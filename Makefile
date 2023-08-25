@@ -1,4 +1,4 @@
-# Copyright (C) 2008-2021 Andrew Ziem.  All rights reserved.
+# Copyright (C) 2008-2023 Andrew Ziem.  All rights reserved.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 # This is free software: You are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
@@ -26,7 +26,8 @@ build:
 	echo Nothing to build
 
 clean:
-	@rm -vf {.,bleachbit,tests,windows}/*{pyc,pyo,~}
+	@rm -vf {.,bleachbit,tests,windows,bleachbit/markovify}/*{pyc,pyo,~} # files
+	@rm -vrf {.,bleachbit,tests,windows,bleachbit/markovify}/__pycache__ # directories
 	@rm -vrf build dist # created by py2exe
 	@rm -rf BleachBit-Portable # created by windows/setup_py2exe.bat
 	@rm -rf BleachBit-*-portable.zip

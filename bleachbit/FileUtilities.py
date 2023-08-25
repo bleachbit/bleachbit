@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2023 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -931,6 +931,9 @@ def wipe_path(pathname, idle=False):
         return 1, done_percent, remaining_seconds
 
     logger.debug(_("Wiping path: %s") % pathname)
+    if not os.path.isdir(pathname):
+        logger.error(_("Path to wipe must be an existing directory: %s"), pathname)
+        return
     files = []
     total_bytes = 0
     start_free_bytes = free_space(pathname)

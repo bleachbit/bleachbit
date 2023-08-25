@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2023 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -153,17 +153,18 @@ class Bleachbit(Gtk.Application):
     def _init_windows_misc(self, auto_exit, shred_paths, uac):
         application_id_suffix = ''
         is_context_menu_executed = auto_exit and shred_paths
-        if os.name == 'nt':
-            if Windows.elevate_privileges(uac):
-                # privileges escalated in other process
-                sys.exit(0)
+        if not os.name == 'nt':
+            return ''
+        if Windows.elevate_privileges(uac):
+            # privileges escalated in other process
+            sys.exit(0)
 
-            if is_context_menu_executed:
-                # When we have a running application and executing the Windows
-                # context menu command we start a new process with new application_id.
-                # That is because the command line arguments of the context menu command
-                # are not passed to the already running instance.
-                application_id_suffix = 'ContextMenuShred'
+        if is_context_menu_executed:
+            # When we have a running application and executing the Windows
+            # context menu command we start a new process with new application_id.
+            # That is because the command line arguments of the context menu command
+            # are not passed to the already running instance.
+            application_id_suffix = 'ContextMenuShred'
         return application_id_suffix
 
     def build_app_menu(self):
@@ -307,7 +308,7 @@ class Bleachbit(Gtk.Application):
 
     def get_about_dialog(self):
         dialog = Gtk.AboutDialog(comments=_("Program to clean unnecessary files"),
-                                 copyright='Copyright (C) 2008-2021 Andrew Ziem',
+                                 copyright='Copyright (C) 2008-2023 Andrew Ziem',
                                  program_name=APP_NAME,
                                  version=bleachbit.APP_VERSION,
                                  website=bleachbit.APP_URL,
@@ -378,6 +379,8 @@ class Bleachbit(Gtk.Application):
         if not self._window:
             self._window = GUI(
                 application=self, title=APP_NAME, auto_exit=self._auto_exit)
+        if 'nt' == os.name:
+            Windows.check_dll_hijacking(self._window)
         self._window.present()
         if self._shred_paths:
             GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths, priority=GObject.PRIORITY_LOW)
@@ -525,7 +528,9 @@ class TreeDisplayModel:
             if warning:
                 resp = GuiBasic.message_dialog(parent_window,
                                                msg,
-                                               Gtk.MessageType.WARNING, Gtk.ButtonsType.OK_CANCEL)
+                                               Gtk.MessageType.WARNING,
+                                               Gtk.ButtonsType.OK_CANCEL,
+                                               _('Confirm'))
                 if Gtk.ResponseType.OK != resp:
                     # user cancelled, so don't toggle option
                     return
@@ -767,7 +772,9 @@ class GUI(Gtk.ApplicationWindow):
         if not operations:  # empty
             GuiBasic.message_dialog(self,
                                     _("You must select an operation"),
-                                    Gtk.MessageType.WARNING, Gtk.ButtonsType.OK)
+                                    Gtk.MessageType.ERROR,
+                                    Gtk.ButtonsType.OK,
+                                    _('Error'))
             return
         try:
             self.set_sensitive(False)

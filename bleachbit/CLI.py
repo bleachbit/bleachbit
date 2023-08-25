@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2023 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -139,6 +139,11 @@ def args_to_operations(args, preset, all_but_warning):
 
 def process_cmd_line():
     """Parse the command line and execute given commands."""
+
+    if 'nt' == os.name:
+        from bleachbit.Windows import check_dll_hijacking
+        check_dll_hijacking()
+
     # TRANSLATORS: This is the command line usage.  Don't translate
     # %prog, but do translate options, cleaner, and option.
     # Don't translate and add "usage:" - it gets added by Python.
@@ -224,7 +229,7 @@ def process_cmd_line():
     if options.version:
         print("""
 BleachBit version %s
-Copyright (C) 2008-2021 Andrew Ziem.  All rights reserved.
+Copyright (C) 2008-2023 Andrew Ziem.  All rights reserved.
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
@@ -248,11 +253,6 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         if len(args) < 1:
             logger.error(_("No directories given for --wipe-free-space"))
             sys.exit(1)
-        for wipe_path in args:
-            if not os.path.isdir(wipe_path):
-                logger.error(
-                    _("Path to wipe must be an existing directory: %s"), wipe_path)
-                sys.exit(1)
         logger.info(_("Wiping free space can take a long time."))
         for wipe_path in args:
             logger.info('Wiping free space in path: %s', wipe_path)

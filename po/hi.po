@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-25 09:59-0700\n"
+"POT-Creation-Date: 2023-08-06 15:47-0600\n"
 "PO-Revision-Date: 2023-02-02 18:37+0000\n"
 "Last-Translator: Raman <translations.0l5zc@simplelogin.com>\n"
-"Language-Team: Hindi <https://hosted.weblate.org/projects/bleachbit/main/hi/>"
-"\n"
+"Language-Team: Hindi <https://hosted.weblate.org/projects/bleachbit/main/hi/"
+">\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -530,8 +530,7 @@ msgstr "इंडेक्स"
 msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
-msgstr ""
-"अनुक्रमणिका को हटाने से संदेश सूची में स्तंभों का विन्यास रीसेट हो जाएगा।"
+msgstr "अनुक्रमणिका को हटाने से संदेश सूची में स्तंभों का विन्यास रीसेट हो जाएगा।"
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
@@ -816,7 +815,7 @@ msgstr "फाइल साफ करें"
 #. TRANSLATORS: This is the clean button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes
 #. altering them.
-#: ../bleachbit/Action.py:528 ../bleachbit/GUI.py:932 ../bleachbit/GUI.py:1039
+#: ../bleachbit/Action.py:528 ../bleachbit/GUI.py:946 ../bleachbit/GUI.py:1053
 msgid "Clean"
 msgstr "साफ करें"
 
@@ -1009,74 +1008,74 @@ msgstr "एक मान्य क्लीनर नहीं है: %s"
 #. Don't translate and add "usage:" - it gets added by Python.
 #. More information about the command line is here
 #. https://www.bleachbit.org/documentation/command-line
-#: ../bleachbit/CLI.py:147
+#: ../bleachbit/CLI.py:152
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgstr "उपयोग: %prog [options] cleaner.option1 cleaner.option2"
 
-#: ../bleachbit/CLI.py:150
+#: ../bleachbit/CLI.py:155
 msgid "list cleaners"
 msgstr "लिस्ट क्लीनर्स"
 
-#: ../bleachbit/CLI.py:152
+#: ../bleachbit/CLI.py:157
 msgid "preview files to be deleted and other changes"
 msgstr "डिलीट की जाने वाली फाइलों और अन्य बदलावों को प्रीव्यू करें"
 
 #. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
 #. This is different than cleaning an arbitrary file, such as a
 #. spreadsheet on the desktop.
-#: ../bleachbit/CLI.py:157
+#: ../bleachbit/CLI.py:162
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr "फाइलें डिलीट करने और अन्य स्थायी बदलाव करने के लिए क्लीनर रन करें"
 
-#: ../bleachbit/CLI.py:159
+#: ../bleachbit/CLI.py:164
 msgid "shred specific files or folders"
 msgstr "खास फाइलें या फोल्डर श्रेड (नष्ट) करें"
 
-#: ../bleachbit/CLI.py:161
+#: ../bleachbit/CLI.py:166
 msgid "wipe free space in the given paths"
 msgstr "दिए पाथ्स में फ्री स्पेस वाइप करें"
 
-#: ../bleachbit/CLI.py:163
+#: ../bleachbit/CLI.py:168
 msgid "overwrite files to hide contents"
 msgstr "कंटेन्ट छिपाने के लिए फाइलों को ओवरराइट करें"
 
-#: ../bleachbit/CLI.py:165
+#: ../bleachbit/CLI.py:170
 msgid "launch the graphical interface"
 msgstr "ग्राफ़िकल इंटरफेस लॉंच करें"
 
-#: ../bleachbit/CLI.py:167
+#: ../bleachbit/CLI.py:172
 msgid "use options set in the graphical interface"
 msgstr "ग्राफ़िकल इंटरफेस में सेट ऑप्शन उपयोग करें"
 
-#: ../bleachbit/CLI.py:169
+#: ../bleachbit/CLI.py:174
 msgid "enable all options that do not have a warning"
 msgstr ""
 
-#: ../bleachbit/CLI.py:171
+#: ../bleachbit/CLI.py:176
 msgid "set log level to verbose"
 msgstr "लॉग लेवल को वरबोज़ में सेट करें"
 
-#: ../bleachbit/CLI.py:172
+#: ../bleachbit/CLI.py:177
 msgid "log debug messages to file"
 msgstr "फाइल में डीबग मैसेज लॉग करें"
 
-#: ../bleachbit/CLI.py:174
+#: ../bleachbit/CLI.py:179
 msgid "show system information"
 msgstr "सिस्टम इन्फॉर्मेशन दिखाएँ"
 
-#: ../bleachbit/CLI.py:176
+#: ../bleachbit/CLI.py:181
 msgid "output version information and exit"
 msgstr "आउटपुट वर्शन जानकारी और एक्ज़िट"
 
-#: ../bleachbit/CLI.py:179
+#: ../bleachbit/CLI.py:184
 msgid "do not prompt for administrator privileges"
 msgstr "एडमिनिस्ट्रेटिव प्रिविलेजेस के लिए न पूछें"
 
-#: ../bleachbit/CLI.py:187
+#: ../bleachbit/CLI.py:192
 msgid "update winapp2.ini, if a new version is available"
 msgstr "यदि एक नया वर्शन उपलब्ध हो तो winapp2.ini अपडेट करें"
 
-#: ../bleachbit/CLI.py:209
+#: ../bleachbit/CLI.py:214
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
@@ -1084,18 +1083,13 @@ msgstr ""
 "केवल इनमें से कोई कमांड बताएँ: -- list-cleaners, --wipe-free-space, --preview, --"
 "clean"
 
-#: ../bleachbit/CLI.py:234
+#: ../bleachbit/CLI.py:239
 msgid "Checking online for updates to winapp2.ini"
 msgstr "winapp2.ini के लिए ऑनलाइन अपडेट चेक कर रहा है"
 
-#: ../bleachbit/CLI.py:249
+#: ../bleachbit/CLI.py:254
 msgid "No directories given for --wipe-free-space"
 msgstr "--wipe-free-space के लिए कोई डायरेक्ट्री नहीं बताई गई"
-
-#: ../bleachbit/CLI.py:254
-#, python-format
-msgid "Path to wipe must be an existing directory: %s"
-msgstr "वाइप का पाथ एक्सिस्टिंग डायरेक्ट्री में होना चाहिए: %s"
 
 #: ../bleachbit/CLI.py:256
 msgid "Wiping free space can take a long time."
@@ -1183,16 +1177,21 @@ msgstr ""
 msgid "Wiping path: %s"
 msgstr "वाइपिंग पाथ: %s"
 
-#: ../bleachbit/FileUtilities.py:940
+#: ../bleachbit/FileUtilities.py:932
+#, python-format
+msgid "Path to wipe must be an existing directory: %s"
+msgstr "वाइप का पाथ एक्सिस्टिंग डायरेक्ट्री में होना चाहिए: %s"
+
+#: ../bleachbit/FileUtilities.py:943
 msgid "Creating new, temporary file for wiping free space."
 msgstr "फ्री सेप्स को वाइप करने के लिए नई, टेम्परेरी फाइल बना रहा है।"
 
-#: ../bleachbit/FileUtilities.py:996
+#: ../bleachbit/FileUtilities.py:999
 #, python-format
 msgid "Error #%d when flushing the file buffer."
 msgstr "फाइल बफर को फ्लश करते समय एरर #%d."
 
-#: ../bleachbit/FileUtilities.py:1012
+#: ../bleachbit/FileUtilities.py:1015
 msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
@@ -1200,15 +1199,15 @@ msgstr ""
 "{rate:.2f} MB/s की रेट से {files:,} फाइलें और {bytes:,} बाइट {seconds:,} सेकंड में "
 "लिखे"
 
-#: ../bleachbit/FileUtilities.py:1017
+#: ../bleachbit/FileUtilities.py:1020
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
 msgstr "नॉन-सुपर यूज़र को {bytes:,} बाइट और {inodes:,} इनोड उपलब्ध हैं"
 
-#: ../bleachbit/FileUtilities.py:1019
+#: ../bleachbit/FileUtilities.py:1022
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
 msgstr "सुपर यूज़र को {bytes:,} बाइट और {inodes:,} इनोड उपलब्ध हैं"
 
-#: ../bleachbit/FileUtilities.py:1035
+#: ../bleachbit/FileUtilities.py:1038
 msgid "Handled unknown error #0 while truncating file."
 msgstr "फाइल ट्रंकेट करते समय अज्ञात एरर #0 मिली।"
 
@@ -1222,7 +1221,7 @@ msgid "_Open"
 msgstr "_ओपन करें"
 
 #: ../bleachbit/GuiBasic.py:106 ../bleachbit/GuiBasic.py:150
-#: ../bleachbit/GUI.py:225
+#: ../bleachbit/GUI.py:226
 msgid "_Delete"
 msgstr "_डिलीट करें"
 
@@ -1254,7 +1253,7 @@ msgstr ""
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "क्या आप इन फ़ाइलों को स्थायी रूप से डिलीट करना चाहते हैं?"
 
-#: ../bleachbit/GuiBasic.py:180
+#: ../bleachbit/GuiBasic.py:182
 #, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
@@ -1265,10 +1264,14 @@ msgstr ""
 "%s"
 
 #. TRANSLATORS: %s expands to www.bleachbit.org or similar
-#: ../bleachbit/GuiBasic.py:192
+#: ../bleachbit/GuiBasic.py:194
 #, python-format
 msgid "Open web browser to %s?"
 msgstr "वेब ब्राउज़र को %s में खोलना है?"
+
+#: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:533
+msgid "Confirm"
+msgstr ""
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1281,53 +1284,53 @@ msgstr "फ़ाइलें डिलीट कर रहा है"
 msgid "Make chaff"
 msgstr "शाफ़ (डिजिटल कवच) बनाएँ"
 
-#: ../bleachbit/GuiChaff.py:70
+#: ../bleachbit/GuiChaff.py:71
 msgid "Make randomly-generated messages inspired by documents."
 msgstr "रैंडम मैसेज बनाएँ जो दस्तावेजों पर आधारित हों।"
 
 #. TRANSLATORS: Inspiration is a choice of documents from which random
 #. text will be generated.
-#: ../bleachbit/GuiChaff.py:77
+#: ../bleachbit/GuiChaff.py:78
 msgid "Inspiration"
 msgstr "प्रेरणा"
 
-#: ../bleachbit/GuiChaff.py:80
+#: ../bleachbit/GuiChaff.py:81
 msgid "2600 Magazine"
 msgstr "2600 मैगज़ीन"
 
-#: ../bleachbit/GuiChaff.py:80
+#: ../bleachbit/GuiChaff.py:81
 msgid "Hillary Clinton's emails"
 msgstr "हिलेरी क्लिंटन की ईमेल"
 
-#: ../bleachbit/GuiChaff.py:88
+#: ../bleachbit/GuiChaff.py:89
 msgid "Number of files"
 msgstr "फाइलों की संख्या"
 
-#: ../bleachbit/GuiChaff.py:95 ../bleachbit/GuiChaff.py:155
+#: ../bleachbit/GuiChaff.py:96 ../bleachbit/GuiChaff.py:156
 msgid "Select destination folder"
 msgstr "डेस्टिनेशन फोल्डर सिलेक्ट करें"
 
-#: ../bleachbit/GuiChaff.py:105
+#: ../bleachbit/GuiChaff.py:106
 msgid "When finished"
 msgstr "जब खत्म हो जाए"
 
-#: ../bleachbit/GuiChaff.py:108
+#: ../bleachbit/GuiChaff.py:109
 msgid "Delete without shredding"
 msgstr "बिना श्रेडिंग किए डिलीट करें"
 
-#: ../bleachbit/GuiChaff.py:108
+#: ../bleachbit/GuiChaff.py:109
 msgid "Do not delete"
 msgstr "डिलीट न करें"
 
-#: ../bleachbit/GuiChaff.py:119
+#: ../bleachbit/GuiChaff.py:120
 msgid "Make files"
 msgstr "फाइलें बनाएँ"
 
-#: ../bleachbit/GuiChaff.py:136
+#: ../bleachbit/GuiChaff.py:137
 msgid "Download data needed for chaff generator?"
 msgstr "शाफ़ (डिजिटल कवच) जनरेटर के लिए डाटा डाऊनलोड करना है?"
 
-#: ../bleachbit/GuiChaff.py:178
+#: ../bleachbit/GuiChaff.py:179
 msgid "Generating files"
 msgstr "फाइलें बना रहा है"
 
@@ -1420,7 +1423,7 @@ msgid "Add shred context menu option (KDE Plasma specific)"
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
-#: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:285
+#: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:286
 msgid "Choose a folder"
 msgstr "कोई फ़ोल्डर चुनें"
 
@@ -1457,7 +1460,7 @@ msgstr "प्रिसर्व करें"
 msgid "Code"
 msgstr "कोड"
 
-#: ../bleachbit/GuiPreferences.py:326 ../bleachbit/GUI.py:468
+#: ../bleachbit/GuiPreferences.py:326 ../bleachbit/GUI.py:478
 msgid "Name"
 msgstr "नाम"
 
@@ -1505,32 +1508,32 @@ msgctxt "button"
 msgid "Add folder"
 msgstr "फोल्डर जोड़ें"
 
-#: ../bleachbit/GUI.py:151 ../bleachbit/GUI.py:868
+#: ../bleachbit/GUI.py:151 ../bleachbit/GUI.py:882
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr "SQLite मॉड्यूल लोड करने में एरर हुई: एंटीवायरस सॉफ्टवेयर इसे ब्लॉक कर रहा होगा।"
 
-#: ../bleachbit/GUI.py:214
+#: ../bleachbit/GUI.py:215
 msgid "Choose files to shred"
 msgstr "शेयर करने के लिए फ़ाइलें चुनें"
 
-#: ../bleachbit/GUI.py:223
+#: ../bleachbit/GUI.py:224
 msgid "Choose folder to shred"
 msgstr "श्रेड करने के लिए फोल्डर चुनें"
 
-#: ../bleachbit/GUI.py:250
+#: ../bleachbit/GUI.py:251
 msgid "No paths found in clipboard."
 msgstr "क्लिपबोर्ड में कोई पाथ नहीं मिले।"
 
-#: ../bleachbit/GUI.py:286
+#: ../bleachbit/GUI.py:287
 msgid "_OK"
 msgstr "_ठीक है"
 
-#: ../bleachbit/GUI.py:309
+#: ../bleachbit/GUI.py:310
 msgid "Program to clean unnecessary files"
 msgstr ""
 
-#: ../bleachbit/GUI.py:320
+#: ../bleachbit/GUI.py:321
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
@@ -1542,7 +1545,7 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:326
+#: ../bleachbit/GUI.py:327
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -1554,24 +1557,24 @@ msgstr ""
 "  nipunreddevil https://launchpad.net/~nipunreddevil\n"
 "  sumeet https://launchpad.net/~sumeetdceian2007"
 
-#: ../bleachbit/GUI.py:350
+#: ../bleachbit/GUI.py:351
 msgid "System information"
 msgstr "सिस्टम की जानकारी"
 
-#: ../bleachbit/GUI.py:476
+#: ../bleachbit/GUI.py:486
 msgid "Active"
 msgstr "एक्टिव"
 
 #. TRANSLATORS: Size is the label for the column that shows how
 #. much space an option would clean or did clean
-#: ../bleachbit/GUI.py:485
+#: ../bleachbit/GUI.py:495
 msgid "Size"
 msgstr "साइज़"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #. %(warning) may be 'This option is really slow'
-#: ../bleachbit/GUI.py:514
+#: ../bleachbit/GUI.py:524
 #, python-format
 msgid ""
 "Warning regarding %(cleaner)s - %(option)s:\n"
@@ -1582,29 +1585,35 @@ msgstr ""
 "\n"
 "%(warning)s"
 
-#: ../bleachbit/GUI.py:590
+#: ../bleachbit/GUI.py:602
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "कॉन्फ़िगुरेशन फाइल रीसेट कर रहा है क्योंकि ये करप्ट है: %s"
 
-#: ../bleachbit/GUI.py:762
+#: ../bleachbit/GUI.py:774
 msgid "You must select an operation"
 msgstr "आपको कोई एक ऑपरेशन चुनना होगा"
 
-#: ../bleachbit/GUI.py:781 ../bleachbit/GUI.py:797
+#: ../bleachbit/GUI.py:777
+#, fuzzy
+#| msgid "Errors: %d"
+msgid "Error"
+msgstr "एरर: %d"
+
+#: ../bleachbit/GUI.py:795 ../bleachbit/GUI.py:811
 msgid "Done."
 msgstr "पूरा हुआ।"
 
-#: ../bleachbit/GUI.py:852
+#: ../bleachbit/GUI.py:866
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
 msgstr "एप्लिकेशन मेनू में एक्सेस के लिए टाइटल बार में हैमबर्गर आइकॉन पर क्लिक करें।"
 
-#: ../bleachbit/GUI.py:857
+#: ../bleachbit/GUI.py:871
 msgid "Access the application menu by clicking the logo on the title bar."
 msgstr "एप्लिकेशन मेनू में एक्सेस के लिए टाइटल बार में लोगो पर क्लिक करें।"
 
-#: ../bleachbit/GUI.py:873
+#: ../bleachbit/GUI.py:887
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
@@ -1613,7 +1622,7 @@ msgstr ""
 "आप BleachBit को सिस्टम के शेयर्ड हिस्सों को क्लीन करने की एड्मिनिस्ट्रेटिव प्रिविलेज से चला "
 "रहे हैं, और यूज़र प्रोफाइल फोंल्डर के रेफेरेंस केवल रूट अकाउंट को साफ करेंगे।"
 
-#: ../bleachbit/GUI.py:878
+#: ../bleachbit/GUI.py:892
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
@@ -1621,7 +1630,7 @@ msgstr ""
 "एडमिनिस्ट्रेटिव प्रिविलेजेस से BleachBit चलाएं और फाइलों के कंटेंट को ओवरराइट करने की "
 "एक्यूरेसी बढ़ाएँ।"
 
-#: ../bleachbit/GUI.py:883
+#: ../bleachbit/GUI.py:897
 msgid ""
 "There is no official version of BleachBit on the Microsoft Store. Get the "
 "genuine version at https://www.bleachbit.org where it is always free of "
@@ -1631,27 +1640,27 @@ msgstr ""
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
 #. previews changes.
-#: ../bleachbit/GUI.py:927 ../bleachbit/GUI.py:1029
+#: ../bleachbit/GUI.py:941 ../bleachbit/GUI.py:1043
 msgid "Preview"
 msgstr "प्रीव्यू"
 
-#: ../bleachbit/GUI.py:1026
+#: ../bleachbit/GUI.py:1040
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "चयनित आपरेशनों में फाइलों को प्रीव्यू करें (किसी भी फाइल को डिलीट किए बिना)"
 
-#: ../bleachbit/GUI.py:1041
+#: ../bleachbit/GUI.py:1055
 msgid "Clean files in the selected operations"
 msgstr "सिलेक्ट किए हुए ऑपरेशन्स  में फाइलें साफ करें"
 
-#: ../bleachbit/GUI.py:1049
+#: ../bleachbit/GUI.py:1063
 msgid "Abort"
 msgstr "निरस्त करें"
 
-#: ../bleachbit/GUI.py:1051
+#: ../bleachbit/GUI.py:1065
 msgid "Abort the preview or cleaning process"
 msgstr "प्रीव्यू या साफ करने की प्रोसेस निरस्त करें"
 
-#: ../bleachbit/GUI.py:1258
+#: ../bleachbit/GUI.py:1272
 msgid "Error when checking for updates: "
 msgstr "अपडेट चेक करते समय त्रुटि: "
 
@@ -1747,11 +1756,11 @@ msgstr "फाइल %s में कॉन्फ़िगुरेशन लिख
 msgid "Error checking whether path exists: %s"
 msgstr "पाथ है या नहीं ये चेक करने में त्रुटि: %s"
 
-#: ../bleachbit/Options.py:267
+#: ../bleachbit/Options.py:268
 msgid "Error when setting the default drives to shred."
 msgstr "डिफ़ाल्ट ड्राइव को श्रेड में सेट करते समय त्रुटि।"
 
-#: ../bleachbit/Options.py:293
+#: ../bleachbit/Options.py:294
 #, python-format
 msgid "Automatically preserving language %s."
 msgstr "भाषा %s को अपने-आप प्रिसर्व कर रहा है।"
@@ -1852,7 +1861,17 @@ msgstr "गेम्स"
 msgid "Imported from winapp2.ini"
 msgstr "winapp2.ini से इम्पोर्ट"
 
-#: ../bleachbit/Windows.py:824
+#: ../bleachbit/Windows.py:141
+msgid ""
+"The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
+"possible attempt at DLL search-order hijacking."
+msgstr ""
+
+#: ../bleachbit/Windows.py:151
+msgid "Warning"
+msgstr ""
+
+#: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
 msgstr ""
 
