@@ -34,7 +34,7 @@ if sys.platform == 'win32':
     # Error: Namespace packages not yet supported: Skipping package 'pywintypes'
     import importlib
     for m in ('pywintypes', 'pythoncom'):
-        l = importlib.util.find_spec(m, None)
+        l = importlib.find_loader(m, None)
         __import__(m)
         sys.modules[m].__loader__ = l
 
