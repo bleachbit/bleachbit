@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-06 15:47-0600\n"
-"PO-Revision-Date: 2023-01-31 19:51+0000\n"
-"Last-Translator: S3aBreeze <S3aBreeze@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2023-08-26 14:53+0000\n"
+"Last-Translator: a <xxx_xxx_xxxxxxxxx@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/bleachbit/main/"
 "ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.0.1-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -1294,8 +1294,9 @@ msgid "Open web browser to %s?"
 msgstr "Открыть страницу %s в браузере?"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:533
+#, fuzzy
 msgid "Confirm"
-msgstr ""
+msgstr "Подтвердить"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1900,14 +1901,18 @@ msgid "Imported from winapp2.ini"
 msgstr "Импортировано из winapp2.ini"
 
 #: ../bleachbit/Windows.py:141
+#, fuzzy
 msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
+"Файл python3.dll был найден в c:\\ или c:\\dlls , что указывает на возможную "
+"попытку перехвата порядка поиска DLL-файлов."
 
 #: ../bleachbit/Windows.py:151
+#, fuzzy
 msgid "Warning"
-msgstr ""
+msgstr "Предупреждение"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
