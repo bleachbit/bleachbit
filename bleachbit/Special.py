@@ -105,13 +105,14 @@ def delete_chrome_autofill(path):
     """Delete autofill table in Chromium/Google Chrome 'Web Data' database"""
     cols = ('name', 'value', 'value_lower')
     cmds = __shred_sqlite_char_columns('autofill', cols)
-    cols = ('first_name', 'middle_name', 'last_name', 'full_name')
-    cmds += __shred_sqlite_char_columns('autofill_profile_names', cols)
-    cmds += __shred_sqlite_char_columns('autofill_profile_emails', ('email',))
-    cmds += __shred_sqlite_char_columns('autofill_profile_phones', ('number',))
-    cols = ('company_name', 'street_address', 'dependent_locality',
-            'city', 'state', 'zipcode', 'country_code')
-    cmds += __shred_sqlite_char_columns('autofill_profiles', cols)
+
+    cols = ('guid', 'use_count', 'use_date', 'date_modified',
+            'language_code', 'label', 'initial_creator_id', 'last_modifier_id')
+    cmds += __shred_sqlite_char_columns('local_addresses', cols)
+
+    cols = ('guid', 'type', 'value', 'verification_status')
+    cmds += __shred_sqlite_char_columns('local_addresses_type_tokens', cols)
+
     cols = (
         'company_name', 'street_address', 'address_1', 'address_2', 'address_3', 'address_4',
         'postal_code', 'country_code', 'language_code', 'recipient_name', 'phone_number')
