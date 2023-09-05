@@ -106,12 +106,14 @@ def delete_chrome_autofill(path):
     cols = ('name', 'value', 'value_lower')
     cmds = __shred_sqlite_char_columns('autofill', cols)
 
-    cols = ('guid', 'use_count', 'use_date', 'date_modified',
-            'language_code', 'label', 'initial_creator_id', 'last_modifier_id')
-    cmds += __shred_sqlite_char_columns('local_addresses', cols)
+    if __sqlite_table_exists(path, 'local_addresses'):
+        cols = ('guid', 'use_count', 'use_date', 'date_modified',
+                'language_code', 'label', 'initial_creator_id', 'last_modifier_id')
+        cmds += __shred_sqlite_char_columns('local_addresses', cols)
 
-    cols = ('guid', 'type', 'value', 'verification_status')
-    cmds += __shred_sqlite_char_columns('local_addresses_type_tokens', cols)
+    if __sqlite_table_exists(path, 'local_addresses_type_tokens'):
+        cols = ('guid', 'type', 'value', 'verification_status')
+        cmds += __shred_sqlite_char_columns('local_addresses_type_tokens', cols)
 
     cols = (
         'company_name', 'street_address', 'address_1', 'address_2', 'address_3', 'address_4',
