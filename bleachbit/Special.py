@@ -108,6 +108,16 @@ def delete_chrome_autofill(path):
     cols = ('name', 'value', 'value_lower')
     cmds = __shred_sqlite_char_columns('autofill', cols, path=path)
 
+    # autofill_profile_* existed for years until Google Chrome stable released August 2023
+    cols = ('first_name', 'middle_name', 'last_name', 'full_name')
+    cmds += __shred_sqlite_char_columns('autofill_profile_names', cols, path=path)
+    cmds += __shred_sqlite_char_columns('autofill_profile_emails', ('email',), path=path)
+    cmds += __shred_sqlite_char_columns('autofill_profile_phones', ('number',), path=path)
+    cols = ('company_name', 'street_address', 'dependent_locality',
+            'city', 'state', 'zipcode', 'country_code')
+    cmds += __shred_sqlite_char_columns('autofill_profiles', cols, path=path)
+
+    # local_addresses* appeared in Google Chrome stable versions released August 2023
     cols = ('guid', 'use_count', 'use_date', 'date_modified',
             'language_code', 'label', 'initial_creator_id', 'last_modifier_id')
     cmds += __shred_sqlite_char_columns('local_addresses', cols, path=path)
