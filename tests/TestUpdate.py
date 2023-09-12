@@ -23,14 +23,14 @@ Test case for module Update
 """
 
 
-from tests import common
-import bleachbit
-from bleachbit import logger
-from bleachbit.Update import check_updates, update_winapp2, user_agent
-import bleachbit.Update
-
 import os
 import os.path
+
+import bleachbit
+import bleachbit.Update
+from bleachbit import logger
+from bleachbit.Update import check_updates, update_winapp2, user_agent
+from tests import common
 
 
 class UpdateTestCase(common.BleachbitTestCase):

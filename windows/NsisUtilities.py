@@ -21,7 +21,6 @@
 
 import os
 
-
 _DIRECTORY_TO_WALK = 'dist'
 _DIRECTORY_TO_SEPARATE = r'dist\share\locale'
 # NSIS script needs a prefix in the paths included in order to access them.

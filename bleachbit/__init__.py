@@ -25,12 +25,12 @@ Code that is commonly shared throughout BleachBit
 import gettext
 import locale
 import os
+import platform
 import re
 import sys
-import platform
+from configparser import NoOptionError, RawConfigParser
 
 from bleachbit import Log
-from configparser import RawConfigParser, NoOptionError, SafeConfigParser
 
 APP_VERSION = "4.5.0"
 APP_NAME = "BleachBit"
@@ -107,7 +107,7 @@ try:
     options_dir = os.environ['BLEACHBIT_TEST_OPTIONS_DIR']
 except KeyError:
     pass
-        
+
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
 # check whether the application is running from the source tree

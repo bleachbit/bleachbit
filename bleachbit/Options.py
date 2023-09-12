@@ -22,13 +22,12 @@
 Store and retrieve user preferences
 """
 
-import bleachbit
-from bleachbit import General
-from bleachbit import _
-
 import logging
 import os
 import re
+
+import bleachbit
+from bleachbit import General, _
 
 logger = logging.getLogger(__name__)
 
@@ -278,7 +277,7 @@ class Options:
         self.__set_default("kde_shred_menu_option", False)
         self.__set_default("remember_geometry", True)
         self.__set_default("shred", False)
-        self.__set_default("units_iec", False)        
+        self.__set_default("units_iec", False)
         self.__set_default("window_maximized", False)
 
         if 'nt' == os.name:

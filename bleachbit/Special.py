@@ -22,12 +22,12 @@
 Cross-platform, special cleaning operations
 """
 
-from bleachbit.Options import options
-from bleachbit import FileUtilities
-
 import logging
 import os.path
 from urllib.parse import urlparse, urlunparse
+
+from bleachbit import FileUtilities
+from bleachbit.Options import options
 
 logger = logging.getLogger(__name__)
 
@@ -403,7 +403,7 @@ def delete_mozilla_favicons(path):
                      if (
                             # collect only favicons with not bookmarked urls with same domain or
                             # their domain is a part of a bookmarked url but the favicons are not domain level
-                            # in other words collect all that are not bookmarked 
+                            # in other words collect all that are not bookmarked
                             remove_path_from_url(url) not in bookmarked_urls_domains or
                             urlparse(url).path.count('/') > 1
                      )

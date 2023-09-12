@@ -37,21 +37,22 @@ These are the terms:
 
 """
 
-import bleachbit
-from bleachbit import _, Command, FileUtilities, General
-
 import glob
 import logging
 import os
-import sys
 import shutil
-from threading import Thread, Event
+import sys
 import xml.dom.minidom
-
 from decimal import Decimal
+from threading import Event, Thread
+
+import bleachbit
+from bleachbit import Command, FileUtilities, General, _
 
 if 'win32' == sys.platform:
     import winreg
+    from ctypes import byref, c_buffer, c_ulong, sizeof, windll
+
     import pywintypes
     import win32api
     import win32con
@@ -59,8 +60,6 @@ if 'win32' == sys.platform:
     import win32gui
     import win32process
     import win32security
-
-    from ctypes import windll, c_ulong, c_buffer, byref, sizeof
     from win32com.shell import shell, shellcon
 
     psapi = windll.psapi
@@ -701,7 +700,8 @@ class SplashThread(Thread):
         win32gui.PumpMessages()
 
     def join(self, *args):
-        import win32con, win32gui
+        import win32con
+        import win32gui
         win32gui.PostMessage(self._splash_screen_handle, win32con.WM_CLOSE, 0, 0)
         Thread.join(self, *args)
 

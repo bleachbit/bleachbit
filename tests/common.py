@@ -28,11 +28,12 @@ import shutil
 import sys
 import tempfile
 import unittest
+
 import mock
+
 if 'win32' == sys.platform:
     import winreg
     import win32gui
-
 
 import bleachbit
 import bleachbit.Options
@@ -54,7 +55,7 @@ class BleachbitTestCase(unittest.TestCase):
 
     @classmethod
     def _patch_options_paths(cls):
-        to_patch = [('bleachbit.options_dir', cls.tempdir), 
+        to_patch = [('bleachbit.options_dir', cls.tempdir),
                     ('bleachbit.options_file', os.path.join(cls.tempdir, "bleachbit.ini")),
                     ('bleachbit.personal_cleaners_dir', os.path.join(cls.tempdir, "cleaners"))]
         for target, source in to_patch:
@@ -71,11 +72,11 @@ class BleachbitTestCase(unittest.TestCase):
             shutil.rmtree(cls.tempdir)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             cls._stop_patch_options_paths()
-    
+
     @classmethod
     def _stop_patch_options_paths(cls):
         for patcher in cls._patchers:
-            patcher.stop()        
+            patcher.stop()
 
     def setUp(cls):
         """Call before each test method"""
@@ -207,7 +208,7 @@ def touch_file(filename):
         os.makedirs(dname)
     import pathlib
     pathlib.Path(filename).touch()
-    assert(os.path.exists(filename))
+    assert os.path.exists(filename)
 
 
 def validate_result(self, result, really_delete=False):

@@ -3,10 +3,10 @@
 # Origin: https://github.com/jsvine/markovify
 # MIT License: https://github.com/jsvine/markovify/blob/master/LICENSE.txt
 
-import random
-import operator
 import bisect
 import json
+import operator
+import random
 
 # Python3 compatibility
 try: # pragma: no cover
@@ -29,7 +29,7 @@ def accumulate(iterable, func=operator.add):
         total = func(total, element)
         yield total
 
-class Chain(object):
+class Chain():
     """
     A Markov chain representing processes that have both beginnings and ends.
     For example: Sentences.
@@ -110,7 +110,8 @@ class Chain(object):
         state = init_state or (BEGIN,) * self.state_size
         while True:
             next_word = self.move(state)
-            if next_word == END: break
+            if next_word == END:
+                break
             yield next_word
             state = tuple(state[1:]) + (next_word,)
 

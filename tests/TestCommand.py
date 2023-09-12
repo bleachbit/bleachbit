@@ -22,8 +22,8 @@
 Test case for Command
 """
 
-from tests import common
 from bleachbit.Command import *
+from tests import common
 
 
 class CommandTestCase(common.BleachbitTestCase):

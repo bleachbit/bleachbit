@@ -22,19 +22,13 @@
 GTK graphical user interface
 """
 
-from bleachbit import GuiBasic
-from bleachbit import Cleaner, FileUtilities
-from bleachbit import _, APP_NAME, appicon_path, portable_mode, windows10_theme_path
-from bleachbit.Options import options
-
+from bleachbit import (APP_NAME, Cleaner, FileUtilities, GuiBasic, _,
+                       appicon_path, portable_mode, windows10_theme_path)
 # Now that the configuration is loaded, honor the debug preference there.
 from bleachbit.Log import set_root_log_level
-set_root_log_level(options.get('debug'))
+from bleachbit.Options import options
 
-from bleachbit.GuiPreferences import PreferencesDialog
-from bleachbit.Cleaner import backends, register_cleaners
-import bleachbit
-from gi.repository import Gtk, Gdk, GObject, GLib, Gio
+set_root_log_level(options.get('debug'))
 
 import glob
 import logging
@@ -44,6 +38,12 @@ import threading
 import time
 
 import gi
+from gi.repository import Gdk, Gio, GLib, GObject, Gtk
+
+import bleachbit
+from bleachbit.Cleaner import backends, register_cleaners
+from bleachbit.GuiPreferences import PreferencesDialog
+
 gi.require_version('Gtk', '3.0')
 
 
@@ -131,7 +131,7 @@ class Bleachbit(Gtk.Application):
         if auto_exit:
             # This is used for automated testing of whether the GUI can start.
             # It is called from assert_execute_console() in windows/setup_py2exe.py
-            self._auto_exit = True        
+            self._auto_exit = True
 
         if shred_paths:
             self._shred_paths = shred_paths
@@ -570,7 +570,7 @@ class GUI(Gtk.ApplicationWindow):
     _style_provider_dark = None
 
     def __init__(self, auto_exit, *args, **kwargs):
-        super(GUI, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self._show_splash_screen()
 
@@ -625,7 +625,7 @@ class GUI(Gtk.ApplicationWindow):
     def destroy(self):
         """Prevent textbuffer usage during UI destruction"""
         self.textbuffer = None
-        super(GUI, self).destroy()
+        super().destroy()
 
     def get_preferences_dialog(self):
         return PreferencesDialog(

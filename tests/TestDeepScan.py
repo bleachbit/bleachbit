@@ -23,12 +23,12 @@
 Test case for module DeepScan
 """
 
-from tests import common
-from bleachbit.DeepScan import DeepScan, Search, normalized_walk
-
 import os
 import sys
 import unittest
+
+from bleachbit.DeepScan import DeepScan, Search, normalized_walk
+from tests import common
 
 
 class DeepScanTestCase(common.BleachbitTestCase):
@@ -51,7 +51,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
         ds = DeepScan(searches)
         found = False
         for cmd in ds.scan():
-            if cmd == True:
+            if cmd:
                 # True is used to yield to GTK+, but it is not
                 # needed in this test.
                 continue
@@ -79,7 +79,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
             searches[path].append(Search(command='delete', regex=regex))
         ds = DeepScan(searches)
         for cmd in ds.scan():
-            if True == cmd:
+            if cmd:
                 # it's yielding control to the GTK idle loop
                 continue
             self.assertLExists(cmd.path)
@@ -106,7 +106,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
                 command, self.tempdir, regex)
             from tests import TestCleaner
             cleaner = TestCleaner.action_to_cleaner(astr)
-            from bleachbit.Worker import backends, Worker
+            from bleachbit.Worker import Worker, backends
             backends['test'] = cleaner
             operations = {'test': ['option1']}
             from bleachbit import CLI

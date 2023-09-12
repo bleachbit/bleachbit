@@ -26,10 +26,10 @@ import shutil
 import tempfile
 from unittest import mock
 
-from tests import common
-from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
-from bleachbit.Windows import detect_registry_key, parse_windows_build
 from bleachbit import logger
+from bleachbit.Winapp import Winapp, detect_file, detectos, section2option
+from bleachbit.Windows import detect_registry_key, parse_windows_build
+from tests import common
 
 
 def create_sub_key(sub_key):
@@ -52,8 +52,8 @@ def get_winapp2():
         tmpdir = os.getenv('TMP')
     fname = os.path.join(tmpdir, 'bleachbit_test_winapp2.ini')
     if os.path.exists(fname):
-        import time
         import stat
+        import time
         age_seconds = time.time() - os.stat(fname)[stat.ST_MTIME]
         if age_seconds > (24 * 36 * 36):
             logger.info('deleting stale file %s ', fname)

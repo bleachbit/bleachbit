@@ -22,23 +22,23 @@
 Test case for module CLI
 """
 
-from bleachbit.CLI import *
-from bleachbit.General import run_external
-from bleachbit import FileUtilities
-from tests import common
-
 import copy
 import os
 import sys
 import tempfile
 import unittest
 
+from bleachbit import FileUtilities
+from bleachbit.CLI import *
+from bleachbit.General import run_external
+from tests import common
+
 
 class CLITestCase(common.BleachbitTestCase):
     """Test case for module CLI"""
 
     def setUp(self):
-        super(CLITestCase, self).setUp()
+        super().setUp()
 
     def _test_preview(self, args, redirect_stdout=True, env=None):
         """Helper to test preview"""

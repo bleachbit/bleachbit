@@ -27,7 +27,6 @@ import sys
 
 from bleachbit import _
 
-
 if 'posix' == os.name:
     import bleachbit.Unix
     if os.path.isdir('/usr/share/bleachbit'):

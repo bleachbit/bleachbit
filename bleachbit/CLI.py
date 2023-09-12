@@ -22,15 +22,15 @@
 Command line interface
 """
 
-from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
-from bleachbit import _, APP_VERSION
-from bleachbit import SystemInformation, Options, Worker
-from bleachbit.Log import set_root_log_level
-
 import logging
 import optparse
 import os
 import sys
+
+from bleachbit import APP_VERSION, Options, SystemInformation, Worker, _
+from bleachbit.Cleaner import (backends, create_simple_cleaner,
+                               register_cleaners)
+from bleachbit.Log import set_root_log_level
 
 logger = logging.getLogger(__name__)
 
@@ -94,7 +94,7 @@ def args_to_operations_list(preset, all_but_warning):
     args = []
     if not backends:
         list(register_cleaners())
-    assert(len(backends) > 1)
+    assert len(backends) > 1
     for key in sorted(backends):
         c_id = backends[key].get_id()
         for (o_id, _o_name) in backends[key].get_options():

@@ -22,17 +22,16 @@
 Create cleaners from CleanerML (markup language)
 """
 
-import bleachbit
-from bleachbit.Action import ActionProvider
-from bleachbit import _
-from bleachbit.General import boolstr_to_bool, getText
-from bleachbit.FileUtilities import expand_glob_join, listdir
-from bleachbit import Cleaner
-
 import logging
 import os
 import sys
 import xml.dom.minidom
+
+import bleachbit
+from bleachbit import Cleaner, _
+from bleachbit.Action import ActionProvider
+from bleachbit.FileUtilities import expand_glob_join, listdir
+from bleachbit.General import boolstr_to_bool, getText
 
 logger = logging.getLogger(__name__)
 

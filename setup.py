@@ -26,6 +26,7 @@ import glob
 import os
 import sys
 import tempfile
+
 from setuptools import setup
 
 if sys.platform == 'win32':
@@ -43,8 +44,8 @@ if sys.platform == 'win32':
         print('warning: py2exe not available')
 
 import bleachbit
-import bleachbit.General
 import bleachbit.FileUtilities
+import bleachbit.General
 
 APP_NAME = "BleachBit - Free space and maintain privacy"
 APP_DESCRIPTION = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Edge, Firefox, Google Chrome, VLC, and many others."

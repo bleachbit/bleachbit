@@ -23,9 +23,6 @@
 File-related utilities
 """
 
-import bleachbit
-from bleachbit import _
-
 import atexit
 import errno
 import glob
@@ -37,16 +34,20 @@ import random
 import re
 import stat
 import string
-import sys
 import subprocess
+import sys
 import tempfile
 import time
+
+import bleachbit
+from bleachbit import _
 
 logger = logging.getLogger(__name__)
 
 if 'nt' == os.name:
-    from pywintypes import error as pywinerror
     import win32file
+    from pywintypes import error as pywinerror
+
     import bleachbit.Windows
     os_path_islink = os.path.islink
     os.path.islink = lambda path: os_path_islink(
@@ -60,11 +61,12 @@ try:
     from scandir import walk
     if 'nt' == os.name:
         import scandir
+
         import bleachbit.Windows
 
         class _Win32DirEntryPython(scandir.Win32DirEntryPython):
             def is_symlink(self):
-                return super(_Win32DirEntryPython, self).is_symlink() or bleachbit.Windows.is_junction(self.path)
+                return super().is_symlink() or bleachbit.Windows.is_junction(self.path)
 
         scandir.scandir = scandir.scandir_python
         scandir.DirEntry = scandir.Win32DirEntryPython = _Win32DirEntryPython
@@ -106,7 +108,7 @@ def get_filesystem_type(path):
         path = os.sep.join(splitpath[:i]) + os.sep
         if path in partitions:
             return partitions[path]
-            
+
         path = os.sep.join(splitpath[:i])
         if path in partitions:
             return partitions[path]
@@ -192,7 +194,7 @@ def bytes_to_human(bytes_i):
         prefixes = ['', 'k', 'M', 'G', 'T', 'P']
         base = 1000.0
 
-    assert(isinstance(bytes_i, int))
+    assert isinstance(bytes_i, int)
 
     if 0 == bytes_i:
         return '0B'
@@ -308,7 +310,7 @@ def clean_json(path, target):
         elif new_target in pos:
             # delete terminal target
             changed = True
-            del(pos[new_target])
+            del pos[new_target]
         else:
             # target not found
             break
@@ -458,8 +460,8 @@ def exe_exists(pathname):
 
 def execute_sqlite3(path, cmds):
     """Execute 'cmds' on SQLite database 'path'"""
-    import sqlite3
     import contextlib
+    import sqlite3
     with contextlib.closing(sqlite3.connect(path)) as conn:
         cursor = conn.cursor()
 
@@ -805,9 +807,10 @@ def wipe_contents(path, truncate=True):
         from win32com.shell.shell import IsUserAnAdmin
 
     if 'nt' == os.name and IsUserAnAdmin():
-        from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
         import warnings
+
         from bleachbit import _
+        from bleachbit.WindowsWipe import UnsupportedFileSystemError, file_wipe
         try:
             file_wipe(path)
         except pywinerror as e:
@@ -959,7 +962,7 @@ def wipe_path(pathname, idle=False):
         # Write large blocks to quickly fill the disk.
         blanks = b'\0' * 65536
         writtensize = 0
-        
+
         while True:
             try:
                 if fstype != 'vfat':
@@ -970,7 +973,7 @@ def wipe_path(pathname, idle=False):
                     writtensize += f.write(blanks)
                 else:
                     break
-            
+
             except IOError as e:
                 if e.errno == errno.ENOSPC:
                     if len(blanks) > 1:

@@ -25,8 +25,9 @@ import shutil
 import subprocess
 import sys
 import time
-import win_unicode_console
 import xml.dom.minidom
+
+import win_unicode_console
 
 from windows.NsisUtilities import write_nsis_expressions_to_files
 

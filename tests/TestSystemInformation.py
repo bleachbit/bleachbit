@@ -23,8 +23,8 @@
 Test case for module SystemInformation
 """
 
-from tests import common
 from bleachbit.SystemInformation import get_system_information
+from tests import common
 
 
 class SystemInformationTestCase(common.BleachbitTestCase):

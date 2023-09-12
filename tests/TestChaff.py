@@ -23,15 +23,17 @@
 Test case for module Chaff
 """
 
-import mock
 import os
 import unittest
-from tempfile import mkdtemp
 from shutil import rmtree
+from tempfile import mkdtemp
 
-from tests import common
-from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models
+import mock
+
+from bleachbit.Chaff import (download_models, generate_2600, generate_emails,
+                             have_models)
 from bleachbit.FileUtilities import getsize
+from tests import common
 
 
 class ChaffTestCase(common.BleachbitTestCase):
@@ -40,6 +42,7 @@ class ChaffTestCase(common.BleachbitTestCase):
     def test_download_url_to_fn(self):
         """Unit test for function download_url_to_fn()"""
         from bleachbit.Chaff import download_url_to_fn
+
         # 200: no error
         # 404: not retryable error
         # 503: retryable error

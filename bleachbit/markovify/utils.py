@@ -6,6 +6,7 @@
 from .chain import Chain
 from .text import Text
 
+
 def get_model_dict(thing):
     if isinstance(thing, Chain):
         return thing.model

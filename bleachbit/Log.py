@@ -31,7 +31,7 @@ def is_debugging_enabled_via_cli():
     return any(arg.startswith('--debug') for arg in sys.argv)
 
 
-class DelayLog(object):
+class DelayLog():
     def __init__(self):
         self.queue = []
         self.msg = ''
@@ -54,6 +54,7 @@ def init_log():
     """
     logger = logging.getLogger('bleachbit')
     import sys
+
     # On Microsoft Windows when running frozen without the console,
     # avoid py2exe redirecting stderr to bleachbit.exe.log by not
     # writing to stderr because py2exe redirects stderr to a file.

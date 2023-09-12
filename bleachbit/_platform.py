@@ -110,7 +110,8 @@ __copyright__ = """
 
 """
 
-import os, re
+import os
+import re
 
 ### Globals & Constants
 
@@ -258,7 +259,7 @@ def _linux_distribution(distname='', version='', id='', supported_dists=_support
             if _u_distname and _u_version:
                 return (_u_distname, _u_version, _u_id)
     except (EnvironmentError, UnboundLocalError):
-            pass
+        pass
 
     try:
         etc = os.listdir(_UNIXCONFDIR)

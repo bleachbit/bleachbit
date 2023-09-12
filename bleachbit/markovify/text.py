@@ -3,10 +3,12 @@
 # Origin: https://github.com/jsvine/markovify
 # MIT License: https://github.com/jsvine/markovify/blob/master/LICENSE.txt
 
-import re
 import random
+import re
+
+from .chain import BEGIN, Chain
 from .splitters import split_into_sentences
-from .chain import Chain, BEGIN
+
 # BleachBit does not use unidecode
 #from unidecode import unidecode
 
@@ -17,7 +19,7 @@ DEFAULT_TRIES = 10
 class ParamError(Exception):
     pass
 
-class Text(object):
+class Text():
 
     def __init__(self, input_text, state_size=2, chain=None, parsed_sentences=None, retain_original=True):
         """
@@ -150,7 +152,7 @@ class Text(object):
         test_output = kwargs.get('test_output', True)
         max_words = kwargs.get('max_words', None)
 
-        if init_state != None:
+        if init_state is not None:
             prefix = list(init_state)
             for word in prefix:
                 if word == BEGIN:
@@ -162,7 +164,7 @@ class Text(object):
 
         for _ in range(tries):
             words = prefix + self.chain.walk(init_state)
-            if max_words != None and len(words) > max_words:
+            if max_words is not None and len(words) > max_words:
                 continue
             if test_output and hasattr(self, "rejoined_text"):
                 if self.test_sentence_output(words, mor, mot):

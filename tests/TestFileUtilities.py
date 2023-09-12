@@ -23,15 +23,15 @@
 Test case for module FileUtilities
 """
 
-from tests import common
-from bleachbit.FileUtilities import *
-from bleachbit.General import run_external, sudo_mode
-from bleachbit.Options import options
-from bleachbit import logger
-
 import json
 import sys
 import unittest
+
+from bleachbit import logger
+from bleachbit.FileUtilities import *
+from bleachbit.General import run_external, sudo_mode
+from bleachbit.Options import options
+from tests import common
 
 
 def test_ini_helper(self, execute):
@@ -351,7 +351,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                           ctypes.FormatError())
                     self.assertNotEqual(rc, 0)
             symlink_helper(win_symlink)
-            
+
             return
 
         # below this point, only posix

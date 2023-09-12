@@ -29,7 +29,6 @@ from xml.dom.minidom import parseString
 
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import *
-
 from tests import common
 
 logger = logging.getLogger('bleachbit')
@@ -151,7 +150,7 @@ class CleanerTestCase(common.BleachbitTestCase):
             for (option_id, __name) in backends[key].get_options():
                 for cmd in backends[key].get_commands(option_id):
                     for result in cmd.execute(really_delete=False):
-                        if result != True:
+                        if not result:
                             break
                         common.validate_result(self, result)
         # make sure trash and tmp don't return the same results
@@ -185,7 +184,7 @@ class CleanerTestCase(common.BleachbitTestCase):
                 for (option_id, __name) in backends[key].get_options():
                     for cmd in backends[key].get_commands(option_id):
                         for result in cmd.execute(really_delete=False):
-                            if result != True:
+                            if not result:
                                 break
                             msg = "Expected no files to be deleted but got '%s'" % str(
                                 result)

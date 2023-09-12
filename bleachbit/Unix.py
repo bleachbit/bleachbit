@@ -23,10 +23,6 @@
 Integration specific to Unix-like operating systems
 """
 
-import bleachbit
-from bleachbit import FileUtilities, General
-from bleachbit import _
-
 import glob
 import logging
 import os
@@ -34,6 +30,9 @@ import re
 import shlex
 import subprocess
 import sys
+
+import bleachbit
+from bleachbit import FileUtilities, General, _
 
 logger = logging.getLogger(__name__)
 
@@ -727,7 +726,7 @@ def dnf_autoremove():
 
 
 def is_linux_display_protocol_wayland():
-    assert(sys.platform.startswith('linux'))
+    assert sys.platform.startswith('linux')
     result = General.run_external(['loginctl'])
     session = result[1].split('\n')[1].strip().split(' ')[0]
     result = General.run_external(['loginctl', 'show-session', session, '-p', 'Type'])
@@ -735,7 +734,7 @@ def is_linux_display_protocol_wayland():
 
 
 def root_is_not_allowed_to_X_session():
-    assert (sys.platform.startswith('linux'))
+    assert sys.platform.startswith('linux')
     result = General.run_external(['xhost'], clean_env=False)
     xhost_returned_error = result[0] == 1
     return xhost_returned_error

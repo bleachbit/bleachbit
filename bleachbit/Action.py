@@ -23,13 +23,14 @@
 Actions that perform cleaning
 """
 
-from bleachbit import Command, FileUtilities, General, Special, DeepScan
-from bleachbit import _, fs_scan_re_flags
-
 import glob
 import logging
 import os
 import re
+
+from bleachbit import (Command, DeepScan, FileUtilities, General, Special, _,
+                       fs_scan_re_flags)
+
 if 'posix' == os.name:
     from bleachbit import Unix
 
@@ -39,7 +40,7 @@ logger = logging.getLogger(__name__)
 
 def has_glob(s):
     """Checks whether the string contains any glob characters"""
-    return re.search('[?*\[\]]', s) is not None
+    return re.search(r'[?*\[\]]', s) is not None
 
 
 def expand_multi_var(s, variables):
@@ -129,13 +130,13 @@ class FileActionProvider(ActionProvider):
         """Initialize file search"""
         ActionProvider.__init__(self, action_element, path_vars)
         self.regex = action_element.getAttribute('regex')
-        assert(isinstance(self.regex, (str, type(None))))
+        assert isinstance(self.regex, (str, type(None)))
         self.nregex = action_element.getAttribute('nregex')
-        assert(isinstance(self.nregex, (str, type(None))))
+        assert isinstance(self.nregex, (str, type(None)))
         self.wholeregex = action_element.getAttribute('wholeregex')
-        assert(isinstance(self.wholeregex, (str, type(None))))
+        assert isinstance(self.wholeregex, (str, type(None)))
         self.nwholeregex = action_element.getAttribute('nwholeregex')
-        assert(isinstance(self.nwholeregex, (str, type(None))))
+        assert isinstance(self.nwholeregex, (str, type(None)))
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
         self._set_paths(action_element.getAttribute('path'), path_vars)

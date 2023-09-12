@@ -22,14 +22,13 @@
 Perform the preview or delete operations
 """
 
-from bleachbit import DeepScan, FileUtilities
-from bleachbit.Cleaner import backends
-from bleachbit import _, ngettext
-
 import logging
 import math
-import sys
 import os
+import sys
+
+from bleachbit import DeepScan, FileUtilities, _, ngettext
+from bleachbit.Cleaner import backends
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +52,7 @@ class Worker:
         """
         self.ui = ui
         self.really_delete = really_delete
-        assert(isinstance(operations, dict))
+        assert isinstance(operations, dict)
         self.operations = operations
         self.size = 0
         self.total_bytes = 0
@@ -85,7 +84,7 @@ class Worker:
         ret = None
         try:
             for ret in cmd.execute(self.really_delete):
-                if True == ret or isinstance(ret, tuple):
+                if bool(ret) or isinstance(ret, tuple):
                     # Temporarily pass control to the GTK idle loop,
                     # allow user to abort, and
                     # display progress (if applicable).
@@ -97,7 +96,7 @@ class Worker:
         except Exception as e:
             # 2 = does not exist
             # 13 = permission denied
-            from errno import ENOENT, EACCES
+            from errno import EACCES, ENOENT
             if isinstance(e, OSError) and e.errno in (ENOENT, EACCES):
                 # For access denied, do not show traceback
                 exc_message = str(e)
@@ -134,7 +133,7 @@ class Worker:
     def clean_operation(self, operation):
         """Perform a single cleaning operation"""
         operation_options = self.operations[operation]
-        assert(isinstance(operation_options, list))
+        assert isinstance(operation_options, list)
         logger.debug("clean_operation('%s'), options = '%s'",
                      operation, operation_options)
 
@@ -154,11 +153,11 @@ class Worker:
         total_size = 0
         for option_id in operation_options:
             self.size = 0
-            assert(isinstance(option_id, str))
+            assert isinstance(option_id, str)
             # normal scan
             for cmd in backends[operation].get_commands(option_id):
                 for ret in self.execute(cmd, '%s.%s' % (operation, option_id)):
-                    if True == ret:
+                    if ret:
                         # Return control to PyGTK idle loop to keep
                         # it responding allow the user to abort
                         self.yield_time = time.time()
@@ -222,7 +221,7 @@ class Worker:
                         self.ui.update_progress_bar(msg)
                 if self.is_aborted:
                     break
-                if True == ret or isinstance(ret, tuple):
+                if bool(ret) or isinstance(ret, tuple):
                     # Return control to PyGTK idle loop to keep
                     # it responding and allow the user to abort.
                     yield True
@@ -322,7 +321,7 @@ class Worker:
         ds = DeepScan.DeepScan(self.deepscans)
 
         for cmd in ds.scan():
-            if True == cmd:
+            if cmd:
                 yield True
                 continue
             for _ret in self.execute(cmd, 'deepscan'):

@@ -22,12 +22,12 @@
 Test case for module General
 """
 
-from bleachbit.General import *
-from bleachbit import logger
-from tests import common
-
 import shutil
 import unittest
+
+from bleachbit import logger
+from bleachbit.General import *
+from tests import common
 
 
 class GeneralTestCase(common.BleachbitTestCase):

@@ -19,17 +19,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import email.generator
-from email.mime.text import MIMEText
 import json
 import logging
 import os
+import queue as _unused_module_Queue
 import random
 import tempfile
 from datetime import datetime
-import queue as _unused_module_Queue
+from email.mime.text import MIMEText
 
-from bleachbit import _, bleachbit_exe_path
-from bleachbit import options_dir
+from bleachbit import _, bleachbit_exe_path, options_dir
 
 from . import markovify
 
@@ -190,15 +189,17 @@ def _generate_email(subject_model, content_model, number_of_sentences=DEFAULT_NU
 def download_url_to_fn(url, fn, on_error=None, max_retries=2, backoff_factor=0.5):
     """Download a URL to the given filename"""
     logger.info('Downloading %s to %s', url, fn)
-    import requests
     import sys
+
+    import requests
     if hasattr(sys, 'frozen'):
         # when frozen by py2exe, certificates are in alternate location
         CA_BUNDLE = os.path.join(bleachbit_exe_path, 'cacert.pem')
         requests.utils.DEFAULT_CA_BUNDLE_PATH = CA_BUNDLE
         requests.adapters.DEFAULT_CA_BUNDLE_PATH = CA_BUNDLE
-    from urllib3.util.retry import Retry
     from requests.adapters import HTTPAdapter
+    from urllib3.util.retry import Retry
+
     # 408: request timeout
     # 429: too many requests
     # 500: internal server error

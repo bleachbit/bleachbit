@@ -22,10 +22,10 @@
 Test case for module Memory
 """
 
-from tests import common
-from bleachbit.Memory import *
-
 import unittest
+
+from bleachbit.Memory import *
+from tests import common
 
 
 class MemoryTestCase(common.BleachbitTestCase):
@@ -37,7 +37,7 @@ class MemoryTestCase(common.BleachbitTestCase):
         """Test for method get_proc_swaps"""
         ret = get_proc_swaps()
         self.assertGreater(len(ret), 10)
-        if not re.search('Filename\s+Type\s+Size', ret):
+        if not re.search(r'Filename\s+Type\s+Size', ret):
             raise RuntimeError(
                 "Unexpected first line in swap summary '%s'" % ret)
 

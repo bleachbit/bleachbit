@@ -24,13 +24,14 @@
 GUI for making chaff
 """
 
-from bleachbit import _
-from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models
-
-from gi.repository import Gtk, GLib
 import logging
 import os
 
+from gi.repository import GLib, Gtk
+
+from bleachbit import _
+from bleachbit.Chaff import (download_models, generate_2600, generate_emails,
+                             have_models)
 
 logger = logging.getLogger(__name__)
 

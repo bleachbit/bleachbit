@@ -22,8 +22,8 @@
 Test case for RecognizeCleanerML
 """
 
-from tests import common
 from bleachbit.RecognizeCleanerML import hashdigest
+from tests import common
 
 
 class RecognizeCleanerMLTestCase(common.BleachbitTestCase):
