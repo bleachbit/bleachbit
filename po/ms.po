@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-06 15:47-0600\n"
-"PO-Revision-Date: 2023-09-17 22:06+0000\n"
+"PO-Revision-Date: 2023-09-18 23:02+0000\n"
 "Last-Translator: Harisfazillah Jamel <linuxmalaysia@gmail.com>\n"
 "Language-Team: Malay <https://hosted.weblate.org/projects/bleachbit/main/ms/>"
 "\n"
@@ -293,7 +293,7 @@ msgstr "Paling digunakan baru-baru ini"
 
 #: ../cleaners/windows_defender.xml
 msgid "Anti-virus"
-msgstr "Anti-virus"
+msgstr "Anti virus"
 
 #: ../cleaners/windows_defender.xml
 msgid "Quarantine"
@@ -1138,7 +1138,7 @@ msgid ""
 "At least one file was locked by another process, so its contents could not "
 "be overwritten. It will be marked for deletion upon system reboot."
 msgstr ""
-"Sekurang-kurangnya satu fail telah dikunci oleh proses lain  supaya "
+"Sekurang-kurangnya satu fail telah dikunci oleh proses lain supaya "
 "kandungannya tidak ditulis-ganti. Ia akan bertanda untuk pemadaman ketika "
 "but-semula sistem."
 
@@ -1571,11 +1571,7 @@ msgstr ""
 #. in the 'About' box.
 #: ../bleachbit/GUI.py:327
 msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Ibrahim Elias https://launchpad.net/~imen802003-netscape\n"
-"  Ronand Joe https://launchpad.net/~ronandjoe\n"
-"  abuyop https://launchpad.net/~abuyop"
+msgstr "kredit kepada penterjemah"
 
 #: ../bleachbit/GUI.py:351
 msgid "System information"
@@ -1690,7 +1686,7 @@ msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"Perintah 'swapoff -s' gagal dijalankan, jatuh balik ke  /proc/swaps untuk "
+"Perintah 'swapoff -s' gagal dijalankan, jatuh balik ke /proc/swaps untuk "
 "maklumat silih."
 
 #: ../bleachbit/Memory.py:78
@@ -1709,7 +1705,7 @@ msgstr "Menetapkan nilai elok %d bagi proses ini."
 #: ../bleachbit/Memory.py:126
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
-msgstr "Melepaskan kelayakan ID proses  {pid} kepada ID pengguna {uid}."
+msgstr "Melepaskan kelayakan ID proses {pid} kepada ID pengguna {uid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140
@@ -1876,7 +1872,7 @@ msgstr "Utiliti"
 
 #: ../bleachbit/Winapp.py:63
 msgid "Games"
-msgstr "Permainan"
+msgstr "Permainan-permainan"
 
 #: ../bleachbit/Winapp.py:183
 msgid "Imported from winapp2.ini"
@@ -1936,7 +1932,7 @@ msgstr "Tunggu sebentar.  Membersihkan %s."
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
 msgstr[0] "Kira-kira %d minit berbaki."
-msgstr[1] "Kira-kira %d minit berbaki."
+msgstr[1] "Kira-kira %d minit-minit berbaki."
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
