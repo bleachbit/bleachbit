@@ -8,16 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-06 15:47-0600\n"
-"PO-Revision-Date: 2021-10-27 03:57+0000\n"
-"Last-Translator: abuyop <Unknown>\n"
-"Language-Team: Malay <ms@li.org>\n"
+"PO-Revision-Date: 2023-09-17 22:06+0000\n"
+"Last-Translator: Harisfazillah Jamel <linuxmalaysia@gmail.com>\n"
+"Language-Team: Malay <https://hosted.weblate.org/projects/bleachbit/main/ms/>"
+"\n"
 "Language: ms\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.0.2\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
-"X-Generator: Launchpad (build 0d8de2bfee2024772b3040d4d19f42f47395ac0d)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -839,10 +840,9 @@ msgid "Run external command: %s"
 msgstr "Jalankan perintah luar: %s"
 
 #: ../bleachbit/Chaff.py:212
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
-msgstr "Gagal memuat turun url: %s"
+msgstr "Gagal memuat turun URL: %s"
 
 #: ../bleachbit/CleanerML.py:134
 #, python-brace-format
@@ -856,7 +856,7 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:275
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr "Mengabaikan pembersih kerana  ia boleh ditulis: %s"
+msgstr "Mengabaikan pembersih kerana ia boleh ditulis: %s"
 
 #: ../bleachbit/CleanerML.py:294 ../bleachbit/CleanerML.py:339
 #, python-format
@@ -1295,7 +1295,7 @@ msgstr "Buka pelayar sesawang ke %s?"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:533
 msgid "Confirm"
-msgstr ""
+msgstr "Sahkan"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1445,7 +1445,7 @@ msgstr "Tunjuk mesej nyahpepijat"
 
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
-msgstr ""
+msgstr "Tambah pilihan menu konteks cincang (khusus KDE Plasma)"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:286
@@ -1504,8 +1504,6 @@ msgid "Folder"
 msgstr "Folder"
 
 #: ../bleachbit/GuiPreferences.py:452
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
 msgstr "Laluan ini tidak akan dipadam atau diubah suai."
 
@@ -1557,7 +1555,7 @@ msgstr "_OK"
 
 #: ../bleachbit/GUI.py:310
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Program untuk membersihkan fail yang tidak diperlukan"
 
 #: ../bleachbit/GUI.py:321
 msgid ""
@@ -1617,10 +1615,8 @@ msgid "You must select an operation"
 msgstr "Anda mesti pilih satu operasi"
 
 #: ../bleachbit/GUI.py:777
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Ralat: %d"
+msgstr "Ralat"
 
 #: ../bleachbit/GUI.py:795 ../bleachbit/GUI.py:811
 msgid "Done."
@@ -1659,6 +1655,8 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"Tiada versi rasmi BleachBit di Microsoft Store. Dapatkan versi tulen di "
+"https://www.bleachbit.org di mana ia sentiasa percuma."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1889,10 +1887,12 @@ msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
+"Fail python3.dll ditemui dalam c:\\ atau c:\\dlls, yang menunjukkan "
+"kemungkinan percubaan pada rampasan perintah carian DLL."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "Amaran"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
