@@ -138,6 +138,10 @@ def open_files():
             # happens, for example, when link points to
             # '/etc/password\x00 (deleted)'
             continue
+        except PermissionError:
+            # /proc/###/fd/0 with systemd
+            # https://github.com/bleachbit/bleachbit/issues/1515
+            continue
         else:
             yield target
 
