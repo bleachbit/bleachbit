@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-06 15:47-0600\n"
-"PO-Revision-Date: 2023-02-07 00:55+0000\n"
+"PO-Revision-Date: 2023-09-25 00:04+0000\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "bleachbit/main/en_GB/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -1284,7 +1284,7 @@ msgstr "Open web browser to %s?"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:533
 msgid "Confirm"
-msgstr ""
+msgstr "Confirm"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1605,10 +1605,8 @@ msgid "You must select an operation"
 msgstr "You must select an operation"
 
 #: ../bleachbit/GUI.py:777
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Errors: %d"
+msgstr "Error"
 
 #: ../bleachbit/GUI.py:795 ../bleachbit/GUI.py:811
 msgid "Done."
@@ -1882,10 +1880,12 @@ msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
+"The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
+"possible attempt at DLL search-order hijacking."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "Warning"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
