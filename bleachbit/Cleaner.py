@@ -611,14 +611,15 @@ class System(Cleaner):
             '^/tmp/.truecrypt_aux_mnt.*/(control|volume)$',
             '^/tmp/.vbox-[^/]+-ipc/lock$',
             '^/tmp/.wine-[0-9]+/server-.*/lock$',
-            '^/tmp/gconfd-[^/]+/lock/ior$',
             '^/tmp/fsa/',  # fsarchiver
+            '^/tmp/gconfd-[^/]+/lock/ior$',
             '^/tmp/kde-',
             '^/tmp/kdesudo-',
             '^/tmp/ksocket-',
             '^/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock$',
             '^/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior$',
             '^/tmp/pulse-[^/]+/pid$',
+            '^/tmp/xauth',
             '^/var/tmp/kdecache-',
             '^' + os.path.expanduser('~/.cache/wallpaper/'),
             # Flatpak mount point
