@@ -58,8 +58,9 @@ class ChaffTestCase(common.BleachbitTestCase):
             expected_rc = test[1]
             on_error_called = [False]
             rc = download_url_to_fn(
-                url, fn, on_error=on_error, max_retries=2, backoff_factor=1)
-            self.assertEqual(rc, expected_rc)
+                url, fn, on_error=on_error, timeout=20)
+            err_msg = 'test_download_url_to_fn({}) returned {} instead of {}'.format(url, rc, expected_rc)
+            self.assertEqual(rc, expected_rc, err_msg)
             if expected_rc:
                 self.assertExists(fn)
             self.assertNotEqual(rc, on_error_called[0])

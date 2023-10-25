@@ -54,6 +54,7 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
                 return
         delete_current = True
     # download update
+    # FIXME: refactor this to share code with bleachbit.Chaff.download_url_to_fn()
     opener = build_opener()
     opener.addheaders = [('User-Agent', user_agent())]
     doc = opener.open(fullurl=url, timeout=20).read()
