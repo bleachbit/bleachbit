@@ -148,6 +148,22 @@ def update_dialog(parent, updates):
     return False
 
 
+def get_ip_for_url(url):
+    """Given an https URL, return the IP address"""
+    if not url:
+        return '(no URL)'
+    url_split = url.split('/')
+    if len(url_split) < 3:
+        return '(bad URL)'
+    hostname = url.split('/')[2]
+    import socket
+    try:
+        ip_address = socket.gethostbyname(hostname)
+    except socket.gaierror:
+        return '(socket.gaierror)'
+    return ip_address
+
+
 def check_updates(check_beta, check_winapp2, append_text, cb_success):
     """Check for updates via the Internet"""
     opener = build_opener()
@@ -162,6 +178,8 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     except URLError as e:
         logger.error(
             _('Error when opening a network connection to check for updates. Please verify the network is working and that a firewall is not blocking this application. Error message: {}').format(e))
+        logger.debug('URL {} has IP address {}'.format(
+            url, get_ip_for_url(url)))
         if hasattr(e, 'headers'):
             logger.debug(e.headers)
         return ()
