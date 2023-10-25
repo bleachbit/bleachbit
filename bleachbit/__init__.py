@@ -32,7 +32,7 @@ import platform
 from bleachbit import Log
 from configparser import RawConfigParser, NoOptionError
 
-APP_VERSION = "4.5.0"
+APP_VERSION = "4.5.1"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 
