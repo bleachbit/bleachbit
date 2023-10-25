@@ -161,7 +161,7 @@ class Function:
                 # Function takes a path.  We check the size.
                 oldsize = FileUtilities.getsize(self.path)
 
-                from sqlite import DatabaseError
+                from sqlite3 import DatabaseError
                 try:
                     self.func(self.path)
                 except DatabaseError as e:
