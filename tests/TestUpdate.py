@@ -86,10 +86,11 @@ class UpdateTestCase(common.BleachbitTestCase):
         """Unit test for class UpdateCheck with bad network address"""
         # expect connection failure
         preserve_url = bleachbit.update_check_url
-        bleachbit.update_check_url = "http://localhost/doesnotexist"
-        self.assertEqual(
-            check_updates(True, False, None, None),
-            ())
+        for url in ('http://localhost/doesnotexist', 'https://httpstat.us/500'):
+            bleachbit.update_check_url = url
+            self.assertEqual(
+                check_updates(True, False, None, None),
+                ())
         bleachbit.update_check_url = preserve_url
 
     def test_update_url(self):
