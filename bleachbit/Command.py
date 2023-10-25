@@ -40,12 +40,6 @@ else:
 
 logger = logging.getLogger(__name__)
 
-try:
-    from sqlite3 import DatabaseError
-except ModuleNotFoundError as e:
-    logger.exception(
-        _('There was a ModuleNotFoundError when importing sqlite3, so make sure that the Python package for sqlite3 is installed.'))
-
 
 def whitelist(path):
     """Return information that this file was whitelisted"""
@@ -167,6 +161,7 @@ class Function:
                 # Function takes a path.  We check the size.
                 oldsize = FileUtilities.getsize(self.path)
 
+                from sqlite import DatabaseError
                 try:
                     self.func(self.path)
                 except DatabaseError as e:

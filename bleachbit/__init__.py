@@ -315,3 +315,15 @@ if 'posix' == os.name:
 
 # should be re.IGNORECASE on macOS
 fs_scan_re_flags = 0 if os.name == 'posix' else re.IGNORECASE
+
+#
+# Exceptions
+#
+
+
+# Python 3.6 is the first with this exception
+if hasattr(sys.modules['builtins'], 'ModuleNotFoundError'):
+    ModuleNotFoundError = sys.modules['builtins'].ModuleNotFoundError
+else:
+    class ModuleNotFoundError(Exception):
+        pass

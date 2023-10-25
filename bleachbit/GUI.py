@@ -141,14 +141,8 @@ class Bleachbit(Gtk.Application):
             import atexit
             atexit.register(Windows.cleanup_nonce)
 
-            # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
-            # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
-            # https://www.bleachbit.org/forum/074-fails-errors
-            try:
-                import sqlite3
-            except ImportError:
-                logger.exception(
-                    _("Error loading the SQLite module: the antivirus software may be blocking it."))
+        from bleachbit.General import startup_check
+        startup_check()
 
     def _init_windows_misc(self, auto_exit, shred_paths, uac):
         application_id_suffix = ''

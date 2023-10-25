@@ -21,7 +21,7 @@
 Basic GUI code
 """
 
-from bleachbit import _
+from bleachbit import _, ModuleNotFoundError
 
 import os
 
