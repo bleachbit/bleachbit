@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-06 15:47-0600\n"
-"PO-Revision-Date: 2023-08-06 05:49+0000\n"
-"Last-Translator: tjw123hh <tjw123hh@outlook.com>\n"
+"PO-Revision-Date: 2023-10-28 04:16+0000\n"
+"Last-Translator: Pin-Hsien Lee <phsnlee@ncpy.dev>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "bleachbit/main/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.2-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -1251,7 +1251,7 @@ msgstr "用網頁瀏覽器開啟 %s？"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:533
 msgid "Confirm"
-msgstr ""
+msgstr "確認"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1397,9 +1397,8 @@ msgid "Show debug messages"
 msgstr "顯示除錯訊息"
 
 #: ../bleachbit/GuiPreferences.py:216
-#, fuzzy
 msgid "Add shred context menu option (KDE Plasma specific)"
-msgstr "往右鍵菜單中添加粉碎檔案選項（僅 KDE Plasma）"
+msgstr "往右鍵選單中添加粉碎檔案選項（僅 KDE Plasma）"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:286
@@ -1568,10 +1567,8 @@ msgid "You must select an operation"
 msgstr "您必須選擇一項操作"
 
 #: ../bleachbit/GUI.py:777
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "錯誤：%d 項錯誤"
+msgstr "錯誤"
 
 #: ../bleachbit/GUI.py:795 ../bleachbit/GUI.py:811
 msgid "Done."
@@ -1831,11 +1828,11 @@ msgstr "從 winapp2.ini 匯入"
 msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
-msgstr ""
+msgstr "在 c:\\ 或 c:\\dlls 找到了 python3.dll，表明可能存在 DLL 搜尋順序挾持的嘗試。"
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "警告"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
