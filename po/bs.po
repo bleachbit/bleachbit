@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-06 15:47-0600\n"
+"POT-Creation-Date: 2023-10-29 10:23-0600\n"
 "PO-Revision-Date: 2021-05-02 00:30+0000\n"
 "Last-Translator: Ibrahim Sikirić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -15,69 +15,75 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2021-05-02 16:44+0000\n"
 "X-Generator: Launchpad (build 02afa4875ac52c169f5cddf0d1bcdd6e149a3754)\n"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
-#: ../cleaners/elinks.xml ../cleaners/epiphany.xml ../cleaners/links2.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/safari.xml ../cleaners/konqueror.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\waterfox.xml ../cleaners\seamonkey.xml
+#: ../cleaners\palemoon.xml ../cleaners\elinks.xml ../cleaners\epiphany.xml
+#: ../cleaners\links2.xml ../cleaners\microsoft_edge.xml
+#: ../cleaners\firefox.xml ../cleaners\brave.xml ../cleaners\safari.xml
+#: ../cleaners\konqueror.xml ../cleaners\internet_explorer.xml
+#: ../cleaners\opera.xml
 msgid "Web browser"
 msgstr "Web preglednik"
 
-#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/tremulous.xml
-#: ../cleaners/flash.xml ../cleaners/google_chrome.xml ../cleaners/slack.xml
-#: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/emesene.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
-#: ../cleaners/epiphany.xml ../cleaners/microsoft_edge.xml ../cleaners/gftp.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/vuze.xml
-#: ../cleaners/evolution.xml ../cleaners/rhythmbox.xml ../cleaners/miro.xml
-#: ../cleaners/java.xml ../cleaners/discord.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/pidgin.xml
-#: ../cleaners/safari.xml ../cleaners/audacious.xml ../cleaners/smartftp.xml
-#: ../cleaners/exaile.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/thumbnails.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/zoom.xml ../cleaners/amsn.xml ../cleaners/liferea.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
-#: ../cleaners/beagle.xml ../cleaners/xine.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/kde.xml
-#: ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:192
+#: ../cleaners\chromium.xml ../cleaners\gpodder.xml
+#: ../cleaners\tremulous.xml ../cleaners\flash.xml
+#: ../cleaners\google_chrome.xml ../cleaners\slack.xml
+#: ../cleaners\waterfox.xml ../cleaners\seamonkey.xml
+#: ../cleaners\emesene.xml ../cleaners\thunderbird.xml
+#: ../cleaners\palemoon.xml ../cleaners\epiphany.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\gftp.xml
+#: ../cleaners\firefox.xml ../cleaners\brave.xml ../cleaners\vuze.xml
+#: ../cleaners\evolution.xml ../cleaners\rhythmbox.xml ../cleaners\miro.xml
+#: ../cleaners\java.xml ../cleaners\discord.xml ../cleaners\adobe_reader.xml
+#: ../cleaners\windows_media_player.xml ../cleaners\pidgin.xml
+#: ../cleaners\safari.xml ../cleaners\audacious.xml ../cleaners\smartftp.xml
+#: ../cleaners\exaile.xml ../cleaners\yahoo_messenger.xml
+#: ../cleaners\thumbnails.xml ../cleaners\secondlife_viewer.xml
+#: ../cleaners\zoom.xml ../cleaners\amsn.xml ../cleaners\liferea.xml
+#: ../cleaners\internet_explorer.xml ../cleaners\opera.xml
+#: ../cleaners\beagle.xml ../cleaners\xine.xml
+#: ../cleaners\hippo_opensim_viewer.xml ../cleaners\kde.xml
+#: ../cleaners\nexuiz.xml ../bleachbit/Cleaner.py:192
 #: ../bleachbit/Cleaner.py:277
 msgid "Cache"
 msgstr "Keš"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/slack.xml
-#: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
-#: ../cleaners/epiphany.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/brave.xml ../cleaners/safari.xml ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\slack.xml ../cleaners\seamonkey.xml
+#: ../cleaners\thunderbird.xml ../cleaners\epiphany.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\brave.xml
+#: ../cleaners\safari.xml ../cleaners\opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
 "Obriši keširani web sadržaj, koji skraćuje vrijeme prikaza ranije "
 "pregledanih stranica"
 
-#: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
-#: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml
-#: ../cleaners/realplayer.xml ../cleaners/brave.xml ../cleaners/discord.xml
-#: ../cleaners/safari.xml ../cleaners/konqueror.xml ../cleaners/liferea.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\silverlight.xml
+#: ../cleaners\flash.xml ../cleaners\google_chrome.xml ../cleaners\slack.xml
+#: ../cleaners\waterfox.xml ../cleaners\seamonkey.xml
+#: ../cleaners\thunderbird.xml ../cleaners\palemoon.xml
+#: ../cleaners\epiphany.xml ../cleaners\microsoft_edge.xml
+#: ../cleaners\firefox.xml ../cleaners\realplayer.xml ../cleaners\brave.xml
+#: ../cleaners\discord.xml ../cleaners\safari.xml ../cleaners\konqueror.xml
+#: ../cleaners\liferea.xml ../cleaners\internet_explorer.xml
+#: ../cleaners\opera.xml
 msgid "Cookies"
 msgstr "Kolačići"
 
-#: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
-#: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml
-#: ../cleaners/realplayer.xml ../cleaners/brave.xml ../cleaners/discord.xml
-#: ../cleaners/safari.xml ../cleaners/konqueror.xml ../cleaners/liferea.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\silverlight.xml
+#: ../cleaners\flash.xml ../cleaners\google_chrome.xml ../cleaners\slack.xml
+#: ../cleaners\waterfox.xml ../cleaners\seamonkey.xml
+#: ../cleaners\thunderbird.xml ../cleaners\palemoon.xml
+#: ../cleaners\epiphany.xml ../cleaners\microsoft_edge.xml
+#: ../cleaners\firefox.xml ../cleaners\realplayer.xml ../cleaners\brave.xml
+#: ../cleaners\discord.xml ../cleaners\safari.xml ../cleaners\konqueror.xml
+#: ../cleaners\liferea.xml ../cleaners\internet_explorer.xml
+#: ../cleaners\opera.xml
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
@@ -88,56 +94,58 @@ msgstr ""
 #. DOM=Document Object Model
 #. DOM=Document Object Model
 #. DOM=Document Object Model
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/epiphany.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\waterfox.xml ../cleaners\palemoon.xml
+#: ../cleaners\epiphany.xml ../cleaners\microsoft_edge.xml
+#: ../cleaners\firefox.xml ../cleaners\brave.xml ../cleaners\opera.xml
 msgid "DOM Storage"
 msgstr "DOM Arhiva"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/epiphany.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\waterfox.xml ../cleaners\palemoon.xml
+#: ../cleaners\epiphany.xml ../cleaners\microsoft_edge.xml
+#: ../cleaners\firefox.xml ../cleaners\brave.xml ../cleaners\opera.xml
 msgid "Delete HTML5 cookies"
 msgstr "Obriši HTML5 kolačiće"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\waterfox.xml ../cleaners\palemoon.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\firefox.xml
+#: ../cleaners\brave.xml ../cleaners\internet_explorer.xml
+#: ../cleaners\opera.xml
 msgid "Form history"
 msgstr "Historija obrazaca"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\brave.xml
+#: ../cleaners\opera.xml
 msgid "A history of forms entered in web sites"
 msgstr "Historija obrazaca unesenih na web stranicama"
 
-#: ../cleaners/chromium.xml ../cleaners/winrar.xml
-#: ../cleaners/windows_defender.xml ../cleaners/sqlite3.xml
-#: ../cleaners/bash.xml ../cleaners/nautilus.xml ../cleaners/octave.xml
-#: ../cleaners/tortoisesvn.xml ../cleaners/google_chrome.xml
-#: ../cleaners/slack.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
-#: ../cleaners/links2.xml ../cleaners/libreoffice.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/realplayer.xml
-#: ../cleaners/brave.xml ../cleaners/discord.xml ../cleaners/vim.xml
-#: ../cleaners/d4x.xml ../cleaners/safari.xml ../cleaners/mc.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
-#: ../cleaners/easytag.xml
+#: ../cleaners\chromium.xml ../cleaners\winrar.xml
+#: ../cleaners\windows_defender.xml ../cleaners\sqlite3.xml
+#: ../cleaners\bash.xml ../cleaners\nautilus.xml ../cleaners\octave.xml
+#: ../cleaners\tortoisesvn.xml ../cleaners\google_chrome.xml
+#: ../cleaners\slack.xml ../cleaners\seamonkey.xml ../cleaners\elinks.xml
+#: ../cleaners\links2.xml ../cleaners\libreoffice.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\realplayer.xml
+#: ../cleaners\brave.xml ../cleaners\discord.xml ../cleaners\vim.xml
+#: ../cleaners\d4x.xml ../cleaners\safari.xml ../cleaners\mc.xml
+#: ../cleaners\internet_explorer.xml ../cleaners\opera.xml
+#: ../cleaners\easytag.xml
 msgid "History"
 msgstr "Historija"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/slack.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/discord.xml
-#: ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\slack.xml ../cleaners\microsoft_edge.xml
+#: ../cleaners\brave.xml ../cleaners\discord.xml ../cleaners\opera.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
 "Obriši historijat, koji uključuje posjećene lokacije, preuzimanja i sličice"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\brave.xml
 msgid "Search engines"
 msgstr "Pretraživači"
 
@@ -145,8 +153,8 @@ msgstr "Pretraživači"
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\brave.xml
 msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
@@ -154,39 +162,41 @@ msgstr ""
 "Vrati historiju korištenja pretraživača i obriši ne-tvorničke pretraživače, "
 "od kojih su neki automatski dodati"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\brave.xml
+#: ../cleaners\opera.xml
 msgid "Session"
 msgstr "Sesija"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\brave.xml
+#: ../cleaners\opera.xml
 msgid "Delete the current and last sessions"
 msgstr "Obriši trenutnu i posljednju sesiju"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\brave.xml
 msgid "Sync"
 msgstr "Sinhronizuj"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\brave.xml
 msgid "Delete the sync data and sign out of the browser"
 msgstr "Obriši sinhronizovane podatke i odjavi se iz preglednika"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\waterfox.xml ../cleaners\thunderbird.xml
+#: ../cleaners\palemoon.xml ../cleaners\epiphany.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\firefox.xml
+#: ../cleaners\brave.xml ../cleaners\opera.xml
 msgid "Passwords"
 msgstr "Šifre"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\waterfox.xml ../cleaners\thunderbird.xml
+#: ../cleaners\palemoon.xml ../cleaners\epiphany.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\firefox.xml
+#: ../cleaners\brave.xml ../cleaners\opera.xml
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
@@ -194,11 +204,11 @@ msgstr ""
 "Baza podataka korisničkih imena i šifri, kao i popis lokacija koje ne bi "
 "trebale pohranjivati šifre"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\waterfox.xml ../cleaners\thunderbird.xml
+#: ../cleaners\palemoon.xml ../cleaners\epiphany.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\firefox.xml
+#: ../cleaners\brave.xml ../cleaners\opera.xml
 msgid "This option will delete your saved passwords."
 msgstr "Ova opcija će obrisati sačuvane šifre"
 
@@ -206,21 +216,22 @@ msgstr "Ova opcija će obrisati sačuvane šifre"
 #. from the SQLite database.  Microsoft Access uses
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
-#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/yum.xml
-#: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/discord.xml ../cleaners/safari.xml ../cleaners/liferea.xml
-#: ../cleaners/opera.xml ../bleachbit/Action.py:592
+#: ../cleaners\chromium.xml ../cleaners\gpodder.xml ../cleaners\yum.xml
+#: ../cleaners\google_chrome.xml ../cleaners\slack.xml
+#: ../cleaners\waterfox.xml ../cleaners\thunderbird.xml
+#: ../cleaners\palemoon.xml ../cleaners\microsoft_edge.xml
+#: ../cleaners\firefox.xml ../cleaners\brave.xml ../cleaners\discord.xml
+#: ../cleaners\safari.xml ../cleaners\liferea.xml ../cleaners\opera.xml
+#: ../bleachbit/Action.py:592
 msgid "Vacuum"
 msgstr "Vakum"
 
-#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/yum.xml
-#: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/discord.xml ../cleaners/safari.xml ../cleaners/liferea.xml
-#: ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\gpodder.xml ../cleaners\yum.xml
+#: ../cleaners\google_chrome.xml ../cleaners\slack.xml
+#: ../cleaners\waterfox.xml ../cleaners\thunderbird.xml
+#: ../cleaners\palemoon.xml ../cleaners\microsoft_edge.xml
+#: ../cleaners\firefox.xml ../cleaners\brave.xml ../cleaners\discord.xml
+#: ../cleaners\safari.xml ../cleaners\liferea.xml ../cleaners\opera.xml
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
@@ -228,403 +239,411 @@ msgstr ""
 "Očisti fragmentaciju baze podataka da bi se umanjilo zauzeće prostora i "
 "unaprijedila brzina bez uklanjanja podataka"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\waterfox.xml ../cleaners\palemoon.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\firefox.xml
+#: ../cleaners\brave.xml ../cleaners\opera.xml
 msgid "Site preferences"
 msgstr "Postavke lokacija"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/opera.xml
+#: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
+#: ../cleaners\waterfox.xml ../cleaners\palemoon.xml
+#: ../cleaners\microsoft_edge.xml ../cleaners\firefox.xml
+#: ../cleaners\brave.xml ../cleaners\opera.xml
 msgid "Settings for individual sites"
 msgstr "Podešavanja za pojedinačne lokacije"
 
-#: ../cleaners/winrar.xml
+#: ../cleaners\winrar.xml
 msgid "File archiver"
 msgstr "Arhiver"
 
-#: ../cleaners/winrar.xml ../cleaners/filezilla.xml
-#: ../cleaners/windows_defender.xml ../cleaners/nautilus.xml
-#: ../cleaners/tortoisesvn.xml ../cleaners/gnome.xml ../cleaners/links2.xml
-#: ../cleaners/libreoffice.xml ../cleaners/amule.xml ../cleaners/realplayer.xml
-#: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:245
-#: ../bleachbit/Cleaner.py:254
+#: ../cleaners\winrar.xml ../cleaners\filezilla.xml
+#: ../cleaners\windows_defender.xml ../cleaners\nautilus.xml
+#: ../cleaners\tortoisesvn.xml ../cleaners\gnome.xml ../cleaners\links2.xml
+#: ../cleaners\libreoffice.xml ../cleaners\amule.xml
+#: ../cleaners\realplayer.xml ../cleaners\d4x.xml ../cleaners\mc.xml
+#: ../cleaners\internet_explorer.xml ../cleaners\easytag.xml
+#: ../bleachbit/Cleaner.py:245 ../bleachbit/Cleaner.py:254
 msgid "Delete the usage history"
 msgstr "Obriši historiju korištenja"
 
-#: ../cleaners/winrar.xml ../cleaners/silverlight.xml
-#: ../cleaners/windows_defender.xml ../cleaners/winetricks.xml
-#: ../cleaners/amule.xml ../cleaners/google_earth.xml ../cleaners/vuze.xml
-#: ../cleaners/wine.xml ../cleaners/deepscan.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/kde.xml ../cleaners/gimp.xml ../bleachbit/Cleaner.py:342
+#: ../cleaners\winrar.xml ../cleaners\silverlight.xml
+#: ../cleaners\windows_defender.xml ../cleaners\winetricks.xml
+#: ../cleaners\amule.xml ../cleaners\google_earth.xml ../cleaners\vuze.xml
+#: ../cleaners\wine.xml ../cleaners\deepscan.xml
+#: ../cleaners\adobe_reader.xml ../cleaners\kde.xml ../cleaners\gimp.xml
+#: ../bleachbit/Cleaner.py:342
 msgid "Temporary files"
 msgstr "Privremene datoteke"
 
-#: ../cleaners/winrar.xml ../cleaners/silverlight.xml
-#: ../cleaners/windows_defender.xml ../cleaners/winetricks.xml
-#: ../cleaners/amule.xml ../cleaners/google_earth.xml ../cleaners/vuze.xml
-#: ../cleaners/wine.xml ../cleaners/deepscan.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/kde.xml ../cleaners/gimp.xml ../bleachbit/Cleaner.py:342
+#: ../cleaners\winrar.xml ../cleaners\silverlight.xml
+#: ../cleaners\windows_defender.xml ../cleaners\winetricks.xml
+#: ../cleaners\amule.xml ../cleaners\google_earth.xml ../cleaners\vuze.xml
+#: ../cleaners\wine.xml ../cleaners\deepscan.xml
+#: ../cleaners\adobe_reader.xml ../cleaners\kde.xml ../cleaners\gimp.xml
+#: ../bleachbit/Cleaner.py:342
 msgid "Delete the temporary files"
 msgstr "Obriši privremene datoteke"
 
-#: ../cleaners/silverlight.xml ../cleaners/flash.xml ../cleaners/miro.xml
-#: ../cleaners/xine.xml
+#: ../cleaners\silverlight.xml ../cleaners\flash.xml ../cleaners\miro.xml
+#: ../cleaners\xine.xml
 msgid "Multimedia viewer"
 msgstr "Multimedijski preglednik"
 
-#: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/amule.xml
-#: ../cleaners/gftp.xml ../cleaners/vuze.xml ../cleaners/smartftp.xml
+#: ../cleaners\filezilla.xml ../cleaners\transmission.xml
+#: ../cleaners\amule.xml ../cleaners\gftp.xml ../cleaners\vuze.xml
+#: ../cleaners\smartftp.xml
 msgid "File transfer client"
 msgstr "Klijent za prijenos datoteka"
 
-#: ../cleaners/filezilla.xml ../cleaners/paint.xml ../cleaners/winamp.xml
-#: ../cleaners/vlc.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/audacious.xml ../cleaners/winzip.xml ../cleaners/smartftp.xml
-#: ../cleaners/wordpad.xml ../cleaners/teamviewer.xml
-#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:193
+#: ../cleaners\filezilla.xml ../cleaners\paint.xml ../cleaners\winamp.xml
+#: ../cleaners\vlc.xml ../cleaners\adobe_reader.xml
+#: ../cleaners\microsoft_office.xml ../cleaners\windows_media_player.xml
+#: ../cleaners\audacious.xml ../cleaners\winzip.xml ../cleaners\smartftp.xml
+#: ../cleaners\wordpad.xml ../cleaners\teamviewer.xml
+#: ../cleaners\windows_explorer.xml ../bleachbit/Cleaner.py:193
 msgid "Most recently used"
 msgstr "Nedavno korišteni"
 
-#: ../cleaners/windows_defender.xml
+#: ../cleaners\windows_defender.xml
 msgid "Anti-virus"
 msgstr "Anti-virus"
 
-#: ../cleaners/windows_defender.xml
+#: ../cleaners\windows_defender.xml
 msgid "Quarantine"
 msgstr "Karantena"
 
-#: ../cleaners/windows_defender.xml ../cleaners/transmission.xml
-#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/beagle.xml
+#: ../cleaners\windows_defender.xml ../cleaners\transmission.xml
+#: ../cleaners\waterfox.xml ../cleaners\thunderbird.xml
+#: ../cleaners\palemoon.xml ../cleaners\firefox.xml ../cleaners\vuze.xml
+#: ../cleaners\deepscan.xml ../cleaners\beagle.xml
 msgid "Delete the files"
 msgstr "Obriši datoteke"
 
-#: ../cleaners/windows_defender.xml ../cleaners/waterfox.xml
-#: ../cleaners/palemoon.xml ../cleaners/amule.xml ../cleaners/firefox.xml
-#: ../cleaners/vuze.xml ../cleaners/deepscan.xml
+#: ../cleaners\windows_defender.xml ../cleaners\waterfox.xml
+#: ../cleaners\palemoon.xml ../cleaners\amule.xml ../cleaners\firefox.xml
+#: ../cleaners\vuze.xml ../cleaners\deepscan.xml
 msgid "Backup files"
 msgstr "Rezervne datoteke"
 
-#: ../cleaners/windows_defender.xml ../cleaners/waterfox.xml
-#: ../cleaners/palemoon.xml ../cleaners/amule.xml ../cleaners/firefox.xml
-#: ../cleaners/vuze.xml ../cleaners/deepscan.xml
+#: ../cleaners\windows_defender.xml ../cleaners\waterfox.xml
+#: ../cleaners\palemoon.xml ../cleaners\amule.xml ../cleaners\firefox.xml
+#: ../cleaners\vuze.xml ../cleaners\deepscan.xml
 msgid "Delete the backup files"
 msgstr "Obriši rezervne datoteke"
 
-#: ../cleaners/windows_defender.xml ../cleaners/gpodder.xml
-#: ../cleaners/screenlets.xml ../cleaners/amule.xml ../cleaners/gftp.xml
-#: ../cleaners/realplayer.xml ../cleaners/warzone2100.xml ../cleaners/vuze.xml
-#: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/smartftp.xml
-#: ../cleaners/exaile.xml ../cleaners/teamviewer.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:308
+#: ../cleaners\windows_defender.xml ../cleaners\gpodder.xml
+#: ../cleaners\screenlets.xml ../cleaners\amule.xml ../cleaners\gftp.xml
+#: ../cleaners\realplayer.xml ../cleaners\warzone2100.xml
+#: ../cleaners\vuze.xml ../cleaners\miro.xml ../cleaners\audacious.xml
+#: ../cleaners\smartftp.xml ../cleaners\exaile.xml
+#: ../cleaners\teamviewer.xml ../cleaners\yahoo_messenger.xml
+#: ../cleaners\zoom.xml ../cleaners\internet_explorer.xml
+#: ../cleaners\hippo_opensim_viewer.xml ../cleaners\easytag.xml
+#: ../bleachbit/Cleaner.py:308
 msgid "Logs"
 msgstr "Dnevnici"
 
-#: ../cleaners/windows_defender.xml ../cleaners/gpodder.xml
-#: ../cleaners/screenlets.xml ../cleaners/amule.xml ../cleaners/gftp.xml
-#: ../cleaners/realplayer.xml ../cleaners/warzone2100.xml ../cleaners/vuze.xml
-#: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/smartftp.xml
-#: ../cleaners/exaile.xml ../cleaners/teamviewer.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../bleachbit/Cleaner.py:308
+#: ../cleaners\windows_defender.xml ../cleaners\gpodder.xml
+#: ../cleaners\screenlets.xml ../cleaners\amule.xml ../cleaners\gftp.xml
+#: ../cleaners\realplayer.xml ../cleaners\warzone2100.xml
+#: ../cleaners\vuze.xml ../cleaners\miro.xml ../cleaners\audacious.xml
+#: ../cleaners\smartftp.xml ../cleaners\exaile.xml
+#: ../cleaners\teamviewer.xml ../cleaners\yahoo_messenger.xml
+#: ../cleaners\zoom.xml ../cleaners\internet_explorer.xml
+#: ../cleaners\hippo_opensim_viewer.xml ../bleachbit/Cleaner.py:308
 msgid "Delete the logs"
 msgstr "Obriši dnevnike"
 
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/flash.xml
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/gftp.xml
-#: ../cleaners/firefox.xml ../cleaners/vuze.xml ../cleaners/evolution.xml
-#: ../cleaners/rhythmbox.xml ../cleaners/miro.xml ../cleaners/java.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/pidgin.xml ../cleaners/apt.xml ../cleaners/audacious.xml
-#: ../cleaners/smartftp.xml ../cleaners/exaile.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/thumbnails.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/zoom.xml ../cleaners/amsn.xml
-#: ../cleaners/liferea.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/dnf.xml ../cleaners/beagle.xml
-#: ../cleaners/xine.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/kde.xml ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:192
+#: ../cleaners\gpodder.xml ../cleaners\yum.xml ../cleaners\flash.xml
+#: ../cleaners\waterfox.xml ../cleaners\palemoon.xml ../cleaners\gftp.xml
+#: ../cleaners\firefox.xml ../cleaners\vuze.xml ../cleaners\evolution.xml
+#: ../cleaners\rhythmbox.xml ../cleaners\miro.xml ../cleaners\java.xml
+#: ../cleaners\adobe_reader.xml ../cleaners\windows_media_player.xml
+#: ../cleaners\pidgin.xml ../cleaners\apt.xml ../cleaners\audacious.xml
+#: ../cleaners\smartftp.xml ../cleaners\exaile.xml
+#: ../cleaners\yahoo_messenger.xml ../cleaners\thumbnails.xml
+#: ../cleaners\secondlife_viewer.xml ../cleaners\zoom.xml
+#: ../cleaners\amsn.xml ../cleaners\liferea.xml
+#: ../cleaners\windows_explorer.xml ../cleaners\internet_explorer.xml
+#: ../cleaners\dnf.xml ../cleaners\beagle.xml ../cleaners\xine.xml
+#: ../cleaners\hippo_opensim_viewer.xml ../cleaners\kde.xml
+#: ../cleaners\nexuiz.xml ../bleachbit/Cleaner.py:192
 #: ../bleachbit/Cleaner.py:277 ../bleachbit/Cleaner.py:311
 #: ../bleachbit/Cleaner.py:313
 msgid "Delete the cache"
 msgstr "Obriši keširani sadržaj"
 
-#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
+#: ../cleaners\gpodder.xml ../cleaners\exaile.xml
 msgid "Downloaded podcasts"
 msgstr "Preuzeti podkasti"
 
-#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
+#: ../cleaners\gpodder.xml ../cleaners\exaile.xml
 msgid "Delete downloaded podcasts"
 msgstr "Obriši preuzete podkaste"
 
-#: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/octave.xml
+#: ../cleaners\sqlite3.xml ../cleaners\bash.xml ../cleaners\octave.xml
 msgid "Delete the command history"
 msgstr "Obriši historijat komandi"
 
-#: ../cleaners/tremulous.xml ../cleaners/warzone2100.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/nexuiz.xml
+#: ../cleaners\tremulous.xml ../cleaners\warzone2100.xml
+#: ../cleaners\secondlife_viewer.xml ../cleaners\gl-117.xml
+#: ../cleaners\hippo_opensim_viewer.xml ../cleaners\nexuiz.xml
 msgid "Game"
 msgstr "Igra"
 
-#: ../cleaners/tremulous.xml
+#: ../cleaners\tremulous.xml
 msgid "Delete the list of game servers"
 msgstr "Obriši listu servera za igre"
 
-#: ../cleaners/yum.xml ../cleaners/apt.xml ../cleaners/dnf.xml
+#: ../cleaners\yum.xml ../cleaners\apt.xml ../cleaners\dnf.xml
 msgid "Package manager"
 msgstr "Sistemski upravitelj paketa"
 
-#: ../cleaners/gedit.xml ../cleaners/vim.xml
+#: ../cleaners\gedit.xml ../cleaners\vim.xml
 msgid "Editor"
 msgstr "Uređivač teksta"
 
-#: ../cleaners/gedit.xml ../cleaners/gwenview.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/kde.xml
+#: ../cleaners\gedit.xml ../cleaners\gwenview.xml
+#: ../cleaners\windows_explorer.xml ../cleaners\kde.xml
 #: ../bleachbit/Cleaner.py:290 ../bleachbit/Cleaner.py:485
 msgid "Recent documents list"
 msgstr "Lista korištenih dokumenata"
 
-#: ../cleaners/gedit.xml ../cleaners/adobe_reader.xml ../cleaners/audacious.xml
-#: ../cleaners/gwenview.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/kde.xml ../bleachbit/Cleaner.py:194 ../bleachbit/Cleaner.py:291
+#: ../cleaners\gedit.xml ../cleaners\adobe_reader.xml
+#: ../cleaners\audacious.xml ../cleaners\gwenview.xml
+#: ../cleaners\windows_explorer.xml ../cleaners\kde.xml
+#: ../bleachbit/Cleaner.py:194 ../bleachbit/Cleaner.py:291
 msgid "Delete the list of recently used documents"
 msgstr "Obriši listu nedavno korištenih dokumenata"
 
-#: ../cleaners/bash.xml
+#: ../cleaners\bash.xml
 msgid "Shell"
 msgstr "Interpreter sistemskih komandi (Shell)"
 
-#: ../cleaners/skype.xml ../cleaners/slack.xml ../cleaners/emesene.xml
-#: ../cleaners/discord.xml ../cleaners/pidgin.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../cleaners/amsn.xml
+#: ../cleaners\skype.xml ../cleaners\slack.xml ../cleaners\emesene.xml
+#: ../cleaners\discord.xml ../cleaners\pidgin.xml
+#: ../cleaners\yahoo_messenger.xml ../cleaners\zoom.xml ../cleaners\amsn.xml
 msgid "Chat client"
 msgstr "Chat klijent"
 
-#: ../cleaners/skype.xml ../cleaners/seamonkey.xml ../cleaners/emesene.xml
-#: ../cleaners/pidgin.xml ../cleaners/yahoo_messenger.xml ../cleaners/amsn.xml
-#: ../cleaners/hexchat.xml
+#: ../cleaners\skype.xml ../cleaners\seamonkey.xml ../cleaners\emesene.xml
+#: ../cleaners\pidgin.xml ../cleaners\yahoo_messenger.xml
+#: ../cleaners\amsn.xml ../cleaners\hexchat.xml
 msgid "Chat logs"
 msgstr "Chat dnevnici"
 
-#: ../cleaners/skype.xml ../cleaners/seamonkey.xml ../cleaners/emesene.xml
-#: ../cleaners/pidgin.xml ../cleaners/yahoo_messenger.xml ../cleaners/amsn.xml
-#: ../cleaners/hexchat.xml
+#: ../cleaners\skype.xml ../cleaners\seamonkey.xml ../cleaners\emesene.xml
+#: ../cleaners\pidgin.xml ../cleaners\yahoo_messenger.xml
+#: ../cleaners\amsn.xml ../cleaners\hexchat.xml
 msgid "Delete the chat logs"
 msgstr "Obriši dnevnike razgovora"
 
-#: ../cleaners/skype.xml
+#: ../cleaners\skype.xml
 msgid "Installers"
 msgstr "Instalacije"
 
-#: ../cleaners/skype.xml
+#: ../cleaners\skype.xml
 msgid "Delete cached patches and installers"
 msgstr "Obriši keširane zakrpe i instalacije"
 
-#: ../cleaners/x11.xml
+#: ../cleaners\x11.xml
 msgid "Windowing system"
 msgstr "Window okruženje"
 
-#: ../cleaners/x11.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
-#: ../cleaners/beagle.xml
+#: ../cleaners\x11.xml ../cleaners\microsoft_office.xml
+#: ../cleaners\secondlife_viewer.xml ../cleaners\gl-117.xml
+#: ../cleaners\beagle.xml
 msgid "Debug logs"
 msgstr "Debag dnevnici"
 
-#: ../cleaners/x11.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
-#: ../cleaners/beagle.xml ../cleaners/easytag.xml
+#: ../cleaners\x11.xml ../cleaners\microsoft_office.xml
+#: ../cleaners\secondlife_viewer.xml ../cleaners\gl-117.xml
+#: ../cleaners\beagle.xml ../cleaners\easytag.xml
 msgid "Delete the debug logs"
 msgstr "Obriši debag dnevnike"
 
-#: ../cleaners/nautilus.xml ../cleaners/mc.xml ../cleaners/windows_explorer.xml
+#: ../cleaners\nautilus.xml ../cleaners\mc.xml
+#: ../cleaners\windows_explorer.xml
 msgid "File manager"
 msgstr "Upravitelj datoteka"
 
-#: ../cleaners/nautilus.xml
+#: ../cleaners\nautilus.xml
 msgid "Custom folders will be reset."
 msgstr "Zadani direktoriji će biti vraćeni."
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
-#: ../cleaners/transmission.xml
+#: ../cleaners\transmission.xml
 msgid "Blocklists"
 msgstr "Liste zabrana"
 
-#: ../cleaners/transmission.xml
+#: ../cleaners\transmission.xml
 msgid "Blocklists will need update to work."
 msgstr "Liste zabrana će trebati ažuriranje za rad."
 
-#: ../cleaners/transmission.xml
+#: ../cleaners\transmission.xml
 msgid "Torrents"
 msgstr "Torrenti"
 
-#: ../cleaners/transmission.xml
+#: ../cleaners\transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
 msgstr "Obriši torrente (samo metapodatke, ali ne i opisane datoteke)"
 
-#: ../cleaners/transmission.xml ../cleaners/vuze.xml
+#: ../cleaners\transmission.xml ../cleaners\vuze.xml
 msgid "Statistics"
 msgstr "Statistika"
 
-#: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py:310
+#: ../cleaners\transmission.xml ../cleaners\vlc.xml
+#: ../bleachbit/Cleaner.py:310
 msgid "Delete the file"
 msgstr "Obriši datoteku"
 
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners\waterfox.xml ../cleaners\palemoon.xml ../cleaners\firefox.xml
 msgid "Crash reports"
 msgstr "Izvještaji grešaka"
 
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/internet_explorer.xml
+#: ../cleaners\waterfox.xml ../cleaners\palemoon.xml ../cleaners\firefox.xml
+#: ../cleaners\internet_explorer.xml
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr "Historija obrazaca unesenih na web stranicama i u traci pretrage"
 
-#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners\waterfox.xml ../cleaners\thunderbird.xml
+#: ../cleaners\palemoon.xml ../cleaners\firefox.xml
 msgid "Session restore"
 msgstr "Vraćanje sesije"
 
-#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners\waterfox.xml ../cleaners\thunderbird.xml
+#: ../cleaners\palemoon.xml ../cleaners\firefox.xml
 msgid "Loads the initial session after the browser closes or crashes"
 msgstr "Učitaj početnu sesiju nakon zatvaranja ili rušenja preglednika"
 
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/konqueror.xml
+#: ../cleaners\waterfox.xml ../cleaners\palemoon.xml ../cleaners\firefox.xml
+#: ../cleaners\konqueror.xml
 msgid "URL history"
 msgstr "URL historija"
 
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/safari.xml ../cleaners/konqueror.xml
-#: ../cleaners/internet_explorer.xml
+#: ../cleaners\waterfox.xml ../cleaners\palemoon.xml ../cleaners\firefox.xml
+#: ../cleaners\safari.xml ../cleaners\konqueror.xml
+#: ../cleaners\internet_explorer.xml
 msgid "List of visited web pages"
 msgstr "Lista posjećenih web stranica"
 
-#: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
+#: ../cleaners\seamonkey.xml ../cleaners\internet_explorer.xml
 msgid "Download history"
 msgstr "Historija preuzimanja"
 
-#: ../cleaners/seamonkey.xml
+#: ../cleaners\seamonkey.xml
 msgid "List of files downloaded"
 msgstr "Lista preuzetih datoteka"
 
-#: ../cleaners/seamonkey.xml
+#: ../cleaners\seamonkey.xml
 msgid "Delete the list of visited web pages"
 msgstr "Obriši listu posjećenih web stranica"
 
-#: ../cleaners/emesene.xml
+#: ../cleaners\emesene.xml
 msgid "Delete the avatars and emoticons cache"
 msgstr "Obriši keširani sadržaj avatara i emotikona"
 
-#: ../cleaners/thunderbird.xml ../cleaners/evolution.xml
+#: ../cleaners\thunderbird.xml ../cleaners\evolution.xml
 msgid "Email client"
 msgstr "E-mail klijent"
 
-#: ../cleaners/thunderbird.xml ../cleaners/recoll.xml ../cleaners/beagle.xml
+#: ../cleaners\thunderbird.xml ../cleaners\recoll.xml ../cleaners\beagle.xml
 msgid "Index"
 msgstr "Registar"
 
-#: ../cleaners/thunderbird.xml
+#: ../cleaners\thunderbird.xml
 msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
 msgstr ""
 
-#: ../cleaners/screenlets.xml
+#: ../cleaners\screenlets.xml
 msgid "Widgets for the desktop"
 msgstr "Widgeti za desktop"
 
-#: ../cleaners/elinks.xml
+#: ../cleaners\elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
 msgstr "Obriši kolačiće, posjećene URL-ove i historiju pretraživanja"
 
-#: ../cleaners/paint.xml ../cleaners/winamp.xml ../cleaners/vlc.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winzip.xml ../cleaners/smartftp.xml ../cleaners/wordpad.xml
-#: ../cleaners/teamviewer.xml ../cleaners/windows_explorer.xml
+#: ../cleaners\paint.xml ../cleaners\winamp.xml ../cleaners\vlc.xml
+#: ../cleaners\microsoft_office.xml ../cleaners\windows_media_player.xml
+#: ../cleaners\winzip.xml ../cleaners\smartftp.xml ../cleaners\wordpad.xml
+#: ../cleaners\teamviewer.xml ../cleaners\windows_explorer.xml
 msgid "Delete the most recently used list"
 msgstr "Obriši posljednju korištenu listu"
 
-#: ../cleaners/gnome.xml ../cleaners/kde.xml
+#: ../cleaners\gnome.xml ../cleaners\kde.xml
 msgid "Desktop environment"
 msgstr "Desktop okruženje"
 
 #. In GNOME 'Run' is the dialog shown when typing ALT+F2'
 #. In Windows 'Run' is the dialog in the Start menu
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+#: ../cleaners\gnome.xml ../cleaners\windows_explorer.xml
 msgid "Run"
 msgstr "Run dijalog"
 
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/google_toolbar.xml
+#: ../cleaners\gnome.xml ../cleaners\windows_explorer.xml
+#: ../cleaners\google_toolbar.xml
 msgid "Search history"
 msgstr "Historija pretraživanja"
 
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/google_toolbar.xml
+#: ../cleaners\gnome.xml ../cleaners\windows_explorer.xml
+#: ../cleaners\google_toolbar.xml
 msgid "Delete the search history"
 msgstr "Obriši historiju pretraživanja"
 
-#: ../cleaners/epiphany.xml
+#: ../cleaners\epiphany.xml
 msgid "Places"
 msgstr "Mjesta"
 
-#: ../cleaners/epiphany.xml
+#: ../cleaners\epiphany.xml
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
 msgstr ""
 "Baza URL-ova uključujući oznake, favikone i historiju posjećenih web stranica"
 
-#: ../cleaners/epiphany.xml
+#: ../cleaners\epiphany.xml
 msgid "This option deletes all bookmarks."
 msgstr "Ova opcija briše sve oznake."
 
-#: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
+#: ../cleaners\libreoffice.xml ../cleaners\microsoft_office.xml
 #: ../bleachbit/Cleaner.py:197
 msgid "Office suite"
 msgstr "Uredski paket programa"
 
-#: ../cleaners/amule.xml
+#: ../cleaners\amule.xml
 msgid "Known files history"
 msgstr "Historija poznatih datoteka"
 
 #. http://wiki.amule.org/wiki/Friend
-#: ../cleaners/amule.xml
+#: ../cleaners\amule.xml
 msgid "Known clients and friends"
 msgstr "Poznati klijenti i prijatelji"
 
-#: ../cleaners/winamp.xml ../cleaners/realplayer.xml ../cleaners/vlc.xml
-#: ../cleaners/windows_media_player.xml
+#: ../cleaners\winamp.xml ../cleaners\realplayer.xml ../cleaners\vlc.xml
+#: ../cleaners\windows_media_player.xml
 msgid "Media player"
 msgstr "Medijski plejer"
 
-#: ../cleaners/journald.xml
+#: ../cleaners\journald.xml
 msgid "System journals"
 msgstr "Sistemski dnevnici"
 
-#: ../cleaners/journald.xml
+#: ../cleaners\journald.xml
 msgid "Clean old system journals"
 msgstr "Očisti stare sistemske dnevnike"
 
-#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:310
+#: ../cleaners\vlc.xml ../bleachbit/Cleaner.py:310
 msgid "Memory dump"
 msgstr "Prijepis memorije"
 
-#: ../cleaners/rhythmbox.xml
+#: ../cleaners\rhythmbox.xml
 msgid "Database"
 msgstr "Baza podataka"
 
-#: ../cleaners/rhythmbox.xml
+#: ../cleaners\rhythmbox.xml
 msgid ""
 "Delete the database, which contains information such as play count and last "
 "played"
@@ -632,11 +651,11 @@ msgstr ""
 "Obriši bazu podataka koja sadrži informacije poput broj reprodukcija i "
 "posljednji reproduciran"
 
-#: ../cleaners/wine.xml
+#: ../cleaners\wine.xml
 msgid "Compatibility layer for Windows software"
 msgstr "Layer kompatibilnosti za Windows softver"
 
-#: ../cleaners/discord.xml
+#: ../cleaners\discord.xml
 #, fuzzy
 #| msgid "Delete the web cache, which reduces time to display revisited pages"
 msgid ""
@@ -646,113 +665,113 @@ msgstr ""
 "Obriši keširani web sadržaj, koji skraćuje vrijeme prikaza ranije "
 "pregledanih stranica"
 
-#: ../cleaners/vim.xml
+#: ../cleaners\vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
 "Obriši ~/.viminfo koji uključuje historiju datoteka, historiju komandi i "
 "bafere"
 
-#: ../cleaners/deepscan.xml
+#: ../cleaners\deepscan.xml
 msgid "Deep scan"
 msgstr "Dubinsko skeniranje"
 
-#: ../cleaners/deepscan.xml
+#: ../cleaners\deepscan.xml
 msgid "Clean files widely scattered across the disk"
 msgstr "Čišćenje datoteka raštrkanih po disku"
 
-#: ../cleaners/deepscan.xml
+#: ../cleaners\deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
 msgstr "Provjerite prikaz svih datoteka koje želite zadržati."
 
-#: ../cleaners/deepscan.xml
+#: ../cleaners\deepscan.xml
 msgid "This option is slow."
 msgstr "Ova opcija je spora."
 
-#: ../cleaners/deepscan.xml
+#: ../cleaners\deepscan.xml
 msgid "VIM swap files under user profile"
 msgstr "VIM swap datoteke korisničkog profila"
 
-#: ../cleaners/deepscan.xml
+#: ../cleaners\deepscan.xml
 msgid "VIM swap files across system"
 msgstr "VIM swap datoteke cijelog sistema"
 
-#: ../cleaners/adobe_reader.xml
+#: ../cleaners\adobe_reader.xml
 msgid "Document viewer"
 msgstr "Preglednik dokumenata"
 
-#: ../cleaners/apt.xml
+#: ../cleaners\apt.xml
 msgid "Delete obsolete files"
 msgstr "Obriši zastarjele datoteke"
 
-#: ../cleaners/apt.xml
+#: ../cleaners\apt.xml
 msgid "Package lists"
 msgstr "Liste paketa"
 
-#: ../cleaners/audacious.xml
+#: ../cleaners\audacious.xml
 msgid "Audio player"
 msgstr "Audio plejer"
 
-#: ../cleaners/wordpad.xml
+#: ../cleaners\wordpad.xml
 msgid "Word processor"
 msgstr "Program za obradu teksta"
 
-#: ../cleaners/konqueror.xml
+#: ../cleaners\konqueror.xml
 msgid "Current session"
 msgstr "Trenutna sesija"
 
-#: ../cleaners/konqueror.xml
+#: ../cleaners\konqueror.xml
 msgid "Delete the current session"
 msgstr "Obriši trenutnu sesiju"
 
-#: ../cleaners/teamviewer.xml
+#: ../cleaners\teamviewer.xml
 msgid "Remote control software"
 msgstr "Softver za daljinsko upravljanje"
 
-#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
+#: ../cleaners\thumbnails.xml ../cleaners\windows_explorer.xml
 msgid "Thumbnails"
 msgstr "Sličice"
 
-#: ../cleaners/thumbnails.xml
+#: ../cleaners\thumbnails.xml
 msgid "Icons for files on the system"
 msgstr "Ikone datoteka na sistemu"
 
-#: ../cleaners/zoom.xml
+#: ../cleaners\zoom.xml
 msgid "Recordings"
 msgstr "Snimci"
 
-#: ../cleaners/zoom.xml
+#: ../cleaners\zoom.xml
 msgid "Delete the audio and video recordings"
 msgstr "Obriši audio i video snimke"
 
-#: ../cleaners/windows_explorer.xml
+#: ../cleaners\windows_explorer.xml
 msgid ""
 "This option will reset pinned locations in Quick Access to their defaults."
 msgstr ""
 "Ova opcija će vratiti zakačene lokacije u Quick Access na njihove zadane "
 "postavke."
 
-#: ../cleaners/windows_explorer.xml
+#: ../cleaners\windows_explorer.xml
 msgid "Shellbags"
 msgstr "Shellbags"
 
-#: ../cleaners/windows_explorer.xml
+#: ../cleaners\windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
 msgstr "Obriši datum upotrebe, poziciju prozora i ostale podatke direktorija."
 
-#: ../cleaners/windows_explorer.xml
+#: ../cleaners\windows_explorer.xml
 msgid "This will reset the position of desktop icons."
 msgstr "Ovo će vratiti poziciju desktop ikona."
 
-#: ../cleaners/windows_explorer.xml
+#: ../cleaners\windows_explorer.xml
 msgid "This will restart Windows Explorer."
 msgstr "Ovo će ponovo pokrenuti Windows Explorer."
 
-#: ../cleaners/dnf.xml
+#: ../cleaners\dnf.xml
 msgid "Remove packages that were formerly dependencies"
 msgstr "Ukloni prethodno zavisne pakete"
 
-#: ../cleaners/dnf.xml
+#: ../cleaners\dnf.xml
 msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
@@ -760,24 +779,24 @@ msgstr ""
 "Pažljivo provjeri listu paketa koji će biti uklonjeni komandom \"dnf list "
 "autoremove\"."
 
-#: ../cleaners/recoll.xml ../cleaners/beagle.xml
+#: ../cleaners\recoll.xml ../cleaners\beagle.xml
 msgid "Search tool"
 msgstr "Alat za pretragu"
 
-#: ../cleaners/recoll.xml
+#: ../cleaners\recoll.xml
 msgid "Delete the search index, a database of words and the files they contain"
 msgstr "Obriši registar pretraživanja, bazu riječi i datoteke koje sadrže"
 
-#: ../cleaners/gimp.xml
+#: ../cleaners\gimp.xml
 msgid "Graphics editor"
 msgstr "Grafički editori"
 
 #. This software edits metadata tags, such as title and artist, in audio files
-#: ../cleaners/easytag.xml
+#: ../cleaners\easytag.xml
 msgid "Audio files tagger"
 msgstr "Tager audio datoteka"
 
-#: ../cleaners/hexchat.xml
+#: ../cleaners\hexchat.xml
 msgid "IRC client formerly known as XChat"
 msgstr "IRC klijent ranije poznat kao XChat"
 
@@ -819,8 +838,8 @@ msgstr "path=\"%s\" nije glob šablon"
 #: ../bleachbit/Action.py:386 ../bleachbit/Action.py:399
 #: ../bleachbit/Action.py:412 ../bleachbit/Action.py:425
 #: ../bleachbit/Action.py:438 ../bleachbit/Action.py:503
-#: ../bleachbit/Action.py:515 ../bleachbit/Command.py:207
-#: ../bleachbit/Command.py:241
+#: ../bleachbit/Action.py:515 ../bleachbit/Command.py:209
+#: ../bleachbit/Command.py:243
 msgid "Clean file"
 msgstr "Očisti datoteku"
 
@@ -828,7 +847,7 @@ msgstr "Očisti datoteku"
 #. TRANSLATORS: This is the clean button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes
 #. altering them.
-#: ../bleachbit/Action.py:528 ../bleachbit/GUI.py:946 ../bleachbit/GUI.py:1053
+#: ../bleachbit/Action.py:528 ../bleachbit/GUI.py:940 ../bleachbit/GUI.py:1047
 msgid "Clean"
 msgstr "Čišćenje"
 
@@ -837,7 +856,7 @@ msgstr "Čišćenje"
 msgid "Run external command: %s"
 msgstr "Pokrenite vanjsku komandu: %s"
 
-#: ../bleachbit/Chaff.py:212
+#: ../bleachbit/Chaff.py:226
 #, fuzzy, python-format
 #| msgid "Downloading url failed: %s"
 msgid "Downloading URL failed: %s"
@@ -994,22 +1013,22 @@ msgstr "Ova opcija je vrlo spora."
 msgid "The system in general"
 msgstr "Sistem općenito"
 
-#: ../bleachbit/Cleaner.py:346 ../bleachbit/Cleaner.py:687
+#: ../bleachbit/Cleaner.py:346 ../bleachbit/Cleaner.py:688
 msgid "System"
 msgstr "Sistem"
 
 #. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:553 ../bleachbit/Cleaner.py:718
+#: ../bleachbit/Cleaner.py:553 ../bleachbit/Cleaner.py:719
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "Prepiši slobodni prostor na disku %s"
 
-#: ../bleachbit/Cleaner.py:669
+#: ../bleachbit/Cleaner.py:670
 msgid "Loading native cleaners."
 msgstr "Učitavanje internih čistača."
 
-#: ../bleachbit/Cleaner.py:674
+#: ../bleachbit/Cleaner.py:675
 msgid "Importing cleaners from Winapp2.ini."
 msgstr "Uvoz čistača iz Winapp2.ini."
 
@@ -1023,74 +1042,74 @@ msgstr "nije valjani čistač: %s"
 #. Don't translate and add "usage:" - it gets added by Python.
 #. More information about the command line is here
 #. https://www.bleachbit.org/documentation/command-line
-#: ../bleachbit/CLI.py:152
+#: ../bleachbit/CLI.py:148
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgstr "usage: %prog [options] cleaner.option1 cleaner.option2"
 
-#: ../bleachbit/CLI.py:155
+#: ../bleachbit/CLI.py:151
 msgid "list cleaners"
 msgstr "lista čistača"
 
-#: ../bleachbit/CLI.py:157
+#: ../bleachbit/CLI.py:153
 msgid "preview files to be deleted and other changes"
 msgstr "pregled datoteka za brisanje i ostale promjene"
 
 #. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
 #. This is different than cleaning an arbitrary file, such as a
 #. spreadsheet on the desktop.
-#: ../bleachbit/CLI.py:162
+#: ../bleachbit/CLI.py:158
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr "pokreni čistače za brisanje datoteka i druge trajne promjene"
 
-#: ../bleachbit/CLI.py:164
+#: ../bleachbit/CLI.py:160
 msgid "shred specific files or folders"
 msgstr "uništi određene datoteke i direktorije"
 
-#: ../bleachbit/CLI.py:166
+#: ../bleachbit/CLI.py:162
 msgid "wipe free space in the given paths"
 msgstr "počisti slobodan prostor na odabranim putanjama"
 
-#: ../bleachbit/CLI.py:168
+#: ../bleachbit/CLI.py:164
 msgid "overwrite files to hide contents"
 msgstr "prepiši datoteke za sakrivanje sadržaja"
 
-#: ../bleachbit/CLI.py:170
+#: ../bleachbit/CLI.py:166
 msgid "launch the graphical interface"
 msgstr "pokreni grafički interfejs"
 
-#: ../bleachbit/CLI.py:172
+#: ../bleachbit/CLI.py:168
 msgid "use options set in the graphical interface"
 msgstr "koristi opcije postavljene u grafičkom interfejsu"
 
-#: ../bleachbit/CLI.py:174
+#: ../bleachbit/CLI.py:170
 msgid "enable all options that do not have a warning"
 msgstr ""
 
-#: ../bleachbit/CLI.py:176
+#: ../bleachbit/CLI.py:172
 msgid "set log level to verbose"
 msgstr "nivo zapisnika na detaljno"
 
-#: ../bleachbit/CLI.py:177
+#: ../bleachbit/CLI.py:173
 msgid "log debug messages to file"
 msgstr "smjesti debag poruke u datoteku"
 
-#: ../bleachbit/CLI.py:179
+#: ../bleachbit/CLI.py:175
 msgid "show system information"
 msgstr "prikaži informacije sistema"
 
-#: ../bleachbit/CLI.py:181
+#: ../bleachbit/CLI.py:177
 msgid "output version information and exit"
 msgstr "ispiši podatke o verziji i izađi"
 
-#: ../bleachbit/CLI.py:184
+#: ../bleachbit/CLI.py:180
 msgid "do not prompt for administrator privileges"
 msgstr "ne prijavljuj administratorske privilegije"
 
-#: ../bleachbit/CLI.py:192
+#: ../bleachbit/CLI.py:188
 msgid "update winapp2.ini, if a new version is available"
 msgstr "ažuriraj winapp2.ini, ukoliko je nova verzija dostupna"
 
-#: ../bleachbit/CLI.py:214
+#: ../bleachbit/CLI.py:210
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
@@ -1098,23 +1117,23 @@ msgstr ""
 "Navedite samo jednu od ovih komandi: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 
-#: ../bleachbit/CLI.py:239
+#: ../bleachbit/CLI.py:240
 msgid "Checking online for updates to winapp2.ini"
 msgstr "Online provjera za ažuriranje winapp2.ini"
 
-#: ../bleachbit/CLI.py:254
+#: ../bleachbit/CLI.py:255
 msgid "No directories given for --wipe-free-space"
 msgstr "Nisu naznačeni direktoriji za --wipe-free-space"
 
-#: ../bleachbit/CLI.py:256
+#: ../bleachbit/CLI.py:257
 msgid "Wiping free space can take a long time."
 msgstr "Čišćenje slobodnog prostora može dugo potrajati."
 
-#: ../bleachbit/CLI.py:267
+#: ../bleachbit/CLI.py:268
 msgid "No work to do. Specify options."
 msgstr "Ništa za uraditi. Navedite opcije."
 
-#: ../bleachbit/CLI.py:275
+#: ../bleachbit/CLI.py:276
 msgid "--overwrite is intended only for use with --clean"
 msgstr "--overwrite predviđeno jedino uz --clean"
 
@@ -1146,42 +1165,42 @@ msgid "Mark for deletion"
 msgstr "Označi za brisanje"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:283
+#: ../bleachbit/Command.py:285
 msgid "Truncate"
 msgstr "Skrati"
 
-#: ../bleachbit/Command.py:326
+#: ../bleachbit/Command.py:328
 msgid "Delete registry key"
 msgstr "Obriši ključ registra"
 
-#: ../bleachbit/FileUtilities.py:354 ../bleachbit/FileUtilities.py:363
-#: ../bleachbit/FileUtilities.py:377
+#: ../bleachbit/FileUtilities.py:358 ../bleachbit/FileUtilities.py:367
+#: ../bleachbit/FileUtilities.py:381
 #, python-format
 msgid "Directory is not empty: %s"
 msgstr "Direktorij nije prazan: %s"
 
-#: ../bleachbit/FileUtilities.py:366
+#: ../bleachbit/FileUtilities.py:370
 #, python-format
 msgid "Skipping mount point: %s"
 msgstr "Preskačem tačku postavljanja: %s"
 
-#: ../bleachbit/FileUtilities.py:368
+#: ../bleachbit/FileUtilities.py:372
 #, python-format
 msgid "Device or resource is busy: %s"
 msgstr "Uređaj ili resurs je zauzet: %s"
 
-#: ../bleachbit/FileUtilities.py:404
+#: ../bleachbit/FileUtilities.py:408
 #, python-format
 msgid "Special file type cannot be deleted: %s"
 msgstr "Specijalni tip datoteke nije moguće obrisati: %s"
 
-#: ../bleachbit/FileUtilities.py:594
+#: ../bleachbit/FileUtilities.py:598
 #, python-format
 msgid ""
 "The environment variable TMP refers to a directory that does not exist: %s"
 msgstr "TMP ne postoji: %s"
 
-#: ../bleachbit/FileUtilities.py:834
+#: ../bleachbit/FileUtilities.py:838
 msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
@@ -1189,26 +1208,26 @@ msgstr ""
 "Postoji najmanje jedna datoteka u sistemu koja ne podržava napredno "
 "prepisivanje."
 
-#: ../bleachbit/FileUtilities.py:930
+#: ../bleachbit/FileUtilities.py:934
 #, python-format
 msgid "Wiping path: %s"
 msgstr "Čišćenje putanje: %s"
 
-#: ../bleachbit/FileUtilities.py:932
+#: ../bleachbit/FileUtilities.py:936
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
 msgstr "Putanja za čišćenje mora biti postojeći direktorij: %s"
 
-#: ../bleachbit/FileUtilities.py:943
+#: ../bleachbit/FileUtilities.py:947
 msgid "Creating new, temporary file for wiping free space."
 msgstr "Kreiranje nove, privremene datoteke pri čišćenju slobodnog prostora."
 
-#: ../bleachbit/FileUtilities.py:999
+#: ../bleachbit/FileUtilities.py:1003
 #, python-format
 msgid "Error #%d when flushing the file buffer."
 msgstr "Greška #%d pri slanju sadržaja u bafer."
 
-#: ../bleachbit/FileUtilities.py:1015
+#: ../bleachbit/FileUtilities.py:1019
 msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
@@ -1216,15 +1235,15 @@ msgstr ""
 "Zapisano {files:,} datoteka i {bytes:,} bajta za {seconds:,} sekundi u "
 "{rate:.2f} MB/s"
 
-#: ../bleachbit/FileUtilities.py:1020
+#: ../bleachbit/FileUtilities.py:1024
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
 msgstr "{bytes:,} bajta i {inodes:,} indeksa dostupno za non-super-user"
 
-#: ../bleachbit/FileUtilities.py:1022
+#: ../bleachbit/FileUtilities.py:1026
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
 msgstr "{bytes:,} bajta i {inodes:,} indeksa dostupno za super-korisnika"
 
-#: ../bleachbit/FileUtilities.py:1038
+#: ../bleachbit/FileUtilities.py:1042
 msgid "Handled unknown error #0 while truncating file."
 msgstr "Došlo je do greške #0 pri obradi datoteke."
 
@@ -1238,7 +1257,7 @@ msgid "_Open"
 msgstr "_Otvori"
 
 #: ../bleachbit/GuiBasic.py:106 ../bleachbit/GuiBasic.py:150
-#: ../bleachbit/GUI.py:226
+#: ../bleachbit/GUI.py:220
 msgid "_Delete"
 msgstr "_Obriši"
 
@@ -1287,7 +1306,7 @@ msgstr ""
 msgid "Open web browser to %s?"
 msgstr "Otvorite web preglednik na %s?"
 
-#: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:533
+#: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:527
 msgid "Confirm"
 msgstr ""
 
@@ -1442,7 +1461,7 @@ msgid "Add shred context menu option (KDE Plasma specific)"
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
-#: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:286
+#: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:280
 msgid "Choose a folder"
 msgstr "Odabir direktorija"
 
@@ -1479,7 +1498,7 @@ msgstr "Zadrži"
 msgid "Code"
 msgstr "Kod"
 
-#: ../bleachbit/GuiPreferences.py:326 ../bleachbit/GUI.py:478
+#: ../bleachbit/GuiPreferences.py:326 ../bleachbit/GUI.py:472
 msgid "Name"
 msgstr "Naziv"
 
@@ -1527,34 +1546,27 @@ msgctxt "button"
 msgid "Add folder"
 msgstr "Dodaj direktorij"
 
-#: ../bleachbit/GUI.py:151 ../bleachbit/GUI.py:882
-msgid ""
-"Error loading the SQLite module: the antivirus software may be blocking it."
-msgstr ""
-"Greška pri učitavanju SQLite modula: moguće je da ga blokira antivirusni "
-"program."
-
-#: ../bleachbit/GUI.py:215
+#: ../bleachbit/GUI.py:209
 msgid "Choose files to shred"
 msgstr "Odabir datoteka za uništavanje"
 
-#: ../bleachbit/GUI.py:224
+#: ../bleachbit/GUI.py:218
 msgid "Choose folder to shred"
 msgstr "Odabir direktorija za uništavanje"
 
-#: ../bleachbit/GUI.py:251
+#: ../bleachbit/GUI.py:245
 msgid "No paths found in clipboard."
 msgstr "Putanje u međuspremniku ne postoje."
 
-#: ../bleachbit/GUI.py:287
+#: ../bleachbit/GUI.py:281
 msgid "_OK"
 msgstr "_Uredu"
 
-#: ../bleachbit/GUI.py:310
+#: ../bleachbit/GUI.py:304
 msgid "Program to clean unnecessary files"
 msgstr ""
 
-#: ../bleachbit/GUI.py:321
+#: ../bleachbit/GUI.py:315
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
@@ -1566,31 +1578,31 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:327
+#: ../bleachbit/GUI.py:321
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Ibrahim Sikirić https://launchpad.net/~axterbach\n"
 "  Kenan Dervišević https://launchpad.net/~kenan3008"
 
-#: ../bleachbit/GUI.py:351
+#: ../bleachbit/GUI.py:345
 msgid "System information"
 msgstr "Informacije o sistemu"
 
-#: ../bleachbit/GUI.py:486
+#: ../bleachbit/GUI.py:480
 msgid "Active"
 msgstr "Aktivno"
 
 #. TRANSLATORS: Size is the label for the column that shows how
 #. much space an option would clean or did clean
-#: ../bleachbit/GUI.py:495
+#: ../bleachbit/GUI.py:489
 msgid "Size"
 msgstr "Velična"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #. %(warning) may be 'This option is really slow'
-#: ../bleachbit/GUI.py:524
+#: ../bleachbit/GUI.py:518
 #, python-format
 msgid ""
 "Warning regarding %(cleaner)s - %(option)s:\n"
@@ -1601,37 +1613,44 @@ msgstr ""
 "\n"
 "%(warning)s"
 
-#: ../bleachbit/GUI.py:602
+#: ../bleachbit/GUI.py:596
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "Ponovno postavljanje konfiguracijske datoteke zbog oštećenja: %s"
 
-#: ../bleachbit/GUI.py:774
+#: ../bleachbit/GUI.py:768
 msgid "You must select an operation"
 msgstr "Morate odabrati operaciju"
 
-#: ../bleachbit/GUI.py:777
+#: ../bleachbit/GUI.py:771
 #, fuzzy
 #| msgid "Errors: %d"
 msgid "Error"
 msgstr "Grešaka: %d"
 
-#: ../bleachbit/GUI.py:795 ../bleachbit/GUI.py:811
+#: ../bleachbit/GUI.py:789 ../bleachbit/GUI.py:805
 msgid "Done."
 msgstr "Gotovo."
 
-#: ../bleachbit/GUI.py:866
+#: ../bleachbit/GUI.py:860
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
 msgstr ""
 "Za pristup meniju aplikacije kliknite na ikonu hamburgera u traci sa "
 "naslovom."
 
-#: ../bleachbit/GUI.py:871
+#: ../bleachbit/GUI.py:865
 msgid "Access the application menu by clicking the logo on the title bar."
 msgstr "Za pristup meniju aplikacije kliknite na logo u traci sa naslovom."
 
-#: ../bleachbit/GUI.py:887
+#: ../bleachbit/GUI.py:876
+msgid ""
+"Error loading the SQLite module: the antivirus software may be blocking it."
+msgstr ""
+"Greška pri učitavanju SQLite modula: moguće je da ga blokira antivirusni "
+"program."
+
+#: ../bleachbit/GUI.py:881
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
@@ -1641,7 +1660,7 @@ msgstr ""
 "dijeljenih sistemskih resursa, a reference na direktorij korisničkog profila "
 "može očistiti samo root račun."
 
-#: ../bleachbit/GUI.py:892
+#: ../bleachbit/GUI.py:886
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
@@ -1649,7 +1668,7 @@ msgstr ""
 "Pokreni BleachBit sa administratorskim ovlastima za veću preciznost "
 "prepisivanja sadržaja datoteka."
 
-#: ../bleachbit/GUI.py:897
+#: ../bleachbit/GUI.py:891
 msgid ""
 "There is no official version of BleachBit on the Microsoft Store. Get the "
 "genuine version at https://www.bleachbit.org where it is always free of "
@@ -1659,27 +1678,27 @@ msgstr ""
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
 #. previews changes.
-#: ../bleachbit/GUI.py:941 ../bleachbit/GUI.py:1043
+#: ../bleachbit/GUI.py:935 ../bleachbit/GUI.py:1037
 msgid "Preview"
 msgstr "Pregled"
 
-#: ../bleachbit/GUI.py:1040
+#: ../bleachbit/GUI.py:1034
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "Pregled datoteka za odabrane filtere (bez brisanja datoteka)"
 
-#: ../bleachbit/GUI.py:1055
+#: ../bleachbit/GUI.py:1049
 msgid "Clean files in the selected operations"
 msgstr "Čišćenje datoteka za odabrane filtere"
 
-#: ../bleachbit/GUI.py:1063
+#: ../bleachbit/GUI.py:1057
 msgid "Abort"
 msgstr "Prekid"
 
-#: ../bleachbit/GUI.py:1065
+#: ../bleachbit/GUI.py:1059
 msgid "Abort the preview or cleaning process"
 msgstr "Prekid procesa pregleda ili čišćenja"
 
-#: ../bleachbit/GUI.py:1272
+#: ../bleachbit/GUI.py:1266
 msgid "Error when checking for updates: "
 msgstr "Greška prilikom provjere ažuriranja: "
 
@@ -1824,26 +1843,26 @@ msgstr ""
 "%s ne može biti očišćen jer je trenutno pokrenut. Zatvorite i pokušajte "
 "ponovo."
 
-#: ../bleachbit/Update.py:74
+#: ../bleachbit/Update.py:75
 msgid "New winapp2.ini was downloaded."
 msgstr "Nova winapp2.ini datoteka je preuzeta."
 
-#: ../bleachbit/Update.py:120
+#: ../bleachbit/Update.py:121
 msgid "Update BleachBit"
 msgstr "Ažuriraj BleachBit"
 
-#: ../bleachbit/Update.py:126
+#: ../bleachbit/Update.py:127
 msgid "A new version is available."
 msgstr "Dostupna je nova verzija."
 
 #. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
 #. similar
-#: ../bleachbit/Update.py:135
+#: ../bleachbit/Update.py:136
 #, python-format
 msgid "Update to version %s"
 msgstr "Ažuriraj na verziju %s"
 
-#: ../bleachbit/Update.py:164
+#: ../bleachbit/Update.py:181
 msgid ""
 "Error when opening a network connection to check for updates. Please verify "
 "the network is working and that a firewall is not blocking this application. "
