@@ -35,7 +35,7 @@ install:
   - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v4.2.0/upx-4.2.0-win64.zip" -FileName upx.zip}
   - ps: Get-FileHash upx.zip
   - '%SZ_EXE% x upx.zip'
-  - 'rename upx-a.2.0-win64 upx'
+  - 'rename upx-4.2.0-win64 upx'
   - 'dir .\upx\'
   - ps: if (-not (Test-Path gettext.zip)) { Start-FileDownload "https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.21-v1.16/gettext0.21-iconv1.16-static-32.zip" -FileName gettext.zip}
   - ps: Get-FileHash gettext.zip
