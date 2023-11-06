@@ -728,10 +728,7 @@ def dnf_autoremove():
 
 def is_linux_display_protocol_wayland():
     assert(sys.platform.startswith('linux'))
-    result = General.run_external(['loginctl'])
-    session = result[1].split('\n')[1].strip().split(' ')[0]
-    result = General.run_external(['loginctl', 'show-session', session, '-p', 'Type'])
-    return 'wayland' in result[1].lower()
+    return os.environ['XDG_SESSION_TYPE'] == 'wayland'
 
 
 def root_is_not_allowed_to_X_session():
