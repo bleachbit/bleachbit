@@ -313,17 +313,12 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
     @common.skipIfWindows
     def test_is_linux_display_protocol_wayland(self):
         display_protocol = None
-        def side_effect_func(value):
-            if len(value) == 1:
-                return (0, 'SESSION  UID USER   SEAT  TTY \n      2 1000 debian seat0 tty2\n\n1 sessions listed.\n', '')
-            elif len(value) > 1:
-                return (0, 'Type={}\n'.format(display_protocol), '')
-            assert(False) # should never reach here
 
         for display_protocol, assert_method in [['wayland', self.assertTrue], ['donotexist', self.assertFalse]]:
-            with mock.patch('bleachbit.General.run_external') as mock_run_external:
-                mock_run_external.side_effect = side_effect_func
-                is_wayland = is_linux_display_protocol_wayland()
+            os.environ['XDG_SESSION_TYPE'] = 'wayland'
+            is_wayland = is_linux_display_protocol_wayland()
+            del os.environ['XDG_SESSION_TYPE']
+
             self.assertIsInstance(is_wayland, bool)
             assert_method(is_wayland)
 
