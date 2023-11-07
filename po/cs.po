@@ -8,16 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2020-03-07 00:37+0000\n"
-"Last-Translator: Daniel Čermák <Unknown>\n"
-"Language-Team: Czech <cs@li.org>\n"
+"PO-Revision-Date: 2023-11-08 01:36+0000\n"
+"Last-Translator: inson1 <vaclav.svarc01@seznam.cz>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/bleachbit/main/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 5.2-dev\n"
 "X-Launchpad-Export-Date: 2020-03-08 19:36+0000\n"
-"X-Generator: Launchpad (build e0878392dc799b267dea80578fa65500a5d74155)\n"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
 #: ../cleaners\waterfox.xml ../cleaners\seamonkey.xml
@@ -286,7 +287,7 @@ msgstr "Smazat dočasné soubory"
 #: ../cleaners\silverlight.xml ../cleaners\flash.xml ../cleaners\miro.xml
 #: ../cleaners\xine.xml
 msgid "Multimedia viewer"
-msgstr "Multimediální přehrávač"
+msgstr "Prohlížeč multimédií"
 
 #: ../cleaners\filezilla.xml ../cleaners\transmission.xml
 #: ../cleaners\amule.xml ../cleaners\gftp.xml ../cleaners\vuze.xml
@@ -623,12 +624,12 @@ msgstr "Historie známých souborů"
 #. http://wiki.amule.org/wiki/Friend
 #: ../cleaners\amule.xml
 msgid "Known clients and friends"
-msgstr ""
+msgstr "Známí klienti a přátelé"
 
 #: ../cleaners\winamp.xml ../cleaners\realplayer.xml ../cleaners\vlc.xml
 #: ../cleaners\windows_media_player.xml
 msgid "Media player"
-msgstr "Multimediální přehrávač"
+msgstr "Přehrávač médií"
 
 #: ../cleaners\journald.xml
 msgid "System journals"
@@ -651,6 +652,8 @@ msgid ""
 "Delete the database, which contains information such as play count and last "
 "played"
 msgstr ""
+"Smazat databázi, která obsahuje informace jako počet přehrání a poslední "
+"přehrání"
 
 #: ../cleaners\wine.xml
 msgid "Compatibility layer for Windows software"
@@ -663,8 +666,8 @@ msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"Smazat mezipaměť webových stránek, omezujících čas potřebný pro načítání již "
-"navštívených stránek"
+"Smazat mezipaměť webových stránek, která urychluje načítání již navštívených "
+"stránek. Toto také vyčistí oblíbené Gify."
 
 #: ../cleaners\vim.xml
 msgid ""
@@ -682,8 +685,9 @@ msgid "Clean files widely scattered across the disk"
 msgstr "Vyčistit soubory poházené po disku"
 
 #: ../cleaners\deepscan.xml
+#, fuzzy
 msgid "Inspect the preview for any files you want to keep."
-msgstr "Prohlédněte si v náhledu soubory, které si přejete zachovat"
+msgstr "Prohlédněte si náhled pro soubory, které si chcete zachovat."
 
 #: ../cleaners\deepscan.xml
 msgid "This option is slow."
@@ -739,13 +743,11 @@ msgstr "Ikony souborů na systému"
 
 #: ../cleaners\zoom.xml
 msgid "Recordings"
-msgstr ""
+msgstr "Nahrávky"
 
 #: ../cleaners\zoom.xml
-#, fuzzy
-#| msgid "Delete the list of game servers"
 msgid "Delete the audio and video recordings"
-msgstr "Smazat seznam herních serverů"
+msgstr "Smazat audio a video nahrávky"
 
 #: ../cleaners\windows_explorer.xml
 msgid ""
@@ -768,11 +770,12 @@ msgstr "Toto resetuje pozici ikon na pracovní ploše."
 
 #: ../cleaners\windows_explorer.xml
 msgid "This will restart Windows Explorer."
-msgstr "Tímto bude restartován Windows Explorer"
+msgstr "Tímto bude restartován Windows Explorer."
 
 #: ../cleaners\dnf.xml
+#, fuzzy
 msgid "Remove packages that were formerly dependencies"
-msgstr ""
+msgstr "Smaž balíčky, kter kdysi byly závislosti"
 
 #: ../cleaners\dnf.xml
 msgid ""
@@ -950,7 +953,7 @@ msgstr "Tato volba je experimentální, může způsobit problémy v systému!"
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:313
 msgid "Prefetch"
-msgstr "Prefetch"
+msgstr ""
 
 #: ../bleachbit/Cleaner.py:315
 msgid "Recycle bin"
@@ -1065,7 +1068,7 @@ msgstr "skartovat konkrétní soubory nebo složky"
 
 #: ../bleachbit/CLI.py:162
 msgid "wipe free space in the given paths"
-msgstr ""
+msgstr "Vyčistit volné místo v daných cestách"
 
 #: ../bleachbit/CLI.py:164
 msgid "overwrite files to hide contents"
@@ -1080,12 +1083,14 @@ msgid "use options set in the graphical interface"
 msgstr "použít volby nastavené v grafickém rozhraní"
 
 #: ../bleachbit/CLI.py:170
+#, fuzzy
 msgid "enable all options that do not have a warning"
-msgstr ""
+msgstr "zapnout všechny možnosti, kter nemají upozornění"
 
 #: ../bleachbit/CLI.py:172
+#, fuzzy
 msgid "set log level to verbose"
-msgstr ""
+msgstr "Nastavit logovací úroveň na podrobnou"
 
 #: ../bleachbit/CLI.py:173
 msgid "log debug messages to file"
@@ -1124,7 +1129,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:257
 msgid "Wiping free space can take a long time."
-msgstr ""
+msgstr "Čištění volného místa může zabrat hodně dlouho."
 
 #: ../bleachbit/CLI.py:268
 msgid "No work to do. Specify options."
@@ -1205,9 +1210,9 @@ msgstr ""
 "není možné použít pokročilé přepsání."
 
 #: ../bleachbit/FileUtilities.py:934
-#, python-format
+#, fuzzy, python-format
 msgid "Wiping path: %s"
-msgstr ""
+msgstr "Čištění cesty: %s"
 
 #: ../bleachbit/FileUtilities.py:936
 #, python-format
@@ -1249,8 +1254,9 @@ msgid "_Cancel"
 msgstr ""
 
 #: ../bleachbit/GuiBasic.py:82
+#, fuzzy
 msgid "_Open"
-msgstr ""
+msgstr "_Otevřít"
 
 #: ../bleachbit/GuiBasic.py:106 ../bleachbit/GuiBasic.py:150
 #: ../bleachbit/GUI.py:220
@@ -1269,6 +1275,7 @@ msgid ""
 msgstr ""
 
 #: ../bleachbit/GuiBasic.py:139
+#, fuzzy
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -1301,7 +1308,7 @@ msgstr "Otevřít webovou stránku %s?"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:527
 msgid "Confirm"
-msgstr ""
+msgstr "Potvrdit"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1321,8 +1328,9 @@ msgstr ""
 #. TRANSLATORS: Inspiration is a choice of documents from which random
 #. text will be generated.
 #: ../bleachbit/GuiChaff.py:78
+#, fuzzy
 msgid "Inspiration"
-msgstr ""
+msgstr "Inspirace"
 
 #: ../bleachbit/GuiChaff.py:81
 msgid "2600 Magazine"
@@ -1334,11 +1342,12 @@ msgstr ""
 
 #: ../bleachbit/GuiChaff.py:89
 msgid "Number of files"
-msgstr ""
+msgstr "Počet souborů"
 
 #: ../bleachbit/GuiChaff.py:96 ../bleachbit/GuiChaff.py:156
+#, fuzzy
 msgid "Select destination folder"
-msgstr ""
+msgstr "Vyber cílovou složkku"
 
 #: ../bleachbit/GuiChaff.py:106
 msgid "When finished"
@@ -1349,8 +1358,9 @@ msgid "Delete without shredding"
 msgstr ""
 
 #: ../bleachbit/GuiChaff.py:109
+#, fuzzy
 msgid "Do not delete"
-msgstr ""
+msgstr "Nesmaž to"
 
 #: ../bleachbit/GuiChaff.py:120
 msgid "Make files"
@@ -1362,7 +1372,7 @@ msgstr ""
 
 #: ../bleachbit/GuiChaff.py:179
 msgid "Generating files"
-msgstr ""
+msgstr "Generování souborů"
 
 #: ../bleachbit/GuiPreferences.py:55 ../data/app-menu.ui:32
 msgid "Preferences"
@@ -1397,6 +1407,7 @@ msgstr ""
 "informace. Poté si ji můžete ručně stáhnout a nainstalovat."
 
 #: ../bleachbit/GuiPreferences.py:129
+#, fuzzy
 msgid "Check for new beta releases"
 msgstr "Kontrolovat pro nové betaverze"
 
@@ -1410,7 +1421,7 @@ msgstr "Skrýt nepodstatné čističe"
 
 #: ../bleachbit/GuiPreferences.py:161
 msgid "Overwrite contents of files to prevent recovery"
-msgstr "Přepsat obsah tak aby ze zabránilo obnovení dat"
+msgstr "Přepsat obsah souborů, tak aby ze zabránilo obnovení dat"
 
 #: ../bleachbit/GuiPreferences.py:165
 msgid ""
@@ -1434,22 +1445,21 @@ msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
 msgstr "Použít jednotky IEC (1KiB = 1024 bajtů) namísto SI (1kB = 1000 bajtů)"
 
 #: ../bleachbit/GuiPreferences.py:191
-#, fuzzy
-#| msgid "Windowing system"
 msgid "Windows 10 theme"
-msgstr "Okenní systém"
+msgstr "Windows 10 motiv"
 
 #: ../bleachbit/GuiPreferences.py:198
 msgid "Dark mode"
-msgstr ""
+msgstr "Tmavý motiv"
 
 #: ../bleachbit/GuiPreferences.py:204
 msgid "Remember window geometry"
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:210
+#, fuzzy
 msgid "Show debug messages"
-msgstr ""
+msgstr "Ukázat debug zprávy"
 
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
@@ -1482,8 +1492,9 @@ msgid "Remove"
 msgstr "Odstranit"
 
 #: ../bleachbit/GuiPreferences.py:302
+#, fuzzy
 msgid "All languages will be deleted except those checked."
-msgstr "Všechny jazykové překlady kromě označených budou smazány"
+msgstr "Všechny jazykové překlady kromě označených budou smazány."
 
 #: ../bleachbit/GuiPreferences.py:318
 msgid "Preserve"
@@ -1529,7 +1540,7 @@ msgstr "Typ"
 #. file, a folder, or a pattern describing either
 #: ../bleachbit/GuiPreferences.py:469
 msgid "Path"
-msgstr "Umístění"
+msgstr "Cesta"
 
 #: ../bleachbit/GuiPreferences.py:484
 msgctxt "button"
@@ -1628,10 +1639,8 @@ msgid "You must select an operation"
 msgstr "Nejprve musíte zvolit operaci"
 
 #: ../bleachbit/GUI.py:771
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Chyb: %d"
+msgstr "Chyba"
 
 #: ../bleachbit/GUI.py:789 ../bleachbit/GUI.py:805
 msgid "Done."
@@ -1672,11 +1681,14 @@ msgstr ""
 "systému."
 
 #: ../bleachbit/GUI.py:891
+#, fuzzy
 msgid ""
 "There is no official version of BleachBit on the Microsoft Store. Get the "
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"V Microsoft Obchodě není žádná oficiální verze BleachBitu. Pravá verze je na "
+"https://www.bleachbit.org kde je vždy zdarma."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1686,8 +1698,9 @@ msgid "Preview"
 msgstr "Náhled"
 
 #: ../bleachbit/GUI.py:1034
+#, fuzzy
 msgid "Preview files in the selected operations (without deleting any files)"
-msgstr "Náhled souborů ve vybraných operacích (bez mazání)"
+msgstr "Náhled souborů ve vybraných operacích (bez smazání jakékoliv souboru)"
 
 #: ../bleachbit/GUI.py:1049
 msgid "Clean files in the selected operations"
@@ -1699,7 +1712,7 @@ msgstr "Přerušit"
 
 #: ../bleachbit/GUI.py:1059
 msgid "Abort the preview or cleaning process"
-msgstr ""
+msgstr "Přerušit náhled nebo čištění procesu"
 
 #: ../bleachbit/GUI.py:1266
 msgid "Error when checking for updates: "
@@ -1748,9 +1761,9 @@ msgstr ""
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:265
-#, python-format
+#, fuzzy, python-format
 msgid "Physical free memory is %s."
-msgstr ""
+msgstr "Fyzická volná paměť je %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:280
@@ -1796,8 +1809,9 @@ msgid "Error checking whether path exists: %s"
 msgstr "Chyba při zjišťování zda dané umístění existuje: %s"
 
 #: ../bleachbit/Options.py:268
+#, fuzzy
 msgid "Error when setting the default drives to shred."
-msgstr "Chyba při nastavování výchozích jednotek, které vyskartovat"
+msgstr "Chyba při nastavování výchozích jednotek, které vyskartovat."
 
 #: ../bleachbit/Options.py:294
 #, python-format
@@ -1906,11 +1920,12 @@ msgstr ""
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "Upozornění"
 
 #: ../bleachbit/Windows.py:855
+#, fuzzy
 msgid "BleachBit is starting...\n"
-msgstr ""
+msgstr "BleachBit se zapíná...\n"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -2038,4 +2053,4 @@ msgstr "_Nápověda"
 
 #: ../data/app-menu.ui:47
 msgid "_About BleachBit"
-msgstr ""
+msgstr "_O BleachBitu"
