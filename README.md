@@ -24,8 +24,14 @@ For information regarding the command line interface, run:
 page](https://www.bleachbit.org)
 * [Support](https://www.bleachbit.org/help)
 * [Documentation](https://docs.bleachbit.org)
-* [Translate in Weblate](https://hosted.weblate.org/projects/bleachbit/): under evaluation
 
+## Localization
+
+[Translate in Weblate](https://hosted.weblate.org/projects/bleachbit/): under evaluation
+
+<a href="https://hosted.weblate.org/engage/bleachbit/">
+      <img src="https://hosted.weblate.org/widgets/bleachbit/-/multi-auto.svg" alt="Translation status"/>
+</a>
 
 ## Licenses
 
