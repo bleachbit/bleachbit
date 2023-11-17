@@ -311,13 +311,30 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         self.assertEqual(bytes_freed, 299000000)
 
     @common.skipIfWindows
-    def test_is_unix_display_protocol_wayland(self):
+    def test_is_unix_display_protocol_wayland_no_mock(self):
+        """Unit test for test_is_unix_display_protocol_wayland() with no mock"""
+        ret = is_unix_display_protocol_wayland()
+        self.assertIsInstance(ret, bool)
+
+    @common.skipIfWindows
+    def test_is_unix_display_protocol_wayland_mock_env(self):
+        """Unit test for test_is_unix_display_protocol_wayland() by mocking os.environ"""
+        # The environment variables take precedence.
         with mock.patch.dict('os.environ', {'XDG_SESSION_TYPE': 'x11'}, clear=True):
             self.assertFalse(is_unix_display_protocol_wayland())
         with mock.patch.dict('os.environ', {'XDG_SESSION_TYPE': 'wayland'}, clear=True):
             self.assertTrue(is_unix_display_protocol_wayland())
         with mock.patch.dict('os.environ', {'WAYLAND_DISPLAY': 'yes'}, clear=True):
             self.assertTrue(is_unix_display_protocol_wayland())
+
+    @common.skipIfWindows
+    @mock.patch.dict(os.environ, {}, clear=True)
+    def test_is_unix_display_protocol_wayland_mock_no_env(self):
+        """Unit test for test_is_unix_display_protocol_wayland() by clearing os.environ"""
+        self.assertEqual(len(os.environ), 0)
+
+        # Check that it does not throw an exception.
+        no_exception = is_unix_display_protocol_wayland()
 
         display_protocol = None
 
@@ -330,11 +347,27 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
 
         for display_protocol, assert_method in [['wayland', self.assertTrue], ['donotexist', self.assertFalse]]:
             with mock.patch('bleachbit.General.run_external') as mock_run_external:
-                with mock.patch.dict(os.environ, {}, clear=True):
-                    mock_run_external.side_effect = side_effect_func
-                    is_wayland = is_unix_display_protocol_wayland()
+                mock_run_external.side_effect = side_effect_func
+                is_wayland = is_unix_display_protocol_wayland()
+                assert mock_run_external.called
             self.assertIsInstance(is_wayland, bool)
             assert_method(is_wayland)
+
+        with mock.patch('bleachbit.General.run_external') as mock_run_external:
+            mock_run_external.side_effect = FileNotFoundError('not found')
+            self.assertFalse(is_unix_display_protocol_wayland())
+            assert mock_run_external.called
+
+        with mock.patch('bleachbit.General.run_external') as mock_run_external:
+            mock_run_external.side_effect = lambda a: (1, None, None)
+            self.assertFalse(is_unix_display_protocol_wayland())
+            assert mock_run_external.called
+
+        with mock.patch('bleachbit.General.run_external') as mock_run_external:
+            mock_run_external.side_effect = lambda a: (
+                0, 'test of invalid output from loginctl', None)
+            self.assertFalse(is_unix_display_protocol_wayland())
+            assert mock_run_external.called
 
     @common.skipIfWindows
     def test_xhost_autorized_root(self):
