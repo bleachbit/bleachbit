@@ -311,25 +311,35 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         self.assertEqual(bytes_freed, 299000000)
 
     @common.skipIfWindows
-    def test_is_linux_display_protocol_wayland(self):
+    def test_is_unix_display_protocol_wayland(self):
+        with mock.patch.dict('os.environ', {'XDG_SESSION_TYPE': 'x11'}, clear=True):
+            self.assertFalse(is_unix_display_protocol_wayland())
+        with mock.patch.dict('os.environ', {'XDG_SESSION_TYPE': 'wayland'}, clear=True):
+            self.assertTrue(is_unix_display_protocol_wayland())
+        with mock.patch.dict('os.environ', {'WAYLAND_DISPLAY': 'yes'}, clear=True):
+            self.assertTrue(is_unix_display_protocol_wayland())
+
         display_protocol = None
+
         def side_effect_func(value):
             if len(value) == 1:
                 return (0, 'SESSION  UID USER   SEAT  TTY \n      2 1000 debian seat0 tty2\n\n1 sessions listed.\n', '')
             elif len(value) > 1:
                 return (0, 'Type={}\n'.format(display_protocol), '')
-            assert(False) # should never reach here
+            assert(False)  # should never reach here
 
         for display_protocol, assert_method in [['wayland', self.assertTrue], ['donotexist', self.assertFalse]]:
             with mock.patch('bleachbit.General.run_external') as mock_run_external:
-                mock_run_external.side_effect = side_effect_func
-                is_wayland = is_linux_display_protocol_wayland()
+                with mock.patch.dict(os.environ, {}, clear=True):
+                    mock_run_external.side_effect = side_effect_func
+                    is_wayland = is_unix_display_protocol_wayland()
             self.assertIsInstance(is_wayland, bool)
             assert_method(is_wayland)
 
     @common.skipIfWindows
     def test_xhost_autorized_root(self):
         error_code = None
+
         def side_effect_func(*args, **kwargs):
             self.assertEqual(args[0][0], 'xhost')
             return (error_code,
