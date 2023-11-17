@@ -504,7 +504,7 @@ def is_running_darwin(exename):
         ps_out = subprocess.check_output(["ps", "aux", "-c"],
                                          universal_newlines=True)
         processes = (re.split(r"\s+", p, 10)[10]
-                      for p in ps_out.split("\n") if p != "")
+                     for p in ps_out.split("\n") if p != "")
         next(processes)  # drop the header
         return exename in processes
     except IndexError:
@@ -726,26 +726,53 @@ def dnf_autoremove():
     return freed_bytes
 
 
-def is_linux_display_protocol_wayland():
-    assert(sys.platform.startswith('linux'))
-    result = General.run_external(['loginctl'])
-    session = result[1].split('\n')[1].strip().split(' ')[0]
-    result = General.run_external(['loginctl', 'show-session', session, '-p', 'Type'])
+def is_unix_display_protocol_wayland():
+    assert os.name == 'posix'
+    if 'XDG_SESSION_TYPE' in os.environ:
+        if os.environ['XDG_SESSION_TYPE'] == 'wayland':
+            return True
+        # If not wayland, then x11, mir, etc.
+        return False
+    if 'WAYLAND_DISPLAY' in os.environ:
+        return True
+    # Wayland (Ubuntu 23.10) sets DISPLAY=:0 like x11, so do not check DISPLAY.
+    try:
+        (rc, stdout, stderr) = General.run_external(['loginctl'])
+    except FileNotFoundError:
+        return False
+    if not rc == 0:
+        logger.warning('logintctl returned rc %s', rc)
+        return False
+    try:
+        session = stdout.split('\n')[1].strip().split(' ')[0]
+    except (IndexError, ValueError):
+        logger.warning('unexpected output from loginctl: %s', stdout)
+        return False
+    if not session.isdigit():
+        logger.warning('unexpected session loginctl: %s', session)
+        return False
+    result = General.run_external(
+        ['loginctl', 'show-session', session, '-p', 'Type'])
     return 'wayland' in result[1].lower()
 
 
 def root_is_not_allowed_to_X_session():
-    assert (sys.platform.startswith('linux'))
+    assert os.name == 'posix'
     result = General.run_external(['xhost'], clean_env=False)
     xhost_returned_error = result[0] == 1
     return xhost_returned_error
 
 
 def is_display_protocol_wayland_and_root_not_allowed():
+    try:
+        is_wayland = bleachbit.Unix.is_unix_display_protocol_wayland()
+    except Exception as e:
+        logger.exception(e)
+        return False
     return (
-            bleachbit.Unix.is_linux_display_protocol_wayland() and
-            os.environ['USER'] == 'root' and
-            bleachbit.Unix.root_is_not_allowed_to_X_session()
+        is_wayland and
+        os.environ['USER'] == 'root' and
+        bleachbit.Unix.root_is_not_allowed_to_X_session()
     )
 
 
