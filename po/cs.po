@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2023-11-11 11:36+0000\n"
+"PO-Revision-Date: 2023-11-18 05:14+0000\n"
 "Last-Translator: inson1 <vaclav.svarc01@seznam.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/bleachbit/main/cs/>"
 "\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.2\n"
 "X-Launchpad-Export-Date: 2020-03-08 19:36+0000\n"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
@@ -560,7 +560,7 @@ msgstr "Rejstřík"
 msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
-msgstr "Smazání indexu zresetuje nastavení sloupců v message listu."
+msgstr "Smazání indexu zresetuje nastavení sloupců v zprávovém seznamu."
 
 #: ../cleaners\screenlets.xml
 msgid "Widgets for the desktop"
@@ -827,9 +827,9 @@ msgstr "Hloubkový sken nepodporuje proměnnou s více hodnotami."
 #. be used with directories instead of with files. Do not translate
 #. search="walk.all" and path="%s"
 #: ../bleachbit/Action.py:255
-#, python-format
+#, fuzzy, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr ""
+msgstr "hledat=\"walk.all\"použitý s regular souborovou cestou=\"%s\""
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -1032,8 +1032,9 @@ msgid "Overwrite free disk space %s"
 msgstr "Přepsat volné místo na %s"
 
 #: ../bleachbit/Cleaner.py:670
+#, fuzzy
 msgid "Loading native cleaners."
-msgstr ""
+msgstr "Načítání nativních čističů"
 
 #: ../bleachbit/Cleaner.py:675
 #, fuzzy
