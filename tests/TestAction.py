@@ -31,12 +31,12 @@ from tests.TestFileUtilities import test_json_helper
 
 import glob
 import logging
-import mock
 import os
 import shutil
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from xml.dom.minidom import parseString
 
 

@@ -27,7 +27,10 @@ import shutil
 import sys
 import tempfile
 import unittest
-import mock
+if sys.version_info >= (3, 8):
+    from unittest import mock
+else:
+    import mock
 if 'win32' == sys.platform:
     import winreg
     import win32gui

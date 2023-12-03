@@ -26,7 +26,7 @@ Test case for module Unix
 from tests import common
 from bleachbit.Unix import *
 
-import mock
+from unittest import mock
 import os
 import sys
 import unittest

@@ -23,11 +23,15 @@
 Test case for module GUI
 """
 
-import mock
 import os
+import sys
 import unittest
 import time
 import types
+if sys.version_info >= (3, 6):
+    from unittest import mock
+else:
+    import mock
 
 try:
     import gi
