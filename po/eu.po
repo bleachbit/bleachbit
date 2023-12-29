@@ -8,16 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2013-05-30 14:28+0000\n"
-"Last-Translator: gorkaazk <gorkaazkarate@euskalerria.org>\n"
-"Language-Team: Basque <eu@li.org>\n"
+"PO-Revision-Date: 2023-12-30 15:08+0000\n"
+"Last-Translator: Sergio Varela <sergitroll9@gmail.com>\n"
+"Language-Team: Basque <https://hosted.weblate.org/projects/bleachbit/main/eu/"
+">\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Launchpad-Export-Date: 2013-05-31 05:01+0000\n"
-"X-Generator: Launchpad (build 16660)\n"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
 #: ../cleaners\waterfox.xml ../cleaners\seamonkey.xml
@@ -176,12 +177,12 @@ msgstr "Ezabatu uneko eta azkenengo saioak"
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
 #: ../cleaners\microsoft_edge.xml ../cleaners\brave.xml
 msgid "Sync"
-msgstr ""
+msgstr "Sinkronizazioa"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
 #: ../cleaners\microsoft_edge.xml ../cleaners\brave.xml
 msgid "Delete the sync data and sign out of the browser"
-msgstr ""
+msgstr "Sinkronizazio-datuak ezabatu eta nabigatzailearen saioa itxi"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
 #: ../cleaners\waterfox.xml ../cleaners\thunderbird.xml
@@ -208,10 +209,8 @@ msgstr ""
 #: ../cleaners\palemoon.xml ../cleaners\epiphany.xml
 #: ../cleaners\microsoft_edge.xml ../cleaners\firefox.xml
 #: ../cleaners\brave.xml ../cleaners\opera.xml
-#, fuzzy
-#| msgid "This option deletes all bookmarks."
 msgid "This option will delete your saved passwords."
-msgstr "Aukera honek laster-marka guztiak ezabatzen ditu."
+msgstr "Aukera honek zure pasahitzak ezabatuko ditu."
 
 #. TRANSLATORS: Vacuum is a verb.  The term is jargon
 #. from the SQLite database.  Microsoft Access uses
@@ -255,10 +254,8 @@ msgid "Settings for individual sites"
 msgstr "Banakako guneen hobespenak"
 
 #: ../cleaners\winrar.xml
-#, fuzzy
-#| msgid "File transfer client"
 msgid "File archiver"
-msgstr "Fitxategi transferentzia bezeroa"
+msgstr "Artxibategia"
 
 #: ../cleaners\winrar.xml ../cleaners\filezilla.xml
 #: ../cleaners\windows_defender.xml ../cleaners\nautilus.xml
@@ -310,11 +307,11 @@ msgstr "Azkenaldian erabilitakoak"
 
 #: ../cleaners\windows_defender.xml
 msgid "Anti-virus"
-msgstr ""
+msgstr "Antibirusa"
 
 #: ../cleaners\windows_defender.xml
 msgid "Quarantine"
-msgstr ""
+msgstr "Berrogeialdia"
 
 #: ../cleaners\windows_defender.xml ../cleaners\transmission.xml
 #: ../cleaners\waterfox.xml ../cleaners\thunderbird.xml
@@ -401,7 +398,7 @@ msgstr "Ezabatu joko zerbitzari zerrenda"
 
 #: ../cleaners\yum.xml ../cleaners\apt.xml ../cleaners\dnf.xml
 msgid "Package manager"
-msgstr ""
+msgstr "Paketeen kudeatzailea"
 
 #: ../cleaners\gedit.xml ../cleaners\vim.xml
 msgid "Editor"
@@ -443,16 +440,12 @@ msgid "Delete the chat logs"
 msgstr "Ezabatu berriketa-egunkariak"
 
 #: ../cleaners\skype.xml
-#, fuzzy
-#| msgid "Update uninstallers"
 msgid "Installers"
-msgstr "Eguneraketen desinstalatzaileak"
+msgstr "Instalatzaileak"
 
 #: ../cleaners\skype.xml
-#, fuzzy
-#| msgid "Delete the avatars and emoticons cache"
 msgid "Delete cached patches and installers"
-msgstr "Ezabatu avatar eta aurpegieren cache-a"
+msgstr "Ezabatu cachean dagoen txaplatak eta instalatzaileak"
 
 #: ../cleaners\x11.xml
 msgid "Windowing system"
