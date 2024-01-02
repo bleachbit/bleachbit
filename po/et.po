@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2023-08-09 14:51+0000\n"
-"Last-Translator: Pernelle Bourel <pernelle.bourel@ethitra.com>\n"
+"PO-Revision-Date: 2024-01-03 10:09+0000\n"
+"Last-Translator: vaba <vaba@riseup.net>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/bleachbit/main/"
 "et/>\n"
 "Language: et\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
@@ -1567,13 +1567,7 @@ msgstr ""
 #. in the 'About' box.
 #: ../bleachbit/GUI.py:321
 msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Jalakas https://launchpad.net/~jalakas\n"
-"  Talupoja Tarkus https://launchpad.net/~talupojatarkus\n"
-"  bushido https://launchpad.net/~olav-magi\n"
-"  olavi tohver https://launchpad.net/~olts16\n"
-"  vaba https://launchpad.net/~vaba"
+msgstr "vaba, 2023 😎️"
 
 #: ../bleachbit/GUI.py:345
 msgid "System information"
@@ -1613,10 +1607,8 @@ msgid "You must select an operation"
 msgstr "Peate valima tegevuse"
 
 #: ../bleachbit/GUI.py:771
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Vead: %d"
+msgstr "Viga"
 
 #: ../bleachbit/GUI.py:789 ../bleachbit/GUI.py:805
 msgid "Done."
