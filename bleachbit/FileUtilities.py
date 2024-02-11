@@ -502,7 +502,9 @@ def expand_glob_join(pathname1, pathname2):
 
 def extended_path(path):
     """If applicable, return the extended Windows pathname"""
-    if 'nt' == os.name:
+    # Do not extend the Sysnative paths because on some systems there are problems with path resolution,
+    # for example: https://github.com/bleachbit/bleachbit/issues/1574.
+    if 'nt' == os.name and 'Sysnative' not in path.split(os.sep):
         if path.startswith(r'\\?'):
             return path
         if path.startswith(r'\\'):
