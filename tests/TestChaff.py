@@ -23,7 +23,7 @@
 Test case for module Chaff
 """
 
-import mock
+from unittest import mock
 import os
 import unittest
 from tempfile import mkdtemp
