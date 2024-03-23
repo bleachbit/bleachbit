@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2023-11-05 22:11+0000\n"
-"Last-Translator: John Donne <akheron@zaclys.net>\n"
+"PO-Revision-Date: 2024-03-24 14:02+0000\n"
+"Last-Translator: programutox <programutox@disroot.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/bleachbit/main/fr/"
 ">\n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
@@ -1985,10 +1985,13 @@ msgid "Imported from winapp2.ini"
 msgstr "Importé depuis le fichier winapp2.ini"
 
 #: ../bleachbit/Windows.py:141
+#, fuzzy
 msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
+"Le fichier python3.dll a été trouvé dans C:\\ ou C:\\dlls, ce qui indique "
+"une tentative possible de détournement de l'ordre de recherche des DLL."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
