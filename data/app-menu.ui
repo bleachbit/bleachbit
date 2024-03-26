@@ -46,6 +46,11 @@
         <attribute name="action">app.about</attribute>
         <attribute name="label" translatable="yes">_About BleachBit</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">_Quit</attribute>
+        <attribute name="action">app.quit</attribute>
+        <attribute name="accel">&lt;Control&gt;q</attribute>
+      </item>
     </section>
   </menu>
 </interface>
