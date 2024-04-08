@@ -26,7 +26,7 @@ Test case for module Update
 from tests import common
 import bleachbit
 from bleachbit import logger
-from bleachbit.Update import check_updates, update_winapp2, user_agent
+from bleachbit.Update import check_updates, get_ip_for_url, update_winapp2, user_agent
 import bleachbit.Update
 
 import os
@@ -86,11 +86,22 @@ class UpdateTestCase(common.BleachbitTestCase):
         """Unit test for class UpdateCheck with bad network address"""
         # expect connection failure
         preserve_url = bleachbit.update_check_url
-        bleachbit.update_check_url = "http://localhost/doesnotexist"
-        self.assertEqual(
-            check_updates(True, False, None, None),
-            ())
+        for url in ('http://localhost/doesnotexist', 'https://httpstat.us/500'):
+            bleachbit.update_check_url = url
+            self.assertEqual(
+                check_updates(True, False, None, None),
+                ())
         bleachbit.update_check_url = preserve_url
+
+    def test_get_ip_for_url(self):
+        """Unit test for get_ip_for_url()"""
+        for good_url in ('https://www.example.com', bleachbit.update_check_url):
+            ip_str = get_ip_for_url(good_url)
+            import ipaddress
+            ip = ipaddress.ip_address(ip_str)
+        for bad_url in (None, '', 'https://invalid.com'):
+            ret = get_ip_for_url(bad_url)
+            self.assertEqual(ret[0], '(')
 
     def test_update_url(self):
         """Check connection to the update URL"""

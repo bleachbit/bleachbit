@@ -187,8 +187,22 @@ def _generate_email(subject_model, content_model, number_of_sentences=DEFAULT_NU
     return message
 
 
-def download_url_to_fn(url, fn, on_error=None, max_retries=2, backoff_factor=0.5):
-    """Download a URL to the given filename"""
+def download_url_to_fn(url, fn, on_error=None, max_retries=3, backoff_factor=0.5, timeout=60):
+    """Download a URL to the given filename
+
+    fn: target filename
+
+    on_error: callback function in case of error
+
+    max_retries: retry count
+
+    backoff_factor: how long to wait before retries
+
+    timeout: number of seconds to wait to establish connection
+
+    return: True if succeeded, False if failed
+    """
+    # FIXME: unify this with update_winapp2(), check_updates()
     logger.info('Downloading %s to %s', url, fn)
     import requests
     import sys
@@ -222,7 +236,7 @@ def download_url_to_fn(url, fn, on_error=None, max_retries=2, backoff_factor=0.5
     with requests.Session() as session:
         session.mount('http://', HTTPAdapter(max_retries=retries))
         try:
-            response = session.get(url, headers=headers)
+            response = session.get(url, headers=headers, timeout=timeout)
             content = response.content
         except requests.exceptions.RequestException as exc:
             msg2 = '{}: {}'.format(type(exc).__name__, exc)

@@ -145,8 +145,8 @@ INSERT INTO "keywords_backup" VALUES(4,'Yahoo! QuÃ©bec','qc.yahoo.com','http:/
 INSERT INTO "keywords_backup" VALUES(5,'Bing','bing.com','http://www.bing.com/s/wlflag.ico','http://www.bing.com/search?setmkt=en-CA&q={searchTerms}',1,'',0,0,'UTF-8',1,'http://api.bing.com/osjson.aspx?query={searchTerms}&language={language}',3,0,'',0,'D77A8BC1-3CD6-4AB5-93B2-72B0C2E94E73');
 INSERT INTO "keywords_backup" VALUES(6,'Bing','bing.com_','http://www.bing.com/s/wlflag.ico','http://www.bing.com/search?setmkt=fr-CA&q={searchTerms}',1,'',0,0,'UTF-8',1,'http://api.bing.com/osjson.aspx?query={searchTerms}&language={language}',7,0,'',0,'E1035236-31F4-216A-632A-A7323A1B7A70');
 CREATE TABLE autofill (name VARCHAR, value VARCHAR, value_lower VARCHAR, pair_id INTEGER PRIMARY KEY, count INTEGER DEFAULT 1);
-CREATE TABLE autofill_dates ( pair_id INTEGER DEFAULT 0, date_created INTEGER DEFAULT 0);
 INSERT INTO "autofill" VALUES('ltmpl','sso','sso',1,3);
+CREATE TABLE autofill_dates ( pair_id INTEGER DEFAULT 0, date_created INTEGER DEFAULT 0);
 INSERT INTO "autofill_dates" VALUES(1,1268958682);
 CREATE TABLE autofill_profile_names ( guid VARCHAR, first_name VARCHAR, middle_name VARCHAR, last_name VARCHAR, full_name VARCHAR);
 INSERT INTO "autofill_profile_names" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA','andrew','','ziem','');
@@ -156,6 +156,19 @@ CREATE TABLE "autofill_profile_phones" ( guid VARCHAR, number VARCHAR);
 INSERT INTO "autofill_profile_phones" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA','123457890');
 CREATE TABLE "autofill_profiles" ( guid VARCHAR PRIMARY KEY, company_name VARCHAR, street_address VARCHAR, dependent_locality VARCHAR, city VARCHAR, state VARCHAR, zipcode VARCHAR, sorting_code VARCHAR, country_code VARCHAR, date_modified INTEGER NOT NULL DEFAULT 0, origin VARCHAR DEFAULT '', language_code VARCHAR, use_count INTEGER NOT NULL DEFAULT 0, use_date INTEGER NOT NULL DEFAULT 0);
 INSERT INTO "autofill_profiles" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA','','1234 anywhere st','','City','ST','000000','','US',1386736740,'','',5,1437861201);
+CREATE TABLE local_addresses(guid VARCHAR, use_count INTEGER, use_date INTEGER, date_modified INTEGER,  language_code VARCHAR, label VARCHAR, initial_creator_id INTEGER, last_modifier_id INTEGER);
+INSERT INTO "local_addresses" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 1, 1667776445, 1667776456, '', '', 70073, 70073);
+CREATE TABLE local_addresses_type_tokens(guid VARCHAR, type INTEGER, value VARCHAR, verification_status INTEGER);
+INSERT INTO "local_addresses_type_tokens" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 60, '', 0);
+INSERT INTO "local_addresses_type_tokens" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 3, 'andrew', 1);
+INSERT INTO "local_addresses_type_tokens" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 5, 'ziem', 1);
+INSERT INTO "local_addresses_type_tokens" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 77, '1234 anywhere st', 3);
+INSERT INTO "local_addresses_type_tokens" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 33, 'City', 0);
+INSERT INTO "local_addresses_type_tokens" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 36, 'US', 3);
+INSERT INTO "local_addresses_type_tokens" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 35, '0000000', 3);
+INSERT INTO "local_addresses_type_tokens" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 9, 'a@a.a', 0);
+INSERT INTO "local_addresses_type_tokens" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 14, '123457890', 0);
+INSERT INTO "local_addresses_type_tokens" VALUES('AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA', 60, 'bleachbit company', 0);
 CREATE TABLE server_addresses (id VARCHAR,company_name VARCHAR,street_address VARCHAR,address_1 VARCHAR,address_2 VARCHAR,address_3 VARCHAR,address_4 VARCHAR,postal_code VARCHAR,sorting_code VARCHAR,country_code VARCHAR,language_code VARCHAR, recipient_name VARCHAR, phone_number VARCHAR);
 INSERT INTO "server_addresses" VALUES('a','','123 anywhere','ST','City','',NULL,'0000','','US','','andrew ziem','+1 000-000-0000');
 """
@@ -380,8 +393,10 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
         fn = "google-chrome/Default/Web Data"
 
         def check_autofill(testcase, filename):
-            testcase.assertTablesAreEmpty(filename, ['autofill', 'autofill_profile_emails', 'autofill_profile_names',
-                                                     'autofill_profile_phones', 'autofill_profiles', 'server_addresses'])
+            testcase.assertTablesAreEmpty(
+                filename,
+                ['autofill', 'local_addresses', 'local_addresses_type_tokens', 'server_addresses']
+            )
 
         self.sqlite_clean_helper(
             None, fn, Special.delete_chrome_autofill, check_func=check_autofill)

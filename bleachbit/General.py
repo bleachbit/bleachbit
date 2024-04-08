@@ -158,6 +158,24 @@ def run_external(args, stdout=None, env=None, clean_env=True):
             str(out[1], encoding=encoding) if out[1] else '')
 
 
+def startup_check():
+    """At application startup, check some things are okay."""
+
+    if 'nt' == os.name:
+        from bleachbit.Windows import check_dll_hijacking
+        check_dll_hijacking()
+
+    # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
+    # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
+    # https://www.bleachbit.org/forum/074-fails-errors
+    from bleachbit import ModuleNotFoundError
+    try:
+        from sqlite3 import SQLITE_OK
+    except (ModuleNotFoundError, ImportError):
+        logger.exception(
+            'The sqlite3 module could not be loaded. On Windows, the antivirus may be blocking it. On FreeBSD, install the package databases/py-sqlite3.')
+
+
 def sudo_mode():
     """Return whether running in sudo mode"""
     if not sys.platform.startswith('linux'):

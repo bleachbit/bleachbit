@@ -75,7 +75,7 @@ def cleaners_list():
 def list_cleaners():
     """Display available cleaners"""
     for cleaner in cleaners_list():
-        print (cleaner)
+        print(cleaner)
 
 
 def preview_or_clean(operations, really_clean, quiet=False):
@@ -139,10 +139,6 @@ def args_to_operations(args, preset, all_but_warning):
 
 def process_cmd_line():
     """Parse the command line and execute given commands."""
-
-    if 'nt' == os.name:
-        from bleachbit.Windows import check_dll_hijacking
-        check_dll_hijacking()
 
     # TRANSLATORS: This is the command line usage.  Don't translate
     # %prog, but do translate options, cleaner, and option.
@@ -213,6 +209,11 @@ def process_cmd_line():
         logger.error(
             _('Specify only one of these commands: --list-cleaners, --wipe-free-space, --preview, --clean'))
         sys.exit(1)
+
+    if not options.gui:
+        # The GUI has its own trigger for the same function.
+        from bleachbit.General import startup_check
+        startup_check()
 
     did_something = False
     if options.debug:

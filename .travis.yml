@@ -2,15 +2,15 @@ language: python
 os: linux
 jobs:
   include:
-   # Ubuntu 16.04 LTS (Xenial)
+   # references:
+   #    https://docs.travis-ci.com/user/reference/overview/
+   #    https://wiki.ubuntu.com/Releases
+   #    https://devguide.python.org/versions/
+   #    https://distrowatch.com/table.php?distribution=ubuntu
+   # Ubuntu 16.04 LTS (Xenial) EOL is April 2026, has Python 3.5
     - dist: xenial
       python: 3.5
-   # Ubuntu 18.04 LTS (Bionic)
-    - dist: bionic
-      python: 3.6
-    - dist: bionic
-      python: 3.7
-   # Ubuntu 20.04 LTS (Focal)
+   # Ubuntu 20.04 LTS (Focal)  EOL is April 2030, has Python 3.8
     - dist: focal
       python: 3.8
     - dist: focal

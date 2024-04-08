@@ -95,7 +95,7 @@ lint:
 delete_windows_files:
 	# This is used for building .deb and .rpm packages.
 	# Remove Windows-specific cleaners.
-	awk '/os=\"windows/ && /id=\"/ {print FILENAME}' cleaners/*.xml | xargs rm -f
+	grep -l "cleaner id=\"\w*\" os=\"windows\"" cleaners/*xml | xargs rm -f
 	# Remove Windows-specific modules.
 	rm -f bleachbit/{Winapp,Windows*}.py 
 

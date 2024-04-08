@@ -33,12 +33,12 @@ import logging
 import os
 import types
 
-from sqlite3 import DatabaseError
-
 if 'nt' == os.name:
     import bleachbit.Windows
 else:
     from bleachbit.General import WindowsError
+
+logger = logging.getLogger(__name__)
 
 
 def whitelist(path):
@@ -160,13 +160,15 @@ class Function:
                                        (self.func.__name__, self.path))
                 # Function takes a path.  We check the size.
                 oldsize = FileUtilities.getsize(self.path)
+
+                from sqlite3 import DatabaseError
                 try:
                     self.func(self.path)
                 except DatabaseError as e:
                     if -1 == e.message.find('file is encrypted or is not a database') and \
                        -1 == e.message.find('or missing database'):
                         raise
-                    logging.getLogger(__name__).exception(e.message)
+                    logger.exception(e.message)
                     return
                 try:
                     newsize = FileUtilities.getsize(self.path)
