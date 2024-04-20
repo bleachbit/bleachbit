@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2022-05-31 02:17+0000\n"
-"Last-Translator: phlostically <phlostically@mailinator.com>\n"
+"PO-Revision-Date: 2024-03-24 14:02+0000\n"
+"Last-Translator: programutox <programutox@disroot.org>\n"
 "Language-Team: Esperanto <https://hosted.weblate.org/projects/bleachbit/main/"
 "eo/>\n"
 "Language: eo\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Launchpad-Export-Date: 2013-04-09 14:56+0000\n"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
@@ -176,8 +176,9 @@ msgstr "Forigi la aktualan kaj la lastajn seancojn"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
 #: ../cleaners\microsoft_edge.xml ../cleaners\brave.xml
+#, fuzzy
 msgid "Sync"
-msgstr ""
+msgstr "Sinkronigi"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
 #: ../cleaners\microsoft_edge.xml ../cleaners\brave.xml
@@ -311,11 +312,11 @@ msgstr "Plejfreŝe uzataj"
 
 #: ../cleaners\windows_defender.xml
 msgid "Anti-virus"
-msgstr ""
+msgstr "Kontraŭvirusilo"
 
 #: ../cleaners\windows_defender.xml
 msgid "Quarantine"
-msgstr ""
+msgstr "Kvaranteno"
 
 #: ../cleaners\windows_defender.xml ../cleaners\transmission.xml
 #: ../cleaners\waterfox.xml ../cleaners\thunderbird.xml
@@ -402,7 +403,7 @@ msgstr "Forigi la liston de ludserviloj"
 
 #: ../cleaners\yum.xml ../cleaners\apt.xml ../cleaners\dnf.xml
 msgid "Package manager"
-msgstr ""
+msgstr "Pakaĵa administrilo"
 
 #: ../cleaners\gedit.xml ../cleaners\vim.xml
 msgid "Editor"
@@ -486,15 +487,15 @@ msgstr "Propraj dosierujoj rekomencigitos"
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners\transmission.xml
 msgid "Blocklists"
-msgstr ""
+msgstr "Malpermeslistoj"
 
 #: ../cleaners\transmission.xml
 msgid "Blocklists will need update to work."
-msgstr ""
+msgstr "Malpermeslistoj bezonos ĝisdatigon por funkcii."
 
 #: ../cleaners\transmission.xml
 msgid "Torrents"
-msgstr ""
+msgstr "Torentoj"
 
 #: ../cleaners\transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
@@ -502,7 +503,7 @@ msgstr ""
 
 #: ../cleaners\transmission.xml ../cleaners\vuze.xml
 msgid "Statistics"
-msgstr ""
+msgstr "Statistiko"
 
 #: ../cleaners\transmission.xml ../cleaners\vlc.xml
 #: ../bleachbit/Cleaner.py:310
@@ -572,6 +573,7 @@ msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
 msgstr ""
+"Forigi la indekson rekomencigos la agordon de kolonoj en la listo de mesaĝoj."
 
 #: ../cleaners\screenlets.xml
 msgid "Widgets for the desktop"
@@ -589,8 +591,9 @@ msgid "Delete the most recently used list"
 msgstr "Forigi la liston de la plejfreŝe uzataj"
 
 #: ../cleaners\gnome.xml ../cleaners\kde.xml
+#, fuzzy
 msgid "Desktop environment"
-msgstr ""
+msgstr "Labortabla ĉirkaŭaĵo"
 
 #. In GNOME 'Run' is the dialog shown when typing ALT+F2'
 #. In Windows 'Run' is the dialog in the Start menu
@@ -637,13 +640,15 @@ msgstr "Elŝutkronologio"
 
 #. http://wiki.amule.org/wiki/Friend
 #: ../cleaners\amule.xml
+#, fuzzy
 msgid "Known clients and friends"
-msgstr ""
+msgstr "Konataj klientaj kaj amikoj"
 
 #: ../cleaners\winamp.xml ../cleaners\realplayer.xml ../cleaners\vlc.xml
 #: ../cleaners\windows_media_player.xml
+#, fuzzy
 msgid "Media player"
-msgstr ""
+msgstr "Spektilo"
 
 #: ../cleaners\journald.xml
 #, fuzzy
@@ -662,8 +667,9 @@ msgid "Memory dump"
 msgstr "Memornekropsio"
 
 #: ../cleaners\rhythmbox.xml
+#, fuzzy
 msgid "Database"
-msgstr ""
+msgstr "Datenaro"
 
 #: ../cleaners\rhythmbox.xml
 msgid ""
@@ -728,16 +734,18 @@ msgid "Delete obsolete files"
 msgstr "Forigi senvaloriĝintajn dosierojn"
 
 #: ../cleaners\apt.xml
+#, fuzzy
 msgid "Package lists"
-msgstr ""
+msgstr "Listo de pakaĵoj"
 
 #: ../cleaners\audacious.xml
 msgid "Audio player"
 msgstr ""
 
 #: ../cleaners\wordpad.xml
+#, fuzzy
 msgid "Word processor"
-msgstr ""
+msgstr "Teksta redaktilo"
 
 #: ../cleaners\konqueror.xml
 msgid "Current session"
@@ -748,8 +756,9 @@ msgid "Delete the current session"
 msgstr "Forigi la aktualan seancon"
 
 #: ../cleaners\teamviewer.xml
+#, fuzzy
 msgid "Remote control software"
-msgstr ""
+msgstr "Telerega programaro"
 
 #: ../cleaners\thumbnails.xml ../cleaners\windows_explorer.xml
 msgid "Thumbnails"

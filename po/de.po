@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2023-05-14 22:52+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2024-02-05 19:01+0000\n"
+"Last-Translator: David <dawin@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/bleachbit/main/de/"
 ">\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Launchpad-Export-Date: 2021-11-19 21:00+0000\n"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
@@ -1338,7 +1338,7 @@ msgstr "%s im Webbrowser öffnen?"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:527
 msgid "Confirm"
-msgstr ""
+msgstr "Bestätigen"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1654,10 +1654,8 @@ msgid "You must select an operation"
 msgstr "Sie müssen einen Vorgang auswählen"
 
 #: ../bleachbit/GUI.py:771
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Fehler: %d"
+msgstr "Fehler"
 
 #: ../bleachbit/GUI.py:789 ../bleachbit/GUI.py:805
 msgid "Done."
@@ -1946,10 +1944,12 @@ msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
+"Die Datei python3.dll wurde in c:\\ oder c:\\dlls gefunden, was auf einen "
+"möglichen Versuch hinweist, die DLL-Suchreihenfolge zu manipulieren."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "Warnung"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
@@ -2002,7 +2002,7 @@ msgstr[1] "Noch %d Minuten verbleibend."
 #: ../bleachbit/Worker.py:285
 #, python-format
 msgid "Disk space recovered: %s"
-msgstr "Gewonnener Speicherplatz: %s"
+msgstr "Wiedergewonnener Speicherplatz: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)

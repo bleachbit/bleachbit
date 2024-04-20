@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2022-06-07 12:15+0000\n"
-"Last-Translator: Ács Zoltán <acszoltan111@gmail.com>\n"
+"PO-Revision-Date: 2024-03-17 15:02+0000\n"
+"Last-Translator: Ghost of Sparta <makesocialfoss32@keemail.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/bleachbit/main/"
 "hu/>\n"
 "Language: hu\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Launchpad-Export-Date: 2019-12-26 01:52+0000\n"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
@@ -558,6 +558,8 @@ msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
 msgstr ""
+"A keresési index törlése visszaállítja az üzenetlista oszlopainak "
+"beállításait."
 
 #: ../cleaners\screenlets.xml
 msgid "Widgets for the desktop"
@@ -649,25 +651,27 @@ msgid ""
 "Delete the database, which contains information such as play count and last "
 "played"
 msgstr ""
+"Adatbázis törlése, amely olyan információkat tartalmaz, mint a lejátszások "
+"száma és az utolsó lejátszás"
 
 #: ../cleaners\wine.xml
 msgid "Compatibility layer for Windows software"
 msgstr "Kompatibilitási réteg Windows szoftverhez"
 
 #: ../cleaners\discord.xml
-#, fuzzy
-#| msgid "Delete the web cache, which reduces time to display revisited pages"
 msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
 "Web gyorsítótár törlése, amely csökkenti az újra meglátogatott oldalak "
-"megjelenítési idejét"
+"megjelenítési idejét. Ez a kedvenc GIF-eket is törli."
 
 #: ../cleaners\vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
+"A ~/.viminfo fájl törlése, amely tartalmazza a fájlelőzményeket, a "
+"parancselőzményeket és a puffereket"
 
 #: ../cleaners\deepscan.xml
 msgid "Deep scan"
@@ -688,13 +692,11 @@ msgstr "Ez a beállítás elég lassú."
 
 #: ../cleaners\deepscan.xml
 msgid "VIM swap files under user profile"
-msgstr ""
+msgstr "VIM cserefájlok a felhasználói profil alatt"
 
 #: ../cleaners\deepscan.xml
-#, fuzzy
-#| msgid "Swap files across system"
 msgid "VIM swap files across system"
-msgstr "VIM Biztonsági mentések az egész rendszeren"
+msgstr "VIM cserefájlok az egész rendszeren"
 
 #: ../cleaners\adobe_reader.xml
 msgid "Document viewer"
@@ -738,20 +740,18 @@ msgstr "Ikonok a rendszeren lévő fájlok részére"
 
 #: ../cleaners\zoom.xml
 msgid "Recordings"
-msgstr ""
+msgstr "Felvételek"
 
 #: ../cleaners\zoom.xml
-#, fuzzy
-#| msgid "Delete the list of game servers"
 msgid "Delete the audio and video recordings"
-msgstr "Törli a játékszerverek listáját"
+msgstr "Törli a hang- és videofelvételeket"
 
 #: ../cleaners\windows_explorer.xml
 msgid ""
 "This option will reset pinned locations in Quick Access to their defaults."
 msgstr ""
 "Ez visszaállítja a gyors elérésben a kitűzött útvonalakat alapértelmezés "
-"szerint"
+"szerint."
 
 #: ../cleaners\windows_explorer.xml
 msgid "Shellbags"
@@ -767,17 +767,19 @@ msgstr "Ez visszaállítja az asztali ikonok pozícióját."
 
 #: ../cleaners\windows_explorer.xml
 msgid "This will restart Windows Explorer."
-msgstr "Ez újraindítja a Windows Explorer-t"
+msgstr "Ez újraindítja a Windows Explorer-t."
 
 #: ../cleaners\dnf.xml
 msgid "Remove packages that were formerly dependencies"
-msgstr ""
+msgstr "A korábban függőségeket tartalmazó csomagok eltávolítása"
 
 #: ../cleaners\dnf.xml
 msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
 msgstr ""
+"Gondosan tekintse át az eltávolítandó csomagok listáját a „dnf list "
+"autoremove” futtatásával."
 
 #: ../cleaners\recoll.xml ../cleaners\beagle.xml
 msgid "Search tool"
@@ -786,7 +788,7 @@ msgstr "Kereső eszköz"
 #: ../cleaners\recoll.xml
 msgid "Delete the search index, a database of words and the files they contain"
 msgstr ""
-"Törli a keresési indexet, mely szavak és az őket tartalmazó fájlok adatbázisa"
+"Keresési index törlése, mely a szavak és az őket tartalmazó fájlok adatbázisa"
 
 #: ../cleaners\gimp.xml
 msgid "Graphics editor"
@@ -813,7 +815,6 @@ msgstr "Hely felszabadítása és magánszférájának fenntartása"
 #. Basically, they are like an environment variable, but each multi-value variable
 #. can have multiple values. They're a way to make CleanerML files more concise.
 #: ../bleachbit/Action.py:153
-#, fuzzy
 msgid "Deep scan does not support multi-value variable."
 msgstr "Az alapos vizsgálat nem támogatja a többértékű változót."
 
@@ -824,7 +825,7 @@ msgstr "Az alapos vizsgálat nem támogatja a többértékű változót."
 #: ../bleachbit/Action.py:255
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr ""
+msgstr "search=\"walk.all\" a szokásos fájl elérési útvonallal \"%s\""
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -834,7 +835,7 @@ msgstr ""
 #: ../bleachbit/Action.py:293
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr ""
+msgstr "path=\"%s\" nem egy glob minta"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Action.py:386 ../bleachbit/Action.py:399
@@ -859,10 +860,9 @@ msgid "Run external command: %s"
 msgstr "Külső parancs futtatása: %s"
 
 #: ../bleachbit/Chaff.py:226
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
-msgstr "Url letöltése sikertelen: %s"
+msgstr "Az URL letöltése sikertelen: %s"
 
 #: ../bleachbit/CleanerML.py:134
 #, python-brace-format
@@ -870,6 +870,8 @@ msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 msgstr ""
+"Hiba a handle_cleaner_option()-ban a cleaner id = {cleaner_id}, option "
+"XML={option_xml} esetén"
 
 #: ../bleachbit/CleanerML.py:275
 #, python-format
@@ -954,7 +956,7 @@ msgstr "Ez egy kísérleti lehetőség, rendszerproblémákat okozhat."
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:313
 msgid "Prefetch"
-msgstr "Prefetch"
+msgstr "Előzetes lekérdezés"
 
 #: ../bleachbit/Cleaner.py:315
 msgid "Recycle bin"
@@ -1088,7 +1090,7 @@ msgstr "a grafikus felületen beállított opciók használata"
 
 #: ../bleachbit/CLI.py:170
 msgid "enable all options that do not have a warning"
-msgstr ""
+msgstr "Minden olyan opció engedélyezése, amelyhez nem tartozik figyelmeztetés"
 
 #: ../bleachbit/CLI.py:172
 msgid "set log level to verbose"
@@ -1119,14 +1121,16 @@ msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 msgstr ""
+"A következő parancsok közül csak egyet adjon meg: --list-cleaners, --wipe-"
+"free-space, --preview, --clean"
 
 #: ../bleachbit/CLI.py:240
 msgid "Checking online for updates to winapp2.ini"
-msgstr ""
+msgstr "A winapp2.ini frissítéseinek keresése online"
 
 #: ../bleachbit/CLI.py:255
 msgid "No directories given for --wipe-free-space"
-msgstr ""
+msgstr "Nincsenek könyvtárak a --wipe-free-space számára"
 
 #: ../bleachbit/CLI.py:257
 msgid "Wiping free space can take a long time."
@@ -1134,11 +1138,11 @@ msgstr "A szabad terület törlése sok időt vehet igénybe."
 
 #: ../bleachbit/CLI.py:268
 msgid "No work to do. Specify options."
-msgstr ""
+msgstr "Nincs mit csinálni. Adja meg a beállításokat."
 
 #: ../bleachbit/CLI.py:276
 msgid "--overwrite is intended only for use with --clean"
-msgstr ""
+msgstr "A --overwrite csak a --clean funkcióval használható"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -1220,7 +1224,7 @@ msgstr "Útvonal törlése: %s"
 #: ../bleachbit/FileUtilities.py:936
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr ""
+msgstr "A törlendő útvonalnak egy létező könyvtárnak kell lennie: %s"
 
 #: ../bleachbit/FileUtilities.py:947
 msgid "Creating new, temporary file for wiping free space."
@@ -1229,25 +1233,30 @@ msgstr "Új, ideiglenes fájl létrehozása a szabad terület törléséhez."
 #: ../bleachbit/FileUtilities.py:1003
 #, python-format
 msgid "Error #%d when flushing the file buffer."
-msgstr ""
+msgstr "#%d hiba a fájlpuffer kiürítésekor."
 
 #: ../bleachbit/FileUtilities.py:1019
 msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
 msgstr ""
+"{files:,} fájlt és {bytes:,} bájtot írt {seconds:,} másodperc alatt {rate:."
+"2f} MB/s sebességgel"
 
 #: ../bleachbit/FileUtilities.py:1024
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
 msgstr ""
+"{bytes:,} bájt és {inodes:,} inode áll rendelkezésre a nem "
+"szuperfelhasználók számára"
 
 #: ../bleachbit/FileUtilities.py:1026
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
 msgstr ""
+"{bytes:,} bájt és {inodes:,} inode áll a szuperfelhasználók rendelkezésére"
 
 #: ../bleachbit/FileUtilities.py:1042
 msgid "Handled unknown error #0 while truncating file."
-msgstr ""
+msgstr "Ismeretlen #0 hiba kezelése a fájl csonkolása közben."
 
 #: ../bleachbit/GuiBasic.py:54 ../bleachbit/GuiBasic.py:81
 #: ../bleachbit/GuiBasic.py:105 ../bleachbit/GuiBasic.py:151
@@ -1268,16 +1277,15 @@ msgid "Delete confirmation"
 msgstr "Törlés megerősítése"
 
 #: ../bleachbit/GuiBasic.py:132
-#, fuzzy
 msgid ""
 "This function deletes all BleachBit settings and then quits the application. "
 "Use this to hide your use of BleachBit or to reset its settings. The next "
 "time you start BleachBit, the settings will initialize to default values."
 msgstr ""
 "Ez a művelet törli a BleachBit összes beállítását és bezárja az alkalmazást. "
-"Használja ezt, ha el szeretné rejteni, hogy használta a BleachBitet, vagy ha "
-"vissza akarja állítani a beállításait. A következő alkalommal, amikor "
-"elindítja a BleachBitet, a beállítások alaphelyzetben lesznek."
+"Ezzel elrejtheti a BleachBit használatát, vagy visszaállíthatja a "
+"beállításokat. A BleachBit következő indításakor a beállítások az "
+"alapértelmezett értékekre állnak vissza."
 
 #: ../bleachbit/GuiBasic.py:139
 msgid ""
@@ -1311,7 +1319,7 @@ msgstr "%s meg legyen nyitva a böngészőben?"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:527
 msgid "Confirm"
-msgstr ""
+msgstr "Megerősítés"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1444,10 +1452,8 @@ msgstr ""
 "IEC méretek használata (1 KiB = 1024 bájt) az SI helyett (1 kB = 1000 byte)"
 
 #: ../bleachbit/GuiPreferences.py:191
-#, fuzzy
-#| msgid "Windowing system"
 msgid "Windows 10 theme"
-msgstr "Ablakkezelő rendszer"
+msgstr "Windows 10 téma"
 
 #: ../bleachbit/GuiPreferences.py:198
 msgid "Dark mode"
@@ -1455,7 +1461,7 @@ msgstr "Sötét mód"
 
 #: ../bleachbit/GuiPreferences.py:204
 msgid "Remember window geometry"
-msgstr ""
+msgstr "Ablakgeometria megjegyzése"
 
 #: ../bleachbit/GuiPreferences.py:210
 msgid "Show debug messages"
@@ -1463,7 +1469,7 @@ msgstr "Hibakeresési üzenetek megjelenítése"
 
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
-msgstr ""
+msgstr "Megsemmisítési környezeti menü hozzáadása (KDE Plasma specifikus)"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:280
@@ -1522,8 +1528,6 @@ msgid "Folder"
 msgstr "Mappa"
 
 #: ../bleachbit/GuiPreferences.py:452
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
 msgstr "Ezek az útvonalak nem kerülnek törlésre vagy módosításra."
 
@@ -1569,7 +1573,7 @@ msgstr "_OK"
 
 #: ../bleachbit/GUI.py:304
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Program a felesleges fájlok törlésére"
 
 #: ../bleachbit/GUI.py:315
 msgid ""
@@ -1638,10 +1642,8 @@ msgid "You must select an operation"
 msgstr "Választani kell egy műveletet"
 
 #: ../bleachbit/GUI.py:771
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Hibák: %d"
+msgstr "Hiba"
 
 #: ../bleachbit/GUI.py:789 ../bleachbit/GUI.py:805
 msgid "Done."
@@ -1650,11 +1652,11 @@ msgstr "Kész."
 #: ../bleachbit/GUI.py:860
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
-msgstr ""
+msgstr "Az alkalmazásmenü eléréséhez kattintson a hamburger ikonra a címsorban."
 
 #: ../bleachbit/GUI.py:865
 msgid "Access the application menu by clicking the logo on the title bar."
-msgstr ""
+msgstr "Az alkalmazásmenü eléréséhez kattintson a címsorban lévő logóra."
 
 #: ../bleachbit/GUI.py:876
 msgid ""
@@ -1678,6 +1680,8 @@ msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
 msgstr ""
+"Futtassa a BleachBit programot rendszergazdai jogosultságokkal, hogy javítsa "
+"a fájltartalmak felülírásának pontosságát."
 
 #: ../bleachbit/GUI.py:891
 msgid ""
@@ -1685,6 +1689,9 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"A BleachBit programnak nincs hivatalos verziója a Microsoft Store-ban. "
+"Szerezze be az eredeti verziót a https://www.bleachbit.org webhelyről, ahol "
+"mindig ingyen juthat hozzá."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1697,7 +1704,7 @@ msgstr "Előnézet"
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "A (törlésre) kiválasztott fájlok listájának megtekintése (nem lesz egyetlen "
-"fájl sem törölve)."
+"fájl sem törölve)"
 
 #: ../bleachbit/GUI.py:1049
 msgid "Clean files in the selected operations"
@@ -1720,6 +1727,8 @@ msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
+"A 'swapoff -s' parancs meghiúsult, ezért a csereinformációkért visszatérés a "
+"/proc/swaps fájlhoz."
 
 #: ../bleachbit/Memory.py:78
 msgid "Disabling swap."
@@ -1732,18 +1741,20 @@ msgstr "Lapozófájl újraengedélyezése."
 #: ../bleachbit/Memory.py:120
 #, python-format
 msgid "Setting nice value %d for this process."
-msgstr ""
+msgstr "Szép %d érték beállítása ehhez a folyamathoz."
 
 #: ../bleachbit/Memory.py:126
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
 msgstr ""
+"A(z) {pid} folyamatazonosítóhoz tartozó jogosultságok megszüntetése {uid} "
+"felhasználói azonosítóra."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr ""
+msgstr "%s memória lefoglalása és törlése."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:149
@@ -1754,7 +1765,7 @@ msgstr "%s memória felszabadítása."
 #: ../bleachbit/Memory.py:179
 #, python-brace-format
 msgid "Found UUID for swap file {device} is {uuid}."
-msgstr ""
+msgstr "A(z) {device} cserefájl UUID-azonosítója {uuid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:265
@@ -1766,19 +1777,19 @@ msgstr "A fizikai szabad memória %s."
 #: ../bleachbit/Memory.py:280
 #, python-format
 msgid "Wiping the swap device %s."
-msgstr ""
+msgstr "A csereeszköz (%s) törlése."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:292
 #, python-format
 msgid "Reinitializing the swap device %s."
-msgstr ""
+msgstr "A %s csereeszköz újrainicializálása."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:309
 #, python-format
 msgid "Detected these swap devices: %s"
-msgstr ""
+msgstr "Ezeket a csereeszközöket észlelte: %s"
 
 #. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
 #: ../bleachbit/Memory.py:319
@@ -1787,16 +1798,18 @@ msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
 msgstr ""
+"A {pid} folyamatazonosítójú wipe_memory() függvény a {cid} gyermekfolyamat-"
+"azonosítóra vár."
 
 #: ../bleachbit/Memory.py:324
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr ""
+msgstr "A gyermek memória-törlési folyamat a %d kódot adta vissza."
 
 #: ../bleachbit/Options.py:113
-#, fuzzy, python-format
+#, python-format
 msgid "Disk was full when writing configuration to file %s"
-msgstr "A lemez tele volt a konfiguráció fájlba írásakor: %s"
+msgstr "A lemez megtelt, amikor a konfigurációt a %s fájlba írták"
 
 #: ../bleachbit/Options.py:137
 #, python-format
@@ -1805,7 +1818,7 @@ msgstr "Hiba az útvonal létezésének ellenőrzésekor: %s"
 
 #: ../bleachbit/Options.py:268
 msgid "Error when setting the default drives to shred."
-msgstr ""
+msgstr "Hiba az alapértelmezett meghajtók megsemmisítésre állítása során."
 
 #: ../bleachbit/Options.py:294
 #, python-format
@@ -1876,6 +1889,9 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
+"Hiba történt a hálózati kapcsolat megnyitásakor a frissítések kereséséhez. "
+"Ellenőrizze, hogy a hálózat működik-e, és hogy egy tűzfal nem blokkolja-e "
+"ezt az alkalmazást. Hiba üzenet: {}"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py:46
@@ -1910,14 +1926,16 @@ msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
+"A python3.dll fájlt a c:\\ vagy c:\\dlls fájlban találták meg, ami egy "
+"lehetséges DLL-keresési sorrend eltérítési kísérletet jelez."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "Figyelem"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
-msgstr ""
+msgstr "A BleachBit elindul...\n"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -1943,6 +1961,8 @@ msgid ""
 "Wiping free disk space erases remnants of files that were deleted without "
 "shredding. It does not free up space."
 msgstr ""
+"A szabad lemezterület törlésével törli a megsemmisítés nélkül törölt fájlok "
+"maradványait. Ez nem szabadít fel helyet."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:338
@@ -2033,8 +2053,6 @@ msgid "S_hred Settings and Quit"
 msgstr "_Beállítások törlése és kilépés"
 
 #: ../data/app-menu.ui:37
-#, fuzzy
-#| msgid "System information"
 msgid "S_ystem Information"
 msgstr "Rendszerinformáció"
 

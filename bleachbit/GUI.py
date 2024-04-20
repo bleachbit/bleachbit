@@ -126,6 +126,7 @@ class Bleachbit(Gtk.Application):
         application_id = '{}{}'.format('org.gnome.Bleachbit', application_id_suffix)
         Gtk.Application.__init__(
             self, application_id=application_id, flags=Gio.ApplicationFlags.FLAGS_NONE)
+        GLib.set_prgname('org.bleachbit.BleachBit')
         GObject.threads_init()
 
         if auto_exit:
