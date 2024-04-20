@@ -46,8 +46,8 @@ import bleachbit
 import bleachbit.General
 import bleachbit.FileUtilities
 
-APP_NAME = "BleachBit - Free space and maintain privacy"
-APP_DESCRIPTION = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Edge, Firefox, Google Chrome, VLC, and many others."
+APP_NAME = 'BleachBit'
+APP_DESCRIPTION = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had."
 
 #
 # begin win32com.shell workaround for py2exe
@@ -98,6 +98,9 @@ elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
 
 args = {}
 if 'py2exe' in sys.argv:
+    # see multiple issues such as https://github.com/bleachbit/bleachbit/issues/1000
+    APP_DESCRIPTION = 'BleachBit software cleaner'
+
     args['windows'] = [{
         'script': 'bleachbit.py',
         'product_name': APP_NAME,
