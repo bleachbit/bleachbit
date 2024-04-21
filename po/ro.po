@@ -8,17 +8,18 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2022-01-31 09:35+0000\n"
-"Last-Translator: Daniel Slavu <Unknown>\n"
-"Language-Team: Romanian <ro@li.org>\n"
+"PO-Revision-Date: 2024-04-22 06:07+0000\n"
+"Last-Translator: ThinkRoot <social@crism.ro>\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/bleachbit/main/"
+"ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n == 1 ? 0: (((n % 100 > 19) || ((n % 100 "
-"== 0) && (n != 0))) ? 2: 1));\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Launchpad-Export-Date: 2022-02-05 16:44+0000\n"
-"X-Generator: Launchpad (build 5cca8e573979320a68d31841c31d0ffbd940515e)\n"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
 #: ../cleaners\waterfox.xml ../cleaners\seamonkey.xml
@@ -862,10 +863,9 @@ msgid "Run external command: %s"
 msgstr "Execută comanda externă: %s"
 
 #: ../bleachbit/Chaff.py:226
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
-msgstr "Eroare la descărcarea:%s"
+msgstr "Descărcarea URL-ului a eșuat:%s"
 
 #: ../bleachbit/CleanerML.py:134
 #, python-brace-format
@@ -1320,7 +1320,7 @@ msgstr "Deschideți navigatorul web către %s?"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:527
 msgid "Confirm"
-msgstr ""
+msgstr "Confirmare"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1474,6 +1474,7 @@ msgstr "Afișează mesajele de depanare"
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
 msgstr ""
+"Adăugați opțiunea de meniu contextual de distrugere (specific KDE Plasma)"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:280
@@ -1532,8 +1533,6 @@ msgid "Folder"
 msgstr "Dosar"
 
 #: ../bleachbit/GuiPreferences.py:452
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
 msgstr "Aceste căi nu vor fi șterse sau modificate."
 
@@ -1579,7 +1578,7 @@ msgstr "_OK"
 
 #: ../bleachbit/GUI.py:304
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Program de curățare a fișierelor inutile"
 
 #: ../bleachbit/GUI.py:315
 msgid ""
@@ -1643,10 +1642,8 @@ msgid "You must select an operation"
 msgstr "Trebuie să alegeți o operație"
 
 #: ../bleachbit/GUI.py:771
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Erori: %d"
+msgstr "Erori"
 
 #: ../bleachbit/GUI.py:789 ../bleachbit/GUI.py:805
 msgid "Done."
@@ -1694,6 +1691,9 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"Nu există o versiune oficială a BleachBit în Microsoft Store. Obțineți "
+"versiunea originală de la https://www.bleachbit.org, unde este întotdeauna "
+"gratuită."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1924,10 +1924,12 @@ msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
+"Fișierul python3.dll a fost găsit în c:\\ sau c:\\dlls, ceea ce indică o "
+"posibilă încercare de deviere a ordinii de căutare a DLL-urilor."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "Atenționare"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
@@ -2051,7 +2053,7 @@ msgstr "Distru_ge configurările și ieși"
 
 #: ../data/app-menu.ui:37
 msgid "S_ystem Information"
-msgstr ""
+msgstr "Informații S_istem"
 
 #: ../data/app-menu.ui:41
 msgid "_Help"
