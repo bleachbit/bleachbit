@@ -742,6 +742,13 @@ class GUI(Gtk.ApplicationWindow):
         self.run_button.set_sensitive(is_sensitive)
         self.stop_button.set_sensitive(not is_sensitive)
 
+    def select_all_toggled(self, select_all_checkbox):
+        if select_all_checkbox.get_active():
+            print('select all')
+        else:
+            print('de-select all')
+
+
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
         # fixme: should present this dialog after finding operations
@@ -1192,10 +1199,18 @@ class GUI(Gtk.ApplicationWindow):
         self.headerbar = self.create_headerbar()
         self.set_titlebar(self.headerbar)
 
+        check_box_container = Gtk.Box(homogeneous=False)
+        # self.add(check_box_container)
+
+        self._select_all_checkbox = Gtk.CheckButton(label="Select all")
+        self._select_all_checkbox.connect("toggled", self.select_all_toggled)
+        # check_box_container.pack_end(self._select_all_checkbox, True, True, 0)
+
         # split main window twice
         hbox = Gtk.Box(homogeneous=False)
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, homogeneous=False)
         self.add(vbox)
+        vbox.add(self._select_all_checkbox)
         vbox.add(hbox)
 
         # add operations to left

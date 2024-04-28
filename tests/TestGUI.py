@@ -295,3 +295,26 @@ class GUITestCase(common.BleachbitTestCase):
 
             self.refresh_gui()
             assert_method(file_to_clean)
+
+    def _get_checkmark_state_for_cleaner(self, gui, cleaner_id, option_id):
+        # todo clean duplication with set_checkmark...
+        model = gui.view.get_model()
+        tree = self.find_widget(gui, Gtk.TreeView)
+        self.assertIsNotNone(tree)
+        it = self.find_option(model, cleaner_id, option_id)
+        self.assertIsNotNone(it)
+        tree.scroll_to_cell(model.get_path(it), None, False, 0, 0)
+        parent_check_mark_state = model[model.iter_parent(it)][1]
+        checkmark_state = model[it][1]
+        return parent_check_mark_state, checkmark_state
+
+    def test_select_all_no_warning(self):
+        gui = self.app._window
+        file_to_clean = self._setup_new_cleaner(gui)
+        gui._select_all_checkbox.set_active(True)
+        self.refresh_gui()
+        gui = self.app._window
+        parent_check_mark_state, checkmark_state = self._get_checkmark_state_for_cleaner(
+            gui, self._NEW_CLEANER_ID, self._NEW_OPTION_ID)
+        self.assertTrue(parent_check_mark_state)
+        self.assertTrue(checkmark_state)
