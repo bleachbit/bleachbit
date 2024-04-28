@@ -297,7 +297,7 @@ def clean_json(path, target):
     targets = target.split('/')
 
     # read file to parser
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(path, 'r', encoding='utf-8-sig') as f:
         js = json.load(f)
 
     # change file
