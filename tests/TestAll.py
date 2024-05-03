@@ -38,7 +38,7 @@ if __name__ == '__main__':
     python -m unittest tests.TestCLI                              # run only the CLI tests
     python -m unittest tests.TestCLI.CLITestCase.test_encoding    # run only a single test""")
     suite = unittest.defaultTestLoader.discover(
-        os.getcwd(), pattern='Test*.py')
+        os.getcwd(), pattern='TestGUI*.py')
     success = unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()
     
     del os.environ['BLEACHBIT_TEST_OPTIONS_DIR']

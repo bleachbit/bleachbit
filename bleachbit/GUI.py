@@ -743,10 +743,16 @@ class GUI(Gtk.ApplicationWindow):
         self.stop_button.set_sensitive(not is_sensitive)
 
     def select_all_toggled(self, select_all_checkbox):
-        if select_all_checkbox.get_active():
-            print('select all')
-        else:
-            print('de-select all')
+
+        print('select all')
+        count = 0
+        model = self.tree_store.get_model()
+        iterator = model.iter_children()
+        while iterator:
+            self.display.col1_toggled_cb(None, str(count), model, self)
+            iterator = model.iter_next(iterator)
+            count += 1
+
 
 
     def run_operations(self, __widget):
@@ -819,9 +825,9 @@ class GUI(Gtk.ApplicationWindow):
             Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         scrolled_window.set_overlay_scrolling(False)
         self.tree_store = TreeInfoModel()
-        display = TreeDisplayModel()
+        self.display = TreeDisplayModel()
         mdl = self.tree_store.get_model()
-        self.view = display.make_view(
+        self.view = self.display.make_view(
             mdl, self, self.context_menu_event)
         self.view.get_selection().connect("changed", self.on_selection_changed)
         scrollbar_width = scrolled_window.get_vscrollbar().get_preferred_width()[1]
