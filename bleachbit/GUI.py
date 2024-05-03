@@ -495,7 +495,7 @@ class TreeDisplayModel:
         self.view.expand_all()
         return self.view
 
-    def set_cleaner(self, path, model, parent_window, value):
+    def set_cleaner(self, path, model, parent_window, value, all_toggled):
         """Activate or deactivate option of cleaner."""
         assert isinstance(value, bool)
         assert isinstance(model, Gtk.TreeStore)
@@ -520,7 +520,7 @@ class TreeDisplayModel:
                 {'cleaner': model[parent][0],
                  'option': model[path][0],
                  'warning': warning}
-            if warning:
+            if warning and not all_toggled:
                 resp = GuiBasic.message_dialog(parent_window,
                                                msg,
                                                Gtk.MessageType.WARNING,
@@ -528,13 +528,22 @@ class TreeDisplayModel:
                                                _('Confirm'))
                 if Gtk.ResponseType.OK != resp:
                     # user cancelled, so don't toggle option
-                    return
+                    return None
+                
+            elif warning and all_toggled:
+                return msg, path
+                
         model[path][1] = value
+        return None
+        
 
     def col1_toggled_cb(self, cell, path, model, parent_window):
         """Callback for toggling cleaners"""
+        return self.col1_toggled(path, model, parent_window)
+    
+    def col1_toggled(self, path, model, parent_window, all_toggled=False):
         is_toggled_on = not model[path][1]  # Is the new state enabled?
-        self.set_cleaner(path, model, parent_window, is_toggled_on)
+        self.set_cleaner(path, model, parent_window, is_toggled_on, all_toggled)
         i = model.get_iter(path)
         parent = model.iter_parent(i)
         if parent and is_toggled_on:
@@ -552,9 +561,24 @@ class TreeDisplayModel:
                 model[parent][1] = False
         # If toggled and has children, then do the same for each child.
         child = model.iter_children(i)
+        path_to_msg = {}
         while child:
-            self.set_cleaner(child, model, parent_window, is_toggled_on)
+            msg_path = self.set_cleaner(child, model, parent_window, is_toggled_on, all_toggled)
+            if msg_path is not None:
+                path_to_msg[msg_path[1]] = msg_path[0]
             child = model.iter_next(child)
+            
+        if path_to_msg:
+            msgs = '\n\n'.join(path_to_msg.values())
+            resp = GuiBasic.message_dialog(parent_window,
+                                msgs,
+                                Gtk.MessageType.WARNING,
+                                Gtk.ButtonsType.OK_CANCEL,
+                                _('Confirm'))
+            if Gtk.ResponseType.OK == resp:
+                for path in path_to_msg.keys():
+                    model[path][1] = True
+            
         return
 
 
@@ -743,17 +767,15 @@ class GUI(Gtk.ApplicationWindow):
         self.stop_button.set_sensitive(not is_sensitive)
 
     def select_all_toggled(self, select_all_checkbox):
-
-        print('select all')
         count = 0
         model = self.tree_store.get_model()
         iterator = model.iter_children()
         while iterator:
-            self.display.col1_toggled_cb(None, str(count), model, self)
+            self.display.col1_toggled(str(count), model, self, all_toggled=True)
             iterator = model.iter_next(iterator)
             count += 1
-
-
+            
+        options.set_tree("select_all", None, select_all_checkbox.get_active())
 
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
@@ -1210,6 +1232,8 @@ class GUI(Gtk.ApplicationWindow):
 
         self._select_all_checkbox = Gtk.CheckButton(label="Select all")
         self._select_all_checkbox.connect("toggled", self.select_all_toggled)
+        is_select_all_active = options.get_tree("select_all", None)
+        self._select_all_checkbox.set_active(is_select_all_active)
         # check_box_container.pack_end(self._select_all_checkbox, True, True, 0)
 
         # split main window twice
