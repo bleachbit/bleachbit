@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2024-02-15 17:02+0000\n"
-"Last-Translator: Box Los <boxlos@pm.me>\n"
+"PO-Revision-Date: 2024-05-04 12:07+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/bleachbit/main/"
 "fi/>\n"
 "Language: fi\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5.3\n"
 "X-Launchpad-Export-Date: 2021-12-02 04:08+0000\n"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
@@ -82,13 +82,12 @@ msgstr "Evästeet"
 #: ../cleaners\discord.xml ../cleaners\safari.xml ../cleaners\konqueror.xml
 #: ../cleaners\liferea.xml ../cleaners\internet_explorer.xml
 #: ../cleaners\opera.xml
-#, fuzzy
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
 "Poista evästeet, jotka sisältävät tietoja, kuten verkkosivuston "
-"mieltymykset, tunnistaminen ja seurantatunnistus"
+"mieltymykset, todennus ja seurantatunnistus"
 
 #. DOM=Document Object Model
 #. DOM=Document Object Model
@@ -659,6 +658,8 @@ msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
+"Poista verkkovälimuisti, mikä lyhentää uudelleenkutsuttujen sivujen "
+"näyttämiseen kuluvaa aikaa. Tämä tyhjentää myös suosikkien GIF-tiedostot."
 
 #: ../cleaners\vim.xml
 msgid ""
@@ -748,7 +749,7 @@ msgstr ""
 
 #: ../cleaners\windows_explorer.xml
 msgid "Shellbags"
-msgstr ""
+msgstr "Shell-laukut"
 
 #: ../cleaners\windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
@@ -817,7 +818,7 @@ msgstr "Syväskannaus ei tue useamman arvon muuttujia."
 #: ../bleachbit/Action.py:255
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr ""
+msgstr "haku=\"walk.all\" käytetään tavallisen tiedostopolun=\"%s\" kanssa"
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -1905,6 +1906,8 @@ msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
+"Tiedosto python3.dll löytyi hakemistosta c:\\ tai c:\\dlls, mikä viittaa "
+"mahdolliseen DLL-hakujärjestyksen kaappausyritykseen."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
