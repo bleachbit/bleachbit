@@ -541,8 +541,10 @@ class TreeDisplayModel:
         """Callback for toggling cleaners"""
         return self.col1_toggled(path, model, parent_window)
     
-    def col1_toggled(self, path, model, parent_window, all_toggled=False):
-        is_toggled_on = not model[path][1]  # Is the new state enabled?
+    def col1_toggled(self, path, model, parent_window, is_toggled_on=None, all_toggled=False):
+        if is_toggled_on is None:
+            is_toggled_on = not model[path][1] # Is the new state enabled?
+
         self.set_cleaner(path, model, parent_window, is_toggled_on, all_toggled)
         i = model.get_iter(path)
         parent = model.iter_parent(i)
@@ -766,16 +768,17 @@ class GUI(Gtk.ApplicationWindow):
         self.run_button.set_sensitive(is_sensitive)
         self.stop_button.set_sensitive(not is_sensitive)
 
-    def select_all_toggled(self, select_all_checkbox):
+    def select_all_pressed(self, select_all_button):
         count = 0
         model = self.tree_store.get_model()
+        is_select_all = select_all_button == self._select_all_button
         iterator = model.iter_children()
         while iterator:
-            self.display.col1_toggled(str(count), model, self, all_toggled=True)
+            self.display.col1_toggled(str(count), model, self, is_toggled_on=is_select_all, all_toggled=True)
             iterator = model.iter_next(iterator)
             count += 1
             
-        options.set_tree("select_all", None, select_all_checkbox.get_active())
+        options.set_tree("select_all", None, is_select_all)
 
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
@@ -1230,17 +1233,22 @@ class GUI(Gtk.ApplicationWindow):
         check_box_container = Gtk.Box(homogeneous=False)
         # self.add(check_box_container)
 
-        self._select_all_checkbox = Gtk.CheckButton(label="Select all")
-        self._select_all_checkbox.connect("toggled", self.select_all_toggled)
-        is_select_all_active = options.get_tree("select_all", None)
-        self._select_all_checkbox.set_active(is_select_all_active)
+        self._select_all_button = Gtk.Button(label="Select all")
+        self._select_all_button.connect("pressed", self.select_all_pressed)
+        
+        self._deselect_all_button = Gtk.Button(label="Deselect all")
+        self._deselect_all_button.connect("pressed", self.select_all_pressed)
+
         # check_box_container.pack_end(self._select_all_checkbox, True, True, 0)
 
         # split main window twice
         hbox = Gtk.Box(homogeneous=False)
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, homogeneous=False)
         self.add(vbox)
-        vbox.add(self._select_all_checkbox)
+        hbox_select_buttons = Gtk.Box(homogeneous=False)
+        hbox_select_buttons.add(self._select_all_button)
+        hbox_select_buttons.add(self._deselect_all_button)
+        vbox.add(hbox_select_buttons)
         vbox.add(hbox)
 
         # add operations to left

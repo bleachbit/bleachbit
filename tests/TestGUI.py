@@ -311,7 +311,7 @@ class GUITestCase(common.BleachbitTestCase):
     def test_select_all_no_warning(self):
         gui = self.app._window
         file_to_clean = self._setup_new_cleaner(gui)
-        gui._select_all_checkbox.set_active(True)
+        gui._select_all_button.emit("pressed")
         self.refresh_gui()
         gui = self.app._window
         parent_check_mark_state, checkmark_state = self._get_checkmark_state_for_cleaner(
