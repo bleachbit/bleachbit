@@ -325,33 +325,38 @@ class GUITestCase(common.BleachbitTestCase):
             
             self._assert_checkmark_active(self._cleaner_id, self._option_id, False)
 
-    def test_select_all_deselect_all_based_on_clean_selection(self):
+    @mock.patch('bleachbit.Cleaner.System.get_options')
+    def test_select_all_deselect_all_based_on_clean_selection(self, mock_system_get_options):
+        mock_system_get_options.return_value = [] # do not show System cleaner in the GUI
         with mock.patch('bleachbit.system_cleaners_dir', self._dirname):
             self._setup_new_cleaner(self._dirname, self._cleaner_id, self._option_id)
             self._gui._select_all_button.emit("pressed")
             self.refresh_gui()
-            
+
             self._assert_checkmark_active(self._cleaner_id, self._option_id, True)
-            
+
             self._gui._deselect_all_button.emit("pressed")
-            
+
             self._assert_checkmark_active(self._cleaner_id, self._option_id, False)
-    
-    def test_select_all_based_on_existing_selection(self):
+
+    @mock.patch('bleachbit.Cleaner.System.get_options')
+    def test_select_all_based_on_existing_selection(self, mock_system_get_options):
+        mock_system_get_options.return_value = [] # do not show System cleaner in the GUI
         with mock.patch('bleachbit.system_cleaners_dir', self._dirname):
+            from bleachbit.Cleaner import backends
             self._setup_new_cleaner(self._dirname, self._cleaner_id, self._option_id)
             self._setup_new_cleaner(self._dirname, self._cleaner_id_2, self._option_id_2)
-            
+
             self._put_checkmark_on_cleaner(self._cleaner_id, self._option_id)
             self._assert_checkmark_active(self._cleaner_id, self._option_id, True)
             self._assert_checkmark_active(self._cleaner_id_2, self._option_id_2, False)
-            
+
             self._gui._select_all_button.emit("pressed")
             self.refresh_gui()
             self._assert_checkmark_active(self._cleaner_id, self._option_id, True)
             self._assert_checkmark_active(self._cleaner_id_2, self._option_id_2, True)
-       
-    def test_deselect_all_based_on_existing_selection(self):    
+
+    def test_deselect_all_based_on_existing_selection(self):
         with mock.patch('bleachbit.system_cleaners_dir', self._dirname):
             self._setup_new_cleaner(self._dirname, self._cleaner_id, self._option_id)
             self._setup_new_cleaner(self._dirname, self._cleaner_id_2, self._option_id_2)
