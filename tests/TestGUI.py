@@ -339,7 +339,6 @@ class GUITestCase(common.BleachbitTestCase):
     
     def test_select_all_based_on_existing_selection(self):
         with mock.patch('bleachbit.system_cleaners_dir', self._dirname):
-            from bleachbit.Cleaner import backends
             self._setup_new_cleaner(self._dirname, self._cleaner_id, self._option_id)
             self._setup_new_cleaner(self._dirname, self._cleaner_id_2, self._option_id_2)
             
@@ -354,7 +353,6 @@ class GUITestCase(common.BleachbitTestCase):
        
     def test_deselect_all_based_on_existing_selection(self):    
         with mock.patch('bleachbit.system_cleaners_dir', self._dirname):
-            from bleachbit.Cleaner import backends
             self._setup_new_cleaner(self._dirname, self._cleaner_id, self._option_id)
             self._setup_new_cleaner(self._dirname, self._cleaner_id_2, self._option_id_2)
             

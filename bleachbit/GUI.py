@@ -528,13 +528,13 @@ class TreeDisplayModel:
                                                _('Confirm'))
                 if Gtk.ResponseType.OK != resp:
                     # user cancelled, so don't toggle option
-                    return None, None
+                    return None
                 
             elif warning and all_toggled:
                 return msg, path
                 
         model[path][1] = value
-        return None, None
+        return None
         
 
     def col1_toggled_cb(self, cell, path, model, parent_window):
@@ -566,7 +566,7 @@ class TreeDisplayModel:
         msgs_paths = []
         while child:
             msg_path = self.set_cleaner(child, model, parent_window, is_toggled_on, all_toggled)
-            if msg_path is not (None, None):
+            if msg_path is not None:
                 msgs_paths.append(msg_path)
             child = model.iter_next(child)
             
@@ -1250,12 +1250,15 @@ class GUI(Gtk.ApplicationWindow):
         hbox_select_buttons = Gtk.Box(homogeneous=False)
         hbox_select_buttons.add(self._select_all_button)
         hbox_select_buttons.add(self._deselect_all_button)
-        vbox.add(hbox_select_buttons)
+        # vbox.add(hbox_select_buttons)
         vbox.add(hbox)
 
         # add operations to left
+        vbox_operations = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, homogeneous=False)
         operations = self.create_operations_box()
-        hbox.pack_start(operations, False, True, 0)
+        vbox_operations.pack_start(hbox_select_buttons, False, False, 0)
+        vbox_operations.pack_start(operations, True, True, 0)
+        hbox.pack_start(vbox_operations, False, True, 0)
 
         # create the right side of the window
         right_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
