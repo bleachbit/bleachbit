@@ -528,13 +528,13 @@ class TreeDisplayModel:
                                                _('Confirm'))
                 if Gtk.ResponseType.OK != resp:
                     # user cancelled, so don't toggle option
-                    return None
+                    return None, None
                 
             elif warning and all_toggled:
                 return msg, path
                 
         model[path][1] = value
-        return None
+        return None, None
         
 
     def col1_toggled_cb(self, cell, path, model, parent_window):
@@ -563,22 +563,24 @@ class TreeDisplayModel:
                 model[parent][1] = False
         # If toggled and has children, then do the same for each child.
         child = model.iter_children(i)
-        path_to_msg = {}
+        msgs_paths = []
         while child:
             msg_path = self.set_cleaner(child, model, parent_window, is_toggled_on, all_toggled)
-            if msg_path is not None:
-                path_to_msg[msg_path[1]] = msg_path[0]
+            if msg_path is not (None, None):
+                msgs_paths.append(msg_path)
             child = model.iter_next(child)
             
-        if path_to_msg:
-            msgs = '\n\n'.join(path_to_msg.values())
+        if msgs_paths:
+            msgs = list(zip(*msgs_paths))[0]
+            msgs = '\n\n'.join(msgs)
             resp = GuiBasic.message_dialog(parent_window,
                                 msgs,
                                 Gtk.MessageType.WARNING,
                                 Gtk.ButtonsType.OK_CANCEL,
                                 _('Confirm'))
             if Gtk.ResponseType.OK == resp:
-                for path in path_to_msg.keys():
+                paths = list(zip(*msgs_paths))[1]
+                for path in paths:
                     model[path][1] = True
             
         return
