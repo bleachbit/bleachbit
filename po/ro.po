@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2024-05-12 12:36+0000\n"
+"PO-Revision-Date: 2024-05-12 17:05+0000\n"
 "Last-Translator: NicolaeFericitu <cni@disroot.org>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/bleachbit/main/"
 "ro/>\n"
@@ -842,7 +842,7 @@ msgstr "căutarea=\"walk.all\" utilizată cu expresiile regulate=\"%s\""
 #: ../bleachbit/Action.py:293
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr "calea=„%s” nu este un șablon pentru caractere wildcard"
+msgstr "calea=\"%s\" nu este un șablon pentru caractere wildcard"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Action.py:386 ../bleachbit/Action.py:399
@@ -1076,7 +1076,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:160
 msgid "shred specific files or folders"
-msgstr "distruge fișiere sau dosare specifice"
+msgstr "distrugeți fișiere sau dosare specifice"
 
 #: ../bleachbit/CLI.py:162
 msgid "wipe free space in the given paths"
@@ -1127,12 +1127,12 @@ msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 msgstr ""
-"Sspecificați una din comenzile: --list-cleaners, --wipe-free-space, --"
+"Specificați una din comenzile: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 
 #: ../bleachbit/CLI.py:240
 msgid "Checking online for updates to winapp2.ini"
-msgstr "Se cautpă actualizări pentru winapp2.ini"
+msgstr "Se caută actualizări pentru winapp2.ini"
 
 #: ../bleachbit/CLI.py:255
 msgid "No directories given for --wipe-free-space"
@@ -1270,7 +1270,7 @@ msgstr "_Anulare"
 
 #: ../bleachbit/GuiBasic.py:82
 msgid "_Open"
-msgstr "_Deschide"
+msgstr "_Deschideți"
 
 #: ../bleachbit/GuiBasic.py:106 ../bleachbit/GuiBasic.py:150
 #: ../bleachbit/GUI.py:220
@@ -1428,8 +1428,7 @@ msgstr "Verifică pentru noi versiuni beta"
 #: ../bleachbit/GuiPreferences.py:138
 msgid "Download and update cleaners from community (winapp2.ini)"
 msgstr ""
-"Descarcă și actualizează programele de curățare de la comunitate (winapp2."
-"ini)"
+"Descărcați și actualizați șabloanele de curățare din comunitate (winapp2.ini)"
 
 #: ../bleachbit/GuiPreferences.py:152
 msgid "Hide irrelevant cleaners"
@@ -1449,7 +1448,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:170
 msgid "Exit after cleaning"
-msgstr "Ieși după curățare"
+msgstr "Ieșiți după curățare"
 
 #: ../bleachbit/GuiPreferences.py:176
 msgid "Confirm before delete"
@@ -1723,7 +1722,7 @@ msgstr "Anulare"
 
 #: ../bleachbit/GUI.py:1059
 msgid "Abort the preview or cleaning process"
-msgstr "Anulează procesul de previzualizare sau de curățare"
+msgstr "Anulați procesul de previzualizare sau de curățare"
 
 #: ../bleachbit/GUI.py:1266
 msgid "Error when checking for updates: "
@@ -1845,7 +1844,7 @@ msgstr ""
 #: ../bleachbit/RecognizeCleanerML.py:85
 msgctxt "column_label"
 msgid "Delete"
-msgstr "Șterge"
+msgstr "Ștergeți"
 
 #: ../bleachbit/RecognizeCleanerML.py:90
 msgctxt "column_label"
@@ -1865,7 +1864,7 @@ msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
 msgstr ""
-"%s nu poate fi curățat pentru că se află în execuție. Închideți-l și apoi "
+"%s nu poate fi curățat pentru că este în curs de execuție.  Închideți-l și "
 "încercați din nou."
 
 #: ../bleachbit/Update.py:75
@@ -2034,15 +2033,15 @@ msgstr "Așteptați. Se previzualizează %s."
 
 #: ../data/app-menu.ui:5
 msgid "_Shred Files"
-msgstr "_Distruge fișiere"
+msgstr "_Distrugeți fișiere"
 
 #: ../data/app-menu.ui:9
 msgid "Sh_red Folders"
-msgstr "Dist_ruge dosare"
+msgstr "_Distrugeți dosare"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
-msgstr "Distruge datele din clipboard"
+msgstr "Distrugeți căile din clipboard"
 
 #: ../data/app-menu.ui:18
 msgid "_Wipe Free Space"
@@ -2050,11 +2049,11 @@ msgstr "_Ștergeți spațiul liber"
 
 #: ../data/app-menu.ui:22
 msgid "_Make Chaff"
-msgstr "_Creare contra-măsuri"
+msgstr "_Creați contramăsuri"
 
 #: ../data/app-menu.ui:26
 msgid "S_hred Settings and Quit"
-msgstr "D_istruge configurările și ieși"
+msgstr "_Distrugeți configurările și ieșiți"
 
 #: ../data/app-menu.ui:37
 msgid "S_ystem Information"
