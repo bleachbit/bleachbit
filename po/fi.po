@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2024-05-04 12:07+0000\n"
+"PO-Revision-Date: 2024-05-16 23:24+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/bleachbit/main/"
 "fi/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.3\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Launchpad-Export-Date: 2021-12-02 04:08+0000\n"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
@@ -658,14 +658,14 @@ msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"Poista verkkovälimuisti, mikä lyhentää uudelleenkutsuttujen sivujen "
-"näyttämiseen kuluvaa aikaa. Tämä tyhjentää myös suosikkien GIF-tiedostot."
+"Poista verkkovälimuisti, mikä lyhentää uudelleen vierailevien sivujen "
+"näyttöaikaa. Tämä tyhjentää myös suosikit GIF-tiedostot."
 
 #: ../cleaners\vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"Poista ~/.viminfo, joka sisältää tiedostohistorian, komentojen historian ja "
+"Poista ~/.viminfo, joka sisältää tiedostohistorian, komentohistorian ja "
 "puskurit"
 
 #: ../cleaners\deepscan.xml
@@ -686,11 +686,11 @@ msgstr "Tämä vaihtoehto on hidas."
 
 #: ../cleaners\deepscan.xml
 msgid "VIM swap files under user profile"
-msgstr "VIM vaihda käyttäjä profiiin tiedostoja"
+msgstr "VIM-siivutustiedostot käyttäjäprofiilin alla"
 
 #: ../cleaners\deepscan.xml
 msgid "VIM swap files across system"
-msgstr "VIM vaihda tiedostoja koko systeemissä"
+msgstr "VIM-siivutustiedostot koko järjestelmässä"
 
 #: ../cleaners\adobe_reader.xml
 msgid "Document viewer"
@@ -855,7 +855,7 @@ msgstr "Suorita ulkoinen komento: %s"
 #: ../bleachbit/Chaff.py:226
 #, python-format
 msgid "Downloading URL failed: %s"
-msgstr "URL:n lataaminen epäonnistui: %s"
+msgstr "URL-osoitteen lataus epäonnistui: %s"
 
 #: ../bleachbit/CleanerML.py:134
 #, python-brace-format
@@ -946,7 +946,7 @@ msgstr "Tämä valinta on kokeellinen ja voi aiheuttaa ongelmia järjestelmään
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:313
 msgid "Prefetch"
-msgstr "Prefetch"
+msgstr "Esihaku"
 
 #: ../bleachbit/Cleaner.py:315
 msgid "Recycle bin"
@@ -1062,7 +1062,7 @@ msgstr "tee silppua tietyistä tiedostoista tai kansioista"
 
 #: ../bleachbit/CLI.py:162
 msgid "wipe free space in the given paths"
-msgstr ""
+msgstr "pyyhi vapaa tila annetuissa poluissa"
 
 #: ../bleachbit/CLI.py:164
 msgid "overwrite files to hide contents"
@@ -1082,7 +1082,7 @@ msgstr "ota käyttöön kaikki valinnat joissa ei ole varoitusta"
 
 #: ../bleachbit/CLI.py:172
 msgid "set log level to verbose"
-msgstr ""
+msgstr "aseta lokitaso monisanalliseksi"
 
 #: ../bleachbit/CLI.py:173
 msgid "log debug messages to file"
@@ -1130,7 +1130,7 @@ msgstr "Ei työtä tehtäväksi. Määritä valinnat."
 
 #: ../bleachbit/CLI.py:276
 msgid "--overwrite is intended only for use with --clean"
-msgstr ""
+msgstr "\"--overwrite\" on tarkoitettu käytettäväksi vain \"--clean\" kanssa"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -1206,21 +1206,21 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py:934
 #, python-format
 msgid "Wiping path: %s"
-msgstr ""
+msgstr "Pyyhittävä polku: %s"
 
 #: ../bleachbit/FileUtilities.py:936
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr ""
+msgstr "Pyyhittävän polun on oltava olemassa oleva hakemisto: %s"
 
 #: ../bleachbit/FileUtilities.py:947
 msgid "Creating new, temporary file for wiping free space."
-msgstr ""
+msgstr "Luodaan uusi väliaikainen tiedosto vapaan tilan pyyhkimistä varten."
 
 #: ../bleachbit/FileUtilities.py:1003
 #, python-format
 msgid "Error #%d when flushing the file buffer."
-msgstr ""
+msgstr "Virhe #%d tiedostopuskuria tyhjennettäessä."
 
 #: ../bleachbit/FileUtilities.py:1019
 msgid ""
@@ -1240,7 +1240,7 @@ msgstr "{bytes:,} tavua ja {inodes:,} inodea tarjolla pääkäyttäjälle"
 
 #: ../bleachbit/FileUtilities.py:1042
 msgid "Handled unknown error #0 while truncating file."
-msgstr ""
+msgstr "käsiteltiin tuntematon virhe #0 tiedostoa katkaistaessa."
 
 #: ../bleachbit/GuiBasic.py:54 ../bleachbit/GuiBasic.py:81
 #: ../bleachbit/GuiBasic.py:105 ../bleachbit/GuiBasic.py:151
@@ -1303,7 +1303,7 @@ msgstr "Avataanko osoite %s selaimessa?"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:527
 msgid "Confirm"
-msgstr ""
+msgstr "Vahvista"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1319,6 +1319,8 @@ msgstr "Tee silppua"
 #: ../bleachbit/GuiChaff.py:71
 msgid "Make randomly-generated messages inspired by documents."
 msgstr ""
+"Luo satunnaisesti aikaansaatuja viestejä, jotka ovat saaneet vaikutteita "
+"asiakirjoista."
 
 #. TRANSLATORS: Inspiration is a choice of documents from which random
 #. text will be generated.
@@ -1328,7 +1330,7 @@ msgstr "Inspiraatio"
 
 #: ../bleachbit/GuiChaff.py:81
 msgid "2600 Magazine"
-msgstr ""
+msgstr "2600 Magazine"
 
 #: ../bleachbit/GuiChaff.py:81
 msgid "Hillary Clinton's emails"
@@ -1360,7 +1362,7 @@ msgstr "Luo tiedostoja"
 
 #: ../bleachbit/GuiChaff.py:137
 msgid "Download data needed for chaff generator?"
-msgstr ""
+msgstr "Ladataanko akanoiden generaattoriin tarvittavat tiedot?"
 
 #: ../bleachbit/GuiChaff.py:179
 msgid "Generating files"
@@ -1454,7 +1456,7 @@ msgstr "Näytä vianjäljitysviestit"
 
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
-msgstr ""
+msgstr "Lisää silppuamisen kontekstivalikkovaihtoehto (KDE Plasma -kohtainen)"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:280
@@ -1514,7 +1516,7 @@ msgstr "Kansio"
 
 #: ../bleachbit/GuiPreferences.py:452
 msgid "These paths will not be deleted or modified."
-msgstr "Seuraavia polkuja ei poisteta tai muokata."
+msgstr "Näitä polkuja ei poisteta tai muokata."
 
 #: ../bleachbit/GuiPreferences.py:455
 msgid "These locations can be selected for deletion."
@@ -1558,7 +1560,7 @@ msgstr "_OK"
 
 #: ../bleachbit/GUI.py:304
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Ohjelma tarpeettomien tiedostojen siivoamiseen"
 
 #: ../bleachbit/GUI.py:315
 msgid ""
@@ -1675,9 +1677,8 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
-"BleachBitin virallista versiota ei ole Microsoft Storessa. Hanki virallinen "
-"versio osoitteesta https://www.bleachbit.org - se on ja tulee aina olemaan "
-"ilmainen."
+"BleachBitistä ei ole virallista versiota Microsoft Storessa. Hanki aito "
+"versio osoitteesta https://www.bleachbit.org, jossa se on aina ilmainen."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1700,7 +1701,7 @@ msgstr "Keskeytä"
 
 #: ../bleachbit/GUI.py:1059
 msgid "Abort the preview or cleaning process"
-msgstr ""
+msgstr "Keskeytä esikatselu tai siivousprosessi"
 
 #: ../bleachbit/GUI.py:1266
 msgid "Error when checking for updates: "
@@ -1731,12 +1732,13 @@ msgstr "Asetetaan nice-arvo %d tälle prosessille."
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
 msgstr ""
+"Poistetaan prosessitunnuksen {pid} etuoikeudet käyttäjätunnukselta {uid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr ""
+msgstr "Varataan ja pyyhitään %s muistia."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:149
@@ -1747,7 +1749,7 @@ msgstr "Vapautetaan %s muistia."
 #: ../bleachbit/Memory.py:179
 #, python-brace-format
 msgid "Found UUID for swap file {device} is {uuid}."
-msgstr ""
+msgstr "Löydetyn sivutustiedoston {device} UUID on {uuid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:265
@@ -1780,11 +1782,13 @@ msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
 msgstr ""
+"Funktio wipe_memory(), jolla on prosessin ID {pid}, odottaa lapsiprosessin "
+"tunnusta {cid}."
 
 #: ../bleachbit/Memory.py:324
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr ""
+msgstr "Muistin pyyhkivä lapsiprosessi palautti koodin %d."
 
 #: ../bleachbit/Options.py:113
 #, python-format
@@ -1798,7 +1802,7 @@ msgstr "Virhe tarkistaessa onko polkua olemassa: %s"
 
 #: ../bleachbit/Options.py:268
 msgid "Error when setting the default drives to shred."
-msgstr "Virhe asetettaessa oletusasemia tuhottavaksi"
+msgstr "Virhe asetettaessa oletusasemia silputtavaksi."
 
 #: ../bleachbit/Options.py:294
 #, python-format
@@ -1924,7 +1928,7 @@ msgstr "BleachBit käynnistyy...\n"
 #: ../bleachbit/Worker.py:78
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "Virhe suoritettaessa operaatiota ”%(operation)s”: ”%(msg)s”"
+msgstr "Virhe suoritettaessa operaatiota '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py:107
 #, python-brace-format
@@ -1941,6 +1945,8 @@ msgid ""
 "Wiping free disk space erases remnants of files that were deleted without "
 "shredding. It does not free up space."
 msgstr ""
+"Vapaan levytilan pyyhkiminen poistaa sellaisten tiedostojen jäänteet, jotka "
+"poistettiin ilman silppuamista. Se ei vapauta tilaa."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:338
