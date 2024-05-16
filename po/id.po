@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2023-08-09 14:51+0000\n"
-"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
+"PO-Revision-Date: 2024-05-16 23:24+0000\n"
+"Last-Translator: Nivalyx <drksky_light@yahoo.co.id>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/bleachbit/"
 "main/id/>\n"
 "Language: id\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
@@ -73,7 +73,7 @@ msgstr ""
 #: ../cleaners\liferea.xml ../cleaners\internet_explorer.xml
 #: ../cleaners\opera.xml
 msgid "Cookies"
-msgstr "Cookies"
+msgstr "Cookie"
 
 #: ../cleaners\chromium.xml ../cleaners\silverlight.xml
 #: ../cleaners\flash.xml ../cleaners\google_chrome.xml ../cleaners\slack.xml
@@ -88,8 +88,8 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
-"Hapus cookies, yang berisi informasi seperti preferensi situs web, "
-"otentikasi, dan identifikasi pelacakan"
+"Hapus cookie, yang mengandung informasi seperti preferensi situs web, "
+"autentikasi, dan identifikasi pelacakan"
 
 #. DOM=Document Object Model
 #. DOM=Document Object Model
@@ -632,11 +632,11 @@ msgstr "Pemutar media"
 
 #: ../cleaners\journald.xml
 msgid "System journals"
-msgstr "Jurnal Sistem"
+msgstr "Jurnal sistem"
 
 #: ../cleaners\journald.xml
 msgid "Clean old system journals"
-msgstr "Hapus jurnal sistem lama"
+msgstr "Hapus jurnal sistem lawas"
 
 #: ../cleaners\vlc.xml ../bleachbit/Cleaner.py:310
 msgid "Memory dump"
@@ -683,7 +683,7 @@ msgstr "Hapus semua berkas yang tersebar ke seluruh disk"
 
 #: ../cleaners\deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
-msgstr "Lihat pratampilan setiap berkas yang ingin anda simpan."
+msgstr "Lihat pratinjau setiap berkas yang ingin Anda simpan."
 
 #: ../cleaners\deepscan.xml
 msgid "This option is slow."
@@ -1076,7 +1076,7 @@ msgstr "sapu ruang kosong pada alamat yang diberikan"
 
 #: ../bleachbit/CLI.py:164
 msgid "overwrite files to hide contents"
-msgstr "Timpa berkas-berkas untuk sembunyikan konten"
+msgstr "timpa berkas-untuk menyembunyikan konten"
 
 #: ../bleachbit/CLI.py:166
 msgid "launch the graphical interface"
@@ -1672,8 +1672,8 @@ msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
 msgstr ""
-"Jalankan BleachBit dengan hak administrator untuk memperbaiki akurasi dari "
-"penimpaan isi berkas."
+"Jalankan BleachBit dengan hak administrator untuk meningkatkan akurasi "
+"program dalam menimpa isi berkas."
 
 #: ../bleachbit/GUI.py:891
 msgid ""
@@ -1711,7 +1711,7 @@ msgstr "Batalkan proses pratinjau atau pembersihan"
 
 #: ../bleachbit/GUI.py:1266
 msgid "Error when checking for updates: "
-msgstr "Gagal ketika memeriksa pembaruan: "
+msgstr "Terdapat kesalahan pada saat memeriksa pembaruan: "
 
 #: ../bleachbit/Memory.py:58
 msgid ""
@@ -1859,7 +1859,7 @@ msgstr "winapp2.ini yang baru sudah didownload."
 
 #: ../bleachbit/Update.py:121
 msgid "Update BleachBit"
-msgstr "Perbaharui BleachBit"
+msgstr "Perbarui BleachBit"
 
 #: ../bleachbit/Update.py:127
 msgid "A new version is available."
