@@ -64,7 +64,7 @@ class LocaleCleanerPath:
         return child
 
     def add_path_filter(self, pre, post):
-        """Adds a filter consisting of a prefix and a postfix
+        r"""Adds a filter consisting of a prefix and a postfix
         (e.g. 'foobar_' and '\.qm' to match 'foobar_en_US.utf-8.qm)"""
         try:
             regex = re.compile('^' + pre + Locales.localepattern + post + '$')
@@ -649,7 +649,7 @@ def apt_clean():
 def get_apt_size():
     """Return the size of the apt cache (in bytes)"""
     (rc, stdout, stderr) = General.run_external(['apt-get', '-s', 'clean'])
-    paths = re.findall('/[/a-z\.\*]+', stdout)
+    paths = re.findall(r'/[/a-z\.\*]+', stdout)
     return get_globs_size(paths)
 
 
@@ -717,7 +717,7 @@ def dnf_autoremove():
     if rc > 0:
         raise RuntimeError('dnf raised error %s: %s' % (rc, stderr))
 
-    cregex = re.compile("Freed space: ([\d.]+[\s]+[BkMG])")
+    cregex = re.compile(r"Freed space: ([\d.]+[\s]+[BkMG])")
     match = cregex.search(allout)
     if match:
         freed_bytes = parseSize(match.group(1))

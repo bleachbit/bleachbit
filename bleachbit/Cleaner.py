@@ -399,7 +399,7 @@ class System(Cleaner):
                 '$ALLUSERSPROFILE\\Application Data\\Microsoft\\Dr Watson\\*.log',
                 '$ALLUSERSPROFILE\\Application Data\\Microsoft\\Dr Watson\\user.dmp',
                 '$LocalAppData\\Microsoft\\Windows\\WER\\ReportArchive\\*\\*',
-                '$LocalAppData\\Microsoft\\Windows\WER\\ReportQueue\\*\\*',
+                '$LocalAppData\\Microsoft\\Windows\\WER\\ReportQueue\\*\\*',
                 '$programdata\\Microsoft\\Windows\\WER\\ReportArchive\\*\\*',
                 '$programdata\\Microsoft\\Windows\\WER\\ReportQueue\\*\\*',
                 '$localappdata\\Microsoft\\Internet Explorer\\brndlog.bak',
@@ -416,7 +416,7 @@ class System(Cleaner):
                 '$windir\\Debug\\UserMode\\*.log',
                 '$windir\\Debug\\UserMode\\ChkAcc.bak',
                 '$windir\\Debug\\UserMode\\userenv.bak',
-                '$windir\\Microsoft.NET\Framework\*\*.log',
+                '$windir\\Microsoft.NET\\Framework\\*\\*.log',
                 '$windir\\pchealth\\helpctr\\Logs\\hcupdate.log',
                 '$windir\\security\\logs\\*.log',
                 '$windir\\security\\logs\\*.old',
@@ -429,7 +429,7 @@ class System(Cleaner):
                 '$windir\\system32\\LogFiles\\Firewall\\pfirewall.log*',
                 '$windir\\system32\\LogFiles\\Scm\\SCM.EVM*',
                 '$windir\\system32\\LogFiles\\WMI\\Terminal*.etl',
-                '$windir\\system32\\LogFiles\\WMI\\RTBackup\EtwRT.*etl',
+                '$windir\\system32\\LogFiles\\WMI\\RTBackup\\EtwRT.*etl',
                 '$windir\\system32\\wbem\\Logs\\*.lo_',
                 '$windir\\system32\\wbem\\Logs\\*.log', )
 
