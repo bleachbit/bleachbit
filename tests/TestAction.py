@@ -30,7 +30,7 @@ import shutil
 import sys
 import tempfile
 import unittest
-import mock
+from unittest import mock
 from xml.dom.minidom import parseString
 
 
