@@ -20,7 +20,7 @@
 
 
 import os
-import mock
+from unittest import mock
 
 from windows.NsisUtilities import (_generate_add_remove_nsis_expressions,
                                    _walk_with_parent_directory_and_filepaths,
