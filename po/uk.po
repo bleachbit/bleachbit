@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2024-07-28 07:09+0000\n"
+"PO-Revision-Date: 2024-07-30 17:09+0000\n"
 "Last-Translator: Fqwe1 <Fqwe1@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/bleachbit/main/"
 "uk/>\n"
@@ -61,8 +61,7 @@ msgstr "Кеш"
 #: ../cleaners\safari.xml ../cleaners\opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Видалити кеш браузера, який зменшує час завантаження повторно відвіданих "
-"сторінок"
+"Видалити вебкеш, який зменшує час завантаження повторно відвіданих сторінок"
 
 #: ../cleaners\chromium.xml ../cleaners\silverlight.xml
 #: ../cleaners\flash.xml ../cleaners\google_chrome.xml ../cleaners\slack.xml
@@ -89,7 +88,7 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
-"Видалити файли cookie, які містять інформацію, таку, як налаштування "
+"Видалити файли cookie, які містять, таку інформацію, як налаштування "
 "вебсайтів, автентифікація та ідентифікація для відстеження"
 
 #. DOM=Document Object Model
@@ -319,7 +318,7 @@ msgstr "Карантин"
 #: ../cleaners\palemoon.xml ../cleaners\firefox.xml ../cleaners\vuze.xml
 #: ../cleaners\deepscan.xml ../cleaners\beagle.xml
 msgid "Delete the files"
-msgstr "Видалити ці файли"
+msgstr "Видалити файли"
 
 #: ../cleaners\windows_defender.xml ../cleaners\waterfox.xml
 #: ../cleaners\palemoon.xml ../cleaners\amule.xml ../cleaners\firefox.xml
@@ -409,7 +408,7 @@ msgstr "Редактор"
 #: ../cleaners\windows_explorer.xml ../cleaners\kde.xml
 #: ../bleachbit/Cleaner.py:290 ../bleachbit/Cleaner.py:485
 msgid "Recent documents list"
-msgstr "Список нещодавно використаних документів"
+msgstr "Список останніх документів"
 
 #: ../cleaners\gedit.xml ../cleaners\adobe_reader.xml
 #: ../cleaners\audacious.xml ../cleaners\gwenview.xml
@@ -432,13 +431,13 @@ msgstr "Клієнт для спілкування"
 #: ../cleaners\pidgin.xml ../cleaners\yahoo_messenger.xml
 #: ../cleaners\amsn.xml ../cleaners\hexchat.xml
 msgid "Chat logs"
-msgstr "Журнали чату"
+msgstr "Журнали чатів"
 
 #: ../cleaners\skype.xml ../cleaners\seamonkey.xml ../cleaners\emesene.xml
 #: ../cleaners\pidgin.xml ../cleaners\yahoo_messenger.xml
 #: ../cleaners\amsn.xml ../cleaners\hexchat.xml
 msgid "Delete the chat logs"
-msgstr "Видалити журнали чату"
+msgstr "Видалити журнали чатів"
 
 #: ../cleaners\skype.xml
 msgid "Installers"
@@ -456,13 +455,13 @@ msgstr "Система керування вікнами"
 #: ../cleaners\secondlife_viewer.xml ../cleaners\gl-117.xml
 #: ../cleaners\beagle.xml
 msgid "Debug logs"
-msgstr "Журнали відлагодження"
+msgstr "Журнали налагодження"
 
 #: ../cleaners\x11.xml ../cleaners\microsoft_office.xml
 #: ../cleaners\secondlife_viewer.xml ../cleaners\gl-117.xml
 #: ../cleaners\beagle.xml ../cleaners\easytag.xml
 msgid "Delete the debug logs"
-msgstr "Видалити журнали відлагодження"
+msgstr "Видалити журнали налагодження"
 
 #: ../cleaners\nautilus.xml ../cleaners\mc.xml
 #: ../cleaners\windows_explorer.xml
@@ -471,7 +470,7 @@ msgstr "Файловий менеджер"
 
 #: ../cleaners\nautilus.xml
 msgid "Custom folders will be reset."
-msgstr "Власні теки будуть скинуті."
+msgstr "Користувацькі теки будуть скинуті."
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners\transmission.xml
@@ -488,7 +487,7 @@ msgstr "Торенти"
 
 #: ../cleaners\transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
-msgstr "Видалити метадані перелічених торентів (тільки метадані, не файли)"
+msgstr "Видалити торенти (тільки метадані, не файли, що описуються)"
 
 #: ../cleaners\transmission.xml ../cleaners\vuze.xml
 msgid "Statistics"
@@ -569,14 +568,14 @@ msgstr "Віджети для стільниці"
 
 #: ../cleaners\elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
-msgstr "Видалити кукі, відвідані посилання та історію пошуку"
+msgstr "Видалити файли cookie, відвідані посилання та історію пошуку"
 
 #: ../cleaners\paint.xml ../cleaners\winamp.xml ../cleaners\vlc.xml
 #: ../cleaners\microsoft_office.xml ../cleaners\windows_media_player.xml
 #: ../cleaners\winzip.xml ../cleaners\smartftp.xml ../cleaners\wordpad.xml
 #: ../cleaners\teamviewer.xml ../cleaners\windows_explorer.xml
 msgid "Delete the most recently used list"
-msgstr "Видалити список нещодавно використовуваних документів"
+msgstr "Видалити список нещодавно використовуваних"
 
 #: ../cleaners\gnome.xml ../cleaners\kde.xml
 msgid "Desktop environment"
@@ -626,7 +625,7 @@ msgstr "Історія відомих файлів"
 #. http://wiki.amule.org/wiki/Friend
 #: ../cleaners\amule.xml
 msgid "Known clients and friends"
-msgstr "Клієнти та друзі"
+msgstr "Відомі клієнти та друзі"
 
 #: ../cleaners\winamp.xml ../cleaners\realplayer.xml ../cleaners\vlc.xml
 #: ../cleaners\windows_media_player.xml
@@ -659,15 +658,15 @@ msgstr ""
 
 #: ../cleaners\wine.xml
 msgid "Compatibility layer for Windows software"
-msgstr "Забезпечення сумісності для програмного забезпечення Windows"
+msgstr "Забезпечення сумісності для ПЗ Windows"
 
 #: ../cleaners\discord.xml
 msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"Видалити веб кеш, який зменшує час відображення повторно відвіданих "
-"сторінок. Це також очистить список обраних GIF-файлів."
+"Видалити вебкеш, який зменшує час відображення повторно відвіданих сторінок. "
+"Це також очистить список обраних GIF-файлів."
 
 #: ../cleaners\vim.xml
 msgid ""
@@ -686,7 +685,8 @@ msgstr "Очищення файлів розкиданих по диску"
 #: ../cleaners\deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
 msgstr ""
-"Перевірте попередній перегляд для будь-яких файлів, які ви хочете зберегти."
+"Перевірте попередній перегляд на наявність будь-яких файлів, які ви хотіли б "
+"зберегти."
 
 #: ../cleaners\deepscan.xml
 msgid "This option is slow."
@@ -694,11 +694,11 @@ msgstr "Ця опція працює повільно."
 
 #: ../cleaners\deepscan.xml
 msgid "VIM swap files under user profile"
-msgstr "Файли підкачки VIM у профілі користувача"
+msgstr "Файли підкачування VIM у профілі користувача"
 
 #: ../cleaners\deepscan.xml
 msgid "VIM swap files across system"
-msgstr "Файли підкачки VIM у системі"
+msgstr "Файли підкачування VIM у системі"
 
 #: ../cleaners\adobe_reader.xml
 msgid "Document viewer"
@@ -780,8 +780,8 @@ msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
 msgstr ""
-"Уважно перегляньте список пакунків, які будуть видалені, запустивши команду "
-"\"dnf list autoremove\"."
+"Уважно перегляньте список пакунків, які будуть видалені, запустивши команду «"
+"dnf list autoremove»."
 
 #: ../cleaners\recoll.xml ../cleaners\beagle.xml
 msgid "Search tool"
@@ -806,18 +806,18 @@ msgstr "Клієнт IRC, раніше відомий як XChat"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
-msgstr "Очищення непотрібних файлів"
+msgstr "Очищення від непотрібних файлів"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Free space and maintain privacy"
-msgstr "Звільнити місце та забезпечити конфіденційність"
+msgstr "Звільнення місця та забезпечення конфіденційності"
 
 #. TRANSLATORS: Multi-value variables are explained in the online documentation.
 #. Basically, they are like an environment variable, but each multi-value variable
 #. can have multiple values. They're a way to make CleanerML files more concise.
 #: ../bleachbit/Action.py:153
 msgid "Deep scan does not support multi-value variable."
-msgstr "Глибоке сканування не підтримує багатозначних перемінних."
+msgstr "Глибоке сканування не підтримує багатозначні змінні."
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
@@ -865,7 +865,7 @@ msgstr "Виконати наступну команду: %s"
 #: ../bleachbit/Chaff.py:226
 #, python-format
 msgid "Downloading URL failed: %s"
-msgstr "Помилка завантаження URL: %s"
+msgstr "Не вдалося завантажити посилання: %s"
 
 #: ../bleachbit/CleanerML.py:134
 #, python-brace-format
@@ -873,8 +873,8 @@ msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 msgstr ""
-"Помилка в функції handle_cleaner_option() для очищувача id = {cleaner_id}, "
-"option XML={option_xml}"
+"Помилка в функції handle_cleaner_option() для очищувача з ідентифікатором "
+"{cleaner_id} та XML опцією {option_xml}"
 
 #: ../bleachbit/CleanerML.py:275
 #, python-format
@@ -922,7 +922,7 @@ msgstr "Видалити файли небажаних мов"
 
 #: ../bleachbit/Cleaner.py:283
 msgid "Configure this option in the preferences."
-msgstr "Налаштувати цю опцію у налаштуваннях."
+msgstr "Налаштуйте цю опцію у налаштуваннях."
 
 #: ../bleachbit/Cleaner.py:289
 msgid "Rotated logs"
@@ -943,16 +943,16 @@ msgstr "Очистити смітник"
 #: ../bleachbit/Cleaner.py:298 ../bleachbit/Cleaner.py:443
 #: ../bleachbit/Worker.py:199
 msgid "Memory"
-msgstr "Пам'ять"
+msgstr "Пам’ять"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py:300
 msgid "Wipe the swap and free memory"
-msgstr "Очистити простір довантаження та нерозподілену пам'ять"
+msgstr "Стерти простір довантаження та вільну пам’ять"
 
 #: ../bleachbit/Cleaner.py:302
 msgid "This option is experimental and may cause system problems."
-msgstr "Ця опція є експериментальною та може викликати проблеми з системою."
+msgstr "Ця опція експериментальна та може викликати проблеми з системою."
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py:313
@@ -1016,7 +1016,7 @@ msgstr "Ця опція працює дуже повільно."
 
 #: ../bleachbit/Cleaner.py:344
 msgid "The system in general"
-msgstr "Система в цілому"
+msgstr "Система загалом"
 
 #: ../bleachbit/Cleaner.py:346 ../bleachbit/Cleaner.py:688
 msgid "System"
@@ -1049,7 +1049,7 @@ msgstr "недійсний очищувач: %s"
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py:148
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr "використання: %prog [опції] очищувач.опція1 очищувач.опція2"
+msgstr "%prog [опції] очищувач.опція1 очищувач.опція2"
 
 #: ../bleachbit/CLI.py:151
 msgid "list cleaners"
@@ -1065,19 +1065,19 @@ msgstr "попередній перегляд файлів, які будуть 
 #: ../bleachbit/CLI.py:158
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr ""
-"запустити очищувач для видалення файлів та внесення інших постійних змін"
+"запустити очищувачі для видалення файлів та внесення інших постійних змін"
 
 #: ../bleachbit/CLI.py:160
 msgid "shred specific files or folders"
-msgstr "знищення окремих файлів або тек"
+msgstr "знищення окремих файлів чи тек"
 
 #: ../bleachbit/CLI.py:162
 msgid "wipe free space in the given paths"
-msgstr "перезаписати вільний простір за вказаними шляхами"
+msgstr "стерти вільний простір у вказаних шляхах"
 
 #: ../bleachbit/CLI.py:164
 msgid "overwrite files to hide contents"
-msgstr "перезаписати файли, щоб приховати вміст"
+msgstr "перезаписати файли, щоб приховати їхній вміст"
 
 #: ../bleachbit/CLI.py:166
 msgid "launch the graphical interface"
@@ -1089,7 +1089,7 @@ msgstr "використовувати налаштування встановл
 
 #: ../bleachbit/CLI.py:170
 msgid "enable all options that do not have a warning"
-msgstr "увімкнути всі налаштування, які не мають попередження"
+msgstr "увімкнути усі опції, які не мають попередження"
 
 #: ../bleachbit/CLI.py:172
 msgid "set log level to verbose"
@@ -1101,15 +1101,15 @@ msgstr "записувати повідомлення для налагодже�
 
 #: ../bleachbit/CLI.py:175
 msgid "show system information"
-msgstr "показати інформацію про систему"
+msgstr "показати подробиці про систему"
 
 #: ../bleachbit/CLI.py:177
 msgid "output version information and exit"
-msgstr "показати інформацію про версію та вийти"
+msgstr "вивести інформацію про версію та вийти"
 
 #: ../bleachbit/CLI.py:180
 msgid "do not prompt for administrator privileges"
-msgstr "не вимагати права адміністратора"
+msgstr "не запитувати права адміністратора"
 
 #: ../bleachbit/CLI.py:188
 msgid "update winapp2.ini, if a new version is available"
@@ -1129,11 +1129,11 @@ msgstr "Перевірка оновлень для winapp2.ini"
 
 #: ../bleachbit/CLI.py:255
 msgid "No directories given for --wipe-free-space"
-msgstr "Не вказано жодної теки для --wipe-free-space"
+msgstr "Не вказано жодних тек для --wipe-free-space"
 
 #: ../bleachbit/CLI.py:257
 msgid "Wiping free space can take a long time."
-msgstr "Очищення вільного простору може зайняти багато часу."
+msgstr "Стирання вільного простору може зайняти багато часу."
 
 #: ../bleachbit/CLI.py:268
 msgid "No work to do. Specify options."
@@ -1161,7 +1161,7 @@ msgid ""
 "be overwritten. It will be marked for deletion upon system reboot."
 msgstr ""
 "Щонайменше один файл був заблокований іншим процесом, тому його вміст "
-"неможливо перезаписати. Він буде позначений на видалення після "
+"неможливо перезаписати. Він буде позначений для видалення після "
 "перезавантаження системи."
 
 #. TRANSLATORS: The file will be deleted when the
@@ -1204,7 +1204,7 @@ msgstr "Файл цього типу неможливо видалити: %s"
 #, python-format
 msgid ""
 "The environment variable TMP refers to a directory that does not exist: %s"
-msgstr "Змінна середовища TMP посилається на теку, якої не існує: %s"
+msgstr "Змінна середовища TMP вказує на теку, якої не існує: %s"
 
 #: ../bleachbit/FileUtilities.py:838
 msgid ""
@@ -1217,21 +1217,21 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py:934
 #, python-format
 msgid "Wiping path: %s"
-msgstr "Перезапис шляху: %s"
+msgstr "Стирання шляху: %s"
 
 #: ../bleachbit/FileUtilities.py:936
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr "Шляхом для очищення повинна бути існуюча директорія: %s"
+msgstr "Шляхом для стирання повинна бути існуюча тека: %s"
 
 #: ../bleachbit/FileUtilities.py:947
 msgid "Creating new, temporary file for wiping free space."
-msgstr "Створення нового тимчасового файлу для очищення вільного простору."
+msgstr "Створення нового тимчасового файлу для стирання вільного простору."
 
 #: ../bleachbit/FileUtilities.py:1003
 #, python-format
 msgid "Error #%d when flushing the file buffer."
-msgstr "Помилка #%d при очищені буфера файлу."
+msgstr "Помилка #%d під час очищення буфера файлу."
 
 #: ../bleachbit/FileUtilities.py:1019
 msgid ""
@@ -1243,17 +1243,15 @@ msgstr ""
 
 #: ../bleachbit/FileUtilities.py:1024
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
-msgstr ""
-"{bytes:,} байтів та {inodes:,} inode доступно для непривілейованого "
-"користувача"
+msgstr "Доступно {bytes:,} байтів та {inodes:,} інодів для не суперкористувача"
 
 #: ../bleachbit/FileUtilities.py:1026
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
-msgstr "{bytes:,} байтів та {inodes:,} inode доступно для суперкористувача"
+msgstr "Доступно {bytes:,} байтів та {inodes:,} інодів для суперкористувача"
 
 #: ../bleachbit/FileUtilities.py:1042
 msgid "Handled unknown error #0 while truncating file."
-msgstr "Виявлена невідома помилка #0 при обрізанні файлу."
+msgstr "Виявлено невідому помилку #0 при обрізанні файлу."
 
 #: ../bleachbit/GuiBasic.py:54 ../bleachbit/GuiBasic.py:81
 #: ../bleachbit/GuiBasic.py:105 ../bleachbit/GuiBasic.py:151
@@ -1291,7 +1289,7 @@ msgid ""
 "you ran the preview."
 msgstr ""
 "Ви впевнені, що хочете назавжди видалити файли згідно до обраних операцій?  "
-"Дані файли, які будуть видалені, можуть змінитися з моменту попереднього "
+"Файли, які будуть видалені, можуть змінитися з моменту попереднього "
 "перегляду."
 
 #: ../bleachbit/GuiBasic.py:142
@@ -1328,7 +1326,7 @@ msgstr "Видалення файлів"
 #. missiles. For more explanation, see the online documentation.
 #: ../bleachbit/GuiChaff.py:65
 msgid "Make chaff"
-msgstr "Створити перешкоди"
+msgstr "Згенерувати перешкоди"
 
 #: ../bleachbit/GuiChaff.py:71
 msgid "Make randomly-generated messages inspired by documents."
@@ -1354,7 +1352,7 @@ msgstr "Кількість файлів"
 
 #: ../bleachbit/GuiChaff.py:96 ../bleachbit/GuiChaff.py:156
 msgid "Select destination folder"
-msgstr "Виберіть теку для збереження"
+msgstr "Оберіть теку для збереження"
 
 #: ../bleachbit/GuiChaff.py:106
 msgid "When finished"
@@ -1378,7 +1376,7 @@ msgstr "Завантажити дані, необхідні для генера�
 
 #: ../bleachbit/GuiChaff.py:179
 msgid "Generating files"
-msgstr "Генерація файлів"
+msgstr "Генерування файлів"
 
 #: ../bleachbit/GuiPreferences.py:55 ../data/app-menu.ui:32
 msgid "Preferences"
@@ -1410,7 +1408,7 @@ msgid ""
 "about it.  Then, you may manually download and install the update."
 msgstr ""
 "Якщо буде виявлено оновлення, то ви отримаєте можливість переглянути "
-"інформацію про нього.  Далі ви зможете завантажити та встановити оновлення "
+"подробиці про нього.  Далі ви зможете завантажити та встановити оновлення "
 "вручну."
 
 #: ../bleachbit/GuiPreferences.py:129
@@ -1427,15 +1425,15 @@ msgstr "Приховувати неактуальні очищувачі"
 
 #: ../bleachbit/GuiPreferences.py:161
 msgid "Overwrite contents of files to prevent recovery"
-msgstr "Перезаписувати вміст файлів, щоб запобігти відновленню"
+msgstr "Перезаписувати вміст файлів, щоб запобігти їхньому відновленню"
 
 #: ../bleachbit/GuiPreferences.py:165
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
 msgstr ""
-"Перезапис може бути неефективним на деяких файлових системах та для деяких "
-"операцій BleachBit.  Перезапис значно повільніший."
+"Перезаписування може бути неефективним на деяких файлових системах та для "
+"деяких операцій BleachBit.  Перезаписування значно повільніше."
 
 #: ../bleachbit/GuiPreferences.py:170
 msgid "Exit after cleaning"
@@ -1461,7 +1459,7 @@ msgstr "Темний режим"
 
 #: ../bleachbit/GuiPreferences.py:204
 msgid "Remember window geometry"
-msgstr "Запам'ятовувати геометрію вікна"
+msgstr "Запам’ятовувати геометрію вікна"
 
 #: ../bleachbit/GuiPreferences.py:210
 msgid "Show debug messages"
@@ -1469,7 +1467,7 @@ msgstr "Показувати повідомлення для налагодже�
 
 #: ../bleachbit/GuiPreferences.py:216
 msgid "Add shred context menu option (KDE Plasma specific)"
-msgstr "Додати пункт контекстного меню \"Знищити\" (лише для KDE Plasma)"
+msgstr "Додати пункт контекстного меню «Знищити» (лише для KDE Plasma)"
 
 #: ../bleachbit/GuiPreferences.py:228 ../bleachbit/GuiPreferences.py:358
 #: ../bleachbit/GuiPreferences.py:401 ../bleachbit/GUI.py:280
@@ -1533,7 +1531,7 @@ msgstr "Вказані шляхи не будуть видалені або зм
 
 #: ../bleachbit/GuiPreferences.py:455
 msgid "These locations can be selected for deletion."
-msgstr "Вказані розташування можна обрати для видалення."
+msgstr "Вказані шляхи можна обрати для видалення."
 
 #: ../bleachbit/GuiPreferences.py:463
 msgid "Type"
@@ -1580,7 +1578,7 @@ msgid ""
 "GNU General Public License version 3 or later.\n"
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
-"GNU General Public License версії 3 або пізнішої.\n"
+"GNU General Public License 3 версії або пізнішої.\n"
 "Дивіться https://www.gnu.org/licenses/gpl-3.0.txt"
 
 #. TRANSLATORS: Maintain the names of translators here.
@@ -1705,12 +1703,11 @@ msgstr "Попередній перегляд"
 #: ../bleachbit/GUI.py:1034
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
-"Попередній перегляд файлів, на які впливають обрані операції (без видалення "
-"файлів)"
+"Перегляньте файли, на які впливають обрані операції (без видалення файлів)"
 
 #: ../bleachbit/GUI.py:1049
 msgid "Clean files in the selected operations"
-msgstr "Очистити файли у обраних операціях"
+msgstr "Очистіть файли за обраними операціями"
 
 #: ../bleachbit/GUI.py:1057
 msgid "Abort"
@@ -1718,7 +1715,7 @@ msgstr "Перервати"
 
 #: ../bleachbit/GUI.py:1059
 msgid "Abort the preview or cleaning process"
-msgstr "Перервати процес попереднього перегляду або очищення"
+msgstr "Перервіть процес попереднього перегляду або очищення"
 
 #: ../bleachbit/GUI.py:1266
 msgid "Error when checking for updates: "
@@ -1729,7 +1726,7 @@ msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"Не вдалося виконати команду 'swapoff -s', тому виконується /proc/swaps для "
+"Не вдалося виконати команду «swapoff -s», тому виконується /proc/swaps для "
 "отримання подробиць про підкачування."
 
 #: ../bleachbit/Memory.py:78
@@ -1743,7 +1740,7 @@ msgstr "Повторне ввімкнення підкачування."
 #: ../bleachbit/Memory.py:120
 #, python-format
 msgid "Setting nice value %d for this process."
-msgstr "Встановлюється значення nice %d для цього процесу."
+msgstr "Встановлюється значення «nice» %d для цього процесу."
 
 #: ../bleachbit/Memory.py:126
 #, python-brace-format
@@ -1754,42 +1751,42 @@ msgstr "Зниження прав процесу з PID {pid} до корист�
 #: ../bleachbit/Memory.py:140
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr "Виділення та очищення %s пам'яті."
+msgstr "Виділення та стирання %s пам’яті."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:149
 #, python-format
 msgid "Freeing %s of memory."
-msgstr "Звільнення %s памя'ті."
+msgstr "Звільнення %s пам’яті."
 
 #: ../bleachbit/Memory.py:179
 #, python-brace-format
 msgid "Found UUID for swap file {device} is {uuid}."
-msgstr "Знайдений UUID для файлу підкачки {device} — {uuid}."
+msgstr "Знайдено UUID для файлу підкачування {device} — {uuid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:265
 #, python-format
 msgid "Physical free memory is %s."
-msgstr "Вільна фізична пам'ять – %s."
+msgstr "Вільна фізична пам’ять – %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:280
 #, python-format
 msgid "Wiping the swap device %s."
-msgstr "Очищення вмісту пристрою підкачки %s."
+msgstr "Стирання пристрою підкачування %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:292
 #, python-format
 msgid "Reinitializing the swap device %s."
-msgstr "Повторна ініціалізація пристрою підкачки %s."
+msgstr "Повторна ініціалізація пристрою підкачування %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:309
 #, python-format
 msgid "Detected these swap devices: %s"
-msgstr "Виявлено наступні пристрої підкачки: %s"
+msgstr "Виявлено наступні пристрої підкачування: %s"
 
 #. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
 #: ../bleachbit/Memory.py:319
@@ -1798,27 +1795,27 @@ msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
 msgstr ""
-"Функція wipe_memory() с PID {pid} очікує завершення процесу-потомка з "
+"Функція wipe_memory() з PID {pid} очікує на дочірній процес з "
 "ідентифікатором {cid}."
 
 #: ../bleachbit/Memory.py:324
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr "Нащадок процесу стирання пам'яті повернув код %d."
+msgstr "Дочірній процес стирання пам’яті повернув код %d."
 
 #: ../bleachbit/Options.py:113
 #, python-format
 msgid "Disk was full when writing configuration to file %s"
-msgstr "Диск було заповнено під час записування конфігурації до файлу %s"
+msgstr "Під час записування конфігурації до файлу %s диск був переповнений"
 
 #: ../bleachbit/Options.py:137
 #, python-format
 msgid "Error checking whether path exists: %s"
-msgstr "Помилка перевірки існування директорії: %s"
+msgstr "Помилка перевірки існування шляху: %s"
 
 #: ../bleachbit/Options.py:268
 msgid "Error when setting the default drives to shred."
-msgstr "Помилка при обиранні дисків за замовчуванням для знищення."
+msgstr "Помилка при встановленні дисків за замовчуванням для знищення."
 
 #: ../bleachbit/Options.py:294
 #, python-format
@@ -1827,7 +1824,7 @@ msgstr "Автоматичне збереження мови %s."
 
 #: ../bleachbit/RecognizeCleanerML.py:56
 msgid "Security warning"
-msgstr "Повідомлення безпеки"
+msgstr "Попередження безпеки"
 
 #: ../bleachbit/RecognizeCleanerML.py:70
 msgid ""
@@ -1835,9 +1832,9 @@ msgid ""
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
 msgstr ""
-"Дані налаштувань очищувача є новими або вони змінені. Шкідливі налаштування "
-"можуть пошкодити вашу систему. Якщо ви не довіряєте цим змінам, вилучіть "
-"файли або вийдіть з програми."
+"Дані налаштувань очищувача є новими або зміненими. Шкідливі налаштування "
+"можуть пошкодити вашу систему. Якщо ви не довіряєте цим змінам, видаліть "
+"файли або вийдіть з застосунку."
 
 #: ../bleachbit/RecognizeCleanerML.py:85
 msgctxt "column_label"
@@ -1862,7 +1859,7 @@ msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
 msgstr ""
-"Неможливо очистити програму %s, бо її запущено зараз.  Завершіть її роботу "
+"%s неможливо очистити, оскільки застосунок наразі запущено.  Закрийте його "
 "та спробуйте ще раз."
 
 #: ../bleachbit/Update.py:75
@@ -1890,8 +1887,8 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
-"Помилка при встановленні з'єднання з мережею для перевірки оновлень. "
-"Перевірте, чи працює мережа, і чи не заблокований застосунок брендмауером. "
+"Помилка при встановленні мережевого з’єднання для перевірки оновлень. "
+"Перевірте, чи працює мережа, та чи не заблокований застосунок брандмауером. "
 "Повідомлення про помилку: {}"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
@@ -1927,12 +1924,12 @@ msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
-"Файл python3.dll було знайдено в c:\\ або c:\\ dlls, що вказує на можливу "
-"спробу викрадення DLL в порядку пошуку."
+"Файл python3.dll було знайдено в c:\\ або c:\\dlls, що вказує на можливу "
+"спробу підміни DLL в порядку пошуку."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr "Увага"
+msgstr "Попередження"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
@@ -1945,7 +1942,7 @@ msgstr "BleachBit запускається...\n"
 #: ../bleachbit/Worker.py:78
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "Помилка під час виконання операції '%(operation)s': '%(msg)s'"
+msgstr "Виникла помилка під час виконання операції «%(operation)s»: «%(msg)s»"
 
 #: ../bleachbit/Worker.py:107
 #, python-brace-format
@@ -1955,43 +1952,43 @@ msgstr "Помилка: {operation_option}: {command}"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:194
 msgid "Please wait.  Wiping free disk space."
-msgstr "Зачекайте... Виконується очистка вільного дискового простору."
+msgstr "Зачекайте.  Стирання вільного дискового простору."
 
 #: ../bleachbit/Worker.py:196
 msgid ""
 "Wiping free disk space erases remnants of files that were deleted without "
 "shredding. It does not free up space."
 msgstr ""
-"Перезапис вільного дискового простору знищує залишки файлів, які були "
-"видалені без стирання. Вона не звільняє додатковий простір на диску."
+"Стирання вільного дискового простору знищує залишки файлів, які було "
+"видалено без стирання. Це не звільняє додатковий простір на диску."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:338
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "Зачекайте, будь-ласка. Очистка %s."
+msgstr "Зачекайте.  Очищення %s."
 
 #: ../bleachbit/Worker.py:217
 #, python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
-msgstr[0] "До завершення лишилась %d хвилина."
-msgstr[1] "До завершення лишилось %d хвилини."
-msgstr[2] "До завершення лишилось %d хвилин."
+msgstr[0] "Залишилася приблизно %d хвилина."
+msgstr[1] "Залишилося приблизно %d хвилини."
+msgstr[2] "Залишилося приблизно %d хвилин."
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
 #: ../bleachbit/Worker.py:285
 #, python-format
 msgid "Disk space recovered: %s"
-msgstr "Вивільнено дискового простору: %s"
+msgstr "Звільнено дискового простору: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
 #: ../bleachbit/Worker.py:289
 #, python-format
 msgid "Disk space to be recovered: %s"
-msgstr "Дисковий простір, для звільнення: %s"
+msgstr "Дискового простору буде звільнено: %s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
@@ -2005,7 +2002,7 @@ msgstr "Видалено файлів: %d"
 #: ../bleachbit/Worker.py:298
 #, python-format
 msgid "Files to be deleted: %d"
-msgstr "Файли до видалення: %d"
+msgstr "Файлів буде видалено: %d"
 
 #: ../bleachbit/Worker.py:301
 #, python-format
@@ -2015,28 +2012,28 @@ msgstr "Спеціальні операції: %d"
 #: ../bleachbit/Worker.py:304
 #, python-format
 msgid "Errors: %d"
-msgstr "Помилки: %d"
+msgstr "Помилок: %d"
 
 #. TRANSLATORS: The "deep scan" feature searches over broad
 #. areas of the file system such as the user's whole home directory
 #. or all the system executables.
 #: ../bleachbit/Worker.py:320
 msgid "Please wait.  Running deep scan."
-msgstr "Зачекайте... Виконується глибоке сканування."
+msgstr "Зачекайте.  Виконується глибоке сканування."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:341
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr "Зачекайте, будь-ласка. Попередній перегляд %s."
+msgstr "Зачекайте.  Попередній перегляд %s."
 
 #: ../data/app-menu.ui:5
 msgid "_Shred Files"
-msgstr "_Знищення файлів"
+msgstr "_Знищити файли"
 
 #: ../data/app-menu.ui:9
 msgid "Sh_red Folders"
-msgstr "О_чистити теки"
+msgstr "_Знищити теки"
 
 #: ../data/app-menu.ui:13
 msgid "Shred Paths from Clipboard"
@@ -2044,27 +2041,27 @@ msgstr "Знищити шляхи з буфера обміну"
 
 #: ../data/app-menu.ui:18
 msgid "_Wipe Free Space"
-msgstr "_Очистити вільне місце"
+msgstr "_Стерти вільне місце"
 
 #: ../data/app-menu.ui:22
 msgid "_Make Chaff"
-msgstr "_Створити перешкоду"
+msgstr "_Згенерувати перешкоди"
 
 #: ../data/app-menu.ui:26
 msgid "S_hred Settings and Quit"
-msgstr "В_итерти налаштування та вийти"
+msgstr "_Знищити налаштування та вийти"
 
 #: ../data/app-menu.ui:37
 msgid "S_ystem Information"
-msgstr "Інформація про систему"
+msgstr "_Подробиці про систему"
 
 #: ../data/app-menu.ui:41
 msgid "_Help"
-msgstr "_Довідка"
+msgstr "_Допомога"
 
 #: ../data/app-menu.ui:47
 msgid "_About BleachBit"
-msgstr "_Про програму BleachBit"
+msgstr "_Про BleachBit"
 
 #~ msgid "_Diagnostics"
 #~ msgstr "_Діагностика"
