@@ -99,9 +99,9 @@ class UpdateTestCase(common.BleachbitTestCase):
             ip_str = get_ip_for_url(good_url)
             import ipaddress
             ip = ipaddress.ip_address(ip_str)
-        for bad_url in (None, '', 'https://invalid.com'):
+        for bad_url in (None, '', 'https://test.invalid'):
             ret = get_ip_for_url(bad_url)
-            self.assertEqual(ret[0], '(')
+            self.assertEqual(ret[0], '(', 'get_ip_for_url({})={}'.format(bad_url,ret))
 
     def test_update_url(self):
         """Check connection to the update URL"""
