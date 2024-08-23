@@ -147,13 +147,18 @@ def run_cmd(cmd):
         logger.error(stderr.decode(setup_encoding))
 
 
-def sign_code(filename):
+def sign_files(filenames):
+    """Add a digital signature
+
+    Passing multiple filenames in one function call can be faster than
+    two calls.
+    """
     if os.path.exists('CodeSign.bat'):
-        logger.info('Signing code: %s' % filename)
-        cmd = 'CodeSign.bat %s' % filename
+        logger.info('Signing code: %s' % filenames)
+        cmd = 'CodeSign.bat %s' % ' '.join(filenames)
         run_cmd(cmd)
     else:
-        logger.warning('CodeSign.bat not available for %s' % filename)
+        logger.warning('CodeSign.bat not available for %s' % filenames)
 
 
 def get_dir_size(start_path='.'):
@@ -303,8 +308,7 @@ def build():
     logger.info('Copying msvcr100.dll')
     shutil.copy('C:\\WINDOWS\\system32\\msvcr100.dll', 'dist\\msvcr100.dll')
 
-    sign_code('dist\\bleachbit.exe')
-    sign_code('dist\\bleachbit_console.exe')
+    sign_files('dist\\bleachbit.exe', 'dist\\bleachbit_console.exe')
 
     assert_execute_console()
 
@@ -565,7 +569,6 @@ def nsis(opts, exe_name, nsi_path):
             opts, BB_VER, SHRED_REGEX_KEY, nsi_path)
     run_cmd(cmd)
     assert_exist(exe_name)
-    sign_code(exe_name)
 
 
 def package_installer(nsi_path=r'windows\bleachbit.nsi'):
@@ -579,20 +582,22 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
 
     write_nsis_expressions_to_files()
 
-    exe_name = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
+    exe_name_multilang = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
+    exe_name_en = 'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER)
     # Was:
-    #opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
+    # opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
     # Now: Done in NSIS file!
     opts = '' if fast else '/V3 /Dpackhdr /DCompressor'
-    nsis(opts, exe_name, nsi_path)
+    nsis(opts, exe_name_multilang, nsi_path)
 
-    if not fast:
+    if fast:
+        sign_files((exe_name_multilang,))
+    else:
         # Was:
         # nsis('/DNoTranslations',
         # Now: Compression gets now done in NSIS file!
-        nsis(opts + ' /DNoTranslations',
-             'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER),
-             nsi_path)
+        nsis(opts + ' /DNoTranslations', exe_name_en, nsi_path)
+        sign_files((exe_name_multilang, exe_name_en))
 
     if os.path.exists(SZ_EXE):
         logger.info('Zipping installer')
