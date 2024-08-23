@@ -153,12 +153,13 @@ def sign_files(filenames):
     Passing multiple filenames in one function call can be faster than
     two calls.
     """
+    filenames_str = ' '.join(filenames)
     if os.path.exists('CodeSign.bat'):
-        logger.info('Signing code: %s' % filenames)
-        cmd = 'CodeSign.bat %s' % ' '.join(filenames)
+        logger.info('Signing code: %s' % filenames_str)
+        cmd = 'CodeSign.bat %s' % filenames_str
         run_cmd(cmd)
     else:
-        logger.warning('CodeSign.bat not available for %s' % filenames)
+        logger.warning('CodeSign.bat not available for %s' % filenames_str))
 
 
 def get_dir_size(start_path='.'):
@@ -308,7 +309,7 @@ def build():
     logger.info('Copying msvcr100.dll')
     shutil.copy('C:\\WINDOWS\\system32\\msvcr100.dll', 'dist\\msvcr100.dll')
 
-    sign_files('dist\\bleachbit.exe', 'dist\\bleachbit_console.exe')
+    sign_files(('dist\\bleachbit.exe', 'dist\\bleachbit_console.exe'))
 
     assert_execute_console()
 
