@@ -133,7 +133,7 @@ class CleanerML:
                 exc_msg = _(
                     "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option XML={option_xml}")
                 logger.exception(exc_msg.format(
-                    cleaner_id=exc_dict, option_xml=option.toxml()))
+                    cleaner_id=self.cleaner.id, option_xml=option.toxml()))
         self.handle_cleaner_running(cleaner.getElementsByTagName('running'))
         self.handle_localizations(
             cleaner.getElementsByTagName('localizations'))
