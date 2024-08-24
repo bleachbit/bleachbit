@@ -644,7 +644,7 @@ def is_dir_empty(dirname):
     if hasattr(os, 'scandir'):
         if sys.version_info < (3, 6, 0):
                     # Python 3.5 added os.scandir() without context manager.
-            for _ in os.scandir(dirname):
+            for _i in os.scandir(dirname):
                 return False
         else:
             # Python 3.6 added the context manager.
@@ -835,7 +835,7 @@ def wipe_contents(path, truncate=True):
                     pass
             # translate exception to mark file to deletion in Command.py
             raise WindowsError(e.winerror, e.strerror)
-        except UnsupportedFileSystemError as e:
+        except UnsupportedFileSystemError:
             warnings.warn(
                 _('There was at least one file on a file system that does not support advanced overwriting.'), UserWarning)
             f = wipe_write()

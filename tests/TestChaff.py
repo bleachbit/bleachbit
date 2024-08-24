@@ -25,7 +25,6 @@ Test case for module Chaff
 
 import mock
 import os
-import unittest
 from tempfile import mkdtemp
 from shutil import rmtree
 

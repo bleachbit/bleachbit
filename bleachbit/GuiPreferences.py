@@ -32,8 +32,6 @@ from gi.repository import Gtk
 import logging
 import os
 
-if 'nt' == os.name:
-    from bleachbit import Windows
 if 'posix' == os.name:
     from bleachbit import Unix
 

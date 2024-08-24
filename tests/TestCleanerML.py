@@ -22,8 +22,19 @@
 Test cases for module CleanerML
 """
 
+import bleachbit
 from tests import common
-from bleachbit.CleanerML import *
+from bleachbit import Cleaner
+from bleachbit.CleanerML import (
+    CleanerML,
+    boolstr_to_bool,
+    create_pot,
+    list_cleanerml_files,
+    load_cleaners,
+    pot_fragment)
+
+import os
+import sys
 
 
 class CleanerMLTestCase(common.BleachbitTestCase):

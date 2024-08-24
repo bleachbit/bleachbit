@@ -22,7 +22,6 @@
 Common code for unit tests
 """
 
-import functools
 import os
 import shutil
 import sys

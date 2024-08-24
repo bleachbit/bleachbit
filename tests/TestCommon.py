@@ -23,7 +23,6 @@ Test case for Common
 """
 
 from tests import common
-import bleachbit
 
 import os
 

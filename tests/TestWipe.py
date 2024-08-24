@@ -31,7 +31,6 @@ import sys
 import tempfile
 import time
 import traceback
-import unittest
 
 logger = logging.getLogger('bleachbit')
 

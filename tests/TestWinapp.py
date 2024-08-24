@@ -371,7 +371,7 @@ class WinappTestCase(common.BleachbitTestCase):
             ('FileKey1=%(d)s|*.log;*.bak|RECURSE\nExcludeKey1=PATH|%(d)s|*.log',
              True, False, True),
             # exclude log without pipe delimiter
-            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\deleteme.log',
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\\deleteme.log',
              True, False, True),
             # exclude everything in folder
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.*',

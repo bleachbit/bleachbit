@@ -26,11 +26,11 @@ Test case for module Worker
 from tests import TestCleaner, common
 from bleachbit import CLI, Command
 from bleachbit.Action import ActionProvider
-from bleachbit.Worker import *
+from bleachbit.Cleaner import backends
+from bleachbit.Worker import Worker
 
 import os
 import tempfile
-import unittest
 
 
 class AccessDeniedActionAction(ActionProvider):

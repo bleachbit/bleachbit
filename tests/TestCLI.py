@@ -22,7 +22,11 @@
 Test case for module CLI
 """
 
-from bleachbit.CLI import *
+from bleachbit.CLI import (
+    args_to_operations,
+    args_to_operations_list,
+    cleaners_list,
+    preview_or_clean)
 from bleachbit.General import run_external
 from bleachbit import FileUtilities
 from tests import common
@@ -31,7 +35,6 @@ import copy
 import os
 import sys
 import tempfile
-import unittest
 
 
 class CLITestCase(common.BleachbitTestCase):
@@ -201,6 +204,7 @@ class CLITestCase(common.BleachbitTestCase):
                 args = [sys.executable, '-m',
                         'bleachbit.CLI', '--shred', filename]
                 output = run_external(args)
+                self.assertEqual(output[0], 0)
                 self.assertNotExists(filename)
 
     @common.skipUnlessWindows
@@ -209,5 +213,6 @@ class CLITestCase(common.BleachbitTestCase):
         args = [sys.executable, '-m',
                 'bleachbit.CLI', '--gui --exit']
         output = run_external(args)
+        self.assertEqual(output[0], 0)
         opened_windows_titles = common.get_opened_windows_titles()
         self.assertFalse('BleachBit' in opened_windows_titles)

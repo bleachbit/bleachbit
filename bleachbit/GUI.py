@@ -872,7 +872,7 @@ class GUI(Gtk.ApplicationWindow):
             # http://bleachbit.sourceforge.net/forum/074-fails-errors
             try:
                 import sqlite3
-            except ImportError as e:
+            except ImportError:
                 self.append_text(
                     _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
 
@@ -987,7 +987,7 @@ class GUI(Gtk.ApplicationWindow):
         treepath = Gtk.TreePath(0)
         try:
             __iter = model.get_iter(treepath)
-        except ValueError as e:
+        except ValueError:
             logger.warning(
                 'ValueError in get_iter() when updating file size for tree path=%s' % treepath)
             return

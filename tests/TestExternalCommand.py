@@ -27,7 +27,7 @@ Test case for application level functions
 import os
 import sys
 import subprocess
-from unittest import mock, SkipTest
+from unittest import mock
 
 try:
     import gi

@@ -60,7 +60,7 @@ if 'win32' == sys.platform:
     import win32process
     import win32security
 
-    from ctypes import windll, c_ulong, c_buffer, byref, sizeof
+    from ctypes import windll, byref
     from win32com.shell import shell, shellcon
 
     psapi = windll.psapi
@@ -636,7 +636,7 @@ def symlink_or_copy(src, dst):
     try:
         os.symlink(src, dst)
         logger.debug('linked %s to %s', src, dst)
-    except (PermissionError, OSError) as e:
+    except (PermissionError, OSError):
         shutil.copy(src, dst)
         logger.debug('copied %s to %s', src, dst)
 
