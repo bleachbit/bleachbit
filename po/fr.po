@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2024-05-12 10:44+0000\n"
-"Last-Translator: NicolaeFericitu <cni@disroot.org>\n"
+"PO-Revision-Date: 2024-08-23 22:09+0000\n"
+"Last-Translator: Mqlx <vncrlecgubhp@rel.eliott.cc>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/bleachbit/main/fr/"
 ">\n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.5.4\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
@@ -1694,10 +1694,8 @@ msgid "You must select an operation"
 msgstr "Vous devez sélectionner une opération"
 
 #: ../bleachbit/GUI.py:771
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Erreurs : %d"
+msgstr "Erreur"
 
 #: ../bleachbit/GUI.py:789 ../bleachbit/GUI.py:805
 msgid "Done."
@@ -1985,7 +1983,6 @@ msgid "Imported from winapp2.ini"
 msgstr "Importé depuis le fichier winapp2.ini"
 
 #: ../bleachbit/Windows.py:141
-#, fuzzy
 msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
