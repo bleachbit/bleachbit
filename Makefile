@@ -81,13 +81,13 @@ install:
 
 lint:
 	[ -x "$$(command -v pychecker)" ] ||  echo "WARNING: pychecker not found"
-	[ -x "$$(command -v pyflakes)" ] ||  echo "WARNING: pyflakes not found"
+	[ -x "$$(command -v pyflakes3)" ] ||  echo "WARNING: pyflakes3 not found"
 	[ -x "$$(command -v pylint)" ] ||  echo "WARNING: pylint not found"
 	for f in *py */*py; \
 	do \
 		echo "$$f"; \
 		( [ -x "$$(command -v pychecker)" ] && pyflakes "$$f" > "$$f".pychecker.log ); \
-		( [ -x "$$(command -v pyflakes)" ] && pyflakes "$$f" > "$$f".pyflakes.log ); \
+		( [ -x "$$(command -v pyflakes3)" ] && pyflakes3 "$$f" > "$$f".pyflakes.log ); \
 		( [ -x "$$(command -v pylint)" ] && pylint "$$f" > "$$f".pylint.log ); \
 	done; \
 	exit 0
