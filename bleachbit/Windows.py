@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-"""
+r"""
 Functionality specific to Microsoft Windows
 
 The Windows Registry terminology can be confusing. Take for example
@@ -138,7 +138,7 @@ def check_dll_hijacking(window=None):
     if not (os.path.exists(r'c:\python3.dll') or os.path.exists(r'c:\dlls\python3.dll')):
         return False
     # This workaround will be removed when the Python 3.10 branch is ready.
-    msg = _('The file python3.dll was found in c:\ or c:\dlls, which indicates a possible attempt at DLL search-order hijacking.')
+    msg = _(r'The file python3.dll was found in c:\ or c:\dlls, which indicates a possible attempt at DLL search-order hijacking.')
     logger.error(msg)
     if window:
         from bleachbit.GuiBasic import message_dialog
@@ -154,7 +154,7 @@ def check_dll_hijacking(window=None):
 
 def cleanup_nonce():
     """On exit, clean up GTK junk files"""
-    for fn in glob.glob(os.path.expandvars('%TEMP%\gdbus-nonce-file-*')):
+    for fn in glob.glob(os.path.expandvars(r'%TEMP%\gdbus-nonce-file-*')):
         logger.debug('cleaning GTK nonce file: %s', fn)
         FileUtilities.delete(fn)
 
