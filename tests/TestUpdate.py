@@ -26,7 +26,7 @@ Test case for module Update
 from tests import common
 import bleachbit
 from bleachbit import logger
-from bleachbit.Update import check_updates, get_ip_for_url, update_winapp2, user_agent
+from bleachbit.Update import check_updates, get_gtk_version, get_ip_for_url, update_winapp2, user_agent
 import bleachbit.Update
 
 import os
@@ -92,6 +92,12 @@ class UpdateTestCase(common.BleachbitTestCase):
                 check_updates(True, False, None, None),
                 ())
         bleachbit.update_check_url = preserve_url
+
+    def test_get_gtk_version(self):
+        """Unit test for get_gtk_version()"""
+        gtk_ver = get_gtk_version()
+        self.assertIsInstance(gtk_ver, str)
+        self.assertRegex(gtk_ver, r"^\d+\.\d+\.\d+$")
 
     def test_get_ip_for_url(self):
         """Unit test for get_ip_for_url()"""
