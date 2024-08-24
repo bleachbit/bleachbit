@@ -159,7 +159,7 @@ def sign_files(filenames):
         cmd = 'CodeSign.bat %s' % filenames_str
         run_cmd(cmd)
     else:
-        logger.warning('CodeSign.bat not available for %s' % filenames_str))
+        logger.warning('CodeSign.bat not available for %s' % filenames_str)
 
 
 def get_dir_size(start_path='.'):
