@@ -211,10 +211,11 @@ class PreferencesDialog:
         vbox.pack_start(cb_debug, False, True, 0)
 
         # KDE context menu shred option
-        cb_kde_shred_menu_option = Gtk.CheckButton(label=_("Add shred context menu option (KDE Plasma specific)"))
-        cb_kde_shred_menu_option.set_active(options.get("kde_shred_menu_option"))
-        cb_kde_shred_menu_option.connect('toggled', self.__toggle_callback, 'kde_shred_menu_option')
-        vbox.pack_start(cb_kde_shred_menu_option, False, True, 0)
+        if 'nt' != os.name:
+            cb_kde_shred_menu_option = Gtk.CheckButton(label=_("Add the shred context menu to KDE Plasma"))
+            cb_kde_shred_menu_option.set_active(options.get("kde_shred_menu_option"))
+            cb_kde_shred_menu_option.connect('toggled', self.__toggle_callback, 'kde_shred_menu_option')
+            vbox.pack_start(cb_kde_shred_menu_option, False, True, 0)
 
         return vbox
 
