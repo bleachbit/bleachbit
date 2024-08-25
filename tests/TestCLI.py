@@ -210,9 +210,12 @@ class CLITestCase(common.BleachbitTestCase):
     @common.skipUnlessWindows
     def test_gui_exit(self):
         """Unit test for --gui --exit, only for Windows"""
-        args = [sys.executable, '-m',
-                'bleachbit.CLI', '--gui --exit']
-        output = run_external(args)
-        self.assertEqual(output[0], 0)
+        args = (sys.executable, '-m',
+                'bleachbit.CLI', '--gui', '--exit')
+        (rc, _stdout, stderr) = run_external(args)
+        self.assertNotIn('no such option', stderr)
+        self.assertNotIn('Usage: CLI.py', stderr)
+        self.assertEqual(rc, 0)
+        # Is the application still running?
         opened_windows_titles = common.get_opened_windows_titles()
         self.assertFalse('BleachBit' in opened_windows_titles)
