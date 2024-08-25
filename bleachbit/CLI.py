@@ -41,26 +41,22 @@ class CliCallback:
     def __init__(self, quiet=False):
         self.quiet = quiet
 
-    def append_text(self, msg, tag=None):
+    def append_text(self, msg, _tag=None):
         """Write text to the terminal"""
         if not self.quiet:
             print(msg.strip('\n'))
 
     def update_progress_bar(self, status):
         """Not used"""
-        pass
 
     def update_total_size(self, size):
         """Not used"""
-        pass
 
     def update_item_size(self, op, opid, size):
         """Not used"""
-        pass
 
     def worker_done(self, worker, really_delete):
         """Not used"""
-        pass
 
 
 def cleaners_list():
@@ -94,7 +90,7 @@ def args_to_operations_list(preset, all_but_warning):
     args = []
     if not backends:
         list(register_cleaners())
-    assert(len(backends) > 1)
+    assert len(backends) > 1
     for key in sorted(backends):
         c_id = backends[key].get_id()
         for (o_id, _o_name) in backends[key].get_options():
@@ -194,7 +190,7 @@ def process_cmd_line():
 
     # some workaround for context menu added here
     # https://github.com/bleachbit/bleachbit/commit/b09625925149c98a6c79e278c35d5995e7526993
-    def expand_context_menu_option(option, opt, value, parser):
+    def expand_context_menu_option(_option, _opt, _value, parser):
         setattr(parser.values, 'gui', True)
         setattr(parser.values, 'exit', True)
     parser.add_option("--context-menu", action="callback", callback=expand_context_menu_option,

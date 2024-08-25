@@ -147,8 +147,7 @@ class Cleaner:
         """Return a warning as string."""
         if option_id in self.warnings:
             return self.warnings[option_id]
-        else:
-            return None
+        return None
 
     def is_running(self):
         """Return whether the program is currently running"""

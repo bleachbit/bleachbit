@@ -242,12 +242,11 @@ def download_url_to_fn(url, fn, on_error=None, max_retries=3, backoff_factor=0.5
             logger.exception(msg)
             do_error(msg2)
             return False
-        else:
-            if not response.status_code == 200:
-                logger.error(msg)
-                msg2 = 'Status code: %s' % response.status_code
-                do_error(msg2)
-                return False
+        if response.status_code != 200:
+            logger.error(msg)
+            msg2 = 'Status code: %s' % response.status_code
+            do_error(msg2)
+            return False
 
     with open(fn, 'wb') as f:
         f.write(content)

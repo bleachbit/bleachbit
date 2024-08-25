@@ -109,7 +109,7 @@ class CleanerML:
         elif platform.startswith('freebsd'):
             current_os = ('bsd', 'freebsd', 'unix')
         elif platform == 'win32':
-            current_os = ('windows')
+            current_os = ('windows',)
         else:
             raise RuntimeError('Unknown operating system: %s ' % sys.platform)
         # Compare current OS against required OS.
@@ -325,7 +325,7 @@ msgstr ""
 def create_pot():
     """Create a .pot for translation using gettext"""
 
-    f = open('../po/cleanerml.pot', 'w')
+    f = open('../po/cleanerml.pot', 'w', encoding='utf-8')
 
     for pathname in listdir('../cleaners'):
         if not pathname.lower().endswith(".xml"):
