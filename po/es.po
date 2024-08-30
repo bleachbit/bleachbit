@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-29 20:55-0600\n"
-"PO-Revision-Date: 2023-08-09 14:51+0000\n"
+"PO-Revision-Date: 2024-08-31 06:09+0000\n"
 "Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/bleachbit/main/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Launchpad-Export-Date: 2021-12-14 04:36+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -1462,11 +1462,8 @@ msgid "Show debug messages"
 msgstr "Mostrar los mensajes de depuración"
 
 #: ../bleachbit/GuiPreferences.py:215
-#, fuzzy
-#| msgid "Add shred context menu option (KDE Plasma specific)"
 msgid "Add the shred context menu to KDE Plasma"
-msgstr ""
-"Añadir una opción al menú contextual para destruir (específica de KDE Plasma)"
+msgstr "Añadir el menú contextual de Shred a KDE Plasma"
 
 #: ../bleachbit/GuiPreferences.py:227 ../bleachbit/GuiPreferences.py:357
 #: ../bleachbit/GuiPreferences.py:400 ../bleachbit/GUI.py:281
