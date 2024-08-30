@@ -8,16 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-29 10:23-0600\n"
-"PO-Revision-Date: 2021-10-21 14:43+0000\n"
-"Last-Translator: id:sicklylife <Unknown>\n"
-"Language-Team: Japanese <ja@li.org>\n"
+"PO-Revision-Date: 2024-08-30 01:09+0000\n"
+"Last-Translator: maboroshin <maboroshin@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/bleachbit/main/"
+"ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
-"X-Generator: Launchpad (build 5208e7f8f75eb1d093d03c455dcca20a57934b38)\n"
 
 #: ../cleaners\chromium.xml ../cleaners\google_chrome.xml
 #: ../cleaners\waterfox.xml ../cleaners\seamonkey.xml
@@ -843,8 +844,7 @@ msgid "Run external command: %s"
 msgstr "外部コマンドを実行: %s"
 
 #: ../bleachbit/Chaff.py:226
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
 msgstr "URL のダウンロードに失敗しました: %s"
 
@@ -1290,7 +1290,7 @@ msgstr "%s をウェブブラウザーで開きますか？"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:527
 msgid "Confirm"
-msgstr ""
+msgstr "確認"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1503,8 +1503,6 @@ msgid "Folder"
 msgstr "フォルダー"
 
 #: ../bleachbit/GuiPreferences.py:452
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
 msgstr "これらのパスは削除や変更はできません。"
 
@@ -1612,10 +1610,8 @@ msgid "You must select an operation"
 msgstr "操作を選択してください"
 
 #: ../bleachbit/GUI.py:771
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "エラー: %d"
+msgstr "エラー"
 
 #: ../bleachbit/GUI.py:789 ../bleachbit/GUI.py:805
 msgid "Done."
@@ -1664,6 +1660,8 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"Microsoft StoreにBleachBitの公式版はありません。https://www.bleachbit.org "
+"からいつでも無料で正規版を入手できます。"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1896,7 +1894,7 @@ msgstr ""
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "警告"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
