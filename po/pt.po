@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-29 20:55-0600\n"
-"PO-Revision-Date: 2023-08-09 14:51+0000\n"
-"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
+"PO-Revision-Date: 2024-09-03 20:09+0000\n"
+"Last-Translator: SC <larcansal@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/bleachbit/"
 "main/pt/>\n"
 "Language: pt\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 "X-Launchpad-Export-Date: 2021-07-06 03:44+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -56,7 +56,7 @@ msgstr "Cache"
 #: ../cleaners/brave.xml ../cleaners/safari.xml ../cleaners/opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Eliminar a cache da web, o que reduz o tempo de exibição das páginas "
+"Eliminar a cache da web, o que reduz o tempo de apresentação das páginas "
 "revisitadas"
 
 #: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
@@ -133,7 +133,8 @@ msgstr "Histórico"
 #: ../cleaners/opera.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr "Eliminar histórico dos sites visitados, descargas e miniaturas"
+msgstr ""
+"Eliminar histórico dos sites visitados, descargas e miniaturas de imagens"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
@@ -309,13 +310,13 @@ msgstr "Limpar ficheiros"
 #: ../cleaners/palemoon.xml ../cleaners/amule.xml ../cleaners/firefox.xml
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Backup files"
-msgstr "Ficheiros de backup"
+msgstr "Ficheiros de cópias de segurança"
 
 #: ../cleaners/windows_defender.xml ../cleaners/waterfox.xml
 #: ../cleaners/palemoon.xml ../cleaners/amule.xml ../cleaners/firefox.xml
 #: ../cleaners/vuze.xml ../cleaners/deepscan.xml
 msgid "Delete the backup files"
-msgstr "Limpar ficheiros de backup"
+msgstr "Limpar ficheiros de cópias de segurança"
 
 #: ../cleaners/windows_defender.xml ../cleaners/gpodder.xml
 #: ../cleaners/screenlets.xml ../cleaners/amule.xml ../cleaners/gftp.xml
@@ -480,7 +481,7 @@ msgstr "Limpar ficheiros"
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Crash reports"
-msgstr "Relatórios de erro"
+msgstr "Relatórios de falhas de sistema"
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
@@ -495,7 +496,9 @@ msgstr "Restaurar sessão"
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr "Carregar sessão inicial após o encerramento do navegador"
+msgstr ""
+"Carrega a sessão inicial após o encerramento do navegador ou em caso de "
+"falha de sistema"
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/konqueror.xml
@@ -709,7 +712,7 @@ msgstr "Programas de controlo remoto"
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
-msgstr "Miniaturas"
+msgstr "Miniaturas de imagens"
 
 #: ../cleaners/thumbnails.xml
 msgid "Icons for files on the system"
@@ -935,11 +938,11 @@ msgstr "Prefetch"
 
 #: ../bleachbit/Cleaner.py:314
 msgid "Recycle bin"
-msgstr "Reciclagem"
+msgstr "Reciclagem / lixo"
 
 #: ../bleachbit/Cleaner.py:314 ../bleachbit/Cleaner.py:599
 msgid "Empty the recycle bin"
-msgstr "Limpar reciclagem"
+msgstr "Limpar a reciclagem / lixo"
 
 #. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
 #. the uninstallers for software updates.
@@ -984,7 +987,7 @@ msgstr "Espaço livre em disco"
 #: ../bleachbit/Cleaner.py:338
 msgid "Overwrite free disk space to hide deleted files"
 msgstr ""
-"Escrever sobre o espaço livre em disco para ocultar os ficheiros apagados"
+"Escrever sobre o espaço livre em disco para ocultar os ficheiros eliminados"
 
 #: ../bleachbit/Cleaner.py:339
 msgid "This option is very slow."
@@ -1558,7 +1561,7 @@ msgid ""
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
 msgstr ""
 "Licença GNU General Public, versão 3 ou mais recente.\n"
-"Consute https://www.gnu.org/licenses/gpl-3.0.txt"
+"Consulte https://www.gnu.org/licenses/gpl-3.0.txt"
 
 #. TRANSLATORS: Maintain the names of translators here.
 #. Launchpad does this automatically for translations
@@ -1568,7 +1571,27 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Hugo Carvalho <hugokarvalho@hotmail.com>\n"
-"Sérgio Marques <smarquespt@gmail.com>"
+"Sérgio Marques <smarquespt@gmail.com>\n"
+"larcansal\n"
+"\n"
+"Contribuições anteriores no Launchpad:\n"
+"  Alexandre Fidalgo https://launchpad.net/~alexandremagnos15\n"
+"  Almufadado https://launchpad.net/~almufadado\n"
+"  Carlos Geadas https://launchpad.net/~carlosgeadas\n"
+"  DarkVenger https://launchpad.net/~darkvenger\n"
+"  Formatado https://launchpad.net/~form-atado\n"
+"  Gmood https://launchpad.net/~jaleixo70\n"
+"  Ivo Xavier https://launchpad.net/~ivoxavier\n"
+"  JL https://launchpad.net/~jl2414\n"
+"  Jon Amil https://launchpad.net/~amilgz\n"
+"  Nuno Machado https://launchpad.net/~nunomsmachado\n"
+"  Pedro Folha https://launchpad.net/~pedrovi\n"
+"  Pedro Silva https://launchpad.net/~pedrof-silva\n"
+"  Raphael de Paula Horta https://launchpad.net/~raphaelhorta\n"
+"  Sérgio Marques https://launchpad.net/~sergio+marques\n"
+"  asensio https://launchpad.net/~asensio\n"
+"  nglnx https://launchpad.net/~nglnx\n"
+"  paulo caldeira https://launchpad.net/~paulocaldeira"
 
 #: ../bleachbit/GUI.py:346
 msgid "System information"
@@ -1888,7 +1911,7 @@ msgid ""
 "possible attempt at DLL search-order hijacking."
 msgstr ""
 "O ficheiro python3.dll foi localizado em c:\\ ou c:\\dlls, o que indica uma "
-"possível tentativa de pirataria da ordem de pesquisa de DLL."
+"possível tentativa de sequestro (hijacking) da ordem de pesquisa da DLL."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
