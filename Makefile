@@ -43,6 +43,8 @@ install:
 	mkdir -p $(DESTDIR)$(bindir)
 	$(INSTALL_DATA) bleachbit.py $(DESTDIR)$(bindir)/bleachbit
 	chmod 0755 $(DESTDIR)$(bindir)/bleachbit
+	# Update the hardcoded /usr/share in bleachbit.py to match the datadir set by the user.
+	sed -i 's|/usr/share|$(datadir)|g' $(DESTDIR)$(bindir)/bleachbit
 
 	# application launcher
 	mkdir -p $(DESTDIR)$(datadir)/applications
