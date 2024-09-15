@@ -31,7 +31,7 @@
   <var name="base">
     <value os="windows">%LocalAppData%\Chromium\User Data</value>
     <value os="linux">$XDG_CONFIG_HOME/chromium</value>
-    <value os="linux">~/snap/common/chromium</value>
+    <value os="linux">~/snap/chromium/common/chromium</value>
     <value os="freebsd">$XDG_CONFIG_HOME/chromium</value>
     <value os="openbsd">$XDG_CONFIG_HOME/chromium</value>
   </var>
@@ -59,6 +59,7 @@
     <action command="json" search="file" path="$$base$$/Local State" address="StartupDNSPrefetchList"/>
     <!-- Linux-specific -->
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/chromium/"/>
+    <action command="delete" search="walk.files" path="$$profile$$/Cache"/>
     <!-- Windows-specific -->
     <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
     <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
