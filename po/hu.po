@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-29 20:55-0600\n"
-"PO-Revision-Date: 2024-09-03 20:09+0000\n"
+"PO-Revision-Date: 2024-09-26 12:21+0000\n"
 "Last-Translator: Ghost of Sparta <makesocialfoss32@keemail.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/bleachbit/main/"
 "hu/>\n"
@@ -56,7 +56,7 @@ msgstr "Gyorsítótár"
 #: ../cleaners/brave.xml ../cleaners/safari.xml ../cleaners/opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Web gyorsítótár törlése, amely csökkenti az újra meglátogatott oldalak "
+"Webes gyorsítótár törlése, amely csökkenti az újra meglátogatott oldalak "
 "megjelenítési idejét"
 
 #: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
@@ -409,13 +409,13 @@ msgstr "Parancsértelmező"
 #: ../cleaners/discord.xml ../cleaners/pidgin.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../cleaners/amsn.xml
 msgid "Chat client"
-msgstr "Chat kliens"
+msgstr "Csevegőkliens"
 
 #: ../cleaners/skype.xml ../cleaners/seamonkey.xml ../cleaners/emesene.xml
 #: ../cleaners/pidgin.xml ../cleaners/yahoo_messenger.xml ../cleaners/amsn.xml
 #: ../cleaners/hexchat.xml
 msgid "Chat logs"
-msgstr "Chat naplók"
+msgstr "Csevegési naplók"
 
 #: ../cleaners/skype.xml ../cleaners/seamonkey.xml ../cleaners/emesene.xml
 #: ../cleaners/pidgin.xml ../cleaners/yahoo_messenger.xml ../cleaners/amsn.xml
@@ -544,7 +544,7 @@ msgstr ""
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
-msgstr "Asztali widgetek"
+msgstr "Asztali felületi elemek"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
@@ -644,7 +644,7 @@ msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"Web gyorsítótár törlése, amely csökkenti az újra meglátogatott oldalak "
+"Webes gyorsítótár törlése, amely csökkenti az újra meglátogatott oldalak "
 "megjelenítési idejét. Ez a kedvenc GIF-eket is törli."
 
 #: ../cleaners/vim.xml
@@ -1381,7 +1381,7 @@ msgstr "Nyelvek"
 
 #: ../bleachbit/GuiPreferences.py:70
 msgid "Whitelist"
-msgstr "Fehérlista"
+msgstr "Engedélyezési lista"
 
 #: ../bleachbit/GuiPreferences.py:115
 msgid "Check periodically for software updates via the Internet"
@@ -1392,8 +1392,8 @@ msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
 msgstr ""
-"Ha elérhető egy újabb frissítés, megtekintheted a frissítés információit, "
-"ezután kézileg töltsd le a legfrissebb telepítőt és telepítsd a frissítést."
+"Ha elérhető egy újabb frissítés, megtekintheti a frissítés információit, "
+"ezután kézileg töltse le a legfrissebb telepítőt és telepítse a frissítést."
 
 #: ../bleachbit/GuiPreferences.py:127
 msgid "Check for new beta releases"
@@ -2028,7 +2028,7 @@ msgstr "_Szabad terület törlése"
 
 #: ../data/app-menu.ui:22
 msgid "_Make Chaff"
-msgstr "Á_ladatok létrehozása"
+msgstr "_Áladatok létrehozása"
 
 #: ../data/app-menu.ui:26
 msgid "S_hred Settings and Quit"
