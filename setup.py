@@ -269,10 +269,18 @@ def run_setup():
           long_description=APP_DESCRIPTION,
           author="Andrew Ziem",
           author_email="andrew@bleachbit.org",
-          download_url="https://www.bleachbit.org/download",
-          license="GPLv3",
           url=bleachbit.APP_URL,
-          platforms='Linux and Windows; Python v2.6 and 2.7; GTK v3.12+',
+          download_url="https://www.bleachbit.org/download",
+          classifiers=[
+              'Development Status :: 5 - Production/Stable',
+              'Programming Language :: Python',
+              'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+              'Operating System :: Microsoft :: Windows',
+              'Operating System :: POSIX :: Linux',
+          ],
+          license='GPLv3+',
+          py_requires='>=3.4',
+          platforms='Linux and Windows, Python v3.4+, GTK v3.12+',
           packages=['bleachbit', 'bleachbit.markovify'],
           **args)
 
