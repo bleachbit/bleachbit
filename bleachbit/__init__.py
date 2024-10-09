@@ -293,8 +293,6 @@ _p = pgettext
 base_url = "https://update.bleachbit.org"
 help_contents_url = "%s/help/%s" \
     % (base_url, APP_VERSION)
-release_notes_url = "%s/release-notes/%s" \
-    % (base_url, APP_VERSION)
 update_check_url = "%s/update/%s" % (base_url, APP_VERSION)
 
 # set up environment variables
