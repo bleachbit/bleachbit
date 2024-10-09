@@ -168,7 +168,7 @@ class Bleachbit(Gtk.Application):
         On Linux with GTK 3.24, this code is necessary but not sufficient for
         the menu to work. The headerbar code is also needed.
 
-        On Windows with GTK 3.18, this cde is sufficient for the menu to work.
+        On Windows with GTK 3.18, this code is sufficient for the menu to work.
         """
 
         builder = Gtk.Builder()
