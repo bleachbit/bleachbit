@@ -874,7 +874,7 @@ class GUI(Gtk.ApplicationWindow):
                 import sqlite3
             except ImportError:
                 self.append_text(
-                    _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
+                    _("There was an error loading the SQLite module; antivirus software may have blocked it."), 'error')
 
         # Show notice about admin privileges.
         if os.name == 'posix' and os.path.expanduser('~') == '/root':
