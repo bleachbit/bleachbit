@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-29 20:55-0600\n"
-"PO-Revision-Date: 2023-02-03 19:36+0000\n"
-"Last-Translator: Toni Estévez <toni.estevez@gmail.com>\n"
+"PO-Revision-Date: 2024-10-16 15:51+0000\n"
+"Last-Translator: Ricard Rodríguez <rcard@insicuri.net>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/bleachbit/main/"
 "ca/>\n"
 "Language: ca\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 "X-Launchpad-Export-Date: 2022-01-23 20:20+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -1301,7 +1301,7 @@ msgstr "Voleu obrir %s al navegador web?"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:528
 msgid "Confirm"
-msgstr ""
+msgstr "Confirma"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1452,11 +1452,8 @@ msgid "Show debug messages"
 msgstr "Mostra els missatges de depuració"
 
 #: ../bleachbit/GuiPreferences.py:215
-#, fuzzy
-#| msgid "Add shred context menu option (KDE Plasma specific)"
 msgid "Add the shred context menu to KDE Plasma"
-msgstr ""
-"Afegeix una opció al menú contextual per triturar (específica de KDE Plasma)"
+msgstr "Afegiu el menú contextual per triurar al KDE Plasma"
 
 #: ../bleachbit/GuiPreferences.py:227 ../bleachbit/GuiPreferences.py:357
 #: ../bleachbit/GuiPreferences.py:400 ../bleachbit/GUI.py:281
@@ -1627,10 +1624,8 @@ msgid "You must select an operation"
 msgstr "Heu de seleccionar una operació"
 
 #: ../bleachbit/GUI.py:772
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Errors: %d"
+msgstr "Error"
 
 #: ../bleachbit/GUI.py:790 ../bleachbit/GUI.py:806
 msgid "Done."
@@ -1918,7 +1913,7 @@ msgstr ""
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "Avís"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
