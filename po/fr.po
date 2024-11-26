@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-29 20:55-0600\n"
-"PO-Revision-Date: 2024-08-23 22:09+0000\n"
-"Last-Translator: Mqlx <vncrlecgubhp@rel.eliott.cc>\n"
+"PO-Revision-Date: 2024-11-27 16:00+0000\n"
+"Last-Translator: BlueTurtle <skayzmomo@hotmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/bleachbit/main/fr/"
 ">\n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -53,9 +53,11 @@ msgstr "Cache"
 #: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
 #: ../cleaners/epiphany.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/brave.xml ../cleaners/safari.xml ../cleaners/opera.xml
+#, fuzzy
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Vide le cache Web, ce qui réduit le temps d’affichage des pages revisitées"
+"Supprimez le cache web, ce qui réduit le temps d'affichage des pages "
+"revisitées"
 
 #: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
@@ -1475,12 +1477,8 @@ msgid "Show debug messages"
 msgstr "Afficher les messages de débogage"
 
 #: ../bleachbit/GuiPreferences.py:215
-#, fuzzy
-#| msgid "Add shred context menu option (KDE Plasma specific)"
 msgid "Add the shred context menu to KDE Plasma"
-msgstr ""
-"Ajout d'une option de menu contextuel « déchiqueter » (spécifique à KDE "
-"Plasma)"
+msgstr "Ajouter le menu contextuel de déchiquetage à KDE Plasma"
 
 #: ../bleachbit/GuiPreferences.py:227 ../bleachbit/GuiPreferences.py:357
 #: ../bleachbit/GuiPreferences.py:400 ../bleachbit/GUI.py:281
