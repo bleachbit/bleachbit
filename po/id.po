@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-29 20:55-0600\n"
-"PO-Revision-Date: 2024-05-16 23:24+0000\n"
-"Last-Translator: Nivalyx <drksky_light@yahoo.co.id>\n"
+"PO-Revision-Date: 2024-11-27 16:00+0000\n"
+"Last-Translator: Adrien N <adriennathaniel1999@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/bleachbit/"
 "main/id/>\n"
 "Language: id\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -48,7 +48,7 @@ msgstr "Peramban Web"
 #: ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:191
 #: ../bleachbit/Cleaner.py:276
 msgid "Cache"
-msgstr "Cache"
+msgstr "Tembolok"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/slack.xml
 #: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
@@ -56,8 +56,8 @@ msgstr "Cache"
 #: ../cleaners/brave.xml ../cleaners/safari.xml ../cleaners/opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Hapus cache web, yang mana mengurangi waktu untuk menampilkan halaman yang "
-"dikunjungi ulang"
+"Hapus tembolok web. Dapat mengurangi waktu penampilan halaman yang telah "
+"dikunjungi"
 
 #: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
@@ -68,7 +68,7 @@ msgstr ""
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml ../cleaners/liferea.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 msgid "Cookies"
-msgstr "Cookie"
+msgstr "Kuki"
 
 #: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
@@ -82,7 +82,7 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
-"Hapus cookie, yang mengandung informasi seperti preferensi situs web, "
+"Hapus kuki. Kuki mengandung informasi seperti preferensi situs web, "
 "autentikasi, dan identifikasi pelacakan"
 
 #. DOM=Document Object Model
@@ -100,7 +100,7 @@ msgstr "Penyimpanan DOM"
 #: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
 #: ../cleaners/opera.xml
 msgid "Delete HTML5 cookies"
-msgstr "Hapus cookie HTML5"
+msgstr "Hapus kuki HTML5"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
@@ -134,8 +134,8 @@ msgstr "Riwayat"
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
-"Hapus catatan yang meliputi situs yang telah dikunjungi, diunduh, dan gambar "
-"mini"
+"Hapus riwayat yang meliputi segala situs yang telah dikunjungi, berkas-"
+"berkas terunduh, dan keluku-keluku"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
@@ -152,8 +152,8 @@ msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr ""
-"Atur ulang riwayat penggunaan mesin pencari dan menghapus mesin pencari non-"
-"pabrik, beberapa yang di antaranya ditambahkan secara otomatis"
+"Atur ulang riwayat penggunaan mesin pencari dan hapus mesin pencari non-"
+"bawaan yang beberapa ditambahkan secara otomatis"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
@@ -168,12 +168,12 @@ msgstr "Hapus sesi saat ini dan sesi terakhir"
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
 msgid "Sync"
-msgstr "Sinkronisasi"
+msgstr "Penyinkronan"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
 msgid "Delete the sync data and sign out of the browser"
-msgstr "Hapus data disnkronisasi dan keluar dari peramban"
+msgstr "Hapus data penyinkronan dan keluar dari peramban"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
@@ -192,8 +192,8 @@ msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
-"Basis data nama pengguna dan kata sandi serta daftar situs yang seharusnya "
-"tidak menyimpan sandi"
+"Merupakan pangkalan data nama pengguna dan kata sandi serta daftar situs "
+"yang tidak menyimpan kata sandi"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
@@ -201,7 +201,7 @@ msgstr ""
 #: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
 #: ../cleaners/opera.xml
 msgid "This option will delete your saved passwords."
-msgstr "Opsi ini akan menghapus sandi Anda yang tersimpan."
+msgstr "Pilihan ini akan menghapus kata sandi yang tersimpan."
 
 #. TRANSLATORS: Vacuum is a verb.  The term is jargon
 #. from the SQLite database.  Microsoft Access uses
@@ -226,8 +226,8 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Bersihkan fragmentasi database untuk mengurangi ruang dan meningkatkan "
-"kecepatan tanpa menghapus data apapun"
+"Bersihkan fragmentasi pangkalan data untuk mengurangi ruang dan meningkatkan "
+"kecepatan tanpa menghapus data apa pun"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
@@ -241,7 +241,7 @@ msgstr "Preferensi situs"
 #: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
 #: ../cleaners/opera.xml
 msgid "Settings for individual sites"
-msgstr "Pengaturan untuk masing-masing situs"
+msgstr "Pengaturan masing-masing situs"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -281,7 +281,7 @@ msgstr "Penampil multimedia"
 #: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/amule.xml
 #: ../cleaners/gftp.xml ../cleaners/vuze.xml ../cleaners/smartftp.xml
 msgid "File transfer client"
-msgstr "Klien transfer berkas"
+msgstr "Klien pentransfer berkas"
 
 #: ../cleaners/filezilla.xml ../cleaners/paint.xml ../cleaners/winamp.xml
 #: ../cleaners/vlc.xml ../cleaners/adobe_reader.xml
@@ -294,7 +294,7 @@ msgstr "Terakhir digunakan"
 
 #: ../cleaners/windows_defender.xml
 msgid "Anti-virus"
-msgstr "Anti-virus"
+msgstr "Antivirus"
 
 #: ../cleaners/windows_defender.xml
 msgid "Quarantine"
@@ -357,15 +357,15 @@ msgstr "Hapus log"
 #: ../bleachbit/Cleaner.py:276 ../bleachbit/Cleaner.py:310
 #: ../bleachbit/Cleaner.py:312
 msgid "Delete the cache"
-msgstr "Hapus cache"
+msgstr "Hapus tembolok"
 
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
-msgstr "Podcast yang terunduh"
+msgstr "Siniar terunduh"
 
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr "Hapus podcast yang terunduh"
+msgstr "Hapus siniar terunduh"
 
 #: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/octave.xml
 msgid "Delete the command history"
@@ -379,7 +379,7 @@ msgstr "Permainan"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
-msgstr "Hapus daftar server-server permainan"
+msgstr "Hapus daftar peladen permainan"
 
 #: ../cleaners/yum.xml ../cleaners/apt.xml ../cleaners/dnf.xml
 msgid "Package manager"
@@ -429,7 +429,7 @@ msgstr "Penginstal"
 
 #: ../cleaners/skype.xml
 msgid "Delete cached patches and installers"
-msgstr "Hapus tambalan dan penginstal yang tersimpan"
+msgstr "Hapus tambalan dan penginstal yang ditembolokkan"
 
 #: ../cleaners/x11.xml
 msgid "Windowing system"
@@ -439,13 +439,13 @@ msgstr "Sistem windowing"
 #: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
 #: ../cleaners/beagle.xml
 msgid "Debug logs"
-msgstr "Log Debug"
+msgstr "Log Awakutu"
 
 #: ../cleaners/x11.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
 #: ../cleaners/beagle.xml ../cleaners/easytag.xml
 msgid "Delete the debug logs"
-msgstr "Hapus log debug"
+msgstr "Hapus log awakutu"
 
 #: ../cleaners/nautilus.xml ../cleaners/mc.xml ../cleaners/windows_explorer.xml
 msgid "File manager"
@@ -453,16 +453,16 @@ msgstr "Manajer berkas"
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
-msgstr "Folder yang telah dimodifikasi akan dipulihkan."
+msgstr "Folder yang telah dimodifikasi akan diatur ulang."
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
 msgid "Blocklists"
-msgstr "Daftar blokir"
+msgstr "Daftar blokiran"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
-msgstr "Daftar blokir akan memerlukan pembaruan agar bekerja."
+msgstr "Daftar blokiran memerlukan pemutakhiran agar dapat befungsi."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -470,11 +470,11 @@ msgstr "Torrent"
 
 #: ../cleaners/transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
-msgstr "Hapus torrent (hanya metadata tapi bukan berkas yang diuraikan)"
+msgstr "Hapus torrent (hanya metadatanya saja, bukan berkas yang diuraikan)"
 
 #: ../cleaners/transmission.xml ../cleaners/vuze.xml
 msgid "Statistics"
-msgstr "Statistik"
+msgstr "Statistika"
 
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py:309
 msgid "Delete the file"
@@ -482,7 +482,7 @@ msgstr "Hapus berkas"
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Crash reports"
-msgstr "Laporan crash"
+msgstr "Laporan kemogokan"
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
@@ -497,7 +497,7 @@ msgstr "Pemulihan sesi"
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Loads the initial session after the browser closes or crashes"
-msgstr "Muat sesi awal setelah peramban ditutup atau crash"
+msgstr "Muat sesi awal setelah peramban ditutup atau mogok"
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/konqueror.xml
@@ -508,7 +508,7 @@ msgstr "Riwayat URL"
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../cleaners/internet_explorer.xml
 msgid "List of visited web pages"
-msgstr "Daftar halaman web yang dikunjungi"
+msgstr "Daftar laman web yang dikunjungi"
 
 #: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
 msgid "Download history"
@@ -516,19 +516,19 @@ msgstr "Riwayat unduhan"
 
 #: ../cleaners/seamonkey.xml
 msgid "List of files downloaded"
-msgstr "Daftar file terunduh"
+msgstr "Daftar berkas terunduh"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
-msgstr "Hapus daftar halaman web yang dikunjungi"
+msgstr "Hapus daftar laman web yang dikunjungi"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr "Hapus cache avatar dan emotikon"
+msgstr "Hapus tembolok avatar dan emotikon"
 
 #: ../cleaners/thunderbird.xml ../cleaners/evolution.xml
 msgid "Email client"
-msgstr "Klien email"
+msgstr "Klien surel"
 
 #: ../cleaners/thunderbird.xml ../cleaners/recoll.xml ../cleaners/beagle.xml
 msgid "Index"
@@ -538,16 +538,15 @@ msgstr "Indeks"
 msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
-msgstr ""
-"Menghapus indeks akan mengatur ulang konfigurasi kolom dalam daftar pesan."
+msgstr "Menghapus indeks akan mengatur ulang konfigurasi kolom daftar pesan."
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
-msgstr "Widget untuk destop"
+msgstr "Gawit untuk destop"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
-msgstr "Hapus cookie, URL yang dikunjungi, dan riwayat pencarian"
+msgstr "Hapus kuki, URL yang dikunjungi, dan riwayat pencarian"
 
 #: ../cleaners/paint.xml ../cleaners/winamp.xml ../cleaners/vlc.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
@@ -585,12 +584,12 @@ msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "web sites"
 msgstr ""
-"Basis data URLs termasuk bookmark, favicons, dan riwayat situs yang telah "
-"dikunjungi"
+"Pangkalan data URL yang meliputi markah buku, favikon, dan riwayat situs "
+"yang telah dikunjungi"
 
 #: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
-msgstr "Opsi ini akan menghapus semua bookmark."
+msgstr "Pilihan ini akan menghapus semua markah buku."
 
 #: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
 #: ../bleachbit/Cleaner.py:196
@@ -625,15 +624,15 @@ msgstr "Pengarsipan memori"
 
 #: ../cleaners/rhythmbox.xml
 msgid "Database"
-msgstr "Database"
+msgstr "Pangkalan data"
 
 #: ../cleaners/rhythmbox.xml
 msgid ""
 "Delete the database, which contains information such as play count and last "
 "played"
 msgstr ""
-"Hapus database, yang memuat informasi seperti banyaknya dimainkan dan yang "
-"terakhir dimainkan"
+"Hapus pangkalan data yang memuat informasi seperti banyaknya media yang "
+"dimainkan serta media yang terakhir dimainkan"
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
@@ -644,8 +643,8 @@ msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"Hapus cache web, yang mana dapat mengurangi waktu untuk menampilkan halaman "
-"yang dikunjungi kembali. Ini juga menghapus GIF-GIF favorit."
+"Hapus tembolok web. Pilihan ini akan mengurangi waktu penampilan laman yang "
+"dikunjungi lagi. Pilihan ini juga akan menghapus berkas-berkas GIF favorit."
 
 #: ../cleaners/vim.xml
 msgid ""
@@ -660,7 +659,7 @@ msgstr "Pindai secara mendalam"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
-msgstr "Hapus semua berkas yang tersebar ke seluruh disk"
+msgstr "Hapus semua berkas yang tersebar pada seluruh diska"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -672,11 +671,11 @@ msgstr "Pilihan ini lambat."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
-msgstr "Berkas swap VIM di bawah profil pengguna"
+msgstr "Berkas tukar VIM di bawah profil pengguna"
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files across system"
-msgstr "Berkas swap VIM di seluruh sistem"
+msgstr "Berkas tukar VIM pada seluruh sistem"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -708,15 +707,15 @@ msgstr "Hapus sesi saat ini"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
-msgstr "Perangkat lunak remote kontrol"
+msgstr "Perangkat lunak kontrol jarak jauh"
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
-msgstr "Gambar mini"
+msgstr "Keluku"
 
 #: ../cleaners/thumbnails.xml
 msgid "Icons for files on the system"
-msgstr "Ikon untuk berkas di dalam sistem"
+msgstr "Ikon untuk berkas pada sistem"
 
 #: ../cleaners/zoom.xml
 msgid "Recordings"
@@ -730,23 +729,25 @@ msgstr "Hapus rekaman-rekaman audio dan video"
 msgid ""
 "This option will reset pinned locations in Quick Access to their defaults."
 msgstr ""
-"Pilihan ini akan mereset lokasi tersemat pada Akses Cepat menjadi default."
+"Pilihan ini akan mengatur ulang lokasi tersemat pada Akses Cepat menjadi "
+"pilihan bawaan."
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
-msgstr "Shellbags"
+msgstr "Shellbag"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
-msgstr "Hapus tanggal penggunaan, posisi jendela, dan data lain untuk folder"
+msgstr ""
+"Hapus tanggal penggunaan, posisi jendela, dan data-data lain untuk folder"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will reset the position of desktop icons."
-msgstr "Ini akan memulihkan posisi ikon desktop."
+msgstr "Tindakan ini akan memulihkan posisi ikon desktop."
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
-msgstr "Ini akan memulai ulang Windows Explorer."
+msgstr "Tindakan ini akan memulai ulang Windows Explorer."
 
 #: ../cleaners/dnf.xml
 msgid "Remove packages that were formerly dependencies"
@@ -757,7 +758,7 @@ msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
 msgstr ""
-"Melihat ulang secara hati-hati daftar paket yang akan dihapus dengan "
+"Tinjau ulang secara hati-hati daftar paket yang akan dihapus dengan "
 "menjalankan \"dnf list autoremove\"."
 
 #: ../cleaners/recoll.xml ../cleaners/beagle.xml
@@ -767,7 +768,8 @@ msgstr "Alat pencarian"
 #: ../cleaners/recoll.xml
 msgid "Delete the search index, a database of words and the files they contain"
 msgstr ""
-"Hapus indeks pencarian, basis data kata dan berkas-berkas yang ada isinya"
+"Hapus indeks pencarian (merupakan pangkalan data perkataan dan berkas-berkas "
+"di dalamnya)"
 
 #: ../cleaners/gimp.xml
 msgid "Graphics editor"
@@ -776,11 +778,11 @@ msgstr "Penyunting Grafis"
 #. This software edits metadata tags, such as title and artist, in audio files
 #: ../cleaners/easytag.xml
 msgid "Audio files tagger"
-msgstr "Pengetag berkas-berkas audio"
+msgstr "Penanda berkas-berkas audio"
 
 #: ../cleaners/hexchat.xml
 msgid "IRC client formerly known as XChat"
-msgstr "Klien IRC yang tadinya dikenal sebagai XChat"
+msgstr "Klien IRC yang sebelumnya dikenal sebagai XChat"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
@@ -788,14 +790,14 @@ msgstr "Pembersih berkas yang tidak diperlukan"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Free space and maintain privacy"
-msgstr "Bersihkan ruang dan perbaiki privasi"
+msgstr "Bersihkan ruang dan pertahankan privasi"
 
 #. TRANSLATORS: Multi-value variables are explained in the online documentation.
 #. Basically, they are like an environment variable, but each multi-value variable
 #. can have multiple values. They're a way to make CleanerML files more concise.
 #: ../bleachbit/Action.py:150
 msgid "Deep scan does not support multi-value variable."
-msgstr "Pindai mendalam tidak mendukung variabel multi-nilai."
+msgstr "Pemindaian secara mendalam tidak mendukung variabel multinilai."
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
@@ -841,7 +843,7 @@ msgstr "Jalankan perintah eksternal: %s"
 #: ../bleachbit/Chaff.py:225
 #, python-format
 msgid "Downloading URL failed: %s"
-msgstr "Gagal mengunduh url: %s"
+msgstr "Gagal mengunduh URL: %s"
 
 #: ../bleachbit/CleanerML.py:134
 #, python-brace-format
@@ -849,13 +851,13 @@ msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 msgstr ""
-"Kesalahan di handle_cleaner_option() untuk cleaner id = {cleaner_id}, option "
-"XML={option_xml}"
+"Galat pada handle_cleaner_option() untuk id pembersih = {cleaner_id}, XML "
+"pilihan={option_xml}"
 
 #: ../bleachbit/CleanerML.py:275
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr "Mengabaikan pembersih karena dapat ditulis: %s"
+msgstr "Abaikan pembersih karena dapat ditulis: %s"
 
 #: ../bleachbit/CleanerML.py:294 ../bleachbit/CleanerML.py:339
 #, python-format
@@ -869,7 +871,7 @@ msgstr "Gagal membaca pembersih: %s"
 #, python-format
 msgid "Cleaner is not usable on this OS because it has no actions: %s"
 msgstr ""
-"Pembersih tidak dapat digunakan pada OS ini karena tidak memiliki aksi: %s"
+"Pembersih tidak dapat digunakan pada OS ini karena tidak ada tindakan: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -884,7 +886,7 @@ msgstr "Berkas desktop yang rusak"
 
 #: ../bleachbit/Cleaner.py:275
 msgid "Delete broken application menu entries and file associations"
-msgstr "Hapus entri menu aplikasi yang rusak dan asosiasi berkas"
+msgstr "Hapus entri menu aplikasi yang rusak dan perhubungan-perhubungan berkas"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
@@ -898,7 +900,7 @@ msgstr "Hapus berkas bahasa yang tidak diinginkan"
 
 #: ../bleachbit/Cleaner.py:282
 msgid "Configure this option in the preferences."
-msgstr "Konfigurasikan opsi ini di preferensi."
+msgstr "Konfigurasikan pilihan ini di preferensi."
 
 #: ../bleachbit/Cleaner.py:288
 msgid "Rotated logs"
@@ -1443,10 +1445,8 @@ msgid "Show debug messages"
 msgstr "Tampilkan pesan debug"
 
 #: ../bleachbit/GuiPreferences.py:215
-#, fuzzy
-#| msgid "Add shred context menu option (KDE Plasma specific)"
 msgid "Add the shred context menu to KDE Plasma"
-msgstr "Tambahkan opsi menu konteks shred (khusus KDE Plasma)"
+msgstr "Tambahkan menu-konteks shred (ke KDE Plasma)"
 
 #: ../bleachbit/GuiPreferences.py:227 ../bleachbit/GuiPreferences.py:357
 #: ../bleachbit/GuiPreferences.py:400 ../bleachbit/GUI.py:281
