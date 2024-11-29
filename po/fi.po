@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-29 20:55-0600\n"
-"PO-Revision-Date: 2024-05-16 23:24+0000\n"
+"PO-Revision-Date: 2024-11-30 14:44+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/bleachbit/main/"
 "fi/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 "X-Launchpad-Export-Date: 2021-12-02 04:08+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -809,7 +809,7 @@ msgstr "haku=\"walk.all\" käytetään tavallisen tiedostopolun=\"%s\" kanssa"
 #: ../bleachbit/Action.py:291
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr ""
+msgstr "path=\"%s\" ei ole laajamittainen lauseke"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Action.py:383 ../bleachbit/Action.py:396
@@ -844,6 +844,8 @@ msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 msgstr ""
+"Virhe handle_cleaner_option():ssa puhdistajalle id = {cleaner_id}, option "
+"XML={option_xml}"
 
 #: ../bleachbit/CleanerML.py:275
 #, python-format
@@ -1436,10 +1438,8 @@ msgid "Show debug messages"
 msgstr "Näytä vianjäljitysviestit"
 
 #: ../bleachbit/GuiPreferences.py:215
-#, fuzzy
-#| msgid "Add shred context menu option (KDE Plasma specific)"
 msgid "Add the shred context menu to KDE Plasma"
-msgstr "Lisää silppuamisen kontekstivalikkovaihtoehto (KDE Plasma -kohtainen)"
+msgstr "Lisää silppuamisen kontekstivalikko KDE Plasmaan"
 
 #: ../bleachbit/GuiPreferences.py:227 ../bleachbit/GuiPreferences.py:357
 #: ../bleachbit/GuiPreferences.py:400 ../bleachbit/GUI.py:281
