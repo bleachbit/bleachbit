@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-29 20:55-0600\n"
-"PO-Revision-Date: 2023-01-30 17:02+0000\n"
-"Last-Translator: Sanjay Karia <sanjaykaria@gmail.com>\n"
+"PO-Revision-Date: 2024-12-16 20:09+0000\n"
+"Last-Translator: Distant Prince <distantprinceca@gmail.com>\n"
 "Language-Team: English (Canada) <https://hosted.weblate.org/projects/"
 "bleachbit/main/en_CA/>\n"
 "Language: en_CA\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 5.9\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -836,10 +836,9 @@ msgid "Run external command: %s"
 msgstr "Run external command: %s"
 
 #: ../bleachbit/Chaff.py:225
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
-msgstr "Downloading url failed: %s"
+msgstr "Downloading URL failed: %s"
 
 #: ../bleachbit/CleanerML.py:134
 #, python-brace-format
@@ -1285,7 +1284,7 @@ msgstr "Open web browser to %s?"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:528
 msgid "Confirm"
-msgstr ""
+msgstr "Confirm"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1434,7 +1433,7 @@ msgstr "Show debug messages"
 
 #: ../bleachbit/GuiPreferences.py:215
 msgid "Add the shred context menu to KDE Plasma"
-msgstr ""
+msgstr "Add the shred context menu to KDE Plasma"
 
 #: ../bleachbit/GuiPreferences.py:227 ../bleachbit/GuiPreferences.py:357
 #: ../bleachbit/GuiPreferences.py:400 ../bleachbit/GUI.py:281
@@ -1492,10 +1491,8 @@ msgid "Folder"
 msgstr "Folder"
 
 #: ../bleachbit/GuiPreferences.py:451
-#, fuzzy
-#| msgid "These locations can be selected for deletion."
 msgid "These paths will not be deleted or modified."
-msgstr "These locations can be selected for deletion."
+msgstr "These paths will not be deleted or modified."
 
 #: ../bleachbit/GuiPreferences.py:454
 msgid "These locations can be selected for deletion."
@@ -1539,7 +1536,7 @@ msgstr "_OK"
 
 #: ../bleachbit/GUI.py:305
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Program to clean unnecessary files"
 
 #: ../bleachbit/GUI.py:316
 msgid ""
@@ -1599,10 +1596,8 @@ msgid "You must select an operation"
 msgstr "You must select an operation"
 
 #: ../bleachbit/GUI.py:772
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Errors: %d"
+msgstr "Error"
 
 #: ../bleachbit/GUI.py:790 ../bleachbit/GUI.py:806
 msgid "Done."
@@ -1648,6 +1643,9 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"There is no official version of BleachBit on the Microsoft Store. Get the "
+"genuine version at https://www.bleachbit.org where it is always free of "
+"charge."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1879,10 +1877,12 @@ msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
+"The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
+"possible attempt at DLL search-order hijacking."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "Warning"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
