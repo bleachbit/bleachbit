@@ -75,7 +75,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
         """Unit test for class DeepScan.  Preview real files."""
         path = os.path.expanduser('~')
         searches = {path: []}
-        for regex in ('^Makefile$', '~$', 'bak$', '^Thumbs.db$', '^Thumbs.db:encryptable$'):
+        for regex in ('^(Makefile|Thumbs.db(:encryptable)?|bak|~)$'):
             searches[path].append(Search(command='delete', regex=regex))
         ds = DeepScan(searches)
         for cmd in ds.scan():
