@@ -599,7 +599,23 @@ class GUI(Gtk.ApplicationWindow):
 
         GLib.idle_add(self.cb_refresh_operations)
 
+        # Close the application when user presses CTRL+Q or CTRL+W.
+        accel = Gtk.AccelGroup()
+        self.add_accel_group(accel)
+        key, mod = Gtk.accelerator_parse("<Control>Q")
+        accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
+        key, mod = Gtk.accelerator_parse("<Control>W")
+        accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
+
+    def on_quit(self, *args):
+        """Quit the application, used with CTRL+Q or CTRL+W"""
+        if Gtk.main_level() > 0:
+            Gtk.main_quit()
+        else:
+            self.destroy()
+
     def _show_splash_screen(self):
+        """Show the splash screen on Windows because startup may be slow"""
         if os.name != 'nt':
             return
 
