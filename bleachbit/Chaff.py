@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,6 @@ import os
 import random
 import tempfile
 from datetime import datetime
-import queue as _unused_module_Queue
 
 from bleachbit import _, bleachbit_exe_path
 from bleachbit import options_dir
@@ -89,7 +88,6 @@ RECIPIENTS = [
               'marshallcp@state.gov',
               'mchaleja@state.gov',
               'millscd@state.gov',
-              'millscd@state.gov',
               'muscatinel@state.gov',
               'nidestr@state.gov',
               'nulandvj@state.gov',
@@ -114,7 +112,6 @@ RECIPIENTS = [
               'toivnf@state.gov',
               'tommy_ross@reid.senate.gov',
               'valenzuelaaa@state.gov',
-              'valmorolj@state.gov',
               'valmorolj@state.gov',
               'vermarr@state.gov',
               'verveerms@state.gov',
@@ -166,7 +163,7 @@ def _get_random_datetime(min_year=2011, max_year=2012):
 
 def _get_random_content(content_model, number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_CLINTON):
     content = []
-    for _ in range(number_of_sentences):
+    for _i in range(number_of_sentences):
         content.append(content_model.make_sentence())
         content.append(random.choice([' ', ' ', '\n\n']))
     try:
@@ -243,12 +240,11 @@ def download_url_to_fn(url, fn, on_error=None, max_retries=3, backoff_factor=0.5
             logger.exception(msg)
             do_error(msg2)
             return False
-        else:
-            if not response.status_code == 200:
-                logger.error(msg)
-                msg2 = 'Status code: %s' % response.status_code
-                do_error(msg2)
-                return False
+        if response.status_code != 200:
+            logger.error(msg)
+            msg2 = 'Status code: %s' % response.status_code
+            do_error(msg2)
+            return False
 
     with open(fn, 'wb') as f:
         f.write(content)
@@ -308,7 +304,7 @@ def generate_emails(number_of_emails,
 
 def _generate_2600_file(model, number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_2600):
     content = []
-    for _ in range(number_of_sentences):
+    for _i in range(number_of_sentences):
         content.append(model.make_sentence())
         # The space is repeated to make paragraphs longer.
         content.append(random.choice([' ', ' ', '\n\n']))

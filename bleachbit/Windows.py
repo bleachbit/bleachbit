@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-"""
+r"""
 Functionality specific to Microsoft Windows
 
 The Windows Registry terminology can be confusing. Take for example
@@ -60,7 +60,7 @@ if 'win32' == sys.platform:
     import win32process
     import win32security
 
-    from ctypes import windll, c_ulong, c_buffer, byref, sizeof
+    from ctypes import windll, byref
     from win32com.shell import shell, shellcon
 
     psapi = windll.psapi
@@ -138,7 +138,7 @@ def check_dll_hijacking(window=None):
     if not (os.path.exists(r'c:\python3.dll') or os.path.exists(r'c:\dlls\python3.dll')):
         return False
     # This workaround will be removed when the Python 3.10 branch is ready.
-    msg = _('The file python3.dll was found in c:\ or c:\dlls, which indicates a possible attempt at DLL search-order hijacking.')
+    msg = _(r'The file python3.dll was found in c:\ or c:\dlls, which indicates a possible attempt at DLL search-order hijacking.')
     logger.error(msg)
     if window:
         from bleachbit.GuiBasic import message_dialog
@@ -154,7 +154,7 @@ def check_dll_hijacking(window=None):
 
 def cleanup_nonce():
     """On exit, clean up GTK junk files"""
-    for fn in glob.glob(os.path.expandvars('%TEMP%\gdbus-nonce-file-*')):
+    for fn in glob.glob(os.path.expandvars(r'%TEMP%\gdbus-nonce-file-*')):
         logger.debug('cleaning GTK nonce file: %s', fn)
         FileUtilities.delete(fn)
 
@@ -636,7 +636,7 @@ def symlink_or_copy(src, dst):
     try:
         os.symlink(src, dst)
         logger.debug('linked %s to %s', src, dst)
-    except (PermissionError, OSError) as e:
+    except (PermissionError, OSError):
         shutil.copy(src, dst)
         logger.debug('copied %s to %s', src, dst)
 

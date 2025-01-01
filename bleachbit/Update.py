@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -38,6 +38,23 @@ from urllib.error import URLError
 
 
 logger = logging.getLogger(__name__)
+
+
+def get_gtk_version():
+    """Return the version of GTK
+
+    If GTK is not available, returns None.
+    """
+
+    try:
+        import gi
+    except ModuleNotFoundError:
+        return none
+    gi.require_version('Gtk', '3.0')
+    from gi.repository import Gtk
+    gtk_version = (Gtk.get_major_version(),
+                   Gtk.get_minor_version(), Gtk.get_micro_version())
+    return '.'.join([str(x) for x in gtk_version])
 
 
 def update_winapp2(url, hash_expected, append_text, cb_success):
@@ -102,15 +119,14 @@ def user_agent():
     except:
         logger.exception('Exception when getting default locale')
 
-    try:
-        gi.require_version('Gtk', '3.0')
-        from gi.repository import Gtk
-        gtkver = '; GTK %s' % '.'.join([str(x) for x in Gtk.gtk_version])
-    except:
-        gtkver = ""
+    gtk_ver_raw = get_gtk_version()
+    if gtk_ver_raw:
+        gtk_ver = '; GTK %s' % gtk_ver_raw
+    else:
+        gtk_ver = ''
 
     agent = "BleachBit/%s (%s; %s; %s%s)" % (bleachbit.APP_VERSION,
-                                             __platform, __os, __locale, gtkver)
+                                             __platform, __os, __locale, gtk_ver)
     return agent
 
 

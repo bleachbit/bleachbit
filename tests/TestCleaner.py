@@ -2,7 +2,7 @@
 # coding=utf-8
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,11 +24,12 @@ Test case for module Cleaner
 """
 
 import logging
-import unittest
+import os
+import glob
 from xml.dom.minidom import parseString
 
 from bleachbit.Action import ActionProvider
-from bleachbit.Cleaner import *
+from bleachbit.Cleaner import Cleaner, backends, create_simple_cleaner, register_cleaners
 
 from tests import common
 
@@ -206,6 +207,7 @@ class CleanerTestCase(common.BleachbitTestCase):
     @common.skipUnlessDestructive
     def test_system_recent_documents(self):
         """Clean recent documents in GTK"""
+        import Gtk
         mgr = Gtk.RecentManager().get_default()
         fn = self.mkstemp(suffix='.txt')
         self.assertExists(fn)
@@ -260,7 +262,6 @@ class CleanerTestCase(common.BleachbitTestCase):
             os.makedirs(obexd_dir)
         obexd_fn = os.path.join(obexd_dir, 'bleachbit-test')
         common.touch_file(obexd_fn)
-        found_canary = False
         for cmd in backends['system'].get_commands('cache'):
             for _result in cmd.execute(really_delete=False):
                 self.assertNotEqual(cmd.path, obexd_fn)

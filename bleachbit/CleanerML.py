@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -109,7 +109,7 @@ class CleanerML:
         elif platform.startswith('freebsd'):
             current_os = ('bsd', 'freebsd', 'unix')
         elif platform == 'win32':
-            current_os = ('windows')
+            current_os = ('windows',)
         else:
             raise RuntimeError('Unknown operating system: %s ' % sys.platform)
         # Compare current OS against required OS.
@@ -133,7 +133,7 @@ class CleanerML:
                 exc_msg = _(
                     "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option XML={option_xml}")
                 logger.exception(exc_msg.format(
-                    cleaner_id=exc_dict, option_xml=option.toxml()))
+                    cleaner_id=self.cleaner.id, option_xml=option.toxml()))
         self.handle_cleaner_running(cleaner.getElementsByTagName('running'))
         self.handle_localizations(
             cleaner.getElementsByTagName('localizations'))
@@ -325,7 +325,7 @@ msgstr ""
 def create_pot():
     """Create a .pot for translation using gettext"""
 
-    f = open('../po/cleanerml.pot', 'w')
+    f = open('../po/cleanerml.pot', 'w', encoding='utf-8')
 
     for pathname in listdir('../cleaners'):
         if not pathname.lower().endswith(".xml"):

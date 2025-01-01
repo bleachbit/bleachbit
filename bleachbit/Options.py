@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -124,7 +124,7 @@ class Options:
             return
         for option in self.config.options('hashpath'):
             pathname = option
-            if 'nt' == os.name and re.search('^[a-z]\\\\', option):
+            if 'nt' == os.name and re.search(r'^[a-z]\\', option):
                 # restore colon lost because ConfigParser treats colon special
                 # in keys
                 pathname = pathname[0] + ':' + pathname[1:]

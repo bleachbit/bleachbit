@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ Test case for module Update
 from tests import common
 import bleachbit
 from bleachbit import logger
-from bleachbit.Update import check_updates, get_ip_for_url, update_winapp2, user_agent
+from bleachbit.Update import check_updates, get_gtk_version, get_ip_for_url, update_winapp2, user_agent
 import bleachbit.Update
 
 import os
@@ -93,15 +93,21 @@ class UpdateTestCase(common.BleachbitTestCase):
                 ())
         bleachbit.update_check_url = preserve_url
 
+    def test_get_gtk_version(self):
+        """Unit test for get_gtk_version()"""
+        gtk_ver = get_gtk_version()
+        self.assertIsInstance(gtk_ver, str)
+        self.assertRegex(gtk_ver, r"^\d+\.\d+\.\d+$")
+
     def test_get_ip_for_url(self):
         """Unit test for get_ip_for_url()"""
         for good_url in ('https://www.example.com', bleachbit.update_check_url):
             ip_str = get_ip_for_url(good_url)
             import ipaddress
             ip = ipaddress.ip_address(ip_str)
-        for bad_url in (None, '', 'https://invalid.com'):
+        for bad_url in (None, '', 'https://test.invalid'):
             ret = get_ip_for_url(bad_url)
-            self.assertEqual(ret[0], '(')
+            self.assertEqual(ret[0], '(', 'get_ip_for_url({})={}'.format(bad_url,ret))
 
     def test_update_url(self):
         """Check connection to the update URL"""

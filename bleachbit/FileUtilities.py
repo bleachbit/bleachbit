@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -297,7 +297,7 @@ def clean_json(path, target):
     targets = target.split('/')
 
     # read file to parser
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(path, 'r', encoding='utf-8-sig') as f:
         js = json.load(f)
 
     # change file
@@ -644,7 +644,7 @@ def is_dir_empty(dirname):
     if hasattr(os, 'scandir'):
         if sys.version_info < (3, 6, 0):
                     # Python 3.5 added os.scandir() without context manager.
-            for _ in os.scandir(dirname):
+            for _i in os.scandir(dirname):
                 return False
         else:
             # Python 3.6 added the context manager.
@@ -835,7 +835,7 @@ def wipe_contents(path, truncate=True):
                     pass
             # translate exception to mark file to deletion in Command.py
             raise WindowsError(e.winerror, e.strerror)
-        except UnsupportedFileSystemError as e:
+        except UnsupportedFileSystemError:
             warnings.warn(
                 _('There was at least one file on a file system that does not support advanced overwriting.'), UserWarning)
             f = wipe_write()

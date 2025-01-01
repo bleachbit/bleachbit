@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -26,11 +26,11 @@ Test case for module Worker
 from tests import TestCleaner, common
 from bleachbit import CLI, Command
 from bleachbit.Action import ActionProvider
-from bleachbit.Worker import *
+from bleachbit.Cleaner import backends
+from bleachbit.Worker import Worker
 
 import os
 import tempfile
-import unittest
 
 
 class AccessDeniedActionAction(ActionProvider):

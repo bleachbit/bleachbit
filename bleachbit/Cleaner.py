@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -39,7 +39,7 @@ warnings.simplefilter("ignore", Warning)
 try:
     from bleachbit.GuiBasic import Gtk, Gdk
     HAVE_GTK = Gdk.get_default_root_window() is not None
-except (ImportError, RuntimeError, ValueError) as e:
+except (ImportError, RuntimeError, ValueError):
     # ImportError happens when GTK is not installed.
     # RuntimeError can happen when X is not available (e.g., cron, ssh).
     # ValueError seen on BleachBit 3.0 with GTK 3 (GitHub issue 685)
@@ -147,8 +147,7 @@ class Cleaner:
         """Return a warning as string."""
         if option_id in self.warnings:
             return self.warnings[option_id]
-        else:
-            return None
+        return None
 
     def is_running(self):
         """Return whether the program is currently running"""
@@ -399,7 +398,7 @@ class System(Cleaner):
                 '$ALLUSERSPROFILE\\Application Data\\Microsoft\\Dr Watson\\*.log',
                 '$ALLUSERSPROFILE\\Application Data\\Microsoft\\Dr Watson\\user.dmp',
                 '$LocalAppData\\Microsoft\\Windows\\WER\\ReportArchive\\*\\*',
-                '$LocalAppData\\Microsoft\\Windows\WER\\ReportQueue\\*\\*',
+                '$LocalAppData\\Microsoft\\Windows\\WER\\ReportQueue\\*\\*',
                 '$programdata\\Microsoft\\Windows\\WER\\ReportArchive\\*\\*',
                 '$programdata\\Microsoft\\Windows\\WER\\ReportQueue\\*\\*',
                 '$localappdata\\Microsoft\\Internet Explorer\\brndlog.bak',
@@ -416,7 +415,7 @@ class System(Cleaner):
                 '$windir\\Debug\\UserMode\\*.log',
                 '$windir\\Debug\\UserMode\\ChkAcc.bak',
                 '$windir\\Debug\\UserMode\\userenv.bak',
-                '$windir\\Microsoft.NET\Framework\*\*.log',
+                '$windir\\Microsoft.NET\\Framework\\*\\*.log',
                 '$windir\\pchealth\\helpctr\\Logs\\hcupdate.log',
                 '$windir\\security\\logs\\*.log',
                 '$windir\\security\\logs\\*.old',
@@ -429,7 +428,7 @@ class System(Cleaner):
                 '$windir\\system32\\LogFiles\\Firewall\\pfirewall.log*',
                 '$windir\\system32\\LogFiles\\Scm\\SCM.EVM*',
                 '$windir\\system32\\LogFiles\\WMI\\Terminal*.etl',
-                '$windir\\system32\\LogFiles\\WMI\\RTBackup\EtwRT.*etl',
+                '$windir\\system32\\LogFiles\\WMI\\RTBackup\\EtwRT.*etl',
                 '$windir\\system32\\wbem\\Logs\\*.lo_',
                 '$windir\\system32\\wbem\\Logs\\*.log', )
 

@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -205,7 +205,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         configxml = '<path directoryregex="^.*$">' \
                     '  <path directoryregex="^(locale|dummyfiles)$">' \
                     '    <path location="." filter="*" />' \
-                    '    <regexfilter postfix="\.txt" />' \
+                    r'    <regexfilter postfix="\.txt" />' \
                     '  </path>' \
                     '</path>'
         from xml.dom.minidom import parseString

@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -88,12 +88,12 @@ class Delete:
                 # WindowsError: [Error 32] The process cannot access the file because it is being
                 # used by another process: 'C:\\Documents and
                 # Settings\\username\\Cookies\\index.dat'
-                if 32 != e.winerror and 5 != e.winerror:
+                if e.winerror not in (5, 32):
                     raise
                 try:
                     bleachbit.Windows.delete_locked_file(self.path)
                 except:
-                    raise
+                    logger.exception('exception when deleting locked file %s', self.path)
                 else:
                     if self.shred:
                         import warnings
@@ -124,8 +124,7 @@ class Function:
     def __str__(self):
         if self.path:
             return 'Function: %s: %s' % (self.label, self.path)
-        else:
-            return 'Function: %s' % (self.label)
+        return 'Function: %s' % (self.label)
 
     def execute(self, really_delete):
 
@@ -288,7 +287,7 @@ class Truncate(Delete):
             'path': self.path,
             'size': FileUtilities.getsize(self.path)}
         if really_delete:
-            with open(self.path, 'w') as f:
+            with open(self.path, 'w', encoding='ascii') as f:
                 f.truncate(0)
         yield ret
 

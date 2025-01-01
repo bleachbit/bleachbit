@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -168,7 +168,7 @@ class Bleachbit(Gtk.Application):
         On Linux with GTK 3.24, this code is necessary but not sufficient for
         the menu to work. The headerbar code is also needed.
 
-        On Windows with GTK 3.18, this cde is sufficient for the menu to work.
+        On Windows with GTK 3.18, this code is sufficient for the menu to work.
         """
 
         builder = Gtk.Builder()
@@ -303,7 +303,7 @@ class Bleachbit(Gtk.Application):
 
     def get_about_dialog(self):
         dialog = Gtk.AboutDialog(comments=_("Program to clean unnecessary files"),
-                                 copyright='Copyright (C) 2008-2023 Andrew Ziem',
+                                 copyright='Copyright (C) 2008-2024 Andrew Ziem',
                                  program_name=APP_NAME,
                                  version=bleachbit.APP_VERSION,
                                  website=bleachbit.APP_URL,
@@ -599,7 +599,23 @@ class GUI(Gtk.ApplicationWindow):
 
         GLib.idle_add(self.cb_refresh_operations)
 
+        # Close the application when user presses CTRL+Q or CTRL+W.
+        accel = Gtk.AccelGroup()
+        self.add_accel_group(accel)
+        key, mod = Gtk.accelerator_parse("<Control>Q")
+        accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
+        key, mod = Gtk.accelerator_parse("<Control>W")
+        accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
+
+    def on_quit(self, *args):
+        """Quit the application, used with CTRL+Q or CTRL+W"""
+        if Gtk.main_level() > 0:
+            Gtk.main_quit()
+        else:
+            self.destroy()
+
     def _show_splash_screen(self):
+        """Show the splash screen on Windows because startup may be slow"""
         if os.name != 'nt':
             return
 
@@ -872,9 +888,9 @@ class GUI(Gtk.ApplicationWindow):
             # http://bleachbit.sourceforge.net/forum/074-fails-errors
             try:
                 import sqlite3
-            except ImportError as e:
+            except ImportError:
                 self.append_text(
-                    _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
+                    _("There was an error loading the SQLite module; antivirus software may have blocked it."), 'error')
 
         # Show notice about admin privileges.
         if os.name == 'posix' and os.path.expanduser('~') == '/root':
@@ -987,7 +1003,7 @@ class GUI(Gtk.ApplicationWindow):
         treepath = Gtk.TreePath(0)
         try:
             __iter = model.get_iter(treepath)
-        except ValueError as e:
+        except ValueError:
             logger.warning(
                 'ValueError in get_iter() when updating file size for tree path=%s' % treepath)
             return

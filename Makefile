@@ -1,4 +1,4 @@
-# Copyright (C) 2008-2023 Andrew Ziem.  All rights reserved.
+# Copyright (C) 2008-2024 Andrew Ziem.  All rights reserved.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 # This is free software: You are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
@@ -34,7 +34,7 @@ clean:
 	@rm -vf MANIFEST # created by setup.py
 	make -C po clean
 	@rm -vrf locale
-	@rm -vrf {*/,./}*.{pychecker,pylint,pyflakes}.log
+	@rm -vrf {*/,./}*.{pylint,pyflakes}.log
 	@rm -vrf windows/BleachBit-*-setup*.{exe,zip}
 	@rm -vrf htmlcov .coverage # code coverage reports
 
@@ -80,14 +80,12 @@ install:
 	$(INSTALL_DATA) org.bleachbit.policy $(DESTDIR)$(datadir)/polkit-1/actions/
 
 lint:
-	[ -x "$$(command -v pychecker)" ] ||  echo "WARNING: pychecker not found"
-	[ -x "$$(command -v pyflakes)" ] ||  echo "WARNING: pyflakes not found"
+	[ -x "$$(command -v pyflakes3)" ] ||  echo "WARNING: pyflakes3 not found"
 	[ -x "$$(command -v pylint)" ] ||  echo "WARNING: pylint not found"
 	for f in *py */*py; \
 	do \
 		echo "$$f"; \
-		( [ -x "$$(command -v pychecker)" ] && pyflakes "$$f" > "$$f".pychecker.log ); \
-		( [ -x "$$(command -v pyflakes)" ] && pyflakes "$$f" > "$$f".pyflakes.log ); \
+		( [ -x "$$(command -v pyflakes3)" ] && pyflakes3 "$$f" > "$$f".pyflakes.log ); \
 		( [ -x "$$(command -v pylint)" ] && pylint "$$f" > "$$f".pylint.log ); \
 	done; \
 	exit 0

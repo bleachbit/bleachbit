@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,11 @@
 Test case for module CLI
 """
 
-from bleachbit.CLI import *
+from bleachbit.CLI import (
+    args_to_operations,
+    args_to_operations_list,
+    cleaners_list,
+    preview_or_clean)
 from bleachbit.General import run_external
 from bleachbit import FileUtilities
 from tests import common
@@ -31,7 +35,6 @@ import copy
 import os
 import sys
 import tempfile
-import unittest
 
 
 class CLITestCase(common.BleachbitTestCase):
@@ -201,13 +204,18 @@ class CLITestCase(common.BleachbitTestCase):
                 args = [sys.executable, '-m',
                         'bleachbit.CLI', '--shred', filename]
                 output = run_external(args)
+                self.assertEqual(output[0], 0)
                 self.assertNotExists(filename)
 
     @common.skipUnlessWindows
     def test_gui_exit(self):
         """Unit test for --gui --exit, only for Windows"""
-        args = [sys.executable, '-m',
-                'bleachbit.CLI', '--gui --exit']
-        output = run_external(args)
+        args = (sys.executable, '-m',
+                'bleachbit.CLI', '--gui', '--exit')
+        (rc, _stdout, stderr) = run_external(args)
+        self.assertNotIn('no such option', stderr)
+        self.assertNotIn('Usage: CLI.py', stderr)
+        self.assertEqual(rc, 0)
+        # Is the application still running?
         opened_windows_titles = common.get_opened_windows_titles()
         self.assertFalse('BleachBit' in opened_windows_titles)

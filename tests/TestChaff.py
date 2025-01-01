@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,6 @@ Test case for module Chaff
 
 import mock
 import os
-import unittest
 from tempfile import mkdtemp
 from shutil import rmtree
 

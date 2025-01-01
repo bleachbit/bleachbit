@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -107,6 +107,7 @@ from winioctlcon import (FSCTL_GET_RETRIEVAL_POINTERS,
                          FSCTL_SET_SPARSE,
                          FSCTL_SET_ZERO_DATA)
 from win32file import (GENERIC_READ, GENERIC_WRITE, FILE_BEGIN,
+                       FILE_SHARE_DELETE,
                        FILE_SHARE_READ, FILE_SHARE_WRITE,
                        OPEN_EXISTING, CREATE_ALWAYS, FILE_FLAG_BACKUP_SEMANTICS,
                        DRIVE_REMOTE, DRIVE_CDROM, DRIVE_UNKNOWN)
@@ -737,7 +738,7 @@ def move_file(volume_handle, file_handle, starting_vcn,
     # We include a couple of zero ints for 64-bit alignment.
     input_struct = struct.pack('IIqqII', int(file_handle), 0, starting_vcn,
                                starting_lcn, cluster_count, 0)
-    vb_struct = DeviceIoControl(volume_handle, FSCTL_MOVE_FILE,
+    _vb_struct = DeviceIoControl(volume_handle, FSCTL_MOVE_FILE,
                                 input_struct, None)
 
 
@@ -965,7 +966,7 @@ def file_wipe(file_name):
                                          volume_info.total_clusters,
                                          orig_extents, bridged_extents)
     for lcn_start, lcn_end in orig_extents:
-        result = wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end,
+        wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end,
                                        cluster_size, volume_info.total_clusters,
                                        tmp_file_path)
 

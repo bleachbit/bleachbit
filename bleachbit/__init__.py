@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -30,9 +30,9 @@ import sys
 import platform
 
 from bleachbit import Log
-from configparser import RawConfigParser, NoOptionError
+from configparser import RawConfigParser, NoOptionError # used in other files
 
-APP_VERSION = "4.6.1"
+APP_VERSION = "4.6.2"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 
@@ -292,8 +292,6 @@ _p = pgettext
 #
 base_url = "https://update.bleachbit.org"
 help_contents_url = "%s/help/%s" \
-    % (base_url, APP_VERSION)
-release_notes_url = "%s/release-notes/%s" \
     % (base_url, APP_VERSION)
 update_check_url = "%s/update/%s" % (base_url, APP_VERSION)
 

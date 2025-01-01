@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2024 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -47,7 +47,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
 
         searches = {self.tempdir: []}
         searches[self.tempdir].append(
-            Search(command='delete', regex='\.[Bb][Aa][Kk]$'))
+            Search(command='delete', regex=r'\.[Bb][Aa][Kk]$'))
         ds = DeepScan(searches)
         found = False
         for cmd in ds.scan():
@@ -116,7 +116,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
             del backends['test']
 
         # validate results
-        run_deep_scan('regex="\.bbtestbak$" wholeregex="sub.*\.bbtestbak$"')
+        run_deep_scan(r'regex="\.bbtestbak$" wholeregex="sub.*\.bbtestbak$"')
         self.assertExists(f_del)
         self.assertExists(f_keep)
         self.assertFalse(os.path.exists(f_del2))
@@ -126,7 +126,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
             self.assertFalse(os.path.exists(f_del3))
 
         # validate results
-        run_deep_scan('regex="\.bbtestbak$"')
+        run_deep_scan(r'regex="\.bbtestbak$"')
         self.assertFalse(os.path.exists(f_del))
         self.assertExists(f_keep)
 
