@@ -321,8 +321,22 @@ def build():
     logger.info('Copying license')
     shutil.copy('COPYING', 'dist')
 
-    logger.info('Copying msvcr100.dll')
-    shutil.copy('C:\\WINDOWS\\system32\\msvcr100.dll', 'dist\\msvcr100.dll')
+    logger.info('Copying DLL')
+    python_version = sys.version_info[:2]
+    if python_version == (3, 4):
+        # For Python 3.4, copy msvcr100.dll
+        dll_name = 'msvcr100.dll'
+    elif python_version >= (3, 10):
+        # For Python 3.10, copy vcruntime140.dll
+        dll_name = 'vcruntime140.dll'
+    else:
+        logger.error('Unsupported Python version. Skipping DLL copy.')
+        return
+    dll_path = os.path.join(sys.prefix, dll_name)
+    if os.path.exists(dll_path):
+        shutil.copy(dll_path, 'dist')
+    else:
+        logger.warning(f'{dll_name} not found. Skipping copy.')
 
     sign_files(('dist\\bleachbit.exe', 'dist\\bleachbit_console.exe'))
 
