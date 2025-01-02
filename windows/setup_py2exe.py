@@ -332,10 +332,16 @@ def build():
     else:
         logger.error('Unsupported Python version. Skipping DLL copy.')
         return
-    dll_path = os.path.join(sys.prefix, dll_name)
-    if os.path.exists(dll_path):
-        shutil.copy(dll_path, 'dist')
-    else:
+    dll_dirs = (sys.prefix, r'c:\windows\system32', r'c:\windows\SysWOW64')
+    copied_dll = False
+    for dll_dir in dll_dirs:
+        dll_path = os.path.join(dll_dir, dll_name)
+        if os.path.exists(dll_path):
+            logger.info(f'Copying {dll_name} from {dll_path}')
+            shutil.copy(dll_path, 'dist')
+            copied_dll = True
+            break
+    if not copied_dll:
         logger.warning(f'{dll_name} not found. Skipping copy.')
 
     sign_files(('dist\\bleachbit.exe', 'dist\\bleachbit_console.exe'))
