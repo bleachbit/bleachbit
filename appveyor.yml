@@ -12,28 +12,7 @@ init:
   - 'echo PYTHON_HOME=%PYTHON_HOME%'
 
 install:
-  - ps: if (-not (Test-Path gtk.zip)) { Start-FileDownload "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v1/gtk3.24-x86-windows.zip" -FileName gtk3.24-x86-windows.zip}
-  - ps: Get-FileHash gtk3.24-x86-windows.zip
-  - '%SZ_EXE% x gtk3.24-x86-windows.zip'
-  - '%PYTHON_HOME%\python.exe -V' # show Python version
-  - '%PYTHON_HOME%\python.exe -m ensurepip'
-  - '%PYTHON_HOME%\Scripts\pip3.exe --version' # show pip version
-  - ps: if (-not (Test-Path gtk-themes.zip )) { Start-FileDownload "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v1/gtk-themes.zip" }
-  - ps: Get-FileHash gtk-themes.zip
-  - '%SZ_EXE% x gtk-themes.zip'
-  - 'XCOPY /E gtk-themes\*.* %PYTHON_HOME%'
-  - '%PYTHON_HOME%\Scripts\pip3.exe install psutil'
-  - '%PYTHON_HOME%\Scripts\pip3.exe install pypiwin32'
-  - '%PYTHON_HOME%\Scripts\pip3.exe install winshell'
-  - '%PYTHON_HOME%\Scripts\pip3.exe install py2exe'
-  - '%PYTHON_HOME%\Scripts\pip3.exe install scandir'
-  - '%PYTHON_HOME%\Scripts\pip3.exe install chardet'
-  - '%PYTHON_HOME%\Scripts\pip3.exe install requests'
-  - '%PYTHON_HOME%\Scripts\pip3.exe install plyer'
-  - '%PYTHON_HOME%\Scripts\pip3.exe install win-unicode-console'
-  - ps: if (-not (Test-Path PyGObject-3.42.0-cp310-cp310-win32.whl)) { Start-FileDownload "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v1/PyGObject-3.42.0-cp310-cp310-win32.whl" }
-  - '%PYTHON_HOME%\Scripts\pip3.exe install PyGObject-3.42.0-cp310-cp310-win32.whl'
-  - 'windows\python-gtk3-fixup.bat %PYTHON_HOME%\..\..'
+  - ps: .\windows\python-gtk3-install.ps1
   # UPX 4.0.2, 4.1.0, and 4.2.3 cause ModuleNotFoundError during build
   # UPX 4.0.1 works
   - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v4.0.1/upx-4.0.1-win64.zip" -FileName upx.zip}
