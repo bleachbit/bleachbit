@@ -260,7 +260,6 @@ def build():
         f.write(data)
         f.truncate()
 
-    logger.info('Remove windows fonts dir from fonts.conf file')
     # fonts are not needed https://github.com/bleachbit/bleachbit/issues/863
     for d in ('icons',):
         path = os.path.join(GTK_DIR, 'share', d)
