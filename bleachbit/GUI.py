@@ -236,8 +236,6 @@ class Bleachbit(Gtk.Application):
         get_uris().
         """
         shred_paths = None
-        logger.info(f'clipboard received  targets={targets}')
-        
         if 'nt' == os.name and Gdk.atom_intern_static_string('FileNameW') in targets:
             # Windows
             # Use non-GTK+ functions because because GTK+ 2 does not work.
