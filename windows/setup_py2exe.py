@@ -185,7 +185,8 @@ def copy_file(src, dst):
     # If the destination directory is current directory, do not create it.
     if dst_dirname and not os.path.exists(dst_dirname):
         os.makedirs(dst_dirname)
-    shutil.copyfile(src, dst)
+    # shutil.copy() and .copyfile() do not preserve file date.
+    shutil.copy2(src, dst)
 
 
 def copy_tree(src, dst):
@@ -194,11 +195,9 @@ def copy_tree(src, dst):
     if not os.path.exists(src):
         logger.warning(f'copytree: {src} does not exist')
         return
-    # Microsoft xcopy is about twice as fast as shutil.copytree, but
-    # not tested since Python 3.8, which made improvements, was released.
     logger.info(f'copying {src} to {dst}')
-    cmd = 'xcopy {} {} /i /s /q'.format(src, dst)
-    os.system(cmd)
+    # copytree() preserves file date
+    shutil.copytree(src, dst, dirs_exist_ok=True)
 
 
 def count_size_improvement(func):
