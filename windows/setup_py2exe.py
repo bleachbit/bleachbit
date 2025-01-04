@@ -173,6 +173,20 @@ def get_dir_size(start_path='.'):
     return total_size
 
 
+def copy_file(src, dst):
+    """Copy a file
+
+    The dst must be a full path.
+    """
+    if not os.path.exists(src):
+        logger.warning(f'copy_file: {src} does not exist')
+        return
+    dst_dirname = os.path.dirname(dst)
+    if not os.path.exists(dst_dirname):
+        os.makedirs(dst_dirname)
+    shutil.copyfile(src, dst)
+
+
 def copytree(src, dst):
     """Copy a directory tree"""
     if not os.path.exists(src):
@@ -224,7 +238,7 @@ def build():
     shutil.rmtree('BleachBit-Portable', ignore_errors=True)
 
     logger.info('Running py2exe')
-    shutil.copyfile('bleachbit.py', 'bleachbit_console.py')
+    copy_file('bleachbit.py', 'bleachbit_console.py')
     cmd = sys.executable + ' -OO setup.py py2exe'
     run_cmd(cmd)
     assert_exist('dist\\bleachbit.exe')
@@ -234,11 +248,13 @@ def build():
     if not os.path.exists('dist'):
         os.makedirs('dist')
 
+    os.makedirs(os.path.join('dist', 'share'), exist_ok=True)
+
     logger.info('Copying GTK helpers')
     for exe in glob.glob1(GTK_LIBDIR, 'gspawn-win*-helper*.exe'):
-        shutil.copyfile(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
+        copy_file(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
     for exe in ('fc-cache.exe',):
-        shutil.copyfile(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
+        copy_file(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
 
     logger.info('Copying GTK files and icon')
     for d in ('dbus-1', 'fonts', 'gtk-3.0', 'pango'):
@@ -247,6 +263,7 @@ def build():
     for d in ('gdk-pixbuf-2.0', 'girepository-1.0', 'glade', 'gtk-3.0'):
         path = os.path.join(GTK_DIR, 'lib', d)
         copytree(path, os.path.join('dist', 'lib', d))
+    
     gtk_share = os.path.join(GTK_LIBDIR, 'share')
     if os.path.exists(gtk_share):
         for d in ('icons', 'themes'):
@@ -266,27 +283,23 @@ def build():
         path = os.path.join(GTK_DIR, 'share', d)
         copytree(path, os.path.join('dist', 'share', d))
     SCHEMAS_DIR = 'share\\glib-2.0\\schemas'
-    gschemas_compiled = os.path.join(GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled')
-    if os.path.exists(gschemas_compiled):
-        os.makedirs(os.path.join('dist', SCHEMAS_DIR))
-        shutil.copyfile(gschemas_compiled,
-                        os.path.join('dist', SCHEMAS_DIR, 'gschemas.compiled'))
-    os.makedirs(os.path.join('dist', 'share'), exist_ok=True)
-    shutil.copyfile('bleachbit.png',  'dist\\share\\bleachbit.png')
+    gschemas_compiled_src = os.path.join(GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled')
+    gschemas_compiled_dst = os.path.join('dist', SCHEMAS_DIR, 'gschemas.compiled')
+    copy_file(gschemas_compiled_src, gschemas_compiled_dst)
+    copy_file('bleachbit.png',  'dist\\share\\bleachbit.png')
     # bleachbit.ico is used the for pop-up notification.
-    shutil.copyfile('windows\\bleachbit.ico',  'dist\\share\\bleachbit.ico')
+    copy_file('windows\\bleachbit.ico',  'dist\\share\\bleachbit.ico')
     for dll in glob.glob1(GTK_LIBDIR, '*.dll'):
-        shutil.copyfile(os.path.join(GTK_LIBDIR, dll), 'dist\\'+dll)
+        copy_file(os.path.join(GTK_LIBDIR, dll), 'dist\\'+dll)
 
-    os.mkdir('dist\\data')
-    shutil.copyfile('data\\app-menu.ui', 'dist\\data\\app-menu.ui')
+    copy_file('data\\app-menu.ui', 'dist\\data\\app-menu.ui')
 
     logger.info('Copying themes')
     copytree('themes', 'dist\\themes')
 
     logger.info('Copying CA bundle')
     import requests
-    shutil.copyfile(requests.utils.DEFAULT_CA_BUNDLE_PATH,
+    copy_file(requests.utils.DEFAULT_CA_BUNDLE_PATH,
                     os.path.join('dist', 'cacert.pem'))
 
     dist_locale_dir = r'dist\share\locale'
@@ -299,8 +312,7 @@ def build():
         if not f.startswith(locale_dir):
             continue
         rel_f = f[len(locale_dir):]
-        os.makedirs(os.path.join(dist_locale_dir, os.path.dirname(rel_f)))
-        shutil.copyfile(f, os.path.join(dist_locale_dir, rel_f))
+        copy_file(f, os.path.join(dist_locale_dir, rel_f))
     assert_exist(os.path.join(dist_locale_dir, r'es\LC_MESSAGES\gtk30.mo'))
 
     logger.info('Copying BleachBit localizations')
@@ -318,7 +330,7 @@ def build():
     assert_exist('dist\\share\\cleaners\\internet_explorer.xml')
 
     logger.info('Copying license')
-    shutil.copy('COPYING', 'dist')
+    copy_file('COPYING', 'dist\\COPYING')
 
     logger.info('Copying DLL')
     python_version = sys.version_info[:2]
