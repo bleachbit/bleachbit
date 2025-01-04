@@ -132,7 +132,7 @@ class Bleachbit(Gtk.Application):
         if auto_exit:
             # This is used for automated testing of whether the GUI can start.
             # It is called from assert_execute_console() in windows/setup_py2exe.py
-            self._auto_exit = True        
+            self._auto_exit = True
 
         if shred_paths:
             self._shred_paths = shred_paths
@@ -230,7 +230,7 @@ class Bleachbit(Gtk.Application):
 
     def cb_clipboard_uri_received(self, clipboard, targets, data):
         """Callback for when URIs are received from clipboard
-        
+
         With GTK 3.18.9 on Windows, there was no text/uri-list in targets,
         but there is with GTK 3.24.34. However, Windows does not have
         get_uris().
@@ -595,7 +595,7 @@ class GUI(Gtk.ApplicationWindow):
             # if stderr was redirected - keep redirecting it
             sys.stderr = self.gtklog
 
-        #self.set_windows10_theme()
+        # self.set_windows10_theme()
         Gtk.Settings.get_default().set_property(
             'gtk-application-prefer-dark-theme', options.get('dark_mode'))
 
@@ -1130,7 +1130,7 @@ class GUI(Gtk.ApplicationWindow):
 
     def on_window_state_event(self, widget, event):
         """Save window state
-        
+
         GTK version 3.24.34 on Windows 11 behaves strangely:
         * It reports maximized only when application starts.
         * Later, it reports window is fullscreen when neither
@@ -1138,19 +1138,21 @@ class GUI(Gtk.ApplicationWindow):
 
         Because of this issue, we check the tiling state.
         """
-        tiling_states = (Gdk.WindowState.TILED | 
-                            Gdk.WindowState.TOP_TILED | 
-                            Gdk.WindowState.RIGHT_TILED | 
-                            Gdk.WindowState.BOTTOM_TILED | 
-                            Gdk.WindowState.LEFT_TILED)
-            
+        tiling_states = (Gdk.WindowState.TILED |
+                         Gdk.WindowState.TOP_TILED |
+                         Gdk.WindowState.RIGHT_TILED |
+                         Gdk.WindowState.BOTTOM_TILED |
+                         Gdk.WindowState.LEFT_TILED)
+
         is_tiled = event.new_window_state & tiling_states != 0
-        fullscreen = (event.new_window_state & Gdk.WindowState.FULLSCREEN != 0) and not is_tiled
+        fullscreen = (event.new_window_state &
+                      Gdk.WindowState.FULLSCREEN != 0) and not is_tiled
         options.set("window_fullscreen", fullscreen, commit=False)
         maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
         options.set("window_maximized", maximized, commit=False)
         if 'nt' == os.name:
-            logger.info(f'window state = {event.new_window_state}, full screen = {fullscreen}, maximized = {maximized}')
+            logger.info(
+                f'window state = {event.new_window_state}, full screen = {fullscreen}, maximized = {maximized}')
         return False
 
     def on_delete_event(self, widget, event):

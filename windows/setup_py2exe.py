@@ -265,7 +265,7 @@ def build():
     for d in ('gdk-pixbuf-2.0', 'girepository-1.0', 'glade', 'gtk-3.0'):
         path = os.path.join(GTK_DIR, 'lib', d)
         copy_tree(path, os.path.join('dist', 'lib', d))
-    
+
     gtk_share = os.path.join(GTK_LIBDIR, 'share')
     if os.path.exists(gtk_share):
         for d in ('icons', 'themes'):
@@ -285,8 +285,10 @@ def build():
         path = os.path.join(GTK_DIR, 'share', d)
         copy_tree(path, os.path.join('dist', 'share', d))
     SCHEMAS_DIR = 'share\\glib-2.0\\schemas'
-    gschemas_compiled_src = os.path.join(GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled')
-    gschemas_compiled_dst = os.path.join('dist', SCHEMAS_DIR, 'gschemas.compiled')
+    gschemas_compiled_src = os.path.join(
+        GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled')
+    gschemas_compiled_dst = os.path.join(
+        'dist', SCHEMAS_DIR, 'gschemas.compiled')
     copy_file(gschemas_compiled_src, gschemas_compiled_dst)
     copy_file('bleachbit.png',  'dist\\share\\bleachbit.png')
     # bleachbit.ico is used the for pop-up notification.
@@ -302,7 +304,7 @@ def build():
     logger.info('Copying CA bundle')
     import requests
     copy_file(requests.utils.DEFAULT_CA_BUNDLE_PATH,
-                    os.path.join('dist', 'cacert.pem'))
+              os.path.join('dist', 'cacert.pem'))
 
     dist_locale_dir = r'dist\share\locale'
     shutil.rmtree(dist_locale_dir, ignore_errors=True)

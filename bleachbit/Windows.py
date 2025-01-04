@@ -570,7 +570,7 @@ def set_environ(varname, path):
     if not path:
         return
     if varname in os.environ:
-        #logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
+        # logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
         if 'nt' == os.name:
             os.environ[varname] = os.path.expandvars('%%%s%%' % varname)
         # Do not redefine the environment variable when it already exists
@@ -614,14 +614,16 @@ def setup_environment():
     # For gschemas.compiled required by make chaff dialog
     # https://github.com/bleachbit/bleachbit/issues/1444
     if not os.environ.get('XDG_DATA_DIRS'):
-        xdg_data_dirs = (os.path.dirname(sys.executable) + '\\share', os.getcwd() + '\\share')
+        xdg_data_dirs = (os.path.dirname(sys.executable) +
+                         '\\share', os.getcwd() + '\\share')
         found_dir = False
         for xdg_data_dir in xdg_data_dirs:
-            if os.path.exists(os.path.join(xdg_data_dir, 'glib-2.0','schemas','gschemas.compiled')):
+            if os.path.exists(os.path.join(xdg_data_dir, 'glib-2.0', 'schemas', 'gschemas.compiled')):
                 found_dir = True
-                break        
+                break
         if not found_dir:
-            logger.warning('XDG_DATA_DIRS not set and %s does not exist', xdg_data_dir)
+            logger.warning(
+                'XDG_DATA_DIRS not set and %s does not exist', xdg_data_dir)
         else:
             set_environ('XDG_DATA_DIRS', xdg_data_dir)
 
@@ -722,7 +724,7 @@ class SplashThread(Thread):
         Thread.join(self, *args)
 
     def _show_splash_screen(self):
-        #get instance handle
+        # get instance handle
         hInstance = win32api.GetModuleHandle()
 
         # the class name
@@ -823,7 +825,7 @@ class SplashThread(Thread):
             return True
 
         # Solution 3: Working with timers that lock/unlock SetForegroundWindow
-        #https://gist.github.com/EBNull/1419093
+        # https://gist.github.com/EBNull/1419093
         try:
             timeout = win32gui.SystemParametersInfo(win32con.SPI_GETFOREGROUNDLOCKTIMEOUT)
             win32gui.SystemParametersInfo(win32con.SPI_SETFOREGROUNDLOCKTIMEOUT, 0, win32con.SPIF_SENDCHANGE)
