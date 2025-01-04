@@ -1122,11 +1122,28 @@ class GUI(Gtk.ApplicationWindow):
         return False
 
     def on_window_state_event(self, widget, event):
-        # save window state
-        fullscreen = event.new_window_state & Gdk.WindowState.FULLSCREEN != 0
+        """Save window state
+        
+        GTK version 3.24.34 on Windows 11 behaves strangely:
+        * It reports maximized only when application starts.
+        * Later, it reports window is fullscreen when neither
+          full screen nor maximized.
+
+        Because of this issue, we check the tiling state.
+        """
+        tiling_states = (Gdk.WindowState.TILED | 
+                            Gdk.WindowState.TOP_TILED | 
+                            Gdk.WindowState.RIGHT_TILED | 
+                            Gdk.WindowState.BOTTOM_TILED | 
+                            Gdk.WindowState.LEFT_TILED)
+            
+        is_tiled = event.new_window_state & tiling_states != 0
+        fullscreen = (event.new_window_state & Gdk.WindowState.FULLSCREEN != 0) and not is_tiled
         options.set("window_fullscreen", fullscreen, commit=False)
         maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
         options.set("window_maximized", maximized, commit=False)
+        if 'nt' == os.name:
+            logger.info(f'window state = {event.new_window_state}, full screen = {fullscreen}, maximized = {maximized}')
         return False
 
     def on_delete_event(self, widget, event):
