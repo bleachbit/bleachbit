@@ -182,7 +182,8 @@ def copy_file(src, dst):
         logger.warning(f'copy_file: {src} does not exist')
         return
     dst_dirname = os.path.dirname(dst)
-    if not os.path.exists(dst_dirname):
+    # If the destination directory is current directory, do not create it.
+    if dst_dirname and not os.path.exists(dst_dirname):
         os.makedirs(dst_dirname)
     shutil.copyfile(src, dst)
 
