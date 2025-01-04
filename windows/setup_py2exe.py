@@ -188,12 +188,14 @@ def copy_file(src, dst):
     shutil.copyfile(src, dst)
 
 
-def copytree(src, dst):
+def copy_tree(src, dst):
     """Copy a directory tree"""
+    src = os.path.abspath(src)
     if not os.path.exists(src):
         logger.warning(f'copytree: {src} does not exist')
         return
-    # Microsoft xcopy is about twice as fast as shutil.copytree
+    # Microsoft xcopy is about twice as fast as shutil.copytree, but
+    # not tested since Python 3.8, which made improvements, was released.
     logger.info(f'copying {src} to {dst}')
     cmd = 'xcopy {} {} /i /s /q'.format(src, dst)
     os.system(cmd)
@@ -260,16 +262,16 @@ def build():
     logger.info('Copying GTK files and icon')
     for d in ('dbus-1', 'fonts', 'gtk-3.0', 'pango'):
         path = os.path.join(GTK_DIR, 'etc', d)
-        copytree(path, os.path.join('dist', 'etc', d))
+        copy_tree(path, os.path.join('dist', 'etc', d))
     for d in ('gdk-pixbuf-2.0', 'girepository-1.0', 'glade', 'gtk-3.0'):
         path = os.path.join(GTK_DIR, 'lib', d)
-        copytree(path, os.path.join('dist', 'lib', d))
+        copy_tree(path, os.path.join('dist', 'lib', d))
     
     gtk_share = os.path.join(GTK_LIBDIR, 'share')
     if os.path.exists(gtk_share):
         for d in ('icons', 'themes'):
             path = os.path.join(gtk_share, d)
-            copytree(path, os.path.join('dist', 'share', d))
+            copy_tree(path, os.path.join('dist', 'share', d))
 
     logger.info('Fixing paths in loaders.cache file')
     with open(os.path.join('dist', 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache'), 'r+') as f:
@@ -282,7 +284,7 @@ def build():
     # fonts are not needed https://github.com/bleachbit/bleachbit/issues/863
     for d in ('icons',):
         path = os.path.join(GTK_DIR, 'share', d)
-        copytree(path, os.path.join('dist', 'share', d))
+        copy_tree(path, os.path.join('dist', 'share', d))
     SCHEMAS_DIR = 'share\\glib-2.0\\schemas'
     gschemas_compiled_src = os.path.join(GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled')
     gschemas_compiled_dst = os.path.join('dist', SCHEMAS_DIR, 'gschemas.compiled')
@@ -296,7 +298,7 @@ def build():
     copy_file('data\\app-menu.ui', 'dist\\data\\app-menu.ui')
 
     logger.info('Copying themes')
-    copytree('themes', 'dist\\themes')
+    copy_tree('themes', 'dist\\themes')
 
     logger.info('Copying CA bundle')
     import requests
@@ -317,7 +319,7 @@ def build():
     assert_exist(os.path.join(dist_locale_dir, r'es\LC_MESSAGES\gtk30.mo'))
 
     logger.info('Copying BleachBit localizations')
-    copytree('locale', dist_locale_dir)
+    copy_tree('locale', dist_locale_dir)
     assert_exist(os.path.join(dist_locale_dir, r'es\LC_MESSAGES\bleachbit.mo'))
 
     logger.info('Copying BleachBit cleaners')
@@ -598,7 +600,7 @@ def shrink():
 def package_portable():
     """Package the portable version"""
     logger.info('Building portable')
-    copytree('dist', 'BleachBit-Portable')
+    copy_tree('dist', 'BleachBit-Portable')
     with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
         text_file.write("[Portable]")
 
