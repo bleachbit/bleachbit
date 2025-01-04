@@ -587,7 +587,9 @@ def set_environ(varname, path):
 
 
 def setup_environment():
-    """Define any extra environment variables for use in CleanerML and Winapp2.ini"""
+    """Define any extra environment variables"""
+
+    # These variables are for use in CleanerML and Winapp2.ini.
     csidl_to_environ('commonappdata', shellcon.CSIDL_COMMON_APPDATA)
     csidl_to_environ('documents', shellcon.CSIDL_PERSONAL)
     # Windows XP does not define localappdata, but Windows Vista and 7 do
@@ -608,6 +610,20 @@ def setup_environment():
     # BleachBit is portable. It is the same variable name as defined by
     # cmd.exe .
     set_environ('cd', os.getcwd())
+
+    # For gschemas.compiled required by make chaff dialog
+    # https://github.com/bleachbit/bleachbit/issues/1444
+    if not os.environ.get('XDG_DATA_DIRS'):
+        xdg_data_dirs = (os.path.dirname(sys.executable) + '\\share', os.getcwd() + '\\share')
+        found_dir = False
+        for xdg_data_dir in xdg_data_dirs:
+            if os.path.exists(os.path.join(xdg_data_dir, 'glib-2.0','schemas','gschemas.compiled')):
+                found_dir = True
+                break        
+        if not found_dir:
+            logger.warning('XDG_DATA_DIRS not set and %s does not exist', xdg_data_dir)
+        else:
+            set_environ('XDG_DATA_DIRS', xdg_data_dir)
 
 
 def split_registry_key(full_key):
