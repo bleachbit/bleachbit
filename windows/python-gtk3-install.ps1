@@ -79,6 +79,17 @@ if (-not (Test-Path "$root_dir\tools\gtk3\gtk-launch.exe")) {
     exit 1
 }
 
+$schema_compiler = Join-Path $root_dir "tools\glib\glib-compile-schemas.exe"
+$schema_dir = Join-Path $root_dir "share\glib-2.0\schemas"
+if (-not (Test-Path "$schema_dir\gschemas.compiled")) {
+    Write-Host "Compiling GLib schemas..."
+    & $schema_compiler $schema_dir
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Failed to compile GLib schemas"
+        exit $LASTEXITCODE
+    }
+}
+
 Write-Host "Checking python version"
 & "$python_home\python.exe" -V  # show Python version
 if ($LASTEXITCODE -ne 0) {
