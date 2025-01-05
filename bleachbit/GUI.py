@@ -127,7 +127,6 @@ class Bleachbit(Gtk.Application):
         Gtk.Application.__init__(
             self, application_id=application_id, flags=Gio.ApplicationFlags.FLAGS_NONE)
         GLib.set_prgname('org.bleachbit.BleachBit')
-        GObject.threads_init()
 
         if auto_exit:
             # This is used for automated testing of whether the GUI can start.
