@@ -4,17 +4,18 @@ jobs:
   include:
    # references:
    #    https://docs.travis-ci.com/user/reference/overview/
+   #    https://docs.travis-ci.com/user/reference/linux/
    #    https://wiki.ubuntu.com/Releases
    #    https://devguide.python.org/versions/
    #    https://distrowatch.com/table.php?distribution=ubuntu
-   # Ubuntu 16.04 LTS (Xenial) EOL is April 2026, has Python 3.5
-    - dist: xenial
-      python: 3.5
    # Ubuntu 20.04 LTS (Focal)  EOL is April 2030, has Python 3.8
     - dist: focal
       python: 3.8
     - dist: focal
       python: 3.9
+   # Ubuntu 22.04 LTS (Jammy)  EOL is April 2034, has Python 3.10
+    - dist: jammy
+      python: 3.10
 cache: pip
 before_install:
   - python --version # show Python version
