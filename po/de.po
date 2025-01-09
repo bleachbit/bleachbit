@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-29 20:55-0600\n"
-"PO-Revision-Date: 2024-02-05 19:01+0000\n"
-"Last-Translator: David <dawin@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2025-01-10 05:29+0000\n"
+"Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/bleachbit/main/de/"
 ">\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Launchpad-Export-Date: 2021-11-19 21:00+0000\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -27,7 +27,7 @@ msgstr ""
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 msgid "Web browser"
-msgstr "Internet-Browser"
+msgstr "Webbrowser"
 
 #: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/tremulous.xml
 #: ../cleaners/flash.xml ../cleaners/google_chrome.xml ../cleaners/slack.xml
@@ -56,8 +56,8 @@ msgstr "Zwischenspeicher (Cache)"
 #: ../cleaners/brave.xml ../cleaners/safari.xml ../cleaners/opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Den Zwischenspeicher (Cache) des Internet-Browsers löschen, welcher die "
-"Anzeigezeit bereits besuchter Seiten reduziert"
+"Den Zwischenspeicher (Cache) löschen, um die Anzeigezeit bereits besuchter "
+"Seiten zu reduzieren"
 
 #: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
@@ -68,7 +68,7 @@ msgstr ""
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml ../cleaners/liferea.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
 msgid "Cookies"
-msgstr "Profildateien (Cookies)"
+msgstr "Cookies"
 
 #: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
@@ -82,9 +82,8 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
-"Die Profildateien (Cookies) löschen, welche Informationen wie "
-"Internetseiteneinstellungen, Legitimierungen und Rückverfolgungsdaten "
-"enthalten"
+"Die Cookies löschen, welche Informationen wie Internetseiteneinstellungen, "
+"Legitimierungen und Rückverfolgungsdaten enthalten"
 
 #. DOM=Document Object Model
 #. DOM=Document Object Model
@@ -101,7 +100,7 @@ msgstr "DOM-Speicher"
 #: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
 #: ../cleaners/opera.xml
 msgid "Delete HTML5 cookies"
-msgstr "HTML5-Profildateien (Cookies) löschen"
+msgstr "HTML5-Cookies löschen"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
@@ -558,15 +557,14 @@ msgstr "Widgets für den Schreibtisch"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
-msgstr ""
-"Die Profildateien (Cookies) löschen, besuchte Adressen und den Suchverlauf"
+msgstr "Die Cookies, besuchte Adressen und den Suchverlauf löschen"
 
 #: ../cleaners/paint.xml ../cleaners/winamp.xml ../cleaners/vlc.xml
 #: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/winzip.xml ../cleaners/smartftp.xml ../cleaners/wordpad.xml
 #: ../cleaners/teamviewer.xml ../cleaners/windows_explorer.xml
 msgid "Delete the most recently used list"
-msgstr "Die zuletzt benutzen Listen löschen"
+msgstr "Die zuletzt benutzten Listen löschen"
 
 #: ../cleaners/gnome.xml ../cleaners/kde.xml
 msgid "Desktop environment"
@@ -812,7 +810,7 @@ msgstr "Speicherplatz freigeben und die Privatsphäre schützen"
 #. can have multiple values. They're a way to make CleanerML files more concise.
 #: ../bleachbit/Action.py:150
 msgid "Deep scan does not support multi-value variable."
-msgstr "Tiefenuntersuchung unterstützt nicht Multi-Wert-Variable."
+msgstr "Tiefenprüfung unterstützt keine Variablen mit mehreren Werten."
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
@@ -821,7 +819,7 @@ msgstr "Tiefenuntersuchung unterstützt nicht Multi-Wert-Variable."
 #: ../bleachbit/Action.py:252
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr "search=»walk.all« verwendet mit normalem Dateipfad=»%s«"
+msgstr "search=»walk.all« wird mit dem regulären Dateipfad=»%s« verwendet"
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -858,7 +856,7 @@ msgstr "Externen Befehl ausführen: %s"
 #: ../bleachbit/Chaff.py:225
 #, python-format
 msgid "Downloading URL failed: %s"
-msgstr "Herunterlanden von der Adresse schlug fehl: %s"
+msgstr "Herunterladen der Adresse schlug fehl: %s"
 
 #: ../bleachbit/CleanerML.py:134
 #, python-brace-format
@@ -972,9 +970,9 @@ msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr ""
-"Deinstallationsprogramme für Microsoft-Aktualisierungen (inklusive "
-"Hotfixes), Service Packs (Wartungspakete) und Internet-Explorer-"
-"Aktualisierungen löschen"
+"Deinstallationsprogramme für Microsoft-Aktualisierungen (inklusive Hotfixes)"
+", Service Packs (Wartungspakete) und Internet Explorer-Aktualisierungen "
+"löschen"
 
 #: ../bleachbit/Cleaner.py:325 ../bleachbit/Cleaner.py:544
 msgid "Clipboard"
@@ -1032,7 +1030,7 @@ msgstr "Native Reiniger werden geladen."
 
 #: ../bleachbit/Cleaner.py:674
 msgid "Importing cleaners from Winapp2.ini."
-msgstr "Reiniger wird aus Winapp2.ini importiert."
+msgstr "Reiniger wird aus winapp2.ini importiert."
 
 #: ../bleachbit/CLI.py:114
 #, python-format
@@ -1146,7 +1144,7 @@ msgstr "--overwrite ist nur gedacht in Verwendung mit --clean"
 #. skipped because it matches the whitelist
 #: ../bleachbit/Command.py:49
 msgid "Skip"
-msgstr "Übersprungen"
+msgstr "Überspringen"
 
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
@@ -1187,7 +1185,7 @@ msgstr "Verzeichnis ist nicht leer: %s"
 #: ../bleachbit/FileUtilities.py:370
 #, python-format
 msgid "Skipping mount point: %s"
-msgstr "Einhängpunkt wird übersprungen: %s"
+msgstr "Einhängepunkt wird übersprungen: %s"
 
 #: ../bleachbit/FileUtilities.py:372
 #, python-format
@@ -1228,7 +1226,7 @@ msgstr "Pfad zum Reinigen muss ein existierendes Vereichnis sein: %s"
 #: ../bleachbit/FileUtilities.py:949
 msgid "Creating new, temporary file for wiping free space."
 msgstr ""
-"Eine neue temporären Datei zum Löschen von freiem Speicherplatz wird "
+"Eine neue, temporäre Datei zum Löschen von freiem Speicherplatz wird "
 "erstellt."
 
 #: ../bleachbit/FileUtilities.py:1005
@@ -1308,7 +1306,7 @@ msgid ""
 "%s"
 msgstr ""
 "Sie sind als Systemverwalter angemeldet, bitte den folgenden Verweis manuell "
-"in einem Internet-Browser öffnen:\n"
+"in einem Webbrowser öffnen:\n"
 "%s"
 
 #. TRANSLATORS: %s expands to www.bleachbit.org or similar
@@ -1458,7 +1456,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:189
 msgid "Windows 10 theme"
-msgstr "Windows-10-Thema"
+msgstr "Windows 10-Thema"
 
 #: ../bleachbit/GuiPreferences.py:196
 msgid "Dark mode"
@@ -1473,11 +1471,8 @@ msgid "Show debug messages"
 msgstr "Fehlerdiagnosemeldungen anzeigen"
 
 #: ../bleachbit/GuiPreferences.py:215
-#, fuzzy
-#| msgid "Add shred context menu option (KDE Plasma specific)"
 msgid "Add the shred context menu to KDE Plasma"
-msgstr ""
-"Option zum Schreddern im Kontextmenü hinzufügen (spezifisch für KDE Plasma)"
+msgstr "Schredder-Kontextmenü zu KDE Plasma hinzufügen"
 
 #: ../bleachbit/GuiPreferences.py:227 ../bleachbit/GuiPreferences.py:357
 #: ../bleachbit/GuiPreferences.py:400 ../bleachbit/GUI.py:281
@@ -1670,17 +1665,17 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
-"Sie führen BleachBit mit Systemverwaltungsrechten aus, um gemeinsam benutzte "
-"Teile des Systems reinigen, Verweise zum Benutzerprofilordner werden nur das "
-"root-Kontos bereinigen."
+"Sie führen BleachBit mit Systemverwaltungsrechten aus, um gemeinsam genutzte "
+"Teile des Systems zu reinigen. Verweise zum Benutzerprofilordner werden nur "
+"das Root-Konto reinigen."
 
 #: ../bleachbit/GUI.py:887
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
 msgstr ""
-"BleachBit mit Systemverwaltungsrechten starten, um die Genauigkeit der zu "
-"überschriebenen Dateien zu erhöhen."
+"BleachBit mit Systemverwaltungsrechten starten, um die Genauigkeit beim "
+"Überschreiben von Dateiinhalten zu verbessern."
 
 #: ../bleachbit/GUI.py:892
 msgid ""
@@ -1803,7 +1798,7 @@ msgstr ""
 #: ../bleachbit/Memory.py:324
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr "Der Kind-Speicher-Reinigung-Prozess gab Code %d zurück."
+msgstr "Der Kind-Speicherreinigungsprozess gab Code %d zurück."
 
 #: ../bleachbit/Options.py:113
 #, python-format
@@ -1964,8 +1959,8 @@ msgid ""
 "Wiping free disk space erases remnants of files that were deleted without "
 "shredding. It does not free up space."
 msgstr ""
-"Das Löschen von freiem Festplattenspeicher löscht Überreste von Dateien, die "
-"gelöscht wurden, ohne sie zu vernichten. Es wird kein Speicher freigegeben."
+"Das Löschen von freiem Festplattenspeicher löscht Reste von Dateien, die "
+"ohne Schreddern gelöscht wurden. Es wird kein Speicherplatz freigegeben."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:338
