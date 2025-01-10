@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-29 20:55-0600\n"
-"PO-Revision-Date: 2025-01-10 05:29+0000\n"
+"PO-Revision-Date: 2025-01-11 02:23+0000\n"
 "Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/bleachbit/main/de/"
 ">\n"
@@ -82,7 +82,7 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
-"Die Cookies löschen, welche Informationen wie Internetseiteneinstellungen, "
+"Die Cookies löschen, die Informationen wie Webseiteneinstellungen, "
 "Legitimierungen und Rückverfolgungsdaten enthalten"
 
 #. DOM=Document Object Model
@@ -112,8 +112,7 @@ msgstr "Formularverlauf"
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
 msgid "A history of forms entered in web sites"
-msgstr ""
-"Der Verlauf von Formulareingaben die in Internetseiten eingegeben wurden"
+msgstr "Der Verlauf von Formulareingaben, die in Webseiten eingegeben wurden"
 
 #: ../cleaners/chromium.xml ../cleaners/winrar.xml
 #: ../cleaners/windows_defender.xml ../cleaners/sqlite3.xml
@@ -135,7 +134,7 @@ msgstr "Verlauf"
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
-"Den Verlauf löschen, was besuchte Seiten, Übertragungen und Vorschaubilder "
+"Den Verlauf löschen, der besuchte Seiten, Downloads und Vorschaubilder "
 "beinhaltet"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
@@ -154,7 +153,7 @@ msgid ""
 "some of which are added automatically"
 msgstr ""
 "Den Suchmaschinenverlauf zurücksetzen und nicht vorinstallierte "
-"Suchmaschinen löschen, welche automatisch hinzugefügt wurden"
+"Suchmaschinen löschen, die automatisch hinzugefügt wurden"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
@@ -193,8 +192,8 @@ msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr ""
-"Eine Datenbank sowohl von Benutzernamen und Passwörtern als auch von Seiten, "
-"welche keine Passwörter speichern sollen"
+"Eine Datenbank mit Benutzernamen und Passwörtern sowie eine Liste von "
+"Webseiten, die keine Passwörter speichern sollten"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
@@ -400,7 +399,7 @@ msgstr "Liste der zuletzt verwendeten Dokumente"
 #: ../cleaners/gwenview.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/kde.xml ../bleachbit/Cleaner.py:193 ../bleachbit/Cleaner.py:290
 msgid "Delete the list of recently used documents"
-msgstr "Die Liste der zuletzt benutzten Dokumente löschen"
+msgstr "Die Liste der zuletzt verwendeten Dokumente löschen"
 
 #: ../cleaners/bash.xml
 msgid "Shell"
@@ -494,7 +493,7 @@ msgstr "Absturzberichte"
 #: ../cleaners/internet_explorer.xml
 msgid "A history of forms entered in web sites and in the Search bar"
 msgstr ""
-"Der Verlauf von Formulareingaben die in Internetseiten und in die Suchleiste "
+"Der Verlauf von Formulareingaben, die in Webseiten und in der Suchleiste "
 "eingegeben wurden"
 
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
@@ -517,11 +516,11 @@ msgstr "Adressverlauf"
 #: ../cleaners/safari.xml ../cleaners/konqueror.xml
 #: ../cleaners/internet_explorer.xml
 msgid "List of visited web pages"
-msgstr "Liste besuchter Internetseiten"
+msgstr "Liste besuchter Webseiten"
 
 #: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
 msgid "Download history"
-msgstr "Übertragungsverlauf"
+msgstr "Downloadverlauf"
 
 #: ../cleaners/seamonkey.xml
 msgid "List of files downloaded"
@@ -529,7 +528,7 @@ msgstr "Liste der heruntergeladenen Dateien"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
-msgstr "Die Liste mit den besuchten Internetseiten löschen"
+msgstr "Die Liste mit den besuchten Webseiten löschen"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
@@ -553,7 +552,7 @@ msgstr ""
 
 #: ../cleaners/screenlets.xml
 msgid "Widgets for the desktop"
-msgstr "Widgets für den Schreibtisch"
+msgstr "Widgets für den Desktop"
 
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
@@ -564,11 +563,11 @@ msgstr "Die Cookies, besuchte Adressen und den Suchverlauf löschen"
 #: ../cleaners/winzip.xml ../cleaners/smartftp.xml ../cleaners/wordpad.xml
 #: ../cleaners/teamviewer.xml ../cleaners/windows_explorer.xml
 msgid "Delete the most recently used list"
-msgstr "Die zuletzt benutzten Listen löschen"
+msgstr "Die zuletzt verwendeten Listen löschen"
 
 #: ../cleaners/gnome.xml ../cleaners/kde.xml
 msgid "Desktop environment"
-msgstr "Arbeitsumgebung"
+msgstr "Desktop-Umgebung"
 
 #. In GNOME 'Run' is the dialog shown when typing ALT+F2'
 #. In Windows 'Run' is the dialog in the Start menu
@@ -596,7 +595,7 @@ msgid ""
 "web sites"
 msgstr ""
 "Eine Datenbank von Adressen, inklusive Lesezeichen, Favicons und ein Verlauf "
-"der besuchten Seiten"
+"der besuchten Webseiten"
 
 #: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
@@ -642,7 +641,7 @@ msgid ""
 "Delete the database, which contains information such as play count and last "
 "played"
 msgstr ""
-"Die Datenbank löschen, welche Informationen wie die Wiedergabeanzahl und die "
+"Die Datenbank löschen, die Informationen wie die Wiedergabeanzahl und die "
 "letzte Wiedergabe enthält"
 
 #: ../cleaners/wine.xml
@@ -661,7 +660,7 @@ msgstr ""
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"Die Datei »~/.viminfo« löschen, welche den Datei- und Befehlsverlauf und den "
+"Die Datei »~/.viminfo« löschen, die den Datei- und Befehlsverlauf und den "
 "Zwischenspeicher beinhaltet"
 
 #: ../cleaners/deepscan.xml
@@ -670,7 +669,7 @@ msgstr "Tiefenprüfung"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
-msgstr "Weit über der Platte verstreute Dateien reinigen"
+msgstr "Weit über die Platte verstreute Dateien reinigen"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -756,11 +755,11 @@ msgstr ""
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will reset the position of desktop icons."
-msgstr "Das wird die Position der Schreibtischsymbole zurücksetzen."
+msgstr "Dadurch wird die Position der Desktop-Symbole zurückgesetzt."
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
-msgstr "Das wird den Windows-Explorer neu starten."
+msgstr "Dadurch wird der Windows Explorer neu gestartet."
 
 #: ../cleaners/dnf.xml
 msgid "Remove packages that were formerly dependencies"
@@ -781,8 +780,8 @@ msgstr "Suchwerkzeug"
 #: ../cleaners/recoll.xml
 msgid "Delete the search index, a database of words and the files they contain"
 msgstr ""
-"Den Suchindex löschen, eine Wörterdatenbank und die Dateien, die sie "
-"enthalten"
+"Den Suchindex, eine Wörterdatenbank und die Dateien, die sie enthalten, "
+"löschen"
 
 #: ../cleaners/gimp.xml
 msgid "Graphics editor"
@@ -896,7 +895,7 @@ msgstr ""
 #. http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
 #: ../bleachbit/Cleaner.py:274
 msgid "Broken desktop files"
-msgstr "Beschädigte Schreibtischdateien"
+msgstr "Beschädigte Desktop-Dateien"
 
 #: ../bleachbit/Cleaner.py:275
 msgid "Delete broken application menu entries and file associations"
@@ -910,7 +909,7 @@ msgstr "Lokalisierungen"
 
 #: ../bleachbit/Cleaner.py:280
 msgid "Delete files for unwanted languages"
-msgstr "Löscht die Dateien von den unerwünschten Sprachen"
+msgstr "Löscht die Dateien für unerwünschte Sprachen"
 
 #: ../bleachbit/Cleaner.py:282
 msgid "Configure this option in the preferences."
@@ -981,8 +980,8 @@ msgstr "Zwischenablage"
 #: ../bleachbit/Cleaner.py:326
 msgid "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
-"Die Zwischenablage der Arbeitsumgebung, welche zum Kopieren und Einfügen "
-"benutzt wird"
+"Die Zwischenablage der Desktop-Umgebung, die zum Kopieren und Einfügen "
+"verwendet wird"
 
 #. TRANSLATORS: "Custom" is an option allowing the user to specify which
 #. files and folders will be erased.
@@ -1069,7 +1068,7 @@ msgstr "Bestimmte Dateien oder Ordner schreddern"
 
 #: ../bleachbit/CLI.py:158
 msgid "wipe free space in the given paths"
-msgstr "freien Speicher in den angegebenen Pfaden säubern"
+msgstr "Freien Speicher in den angegebenen Pfaden säubern"
 
 #: ../bleachbit/CLI.py:160
 msgid "overwrite files to hide contents"
@@ -1086,7 +1085,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py:166
 msgid "enable all options that do not have a warning"
-msgstr "alle Optionen aktivieren, die keine Warnung haben"
+msgstr "Alle Optionen aktivieren, die keine Warnung haben"
 
 #: ../bleachbit/CLI.py:168
 msgid "set log level to verbose"
@@ -1138,7 +1137,7 @@ msgstr "Nichts zu tun. Bitte Optionen angeben."
 
 #: ../bleachbit/CLI.py:272
 msgid "--overwrite is intended only for use with --clean"
-msgstr "--overwrite ist nur gedacht in Verwendung mit --clean"
+msgstr "--overwrite ist nur gedacht für die Verwendung mit --clean"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
@@ -1210,7 +1209,7 @@ msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr ""
-"Es gab mindestens eine Datei auf dem Dateisystem, welche das erweitert "
+"Es gab mindestens eine Datei in einem Dateisystem, das erweitertes "
 "Überschreiben nicht unterstützt."
 
 #: ../bleachbit/FileUtilities.py:936
@@ -1221,7 +1220,7 @@ msgstr "Bereinigungspfad: %s"
 #: ../bleachbit/FileUtilities.py:938
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr "Pfad zum Reinigen muss ein existierendes Vereichnis sein: %s"
+msgstr "Pfad zum Reinigen muss ein existierendes Verzeichnis sein: %s"
 
 #: ../bleachbit/FileUtilities.py:949
 msgid "Creating new, temporary file for wiping free space."
@@ -1244,15 +1243,15 @@ msgstr ""
 
 #: ../bleachbit/FileUtilities.py:1026
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
-msgstr "{bytes:,} Bytes und {inodes:,} Inodes verfügbar für Non-Super-User"
+msgstr "{bytes:,} Bytes und {inodes:,} Inodes verfügbar für Nicht-Superuser"
 
 #: ../bleachbit/FileUtilities.py:1028
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
-msgstr "{bytes:,} Bytes und {Inodes:,} Inodes verfügbar für super-user"
+msgstr "{bytes:,} Bytes und {Inodes:,} Inodes verfügbar für Superuser"
 
 #: ../bleachbit/FileUtilities.py:1044
 msgid "Handled unknown error #0 while truncating file."
-msgstr "Unbekannter Fehler #0 beim Abschneiden der Datei behoben."
+msgstr "Unbekannten Fehler #0 beim Abschneiden der Datei behoben."
 
 #: ../bleachbit/GuiBasic.py:54 ../bleachbit/GuiBasic.py:81
 #: ../bleachbit/GuiBasic.py:105 ../bleachbit/GuiBasic.py:151
@@ -1483,8 +1482,8 @@ msgstr "Ordner auswählen"
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
 msgstr ""
-"Bitte einen beschreibbaren Ordner auf jedem Laufwerk auswählen, bei welchem "
-"Sie den freien Speicher überschreiben möchten."
+"Wählen Sie für jedes Laufwerk einen beschreibbaren Ordner, dessen freier "
+"Speicherplatz überschrieben werden soll."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
