@@ -22,9 +22,10 @@
 GTK graphical user interface
 """
 
-from bleachbit import GuiBasic
-from bleachbit import Cleaner, FileUtilities
-from bleachbit import _, APP_NAME, appicon_path, portable_mode, windows10_theme_path
+
+from bleachbit import Cleaner, FileUtilities, GuiBasic
+from bleachbit import APP_NAME, appicon_path, portable_mode, windows10_theme_path
+from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 
 # Now that the configuration is loaded, honor the debug preference there.

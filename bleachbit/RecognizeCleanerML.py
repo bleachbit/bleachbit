@@ -22,7 +22,7 @@
 Check local CleanerML files as a security measure
 """
 
-from bleachbit import _, _p
+from bleachbit.Language import get_text as _, pget_text as _p
 import bleachbit
 from bleachbit.CleanerML import list_cleanerml_files
 from bleachbit.Options import options

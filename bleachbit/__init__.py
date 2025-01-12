@@ -22,8 +22,6 @@
 Code that is commonly shared throughout BleachBit
 """
 
-import gettext
-import locale
 import os
 import re
 import sys
@@ -192,99 +190,6 @@ elif sys.platform.startswith("openbsd") or sys.platform.startswith("freebsd"):
     locale_dir = "/usr/local/share/locale/"
 
 
-
-#
-# gettext
-#
-try:
-    (user_locale, encoding) = locale.getdefaultlocale()
-except:
-    logger.exception('error getting locale')
-    user_locale = None
-    encoding = None
-
-if user_locale is None:
-    user_locale = 'C'
-    logger.warning("no default locale found.  Assuming '%s'", user_locale)
-
-if 'win32' == sys.platform:
-    os.environ['LANG'] = user_locale
-
-try:
-    if not os.path.exists(locale_dir):
-        raise RuntimeError('translations not installed')
-    t = gettext.translation('bleachbit', locale_dir)
-    _ = t.gettext
-except:
-    def _(msg):
-        """Dummy replacement for gettext"""
-        return msg
-
-try:
-    locale.bindtextdomain('bleachbit', locale_dir)
-except AttributeError:
-    if sys.platform.startswith('win'):
-        try:
-            # We're on Windows; try and use libintl-8.dll instead
-            import ctypes
-            libintl = ctypes.cdll.LoadLibrary('libintl-8.dll')
-        except OSError:
-            # libintl-8.dll isn't available; give up
-            pass
-        else:
-            # bindtextdomain can not handle Unicode
-            libintl.bindtextdomain(b'bleachbit', locale_dir.encode('utf-8'))
-            libintl.bind_textdomain_codeset(b'bleachbit', b'UTF-8')
-except:
-    logger.exception('error binding text domain')
-
-try:
-    ngettext = t.ngettext
-except:
-    def ngettext(singular, plural, n):
-        """Dummy replacement for plural gettext"""
-        if 1 == n:
-            return singular
-        return plural
-
-
-#
-# pgettext
-#
-
-# Code released in the Public Domain. You can do whatever you want with this package.
-# Originally written by Pierre Métras <pierre@alterna.tv> for the OLPC XO laptop.
-#
-# Original source: http://dev.laptop.org/git/activities/clock/plain/pgettext.py
-
-
-# pgettext(msgctxt, msgid) from gettext is not supported in Python as of January 2017
-# http://bugs.python.org/issue2504
-# This issue was fixed in Python 3.8, but we need to support older versions.
-# Meanwhile we get official support, we have to simulate it.
-# See http://www.gnu.org/software/gettext/manual/gettext.html#Ambiguities for
-# more information about pgettext.
-
-# The separator between message context and message id.This value is the same as
-# the one used in gettext.h, so PO files should be still valid when Python gettext
-# module will include pgettext() function.
-GETTEXT_CONTEXT_GLUE = "\004"
-
-
-def pgettext(msgctxt, msgid):
-    """A custom implementation of GNU pgettext().
-    """
-    if msgctxt is None or msgctxt == "":
-        return _(msgid)
-    translation = _(msgctxt + GETTEXT_CONTEXT_GLUE + msgid)
-    if translation.startswith(msgctxt + GETTEXT_CONTEXT_GLUE):
-        return msgid
-    else:
-        return translation
-
-
-# Map our pgettext() custom function to _p()
-_p = pgettext
 
 
 #

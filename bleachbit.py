@@ -34,7 +34,7 @@ if 'posix' == os.name:
 
     # The two imports from bleachbit must come after sys.path.append(..)
     import bleachbit.Unix
-    from bleachbit import _
+    from bleachbit.Language import get_text as _
 
     if (
         bleachbit.Unix.is_display_protocol_wayland_and_root_not_allowed()

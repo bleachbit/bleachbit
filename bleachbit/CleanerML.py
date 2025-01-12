@@ -24,7 +24,7 @@ Create cleaners from CleanerML (markup language)
 
 import bleachbit
 from bleachbit.Action import ActionProvider
-from bleachbit import _
+from bleachbit.Language import get_text as _
 from bleachbit.General import boolstr_to_bool, getText
 from bleachbit.FileUtilities import expand_glob_join, listdir
 from bleachbit import Cleaner

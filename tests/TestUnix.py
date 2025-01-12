@@ -137,6 +137,24 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         for neg in negative_cases:
             self.assertFalse(regex.match(neg))
 
+    def test_get_purgeable_locales(self):
+        """Unit test for method get_purgeable_locales()"""
+        # 'en' implies 'en_US'
+        locales_to_keep = ['en', 'en_AU', 'en_CA', 'en_GB']
+        purgeable_locales = get_purgeable_locales(locales_to_keep)
+        self.assertIsInstance(purgeable_locales, frozenset)
+        self.assertIn('es', purgeable_locales)
+        self.assertIn('pt', purgeable_locales)
+        self.assertIn('de', purgeable_locales)
+        for keep in locales_to_keep + ['en_US']:
+            self.assertNotIn(keep, purgeable_locales)
+
+        # 'en_US' keeps 'en' but discards 'en_AU'.
+        purgeable_locales = get_purgeable_locales(['en_US'])
+        self.assertNotIn('en', purgeable_locales)
+        self.assertNotIn('en_US', purgeable_locales)
+        self.assertIn('en_AU', purgeable_locales)
+
     def test_locale_regex(self):
         """Unit test for locale_to_language()"""
         tests = {'en': 'en',
@@ -162,13 +180,14 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         from xml.dom.minidom import parseString
         configpath = parseString(
             '<path location="/usr/share/locale/" filter="*" />').firstChild
-        locales.add_xml(configpath)
+        self.locales.add_xml(configpath)
         counter = 0
-        for path in locales.localization_paths(['en', 'en_AU', 'en_CA', 'en_GB']):
+        for path in self.locales.localization_paths(['en', 'en_AU', 'en_CA', 'en_GB']):
             self.assertLExists(path)
-            # self.assertTrue(path.startswith('/usr/share/locale'))
+            self.assertTrue(path.startswith('/usr/share/locale'))
             # /usr/share/locale/en_* should be ignored
-            self.assertEqual(path.find('/en_'), -1)
+            self.assertEqual(path.find('/en_'), -1, 'expected path ' + path +
+                             ' to not contain /en_')
             counter += 1
         self.assertGreater(counter, 0, 'Zero files deleted by localization cleaner. ' +
                                        'This may be an error unless you really deleted all the files.')
@@ -343,7 +362,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                 return (0, 'SESSION  UID USER   SEAT  TTY \n      2 1000 debian seat0 tty2\n\n1 sessions listed.\n', '')
             elif len(value) > 1:
                 return (0, 'Type={}\n'.format(display_protocol), '')
-            assert(False)  # should never reach here
+            assert (False)  # should never reach here
 
         for display_protocol, assert_method in [['wayland', self.assertTrue], ['donotexist', self.assertFalse]]:
             with mock.patch('bleachbit.General.run_external') as mock_run_external:

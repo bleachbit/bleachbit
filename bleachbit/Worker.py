@@ -24,7 +24,7 @@ Perform the preview or delete operations
 
 from bleachbit import DeepScan, FileUtilities
 from bleachbit.Cleaner import backends
-from bleachbit import _, ngettext
+from bleachbit.Language import get_text as _, nget_text as ngettext
 
 import logging
 import math

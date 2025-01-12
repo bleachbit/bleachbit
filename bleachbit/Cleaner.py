@@ -27,7 +27,7 @@ import os.path
 import re
 import sys
 
-from bleachbit import _
+from bleachbit.Language import get_text as _
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
 from bleachbit import Command, FileUtilities, Memory, Special

@@ -23,7 +23,7 @@ Check for updates via the Internet
 """
 
 import bleachbit
-from bleachbit import _
+from bleachbit.Language import get_text as _
 
 import hashlib
 import logging

@@ -38,7 +38,8 @@ These are the terms:
 """
 
 import bleachbit
-from bleachbit import _, Command, FileUtilities, General
+from bleachbit import Command, FileUtilities, General
+from bleachbit.Language import get_text as _
 
 import glob
 import logging

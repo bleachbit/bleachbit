@@ -32,7 +32,7 @@ from xml.dom.minidom import parseString
 import bleachbit
 from bleachbit import Cleaner, Windows
 from bleachbit.Action import Delete, Winreg
-from bleachbit import _
+from bleachbit.Language import get_text as _
 
 logger = logging.getLogger(__name__)
 

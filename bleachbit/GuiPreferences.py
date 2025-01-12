@@ -23,9 +23,10 @@
 Preferences dialog
 """
 
-from bleachbit import _, _p, online_update_notification_enabled
+from bleachbit import online_update_notification_enabled
 from bleachbit.Options import options
 from bleachbit import GuiBasic
+from bleachbit.Language import get_text as _, pget_text as _p
 
 from gi.repository import Gtk
 import logging

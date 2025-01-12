@@ -24,7 +24,7 @@ Store and retrieve user preferences
 
 import bleachbit
 from bleachbit import General
-from bleachbit import _
+from bleachbit.Language import get_text as _
 
 import logging
 import os
@@ -288,7 +288,7 @@ class Options:
             self.__set_default("win10_theme", False)
 
         if not self.config.has_section('preserve_languages'):
-            lang = bleachbit.user_locale
+            lang = bleachbit.Language.get_active_language_code()
             pos = lang.find('_')
             if -1 != pos:
                 lang = lang[0: pos]

@@ -24,7 +24,7 @@
 GUI for making chaff
 """
 
-from bleachbit import _
+from bleachbit.Language import get_text as _
 from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models
 
 from gi.repository import Gtk, GLib

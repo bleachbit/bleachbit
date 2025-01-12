@@ -39,7 +39,7 @@ except ImportError:
     HAVE_GTK = False
 
 import bleachbit
-from bleachbit import _
+from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 
 from tests import common

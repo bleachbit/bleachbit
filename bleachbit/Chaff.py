@@ -27,8 +27,9 @@ import random
 import tempfile
 from datetime import datetime
 
-from bleachbit import _, bleachbit_exe_path
+from bleachbit import bleachbit_exe_path
 from bleachbit import options_dir
+from bleachbit.Language import get_text as _
 
 from . import markovify
 

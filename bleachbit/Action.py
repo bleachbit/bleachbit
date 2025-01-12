@@ -24,7 +24,8 @@ Actions that perform cleaning
 """
 
 from bleachbit import Command, FileUtilities, General, Special, DeepScan
-from bleachbit import _, fs_scan_re_flags
+from bleachbit import fs_scan_re_flags
+from bleachbit.Language import get_text as _
 
 import glob
 import logging

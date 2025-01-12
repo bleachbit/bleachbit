@@ -21,7 +21,7 @@
 Basic GUI code
 """
 
-from bleachbit import _
+from bleachbit.Language import get_text as _
 
 import os
 

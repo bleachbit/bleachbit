@@ -23,8 +23,9 @@ Command line interface
 """
 
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
-from bleachbit import _, APP_VERSION
+from bleachbit import APP_VERSION
 from bleachbit import SystemInformation, Options, Worker
+from bleachbit.Language import get_text as _
 from bleachbit.Log import set_root_log_level
 
 import logging

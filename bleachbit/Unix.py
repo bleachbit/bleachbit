@@ -25,7 +25,7 @@ Integration specific to Unix-like operating systems
 
 import bleachbit
 from bleachbit import FileUtilities, General
-from bleachbit import _
+from bleachbit.Language import get_text as _, native_locale_names
 
 import glob
 import logging
@@ -110,239 +110,6 @@ class Locales:
         r'(?P<specifier>[_-][A-Z]{2,4})?(?:\.[\w]+[\d-]+|@\w+)?' \
         r'(?P<encoding>[.-_](?:(?:ISO|iso|UTF|utf|us-ascii)[\d-]+|(?:euc|EUC)[A-Z]+))?'
 
-    native_locale_names = \
-        {'aa': 'Afaraf',
-         'ab': 'аҧсуа бызшәа',
-         'ace': 'بهسا اچيه',
-         'ach': 'Acoli',
-         'ae': 'avesta',
-         'af': 'Afrikaans',
-         'ak': 'Akan',
-         'am': 'አማርኛ',
-         'an': 'aragonés',
-         'ang': 'Old English',
-         'anp': 'Angika',
-         'ar': 'العربية',
-         'as': 'অসমীয়া',
-         'ast': 'Asturianu',
-         'av': 'авар мацӀ',
-         'ay': 'aymar aru',
-         'az': 'azərbaycan dili',
-         'ba': 'башҡорт теле',
-         'bal': 'Baluchi',
-         'be': 'Беларуская мова',
-         'bg': 'български език',
-         'bh': 'भोजपुरी',
-         'bi': 'Bislama',
-         'bm': 'bamanankan',
-         'bn': 'বাংলা',
-         'bo': 'བོད་ཡིག',
-         'br': 'brezhoneg',
-         'brx': 'Bodo (India)',
-         'bs': 'босански',
-         'byn': 'Bilin',
-         'ca': 'català',
-         'ce': 'нохчийн мотт',
-         'cgg': 'Chiga',
-         'ch': 'Chamoru',
-         'ckb': 'Central Kurdish',
-         'co': 'corsu',
-         'cr': 'ᓀᐦᐃᔭᐍᐏᐣ',
-         'crh': 'Crimean Tatar',
-         'cs': 'česky',
-         'csb': 'Cashubian',
-         'cu': 'ѩзыкъ словѣньскъ',
-         'cv': 'чӑваш чӗлхи',
-         'cy': 'Cymraeg',
-         'da': 'dansk',
-         'de': 'Deutsch',
-         'doi': 'डोगरी; ڈوگرى',
-         'dv': 'ދިވެހި',
-         'dz': 'རྫོང་ཁ',
-         'ee': 'Eʋegbe',
-         'el': 'Ελληνικά',
-         'en': 'English',
-         'en_AU': 'Australian English',
-         'en_CA': 'Canadian English',
-         'en_GB': 'British English',
-         'eo': 'Esperanto',
-         'es': 'Español',
-         'es_419': 'Latin American Spanish',
-         'et': 'eesti',
-         'eu': 'euskara',
-         'fa': 'فارسی',
-         'ff': 'Fulfulde',
-         'fi': 'suomen kieli',
-         'fil': 'Wikang Filipino',
-         'fin': 'suomen kieli',
-         'fj': 'vosa Vakaviti',
-         'fo': 'føroyskt',
-         'fr': 'Français',
-         'frp': 'Arpitan',
-         'fur': 'Frilian',
-         'fy': 'Frysk',
-         'ga': 'Gaeilge',
-         'gd': 'Gàidhlig',
-         'gez': 'Geez',
-         'gl': 'galego',
-         'gn': 'Avañeẽ',
-         'gu': 'Gujarati',
-         'gv': 'Gaelg',
-         'ha': 'هَوُسَ',
-         'haw': 'Hawaiian',
-         'he': 'עברית',
-         'hi': 'हिन्दी',
-         'hne': 'Chhattisgarhi',
-         'ho': 'Hiri Motu',
-         'hr': 'Hrvatski',
-         'hsb': 'Upper Sorbian',
-         'ht': 'Kreyòl ayisyen',
-         'hu': 'Magyar',
-         'hy': 'Հայերեն',
-         'hz': 'Otjiherero',
-         'ia': 'Interlingua',
-         'id': 'Indonesian',
-         'ie': 'Interlingue',
-         'ig': 'Asụsụ Igbo',
-         'ii': 'ꆈꌠ꒿',
-         'ik': 'Iñupiaq',
-         'ilo': 'Ilokano',
-         'ina': 'Interlingua',
-         'io': 'Ido',
-         'is': 'Íslenska',
-         'it': 'Italiano',
-         'iu': 'ᐃᓄᒃᑎᑐᑦ',
-         'iw': 'עברית',
-         'ja': '日本語',
-         'jv': 'basa Jawa',
-         'ka': 'ქართული',
-         'kab': 'Tazwawt',
-         'kac': 'Jingpho',
-         'kg': 'Kikongo',
-         'ki': 'Gĩkũyũ',
-         'kj': 'Kuanyama',
-         'kk': 'қазақ тілі',
-         'kl': 'kalaallisut',
-         'km': 'ខ្មែរ',
-         'kn': 'ಕನ್ನಡ',
-         'ko': '한국어',
-         'kok': 'Konkani',
-         'kr': 'Kanuri',
-         'ks': 'कश्मीरी',
-         'ku': 'Kurdî',
-         'kv': 'коми кыв',
-         'kw': 'Kernewek',
-         'ky': 'Кыргызча',
-         'la': 'latine',
-         'lb': 'Lëtzebuergesch',
-         'lg': 'Luganda',
-         'li': 'Limburgs',
-         'ln': 'Lingála',
-         'lo': 'ພາສາລາວ',
-         'lt': 'lietuvių kalba',
-         'lu': 'Tshiluba',
-         'lv': 'latviešu valoda',
-         'mai': 'Maithili',
-         'mg': 'fiteny malagasy',
-         'mh': 'Kajin M̧ajeļ',
-         'mhr': 'Eastern Mari',
-         'mi': 'te reo Māori',
-         'mk': 'македонски јазик',
-         'ml': 'മലയാളം',
-         'mn': 'монгол',
-         'mni': 'Manipuri',
-         'mr': 'मराठी',
-         'ms': 'بهاس ملايو',
-         'mt': 'Malti',
-         'my': 'ဗမာစာ',
-         'na': 'Ekakairũ Naoero',
-         'nb': 'Bokmål',
-         'nd': 'isiNdebele',
-         'nds': 'Plattdüütsch',
-         'ne': 'नेपाली',
-         'ng': 'Owambo',
-         'nl': 'Nederlands',
-         'nn': 'Norsk nynorsk',
-         'no': 'Norsk',
-         'nr': 'isiNdebele',
-         'nso': 'Pedi',
-         'nv': 'Diné bizaad',
-         'ny': 'chiCheŵa',
-         'oc': 'occitan',
-         'oj': 'ᐊᓂᔑᓈᐯᒧᐎᓐ',
-         'om': 'Afaan Oromoo',
-         'or': 'ଓଡ଼ିଆ',
-         'os': 'ирон æвзаг',
-         'pa': 'ਪੰਜਾਬੀ',
-         'pap': 'Papiamentu',
-         'pau': 'a tekoi er a Belau',
-         'pi': 'पाऴि',
-         'pl': 'polski',
-         'ps': 'پښتو',
-         'pt': 'Português',
-         'pt_BR': 'Português do Brasil',
-         'qu': 'Runa Simi',
-         'rm': 'rumantsch grischun',
-         'rn': 'Ikirundi',
-         'ro': 'română',
-         'ru': 'Pусский',
-         'rw': 'Ikinyarwanda',
-         'sa': 'संस्कृतम्',
-         'sat': 'ᱥᱟᱱᱛᱟᱲᱤ',
-         'sc': 'sardu',
-         'sd': 'सिन्धी',
-         'se': 'Davvisámegiella',
-         'sg': 'yângâ tî sängö',
-         'shn': 'Shan',
-         'si': 'සිංහල',
-         'sk': 'slovenčina',
-         'sl': 'slovenščina',
-         'sm': 'gagana faa Samoa',
-         'sn': 'chiShona',
-         'so': 'Soomaaliga',
-         'sq': 'Shqip',
-         'sr': 'Српски',
-         'ss': 'SiSwati',
-         'st': 'Sesotho',
-         'su': 'Basa Sunda',
-         'sv': 'svenska',
-         'sw': 'Kiswahili',
-         'ta': 'தமிழ்',
-         'te': 'తెలుగు',
-         'tet': 'Tetum',
-         'tg': 'тоҷикӣ',
-         'th': 'ไทย',
-         'ti': 'ትግርኛ',
-         'tig': 'Tigre',
-         'tk': 'Türkmen',
-         'tl': 'ᜏᜒᜃᜅ᜔ ᜆᜄᜎᜓᜄ᜔',
-         'tn': 'Setswana',
-         'to': 'faka Tonga',
-         'tr': 'Türkçe',
-         'ts': 'Xitsonga',
-         'tt': 'татар теле',
-         'tw': 'Twi',
-         'ty': 'Reo Tahiti',
-         'ug': 'Uyghur',
-         'uk': 'Українська',
-         'ur': 'اردو',
-         'uz': 'Ўзбек',
-         've': 'Tshivenḓa',
-         'vi': 'Tiếng Việt',
-         'vo': 'Volapük',
-         'wa': 'walon',
-         'wae': 'Walser',
-         'wal': 'Wolaytta',
-         'wo': 'Wollof',
-         'xh': 'isiXhosa',
-         'yi': 'ייִדיש',
-         'yo': 'Yorùbá',
-         'za': 'Saɯ cueŋƅ',
-         'zh': '中文',
-         'zh_CN': '中文',
-         'zh_TW': '中文',
-         'zu': 'isiZulu'}
-
     def __init__(self):
         self._paths = LocaleCleanerPath(location='/')
 
@@ -395,10 +162,7 @@ class Locales:
 
     def localization_paths(self, locales_to_keep):
         """Returns all localization items matching the previously added xml configuration"""
-        if not locales_to_keep:
-            raise RuntimeError('Found no locales to keep')
-        purgeable_locales = frozenset((locale for locale in Locales.native_locale_names.keys()
-                                       if locale not in locales_to_keep))
+        purgeable_locales = get_purgeable_locales(locales_to_keep)
 
         for (locale, specifier, path) in self._paths.get_localizations('/'):
             specific = locale + (specifier or '')
@@ -444,6 +208,30 @@ def __is_broken_xdg_desktop_application(config, desktop_pathname):
                             windows_exe, desktop_pathname)
                 return True
     return False
+
+
+def get_purgeable_locales(locales_to_keep):
+    """Returns all locales to be purged"""
+    if not locales_to_keep:
+        raise RuntimeError('Found no locales to keep')
+
+    assert isinstance(locales_to_keep, list)
+
+    # Start with all locales as potentially purgeable
+    purgeable_locales = set(native_locale_names.keys())
+
+    # Remove the locales we want to keep
+    for keep in locales_to_keep:
+        purgeable_locales.discard(keep)
+        # If keeping a variant (e.g. 'en_US'), also keep the base locale (e.g. 'en')
+        if '_' in keep:
+            purgeable_locales.discard(keep[:keep.find('_')])
+        # If keeping a base locale (e.g. 'en'), also keep all its variants (e.g. 'en_US')
+        if '_' not in keep:
+            purgeable_locales = {locale for locale in purgeable_locales
+                                 if not locale.startswith(keep + '_')}
+
+    return frozenset(purgeable_locales)
 
 
 def is_unregistered_mime(mimetype):

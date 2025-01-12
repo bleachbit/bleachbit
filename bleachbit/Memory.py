@@ -25,7 +25,7 @@ Wipe memory
 
 from bleachbit import FileUtilities
 from bleachbit import General
-from bleachbit import _
+from bleachbit.Language import get_text as _
 
 import logging
 import os
