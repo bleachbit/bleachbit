@@ -33,6 +33,8 @@ script:
 # Make the same file as on AppVeyor, so coveralls does not complain.
    - echo "revision = \"`git rev-parse --short HEAD `\"" >bleachbit/Revision.py
    - echo "build_number = \"$TRAVIS_BUILD_NUMBER" >>bleachbit/Revision.py
+# Tests require translations.
+   - make -C po local
 # Run tests.
    - xvfb-run make tests COVERAGE="coverage run --include='bleachbit/*'"
 after_success:
