@@ -19,8 +19,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from bleachbit.Language import get_supported_language_codes, native_locale_names
+from bleachbit.Language import get_supported_language_codes, native_locale_names, setup_translation, get_text
 from tests import common
+
 
 class LanguageTestCase(common.BleachbitTestCase):
 
@@ -34,3 +35,21 @@ class LanguageTestCase(common.BleachbitTestCase):
             self.assertIsInstance(slang, str)
             self.assertTrue(slang in native_locale_names)
         self.assertTrue('en_US' in slangs)
+        self.assertTrue('es' in slangs)
+
+    def test_switch_language_twice(self):
+        """English should still work after switching twice"""
+        from bleachbit.Options import options
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        setup_translation()
+        self.assertEqual(get_text('Preview'), 'Preview')
+
+        options.set('auto_detect_lang', False)
+        options.set('forced_language', 'es')
+        setup_translation()
+        self.assertEqual(get_text('Preview'), 'Vista previa')
+
+        options.set('forced_language', 'en')
+        setup_translation()
+        self.assertEqual(get_text('Preview'), 'Preview')

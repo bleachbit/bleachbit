@@ -846,7 +846,9 @@ class GUI(Gtk.ApplicationWindow):
         return scrolled_window
 
     def cb_refresh_operations(self):
-        """Callback to refresh the list of cleaners"""
+        """Callback to refresh the list of cleaners and header bar labels"""
+        # In case language changed, update the header bar labels.
+        self.update_headerbar_labels()
         # Is this the first time in this session?
         if not hasattr(self, 'recognized_cleanerml') and not self._auto_exit:
             from bleachbit import RecognizeCleanerML
@@ -1034,6 +1036,28 @@ class GUI(Gtk.ApplicationWindow):
             text = ""
         self.status_bar.push(context_id, text)
 
+    def update_headerbar_labels(self):
+        """Update the labels and tooltips in the headerbar buttons"""
+        # Preview button
+        self.preview_button.set_tooltip_text(
+            _("Preview files in the selected operations (without deleting any files)"))
+        # TRANSLATORS: This is the preview button on the main window.  It
+        # previews changes.
+        self.preview_button.set_label(_('Preview'))
+
+        # Clean button
+        # TRANSLATORS: This is the clean button on the main window.
+        # It makes permanent changes: usually deleting files, sometimes
+        # altering them.
+        self.run_button.set_label(_('Clean'))
+        self.run_button.set_tooltip_text(
+            _("Clean files in the selected operations"))
+
+        # Stop button
+        self.stop_button.set_label(_('Abort'))
+        self.stop_button.set_tooltip_text(
+            _('Abort the preview or cleaning process'))
+
     def create_headerbar(self):
         """Create the headerbar"""
         hbar = Gtk.HeaderBar()
@@ -1054,23 +1078,12 @@ class GUI(Gtk.ApplicationWindow):
         self.preview_button.set_always_show_image(True)
         self.preview_button.connect(
             'clicked', lambda *dummy: self.preview_or_run_operations(False))
-        self.preview_button.set_tooltip_text(
-            _("Preview files in the selected operations (without deleting any files)"))
-        # TRANSLATORS: This is the preview button on the main window.  It
-        # previews changes.
-        self.preview_button.set_label(_('Preview'))
         box.add(self.preview_button)
 
         # create the delete button
         self.run_button = Gtk.Button.new_from_icon_name(
             'edit-clear-all', icon_size)
         self.run_button.set_always_show_image(True)
-        # TRANSLATORS: This is the clean button on the main window.
-        # It makes permanent changes: usually deleting files, sometimes
-        # altering them.
-        self.run_button.set_label(_('Clean'))
-        self.run_button.set_tooltip_text(
-            _("Clean files in the selected operations"))
         self.run_button.connect("clicked", self.run_operations)
         box.add(self.run_button)
 
@@ -1078,9 +1091,6 @@ class GUI(Gtk.ApplicationWindow):
         self.stop_button = Gtk.Button.new_from_icon_name(
             'process-stop', icon_size)
         self.stop_button.set_always_show_image(True)
-        self.stop_button.set_label(_('Abort'))
-        self.stop_button.set_tooltip_text(
-            _('Abort the preview or cleaning process'))
         self.stop_button.set_sensitive(False)
         self.stop_button.connect('clicked', self.cb_stop_operations)
         box.add(self.stop_button)
@@ -1101,6 +1111,8 @@ class GUI(Gtk.ApplicationWindow):
         menu_button.add(image)
         hbar.pack_end(menu_button)
 
+        # Update all labels and tooltips
+        self.update_headerbar_labels()
         return hbar
 
     def on_configure_event(self, widget, event):

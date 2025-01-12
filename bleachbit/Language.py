@@ -25,8 +25,6 @@ import sys
 
 logger = logging.getLogger(__name__)
 
-# from tests import common
-
 
 native_locale_names = \
     {'aa': 'Afaraf',
@@ -264,13 +262,16 @@ native_locale_names = \
 
 
 def get_supported_language_codes():
-    """Return list of supported languages as language codes"""
+    """Return list of supported languages as language codes
+
+    Supported means a translation is available.
+    """
     supported_langs = []
     # Use local import to avoid circular import.
     from bleachbit import locale_dir
-    lang_codes = sorted(set(os.listdir(locale_dir)+['en_US']))
+    lang_codes = sorted(set(os.listdir(locale_dir)+['en_US', 'en']))
     for lang in lang_codes:
-        if 'en_US' == lang:
+        if lang in ('en', 'en_US'):
             supported_langs.append(lang)
             continue
         if os.path.isdir(os.path.join(locale_dir, lang)):
@@ -285,7 +286,10 @@ def get_supported_language_codes():
 
 
 def get_supported_language_code_name_dict():
-    """Return dictionary of supported languages as language codes and names"""
+    """Return dictionary of supported languages as language codes and names
+
+    Supported means a translation is available.
+    """
     supported_langs = {}
     for lang in get_supported_language_codes():
         supported_langs[lang] = native_locale_names[lang]
@@ -293,18 +297,16 @@ def get_supported_language_code_name_dict():
 
 
 def get_active_language_code():
-    """Return language name for language code"""
-
-    # from bleachbit.Options import has_option, get_option
-    # if not get_option('auto_detect_lang') and has_option('forced_language'):
-    #    return get_option('forced_language')
+    """Return the language ID to use for translations"""
+    from bleachbit.Options import options
+    if not options.get('auto_detect_lang') and options.has_option('forced_language') and options.get('forced_language'):
+        return options.get('forced_language')
     import locale
     try:
-        (user_locale, encoding) = locale.getlocale()
+        (user_locale, _encoding) = locale.getlocale()
     except:
         logger.exception('error getting locale')
         user_locale = None
-        encoding = None
 
     if user_locale is None:
         user_locale = 'C'
@@ -314,25 +316,22 @@ def get_active_language_code():
 
 def setup_translation():
     """Do a one-time setup of translations"""
+    global attempted_setup_translation, t
+    attempted_setup_translation = True
     # Use local import to avoid circular import.
     from bleachbit import locale_dir
-    if not os.path.exists(locale_dir):
-        logger.info("locale directory '%s' does not exist", locale_dir)
-        return
-    global t
     user_locale = get_active_language_code()
-    if user_locale == 'en_US':
-        return
-    print(f"user_locale: {user_locale}, locale_dir: {locale_dir}")
+    logger.debug(f"user_locale: {user_locale}, locale_dir: {locale_dir}")
     assert isinstance(user_locale, str)
     assert isinstance(locale_dir, str), f"locale_dir: {locale_dir}"
     if 'win32' == sys.platform and user_locale:
         os.environ['LANG'] = user_locale
-    # t = gettext.translation(domain='bleachbit', localedir=locale_dir, languages=[user_locale])
     try:
-        t = gettext.translation(domain='bleachbit', localedir=locale_dir)
+        t = gettext.translation(
+            domain='bleachbit', localedir=locale_dir, languages=[user_locale])
     except FileNotFoundError:
         logger.debug("locale directory '%s' does not exist", locale_dir)
+        t = None
         return
     import locale
     locale.bindtextdomain('bleachbit', locale_dir)
@@ -344,7 +343,9 @@ def get_text(str):
 
     The name has an underscore to avoid conflicting with gettext module.
     """
-    global t
+    global attempted_setup_translation, t
+    if not attempted_setup_translation:
+        setup_translation()
     if not t:
         return str
     return t.gettext(str)
@@ -371,5 +372,5 @@ def pget_text(msgctxt, msgid):
     return t.pgettext(msgctxt, msgid)
 
 
+attempted_setup_translation = False
 t = None
-setup_translation()

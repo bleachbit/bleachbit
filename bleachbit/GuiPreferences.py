@@ -26,6 +26,7 @@ Preferences dialog
 from bleachbit import online_update_notification_enabled
 from bleachbit.Options import options
 from bleachbit import GuiBasic
+from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _, pget_text as _p
 
 from gi.repository import Gtk
@@ -184,6 +185,64 @@ class PreferencesDialog:
         cb_units_iec.connect('toggled', self.__toggle_callback, 'units_iec')
         vbox.pack_start(cb_units_iec, False, True, 0)
 
+        # Language auto-detection
+        lang_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        cb_auto_lang = Gtk.CheckButton(
+            label=_("Auto-detect language"))
+        is_auto_detect = options.get("auto_detect_lang")
+        cb_auto_lang.set_active(is_auto_detect)
+        cb_auto_lang.set_tooltip_text(
+            _("Automatically detect the system language"))
+        lang_box.pack_start(cb_auto_lang, False, True, 0)
+
+        # Language selection dropdown
+        lang_select_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        lang_label = Gtk.Label(label=_("Language:"))
+        lang_label.set_margin_start(20)  # Add some indentation
+        lang_select_box.pack_start(lang_label, False, True, 5)
+
+        lang_combo = Gtk.ComboBoxText()
+        current_lang_code = get_active_language_code()
+        # Add available languages
+        lang_idx = 0
+        active_language_idx = None
+        for lang_code, native in get_supported_language_code_name_dict().items():
+            lang_combo.append_text(f"{native} ({lang_code})")
+            if lang_code == current_lang_code:
+                active_language_idx = lang_idx
+            lang_idx += 1
+        lang_combo.set_active(active_language_idx)
+
+        def on_lang_changed(widget):
+            text = widget.get_active_text()
+            # Extract language code from the format "Native Name (lang_code)"
+            lang_code = text.split("(")[-1].rstrip(")")
+            if lang_code:
+                options.set("forced_language", lang_code, section="bleachbit")
+            else:
+                logger.warning(
+                    "No language code found in combobox for text %s", text)
+            setup_translation()
+            self.refresh_operations = True
+
+        def on_auto_detect_toggled(widget):
+            self.__toggle_callback(None, 'auto_detect_lang')
+            is_auto_detect = options.get("auto_detect_lang")
+            lang_select_box.set_sensitive(not is_auto_detect)
+            if is_auto_detect:
+                options.set("forced_language", "", section="bleachbit")
+            setup_translation()
+            self.refresh_operations = True
+
+        lang_combo.connect('changed', on_lang_changed)
+        cb_auto_lang.connect('toggled', on_auto_detect_toggled)
+
+        lang_select_box.pack_start(lang_combo, True, True, 5)
+        lang_select_box.set_sensitive(not is_auto_detect)
+
+        lang_box.pack_start(lang_select_box, False, True, 0)
+        vbox.pack_start(lang_box, False, True, 0)
+
         if 'nt' == os.name:
             # Dark theme
             cb_win10_theme = Gtk.CheckButton(_("Windows 10 theme"))
@@ -303,7 +362,7 @@ class PreferencesDialog:
 
         # populate data
         liststore = Gtk.ListStore('gboolean', str, str)
-        for lang, native in sorted(Unix.Locales.native_locale_names.items()):
+        for lang, native in get_supported_language_code_name_dict().items():
             liststore.append([(options.get_language(lang)), lang, native])
 
         # create treeview
