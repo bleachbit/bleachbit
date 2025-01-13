@@ -297,20 +297,38 @@ def get_supported_language_code_name_dict():
 
 
 def get_active_language_code():
-    """Return the language ID to use for translations"""
+    """Return the language ID to use for translations
+
+    The language ID is a code like: en, en_US, nds, C
+
+    There may be an underscore or no underscore. The first part may
+    contain two or three letters.
+
+    There will not be a dot like `en_US.UTF-8`.
+    """
     from bleachbit.Options import options
     if not options.get('auto_detect_lang') and options.has_option('forced_language') and options.get('forced_language'):
         return options.get('forced_language')
     import locale
     try:
-        (user_locale, _encoding) = locale.getlocale()
-    except:
-        logger.exception('error getting locale')
+        user_locale = locale.getlocale()[0]
+    except Exception as e:
+        logger.exception('error calling getlocale(): %s', e)
         user_locale = None
 
     if user_locale is None:
         user_locale = 'C'
         logger.warning("no default locale found.  Assuming '%s'", user_locale)
+
+    if '.' in user_locale:
+        # This should never happen.
+        logger.warning('locale contains a dot: %s', user_locale)
+        user_locale = user_locale.split('.')[0]
+
+    assert isinstance(user_locale, str)
+    assert len(
+        user_locale) >= 2 or user_locale == 'C', f"user_locale: {user_locale}"
+
     return user_locale
 
 
@@ -328,9 +346,10 @@ def setup_translation():
         os.environ['LANG'] = user_locale
     try:
         t = gettext.translation(
-            domain='bleachbit', localedir=locale_dir, languages=[user_locale])
+            domain='bleachbit', localedir=locale_dir, languages=[user_locale], fallback=True)
     except FileNotFoundError as e:
-        logger.exception("Error in setup_translation() with language code %s: %s", user_locale,e)
+        logger.error(
+            "Error in setup_translation() with language code %s: %s", user_locale, e)
         t = None
         return
     import locale
