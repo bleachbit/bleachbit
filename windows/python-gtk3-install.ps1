@@ -24,8 +24,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #>
 
-$ErrorActionPreference = "Stop"
-
 $root_dir = ".\x86-windows"
 $python_home = "$root_dir\tools\python3"
 $themes_dir = "$python_home\share\themes"
