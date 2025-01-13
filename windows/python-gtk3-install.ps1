@@ -2,15 +2,15 @@
 Install Python and GTK development and build environment for BleachBit on Windows.
 This is a special version built for BleachBit.
 It installs in a portable style.
-This script may be run in an empty directory like `c:\pygtk`.
+This script may be run in an empty directory like `c:\projects`.
 
 Afterwards, launch the application like this:
-  c:\pygtk\x86-windows\tools\python3\python.exe c:\bleachbit\bleachbit.py
+  c:\projects\x86-windows\tools\python3\python.exe c:\projects\bleachbit\bleachbit.py
 
-This assumes that the BleachBit source code is in `c:\bleachbit` and PyGTK
-is installed in `c:\pygtk`, but either directory can be relocated.
+This assumes that the BleachBit source code is in `c:\projects\bleachbit` and PyGTK
+is installed in `c:\projects\pygtk`, but either directory can be relocated.
 
-Copyright (C) 2008-2024 Andrew Ziem
+Copyright (C) 2008-2025 Andrew Ziem
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #>
+
+$ErrorActionPreference = "Stop"
 
 $root_dir = ".\x86-windows"
 $python_home = "$root_dir\tools\python3"
@@ -158,6 +160,32 @@ Get-Content "$script_dir\python-gtk3-deps.lst" | ForEach-Object {
     if (-not (Test-Path "$python_home\$_")) {
         Copy-Item -Path "$root_dir\$_" -Destination "$python_home" -Recurse -Force
     }
+}
+
+# Find all copies of libintl-8.dll
+$libintl_paths = @()
+$possiblePaths = @("c:\mingw", "c:\msys32", "c:\msys64", ".")
+
+foreach ($path in $possiblePaths) {
+    if (Test-Path $path) {
+        $libintl_paths += Get-ChildItem -Path $path -Filter "libintl-8.dll" -Recurse -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName }
+    }
+}
+
+# Show all libintl-8.dll instances
+Write-Host "libintl-8.dll instances:"
+$libintl_paths | ForEach-Object { Write-Host $_ }
+
+$MINGW_ROOT = ".\msys2\mingw32"
+if (-not (Test-Path "$MINGW_ROOT\bin")) {
+    if (-Test-Path "c:\mingw32\bin") {
+        $MINGW_ROOT = "c:\mingw32"
+    }
+}
+
+if (-not (Test-Path "$python_home\dlls\libintl-8.dll")) {
+    Write-Host "Copying libintl-8.dll..."
+    Copy-Item -Path "$MINGW_ROOT\bin\libintl-8.dll" -Destination "$python_home\dlls" -Force
 }
 
 # Add Python home to PATH.

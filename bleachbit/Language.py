@@ -329,13 +329,26 @@ def setup_translation():
     try:
         t = gettext.translation(
             domain='bleachbit', localedir=locale_dir, languages=[user_locale])
-    except FileNotFoundError:
-        logger.debug("locale directory '%s' does not exist", locale_dir)
+    except FileNotFoundError as e:
+        logger.exception("Error in setup_translation() with language code %s: %s", user_locale,e)
         t = None
         return
     import locale
-    locale.bindtextdomain('bleachbit', locale_dir)
-    # fixme: test importance of libintl-8.dll
+    try:
+        locale.bindtextdomain('bleachbit', locale_dir)
+    except AttributeError as e:
+        if 'nt' == os.name:
+            try:
+                import ctypes
+                libintl = ctypes.cdll.LoadLibrary('libintl-8.dll')
+            except OSError:
+                logger.exception('error loading libintl-8.dll')
+                # libintl-8.dll isn't available; give up
+                pass
+        else:
+            logger.exception('Error in setup_translation(): %s', e)
+    except:
+        logger.exception('error binding text domain')
 
 
 def get_text(str):
