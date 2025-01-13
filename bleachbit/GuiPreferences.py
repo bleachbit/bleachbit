@@ -211,7 +211,8 @@ class PreferencesDialog:
             if lang_code == current_lang_code:
                 active_language_idx = lang_idx
             lang_idx += 1
-        lang_combo.set_active(active_language_idx)
+        if active_language_idx:
+            lang_combo.set_active(active_language_idx)
 
         def on_lang_changed(widget):
             text = widget.get_active_text()
