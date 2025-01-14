@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -310,7 +310,7 @@ class Bleachbit(Gtk.Application):
 
     def get_about_dialog(self):
         dialog = Gtk.AboutDialog(comments=_("Program to clean unnecessary files"),
-                                 copyright='Copyright (C) 2008-2024 Andrew Ziem',
+                                 copyright='Copyright (C) 2008-2025 Andrew Ziem',
                                  program_name=APP_NAME,
                                  version=bleachbit.APP_VERSION,
                                  website=bleachbit.APP_URL,
