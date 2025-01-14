@@ -160,32 +160,6 @@ Get-Content "$script_dir\python-gtk3-deps.lst" | ForEach-Object {
     }
 }
 
-# Find all copies of libintl-8.dll
-$libintl_paths = @()
-$possiblePaths = @("c:\mingw", "c:\msys32", "c:\msys64", ".")
-
-foreach ($path in $possiblePaths) {
-    if (Test-Path $path) {
-        $libintl_paths += Get-ChildItem -Path $path -Filter "libintl-8.dll" -Recurse -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName }
-    }
-}
-
-# Show all libintl-8.dll instances
-Write-Host "libintl-8.dll instances:"
-$libintl_paths | ForEach-Object { Write-Host $_ }
-
-$MINGW_ROOT = ".\msys2\mingw32"
-if (-not (Test-Path "$MINGW_ROOT\bin")) {
-    if (-Test-Path "c:\mingw32\bin") {
-        $MINGW_ROOT = "c:\mingw32"
-    }
-}
-
-if (-not (Test-Path "$python_home\dlls\libintl-8.dll")) {
-    Write-Host "Copying libintl-8.dll..."
-    Copy-Item -Path "$MINGW_ROOT\bin\libintl-8.dll" -Destination "$python_home\dlls" -Force
-}
-
 # Add Python home to PATH.
 if ($env:PATH -notlike "*$env:PYTHON_HOME*") {
     Write-Host "Adding $env:PYTHON_HOME to PATH..."

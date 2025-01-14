@@ -532,6 +532,29 @@ def is_process_running(name):
     return False
 
 
+def load_libintl():
+    """Load libintl-8.dll if available
+
+    Returns None if the dll is not available.
+    """
+    import ctypes
+    lib_name = 'libintl-8.dll'
+    try:
+        lib_name = ctypes.util.find_library(lib_name)
+    except Exception as e:
+        logger.warning('error in find_library(%s): %s', lib_name, e)
+        return
+    if not lib_name:
+        logger.warning('libintl-8.dll was not found, so translations will not work.')
+        return
+    try:
+        libintl = ctypes.cdll.LoadLibrary(lib_name)
+    except Exception as e:
+        logger.warning('error in LoadLibrary(%s): %s', lib_name, e)
+        return
+    return libintl
+
+
 def move_to_recycle_bin(path):
     """Move 'path' into recycle bin"""
     shell.SHFileOperation(

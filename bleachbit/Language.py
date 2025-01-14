@@ -357,13 +357,11 @@ def setup_translation():
         locale.bindtextdomain('bleachbit', locale_dir)
     except AttributeError as e:
         if 'nt' == os.name:
-            try:
-                import ctypes
-                libintl = ctypes.cdll.LoadLibrary('libintl-8.dll')
-            except OSError:
-                logger.exception('error loading libintl-8.dll')
-                # libintl-8.dll isn't available; give up
-                pass
+            from bleachbit.Windows import load_libintl
+            libintl = load_libintl()
+            if libintl:
+                libintl.bindtextdomain('bleachbit', locale_dir)
+                libintl.bind_textdomain_codeset('bleachbit', 'UTF-8')
         else:
             logger.exception('Error in setup_translation(): %s', e)
     except:
