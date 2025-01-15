@@ -532,25 +532,30 @@ def is_process_running(name):
     return False
 
 
-def load_libintl():
-    """Load libintl-8.dll if available
+def load_i18n_dll():
+    """Load internationalization library
+
+    It may be called either libintl-8.dll or intl-8.dll, and it comes
+    from gettext.
 
     Returns None if the dll is not available.
     """
     import ctypes
-    lib_name = 'libintl-8.dll'
-    try:
-        lib_name = ctypes.util.find_library(lib_name)
-    except Exception as e:
-        logger.warning('error in find_library(%s): %s', lib_name, e)
+    lib_fns = ['libintl-8.dll', 'intl-8.dll']
+    for lib_fn in lib_fns:
+        lib_path = os.path.join(bleachbit.bleachbit_exe_path, lib_fn)
+        if os.path.exists(lib_path):
+            break
+    else:
+        return None
+    if not lib_path:
+        logger.warning(
+            'internationalization library was not found, so translations will not work.')
         return
-    if not lib_name:
-        logger.warning('libintl-8.dll was not found, so translations will not work.')
-        return
     try:
-        libintl = ctypes.cdll.LoadLibrary(lib_name)
+        libintl = ctypes.cdll.LoadLibrary(lib_path)
     except Exception as e:
-        logger.warning('error in LoadLibrary(%s): %s', lib_name, e)
+        logger.warning('error in LoadLibrary(%s): %s', lib_path, e)
         return
     return libintl
 

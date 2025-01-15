@@ -310,13 +310,18 @@ def get_active_language_code():
     if not options.get('auto_detect_lang') and options.has_option('forced_language') and options.get('forced_language'):
         return options.get('forced_language')
     import locale
-    try:
+    # getdefaultlocale() will be removed in Python 3.15, but
+    # on Windows, it returns RFC1766 codes when getlocale()
+    # may return a value such as 'English_United States'.
+    if os.name == 'nt':
+        import ctypes
+        kernel32 = ctypes.windll.kernel32
+        lcid = kernel32.GetUserDefaultLCID()  # e.g., 1033 is en-US
+        user_locale = locale.windows_locale.get(lcid, '')
+    else:
         user_locale = locale.getlocale()[0]
-    except Exception as e:
-        logger.exception('error calling getlocale(): %s', e)
-        user_locale = None
 
-    if user_locale is None:
+    if not user_locale:
         user_locale = 'C'
         logger.warning("no default locale found.  Assuming '%s'", user_locale)
 
@@ -357,8 +362,8 @@ def setup_translation():
         locale.bindtextdomain('bleachbit', locale_dir)
     except AttributeError as e:
         if 'nt' == os.name:
-            from bleachbit.Windows import load_libintl
-            libintl = load_libintl()
+            from bleachbit.Windows import load_i18n_dll
+            libintl = load_i18n_dll()
             if libintl:
                 libintl.bindtextdomain('bleachbit', locale_dir)
                 libintl.bind_textdomain_codeset('bleachbit', 'UTF-8')
