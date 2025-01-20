@@ -95,13 +95,37 @@ class BleachbitTestCase(unittest.TestCase):
 
     def assertIsLanguageCode(self, lang_id, msg=''):
         self.assertIsInstance(lang_id, str)
-        if lang_id in ('C', 'C.utf8', 'POSIX'):
+        if lang_id in ('C', 'C.UTF-8', 'C.utf8', 'POSIX'):
             return
         self.assertTrue(len(lang_id) >= 2)
         import re
         pattern = r'^[a-z]{2,3}(_[A-Z]{2})?(\.(utf\-?8|iso88591))?$'
         self.assertTrue(re.match(pattern, lang_id),
                         f'Invalid language code format: {lang_id}')
+
+    def test_assertIsLanguageCode(self):
+        valid_codes = ['en', 'en_US', 'fr_FR.utf8',
+                       'de_DE.iso88591', 'C', 'C.UTF-8', 'C.utf8', 'POSIX']
+        invalid_codes = ['e', 'en_', 'english', 'en_US_', '123', 'en-US', 'en_us', 'en_US.',
+                         'en_us.utf8',
+                         'en_us.UTF-8',
+                         'utf8',
+                         'UTF-8',
+                         '.utf8',
+                         '.UTF-8',
+                         '',
+                         [],
+                         0,
+                         None]
+        invalid_codes.extend([code + ' ' for code in valid_codes])
+        invalid_codes.extend([' ' + code for code in valid_codes])
+
+        for code in valid_codes:
+            self.assertIsLanguageCode(code)
+
+        for code in invalid_codes:
+            with self.assertRaises(AssertionError):
+                self.assertIsLanguageCode(code)
 
     def assertIsSupportedLanguageCode(self, lang_id, msg=''):
         self.assertIsLanguageCode(lang_id, msg)
