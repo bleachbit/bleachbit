@@ -310,13 +310,15 @@ def get_active_language_code():
     if not options.get('auto_detect_lang') and options.has_option('forced_language') and options.get('forced_language'):
         return options.get('forced_language')
     import locale
-    # getdefaultlocale() will be removed in Python 3.15, but
-    # on Windows, it returns RFC1766 codes when getlocale()
-    # may return a value such as 'English_United States'.
+    # locale.getdefaultlocale() will be removed in Python 3.15, so
+    # use getlocale() instead.
+    # However, on Windows, getlocale() may return values like
+    # 'English_United States' instead of RFC1766 codes.
     if os.name == 'nt':
         import ctypes
         kernel32 = ctypes.windll.kernel32
-        lcid = kernel32.GetUserDefaultLCID()  # e.g., 1033 is en-US
+        lcid = kernel32.GetUserDefaultLCID()
+        # Convert Windows LCID (e.g., 1033) to RFC1766 (e.g., en-US).
         user_locale = locale.windows_locale.get(lcid, '')
     else:
         user_locale = locale.getlocale()[0]
@@ -349,28 +351,46 @@ def setup_translation():
     assert isinstance(locale_dir, str), f"locale_dir: {locale_dir}"
     if 'win32' == sys.platform and user_locale:
         os.environ['LANG'] = user_locale
+    text_domain = 'bleachbit'
     try:
         t = gettext.translation(
-            domain='bleachbit', localedir=locale_dir, languages=[user_locale], fallback=True)
+            domain=text_domain, localedir=locale_dir, languages=[user_locale], fallback=True)
     except FileNotFoundError as e:
         logger.error(
             "Error in setup_translation() with language code %s: %s", user_locale, e)
         t = None
         return
     import locale
-    try:
-        locale.bindtextdomain('bleachbit', locale_dir)
-    except AttributeError as e:
+    if hasattr(locale, 'bindtextdomain'):
+        locale.bindtextdomain(text_domain, locale_dir)
+        locale.textdomain(text_domain)
+    else:
         if 'nt' == os.name:
             from bleachbit.Windows import load_i18n_dll
             libintl = load_i18n_dll()
             if libintl:
-                libintl.bindtextdomain('bleachbit', locale_dir)
-                libintl.bind_textdomain_codeset('bleachbit', 'UTF-8')
+                libintl.bindtextdomain(text_domain, locale_dir)
+                libintl.textdomain(text_domain)
+                libintl.bind_textdomain_codeset(text_domain, 'UTF-8')
+            else:
+                logger.error(
+                    'The internationalization library is not available.')
         else:
-            logger.exception('Error in setup_translation(): %s', e)
-    except:
-        logger.exception('error binding text domain')
+            logger.error('The function bindtextdomain() is not available.')
+
+    # locale.setlocale() on Linux will throw an exception if the locale is not
+    # available, so find the best matching locale. When set, Gtk.Builder is
+    # translated.
+    # On Windows, setlocale() accepts any values without raising an exception.
+    # FIXME: I tested various values for locale.setlocale() on Windows, but
+    # Gtk.Builder is not translated.
+    if os.name == 'posix':
+        from bleachbit.Unix import find_best_locale
+        setlocale_local = find_best_locale(user_locale)
+        try:
+            locale.setlocale(locale.LC_ALL, setlocale_local)
+        except locale.Error as e:
+            logger.error('locale.setlocale(%s): %s:', setlocale_local, e)
 
 
 def get_text(str):

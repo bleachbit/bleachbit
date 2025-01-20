@@ -210,6 +210,50 @@ def __is_broken_xdg_desktop_application(config, desktop_pathname):
     return False
 
 
+def find_available_locales():
+    """Returns a list of available locales using locale -a"""
+    rc, stdout, stderr = General.run_external(['locale', '-a'])
+    if rc == 0:
+        return stdout.strip().split('\n')
+    else:
+        logger.warning("Failed to get available locales: %s", stderr)
+        return []
+
+
+def find_best_locale(user_locale):
+    """Find closest match to available locales"""
+    assert isinstance(user_locale, str)
+    if not user_locale:
+        return 'C'
+    if user_locale in ('C', 'C.utf8', 'POSIX'):
+        return user_locale
+    available_locales = find_available_locales()
+
+    # If requesting a language like 'es' and current locale is compatible
+    # like 'es_MX', then return that.
+    import locale
+    current_locale = locale.getlocale()[0]
+    if current_locale and current_locale.startswith(user_locale.split('.')[0]):
+        return '.'.join(locale.getlocale())
+
+    # Check for exact match.
+    if user_locale in available_locales:
+        return user_locale
+
+    # Next, match like 'en' to 'en_US.utf8' (if available) because
+    # of preference for UTF-8.
+    for avail_locale in available_locales:
+        if avail_locale.startswith(user_locale) and avail_locale.endswith('.utf8'):
+            return avail_locale
+
+    # Next, match like 'en' to 'en_US' or 'en_US.iso88591'.
+    for avail_locale in available_locales:
+        if avail_locale.startswith(user_locale):
+            return avail_locale
+
+    return 'C'
+
+
 def get_purgeable_locales(locales_to_keep):
     """Returns all locales to be purged"""
     if not locales_to_keep:

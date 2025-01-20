@@ -70,11 +70,11 @@ class BleachbitTestCase(unittest.TestCase):
             shutil.rmtree(cls.tempdir)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             cls._stop_patch_options_paths()
-    
+
     @classmethod
     def _stop_patch_options_paths(cls):
         for patcher in cls._patchers:
-            patcher.stop()        
+            patcher.stop()
 
     def setUp(cls):
         """Call before each test method"""
@@ -92,6 +92,26 @@ class BleachbitTestCase(unittest.TestCase):
 
     def assertIsBytes(self, obj, msg=''):
         self.assertIsInstance(obj, bytes, msg)
+
+    def assertIsLanguageCode(self, lang_id, msg=''):
+        self.assertIsInstance(lang_id, str)
+        if lang_id in ('C', 'C.utf8', 'POSIX'):
+            return
+        self.assertTrue(len(lang_id) >= 2)
+        import re
+        pattern = r'^[a-z]{2,3}(_[A-Z]{2})?(\.(utf\-?8|iso88591))?$'
+        self.assertTrue(re.match(pattern, lang_id),
+                        f'Invalid language code format: {lang_id}')
+
+    def assertIsSupportedLanguageCode(self, lang_id, msg=''):
+        self.assertIsLanguageCode(lang_id, msg)
+        from bleachbit.Language import native_locale_names
+        self.assertTrue(lang_id in native_locale_names,
+                        f'Invalid language ID: {lang_id}')
+        from bleachbit.Language import get_supported_language_codes
+        self.assertTrue(lang_id in get_supported_language_codes())
+        self.assertNotIn('English', lang_id)
+        self.assertNotIn('United States', lang_id)
 
     @staticmethod
     def check_exists(func, path):

@@ -542,12 +542,13 @@ def load_i18n_dll():
     """
     import ctypes
     lib_fns = ['libintl-8.dll', 'intl-8.dll']
+    dirs = set([bleachbit.bleachbit_exe_path, os.path.dirname(sys.executable)])
     for lib_fn in lib_fns:
-        lib_path = os.path.join(bleachbit.bleachbit_exe_path, lib_fn)
-        if os.path.exists(lib_path):
-            break
-    else:
-        return None
+        for dir in dirs:
+            lib_path = os.path.join(dir, lib_fn)
+            if os.path.exists(lib_path):
+                break
+            lib_path = None
     if not lib_path:
         logger.warning(
             'internationalization library was not found, so translations will not work.')

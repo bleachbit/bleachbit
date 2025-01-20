@@ -53,6 +53,80 @@ class UnixTestCase(common.BleachbitTestCase):
             bytes_freed = apt_autoremove()
             self.assertIsInteger(bytes_freed)
 
+    @common.skipIfWindows
+    def test_find_available_locales(self):
+        """Unit test for method find_available_locales()"""
+        locales = find_available_locales()
+        self.assertIsInstance(locales, list)
+        for locale in locales:
+            self.assertIsLanguageCode(locale)
+
+    def test_find_available_locales_mock(self):
+        """Unit test for method find_available_locales() with mock"""
+        mock_locales = ['C', 'C.utf8', 'en_US.utf8',
+                        'es_MX', 'es_MX.iso88591', 'es_MX.utf8', 'POSIX']
+        with mock.patch('bleachbit.Unix.General.run_external') as mock_run_external:
+            mock_run_external.return_value = (
+                0, "\n".join(mock_locales) + "\n", "")
+            locales = find_available_locales()
+            self.assertEqual(locales, mock_locales)
+            mock_run_external.assert_called_once_with(['locale', '-a'])
+
+    @mock.patch('locale.getlocale')
+    @mock.patch('bleachbit.Unix.find_available_locales')
+    def test_find_best_locale(self, mock_find_available_locales, mock_getlocale):
+        """Unit test for method find_best_locale()"""
+        mock_find_available_locales.return_value = [
+            'C',
+            'C.utf8',
+            'de_DE.utf8',
+            'en_US.iso88591',
+            'en_US.utf8',
+            'es_MX',
+            'es_MX.iso88591',
+            'es_MX.utf8',
+            'nds_DE.utf8',
+            'POSIX',
+        ]
+        mock_getlocale.return_value = ('en_US', 'UTF-8')
+        for locale in ('en', 'en_US', 'en_US.utf8'):
+            self.assertEqual(find_best_locale(locale), 'en_US.UTF-8')
+
+        mock_find_available_locales.assert_called()
+        mock_getlocale.assert_called()
+
+        for locale in ('de', 'de_DE', 'de_DE.utf8'):
+            self.assertEqual(find_best_locale(locale), 'de_DE.utf8')
+
+        # Test language with a three-letter code.
+        for locale in ('nds', 'nds_DE', 'nds_DE.utf8'):
+            self.assertEqual(find_best_locale(locale), 'nds_DE.utf8')
+
+        # Reverse the list.
+        mock_find_available_locales.return_value = mock_find_available_locales.return_value[::-1]
+        for locale in ('en', 'en_US', 'en_US.utf8'):
+            self.assertEqual(find_best_locale(locale), 'en_US.UTF-8')
+
+        # ISO-8859-1 is less preferred than UTF-8
+        mock_find_available_locales.return_value.remove('en_US.utf8')
+        mock_getlocale.return_value = ('es_MX', 'UTF-8')
+        for locale in ('en', 'en_US'):
+            self.assertEqual(find_best_locale(locale), 'en_US.iso88591')
+
+        mock_getlocale.return_value = ('es_MX', 'UTF-8')
+        mock_find_available_locales.return_value = ['C', 'C.utf8', 'en_US.utf8',
+                            'es_MX.iso88591', 'es_MX.utf8', 'POSIX']
+        for locale in ('es', 'es_MX', 'es_MX.utf8'):
+            self.assertEqual(find_best_locale(locale), 'es_MX.UTF-8')
+
+        self.assertEqual(find_best_locale('C'), 'C')
+        self.assertEqual(find_best_locale(''), 'C')
+        self.assertEqual(find_best_locale('POSIX'), 'POSIX')
+
+        self.assertRaises(AssertionError, find_best_locale, None)
+        self.assertRaises(AssertionError, find_best_locale, [])
+
+
     @unittest.skipUnless(FileUtilities.exe_exists('apt-get'),
                          'skipping tests for unavailable apt-get')
     def test_get_apt_size(self):
@@ -309,10 +383,14 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             bleachbit.logger.debug('dnf bytes cleaned %d', bytes_freed)
 
     @common.skipIfWindows
+    @mock.patch('bleachbit.Language.setup_translation')
     @mock.patch('bleachbit.Unix.os.path')
     @mock.patch('bleachbit.General.run_external')
-    def test_dnf_autoremove_mock(self, mock_run, mock_path):
+    def test_dnf_autoremove_mock(self, mock_run, mock_path, mock_setup):
         """Unit test for dnf_autoremove() with mock"""
+        # Don't call setup_translation() for real because it uses
+        # os.path.exists(), which is mocked here.
+        mock_setup.return_value = None
         mock_path.exists.return_value = True
         self.assertRaises(RuntimeError, dnf_autoremove)
 

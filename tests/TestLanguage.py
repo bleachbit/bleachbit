@@ -31,21 +31,6 @@ from tests import common
 class LanguageTestCase(common.BleachbitTestCase):
 
     """Test case for module Language"""
-
-    def assert_valid_language_id(self, lang_id):
-        self.assertIsInstance(lang_id, str)
-        self.assertNotIn('English', lang_id)
-        self.assertNotIn('United States', lang_id)
-        if not lang_id == 'C':
-            self.assertTrue(len(lang_id) >= 2)
-            import re
-            pattern = r'^[a-z]{2,3}(_[A-Z]{2})?$'
-            self.assertTrue(re.match(pattern, lang_id),
-                            f'Invalid language code format: {lang_id}')
-        self.assertTrue(lang_id in native_locale_names,
-                        f'Invalid language ID: {lang_id}')
-        self.assertTrue(lang_id in get_supported_language_codes())
-
     def setUp(self):
         super(LanguageTestCase, self).setUp()
         options.set('auto_detect_lang', False)
@@ -54,7 +39,7 @@ class LanguageTestCase(common.BleachbitTestCase):
     def test_get_active_language_code(self):
         """Test get_active_language_code()"""
         lang_id = get_active_language_code()
-        self.assert_valid_language_id(lang_id)
+        self.assertIsSupportedLanguageCode(lang_id)
 
     def test_get_supported_language_codes(self):
         """Test get_supported_language_codes()"""
@@ -62,7 +47,7 @@ class LanguageTestCase(common.BleachbitTestCase):
         self.assertTrue(isinstance(slangs, list))
         self.assertTrue(len(slangs) > 1)
         for slang in slangs:
-            self.assert_valid_language_id(slang)
+            self.assertIsSupportedLanguageCode(slang)
         self.assertTrue('en_US' in slangs)
         self.assertTrue('es' in slangs)
 
