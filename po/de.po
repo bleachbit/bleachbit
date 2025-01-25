@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-29 20:55-0600\n"
-"PO-Revision-Date: 2025-01-11 02:23+0000\n"
+"PO-Revision-Date: 2025-01-26 22:07+0000\n"
 "Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/bleachbit/main/de/"
 ">\n"
@@ -532,7 +532,7 @@ msgstr "Die Liste mit den besuchten Webseiten löschen"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr "Den Avatar- und Smilypuffer löschen"
+msgstr "Den Avatar- und Smiley-Puffer löschen"
 
 #: ../cleaners/thunderbird.xml ../cleaners/evolution.xml
 msgid "Email client"
@@ -626,7 +626,7 @@ msgstr "Systemprotokolle"
 
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
-msgstr "Alte Systemprotokolle reinigen"
+msgstr "Alte Systemprotokolle bereinigen"
 
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:309
 msgid "Memory dump"
@@ -669,7 +669,7 @@ msgstr "Tiefenprüfung"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
-msgstr "Weit über die Platte verstreute Dateien reinigen"
+msgstr "Weit über die Platte verstreute Dateien bereinigen"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -1129,7 +1129,7 @@ msgstr "Keine Verzeichnisse gegeben für --wipe-free-space"
 
 #: ../bleachbit/CLI.py:253
 msgid "Wiping free space can take a long time."
-msgstr "Freien Speicher reinigen kann eine lange Zeit dauern."
+msgstr "Freien Speicher bereinigen kann eine lange Zeit dauern."
 
 #: ../bleachbit/CLI.py:264
 msgid "No work to do. Specify options."
@@ -1220,7 +1220,7 @@ msgstr "Bereinigungspfad: %s"
 #: ../bleachbit/FileUtilities.py:938
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr "Pfad zum Reinigen muss ein existierendes Verzeichnis sein: %s"
+msgstr "Pfad zum Löschen muss ein existierendes Verzeichnis sein: %s"
 
 #: ../bleachbit/FileUtilities.py:949
 msgid "Creating new, temporary file for wiping free space."
@@ -1665,8 +1665,8 @@ msgid ""
 "only the root account."
 msgstr ""
 "Sie führen BleachBit mit Systemverwaltungsrechten aus, um gemeinsam genutzte "
-"Teile des Systems zu reinigen. Verweise zum Benutzerprofilordner werden nur "
-"das Root-Konto reinigen."
+"Teile des Systems zu bereinigen. Verweise zum Benutzerprofilordner werden "
+"nur das Root-Konto bereinigen."
 
 #: ../bleachbit/GUI.py:887
 msgid ""
@@ -1705,7 +1705,7 @@ msgstr "Dateien in den ausgewählten Bereichen bereinigen"
 
 #: ../bleachbit/GUI.py:1058
 msgid "Abort"
-msgstr "Abbruch"
+msgstr "Abbrechen"
 
 #: ../bleachbit/GUI.py:1060
 msgid "Abort the preview or cleaning process"
@@ -1721,7 +1721,7 @@ msgid ""
 "information."
 msgstr ""
 "Der Befehl »swapoff -s« schlug fehl, es wird auf /proc/swaps für "
-"Auslagerinformationen zurückgefallen."
+"Auslagerungsinformationen zurückgegriffen."
 
 #: ../bleachbit/Memory.py:78
 msgid "Disabling swap."
@@ -1740,8 +1740,8 @@ msgstr "nice-Wert %d für diesen Prozess wird festgelegt."
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
 msgstr ""
-"Privilegien von Prozesskennung {pid} auf der Benutzerkennung {uid} wird "
-"gelöscht."
+"Die Berechtigungen der Prozess-ID {pid} werden auf die Benutzer-ID {uid} "
+"übertragen."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py:140
@@ -1753,7 +1753,7 @@ msgstr "%s des Speichers wird zugewiesen und gelöscht."
 #: ../bleachbit/Memory.py:149
 #, python-format
 msgid "Freeing %s of memory."
-msgstr "%s Speicher wird gereinigt."
+msgstr "%s des Speichers freigeben."
 
 #: ../bleachbit/Memory.py:179
 #, python-brace-format
@@ -1770,7 +1770,7 @@ msgstr "Physikalischer freier Speicher beträgt %s."
 #: ../bleachbit/Memory.py:280
 #, python-format
 msgid "Wiping the swap device %s."
-msgstr "Das Auslagerungsgerät %s wird gereinigt."
+msgstr "Das Auslagerungsgerät %s wird gelöscht."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py:292
@@ -1782,7 +1782,7 @@ msgstr "Das Auslagerungsgerät %s wird reinitialisiert."
 #: ../bleachbit/Memory.py:309
 #, python-format
 msgid "Detected these swap devices: %s"
-msgstr "Diese Wechselgeräte erkannt: %s"
+msgstr "Diese Auslagerungsgeräte wurden erkannt: %s"
 
 #. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
 #: ../bleachbit/Memory.py:319
@@ -1817,7 +1817,7 @@ msgstr "Fehler beim Festlegen der Standardfestplatten zum Schreddern."
 #: ../bleachbit/Options.py:294
 #, python-format
 msgid "Automatically preserving language %s."
-msgstr "Automatisch Sprache erhalten %s."
+msgstr "Sprache %s automatisch beibehalten."
 
 #: ../bleachbit/RecognizeCleanerML.py:56
 msgid "Security warning"
@@ -1856,7 +1856,7 @@ msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
 msgstr ""
-"%s konnte nicht gereinigt werden, da es noch aktiv ist. Bitte das Programm "
+"%s konnte nicht bereinigt werden, da es noch aktiv ist. Bitte das Programm "
 "beenden und den Vorgang wiederholen."
 
 #: ../bleachbit/Update.py:92
@@ -1951,7 +1951,7 @@ msgstr "Fehler: {operation_option}: {command}"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py:194
 msgid "Please wait.  Wiping free disk space."
-msgstr "Bitte warten. Freier Speicherplatz wird gereinigt."
+msgstr "Bitte warten. Freier Speicherplatz wird bereinigt."
 
 #: ../bleachbit/Worker.py:196
 msgid ""
@@ -1965,7 +1965,7 @@ msgstr ""
 #: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:338
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "Bitte warten. %s wird gereinigt."
+msgstr "Bitte warten. %s wird bereinigt."
 
 #: ../bleachbit/Worker.py:217
 #, python-format
@@ -2027,7 +2027,7 @@ msgstr "Bitte warten. %s wird analysiert."
 
 #: ../data/app-menu.ui:5
 msgid "_Shred Files"
-msgstr "_Datei schreddern"
+msgstr "_Dateien schreddern"
 
 #: ../data/app-menu.ui:9
 msgid "Sh_red Folders"
