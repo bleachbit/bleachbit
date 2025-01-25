@@ -475,11 +475,11 @@ class WindowsTestCase(common.BleachbitTestCase):
         # winlogon.exe runs on Windows XP and Windows 7
         # explorer.exe does not run on Appveyor
         # svchost.exe runs both as system and current user on Windows 11
+        # svchost.exe does not run as same user on AppVeyor and Windows Server 2012.
         tests = ((True, 'winlogon.exe', False),
                  (True, 'WinLogOn.exe', False),
                  (False, 'doesnotexist.exe', False),
                  (True, 'svchost.exe', False),
-                 (True, 'svchost.exe', True),
                  (True, 'services.exe', False),
                  (False, 'services.exe', True),
                  (True, 'wininit.exe', False),
