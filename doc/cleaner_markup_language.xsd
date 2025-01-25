@@ -70,6 +70,7 @@
                     </xs:restriction>
                   </xs:simpleType>
                 </xs:attribute>
+                <xs:attribute name="same_user" type="xs:boolean" use="optional"/>
               </xs:extension>
             </xs:simpleContent>
           </xs:complexType>

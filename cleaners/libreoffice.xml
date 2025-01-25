@@ -26,9 +26,8 @@ will uninstall all extensions.
 <cleaner id="libreoffice">
   <label>LibreOffice</label>
   <description>Office suite</description>
-  <running type="exe" os="linux">soffice.bin</running>
-  <running type="exe" os="freebsd">soffice.bin</running>
-  <running type="exe" os="windows">soffice.exe</running>
+  <running type="exe" os="unix" same_user="true">soffice.bin</running>
+  <running type="exe" os="windows" same_user="true">soffice.exe</running>
   <option id="history">
     <label>History</label>
     <description>Delete the usage history</description>

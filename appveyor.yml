@@ -10,6 +10,8 @@ environment:
 init:
   - 'systeminfo | findstr /B /C:"OS Name" /C:"OS Version"' # show Windows version
   - 'echo PYTHON_HOME=%PYTHON_HOME%'
+  - ps: |
+      Get-WmiObject Win32_Process | Select-Object ProcessName, @{Name="UserName";Expression={$_.GetOwner().User}} | Format-Table -AutoSize
 
 install:
   - ps: .\windows\python-gtk3-install.ps1

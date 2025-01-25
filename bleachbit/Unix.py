@@ -331,48 +331,93 @@ def is_broken_xdg_desktop(pathname):
     return False
 
 
-def is_running_darwin(exename):
-    try:
-        ps_out = subprocess.check_output(["ps", "aux", "-c"],
-                                         universal_newlines=True)
-        processes = (re.split(r"\s+", p, 10)[10]
-                     for p in ps_out.split("\n") if p != "")
-        next(processes)  # drop the header
-        return exename in processes
-    except IndexError:
-        raise RuntimeError("Unexpected output from ps")
+def is_process_running_ps_aux(exename, require_same_user):
+    """Check whether exename is running by calling 'ps aux -c'
+
+    exename: name of the executable
+    require_same_user: if True, ignore processes run by other users
+    """
+    if require_same_user:
+        import getpass
+        current_user = getpass.getuser()
+
+    ps_out = subprocess.check_output(["ps", "aux", "-c"],
+                                     universal_newlines=True)
+    first_line = ps_out.split("\n")[0].strip()
+    if "USER" not in first_line or "COMMAND" not in first_line:
+        raise RuntimeError("Unexpected ps header format")
+
+    for line in ps_out.split("\n")[1:]:
+        parts = line.split()
+        if len(parts) < 11:
+            continue
+        process_user = parts[0]
+        process_cmd = parts[10]
+        if process_cmd != exename:
+            continue
+        if not require_same_user or process_user == current_user:
+            return True
+    return False
 
 
-def is_running_linux(exename):
-    """Check whether exename is running"""
+def is_process_running_linux(exename, require_same_user):
+    """Check whether exename is running
+
+    The exename is checked two different ways.
+    """
     for filename in glob.iglob("/proc/*/exe"):
+        does_exe_match = False
         try:
             target = os.path.realpath(filename)
         except TypeError:
             # happens, for example, when link points to
             # '/etc/password\x00 (deleted)'
-            continue
+            pass
         except OSError:
             # 13 = permission denied
+            pass
+        else:
+            # Google Chrome 74 on Ubuntu 19.04 shows up as
+            # /opt/google/chrome/chrome (deleted)
+            found_exename = os.path.basename(target).replace(' (deleted)', '')
+            does_exe_match = exename == found_exename
+
+        if not does_exe_match:
+            with open(os.path.join(os.path.dirname(filename), 'stat'), 'r') as stat_file:
+                proc_name = stat_file.read().split()[1].strip('()')
+                if proc_name == exename:
+                    does_exe_match = True
+                else:
+                    continue
+
+        if not require_same_user:
+            return True
+
+        try:
+            uid = os.stat(os.path.dirname(filename)).st_uid
+        except OSError:
+            # permission denied means not the same user
             continue
-        # Google Chrome shows 74 on Ubuntu 19.04 shows up as
-        # /opt/google/chrome/chrome (deleted)
-        found_exename = os.path.basename(target).replace(' (deleted)', '')
-        if exename == found_exename:
+        if uid == os.getuid():
             return True
     return False
 
 
-def is_running(exename):
-    """Check whether exename is running"""
+def is_process_running(exename, require_same_user):
+    """Check whether exename is running
+
+    exename: name of the executable
+    require_same_user: if True, ignore processes run by other users
+
+    """
     if sys.platform.startswith('linux'):
-        return is_running_linux(exename)
+        return is_process_running_linux(exename, require_same_user)
     elif ('darwin' == sys.platform or
           sys.platform.startswith('openbsd') or
           sys.platform.startswith('freebsd')):
-        return is_running_darwin(exename)
+        return is_process_running_ps_aux(exename, require_same_user)
     else:
-        raise RuntimeError('unsupported platform for physical_free()')
+        raise RuntimeError('unsupported platform for is_process_running()')
 
 
 def rotated_logs():

@@ -150,9 +150,9 @@ class UnixTestCase(common.BleachbitTestCase):
                              if fn.endswith('.desktop')]:
                 self.assertIsInstance(is_broken_xdg_desktop(filename), bool)
 
-    @common.skipIfWindows
     @mock.patch('subprocess.check_output')
-    def test_is_running_darwin(self, mock_check_output):
+    @mock.patch('getpass.getuser', return_value="alocaluseraccount")
+    def test_is_process_running_ps_aux(self, mock_getuser, mock_check_output):
         mock_check_output.return_value = """USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
 root               703   0.0  0.0  2471428   2792   ??  Ss   20May16   0:01.30 SubmitDiagInfo
 alocaluseraccount   681   0.0  0.0  2471568    856   ??  S    20May16   0:00.81 DiskUnmountWatcher
@@ -167,19 +167,30 @@ alocaluseraccount   561   0.0  0.0  2471492    584   ??  S    20May16   0:00.21 
 alocaluseraccount   535   0.0  0.0  2496656    524   ??  S    20May16   0:00.33 storelegacy
 root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 suhelperd
 """
-        self.assertTrue(is_running_darwin('USBAgent'))
-        self.assertFalse(is_running_darwin('does-not-exist'))
+        self.assertTrue(is_process_running_ps_aux('USBAgent', False))
+        self.assertTrue(is_process_running_ps_aux('USBAgent', True))
+        self.assertFalse(is_process_running_ps_aux('does-not-exist', False))
+        self.assertFalse(is_process_running_ps_aux('does-not-exist', True))
 
         mock_check_output.return_value = 'invalid-input'
-        self.assertRaises(RuntimeError, is_running_darwin, 'foo')
+        self.assertRaises(
+            RuntimeError, is_process_running_ps_aux, 'foo', False)
+        self.assertRaises(RuntimeError, is_process_running_ps_aux, 'foo', True)
 
     @common.skipIfWindows
-    def test_is_running(self):
+    def test_is_process_running(self):
         # Fedora 11 doesn't need realpath but Ubuntu 9.04 uses symlink
         # from /usr/bin/python to python2.6
         exe = os.path.basename(os.path.realpath(sys.executable))
-        self.assertTrue(is_running(exe))
-        self.assertFalse(is_running('does-not-exist'))
+        self.assertTrue(is_process_running(exe, False))
+        self.assertTrue(is_process_running(exe, True),
+                        f'is_running({exe}, True)')
+        non_user_exes = ('polkitd', 'bluetoothd', 'NetworkManager',
+                         'gdm3', 'snapd', 'systemd-journald')
+        for exe in non_user_exes:
+            self.assertFalse(is_process_running(exe, True))
+        self.assertFalse(is_process_running('does-not-exist', True))
+        self.assertFalse(is_process_running('does-not-exist', False))
 
     @common.skipIfWindows
     def test_journald_clean(self):

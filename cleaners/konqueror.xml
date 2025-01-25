@@ -22,7 +22,7 @@
 <cleaner id="konqueror" os="linux">
   <label>Konqueror</label>
   <description>Web browser</description>
-  <running type="exe">konqueror</running>
+  <running type="exe" same_user="true">konqueror</running>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
