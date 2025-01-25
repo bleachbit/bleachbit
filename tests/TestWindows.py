@@ -474,14 +474,22 @@ class WindowsTestCase(common.BleachbitTestCase):
     def test_is_process_running(self):
         # winlogon.exe runs on Windows XP and Windows 7
         # explorer.exe does not run on Appveyor
-        tests = ((True, 'winlogon.exe'),
-                 (True, 'WinLogOn.exe'),
-                 (False, 'doesnotexist.exe'))
-        for test in tests:
-            self.assertEqual(test[0],
-                             is_process_running(test[1]),
-                             'Expecting is_process_running(%s) = %s' %
-                             (test[1], test[0]))
+        # svchost.exe runs both as system and current user on Windows 11
+        tests = ((True, 'winlogon.exe', False),
+                 (True, 'WinLogOn.exe', False),
+                 (False, 'doesnotexist.exe', False),
+                 (True, 'svchost.exe', False),
+                 (True, 'svchost.exe', True),
+                 (True, 'services.exe', False),
+                 (False, 'services.exe', True),
+                 (True, 'wininit.exe', False),
+                 (False, 'wininit.exe', True))
+
+        for expected, exename, require_same_user in tests:
+            with self.subTest(exename=exename, require_same_user=require_same_user):
+                result = is_process_running(exename, require_same_user)
+                self.assertEqual(
+                    expected, result, f'Expecting is_process_running({exename}, {require_same_user}) = {expected}, got {result}')
 
     def test_setup_environment(self):
         """Unit test for setup_environment"""

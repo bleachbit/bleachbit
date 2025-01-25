@@ -22,7 +22,7 @@
 <cleaner id="adobe_reader">
   <label>Adobe Reader</label>
   <description>Document viewer</description>
-  <running type="exe">acroread</running>
+  <running type="exe" same_user="true">acroread</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>

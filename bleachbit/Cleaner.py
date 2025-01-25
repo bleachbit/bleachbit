@@ -80,9 +80,9 @@ class Cleaner:
         """Register option (such as 'cache')"""
         self.options[option_id] = (name, description)
 
-    def add_running(self, detection_type, pathname):
+    def add_running(self, detection_type, pathname, same_user=False):
         """Add a way to detect this program is currently running"""
-        self.running.append((detection_type, pathname))
+        self.running.append((detection_type, pathname, same_user))
 
     def auto_hide(self):
         """Return boolean whether it is OK to automatically hide this
@@ -149,15 +149,13 @@ class Cleaner:
             return self.warnings[option_id]
         return None
 
-    def is_running(self):
-        """Return whether the program is currently running"""
+    def is_process_running(self):
+        """Return whether the process is currently running"""
         logger = logging.getLogger(__name__)
-        for running in self.running:
-            test = running[0]
-            pathname = running[1]
+        for (test, pathname, same_user) in self.running:
             if 'exe' == test:
-                if ('posix' == os.name and Unix.is_running(pathname)) or \
-                   ('nt' == os.name and Windows.is_process_running(pathname)):
+                if ('posix' == os.name and Unix.is_process_running(pathname, same_user)) or \
+                   ('nt' == os.name and Windows.is_process_running(pathname, same_user)):
                     logger.debug("process '%s' is running", pathname)
                     return True
             elif 'pathname' == test:

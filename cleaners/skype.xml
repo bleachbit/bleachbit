@@ -22,7 +22,7 @@
 <cleaner id="skype">
   <label>Skype</label>
   <description>Chat client</description>
-  <running type="exe">skype</running>
+  <running type="exe" same_user="true">skype</running>
   <option id="chat_logs">
     <label>Chat logs</label>
     <description>Delete the chat logs</description>

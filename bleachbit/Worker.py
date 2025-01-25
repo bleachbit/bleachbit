@@ -141,7 +141,7 @@ class Worker:
         if not operation_options:
             return
 
-        if self.really_delete and backends[operation].is_running():
+        if self.really_delete and backends[operation].is_process_running():
             # TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
             err = _("%s cannot be cleaned because it is currently running.  Close it, and try again.") \
                 % backends[operation].get_name()

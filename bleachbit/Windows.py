@@ -515,20 +515,31 @@ def is_junction(path):
     return bool(attr & FILE_ATTRIBUTE_REPARSE_POINT)
 
 
-def is_process_running(name):
+def is_process_running(exename, require_same_user):
     """Return boolean whether process (like firefox.exe) is running
 
-    Works on Windows Vista or later, but on Windows XP gives an ImportError
+    exename: name of the executable
+    require_same_user: if True, ignore processes run by other users
     """
 
     import psutil
-    name = name.lower()
+    exename = exename.lower()
+    current_username = psutil.Process().username().lower()
     for proc in psutil.process_iter():
         try:
-            if proc.name().lower() == name:
-                return True
+            proc_name = proc.name().lower()
         except psutil.NoSuchProcess:
-            pass
+            continue
+        if not proc_name == exename:
+            continue
+        if not require_same_user:
+            return True
+        try:
+            proc_username = proc.username().lower()
+        except psutil.AccessDenied:
+            continue
+        if proc_username == current_username:
+            return True
     return False
 
 
