@@ -142,9 +142,6 @@ class Bleachbit(Gtk.Application):
             import atexit
             atexit.register(Windows.cleanup_nonce)
 
-        from bleachbit.General import startup_check
-        startup_check()
-
     def _init_windows_misc(self, auto_exit, shred_paths, uac):
         application_id_suffix = ''
         is_context_menu_executed = auto_exit and shred_paths
@@ -325,7 +322,6 @@ class Bleachbit(Gtk.Application):
         except (IOError, TypeError):
             dialog.set_license(
                 _("GNU General Public License version 3 or later.\nSee https://www.gnu.org/licenses/gpl-3.0.txt"))
-        # dialog.set_name(APP_NAME)
         # TRANSLATORS: Maintain the names of translators here.
         # Launchpad does this automatically for translations
         # typed in Launchpad. This is a special string shown
@@ -385,8 +381,6 @@ class Bleachbit(Gtk.Application):
         if not self._window:
             self._window = GUI(
                 application=self, title=APP_NAME, auto_exit=self._auto_exit)
-        if 'nt' == os.name:
-            Windows.check_dll_hijacking(self._window)
         self._window.present()
         if self._shred_paths:
             GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths, priority=GObject.PRIORITY_LOW)
@@ -894,16 +888,6 @@ class GUI(Gtk.ApplicationWindow):
                 self.append_text(
                     _('Access the application menu by clicking the logo on the title bar.'))
             options.set('first_start', False)
-
-        if os.name == 'nt':
-            # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
-            # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
-            # http://bleachbit.sourceforge.net/forum/074-fails-errors
-            try:
-                import sqlite3
-            except ImportError:
-                self.append_text(
-                    _("There was an error loading the SQLite module; antivirus software may have blocked it."), 'error')
 
         # Show notice about admin privileges.
         if os.name == 'posix' and os.path.expanduser('~') == '/root':

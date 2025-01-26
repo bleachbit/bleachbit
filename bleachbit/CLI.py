@@ -207,11 +207,6 @@ def process_cmd_line():
             _('Specify only one of these commands: --list-cleaners, --wipe-free-space, --preview, --clean'))
         sys.exit(1)
 
-    if not options.gui:
-        # The GUI has its own trigger for the same function.
-        from bleachbit.General import startup_check
-        startup_check()
-
     did_something = False
     if options.debug:
         # set in __init__ so it takes effect earlier

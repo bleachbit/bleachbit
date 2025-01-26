@@ -33,9 +33,6 @@ from gi.repository import Gtk
 import logging
 import os
 
-if 'posix' == os.name:
-    from bleachbit import Unix
-
 logger = logging.getLogger(__name__)
 
 LOCATIONS_WHITELIST = 1
