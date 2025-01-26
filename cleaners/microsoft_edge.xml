@@ -27,10 +27,12 @@
   <var name="base">
     <value os="windows">%LocalAppData%\Microsoft\Edge\User Data</value>
     <value os="linux">$XDG_CONFIG_HOME/microsoft-edge-beta</value>
+    <value os="linux">$XDG_CONFIG_HOME/microsoft-edge</value>
   </var>
   <var name="profile">
     <value os="windows">%LocalAppData%\Microsoft\Edge\User Data\Default</value>
     <value os="linux">$XDG_CONFIG_HOME/microsoft-edge-beta/Default</value>
+    <value os="linux">$XDG_CONFIG_HOME/microsoft-edge/Default</value>
   </var>
   <option id="cache">
     <label>Cache</label>
