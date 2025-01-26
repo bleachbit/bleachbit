@@ -3,7 +3,7 @@
 
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@
 GUI for making chaff
 """
 
-from bleachbit import _
+from bleachbit.Language import get_text as _
 from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models
 
 from gi.repository import Gtk, GLib

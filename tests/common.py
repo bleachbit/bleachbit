@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -70,11 +70,11 @@ class BleachbitTestCase(unittest.TestCase):
             shutil.rmtree(cls.tempdir)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             cls._stop_patch_options_paths()
-    
+
     @classmethod
     def _stop_patch_options_paths(cls):
         for patcher in cls._patchers:
-            patcher.stop()        
+            patcher.stop()
 
     def setUp(cls):
         """Call before each test method"""
@@ -92,6 +92,50 @@ class BleachbitTestCase(unittest.TestCase):
 
     def assertIsBytes(self, obj, msg=''):
         self.assertIsInstance(obj, bytes, msg)
+
+    def assertIsLanguageCode(self, lang_id, msg=''):
+        self.assertIsInstance(lang_id, str)
+        if lang_id in ('C', 'C.UTF-8', 'C.utf8', 'POSIX'):
+            return
+        self.assertTrue(len(lang_id) >= 2)
+        import re
+        pattern = r'^[a-z]{2,3}(_[A-Z]{2})?(\.(utf\-?8|iso88591))?$'
+        self.assertTrue(re.match(pattern, lang_id),
+                        f'Invalid language code format: {lang_id}')
+
+    def test_assertIsLanguageCode(self):
+        valid_codes = ['en', 'en_US', 'fr_FR.utf8',
+                       'de_DE.iso88591', 'C', 'C.UTF-8', 'C.utf8', 'POSIX']
+        invalid_codes = ['e', 'en_', 'english', 'en_US_', '123', 'en-US', 'en_us', 'en_US.',
+                         'en_us.utf8',
+                         'en_us.UTF-8',
+                         'utf8',
+                         'UTF-8',
+                         '.utf8',
+                         '.UTF-8',
+                         '',
+                         [],
+                         0,
+                         None]
+        invalid_codes.extend([code + ' ' for code in valid_codes])
+        invalid_codes.extend([' ' + code for code in valid_codes])
+
+        for code in valid_codes:
+            self.assertIsLanguageCode(code)
+
+        for code in invalid_codes:
+            with self.assertRaises(AssertionError):
+                self.assertIsLanguageCode(code)
+
+    def assertIsSupportedLanguageCode(self, lang_id, msg=''):
+        self.assertIsLanguageCode(lang_id, msg)
+        from bleachbit.Language import native_locale_names
+        self.assertTrue(lang_id in native_locale_names,
+                        f'Invalid language ID: {lang_id}')
+        from bleachbit.Language import get_supported_language_codes
+        self.assertTrue(lang_id in get_supported_language_codes())
+        self.assertNotIn('English', lang_id)
+        self.assertNotIn('United States', lang_id)
 
     @staticmethod
     def check_exists(func, path):

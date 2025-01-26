@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2024 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,8 @@
 <cleaner id="chromium">
   <label>Chromium</label>
   <description>Web browser</description>
-  <running type="exe" os="windows">chrome.exe</running>
-  <running type="exe" os="linux">chromium-browser</running>
+  <running type="exe" os="windows" same_user="true">chrome.exe</running>
+  <running type="exe" os="linux" same_user="true">chromium-browser</running>
   <!-- OpenBSD and NetBSD use "chrome" for Chromium, while on Linux it means
     Google Chrome. In other words, on Linux this could give a false positive
     for Chromium when Google Chrome is running. -->

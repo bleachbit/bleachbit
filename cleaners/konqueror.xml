@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2024 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 <cleaner id="konqueror" os="linux">
   <label>Konqueror</label>
   <description>Web browser</description>
-  <running type="exe">konqueror</running>
+  <running type="exe" same_user="true">konqueror</running>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>

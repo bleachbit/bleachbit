@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -27,8 +27,9 @@ import random
 import tempfile
 from datetime import datetime
 
-from bleachbit import _, bleachbit_exe_path
+from bleachbit import bleachbit_exe_path
 from bleachbit import options_dir
+from bleachbit.Language import get_text as _
 
 from . import markovify
 

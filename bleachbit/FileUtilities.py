@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ File-related utilities
 """
 
 import bleachbit
-from bleachbit import _
+from bleachbit.Language import get_text as _
 
 import atexit
 import errno
@@ -813,7 +813,6 @@ def wipe_contents(path, truncate=True):
     if 'nt' == os.name and IsUserAnAdmin():
         from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
         import warnings
-        from bleachbit import _
         try:
             file_wipe(path)
         except pywinerror as e:

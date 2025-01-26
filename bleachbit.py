@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ if 'posix' == os.name:
 
     # The two imports from bleachbit must come after sys.path.append(..)
     import bleachbit.Unix
-    from bleachbit import _
+    from bleachbit.Language import get_text as _
 
     if (
         bleachbit.Unix.is_display_protocol_wayland_and_root_not_allowed()

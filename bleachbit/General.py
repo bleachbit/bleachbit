@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -168,7 +168,6 @@ def startup_check():
     # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
     # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
     # https://www.bleachbit.org/forum/074-fails-errors
-    from bleachbit import ModuleNotFoundError
     try:
         from sqlite3 import SQLITE_OK
     except (ModuleNotFoundError, ImportError):

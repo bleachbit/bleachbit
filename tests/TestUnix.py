@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -53,6 +53,80 @@ class UnixTestCase(common.BleachbitTestCase):
             bytes_freed = apt_autoremove()
             self.assertIsInteger(bytes_freed)
 
+    @common.skipIfWindows
+    def test_find_available_locales(self):
+        """Unit test for method find_available_locales()"""
+        locales = find_available_locales()
+        self.assertIsInstance(locales, list)
+        for locale in locales:
+            self.assertIsLanguageCode(locale)
+
+    def test_find_available_locales_mock(self):
+        """Unit test for method find_available_locales() with mock"""
+        mock_locales = ['C', 'C.utf8', 'en_US.utf8',
+                        'es_MX', 'es_MX.iso88591', 'es_MX.utf8', 'POSIX']
+        with mock.patch('bleachbit.Unix.General.run_external') as mock_run_external:
+            mock_run_external.return_value = (
+                0, "\n".join(mock_locales) + "\n", "")
+            locales = find_available_locales()
+            self.assertEqual(locales, mock_locales)
+            mock_run_external.assert_called_once_with(['locale', '-a'])
+
+    @mock.patch('locale.getlocale')
+    @mock.patch('bleachbit.Unix.find_available_locales')
+    def test_find_best_locale(self, mock_find_available_locales, mock_getlocale):
+        """Unit test for method find_best_locale()"""
+        mock_find_available_locales.return_value = [
+            'C',
+            'C.utf8',
+            'de_DE.utf8',
+            'en_US.iso88591',
+            'en_US.utf8',
+            'es_MX',
+            'es_MX.iso88591',
+            'es_MX.utf8',
+            'nds_DE.utf8',
+            'POSIX',
+        ]
+        mock_getlocale.return_value = ('en_US', 'UTF-8')
+        for locale in ('en', 'en_US', 'en_US.utf8'):
+            self.assertEqual(find_best_locale(locale), 'en_US.UTF-8')
+
+        mock_find_available_locales.assert_called()
+        mock_getlocale.assert_called()
+
+        for locale in ('de', 'de_DE', 'de_DE.utf8'):
+            self.assertEqual(find_best_locale(locale), 'de_DE.utf8')
+
+        # Test language with a three-letter code.
+        for locale in ('nds', 'nds_DE', 'nds_DE.utf8'):
+            self.assertEqual(find_best_locale(locale), 'nds_DE.utf8')
+
+        # Reverse the list.
+        mock_find_available_locales.return_value = mock_find_available_locales.return_value[::-1]
+        for locale in ('en', 'en_US', 'en_US.utf8'):
+            self.assertEqual(find_best_locale(locale), 'en_US.UTF-8')
+
+        # ISO-8859-1 is less preferred than UTF-8
+        mock_find_available_locales.return_value.remove('en_US.utf8')
+        mock_getlocale.return_value = ('es_MX', 'UTF-8')
+        for locale in ('en', 'en_US'):
+            self.assertEqual(find_best_locale(locale), 'en_US.iso88591')
+
+        mock_getlocale.return_value = ('es_MX', 'UTF-8')
+        mock_find_available_locales.return_value = ['C', 'C.utf8', 'en_US.utf8',
+                            'es_MX.iso88591', 'es_MX.utf8', 'POSIX']
+        for locale in ('es', 'es_MX', 'es_MX.utf8'):
+            self.assertEqual(find_best_locale(locale), 'es_MX.UTF-8')
+
+        self.assertEqual(find_best_locale('C'), 'C')
+        self.assertEqual(find_best_locale(''), 'C')
+        self.assertEqual(find_best_locale('POSIX'), 'POSIX')
+
+        self.assertRaises(AssertionError, find_best_locale, None)
+        self.assertRaises(AssertionError, find_best_locale, [])
+
+
     @unittest.skipUnless(FileUtilities.exe_exists('apt-get'),
                          'skipping tests for unavailable apt-get')
     def test_get_apt_size(self):
@@ -76,9 +150,9 @@ class UnixTestCase(common.BleachbitTestCase):
                              if fn.endswith('.desktop')]:
                 self.assertIsInstance(is_broken_xdg_desktop(filename), bool)
 
-    @common.skipIfWindows
     @mock.patch('subprocess.check_output')
-    def test_is_running_darwin(self, mock_check_output):
+    @mock.patch('getpass.getuser', return_value="alocaluseraccount")
+    def test_is_process_running_ps_aux(self, mock_getuser, mock_check_output):
         mock_check_output.return_value = """USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
 root               703   0.0  0.0  2471428   2792   ??  Ss   20May16   0:01.30 SubmitDiagInfo
 alocaluseraccount   681   0.0  0.0  2471568    856   ??  S    20May16   0:00.81 DiskUnmountWatcher
@@ -93,19 +167,30 @@ alocaluseraccount   561   0.0  0.0  2471492    584   ??  S    20May16   0:00.21 
 alocaluseraccount   535   0.0  0.0  2496656    524   ??  S    20May16   0:00.33 storelegacy
 root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 suhelperd
 """
-        self.assertTrue(is_running_darwin('USBAgent'))
-        self.assertFalse(is_running_darwin('does-not-exist'))
+        self.assertTrue(is_process_running_ps_aux('USBAgent', False))
+        self.assertTrue(is_process_running_ps_aux('USBAgent', True))
+        self.assertFalse(is_process_running_ps_aux('does-not-exist', False))
+        self.assertFalse(is_process_running_ps_aux('does-not-exist', True))
 
         mock_check_output.return_value = 'invalid-input'
-        self.assertRaises(RuntimeError, is_running_darwin, 'foo')
+        self.assertRaises(
+            RuntimeError, is_process_running_ps_aux, 'foo', False)
+        self.assertRaises(RuntimeError, is_process_running_ps_aux, 'foo', True)
 
     @common.skipIfWindows
-    def test_is_running(self):
+    def test_is_process_running(self):
         # Fedora 11 doesn't need realpath but Ubuntu 9.04 uses symlink
         # from /usr/bin/python to python2.6
         exe = os.path.basename(os.path.realpath(sys.executable))
-        self.assertTrue(is_running(exe))
-        self.assertFalse(is_running('does-not-exist'))
+        self.assertTrue(is_process_running(exe, False))
+        self.assertTrue(is_process_running(exe, True),
+                        f'is_running({exe}, True)')
+        non_user_exes = ('polkitd', 'bluetoothd', 'NetworkManager',
+                         'gdm3', 'snapd', 'systemd-journald')
+        for exe in non_user_exes:
+            self.assertFalse(is_process_running(exe, True))
+        self.assertFalse(is_process_running('does-not-exist', True))
+        self.assertFalse(is_process_running('does-not-exist', False))
 
     @common.skipIfWindows
     def test_journald_clean(self):
@@ -137,6 +222,24 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         for neg in negative_cases:
             self.assertFalse(regex.match(neg))
 
+    def test_get_purgeable_locales(self):
+        """Unit test for method get_purgeable_locales()"""
+        # 'en' implies 'en_US'
+        locales_to_keep = ['en', 'en_AU', 'en_CA', 'en_GB']
+        purgeable_locales = get_purgeable_locales(locales_to_keep)
+        self.assertIsInstance(purgeable_locales, frozenset)
+        self.assertIn('es', purgeable_locales)
+        self.assertIn('pt', purgeable_locales)
+        self.assertIn('de', purgeable_locales)
+        for keep in locales_to_keep + ['en_US']:
+            self.assertNotIn(keep, purgeable_locales)
+
+        # 'en_US' keeps 'en' but discards 'en_AU'.
+        purgeable_locales = get_purgeable_locales(['en_US'])
+        self.assertNotIn('en', purgeable_locales)
+        self.assertNotIn('en_US', purgeable_locales)
+        self.assertIn('en_AU', purgeable_locales)
+
     def test_locale_regex(self):
         """Unit test for locale_to_language()"""
         tests = {'en': 'en',
@@ -162,13 +265,14 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         from xml.dom.minidom import parseString
         configpath = parseString(
             '<path location="/usr/share/locale/" filter="*" />').firstChild
-        locales.add_xml(configpath)
+        self.locales.add_xml(configpath)
         counter = 0
-        for path in locales.localization_paths(['en', 'en_AU', 'en_CA', 'en_GB']):
+        for path in self.locales.localization_paths(['en', 'en_AU', 'en_CA', 'en_GB']):
             self.assertLExists(path)
-            # self.assertTrue(path.startswith('/usr/share/locale'))
+            self.assertTrue(path.startswith('/usr/share/locale'))
             # /usr/share/locale/en_* should be ignored
-            self.assertEqual(path.find('/en_'), -1)
+            self.assertEqual(path.find('/en_'), -1, 'expected path ' + path +
+                             ' to not contain /en_')
             counter += 1
         self.assertGreater(counter, 0, 'Zero files deleted by localization cleaner. ' +
                                        'This may be an error unless you really deleted all the files.')
@@ -290,10 +394,14 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             bleachbit.logger.debug('dnf bytes cleaned %d', bytes_freed)
 
     @common.skipIfWindows
+    @mock.patch('bleachbit.Language.setup_translation')
     @mock.patch('bleachbit.Unix.os.path')
     @mock.patch('bleachbit.General.run_external')
-    def test_dnf_autoremove_mock(self, mock_run, mock_path):
+    def test_dnf_autoremove_mock(self, mock_run, mock_path, mock_setup):
         """Unit test for dnf_autoremove() with mock"""
+        # Don't call setup_translation() for real because it uses
+        # os.path.exists(), which is mocked here.
+        mock_setup.return_value = None
         mock_path.exists.return_value = True
         self.assertRaises(RuntimeError, dnf_autoremove)
 
@@ -343,7 +451,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                 return (0, 'SESSION  UID USER   SEAT  TTY \n      2 1000 debian seat0 tty2\n\n1 sessions listed.\n', '')
             elif len(value) > 1:
                 return (0, 'Type={}\n'.format(display_protocol), '')
-            assert(False)  # should never reach here
+            assert (False)  # should never reach here
 
         for display_protocol, assert_method in [['wayland', self.assertTrue], ['donotexist', self.assertFalse]]:
             with mock.patch('bleachbit.General.run_external') as mock_run_external:

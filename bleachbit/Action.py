@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,8 @@ Actions that perform cleaning
 """
 
 from bleachbit import Command, FileUtilities, General, Special, DeepScan
-from bleachbit import _, fs_scan_re_flags
+from bleachbit import fs_scan_re_flags
+from bleachbit.Language import get_text as _
 
 import glob
 import logging

@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,9 +22,10 @@
 GTK graphical user interface
 """
 
-from bleachbit import GuiBasic
-from bleachbit import Cleaner, FileUtilities
-from bleachbit import _, APP_NAME, appicon_path, portable_mode, windows10_theme_path
+
+from bleachbit import Cleaner, FileUtilities, GuiBasic
+from bleachbit import APP_NAME, appicon_path, portable_mode, windows10_theme_path
+from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 
 # Now that the configuration is loaded, honor the debug preference there.
@@ -127,12 +128,11 @@ class Bleachbit(Gtk.Application):
         Gtk.Application.__init__(
             self, application_id=application_id, flags=Gio.ApplicationFlags.FLAGS_NONE)
         GLib.set_prgname('org.bleachbit.BleachBit')
-        GObject.threads_init()
 
         if auto_exit:
             # This is used for automated testing of whether the GUI can start.
             # It is called from assert_execute_console() in windows/setup_py2exe.py
-            self._auto_exit = True        
+            self._auto_exit = True
 
         if shred_paths:
             self._shred_paths = shred_paths
@@ -170,7 +170,11 @@ class Bleachbit(Gtk.Application):
 
         On Windows with GTK 3.18, this code is sufficient for the menu to work.
         """
-
+        # FIXME: Localization of the menu is broken on Windows.
+        if os.name == 'posix':
+            from bleachbit.Language import setup_translation, attempted_setup_translation
+            #if not attempted_setup_translation:
+            setup_translation()
         builder = Gtk.Builder()
         builder.add_from_file(bleachbit.app_menu_filename)
         menu = builder.get_object('app-menu')
@@ -229,17 +233,24 @@ class Bleachbit(Gtk.Application):
         clipboard.request_targets(self.cb_clipboard_uri_received)
 
     def cb_clipboard_uri_received(self, clipboard, targets, data):
-        """Callback for when URIs are received from clipboard"""
+        """Callback for when URIs are received from clipboard
+
+        With GTK 3.18.9 on Windows, there was no text/uri-list in targets,
+        but there is with GTK 3.24.34. However, Windows does not have
+        get_uris().
+        """
         shred_paths = None
-        if Gdk.atom_intern_static_string('text/uri-list') in targets:
+        if 'nt' == os.name and Gdk.atom_intern_static_string('FileNameW') in targets:
+            # Windows
+            # Use non-GTK+ functions because because GTK+ 2 does not work.
+            shred_paths = Windows.get_clipboard_paths()
+        elif Gdk.atom_intern_static_string('text/uri-list') in targets:
             # Linux
             shred_uris = clipboard.wait_for_contents(
                 Gdk.atom_intern_static_string('text/uri-list')).get_uris()
             shred_paths = FileUtilities.uris_to_paths(shred_uris)
-        elif Gdk.atom_intern_static_string('FileNameW') in targets:
-            # Windows
-            # Use non-GTK+ functions because because GTK+ 2 does not work.
-            shred_paths = Windows.get_clipboard_paths()
+        else:
+            logger.warning(_('No paths found in clipboard.'))
         if shred_paths:
             GUI.shred_paths(self._window, shred_paths)
         else:
@@ -303,7 +314,7 @@ class Bleachbit(Gtk.Application):
 
     def get_about_dialog(self):
         dialog = Gtk.AboutDialog(comments=_("Program to clean unnecessary files"),
-                                 copyright='Copyright (C) 2008-2024 Andrew Ziem',
+                                 copyright='Copyright (C) 2008-2025 Andrew Ziem',
                                  program_name=APP_NAME,
                                  version=bleachbit.APP_VERSION,
                                  website=bleachbit.APP_URL,
@@ -588,7 +599,7 @@ class GUI(Gtk.ApplicationWindow):
             # if stderr was redirected - keep redirecting it
             sys.stderr = self.gtklog
 
-        self.set_windows10_theme()
+        # self.set_windows10_theme()
         Gtk.Settings.get_default().set_property(
             'gtk-application-prefer-dark-theme', options.get('dark_mode'))
 
@@ -839,7 +850,9 @@ class GUI(Gtk.ApplicationWindow):
         return scrolled_window
 
     def cb_refresh_operations(self):
-        """Callback to refresh the list of cleaners"""
+        """Callback to refresh the list of cleaners and header bar labels"""
+        # In case language changed, update the header bar labels.
+        self.update_headerbar_labels()
         # Is this the first time in this session?
         if not hasattr(self, 'recognized_cleanerml') and not self._auto_exit:
             from bleachbit import RecognizeCleanerML
@@ -1027,6 +1040,28 @@ class GUI(Gtk.ApplicationWindow):
             text = ""
         self.status_bar.push(context_id, text)
 
+    def update_headerbar_labels(self):
+        """Update the labels and tooltips in the headerbar buttons"""
+        # Preview button
+        self.preview_button.set_tooltip_text(
+            _("Preview files in the selected operations (without deleting any files)"))
+        # TRANSLATORS: This is the preview button on the main window.  It
+        # previews changes.
+        self.preview_button.set_label(_('Preview'))
+
+        # Clean button
+        # TRANSLATORS: This is the clean button on the main window.
+        # It makes permanent changes: usually deleting files, sometimes
+        # altering them.
+        self.run_button.set_label(_('Clean'))
+        self.run_button.set_tooltip_text(
+            _("Clean files in the selected operations"))
+
+        # Stop button
+        self.stop_button.set_label(_('Abort'))
+        self.stop_button.set_tooltip_text(
+            _('Abort the preview or cleaning process'))
+
     def create_headerbar(self):
         """Create the headerbar"""
         hbar = Gtk.HeaderBar()
@@ -1047,23 +1082,12 @@ class GUI(Gtk.ApplicationWindow):
         self.preview_button.set_always_show_image(True)
         self.preview_button.connect(
             'clicked', lambda *dummy: self.preview_or_run_operations(False))
-        self.preview_button.set_tooltip_text(
-            _("Preview files in the selected operations (without deleting any files)"))
-        # TRANSLATORS: This is the preview button on the main window.  It
-        # previews changes.
-        self.preview_button.set_label(_('Preview'))
         box.add(self.preview_button)
 
         # create the delete button
         self.run_button = Gtk.Button.new_from_icon_name(
             'edit-clear-all', icon_size)
         self.run_button.set_always_show_image(True)
-        # TRANSLATORS: This is the clean button on the main window.
-        # It makes permanent changes: usually deleting files, sometimes
-        # altering them.
-        self.run_button.set_label(_('Clean'))
-        self.run_button.set_tooltip_text(
-            _("Clean files in the selected operations"))
         self.run_button.connect("clicked", self.run_operations)
         box.add(self.run_button)
 
@@ -1071,9 +1095,6 @@ class GUI(Gtk.ApplicationWindow):
         self.stop_button = Gtk.Button.new_from_icon_name(
             'process-stop', icon_size)
         self.stop_button.set_always_show_image(True)
-        self.stop_button.set_label(_('Abort'))
-        self.stop_button.set_tooltip_text(
-            _('Abort the preview or cleaning process'))
         self.stop_button.set_sensitive(False)
         self.stop_button.connect('clicked', self.cb_stop_operations)
         box.add(self.stop_button)
@@ -1094,6 +1115,8 @@ class GUI(Gtk.ApplicationWindow):
         menu_button.add(image)
         hbar.pack_end(menu_button)
 
+        # Update all labels and tooltips
+        self.update_headerbar_labels()
         return hbar
 
     def on_configure_event(self, widget, event):
@@ -1122,9 +1145,30 @@ class GUI(Gtk.ApplicationWindow):
         return False
 
     def on_window_state_event(self, widget, event):
-        # save window state
+        """Save window state
+
+        GTK version 3.24.34 on Windows 11 behaves strangely:
+        * It reports maximized only when application starts.
+        * Later, it reports window is fullscreen when neither
+          full screen nor maximized.
+
+        Because of this issue, we check the tiling state.
+        """
+        tiling_states = (Gdk.WindowState.TILED |
+                         Gdk.WindowState.TOP_TILED |
+                         Gdk.WindowState.RIGHT_TILED |
+                         Gdk.WindowState.BOTTOM_TILED |
+                         Gdk.WindowState.LEFT_TILED)
+
+        is_tiled = event.new_window_state & tiling_states != 0
+        fullscreen = (event.new_window_state &
+                      Gdk.WindowState.FULLSCREEN != 0) and not is_tiled
+        options.set("window_fullscreen", fullscreen, commit=False)
         maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
         options.set("window_maximized", maximized, commit=False)
+        if 'nt' == os.name:
+            logger.info(
+                f'window state = {event.new_window_state}, full screen = {fullscreen}, maximized = {maximized}')
         return False
 
     def on_delete_event(self, widget, event):
@@ -1159,7 +1203,9 @@ class GUI(Gtk.ApplicationWindow):
                     monitor_num, (g.x, g.y), (g.width, g.height), (r.x, r.y), (r.width, r.height)))
                 self.move(r.x, r.y)
                 self.resize(r.width, r.height)
-        if options.get("window_maximized"):
+        if options.get("window_fullscreen"):
+            self.fullscreen()
+        elif options.get("window_maximized"):
             self.maximize()
 
     def set_windows10_theme(self):

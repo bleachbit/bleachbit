@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -38,7 +38,8 @@ These are the terms:
 """
 
 import bleachbit
-from bleachbit import _, Command, FileUtilities, General
+from bleachbit import Command, FileUtilities, General
+from bleachbit.Language import get_text as _
 
 import glob
 import logging
@@ -514,21 +515,61 @@ def is_junction(path):
     return bool(attr & FILE_ATTRIBUTE_REPARSE_POINT)
 
 
-def is_process_running(name):
+def is_process_running(exename, require_same_user):
     """Return boolean whether process (like firefox.exe) is running
 
-    Works on Windows Vista or later, but on Windows XP gives an ImportError
+    exename: name of the executable
+    require_same_user: if True, ignore processes run by other users
     """
 
     import psutil
-    name = name.lower()
+    exename = exename.lower()
+    current_username = psutil.Process().username().lower()
     for proc in psutil.process_iter():
         try:
-            if proc.name().lower() == name:
-                return True
+            proc_name = proc.name().lower()
         except psutil.NoSuchProcess:
-            pass
+            continue
+        if not proc_name == exename:
+            continue
+        if not require_same_user:
+            return True
+        try:
+            proc_username = proc.username().lower()
+        except psutil.AccessDenied:
+            continue
+        if proc_username == current_username:
+            return True
     return False
+
+
+def load_i18n_dll():
+    """Load internationalization library
+
+    It may be called either libintl-8.dll or intl-8.dll, and it comes
+    from gettext.
+
+    Returns None if the dll is not available.
+    """
+    import ctypes
+    lib_fns = ['libintl-8.dll', 'intl-8.dll']
+    dirs = set([bleachbit.bleachbit_exe_path, os.path.dirname(sys.executable)])
+    for lib_fn in lib_fns:
+        for dir in dirs:
+            lib_path = os.path.join(dir, lib_fn)
+            if os.path.exists(lib_path):
+                break
+            lib_path = None
+    if not lib_path:
+        logger.warning(
+            'internationalization library was not found, so translations will not work.')
+        return
+    try:
+        libintl = ctypes.cdll.LoadLibrary(lib_path)
+    except Exception as e:
+        logger.warning('error in LoadLibrary(%s): %s', lib_path, e)
+        return
+    return libintl
 
 
 def move_to_recycle_bin(path):
@@ -570,7 +611,7 @@ def set_environ(varname, path):
     if not path:
         return
     if varname in os.environ:
-        #logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
+        # logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
         if 'nt' == os.name:
             os.environ[varname] = os.path.expandvars('%%%s%%' % varname)
         # Do not redefine the environment variable when it already exists
@@ -587,7 +628,9 @@ def set_environ(varname, path):
 
 
 def setup_environment():
-    """Define any extra environment variables for use in CleanerML and Winapp2.ini"""
+    """Define any extra environment variables"""
+
+    # These variables are for use in CleanerML and Winapp2.ini.
     csidl_to_environ('commonappdata', shellcon.CSIDL_COMMON_APPDATA)
     csidl_to_environ('documents', shellcon.CSIDL_PERSONAL)
     # Windows XP does not define localappdata, but Windows Vista and 7 do
@@ -608,6 +651,22 @@ def setup_environment():
     # BleachBit is portable. It is the same variable name as defined by
     # cmd.exe .
     set_environ('cd', os.getcwd())
+
+    # For gschemas.compiled required by make chaff dialog
+    # https://github.com/bleachbit/bleachbit/issues/1444
+    if not os.environ.get('XDG_DATA_DIRS'):
+        xdg_data_dirs = (os.path.dirname(sys.executable) +
+                         '\\share', os.getcwd() + '\\share')
+        found_dir = False
+        for xdg_data_dir in xdg_data_dirs:
+            if os.path.exists(os.path.join(xdg_data_dir, 'glib-2.0', 'schemas', 'gschemas.compiled')):
+                found_dir = True
+                break
+        if not found_dir:
+            logger.warning(
+                'XDG_DATA_DIRS not set and %s does not exist', xdg_data_dir)
+        else:
+            set_environ('XDG_DATA_DIRS', xdg_data_dir)
 
 
 def split_registry_key(full_key):
@@ -706,7 +765,7 @@ class SplashThread(Thread):
         Thread.join(self, *args)
 
     def _show_splash_screen(self):
-        #get instance handle
+        # get instance handle
         hInstance = win32api.GetModuleHandle()
 
         # the class name
@@ -807,7 +866,7 @@ class SplashThread(Thread):
             return True
 
         # Solution 3: Working with timers that lock/unlock SetForegroundWindow
-        #https://gist.github.com/EBNull/1419093
+        # https://gist.github.com/EBNull/1419093
         try:
             timeout = win32gui.SystemParametersInfo(win32con.SPI_GETFOREGROUNDLOCKTIMEOUT)
             win32gui.SystemParametersInfo(win32con.SPI_SETFOREGROUNDLOCKTIMEOUT, 0, win32con.SPIF_SENDCHANGE)

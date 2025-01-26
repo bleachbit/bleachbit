@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2024 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 <cleaner id="epiphany" os="linux">
   <label>Epiphany</label>
   <description>Web browser</description>
-  <running type="exe">epiphany</running>
+  <running type="exe" same_user="true">epiphany</running>
   <running type="pathname">~/.gnome2/epiphany/mozilla/epiphany/lock</running>
   <option id="cache">
     <label>Cache</label>
