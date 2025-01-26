@@ -126,7 +126,6 @@ class UnixTestCase(common.BleachbitTestCase):
         self.assertRaises(AssertionError, find_best_locale, None)
         self.assertRaises(AssertionError, find_best_locale, [])
 
-
     @unittest.skipUnless(FileUtilities.exe_exists('apt-get'),
                          'skipping tests for unavailable apt-get')
     def test_get_apt_size(self):
@@ -325,11 +324,58 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             self.assertIn(os.path.join(self.tempdir, path), deletelist)
 
     @common.skipIfWindows
-    def test_rotated_logs(self):
+    def test_rotated_logs_real(self):
         """Unit test for rotated_logs()"""
         for path in rotated_logs():
             self.assertLExists(
                 path, "Rotated log path '%s' does not exist" % path)
+
+    @mock.patch('bleachbit.FileUtilities.whitelisted')
+    @mock.patch('bleachbit.FileUtilities.children_in_directory')
+    def test_rotated_logs_mock(self, mock_cid, mock_whitelisted):
+        mock_whitelisted.side_effect = lambda path: path.startswith(
+            '/var/log/whitelisted/')
+        expected_delete = [
+            '/var/log/apt/history.log.1.gz',
+            '/var/log/auth.log.3.old',
+            '/var/log/dmesg.0',
+            '/var/log/dmesg.1.gz',
+            '/var/log/foo.gz',
+            '/var/log/foo.old',
+            '/var/log/foo/bar.0',
+            '/var/log/foo/bar.gz',
+            '/var/log/foo/bar.old',
+            '/var/log/kern.log-20230601',
+            '/var/log/messages-20090118.bz2',
+            '/var/log/messages-20090118.gz',
+            '/var/log/messages-20090118.xz'
+            '/var/log/messages-20090118',
+            '/var/log/messages.2.bz2',
+            '/var/log/samba/log.smbd-20250126.gz',
+            '/var/log/syslog.1',
+            '/var/log/syslog.2.xz',
+            '/var/log/cups/access_log.9'
+
+        ]
+        expected_keep = [
+            '/var/log/dmesg',
+            '/var/log/packages/foo.0',
+            '/var/log/removed_packages/foo.0',
+            '/var/log/removed_scripts/foo.0',
+            '/var/log/samba/log.192.168.0.1',
+            '/var/log/samba/log.172.17.0.1',
+            '/var/log/scripts/foo.0',
+            '/var/log/syslog',
+            '/var/log/sysstat/sar24',
+            '/var/log/whitelisted/foo.0'
+        ]
+        mock_cid.return_value = iter(expected_delete+expected_keep)
+        result = list(rotated_logs())
+        self.assertEqual(set(result), set(expected_delete))
+        for path in expected_keep:
+            self.assertNotIn(path, result)
+        mock_cid.assert_called_once_with('/var/log')
+        mock_whitelisted.assert_called()
 
     @common.skipIfWindows
     def test_run_cleaner_cmd(self):

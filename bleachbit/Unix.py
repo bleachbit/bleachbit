@@ -421,25 +421,25 @@ def is_process_running(exename, require_same_user):
 
 
 def rotated_logs():
-    """Yield a list of rotated (i.e., old) logs in /var/log/"""
-    # Ubuntu 9.04
-    # /var/log/dmesg.0
-    # /var/log/dmesg.1.gz
-    # Fedora 10
-    # /var/log/messages-20090118
-    globpaths = ('/var/log/*.[0-9]',
-                 '/var/log/*/*.[0-9]',
-                 '/var/log/*.gz',
-                 '/var/log/*/*gz',
-                 '/var/log/*/*.old',
-                 '/var/log/*.old')
-    for globpath in globpaths:
-        yield from glob.iglob(globpath)
-    regex = '-[0-9]{8}$'
-    globpaths = ('/var/log/*-*', '/var/log/*/*-*')
-    for path in FileUtilities.globex(globpaths, regex):
-        whitelist_re = '^/var/log/(removed_)?(packages|scripts)'
-        if re.match(whitelist_re, path) is None:  # for Slackware, Launchpad #367575
+    """Yield a list of rotated (i.e., old) logs in /var/log/
+
+    See:
+    https://bugs.launchpad.net/bleachbit/+bug/367575
+    https://github.com/bleachbit/bleachbit/issues/1744
+    """
+    whitelists = [re.compile(r'/var/log/(removed_)?(packages|scripts)'),
+                  re.compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')]
+    positive_re = re.compile(r'(\.(\d+|bz2|gz|xz|old)|\-\d{8}?)')
+
+    for path in bleachbit.FileUtilities.children_in_directory('/var/log'):
+        whitelist_match = False
+        for whitelist in whitelists:
+            if whitelist.search(path) or bleachbit.FileUtilities.whitelisted(path):
+                whitelist_match = True
+                break
+        if whitelist_match:
+            continue
+        if positive_re.search(path):
             yield path
 
 
