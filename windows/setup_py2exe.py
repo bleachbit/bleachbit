@@ -18,21 +18,18 @@ from __future__ import absolute_import, print_function
 
 import fnmatch
 import glob
-import imp
+import importlib.util
 import logging
 import os
 import shutil
 import subprocess
 import sys
 import time
-import win_unicode_console
-import xml.dom.minidom
 import re
 
 from windows.NsisUtilities import write_nsis_expressions_to_files
 
 setup_encoding = sys.stdout.encoding
-win_unicode_console.enable()
 logger = logging.getLogger('setup_py2exe')
 logger.setLevel(logging.INFO)
 ch = logging.StreamHandler()
@@ -116,9 +113,9 @@ def check_exist(path, msg=None):
 
 def assert_module(module):
     try:
-        imp.find_module(module)
+        importlib.util.find_spec(module)
     except ImportError:
-        logger.error('Failed to import ' + module)
+        logger.error(f'Failed to import {module}')
         logger.error('Process aborted because of error!')
         sys.exit(1)
 
