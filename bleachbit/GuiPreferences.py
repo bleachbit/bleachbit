@@ -208,6 +208,9 @@ class PreferencesDialog:
             if lang_code == current_lang_code:
                 active_language_idx = lang_idx
             lang_idx += 1
+        # set_wrap_width() prevents infinite space to scroll up.
+        # https://github.com/bleachbit/bleachbit/issues/1764
+        lang_combo.set_wrap_width(1)
         if active_language_idx:
             lang_combo.set_active(active_language_idx)
 
