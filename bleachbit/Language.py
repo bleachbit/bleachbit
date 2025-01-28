@@ -269,6 +269,9 @@ def get_supported_language_codes():
     supported_langs = []
     # Use local import to avoid circular import.
     from bleachbit import locale_dir
+    # The locale_dir may no exist, especially on Windows.
+    if not os.path.isdir(locale_dir):
+        return ['en_US', 'en']
     lang_codes = sorted(set(os.listdir(locale_dir)+['en_US', 'en']))
     for lang in lang_codes:
         if lang in ('en', 'en_US'):

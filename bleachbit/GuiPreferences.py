@@ -203,7 +203,13 @@ class PreferencesDialog:
         # Add available languages
         lang_idx = 0
         active_language_idx = None
-        for lang_code, native in get_supported_language_code_name_dict().items():
+        try:
+            supported_langs = get_supported_language_code_name_dict().items()
+        except:
+            logger.error("Failed to get list of supported languages")
+            supported_langs = [('en_us', 'English')]
+
+        for lang_code, native in supported_langs:
             lang_combo.append_text(f"{native} ({lang_code})")
             if lang_code == current_lang_code:
                 active_language_idx = lang_idx
