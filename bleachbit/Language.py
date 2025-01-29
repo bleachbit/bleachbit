@@ -390,6 +390,8 @@ def setup_translation():
     if os.name == 'posix':
         from bleachbit.Unix import find_best_locale
         setlocale_local = find_best_locale(user_locale)
+        if 'C' == setlocale_local and not user_locale == 'C':
+            logger.warning('locale %s is not available. You may wish to run sudo local-gen to generate it.', user_locale)
         try:
             locale.setlocale(locale.LC_ALL, setlocale_local)
         except locale.Error as e:
