@@ -103,43 +103,110 @@ class PreferencesDialog:
             from bleachbit.DesktopMenuOptions import install_kde_service_menu_file
             install_kde_service_menu_file()
 
-    def __general_page(self):
-        """Return a widget containing the general page"""
+    def __create_update_widgets(self, vbox):
+        """Create and configure update-related checkboxes."""
+        if not online_update_notification_enabled:
+            return
+        cb_updates = Gtk.CheckButton.new_with_label(
+            _("Check periodically for software updates via the Internet"))
+        cb_updates.set_active(options.get('check_online_updates'))
+        cb_updates.connect(
+            'toggled', self.__toggle_callback, 'check_online_updates')
+        cb_updates.set_tooltip_text(
+            _("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
+        vbox.pack_start(cb_updates, False, True, 0)
 
-        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        updates_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        updates_box.set_border_width(10)
 
-        if online_update_notification_enabled:
-            cb_updates = Gtk.CheckButton.new_with_label(
-                _("Check periodically for software updates via the Internet"))
-            cb_updates.set_active(options.get('check_online_updates'))
-            cb_updates.connect(
-                'toggled', self.__toggle_callback, 'check_online_updates')
-            cb_updates.set_tooltip_text(
-                _("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
-            vbox.pack_start(cb_updates, False, True, 0)
+        self.cb_beta = Gtk.CheckButton.new_with_label(
+            label=_("Check for new beta releases"))
+        self.cb_beta.set_active(options.get('check_beta'))
+        self.cb_beta.set_sensitive(options.get('check_online_updates'))
+        self.cb_beta.connect(
+            'toggled', self.__toggle_callback, 'check_beta')
+        updates_box.pack_start(self.cb_beta, False, True, 0)
 
-            updates_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-            updates_box.set_border_width(10)
+        if 'nt' == os.name:
+            self.cb_winapp2 = Gtk.CheckButton.new_with_label(
+                _("Download and update cleaners from community (winapp2.ini)"))
+            self.cb_winapp2.set_active(options.get('update_winapp2'))
+            self.cb_winapp2.set_sensitive(
+                options.get('check_online_updates'))
+            self.cb_winapp2.connect(
+                'toggled', self.__toggle_callback, 'update_winapp2')
+            updates_box.pack_start(self.cb_winapp2, False, True, 0)
+        vbox.pack_start(updates_box, False, True, 0)
 
-            self.cb_beta = Gtk.CheckButton.new_with_label(
-                label=_("Check for new beta releases"))
-            self.cb_beta.set_active(options.get('check_beta'))
-            self.cb_beta.set_sensitive(options.get('check_online_updates'))
-            self.cb_beta.connect(
-                'toggled', self.__toggle_callback, 'check_beta')
-            updates_box.pack_start(self.cb_beta, False, True, 0)
+    def __create_language_widgets(self, vbox):
+        """Create and configure language selection widgets."""
+        lang_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.cb_auto_lang = Gtk.CheckButton(
+            label=_("Auto-detect language"))
+        is_auto_detect = options.get("auto_detect_lang")
+        self.cb_auto_lang.set_active(is_auto_detect)
+        self.cb_auto_lang.set_tooltip_text(
+            _("Automatically detect the system language"))
+        lang_box.pack_start(self.cb_auto_lang, False, True, 0)
 
-            if 'nt' == os.name:
-                self.cb_winapp2 = Gtk.CheckButton.new_with_label(
-                    _("Download and update cleaners from community (winapp2.ini)"))
-                self.cb_winapp2.set_active(options.get('update_winapp2'))
-                self.cb_winapp2.set_sensitive(
-                    options.get('check_online_updates'))
-                self.cb_winapp2.connect(
-                    'toggled', self.__toggle_callback, 'update_winapp2')
-                updates_box.pack_start(self.cb_winapp2, False, True, 0)
-            vbox.pack_start(updates_box, False, True, 0)
+        self.lang_select_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        lang_label = Gtk.Label(label=_("Language:"))
+        lang_label.set_margin_start(20)  # Add some indentation
+        self.lang_select_box.pack_start(lang_label, False, True, 5)
 
+        self.lang_combo = Gtk.ComboBoxText()
+        current_lang_code = get_active_language_code()
+        # Add available languages
+        lang_idx = 0
+        active_language_idx = None
+        try:
+            supported_langs = get_supported_language_code_name_dict().items()
+        except:
+            logger.error("Failed to get list of supported languages")
+            supported_langs = [('en_us', 'English')]
+        for lang_code, native in supported_langs:
+            self.lang_combo.append_text(f"{native} ({lang_code})")
+            if lang_code == current_lang_code:
+                active_language_idx = lang_idx
+            lang_idx += 1
+        if active_language_idx is not None:
+            self.lang_combo.set_active(active_language_idx)
+        # set_wrap_width() prevents infinite space to scroll up.
+        # https://github.com/bleachbit/bleachbit/issues/1764
+        self.lang_combo.set_wrap_width(1)
+        self.lang_select_box.pack_start(self.lang_combo, False, True, 0)
+        lang_box.pack_start(self.lang_select_box, False, True, 0)
+
+        vbox.pack_start(lang_box, False, True, 0)
+        self.lang_select_box.set_sensitive(not is_auto_detect)
+        self.cb_auto_lang.connect('toggled', self.on_auto_detect_toggled)
+        self.lang_combo.connect('changed', self.on_lang_changed)
+
+    def on_lang_changed(self, widget):
+        """Callback for when the language combobox is changed."""
+        text = widget.get_active_text()
+        # Extract language code from the format "Native Name (lang_code)"
+        lang_code = text.split("(")[-1].rstrip(")")
+        if lang_code:
+            options.set("forced_language", lang_code, section="bleachbit")
+        else:
+            logger.warning(
+                "No language code found in combobox for text %s", text)
+        setup_translation()
+        self.refresh_operations = True
+
+    def on_auto_detect_toggled(self, widget):
+        """Callback for when the auto-detect language checkbox is toggled."""
+        self.__toggle_callback(None, 'auto_detect_lang')
+        is_auto_detect = options.get("auto_detect_lang")
+        self.lang_select_box.set_sensitive(not is_auto_detect)
+        if is_auto_detect:
+            options.set("forced_language", "", section="bleachbit")
+        setup_translation()
+        self.refresh_operations = True
+
+    def __create_general_checkboxes(self, vbox):
+        """Create and configure general checkboxes."""
         # TRANSLATORS: This means to hide cleaners which would do
         # nothing.  For example, if Firefox were never used on
         # this system, this option would hide Firefox to simplify
@@ -182,92 +249,20 @@ class PreferencesDialog:
         cb_units_iec.connect('toggled', self.__toggle_callback, 'units_iec')
         vbox.pack_start(cb_units_iec, False, True, 0)
 
-        # Language auto-detection
-        lang_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        cb_auto_lang = Gtk.CheckButton(
-            label=_("Auto-detect language"))
-        is_auto_detect = options.get("auto_detect_lang")
-        cb_auto_lang.set_active(is_auto_detect)
-        cb_auto_lang.set_tooltip_text(
-            _("Automatically detect the system language"))
-        lang_box.pack_start(cb_auto_lang, False, True, 0)
+    def __general_page(self):
+        """Return a widget containing the general page"""
 
-        # Language selection dropdown
-        lang_select_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        lang_label = Gtk.Label(label=_("Language:"))
-        lang_label.set_margin_start(20)  # Add some indentation
-        lang_select_box.pack_start(lang_label, False, True, 5)
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
-        lang_combo = Gtk.ComboBoxText()
-        current_lang_code = get_active_language_code()
-        # Add available languages
-        lang_idx = 0
-        active_language_idx = None
-        try:
-            supported_langs = get_supported_language_code_name_dict().items()
-        except:
-            logger.error("Failed to get list of supported languages")
-            supported_langs = [('en_us', 'English')]
+        self.__create_update_widgets(vbox)
 
-        for lang_code, native in supported_langs:
-            lang_combo.append_text(f"{native} ({lang_code})")
-            if lang_code == current_lang_code:
-                active_language_idx = lang_idx
-            lang_idx += 1
-        # set_wrap_width() prevents infinite space to scroll up.
-        # https://github.com/bleachbit/bleachbit/issues/1764
-        lang_combo.set_wrap_width(1)
-        if active_language_idx:
-            lang_combo.set_active(active_language_idx)
-
-        def on_lang_changed(widget):
-            text = widget.get_active_text()
-            # Extract language code from the format "Native Name (lang_code)"
-            lang_code = text.split("(")[-1].rstrip(")")
-            if lang_code:
-                options.set("forced_language", lang_code, section="bleachbit")
-            else:
-                logger.warning(
-                    "No language code found in combobox for text %s", text)
-            setup_translation()
-            self.refresh_operations = True
-
-        def on_auto_detect_toggled(widget):
-            self.__toggle_callback(None, 'auto_detect_lang')
-            is_auto_detect = options.get("auto_detect_lang")
-            lang_select_box.set_sensitive(not is_auto_detect)
-            if is_auto_detect:
-                options.set("forced_language", "", section="bleachbit")
-            setup_translation()
-            self.refresh_operations = True
-
-        lang_combo.connect('changed', on_lang_changed)
-        cb_auto_lang.connect('toggled', on_auto_detect_toggled)
-
-        lang_select_box.pack_start(lang_combo, True, True, 5)
-        lang_select_box.set_sensitive(not is_auto_detect)
-
-        lang_box.pack_start(lang_select_box, False, True, 0)
-        vbox.pack_start(lang_box, False, True, 0)
-
-        if 'nt' == os.name:
-            # Dark theme
-            cb_win10_theme = Gtk.CheckButton(_("Windows 10 theme"))
-            cb_win10_theme.set_active(options.get("win10_theme"))
-            cb_win10_theme.connect(
-                'toggled', self.__toggle_callback, 'win10_theme')
-            vbox.pack_start(cb_win10_theme, False, True, 0)
-
-        # Dark theme
-        self.cb_dark_mode = Gtk.CheckButton(label=_("Dark mode"))
-        self.cb_dark_mode.set_active(options.get("dark_mode"))
-        self.cb_dark_mode.connect('toggled', self.__toggle_callback, 'dark_mode')
-        vbox.pack_start(self.cb_dark_mode, False, True, 0)
+        self.__create_general_checkboxes(vbox)
 
         # Remember window geometry (position and size)
         self.cb_geom = Gtk.CheckButton(label=_("Remember window geometry"))
         self.cb_geom.set_active(options.get("remember_geometry"))
-        self.cb_geom.connect('toggled', self.__toggle_callback, 'remember_geometry')
+        self.cb_geom.connect(
+            'toggled', self.__toggle_callback, 'remember_geometry')
         vbox.pack_start(self.cb_geom, False, True, 0)
 
         # Debug logging
@@ -278,10 +273,30 @@ class PreferencesDialog:
 
         # KDE context menu shred option
         if 'nt' != os.name:
-            cb_kde_shred_menu_option = Gtk.CheckButton(label=_("Add the shred context menu to KDE Plasma"))
-            cb_kde_shred_menu_option.set_active(options.get("kde_shred_menu_option"))
-            cb_kde_shred_menu_option.connect('toggled', self.__toggle_callback, 'kde_shred_menu_option')
+            cb_kde_shred_menu_option = Gtk.CheckButton(
+                label=_("Add the shred context menu to KDE Plasma"))
+            cb_kde_shred_menu_option.set_active(
+                options.get("kde_shred_menu_option"))
+            cb_kde_shred_menu_option.connect(
+                'toggled', self.__toggle_callback, 'kde_shred_menu_option')
             vbox.pack_start(cb_kde_shred_menu_option, False, True, 0)
+
+        # Dark theme
+        self.cb_dark_mode = Gtk.CheckButton(label=_("Dark mode"))
+        self.cb_dark_mode.set_active(options.get("dark_mode"))
+        self.cb_dark_mode.connect(
+            'toggled', self.__toggle_callback, 'dark_mode')
+        vbox.pack_start(self.cb_dark_mode, False, True, 0)
+
+        if 'nt' == os.name:
+            # Windows 10 theme
+            cb_win10_theme = Gtk.CheckButton(_("Windows 10 theme"))
+            cb_win10_theme.set_active(options.get("win10_theme"))
+            cb_win10_theme.connect(
+                'toggled', self.__toggle_callback, 'win10_theme')
+            vbox.pack_start(cb_win10_theme, False, True, 0)
+
+        self.__create_language_widgets(vbox)
 
         return vbox
 
