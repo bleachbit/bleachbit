@@ -8,16 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-29 20:55-0600\n"
-"PO-Revision-Date: 2021-06-06 19:11+0000\n"
-"Last-Translator: Vasilis Kosmidis <Unknown>\n"
-"Language-Team: Greek <el@li.org>\n"
+"PO-Revision-Date: 2025-02-03 05:01+0000\n"
+"Last-Translator: Manolis Boliotis <admiraladama@tutamail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/bleachbit/main/el/>"
+"\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10-dev\n"
 "X-Launchpad-Export-Date: 2021-06-15 14:28+0000\n"
-"X-Generator: Launchpad (build ed184eb8c3e03c8a0c3f47e69a5c546619a1af7c)\n"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
@@ -305,7 +306,7 @@ msgstr "Καραντίνα"
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/vuze.xml
 #: ../cleaners/deepscan.xml ../cleaners/beagle.xml
 msgid "Delete the files"
-msgstr "Διαγραφή αρχείων"
+msgstr "Διαγραφή τα αρχεία"
 
 #: ../cleaners/windows_defender.xml ../cleaners/waterfox.xml
 #: ../cleaners/palemoon.xml ../cleaners/amule.xml ../cleaners/firefox.xml
@@ -445,7 +446,7 @@ msgstr "Αρχεία καταγραφής αποσφαλματώσεων"
 #: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
 #: ../cleaners/beagle.xml ../cleaners/easytag.xml
 msgid "Delete the debug logs"
-msgstr "Διαγραφή αρχείων καταγραφής  αποσφαλματώσεων"
+msgstr "Διαγραφή αρχείων καταγραφής αποσφαλματώσεων"
 
 #: ../cleaners/nautilus.xml ../cleaners/mc.xml ../cleaners/windows_explorer.xml
 msgid "File manager"
@@ -462,11 +463,11 @@ msgstr "Λίστα μπλοκαρισμένων"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
-msgstr "Η λίστα μπλοκαρισμένων θα χρειαστεί αναβάθμιση για να λειτουργήσει"
+msgstr "Η λίστα μπλοκαρισμένων θα χρειαστεί αναβάθμιση για να λειτουργήσει."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
-msgstr "Torrents"
+msgstr "αρχεία Torrents"
 
 #: ../cleaners/transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
@@ -646,14 +647,12 @@ msgid "Compatibility layer for Windows software"
 msgstr "Στρώμα συμβατότητας για λογισμικό των Windows"
 
 #: ../cleaners/discord.xml
-#, fuzzy
-#| msgid "Delete the web cache, which reduces time to display revisited pages"
 msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"Διαγραφή της προσωρινής μνήμης του ιστού, η οποία μειώνει τον χρόνο "
-"εμφάνισης ήδη προβεβλημένων σελίδων"
+"Διαγραφή της προσωρινής δυκτιακής μνήμης , η οποία μειώνει τον χρόνο "
+"εμφάνισης επαναπροβεβλημένων σελίδων. Επίσης καθαρίζει τα αγαπημένα σας GIF."
 
 #: ../cleaners/vim.xml
 msgid ""
@@ -743,7 +742,7 @@ msgstr ""
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
-msgstr ""
+msgstr "Δεδομένα φακέλων"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
@@ -752,7 +751,7 @@ msgstr ""
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will reset the position of desktop icons."
-msgstr "Επαναφορά των θέσεων των εικονιδίων της επιφάνειας εργασίας"
+msgstr "Αυτό θα επαναφέρει τις θέσεις των εικονιδίων στην επιφάνειας εργασίας."
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
@@ -815,7 +814,7 @@ msgstr "Η βαθιά σάρωση δεν υποστηρίζει μεταβλη�
 #: ../bleachbit/Action.py:252
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr ""
+msgstr "search=\"walk.all\" με το συνιθισμένο μονοπάτι αρχείου path=\"%s\""
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -823,9 +822,9 @@ msgstr ""
 #. the wildcard or should search using path="file" which does not
 #. expect or support wildcards in the path.
 #: ../bleachbit/Action.py:291
-#, python-format
+#, fuzzy, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr ""
+msgstr "το path=\"%s\" δεν παίρνει χαρακτήρες μπαλαντέρ"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Action.py:383 ../bleachbit/Action.py:396
@@ -850,10 +849,9 @@ msgid "Run external command: %s"
 msgstr "Εκτελέστε εξωτερική εντολή: %s"
 
 #: ../bleachbit/Chaff.py:225
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
-msgstr "Αποτυχία λήψης url: %s"
+msgstr "Αποτυχία λήψης URL: %s"
 
 #: ../bleachbit/CleanerML.py:134
 #, python-brace-format
@@ -867,7 +865,7 @@ msgstr ""
 #: ../bleachbit/CleanerML.py:275
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr ""
+msgstr "Αγνοώντας τον καθαριστή επειδή είναι παγκοσμίως εγγράψιμος:%s"
 
 #: ../bleachbit/CleanerML.py:294 ../bleachbit/CleanerML.py:339
 #, python-format
@@ -1227,7 +1225,7 @@ msgstr "Δημιουργία νέου, προσωρινού αρχείου, γι
 #: ../bleachbit/FileUtilities.py:1005
 #, python-format
 msgid "Error #%d when flushing the file buffer."
-msgstr ""
+msgstr "Λάθος #%d καθώς άδειαζε η προσωρινή μνήμη."
 
 #: ../bleachbit/FileUtilities.py:1021
 msgid ""
@@ -1311,7 +1309,7 @@ msgstr "Άνοιγμα περιηγητή ιστού στο %s;"
 
 #: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:528
 msgid "Confirm"
-msgstr ""
+msgstr "Επιβεβαίωση"
 
 #: ../bleachbit/GuiChaff.py:46
 msgid "Deleting files"
@@ -1321,8 +1319,9 @@ msgstr "Διαγραφή αρχείων"
 #. physical chaff airplanes use to protect themselves from radar-guided
 #. missiles. For more explanation, see the online documentation.
 #: ../bleachbit/GuiChaff.py:65
+#, fuzzy
 msgid "Make chaff"
-msgstr ""
+msgstr "Δημιούργησε ψηφιακό παραπλανητικό υλικό"
 
 #: ../bleachbit/GuiChaff.py:71
 msgid "Make randomly-generated messages inspired by documents."
@@ -1465,7 +1464,7 @@ msgstr "Εμφάνιση μηνυμάτων αποσφαλμάτωσης"
 
 #: ../bleachbit/GuiPreferences.py:215
 msgid "Add the shred context menu to KDE Plasma"
-msgstr ""
+msgstr "Προσθέστε το μενού περιβάλλοντος shred στο KDE Plasma"
 
 #: ../bleachbit/GuiPreferences.py:227 ../bleachbit/GuiPreferences.py:357
 #: ../bleachbit/GuiPreferences.py:400 ../bleachbit/GUI.py:281
@@ -1524,8 +1523,6 @@ msgid "Folder"
 msgstr "Φάκελος"
 
 #: ../bleachbit/GuiPreferences.py:451
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
 msgstr "Αυτές οι τοποθεσίες δε θα διαγραφούν ούτε θα τροποποιηθούν."
 
@@ -1571,7 +1568,7 @@ msgstr "_Εντάξει"
 
 #: ../bleachbit/GUI.py:305
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Πρόγραμμα που καθαρίζει τα άχρηστα αρχεία"
 
 #: ../bleachbit/GUI.py:316
 msgid ""
@@ -1589,18 +1586,18 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Dimitris Mytilinaios https://launchpad.net/~webdev-hotmail\n"
-"  DimitrisT https://launchpad.net/~dimitris.t\n"
-"  Matsek Ratkievits https://launchpad.net/~matsaki95\n"
-"  Nikos P. https://launchpad.net/~pougounias\n"
-"  Stefanos Kariotidis https://launchpad.net/~iccode\n"
-"  Valantis Kamayiannis https://launchpad.net/~kamayiannis\n"
-"  Vasilis Kosmidis https://launchpad.net/~vasiliskos\n"
-"  mara sdr https://launchpad.net/~paren8esis\n"
-"  nask00s https://launchpad.net/~nask00s\n"
-"  sarantis https://launchpad.net/~ubu-roi\n"
-"  tzem https://launchpad.net/~athmakrigiannis\n"
-"  Χρήστος https://launchpad.net/~maguss"
+"Dimitris Mytilinaios https://launchpad.net/~webdev-hotmail\n"
+"DimitrisT https://launchpad.net/~dimitris.t\n"
+"Matsek Ratkievits https://launchpad.net/~matsaki95\n"
+"Nikos P. https://launchpad.net/~pougounias\n"
+"Stefanos Kariotidis https://launchpad.net/~iccode\n"
+"Valantis Kamayiannis https://launchpad.net/~kamayiannis\n"
+"Vasilis Kosmidis https://launchpad.net/~vasiliskos\n"
+"mara sdr https://launchpad.net/~paren8esis\n"
+"nask00s https://launchpad.net/~nask00s\n"
+"sarantis https://launchpad.net/~ubu-roi\n"
+"tzem https://launchpad.net/~athmakrigiannis\n"
+"Χρήστος https://launchpad.net/~maguss"
 
 #: ../bleachbit/GUI.py:346
 msgid "System information"
@@ -1640,10 +1637,8 @@ msgid "You must select an operation"
 msgstr "Πρέπει να επιλέξετε μια ενέργεια"
 
 #: ../bleachbit/GUI.py:772
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Σφάλματα: %d"
+msgstr "Σφάλμα"
 
 #: ../bleachbit/GUI.py:790 ../bleachbit/GUI.py:806
 msgid "Done."
@@ -1692,6 +1687,9 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"Δεν υπάρχει επίσημη έκδοση του BleachBit στο Microsoft Store. Βρες την "
+"αυθεντική έκδοση στη διεύθυνση https://www.bleachbit.org που είναι πάντα "
+"δωρεάν."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1786,7 +1784,7 @@ msgstr "Επαναρχικοποίηση της συσκευής swap %s."
 #: ../bleachbit/Memory.py:309
 #, python-format
 msgid "Detected these swap devices: %s"
-msgstr "Εντοπίστηκαν αυτές οι συσκευές swap: %s."
+msgstr "Εντοπίστηκαν αυτές οι συσκευές swap: %s"
 
 #. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
 #: ../bleachbit/Memory.py:319
@@ -1795,11 +1793,13 @@ msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
 "process ID {cid}."
 msgstr ""
+"Η λειτουργεία wipe_memory() με ταυτότητα διαδικασίας {pid} περιμένει τη "
+"θυγατρική ταυτότητα διαδικασίας {cid}."
 
 #: ../bleachbit/Memory.py:324
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr ""
+msgstr "Η θυγατρική διαδικασία καθαρισμού μνήμης επέστρεψε κωδικό %d."
 
 #: ../bleachbit/Options.py:113
 #, python-format
@@ -1813,12 +1813,12 @@ msgstr "Σφάλμα εξέτασης ύπαρξης της διαδρομής: 
 
 #: ../bleachbit/Options.py:268
 msgid "Error when setting the default drives to shred."
-msgstr "Σφάλμα κατά τον ορισμό των προεπιλεγμένων οδηγών προς ασφαλή διαγραφή"
+msgstr "Σφάλμα κατά τον ορισμό των προεπιλεγμένων οδηγών προς ασφαλή διαγραφή."
 
 #: ../bleachbit/Options.py:294
 #, python-format
 msgid "Automatically preserving language %s."
-msgstr "Αυτόματη διατήρηση της γλώσσας %s"
+msgstr "Αυτόματη διατήρηση της γλώσσας %s."
 
 #: ../bleachbit/RecognizeCleanerML.py:56
 msgid "Security warning"
@@ -1862,7 +1862,7 @@ msgstr ""
 
 #: ../bleachbit/Update.py:92
 msgid "New winapp2.ini was downloaded."
-msgstr "Κατέβηκε νέο winapp2.ini"
+msgstr "Κατέβηκε νέο winapp2.ini."
 
 #: ../bleachbit/Update.py:137
 msgid "Update BleachBit"
@@ -1918,18 +1918,21 @@ msgid "Imported from winapp2.ini"
 msgstr "Εισήχθει από το winapp2.ini"
 
 #: ../bleachbit/Windows.py:141
+#, fuzzy
 msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
+"Το αρχείο python3.dll βρέθηκε στο c:\\ ή sto c:\\dlls, που ίσως δείχνει "
+"προσπάθεια παραβίασης της σειράς αναζήτησης DLL."
 
 #: ../bleachbit/Windows.py:151
 msgid "Warning"
-msgstr ""
+msgstr "Προσοχή"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
-msgstr ""
+msgstr "Το BleachBit ξεκινάει...\n"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
