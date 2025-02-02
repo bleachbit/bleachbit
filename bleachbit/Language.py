@@ -76,7 +76,7 @@ native_locale_names = \
      'dv': 'ދިވެހި',
      'dz': 'རྫོང་ཁ',
      'ee': 'Eʋegbe',
-     'el': 'Ελληνικά',
+     'el': 'Ελληνικά', # modern Greek
      'en': 'English',
      'en_AU': 'Australian English',
      'en_CA': 'Canadian English',
@@ -103,6 +103,7 @@ native_locale_names = \
      'gez': 'Geez',
      'gl': 'galego',
      'gn': 'Avañeẽ',
+     'grc': 'Ἑλληνική', # ancient Greek
      'gu': 'Gujarati',
      'gv': 'Gaelg',
      'ha': 'هَوُسَ',
