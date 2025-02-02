@@ -171,22 +171,31 @@ class Locales:
                 yield path
 
 
-def __is_broken_xdg_desktop_application(config, desktop_pathname):
-    """Returns boolean whether application desktop entry file is broken"""
+def _is_broken_xdg_desktop_application(config, desktop_pathname):
+    """Returns whether application .desktop file is critically broken
+
+    This function tests only .desktop files with Type=Application.
+    """
     if not config.has_option('Desktop Entry', 'Exec'):
         logger.info(
-            "is_broken_xdg_menu: missing required option 'Exec': '%s'", desktop_pathname)
+            "is_broken_xdg_menu: missing required option 'Exec' in '%s'", desktop_pathname)
         return True
     exe = config.get('Desktop Entry', 'Exec').split(" ")[0]
     if not FileUtilities.exe_exists(exe):
         logger.info(
-            "is_broken_xdg_menu: executable '%s' does not exist '%s'", exe, desktop_pathname)
+            "is_broken_xdg_menu: executable '%s' does not exist in '%s'", exe, desktop_pathname)
         return True
     if 'env' == exe:
         # Wine v1.0 creates .desktop files like this
         # Exec=env WINEPREFIX="/home/z/.wine" wine "C:\\Program
         # Files\\foo\\foo.exe"
-        execs = shlex.split(config.get('Desktop Entry', 'Exec'))
+        exec = config.get('Desktop Entry', 'Exec')
+        try:
+            execs = shlex.split(exec)
+        except ValueError as e:
+            logger.info(
+                "is_broken_xdg_menu: error splitting 'Exec' key '%s' in '%s'", e, desktop_pathname)
+            return True
         wineprefix = None
         del execs[0]
         while True:
@@ -198,13 +207,13 @@ def __is_broken_xdg_desktop_application(config, desktop_pathname):
             del execs[0]
         if not FileUtilities.exe_exists(execs[0]):
             logger.info(
-                "is_broken_xdg_menu: executable '%s' does not exist '%s'", execs[0], desktop_pathname)
+                "is_broken_xdg_menu: executable '%s' does not exist in '%s'", execs[0], desktop_pathname)
             return True
         # check the Windows executable exists
         if wineprefix:
             windows_exe = wine_to_linux_path(wineprefix, execs[1])
             if not os.path.exists(windows_exe):
-                logger.info("is_broken_xdg_menu: Windows executable '%s' does not exist '%s'",
+                logger.info("is_broken_xdg_menu: Windows executable '%s' does not exist in '%s'",
                             windows_exe, desktop_pathname)
                 return True
     return False
@@ -292,10 +301,20 @@ def is_unregistered_mime(mimetype):
 
 
 def is_broken_xdg_desktop(pathname):
-    """Returns boolean whether the given XDG desktop entry file is broken.
+    """Returns whether the given XDG .desktop file is critically broken.
     Reference: http://standards.freedesktop.org/desktop-entry-spec/latest/"""
     config = bleachbit.RawConfigParser()
-    config.read(pathname)
+    import configparser
+    try:
+        config.read(pathname)
+    except UnicodeDecodeError:
+        logger.info(
+            "is_broken_xdg_menu: cannot decode file: '%s'", pathname)
+        return True
+    except (configparser.Error) as e:
+        logger.info(
+            "is_broken_xdg_menu: %s: '%s'", e, pathname)
+        return True
     if not config.has_section('Desktop Entry'):
         logger.info(
             "is_broken_xdg_menu: missing required section 'Desktop Entry': '%s'", pathname)
@@ -326,7 +345,7 @@ def is_broken_xdg_desktop(pathname):
     if 'application' != file_type:
         logger.warning("unhandled type '%s': file '%s'", file_type, pathname)
         return False
-    if __is_broken_xdg_desktop_application(config, pathname):
+    if _is_broken_xdg_desktop_application(config, pathname):
         return True
     return False
 
