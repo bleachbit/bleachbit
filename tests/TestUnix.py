@@ -25,11 +25,24 @@ Test case for module Unix
 
 from tests import common
 from bleachbit.Unix import *
+from bleachbit.Unix import _is_broken_xdg_desktop_application
 
 import mock
 import os
 import sys
+import tempfile
 import unittest
+
+
+class FakeConfig:
+    def __init__(self, options):
+        self.options = options
+
+    def has_option(self, section, option):
+        return section in self.options and option in self.options[section]
+
+    def get(self, section, option):
+        return self.options[section][option]
 
 
 class UnixTestCase(common.BleachbitTestCase):
@@ -135,19 +148,143 @@ class UnixTestCase(common.BleachbitTestCase):
         self.assertGreaterEqual(size, 0)
 
     @common.skipIfWindows
-    def test_is_broken_xdg_desktop(self):
-        """Unit test for is_broken_xdg_desktop()"""
+    def test_is_broken_xdg_desktop_real(self):
+        """Unit test for is_broken_xdg_desktop()
+
+        Check it does not crash on real-world .desktop files.
+        """
         menu_dirs = ['/usr/share/applications',
+                     '~/.local/share/applications',
+                     '~/snap/steam/common/.local/share/applications',
                      '/usr/share/autostart',
                      '/usr/share/gnome/autostart',
                      '/usr/share/gnome/apps',
                      '/usr/share/mimelnk',
                      '/usr/share/applnk-redhat/',
-                     '/usr/local/share/applications/']
+                     '/usr/local/share/applications/',
+                     '/usr/share/ubuntu-wayland/']
         for dirname in menu_dirs:
-            for filename in [fn for fn in FileUtilities.children_in_directory(dirname, False)
-                             if fn.endswith('.desktop')]:
+            for filename in [fn for fn in FileUtilities.children_in_directory(os.path.expanduser(dirname), False)
+                             if fn.endswith('.desktop')
+                             ]:
                 self.assertIsInstance(is_broken_xdg_desktop(filename), bool)
+
+    @common.skipIfWindows
+    @mock.patch('bleachbit.Unix.logger.info')
+    def test_is_broken_xdg_desktop_other(self, mock_logger):
+        """Unit test for is_broken_xdg_desktop() using non-.desktop files"""
+        system_dirs = ['/usr/bin', '/usr/lib', '/etc']
+        filenames = []
+        for dirname in system_dirs:
+            for filename in FileUtilities.children_in_directory(dirname, False):
+                if filename.endswith('.desktop'):
+                    continue
+                filenames.append(filename)
+        import random
+        sample_size = min(1000, len(filenames))
+        sampled_filenames = random.sample(filenames, sample_size)
+        for filename in sampled_filenames:
+            result = is_broken_xdg_desktop(filename)
+            self.assertTrue(
+                result, msg=f"Expected is_broken_xdg_desktop({filename}) to return True, but got {result}")
+            mock_logger.assert_called()
+            mock_logger.reset_mock()
+
+    def test_is_broken_xdg_desktop_wine(self):
+        """Unit test for certain Wine .desktop file
+
+        https://github.com/bleachbit/bleachbit/issues/1756
+        """
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.desktop', prefix='bleachbit-xdg-') as tmp:
+            tmp.write("""[Desktop Entry]
+Name=What's New
+Exec=env WINEPREFIX="/home/bem/.wine" wine C:\\\\windows\\\\command\\\\start.exe /Unix /home/bem/.wine/dosdevices/c:/users/Public/Start\\ Menu/Programs/Biet-O-Matic/What\\'s\\ New.lnk
+Type=Application
+StartupNotify=true
+Path=/home/bem/.wine/dosdevices/c:/Program Files (x86)/Biet-O-Matic
+Icon=6B19_WhatsNew.0""")
+            tmp.flush()
+            self.assertIsInstance(is_broken_xdg_desktop(tmp.name), bool)
+
+    @common.skipIfWindows
+    def test_desktop_valid_exe(self):
+        """Unit test for .desktop file with valid Unix exe (not env)"""
+        fake_config = FakeConfig({"Desktop Entry": {"Exec": "ls"}})
+        result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
+        self.assertFalse(result)
+
+    @common.skipIfWindows
+    def test_desktop_env_shlex_failure(self):
+        """Unit test for .desktop file with shlex exception"""
+        fake_config = FakeConfig(
+            {"Desktop Entry": {"Exec": "env ENVVAR=bar ls \"notepad.exe"}})
+        result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
+        self.assertTrue(result)
+
+    @common.skipIfWindows
+    def test_desktop_env_valid(self):
+        """Unit test for .desktop file with valid env Exec"""
+        fake_config = FakeConfig(
+            {"Desktop Entry": {"Exec": "env FOO=bar ls /usr/bin"}})
+        result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
+        self.assertFalse(result)
+
+    @mock.patch('bleachbit.Unix.FileUtilities.exe_exists')
+    def test_desktop_missing_wine(self, mock_exe_exists):
+        """Unit test for .desktop file without Wine installed"""
+        mock_exe_exists.side_effect = [
+            True, False]  # First True for 'env', then False for 'wine'
+        fake_config = FakeConfig(
+            {"Desktop Entry": {"Exec": "env WINEPREFIX=/some/path wine notepad.exe"}})
+        result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
+        self.assertTrue(result)
+        mock_exe_exists.assert_has_calls([mock.call('env'), mock.call('wine')])
+
+    @mock.patch('os.path.exists')
+    @mock.patch('bleachbit.Unix.FileUtilities.exe_exists')
+    def test_desktop_wine_valid_windows_exe(self, mock_exe_exists, mock_path_exists):
+        """Unit test for .desktop file pointing to valid Windows application"""
+        fake_config = FakeConfig({"Desktop Entry": {
+                                 "Exec": r"env WINEPREFIX=/some/path wine C:\\Windows\\notepad.exe"}})
+        mock_exe_exists.return_value = True  # for env and wine
+        mock_path_exists.return_value = True  # for notepad
+        result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
+        self.assertFalse(result)
+
+    @mock.patch('os.path.exists')
+    @mock.patch('bleachbit.Unix.FileUtilities.exe_exists')
+    def test_desktop_env_missing_windows_exe(self, mock_exe_exists, mock_path_exists):
+        """Unit test for .desktop file with env pointing to missing Windows application"""
+        fake_config = FakeConfig({"Desktop Entry": {
+                                 "Exec": "env WINEPREFIX=/some/path wine_exe does_not_exist.exe"}})
+        mock_exe_exists.return_value = True  # for env and wine
+        mock_path_exists.return_value = False  # for does_not_exist.exe
+        result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
+        self.assertTrue(result)
+
+    def test_desktop_missing_keys(self):
+        """Unit test for .desktop file missing keys"""
+
+        test_cases = [
+            ("", "Blank file"),
+            ("[Desktop Entry]\n", "missing Type and Name"),
+            ("[Desktop Entry]\nType=Application\n", "missing Name key"),
+            ("[Desktop Entry]\nName=Test\n",    "missing Type key"),
+            ("[Desktop Entry]\nType=Link\nName=Test\n",
+             "Type=Link and missing URL key"),
+            ("[Desktop Entry]\nType=Application\nName=Test",
+             "Type=Application and missing Exec"),
+            ("garbage", "Not a .desktop file"),
+            ("#/bin/bash\necho hello world", "Bash script")
+        ]
+
+        for content, description in test_cases:
+            with tempfile.NamedTemporaryFile(mode='w+', delete=False) as tf:
+                tf.write(content)
+                tf.flush()
+                result = is_broken_xdg_desktop(tf.name)
+                self.assertTrue(result, f"Failed case: {description}")
+            os.unlink(tf.name)
 
     @mock.patch('subprocess.check_output')
     @mock.patch('getpass.getuser', return_value="alocaluseraccount")
