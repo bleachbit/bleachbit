@@ -29,7 +29,17 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y gir1.2-gtk-3.0 gir1.2-notify-0.7 libgirepository1.0-dev libxml2-utils libcairo2-dev gettext notification-daemon dbus dbus-x11
+        sudo apt-get install -y \
+          dbus \
+          dbus-x11 \
+          gettext \
+          gir1.2-gtk-3.0 \
+          gir1.2-notify-0.7 \
+          libcairo2-dev \
+          libgirepository1.0-dev \
+          libxml2-utils \
+          notification-daemon \
+          xvfb
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
@@ -55,10 +65,9 @@ jobs:
 
     - name: Run tests
       run: |
-        sudo apt-get install -y xvfb
         # Start D-Bus and notification daemon
         export $(dbus-launch)
-        /usr/lib/notification-daemon/notification-daemon &
+        dbus-run-session /usr/lib/notification-daemon/notification-daemon &
         sleep 2  # Give some time for the daemon to start
         xvfb-run make tests COVERAGE="coverage run --include='bleachbit/*'"
 
