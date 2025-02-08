@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-29 20:55-0600\n"
-"PO-Revision-Date: 2025-01-26 22:07+0000\n"
+"PO-Revision-Date: 2025-02-08 19:35+0000\n"
 "Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/bleachbit/main/de/"
 ">\n"
@@ -48,7 +48,7 @@ msgstr "Webbrowser"
 #: ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:191
 #: ../bleachbit/Cleaner.py:276
 msgid "Cache"
-msgstr "Zwischenspeicher (Cache)"
+msgstr "Cache"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/slack.xml
 #: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
@@ -56,8 +56,7 @@ msgstr "Zwischenspeicher (Cache)"
 #: ../cleaners/brave.xml ../cleaners/safari.xml ../cleaners/opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
-"Den Zwischenspeicher (Cache) löschen, um die Anzeigezeit bereits besuchter "
-"Seiten zu reduzieren"
+"Den Cache löschen, um die Ladezeit für erneut aufgerufene Seiten zu verkürzen"
 
 #: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
@@ -357,7 +356,7 @@ msgstr "Die Protokolle löschen"
 #: ../bleachbit/Cleaner.py:276 ../bleachbit/Cleaner.py:310
 #: ../bleachbit/Cleaner.py:312
 msgid "Delete the cache"
-msgstr "Den Zwischenspeicher löschen"
+msgstr "Den Cache löschen"
 
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
@@ -532,7 +531,7 @@ msgstr "Die Liste mit den besuchten Webseiten löschen"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
-msgstr "Den Avatar- und Smiley-Puffer löschen"
+msgstr "Den Avatar- und Smiley-Cache löschen"
 
 #: ../cleaners/thunderbird.xml ../cleaners/evolution.xml
 msgid "Email client"
@@ -653,15 +652,15 @@ msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"Den Webcache löschen, um die Zeit für die Anzeige aufgerufener Seiten zu "
+"Den Cache löschen, um die Ladezeit für erneut aufgerufene Seiten zu "
 "verkürzen. Dabei werden auch favorisierte GIFs gelöscht."
 
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"Die Datei »~/.viminfo« löschen, die den Datei- und Befehlsverlauf und den "
-"Zwischenspeicher beinhaltet"
+"Die Datei »~/.viminfo« löschen, die den Datei- und Befehlsverlauf sowie den "
+"Cache enthält"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
