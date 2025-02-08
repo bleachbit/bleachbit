@@ -26,6 +26,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gir1.2-gtk-3.0 gir1.2-notify-0.7 libgirepository1.0-dev libxml2-utils libcairo2-dev gettext notification-daemon dbus dbus-x11
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
@@ -34,11 +39,6 @@ jobs:
     - name: Update pip
       run: python -m pip install --upgrade pip
       
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y gir1.2-gtk-3.0 gir1.2-notify-0.7 libgirepository1.0-dev libxml2-utils libcairo2-dev gettext
-        
     - name: Install Python dependencies
       run: |
         pip install PyGObject chardet
@@ -56,6 +56,10 @@ jobs:
     - name: Run tests
       run: |
         sudo apt-get install -y xvfb
+        # Start D-Bus and notification daemon
+        export $(dbus-launch)
+        /usr/lib/notification-daemon/notification-daemon &
+        sleep 2  # Give some time for the daemon to start
         xvfb-run make tests COVERAGE="coverage run --include='bleachbit/*'"
         
     - name: Process coverage
