@@ -165,7 +165,10 @@ class PreferencesDialog:
             logger.error("Failed to get list of supported languages")
             supported_langs = [('en_us', 'English')]
         for lang_code, native in supported_langs:
-            self.lang_combo.append_text(f"{native} ({lang_code})")
+            if native:
+                self.lang_combo.append_text(f"{native} ({lang_code})")
+            else:
+                self.lang_combo.append_text(lang_code)
             if lang_code == current_lang_code:
                 active_language_idx = lang_idx
             lang_idx += 1

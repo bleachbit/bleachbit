@@ -23,9 +23,11 @@ from bleachbit.Language import get_active_language_code, \
     get_supported_language_codes, \
     get_text, \
     native_locale_names, \
-    setup_translation
+    setup_translation, \
+    get_supported_language_code_name_dict
 from bleachbit.Options import options
 from tests import common
+import mock
 
 
 class LanguageTestCase(common.BleachbitTestCase):
@@ -39,7 +41,7 @@ class LanguageTestCase(common.BleachbitTestCase):
     def test_get_active_language_code(self):
         """Test get_active_language_code()"""
         lang_id = get_active_language_code()
-        self.assertIsSupportedLanguageCode(lang_id)
+        self.assertIsLanguageCode(lang_id)
 
     def test_get_supported_language_codes(self):
         """Test get_supported_language_codes()"""
@@ -47,9 +49,17 @@ class LanguageTestCase(common.BleachbitTestCase):
         self.assertTrue(isinstance(slangs, list))
         self.assertTrue(len(slangs) > 1)
         for slang in slangs:
-            self.assertIsSupportedLanguageCode(slang)
+            self.assertIsLanguageCode(slang)
         self.assertTrue('en_US' in slangs)
         self.assertTrue('es' in slangs)
+
+    def test_get_supported_language_code_name_dict_unknown_code(self):
+        with mock.patch('bleachbit.Language.get_supported_language_codes', return_value=['en', 'es', 'foo@bar']):
+            supported_langs = get_supported_language_code_name_dict()
+            self.assertIn('en', supported_langs)
+            self.assertIn('es', supported_langs)
+            self.assertIn('foo@bar', supported_langs)
+
 
     def test_switch_language_twice(self):
         """English should still work after switching twice"""

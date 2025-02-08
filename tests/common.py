@@ -99,14 +99,31 @@ class BleachbitTestCase(unittest.TestCase):
             return
         self.assertTrue(len(lang_id) >= 2)
         import re
-        pattern = r'^[a-z]{2,3}(_[A-Z]{2})?(\.(utf\-?8|iso88591))?$'
+        pattern = r'^[a-z]{2,3}(_[A-Z][A-Za-z]{1,3})?(@\w+)?(\.[a-zA-Z][a-zA-Z0-9-]+)?$'
         self.assertTrue(re.match(pattern, lang_id),
                         f'Invalid language code format: {lang_id}')
 
-    def test_assertIsLanguageCode(self):
-        valid_codes = ['en', 'en_US', 'fr_FR.utf8',
-                       'de_DE.iso88591', 'C', 'C.UTF-8', 'C.utf8', 'POSIX']
-        invalid_codes = ['e', 'en_', 'english', 'en_US_', '123', 'en-US', 'en_us', 'en_US.',
+    def test_assertIsLanguageCode_hardcoded(self):
+        """Test assertIsLanguageCode() using hard-coded values"""
+        valid_codes = [
+            'be@latin',
+            'C.UTF-8',
+            'C.utf8',
+            'C',
+            'de_DE.iso88591',
+            'en_US',
+            'en',
+            'fr_FR.utf8',
+            'ja_JP.SJIS',
+            'ko_KR.eucKR',
+            'nb_NO.ISO-8859-1',
+            'POSIX',
+            'ru_RU.KOI8-R',
+            'zh_Hant',
+        ]
+
+        invalid_codes = ['e', 'en_', 'english', 'en_US_', '123', 'en-US',
+                         'en_us', 'en_US.',
                          'en_us.utf8',
                          'en_us.UTF-8',
                          'utf8',
@@ -124,18 +141,31 @@ class BleachbitTestCase(unittest.TestCase):
             self.assertIsLanguageCode(code)
 
         for code in invalid_codes:
-            with self.assertRaises(AssertionError):
+            with self.assertRaises(AssertionError, msg=f'Expected exception for {code}'):
                 self.assertIsLanguageCode(code)
 
-    def assertIsSupportedLanguageCode(self, lang_id, msg=''):
-        self.assertIsLanguageCode(lang_id, msg)
-        from bleachbit.Language import native_locale_names
-        self.assertTrue(lang_id in native_locale_names,
-                        f'Invalid language ID: {lang_id}')
-        from bleachbit.Language import get_supported_language_codes
-        self.assertTrue(lang_id in get_supported_language_codes())
-        self.assertNotIn('English', lang_id)
-        self.assertNotIn('United States', lang_id)
+    def test_assertIsLanguageCode_live(self):
+        """Test assertIsLanguageCode() using live data"""
+        from bleachbit import locale_dir
+        locale_dirs = list(set([locale_dir, '/usr/share/locale']))
+        lang_codes = []
+        for locale_dir in locale_dirs:
+            if not os.path.isdir(locale_dir):
+                continue
+            for lang_code in os.listdir(locale_dir):
+                if not os.path.isdir(os.path.join(locale_dir, lang_code)):
+                    continue
+                lang_codes.append(lang_code)
+        if os.path.exists('/etc/locale.alias'):
+            with open('/etc/locale.alias', 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if not line.startswith('#'):
+                        parts = line.split()
+                        if len(parts) > 1:
+                            lang_codes.append(parts[1])
+        for lang_code in lang_codes:
+            self.assertIsLanguageCode(lang_code)
 
     @staticmethod
     def check_exists(func, path):
