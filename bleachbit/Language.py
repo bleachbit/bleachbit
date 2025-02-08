@@ -265,7 +265,7 @@ native_locale_names = \
 def get_supported_language_codes():
     """Return list of supported languages as language codes
 
-    Supported means a translation is available.
+    Supported means a translation may be available.
     """
     supported_langs = []
     # Use local import to avoid circular import.
@@ -296,7 +296,7 @@ def get_supported_language_code_name_dict():
     """
     supported_langs = {}
     for lang in get_supported_language_codes():
-        supported_langs[lang] = native_locale_names[lang]
+        supported_langs[lang] = native_locale_names.get(lang, None)
     return supported_langs
 
 
