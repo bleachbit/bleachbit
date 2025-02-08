@@ -37,6 +37,7 @@ clean:
 	@rm -vrf {*/,./}*.{pylint,pyflakes}.log
 	@rm -vrf windows/BleachBit-*-setup*.{exe,zip}
 	@rm -vrf htmlcov .coverage # code coverage reports
+	@rm -vrf *.egg-info # Python package metadata
 
 install:
 	# "binary"
