@@ -44,9 +44,6 @@ jobs:
           notification-daemon \
           xvfb
 
-    - name: Start dbus service
-      run: |
-        sudo systemctl start dbus.service
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
@@ -70,15 +67,12 @@ jobs:
     - name: Generate translations
       run: make -C po local
 
-    - name: Set environment variables
+    - name: Run tests
       run: |
-        export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1001/bus"
         export DISPLAY=":99.0"
         export $(dbus-launch)
         sudo Xvfb :99 -screen 0 800x600x24 &
-        dbus-run-session /usr/lib/notification-daemon/notification-daemon &
-        sleep 2  # Give some time for the daemon to start
-        dbus-run-session xvfb-run make tests COVERAGE="coverage run --include='bleachbit/*'"
+        dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run make tests COVERAGE="coverage run --include=bleachbit/*"'
 
     - name: Process coverage
       env:
