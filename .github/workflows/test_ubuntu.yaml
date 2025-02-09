@@ -41,14 +41,7 @@ jobs:
           libnotify-bin \
           libxml2-utils \
           notification-daemon \
-          xvfb \
-          x11-xkb-utils \
-          xfonts-base \
-          xfonts-100dpi \
-          xfonts-75dpi \
-          xfonts-scalable \
-          xserver-xorg-core \
-          x11-xserver-utils
+          xvfb
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
@@ -77,5 +70,4 @@ jobs:
         export $(dbus-launch)
         sudo Xvfb :1 -screen 0 800x600x24 &
         sleep 5
-        echo "DISPLAY is $DISPLAY"
         dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run make tests'
