@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-29 20:55-0600\n"
-"PO-Revision-Date: 2025-02-08 19:35+0000\n"
+"PO-Revision-Date: 2025-02-10 21:01+0000\n"
 "Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/bleachbit/main/de/"
 ">\n"
@@ -134,7 +134,7 @@ msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
 "Den Verlauf löschen, der besuchte Seiten, Downloads und Vorschaubilder "
-"beinhaltet"
+"enthält"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
@@ -225,8 +225,8 @@ msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"Datenbankfragmentierung säubern, um Platz zu sparen und die Geschwindigkeit "
-"zu erhöhen, ohne Daten zu entfernen"
+"Datenbankfragmentierung bereinigen, um Platz zu sparen und die "
+"Geschwindigkeit zu erhöhen, ohne Daten zu entfernen"
 
 #: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
@@ -254,7 +254,7 @@ msgstr "Archivverwaltung"
 #: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:244
 #: ../bleachbit/Cleaner.py:253
 msgid "Delete the usage history"
-msgstr "Den Verwendungsverlauf löschen"
+msgstr "Den Nutzungsverlauf löschen"
 
 #: ../cleaners/winrar.xml ../cleaners/silverlight.xml
 #: ../cleaners/windows_defender.xml ../cleaners/winetricks.xml
@@ -504,7 +504,8 @@ msgstr "Sitzung wiederherstellen"
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Loads the initial session after the browser closes or crashes"
 msgstr ""
-"Lädt die ursprüngliche Sitzung nach dem Schließen oder Abstürzen des Browsers"
+"Lädt die erste Sitzung, nachdem der Browser geschlossen wurde oder "
+"abgestürzt ist"
 
 #: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/konqueror.xml
@@ -779,7 +780,7 @@ msgstr "Suchwerkzeug"
 #: ../cleaners/recoll.xml
 msgid "Delete the search index, a database of words and the files they contain"
 msgstr ""
-"Den Suchindex, eine Wörterdatenbank und die Dateien, die sie enthalten, "
+"Den Suchindex, eine Datenbank mit Wörtern und den darin enthaltenen Dateien, "
 "löschen"
 
 #: ../cleaners/gimp.xml
@@ -817,7 +818,7 @@ msgstr "Tiefenprüfung unterstützt keine Variablen mit mehreren Werten."
 #: ../bleachbit/Action.py:252
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr "search=»walk.all« wird mit dem regulären Dateipfad=»%s« verwendet"
+msgstr "search=»walk.all« wird mit der regulären Datei pfad=»%s« verwendet"
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -969,8 +970,7 @@ msgid ""
 "and Internet Explorer updates"
 msgstr ""
 "Deinstallationsprogramme für Microsoft-Aktualisierungen (inklusive Hotfixes)"
-", Service Packs (Wartungspakete) und Internet Explorer-Aktualisierungen "
-"löschen"
+", Service Packs und Internet Explorer-Aktualisierungen löschen"
 
 #: ../bleachbit/Cleaner.py:325 ../bleachbit/Cleaner.py:544
 msgid "Clipboard"
@@ -1530,7 +1530,7 @@ msgstr "Ordner"
 
 #: ../bleachbit/GuiPreferences.py:451
 msgid "These paths will not be deleted or modified."
-msgstr "Diese Orte werden weder gelöscht noch verändert."
+msgstr "Diese Pfade werden weder gelöscht noch verändert."
 
 #: ../bleachbit/GuiPreferences.py:454
 msgid "These locations can be selected for deletion."
@@ -1929,7 +1929,7 @@ msgstr "Warnung"
 
 #: ../bleachbit/Windows.py:855
 msgid "BleachBit is starting...\n"
-msgstr "BleachBit wird gestartet …\n"
+msgstr "BleachBit wird gestartet ...\n"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
