@@ -24,7 +24,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #>
 
-$root_dir = ".\x86-windows"
+$root_dir = ".\vcpkg_installed\x86-windows"
 $python_home = "$root_dir\tools\python3"
 $themes_dir = "$python_home\share\themes"
 # location of this .ps1 script
