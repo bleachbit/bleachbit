@@ -36,6 +36,7 @@ jobs:
           gettext \
           gir1.2-gtk-3.0 \
           gir1.2-notify-0.7 \
+          gnome-keyring \
           libcairo2-dev \
           libgirepository1.0-dev \
           libnotify-bin \
@@ -77,7 +78,7 @@ jobs:
         sudo Xvfb :99 -screen 0 800x600x24 &
         dbus-run-session /usr/lib/notification-daemon/notification-daemon &
         sleep 2  # Give some time for the daemon to start
-        xvfb-run make tests COVERAGE="coverage run --include='bleachbit/*'"
+        dbus-run-session xvfb-run make tests COVERAGE="coverage run --include='bleachbit/*'"
 
     - name: Process coverage
       env:
