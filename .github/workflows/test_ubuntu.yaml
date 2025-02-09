@@ -29,7 +29,6 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get upgrade
         sudo apt-get install -y \
           dbus \
           dbus-x11 \
@@ -56,7 +55,6 @@ jobs:
     - name: Install Python dependencies
       run: |
         pip install PyGObject chardet
-        pip install coveralls requests[security]
         pip install mock
 
     - name: Generate Revision.py
@@ -72,15 +70,6 @@ jobs:
         export DISPLAY=":99.0"
         export $(dbus-launch)
         sudo Xvfb :99 -screen 0 800x600x24 &
-        dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run make tests COVERAGE="coverage run --include=bleachbit/*"'
+        dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run make tests'
 
-    - name: Process coverage
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        mv .coverage .coverage.github
-        pip install appveyor-artifacts
-        appveyor-artifacts -o az0 -n bleachbit -m -c ${{ github.sha }} download
-        coverage combine
-        coverage report
-        coveralls --service=github
+
