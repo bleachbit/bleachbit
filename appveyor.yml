@@ -3,7 +3,7 @@ version: 4.9.0.{build}
 image: Visual Studio 2013
 
 environment:
-    PYTHON_HOME: 'x86-windows\tools\python3'
+    PYTHON_HOME: 'c:\projects\bleachbit\vcpkg_installed\x86-windows\tools\python3'
     SZ_EXE   :   '"C:/Program Files/7-Zip/7z.exe"'
     make : 'C:/MinGW/bin/mingw32-make.exe'
 
@@ -14,7 +14,7 @@ init:
       Get-WmiObject Win32_Process | Select-Object ProcessName, @{Name="UserName";Expression={$_.GetOwner().User}} | Format-Table -AutoSize
 
 install:
-  - ps: .\windows\python-gtk3-install.ps1
+  - ps: '& "$env:APPVEYOR_BUILD_FOLDER\windows\python-gtk3-install.ps1"'
   # UPX 4.0.2, 4.1.0, and 4.2.3 cause ModuleNotFoundError during build
   # UPX 4.0.1 works
   - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v4.0.1/upx-4.0.1-win64.zip" -FileName upx.zip}
@@ -39,17 +39,13 @@ build_script:
   - ps: Get-FileHash BleachBit-*
 
 cache:
-  - gtk3.24-x86-windows.zip -> appveyor.yml
-  - PyGObject-3.42.0-cp310-cp310-win32.whl -> appveyor.yml
-  - gtk-themes.zip -> appveyor.yml
-  - upx.zip -> appveyor.yml
+  - gtk3.24-x86-windows.zip -> appveyor.yml, windows/python-gtk3-deps.lst, windows/python-gtk3-install.ps1
 
 test_script:
 # coveralls.io
   - '%PYTHON_HOME%\Scripts\pip3.exe install python-coveralls requests[security]'
 # shorten very long path because of error https://github.com/az0/bleachbit/issues/166
   - 'set PATH=c:\windows\system32;c:\windows;c:\windows\system32\wbem;c:\windows\SysWOW64\WindowsPowerShell\v1.0\'
-  - '%PYTHON_HOME%\Scripts\pip3.exe install mock'
   - 'SET DESTRUCTIVE_TESTS=T'
   - '%PYTHON_HOME%\Scripts\coverage.exe run --include="bleachbit/*" tests/TestAll.py'
 

@@ -55,7 +55,7 @@ from bleachbit.FileUtilities import (
     wipe_name,
     wipe_path
 )
-from bleachbit.General import run_external
+from bleachbit.General import gc_collect, run_external
 from bleachbit.Options import options
 from bleachbit import logger
 from tests import common
@@ -522,6 +522,23 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
     def test_ego_owner(self):
         """Unit test for ego_owner()"""
         self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
+
+    def test_execute_sqlite3(self):
+        """Unit test for execute_sqlite3()"""
+        from bleachbit.FileUtilities import execute_sqlite3
+        db_path = self.mkstemp(prefix='bleachbit-test-file', suffix='.sqlite')
+
+        cmds = ['CREATE TABLE test (id INTEGER PRIMARY KEY, name TEXT)',
+                "INSERT INTO test (name) VALUES ('A'), ('B')",
+                "UPDATE test SET name = 'C' WHERE name = 'B'",
+                "DELETE FROM test WHERE name = 'C'"]
+
+        execute_sqlite3(db_path, ';'.join(cmds))
+        execute_sqlite3(db_path, 'vacuum')
+
+        gc_collect()
+        os.unlink(db_path)
+        self.assertNotExists(db_path)
 
     def test_exists_in_path(self):
         """Unit test for exists_in_path()"""
@@ -1004,7 +1021,9 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         vacuum_sqlite3(path)
         self.assertEqual(empty_size, getsize(path))
 
+        gc_collect()
         delete(path)
+        self.assertNotExists(path)
 
     @common.skipIfWindows
     def test_OpenFiles(self):

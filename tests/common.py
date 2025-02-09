@@ -36,7 +36,7 @@ if 'win32' == sys.platform:
 import bleachbit
 import bleachbit.Options
 from bleachbit.FileUtilities import extended_path
-from bleachbit.General import sudo_mode
+from bleachbit.General import gc_collect, sudo_mode
 
 
 class BleachbitTestCase(unittest.TestCase):
@@ -66,6 +66,7 @@ class BleachbitTestCase(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         """remove the temporary directory"""
+        gc_collect()
         if os.path.exists(cls.tempdir):
             shutil.rmtree(cls.tempdir)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
@@ -80,6 +81,7 @@ class BleachbitTestCase(unittest.TestCase):
         """Call before each test method"""
         basedir = os.path.join(os.path.dirname(__file__), '..')
         os.chdir(basedir)
+
 
     #
     # type asserts
@@ -199,6 +201,8 @@ class BleachbitTestCase(unittest.TestCase):
         if 'dir' not in kwargs:
             kwargs['dir'] = self.tempdir
         return tempfile.mkdtemp(**kwargs)
+
+
 
 
 def getTestPath(path):

@@ -178,7 +178,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         _lexists = os.path.lexists
         _oswalk = os.walk
         try:
-            glob.iglob = lambda path, root_dir=None, dir_fd=None, recursive=False: []
+            glob.iglob = lambda path, *args, **kwargs: []
             os.path.exists = lambda path: False
             os.path.lexists = lambda path: False
             os.walk = lambda top, topdown = True, onerror = None, followlinks = False: []

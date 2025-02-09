@@ -461,15 +461,28 @@ def exe_exists(pathname):
 
 
 def execute_sqlite3(path, cmds):
-    """Execute 'cmds' on SQLite database 'path'"""
+    """Execute SQL commands on SQLite database
+
+    Args:
+        path (str): Path to the SQLite database file
+        cmds (str): SQL commands to execute, separated by semicolons
+
+    Raises:
+        sqlite3.OperationalError: If there's an error executing the SQL commands
+        sqlite3.DatabaseError: If there's a database-related error
+
+    Returns:
+        None
+    """
     import sqlite3
-    import contextlib
-    with contextlib.closing(sqlite3.connect(path)) as conn:
+    from bleachbit.Options import options
+    assert isinstance(path, str)
+    assert isinstance(cmds, str)
+    with sqlite3.connect(path) as conn:
         cursor = conn.cursor()
 
         # overwrites deleted content with zeros
         # https://www.sqlite.org/pragma.html#pragma_secure_delete
-        from bleachbit.Options import options
         if options.get('shred'):
             cursor.execute('PRAGMA secure_delete=ON')
 
@@ -489,7 +502,8 @@ def execute_sqlite3(path, cmds):
                     '%s: %s' % (exc, path))
 
         cursor.close()
-        conn.commit()
+        from bleachbit.General import gc_collect
+        gc_collect()
 
 
 def expand_glob_join(pathname1, pathname2):

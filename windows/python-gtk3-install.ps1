@@ -25,10 +25,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #>
 
 $root_dir = ".\vcpkg_installed\x86-windows"
-$python_home = "$root_dir\tools\python3"
+$python_home = Join-Path (Get-Location).Path "vcpkg_installed\x86-windows\tools\python3"
 $themes_dir = "$python_home\share\themes"
 # location of this .ps1 script
 $script_dir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$base_download_url = "https://github.com/bleachbit/pygtkwin/releases/download/v2025-02-15/"
 
 # Visual C++ Redistributable 2015 x86
 $VC_REDIST_FN = "VC_redist.x86.exe"
@@ -58,10 +59,9 @@ if ($env:APPVEYOR -ne $true) {
 
 # Python and GTK+
 $GTK_ZIP_FN = "gtk3.24-x86-windows.zip"
-$GTK_ZIP_URL = "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v1/$GTK_ZIP_FN"
 if (-not (Test-Path $GTK_ZIP_FN)) {
     Write-Host "Downloading Python and GTK+..."
-    Invoke-WebRequest -Uri $GTK_ZIP_URL -OutFile $GTK_ZIP_FN
+    Invoke-WebRequest -Uri "$base_download_url/$GTK_ZIP_FN" -OutFile $GTK_ZIP_FN
     Get-FileHash -Path $GTK_ZIP_FN -Algorithm SHA256 | Format-List
 } else {
     Write-Host "Python and GTK+ are already downloaded."
@@ -69,6 +69,10 @@ if (-not (Test-Path $GTK_ZIP_FN)) {
 
 if (-not (Test-Path $python_home\python.exe)) {
     Write-Host "Unpacking Python and GTK+..."
+    $vcpkg_installed = ".\vcpkg_installed"
+    if (-not (Test-Path $vcpkg_installed)) {
+        New-Item -Path $vcpkg_installed -ItemType Directory
+    }
     Expand-Archive -Path $GTK_ZIP_FN -DestinationPath .
 } else {
     Write-Host "Python and GTK+ are already unpacked."
@@ -97,14 +101,26 @@ if ($LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 }
 
+# Add Python home and scripts to PATH.
+if ($env:PATH -notlike "*$PYTHON_HOME*") {
+    Write-Host "Adding Python home and scripts to PATH..."
+    $env:PATH += ";$python_home;$python_home\Scripts"
+    Write-Host "Updated PATH: $env:PATH"
+}
+
 Write-Host "ensurepip"
 & "$python_home\python.exe" -m ensurepip
 
 Write-Host "Checking pip version"
 & "$python_home\Scripts\pip3.exe" --version  # show pip version
 
+Write-Host "Updating pip..."
+& "$python_home\python.exe" -m pip install --upgrade pip
+
 if (-not (Test-Path gtk-themes.zip)) { 
     Write-Host "Downloading GTK themes..."
+    #Invoke-WebRequest -Uri "$base_download_url/gtk-themes.zip" -OutFile "gtk-themes.zip"
+    #FIXME: use new themes
     Invoke-WebRequest -Uri "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v1/gtk-themes.zip" -OutFile "gtk-themes.zip"
     Get-FileHash -Path gtk-themes.zip -Algorithm SHA256 | Format-List
 } else {
@@ -132,10 +148,10 @@ if (Test-Path "gtk-themes") {
 # Install pip packages
 & "$python_home\Scripts\pip3.exe" install -r "$script_dir\requirements.txt"
 
-$PYGOBJECT_FN = "PyGObject-3.42.0-cp310-cp310-win32.whl"
+$PYGOBJECT_FN = "pygobject-3.51.0-cp311-cp311-win32.whl"
 if (-not (Test-Path $PYGOBJECT_FN)) { 
     Write-Host "Downloading PyGObject..."
-    Invoke-WebRequest -Uri "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v1/$PYGOBJECT_FN" -OutFile "$PYGOBJECT_FN"
+    Invoke-WebRequest -Uri "$base_download_url/$PYGOBJECT_FN" -OutFile "$PYGOBJECT_FN"
     Get-FileHash -Path $PYGOBJECT_FN -Algorithm SHA256 | Format-List
 } else {
     Write-Host "PyGObject is already downloaded."
@@ -158,12 +174,6 @@ Get-Content "$script_dir\python-gtk3-deps.lst" | ForEach-Object {
     if (-not (Test-Path "$python_home\$_")) {
         Copy-Item -Path "$root_dir\$_" -Destination "$python_home" -Recurse -Force
     }
-}
-
-# Add Python home to PATH.
-if ($env:PATH -notlike "*$env:PYTHON_HOME*") {
-    Write-Host "Adding $env:PYTHON_HOME to PATH..."
-    $env:PATH += ";$env:PYTHON_HOME"
 }
 
 $GDK_PIXBUF_DIR = "$python_home\lib\gdk-pixbuf-2.0\2.10.0"
