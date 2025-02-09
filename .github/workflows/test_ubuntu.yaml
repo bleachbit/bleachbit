@@ -45,7 +45,7 @@ jobs:
 
     - name: Start dbus service
       run: |
-        sudo /etc/init.d/dbus start
+        sudo systemctl start dbus.service
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
