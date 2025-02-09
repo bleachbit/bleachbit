@@ -73,7 +73,13 @@ class MakefileTestCase(common.BleachbitTestCase):
         self.assertNotExists(pkg_fn)
 
         sdist_cmd = [sys.executable, 'setup.py', 'sdist']
-        subprocess.check_call(sdist_cmd)
+        try:
+            output = subprocess.check_output(sdist_cmd).decode('utf-8')
+            print(output)
+        except subprocess.CalledProcessError as e:
+            print(f"Command '{e.cmd}' returned non-zero exit status {e.returncode}")
+            print(e.output)
+            raise
         pkg_fn = os.path.join('dist', ver_name+'.tar.gz')
         self.assertExists(pkg_fn)
 

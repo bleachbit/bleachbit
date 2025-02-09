@@ -60,7 +60,7 @@ jobs:
 
     - name: Install Python dependencies
       run: |
-        pip install PyGObject chardet
+        pip install PyGObject chardet requests
         pip install mock
 
     - name: Generate Revision.py
