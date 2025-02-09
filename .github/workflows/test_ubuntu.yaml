@@ -53,8 +53,7 @@ jobs:
 
     - name: Install Python dependencies
       run: |
-        pip install PyGObject chardet requests
-        pip install mock
+        pip install PyGObject chardet requests mock setuptools
 
     - name: Generate Revision.py
       run: |
