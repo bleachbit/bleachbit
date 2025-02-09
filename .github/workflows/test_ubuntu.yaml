@@ -29,6 +29,7 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
+        sudo apt-get upgrade
         sudo apt-get install -y \
           dbus \
           dbus-x11 \
@@ -37,9 +38,14 @@ jobs:
           gir1.2-notify-0.7 \
           libcairo2-dev \
           libgirepository1.0-dev \
+          libnotify-bin \
           libxml2-utils \
           notification-daemon \
           xvfb
+
+    - name: Start dbus service
+      run: |
+        sudo /etc/init.d/dbus start
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
@@ -63,10 +69,12 @@ jobs:
     - name: Generate translations
       run: make -C po local
 
-    - name: Run tests
+    - name: Set environment variables
       run: |
-        # Start D-Bus and notification daemon
+        export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1001/bus"
+        export DISPLAY=":99.0"
         export $(dbus-launch)
+        sudo Xvfb :99 -screen 0 800x600x24 &
         dbus-run-session /usr/lib/notification-daemon/notification-daemon &
         sleep 2  # Give some time for the daemon to start
         xvfb-run make tests COVERAGE="coverage run --include='bleachbit/*'"
