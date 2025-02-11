@@ -67,10 +67,10 @@ local: $(MOFILES)
 	@echo "Now you can run cd ..; python3 bleachbit/GUI.py"
 
 install: $(MOFILES)
-	echo "* Installing in $(DESTDIR)/usr/share/locale"
+	echo "* Installing in $(DESTDIR)$(datadir)/locale"
 	for MO in $(MOFILES); do \
 		lang=`basename $$MO .mo`; \
-		DST=$(DESTDIR)/usr/share/locale/$$lang/LC_MESSAGES/; \
+		DST=$(DESTDIR)$(datadir)/locale/$$lang/LC_MESSAGES/; \
 		mkdir -p $$DST; \
 		cp $$MO $$DST/bleachbit.mo; \
 done
