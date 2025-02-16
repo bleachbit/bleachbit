@@ -143,9 +143,7 @@ def update_dialog(parent, updates):
     label = Gtk.Label(label=_("A new version is available."))
     dlg.vbox.pack_start(label, True, True, 0)
 
-    for update in updates:
-        ver = update[0]
-        url = update[1]
+    for (ver, url) in updates:
         box_update = Gtk.Box()
         # TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
         # similar
@@ -211,6 +209,9 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
         if element:
             ver = element[0].getAttribute('ver')
             url = element[0].firstChild.data
+            assert isinstance(ver, str)
+            assert isinstance(url, str)
+            assert url.startswith('http')
             return ver, url
         return ()
 

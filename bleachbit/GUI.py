@@ -1046,9 +1046,59 @@ class GUI(Gtk.ApplicationWindow):
         self.stop_button.set_tooltip_text(
             _('Abort the preview or cleaning process'))
 
+    def on_update_button_clicked(self, widget):
+        """Callback when the update button on the headerbar is clicked"""
+        if not (hasattr(self, '_available_updates') and self._available_updates):
+            return
+
+        self.update_button.get_style_context().remove_class('update-available')
+        updates = self._available_updates
+        if len(updates) == 1:
+            ver, url = updates[0]
+            GuiBasic.open_url(url, self, False)
+            return
+        # If multiple updates are available, find out which one the user wants.
+        from bleachbit import Update
+        Update.update_dialog(self, updates)
+
     def create_headerbar(self):
         """Create the headerbar"""
         hbar = Gtk.HeaderBar()
+
+        # The update button is on the right side of the headerbar.
+        # It is hidden until an update is available.
+        self.update_button = Gtk.Button()
+        self.update_button.set_visible(False)
+        self.update_button.connect('clicked', self.on_update_button_clicked)
+        # TRANSLATORS: Button in headerbar to update the application
+        self.update_button.set_label(_('Update'))
+        self.update_button.set_tooltip_text(
+            _('Update BleachBit to the latest version'))
+
+        # Add CSS to animate the update button.
+        css_provider = Gtk.CssProvider()
+        css_provider.load_from_data(b"""
+            @keyframes update-pulse {
+                0% { opacity: 1; }
+                50% { opacity: 0.7; }
+                100% { opacity: 1; }
+            }
+            .update-available {
+                background: @theme_selected_bg_color;
+                color: @theme_selected_fg_color;
+                animation: update-pulse 2s ease-in-out;
+                animation-delay: 2s;
+                animation-iteration-count: 1;
+            }
+        """)
+        Gtk.StyleContext.add_provider_for_screen(
+            Gdk.Screen.get_default(),
+            css_provider,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        self.update_button.get_style_context().add_class('update-available')
+        hbar.pack_end(self.update_button)
+        self.update_button.set_no_show_all(True)
+        self.update_button.hide()
         hbar.props.show_close_button = True
         hbar.props.title = APP_NAME
 
@@ -1306,8 +1356,14 @@ class GUI(Gtk.ApplicationWindow):
                                            options.get('update_winapp2'),
                                            self.append_text,
                                            lambda: GLib.idle_add(self.cb_refresh_operations))
-            if updates:
-                GLib.idle_add(
-                    lambda: Update.update_dialog(self, updates))
+
         except Exception:
             logger.exception(_("Error when checking for updates: "))
+        else:
+            self._available_updates = updates
+
+            def update_button_state():
+                if updates:
+                    self.update_button.show()
+                    self.set_sensitive(True)
+            GLib.idle_add(update_button_state)
