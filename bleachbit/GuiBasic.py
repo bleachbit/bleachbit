@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 Basic GUI code
 """
 
-from bleachbit import _, ModuleNotFoundError
+from bleachbit.Language import get_text as _
 
 import os
 
@@ -185,7 +185,7 @@ def open_url(url, parent_window=None, prompt=True):
     if prompt:
         # find hostname
         import re
-        ret = re.search('^http(s)?://([a-z.]+)', url)
+        ret = re.search(r'^http(s)?://([a-z.]+)', url)
         if not ret:
             host = url
         else:

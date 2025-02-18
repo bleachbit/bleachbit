@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2023 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -23,17 +23,17 @@
   <label>GIMP</label>
   <description>Graphics editor</description>
     <!-- GIMP 2.4 -->
-  <running type="exe" os="windows">gimp-2.4.exe</running>
-  <running type="exe" os="linux">gimp-2.4</running>
+  <running type="exe" os="windows" same_user="true">gimp-2.4.exe</running>
+  <running type="exe" os="linux" same_user="true">gimp-2.4</running>
     <!-- GIMP 2.6 -->
-  <running type="exe" os="windows">gimp-2.6.exe</running>
-  <running type="exe" os="linux">gimp-2.6</running>
+  <running type="exe" os="windows" same_user="true">gimp-2.6.exe</running>
+  <running type="exe" os="linux" same_user="true">gimp-2.6</running>
     <!-- GIMP 2.8 -->
-  <running type="exe" os="windows">gimp-2.8.exe</running>
-  <running type="exe" os="linux">gimp-2.8</running>
+  <running type="exe" os="windows" same_user="true">gimp-2.8.exe</running>
+  <running type="exe" os="linux" same_user="true">gimp-2.8</running>
     <!-- GIMP 2.10 -->
-  <running type="exe" os="windows">gimp-2.10.exe</running>
-  <running type="exe" os="linux">gimp-2.10</running>
+  <running type="exe" os="windows" same_user="true">gimp-2.10.exe</running>
+  <running type="exe" os="linux" same_user="true">gimp-2.10</running>
 
   <var name="base">
     <!-- GIMP 2.4/2.6/2.8 -->

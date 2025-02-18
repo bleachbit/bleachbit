@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2023 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -23,9 +23,9 @@
 <cleaner id="firefox">
   <label>Firefox</label>
   <description>Web browser</description>
-  <running type="exe" os="unix">firefox</running>
-  <running type="exe" os="unix">firefox-bin</running>
-  <running type="exe" os="windows">firefox.exe</running>
+  <running type="exe" os="unix" same_user="true">firefox</running>
+  <running type="exe" os="unix" same_user="true">firefox-bin</running>
+  <running type="exe" os="windows" same_user="true">firefox.exe</running>
   <running type="pathname">~/.mozilla/firefox/*.default/lock</running>
   <running type="pathname">~/snap/firefox/common/.mozilla/firefox/*.default/lock</running>
   <running type="pathname">~/.var/app/org.mozilla.firefox/.mozilla/firefox/*.default*/lock</running> <!-- Flatpak -->

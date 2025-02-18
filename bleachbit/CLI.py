@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2023 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,8 +23,9 @@ Command line interface
 """
 
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
-from bleachbit import _, APP_VERSION
+from bleachbit import APP_VERSION
 from bleachbit import SystemInformation, Options, Worker
+from bleachbit.Language import get_text as _
 from bleachbit.Log import set_root_log_level
 
 import logging
@@ -41,26 +42,22 @@ class CliCallback:
     def __init__(self, quiet=False):
         self.quiet = quiet
 
-    def append_text(self, msg, tag=None):
+    def append_text(self, msg, _tag=None):
         """Write text to the terminal"""
         if not self.quiet:
             print(msg.strip('\n'))
 
     def update_progress_bar(self, status):
         """Not used"""
-        pass
 
     def update_total_size(self, size):
         """Not used"""
-        pass
 
     def update_item_size(self, op, opid, size):
         """Not used"""
-        pass
 
     def worker_done(self, worker, really_delete):
         """Not used"""
-        pass
 
 
 def cleaners_list():
@@ -94,7 +91,7 @@ def args_to_operations_list(preset, all_but_warning):
     args = []
     if not backends:
         list(register_cleaners())
-    assert(len(backends) > 1)
+    assert len(backends) > 1
     for key in sorted(backends):
         c_id = backends[key].get_id()
         for (o_id, _o_name) in backends[key].get_options():
@@ -194,7 +191,7 @@ def process_cmd_line():
 
     # some workaround for context menu added here
     # https://github.com/bleachbit/bleachbit/commit/b09625925149c98a6c79e278c35d5995e7526993
-    def expand_context_menu_option(option, opt, value, parser):
+    def expand_context_menu_option(_option, _opt, _value, parser):
         setattr(parser.values, 'gui', True)
         setattr(parser.values, 'exit', True)
     parser.add_option("--context-menu", action="callback", callback=expand_context_menu_option,
@@ -209,11 +206,6 @@ def process_cmd_line():
         logger.error(
             _('Specify only one of these commands: --list-cleaners, --wipe-free-space, --preview, --clean'))
         sys.exit(1)
-
-    if not options.gui:
-        # The GUI has its own trigger for the same function.
-        from bleachbit.General import startup_check
-        startup_check()
 
     did_something = False
     if options.debug:
@@ -230,7 +222,7 @@ def process_cmd_line():
     if options.version:
         print("""
 BleachBit version %s
-Copyright (C) 2008-2023 Andrew Ziem.  All rights reserved.
+Copyright (C) 2008-2025 Andrew Ziem.  All rights reserved.
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)

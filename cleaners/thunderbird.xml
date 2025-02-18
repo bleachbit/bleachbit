@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2023 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,8 @@
 <cleaner id="thunderbird">
   <label>Thunderbird</label>
   <description>Email client</description>
-  <running type="exe" os="windows">thunderbird.exe</running>
-  <running type="exe" os="linux">thunderbird</running>
+  <running type="exe" os="windows" same_user="true">thunderbird.exe</running>
+  <running type="exe" os="linux" same_user="true">thunderbird</running>
   <running type="exe" os="freebsd">thunderbird</running>
   <var name="profile">
     <!-- Fedora 11 Thunderbird 3.0 has ~/.thunderbird/default/????????.slt/ -->

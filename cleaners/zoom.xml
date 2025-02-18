@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2023 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,8 @@
 <cleaner id="zoom">
   <label>Zoom</label>
   <description>Chat client</description>
-  <running type="exe" os="windows">Zoom.exe</running>
-  <running type="exe" os="linux">zoom</running>
+  <running type="exe" os="windows" same_user="true">Zoom.exe</running>
+  <running type="exe" os="linux" same_user="true">zoom</running>
   <var name="base">
     <value os="windows">%AppData%\Zoom</value>
     <value search="glob" os="linux">~/snap/zoom-client/*/.zoom</value>

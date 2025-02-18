@@ -5,7 +5,9 @@ Thank you for your interest in contributing.
 
 ## When to file a bug report
 
-Are you using the [latest version](https://www.bleachbit.org/download)?
+If you are not using the [latest stable version](https://www.bleachbit.org/download), try upgrading. Windows users can also try [CI builds](https://ci.bleachbit.org/).
+
+If you are on the latest, stable version, check "known issues" section of [release notes](https://www.bleachbit.org/news).
 
 ## Where to file an issue
 
@@ -19,6 +21,14 @@ Bug reports were managed in [Launchpad](https://bugs.launchpad.net/bleachbit/) b
 When filing a [bug report](https://github.com/bleachbit/bleachbit/issues/new), the issue template will guide you on which information to include.
 
 If you are reporting an error that happens while cleaning ([example screenshot](https://user-images.githubusercontent.com/22394276/31048383-42d469d8-a61c-11e7-9a7d-d149887ce2f3.jpg)), please try to narrow it down a single cleaning option (in other words, a single checkbox).
+
+Three kinds of information are often helpful:
+
+1. Screenshot: to include a screenshot, you can either drag-and-drop it like a file attachment or use CTRL+V to paste it from the clipboard into the GitHub comment form.
+
+2. BleachBit log: this is the text that BleachBit shows while it is running. You can copy and paste it as text. Do not include hundreds of lines, but try to narrow it down to the interesting parts, like error messages. [Enabling debug logging](https://docs.bleachbit.org/doc/troubleshooting.html) using the launcher or preferences may show more information.
+
+3. BleachBit [system information](https://docs.bleachbit.org/doc/troubleshooting.html): this is a window inside of BleachBit that includes general information about your system. Copy and paste this as text, and paste it into GitHub.
 
 See also [prioritization of issues](https://www.bleachbit.org/contribute/prioritization-issues).
 

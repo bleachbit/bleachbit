@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2023 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,8 @@
 <cleaner id="brave">
   <label>Brave</label>
   <description>Web browser</description>
-  <running type="exe" os="windows">brave.exe</running>
-  <running type="exe" os="linux">brave</running>
+  <running type="exe" os="windows" same_user="true">brave.exe</running>
+  <running type="exe" os="linux" same_user="true">brave</running>
   <var name="base">
     <value os="windows">%LocalAppData%\BraveSoftware\Brave-Browser\User Data</value>
     <value os="linux">$XDG_CONFIG_HOME/BraveSoftware/Brave-Browser</value>

@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2023 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,8 @@
 <cleaner id="slack">
   <label>Slack</label>
   <description>Chat client</description>
-  <running type="exe" os="windows">slack.exe</running>
-  <running type="exe" os="linux">Slack</running>
+  <running type="exe" os="windows" same_user="true">slack.exe</running>
+  <running type="exe" os="linux" same_user="true">Slack</running>
   <var name="base">
     <value os="windows">%UserProfile%\AppData\Roaming\Slack</value>
     <value os="linux">~/.config/Slack</value>

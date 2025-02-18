@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2023 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,8 @@
 <cleaner id="seamonkey">
   <label>SeaMonkey</label>
   <description>Web browser</description>
-  <running type="exe">seamonkey.exe</running>
-  <running type="exe">seamonkey</running>
+  <running type="exe" same_user="true">seamonkey.exe</running>
+  <running type="exe" same_user="true">seamonkey</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>

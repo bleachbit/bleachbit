@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2023 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -22,15 +22,17 @@
 <cleaner id="microsoft_edge">
   <label>Microsoft Edge</label>
   <description>Web browser</description>
-  <running type="exe" os="windows">msedge.exe</running>
-  <running type="exe" os="linux">msedge</running>
+  <running type="exe" os="windows" same_user="true">msedge.exe</running>
+  <running type="exe" os="linux" same_user="true">msedge</running>
   <var name="base">
     <value os="windows">%LocalAppData%\Microsoft\Edge\User Data</value>
     <value os="linux">$XDG_CONFIG_HOME/microsoft-edge-beta</value>
+    <value os="linux">$XDG_CONFIG_HOME/microsoft-edge</value>
   </var>
   <var name="profile">
     <value os="windows">%LocalAppData%\Microsoft\Edge\User Data\Default</value>
     <value os="linux">$XDG_CONFIG_HOME/microsoft-edge-beta/Default</value>
+    <value os="linux">$XDG_CONFIG_HOME/microsoft-edge/Default</value>
   </var>
   <option id="cache">
     <label>Cache</label>

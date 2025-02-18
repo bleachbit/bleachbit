@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2023 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,8 @@
 <cleaner id="chromium">
   <label>Chromium</label>
   <description>Web browser</description>
-  <running type="exe" os="windows">chrome.exe</running>
-  <running type="exe" os="linux">chromium-browser</running>
+  <running type="exe" os="windows" same_user="true">chrome.exe</running>
+  <running type="exe" os="linux" same_user="true">chromium-browser</running>
   <!-- OpenBSD and NetBSD use "chrome" for Chromium, while on Linux it means
     Google Chrome. In other words, on Linux this could give a false positive
     for Chromium when Google Chrome is running. -->
@@ -31,7 +31,7 @@
   <var name="base">
     <value os="windows">%LocalAppData%\Chromium\User Data</value>
     <value os="linux">$XDG_CONFIG_HOME/chromium</value>
-    <value os="linux">~/snap/common/chromium</value>
+    <value os="linux">~/snap/chromium/common/chromium</value>
     <value os="freebsd">$XDG_CONFIG_HOME/chromium</value>
     <value os="openbsd">$XDG_CONFIG_HOME/chromium</value>
   </var>
@@ -59,6 +59,7 @@
     <action command="json" search="file" path="$$base$$/Local State" address="StartupDNSPrefetchList"/>
     <!-- Linux-specific -->
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/chromium/"/>
+    <action command="delete" search="walk.files" path="$$profile$$/Cache"/>
     <!-- Windows-specific -->
     <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
     <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>

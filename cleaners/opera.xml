@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2023 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -34,8 +34,8 @@
 <cleaner id="opera">
   <label>Opera</label>
   <description>Web browser</description>
-  <running type="exe" os="linux">opera</running>
-  <running type="exe" os="windows">opera.exe</running>
+  <running type="exe" os="linux" same_user="true">opera</running>
+  <running type="exe" os="windows" same_user="true">opera.exe</running>
   <var name="base">
     <!-- On Windows 10, Opera 68 created "Opera Stable" and "Opera Next" directories.
         The "Opera Next" is for Opera beta.

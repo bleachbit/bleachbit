@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2023 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -23,8 +23,8 @@
 <cleaner id="palemoon">
   <label>Pale Moon</label>
   <description>Web browser</description>
-  <running type="exe" os="unix">palemoon</running>
-  <running type="exe" os="windows">palemoon.exe</running>
+  <running type="exe" os="unix" same_user="true">palemoon</running>
+  <running type="exe" os="windows" same_user="true">palemoon.exe</running>
   <running type="pathname">~/.moonchild productions/pale moon/*/lock</running>
   <var name="base">
     <value os="windows">%AppData%\moonchild productions\value</value>
