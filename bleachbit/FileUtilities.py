@@ -51,6 +51,7 @@ if 'nt' == os.name:
     os_path_islink = os.path.islink
     os.path.islink = lambda path: os_path_islink(
         path) or bleachbit.Windows.is_junction(path)
+    os.remove = lambda pathname: bleachbit.Windows.delete_file(pathname)
 
 if 'posix' == os.name:
     from bleachbit.General import WindowsError
