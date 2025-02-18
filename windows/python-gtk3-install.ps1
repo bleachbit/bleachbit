@@ -24,9 +24,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #>
 
-$root_dir = ".\vcpkg_installed\x86-windows"
-$python_home = Join-Path (Get-Location).Path "vcpkg_installed\x86-windows\tools\python3"
-$themes_dir = "$python_home\share\themes"
+$root_dir = Join-Path (Get-Location).Path "vcpkg_installed\x86-windows"
+$python_home = Join-Path $root_dir "tools\python3"
+$themes_dir = Join-Path $python_home "share\themes"
 # location of this .ps1 script
 $script_dir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $base_download_url = "https://github.com/bleachbit/pygtkwin/releases/download/v2025-02-15/"
@@ -186,5 +186,6 @@ if (-not (Test-Path $GDK_PIXBUF_DIR)) {
 $env:GDK_PIXBUF_MODULE_FILE = "$GDK_PIXBUF_DIR\loaders.cache"
 if (-not (Test-Path $env:GDK_PIXBUF_MODULE_FILE)) {
     Write-Host "Creating $env:GDK_PIXBUF_MODULE_FILE..."
+    $env:PATH += ";$root_dir\tools\gtk3"
     & "$root_dir\tools\gdk-pixbuf\gdk-pixbuf-query-loaders.exe" --update-cache "$python_home\pixbufloader-svg.dll"
 }
