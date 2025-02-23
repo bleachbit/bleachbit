@@ -26,7 +26,7 @@ Test case for module Update
 from tests import common
 import bleachbit
 from bleachbit import logger
-from bleachbit.Update import check_updates, get_gtk_version, get_ip_for_url, update_winapp2, user_agent
+from bleachbit.Update import check_updates, update_winapp2
 import bleachbit.Update
 
 import os
@@ -93,22 +93,6 @@ class UpdateTestCase(common.BleachbitTestCase):
                 ())
         bleachbit.update_check_url = preserve_url
 
-    def test_get_gtk_version(self):
-        """Unit test for get_gtk_version()"""
-        gtk_ver = get_gtk_version()
-        self.assertIsInstance(gtk_ver, str)
-        self.assertRegex(gtk_ver, r"^\d+\.\d+\.\d+$")
-
-    def test_get_ip_for_url(self):
-        """Unit test for get_ip_for_url()"""
-        for good_url in ('https://www.example.com', bleachbit.update_check_url):
-            ip_str = get_ip_for_url(good_url)
-            import ipaddress
-            ip = ipaddress.ip_address(ip_str)
-        for bad_url in (None, '', 'https://test.invalid'):
-            ret = get_ip_for_url(bad_url)
-            self.assertEqual(ret[0], '(', 'get_ip_for_url({})={}'.format(bad_url,ret))
-
     def test_update_url(self):
         """Check connection to the update URL"""
         from bleachbit.Update import build_opener
@@ -153,11 +137,6 @@ class UpdateTestCase(common.BleachbitTestCase):
         update_winapp2(url, None, print, on_success)
         update_winapp2(url, None, print, expect_failure)
 
-    def test_user_agent(self):
-        """Unit test for method user_agent()"""
-        agent = user_agent()
-        logger.debug("user agent = '%s'", agent)
-        self.assertIsString(agent)
 
     def test_environment(self):
         """Check the sanity of the environment"""

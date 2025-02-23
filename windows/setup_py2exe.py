@@ -299,8 +299,8 @@ def build():
     copy_tree('themes', 'dist\\themes')
 
     logger.info('Copying CA bundle')
-    import requests
-    copy_file(requests.utils.DEFAULT_CA_BUNDLE_PATH,
+    import certifi
+    copy_file(certifi.where(),
               os.path.join('dist', 'cacert.pem'))
 
     dist_locale_dir = r'dist\share\locale'

@@ -24,12 +24,12 @@ Check for updates via the Internet
 
 import bleachbit
 from bleachbit.Language import get_text as _
+from bleachbit.Network import get_ip_for_url, get_user_agent
 
 import hashlib
 import logging
 import os
 import os.path
-import platform
 import socket
 import sys
 import xml.dom.minidom
@@ -40,94 +40,27 @@ from urllib.error import URLError
 logger = logging.getLogger(__name__)
 
 
-def get_gtk_version():
-    """Return the version of GTK
-
-    If GTK is not available, returns None.
-    """
-
-    try:
-        import gi
-    except ModuleNotFoundError:
-        return none
-    gi.require_version('Gtk', '3.0')
-    from gi.repository import Gtk
-    gtk_version = (Gtk.get_major_version(),
-                   Gtk.get_minor_version(), Gtk.get_micro_version())
-    return '.'.join([str(x) for x in gtk_version])
-
-
 def update_winapp2(url, hash_expected, append_text, cb_success):
     """Download latest winapp2.ini file.  Hash is sha512 or None to disable checks"""
     # first, determine whether an update is necessary
     from bleachbit import personal_cleaners_dir
     fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
-    delete_current = False
     if os.path.exists(fn):
         with open(fn, 'rb') as f:
             hash_current = hashlib.sha512(f.read()).hexdigest()
             if not hash_expected or hash_current == hash_expected:
                 # update is same as current
                 return
-        delete_current = True
     # download update
-    # FIXME: refactor this to share code with bleachbit.Chaff.download_url_to_fn()
-    opener = build_opener()
-    opener.addheaders = [('User-Agent', user_agent())]
-    doc = opener.open(fullurl=url, timeout=20).read()
-    # verify hash
-    hash_actual = hashlib.sha512(doc).hexdigest()
-    if hash_expected and not hash_actual == hash_expected:
-        raise RuntimeError("hash for %s actually %s instead of %s" %
-                           (url, hash_actual, hash_expected))
-    # delete current
-    if delete_current:
-        from bleachbit.FileUtilities import delete
-        delete(fn, True)
-    # write file
-    if not os.path.exists(personal_cleaners_dir):
-        os.mkdir(personal_cleaners_dir)
-    with open(fn, 'wb') as f:
-        f.write(doc)
-    append_text(_('New winapp2.ini was downloaded.'))
-    cb_success()
+    from bleachbit.Network import download_url_to_fn
 
+    # Define error handler to propagate download errors
+    def on_error(msg, msg2):
+        raise RuntimeError(f"{msg}: {msg2}")
 
-def user_agent():
-    """Return the user agent string"""
-    __platform = platform.system()  # Linux or Windows
-    __os = platform.uname()[2]  # e.g., 2.6.28-12-generic or XP
-    if sys.platform == "win32":
-        # misleading: Python 2.5.4 shows uname()[2] as Vista on Windows 7
-        __os = platform.uname()[3][
-            0:3]  # 5.1 = Windows XP, 6.0 = Vista, 6.1 = 7
-    elif sys.platform.startswith('linux'):
-        dist = platform.linux_distribution()
-        # example: ('fedora', '11', 'Leonidas')
-        # example: ('', '', '') for Arch Linux
-        if 0 < len(dist[0]):
-            __os = dist[0] + '/' + dist[1] + '-' + dist[2]
-    elif sys.platform[:6] == 'netbsd':
-        __sys = platform.system()
-        mach = platform.machine()
-        rel = platform.release()
-        __os = __sys + '/' + mach + ' ' + rel
-    __locale = ""
-    try:
-        import locale
-        __locale = locale.getdefaultlocale()[0]  # e.g., en_US
-    except:
-        logger.exception('Exception when getting default locale')
-
-    gtk_ver_raw = get_gtk_version()
-    if gtk_ver_raw:
-        gtk_ver = '; GTK %s' % gtk_ver_raw
-    else:
-        gtk_ver = ''
-
-    agent = "BleachBit/%s (%s; %s; %s%s)" % (bleachbit.APP_VERSION,
-                                             __platform, __os, __locale, gtk_ver)
-    return agent
+    if download_url_to_fn(url, fn, hash_expected, on_error):
+        append_text(_('New winapp2.ini was downloaded.'))
+        cb_success()
 
 
 def update_dialog(parent, updates):
@@ -145,8 +78,7 @@ def update_dialog(parent, updates):
 
     for (ver, url) in updates:
         box_update = Gtk.Box()
-        # TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
-        # similar
+        # TRANSLATORS: %s expands to version such as '4.6.0'
         button_stable = Gtk.Button(_("Update to version %s") % ver)
         button_stable.connect(
             'clicked', lambda dummy: open_url(url, parent, False))
@@ -163,27 +95,11 @@ def update_dialog(parent, updates):
     return False
 
 
-def get_ip_for_url(url):
-    """Given an https URL, return the IP address"""
-    if not url:
-        return '(no URL)'
-    url_split = url.split('/')
-    if len(url_split) < 3:
-        return '(bad URL)'
-    hostname = url.split('/')[2]
-    import socket
-    try:
-        ip_address = socket.gethostbyname(hostname)
-    except socket.gaierror:
-        return '(socket.gaierror)'
-    return ip_address
-
-
 def check_updates(check_beta, check_winapp2, append_text, cb_success):
     """Check for updates via the Internet"""
     opener = build_opener()
     socket.setdefaulttimeout(bleachbit.socket_timeout)
-    opener.addheaders = [('User-Agent', user_agent())]
+    opener.addheaders = [('User-Agent', get_user_agent())]
     import encodings.idna  # https://github.com/bleachbit/bleachbit/issues/760
     url = bleachbit.update_check_url
     if 'windowsapp' in sys.executable.lower():
