@@ -38,12 +38,16 @@
     <!-- Discord Stable -->
     <value os="windows">%UserProfile%\AppData\Roaming\discord</value>
     <value os="linux">~/.config/discord</value>
-  <!-- Discord PTB -->
+    <value os="linux">~/snap/discord/current/.config/discord</value>
+    <value os="linux">~/.var/app/com.discordapp.Discord/config/discord</value>
+    <!-- Discord PTB -->
     <value os="windows">%UserProfile%\AppData\Roaming\discordptb</value>
     <value os="linux">~/.config/discordptb</value>
     <!-- Discord Canary -->
     <value os="windows">%UserProfile%\AppData\Roaming\discordcanary</value>
     <value os="linux">~/.config/discordcanary</value>
+    <value os="linux">~/snap/discord/current/.config/discordcanary</value>
+    <value os="linux">~/.var/app/com.discordapp.DiscordCanary/config/discordcanary</value>
     <!-- Discord Development -->
     <value os="windows">%UserProfile%\AppData\Roaming\discorddevelopment</value>
     <value os="linux">~/.config/discorddevelopment</value>
@@ -55,6 +59,8 @@
     <action command="delete" search="walk.all" path="$$base$$/Code Cache"/>
     <action command="delete" search="walk.all" path="$$base$$/GPUCache"/>
     <action command="delete" search="file" path="$$base$$/Network Persistent State"/>
+    <action command="delete" search="walk.all" path="~/.var/app/com.discordapp.Discord/cache"/>
+    <action command="delete" search="walk.all" path="~/.var/app/com.discordapp.DiscordCanary/cache"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
