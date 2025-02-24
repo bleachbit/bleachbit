@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -371,7 +371,7 @@ class WinappTestCase(common.BleachbitTestCase):
             ('FileKey1=%(d)s|*.log;*.bak|RECURSE\nExcludeKey1=PATH|%(d)s|*.log',
              True, False, True),
             # exclude log without pipe delimiter
-            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\deleteme.log',
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\\deleteme.log',
              True, False, True),
             # exclude everything in folder
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.*',

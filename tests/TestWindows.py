@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -25,8 +25,30 @@ Test case for module Windows
 
 from tests import common
 
+from bleachbit import FileUtilities, General
 from bleachbit.FileUtilities import extended_path, extended_path_undo
-from bleachbit.Windows import *
+from bleachbit.Windows import (
+    delete_locked_file,
+    delete_registry_key,
+    delete_registry_value,
+    detect_registry_key,
+    empty_recycle_bin,
+    get_clipboard_paths,
+    get_fixed_drives,
+    get_font_conf_file,
+    get_known_folder_path,
+    get_recycle_bin,
+    get_windows_version,
+    is_junction,
+    is_process_running,
+    move_to_recycle_bin,
+    parse_windows_build,
+    path_on_network,
+    set_environ,
+    setup_environment,
+    shell_change_notify,
+    split_registry_key
+)
 from bleachbit import logger
 
 import os
@@ -39,6 +61,8 @@ import mock
 from decimal import Decimal
 
 if 'win32' == sys.platform:
+    import pywintypes
+    import win32api
     import winreg
     from win32com.shell import shell
 
@@ -449,15 +473,24 @@ class WindowsTestCase(common.BleachbitTestCase):
 
     def test_is_process_running(self):
         # winlogon.exe runs on Windows XP and Windows 7
-        # explorer.exe does not run on Appveyor
-        tests = ((True, 'winlogon.exe'),
-                 (True, 'WinLogOn.exe'),
-                 (False, 'doesnotexist.exe'))
-        for test in tests:
-            self.assertEqual(test[0],
-                             is_process_running(test[1]),
-                             'Expecting is_process_running(%s) = %s' %
-                             (test[1], test[0]))
+        # explorer.exe did not run Appveyor, but it does as of 2025-01-25.
+        # svchost.exe runs both as system and current user on Windows 11
+        # svchost.exe does not run as same user on AppVeyor and Windows Server 2012.
+        tests = ((True, 'winlogon.exe', False),
+                 (True, 'WinLogOn.exe', False),
+                 (False, 'doesnotexist.exe', False),
+                 (True, 'explorer.exe', True),
+                 (True, 'svchost.exe', False),
+                 (True, 'services.exe', False),
+                 (False, 'services.exe', True),
+                 (True, 'wininit.exe', False),
+                 (False, 'wininit.exe', True))
+
+        for expected, exename, require_same_user in tests:
+            with self.subTest(exename=exename, require_same_user=require_same_user):
+                result = is_process_running(exename, require_same_user)
+                self.assertEqual(
+                    expected, result, f'Expecting is_process_running({exename}, {require_same_user}) = {expected}, got {result}')
 
     def test_setup_environment(self):
         """Unit test for setup_environment"""

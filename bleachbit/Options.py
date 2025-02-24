@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,8 +24,7 @@ Store and retrieve user preferences
 
 import bleachbit
 from bleachbit import General
-from bleachbit import _
-from bleachbit.Log import set_root_log_level
+from bleachbit.Language import get_text as _
 
 import logging
 import os
@@ -38,6 +37,7 @@ if 'nt' == os.name:
 
 
 boolean_keys = ['auto_hide',
+                'auto_detect_lang',
                 'check_beta',
                 'check_online_updates',
                 'dark_mode',
@@ -45,6 +45,7 @@ boolean_keys = ['auto_hide',
                 'delete_confirmation',
                 'exit_done',
                 'first_start',
+                'kde_shred_menu_option',
                 'remember_geometry',
                 'shred',
                 'units_iec',
@@ -124,7 +125,7 @@ class Options:
             return
         for option in self.config.options('hashpath'):
             pathname = option
-            if 'nt' == os.name and re.search('^[a-z]\\\\', option):
+            if 'nt' == os.name and re.search(r'^[a-z]\\', option):
                 # restore colon lost because ConfigParser treats colon special
                 # in keys
                 pathname = pathname[0] + ':' + pathname[1:]
@@ -140,6 +141,13 @@ class Options:
                 # the file does not on exist, so forget it
                 self.config.remove_option('hashpath', option)
 
+    def __auto_preserve_languages(self):
+        """Automatically preserve the active language"""
+        active_lang = bleachbit.Language.get_active_language_code()
+        for lang_id in set([active_lang.split('_')[0], 'en']):
+            logger.info(_("Automatically preserving language %s."), lang_id)
+            self.set_language(lang_id, True)
+
     def __set_default(self, key, value):
         """Set the default value"""
         if not self.config.has_option('bleachbit', key):
@@ -153,13 +161,14 @@ class Options:
         """Retrieve a general option"""
         if not 'nt' == os.name and 'update_winapp2' == option:
             return False
+        if section == 'bleachit' and option == 'debug':
+            from bleachbit.Log import is_debugging_enabled_via_cli
+            if is_debugging_enabled_via_cli():
+                # command line overrides stored configuration
+                return True
         if section == 'hashpath' and option[1] == ':':
             option = option[0] + option[2:]
         if option in boolean_keys:
-            from bleachbit.Log import is_debugging_enabled_via_cli
-            if section == 'bleachbit' and option == 'debug' and is_debugging_enabled_via_cli():
-                # command line overrides store configuration
-                return True
             return self.config.getboolean(section, option)
         elif option in int_keys:
             return self.config.getint(section, option)
@@ -171,6 +180,8 @@ class Options:
 
     def get_language(self, langid):
         """Retrieve value for whether to preserve the language"""
+        if not self.config.has_section('preserve_languages'):
+            self.__auto_preserve_languages()
         if not self.config.has_option('preserve_languages', langid):
             return False
         return self.config.getboolean('preserve_languages', langid)
@@ -178,7 +189,7 @@ class Options:
     def get_languages(self):
         """Return a list of all selected languages"""
         if not self.config.has_section('preserve_languages'):
-            return None
+            self.__auto_preserve_languages()
         return self.config.options('preserve_languages')
 
     def get_list(self, option):
@@ -266,15 +277,16 @@ class Options:
             except:
                 logger.exception(
                     _("Error when setting the default drives to shred."))
-
         # set defaults
         self.__set_default("auto_hide", True)
+        self.__set_default("auto_detect_lang", True)
         self.__set_default("check_beta", False)
         self.__set_default("check_online_updates", True)
         self.__set_default("dark_mode", True)
         self.__set_default("debug", False)
         self.__set_default("delete_confirmation", True)
         self.__set_default("exit_done", False)
+        self.__set_default("kde_shred_menu_option", False)
         self.__set_default("remember_geometry", True)
         self.__set_default("shred", False)
         self.__set_default("units_iec", False)
@@ -284,15 +296,6 @@ class Options:
         if 'nt' == os.name:
             self.__set_default("update_winapp2", False)
             self.__set_default("win10_theme", False)
-
-        if not self.config.has_section('preserve_languages'):
-            lang = bleachbit.user_locale
-            pos = lang.find('_')
-            if -1 != pos:
-                lang = lang[0: pos]
-            for _lang in set([lang, 'en']):
-                logger.info(_("Automatically preserving language %s."), _lang)
-                self.set_language(_lang, True)
 
         # BleachBit upgrade or first start ever
         if not self.config.has_option('bleachbit', 'version') or \
@@ -376,6 +379,3 @@ class Options:
 
 
 options = Options()
-
-# Now that the configuration is loaded, honor the debug preference there.
-set_root_log_level()

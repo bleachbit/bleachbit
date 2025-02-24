@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ import os.path
 import re
 import sys
 
-from bleachbit import _
+from bleachbit.Language import get_text as _
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
 from bleachbit import Command, FileUtilities, Memory, Special
@@ -39,7 +39,7 @@ warnings.simplefilter("ignore", Warning)
 try:
     from bleachbit.GuiBasic import Gtk, Gdk
     HAVE_GTK = Gdk.get_default_root_window() is not None
-except (ImportError, RuntimeError, ValueError) as e:
+except (ImportError, RuntimeError, ValueError):
     # ImportError happens when GTK is not installed.
     # RuntimeError can happen when X is not available (e.g., cron, ssh).
     # ValueError seen on BleachBit 3.0 with GTK 3 (GitHub issue 685)
@@ -74,15 +74,15 @@ class Cleaner:
         """Register 'action' (instance of class Action) to be executed
         for ''option_id'.  The actions must implement list_files and
         other_cleanup()"""
-        self.actions += ((option_id, action), )
+        self.actions.append((option_id, action))
 
     def add_option(self, option_id, name, description):
         """Register option (such as 'cache')"""
         self.options[option_id] = (name, description)
 
-    def add_running(self, detection_type, pathname):
+    def add_running(self, detection_type, pathname, same_user=False):
         """Add a way to detect this program is currently running"""
-        self.running += ((detection_type, pathname), )
+        self.running.append((detection_type, pathname, same_user))
 
     def auto_hide(self):
         """Return boolean whether it is OK to automatically hide this
@@ -147,21 +147,15 @@ class Cleaner:
         """Return a warning as string."""
         if option_id in self.warnings:
             return self.warnings[option_id]
-        else:
-            return None
+        return None
 
-    def is_running(self):
-        """Return whether the program is currently running"""
+    def is_process_running(self):
+        """Return whether the process is currently running"""
         logger = logging.getLogger(__name__)
-        for running in self.running:
-            test = running[0]
-            pathname = running[1]
-            if 'exe' == test and 'posix' == os.name:
-                if Unix.is_running(pathname):
-                    logger.debug("process '%s' is running", pathname)
-                    return True
-            elif 'exe' == test and 'nt' == os.name:
-                if Windows.is_process_running(pathname):
+        for (test, pathname, same_user) in self.running:
+            if 'exe' == test:
+                if ('posix' == os.name and Unix.is_process_running(pathname, same_user)) or \
+                   ('nt' == os.name and Windows.is_process_running(pathname, same_user)):
                     logger.debug("process '%s' is running", pathname)
                     return True
             elif 'pathname' == test:
@@ -202,8 +196,8 @@ class OpenOfficeOrg(Cleaner):
         # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
         if 'posix' == os.name:
             self.prefixes = ["~/.ooo-2.0", "~/.openoffice.org2",
-                             "~/.openoffice.org2.0", "~/.openoffice.org/3"]
-            self.prefixes += ["~/.ooo-dev3"]
+                             "~/.openoffice.org2.0", "~/.openoffice.org/3",
+                             "~/.ooo-dev3"]
         if 'nt' == os.name:
             self.prefixes = [
                 "$APPDATA\\OpenOffice.org\\3", "$APPDATA\\OpenOffice.org2"]
@@ -382,10 +376,10 @@ class System(Cleaner):
                      '~/.kde2/share/applnk']
 
         if 'posix' == os.name and 'desktop_entry' == option_id:
-            for dirname in menu_dirs:
-                for filename in [fn for fn in children_in_directory(dirname, False)
-                                 if fn.endswith('.desktop')]:
-                    if Unix.is_broken_xdg_desktop(filename):
+            for path in menu_dirs:
+                dirname = os.path.expanduser(path)
+                for filename in children_in_directory(dirname, False):
+                    if filename.endswith('.desktop') and Unix.is_broken_xdg_desktop(filename):
                         yield Command.Delete(filename)
 
         # unwanted locales
@@ -402,7 +396,7 @@ class System(Cleaner):
                 '$ALLUSERSPROFILE\\Application Data\\Microsoft\\Dr Watson\\*.log',
                 '$ALLUSERSPROFILE\\Application Data\\Microsoft\\Dr Watson\\user.dmp',
                 '$LocalAppData\\Microsoft\\Windows\\WER\\ReportArchive\\*\\*',
-                '$LocalAppData\\Microsoft\\Windows\WER\\ReportQueue\\*\\*',
+                '$LocalAppData\\Microsoft\\Windows\\WER\\ReportQueue\\*\\*',
                 '$programdata\\Microsoft\\Windows\\WER\\ReportArchive\\*\\*',
                 '$programdata\\Microsoft\\Windows\\WER\\ReportQueue\\*\\*',
                 '$localappdata\\Microsoft\\Internet Explorer\\brndlog.bak',
@@ -419,7 +413,7 @@ class System(Cleaner):
                 '$windir\\Debug\\UserMode\\*.log',
                 '$windir\\Debug\\UserMode\\ChkAcc.bak',
                 '$windir\\Debug\\UserMode\\userenv.bak',
-                '$windir\\Microsoft.NET\Framework\*\*.log',
+                '$windir\\Microsoft.NET\\Framework\\*\\*.log',
                 '$windir\\pchealth\\helpctr\\Logs\\hcupdate.log',
                 '$windir\\security\\logs\\*.log',
                 '$windir\\security\\logs\\*.old',
@@ -432,7 +426,7 @@ class System(Cleaner):
                 '$windir\\system32\\LogFiles\\Firewall\\pfirewall.log*',
                 '$windir\\system32\\LogFiles\\Scm\\SCM.EVM*',
                 '$windir\\system32\\LogFiles\\WMI\\Terminal*.etl',
-                '$windir\\system32\\LogFiles\\WMI\\RTBackup\EtwRT.*etl',
+                '$windir\\system32\\LogFiles\\WMI\\RTBackup\\EtwRT.*etl',
                 '$windir\\system32\\wbem\\Logs\\*.lo_',
                 '$windir\\system32\\wbem\\Logs\\*.log', )
 
@@ -614,14 +608,15 @@ class System(Cleaner):
             '^/tmp/.truecrypt_aux_mnt.*/(control|volume)$',
             '^/tmp/.vbox-[^/]+-ipc/lock$',
             '^/tmp/.wine-[0-9]+/server-.*/lock$',
-            '^/tmp/gconfd-[^/]+/lock/ior$',
             '^/tmp/fsa/',  # fsarchiver
+            '^/tmp/gconfd-[^/]+/lock/ior$',
             '^/tmp/kde-',
             '^/tmp/kdesudo-',
             '^/tmp/ksocket-',
             '^/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock$',
             '^/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior$',
             '^/tmp/pulse-[^/]+/pid$',
+            '^/tmp/xauth',
             '^/var/tmp/kdecache-',
             '^' + os.path.expanduser('~/.cache/wallpaper/'),
             # Flatpak mount point

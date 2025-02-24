@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -26,19 +26,19 @@ else is counted as special commands: run any external process, edit
 JSON or INI file, delete registry key, edit SQLite3 database, etc.
 """
 
-from bleachbit import _
+from bleachbit.Language import get_text as _
 from bleachbit import FileUtilities
 
 import logging
 import os
 import types
 
-from sqlite3 import DatabaseError
-
 if 'nt' == os.name:
     import bleachbit.Windows
 else:
     from bleachbit.General import WindowsError
+
+logger = logging.getLogger(__name__)
 
 
 def whitelist(path):
@@ -88,12 +88,12 @@ class Delete:
                 # WindowsError: [Error 32] The process cannot access the file because it is being
                 # used by another process: 'C:\\Documents and
                 # Settings\\username\\Cookies\\index.dat'
-                if 32 != e.winerror and 5 != e.winerror:
+                if e.winerror not in (5, 32):
                     raise
                 try:
                     bleachbit.Windows.delete_locked_file(self.path)
                 except:
-                    raise
+                    logger.exception('exception when deleting locked file %s', self.path)
                 else:
                     if self.shred:
                         import warnings
@@ -124,8 +124,7 @@ class Function:
     def __str__(self):
         if self.path:
             return 'Function: %s: %s' % (self.label, self.path)
-        else:
-            return 'Function: %s' % (self.label)
+        return 'Function: %s' % (self.label)
 
     def execute(self, really_delete):
 
@@ -160,13 +159,15 @@ class Function:
                                        (self.func.__name__, self.path))
                 # Function takes a path.  We check the size.
                 oldsize = FileUtilities.getsize(self.path)
+
+                from sqlite3 import DatabaseError
                 try:
                     self.func(self.path)
                 except DatabaseError as e:
                     if -1 == e.message.find('file is encrypted or is not a database') and \
                        -1 == e.message.find('or missing database'):
                         raise
-                    logging.getLogger(__name__).exception(e.message)
+                    logger.exception(e.message)
                     return
                 try:
                     newsize = FileUtilities.getsize(self.path)
@@ -286,7 +287,7 @@ class Truncate(Delete):
             'path': self.path,
             'size': FileUtilities.getsize(self.path)}
         if really_delete:
-            with open(self.path, 'w') as f:
+            with open(self.path, 'w', encoding='ascii') as f:
                 f.truncate(0)
         yield ret
 

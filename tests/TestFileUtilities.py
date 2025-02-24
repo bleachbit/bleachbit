@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,14 +23,50 @@
 Test case for module FileUtilities
 """
 
-from tests import common
-from bleachbit.FileUtilities import *
-from bleachbit.General import run_external, sudo_mode
+
+from bleachbit.FileUtilities import (
+    bytes_to_human,
+    children_in_directory,
+    clean_ini,
+    clean_json,
+    delete,
+    detect_encoding,
+    ego_owner,
+    exists_in_path,
+    exe_exists,
+    expand_glob_join,
+    extended_path,
+    extended_path_undo,
+    free_space,
+    getsize,
+    getsizedir,
+    globex,
+    guess_overwrite_paths,
+    human_to_bytes,
+    is_dir_empty,
+    listdir,
+    open_files_lsof,
+    OpenFiles,
+    same_partition,
+    uris_to_paths,
+    vacuum_sqlite3,
+    whitelisted,
+    wipe_contents,
+    wipe_name,
+    wipe_path
+)
+from bleachbit.General import gc_collect, run_external
 from bleachbit.Options import options
 from bleachbit import logger
+from tests import common
 
 import json
+import locale
+import os
+import subprocess
 import sys
+import tempfile
+import time
 import unittest
 
 
@@ -487,6 +523,23 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         """Unit test for ego_owner()"""
         self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
 
+    def test_execute_sqlite3(self):
+        """Unit test for execute_sqlite3()"""
+        from bleachbit.FileUtilities import execute_sqlite3
+        db_path = self.mkstemp(prefix='bleachbit-test-file', suffix='.sqlite')
+
+        cmds = ['CREATE TABLE test (id INTEGER PRIMARY KEY, name TEXT)',
+                "INSERT INTO test (name) VALUES ('A'), ('B')",
+                "UPDATE test SET name = 'C' WHERE name = 'B'",
+                "DELETE FROM test WHERE name = 'C'"]
+
+        execute_sqlite3(db_path, ';'.join(cmds))
+        execute_sqlite3(db_path, 'vacuum')
+
+        gc_collect()
+        os.unlink(db_path)
+        self.assertNotExists(db_path)
+
     def test_exists_in_path(self):
         """Unit test for exists_in_path()"""
         filename = 'ls'
@@ -513,7 +566,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         if 'posix' == os.name:
             expand_glob_join('/bin', '*sh')
         if 'nt' == os.name:
-            expand_glob_join('c:\windows', '*.exe')
+            expand_glob_join(r'c:\windows', '*.exe')
 
     def test_expandvars(self):
         """Unit test for expandvars()."""
@@ -559,9 +612,9 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         import re
         for line in stdout.split('\n'):
             line = line.strip()
-            if not re.match('([A-Z]):\s+(\d+)', line):
+            if not re.match(r'([A-Z]):\s+(\d+)', line):
                 continue
-            drive, bytes_free = re.split('\s+', line)
+            drive, bytes_free = re.split(r'\s+', line)
             print('Checking free space for %s' % drive)
             bytes_free = int(bytes_free)
             free = free_space(drive)
@@ -833,8 +886,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         d = '/usr/bin'
         whitelist = [('file', '/home/foo'), ('folder', '/home/folder')]
         if 'nt' == os.name:
-            d = os.path.expandvars('%windir%\system32')
-            whitelist = [('file', r'c:\\filename'), ('folder', r'c:\\folder')]
+            d = os.path.expandvars(r'%windir%\system32')
+            whitelist = [('file', r'c:\filename'), ('folder', r'c:\\folder')]
         reps = 20
         paths = [p for p in children_in_directory(d, True)]
         paths = paths[:1000]  # truncate
@@ -968,7 +1021,9 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         vacuum_sqlite3(path)
         self.assertEqual(empty_size, getsize(path))
 
+        gc_collect()
         delete(path)
+        self.assertNotExists(path)
 
     @common.skipIfWindows
     def test_OpenFiles(self):

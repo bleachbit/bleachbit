@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,6 @@
 Common code for unit tests
 """
 
-import functools
 import os
 import shutil
 import sys
@@ -37,7 +36,7 @@ if 'win32' == sys.platform:
 import bleachbit
 import bleachbit.Options
 from bleachbit.FileUtilities import extended_path
-from bleachbit.General import sudo_mode
+from bleachbit.General import gc_collect, sudo_mode
 
 
 class BleachbitTestCase(unittest.TestCase):
@@ -67,20 +66,22 @@ class BleachbitTestCase(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         """remove the temporary directory"""
+        gc_collect()
         if os.path.exists(cls.tempdir):
             shutil.rmtree(cls.tempdir)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             cls._stop_patch_options_paths()
-    
+
     @classmethod
     def _stop_patch_options_paths(cls):
         for patcher in cls._patchers:
-            patcher.stop()        
+            patcher.stop()
 
     def setUp(cls):
         """Call before each test method"""
         basedir = os.path.join(os.path.dirname(__file__), '..')
         os.chdir(basedir)
+
 
     #
     # type asserts
@@ -93,6 +94,80 @@ class BleachbitTestCase(unittest.TestCase):
 
     def assertIsBytes(self, obj, msg=''):
         self.assertIsInstance(obj, bytes, msg)
+
+    def assertIsLanguageCode(self, lang_id, msg=''):
+        self.assertIsInstance(lang_id, str)
+        if lang_id in ('C', 'C.UTF-8', 'C.utf8', 'POSIX'):
+            return
+        self.assertTrue(len(lang_id) >= 2)
+        import re
+        pattern = r'^[a-z]{2,3}(_[A-Z][A-Za-z]{1,3})?(@\w+)?(\.[a-zA-Z][a-zA-Z0-9-]+)?$'
+        self.assertTrue(re.match(pattern, lang_id),
+                        f'Invalid language code format: {lang_id}')
+
+    def test_assertIsLanguageCode_hardcoded(self):
+        """Test assertIsLanguageCode() using hard-coded values"""
+        valid_codes = [
+            'be@latin',
+            'C.UTF-8',
+            'C.utf8',
+            'C',
+            'de_DE.iso88591',
+            'en_US',
+            'en',
+            'fr_FR.utf8',
+            'ja_JP.SJIS',
+            'ko_KR.eucKR',
+            'nb_NO.ISO-8859-1',
+            'POSIX',
+            'ru_RU.KOI8-R',
+            'zh_Hant',
+        ]
+
+        invalid_codes = ['e', 'en_', 'english', 'en_US_', '123', 'en-US',
+                         'en_us', 'en_US.',
+                         'en_us.utf8',
+                         'en_us.UTF-8',
+                         'utf8',
+                         'UTF-8',
+                         '.utf8',
+                         '.UTF-8',
+                         '',
+                         [],
+                         0,
+                         None]
+        invalid_codes.extend([code + ' ' for code in valid_codes])
+        invalid_codes.extend([' ' + code for code in valid_codes])
+
+        for code in valid_codes:
+            self.assertIsLanguageCode(code)
+
+        for code in invalid_codes:
+            with self.assertRaises(AssertionError, msg=f'Expected exception for {code}'):
+                self.assertIsLanguageCode(code)
+
+    def test_assertIsLanguageCode_live(self):
+        """Test assertIsLanguageCode() using live data"""
+        from bleachbit import locale_dir
+        locale_dirs = list(set([locale_dir, '/usr/share/locale']))
+        lang_codes = []
+        for locale_dir in locale_dirs:
+            if not os.path.isdir(locale_dir):
+                continue
+            for lang_code in os.listdir(locale_dir):
+                if not os.path.isdir(os.path.join(locale_dir, lang_code)):
+                    continue
+                lang_codes.append(lang_code)
+        if os.path.exists('/etc/locale.alias'):
+            with open('/etc/locale.alias', 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if not line.startswith('#'):
+                        parts = line.split()
+                        if len(parts) > 1:
+                            lang_codes.append(parts[1])
+        for lang_code in lang_codes:
+            self.assertIsLanguageCode(lang_code)
 
     @staticmethod
     def check_exists(func, path):
@@ -156,6 +231,8 @@ class BleachbitTestCase(unittest.TestCase):
         if 'dir' not in kwargs:
             kwargs['dir'] = self.tempdir
         return tempfile.mkdtemp(**kwargs)
+
+
 
 
 def getTestPath(path):

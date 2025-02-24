@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ File-related utilities
 """
 
 import bleachbit
-from bleachbit import _
+from bleachbit.Language import get_text as _
 
 import atexit
 import errno
@@ -137,6 +137,10 @@ def open_files():
         except TypeError:
             # happens, for example, when link points to
             # '/etc/password\x00 (deleted)'
+            continue
+        except PermissionError:
+            # /proc/###/fd/0 with systemd
+            # https://github.com/bleachbit/bleachbit/issues/1515
             continue
         else:
             yield target
@@ -293,7 +297,7 @@ def clean_json(path, target):
     targets = target.split('/')
 
     # read file to parser
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(path, 'r', encoding='utf-8-sig') as f:
         js = json.load(f)
 
     # change file
@@ -457,15 +461,28 @@ def exe_exists(pathname):
 
 
 def execute_sqlite3(path, cmds):
-    """Execute 'cmds' on SQLite database 'path'"""
+    """Execute SQL commands on SQLite database
+
+    Args:
+        path (str): Path to the SQLite database file
+        cmds (str): SQL commands to execute, separated by semicolons
+
+    Raises:
+        sqlite3.OperationalError: If there's an error executing the SQL commands
+        sqlite3.DatabaseError: If there's a database-related error
+
+    Returns:
+        None
+    """
     import sqlite3
-    import contextlib
-    with contextlib.closing(sqlite3.connect(path)) as conn:
+    from bleachbit.Options import options
+    assert isinstance(path, str)
+    assert isinstance(cmds, str)
+    with sqlite3.connect(path) as conn:
         cursor = conn.cursor()
 
         # overwrites deleted content with zeros
         # https://www.sqlite.org/pragma.html#pragma_secure_delete
-        from bleachbit.Options import options
         if options.get('shred'):
             cursor.execute('PRAGMA secure_delete=ON')
 
@@ -485,7 +502,8 @@ def execute_sqlite3(path, cmds):
                     '%s: %s' % (exc, path))
 
         cursor.close()
-        conn.commit()
+        from bleachbit.General import gc_collect
+        gc_collect()
 
 
 def expand_glob_join(pathname1, pathname2):
@@ -498,7 +516,9 @@ def expand_glob_join(pathname1, pathname2):
 
 def extended_path(path):
     """If applicable, return the extended Windows pathname"""
-    if 'nt' == os.name:
+    # Do not extend the Sysnative paths because on some systems there are problems with path resolution,
+    # for example: https://github.com/bleachbit/bleachbit/issues/1574.
+    if 'nt' == os.name and 'Sysnative' not in path.split(os.sep):
         if path.startswith(r'\\?'):
             return path
         if path.startswith(r'\\'):
@@ -638,7 +658,7 @@ def is_dir_empty(dirname):
     if hasattr(os, 'scandir'):
         if sys.version_info < (3, 6, 0):
                     # Python 3.5 added os.scandir() without context manager.
-            for _ in os.scandir(dirname):
+            for _i in os.scandir(dirname):
                 return False
         else:
             # Python 3.6 added the context manager.
@@ -807,7 +827,6 @@ def wipe_contents(path, truncate=True):
     if 'nt' == os.name and IsUserAnAdmin():
         from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
         import warnings
-        from bleachbit import _
         try:
             file_wipe(path)
         except pywinerror as e:
@@ -829,7 +848,7 @@ def wipe_contents(path, truncate=True):
                     pass
             # translate exception to mark file to deletion in Command.py
             raise WindowsError(e.winerror, e.strerror)
-        except UnsupportedFileSystemError as e:
+        except UnsupportedFileSystemError:
             warnings.warn(
                 _('There was at least one file on a file system that does not support advanced overwriting.'), UserWarning)
             f = wipe_write()
@@ -928,6 +947,9 @@ def wipe_path(pathname, idle=False):
         return 1, done_percent, remaining_seconds
 
     logger.debug(_("Wiping path: %s") % pathname)
+    if not os.path.isdir(pathname):
+        logger.error(_("Path to wipe must be an existing directory: %s"), pathname)
+        return
     files = []
     total_bytes = 0
     start_free_bytes = free_space(pathname)

@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -37,7 +37,7 @@ class MemoryTestCase(common.BleachbitTestCase):
         """Test for method get_proc_swaps"""
         ret = get_proc_swaps()
         self.assertGreater(len(ret), 10)
-        if not re.search('Filename\s+Type\s+Size', ret):
+        if not re.search(r'Filename\s+Type\s+Size', ret):
             raise RuntimeError(
                 "Unexpected first line in swap summary '%s'" % ret)
 

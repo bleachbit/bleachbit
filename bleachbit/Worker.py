@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ Perform the preview or delete operations
 
 from bleachbit import DeepScan, FileUtilities
 from bleachbit.Cleaner import backends
-from bleachbit import _, ngettext
+from bleachbit.Language import get_text as _, nget_text as ngettext
 
 import logging
 import math
@@ -141,7 +141,7 @@ class Worker:
         if not operation_options:
             return
 
-        if self.really_delete and backends[operation].is_running():
+        if self.really_delete and backends[operation].is_process_running():
             # TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
             err = _("%s cannot be cleaned because it is currently running.  Close it, and try again.") \
                 % backends[operation].get_name()

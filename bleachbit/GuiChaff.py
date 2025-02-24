@@ -3,7 +3,7 @@
 
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@
 GUI for making chaff
 """
 
-from bleachbit import _
+from bleachbit.Language import get_text as _
 from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models
 
 from gi.repository import Gtk, GLib
@@ -63,6 +63,7 @@ class ChaffDialog(Gtk.Dialog):
 # physical chaff airplanes use to protect themselves from radar-guided
 # missiles. For more explanation, see the online documentation.
         Gtk.Dialog.__init__(self, _("Make chaff"), parent)
+        Gtk.Dialog.set_modal(self,True)
         self.set_border_width(5)
         box = self.get_content_area()
 

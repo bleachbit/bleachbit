@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ Integration specific to Unix-like operating systems
 
 import bleachbit
 from bleachbit import FileUtilities, General
-from bleachbit import _
+from bleachbit.Language import get_text as _, native_locale_names
 
 import glob
 import logging
@@ -64,7 +64,7 @@ class LocaleCleanerPath:
         return child
 
     def add_path_filter(self, pre, post):
-        """Adds a filter consisting of a prefix and a postfix
+        r"""Adds a filter consisting of a prefix and a postfix
         (e.g. 'foobar_' and '\.qm' to match 'foobar_en_US.utf-8.qm)"""
         try:
             regex = re.compile('^' + pre + Locales.localepattern + post + '$')
@@ -109,239 +109,6 @@ class Locales:
         r'(?P<locale>[a-z]{2,3})' \
         r'(?P<specifier>[_-][A-Z]{2,4})?(?:\.[\w]+[\d-]+|@\w+)?' \
         r'(?P<encoding>[.-_](?:(?:ISO|iso|UTF|utf|us-ascii)[\d-]+|(?:euc|EUC)[A-Z]+))?'
-
-    native_locale_names = \
-        {'aa': 'Afaraf',
-         'ab': 'аҧсуа бызшәа',
-         'ace': 'بهسا اچيه',
-         'ach': 'Acoli',
-         'ae': 'avesta',
-         'af': 'Afrikaans',
-         'ak': 'Akan',
-         'am': 'አማርኛ',
-         'an': 'aragonés',
-         'ang': 'Old English',
-         'anp': 'Angika',
-         'ar': 'العربية',
-         'as': 'অসমীয়া',
-         'ast': 'Asturianu',
-         'av': 'авар мацӀ',
-         'ay': 'aymar aru',
-         'az': 'azərbaycan dili',
-         'ba': 'башҡорт теле',
-         'bal': 'Baluchi',
-         'be': 'Беларуская мова',
-         'bg': 'български език',
-         'bh': 'भोजपुरी',
-         'bi': 'Bislama',
-         'bm': 'bamanankan',
-         'bn': 'বাংলা',
-         'bo': 'བོད་ཡིག',
-         'br': 'brezhoneg',
-         'brx': 'Bodo (India)',
-         'bs': 'босански',
-         'byn': 'Bilin',
-         'ca': 'català',
-         'ce': 'нохчийн мотт',
-         'cgg': 'Chiga',
-         'ch': 'Chamoru',
-         'ckb': 'Central Kurdish',
-         'co': 'corsu',
-         'cr': 'ᓀᐦᐃᔭᐍᐏᐣ',
-         'crh': 'Crimean Tatar',
-         'cs': 'česky',
-         'csb': 'Cashubian',
-         'cu': 'ѩзыкъ словѣньскъ',
-         'cv': 'чӑваш чӗлхи',
-         'cy': 'Cymraeg',
-         'da': 'dansk',
-         'de': 'Deutsch',
-         'doi': 'डोगरी; ڈوگرى',
-         'dv': 'ދިވެހި',
-         'dz': 'རྫོང་ཁ',
-         'ee': 'Eʋegbe',
-         'el': 'Ελληνικά',
-         'en': 'English',
-         'en_AU': 'Australian English',
-         'en_CA': 'Canadian English',
-         'en_GB': 'British English',
-         'eo': 'Esperanto',
-         'es': 'Español',
-         'es_419': 'Latin American Spanish',
-         'et': 'eesti',
-         'eu': 'euskara',
-         'fa': 'فارسی',
-         'ff': 'Fulfulde',
-         'fi': 'suomen kieli',
-         'fil': 'Wikang Filipino',
-         'fin': 'suomen kieli',
-         'fj': 'vosa Vakaviti',
-         'fo': 'føroyskt',
-         'fr': 'Français',
-         'frp': 'Arpitan',
-         'fur': 'Frilian',
-         'fy': 'Frysk',
-         'ga': 'Gaeilge',
-         'gd': 'Gàidhlig',
-         'gez': 'Geez',
-         'gl': 'galego',
-         'gn': 'Avañeẽ',
-         'gu': 'Gujarati',
-         'gv': 'Gaelg',
-         'ha': 'هَوُسَ',
-         'haw': 'Hawaiian',
-         'he': 'עברית',
-         'hi': 'हिन्दी',
-         'hne': 'Chhattisgarhi',
-         'ho': 'Hiri Motu',
-         'hr': 'Hrvatski',
-         'hsb': 'Upper Sorbian',
-         'ht': 'Kreyòl ayisyen',
-         'hu': 'Magyar',
-         'hy': 'Հայերեն',
-         'hz': 'Otjiherero',
-         'ia': 'Interlingua',
-         'id': 'Indonesian',
-         'ie': 'Interlingue',
-         'ig': 'Asụsụ Igbo',
-         'ii': 'ꆈꌠ꒿',
-         'ik': 'Iñupiaq',
-         'ilo': 'Ilokano',
-         'ina': 'Interlingua',
-         'io': 'Ido',
-         'is': 'Íslenska',
-         'it': 'Italiano',
-         'iu': 'ᐃᓄᒃᑎᑐᑦ',
-         'iw': 'עברית',
-         'ja': '日本語',
-         'jv': 'basa Jawa',
-         'ka': 'ქართული',
-         'kab': 'Tazwawt',
-         'kac': 'Jingpho',
-         'kg': 'Kikongo',
-         'ki': 'Gĩkũyũ',
-         'kj': 'Kuanyama',
-         'kk': 'қазақ тілі',
-         'kl': 'kalaallisut',
-         'km': 'ខ្មែរ',
-         'kn': 'ಕನ್ನಡ',
-         'ko': '한국어',
-         'kok': 'Konkani',
-         'kr': 'Kanuri',
-         'ks': 'कश्मीरी',
-         'ku': 'Kurdî',
-         'kv': 'коми кыв',
-         'kw': 'Kernewek',
-         'ky': 'Кыргызча',
-         'la': 'latine',
-         'lb': 'Lëtzebuergesch',
-         'lg': 'Luganda',
-         'li': 'Limburgs',
-         'ln': 'Lingála',
-         'lo': 'ພາສາລາວ',
-         'lt': 'lietuvių kalba',
-         'lu': 'Tshiluba',
-         'lv': 'latviešu valoda',
-         'mai': 'Maithili',
-         'mg': 'fiteny malagasy',
-         'mh': 'Kajin M̧ajeļ',
-         'mhr': 'Eastern Mari',
-         'mi': 'te reo Māori',
-         'mk': 'македонски јазик',
-         'ml': 'മലയാളം',
-         'mn': 'монгол',
-         'mni': 'Manipuri',
-         'mr': 'मराठी',
-         'ms': 'بهاس ملايو',
-         'mt': 'Malti',
-         'my': 'ဗမာစာ',
-         'na': 'Ekakairũ Naoero',
-         'nb': 'Bokmål',
-         'nd': 'isiNdebele',
-         'nds': 'Plattdüütsch',
-         'ne': 'नेपाली',
-         'ng': 'Owambo',
-         'nl': 'Nederlands',
-         'nn': 'Norsk nynorsk',
-         'no': 'Norsk',
-         'nr': 'isiNdebele',
-         'nso': 'Pedi',
-         'nv': 'Diné bizaad',
-         'ny': 'chiCheŵa',
-         'oc': 'occitan',
-         'oj': 'ᐊᓂᔑᓈᐯᒧᐎᓐ',
-         'om': 'Afaan Oromoo',
-         'or': 'ଓଡ଼ିଆ',
-         'os': 'ирон æвзаг',
-         'pa': 'ਪੰਜਾਬੀ',
-         'pap': 'Papiamentu',
-         'pau': 'a tekoi er a Belau',
-         'pi': 'पाऴि',
-         'pl': 'polski',
-         'ps': 'پښتو',
-         'pt': 'Português',
-         'pt_BR': 'Português do Brasil',
-         'qu': 'Runa Simi',
-         'rm': 'rumantsch grischun',
-         'rn': 'Ikirundi',
-         'ro': 'română',
-         'ru': 'Pусский',
-         'rw': 'Ikinyarwanda',
-         'sa': 'संस्कृतम्',
-         'sat': 'ᱥᱟᱱᱛᱟᱲᱤ',
-         'sc': 'sardu',
-         'sd': 'सिन्धी',
-         'se': 'Davvisámegiella',
-         'sg': 'yângâ tî sängö',
-         'shn': 'Shan',
-         'si': 'සිංහල',
-         'sk': 'slovenčina',
-         'sl': 'slovenščina',
-         'sm': 'gagana faa Samoa',
-         'sn': 'chiShona',
-         'so': 'Soomaaliga',
-         'sq': 'Shqip',
-         'sr': 'Српски',
-         'ss': 'SiSwati',
-         'st': 'Sesotho',
-         'su': 'Basa Sunda',
-         'sv': 'svenska',
-         'sw': 'Kiswahili',
-         'ta': 'தமிழ்',
-         'te': 'తెలుగు',
-         'tet': 'Tetum',
-         'tg': 'тоҷикӣ',
-         'th': 'ไทย',
-         'ti': 'ትግርኛ',
-         'tig': 'Tigre',
-         'tk': 'Türkmen',
-         'tl': 'ᜏᜒᜃᜅ᜔ ᜆᜄᜎᜓᜄ᜔',
-         'tn': 'Setswana',
-         'to': 'faka Tonga',
-         'tr': 'Türkçe',
-         'ts': 'Xitsonga',
-         'tt': 'татар теле',
-         'tw': 'Twi',
-         'ty': 'Reo Tahiti',
-         'ug': 'Uyghur',
-         'uk': 'Українська',
-         'ur': 'اردو',
-         'uz': 'Ўзбек',
-         've': 'Tshivenḓa',
-         'vi': 'Tiếng Việt',
-         'vo': 'Volapük',
-         'wa': 'walon',
-         'wae': 'Walser',
-         'wal': 'Wolaytta',
-         'wo': 'Wollof',
-         'xh': 'isiXhosa',
-         'yi': 'ייִדיש',
-         'yo': 'Yorùbá',
-         'za': 'Saɯ cueŋƅ',
-         'zh': '中文',
-         'zh_CN': '中文',
-         'zh_TW': '中文',
-         'zu': 'isiZulu'}
 
     def __init__(self):
         self._paths = LocaleCleanerPath(location='/')
@@ -395,10 +162,7 @@ class Locales:
 
     def localization_paths(self, locales_to_keep):
         """Returns all localization items matching the previously added xml configuration"""
-        if not locales_to_keep:
-            raise RuntimeError('Found no locales to keep')
-        purgeable_locales = frozenset((locale for locale in Locales.native_locale_names.keys()
-                                       if locale not in locales_to_keep))
+        purgeable_locales = get_purgeable_locales(locales_to_keep)
 
         for (locale, specifier, path) in self._paths.get_localizations('/'):
             specific = locale + (specifier or '')
@@ -407,22 +171,31 @@ class Locales:
                 yield path
 
 
-def __is_broken_xdg_desktop_application(config, desktop_pathname):
-    """Returns boolean whether application desktop entry file is broken"""
+def _is_broken_xdg_desktop_application(config, desktop_pathname):
+    """Returns whether application .desktop file is critically broken
+
+    This function tests only .desktop files with Type=Application.
+    """
     if not config.has_option('Desktop Entry', 'Exec'):
         logger.info(
-            "is_broken_xdg_menu: missing required option 'Exec': '%s'", desktop_pathname)
+            "is_broken_xdg_menu: missing required option 'Exec' in '%s'", desktop_pathname)
         return True
     exe = config.get('Desktop Entry', 'Exec').split(" ")[0]
     if not FileUtilities.exe_exists(exe):
         logger.info(
-            "is_broken_xdg_menu: executable '%s' does not exist '%s'", exe, desktop_pathname)
+            "is_broken_xdg_menu: executable '%s' does not exist in '%s'", exe, desktop_pathname)
         return True
     if 'env' == exe:
         # Wine v1.0 creates .desktop files like this
         # Exec=env WINEPREFIX="/home/z/.wine" wine "C:\\Program
         # Files\\foo\\foo.exe"
-        execs = shlex.split(config.get('Desktop Entry', 'Exec'))
+        exec = config.get('Desktop Entry', 'Exec')
+        try:
+            execs = shlex.split(exec)
+        except ValueError as e:
+            logger.info(
+                "is_broken_xdg_menu: error splitting 'Exec' key '%s' in '%s'", e, desktop_pathname)
+            return True
         wineprefix = None
         del execs[0]
         while True:
@@ -434,16 +207,84 @@ def __is_broken_xdg_desktop_application(config, desktop_pathname):
             del execs[0]
         if not FileUtilities.exe_exists(execs[0]):
             logger.info(
-                "is_broken_xdg_menu: executable '%s' does not exist '%s'", execs[0], desktop_pathname)
+                "is_broken_xdg_menu: executable '%s' does not exist in '%s'", execs[0], desktop_pathname)
             return True
         # check the Windows executable exists
         if wineprefix:
             windows_exe = wine_to_linux_path(wineprefix, execs[1])
             if not os.path.exists(windows_exe):
-                logger.info("is_broken_xdg_menu: Windows executable '%s' does not exist '%s'",
+                logger.info("is_broken_xdg_menu: Windows executable '%s' does not exist in '%s'",
                             windows_exe, desktop_pathname)
                 return True
     return False
+
+
+def find_available_locales():
+    """Returns a list of available locales using locale -a"""
+    rc, stdout, stderr = General.run_external(['locale', '-a'])
+    if rc == 0:
+        return stdout.strip().split('\n')
+    else:
+        logger.warning("Failed to get available locales: %s", stderr)
+        return []
+
+
+def find_best_locale(user_locale):
+    """Find closest match to available locales"""
+    assert isinstance(user_locale, str)
+    if not user_locale:
+        return 'C'
+    if user_locale in ('C', 'C.utf8', 'POSIX'):
+        return user_locale
+    available_locales = find_available_locales()
+
+    # If requesting a language like 'es' and current locale is compatible
+    # like 'es_MX', then return that.
+    import locale
+    current_locale = locale.getlocale()[0]
+    if current_locale and current_locale.startswith(user_locale.split('.')[0]):
+        return '.'.join(locale.getlocale())
+
+    # Check for exact match.
+    if user_locale in available_locales:
+        return user_locale
+
+    # Next, match like 'en' to 'en_US.utf8' (if available) because
+    # of preference for UTF-8.
+    for avail_locale in available_locales:
+        if avail_locale.startswith(user_locale) and avail_locale.endswith('.utf8'):
+            return avail_locale
+
+    # Next, match like 'en' to 'en_US' or 'en_US.iso88591'.
+    for avail_locale in available_locales:
+        if avail_locale.startswith(user_locale):
+            return avail_locale
+
+    return 'C'
+
+
+def get_purgeable_locales(locales_to_keep):
+    """Returns all locales to be purged"""
+    if not locales_to_keep:
+        raise RuntimeError('Found no locales to keep')
+
+    assert isinstance(locales_to_keep, list)
+
+    # Start with all locales as potentially purgeable
+    purgeable_locales = set(native_locale_names.keys())
+
+    # Remove the locales we want to keep
+    for keep in locales_to_keep:
+        purgeable_locales.discard(keep)
+        # If keeping a variant (e.g. 'en_US'), also keep the base locale (e.g. 'en')
+        if '_' in keep:
+            purgeable_locales.discard(keep[:keep.find('_')])
+        # If keeping a base locale (e.g. 'en'), also keep all its variants (e.g. 'en_US')
+        if '_' not in keep:
+            purgeable_locales = {locale for locale in purgeable_locales
+                                 if not locale.startswith(keep + '_')}
+
+    return frozenset(purgeable_locales)
 
 
 def is_unregistered_mime(mimetype):
@@ -460,10 +301,20 @@ def is_unregistered_mime(mimetype):
 
 
 def is_broken_xdg_desktop(pathname):
-    """Returns boolean whether the given XDG desktop entry file is broken.
+    """Returns whether the given XDG .desktop file is critically broken.
     Reference: http://standards.freedesktop.org/desktop-entry-spec/latest/"""
     config = bleachbit.RawConfigParser()
-    config.read(pathname)
+    import configparser
+    try:
+        config.read(pathname)
+    except UnicodeDecodeError:
+        logger.info(
+            "is_broken_xdg_menu: cannot decode file: '%s'", pathname)
+        return True
+    except (configparser.Error) as e:
+        logger.info(
+            "is_broken_xdg_menu: %s: '%s'", e, pathname)
+        return True
     if not config.has_section('Desktop Entry'):
         logger.info(
             "is_broken_xdg_menu: missing required section 'Desktop Entry': '%s'", pathname)
@@ -494,75 +345,120 @@ def is_broken_xdg_desktop(pathname):
     if 'application' != file_type:
         logger.warning("unhandled type '%s': file '%s'", file_type, pathname)
         return False
-    if __is_broken_xdg_desktop_application(config, pathname):
+    if _is_broken_xdg_desktop_application(config, pathname):
         return True
     return False
 
 
-def is_running_darwin(exename):
-    try:
-        ps_out = subprocess.check_output(["ps", "aux", "-c"],
-                                         universal_newlines=True)
-        processess = (re.split(r"\s+", p, 10)[10]
-                      for p in ps_out.split("\n") if p != "")
-        next(processess)  # drop the header
-        return exename in processess
-    except IndexError:
-        raise RuntimeError("Unexpected output from ps")
+def is_process_running_ps_aux(exename, require_same_user):
+    """Check whether exename is running by calling 'ps aux -c'
+
+    exename: name of the executable
+    require_same_user: if True, ignore processes run by other users
+    """
+    if require_same_user:
+        import getpass
+        current_user = getpass.getuser()
+
+    ps_out = subprocess.check_output(["ps", "aux", "-c"],
+                                     universal_newlines=True)
+    first_line = ps_out.split("\n")[0].strip()
+    if "USER" not in first_line or "COMMAND" not in first_line:
+        raise RuntimeError("Unexpected ps header format")
+
+    for line in ps_out.split("\n")[1:]:
+        parts = line.split()
+        if len(parts) < 11:
+            continue
+        process_user = parts[0]
+        process_cmd = parts[10]
+        if process_cmd != exename:
+            continue
+        if not require_same_user or process_user == current_user:
+            return True
+    return False
 
 
-def is_running_linux(exename):
-    """Check whether exename is running"""
+def is_process_running_linux(exename, require_same_user):
+    """Check whether exename is running
+
+    The exename is checked two different ways.
+    """
     for filename in glob.iglob("/proc/*/exe"):
+        does_exe_match = False
         try:
             target = os.path.realpath(filename)
         except TypeError:
             # happens, for example, when link points to
             # '/etc/password\x00 (deleted)'
-            continue
+            pass
         except OSError:
             # 13 = permission denied
+            pass
+        else:
+            # Google Chrome 74 on Ubuntu 19.04 shows up as
+            # /opt/google/chrome/chrome (deleted)
+            found_exename = os.path.basename(target).replace(' (deleted)', '')
+            does_exe_match = exename == found_exename
+
+        if not does_exe_match:
+            with open(os.path.join(os.path.dirname(filename), 'stat'), 'r') as stat_file:
+                proc_name = stat_file.read().split()[1].strip('()')
+                if proc_name == exename:
+                    does_exe_match = True
+                else:
+                    continue
+
+        if not require_same_user:
+            return True
+
+        try:
+            uid = os.stat(os.path.dirname(filename)).st_uid
+        except OSError:
+            # permission denied means not the same user
             continue
-        # Google Chrome shows 74 on Ubuntu 19.04 shows up as
-        # /opt/google/chrome/chrome (deleted)
-        found_exename = os.path.basename(target).replace(' (deleted)', '')
-        if exename == found_exename:
+        if uid == os.getuid():
             return True
     return False
 
 
-def is_running(exename):
-    """Check whether exename is running"""
+def is_process_running(exename, require_same_user):
+    """Check whether exename is running
+
+    exename: name of the executable
+    require_same_user: if True, ignore processes run by other users
+
+    """
     if sys.platform.startswith('linux'):
-        return is_running_linux(exename)
+        return is_process_running_linux(exename, require_same_user)
     elif ('darwin' == sys.platform or
           sys.platform.startswith('openbsd') or
           sys.platform.startswith('freebsd')):
-        return is_running_darwin(exename)
+        return is_process_running_ps_aux(exename, require_same_user)
     else:
-        raise RuntimeError('unsupported platform for physical_free()')
+        raise RuntimeError('unsupported platform for is_process_running()')
 
 
 def rotated_logs():
-    """Yield a list of rotated (i.e., old) logs in /var/log/"""
-    # Ubuntu 9.04
-    # /var/log/dmesg.0
-    # /var/log/dmesg.1.gz
-    # Fedora 10
-    # /var/log/messages-20090118
-    globpaths = ('/var/log/*.[0-9]',
-                 '/var/log/*/*.[0-9]',
-                 '/var/log/*.gz',
-                 '/var/log/*/*gz',
-                 '/var/log/*/*.old',
-                 '/var/log/*.old')
-    for globpath in globpaths:
-        yield from glob.iglob(globpath)
-    regex = '-[0-9]{8}$'
-    globpaths = ('/var/log/*-*', '/var/log/*/*-*')
-    for path in FileUtilities.globex(globpaths, regex):
-        whitelist_re = '^/var/log/(removed_)?(packages|scripts)'
-        if re.match(whitelist_re, path) is None:  # for Slackware, Launchpad #367575
+    """Yield a list of rotated (i.e., old) logs in /var/log/
+
+    See:
+    https://bugs.launchpad.net/bleachbit/+bug/367575
+    https://github.com/bleachbit/bleachbit/issues/1744
+    """
+    whitelists = [re.compile(r'/var/log/(removed_)?(packages|scripts)'),
+                  re.compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')]
+    positive_re = re.compile(r'(\.(\d+|bz2|gz|xz|old)|\-\d{8}?)')
+
+    for path in bleachbit.FileUtilities.children_in_directory('/var/log'):
+        whitelist_match = False
+        for whitelist in whitelists:
+            if whitelist.search(path) or bleachbit.FileUtilities.whitelisted(path):
+                whitelist_match = True
+                break
+        if whitelist_match:
+            continue
+        if positive_re.search(path):
             yield path
 
 
@@ -649,7 +545,7 @@ def apt_clean():
 def get_apt_size():
     """Return the size of the apt cache (in bytes)"""
     (rc, stdout, stderr) = General.run_external(['apt-get', '-s', 'clean'])
-    paths = re.findall('/[/a-z\.\*]+', stdout)
+    paths = re.findall(r'/[/a-z\.\*]+', stdout)
     return get_globs_size(paths)
 
 
@@ -717,13 +613,63 @@ def dnf_autoremove():
     if rc > 0:
         raise RuntimeError('dnf raised error %s: %s' % (rc, stderr))
 
-    cregex = re.compile("Freed space: ([\d.]+[\s]+[BkMG])")
+    cregex = re.compile(r"Freed space: ([\d.]+[\s]+[BkMG])")
     match = cregex.search(allout)
     if match:
         freed_bytes = parseSize(match.group(1))
     logger.debug(
         'dnf_autoremove >> total freed bytes: %s', freed_bytes)
     return freed_bytes
+
+
+def is_unix_display_protocol_wayland():
+    assert os.name == 'posix'
+    if 'XDG_SESSION_TYPE' in os.environ:
+        if os.environ['XDG_SESSION_TYPE'] == 'wayland':
+            return True
+        # If not wayland, then x11, mir, etc.
+        return False
+    if 'WAYLAND_DISPLAY' in os.environ:
+        return True
+    # Wayland (Ubuntu 23.10) sets DISPLAY=:0 like x11, so do not check DISPLAY.
+    try:
+        (rc, stdout, stderr) = General.run_external(['loginctl'])
+    except FileNotFoundError:
+        return False
+    if not rc == 0:
+        logger.warning('logintctl returned rc %s', rc)
+        return False
+    try:
+        session = stdout.split('\n')[1].strip().split(' ')[0]
+    except (IndexError, ValueError):
+        logger.warning('unexpected output from loginctl: %s', stdout)
+        return False
+    if not session.isdigit():
+        logger.warning('unexpected session loginctl: %s', session)
+        return False
+    result = General.run_external(
+        ['loginctl', 'show-session', session, '-p', 'Type'])
+    return 'wayland' in result[1].lower()
+
+
+def root_is_not_allowed_to_X_session():
+    assert os.name == 'posix'
+    result = General.run_external(['xhost'], clean_env=False)
+    xhost_returned_error = result[0] == 1
+    return xhost_returned_error
+
+
+def is_display_protocol_wayland_and_root_not_allowed():
+    try:
+        is_wayland = bleachbit.Unix.is_unix_display_protocol_wayland()
+    except Exception as e:
+        logger.exception(e)
+        return False
+    return (
+        is_wayland and
+        os.environ['USER'] == 'root' and
+        bleachbit.Unix.root_is_not_allowed_to_X_session()
+    )
 
 
 locales = Locales()

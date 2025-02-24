@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -27,6 +27,7 @@ from bleachbit import FileUtilities
 
 import logging
 import os.path
+from urllib.parse import urlparse, urlunparse
 
 logger = logging.getLogger(__name__)
 
@@ -38,23 +39,6 @@ def __get_chrome_history(path, fn='History'):
         path_history, 'select value from meta where key="version"')[0]
     assert ver > 1
     return ver
-
-
-def __shred_sqlite_char_columns(table, cols=None, where=""):
-    """Create an SQL command to shred character columns"""
-    cmd = ""
-    if not where:
-        # If None, set to empty string.
-        where = ""
-    if cols and options.get('shred'):
-        cmd += "update or ignore %s set %s %s;" % \
-            (table, ",".join(["%s = randomblob(length(%s))" % (col, col)
-                              for col in cols]), where)
-        cmd += "update or ignore %s set %s %s;" % \
-            (table, ",".join(["%s = zeroblob(length(%s))" % (col, col)
-                              for col in cols]), where)
-    cmd += "delete from %s %s;" % (table, where)
-    return cmd
 
 
 def __sqlite_table_exists(pathname, table):
@@ -73,36 +57,79 @@ def __sqlite_table_exists(pathname, table):
     return ret
 
 
+def __shred_sqlite_char_columns(table, cols=None, where="", path=None):
+    """Create an SQL command to shred character columns"""
+    if path and not __sqlite_table_exists(path, table):
+        return ""
+    cmd = ""
+    if not where:
+        # If None, set to empty string.
+        where = ""
+    if cols and options.get('shred'):
+        cmd += "update or ignore %s set %s %s;" % \
+            (table, ",".join(["%s = randomblob(length(%s))" % (col, col)
+                              for col in cols]), where)
+        cmd += "update or ignore %s set %s %s;" % \
+            (table, ",".join(["%s = zeroblob(length(%s))" % (col, col)
+                              for col in cols]), where)
+    cmd += "delete from %s %s;" % (table, where)
+    return cmd
+
+
 def get_sqlite_int(path, sql, parameters=None):
+    """Run SQL on database in 'path' and return the integers"""
+    row_factory = lambda cursor, row: int(row[0])
+    return _get_sqlite_values(path, sql, row_factory, parameters)
+
+
+def _get_sqlite_values(path, sql, row_factory=None, parameters=None):
     """Run SQL on database in 'path' and return the integers"""
     import sqlite3
     conn = sqlite3.connect(path)
+
+    if row_factory is not None:
+        conn.row_factory = row_factory
+
     cursor = conn.cursor()
     if parameters:
         cursor.execute(sql, parameters)
     else:
         cursor.execute(sql)
-    ids = [int(row[0]) for row in cursor]
+
+    values = cursor.fetchall()
     cursor.close()
     conn.close()
-    return ids
+
+    return values
 
 
 def delete_chrome_autofill(path):
     """Delete autofill table in Chromium/Google Chrome 'Web Data' database"""
     cols = ('name', 'value', 'value_lower')
-    cmds = __shred_sqlite_char_columns('autofill', cols)
+    cmds = __shred_sqlite_char_columns('autofill', cols, path=path)
+
+    # autofill_profile_* existed for years until Google Chrome stable released August 2023
     cols = ('first_name', 'middle_name', 'last_name', 'full_name')
-    cmds += __shred_sqlite_char_columns('autofill_profile_names', cols)
-    cmds += __shred_sqlite_char_columns('autofill_profile_emails', ('email',))
-    cmds += __shred_sqlite_char_columns('autofill_profile_phones', ('number',))
+    cmds += __shred_sqlite_char_columns('autofill_profile_names', cols, path=path)
+    cmds += __shred_sqlite_char_columns('autofill_profile_emails', ('email',), path=path)
+    cmds += __shred_sqlite_char_columns('autofill_profile_phones', ('number',), path=path)
     cols = ('company_name', 'street_address', 'dependent_locality',
             'city', 'state', 'zipcode', 'country_code')
-    cmds += __shred_sqlite_char_columns('autofill_profiles', cols)
+    cmds += __shred_sqlite_char_columns('autofill_profiles', cols, path=path)
+
+    # local_addresses* appeared in Google Chrome stable versions released August 2023
+    cols = ('guid', 'use_count', 'use_date', 'date_modified',
+            'language_code', 'label', 'initial_creator_id', 'last_modifier_id')
+    cmds += __shred_sqlite_char_columns('local_addresses', cols, path=path)
+
+    cols = ('guid', 'type', 'value', 'verification_status')
+    cmds += __shred_sqlite_char_columns(
+        'local_addresses_type_tokens', cols, path=path)
+
     cols = (
         'company_name', 'street_address', 'address_1', 'address_2', 'address_3', 'address_4',
         'postal_code', 'country_code', 'language_code', 'recipient_name', 'phone_number')
-    cmds += __shred_sqlite_char_columns('server_addresses', cols)
+    cmds += __shred_sqlite_char_columns('server_addresses', cols, path=path)
     FileUtilities.execute_sqlite3(path, cmds)
 
 
@@ -110,7 +137,7 @@ def delete_chrome_databases_db(path):
     """Delete remote HTML5 cookies (avoiding extension data) from the Databases.db file"""
     cols = ('origin', 'name', 'description')
     where = "where origin not like 'chrome-%'"
-    cmds = __shred_sqlite_char_columns('Databases', cols, where)
+    cmds = __shred_sqlite_char_columns('Databases', cols, where, path)
     FileUtilities.execute_sqlite3(path, cmds)
 
 
@@ -144,12 +171,13 @@ def delete_chrome_favicons(path):
         if os.path.exists(path_history):
             cmds += "attach database \"%s\" as History;" % path_history
             where = "where page_url not in (select distinct url from History.urls)"
-        cmds += __shred_sqlite_char_columns('icon_mapping', cols, where)
+        cmds += __shred_sqlite_char_columns('icon_mapping', cols, where, path)
 
         # favicon images
         cols = ('image_data', )
         where = "where icon_id not in (select distinct icon_id from icon_mapping)"
-        cmds += __shred_sqlite_char_columns('favicon_bitmaps', cols, where)
+        cmds += __shred_sqlite_char_columns('favicon_bitmaps',
+                                            cols, where, path)
 
         # favicons
         # Google Chrome 30 (database version 28): image_data moved to table
@@ -159,7 +187,7 @@ def delete_chrome_favicons(path):
         else:
             cols = ('url', )
         where = "where id not in (select distinct icon_id from icon_mapping)"
-        cmds += __shred_sqlite_char_columns('favicons', cols, where)
+        cmds += __shred_sqlite_char_columns('favicons', cols, where, path)
     elif 3 == ver:
         # Version 3 includes Google Chrome 11
 
@@ -168,7 +196,7 @@ def delete_chrome_favicons(path):
         if os.path.exists(path_history):
             cmds += "attach database \"%s\" as History;" % path_history
             where = "where id not in(select distinct favicon_id from History.urls)"
-        cmds += __shred_sqlite_char_columns('favicons', cols, where)
+        cmds += __shred_sqlite_char_columns('favicons', cols, where, path)
     else:
         raise RuntimeError('%s is version %d' % (path, ver))
 
@@ -187,11 +215,12 @@ def delete_chrome_history(path):
     if ids_int:
         ids_str = ",".join([str(id0) for id0 in ids_int])
         where = "where id not in (%s) " % ids_str
-    cmds = __shred_sqlite_char_columns('urls', cols, where)
-    cmds += __shred_sqlite_char_columns('visits')
+    cmds = __shred_sqlite_char_columns('urls', cols, where, path)
+    cmds += __shred_sqlite_char_columns('visits', path=path)
     # Google Chrome 79 no longer has lower_term in keyword_search_terms
     cols = ('term',)
-    cmds += __shred_sqlite_char_columns('keyword_search_terms', cols)
+    cmds += __shred_sqlite_char_columns('keyword_search_terms',
+                                        cols, path=path)
     ver = __get_chrome_history(path)
     if ver >= 20:
         # downloads, segments, segment_usage first seen in Chrome 14,
@@ -200,14 +229,14 @@ def delete_chrome_history(path):
         # does have current_path and target_path
         if ver >= 28:
             cmds += __shred_sqlite_char_columns(
-                'downloads', ('current_path', 'target_path'))
+                'downloads', ('current_path', 'target_path'), path=path)
             cmds += __shred_sqlite_char_columns(
-                'downloads_url_chains', ('url', ))
+                'downloads_url_chains', ('url', ), path=path)
         else:
             cmds += __shred_sqlite_char_columns(
-                'downloads', ('full_path', 'url'))
-        cmds += __shred_sqlite_char_columns('segments', ('name',))
-        cmds += __shred_sqlite_char_columns('segment_usage')
+                'downloads', ('full_path', 'url'), path=path)
+        cmds += __shred_sqlite_char_columns('segments', ('name',), path=path)
+        cmds += __shred_sqlite_char_columns('segment_usage', path=path)
     FileUtilities.execute_sqlite3(path, cmds)
 
 
@@ -216,13 +245,14 @@ def delete_chrome_keywords(path):
     cols = ('short_name', 'keyword', 'favicon_url',
             'originating_url', 'suggest_url')
     where = "where not date_created = 0"
-    cmds = __shred_sqlite_char_columns('keywords', cols, where)
+    cmds = __shred_sqlite_char_columns('keywords', cols, where, path)
     cmds += "update keywords set usage_count = 0;"
     ver = __get_chrome_history(path, 'Web Data')
     if 43 <= ver < 49:
         # keywords_backup table first seen in Google Chrome 17 / Chromium 17 which is Web Data version 43
         # In Google Chrome 25, the table is gone.
-        cmds += __shred_sqlite_char_columns('keywords_backup', cols, where)
+        cmds += __shred_sqlite_char_columns('keywords_backup',
+                                            cols, where, path)
         cmds += "update keywords_backup set usage_count = 0;"
 
     FileUtilities.execute_sqlite3(path, cmds)
@@ -251,42 +281,47 @@ def delete_mozilla_url_history(path):
 
     cmds = ""
 
-    # delete the URLs in moz_places
-    places_suffix = "where id in (select " \
-        "moz_places.id from moz_places " \
-        "left join moz_bookmarks on moz_bookmarks.fk = moz_places.id " \
-        "where moz_bookmarks.id is null); "
+    have_places = __sqlite_table_exists(path, 'moz_places')
 
-    cols = ('url', 'rev_host', 'title')
-    cmds += __shred_sqlite_char_columns('moz_places', cols, places_suffix)
+    if have_places:
+        # delete the URLs in moz_places
+        places_suffix = "where id in (select " \
+            "moz_places.id from moz_places " \
+            "left join moz_bookmarks on moz_bookmarks.fk = moz_places.id " \
+            "where moz_bookmarks.id is null); "
 
-    # For any bookmarks that remain in moz_places, reset the non-character values.
-    cmds += "update moz_places set visit_count=0, frecency=-1, last_visit_date=null;"
+        cols = ('url', 'rev_host', 'title')
+        cmds += __shred_sqlite_char_columns('moz_places',
+                                            cols, places_suffix, path)
 
-    # delete any orphaned annotations in moz_annos
-    annos_suffix = "where id in (select moz_annos.id " \
-        "from moz_annos " \
-        "left join moz_places " \
-        "on moz_annos.place_id = moz_places.id " \
-        "where moz_places.id is null); "
+        # For any bookmarks that remain in moz_places, reset the non-character values.
+        cmds += "update moz_places set visit_count=0, frecency=-1, last_visit_date=null;"
 
-    cmds += __shred_sqlite_char_columns(
-        'moz_annos', ('content', ), annos_suffix)
+        # delete any orphaned annotations in moz_annos
+        annos_suffix = "where id in (select moz_annos.id " \
+            "from moz_annos " \
+            "left join moz_places " \
+            "on moz_annos.place_id = moz_places.id " \
+            "where moz_places.id is null); "
+
+        cmds += __shred_sqlite_char_columns(
+            'moz_annos', ('content', ), annos_suffix, path)
 
     # Delete any orphaned favicons.
     # Firefox 78 no longer has a table named moz_favicons, and it no longer has
     # a column favicon_id in the table moz_places. (This change probably happened before version 78.)
-    if __sqlite_table_exists(path, 'moz_favicons'):
+    if have_places and __sqlite_table_exists(path, 'moz_favicons'):
         fav_suffix = "where id not in (select favicon_id " \
             "from moz_places where favicon_id is not null ); "
         cols = ('url', 'data')
-        cmds += __shred_sqlite_char_columns('moz_favicons', cols, fav_suffix)
+        cmds += __shred_sqlite_char_columns('moz_favicons',
+                                            cols, fav_suffix, path)
 
     # Delete orphaned origins.
-    if __sqlite_table_exists(path, 'moz_origins'):
+    if have_places and __sqlite_table_exists(path, 'moz_origins'):
         origins_where = 'where id not in (select distinct origin_id from moz_places)'
         cmds += __shred_sqlite_char_columns('moz_origins',
-                                            ('host',), origins_where)
+                                            ('host',), origins_where, path)
         # For any remaining origins, reset the statistic.
         cmds += "update moz_origins set frecency=-1;"
 
@@ -297,16 +332,18 @@ def delete_mozilla_url_history(path):
     cmds += "delete from moz_historyvisits;"
 
     # delete any orphaned input history
-    input_suffix = "where place_id not in (select distinct id from moz_places)"
-    cols = ('input',)
-    cmds += __shred_sqlite_char_columns('moz_inputhistory', cols, input_suffix)
+    if have_places:
+        input_suffix = "where place_id not in (select distinct id from moz_places)"
+        cols = ('input',)
+        cmds += __shred_sqlite_char_columns('moz_inputhistory',
+                                            cols, input_suffix, path)
 
     # delete the whole moz_hosts table
     # Reference: https://bugzilla.mozilla.org/show_bug.cgi?id=932036
     # Reference:
     # https://support.mozilla.org/en-US/questions/937290#answer-400987
     if __sqlite_table_exists(path, 'moz_hosts'):
-        cmds += __shred_sqlite_char_columns('moz_hosts', ('host',))
+        cmds += __shred_sqlite_char_columns('moz_hosts', ('host',), path=path)
         cmds += "delete from moz_hosts;"
 
     # execute the commands
@@ -316,26 +353,66 @@ def delete_mozilla_url_history(path):
 def delete_mozilla_favicons(path):
     """Delete favorites icon in Mozilla places.favicons only if they are not bookmarks (Firefox 3 and family)"""
 
+    def remove_path_from_url(url):
+        url = urlparse(url.lstrip('fake-favicon-uri:'))
+        return urlunparse((url.scheme, url.netloc, '', '', '', ''))
+
     cmds = ""
 
     places_path = os.path.join(os.path.dirname(path), 'places.sqlite')
-    cmds += "attach database \"%s\" as places;" % places_path
+    cmds += 'attach database "{}" as places;'.format(places_path)
 
-    # delete all not bookmarked icon urls
-    urls_where = (
-        "where page_url not in (select url from places.moz_places where id in "
-        "(select distinct fk from places.moz_bookmarks where fk is not null))"
-    )
-    cmds += __shred_sqlite_char_columns('moz_pages_w_icons', ('page_url',), urls_where)
+    bookmarked_urls_query = ("select url from {db}moz_places where id in "
+        "(select distinct fk from {db}moz_bookmarks where fk is not null){filter}")
+
+    # delete all not bookmarked pages with icons
+    urls_where = "where page_url not in ({})".format(
+        bookmarked_urls_query.format(db='places.', filter=''))
+    cmds += __shred_sqlite_char_columns('moz_pages_w_icons',
+                                        ('page_url',), urls_where, path)
 
     # delete all not bookmarked icons to pages mapping
     mapping_where = "where page_id not in (select id from moz_pages_w_icons)"
-    cmds += __shred_sqlite_char_columns('moz_icons_to_pages', where=mapping_where)
+    cmds += __shred_sqlite_char_columns('moz_icons_to_pages',
+                                        where=mapping_where, path=path)
+
+    # this intermediate cleaning is needed for the next query to favicons db which collects
+    # icon ids that don't have a bookmark or have domain level bookmark
+    FileUtilities.execute_sqlite3(path, cmds)
+
+    # collect favicons that are not bookmarked with their full url which collects also domain level bookmarks
+    id_and_url_pairs = _get_sqlite_values(path,
+                                         "select id, icon_url from moz_icons where "
+                                         "(id not in (select icon_id from moz_icons_to_pages))")
+
+    # We query twice the bookmarked urls and this is a kind of duplication. This is because the first usage of
+    # bookmarks is for refining further queries to favicons db and if we first extract the bookmarks as a Python list
+    # and give them to the query we could cause an error in execute_sqlite3 since it splits the cmds string by ';' and
+    # bookmarked url could contain a ';'. Also if we have a Python list with urls we need to pay attention to escaping
+    # JavaScript strings in some bookmarks and probably other things. So the safer way for now is to not compose a query
+    # with Python list of extracted urls.
+
+    row_factory = lambda cursor, row: row[0]
+    # with the row_factory bookmarked_urls is a list of urls, instead of list of tuples with first element a url
+    bookmarked_urls = _get_sqlite_values(places_path,
+                                        bookmarked_urls_query.format(db='', filter=" and url NOT LIKE 'javascript:%'"),
+                                        row_factory)
+
+    bookmarked_urls_domains = list(map(remove_path_from_url, bookmarked_urls))
+    ids_to_delete = [id for id, url in id_and_url_pairs
+                     if (
+                            # collect only favicons with not bookmarked urls with same domain or
+                            # their domain is a part of a bookmarked url but the favicons are not domain level
+                            # in other words collect all that are not bookmarked 
+                            remove_path_from_url(url) not in bookmarked_urls_domains or
+                            urlparse(url).path.count('/') > 1
+                     )
+                     ]
 
     # delete all not bookmarked icons
-    icons_where = "where (id not in (select icon_id from moz_icons_to_pages))"
+    icons_where = "where (id in ({}))".format(str(ids_to_delete).replace('[', '').replace(']', ''))
     cols = ('icon_url', 'data')
-    cmds += __shred_sqlite_char_columns('moz_icons', cols, where=icons_where)
+    cmds += __shred_sqlite_char_columns('moz_icons', cols, icons_where, path)
 
     FileUtilities.execute_sqlite3(path, cmds)
 

@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,8 @@ Actions that perform cleaning
 """
 
 from bleachbit import Command, FileUtilities, General, Special, DeepScan
-from bleachbit import _, fs_scan_re_flags
+from bleachbit import fs_scan_re_flags
+from bleachbit.Language import get_text as _
 
 import glob
 import logging
@@ -39,7 +40,7 @@ logger = logging.getLogger(__name__)
 
 def has_glob(s):
     """Checks whether the string contains any glob characters"""
-    return re.search('[?*\[\]]', s) is not None
+    return re.search(r'[?*\[\]]', s) is not None
 
 
 def expand_multi_var(s, variables):
@@ -76,9 +77,8 @@ def expand_multi_var(s, variables):
         ret.append(ms)
     if ret:
         return ret
-    else:
-        # The string has $$, but it did not match anything
-        return (s,)
+    # The string has $$, but it did not match anything
+    return (s,)
 
 #
 # Plugin framework
@@ -103,7 +103,6 @@ class ActionProvider(metaclass=PluginMount):
 
     def __init__(self, action_node, path_vars=None):
         """Create ActionProvider from CleanerML <action>"""
-        pass
 
     def get_deep_scan(self):
         """Return a dictionary used to construct a deep scan"""
@@ -111,7 +110,6 @@ class ActionProvider(metaclass=PluginMount):
 
     def get_commands(self):
         """Yield each command (which can be previewed or executed)"""
-        pass
 
 
 #
@@ -145,7 +143,7 @@ class FileActionProvider(ActionProvider):
                 command=action_element.getAttribute('command'),
                 regex=self.regex, nregex=self.nregex,
                 wholeregex=self.wholeregex, nwholeregex=self.nwholeregex))
-            if not len(self.paths) == 1:
+            if len(self.paths) != 1:
                 logger.warning(
                     # TRANSLATORS: Multi-value variables are explained in the online documentation.
                     # Basically, they are like an environment variable, but each multi-value variable
@@ -269,18 +267,19 @@ class FileActionProvider(ActionProvider):
 
         if 'deep' == self.search:
             return
-        elif 'file' == self.search:
-            func = get_file
-        elif 'glob' == self.search:
-            func = glob.iglob
-        elif 'walk.all' == self.search:
-            func = get_walk_all
-        elif 'walk.files' == self.search:
-            func = get_walk_files
-        elif 'walk.top' == self.search:
-            func = get_top
-        else:
-            raise RuntimeError("invalid search='%s'" % self.search)
+
+        search_functions = {
+            'file': get_file,
+            'glob': glob.iglob,
+            'walk.all': get_walk_all,
+            'walk.files': get_walk_files,
+            'walk.top': get_top
+        }
+
+        if self.search not in search_functions:
+            raise RuntimeError("Invalid search='%s'" % self.search)
+
+        func = search_functions[self.search]
 
         cache = self.__class__.cache
         for input_path in self.paths:
@@ -298,11 +297,10 @@ class FileActionProvider(ActionProvider):
                 for x in cache[2]:
                     yield x
                 return
-            else:
-                # if self.search in self.CACHEABLE_SEARCHERS:
-                #    logger.debug('not using cache because it has (%s,%s) and we want (%s,%s)',
-                #                 cache[0], cache[1], self.search, input_path)
-                self.__class__.cache = ('cleared by', input_path, tuple())
+            # if self.search in self.CACHEABLE_SEARCHERS:
+            #    logger.debug('not using cache because it has (%s,%s) and we want (%s,%s)',
+            #                 cache[0], cache[1], self.search, input_path)
+            self.__class__.cache = ('cleared by', input_path, tuple())
 
             # build new cache
             #logger.debug('%s walking %s', id(self), input_path)
@@ -556,11 +554,10 @@ class Process(ActionProvider):
                     Popen(self.cmd)
             except Exception as e:
                 raise RuntimeError(
-                    'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e)))
-            else:
-                if not 0 == rc:
-                    msg = 'Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n'
-                    logger.warning(msg, self.cmd, rc, stdout, stderr)
+                    'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e))) from e
+            if 0 != rc:
+                msg = 'Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n'
+                logger.warning(msg, self.cmd, rc, stdout, stderr)
             return 0
         yield Command.Function(path=None, func=run_process, label=_("Run external command: %s") % self.cmd)
 

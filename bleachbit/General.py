@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -77,6 +77,21 @@ def chownself(path):
         os.chown(path, uid, -1)
     except:
         logger.exception('Error in chown() under chownself()')
+
+
+def gc_collect():
+    """Collect garbage
+
+    On Windows after updating from Python 3.11 to Python 3.12 calling
+        os.unlink() would fail on a file processed by SQLite3.
+    PermissionError: [WinError 32] The process cannot access the file because it is being used
+    by another process: '[...].sqlite'
+    """
+    if not os.name == 'nt':
+        return
+
+    import gc
+    gc.collect()
 
 
 def getrealuid():

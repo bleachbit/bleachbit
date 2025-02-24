@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ Test case for module Update
 from tests import common
 import bleachbit
 from bleachbit import logger
-from bleachbit.Update import check_updates, update_winapp2, user_agent
+from bleachbit.Update import check_updates, update_winapp2
 import bleachbit.Update
 
 import os
@@ -86,10 +86,11 @@ class UpdateTestCase(common.BleachbitTestCase):
         """Unit test for class UpdateCheck with bad network address"""
         # expect connection failure
         preserve_url = bleachbit.update_check_url
-        bleachbit.update_check_url = "http://localhost/doesnotexist"
-        self.assertEqual(
-            check_updates(True, False, None, None),
-            ())
+        for url in ('http://localhost/doesnotexist', 'https://httpstat.us/500'):
+            bleachbit.update_check_url = url
+            self.assertEqual(
+                check_updates(True, False, None, None),
+                ())
         bleachbit.update_check_url = preserve_url
 
     def test_update_url(self):
@@ -136,11 +137,6 @@ class UpdateTestCase(common.BleachbitTestCase):
         update_winapp2(url, None, print, on_success)
         update_winapp2(url, None, print, expect_failure)
 
-    def test_user_agent(self):
-        """Unit test for method user_agent()"""
-        agent = user_agent()
-        logger.debug("user agent = '%s'", agent)
-        self.assertIsString(agent)
 
     def test_environment(self):
         """Check the sanity of the environment"""

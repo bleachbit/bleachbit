@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2021 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -22,23 +22,29 @@
 <cleaner id="google_chrome">
   <label>Google Chrome</label>
   <description>Web browser</description>
-  <running type="exe" os="windows">chrome.exe</running>
-  <running type="exe" os="linux">chrome</running>
+  <running type="exe" os="windows" same_user="true">chrome.exe</running>
+  <running type="exe" os="linux" same_user="true">chrome</running>
   <var name="base">
     <value os="windows">%LocalAppData%\Google\Chrome\User Data</value>
     <value os="linux">$XDG_CONFIG_HOME/google-chrome</value>
+    <value os="linux">~/.var/app/com.google.Chrome/config/google-chrome/</value> <!-- Flatpak -->
+    <value os="linux">~/.var/app/com.google.ChromeDev/config/google-chrome/</value> <!-- Flatpak -->
   </var>
   <var name="profile">
     <value os="windows">%LocalAppData%\Google\Chrome\User Data\Default</value>
     <value os="linux">$XDG_CONFIG_HOME/google-chrome/Default</value>
     <value os="linux">$XDG_CONFIG_HOME/google-chrome-beta/Default</value>
     <value os="linux">$XDG_CONFIG_HOME/google-chrome-unstable/Default</value>
+    <value os="linux">~/.var/app/com.google.Chrome/config/google-chrome/Default</value> <!-- Flatpak -->
+    <value os="linux">~/.var/app/com.google.ChromeDev/config/google-chrome/Default</value> <!-- Flatpak -->
   </var>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action command="delete" search="file" path="$$base$$/Safe Browsing Channel IDs-journal"/>
+    <!-- Google Chrome 126 on Linux stores Network Persistent State directly under $$profile$$ while Chrome 126 on Windows stores it under $$profile$$/Network -->
     <action command="delete" search="file" path="$$profile$$/Network Persistent State"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
     <action command="delete" search="walk.all" path="$$profile$$/File System"/>
     <action command="delete" search="walk.all" path="$$profile$$/Pepper Data/Shockwave Flash/CacheWritableAdobeRoot/"/>
@@ -54,6 +60,8 @@
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome/"/>
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome-beta/"/>
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/google-chrome-unstable/"/>
+    <action command="delete" search="walk.files" path="~/.var/app/com.google.Chrome/cache/"/> <!-- Flatpak -->
+    <action command="delete" search="walk.files" path="~/.var/app/com.google.ChromeDev/cache/"/> <!-- Flatpak -->
     <!-- Windows-specific -->
     <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
     <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
@@ -69,6 +77,8 @@
     <action command="delete" search="file" path="$$profile$$/Cookies-journal"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Cookies"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
     <action command="delete" search="walk.all" path="$$profile$$/IndexedDB/"/>
     <action command="delete" search="walk.all" path="$$profile$$/Pepper Data/Shockwave Flash/WritableRoot/"/>
   </option>
@@ -120,6 +130,7 @@
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
     <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="savefile"/>
+
     <!-- Windows-specific -->
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsMostVisited\"/>
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsOld\"/>
@@ -139,6 +150,7 @@
     <action command="delete" search="file" path="$$profile$$/Last Session"/>
     <action command="delete" search="file" path="$$profile$$/Last Tabs"/>
     <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Sessions"/>
   </option>
   <option id="sync">
     <label>Sync</label>

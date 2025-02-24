@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,8 +23,10 @@ Command line interface
 """
 
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
-from bleachbit import _, APP_VERSION
+from bleachbit import APP_VERSION
 from bleachbit import SystemInformation, Options, Worker
+from bleachbit.Language import get_text as _
+from bleachbit.Log import set_root_log_level
 
 import logging
 import optparse
@@ -40,26 +42,22 @@ class CliCallback:
     def __init__(self, quiet=False):
         self.quiet = quiet
 
-    def append_text(self, msg, tag=None):
+    def append_text(self, msg, _tag=None):
         """Write text to the terminal"""
         if not self.quiet:
             print(msg.strip('\n'))
 
     def update_progress_bar(self, status):
         """Not used"""
-        pass
 
     def update_total_size(self, size):
         """Not used"""
-        pass
 
     def update_item_size(self, op, opid, size):
         """Not used"""
-        pass
 
     def worker_done(self, worker, really_delete):
         """Not used"""
-        pass
 
 
 def cleaners_list():
@@ -74,7 +72,7 @@ def cleaners_list():
 def list_cleaners():
     """Display available cleaners"""
     for cleaner in cleaners_list():
-        print (cleaner)
+        print(cleaner)
 
 
 def preview_or_clean(operations, really_clean, quiet=False):
@@ -93,7 +91,7 @@ def args_to_operations_list(preset, all_but_warning):
     args = []
     if not backends:
         list(register_cleaners())
-    assert(len(backends) > 1)
+    assert len(backends) > 1
     for key in sorted(backends):
         c_id = backends[key].get_id()
         for (o_id, _o_name) in backends[key].get_options():
@@ -138,6 +136,7 @@ def args_to_operations(args, preset, all_but_warning):
 
 def process_cmd_line():
     """Parse the command line and execute given commands."""
+
     # TRANSLATORS: This is the command line usage.  Don't translate
     # %prog, but do translate options, cleaner, and option.
     # Don't translate and add "usage:" - it gets added by Python.
@@ -147,51 +146,56 @@ def process_cmd_line():
     parser = optparse.OptionParser(usage)
     parser.add_option("-l", "--list-cleaners", action="store_true",
                       help=_("list cleaners"))
+    parser.add_option("-p", "--preview", action="store_true",
+                      help=_("preview files to be deleted and other changes"))
     parser.add_option("-c", "--clean", action="store_true",
                       # TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
                       # This is different than cleaning an arbitrary file, such as a
                       # spreadsheet on the desktop.
                       help=_("run cleaners to delete files and make other permanent changes"))
+    parser.add_option("-s", "--shred", action="store_true",
+                      help=_("shred specific files or folders"))
+    parser.add_option("-w", "--wipe-free-space", action="store_true",
+                      help=_("wipe free space in the given paths"))
+    parser.add_option('-o', '--overwrite', action='store_true',
+                      help=_('overwrite files to hide contents'))
+    parser.add_option("--gui", action="store_true",
+                      help=_("launch the graphical interface"))
+    parser.add_option("--preset", action="store_true",
+                      help=_("use options set in the graphical interface"))
+    parser.add_option("--all-but-warning", action="store_true",
+                      help=_("enable all options that do not have a warning"))
     parser.add_option(
         '--debug', help=_("set log level to verbose"), action="store_true")
     parser.add_option('--debug-log', help=_("log debug messages to file"))
-    parser.add_option("-s", "--shred", action="store_true",
-                      help=_("shred specific files or folders"))
     parser.add_option("--sysinfo", action="store_true",
                       help=_("show system information"))
-    parser.add_option("--gui", action="store_true",
-                      help=_("launch the graphical interface"))
-    parser.add_option('--exit', action='store_true',
-                      help=optparse.SUPPRESS_HELP)
+    parser.add_option("-v", "--version", action="store_true",
+                      help=_("output version information and exit"))
 
     if 'nt' == os.name:
         uac_help = _("do not prompt for administrator privileges")
     else:
         uac_help = optparse.SUPPRESS_HELP
     parser.add_option("--no-uac", action="store_true", help=uac_help)
-    parser.add_option("-p", "--preview", action="store_true",
-                      help=_("preview files to be deleted and other changes"))
     parser.add_option('--pot', action='store_true',
                       help=optparse.SUPPRESS_HELP)
-    parser.add_option("--preset", action="store_true",
-                      help=_("use options set in the graphical interface"))
-    parser.add_option("--all-but-warning", action="store_true",
-                      help=_("enable all options that do not have a warning"))
     if 'nt' == os.name:
         parser.add_option("--update-winapp2", action="store_true",
                           help=_("update winapp2.ini, if a new version is available"))
-    parser.add_option("-w", "--wipe-free-space", action="store_true",
-                      help=_("wipe free space in the given paths"))
-    parser.add_option("-v", "--version", action="store_true",
-                      help=_("output version information and exit"))
-    parser.add_option('-o', '--overwrite', action='store_true',
-                      help=_('overwrite files to hide contents'))
 
-    def expand_context_menu_option(option, opt, value, parser):
+    # added for testing py2exe build
+    # https://github.com/bleachbit/bleachbit/commit/befe244efee9b2d4859c6b6c31f8bedfd4d85aad#diff-b578cd35e15095f69822ebe497bf8691da1b587d6cc5f5ec252ff4f186dbed56
+    parser.add_option('--exit', action='store_true',
+                      help=optparse.SUPPRESS_HELP)
+
+    # some workaround for context menu added here
+    # https://github.com/bleachbit/bleachbit/commit/b09625925149c98a6c79e278c35d5995e7526993
+    def expand_context_menu_option(_option, _opt, _value, parser):
         setattr(parser.values, 'gui', True)
         setattr(parser.values, 'exit', True)
-
-    parser.add_option("--context-menu", action="callback", callback=expand_context_menu_option)
+    parser.add_option("--context-menu", action="callback", callback=expand_context_menu_option,
+                      help=optparse.SUPPRESS_HELP)
 
     (options, args) = parser.parse_args()
 
@@ -207,13 +211,18 @@ def process_cmd_line():
     if options.debug:
         # set in __init__ so it takes effect earlier
         pass
+    elif options.preset:
+        # but if --preset is given, check if GUI option sets debug
+        if Options.options.get('debug'):
+            set_root_log_level(Options.options.get('debug'))
+            logger.debug("Debugging is enabled in GUI settings.")
     if options.debug_log:
         logger.addHandler(logging.FileHandler(options.debug_log))
         logger.info(SystemInformation.get_system_information())
     if options.version:
         print("""
 BleachBit version %s
-Copyright (C) 2008-2021 Andrew Ziem.  All rights reserved.
+Copyright (C) 2008-2025 Andrew Ziem.  All rights reserved.
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
@@ -237,11 +246,6 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         if len(args) < 1:
             logger.error(_("No directories given for --wipe-free-space"))
             sys.exit(1)
-        for wipe_path in args:
-            if not os.path.isdir(wipe_path):
-                logger.error(
-                    _("Path to wipe must be an existing directory: %s"), wipe_path)
-                sys.exit(1)
         logger.info(_("Wiping free space can take a long time."))
         for wipe_path in args:
             logger.info('Wiping free space in path: %s', wipe_path)

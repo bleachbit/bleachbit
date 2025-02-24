@@ -1,6 +1,6 @@
 """
 BleachBit
-Copyright (C) 2008-2021 Andrew Ziem
+Copyright (C) 2008-2025 Andrew Ziem
 https://www.bleachbit.org
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,20 +18,18 @@ from __future__ import absolute_import, print_function
 
 import fnmatch
 import glob
-import imp
+import importlib.util
 import logging
 import os
 import shutil
 import subprocess
 import sys
 import time
-import win_unicode_console
-import xml.dom.minidom
+import re
 
 from windows.NsisUtilities import write_nsis_expressions_to_files
 
 setup_encoding = sys.stdout.encoding
-win_unicode_console.enable()
 logger = logging.getLogger('setup_py2exe')
 logger.setLevel(logging.INFO)
 ch = logging.StreamHandler()
@@ -76,7 +74,7 @@ if fast:
     # fast compression
     SZ_OPTS = '-tzip -mx=1 -bso0 -bsp0'
 UPX_EXE = ROOT_DIR + '\\upx\\upx.exe'
-UPX_OPTS = '--best --crp-ms=999999 --nrv2e'
+UPX_OPTS = '--best --nrv2e'
 
 
 def archive(infile, outfile):
@@ -115,9 +113,9 @@ def check_exist(path, msg=None):
 
 def assert_module(module):
     try:
-        imp.find_module(module)
+        importlib.util.find_spec(module)
     except ImportError:
-        logger.error('Failed to import ' + module)
+        logger.error(f'Failed to import {module}')
         logger.error('Process aborted because of error!')
         sys.exit(1)
 
@@ -147,13 +145,19 @@ def run_cmd(cmd):
         logger.error(stderr.decode(setup_encoding))
 
 
-def sign_code(filename):
+def sign_files(filenames):
+    """Add a digital signature
+
+    Passing multiple filenames in one function call can be faster than
+    two calls.
+    """
+    filenames_str = ' '.join(filenames)
     if os.path.exists('CodeSign.bat'):
-        logger.info('Signing code: %s' % filename)
-        cmd = 'CodeSign.bat %s' % filename
+        logger.info('Signing code: %s' % filenames_str)
+        cmd = 'CodeSign.bat %s' % filenames_str
         run_cmd(cmd)
     else:
-        logger.warning('CodeSign.bat not available for %s' % filename)
+        logger.warning('CodeSign.bat not available for %s' % filenames_str)
 
 
 def get_dir_size(start_path='.'):
@@ -166,11 +170,31 @@ def get_dir_size(start_path='.'):
     return total_size
 
 
-def copytree(src, dst):
-    # Microsoft xcopy is about twice as fast as shutil.copytree
-    logger.info('copying {} to {}'.format(src, dst))
-    cmd = 'xcopy {} {} /i /s /q'.format(src, dst)
-    os.system(cmd)
+def copy_file(src, dst):
+    """Copy a file
+
+    The dst must be a full path.
+    """
+    if not os.path.exists(src):
+        logger.warning(f'copy_file: {src} does not exist')
+        return
+    dst_dirname = os.path.dirname(dst)
+    # If the destination directory is current directory, do not create it.
+    if dst_dirname and not os.path.exists(dst_dirname):
+        os.makedirs(dst_dirname)
+    # shutil.copy() and .copyfile() do not preserve file date.
+    shutil.copy2(src, dst)
+
+
+def copy_tree(src, dst):
+    """Copy a directory tree"""
+    src = os.path.abspath(src)
+    if not os.path.exists(src):
+        logger.warning(f'copytree: {src} does not exist')
+        return
+    logger.info(f'copying {src} to {dst}')
+    # copytree() preserves file date
+    shutil.copytree(src, dst, dirs_exist_ok=True)
 
 
 def count_size_improvement(func):
@@ -213,7 +237,7 @@ def build():
     shutil.rmtree('BleachBit-Portable', ignore_errors=True)
 
     logger.info('Running py2exe')
-    shutil.copyfile('bleachbit.py', 'bleachbit_console.py')
+    copy_file('bleachbit.py', 'bleachbit_console.py')
     cmd = sys.executable + ' -OO setup.py py2exe'
     run_cmd(cmd)
     assert_exist('dist\\bleachbit.exe')
@@ -223,51 +247,61 @@ def build():
     if not os.path.exists('dist'):
         os.makedirs('dist')
 
+    os.makedirs(os.path.join('dist', 'share'), exist_ok=True)
+
     logger.info('Copying GTK helpers')
     for exe in glob.glob1(GTK_LIBDIR, 'gspawn-win*-helper*.exe'):
-        shutil.copyfile(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
+        copy_file(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
     for exe in ('fc-cache.exe',):
-        shutil.copyfile(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
+        copy_file(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
 
     logger.info('Copying GTK files and icon')
     for d in ('dbus-1', 'fonts', 'gtk-3.0', 'pango'):
         path = os.path.join(GTK_DIR, 'etc', d)
-        if os.path.exists(path):
-            copytree(path, os.path.join('dist', 'etc', d))
-    for d in ('girepository-1.0', 'glade', 'gtk-3.0'):
+        copy_tree(path, os.path.join('dist', 'etc', d))
+    for d in ('gdk-pixbuf-2.0', 'girepository-1.0', 'glade', 'gtk-3.0'):
         path = os.path.join(GTK_DIR, 'lib', d)
-        if os.path.exists(path):
-            copytree(path, os.path.join('dist', 'lib', d))
+        copy_tree(path, os.path.join('dist', 'lib', d))
 
-    logger.info('Remove windows fonts dir from fonts.conf file')
+    gtk_share = os.path.join(GTK_LIBDIR, 'share')
+    if os.path.exists(gtk_share):
+        for d in ('icons', 'themes'):
+            path = os.path.join(gtk_share, d)
+            copy_tree(path, os.path.join('dist', 'share', d))
+
+    logger.info('Fixing paths in loaders.cache file')
+    with open(os.path.join('dist', 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache'), 'r+') as f:
+        data = f.read()
+        data = re.sub(r'^".*[/\\](.*\.dll)"$', r'"\1"', data, flags=re.I|re.M)
+        f.seek(0)
+        f.write(data)
+        f.truncate()
+
     # fonts are not needed https://github.com/bleachbit/bleachbit/issues/863
     for d in ('icons',):
         path = os.path.join(GTK_DIR, 'share', d)
-        if os.path.exists(path):
-            copytree(path, os.path.join('dist', 'share', d))
+        copy_tree(path, os.path.join('dist', 'share', d))
     SCHEMAS_DIR = 'share\\glib-2.0\\schemas'
-    gschemas_compiled = os.path.join(GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled')
-    if os.path.exists(gschemas_compiled):
-        os.makedirs(os.path.join('dist', SCHEMAS_DIR))
-        shutil.copyfile(gschemas_compiled,
-                        os.path.join('dist', SCHEMAS_DIR, 'gschemas.compiled'))
-    os.makedirs(os.path.join('dist', 'share'), exist_ok=True)
-    shutil.copyfile('bleachbit.png',  'dist\\share\\bleachbit.png')
-    # for pop-up notification
-    shutil.copyfile('windows\\bleachbit.ico',  'dist\\share\\bleachbit.ico')
+    gschemas_compiled_src = os.path.join(
+        GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled')
+    gschemas_compiled_dst = os.path.join(
+        'dist', SCHEMAS_DIR, 'gschemas.compiled')
+    copy_file(gschemas_compiled_src, gschemas_compiled_dst)
+    copy_file('bleachbit.png',  'dist\\share\\bleachbit.png')
+    # bleachbit.ico is used the for pop-up notification.
+    copy_file('windows\\bleachbit.ico',  'dist\\share\\bleachbit.ico')
     for dll in glob.glob1(GTK_LIBDIR, '*.dll'):
-        shutil.copyfile(os.path.join(GTK_LIBDIR, dll), 'dist\\'+dll)
+        copy_file(os.path.join(GTK_LIBDIR, dll), 'dist\\'+dll)
 
-    os.mkdir('dist\\data')
-    shutil.copyfile('data\\app-menu.ui', 'dist\\data\\app-menu.ui')
+    copy_file('data\\app-menu.ui', 'dist\\data\\app-menu.ui')
 
     logger.info('Copying themes')
-    copytree('themes', 'dist\\themes')
+    copy_tree('themes', 'dist\\themes')
 
     logger.info('Copying CA bundle')
-    import requests
-    shutil.copyfile(requests.utils.DEFAULT_CA_BUNDLE_PATH,
-                    os.path.join('dist', 'cacert.pem'))
+    import certifi
+    copy_file(certifi.where(),
+              os.path.join('dist', 'cacert.pem'))
 
     dist_locale_dir = r'dist\share\locale'
     shutil.rmtree(dist_locale_dir, ignore_errors=True)
@@ -279,12 +313,11 @@ def build():
         if not f.startswith(locale_dir):
             continue
         rel_f = f[len(locale_dir):]
-        os.makedirs(os.path.join(dist_locale_dir, os.path.dirname(rel_f)))
-        shutil.copyfile(f, os.path.join(dist_locale_dir, rel_f))
+        copy_file(f, os.path.join(dist_locale_dir, rel_f))
     assert_exist(os.path.join(dist_locale_dir, r'es\LC_MESSAGES\gtk30.mo'))
 
     logger.info('Copying BleachBit localizations')
-    copytree('locale', dist_locale_dir)
+    copy_tree('locale', dist_locale_dir)
     assert_exist(os.path.join(dist_locale_dir, r'es\LC_MESSAGES\bleachbit.mo'))
 
     logger.info('Copying BleachBit cleaners')
@@ -298,10 +331,32 @@ def build():
     assert_exist('dist\\share\\cleaners\\internet_explorer.xml')
 
     logger.info('Copying license')
-    shutil.copy('COPYING', 'dist')
+    copy_file('COPYING', 'dist\\COPYING')
 
-    sign_code('dist\\bleachbit.exe')
-    sign_code('dist\\bleachbit_console.exe')
+    logger.info('Copying DLL')
+    python_version = sys.version_info[:2]
+    if python_version == (3, 4):
+        # For Python 3.4, copy msvcr100.dll
+        dll_name = 'msvcr100.dll'
+    elif python_version >= (3, 10):
+        # For Python 3.10, copy vcruntime140.dll
+        dll_name = 'vcruntime140.dll'
+    else:
+        logger.error('Unsupported Python version. Skipping DLL copy.')
+        return
+    dll_dirs = (sys.prefix, r'c:\windows\system32', r'c:\windows\SysWOW64')
+    copied_dll = False
+    for dll_dir in dll_dirs:
+        dll_path = os.path.join(dll_dir, dll_name)
+        if os.path.exists(dll_path):
+            logger.info(f'Copying {dll_name} from {dll_path}')
+            shutil.copy(dll_path, 'dist')
+            copied_dll = True
+            break
+    if not copied_dll:
+        logger.warning(f'{dll_name} not found. Skipping copy.')
+
+    sign_files(('dist\\bleachbit.exe', 'dist\\bleachbit_console.exe'))
 
     assert_execute_console()
 
@@ -523,7 +578,7 @@ def shrink():
             'Error when running strip. Does your PATH have MINGW with binutils?')
 
     if not fast:
-        upx()
+        # upx()
         assert_execute_console()
 
     logger.info('Purging unnecessary GTK+ files')
@@ -543,7 +598,7 @@ def shrink():
 def package_portable():
     """Package the portable version"""
     logger.info('Building portable')
-    copytree('dist', 'BleachBit-Portable')
+    copy_tree('dist', 'BleachBit-Portable')
     with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
         text_file.write("[Portable]")
 
@@ -562,7 +617,6 @@ def nsis(opts, exe_name, nsi_path):
             opts, BB_VER, SHRED_REGEX_KEY, nsi_path)
     run_cmd(cmd)
     assert_exist(exe_name)
-    sign_code(exe_name)
 
 
 def package_installer(nsi_path=r'windows\bleachbit.nsi'):
@@ -576,20 +630,25 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
 
     write_nsis_expressions_to_files()
 
-    exe_name = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
+    exe_name_multilang = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
+    exe_name_en = 'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER)
     # Was:
-    #opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
+    # opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
     # Now: Done in NSIS file!
     opts = '' if fast else '/V3 /Dpackhdr /DCompressor'
-    nsis(opts, exe_name, nsi_path)
+    nsis(opts, exe_name_multilang, nsi_path)
 
-    if not fast:
+    if fast:
+        sign_files((exe_name_multilang,))
+    else:
         # Was:
         # nsis('/DNoTranslations',
         # Now: Compression gets now done in NSIS file!
-        nsis(opts + ' /DNoTranslations',
-             'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER),
-             nsi_path)
+        # As of 2022-11-20, there is not a big size difference for
+        # the English-only build, and Google Search flags the Python 3.10
+        # version as malware.
+        nsis(opts + ' /DNoTranslations', exe_name_en, nsi_path)
+        sign_files((exe_name_multilang, exe_name_en))
 
     if os.path.exists(SZ_EXE):
         logger.info('Zipping installer')

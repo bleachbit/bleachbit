@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -77,7 +77,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external(self):
         """Unit test for run_external"""
-        args = {'nt': ['cmd.exe', '/c', 'dir', '%windir%\system32', '/s', '/b'],
+        args = {'nt': ['cmd.exe', '/c', 'dir', r'%windir%\system32', '/s', '/b'],
                 'posix': ['find', '/usr/bin']}
         (rc, stdout, stderr) = run_external(args[os.name])
         self.assertEqual(0, rc)
@@ -85,7 +85,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
         self.assertRaises(OSError, run_external, ['cmddoesnotexist'])
 
-        args = {'nt': ['cmd.exe', '/c', 'dir', 'c:\doesnotexist'],
+        args = {'nt': ['cmd.exe', '/c', 'dir', r'c:\doesnotexist'],
                 'posix': ['ls', '/doesnotexist']}
         (rc, stdout, stderr) = run_external(args[os.name])
         self.assertNotEqual(0, rc)
