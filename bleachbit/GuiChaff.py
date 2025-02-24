@@ -1,7 +1,6 @@
 # vim: ts=4:sw=4:expandtab
 # -*- coding: UTF-8 -*-
 
-
 # BleachBit
 # Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
@@ -25,7 +24,6 @@ GUI for making chaff
 """
 
 from bleachbit.Language import get_text as _
-from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models
 
 from gi.repository import Gtk, GLib
 import logging
@@ -37,11 +35,15 @@ logger = logging.getLogger(__name__)
 
 def make_files_thread(file_count, inspiration, output_folder, delete_when_finished, on_progress):
     if inspiration == 0:
+        from bleachbit.Chaff import generate_2600
         generated_file_names = generate_2600(
             file_count, output_folder, on_progress=on_progress)
     elif inspiration == 1:
+        from bleachbit.Chaff import generate_emails
         generated_file_names = generate_emails(
             file_count, output_folder, on_progress=on_progress)
+    else:
+        raise ValueError(f'Invalid inspiration {inspiration}')
     if delete_when_finished:
         on_progress(0, msg=_('Deleting files'))
         for i in range(0, file_count):
@@ -62,20 +64,20 @@ class ChaffDialog(Gtk.Dialog):
 # TRANSLATORS: BleachBit creates digital chaff like that is like the
 # physical chaff airplanes use to protect themselves from radar-guided
 # missiles. For more explanation, see the online documentation.
-        Gtk.Dialog.__init__(self, _("Make chaff"), parent)
-        Gtk.Dialog.set_modal(self,True)
+        Gtk.Dialog.__init__(self, title=_("Make chaff"), transient_for=parent)
+        Gtk.Dialog.set_modal(self, True)
         self.set_border_width(5)
         box = self.get_content_area()
 
         label = Gtk.Label(
-            _("Make randomly-generated messages inspired by documents."))
+            label=_("Make randomly-generated messages inspired by documents."))
         box.add(label)
 
         inspiration_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 
         # TRANSLATORS: Inspiration is a choice of documents from which random
         # text will be generated.
-        inspiration_box.add(Gtk.Label(_("Inspiration")))
+        inspiration_box.add(Gtk.Label(label=_("Inspiration")))
         self.inspiration_combo = Gtk.ComboBoxText()
         self.inspiration_combo_options = (
             _('2600 Magazine'), _("Hillary Clinton's emails"))
@@ -86,14 +88,15 @@ class ChaffDialog(Gtk.Dialog):
         box.add(inspiration_box)
 
         spin_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        spin_box.add(Gtk.Label(_("Number of files")))
-        adjustment = Gtk.Adjustment(100, 1, 99999, 1, 1000, 0)
+        spin_box.add(Gtk.Label(label=_("Number of files")))
+        adjustment = Gtk.Adjustment(
+            value=100, lower=1, upper=99999, step_increment=1, page_increment=1000, page_size=0)
         self.file_count = Gtk.SpinButton(adjustment=adjustment)
         spin_box.add(self.file_count)
         box.add(spin_box)
 
         folder_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        folder_box.add(Gtk.Label(_("Select destination folder")))
+        folder_box.add(Gtk.Label(label=_("Select destination folder")))
         self.choose_folder_button = Gtk.FileChooserButton()
         self.choose_folder_button.set_action(
             Gtk.FileChooserAction.SELECT_FOLDER)
@@ -103,7 +106,7 @@ class ChaffDialog(Gtk.Dialog):
         box.add(folder_box)
 
         delete_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        delete_box.add(Gtk.Label(_("When finished")))
+        delete_box.add(Gtk.Label(label=_("When finished")))
         self.when_finished_combo = Gtk.ComboBoxText()
         self.combo_options = (
             _('Delete without shredding'), _('Do not delete'))
@@ -117,7 +120,7 @@ class ChaffDialog(Gtk.Dialog):
         box.add(self.progressbar)
         self.progressbar.hide()
 
-        self.make_button = Gtk.Button(_("Make files"))
+        self.make_button = Gtk.Button(label=_("Make files"))
         self.make_button.connect('clicked', self.on_make_files)
         box.add(self.make_button)
 
@@ -129,12 +132,13 @@ class ChaffDialog(Gtk.Dialog):
             dialog.format_secondary_text(msg2)
             dialog.run()
             dialog.destroy()
-        return download_models(on_error=on_download_error)
+        import bleachbit.Chaff
+        return bleachbit.Chaff.download_models(on_error=on_download_error)
 
     def download_models_dialog(self):
         """Download models"""
-        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.QUESTION,
-                                   Gtk.ButtonsType.OK_CANCEL, _("Download data needed for chaff generator?"))
+        dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.QUESTION,
+                                   buttons=Gtk.ButtonsType.OK_CANCEL, text=_("Download data needed for chaff generator?"))
         response = dialog.run()
         ret = None
         if response == Gtk.ResponseType.OK:
@@ -158,6 +162,7 @@ class ChaffDialog(Gtk.Dialog):
             dialog.destroy()
             return
 
+        from bleachbit.Chaff import have_models
         if not have_models():
             if not self.download_models_dialog():
                 return
