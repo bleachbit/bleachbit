@@ -19,14 +19,16 @@
 
 
 """
-Test case for module Update
+Test case for module Network
 """
 
 import logging
 import os
+import requests
+from unittest.mock import patch
 
 from tests import common
-from bleachbit.Network import download_url_to_fn, get_gtk_version, get_ip_for_url, get_user_agent
+from bleachbit.Network import download_url_to_fn, fetch_url, get_gtk_version, get_ip_for_url, get_user_agent
 import bleachbit.Network
 
 logger = logging.getLogger(__name__)
@@ -90,3 +92,29 @@ class NetworkTestCase(common.BleachbitTestCase):
         agent = get_user_agent()
         logger.debug("user agent = '%s'", agent)
         self.assertIsString(agent)
+
+    def test_fetch_url_nonretry(self):
+        """Unit test for fetch_url() without retry"""
+        schemes = ('http', 'https')
+        status_codes = (200, 404)
+        expected_content = {200: '200 OK', 404: '404 Not Found'}
+        for scheme in schemes:
+            for status_code in status_codes:
+                url = scheme + '://httpstat.us/' + str(status_code)
+                response = fetch_url(url, max_retries=0, timeout=5)
+                self.assertEqual(response.status_code, status_code)
+                self.assertEqual(response.text, expected_content[status_code])
+
+    def test_fetch_url_retry(self):
+        """Unit test for fetch_url() with retry"""
+        schemes = ('http', 'https')
+        for scheme in schemes:
+            url = scheme + '://httpstat.us/500'
+            with self.assertRaises(requests.exceptions.RetryError):
+                fetch_url(url, max_retries=1, timeout=2)
+
+    def test_fetch_url_invalid(self):
+        # Test connection error
+        url = 'https://test.invalid'
+        with self.assertRaises(requests.exceptions.RequestException):
+            fetch_url(url)

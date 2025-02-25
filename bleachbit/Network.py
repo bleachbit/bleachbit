@@ -28,6 +28,7 @@ import os
 import sys
 
 import requests
+from urllib3.util.retry import Retry
 
 from bleachbit import bleachbit_exe_path
 from bleachbit.Language import get_text as _
@@ -62,6 +63,64 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None, max_retries
     assert isinstance(backoff_factor, float)
     assert isinstance(timeout, int)
 
+    msg = _('Downloading URL failed: %s') % url
+
+    def do_error(msg2):
+        if on_error:
+            on_error(msg, msg2)
+        from bleachbit.FileUtilities import delete
+        delete(fn, ignore_missing=True)  # delete any partial download
+
+    try:
+        response = fetch_url(url)
+    except requests.exceptions.RequestException as exc:
+        msg2 = f'{type(exc).__name__}: {exc}'
+        logger.exception(msg)
+        do_error(msg2)
+        return False
+    if response.status_code != 200:
+        logger.error(msg)
+        msg2 = f'HTTP status code: {response.status_code}'
+        do_error(msg2)
+        return False
+
+    if expected_sha512:
+        hash_actual = hashlib.sha512(response.content).hexdigest()
+        if hash_actual != expected_sha512:
+            msg2 = f"SHA-512 mismatch: expected {expected_sha512}, got {hash_actual}"
+            do_error(msg2)
+            return False
+    fn_dir = os.path.dirname(fn)
+    if not os.path.exists(fn_dir):
+        os.makedirs(fn_dir)
+    with open(fn, 'wb') as f:
+        f.write(response.content)
+    return True
+
+
+def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60):
+    """Fetch a URL using requests library
+
+    Args:
+        url (str): URL to fetch content from
+        max_retries (int, optional): Maximum number of retry attempts
+        backoff_factor (float, optional): A backoff factor to apply between attempts
+        timeout (int, optional): How many seconds to wait for the server before giving up
+
+    Returns:
+        requests.Response: Response object from requests library
+
+    Raises:
+        requests.RequestException: If there is an error fetching the URL
+    """
+    assert isinstance(url, str)
+    assert url.startswith('http')
+    assert isinstance(max_retries, int)
+    assert max_retries >= 0
+    assert isinstance(backoff_factor, float)
+    assert backoff_factor > 0
+    assert isinstance(timeout, int)
+    assert timeout > 0
     if hasattr(sys, 'frozen'):
         # when frozen by py2exe, certificates are in alternate location
         CA_BUNDLE = os.path.join(bleachbit_exe_path, 'cacert.pem')
@@ -71,8 +130,7 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None, max_retries
         else:
             logger.error(
                 'Application is frozen but certificate file not found: %s', CA_BUNDLE)
-    from urllib3.util.retry import Retry
-    from requests.adapters import HTTPAdapter
+    headers = {'User-Agent': get_user_agent()}
     # 408: request timeout
     # 429: too many requests
     # 500: internal server error
@@ -80,46 +138,16 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None, max_retries
     # 503: service unavailable
     # 504: gateway_timeout
     status_forcelist = (408, 429, 500, 502, 503, 504)
-    # sourceforge.net directories to download mirror
     retries = Retry(total=max_retries, backoff_factor=backoff_factor,
                     status_forcelist=status_forcelist, redirect=5)
-    msg = _('Downloading URL failed: %s') % url
-
-    headers = {'User-Agent': get_user_agent()}
-
-    def do_error(msg2):
-        if on_error:
-            on_error(msg, msg2)
-        from bleachbit.FileUtilities import delete
-        delete(fn, ignore_missing=True)  # delete any partial download
     with requests.Session() as session:
-        session.mount('http://', HTTPAdapter(max_retries=retries))
-        try:
-            response = session.get(url, headers=headers, timeout=timeout)
-            content = response.content
-        except requests.exceptions.RequestException as exc:
-            msg2 = f'{type(exc).__name__}: {exc}'
-            logger.exception(msg)
-            do_error(msg2)
-            return False
-        if response.status_code != 200:
-            logger.error(msg)
-            msg2 = f'Status code: {response.status_code}'
-            do_error(msg2)
-            return False
-
-    if expected_sha512:
-        hash_actual = hashlib.sha512(content).hexdigest()
-        if hash_actual != expected_sha512:
-            msg2 = f"SHA-512 mismatch: expected {expected_sha512}, got {hash_actual}"
-            do_error(msg2)
-            return False
-    fn_dir = os.path.dirname(fn)
-    if not os.path.exists(fn_dir):
-        os.makedirs(fn_dir)
-    with open(fn, 'wb') as f:
-        f.write(content)
-    return True
+        session.mount(
+            'http://', requests.adapters.HTTPAdapter(max_retries=retries))
+        session.mount(
+            'https://', requests.adapters.HTTPAdapter(max_retries=retries))
+        response = session.get(url, headers=headers,
+                               timeout=timeout, verify=True)
+        return response
 
 
 def get_gtk_version():

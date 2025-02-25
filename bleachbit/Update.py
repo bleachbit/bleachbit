@@ -24,17 +24,15 @@ Check for updates via the Internet
 
 import bleachbit
 from bleachbit.Language import get_text as _
-from bleachbit.Network import get_ip_for_url, get_user_agent
+from bleachbit.Network import fetch_url, get_ip_for_url
 
 import hashlib
 import logging
 import os
 import os.path
-import socket
+import requests
 import sys
 import xml.dom.minidom
-from urllib.request import build_opener
-from urllib.error import URLError
 
 
 logger = logging.getLogger(__name__)
@@ -97,28 +95,24 @@ def update_dialog(parent, updates):
 
 def check_updates(check_beta, check_winapp2, append_text, cb_success):
     """Check for updates via the Internet"""
-    opener = build_opener()
-    socket.setdefaulttimeout(bleachbit.socket_timeout)
-    opener.addheaders = [('User-Agent', get_user_agent())]
-    import encodings.idna  # https://github.com/bleachbit/bleachbit/issues/760
     url = bleachbit.update_check_url
     if 'windowsapp' in sys.executable.lower():
         url += '?windowsapp=1'
     try:
-        handle = opener.open(url)
-    except URLError as e:
+        response = fetch_url(url)
+    except requests.RequestException as e:
         logger.error(
             _('Error when opening a network connection to check for updates. Please verify the network is working and that a firewall is not blocking this application. Error message: {}').format(e))
         logger.debug('URL {} has IP address {}'.format(
             url, get_ip_for_url(url)))
-        if hasattr(e, 'headers'):
-            logger.debug(e.headers)
+        if hasattr(e, 'response') and e.response is not None:
+            logger.debug(e.response.headers)
         return ()
-    doc = handle.read()
     try:
-        dom = xml.dom.minidom.parseString(doc)
+        dom = xml.dom.minidom.parseString(response.text)
     except:
-        logger.exception('The update information does not parse: %s', doc)
+        logger.exception(
+            'The update information does not parse: %s', response.text)
         return ()
 
     def parse_updates(element):
