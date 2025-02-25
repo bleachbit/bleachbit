@@ -101,20 +101,25 @@ if 'py2exe' in sys.argv:
     # see multiple issues such as https://github.com/bleachbit/bleachbit/issues/1000
     APP_DESCRIPTION = 'BleachBit software cleaner'
 
-    args['windows'] = [{
-        'script': 'bleachbit.py',
+    # Common metadata for both GUI and console executables
+    common_metadata = {
         'product_name': APP_NAME,
         'description': APP_DESCRIPTION,
         'version': bleachbit.APP_VERSION,
-        'icon_resources': [(1, 'windows/bleachbit.ico')]
-    }]
-    args['console'] = [{
-        'script': 'bleachbit_console.py',
-        'product_name': APP_NAME,
-        'description': APP_DESCRIPTION,
-        'version': bleachbit.APP_VERSION,
-        'icon_resources': [(1, 'windows/bleachbit.ico')]
-    }]
+        'icon_resources': [(1, 'windows/bleachbit.ico')],
+        'company_name': APP_NAME,
+        'copyright': 'Copyright (C) 2008-2025 Andrew Ziem'
+    }
+
+    # GUI executable
+    gui_metadata = common_metadata.copy()
+    gui_metadata['script'] = 'bleachbit.py'
+    args['windows'] = [gui_metadata]
+
+    # Console executable
+    console_metadata = common_metadata.copy()
+    console_metadata['script'] = 'bleachbit_console.py'
+    args['console'] = [console_metadata]
     args['options'] = {
         'py2exe': {
             'packages': ['encodings', 'gi', 'gi.overrides', 'plyer'],
