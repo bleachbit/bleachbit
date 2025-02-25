@@ -67,12 +67,20 @@ def notify_gi(msg):
 
     The Windows pygy-aio installer does not include notify, so this is just for Linux.
     """
-    gi.require_version('Notify', '0.7')
+    try:
+        gi.require_version('Notify', '0.7')
+    except ValueError as e:
+        logger.debug('gi.require_version("Notify", "0.7") failed: %s', e)
+        return
     from gi.repository import Notify
     if Notify.init(APP_NAME):
         notify = Notify.Notification.new('BleachBit', msg, 'bleachbit')
         notify.set_hint("desktop-entry", GLib.Variant('s', 'bleachbit'))
-        notify.show()
+        try:
+            notify.show()
+        except gi.repository.GLib.GError as e:
+            logger.debug('Notify.Notification.show() failed: %s', e)
+            return
         notify.set_timeout(10000)
 
 
