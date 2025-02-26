@@ -175,12 +175,11 @@ class Bleachbit(Gtk.Application):
 
         On Windows with GTK 3.18, this code is sufficient for the menu to work.
         """
-        # FIXME: Localization of the menu is broken on Windows.
-        if os.name == 'posix':
-            from bleachbit.Language import setup_translation, attempted_setup_translation
-            #if not attempted_setup_translation:
-            setup_translation()
+        from bleachbit.Language import setup_translation
+        setup_translation()
         builder = Gtk.Builder()
+        # set_translation_domain() seems to have no effect.
+        #builder.set_translation_domain('bleachbit')
         builder.add_from_file(bleachbit.app_menu_filename)
         menu = builder.get_object('app-menu')
         self.set_app_menu(menu)

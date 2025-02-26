@@ -270,7 +270,7 @@ def get_supported_language_codes():
     supported_langs = []
     # Use local import to avoid circular import.
     from bleachbit import locale_dir
-    # The locale_dir may no exist, especially on Windows.
+    # The locale_dir may not exist, especially on Windows.
     if not os.path.isdir(locale_dir):
         return ['en_US', 'en']
     lang_codes = sorted(set(os.listdir(locale_dir)+['en_US', 'en']))
@@ -368,26 +368,29 @@ def setup_translation():
     if hasattr(locale, 'bindtextdomain'):
         locale.bindtextdomain(text_domain, locale_dir)
         locale.textdomain(text_domain)
+    elif 'nt' == os.name:
+        from bleachbit.Windows import load_i18n_dll
+        libintl = load_i18n_dll()
+        if not libintl:
+            logger.error(
+                'The internationalization library is not available.')
+        assert isinstance(text_domain, str)
+        encoded_domain = text_domain.encode('utf-8')
+        # wbindtextdomain(char, wchar): first parameter is encoded
+        libintl.libintl_wbindtextdomain(encoded_domain, locale_dir)
+        libintl.textdomain(encoded_domain)
+        libintl.bind_textdomain_codeset(encoded_domain, b'UTF-8')
+
+        # Log for debugging
+        logger.debug(
+            f"Windows translation domain set to: {text_domain}, dir: {locale_dir}")
     else:
-        if 'nt' == os.name:
-            from bleachbit.Windows import load_i18n_dll
-            libintl = load_i18n_dll()
-            if libintl:
-                libintl.bindtextdomain(text_domain, locale_dir)
-                libintl.textdomain(text_domain)
-                libintl.bind_textdomain_codeset(text_domain, 'UTF-8')
-            else:
-                logger.error(
-                    'The internationalization library is not available.')
-        else:
-            logger.error('The function bindtextdomain() is not available.')
+        logger.error('The function bindtextdomain() is not available.')
 
     # locale.setlocale() on Linux will throw an exception if the locale is not
     # available, so find the best matching locale. When set, Gtk.Builder is
     # translated.
-    # On Windows, setlocale() accepts any values without raising an exception.
-    # FIXME: I tested various values for locale.setlocale() on Windows, but
-    # Gtk.Builder is not translated.
+    # On Windows, locale.setlocale() accepts any values without raising an exception.
     if os.name == 'posix':
         from bleachbit.Unix import find_best_locale
         setlocale_local = find_best_locale(user_locale)

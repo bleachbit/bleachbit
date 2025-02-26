@@ -541,6 +541,19 @@ def load_i18n_dll():
     except Exception as e:
         logger.warning('error in LoadLibrary(%s): %s', lib_path, e)
         return
+
+    # Configure DLL function prototypes
+    libintl.bindtextdomain.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
+    libintl.bindtextdomain.restype = ctypes.c_char_p
+    libintl.bind_textdomain_codeset.argtypes = [
+        ctypes.c_char_p, ctypes.c_char_p]
+    libintl.textdomain.argtypes = [ctypes.c_char_p]
+
+    if hasattr(libintl, "libintl_wbindtextdomain"):
+        libintl.libintl_wbindtextdomain.argtypes = [
+            ctypes.c_char_p, ctypes.c_wchar_p]
+        libintl.libintl_wbindtextdomain.restype = ctypes.c_wchar_p
+
     return libintl
 
 
