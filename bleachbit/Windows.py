@@ -637,21 +637,29 @@ def setup_environment():
     # cmd.exe .
     set_environ('cd', os.getcwd())
 
-    # For gschemas.compiled required by make chaff dialog
+    # XDG_DATA_DIRS environment variable needs to be set with both GTK icons and
+    # `glib-2.0\schemas\gschemas.compiled`.
+    # The latter is required by the make chaff dialog.
     # https://github.com/bleachbit/bleachbit/issues/1444
-    if not os.environ.get('XDG_DATA_DIRS'):
-        xdg_data_dirs = (os.path.dirname(sys.executable) +
-                         '\\share', os.getcwd() + '\\share')
-        found_dir = False
-        for xdg_data_dir in xdg_data_dirs:
-            if os.path.exists(os.path.join(xdg_data_dir, 'glib-2.0', 'schemas', 'gschemas.compiled')):
-                found_dir = True
-                break
-        if not found_dir:
-            logger.warning(
-                'XDG_DATA_DIRS not set and %s does not exist', xdg_data_dir)
-        else:
-            set_environ('XDG_DATA_DIRS', xdg_data_dir)
+    # https://github.com/bleachbit/bleachbit/issues/1780
+    if os.environ.get('XDG_DATA_DIRS'):
+        return
+    xdg_data_dirs = [os.path.dirname(sys.executable) +
+                     '\\share',
+                     os.getcwd() + '\\share']
+
+    found_dir = False
+    for xdg_data_dir in xdg_data_dirs:
+        xdg_data_fn = os.path.join(
+            xdg_data_dir, 'glib-2.0', 'schemas', 'gschemas.compiled')
+        if os.path.exists(xdg_data_fn):
+            found_dir = True
+            break
+    if found_dir:
+        logger.debug('XDG_DATA_DIRS=%s', xdg_data_dir)
+        set_environ('XDG_DATA_DIRS', xdg_data_dir)
+    else:
+        logger.warning('XDG_DATA_DIRS not set and gschemas.compiled not found')
 
 
 def split_registry_key(full_key):

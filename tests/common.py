@@ -22,16 +22,16 @@
 Common code for unit tests
 """
 
+import mock
 import os
 import shutil
 import sys
 import tempfile
+import time
 import unittest
-import mock
 if 'win32' == sys.platform:
     import winreg
     import win32gui
-
 
 import bleachbit
 import bleachbit.Options
@@ -67,8 +67,17 @@ class BleachbitTestCase(unittest.TestCase):
     def tearDownClass(cls):
         """remove the temporary directory"""
         gc_collect()
-        if os.path.exists(cls.tempdir):
-            shutil.rmtree(cls.tempdir)
+        # On Windows, a file may be temporarily locked, so retry.
+        for attempt in range(5):
+            try:
+                if os.path.exists(cls.tempdir):
+                    shutil.rmtree(cls.tempdir)
+                break
+            except PermissionError:
+                if attempt < 4:
+                    time.sleep(1)
+                else:
+                    raise
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             cls._stop_patch_options_paths()
 

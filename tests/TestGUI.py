@@ -179,6 +179,19 @@ class GUITestCase(common.BleachbitTestCase):
         # destroy
         about.destroy()
 
+    def test_chaff(self):
+        """Minimal test of the chaff dialog"""
+        from bleachbit.GuiChaff import ChaffDialog
+        import bleachbit.Chaff
+        ret = bleachbit.Chaff.download_models()
+        self.assertTrue(ret)
+        gui = self.app._window
+        cd = ChaffDialog(gui)
+        cd.show_all()
+        self.refresh_gui()
+        b= self.click_button(cd, 'Make files')
+        self.refresh_gui()
+
     def test_preview(self):
         """Select cleaner option and clicks preview button"""
         gui = self.app._window
@@ -193,8 +206,7 @@ class GUITestCase(common.BleachbitTestCase):
         """Test a pop-up notification"""
         from bleachbit.GUI import notify
         notify('This is a test notification')
-        import time
-        time.sleep
+        time.sleep(1)  # Pause for 1 second
 
     @mock.patch('bleachbit.GuiBasic.delete_confirmation_dialog')
     def test_confirm_delete(self, mock_delete_confirmation_dialog):

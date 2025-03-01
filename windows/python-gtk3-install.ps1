@@ -89,12 +89,20 @@ if (-not (Test-Path "$schema_dir\gschemas.compiled")) {
     Write-Host "Compiling GLib schemas..."
     & $schema_compiler $schema_dir
     if ($LASTEXITCODE -ne 0) {
-        Write-Error "Failed to compile GLib schemas"
+        Write-Error "Failed to compile GLib schemas: exit code $LASTEXITCODE"
         exit $LASTEXITCODE
+    }
+    if (-not (Test-Path "$schema_dir\gschemas.compiled")) {
+        Write-Error "Failed to compile GLib schemas: $schema_dir\gschemas.compiled does not exist"
+        exit 1
     }
 }
 
-Write-Host "Checking python version"
+# This fixes the chaff dialog when running on Windows from source.
+New-Item -ItemType Directory -Path "$python_home\share\glib-2.0\schemas" -Force
+Copy-Item -Path "$schema_dir\gschemas.compiled" -Destination "$python_home\share\glib-2.0\schemas" -Force
+
+Write-Host "Checking Python version"
 & "$python_home\python.exe" -V  # show Python version
 if ($LASTEXITCODE -ne 0) {
     Write-Error "python.exe -V failed"

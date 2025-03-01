@@ -97,6 +97,10 @@ class ChaffDialog(Gtk.Dialog):
 
         folder_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         folder_box.add(Gtk.Label(label=_("Select destination folder")))
+        # The file chooser button displays a stock GTK icon. When some parts of GTK are not
+        # set up correctly on Windows, then the application may crash here with the error
+        # message "No GSettings schemas".
+        # https://github.com/bleachbit/bleachbit/issues/1780
         self.choose_folder_button = Gtk.FileChooserButton()
         self.choose_folder_button.set_action(
             Gtk.FileChooserAction.SELECT_FOLDER)

@@ -24,8 +24,12 @@ Test case for module GuiChaff
 """
 
 
+import os
+import unittest
 import tempfile
+import time
 from unittest.mock import patch, MagicMock
+
 from tests import common
 
 try:
@@ -33,26 +37,38 @@ try:
     gi.require_version('Gtk', '3.0')
     from gi.repository import Gtk
     HAVE_GTK = True
+    from bleachbit.GUI import Bleachbit
 except ImportError:
     HAVE_GTK = False
 
 
+@unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
 class GuiChaffTestCase(common.BleachbitTestCase):
     """Test case for module GuiChaff"""
+    app = Bleachbit(auto_exit=False, uac=False)
 
     @classmethod
     def setUpClass(cls):
+        if os.name == 'nt':
+            from bleachbit.Windows import setup_environment
         super(GuiChaffTestCase, cls).setUpClass()
+        cls.app.register()
+        cls.app.activate()
+        cls.refresh_gui()
+
+    @classmethod
+    def refresh_gui(cls, delay=0):
+        while Gtk.events_pending():
+            Gtk.main_iteration_do(blocking=False)
+        time.sleep(delay)
 
     def setUp(self):
-        if not HAVE_GTK:
-            self.skipTest('GTK+ module not available')
         from bleachbit.GuiChaff import ChaffDialog
-        self.dialog = ChaffDialog(None)
+        # Pass the GtkWindow object
+        self.dialog = ChaffDialog(parent=self.app._window)
 
     def tearDown(self):
-        if HAVE_GTK:
-            self.dialog.destroy()
+        self.dialog.destroy()
 
     def test_dialog_creation(self):
         """Test that dialog is created with expected widgets"""
