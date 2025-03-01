@@ -22,11 +22,35 @@
 <cleaner id="discord">
   <label>Discord</label>
   <description>Chat client</description>
-  <running type="exe" os="windows" same_user="true">discord.exe</running>
-  <running type="exe" os="linux" same_user="true">Discord</running>
+  <!-- Discord Stable -->
+  <running type="exe" os="windows">Discord.exe</running>
+  <running type="exe" os="linux">Discord</running>
+  <!-- Discord PTB -->
+  <running type="exe" os="windows">DiscordPTB.exe</running>
+  <running type="exe" os="linux">DiscordPTB</running>
+  <!-- Discord Canary -->
+  <running type="exe" os="windows">DiscordCanary.exe</running>
+  <running type="exe" os="linux">DiscordCanary</running>
+  <!-- Discord Development -->
+  <running type="exe" os="windows">DiscordDevelopment.exe</running>
+  <running type="exe" os="linux">DiscordDevelopment</running>
   <var name="base">
-    <value os="windows">%UserProfile%\AppData\Roaming\Discord</value>
+    <!-- Discord Stable -->
+    <value os="windows">%UserProfile%\AppData\Roaming\discord</value>
     <value os="linux">~/.config/discord</value>
+    <value os="linux">~/snap/discord/current/.config/discord</value>
+    <value os="linux">~/.var/app/com.discordapp.Discord/config/discord</value>
+    <!-- Discord PTB -->
+    <value os="windows">%UserProfile%\AppData\Roaming\discordptb</value>
+    <value os="linux">~/.config/discordptb</value>
+    <!-- Discord Canary -->
+    <value os="windows">%UserProfile%\AppData\Roaming\discordcanary</value>
+    <value os="linux">~/.config/discordcanary</value>
+    <value os="linux">~/snap/discord/current/.config/discordcanary</value>
+    <value os="linux">~/.var/app/com.discordapp.DiscordCanary/config/discordcanary</value>
+    <!-- Discord Development -->
+    <value os="windows">%UserProfile%\AppData\Roaming\discorddevelopment</value>
+    <value os="linux">~/.config/discorddevelopment</value>
   </var>
   <option id="cache">
     <label>Cache</label>
@@ -35,6 +59,8 @@
     <action command="delete" search="walk.all" path="$$base$$/Code Cache"/>
     <action command="delete" search="walk.all" path="$$base$$/GPUCache"/>
     <action command="delete" search="file" path="$$base$$/Network Persistent State"/>
+    <action command="delete" search="walk.all" path="~/.var/app/com.discordapp.Discord/cache"/>
+    <action command="delete" search="walk.all" path="~/.var/app/com.discordapp.DiscordCanary/cache"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -47,7 +73,6 @@
     <label>History</label>
     <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
     <action command="delete" search="file" path="$$base$$/TransportSecurity"/>
-    <action command="delete" search="walk.all" path="$$base$$/Local Storage/leveldb"/>
     <action command="delete" search="walk.all" path="$$base$$/Session Storage"/>
     <action command="delete" search="walk.all" path="$$base$$/VideoDecodeStats"/>
   </option>
