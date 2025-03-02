@@ -387,7 +387,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                           ctypes.FormatError())
                     self.assertNotEqual(rc, 0)
             symlink_helper(win_symlink)
-            
+
             return
 
         # below this point, only posix
@@ -992,7 +992,18 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             pass
 
     def test_wipe_path_fast(self):
-        next(wipe_path(self.tempdir, True))
+        """Unit test for wipe_path() with fast mode
+
+        This test runs three iterations of the generator
+        and then aborts. Each iteration takes a little more
+        than two seconds.
+        """
+        counter = 0
+        for _i in wipe_path(self.tempdir, True):
+            counter += 1
+            if counter >= 3:
+                break
+        self.assertGreater(counter, 0)
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""
