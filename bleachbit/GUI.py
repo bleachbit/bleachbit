@@ -583,7 +583,8 @@ class GUI(Gtk.ApplicationWindow):
 
         self._auto_exit = auto_exit
 
-        self.set_wmclass(APP_NAME, APP_NAME)
+        self.set_property('name', APP_NAME)
+        self.set_property('role', APP_NAME)
         self.populate_window()
 
         # Redirect logging to the GUI.
@@ -846,7 +847,7 @@ class GUI(Gtk.ApplicationWindow):
             mdl, self, self.context_menu_event)
         self.view.get_selection().connect("changed", self.on_selection_changed)
         scrollbar_width = scrolled_window.get_vscrollbar().get_preferred_width()[1]
-        self.view.set_margin_right(scrollbar_width) # avoid conflict with scrollbar
+        self.view.set_margin_end(scrollbar_width) # avoid conflict with scrollbar
         scrolled_window.add(self.view)
         return scrolled_window
 
@@ -1232,14 +1233,15 @@ class GUI(Gtk.ApplicationWindow):
             (r.width, r.height) = (options.get(
                 "window_width"), options.get("window_height"))
 
-            screen = self.get_screen()
-            monitor_num = screen.get_monitor_at_point(r.x, r.y)
-            g = screen.get_monitor_geometry(monitor_num)
+            display = Gdk.Display.get_default()
+            monitor = display.get_monitor_at_window(self.get_window())
+            g = monitor.get_geometry()
 
             # only restore position and size if window left corner
             # is within the closest monitor
             if r.x >= g.x and r.x < g.x + g.width and \
                r.y >= g.y and r.y < g.y + g.height:
+                monitor_num = display.get_n_monitors() > 0 and display.get_monitor_at_window(self.get_window()).get_model() or 0
                 logger.debug("closest monitor ({}) geometry = {}+{}, window geometry = {}+{}".format(
                     monitor_num, (g.x, g.y), (g.width, g.height), (r.x, r.y), (r.width, r.height)))
                 self.move(r.x, r.y)
@@ -1280,8 +1282,11 @@ class GUI(Gtk.ApplicationWindow):
     def populate_window(self):
         """Create the main application window"""
         screen = self.get_screen()
-        self.set_default_size(min(screen.width(), 800),
-                              min(screen.height(), 600))
+        display = screen.get_display()
+        monitor = display.get_primary_monitor()
+        geometry = monitor.get_geometry()
+        self.set_default_size(min(geometry.width, 800),
+                              min(geometry.height, 600))
         self.set_position(Gtk.WindowPosition.CENTER)
         self.connect("configure-event", self.on_configure_event)
         self.connect("window-state-event", self.on_window_state_event)
