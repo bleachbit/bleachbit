@@ -138,7 +138,7 @@ if (-not (Test-Path gtk-themes.zip)) {
 if (-not (Test-Path "$themes_dir")) {
     Write-Host "Unpacking GTK themes..."
     Expand-Archive -Path gtk-themes.zip -DestinationPath .
-    Copy-Item -Path "gtk-themes\*" -Destination $python_home -Recurse -ErrorAction Stop
+    Copy-Item -Path "gtk-themes\*" -Destination $python_home -Recurse -ErrorAction SilentlyContinue
 } else {
     Write-Host "GTK themes are already unpacked."
 }
