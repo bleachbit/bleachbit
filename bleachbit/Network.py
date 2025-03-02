@@ -74,8 +74,13 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None, max_retries
     try:
         response = fetch_url(url)
     except requests.exceptions.RequestException as exc:
-        msg2 = f'{type(exc).__name__}: {exc}'
-        logger.exception(msg)
+        # For retryable errors (like 503), use a simplified error message
+        if isinstance(exc, requests.exceptions.RetryError):
+            msg2 = f'Server temporarily unavailable (retries exceeded)'
+            logger.warning(f"{msg}: {type(exc).__name__}")
+        else:
+            msg2 = f'{type(exc).__name__}: {exc}'
+            logger.exception(msg)
         do_error(msg2)
         return False
     if response.status_code != 200:

@@ -49,7 +49,9 @@ class NetworkTestCase(common.BleachbitTestCase):
         on_error_called = [False]
 
         def on_error(msg1, msg2):
-            print('test on_error(%s, %s)' % (msg1, msg2))
+            # Only print a simplified error message to avoid excessive output
+            error_type = 'HTTP status' if 'HTTP status code' in str(msg2) else 'Connection'
+            print(f'test on_error: {error_type} error for {msg1.split(":")[-1].strip()}')
             on_error_called[0] = True
         for test in tests:
             self.assertNotExists(fn)
