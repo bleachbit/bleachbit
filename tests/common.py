@@ -47,7 +47,6 @@ class BleachbitTestCase(unittest.TestCase):
     def setUpClass(cls):
         """Create a temporary directory for the testcase"""
         cls.tempdir = tempfile.mkdtemp(prefix=cls.__name__)
-        print(cls.tempdir)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             cls._patch_options_paths()
 

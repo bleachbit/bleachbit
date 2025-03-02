@@ -29,7 +29,7 @@ from tempfile import mkdtemp
 from shutil import rmtree
 
 from tests import common
-from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models
+from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models, MODEL_BASENAMES, DEFAULT_MODELS_DIR
 from bleachbit.FileUtilities import getsize
 
 
@@ -105,5 +105,12 @@ class ChaffTestCase(common.BleachbitTestCase):
 
     def test_have_models(self):
         """Test for function have_models()"""
+        download_models()
         rc = have_models()
+        self.assertTrue(rc)
         self.assertIsInstance(rc, bool)
+        for basename in MODEL_BASENAMES:
+            fn = os.path.join(DEFAULT_MODELS_DIR, basename)
+            self.assertExists(fn)
+            os.remove(fn)
+        self.assertFalse(have_models())

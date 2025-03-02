@@ -181,16 +181,23 @@ class GUITestCase(common.BleachbitTestCase):
 
     def test_chaff(self):
         """Minimal test of the chaff dialog"""
-        from bleachbit.GuiChaff import ChaffDialog
+        import bleachbit.GuiChaff
         import bleachbit.Chaff
-        ret = bleachbit.Chaff.download_models()
-        self.assertTrue(ret)
+        # common.py patches the download directory, so have_models() will return False.
+        bleachbit.Chaff.download_models()
         gui = self.app._window
-        cd = ChaffDialog(gui)
+        cd = bleachbit.GuiChaff.ChaffDialog(gui)
         cd.show_all()
+        chaff_dst_dir = os.path.join(self.tempdir, 'chaff_dst')
+        os.mkdir(chaff_dst_dir)
+        cd.choose_folder_button.set_filename(chaff_dst_dir)
+        cd.when_finished_combo.set_active(1) # do not delete after generation
+        cd.file_count.set_value(10)
         self.refresh_gui()
-        b= self.click_button(cd, 'Make files')
+        self.click_button(cd, 'Make files')
+        cd.thread.join()
         self.refresh_gui()
+        self.assertEqual(len(os.listdir(chaff_dst_dir)), 10)
 
     def test_preview(self):
         """Select cleaner option and clicks preview button"""

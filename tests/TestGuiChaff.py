@@ -35,7 +35,7 @@ from tests import common
 try:
     import gi
     gi.require_version('Gtk', '3.0')
-    from gi.repository import Gtk
+    from gi.repository import Gtk, Gio
     HAVE_GTK = True
     from bleachbit.GUI import Bleachbit
 except ImportError:
@@ -52,8 +52,21 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         if os.name == 'nt':
             from bleachbit.Windows import setup_environment
         super(GuiChaffTestCase, cls).setUpClass()
-        cls.app.register()
-        cls.app.activate()
+
+        # Try to register the application, catch the error if already registered
+        try:
+            cls.app.register()
+            cls.app.hold()  # Keep application alive during tests
+            cls.app.activate()
+        except gi.repository.GLib.GError as e:
+            if not "already exported" in str(e):
+                raise
+            # Application already registered, just hold it
+            cls.app.hold()
+            # Try to get the default application and activate it
+            default_app = Gio.Application.get_default()
+            if default_app:
+                default_app.activate()
         cls.refresh_gui()
 
     @classmethod

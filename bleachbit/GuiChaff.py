@@ -195,8 +195,8 @@ class ChaffDialog(Gtk.Dialog):
         import threading
         args = (file_count, inspiration, output_dir,
                 delete_when_finished, on_progress)
-        t = threading.Thread(target=make_files_thread, args=args)
-        t.start()
+        self.thread = threading.Thread(target=make_files_thread, args=args)
+        self.thread.start()
 
     def run(self):
         """Run the dialog"""
