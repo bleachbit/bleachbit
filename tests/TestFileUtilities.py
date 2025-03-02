@@ -271,25 +271,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         delete('does-not-exist', ignore_missing=True)
         self.assertRaises(OSError, delete, 'does-not-exist')
 
-    def test_delete_not_empty(self):
-        """Test for scenario directory is not empty"""
-        dirname = os.path.join(self.tempdir, 'a_dir')
-        os.mkdir(dirname)
-        self.assertTrue(is_dir_empty(dirname))
-        fn = os.path.join(dirname, 'a_file')
-        common.touch_file(fn)
-        self.assertFalse(is_dir_empty(dirname))
-        self.assertExists(fn)
-        self.assertExists(dirname)
-        self.assertExists(self.tempdir)
-
-        # Make sure shredding does not leave a renamed directory like
-        # in https://github.com/bleachbit/bleachbit/issues/783
-        for allow_shred in (False, True):
-            delete(dirname, allow_shred=allow_shred)
-            self.assertExists(fn)
-            self.assertExists(dirname)
-
     def delete_helper(self, shred):
         """Called by test_delete() with shred = False and = True"""
 
@@ -415,17 +396,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         delete(path, shred)
         self.assertNotExists(path)
 
-    def test_delete_read_only(self):
-        """Unit test for delete() with read-only file"""
-        for shred in (False, True):
-            fn = os.path.join(self.tempdir, 'read-only')
-            common.touch_file(fn)
-            import stat
-            os.chmod(fn, stat.S_IREAD)
-            self.assertExists(fn)
-            delete(fn, shred=shred)
-            self.assertNotExists(fn)
-
     @common.skipUnlessWindows
     def test_delete_hidden(self):
         """Unit test for delete() with hidden file"""
@@ -505,6 +475,36 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         msg = 'error calling umount\nargs=%s\nstderr=%s' % (args, stderr)
         self.assertEqual(rc, 0, msg)
 
+    def test_delete_not_empty(self):
+        """Test for scenario directory is not empty"""
+        dirname = os.path.join(self.tempdir, 'a_dir')
+        os.mkdir(dirname)
+        self.assertTrue(is_dir_empty(dirname))
+        fn = os.path.join(dirname, 'a_file')
+        common.touch_file(fn)
+        self.assertFalse(is_dir_empty(dirname))
+        self.assertExists(fn)
+        self.assertExists(dirname)
+        self.assertExists(self.tempdir)
+
+        # Make sure shredding does not leave a renamed directory like
+        # in https://github.com/bleachbit/bleachbit/issues/783
+        for allow_shred in (False, True):
+            delete(dirname, allow_shred=allow_shred)
+            self.assertExists(fn)
+            self.assertExists(dirname)
+
+    def test_delete_read_only(self):
+        """Unit test for delete() with read-only file"""
+        for shred in (False, True):
+            fn = os.path.join(self.tempdir, 'read-only')
+            common.touch_file(fn)
+            import stat
+            os.chmod(fn, stat.S_IREAD)
+            self.assertExists(fn)
+            delete(fn, shred=shred)
+            self.assertNotExists(fn)
+
     def test_detect_encoding(self):
         """Unit test for detect_encoding"""
         eat_glass = '나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
@@ -540,13 +540,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         os.unlink(db_path)
         self.assertNotExists(db_path)
 
-    def test_exists_in_path(self):
-        """Unit test for exists_in_path()"""
-        filename = 'ls'
-        if 'nt' == os.name:
-            filename = 'cmd.exe'
-        self.assertTrue(exists_in_path(filename))
-
     def test_exe_exists(self):
         """Unit test for exe_exists()"""
         tests = [("/bin/sh", True),
@@ -560,6 +553,13 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                      ('c:\\windows\\doesnotexist.exe', False)]
         for test in tests:
             self.assertEqual(exe_exists(test[0]), test[1])
+
+    def test_exists_in_path(self):
+        """Unit test for exists_in_path()"""
+        filename = 'ls'
+        if 'nt' == os.name:
+            filename = 'cmd.exe'
+        self.assertTrue(exists_in_path(filename))
 
     def test_expand_glob_join(self):
         """Unit test for expand_glob_join()"""
@@ -760,6 +760,33 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         for pathname in paths12:
             self.assertLExists(pathname)
 
+    def test_open_files_lsof(self):
+        self.assertEqual(list(open_files_lsof(
+            lambda: 'n/bar/foo\nn/foo/bar\nnoise')), ['/bar/foo', '/foo/bar'])
+
+    @common.skipIfWindows
+    def test_OpenFiles(self):
+        """Unit test for class OpenFiles"""
+
+        filename = os.path.join(self.tempdir, 'bleachbit-test-open-files')
+        f = open(filename, 'w')
+        openfiles = OpenFiles()
+        self.assertTrue(openfiles.is_open(filename),
+                        "Expected is_open(%s) to return True)\n"
+                        "openfiles.last_scan_time (ago)=%s\n"
+                        "openfiles.files=%s" %
+                        (filename,
+                         time.time() - openfiles.last_scan_time,
+                         openfiles.files))
+
+        f.close()
+        openfiles.scan()
+        self.assertFalse(openfiles.is_open(filename))
+
+        os.unlink(filename)
+        openfiles.scan()
+        self.assertFalse(openfiles.is_open(filename))
+
     def test_same_partition(self):
         """Unit test for same_partition()"""
         home = os.path.expanduser('~')
@@ -794,6 +821,37 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         # Unsupported scheme
         uri_s = ['foo://bar']
         self.assertEqual(uris_to_paths(uri_u + uri_w + uri_s), path_u + path_w)
+
+    def test_vacuum_sqlite3(self):
+        """Unit test for method vacuum_sqlite3()"""
+        import sqlite3
+
+        path = os.path.abspath('bleachbit.tmp.sqlite3')
+        if os.path.lexists(path):
+            delete(path)
+
+        conn = sqlite3.connect(path)
+        conn.execute('create table numbers (number)')
+        conn.commit()
+        empty_size = getsize(path)
+
+        def number_generator():
+            for x in range(1, 10000):
+                yield (x, )
+        conn.executemany(
+            'insert into numbers (number) values ( ? ) ', number_generator())
+        conn.commit()
+        self.assertLess(empty_size, getsize(path))
+        conn.execute('delete from numbers')
+        conn.commit()
+        conn.close()
+
+        vacuum_sqlite3(path)
+        self.assertEqual(empty_size, getsize(path))
+
+        gc_collect()
+        delete(path)
+        self.assertNotExists(path)
 
     def test_whitelisted(self):
         """Unit test for whitelisted()"""
@@ -1004,61 +1062,3 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             if counter >= 3:
                 break
         self.assertGreater(counter, 0)
-
-    def test_vacuum_sqlite3(self):
-        """Unit test for method vacuum_sqlite3()"""
-        import sqlite3
-
-        path = os.path.abspath('bleachbit.tmp.sqlite3')
-        if os.path.lexists(path):
-            delete(path)
-
-        conn = sqlite3.connect(path)
-        conn.execute('create table numbers (number)')
-        conn.commit()
-        empty_size = getsize(path)
-
-        def number_generator():
-            for x in range(1, 10000):
-                yield (x, )
-        conn.executemany(
-            'insert into numbers (number) values ( ? ) ', number_generator())
-        conn.commit()
-        self.assertLess(empty_size, getsize(path))
-        conn.execute('delete from numbers')
-        conn.commit()
-        conn.close()
-
-        vacuum_sqlite3(path)
-        self.assertEqual(empty_size, getsize(path))
-
-        gc_collect()
-        delete(path)
-        self.assertNotExists(path)
-
-    @common.skipIfWindows
-    def test_OpenFiles(self):
-        """Unit test for class OpenFiles"""
-
-        filename = os.path.join(self.tempdir, 'bleachbit-test-open-files')
-        f = open(filename, 'w')
-        openfiles = OpenFiles()
-        self.assertTrue(openfiles.is_open(filename),
-                        "Expected is_open(%s) to return True)\n"
-                        "openfiles.last_scan_time (ago)=%s\n"
-                        "openfiles.files=%s" %
-                        (filename,
-                         time.time() - openfiles.last_scan_time,
-                         openfiles.files))
-
-        f.close()
-        openfiles.scan()
-        self.assertFalse(openfiles.is_open(filename))
-
-        os.unlink(filename)
-        openfiles.scan()
-        self.assertFalse(openfiles.is_open(filename))
-
-    def test_open_files_lsof(self):
-        self.assertEqual(list(open_files_lsof(
-            lambda: 'n/bar/foo\nn/foo/bar\nnoise')), ['/bar/foo', '/foo/bar'])
