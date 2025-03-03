@@ -81,38 +81,52 @@ def open_files_linux():
 
 
 def get_filesystem_type(path):
-    """
-    * Get file system type from the given path
-    * return value: The tuple of (file_system_type, device_name)
-    *               @ file_system_type: vfat, ntfs, etc
-    *               @ device_name:      C://, D://, etc
+    """Get file system type from the given path
+
+    path: directory path
+
+    Return value:
+    A tuple of (file_system_type, device_name)
+    file_system_type: vfat, ntfs, etc.
+    device_name: C:, D:, etc.
+
+    File system types seen
+    * On Linux: ext4, vfat, squashfs
+    * On Windows: NTFS, FAT32, CDFS
     """
     try:
         import psutil
+        from pathlib import Path
     except ImportError:
-        logger.warning('To get the file system type from the given path, you need to install psutil package')
+        logger.warning(
+            'To get the file system type from the given path, you need to install psutil package')
         return ("unknown", "none")
 
-    partitions = {
-        partition.mountpoint: (partition.fstype, partition.device)
-        for partition in psutil.disk_partitions()
-    }
+    path_obj = Path(path)
+    if os.name == 'nt':
+        if len(path) == 2 and path[1] == ':':
+            path_obj = Path(path + '\\')
 
-    if path in partitions:
-        return partitions[path]
+    # Get all partitions with Path objects as keys
+    partitions = {}
+    for partition in psutil.disk_partitions():
+        mount_path = Path(partition.mountpoint)
+        partitions[mount_path] = (partition.fstype, partition.device)
 
-    splitpath = path.split(os.sep)
-    for i in range(0, len(splitpath)-1):
-        path = os.sep.join(splitpath[:i]) + os.sep
-        if path in partitions:
-            return partitions[path]
-            
-        path = os.sep.join(splitpath[:i])
-        if path in partitions:
-            return partitions[path]
+    # Exact match
+    for mount_path in partitions:
+        if path_obj == mount_path:
+            return partitions[mount_path]
+
+    # Try parent paths
+    current = path_obj
+    while current.parent != current:  # Stop at root
+        current = current.parent
+        for mount_path in partitions:
+            if current == mount_path:
+                return partitions[mount_path]
 
     return ("unknown", "none")
-
 
 
 def open_files_lsof(run_lsof=None):
@@ -947,8 +961,7 @@ def wipe_path(pathname, idle=False):
         return 1, done_percent, remaining_seconds
 
     # Get the file system type from the given path
-    fstype = get_filesystem_type(pathname)
-    fstype = fstype[0]
+    fstype = get_filesystem_type(pathname)[0]
     logger.debug(_(f"Wiping path {pathname} with file system type {fstype}"))
     if not os.path.isdir(pathname):
         logger.error(

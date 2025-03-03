@@ -32,12 +32,13 @@ from bleachbit.FileUtilities import (
     delete,
     detect_encoding,
     ego_owner,
-    exists_in_path,
     exe_exists,
+    exists_in_path,
     expand_glob_join,
-    extended_path,
     extended_path_undo,
+    extended_path,
     free_space,
+    get_filesystem_type,
     getsize,
     getsizedir,
     globex,
@@ -619,6 +620,35 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             bytes_free = int(bytes_free)
             free = free_space(drive)
             self.assertEqual(bytes_free, free)
+
+    def test_get_filesystem_type(self):
+        """Unit test for get_filesystem_type()"""
+        home = os.path.expanduser('~')
+        if os.name == 'nt':
+            path = self.tempdir
+            fs_type = get_filesystem_type(path)[0]
+            while path:
+                print(path)
+                self.assertEqual(get_filesystem_type(path)[0], fs_type)
+                self.assertEqual(get_filesystem_type(path.lower())[0], fs_type)
+                self.assertEqual(get_filesystem_type(path.upper())[0], fs_type)
+                if path == os.path.dirname(path):
+                    break
+                path = os.path.dirname(path)
+            self.assertNotEqual(fs_type, 'unknown')
+            self.assertEqual(get_filesystem_type(r'a:\\')[0], 'unknown')
+            self.assertEqual(get_filesystem_type(r'Z:\\')[0], 'unknown')
+            for check_path in (home, r'c:\\', r'c:'):
+                self.assertEqual(get_filesystem_type(
+                    check_path)[0], 'NTFS', check_path)
+                self.assertEqual(get_filesystem_type(
+                    check_path.lower())[0], 'NTFS')
+                self.assertEqual(get_filesystem_type(
+                    check_path.upper())[0], 'NTFS')
+        elif os.name == 'posix':
+            detected_fs = get_filesystem_type(home)[0]
+            self.assertTrue(detected_fs.startswith('ext'), detected_fs)
+            self.assertTrue(get_filesystem_type('/')[0].startswith('ext'))
 
     def test_getsize(self):
         """Unit test for method getsize()"""
