@@ -207,8 +207,27 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             else:
                 self.assertEqual("1,01GB", bytes_to_human(1000 ** 3 + 5812389))
 
-        # clean up
-        locale.setlocale(locale.LC_NUMERIC, old_locale)
+        try:
+            if old_locale[0] is None:
+                locale.setlocale(locale.LC_NUMERIC, None)
+            else:
+                try:
+                    # First try with the full locale string
+                    locale.setlocale(locale.LC_NUMERIC, '.'.join(
+                        filter(None, old_locale)))
+                except locale.Error:
+                    # If that fails, try just the language code part
+                    try:
+                        locale.setlocale(locale.LC_NUMERIC, old_locale[0])
+                    except locale.Error as e:
+                        print(
+                            f'Failed to restore locale with just language code {old_locale[0]}: {e}')
+        except locale.Error as e:
+            print(f'Failed to restore locale {old_locale}: {e}')
+        # Check that running getlocale again does not raise an exception.
+        # For me, getlocale() fails after successful setlocale(..., 'en_MX') on Windows.
+        locale.getlocale(locale.LC_NUMERIC)
+        self.assertEqual(locale.getlocale(locale.LC_NUMERIC), old_locale)
 
     def test_children_in_directory(self):
         """Unit test for function children_in_directory()"""

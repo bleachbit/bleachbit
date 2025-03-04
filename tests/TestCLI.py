@@ -117,6 +117,8 @@ class CLITestCase(common.BleachbitTestCase):
 
     def test_invalid_locale(self):
         """Unit test for invalid locales"""
+        import locale
+        original_locale = locale.getlocale(locale.LC_NUMERIC)
         old_lang = common.get_env('LANG')
         common.put_env('LANG', 'blahfoo')
         # tests are run from the parent directory
@@ -124,6 +126,8 @@ class CLITestCase(common.BleachbitTestCase):
         output = run_external(args)
         self.assertNotEqual(output[1].find('Copyright'), -1, str(output))
         common.put_env('LANG', old_lang)
+        self.assertEqual(common.get_env('LANG'), old_lang)
+        self.assertEqual(locale.getlocale(locale.LC_NUMERIC), original_locale)
 
     def test_preview(self):
         """Unit test for --preview option"""
