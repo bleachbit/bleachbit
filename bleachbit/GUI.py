@@ -601,7 +601,7 @@ class GUI(Gtk.ApplicationWindow):
             # if stderr was redirected - keep redirecting it
             sys.stderr = self.gtklog
 
-        # self.set_windows10_theme()
+        self.set_windows10_theme()
         Gtk.Settings.get_default().set_property(
             'gtk-application-prefer-dark-theme', options.get('dark_mode'))
 
