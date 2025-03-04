@@ -59,10 +59,8 @@ def get_winapp2():
             logger.info('deleting stale file %s ', fname)
             os.remove(fname)
     if not os.path.exists(fname):
-        with open(fname, 'w', encoding='utf-8') as fobj:
-            import urllib.request
-            txt = urllib.request.urlopen(url).read()
-            fobj.write(txt.decode('utf-8'))
+        from bleachbit.Network import download_url_to_fn
+        download_url_to_fn(url, fname)
     return fname
 
 
@@ -82,6 +80,7 @@ class WinappTestCase(common.BleachbitTestCase):
         winapps = Winapp(get_winapp2())
         for cleaner in winapps.get_cleaners():
             self.run_all(cleaner, False)
+
 
     def test_detectos(self):
         """Test detectos function"""
@@ -354,12 +353,12 @@ class WinappTestCase(common.BleachbitTestCase):
             # exclude log delimited by pipe
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log',
              True, False, True),
-            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\|deleteme.log',
+            (r'FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\|deleteme.log',
              True, False, True),
             # delete / exclude patterns with different complexity
             ('FileKey1=%(d)s|*eteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log',
              True, False, True),
-            ('FileKey1=%(d)s|*eteme.*\nExcludeKey1=FILE|%(d)s\|deleteme.log',
+            (r'FileKey1=%(d)s|*eteme.*\nExcludeKey1=FILE|%(d)s\|deleteme.log',
              True, False, True),
             ('FileKey1=%(d)s|*ete*.*\nExcludeKey1=PATH|%(d)s|*ete*.lo?',
              True, False, True),
@@ -376,7 +375,7 @@ class WinappTestCase(common.BleachbitTestCase):
             # exclude everything in folder
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.*',
              True, True, True),
-            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s\|*.*',
+            (r'FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s\|*.*',
              True, True, True),
             ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.*',
              True, True, True),
@@ -389,7 +388,7 @@ class WinappTestCase(common.BleachbitTestCase):
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%%bbtestdir%%|*.*',
              True, True, True),
             # exclude sub-folder
-            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s\sub',
+            (r'FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s\sub',
              False, False, True),
             # exclude multiple file types that do not exist
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.exe;*.dll',
@@ -403,13 +402,13 @@ class WinappTestCase(common.BleachbitTestCase):
             ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|c:\\doesnotexist|*.*\nExcludeKey2=PATH|c:\\alsodoesnotexist|*.*',
              False, False, False),
             # multiple ExcludeKey, the first should work
-            ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.log\nExcludeKey2=PATH|c:\\alsodoesnotexist\|*.*',
+            (r'FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.log\nExcludeKey2=PATH|c:\alsodoesnotexist\|*.*',
              True, False, True),
             # multiple ExcludeKey, both should work
             ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.log\nExcludeKey2=PATH|%(d)s|*.bak',
              True, True, True),
             # glob should exclude the directory called 'sub'
-            ('FileKey1=%(d)s|*.*\nExcludeKey1=PATH|%(d)s\s*',
+            (r'FileKey1=%(d)s|*.*\nExcludeKey1=PATH|%(d)s\s*',
              False, False, True),
         )
 
@@ -529,6 +528,26 @@ class WinappTestCase(common.BleachbitTestCase):
                  ('A - B (C)', 'a_b_c'))
         for test in tests:
             self.assertEqual(section2option(test[0]), test[1])
+
+    def test_section_not_found(self):
+        """Test a section that is found"""
+        tmp_ini_fn = os.path.join(self.tempdir, 'section_not_found.ini')
+
+        with open(tmp_ini_fn, 'w') as f:
+            f.write(r"""[Initech TPS Reports *]
+LangSecRef=3023
+DetectFile=%CommonAppData%\Initech\TPSReports
+FileKey1=%CommonAppData%\Initech\TPSReports\Logs|*.*""")
+
+        with mock.patch.object(Winapp, 'detect', return_value=True) as mock_detect:
+            winapps = Winapp(tmp_ini_fn)
+            cleaner_list = list(winapps.get_cleaners())
+            self.assertEqual(len(cleaner_list), 1)
+            self.assertEqual(cleaner_list[0].get_name(), 'Multimedia')
+            this_option = [x for x in cleaner_list[0].get_options()][0]
+            self.assertEqual(this_option[0], 'initech_tps_reports')
+            self.assertEqual(this_option[1], 'Initech TPS Reports')
+            mock_detect.assert_called()
 
     def test_many_patterns(self):
         """Test a cleaner like Steam Installers and related performance improvement
