@@ -452,8 +452,10 @@ class WinappTestCase(common.BleachbitTestCase):
         # clean their targets.
 
         filename = os.path.join('C:\\', 'deleteme.txt')
-        open(filename, 'w').close()
-        self.assertExists(filename)
+        try:
+            common.touch_file(filename)
+        except PermissionError:
+            self.skipTest('Permission denied: run as administrator')
 
         with mock.patch('os.path.lexists') as mock_lexists:
             cleaner = self.ini2cleaner('FileKey1=%SystemDrive%|deleteme.txt')
