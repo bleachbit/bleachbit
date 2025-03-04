@@ -180,6 +180,7 @@ class Winapp:
         self.cleaners[cleaner_id] = Cleaner.Cleaner()
         self.cleaners[cleaner_id].id = cleaner_id
         self.cleaners[cleaner_id].name = name
+        assert name.strip() == name
         self.cleaners[cleaner_id].description = _('Imported from winapp2.ini')
         # The detect() function in this module effectively does what
         # auto_hide() does, so this avoids redundant, slow processing.
@@ -307,8 +308,9 @@ class Winapp:
             return
         # find the BleachBit internal cleaner ID
         lid = self.section_to_cleanerid(langsecref_num)
+        option_name = section.replace('*', '').strip()
         self.cleaners[lid].add_option(
-            section2option(section), section.replace('*', ''), '')
+            section2option(section), option_name, '')
         for option in self.parser.options(section):
             if (
                 option
