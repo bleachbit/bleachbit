@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 21:03-0700\n"
-"PO-Revision-Date: 2024-09-26 12:21+0000\n"
+"PO-Revision-Date: 2025-03-05 08:29+0000\n"
 "Last-Translator: Ghost of Sparta <makesocialfoss32@keemail.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/bleachbit/main/"
 "hu/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Launchpad-Export-Date: 2019-12-26 01:52+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1188,7 +1188,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py:965
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
+msgstr "{pathname} elérési út törlése {fstype} típusú fájlrendszerrel"
 
 #: ../bleachbit/FileUtilities.py:968
 #, python-format
@@ -1393,19 +1393,15 @@ msgstr "Tisztítók letöltése és frissítése közösségtől (winapp2.ini)"
 
 #: ../bleachbit/GuiPreferences.py:145
 msgid "Auto-detect language"
-msgstr ""
+msgstr "Automatikus nyelvfelismerés"
 
 #: ../bleachbit/GuiPreferences.py:149
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "Nyelv automatikus megőrzése: %s."
+msgstr "Automatikusan felismeri a rendszer nyelvét"
 
 #: ../bleachbit/GuiPreferences.py:153
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "Nyelvek"
+msgstr "Nyelv:"
 
 #: ../bleachbit/GuiPreferences.py:218
 msgid "Hide irrelevant cleaners"
@@ -1500,7 +1496,7 @@ msgstr "Név"
 
 #: ../bleachbit/GuiPreferences.py:431
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "Ez az útvonal már létezik az engedélyezési listán."
 
 #: ../bleachbit/GuiPreferences.py:436 ../bleachbit/GuiPreferences.py:447
 #: ../bleachbit/GUI.py:801
@@ -1509,7 +1505,7 @@ msgstr "Hiba"
 
 #: ../bleachbit/GuiPreferences.py:442
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "Ez az útvonal már létezik az egyéni listán."
 
 #: ../bleachbit/GuiPreferences.py:457 ../bleachbit/GuiPreferences.py:497
 msgid "File"
@@ -1707,11 +1703,11 @@ msgstr "Előnézet vagy tisztítási folyamat megszakítása"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py:1082
 msgid "Update"
-msgstr ""
+msgstr "Frissítés"
 
 #: ../bleachbit/GUI.py:1084
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "A BleachBit frissítése a legújabb verzióra"
 
 #: ../bleachbit/GUI.py:1373
 msgid "Error when checking for updates: "
