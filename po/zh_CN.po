@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 21:03-0700\n"
-"PO-Revision-Date: 2024-08-31 06:09+0000\n"
-"Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate."
-"org>\n"
-"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
-"bleachbit/main/zh_Hans/>\n"
+"PO-Revision-Date: 2025-03-05 06:58+0000\n"
+"Last-Translator: 大王叫我来巡山 "
+"<hamburger2048@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
+"projects/bleachbit/main/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1149,7 +1149,7 @@ msgstr "文件系统中至少有一个文件不支持高级覆盖。"
 #: ../bleachbit/FileUtilities.py:965
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
+msgstr "擦除文件系统类型为 {fstype} 的路径 {pathname}"
 
 #: ../bleachbit/FileUtilities.py:968
 #, python-format
@@ -1346,19 +1346,15 @@ msgstr "下载并更新来自社区的清理规则（Winapp2.ini）"
 
 #: ../bleachbit/GuiPreferences.py:145
 msgid "Auto-detect language"
-msgstr ""
+msgstr "自动检测语言"
 
 #: ../bleachbit/GuiPreferences.py:149
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "自动保留语言 %s 。"
+msgstr "自动检测系统语言"
 
 #: ../bleachbit/GuiPreferences.py:153
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "语言"
+msgstr "语言："
 
 #: ../bleachbit/GuiPreferences.py:218
 msgid "Hide irrelevant cleaners"
@@ -1448,7 +1444,7 @@ msgstr "名称"
 
 #: ../bleachbit/GuiPreferences.py:431
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "此路径已在白名单中。"
 
 #: ../bleachbit/GuiPreferences.py:436 ../bleachbit/GuiPreferences.py:447
 #: ../bleachbit/GUI.py:801
@@ -1457,7 +1453,7 @@ msgstr "错误"
 
 #: ../bleachbit/GuiPreferences.py:442
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "此路径已经在自定义列表中。"
 
 #: ../bleachbit/GuiPreferences.py:457 ../bleachbit/GuiPreferences.py:497
 msgid "File"
@@ -1650,11 +1646,11 @@ msgstr "终止清理过程预览"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py:1082
 msgid "Update"
-msgstr ""
+msgstr "更新"
 
 #: ../bleachbit/GUI.py:1084
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "更新 BleachBit 到最新版"
 
 #: ../bleachbit/GUI.py:1373
 msgid "Error when checking for updates: "
