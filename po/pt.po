@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 21:03-0700\n"
-"PO-Revision-Date: 2025-03-05 17:29+0000\n"
+"PO-Revision-Date: 2025-03-05 17:38+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/bleachbit/"
 "main/pt/>\n"
@@ -71,7 +71,7 @@ msgstr "Histórico"
 #: ../cleaners/amule.xml ../bleachbit/Cleaner.py:242
 #: ../bleachbit/Cleaner.py:251
 msgid "Delete the usage history"
-msgstr "Limpar histórico de utilização"
+msgstr "Eliminar histórico de utilização"
 
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
@@ -93,7 +93,7 @@ msgstr "Registos"
 #: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
 #: ../cleaners/vuze.xml ../bleachbit/Cleaner.py:305
 msgid "Delete the logs"
-msgstr "Limpar registos"
+msgstr "Eliminar os registos"
 
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
 #: ../cleaners/flash.xml
@@ -394,7 +394,7 @@ msgstr ""
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "This option will delete your saved passwords."
-msgstr "Esta opção irá remover as palavras-passe guardadas."
+msgstr "Esta opção irá eliminar as palavras-passe guardadas."
 
 #: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -465,7 +465,7 @@ msgstr ""
 
 #: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
-msgstr "Esta opção remove todos os marcadores."
+msgstr "Esta opção elimina todos os marcadores."
 
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
@@ -936,7 +936,7 @@ msgstr "Limpar a reciclagem / lixo"
 #. the uninstallers for software updates.
 #: ../bleachbit/Cleaner.py:315
 msgid "Update uninstallers"
-msgstr "Atualizações de programas"
+msgstr "Atualizar desinstaladores"
 
 #: ../bleachbit/Cleaner.py:316
 msgid ""
@@ -1024,7 +1024,7 @@ msgstr "listar ferramentas"
 
 #: ../bleachbit/CLI.py:150
 msgid "preview files to be deleted and other changes"
-msgstr "pré-visualizar alterações e ficheiros a serem removidos"
+msgstr "pré-visualizar alterações e ficheiros a serem eliminados"
 
 #. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
 #. This is different than cleaning an arbitrary file, such as a
@@ -1032,7 +1032,8 @@ msgstr "pré-visualizar alterações e ficheiros a serem removidos"
 #: ../bleachbit/CLI.py:155
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr ""
-"executar ferramentas para apagar ficheiros ou efetuar alterações permanentes"
+"executar ferramentas para eliminar ficheiros ou efetuar alterações "
+"permanentes"
 
 #: ../bleachbit/CLI.py:157
 msgid "shred specific files or folders"
@@ -1134,7 +1135,7 @@ msgstr ""
 #. system reboots
 #: ../bleachbit/Command.py:104
 msgid "Mark for deletion"
-msgstr "Marcar para remoção"
+msgstr "Marcar para eliminação"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py:284
@@ -1164,7 +1165,7 @@ msgstr "Dispositivo ou recurso ocupado: %s"
 #: ../bleachbit/FileUtilities.py:422
 #, python-format
 msgid "Special file type cannot be deleted: %s"
-msgstr "Tipo de ficheiro especial, não pode ser removido: %s"
+msgstr "Tipo de ficheiro especial, não pode ser eliminado: %s"
 
 #: ../bleachbit/FileUtilities.py:628
 #, python-format
@@ -1247,7 +1248,7 @@ msgid ""
 "Use this to hide your use of BleachBit or to reset its settings. The next "
 "time you start BleachBit, the settings will initialize to default values."
 msgstr ""
-"Esta funcionalidade remove todas as definições e fecha a aplicação. Utilize-"
+"Esta funcionalidade elimina todas as definições e fecha a aplicação. Utilize-"
 "a para ocultar a sua utilização do Bleachbit ou para repor as definições "
 "originais. Da próxima vez que iniciar a aplicação, as definições serão "
 "repostas para os valores padrão."
@@ -1258,8 +1259,8 @@ msgid ""
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr ""
-"Tem a certeza de que pretende remover permanentemente os ficheiros das "
-"operações selecionadas? Os ficheiros removidos podem ter alterações desde a "
+"Tem a certeza de que pretende eliminar permanentemente os ficheiros das "
+"operações selecionadas? Os ficheiros eliminados podem ter alterações desde a "
 "última pré-visualização."
 
 #: ../bleachbit/GuiBasic.py:142
@@ -1334,7 +1335,7 @@ msgstr "Limpar sem destruir"
 
 #: ../bleachbit/GuiChaff.py:116
 msgid "Do not delete"
-msgstr "Não limpar"
+msgstr "Não eliminar"
 
 #: ../bleachbit/GuiChaff.py:127
 msgid "Make files"
@@ -1422,7 +1423,7 @@ msgstr "Sair após a limpeza"
 
 #: ../bleachbit/GuiPreferences.py:242
 msgid "Confirm before delete"
-msgstr "Confirmar antes de limpar"
+msgstr "Confirmar antes de eliminar"
 
 #: ../bleachbit/GuiPreferences.py:250
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
@@ -1477,7 +1478,7 @@ msgstr "Remover"
 
 #: ../bleachbit/GuiPreferences.py:385
 msgid "All languages will be deleted except those checked."
-msgstr "Apenas os idiomas assinalados serão mantidos."
+msgstr "Todas os idiomas serão eliminados, exceto os marcados."
 
 #: ../bleachbit/GuiPreferences.py:401
 msgid "Preserve"
@@ -1946,7 +1947,7 @@ msgid ""
 "shredding. It does not free up space."
 msgstr ""
 "A limpeza do espaço livre em disco remove os restos de ficheiros que foram "
-"removidos sem terem sido destruídos. Não liberta espaço."
+"eliminados sem terem sido destruídos. Não liberta espaço."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:338
@@ -1980,14 +1981,14 @@ msgstr "Espaço em disco a ser recuperado: %s"
 #: ../bleachbit/Worker.py:294
 #, python-format
 msgid "Files deleted: %d"
-msgstr "Ficheiros removidos: %d"
+msgstr "Ficheiros eliminados: %d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
 #: ../bleachbit/Worker.py:298
 #, python-format
 msgid "Files to be deleted: %d"
-msgstr "Ficheiros a serem removidos: %d"
+msgstr "Ficheiros a serem eliminados: %d"
 
 #: ../bleachbit/Worker.py:301
 #, python-format
