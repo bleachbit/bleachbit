@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 21:03-0700\n"
-"PO-Revision-Date: 2024-12-05 11:00+0000\n"
+"PO-Revision-Date: 2025-03-05 12:02+0000\n"
 "Last-Translator: Priit Jõerüüt <hwlate@joeruut.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/bleachbit/main/"
 "et/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1180,6 +1180,7 @@ msgstr ""
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
 msgstr ""
+"Kustutame andmeid asukohas „{pathname}“, kus failisüsteemiks on „{fstype}“"
 
 #: ../bleachbit/FileUtilities.py:968
 #, python-format
@@ -1383,19 +1384,15 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:145
 msgid "Auto-detect language"
-msgstr ""
+msgstr "Tuvasta keel automaatselt"
 
 #: ../bleachbit/GuiPreferences.py:149
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "Automaatselt säilitame keele %s."
+msgstr "Tuvasta süsteemi keel automaatselt"
 
 #: ../bleachbit/GuiPreferences.py:153
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "Keeled"
+msgstr "Keel:"
 
 #: ../bleachbit/GuiPreferences.py:218
 msgid "Hide irrelevant cleaners"
@@ -1489,7 +1486,7 @@ msgstr "Nimi"
 
 #: ../bleachbit/GuiPreferences.py:431
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "See asukoht on juba olemas lubatud nimekirjas."
 
 #: ../bleachbit/GuiPreferences.py:436 ../bleachbit/GuiPreferences.py:447
 #: ../bleachbit/GUI.py:801
@@ -1498,7 +1495,7 @@ msgstr "Viga"
 
 #: ../bleachbit/GuiPreferences.py:442
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "See asukoht on juba olemas sinu loodud nimekirjas."
 
 #: ../bleachbit/GuiPreferences.py:457 ../bleachbit/GuiPreferences.py:497
 msgid "File"
@@ -1683,11 +1680,11 @@ msgstr "Katkesta eelvaade või puhastusprotsess"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py:1082
 msgid "Update"
-msgstr ""
+msgstr "Uuenda"
 
 #: ../bleachbit/GUI.py:1084
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "Uuenda BleachBit viimase versioonini"
 
 #: ../bleachbit/GUI.py:1373
 msgid "Error when checking for updates: "
