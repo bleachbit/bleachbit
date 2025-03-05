@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 21:03-0700\n"
-"PO-Revision-Date: 2024-08-31 06:09+0000\n"
+"PO-Revision-Date: 2025-03-05 05:58+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/he/"
 ">\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1366,16 +1366,12 @@ msgid "Auto-detect language"
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py:149
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "השפה %s משומרת אוטומטית."
+msgstr "לזהות את שפת המערכת אוטומטית"
 
 #: ../bleachbit/GuiPreferences.py:153
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "שפות"
+msgstr "שפה:"
 
 #: ../bleachbit/GuiPreferences.py:218
 msgid "Hide irrelevant cleaners"
