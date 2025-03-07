@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-04 21:03-0700\n"
-"PO-Revision-Date: 2024-09-01 21:09+0000\n"
+"PO-Revision-Date: 2025-03-07 13:13+0000\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "bleachbit/main/en_GB/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1175,7 +1175,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py:965
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
+msgstr "Wiping path {pathname} with file system type {fstype}"
 
 #: ../bleachbit/FileUtilities.py:968
 #, python-format
@@ -1377,19 +1377,15 @@ msgstr "Download and update cleaners from community (winapp2.ini)"
 
 #: ../bleachbit/GuiPreferences.py:145
 msgid "Auto-detect language"
-msgstr ""
+msgstr "Auto-detect language"
 
 #: ../bleachbit/GuiPreferences.py:149
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "Automatically preserving language %s."
+msgstr "Automatically detect the system language"
 
 #: ../bleachbit/GuiPreferences.py:153
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "Languages"
+msgstr "Language:"
 
 #: ../bleachbit/GuiPreferences.py:218
 msgid "Hide irrelevant cleaners"
@@ -1482,7 +1478,7 @@ msgstr "Name"
 
 #: ../bleachbit/GuiPreferences.py:431
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "This path already exists in the whitelist."
 
 #: ../bleachbit/GuiPreferences.py:436 ../bleachbit/GuiPreferences.py:447
 #: ../bleachbit/GUI.py:801
@@ -1491,7 +1487,7 @@ msgstr "Error"
 
 #: ../bleachbit/GuiPreferences.py:442
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "This path already exists in the custom list."
 
 #: ../bleachbit/GuiPreferences.py:457 ../bleachbit/GuiPreferences.py:497
 msgid "File"
@@ -1681,11 +1677,11 @@ msgstr "Abort the preview or cleaning process"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py:1082
 msgid "Update"
-msgstr ""
+msgstr "Update"
 
 #: ../bleachbit/GUI.py:1084
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "Update BleachBit to the latest version"
 
 #: ../bleachbit/GUI.py:1373
 msgid "Error when checking for updates: "
