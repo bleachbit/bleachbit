@@ -77,6 +77,7 @@ class Worker:
         # replaced by a message such as 'Permission denied.'
         err = _("Exception while running operation '%(operation)s': '%(msg)s'") \
             % {'operation': operation, 'msg': str(sys.exc_info()[1])}
+
         logger.error(err, exc_info=True)
         self.total_errors += 1
 
@@ -95,13 +96,15 @@ class Worker:
         except SystemExit:
             pass
         except Exception as e:
-            # 2 = does not exist
-            # 13 = permission denied
             from errno import ENOENT, EACCES
-            if isinstance(e, OSError) and e.errno in (ENOENT, EACCES):
-                # For access denied, do not show traceback
-                exc_message = str(e)
-                logger.error('%s: %s', exc_message, cmd)
+            if isinstance(e, OSError) and e.errno == ENOENT:
+                # ENOENT (Error NO ENTry) means file not found.
+                # Do not show traceback.
+                logger.error(_("File not found: %s"), e.filename)
+            elif isinstance(e, OSError) and e.errno == EACCES:
+                # EACCES (Error ACCESS) means access denied.
+                # Do not show traceback.
+                logger.error(_("Access denied: %s"), e.filename)
             else:
                 # For other errors, show the traceback.
                 msg = _('Error: {operation_option}: {command}')
