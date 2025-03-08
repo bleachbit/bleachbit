@@ -44,6 +44,8 @@ install:
 	mkdir -p $(DESTDIR)$(bindir)
 	$(INSTALL_DATA) bleachbit.py $(DESTDIR)$(bindir)/bleachbit
 	chmod 0755 $(DESTDIR)$(bindir)/bleachbit
+	# Update the hardcoded /usr/share in bleachbit.py to match the datadir set by the user.
+	sed -i 's|/usr/share|$(datadir)|g' $(DESTDIR)$(bindir)/bleachbit
 
 	# application launcher
 	mkdir -p $(DESTDIR)$(datadir)/applications
@@ -74,7 +76,7 @@ install:
 	$(INSTALL_DATA) bleachbit.png $(DESTDIR)$(datadir)/pixmaps/
 
 	# translations
-	make -C po install DESTDIR=$(DESTDIR)
+	make -C po install prefix=$(prefix) datadir=$(datadir) DESTDIR=$(DESTDIR)
 
 	# PolicyKit
 	mkdir -p $(DESTDIR)$(datadir)/polkit-1/actions
