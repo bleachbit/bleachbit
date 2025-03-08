@@ -104,7 +104,11 @@ class Worker:
             elif isinstance(e, OSError) and e.errno == EACCES:
                 # EACCES (Error ACCESS) means access denied.
                 # Do not show traceback.
-                logger.error(_("Access denied: %s"), e.filename)
+                if e.strerror == "Access denied in delete_locked_file()":
+                    # This comes from Windows.delete_locked_file()
+                    logger.error(_("Access denied when flagging file for later delete: %s"), e.filename)
+                else:
+                    logger.error(_("Access denied: %s"), e.filename)
             else:
                 # For other errors, show the traceback.
                 msg = _('Error: {operation_option}: {command}')
