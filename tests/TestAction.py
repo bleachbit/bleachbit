@@ -36,6 +36,7 @@ import shutil
 import sys
 import tempfile
 import unittest
+import xml.parsers.expat
 from unittest import mock
 from xml.dom.minidom import parseString
 
@@ -103,7 +104,11 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def _test_action_str(self, action_str, expect_exists=True):
         """Parse <action> and test it"""
-        dom = parseString(action_str)
+        try:
+            dom = parseString(action_str)
+        except xml.parsers.expat.ExpatError as e:
+            print(action_str)
+            raise e
         action_node = dom.childNodes[0]
         command = action_node.getAttribute('command')
         filename = action_node.getAttribute('path')
@@ -269,6 +274,21 @@ class ActionTestCase(common.BleachbitTestCase):
         for test in tests:
             self._test_action_str(
                 test % ActionTestCase._TEST_PROCESS_CMDS[os.name])
+
+    def test_process_space(self):
+        """Unit test for process action with space in path
+
+        https://github.com/bleachbit/bleachbit/pull/871
+        """
+        fn = os.path.join(self.tempdir, 'file with space.txt')
+        common.touch_file(fn)
+        if os.name == 'nt':
+            cmd = 'cmd /c del &quot;%s&quot;' % fn
+        else:
+            cmd = 'rm %s' % fn.replace(' ', '\\ ')
+        action_str = '<action command="process" wait="true" cmd="%s" />' % cmd
+        self._test_action_str(action_str)
+        self.assertNotExists(fn)
 
     def test_process_unicode_stderr(self):
         """
