@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -77,7 +77,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external(self):
         """Unit test for run_external"""
-        args = {'nt': ['cmd.exe', '/c', 'dir', '%windir%\system32', '/s', '/b'],
+        args = {'nt': ['cmd.exe', '/c', 'dir', r'%windir%\system32', '/s', '/b'],
                 'posix': ['find', '/usr/bin']}
         (rc, stdout, stderr) = run_external(args[os.name])
         self.assertEqual(0, rc)
@@ -85,7 +85,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
         self.assertRaises(OSError, run_external, ['cmddoesnotexist'])
 
-        args = {'nt': ['cmd.exe', '/c', 'dir', 'c:\doesnotexist'],
+        args = {'nt': ['cmd.exe', '/c', 'dir', r'c:\doesnotexist'],
                 'posix': ['ls', '/doesnotexist']}
         (rc, stdout, stderr) = run_external(args[os.name])
         self.assertNotEqual(0, rc)
@@ -106,38 +106,46 @@ class GeneralTestCase(common.BleachbitTestCase):
         # clean_env parameter should not alter the PATH, and the PATH
         # should not be empty
         path_clean = run(['bash', '-c', 'echo $PATH'], clean_env=True)
-        self.assertEqual(os.getenv('PATH'), path_clean)
+        self.assertEqual(common.get_env('PATH'), path_clean)
         self.assertGreater(len(path_clean), 10)
 
         path_unclean = run(['bash', '-c', 'echo $PATH'], clean_env=False)
         self.assertEqual(path_clean, path_unclean)
 
         # With parent environment set to English and parameter clean_env=False,
-        # expect English.
-        os.putenv('LC_ALL', 'C')
+        # expect English
+        import copy
+        old_environ = copy.deepcopy(os.environ)
+
+        lc_all_old = common.get_env('LC_ALL')
+        lang_old = common.get_env('LANG')
+        common.put_env('LC_ALL', 'C')
         (rc, stdout, stderr) = run_external(
             ['ls', '/doesnotexist'], clean_env=False)
         self.assertEqual(rc, 2)
-        self.assertTrue('No such file' in stderr)
+        self.assertIn('No such file', stderr)
 
         # Set parent environment to Spanish.
-        os.putenv('LC_ALL', 'es_MX.UTF-8')
+        common.put_env('LC_ALL', 'es_MX.UTF-8')
         (rc, stdout, stderr) = run_external(
             ['ls', '/doesnotexist'], clean_env=False)
         self.assertEqual(rc, 2)
         if os.path.exists('/usr/share/locale-langpack/es/LC_MESSAGES/coreutils.mo'):
             # Spanish language pack is installed.
-            self.assertTrue('No existe el archivo' in stderr)
+            self.assertIn('No existe el archivo', stderr)
 
         # Here the parent environment has Spanish, but the child process
         # should use English.
         (rc, stdout, stderr) = run_external(
             ['ls', '/doesnotexist'], clean_env=True)
         self.assertEqual(rc, 2)
-        self.assertTrue('No such file' in stderr)
+        self.assertIn('No such file', stderr)
 
         # Reset environment
-        os.unsetenv('LC_ALL')
+        self.assertNotEqual(old_environ, copy.deepcopy(os.environ))
+        common.put_env('LC_ALL', lc_all_old)
+        common.put_env('LANG', lang_old)
+        self.assertEqual(old_environ, copy.deepcopy(os.environ))
 
     @common.skipIfWindows
     def test_sudo_mode(self):

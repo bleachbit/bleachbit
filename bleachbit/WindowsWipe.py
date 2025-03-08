@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -107,8 +107,9 @@ from winioctlcon import (FSCTL_GET_RETRIEVAL_POINTERS,
                          FSCTL_SET_SPARSE,
                          FSCTL_SET_ZERO_DATA)
 from win32file import (GENERIC_READ, GENERIC_WRITE, FILE_BEGIN,
+                       FILE_SHARE_DELETE,
                        FILE_SHARE_READ, FILE_SHARE_WRITE,
-                       OPEN_EXISTING, CREATE_ALWAYS,
+                       OPEN_EXISTING, CREATE_ALWAYS, FILE_FLAG_BACKUP_SEMANTICS,
                        DRIVE_REMOTE, DRIVE_CDROM, DRIVE_UNKNOWN)
 from win32con import (FILE_ATTRIBUTE_ENCRYPTED,
                       FILE_ATTRIBUTE_COMPRESSED,
@@ -124,7 +125,7 @@ VER_SUITE_PERSONAL = 0x200   # doesn't seem to be present in win32con.
 
 # Constants.
 simulate_concurrency = False     # remove this test function when QA complete
-# drive_letter_safety = "E"       # protection to only use removeable drives
+# drive_letter_safety = "E"       # protection to only use removable drives
 # don't use C: or D:, but E: and beyond OK.
 tmp_file_name = "bbtemp.dat"
 spike_file_name = "bbspike"     # cluster number will be appended
@@ -326,7 +327,7 @@ def check_extents(extents, volume_bitmap, allocated_extents=None):
             if check_mapped_bit(volume_bitmap, cluster):
                 count_allocated += 1
                 if allocated_extents is not None:
-                    allocated_extents.append(cluster)
+                    allocated_extents.append((cluster, cluster)) # Modified by Marvin [12/05/2020] The extents should have (start, end) format 
             else:
                 count_free += 1
 
@@ -399,7 +400,7 @@ def spike_cluster(volume_handle, cluster, tmp_file_path):
 # should look.
 def check_mapped_bit(volume_bitmap, lcn):
     assert isinstance(lcn, int)
-    mapped_bit = ord(volume_bitmap[lcn // 8])
+    mapped_bit = volume_bitmap[lcn // 8]
     bit_location = lcn % 8    # zero-based
     if bit_location > 0:
         mapped_bit = mapped_bit >> bit_location
@@ -432,8 +433,13 @@ def determine_win_version():
 # CreateFileW gives us Unicode support.
 def open_file(file_name, mode=GENERIC_READ):
     file_handle = CreateFileW(file_name, mode, 0, None,
-                              OPEN_EXISTING, 0, None)
+                              OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, None)
     return file_handle
+
+
+# Close file
+def close_file(file_handle):
+    CloseHandle(file_handle)
 
 
 # Get some basic information about a file.
@@ -643,7 +649,7 @@ def get_volume_bitmap(volume_handle, total_clusters):
     input_struct = struct.pack('q', 0)
 
     # Figure out the buffer size. Add small fudge factor to ensure success.
-    buf_size = (total_clusters / 8) + 16 + 64
+    buf_size = int(total_clusters / 8) + 16 + 64
 
     vb_struct = DeviceIoControl(volume_handle, FSCTL_GET_VOLUME_BITMAP,
                                 input_struct, buf_size)
@@ -732,7 +738,7 @@ def move_file(volume_handle, file_handle, starting_vcn,
     # We include a couple of zero ints for 64-bit alignment.
     input_struct = struct.pack('IIqqII', int(file_handle), 0, starting_vcn,
                                starting_lcn, cluster_count, 0)
-    vb_struct = DeviceIoControl(volume_handle, FSCTL_MOVE_FILE,
+    _vb_struct = DeviceIoControl(volume_handle, FSCTL_MOVE_FILE,
                                 input_struct, None)
 
 
@@ -826,15 +832,14 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
     if count_allocated > 0 and count_free == 0:
         return False
     if count_allocated > 0 or write_length > write_buf_size * 4:
-        if lcn_start < lcn_end:
-            for split_s, split_e in split_extent(lcn_start, lcn_end):
-                wipe_extent_by_defrag(volume_handle, split_s, split_e,
-                                      cluster_size, total_clusters,
-                                      tmp_file_path)
-            return True
-        else:
+        if lcn_start >= lcn_end:
             return False
 
+        for split_s, split_e in split_extent(lcn_start, lcn_end):
+            wipe_extent_by_defrag(volume_handle, split_s, split_e,
+                                  cluster_size, total_clusters,
+                                  tmp_file_path)
+        return True
     # Put the zero-fill file in place.
     file_handle = CreateFile(tmp_file_path, GENERIC_READ | GENERIC_WRITE,
                              0, None, CREATE_ALWAYS,
@@ -864,14 +869,13 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
                 # Break into smaller pieces and do what we can.
                 logger.debug("!! Move encountered an error !!")
                 CloseHandle(file_handle)
-                if lcn_start < lcn_end:
-                    for split_s, split_e in split_extent(lcn_start, lcn_end):
-                        wipe_extent_by_defrag(volume_handle, split_s, split_e,
-                                              cluster_size, total_clusters,
-                                              tmp_file_path)
-                    return True
-                else:
+                if lcn_start >= lcn_end:
                     return False
+                for split_s, split_e in split_extent(lcn_start, lcn_end):
+                    wipe_extent_by_defrag(volume_handle, split_s, split_e,
+                                          cluster_size, total_clusters,
+                                          tmp_file_path)
+                return True
         else:
             # If Windows put the zero-fill extent on the exact clusters we
             # intended to place it, no need to attempt a move.
@@ -962,7 +966,7 @@ def file_wipe(file_name):
                                          volume_info.total_clusters,
                                          orig_extents, bridged_extents)
     for lcn_start, lcn_end in orig_extents:
-        result = wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end,
+        wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end,
                                        cluster_size, volume_info.total_clusters,
                                        tmp_file_path)
 

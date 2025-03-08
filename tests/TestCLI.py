@@ -1,8 +1,7 @@
-#!/usr/bin/env python
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,7 +22,11 @@
 Test case for module CLI
 """
 
-from bleachbit.CLI import *
+from bleachbit.CLI import (
+    args_to_operations,
+    args_to_operations_list,
+    cleaners_list,
+    preview_or_clean)
 from bleachbit.General import run_external
 from bleachbit import FileUtilities
 from tests import common
@@ -32,7 +35,6 @@ import copy
 import os
 import sys
 import tempfile
-import unittest
 
 
 class CLITestCase(common.BleachbitTestCase):
@@ -57,14 +59,36 @@ class CLITestCase(common.BleachbitTestCase):
                   (args, output[2]))
         self.assertEqual(pos, -1)
 
+    def test_args_to_operations_list(self):
+        """Unit test for args_to_operations_list()"""
+        # --preset
+        import bleachbit.Options
+        bleachbit.Options.init_configuration()
+        o = args_to_operations_list(True, False)
+        self.assertEqual(o, [])
+        bleachbit.Options.options.set_tree('system', 'tmp', True)
+        o = args_to_operations_list(True, False)
+        self.assertEqual(o, ['system.tmp'])
+
+        # --all-but-warning
+        o = args_to_operations_list(False, True)
+        self.assertIsInstance(o, list)
+        self.assertTrue('google_chrome.cache' in o)
+        self.assertTrue('system.tmp' in o)
+        self.assertTrue('system.clipboard' in o)
+        self.assertFalse('system.free_disk_space' in o)
+        self.assertFalse('system.memory' in o)
+
     def test_args_to_operations(self):
         """Unit test for args_to_operations()"""
+        # test explicit cleaners (without --preset or --all-but-warning)
         tests = (
             (['adobe_reader.*'],
              {'adobe_reader': ['cache', 'mru', 'tmp']}),
             (['adobe_reader.mru'], {'adobe_reader': ['mru']}))
         for test in tests:
-            o = args_to_operations(test[0], False)
+            o = args_to_operations(test[0], False, False)
+            self.assertIsInstance(o, dict)
             self.assertEqual(o, test[1])
 
     def test_cleaners_list(self):
@@ -93,13 +117,17 @@ class CLITestCase(common.BleachbitTestCase):
 
     def test_invalid_locale(self):
         """Unit test for invalid locales"""
-        lang = os.environ['LANG']
-        os.environ['LANG'] = 'blahfoo'
+        import locale
+        original_locale = locale.getlocale(locale.LC_NUMERIC)
+        old_lang = common.get_env('LANG')
+        common.put_env('LANG', 'blahfoo')
         # tests are run from the parent directory
         args = [sys.executable, '-m', 'bleachbit.CLI', '--version']
         output = run_external(args)
         self.assertNotEqual(output[1].find('Copyright'), -1, str(output))
-        os.environ['LANG'] = lang
+        common.put_env('LANG', old_lang)
+        self.assertEqual(common.get_env('LANG'), old_lang)
+        self.assertEqual(locale.getlocale(locale.LC_NUMERIC), original_locale)
 
     def test_preview(self):
         """Unit test for --preview option"""
@@ -110,7 +138,16 @@ class CLITestCase(common.BleachbitTestCase):
         args_list = []
         module = 'bleachbit.CLI'
         big_args = [sys.executable, '-m', module, '--preview', ]
-        for cleaner in cleaners_list():
+        # The full list can take a long time and generally does not improve the testing,
+        # so test a subset.
+        full_cleaners_list = list(cleaners_list())
+        system_cleaners = [
+            c for c in full_cleaners_list if c.startswith('system.')]
+        non_system_cleaners = [
+            c for c in full_cleaners_list if not c.startswith('system.')]
+        import random
+        sample_cleaners = random.sample(non_system_cleaners, 5)
+        for cleaner in (system_cleaners + sample_cleaners):
             args_list.append(
                 [sys.executable, '-m', module, '--preview', cleaner])
             big_args.append(cleaner)
@@ -146,8 +183,8 @@ class CLITestCase(common.BleachbitTestCase):
             FileUtilities.delete = dummy_delete
             FileUtilities.delete(filename)
             self.assertExists(filename)
-            operations = args_to_operations(['system.tmp'], False)
-            preview_or_clean(operations, True)
+            operations = args_to_operations(['system.tmp'], False, False)
+            preview_or_clean(operations, True, quiet=True)
             FileUtilities.delete = save_delete
             self.assertIn(filename, deleted_paths,
                           "%s not found deleted" % filename)
@@ -171,4 +208,18 @@ class CLITestCase(common.BleachbitTestCase):
                 args = [sys.executable, '-m',
                         'bleachbit.CLI', '--shred', filename]
                 output = run_external(args)
+                self.assertEqual(output[0], 0)
                 self.assertNotExists(filename)
+
+    @common.skipUnlessWindows
+    def test_gui_exit(self):
+        """Unit test for --gui --exit, only for Windows"""
+        args = (sys.executable, '-m',
+                'bleachbit.CLI', '--gui', '--exit')
+        (rc, _stdout, stderr) = run_external(args)
+        self.assertNotIn('no such option', stderr)
+        self.assertNotIn('Usage: CLI.py', stderr)
+        self.assertEqual(rc, 0)
+        # Is the application still running?
+        opened_windows_titles = common.get_opened_windows_titles()
+        self.assertFalse('BleachBit' in opened_windows_titles)

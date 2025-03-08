@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2008-2025 Andrew Ziem
+    https://www.bleachbit.org
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<cleaner id="slack">
+  <label>Slack</label>
+  <description>Chat client</description>
+  <running type="exe" os="windows" same_user="true">slack.exe</running>
+  <running type="exe" os="linux" same_user="true">Slack</running>
+  <var name="base">
+    <value os="windows">%UserProfile%\AppData\Roaming\Slack</value>
+    <value os="linux">~/.config/Slack</value>
+  </var>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the web cache, which reduces time to display revisited pages</description>
+    <action command="delete" search="walk.all" path="$$base$$/Cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/Code Cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GPUCache"/>
+    <action command="delete" search="file" path="$$base$$/Network Persistent State"/>
+  </option>
+  <option id="cookies">
+    <label>Cookies</label>
+    <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
+    <action command="delete" search="file" path="$$base$$/Cookies"/>
+    <action command="delete" search="file" path="$$base$$/Cookies-journal"/>
+    <action command="delete" search="file" path="$$base$$/Preferences"/>
+  </option>
+  <option id="history">
+    <label>History</label>
+    <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
+    <action command="delete" search="file" path="$$base$$/TransportSecurity"/>
+    <action command="delete" search="walk.all" path="$$base$$/Local Storage/leveldb"/>
+    <action command="delete" search="walk.all" path="$$base$$/Session Storage"/>
+    <action command="delete" search="walk.all" path="$$base$$/VideoDecodeStats"/>
+  </option>
+  <option id="vacuum">
+    <label>Vacuum</label>
+    <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
+    <action command="sqlite.vacuum" search="file" path="$$base$$/Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="$$base$$/Origin Bound Certs"/>
+    <action command="sqlite.vacuum" search="file" path="$$base$$/QuotaManager"/>
+    <action command="sqlite.vacuum" search="file" path="$$base$$/databases/Databases.db"/>
+  </option>
+</cleaner>

@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2020 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -22,15 +22,15 @@
 <cleaner id="discord">
   <label>Discord</label>
   <description>Chat client</description>
-  <running type="exe" os="windows">discord.exe</running>
-  <running type="exe" os="linux">Discord</running>
+  <running type="exe" os="windows" same_user="true">discord.exe</running>
+  <running type="exe" os="linux" same_user="true">Discord</running>
   <var name="base">
     <value os="windows">%UserProfile%\AppData\Roaming\Discord</value>
     <value os="linux">~/.config/discord</value>
   </var>
   <option id="cache">
     <label>Cache</label>
-    <description>Delete the web cache, which reduces time to display revisited pages</description>
+    <description>Delete the web cache, which reduces time to display revisited pages. This also clears favorited GIFs.</description>
     <action command="delete" search="walk.all" path="$$base$$/Cache"/>
     <action command="delete" search="walk.all" path="$$base$$/Code Cache"/>
     <action command="delete" search="walk.all" path="$$base$$/GPUCache"/>

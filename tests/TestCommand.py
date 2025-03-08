@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,11 @@
 Test case for Command
 """
 
+import os
+
 from tests import common
-from bleachbit.Command import *
+from bleachbit import FileUtilities
+from bleachbit.Command import Delete, Function, Shred
 
 
 class CommandTestCase(common.BleachbitTestCase):
@@ -37,7 +40,6 @@ class CommandTestCase(common.BleachbitTestCase):
 
         # preview
         ret = next(cmd.execute(really_delete=False))
-        s = str(cmd)
         self.assertGreater(ret['size'], 0)
         self.assertEqual(ret['path'], path)
         self.assertExists(path)

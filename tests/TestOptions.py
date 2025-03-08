@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,11 +22,14 @@
 Test case for module Options
 """
 
+import errno
+import mock
+import os
+import unittest.mock
+
 from tests import common
 import bleachbit.Options
 from bleachbit import NoOptionError
-
-import os
 
 
 class OptionsTestCase(common.BleachbitTestCase):
@@ -103,6 +106,9 @@ class OptionsTestCase(common.BleachbitTestCase):
 
     def test_init_configuration(self):
         """Test for init_configuration()"""
+        if os.path.exists(bleachbit.options_file):
+            os.remove(bleachbit.options_file)
+        self.assertNotExists(bleachbit.options_file)
         bleachbit.Options.init_configuration()
         self.assertExists(bleachbit.options_file)
 
@@ -193,3 +199,27 @@ class OptionsTestCase(common.BleachbitTestCase):
 
         # clean up
         del opt
+
+    def test_error_disk_full(self):
+        """Test graceful degradation when disk is full"""
+        disk_full_error = OSError('No space left on device')
+        disk_full_error.errno = errno.ENOSPC
+        o = bleachbit.Options.Options()
+        with mock.patch('builtins.open', side_effect=disk_full_error):
+            with self.assertLogs(level='ERROR') as log_context:
+                o.set('test_key', 'test_value')
+        self.assertIn('Disk was full', log_context.output[0])
+        self.assertIn(bleachbit.options_file, log_context.output[0])
+        self.assertEqual(o.get('test_key'), 'test_value')
+
+    def test_error_permission(self):
+        """Test graceful degradation with permission errors"""
+        permission_error = PermissionError('Permission denied')
+        permission_error.errno = errno.EACCES
+        o = bleachbit.Options.Options()
+        with mock.patch('builtins.open', side_effect=permission_error):
+            with self.assertLogs(level='ERROR') as log_context:
+                o.set('test_key', 'test_value')
+        self.assertIn('Permission denied', log_context.output[0])
+        self.assertIn(bleachbit.options_file, log_context.output[0])
+        self.assertEqual(o.get('test_key'), 'test_value')

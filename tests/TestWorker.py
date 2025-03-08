@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -26,11 +26,13 @@ Test case for module Worker
 from tests import TestCleaner, common
 from bleachbit import CLI, Command
 from bleachbit.Action import ActionProvider
-from bleachbit.Worker import *
+from bleachbit.Cleaner import backends
+from bleachbit.Worker import Worker
 
 import os
 import tempfile
 import unittest
+import logging
 
 
 class AccessDeniedActionAction(ActionProvider):
@@ -43,7 +45,8 @@ class AccessDeniedActionAction(ActionProvider):
         # access denied, should fail and continue
         def accessdenied():
             import errno
-            raise OSError(errno.EACCES, 'Permission denied: /foo/bar')
+            raise OSError(
+                errno.EACCES, 'Permission denied: c:\\access\\denied', 'c:\\access\\denied')
         yield Command.Function(None, accessdenied, 'Test access denied')
 
         # real file, should succeed
@@ -58,7 +61,10 @@ class DoesNotExistAction(ActionProvider):
 
     def get_commands(self):
         # non-existent file, should fail and continue
-        yield Command.Delete("doesnotexist")
+        if os.name == 'nt':
+            yield Command.Delete(r"c:\does\not\exist")
+        else:
+            yield Command.Delete("/does/not/exist")
 
         # real file, should succeed
         yield Command.Delete(self.pathname)
@@ -174,7 +180,6 @@ class RuntimeErrorAction(ActionProvider):
 
 
 class TruncateTestAction(ActionProvider):
-
     action_key = 'truncate.test'
 
     def __init__(self, action_element):
@@ -226,11 +231,22 @@ class WorkerTestCase(common.BleachbitTestCase):
 
     def test_AccessDenied(self):
         """Test Worker using Action.AccessDeniedAction"""
-        self.action_test_helper('access.denied', 0, 1, 4096, 1, 3, 1)
+        with self.assertLogs(level='ERROR') as log_context:
+            self.action_test_helper('access.denied', 0, 1, 4096, 1, 3, 1)
+            if os.name == 'nt':
+                self.assertIn('Access denied: c:\\access\\denied',
+                              log_context.output[0])
+                self.assertNotIn('\\\\', log_context.output[0])
 
     def test_DoesNotExist(self):
         """Test Worker using Action.DoesNotExistAction"""
-        self.action_test_helper('does.not.exist', 0, 1, 4096, 1, 3, 1)
+        with self.assertLogs(level='ERROR') as log_context:
+            self.action_test_helper('does.not.exist', 0, 1, 4096, 1, 3, 1)
+            if os.name == 'nt':
+                # Make sure there is a simple messages without double backslashes.
+                self.assertIn(
+                    'File not found: c:\\does\\not\\exist', log_context.output[0])
+                self.assertNotIn('\\\\', log_context.output[0])
 
     def test_FunctionGenerator(self):
         """Test Worker using Action.FunctionGenerator"""
@@ -260,7 +276,7 @@ class WorkerTestCase(common.BleachbitTestCase):
             bytes_expected = 3 + 3
             total_deleted = 2
         else:
-            # If not an admin, the first attempt will fail, and the second wil succeed.
+            # If not an admin, the first attempt will fail, and the second will succeed.
             errors_expected = 1
             bytes_expected = 3
             total_deleted = 1
@@ -268,7 +284,8 @@ class WorkerTestCase(common.BleachbitTestCase):
             'locked', 0, errors_expected, None, None, bytes_expected, total_deleted)
 
     def test_RuntimeError(self):
-        """Test Worker using Action.RuntimeErrorAction
+        """Test Worker using Action.RuntimeErrorAction. It is normal to see a traceback.
+
         The Worker module handles these differently than
         access denied exceptions
         """
@@ -293,10 +310,12 @@ class WorkerTestCase(common.BleachbitTestCase):
         parent = self
 
         class MyDeepScan:
-            def add_search(self, dirname, regex):
-                parent.assertEqual(dirname, os.path.expanduser('~'))
-                parent.assertIn(
-                    regex, ['^Thumbs\\.db$', '^Thumbs\\.db:encryptable$'])
+            def __init__(self, searches):
+                for (path, searches) in searches.items():
+                    parent.assertEqual(path, os.path.expanduser('~'))
+                    for s in searches:
+                        parent.assertIn(
+                            s.regex, ['^Thumbs\\.db$', '^Thumbs\\.db:encryptable$'])
 
             def scan(self):
                 parent.scanned += 1

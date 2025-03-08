@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,29 +22,34 @@
 Store and retrieve user preferences
 """
 
-import bleachbit
-from bleachbit import General
-from bleachbit import _
-from bleachbit.Log import set_root_log_level
-
+# standard library imports
+import errno
 import logging
 import os
 import re
 
-logger = logging.getLogger(__name__)
-
+# third-party imports
 if 'nt' == os.name:
     from win32file import GetLongPathName
 
+# local application imports
+import bleachbit
+from bleachbit import General
+from bleachbit.Language import get_text as _
+
+logger = logging.getLogger(__name__)
 
 boolean_keys = ['auto_hide',
+                'auto_detect_lang',
                 'check_beta',
                 'check_online_updates',
                 'dark_mode',
-                'delete_confirmation',
                 'debug',
+                'delete_confirmation',
                 'exit_done',
                 'first_start',
+                'kde_shred_menu_option',
+                'remember_geometry',
                 'shred',
                 'units_iec',
                 'window_maximized',
@@ -70,6 +75,8 @@ def path_to_option(pathname):
 
 def init_configuration():
     """Initialize an empty configuration, if necessary"""
+    if not os.path.exists(bleachbit.options_dir):
+        General.makedirs(bleachbit.options_dir)
     if os.path.lexists(bleachbit.options_file):
         logger.debug('Deleting configuration: %s ' % bleachbit.options_file)
         os.remove(bleachbit.options_file)
@@ -98,21 +105,24 @@ class Options:
         """Write information to disk"""
         if not self.purged:
             self.__purge()
-        if not os.path.exists(bleachbit.options_dir):
-            General.makedirs(bleachbit.options_dir)
-        mkfile = not os.path.exists(bleachbit.options_file)
-        with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as _file:
-            try:
+
+        try:
+            if not os.path.exists(bleachbit.options_dir):
+                General.makedirs(bleachbit.options_dir)
+            mkfile = not os.path.exists(bleachbit.options_file)
+            with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as _file:
                 self.config.write(_file)
-            except IOError as e:
-                from errno import ENOSPC
-                if e.errno == ENOSPC:
-                    logger.error(
-                        _("Disk was full when writing configuration to file %s"), bleachbit.options_file)
-                else:
-                    raise
-        if mkfile and General.sudo_mode():
-            General.chownself(bleachbit.options_file)
+            if mkfile and General.sudo_mode():
+                General.chownself(bleachbit.options_file)
+        except (OSError, IOError, PermissionError) as e:
+            if e.errno == errno.ENOSPC:
+                logger.error(
+                    _("Disk was full when writing configuration to file %s"), bleachbit.options_file)
+            elif e.errno == errno.EACCES:
+                logger.error(
+                    _("Permission denied when writing configuration to file %s"), bleachbit.options_file)
+            else:
+                raise
 
     def __purge(self):
         """Clear out obsolete data"""
@@ -121,7 +131,7 @@ class Options:
             return
         for option in self.config.options('hashpath'):
             pathname = option
-            if 'nt' == os.name and re.search('^[a-z]\\\\', option):
+            if 'nt' == os.name and re.search(r'^[a-z]\\', option):
                 # restore colon lost because ConfigParser treats colon special
                 # in keys
                 pathname = pathname[0] + ':' + pathname[1:]
@@ -137,6 +147,13 @@ class Options:
                 # the file does not on exist, so forget it
                 self.config.remove_option('hashpath', option)
 
+    def __auto_preserve_languages(self):
+        """Automatically preserve the active language"""
+        active_lang = bleachbit.Language.get_active_language_code()
+        for lang_id in set([active_lang.split('_')[0], 'en']):
+            logger.info(_("Automatically preserving language %s."), lang_id)
+            self.set_language(lang_id, True)
+
     def __set_default(self, key, value):
         """Set the default value"""
         if not self.config.has_option('bleachbit', key):
@@ -150,13 +167,14 @@ class Options:
         """Retrieve a general option"""
         if not 'nt' == os.name and 'update_winapp2' == option:
             return False
+        if section == 'bleachit' and option == 'debug':
+            from bleachbit.Log import is_debugging_enabled_via_cli
+            if is_debugging_enabled_via_cli():
+                # command line overrides stored configuration
+                return True
         if section == 'hashpath' and option[1] == ':':
             option = option[0] + option[2:]
         if option in boolean_keys:
-            from bleachbit.Log import is_debugging_enabled_via_cli
-            if section == 'bleachbit' and option == 'debug' and is_debugging_enabled_via_cli():
-                # command line overrides store configuration
-                return True
             return self.config.getboolean(section, option)
         elif option in int_keys:
             return self.config.getint(section, option)
@@ -168,6 +186,8 @@ class Options:
 
     def get_language(self, langid):
         """Retrieve value for whether to preserve the language"""
+        if not self.config.has_section('preserve_languages'):
+            self.__auto_preserve_languages()
         if not self.config.has_option('preserve_languages', langid):
             return False
         return self.config.getboolean('preserve_languages', langid)
@@ -175,7 +195,7 @@ class Options:
     def get_languages(self):
         """Return a list of all selected languages"""
         if not self.config.has_section('preserve_languages'):
-            return None
+            self.__auto_preserve_languages()
         return self.config.options('preserve_languages')
 
     def get_list(self, option):
@@ -183,9 +203,10 @@ class Options:
         section = "list/%s" % option
         if not self.config.has_section(section):
             return None
-        values = []
-        for option in sorted(self.config.options(section)):
-            values.append(self.config.get(section, option))
+        values = [
+            self.config.get(section, option)
+            for option in sorted(self.config.options(section))
+        ]
         return values
 
     def get_paths(self, section):
@@ -262,15 +283,17 @@ class Options:
             except:
                 logger.exception(
                     _("Error when setting the default drives to shred."))
-
         # set defaults
         self.__set_default("auto_hide", True)
+        self.__set_default("auto_detect_lang", True)
         self.__set_default("check_beta", False)
         self.__set_default("check_online_updates", True)
         self.__set_default("dark_mode", True)
-        self.__set_default("delete_confirmation", True)
         self.__set_default("debug", False)
+        self.__set_default("delete_confirmation", True)
         self.__set_default("exit_done", False)
+        self.__set_default("kde_shred_menu_option", False)
+        self.__set_default("remember_geometry", True)
         self.__set_default("shred", False)
         self.__set_default("units_iec", False)
         self.__set_default("window_fullscreen", False)
@@ -279,15 +302,6 @@ class Options:
         if 'nt' == os.name:
             self.__set_default("update_winapp2", False)
             self.__set_default("win10_theme", False)
-
-        if not self.config.has_section('preserve_languages'):
-            lang = bleachbit.user_locale
-            pos = lang.find('_')
-            if -1 != pos:
-                lang = lang[0: pos]
-            for _lang in set([lang, 'en']):
-                logger.info(_("Automatically preserving language %s."), _lang)
-                self.set_language(_lang, True)
 
         # BleachBit upgrade or first start ever
         if not self.config.has_option('bleachbit', 'version') or \
@@ -316,10 +330,8 @@ class Options:
         if self.config.has_section(section):
             self.config.remove_section(section)
         self.config.add_section(section)
-        counter = 0
-        for value in values:
+        for counter, value in enumerate(values):
             self.config.set(section, str(counter), value)
-            counter += 1
         self.__flush()
 
     def set_whitelist_paths(self, values):
@@ -328,11 +340,9 @@ class Options:
         if self.config.has_section(section):
             self.config.remove_section(section)
         self.config.add_section(section)
-        counter = 0
-        for value in values:
+        for counter, value in enumerate(values):
             self.config.set(section, str(counter) + '_type', value[0])
             self.config.set(section, str(counter) + '_path', value[1])
-            counter += 1
         self.__flush()
 
     def set_custom_paths(self, values):
@@ -341,11 +351,9 @@ class Options:
         if self.config.has_section(section):
             self.config.remove_section(section)
         self.config.add_section(section)
-        counter = 0
-        for value in values:
+        for counter, value in enumerate(values):
             self.config.set(section, str(counter) + '_type', value[0])
             self.config.set(section, str(counter) + '_path', value[1])
-            counter += 1
         self.__flush()
 
     def set_language(self, langid, value):
@@ -377,6 +385,3 @@ class Options:
 
 
 options = Options()
-
-# Now that the configuration is loaded, honor the debug preference there.
-set_root_log_level()

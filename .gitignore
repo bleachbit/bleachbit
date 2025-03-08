@@ -10,7 +10,9 @@ htmlcov
 
 # Compiled language files
 po/*.mo
-po/*.pot
+po/cleanerml.pot
+po/desktop.pot
+po/diff.pot
 locale/
 
 # Windows build
@@ -19,6 +21,7 @@ dist/
 BleachBit-Portable/
 BleachBit-*-portable.zip
 upx/
+windows/vcpkg_installed/
 windows/BleachBit*.exe
 windows/BleachBit*.zip
 
@@ -26,3 +29,7 @@ windows/BleachBit*.zip
 *~
 *.bak
 *.swp
+
+# Python package metadata
+*.egg-info/
+*.egg

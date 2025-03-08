@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2008-2025 Andrew Ziem
+    https://www.bleachbit.org
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<cleaner id="zoom">
+  <label>Zoom</label>
+  <description>Chat client</description>
+  <running type="exe" os="windows" same_user="true">Zoom.exe</running>
+  <running type="exe" os="linux" same_user="true">zoom</running>
+  <var name="base">
+    <value os="windows">%AppData%\Zoom</value>
+    <value search="glob" os="linux">~/snap/zoom-client/*/.zoom</value>
+    <value os="linux">~/.zoom</value>
+  </var>
+  <var name="doc">
+    <value os="windows">%Documents%\Zoom</value>
+    <value os="linux">~/Documents/Zoom</value>
+  </var>
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete the cache</description>
+    <!--
+Zoom 5.1.422789.0705 on Ubuntu 20.04
+~/snap/zoom-client/common/.cache/
+
+Zoom 5.2.440215.0803 on Ubuntu 20.04
+~/.cache/zoom
+-->
+    <action command="delete" search="walk.all" path="~/snap/zoom-client/common/.cache/"/>
+    <action command="delete" search="walk.all" path="$XDG_CACHE_HOME/zoom/"/>
+  </option>
+  <option id="logs">
+    <label>Logs</label>
+    <description>Delete the logs</description>
+    <!--
+Zoom 5.1.422789.0705 on Ubuntu 20.04
+~/snap/zoom-client/90/.zoom/logs/zoom-terminal.log
+~/snap/zoom-client/90/.zoom/logs/zoom-terminal.log.old
+~/snap/zoom-client/92/.zoom/logs/zoom-terminal.log
+~/snap/zoom-client/92/.zoom/logs/zoom-terminal.log.old
+~/snap/zoom-client/92/.zoom/logs/zoom_stdout_stderr.log
+
+Zoom 5.2.440215.0803 on Ubuntu 20.04
+~/.zoom/logs/zoom_stdout_stderr.log
+
+Zoom 5.2.0 on Windows 10
+%AppData%\Roaming\Zoom\logs\
+%AppData%\Roaming\Zoom\installer.txt
+-->
+    <action command="delete" search="walk.all" path="$$base$$/logs/"/>
+    <action command="delete" search="file" path="$$base$$/installer.txt"/>
+  </option>
+  <!--
+Zoom 5.2.440215.0803 on Ubuntu 20.04
+~/Downloads/zoom_0.mp4
+~/Documents/Zoom/2020-01-01 01.01.01 meeting name 123/
+
+The second path had three files
+playback.m3u
+zoom_0.mp4
+audio_only.m4a
+
+Zoom 5.2.0 Windows 10
+%UserProfile%\Documents\Zoom
+-->
+  <option id="recordings">
+    <label>Recordings</label>
+    <description>Delete the audio and video recordings</description>
+    <action command="delete" search="glob" path="~/Downloads/zoom_*.mp4"/>
+    <action command="delete" search="walk.all" path="$$doc$$" regex="(playback\.m3u|zoom_\d+\.mp4|audio_only\.m4a)"/>
+  </option>
+</cleaner>

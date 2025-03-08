@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -45,6 +45,9 @@ if sys.platform == 'win32':
 import bleachbit
 import bleachbit.General
 import bleachbit.FileUtilities
+
+APP_NAME = 'BleachBit'
+APP_DESCRIPTION = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had."
 
 #
 # begin win32com.shell workaround for py2exe
@@ -95,17 +98,31 @@ elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
 
 args = {}
 if 'py2exe' in sys.argv:
-    args['windows'] = [{
-        'script': 'bleachbit.py',
-        'icon_resources': [(1, 'windows/bleachbit.ico')]
-    }]
-    args['console'] = [{
-        'script': 'bleachbit_console.py',
-        'icon_resources': [(1, 'windows/bleachbit.ico')]
-    }]
+    # see multiple issues such as https://github.com/bleachbit/bleachbit/issues/1000
+    APP_DESCRIPTION = 'BleachBit software cleaner'
+
+    # Common metadata for both GUI and console executables
+    common_metadata = {
+        'product_name': APP_NAME,
+        'description': APP_DESCRIPTION,
+        'version': bleachbit.APP_VERSION,
+        'icon_resources': [(1, 'windows/bleachbit.ico')],
+        'company_name': APP_NAME,
+        'copyright': 'Copyright (C) 2008-2025 Andrew Ziem'
+    }
+
+    # GUI executable
+    gui_metadata = common_metadata.copy()
+    gui_metadata['script'] = 'bleachbit.py'
+    args['windows'] = [gui_metadata]
+
+    # Console executable
+    console_metadata = common_metadata.copy()
+    console_metadata['script'] = 'bleachbit_console.py'
+    args['console'] = [console_metadata]
     args['options'] = {
         'py2exe': {
-            'packages': ['encodings', 'gi', 'plyer'],
+            'packages': ['encodings', 'gi', 'gi.overrides', 'plyer'],
             'optimize': 2,  # extra optimization (like python -OO)
             'includes': ['gi'],
             'excludes': ['pyreadline', 'difflib', 'doctest',
@@ -253,14 +270,22 @@ def clean_dist_locale():
 def run_setup():
     setup(name='bleachbit',
           version=bleachbit.APP_VERSION,
-          description="BleachBit - Free space and maintain privacy",
-          long_description="BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Firefox, Flash, Internet Explorer, Java, Opera, Safari, GNOME, and many others.",
+          description=APP_NAME,
+          long_description=APP_DESCRIPTION,
           author="Andrew Ziem",
           author_email="andrew@bleachbit.org",
-          download_url="https://www.bleachbit.org/download",
-          license="GPLv3",
           url=bleachbit.APP_URL,
-          platforms='Linux and Windows; Python v2.6 and 2.7; GTK v3.12+',
+          download_url="https://www.bleachbit.org/download",
+          classifiers=[
+              'Development Status :: 5 - Production/Stable',
+              'Programming Language :: Python',
+              'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+              'Operating System :: Microsoft :: Windows',
+              'Operating System :: POSIX :: Linux',
+          ],
+          license='GPLv3+',
+          py_requires='>=3.4',
+          platforms='Linux and Windows, Python v3.4+, GTK v3.12+',
           packages=['bleachbit', 'bleachbit.markovify'],
           **args)
 

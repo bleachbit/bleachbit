@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,13 +23,76 @@ Test case for Common
 """
 
 from tests import common
-import bleachbit
 
 import os
 
 
 class CommonTestCase(common.BleachbitTestCase):
     """Test case for Common."""
+
+    def test_assertIsLanguageCode_hardcoded(self):
+        """Test assertIsLanguageCode() using hard-coded values"""
+        valid_codes = [
+            'be@latin',
+            'C.UTF-8',
+            'C.utf8',
+            'C',
+            'de_DE.iso88591',
+            'en_US',
+            'en',
+            'fr_FR.utf8',
+            'ja_JP.SJIS',
+            'ko_KR.eucKR',
+            'nb_NO.ISO-8859-1',
+            'POSIX',
+            'ru_RU.KOI8-R',
+            'zh_Hant',
+        ]
+
+        invalid_codes = ['e', 'en_', 'english', 'en_US_', '123', 'en-US',
+                         'en_us', 'en_US.',
+                         'en_us.utf8',
+                         'en_us.UTF-8',
+                         'utf8',
+                         'UTF-8',
+                         '.utf8',
+                         '.UTF-8',
+                         '',
+                         [],
+                         0,
+                         None]
+        invalid_codes.extend([code + ' ' for code in valid_codes])
+        invalid_codes.extend([' ' + code for code in valid_codes])
+
+        for code in valid_codes:
+            self.assertIsLanguageCode(code)
+
+        for code in invalid_codes:
+            with self.assertRaises(AssertionError, msg=f'Expected exception for {code}'):
+                self.assertIsLanguageCode(code)
+
+    def test_assertIsLanguageCode_live(self):
+        """Test assertIsLanguageCode() using live data"""
+        from bleachbit import locale_dir
+        locale_dirs = list(set([locale_dir, '/usr/share/locale']))
+        lang_codes = []
+        for locale_dir in locale_dirs:
+            if not os.path.isdir(locale_dir):
+                continue
+            for lang_code in os.listdir(locale_dir):
+                if not os.path.isdir(os.path.join(locale_dir, lang_code)):
+                    continue
+                lang_codes.append(lang_code)
+        if os.path.exists('/etc/locale.alias'):
+            with open('/etc/locale.alias', 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if not line.startswith('#'):
+                        parts = line.split()
+                        if len(parts) > 1:
+                            lang_codes.append(parts[1])
+        for lang_code in lang_codes:
+            self.assertIsLanguageCode(lang_code)
 
     def test_expandvars(self):
         """Unit test for expandvars."""
@@ -63,3 +126,25 @@ class CommonTestCase(common.BleachbitTestCase):
         # A relative path (without a reference to the home directory)
         # should not be expanded.
         self.assertEqual(os.path.expanduser('common'), 'common')
+
+    def test_touch_file(self):
+        """Unit test for touch_file"""
+        fn = os.path.join(self.tempdir, 'test_touch_file')
+        self.assertNotExists(fn)
+
+        # Create empty file.
+        common.touch_file(fn)
+        from bleachbit.FileUtilities import getsize
+        self.assertExists(fn)
+        self.assertEqual(0, getsize(fn))
+
+        # Increase size of file.
+        fsize = 2**13
+        with open(fn, "w") as f:
+            f.write(' '*fsize)
+        self.assertEqual(fsize, getsize(fn))
+
+        # Do not truncate.
+        common.touch_file(fn)
+        self.assertExists(fn)
+        self.assertEqual(fsize, getsize(fn))

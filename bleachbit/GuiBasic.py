@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,11 +21,18 @@
 Basic GUI code
 """
 
-from bleachbit import _
+from bleachbit.Language import get_text as _
 
 import os
 
-import gi
+try:
+    import gi
+except ModuleNotFoundError as e:
+    print('*'*60)
+    print('Please install PyGObject')
+    print('https://pygobject.readthedocs.io/en/latest/getting_started.html')
+    print('*'*60)
+    raise e
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk  # keep after gi.require_version()
 
@@ -150,7 +157,7 @@ def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
     return ret == Gtk.ResponseType.ACCEPT
 
 
-def message_dialog(parent, msg, mtype=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.OK):
+def message_dialog(parent, msg, mtype=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.OK, title=None):
     """Convenience wrapper for Gtk.MessageDialog"""
 
     dialog = Gtk.MessageDialog(transient_for=parent,
@@ -159,6 +166,8 @@ def message_dialog(parent, msg, mtype=Gtk.MessageType.ERROR, buttons=Gtk.Buttons
                                message_type=mtype,
                                buttons=buttons,
                                text=msg)
+    if title:
+        dialog.set_title(title)
     resp = dialog.run()
     dialog.destroy()
 
@@ -176,15 +185,18 @@ def open_url(url, parent_window=None, prompt=True):
     if prompt:
         # find hostname
         import re
-        ret = re.search('^http(s)?://([a-z.]+)', url)
+        ret = re.search(r'^http(s)?://([a-z.]+)', url)
         if not ret:
             host = url
         else:
             host = ret.group(2)
         # TRANSLATORS: %s expands to www.bleachbit.org or similar
         msg = _("Open web browser to %s?") % host
-        resp = message_dialog(parent_window, msg,
-                              Gtk.MessageType.QUESTION, Gtk.ButtonsType.OK_CANCEL)
+        resp = message_dialog(parent_window,
+                              msg,
+                              Gtk.MessageType.QUESTION,
+                              Gtk.ButtonsType.OK_CANCEL,
+                              _('Confirm'))
         if Gtk.ResponseType.OK != resp:
             return
     # open web browser
@@ -193,5 +205,8 @@ def open_url(url, parent_window=None, prompt=True):
         # handling this file'
         import webbrowser
         webbrowser.open(url)
+    elif (Gtk.get_major_version(), Gtk.get_minor_version()) < (3, 22):
+        # Ubuntu 16.04 LTS ships with GTK 3.18
+        Gtk.show_uri(None, url, Gdk.CURRENT_TIME)
     else:
         Gtk.show_uri_on_window(parent_window, url, Gdk.CURRENT_TIME)

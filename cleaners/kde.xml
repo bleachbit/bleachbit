@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2020 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -43,5 +43,6 @@
     <description>Delete the list of recently used documents</description>
     <action command="delete" search="glob" path="~/.kde/share/apps/RecentDocuments/*.desktop"/>
     <action command="delete" search="glob" path="~/.kde4/share/apps/RecentDocuments/*.desktop"/>
+    <action command="delete" search="glob" path="~/.local/share/RecentDocuments/*.desktop"/>
   </option>
 </cleaner>

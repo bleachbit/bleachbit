@@ -1,8 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,16 +22,22 @@
 GTK graphical user interface
 """
 
-from bleachbit import GuiBasic
-from bleachbit import Cleaner, FileUtilities
-from bleachbit import _, APP_NAME, appicon_path, portable_mode, windows10_theme_path
+
+from bleachbit import Cleaner, FileUtilities, GuiBasic
+from bleachbit import APP_NAME, appicon_path, portable_mode, windows10_theme_path
+from bleachbit.Language import get_text as _
 from bleachbit.Options import options
+
+# Now that the configuration is loaded, honor the debug preference there.
+from bleachbit.Log import set_root_log_level
+set_root_log_level(options.get('debug'))
+
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.Cleaner import backends, register_cleaners
 import bleachbit
 from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 
-
+import glob
 import logging
 import os
 import sys
@@ -61,12 +67,20 @@ def notify_gi(msg):
 
     The Windows pygy-aio installer does not include notify, so this is just for Linux.
     """
-    gi.require_version('Notify', '0.7')
+    try:
+        gi.require_version('Notify', '0.7')
+    except ValueError as e:
+        logger.debug('gi.require_version("Notify", "0.7") failed: %s', e)
+        return
     from gi.repository import Notify
     if Notify.init(APP_NAME):
         notify = Notify.Notification.new('BleachBit', msg, 'bleachbit')
         notify.set_hint("desktop-entry", GLib.Variant('s', 'bleachbit'))
-        notify.show()
+        try:
+            notify.show()
+        except gi.repository.GLib.GError as e:
+            logger.debug('Notify.Notification.show() failed: %s', e)
+            return
         notify.set_timeout(10000)
 
 
@@ -116,28 +130,42 @@ class Bleachbit(Gtk.Application):
     _auto_exit = False
 
     def __init__(self, uac=True, shred_paths=None, auto_exit=False):
-        if uac and os.name == 'nt' and Windows.elevate_privileges():
-            # privileges escalated in other process
-            sys.exit(0)
+
+        application_id_suffix = self._init_windows_misc(auto_exit, shred_paths, uac)
+        application_id = '{}{}'.format('org.gnome.Bleachbit', application_id_suffix)
         Gtk.Application.__init__(
-            self, application_id='org.gnome.Bleachbit', flags=Gio.ApplicationFlags.FLAGS_NONE)
-        GObject.threads_init()
+            self, application_id=application_id, flags=Gio.ApplicationFlags.FLAGS_NONE)
+        GLib.set_prgname('org.bleachbit.BleachBit')
+
+        if auto_exit:
+            # This is used for automated testing of whether the GUI can start.
+            # It is called from assert_execute_console() in windows/setup_py2exe.py
+            self._auto_exit = True
 
         if shred_paths:
             self._shred_paths = shred_paths
-            return
+
         if os.name == 'nt':
-            # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
-            # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
-            # https://www.bleachbit.org/forum/074-fails-errors
-            try:
-                import sqlite3
-            except ImportError:
-                logger.exception(
-                    _("Error loading the SQLite module: the antivirus software may be blocking it."))
-        if auto_exit:
-            # This is used for automated testing of whether the GUI can start.
-            self._auto_exit = True
+            # clean up nonce files https://github.com/bleachbit/bleachbit/issues/858
+            import atexit
+            atexit.register(Windows.cleanup_nonce)
+
+    def _init_windows_misc(self, auto_exit, shred_paths, uac):
+        application_id_suffix = ''
+        is_context_menu_executed = auto_exit and shred_paths
+        if not os.name == 'nt':
+            return ''
+        if Windows.elevate_privileges(uac):
+            # privileges escalated in other process
+            sys.exit(0)
+
+        if is_context_menu_executed:
+            # When we have a running application and executing the Windows
+            # context menu command we start a new process with new application_id.
+            # That is because the command line arguments of the context menu command
+            # are not passed to the already running instance.
+            application_id_suffix = 'ContextMenuShred'
+        return application_id_suffix
 
     def build_app_menu(self):
         """Build the application menu
@@ -145,10 +173,13 @@ class Bleachbit(Gtk.Application):
         On Linux with GTK 3.24, this code is necessary but not sufficient for
         the menu to work. The headerbar code is also needed.
 
-        On Windows with GTK 3.18, this cde is sufficient for the menu to work.
+        On Windows with GTK 3.18, this code is sufficient for the menu to work.
         """
-
+        from bleachbit.Language import setup_translation
+        setup_translation()
         builder = Gtk.Builder()
+        # set_translation_domain() seems to have no effect.
+        #builder.set_translation_domain('bleachbit')
         builder.add_from_file(bleachbit.app_menu_filename)
         menu = builder.get_object('app-menu')
         self.set_app_menu(menu)
@@ -161,7 +192,7 @@ class Bleachbit(Gtk.Application):
                    'makeChaff': self.cb_make_chaff,
                    'shredQuit': self.cb_shred_quit,
                    'preferences': self.cb_preferences_dialog,
-                   'diagnostics': self.diagnostic_dialog,
+                   'systemInformation': self.system_information_dialog,
                    'help': self.cb_help,
                    'about': self.about}
 
@@ -206,17 +237,24 @@ class Bleachbit(Gtk.Application):
         clipboard.request_targets(self.cb_clipboard_uri_received)
 
     def cb_clipboard_uri_received(self, clipboard, targets, data):
-        """Callback for when URIs are received from clipboard"""
+        """Callback for when URIs are received from clipboard
+
+        With GTK 3.18.9 on Windows, there was no text/uri-list in targets,
+        but there is with GTK 3.24.34. However, Windows does not have
+        get_uris().
+        """
         shred_paths = None
-        if Gdk.atom_intern_static_string('text/uri-list') in targets:
+        if 'nt' == os.name and Gdk.atom_intern_static_string('FileNameW') in targets:
+            # Windows
+            # Use non-GTK+ functions because because GTK+ 2 does not work.
+            shred_paths = Windows.get_clipboard_paths()
+        elif Gdk.atom_intern_static_string('text/uri-list') in targets:
             # Linux
             shred_uris = clipboard.wait_for_contents(
                 Gdk.atom_intern_static_string('text/uri-list')).get_uris()
             shred_paths = FileUtilities.uris_to_paths(shred_uris)
-        elif Gdk.atom_intern_static_string('FileNameW') in targets:
-            # Windows
-            # Use non-GTK+ functions because because GTK+ 2 does not work.
-            shred_paths = Windows.get_clipboard_paths()
+        else:
+            logger.warning(_('No paths found in clipboard.'))
         if shred_paths:
             GUI.shred_paths(self._window, shred_paths)
         else:
@@ -230,6 +268,10 @@ class Bleachbit(Gtk.Application):
             # in portable mode on Windows, the options directory includes
             # executables
             paths.append(bleachbit.options_file)
+            if os.path.isdir(bleachbit.personal_cleaners_dir):
+                paths.append(bleachbit.personal_cleaners_dir)
+            for f in glob.glob(os.path.join(bleachbit.options_dir, "*.bz2")):
+                paths.append(f)
         else:
             paths.append(bleachbit.options_dir)
 
@@ -239,14 +281,14 @@ class Bleachbit(Gtk.Application):
             # aborted
             return
 
-        # in portable mode, rebuild a minimal bleachbit.ini
-        bleachbit.Options.init_configuration()
-
         # Quit the application through the idle loop to allow the worker
         # to delete the files.  Use the lowest priority because the worker
-        # uses the standard priority.  Otherwise, this will quit before
+        # uses the standard priority. Otherwise, this will quit before
         # the files are deleted.
-        GLib.idle_add(self.quit, priority=GObject.PRIORITY_LOW)
+        #
+        # Rebuild a minimal bleachbit.ini when quitting
+        GLib.idle_add(self.quit, None, None, True,
+                      priority=GObject.PRIORITY_LOW)
 
     def cb_wipe_free_space(self, action, param):
         """callback to wipe free space in arbitrary folder"""
@@ -275,8 +317,8 @@ class Bleachbit(Gtk.Application):
         GUI.update_log_level(self._window)
 
     def get_about_dialog(self):
-        dialog = Gtk.AboutDialog(comments='Program to clean unnecessary files',
-                                 copyright='Copyright (C) 2008-2020 Andrew Ziem',
+        dialog = Gtk.AboutDialog(comments=_("Program to clean unnecessary files"),
+                                 copyright='Copyright (C) 2008-2025 Andrew Ziem',
                                  program_name=APP_NAME,
                                  version=bleachbit.APP_VERSION,
                                  website=bleachbit.APP_URL,
@@ -287,7 +329,6 @@ class Bleachbit(Gtk.Application):
         except (IOError, TypeError):
             dialog.set_license(
                 _("GNU General Public License version 3 or later.\nSee https://www.gnu.org/licenses/gpl-3.0.txt"))
-        # dialog.set_name(APP_NAME)
         # TRANSLATORS: Maintain the names of translators here.
         # Launchpad does this automatically for translations
         # typed in Launchpad. This is a special string shown
@@ -309,16 +350,18 @@ class Bleachbit(Gtk.Application):
         Gtk.Application.do_startup(self)
         self.build_app_menu()
 
-    def quit(self, _action=None, _param=None):
+    def quit(self, _action=None, _param=None, init_configuration=False):
+        if init_configuration:
+            bleachbit.Options.init_configuration()
         self._window.destroy()
 
-    def get_diagnostics_dialog(self):
-        """Show diagnostic information"""
+    def get_system_information_dialog(self):
+        """Show system information dialog"""
         dialog = Gtk.Dialog(_("System information"), self._window)
         dialog.set_default_size(600, 400)
         txtbuffer = Gtk.TextBuffer()
-        from bleachbit import Diagnostic
-        txt = Diagnostic.diagnostic_info()
+        from bleachbit import SystemInformation
+        txt = SystemInformation.get_system_information()
         txtbuffer.set_text(txt)
         textview = Gtk.TextView.new_with_buffer(txtbuffer)
         textview.set_editable(False)
@@ -330,16 +373,15 @@ class Bleachbit(Gtk.Application):
                            Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
         return (dialog, txt)
 
-    def diagnostic_dialog(self, _action, _param):
-        dialog, txt = self.get_diagnostics_dialog()
+    def system_information_dialog(self, _action, _param):
+        dialog, txt = self.get_system_information_dialog()
         dialog.show_all()
         while True:
             rc = dialog.run()
-            if rc == 100:
-                clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-                clipboard.set_text(txt, -1)
-            else:
+            if rc != 100:
                 break
+            clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+            clipboard.set_text(txt, -1)
         dialog.destroy()
 
     def do_activate(self):
@@ -347,13 +389,15 @@ class Bleachbit(Gtk.Application):
             self._window = GUI(
                 application=self, title=APP_NAME, auto_exit=self._auto_exit)
         self._window.present()
-        if self._auto_exit:
+        if self._shred_paths:
+            GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths, priority=GObject.PRIORITY_LOW)
+            # When we shred paths and auto exit with the Windows Explorer context menu command we close the
+            # application in GUI.shred_paths, because if it is closed from here there are problems.
+            # Most probably this is something related with how GTK handles idle quit calls.
+        elif self._auto_exit:
             GLib.idle_add(self.quit,
                           priority=GObject.PRIORITY_LOW)
             print('Success')
-        if self._shred_paths:
-            GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths, False, True,
-                          priority=GObject.PRIORITY_LOW)
 
 
 class TreeInfoModel:
@@ -406,9 +450,16 @@ class TreeInfoModel:
                                                               self.on_row_changed)
 
     def sort_func(self, model, iter1, iter2, _user_data):
-        """Sort the tree by the display name"""
-        value1 = model[iter1][0].lower()
-        value2 = model[iter2][0].lower()
+        """Sort the tree by the id
+
+        Index 0 is the display name
+        Index 2 is the ID (e.g., cookies, vacuum).
+
+        Sorting by ID is functionally important, so that vacuuming is done
+        last, even for other languages. See https://github.com/bleachbit/bleachbit/issues/441
+        """
+        value1 = model[iter1][2].lower()
+        value2 = model[iter2][2].lower()
         if value1 == value2:
             return 0
         if value1 > value2:
@@ -457,7 +508,7 @@ class TreeDisplayModel:
         return self.view
 
     def set_cleaner(self, path, model, parent_window, value):
-        """Activate or deactive option of cleaner."""
+        """Activate or deactivate option of cleaner."""
         assert isinstance(value, bool)
         assert isinstance(model, Gtk.TreeStore)
         cleaner_id = None
@@ -484,7 +535,9 @@ class TreeDisplayModel:
             if warning:
                 resp = GuiBasic.message_dialog(parent_window,
                                                msg,
-                                               Gtk.MessageType.WARNING, Gtk.ButtonsType.OK_CANCEL)
+                                               Gtk.MessageType.WARNING,
+                                               Gtk.ButtonsType.OK_CANCEL,
+                                               _('Confirm'))
                 if Gtk.ResponseType.OK != resp:
                     # user cancelled, so don't toggle option
                     return
@@ -526,9 +579,12 @@ class GUI(Gtk.ApplicationWindow):
     def __init__(self, auto_exit, *args, **kwargs):
         super(GUI, self).__init__(*args, **kwargs)
 
-        self.auto_exit = auto_exit
+        self._show_splash_screen()
 
-        self.set_wmclass(APP_NAME, APP_NAME)
+        self._auto_exit = auto_exit
+
+        self.set_property('name', APP_NAME)
+        self.set_property('role', APP_NAME)
         self.populate_window()
 
         # Redirect logging to the GUI.
@@ -556,21 +612,57 @@ class GUI(Gtk.ApplicationWindow):
 
         GLib.idle_add(self.cb_refresh_operations)
 
+        # Close the application when user presses CTRL+Q or CTRL+W.
+        accel = Gtk.AccelGroup()
+        self.add_accel_group(accel)
+        key, mod = Gtk.accelerator_parse("<Control>Q")
+        accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
+        key, mod = Gtk.accelerator_parse("<Control>W")
+        accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
+
+    def on_quit(self, *args):
+        """Quit the application, used with CTRL+Q or CTRL+W"""
+        if Gtk.main_level() > 0:
+            Gtk.main_quit()
+        else:
+            self.destroy()
+
+    def _show_splash_screen(self):
+        """Show the splash screen on Windows because startup may be slow"""
+        if os.name != 'nt':
+            return
+
+        font_conf_file = Windows.get_font_conf_file()
+        if not os.path.exists(font_conf_file):
+            logger.error('No fonts.conf file {}'.format(font_conf_file))
+            return
+
+        has_cache = Windows.has_fontconfig_cache(font_conf_file)
+        if not has_cache:
+            Windows.splash_thread.start()
+
+    def _confirm_delete(self, mention_preview, shred_settings=False):
+        if options.get("delete_confirmation"):
+            return GuiBasic.delete_confirmation_dialog(self, mention_preview, shred_settings=shred_settings)
+        return True
+
+    def destroy(self):
+        """Prevent textbuffer usage during UI destruction"""
+        self.textbuffer = None
+        super(GUI, self).destroy()
+
     def get_preferences_dialog(self):
         return PreferencesDialog(
             self,
             self.cb_refresh_operations,
             self.set_windows10_theme)
 
-    def shred_paths(self, paths, shred_settings=False, quit_when_done=False):
+    def shred_paths(self, paths, shred_settings=False):
         """Shred file or folders
 
         When shredding_settings=True:
         If user confirms to delete, then returns True.  If user aborts, returns
         False.
-
-        When quit_when_done=True:
-        Always returns False to remove function from the idle queue.
         """
         # create a temporary cleaner object
         backends['_gui'] = Cleaner.create_simple_cleaner(paths)
@@ -579,21 +671,24 @@ class GUI(Gtk.ApplicationWindow):
         operations = {'_gui': ['files']}
         self.preview_or_run_operations(False, operations)
 
-        if GuiBasic.delete_confirmation_dialog(self, mention_preview=False, shred_settings=shred_settings):
+        if self._confirm_delete(False, shred_settings):
             # delete
             self.preview_or_run_operations(True, operations)
             if shred_settings:
                 return True
 
-        if quit_when_done:
+        if self._auto_exit:
             GLib.idle_add(self.close,
-                          priority=GObject.PRIORITY_LOW)
+                              priority=GObject.PRIORITY_LOW)
 
         # user aborted
         return False
 
     def append_text(self, text, tag=None, __iter=None, scroll=True):
         """Add some text to the main log"""
+        if self.textbuffer is None:
+            # textbuffer was destroyed.
+            return
         if not __iter:
             __iter = self.textbuffer.get_end_iter()
         if tag:
@@ -604,7 +699,7 @@ class GUI(Gtk.ApplicationWindow):
         # through the idle loop, it may only scroll most of the way
         # as seen on Ubuntu 9.04 with Italian and Spanish.
         if scroll:
-            GLib.idle_add(lambda:
+            GLib.idle_add(lambda: self.textbuffer is not None and
                           self.textview.scroll_mark_onscreen(
                               self.textbuffer.get_insert()))
 
@@ -683,10 +778,8 @@ class GUI(Gtk.ApplicationWindow):
         # Disable delete confirmation message.
         # if the option is selected under preference.
 
-        if options.get("delete_confirmation"):
-            if not GuiBasic.delete_confirmation_dialog(self, True):
-                return
-        self.preview_or_run_operations(True)
+        if self._confirm_delete(True):
+            self.preview_or_run_operations(True)
 
     def preview_or_run_operations(self, really_delete, operations=None):
         """Preview operations or run operations (delete files)"""
@@ -695,14 +788,17 @@ class GUI(Gtk.ApplicationWindow):
         from bleachbit import Worker
         self.start_time = None
         if not operations:
-            operations = {}
-            for operation in self.get_selected_operations():
-                operations[operation] = self.get_operation_options(operation)
+            operations = {
+                operation: self.get_operation_options(operation)
+                for operation in self.get_selected_operations()
+            }
         assert isinstance(operations, dict)
         if not operations:  # empty
             GuiBasic.message_dialog(self,
                                     _("You must select an operation"),
-                                    Gtk.MessageType.WARNING, Gtk.ButtonsType.OK)
+                                    Gtk.MessageType.ERROR,
+                                    Gtk.ButtonsType.OK,
+                                    _('Error'))
             return
         try:
             self.set_sensitive(False)
@@ -714,7 +810,7 @@ class GUI(Gtk.ApplicationWindow):
         else:
             self.start_time = time.time()
             worker = self.worker.run()
-            GLib.idle_add(worker.__next__, priority=GLib.PRIORITY_LOW)
+            GLib.idle_add(worker.__next__)
 
     def worker_done(self, worker, really_delete):
         """Callback for when Worker is done"""
@@ -743,19 +839,24 @@ class GUI(Gtk.ApplicationWindow):
         scrolled_window = Gtk.ScrolledWindow()
         scrolled_window.set_policy(
             Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        scrolled_window.set_overlay_scrolling(False)
         self.tree_store = TreeInfoModel()
         display = TreeDisplayModel()
         mdl = self.tree_store.get_model()
         self.view = display.make_view(
             mdl, self, self.context_menu_event)
         self.view.get_selection().connect("changed", self.on_selection_changed)
+        scrollbar_width = scrolled_window.get_vscrollbar().get_preferred_width()[1]
+        self.view.set_margin_end(scrollbar_width) # avoid conflict with scrollbar
         scrolled_window.add(self.view)
         return scrolled_window
 
     def cb_refresh_operations(self):
-        """Callback to refresh the list of cleaners"""
+        """Callback to refresh the list of cleaners and header bar labels"""
+        # In case language changed, update the header bar labels.
+        self.update_headerbar_labels()
         # Is this the first time in this session?
-        if not hasattr(self, 'recognized_cleanerml') and not self.auto_exit:
+        if not hasattr(self, 'recognized_cleanerml') and not self._auto_exit:
             from bleachbit import RecognizeCleanerML
             RecognizeCleanerML.RecognizeCleanerML()
             self.recognized_cleanerml = True
@@ -776,7 +877,7 @@ class GUI(Gtk.ApplicationWindow):
         self.view.expand_all()
 
         # Check for online updates.
-        if not self.auto_exit and \
+        if not self._auto_exit and \
             bleachbit.online_update_notification_enabled and \
             options.get("check_online_updates") and \
                 not hasattr(self, 'checked_for_updates'):
@@ -785,26 +886,16 @@ class GUI(Gtk.ApplicationWindow):
 
         # Show information for first start.
         # (The first start flag is set also for each new version.)
-        if options.get("first_start") and not self.auto_exit:
+        if options.get("first_start") and not self._auto_exit:
             if os.name == 'posix':
                 self.append_text(
                     _('Access the application menu by clicking the hamburger icon on the title bar.'))
                 pref = self.get_preferences_dialog()
                 pref.run()
-            if os.name == 'nt':
+            elif os.name == 'nt':
                 self.append_text(
                     _('Access the application menu by clicking the logo on the title bar.'))
             options.set('first_start', False)
-
-        if os.name == 'nt':
-            # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
-            # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
-            # http://bleachbit.sourceforge.net/forum/074-fails-errors
-            try:
-                import sqlite3
-            except ImportError as e:
-                self.append_text(
-                    _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
 
         # Show notice about admin privileges.
         if os.name == 'posix' and os.path.expanduser('~') == '/root':
@@ -816,6 +907,10 @@ class GUI(Gtk.ApplicationWindow):
                 self.append_text(
                     _('Run BleachBit with administrator privileges to improve the accuracy of overwriting the contents of files.'))
                 self.append_text('\n')
+
+        if 'windowsapps' in sys.executable.lower():
+            self.append_text(
+                _('There is no official version of BleachBit on the Microsoft Store. Get the genuine version at https://www.bleachbit.org where it is always free of charge.') + '\n', 'error')
 
         # remove from idle loop (see GObject.idle_add)
         return False
@@ -830,7 +925,7 @@ class GUI(Gtk.ApplicationWindow):
             return
 
         # delete
-        if GuiBasic.delete_confirmation_dialog(self, mention_preview=False):
+        if self._confirm_delete(False):
             self.preview_or_run_operations(True, operations)
             return
 
@@ -851,7 +946,7 @@ class GUI(Gtk.ApplicationWindow):
         # context menu applies only to children, not parents
         if len(path) != 2:
             return False
-        # find the seleted option
+        # find the selected option
         model = treeview.get_model()
         option_id = model[path][2]
         cleaner_id = model[path[0]][2]
@@ -913,7 +1008,7 @@ class GUI(Gtk.ApplicationWindow):
         treepath = Gtk.TreePath(0)
         try:
             __iter = model.get_iter(treepath)
-        except ValueError as e:
+        except ValueError:
             logger.warning(
                 'ValueError in get_iter() when updating file size for tree path=%s' % treepath)
             return
@@ -937,9 +1032,81 @@ class GUI(Gtk.ApplicationWindow):
             text = ""
         self.status_bar.push(context_id, text)
 
+    def update_headerbar_labels(self):
+        """Update the labels and tooltips in the headerbar buttons"""
+        # Preview button
+        self.preview_button.set_tooltip_text(
+            _("Preview files in the selected operations (without deleting any files)"))
+        # TRANSLATORS: This is the preview button on the main window.  It
+        # previews changes.
+        self.preview_button.set_label(_('Preview'))
+
+        # Clean button
+        # TRANSLATORS: This is the clean button on the main window.
+        # It makes permanent changes: usually deleting files, sometimes
+        # altering them.
+        self.run_button.set_label(_('Clean'))
+        self.run_button.set_tooltip_text(
+            _("Clean files in the selected operations"))
+
+        # Stop button
+        self.stop_button.set_label(_('Abort'))
+        self.stop_button.set_tooltip_text(
+            _('Abort the preview or cleaning process'))
+
+    def on_update_button_clicked(self, widget):
+        """Callback when the update button on the headerbar is clicked"""
+        if not (hasattr(self, '_available_updates') and self._available_updates):
+            return
+
+        self.update_button.get_style_context().remove_class('update-available')
+        updates = self._available_updates
+        if len(updates) == 1:
+            ver, url = updates[0]
+            GuiBasic.open_url(url, self, False)
+            return
+        # If multiple updates are available, find out which one the user wants.
+        from bleachbit import Update
+        Update.update_dialog(self, updates)
+
     def create_headerbar(self):
         """Create the headerbar"""
         hbar = Gtk.HeaderBar()
+
+        # The update button is on the right side of the headerbar.
+        # It is hidden until an update is available.
+        self.update_button = Gtk.Button()
+        self.update_button.set_visible(False)
+        self.update_button.connect('clicked', self.on_update_button_clicked)
+        # TRANSLATORS: Button in headerbar to update the application
+        self.update_button.set_label(_('Update'))
+        self.update_button.set_tooltip_text(
+            _('Update BleachBit to the latest version'))
+
+        # Add CSS to animate the update button.
+        css_provider = Gtk.CssProvider()
+        css_provider.load_from_data(b"""
+            @keyframes update-pulse {
+                0% { opacity: 1; }
+                50% { opacity: 0.7; }
+                100% { opacity: 1; }
+            }
+            .update-available {
+                background: @theme_selected_bg_color;
+                color: @theme_selected_fg_color;
+                animation: update-pulse 2s ease-in-out;
+                animation-delay: 2s;
+                animation-iteration-count: 1;
+            }
+        """)
+        Gtk.StyleContext.add_provider_for_screen(
+            Gdk.Screen.get_default(),
+            css_provider,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        self.update_button.get_style_context().add_class('update-available')
+        hbar.pack_end(self.update_button)
+        self.update_button.set_no_show_all(True)
+        self.update_button.hide()
         hbar.props.show_close_button = True
         hbar.props.title = APP_NAME
 
@@ -957,23 +1124,12 @@ class GUI(Gtk.ApplicationWindow):
         self.preview_button.set_always_show_image(True)
         self.preview_button.connect(
             'clicked', lambda *dummy: self.preview_or_run_operations(False))
-        self.preview_button.set_tooltip_text(
-            _("Preview files in the selected operations (without deleting any files)"))
-        # TRANSLATORS: This is the preview button on the main window.  It
-        # previews changes.
-        self.preview_button.set_label(_('Preview'))
         box.add(self.preview_button)
 
         # create the delete button
         self.run_button = Gtk.Button.new_from_icon_name(
             'edit-clear-all', icon_size)
         self.run_button.set_always_show_image(True)
-        # TRANSLATORS: This is the clean button on the main window.
-        # It makes permanent changes: usually deleting files, sometimes
-        # altering them.
-        self.run_button.set_label(_('Clean'))
-        self.run_button.set_tooltip_text(
-            _("Clean files in the selected operations"))
         self.run_button.connect("clicked", self.run_operations)
         box.add(self.run_button)
 
@@ -981,9 +1137,6 @@ class GUI(Gtk.ApplicationWindow):
         self.stop_button = Gtk.Button.new_from_icon_name(
             'process-stop', icon_size)
         self.stop_button.set_always_show_image(True)
-        self.stop_button.set_label(_('Abort'))
-        self.stop_button.set_tooltip_text(
-            _('Abort the preview or cleaning process'))
         self.stop_button.set_sensitive(False)
         self.stop_button.connect('clicked', self.cb_stop_operations)
         box.add(self.stop_button)
@@ -1004,23 +1157,27 @@ class GUI(Gtk.ApplicationWindow):
         menu_button.add(image)
         hbar.pack_end(menu_button)
 
+        # Update all labels and tooltips
+        self.update_headerbar_labels()
         return hbar
 
     def on_configure_event(self, widget, event):
-        # fixup maximized window position:
-        # on Windows if a window is maximized on a secondary monitor it is moved off the screen
         (x, y) = self.get_position()
         (width, height) = self.get_size()
-        window = self.get_window()
-        if window.get_state() & Gdk.WindowState.MAXIMIZED != 0:
-            screen = self.get_screen()
-            monitor_num = screen.get_monitor_at_window(window)
-            g = screen.get_monitor_geometry(monitor_num)
-            if x < g.x or x >= g.x + g.width or y < g.y or y >= g.y + g.height:
-                logger.info("Maximized window {}+{}: monitor ({}) geometry = {}+{}".format(
-                    (x, y), (width, height), monitor_num, (g.x, g.y), (g.width, g.height)))
-                self.move(g.x, g.y)
-                return True
+
+        # fixup maximized window position:
+        # on Windows if a window is maximized on a secondary monitor it is moved off the screen
+        if 'nt' == os.name:
+            window = self.get_window()
+            if window.get_state() & Gdk.WindowState.MAXIMIZED != 0:
+                screen = self.get_screen()
+                monitor_num = screen.get_monitor_at_window(window)
+                g = screen.get_monitor_geometry(monitor_num)
+                if x < g.x or x >= g.x + g.width or y < g.y or y >= g.y + g.height:
+                    logger.debug("Maximized window {}+{}: monitor ({}) geometry = {}+{}".format(
+                        (x, y), (width, height), monitor_num, (g.x, g.y), (g.width, g.height)))
+                    self.move(g.x, g.y)
+                    return True
 
         # save window position and size
         options.set("window_x", x, commit=False)
@@ -1030,11 +1187,30 @@ class GUI(Gtk.ApplicationWindow):
         return False
 
     def on_window_state_event(self, widget, event):
-        # save window state
-        fullscreen = event.new_window_state & Gdk.WindowState.FULLSCREEN != 0
+        """Save window state
+
+        GTK version 3.24.34 on Windows 11 behaves strangely:
+        * It reports maximized only when application starts.
+        * Later, it reports window is fullscreen when neither
+          full screen nor maximized.
+
+        Because of this issue, we check the tiling state.
+        """
+        tiling_states = (Gdk.WindowState.TILED |
+                         Gdk.WindowState.TOP_TILED |
+                         Gdk.WindowState.RIGHT_TILED |
+                         Gdk.WindowState.BOTTOM_TILED |
+                         Gdk.WindowState.LEFT_TILED)
+
+        is_tiled = event.new_window_state & tiling_states != 0
+        fullscreen = (event.new_window_state &
+                      Gdk.WindowState.FULLSCREEN != 0) and not is_tiled
         options.set("window_fullscreen", fullscreen, commit=False)
         maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
         options.set("window_maximized", maximized, commit=False)
+        if 'nt' == os.name:
+            logger.info(
+                f'window state = {event.new_window_state}, full screen = {fullscreen}, maximized = {maximized}')
         return False
 
     def on_delete_event(self, widget, event):
@@ -1043,7 +1219,13 @@ class GUI(Gtk.ApplicationWindow):
         return False
 
     def on_show(self, widget):
+
+        if 'nt' == os.name and Windows.splash_thread.is_alive():
+            Windows.splash_thread.join(0)
+
         # restore window position, size and state
+        if not options.get('remember_geometry'):
+            return
         if options.has_option("window_x") and options.has_option("window_y") and \
            options.has_option("window_width") and options.has_option("window_height"):
             r = Gdk.Rectangle()
@@ -1051,15 +1233,16 @@ class GUI(Gtk.ApplicationWindow):
             (r.width, r.height) = (options.get(
                 "window_width"), options.get("window_height"))
 
-            screen = self.get_screen()
-            monitor_num = screen.get_monitor_at_point(r.x, r.y)
-            g = screen.get_monitor_geometry(monitor_num)
+            display = Gdk.Display.get_default()
+            monitor = display.get_monitor_at_window(self.get_window())
+            g = monitor.get_geometry()
 
             # only restore position and size if window left corner
             # is within the closest monitor
             if r.x >= g.x and r.x < g.x + g.width and \
                r.y >= g.y and r.y < g.y + g.height:
-                logger.info("closest monitor ({}) geometry = {}+{}, window geometry = {}+{}".format(
+                monitor_num = display.get_n_monitors() > 0 and display.get_monitor_at_window(self.get_window()).get_model() or 0
+                logger.debug("closest monitor ({}) geometry = {}+{}, window geometry = {}+{}".format(
                     monitor_num, (g.x, g.y), (g.width, g.height), (r.x, r.y), (r.width, r.height)))
                 self.move(r.x, r.y)
                 self.resize(r.width, r.height)
@@ -1099,8 +1282,11 @@ class GUI(Gtk.ApplicationWindow):
     def populate_window(self):
         """Create the main application window"""
         screen = self.get_screen()
-        self.set_default_size(min(screen.width(), 800),
-                              min(screen.height(), 600))
+        display = screen.get_display()
+        monitor = display.get_primary_monitor()
+        geometry = monitor.get_geometry()
+        self.set_default_size(min(geometry.width, 800),
+                              min(geometry.height, 600))
         self.set_position(Gtk.WindowPosition.CENTER)
         self.connect("configure-event", self.on_configure_event)
         self.connect("window-state-event", self.on_window_state_event)
@@ -1182,8 +1368,14 @@ class GUI(Gtk.ApplicationWindow):
                                            options.get('update_winapp2'),
                                            self.append_text,
                                            lambda: GLib.idle_add(self.cb_refresh_operations))
-            if updates:
-                GLib.idle_add(
-                    lambda: Update.update_dialog(self, updates))
+
         except Exception:
             logger.exception(_("Error when checking for updates: "))
+        else:
+            self._available_updates = updates
+
+            def update_button_state():
+                if updates:
+                    self.update_button.show()
+                    self.set_sensitive(True)
+            GLib.idle_add(update_button_state)

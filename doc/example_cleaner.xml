@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2020 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -87,7 +87,7 @@
 
          The following action truncates any file that ends with log.
          -->
-    <action command="truncate" search="walk.files" path="/var/log" regex="log$" type="d"/>
+    <action command="truncate" search="walk.files" path="/var/log" regex="log$" type="f"/>
     <!-- command=sqlite.vacuum defragments an SQLite 3 database -->
     <action command="sqlite.vacuum" search="glob" path="/var/cache/yum/*/*.sqlite"/>
     <!-- command="winreg" without the attribute 'name' deletes

@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,9 +23,8 @@ Test cases for module Winapp
 
 import os
 import shutil
-import sys
 import tempfile
-import unittest
+from unittest import mock
 
 from tests import common
 from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
@@ -60,10 +59,8 @@ def get_winapp2():
             logger.info('deleting stale file %s ', fname)
             os.remove(fname)
     if not os.path.exists(fname):
-        fobj = open(fname, 'w')
-        import urllib.request
-        txt = urllib.request.urlopen(url).read()
-        fobj.write(txt)
+        from bleachbit.Network import download_url_to_fn
+        download_url_to_fn(url, fname)
     return fname
 
 
@@ -83,6 +80,7 @@ class WinappTestCase(common.BleachbitTestCase):
         winapps = Winapp(get_winapp2())
         for cleaner in winapps.get_cleaners():
             self.run_all(cleaner, False)
+
 
     def test_detectos(self):
         """Test detectos function"""
@@ -139,13 +137,11 @@ class WinappTestCase(common.BleachbitTestCase):
         # variable to also %ProgramW6432%, so test unique entries in
         # %ProgramW6432%.
         import struct
-        if 8 * struct.calcsize('P') != 32:
-            raise NotImplementedError('expecting 32-bit Python')
         if os.getenv('ProgramW6432'):
             dir_64 = os.listdir(os.getenv('ProgramFiles'))
             dir_32 = os.listdir(os.getenv('ProgramW6432'))
             dir_32_unique = set(dir_32) - set(dir_64)
-            if dir_32 and not dir_32_unique:
+            if dir_32 and not dir_32_unique and 8 * struct.calcsize('P') == 32:
                 raise RuntimeError(
                     'Test expects objects in %ProgramW6432% not in %ProgramFiles%')
             for pathname in dir_32_unique:
@@ -189,12 +185,8 @@ class WinappTestCase(common.BleachbitTestCase):
 
     def ini2cleaner(self, body, do_next=True):
         """Write a minimal Winapp2.ini"""
-        ini = open(self.ini_fn, 'w')
-        ini.write('[someapp]\n')
-        ini.write('LangSecRef=3021\n')
-        ini.write(body)
-        ini.write('\n')
-        ini.close()
+        with open(self.ini_fn, 'w') as ini:
+            ini.write('[someapp]\nLangSecRef=3021\n' + body + '\n')
         self.assertExists(self.ini_fn)
         if do_next:
             return next(Winapp(self.ini_fn).get_cleaners())
@@ -258,7 +250,7 @@ class WinappTestCase(common.BleachbitTestCase):
                 "\nDetectFile1=%%APPDATA%%\\does_not_exist\nDetectFile2=%%APPDATA%%\\Microsoft",
                 "\nDetect=HKCU\\Software\\Microsoft",
                 # Below checks that a space is OK in the registry key
-                "\nDetect=HKCU\\Software\\Microsoft\\Command Processor",
+                "\nDetect=HKCU\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
                 # Below checks Detect# where one of two keys exist.
                 "\nDetect1=HKCU\\Software\\Microsoft\nDetect2=HKCU\\Software\\does_not_exist",
                 "\nDetect1=HKCU\\Software\\does_not_exist\nDetect2=HKCU\\Software\\Microsoft",
@@ -329,15 +321,19 @@ class WinappTestCase(common.BleachbitTestCase):
 
         # reuse this path to store a winapp2.ini file in
         (ini_h, self.ini_fn) = tempfile.mkstemp(
-            suffix='.ini', prefix='winapp2')
+            suffix='.ini', prefix='winapp2', dir=self.tempdir)
         os.close(ini_h)
 
-        # tests
-        # each tuple
-        # 0 = body of winapp2.ini
-        # 1 = .\deleteme.log should exist
-        # 2 = .\deleteme.bak should exist
-        # 3 = sub\deleteme.log should exist
+        # Each tuple contains:
+        #   [0] = Body of winapp2.ini configuration
+        #   [1] = Whether .\deleteme.log should exist after cleaning (True=exists)
+        #   [2] = Whether .\deleteme.bak should exist after cleaning (True=exists)
+        #   [3] = Whether sub\deleteme.log should exist after cleaning (True=exists)
+        #
+        # Path notation:
+        #   %(d)s     - Literal test directory path without a trailing backslash
+        #   %(d)s\\   - Literal directory with a trailing backslash
+        #   %%bbtestdir%% - Literal environment variable that resolves to same test directory
 
         tests = (
             # delete everything in single directory (no children) without
@@ -348,16 +344,43 @@ class WinappTestCase(common.BleachbitTestCase):
             # delete everything in parent and child directories without
             # exclusions
             ('FileKey1=%(d)s|deleteme.*|RECURSE', False, False, False),
+            # don't delete files containing the described file name
+            ('FileKey1=%(d)s|eteme.*|RECURSE', True, True, True),
+            # delete a pattern sub folder included
+            ('FileKey1=%(d)s|*eteme.*|RECURSE', False, False, False),
+            # delete a pattern sub folder not included
+            ('FileKey1=%(d)s|*eteme.*', False, False, True),
             # exclude log delimited by pipe
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log',
              True, False, True),
+            # trailing backslash should work the same as without
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\\|deleteme.log',
+             True, False, True),
+            # delete / exclude patterns with different complexity
+            ('FileKey1=%(d)s|*eteme.*\nExcludeKey1=FILE|%(d)s|deleteme.log',
+             True, False, True),
+            ('FileKey1=%(d)s|*eteme.*\nExcludeKey1=FILE|%(d)s\\|deleteme.log',
+             True, False, True),
+            ('FileKey1=%(d)s|*ete*.*\nExcludeKey1=PATH|%(d)s|*ete*.lo?',
+             True, False, True),
+            ('FileKey1=%(d)s|*eteme*\nExcludeKey1=PATH|%(d)s|*notexist.*',
+             False, False, True),
+            ('FileKey1=%(d)s|*eteme.log\nExcludeKey1=PATH|%(d)s|do*.log',
+             False, True, True),
+            # semicolon separates different file types
+            ('FileKey1=%(d)s|*.log;*.bak|RECURSE\nExcludeKey1=PATH|%(d)s|*.log',
+             True, False, True),
             # exclude log without pipe delimiter
-            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\deleteme.log',
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=FILE|%(d)s\\deleteme.log',
              True, False, True),
             # exclude everything in folder
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.*',
              True, True, True),
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s\\|*.*',
+             True, True, True),
             ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.*',
+             True, True, True),
+            ('FileKey1=%(d)s|*.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.*',
              True, True, True),
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s',
              True, True, True),
@@ -366,7 +389,7 @@ class WinappTestCase(common.BleachbitTestCase):
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%%bbtestdir%%|*.*',
              True, True, True),
             # exclude sub-folder
-            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s\sub',
+            ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s\\sub',
              False, False, True),
             # exclude multiple file types that do not exist
             ('FileKey1=%(d)s|deleteme.*\nExcludeKey1=PATH|%(d)s|*.exe;*.dll',
@@ -377,19 +400,17 @@ class WinappTestCase(common.BleachbitTestCase):
             ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.bak;*.log',
              True, True, True),
             # multiple ExcludeKey, neither of which should do anything
-            ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|c:\\doesnotexist|*.*\nExcludeKey2=PATH|c:\\alsodoesnotexist|*.*',
+            ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|c:\\doesnotexist|*.*\nExcludeKey2=PATH|c:\\alsodoesnotexist\\|*.*',
              False, False, False),
             # multiple ExcludeKey, the first should work
-            ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.log\nExcludeKey2=PATH|c:\\alsodoesnotexist\|*.*',
+            ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.log\nExcludeKey2=PATH|c:\\alsodoesnotexist\\|*.*',
              True, False, True),
             # multiple ExcludeKey, both should work
             ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.log\nExcludeKey2=PATH|%(d)s|*.bak',
              True, True, True),
             # glob should exclude the directory called 'sub'
-            ('FileKey1=%(d)s|*.*\nExcludeKey1=PATH|%(d)s\s*',
+            ('FileKey1=%(d)s|*.*\nExcludeKey1=PATH|%(d)s\\s*',
              False, False, True),
-
-
         )
 
         for test in tests:
@@ -410,8 +431,99 @@ class WinappTestCase(common.BleachbitTestCase):
             self.assertCondExists(test[2], r'%s\deleteme.bak' % dirname, msg)
             self.assertCondExists(
                 test[3], r'%s\sub\deleteme.log' % dirname, msg)
+
             # cleanup
             shutil.rmtree(dirname, True)
+
+    @common.skipUnlessWindows
+    def test_filekey_with_path_including_systemdrive(self):
+        (ini_h, self.ini_fn) = tempfile.mkstemp(
+            suffix='.ini', prefix='winapp2')
+        os.close(ini_h)
+        # lexists(r'C:filename') returns False
+        # FindFilesW(r'C:filename') throws an exception
+        # So assert that we use r'C:\filename'.
+        # We need this test because winapp2.ini supports such paths and
+        # giving r'C:filename' as argument to lexists or FindFilesW
+        # causes a hard to detect issue, which has been detected because
+        # lexists('C:filename') returns True when called through PyCharm.
+        # Also test_remote is supposed to run cleaners that contain
+        # such paths but it doesn't assert if those cleaners actually
+        # clean their targets.
+
+        filename = os.path.join('C:\\', 'deleteme.txt')
+        try:
+            common.touch_file(filename)
+        except PermissionError:
+            self.skipTest('Permission denied: run as administrator')
+
+        with mock.patch('os.path.lexists') as mock_lexists:
+            cleaner = self.ini2cleaner('FileKey1=%SystemDrive%|deleteme.txt')
+            self.run_all(cleaner, True)
+            mock_lexists.assert_any_call(r'C:\deleteme.txt')
+
+        self.assertNotExists(filename)
+
+    @common.skipUnlessWindows
+    def test_removeself(self):
+        """Test for the removeself option"""
+
+        # indexes for test
+        # position 0: FileKey statement
+        # position 1: whether the file `dir_c\subdir\foo.log` should exist after operation is complete
+        # position 2: path of top-folder which should have been deleted
+        tests = (
+            # Refer to directory directly (i.e., without a glob).
+            (r'FileKey1=%s\dir_c|*.*|REMOVESELF' % self.tempdir, False, r'%s\dir_c' % self.tempdir),
+            # Refer to file that exists. This is invalid, so nothing happens.
+            (r'FileKey1=%s\dir_c\submarine_sandwich.log|*.*|REMOVESELF' %
+             self.tempdir, True, ''),
+            (r'FileKey1=%s\dir_c\submarine*|*.*|REMOVESELF' % self.tempdir, True, ''),
+            # Refer to path that does not exist, so nothing happens.
+            (r'FileKey1=%s\dir_c\doesnotexist.log|*.*|REMOVESELF' %
+             self.tempdir, True, ''),
+            # Refer by glob to both a file and directory (which both start with `sub`).
+            # This should affect only the directory.
+            (r'FileKey1=%s\dir_a\sub*|*.*|REMOVESELF' % self.tempdir, True, r'%s\dir_a\subdir' % self.tempdir),
+            # glob in middle of directory path with whole directory entry
+            (r'FileKey1=%s\*c\subdir|*.*|REMOVESELF' % self.tempdir, False, r'%s\dir_c\subdir' % self.tempdir),
+            (r'FileKey1=%s\*doesnotexist\subdir|*.*|REMOVESELF' % self.tempdir, True, ''),
+            # glob at end of path
+            (r'FileKey1=%s\dir_c\sub*|*.*|REMOVESELF' % self.tempdir, False, r'%s\dir_c\subdir' % self.tempdir),
+            (r'FileKey1=%s\dir_c\doesnotexist*|*.*|REMOVESELF' % self.tempdir, True, '')
+        )
+
+        (ini_h, self.ini_fn) = tempfile.mkstemp(
+            suffix='.ini', prefix='winapp2')
+        os.close(ini_h)
+
+        for filekey, c_log_expected, top_log_expected in tests:
+            for letter in ('a', 'b', 'c'):
+                # Make three directories, each with a `foo.log` file.
+                fn = os.path.join(self.tempdir, 'dir_' +
+                                  letter, 'subdir', 'foo.log')
+                common.touch_file(fn)
+
+            # In dir_a, place a file one level up from `foo.log`.
+            # Notice the glob `dir_a\sub*` will match both a directory and file.
+            fn2 = os.path.join(self.tempdir, 'dir_a', 'submarine_sandwich.log')
+            common.touch_file(fn2)
+
+            cleaner = self.ini2cleaner(filekey)
+            self.assertExists(fn, filekey)
+            self.assertExists(fn2, filekey)
+            if top_log_expected:
+                self.assertExists(top_log_expected, filekey)
+            self.run_all(cleaner, True)
+            if c_log_expected:
+                self.assertExists(fn, filekey)
+            else:
+                self.assertNotExists(fn, filekey)
+            if top_log_expected != '':
+                self.assertNotExists(top_log_expected, filekey)
+            self.assertExists(fn2, filekey)
+            if top_log_expected:
+                self.assertNotExists(top_log_expected, filekey)
 
     def test_section2option(self):
         """Test for section2option()"""
@@ -419,6 +531,26 @@ class WinappTestCase(common.BleachbitTestCase):
                  ('A - B (C)', 'a_b_c'))
         for test in tests:
             self.assertEqual(section2option(test[0]), test[1])
+
+    def test_section_not_found(self):
+        """Test a section that is found"""
+        tmp_ini_fn = os.path.join(self.tempdir, 'section_not_found.ini')
+
+        with open(tmp_ini_fn, 'w') as f:
+            f.write(r"""[Initech TPS Reports *]
+LangSecRef=3023
+DetectFile=%CommonAppData%\Initech\TPSReports
+FileKey1=%CommonAppData%\Initech\TPSReports\Logs|*.*""")
+
+        with mock.patch.object(Winapp, 'detect', return_value=True) as mock_detect:
+            winapps = Winapp(tmp_ini_fn)
+            cleaner_list = list(winapps.get_cleaners())
+            self.assertEqual(len(cleaner_list), 1)
+            self.assertEqual(cleaner_list[0].get_name(), 'Multimedia')
+            this_option = [x for x in cleaner_list[0].get_options()][0]
+            self.assertEqual(this_option[0], 'initech_tps_reports')
+            self.assertEqual(this_option[1], 'Initech TPS Reports')
+            mock_detect.assert_called()
 
     def test_many_patterns(self):
         """Test a cleaner like Steam Installers and related performance improvement

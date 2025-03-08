@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2020 Andrew Ziem, nodiscc
+    Copyright (C) 2008-2025 Andrew Ziem, nodiscc
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 <cleaner id="journald" os="linux">
   <label>journald</label>
   <description>System journals</description>
-  <running type="exe">journalctl</running>
+  <running type="exe" same_user="false">journalctl</running>
   <option id="clean">
     <label translate="false">clean</label>
     <description>Clean old system journals</description>

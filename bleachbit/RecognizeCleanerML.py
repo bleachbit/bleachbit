@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 Check local CleanerML files as a security measure
 """
 
-from bleachbit import _, _p
+from bleachbit.Language import get_text as _, pget_text as _p
 import bleachbit
 from bleachbit.CleanerML import list_cleanerml_files
 from bleachbit.Options import options
@@ -169,7 +169,7 @@ class RecognizeCleanerML:
             (status, myhash) = self.__recognized(pathname)
             if NEW == status or CHANGED == status:
                 changes.append([pathname, status, myhash])
-        if len(changes) > 0:
+        if changes:
             cleaner_change_dialog(changes, self.parent_window)
             for change in changes:
                 pathname = change[0]

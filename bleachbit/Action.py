@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2020 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,8 +23,9 @@
 Actions that perform cleaning
 """
 
-from bleachbit import Command, FileUtilities, General, Special
-from bleachbit import _
+from bleachbit import Command, FileUtilities, General, Special, DeepScan
+from bleachbit import fs_scan_re_flags
+from bleachbit.Language import get_text as _
 
 import glob
 import logging
@@ -33,18 +34,17 @@ import re
 import shlex
 
 
+
 if 'posix' == os.name:
-    re_flags = 0
     from bleachbit import Unix
-else:
-    re_flags = re.IGNORECASE
+
 
 logger = logging.getLogger(__name__)
 
 
 def has_glob(s):
     """Checks whether the string contains any glob characters"""
-    return re.search('[?*\[\]]', s) is not None
+    return re.search(r'[?*\[\]]', s) is not None
 
 
 def expand_multi_var(s, variables):
@@ -81,9 +81,8 @@ def expand_multi_var(s, variables):
         ret.append(ms)
     if ret:
         return ret
-    else:
-        # The string has $$, but it did not match anything
-        return (s,)
+    # The string has $$, but it did not match anything
+    return (s,)
 
 #
 # Plugin framework
@@ -108,7 +107,6 @@ class ActionProvider(metaclass=PluginMount):
 
     def __init__(self, action_node, path_vars=None):
         """Create ActionProvider from CleanerML <action>"""
-        pass
 
     def get_deep_scan(self):
         """Return a dictionary used to construct a deep scan"""
@@ -116,7 +114,6 @@ class ActionProvider(metaclass=PluginMount):
 
     def get_commands(self):
         """Yield each command (which can be previewed or executed)"""
-        pass
 
 
 #
@@ -144,13 +141,13 @@ class FileActionProvider(ActionProvider):
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
         self._set_paths(action_element.getAttribute('path'), path_vars)
-        self.ds = {}
+        self.ds = None
         if 'deep' == self.search:
-            self.ds['regex'] = self.regex
-            self.ds['nregex'] = self.nregex
-            self.ds['command'] = action_element.getAttribute('command')
-            self.ds['path'] = self.paths[0]
-            if not len(self.paths) == 1:
+            self.ds = (self.paths[0], DeepScan.Search(
+                command=action_element.getAttribute('command'),
+                regex=self.regex, nregex=self.nregex,
+                wholeregex=self.wholeregex, nwholeregex=self.nwholeregex))
+            if len(self.paths) != 1:
                 logger.warning(
                     # TRANSLATORS: Multi-value variables are explained in the online documentation.
                     # Basically, they are like an environment variable, but each multi-value variable
@@ -175,7 +172,7 @@ class FileActionProvider(ActionProvider):
             self.paths.append(path3)
 
     def get_deep_scan(self):
-        if 0 == len(self.ds):
+        if self.ds is None:
             return
         yield self.ds
 
@@ -193,23 +190,23 @@ class FileActionProvider(ActionProvider):
         basename = os.path.basename
         object_type = self.object_type
         if self.regex:
-            regex_c_search = re.compile(self.regex, re_flags).search
+            regex_c_search = re.compile(self.regex, fs_scan_re_flags).search
         else:
             regex_c_search = None
 
         if self.nregex:
-            nregex_c_search = re.compile(self.nregex, re_flags).search
+            nregex_c_search = re.compile(self.nregex, fs_scan_re_flags).search
         else:
             nregex_c_search = None
 
         if self.wholeregex:
-            wholeregex_c_search = re.compile(self.wholeregex, re_flags).search
+            wholeregex_c_search = re.compile(self.wholeregex, fs_scan_re_flags).search
         else:
             wholeregex_c_search = None
 
         if self.nwholeregex:
             nwholeregex_c_search = re.compile(
-                self.nwholeregex, re_flags).search
+                self.nwholeregex, fs_scan_re_flags).search
         else:
             nwholeregex_c_search = None
 
@@ -245,8 +242,7 @@ class FileActionProvider(ActionProvider):
             """Delete files and directories inside a directory but not the top directory"""
             for expanded in glob.iglob(top):
                 path = None  # sentinel value
-                for path in FileUtilities.children_in_directory(expanded, True):
-                    yield path
+                yield from FileUtilities.children_in_directory(expanded, True)
                 # This condition executes when there are zero iterations
                 # in the loop above.
                 if path is None:
@@ -256,7 +252,8 @@ class FileActionProvider(ActionProvider):
                         logger.debug(
                             # TRANSLATORS: This is a lint-style warning that there seems to be a
                             # mild mistake in the CleanerML file because walk.all is expected to
-                            # be used with directories instead of with files.
+                            # be used with directories instead of with files. Do not translate
+                            # search="walk.all" and path="%s"
                             _('search="walk.all" used with regular file path="%s"'),
                             expanded,
                         )
@@ -264,30 +261,29 @@ class FileActionProvider(ActionProvider):
         def get_walk_files(top):
             """Delete files inside a directory but not any directories"""
             for expanded in glob.iglob(top):
-                for path in FileUtilities.children_in_directory(expanded, False):
-                    yield path
+                yield from FileUtilities.children_in_directory(expanded, False)
 
         def get_top(top):
             """Delete directory contents and the directory itself"""
-            for f in get_walk_all(top):
-                yield f
+            yield from get_walk_all(top)
             if os.path.exists(top):
                 yield top
 
         if 'deep' == self.search:
             return
-        elif 'file' == self.search:
-            func = get_file
-        elif 'glob' == self.search:
-            func = glob.iglob
-        elif 'walk.all' == self.search:
-            func = get_walk_all
-        elif 'walk.files' == self.search:
-            func = get_walk_files
-        elif 'walk.top' == self.search:
-            func = get_top
-        else:
-            raise RuntimeError("invalid search='%s'" % self.search)
+
+        search_functions = {
+            'file': get_file,
+            'glob': glob.iglob,
+            'walk.all': get_walk_all,
+            'walk.files': get_walk_files,
+            'walk.top': get_top
+        }
+
+        if self.search not in search_functions:
+            raise RuntimeError("Invalid search='%s'" % self.search)
+
+        func = search_functions[self.search]
 
         cache = self.__class__.cache
         for input_path in self.paths:
@@ -305,11 +301,10 @@ class FileActionProvider(ActionProvider):
                 for x in cache[2]:
                     yield x
                 return
-            else:
-                # if self.search in self.CACHEABLE_SEARCHERS:
-                #    logger.debug('not using cache because it has (%s,%s) and we want (%s,%s)',
-                #                 cache[0], cache[1], self.search, input_path)
-                self.__class__.cache = ('cleared by', input_path, tuple())
+            # if self.search in self.CACHEABLE_SEARCHERS:
+            #    logger.debug('not using cache because it has (%s,%s) and we want (%s,%s)',
+            #                 cache[0], cache[1], self.search, input_path)
+            self.__class__.cache = ('cleared by', input_path, tuple())
 
             # build new cache
             #logger.debug('%s walking %s', id(self), input_path)
@@ -510,6 +505,18 @@ class MozillaUrlHistory(FileActionProvider):
                                    _('Clean file'))
 
 
+class MozillaFavicons(FileActionProvider):
+
+    """Action to clean Mozilla (Firefox) URL history in places.sqlite"""
+    action_key = 'mozilla.favicons'
+
+    def get_commands(self):
+        for path in self.get_paths():
+            yield Command.Function(path,
+                                   Special.delete_mozilla_favicons,
+                                   _('Clean file'))
+
+
 class OfficeRegistryModifications(FileActionProvider):
 
     """Action to delete LibreOffice history"""
@@ -551,11 +558,10 @@ class Process(ActionProvider):
                     Popen(self.cmd)
             except Exception as e:
                 raise RuntimeError(
-                    'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e)))
-            else:
-                if not 0 == rc:
-                    msg = 'Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n'
-                    logger.warning(msg, self.cmd, rc, stdout, stderr)
+                    'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e))) from e
+            if 0 != rc:
+                msg = 'Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n'
+                logger.warning(msg, self.cmd, rc, stdout, stderr)
             return 0
         yield Command.Function(path=None, func=run_process, label=_("Run external command: %s") % self.cmd)
 

@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2020 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 <cleaner id="transmission" os="linux">
   <label>Transmission</label>
   <description>File transfer client</description>
-  <running type="exe">transmission</running>
+  <running type="exe" same_user="true">transmission</running>
   <option id="blocklists">
     <label translators="Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations">Blocklists</label>
     <description>Delete the files</description>

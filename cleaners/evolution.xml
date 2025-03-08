@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2020 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 <cleaner id="evolution" os="linux">
   <label>Evolution</label>
   <description>Email client</description>
-  <running type="exe">evolution</running>
+  <running type="exe" same_user="true">evolution</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>

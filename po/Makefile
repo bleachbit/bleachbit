@@ -22,19 +22,27 @@ desktop.pot: ../org.bleachbit.BleachBit.desktop
 
 
 $(POTFILE): $(SRC) cleanerml.pot desktop.pot
-	@echo "* Generating $(APP).pot"
-	echo " Words before update: " \
-		`tail -n +20 bleachbit.pot | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | wc --words`
-	cat cleanerml.pot desktop.pot > $(APP).pot
-	xgettext -o $(APP).pot \
+	@echo "* Generating $(POTFILE)"
+	@if [ -f $(POTFILE) ]; then \
+		cp $(POTFILE) $(POTFILE).old; \
+		echo " Words before update: "; \
+		tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq |wc --words; \
+	fi
+	cat cleanerml.pot desktop.pot > $(POTFILE)
+	xgettext -o $(POTFILE) \
 		--join-existing \
 		--add-comments=TRANSLATORS \
 		--keyword="_p:1c,2" \
 		--default-domain=$(APP) \
 		$(SRC)
-	sed -i 's/charset=CHARSET/charset=utf-8/g' bleachbit.pot
+	sed -i 's/charset=CHARSET/charset=utf-8/g' $(POTFILE)
 	echo " Words after update: " \
-		`tail -n +20 bleachbit.pot | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | wc --words`
+		`tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq | wc --words`
+	if [ -f $(POTFILE).old ]; then \
+		echo "msgid added or removed"; \
+		msgcomm -u $(POTFILE) $(POTFILE).old > diff.pot; \
+		sed -e '1,/^"Plural-Forms:/d' -e '/^#/d' -e '/^msgstr/d' -e '/^$$/d' diff.pot; \
+	fi
 
 
 refresh-po: $(POTFILE)
@@ -51,7 +59,7 @@ spelling: $(POTFILE)
 	@echo
 	@echo Word count: `msggrep -Kie . --no-wrap $(POTFILE)  | grep ^msgid  | cut -c 8- | wc --words`
 	@echo
-	msggrep -Kie . --no-wrap $(POTFILE)  | grep ^msgid  | cut -c 8- | aspell  list | sort -u
+	msggrep -Kie . --no-wrap $(POTFILE)  | grep ^msgid  | cut -c 8- | aspell --personal=./aspell.pws list | sort -u
 
 %.mo: %.po
 	@echo "* Generating $@"
@@ -78,8 +86,7 @@ done
 clean:
 	echo "* Cleaning"
 	@rm -fv *.mo
-	@rm -fv $(APP).pot cleanerml.pot desktop.pot
+	@rm -fv $(POTFILE) cleanerml.pot desktop.pot diff.pot
 	@rm -rfv ../locale
 
-all: $(APP).pot $(MOFILES)
-
+all: $(POTFILE) $(MOFILES)

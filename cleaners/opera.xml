@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2020 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -24,9 +24,9 @@
     @cleanerversion v1.6.1
     @cleanerdate 2019-03-29
     @cleanerby Andrew Ziem (2009-10-04 - 2018-11-20) & theatre-x (2014-11-04) & Tobias B. Besemer (2019-03-13 - 2019-03-29)
-    @tested ok 
-    @testeddate 
-    @testedby 
+    @tested ok
+    @testeddate
+    @testedby
     @note Opera version 15 switched layout engine to Blink like Chromium
     @note Unlike Chromium, Opera does not support multiple profiles
 
@@ -34,8 +34,8 @@
 <cleaner id="opera">
   <label>Opera</label>
   <description>Web browser</description>
-  <running type="exe" os="linux">opera</running>
-  <running type="exe" os="windows">opera.exe</running>
+  <running type="exe" os="linux" same_user="true">opera</running>
+  <running type="exe" os="windows" same_user="true">opera.exe</running>
   <var name="base">
     <!-- On Windows 10, Opera 68 created "Opera Stable" and "Opera Next" directories.
         The "Opera Next" is for Opera beta.
@@ -134,7 +134,6 @@
     <action command="delete" search="file" path="$$profile$$/Visited Links"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
-    <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
     <!-- Windows-specific -->
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsOld\"/>
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIcons\"/>
@@ -212,5 +211,10 @@
     <action command="sqlite.vacuum" search="file" path="$$profile$$/databases/Databases.db"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/?"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/??"/>
+  </option>
+  <option id="site_preferences">
+    <label>Site preferences</label>
+    <description>Settings for individual sites</description>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
   </option>
 </cleaner>

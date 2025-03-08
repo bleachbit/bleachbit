@@ -1,4 +1,4 @@
-# Copyright (C) 2008-2020 Andrew Ziem.  All rights reserved.
+# Copyright (C) 2008-2025 Andrew Ziem.  All rights reserved.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 # This is free software: You are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
@@ -26,16 +26,18 @@ build:
 	echo Nothing to build
 
 clean:
-	@rm -vf {.,bleachbit,tests,windows}/*{pyc,pyo,~}
+	@rm -vf {.,bleachbit,tests,windows,bleachbit/markovify}/*{pyc,pyo,~} # files
+	@rm -vrf {.,bleachbit,tests,windows,bleachbit/markovify}/__pycache__ # directories
 	@rm -vrf build dist # created by py2exe
 	@rm -rf BleachBit-Portable # created by windows/setup_py2exe.bat
 	@rm -rf BleachBit-*-portable.zip
 	@rm -vf MANIFEST # created by setup.py
 	make -C po clean
 	@rm -vrf locale
-	@rm -vrf {*/,./}*.{pychecker,pylint,pyflakes}.log
+	@rm -vrf {*/,./}*.{pylint,pyflakes}.log
 	@rm -vrf windows/BleachBit-*-setup*.{exe,zip}
 	@rm -vrf htmlcov .coverage # code coverage reports
+	@rm -vrf *.egg-info # Python package metadata
 
 install:
 	# "binary"
@@ -79,14 +81,12 @@ install:
 	$(INSTALL_DATA) org.bleachbit.policy $(DESTDIR)$(datadir)/polkit-1/actions/
 
 lint:
-	[ -x "$$(command -v pychecker)" ] ||  echo "WARNING: pychecker not found"
-	[ -x "$$(command -v pyflakes)" ] ||  echo "WARNING: pyflakes not found"
+	[ -x "$$(command -v pyflakes3)" ] ||  echo "WARNING: pyflakes3 not found"
 	[ -x "$$(command -v pylint)" ] ||  echo "WARNING: pylint not found"
 	for f in *py */*py; \
 	do \
 		echo "$$f"; \
-		( [ -x "$$(command -v pychecker)" ] && pyflakes "$$f" > "$$f".pychecker.log ); \
-		( [ -x "$$(command -v pyflakes)" ] && pyflakes "$$f" > "$$f".pyflakes.log ); \
+		( [ -x "$$(command -v pyflakes3)" ] && pyflakes3 "$$f" > "$$f".pyflakes.log ); \
 		( [ -x "$$(command -v pylint)" ] && pylint "$$f" > "$$f".pylint.log ); \
 	done; \
 	exit 0
@@ -94,9 +94,9 @@ lint:
 delete_windows_files:
 	# This is used for building .deb and .rpm packages.
 	# Remove Windows-specific cleaners.
-	awk '/os=\"windows/ && /id=\"/ {print FILENAME}' cleaners/*.xml | xargs rm -f
+	grep -l "cleaner id=\"\w*\" os=\"windows\"" cleaners/*xml | xargs rm -f
 	# Remove Windows-specific modules.
-	rm -f bleachbit/Windows*.py
+	rm -f bleachbit/{Winapp,Windows*}.py 
 
 downgrade_desktop:
 #	This will downgrade the version of the .desktop file for older Linux distributions.

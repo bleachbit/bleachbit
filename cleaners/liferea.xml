@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2020 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -21,9 +21,9 @@
 -->
 <cleaner id="liferea" os="linux">
   <label>Liferea</label>
-  <running type="exe">liferea-bin</running>
+  <running type="exe" same_user="true">liferea-bin</running>
   <!-- Newer Liferea releases do not have a "liferea" wrapper anymore. Just a binary -->
-  <running type="exe">liferea</running>
+  <running type="exe" same_user="true">liferea</running>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>

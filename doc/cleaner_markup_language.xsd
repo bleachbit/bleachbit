@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2020 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -70,6 +70,7 @@
                     </xs:restriction>
                   </xs:simpleType>
                 </xs:attribute>
+                <xs:attribute name="same_user" type="xs:boolean" use="optional"/>
               </xs:extension>
             </xs:simpleContent>
           </xs:complexType>
@@ -136,6 +137,7 @@
                             <xs:enumeration value="ini"/>
                             <xs:enumeration value="journald.clean"/>
                             <xs:enumeration value="json"/>
+                            <xs:enumeration value="mozilla.favicons"/>
                             <xs:enumeration value="mozilla.url.history"/>
                             <xs:enumeration value="office_registrymodifications"/>
                             <xs:enumeration value="process"/>
