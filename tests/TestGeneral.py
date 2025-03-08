@@ -22,12 +22,13 @@
 Test case for module General
 """
 
+from bleachbit.FileUtilities import exists_in_path
 from bleachbit.General import *
 from bleachbit import logger
 from tests import common
 
+import copy
 import shutil
-import unittest
 
 
 class GeneralTestCase(common.BleachbitTestCase):
@@ -114,7 +115,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
         # With parent environment set to English and parameter clean_env=False,
         # expect English
-        import copy
+
         old_environ = copy.deepcopy(os.environ)
 
         lc_all_old = common.get_env('LC_ALL')
@@ -146,6 +147,18 @@ class GeneralTestCase(common.BleachbitTestCase):
         common.put_env('LC_ALL', lc_all_old)
         common.put_env('LANG', lang_old)
         self.assertEqual(old_environ, copy.deepcopy(os.environ))
+
+    @common.skipIfWindows
+    def test_dconf(self):
+        """Unit test for dconf"""
+        if not exists_in_path('dconf'):
+            self.skipTest('dconf not found')
+        args = ['dconf', 'write',
+                '/apps/bleachbit/test', 'true']
+        (rc, stdout, stderr) = run_external(args)
+        self.assertEqual(0, rc, stderr)
+        self.assertEqual('', stderr)
+        self.assertEqual('', stdout)
 
     @common.skipIfWindows
     def test_sudo_mode(self):
