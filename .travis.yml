@@ -28,7 +28,7 @@ install:
 # coveralls.io
   - pip install coveralls requests[security]
 # install mock
-  - pip install mock
+  - pip install 'mock; python_version<"3.8"'
 script:
 # Make the same file as on AppVeyor, so coveralls does not complain.
    - echo "revision = \"`git rev-parse --short HEAD `\"" >bleachbit/Revision.py

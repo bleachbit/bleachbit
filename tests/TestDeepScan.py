@@ -144,7 +144,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
 
     @unittest.skipUnless('darwin' == sys.platform, 'Not on Darwin')
     def test_normalized_walk_darwin(self):
-        import mock
+        from unittest import mock
 
         with mock.patch('os.walk') as mock_walk:
             mock_walk.return_value = [

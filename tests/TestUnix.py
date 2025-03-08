@@ -27,7 +27,7 @@ from tests import common
 from bleachbit.Unix import *
 from bleachbit.Unix import _is_broken_xdg_desktop_application
 
-import mock
+from unittest import mock
 import os
 import sys
 import tempfile
