@@ -19,20 +19,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import mock
+import os
+import locale
+
+import unittest.mock
 from bleachbit.Language import get_active_language_code, \
     get_supported_language_codes, \
     get_text, \
-    native_locale_names, \
     setup_translation, \
     get_supported_language_code_name_dict
 from bleachbit.Options import options
+from bleachbit import locale_dir
 from tests import common
-import mock
 
 
 class LanguageTestCase(common.BleachbitTestCase):
 
     """Test case for module Language"""
+
     def setUp(self):
         super(LanguageTestCase, self).setUp()
         options.set('auto_detect_lang', False)
@@ -59,7 +64,6 @@ class LanguageTestCase(common.BleachbitTestCase):
             self.assertIn('en', supported_langs)
             self.assertIn('es', supported_langs)
             self.assertIn('foo@bar', supported_langs)
-
 
     def test_switch_language_twice(self):
         """English should still work after switching twice"""
@@ -105,3 +109,12 @@ class LanguageTestCase(common.BleachbitTestCase):
             self.assertEqual(get_active_language_code(), lang_id)
             setup_translation()
             self.assertEqual(get_text('Preview'), 'Vista previa')
+
+    def test_options_import_failure(self):
+        """Test handling of failed Options import in language detection"""
+        with unittest.mock.patch.dict('sys.modules', {'bleachbit.Options': None}):
+            with self.assertLogs(level='ERROR') as log_context:
+                result = get_active_language_code()
+            self.assertIn("Failed to get language options", log_context.output[0])
+
+        self.assertIn(result, [locale.getlocale()[0], 'C', 'en', 'en_US'])

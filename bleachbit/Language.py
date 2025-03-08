@@ -310,9 +310,13 @@ def get_active_language_code():
 
     There will not be a dot like `en_US.UTF-8`.
     """
-    from bleachbit.Options import options
-    if not options.get('auto_detect_lang') and options.has_option('forced_language') and options.get('forced_language'):
-        return options.get('forced_language')
+    try:
+        from bleachbit.Options import options
+    except ImportError:
+        logger.error("Failed to get language options")
+    else:
+        if not options.get('auto_detect_lang') and options.has_option('forced_language') and options.get('forced_language'):
+            return options.get('forced_language')
     import locale
     # locale.getdefaultlocale() will be removed in Python 3.15, so
     # use getlocale() instead.

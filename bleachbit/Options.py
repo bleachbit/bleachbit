@@ -22,19 +22,22 @@
 Store and retrieve user preferences
 """
 
-import bleachbit
-from bleachbit import General
-from bleachbit.Language import get_text as _
-
+# standard library imports
+import errno
 import logging
 import os
 import re
 
-logger = logging.getLogger(__name__)
-
+# third-party imports
 if 'nt' == os.name:
     from win32file import GetLongPathName
 
+# local application imports
+import bleachbit
+from bleachbit import General
+from bleachbit.Language import get_text as _
+
+logger = logging.getLogger(__name__)
 
 boolean_keys = ['auto_hide',
                 'auto_detect_lang',
@@ -102,21 +105,24 @@ class Options:
         """Write information to disk"""
         if not self.purged:
             self.__purge()
-        if not os.path.exists(bleachbit.options_dir):
-            General.makedirs(bleachbit.options_dir)
-        mkfile = not os.path.exists(bleachbit.options_file)
-        with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as _file:
-            try:
+
+        try:
+            if not os.path.exists(bleachbit.options_dir):
+                General.makedirs(bleachbit.options_dir)
+            mkfile = not os.path.exists(bleachbit.options_file)
+            with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as _file:
                 self.config.write(_file)
-            except IOError as e:
-                from errno import ENOSPC
-                if e.errno == ENOSPC:
-                    logger.error(
-                        _("Disk was full when writing configuration to file %s"), bleachbit.options_file)
-                else:
-                    raise
-        if mkfile and General.sudo_mode():
-            General.chownself(bleachbit.options_file)
+            if mkfile and General.sudo_mode():
+                General.chownself(bleachbit.options_file)
+        except (OSError, IOError, PermissionError) as e:
+            if e.errno == errno.ENOSPC:
+                logger.error(
+                    _("Disk was full when writing configuration to file %s"), bleachbit.options_file)
+            elif e.errno == errno.EACCES:
+                logger.error(
+                    _("Permission denied when writing configuration to file %s"), bleachbit.options_file)
+            else:
+                raise
 
     def __purge(self):
         """Clear out obsolete data"""
