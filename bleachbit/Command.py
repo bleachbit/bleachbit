@@ -32,6 +32,7 @@ from bleachbit import FileUtilities
 import logging
 import os
 import types
+import warnings
 
 if 'nt' == os.name:
     import bleachbit.Windows
@@ -90,15 +91,13 @@ class Delete:
                 # Settings\\username\\Cookies\\index.dat'
                 if e.winerror not in (5, 32):
                     raise
-                try:
-                    bleachbit.Windows.delete_locked_file(self.path)
-                except:
-                    logger.exception('exception when deleting locked file %s', self.path)
-                else:
-                    if self.shred:
-                        import warnings
-                        warnings.warn(
-                            _('At least one file was locked by another process, so its contents could not be overwritten. It will be marked for deletion upon system reboot.'))
+
+                bleachbit.Windows.delete_locked_file(self.path)
+
+                if self.shred:
+
+                    warnings.warn(
+                        _('At least one file was locked by another process, so its contents could not be overwritten. It will be marked for deletion upon system reboot.'))
                     # TRANSLATORS: The file will be deleted when the
                     # system reboots
                     ret['label'] = _('Mark for deletion')
