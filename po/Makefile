@@ -24,6 +24,7 @@ desktop.pot: ../org.bleachbit.BleachBit.desktop
 $(POTFILE): $(SRC) cleanerml.pot desktop.pot
 	@echo "* Generating $(POTFILE)"
 	@if [ -f $(POTFILE) ]; then \
+		cp $(POTFILE) $(POTFILE).old; \
 		echo " Words before update: "; \
 		tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq |wc --words; \
 	fi
@@ -37,6 +38,11 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot
 	sed -i 's/charset=CHARSET/charset=utf-8/g' $(POTFILE)
 	echo " Words after update: " \
 		`tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq | wc --words`
+	if [ -f $(POTFILE).old ]; then \
+		echo "msgid added or removed"; \
+		msgcomm -u $(POTFILE) $(POTFILE).old > diff.pot; \
+		sed -e '1,/^"Plural-Forms:/d' -e '/^#/d' -e '/^msgstr/d' -e '/^$$/d' diff.pot; \
+	fi
 
 
 refresh-po: $(POTFILE)
@@ -80,7 +86,7 @@ done
 clean:
 	echo "* Cleaning"
 	@rm -fv *.mo
-	@rm -fv $(POTFILE) cleanerml.pot desktop.pot
+	@rm -fv $(POTFILE) cleanerml.pot desktop.pot diff.pot
 	@rm -rfv ../locale
 
 all: $(POTFILE) $(MOFILES)
