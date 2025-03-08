@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ Wipe memory
 
 from bleachbit import FileUtilities
 from bleachbit import General
-from bleachbit import _
+from bleachbit.Language import get_text as _
 
 import logging
 import os

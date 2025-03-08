@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,8 +23,9 @@ Command line interface
 """
 
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
-from bleachbit import _, APP_VERSION
+from bleachbit import APP_VERSION
 from bleachbit import SystemInformation, Options, Worker
+from bleachbit.Language import get_text as _
 from bleachbit.Log import set_root_log_level
 
 import logging
@@ -206,11 +207,6 @@ def process_cmd_line():
             _('Specify only one of these commands: --list-cleaners, --wipe-free-space, --preview, --clean'))
         sys.exit(1)
 
-    if not options.gui:
-        # The GUI has its own trigger for the same function.
-        from bleachbit.General import startup_check
-        startup_check()
-
     did_something = False
     if options.debug:
         # set in __init__ so it takes effect earlier
@@ -226,7 +222,7 @@ def process_cmd_line():
     if options.version:
         print("""
 BleachBit version %s
-Copyright (C) 2008-2024 Andrew Ziem.  All rights reserved.
+Copyright (C) 2008-2025 Andrew Ziem.  All rights reserved.
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)

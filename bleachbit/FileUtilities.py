@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ File-related utilities
 """
 
 import bleachbit
-from bleachbit import _
+from bleachbit.Language import get_text as _
 
 import atexit
 import errno
@@ -81,38 +81,52 @@ def open_files_linux():
 
 
 def get_filesystem_type(path):
-    """
-    * Get file system type from the given path
-    * return value: The tuple of (file_system_type, device_name)
-    *               @ file_system_type: vfat, ntfs, etc
-    *               @ device_name:      C://, D://, etc
+    """Get file system type from the given path
+
+    path: directory path
+
+    Return value:
+    A tuple of (file_system_type, device_name)
+    file_system_type: vfat, ntfs, etc.
+    device_name: C:, D:, etc.
+
+    File system types seen
+    * On Linux: ext4, vfat, squashfs
+    * On Windows: NTFS, FAT32, CDFS
     """
     try:
         import psutil
+        from pathlib import Path
     except ImportError:
-        logger.warning('To get the file system type from the given path, you need to install psutil package')
+        logger.warning(
+            'To get the file system type from the given path, you need to install psutil package')
         return ("unknown", "none")
 
-    partitions = {
-        partition.mountpoint: (partition.fstype, partition.device)
-        for partition in psutil.disk_partitions()
-    }
+    path_obj = Path(path)
+    if os.name == 'nt':
+        if len(path) == 2 and path[1] == ':':
+            path_obj = Path(path + '\\')
 
-    if path in partitions:
-        return partitions[path]
+    # Get all partitions with Path objects as keys
+    partitions = {}
+    for partition in psutil.disk_partitions():
+        mount_path = Path(partition.mountpoint)
+        partitions[mount_path] = (partition.fstype, partition.device)
 
-    splitpath = path.split(os.sep)
-    for i in range(0, len(splitpath)-1):
-        path = os.sep.join(splitpath[:i]) + os.sep
-        if path in partitions:
-            return partitions[path]
-            
-        path = os.sep.join(splitpath[:i])
-        if path in partitions:
-            return partitions[path]
+    # Exact match
+    for mount_path in partitions:
+        if path_obj == mount_path:
+            return partitions[mount_path]
+
+    # Try parent paths
+    current = path_obj
+    while current.parent != current:  # Stop at root
+        current = current.parent
+        for mount_path in partitions:
+            if current == mount_path:
+                return partitions[mount_path]
 
     return ("unknown", "none")
-
 
 
 def open_files_lsof(run_lsof=None):
@@ -461,15 +475,28 @@ def exe_exists(pathname):
 
 
 def execute_sqlite3(path, cmds):
-    """Execute 'cmds' on SQLite database 'path'"""
+    """Execute SQL commands on SQLite database
+
+    Args:
+        path (str): Path to the SQLite database file
+        cmds (str): SQL commands to execute, separated by semicolons
+
+    Raises:
+        sqlite3.OperationalError: If there's an error executing the SQL commands
+        sqlite3.DatabaseError: If there's a database-related error
+
+    Returns:
+        None
+    """
     import sqlite3
-    import contextlib
-    with contextlib.closing(sqlite3.connect(path)) as conn:
+    from bleachbit.Options import options
+    assert isinstance(path, str)
+    assert isinstance(cmds, str)
+    with sqlite3.connect(path) as conn:
         cursor = conn.cursor()
 
         # overwrites deleted content with zeros
         # https://www.sqlite.org/pragma.html#pragma_secure_delete
-        from bleachbit.Options import options
         if options.get('shred'):
             cursor.execute('PRAGMA secure_delete=ON')
 
@@ -489,7 +516,8 @@ def execute_sqlite3(path, cmds):
                     '%s: %s' % (exc, path))
 
         cursor.close()
-        conn.commit()
+        from bleachbit.General import gc_collect
+        gc_collect()
 
 
 def expand_glob_join(pathname1, pathname2):
@@ -551,7 +579,12 @@ def getsize(path):
         # try FindFilesW.
         # Also, apply prefix to use extended-length paths to support longer
         # filenames.
-        finddata = win32file.FindFilesW(extended_path(path))
+        try:
+            finddata = win32file.FindFilesW(extended_path(path))
+        except pywinerror as e:
+            if e.winerror == 3:  # 3 = The system cannot find the path specified.
+                raise OSError(errno.ENOENT, e.strerror, path)
+            raise e
         if not finddata:
             # FindFilesW does not work for directories, so fall back to
             # getsize()
@@ -813,7 +846,6 @@ def wipe_contents(path, truncate=True):
     if 'nt' == os.name and IsUserAnAdmin():
         from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
         import warnings
-        from bleachbit import _
         try:
             file_wipe(path)
         except pywinerror as e:
@@ -933,118 +965,133 @@ def wipe_path(pathname, idle=False):
         remaining_seconds = int(remaining_bytes / (rate + 0.0001))
         return 1, done_percent, remaining_seconds
 
-    logger.debug(_("Wiping path: %s") % pathname)
+    # Get the file system type from the given path
+    fstype = get_filesystem_type(pathname)[0]
+    logger.debug(_(f"Wiping path {pathname} with file system type {fstype}"))
     if not os.path.isdir(pathname):
-        logger.error(_("Path to wipe must be an existing directory: %s"), pathname)
+        logger.error(
+            _("Path to wipe must be an existing directory: %s"), pathname)
         return
+
     files = []
     total_bytes = 0
     start_free_bytes = free_space(pathname)
     start_time = time.time()
-    # Because FAT32 has a maximum file size of 4,294,967,295 bytes,
-    # this loop is sometimes necessary to create multiple files.
-    while True:
-        try:
-            logger.debug(
-                _('Creating new, temporary file for wiping free space.'))
-            f = temporaryfile()
-        except OSError as e:
-            # Linux gives errno 24
-            # Windows gives errno 28 No space left on device
-            if e.errno in (errno.EMFILE, errno.ENOSPC):
-                break
-            else:
-                raise
+    done_wiping = False
+    try:
 
-        # Get the file system type from the given path
-        fstype = get_filesystem_type(pathname)
-        fstype = fstype[0]
-        logging.debug('File System:' + fstype)
-        # print(f.name) # Added by Marvin for debugging #issue 1051
-        last_idle = time.time()
-        # Write large blocks to quickly fill the disk.
-        blanks = b'\0' * 65536
-        writtensize = 0
-        
+        # Because FAT32 has a maximum file size of 4,294,967,295 bytes,
+        # this loop is sometimes necessary to create multiple files.
         while True:
             try:
-                if fstype != 'vfat':
-                    f.write(blanks)
-                # In the ubuntu system, the size of file should be less then 4GB. If not, there should be EFBIG error.
-                # So the maximum file size should be less than or equal to "4GB - 65536byte".
-                elif writtensize < 4 * 1024 * 1024 * 1024 - 65536:
-                    writtensize += f.write(blanks)
-                else:
-                    break
-            
-            except IOError as e:
-                if e.errno == errno.ENOSPC:
-                    if len(blanks) > 1:
-                        # Try writing smaller blocks
-                        blanks = blanks[0:len(blanks) // 2]
-                    else:
-                        break
-                elif e.errno == errno.EFBIG:
+                logger.debug(
+                    _('Creating new, temporary file for wiping free space.'))
+                f = temporaryfile()
+            except OSError as e:
+                # Linux gives errno 24
+                # Windows gives errno 28 No space left on device
+                if e.errno in (errno.EMFILE, errno.ENOSPC):
                     break
                 else:
                     raise
-            if idle and (time.time() - last_idle) > 2:
-                # Keep the GUI responding, and allow the user to abort.
-                # Also display the ETA.
-                yield estimate_completion()
-                last_idle = time.time()
-        # Write to OS buffer
-        try:
-            f.flush()
-        except IOError as e:
-            # IOError: [Errno 28] No space left on device
-            # seen on Microsoft Windows XP SP3 with ~30GB free space but
-            # not on another XP SP3 with 64MB free space
-            if not e.errno == errno.ENOSPC:
-                logger.error(
-                    _("Error #%d when flushing the file buffer." % e.errno))
 
-        os.fsync(f.fileno())  # write to disk
-        # Remember to delete
-        files.append(f)
-        # For statistics
-        total_bytes += f.tell()
-        # If no bytes were written, then quit.
-        # See https://github.com/bleachbit/bleachbit/issues/502
-        if start_free_bytes - total_bytes < 2: # Modified by Marvin to fix the issue #1051 [12/06/2020]
-            break
-    # sync to disk
-    sync()
-    # statistics
-    elapsed_sec = time.time() - start_time
-    rate_mbs = (total_bytes / (1000 * 1000)) / elapsed_sec
-    logger.info(_('Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at {rate:.2f} MB/s').format(
-                files=len(files), bytes=total_bytes, seconds=int(elapsed_sec), rate=rate_mbs))
-    # how much free space is left (should be near zero)
-    if 'posix' == os.name:
-        stats = os.statvfs(pathname)
-        logger.info(_("{bytes:,} bytes and {inodes:,} inodes available to non-super-user").format(
-                    bytes=stats.f_bsize * stats.f_bavail, inodes=stats.f_favail))
-        logger.info(_("{bytes:,} bytes and {inodes:,} inodes available to super-user").format(
-                    bytes=stats.f_bsize * stats.f_bfree, inodes=stats.f_ffree))
-    # truncate and close files
-    for f in files:
-        truncate_f(f)
+            # Remember to delete
+            files.append(f)
+            last_idle = time.time()
+            # Write large blocks to quickly fill the disk.
+            blanks = b'\0' * 65536
+            writtensize = 0
 
-        while True:
+            while True:
+                try:
+                    if fstype != 'vfat':
+                        f.write(blanks)
+                    # On Ubuntu, the size of file should be less then 4GB. If not, there should be EFBIG error,
+                    # so the maximum file size should be less than or equal to "4GB - 65536byte".
+                    elif writtensize < 4 * 1024 * 1024 * 1024 - 65536:
+                        writtensize += f.write(blanks)
+                    else:
+                        break
+
+                except IOError as e:
+                    if e.errno == errno.ENOSPC:
+                        if len(blanks) > 1:
+                            # Try writing smaller blocks
+                            blanks = blanks[0:len(blanks) // 2]
+                        else:
+                            break
+                    elif e.errno == errno.EFBIG:
+                        break
+                    else:
+                        raise
+                if idle and (time.time() - last_idle) > 2:
+                    # Keep the GUI responding, and allow the user to abort.
+                    # Also display the ETA.
+                    yield estimate_completion()
+                    last_idle = time.time()
+            # Write to OS buffer
             try:
-                # Nikita: I noticed a bug that prevented file handles from
-                # being closed on FAT32. It sometimes takes two .close() calls
-                # to do actually close (and therefore delete) a temporary file
-                f.close()
-                break
+                f.flush()
             except IOError as e:
-                if e.errno == 0:
-                    logger.debug(
-                        _("Handled unknown error #0 while truncating file."))
+                # IOError: [Errno 28] No space left on device
+                # seen on Microsoft Windows XP SP3 with ~30GB free space but
+                # not on another XP SP3 with 64MB free space
+                if not e.errno == errno.ENOSPC:
+                    logger.error(
+                        _("Error #%d when flushing the file buffer." % e.errno))
+
+            os.fsync(f.fileno())  # write to disk
+            # For statistics
+            total_bytes += f.tell()
+            # If no bytes were written, then quit.
+            # See https://github.com/bleachbit/bleachbit/issues/502
+            # Modified by Marvin to fix the issue #1051 [12/06/2020]
+            if start_free_bytes - total_bytes < 2:
+                break
+            # sync to disk
+            sync()
+            # statistics
+            elapsed_sec = time.time() - start_time
+            rate_mbs = (total_bytes / (1000 * 1000)) / elapsed_sec
+            logger.info(_('Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at {rate:.2f} MB/s').format(
+                        files=len(files), bytes=total_bytes, seconds=int(elapsed_sec), rate=rate_mbs))
+            # how much free space is left (should be near zero)
+            if 'posix' == os.name:
+                stats = os.statvfs(pathname)
+                logger.info(_("{bytes:,} bytes and {inodes:,} inodes available to non-super-user").format(
+                            bytes=stats.f_bsize * stats.f_bavail, inodes=stats.f_favail))
+                logger.info(_("{bytes:,} bytes and {inodes:,} inodes available to super-user").format(
+                            bytes=stats.f_bsize * stats.f_bfree, inodes=stats.f_ffree))
+        done_wiping = True
+    finally:
+        # Ensure files are closed and deleted even if an exception occurs or generator is not fully consumed.
+        # Truncate and close files.
+        for f in files:
+            if done_wiping:
+                try:
+                    truncate_f(f)
+                except Exception as e:
+                    logger.error(
+                        f'After wiping, truncating file {f.name} failed: {e}')
+
+            while True:
+                try:
+                    # Nikita: I noticed a bug that prevented file handles from
+                    # being closed on FAT32. It sometimes takes two .close() calls
+                    # to do actually close (and therefore delete) a temporary file
+                    f.close()
+                    break
+                except IOError as e:
+                    if e.errno == 0:
+                        logger.debug(
+                            _("Handled unknown error #0 while truncating file."))
                     time.sleep(0.1)
-        # explicitly delete
-        delete(f.name, ignore_missing=True)
+            # explicitly delete
+            try:
+                delete(f.name, ignore_missing=True)
+            except Exception as e:
+                logger.error(
+                    f'After wiping, error deleting file {f.name}: {e}')
 
 
 def vacuum_sqlite3(path):

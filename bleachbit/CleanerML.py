@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ Create cleaners from CleanerML (markup language)
 
 import bleachbit
 from bleachbit.Action import ActionProvider
-from bleachbit import _
+from bleachbit.Language import get_text as _
 from bleachbit.General import boolstr_to_bool, getText
 from bleachbit.FileUtilities import expand_glob_join, listdir
 from bleachbit import Cleaner
@@ -78,7 +78,11 @@ class CleanerML:
         else:
             self.xlate_mode = True
 
-        dom = xml.dom.minidom.parse(pathname)
+        try:
+            dom = xml.dom.minidom.parse(pathname)
+        except xml.parsers.expat.ExpatError as e:
+            logger.error("Error parsing CleanerML file %s with error %s", pathname, e)
+            return
 
         self.handle_cleaner(dom.getElementsByTagName('cleaner')[0])
 
@@ -159,7 +163,8 @@ class CleanerML:
                 continue
             detection_type = running.getAttribute('type')
             value = getText(running.childNodes)
-            self.cleaner.add_running(detection_type, value)
+            same_user = running.getAttribute('same_user') or False
+            self.cleaner.add_running(detection_type, value, same_user)
 
     def handle_cleaner_option(self, option):
         """<option> element"""

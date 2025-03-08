@@ -1,0 +1,72 @@
+name: Run tests on Linux
+
+on:
+  push:
+    branches:
+      - '**'
+    paths-ignore:
+      - 'po/*.po'
+  pull_request:  # Run on all pull requests
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.10', '3.12']
+        include:
+          - python-version: '3.8'
+            ubuntu-version: ubuntu-20.04
+          - python-version: '3.10'
+            ubuntu-version: ubuntu-22.04
+          - python-version: '3.12'
+            ubuntu-version: ubuntu-24.04
+
+    runs-on: ${{ matrix.ubuntu-version }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          dbus \
+          dbus-x11 \
+          gettext \
+          gir1.2-gtk-3.0 \
+          gir1.2-notify-0.7 \
+          gnome-keyring \
+          libcairo2-dev \
+          libgirepository1.0-dev \
+          libnotify-bin \
+          libxml2-utils \
+          notification-daemon \
+          xvfb
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Update pip
+      run: python -m pip install --upgrade pip
+
+    - name: Install Python dependencies
+      run: |
+        pip install PyGObject chardet requests mock setuptools
+
+    - name: Generate Revision.py
+      run: |
+        echo "revision = \"`git rev-parse --short HEAD`\"" > bleachbit/Revision.py
+        echo "build_number = \"${{ github.run_number }}\"" >> bleachbit/Revision.py
+
+    - name: Generate translations
+      run: make -C po local
+
+    - name: Run tests
+      run: |
+        export DISPLAY=":1.0"
+        export $(dbus-launch)
+        sudo Xvfb :1 -screen 0 800x600x24 &
+        sleep 5
+        dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run make tests'

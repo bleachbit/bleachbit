@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -72,7 +72,7 @@ def get_system_information():
     s += "\nsystem_cleaners_dir = %s" % bleachbit.system_cleaners_dir
 
     # this section is for information about the system environment
-    s += "\nlocale.getdefaultlocale = %s" % str(locale.getdefaultlocale())
+    s += "\nlocale.getlocale = %s" % str(locale.getlocale())
     if 'posix' == os.name:
         envs = ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID')
     elif 'nt' == os.name:

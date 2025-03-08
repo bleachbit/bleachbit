@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ Perform the preview or delete operations
 
 from bleachbit import DeepScan, FileUtilities
 from bleachbit.Cleaner import backends
-from bleachbit import _, ngettext
+from bleachbit.Language import get_text as _, nget_text as ngettext
 
 import logging
 import math
@@ -77,6 +77,7 @@ class Worker:
         # replaced by a message such as 'Permission denied.'
         err = _("Exception while running operation '%(operation)s': '%(msg)s'") \
             % {'operation': operation, 'msg': str(sys.exc_info()[1])}
+
         logger.error(err, exc_info=True)
         self.total_errors += 1
 
@@ -95,13 +96,15 @@ class Worker:
         except SystemExit:
             pass
         except Exception as e:
-            # 2 = does not exist
-            # 13 = permission denied
             from errno import ENOENT, EACCES
-            if isinstance(e, OSError) and e.errno in (ENOENT, EACCES):
-                # For access denied, do not show traceback
-                exc_message = str(e)
-                logger.error('%s: %s', exc_message, cmd)
+            if isinstance(e, OSError) and e.errno == ENOENT:
+                # ENOENT (Error NO ENTry) means file not found.
+                # Do not show traceback.
+                logger.error(_("File not found: %s"), e.filename)
+            elif isinstance(e, OSError) and e.errno == EACCES:
+                # EACCES (Error ACCESS) means access denied.
+                # Do not show traceback.
+                logger.error(_("Access denied: %s"), e.filename)
             else:
                 # For other errors, show the traceback.
                 msg = _('Error: {operation_option}: {command}')
@@ -141,7 +144,7 @@ class Worker:
         if not operation_options:
             return
 
-        if self.really_delete and backends[operation].is_running():
+        if self.really_delete and backends[operation].is_process_running():
             # TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
             err = _("%s cannot be cleaned because it is currently running.  Close it, and try again.") \
                 % backends[operation].get_name()

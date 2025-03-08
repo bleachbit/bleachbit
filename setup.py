@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -101,20 +101,25 @@ if 'py2exe' in sys.argv:
     # see multiple issues such as https://github.com/bleachbit/bleachbit/issues/1000
     APP_DESCRIPTION = 'BleachBit software cleaner'
 
-    args['windows'] = [{
-        'script': 'bleachbit.py',
+    # Common metadata for both GUI and console executables
+    common_metadata = {
         'product_name': APP_NAME,
         'description': APP_DESCRIPTION,
         'version': bleachbit.APP_VERSION,
-        'icon_resources': [(1, 'windows/bleachbit.ico')]
-    }]
-    args['console'] = [{
-        'script': 'bleachbit_console.py',
-        'product_name': APP_NAME,
-        'description': APP_DESCRIPTION,
-        'version': bleachbit.APP_VERSION,
-        'icon_resources': [(1, 'windows/bleachbit.ico')]
-    }]
+        'icon_resources': [(1, 'windows/bleachbit.ico')],
+        'company_name': APP_NAME,
+        'copyright': 'Copyright (C) 2008-2025 Andrew Ziem'
+    }
+
+    # GUI executable
+    gui_metadata = common_metadata.copy()
+    gui_metadata['script'] = 'bleachbit.py'
+    args['windows'] = [gui_metadata]
+
+    # Console executable
+    console_metadata = common_metadata.copy()
+    console_metadata['script'] = 'bleachbit_console.py'
+    args['console'] = [console_metadata]
     args['options'] = {
         'py2exe': {
             'packages': ['encodings', 'gi', 'gi.overrides', 'plyer'],
@@ -269,10 +274,18 @@ def run_setup():
           long_description=APP_DESCRIPTION,
           author="Andrew Ziem",
           author_email="andrew@bleachbit.org",
-          download_url="https://www.bleachbit.org/download",
-          license="GPLv3",
           url=bleachbit.APP_URL,
-          platforms='Linux and Windows; Python v2.6 and 2.7; GTK v3.12+',
+          download_url="https://www.bleachbit.org/download",
+          classifiers=[
+              'Development Status :: 5 - Production/Stable',
+              'Programming Language :: Python',
+              'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+              'Operating System :: Microsoft :: Windows',
+              'Operating System :: POSIX :: Linux',
+          ],
+          license='GPLv3+',
+          py_requires='>=3.4',
+          platforms='Linux and Windows, Python v3.4+, GTK v3.12+',
           packages=['bleachbit', 'bleachbit.markovify'],
           **args)
 

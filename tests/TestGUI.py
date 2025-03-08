@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -43,7 +43,7 @@ except ImportError:
     HAVE_GTK = False
 
 import bleachbit
-from bleachbit import _
+from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 
 from tests import common
@@ -183,6 +183,26 @@ class GUITestCase(common.BleachbitTestCase):
         # destroy
         about.destroy()
 
+    def test_chaff(self):
+        """Minimal test of the chaff dialog"""
+        import bleachbit.GuiChaff
+        import bleachbit.Chaff
+        # common.py patches the download directory, so have_models() will return False.
+        bleachbit.Chaff.download_models()
+        gui = self.app._window
+        cd = bleachbit.GuiChaff.ChaffDialog(gui)
+        cd.show_all()
+        chaff_dst_dir = os.path.join(self.tempdir, 'chaff_dst')
+        os.mkdir(chaff_dst_dir)
+        cd.choose_folder_button.set_filename(chaff_dst_dir)
+        cd.when_finished_combo.set_active(1) # do not delete after generation
+        cd.file_count.set_value(10)
+        self.refresh_gui()
+        self.click_button(cd, 'Make files')
+        cd.thread.join()
+        self.refresh_gui()
+        self.assertEqual(len(os.listdir(chaff_dst_dir)), 10)
+
     def test_preview(self):
         """Select cleaner option and clicks preview button"""
         gui = self.app._window
@@ -197,8 +217,7 @@ class GUITestCase(common.BleachbitTestCase):
         """Test a pop-up notification"""
         from bleachbit.GUI import notify
         notify('This is a test notification')
-        import time
-        time.sleep
+        time.sleep(1)  # Pause for 1 second
 
     @mock.patch('bleachbit.GuiBasic.delete_confirmation_dialog')
     def test_confirm_delete(self, mock_delete_confirmation_dialog):

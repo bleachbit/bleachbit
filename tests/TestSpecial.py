@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -274,13 +274,13 @@ class SpecialAssertions:
         """Asserts SQLite tables exists and are empty"""
         if not os.path.lexists(path):
             raise AssertionError('Path does not exist: %s' % path)
-        conn = sqlite3.connect(path)
-        cursor = conn.cursor()
-        for table in tables:
-            cursor.execute('select 1 from %s limit 1' % table)
-            row = cursor.fetchone()
-            if row:
-                raise AssertionError('Table is not empty: %s ' % table)
+        with sqlite3.connect(path) as conn:
+            cursor = conn.cursor()
+            for table in tables:
+                cursor.execute('select 1 from %s limit 1' % table)
+                row = cursor.fetchone()
+                if row:
+                    raise AssertionError('Table is not empty: %s ' % table)
 
 
 class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
@@ -331,6 +331,8 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
 
     def tearDown(self):
         """Remove test browser files."""
+        from bleachbit.General import gc_collect
+        gc_collect()
         shutil.rmtree(self.dir_base)
 
     def sqlite_clean_helper(self, sql, fn, clean_func, check_func=None, setup_func=None):
@@ -411,17 +413,20 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
 
         def check_chrome_history(self, filename):
             conn = sqlite3.connect(filename)
-            c = conn.cursor()
-            c.execute('select id from urls')
-            ids = [row[0] for row in c]
-            # id 1 is sqlite.org which is not a bookmark and should be cleaned
-            # id 2 is www.bleachbit.org which is a bookmark and should
-            # be cleaned
-            self.assertEqual(ids, [2])
+            try:
+                c = conn.cursor()
+                c.execute('select id from urls')
+                ids = [row[0] for row in c]
+                # id 1 is sqlite.org which is not a bookmark and should be cleaned
+                # id 2 is www.bleachbit.org which is a bookmark and should
+                # be cleaned
+                self.assertEqual(ids, [2])
 
-            # these tables should always be empty after cleaning
-            self.assertTablesAreEmpty(filename, ['downloads', 'keyword_search_terms',
-                                                 'segment_usage', 'segments', 'visits'])
+                # these tables should always be empty after cleaning
+                self.assertTablesAreEmpty(filename, ['downloads', 'keyword_search_terms',
+                                                     'segment_usage', 'segments', 'visits'])
+            finally:
+                conn.close()
 
         self.sqlite_clean_helper(None, "google-chrome/Default/History",
                                  Special.delete_chrome_history, check_chrome_history)
@@ -431,10 +436,13 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
 
         def check_chrome_keywords(self, filename):
             conn = sqlite3.connect(filename)
-            c = conn.cursor()
-            c.execute('select id from keywords')
-            ids = [row[0] for row in c]
-            self.assertEqual(ids, [2, 3, 4, 5, 6])
+            try:
+                c = conn.cursor()
+                c.execute('select id from keywords')
+                ids = [row[0] for row in c]
+                self.assertEqual(ids, [2, 3, 4, 5, 6])
+            finally:
+                conn.close()
 
         self.sqlite_clean_helper(None, "google-chrome/Default/Web Data", Special.delete_chrome_keywords,
                                  check_chrome_keywords)

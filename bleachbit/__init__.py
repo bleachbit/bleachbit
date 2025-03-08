@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,6 @@
 Code that is commonly shared throughout BleachBit
 """
 
-import gettext
-import locale
 import os
 import re
 import sys
@@ -32,7 +30,7 @@ import platform
 from bleachbit import Log
 from configparser import RawConfigParser, NoOptionError # used in other files
 
-APP_VERSION = "4.6.1"
+APP_VERSION = "4.9.1"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 
@@ -46,9 +44,6 @@ if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
     stdout_encoding = 'utf-8'
 else:
     stdout_encoding = sys.stdout.encoding
-    if 'win32' == sys.platform:
-        import win_unicode_console
-        win_unicode_console.enable()
 
 if not hasattr(platform, 'linux_distribution'):
     from ._platform import _linux_distribution
@@ -193,107 +188,12 @@ elif sys.platform.startswith("openbsd") or sys.platform.startswith("freebsd"):
 
 
 
-#
-# gettext
-#
-try:
-    (user_locale, encoding) = locale.getdefaultlocale()
-except:
-    logger.exception('error getting locale')
-    user_locale = None
-    encoding = None
-
-if user_locale is None:
-    user_locale = 'C'
-    logger.warning("no default locale found.  Assuming '%s'", user_locale)
-
-if 'win32' == sys.platform:
-    os.environ['LANG'] = user_locale
-
-try:
-    if not os.path.exists(locale_dir):
-        raise RuntimeError('translations not installed')
-    t = gettext.translation('bleachbit', locale_dir)
-    _ = t.gettext
-except:
-    def _(msg):
-        """Dummy replacement for gettext"""
-        return msg
-
-try:
-    locale.bindtextdomain('bleachbit', locale_dir)
-except AttributeError:
-    if sys.platform.startswith('win'):
-        try:
-            # We're on Windows; try and use libintl-8.dll instead
-            import ctypes
-            libintl = ctypes.cdll.LoadLibrary('libintl-8.dll')
-        except OSError:
-            # libintl-8.dll isn't available; give up
-            pass
-        else:
-            # bindtextdomain can not handle Unicode
-            libintl.bindtextdomain(b'bleachbit', locale_dir.encode('utf-8'))
-            libintl.bind_textdomain_codeset(b'bleachbit', b'UTF-8')
-except:
-    logger.exception('error binding text domain')
-
-try:
-    ngettext = t.ngettext
-except:
-    def ngettext(singular, plural, n):
-        """Dummy replacement for plural gettext"""
-        if 1 == n:
-            return singular
-        return plural
-
-
-#
-# pgettext
-#
-
-# Code released in the Public Domain. You can do whatever you want with this package.
-# Originally written by Pierre Métras <pierre@alterna.tv> for the OLPC XO laptop.
-#
-# Original source: http://dev.laptop.org/git/activities/clock/plain/pgettext.py
-
-
-# pgettext(msgctxt, msgid) from gettext is not supported in Python as of January 2017
-# http://bugs.python.org/issue2504
-# This issue was fixed in Python 3.8, but we need to support older versions.
-# Meanwhile we get official support, we have to simulate it.
-# See http://www.gnu.org/software/gettext/manual/gettext.html#Ambiguities for
-# more information about pgettext.
-
-# The separator between message context and message id.This value is the same as
-# the one used in gettext.h, so PO files should be still valid when Python gettext
-# module will include pgettext() function.
-GETTEXT_CONTEXT_GLUE = "\004"
-
-
-def pgettext(msgctxt, msgid):
-    """A custom implementation of GNU pgettext().
-    """
-    if msgctxt is None or msgctxt == "":
-        return _(msgid)
-    translation = _(msgctxt + GETTEXT_CONTEXT_GLUE + msgid)
-    if translation.startswith(msgctxt + GETTEXT_CONTEXT_GLUE):
-        return msgid
-    else:
-        return translation
-
-
-# Map our pgettext() custom function to _p()
-_p = pgettext
-
 
 #
 # URLs
 #
 base_url = "https://update.bleachbit.org"
 help_contents_url = "%s/help/%s" \
-    % (base_url, APP_VERSION)
-release_notes_url = "%s/release-notes/%s" \
     % (base_url, APP_VERSION)
 update_check_url = "%s/update/%s" % (base_url, APP_VERSION)
 
@@ -316,14 +216,11 @@ if 'posix' == os.name:
 # should be re.IGNORECASE on macOS
 fs_scan_re_flags = 0 if os.name == 'posix' else re.IGNORECASE
 
-#
-# Exceptions
-#
+if 'win32' == sys.platform:
+    import win32process
 
-
-# Python 3.6 is the first with this exception
-if hasattr(sys.modules['builtins'], 'ModuleNotFoundError'):
-    ModuleNotFoundError = sys.modules['builtins'].ModuleNotFoundError
-else:
-    class ModuleNotFoundError(Exception):
-        pass
+    for process in win32process.EnumProcessModules(-1):
+        name = win32process.GetModuleFileNameEx(-1, process)
+        if re.search(r'python\d+.dll$', name, re.IGNORECASE):
+            bindir = os.path.dirname(name)
+            os.environ['GDK_PIXBUF_MODULE_FILE'] = os.path.join(bindir, 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache')

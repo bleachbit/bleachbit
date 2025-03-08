@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -27,8 +27,9 @@ import random
 import tempfile
 from datetime import datetime
 
-from bleachbit import _, bleachbit_exe_path
+
 from bleachbit import options_dir
+
 
 from . import markovify
 
@@ -184,73 +185,6 @@ def _generate_email(subject_model, content_model, number_of_sentences=DEFAULT_NU
     return message
 
 
-def download_url_to_fn(url, fn, on_error=None, max_retries=3, backoff_factor=0.5, timeout=60):
-    """Download a URL to the given filename
-
-    fn: target filename
-
-    on_error: callback function in case of error
-
-    max_retries: retry count
-
-    backoff_factor: how long to wait before retries
-
-    timeout: number of seconds to wait to establish connection
-
-    return: True if succeeded, False if failed
-    """
-    # FIXME: unify this with update_winapp2(), check_updates()
-    logger.info('Downloading %s to %s', url, fn)
-    import requests
-    import sys
-    if hasattr(sys, 'frozen'):
-        # when frozen by py2exe, certificates are in alternate location
-        CA_BUNDLE = os.path.join(bleachbit_exe_path, 'cacert.pem')
-        requests.utils.DEFAULT_CA_BUNDLE_PATH = CA_BUNDLE
-        requests.adapters.DEFAULT_CA_BUNDLE_PATH = CA_BUNDLE
-    from urllib3.util.retry import Retry
-    from requests.adapters import HTTPAdapter
-    # 408: request timeout
-    # 429: too many requests
-    # 500: internal server error
-    # 502: bad gateway
-    # 503: service unavailable
-    # 504: gateway_timeout
-    status_forcelist = (408, 429, 500, 502, 503, 504)
-    # sourceforge.net directories to download mirror
-    retries = Retry(total=max_retries, backoff_factor=backoff_factor,
-                    status_forcelist=status_forcelist, redirect=5)
-    msg = _('Downloading URL failed: %s') % url
-
-    from bleachbit.Update import user_agent
-    headers = {'user_agent': user_agent()}
-
-    def do_error(msg2):
-        if on_error:
-            on_error(msg, msg2)
-        from bleachbit.FileUtilities import delete
-        delete(fn, ignore_missing=True)  # delete any partial download
-    with requests.Session() as session:
-        session.mount('http://', HTTPAdapter(max_retries=retries))
-        try:
-            response = session.get(url, headers=headers, timeout=timeout)
-            content = response.content
-        except requests.exceptions.RequestException as exc:
-            msg2 = '{}: {}'.format(type(exc).__name__, exc)
-            logger.exception(msg)
-            do_error(msg2)
-            return False
-        if response.status_code != 200:
-            logger.error(msg)
-            msg2 = 'Status code: %s' % response.status_code
-            do_error(msg2)
-            return False
-
-    with open(fn, 'wb') as f:
-        f.write(content)
-    return True
-
-
 def download_models(models_dir=DEFAULT_MODELS_DIR,
                     on_error=None):
     """Download models
@@ -259,6 +193,7 @@ def download_models(models_dir=DEFAULT_MODELS_DIR,
 
     Returns success as boolean value
     """
+    from bleachbit.Network import download_url_to_fn
     for basename in (MODEL_BASENAMES):
         fn = os.path.join(models_dir, basename)
         if os.path.exists(fn):
@@ -267,7 +202,7 @@ def download_models(models_dir=DEFAULT_MODELS_DIR,
         this_file_success = False
         for url_template in URL_TEMPLATES:
             url = url_template % basename
-            if download_url_to_fn(url, fn, on_error):
+            if download_url_to_fn(url, fn, on_error=on_error):
                 this_file_success = True
                 break
         if not this_file_success:

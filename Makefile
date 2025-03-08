@@ -1,4 +1,4 @@
-# Copyright (C) 2008-2024 Andrew Ziem.  All rights reserved.
+# Copyright (C) 2008-2025 Andrew Ziem.  All rights reserved.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 # This is free software: You are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
@@ -37,6 +37,7 @@ clean:
 	@rm -vrf {*/,./}*.{pylint,pyflakes}.log
 	@rm -vrf windows/BleachBit-*-setup*.{exe,zip}
 	@rm -vrf htmlcov .coverage # code coverage reports
+	@rm -vrf *.egg-info # Python package metadata
 
 install:
 	# "binary"

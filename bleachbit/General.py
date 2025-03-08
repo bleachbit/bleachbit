@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -77,6 +77,21 @@ def chownself(path):
         os.chown(path, uid, -1)
     except:
         logger.exception('Error in chown() under chownself()')
+
+
+def gc_collect():
+    """Collect garbage
+
+    On Windows after updating from Python 3.11 to Python 3.12 calling
+        os.unlink() would fail on a file processed by SQLite3.
+    PermissionError: [WinError 32] The process cannot access the file because it is being used
+    by another process: '[...].sqlite'
+    """
+    if not os.name == 'nt':
+        return
+
+    import gc
+    gc.collect()
 
 
 def getrealuid():
@@ -156,24 +171,6 @@ def run_external(args, stdout=None, env=None, clean_env=True):
     return (p.returncode,
             str(out[0], encoding=encoding) if out[0] else '',
             str(out[1], encoding=encoding) if out[1] else '')
-
-
-def startup_check():
-    """At application startup, check some things are okay."""
-
-    if 'nt' == os.name:
-        from bleachbit.Windows import check_dll_hijacking
-        check_dll_hijacking()
-
-    # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
-    # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
-    # https://www.bleachbit.org/forum/074-fails-errors
-    from bleachbit import ModuleNotFoundError
-    try:
-        from sqlite3 import SQLITE_OK
-    except (ModuleNotFoundError, ImportError):
-        logger.exception(
-            'The sqlite3 module could not be loaded. On Windows, the antivirus may be blocking it. On FreeBSD, install the package databases/py-sqlite3.')
 
 
 def sudo_mode():
