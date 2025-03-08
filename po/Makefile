@@ -22,19 +22,21 @@ desktop.pot: ../org.bleachbit.BleachBit.desktop
 
 
 $(POTFILE): $(SRC) cleanerml.pot desktop.pot
-	@echo "* Generating $(APP).pot"
-	echo " Words before update: " \
-		`tail -n +20 bleachbit.pot | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | wc --words`
-	cat cleanerml.pot desktop.pot > $(APP).pot
-	xgettext -o $(APP).pot \
+	@echo "* Generating $(POTFILE)"
+	@if [ -f $(POTFILE) ]; then \
+		echo " Words before update: "; \
+		tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq |wc --words; \
+	fi
+	cat cleanerml.pot desktop.pot > $(POTFILE)
+	xgettext -o $(POTFILE) \
 		--join-existing \
 		--add-comments=TRANSLATORS \
 		--keyword="_p:1c,2" \
 		--default-domain=$(APP) \
 		$(SRC)
-	sed -i 's/charset=CHARSET/charset=utf-8/g' bleachbit.pot
+	sed -i 's/charset=CHARSET/charset=utf-8/g' $(POTFILE)
 	echo " Words after update: " \
-		`tail -n +20 bleachbit.pot | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | wc --words`
+		`tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq | wc --words`
 
 
 refresh-po: $(POTFILE)
@@ -78,8 +80,7 @@ done
 clean:
 	echo "* Cleaning"
 	@rm -fv *.mo
-	@rm -fv $(APP).pot cleanerml.pot desktop.pot
+	@rm -fv $(POTFILE) cleanerml.pot desktop.pot
 	@rm -rfv ../locale
 
-all: $(APP).pot $(MOFILES)
-
+all: $(POTFILE) $(MOFILES)
