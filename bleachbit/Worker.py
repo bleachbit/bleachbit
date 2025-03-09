@@ -106,7 +106,16 @@ class Worker:
                 # Do not show traceback.
                 if e.strerror == "Access denied in delete_locked_file()":
                     # This comes from Windows.delete_locked_file()
-                    logger.error(_("Access denied when flagging file for later delete: %s"), e.filename)
+                    logger.error(
+                        _("Access denied when flagging file for later delete: %s"), e.filename)
+                elif e.strerror == "Access denied in delete_registry_value()":
+                    # This comes from Windows.delete_registry_value()
+                    logger.error(
+                        _("Access denied when deleting registry value: %s"), e.filename)
+                elif e.strerror == "Access denied in delete_registry_key()":
+                    # This comes from Windows.delete_registry_key()
+                    logger.error(
+                        _("Access denied when deleting registry key: %s"), e.filename)
                 else:
                     logger.error(_("Access denied: %s"), e.filename)
             else:

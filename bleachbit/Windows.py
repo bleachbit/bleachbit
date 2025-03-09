@@ -157,8 +157,8 @@ def delete_locked_file(pathname):
             except PermissionError:
                 # OSError has special handling in Worker.py
                 # Use a special message for flagging files for later deletion
-                raise OSError(errno.EACCES, "Access denied in delete_locked_file()", pathname)
-                
+                raise OSError(
+                    errno.EACCES, "Access denied in delete_locked_file()", pathname)
 
 
 def delete_registry_value(key, value_name, really_delete):
@@ -167,26 +167,22 @@ def delete_registry_value(key, value_name, really_delete):
     successful.  If really_delete is False (meaning preview),
     just check whether the value exists."""
     (hive, sub_key) = split_registry_key(key)
-    if really_delete:
-        try:
+    try:
+        if really_delete:
             hkey = winreg.OpenKey(hive, sub_key, 0, winreg.KEY_SET_VALUE)
             winreg.DeleteValue(hkey, value_name)
-        except WindowsError as e:
-            if e.winerror == 2:
-                # 2 = 'file not found' means value does not exist
-                return False
-            raise
         else:
-            return True
-    try:
-        hkey = winreg.OpenKey(hive, sub_key)
-        winreg.QueryValueEx(hkey, value_name)
+            hkey = winreg.OpenKey(hive, sub_key)
+            winreg.QueryValueEx(hkey, value_name)
+    except PermissionError:
+        raise OSError(
+            errno.EACCES, "Access denied in delete_registry_value()", key)
     except WindowsError as e:
-        if e.winerror == 2:
+        if e.winerror == errno.ENOENT:
+            # ENOENT = 'file not found' means value does not exist
             return False
         raise
-    else:
-        return True
+    return True
 
 
 def delete_registry_key(parent_key, really_delete):
@@ -214,7 +210,11 @@ def delete_registry_key(parent_key, really_delete):
     ]
     for child_key in child_keys:
         delete_registry_key(child_key, True)
-    winreg.DeleteKey(hive, parent_sub_key)
+    try:
+        winreg.DeleteKey(hive, parent_sub_key)
+    except PermissionError:
+        raise OSError(
+            errno.EACCES, "Access denied in delete_registry_key()", parent_key)
     return True
 
 
