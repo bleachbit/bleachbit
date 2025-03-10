@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-05 08:29+0000\n"
+"PO-Revision-Date: 2025-03-10 05:22+0000\n"
 "Last-Translator: Ghost of Sparta <makesocialfoss32@keemail.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/bleachbit/main/"
 "hu/>\n"
@@ -487,11 +487,11 @@ msgstr "E-mail kliens"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Mellékletek"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Szinkronizációs ütközés"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -757,10 +757,8 @@ msgid "Memory dump"
 msgstr "Memóriatartalom"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Grafikus környezet"
+msgstr "Grafikus felületi elemek"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1806,16 +1804,14 @@ msgid "Downloading URL failed: %s"
 msgstr "Az URL letöltése sikertelen: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "A lemez megtelt, amikor a konfigurációt a %s fájlba írták"
+msgstr "A lemez megtelt a konfiguráció fájlba írása közben: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "A lemez megtelt, amikor a konfigurációt a %s fájlba írták"
+msgstr "Engedély megtagadva a konfiguráció fájlba írása során: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1939,30 +1935,30 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "%(operation)s futás közben hibát okozott: %(msg)s"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "A futtatható állomány nem található: %s"
+msgstr "Fájl nem található: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
 msgstr ""
+"Hozzáférés megtagadva a fájl későbbi törléséhez történő megjelölésekor: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Hozzáférés megtagadva a regisztrációs érték törlésekor: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Hozzáférés megtagadva a regisztrációs kulcs törlésekor: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Hozzáférés megtagadva: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
