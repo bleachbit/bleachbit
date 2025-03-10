@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-07 23:09+0000\n"
+"PO-Revision-Date: 2025-03-11 10:54+0000\n"
 "Last-Translator: Cirnos <Cirnos@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "bleachbit/main/pt_BR/>\n"
@@ -488,11 +488,11 @@ msgstr "Cliente de e-mail"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Anexos"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Conflito de sincronização"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -1811,18 +1811,14 @@ msgid "Downloading URL failed: %s"
 msgstr "Falha no download do URL: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr ""
-"Disco estava cheio quando a configuração estava sendo escrita no arquivo %s"
+msgstr "Disco estava cheio ao escrever configuração para arquivo: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr ""
-"Disco estava cheio quando a configuração estava sendo escrita no arquivo %s"
+msgstr "Permissão rejeitada ao editar escrever configuração para arquivo %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1947,30 +1943,29 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Erro durante a execução da operação '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Executável %s não encontrado"
+msgstr "Arquivo não encontrado: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr ""
+msgstr "Acesso negado ao sinalizar arquivo para futura exclusão: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Acesso negado ao excluir valor de registro: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Acesso rejeitado ao excluir chave de registro: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Acesso negado: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
