@@ -32,7 +32,7 @@ build_script:
   - ps: $env:REV8 = $env:APPVEYOR_REPO_COMMIT.Substring(0,8)
   - 'echo revision = "%REV8%" > bleachbit\Revision.py'
   - 'echo build_number = "%APPVEYOR_BUILD_NUMBER%" > bleachbit\Revision.py'
-  - '%make% -C po local'
+  - '%make% -C po local bleachbit.pot'
   - '%PYTHON_HOME%\python.exe -m windows.setup_py2exe'
   - 'move windows\BleachBit*.exe .'
   - 'move windows\BleachBit*.zip .'
