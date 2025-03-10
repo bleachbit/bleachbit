@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-05 05:58+0000\n"
+"PO-Revision-Date: 2025-03-10 08:40+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/he/"
 ">\n"
@@ -482,11 +482,11 @@ msgstr "לקוח דוא״ל"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "קבצים מצורפים"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "סתירת סנכרון"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -744,10 +744,8 @@ msgid "Memory dump"
 msgstr "איסוף הזיכרון"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "סביבת שולחן עבודה"
+msgstr "וידג׳טים לסביבת שולחן העבודה"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1169,7 +1167,7 @@ msgstr "היה לפחות קובץ אחד במערכת שלא תומך בשכת�
 #: ../bleachbit/FileUtilities.py
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
+msgstr "הנתיב {pathname} עם מערכת הקבצים {fstype} מנופה"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1368,7 +1366,7 @@ msgstr "הורדה ועדכון של כלי ניקוי מהקהילה (winapp2.i
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "זיהוי השפה אוטומטית"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Automatically detect the system language"
@@ -1469,7 +1467,7 @@ msgstr "שם"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "הנתיב הזה כבר קיים ברשימת ההיתר."
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
 msgid "Error"
@@ -1477,7 +1475,7 @@ msgstr "שגיאה"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "הנתיב הזה כבר קיים ברשימה המותאמת אישית."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1660,11 +1658,11 @@ msgstr "ביטול התצוגה המקדימה או תהליך הניקוי"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "עדכון"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "עדכון BleachBit לגרסה העדכנית ביותר"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1756,16 +1754,14 @@ msgid "Downloading URL failed: %s"
 msgstr "הורדת הכתובת נכשלה: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "הכונן היה מלא בעת כתיבת קובץ התצורה לקובץ %s"
+msgstr "הכונן היה מלא בעת כתיבת קובץ התצורה לקובץ: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "הכונן היה מלא בעת כתיבת קובץ התצורה לקובץ %s"
+msgstr "ההרשאה נדחתה בעת כתיבת התצורה לקובץ: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1888,30 +1884,29 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "ארעה חריגה בעת הרצת התהליך '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "קובץ ההפעלה לא נמצא: %s"
+msgstr "קובץ לא נמצא: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr ""
+msgstr "נדחתה הגישה לסימון קובץ למחיקה בהמשך: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "הגישה נדחתה בעת מחיקת ערך ממפתח הרישום: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "הגישה נדחתה בעת מחיקת מפתח ממפתח הרישום: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "הגישה נדחתה: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
