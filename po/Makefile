@@ -32,11 +32,13 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot
 		tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq |wc --words; \
 	fi
 	cat cleanerml.pot desktop.pot > $(POTFILE)
+	# --add-location=file: reduces size of diff
 	xgettext -o $(POTFILE) \
 		--join-existing \
 		--add-comments=TRANSLATORS \
 		--keyword="_p:1c,2" \
 		--default-domain=$(APP) \
+		--add-location=file \
 		$(SRC)
 	sed -i 's/charset=CHARSET/charset=utf-8/g' $(POTFILE)
 	echo " Words after update: " \
