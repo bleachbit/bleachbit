@@ -117,10 +117,10 @@ class Options:
         except (OSError, IOError, PermissionError) as e:
             if e.errno == errno.ENOSPC:
                 logger.error(
-                    _("Disk was full when writing configuration to file %s"), bleachbit.options_file)
+                    _("Disk was full when writing configuration to file: %s"), bleachbit.options_file)
             elif e.errno == errno.EACCES:
                 logger.error(
-                    _("Permission denied when writing configuration to file %s"), bleachbit.options_file)
+                    _("Permission denied when writing configuration to file: %s"), bleachbit.options_file)
             else:
                 raise
 
