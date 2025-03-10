@@ -4,11 +4,14 @@ MOFILES = $(patsubst %.po,%.mo,$(POFILES))
 SRC = $(wildcard ../bleachbit/*.py) ../data/app-menu.ui
 POTFILE = $(APP).pot
 
+# Use PYTHON environment variable if available, otherwise default to python3
+PYTHON ?= python3
+
 
 .PHONY: refresh-po spelling local install clean all
 
 cleanerml.pot: ../bleachbit/CleanerML.py ../cleaners/*xml
-	python3 ../bleachbit.py --pot
+	$(PYTHON) ../bleachbit.py --pot
 
 desktop.pot: ../org.bleachbit.BleachBit.desktop
 	echo "#: ../org.bleachbit.BleachBit.desktop" > desktop.pot
@@ -72,7 +75,7 @@ local: $(MOFILES)
 		mkdir -p ../locale/$$lang/LC_MESSAGES/; \
 		cp -lf $$mofile ../locale/$$lang/LC_MESSAGES/bleachbit.mo; \
 	done
-	@echo "Now you can run cd ..; python3 bleachbit/GUI.py"
+	@echo "Now you can run cd ..; $(PYTHON) bleachbit/GUI.py"
 
 install: $(MOFILES)
 	echo "* Installing in $(DESTDIR)/usr/share/locale"
