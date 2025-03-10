@@ -61,7 +61,7 @@ jobs:
         echo "build_number = \"${{ github.run_number }}\"" >> bleachbit/Revision.py
 
     - name: Generate translations
-      run: make -C po local
+      run: make -C po local bleachbit.pot
 
     - name: Run tests
       run: |
