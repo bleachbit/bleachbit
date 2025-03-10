@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-05 05:58+0000\n"
+"PO-Revision-Date: 2025-03-10 05:22+0000\n"
 "Last-Translator: \"Vasilis K.\" <skyhirules@gmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/bleachbit/main/el/"
-">\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/bleachbit/main/el/>"
+"\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -491,11 +491,11 @@ msgstr "Ηλεκτρονικό ταχυδρομείο"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Συνημμένα"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Διένεξη συγχρονισμού"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -1962,21 +1962,23 @@ msgstr "Το εκτελέσιμο δεν βρέθηκε: %s"
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
 msgstr ""
+"Δεν επετράπη η πρόσβαση κατά την επισήμανση του αρχείου για μεταγενέστερη "
+"διαγραφή: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Δεν επετράπηι η πρόσβαση κατά τη διαγραφή της τιμής μητρώου: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Δεν επετράπηι η πρόσβαση κατά τη διαγραφή του κλειδιού μητρώου: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Δεν επιτρέπεται η πρόσβαση: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
