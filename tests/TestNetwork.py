@@ -99,13 +99,14 @@ class NetworkTestCase(common.BleachbitTestCase):
         """Unit test for fetch_url() without retry"""
         schemes = ('http', 'https')
         status_codes = (200, 404)
-        expected_content = {200: '200 OK', 404: '404 Not Found'}
+        # As of 2025-03-09, httpstat.us returns the number without the text.
+        expected_content = {200: ['200 OK', '200'], 404: ['404 Not Found', '404']}
         for scheme in schemes:
             for status_code in status_codes:
                 url = scheme + '://httpstat.us/' + str(status_code)
                 response = fetch_url(url, max_retries=0, timeout=5)
                 self.assertEqual(response.status_code, status_code)
-                self.assertEqual(response.text, expected_content[status_code])
+                self.assertIn(response.text.strip(), expected_content[status_code])
 
     def test_fetch_url_retry(self):
         """Unit test for fetch_url() with retry"""
