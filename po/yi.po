@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-04 21:03-0700\n"
+"POT-Creation-Date: 2025-03-09 22:12-0600\n"
 "PO-Revision-Date: 2020-04-05 02:23+0000\n"
 "Last-Translator: bernard stafford <Unknown>\n"
 "Language-Team: Yiddish <yi@li.org>\n"
@@ -24,8 +24,8 @@ msgstr ""
 msgid "Media player"
 msgstr "מעדיע שפּילער"
 
-#: ../cleaners/realplayer.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/konqueror.xml
+#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/safari.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/konqueror.xml
 #: ../cleaners/silverlight.xml ../cleaners/chromium.xml ../cleaners/slack.xml
 #: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/liferea.xml ../cleaners/brave.xml ../cleaners/seamonkey.xml
@@ -35,8 +35,8 @@ msgstr "מעדיע שפּילער"
 msgid "Cookies"
 msgstr "קיכלעך"
 
-#: ../cleaners/realplayer.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/konqueror.xml
+#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/safari.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/konqueror.xml
 #: ../cleaners/silverlight.xml ../cleaners/chromium.xml ../cleaners/slack.xml
 #: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/liferea.xml ../cleaners/brave.xml ../cleaners/seamonkey.xml
@@ -67,8 +67,7 @@ msgstr "היסטאריע"
 #: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
 #: ../cleaners/libreoffice.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
-#: ../cleaners/amule.xml ../bleachbit/Cleaner.py:242
-#: ../bleachbit/Cleaner.py:251
+#: ../cleaners/amule.xml ../bleachbit/Cleaner.py
 msgid "Delete the usage history"
 msgstr "ויסמעקן די באַניץ געשיכטע"
 
@@ -79,7 +78,7 @@ msgstr "ויסמעקן די באַניץ געשיכטע"
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/zoom.xml
 #: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py:305
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Logs"
 msgstr "לאָגס"
 
@@ -90,7 +89,7 @@ msgstr "לאָגס"
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/zoom.xml
 #: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py:305
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the logs"
 msgstr "ויסמעקן די לאָגס"
 
@@ -100,41 +99,39 @@ msgid "Multimedia viewer"
 msgstr "מולטימעדיאַ צוקוקער"
 
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
-#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
+#: ../cleaners/librewolf.xml ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/safari.xml
 #: ../cleaners/waterfox.xml ../cleaners/emesene.xml ../cleaners/nexuiz.xml
 #: ../cleaners/java.xml ../cleaners/epiphany.xml ../cleaners/gpodder.xml
-#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/brave.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/seamonkey.xml ../cleaners/flash.xml
+#: ../cleaners/geary.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/smartftp.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/zoom.xml
+#: ../cleaners/evolution.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/tremulous.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/gftp.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Cleaner.py:189
-#: ../bleachbit/Cleaner.py:274
+#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Cleaner.py
 msgid "Cache"
 msgstr "וועב קאַש"
 
 #: ../cleaners/xine.xml ../cleaners/dnf.xml ../cleaners/miro.xml
-#: ../cleaners/amsn.xml ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
-#: ../cleaners/yum.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/audacious.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/pidgin.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
-#: ../cleaners/gpodder.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
+#: ../cleaners/amsn.xml ../cleaners/librewolf.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/beagle.xml ../cleaners/yum.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/waterfox.xml
+#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/gpodder.xml
+#: ../cleaners/geary.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
 #: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py:189
-#: ../bleachbit/Cleaner.py:274 ../bleachbit/Cleaner.py:308
-#: ../bleachbit/Cleaner.py:310
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "ויסמעקן די קאַש"
 
@@ -143,7 +140,7 @@ msgstr "ויסמעקן די קאַש"
 #: ../cleaners/audacious.xml ../cleaners/filezilla.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
 #: ../cleaners/winamp.xml ../cleaners/adobe_reader.xml ../cleaners/winzip.xml
-#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py:190
+#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Most recently used"
 msgstr "רובֿ לעצטנס געוויינט"
 
@@ -172,8 +169,8 @@ msgstr ""
 "פליסנדיק \"dnf list autoremove\"."
 
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/zoom.xml
-#: ../cleaners/skype.xml ../cleaners/discord.xml
+#: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
+#: ../cleaners/zoom.xml ../cleaners/skype.xml ../cleaners/discord.xml
 msgid "Chat client"
 msgstr "שמועסן קליענט"
 
@@ -189,6 +186,161 @@ msgstr "שמועסן לאָגס"
 msgid "Delete the chat logs"
 msgstr "ויסמעקן די שמועס לאָגס"
 
+#: ../cleaners/librewolf.xml ../cleaners/elinks.xml ../cleaners/safari.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/konqueror.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/links2.xml ../cleaners/seamonkey.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Web browser"
+msgstr "וועב בלעטערער"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/deepscan.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml
+msgid "Backup files"
+msgstr "באַקקופּ טעקעס"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/deepscan.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml
+msgid "Delete the backup files"
+msgstr "ויסמעקן די באַקאַפּ טעקעס"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml
+msgid "Crash reports"
+msgstr "קראַך ריפּאָרץ"
+
+#: ../cleaners/librewolf.xml ../cleaners/beagle.xml ../cleaners/waterfox.xml
+#: ../cleaners/geary.xml ../cleaners/windows_defender.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/deepscan.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
+msgid "Delete the files"
+msgstr "ויסמעקן די טעקעס"
+
+#. DOM=Document Object Model
+#. DOM=Document Object Model
+#. DOM=Document Object Model
+#. DOM=Document Object Model
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "DOM Storage"
+msgstr "DOM סטאָרידזש"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Delete HTML5 cookies"
+msgstr "ויסמעקן HTML5 קיכלעך"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Form history"
+msgstr "פאָרעם געשיכטע"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+msgid "A history of forms entered in web sites and in the Search bar"
+msgstr "א געשיכטע פון פארמען אריין אין וועב זייטלעך און אין דער זוך באַר"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/chromium.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Passwords"
+msgstr "פּאַססוואָרדס"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/chromium.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid ""
+"A database of usernames and passwords as well as a list of sites that should "
+"not store passwords"
+msgstr ""
+"אַ דייטאַבייס פון וסערנאַמעס און פּאַסווערדז ווי געזונט ווי אַ רשימה פון זייטלעך "
+"אַז זאָל ניט קראָם פּאַסווערדז"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/chromium.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "This option will delete your saved passwords."
+msgstr "די אָפּציע וועט ויסמעקן דיין געראטעוועט פּאַסווערדז."
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+msgid "Session restore"
+msgstr "סעסיע ומקערן"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+msgid "Loads the initial session after the browser closes or crashes"
+msgstr "לאָודיד די ערשט סעסיע נאָך די בלעטערער קלאָוזיז אָדער קראַשיז"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Site preferences"
+msgstr "פּלאַץ פּרעפֿערענצן"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Settings for individual sites"
+msgstr "סעטטינגספֿאַר יחיד זייטלעך"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/konqueror.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
+msgid "URL history"
+msgstr "URL געשיכטע"
+
+#: ../cleaners/librewolf.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
+#: ../cleaners/konqueror.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/internet_explorer.xml
+msgid "List of visited web pages"
+msgstr "רשימה פון באזוכט וועב זייַטלעך"
+
+#. TRANSLATORS: Vacuum is a verb.  The term is jargon
+#. from the SQLite database.  Microsoft Access uses
+#. the term 'Compact Database' (which you may translate
+#. instead).  Another synonym is 'defragment.'
+#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/safari.xml
+#: ../cleaners/waterfox.xml ../cleaners/gpodder.xml ../cleaners/geary.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../bleachbit/Action.py
+msgid "Vacuum"
+msgstr "וואַקוום"
+
+#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/safari.xml
+#: ../cleaners/waterfox.xml ../cleaners/gpodder.xml ../cleaners/geary.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+msgid ""
+"Clean database fragmentation to reduce space and improve speed without "
+"removing any data"
+msgstr ""
+"ריין דייטאַבייס פראַגמאַנטיישאַן צו רעדוצירן פּלאַץ און פֿאַרבעסערן גיכקייַט אָן "
+"רימוווינג קיין דאַטן"
+
 #: ../cleaners/rhythmbox.xml
 msgid "Database"
 msgstr "דאַטאַבאַסע"
@@ -202,7 +354,7 @@ msgstr ""
 "פּלייַעד"
 
 #: ../cleaners/microsoft_office.xml ../cleaners/libreoffice.xml
-#: ../bleachbit/Cleaner.py:194
+#: ../bleachbit/Cleaner.py
 msgid "Office suite"
 msgstr "אָפיס סוויט"
 
@@ -233,50 +385,9 @@ msgstr "זוכן געצייַג"
 msgid "Index"
 msgstr "אינדעקס"
 
-#: ../cleaners/beagle.xml ../cleaners/waterfox.xml
-#: ../cleaners/windows_defender.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/deepscan.xml
-#: ../cleaners/transmission.xml ../cleaners/vuze.xml
-msgid "Delete the files"
-msgstr "ויסמעקן די טעקעס"
-
-#: ../cleaners/elinks.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/konqueror.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/links2.xml ../cleaners/seamonkey.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Web browser"
-msgstr "וועב בלעטערער"
-
 #: ../cleaners/elinks.xml
 msgid "Delete the cookies, visited URLs, and search history"
 msgstr "ויסמעקן די קיכלעך, באזוכט URL ס, און זוכן געשיכטע"
-
-#. TRANSLATORS: Vacuum is a verb.  The term is jargon
-#. from the SQLite database.  Microsoft Access uses
-#. the term 'Compact Database' (which you may translate
-#. instead).  Another synonym is 'defragment.'
-#: ../cleaners/yum.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
-#: ../cleaners/gpodder.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../bleachbit/Action.py:589
-msgid "Vacuum"
-msgstr "וואַקוום"
-
-#: ../cleaners/yum.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
-#: ../cleaners/gpodder.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-msgid ""
-"Clean database fragmentation to reduce space and improve speed without "
-"removing any data"
-msgstr ""
-"ריין דייטאַבייס פראַגמאַנטיישאַן צו רעדוצירן פּלאַץ און פֿאַרבעסערן גיכקייַט אָן "
-"רימוווינג קיין דאַטן"
 
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
@@ -288,7 +399,7 @@ msgstr "אַודיאָ שפּילער"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
-#: ../cleaners/kde.xml ../bleachbit/Cleaner.py:191 ../bleachbit/Cleaner.py:288
+#: ../cleaners/kde.xml ../bleachbit/Cleaner.py
 msgid "Delete the list of recently used documents"
 msgstr "ויסמעקן די רשימה פון לעצטנס געוויינט דאָקומענטן"
 
@@ -311,12 +422,6 @@ msgid "Delete the web cache, which reduces time to display revisited pages"
 msgstr ""
 "ויסמעקן די וועב קאַש, וואָס ראַדוסאַז צייַט צו אַרויסווייַזן רעוויסיטעד בלעטער"
 
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/konqueror.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/internet_explorer.xml
-msgid "List of visited web pages"
-msgstr "רשימה פון באזוכט וועב זייַטלעך"
-
 #: ../cleaners/journald.xml
 msgid "System journals"
 msgstr "סיסטעם דזשערנאַלז"
@@ -324,103 +429,6 @@ msgstr "סיסטעם דזשערנאַלז"
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
 msgstr "ריין אַלט סיסטעם דזשערנאַלז"
-
-#: ../cleaners/waterfox.xml ../cleaners/windows_defender.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/deepscan.xml
-#: ../cleaners/amule.xml ../cleaners/vuze.xml
-msgid "Backup files"
-msgstr "באַקקופּ טעקעס"
-
-#: ../cleaners/waterfox.xml ../cleaners/windows_defender.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/deepscan.xml
-#: ../cleaners/amule.xml ../cleaners/vuze.xml
-msgid "Delete the backup files"
-msgstr "ויסמעקן די באַקאַפּ טעקעס"
-
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-msgid "Crash reports"
-msgstr "קראַך ריפּאָרץ"
-
-#. DOM=Document Object Model
-#. DOM=Document Object Model
-#. DOM=Document Object Model
-#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "DOM Storage"
-msgstr "DOM סטאָרידזש"
-
-#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "Delete HTML5 cookies"
-msgstr "ויסמעקן HTML5 קיכלעך"
-
-#: ../cleaners/waterfox.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "Form history"
-msgstr "פאָרעם געשיכטע"
-
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/internet_explorer.xml
-msgid "A history of forms entered in web sites and in the Search bar"
-msgstr "א געשיכטע פון פארמען אריין אין וועב זייטלעך און אין דער זוך באַר"
-
-#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Passwords"
-msgstr "פּאַססוואָרדס"
-
-#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid ""
-"A database of usernames and passwords as well as a list of sites that should "
-"not store passwords"
-msgstr ""
-"אַ דייטאַבייס פון וסערנאַמעס און פּאַסווערדז ווי געזונט ווי אַ רשימה פון זייטלעך "
-"אַז זאָל ניט קראָם פּאַסווערדז"
-
-#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "This option will delete your saved passwords."
-msgstr "די אָפּציע וועט ויסמעקן דיין געראטעוועט פּאַסווערדז."
-
-#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
-msgid "Session restore"
-msgstr "סעסיע ומקערן"
-
-#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
-msgid "Loads the initial session after the browser closes or crashes"
-msgstr "לאָודיד די ערשט סעסיע נאָך די בלעטערער קלאָוזיז אָדער קראַשיז"
-
-#: ../cleaners/waterfox.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Site preferences"
-msgstr "פּלאַץ פּרעפֿערענצן"
-
-#: ../cleaners/waterfox.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Settings for individual sites"
-msgstr "סעטטינגספֿאַר יחיד זייטלעך"
-
-#: ../cleaners/waterfox.xml ../cleaners/konqueror.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml
-msgid "URL history"
-msgstr "URL געשיכטע"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
@@ -436,7 +444,7 @@ msgstr "טעקע אַריבערפירן קליענט"
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py:339
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Temporary files"
 msgstr "צייטווייליגע טעקעס"
 
@@ -444,7 +452,7 @@ msgstr "צייטווייליגע טעקעס"
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py:339
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the temporary files"
 msgstr "ויסמעקן די צייַטווייַליק טעקעס"
 
@@ -471,6 +479,22 @@ msgstr "דאַונלאָודיד פּאָדקאַסץ"
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
 msgstr "ויסמעקן דאַונלאָודיד פּאָדקאַסץ"
+
+#: ../cleaners/geary.xml ../cleaners/thunderbird.xml ../cleaners/evolution.xml
+msgid "Email client"
+msgstr "בליצפּאָסט קליענט"
+
+#: ../cleaners/geary.xml
+msgid "Attachments"
+msgstr ""
+
+#: ../cleaners/geary.xml
+msgid "Sync conflict"
+msgstr ""
+
+#: ../cleaners/geary.xml ../cleaners/deepscan.xml
+msgid "This option is slow."
+msgstr "דעם אָפּציע איז פּאַמעלעך."
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
@@ -567,8 +591,7 @@ msgid "File manager"
 msgstr "טעקע פאַרוואַלטער"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
-#: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py:287
-#: ../bleachbit/Cleaner.py:482
+#: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py
 msgid "Recent documents list"
 msgstr "לעצטע דאָקומענטן רשימה"
 
@@ -602,19 +625,11 @@ msgstr "אַנטי-ווירוס"
 msgid "Quarantine"
 msgstr "קאַראַנטין"
 
-#: ../cleaners/thunderbird.xml ../cleaners/evolution.xml
-msgid "Email client"
-msgstr "בליצפּאָסט קליענט"
-
 #: ../cleaners/thunderbird.xml
 msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
 msgstr ""
-
-#: ../cleaners/hexchat.xml
-msgid "IRC client formerly known as XChat"
-msgstr "ירק קליענט, ביז אַהער, באַקאַנט ווי XChat"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -651,10 +666,6 @@ msgstr "ריין טעקעס וויידלי צעוואָרפן אַריבער ד�
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
 msgstr "דורכקוקן די פאָרויסיקע ווייַזונג פֿאַר קיין טעקעס איר ווילן צו האַלטן."
-
-#: ../cleaners/deepscan.xml
-msgid "This option is slow."
-msgstr "דעם אָפּציע איז פּאַמעלעך."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
@@ -724,7 +735,7 @@ msgstr "ויסמעקן די שטראמען (נאָר די מעטאַדאַטאַ
 msgid "Statistics"
 msgstr "סטאַטיסטיק"
 
-#: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py:307
+#: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Delete the file"
 msgstr "ויסמעקן די טעקע"
 
@@ -736,13 +747,15 @@ msgstr "ויסמעקן די רשימה פון שפּיל סערווערס"
 msgid "Remote control software"
 msgstr "רימאָוט קאָנטראָל ווייכווארג"
 
-#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:307
+#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Memory dump"
 msgstr "זיקאָרן דאַמפּ"
 
 #: ../cleaners/screenlets.xml
-msgid "Widgets for the desktop"
-msgstr "ווידזשיץ פֿאַר די דעסקטאַפּ"
+#, fuzzy
+#| msgid "Desktop environment"
+msgid "Desktop widgets"
+msgstr "דעסקטאָפּ סוויווע"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -782,7 +795,7 @@ msgstr "פריי פּלאַץ און טייַנען פּריוואַטקייט"
 #. TRANSLATORS: Multi-value variables are explained in the online documentation.
 #. Basically, they are like an environment variable, but each multi-value variable
 #. can have multiple values. They're a way to make CleanerML files more concise.
-#: ../bleachbit/Action.py:151
+#: ../bleachbit/Action.py
 msgid "Deep scan does not support multi-value variable."
 msgstr "טיף יבערקוקן שטיצט ניט מאַלטי-ווערט בייַטעוודיק."
 
@@ -790,7 +803,7 @@ msgstr "טיף יבערקוקן שטיצט ניט מאַלטי-ווערט ביי
 #. mild mistake in the CleanerML file because walk.all is expected to
 #. be used with directories instead of with files. Do not translate
 #. search="walk.all" and path="%s"
-#: ../bleachbit/Action.py:253
+#: ../bleachbit/Action.py
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
 msgstr "search=\"walk.all\" used with regular file path=\"%s\""
@@ -800,17 +813,13 @@ msgstr "search=\"walk.all\" used with regular file path=\"%s\""
 #. wildcard patterns. Therefore, maybe the developer either missed
 #. the wildcard or should search using path="file" which does not
 #. expect or support wildcards in the path.
-#: ../bleachbit/Action.py:292
+#: ../bleachbit/Action.py
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
 msgstr "path=\"%s\" איז ניט אַ גלאָבוס מוסטער"
 
 #. TRANSLATORS: Parts of this file will be deleted
-#: ../bleachbit/Action.py:384 ../bleachbit/Action.py:397
-#: ../bleachbit/Action.py:410 ../bleachbit/Action.py:423
-#: ../bleachbit/Action.py:436 ../bleachbit/Action.py:501
-#: ../bleachbit/Action.py:513 ../bleachbit/Command.py:208
-#: ../bleachbit/Command.py:242
+#: ../bleachbit/Action.py ../bleachbit/Command.py
 msgid "Clean file"
 msgstr "ריין טעקע"
 
@@ -818,16 +827,16 @@ msgstr "ריין טעקע"
 #. TRANSLATORS: This is the clean button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes
 #. altering them.
-#: ../bleachbit/Action.py:526 ../bleachbit/GUI.py:962 ../bleachbit/GUI.py:1048
+#: ../bleachbit/Action.py ../bleachbit/GUI.py
 msgid "Clean"
 msgstr "ריין"
 
-#: ../bleachbit/Action.py:562
+#: ../bleachbit/Action.py
 #, python-format
 msgid "Run external command: %s"
 msgstr "לויפן פונדרויסנדיק באַפֿעל: %s"
 
-#: ../bleachbit/CleanerML.py:138
+#: ../bleachbit/CleanerML.py
 #, python-brace-format
 msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
@@ -836,12 +845,12 @@ msgstr ""
 "טעות אין handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 
-#: ../bleachbit/CleanerML.py:280
+#: ../bleachbit/CleanerML.py
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
 msgstr "יגנאָרינג רייניקונג ווייַל עס איז וועלט שרייבן: %s"
 
-#: ../bleachbit/CleanerML.py:299 ../bleachbit/CleanerML.py:344
+#: ../bleachbit/CleanerML.py
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "טעות לייענען קלינער: %s"
@@ -849,7 +858,7 @@ msgstr "טעות לייענען קלינער: %s"
 #. TRANSLATORS: An action is something like cleaning a specific file.
 #. "Not usable" means the whole cleaner will be ignored.
 #. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py:309
+#: ../bleachbit/CleanerML.py
 #, python-format
 msgid "Cleaner is not usable on this OS because it has no actions: %s"
 msgstr "קלינער איז ניט ניצלעך אויף דעם אַס ווייַל עס האט קיין אַקשאַנז: %s"
@@ -861,78 +870,77 @@ msgstr "קלינער איז ניט ניצלעך אויף דעם אַס וויי�
 #. Firefox.
 #. More information:
 #. http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-#: ../bleachbit/Cleaner.py:272
+#: ../bleachbit/Cleaner.py
 msgid "Broken desktop files"
 msgstr "צעבראכן דעסקטאַפּ טעקעס"
 
-#: ../bleachbit/Cleaner.py:273
+#: ../bleachbit/Cleaner.py
 msgid "Delete broken application menu entries and file associations"
 msgstr "ויסמעקן געווען בראָקען אַפּלאַקיישאַן מעניו איינסן און טעקע אַסאָוסייישאַנז"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
-#: ../bleachbit/Cleaner.py:277
+#: ../bleachbit/Cleaner.py
 msgid "Localizations"
 msgstr "לאָקאַליזאַטיאָנס"
 
-#: ../bleachbit/Cleaner.py:278
+#: ../bleachbit/Cleaner.py
 msgid "Delete files for unwanted languages"
 msgstr "ויסמעקן טעקעס פֿאַר אַנוואָנטיד שפּראַכן"
 
-#: ../bleachbit/Cleaner.py:280
+#: ../bleachbit/Cleaner.py
 msgid "Configure this option in the preferences."
 msgstr "קאַנפיגיער דעם אָפּציע אין די פּרעפֿערענצן."
 
-#: ../bleachbit/Cleaner.py:286
+#: ../bleachbit/Cleaner.py
 msgid "Rotated logs"
 msgstr "ראָוטייטיד לאָגס"
 
-#: ../bleachbit/Cleaner.py:286
+#: ../bleachbit/Cleaner.py
 msgid "Delete old system logs"
 msgstr "ויסמעקן אַלט סיסטעם לאָגס"
 
-#: ../bleachbit/Cleaner.py:289
+#: ../bleachbit/Cleaner.py
 msgid "Trash"
 msgstr "אָפּפאַל"
 
-#: ../bleachbit/Cleaner.py:289
+#: ../bleachbit/Cleaner.py
 msgid "Empty the trash"
 msgstr "ליידיק די אָפּפאַל"
 
-#: ../bleachbit/Cleaner.py:295 ../bleachbit/Cleaner.py:440
-#: ../bleachbit/Worker.py:199
+#: ../bleachbit/Cleaner.py ../bleachbit/Worker.py
 msgid "Memory"
 msgstr "זכּרון"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:297
+#: ../bleachbit/Cleaner.py
 msgid "Wipe the swap and free memory"
 msgstr "ווישן די ויסבייַטן און פריי זיקאָרן"
 
-#: ../bleachbit/Cleaner.py:299
+#: ../bleachbit/Cleaner.py
 msgid "This option is experimental and may cause system problems."
 msgstr "די אָפּציע איז יקספּערמענאַל און קען פאַרשאַפן סיסטעם פּראָבלעמס."
 
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
-#: ../bleachbit/Cleaner.py:310
+#: ../bleachbit/Cleaner.py
 msgid "Prefetch"
 msgstr "Prefetch"
 
-#: ../bleachbit/Cleaner.py:312
+#: ../bleachbit/Cleaner.py
 msgid "Recycle bin"
 msgstr "רעסיקלע בין"
 
-#: ../bleachbit/Cleaner.py:312 ../bleachbit/Cleaner.py:597
+#: ../bleachbit/Cleaner.py
 msgid "Empty the recycle bin"
 msgstr "ליידיק די ריסייקאַל בין"
 
 #. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
 #. the uninstallers for software updates.
-#: ../bleachbit/Cleaner.py:315
+#: ../bleachbit/Cleaner.py
 msgid "Update uninstallers"
 msgstr "דערהייַנטיקן ונינסטאַללערס"
 
-#: ../bleachbit/Cleaner.py:316
+#: ../bleachbit/Cleaner.py
 msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
@@ -940,63 +948,63 @@ msgstr ""
 "ויסמעקן ונינסטאַללער פֿאַר דערהייַנטיקונגען פון מייקראָסאָפֿט אַרייַנגערעכנט "
 "Hotfixes, סערוויס פּאַקס און Internet Explorer דערהייַנטיקונגען"
 
-#: ../bleachbit/Cleaner.py:323 ../bleachbit/Cleaner.py:542
+#: ../bleachbit/Cleaner.py
 msgid "Clipboard"
 msgstr "קליפּבאָרד"
 
-#: ../bleachbit/Cleaner.py:324
+#: ../bleachbit/Cleaner.py
 msgid "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
 "די קליפּבאָרד פון די דעסקטאַפּ סוויווע געניצט פֿאַר קאַפּיינג און פּאַפּ אַפּעריישאַנז"
 
 #. TRANSLATORS: "Custom" is an option allowing the user to specify which
 #. files and folders will be erased.
-#: ../bleachbit/Cleaner.py:331 ../bleachbit/GuiPreferences.py:61
+#: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
 msgid "Custom"
 msgstr "מנהג"
 
-#: ../bleachbit/Cleaner.py:332
+#: ../bleachbit/Cleaner.py
 msgid "Delete user-specified files and folders"
 msgstr "ויסמעקן באַניצער-ספּעסיפיעד טעקעס און פאָלדערס"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:334
+#: ../bleachbit/Cleaner.py
 msgid "Free disk space"
 msgstr "פריי דיסק פּלאַץ"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:336
+#: ../bleachbit/Cleaner.py
 msgid "Overwrite free disk space to hide deleted files"
 msgstr "אָווועררייט פריי פּלאַץ צו באַהאַלטן אויסגעמעקט טעקעס"
 
-#: ../bleachbit/Cleaner.py:337
+#: ../bleachbit/Cleaner.py
 msgid "This option is very slow."
 msgstr "דעם אָפּציע איז זייער פּאַמעלעך."
 
-#: ../bleachbit/Cleaner.py:341
+#: ../bleachbit/Cleaner.py
 msgid "The system in general"
 msgstr "די סיסטעם אין אַלגעמיין"
 
-#: ../bleachbit/Cleaner.py:343 ../bleachbit/Cleaner.py:685
+#: ../bleachbit/Cleaner.py
 msgid "System"
 msgstr "סיסטעם"
 
 #. TRANSLATORS: 'Free' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:550 ../bleachbit/Cleaner.py:716
+#: ../bleachbit/Cleaner.py
 #, python-format
 msgid "Overwrite free disk space %s"
 msgstr "אָווועררייט פריי פּלאַץ %s"
 
-#: ../bleachbit/Cleaner.py:667
+#: ../bleachbit/Cleaner.py
 msgid "Loading native cleaners."
 msgstr "לאָודינג געבוירן קלינערז."
 
-#: ../bleachbit/Cleaner.py:672
+#: ../bleachbit/Cleaner.py
 msgid "Importing cleaners from Winapp2.ini."
 msgstr "ימפּאָרטינג קלענזערז פֿון Winapp2.ini."
 
-#: ../bleachbit/CLI.py:115
+#: ../bleachbit/CLI.py
 #, python-format
 msgid "not a valid cleaner: %s"
 msgstr "נישט אַ גילטיק קלינער: %s"
@@ -1006,74 +1014,74 @@ msgstr "נישט אַ גילטיק קלינער: %s"
 #. Don't translate and add "usage:" - it gets added by Python.
 #. More information about the command line is here
 #. https://www.bleachbit.org/documentation/command-line
-#: ../bleachbit/CLI.py:145
+#: ../bleachbit/CLI.py
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgstr "באַניץ: %prog [options] cleaner.option1 cleaner.option2"
 
-#: ../bleachbit/CLI.py:148
+#: ../bleachbit/CLI.py
 msgid "list cleaners"
 msgstr "רשימה קלענזערז"
 
-#: ../bleachbit/CLI.py:150
+#: ../bleachbit/CLI.py
 msgid "preview files to be deleted and other changes"
 msgstr "פאָרויסיקע ווייַזונג טעקעס צו ווערן אויסגעמעקט און אנדערע ענדערונגען"
 
 #. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
 #. This is different than cleaning an arbitrary file, such as a
 #. spreadsheet on the desktop.
-#: ../bleachbit/CLI.py:155
+#: ../bleachbit/CLI.py
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr "לויפן קלינערז צו ויסמעקן טעקעס און מאַכן אנדערע שטענדיק ענדערונגען"
 
-#: ../bleachbit/CLI.py:157
+#: ../bleachbit/CLI.py
 msgid "shred specific files or folders"
 msgstr "פּיצל ספּעציפיש טעקעס אָדער פאָלדערס"
 
-#: ../bleachbit/CLI.py:159
+#: ../bleachbit/CLI.py
 msgid "wipe free space in the given paths"
 msgstr "ווישן די פריי פּלאַץ אין די געגעבן פּאַטס"
 
-#: ../bleachbit/CLI.py:161
+#: ../bleachbit/CLI.py
 msgid "overwrite files to hide contents"
 msgstr "אָווועררייט טעקעס צו באַהאַלטן אינהאַלט"
 
-#: ../bleachbit/CLI.py:163
+#: ../bleachbit/CLI.py
 msgid "launch the graphical interface"
 msgstr "קאַטער די גראַפיקאַל צובינד"
 
-#: ../bleachbit/CLI.py:165
+#: ../bleachbit/CLI.py
 msgid "use options set in the graphical interface"
 msgstr "נוצן אָפּציעס שטעלן אין די גראַפיקאַל צובינד"
 
-#: ../bleachbit/CLI.py:167
+#: ../bleachbit/CLI.py
 msgid "enable all options that do not have a warning"
 msgstr ""
 
-#: ../bleachbit/CLI.py:169
+#: ../bleachbit/CLI.py
 msgid "set log level to verbose"
 msgstr "שטעלן קלאָץ הייך צו ווערבאָסע"
 
-#: ../bleachbit/CLI.py:170
+#: ../bleachbit/CLI.py
 msgid "log debug messages to file"
 msgstr "קלאָץ דיבאַג אַרטיקלען צו טעקע"
 
-#: ../bleachbit/CLI.py:172
+#: ../bleachbit/CLI.py
 msgid "show system information"
 msgstr "ווייַזן סיסטעם אינפֿאָרמאַציע"
 
-#: ../bleachbit/CLI.py:174
+#: ../bleachbit/CLI.py
 msgid "output version information and exit"
 msgstr "רעזולטאַט ווערסיע אינפֿאָרמאַציע און אַרויסגאַנג"
 
-#: ../bleachbit/CLI.py:177
+#: ../bleachbit/CLI.py
 msgid "do not prompt for administrator privileges"
 msgstr "דו זאלסט נישט פּינטלעך פֿאַר אַדמיניסטראַטאָר פּריווילאַדזשאַז"
 
-#: ../bleachbit/CLI.py:185
+#: ../bleachbit/CLI.py
 msgid "update winapp2.ini, if a new version is available"
 msgstr "דערהייַנטיקן winapp2.ini, אויב אַ נייַע ווערסיע איז בארעכטיגט"
 
-#: ../bleachbit/CLI.py:207
+#: ../bleachbit/CLI.py
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
@@ -1081,39 +1089,39 @@ msgstr ""
 "ספּעציפיצירן בלויז איין פון די קאַמאַנדז: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 
-#: ../bleachbit/CLI.py:232
+#: ../bleachbit/CLI.py
 msgid "Checking online for updates to winapp2.ini"
 msgstr "קאָנטראָלירונג אָנליין פֿאַר דערהייַנטיקונגען צו winapp2.ini"
 
-#: ../bleachbit/CLI.py:247
+#: ../bleachbit/CLI.py
 msgid "No directories given for --wipe-free-space"
 msgstr "קיין דיירעקטעריז געגעבן פֿאַר --wipe-free-space"
 
-#: ../bleachbit/CLI.py:249
+#: ../bleachbit/CLI.py
 msgid "Wiping free space can take a long time."
 msgstr "ווייפּינג פּאָטער פּלאַץ קענען נעמען אַ לאַנג צייַט."
 
-#: ../bleachbit/CLI.py:260
+#: ../bleachbit/CLI.py
 msgid "No work to do. Specify options."
 msgstr "קיין אַרבעט צו טאָן. ספּעציפיצירן אָפּציעס."
 
-#: ../bleachbit/CLI.py:268
+#: ../bleachbit/CLI.py
 msgid "--overwrite is intended only for use with --clean"
 msgstr "--overwrite איז בלויז בדעה פֿאַר נוצן מיט --clean"
 
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
-#: ../bleachbit/Command.py:49
+#: ../bleachbit/Command.py
 msgid "Skip"
 msgstr "האָפּקען"
 
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:79
+#: ../bleachbit/Command.py
 msgid "Delete"
 msgstr "ויסמעקן"
 
-#: ../bleachbit/Command.py:101
+#: ../bleachbit/Command.py
 msgid ""
 "At least one file was locked by another process, so its contents could not "
 "be overwritten. It will be marked for deletion upon system reboot."
@@ -1123,47 +1131,46 @@ msgstr ""
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
-#: ../bleachbit/Command.py:104
+#: ../bleachbit/Command.py
 msgid "Mark for deletion"
 msgstr "מארק פֿאַר דילישאַן"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:284
+#: ../bleachbit/Command.py
 msgid "Truncate"
 msgstr "טראַנגקייט"
 
-#: ../bleachbit/Command.py:327
+#: ../bleachbit/Command.py
 msgid "Delete registry key"
 msgstr "ויסמעקן רעגיסטרי שליסל"
 
-#: ../bleachbit/FileUtilities.py:372 ../bleachbit/FileUtilities.py:381
-#: ../bleachbit/FileUtilities.py:395
+#: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Directory is not empty: %s"
 msgstr "וועגווייַזער איז נישט ליידיק: %s"
 
-#: ../bleachbit/FileUtilities.py:384
+#: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Skipping mount point: %s"
 msgstr "סקיפּפּינג בארג פונט: %s"
 
-#: ../bleachbit/FileUtilities.py:386
+#: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Device or resource is busy: %s"
 msgstr "מיטל אָדער מיטל איז פאַרנומען: %s"
 
-#: ../bleachbit/FileUtilities.py:422
+#: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Special file type cannot be deleted: %s"
 msgstr "ספּעציעלע טעקע טיפּ קענען ניט זיין אויסגעמעקט: %s"
 
-#: ../bleachbit/FileUtilities.py:628
+#: ../bleachbit/FileUtilities.py
 #, python-format
 msgid ""
 "The environment variable TMP refers to a directory that does not exist: %s"
 msgstr "TMP עקזיסטירט נישט: %s"
 
-#: ../bleachbit/FileUtilities.py:867
+#: ../bleachbit/FileUtilities.py
 msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
@@ -1171,26 +1178,26 @@ msgstr ""
 "עס איז געווען לפּחות איין טעקע אויף אַ טעקע סיסטעם אַז טוט נישט שטיצן "
 "אַוואַנסירטע אָווועררייטינג."
 
-#: ../bleachbit/FileUtilities.py:965
+#: ../bleachbit/FileUtilities.py
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
 msgstr ""
 
-#: ../bleachbit/FileUtilities.py:968
+#: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
 msgstr "דרך צו ווישן מוזן זיין אַ יגזיסטינג וועגווייַזער: %s"
 
-#: ../bleachbit/FileUtilities.py:983
+#: ../bleachbit/FileUtilities.py
 msgid "Creating new, temporary file for wiping free space."
 msgstr "קרעאַטינג נייַ, צייַטווייַליק טעקע פֿאַר ווייפּינג פּאָטער פּלאַץ."
 
-#: ../bleachbit/FileUtilities.py:1036
+#: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Error #%d when flushing the file buffer."
 msgstr "טעות #%d ווען פלאַשינג די טעקע באַפער."
 
-#: ../bleachbit/FileUtilities.py:1051
+#: ../bleachbit/FileUtilities.py
 msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
@@ -1198,37 +1205,35 @@ msgstr ""
 "געשריבן {files:,} טעקעס און {bytes:,} ביטעס אין {seconds:,} סעקונדעס ביי "
 "{rate:.2f} MB/s"
 
-#: ../bleachbit/FileUtilities.py:1056
+#: ../bleachbit/FileUtilities.py
 msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
 msgstr "{bytes:,} ביטעס און {inodes:,} ינאָדעס פאַראַנען צו ניט-יבער-באַניצער"
 
-#: ../bleachbit/FileUtilities.py:1058
+#: ../bleachbit/FileUtilities.py
 msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
 msgstr "{bytes:,} ביטעס און {inodes:,} ינאָדעס פאַראַנען צו יבער-באַניצער"
 
-#: ../bleachbit/FileUtilities.py:1082
+#: ../bleachbit/FileUtilities.py
 msgid "Handled unknown error #0 while truncating file."
 msgstr "כאַנדאַלד אומבאַקאַנט טעות # 0 בשעת טרונקאַטינג טעקע."
 
-#: ../bleachbit/GuiBasic.py:54 ../bleachbit/GuiBasic.py:81
-#: ../bleachbit/GuiBasic.py:105 ../bleachbit/GuiBasic.py:151
+#: ../bleachbit/GuiBasic.py
 msgid "_Cancel"
 msgstr "_ קאַנסעל"
 
-#: ../bleachbit/GuiBasic.py:82
+#: ../bleachbit/GuiBasic.py
 msgid "_Open"
 msgstr "_אָפּען"
 
-#: ../bleachbit/GuiBasic.py:106 ../bleachbit/GuiBasic.py:150
-#: ../bleachbit/GUI.py:229
+#: ../bleachbit/GuiBasic.py ../bleachbit/GUI.py
 msgid "_Delete"
 msgstr "_ויסמעקן"
 
-#: ../bleachbit/GuiBasic.py:123
+#: ../bleachbit/GuiBasic.py
 msgid "Delete confirmation"
 msgstr "ויסמעקן באַשטעטיקונג"
 
-#: ../bleachbit/GuiBasic.py:132
+#: ../bleachbit/GuiBasic.py
 msgid ""
 "This function deletes all BleachBit settings and then quits the application. "
 "Use this to hide your use of BleachBit or to reset its settings. The next "
@@ -1239,7 +1244,7 @@ msgstr ""
 "דער ווייַטער מאָל איר אָנהייב BleachBit, די סעטטינגס וועט ינישאַלייז צו די "
 "פעליקייַט וואַלועס."
 
-#: ../bleachbit/GuiBasic.py:139
+#: ../bleachbit/GuiBasic.py
 msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
@@ -1249,11 +1254,11 @@ msgstr ""
 "אַפּעריישאַנז? די פאַקטיש טעקעס אַז וועט זיין אויסגעמעקט האָט זיך געביטן זינט איר "
 "געלאָפֿן די פאָרויסיקע ווייַזונג."
 
-#: ../bleachbit/GuiBasic.py:142
+#: ../bleachbit/GuiBasic.py
 msgid "Are you sure you want to permanently delete these files?"
 msgstr "זענט איר זיכער אַז איר ווילט פּערמאַנאַנטלי ויסמעקן די טעקעס?"
 
-#: ../bleachbit/GuiBasic.py:182
+#: ../bleachbit/GuiBasic.py
 #, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
@@ -1265,101 +1270,101 @@ msgstr ""
 "%s"
 
 #. TRANSLATORS: %s expands to www.bleachbit.org or similar
-#: ../bleachbit/GuiBasic.py:194
+#: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Open web browser to %s?"
 msgstr "עפענען וועב בלעטערער צו %s?"
 
-#: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:540
+#: ../bleachbit/GuiBasic.py ../bleachbit/GUI.py
 msgid "Confirm"
 msgstr ""
 
-#: ../bleachbit/GuiChaff.py:48
+#: ../bleachbit/GuiChaff.py
 msgid "Deleting files"
 msgstr "דיליטינג טעקעס"
 
 #. TRANSLATORS: BleachBit creates digital chaff like that is like the
 #. physical chaff airplanes use to protect themselves from radar-guided
 #. missiles. For more explanation, see the online documentation.
-#: ../bleachbit/GuiChaff.py:67
+#: ../bleachbit/GuiChaff.py
 msgid "Make chaff"
 msgstr "מאַכן פּסוילעס"
 
-#: ../bleachbit/GuiChaff.py:73
+#: ../bleachbit/GuiChaff.py
 msgid "Make randomly-generated messages inspired by documents."
 msgstr "מאַכן ראַנדאַמלי-דזשענערייטאַד אַרטיקלען ינספּייערד דורך דאָקומענטן."
 
 #. TRANSLATORS: Inspiration is a choice of documents from which random
 #. text will be generated.
-#: ../bleachbit/GuiChaff.py:80
+#: ../bleachbit/GuiChaff.py
 msgid "Inspiration"
 msgstr "ינספּיראַציע"
 
-#: ../bleachbit/GuiChaff.py:83
+#: ../bleachbit/GuiChaff.py
 msgid "2600 Magazine"
 msgstr "2600 זשורנאַל"
 
-#: ../bleachbit/GuiChaff.py:83
+#: ../bleachbit/GuiChaff.py
 msgid "Hillary Clinton's emails"
 msgstr "היללאַרי קלינטאן ס ימיילז"
 
-#: ../bleachbit/GuiChaff.py:91
+#: ../bleachbit/GuiChaff.py
 msgid "Number of files"
 msgstr "נומער פון טעקעס"
 
-#: ../bleachbit/GuiChaff.py:99 ../bleachbit/GuiChaff.py:164
+#: ../bleachbit/GuiChaff.py
 msgid "Select destination folder"
 msgstr "סעלעקט דעסטיניישאַן טעקע"
 
-#: ../bleachbit/GuiChaff.py:113
+#: ../bleachbit/GuiChaff.py
 msgid "When finished"
 msgstr "ווען פאַרטיק"
 
-#: ../bleachbit/GuiChaff.py:116
+#: ../bleachbit/GuiChaff.py
 msgid "Delete without shredding"
 msgstr "ויסמעקן אָן שרעדינג"
 
-#: ../bleachbit/GuiChaff.py:116
+#: ../bleachbit/GuiChaff.py
 msgid "Do not delete"
 msgstr "צי ניט ויסמעקן"
 
-#: ../bleachbit/GuiChaff.py:127
+#: ../bleachbit/GuiChaff.py
 msgid "Make files"
 msgstr "מאַכן טעקעס"
 
-#: ../bleachbit/GuiChaff.py:145
+#: ../bleachbit/GuiChaff.py
 msgid "Download data needed for chaff generator?"
 msgstr "אראפקאפיע דאַטן דארף פֿאַר מוץ גענעראַטאָר?"
 
-#: ../bleachbit/GuiChaff.py:188
+#: ../bleachbit/GuiChaff.py
 msgid "Generating files"
 msgstr "גענעראַטינג טעקעס"
 
-#: ../bleachbit/GuiPreferences.py:51 ../data/app-menu.ui:32
+#: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
 msgid "Preferences"
 msgstr "פּרעפֿערענצן"
 
-#: ../bleachbit/GuiPreferences.py:59
+#: ../bleachbit/GuiPreferences.py
 msgid "General"
 msgstr "אַלגעמײן"
 
-#: ../bleachbit/GuiPreferences.py:63
+#: ../bleachbit/GuiPreferences.py
 msgid "Drives"
 msgstr "דרייווז"
 
-#: ../bleachbit/GuiPreferences.py:66
+#: ../bleachbit/GuiPreferences.py
 msgid "Languages"
 msgstr "שפראכן"
 
-#: ../bleachbit/GuiPreferences.py:68
+#: ../bleachbit/GuiPreferences.py
 msgid "Whitelist"
 msgstr "ווהיטעליסט"
 
-#: ../bleachbit/GuiPreferences.py:111
+#: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
 msgstr "קאָנטראָלירן פּיריאַדיקלי פֿאַר ווייכווארג דערהייַנטיקונגען דורך די אינטערנעט"
 
-#: ../bleachbit/GuiPreferences.py:116
+#: ../bleachbit/GuiPreferences.py
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
@@ -1368,39 +1373,39 @@ msgstr ""
 "אינפֿאָרמאַציע וועגן אים. דערנאָך איר קען מאַנואַל אראפקאפיע און ינסטאַלירן די "
 "דערהייַנטיקן."
 
-#: ../bleachbit/GuiPreferences.py:123
+#: ../bleachbit/GuiPreferences.py
 msgid "Check for new beta releases"
 msgstr "קוק פֿאַר נייַע ריליסיז פון ביתא"
 
-#: ../bleachbit/GuiPreferences.py:132
+#: ../bleachbit/GuiPreferences.py
 msgid "Download and update cleaners from community (winapp2.ini)"
 msgstr "אראפקאפיע און דערהייַנטיקן קלינערז פון די קהל (winapp2.ini)"
 
-#: ../bleachbit/GuiPreferences.py:145
+#: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
 msgstr ""
 
-#: ../bleachbit/GuiPreferences.py:149
+#: ../bleachbit/GuiPreferences.py
 #, fuzzy
 #| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
 msgstr "אויטאָמאַטיש פּראַזערווינג שפּראַך %s."
 
-#: ../bleachbit/GuiPreferences.py:153
+#: ../bleachbit/GuiPreferences.py
 #, fuzzy
 #| msgid "Languages"
 msgid "Language:"
 msgstr "שפראכן"
 
-#: ../bleachbit/GuiPreferences.py:218
+#: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
 msgstr "באַהאַלטן ירעלאַוואַנט קלינערז"
 
-#: ../bleachbit/GuiPreferences.py:227
+#: ../bleachbit/GuiPreferences.py
 msgid "Overwrite contents of files to prevent recovery"
 msgstr "אָווועררייט אינהאַלט פון טעקעס צו פאַרמייַדן אָפּזוך"
 
-#: ../bleachbit/GuiPreferences.py:231
+#: ../bleachbit/GuiPreferences.py
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
@@ -1408,44 +1413,43 @@ msgstr ""
 "אָווועררייטינג איז יניפעקטיוו אויף עטלעכע טעקע סיסטעמען און מיט זיכער "
 "אָפּעראַטיאָנס פון BleachBit. אָווועררייטינג איז באטייטיק סלאָוער."
 
-#: ../bleachbit/GuiPreferences.py:236
+#: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
 msgstr "אַרויסגאַנג נאָך רייניקונג"
 
-#: ../bleachbit/GuiPreferences.py:242
+#: ../bleachbit/GuiPreferences.py
 msgid "Confirm before delete"
 msgstr "באַשטעטיקן איידער ויסמעקן"
 
-#: ../bleachbit/GuiPreferences.py:250
+#: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
 msgstr "ניצן יעק סיזעס (1 קב = 1024 בייט) אַנשטאָט פון SI (1 קב = 1000 בייט)"
 
-#: ../bleachbit/GuiPreferences.py:265
+#: ../bleachbit/GuiPreferences.py
 msgid "Remember window geometry"
 msgstr ""
 
-#: ../bleachbit/GuiPreferences.py:272
+#: ../bleachbit/GuiPreferences.py
 msgid "Show debug messages"
 msgstr "ווייַזן דעבוג אַרטיקלען"
 
-#: ../bleachbit/GuiPreferences.py:280
+#: ../bleachbit/GuiPreferences.py
 msgid "Add the shred context menu to KDE Plasma"
 msgstr ""
 
-#: ../bleachbit/GuiPreferences.py:288
+#: ../bleachbit/GuiPreferences.py
 msgid "Dark mode"
 msgstr "פינצטער מאָדע"
 
-#: ../bleachbit/GuiPreferences.py:296
+#: ../bleachbit/GuiPreferences.py
 msgid "Windows 10 theme"
 msgstr "Windows 10 טעמע"
 
-#: ../bleachbit/GuiPreferences.py:311 ../bleachbit/GuiPreferences.py:550
-#: ../bleachbit/GUI.py:296
+#: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
 msgid "Choose a folder"
 msgstr "קלייַבן אַ טעקע"
 
-#: ../bleachbit/GuiPreferences.py:335
+#: ../bleachbit/GuiPreferences.py
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
 msgstr ""
@@ -1454,112 +1458,111 @@ msgstr ""
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
-#: ../bleachbit/GuiPreferences.py:357
+#: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add"
 msgstr "לייג צו"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path
 #. from the list of paths
-#: ../bleachbit/GuiPreferences.py:361 ../bleachbit/GuiPreferences.py:569
+#: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Remove"
 msgstr "אַראָפּנעמען"
 
-#: ../bleachbit/GuiPreferences.py:385
+#: ../bleachbit/GuiPreferences.py
 msgid "All languages will be deleted except those checked."
 msgstr "אַלע שפראַכן וועט ווערן אויסגעמעקט חוץ די אָפּגעשטעלט."
 
-#: ../bleachbit/GuiPreferences.py:401
+#: ../bleachbit/GuiPreferences.py
 msgid "Preserve"
 msgstr "ופהיטן"
 
-#: ../bleachbit/GuiPreferences.py:405
+#: ../bleachbit/GuiPreferences.py
 msgid "Code"
 msgstr "קאָד"
 
-#: ../bleachbit/GuiPreferences.py:409 ../bleachbit/GUI.py:485
+#: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
 msgid "Name"
 msgstr "נאָמען"
 
-#: ../bleachbit/GuiPreferences.py:431
+#: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the whitelist."
 msgstr ""
 
-#: ../bleachbit/GuiPreferences.py:436 ../bleachbit/GuiPreferences.py:447
-#: ../bleachbit/GUI.py:801
+#: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
 #, fuzzy
 #| msgid "Errors: %d"
 msgid "Error"
 msgstr "ערראָרס: %d"
 
-#: ../bleachbit/GuiPreferences.py:442
+#: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
 msgstr ""
 
-#: ../bleachbit/GuiPreferences.py:457 ../bleachbit/GuiPreferences.py:497
+#: ../bleachbit/GuiPreferences.py
 msgid "File"
 msgstr "טעקע"
 
-#: ../bleachbit/GuiPreferences.py:457 ../bleachbit/GuiPreferences.py:499
+#: ../bleachbit/GuiPreferences.py
 msgid "Folder"
 msgstr "פאָלדער"
 
-#: ../bleachbit/GuiPreferences.py:509
+#: ../bleachbit/GuiPreferences.py
 #, fuzzy
 #| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
 msgstr "טהעסעס פּאַטס וועט נישט ווערן אויסגעמעקט אָדער מאַדאַפייד."
 
-#: ../bleachbit/GuiPreferences.py:512
+#: ../bleachbit/GuiPreferences.py
 msgid "These locations can be selected for deletion."
 msgstr "די לאָוקיישאַנז קענען ווערן אויסגעקליבן פֿאַר דילישאַן."
 
-#: ../bleachbit/GuiPreferences.py:520
+#: ../bleachbit/GuiPreferences.py
 msgid "Type"
 msgstr "טיפּ"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:526
+#: ../bleachbit/GuiPreferences.py
 msgid "Path"
 msgstr "דרך"
 
-#: ../bleachbit/GuiPreferences.py:542
+#: ../bleachbit/GuiPreferences.py
 msgid "Choose a file"
 msgstr "קלייַבן אַ טעקע"
 
-#: ../bleachbit/GuiPreferences.py:562
+#: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add file"
 msgstr "לייג טעקע"
 
-#: ../bleachbit/GuiPreferences.py:566
+#: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add folder"
 msgstr "לייג פאָלדער"
 
-#: ../bleachbit/GUI.py:218
+#: ../bleachbit/GUI.py
 msgid "Choose files to shred"
 msgstr "קלייַבן טעקעס צו פּיצל"
 
-#: ../bleachbit/GUI.py:227
+#: ../bleachbit/GUI.py
 msgid "Choose folder to shred"
 msgstr "קלייַבן טעקע צו פּיצל"
 
-#: ../bleachbit/GUI.py:257 ../bleachbit/GUI.py:261
+#: ../bleachbit/GUI.py
 msgid "No paths found in clipboard."
 msgstr "קיין פּאַטס געפֿונען אין קליפּבאָרד."
 
-#: ../bleachbit/GUI.py:297
+#: ../bleachbit/GUI.py
 msgid "_OK"
 msgstr "_אקעי"
 
-#: ../bleachbit/GUI.py:320
+#: ../bleachbit/GUI.py
 msgid "Program to clean unnecessary files"
 msgstr ""
 
-#: ../bleachbit/GUI.py:331
+#: ../bleachbit/GUI.py
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
@@ -1571,30 +1574,30 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:336
+#: ../bleachbit/GUI.py
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  bernard stafford https://launchpad.net/~bernard010"
 
-#: ../bleachbit/GUI.py:360
+#: ../bleachbit/GUI.py
 msgid "System information"
 msgstr "סיסטעם אינפֿאָרמאַציע"
 
-#: ../bleachbit/GUI.py:493
+#: ../bleachbit/GUI.py
 msgid "Active"
 msgstr "אַקטיװ"
 
 #. TRANSLATORS: Size is the label for the column that shows how
 #. much space an option would clean or did clean
-#: ../bleachbit/GUI.py:502
+#: ../bleachbit/GUI.py
 msgid "Size"
 msgstr "גרײס"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #. %(warning) may be 'This option is really slow'
-#: ../bleachbit/GUI.py:531
+#: ../bleachbit/GUI.py
 #, python-format
 msgid ""
 "Warning regarding %(cleaner)s - %(option)s:\n"
@@ -1605,31 +1608,31 @@ msgstr ""
 "\n"
 "%(warning)s"
 
-#: ../bleachbit/GUI.py:610
+#: ../bleachbit/GUI.py
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "רעסעטטינג די קאָנפיגוראַטיאָן טעקע ווייַל עס איז פאַרדאָרבן: %s"
 
-#: ../bleachbit/GUI.py:798
+#: ../bleachbit/GUI.py
 msgid "You must select an operation"
 msgstr "איר מוזן סעלעקטירן אַן אָפּעראַציע"
 
-#: ../bleachbit/GUI.py:819 ../bleachbit/GUI.py:835
+#: ../bleachbit/GUI.py
 msgid "Done."
 msgstr "געשען."
 
-#: ../bleachbit/GUI.py:892
+#: ../bleachbit/GUI.py
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
 msgstr ""
 "אַקסעס די אַפּלאַקיישאַן מעניו דורך געבן אַ קליק דעם האַמבורגער ייקאַן אין די טיטל "
 "באַר."
 
-#: ../bleachbit/GUI.py:897
+#: ../bleachbit/GUI.py
 msgid "Access the application menu by clicking the logo on the title bar."
 msgstr "אַקסעס די אַפּלאַקיישאַן מעניו דורך קליקינג די לאָגאָ אין די טיטל באַר."
 
-#: ../bleachbit/GUI.py:903
+#: ../bleachbit/GUI.py
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
@@ -1639,7 +1642,7 @@ msgstr ""
 "שערד פּאַרץ פון די סיסטעם, און רעפֿערענצן צו דער באַניצער פּראָפיל טעקע וועט ריין "
 "בלויז די שורש חשבון."
 
-#: ../bleachbit/GUI.py:908
+#: ../bleachbit/GUI.py
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
@@ -1647,7 +1650,7 @@ msgstr ""
 "לויפן בליטשאַביט מיט אַדמיניסטראַטאָר פּריווילאַדזשאַז צו פֿאַרבעסערן די אַקיעראַסי פון "
 "אָווועררייטינג די אינהאַלט פון טעקעס."
 
-#: ../bleachbit/GUI.py:913
+#: ../bleachbit/GUI.py
 msgid ""
 "There is no official version of BleachBit on the Microsoft Store. Get the "
 "genuine version at https://www.bleachbit.org where it is always free of "
@@ -1657,42 +1660,42 @@ msgstr ""
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
 #. previews changes.
-#: ../bleachbit/GUI.py:957 ../bleachbit/GUI.py:1042
+#: ../bleachbit/GUI.py
 msgid "Preview"
 msgstr "פֿאָרױסװײַז"
 
-#: ../bleachbit/GUI.py:1039
+#: ../bleachbit/GUI.py
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
 "פאָרויסיקע ווייַזונג טעקעס אין די אויסגעקליבן אַפּעריישאַנז (אָן ויסמעקן קיין "
 "טעקעס)"
 
-#: ../bleachbit/GUI.py:1050
+#: ../bleachbit/GUI.py
 msgid "Clean files in the selected operations"
 msgstr "ריין טעקעס אין די אויסגעקליבן אַפּעריישאַנז"
 
-#: ../bleachbit/GUI.py:1053
+#: ../bleachbit/GUI.py
 msgid "Abort"
 msgstr "אַבאָרט."
 
-#: ../bleachbit/GUI.py:1055
+#: ../bleachbit/GUI.py
 msgid "Abort the preview or cleaning process"
 msgstr "אַבאָרט די פאָרויסיקע ווייַזונג אָדער רייניקונג פּראָצעס"
 
 #. TRANSLATORS: Button in headerbar to update the application
-#: ../bleachbit/GUI.py:1082
+#: ../bleachbit/GUI.py
 msgid "Update"
 msgstr ""
 
-#: ../bleachbit/GUI.py:1084
+#: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
 msgstr ""
 
-#: ../bleachbit/GUI.py:1373
+#: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
 msgstr "טעות ווען קאָנטראָלירונג פֿאַר ופּדאַטעס: "
 
-#: ../bleachbit/Memory.py:58
+#: ../bleachbit/Memory.py
 msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
@@ -1700,67 +1703,67 @@ msgstr ""
 "די באַפֿעל 'swapoff -s' ניט אַנדערש, אַזוי פאַלינג צוריק צו /proc/swaps פֿאַר "
 "ויסבייַטן אינפֿאָרמאַציע."
 
-#: ../bleachbit/Memory.py:78
+#: ../bleachbit/Memory.py
 msgid "Disabling swap."
 msgstr "דיסאַבלינג סוואַפּ."
 
-#: ../bleachbit/Memory.py:98
+#: ../bleachbit/Memory.py
 msgid "Re-enabling swap."
 msgstr "שייַעך-ענייבאַלינג ויסבייַטן."
 
-#: ../bleachbit/Memory.py:120
+#: ../bleachbit/Memory.py
 #, python-format
 msgid "Setting nice value %d for this process."
 msgstr "באַשטעטיקן פייַן ווערט %d פֿאַר דעם פּראָצעס."
 
-#: ../bleachbit/Memory.py:126
+#: ../bleachbit/Memory.py
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
 msgstr "דראַפּינג פּריווילאַדזשאַז פון פּראָצעס ID {pid} צו באַניצער ID {uid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
-#: ../bleachbit/Memory.py:140
+#: ../bleachbit/Memory.py
 #, python-format
 msgid "Allocating and wiping %s of memory."
 msgstr "אַלאַקייטינג און ווייפּינג %s פון זכּרון."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
-#: ../bleachbit/Memory.py:149
+#: ../bleachbit/Memory.py
 #, python-format
 msgid "Freeing %s of memory."
 msgstr "פרעעינג %s פון זכּרון."
 
-#: ../bleachbit/Memory.py:179
+#: ../bleachbit/Memory.py
 #, python-brace-format
 msgid "Found UUID for swap file {device} is {uuid}."
 msgstr "געפֿונען UUID פֿאַר ויסבייַטן טעקע {device} איז {uuid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
-#: ../bleachbit/Memory.py:265
+#: ../bleachbit/Memory.py
 #, python-format
 msgid "Physical free memory is %s."
 msgstr "גשמיות פריי זיקאָרן איז %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
-#: ../bleachbit/Memory.py:280
+#: ../bleachbit/Memory.py
 #, python-format
 msgid "Wiping the swap device %s."
 msgstr "ווייפּינג די ויסבייַטן מיטל %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
-#: ../bleachbit/Memory.py:292
+#: ../bleachbit/Memory.py
 #, python-format
 msgid "Reinitializing the swap device %s."
 msgstr "רעיניטיאַליזינג די ויסבייַטן מיטל %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
-#: ../bleachbit/Memory.py:309
+#: ../bleachbit/Memory.py
 #, python-format
 msgid "Detected these swap devices: %s"
 msgstr "דעטעקטעד די ויסבייַטן דיווייסאַז: %s"
 
 #. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
-#: ../bleachbit/Memory.py:319
+#: ../bleachbit/Memory.py
 #, python-brace-format
 msgid ""
 "The function wipe_memory() with process ID {pid} is waiting for child "
@@ -1769,41 +1772,48 @@ msgstr ""
 "די פונקציע wipe_memory () מיט פּראָצעס ID {pid} איז ווארטן פֿאַר די קינד פּראָצעס "
 "ID {cid}."
 
-#: ../bleachbit/Memory.py:324
+#: ../bleachbit/Memory.py
 #, python-format
 msgid "The child memory-wiping process returned code %d."
 msgstr "דער קינד זיקאָרן-ווייפּינג פּראָצעס אומגעקערט קאָד  %d."
 
-#: ../bleachbit/Network.py:66
+#: ../bleachbit/Network.py
 #, fuzzy, python-format
 #| msgid "Downloading url failed: %s"
 msgid "Downloading URL failed: %s"
 msgstr "דאַונלאָודינג URL ניט אַנדערש: %s"
 
-#: ../bleachbit/Options.py:115
-#, python-format
-msgid "Disk was full when writing configuration to file %s"
+#: ../bleachbit/Options.py
+#, fuzzy, python-format
+#| msgid "Disk was full when writing configuration to file %s"
+msgid "Disk was full when writing configuration to file: %s"
 msgstr "דיסק איז געווען פול ווען שרייבן קאַנפיגיעריישאַן צו טעקע %s"
 
-#: ../bleachbit/Options.py:139
+#: ../bleachbit/Options.py
+#, fuzzy, python-format
+#| msgid "Disk was full when writing configuration to file %s"
+msgid "Permission denied when writing configuration to file: %s"
+msgstr "דיסק איז געווען פול ווען שרייבן קאַנפיגיעריישאַן צו טעקע %s"
+
+#: ../bleachbit/Options.py
 #, python-format
 msgid "Error checking whether path exists: %s"
 msgstr "פֿעלער קאָנטראָלירונג צי דרך עקזיסטירט: %s"
 
-#: ../bleachbit/Options.py:148
+#: ../bleachbit/Options.py
 #, python-format
 msgid "Automatically preserving language %s."
 msgstr "אויטאָמאַטיש פּראַזערווינג שפּראַך %s."
 
-#: ../bleachbit/Options.py:279
+#: ../bleachbit/Options.py
 msgid "Error when setting the default drives to shred."
 msgstr "טעות אין באַשטעטיקן די פעליק דרייווז צו פּיצל."
 
-#: ../bleachbit/RecognizeCleanerML.py:56
+#: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
 msgstr "זיכערהייט ווארענונג"
 
-#: ../bleachbit/RecognizeCleanerML.py:70
+#: ../bleachbit/RecognizeCleanerML.py
 msgid ""
 "These cleaner definitions are new or have changed. Malicious definitions can "
 "damage your system. If you do not trust these changes, delete the files or "
@@ -1813,24 +1823,23 @@ msgstr ""
 "דיין סיסטעם. אויב איר טאָן ניט צוטרוי די ענדערונגען, ויסמעקן די טעקעס אָדער "
 "פאַרלאָזן."
 
-#: ../bleachbit/RecognizeCleanerML.py:85
+#: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
 msgid "Delete"
 msgstr "ויסמעקן"
 
-#: ../bleachbit/RecognizeCleanerML.py:90
+#: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
 msgid "Filename"
 msgstr "נאָמען פֿון טעקע"
 
-#: ../bleachbit/Unix.py:481
+#: ../bleachbit/Unix.py
 #, python-format
 msgid "Executable not found: %s"
 msgstr "עקסעקוטאַבלע ניט געפֿונען: %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:565 ../bleachbit/Unix.py:580 ../bleachbit/Unix.py:605
-#: ../bleachbit/Worker.py:146
+#: ../bleachbit/Unix.py ../bleachbit/Worker.py
 #, python-format
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
@@ -1839,25 +1848,25 @@ msgstr ""
 "%sקענען ניט זיין קלינד ווייַל עס איז איצט פליסנדיק. נאָענט עס, און פּרובירן "
 "ווידער."
 
-#: ../bleachbit/Update.py:60
+#: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
 msgstr "נייַ winapp2.ini איז דאַונלאָודיד."
 
-#: ../bleachbit/Update.py:68
+#: ../bleachbit/Update.py
 msgid "Update BleachBit"
 msgstr "דערהייַנטיקן בלעאַטשביט"
 
-#: ../bleachbit/Update.py:74
+#: ../bleachbit/Update.py
 msgid "A new version is available."
 msgstr "א נייַע ווערסיע איז בארעכטיגט."
 
 #. TRANSLATORS: %s expands to version such as '4.6.0'
-#: ../bleachbit/Update.py:80
+#: ../bleachbit/Update.py
 #, python-format
 msgid "Update to version %s"
 msgstr "דערהייַנטיקן צו ווערסיע %s"
 
-#: ../bleachbit/Update.py:105
+#: ../bleachbit/Update.py
 msgid ""
 "Error when opening a network connection to check for updates. Please verify "
 "the network is working and that a firewall is not blocking this application. "
@@ -1868,34 +1877,34 @@ msgstr ""
 "אָנזאָג: {}"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:46
+#: ../bleachbit/Winapp.py
 msgid "Applications"
 msgstr "אַפּפּליקאַטיאָנס"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:48
+#: ../bleachbit/Winapp.py
 msgid "Internet"
 msgstr "אינטערנעט"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:50
+#: ../bleachbit/Winapp.py
 msgid "Multimedia"
 msgstr "מולטימעדיאַ"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:52
+#: ../bleachbit/Winapp.py
 msgid "Utilities"
 msgstr "וטיליטיעס"
 
-#: ../bleachbit/Winapp.py:63
+#: ../bleachbit/Winapp.py
 msgid "Games"
 msgstr "גאַמעס"
 
-#: ../bleachbit/Winapp.py:184
+#: ../bleachbit/Winapp.py
 msgid "Imported from winapp2.ini"
 msgstr "ימפּאָרטיד פֿון winapp2.ini"
 
-#: ../bleachbit/Windows.py:907
+#: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
 msgstr ""
 
@@ -1903,22 +1912,48 @@ msgstr ""
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
 #. some other cleaner ID.  The special keyword %(msg)s will be
 #. replaced by a message such as 'Permission denied.'
-#: ../bleachbit/Worker.py:78
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Exception while running operation '%(operation)s': '%(msg)s'"
 
-#: ../bleachbit/Worker.py:107
+#: ../bleachbit/Worker.py
+#, fuzzy, python-format
+#| msgid "Executable not found: %s"
+msgid "File not found: %s"
+msgstr "עקסעקוטאַבלע ניט געפֿונען: %s"
+
+#: ../bleachbit/Worker.py
+#, python-format
+msgid "Access denied when flagging file for later delete: %s"
+msgstr ""
+
+#: ../bleachbit/Worker.py
+#, python-format
+msgid "Access denied when deleting registry value: %s"
+msgstr ""
+
+#: ../bleachbit/Worker.py
+#, python-format
+msgid "Access denied when deleting registry key: %s"
+msgstr ""
+
+#: ../bleachbit/Worker.py
+#, python-format
+msgid "Access denied: %s"
+msgstr ""
+
+#: ../bleachbit/Worker.py
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
 msgstr "Error: {operation_option}: {command}"
 
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Worker.py:194
+#: ../bleachbit/Worker.py
 msgid "Please wait.  Wiping free disk space."
 msgstr "ביטע ווארט. ווייפּינג פּאָטער דיסק פּלאַץ."
 
-#: ../bleachbit/Worker.py:196
+#: ../bleachbit/Worker.py
 msgid ""
 "Wiping free disk space erases remnants of files that were deleted without "
 "shredding. It does not free up space."
@@ -1927,12 +1962,12 @@ msgstr ""
 "שרעדינג. עס טוט ניט פּאָטער אַרויף פּלאַץ."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:338
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Please wait.  Cleaning %s."
 msgstr "ביטע ווארט. רייניגען %s"
 
-#: ../bleachbit/Worker.py:217
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
@@ -1941,38 +1976,38 @@ msgstr[1] "וועגן %d הדקות רוען."
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:285
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Disk space recovered: %s"
 msgstr "דיסק פּלאַץ ריקאַווערד: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
-#: ../bleachbit/Worker.py:289
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Disk space to be recovered: %s"
 msgstr "דיסק פּלאַץ צו זיין ריקאַווערד: %s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:294
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Files deleted: %d"
 msgstr "טעקעס אויסגעמעקט: %d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:298
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Files to be deleted: %d"
 msgstr "טעקעס צו ווערן אויסגעמעקט:%d"
 
-#: ../bleachbit/Worker.py:301
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Special operations: %d"
 msgstr "ספּעציעלע אַפּעריישאַנז: %d"
 
-#: ../bleachbit/Worker.py:304
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Errors: %d"
 msgstr "ערראָרס: %d"
@@ -1980,53 +2015,59 @@ msgstr "ערראָרס: %d"
 #. TRANSLATORS: The "deep scan" feature searches over broad
 #. areas of the file system such as the user's whole home directory
 #. or all the system executables.
-#: ../bleachbit/Worker.py:320
+#: ../bleachbit/Worker.py
 msgid "Please wait.  Running deep scan."
 msgstr "ביטע ווארט. פליסנדיק טיף יבערקוקן."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:341
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Please wait.  Previewing %s."
 msgstr "ביטע ווארט. פּריוויוינג %s."
 
-#: ../data/app-menu.ui:5
+#: ../data/app-menu.ui
 msgid "_Shred Files"
 msgstr "_פּיצל טעקעס"
 
-#: ../data/app-menu.ui:9
+#: ../data/app-menu.ui
 msgid "Sh_red Folders"
 msgstr "ש_רעד פאָלדערס"
 
-#: ../data/app-menu.ui:13
+#: ../data/app-menu.ui
 msgid "Shred Paths from Clipboard"
 msgstr "פּיצל פּאַטס פון קליפּבאָרד"
 
-#: ../data/app-menu.ui:18
+#: ../data/app-menu.ui
 msgid "_Wipe Free Space"
 msgstr "_ווישן פריי פּלאַץ"
 
-#: ../data/app-menu.ui:22
+#: ../data/app-menu.ui
 msgid "_Make Chaff"
 msgstr "_ וויפּע פריי פּלאַץ"
 
-#: ../data/app-menu.ui:26
+#: ../data/app-menu.ui
 msgid "S_hred Settings and Quit"
 msgstr "S_hred סעטטינגס און פאַרלאָזן"
 
-#: ../data/app-menu.ui:37
+#: ../data/app-menu.ui
 #, fuzzy
 #| msgid "System information"
 msgid "S_ystem Information"
 msgstr "סיסטעם אינפֿאָרמאַציע"
 
-#: ../data/app-menu.ui:41
+#: ../data/app-menu.ui
 msgid "_Help"
 msgstr "_געהילף"
 
-#: ../data/app-menu.ui:47
+#: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_ וועגן בליטשאַביט"
+
+#~ msgid "IRC client formerly known as XChat"
+#~ msgstr "ירק קליענט, ביז אַהער, באַקאַנט ווי XChat"
+
+#~ msgid "Widgets for the desktop"
+#~ msgstr "ווידזשיץ פֿאַר די דעסקטאַפּ"
 
 #, python-format
 #~ msgid "Wiping path: %s"
