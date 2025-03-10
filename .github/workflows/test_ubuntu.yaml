@@ -29,6 +29,7 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
+        sudo apt-get upgrade -y
         sudo apt-get install -y \
           dbus \
           dbus-x11 \
@@ -41,7 +42,10 @@ jobs:
           libnotify-bin \
           libxml2-utils \
           notification-daemon \
+          pkg-config \
           xvfb
+        pkg-config --version
+        gettext --version
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
