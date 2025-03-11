@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2024-12-28 17:37+0000\n"
+"PO-Revision-Date: 2025-03-11 10:54+0000\n"
 "Last-Translator: bovirus <roberto.boriotti@canon.it>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bleachbit/main/"
 "it/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Launchpad-Export-Date: 2021-06-15 14:24+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -489,11 +489,11 @@ msgstr "Client posta elettronica"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Allegati"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Conflitto sincronizzazione"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -762,10 +762,8 @@ msgid "Memory dump"
 msgstr "Dump della memoria"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Ambiente desktop"
+msgstr "Widget desktop"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1200,7 +1198,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
+msgstr "Sovrascrittura percorso {pathname} con file system tipo {fstype}"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1404,19 +1402,15 @@ msgstr "Scarica e aggiorna i pulitori dalla comunità (winapp2.ini)"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "Rilevamento automatico lingua"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "Mantieni automaticamente la lingua %s."
+msgstr "Rileva automaticamente la lingua del sistema"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "Lingue"
+msgstr "Lingua:"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1510,7 +1504,7 @@ msgstr "Nome"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "Questo percorso esiste già nell'elenco autorizzati."
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
 msgid "Error"
@@ -1518,7 +1512,7 @@ msgstr "Errore"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "Questo percorso esiste già nell'elenco personalizzato."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1596,24 +1590,24 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Andrea Carulli https://launchpad.net/~blasted\n"
-"  Carml https://launchpad.net/~cleggio\n"
-"  Claudio Arseni https://launchpad.net/~claudio.arseni\n"
-"  Davide Notaristefano https://launchpad.net/~mokmo\n"
-"  Gerardo Giordano https://launchpad.net/~gergio75\n"
-"  Jacopo Tumminello https://launchpad.net/~tummarellox\n"
-"  Luca Ciavatta https://launchpad.net/~cialu\n"
-"  Luca Falavigna https://launchpad.net/~dktrkranz\n"
-"  Marco Ciampa https://launchpad.net/~ciampix\n"
-"  Marco Donato Torsello https://launchpad.net/~md1512\n"
-"  Maurizio.13 https://launchpad.net/~maurizio.13\n"
-"  Milo Casagrande https://launchpad.net/~milo\n"
-"  Paolo Pelloni https://launchpad.net/~briga\n"
-"  Santiago https://launchpad.net/~keteremillpario\n"
-"  Sergio Zanchetta https://launchpad.net/~primes2h\n"
-"  ema.gra https://launchpad.net/~ema.gra\n"
-"  fenzy81 https://launchpad.net/~fenzy81\n"
-"  karm https://launchpad.net/~melo-o"
+" Andrea Carulli https://launchpad.net/~blasted\n"
+" Carml https://launchpad.net/~cleggio\n"
+" Claudio Arseni https://launchpad.net/~claudio.arseni\n"
+" Davide Notaristefano https://launchpad.net/~mokmo\n"
+" Gerardo Giordano https://launchpad.net/~gergio75\n"
+" Jacopo Tumminello https://launchpad.net/~tummarellox\n"
+" Luca Ciavatta https://launchpad.net/~cialu\n"
+" Luca Falavigna https://launchpad.net/~dktrkranz\n"
+" Marco Ciampa https://launchpad.net/~ciampix\n"
+" Marco Donato Torsello https://launchpad.net/~md1512\n"
+" Maurizio.13 https://launchpad.net/~maurizio.13\n"
+" Milo Casagrande https://launchpad.net/~milo\n"
+" Paolo Pelloni https://launchpad.net/~briga\n"
+" Santiago https://launchpad.net/~keteremillpario\n"
+" Sergio Zanchetta https://launchpad.net/~primes2h\n"
+" ema.gra https://launchpad.net/~ema.gra\n"
+" fenzy81 https://launchpad.net/~fenzy81\n"
+" karm https://launchpad.net/~melo-o"
 
 #: ../bleachbit/GUI.py
 msgid "System information"
@@ -1723,11 +1717,11 @@ msgstr "Annulla l'anteprima o il processo di pulizia"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "Aggiorna"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "Aggiorna Bleachbit alla versione più recente"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1823,16 +1817,16 @@ msgid "Downloading URL failed: %s"
 msgstr "Download URL fallito: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "Il disco pieno impedisce di salvare la configurazione nel file %s"
+msgstr ""
+"Il disco era pieno durante la scrittura della configurazione nel file: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "Il disco pieno impedisce di salvare la configurazione nel file %s"
+msgstr ""
+"Autorizzazione negata durante la scrittura della configurazione nel file: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1957,30 +1951,31 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Errore durante l'operazione '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Eseguibile non trovato: %s"
+msgstr "File non trovato: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
 msgstr ""
+"Accesso negato durante la selezione del file per la successiva eliminazione: "
+"%s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Accesso negato durante l'eliminazione del valore del registro: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Accesso negato durante l'eliminazione della chiave del registro: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Accesso negata: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
