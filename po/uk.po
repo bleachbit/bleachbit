@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-05 14:16+0000\n"
+"PO-Revision-Date: 2025-03-11 10:54+0000\n"
 "Last-Translator: Dan <jonweblin2205@protonmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/bleachbit/main/"
 "uk/>\n"
@@ -490,11 +490,11 @@ msgstr "Клієнт ел. пошти"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Вкладення"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Конфлікт синхронізації"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -759,10 +759,8 @@ msgid "Memory dump"
 msgstr "Дамп пам’яті"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Середовище стільниці"
+msgstr "Віджети для робочого столу"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1804,16 +1802,14 @@ msgid "Downloading URL failed: %s"
 msgstr "Не вдалося завантажити посилання: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "Під час записування конфігурації до файлу %s диск був переповнений"
+msgstr "Під час записування конфігурації до файлу диск був переповнений: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "Під час записування конфігурації до файлу %s диск був переповнений"
+msgstr "Відмовлено у дозволі під час запису конфігурації у файл: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1938,30 +1934,30 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Виникла помилка під час виконання операції «%(operation)s»: «%(msg)s»"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Виконуваний файл не знайдено: %s"
+msgstr "Файл не знайдено: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
 msgstr ""
+"Відмовлено в доступі під час позначення файлу для подальшого видалення: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Відмовлено в доступі при видаленні значення реєстру: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Відмовлено в доступі під час видалення ключа реєстру: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "У доступі відмовлено: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
