@@ -206,6 +206,24 @@ Icon=6B19_WhatsNew.0""")
             tmp.flush()
             self.assertIsInstance(is_broken_xdg_desktop(tmp.name), bool)
 
+    def test_is_broken_xdg_desktop_chrome(self):
+        """Unit test for certain Chrome .desktop file
+
+        https://github.com/bleachbit/bleachbit/issues/1729
+        """
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.desktop', prefix='bleachbit-xdg-') as tmp:
+            tmp.write("""#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Type=Application
+Name=Google News
+Exec=/opt/google/chrome/google-chrome --profile-directory=Default --app-id=abcdefghijklmnopqrstuvwxy
+Icon=chrome-abcdefghijklmnopqrstuvwxy-Default
+StartupWMClass=crx_abcdefghijklmnopqrstuvwxy""")
+            tmp.flush()
+            self.assertFalse(is_broken_xdg_desktop(tmp.name))
+
     @common.skipIfWindows
     def test_desktop_valid_exe(self):
         """Unit test for .desktop file with valid Unix exe (not env)"""
