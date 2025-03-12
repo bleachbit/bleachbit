@@ -252,6 +252,43 @@ StartupWMClass=crx_abcdefghijklmnopqrstuvwxy""")
             self.assertFalse(is_broken_xdg_desktop(tmp.name))
 
     @common.skipIfWindows
+    def test_is_broken_xdg_desktop_chatgpt(self):
+        """Unit test for certain ChatGPT .desktop file
+
+        Linux Mint made this file for a Web App.
+
+        I changed Exec from vivaldi-stale to test without mock.
+
+        https://github.com/bleachbit/bleachbit/issues/1729
+        """
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.desktop', prefix='bleachbit-xdg-') as tmp:
+            tmp.write("""[Desktop Entry]
+Version=1.0
+Name=ChatGPT
+Comment=Web App
+Exec=ls --app="https://chatgpt.com/" --class=WebApp-ChatGPT3878 --name=WebApp-ChatGPT3878
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+Icon=/home/username/.local/share/icons/icons8-chatgpt-150.svg
+Categories=GTK;Network;
+MimeType=text/html;text/xml;application/xhtml_xml;
+StartupWMClass=chatgpt.com
+StartupNotify=true
+X-WebApp-Browser=Vivaldi
+X-WebApp-URL=https://chatgpt.com
+X-WebApp-CustomParameters=
+X-WebApp-Navbar=false
+X-WebApp-PrivateWindow=false
+X-WebApp-Isolated=false
+Keywords=deepseek,chatgpt,gpt,gemini,ai
+Hidden=false
+NoDisplay=false
+PrefersNonDefaultGPU=false""")
+            tmp.flush()
+            self.assertFalse(is_broken_xdg_desktop(tmp.name))
+
+    @common.skipIfWindows
     def test_desktop_valid_exe(self):
         """Unit test for .desktop file with valid Unix exe (not env)"""
         fake_config = FakeConfig({"Desktop Entry": {"Exec": "ls"}})
