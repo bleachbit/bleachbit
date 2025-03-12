@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2024-09-15 15:09+0000\n"
-"Last-Translator: senza <senza@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2025-03-12 23:15+0000\n"
+"Last-Translator: Michał Miłobędzki <mfriik@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/bleachbit/main/pl/"
 ">\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 "X-Launchpad-Export-Date: 2021-11-11 16:00+0000\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
@@ -493,11 +493,11 @@ msgstr "Klient email"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Załączniki"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Konflikt Synchronizacji"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -759,10 +759,8 @@ msgid "Memory dump"
 msgstr "Zrzut pamięci"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Środowisko graficzne"
+msgstr "Widżety pulpitu"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1194,7 +1192,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
+msgstr "Czyszczenie ścieżki {pathname} z typem systemu plików - {fstype}"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1401,19 +1399,15 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "Wykryj język"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "Automatyczne zachowanie języka: %s."
+msgstr "Automatyczne wykrywanie języka"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "Języki"
+msgstr "Język:"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1508,7 +1502,7 @@ msgstr "Nazwa"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "Ta ścieżka już istnieje na białej liście."
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
 msgid "Error"
@@ -1516,7 +1510,7 @@ msgstr "Błąd"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "Ta ścieżka już istnieje na liście niestandardowej."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1697,11 +1691,11 @@ msgstr "Przerwij proces podglądu lub czyszczenia"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "Aktualizuj"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "Aktualizuj BleachBit do najnowszej wersji"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1797,16 +1791,14 @@ msgid "Downloading URL failed: %s"
 msgstr "Pobieranie adresu URL nie powiodło się: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "Dysk był pełny podczas zapisywania konfiguracji do pliku %s"
+msgstr "Dysk był pełny podczas zapisywania konfiguracji do pliku: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "Dysk był pełny podczas zapisywania konfiguracji do pliku %s"
+msgstr "Odmowa dostępu podczas zapisywania konfiguracji do pliku: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1863,7 +1855,7 @@ msgstr ""
 
 #: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
-msgstr "Została pobrana nowa wersja pliku winapp2.ini"
+msgstr "Została pobrana nowa wersja pliku winapp2.ini."
 
 #: ../bleachbit/Update.py
 msgid "Update BleachBit"
@@ -1931,30 +1923,29 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Wyjątek podczas wykonywania '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Nie znaleziono pliku wykonywalnego: %s"
+msgstr "Nie znaleziono pliku: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr ""
+msgstr "Odmowa dostępu podczas oznaczania pliku do późniejszego usunięcia: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Odmowa dostępu podczas usuwania wartości rejestru: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Odmowa dostępu podczas usuwania klucza rejestru: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Odmowa dostępu: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
