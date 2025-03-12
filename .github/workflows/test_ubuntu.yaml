@@ -60,7 +60,7 @@ jobs:
 
     - name: Install Python dependencies
       run: |
-        pip install chardet mock "PyGObject${{ matrix.pygobject-version }}" requests setuptools
+        pip install chardet "PyGObject${{ matrix.pygobject-version }}" requests setuptools
 
     - name: Generate Revision.py
       run: |

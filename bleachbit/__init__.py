@@ -25,7 +25,6 @@ Code that is commonly shared throughout BleachBit
 import os
 import re
 import sys
-import platform
 
 from bleachbit import Log
 from configparser import RawConfigParser, NoOptionError # used in other files
@@ -36,18 +35,14 @@ APP_URL = "https://www.bleachbit.org"
 
 socket_timeout = 10
 
-if sys.version_info < (3,0,0):
-    print('BleachBit no longer supports Python 2.x.')
+if sys.version_info < (3, 8, 0):
+    print('BleachBit requires Python version 3.8 or later')
     sys.exit(1)
 
 if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
     stdout_encoding = 'utf-8'
 else:
     stdout_encoding = sys.stdout.encoding
-
-if not hasattr(platform, 'linux_distribution'):
-    from ._platform import _linux_distribution
-    platform.linux_distribution = _linux_distribution
 
 logger = Log.init_log()
 
@@ -125,7 +120,7 @@ personal_cleaners_dir = os.path.join(options_dir, "cleaners")
 # personal_cleaners_dir.
 if os.path.isdir(os.path.join(bleachbit_exe_path, 'cleaners')) and not portable_mode:
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
-elif sys.platform.startswith('linux') or sys.platform == 'darwin':
+elif sys.platform in ('linux', 'darwin'):
     system_cleaners_dir = '/usr/share/bleachbit/cleaners'
 elif sys.platform == 'win32':
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
@@ -177,7 +172,7 @@ if os.path.exists("./locale/"):
     # local locale (personal)
     locale_dir = os.path.abspath("./locale/")
 # system-wide installed locale
-elif sys.platform.startswith("linux") or sys.platform == "darwin":
+elif sys.platform in ('linux', 'darwin'):
     locale_dir = "/usr/share/locale/"
 elif sys.platform == "win32":
     locale_dir = os.path.join(bleachbit_exe_path, "share\\locale\\")

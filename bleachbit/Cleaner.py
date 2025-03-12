@@ -291,7 +291,7 @@ class System(Cleaner):
         #
         # options just for Linux
         #
-        if sys.platform.startswith('linux'):
+        if sys.platform == 'linux':
             self.add_option('memory', _('Memory'),
                             # TRANSLATORS: 'free' means 'unallocated'
                             _('Wipe the swap and free memory'))
@@ -436,7 +436,7 @@ class System(Cleaner):
                     yield Command.Delete(globbed)
 
         # memory
-        if sys.platform.startswith('linux') and 'memory' == option_id:
+        if sys.platform == 'linux' and 'memory' == option_id:
             yield Command.Function(None, Memory.wipe_memory, _('Memory'))
 
         # memory dump

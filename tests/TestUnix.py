@@ -148,6 +148,30 @@ class UnixTestCase(common.BleachbitTestCase):
         self.assertGreaterEqual(size, 0)
 
     @common.skipIfWindows
+    def test_get_distribution_name_version(self):
+        """Unit test for method get_distribution_name_version()"""
+        ret_real = get_distribution_name_version()
+        ret_platform_freedesktop = get_distribution_name_version_platform_freedesktop()
+        ret_distro = get_distribution_name_version_distro()
+        ret_os_release = get_distribution_name_version_os_release()
+
+        for ret in (ret_real, ret_platform_freedesktop, ret_distro, ret_os_release):
+            if ret is None:
+                continue
+            self.assertIsInstance(ret, str)
+            self.assertGreater(len(ret), 0)
+            self.assertLess(len(ret), 100)
+            self.assertIn(' ', ret)
+        if ret_platform_freedesktop and ret_os_release:
+            self.assertEqual(ret_platform_freedesktop, ret_os_release)
+        if ret_distro and ret_os_release:
+            self.assertEqual(ret_distro, ret_os_release)
+
+        self.assertIsNotNone(ret_real)
+        if sys.version_info >= (3, 10):
+            self.assertIsNotNone(ret_platform_freedesktop)
+
+    @common.skipIfWindows
     def test_is_broken_xdg_desktop_real(self):
         """Unit test for is_broken_xdg_desktop()
 
@@ -206,11 +230,14 @@ Icon=6B19_WhatsNew.0""")
             tmp.flush()
             self.assertIsInstance(is_broken_xdg_desktop(tmp.name), bool)
 
-    def test_is_broken_xdg_desktop_chrome(self):
+    @mock.patch('bleachbit.Unix.FileUtilities.exe_exists')
+    @common.skipIfWindows
+    def test_is_broken_xdg_desktop_chrome(self, mock_exe_exists):
         """Unit test for certain Chrome .desktop file
 
         https://github.com/bleachbit/bleachbit/issues/1729
         """
+        mock_exe_exists.return_value = True
         with tempfile.NamedTemporaryFile(mode='w', suffix='.desktop', prefix='bleachbit-xdg-') as tmp:
             tmp.write("""#!/usr/bin/env xdg-open
 [Desktop Entry]

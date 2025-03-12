@@ -22,13 +22,13 @@
 Common code for unit tests
 """
 
-import mock
 import os
 import shutil
 import sys
 import tempfile
 import time
 import unittest
+from unittest import mock
 if 'win32' == sys.platform:
     import winreg
     import win32gui

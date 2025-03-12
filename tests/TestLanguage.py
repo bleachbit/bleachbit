@@ -19,11 +19,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import mock
-import os
 import locale
+from unittest import mock
 
-import unittest.mock
 from bleachbit.Language import get_active_language_code, \
     get_supported_language_codes, \
     get_text, \
@@ -112,7 +110,7 @@ class LanguageTestCase(common.BleachbitTestCase):
 
     def test_options_import_failure(self):
         """Test handling of failed Options import in language detection"""
-        with unittest.mock.patch.dict('sys.modules', {'bleachbit.Options': None}):
+        with mock.patch.dict('sys.modules', {'bleachbit.Options': None}):
             with self.assertLogs(level='ERROR') as log_context:
                 result = get_active_language_code()
             self.assertIn("Failed to get language options", log_context.output[0])

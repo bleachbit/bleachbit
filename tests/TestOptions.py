@@ -23,9 +23,8 @@ Test case for module Options
 """
 
 import errno
-import mock
 import os
-import unittest.mock
+from unittest import mock
 
 from tests import common
 import bleachbit.Options

@@ -104,7 +104,7 @@ class CleanerML:
         # Define the current operating system.
         if platform == 'darwin':
             current_os = ('darwin', 'bsd', 'unix')
-        elif platform.startswith('linux'):
+        elif platform == 'linux':
             current_os = ('linux', 'unix')
         elif platform.startswith('openbsd'):
             current_os = ('bsd', 'openbsd', 'unix')

@@ -57,6 +57,9 @@ if 'posix' == os.name:
     pywinerror = WindowsError
 
 try:
+    # FIXME: replace scandir.walk() with os.scandir()
+    # Preserve behavior added in 25e694.
+    # Test that os.walk() behaves the same on Windows.
     from scandir import walk
     if 'nt' == os.name:
         import scandir
@@ -69,10 +72,7 @@ try:
         scandir.scandir = scandir.scandir_python
         scandir.DirEntry = scandir.Win32DirEntryPython = _Win32DirEntryPython
 except ImportError:
-    if sys.version_info < (3, 5, 0):
-        # Python 3.5 incorporated scandir
-        logger.warning(
-            'scandir is not available, so falling back to slower os.walk()')
+    # Since Python 3.5, os.walk() calls os.scandir().
     from os import walk
 
 
@@ -139,7 +139,7 @@ def open_files_lsof(run_lsof=None):
 
 
 def open_files():
-    if sys.platform.startswith('linux'):
+    if sys.platform == 'linux':
         files = open_files_linux()
     elif 'darwin' == sys.platform or sys.platform.startswith('freebsd'):
         files = open_files_lsof()
@@ -674,19 +674,10 @@ def is_dir_empty(dirname):
 
     It assumes the path exists and is a directory.
     """
-    if hasattr(os, 'scandir'):
-        if sys.version_info < (3, 6, 0):
-                    # Python 3.5 added os.scandir() without context manager.
-            for _i in os.scandir(dirname):
-                return False
-        else:
-            # Python 3.6 added the context manager.
-            with os.scandir(dirname) as it:
-                for _entry in it:
-                    return False
-        return True
-    # This method is slower, but it works with Python 3.4.
-    return len(os.listdir(dirname)) == 0
+    with os.scandir(dirname) as it:
+        for _entry in it:
+            return False
+    return True
 
 
 def listdir(directory):

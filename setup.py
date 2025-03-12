@@ -84,7 +84,7 @@ except ImportError:
 
 
 data_files = []
-if sys.platform.startswith('linux'):
+if sys.platform == 'linux':
     data_files.append(('/usr/share/applications', ['./org.bleachbit.BleachBit.desktop']))
     data_files.append(('/usr/share/pixmaps/', ['./bleachbit.png']))
 elif sys.platform[:6] == 'netbsd':
@@ -221,7 +221,7 @@ def recompile_mo(langdir, app, langid, dst):
     # shrink .po
     po2 = os.path.join(dst, langid + '.po2')
     __args = ['msgmerge', '--no-fuzzy-matching', po,
-              os.path.normpath('windows/%s.pot' % app),
+              os.path.normpath(f'windows/{app}.pot'),
               '-o', po2]
     ret = bleachbit.General.run_external(__args)
     if ret[0] != 0:
@@ -255,11 +255,11 @@ def clean_dist_locale():
     for langid in sorted(os.listdir(basedir)):
         langdir = os.path.join(basedir, langid)
         if langid in langs:
-            print("recompiling supported GTK language = %s" % langid)
+            print(f"recompiling supported GTK language = {langid}")
             # reduce the size of the .mo file
             recompile_mo(langdir, 'gtk30', langid, tmpd)
         else:
-            print("removing unsupported GTK language = %s" % langid)
+            print(f"removing unsupported GTK language = {langid}")
             # remove language supported by GTK+ but not by BleachBit
             cmd = 'rd /s /q ' + langdir
             print(cmd)
@@ -284,8 +284,9 @@ def run_setup():
               'Operating System :: POSIX :: Linux',
           ],
           license='GPLv3+',
-          py_requires='>=3.4',
-          platforms='Linux and Windows, Python v3.4+, GTK v3.12+',
+          py_requires='>=3.8',
+          # Ubuntu 20.04 LTS is EOL on April 2025, and it has Python 3.8.
+          platforms='Linux and Windows, Python v3.8+, GTK v3.24+',
           packages=['bleachbit', 'bleachbit.markovify'],
           **args)
 

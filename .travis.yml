@@ -27,8 +27,6 @@ install:
   - pip install PyGObject chardet
 # coveralls.io
   - pip install coveralls requests[security]
-# install mock
-  - pip install 'mock; python_version<"3.8"'
 script:
 # Make the same file as on AppVeyor, so coveralls does not complain.
    - echo "revision = \"`git rev-parse --short HEAD `\"" >bleachbit/Revision.py
@@ -38,6 +36,7 @@ script:
 # Run tests.
    - xvfb-run make tests COVERAGE="coverage run --include='bleachbit/*'"
 after_success:
+# FIXME: add coveralls to GitHub Actions
    - mv .coverage .coverage.travis
    - sudo pip install appveyor-artifacts
    - appveyor-artifacts -o az0 -n bleachbit -m -c $TRAVIS_COMMIT download

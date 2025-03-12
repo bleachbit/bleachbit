@@ -191,18 +191,12 @@ def get_ip_for_url(url):
 def get_user_agent():
     """Return the user agent string"""
     import platform
-    __platform = platform.system()  # Linux or Windows
-    __os = platform.uname()[2]  # e.g., 2.6.28-12-generic or XP
-    if sys.platform == "win32":
-        # misleading: Python 2.5.4 shows uname()[2] as Vista on Windows 7
-        __os = platform.uname()[3][
-            0:3]  # 5.1 = Windows XP, 6.0 = Vista, 6.1 = 7
-    elif sys.platform.startswith('linux'):
-        dist = platform.linux_distribution()
-        # example: ('fedora', '11', 'Leonidas')
-        # example: ('', '', '') for Arch Linux
-        if 0 < len(dist[0]):
-            __os = dist[0] + '/' + dist[1] + '-' + dist[2]
+    __platform = platform.system()  # 'Linux', 'Windows', etc.
+    # On Windows, version is like '10.0.22631'.
+    __os = platform.uname().version
+    if sys.platform == 'linux':
+        from bleachbit.Unix import get_distribution_name_version
+        __os = get_distribution_name_version()
     elif sys.platform[:6] == 'netbsd':
         __sys = platform.system()
         mach = platform.machine()

@@ -114,9 +114,9 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertTrue(xmlcleaner.os_match(""))
 
         # as Linux
-        self.assertFalse(xmlcleaner.os_match('windows', 'linux2'))
-        self.assertTrue(xmlcleaner.os_match('linux', 'linux2'))
-        self.assertTrue(xmlcleaner.os_match('unix', 'linux2'))
+        self.assertFalse(xmlcleaner.os_match('windows', 'linux'))
+        self.assertTrue(xmlcleaner.os_match('linux', 'linux'))
+        self.assertTrue(xmlcleaner.os_match('unix', 'linux'))
 
         # as Windows
         self.assertFalse(xmlcleaner.os_match('linux', 'win32'))

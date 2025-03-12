@@ -1,11 +1,10 @@
 # requirements for BleachBit on Windows
 certifi
 chardet
-mock # for unit tests
 plyer
 psutil
 py2exe
 pypiwin32
 requests
-scandir
+scandir # FIXME: switch to os.walk() on Windows
 winshell

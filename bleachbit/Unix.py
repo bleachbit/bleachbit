@@ -30,6 +30,7 @@ from bleachbit.Language import get_text as _, native_locale_names
 import glob
 import logging
 import os
+import platform
 import re
 import shlex
 import subprocess
@@ -263,6 +264,100 @@ def find_best_locale(user_locale):
     return 'C'
 
 
+def get_distribution_name_version_platform_freedesktop():
+    """Returns the name and version of the distribution using
+    platform.freedesktop_os_release()
+
+    Example return value: 'ubuntu 24.10'
+
+    Python 3.10 added platform.freedesktop_os_release().
+    """
+    if hasattr(platform, 'freedesktop_os_release'):
+        release = platform.freedesktop_os_release()
+        dist_id = release.get('ID')
+        dist_version_id = release.get('VERSION_ID')
+        if dist_id and dist_version_id:
+            return f"{dist_id} {dist_version_id}"
+    return None
+
+
+def get_distribution_name_version_distro():
+    """Returns the name and version of the distribution using the distro
+    package
+
+    Example return value: 'ubuntu 24.10'
+
+    distro is a third-party package recommended here:
+    https://docs.python.org/3.7/library/platform.html
+    """
+    try:
+        import distro
+        # example 'ubuntu 24.10'
+        return distro.id() + ' ' + distro.version()
+    except ImportError:
+        return None
+
+
+def get_distribution_name_version_os_release():
+    """Returns the name and version of the distribution using /etc/os-release
+
+    Example return value: 'ubuntu 24.10'
+    """
+    if not os.path.exists('/etc/os-release'):
+        return None
+    try:
+        with open('/etc/os-release', 'r') as f:
+            os_release = {}
+            for line in f:
+                if '=' in line:
+                    key, value = line.rstrip().split('=', 1)
+                    os_release[key] = value.strip('"\'')
+    except Exception as e:
+        logger.debug(f"Error reading /etc/os-release: {e}")
+        return None
+    if 'ID' in os_release and 'VERSION_ID' in os_release:
+        dist_name = os_release['ID']
+        return f"{dist_name} {os_release['VERSION_ID']}"
+    return None
+
+
+def get_distribution_name_version():
+    """Returns the name and version of the distribution
+
+    Depending on system capabilities, return value may be:
+    * 'ubuntu 24.10'
+    * 'Linux 6.12.3 (unknown distribution)'
+    * 'Linux (unknown version and distribution)'
+
+    Python 3.7 had platform.linux_distribution(), but it
+    was removed in Python 3.8.
+    """
+    ret = get_distribution_name_version_platform_freedesktop()
+    if ret:
+        return ret
+    ret = get_distribution_name_version_distro()
+    if ret:
+        return ret
+    ret = get_distribution_name_version_os_release()
+    if ret:
+        return ret
+    try:
+        linux_version = platform.release()
+        # example '6.12.3-061203-generic'
+        linux_version = linux_version.split('-')[0]
+        return f"Linux {linux_version} (unknown distribution)"
+    except Exception as e:
+        logger.debug(f"Error calling platform.release(): {e}")
+        try:
+            linux_version = os.uname().release
+            # example '6.12.3-061203-generic'
+            linux_version = linux_version.split('-')[0]
+            return f"Linux {linux_version} (unknown distribution)"
+        except Exception as e:
+            logger.debug(f"Error calling os.uname(): {e}")
+    return "Linux (unknown version and distribution)"
+
+
 def get_purgeable_locales(locales_to_keep):
     """Returns all locales to be purged"""
     if not locales_to_keep:
@@ -429,7 +524,7 @@ def is_process_running(exename, require_same_user):
     require_same_user: if True, ignore processes run by other users
 
     """
-    if sys.platform.startswith('linux'):
+    if sys.platform == 'linux':
         return is_process_running_linux(exename, require_same_user)
     elif ('darwin' == sys.platform or
           sys.platform.startswith('openbsd') or

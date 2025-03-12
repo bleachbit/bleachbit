@@ -497,8 +497,11 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
     def test_delete_not_empty(self):
         """Test for scenario directory is not empty"""
+        # common.py puts bleachbit.ini in self.tempdir, but it may
+        # not be flushed
         dirname = os.path.join(self.tempdir, 'a_dir')
         os.mkdir(dirname)
+        self.assertFalse(is_dir_empty(self.tempdir))
         self.assertTrue(is_dir_empty(dirname))
         fn = os.path.join(dirname, 'a_file')
         common.touch_file(fn)
@@ -513,6 +516,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             delete(dirname, allow_shred=allow_shred)
             self.assertExists(fn)
             self.assertExists(dirname)
+        os.remove(fn)
+        self.assertTrue(is_dir_empty(dirname))
 
     def test_delete_read_only(self):
         """Unit test for delete() with read-only file"""
@@ -588,10 +593,36 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         if 'nt' == os.name:
             expand_glob_join(r'c:\windows', '*.exe')
 
-    def test_expandvars(self):
-        """Unit test for expandvars()."""
-        expanded = os.path.expandvars('$HOME')
-        self.assertIsString(expanded)
+    def test_expand_vars_user(self):
+        """Unit test for expandvars() and expanduser()
+
+        We had custom implementations of expandvars() and expanduser()
+        until commit 3a3913 that switched to Python 3.
+        """
+
+        if 'nt' == os.name:
+            vars = ('%USERPROFILE%', '$userprofile', '${USERprofile}')
+        else:
+            vars = ['$HOME', '${HOME}']
+        for var in vars:
+            expanded = os.path.expandvars(var)
+            self.assertIsString(expanded)
+            self.assertNotEqual(
+                expanded, var, 'Environment variable was not expanded')
+            self.assertEqual(expanded, os.path.expanduser('~'))
+            self.assertExists(expanded)
+            # An absolute path should not be altered.
+            self.assertEqual(expanded, os.path.expandvars(expanded))
+            self.assertEqual(expanded, os.path.expanduser(expanded))
+        # An empty string should not be altered.
+        self.assertEqual(os.path.expandvars(''), '')
+
+        # Non-existent variables should not be altered.
+        self.assertEqual(os.path.expandvars('$nonexistent'), '$nonexistent')
+
+        # A relative path should not be expanded.
+        for p in ('common', 'common/', 'common', 'home', 'userprofile'):
+            self.assertEqual(os.path.expanduser(p), p)
 
     def test_extended_path(self):
         """Unit test for extended_path() and extended_path_undo()"""

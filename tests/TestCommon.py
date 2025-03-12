@@ -94,10 +94,6 @@ class CommonTestCase(common.BleachbitTestCase):
         for lang_code in lang_codes:
             self.assertIsLanguageCode(lang_code)
 
-    def test_expandvars(self):
-        """Unit test for expandvars."""
-        var = os.path.expandvars('$HOME')
-        self.assertIsString(var)
 
     def test_environment(self):
         """Test for important environment variables"""
@@ -109,23 +105,6 @@ class CommonTestCase(common.BleachbitTestCase):
             e = os.getenv(env)
             self.assertIsNotNone(e)
             self.assertGreater(len(e), 4)
-
-    def test_expanduser(self):
-        """Unit test for expanduser."""
-        # Return Unicode when given Unicode.
-        self.assertIsString(os.path.expanduser('~'))
-
-        # Blank input should give blank output.
-        self.assertEqual(os.path.expanduser(''), '')
-
-        # An absolute path should not be altered.
-        abs_dirs = {'posix': '$HOME', 'nt': '%USERPROFILE%'}
-        abs_dir = os.path.expandvars(abs_dirs[os.name])
-        self.assertExists(abs_dir)
-        self.assertEqual(os.path.expanduser(abs_dir), abs_dir)
-        # A relative path (without a reference to the home directory)
-        # should not be expanded.
-        self.assertEqual(os.path.expanduser('common'), 'common')
 
     def test_touch_file(self):
         """Unit test for touch_file"""
