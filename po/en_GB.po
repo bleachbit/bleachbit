@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-07 13:13+0000\n"
+"PO-Revision-Date: 2025-03-12 17:30+0000\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "bleachbit/main/en_GB/>\n"
@@ -486,11 +486,11 @@ msgstr "E-mail client"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Attachments"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Sync conflict"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -753,10 +753,8 @@ msgid "Memory dump"
 msgstr "Memory dump"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Desktop environment"
+msgstr "Desktop widgets"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1778,16 +1776,14 @@ msgid "Downloading URL failed: %s"
 msgstr "Downloading URL failed: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "Disk was full when writing configuration to file %s"
+msgstr "Disk was full when writing configuration to file: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "Disk was full when writing configuration to file %s"
+msgstr "Permission denied when writing configuration to file: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1912,30 +1908,29 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Exception while running operation '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Executable not found: %s"
+msgstr "File not found: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr ""
+msgstr "Access denied when flagging file for later delete: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Access denied when deleting registry value: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Access denied when deleting registry key: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Access denied: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
