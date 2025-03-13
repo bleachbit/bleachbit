@@ -7,20 +7,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2024-03-24 14:02+0000\n"
-"Last-Translator: Matas <matukas.jurevicius@gmail.com>\n"
+"PO-Revision-Date: 2025-03-13 19:09+0000\n"
+"Last-Translator: J4mm3ris <dr.simonas@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/bleachbit/"
 "main/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
-"19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
-"1 : 2);\n"
-"X-Generator: Weblate 5.5-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && ("
+"n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Launchpad-Export-Date: 2020-12-28 15:48+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -489,11 +488,11 @@ msgstr "El. pašto klientas"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Priedai"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Sinchronizacijos kolizija"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -632,10 +631,11 @@ msgid "Quarantine"
 msgstr "Karantinas"
 
 #: ../cleaners/thunderbird.xml
+#, fuzzy
 msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
-msgstr ""
+msgstr "Indekso ištrynimas atstatys stulpelių konfigūraciją žinučių saraše."
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -759,7 +759,7 @@ msgstr "Atminties išklotinė"
 #, fuzzy
 #| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Darbalaukio aplinka"
+msgstr "Darbalaukio valdikliai"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -781,13 +781,12 @@ msgstr ""
 "Ištrinti ~/.viminfo kuriame yra failų istorija, komandų istorija ir buferiai"
 
 #: ../cleaners/discord.xml
-#, fuzzy
-#| msgid "Delete the web cache, which reduces time to display revisited pages"
 msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"Ištrinti tinklo podėlį, taip pagreitės paskutinių aplankytų puslapių rodymas"
+"Ištrinti tinklo podėlį, taip pagreitės paskutinių aplankytų puslapių "
+"rodymas. Ši funkcija taip pat išvalo pamėgtų GIF sąrašą."
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
@@ -1063,8 +1062,9 @@ msgid "use options set in the graphical interface"
 msgstr "naudoti parinktis nustatytas grafinėje sąsajoje"
 
 #: ../bleachbit/CLI.py
+#, fuzzy
 msgid "enable all options that do not have a warning"
-msgstr ""
+msgstr "įgalinti visas funkcijas, kurios neturi įspėjimų"
 
 #: ../bleachbit/CLI.py
 msgid "set log level to verbose"
@@ -1404,10 +1404,8 @@ msgid "Automatically detect the system language"
 msgstr "Automatiškai išsaugoma kalba %s."
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "Kalbos"
+msgstr "Kalbos:"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1438,8 +1436,9 @@ msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
 msgstr "Naudoti IEC dydžius (1 KiB = 1024 baitai), o ne SI (1 kB = 1000 baitų)"
 
 #: ../bleachbit/GuiPreferences.py
+#, fuzzy
 msgid "Remember window geometry"
-msgstr ""
+msgstr "Prisiminti langų išdėstymą"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Show debug messages"
@@ -1503,10 +1502,8 @@ msgid "This path already exists in the whitelist."
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Klaidų: %d"
+msgstr "Klaida"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
@@ -1521,8 +1518,6 @@ msgid "Folder"
 msgstr "Aplankas"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
 msgstr "Šie keliai nebus išvalyti ar pakeisti."
 
