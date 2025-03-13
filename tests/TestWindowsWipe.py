@@ -98,7 +98,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
                 print(f"Error opening {path}: {e}")
                 raise e
 
-            ret = get_extents(file_handle)
+            ret = get_extents(file_handle, filename=path)
             self.assertIsInstance(ret, list)
             close_file(file_handle)
 
