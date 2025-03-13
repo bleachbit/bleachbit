@@ -547,13 +547,14 @@ def obtain_readwrite(volume):
 # Retrieve a list of pointers to the file location on disk.
 # If translate_to_extents is False, return the Windows VCN/LCN format.
 # If True, do an extra conversion to get a list of extents on disk.
-def get_extents(file_handle, translate_to_extents=True):
+def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
     # Assemble input structure and query Windows for retrieval pointers.
     # The input structure is the number 0 as a signed 64 bit integer.
     input_struct = struct.pack('q', 0)
     # 4K, 32K, 256K, 2M step ups in buffer size, until call succeeds.
     # Compressed/encrypted/sparse files tend to have more chopped up extents.
     buf_retry_sizes = [4 * 1024, 32 * 1024, 256 * 1024, 2 * 1024**2]
+    rp_struct = None
     for retrieval_pointers_buf_size in buf_retry_sizes:
         try:
             rp_struct = DeviceIoControl(file_handle,
@@ -572,10 +573,15 @@ def get_extents(file_handle, translate_to_extents=True):
                 # (234, 'DeviceIoControl', 'More data is available.')
                 pass
             else:
+                logger.error("Unhandled error code %d in get_extents for file '%s': %s",
+                             err_code, filename, str(err_info))
                 raise
         else:
             # Call succeeded, break out from for loop.
             break
+
+    if rp_struct is None:
+        raise Exception("Failed to get retrieval pointers for file '%s'")
 
     # At this point we have a FSCTL_GET_RETRIEVAL_POINTERS (rp) structure.
     # Process content of the first part of structure.
@@ -915,10 +921,10 @@ def file_wipe(file_name):
 
     file_handle = open_file(file_name)
     file_size, is_special = get_file_basic_info(file_name, file_handle)
-    orig_extents = get_extents(file_handle)
+    orig_extents = get_extents(file_handle, True, file_name)
     if is_special:
         bridged_extents = [x for x in logical_ranges_to_extents(
-            get_extents(file_handle, False), True)]
+            get_extents(file_handle, False, file_name), True)]
     CloseHandle(file_handle)
     #logger.debug('Original extents: {}'.format(orig_extents))
 
@@ -933,7 +939,7 @@ def file_wipe(file_name):
         # Direct overwrite when it's a regular file.
         #logger.info("Attempting direct file wipe.")
         wipe_file_direct(file_handle, orig_extents, cluster_size, file_size)
-        new_extents = get_extents(file_handle)
+        new_extents = get_extents(file_handle, True, file_name)
         CloseHandle(file_handle)
         #logger.debug('New extents: {}'.format(new_extents))
         if orig_extents == new_extents:
