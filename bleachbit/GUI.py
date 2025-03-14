@@ -40,6 +40,7 @@ APP_INDICATOR_FOUND = True
 if sys.platform == 'linux':
     try:
         # Ubuntu: sudo apt install gir1.2-ayatanaappindicator3-0.1
+        gi.require_version('AyatanaAppIndicator3', '0.1')
         from gi.repository import AyatanaAppIndicator3 as AppIndicator
     except ImportError:
         try:
