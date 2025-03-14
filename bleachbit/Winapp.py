@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@ from xml.dom.minidom import parseString
 import bleachbit
 from bleachbit import Cleaner, Windows
 from bleachbit.Action import Delete, Winreg
-from bleachbit import _
+from bleachbit.Language import get_text as _
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +115,7 @@ def winapp_expand_vars(pathname):
 def detect_file(pathname):
     """Check whether a path exists for DetectFile#="""
     for expanded in winapp_expand_vars(pathname):
-        for _ in glob.iglob(expanded):
+        for _i in glob.iglob(expanded):
             return True
     return False
 
@@ -180,6 +180,7 @@ class Winapp:
         self.cleaners[cleaner_id] = Cleaner.Cleaner()
         self.cleaners[cleaner_id].id = cleaner_id
         self.cleaners[cleaner_id].name = name
+        assert name.strip() == name
         self.cleaners[cleaner_id].description = _('Imported from winapp2.ini')
         # The detect() function in this module effectively does what
         # auto_hide() does, so this avoids redundant, slow processing.
@@ -307,8 +308,9 @@ class Winapp:
             return
         # find the BleachBit internal cleaner ID
         lid = self.section_to_cleanerid(langsecref_num)
+        option_name = section.replace('*', '').strip()
         self.cleaners[lid].add_option(
-            section2option(section), section.replace('*', ''), '')
+            section2option(section), option_name, '')
         for option in self.parser.options(section):
             if (
                 option
@@ -437,7 +439,7 @@ def load_cleaners(cb_progress=lambda x: None):
     for pathname in list_winapp_files():
         try:
             inicleaner = Winapp(pathname, cb_progress)
-        except Exception as e:
+        except Exception:
             logger.exception(
                 "Error reading winapp2.ini cleaner '%s'", pathname)
         else:

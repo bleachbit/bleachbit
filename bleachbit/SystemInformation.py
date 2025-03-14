@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -30,83 +30,93 @@ import os
 import platform
 import sys
 
-if 'nt' == os.name:
-    from win32com.shell import shell
-
 
 def get_system_information():
-    """Return system information as a string"""
-    # this section is for application and library versions
-    s = "BleachBit version %s" % bleachbit.APP_VERSION
+    """Return system information as a string."""
+    from collections import OrderedDict
+    info = OrderedDict()
+
+    # Application and library versions
+    info['BleachBit version'] = bleachbit.APP_VERSION
 
     try:
         # Linux tarball will have a revision but not build_number
         from bleachbit.Revision import revision
-        s += '\nGit revision %s' % revision
+        info['Git revision'] = revision
     except:
         pass
+
     try:
+        # appveyor.yml defines the build number.
+        # Linux never has a build number.
         from bleachbit.Revision import build_number
-        s += '\nBuild number %s' % build_number
+        info['Build number'] = build_number
     except:
         pass
+
     try:
         import gi
         gi.require_version('Gtk', '3.0')
         from gi.repository import Gtk
-        s += '\nGTK version {0}.{1}.{2}'.format(
+        settings = Gtk.Settings.get_default()
+        info['GTK version'] = '{0}.{1}.{2}'.format(
             Gtk.get_major_version(), Gtk.get_minor_version(), Gtk.get_micro_version())
-        s += '\nGTK theme = %s' % Gtk.Settings.get_default().get_property('gtk-theme-name')
-        s += '\nGTK icon theme = %s' % Gtk.Settings.get_default().get_property('gtk-icon-theme-name')
-        s += '\nGTK prefer dark theme = %s' % Gtk.Settings.get_default().get_property('gtk-application-prefer-dark-theme')
+        info['GTK theme'] = settings.get_property('gtk-theme-name')
+        info['GTK icon theme'] = settings.get_property('gtk-icon-theme-name')
+        info['GTK prefer dark theme'] = settings.get_property(
+            'gtk-application-prefer-dark-theme')
     except:
         pass
+
     import sqlite3
-    s += "\nSQLite version %s" % sqlite3.sqlite_version
+    info['SQLite version'] = sqlite3.sqlite_version
 
-    # this section is for variables defined in __init__.py
-    s += "\nlocal_cleaners_dir = %s" % bleachbit.local_cleaners_dir
-    s += "\nlocale_dir = %s" % bleachbit.locale_dir
-    s += "\noptions_dir = %s" % bleachbit.options_dir
-    s += "\npersonal_cleaners_dir = %s" % bleachbit.personal_cleaners_dir
-    s += "\nsystem_cleaners_dir = %s" % bleachbit.system_cleaners_dir
+    # Variables defined in __init__.py
+    info['local_cleaners_dir'] = bleachbit.local_cleaners_dir
+    info['locale_dir'] = bleachbit.locale_dir
+    info['options_dir'] = bleachbit.options_dir
+    info['personal_cleaners_dir'] = bleachbit.personal_cleaners_dir
+    info['system_cleaners_dir'] = bleachbit.system_cleaners_dir
 
-    # this section is for information about the system environment
-    s += "\nlocale.getdefaultlocale = %s" % str(locale.getdefaultlocale())
+    # System environment information
+    info['locale.getlocale'] = str(locale.getlocale())
+
+    # Environment variables
     if 'posix' == os.name:
         envs = ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID')
     elif 'nt' == os.name:
         envs = ('APPDATA', 'cd', 'LocalAppData', 'LocalAppDataLow', 'Music',
                 'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
+
     for env in envs:
-        s += "\nos.getenv('%s') = %s" % (env, os.getenv(env))
-    s += "\nos.path.expanduser('~') = %s" % os.path.expanduser('~')
-    if sys.platform.startswith('linux'):
-        s += "\nplatform.linux_distribution() = %s" % str(platform.linux_distribution())
+        info[f'os.getenv({env})'] = os.getenv(env)
+
+    info['os.path.expanduser(~")'] = os.path.expanduser('~')
 
     # Mac Version Name - Dictionary
     macosx_dict = {'5': 'Leopard', '6': 'Snow Leopard', '7': 'Lion', '8': 'Mountain Lion',
                    '9': 'Mavericks', '10': 'Yosemite', '11': 'El Capitan', '12': 'Sierra'}
 
-    if sys.platform.startswith('darwin'):
+    if sys.platform == 'linux':
+        from bleachbit.Unix import get_distribution_name_version
+        info['get_distribution_name_version()'] = get_distribution_name_version()
+    elif sys.platform.startswith('darwin'):
         if hasattr(platform, 'mac_ver'):
-            for key in macosx_dict:
-                if (platform.mac_ver()[0].split('.')[1] == key):
-                    s += "\nplatform.mac_ver() = %s" % str(
-                        platform.mac_ver()[0] + " (" + macosx_dict[key] + ")")
-        else:
-            s += "\nplatform.dist() = %s" % str(platform.linux_distribution(full_distribution_name=0))
+            mac_version = platform.mac_ver()[0]
+            version_minor = mac_version.split('.')[1]
+            if version_minor in macosx_dict:
+                info['platform.mac_ver()'] = f'{mac_version} ({macosx_dict[version_minor]})'
+    else:
+        info['platform.uname().version'] = platform.uname().version
 
+    # System information
+    info['sys.argv'] = sys.argv
+    info['sys.executable'] = sys.executable
+    info['sys.version'] = sys.version
     if 'nt' == os.name:
-        s += "\nplatform.win32_ver[1]() = %s" % platform.win32_ver()[1]
-    s += "\nplatform.platform = %s" % platform.platform()
-    s += "\nplatform.version = %s" % platform.version()
-    s += "\nsys.argv = %s" % sys.argv
-    s += "\nsys.executable = %s" % sys.executable
-    s += "\nsys.version = %s" % sys.version
-    if 'nt' == os.name:
-        s += "\nwin32com.shell.shell.IsUserAnAdmin() = %s" % shell.IsUserAnAdmin(
-        )
-    s += "\n__file__ = %s" % __file__
+        from win32com.shell import shell
+        info['IsUserAnAdmin()'] = shell.IsUserAnAdmin()
+    info['__file__'] = __file__
 
-    return s
+    # Render the information as a string
+    return '\n'.join(f'{key} = {value}' for key, value in info.items())

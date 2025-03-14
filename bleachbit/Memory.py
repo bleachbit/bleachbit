@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ Wipe memory
 
 from bleachbit import FileUtilities
 from bleachbit import General
-from bleachbit import _
+from bleachbit.Language import get_text as _
 
 import logging
 import os
@@ -64,7 +64,7 @@ def parse_swapoff(swapoff):
     # English is 'swapoff on /dev/sda5' but German is 'swapoff für ...'
     # Example output in English with LVM and hyphen: 'swapoff on /dev/mapper/lubuntu-swap_1'
     # This matches swap devices and swap files
-    ret = re.search('^swapoff (\w* )?(/[\w/.-]+)$', swapoff)
+    ret = re.search(r'^swapoff (\w* )?(/[\w/.-]+)$', swapoff)
     if not ret:
         # no matches
         return None
@@ -156,10 +156,10 @@ def get_swap_size_linux(device, proc_swaps=None):
     if proc_swaps is None:
         proc_swaps = get_proc_swaps()
     line = proc_swaps.split('\n')[0]
-    if not re.search('Filename\s+Type\s+Size', line):
+    if not re.search(r'Filename\s+Type\s+Size', line):
         raise RuntimeError("Unexpected first line in swap summary '%s'" % line)
     for line in proc_swaps.split('\n')[1:]:
-        ret = re.search("%s\s+\w+\s+([0-9]+)\s" % device, line)
+        ret = re.search(r"%s\s+\w+\s+([0-9]+)\s" % device, line)
         if ret:
             return int(ret.group(1)) * 1024
     raise RuntimeError("error: cannot find size of swap device '%s'\n%s" %
@@ -173,7 +173,7 @@ def get_swap_uuid(device):
     (_rc, stdout, _stderr) = General.run_external(args)
     for line in stdout.split('\n'):
         # example: /dev/sda5: UUID="ee0e85f6-6e5c-42b9-902f-776531938bbf"
-        ret = re.search("^%s: UUID=\"([a-z0-9-]+)\"" % device, line)
+        ret = re.search(r"^%s: UUID=\"([a-z0-9-]+)\"" % device, line)
         if ret is not None:
             uuid = ret.group(1)
     logger.debug(_("Found UUID for swap file {device} is {uuid}.").format(
@@ -207,7 +207,7 @@ def physical_free_linux():
     with open("/proc/meminfo") as f:
         for line in f:
             line = line.replace("\n", "")
-            ret = re.search('(MemFree|Cached):[ ]*([0-9]*) kB', line)
+            ret = re.search(r'(MemFree|Cached):[ ]*([0-9]*) kB', line)
             if ret is not None:
                 kb = int(ret.group(2))
                 free_bytes += kb * 1024
@@ -247,7 +247,7 @@ def physical_free_windows():
 
 
 def physical_free():
-    if sys.platform.startswith('linux'):
+    if sys.platform == 'linux':
         return physical_free_linux()
     elif 'win32' == sys.platform:
         return physical_free_windows()

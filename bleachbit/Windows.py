@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-"""
+r"""
 Functionality specific to Microsoft Windows
 
 The Windows Registry terminology can be confusing. Take for example
@@ -38,8 +38,10 @@ These are the terms:
 """
 
 import bleachbit
-from bleachbit import _, Command, FileUtilities, General
+from bleachbit import Command, FileUtilities, General
+from bleachbit.Language import get_text as _
 
+import errno
 import glob
 import logging
 import os
@@ -60,7 +62,7 @@ if 'win32' == sys.platform:
     import win32process
     import win32security
 
-    from ctypes import windll, c_ulong, c_buffer, byref, sizeof
+    from ctypes import windll, byref
     from win32com.shell import shell, shellcon
 
     psapi = windll.psapi
@@ -126,7 +128,7 @@ def browse_folder(_, title):
 
 def cleanup_nonce():
     """On exit, clean up GTK junk files"""
-    for fn in glob.glob(os.path.expandvars('%TEMP%\gdbus-nonce-file-*')):
+    for fn in glob.glob(os.path.expandvars(r'%TEMP%\gdbus-nonce-file-*')):
         logger.debug('cleaning GTK nonce file: %s', fn)
         FileUtilities.delete(fn)
 
@@ -149,7 +151,14 @@ def delete_locked_file(pathname):
         MOVEFILE_DELAY_UNTIL_REBOOT = 4
         if 0 == windll.kernel32.MoveFileExW(pathname, None, MOVEFILE_DELAY_UNTIL_REBOOT):
             from ctypes import WinError
-            raise WinError()
+            # WinError throws the right exception based on last error.
+            try:
+                raise WinError()
+            except PermissionError:
+                # OSError has special handling in Worker.py
+                # Use a special message for flagging files for later deletion
+                raise OSError(
+                    errno.EACCES, "Access denied in delete_locked_file()", pathname)
 
 
 def delete_registry_value(key, value_name, really_delete):
@@ -158,26 +167,22 @@ def delete_registry_value(key, value_name, really_delete):
     successful.  If really_delete is False (meaning preview),
     just check whether the value exists."""
     (hive, sub_key) = split_registry_key(key)
-    if really_delete:
-        try:
+    try:
+        if really_delete:
             hkey = winreg.OpenKey(hive, sub_key, 0, winreg.KEY_SET_VALUE)
             winreg.DeleteValue(hkey, value_name)
-        except WindowsError as e:
-            if e.winerror == 2:
-                # 2 = 'file not found' means value does not exist
-                return False
-            raise
         else:
-            return True
-    try:
-        hkey = winreg.OpenKey(hive, sub_key)
-        winreg.QueryValueEx(hkey, value_name)
+            hkey = winreg.OpenKey(hive, sub_key)
+            winreg.QueryValueEx(hkey, value_name)
+    except PermissionError:
+        raise OSError(
+            errno.EACCES, "Access denied in delete_registry_value()", key)
     except WindowsError as e:
-        if e.winerror == 2:
+        if e.winerror == errno.ENOENT:
+            # ENOENT = 'file not found' means value does not exist
             return False
         raise
-    else:
-        return True
+    return True
 
 
 def delete_registry_key(parent_key, really_delete):
@@ -205,7 +210,11 @@ def delete_registry_key(parent_key, really_delete):
     ]
     for child_key in child_keys:
         delete_registry_key(child_key, True)
-    winreg.DeleteKey(hive, parent_sub_key)
+    try:
+        winreg.DeleteKey(hive, parent_sub_key)
+    except PermissionError:
+        raise OSError(
+            errno.EACCES, "Access denied in delete_registry_key()", parent_key)
     return True
 
 
@@ -218,7 +227,11 @@ def delete_updates():
     dirs += [os.path.expandvars(r'%windir%\SoftwareDistribution.bak')]
     dirs += [os.path.expandvars(r'%windir%\ie7updates')]
     dirs += [os.path.expandvars(r'%windir%\ie8updates')]
-    dirs += [os.path.expandvars(r'%windir%\system32\catroot2')]
+    # see https://github.com/bleachbit/bleachbit/issues/1215 about catroot2
+    #dirs += [os.path.expandvars(r'%windir%\system32\catroot2')]
+    dirs += [os.path.expandvars(r'%systemdrive%\windows.old')]
+    dirs += [os.path.expandvars(r'%systemdrive%\$windows.~bt')]
+    dirs += [os.path.expandvars(r'%systemdrive%\$windows.~ws')]
     if not dirs:
         # if nothing to delete, then also do not restart service
         return
@@ -483,21 +496,74 @@ def is_junction(path):
     return bool(attr & FILE_ATTRIBUTE_REPARSE_POINT)
 
 
-def is_process_running(name):
+def is_process_running(exename, require_same_user):
     """Return boolean whether process (like firefox.exe) is running
 
-    Works on Windows Vista or later, but on Windows XP gives an ImportError
+    exename: name of the executable
+    require_same_user: if True, ignore processes run by other users
     """
 
     import psutil
-    name = name.lower()
+    exename = exename.lower()
+    current_username = psutil.Process().username().lower()
     for proc in psutil.process_iter():
         try:
-            if proc.name().lower() == name:
-                return True
+            proc_name = proc.name().lower()
         except psutil.NoSuchProcess:
-            pass
+            continue
+        if not proc_name == exename:
+            continue
+        if not require_same_user:
+            return True
+        try:
+            proc_username = proc.username().lower()
+        except psutil.AccessDenied:
+            continue
+        if proc_username == current_username:
+            return True
     return False
+
+
+def load_i18n_dll():
+    """Load internationalization library
+
+    It may be called either libintl-8.dll or intl-8.dll, and it comes
+    from gettext.
+
+    Returns None if the dll is not available.
+    """
+    import ctypes
+    lib_fns = ['libintl-8.dll', 'intl-8.dll']
+    dirs = set([bleachbit.bleachbit_exe_path, os.path.dirname(sys.executable)])
+    for lib_fn in lib_fns:
+        for dir in dirs:
+            lib_path = os.path.join(dir, lib_fn)
+            if os.path.exists(lib_path):
+                break
+            lib_path = None
+    if not lib_path:
+        logger.warning(
+            'internationalization library was not found, so translations will not work.')
+        return
+    try:
+        libintl = ctypes.cdll.LoadLibrary(lib_path)
+    except Exception as e:
+        logger.warning('error in LoadLibrary(%s): %s', lib_path, e)
+        return
+
+    # Configure DLL function prototypes
+    libintl.bindtextdomain.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
+    libintl.bindtextdomain.restype = ctypes.c_char_p
+    libintl.bind_textdomain_codeset.argtypes = [
+        ctypes.c_char_p, ctypes.c_char_p]
+    libintl.textdomain.argtypes = [ctypes.c_char_p]
+
+    if hasattr(libintl, "libintl_wbindtextdomain"):
+        libintl.libintl_wbindtextdomain.argtypes = [
+            ctypes.c_char_p, ctypes.c_wchar_p]
+        libintl.libintl_wbindtextdomain.restype = ctypes.c_wchar_p
+
+    return libintl
 
 
 def move_to_recycle_bin(path):
@@ -539,7 +605,7 @@ def set_environ(varname, path):
     if not path:
         return
     if varname in os.environ:
-        #logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
+        # logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
         if 'nt' == os.name:
             os.environ[varname] = os.path.expandvars('%%%s%%' % varname)
         # Do not redefine the environment variable when it already exists
@@ -556,7 +622,9 @@ def set_environ(varname, path):
 
 
 def setup_environment():
-    """Define any extra environment variables for use in CleanerML and Winapp2.ini"""
+    """Define any extra environment variables"""
+
+    # These variables are for use in CleanerML and Winapp2.ini.
     csidl_to_environ('commonappdata', shellcon.CSIDL_COMMON_APPDATA)
     csidl_to_environ('documents', shellcon.CSIDL_PERSONAL)
     # Windows XP does not define localappdata, but Windows Vista and 7 do
@@ -577,6 +645,30 @@ def setup_environment():
     # BleachBit is portable. It is the same variable name as defined by
     # cmd.exe .
     set_environ('cd', os.getcwd())
+
+    # XDG_DATA_DIRS environment variable needs to be set with both GTK icons and
+    # `glib-2.0\schemas\gschemas.compiled`.
+    # The latter is required by the make chaff dialog.
+    # https://github.com/bleachbit/bleachbit/issues/1444
+    # https://github.com/bleachbit/bleachbit/issues/1780
+    if os.environ.get('XDG_DATA_DIRS'):
+        return
+    xdg_data_dirs = [os.path.dirname(sys.executable) +
+                     '\\share',
+                     os.getcwd() + '\\share']
+
+    found_dir = False
+    for xdg_data_dir in xdg_data_dirs:
+        xdg_data_fn = os.path.join(
+            xdg_data_dir, 'glib-2.0', 'schemas', 'gschemas.compiled')
+        if os.path.exists(xdg_data_fn):
+            found_dir = True
+            break
+    if found_dir:
+        logger.debug('XDG_DATA_DIRS=%s', xdg_data_dir)
+        set_environ('XDG_DATA_DIRS', xdg_data_dir)
+    else:
+        logger.warning('XDG_DATA_DIRS not set and gschemas.compiled not found')
 
 
 def split_registry_key(full_key):
@@ -605,7 +697,7 @@ def symlink_or_copy(src, dst):
     try:
         os.symlink(src, dst)
         logger.debug('linked %s to %s', src, dst)
-    except (PermissionError, OSError) as e:
+    except (PermissionError, OSError):
         shutil.copy(src, dst)
         logger.debug('copied %s to %s', src, dst)
 
@@ -675,7 +767,7 @@ class SplashThread(Thread):
         Thread.join(self, *args)
 
     def _show_splash_screen(self):
-        #get instance handle
+        # get instance handle
         hInstance = win32api.GetModuleHandle()
 
         # the class name
@@ -776,7 +868,7 @@ class SplashThread(Thread):
             return True
 
         # Solution 3: Working with timers that lock/unlock SetForegroundWindow
-        #https://gist.github.com/EBNull/1419093
+        # https://gist.github.com/EBNull/1419093
         try:
             timeout = win32gui.SystemParametersInfo(win32con.SPI_GETFOREGROUNDLOCKTIMEOUT)
             win32gui.SystemParametersInfo(win32con.SPI_SETFOREGROUNDLOCKTIMEOUT, 0, win32con.SPIF_SENDCHANGE)

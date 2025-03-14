@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,22 +22,21 @@
 Common code for unit tests
 """
 
-import functools
 import os
 import shutil
 import sys
 import tempfile
+import time
 import unittest
-import mock
+from unittest import mock
 if 'win32' == sys.platform:
     import winreg
     import win32gui
 
-
 import bleachbit
 import bleachbit.Options
 from bleachbit.FileUtilities import extended_path
-from bleachbit.General import sudo_mode
+from bleachbit.General import gc_collect, sudo_mode
 
 
 class BleachbitTestCase(unittest.TestCase):
@@ -48,7 +47,6 @@ class BleachbitTestCase(unittest.TestCase):
     def setUpClass(cls):
         """Create a temporary directory for the testcase"""
         cls.tempdir = tempfile.mkdtemp(prefix=cls.__name__)
-        print(cls.tempdir)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             cls._patch_options_paths()
 
@@ -67,20 +65,31 @@ class BleachbitTestCase(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         """remove the temporary directory"""
-        if os.path.exists(cls.tempdir):
-            shutil.rmtree(cls.tempdir)
+        gc_collect()
+        # On Windows, a file may be temporarily locked, so retry.
+        for attempt in range(5):
+            try:
+                if os.path.exists(cls.tempdir):
+                    shutil.rmtree(cls.tempdir)
+                break
+            except PermissionError:
+                if attempt < 4:
+                    time.sleep(1)
+                else:
+                    raise
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             cls._stop_patch_options_paths()
-    
+
     @classmethod
     def _stop_patch_options_paths(cls):
         for patcher in cls._patchers:
-            patcher.stop()        
+            patcher.stop()
 
     def setUp(cls):
         """Call before each test method"""
         basedir = os.path.join(os.path.dirname(__file__), '..')
         os.chdir(basedir)
+
 
     #
     # type asserts
@@ -93,6 +102,16 @@ class BleachbitTestCase(unittest.TestCase):
 
     def assertIsBytes(self, obj, msg=''):
         self.assertIsInstance(obj, bytes, msg)
+
+    def assertIsLanguageCode(self, lang_id, msg=''):
+        self.assertIsInstance(lang_id, str)
+        if lang_id in ('C', 'C.UTF-8', 'C.utf8', 'POSIX'):
+            return
+        self.assertTrue(len(lang_id) >= 2)
+        import re
+        pattern = r'^[a-z]{2,3}(_[A-Z][A-Za-z]{1,3})?(@\w+)?(\.[a-zA-Z][a-zA-Z0-9-]+)?$'
+        self.assertTrue(re.match(pattern, lang_id),
+                        f'Invalid language code format: {lang_id}')
 
     @staticmethod
     def check_exists(func, path):

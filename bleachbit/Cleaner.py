@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ import os.path
 import re
 import sys
 
-from bleachbit import _
+from bleachbit.Language import get_text as _
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
 from bleachbit import Command, FileUtilities, Memory, Special
@@ -39,7 +39,7 @@ warnings.simplefilter("ignore", Warning)
 try:
     from bleachbit.GuiBasic import Gtk, Gdk
     HAVE_GTK = Gdk.get_default_root_window() is not None
-except (ImportError, RuntimeError, ValueError) as e:
+except (ImportError, RuntimeError, ValueError):
     # ImportError happens when GTK is not installed.
     # RuntimeError can happen when X is not available (e.g., cron, ssh).
     # ValueError seen on BleachBit 3.0 with GTK 3 (GitHub issue 685)
@@ -80,9 +80,9 @@ class Cleaner:
         """Register option (such as 'cache')"""
         self.options[option_id] = (name, description)
 
-    def add_running(self, detection_type, pathname):
+    def add_running(self, detection_type, pathname, same_user=False):
         """Add a way to detect this program is currently running"""
-        self.running.append((detection_type, pathname))
+        self.running.append((detection_type, pathname, same_user))
 
     def auto_hide(self):
         """Return boolean whether it is OK to automatically hide this
@@ -147,18 +147,15 @@ class Cleaner:
         """Return a warning as string."""
         if option_id in self.warnings:
             return self.warnings[option_id]
-        else:
-            return None
+        return None
 
-    def is_running(self):
-        """Return whether the program is currently running"""
+    def is_process_running(self):
+        """Return whether the process is currently running"""
         logger = logging.getLogger(__name__)
-        for running in self.running:
-            test = running[0]
-            pathname = running[1]
+        for (test, pathname, same_user) in self.running:
             if 'exe' == test:
-                if ('posix' == os.name and Unix.is_running(pathname)) or \
-                   ('nt' == os.name and Windows.is_process_running(pathname)):
+                if ('posix' == os.name and Unix.is_process_running(pathname, same_user)) or \
+                   ('nt' == os.name and Windows.is_process_running(pathname, same_user)):
                     logger.debug("process '%s' is running", pathname)
                     return True
             elif 'pathname' == test:
@@ -294,7 +291,7 @@ class System(Cleaner):
         #
         # options just for Linux
         #
-        if sys.platform.startswith('linux'):
+        if sys.platform == 'linux':
             self.add_option('memory', _('Memory'),
                             # TRANSLATORS: 'free' means 'unallocated'
                             _('Wipe the swap and free memory'))
@@ -399,7 +396,7 @@ class System(Cleaner):
                 '$ALLUSERSPROFILE\\Application Data\\Microsoft\\Dr Watson\\*.log',
                 '$ALLUSERSPROFILE\\Application Data\\Microsoft\\Dr Watson\\user.dmp',
                 '$LocalAppData\\Microsoft\\Windows\\WER\\ReportArchive\\*\\*',
-                '$LocalAppData\\Microsoft\\Windows\WER\\ReportQueue\\*\\*',
+                '$LocalAppData\\Microsoft\\Windows\\WER\\ReportQueue\\*\\*',
                 '$programdata\\Microsoft\\Windows\\WER\\ReportArchive\\*\\*',
                 '$programdata\\Microsoft\\Windows\\WER\\ReportQueue\\*\\*',
                 '$localappdata\\Microsoft\\Internet Explorer\\brndlog.bak',
@@ -416,7 +413,7 @@ class System(Cleaner):
                 '$windir\\Debug\\UserMode\\*.log',
                 '$windir\\Debug\\UserMode\\ChkAcc.bak',
                 '$windir\\Debug\\UserMode\\userenv.bak',
-                '$windir\\Microsoft.NET\Framework\*\*.log',
+                '$windir\\Microsoft.NET\\Framework\\*\\*.log',
                 '$windir\\pchealth\\helpctr\\Logs\\hcupdate.log',
                 '$windir\\security\\logs\\*.log',
                 '$windir\\security\\logs\\*.old',
@@ -429,7 +426,7 @@ class System(Cleaner):
                 '$windir\\system32\\LogFiles\\Firewall\\pfirewall.log*',
                 '$windir\\system32\\LogFiles\\Scm\\SCM.EVM*',
                 '$windir\\system32\\LogFiles\\WMI\\Terminal*.etl',
-                '$windir\\system32\\LogFiles\\WMI\\RTBackup\EtwRT.*etl',
+                '$windir\\system32\\LogFiles\\WMI\\RTBackup\\EtwRT.*etl',
                 '$windir\\system32\\wbem\\Logs\\*.lo_',
                 '$windir\\system32\\wbem\\Logs\\*.log', )
 
@@ -439,7 +436,7 @@ class System(Cleaner):
                     yield Command.Delete(globbed)
 
         # memory
-        if sys.platform.startswith('linux') and 'memory' == option_id:
+        if sys.platform == 'linux' and 'memory' == option_id:
             yield Command.Function(None, Memory.wipe_memory, _('Memory'))
 
         # memory dump
@@ -611,14 +608,15 @@ class System(Cleaner):
             '^/tmp/.truecrypt_aux_mnt.*/(control|volume)$',
             '^/tmp/.vbox-[^/]+-ipc/lock$',
             '^/tmp/.wine-[0-9]+/server-.*/lock$',
-            '^/tmp/gconfd-[^/]+/lock/ior$',
             '^/tmp/fsa/',  # fsarchiver
+            '^/tmp/gconfd-[^/]+/lock/ior$',
             '^/tmp/kde-',
             '^/tmp/kdesudo-',
             '^/tmp/ksocket-',
             '^/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock$',
             '^/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior$',
             '^/tmp/pulse-[^/]+/pid$',
+            '^/tmp/xauth',
             '^/var/tmp/kdecache-',
             '^' + os.path.expanduser('~/.cache/wallpaper/'),
             # Flatpak mount point

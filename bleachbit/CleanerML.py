@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ Create cleaners from CleanerML (markup language)
 
 import bleachbit
 from bleachbit.Action import ActionProvider
-from bleachbit import _
+from bleachbit.Language import get_text as _
 from bleachbit.General import boolstr_to_bool, getText
 from bleachbit.FileUtilities import expand_glob_join, listdir
 from bleachbit import Cleaner
@@ -78,7 +78,11 @@ class CleanerML:
         else:
             self.xlate_mode = True
 
-        dom = xml.dom.minidom.parse(pathname)
+        try:
+            dom = xml.dom.minidom.parse(pathname)
+        except xml.parsers.expat.ExpatError as e:
+            logger.error("Error parsing CleanerML file %s with error %s", pathname, e)
+            return
 
         self.handle_cleaner(dom.getElementsByTagName('cleaner')[0])
 
@@ -100,7 +104,7 @@ class CleanerML:
         # Define the current operating system.
         if platform == 'darwin':
             current_os = ('darwin', 'bsd', 'unix')
-        elif platform.startswith('linux'):
+        elif platform == 'linux':
             current_os = ('linux', 'unix')
         elif platform.startswith('openbsd'):
             current_os = ('bsd', 'openbsd', 'unix')
@@ -109,7 +113,7 @@ class CleanerML:
         elif platform.startswith('freebsd'):
             current_os = ('bsd', 'freebsd', 'unix')
         elif platform == 'win32':
-            current_os = ('windows')
+            current_os = ('windows',)
         else:
             raise RuntimeError('Unknown operating system: %s ' % sys.platform)
         # Compare current OS against required OS.
@@ -133,7 +137,7 @@ class CleanerML:
                 exc_msg = _(
                     "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option XML={option_xml}")
                 logger.exception(exc_msg.format(
-                    cleaner_id=exc_dict, option_xml=option.toxml()))
+                    cleaner_id=self.cleaner.id, option_xml=option.toxml()))
         self.handle_cleaner_running(cleaner.getElementsByTagName('running'))
         self.handle_localizations(
             cleaner.getElementsByTagName('localizations'))
@@ -159,7 +163,8 @@ class CleanerML:
                 continue
             detection_type = running.getAttribute('type')
             value = getText(running.childNodes)
-            self.cleaner.add_running(detection_type, value)
+            same_user = running.getAttribute('same_user') or False
+            self.cleaner.add_running(detection_type, value, same_user)
 
     def handle_cleaner_option(self, option):
         """<option> element"""
@@ -325,7 +330,7 @@ msgstr ""
 def create_pot():
     """Create a .pot for translation using gettext"""
 
-    f = open('../po/cleanerml.pot', 'w')
+    f = open('../po/cleanerml.pot', 'w', encoding='utf-8')
 
     for pathname in listdir('../cleaners'):
         if not pathname.lower().endswith(".xml"):

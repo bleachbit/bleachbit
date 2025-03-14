@@ -1,0 +1,10 @@
+# requirements for BleachBit on Windows
+certifi
+chardet
+plyer
+psutil
+py2exe
+pypiwin32
+requests
+scandir # FIXME: switch to os.walk() on Windows
+winshell

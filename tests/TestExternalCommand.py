@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ Test case for application level functions
 import os
 import sys
 import subprocess
-from unittest import mock, SkipTest
+from unittest import mock
 
 try:
     import gi

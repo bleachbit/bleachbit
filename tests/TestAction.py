@@ -2,7 +2,7 @@
 # coding=utf-8
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,14 +23,21 @@
 Test cases for module Action
 """
 
-from bleachbit.Action import *
+import bleachbit.FileUtilities
+from bleachbit.Action import ActionProvider, Command, Delete, has_glob, expand_multi_var
 from tests import common
+from tests.TestFileUtilities import test_ini_helper
+from tests.TestFileUtilities import test_json_helper
 
+import glob
+import logging
+import os
 import shutil
 import sys
 import tempfile
 import unittest
-import mock
+import xml.parsers.expat
+from unittest import mock
 from xml.dom.minidom import parseString
 
 
@@ -70,7 +77,7 @@ def benchmark_filter(this_filter):
         filter_code = 'regex="."'
     action_str = '<action command="delete" search="glob" path="%s/*" %s />' % \
         (dirname, filter_code)
-    results = _action_str_to_results(action_str)
+    _action_str_to_results(action_str)
     end = time.time()
     elapsed_seconds = end - start
     rate = n_files / elapsed_seconds
@@ -97,7 +104,11 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def _test_action_str(self, action_str, expect_exists=True):
         """Parse <action> and test it"""
-        dom = parseString(action_str)
+        try:
+            dom = parseString(action_str)
+        except xml.parsers.expat.ExpatError as e:
+            print(action_str)
+            raise e
         action_node = dom.childNodes[0]
         command = action_node.getAttribute('command')
         filename = action_node.getAttribute('path')
@@ -118,7 +129,7 @@ class ActionTestCase(common.BleachbitTestCase):
             common.validate_result(self, result)
             self.assertNotEqual('/', result['path'])
             # delete
-            ret = next(cmd.execute(really_delete=True))
+            next(cmd.execute(really_delete=True))
             if 'delete' == command:
                 self.assertNotLExists(cmd.path)
             elif 'truncate' == command:
@@ -232,8 +243,6 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_ini(self):
         """Unit test for class Ini"""
-        from tests.TestFileUtilities import test_ini_helper
-
         def execute_ini(path, section, parameter):
             effective_parameter = ""
             if parameter is not None:
@@ -246,8 +255,6 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_json(self):
         """Unit test for class Json"""
-        from tests.TestFileUtilities import test_json_helper
-
         def execute_json(path, address):
             action_str = '<action command="json" search="file" path="%s" address="%s" />' \
                 % (path, address)
@@ -267,6 +274,21 @@ class ActionTestCase(common.BleachbitTestCase):
         for test in tests:
             self._test_action_str(
                 test % ActionTestCase._TEST_PROCESS_CMDS[os.name])
+
+    def test_process_space(self):
+        """Unit test for process action with space in path
+
+        https://github.com/bleachbit/bleachbit/pull/871
+        """
+        fn = os.path.join(self.tempdir, 'file with space.txt')
+        common.touch_file(fn)
+        if os.name == 'nt':
+            cmd = 'cmd /c del &quot;%s&quot;' % fn
+        else:
+            cmd = 'rm %s' % fn.replace(' ', '\\ ')
+        action_str = '<action command="process" wait="true" cmd="%s" />' % cmd
+        self._test_action_str(action_str)
+        self.assertNotExists(fn)
 
     def test_process_unicode_stderr(self):
         """
@@ -292,8 +314,8 @@ class ActionTestCase(common.BleachbitTestCase):
         """Unit test for regex option"""
         _iglob = glob.iglob
         glob.iglob = lambda x: ['/tmp/foo1', '/tmp/foo2', '/tmp/bar1']
-        _getsize = FileUtilities.getsize
-        FileUtilities.getsize = lambda x: 1
+        _getsize = bleachbit.FileUtilities.getsize
+        bleachbit.FileUtilities.getsize = lambda x: 1
 
         # should match three files using no regexes
         action_str = '<action command="delete" search="glob" path="/tmp/foo*" />'
@@ -344,7 +366,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
         # clean up
         glob.iglob = _iglob
-        FileUtilities.getsize = _getsize
+        bleachbit.FileUtilities.getsize = _getsize
 
     def test_search_glob(self):
         """Unit test for search=glob"""
@@ -370,8 +392,8 @@ class ActionTestCase(common.BleachbitTestCase):
         """Unit test for wholeregex filter"""
         _iglob = glob.iglob
         glob.iglob = lambda x: ['/tmp/foo1', '/tmp/foo2', '/tmp/bar1']
-        _getsize = FileUtilities.getsize
-        FileUtilities.getsize = lambda x: 1
+        _getsize = bleachbit.FileUtilities.getsize
+        bleachbit.FileUtilities.getsize = lambda x: 1
 
         # should match three files using no regexes
         action_str = '<action command="delete" search="glob" path="/tmp/foo*" />'
@@ -392,7 +414,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
         # clean up
         glob.iglob = _iglob
-        FileUtilities.getsize = _getsize
+        bleachbit.FileUtilities.getsize = _getsize
 
     def test_type(self):
         """Unit test for type attribute"""
@@ -458,7 +480,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_walk_files(self):
         """Unit test for walk.files"""
-        paths = {'posix': '/var', 'nt': '$WINDIR\\system32'}
+        paths = {'posix': '/var', 'nt': r'$WINDIR\system32'}
 
         action_str = '<action command="delete" search="walk.files" path="%s" />' % paths[os.name]
         results = 0

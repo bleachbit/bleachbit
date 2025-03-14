@@ -2,7 +2,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -46,8 +46,8 @@ import bleachbit
 import bleachbit.General
 import bleachbit.FileUtilities
 
-APP_NAME = "BleachBit - Free space and maintain privacy"
-APP_DESCRIPTION = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had. Supported applications include Edge, Firefox, Google Chrome, VLC, and many others."
+APP_NAME = 'BleachBit'
+APP_DESCRIPTION = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had."
 
 #
 # begin win32com.shell workaround for py2exe
@@ -84,7 +84,7 @@ except ImportError:
 
 
 data_files = []
-if sys.platform.startswith('linux'):
+if sys.platform == 'linux':
     data_files.append(('/usr/share/applications', ['./org.bleachbit.BleachBit.desktop']))
     data_files.append(('/usr/share/pixmaps/', ['./bleachbit.png']))
 elif sys.platform[:6] == 'netbsd':
@@ -98,20 +98,28 @@ elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
 
 args = {}
 if 'py2exe' in sys.argv:
-    args['windows'] = [{
-        'script': 'bleachbit.py',
+    # see multiple issues such as https://github.com/bleachbit/bleachbit/issues/1000
+    APP_DESCRIPTION = 'BleachBit software cleaner'
+
+    # Common metadata for both GUI and console executables
+    common_metadata = {
         'product_name': APP_NAME,
         'description': APP_DESCRIPTION,
         'version': bleachbit.APP_VERSION,
-        'icon_resources': [(1, 'windows/bleachbit.ico')]
-    }]
-    args['console'] = [{
-        'script': 'bleachbit_console.py',
-        'product_name': APP_NAME,
-        'description': APP_DESCRIPTION,
-        'version': bleachbit.APP_VERSION,
-        'icon_resources': [(1, 'windows/bleachbit.ico')]
-    }]
+        'icon_resources': [(1, 'windows/bleachbit.ico')],
+        'company_name': APP_NAME,
+        'copyright': 'Copyright (C) 2008-2025 Andrew Ziem'
+    }
+
+    # GUI executable
+    gui_metadata = common_metadata.copy()
+    gui_metadata['script'] = 'bleachbit.py'
+    args['windows'] = [gui_metadata]
+
+    # Console executable
+    console_metadata = common_metadata.copy()
+    console_metadata['script'] = 'bleachbit_console.py'
+    args['console'] = [console_metadata]
     args['options'] = {
         'py2exe': {
             'packages': ['encodings', 'gi', 'gi.overrides', 'plyer'],
@@ -213,7 +221,7 @@ def recompile_mo(langdir, app, langid, dst):
     # shrink .po
     po2 = os.path.join(dst, langid + '.po2')
     __args = ['msgmerge', '--no-fuzzy-matching', po,
-              os.path.normpath('windows/%s.pot' % app),
+              os.path.normpath(f'windows/{app}.pot'),
               '-o', po2]
     ret = bleachbit.General.run_external(__args)
     if ret[0] != 0:
@@ -247,11 +255,11 @@ def clean_dist_locale():
     for langid in sorted(os.listdir(basedir)):
         langdir = os.path.join(basedir, langid)
         if langid in langs:
-            print("recompiling supported GTK language = %s" % langid)
+            print(f"recompiling supported GTK language = {langid}")
             # reduce the size of the .mo file
             recompile_mo(langdir, 'gtk30', langid, tmpd)
         else:
-            print("removing unsupported GTK language = %s" % langid)
+            print(f"removing unsupported GTK language = {langid}")
             # remove language supported by GTK+ but not by BleachBit
             cmd = 'rd /s /q ' + langdir
             print(cmd)
@@ -266,10 +274,19 @@ def run_setup():
           long_description=APP_DESCRIPTION,
           author="Andrew Ziem",
           author_email="andrew@bleachbit.org",
-          download_url="https://www.bleachbit.org/download",
-          license="GPLv3",
           url=bleachbit.APP_URL,
-          platforms='Linux and Windows; Python v2.6 and 2.7; GTK v3.12+',
+          download_url="https://www.bleachbit.org/download",
+          classifiers=[
+              'Development Status :: 5 - Production/Stable',
+              'Programming Language :: Python',
+              'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+              'Operating System :: Microsoft :: Windows',
+              'Operating System :: POSIX :: Linux',
+          ],
+          license='GPLv3+',
+          py_requires='>=3.8',
+          # Ubuntu 20.04 LTS is EOL on April 2025, and it has Python 3.8.
+          platforms='Linux and Windows, Python v3.8+, GTK v3.24+',
           packages=['bleachbit', 'bleachbit.markovify'],
           **args)
 

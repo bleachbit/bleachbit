@@ -2,19 +2,20 @@ language: python
 os: linux
 jobs:
   include:
-   # Ubuntu 16.04 LTS (Xenial)
-    - dist: xenial
-      python: 3.5
-   # Ubuntu 18.04 LTS (Bionic)
-    - dist: bionic
-      python: 3.6
-    - dist: bionic
-      python: 3.7
-   # Ubuntu 20.04 LTS (Focal)
+   # references:
+   #    https://docs.travis-ci.com/user/reference/overview/
+   #    https://docs.travis-ci.com/user/reference/linux/
+   #    https://wiki.ubuntu.com/Releases
+   #    https://devguide.python.org/versions/
+   #    https://distrowatch.com/table.php?distribution=ubuntu
+   # Ubuntu 20.04 LTS (Focal)  EOL is April 2030, has Python 3.8
     - dist: focal
       python: 3.8
     - dist: focal
       python: 3.9
+   # Ubuntu 22.04 LTS (Jammy)  EOL is April 2034, has Python 3.10
+    - dist: jammy
+      python: 3.10
 cache: pip
 before_install:
   - python --version # show Python version
@@ -26,15 +27,16 @@ install:
   - pip install PyGObject chardet
 # coveralls.io
   - pip install coveralls requests[security]
-# install mock
-  - pip install mock
 script:
 # Make the same file as on AppVeyor, so coveralls does not complain.
    - echo "revision = \"`git rev-parse --short HEAD `\"" >bleachbit/Revision.py
    - echo "build_number = \"$TRAVIS_BUILD_NUMBER" >>bleachbit/Revision.py
+# Tests require translations.
+   - make -C po local
 # Run tests.
    - xvfb-run make tests COVERAGE="coverage run --include='bleachbit/*'"
 after_success:
+# FIXME: add coveralls to GitHub Actions
    - mv .coverage .coverage.travis
    - sudo pip install appveyor-artifacts
    - appveyor-artifacts -o az0 -n bleachbit -m -c $TRAVIS_COMMIT download

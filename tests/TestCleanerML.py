@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,19 @@
 Test cases for module CleanerML
 """
 
+import bleachbit
 from tests import common
-from bleachbit.CleanerML import *
+from bleachbit import Cleaner
+from bleachbit.CleanerML import (
+    CleanerML,
+    boolstr_to_bool,
+    create_pot,
+    list_cleanerml_files,
+    load_cleaners,
+    pot_fragment)
+
+import os
+import sys
 
 
 class CleanerMLTestCase(common.BleachbitTestCase):
@@ -103,9 +114,9 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertTrue(xmlcleaner.os_match(""))
 
         # as Linux
-        self.assertFalse(xmlcleaner.os_match('windows', 'linux2'))
-        self.assertTrue(xmlcleaner.os_match('linux', 'linux2'))
-        self.assertTrue(xmlcleaner.os_match('unix', 'linux2'))
+        self.assertFalse(xmlcleaner.os_match('windows', 'linux'))
+        self.assertTrue(xmlcleaner.os_match('linux', 'linux'))
+        self.assertTrue(xmlcleaner.os_match('unix', 'linux'))
 
         # as Windows
         self.assertFalse(xmlcleaner.os_match('linux', 'win32'))

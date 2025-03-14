@@ -1,7 +1,7 @@
 # vim: ts=4:sw=4:expandtab
 
 # BleachBit
-# Copyright (C) 2008-2021 Andrew Ziem
+# Copyright (C) 2008-2025 Andrew Ziem
 # https://www.bleachbit.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -79,6 +79,21 @@ def chownself(path):
         logger.exception('Error in chown() under chownself()')
 
 
+def gc_collect():
+    """Collect garbage
+
+    On Windows after updating from Python 3.11 to Python 3.12 calling
+        os.unlink() would fail on a file processed by SQLite3.
+    PermissionError: [WinError 32] The process cannot access the file because it is being used
+    by another process: '[...].sqlite'
+    """
+    if not os.name == 'nt':
+        return
+
+    import gc
+    gc.collect()
+
+
 def getrealuid():
     """Get the real user ID when running in sudo mode"""
 
@@ -140,8 +155,12 @@ def run_external(args, stdout=None, env=None, clean_env=True):
         # strings in the output.
         # https://github.com/bleachbit/bleachbit/issues/167
         # https://github.com/bleachbit/bleachbit/issues/168
-        keep_env = ('PATH', 'HOME', 'LD_LIBRARY_PATH', 'TMPDIR', 'BLEACHBIT_TEST_OPTIONS_DIR')
-        env = {key: value for key, value in os.environ.items() if key in keep_env}
+        # dconf reset requires DISPLAY
+        # https://github.com/bleachbit/bleachbit/issues/1096
+        keep_env = ('PATH', 'HOME', 'LD_LIBRARY_PATH', 'TMPDIR',
+                    'BLEACHBIT_TEST_OPTIONS_DIR', 'DISPLAY', 'DBUS_SESSION_BUS_ADDRESS')
+        env = {key: value for key, value in os.environ.items()
+               if key in keep_env}
         env['LANG'] = 'C'
         env['LC_ALL'] = 'C'
     p = subprocess.Popen(args, stdout=stdout,
@@ -160,7 +179,7 @@ def run_external(args, stdout=None, env=None, clean_env=True):
 
 def sudo_mode():
     """Return whether running in sudo mode"""
-    if not sys.platform.startswith('linux'):
+    if not sys.platform == 'linux':
         return False
 
     # if 'root' == os.getenv('USER'):
