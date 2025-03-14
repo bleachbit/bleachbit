@@ -38,6 +38,8 @@ import bleachbit
 from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 
 import glob
+from gi.repository import AppIndicator3 as appindicator
+
 import logging
 import os
 import sys
@@ -612,6 +614,16 @@ class GUI(Gtk.ApplicationWindow):
 
         GLib.idle_add(self.cb_refresh_operations)
 
+        # Ubuntu AppIndicator/KStatusNotifierItem
+        APPINDICATOR_ID = 'BLEACHBIT'
+        current_path = os.getcwd()
+        menu_icon_path = os.path.join(current_path, 'bleachbit-icon.svg')
+        indicator_category = appindicator.IndicatorCategory.SYSTEM_SERVICES
+        indicator = appindicator.Indicator.new(APPINDICATOR_ID, os.path.abspath(menu_icon_path), indicator_category)
+        indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
+        indicator.set_menu(self.build_appindicator_menu())
+        Gtk.main()
+
         # Close the application when user presses CTRL+Q or CTRL+W.
         accel = Gtk.AccelGroup()
         self.add_accel_group(accel)
@@ -650,6 +662,21 @@ class GUI(Gtk.ApplicationWindow):
         """Prevent textbuffer usage during UI destruction"""
         self.textbuffer = None
         super(GUI, self).destroy()
+        
+    def build_appindicator_menu(self):
+        menu = Gtk.Menu()
+        item_clean = Gtk.MenuItem('Clean')
+        item_clean.connect('activate', self.clean_appindicator)
+        item_quit = Gtk.MenuItem('Quit BleachBit')
+        item_quit.connect('activate', Gtk.main_quit)
+        menu.append(item_clean)
+        menu.append(item_quit)
+        menu.show_all()
+        return menu
+
+    def clean_appindicator(self, source):
+        self.preview_or_run_operations(True)
+
 
     def get_preferences_dialog(self):
         return PreferencesDialog(
