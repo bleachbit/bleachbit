@@ -24,7 +24,11 @@ Test case for module General
 
 from bleachbit.FileUtilities import exists_in_path
 from bleachbit.General import (
-    boolstr_to_bool, getrealuid, makedirs, run_external, sudo_mode)
+    boolstr_to_bool,
+    get_real_uid,
+    makedirs,
+    run_external,
+    sudo_mode)
 from bleachbit import logger
 from tests import common
 
@@ -46,12 +50,12 @@ class GeneralTestCase(common.BleachbitTestCase):
         for test in tests:
             self.assertEqual(boolstr_to_bool(test[0]), test[1])
 
-    def test_getrealuid(self):
-        """Test for getrealuid()"""
+    def test_get_real_uid(self):
+        """Test for get_real_uid()"""
         if 'posix' != os.name:
-            self.assertRaises(RuntimeError, getrealuid)
+            self.assertRaises(RuntimeError, get_real_uid)
             return
-        uid = getrealuid()
+        uid = get_real_uid()
         self.assertIsInstance(uid, int)
         self.assertTrue(0 <= uid <= 65535)
         if sudo_mode():

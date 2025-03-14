@@ -120,7 +120,7 @@ def make_self_oom_target_linux():
     logger.debug(_("Setting nice value %d for this process."), os.nice(19))
     # OOM prefers non-privileged processes
     try:
-        uid = General.getrealuid()
+        uid = General.get_real_uid()
         if uid > 0:
             logger.debug(
                 _("Dropping privileges of process ID {pid} to user ID {uid}.").format(pid=os.getpid(), uid=uid))
