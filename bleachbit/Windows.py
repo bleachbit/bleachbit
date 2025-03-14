@@ -928,7 +928,7 @@ class SplashThread(Thread):
             textmetrics = win32gui.GetTextMetrics(hDC)
             text_left_margin = 2 * default_icon_size
             text_rect = (text_left_margin,
-                         (rect[3]-textmetrics['Height'])//2, rect[2], rect[3])
+                         (rect[3] - textmetrics['Height']) // 2, rect[2], rect[3])
             win32gui.DrawText(
                 hDC,
                 _("BleachBit is starting...\n"),

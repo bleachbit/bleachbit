@@ -233,7 +233,7 @@ def generate_emails(number_of_emails,
             email_generator.write(msg.as_string())
             generated_file_names.append(email_output_file.name)
         if on_progress:
-            on_progress(1.0*i/number_of_emails)
+            on_progress(1.0 * i / number_of_emails)
     return generated_file_names
 
 
@@ -261,7 +261,7 @@ def generate_2600(file_count,
             output_file.write(txt)
             generated_file_names.append(output_file.name)
         if on_progress:
-            on_progress(1.0*i/file_count)
+            on_progress(1.0 * i / file_count)
     return generated_file_names
 
 

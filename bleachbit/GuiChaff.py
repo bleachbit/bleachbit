@@ -48,7 +48,7 @@ def make_files_thread(file_count, inspiration, output_folder, delete_when_finish
         on_progress(0, msg=_('Deleting files'))
         for i in range(0, file_count):
             os.unlink(generated_file_names[i])
-            on_progress(1.0 * (i+1)/file_count)
+            on_progress(1.0 * (i + 1) / file_count)
     on_progress(1.0, is_done=True)
 
 

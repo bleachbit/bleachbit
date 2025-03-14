@@ -882,7 +882,7 @@ def wipe_name(pathname1):
     while True:
         try:
             pathname2 = os.path.join(head, __random_string(maxlen))
-            os.rename(pathname1,  pathname2)
+            os.rename(pathname1, pathname2)
             break
         except OSError:
             if maxlen > 10:
