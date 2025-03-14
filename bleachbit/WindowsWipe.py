@@ -912,7 +912,7 @@ def file_wipe(file_name):
     # add \\?\ if it does not exist to support Unicode and long paths
     file_name = extended_path(file_name)
     check_os()
-    win_version, _ = determine_win_version()
+    # win_version, _ = determine_win_version()
 
     volume = volume_from_file(file_name)
     volume_info = get_volume_information(volume)

@@ -28,7 +28,6 @@ from bleachbit.Language import get_active_language_code, \
     setup_translation, \
     get_supported_language_code_name_dict
 from bleachbit.Options import options
-from bleachbit import locale_dir
 from tests import common
 
 

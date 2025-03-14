@@ -56,8 +56,6 @@ import platform
 import shutil
 import sys
 import tempfile
-import unittest
-from unittest import mock
 from decimal import Decimal
 
 if 'win32' == sys.platform:

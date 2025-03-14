@@ -57,7 +57,7 @@ def _action_str_to_results(action_str):
     return [next(cmd.execute(False)) for cmd in _action_str_to_commands(action_str)]
 
 
-def benchmark_filter(this_filter):
+def benchmark_filter(filter_type):
     """Measure how fast listing files is with and without filter"""
     n_files = 100000
     print('benchmark of %d files' % n_files)
@@ -71,7 +71,7 @@ def benchmark_filter(this_filter):
     import time
     start = time.time()
     filter_code = ''
-    if 'regex' == this_filter:
+    if 'regex' == filter_type:
         # This regex matches everything, so the "no filter" and regex
         # are comparable
         filter_code = 'regex="."'
@@ -82,7 +82,7 @@ def benchmark_filter(this_filter):
     elapsed_seconds = end - start
     rate = n_files / elapsed_seconds
     print('filter %s: elapsed: %.2f seconds, %.2f files/second' %
-          (this_filter, elapsed_seconds, rate))
+          (filter_type, elapsed_seconds, rate))
 
     # clean up
     shutil.rmtree(dirname)
@@ -497,7 +497,7 @@ def suite():
     return unittest.makeSuite(ActionTestCase)
 
 
-if __name__ == '__main__':
+def main():
     if 1 < len(sys.argv) and 'benchmark' == sys.argv[1]:
         for this_filter in ['none', 'regex']:
             rates = []
@@ -512,3 +512,7 @@ if __name__ == '__main__':
                   (this_filter, ','.join([str(rate) for rate in rates])))
         sys.exit()
     unittest.main()
+
+
+if __name__ == '__main__':
+    main()

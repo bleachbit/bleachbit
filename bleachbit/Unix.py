@@ -23,10 +23,7 @@
 Integration specific to Unix-like operating systems
 """
 
-import bleachbit
-from bleachbit import FileUtilities, General
-from bleachbit.Language import get_text as _, native_locale_names
-
+import configparser
 import glob
 import logging
 import os
@@ -35,6 +32,10 @@ import re
 import shlex
 import subprocess
 import sys
+
+import bleachbit
+from bleachbit import FileUtilities, General
+from bleachbit.Language import get_text as _, native_locale_names
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +72,7 @@ class LocaleCleanerPath:
             regex = re.compile('^' + pre + Locales.localepattern + post + '$')
         except Exception as errormsg:
             raise RuntimeError(
-                "Malformed regex '%s' or '%s': %s" % (pre, post, errormsg))
+                f"Malformed regex '{pre}' or '{post}': {errormsg}") from errormsg
         self.add_child(regex)
 
     def get_subpaths(self, basepath):
@@ -147,7 +148,7 @@ class Locales:
                     userfilter = xml_node.getAttribute('filter')
                     if 1 != userfilter.count('*'):
                         raise RuntimeError(
-                            "Filter string '%s' must contain the placeholder * exactly once" % userfilter)
+                            f"Filter string '{userfilter}' must contain the placeholder * exactly once")
 
                     # we can't use re.escape, because it escapes too much
                     (pre, post) = (re.sub(r'([\[\]()^$.])', r'\\\1', p)
@@ -155,7 +156,7 @@ class Locales:
                     parent.add_path_filter(pre, post)
         else:
             raise RuntimeError(
-                "Invalid node '%s', expected '<path>' or '<regexfilter>'" % xml_node.nodeName)
+                f"Invalid node '{xml_node.nodeName}', expected '<path>' or '<regexfilter>'")
 
         # handle child nodes
         for child_xml in xml_node.childNodes:
@@ -190,9 +191,9 @@ def _is_broken_xdg_desktop_application(config, desktop_pathname):
         # Wine v1.0 creates .desktop files like this
         # Exec=env WINEPREFIX="/home/z/.wine" wine "C:\\Program
         # Files\\foo\\foo.exe"
-        exec = config.get('Desktop Entry', 'Exec')
+        exec_val = config.get('Desktop Entry', 'Exec')
         try:
-            execs = shlex.split(exec)
+            execs = shlex.split(exec_val)
         except ValueError as e:
             logger.info(
                 "is_broken_xdg_menu: error splitting 'Exec' key '%s' in '%s'", e, desktop_pathname)
@@ -225,9 +226,9 @@ def find_available_locales():
     rc, stdout, stderr = General.run_external(['locale', '-a'])
     if rc == 0:
         return stdout.strip().split('\n')
-    else:
-        logger.warning("Failed to get available locales: %s", stderr)
-        return []
+
+    logger.warning("Failed to get available locales: %s", stderr)
+    return []
 
 
 def find_best_locale(user_locale):
@@ -241,7 +242,8 @@ def find_best_locale(user_locale):
 
     # If requesting a language like 'es' and current locale is compatible
     # like 'es_MX', then return that.
-    import locale
+    # Import here for mock patch.
+    import locale  # pylint: disable=import-outside-toplevel
     current_locale = locale.getlocale()[0]
     if current_locale and current_locale.startswith(user_locale.split('.')[0]):
         return '.'.join(locale.getlocale())
@@ -291,7 +293,8 @@ def get_distribution_name_version_distro():
     https://docs.python.org/3.7/library/platform.html
     """
     try:
-        import distro
+        # Import here in case of ImportError.
+        import distro  # pylint: disable=import-outside-toplevel
         # example 'ubuntu 24.10'
         return distro.id() + ' ' + distro.version()
     except ImportError:
@@ -306,14 +309,14 @@ def get_distribution_name_version_os_release():
     if not os.path.exists('/etc/os-release'):
         return None
     try:
-        with open('/etc/os-release', 'r') as f:
+        with open('/etc/os-release', 'r', encoding='utf-8') as f:
             os_release = {}
             for line in f:
                 if '=' in line:
                     key, value = line.rstrip().split('=', 1)
                     os_release[key] = value.strip('"\'')
     except Exception as e:
-        logger.debug(f"Error reading /etc/os-release: {e}")
+        logger.debug("Error reading /etc/os-release: %s", e)
         return None
     if 'ID' in os_release and 'VERSION_ID' in os_release:
         dist_name = os_release['ID']
@@ -346,15 +349,15 @@ def get_distribution_name_version():
         # example '6.12.3-061203-generic'
         linux_version = linux_version.split('-')[0]
         return f"Linux {linux_version} (unknown distribution)"
-    except Exception as e:
-        logger.debug(f"Error calling platform.release(): {e}")
+    except Exception as e1:
+        logger.debug("Error calling platform.release(): %s", e1)
         try:
             linux_version = os.uname().release
             # example '6.12.3-061203-generic'
             linux_version = linux_version.split('-')[0]
             return f"Linux {linux_version} (unknown distribution)"
-        except Exception as e:
-            logger.debug(f"Error calling os.uname(): {e}")
+        except Exception as e2:
+            logger.debug("Error calling os.uname(): %s", e2)
     return "Linux (unknown version and distribution)"
 
 
@@ -386,7 +389,7 @@ def is_unregistered_mime(mimetype):
     """Returns True if the MIME type is known to be unregistered. If
     registered or unknown, conservatively returns False."""
     try:
-        from gi.repository import Gio
+        from gi.repository import Gio  # pylint: disable=import-outside-toplevel
         if 0 == len(Gio.app_info_get_all_for_type(mimetype)):
             return True
     except ImportError:
@@ -399,7 +402,6 @@ def is_broken_xdg_desktop(pathname):
     """Returns whether the given XDG .desktop file is critically broken.
     Reference: http://standards.freedesktop.org/desktop-entry-spec/latest/"""
     config = bleachbit.RawConfigParser()
-    import configparser
     try:
         config.read(pathname)
     except UnicodeDecodeError:
@@ -457,7 +459,7 @@ def is_process_running_ps_aux(exename, require_same_user):
 
     ps_out = subprocess.check_output(["ps", "aux", "-c"],
                                      universal_newlines=True)
-    first_line = ps_out.split("\n")[0].strip()
+    first_line = ps_out.split('\n', maxsplit=1)[0].strip()
     if "USER" not in first_line or "COMMAND" not in first_line:
         raise RuntimeError("Unexpected ps header format")
 
@@ -497,7 +499,7 @@ def is_process_running_linux(exename, require_same_user):
             does_exe_match = exename == found_exename
 
         if not does_exe_match:
-            with open(os.path.join(os.path.dirname(filename), 'stat'), 'r') as stat_file:
+            with open(os.path.join(os.path.dirname(filename), 'stat'), 'r', encoding='utf-8') as stat_file:
                 proc_name = stat_file.read().split()[1].strip('()')
                 if proc_name == exename:
                     does_exe_match = True
@@ -526,12 +528,9 @@ def is_process_running(exename, require_same_user):
     """
     if sys.platform == 'linux':
         return is_process_running_linux(exename, require_same_user)
-    elif ('darwin' == sys.platform or
-          sys.platform.startswith('openbsd') or
-          sys.platform.startswith('freebsd')):
+    if sys.platform == 'darwin' or sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
         return is_process_running_ps_aux(exename, require_same_user)
-    else:
-        raise RuntimeError('unsupported platform for is_process_running()')
+    raise RuntimeError('unsupported platform for is_process_running()')
 
 
 def rotated_logs():
@@ -598,8 +597,8 @@ def journald_clean():
     try:
         return run_cleaner_cmd('journalctl', ['--vacuum-size=1'], JOURNALD_REGEX)
     except subprocess.CalledProcessError as e:
-        raise RuntimeError("Error calling '%s':\n%s" %
-                           (' '.join(e.cmd), e.output))
+        raise RuntimeError(
+            f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
 
 
 def apt_autoremove():
@@ -612,8 +611,8 @@ def apt_autoremove():
     try:
         return run_cleaner_cmd('apt-get', args, freed_space_regex, ['^E: '])
     except subprocess.CalledProcessError as e:
-        raise RuntimeError("Error calling '%s':\n%s" %
-                           (' '.join(e.cmd), e.output))
+        raise RuntimeError(
+            f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
 
 
 def apt_autoclean():
@@ -621,8 +620,8 @@ def apt_autoclean():
     try:
         return run_cleaner_cmd('apt-get', ['autoclean'], r'^Del .*\[([\d.]+[a-zA-Z]{2})}]', ['^E: '])
     except subprocess.CalledProcessError as e:
-        raise RuntimeError("Error calling '%s':\n%s" %
-                           (' '.join(e.cmd), e.output))
+        raise RuntimeError(
+            f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
 
 
 def apt_clean():
@@ -631,15 +630,15 @@ def apt_clean():
     try:
         run_cleaner_cmd('apt-get', ['clean'], '^unused regex$', ['^E: '])
     except subprocess.CalledProcessError as e:
-        raise RuntimeError("Error calling '%s':\n%s" %
-                           (' '.join(e.cmd), e.output))
+        raise RuntimeError(
+            f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
     new_size = get_apt_size()
     return old_size - new_size
 
 
 def get_apt_size():
     """Return the size of the apt cache (in bytes)"""
-    (rc, stdout, stderr) = General.run_external(['apt-get', '-s', 'clean'])
+    (_rc, stdout, _stderr) = General.run_external(['apt-get', '-s', 'clean'])
     paths = re.findall(r'/[/a-z\.\*]+', stdout)
     return get_globs_size(paths)
 
@@ -687,7 +686,7 @@ def dnf_clean():
 units = {"B": 1, "k": 10**3, "M": 10**6, "G": 10**9}
 
 
-def parseSize(size):
+def parse_size(size):
     """Parse the size returned by dnf"""
     number, unit = [string.strip() for string in size.split()]
     return int(float(number)*units[unit])
@@ -704,14 +703,14 @@ def dnf_autoremove():
     freed_bytes = 0
     allout = stdout + stderr
     if 'Error: This command has to be run under the root user.' in allout:
-        raise RuntimeError('dnf autoremove >> requires root permissions')
+        raise RuntimeError('dnf autoremove requires root permissions')
     if rc > 0:
-        raise RuntimeError('dnf raised error %s: %s' % (rc, stderr))
+        raise RuntimeError(f'dnf autoremove raised error {rc}: {stderr}')
 
     cregex = re.compile(r"Freed space: ([\d.]+[\s]+[BkMG])")
     match = cregex.search(allout)
     if match:
-        freed_bytes = parseSize(match.group(1))
+        freed_bytes = parse_size(match.group(1))
     logger.debug(
         'dnf_autoremove >> total freed bytes: %s', freed_bytes)
     return freed_bytes
@@ -728,10 +727,10 @@ def is_unix_display_protocol_wayland():
         return True
     # Wayland (Ubuntu 23.10) sets DISPLAY=:0 like x11, so do not check DISPLAY.
     try:
-        (rc, stdout, stderr) = General.run_external(['loginctl'])
+        (rc, stdout, _stderr) = General.run_external(['loginctl'])
     except FileNotFoundError:
         return False
-    if not rc == 0:
+    if rc != 0:
         logger.warning('logintctl returned rc %s', rc)
         return False
     try:

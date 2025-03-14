@@ -844,7 +844,7 @@ class SplashThread(Thread):
 
         # Solution 2: Attaching current thread to the foreground thread in order to use BringWindowToTop
         # https://shlomio.wordpress.com/2012/09/04/solved-setforegroundwindow-win32-api-not-always-works/
-        foreground_thread_id, foreground_process_id = win32process.GetWindowThreadProcessId(win32gui.GetForegroundWindow())
+        foreground_thread_id, _foreground_process_id = win32process.GetWindowThreadProcessId(win32gui.GetForegroundWindow())
         appThread = win32api.GetCurrentThreadId()
 
         if foreground_thread_id != appThread:

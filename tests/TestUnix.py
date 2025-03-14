@@ -23,15 +23,46 @@
 Test case for module Unix
 """
 
-from tests import common
-from bleachbit.Unix import *
-from bleachbit.Unix import _is_broken_xdg_desktop_application
-
 from unittest import mock
 import os
+import random
+import re
 import sys
 import tempfile
 import unittest
+from xml.dom.minidom import parseString
+
+from tests import common
+from bleachbit import logger
+from bleachbit.FileUtilities import children_in_directory, exe_exists
+from bleachbit.Unix import (
+    apt_autoclean,
+    apt_autoremove,
+    find_available_locales,
+    get_distribution_name_version,
+    get_distribution_name_version_distro,
+    get_distribution_name_version_os_release,
+    get_distribution_name_version_platform_freedesktop,
+    Locales,
+    _is_broken_xdg_desktop_application,
+    is_broken_xdg_desktop,
+    get_purgeable_locales,
+    get_apt_size,
+    find_best_locale,
+    LocaleCleanerPath,
+    yum_clean,
+    dnf_clean,
+    dnf_autoremove,
+    wine_to_linux_path,
+    root_is_not_allowed_to_X_session,
+    rotated_logs,
+    run_cleaner_cmd,
+    journald_clean,
+    is_unix_display_protocol_wayland,
+    is_process_running_ps_aux,
+    is_process_running,
+    JOURNALD_REGEX
+)
 
 
 class FakeConfig:
@@ -57,14 +88,16 @@ class UnixTestCase(common.BleachbitTestCase):
     @common.skipIfWindows
     def test_apt(self):
         """Unit test for method apt_autoclean() and apt_autoremove()"""
-        if 0 != os.geteuid() or not FileUtilities.exe_exists('apt-get'):
+        if 0 != os.geteuid() or not exe_exists('apt-get'):
             self.assertRaises(RuntimeError, apt_autoclean)
             self.assertRaises(RuntimeError, apt_autoremove)
         else:
             bytes_freed = apt_autoclean()
             self.assertIsInteger(bytes_freed)
+            logger.debug('apt bytes cleaned %d', bytes_freed)
             bytes_freed = apt_autoremove()
             self.assertIsInteger(bytes_freed)
+            logger.debug('apt bytes cleaned %d', bytes_freed)
 
     @common.skipIfWindows
     def test_find_available_locales(self):
@@ -139,7 +172,7 @@ class UnixTestCase(common.BleachbitTestCase):
         self.assertRaises(AssertionError, find_best_locale, None)
         self.assertRaises(AssertionError, find_best_locale, [])
 
-    @unittest.skipUnless(FileUtilities.exe_exists('apt-get'),
+    @unittest.skipUnless(exe_exists('apt-get'),
                          'skipping tests for unavailable apt-get')
     def test_get_apt_size(self):
         """Unit test for method get_apt_size()"""
@@ -188,7 +221,7 @@ class UnixTestCase(common.BleachbitTestCase):
                      '/usr/local/share/applications/',
                      '/usr/share/ubuntu-wayland/']
         for dirname in menu_dirs:
-            for filename in [fn for fn in FileUtilities.children_in_directory(os.path.expanduser(dirname), False)
+            for filename in [fn for fn in children_in_directory(os.path.expanduser(dirname), False)
                              if fn.endswith('.desktop')
                              ]:
                 self.assertIsInstance(is_broken_xdg_desktop(filename), bool)
@@ -200,11 +233,10 @@ class UnixTestCase(common.BleachbitTestCase):
         system_dirs = ['/usr/bin', '/usr/lib', '/etc']
         filenames = []
         for dirname in system_dirs:
-            for filename in FileUtilities.children_in_directory(dirname, False):
+            for filename in children_in_directory(dirname, False):
                 if filename.endswith('.desktop'):
                     continue
                 filenames.append(filename)
-        import random
         sample_size = min(1000, len(filenames))
         sampled_filenames = random.sample(filenames, sample_size)
         for filename in sampled_filenames:
@@ -230,7 +262,7 @@ Icon=6B19_WhatsNew.0""")
             tmp.flush()
             self.assertIsInstance(is_broken_xdg_desktop(tmp.name), bool)
 
-    @mock.patch('bleachbit.Unix.FileUtilities.exe_exists')
+    @mock.patch('bleachbit.FileUtilities.exe_exists')
     @common.skipIfWindows
     def test_is_broken_xdg_desktop_chrome(self, mock_exe_exists):
         """Unit test for certain Chrome .desktop file
@@ -311,7 +343,7 @@ PrefersNonDefaultGPU=false""")
         result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
         self.assertFalse(result)
 
-    @mock.patch('bleachbit.Unix.FileUtilities.exe_exists')
+    @mock.patch('bleachbit.FileUtilities.exe_exists')
     def test_desktop_missing_wine(self, mock_exe_exists):
         """Unit test for .desktop file without Wine installed"""
         mock_exe_exists.side_effect = [
@@ -323,7 +355,7 @@ PrefersNonDefaultGPU=false""")
         mock_exe_exists.assert_has_calls([mock.call('env'), mock.call('wine')])
 
     @mock.patch('os.path.exists')
-    @mock.patch('bleachbit.Unix.FileUtilities.exe_exists')
+    @mock.patch('bleachbit.FileUtilities.exe_exists')
     def test_desktop_wine_valid_windows_exe(self, mock_exe_exists, mock_path_exists):
         """Unit test for .desktop file pointing to valid Windows application"""
         fake_config = FakeConfig({"Desktop Entry": {
@@ -334,7 +366,7 @@ PrefersNonDefaultGPU=false""")
         self.assertFalse(result)
 
     @mock.patch('os.path.exists')
-    @mock.patch('bleachbit.Unix.FileUtilities.exe_exists')
+    @mock.patch('bleachbit.FileUtilities.exe_exists')
     def test_desktop_env_missing_windows_exe(self, mock_exe_exists, mock_path_exists):
         """Unit test for .desktop file with env pointing to missing Windows application"""
         fake_config = FakeConfig({"Desktop Entry": {
@@ -412,7 +444,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
 
     @common.skipIfWindows
     def test_journald_clean(self):
-        if not FileUtilities.exe_exists('journalctl'):
+        if not exe_exists('journalctl'):
             self.assertRaises(RuntimeError, journald_clean)
         else:
             try:
@@ -467,7 +499,6 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                  'ko_KR.eucKR': 'ko',
                  'pl.ISO8859-2': 'pl',
                  'zh_TW.Big5': 'zh'}
-        import re
         regex = re.compile('^' + Locales.localepattern + '$')
         for locale, tlc in tests.items():
             m = regex.match(locale)
@@ -480,7 +511,6 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
     @common.skipIfWindows
     def test_localization_paths(self):
         """Unit test for localization_paths()"""
-        from xml.dom.minidom import parseString
         configpath = parseString(
             '<path location="/usr/share/locale/" filter="*" />').firstChild
         self.locales.add_xml(configpath)
@@ -530,7 +560,6 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                     r'    <regexfilter postfix="\.txt" />' \
                     '  </path>' \
                     '</path>'
-        from xml.dom.minidom import parseString
         config = parseString(configxml)
         self.locales._paths = LocaleCleanerPath(self.tempdir)
         self.locales.add_xml(config.firstChild, None)
@@ -547,7 +576,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         """Unit test for rotated_logs()"""
         for path in rotated_logs():
             self.assertLExists(
-                path, "Rotated log path '%s' does not exist" % path)
+                path, f"Rotated log path '{path}' does not exist")
 
     @mock.patch('bleachbit.FileUtilities.whitelisted')
     @mock.patch('bleachbit.FileUtilities.children_in_directory')
@@ -629,34 +658,34 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
     def test_yum_clean(self):
         """Unit test for yum_clean()"""
         if 0 != os.geteuid() or os.path.exists('/var/run/yum.pid') \
-                or not FileUtilities.exe_exists('yum'):
+                or not exe_exists('yum'):
             self.assertRaises(RuntimeError, yum_clean)
         else:
             bytes_freed = yum_clean()
             self.assertIsInteger(bytes_freed)
-            bleachbit.logger.debug('yum bytes cleaned %d', bytes_freed)
+            logger.debug('yum bytes cleaned %d', bytes_freed)
 
     @common.skipIfWindows
     def test_dnf_clean(self):
         """Unit test for dnf_clean()"""
         if 0 != os.geteuid() or os.path.exists('/var/run/dnf.pid') \
-                or not FileUtilities.exe_exists('dnf'):
+                or not exe_exists('dnf'):
             self.assertRaises(RuntimeError, dnf_clean)
         else:
             bytes_freed = dnf_clean()
             self.assertIsInteger(bytes_freed)
-            bleachbit.logger.debug('dnf bytes cleaned %d', bytes_freed)
+            logger.debug('dnf bytes cleaned %d', bytes_freed)
 
     @common.skipIfWindows
     def test_dnf_autoremove_real(self):
         """Unit test for dnf_autoremove() with real dnf"""
         if 0 != os.geteuid() or os.path.exists('/var/run/dnf.pid') \
-                or not FileUtilities.exe_exists('dnf'):
+                or not exe_exists('dnf'):
             self.assertRaises(RuntimeError, dnf_clean)
         else:
             bytes_freed = dnf_autoremove()
             self.assertIsInteger(bytes_freed)
-            bleachbit.logger.debug('dnf bytes cleaned %d', bytes_freed)
+            logger.debug('dnf bytes cleaned %d', bytes_freed)
 
     @common.skipIfWindows
     @mock.patch('bleachbit.Language.setup_translation')
@@ -707,16 +736,16 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         self.assertEqual(len(os.environ), 0)
 
         # Check that it does not throw an exception.
-        no_exception = is_unix_display_protocol_wayland()
+        is_unix_display_protocol_wayland()
 
         display_protocol = None
 
         def side_effect_func(value):
             if len(value) == 1:
                 return (0, 'SESSION  UID USER   SEAT  TTY \n      2 1000 debian seat0 tty2\n\n1 sessions listed.\n', '')
-            elif len(value) > 1:
-                return (0, 'Type={}\n'.format(display_protocol), '')
-            assert (False)  # should never reach here
+            if len(value) > 1:
+                return (0, f'Type={display_protocol}\n', '')
+            assert False  # should never reach here
 
         for display_protocol, assert_method in [['wayland', self.assertTrue], ['donotexist', self.assertFalse]]:
             with mock.patch('bleachbit.General.run_external') as mock_run_external:
@@ -746,7 +775,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
     def test_xhost_autorized_root(self):
         error_code = None
 
-        def side_effect_func(*args, **kwargs):
+        def side_effect_func(*args, **_kwargs):
             self.assertEqual(args[0][0], 'xhost')
             return (error_code,
                     '',

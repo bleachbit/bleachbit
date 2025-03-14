@@ -31,8 +31,6 @@ from bleachbit.Worker import Worker
 
 import os
 import tempfile
-import unittest
-import logging
 
 
 class AccessDeniedActionAction(ActionProvider):

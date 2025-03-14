@@ -22,10 +22,23 @@
 Test case for module Memory
 """
 
-from tests import common
-from bleachbit.Memory import *
-
+import os
+import re
 import unittest
+
+from tests import common
+from bleachbit import logger
+from bleachbit.Memory import (
+    count_swap_linux,
+    disable_swap_linux,
+    enable_swap_linux,
+    get_proc_swaps,
+    get_swap_size_linux,
+    get_swap_uuid,
+    make_self_oom_target_linux,
+    parse_swapoff,
+    physical_free, physical_free_darwin,
+    report_free)
 
 
 class MemoryTestCase(common.BleachbitTestCase):
