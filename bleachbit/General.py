@@ -21,6 +21,7 @@
 General code
 """
 
+import getpass
 import logging
 import os
 import sys
@@ -92,6 +93,20 @@ def gc_collect():
 
     import gc
     gc.collect()
+
+
+def get_real_username():
+    """Get the real username when running in sudo mode
+
+    On GitHub Actions, os.getlogin() returns
+    OSError: [Errno 25] Inappropriate ioctl for device
+    """
+    if 'posix' != os.name:
+        raise RuntimeError('get_real_username() requires POSIX')
+    try:
+        return os.getenv('SUDO_USER') or os.getlogin()
+    except OSError:
+        return getpass.getuser()
 
 
 def get_real_uid():

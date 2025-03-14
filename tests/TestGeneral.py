@@ -26,6 +26,7 @@ from bleachbit.FileUtilities import exists_in_path
 from bleachbit.General import (
     boolstr_to_bool,
     get_real_uid,
+    get_real_username,
     makedirs,
     run_external,
     sudo_mode)
@@ -68,6 +69,17 @@ class GeneralTestCase(common.BleachbitTestCase):
             logger.debug('os.login() = %s', os.getlogin())
         except:
             logger.exception('os.login() raised exception')
+
+    def test_get_real_username(self):
+        """Test for get_real_username()"""
+        if 'posix' != os.name:
+            self.assertRaises(RuntimeError, get_real_username)
+            return
+        username = get_real_username()
+        self.assertIsInstance(username, str)
+        self.assertGreater(len(username), 0)
+        if sudo_mode():
+            self.assertNotEqual(username, 'root')
 
     def test_makedirs(self):
         """Unit test for makedirs"""
