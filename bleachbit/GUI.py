@@ -46,6 +46,16 @@ import sys
 import threading
 import time
 
+if sys.platform.startswith('linux'):
+    try:
+        from gi.repository import AyatanaAppIndicator3 as AppIndicator
+    except ImportError:
+        try:
+            from gi.repository import AppIndicator3 as AppIndicator
+        except ImportError:
+            from gi.repository import AppIndicator
+from gi.repository import Gtk, Gdk, GObject, GLib, Gio
+
 import gi
 gi.require_version('Gtk', '3.0')
 
