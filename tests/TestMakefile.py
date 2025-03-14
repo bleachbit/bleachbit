@@ -65,16 +65,16 @@ class MakefileTestCase(common.BleachbitTestCase):
     def test_make(self):
 
         from bleachbit import APP_VERSION
-        ver_name = 'bleachbit-'+APP_VERSION
+        ver_name = 'bleachbit-' + APP_VERSION
 
-        pkg_fn = os.path.join('dist', ver_name+'.tar.gz')
+        pkg_fn = os.path.join('dist', ver_name + '.tar.gz')
         if os.path.exists(pkg_fn):
             os.remove(pkg_fn)
         self.assertNotExists(pkg_fn)
 
         sdist_cmd = [sys.executable, 'setup.py', 'sdist']
         subprocess.check_call(sdist_cmd)
-        pkg_fn = os.path.join('dist', ver_name+'.tar.gz')
+        pkg_fn = os.path.join('dist', ver_name + '.tar.gz')
         self.assertExists(pkg_fn)
 
         extract_dir = os.path.join(make_temp_dir, 'extract')
@@ -92,7 +92,7 @@ class MakefileTestCase(common.BleachbitTestCase):
         self.assertNotExists(canary_fn)
 
         install_tgt_dir = os.path.join(make_temp_dir, 'install')
-        install_command = ['make', 'install', 'DESTDIR='+install_tgt_dir]
+        install_command = ['make', 'install', 'DESTDIR=' + install_tgt_dir]
         subprocess.check_call(install_command, cwd=extract_subdir)
         self.assertTrue(os.path.isdir(install_tgt_dir))
         self.assertExists(os.path.join(

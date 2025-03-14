@@ -384,7 +384,7 @@ PrefersNonDefaultGPU=false""")
             ("", "Blank file"),
             ("[Desktop Entry]\n", "missing Type and Name"),
             ("[Desktop Entry]\nType=Application\n", "missing Name key"),
-            ("[Desktop Entry]\nName=Test\n",    "missing Type key"),
+            ("[Desktop Entry]\nName=Test\n", "missing Type key"),
             ("[Desktop Entry]\nType=Link\nName=Test\n",
              "Type=Link and missing URL key"),
             ("[Desktop Entry]\nType=Application\nName=Test",
@@ -628,7 +628,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             '/var/log/sysstat/sar24',
             '/var/log/whitelisted/foo.0'
         ]
-        mock_cid.return_value = iter(expected_delete+expected_keep)
+        mock_cid.return_value = iter(expected_delete + expected_keep)
         result = list(rotated_logs())
         self.assertEqual(set(result), set(expected_delete))
         for path in expected_keep:

@@ -260,7 +260,7 @@ def validate_result(self, result, really_delete=False):
 
 def get_winregistry_value(key, subkey):
     try:
-        with winreg.OpenKey(key,  subkey) as hkey:
+        with winreg.OpenKey(key, subkey) as hkey:
             return winreg.QueryValue(hkey, None)
     except FileNotFoundError:
         return None

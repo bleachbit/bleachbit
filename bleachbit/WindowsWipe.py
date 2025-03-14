@@ -690,15 +690,15 @@ def get_ntfs_volume_data(volume_handle):
 
     # At this point we have a FSCTL_GET_NTFS_VOLUME_DATA (vd) structure.
     # Pick out the elements from structure that are useful to us.
-    _,              vd_struct = unpack_element('q', vd_struct)     # 8 bytes
+    _, vd_struct = unpack_element('q', vd_struct)     # 8 bytes
     number_sectors, vd_struct = unpack_element('q', vd_struct)     # 8 bytes
     total_clusters, vd_struct = unpack_element('q', vd_struct)     # 8 bytes
-    free_clusters,  vd_struct = unpack_element('q', vd_struct)     # 8 bytes
+    free_clusters, vd_struct = unpack_element('q', vd_struct)     # 8 bytes
     total_reserved, vd_struct = unpack_element('q', vd_struct)     # 8 bytes
-    _,              vd_struct = unpack_element('4I', vd_struct)    # 4*4 bytes
-    _,              vd_struct = unpack_element('3q', vd_struct)    # 3*8 bytes
+    _, vd_struct = unpack_element('4I', vd_struct)    # 4*4 bytes
+    _, vd_struct = unpack_element('3q', vd_struct)    # 3*8 bytes
     mft_zone_start, vd_struct = unpack_element('q', vd_struct)     # 8 bytes
-    mft_zone_end,   vd_struct = unpack_element('q', vd_struct)     # 8 bytes
+    mft_zone_end, vd_struct = unpack_element('q', vd_struct)     # 8 bytes
 
     # Quick sanity check that we got something reasonable for MFT zone.
     assert (mft_zone_start < mft_zone_end and

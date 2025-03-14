@@ -570,9 +570,9 @@ FileKey1=%CommonAppData%\Initech\TPSReports\Logs|*.*""")
         print('Making %d files in each of %d directories.' %
               (file_count, dir_count))
         tmp_dir = tempfile.mkdtemp()
-        for i_d in range(1, dir_count+1):
+        for i_d in range(1, dir_count + 1):
             sub_dir = os.path.join(tmp_dir, 'dir%d' % i_d)
-            for i_f in range(1, file_count+1):
+            for i_f in range(1, file_count + 1):
                 tmp_fn = os.path.join(sub_dir, 'file%d' % i_f)
                 common.touch_file(tmp_fn)
 
@@ -591,7 +591,7 @@ FileKey1=%CommonAppData%\Initech\TPSReports\Logs|*.*""")
         t0 = time.time()
         self.run_all(cleaner, False)
         t1 = time.time()
-        print('Elapsed time in preview: %.4f seconds ' % (t1-t0))
+        print('Elapsed time in preview: %.4f seconds ' % (t1 - t0))
 
         # delete
         self.run_all(cleaner, False)

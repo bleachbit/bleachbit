@@ -690,7 +690,7 @@ units = {"B": 1, "k": 10**3, "M": 10**6, "G": 10**9}
 def parse_size(size):
     """Parse the size returned by dnf"""
     number, unit = [string.strip() for string in size.split()]
-    return int(float(number)*units[unit])
+    return int(float(number) * units[unit])
 
 
 def dnf_autoremove():

@@ -119,7 +119,7 @@ class CommonTestCase(common.BleachbitTestCase):
         # Increase size of file.
         fsize = 2**13
         with open(fn, "w") as f:
-            f.write(' '*fsize)
+            f.write(' ' * fsize)
         self.assertEqual(fsize, getsize(fn))
 
         # Do not truncate.

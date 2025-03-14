@@ -273,7 +273,7 @@ def get_supported_language_codes():
     # The locale_dir may not exist, especially on Windows.
     if not os.path.isdir(locale_dir):
         return ['en_US', 'en']
-    lang_codes = sorted(set(os.listdir(locale_dir)+['en_US', 'en']))
+    lang_codes = sorted(set(os.listdir(locale_dir) + ['en_US', 'en']))
     for lang in lang_codes:
         if lang in ('en', 'en_US'):
             supported_langs.append(lang)
