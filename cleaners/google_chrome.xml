@@ -130,7 +130,6 @@
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
     <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="savefile"/>
-
     <!-- Windows-specific -->
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsMostVisited\"/>
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsOld\"/>

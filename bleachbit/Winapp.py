@@ -349,7 +349,8 @@ class Winapp:
                     search = 'walk.all'
             else:
                 import fnmatch
-                regex = ' regex="^%s$" ' % xml_escape(fnmatch.translate(filename))
+                regex = ' regex="^%s$" ' % xml_escape(
+                    fnmatch.translate(filename))
         else:
             search = 'glob'
             path = os.path.join(dirname, filename)
@@ -401,7 +402,8 @@ class Winapp:
             for dirname in dirnames:
                 # If dirname is a drive letter it needs a special treatment on Windows:
                 # https://www.reddit.com/r/learnpython/comments/gawqne/why_cant_i_ospathjoin_on_a_drive_letterc/
-                dirname = '{}{}'.format(dirname, os.path.sep) if os.path.splitdrive(dirname)[0] == dirname else dirname
+                dirname = '{}{}'.format(dirname, os.path.sep) if os.path.splitdrive(dirname)[
+                    0] == dirname else dirname
                 for provider in self.__make_file_provider(dirname, filename, recurse, removeself, excludekeys):
                     self.cleaners[lid].add_action(
                         section2option(ini_section), provider)

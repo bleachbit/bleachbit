@@ -78,7 +78,7 @@ def __shred_sqlite_char_columns(table, cols=None, where="", path=None):
 
 def get_sqlite_int(path, sql, parameters=None):
     """Run SQL on database in 'path' and return the integers"""
-    row_factory = lambda cursor, row: int(row[0])
+    def row_factory(cursor, row): return int(row[0])
     return _get_sqlite_values(path, sql, row_factory, parameters)
 
 
@@ -110,9 +110,12 @@ def delete_chrome_autofill(path):
 
     # autofill_profile_* existed for years until Google Chrome stable released August 2023
     cols = ('first_name', 'middle_name', 'last_name', 'full_name')
-    cmds += __shred_sqlite_char_columns('autofill_profile_names', cols, path=path)
-    cmds += __shred_sqlite_char_columns('autofill_profile_emails', ('email',), path=path)
-    cmds += __shred_sqlite_char_columns('autofill_profile_phones', ('number',), path=path)
+    cmds += __shred_sqlite_char_columns(
+        'autofill_profile_names', cols, path=path)
+    cmds += __shred_sqlite_char_columns('autofill_profile_emails',
+                                        ('email',), path=path)
+    cmds += __shred_sqlite_char_columns('autofill_profile_phones',
+                                        ('number',), path=path)
     cols = ('company_name', 'street_address', 'dependent_locality',
             'city', 'state', 'zipcode', 'country_code')
     cmds += __shred_sqlite_char_columns('autofill_profiles', cols, path=path)
@@ -363,7 +366,7 @@ def delete_mozilla_favicons(path):
     cmds += 'attach database "{}" as places;'.format(places_path)
 
     bookmarked_urls_query = ("select url from {db}moz_places where id in "
-        "(select distinct fk from {db}moz_bookmarks where fk is not null){filter}")
+                             "(select distinct fk from {db}moz_bookmarks where fk is not null){filter}")
 
     # delete all not bookmarked pages with icons
     urls_where = "where page_url not in ({})".format(
@@ -382,8 +385,8 @@ def delete_mozilla_favicons(path):
 
     # collect favicons that are not bookmarked with their full url which collects also domain level bookmarks
     id_and_url_pairs = _get_sqlite_values(path,
-                                         "select id, icon_url from moz_icons where "
-                                         "(id not in (select icon_id from moz_icons_to_pages))")
+                                          "select id, icon_url from moz_icons where "
+                                          "(id not in (select icon_id from moz_icons_to_pages))")
 
     # We query twice the bookmarked urls and this is a kind of duplication. This is because the first usage of
     # bookmarks is for refining further queries to favicons db and if we first extract the bookmarks as a Python list
@@ -392,25 +395,27 @@ def delete_mozilla_favicons(path):
     # JavaScript strings in some bookmarks and probably other things. So the safer way for now is to not compose a query
     # with Python list of extracted urls.
 
-    row_factory = lambda cursor, row: row[0]
+    def row_factory(cursor, row): return row[0]
     # with the row_factory bookmarked_urls is a list of urls, instead of list of tuples with first element a url
     bookmarked_urls = _get_sqlite_values(places_path,
-                                        bookmarked_urls_query.format(db='', filter=" and url NOT LIKE 'javascript:%'"),
-                                        row_factory)
+                                         bookmarked_urls_query.format(
+                                             db='', filter=" and url NOT LIKE 'javascript:%'"),
+                                         row_factory)
 
     bookmarked_urls_domains = list(map(remove_path_from_url, bookmarked_urls))
     ids_to_delete = [id for id, url in id_and_url_pairs
                      if (
-                            # collect only favicons with not bookmarked urls with same domain or
-                            # their domain is a part of a bookmarked url but the favicons are not domain level
-                            # in other words collect all that are not bookmarked 
-                            remove_path_from_url(url) not in bookmarked_urls_domains or
-                            urlparse(url).path.count('/') > 1
+                         # collect only favicons with not bookmarked urls with same domain or
+                         # their domain is a part of a bookmarked url but the favicons are not domain level
+                         # in other words collect all that are not bookmarked
+                         remove_path_from_url(url) not in bookmarked_urls_domains or
+                         urlparse(url).path.count('/') > 1
                      )
                      ]
 
     # delete all not bookmarked icons
-    icons_where = "where (id in ({}))".format(str(ids_to_delete).replace('[', '').replace(']', ''))
+    icons_where = "where (id in ({}))".format(
+        str(ids_to_delete).replace('[', '').replace(']', ''))
     cols = ('icon_url', 'data')
     cmds += __shred_sqlite_char_columns('moz_icons', cols, icons_where, path)
 

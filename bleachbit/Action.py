@@ -34,7 +34,6 @@ import re
 import shlex
 
 
-
 if 'posix' == os.name:
     from bleachbit import Unix
 
@@ -131,13 +130,13 @@ class FileActionProvider(ActionProvider):
         """Initialize file search"""
         ActionProvider.__init__(self, action_element, path_vars)
         self.regex = action_element.getAttribute('regex')
-        assert(isinstance(self.regex, (str, type(None))))
+        assert (isinstance(self.regex, (str, type(None))))
         self.nregex = action_element.getAttribute('nregex')
-        assert(isinstance(self.nregex, (str, type(None))))
+        assert (isinstance(self.nregex, (str, type(None))))
         self.wholeregex = action_element.getAttribute('wholeregex')
-        assert(isinstance(self.wholeregex, (str, type(None))))
+        assert (isinstance(self.wholeregex, (str, type(None))))
         self.nwholeregex = action_element.getAttribute('nwholeregex')
-        assert(isinstance(self.nwholeregex, (str, type(None))))
+        assert (isinstance(self.nwholeregex, (str, type(None))))
         self.search = action_element.getAttribute('search')
         self.object_type = action_element.getAttribute('type')
         self._set_paths(action_element.getAttribute('path'), path_vars)
@@ -200,7 +199,8 @@ class FileActionProvider(ActionProvider):
             nregex_c_search = None
 
         if self.wholeregex:
-            wholeregex_c_search = re.compile(self.wholeregex, fs_scan_re_flags).search
+            wholeregex_c_search = re.compile(
+                self.wholeregex, fs_scan_re_flags).search
         else:
             wholeregex_c_search = None
 
@@ -297,7 +297,7 @@ class FileActionProvider(ActionProvider):
 
             # use cache
             if self.search in self.CACHEABLE_SEARCHERS and cache[0] == self.search and cache[1] == input_path:
-                #logger.debug(_('using cached walk for path %s'), input_path)
+                # logger.debug(_('using cached walk for path %s'), input_path)
                 for x in cache[2]:
                     yield x
                 return
@@ -307,7 +307,7 @@ class FileActionProvider(ActionProvider):
             self.__class__.cache = ('cleared by', input_path, tuple())
 
             # build new cache
-            #logger.debug('%s walking %s', id(self), input_path)
+            # logger.debug('%s walking %s', id(self), input_path)
 
             if self.search in self.CACHEABLE_SEARCHERS:
                 cache = self.__class__.cache = (self.search, input_path, [])

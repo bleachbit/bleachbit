@@ -52,8 +52,9 @@ class BleachbitTestCase(unittest.TestCase):
 
     @classmethod
     def _patch_options_paths(cls):
-        to_patch = [('bleachbit.options_dir', cls.tempdir), 
-                    ('bleachbit.options_file', os.path.join(cls.tempdir, "bleachbit.ini")),
+        to_patch = [('bleachbit.options_dir', cls.tempdir),
+                    ('bleachbit.options_file', os.path.join(
+                        cls.tempdir, "bleachbit.ini")),
                     ('bleachbit.personal_cleaners_dir', os.path.join(cls.tempdir, "cleaners"))]
         for target, source in to_patch:
             patcher = mock.patch(target, source)
@@ -90,10 +91,10 @@ class BleachbitTestCase(unittest.TestCase):
         basedir = os.path.join(os.path.dirname(__file__), '..')
         os.chdir(basedir)
 
-
     #
     # type asserts
     #
+
     def assertIsInteger(self, obj, msg=''):
         self.assertIsInstance(obj, int, msg)
 
@@ -226,7 +227,7 @@ def touch_file(filename):
         os.makedirs(dname)
     import pathlib
     pathlib.Path(filename).touch()
-    assert(os.path.exists(filename))
+    assert (os.path.exists(filename))
 
 
 def validate_result(self, result, really_delete=False):

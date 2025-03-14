@@ -397,7 +397,8 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
         def check_autofill(testcase, filename):
             testcase.assertTablesAreEmpty(
                 filename,
-                ['autofill', 'local_addresses', 'local_addresses_type_tokens', 'server_addresses']
+                ['autofill', 'local_addresses',
+                    'local_addresses_type_tokens', 'server_addresses']
             )
 
         self.sqlite_clean_helper(
@@ -487,9 +488,9 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
             icon_ids = map(lambda x: x[0], icon_entries)
             cursor.close()
 
-        expected_icon_ids = [4, 5, 6, 7, 13, 14, 42]  # not removed ids from moz_icons table
+        # not removed ids from moz_icons table
+        expected_icon_ids = [4, 5, 6, 7, 13, 14, 42]
         assert sorted(expected_icon_ids) == sorted(icon_ids)
-
 
     def test_get_chrome_bookmark_ids(self):
         """Unit test for get_chrome_bookmark_ids()"""

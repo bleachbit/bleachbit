@@ -21,10 +21,10 @@
 Basic GUI code
 """
 
-from bleachbit.Language import get_text as _
-
+# standard library
 import os
 
+# third party
 try:
     import gi
 except ModuleNotFoundError as e:
@@ -33,9 +33,12 @@ except ModuleNotFoundError as e:
     print('https://pygobject.readthedocs.io/en/latest/getting_started.html')
     print('*'*60)
     raise e
+
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk  # keep after gi.require_version()
 
+# local import
+from bleachbit.Language import get_text as _
 if os.name == 'nt':
     from bleachbit import Windows
 

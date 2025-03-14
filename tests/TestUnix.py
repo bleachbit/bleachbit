@@ -149,7 +149,8 @@ class UnixTestCase(common.BleachbitTestCase):
             self.assertEqual(find_best_locale(locale), 'nds_DE.utf8')
 
         # Reverse the list.
-        mock_find_available_locales.return_value = mock_find_available_locales.return_value[::-1]
+        mock_find_available_locales.return_value = mock_find_available_locales.return_value[
+            ::-1]
         for locale in ('en', 'en_US', 'en_US.utf8'):
             self.assertEqual(find_best_locale(locale), 'en_US.UTF-8')
 
@@ -161,7 +162,7 @@ class UnixTestCase(common.BleachbitTestCase):
 
         mock_getlocale.return_value = ('es_MX', 'UTF-8')
         mock_find_available_locales.return_value = ['C', 'C.utf8', 'en_US.utf8',
-                            'es_MX.iso88591', 'es_MX.utf8', 'POSIX']
+                                                    'es_MX.iso88591', 'es_MX.utf8', 'POSIX']
         for locale in ('es', 'es_MX', 'es_MX.utf8'):
             self.assertEqual(find_best_locale(locale), 'es_MX.UTF-8')
 
