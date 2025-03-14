@@ -117,7 +117,7 @@ def browse_files(_, title):
 
 def browse_folder(_, title):
     """Ask the user to select a folder.  Return full path."""
-    flags = 0x0010 #SHBrowseForFolder path input
+    flags = 0x0010  # SHBrowseForFolder path input
     pidl = shell.SHBrowseForFolder(None, None, title, flags)[0]
     if pidl is None:
         # user cancelled
@@ -228,7 +228,7 @@ def delete_updates():
     dirs += [os.path.expandvars(r'%windir%\ie7updates')]
     dirs += [os.path.expandvars(r'%windir%\ie8updates')]
     # see https://github.com/bleachbit/bleachbit/issues/1215 about catroot2
-    #dirs += [os.path.expandvars(r'%windir%\system32\catroot2')]
+    # dirs += [os.path.expandvars(r'%windir%\system32\catroot2')]
     dirs += [os.path.expandvars(r'%systemdrive%\windows.old')]
     dirs += [os.path.expandvars(r'%systemdrive%\$windows.~bt')]
     dirs += [os.path.expandvars(r'%systemdrive%\$windows.~ws')]
@@ -297,8 +297,10 @@ def elevate_privileges(uac):
         htoken = win32security.OpenProcessToken(
             win32api.GetCurrentProcess(), win32security.TOKEN_ADJUST_PRIVILEGES | win32security.TOKEN_QUERY)
         newPrivileges = [
-            (win32security.LookupPrivilegeValue(None, "SeBackupPrivilege"), win32security.SE_PRIVILEGE_ENABLED),
-            (win32security.LookupPrivilegeValue(None, "SeRestorePrivilege"), win32security.SE_PRIVILEGE_ENABLED),
+            (win32security.LookupPrivilegeValue(None, "SeBackupPrivilege"),
+             win32security.SE_PRIVILEGE_ENABLED),
+            (win32security.LookupPrivilegeValue(None, "SeRestorePrivilege"),
+             win32security.SE_PRIVILEGE_ENABLED),
         ]
         win32security.AdjustTokenPrivileges(htoken, 0, newPrivileges)
         win32file.CloseHandle(htoken)
@@ -321,7 +323,6 @@ def elevate_privileges(uac):
             return False
         parameters = '"%s" --gui --no-uac' % pyfile
         exe = sys.executable
-
 
     parameters = _add_command_line_parameters(parameters)
 
@@ -707,7 +708,8 @@ def has_fontconfig_cache(font_conf_file):
     fc_element = dom.getElementsByTagName('fontconfig')[0]
     cachefile = 'd031bbba323fd9e5b47e0ee5a0353f11-le32d8.cache-6'
     expanded_localdata = os.path.expandvars('%LOCALAPPDATA%')
-    expanded_homepath = os.path.join(os.path.expandvars('%HOMEDRIVE%'), os.path.expandvars('%HOMEPATH%'))
+    expanded_homepath = os.path.join(os.path.expandvars(
+        '%HOMEDRIVE%'), os.path.expandvars('%HOMEPATH%'))
     for dir_element in fc_element.getElementsByTagName('cachedir'):
 
         if dir_element.firstChild.nodeValue == 'LOCAL_APPDATA_FONTCONFIG_CACHE':
@@ -733,7 +735,8 @@ def get_font_conf_file():
         return os.path.join(bleachbit.bleachbit_exe_path, 'etc', 'fonts', 'fonts.conf')
 
     import gi
-    gnome_dir = os.path.join(os.path.dirname(os.path.dirname(gi.__file__)), 'gnome')
+    gnome_dir = os.path.join(os.path.dirname(
+        os.path.dirname(gi.__file__)), 'gnome')
     if not os.path.isdir(gnome_dir):
         # BleachBit is running from a stand-alone Python installation.
         gnome_dir = os.path.join(sys.exec_prefix, '..', '..')
@@ -762,8 +765,10 @@ class SplashThread(Thread):
         win32gui.PumpMessages()
 
     def join(self, *args):
-        import win32con, win32gui
-        win32gui.PostMessage(self._splash_screen_handle, win32con.WM_CLOSE, 0, 0)
+        import win32con
+        import win32gui
+        win32gui.PostMessage(self._splash_screen_handle,
+                             win32con.WM_CLOSE, 0, 0)
         Thread.join(self, *args)
 
     def _show_splash_screen(self):
@@ -774,14 +779,14 @@ class SplashThread(Thread):
         className = 'SimpleWin32'
 
         # create and initialize window class
-        wndClass                = win32gui.WNDCLASS()
-        wndClass.style          = win32con.CS_HREDRAW | win32con.CS_VREDRAW
-        wndClass.lpfnWndProc    = self.wndProc
-        wndClass.hInstance      = hInstance
-        wndClass.hIcon          = win32gui.LoadIcon(0, win32con.IDI_APPLICATION)
-        wndClass.hCursor        = win32gui.LoadCursor(0, win32con.IDC_ARROW)
-        wndClass.hbrBackground  = win32gui.GetStockObject(win32con.WHITE_BRUSH)
-        wndClass.lpszClassName  = className
+        wndClass = win32gui.WNDCLASS()
+        wndClass.style = win32con.CS_HREDRAW | win32con.CS_VREDRAW
+        wndClass.lpfnWndProc = self.wndProc
+        wndClass.hInstance = hInstance
+        wndClass.hIcon = win32gui.LoadIcon(0, win32con.IDI_APPLICATION)
+        wndClass.hCursor = win32gui.LoadCursor(0, win32con.IDC_ARROW)
+        wndClass.hbrBackground = win32gui.GetStockObject(win32con.WHITE_BRUSH)
+        wndClass.lpszClassName = className
 
         # register window class
         wndClassAtom = None
@@ -798,7 +803,7 @@ class SplashThread(Thread):
         windowPosY = (displayHeigh - self._splash_screen_height) // 2
 
         hWindow = win32gui.CreateWindow(
-            wndClassAtom,                   #it seems message dispatching only works with the atom, not the class name
+            wndClassAtom,  # it seems message dispatching only works with the atom, not the class name
             'Bleachbit splash screen',
             win32con.WS_POPUPWINDOW |
             win32con.WS_VISIBLE,
@@ -836,7 +841,8 @@ class SplashThread(Thread):
         except Exception as e:
             exc_message = str(e)
             logger.debug(
-                'Failed attempt to show splash screen with keybd_event: {}'.format(exc_message)
+                'Failed attempt to show splash screen with keybd_event: {}'.format(
+                    exc_message)
             )
 
         if win32gui.GetForegroundWindow() == hWindow:
@@ -844,20 +850,24 @@ class SplashThread(Thread):
 
         # Solution 2: Attaching current thread to the foreground thread in order to use BringWindowToTop
         # https://shlomio.wordpress.com/2012/09/04/solved-setforegroundwindow-win32-api-not-always-works/
-        foreground_thread_id, _foreground_process_id = win32process.GetWindowThreadProcessId(win32gui.GetForegroundWindow())
+        foreground_thread_id, _foreground_process_id = win32process.GetWindowThreadProcessId(
+            win32gui.GetForegroundWindow())
         appThread = win32api.GetCurrentThreadId()
 
         if foreground_thread_id != appThread:
 
             try:
-                win32process.AttachThreadInput(foreground_thread_id, appThread, True)
+                win32process.AttachThreadInput(
+                    foreground_thread_id, appThread, True)
                 win32gui.BringWindowToTop(hWindow)
                 win32gui.ShowWindow(hWindow, win32con.SW_SHOW)
-                win32process.AttachThreadInput(foreground_thread_id, appThread, False)
+                win32process.AttachThreadInput(
+                    foreground_thread_id, appThread, False)
             except Exception as e:
                 exc_message = str(e)
                 logger.debug(
-                    'Failed attempt to show splash screen with AttachThreadInput: {}'.format(exc_message)
+                    'Failed attempt to show splash screen with AttachThreadInput: {}'.format(
+                        exc_message)
                 )
 
         else:
@@ -870,15 +880,19 @@ class SplashThread(Thread):
         # Solution 3: Working with timers that lock/unlock SetForegroundWindow
         # https://gist.github.com/EBNull/1419093
         try:
-            timeout = win32gui.SystemParametersInfo(win32con.SPI_GETFOREGROUNDLOCKTIMEOUT)
-            win32gui.SystemParametersInfo(win32con.SPI_SETFOREGROUNDLOCKTIMEOUT, 0, win32con.SPIF_SENDCHANGE)
+            timeout = win32gui.SystemParametersInfo(
+                win32con.SPI_GETFOREGROUNDLOCKTIMEOUT)
+            win32gui.SystemParametersInfo(
+                win32con.SPI_SETFOREGROUNDLOCKTIMEOUT, 0, win32con.SPIF_SENDCHANGE)
             win32gui.BringWindowToTop(hWindow)
             win32gui.SetForegroundWindow(hWindow)
-            win32gui.SystemParametersInfo(win32con.SPI_SETFOREGROUNDLOCKTIMEOUT, timeout, win32con.SPIF_SENDCHANGE)
+            win32gui.SystemParametersInfo(
+                win32con.SPI_SETFOREGROUNDLOCKTIMEOUT, timeout, win32con.SPIF_SENDCHANGE)
         except Exception as e:
             exc_message = str(e)
             logger.debug(
-                'Failed attempt to show splash screen with SystemParametersInfo: {}'.format(exc_message)
+                'Failed attempt to show splash screen with SystemParametersInfo: {}'.format(
+                    exc_message)
             )
 
         if win32gui.GetForegroundWindow() == hWindow:
@@ -894,8 +908,10 @@ class SplashThread(Thread):
 
         if message == win32con.WM_PAINT:
             hDC, paintStruct = win32gui.BeginPaint(hWnd)
-            folder_with_ico_file = 'share' if hasattr(sys, 'frozen') else 'windows'
-            filename = os.path.join(os.path.dirname(sys.argv[0]), folder_with_ico_file, 'bleachbit.ico')
+            folder_with_ico_file = 'share' if hasattr(
+                sys, 'frozen') else 'windows'
+            filename = os.path.join(os.path.dirname(
+                sys.argv[0]), folder_with_ico_file, 'bleachbit.ico')
             flags = win32con.LR_LOADFROMFILE
             hIcon = win32gui.LoadImage(
                 0, filename, win32con.IMAGE_ICON,
@@ -903,14 +919,16 @@ class SplashThread(Thread):
 
             # Default icon size seems to be 32 pixels so we center the icon vertically.
             default_icon_size = 32
-            icon_top_margin = self._splash_screen_height - 2 * (default_icon_size + 2)
+            icon_top_margin = self._splash_screen_height - \
+                2 * (default_icon_size + 2)
             win32gui.DrawIcon(hDC, 0, icon_top_margin, hIcon)
             # win32gui.DrawIconEx(hDC, 0, 0, hIcon, 64, 64, 0, 0, win32con.DI_NORMAL)
 
             rect = win32gui.GetClientRect(hWnd)
             textmetrics = win32gui.GetTextMetrics(hDC)
             text_left_margin = 2 * default_icon_size
-            text_rect = (text_left_margin, (rect[3]-textmetrics['Height'])//2, rect[2], rect[3])
+            text_rect = (text_left_margin,
+                         (rect[3]-textmetrics['Height'])//2, rect[2], rect[3])
             win32gui.DrawText(
                 hDC,
                 _("BleachBit is starting...\n"),
@@ -926,5 +944,6 @@ class SplashThread(Thread):
 
         else:
             return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
+
 
 splash_thread = SplashThread()

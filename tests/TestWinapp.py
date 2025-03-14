@@ -81,7 +81,6 @@ class WinappTestCase(common.BleachbitTestCase):
         for cleaner in winapps.get_cleaners():
             self.run_all(cleaner, False)
 
-
     def test_detectos(self):
         """Test detectos function"""
         # Tests are in the format (required_ver, mock, expected_return)
@@ -474,23 +473,30 @@ class WinappTestCase(common.BleachbitTestCase):
         # position 2: path of top-folder which should have been deleted
         tests = (
             # Refer to directory directly (i.e., without a glob).
-            (r'FileKey1=%s\dir_c|*.*|REMOVESELF' % self.tempdir, False, r'%s\dir_c' % self.tempdir),
+            (r'FileKey1=%s\dir_c|*.*|REMOVESELF' %
+             self.tempdir, False, r'%s\dir_c' % self.tempdir),
             # Refer to file that exists. This is invalid, so nothing happens.
             (r'FileKey1=%s\dir_c\submarine_sandwich.log|*.*|REMOVESELF' %
              self.tempdir, True, ''),
-            (r'FileKey1=%s\dir_c\submarine*|*.*|REMOVESELF' % self.tempdir, True, ''),
+            (r'FileKey1=%s\dir_c\submarine*|*.*|REMOVESELF' %
+             self.tempdir, True, ''),
             # Refer to path that does not exist, so nothing happens.
             (r'FileKey1=%s\dir_c\doesnotexist.log|*.*|REMOVESELF' %
              self.tempdir, True, ''),
             # Refer by glob to both a file and directory (which both start with `sub`).
             # This should affect only the directory.
-            (r'FileKey1=%s\dir_a\sub*|*.*|REMOVESELF' % self.tempdir, True, r'%s\dir_a\subdir' % self.tempdir),
+            (r'FileKey1=%s\dir_a\sub*|*.*|REMOVESELF' %
+             self.tempdir, True, r'%s\dir_a\subdir' % self.tempdir),
             # glob in middle of directory path with whole directory entry
-            (r'FileKey1=%s\*c\subdir|*.*|REMOVESELF' % self.tempdir, False, r'%s\dir_c\subdir' % self.tempdir),
-            (r'FileKey1=%s\*doesnotexist\subdir|*.*|REMOVESELF' % self.tempdir, True, ''),
+            (r'FileKey1=%s\*c\subdir|*.*|REMOVESELF' %
+             self.tempdir, False, r'%s\dir_c\subdir' % self.tempdir),
+            (r'FileKey1=%s\*doesnotexist\subdir|*.*|REMOVESELF' %
+             self.tempdir, True, ''),
             # glob at end of path
-            (r'FileKey1=%s\dir_c\sub*|*.*|REMOVESELF' % self.tempdir, False, r'%s\dir_c\subdir' % self.tempdir),
-            (r'FileKey1=%s\dir_c\doesnotexist*|*.*|REMOVESELF' % self.tempdir, True, '')
+            (r'FileKey1=%s\dir_c\sub*|*.*|REMOVESELF' %
+             self.tempdir, False, r'%s\dir_c\subdir' % self.tempdir),
+            (r'FileKey1=%s\dir_c\doesnotexist*|*.*|REMOVESELF' %
+             self.tempdir, True, '')
         )
 
         (ini_h, self.ini_fn) = tempfile.mkstemp(

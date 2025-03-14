@@ -23,7 +23,8 @@ Test case for module General
 """
 
 from bleachbit.FileUtilities import exists_in_path
-from bleachbit.General import (boolstr_to_bool, getrealuid, makedirs, run_external, sudo_mode)
+from bleachbit.General import (
+    boolstr_to_bool, getrealuid, makedirs, run_external, sudo_mode)
 from bleachbit import logger
 from tests import common
 

@@ -12,7 +12,8 @@ def install_kde_service_menu_file():
         data_home_path = Path(os.environ["XDG_DATA_HOME"])
     except KeyError:
         data_home_path = Path(os.environ["HOME"], ".local", "share")
-    service_file_path = data_home_path / "kio" / "servicemenus" / "shred_with_bleachbit.desktop"
+    service_file_path = data_home_path / "kio" / \
+        "servicemenus" / "shred_with_bleachbit.desktop"
     if options.get("kde_shred_menu_option"):
         dir_path = service_file_path.parent
         if not dir_path.exists():

@@ -327,7 +327,8 @@ def check_extents(extents, volume_bitmap, allocated_extents=None):
             if check_mapped_bit(volume_bitmap, cluster):
                 count_allocated += 1
                 if allocated_extents is not None:
-                    allocated_extents.append((cluster, cluster)) # Modified by Marvin [12/05/2020] The extents should have (start, end) format 
+                    # Modified by Marvin [12/05/2020] The extents should have (start, end) format
+                    allocated_extents.append((cluster, cluster))
             else:
                 count_free += 1
 
@@ -539,7 +540,7 @@ def obtain_readwrite(volume):
                                FILE_FLAG_NO_BUFFERING |
                                FILE_FLAG_WRITE_THROUGH,
                                None)
-    #logger.debug("Opened volume %s", volume)
+    # logger.debug("Opened volume %s", volume)
 
     return volume_handle
 
@@ -745,7 +746,7 @@ def move_file(volume_handle, file_handle, starting_vcn,
     input_struct = struct.pack('IIqqII', int(file_handle), 0, starting_vcn,
                                starting_lcn, cluster_count, 0)
     _vb_struct = DeviceIoControl(volume_handle, FSCTL_MOVE_FILE,
-                                input_struct, None)
+                                 input_struct, None)
 
 
 # Write zero-fill to a file.
@@ -768,7 +769,7 @@ def write_zero_fill(file_handle, write_length):
             write_length = 0
 
         # Write buffer to file.
-        #logger.debug("Write %d bytes", len(write_string))
+        # logger.debug("Write %d bytes", len(write_string))
         _, bytes_written = WriteFile(file_handle, write_string)
         assert bytes_written == len(write_string)
 
@@ -794,7 +795,7 @@ def wipe_file_direct(file_handle, extents, cluster_size, file_size):
     else:
         # Special case - file so small it can be contained within the
         # directory entry in the MFT part of the disk.
-        #logger.debug("Wiping tiny file that fits entirely on MFT")
+        # logger.debug("Wiping tiny file that fits entirely on MFT")
         write_length = file_size
         write_zero_fill(file_handle, write_length)
 
@@ -926,7 +927,7 @@ def file_wipe(file_name):
         bridged_extents = [x for x in logical_ranges_to_extents(
             get_extents(file_handle, False, file_name), True)]
     CloseHandle(file_handle)
-    #logger.debug('Original extents: {}'.format(orig_extents))
+    # logger.debug('Original extents: {}'.format(orig_extents))
 
     volume_handle = obtain_readwrite(volume)
     attrs = GetFileAttributesW(file_name)
@@ -937,11 +938,11 @@ def file_wipe(file_name):
 
     if not is_special:
         # Direct overwrite when it's a regular file.
-        #logger.info("Attempting direct file wipe.")
+        # logger.info("Attempting direct file wipe.")
         wipe_file_direct(file_handle, orig_extents, cluster_size, file_size)
         new_extents = get_extents(file_handle, True, file_name)
         CloseHandle(file_handle)
-        #logger.debug('New extents: {}'.format(new_extents))
+        # logger.debug('New extents: {}'.format(new_extents))
         if orig_extents == new_extents:
             clean_up(None, volume_handle, None)
             return
@@ -963,7 +964,7 @@ def file_wipe(file_name):
                         orig_extents)
 
     # Chase down all the freed clusters we can, and wipe them.
-    #logger.debug("Attempting defrag file wipe.")
+    # logger.debug("Attempting defrag file wipe.")
     # Put the temp file in the same folder as the target wipe file.
     # Should be able to write this path if user can write the wipe file.
     tmp_file_path = os.path.dirname(file_name) + os.sep + tmp_file_name
@@ -973,8 +974,8 @@ def file_wipe(file_name):
                                          orig_extents, bridged_extents)
     for lcn_start, lcn_end in orig_extents:
         wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end,
-                                       cluster_size, volume_info.total_clusters,
-                                       tmp_file_path)
+                              cluster_size, volume_info.total_clusters,
+                              tmp_file_path)
 
     # Clean up.
     clean_up(None, volume_handle, tmp_file_path)

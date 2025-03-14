@@ -94,7 +94,6 @@ class CommonTestCase(common.BleachbitTestCase):
         for lang_code in lang_codes:
             self.assertIsLanguageCode(lang_code)
 
-
     def test_environment(self):
         """Test for important environment variables"""
         # useful for researching

@@ -471,9 +471,9 @@ class System(Cleaner):
                 yield 0
 
             xbel_pathnames = [
-                    '~/.recently-used.xbel',
-                    '~/.local/share/recently-used.xbel*',
-                    '~/snap/*/*/.local/share/recently-used.xbel']
+                '~/.recently-used.xbel',
+                '~/.local/share/recently-used.xbel*',
+                '~/snap/*/*/.local/share/recently-used.xbel']
             for path1 in xbel_pathnames:
                 for path2 in glob.iglob(os.path.expanduser(path1)):
                     if os.path.lexists(path2):
@@ -501,7 +501,8 @@ class System(Cleaner):
 
         # temporary files
         if 'nt' == os.name and 'tmp' == option_id:
-            dirnames = [os.path.expandvars(r'%temp%'), os.path.expandvars("%windir%\\temp\\")]
+            dirnames = [os.path.expandvars(
+                r'%temp%'), os.path.expandvars("%windir%\\temp\\")]
             # whitelist the folder %TEMP%\Low but not its contents
             # https://bugs.launchpad.net/bleachbit/+bug/1421726
             for dirname in dirnames:
@@ -692,7 +693,8 @@ def create_simple_cleaner(paths):
         def get_commands(self):
             for path in paths:
                 if not isinstance(path, (str)):
-                    raise RuntimeError(f'expected path as string but got {str(path)}')
+                    raise RuntimeError(
+                        f'expected path as string but got {str(path)}')
                 if not os.path.isabs(path):
                     path = os.path.abspath(path)
                 if os.path.isdir(path):

@@ -81,7 +81,8 @@ class CleanerML:
         try:
             dom = xml.dom.minidom.parse(pathname)
         except xml.parsers.expat.ExpatError as e:
-            logger.error("Error parsing CleanerML file %s with error %s", pathname, e)
+            logger.error(
+                "Error parsing CleanerML file %s with error %s", pathname, e)
             return
 
         self.handle_cleaner(dom.getElementsByTagName('cleaner')[0])

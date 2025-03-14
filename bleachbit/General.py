@@ -148,7 +148,7 @@ def run_external(args, stdout=None, env=None, clean_env=True):
         stui.dwFlags = win32process.STARTF_USESHOWWINDOW
         stui.wShowWindow = win32con.SW_HIDE
         kwargs['startupinfo'] = stui
-        encoding='mbcs'
+        encoding = 'mbcs'
     if not env and clean_env and 'posix' == os.name:
         # Clean environment variables so that that subprocesses use English
         # instead of translated text. This helps when checking for certain

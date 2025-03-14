@@ -27,7 +27,7 @@ import re
 import sys
 
 from bleachbit import Log
-from configparser import RawConfigParser, NoOptionError # used in other files
+from configparser import RawConfigParser, NoOptionError  # used in other files
 
 APP_VERSION = "4.9.1"
 APP_NAME = "BleachBit"
@@ -97,7 +97,7 @@ try:
     options_dir = os.environ['BLEACHBIT_TEST_OPTIONS_DIR']
 except KeyError:
     pass
-        
+
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
 # check whether the application is running from the source tree
@@ -139,7 +139,8 @@ if portable_mode:
     local_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
 
 # windows10 theme
-windows10_theme_path = os.path.normpath(os.path.join(bleachbit_exe_path, 'themes/windows10'))
+windows10_theme_path = os.path.normpath(
+    os.path.join(bleachbit_exe_path, 'themes/windows10'))
 
 # application icon
 __icons = (
@@ -182,8 +183,6 @@ elif sys.platform.startswith("openbsd") or sys.platform.startswith("freebsd"):
     locale_dir = "/usr/local/share/locale/"
 
 
-
-
 #
 # URLs
 #
@@ -218,4 +217,5 @@ if 'win32' == sys.platform:
         name = win32process.GetModuleFileNameEx(-1, process)
         if re.search(r'python\d+.dll$', name, re.IGNORECASE):
             bindir = os.path.dirname(name)
-            os.environ['GDK_PIXBUF_MODULE_FILE'] = os.path.join(bindir, 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache')
+            os.environ['GDK_PIXBUF_MODULE_FILE'] = os.path.join(
+                bindir, 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache')

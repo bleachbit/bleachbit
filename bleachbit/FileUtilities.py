@@ -209,7 +209,7 @@ def bytes_to_human(bytes_i):
         prefixes = ['', 'k', 'M', 'G', 'T', 'P']
         base = 1000.0
 
-    assert(isinstance(bytes_i, int))
+    assert (isinstance(bytes_i, int))
 
     if 0 == bytes_i:
         return '0B'
@@ -325,7 +325,7 @@ def clean_json(path, target):
         elif new_target in pos:
             # delete terminal target
             changed = True
-            del(pos[new_target])
+            del (pos[new_target])
         else:
             # target not found
             break
@@ -629,7 +629,8 @@ def guess_overwrite_paths():
     elif 'nt' == os.name:
         localtmp = os.path.expandvars('$TMP')
         if not os.path.exists(localtmp):
-            logger.warning(_("The environment variable TMP refers to a directory that does not exist: %s"), localtmp)
+            logger.warning(
+                _("The environment variable TMP refers to a directory that does not exist: %s"), localtmp)
             localtmp = None
         from bleachbit.Windows import get_fixed_drives
         for drive in get_fixed_drives():

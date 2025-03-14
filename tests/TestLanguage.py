@@ -112,6 +112,7 @@ class LanguageTestCase(common.BleachbitTestCase):
         with mock.patch.dict('sys.modules', {'bleachbit.Options': None}):
             with self.assertLogs(level='ERROR') as log_context:
                 result = get_active_language_code()
-            self.assertIn("Failed to get language options", log_context.output[0])
+            self.assertIn("Failed to get language options",
+                          log_context.output[0])
 
         self.assertIn(result, [locale.getlocale()[0], 'C', 'en', 'en_US'])

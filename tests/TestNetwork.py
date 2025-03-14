@@ -49,8 +49,10 @@ class NetworkTestCase(common.BleachbitTestCase):
 
         def on_error(msg1, msg2):
             # Only print a simplified error message to avoid excessive output
-            error_type = 'HTTP status' if 'HTTP status code' in str(msg2) else 'Connection'
-            print(f'test on_error: {error_type} error for {msg1.split(":")[-1].strip()}')
+            error_type = 'HTTP status' if 'HTTP status code' in str(
+                msg2) else 'Connection'
+            print(
+                f'test on_error: {error_type} error for {msg1.split(":")[-1].strip()}')
             on_error_called[0] = True
         for test in tests:
             self.assertNotExists(fn)
@@ -99,13 +101,15 @@ class NetworkTestCase(common.BleachbitTestCase):
         schemes = ('http', 'https')
         status_codes = (200, 404)
         # As of 2025-03-09, httpstat.us returns the number without the text.
-        expected_content = {200: ['200 OK', '200'], 404: ['404 Not Found', '404']}
+        expected_content = {200: ['200 OK', '200'],
+                            404: ['404 Not Found', '404']}
         for scheme in schemes:
             for status_code in status_codes:
                 url = scheme + '://httpstat.us/' + str(status_code)
                 response = fetch_url(url, max_retries=0, timeout=5)
                 self.assertEqual(response.status_code, status_code)
-                self.assertIn(response.text.strip(), expected_content[status_code])
+                self.assertIn(response.text.strip(),
+                              expected_content[status_code])
 
     def test_fetch_url_retry(self):
         """Unit test for fetch_url() with retry"""

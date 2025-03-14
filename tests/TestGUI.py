@@ -110,7 +110,7 @@ class GUITestCase(common.BleachbitTestCase):
     @classmethod
     def find_option(cls, model, cleaner, option):
         it = cls.get_iter(model, cleaner)
-        #cls.assertIsNotNone(cls, it)
+        # cls.assertIsNotNone(cls, it)
         while it:
             if model[it][2] == option:
                 return it
@@ -191,7 +191,7 @@ class GUITestCase(common.BleachbitTestCase):
         chaff_dst_dir = os.path.join(self.tempdir, 'chaff_dst')
         os.mkdir(chaff_dst_dir)
         cd.choose_folder_button.set_filename(chaff_dst_dir)
-        cd.when_finished_combo.set_active(1) # do not delete after generation
+        cd.when_finished_combo.set_active(1)  # do not delete after generation
         cd.file_count.set_value(10)
         self.refresh_gui()
         self.click_button(cd, 'Make files')
