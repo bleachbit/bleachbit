@@ -452,11 +452,12 @@ def is_process_running_ps_aux(exename, require_same_user):
 
     exename: name of the executable
     require_same_user: if True, ignore processes run by other users
-    """
-    if require_same_user:
-        import getpass
-        current_user = getpass.getuser()
 
+    with sudo
+     * getpass.getuser() returns root
+     * os.getlogin() returns the regular username
+     * this checks the regular username
+    """
     ps_out = subprocess.check_output(["ps", "aux", "-c"],
                                      universal_newlines=True)
     first_line = ps_out.split('\n', maxsplit=1)[0].strip()
@@ -471,7 +472,7 @@ def is_process_running_ps_aux(exename, require_same_user):
         process_cmd = parts[10]
         if process_cmd != exename:
             continue
-        if not require_same_user or process_user == current_user:
+        if not require_same_user or process_user == os.getlogin():
             return True
     return False
 

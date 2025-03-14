@@ -401,9 +401,8 @@ PrefersNonDefaultGPU=false""")
             os.unlink(tf.name)
 
     @mock.patch('subprocess.check_output')
-    @mock.patch('getpass.getuser', return_value="alocaluseraccount")
-    def test_is_process_running_ps_aux(self, mock_getuser, mock_check_output):
-        mock_check_output.return_value = """USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
+    def test_is_process_running_ps_aux(self, mock_check_output):
+        ps_out = f"""USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
 root               703   0.0  0.0  2471428   2792   ??  Ss   20May16   0:01.30 SubmitDiagInfo
 alocaluseraccount   681   0.0  0.0  2471568    856   ??  S    20May16   0:00.81 DiskUnmountWatcher
 alocaluseraccount   666   0.0  0.0  2507092   3488   ??  S    20May16   0:17.47 SpotlightNetHelper
@@ -413,14 +412,24 @@ alocaluseraccount   632   0.0  0.0  2471288    320   ??  S    20May16   0:02.79 
 alocaluseraccount   616   0.0  0.0  2497596    520   ??  S    20May16   0:00.41 familycircled
 alocaluseraccount   573   0.0  0.0  3602328   2440   ??  S    20May16   0:39.64 storedownloadd
 alocaluseraccount   572   0.0  0.0  2531184   3116   ??  S    20May16   0:02.93 LaterAgent
-alocaluseraccount   561   0.0  0.0  2471492    584   ??  S    20May16   0:00.21 USBAgent
+{os.getlogin()}   561   0.0  0.0  2471492    584   ??  S    20May16   0:00.21 USBAgent
 alocaluseraccount   535   0.0  0.0  2496656    524   ??  S    20May16   0:00.33 storelegacy
 root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 suhelperd
 """
-        self.assertTrue(is_process_running_ps_aux('USBAgent', False))
-        self.assertTrue(is_process_running_ps_aux('USBAgent', True))
-        self.assertFalse(is_process_running_ps_aux('does-not-exist', False))
-        self.assertFalse(is_process_running_ps_aux('does-not-exist', True))
+        mock_check_output.return_value = ps_out
+
+        tests = [
+            (True, 'USBAgent', False),
+            (True, 'USBAgent', True),
+            (False, 'does-not-exist', False),
+            (False, 'does-not-exist', True)
+        ]
+
+        for expected, exename, require_same_user in tests:
+            with self.subTest(exename=exename, require_same_user=require_same_user):
+                result = is_process_running_ps_aux(exename, require_same_user)
+                self.assertEqual(
+                    expected, result, f'is_process_running_ps_aux(exename={exename}, require_same_user={require_same_user})')
 
         mock_check_output.return_value = 'invalid-input'
         self.assertRaises(
@@ -438,7 +447,8 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         non_user_exes = ('polkitd', 'bluetoothd', 'NetworkManager',
                          'gdm3', 'snapd', 'systemd-journald')
         for exe in non_user_exes:
-            self.assertFalse(is_process_running(exe, True))
+            self.assertFalse(is_process_running(exe, True),
+                             f'is_running({exe}, True)')
         self.assertFalse(is_process_running('does-not-exist', True))
         self.assertFalse(is_process_running('does-not-exist', False))
 
