@@ -35,7 +35,7 @@ import sys
 
 import bleachbit
 from bleachbit import FileUtilities, General
-from bleachbit.General import get_real_uid
+from bleachbit.General import get_real_uid, get_real_username
 from bleachbit.Language import get_text as _, native_locale_names
 
 logger = logging.getLogger(__name__)
@@ -454,10 +454,7 @@ def is_process_running_ps_aux(exename, require_same_user):
     exename: name of the executable
     require_same_user: if True, ignore processes run by other users
 
-    with sudo
-     * getpass.getuser() returns root
-     * os.getlogin() returns the regular username
-     * this checks the regular username
+    When running under sudo, this uses the non-root username.
     """
     ps_out = subprocess.check_output(["ps", "aux", "-c"],
                                      universal_newlines=True)
@@ -473,7 +470,7 @@ def is_process_running_ps_aux(exename, require_same_user):
         process_cmd = parts[10]
         if process_cmd != exename:
             continue
-        if not require_same_user or process_user == os.getlogin():
+        if not require_same_user or process_user == get_real_username():
             return True
     return False
 
@@ -482,6 +479,8 @@ def is_process_running_linux(exename, require_same_user):
     """Check whether exename is running
 
     The exename is checked two different ways.
+
+    When running under sudo, this uses the non-root user ID.
     """
     for filename in glob.iglob("/proc/*/exe"):
         does_exe_match = False

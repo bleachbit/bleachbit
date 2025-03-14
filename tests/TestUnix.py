@@ -34,6 +34,7 @@ from xml.dom.minidom import parseString
 
 from tests import common
 from bleachbit import logger
+from bleachbit.General import get_real_username
 from bleachbit.FileUtilities import children_in_directory, exe_exists
 from bleachbit.Unix import (
     apt_autoclean,
@@ -403,6 +404,7 @@ PrefersNonDefaultGPU=false""")
 
     @mock.patch('subprocess.check_output')
     def test_is_process_running_ps_aux(self, mock_check_output):
+        username = get_real_username()
         ps_out = f"""USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
 root               703   0.0  0.0  2471428   2792   ??  Ss   20May16   0:01.30 SubmitDiagInfo
 alocaluseraccount   681   0.0  0.0  2471568    856   ??  S    20May16   0:00.81 DiskUnmountWatcher
@@ -413,7 +415,7 @@ alocaluseraccount   632   0.0  0.0  2471288    320   ??  S    20May16   0:02.79 
 alocaluseraccount   616   0.0  0.0  2497596    520   ??  S    20May16   0:00.41 familycircled
 alocaluseraccount   573   0.0  0.0  3602328   2440   ??  S    20May16   0:39.64 storedownloadd
 alocaluseraccount   572   0.0  0.0  2531184   3116   ??  S    20May16   0:02.93 LaterAgent
-{os.getlogin()}   561   0.0  0.0  2471492    584   ??  S    20May16   0:00.21 USBAgent
+{username}   561   0.0  0.0  2471492    584   ??  S    20May16   0:00.21 USBAgent
 alocaluseraccount   535   0.0  0.0  2496656    524   ??  S    20May16   0:00.33 storelegacy
 root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 suhelperd
 """
