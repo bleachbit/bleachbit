@@ -134,6 +134,18 @@ class GUITestCase(common.BleachbitTestCase):
         b.clicked()
         self.refresh_gui()
 
+    def test_get_window_info(self):
+        """Test get_window_info"""
+        gui = self.app._window
+        geo = bleachbit.GUI.get_window_info(gui)
+        self.assertGreaterEqual(geo.x, 0)
+        self.assertGreaterEqual(geo.y, 0)
+        self.assertGreaterEqual(geo.width, 0)
+        self.assertGreaterEqual(geo.height, 0)
+        self.assertIsInstance(geo.monitor_model, str)
+        self.assertGreater(len(geo.monitor_model), 0)
+        self.assertNotEqual(geo.monitor_model, "(error)")
+
     def test_GUI(self):
         """Unit test for class GUI"""
         # there should be no crashes
