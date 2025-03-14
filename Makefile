@@ -72,6 +72,7 @@ install:
 	# icon
 	mkdir -p $(DESTDIR)$(datadir)/pixmaps
 	$(INSTALL_DATA) bleachbit.png $(DESTDIR)$(datadir)/pixmaps/
+	$(INSTALL_DATA) bleachbit-indicator.svg $(DESTDIR)$(datadir)/pixmaps/
 
 	# translations
 	make -C po install DESTDIR=$(DESTDIR)

@@ -184,6 +184,7 @@ update-desktop-database &> /dev/null ||:
 %endif
 %{_datadir}/%{name}/
 %{_datadir}/pixmaps/%{name}.png
+%{_datadir}/pixmaps/%{name}-indicator.svg
 %{_datadir}/polkit-1
 %{_datadir}/polkit-1/actions
 %{_datadir}/polkit-1/actions/org.bleachbit.policy

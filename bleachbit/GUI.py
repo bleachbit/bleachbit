@@ -22,34 +22,24 @@
 GTK graphical user interface
 """
 
-
-from bleachbit import Cleaner, FileUtilities, GuiBasic
-from bleachbit import APP_NAME, appicon_path, portable_mode, windows10_theme_path
-from bleachbit.Language import get_text as _
-from bleachbit.Options import options
-
-# Now that the configuration is loaded, honor the debug preference there.
-from bleachbit.Log import set_root_log_level
-set_root_log_level(options.get('debug'))
-
-from bleachbit.GuiPreferences import PreferencesDialog
-from bleachbit.Cleaner import backends, register_cleaners
-import bleachbit
-from gi.repository import Gtk, Gdk, GObject, GLib, Gio
-
+# standard library
 import glob
-from gi.repository import AppIndicator3 as appindicator
-
 import logging
 import os
 import sys
 import threading
 import time
 
-app_indicator_found = True
+# third party import
+import gi
+gi.require_version('Gtk', '3.0') # Keep this above `import Gtk``.
+from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 
-if sys.platform.startswith('linux'):
+APP_INDICATOR_FOUND = True
+
+if sys.platform == 'linux':
     try:
+        # Ubuntu: sudo apt install gir1.2-ayatanaappindicator3-0.1
         from gi.repository import AyatanaAppIndicator3 as AppIndicator
     except ImportError:
         try:
@@ -58,16 +48,23 @@ if sys.platform.startswith('linux'):
             try:
                 from gi.repository import AppIndicator
             except ImportError:
-                app_indicator_found = False
-from gi.repository import Gtk, Gdk, GObject, GLib, Gio
-
-import gi
-gi.require_version('Gtk', '3.0')
+                APP_INDICATOR_FOUND = False
 
 
+# local import
+import bleachbit
+from bleachbit import Cleaner, FileUtilities, GuiBasic
+from bleachbit import APP_NAME, appicon_path, portable_mode, windows10_theme_path
+from bleachbit.Cleaner import backends, register_cleaners
+from bleachbit.GuiPreferences import PreferencesDialog
+from bleachbit.Language import get_text as _
+from bleachbit.Options import options
+from bleachbit.Log import set_root_log_level
 if os.name == 'nt':
     from bleachbit import Windows
 
+# Now that the configuration is loaded, honor the debug preference there.
+set_root_log_level(options.get('debug'))
 logger = logging.getLogger(__name__)
 
 
@@ -629,16 +626,6 @@ class GUI(Gtk.ApplicationWindow):
 
         GLib.idle_add(self.cb_refresh_operations)
 
-    def _set_appindicator(self):
-        if sys.platform.startswith('linux') and app_indicator_found:
-            APPINDICATOR_ID = 'BLEACHBIT'
-            current_path = Path().cwd()
-            menu_icon_path = Path(current_path, 'bleachbit-icon.svg')
-            indicator_category = AppIndicator.IndicatorCategory.SYSTEM_SERVICES
-            self.indicator = AppIndicator.Indicator.new(APPINDICATOR_ID, str(menu_icon_path), indicator_category)
-            self.indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
-            self.indicator.set_menu(self.build_appindicator_menu())
-
         # Close the application when user presses CTRL+Q or CTRL+W.
         accel = Gtk.AccelGroup()
         self.add_accel_group(accel)
@@ -646,6 +633,25 @@ class GUI(Gtk.ApplicationWindow):
         accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
         key, mod = Gtk.accelerator_parse("<Control>W")
         accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
+
+        self._set_appindicator()
+
+    def _set_appindicator(self):
+        if not (sys.platform == 'linux' and APP_INDICATOR_FOUND):
+            return
+        APPINDICATOR_ID = 'BLEACHBIT'
+        icon_dir = os.path.dirname(appicon_path)
+        menu_icon_path = os.path.join(icon_dir, 'bleachbit-indicator.svg')
+        if not os.path.exists(menu_icon_path):
+            if os.path.exists(appicon_path):
+                menu_icon_path = appicon_path
+            else:
+                menu_icon_path = 'user-trash'
+        indicator_category = AppIndicator.IndicatorCategory.SYSTEM_SERVICES
+        self.indicator = AppIndicator.Indicator.new(
+            APPINDICATOR_ID, menu_icon_path, indicator_category)
+        self.indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
+        self.indicator.set_menu(self.build_appindicator_menu())
 
     def on_quit(self, *args):
         """Quit the application, used with CTRL+Q or CTRL+W"""
@@ -677,7 +683,7 @@ class GUI(Gtk.ApplicationWindow):
         """Prevent textbuffer usage during UI destruction"""
         self.textbuffer = None
         super(GUI, self).destroy()
-        
+
     def build_appindicator_menu(self):
         menu = Gtk.Menu()
         item_clean = Gtk.MenuItem('Clean')
