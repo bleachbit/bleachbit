@@ -155,6 +155,8 @@ class GeneralTestCase(common.BleachbitTestCase):
         """Unit test for dconf"""
         if not exists_in_path('dconf'):
             self.skipTest('dconf not found')
+        if sudo_mode():
+            self.skipTest('dconf not supported in sudo mode')
         args = ['dconf', 'write',
                 '/apps/bleachbit/test', 'true']
         (rc, stdout, stderr) = run_external(args)
