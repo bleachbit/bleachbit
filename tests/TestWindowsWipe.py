@@ -54,8 +54,12 @@ if os.name == 'nt':
         get_extents,
         write_zero_fill,
         file_wipe,
+        wipe_file_direct,
         GENERIC_READ,
-        GENERIC_WRITE
+        GENERIC_WRITE,
+        SetFilePointer,
+        FILE_BEGIN,
+        FlushFileBuffers
     )
 
 
@@ -253,6 +257,108 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
             # Close the file handle to release the lock
             if file_handle:
                 win32file.CloseHandle(file_handle)
+
+    def test_file_wipe_swapped_handles(self):
+        """Test file_wipe() with swapped handles and extents"""
+        if not shell.IsUserAnAdmin():
+            self.skipTest("Test requires administrator privileges")
+
+        volume = volume_from_file(self.tempdir)
+        volume_info = get_volume_information(volume)
+        cluster_size = (volume_info.sectors_per_cluster *
+                        volume_info.bytes_per_sector)
+
+        file_configs = [
+            {"path": os.path.join(self.tempdir, 'file_wipe_swap_1'),
+             "content": b'1',
+             "clusters": 1,
+             "handle": None},
+            {"path": os.path.join(self.tempdir, 'file_wipe_swap_2'),
+             "content": b'2',
+             "clusters": 2,
+             "handle": None}
+        ]
+
+        try:
+            for config in file_configs:
+                with open(config["path"], 'wb') as f:
+                    f.write(config["content"] *
+                            (cluster_size * config["clusters"]))
+
+                with open(config["path"], 'rb') as f:
+                    content = f.read()
+                    config["content_before"] = content
+                    expected_size = cluster_size * config["clusters"]
+                    self.assertEqual(len(content), expected_size,
+                                     f"File should be exactly {config['clusters']} cluster(s) ({expected_size} bytes)")
+                    self.assertEqual(
+                        content, config["content"] * expected_size)
+
+                config["handle"] = open_file(
+                    config["path"], GENERIC_READ | GENERIC_WRITE)
+                config["extents"] = get_extents(
+                    config["handle"], filename=config["path"])
+
+                total_clusters = sum([(end - start + 1)
+                                     for start, end in config["extents"]])
+                self.assertEqual(total_clusters, config["clusters"],
+                                 f"File should have exactly {config['clusters']} cluster(s)")
+
+                config["size"], _ = get_file_basic_info(
+                    config["path"], config["handle"])
+
+                # SetFilePointer(config["handle"], 0, FILE_BEGIN)
+
+            # Wipe files with swapped handles and extents
+            # Wipe file1 using file2's handle and extents
+            wipe_file_direct(file_configs[1]["handle"], file_configs[0]["extents"],
+                             cluster_size, file_configs[0]["size"])
+            # Wipe file2 using file1's handle and extents
+            wipe_file_direct(file_configs[0]["handle"], file_configs[1]["extents"],
+                             cluster_size, file_configs[1]["size"])
+
+            for config in file_configs:
+                if config["handle"]:
+                    # FlushFileBuffers(config["handle"])
+                    close_file(config["handle"])
+                    config["handle"] = None
+
+            for config in file_configs:
+                with open(config["path"], 'rb') as f:
+                    config["content_after"] = f.read()
+
+            # Verify results
+            # File 1 (originally 1 cluster) wiped with File 2's extents (2 clusters)
+            self.assertNotEqual(file_configs[0]["content_after"], file_configs[0]["content_before"],
+                                "File 1 still contains original content after wiping")
+            self.assertTrue(all(byte == 0 for byte in file_configs[0]["content_after"][:cluster_size]),
+                            "First cluster of file 1 was not properly zeroed out")
+            # File 1 should grow to match file 2's size (2 clusters)
+            self.assertEqual(len(file_configs[0]["content_after"]), cluster_size * 2,
+                             f"File 1 size should grow to 2 clusters ({cluster_size * 2} bytes)")
+
+            # File 2 (originally 2 clusters) wiped with File 1's extents (1 cluster)
+            self.assertNotEqual(file_configs[1]["content_after"], file_configs[1]["content_before"],
+                                "File 2 still contains all original content after wiping")
+            # First cluster should be zeroed out
+            first_cluster = file_configs[1]["content_after"][:cluster_size]
+            self.assertTrue(all(byte == 0 for byte in first_cluster),
+                            "First cluster of file 2 was not properly zeroed out")
+            # Second cluster should still have original data
+            second_cluster = file_configs[1]["content_after"][cluster_size:cluster_size * 2]
+            self.assertEqual(second_cluster, file_configs[1]["content"] * cluster_size,
+                             "Second cluster of file 2 should still contain original data")
+            # File 2 size should remain the same (2 clusters)
+            self.assertEqual(len(file_configs[1]["content_after"]), cluster_size * 2,
+                             f"File 2 size should remain 2 clusters ({cluster_size * 2} bytes)")
+
+        finally:
+            for config in file_configs:
+                if config.get("handle"):
+                    try:
+                        close_file(config["handle"])
+                    except:
+                        pass
 
     def test_not_included(self):
         """Notify users there are more tests"""
