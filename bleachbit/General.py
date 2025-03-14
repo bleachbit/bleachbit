@@ -68,7 +68,7 @@ def chownself(path):
     owner may not be able to access the path."""
     if 'posix' != os.name:
         return
-    uid = getrealuid()
+    uid = get_real_uid()
     logger.debug('chown(%s, uid=%s)', path, uid)
     if 0 == path.find('/root'):
         logger.info('chown for path /root aborted')
@@ -94,11 +94,11 @@ def gc_collect():
     gc.collect()
 
 
-def getrealuid():
+def get_real_uid():
     """Get the real user ID when running in sudo mode"""
 
     if 'posix' != os.name:
-        raise RuntimeError('getrealuid() requires POSIX')
+        raise RuntimeError('get_real_uid() requires POSIX')
 
     if os.getenv('SUDO_UID'):
         return int(os.getenv('SUDO_UID'))

@@ -35,6 +35,7 @@ import sys
 
 import bleachbit
 from bleachbit import FileUtilities, General
+from bleachbit.General import get_real_uid
 from bleachbit.Language import get_text as _, native_locale_names
 
 logger = logging.getLogger(__name__)
