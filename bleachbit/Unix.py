@@ -516,7 +516,8 @@ def is_process_running_linux(exename, require_same_user):
         except OSError:
             # permission denied means not the same user
             continue
-        if uid == os.getuid():
+        # In case of sudo, use the regular user's ID.
+        if uid == get_real_uid():
             return True
     return False
 
