@@ -46,6 +46,8 @@ import sys
 import threading
 import time
 
+app_indicator_found = True
+
 if sys.platform.startswith('linux'):
     try:
         from gi.repository import AyatanaAppIndicator3 as AppIndicator
@@ -53,7 +55,10 @@ if sys.platform.startswith('linux'):
         try:
             from gi.repository import AppIndicator3 as AppIndicator
         except ImportError:
-            from gi.repository import AppIndicator
+            try:
+                from gi.repository import AppIndicator
+            except ImportError:
+                app_indicator_found = False
 from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 
 import gi
@@ -624,15 +629,15 @@ class GUI(Gtk.ApplicationWindow):
 
         GLib.idle_add(self.cb_refresh_operations)
 
-        # Ubuntu AppIndicator/KStatusNotifierItem
-        APPINDICATOR_ID = 'BLEACHBIT'
-        current_path = os.getcwd()
-        menu_icon_path = os.path.join(current_path, 'bleachbit-icon.svg')
-        indicator_category = appindicator.IndicatorCategory.SYSTEM_SERVICES
-        indicator = appindicator.Indicator.new(APPINDICATOR_ID, os.path.abspath(menu_icon_path), indicator_category)
-        indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
-        indicator.set_menu(self.build_appindicator_menu())
-        Gtk.main()
+    def _set_appindicator(self):
+        if sys.platform.startswith('linux') and app_indicator_found:
+            APPINDICATOR_ID = 'BLEACHBIT'
+            current_path = Path().cwd()
+            menu_icon_path = Path(current_path, 'bleachbit-icon.svg')
+            indicator_category = AppIndicator.IndicatorCategory.SYSTEM_SERVICES
+            self.indicator = AppIndicator.Indicator.new(APPINDICATOR_ID, str(menu_icon_path), indicator_category)
+            self.indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
+            self.indicator.set_menu(self.build_appindicator_menu())
 
         # Close the application when user presses CTRL+Q or CTRL+W.
         accel = Gtk.AccelGroup()
