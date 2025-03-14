@@ -75,6 +75,58 @@ set_root_log_level(options.get('debug'))
 logger = logging.getLogger(__name__)
 
 
+class WindowInfo:
+    def __init__(self, x, y, width, height, monitor_model):
+        super().__init__()
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.monitor_model = monitor_model
+
+    def __str__(self):
+        return f"WindowInfo(x={self.x}, y={self.y}, width={self.width}, height={self.height}, monitor_model={self.monitor_model})"
+
+
+def get_window_info(window):
+    """Get the geometry and monitor of a window.
+
+    window: Gtk.Window
+
+    https://docs.gtk.org/gdk3/method.Screen.get_monitor_at_window.html
+    Deprecated since: 3.22
+    Use gdk_display_get_monitor_at_window() instead.
+
+    https://docs.gtk.org/gdk3/method.Display.get_monitor_at_window.html
+    Available since: 3.22
+
+    https://docs.gtk.org/gdk3/method.Screen.get_monitor_geometry.html
+    Deprecated since: 3.22
+    Use gdk_monitor_get_geometry() instead.
+
+    https://docs.gtk.org/gdk3/method.Monitor.get_geometry.html
+    Available since: 3.22
+
+    Returns a Rectangle-like object with with extra `monitor_model`
+    property with the monitor model string.
+    """
+    assert window is not None
+    assert isinstance(window, Gtk.Window)
+    gdk_window = window.get_window()
+    display = Gdk.Display.get_default()
+    assert display is not None
+    monitor = display.get_monitor_at_window(gdk_window)
+    assert monitor is not None
+    geo = monitor.get_geometry()
+    assert geo is not None
+    assert isinstance(geo, Gdk.Rectangle)
+    if display.get_n_monitors() > 0 and monitor.get_model():
+        monitor_model = monitor.get_model()
+    else:
+        monitor_model = "(unknown)"
+    return WindowInfo(geo.x, geo.y, geo.width, geo.height, monitor_model)
+
+
 def threaded(func):
     """Decoration to create a threaded function"""
     def wrapper(*args):
@@ -1228,12 +1280,10 @@ class GUI(Gtk.ApplicationWindow):
         if 'nt' == os.name:
             window = self.get_window()
             if window.get_state() & Gdk.WindowState.MAXIMIZED != 0:
-                screen = self.get_screen()
-                monitor_num = screen.get_monitor_at_window(window)
-                g = screen.get_monitor_geometry(monitor_num)
+                g = get_window_info(self)
                 if x < g.x or x >= g.x + g.width or y < g.y or y >= g.y + g.height:
-                    logger.debug("Maximized window {}+{}: monitor ({}) geometry = {}+{}".format(
-                        (x, y), (width, height), monitor_num, (g.x, g.y), (g.width, g.height)))
+                    logger.debug("Maximized window {}+{}: {}".format(
+                        (x, y), (width, height), str(g)))
                     self.move(g.x, g.y)
                     return True
 
@@ -1267,7 +1317,7 @@ class GUI(Gtk.ApplicationWindow):
         maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
         options.set("window_maximized", maximized, commit=False)
         if 'nt' == os.name:
-            logger.info(
+            logger.debug(
                 f'window state = {event.new_window_state}, full screen = {fullscreen}, maximized = {maximized}')
         return False
 
@@ -1276,8 +1326,12 @@ class GUI(Gtk.ApplicationWindow):
         options.commit()
         return False
 
-    def on_show(self, widget):
+    def on_show(self, _widget):
+        """Handle the show event.
 
+        The event is triggered when the window is first shown.
+        It is not emitted when the window is moved or unminimized.
+        """
         if 'nt' == os.name and Windows.splash_thread.is_alive():
             Windows.splash_thread.join(0)
 
@@ -1291,18 +1345,14 @@ class GUI(Gtk.ApplicationWindow):
             (r.width, r.height) = (options.get(
                 "window_width"), options.get("window_height"))
 
-            display = Gdk.Display.get_default()
-            monitor = display.get_monitor_at_window(self.get_window())
-            g = monitor.get_geometry()
+            g = get_window_info(self)
 
             # only restore position and size if window left corner
             # is within the closest monitor
             if r.x >= g.x and r.x < g.x + g.width and \
                r.y >= g.y and r.y < g.y + g.height:
-                monitor_num = display.get_n_monitors() > 0 and display.get_monitor_at_window(
-                    self.get_window()).get_model() or 0
-                logger.debug("closest monitor ({}) geometry = {}+{}, window geometry = {}+{}".format(
-                    monitor_num, (g.x, g.y), (g.width, g.height), (r.x, r.y), (r.width, r.height)))
+                logger.debug("closest monitor {}, prior window geometry = {}+{}".format(
+                    str(g), (r.x, r.y), (r.width, r.height)))
                 self.move(r.x, r.y)
                 self.resize(r.width, r.height)
         if options.get("window_fullscreen"):
@@ -1343,9 +1393,16 @@ class GUI(Gtk.ApplicationWindow):
         screen = self.get_screen()
         display = screen.get_display()
         monitor = display.get_primary_monitor()
-        geometry = monitor.get_geometry()
-        self.set_default_size(min(geometry.width, 800),
-                              min(geometry.height, 600))
+        if monitor is None:
+            # See https://github.com/bleachbit/bleachbit/issues/1793
+            if display.get_n_monitors() > 0:
+                monitor = display.get_monitor(0)
+        if monitor is None:
+            self.set_default_size(800, 600)
+        else:
+            geometry = monitor.get_geometry()
+            self.set_default_size(min(geometry.width, 800),
+                                  min(geometry.height, 600))
         self.set_position(Gtk.WindowPosition.CENTER)
         self.connect("configure-event", self.on_configure_event)
         self.connect("window-state-event", self.on_window_state_event)
