@@ -35,14 +35,29 @@ set_root_log_level(options.get('debug'))
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.Cleaner import backends, register_cleaners
 import bleachbit
-from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 
 import glob
 import logging
 import os
+from pathlib import Path
 import sys
 import threading
 import time
+
+app_indicator_found = True
+
+if sys.platform.startswith('linux'):
+    try:
+        from gi.repository import AyatanaAppIndicator3 as AppIndicator
+    except ImportError:
+        try:
+            from gi.repository import AppIndicator3 as AppIndicator
+        except ImportError:
+            try:
+                from gi.repository import AppIndicator
+            except ImportError:
+                app_indicator_found = False
+from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -610,8 +625,10 @@ class GUI(Gtk.ApplicationWindow):
                 _('Resetting the configuration file because it is corrupt: %s') % bleachbit.options_file)
             bleachbit.Options.init_configuration()
 
-        GLib.idle_add(self.cb_refresh_operations)
+        self._set_appindicator()
 
+        GLib.idle_add(self.cb_refresh_operations)
+        
         # Close the application when user presses CTRL+Q or CTRL+W.
         accel = Gtk.AccelGroup()
         self.add_accel_group(accel)
@@ -620,6 +637,30 @@ class GUI(Gtk.ApplicationWindow):
         key, mod = Gtk.accelerator_parse("<Control>W")
         accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
 
+    def _set_appindicator(self):
+        if sys.platform.startswith('linux') and app_indicator_found:
+            APPINDICATOR_ID = 'BLEACHBIT'
+            current_path = Path().cwd()
+            menu_icon_path = Path(current_path, 'bleachbit-icon.svg')
+            indicator_category = AppIndicator.IndicatorCategory.SYSTEM_SERVICES
+            self.indicator = AppIndicator.Indicator.new(APPINDICATOR_ID, str(menu_icon_path), indicator_category)
+            self.indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
+            self.indicator.set_menu(self.build_appindicator_menu())
+
+    def build_appindicator_menu(self):
+        menu = Gtk.Menu()
+        item_clean = Gtk.MenuItem('Clean')
+        item_clean.connect('activate', self.clean_appindicator)
+        item_quit = Gtk.MenuItem('Quit BleachBit')
+        item_quit.connect('activate', on_quit)
+        menu.append(item_clean)
+        menu.append(item_quit)
+        menu.show_all()
+        return menu
+
+    def clean_appindicator(self, source):
+        self.preview_or_run_operations(True)
+        
     def on_quit(self, *args):
         """Quit the application, used with CTRL+Q or CTRL+W"""
         if Gtk.main_level() > 0:
