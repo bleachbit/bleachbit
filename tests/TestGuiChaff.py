@@ -24,7 +24,6 @@ Test case for module GuiChaff
 """
 
 
-import os
 import unittest
 import tempfile
 import time
@@ -49,8 +48,6 @@ class GuiChaffTestCase(common.BleachbitTestCase):
 
     @classmethod
     def setUpClass(cls):
-        if os.name == 'nt':
-            from bleachbit.Windows import setup_environment
         super(GuiChaffTestCase, cls).setUpClass()
 
         # Try to register the application, catch the error if already registered

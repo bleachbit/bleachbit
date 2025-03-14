@@ -63,7 +63,6 @@ try:
     from scandir import walk
     if 'nt' == os.name:
         import scandir
-        import bleachbit.Windows
 
         class _Win32DirEntryPython(scandir.Win32DirEntryPython):
             def is_symlink(self):

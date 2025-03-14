@@ -47,13 +47,15 @@ if 'posix' == os.name:
 if os.name == 'nt':
     # change error handling to avoid popup with GTK 3
     # https://github.com/bleachbit/bleachbit/issues/651
-    import win32api
-    import win32con
+    import win32api  # pylint: disable=import-error
+    import win32con  # pylint: disable=import-error
     win32api.SetErrorMode(win32con.SEM_FAILCRITICALERRORS |
                           win32con.SEM_NOGPFAULTERRORBOX | win32con.SEM_NOOPENFILEERRORBOX)
 
 if 1 == len(sys.argv):
-    import bleachbit.GUI
+    # Import GUI inside the condition for Linux packagers to
+    # separate GUI into another package.
+    import bleachbit.GUI  # pylint: disable=ungrouped-imports
     app = bleachbit.GUI.Bleachbit()
     sys.exit(app.run(sys.argv))
 else:

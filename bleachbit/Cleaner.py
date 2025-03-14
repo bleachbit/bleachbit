@@ -26,6 +26,8 @@ import logging
 import os.path
 import re
 import sys
+import tempfile
+import warnings
 
 from bleachbit.Language import get_text as _
 from bleachbit.FileUtilities import children_in_directory
@@ -34,7 +36,7 @@ from bleachbit import Command, FileUtilities, Memory, Special
 
 
 # Suppress GTK warning messages while running in CLI #34
-import warnings
+
 warnings.simplefilter("ignore", Warning)
 try:
     from bleachbit.GuiBasic import Gtk, Gdk
@@ -106,7 +108,7 @@ class Cleaner:
             if option_id == action[0]:
                 yield from action[1].get_commands()
         if option_id not in self.options:
-            raise RuntimeError("Unknown option '%s'" % option_id)
+            raise RuntimeError(f"Unknown option '{option_id}'")
 
     def get_deep_scan(self, option_id):
         """Get dictionary used to build a deep scan"""
@@ -117,7 +119,7 @@ class Cleaner:
                 except StopIteration:
                     return
         if option_id not in self.options:
-            raise RuntimeError("Unknown option '%s'" % option_id)
+            raise RuntimeError(f"Unknown option '{option_id}'")
 
     def get_description(self):
         """Brief description of the cleaner"""
@@ -166,8 +168,7 @@ class Cleaner:
                             "file '%s' exists indicating '%s' is running", globbed, self.name)
                         return True
             else:
-                raise RuntimeError(
-                    "Unknown running-detection test '%s'" % test)
+                raise RuntimeError(f"Unknown running-detection test '{test}'")
         return False
 
     def is_usable(self):
@@ -582,7 +583,6 @@ class System(Cleaner):
 
             # This is a hack to refresh the icon.
             def empty_recycle_bin_func():
-                import tempfile
                 tmpdir = tempfile.mkdtemp()
                 Windows.move_to_recycle_bin(tmpdir)
                 try:
@@ -692,8 +692,7 @@ def create_simple_cleaner(paths):
         def get_commands(self):
             for path in paths:
                 if not isinstance(path, (str)):
-                    raise RuntimeError(
-                        'expected path as string but got %s' % str(path))
+                    raise RuntimeError(f'expected path as string but got {str(path)}')
                 if not os.path.isabs(path):
                     path = os.path.abspath(path)
                 if os.path.isdir(path):

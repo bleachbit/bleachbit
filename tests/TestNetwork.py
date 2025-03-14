@@ -25,7 +25,6 @@ Test case for module Network
 import logging
 import os
 import requests
-from unittest.mock import patch
 
 from tests import common
 from bleachbit.Network import download_url_to_fn, fetch_url, get_gtk_version, get_ip_for_url, get_user_agent

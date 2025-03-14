@@ -24,7 +24,6 @@ Test case for module GUI
 """
 
 import os
-import sys
 import unittest
 import time
 import types

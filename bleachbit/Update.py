@@ -22,17 +22,20 @@
 Check for updates via the Internet
 """
 
-import bleachbit
-from bleachbit.Language import get_text as _
-from bleachbit.Network import fetch_url, get_ip_for_url
-
+# standard library
 import hashlib
 import logging
 import os
-import os.path
-import requests
 import sys
 import xml.dom.minidom
+
+# third-party
+import requests
+
+# local
+import bleachbit
+from bleachbit.Language import get_text as _
+from bleachbit.Network import download_url_to_fn, fetch_url, get_ip_for_url
 
 
 logger = logging.getLogger(__name__)
@@ -41,8 +44,8 @@ logger = logging.getLogger(__name__)
 def update_winapp2(url, hash_expected, append_text, cb_success):
     """Download latest winapp2.ini file.  Hash is sha512 or None to disable checks"""
     # first, determine whether an update is necessary
-    from bleachbit import personal_cleaners_dir
-    fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
+
+    fn = os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini')
     if os.path.exists(fn):
         with open(fn, 'rb') as f:
             hash_current = hashlib.sha512(f.read()).hexdigest()
@@ -50,9 +53,8 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
                 # update is same as current
                 return
     # download update
-    from bleachbit.Network import download_url_to_fn
-
     # Define error handler to propagate download errors
+
     def on_error(msg, msg2):
         raise RuntimeError(f"{msg}: {msg2}")
 
@@ -63,8 +65,9 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
 
 def update_dialog(parent, updates):
     """Updates contains the version numbers and URLs"""
-    from gi.repository import Gtk
-    from bleachbit.GuiBasic import open_url
+    # import these here to allow headless mode.
+    from gi.repository import Gtk  # pylint: disable=import-outside-toplevel
+    from bleachbit.GuiBasic import open_url  # pylint: disable=import-outside-toplevel
     dlg = Gtk.Dialog(title=_("Update BleachBit"),
                      transient_for=parent,
                      modal=True,
@@ -103,8 +106,7 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     except requests.RequestException as e:
         logger.error(
             _('Error when opening a network connection to check for updates. Please verify the network is working and that a firewall is not blocking this application. Error message: {}').format(e))
-        logger.debug('URL {} has IP address {}'.format(
-            url, get_ip_for_url(url)))
+        logger.debug('URL %s has IP address %s', url, get_ip_for_url(url))
         if hasattr(e, 'response') and e.response is not None:
             logger.debug(e.response.headers)
         return ()
@@ -137,9 +139,9 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     dom.unlink()
 
     if stable and beta and check_beta:
-        return stable, beta
+        return (stable, beta)
     if stable:
-        return stable,
+        return (stable,)
     if beta and check_beta:
-        return beta,
+        return (beta,)
     return ()
