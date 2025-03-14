@@ -434,7 +434,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         """Unit test for delete() with locked file"""
         # set up
         def test_delete_locked_setup():
-            (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker')
+            (fd, filename) = tempfile.mkstemp(
+                prefix='bleachbit-test-fileutilities')
             os.write(fd, b'123')
             os.close(fd)
             self.assertExists(filename)

@@ -23,34 +23,40 @@
 Test case for module WindowsWipe
 """
 
+# standard library
 import os
 import sys
 import tempfile
 import time
 import unittest
 
+# third party
+if os.name == 'nt':
+    import win32file
+    import pywintypes
+    from win32com.shell import shell
+
+# local
 from tests import common
 from bleachbit.FileUtilities import children_in_directory
-from bleachbit.WindowsWipe import (
-    check_os,
-    determine_win_version,
-    open_file,
-    close_file,
-    get_file_basic_info,
-    truncate_file,
-    volume_from_file,
-    get_volume_information,
-    get_extents,
-    write_zero_fill,
-    file_wipe,
-    GENERIC_READ,
-    GENERIC_WRITE
-)
 
-import win32file
-import pywintypes
-
-from win32com.shell import shell
+if os.name == 'nt':
+    # importing WindowsWipe fails on non-Windows
+    from bleachbit.WindowsWipe import (
+        check_os,
+        determine_win_version,
+        open_file,
+        close_file,
+        get_file_basic_info,
+        truncate_file,
+        volume_from_file,
+        get_volume_information,
+        get_extents,
+        write_zero_fill,
+        file_wipe,
+        GENERIC_READ,
+        GENERIC_WRITE
+    )
 
 
 @common.skipUnlessWindows
