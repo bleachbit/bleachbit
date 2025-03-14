@@ -50,6 +50,18 @@ if sys.platform == 'linux':
             except ImportError:
                 APP_INDICATOR_FOUND = False
 
+# local
+import bleachbit
+from bleachbit import APP_NAME, appicon_path, portable_mode, windows10_theme_path
+from bleachbit import Cleaner, FileUtilities, GuiBasic
+from bleachbit.Cleaner import backends, register_cleaners
+from bleachbit.GuiPreferences import PreferencesDialog
+from bleachbit.Language import get_text as _
+from bleachbit.Log import set_root_log_level
+from bleachbit.Options import options
+
+# Now that the configuration is loaded, honor the debug preference there.
+set_root_log_level(options.get('debug'))
 
 # local import
 import bleachbit
@@ -145,8 +157,10 @@ class Bleachbit(Gtk.Application):
 
     def __init__(self, uac=True, shred_paths=None, auto_exit=False):
 
-        application_id_suffix = self._init_windows_misc(auto_exit, shred_paths, uac)
-        application_id = '{}{}'.format('org.gnome.Bleachbit', application_id_suffix)
+        application_id_suffix = self._init_windows_misc(
+            auto_exit, shred_paths, uac)
+        application_id = '{}{}'.format(
+            'org.gnome.Bleachbit', application_id_suffix)
         Gtk.Application.__init__(
             self, application_id=application_id, flags=Gio.ApplicationFlags.FLAGS_NONE)
         GLib.set_prgname('org.bleachbit.BleachBit')
@@ -193,7 +207,7 @@ class Bleachbit(Gtk.Application):
         setup_translation()
         builder = Gtk.Builder()
         # set_translation_domain() seems to have no effect.
-        #builder.set_translation_domain('bleachbit')
+        # builder.set_translation_domain('bleachbit')
         builder.add_from_file(bleachbit.app_menu_filename)
         menu = builder.get_object('app-menu')
         self.set_app_menu(menu)
@@ -404,7 +418,8 @@ class Bleachbit(Gtk.Application):
                 application=self, title=APP_NAME, auto_exit=self._auto_exit)
         self._window.present()
         if self._shred_paths:
-            GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths, priority=GObject.PRIORITY_LOW)
+            GLib.idle_add(GUI.shred_paths, self._window,
+                          self._shred_paths, priority=GObject.PRIORITY_LOW)
             # When we shred paths and auto exit with the Windows Explorer context menu command we close the
             # application in GUI.shred_paths, because if it is closed from here there are problems.
             # Most probably this is something related with how GTK handles idle quit calls.
@@ -727,7 +742,7 @@ class GUI(Gtk.ApplicationWindow):
 
         if self._auto_exit:
             GLib.idle_add(self.close,
-                              priority=GObject.PRIORITY_LOW)
+                          priority=GObject.PRIORITY_LOW)
 
         # user aborted
         return False
@@ -894,8 +909,10 @@ class GUI(Gtk.ApplicationWindow):
         self.view = display.make_view(
             mdl, self, self.context_menu_event)
         self.view.get_selection().connect("changed", self.on_selection_changed)
-        scrollbar_width = scrolled_window.get_vscrollbar().get_preferred_width()[1]
-        self.view.set_margin_end(scrollbar_width) # avoid conflict with scrollbar
+        scrollbar_width = scrolled_window.get_vscrollbar().get_preferred_width()[
+            1]
+        # avoid conflict with scrollbar
+        self.view.set_margin_end(scrollbar_width)
         scrolled_window.add(self.view)
         return scrolled_window
 
@@ -1289,7 +1306,8 @@ class GUI(Gtk.ApplicationWindow):
             # is within the closest monitor
             if r.x >= g.x and r.x < g.x + g.width and \
                r.y >= g.y and r.y < g.y + g.height:
-                monitor_num = display.get_n_monitors() > 0 and display.get_monitor_at_window(self.get_window()).get_model() or 0
+                monitor_num = display.get_n_monitors() > 0 and display.get_monitor_at_window(
+                    self.get_window()).get_model() or 0
                 logger.debug("closest monitor ({}) geometry = {}+{}, window geometry = {}+{}".format(
                     monitor_num, (g.x, g.y), (g.width, g.height), (r.x, r.y), (r.width, r.height)))
                 self.move(r.x, r.y)
