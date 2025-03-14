@@ -403,6 +403,7 @@ PrefersNonDefaultGPU=false""")
             os.unlink(tf.name)
 
     @mock.patch('subprocess.check_output')
+    @common.skipIfWindows
     def test_is_process_running_ps_aux(self, mock_check_output):
         username = get_real_username()
         ps_out = f"""USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
