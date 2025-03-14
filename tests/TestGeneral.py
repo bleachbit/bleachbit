@@ -22,6 +22,13 @@
 Test case for module General
 """
 
+# standard library
+import copy
+import os
+import shutil
+
+# local
+from bleachbit import logger
 from bleachbit.FileUtilities import exists_in_path
 from bleachbit.General import (
     boolstr_to_bool,
@@ -30,12 +37,7 @@ from bleachbit.General import (
     makedirs,
     run_external,
     sudo_mode)
-from bleachbit import logger
 from tests import common
-
-import copy
-import os
-import shutil
 
 
 class GeneralTestCase(common.BleachbitTestCase):
