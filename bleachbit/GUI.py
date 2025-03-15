@@ -30,7 +30,7 @@ import sys
 import threading
 import time
 
-<<<<<<< HEAD
+
 # third party import
 import gi
 gi.require_version('Gtk', '3.0')  # Keep this above `import Gtk``.
@@ -39,11 +39,6 @@ from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 APP_INDICATOR_FOUND = True
 
 if sys.platform == 'linux':
-=======
-app_indicator_found = True
-
-if sys.platform.startswith('linux'):
->>>>>>> 826855c1 (Fixed appindicator import when appindicator is not installed on the system)
     try:
         # Ubuntu: sudo apt install gir1.2-ayatanaappindicator3-0.1
         gi.require_version('AyatanaAppIndicator3', '0.1') # throws ValueError
@@ -55,7 +50,6 @@ if sys.platform.startswith('linux'):
             try:
                 from gi.repository import AppIndicator
             except ImportError:
-<<<<<<< HEAD
                 APP_INDICATOR_FOUND = False
 =======
                 app_indicator_found = False
@@ -719,16 +713,7 @@ class GUI(Gtk.ApplicationWindow):
             APPINDICATOR_ID, menu_icon_path, indicator_category)
         self.indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
         self.indicator.set_menu(self.build_appindicator_menu())
-=======
-        if sys.platform.startswith('linux') and app_indicator_found:
-            APPINDICATOR_ID = 'BLEACHBIT'
-            current_path = Path().cwd()
-            menu_icon_path = Path(current_path, 'bleachbit-icon.svg')
-            indicator_category = AppIndicator.IndicatorCategory.SYSTEM_SERVICES
-            self.indicator = AppIndicator.Indicator.new(APPINDICATOR_ID, str(menu_icon_path), indicator_category)
-            self.indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
-            self.indicator.set_menu(self.build_appindicator_menu())
->>>>>>> 826855c1 (Fixed appindicator import when appindicator is not installed on the system)
+
 
     def on_quit(self, *args):
         """Quit the application, used with CTRL+Q or CTRL+W"""
