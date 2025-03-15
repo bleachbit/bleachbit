@@ -1,3 +1,4 @@
+
 # vim: ts=4:sw=4:expandtab
 # -*- coding: UTF-8 -*-
 
@@ -56,6 +57,7 @@ def get_system_information():
 
     try:
         import gi
+        info['gi.version'] = gi.__version__
         gi.require_version('Gtk', '3.0')
         from gi.repository import Gtk
         settings = Gtk.Settings.get_default()
@@ -65,7 +67,7 @@ def get_system_information():
         info['GTK icon theme'] = settings.get_property('gtk-icon-theme-name')
         info['GTK prefer dark theme'] = settings.get_property(
             'gtk-application-prefer-dark-theme')
-    except:
+    except (ImportError, ValueError):
         pass
 
     import sqlite3
