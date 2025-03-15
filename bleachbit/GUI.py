@@ -52,6 +52,10 @@ if sys.platform == 'linux':
                 from gi.repository import AppIndicator
             except ImportError:
                 APP_INDICATOR_FOUND = False
+=======
+                app_indicator_found = False
+from gi.repository import Gtk, Gdk, GObject, GLib, Gio
+>>>>>>> 826855c1 (Fixed appindicator import when appindicator is not installed on the system)
 
 # local
 import bleachbit
