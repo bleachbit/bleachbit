@@ -31,10 +31,12 @@ import threading
 import time
 
 
+
 # third party import
 import gi
 gi.require_version('Gtk', '3.0')  # Keep this above `import Gtk``.
 from gi.repository import Gtk, Gdk, GObject, GLib, Gio
+
 
 APP_INDICATOR_FOUND = True
 
@@ -661,7 +663,6 @@ class GUI(Gtk.ApplicationWindow):
             APPINDICATOR_ID, menu_icon_path, indicator_category)
         self.indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
         self.indicator.set_menu(self.build_appindicator_menu())
-
 
     def on_quit(self, *args):
         """Quit the application, used with CTRL+Q or CTRL+W"""
