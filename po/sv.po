@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-07 04:33+0000\n"
+"PO-Revision-Date: 2025-03-13 08:09+0000\n"
 "Last-Translator: Nick Wick <NickWick@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/bleachbit/main/"
 "sv/>\n"
@@ -487,11 +487,11 @@ msgstr "E-postklient"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Bilagor"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Synkroniseringskonflikt"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -755,10 +755,8 @@ msgid "Memory dump"
 msgstr "Minnesdump"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Skrivbordsmiljö"
+msgstr "Skrivbordsgränssnittskomponenter"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1791,16 +1789,14 @@ msgid "Downloading URL failed: %s"
 msgstr "Hämtning av webbadress misslyckades: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "Disken var full när du skrev konfigurationen till filen %s"
+msgstr "Disken var full när konfigurationen skrevs till filen: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "Disken var full när du skrev konfigurationen till filen %s"
+msgstr "Tillstånd nekad vid skrivning av konfiguration till filen: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1925,30 +1921,29 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Undantag vid körning av åtgärden '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Körbar fil hittades inte: %s"
+msgstr "Filen hittades inte: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr ""
+msgstr "Åtkomst nekad vid flaggning av fil för senare borttagning: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Åtkomst nekad vid borttagning av registervärde: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Åtkomst nekad vid borttagning av registernyckel: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Åtkomst nekad: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format

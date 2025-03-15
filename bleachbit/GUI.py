@@ -33,9 +33,8 @@ import time
 
 # third party import
 import gi
-gi.require_version('Gtk', '3.0')  # Keep this above `import Gtk``.
+gi.require_version('Gtk', '3.0')  # Keep this above `import Gtk`.
 from gi.repository import Gtk, Gdk, GObject, GLib, Gio
-
 
 APP_INDICATOR_FOUND = True
 
