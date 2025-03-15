@@ -80,7 +80,8 @@ def set_root_log_level(is_debug=False):
     configuration is loaded or after a change via the GUI.
     """
     root_logger = logging.getLogger('bleachbit')
-    root_logger.setLevel(logging.DEBUG if is_debug else logging.INFO)
+    is_debug_effective = is_debug or is_debugging_enabled_via_cli()
+    root_logger.setLevel(logging.DEBUG if is_debug_effective else logging.INFO)
 
 
 class GtkLoggerHandler(logging.Handler):
@@ -93,7 +94,7 @@ class GtkLoggerHandler(logging.Handler):
     def update_log_level(self):
         """Set the log level"""
         from bleachbit.Options import options
-        if options.get('debug'):
+        if is_debugging_enabled_via_cli() or options.get('debug'):
             self.min_level = logging.DEBUG
         else:
             self.min_level = logging.WARNING
