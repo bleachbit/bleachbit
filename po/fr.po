@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-01-14 20:00+0000\n"
+"PO-Revision-Date: 2025-03-16 22:17+0000\n"
 "Last-Translator: BlueTurtle <skayzmomo@hotmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/bleachbit/main/fr/"
 ">\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -494,7 +494,7 @@ msgstr ""
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Conflit de synchronisation"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -1216,6 +1216,7 @@ msgstr ""
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
 msgstr ""
+"Effacement du chemin {pathname} avec le type de système de fichiers {fstype}"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1424,7 +1425,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "Détection automatique de la langue"
 
 #: ../bleachbit/GuiPreferences.py
 #, fuzzy
@@ -1531,7 +1532,7 @@ msgstr "Nom"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "Ce chemin existe déjà dans la liste blanche."
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
 msgid "Error"
@@ -1539,7 +1540,7 @@ msgstr "Erreur"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "Ce chemin existe déjà dans la liste personnalisée."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1764,11 +1765,11 @@ msgstr "Annule la prévisualisation ou le processus de nettoyage"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "Mettre à jour"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "Mettre à jour Bleachbit vers la dernière version"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -2013,21 +2014,22 @@ msgstr "Exécutable non trouvé : %s"
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
 msgstr ""
+"Accès refusé lors du marquage du fichier à supprimer ultérieurement : %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Accès refusé lors de la suppression d'une valeur de registre : %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Accès refusé lors de la suppression d'une clé de registre : %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Accès refusé : %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
