@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2024-08-31 06:09+0000\n"
-"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"PO-Revision-Date: 2025-03-16 04:07+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/bleachbit/main/"
 "es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Launchpad-Export-Date: 2021-12-14 04:36+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -117,7 +117,7 @@ msgstr "Visor multimedia"
 #: ../cleaners/gftp.xml ../cleaners/kde.xml ../cleaners/vuze.xml
 #: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Cleaner.py
 msgid "Cache"
-msgstr "Caché"
+msgstr "Antememoria"
 
 #: ../cleaners/xine.xml ../cleaners/dnf.xml ../cleaners/miro.xml
 #: ../cleaners/amsn.xml ../cleaners/librewolf.xml ../cleaners/rhythmbox.xml
@@ -134,7 +134,7 @@ msgstr "Caché"
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
 #: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
-msgstr "Eliminar la caché"
+msgstr "Eliminar la antememoria"
 
 #: ../cleaners/paint.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/wordpad.xml
@@ -201,19 +201,19 @@ msgstr "Navegador web"
 #: ../cleaners/firefox.xml ../cleaners/deepscan.xml ../cleaners/amule.xml
 #: ../cleaners/vuze.xml
 msgid "Backup files"
-msgstr "Archivos de copia de seguridad"
+msgstr "Archivos de copia de respaldo"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml
 #: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
 #: ../cleaners/firefox.xml ../cleaners/deepscan.xml ../cleaners/amule.xml
 #: ../cleaners/vuze.xml
 msgid "Delete the backup files"
-msgstr "Eliminar los archivos de copia de seguridad"
+msgstr "Eliminar los archivos de copia de respaldo"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/palemoon.xml
 #: ../cleaners/firefox.xml
 msgid "Crash reports"
-msgstr "Informes de error"
+msgstr "Informes de cierres inesperados"
 
 #: ../cleaners/librewolf.xml ../cleaners/beagle.xml ../cleaners/waterfox.xml
 #: ../cleaners/geary.xml ../cleaners/windows_defender.xml
@@ -480,11 +480,11 @@ msgstr "Esta opción elimina todos los marcadores."
 
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 msgid "Downloaded podcasts"
-msgstr "Podcasts descargados"
+msgstr "Pódcast descargados"
 
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr "Eliminar los podcasts descargados"
+msgstr "Eliminar los pódcast descargados"
 
 #: ../cleaners/geary.xml ../cleaners/thunderbird.xml ../cleaners/evolution.xml
 msgid "Email client"
@@ -492,11 +492,11 @@ msgstr "Cliente de correo"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Archivos adjuntos"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Conflicto de sincronización"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -766,10 +766,8 @@ msgid "Memory dump"
 msgstr "Volcado de memoria"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Entorno de escritorio"
+msgstr "Miniaplicaciones de escritorio"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1537,7 +1535,7 @@ msgstr "Carpeta"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "These paths will not be deleted or modified."
-msgstr "Estas rutas no se borrarán ni se modificarán."
+msgstr "Estas rutas no se eliminarán ni se modificarán."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "These locations can be selected for deletion."
@@ -1718,15 +1716,15 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
-"No hay versión oficial de BleachBit en Microsoft Store. Consigue la versión "
-"original en https://www.bleachbit.org, donde siempre es gratuita."
+"No hay ninguna versión oficial de BleachBit en Microsoft Store. Consiga la "
+"versión genuina en https://www.bleachbit.org, donde siempre es gratuita."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
 #. previews changes.
 #: ../bleachbit/GUI.py
 msgid "Preview"
-msgstr "Vista previa"
+msgstr "Previsualizar"
 
 #: ../bleachbit/GUI.py
 msgid "Preview files in the selected operations (without deleting any files)"
@@ -1894,7 +1892,7 @@ msgstr ""
 #: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
 msgid "Delete"
-msgstr "Borrar"
+msgstr "Eliminar"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
