@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-16 04:07+0000\n"
+"PO-Revision-Date: 2025-03-16 06:50+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/bleachbit/main/"
 "es/>\n"
@@ -1408,19 +1408,15 @@ msgstr "Descargar y actualizar los limpiadores de la comunidad (winapp2.ini)"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "Detectar idioma automáticamente"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "Preservación automática del idioma %s."
+msgstr "Detectar automáticamente el idioma del sistema"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "Idiomas"
+msgstr "Idioma:"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1499,7 +1495,7 @@ msgstr "Quitar"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "All languages will be deleted except those checked."
-msgstr "Se eliminarán todos los idiomas excepto los marcados."
+msgstr "Se eliminarán todos los idiomas salvo los marcados."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Preserve"
@@ -1515,7 +1511,7 @@ msgstr "Nombre"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "Esta ruta ya figura en la lista blanca."
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
 msgid "Error"
@@ -1523,7 +1519,7 @@ msgstr "Error"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "Esta ruta ya figura en la lista personalizada."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1729,7 +1725,7 @@ msgstr "Previsualizar"
 #: ../bleachbit/GUI.py
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr ""
-"Vista previa de los archivos de las operaciones seleccionadas (no elimina "
+"Previsualizar los archivos de las operaciones seleccionadas (sin eliminar "
 "ningún archivo)"
 
 #: ../bleachbit/GUI.py
@@ -1747,11 +1743,11 @@ msgstr "Interrumpir la previsualización o el proceso de limpieza"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "Actualizar"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "Actualizar BleachBit a la versión más reciente"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1984,10 +1980,9 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Error al ejecutar la operación «%(operation)s»: «%(msg)s»"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Ejecutable no encontrado: %s"
+msgstr "Archivo no encontrado: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
@@ -1997,17 +1992,17 @@ msgstr ""
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Acceso denegado al eliminar un valor del Registro: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Acceso denegado al eliminar una clave del Registro: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Acceso denegado: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
