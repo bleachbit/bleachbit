@@ -704,7 +704,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         elif os.name == 'posix':
             for check_path in (home, '/'):
                 detected_fs = get_filesystem_type(check_path)[0]
-                self.assertIn(detected_fs, ['ext4', 'ext3', 'squashfs', 'unknown'],
+                self.assertIn(detected_fs, ['btrfs', 'ext4', 'ext3', 'squashfs', 'unknown'],
                               f"Unexpected file system type for {check_path}: {detected_fs}")
 
     def test_getsize(self):
