@@ -85,19 +85,21 @@ def test_ini_helper(self, execute):
         size = os.path.getsize(filename)
         self.assertEqual(len(teststr), size)
 
-        # section does not exist
+        # The section does not exist, so no change.
         execute(filename, 'Recents', None)
         self.assertEqual(len(teststr), os.path.getsize(filename))
 
-        # parameter does not exist
+        # The parameter does not exist, so no change.
         execute(filename, 'RecentsMRL', 'files')
         self.assertEqual(len(teststr), os.path.getsize(filename))
 
-        # parameter does exist
+        # The parameter does exist, so the file shrinks.
+        # The file will be size 14 if chardet is available.
+        # Otherwise, size will be 17 with BOM.
         execute(filename, 'RecentsMRL', 'list')
-        self.assertEqual(14, os.path.getsize(filename))
+        self.assertIn(os.path.getsize(filename), (14,17))
 
-        # section does exist
+        # The section does exist, so the file shrinks.
         execute(filename, 'RecentsMRL', None)
         self.assertEqual(0, os.path.getsize(filename))
 

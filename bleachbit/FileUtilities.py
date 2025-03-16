@@ -246,7 +246,10 @@ def children_in_directory(top, list_directories=False):
 
 
 def clean_ini(path, section, parameter):
-    """Delete sections and parameters (aka option) in the file"""
+    """Delete sections and parameters (aka option) in the file
+
+    Comments are not preserved.
+    """
 
     def write(parser, ini_file):
         """
