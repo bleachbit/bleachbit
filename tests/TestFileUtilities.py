@@ -536,15 +536,18 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
     def test_detect_encoding(self):
         """Unit test for detect_encoding"""
         eat_glass = '나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
+        bom = '\ufeff' + eat_glass  # Add BOM for utf-8-sig
         tests = (('This is just an ASCII file', 'ascii'),
                  (eat_glass, 'utf-8'),
-                 (eat_glass, 'EUC-KR'))
+                 (eat_glass, 'EUC-KR'),
+                 (bom, 'UTF-8-SIG'))
         for file_contents, expected_encoding in tests:
-            with tempfile.NamedTemporaryFile(mode='w', delete=False, encoding=expected_encoding) as temp:
-                temp.write(file_contents)
-                temp.flush()
-            det = detect_encoding(temp.name)
-            self.assertEqual(det, expected_encoding)
+            with self.subTest(encoding=expected_encoding):
+                with tempfile.NamedTemporaryFile(mode='w', delete=False, encoding=expected_encoding) as temp:
+                    temp.write(file_contents)
+                    temp.flush()
+                det = detect_encoding(temp.name)
+                self.assertEqual(det, expected_encoding, f"{file_contents} -> {det}, check that chardet is available")
 
     @common.skipIfWindows
     def test_ego_owner(self):
