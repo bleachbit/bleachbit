@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2024-10-16 15:51+0000\n"
-"Last-Translator: Ricard Rodríguez <rcard@insicuri.net>\n"
+"PO-Revision-Date: 2025-03-16 06:50+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/bleachbit/main/"
 "ca/>\n"
 "Language: ca\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-rc\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Launchpad-Export-Date: 2022-01-23 20:20+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -491,11 +491,11 @@ msgstr "Client de correu"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Fitxers adjunts"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Conflicte de sincronització"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -761,10 +761,8 @@ msgid "Memory dump"
 msgstr "Abocament de memòria"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Entorn d'escriptori"
+msgstr "Ginys d'escriptori"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1401,7 +1399,7 @@ msgstr "Baixa i actualitza els netejadors fets per la comunitat (winapp2.ini)"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "Detecta la llengua automàticament"
 
 #: ../bleachbit/GuiPreferences.py
 #, fuzzy
@@ -1410,10 +1408,8 @@ msgid "Automatically detect the system language"
 msgstr "Preservació automàtica de l’idioma %s."
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "Idiomes"
+msgstr "Llengua:"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1712,11 +1708,11 @@ msgstr "Interromp la previsualització o el procés de neteja"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "Actualitza"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "Actualitzeu el BleachBit a la versió més recent"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1946,10 +1942,9 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Error en executar l'operació «%(operation)s»: «%(msg)s»"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "No s'ha trobat l'executable: %s"
+msgstr "No s'ha trobat el fitxer: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
