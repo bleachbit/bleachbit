@@ -434,15 +434,6 @@ def detect_encoding(fn):
         return None
 
     with open(fn, 'rb') as f:
-        if not hasattr(chardet, 'universaldetector'):
-            # This method works on Ubuntu 16.04 with an older version of the module.
-            rawdata = f.read()
-            det = chardet.detect(rawdata)
-            if det['confidence'] > 0.5:
-                return det['encoding']
-            return None
-
-        # This method is faster, but it requires a newer version of the module.
         detector = chardet.universaldetector.UniversalDetector()
         for line in f.readlines():
             detector.feed(line)
