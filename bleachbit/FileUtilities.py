@@ -90,7 +90,7 @@ def get_filesystem_type(path):
     device_name: C:, D:, etc.
 
     File system types seen
-    * On Linux: ext4, vfat, squashfs
+    * On Linux: btrfs,ext4, vfat, squashfs
     * On Windows: NTFS, FAT32, CDFS
     """
     try:
@@ -988,6 +988,7 @@ def wipe_path(pathname, idle=False):
             writtensize = 0
 
             while True:
+
                 try:
                     if fstype != 'vfat':
                         f.write(blanks)
@@ -1028,25 +1029,33 @@ def wipe_path(pathname, idle=False):
             os.fsync(f.fileno())  # write to disk
             # For statistics
             total_bytes += f.tell()
-            # If no bytes were written, then quit.
-            # See https://github.com/bleachbit/bleachbit/issues/502
-            # Modified by Marvin to fix the issue #1051 [12/06/2020]
-            if start_free_bytes - total_bytes < 2:
-                break
             # sync to disk
             sync()
             # statistics
             elapsed_sec = time.time() - start_time
             rate_mbs = (total_bytes / (1000 * 1000)) / elapsed_sec
-            logger.info(_('Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at {rate:.2f} MB/s').format(
-                        files=len(files), bytes=total_bytes, seconds=int(elapsed_sec), rate=rate_mbs))
+            logger.debug(_('Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at {rate:.2f} MB/s').format(
+                files=len(files), bytes=total_bytes, seconds=int(elapsed_sec), rate=rate_mbs))
             # how much free space is left (should be near zero)
             if 'posix' == os.name:
                 stats = os.statvfs(pathname)
-                logger.info(_("{bytes:,} bytes and {inodes:,} inodes available to non-super-user").format(
-                            bytes=stats.f_bsize * stats.f_bavail, inodes=stats.f_favail))
-                logger.info(_("{bytes:,} bytes and {inodes:,} inodes available to super-user").format(
-                            bytes=stats.f_bsize * stats.f_bfree, inodes=stats.f_ffree))
+                logger.debug(_("{bytes:,} bytes and {inodes:,} inodes available to non-super-user").format(
+                    bytes=stats.f_bsize * stats.f_bavail, inodes=stats.f_favail))
+                logger.debug(_("{bytes:,} bytes and {inodes:,} inodes available to super-user").format(
+                    bytes=stats.f_bsize * stats.f_bfree, inodes=stats.f_ffree))
+            # If no bytes were written to this file, then do not try to create another file.
+            # Linux allows writing several 4K files when free_space() = 0,
+            # so do not check free_space() < 1.
+            # See
+            #  * https://github.com/bleachbit/bleachbit/issues/502
+            #    Replace `f.tell() < 2` with `len(blanks) < 2`
+            #  * https://github.com/bleachbit/bleachbit/issues/1051
+            #    Replace `len(blanks) < 2` with `estimated_free_space < 2`
+            estimated_free_space = start_free_bytes - total_bytes
+            if estimated_free_space < 2:
+                logger.debug(
+                    f'Estimated free space {estimated_free_space} is less than 2 bytes, breaking')
+                break
         done_wiping = True
     finally:
         # Ensure files are closed and deleted even if an exception occurs or generator is not fully consumed.
