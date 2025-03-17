@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-17 19:42+0000\n"
+"PO-Revision-Date: 2025-03-17 20:58+0000\n"
 "Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/bleachbit/main/de/"
 ">\n"
@@ -1518,7 +1518,7 @@ msgstr "Name"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "Dieser Pfad ist in der Ausnahmeliste bereits vorhanden."
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
 msgid "Error"
@@ -1526,7 +1526,7 @@ msgstr "Fehler"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "Dieser Pfad ist in der benutzerdefinierten Liste bereits vorhanden."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1957,22 +1957,22 @@ msgstr "Datei nicht gefunden: %s"
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr ""
+msgstr "Zugriff verweigert beim Markieren der Datei zum späteren Löschen: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Zugriff verweigert beim Löschen des Registrierungswerts: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Zugriff verweigert beim Löschen des Registrierungsschlüssels: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Zugriff verweigert: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
