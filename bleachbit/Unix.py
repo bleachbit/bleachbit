@@ -276,7 +276,10 @@ def get_distribution_name_version_platform_freedesktop():
     Python 3.10 added platform.freedesktop_os_release().
     """
     if hasattr(platform, 'freedesktop_os_release'):
-        release = platform.freedesktop_os_release()
+        try:
+            release = platform.freedesktop_os_release()
+        except FileNotFoundError:
+            return None
         dist_id = release.get('ID')
         dist_version_id = release.get('VERSION_ID')
         if dist_id and dist_version_id:
