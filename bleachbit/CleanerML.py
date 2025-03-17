@@ -265,10 +265,13 @@ def list_cleanerml_files(local_only=False):
     """List CleanerML files"""
     cleanerdirs = (bleachbit.personal_cleaners_dir, )
     if bleachbit.local_cleaners_dir:
-        # If the application is installed, locale_cleaners_dir is None
-        cleanerdirs = (bleachbit.local_cleaners_dir, )
+        # If the application is installed, locale_cleaners_dir is None.
+        # If portable mode, local_cleaners_dir is under the directory of
+        # `bleachbit.py`.
+        cleanerdirs += (bleachbit.local_cleaners_dir, )
     if not local_only and bleachbit.system_cleaners_dir:
         cleanerdirs += (bleachbit.system_cleaners_dir, )
+    logger.info(cleanerdirs)
     for pathname in listdir(cleanerdirs):
         if not pathname.lower().endswith('.xml'):
             continue

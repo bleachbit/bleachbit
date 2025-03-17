@@ -85,19 +85,21 @@ def test_ini_helper(self, execute):
         size = os.path.getsize(filename)
         self.assertEqual(len(teststr), size)
 
-        # section does not exist
+        # The section does not exist, so no change.
         execute(filename, 'Recents', None)
         self.assertEqual(len(teststr), os.path.getsize(filename))
 
-        # parameter does not exist
+        # The parameter does not exist, so no change.
         execute(filename, 'RecentsMRL', 'files')
         self.assertEqual(len(teststr), os.path.getsize(filename))
 
-        # parameter does exist
+        # The parameter does exist, so the file shrinks.
+        # The file will be size 14 if chardet is available.
+        # Otherwise, size will be 17 with BOM.
         execute(filename, 'RecentsMRL', 'list')
-        self.assertEqual(14, os.path.getsize(filename))
+        self.assertIn(os.path.getsize(filename), (14,17))
 
-        # section does exist
+        # The section does exist, so the file shrinks.
         execute(filename, 'RecentsMRL', None)
         self.assertEqual(0, os.path.getsize(filename))
 
@@ -534,15 +536,18 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
     def test_detect_encoding(self):
         """Unit test for detect_encoding"""
         eat_glass = '나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
+        bom = '\ufeff' + eat_glass  # Add BOM for utf-8-sig
         tests = (('This is just an ASCII file', 'ascii'),
                  (eat_glass, 'utf-8'),
-                 (eat_glass, 'EUC-KR'))
+                 (eat_glass, 'EUC-KR'),
+                 (bom, 'UTF-8-SIG'))
         for file_contents, expected_encoding in tests:
-            with tempfile.NamedTemporaryFile(mode='w', delete=False, encoding=expected_encoding) as temp:
-                temp.write(file_contents)
-                temp.flush()
-            det = detect_encoding(temp.name)
-            self.assertEqual(det, expected_encoding)
+            with self.subTest(encoding=expected_encoding):
+                with tempfile.NamedTemporaryFile(mode='w', delete=False, encoding=expected_encoding) as temp:
+                    temp.write(file_contents)
+                    temp.flush()
+                det = detect_encoding(temp.name)
+                self.assertEqual(det, expected_encoding, f"{file_contents} -> {det}, check that chardet is available")
 
     @common.skipIfWindows
     def test_ego_owner(self):
@@ -699,7 +704,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         elif os.name == 'posix':
             for check_path in (home, '/'):
                 detected_fs = get_filesystem_type(check_path)[0]
-                self.assertIn(detected_fs, ['ext4', 'ext3', 'squashfs', 'unknown'],
+                self.assertIn(detected_fs, ['btrfs', 'ext4', 'ext3', 'squashfs', 'unknown'],
                               f"Unexpected file system type for {check_path}: {detected_fs}")
 
     def test_getsize(self):
@@ -908,10 +913,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         """Unit test for method vacuum_sqlite3()"""
         import sqlite3
 
-        path = os.path.abspath('bleachbit.tmp.sqlite3')
-        if os.path.lexists(path):
-            delete(path)
-
+        path = os.path.join(self.tempdir, 'bleachbit.tmp.sqlite3')
         conn = sqlite3.connect(path)
         conn.execute('create table numbers (number)')
         conn.commit()

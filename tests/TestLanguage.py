@@ -20,6 +20,7 @@
 
 
 import locale
+import unittest
 from unittest import mock
 
 from bleachbit.Language import get_active_language_code, \
@@ -31,6 +32,12 @@ from bleachbit.Options import options
 from tests import common
 
 
+def skipIfMissingPo(f):
+    """Skip unit test if missing translations"""
+    lang_count = len(get_supported_language_codes())
+    return unittest.skipIf(lang_count < 3, 'missing translations: run `make -C po local`')(f)
+
+
 class LanguageTestCase(common.BleachbitTestCase):
 
     """Test case for module Language"""
@@ -39,6 +46,11 @@ class LanguageTestCase(common.BleachbitTestCase):
         super(LanguageTestCase, self).setUp()
         options.set('auto_detect_lang', False)
         options.set('forced_language', '')
+
+    def tearDown(self):
+        # reset
+        options.set('forced_language', 'en')
+        setup_translation()
 
     def test_get_active_language_code(self):
         """Test get_active_language_code()"""
@@ -53,6 +65,8 @@ class LanguageTestCase(common.BleachbitTestCase):
         for slang in slangs:
             self.assertIsLanguageCode(slang)
         self.assertTrue('en_US' in slangs)
+        if len(get_supported_language_codes()) < 3:
+            self.skipTest('missing translations')
         self.assertTrue('es' in slangs)
 
     def test_get_supported_language_code_name_dict_unknown_code(self):
@@ -62,6 +76,7 @@ class LanguageTestCase(common.BleachbitTestCase):
             self.assertIn('es', supported_langs)
             self.assertIn('foo@bar', supported_langs)
 
+    @skipIfMissingPo
     def test_switch_language_twice(self):
         """English should still work after switching twice"""
 
@@ -73,7 +88,7 @@ class LanguageTestCase(common.BleachbitTestCase):
         options.set('auto_detect_lang', False)
         options.set('forced_language', 'es')
         setup_translation()
-        self.assertEqual(get_text('Preview'), 'Vista previa')
+        self.assertIn(get_text('Preview'), ('Vista previa', 'Previsualizar'))
 
         options.set('forced_language', 'en')
         setup_translation()
@@ -89,6 +104,7 @@ class LanguageTestCase(common.BleachbitTestCase):
             self.assertIsInstance(text, str)
             self.assertTrue(len(text) > 0)
 
+    @skipIfMissingPo
     def test_get_text_au(self):
         """Test Austrlian English
 
@@ -99,6 +115,7 @@ class LanguageTestCase(common.BleachbitTestCase):
         setup_translation()
         self.assertEqual(get_text('Localizations'), 'Localisations')
 
+    @skipIfMissingPo
     def test_get_text_fallback(self):
         """Language code x_Y should fall back to x"""
         for lang_id in ('es', 'es_XX', 'es_ES', 'es_ES.UTF-8', 'es_1235'):
