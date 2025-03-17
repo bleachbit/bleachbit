@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-09 23:36+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2025-03-17 19:42+0000\n"
+"Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/bleachbit/main/de/"
 ">\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Launchpad-Export-Date: 2021-11-19 21:00+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -491,11 +491,11 @@ msgstr "E-Mail-Programm"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Anhänge"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Synchronisationskonflikt"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -769,10 +769,8 @@ msgid "Memory dump"
 msgstr "Speicherabbild"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Desktop-Umgebung"
+msgstr "Desktop-Widgets"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1209,7 +1207,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
+msgstr "Pfad {pathname} mit Dateisystemtyp {fstype} wird gelöscht"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1816,18 +1814,16 @@ msgid "Downloading URL failed: %s"
 msgstr "Herunterladen der Adresse schlug fehl: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
 msgstr ""
-"Die Platte war voll, als die Konfiguration in die Datei geschrieben wurde %s"
+"Die Platte war voll, als die Konfiguration geschrieben wurde in die Datei: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
 msgstr ""
-"Die Platte war voll, als die Konfiguration in die Datei geschrieben wurde %s"
+"Berechtigung verweigert beim Schreiben der Konfiguration in die Datei: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1954,10 +1950,9 @@ msgstr ""
 "entdeckt: »%(msg)s«"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Ausführbare Datei nicht gefunden: %s"
+msgstr "Datei nicht gefunden: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
