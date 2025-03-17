@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-11 21:27+0000\n"
-"Last-Translator: flip temmeruit <zq9h6h8eq@mozmail.com>\n"
+"PO-Revision-Date: 2025-03-17 09:51+0000\n"
+"Last-Translator: \"Alfred J. Haq\" <linuxghost@hotmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/bleachbit/main/nl/>"
 "\n"
 "Language: nl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -785,7 +785,7 @@ msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"Verwijder de webcache, wat waardoor de tijd die nodig is om opnieuw bezochte "
+"Verwijder de webcache, waardoor de tijd die nodig is om opnieuw bezochte "
 "pagina's weer te geven, wordt verkort. Hiermee worden ook favoriete GIF's "
 "gewist."
 
@@ -1975,9 +1975,9 @@ msgid "Access denied when deleting registry key: %s"
 msgstr ""
 
 #: ../bleachbit/Worker.py
-#, python-format
+#, fuzzy, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Toegang verboden: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
