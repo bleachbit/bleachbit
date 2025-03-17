@@ -913,10 +913,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         """Unit test for method vacuum_sqlite3()"""
         import sqlite3
 
-        path = os.path.abspath('bleachbit.tmp.sqlite3')
-        if os.path.lexists(path):
-            delete(path)
-
+        path = os.path.join(self.tempdir, 'bleachbit.tmp.sqlite3')
         conn = sqlite3.connect(path)
         conn.execute('create table numbers (number)')
         conn.commit()
