@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-11 10:54+0000\n"
+"PO-Revision-Date: 2025-03-17 18:30+0000\n"
 "Last-Translator: Cirnos <Cirnos@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "bleachbit/main/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Launchpad-Export-Date: 2020-12-28 15:48+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -755,10 +755,8 @@ msgid "Memory dump"
 msgstr "Despejo de memória"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Ambiente da Área de trabalho"
+msgstr "Integrações da área de trabalho"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1818,7 +1816,7 @@ msgstr "Disco estava cheio ao escrever configuração para arquivo: %s"
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "Permissão rejeitada ao editar escrever configuração para arquivo %s"
+msgstr "Permissão rejeitada ao escrever configuração para arquivo %s"
 
 #: ../bleachbit/Options.py
 #, python-format
