@@ -64,6 +64,8 @@ from tests import common
 import json
 import locale
 import os
+import random
+import re
 import subprocess
 import sys
 import tempfile
@@ -153,14 +155,44 @@ def test_json_helper(self, execute):
 class FileUtilitiesTestCase(common.BleachbitTestCase):
     """Test case for module FileUtilities"""
 
-    def test_bytes_to_human(self):
-        """Unit test for class bytes_to_human"""
-
-        old_locale = locale.getlocale(locale.LC_NUMERIC)
+    def setUp(self):
+        """Call before each test method"""
+        super().setUp()
+        self.old_locale = locale.getlocale(locale.LC_NUMERIC)
         locale.setlocale(locale.LC_NUMERIC, 'C')
 
-        # test one-way conversion for predefined values
-        # each test is a tuple in the format: (bytes, SI, EIC)
+    def tearDown(self):
+        """Call after each test method"""
+        if self.old_locale == (None, None):
+            locale.setlocale(locale.LC_NUMERIC, 'C')
+            return
+        try:
+            if self.old_locale[0] is None:
+                locale.setlocale(locale.LC_NUMERIC, None)
+            else:
+                try:
+                    # First try with the full locale string
+                    locale.setlocale(locale.LC_NUMERIC, '.'.join(
+                        filter(None, self.old_locale)))
+                except locale.Error:
+                    # If that fails, try just the language code part
+                    try:
+                        locale.setlocale(locale.LC_NUMERIC, self.old_locale[0])
+                    except locale.Error as e:
+                        print(
+                            f'Failed to restore locale with just language code {self.old_locale[0]}: {e}')
+        except locale.Error as e:
+            print(f'Failed to restore locale {self.old_locale}: {e}')
+        # Check that running getlocale again does not raise an exception.
+        # For me, getlocale() fails after successful setlocale(..., 'en_MX') on Windows.
+        locale.getlocale(locale.LC_NUMERIC)
+        self.assertEqual(locale.getlocale(locale.LC_NUMERIC), self.old_locale)
+
+    def test_bytes_to_human_one_way(self):
+        """Test one-way conversion of bytes_to_human()"""
+
+        # Test one-way conversion for predefined values
+        # Each test is a tuple in the format: (bytes, SI, EIC)
         tests = ((-1, '-1B', '-1B'),
                  (0, '0B', '0B'),
                  (1, '1B', '1B'),
@@ -190,46 +222,31 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             self.assertEqual(test[1], si,
                              'bytes_to_human(%d) SI = %s but expected %s' % (test[0], si, test[1]))
 
-        # test roundtrip conversion for random values
-        import random
+
+    def test_bytes_to_human_roundtrip(self):
+        """Test roundtrip conversion of bytes_to_human()
+
+        Example: 1,964,950 -> 2MB -> 2,000,000 with difference of 1.78% (0.0178).
+        """
+
         for _n in range(0, 1000):
             bytes1 = random.randrange(0, 1000 ** 4)
             human = bytes_to_human(bytes1)
             bytes2 = human_to_bytes(human)
             error = abs(float(bytes2 - bytes1) / bytes1)
-            self.assertLess(abs(error), 0.01, "%d (%s) is %.2f%% different than %d" %
-                            (bytes1, human, error * 100, bytes2))
+            self.assertLess(abs(
+                error), 0.02, f"{bytes1:,} ({human}) is {error * 100:.2f}% different than {bytes2:,}")
 
-        # test localization
-        if hasattr(locale, 'format_string'):
-            try:
-                locale.setlocale(locale.LC_NUMERIC, 'de_DE.utf8')
-            except:
-                logger.warning('exception when setlocale to de_DE.utf8')
-            else:
-                self.assertEqual("1,01GB", bytes_to_human(1000 ** 3 + 5812389))
-
+    def test_bytes_to_human_localization(self):
+        """Test localization of bytes_to_human()"""
+        if not hasattr(locale, 'format_string'):
+            self.skipTest('Locale module does not support format_string')
         try:
-            if old_locale[0] is None:
-                locale.setlocale(locale.LC_NUMERIC, None)
-            else:
-                try:
-                    # First try with the full locale string
-                    locale.setlocale(locale.LC_NUMERIC, '.'.join(
-                        filter(None, old_locale)))
-                except locale.Error:
-                    # If that fails, try just the language code part
-                    try:
-                        locale.setlocale(locale.LC_NUMERIC, old_locale[0])
-                    except locale.Error as e:
-                        print(
-                            f'Failed to restore locale with just language code {old_locale[0]}: {e}')
-        except locale.Error as e:
-            print(f'Failed to restore locale {old_locale}: {e}')
-        # Check that running getlocale again does not raise an exception.
-        # For me, getlocale() fails after successful setlocale(..., 'en_MX') on Windows.
-        locale.getlocale(locale.LC_NUMERIC)
-        self.assertEqual(locale.getlocale(locale.LC_NUMERIC), old_locale)
+            locale.setlocale(locale.LC_NUMERIC, 'de_DE.utf8')
+        except:
+            logger.warning('exception when setlocale to de_DE.utf8')
+        else:
+            self.assertEqual("1,01GB", bytes_to_human(1000 ** 3 + 5812389))
 
     def test_children_in_directory(self):
         """Unit test for function children_in_directory()"""
@@ -658,21 +675,19 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         self.assertGreater(result, -1)
         self.assertIsInteger(result)
 
-        # compare to WMIC
-        if 'nt' != os.name:
-            return
+    @common.skipUnlessWindows
+    def test_free_space_windows(self):
+        """Unit test for free_space() on Windows"""
         args = ['wmic', 'LogicalDisk', 'get', 'DeviceID,', 'FreeSpace']
         (rc, stdout, stderr) = run_external(args)
         if rc:
             print('error calling WMIC\nargs=%s\nstderr=%s' % (args, stderr))
             return
-        import re
         for line in stdout.split('\n'):
             line = line.strip()
             if not re.match(r'([A-Z]):\s+(\d+)', line):
                 continue
             drive, bytes_free = re.split(r'\s+', line)
-            print('Checking free space for %s' % drive)
             bytes_free = int(bytes_free)
             free = free_space(drive)
             self.assertEqual(bytes_free, free)

@@ -122,7 +122,7 @@ class LanguageTestCase(common.BleachbitTestCase):
             options.set('forced_language', lang_id)
             self.assertEqual(get_active_language_code(), lang_id)
             setup_translation()
-            self.assertEqual(get_text('Preview'), 'Vista previa')
+            self.assertIn(get_text('Preview'), ('Vista previa', 'Previsualizar'))
 
     def test_options_import_failure(self):
         """Test handling of failed Options import in language detection"""

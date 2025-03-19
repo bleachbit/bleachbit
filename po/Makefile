@@ -91,7 +91,7 @@ done
 clean:
 	echo "* Cleaning"
 	@rm -fv *.mo
-	@rm -fv $(POTFILE) cleanerml.pot desktop.pot diff.pot
+	@rm -fv $(POTFILE) $(POTFILE).old cleanerml.pot desktop.pot diff.pot
 	@rm -rfv ../locale
 
 all: $(POTFILE) $(MOFILES)

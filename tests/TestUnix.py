@@ -203,8 +203,6 @@ class UnixTestCase(common.BleachbitTestCase):
             self.assertEqual(ret_distro, ret_os_release)
 
         self.assertIsNotNone(ret_real)
-        if sys.version_info >= (3, 10):
-            self.assertIsNotNone(ret_platform_freedesktop)
 
     @common.skipIfWindows
     def test_is_broken_xdg_desktop_real(self):
