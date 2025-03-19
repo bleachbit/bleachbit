@@ -1,69 +1,82 @@
-# This rpmbuild.spec is designed in particular for OpenSUSE Build Service
+# This rpmbuild.spec is designed for the OpenSUSE Build Service
 # to build packages for CentOS, Fedora, and OpenSUSE.
 
-# The minimum supported Fedora version is now Fedora 30.
+# Fedora docs deprecate:
+#  * Group
+#  * BuildRoot
+#  * %clean
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/
 
-%if 0%{?fedora}
-# Example definition of variable "fedora" on Fedora 31 is "31"
-%{!?fedora_version: %define fedora_version %fedora}
+# openSUSE docs deprecate:
+#  * Group
+#  * %clean
+# https://en.opensuse.org/openSUSE:Specfile_guidelines
+
+# 2025-03-15
+#  openSUSE:Slowroll reports suse_version=1699
+#  openSUSE:Tumbleweed reports suse_version=1699
+#  CentOS_9_Stream reports centos_version=900
+#  Fedora 41 reports fedora_version=41
+
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
+%define is_redhat_family 1
+%else
+%define is_redhat_family 0
+%endif
+
+%if 0%{?is_opensuse}
+%define pyprefix %{primary_python}
 %endif
 
 Name:           bleachbit
 Version:        4.9.1
 Release:        1%{?dist}
 Summary:        Remove unnecessary files, free space, and maintain privacy
-
-Group:          Applications/System
-License:        GPLv3
+License:        GPL-3.0-or-later
 URL:            https://www.bleachbit.org
 Source0:        %{name}-%{version}.tar.gz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-
 BuildArch:      noarch
 
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
+%if %{is_redhat_family}
 BuildRequires:  desktop-file-utils
+BuildRequires:  fdupes
 BuildRequires:  gettext
-%if 0%{?centos_version}
-%if 0%{?centos_version} < 800
-BuildRequires:  python3-rpm-macros
-%endif
-%endif
+BuildRequires:  python3-chardet
+BuildRequires:  python3-psutil
 BuildRequires:  python3-setuptools
 Requires:       python3
 Requires:       gtk3
 Requires:       usermode
 Requires:       python3-chardet
 Requires:       python3-gobject
+Requires:       python3-psutil
 %endif
 
-# For CentOS and Fedora, do not require scandir.
-# CentOS 7 has python36-scandir, but it does not need it because it has Python 3.6.
-# CentOS 8 does not have a scandir package, but it does not need it because it has Python 3.6.
-# Fedora 31 has python3-scandir, but it is not needed because Fedora 31 has Python 3.7.
-
-# OpenSUSE Tumbleweed as of March 2019
-# - does not have package python3-gnome
-# - has package python3-scandir, but it does not need it because it has Python 3.7
-# - package typelib-1_0-Gtk-3_0 fixes "ValueError: Namespace Gtk not available"
-%if 0%{?suse_version}
-%if 0%{?suse_version} > 910
+%if 0%{?is_opensuse}
 BuildRequires:  desktop-file-utils
-%endif
+BuildRequires:  fdupes
 BuildRequires:  make
+BuildRequires:  openSUSE-release
+BuildRequires:  %{pyprefix}
 BuildRequires:  python-rpm-macros
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
+BuildRequires:  %{pyprefix}-chardet
+BuildRequires:  %{pyprefix}-psutil
+BuildRequires:  %{pyprefix}-setuptools
+BuildRequires:  %{pyprefix}-sqlite-utils
+BuildRequires:  %{pyprefix}-xml
 BuildRequires:  update-desktop-files
-Requires:       gtk3
-Requires:       python3-chardet
-Requires:       python3-gobject-Gdk
-Requires:       python3-xml
-Requires:       typelib-1_0-Gtk-3_0
-#%py3_requires
-%if 0%{?suse_version} >= 1030
+Requires:       gobject-introspection
+Requires:	    %{pyprefix}
+Requires:       %{pyprefix}-chardet
+Requires:       %{pyprefix}-gobject
+Requires:       %{pyprefix}-gobject-Gdk
+Requires:       %{pyprefix}-psutil
+Requires:       %{pyprefix}-sqlite-utils
+Requires:       %{pyprefix}-xml
+Requires:		openSUSE-release
+Requires:       typelib(Gtk)
+Requires:       typelib(Notify)
 Requires:       xdg-utils
-%endif
 %endif
 
 
@@ -81,19 +94,19 @@ hide previously deleted files.
 
 %prep
 %setup -q
+python3 -V
+%{__python3} -V
+
 
 %build
 %{__python3} setup.py build
-
-make downgrade_desktop
-
 cp org.bleachbit.BleachBit.desktop org.bleachbit.BleachBit-root.desktop
 sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' org.bleachbit.BleachBit-root.desktop
 
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
+%if %{is_redhat_family}
 
 cat > bleachbit.pam <<EOF
-#%PAM-1.0
+#%%PAM-1.0
 auth		include		config-util
 account		include		config-util
 session		include		config-util
@@ -109,13 +122,13 @@ EOF
 
 make delete_windows_files
 
-%install
-rm -rf $RPM_BUILD_ROOT
 
+%install
 make install PYTHON=%{__python3} DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix}
 
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit.desktop
+
+%if %{is_redhat_family}
 
 sed -i -e 's/Exec=bleachbit$/Exec=bleachbit-root/g' org.bleachbit.BleachBit-root.desktop
 
@@ -135,7 +148,7 @@ install -m 644 %{name}.console %{buildroot}%{_sysconfdir}/security/console.apps/
 %endif
 
 
-%if 0%{?suse_version} >= 1030
+%if 0%{?is_opensuse}
 sed -i -e 's/^Exec=bleachbit$/Exec=xdg-su -c bleachbit/g' org.bleachbit.BleachBit-root.desktop
 
 desktop-file-install \
@@ -143,20 +156,25 @@ desktop-file-install \
 	--vendor="" org.bleachbit.BleachBit-root.desktop
 
 %suse_update_desktop_file -i org.bleachbit.BleachBit-root Utility Filesystem
-%endif
 
-%if 0%{?suse_version}
 %suse_update_desktop_file org.bleachbit.BleachBit Utility Filesystem
 %endif
 
 make -C po install DESTDIR=$RPM_BUILD_ROOT
 %find_lang %{name}
 
+# Make symlinks for redundant .pyc files.
+%fdupes -s %{buildroot}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
 
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
+%check
+python3 bleachbit.py --sysinfo
+python3 bleachbit.py -l | wc -l
+python3 bleachbit.py -p system.cache | wc -l
+python3 -m unittest -v tests.TestFileUtilities tests.TestUnix
+
+
+%if %{is_redhat_family}
 %post
 update-desktop-database &> /dev/null ||:
 
@@ -165,31 +183,31 @@ update-desktop-database &> /dev/null ||:
 %endif
 
 
-
 %files -f %{name}.lang
 %defattr(-,root,root,-)
-%doc COPYING README.md
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
+%doc README.md
+%license COPYING
+%if %{is_redhat_family}
 %config(noreplace) %{_sysconfdir}/pam.d/%{name}-root
 %config(noreplace) %{_sysconfdir}/security/console.apps/%{name}-root
 %{_bindir}/%{name}-root
 %{_sbindir}/%{name}-root
 %endif
 %{_bindir}/%{name}
-%{_datadir}/metainfo
 %{_datadir}/metainfo/org.bleachbit.BleachBit.metainfo.xml
 %{_datadir}/applications/org.bleachbit.BleachBit.desktop
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?suse_version} >= 1030
 %{_datadir}/applications/org.bleachbit.BleachBit-root.desktop
-%endif
 %{_datadir}/%{name}/
 %{_datadir}/pixmaps/%{name}.png
 %{_datadir}/pixmaps/%{name}-indicator.svg
-%{_datadir}/polkit-1
-%{_datadir}/polkit-1/actions
+%dir %{_datadir}/polkit-1
+%dir %{_datadir}/polkit-1/actions
 %{_datadir}/polkit-1/actions/org.bleachbit.policy
 
 
-
-
 %changelog
+
+* Tue Mar 18 2025 Andrew Ziem <andrew@bleachbit.org> - 4.9.1-1
+- Update to 4.9.1
+- See https://www.bleachbit.org/news
+
