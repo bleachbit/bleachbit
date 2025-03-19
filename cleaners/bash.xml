@@ -27,4 +27,9 @@
     <description>Delete the command history</description>
     <action command="delete" search="file" path="~/.bash_history"/>
   </option>
+  <option id="tmp">
+    <label>Temporary files</label>
+    <description>Delete the temporary files</description>
+    <action command="delete" search="glob" path="~/.bash_history-*.tmp"/>
+  </option>
 </cleaner>
