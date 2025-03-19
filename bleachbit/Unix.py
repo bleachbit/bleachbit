@@ -271,7 +271,7 @@ def get_distribution_name_version_platform_freedesktop():
     """Returns the name and version of the distribution using
     platform.freedesktop_os_release()
 
-    Example return value: 'ubuntu 24.10'
+    Example return value: 'ubuntu 24.10' or None
 
     Python 3.10 added platform.freedesktop_os_release().
     """
@@ -291,7 +291,7 @@ def get_distribution_name_version_distro():
     """Returns the name and version of the distribution using the distro
     package
 
-    Example return value: 'ubuntu 24.10'
+    Example return value: 'ubuntu 24.10' or None
 
     distro is a third-party package recommended here:
     https://docs.python.org/3.7/library/platform.html
@@ -308,7 +308,7 @@ def get_distribution_name_version_distro():
 def get_distribution_name_version_os_release():
     """Returns the name and version of the distribution using /etc/os-release
 
-    Example return value: 'ubuntu 24.10'
+    Example return value: 'ubuntu 24.10' or None
     """
     if not os.path.exists('/etc/os-release'):
         return None
