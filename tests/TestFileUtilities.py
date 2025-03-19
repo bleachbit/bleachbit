@@ -224,15 +224,18 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
 
     def test_bytes_to_human_roundtrip(self):
-        """Test roundtrip conversion of bytes_to_human()"""
+        """Test roundtrip conversion of bytes_to_human()
+
+        Example: 1,964,950 -> 2MB -> 2,000,000 with difference of 1.78% (0.0178).
+        """
 
         for _n in range(0, 1000):
             bytes1 = random.randrange(0, 1000 ** 4)
             human = bytes_to_human(bytes1)
             bytes2 = human_to_bytes(human)
             error = abs(float(bytes2 - bytes1) / bytes1)
-            self.assertLess(abs(error), 0.01, "%d (%s) is %.2f%% different than %d" %
-                            (bytes1, human, error * 100, bytes2))
+            self.assertLess(abs(
+                error), 0.02, f"{bytes1:,} ({human}) is {error * 100:.2f}% different than {bytes2:,}")
 
     def test_bytes_to_human_localization(self):
         """Test localization of bytes_to_human()"""
