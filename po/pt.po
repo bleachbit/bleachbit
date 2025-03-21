@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-05 17:38+0000\n"
+"PO-Revision-Date: 2025-03-21 11:12+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/bleachbit/"
 "main/pt/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Launchpad-Export-Date: 2021-07-06 03:44+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -489,11 +489,11 @@ msgstr "Cliente de e-mail"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Anexos"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Conflito de sincronização"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -757,10 +757,8 @@ msgid "Memory dump"
 msgstr "Limpar memória"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Ambiente de trabalho"
+msgstr "Widgets do ambiente de trabalho"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1808,16 +1806,14 @@ msgid "Downloading URL failed: %s"
 msgstr "Falha ao descarregar o URL: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "Disco cheio ao escrever a configuração no ficheiro %s"
+msgstr "O disco estava cheio ao gravar a configuração no ficheiro: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "Disco cheio ao escrever a configuração no ficheiro %s"
+msgstr "Permissão negada ao gravar a configuração no ficheiro: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1941,30 +1937,29 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Erro ao executar a operação '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Executável não encontrado: %s"
+msgstr "Ficheiro não encontrado: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr ""
+msgstr "Acesso negado ao sinalizar o ficheiro para posterior eliminação: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Acesso negado ao eliminar o valor de registo: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Acesso negado ao eliminar a chave de registo: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Acesso negado: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
