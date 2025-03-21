@@ -228,6 +228,9 @@ def environment_check():
     check_exist(
         NSIS_EXE, 'NSIS executable not found: will try to build portable BleachBit')
 
+    logger.info('Checking for 7-Zip')
+    check_exist(SZ_EXE, '7-Zip executable not found')
+
 
 def build():
     """Build the application"""
