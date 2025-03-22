@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-22 19:26+0000\n"
+"PO-Revision-Date: 2025-03-22 20:42+0000\n"
 "Last-Translator: NicolaeFericitu <cni@disroot.org>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/bleachbit/main/"
 "ro/>\n"
@@ -484,7 +484,7 @@ msgstr "Podcasturi descărcate"
 
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 msgid "Delete downloaded podcasts"
-msgstr "Ștergeți podcasturile descărcate"
+msgstr "Șterge podcasturile descărcate"
 
 #: ../cleaners/geary.xml ../cleaners/thunderbird.xml ../cleaners/evolution.xml
 msgid "Email client"
@@ -532,7 +532,7 @@ msgstr "Istoricul căutărilor"
 #: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/google_toolbar.xml
 msgid "Delete the search history"
-msgstr "Ștergeți istoricul căutărilor"
+msgstr "Șterge istoricul căutărilor"
 
 #: ../cleaners/konqueror.xml
 msgid "Current session"
@@ -540,7 +540,7 @@ msgstr "Sesiunea curentă"
 
 #: ../cleaners/konqueror.xml
 msgid "Delete the current session"
-msgstr "Ștergeți sesiunea curentă"
+msgstr "Șterge sesiunea curentă"
 
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
@@ -553,8 +553,8 @@ msgstr "Un istoric al formularelor web completate"
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
-"Ștergeți istoricul care include site-urile vizitate, descărcările și "
-"imaginile în miniatură"
+"Șterge istoricul care include site-urile vizitate, descărcările și "
+"miniaturile"
 
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
@@ -571,9 +571,8 @@ msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr ""
-"Resetarea istoricului de utilizare a motorului de căutare și ștergerea "
-"motoarelor de căutare instalate ulterior, dintre care unele sunt adăugate "
-"automat"
+"Resetează istoricul de utilizare a motoarelor de căutare și șterge motoarele "
+"de căutare care nu sunt din fabrică, dintre care unele sunt adăugate automat"
 
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
@@ -583,7 +582,7 @@ msgstr "Sesiune"
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Delete the current and last sessions"
-msgstr "Ștergeți sesiunea curentă și cea precedentă"
+msgstr "Șterge sesiunea curentă și cea precedentă"
 
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
@@ -593,7 +592,7 @@ msgstr "Sincronizare"
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 msgid "Delete the sync data and sign out of the browser"
-msgstr "Ștergeți datele de sincronizare și deconectați-vă din browser"
+msgstr "Șterge datele de sincronizare și deconectează-te de la browser"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
 msgid "File manager"
@@ -617,8 +616,7 @@ msgstr "Metadate"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
-msgstr ""
-"Ștergeți data de utilizare, poziția ferestrei și alte date pentru dosare"
+msgstr "Șterge data utilizării, poziția ferestrei și alte date pentru dosare"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will reset the position of desktop icons."
@@ -645,7 +643,7 @@ msgstr ""
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
-msgstr "Ștergeți fișierele învechite"
+msgstr "Șterge fișierele învechite"
 
 #: ../cleaners/apt.xml
 msgid "Package lists"
@@ -699,13 +697,13 @@ msgstr "Înregistrări"
 
 #: ../cleaners/zoom.xml
 msgid "Delete the audio and video recordings"
-msgstr "Ștergeți înregistrările audio și video"
+msgstr "Șterge înregistrările audio și video"
 
 #: ../cleaners/recoll.xml
 msgid "Delete the search index, a database of words and the files they contain"
 msgstr ""
-"Ștergeți indexul de căutare, o bază de date a cuvintelor și a fișierelor pe "
-"care le conțin"
+"Șterge indexul de căutare, baza de date a cuvintelor și a fișierelor pe care "
+"le conțin"
 
 #: ../cleaners/skype.xml
 msgid "Installers"
@@ -713,7 +711,7 @@ msgstr "Programe de instalare"
 
 #: ../cleaners/skype.xml
 msgid "Delete cached patches and installers"
-msgstr "Ștergeți remedierile și programele de instalare din memoria cache"
+msgstr "Șterge remedierile și programele de instalare din memoria cache"
 
 #: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
 msgid "Download history"
@@ -725,7 +723,7 @@ msgstr "Lista fișierelor descărcate"
 
 #: ../cleaners/seamonkey.xml
 msgid "Delete the list of visited web pages"
-msgstr "Ștergeți lista paginilor web vizitate"
+msgstr "Șterge lista paginilor web vizitate"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -742,7 +740,7 @@ msgstr "Torente"
 
 #: ../cleaners/transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
-msgstr "Ștergeți torrentele (doar metadatele, dar nu și fișierele descrise)"
+msgstr "Șterge torrentele (doar metadatele, dar nu și fișierele descrise)"
 
 #: ../cleaners/transmission.xml ../cleaners/vuze.xml
 msgid "Statistics"
@@ -750,11 +748,11 @@ msgstr "Statistici"
 
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Delete the file"
-msgstr "Ștergeți fișierul"
+msgstr "Șterge fișierul"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
-msgstr "Ștergeți lista de servere de jocuri"
+msgstr "Șterge lista de servere de jocuri"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
@@ -787,7 +785,7 @@ msgstr "Clienți și prieteni cunoscuți"
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"Ștergeți ~/.viminfo care include istoricul fișierelor, istoricul comenzilor "
+"Șterge ~/.viminfo, care include istoricul fișierelor, istoricul comenzilor "
 "și bufferele"
 
 #: ../cleaners/discord.xml
@@ -795,7 +793,7 @@ msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"Ștergeți memoria cache web, ceea ce reduce timpul de afișare a paginilor "
+"Șterge memoria cache web, ceea ce reduce timpul de afișare a paginilor "
 "revizitate. Acest lucru șterge, de asemenea, GIF-urile favorite."
 
 #: ../org.bleachbit.BleachBit.desktop
@@ -893,7 +891,7 @@ msgstr "Fișiere desktop nefuncționale"
 #: ../bleachbit/Cleaner.py
 msgid "Delete broken application menu entries and file associations"
 msgstr ""
-"Ștergeți intrările de meniu ale aplicațiilor și asocierile de fișiere "
+"Șterge intrările de meniu ale aplicațiilor și asocierile de fișiere "
 "nefuncționale"
 
 #. TRANSLATORS: Localizations are files supporting specific
@@ -904,7 +902,7 @@ msgstr "Localizări"
 
 #: ../bleachbit/Cleaner.py
 msgid "Delete files for unwanted languages"
-msgstr "Ștergeți fișierele pentru limbile nedorite"
+msgstr "Șterge fișierele pentru limbile nedorite"
 
 #: ../bleachbit/Cleaner.py
 msgid "Configure this option in the preferences."
@@ -916,7 +914,7 @@ msgstr "Jurnale vechi"
 
 #: ../bleachbit/Cleaner.py
 msgid "Delete old system logs"
-msgstr "Ștergeți jurnalele de sistem vechi"
+msgstr "Șterge jurnalele de sistem vechi"
 
 #: ../bleachbit/Cleaner.py
 msgid "Trash"
@@ -933,7 +931,7 @@ msgstr "Memorie"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Wipe the swap and free memory"
-msgstr "Ștergeți memoria swap și eliberați memoria"
+msgstr "Șterge memoria swap și eliberați memoria"
 
 #: ../bleachbit/Cleaner.py
 msgid "This option is experimental and may cause system problems."
@@ -963,7 +961,7 @@ msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
 msgstr ""
-"Ștergeți programele de dezinstalare pentru actualizările Microsoft, inclusiv "
+"Șterge programele de dezinstalare pentru actualizările Microsoft, inclusiv "
 "remedierile rapide, pachetele de servicii și actualizările Internet Explorer"
 
 #: ../bleachbit/Cleaner.py
@@ -982,7 +980,7 @@ msgstr "De șters"
 
 #: ../bleachbit/Cleaner.py
 msgid "Delete user-specified files and folders"
-msgstr "Ștergeți fișierele și dosarele specificate de utilizator"
+msgstr "Șterge fișierele și dosarele specificate de utilizator"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py
@@ -1049,7 +1047,7 @@ msgstr "previzualizează fișierele de șters și alte modificări"
 #: ../bleachbit/CLI.py
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr ""
-"rulați dispozitive de curățare pentru a șterge fișiere și a face alte "
+"rulează programe de curățare pentru a șterge fișiere și a face alte "
 "modificări permanente"
 
 #: ../bleachbit/CLI.py
@@ -1138,7 +1136,7 @@ msgstr "Omite"
 #. deleted (for previews) or was actually deleted
 #: ../bleachbit/Command.py
 msgid "Delete"
-msgstr "Ștergeți"
+msgstr "Șterge"
 
 #: ../bleachbit/Command.py
 msgid ""
@@ -1161,7 +1159,7 @@ msgstr "Trunchiază"
 
 #: ../bleachbit/Command.py
 msgid "Delete registry key"
-msgstr "Ștergeți cheia de registru"
+msgstr "Șterge cheia de registru"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1345,11 +1343,11 @@ msgstr "La finalizare"
 
 #: ../bleachbit/GuiChaff.py
 msgid "Delete without shredding"
-msgstr "Ștergeți fără să distrugeți"
+msgstr "Șterge fără fragmentare"
 
 #: ../bleachbit/GuiChaff.py
 msgid "Do not delete"
-msgstr "Nu ștergeți"
+msgstr "Nu șterge"
 
 #: ../bleachbit/GuiChaff.py
 msgid "Make files"
@@ -1856,7 +1854,7 @@ msgstr ""
 #: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
 msgid "Delete"
-msgstr "Ștergeți"
+msgstr "Șterge"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
@@ -2069,7 +2067,7 @@ msgstr "Distrugeți căile din clipboard"
 
 #: ../data/app-menu.ui
 msgid "_Wipe Free Space"
-msgstr "_Ștergeți spațiul liber"
+msgstr "_Șterge spațiul liber"
 
 #: ../data/app-menu.ui
 msgid "_Make Chaff"
