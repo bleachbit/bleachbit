@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2024-08-31 06:09+0000\n"
-"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
+"PO-Revision-Date: 2025-03-23 14:18+0000\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/bleachbit/main/"
 "tr/>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Launchpad-Export-Date: 2021-06-25 03:40+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -485,11 +485,11 @@ msgstr "E-posta istemcisi"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Ekler"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Eşzamanlama çakışması"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -752,10 +752,8 @@ msgid "Memory dump"
 msgstr "Bellek dökümü"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Masaüstü ortamı"
+msgstr "Masaüstü parçacıkları"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1184,7 +1182,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
+msgstr "{fstype} dosya sistem türlü {pathname} yolu temizleniyor"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1384,19 +1382,15 @@ msgstr "Topluluktan temizleyicileri indir ve güncelle (winapp2.ini)"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "Dili kendiliğinden sapta"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "%s dili kendiliğinden korunuyor."
+msgstr "Sistem dilini kendiliğinden sapta"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "Diller"
+msgstr "Dil:"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1487,7 +1481,7 @@ msgstr "Ad"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "Bu yol zaten beyaz listede var."
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
 msgid "Error"
@@ -1495,7 +1489,7 @@ msgstr "Hata"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "Bu yol zaten özel listede var."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1693,11 +1687,11 @@ msgstr "Ön izleme veya temizleme işlemini iptal et"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "Güncelle"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "BleachBit’i son sürüme güncelle"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1792,16 +1786,14 @@ msgid "Downloading URL failed: %s"
 msgstr "URL indirilemedi: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "%s dosyasına yapılandırma yazılırken disk doluydu"
+msgstr "Yapılandırma dosyaya yazılırken disk doluydu: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "%s dosyasına yapılandırma yazılırken disk doluydu"
+msgstr "Yapılandırma dosyaya yazılırken izin verilmedi: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1926,30 +1918,29 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "'%(operation)s' çalışırken hata oluştu: '%(msg)s'"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Çalıştırılabilir dosya bulunamadı : %s"
+msgstr "Dosya bulunamadı: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr ""
+msgstr "Dosya, sonrasında silinmek için imlenirken erişim engellendi: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Kayıt değeri silinirken erişim engellendi: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Kayıt anahtarı silinirken erişim engellendi: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Erişim engellendi: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
