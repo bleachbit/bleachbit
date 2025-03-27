@@ -159,13 +159,8 @@ if 'py2exe' in sys.argv:
 
 
 def recompile_mo(langdir, app, langid, dst):
-    """Recompile gettext .mo file"""
-
-    if not bleachbit.FileUtilities.exe_exists('msgunfmt') and not bleachbit.FileUtilities.exe_exists('msgunfmt.exe'):
-        print('warning: msgunfmt missing: skipping recompile')
-        return
-
-    mo_pathname = os.path.normpath('%s/LC_MESSAGES/%s.mo' % (langdir, app))
+    """Recompile gettext .mo file to shrink file size."""
+    mo_pathname = os.path.normpath(f'{langdir}/LC_MESSAGES/{app}.mo')
     if not os.path.exists(mo_pathname):
         print('info: does not exist: %s', mo_pathname)
         return
@@ -210,20 +205,33 @@ def supported_languages():
 def clean_dist_locale():
     """Clean dist/share/locale"""
     tmpd = tempfile.mkdtemp('gtk_locale')
-    langs = supported_languages()
+    supported_langs = supported_languages()
     basedir = os.path.normpath('dist/share/locale')
+    have_msgunfmt = bleachbit.FileUtilities.exe_exists(
+        'msgunfmt') or bleachbit.FileUtilities.exe_exists('msgunfmt.exe')
+    recompile_langs = []  # supported languages to recompile
+    remove_langs = []  # unsupported languages to remove
     for langid in sorted(os.listdir(basedir)):
-        langdir = os.path.join(basedir, langid)
-        if langid in langs:
-            print(f"recompiling supported GTK language = {langid}")
-            # reduce the size of the .mo file
-            recompile_mo(langdir, 'gtk30', langid, tmpd)
+        if langid in supported_langs:
+            recompile_langs.append(langid)
         else:
-            print(f"removing unsupported GTK language = {langid}")
-            # remove language supported by GTK+ but not by BleachBit
-            cmd = 'rd /s /q ' + langdir
-            print(cmd)
-            os.system(cmd)
+            remove_langs.append(langid)
+    if recompile_langs:
+        if have_msgunfmt:
+            print(f"recompiling supported GTK languages: {recompile_langs}")
+            for lang_id in recompile_langs:
+                recompile_mo(basedir, 'gtk30', lang_id, tmpd)
+        else:
+            print('warning: msgunfmt missing: skipping recompile')
+    if remove_langs:
+        print(f"removing unsupported GTK languages: {remove_langs}")
+        for langid in remove_langs:
+            langdir = os.path.join(basedir, langid)
+            if os.path.exists(langdir):
+                print(f"Removing directory: {langdir}")
+                shutil.rmtree(langdir)
+    else:
+        print("no unsupported GTK languages found")
     os.rmdir(tmpd)
 
 
@@ -244,7 +252,7 @@ def run_setup():
               'Operating System :: POSIX :: Linux',
           ],
           license='GPLv3+',
-          py_requires='>=3.8',
+          # py_requires='>=3.8',
           # Ubuntu 20.04 LTS is EOL on April 2025, and it has Python 3.8.
           platforms='Linux and Windows, Python v3.8+, GTK v3.24+',
           packages=['bleachbit', 'bleachbit.markovify'],
