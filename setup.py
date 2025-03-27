@@ -29,14 +29,6 @@ import tempfile
 from setuptools import setup
 
 if sys.platform == 'win32':
-    # workaround for
-    # Error: Namespace packages not yet supported: Skipping package 'pywintypes'
-    import importlib
-    for m in ('pywintypes', 'pythoncom'):
-        l = importlib.find_loader(m, None)
-        __import__(m)
-        sys.modules[m].__loader__ = l
-
     try:
         import py2exe
     except ImportError:
@@ -48,40 +40,6 @@ import bleachbit.FileUtilities
 
 APP_NAME = 'BleachBit'
 APP_DESCRIPTION = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had."
-
-#
-# begin win32com.shell workaround for py2exe
-# copied from http://spambayes.svn.sourceforge.net/viewvc/spambayes/trunk/spambayes/windows/py2exe/setup_all.py?revision=3245&content-type=text%2Fplain
-# under Python license compatible with GPL
-#
-
-# ModuleFinder can't handle runtime changes to __path__, but win32com uses them,
-# particularly for people who build from sources.  Hook this in.
-try:
-    # py2exe 0.6.4 introduced a replacement modulefinder.
-    # This means we have to add package paths there, not to the built-in
-    # one.  If this new modulefinder gets integrated into Python, then
-    # we might be able to revert this some day.
-    try:
-        import py2exe.mf as modulefinder
-    except ImportError:
-        import modulefinder
-    import win32com
-    for p in win32com.__path__[1:]:
-        modulefinder.AddPackagePath("win32com", p)
-    for extra in ["win32com.shell", "win32com.mapi"]:
-        __import__(extra)
-        m = sys.modules[extra]
-        for p in m.__path__[1:]:
-            modulefinder.AddPackagePath(extra, p)
-except ImportError:
-    # no build path setup, no worries.
-    pass
-
-#
-# end win32com.shell workaround for py2exe
-#
-
 
 data_files = []
 if sys.platform == 'linux':
