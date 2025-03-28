@@ -207,7 +207,7 @@ class Bleachbit(Gtk.Application):
 
         if auto_exit:
             # This is used for automated testing of whether the GUI can start.
-            # It is called from assert_execute_console() in windows/setup_py2exe.py
+            # It is called from assert_execute_console() in windows/setup.py
             self._auto_exit = True
 
         if shred_paths:
@@ -386,7 +386,7 @@ class Bleachbit(Gtk.Application):
 
     def get_about_dialog(self):
         dialog = Gtk.AboutDialog(comments=_("Program to clean unnecessary files"),
-                                 copyright='Copyright (C) 2008-2025 Andrew Ziem',
+                                 copyright=bleachbit.APP_COPYRIGHT,
                                  program_name=APP_NAME,
                                  version=bleachbit.APP_VERSION,
                                  website=bleachbit.APP_URL,

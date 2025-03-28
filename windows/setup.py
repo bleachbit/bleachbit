@@ -12,25 +12,38 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+Example invocation (from parent directory):
+python3 -m windows.setup
 """
 
 from __future__ import absolute_import, print_function
 
+# standard library
 import fnmatch
 import glob
 import importlib.util
 import logging
 import os
+import re
 import shutil
+import struct
 import subprocess
 import sys
+import tempfile
 import time
-import re
 
+# local import
+import bleachbit
+from setup import run_setup
 from windows.NsisUtilities import write_nsis_expressions_to_files
 
+# third party
+import py2exe
+
 setup_encoding = sys.stdout.encoding
-logger = logging.getLogger('setup_py2exe')
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
@@ -212,6 +225,10 @@ def count_size_improvement(func):
 
 def environment_check():
     """Check the build environment"""
+    logger.info('Checking for 32-bit Python')
+    bits = 8 * struct.calcsize('P')
+    assert 32 == bits
+
     logger.info('Checking for translations')
     assert_exist('locale', 'run "make -C po local" to build translations')
 
@@ -220,6 +237,9 @@ def environment_check():
 
     logger.info('Checking Python win32 library')
     assert_module('win32file')
+
+    logger.info('Checking Python py2exe library')
+    assert_module('py2exe')
 
     logger.info('Checking for CodeSign.bat')
     check_exist('CodeSign.bat', 'Code signing is not available')
@@ -232,6 +252,183 @@ def environment_check():
     check_exist(SZ_EXE, '7-Zip executable not found')
 
 
+def build_py2exe():
+    """Build executables using py2exe"""
+    args = {}
+    # see multiple issues such as https://github.com/bleachbit/bleachbit/issues/1000
+    APP_DESCRIPTION = 'BleachBit software cleaner'
+
+    # Common metadata for both GUI and console executables
+    common_metadata = {
+        'product_name': bleachbit.APP_NAME,
+        'description': APP_DESCRIPTION,
+        'version': bleachbit.APP_VERSION,
+        'icon_resources': [(1, 'windows/bleachbit.ico')],
+        'company_name': bleachbit.APP_NAME,
+        'copyright': bleachbit.APP_COPYRIGHT
+    }
+
+    # GUI executable
+    gui_metadata = common_metadata.copy()
+    gui_metadata['script'] = 'bleachbit.py'
+    args['windows'] = [gui_metadata]
+
+    # Console executable
+    console_metadata = common_metadata.copy()
+    console_metadata['script'] = 'bleachbit_console.py'
+    args['console'] = [console_metadata]
+    args['options'] = {
+        'py2exe': {
+            'packages': ['encodings', 'gi', 'gi.overrides', 'plyer'],
+            'optimize': 2,  # extra optimization (like python -OO)
+            'includes': ['gi'],
+            'excludes': ['pyreadline', 'difflib', 'doctest',
+                         'pickle', 'ftplib', 'bleachbit.Unix'],
+            'dll_excludes': [
+                'libgstreamer-1.0-0.dll',
+                'CRYPT32.DLL',  # required by ssl
+                'DNSAPI.DLL',
+                'IPHLPAPI.DLL',  # psutil
+                'MPR.dll',
+                'MSIMG32.DLL',
+                'MSWSOCK.dll',
+                'NSI.dll',  # psutil
+                'PDH.DLL',  # psutil
+                'PSAPI.DLL',
+                'POWRPROF.dll',
+                'USP10.DLL',
+                'WINNSI.DLL',  # psutil
+                'WTSAPI32.DLL',  # psutil
+                'api-ms-win-core-apiquery-l1-1-0.dll',
+                'api-ms-win-core-crt-l1-1-0.dll',
+                'api-ms-win-core-crt-l2-1-0.dll',
+                'api-ms-win-core-debug-l1-1-1.dll',
+                'api-ms-win-core-delayload-l1-1-1.dll',
+                'api-ms-win-core-errorhandling-l1-1-0.dll',
+                'api-ms-win-core-errorhandling-l1-1-1.dll',
+                'api-ms-win-core-file-l1-1-0.dll',
+                'api-ms-win-core-file-l1-2-1.dll',
+                'api-ms-win-core-handle-l1-1-0.dll',
+                'api-ms-win-core-heap-l1-1-0.dll',
+                'api-ms-win-core-heap-l1-2-0.dll',
+                'api-ms-win-core-heap-obsolete-l1-1-0.dll',
+                'api-ms-win-core-io-l1-1-1.dll',
+                'api-ms-win-core-kernel32-legacy-l1-1-0.dll',
+                'api-ms-win-core-kernel32-legacy-l1-1-1.dll',
+                'api-ms-win-core-libraryloader-l1-2-0.dll',
+                'api-ms-win-core-libraryloader-l1-2-1.dll',
+                'api-ms-win-core-localization-l1-2-1.dll',
+                'api-ms-win-core-localization-obsolete-l1-2-0.dll',
+                'api-ms-win-core-memory-l1-1-0.dll',
+                'api-ms-win-core-memory-l1-1-2.dll',
+                'api-ms-win-core-perfstm-l1-1-0.dll',
+                'api-ms-win-core-processenvironment-l1-2-0.dll',
+                'api-ms-win-core-processthreads-l1-1-0.dll',
+                'api-ms-win-core-processthreads-l1-1-2.dll',
+                'api-ms-win-core-profile-l1-1-0.dll',
+                'api-ms-win-core-registry-l1-1-0.dll',
+                'api-ms-win-core-registry-l2-1-0.dll',
+                'api-ms-win-core-string-l1-1-0.dll',
+                'api-ms-win-core-string-obsolete-l1-1-0.dll',
+                'api-ms-win-core-synch-l1-1-0.dll',
+                'api-ms-win-core-synch-l1-2-0.dll',
+                'api-ms-win-core-sysinfo-l1-1-0.dll',
+                'api-ms-win-core-sysinfo-l1-2-1.dll',
+                'api-ms-win-core-threadpool-l1-2-0.dll',
+                'api-ms-win-core-timezone-l1-1-0.dll',
+                'api-ms-win-core-util-l1-1-0.dll',
+                'api-ms-win-eventing-classicprovider-l1-1-0.dll',
+                'api-ms-win-eventing-consumer-l1-1-0.dll',
+                'api-ms-win-eventing-controller-l1-1-0.dll',
+                'api-ms-win-eventlog-legacy-l1-1-0.dll',
+                'api-ms-win-perf-legacy-l1-1-0.dll',
+                'api-ms-win-security-base-l1-2-0.dll',
+                'w9xpopen.exe',  # not needed after Windows 9x
+            ],
+            'compressed': True  # create a compressed zipfile
+        }
+    }
+
+    run_setup(args)
+
+
+def recompile_mo(langdir, app, langid, dst):
+    """Recompile gettext .mo file to shrink file size."""
+    mo_pathname = os.path.normpath(f'{langdir}/LC_MESSAGES/{app}.mo')
+    if not os.path.exists(mo_pathname):
+        logger.info('does not exist: %s', mo_pathname)
+        return
+
+    # decompile .mo to .po
+    po = os.path.join(dst, langid + '.po')
+    __args = ['msgunfmt', '-o', po,
+              mo_pathname]
+    ret = bleachbit.General.run_external(__args)
+    if ret[0] != 0:
+        raise RuntimeError(ret[2])
+
+    # shrink .po
+    po2 = os.path.join(dst, langid + '.po2')
+    __args = ['msgmerge', '--no-fuzzy-matching', po,
+              os.path.normpath(f'windows/{app}.pot'),
+              '-o', po2]
+    ret = bleachbit.General.run_external(__args)
+    if ret[0] != 0:
+        raise RuntimeError(ret[2])
+
+    # compile smaller .po to smaller .mo
+    __args = ['msgfmt', po2, '-o', mo_pathname]
+    ret = bleachbit.General.run_external(__args)
+    if ret[0] != 0:
+        raise RuntimeError(ret[2])
+
+    # clean up
+    os.remove(po)
+    os.remove(po2)
+
+
+def supported_languages():
+    """Return list of supported languages by scanning ./po/"""
+    langs = []
+    for pathname in glob.glob('po/*.po'):
+        basename = os.path.basename(pathname)
+        langs.append(os.path.splitext(basename)[0])
+    return sorted(langs)
+
+
+def clean_dist_locale():
+    """Clean dist/share/locale"""
+    tmpd = tempfile.mkdtemp('gtk_locale')
+    supported_langs = supported_languages()
+    basedir = os.path.normpath('dist/share/locale')
+    have_msgunfmt = bleachbit.FileUtilities.exe_exists(
+        'msgunfmt') or bleachbit.FileUtilities.exe_exists('msgunfmt.exe')
+    recompile_langs = []  # supported languages to recompile
+    remove_langs = []  # unsupported languages to remove
+    for langid in sorted(os.listdir(basedir)):
+        if langid in supported_langs:
+            recompile_langs.append(langid)
+        else:
+            remove_langs.append(langid)
+    if recompile_langs:
+        if have_msgunfmt:
+            logger.info(f"recompiling supported GTK languages: {recompile_langs}")
+            for lang_id in recompile_langs:
+                recompile_mo(basedir, 'gtk30', lang_id, tmpd)
+        else:
+            logger.warning('msgunfmt missing: skipping recompile')
+    if remove_langs:
+        logger.info(f"removing unsupported GTK languages: {remove_langs}")
+        for langid in remove_langs:
+            langdir = os.path.join(basedir, langid)
+            if os.path.exists(langdir):
+                logger.info(f"Removing directory: {langdir}")
+                shutil.rmtree(langdir)
+    else:
+        logger.info("no unsupported GTK languages found")
+    os.rmdir(tmpd)
+
+
 def build():
     """Build the application"""
     logger.info('Deleting directories build and dist')
@@ -241,8 +438,7 @@ def build():
 
     logger.info('Running py2exe')
     copy_file('bleachbit.py', 'bleachbit_console.py')
-    cmd = sys.executable + ' -OO setup.py py2exe'
-    run_cmd(cmd)
+    build_py2exe()
     assert_exist('dist\\bleachbit.exe')
     assert_exist('dist\\bleachbit_console.exe')
     os.remove('bleachbit_console.py')
@@ -585,9 +781,7 @@ def shrink():
         assert_execute_console()
 
     logger.info('Purging unnecessary GTK+ files')
-    # FIXME: move clean-dist into this program
-    cmd = sys.executable + ' setup.py clean-dist'
-    run_cmd(cmd)
+    clean_dist_locale()
 
     delete_linux_only()
 
@@ -606,6 +800,7 @@ def package_portable():
         text_file.write("[Portable]")
 
     archive('BleachBit-Portable', 'BleachBit-{}-portable.zip'.format(BB_VER))
+
 
 # NSIS
 
@@ -664,9 +859,8 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
         logger.warning(SZ_EXE + ' does not exist')
 
 
-if '__main__' == __name__:
+def main():
     logger.info('Getting BleachBit version')
-    import bleachbit
     BB_VER = bleachbit.APP_VERSION
     build_number = os.getenv('APPVEYOR_BUILD_NUMBER')
     if build_number:
@@ -682,3 +876,11 @@ if '__main__' == __name__:
     # goal is to minimize them.
     os.system(r'dir *.zip windows\*.exe windows\*.zip')
     logger.info('Success!')
+
+
+if '__main__' == __name__:
+    # Add py2exe to sys.argv if it's not already there
+    # This allows running 'python3 -m windows.setup' without explicitly adding py2exe
+    if len(sys.argv) == 1 or 'py2exe' not in sys.argv:
+        sys.argv.append('py2exe')
+    main()

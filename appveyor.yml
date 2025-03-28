@@ -33,7 +33,7 @@ build_script:
   - 'echo revision = "%REV8%" > bleachbit\Revision.py'
   - 'echo build_number = "%APPVEYOR_BUILD_NUMBER%" > bleachbit\Revision.py'
   - '%make% PYTHON=%PYTHON_HOME%\python.exe -C po local bleachbit.pot'
-  - '%PYTHON_HOME%\python.exe -m windows.setup_py2exe'
+  - '%PYTHON_HOME%\python.exe -m windows.setup'
   - 'move windows\BleachBit*.exe .'
   - 'move windows\BleachBit*.zip .'
   - ps: Get-FileHash BleachBit-*

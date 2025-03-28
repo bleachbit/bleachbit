@@ -30,7 +30,7 @@
 ; Note that your executable compressor should not compress the first icon.
 
 !ifdef packhdr
-  ;Using UPX path info from setup_py2exe.py ->
+  ;Using UPX path info from windows/setup.py ->
   !packhdr "$%TEMP%\exehead.tmp" '"\upx\upx.exe" -9 -q "$%TEMP%\exehead.tmp"'
 !endif
 
