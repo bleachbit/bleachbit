@@ -386,7 +386,7 @@ class Bleachbit(Gtk.Application):
 
     def get_about_dialog(self):
         dialog = Gtk.AboutDialog(comments=_("Program to clean unnecessary files"),
-                                 copyright='Copyright (C) 2008-2025 Andrew Ziem',
+                                 copyright=bleachbit.APP_COPYRIGHT,
                                  program_name=APP_NAME,
                                  version=bleachbit.APP_VERSION,
                                  website=bleachbit.APP_URL,

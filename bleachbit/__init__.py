@@ -32,6 +32,7 @@ from configparser import RawConfigParser, NoOptionError  # used in other files
 APP_VERSION = "4.9.1"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
+APP_COPYRIGHT = "Copyright (C) 2008-2025 Andrew Ziem"
 
 socket_timeout = 10
 
