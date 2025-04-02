@@ -6,18 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2024-10-04 05:15+0000\n"
+"PO-Revision-Date: 2025-04-02 20:07+0000\n"
 "Last-Translator: slrslr <adm@prnet.info>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/bleachbit/main/cs/"
-">\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/bleachbit/main/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Launchpad-Export-Date: 2020-03-08 19:36+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -489,11 +489,11 @@ msgstr "E-mailový klient"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Přílohy"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Konflikt synchronizace"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -756,10 +756,8 @@ msgid "Memory dump"
 msgstr "Výpis paměti"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Pracovní prostředí"
+msgstr "Widgety plochy"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1191,7 +1189,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
+msgstr "Mazání cesty {pathname} se souborovým systémem {fstype}"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1393,19 +1391,15 @@ msgstr "Stáhnout a aktualizovat komunitní čističe disků (winapp2.ini)"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "Automaticky rozpoznat jazyk"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "Automaticky preserving jazyk %s."
+msgstr "Automaticky rozpoznat jazyk systému"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "Jazyky"
+msgstr "Jazyk:"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1499,7 +1493,7 @@ msgstr "Název"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "Tato cesta již existuje v seznamu povolených."
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
 msgid "Error"
@@ -1507,7 +1501,7 @@ msgstr "Chyba"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "Tato cesta již existuje v seznamu vlastních."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1702,11 +1696,11 @@ msgstr "Přerušit náhled nebo čištění procesu"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "Aktualizace"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "Aktualizace BleachBit na nejnovější verzi"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1799,20 +1793,14 @@ msgid "Downloading URL failed: %s"
 msgstr "Stahování URL adresy selhalo: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr ""
-"Pro zapsání souboru s nastaveními %s nebylo na úložišti dostatek volného "
-"místa"
+msgstr "Při zapsání souboru s nastaveními %s byl disk plný"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr ""
-"Pro zapsání souboru s nastaveními %s nebylo na úložišti dostatek volného "
-"místa"
+msgstr "Při zapsání souboru s nastaveními %s byla odepřena práva"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1937,30 +1925,29 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Výjimka při spuštění operace \"%(operation)s\": %(msg)s"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Spustitelný soubor nenalezen: %s"
+msgstr "Soubor nenalezen: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr ""
+msgstr "Při označování souboru %s pro pozdější smazání, byl odepřen přístup"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Při pokusu o smazání hodnoty registru %s byl odepřen přístup"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Při pokusu o smazání klíče registru %s byl odepřen přístup"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Přístup odepřen: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
