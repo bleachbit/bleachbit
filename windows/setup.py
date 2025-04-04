@@ -36,11 +36,11 @@ import time
 
 # local import
 import bleachbit
-from setup import run_setup
+from bleachbit.SystemInformation import get_version
 from windows.NsisUtilities import write_nsis_expressions_to_files
 
 # third party
-import py2exe
+from py2exe import freeze
 
 setup_encoding = sys.stdout.encoding
 logger = logging.getLogger(__name__)
@@ -196,6 +196,17 @@ def copy_file(src, dst):
     if dst_dirname and not os.path.exists(dst_dirname):
         os.makedirs(dst_dirname)
     # shutil.copy() and .copyfile() do not preserve file date.
+    # Check if target file exists and compare content
+    if os.path.exists(dst):
+        if os.path.getsize(src) == os.path.getsize(dst):
+            with open(src, 'rb') as f1, open(dst, 'rb') as f2:
+                if f1.read() == f2.read():
+                    logger.debug(
+                        f'files identical, skipping copy: {src} to {dst}')
+                    return
+        logger.warning(f'target file exists with different content: {dst}')
+        os.remove(dst)
+
     shutil.copy2(src, dst)
 
 
@@ -253,103 +264,114 @@ def environment_check():
 
 
 def build_py2exe():
-    """Build executables using py2exe"""
-    args = {}
-    # see multiple issues such as https://github.com/bleachbit/bleachbit/issues/1000
-    APP_DESCRIPTION = 'BleachBit software cleaner'
+    """Build executables using py2exe's freeze API"""
+    # See multiple issues about overly description such as:
+    # https://github.com/bleachbit/bleachbit/issues/1000
+    APP_DESCRIPTION = 'Delete unwanted data'
 
-    # Common metadata for both GUI and console executables
-    common_metadata = {
+    # Common version info for both GUI and console executables
+    formatted_version = get_version(four_parts=True)
+    version_info = {
+        'version': formatted_version,
+        'product_version': formatted_version,
         'product_name': bleachbit.APP_NAME,
         'description': APP_DESCRIPTION,
-        'version': bleachbit.APP_VERSION,
-        'icon_resources': [(1, 'windows/bleachbit.ico')],
         'company_name': bleachbit.APP_NAME,
-        'copyright': bleachbit.APP_COPYRIGHT
+        'internal_name': f'{bleachbit.APP_NAME} GUI',
+        'copyright': bleachbit.APP_COPYRIGHT,
     }
 
-    # GUI executable
-    gui_metadata = common_metadata.copy()
-    gui_metadata['script'] = 'bleachbit.py'
-    args['windows'] = [gui_metadata]
-
-    # Console executable
-    console_metadata = common_metadata.copy()
-    console_metadata['script'] = 'bleachbit_console.py'
-    args['console'] = [console_metadata]
-    args['options'] = {
-        'py2exe': {
-            'packages': ['encodings', 'gi', 'gi.overrides', 'plyer'],
-            'optimize': 2,  # extra optimization (like python -OO)
-            'includes': ['gi'],
-            'excludes': ['pyreadline', 'difflib', 'doctest',
-                         'pickle', 'ftplib', 'bleachbit.Unix'],
-            'dll_excludes': [
-                'libgstreamer-1.0-0.dll',
-                'CRYPT32.DLL',  # required by ssl
-                'DNSAPI.DLL',
-                'IPHLPAPI.DLL',  # psutil
-                'MPR.dll',
-                'MSIMG32.DLL',
-                'MSWSOCK.dll',
-                'NSI.dll',  # psutil
-                'PDH.DLL',  # psutil
-                'PSAPI.DLL',
-                'POWRPROF.dll',
-                'USP10.DLL',
-                'WINNSI.DLL',  # psutil
-                'WTSAPI32.DLL',  # psutil
-                'api-ms-win-core-apiquery-l1-1-0.dll',
-                'api-ms-win-core-crt-l1-1-0.dll',
-                'api-ms-win-core-crt-l2-1-0.dll',
-                'api-ms-win-core-debug-l1-1-1.dll',
-                'api-ms-win-core-delayload-l1-1-1.dll',
-                'api-ms-win-core-errorhandling-l1-1-0.dll',
-                'api-ms-win-core-errorhandling-l1-1-1.dll',
-                'api-ms-win-core-file-l1-1-0.dll',
-                'api-ms-win-core-file-l1-2-1.dll',
-                'api-ms-win-core-handle-l1-1-0.dll',
-                'api-ms-win-core-heap-l1-1-0.dll',
-                'api-ms-win-core-heap-l1-2-0.dll',
-                'api-ms-win-core-heap-obsolete-l1-1-0.dll',
-                'api-ms-win-core-io-l1-1-1.dll',
-                'api-ms-win-core-kernel32-legacy-l1-1-0.dll',
-                'api-ms-win-core-kernel32-legacy-l1-1-1.dll',
-                'api-ms-win-core-libraryloader-l1-2-0.dll',
-                'api-ms-win-core-libraryloader-l1-2-1.dll',
-                'api-ms-win-core-localization-l1-2-1.dll',
-                'api-ms-win-core-localization-obsolete-l1-2-0.dll',
-                'api-ms-win-core-memory-l1-1-0.dll',
-                'api-ms-win-core-memory-l1-1-2.dll',
-                'api-ms-win-core-perfstm-l1-1-0.dll',
-                'api-ms-win-core-processenvironment-l1-2-0.dll',
-                'api-ms-win-core-processthreads-l1-1-0.dll',
-                'api-ms-win-core-processthreads-l1-1-2.dll',
-                'api-ms-win-core-profile-l1-1-0.dll',
-                'api-ms-win-core-registry-l1-1-0.dll',
-                'api-ms-win-core-registry-l2-1-0.dll',
-                'api-ms-win-core-string-l1-1-0.dll',
-                'api-ms-win-core-string-obsolete-l1-1-0.dll',
-                'api-ms-win-core-synch-l1-1-0.dll',
-                'api-ms-win-core-synch-l1-2-0.dll',
-                'api-ms-win-core-sysinfo-l1-1-0.dll',
-                'api-ms-win-core-sysinfo-l1-2-1.dll',
-                'api-ms-win-core-threadpool-l1-2-0.dll',
-                'api-ms-win-core-timezone-l1-1-0.dll',
-                'api-ms-win-core-util-l1-1-0.dll',
-                'api-ms-win-eventing-classicprovider-l1-1-0.dll',
-                'api-ms-win-eventing-consumer-l1-1-0.dll',
-                'api-ms-win-eventing-controller-l1-1-0.dll',
-                'api-ms-win-eventlog-legacy-l1-1-0.dll',
-                'api-ms-win-perf-legacy-l1-1-0.dll',
-                'api-ms-win-security-base-l1-2-0.dll',
-                'w9xpopen.exe',  # not needed after Windows 9x
-            ],
-            'compressed': True  # create a compressed zipfile
-        }
+    # GUI bleachbit.exe
+    gui_target = {
+        'script': 'bleachbit.py',
+        'icon_resources': [(1, 'windows/bleachbit.ico')],
+        'version_info': version_info
     }
 
-    run_setup(args)
+    # Console bleachbit_console.exe
+    console_target = gui_target.copy()
+    console_target['script'] = 'bleachbit_console.py'
+    console_target['internal_name'] = f'{bleachbit.APP_NAME} Console'
+
+    options = {
+        'bundle_files': 3,  # All files copied to dist directory
+        'compressed': 1,     # Create compressed archive
+        'optimize': 2,       # Extra optimization (like python -OO)
+        'includes': ['gi'],
+        'packages': ['encodings', 'gi', 'gi.overrides', 'plyer'],
+        'excludes': ['pyreadline', 'difflib', 'doctest',
+                     'pickle', 'ftplib', 'bleachbit.Unix'],
+        'dll_excludes': [
+            'libgstreamer-1.0-0.dll',
+            'CRYPT32.DLL',  # required by ssl
+            'DNSAPI.DLL',
+            'IPHLPAPI.DLL',  # psutil
+            'MPR.dll',
+            'MSIMG32.DLL',
+            'MSWSOCK.dll',
+            'NSI.dll',  # psutil
+            'PDH.DLL',  # psutil
+            'PSAPI.DLL',
+            'POWRPROF.dll',
+            'USP10.DLL',
+            'WINNSI.DLL',  # psutil
+            'WTSAPI32.DLL',  # psutil
+            'api-ms-win-core-apiquery-l1-1-0.dll',
+            'api-ms-win-core-crt-l1-1-0.dll',
+            'api-ms-win-core-crt-l2-1-0.dll',
+            'api-ms-win-core-debug-l1-1-1.dll',
+            'api-ms-win-core-delayload-l1-1-1.dll',
+            'api-ms-win-core-errorhandling-l1-1-0.dll',
+            'api-ms-win-core-errorhandling-l1-1-1.dll',
+            'api-ms-win-core-file-l1-1-0.dll',
+            'api-ms-win-core-file-l1-2-1.dll',
+            'api-ms-win-core-handle-l1-1-0.dll',
+            'api-ms-win-core-heap-l1-1-0.dll',
+            'api-ms-win-core-heap-l1-2-0.dll',
+            'api-ms-win-core-heap-obsolete-l1-1-0.dll',
+            'api-ms-win-core-io-l1-1-1.dll',
+            'api-ms-win-core-kernel32-legacy-l1-1-0.dll',
+            'api-ms-win-core-kernel32-legacy-l1-1-1.dll',
+            'api-ms-win-core-libraryloader-l1-2-0.dll',
+            'api-ms-win-core-libraryloader-l1-2-1.dll',
+            'api-ms-win-core-localization-l1-2-1.dll',
+            'api-ms-win-core-localization-obsolete-l1-2-0.dll',
+            'api-ms-win-core-memory-l1-1-0.dll',
+            'api-ms-win-core-memory-l1-1-2.dll',
+            'api-ms-win-core-perfstm-l1-1-0.dll',
+            'api-ms-win-core-processenvironment-l1-2-0.dll',
+            'api-ms-win-core-processthreads-l1-1-0.dll',
+            'api-ms-win-core-processthreads-l1-1-2.dll',
+            'api-ms-win-core-profile-l1-1-0.dll',
+            'api-ms-win-core-registry-l1-1-0.dll',
+            'api-ms-win-core-registry-l2-1-0.dll',
+            'api-ms-win-core-string-l1-1-0.dll',
+            'api-ms-win-core-string-obsolete-l1-1-0.dll',
+            'api-ms-win-core-synch-l1-1-0.dll',
+            'api-ms-win-core-synch-l1-2-0.dll',
+            'api-ms-win-core-sysinfo-l1-1-0.dll',
+            'api-ms-win-core-sysinfo-l1-2-1.dll',
+            'api-ms-win-core-threadpool-l1-2-0.dll',
+            'api-ms-win-core-timezone-l1-1-0.dll',
+            'api-ms-win-core-util-l1-1-0.dll',
+            'api-ms-win-eventing-classicprovider-l1-1-0.dll',
+            'api-ms-win-eventing-consumer-l1-1-0.dll',
+            'api-ms-win-eventing-controller-l1-1-0.dll',
+            'api-ms-win-eventlog-legacy-l1-1-0.dll',
+            'api-ms-win-perf-legacy-l1-1-0.dll',
+            'api-ms-win-security-base-l1-2-0.dll',
+            'w9xpopen.exe',  # not needed after Windows 9x
+        ],
+    }
+
+    from py2exe import freeze
+    freeze(
+        windows=[gui_target],
+        console=[console_target],
+        zipfile='library.zip',
+        options=options,
+        version_info=version_info
+    )
 
 
 def recompile_mo(langdir, app, langid, dst):

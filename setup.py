@@ -19,7 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Build BleachBit tarballs and exe
+Build BleachBit tarballs
 """
 
 # standard library

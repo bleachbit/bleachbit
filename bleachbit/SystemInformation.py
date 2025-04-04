@@ -32,26 +32,37 @@ import platform
 import sys
 
 
+def get_version(four_parts=False):
+    """Return version information as a string.
+
+    If four_parts is True, always return a four-part version string.
+    If False, return three or four parts, depending on available information.
+    """
+    try:
+        # appveyor.yml defines the build number.
+        # Linux never has a build number.
+        from bleachbit.Revision import revision
+        partfour = f".{revision}"
+    except:
+        if four_parts:
+            partfour = '.0'
+        else:
+            partfour = ''
+    return f'{bleachbit.APP_VERSION}{partfour}'
+
+
 def get_system_information():
     """Return system information as a string."""
     from collections import OrderedDict
     info = OrderedDict()
 
     # Application and library versions
-    info['BleachBit version'] = bleachbit.APP_VERSION
+    info['BleachBit version'] = get_version()
 
     try:
         # Linux tarball will have a revision but not build_number
         from bleachbit.Revision import revision
         info['Git revision'] = revision
-    except:
-        pass
-
-    try:
-        # appveyor.yml defines the build number.
-        # Linux never has a build number.
-        from bleachbit.Revision import build_number
-        info['Build number'] = build_number
     except:
         pass
 
