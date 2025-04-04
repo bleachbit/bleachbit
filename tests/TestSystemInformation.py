@@ -24,7 +24,7 @@ Test case for module SystemInformation
 """
 
 from tests import common
-from bleachbit.SystemInformation import get_system_information
+from bleachbit.SystemInformation import get_system_information, get_version
 
 
 class SystemInformationTestCase(common.BleachbitTestCase):
@@ -35,3 +35,14 @@ class SystemInformationTestCase(common.BleachbitTestCase):
         # at least it does not crash
         ret = get_system_information()
         self.assertIsString(ret)
+
+    def test_get_version(self):
+        """Test get_version"""
+        ret = get_version()
+        self.assertIsString(ret)
+        # check it is in a.b.c.d or a.b.c format
+        self.assertRegex(ret, r'^\d+\.\d+\.\d+(\.\d+)?$')
+        ret = get_version(four_parts=True)
+        self.assertIsString(ret)
+        # check it is in a.b.c.d format
+        self.assertRegex(ret, r'^\d+\.\d+\.\d+\.\d+$')
