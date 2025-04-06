@@ -271,7 +271,6 @@ def list_cleanerml_files(local_only=False):
         cleanerdirs += (bleachbit.local_cleaners_dir, )
     if not local_only and bleachbit.system_cleaners_dir:
         cleanerdirs += (bleachbit.system_cleaners_dir, )
-    logger.info(cleanerdirs)
     for pathname in listdir(cleanerdirs):
         if not pathname.lower().endswith('.xml'):
             continue
