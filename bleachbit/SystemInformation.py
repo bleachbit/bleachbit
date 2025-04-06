@@ -38,16 +38,23 @@ def get_version(four_parts=False):
     If four_parts is True, always return a four-part version string.
     If False, return three or four parts, depending on available information.
     """
+    build_number = os.getenv('APPVEYOR_BUILD_NUMBER')
+    revision_number = None
     try:
         # appveyor.yml defines the build number.
         # Linux never has a build number.
         from bleachbit.Revision import revision
-        partfour = f".{revision}"
-    except:
-        if four_parts:
-            partfour = '.0'
+        revision_number = revision
+    except ImportError:
+        pass
+
+    if not revision_number and not build_number:
+        if not four_parts:
+            return bleachbit.APP_VERSION
         else:
-            partfour = ''
+            return f'{bleachbit.APP_VERSION}.0'
+    assert revision_number or build_number
+    partfour = f".{revision_number or build_number}"
     return f'{bleachbit.APP_VERSION}{partfour}'
 
 
@@ -63,7 +70,7 @@ def get_system_information():
         # Linux tarball will have a revision but not build_number
         from bleachbit.Revision import revision
         info['Git revision'] = revision
-    except:
+    except ImportError:
         pass
 
     try:
@@ -72,8 +79,7 @@ def get_system_information():
         gi.require_version('Gtk', '3.0')
         from gi.repository import Gtk
         settings = Gtk.Settings.get_default()
-        info['GTK version'] = '{0}.{1}.{2}'.format(
-            Gtk.get_major_version(), Gtk.get_minor_version(), Gtk.get_micro_version())
+        info['GTK version'] = f"{Gtk.get_major_version()}.{Gtk.get_minor_version()}.{Gtk.get_micro_version()}"
         info['GTK theme'] = settings.get_property('gtk-theme-name')
         info['GTK icon theme'] = settings.get_property('gtk-icon-theme-name')
         info['GTK prefer dark theme'] = settings.get_property(
@@ -100,6 +106,8 @@ def get_system_information():
     elif 'nt' == os.name:
         envs = ('APPDATA', 'cd', 'LocalAppData', 'LocalAppDataLow', 'Music',
                 'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
+    else:
+        envs = ()
 
     for env in envs:
         info[f'os.getenv({env})'] = os.getenv(env)

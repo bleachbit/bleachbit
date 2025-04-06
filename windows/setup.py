@@ -34,15 +34,17 @@ import sys
 import tempfile
 import time
 
+# third party
+import certifi
+from py2exe import freeze
+
 # local import
 import bleachbit
+from bleachbit.CleanerML import CleanerML
 from bleachbit.SystemInformation import get_version
 from windows.NsisUtilities import write_nsis_expressions_to_files
 
-# third party
-from py2exe import freeze
-
-setup_encoding = sys.stdout.encoding
+SetupEncoding = sys.stdout.encoding
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 ch = logging.StreamHandler()
@@ -52,17 +54,12 @@ formatter = logging.Formatter(
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
-fast = False
-if len(sys.argv) > 1 and sys.argv[1] == 'fast':
-    logger.info('Fast build')
-    fast = True
 
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-logger.info('ROOT_DIR ' + ROOT_DIR)
+logger.info('ROOT_DIR %s', ROOT_DIR)
 sys.path.append(ROOT_DIR)
 
-BB_VER = None
 GTK_DIR = sys.exec_prefix + '\\Lib\\site-packages\\gnome\\'
 if os.path.exists(GTK_DIR):
     GTK_LIBDIR = GTK_DIR
@@ -73,35 +70,37 @@ NSIS_EXE = 'C:\\Program Files (x86)\\NSIS\\makensis.exe'
 NSIS_ALT_EXE = 'C:\\Program Files\\NSIS\\makensis.exe'
 SHRED_REGEX_KEY = 'AllFilesystemObjects\\shell\\shred.bleachbit'
 if not os.path.exists(NSIS_EXE) and os.path.exists(NSIS_ALT_EXE):
-    logger.info('NSIS found in alternate location: ' + NSIS_ALT_EXE)
+    logger.info('NSIS found in alternate location: %s', NSIS_ALT_EXE)
     NSIS_EXE = NSIS_ALT_EXE
 SZ_EXE = 'C:\\Program Files\\7-Zip\\7z.exe'
-# maximum compression with maximum compatibility
-# mm=deflate method because deflate64 not widely supported
-# mpass=passes for deflate encoder
-# mfb=number of fast bytes
-# bso0 bsp0 quiet output
-# 7-Zip Command Line Reverence Wizard: https://axelstudios.github.io/7z/#!/
-SZ_OPTS = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'  # best compression
-if fast:
-    # fast compression
-    SZ_OPTS = '-tzip -mx=1 -bso0 -bsp0'
 UPX_EXE = ROOT_DIR + '\\upx\\upx.exe'
 UPX_OPTS = '--best --nrv2e'
 
 
-def archive(infile, outfile):
+def archive(infile, outfile, fast_build):
+    """Create an archive from a file"""
     assert_exist(infile)
     if os.path.exists(outfile):
         logger.warning(
-            'Deleting output archive that already exists: ' + outfile)
+            'Deleting output archive that already exists: %s', outfile)
         os.remove(outfile)
-    cmd = '{} a {} {} {}'.format(SZ_EXE, SZ_OPTS, outfile, infile)
+    # maximum compression with maximum compatibility
+    # mm=deflate method because deflate64 not widely supported
+    # mpass=passes for deflate encoder
+    # mfb=number of fast bytes
+    # bso0 bsp0 quiet output
+    # 7-Zip Command Line Reverence Wizard: https://axelstudios.github.io/7z/#!/
+    sz_opts = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'  # best compression
+    if fast_build:
+        # fast compression
+        sz_opts = '-tzip -mx=1 -bso0 -bsp0'
+    cmd = f'{SZ_EXE} a {sz_opts} {outfile} {infile}'
     run_cmd(cmd)
     assert_exist(outfile)
 
 
 def recursive_glob(rootdir, patterns):
+    """Recursively search for files matching the given patterns"""
     return [os.path.join(looproot, filename)
             for looproot, _, filenames in os.walk(rootdir)
             for filename in filenames
@@ -109,36 +108,43 @@ def recursive_glob(rootdir, patterns):
 
 
 def assert_exist(path, msg=None):
+    """Check if a path exists
+
+    If not, log an error and exit."""
     if not os.path.exists(path):
-        logger.error(path + ' not found')
+        logger.error('%s not found', path)
         if msg:
             logger.error(msg)
         sys.exit(1)
 
 
 def check_exist(path, msg=None):
+    """Check if a path exists
+
+    If not, log a warning and sleep for 5 seconds."""
     if not os.path.exists(path):
-        logger.warning(path + ' not found')
+        logger.warning('%s not found', path)
         if msg:
             logger.warning(msg)
         time.sleep(5)
 
 
 def assert_module(module):
+    """Check if a module is available"""
     try:
         importlib.util.find_spec(module)
     except ImportError:
-        logger.error(f'Failed to import {module}')
+        logger.error('Failed to import %s', module)
         logger.error('Process aborted because of error!')
         sys.exit(1)
 
 
 def assert_execute(args, expected_output):
     """Run a command and check it returns the expected output"""
-    actual_output = subprocess.check_output(args).decode(setup_encoding)
+    actual_output = subprocess.check_output(args).decode(SetupEncoding)
     if -1 == actual_output.find(expected_output):
-        raise RuntimeError('When running command {} expected output {} but got {}'.format(
-            args, expected_output, actual_output))
+        raise RuntimeError(
+            f'When running command {args} expected output {expected_output} but got {actual_output}')
 
 
 def assert_execute_console():
@@ -149,13 +155,14 @@ def assert_execute_console():
 
 
 def run_cmd(cmd):
+    """Run a command and log the output"""
     logger.info(cmd)
-    p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
-                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = p.communicate()
-    logger.info(stdout.decode(setup_encoding))
-    if stderr:
-        logger.error(stderr.decode(setup_encoding))
+    with subprocess.Popen(cmd, stdin=subprocess.PIPE,
+                          stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
+        stdout, stderr = p.communicate()
+        logger.info(stdout.decode(SetupEncoding))
+        if stderr:
+            logger.error(stderr.decode(SetupEncoding))
 
 
 def sign_files(filenames):
@@ -166,14 +173,15 @@ def sign_files(filenames):
     """
     filenames_str = ' '.join(filenames)
     if os.path.exists('CodeSign.bat'):
-        logger.info('Signing code: %s' % filenames_str)
-        cmd = 'CodeSign.bat %s' % filenames_str
+        logger.info('Signing code: %s', filenames_str)
+        cmd = f'CodeSign.bat {filenames_str}'
         run_cmd(cmd)
     else:
-        logger.warning('CodeSign.bat not available for %s' % filenames_str)
+        logger.warning('CodeSign.bat not available for %s', filenames_str)
 
 
 def get_dir_size(start_path='.'):
+    """Get the size of a directory"""
     # http://stackoverflow.com/questions/1392413/calculating-a-directory-size-using-python
     total_size = 0
     for dirpath, _dirnames, filenames in os.walk(start_path):
@@ -189,7 +197,7 @@ def copy_file(src, dst):
     The dst must be a full path.
     """
     if not os.path.exists(src):
-        logger.warning(f'copy_file: {src} does not exist')
+        logger.warning('copy_file: %s does not exist', src)
         return
     dst_dirname = os.path.dirname(dst)
     # If the destination directory is current directory, do not create it.
@@ -202,9 +210,9 @@ def copy_file(src, dst):
             with open(src, 'rb') as f1, open(dst, 'rb') as f2:
                 if f1.read() == f2.read():
                     logger.debug(
-                        f'files identical, skipping copy: {src} to {dst}')
+                        'files identical, skipping copy: %s to %s', src, dst)
                     return
-        logger.warning(f'target file exists with different content: {dst}')
+        logger.warning('target file exists with different content: %s', dst)
         os.remove(dst)
 
     shutil.copy2(src, dst)
@@ -214,23 +222,23 @@ def copy_tree(src, dst):
     """Copy a directory tree"""
     src = os.path.abspath(src)
     if not os.path.exists(src):
-        logger.warning(f'copytree: {src} does not exist')
+        logger.warning('copytree: %s does not exist', src)
         return
-    logger.info(f'copying {src} to {dst}')
+    logger.info('copying %s to %s', src, dst)
     # copytree() preserves file date
     shutil.copytree(src, dst, dirs_exist_ok=True)
 
 
 def count_size_improvement(func):
-    def wrapper():
-        import time
+    """Decorator to count the size improvement of a function"""
+    def wrapper(*args, **kwargs):
         t0 = time.time()
         size0 = get_dir_size('dist')
-        func()
+        func(*args, **kwargs)
         size1 = get_dir_size('dist')
         t1 = time.time()
-        logger.info('Reduced size of the dist directory by {:,} B from {:,} B to {:,} B in {:.1f} s'.format(
-            size0 - size1, size0, size1, t1 - t0))
+        logger.info('Reduced size of the dist directory by %s B from %s B to %s B in %.1f s',
+                    f'{size0 - size1:,}', f'{size0:,}', f'{size1:,}', t1 - t0)
     return wrapper
 
 
@@ -267,7 +275,7 @@ def build_py2exe():
     """Build executables using py2exe's freeze API"""
     # See multiple issues about overly description such as:
     # https://github.com/bleachbit/bleachbit/issues/1000
-    APP_DESCRIPTION = 'Delete unwanted data'
+    app_description = 'Delete unwanted data'
 
     # Common version info for both GUI and console executables
     formatted_version = get_version(four_parts=True)
@@ -275,7 +283,7 @@ def build_py2exe():
         'version': formatted_version,
         'product_version': formatted_version,
         'product_name': bleachbit.APP_NAME,
-        'description': APP_DESCRIPTION,
+        'description': app_description,
         'company_name': bleachbit.APP_NAME,
         'internal_name': f'{bleachbit.APP_NAME} GUI',
         'copyright': bleachbit.APP_COPYRIGHT,
@@ -364,7 +372,6 @@ def build_py2exe():
         ],
     }
 
-    from py2exe import freeze
     freeze(
         windows=[gui_target],
         console=[console_target],
@@ -423,8 +430,7 @@ def clean_dist_locale():
     tmpd = tempfile.mkdtemp('gtk_locale')
     supported_langs = supported_languages()
     basedir = os.path.normpath('dist/share/locale')
-    have_msgunfmt = bleachbit.FileUtilities.exe_exists(
-        'msgunfmt') or bleachbit.FileUtilities.exe_exists('msgunfmt.exe')
+    have_msgunfmt = bleachbit.FileUtilities.exe_exists('msgunfmt.exe')
     recompile_langs = []  # supported languages to recompile
     remove_langs = []  # unsupported languages to remove
     for langid in sorted(os.listdir(basedir)):
@@ -434,20 +440,21 @@ def clean_dist_locale():
             remove_langs.append(langid)
     if recompile_langs:
         if have_msgunfmt:
-            logger.info(f"recompiling supported GTK languages: {recompile_langs}")
+            logger.info('recompiling supported GTK languages: %s',
+                        recompile_langs)
             for lang_id in recompile_langs:
                 recompile_mo(basedir, 'gtk30', lang_id, tmpd)
         else:
             logger.warning('msgunfmt missing: skipping recompile')
     if remove_langs:
-        logger.info(f"removing unsupported GTK languages: {remove_langs}")
+        logger.info('removing unsupported GTK languages: %s', remove_langs)
         for langid in remove_langs:
             langdir = os.path.join(basedir, langid)
             if os.path.exists(langdir):
-                logger.info(f"Removing directory: {langdir}")
+                logger.info('Removing directory: %s', langdir)
                 shutil.rmtree(langdir)
     else:
-        logger.info("no unsupported GTK languages found")
+        logger.info('no unsupported GTK languages found')
     os.rmdir(tmpd)
 
 
@@ -491,7 +498,9 @@ def build():
             copy_tree(path, os.path.join('dist', 'share', d))
 
     logger.info('Fixing paths in loaders.cache file')
-    with open(os.path.join('dist', 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache'), 'r+') as f:
+    loaders_fn = os.path.join(
+        'dist', 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache')
+    with open(loaders_fn, 'r+', encoding=SetupEncoding) as f:
         data = f.read()
         data = re.sub(r'^".*[/\\](.*\.dll)"$', r'"\1"', data, flags=re.I|re.M)
         f.seek(0)
@@ -502,11 +511,11 @@ def build():
     for d in ('icons',):
         path = os.path.join(GTK_DIR, 'share', d)
         copy_tree(path, os.path.join('dist', 'share', d))
-    SCHEMAS_DIR = 'share\\glib-2.0\\schemas'
+    schemas_dir = 'share\\glib-2.0\\schemas'
     gschemas_compiled_src = os.path.join(
-        GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled')
+        GTK_DIR, schemas_dir, 'gschemas.compiled')
     gschemas_compiled_dst = os.path.join(
-        'dist', SCHEMAS_DIR, 'gschemas.compiled')
+        'dist', schemas_dir, 'gschemas.compiled')
     copy_file(gschemas_compiled_src, gschemas_compiled_dst)
     copy_file('bleachbit.png',  'dist\\share\\bleachbit.png')
     # bleachbit.ico is used the for pop-up notification.
@@ -520,7 +529,6 @@ def build():
     copy_tree('themes', 'dist\\themes')
 
     logger.info('Copying CA bundle')
-    import certifi
     copy_file(certifi.where(),
               os.path.join('dist', 'cacert.pem'))
 
@@ -570,12 +578,12 @@ def build():
     for dll_dir in dll_dirs:
         dll_path = os.path.join(dll_dir, dll_name)
         if os.path.exists(dll_path):
-            logger.info(f'Copying {dll_name} from {dll_path}')
+            logger.info('Copying %s from %s', dll_name, dll_path)
             shutil.copy(dll_path, 'dist')
             copied_dll = True
             break
     if not copied_dll:
-        logger.warning(f'{dll_name} not found. Skipping copy.')
+        logger.warning('%s not found. Skipping copy.', dll_name)
 
     sign_files(('dist\\bleachbit.exe', 'dist\\bleachbit_console.exe'))
 
@@ -584,6 +592,7 @@ def build():
 
 @count_size_improvement
 def delete_unnecessary():
+    """Delete unnecessary files"""
     logger.info('Deleting unnecessary files')
     # Remove SVG to reduce space and avoid this error
     # Error loading theme icon 'dialog-warning' for stock: Unable to load image-loading module: C:/PythonXY/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll: `C:/PythonXY/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll': The specified module could not be found.
@@ -598,23 +607,24 @@ def delete_unnecessary():
         r'win32wnet.pyd',
     ]
     for path in delete_paths:
-        path = r'dist\{}'.format(path)
+        path = fr'dist\{path}'
         if not os.path.exists(path):
-            logger.warning('Path does not exist: ' + path)
+            logger.warning('Path does not exist: %s', path)
             continue
         if os.path.isdir(path):
             this_dir_size = get_dir_size(path)
             shutil.rmtree(path, ignore_errors=True)
-            logger.info('Deleting directory {} saved {:,} B'.format(
-                path, this_dir_size))
+            logger.info('Deleting directory %s saved %s B',
+                        path, f'{this_dir_size:,}')
         else:
-            logger.info('Deleting file {} saved {:,} B'.format(
-                path, os.path.getsize(path)))
+            file_size = os.path.getsize(path)
+            logger.info('Deleting file %s saved %s B', path, f'{file_size:,}')
             os.remove(path)
 
 
 @count_size_improvement
 def delete_icons():
+    """Delete unused PNG/SVG icons to reduce size"""
     logger.info('Deleting unused PNG/SVG icons')
     # This whitelist comes from analyze_process_monitor_events.py
     icon_whitelist = [
@@ -641,12 +651,11 @@ def delete_icons():
 
 def remove_empty_dirs(root):
     """Remove empty directories"""
-    import scandir
-    for entry in scandir.scandir(root):
+    for entry in os.scandir(root):
         if entry.is_dir():
             remove_empty_dirs(entry.path)
             if not os.listdir(entry.path):
-                logger.info('Deleting empty directory: %s' % entry.path)
+                logger.info('Deleting empty directory: %s', entry.path)
                 os.rmdir(entry.path)
 
 
@@ -668,6 +677,10 @@ def clean_translations():
 
 @count_size_improvement
 def strip():
+    """Strip executables to reduce size"""
+    if not bleachbit.FileUtilities.exe_exists('strip.exe'):
+        logger.warning('strip.exe does not exist. Skipping strip.')
+        return
     logger.info('Stripping executables')
     strip_list = recursive_glob('dist', ['*.dll', '*.pyd'])
     strip_whitelist = ['_sqlite3.dll']
@@ -681,7 +694,7 @@ def strip():
         if not os.path.exists(strip_file):
             logger.error('%s does not exist before stripping', strip_file)
             continue
-        cmd = 'strip.exe --strip-debug --discard-all --preserve-dates -o strip.tmp %s' % strip_file
+        cmd = f'strip.exe --strip-debug --discard-all --preserve-dates -o strip.tmp {strip_file}'
         run_cmd(cmd)
         if not os.path.exists(strip_file):
             logger.error('%s does not exist after stripping', strip_file)
@@ -708,45 +721,49 @@ def strip():
 
 
 @count_size_improvement
-def upx():
-    if fast:
+def upx(fast_build):
+    """Compress executables with UPX to reduce size"""
+    logger.warning('UPX causes application to not launch, so UPX is disabled for now')
+    return
+    if fast_build:
         logger.warning('Fast mode: Skipped executable with UPX')
         return
 
     if not os.path.exists(UPX_EXE):
         logger.warning(
-            'UPX not found. To compress executables, install UPX to: ' + UPX_EXE)
+            'UPX not found. To compress executables, install UPX to: %s', UPX_EXE)
         return
 
     logger.info('Compressing executables')
     # Do not compress bleachbit.exe and bleachbit_console.exe to avoid false positives
     # with antivirus software. Not much is space with gained with these small files, anyway.
     upx_files = recursive_glob('dist', ['*.dll', '*.pyd'])
-    cmd = '{} {} {}'.format(UPX_EXE, UPX_OPTS, ' '.join(upx_files))
+    cmd = f'{UPX_EXE} {UPX_OPTS} {" ".join(upx_files)}'
     run_cmd(cmd)
+    assert_execute_console()
 
 
 @count_size_improvement
 def delete_linux_only():
+    """Delete Linux-only cleaners to reduce size"""
     logger.info('Checking for Linux-only cleaners')
     files = recursive_glob('dist/share/cleaners/', ['*.xml'])
     for fn in files:
-        from bleachbit.CleanerML import CleanerML
         cml = CleanerML(fn)
         if not cml.get_cleaner().is_usable():
-            logger.warning('Deleting cleaner not usable on this OS: ' + fn)
+            logger.warning('Deleting cleaner not usable on this OS: %s', fn)
             os.remove(fn)
 
 
 @count_size_improvement
-def recompress_library():
-    """Recompress library.zip"""
-    if fast:
+def recompress_library(fast_build):
+    """Recompress library.zip to reduce size"""
+    if fast_build:
         logger.warning('Fast mode: Skipped recompression of library.zip')
         return
 
     if not os.path.exists(SZ_EXE):
-        logger.warning(SZ_EXE + ' does not exist')
+        logger.warning('%s does not exist', SZ_EXE)
         return
 
     logger.info('Recompressing library.zip with 7-Zip')
@@ -768,79 +785,64 @@ def recompress_library():
             shutil.rmtree(path)
 
     # recompress library.zip
-    cmd = SZ_EXE + ' a {} ..\\library.zip'.format(SZ_OPTS)
-    logger.info(cmd)
-    p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE, cwd='dist\\library')
-    stdout, stderr = p.communicate()
-    logger.info(stdout.decode(setup_encoding))
-    if stderr:
-        logger.error(stderr.decode(setup_encoding))
-
+    os.chdir('dist\\library')
+    archive('.', '..\\library.zip', fast_build)
+    os.chdir('..\\..')
     file_size_new = os.path.getsize('dist\\library.zip')
     file_size_diff = file_size_old - file_size_new
-    logger.info('Recompression of library.dll reduced size by {:,} from {:,} to {:,}'.format(
-        file_size_diff, file_size_old, file_size_new))
+    logger.info('Recompression of library.dll reduced size by %s from %s to %s',
+                f'{file_size_diff:,}', f'{file_size_old:,}', f'{file_size_new:,}')
     shutil.rmtree('dist\\library', ignore_errors=True)
     assert_exist('dist\\library.zip')
 
 
-def shrink():
+def shrink(fast_build):
     """After building, run all the applicable size optimizations"""
     delete_unnecessary()
     delete_icons()
     clean_translations()
     remove_empty_dirs('dist')
-
-    try:
-        strip()
-    except Exception:
-        logger.exception(
-            'Error when running strip. Does your PATH have MINGW with binutils?')
-
-    if not fast:
-        # upx()
-        assert_execute_console()
+    strip()
+    upx(fast_build)
 
     logger.info('Purging unnecessary GTK+ files')
     clean_dist_locale()
 
     delete_linux_only()
 
-    recompress_library()
+    recompress_library(fast_build)
 
     # so calculate the size of the folder, as it is a goal to shrink it.
-    logger.info('Final size of the dist folder: {:,}'.format(
-        get_dir_size('dist')))
+    logger.info('Final size of the dist folder: %s',
+                f'{get_dir_size("dist"):,}')
 
 
-def package_portable():
+def package_portable(fast_build):
     """Package the portable version"""
     logger.info('Building portable')
     copy_tree('dist', 'BleachBit-Portable')
-    with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
+    with open("BleachBit-Portable\\BleachBit.ini", "w", encoding=SetupEncoding) as text_file:
         text_file.write("[Portable]")
 
-    archive('BleachBit-Portable', 'BleachBit-{}-portable.zip'.format(BB_VER))
-
-
-# NSIS
+    archive('BleachBit-Portable',
+            f'BleachBit-{get_version()}-portable.zip', fast_build)
 
 
 def nsis(opts, exe_name, nsi_path):
     """Run NSIS with the options to build exe_name"""
     if os.path.exists(exe_name):
-        logger.info('Deleting old file: ' + exe_name)
+        logger.info('Deleting old file: %s', exe_name)
         os.remove(exe_name)
-    cmd = NSIS_EXE + \
-        ' {} /DVERSION={} /DSHRED_REGEX_KEY={} {}'.format(
-            opts, BB_VER, SHRED_REGEX_KEY, nsi_path)
+    cmd = f'{NSIS_EXE} {opts} /DVERSION={get_version()} /DSHRED_REGEX_KEY={SHRED_REGEX_KEY} {nsi_path}'
     run_cmd(cmd)
     assert_exist(exe_name)
 
 
-def package_installer(nsi_path=r'windows\bleachbit.nsi'):
+def package_installer(fast_build, nsi_path=r'windows\bleachbit.nsi'):
     """Package the installer"""
+
+    assert isinstance(fast_build, bool)
+    assert isinstance(nsi_path, str)
 
     if not os.path.exists(NSIS_EXE):
         logger.warning('NSIS not found, so not building installer')
@@ -850,15 +852,15 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
 
     write_nsis_expressions_to_files()
 
-    exe_name_multilang = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
-    exe_name_en = 'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER)
+    exe_name_multilang = f'windows\\BleachBit-{get_version()}-setup.exe'
+    exe_name_en = f'windows\\BleachBit-{get_version()}-setup-English.exe'
     # Was:
     # opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
     # Now: Done in NSIS file!
-    opts = '' if fast else '/V3 /Dpackhdr /DCompressor'
+    opts = '' if fast_build else '/V3 /Dpackhdr /DCompressor'
     nsis(opts, exe_name_multilang, nsi_path)
 
-    if fast:
+    if fast_build:
         sign_files((exe_name_multilang,))
     else:
         # Was:
@@ -872,28 +874,23 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
 
     if os.path.exists(SZ_EXE):
         logger.info('Zipping installer')
-        # Please note that the archive does not have the folder name
-        outfile = ROOT_DIR + \
-            '\\windows\\BleachBit-{0}-setup.zip'.format(BB_VER)
-        infile = ROOT_DIR + '\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
-        archive(infile, outfile)
+        # The archive does not have the folder name.
+        outfile = f"{ROOT_DIR}\\windows\\BleachBit-{get_version()}-setup.zip"
+        infile = f"{ROOT_DIR}\\windows\\BleachBit-{get_version()}-setup.exe"
+        archive(infile, outfile, fast_build)
     else:
-        logger.warning(SZ_EXE + ' does not exist')
+        logger.warning('%s does not exist', SZ_EXE)
 
 
 def main():
-    logger.info('Getting BleachBit version')
-    BB_VER = bleachbit.APP_VERSION
-    build_number = os.getenv('APPVEYOR_BUILD_NUMBER')
-    if build_number:
-        BB_VER = '%s.%s' % (BB_VER, build_number)
-    logger.info('BleachBit version ' + BB_VER)
-
+    """Main function"""
+    logger.info('BleachBit version %s', get_version())
     environment_check()
+    fast_build = len(sys.argv) > 1 and sys.argv[1] == 'fast'
     build()
-    shrink()
-    package_portable()
-    package_installer()
+    shrink(fast_build)
+    package_portable(fast_build)
+    package_installer(fast_build)
     # Clearly show the sizes of the files that end users download because the
     # goal is to minimize them.
     os.system(r'dir *.zip windows\*.exe windows\*.zip')
