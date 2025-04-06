@@ -54,7 +54,8 @@ formatter = logging.Formatter(
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
-
+# Prevent propagation to root logger to avoid duplicate messages
+logger.propagate = False
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 logger.info('ROOT_DIR %s', ROOT_DIR)
@@ -502,7 +503,8 @@ def build():
         'dist', 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache')
     with open(loaders_fn, 'r+', encoding=SetupEncoding) as f:
         data = f.read()
-        data = re.sub(r'^".*[/\\](.*\.dll)"$', r'"\1"', data, flags=re.I|re.M)
+        data = re.sub(r'^".*[/\\](.*\.dll)"$',
+                      r'"\1"', data, flags=re.I | re.M)
         f.seek(0)
         f.write(data)
         f.truncate()
@@ -517,11 +519,11 @@ def build():
     gschemas_compiled_dst = os.path.join(
         'dist', schemas_dir, 'gschemas.compiled')
     copy_file(gschemas_compiled_src, gschemas_compiled_dst)
-    copy_file('bleachbit.png',  'dist\\share\\bleachbit.png')
+    copy_file('bleachbit.png', 'dist\\share\\bleachbit.png')
     # bleachbit.ico is used the for pop-up notification.
-    copy_file('windows\\bleachbit.ico',  'dist\\share\\bleachbit.ico')
+    copy_file('windows\\bleachbit.ico', 'dist\\share\\bleachbit.ico')
     for dll in glob.glob1(GTK_LIBDIR, '*.dll'):
-        copy_file(os.path.join(GTK_LIBDIR, dll), 'dist\\'+dll)
+        copy_file(os.path.join(GTK_LIBDIR, dll), 'dist\\' + dll)
 
     copy_file('data\\app-menu.ui', 'dist\\data\\app-menu.ui')
 
@@ -554,7 +556,7 @@ def build():
         os.makedirs('dist\\share\\cleaners')
     cleaners_files = recursive_glob('cleaners', ['*.xml'])
     for file in cleaners_files:
-        shutil.copy(file,  'dist\\share\\cleaners')
+        shutil.copy(file, 'dist\\share\\cleaners')
 
     logger.info('Checking for CleanerML')
     assert_exist('dist\\share\\cleaners\\internet_explorer.xml')
@@ -746,7 +748,7 @@ def upx(fast_build):
 @count_size_improvement
 def delete_linux_only():
     """Delete Linux-only cleaners to reduce size"""
-    logger.info('Checking for Linux-only cleaners')
+    logger.info('Deleting Linux-only cleaners')
     files = recursive_glob('dist/share/cleaners/', ['*.xml'])
     for fn in files:
         cml = CleanerML(fn)

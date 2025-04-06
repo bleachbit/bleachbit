@@ -25,8 +25,10 @@ include org.bleachbit.policy
 include po/*po
 include po/Makefile
 include setup.py
-include tests/*py
+include windows/*bat
+include windows/*ps1
 include windows/bleachbit.ico
 include windows/bleachbit.nsi
-include windows/gtk20.pot
+include windows/gtk*pot
+include windows/requirements.txt
 recursive-include bleachbit *py
