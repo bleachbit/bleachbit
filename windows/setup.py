@@ -426,6 +426,7 @@ def supported_languages():
     return sorted(langs)
 
 
+@count_size_improvement
 def clean_dist_locale():
     """Clean dist/share/locale"""
     tmpd = tempfile.mkdtemp('gtk_locale')
@@ -444,7 +445,8 @@ def clean_dist_locale():
             logger.info('recompiling supported GTK languages: %s',
                         recompile_langs)
             for lang_id in recompile_langs:
-                recompile_mo(basedir, 'gtk30', lang_id, tmpd)
+                langdir = os.path.join(basedir, lang_id)
+                recompile_mo(langdir, 'gtk30', lang_id, tmpd)
         else:
             logger.warning('msgunfmt missing: skipping recompile')
     if remove_langs:
@@ -806,8 +808,6 @@ def shrink(fast_build):
     remove_empty_dirs('dist')
     strip()
     upx(fast_build)
-
-    logger.info('Purging unnecessary GTK+ files')
     clean_dist_locale()
 
     delete_linux_only()
