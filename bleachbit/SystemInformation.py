@@ -35,27 +35,27 @@ import sys
 def get_version(four_parts=False):
     """Return version information as a string.
 
+    CI builds will have an integer build number.
+
     If four_parts is True, always return a four-part version string.
     If False, return three or four parts, depending on available information.
     """
-    build_number = os.getenv('APPVEYOR_BUILD_NUMBER')
-    revision_number = None
+    build_number_env = os.getenv('APPVEYOR_BUILD_NUMBER')
+    build_number_src = None
     try:
-        # appveyor.yml defines the build number.
-        # Linux never has a build number.
-        from bleachbit.Revision import revision
-        revision_number = revision
+        # pylint: disable=import-outside-toplevel
+        from bleachbit.Revision import build_number as build_number_import
+        build_number_src = build_number_import
     except ImportError:
         pass
 
-    if not revision_number and not build_number:
+    build_number = build_number_src or build_number_env
+    if not build_number:
         if not four_parts:
             return bleachbit.APP_VERSION
-        else:
-            return f'{bleachbit.APP_VERSION}.0'
-    assert revision_number or build_number
-    partfour = f".{revision_number or build_number}"
-    return f'{bleachbit.APP_VERSION}{partfour}'
+        return f'{bleachbit.APP_VERSION}.0'
+    assert build_number.isdigit()
+    return f'{bleachbit.APP_VERSION}.{build_number}'
 
 
 def get_system_information():
@@ -67,16 +67,19 @@ def get_system_information():
     info['BleachBit version'] = get_version()
 
     try:
-        # Linux tarball will have a revision but not build_number
+        # CI builds and Linux tarball will have a revision.
+        # pylint: disable=import-outside-toplevel
         from bleachbit.Revision import revision
         info['Git revision'] = revision
     except ImportError:
         pass
 
     try:
+        # pylint: disable=import-outside-toplevel
         import gi
         info['gi.version'] = gi.__version__
         gi.require_version('Gtk', '3.0')
+        # pylint: disable=import-outside-toplevel
         from gi.repository import Gtk
         settings = Gtk.Settings.get_default()
         info['GTK version'] = f"{Gtk.get_major_version()}.{Gtk.get_minor_version()}.{Gtk.get_micro_version()}"
