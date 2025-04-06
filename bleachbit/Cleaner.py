@@ -32,7 +32,7 @@ import warnings
 from bleachbit.Language import get_text as _
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
-from bleachbit import Command, FileUtilities, Memory, Special
+from bleachbit import Action, CleanerML, Command, FileUtilities, Memory, Special
 
 
 # Suppress GTK warning messages while running in CLI #34
@@ -156,8 +156,7 @@ class Cleaner:
         logger = logging.getLogger(__name__)
         for (test, pathname, same_user) in self.running:
             if 'exe' == test:
-                if ('posix' == os.name and Unix.is_process_running(pathname, same_user)) or \
-                   ('nt' == os.name and Windows.is_process_running(pathname, same_user)):
+                if _is_process_running(pathname, same_user):
                     logger.debug("process '%s' is running", pathname)
                     return True
             elif 'pathname' == test:
@@ -362,7 +361,7 @@ class System(Cleaner):
                     yield Command.Delete(c_path)
                 else:
                     raise RuntimeError(
-                        'custom folder has invalid type %s' % c_type)
+                        f'custom folder has invalid type {c_type}')
 
         # menu
         menu_dirs = ['~/.local/share/applications',
@@ -380,6 +379,7 @@ class System(Cleaner):
             for path in menu_dirs:
                 dirname = os.path.expanduser(path)
                 for filename in children_in_directory(dirname, False):
+                    # pylint: disable=possibly-used-before-assignment
                     if filename.endswith('.desktop') and Unix.is_broken_xdg_desktop(filename):
                         yield Command.Delete(filename)
 
@@ -551,10 +551,10 @@ class System(Cleaner):
                 # %s expands to a path such as C:\ or /tmp/
                 display = _("Overwrite free disk space %s") % pathname
 
-                def wipe_path_func():
+                def wipe_path_func(path=pathname):
                     # Yield control to GTK idle because this process
                     # is very slow.  Also display progress.
-                    yield from FileUtilities.wipe_path(pathname, idle=True)
+                    yield from FileUtilities.wipe_path(path, idle=True)
                     yield 0
                 yield Command.Function(None, wipe_path_func, display)
 
@@ -575,6 +575,7 @@ class System(Cleaner):
         if 'nt' == os.name and 'recycle_bin' == option_id:
             # This method allows shredding
             recycled_any = False
+            # pylint: disable=used-before-assignment
             for path in Windows.get_recycle_bin():
                 recycled_any = True
                 yield Command.Delete(path)
@@ -588,7 +589,7 @@ class System(Cleaner):
                 Windows.move_to_recycle_bin(tmpdir)
                 try:
                     Windows.empty_recycle_bin(None, True)
-                except:
+                except Exception:
                     logging.getLogger(__name__).info(
                         'error in empty_recycle_bin()', exc_info=True)
                 yield 0
@@ -651,8 +652,17 @@ class System(Cleaner):
         return False
 
 
+def _is_process_running(exename, require_same_user):
+    if 'posix' == os.name:
+        return Unix.is_process_running(exename, require_same_user)
+    elif 'nt' == os.name:
+        return Windows.is_process_running(exename, require_same_user)
+    raise NotImplementedError('_is_process_running: Unsupported platform')
+
+
 def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
     """Register all known cleaners: system, CleanerML, and Winapp2"""
+    # pylint: disable=global-variable-not-assigned
     global backends
 
     # wipe out any registrations
@@ -664,13 +674,13 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
     backends["system"] = System()
 
     # register CleanerML cleaners
-    from bleachbit import CleanerML
     cb_progress(_('Loading native cleaners.'))
     yield from CleanerML.load_cleaners(cb_progress)
 
     # register Winapp2.ini cleaners
     if 'nt' == os.name:
         cb_progress(_('Importing cleaners from Winapp2.ini.'))
+        # pylint: disable=import-outside-toplevel
         from bleachbit import Winapp
         yield from Winapp.load_cleaners(cb_progress)
 
@@ -684,8 +694,6 @@ def create_simple_cleaner(paths):
     cleaner = Cleaner()
     cleaner.add_option(option_id='files', name='', description='')
     cleaner.name = _("System")  # shows up in progress bar
-
-    from bleachbit import Action
 
     class CustomFileAction(Action.ActionProvider):
         action_key = '__customfileaction'
@@ -719,8 +727,6 @@ def create_wipe_cleaner(path):
     def wipe_path_func():
         yield from FileUtilities.wipe_path(path, idle=True)
         yield 0
-
-    from bleachbit import Action
 
     class CustomWipeAction(Action.ActionProvider):
         action_key = '__customwipeaction'

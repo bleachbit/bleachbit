@@ -22,17 +22,20 @@
 Create cleaners from CleanerML (markup language)
 """
 
-import bleachbit
-from bleachbit.Action import ActionProvider
-from bleachbit.Language import get_text as _
-from bleachbit.General import boolstr_to_bool, getText
-from bleachbit.FileUtilities import expand_glob_join, listdir
-from bleachbit import Cleaner
-
+# standard library
 import logging
 import os
+import stat
 import sys
 import xml.dom.minidom
+
+# local import
+import bleachbit
+from bleachbit.Action import ActionProvider
+from bleachbit.FileUtilities import expand_glob_join, listdir
+from bleachbit.General import boolstr_to_bool, getText
+from bleachbit.Language import get_text as _
+from bleachbit import Cleaner
 
 logger = logging.getLogger(__name__)
 
@@ -116,7 +119,7 @@ class CleanerML:
         elif platform == 'win32':
             current_os = ('windows',)
         else:
-            raise RuntimeError('Unknown operating system: %s ' % sys.platform)
+            raise RuntimeError(f'Unknown operating system: {sys.platform}')
         # Compare current OS against required OS.
         return os_str in current_os
 
@@ -134,7 +137,7 @@ class CleanerML:
         for option in cleaner.getElementsByTagName('option'):
             try:
                 self.handle_cleaner_option(option)
-            except:
+            except Exception:
                 exc_msg = _(
                     "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option XML={option_xml}")
                 logger.exception(exc_msg.format(
@@ -218,13 +221,14 @@ class CleanerML:
             if actionplugin.action_key == command:
                 provider = actionplugin(action_node, self.vars)
         if provider is None:
-            raise RuntimeError("Invalid command '%s'" % command)
+            raise RuntimeError(f"Invalid command '{command}'")
         self.cleaner.add_action(self.option_id, provider)
 
     def handle_localizations(self, localization_nodes):
         """<localizations> element under <cleaner>"""
         if not 'posix' == os.name:
             return
+        # pylint: disable=import-outside-toplevel
         from bleachbit import Unix
         for localization_node in localization_nodes:
             for child_node in localization_node.childNodes:
@@ -274,7 +278,6 @@ def list_cleanerml_files(local_only=False):
     for pathname in listdir(cleanerdirs):
         if not pathname.lower().endswith('.xml'):
             continue
-        import stat
         st = os.stat(pathname)
         if sys.platform != 'win32' and stat.S_IMODE(st[stat.ST_MODE]) & 2:
             # TRANSLATORS: When BleachBit detects the file permissions are
@@ -298,7 +301,7 @@ def load_cleaners(cb_progress=lambda x: None):
     for pathname in cleanerml_files:
         try:
             xmlcleaner = CleanerML(pathname)
-        except:
+        except Exception:
             logger.exception(_("Error reading cleaner: %s"), pathname)
             continue
         cleaner = xmlcleaner.get_cleaner()
@@ -319,34 +322,31 @@ def pot_fragment(msgid, pathname, translators=None):
     """Create a string fragment for generating .pot files"""
     msgid = msgid.replace('"', '\\"')  # escape quotation mark
     if translators:
-        translators = "#. %s\n" % translators
+        translators = f"#. {translators}\n"
     else:
         translators = ""
-    ret = '''%s#: %s
-msgid "%s"
+    ret = f'''{translators}#: {pathname}
+msgid "{msgid}"
 msgstr ""
 
-''' % (translators, pathname, msgid)
+'''
     return ret
 
 
 def create_pot():
     """Create a .pot for translation using gettext"""
 
-    f = open('../po/cleanerml.pot', 'w', encoding='utf-8')
-
-    for pathname in listdir('../cleaners'):
-        if not pathname.lower().endswith(".xml"):
-            continue
-        strings = []
-        try:
-            CleanerML(pathname,
-                      lambda newstr, translators=None:
-                      strings.append([newstr, translators]))
-        except:
-            logger.exception(_("Error reading cleaner: %s"), pathname)
-            continue
-        for (string, translators) in strings:
-            f.write(pot_fragment(string, pathname, translators))
-
-    f.close()
+    with open('../po/cleanerml.pot', 'w', encoding='utf-8') as f:
+        for pathname in listdir('../cleaners'):
+            if not pathname.lower().endswith(".xml"):
+                continue
+            strings = []
+            try:
+                CleanerML(pathname,
+                          lambda newstr, translators=None, current_strings=strings:
+                          current_strings.append([newstr, translators]))
+            except Exception:
+                logger.exception(_("Error reading cleaner: %s"), pathname)
+                continue
+            for (string, translators) in strings:
+                f.write(pot_fragment(string, pathname, translators))
