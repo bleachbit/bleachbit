@@ -722,6 +722,7 @@ def dnf_autoremove():
 
 
 def is_unix_display_protocol_wayland():
+    """Return True if the display protocol is Wayland."""
     assert os.name == 'posix'
     if 'XDG_SESSION_TYPE' in os.environ:
         if os.environ['XDG_SESSION_TYPE'] == 'wayland':
@@ -730,6 +731,9 @@ def is_unix_display_protocol_wayland():
         return False
     if 'WAYLAND_DISPLAY' in os.environ:
         return True
+    # This DESKTOP_SESSION was seen on Ubuntu 24.10.
+    if os.environ.get('DESKTOP_SESSION') == 'ubuntu-xorg':
+        return False
     # Wayland (Ubuntu 23.10) sets DISPLAY=:0 like x11, so do not check DISPLAY.
     try:
         (rc, stdout, _stderr) = General.run_external(['loginctl'])
