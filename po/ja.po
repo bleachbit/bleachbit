@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2024-08-30 01:09+0000\n"
-"Last-Translator: maboroshin <maboroshin@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2025-04-10 08:54+0000\n"
+"Last-Translator: ayako s <a11ya81ko25@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/bleachbit/main/"
 "ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -47,9 +47,8 @@ msgstr "Cookie"
 msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
-msgstr ""
-"Cookie の削除 (サイトの設定、認証、アクセス解析のための追跡情報などが含まれま"
-"す)"
+msgstr "Cookie の削除 "
+"(ウェブサイトの設定、認証、アクセス解析のための追跡情報などが含まれます)"
 
 #: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
 #: ../cleaners/easytag.xml ../cleaners/safari.xml ../cleaners/chromium.xml
@@ -267,8 +266,7 @@ msgstr "パスワード"
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
-msgstr ""
-"ユーザー名とパスワードのデータベース及びパスワードを保存しないサイトの一覧"
+msgstr "ユーザー名とパスワードのデータベースおよびパスワードを保存しないサイトの一覧"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
 #: ../cleaners/chromium.xml ../cleaners/thunderbird.xml
@@ -325,8 +323,9 @@ msgstr "訪問済みページの一覧"
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
 #: ../bleachbit/Action.py
+#, fuzzy
 msgid "Vacuum"
-msgstr "Vacuum"
+msgstr "データベースの最適化"
 
 #: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/safari.xml
 #: ../cleaners/waterfox.xml ../cleaners/gpodder.xml ../cleaners/geary.xml
@@ -479,11 +478,11 @@ msgstr "メールクライアント"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "添付ファイル"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "同期の競合"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -532,7 +531,7 @@ msgstr "現在のセッションの削除"
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "A history of forms entered in web sites"
-msgstr "web サイトで入力したフォームの履歴"
+msgstr "ウェブサイトで入力したフォームの履歴"
 
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
@@ -743,10 +742,8 @@ msgid "Memory dump"
 msgstr "メモリダンプ"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "デスクトップ環境"
+msgstr "デスクトップウィジェット"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -796,7 +793,7 @@ msgstr "ディープスキャンは multi-value 変数をサポートしてい�
 #: ../bleachbit/Action.py
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr ""
+msgstr "search=\"walk.all\" が通常のファイルパス path=\"%s\" に対して使用されています"
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -806,7 +803,7 @@ msgstr ""
 #: ../bleachbit/Action.py
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr "path=\"%s\" は glob パターンではありません"
+msgstr "path=\"%s\" は グロブパターンではありません"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Action.py ../bleachbit/Command.py
@@ -1044,7 +1041,7 @@ msgstr "グラフィカルインターフェイスで設定されたオプショ
 
 #: ../bleachbit/CLI.py
 msgid "enable all options that do not have a warning"
-msgstr ""
+msgstr "警告のないすべてのオプションを有効にする"
 
 #: ../bleachbit/CLI.py
 msgid "set log level to verbose"
@@ -1171,7 +1168,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
+msgstr "パス {pathname} をファイルシステム {fstype} 上でワイプしています"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1372,19 +1369,15 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "言語を自動検出"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "自動的に言語 %s を維持します。"
+msgstr "システムの言語を自動検出"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "言語"
+msgstr "言語："
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1426,7 +1419,7 @@ msgstr "デバッグメッセージを表示する"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Add the shred context menu to KDE Plasma"
-msgstr ""
+msgstr "KDE Plasma にshred のコンテキストメニューを追加する"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Dark mode"
@@ -1479,7 +1472,7 @@ msgstr "名前"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "このパスはすでにホワイトリストに存在します。"
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
 msgid "Error"
@@ -1487,7 +1480,7 @@ msgstr "エラー"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "このパスはすでにカスタムリストに存在します。"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1547,7 +1540,7 @@ msgstr "OK(_O)"
 
 #: ../bleachbit/GUI.py
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "不要なファイルをクリーンアップするプログラム"
 
 #: ../bleachbit/GUI.py
 msgid ""
@@ -1677,11 +1670,11 @@ msgstr "プレビューまたはクリーニング作業を中止します"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "更新"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "BleachBit を最新バージョンに更新する"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1710,7 +1703,7 @@ msgstr "このプロセスの nice 値を %d に設定しています。"
 #: ../bleachbit/Memory.py
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
-msgstr ""
+msgstr "プロセスID {pid} の権限をユーザー {uid} に切り替えています。"
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -1773,16 +1766,14 @@ msgid "Downloading URL failed: %s"
 msgstr "URL のダウンロードに失敗しました: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "ファイル %s に設定を書き込む際にディスクに空きがありませんでした"
+msgstr "ファイル %s に設定を書き込む際にディスクの空き容量が不足していました"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "ファイル %s に設定を書き込む際にディスクに空きがありませんでした"
+msgstr "ファイル %s に設定を書き込む権限がありません"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1907,30 +1898,29 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "'%(operation)s' の例外: '%(msg)s'"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "実行ファイルが見つかりません: %s"
+msgstr "ファイルが見つかりません：%s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr ""
+msgstr "後で削除するためのフラグ設定に失敗しました（アクセス拒否）：%s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "レジストリ値の削除中にアクセスが拒否されました：%s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "レジストリキーの削除中にアクセスが拒否されました：%s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "アクセスが拒否されました：%s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
