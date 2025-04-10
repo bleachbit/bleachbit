@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-10 05:22+0000\n"
+"PO-Revision-Date: 2025-04-10 08:54+0000\n"
 "Last-Translator: \"Vasilis K.\" <skyhirules@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/bleachbit/main/el/>"
 "\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 "X-Launchpad-Export-Date: 2021-06-15 14:28+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -765,10 +765,8 @@ msgid "Memory dump"
 msgstr "Αποτύπωση μνήμης"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Περιβάλλον επιφάνειας εργασίας"
+msgstr "Εργαλεία επιφάνειας εργασίας"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1819,16 +1817,14 @@ msgid "Downloading URL failed: %s"
 msgstr "Αποτυχία λήψης URL: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "Ο δίσκος γέμισε κατά την εγγραφή της διαμόρφωσης στο αρχείο %s"
+msgstr "Ο δίσκος γέμισε κατά την εγγραφή της διαμόρφωσης στο αρχείο: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "Ο δίσκος γέμισε κατά την εγγραφή της διαμόρφωσης στο αρχείο %s"
+msgstr "Απαγορεύτηκε η πρόσβαση κατά την εγγραφή της διαμόρφωσης στο αρχείο: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1953,10 +1949,9 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Σφάλμα κατά την εκτέλεση της ενέργειας '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Το εκτελέσιμο δεν βρέθηκε: %s"
+msgstr "Το αρχείο δεν βρέθηκε: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
