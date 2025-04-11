@@ -40,6 +40,7 @@ from py2exe import freeze
 
 # local import
 import bleachbit
+from setup import supported_languages
 from bleachbit.CleanerML import CleanerML
 from bleachbit.SystemInformation import get_version
 from windows.NsisUtilities import write_nsis_expressions_to_files
@@ -415,15 +416,6 @@ def recompile_mo(langdir, app, langid, dst):
     # clean up
     os.remove(po)
     os.remove(po2)
-
-
-def supported_languages():
-    """Return list of supported languages by scanning ./po/"""
-    langs = []
-    for pathname in glob.glob('po/*.po'):
-        basename = os.path.basename(pathname)
-        langs.append(os.path.splitext(basename)[0])
-    return sorted(langs)
 
 
 @count_size_improvement

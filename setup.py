@@ -23,6 +23,8 @@ Build BleachBit tarballs
 """
 
 # standard library
+import glob
+import os
 import sys
 
 # third-party
@@ -73,6 +75,20 @@ def run_setup(args={}):
           platforms='Linux and Windows, Python v3.8+, GTK v3.24+',
           packages=['bleachbit', 'bleachbit.markovify'],
           **args)
+
+
+def supported_languages():
+    """Return list of supported languages by scanning ./po/
+
+    This function is used by:
+    * windows/setup.py
+    * bleachbit-misc/extract_desktop.py
+    """
+    langs = []
+    for pathname in glob.glob('po/*.po'):
+        basename = os.path.basename(pathname)
+        langs.append(os.path.splitext(basename)[0])
+    return sorted(langs)
 
 
 if __name__ == '__main__':
