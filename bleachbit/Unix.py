@@ -731,8 +731,10 @@ def is_unix_display_protocol_wayland():
         return False
     if 'WAYLAND_DISPLAY' in os.environ:
         return True
-    # This DESKTOP_SESSION was seen on Ubuntu 24.10.
-    if os.environ.get('DESKTOP_SESSION') == 'ubuntu-xorg':
+    # Ubuntu 24.10 showed "ubuntu-xorg".
+    # openSUSE Tumbleweed and Fedora 41 showed "gnome".
+    # Fedora 41 also showed "plasma".
+    if os.environ.get('DESKTOP_SESSION') in ('ubuntu-xorg', 'gnome', 'plasma'):
         return False
     # Wayland (Ubuntu 23.10) sets DISPLAY=:0 like x11, so do not check DISPLAY.
     try:
