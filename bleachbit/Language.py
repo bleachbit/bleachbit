@@ -381,9 +381,13 @@ def setup_translation():
         assert isinstance(text_domain, str)
         encoded_domain = text_domain.encode('utf-8')
         # wbindtextdomain(char, wchar): first parameter is encoded
-        libintl.libintl_wbindtextdomain(encoded_domain, locale_dir)
-        libintl.textdomain(encoded_domain)
-        libintl.bind_textdomain_codeset(encoded_domain, b'UTF-8')
+        if hasattr(libintl, 'libintl_wbindtextdomain'):
+            libintl.libintl_wbindtextdomain(encoded_domain, locale_dir)
+            libintl.textdomain(encoded_domain)
+            libintl.bind_textdomain_codeset(encoded_domain, b'UTF-8')
+        else:
+            logger.error(
+                'The function wbindtextdomain() is not available.')
 
         # Log for debugging
         logger.debug(
