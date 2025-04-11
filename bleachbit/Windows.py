@@ -536,7 +536,10 @@ def load_i18n_dll():
     import ctypes
     lib_fns = ['libintl-8.dll', 'intl-8.dll']
     dirs = set([bleachbit.bleachbit_exe_path, os.path.dirname(sys.executable)])
+    lib_path = None
     for lib_fn in lib_fns:
+        if lib_path:
+            break
         for dir in dirs:
             lib_path = os.path.join(dir, lib_fn)
             if os.path.exists(lib_path):
