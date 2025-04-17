@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-04-17 03:04+0000\n"
+"PO-Revision-Date: 2025-04-17 10:05+0000\n"
 "Last-Translator: Minji <chloe9936@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/bleachbit/main/ko/"
 ">\n"
@@ -869,7 +869,7 @@ msgstr "불필요한 언어 파일 삭제"
 
 #: ../bleachbit/Cleaner.py
 msgid "Configure this option in the preferences."
-msgstr "환경 설정에서 이 옵션 구성"
+msgstr "환경 설정에서 이 옵션 구성."
 
 #: ../bleachbit/Cleaner.py
 msgid "Rotated logs"
@@ -1377,9 +1377,8 @@ msgstr "복구 방지를 위해 파일 항목 덮어쓰기"
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
-msgstr ""
-"덮어쓰기는 몇몇 파일 시스템과 BleachBit 작업에서 비효율적입니다. 덮어 씌우기"
-"는 상당히 느립니다."
+msgstr "덮어쓰기는 일부 파일 시스템과 특정 BleachBit 작업에서 비효율적입니다. 덮어 "
+"씌우기는 상당히 느립니다."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
@@ -1391,8 +1390,7 @@ msgstr "삭제하기 전 확인"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
-msgstr ""
-"SI (1 kB = 1000 bytes) 대신 Use IEC 사이즈 (1 KiB = 1024 bytes)를 사용하세요."
+msgstr "SI (1 kB = 1000 bytes) 대신 IEC 크기 (1 KiB = 1024 bytes)를 사용하세요"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Remember window geometry"
@@ -1517,7 +1515,7 @@ msgstr "영구 삭제할 폴더 선택"
 
 #: ../bleachbit/GUI.py
 msgid "No paths found in clipboard."
-msgstr "클립보드에서 경로가 발견되지 않음"
+msgstr "클립보드에서 경로가 발견되지 않음."
 
 #: ../bleachbit/GUI.py
 msgid "_OK"
@@ -1542,7 +1540,7 @@ msgstr ""
 #: ../bleachbit/GUI.py
 msgid "translator-credits"
 msgstr ""
-"Launchpad Contributions:\n"
+"Launchpad 기여자들:\n"
 "  B. W. Knight https://launchpad.net/~kbd0651\n"
 "  Bundo https://launchpad.net/~kang-bundo\n"
 "  Para https://launchpad.net/~khrhee\n"
@@ -1582,7 +1580,7 @@ msgstr ""
 #: ../bleachbit/GUI.py
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
-msgstr "설정 파일이 손상되어 초기화 중: %s"
+msgstr "구성 파일이 손상되어 다시 설정하는 중: %s"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1595,11 +1593,11 @@ msgstr "완료."
 #: ../bleachbit/GUI.py
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
-msgstr "타이틀 바의 햄버거 아이콘을 클릭하여 응용 프로그램 메뉴에 접근"
+msgstr "타이틀 바의 햄버거 아이콘을 클릭하여 응용 프로그램 메뉴에 접근."
 
 #: ../bleachbit/GUI.py
 msgid "Access the application menu by clicking the logo on the title bar."
-msgstr "타이틀 바의 로고를 클릭하여 응용 프로그램 메뉴에 접근"
+msgstr "타이틀 바의 로고를 클릭하여 응용 프로그램 메뉴에 접근."
 
 #: ../bleachbit/GUI.py
 msgid ""
@@ -1667,39 +1665,38 @@ msgstr "업데이트 확인 중 오류: "
 msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
-msgstr ""
-"명령어 'swapoff -s' 실행에 실패하여, 스와프 정보를 위해 /proc/swaps로 돌아갑"
-"니다."
+msgstr "명령어 'swapoff -s' 실행에 실패하여, 스와프 정보를 위해 /proc/swaps로 "
+"돌아갑니다."
 
 #: ../bleachbit/Memory.py
 msgid "Disabling swap."
-msgstr "스와프 비활성화 중"
+msgstr "스와프 비활성화 중."
 
 #: ../bleachbit/Memory.py
 msgid "Re-enabling swap."
-msgstr "스와프 재활성화 중"
+msgstr "스와프 재활성화 중."
 
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Setting nice value %d for this process."
-msgstr "프로세스를 위해 적절한 값 %d을(를) 설정 중"
+msgstr "프로세스를 위해 적절한 값 %d을(를) 설정 중."
 
 #: ../bleachbit/Memory.py
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
-msgstr "사용자 아이디 {uid}의 프로세스 아이디 {pid} 권한 해제 중"
+msgstr "사용자 아이디 {uid}의 프로세스 아이디 {pid} 권한 해제 중."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr "메모리 %s 정리 및 할당 중"
+msgstr "메모리 %s 정리 및 할당 중."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Freeing %s of memory."
-msgstr "메모리 %s 확보 중"
+msgstr "메모리 %s 확보 중."
 
 #: ../bleachbit/Memory.py
 #, python-brace-format
@@ -1728,7 +1725,7 @@ msgstr "스와프 디바이스 %s을(를) 재시작 중입니다."
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Detected these swap devices: %s"
-msgstr "스와프 디바이스 발견됨: %s"
+msgstr "스와프 디바이스 발견됨 : %s"
 
 #. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
 #: ../bleachbit/Memory.py
@@ -1748,31 +1745,31 @@ msgstr "차일드 메모리-정리 프로세스가 %d 코드를 반환했습니�
 #: ../bleachbit/Network.py
 #, python-format
 msgid "Downloading URL failed: %s"
-msgstr "URL다운로드 실패: %s"
+msgstr "URL 다운로드 실패 : %s"
 
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "파일 %s 에 구성을 는 쓰는 중 디스크가 가득 찼습니다."
+msgstr "파일 %s 에 구성을 는 쓰는 중 디스크가 가득 찼습니다"
 
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "파일 : %s에 구성을 쓰던 중 권한이 거부되었습니다."
+msgstr "파일 : %s에 구성을 쓰던 중 권한이 거부되었습니다"
 
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Error checking whether path exists: %s"
-msgstr "경로 존재 확인 중 에러 발생: %s"
+msgstr "경로 존재 확인 중 에러 발생 : %s"
 
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Automatically preserving language %s."
-msgstr "%s 언어 자동 보존 중"
+msgstr "%s 언어 자동 보존 중."
 
 #: ../bleachbit/Options.py
 msgid "Error when setting the default drives to shred."
-msgstr "영구 삭제할 기본 드라이브 설정 중 에러 발생"
+msgstr "영구 삭제할 기본 드라이브 설정 중 에러 발생."
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
@@ -1784,14 +1781,14 @@ msgid ""
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
 msgstr ""
-"청소 설정이 새로 생겼거나 변경되었습니다. 악의적인 설정은 시스템에 악영향을 "
-"끼칠 수 있습니다. 만약 변경된 설정을 신뢰할 수 없다면, 파일을 삭제하고 종료하"
-"십시오."
+"이러한 청소 설정은 새로 생겼거나 변경되었습니다. 악의적인 설정은 시스템을 "
+"손상시킬 수 있습니다. 만약 변경 사항을 신뢰할 수 없다면 파일을 삭제하거나 "
+"종료하세요."
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
 msgid "Delete"
-msgstr "삭제하기"
+msgstr "삭제"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
@@ -1801,7 +1798,7 @@ msgstr "파일명"
 #: ../bleachbit/Unix.py
 #, python-format
 msgid "Executable not found: %s"
-msgstr "실행파일 존재하지 않음: %s"
+msgstr "실행파일 존재하지 않음 : %s"
 
 #. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
 #: ../bleachbit/Unix.py ../bleachbit/Worker.py
@@ -1836,8 +1833,8 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
-"업데이트 확인을 위해 네트워크 연결 중 에러가 발생했습니다. 방화벽의 응용 프로"
-"그램 차단 여부와 인터넷 연결을 확인하십시오. 에러 메세지: {}"
+"업데이트 확인을 위해 네트워크 연결 중 에러가 발생했습니다. 방화벽의 응용 "
+"프로그램 차단 여부와 인터넷 연결을 확인하십시오. 에러 메세지 : {}"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py
@@ -1908,7 +1905,7 @@ msgstr "접근이 거부되었습니다 : %s"
 #: ../bleachbit/Worker.py
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
-msgstr "오류: {operation_option}: {command}"
+msgstr "오류 : {operation_option}: {command}"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py
@@ -1940,38 +1937,38 @@ msgstr[0] "약 %d분 남았습니다."
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Disk space recovered: %s"
-msgstr "복구된 디스크 공간: %s"
+msgstr "복구된 디스크 공간 : %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Disk space to be recovered: %s"
-msgstr "복구될 디스크 공간: %s"
+msgstr "복구될 디스크 공간 : %s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Files deleted: %d"
-msgstr "삭제된 파일: %d"
+msgstr "삭제된 파일 : %d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Files to be deleted: %d"
-msgstr "삭제될 파일: %d"
+msgstr "삭제될 파일 : %d"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Special operations: %d"
-msgstr "특수 작업: %d"
+msgstr "특수 작업 : %d"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Errors: %d"
-msgstr "오류: %d"
+msgstr "오류 : %d"
 
 #. TRANSLATORS: The "deep scan" feature searches over broad
 #. areas of the file system such as the user's whole home directory
@@ -1992,7 +1989,7 @@ msgstr "파일 영구 삭제(_S)"
 
 #: ../data/app-menu.ui
 msgid "Sh_red Folders"
-msgstr "폴더 영구 삭저(_H)"
+msgstr "폴더 영구 삭제(_H)"
 
 #: ../data/app-menu.ui
 msgid "Shred Paths from Clipboard"
@@ -2004,7 +2001,7 @@ msgstr "디스크 여유 공간 청소(_W)"
 
 #: ../data/app-menu.ui
 msgid "_Make Chaff"
-msgstr "농담 만들기(_M)"
+msgstr "채프 만들기(_M)"
 
 #: ../data/app-menu.ui
 msgid "S_hred Settings and Quit"
