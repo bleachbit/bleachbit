@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2024-09-28 02:16+0000\n"
-"Last-Translator: abc0922001 <abc0922001@hotmail.com>\n"
+"PO-Revision-Date: 2025-04-20 13:59+0000\n"
+"Last-Translator: Pin-Hsien Lee <phsnlee@ncpy.dev>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/bleachbit/main/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -474,11 +474,11 @@ msgstr "郵件客戶端"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "附件"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "同步衝突"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -734,10 +734,8 @@ msgid "Memory dump"
 msgstr "記憶體傾印"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "桌面環境"
+msgstr "桌面小部件"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1154,7 +1152,7 @@ msgstr "至少一份檔案所在的檔案系統不支援進階覆寫。"
 #: ../bleachbit/FileUtilities.py
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
+msgstr "抹寫檔案系統類型為 {fstype} 的路徑 {pathname}"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1347,19 +1345,15 @@ msgstr "從社群下載並更新清理器 (winapp2.ini)"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "自動偵測語言"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "自動保留語言 %s。"
+msgstr "自動偵測系統語言"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "語言"
+msgstr "語言："
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1450,7 +1444,7 @@ msgstr "名稱"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "此路徑已在白名單內。"
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
 msgid "Error"
@@ -1458,7 +1452,7 @@ msgstr "錯誤"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "此路徑已在自定義清單內。"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1641,11 +1635,11 @@ msgstr "中止清理程序預覽"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "更新"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "更新 BleachBit 至最新版本"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1735,16 +1729,14 @@ msgid "Downloading URL failed: %s"
 msgstr "下載 URL 失敗：%s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "磁碟空間已滿，無法將設置寫入檔案 %s"
+msgstr "磁碟空間已滿，無法將設置寫入檔案：%s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "磁碟空間已滿，無法將設置寫入檔案 %s"
+msgstr "權限被拒絕，無法將設置寫入檔案：%s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1865,30 +1857,29 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "執行操作「%(operation)s」時發生例外：「%(msg)s」"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "未找到可執行檔：%s"
+msgstr "未找到檔案：%s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr ""
+msgstr "將檔案標記為稍後刪除時存取被拒：%s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "刪除註冊表值時存取被拒：%s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "刪除註冊表鍵時存取被拒：%s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "存取被拒：%s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
