@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-16 06:50+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"PO-Revision-Date: 2025-04-23 12:08+0000\n"
+"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/bleachbit/main/"
 "es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 "X-Launchpad-Export-Date: 2021-12-14 04:36+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1204,7 +1204,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
+msgstr "Ruta en proceso {pathname} con el tipo {fstype} del sistema de archivo"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1846,16 +1846,15 @@ msgid "Downloading URL failed: %s"
 msgstr "Error en la descarga de la URL: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "Se ha llenado el disco al escribir la configuración en el archivo %s"
+msgstr "Se ha llenado el disco al escribir la configuración en el archivo: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "Se ha llenado el disco al escribir la configuración en el archivo %s"
+msgstr ""
+"Se ha denegado el permiso cuando escribe la configuración al archivo: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1988,6 +1987,7 @@ msgstr "Archivo no encontrado: %s"
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
 msgstr ""
+"Acceso denegado cuando el indicador del archivo para borrado posterior: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
