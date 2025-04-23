@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-04-10 08:54+0000\n"
-"Last-Translator: \"Vasilis K.\" <skyhirules@gmail.com>\n"
+"PO-Revision-Date: 2025-04-24 13:02+0000\n"
+"Last-Translator: GiannosOB <giannos2105@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/bleachbit/main/el/>"
 "\n"
 "Language: el\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 "X-Launchpad-Export-Date: 2021-06-15 14:28+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -826,9 +826,9 @@ msgstr "search=\"walk.all\" με το συνιθισμένο μονοπάτι α
 #. the wildcard or should search using path="file" which does not
 #. expect or support wildcards in the path.
 #: ../bleachbit/Action.py
-#, fuzzy, python-format
+#, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr "το path=\"%s\" δεν παίρνει χαρακτήρες μπαλαντέρ"
+msgstr "path=«%s» δεν είναι μοτίβο glob"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Action.py ../bleachbit/Command.py
@@ -1310,7 +1310,6 @@ msgstr "Διαγραφή αρχείων"
 #. physical chaff airplanes use to protect themselves from radar-guided
 #. missiles. For more explanation, see the online documentation.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
 msgid "Make chaff"
 msgstr "Δημιούργησε ψηφιακό παραπλανητικό υλικό"
 
