@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-04-27 03:50+0000\n"
+"PO-Revision-Date: 2025-04-27 19:46+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/bleachbit/main/ta/>"
 "\n"
@@ -486,11 +486,11 @@ msgstr "மின்னஞ்சல் கிளையன்ட்"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "இணைப்புகள்"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "மோதல் ஒத்திசைவு"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -1176,7 +1176,7 @@ msgstr ""
 #: ../bleachbit/FileUtilities.py
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
+msgstr "{fstype} கோப்பு முறைமை வகை {pathname} பாதையை அழிக்கிறது"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1377,7 +1377,7 @@ msgstr "சமூகத்திலிருந்து கிளீனர்�
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "தானாக கண்டறியும் மொழி"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Automatically detect the system language"
@@ -1479,7 +1479,7 @@ msgstr "பெயர்"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "இந்த பாதை ஏற்கனவே அனுமதிப்பட்டியலில் உள்ளது."
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
 msgid "Error"
@@ -1487,7 +1487,7 @@ msgstr "பிழை"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "இந்த பாதை ஏற்கனவே தனிப்பயன் பட்டியலில் உள்ளது."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1670,11 +1670,11 @@ msgstr "முன்னோட்டம் அல்லது தூய்மை 
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "புதுப்பிப்பு"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "அண்மைக் கால பதிப்பிற்கு ப்ளீச்சிட்டைப் புதுப்பிக்கவும்"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1906,22 +1906,22 @@ msgstr "கோப்பு இல்லை: %s"
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr ""
+msgstr "பின்னர் நீக்குவதற்கு கோப்பைக் கொடியிடும்போது மறுக்கப்பட்டது: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "பதிவேட்டில் மதிப்பை நீக்கும்போது அணுகல் மறுக்கப்பட்டது: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "பதிவேட்டை நீக்கும்போது அணுகல் மறுக்கப்பட்டது விசையை: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "அணுகல் மறுக்கப்பட்டது: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
