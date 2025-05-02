@@ -25,6 +25,7 @@ Launcher
 import os
 import sys
 
+have_gui = True
 
 if 'posix' == os.name:
     if os.path.isdir('/usr/share/bleachbit'):
@@ -43,6 +44,12 @@ if 'posix' == os.name:
               'xhost si:localuser:root\n'
                 'See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-questions.html'))
         sys.exit(1)
+    # Check for GUI only when needed: this avoids a Gtk warning when
+    # a display is not available.
+    if len(sys.argv) == 1 or '--gui' in sys.argv:
+        have_gui = bleachbit.Unix.has_gui()
+    else:
+        have_gui = False
 
 if os.name == 'nt':
     # change error handling to avoid popup with GTK 3
@@ -52,12 +59,17 @@ if os.name == 'nt':
     win32api.SetErrorMode(win32con.SEM_FAILCRITICALERRORS |
                           win32con.SEM_NOGPFAULTERRORBOX | win32con.SEM_NOOPENFILEERRORBOX)
 
-if 1 == len(sys.argv):
+# Use GUI if no arguments provided and display is available
+if 1 == len(sys.argv) and have_gui:
     # Import GUI inside the condition for Linux packagers to
     # separate GUI into another package.
     import bleachbit.GUI  # pylint: disable=ungrouped-imports
     app = bleachbit.GUI.Bleachbit()
     sys.exit(app.run(sys.argv))
 else:
+    # Either CLI args were provided or no display is available
     import bleachbit.CLI
+    # If no args and defaulting to CLI, print usage information
+    if 1 == len(sys.argv) and not have_gui:
+        sys.argv.append('--help')
     bleachbit.CLI.process_cmd_line()

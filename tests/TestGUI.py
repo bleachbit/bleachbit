@@ -29,27 +29,30 @@ import time
 import types
 from unittest import mock
 
-try:
+HAVE_GTK = True
+if os.name == 'posix':
+    from bleachbit.Unix import has_gui
+    HAVE_GTK = has_gui()
+
+if HAVE_GTK:
     import gi
     gi.require_version('Gtk', '3.0')
     from gi.repository import Gtk
     from bleachbit.GUI import Bleachbit
-    HAVE_GTK = True
-except ImportError:
-    HAVE_GTK = False
 
 import bleachbit
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
+
 
 from tests import common
 
 bleachbit.online_update_notification_enabled = False
 
 
-@unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
+@unittest.skipUnless(HAVE_GTK, 'requires GTK+ module and a display environment')
 class GUITestCase(common.BleachbitTestCase):
-    app = Bleachbit(auto_exit=False, uac=False)
+    app = Bleachbit(auto_exit=False, uac=False) if HAVE_GTK else None
     options_get_tree = options.get_tree
     _NEW_CLEANER_ID, _NEW_OPTION_ID = 'test_run_operations', 'test1'
 

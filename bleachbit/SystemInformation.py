@@ -24,12 +24,57 @@
 Show system information
 """
 
-import bleachbit
-
+# standard library
+import logging
 import locale
 import os
 import platform
 import sys
+
+# local
+import bleachbit
+from bleachbit.General import get_executable
+
+logger = logging.getLogger(__name__)
+
+
+def get_gtk_info():
+    """Get dictionary of information about GTK"""
+    info = {}
+    try:
+        # pylint: disable=import-outside-toplevel
+        import gi
+    except ImportError:
+        logger.debug('import gi failed')
+        return info
+
+    info['gi.version'] = gi.__version__
+    try:
+        gi.require_version('Gtk', '3.0')
+    except ValueError:
+        logger.debug(
+            'gi.require_version failed: GTK 3.0 not found or not available')
+        return info
+
+    # pylint: disable=import-outside-toplevel
+    try:
+        from gi.repository import Gtk
+    except (ImportError, ValueError):
+        logger.debug('import Gtk failed: GTK 3.0 not found or not available')
+        return info
+
+    settings = Gtk.Settings.get_default()
+    if not settings:
+        logger.debug('GTK settings not found')
+        return info
+
+    info['GTK version'] = f"{Gtk.get_major_version()}.{Gtk.get_minor_version()}.{Gtk.get_micro_version()}"
+    info['GTK theme'] = settings.get_property('gtk-theme-name')
+    info['GTK icon theme'] = settings.get_property('gtk-icon-theme-name')
+    info['GTK prefer dark theme'] = settings.get_property(
+        'gtk-application-prefer-dark-theme')
+
+    return info
 
 
 def get_version(four_parts=False):
@@ -74,21 +119,7 @@ def get_system_information():
     except ImportError:
         pass
 
-    try:
-        # pylint: disable=import-outside-toplevel
-        import gi
-        info['gi.version'] = gi.__version__
-        gi.require_version('Gtk', '3.0')
-        # pylint: disable=import-outside-toplevel
-        from gi.repository import Gtk
-        settings = Gtk.Settings.get_default()
-        info['GTK version'] = f"{Gtk.get_major_version()}.{Gtk.get_minor_version()}.{Gtk.get_micro_version()}"
-        info['GTK theme'] = settings.get_property('gtk-theme-name')
-        info['GTK icon theme'] = settings.get_property('gtk-icon-theme-name')
-        info['GTK prefer dark theme'] = settings.get_property(
-            'gtk-application-prefer-dark-theme')
-    except (ImportError, ValueError):
-        pass
+    info.update(get_gtk_info())
 
     import sqlite3
     info['SQLite version'] = sqlite3.sqlite_version
@@ -135,7 +166,7 @@ def get_system_information():
 
     # System information
     info['sys.argv'] = sys.argv
-    info['sys.executable'] = sys.executable
+    info['sys.executable'] = get_executable()
     info['sys.version'] = sys.version
     if 'nt' == os.name:
         from win32com.shell import shell

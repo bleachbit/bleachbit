@@ -34,7 +34,7 @@ from xml.dom.minidom import parseString
 
 from tests import common
 from bleachbit import logger
-from bleachbit.General import get_real_username
+from bleachbit.General import get_executable, get_real_username
 from bleachbit.FileUtilities import children_in_directory, exe_exists
 from bleachbit.Unix import (
     apt_autoclean,
@@ -44,6 +44,7 @@ from bleachbit.Unix import (
     get_distribution_name_version_distro,
     get_distribution_name_version_os_release,
     get_distribution_name_version_platform_freedesktop,
+    has_gui,
     Locales,
     _is_broken_xdg_desktop_application,
     is_broken_xdg_desktop,
@@ -251,6 +252,8 @@ class UnixTestCase(common.BleachbitTestCase):
 
         https://github.com/bleachbit/bleachbit/issues/1756
         """
+        if not os.getenv('PATH'):
+            self.skipTest("PATH environment variable is not set")
         with tempfile.NamedTemporaryFile(mode='w', suffix='.desktop', prefix='bleachbit-xdg-') as tmp:
             tmp.write("""[Desktop Entry]
 Name=What's New
@@ -324,16 +327,24 @@ PrefersNonDefaultGPU=false""")
     def test_desktop_valid_exe(self):
         """Unit test for .desktop file with valid Unix exe (not env)"""
         fake_config = FakeConfig({"Desktop Entry": {"Exec": "ls"}})
-        result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
-        self.assertFalse(result)
+        if os.getenv('PATH'):
+            result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
+            self.assertFalse(result)
+        else:
+            with self.assertRaises(RuntimeError):
+                _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
 
     @common.skipIfWindows
     def test_desktop_env_shlex_failure(self):
         """Unit test for .desktop file with shlex exception"""
         fake_config = FakeConfig(
             {"Desktop Entry": {"Exec": "env ENVVAR=bar ls \"notepad.exe"}})
-        result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
-        self.assertTrue(result)
+        if os.getenv('PATH'):
+            result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
+            self.assertTrue(result)
+        else:
+            with self.assertRaises(RuntimeError):
+                _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
 
     @common.skipIfWindows
     def test_desktop_env_valid(self):
@@ -359,7 +370,7 @@ PrefersNonDefaultGPU=false""")
     def test_desktop_wine_valid_windows_exe(self, mock_exe_exists, mock_path_exists):
         """Unit test for .desktop file pointing to valid Windows application"""
         fake_config = FakeConfig({"Desktop Entry": {
-                                 "Exec": r"env WINEPREFIX=/some/path wine C:\\Windows\\notepad.exe"}})
+                                 "Exec": r"/usr/bin/env WINEPREFIX=/some/path wine C:\\Windows\\notepad.exe"}})
         mock_exe_exists.return_value = True  # for env and wine
         mock_path_exists.return_value = True  # for notepad
         result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
@@ -440,19 +451,36 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
 
     @common.skipIfWindows
     def test_is_process_running(self):
-        # Fedora 11 doesn't need realpath but Ubuntu 9.04 uses symlink
-        # from /usr/bin/python to python2.6
-        exe = os.path.basename(os.path.realpath(sys.executable))
-        self.assertTrue(is_process_running(exe, False))
-        self.assertTrue(is_process_running(exe, True),
-                        f'is_running({exe}, True)')
-        non_user_exes = ('polkitd', 'bluetoothd', 'NetworkManager',
-                         'gdm3', 'snapd', 'systemd-journald')
-        for exe in non_user_exes:
-            self.assertFalse(is_process_running(exe, True),
-                             f'is_running({exe}, True)')
-        self.assertFalse(is_process_running('does-not-exist', True))
-        self.assertFalse(is_process_running('does-not-exist', False))
+        """Unit test for method is_process_running()"""
+        # Do not use get_executable() here because of how it
+        # handles symlinks.
+        # sys.executable may look like /usr/bin/python3
+        # When running under `env -i`, then sys.executable is empty.
+        if sys.executable:
+            exe = os.path.basename(os.path.realpath(sys.executable))
+        else:
+            try:
+                with open('/proc/self/stat', 'r', encoding='utf-8') as f:
+                    exe = f.read().split()[1].strip('()')
+            except (IOError, IndexError):
+                self.skipTest("Could not determine current process name from /proc/self/stat")
+        tests = [
+            # (expected, exe, require_same_user)
+            (True, exe, False),  # Check the actual process name
+            (True, exe, True),  # Check the actual process name
+        ]
+        # These processes may be running but not by the current user.
+        non_user_exes = ('polkitd', 'bluetoothd', 'NetworkManager', 'gdm3', 'snapd', 'systemd-journald')
+        tests += [(False, name, True) for name in non_user_exes]
+        # These do not exist.
+        tests += [
+            (False, 'does-not-exist', True),
+            (False, 'does-not-exist', False),
+        ]
+        for expected, exename, require_same_user in tests:
+            with self.subTest(exename=exename, require_same_user=require_same_user):
+                self.assertEqual(is_process_running(exename, require_same_user), expected,
+                                 f'is_running({exename}, {require_same_user})')
 
     @common.skipIfWindows
     def test_journald_clean(self):
@@ -639,11 +667,14 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
 
     @common.skipIfWindows
     def test_run_cleaner_cmd(self):
+        """Unit test for run_cleaner_cmd()"""
         from subprocess import CalledProcessError
         self.assertRaises(RuntimeError, run_cleaner_cmd,
                           '/hopethisdoesntexist', [])
+        # Use absolute path in case like `env -i`.
+        which_sh = 'sh' if exe_exists('sh') else '/usr/bin/sh'
         self.assertRaises(CalledProcessError, run_cleaner_cmd,
-                          'sh', ['-c', 'echo errormsg; false'])
+                          which_sh, ['-c', 'echo errormsg; false'])
         # test if regexes for invalid lines work
         self.assertRaises(RuntimeError, run_cleaner_cmd, 'echo', ['This is an invalid line'],
                           error_line_regexes=['invalid'])
@@ -723,6 +754,11 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             0, 'Remove  112 Packages\nFreed space: 299 M\n', 'stderr')
         bytes_freed = dnf_autoremove()
         self.assertEqual(bytes_freed, 299000000)
+
+    @common.skipIfWindows
+    def test_has_gui(self):
+        """Unit test for has_gui()"""
+        self.assertIsInstance(has_gui(), bool)
 
     @common.skipIfWindows
     def test_is_unix_display_protocol_wayland_no_mock(self):

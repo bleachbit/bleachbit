@@ -98,12 +98,23 @@ class CommonTestCase(common.BleachbitTestCase):
         """Test for important environment variables"""
         # useful for researching
         # grep -Poh "([\\$%]\w+)" cleaners/*xml | cut -b2- | sort | uniq -i
-        envs = {'posix': ['XDG_DATA_HOME', 'XDG_CONFIG_HOME', 'XDG_CACHE_HOME', 'HOME'],
+        # bleachbit/init.py sets these variables on posix, if they do not exist.
+        envs = {'posix': ['HOME', 'USER', 'XDG_CACHE_HOME', 'XDG_CONFIG_HOME', 'XDG_DATA_HOME'],
                 'nt': ['AppData', 'CommonAppData', 'Documents', 'ProgramFiles', 'UserProfile', 'WinDir']}
         for env in envs[os.name]:
             e = os.getenv(env)
             self.assertIsNotNone(e)
-            self.assertGreater(len(e), 4)
+            self.assertNotEqual(e.strip(), '')
+
+    def test_get_put_env(self):
+        """Unit test for get_env() and put_env()"""
+        self.assertIsNone(common.get_env('PUTENV_TEST'))
+
+        common.put_env('PUTENV_TEST', '1')
+        self.assertEqual('1', common.get_env('PUTENV_TEST'))
+
+        common.put_env('PUTENV_TEST', None)
+        self.assertIsNone(common.get_env('PUTENV_TEST'))
 
     def test_touch_file(self):
         """Unit test for touch_file"""

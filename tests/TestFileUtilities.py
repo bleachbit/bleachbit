@@ -564,7 +564,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                     temp.write(file_contents)
                     temp.flush()
                 det = detect_encoding(temp.name)
-                self.assertEqual(det, expected_encoding, f"{file_contents} -> {det}, check that chardet is available")
+                self.assertEqual(
+                    det, expected_encoding, f"{file_contents} -> {det}, check that chardet is available")
 
     @common.skipIfWindows
     def test_ego_owner(self):
@@ -599,15 +600,29 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                      ('cmd.exe', True),
                      ('doesnotexist', False),
                      ('c:\\windows\\doesnotexist.exe', False)]
-        for test in tests:
-            self.assertEqual(exe_exists(test[0]), test[1])
+        for exe, expected in tests:
+            with self.subTest(exe=exe, expected=expected):
+                if os.name == 'posix' and not os.getenv('PATH') and not os.path.isabs(exe):
+                    self.skipTest('PATH not set')
+                self.assertEqual(exe_exists(exe), expected,
+                                 f"{exe} -> {expected}")
 
     def test_exists_in_path(self):
         """Unit test for exists_in_path()"""
         filename = 'ls'
         if 'nt' == os.name:
             filename = 'cmd.exe'
-        self.assertTrue(exists_in_path(filename))
+        if 'posix' == os.name and not os.getenv('PATH'):
+            self.assertFalse(exists_in_path(filename))
+        else:
+            self.assertTrue(exists_in_path(filename))
+        self.assertFalse(exists_in_path('doesnotexist'))
+        if 'posix' == os.name:
+            with self.assertRaises(AssertionError):
+                exists_in_path('/usr/bin/doesnotexist')
+        if 'nt' == os.name:
+            with self.assertRaises(AssertionError):
+                exists_in_path('c:\\does\\not\\exist.exe')
 
     def test_expand_glob_join(self):
         """Unit test for expand_glob_join()"""
@@ -628,6 +643,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         else:
             vars = ['$HOME', '${HOME}']
         for var in vars:
+            if not os.getenv(var):
+                self.skipTest(f'Environment variable {var} not set')
             expanded = os.path.expandvars(var)
             self.assertIsString(expanded)
             self.assertNotEqual(
@@ -637,6 +654,12 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             # An absolute path should not be altered.
             self.assertEqual(expanded, os.path.expandvars(expanded))
             self.assertEqual(expanded, os.path.expanduser(expanded))
+
+    def test_expand_vars_no_change(self):
+        """Unit test for expandvars() and expanduser()
+
+        These expect no change.
+        """
         # An empty string should not be altered.
         self.assertEqual(os.path.expandvars(''), '')
 

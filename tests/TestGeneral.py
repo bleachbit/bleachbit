@@ -26,12 +26,15 @@ Test case for module General
 import copy
 import os
 import shutil
+import subprocess
+import sys
 
 # local
 from bleachbit import logger
-from bleachbit.FileUtilities import exists_in_path
+from bleachbit.FileUtilities import exe_exists, exists_in_path
 from bleachbit.General import (
     boolstr_to_bool,
+    get_executable,
     get_real_uid,
     get_real_username,
     makedirs,
@@ -52,6 +55,16 @@ class GeneralTestCase(common.BleachbitTestCase):
 
         for test in tests:
             self.assertEqual(boolstr_to_bool(test[0]), test[1])
+
+    def test_get_executable(self):
+        """Test for get_executable()"""
+        exe = get_executable()
+        self.assertIsInstance(exe, str)
+        self.assertGreater(len(exe), 0)
+        self.assertEqual(exe, exe.strip())
+        self.assertTrue(exe_exists(exe))
+        if sys.executable:
+            self.assertEqual(exe, sys.executable)
 
     def test_get_real_uid(self):
         """Test for get_real_uid()"""
@@ -127,7 +140,8 @@ class GeneralTestCase(common.BleachbitTestCase):
         # clean_env parameter should not alter the PATH, and the PATH
         # should not be empty
         path_clean = run(['bash', '-c', 'echo $PATH'], clean_env=True)
-        self.assertEqual(common.get_env('PATH'), path_clean)
+        if os.getenv('PATH'):
+            self.assertEqual(common.get_env('PATH'), path_clean)
         self.assertGreater(len(path_clean), 10)
 
         path_unclean = run(['bash', '-c', 'echo $PATH'], clean_env=False)
@@ -168,6 +182,32 @@ class GeneralTestCase(common.BleachbitTestCase):
         common.put_env('LANG', lang_old)
         self.assertEqual(old_environ, copy.deepcopy(os.environ))
 
+    def test_run_external_invalid(self):
+        """Unit test for run_external() with invalid arguments"""
+        with self.assertRaises(AssertionError):
+            run_external(None)
+        with self.assertRaises(AssertionError):
+            run_external('foo')
+        with self.assertRaises(ValueError):
+            run_external([None, 'foo'])
+        with self.assertRaises(ValueError):
+            run_external(['hello', None])
+        with self.assertRaises(ValueError):
+            run_external([''])
+        with self.assertRaises(AssertionError):
+            run_external([])
+
+    def test_run_external_timeout(self):
+        """Unit test for run_external() with timeout"""
+        if 'posix' == os.name:
+            args = ['sleep', '10']
+            with self.assertRaises(subprocess.TimeoutExpired):
+                run_external(args, timeout=1)
+        if os.name == 'nt':
+            args = ['ping', '-n', '10', '127.0.0.1']
+            with self.assertRaises(subprocess.TimeoutExpired):
+                run_external(args, timeout=1)
+
     @common.skipIfWindows
     def test_dconf(self):
         """Unit test for dconf"""
@@ -175,6 +215,10 @@ class GeneralTestCase(common.BleachbitTestCase):
             self.skipTest('dconf not found')
         if sudo_mode():
             self.skipTest('dconf not supported in sudo mode')
+        # pylint: disable=import-outside-toplevel
+        from bleachbit.Unix import has_gui
+        if not has_gui():
+            self.skipTest('dconf not supported without GUI')
         args = ['dconf', 'write',
                 '/apps/bleachbit/test', 'true']
         (rc, stdout, stderr) = run_external(args)

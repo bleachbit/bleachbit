@@ -30,6 +30,7 @@ import tempfile
 import unittest
 
 from tests import common
+from bleachbit.General import get_executable
 
 
 has_make = True
@@ -72,7 +73,7 @@ class MakefileTestCase(common.BleachbitTestCase):
             os.remove(pkg_fn)
         self.assertNotExists(pkg_fn)
 
-        sdist_cmd = [sys.executable, 'setup.py', 'sdist']
+        sdist_cmd = [get_executable(), 'setup.py', 'sdist']
         subprocess.check_call(sdist_cmd)
         pkg_fn = os.path.join('dist', ver_name + '.tar.gz')
         self.assertExists(pkg_fn)

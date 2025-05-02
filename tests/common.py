@@ -197,9 +197,13 @@ def have_root():
 
 
 def put_env(key, val):
-    """Put an environment variable. None removes the key"""
+    """Put an environment variable. None removes the key
+
+    Returns None
+    """
     if not val:
-        del os.environ[key]
+        if key in os.environ:
+            del os.environ[key]
     else:
         os.environ[key] = val
 
