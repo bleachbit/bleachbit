@@ -28,6 +28,13 @@
 %define pyprefix %{primary_python}
 %endif
 
+# Fedora 42 unified /usr/sbin https://fedoraproject.org/wiki/Changes/Unify_bin_and_sbin
+%if "%{_bindir}" == "%{_sbindir}"
+%define has_sbin 0
+%else
+%define has_sbin 1
+%endif
+
 Name:           bleachbit
 Version:        5.0.0
 Release:        1%{?dist}
@@ -138,8 +145,7 @@ desktop-file-install \
 
 # consolehelper and userhelper
 ln -s consolehelper %{buildroot}/%{_bindir}/%{name}-root
-%if 0%{?fedora} < 42
-# Fedora 42 unified /usr/sbin https://fedoraproject.org/wiki/Changes/Unify_bin_and_sbin
+%if %{has_sbin}
 mkdir -p %{buildroot}/%{_sbindir}
 ln -s ../..%{_bindir}/%{name} %{buildroot}/%{_sbindir}/%{name}-root
 %endif
@@ -194,7 +200,7 @@ update-desktop-database &> /dev/null ||:
 %config(noreplace) %{_sysconfdir}/pam.d/%{name}-root
 %config(noreplace) %{_sysconfdir}/security/console.apps/%{name}-root
 %{_bindir}/%{name}-root
-%if 0%{?fedora} < 42
+%if %{has_sbin}
 %{_sbindir}/%{name}-root
 %endif
 %endif
