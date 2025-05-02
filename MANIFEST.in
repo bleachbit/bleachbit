@@ -25,6 +25,8 @@ include org.bleachbit.policy
 include po/*po
 include po/Makefile
 include setup.py
+# openSUSE Build Service uses these tests.
+include tests/*.py
 include windows/*bat
 include windows/*ps1
 include windows/bleachbit.ico
