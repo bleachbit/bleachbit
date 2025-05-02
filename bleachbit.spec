@@ -138,8 +138,11 @@ desktop-file-install \
 
 # consolehelper and userhelper
 ln -s consolehelper %{buildroot}/%{_bindir}/%{name}-root
+%if 0%{?fedora} < 42
+# Fedora 42 unified /usr/sbin https://fedoraproject.org/wiki/Changes/Unify_bin_and_sbin
 mkdir -p %{buildroot}/%{_sbindir}
 ln -s ../..%{_bindir}/%{name} %{buildroot}/%{_sbindir}/%{name}-root
+%endif
 mkdir -p %{buildroot}%{_sysconfdir}/pam.d
 install -m 644 %{name}.pam %{buildroot}%{_sysconfdir}/pam.d/%{name}-root
 mkdir -p %{buildroot}%{_sysconfdir}/security/console.apps
@@ -191,7 +194,9 @@ update-desktop-database &> /dev/null ||:
 %config(noreplace) %{_sysconfdir}/pam.d/%{name}-root
 %config(noreplace) %{_sysconfdir}/security/console.apps/%{name}-root
 %{_bindir}/%{name}-root
+%if 0%{?fedora} < 42
 %{_sbindir}/%{name}-root
+%endif
 %endif
 %{_bindir}/%{name}
 %{_datadir}/metainfo/org.bleachbit.BleachBit.metainfo.xml
@@ -210,4 +215,3 @@ update-desktop-database &> /dev/null ||:
 * Tue Mar 18 2025 Andrew Ziem <andrew@bleachbit.org> - 5.0.0-1
 - Update to 5.0.0
 - See https://www.bleachbit.org/news
-
