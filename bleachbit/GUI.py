@@ -768,7 +768,17 @@ class GUI(Gtk.ApplicationWindow):
 
     def on_key_press_event(self, _widget, event):
         """Handle key press events"""
-        if not event.state & Gdk.ModifierType.CONTROL_MASK:
+        ctrl = event.state & Gdk.ModifierType.CONTROL_MASK
+
+        if event.keyval == Gdk.KEY_F11 and not ctrl:
+            is_fullscreen = self.get_window().get_state() & Gdk.WindowState.FULLSCREEN
+            if is_fullscreen:
+                self.unfullscreen()
+            else:
+                self.fullscreen()
+            options.set("window_fullscreen", is_fullscreen, commit=False)
+            return True
+        if not ctrl:
             return False
         if event.keyval in (Gdk.KEY_plus, Gdk.KEY_KP_Add):
             self.set_font_size(relative_size=1)
@@ -779,6 +789,7 @@ class GUI(Gtk.ApplicationWindow):
         if event.keyval == Gdk.KEY_0:
             self.set_font_size(absolute_size=self.default_font_size)
             return True
+
         return False
 
     def on_scroll_event(self, _widget, event):
@@ -1461,6 +1472,8 @@ class GUI(Gtk.ApplicationWindow):
                 self.resize(r.width, r.height)
         if options.get("window_fullscreen"):
             self.fullscreen()
+            self.append_text(
+                _("Press F11 to exit fullscreen mode.") + '\n')
         elif options.get("window_maximized"):
             self.maximize()
 
