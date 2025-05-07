@@ -159,6 +159,19 @@ class GUITestCase(common.BleachbitTestCase):
         gui.update_progress_bar(1.0)
         gui.update_progress_bar("status")
 
+    def test_get_font_size_from_name(self):
+        """Test get_font_size_from_name()"""
+        tests = (("Sans 12", 12),
+                 ("Sans 10.5", 10),
+                 ("Sans 0", None),
+                 ("Sans -1", None),
+                 ("Sans", None),
+                 ("", None),
+                 (None, None))
+        for font_name, expected in tests:
+            self.assertEqual(bleachbit.GUI.get_font_size_from_name(
+                font_name), expected, f"Font name '{font_name}' should return {expected}")
+
     def test_preferences(self):
         """Opens the preferences dialog and closes it"""
 
