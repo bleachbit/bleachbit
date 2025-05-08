@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2023-12-02 11:06+0000\n"
-"Last-Translator: bass python <pythonbass@gmail.com>\n"
+"PO-Revision-Date: 2025-05-09 04:02+0000\n"
+"Last-Translator: abdelbasset jabrane <ribago9317@cubene.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/bleachbit/main/ar/"
 ">\n"
 "Language: ar\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 5.3-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 "X-Launchpad-Export-Date: 2021-07-18 20:36+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -488,11 +488,11 @@ msgstr "برامج البريد الإلكتروني الشخصي"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "المرفقات"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "تعارض المزامنة"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -757,10 +757,8 @@ msgid "Memory dump"
 msgstr "تفريغ الذاكرة"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "بيئة سطح مكتب"
+msgstr "عناصر واجهة المستخدم لسطح المكتب"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -1185,7 +1183,7 @@ msgstr "كان هناك ملف واحد على الأقل في نظام ملفا
 #: ../bleachbit/FileUtilities.py
 #, python-brace-format
 msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
+msgstr "مسح المسار {pathname} بنوع نظام الملفات {fstype}"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1386,19 +1384,15 @@ msgstr "نزّل و حدّث المنظفّات التي يساهم بها ال�
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "الكشف التلقائي عن اللغة"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "الاحتفاظ باللغة تلقائيًا %s."
+msgstr "اكتشاف لغة النظام تلقائياً"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "اللغات"
+msgstr "اللغة:"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1439,10 +1433,8 @@ msgid "Show debug messages"
 msgstr "عرض رسائل التنقيح"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Add shred context menu option (KDE Plasma specific)"
 msgid "Add the shred context menu to KDE Plasma"
-msgstr "إضافة خيار المحي بقائمة السياق (خاص بـ KDE Plasma)"
+msgstr "إضافة خيار \"المحي\" إلى قائمة السياق في KDE Plasma"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Dark mode"
@@ -1494,7 +1486,7 @@ msgstr "الاسم"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "هذا المسار موجود بالفعل في القائمة البيضاء."
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
 msgid "Error"
@@ -1502,7 +1494,7 @@ msgstr "خطأ"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "هذا المسار موجود بالفعل في القائمة المخصصة."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1589,7 +1581,8 @@ msgstr ""
 "Nizar Kerkeni https://launchpad.net/~nizarus\n"
 "kabdelhady https://launchpad.net/~kabdelhady\n"
 "mohammed ait laarebi https://launchpad.net/~gionmed025\n"
-"someone https://launchpad.net/~somehow"
+"someone https://launchpad.net/~somehow\n"
+"https://hosted.weblate.org/user/naminio201/~abdelbasset jabrane"
 
 #: ../bleachbit/GUI.py
 msgid "System information"
@@ -1695,11 +1688,11 @@ msgstr "إلغاء المعاينة أو عملية التنظيف"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "تحديث"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "قم بتحديث BleachBit إلى أحدث إصدار"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1792,16 +1785,14 @@ msgid "Downloading URL failed: %s"
 msgstr "فشل تحميل الرابط: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "كان القرص ممتلئًا عند كتابة التكوين إلى الملف %s"
+msgstr "كان القرص ممتلئًا عند كتابة التكوين إلى الملف: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "كان القرص ممتلئًا عند كتابة التكوين إلى الملف %s"
+msgstr "تم رفض الإذن عند كتابة التكوين إلى الملف: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1923,30 +1914,29 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "استثناء أثناء إجراء العملية '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "الملف التنفيذي غير موجود: %s"
+msgstr "الملف غير موجود: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr ""
+msgstr "تم رفض الوصول عند وضع علامة على الملف لحذفه لاحقًا: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "تم رفض الوصول عند حذف قيمة السجل: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "تم رفض الوصول عند حذف مفتاح السجل: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "تم رفض الوصول: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
