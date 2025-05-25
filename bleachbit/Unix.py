@@ -184,6 +184,9 @@ def _is_broken_xdg_desktop_application(config, desktop_pathname):
             "is_broken_xdg_menu: missing required option 'Exec' in '%s'", desktop_pathname)
         return True
     exe = config.get('Desktop Entry', 'Exec').split(" ")[0]
+    if not os.path.isabs(exe) and not os.environ.get('PATH'):
+        raise RuntimeError(
+            f"Cannot find executable '{exe}' because PATH environment variable is not set")
     if not FileUtilities.exe_exists(exe):
         logger.info(
             "is_broken_xdg_menu: executable '%s' does not exist in '%s'", exe, desktop_pathname)
@@ -721,6 +724,20 @@ def dnf_autoremove():
     return freed_bytes
 
 
+def has_gui():
+    """Return True if the GUI is available"""
+    assert os.name == 'posix'
+    if not os.environ.get('DISPLAY') and not os.environ.get('WAYLAND_DISPLAY'):
+        return False
+    try:
+        import gi
+        gi.require_version('Gtk', '3.0')
+        from gi.repository import Gtk
+        return True
+    except ImportError:
+        return False
+
+
 def is_unix_display_protocol_wayland():
     """Return True if the display protocol is Wayland."""
     assert os.name == 'posix'
@@ -765,6 +782,7 @@ def root_is_not_allowed_to_X_session():
 
 
 def is_display_protocol_wayland_and_root_not_allowed():
+    """Return True if the display protocol is Wayland and root is not allowed to X session"""
     try:
         is_wayland = bleachbit.Unix.is_unix_display_protocol_wayland()
     except Exception as e:
@@ -772,7 +790,7 @@ def is_display_protocol_wayland_and_root_not_allowed():
         return False
     return (
         is_wayland and
-        os.environ['USER'] == 'root' and
+        os.environ.get('USER') == 'root' and
         bleachbit.Unix.root_is_not_allowed_to_X_session()
     )
 

@@ -27,7 +27,8 @@ from bleachbit.CLI import (
     args_to_operations_list,
     cleaners_list,
     preview_or_clean)
-from bleachbit.General import run_external
+from bleachbit.General import get_executable, run_external
+from bleachbit.Unix import has_gui
 from bleachbit import FileUtilities
 from tests import common
 
@@ -75,7 +76,8 @@ class CLITestCase(common.BleachbitTestCase):
         self.assertIsInstance(o, list)
         self.assertTrue('google_chrome.cache' in o)
         self.assertTrue('system.tmp' in o)
-        self.assertTrue('system.clipboard' in o)
+        gui_available = os.name == 'nt' or has_gui()
+        self.assertEqual(gui_available, 'system.clipboard' in o)
         self.assertFalse('system.free_disk_space' in o)
         self.assertFalse('system.memory' in o)
 
@@ -107,7 +109,7 @@ class CLITestCase(common.BleachbitTestCase):
 
         env = copy.deepcopy(os.environ)
         env['LANG'] = 'en_US'  # not UTF-8
-        args = [sys.executable, '-m', 'bleachbit.CLI', '-p', 'system.tmp']
+        args = [get_executable(), '-m', 'bleachbit.CLI', '-p', 'system.tmp']
         # If Python pipes stdout to file or devnull, the test may give
         # a false negative.  It must print stdout to terminal.
         self._test_preview(args, redirect_stdout=False, env=env)
@@ -122,7 +124,7 @@ class CLITestCase(common.BleachbitTestCase):
         old_lang = common.get_env('LANG')
         common.put_env('LANG', 'blahfoo')
         # tests are run from the parent directory
-        args = [sys.executable, '-m', 'bleachbit.CLI', '--version']
+        args = [get_executable(), '-m', 'bleachbit.CLI', '--version']
         output = run_external(args)
         self.assertNotEqual(output[1].find('Copyright'), -1, str(output))
         common.put_env('LANG', old_lang)
@@ -137,19 +139,23 @@ class CLITestCase(common.BleachbitTestCase):
         env['PYTHONIOENCODING'] = 'utf-8:backslashreplace'
         args_list = []
         module = 'bleachbit.CLI'
-        big_args = [sys.executable, '-m', module, '--preview', ]
+        big_args = [get_executable(), '-m', module, '--preview', ]
         # The full list can take a long time and generally does not improve the testing,
         # so test a subset.
         full_cleaners_list = list(cleaners_list())
         system_cleaners = [
             c for c in full_cleaners_list if c.startswith('system.')]
+        if 'system.clipboard' in system_cleaners:
+            # Fix error on GitHub Actions
+            # FIXME: do conditional removal
+            system_cleaners.remove('system.clipboard')
         non_system_cleaners = [
             c for c in full_cleaners_list if not c.startswith('system.')]
         import random
         sample_cleaners = random.sample(non_system_cleaners, 5)
         for cleaner in (system_cleaners + sample_cleaners):
             args_list.append(
-                [sys.executable, '-m', module, '--preview', cleaner])
+                [get_executable(), '-m', module, '--preview', cleaner])
             big_args.append(cleaner)
         args_list.append(big_args)
         for args in args_list:
@@ -192,6 +198,37 @@ class CLITestCase(common.BleachbitTestCase):
             self.assertNotExists(filename)
             self.assertFalse(crash[0])
 
+    def test_return_text(self):
+        """Check for correct text in output"""
+        # format of tests is: args, expected_output, clean_env, env
+
+        tests = [
+            [['--help'], 'Usage: ', False, None],
+            [['--version'], 'BleachBit version', True, None],
+            [['--sysinfo'], 'sys.version', False, None]
+        ]
+        if os.name == 'posix':
+            # GUI is not available with clean environment on POSIX.
+            tests.append([['--help'], 'Usage: ', True, None])
+            # Force detection of Wayland
+            wayland_env = os.environ.copy()
+            wayland_env['XDG_SESSION_TYPE'] = 'wayland'
+            tests.append([['--sysinfo'], 'sys.version', False, wayland_env])
+
+        for args, expected_output, clean_env, env in tests:
+            launcher_output = {}
+            for i, launcher in enumerate([['bleachbit.py'], ['-m', 'bleachbit.CLI']]):
+                direct_args = [get_executable(),] + launcher + args
+                output = run_external(
+                    direct_args, env=env, clean_env=clean_env, timeout=5)
+                self.assertEqual(output[0], 0, output)
+                self.assertIn(expected_output, output[1])
+                modified_output_str = output[1].replace(
+                    'CLI.py', 'bleachbit.py')
+                launcher_output[i] = [line for line in modified_output_str.split(
+                    '\n') if not line.startswith("sys.argv")]
+            self.assertEqual(launcher_output[0], launcher_output[1])
+
     def test_shred(self):
         """Unit test for --shred"""
         suffixes = ['', '.', '.txt']
@@ -205,16 +242,35 @@ class CLITestCase(common.BleachbitTestCase):
                     filename = os.path.basename(filename)
                 # not assertExists because something strange happens on Windows
                 self.assertTrue(os.path.exists(filename))
-                args = [sys.executable, '-m',
+                args = [get_executable(), '-m',
                         'bleachbit.CLI', '--shred', filename]
                 output = run_external(args)
                 self.assertEqual(output[0], 0)
                 self.assertNotExists(filename)
 
+    def test_sysinfo(self):
+        """Unit test for --sysinfo
+
+        By not using `-m bleachbit.CLI`, this exercises `./bleachbit.py`.
+        """
+        env_configs = [[]]
+        if os.name != 'nt':
+            env_configs.extend([
+                ['env', '-i'],  # No environment variables
+                ['env', '-i', 'XDG_SESSION_TYPE=wayland']  # Mimic Wayland
+            ])
+        for env_prefix in env_configs:
+            args = env_prefix + [get_executable(), 'bleachbit.py', '--sysinfo']
+            output = run_external(args)
+            self.assertEqual(output[0], 0, output)
+            self.assertIn('sys.version', output[1])
+            # FIXME: verify that there is not a message like
+            # (bleachbit.py:1234): Gdk-CRITICAL **: 23:05:08.581: gdk_screen_get_root_window: assertion 'GDK_IS_SCREEN (screen)' failed
+
     @common.skipUnlessWindows
     def test_gui_exit(self):
         """Unit test for --gui --exit, only for Windows"""
-        args = (sys.executable, '-m',
+        args = (get_executable(), '-m',
                 'bleachbit.CLI', '--gui', '--exit')
         (rc, _stdout, stderr) = run_external(args)
         self.assertNotIn('no such option', stderr)

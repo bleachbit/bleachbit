@@ -24,6 +24,7 @@ General code
 import getpass
 import logging
 import os
+import shutil
 import sys
 
 import bleachbit
@@ -95,6 +96,32 @@ def gc_collect():
     gc.collect()
 
 
+def get_executable():
+    """Return the absolute path to the executable
+
+    The executable is either Python or, if frozen, then
+    bleachbit.exe.
+
+    When running under `env -i`, sys.executable is an empty string.
+    """
+    if sys.executable:
+        # example: /usr/bin/python3
+        return sys.executable
+    # When running as unittest, sys.argv may look like this:
+    # [' -m unittest', '-v', 'tests.TestGeneral']
+    try:
+        # example: /usr/bin/python3.12
+        # Notice it ends with .12.
+        return os.readlink('/proc/self/exe')
+    except Exception:
+        pass
+    for py in ['python3', 'python']:
+        py_which = shutil.which(py)
+        if py_which:
+            return py_which
+    raise RuntimeError('Cannot find Python executable')
+
+
 def get_real_username():
     """Get the real username when running in sudo mode
 
@@ -147,8 +174,19 @@ def makedirs(path):
         chownself(path)
 
 
-def run_external(args, stdout=None, env=None, clean_env=True):
+def run_external(args, stdout=None, env=None, clean_env=True, timeout=None):
     """Run external command and return (return code, stdout, stderr)"""
+    assert args is not None
+    assert isinstance(args, (list, tuple))
+    for arg in args:
+        if arg is None:
+            raise ValueError("Command argument cannot be None")
+    assert len(args) > 0
+    if not args[0]:
+        raise ValueError("First command argument cannot be empty")
+    if clean_env and isinstance(env, dict) and len(env) > 0:
+        raise ValueError(
+            "Cannot set environment variables when clean_env is True")
     logger.debug('running cmd ' + ' '.join(args))
     import subprocess
     if stdout is None:
@@ -164,7 +202,7 @@ def run_external(args, stdout=None, env=None, clean_env=True):
         stui.wShowWindow = win32con.SW_HIDE
         kwargs['startupinfo'] = stui
         encoding = 'mbcs'
-    if not env and clean_env and 'posix' == os.name:
+    if clean_env and 'posix' == os.name:
         # Clean environment variables so that that subprocesses use English
         # instead of translated text. This helps when checking for certain
         # strings in the output.
@@ -178,15 +216,20 @@ def run_external(args, stdout=None, env=None, clean_env=True):
                if key in keep_env}
         env['LANG'] = 'C'
         env['LC_ALL'] = 'C'
-    p = subprocess.Popen(args, stdout=stdout,
-                         stderr=subprocess.PIPE, env=env, **kwargs)
-    try:
-        out = p.communicate()
-    except KeyboardInterrupt:
-        out = p.communicate()
-        print(out[0])
-        print(out[1])
-        raise
+
+    with subprocess.Popen(args, stdout=stdout,
+                          stderr=subprocess.PIPE, env=env, **kwargs) as p:
+        try:
+            out = p.communicate(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            p.kill()
+            p.wait(timeout=timeout)
+            raise
+        except KeyboardInterrupt:
+            out = p.communicate()
+            print(out[0])
+            print(out[1])
+            raise
     return (p.returncode,
             str(out[0], encoding=encoding) if out[0] else '',
             str(out[1], encoding=encoding) if out[1] else '')

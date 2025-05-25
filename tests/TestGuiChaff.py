@@ -24,27 +24,32 @@ Test case for module GuiChaff
 """
 
 
-import unittest
+import os
 import tempfile
 import time
+import unittest
 from unittest.mock import patch, MagicMock
 
 from tests import common
 
-try:
+HAVE_GTK = True
+if os.name == 'posix':
+    from bleachbit.Unix import has_gui
+    HAVE_GTK = has_gui()
+if os.name == 'nt':
+    HAVE_GTK = True
+
+if HAVE_GTK:
     import gi
     gi.require_version('Gtk', '3.0')
     from gi.repository import Gtk, Gio
-    HAVE_GTK = True
     from bleachbit.GUI import Bleachbit
-except ImportError:
-    HAVE_GTK = False
 
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
 class GuiChaffTestCase(common.BleachbitTestCase):
     """Test case for module GuiChaff"""
-    app = Bleachbit(auto_exit=False, uac=False)
+    app = Bleachbit(auto_exit=False, uac=False) if HAVE_GTK else None
 
     @classmethod
     def setUpClass(cls):

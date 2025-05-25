@@ -29,27 +29,30 @@ import time
 import types
 from unittest import mock
 
-try:
+HAVE_GTK = True
+if os.name == 'posix':
+    from bleachbit.Unix import has_gui
+    HAVE_GTK = has_gui()
+
+if HAVE_GTK:
     import gi
     gi.require_version('Gtk', '3.0')
     from gi.repository import Gtk
     from bleachbit.GUI import Bleachbit
-    HAVE_GTK = True
-except ImportError:
-    HAVE_GTK = False
 
 import bleachbit
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
+
 
 from tests import common
 
 bleachbit.online_update_notification_enabled = False
 
 
-@unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
+@unittest.skipUnless(HAVE_GTK, 'requires GTK+ module and a display environment')
 class GUITestCase(common.BleachbitTestCase):
-    app = Bleachbit(auto_exit=False, uac=False)
+    app = Bleachbit(auto_exit=False, uac=False) if HAVE_GTK else None
     options_get_tree = options.get_tree
     _NEW_CLEANER_ID, _NEW_OPTION_ID = 'test_run_operations', 'test1'
 
@@ -155,6 +158,19 @@ class GUITestCase(common.BleachbitTestCase):
         gui.update_progress_bar(0.0)
         gui.update_progress_bar(1.0)
         gui.update_progress_bar("status")
+
+    def test_get_font_size_from_name(self):
+        """Test get_font_size_from_name()"""
+        tests = (("Sans 12", 12),
+                 ("Sans 10.5", 10),
+                 ("Sans 0", None),
+                 ("Sans -1", None),
+                 ("Sans", None),
+                 ("", None),
+                 (None, None))
+        for font_name, expected in tests:
+            self.assertEqual(bleachbit.GUI.get_font_size_from_name(
+                font_name), expected, f"Font name '{font_name}' should return {expected}")
 
     def test_preferences(self):
         """Opens the preferences dialog and closes it"""

@@ -25,7 +25,7 @@ Code that is commonly shared throughout BleachBit
 import os
 import re
 import sys
-
+import getpass
 from bleachbit import Log
 from configparser import RawConfigParser, NoOptionError  # used in other files
 
@@ -198,11 +198,14 @@ if 'nt' == os.name:
     Windows.setup_environment()
 
 if 'posix' == os.name:
-    # XDG base directory specification
+    # Set fallbacks for environment variables.
     envs = {
-        'XDG_DATA_HOME': os.path.expanduser('~/.local/share'),
+        'HOME': os.path.expanduser('~'),
+        'PATH': '/usr/bin:/bin:/usr/sbin:/sbin',
+        'USER': getpass.getuser(),
+        'XDG_CACHE_HOME': os.path.expanduser('~/.cache'),
         'XDG_CONFIG_HOME': os.path.expanduser('~/.config'),
-        'XDG_CACHE_HOME': os.path.expanduser('~/.cache')
+        'XDG_DATA_HOME': os.path.expanduser('~/.local/share')
     }
     for varname, value in envs.items():
         if not os.getenv(varname):

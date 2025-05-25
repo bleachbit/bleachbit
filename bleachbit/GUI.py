@@ -81,6 +81,27 @@ class WindowInfo:
         return f"WindowInfo(x={self.x}, y={self.y}, width={self.width}, height={self.height}, monitor_model={self.monitor_model})"
 
 
+def get_font_size_from_name(font_name):
+    """Get the font size from the font name"""
+    if not isinstance(font_name, str):
+        return None
+    if not font_name:
+        return None
+    try:
+        number_part = font_name.split()[-1]
+    except IndexError:
+        return None
+    if '.' in number_part:
+        return int(float(number_part))
+    try:
+        size_int = int(number_part)
+    except ValueError:
+        return None
+    if size_int < 1:
+        return None
+    return size_int
+
+
 def get_window_info(window):
     """Get the geometry and monitor of a window.
 
@@ -689,6 +710,17 @@ class GUI(Gtk.ApplicationWindow):
         key, mod = Gtk.accelerator_parse("<Control>W")
         accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
 
+        # Enable the user to change font size with keyboard or mouse.
+        try:
+            gtk_font_name = Gtk.Settings.get_default().get_property('gtk-font-name')
+        except TypeError as e:
+            logger.debug("Error getting font name from GTK settings: %s", e)
+        self.font_size = get_font_size_from_name(gtk_font_name) or 12
+        self.default_font_size = self.font_size
+        self.textview.connect("scroll-event", self.on_scroll_event)
+        self.connect("key-press-event", self.on_key_press_event)
+        self._font_css_provider = None
+
         self._set_appindicator()
 
     def _set_appindicator(self):
@@ -708,6 +740,96 @@ class GUI(Gtk.ApplicationWindow):
             APPINDICATOR_ID, menu_icon_path, indicator_category)
         self.indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
         self.indicator.set_menu(self.build_appindicator_menu())
+
+    def set_font_size(self, absolute_size=None, relative_size=None):
+        """Set the font size of the entire application"""
+        assert absolute_size is not None or relative_size is not None
+        if absolute_size is None:
+            absolute_size = self.font_size + relative_size
+        absolute_size = max(5, min(25, absolute_size))
+        self.font_size = absolute_size
+        css = f"* {{ font-size: {absolute_size}pt; }}"
+        provider = Gtk.CssProvider()
+        provider.load_from_data(css.encode())
+
+        # Remove any previous provider to avoid stacking rules.
+        screen = Gdk.Screen.get_default()
+        if self._font_css_provider is not None:
+            Gtk.StyleContext.remove_provider_for_screen(
+                screen, self._font_css_provider)
+
+        # Add the new provider globally so it affects all widgets.
+        Gtk.StyleContext.add_provider_for_screen(
+            screen,
+            provider,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
+        )
+        self._font_css_provider = provider
+
+    def on_key_press_event(self, _widget, event):
+        """Handle key press events"""
+        ctrl = event.state & Gdk.ModifierType.CONTROL_MASK
+
+        if event.keyval == Gdk.KEY_F11 and not ctrl:
+            is_fullscreen = self.get_window().get_state() & Gdk.WindowState.FULLSCREEN
+            if is_fullscreen:
+                self.unfullscreen()
+            else:
+                self.fullscreen()
+            options.set("window_fullscreen", is_fullscreen, commit=False)
+            return True
+        if not ctrl:
+            return False
+        if event.keyval in (Gdk.KEY_plus, Gdk.KEY_KP_Add):
+            self.set_font_size(relative_size=1)
+            return True
+        if event.keyval in (Gdk.KEY_minus, Gdk.KEY_KP_Subtract):
+            self.set_font_size(relative_size=-1)
+            return True
+        if event.keyval == Gdk.KEY_0:
+            self.set_font_size(absolute_size=self.default_font_size)
+            return True
+
+        return False
+
+    def on_scroll_event(self, _widget, event):
+        """Handle mouse scroll events
+
+        The first smooth scroll event, whether up or down, has dy=0.
+        """
+        if not event.get_state() & Gdk.ModifierType.CONTROL_MASK:
+            return False
+
+        relative_size = 0
+        if event.direction == Gdk.ScrollDirection.UP:
+            logger.debug('scroll event ctrl + Gdk.ScrollDirection.UP')
+            relative_size = 1
+        elif event.direction == Gdk.ScrollDirection.DOWN:
+            logger.debug('scroll event ctrl + Gdk.ScrollDirection.DOWN')
+            relative_size = -1
+        elif event.direction == Gdk.ScrollDirection.SMOOTH:
+            try:
+                finished, dx, dy = event.get_scroll_deltas()
+            except TypeError as e:
+                logger.warning("Could not unpack scroll deltas: %s", e)
+                return False  # event not handled
+
+            if dy < 0:
+                relative_size = 1
+            elif dy > 0:
+                relative_size = -1
+            else:
+                logger.debug(
+                    "Smooth scroll: finished=%s, dx=%s, dy=%s", finished, dx, dy)
+        else:
+            logger.debug(
+                'scroll event ctrl + unknown direction %s', event.direction)
+
+        if relative_size != 0:
+            self.set_font_size(relative_size=relative_size)
+            return True  # Event handled
+
+        return False
 
     def on_quit(self, *args):
         """Quit the application, used with CTRL+Q or CTRL+W"""
@@ -1350,6 +1472,8 @@ class GUI(Gtk.ApplicationWindow):
                 self.resize(r.width, r.height)
         if options.get("window_fullscreen"):
             self.fullscreen()
+            self.append_text(
+                _("Press F11 to exit fullscreen mode.") + '\n')
         elif options.get("window_maximized"):
             self.maximize()
 
