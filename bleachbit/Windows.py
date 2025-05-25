@@ -41,16 +41,16 @@ import bleachbit
 from bleachbit import Command, FileUtilities, General
 from bleachbit.Language import get_text as _
 
+import ctypes
 import errno
 import glob
 import logging
 import os
-import sys
 import shutil
-from threading import Thread, Event
+import sys
 import xml.dom.minidom
-
 from decimal import Decimal
+from threading import Thread, Event
 
 if 'win32' == sys.platform:
     import winreg
@@ -528,23 +528,21 @@ def is_process_running(exename, require_same_user):
 def load_i18n_dll():
     """Load internationalization library
 
-    It may be called either libintl-8.dll or intl-8.dll, and it comes
-    from gettext.
+    BleachBit 4.6.2 with Python 3.4 and GTK 3.18 had libintl-8.dll.
+
+    BleachBit 5.0.0 with Python 3.10 and GTK 3.24 built on vcpkg
+    has intl-8.dll.
+
+    Either way, it comes from gettext.
 
     Returns None if the dll is not available.
-    """
-    import ctypes
-    lib_fns = ['libintl-8.dll', 'intl-8.dll']
+    """    
     dirs = set([bleachbit.bleachbit_exe_path, os.path.dirname(sys.executable)])
     lib_path = None
-    for lib_fn in lib_fns:
-        if lib_path:
+    for dir in dirs:
+        lib_path = os.path.join(dir, 'intl-8.dll')
+        if os.path.exists(lib_path):
             break
-        for dir in dirs:
-            lib_path = os.path.join(dir, lib_fn)
-            if os.path.exists(lib_path):
-                break
-            lib_path = None
     if not lib_path:
         logger.warning(
             'internationalization library was not found, so translations will not work.')
