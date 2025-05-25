@@ -719,8 +719,6 @@ def strip():
 @count_size_improvement
 def upx(fast_build):
     """Compress executables with UPX to reduce size"""
-    logger.warning('UPX causes application to not launch, so UPX is disabled for now')
-    return
     if fast_build:
         logger.warning('Fast mode: Skipped executable with UPX')
         return
