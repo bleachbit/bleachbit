@@ -41,6 +41,7 @@ from bleachbit.General import (
     run_external,
     sudo_mode)
 from tests import common
+from tests.common import test_also_with_sudo
 
 
 class GeneralTestCase(common.BleachbitTestCase):
@@ -66,25 +67,77 @@ class GeneralTestCase(common.BleachbitTestCase):
         if sys.executable:
             self.assertEqual(exe, sys.executable)
 
+    @test_also_with_sudo
     def test_get_real_uid(self):
         """Test for get_real_uid()"""
         if 'posix' != os.name:
             self.assertRaises(RuntimeError, get_real_uid)
             return
+
+        # Basic functionality test
         uid = get_real_uid()
         self.assertIsInstance(uid, int)
         self.assertTrue(0 <= uid <= 65535)
+
+        # Multiple calls should return same value
+        uid2 = get_real_uid()
+        self.assertEqual(uid, uid2)
+
+        # Test relationship with sudo_mode()
         if sudo_mode():
             self.assertGreater(uid, 0)
+            self.assertNotEqual(uid, os.geteuid())
+        else:
+            self.assertEqual(uid, os.getuid())
+
+        # Test that UID is exists in passwd
+        try:
+            pwd_entry = pwd.getpwuid(uid)
+            self.assertIsInstance(pwd_entry.pw_name, str)
+            self.assertGreater(len(pwd_entry.pw_name), 0)
+        except KeyError:
+            # UID might not be in passwd database in some test environments
+            pass
+
+        # Test environment variable consistency
+        sudo_uid_env = os.getenv('SUDO_UID')
+        if sudo_uid_env:
+            self.assertEqual(uid, int(sudo_uid_env))
+
+        # Test with empty LOGNAME (if not in sudo mode)
+        original_logname = os.getenv('LOGNAME')
+        if not sudo_mode():
+            try:
+                if 'LOGNAME' in os.environ:
+                    del os.environ['LOGNAME']
+                uid_no_logname = get_real_uid()
+                self.assertIsInstance(uid_no_logname, int)
+                self.assertTrue(0 <= uid_no_logname <= 65535)
+            finally:
+                # Restore original environment
+                if original_logname is not None:
+                    os.environ['LOGNAME'] = original_logname
+                elif 'LOGNAME' in os.environ:
+                    del os.environ['LOGNAME']
+
+        # Debug logging for troubleshooting
         logger.debug("os.getenv('LOGNAME') = %s", os.getenv('LOGNAME'))
         logger.debug("os.getenv('SUDO_UID') = %s", os.getenv('SUDO_UID'))
         logger.debug('os.geteuid() = %d', os.geteuid())
         logger.debug('os.getuid() = %d', os.getuid())
-        try:
-            logger.debug('os.login() = %s', os.getlogin())
-        except:
-            logger.exception('os.login() raised exception')
+        logger.debug('get_real_uid() = %d', uid)
+        logger.debug('sudo_mode() = %s', sudo_mode())
 
+        try:
+            logger.debug('os.getlogin() = %s', os.getlogin())
+        except:
+            logger.exception('os.getlogin() raised exception')
+
+        # Test that function doesn't modify global state
+        uid_after = get_real_uid()
+        self.assertEqual(uid, uid_after)
+
+    @test_also_with_sudo
     def test_get_real_username(self):
         """Test for get_real_username()"""
         if 'posix' != os.name:
@@ -96,6 +149,7 @@ class GeneralTestCase(common.BleachbitTestCase):
         if sudo_mode():
             self.assertNotEqual(username, 'root')
 
+    @test_also_with_sudo
     def test_makedirs(self):
         """Unit test for makedirs"""
 
@@ -227,6 +281,7 @@ class GeneralTestCase(common.BleachbitTestCase):
         self.assertEqual('', stdout)
 
     @common.skipIfWindows
+    @test_also_with_sudo
     def test_sudo_mode(self):
         """Unit test for sudo_mode"""
         self.assertIsInstance(sudo_mode(), bool)

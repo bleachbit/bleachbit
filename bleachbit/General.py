@@ -24,7 +24,6 @@ General code
 import getpass
 import logging
 import os
-import pwd
 import shutil
 import sys
 
@@ -156,6 +155,9 @@ def get_real_uid():
         login = os.getenv('LOGNAME')
 
     if login and 'root' != login:
+        # pwd does not exist on Windows, so global unconditional import
+        # would cause a ModuleNotFoundError.
+        import pwd # pylint: disable=import-outside-toplevel
         return pwd.getpwnam(login).pw_uid
 
     # os.getuid() returns 0 for sudo, so use it as a last resort.

@@ -29,6 +29,7 @@ import tempfile
 import time
 import unittest
 from unittest import mock
+
 if 'win32' == sys.platform:
     import winreg
     import win32gui
@@ -221,6 +222,16 @@ def skipUnlessDestructive(f):
 def skipUnlessWindows(f):
     """Skip unit test unless running on Windows"""
     return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')(f)
+
+
+def test_also_with_sudo(test_func):
+    """
+    Decorator to mark test methods that should be run both normally and with sudo.
+
+    See also `tests/test_with_sudo.py`.
+    """
+    test_func._test_also_with_sudo = True
+    return test_func
 
 
 def touch_file(filename):

@@ -77,3 +77,11 @@ jobs:
         sudo Xvfb :1 -screen 0 800x600x24 &
         sleep 5
         dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run make tests'
+
+    - name: Run tests with sudo
+      run: |
+        export DISPLAY=":1.0"
+        export $(dbus-launch)
+        sudo Xvfb :1 -screen 0 800x600x24 &
+        sleep 5
+        dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run make tests-with-sudo'

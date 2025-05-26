@@ -9,7 +9,7 @@
 # On some systems if not explicitly given, make uses /bin/sh
 SHELL := /bin/bash
 
-.PHONY: clean install tests build
+.PHONY: clean install tests build tests-with-sudo
 
 prefix ?= /usr/local
 bindir ?= $(prefix)/bin
@@ -104,6 +104,10 @@ tests:
 	make -C cleaners tests; cleaners_status=$$?; \
 	$(COVERAGE) -m unittest discover -p Test*.py -v; py_status=$$?; \
 	exit $$(($$cleaners_status + $$py_status))
+
+tests-with-sudo:
+	# Run tests marked with @test_also_with_sudo using sudo
+	python3 tests/test_with_sudo.py
 
 pretty:
 	autopep8 -i {.,bleachbit,tests}/*py

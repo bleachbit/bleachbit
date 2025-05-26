@@ -35,6 +35,7 @@ from xml.dom.minidom import parseString
 from tests import common
 from bleachbit import logger
 from bleachbit.General import get_executable, get_real_username
+from tests.common import test_also_with_sudo
 from bleachbit.FileUtilities import children_in_directory, exe_exists
 from bleachbit.Unix import (
     apt_autoclean,
@@ -413,6 +414,7 @@ PrefersNonDefaultGPU=false""")
 
     @mock.patch('subprocess.check_output')
     @common.skipIfWindows
+    @test_also_with_sudo
     def test_is_process_running_ps_aux(self, mock_check_output):
         username = get_real_username()
         ps_out = f"""USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
@@ -450,6 +452,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         self.assertRaises(RuntimeError, is_process_running_ps_aux, 'foo', True)
 
     @common.skipIfWindows
+    @common.test_also_with_sudo
     def test_is_process_running(self):
         """Unit test for method is_process_running()"""
         # Do not use get_executable() here because of how it
