@@ -24,6 +24,7 @@ General code
 import getpass
 import logging
 import os
+import pwd
 import shutil
 import sys
 
@@ -147,16 +148,17 @@ def get_real_uid():
 
     try:
         login = os.getlogin()
-        # On Ubuntu 9.04, getlogin() under sudo returns non-root user.
+        # On Ubuntu 9.04 and 25.04, getlogin() under sudo returns non-root user.
         # On Fedora 11, getlogin() under sudo returns 'root'.
-        # On Fedora 11, getlogin() under su returns non-root user.
+        # On Fedora 41, getlogin() under sudo returns non-root user.
+        # On Fedora 11 and 41, getlogin() under su returns non-root user.
     except:
         login = os.getenv('LOGNAME')
 
     if login and 'root' != login:
-        import pwd
-        return pwd.getpwnam(login)[3]
+        return pwd.getpwnam(login).pw_uid
 
+    # os.getuid() returns 0 for sudo, so use it as a last resort.
     return os.getuid()
 
 
