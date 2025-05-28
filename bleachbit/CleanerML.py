@@ -125,9 +125,9 @@ class CleanerML:
 
     def handle_cleaner(self, cleaner):
         """<cleaner> element"""
+        self.cleaner.id = cleaner.getAttribute('id')
         if not self.os_match(cleaner.getAttribute('os')):
             return
-        self.cleaner.id = cleaner.getAttribute('id')
         self.handle_cleaner_label(cleaner.getElementsByTagName('label')[0])
         description = cleaner.getElementsByTagName('description')
         if description and description[0].parentNode == cleaner:
@@ -298,6 +298,7 @@ def load_cleaners(cb_progress=lambda x: None):
     total_files = len(cleanerml_files)
     cb_progress(0.0)
     files_done = 0
+    not_usable = []
     for pathname in cleanerml_files:
         try:
             xmlcleaner = CleanerML(pathname)
@@ -308,14 +309,16 @@ def load_cleaners(cb_progress=lambda x: None):
         if cleaner.is_usable():
             Cleaner.backends[cleaner.id] = cleaner
         else:
-            logger.debug(
-                # TRANSLATORS: An action is something like cleaning a specific file.
-                # "Not usable" means the whole cleaner will be ignored.
-                # The substituted variable is a pathname.
-                _("Cleaner is not usable on this OS because it has no actions: %s"), pathname)
+            if cleaner.id:
+                not_usable.append(cleaner.id)
+            else:
+                not_usable.append(os.path.basename(pathname))
         files_done += 1
         cb_progress(1.0 * files_done / total_files)
         yield True
+    if not_usable:
+        logger.debug(
+            "%d cleaners are not usable on this OS because they have no actions: %s", len(not_usable), ', '.join(not_usable))
 
 
 def pot_fragment(msgid, pathname, translators=None):

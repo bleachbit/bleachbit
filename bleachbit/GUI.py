@@ -521,6 +521,7 @@ class TreeInfoModel:
         if self.row_changed_handler_id:
             self.tree_store.disconnect(self.row_changed_handler_id)
         self.tree_store.clear()
+        hidden_cleaners = []
         for key in sorted(backends):
             if not any(backends[key].get_options()):
                 # localizations has no options, so it should be hidden
@@ -530,12 +531,14 @@ class TreeInfoModel:
             c_id = backends[key].get_id()
             c_value = options.get_tree(c_id, None)
             if not c_value and options.get('auto_hide') and backends[key].auto_hide():
-                logger.debug("automatically hiding cleaner '%s'", c_id)
+                hidden_cleaners.append(c_id)
                 continue
             parent = self.tree_store.append(None, (c_name, c_value, c_id, ""))
             for (o_id, o_name) in backends[key].get_options():
                 o_value = options.get_tree(c_id, o_id)
                 self.tree_store.append(parent, (o_name, o_value, o_id, ""))
+        if hidden_cleaners:
+            logger.debug("automatically hid %d cleaners: %s", len(hidden_cleaners), ', '.join(hidden_cleaners))
         self.row_changed_handler_id = self.tree_store.connect("row-changed",
                                                               self.on_row_changed)
 
