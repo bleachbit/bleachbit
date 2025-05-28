@@ -78,8 +78,13 @@ def preview_or_clean(operations, really_clean, quiet=False):
     """Preview deletes and other changes"""
     cb = CliCallback(quiet)
     worker = Worker.Worker(cb, really_clean, operations).run()
-    while next(worker):
+    try:
+        while next(worker):
+            pass
+    except StopIteration:
         pass
+    except Exception:
+        logger.exception('Failed to clean')
 
 
 def args_to_operations_list(preset, all_but_warning):
@@ -216,7 +221,8 @@ def process_cmd_line():
             set_root_log_level(Options.options.get('debug'))
             logger.debug("Debugging is enabled in GUI settings.")
     if options.debug_log:
-        logger.addHandler(logging.FileHandler(options.debug_log))
+        # File handler is already set up in Log.py init_log() function
+        # Just add system information to the log
         logger.info(SystemInformation.get_system_information())
     if options.version:
         print("""
@@ -258,16 +264,13 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         if not operations:
             logger.error(_("No work to do. Specify options."))
             sys.exit(1)
-    if options.preview:
-        preview_or_clean(operations, False)
-        sys.exit(0)
     if options.overwrite:
         if not options.clean or options.shred:
             logger.warning(
                 _("--overwrite is intended only for use with --clean"))
         Options.options.set('shred', True, commit=False)
-    if options.clean:
-        preview_or_clean(operations, True)
+    if options.clean or options.preview:
+        preview_or_clean(operations, options.clean)
         sys.exit(0)
     if options.gui:
         import bleachbit.GUI

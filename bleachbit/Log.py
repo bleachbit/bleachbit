@@ -23,11 +23,11 @@ Logging
 """
 
 import logging
+import sys
 
 
 def is_debugging_enabled_via_cli():
     """Return boolean whether user required debugging on the command line"""
-    import sys
     return any(arg.startswith('--debug') for arg in sys.argv)
 
 
@@ -53,14 +53,13 @@ def init_log():
     This is one of the first steps in __init___
     """
     logger = logging.getLogger('bleachbit')
-    import sys
     # On Microsoft Windows when running frozen without the console,
     # avoid py2exe redirecting stderr to bleachbit.exe.log by not
     # writing to stderr because py2exe redirects stderr to a file.
     #
     # sys.frozen = 'console_exe' means the console is shown, which
     # does not require special handling.
-    if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
+    if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':  # pylint: disable=no-member
         sys.stderr = DelayLog()
 
     # debug if command line asks for it or if this a non-final release
@@ -69,7 +68,34 @@ def init_log():
     else:
         logger.setLevel(logging.INFO)
     logger_sh = logging.StreamHandler()
+    console_formatter = logging.Formatter('%(message)s')
+    logger_sh.setFormatter(console_formatter)
     logger.addHandler(logger_sh)
+
+    # If --debug-log parameter was passed, set up the file handler here instead
+    # of in CLI.py, so logs are captured from the very beginning.
+    debug_log_path = None
+    for i, arg in enumerate(sys.argv):
+        # --debug-log /path/file format (space delimited)
+        if arg == '--debug-log' and i + 1 < len(sys.argv):
+            debug_log_path = sys.argv[i + 1]
+            break
+        # --debug-log=/path/file format (delimited with equals sign)
+        if arg.startswith('--debug-log='):
+            debug_log_path = arg.split('=', 1)[1]
+            break
+
+    if debug_log_path:
+        file_handler = logging.FileHandler(debug_log_path)
+        # Always use DEBUG level for log file.
+        file_handler.setLevel(logging.DEBUG)
+        # removed: %(name)s
+        file_formatter = logging.Formatter(
+            '%(asctime)s -  %(levelname)s - %(message)s')
+        file_handler.setFormatter(file_formatter)
+        logger.addHandler(file_handler)
+        logger.debug('Debug log file initialized at %s', debug_log_path)
+
     return logger
 
 

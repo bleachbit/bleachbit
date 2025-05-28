@@ -91,6 +91,8 @@ class GeneralTestCase(common.BleachbitTestCase):
             self.assertEqual(uid, os.getuid())
 
         # Test that UID is exists in passwd
+        # Import pwd here because it would fail on Windows.
+        import pwd # pylint: disable=import-outside-toplevel
         try:
             pwd_entry = pwd.getpwuid(uid)
             self.assertIsInstance(pwd_entry.pw_name, str)

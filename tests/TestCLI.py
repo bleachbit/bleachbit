@@ -33,8 +33,8 @@ from bleachbit import FileUtilities
 from tests import common
 
 import copy
+import datetime
 import os
-import sys
 import tempfile
 
 
@@ -97,6 +97,56 @@ class CLITestCase(common.BleachbitTestCase):
         """Unit test for cleaners_list()"""
         for cleaner in cleaners_list():
             self.assertIsString(cleaner)
+
+    def test_debug_log(self):
+        """Unit test for --debug-log option"""
+
+        # These texts are required in the log file.
+        file_required_texts = [
+            'DEBUG - Debug log file initialized',
+            'ERROR - Failed to clean',
+            'KeyError',
+            'doesnot'
+        ]
+
+        # These texts are forbidden in stderr.
+        stderror_forbidden_texts = [
+            'bleachbit.CLI',
+            'bleachbit.CleanerML',
+            'ERROR',
+            'DEBUG',
+            datetime.datetime.now().strftime('%Y-%m-%d')
+        ]
+
+        for delimiter in (' ', '='):
+            # delete_on_close=False is helpful but requires Python 3.12.
+            with tempfile.NamedTemporaryFile(delete=False) as f:
+                f.close()
+                log_path = f.name
+
+                # 'bleachbit.py' is used instead of '-m bleachbit.CLI'
+                args = [get_executable(), 'bleachbit.py', '--preview', 'doesnot.exist',
+                        '--debug'] + f'--debug-log{delimiter}{log_path}'.split(delimiter)
+                (rc, _stdout, stderr) = run_external(
+                    args, stdout=None, timeout=10)
+                self.assertEqual(0, rc)
+                self.assertExists(log_path)
+                with open(log_path, 'r', encoding='utf-8') as log_file:
+                    log_content = log_file.read()
+
+                self.assertEqual(1, stderr.count('Traceback'))
+                self.assertEqual(1, log_content.count(
+                    'Traceback'), log_content)
+
+                for stderr_forbidden_text in stderror_forbidden_texts:
+                    self.assertNotIn(stderr_forbidden_text, stderr,
+                                     f"The text '{stderr_forbidden_text}' was found in stderr")
+
+                for required_text in file_required_texts:
+                    self.assertIn(required_text, log_content,
+                                  f"The text '{required_text}' was not found in the log file")
+            os.remove(log_path)
+            self.assertNotExists(log_path)
 
     @common.skipIfWindows
     def test_encoding(self):
