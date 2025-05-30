@@ -1369,6 +1369,25 @@ class GUI(Gtk.ApplicationWindow):
         self.stop_button.connect('clicked', self.cb_stop_operations)
         box.add(self.stop_button)
 
+        # TEMPORARY: create button to show system information
+        self.system_info_button = Gtk.Button.new_from_icon_name(
+            'dialog-information', icon_size)
+        self.system_info_button.set_label('System Information')
+        self.system_info_button.set_always_show_image(True)
+        self.system_info_button.connect(
+            'clicked', lambda *dummy: self.get_application().system_information_dialog(None, None))
+        box.add(self.system_info_button)
+
+        # Add font change button
+        self.font_button = Gtk.Button.new_from_icon_name(
+            'format-font', icon_size)
+        self.font_button.set_label(_('Change font'))
+        self.font_button.set_always_show_image(True)
+        self.font_button.connect(
+            'clicked', lambda *dummy: self.on_change_font())
+        box.add(self.font_button)
+
+
         hbar.pack_start(box)
 
         # Add hamburger menu on the right.
@@ -1388,6 +1407,51 @@ class GUI(Gtk.ApplicationWindow):
         # Update all labels and tooltips
         self.update_headerbar_labels()
         return hbar
+
+    def on_change_font(self):
+        test_fonts_python_list = [
+            # Group 1: Common ClearType-Optimized Fonts
+            "Segoe UI",
+            "Calibri",
+            "Arial",
+            "Verdana",
+
+            # Group 2: "Non-ClearType" or Less ClearType-Dependent / Monospaced Fonts
+            "Tahoma",
+            "MS Sans Serif",
+            "Courier New",
+            "Lucida Console"
+        ]
+        
+        # Get current font index from application settings or initialize
+        if not hasattr(self, 'current_font_index'):
+            self.current_font_index = 0
+        
+        # Get the next font
+        font_name = test_fonts_python_list[self.current_font_index]
+        
+        # Log the font change
+        logger.info("Font %d/%d: %s", self.current_font_index + 1, len(test_fonts_python_list), font_name)
+        
+        # Apply the font
+        css = f"""
+        * {{
+            font-family: "{font_name}", sans-serif; /* Fallback to generic sans-serif */
+            /* You might also want to test a specific size */
+            /* font-size: 10pt; */
+        }}
+        """.encode('utf-8')  # Ensure CSS string is bytes for load_from_data
+
+        provider = Gtk.CssProvider()
+        provider.load_from_data(css)
+        Gtk.StyleContext.add_provider_for_screen(
+            Gdk.Screen.get_default(),
+            provider,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
+        
+        # Move to the next font for next time
+        self.current_font_index = (self.current_font_index + 1) % len(test_fonts_python_list)
 
     def on_configure_event(self, widget, event):
         (x, y) = self.get_position()
