@@ -39,6 +39,7 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot
 		--keyword="_p:1c,2" \
 		--default-domain=$(APP) \
 		--add-location=file \
+		--from-code=utf-8 \
 		$(SRC)
 	sed -i 's/charset=CHARSET/charset=utf-8/g' $(POTFILE)
 	echo " Words after update: " \
