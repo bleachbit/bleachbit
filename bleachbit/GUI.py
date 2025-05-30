@@ -929,6 +929,41 @@ class GUI(Gtk.ApplicationWindow):
                           self.textview.scroll_mark_onscreen(
                               self.textbuffer.get_insert()))
 
+    def append_test_text(self):
+        """Append test text with various formatting and characters to help debug font rendering issues"""
+        if self.textbuffer is None:
+            return
+
+        # Create tags if they don't exist
+        for tag_name, props in [
+            ('bold', {'weight': 700}),  # Pango.Weight.BOLD = 700
+            ('italic', {'style': 2}),   # Pango.Style.ITALIC = 2
+            ('underline', {'underline': 1}),  # Pango.Underline.SINGLE = 1
+            ('strikethrough', {'strikethrough': True}),
+            ('heading', {'scale': 1.5})  # 50% larger font for headings
+        ]:
+            if not self.textbuffer.get_tag_table().lookup(tag_name):
+                tag = self.textbuffer.create_tag(tag_name)
+                for prop, value in props.items():
+                    tag.set_property(prop, value)
+
+        test_texts = [
+                "Uppercase: ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                "Lowercase: abcdefghijklmnopqrstuvwxyz",
+                "Digits: 0123456789, Punctuation: !@#$%^&*()_+{}|:<>?",
+                "Ligature: fi fl ffi ffl, Similar characters: 0O1Il|!",
+                "Accented characters: áéíóúñ, Arrows and symbols: →←↑↓",
+                "gettext (localization): %s, %s, %s" % (_("Cache"), _("Cookies"), _("History"))
+        ]
+
+        # Add a heading first
+        for tag in (None, 'bold', 'italic', 'underline', 'strikethrough', 'heading'):
+            self.append_text("testing font tag {}\n".format(tag), scroll=False)
+            for text in test_texts:
+                self.append_text(text + "\n", tag, scroll=False)
+
+
+
     def update_log_level(self):
         """This gets called when the log level might have changed via the preferences."""
         self.gtklog.update_log_level()
@@ -1139,6 +1174,9 @@ class GUI(Gtk.ApplicationWindow):
         if 'windowsapps' in sys.executable.lower():
             self.append_text(
                 _('There is no official version of BleachBit on the Microsoft Store. Get the genuine version at https://www.bleachbit.org where it is always free of charge.') + '\n', 'error')
+
+        # TEMPORARY
+        self.append_test_text()
 
         # remove from idle loop (see GObject.idle_add)
         return False
@@ -1445,17 +1483,17 @@ class GUI(Gtk.ApplicationWindow):
             "Courier New",
             "Lucida Console"
         ]
-        
+
         # Get current font index from application settings or initialize
         if not hasattr(self, 'current_font_index'):
             self.current_font_index = 0
-        
+
         # Get the next font
         font_name = test_fonts_python_list[self.current_font_index]
-        
+
         # Log the font change
-        logger.warning("Font %d/%d: %s", self.current_font_index + 1, len(test_fonts_python_list), font_name)
-        
+        self.append_text("Font %d/%d: %s\n" % (self.current_font_index + 1, len(test_fonts_python_list), font_name))
+
         # Apply the font
         css = f"""
         * {{
@@ -1472,7 +1510,7 @@ class GUI(Gtk.ApplicationWindow):
             provider,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
-        
+
         # Move to the next font for next time
         self.current_font_index = (self.current_font_index + 1) % len(test_fonts_python_list)
 
