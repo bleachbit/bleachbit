@@ -30,6 +30,7 @@ import locale
 import os
 import platform
 import sys
+from collections import OrderedDict
 
 # local
 import bleachbit
@@ -77,6 +78,90 @@ def get_gtk_info():
     return info
 
 
+def get_windows_language_info():
+    info = {}
+    # Check Windows registry for code page settings
+    try:
+        import winreg
+        reg_path = r'SYSTEM\CurrentControlSet\Control\Nls\CodePage'
+        registry_key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, reg_path)
+
+        for value_name in ('ACP', 'OEMCP', 'MACCP'):
+            try:
+                value, _ = winreg.QueryValueEx(registry_key, value_name)
+                info[f'Windows Registry CodePage {value_name}'] = value
+            except WindowsError:
+                info[f'Windows Registry CodePage {value_name}'] = 'not found'
+
+        winreg.CloseKey(registry_key)
+    except Exception as e:
+        info['Windows Registry error'] = str(e)
+
+    # Get the Windows ANSI Code Page and OEM Code Page using the Windows API
+    from ctypes import windll, byref, Structure, c_uint, c_wchar_p, create_unicode_buffer, sizeof, c_ulong
+
+    class CPINFO(Structure):
+        _fields_ = [("MaxCharSize", c_uint),
+                    ("DefaultChar", c_uint * 2),
+                    ("LeadByte", c_uint * 12)]
+    cp_info = CPINFO()
+    try:
+        info['Windows API GetACP'] = str(windll.kernel32.GetACP())
+        info['Windows API GetOEMCP'] = str(windll.kernel32.GetOEMCP())
+        if windll.kernel32.GetCPInfo(windll.kernel32.GetACP(), byref(cp_info)):
+            info['Windows API MaxCharSize'] = str(cp_info.MaxCharSize)
+
+        # Get language information
+        kernel32 = windll.kernel32
+        lcid = kernel32.GetUserDefaultLCID()
+        info['Windows LCID'] = str(lcid)
+
+        # Get UI language preferences
+        info['Windows GetUserDefaultUILanguage'] = str(
+            kernel32.GetUserDefaultUILanguage())
+    except Exception as e:
+        info['Windows API part 1 language error'] = str(e)
+
+    # Get preferred UI languages
+    MUI_LANGUAGE_NAME = 0x8
+    num_languages = c_ulong(0)
+    buffer_size = c_ulong(0)
+
+    try:
+        # Get buffer size needed
+        if kernel32.GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, byref(num_languages), None, byref(buffer_size)):
+            buffer = create_unicode_buffer(buffer_size.value)
+            if kernel32.GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, byref(num_languages), buffer, byref(buffer_size)):
+                languages = []
+                offset = 0
+                for i in range(num_languages.value):
+                    languages.append(buffer[offset:].split('\0')[0])
+                    offset += len(languages[-1]) + 1
+                info['Windows GetUserPreferredUILanguages'] = ", ".join(
+                    languages)
+
+        # Get thread preferred UI languages
+        num_languages = c_ulong(0)
+        buffer_size = c_ulong(0)
+        if kernel32.GetThreadPreferredUILanguages(MUI_LANGUAGE_NAME, byref(num_languages), None, byref(buffer_size)):
+            buffer = create_unicode_buffer(buffer_size.value)
+            if kernel32.GetThreadPreferredUILanguages(MUI_LANGUAGE_NAME, byref(num_languages), buffer, byref(buffer_size)):
+                languages = []
+                offset = 0
+                for i in range(num_languages.value):
+                    languages.append(buffer[offset:].split('\0')[0])
+                    offset += len(languages[-1]) + 1
+                info['Windows GetThreadPreferredUILanguages'] = ", ".join(
+                    languages)
+
+    except Exception as e:
+        info['Windows API part 2 language error'] = str(e)
+    # Convert Windows LCID to RFC1766 (e.g., en-US).
+    user_locale = locale.windows_locale.get(lcid, '')
+    info['Windows locale'] = user_locale
+    return info
+
+
 def get_version(four_parts=False):
     """Return version information as a string.
 
@@ -105,7 +190,7 @@ def get_version(four_parts=False):
 
 def get_system_information():
     """Return system information as a string."""
-    from collections import OrderedDict
+
     info = OrderedDict()
 
     # Application and library versions
@@ -124,15 +209,18 @@ def get_system_information():
     import sqlite3
     info['SQLite version'] = sqlite3.sqlite_version
 
+    # System environment information
+    info['locale.getlocale'] = str(locale.getlocale())
+
+    if os.name == 'nt':
+        info.update(get_windows_language_info())
+
     # Variables defined in __init__.py
     info['local_cleaners_dir'] = bleachbit.local_cleaners_dir
     info['locale_dir'] = bleachbit.locale_dir
     info['options_dir'] = bleachbit.options_dir
     info['personal_cleaners_dir'] = bleachbit.personal_cleaners_dir
     info['system_cleaners_dir'] = bleachbit.system_cleaners_dir
-
-    # System environment information
-    info['locale.getlocale'] = str(locale.getlocale())
 
     # Environment variables
     if 'posix' == os.name:
