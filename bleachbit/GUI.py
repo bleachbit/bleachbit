@@ -1343,6 +1343,8 @@ class GUI(Gtk.ApplicationWindow):
 
         if os.name == 'nt':
             icon_size = Gtk.IconSize.BUTTON
+
+
         else:
             icon_size = Gtk.IconSize.LARGE_TOOLBAR
 
@@ -1376,7 +1378,7 @@ class GUI(Gtk.ApplicationWindow):
         self.system_info_button.set_always_show_image(True)
         self.system_info_button.connect(
             'clicked', lambda *dummy: self.get_application().system_information_dialog(None, None))
-        box.add(self.system_info_button)
+        hbar.pack_end(self.system_info_button)
 
         # Add font change button
         self.font_button = Gtk.Button.new_from_icon_name(
@@ -1385,8 +1387,29 @@ class GUI(Gtk.ApplicationWindow):
         self.font_button.set_always_show_image(True)
         self.font_button.connect(
             'clicked', lambda *dummy: self.on_change_font())
-        box.add(self.font_button)
+        hbar.pack_end(self.font_button)
 
+        # Toggle windows theme
+        if os.name == 'nt':
+            # Add Toggle Windows 10 Theme button
+            self.toggle_win10_theme_button = Gtk.Button()
+            self.toggle_win10_theme_button.set_label('Toggle Windows Theme')
+            def on_toggle_win10_theme_clicked(button):
+                options.set("win10_theme", not options.get("win10_theme"))
+                self.set_windows10_theme()
+            self.toggle_win10_theme_button.connect('clicked', on_toggle_win10_theme_clicked)
+            self.toggle_win10_theme_button.set_tooltip_text(_('Toggle Windows 10 theme'))
+            hbar.pack_end(self.toggle_win10_theme_button)
+
+        # Add Toggle Dark/Light Theme button
+        self.toggle_dark_theme_button = Gtk.Button()
+        self.toggle_dark_theme_button.set_label(_('Toggle dark theme'))
+        def on_toggle_dark_theme_clicked(button):
+            options.set("dark_mode", not options.get("dark_mode"))
+            Gtk.Settings.get_default().set_property('gtk-application-prefer-dark-theme', options.get('dark_mode'))
+        self.toggle_dark_theme_button.connect('clicked', on_toggle_dark_theme_clicked)
+        self.toggle_dark_theme_button.set_tooltip_text(_('Toggle dark theme'))
+        hbar.pack_end(self.toggle_dark_theme_button)
 
         hbar.pack_start(box)
 
@@ -1431,7 +1454,7 @@ class GUI(Gtk.ApplicationWindow):
         font_name = test_fonts_python_list[self.current_font_index]
         
         # Log the font change
-        logger.info("Font %d/%d: %s", self.current_font_index + 1, len(test_fonts_python_list), font_name)
+        logger.warning("Font %d/%d: %s", self.current_font_index + 1, len(test_fonts_python_list), font_name)
         
         # Apply the font
         css = f"""
