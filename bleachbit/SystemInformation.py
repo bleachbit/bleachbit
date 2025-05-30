@@ -78,6 +78,228 @@ def get_gtk_info():
     return info
 
 
+def get_windows_display_info():
+    """Get Windows display information including ClearType, display count, resolution, and DPI."""
+    import ctypes
+    from ctypes import windll, byref, Structure, c_uint, c_ulong, c_wchar_p, create_unicode_buffer, sizeof, POINTER, WINFUNCTYPE, WinError
+
+    # Define Windows types and constants
+    class RECT(Structure):
+        _fields_ = [
+            ('left', ctypes.c_long),
+            ('top', ctypes.c_long),
+            ('right', ctypes.c_long),
+            ('bottom', ctypes.c_long)
+        ]
+
+    class DEVMODEW(Structure):
+        _fields_ = [
+            ('dmDeviceName', c_wchar_p * 32),
+            ('dmSpecVersion', ctypes.c_ushort),
+            ('dmDriverVersion', ctypes.c_ushort),
+            ('dmSize', ctypes.c_ushort),
+            ('dmDriverExtra', ctypes.c_ushort),
+            ('dmFields', ctypes.c_ulong),
+            ('dmPositionX', ctypes.c_long),
+            ('dmPositionY', ctypes.c_long),
+            ('dmDisplayOrientation', ctypes.c_ulong),
+            ('dmDisplayFixedOutput', ctypes.c_ulong),
+            ('dmColor', ctypes.c_short),
+            ('dmDuplex', ctypes.c_short),
+            ('dmYResolution', ctypes.c_short),
+            ('dmTTOption', ctypes.c_short),
+            ('dmCollate', ctypes.c_short),
+            ('dmFormName', c_wchar_p * 32),
+            ('dmLogPixels', ctypes.c_ushort),
+            ('dmBitsPerPel', ctypes.c_ulong),
+            ('dmPelsWidth', ctypes.c_ulong),
+            ('dmPelsHeight', ctypes.c_ulong),
+            ('dmDisplayFlags', ctypes.c_ulong),
+            ('dmDisplayFrequency', ctypes.c_ulong),
+            ('dmICMMethod', ctypes.c_ulong),
+            ('dmICMIntent', ctypes.c_ulong),
+            ('dmMediaType', ctypes.c_ulong),
+            ('dmDitherType', ctypes.c_ulong),
+            ('dmReserved1', ctypes.c_ulong),
+            ('dmReserved2', ctypes.c_ulong),
+            ('dmPanningWidth', ctypes.c_ulong),
+            ('dmPanningHeight', ctypes.c_ulong)
+        ]
+
+    info = {}
+
+    # ClearType is enabled?
+    try:
+        from winreg import OpenKey, QueryValueEx, HKEY_CURRENT_USER, KEY_READ, EnumKey
+        try:
+            key = OpenKey(HKEY_CURRENT_USER, r"Software\Microsoft\Avalon.Graphics", 0, KEY_READ)
+            i = 0
+            while True:
+                try:
+                    subkey_name = EnumKey(key, i)
+                    with OpenKey(key, subkey_name) as subkey:
+                        try:
+                            cleartype_level, _ = QueryValueEx(subkey, 'ClearTypeLevel')
+                            info[f'Display {subkey_name} ClearTypeLevel'] = cleartype_level
+                        except WindowsError:
+                            pass
+                    i += 1
+                except WindowsError:
+                    break
+        except FileNotFoundError:
+            info['ClearType registry'] = 'Key not found (ClearType settings not available)'
+        except Exception as e:
+            info['ClearType registry error'] = str(e)
+    except ImportError as e:
+        info['ClearType check error'] = 'winreg module not available'
+
+    # Font smoothing and ClearType information
+    SPI_GETFONTSMOOTHING = 0x004A
+    SPI_GETFONTSMOOTHINGTYPE = 0x200A
+    FE_FONTSMOOTHINGCLEARTYPE = 0x0002
+    font_smoothing = ctypes.c_uint(0)
+    smoothing_type = ctypes.c_uint(0)
+    try:
+
+        if windll.user32.SystemParametersInfoW(SPI_GETFONTSMOOTHING, 0, byref(font_smoothing), 0):
+            info['Font Smoothing Enabled'] = bool(font_smoothing.value)
+
+            if windll.user32.SystemParametersInfoW(SPI_GETFONTSMOOTHINGTYPE, 0, byref(smoothing_type), 0):
+                info['Font Smoothing Type'] = 'ClearType' if smoothing_type.value == FE_FONTSMOOTHINGCLEARTYPE else 'Standard'
+    except Exception as e:
+        info['Font smoothing API error'] = str(e)
+
+    # Get display count and information
+    class MONITORINFOEX(Structure):
+                _fields_ = [
+                    ('cbSize', c_ulong),
+                    ('rcMonitor', RECT),
+                    ('rcWork', RECT),
+                    ('dwFlags', c_ulong),
+                    ('szDevice', c_wchar_p * 32)
+                ]
+
+    try:
+        try:
+            MonitorEnumProc = WINFUNCTYPE(ctypes.c_int, ctypes.c_ulong, ctypes.c_ulong,
+                                        POINTER(RECT), ctypes.c_double)
+
+            display_count = [0]
+
+            def enum_proc(hmonitor, hdc, lprect, lparam):
+                display_count[0] += 1
+                return 1
+
+            # Enumerate all monitors
+            ctypes.windll.user32.EnumDisplayMonitors(0, 0, MonitorEnumProc(enum_proc), 0)
+            info['Display Count'] = display_count[0]
+
+            # Get display information for each display
+            # Use DISPLAY_DEVICE structure to enumerate devices
+            class DISPLAY_DEVICEW(ctypes.Structure):
+                _fields_ = [
+                    ("cb", ctypes.c_ulong),
+                    ("DeviceName", ctypes.c_wchar * 32),
+                    ("DeviceString", ctypes.c_wchar * 128),
+                    ("StateFlags", ctypes.c_ulong),
+                    ("DeviceID", ctypes.c_wchar * 128),
+                    ("DeviceKey", ctypes.c_wchar * 128)
+                ]
+
+            i = 0
+            while True:
+                display_device = DISPLAY_DEVICEW()
+                display_device.cb = ctypes.sizeof(DISPLAY_DEVICEW)
+                if not ctypes.windll.user32.EnumDisplayDevicesW(None, i, ctypes.byref(display_device), 0):
+                    break
+                device_name = display_device.DeviceName
+                device_string = display_device.DeviceString
+
+                # Get display settings
+                devmode = DEVMODEW()
+                devmode.dmSize = ctypes.sizeof(DEVMODEW)
+                if ctypes.windll.user32.EnumDisplaySettingsW(device_name, -1, ctypes.byref(devmode)):
+                    info[f'Display {i} Name'] = device_name
+                    info[f'Display {i} String'] = device_string
+                    info[f'Display {i} Resolution'] = f"{devmode.dmPelsWidth}x{devmode.dmPelsHeight}"
+                else:
+                    info[f'Display {i} Name'] = device_name
+                    info[f'Display {i} String'] = device_string
+                    info[f'Display {i} Resolution'] = 'Unknown'
+
+                # DPI and scale as before
+                try:
+                    from ctypes import WinDLL
+                    shcore = WinDLL('shcore')
+                    PROCESS_PER_MONITOR_DPI_AWARE = 2
+                    shcore.SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE)
+                    MONITOR_DEFAULTTONEAREST = 2
+                    # Use MonitorFromPoint with a point inside the display
+                    point = ctypes.wintypes.POINT(getattr(devmode, 'dmPositionX', 0) + 1, getattr(devmode, 'dmPositionY', 0) + 1)
+                    hmonitor = ctypes.windll.user32.MonitorFromPoint(point, MONITOR_DEFAULTTONEAREST)
+                    dpiX = ctypes.c_uint()
+                    dpiY = ctypes.c_uint()
+                    shcore.GetDpiForMonitor(hmonitor, 0, ctypes.byref(dpiX), ctypes.byref(dpiY))
+                    info[f'Display {i} DPI'] = f"{dpiX.value}x{dpiY.value}"
+                    scale_x = round((dpiX.value / 96.0) * 100)
+                    scale_y = round((dpiY.value / 96.0) * 100)
+                    info[f'Display {i} Scale'] = f"{scale_x}% x {scale_y}%"
+                except Exception:
+                    hdc = ctypes.windll.user32.GetDC(0)
+                    dpi_x = ctypes.windll.gdi32.GetDeviceCaps(hdc, 88)
+                    dpi_y = ctypes.windll.gdi32.GetDeviceCaps(hdc, 90)
+                    ctypes.windll.user32.ReleaseDC(0, hdc)
+                    scale_x = round((dpi_x / 96.0) * 100)
+                    scale_y = round((dpi_y / 96.0) * 100)
+                    info[f'Display {i} Scale (legacy)'] = f"{scale_x}% x {scale_y}%"
+                i += 1
+
+                # Get DPI information (Windows 8.1+)
+                try:
+                    from ctypes import WinDLL
+                    shcore = WinDLL('shcore')
+                    PROCESS_PER_MONITOR_DPI_AWARE = 2
+                    shcore.SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE)
+
+                    MONITOR_DEFAULTTONEAREST = 2
+                    hmonitor = ctypes.windll.user32.MonitorFromPoint(
+                        ctypes.wintypes.POINT(devmode.dmPosition.x + 1, devmode.dmPosition.y + 1),
+                        MONITOR_DEFAULTTONEAREST)
+
+                    dpiX = ctypes.c_uint()
+                    dpiY = ctypes.c_uint()
+                    shcore.GetDpiForMonitor(hmonitor, 0, byref(dpiX), byref(dpiY))
+                    info[f'Display {i} DPI'] = f"{dpiX.value}x{dpiY.value}"
+
+                    # Calculate scale percentage (assuming 96 DPI = 100%)
+                    scale_x = round((dpiX.value / 96.0) * 100)
+                    scale_y = round((dpiY.value / 96.0) * 100)
+                    info[f'Display {i} Scale'] = f"{scale_x}% x {scale_y}%"
+
+                except (OSError, AttributeError):
+                    # Fallback for Windows versions before 8.1
+                    hdc = ctypes.windll.user32.GetDC(0)
+                    dpi_x = ctypes.windll.gdi32.GetDeviceCaps(hdc, 88)  # LOGPIXELSX
+                    dpi_y = ctypes.windll.gdi32.GetDeviceCaps(hdc, 90)  # LOGPIXELSY
+                    ctypes.windll.user32.ReleaseDC(0, hdc)
+
+                    scale_x = round((dpi_x / 96.0) * 100)
+                    scale_y = round((dpi_y / 96.0) * 100)
+                    info[f'Display {i} Scale (legacy)'] = f"{scale_x}% x {scale_y}%"
+
+                except Exception as e:
+                    info[f'Display {i} error'] = str(e)
+                    continue
+
+        except Exception as e:
+            info['Display enumeration error'] = str(e)
+
+    except Exception as e:
+        info['Windows display info error'] = str(e)
+
+    return info
+
+
 def get_windows_language_info():
     info = {}
     # Check Windows registry for code page settings
@@ -213,7 +435,12 @@ def get_system_information():
     info['locale.getlocale'] = str(locale.getlocale())
 
     if os.name == 'nt':
-        info.update(get_windows_language_info())
+        language_info = get_windows_language_info()
+        if language_info:
+            info.update(language_info)
+        display_info = get_windows_display_info()
+        if display_info:
+            info.update(display_info)
 
     # Variables defined in __init__.py
     info['local_cleaners_dir'] = bleachbit.local_cleaners_dir
