@@ -79,7 +79,7 @@ class SystemInformationTestCase(common.BleachbitTestCase):
                 with open(gtk_settings_ini, 'w', encoding='utf-8') as f:
                     f.write('# empty ini file\n')
                 result = get_system_information()
-                self.assertIn(f'GTK_SETTINGS_INI = 17 bytes', result)
+                self.assertIn(f'GTK_SETTINGS_INI = {os.path.getsize(gtk_settings_ini):,} bytes', result)
                 self.assertIn('GTK font name = not found in settings.ini', result)
 
                 # 4. [Settings] section exists but no gtk-font-name
