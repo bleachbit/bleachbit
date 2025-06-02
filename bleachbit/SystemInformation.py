@@ -25,10 +25,13 @@ Show system information
 """
 
 # standard library
-import logging
+import configparser
+import ctypes
 import locale
+import logging
 import os
 import platform
+import sqlite3
 import sys
 from collections import OrderedDict
 
@@ -80,7 +83,6 @@ def get_gtk_info():
 
 def get_windows_display_info():
     """Get Windows display information including ClearType, display count, resolution, and DPI."""
-    import ctypes
     from ctypes import windll, byref, Structure, c_uint, c_ulong, c_wchar_p, create_unicode_buffer, sizeof, POINTER, WINFUNCTYPE, WinError
     from ctypes import WinDLL
     from winreg import OpenKey, QueryValueEx, HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, KEY_READ, EnumKey, CloseKey
@@ -180,7 +182,7 @@ def get_windows_display_info():
                     ('szDevice', c_wchar_p * 32)
                 ]
 
-    # Check for Segoe UI font registry values
+    # Check for font registry values
     try:
         font_reg_path = r'SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts'
         font_key = OpenKey(HKEY_LOCAL_MACHINE, font_reg_path)
@@ -467,11 +469,39 @@ def get_system_information():
 
     info.update(get_gtk_info())
 
-    import sqlite3
     info['SQLite version'] = sqlite3.sqlite_version
 
     # System environment information
     info['locale.getlocale'] = str(locale.getlocale())
+
+    # check whether GTK_CONFIG_HOME exists
+    # Linux: USER_CONFIG_HOME/gtk-3.0
+    # Windows: %LOCALAPPDATA%\gtk-3.0
+    # settings.ini may not work on Windows
+    if os.name == 'nt':
+        gtk_config_home = os.getenv('LOCALAPPDATA')
+    else:
+        gtk_config_home = os.getenv('XDG_CONFIG_HOME')
+    if gtk_config_home:
+        gtk_config_home = os.path.join(gtk_config_home, 'gtk-3.0')
+        if os.path.exists(gtk_config_home):
+            info['GTK_CONFIG_HOME'] = 'found'
+            gtk_settings_ini = os.path.join(gtk_config_home, 'settings.ini')
+            if os.path.exists(gtk_settings_ini):
+                info['GTK_SETTINGS_INI'] = 'found'
+                config = configparser.ConfigParser()
+                try:
+                    config.read(gtk_settings_ini)
+                    if 'Settings' in config and 'gtk-font-name' in config['Settings']:
+                        info['GTK font name'] = config['Settings']['gtk-font-name']
+                    else:
+                        info['GTK font name'] = 'not found in settings.ini'
+                except Exception as e:
+                    info['GTK_SETTINGS_INI error'] = str(e)
+            else:
+                info['GTK_SETTINGS_INI'] = 'not found'
+        else:
+            info['GTK_CONFIG_HOME'] = 'not found'
 
     if os.name == 'nt':
         language_info = get_windows_language_info()
