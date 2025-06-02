@@ -82,6 +82,8 @@ def get_windows_display_info():
     """Get Windows display information including ClearType, display count, resolution, and DPI."""
     import ctypes
     from ctypes import windll, byref, Structure, c_uint, c_ulong, c_wchar_p, create_unicode_buffer, sizeof, POINTER, WINFUNCTYPE, WinError
+    from ctypes import WinDLL
+    from winreg import OpenKey, QueryValueEx, HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, KEY_READ, EnumKey, CloseKey
 
     # Define Windows types and constants
     class RECT(Structure):
@@ -130,7 +132,6 @@ def get_windows_display_info():
 
     # ClearType is enabled?
     try:
-        from winreg import OpenKey, QueryValueEx, HKEY_CURRENT_USER, KEY_READ, EnumKey
         try:
             key = OpenKey(HKEY_CURRENT_USER, r"Software\Microsoft\Avalon.Graphics", 0, KEY_READ)
             i = 0
@@ -178,6 +179,46 @@ def get_windows_display_info():
                     ('dwFlags', c_ulong),
                     ('szDevice', c_wchar_p * 32)
                 ]
+
+    # Check for Segoe UI font registry values
+    try:
+        font_reg_path = r'SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts'
+        font_key = OpenKey(HKEY_LOCAL_MACHINE, font_reg_path)
+
+        # Add Segoe UI font values
+        segoe_ui_fonts = [
+            "Segoe UI (TrueType)",
+            "Segoe UI Bold (TrueType)",
+            "Segoe UI Bold Italic (TrueType)",
+            "Segoe UI Italic (TrueType)",
+            "Segoe UI Light (TrueType)",
+            "Segoe UI Semibold (TrueType)",
+            "Segoe UI Symbol (TrueType)",
+            "Tahoma (TrueType)",
+            "Tahoma Bold (TrueType)",
+        ]
+
+        for font_name in segoe_ui_fonts:
+            try:
+                value, _ = QueryValueEx(font_key, font_name)
+                info[f'Font: {font_name}'] = value
+            except WindowsError:
+                info[f'Font: {font_name}'] = 'not found'
+        CloseKey(font_key)
+
+        # Check font substitution
+        subst_reg_path = r'SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes'
+        subst_key = OpenKey(HKEY_LOCAL_MACHINE, subst_reg_path)
+
+        for font_name in ('Segoe UI', 'Tahoma'):
+            try:
+                value, _ = QueryValueEx(subst_key, font_name)
+                info[f'Font Substitute: {font_name}'] = value
+            except WindowsError:
+                info[f'Font Substitute: {font_name}'] = 'not found'
+        CloseKey(subst_key)
+    except Exception as e:
+        info['Font registry error'] = str(e)
 
     try:
         try:
@@ -229,7 +270,6 @@ def get_windows_display_info():
 
                 # DPI and scale as before
                 try:
-                    from ctypes import WinDLL
                     shcore = WinDLL('shcore')
                     PROCESS_PER_MONITOR_DPI_AWARE = 2
                     shcore.SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE)
@@ -256,7 +296,6 @@ def get_windows_display_info():
 
                 # Get DPI information (Windows 8.1+)
                 try:
-                    from ctypes import WinDLL
                     shcore = WinDLL('shcore')
                     PROCESS_PER_MONITOR_DPI_AWARE = 2
                     shcore.SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE)
