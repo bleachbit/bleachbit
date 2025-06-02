@@ -72,14 +72,14 @@ class SystemInformationTestCase(common.BleachbitTestCase):
                 # 2. Directory exists but is empty (settings.ini not present)
                 os.makedirs(gtk_config_home, exist_ok=True)
                 result = get_system_information()
-                self.assertIn(f'GTK_CONFIG_HOME = {gtk_config_home}', result)
+                self.assertIn(f'GTK_CONFIG_HOME = found', result)
                 self.assertIn('GTK_SETTINGS_INI = not found', result)
 
                 # 3. settings.ini exists but lacks [Settings] section
                 with open(gtk_settings_ini, 'w', encoding='utf-8') as f:
                     f.write('# empty ini file\n')
                 result = get_system_information()
-                self.assertIn(f'GTK_SETTINGS_INI = {gtk_settings_ini}', result)
+                self.assertIn(f'GTK_SETTINGS_INI = 17 bytes', result)
                 self.assertIn('GTK font name = not found in settings.ini', result)
 
                 # 4. [Settings] section exists but no gtk-font-name
