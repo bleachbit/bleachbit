@@ -77,6 +77,7 @@ def get_gtk_info():
     info['GTK icon theme'] = settings.get_property('gtk-icon-theme-name')
     info['GTK prefer dark theme'] = settings.get_property(
         'gtk-application-prefer-dark-theme')
+    info['GTK font name'] = settings.get_property('gtk-font-name')
 
     return info
 
@@ -486,9 +487,14 @@ def get_system_information():
         gtk_config_home = os.path.join(gtk_config_home, 'gtk-3.0')
         if os.path.exists(gtk_config_home):
             info['GTK_CONFIG_HOME'] = 'found'
+            gtk_css = os.path.join(gtk_config_home, 'gtk.css')
+            if os.path.exists(gtk_css):
+                info['GTK_CSS'] = f"{os.path.getsize(gtk_css):,} bytes"
+            else:
+                info['GTK_CSS'] = 'not found'
             gtk_settings_ini = os.path.join(gtk_config_home, 'settings.ini')
             if os.path.exists(gtk_settings_ini):
-                info['GTK_SETTINGS_INI'] = 'found'
+                info['GTK_SETTINGS_INI'] = f"{os.path.getsize(gtk_settings_ini):,} bytes"
                 config = configparser.ConfigParser()
                 try:
                     config.read(gtk_settings_ini)
