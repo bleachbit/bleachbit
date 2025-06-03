@@ -1,6 +1,7 @@
 
 # vim: ts=4:sw=4:expandtab
 # -*- coding: UTF-8 -*-
+# pylint: disable=import-outside-toplevel,line-too-long,broad-exception-caught,invalid-name
 
 # BleachBit
 # Copyright (C) 2008-2025 Andrew Ziem
@@ -34,6 +35,7 @@ import platform
 import sqlite3
 import sys
 from collections import OrderedDict
+from ctypes import byref, Structure, c_uint, c_ulong, c_wchar_p, create_unicode_buffer, POINTER
 
 # local
 import bleachbit
@@ -67,12 +69,12 @@ def get_gtk_info():
         logger.debug('import Gtk failed: GTK 3.0 not found or not available')
         return info
 
-    settings = Gtk.Settings.get_default()
+    settings = Gtk.Settings.get_default() # pylint: disable=no-value-for-parameter
     if not settings:
-        logger.debug('GTK settings not found')
+        info['GTK settings'] = 'not found'
         return info
 
-    info['GTK version'] = f"{Gtk.get_major_version()}.{Gtk.get_minor_version()}.{Gtk.get_micro_version()}"
+    info['GTK version'] = f"{Gtk.get_major_version()}.{Gtk.get_minor_version()}.{Gtk.get_micro_version()}" # pylint: disable=no-value-for-parameter
     info['GTK theme'] = settings.get_property('gtk-theme-name')
     info['GTK icon theme'] = settings.get_property('gtk-icon-theme-name')
     info['GTK prefer dark theme'] = settings.get_property(
@@ -82,13 +84,88 @@ def get_gtk_info():
     return info
 
 
+def get_windows_font_info():
+    """Get Windows font information."""
+    info = {}
+    from ctypes import windll
+    from winreg import OpenKey, QueryValueEx, HKEY_LOCAL_MACHINE, CloseKey
+
+    # Get Windows font file sizes
+    try:
+        windows_fonts_dir = os.path.join(os.getenv('WINDIR', r'c:\windows'), 'Fonts')
+        for font_file in ['segoeui.ttf', 'tahoma.ttf']:
+            font_path = os.path.join(windows_fonts_dir, font_file)
+            if os.path.exists(font_path):
+                info[f'{font_file} size'] = f"{os.path.getsize(font_path):,} bytes"
+            else:
+                info[f'{font_file}'] = 'not found'
+    except Exception as e:
+        info['Windows font file error'] = str(e)
+
+    # Font smoothing and ClearType information
+    SPI_GETFONTSMOOTHING = 0x004A
+    SPI_GETFONTSMOOTHINGTYPE = 0x200A
+    FE_FONTSMOOTHINGCLEARTYPE = 0x0002
+    font_smoothing = ctypes.c_uint(0)
+    smoothing_type = ctypes.c_uint(0)
+    try:
+
+        if windll.user32.SystemParametersInfoW(SPI_GETFONTSMOOTHING, 0, byref(font_smoothing), 0):
+            info['Font Smoothing Enabled'] = bool(font_smoothing.value)
+
+            if windll.user32.SystemParametersInfoW(SPI_GETFONTSMOOTHINGTYPE, 0, byref(smoothing_type), 0):
+                info['Font Smoothing Type'] = 'ClearType' if smoothing_type.value == FE_FONTSMOOTHINGCLEARTYPE else 'Standard'
+    except Exception as e:
+        info['Font smoothing API error'] = str(e)
+
+
+    # Check for font registry values
+    try:
+        font_reg_path = r'SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts'
+        font_key = OpenKey(HKEY_LOCAL_MACHINE, font_reg_path)
+
+        # Add Segoe UI font values
+        segoe_ui_fonts = [
+            "Segoe UI (TrueType)",
+            "Segoe UI Bold (TrueType)",
+            "Segoe UI Bold Italic (TrueType)",
+            "Segoe UI Italic (TrueType)",
+            "Segoe UI Light (TrueType)",
+            "Segoe UI Semibold (TrueType)",
+            "Segoe UI Symbol (TrueType)",
+            "Tahoma (TrueType)",
+            "Tahoma Bold (TrueType)",
+        ]
+
+        for font_name in segoe_ui_fonts:
+            try:
+                value, _ = QueryValueEx(font_key, font_name)
+                info[f'Font registry: {font_name}'] = value
+            except WindowsError:
+                info[f'Font registry: {font_name}'] = 'not found'
+        CloseKey(font_key)
+
+        # Check font substitution
+        subst_reg_path = r'SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes'
+        subst_key = OpenKey(HKEY_LOCAL_MACHINE, subst_reg_path)
+
+        for font_name in ('Segoe UI', 'Tahoma'):
+            try:
+                value, _ = QueryValueEx(subst_key, font_name)
+                info[f'Font Substitute: {font_name}'] = value
+            except WindowsError:
+                info[f'Font Substitute: {font_name}'] = 'not found'
+        CloseKey(subst_key)
+    except Exception as e:
+        info['Font registry error'] = str(e)
+    return info
+
+
 def get_windows_display_info():
     """Get Windows display information including ClearType, display count, resolution, and DPI."""
-    from ctypes import windll, byref, Structure, c_uint, c_ulong, c_wchar_p, create_unicode_buffer, sizeof, POINTER, WINFUNCTYPE, WinError
-    from ctypes import WinDLL
-    from winreg import OpenKey, QueryValueEx, HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, KEY_READ, EnumKey, CloseKey
+    from ctypes import WINFUNCTYPE, WinDLL
+    from winreg import OpenKey, QueryValueEx, HKEY_CURRENT_USER, KEY_READ, EnumKey
 
-    # Define Windows types and constants
     class RECT(Structure):
         _fields_ = [
             ('left', ctypes.c_long),
@@ -154,74 +231,9 @@ def get_windows_display_info():
             info['ClearType registry'] = 'Key not found (ClearType settings not available)'
         except Exception as e:
             info['ClearType registry error'] = str(e)
-    except ImportError as e:
+    except ImportError:
         info['ClearType check error'] = 'winreg module not available'
 
-    # Font smoothing and ClearType information
-    SPI_GETFONTSMOOTHING = 0x004A
-    SPI_GETFONTSMOOTHINGTYPE = 0x200A
-    FE_FONTSMOOTHINGCLEARTYPE = 0x0002
-    font_smoothing = ctypes.c_uint(0)
-    smoothing_type = ctypes.c_uint(0)
-    try:
-
-        if windll.user32.SystemParametersInfoW(SPI_GETFONTSMOOTHING, 0, byref(font_smoothing), 0):
-            info['Font Smoothing Enabled'] = bool(font_smoothing.value)
-
-            if windll.user32.SystemParametersInfoW(SPI_GETFONTSMOOTHINGTYPE, 0, byref(smoothing_type), 0):
-                info['Font Smoothing Type'] = 'ClearType' if smoothing_type.value == FE_FONTSMOOTHINGCLEARTYPE else 'Standard'
-    except Exception as e:
-        info['Font smoothing API error'] = str(e)
-
-    # Get display count and information
-    class MONITORINFOEX(Structure):
-                _fields_ = [
-                    ('cbSize', c_ulong),
-                    ('rcMonitor', RECT),
-                    ('rcWork', RECT),
-                    ('dwFlags', c_ulong),
-                    ('szDevice', c_wchar_p * 32)
-                ]
-
-    # Check for font registry values
-    try:
-        font_reg_path = r'SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts'
-        font_key = OpenKey(HKEY_LOCAL_MACHINE, font_reg_path)
-
-        # Add Segoe UI font values
-        segoe_ui_fonts = [
-            "Segoe UI (TrueType)",
-            "Segoe UI Bold (TrueType)",
-            "Segoe UI Bold Italic (TrueType)",
-            "Segoe UI Italic (TrueType)",
-            "Segoe UI Light (TrueType)",
-            "Segoe UI Semibold (TrueType)",
-            "Segoe UI Symbol (TrueType)",
-            "Tahoma (TrueType)",
-            "Tahoma Bold (TrueType)",
-        ]
-
-        for font_name in segoe_ui_fonts:
-            try:
-                value, _ = QueryValueEx(font_key, font_name)
-                info[f'Font: {font_name}'] = value
-            except WindowsError:
-                info[f'Font: {font_name}'] = 'not found'
-        CloseKey(font_key)
-
-        # Check font substitution
-        subst_reg_path = r'SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes'
-        subst_key = OpenKey(HKEY_LOCAL_MACHINE, subst_reg_path)
-
-        for font_name in ('Segoe UI', 'Tahoma'):
-            try:
-                value, _ = QueryValueEx(subst_key, font_name)
-                info[f'Font Substitute: {font_name}'] = value
-            except WindowsError:
-                info[f'Font Substitute: {font_name}'] = 'not found'
-        CloseKey(subst_key)
-    except Exception as e:
-        info['Font registry error'] = str(e)
 
     try:
         try:
@@ -230,7 +242,7 @@ def get_windows_display_info():
 
             display_count = [0]
 
-            def enum_proc(hmonitor, hdc, lprect, lparam):
+            def enum_proc(_hmonitor, _hdc, _lprect, _lparam):
                 display_count[0] += 1
                 return 1
 
@@ -343,6 +355,7 @@ def get_windows_display_info():
 
 
 def get_windows_language_info():
+    from ctypes import windll
     info = {}
     # Check Windows registry for code page settings
     try:
@@ -362,13 +375,12 @@ def get_windows_language_info():
         info['Windows Registry error'] = str(e)
 
     # Get the Windows ANSI Code Page and OEM Code Page using the Windows API
-    from ctypes import windll, byref, Structure, c_uint, c_wchar_p, create_unicode_buffer, sizeof, c_ulong
-
     class CPINFO(Structure):
         _fields_ = [("MaxCharSize", c_uint),
                     ("DefaultChar", c_uint * 2),
                     ("LeadByte", c_uint * 12)]
     cp_info = CPINFO()
+    lcid = None
     try:
         info['Windows API GetACP'] = str(windll.kernel32.GetACP())
         info['Windows API GetOEMCP'] = str(windll.kernel32.GetOEMCP())
@@ -398,7 +410,7 @@ def get_windows_language_info():
             if kernel32.GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, byref(num_languages), buffer, byref(buffer_size)):
                 languages = []
                 offset = 0
-                for i in range(num_languages.value):
+                for _ in range(num_languages.value):
                     languages.append(buffer[offset:].split('\0')[0])
                     offset += len(languages[-1]) + 1
                 info['Windows GetUserPreferredUILanguages'] = ", ".join(
@@ -412,7 +424,7 @@ def get_windows_language_info():
             if kernel32.GetThreadPreferredUILanguages(MUI_LANGUAGE_NAME, byref(num_languages), buffer, byref(buffer_size)):
                 languages = []
                 offset = 0
-                for i in range(num_languages.value):
+                for _ in range(num_languages.value):
                     languages.append(buffer[offset:].split('\0')[0])
                     offset += len(languages[-1]) + 1
                 info['Windows GetThreadPreferredUILanguages'] = ", ".join(
@@ -421,8 +433,10 @@ def get_windows_language_info():
     except Exception as e:
         info['Windows API part 2 language error'] = str(e)
     # Convert Windows LCID to RFC1766 (e.g., en-US).
-    user_locale = locale.windows_locale.get(lcid, '')
-    info['Windows locale'] = user_locale
+    if lcid:
+        info['Windows locale'] = locale.windows_locale.get(lcid, '')
+    else:
+        info['Windows locale'] = 'unknown'
     return info
 
 
@@ -516,6 +530,9 @@ def get_system_information():
         display_info = get_windows_display_info()
         if display_info:
             info.update(display_info)
+        font_info = get_windows_font_info()
+        if font_info:
+            info.update(font_info)
 
     # Variables defined in __init__.py
     info['local_cleaners_dir'] = bleachbit.local_cleaners_dir
@@ -559,7 +576,7 @@ def get_system_information():
     info['sys.executable'] = get_executable()
     info['sys.version'] = sys.version
     if 'nt' == os.name:
-        from win32com.shell import shell
+        from win32com.shell import shell # pylint: disable=import-error,no-name-in-module
         info['IsUserAnAdmin()'] = shell.IsUserAnAdmin()
     info['__file__'] = __file__
 
