@@ -81,6 +81,27 @@ def get_gtk_info():
         'gtk-application-prefer-dark-theme')
     info['GTK font name'] = settings.get_property('gtk-font-name')
 
+    # Graphics library versions
+    try:
+        import cairo
+        info['Cairo version'] = cairo.cairo_version_string()
+    except ImportError:
+        info['Cairo version'] = 'not found'
+
+    try:        
+        gi.require_version('Pango', '1.0')
+        from gi.repository import Pango
+        info['Pango version'] = Pango.version_string()
+    except (ImportError, ValueError):
+        info['Pango version'] = 'not found'
+
+    try:
+        gi.require_version('HarfBuzz', '0.0')
+        from gi.repository import HarfBuzz
+        info['HarfBuzz version'] = HarfBuzz.VERSION_STRING
+    except (ImportError, ValueError, AttributeError) as e:
+        info['HarfBuzz version'] = str(e)
+
     return info
 
 
@@ -485,6 +506,9 @@ def get_system_information():
     info.update(get_gtk_info())
 
     info['SQLite version'] = sqlite3.sqlite_version
+
+    
+    
 
     # System environment information
     info['locale.getlocale'] = str(locale.getlocale())
