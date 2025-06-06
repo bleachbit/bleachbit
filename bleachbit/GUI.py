@@ -1467,17 +1467,19 @@ class GUI(Gtk.ApplicationWindow):
 
     def on_change_font(self):
         test_fonts_python_list = [
-            # Group 1: Common ClearType-Optimized Fonts
-            "Segoe UI",
-            "Calibri",
-            "Arial",
-            "Verdana",
+            # ClearType-optimized or compatible
+            "Segoe UI",      # ClearType-optimized
+            "Calibri",       # ClearType Font Collection
+            "Arial",         # ClearType-compatible
 
-            # Group 2: "Non-ClearType" or Less ClearType-Dependent / Monospaced Fonts
+            # Non-ClearType
+            "Verdana",
             "Tahoma",
             "MS Sans Serif",
-            "Courier New",
-            "Lucida Console"
+            "Lucida Sans",
+            "Trebuchet",
+            "Courier New",   # Monospaced
+            "Lucida Console",# Monospaced
         ]
 
         # Get current font index from application settings or initialize
