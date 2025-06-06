@@ -680,6 +680,9 @@ class GUI(Gtk.ApplicationWindow):
         self.set_property('role', APP_NAME)
         self.populate_window()
 
+        # Initialize font CSS provider
+        self._font_css_provider = None
+
         # Redirect logging to the GUI.
         bb_logger = logging.getLogger('bleachbit')
         from bleachbit.Log import GtkLoggerHandler
@@ -698,6 +701,9 @@ class GUI(Gtk.ApplicationWindow):
         Gtk.Settings.get_default().set_property(
             'gtk-application-prefer-dark-theme', options.get('dark_mode'))
 
+        # Apply user-selected font or use fallbacks
+        self.apply_font_preference()
+
         if options.is_corrupt():
             logger.error(
                 _('Resetting the configuration file because it is corrupt: %s') % bleachbit.options_file)
@@ -713,13 +719,15 @@ class GUI(Gtk.ApplicationWindow):
         key, mod = Gtk.accelerator_parse("<Control>W")
         accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
 
-        # Enable the user to change font size with keyboard or mouse.
+        # Get initial font size from GTK settings
         try:
             gtk_font_name = Gtk.Settings.get_default().get_property('gtk-font-name')
-        except TypeError as e:
-            logger.debug("Error getting font name from GTK settings: %s", e)
-        self.font_size = get_font_size_from_name(gtk_font_name) or 12
-        self.default_font_size = self.font_size
+            self.font_size = get_font_size_from_name(gtk_font_name) or 12
+            self.default_font_size = self.font_size
+        except (TypeError, AttributeError) as e:
+            logger.debug("Error getting font size: %s", e)
+            self.font_size = 12
+            self.default_font_size = 12
         self.textview.connect("scroll-event", self.on_scroll_event)
         self.connect("key-press-event", self.on_key_press_event)
         self._font_css_provider = None
@@ -744,30 +752,74 @@ class GUI(Gtk.ApplicationWindow):
         self.indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
         self.indicator.set_menu(self.build_appindicator_menu())
 
-    def set_font_size(self, absolute_size=None, relative_size=None):
-        """Set the font size of the entire application"""
-        assert absolute_size is not None or relative_size is not None
-        if absolute_size is None:
-            absolute_size = self.font_size + relative_size
-        absolute_size = max(5, min(25, absolute_size))
-        self.font_size = absolute_size
-        css = f"* {{ font-size: {absolute_size}pt; }}"
+    def apply_font_preference(self):
+        """Apply the user-selected font preference with fallbacks"""
+        settings = Gtk.Settings.get_default()
+
+        # Get font name from options or use fallback
+        if options.has_option('app_font'):
+            font_name = options.get('app_font')
+            logger.debug("Applying font: %s", font_name)
+
+            # Update font size in case it changed
+            new_size = get_font_size_from_name(font_name)
+            if new_size:
+                self.font_size = new_size
+
+            # Apply the font
+            settings.set_property("gtk-font-name", font_name)
+        else:
+            # Use fallback fonts
+            fallback_fonts = ["DejaVu Sans 10", "Noto Sans 10", "Cantarell 10"]
+            for font in fallback_fonts:
+                logger.debug("Using fallback font: %s", font)
+                settings.set_property("gtk-font-name", font)
+                self.font_size = get_font_size_from_name(font) or 12
+                break
+
+        # Apply font size using CSS for better consistency
+        css = f"* {{ font-size: {self.font_size}pt; }}"
         provider = Gtk.CssProvider()
         provider.load_from_data(css.encode())
 
-        # Remove any previous provider to avoid stacking rules.
+        # Remove any previous provider to avoid stacking rules
         screen = Gdk.Screen.get_default()
         if self._font_css_provider is not None:
-            Gtk.StyleContext.remove_provider_for_screen(
-                screen, self._font_css_provider)
+            Gtk.StyleContext.remove_provider_for_screen(screen, self._font_css_provider)
 
-        # Add the new provider globally so it affects all widgets.
+        # Add the new provider globally
         Gtk.StyleContext.add_provider_for_screen(
             screen,
             provider,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION,
         )
         self._font_css_provider = provider
+
+    def set_font_size(self, absolute_size=None, relative_size=None):
+        """Set the font size of the entire application"""
+        assert absolute_size is not None or relative_size is not None
+        if absolute_size is None:
+            absolute_size = self.font_size + relative_size
+        absolute_size = max(5, min(25, absolute_size))
+
+        # Get current font name or use default
+        if options.has_option('app_font'):
+            font_name = options.get('app_font')
+            # Extract font family from current font
+            font_parts = font_name.rsplit(' ', 1)
+            if len(font_parts) > 1 and font_parts[-1].isdigit():
+                font_family = ' '.join(font_parts[:-1])
+            else:
+                font_family = font_name
+        else:
+            font_family = "DejaVu Sans"
+
+        # Create new font string with updated size
+        new_font = f"{font_family} {absolute_size}"
+
+        # Save and apply the font
+        options.set('app_font', new_font, commit=True)
+        self.apply_font_preference()
 
     def on_key_press_event(self, _widget, event):
         """Handle key press events"""
@@ -1466,7 +1518,8 @@ class GUI(Gtk.ApplicationWindow):
         return hbar
 
     def on_change_font(self):
-        test_fonts_python_list = [
+        """Cycle through test fonts for debugging font rendering"""
+        test_fonts = [
             # ClearType-optimized or compatible
             "Segoe UI",      # ClearType-optimized
             "Calibri",       # ClearType Font Collection
@@ -1479,38 +1532,26 @@ class GUI(Gtk.ApplicationWindow):
             "Lucida Sans",
             "Trebuchet",
             "Courier New",   # Monospaced
-            "Lucida Console",# Monospaced
+            "Lucida Console" # Monospaced
         ]
 
-        # Get current font index from application settings or initialize
+        # Get current font index or initialize
         if not hasattr(self, 'current_font_index'):
             self.current_font_index = 0
 
-        # Get the next font
-        font_name = test_fonts_python_list[self.current_font_index]
+        # Get next font and update index
+        font_family = test_fonts[self.current_font_index]
+        self.current_font_index = (self.current_font_index + 1) % len(test_fonts)
+
+        # Create font string with current size
+        font_str = f"{font_family} {self.font_size}"
 
         # Log the font change
-        self.append_text("Font %d/%d: %s\n" % (self.current_font_index + 1, len(test_fonts_python_list), font_name))
+        self.append_text(f"Testing font: {font_str}\n")
 
-        # Apply the font
-        css = f"""
-        * {{
-            font-family: "{font_name}", sans-serif; /* Fallback to generic sans-serif */
-            /* You might also want to test a specific size */
-            /* font-size: 10pt; */
-        }}
-        """.encode('utf-8')  # Ensure CSS string is bytes for load_from_data
-
-        provider = Gtk.CssProvider()
-        provider.load_from_data(css)
-        Gtk.StyleContext.add_provider_for_screen(
-            Gdk.Screen.get_default(),
-            provider,
-            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
-        )
-
-        # Move to the next font for next time
-        self.current_font_index = (self.current_font_index + 1) % len(test_fonts_python_list)
+        # Save and apply the font
+        options.set('app_font', font_str, commit=True)
+        self.apply_font_preference()
 
     def on_configure_event(self, widget, event):
         (x, y) = self.get_position()

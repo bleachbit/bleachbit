@@ -29,7 +29,7 @@ from bleachbit import GuiBasic
 from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _, pget_text as _p
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Pango
 import logging
 import os
 
@@ -252,6 +252,41 @@ class PreferencesDialog:
         cb_units_iec.connect('toggled', self.__toggle_callback, 'units_iec')
         vbox.pack_start(cb_units_iec, False, True, 0)
 
+    def __create_font_widgets(self, vbox):
+        """Create and configure font selection widgets"""
+        font_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        font_box.set_margin_top(5)
+        font_box.set_margin_bottom(5)
+
+        font_label = Gtk.Label(label=_('Application font:'))
+        font_label.set_halign(Gtk.Align.START)
+        font_box.pack_start(font_label, False, True, 0)
+
+        current_font = options.get('app_font') if options.has_option('app_font') else 'Calibri 10'
+
+        self.font_button = Gtk.FontButton()
+        self.font_button.set_font(current_font)
+        self.font_button.connect('font-set', self.on_font_set)
+        font_box.pack_start(self.font_button, False, True, 5)
+
+        vbox.pack_start(font_box, False, True, 0)
+
+    def on_font_set(self, widget):
+        """Callback for when the font is selected"""
+        font_desc = widget.get_font_desc()
+        font = font_desc.to_string()
+        options.set('app_font', font)
+        logger.debug("Setting font to %s", font)
+        settings = Gtk.Settings.get_default()
+        settings.set_property("gtk-font-name", font)
+        
+        # Update font size in the main GUI if available
+        from bleachbit.GUI import get_font_size_from_name
+        if hasattr(self, 'window') and hasattr(self.window, 'font_size'):
+            new_size = get_font_size_from_name(font)
+            if new_size:
+                self.window.font_size = new_size
+
     def __general_page(self):
         """Return a widget containing the general page"""
 
@@ -260,6 +295,9 @@ class PreferencesDialog:
         self.__create_update_widgets(vbox)
 
         self.__create_general_checkboxes(vbox)
+
+        # Add font chooser widgets
+        self.__create_font_widgets(vbox)
 
         # Remember window geometry (position and size)
         self.cb_geom = Gtk.CheckButton(label=_("Remember window geometry"))
