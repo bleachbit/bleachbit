@@ -547,7 +547,30 @@ def get_system_information():
         else:
             info['GTK_CONFIG_HOME'] = 'not found'
 
+
+
     if os.name == 'nt':
+        fontconfig_dir = os.path.join(os.getenv('LOCALAPPDATA'), 'fontconfig')
+        if os.path.exists(fontconfig_dir):
+            info['Windows fontconfig directory'] = 'found'
+            try:
+                fontconfig_files = []
+                for root, dirs, files in os.walk(fontconfig_dir):
+                    # Only go one level deep
+                    if root != fontconfig_dir and os.path.dirname(root) != fontconfig_dir:
+                        continue
+                    for filename in files:
+                        rel_path = os.path.relpath(os.path.join(root, filename), fontconfig_dir)
+                        fontconfig_files.append(rel_path)
+                        filepath = os.path.join(root, filename)
+                        if os.path.isfile(filepath):
+                            info[f'Windows fontconfig {rel_path}'] = f"{os.path.getsize(filepath):,} bytes"
+                #info['Windows fontconfig files'] = ', '.join(fontconfig_files) if fontconfig_files else 'empty directory'
+            except Exception as e:
+                info['Windows fontconfig error'] = str(e)
+        else:
+            info['Windows fontconfig directory'] = 'not found'
+
         language_info = get_windows_language_info()
         if language_info:
             info.update(language_info)
