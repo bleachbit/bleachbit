@@ -940,7 +940,8 @@ class GUI(Gtk.ApplicationWindow):
             ('italic', {'style': 2}),   # Pango.Style.ITALIC = 2
             ('underline', {'underline': 1}),  # Pango.Underline.SINGLE = 1
             ('strikethrough', {'strikethrough': True}),
-            ('heading', {'scale': 1.5})  # 50% larger font for headings
+            ('heading', {'scale': 1.5}),  # 50% larger font for headings
+            ('safe', {'family': 'Lucida Sans, Arial, Trebuchet MS', 'scale': 1.2})
         ]:
             if not self.textbuffer.get_tag_table().lookup(tag_name):
                 tag = self.textbuffer.create_tag(tag_name)
@@ -948,20 +949,15 @@ class GUI(Gtk.ApplicationWindow):
                     tag.set_property(prop, value)
 
         test_texts = [
-                "Uppercase: ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-                "Lowercase: abcdefghijklmnopqrstuvwxyz",
-                "Digits: 0123456789, Punctuation: !@#$%^&*()_+{}|:<>?",
-                "Ligature: fi fl ffi ffl, Similar characters: 0O1Il|!",
-                "Accented characters: áéíóúñ, Arrows and symbols: →←↑↓",
-                "gettext (localization): %s, %s, %s" % (_("Cache"), _("Cookies"), _("History"))
+                "Uppercase: ABCDEFGHIJKLMNOPQRSTUVWXYZ, Lowercase: abcdefghijklmnopqrstuvwxyz",
+                "Digits: 0123456789, Punctuation: !@#$%^&*()_+{}|:<>?, Ligature: fi fl ffi ffl",
+                "A quick brown fox jumps over the lazy dog."
         ]
 
-        # Add a heading first
         for tag in (None, 'bold', 'italic', 'underline', 'strikethrough', 'heading'):
-            self.append_text("testing font tag {}\n".format(tag), scroll=False)
+            self.append_text(f"Testing font tag {tag}\n", tag='safe', scroll=False)
             for text in test_texts:
                 self.append_text(text + "\n", tag, scroll=False)
-
 
 
     def update_log_level(self):
