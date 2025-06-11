@@ -24,7 +24,9 @@ General code
 import getpass
 import logging
 import os
+import shlex
 import shutil
+import subprocess
 import sys
 
 import bleachbit
@@ -157,7 +159,7 @@ def get_real_uid():
     if login and 'root' != login:
         # pwd does not exist on Windows, so global unconditional import
         # would cause a ModuleNotFoundError.
-        import pwd # pylint: disable=import-outside-toplevel
+        import pwd  # pylint: disable=import-outside-toplevel
         return pwd.getpwnam(login).pw_uid
 
     # os.getuid() returns 0 for sudo, so use it as a last resort.
@@ -178,8 +180,75 @@ def makedirs(path):
         chownself(path)
 
 
-def run_external(args, stdout=None, env=None, clean_env=True, timeout=None):
-    """Run external command and return (return code, stdout, stderr)"""
+def run_external_nowait(args, env=None, kwargs=None):
+    """Run an external program in the background. Return immediately.
+
+    Do not issue a ResourceWarning.
+    Ignore the output of the new process.
+
+    Returns a boolean whether the process was started successfully.
+
+    """
+    try:
+        if sys.platform == 'win32':
+            kwargs['creationflags'] = subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP
+            # Set close_fds to True to prevent Python from tracking the process
+            # Also prevents ResourceWarnings
+            kwargs['close_fds'] = True
+            try:
+                # Start the process with explicit None for stdio to prevent handle inheritance
+                process = subprocess.Popen(args,
+                                           stdin=None,
+                                           stdout=None,
+                                           stderr=None,
+                                           env=env, **kwargs)
+                # Close the process handle to prevent ResourceWarning
+                process.returncode = 0
+                # This prevents the ResourceWarning in __del__
+                process._handle.Close()
+                process._handle = None
+                return True
+            except Exception as e:
+                logger.warning('Failed to start process %s: %s', args, e)
+                return False
+
+        # Unix/Linux
+        pid = os.fork()
+        if pid == 0:
+            # Child process
+            try:
+                # Detach from parent session
+                os.setsid()
+                # Redirect standard streams to devnull
+                with open(os.devnull, 'w', encoding=bleachbit.stdout_encoding) as devnull:
+                    os.dup2(devnull.fileno(), sys.stdout.fileno())
+                    os.dup2(devnull.fileno(), sys.stderr.fileno())
+                with open(os.devnull, 'r', encoding=bleachbit.stdout_encoding) as devnull:
+                    os.dup2(devnull.fileno(), sys.stdin.fileno())
+                # Set environment if needed
+                if env:
+                    os.environ.clear()
+                    os.environ.update(env)
+                os.execvp(args[0], args)
+            except Exception:
+                os._exit(1)
+        else:
+            return True
+    except subprocess.TimeoutExpired:
+        # This is good on Windows.
+        return True
+    except Exception as e:
+        logger.warning('Failed to start process %s: %s', args, e)
+        return False
+
+
+def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait=True):
+    """Run external command and return (return code, stdout, stderr)
+
+    The caller must expand environment variables before calling this function.
+
+    If wait=False, the process will be started but not waited for, and (0, '', '') will be returned.
+    """
     assert args is not None
     assert isinstance(args, (list, tuple))
     for arg in args:
@@ -191,20 +260,14 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None):
     if clean_env and isinstance(env, dict) and len(env) > 0:
         raise ValueError(
             "Cannot set environment variables when clean_env is True")
-    logger.debug('running cmd ' + ' '.join(args))
-    import subprocess
+    logger.debug('running cmd %s', ' '.join(args))
     if stdout is None:
         stdout = subprocess.PIPE
     kwargs = {}
     encoding = bleachbit.stdout_encoding
     if sys.platform == 'win32':
         # hide the 'DOS box' window
-        import win32process
-        import win32con
-        stui = subprocess.STARTUPINFO()
-        stui.dwFlags = win32process.STARTF_USESHOWWINDOW
-        stui.wShowWindow = win32con.SW_HIDE
-        kwargs['startupinfo'] = stui
+        kwargs['creationflags'] = subprocess.CREATE_NO_WINDOW
         encoding = 'mbcs'
     if clean_env and 'posix' == os.name:
         # Clean environment variables so that that subprocesses use English
@@ -221,22 +284,43 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None):
         env['LANG'] = 'C'
         env['LC_ALL'] = 'C'
 
+    if not wait:
+        if run_external_nowait(args, env=env, kwargs=kwargs):
+            return (0, '', '')
+        # Use fallback method.
+        kwargs['start_new_session'] = True
+
     with subprocess.Popen(args, stdout=stdout,
-                          stderr=subprocess.PIPE, env=env, **kwargs) as p:
+                          stderr=subprocess.PIPE, env=env, **kwargs) as process:
         try:
-            out = p.communicate(timeout=timeout)
+            out = process.communicate(timeout=timeout)
         except subprocess.TimeoutExpired:
-            p.kill()
-            p.wait(timeout=timeout)
+            process.kill()
+            process.wait(timeout=timeout)
             raise
         except KeyboardInterrupt:
-            out = p.communicate()
+            out = process.communicate()
             print(out[0])
             print(out[1])
             raise
-    return (p.returncode,
-            str(out[0], encoding=encoding) if out[0] else '',
-            str(out[1], encoding=encoding) if out[1] else '')
+
+        if not wait:
+            return (0, '', '')
+
+        return (process.returncode,
+                str(out[0], encoding=encoding) if out[0] else '',
+                str(out[1], encoding=encoding) if out[1] else '')
+
+
+def shell_split(cmd):
+    """Split a shell command into a list of arguments"""
+    args0 = shlex.split(cmd, posix=os.name == 'posix')
+    args = []
+    for arg in args0:
+        if os.name == 'nt' and arg.startswith('"') and arg.endswith('"'):
+            arg = arg[1:-1]
+        args.append(arg)
+    return args
 
 
 def sudo_mode():

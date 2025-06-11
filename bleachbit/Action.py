@@ -31,7 +31,6 @@ import glob
 import logging
 import os
 import re
-import shlex
 
 
 if 'posix' == os.name:
@@ -549,19 +548,14 @@ class Process(ActionProvider):
 
         def run_process():
             try:
-                if self.wait:
-                    args = shlex.split(self.cmd)
-                    (rc, stdout, stderr) = General.run_external(args)
-                else:
-                    rc = 0  # unknown because we don't wait
-                    from subprocess import Popen
-                    Popen(self.cmd)
+                args = General.shell_split(self.cmd)
+                (rc, stdout, stderr) = General.run_external(args, wait=self.wait)
             except Exception as e:
                 raise RuntimeError(
-                    'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e))) from e
-            if 0 != rc:
+                    'Exception in external command\nCommand: %s\nError: %s' % (args, str(e))) from e
+            if self.wait and 0 != rc:
                 msg = 'Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n'
-                logger.warning(msg, self.cmd, rc, stdout, stderr)
+                logger.warning(msg, args, rc, stdout, stderr)
             return 0
         yield Command.Function(path=None, func=run_process, label=_("Run external command: %s") % self.cmd)
 
