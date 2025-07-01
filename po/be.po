@@ -6,24 +6,25 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2018-12-08 10:43+0000\n"
-"Last-Translator: Zaharov Alexandr <Unknown>\n"
-"Language-Team: Belarusian <be@li.org>\n"
+"PO-Revision-Date: 2025-07-02 00:01+0000\n"
+"Last-Translator: Sergey <krackeros815@gmail.com>\n"
+"Language-Team: Belarusian <https://hosted.weblate.org/projects/bleachbit/"
+"main/be/>\n"
 "Language: be\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.13-dev\n"
 "X-Launchpad-Export-Date: 2018-12-08 23:32+0000\n"
-"X-Generator: Launchpad (build 18831)\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/winamp.xml ../cleaners/vlc.xml
 msgid "Media player"
-msgstr ""
+msgstr "Мэдыя прайгравальнік"
 
 #: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/safari.xml
 #: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/konqueror.xml
@@ -48,6 +49,7 @@ msgid ""
 "Delete cookies, which contain information such as web site preferences, "
 "authentication, and tracking identification"
 msgstr ""
+"Выдаліць біркі са зьвесткамі наладаў бачын, пацьверджаньнем і адсочваньнем"
 
 #: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
 #: ../cleaners/easytag.xml ../cleaners/safari.xml ../cleaners/chromium.xml
@@ -149,21 +151,22 @@ msgstr "Апошнія ўжытыя"
 #: ../cleaners/winamp.xml ../cleaners/winzip.xml ../cleaners/teamviewer.xml
 #: ../cleaners/vlc.xml
 msgid "Delete the most recently used list"
-msgstr ""
+msgstr "Выдаліць нядаўна скарыстаны сьпіс"
 
 #: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/apt.xml
 msgid "Package manager"
-msgstr ""
+msgstr "Кіраўнік пакетаў"
 
 #: ../cleaners/dnf.xml
 msgid "Remove packages that were formerly dependencies"
-msgstr ""
+msgstr "Выдаліць пакеты раней залежнымі"
 
 #: ../cleaners/dnf.xml
 msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
 msgstr ""
+"Праверыць сьпіс будучы выдаленых пакетаў, увёўшы \"dnf list autoremove\"."
 
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
@@ -210,6 +213,8 @@ msgstr "Выдаліць усе рэзервовыя файлы"
 #: ../cleaners/firefox.xml
 msgid "Crash reports"
 msgstr ""
+"Справаздачы аб аварыі\n"
+"Spravazdačy ab avaryi"
 
 #: ../cleaners/librewolf.xml ../cleaners/beagle.xml ../cleaners/waterfox.xml
 #: ../cleaners/geary.xml ../cleaners/windows_defender.xml
@@ -366,7 +371,7 @@ msgstr "Выдаліць дэбагавыя дзёньнікі"
 
 #: ../cleaners/bash.xml
 msgid "Shell"
-msgstr ""
+msgstr "Абалонка"
 
 #: ../cleaners/bash.xml ../cleaners/sqlite3.xml ../cleaners/octave.xml
 msgid "Delete the command history"
@@ -386,7 +391,7 @@ msgstr "Выдаліць цесткі, наведаныя адрасы і гіс
 
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
-msgstr ""
+msgstr "Тэкставы рэдактар"
 
 #: ../cleaners/audacious.xml
 msgid "Audio player"
@@ -407,7 +412,7 @@ msgstr "Гульня"
 #. This software edits metadata tags, such as title and artist, in audio files
 #: ../cleaners/easytag.xml
 msgid "Audio files tagger"
-msgstr ""
+msgstr "Пазначальнік гукафайлаў"
 
 #: ../cleaners/safari.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/brave.xml
@@ -424,7 +429,7 @@ msgstr "Сістэмны журнал"
 
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
-msgstr ""
+msgstr "Ачысьціць мінулыя сыстэмныя сьпісы"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
@@ -481,11 +486,11 @@ msgstr "E-mail кліент"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Далучэньні"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Супярэчнасьць сынхранізаваньня"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -493,7 +498,7 @@ msgstr "Гэты парамэтар павольны."
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
-msgstr ""
+msgstr "Сумяшчальны слой для даставаньняў Уіндоўз"
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
@@ -501,11 +506,11 @@ msgstr "Мініяцюры"
 
 #: ../cleaners/thumbnails.xml
 msgid "Icons for files on the system"
-msgstr ""
+msgstr "Значкі для сыстэмных файлаў"
 
 #: ../cleaners/gnome.xml ../cleaners/kde.xml
 msgid "Desktop environment"
-msgstr ""
+msgstr "Настольнае асяродьдзе"
 
 #. In GNOME 'Run' is the dialog shown when typing ALT+F2'
 #. In Windows 'Run' is the dialog in the Start menu
@@ -534,7 +539,7 @@ msgstr "Выдаліць бягучы сэанс"
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "A history of forms entered in web sites"
-msgstr ""
+msgstr "Летапіс уведзенага ў бачынах"
 
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
@@ -547,7 +552,7 @@ msgstr ""
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 msgid "Search engines"
-msgstr ""
+msgstr "Пошукавыя рухавічкі"
 
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
@@ -559,6 +564,8 @@ msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr ""
+"Скінуць карыстацкі летапіс пошуку й выдаліць іньшыя пошукавыя рухавічкі, "
+"дададзеныя аўтаматам"
 
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
@@ -578,7 +585,7 @@ msgstr "Сінхранізаваць"
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 msgid "Delete the sync data and sign out of the browser"
-msgstr ""
+msgstr "Выдаліць сынхранізаваныя дадзеныя й выйсьці з аглядніку"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
 msgid "File manager"
@@ -592,23 +599,24 @@ msgstr "Сьпіс апошніх дакумэнтаў"
 #: ../cleaners/windows_explorer.xml
 msgid ""
 "This option will reset pinned locations in Quick Access to their defaults."
-msgstr ""
+msgstr "Гэты выбар скіне замацаваныя месцы ў Хуткім Доступе да змоўчных."
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
-msgstr ""
+msgstr "Абалонкавыя сховішчы"
 
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
 msgstr ""
+"Выдаліць карыстацкую дату, месцазнаходжаньне вакна й іньшыя тэчкавыя дадзеныя"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will reset the position of desktop icons."
-msgstr ""
+msgstr "Гэта скіне месцаходжаньне значкоў стальніцы."
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will restart Windows Explorer."
-msgstr ""
+msgstr "Гэта перазапусьціць Азіральнік Ўіндоўз."
 
 #: ../cleaners/windows_defender.xml
 msgid "Anti-virus"
@@ -616,13 +624,13 @@ msgstr "Антывірус"
 
 #: ../cleaners/windows_defender.xml
 msgid "Quarantine"
-msgstr ""
+msgstr "Карантын"
 
 #: ../cleaners/thunderbird.xml
 msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
-msgstr ""
+msgstr "Выдаленьне пазнакаў скіне налады слупкоў у сьпісе паведамленьняў."
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -630,11 +638,11 @@ msgstr "Выдаліць састарэлыя файлы"
 
 #: ../cleaners/apt.xml
 msgid "Package lists"
-msgstr ""
+msgstr "Сьпісы даставаньняў"
 
 #: ../cleaners/x11.xml
 msgid "Windowing system"
-msgstr ""
+msgstr "Ваконная сыстэма"
 
 #: ../cleaners/gimp.xml
 msgid "Graphics editor"
@@ -642,11 +650,11 @@ msgstr "Графічны рэдактар"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
-msgstr ""
+msgstr "Прагляднік дакумэнтаў"
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
-msgstr ""
+msgstr "Карыстацкія тэчкі будуць скінутыя."
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -654,7 +662,7 @@ msgstr "Глыбокае сканаваньне"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
-msgstr ""
+msgstr "Неўпарадкаваныя чыстыя файлы ў накапляльніку"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -674,13 +682,11 @@ msgstr "Рэдактар"
 
 #: ../cleaners/zoom.xml
 msgid "Recordings"
-msgstr ""
+msgstr "Запісы"
 
 #: ../cleaners/zoom.xml
-#, fuzzy
-#| msgid "Delete the list of game servers"
 msgid "Delete the audio and video recordings"
-msgstr "Выдаліць сьпіс сэрвераў"
+msgstr "Выдаліць гука й бачывазапісы"
 
 #: ../cleaners/recoll.xml
 msgid "Delete the search index, a database of words and the files they contain"
@@ -692,7 +698,7 @@ msgstr "Усталёўшчыкі"
 
 #: ../cleaners/skype.xml
 msgid "Delete cached patches and installers"
-msgstr ""
+msgstr "Выдаліць кішэнныя заплаткі й усталёўшчыкі"
 
 #: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
 msgid "Download history"
@@ -709,11 +715,11 @@ msgstr "Выдаліць сьпіс наведаных вэб-старонак"
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
 msgid "Blocklists"
-msgstr ""
+msgstr "Сьпісы забароны"
 
 #: ../cleaners/transmission.xml
 msgid "Blocklists will need update to work."
-msgstr ""
+msgstr "Сьпісы забароны патрабуюць абнаўленьня для працы."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -721,7 +727,7 @@ msgstr "Торэнты"
 
 #: ../cleaners/transmission.xml
 msgid "Delete the torrents (just the metadata but not the files described)"
-msgstr ""
+msgstr "Выдаліць торэнты (толькі мэтазьветскі, не файлы)"
 
 #: ../cleaners/transmission.xml ../cleaners/vuze.xml
 msgid "Statistics"
@@ -737,23 +743,23 @@ msgstr "Выдаліць сьпіс сэрвераў"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
-msgstr ""
+msgstr "Даставаньньне аддаленага кіраваньня"
 
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Memory dump"
-msgstr ""
+msgstr "Скід памяці"
 
 #: ../cleaners/screenlets.xml
 msgid "Desktop widgets"
-msgstr ""
+msgstr "Віджэты стальніцы"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
-msgstr ""
+msgstr "Файлавы архіватар"
 
 #: ../cleaners/amule.xml
 msgid "Known files history"
-msgstr ""
+msgstr "Летапіс вядомых файлаў"
 
 #. http://wiki.amule.org/wiki/Friend
 #: ../cleaners/amule.xml
