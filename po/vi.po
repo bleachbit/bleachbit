@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2024-06-01 08:09+0000\n"
-"Last-Translator: \"Squishy (C6H12O6+NaCl+H2O)\" <ajavamit@gmail.com>\n"
+"PO-Revision-Date: 2025-07-04 07:01+0000\n"
+"Last-Translator: ducdat0507 <ducdat0507@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/bleachbit/"
 "main/vi/>\n"
 "Language: vi\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 "X-Launchpad-Export-Date: 2021-12-02 04:08+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -166,6 +166,8 @@ msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
 msgstr ""
+"Hãy cẩn trọng kiểm tra các gói sẽ bị gỡ bỏ bằng cách chạy "
+"\"dnf list autoremove\"."
 
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
@@ -413,7 +415,7 @@ msgstr "Trò chơi"
 #. This software edits metadata tags, such as title and artist, in audio files
 #: ../cleaners/easytag.xml
 msgid "Audio files tagger"
-msgstr ""
+msgstr "Trình gán nhãn âm thanh"
 
 #: ../cleaners/safari.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/brave.xml
@@ -430,7 +432,7 @@ msgstr "Hệ thống journals"
 
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
-msgstr ""
+msgstr "Xóa các nhật kí hệ thống cũ"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
@@ -488,7 +490,7 @@ msgstr "Máy khách email"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Các tệp đính kèm"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
@@ -611,6 +613,7 @@ msgstr "Túi vỏ"
 #: ../cleaners/windows_explorer.xml
 msgid "Delete the usage date, window position, and other data for folders"
 msgstr ""
+"Xóa thời lượng sử dụng, vị trí cửa sổ và các thông tin khác của các thư mục"
 
 #: ../cleaners/windows_explorer.xml
 msgid "This will reset the position of desktop icons."
@@ -673,11 +676,11 @@ msgstr "Kiểm tra trước bất kì tập tin nào bạn muốn giữ lại."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
-msgstr ""
+msgstr "Tệp swap VIM của hồ sơ người dùng"
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files across system"
-msgstr ""
+msgstr "Tệp swap VIM của hệ thống"
 
 #: ../cleaners/gedit.xml ../cleaners/vim.xml
 msgid "Editor"
@@ -1370,21 +1373,19 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Automatically detect the system language"
-msgstr ""
+msgstr "Tự động dùng ngôn ngữ hệ thống"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "Ngôn ngữ"
+msgstr "Ngôn ngữ:"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
-msgstr ""
+msgstr "Giấu các trình dọn không hữu ích"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Overwrite contents of files to prevent recovery"
-msgstr ""
+msgstr "Ghi đè nội dung các tệp để ngăn việc hồi phục"
 
 #: ../bleachbit/GuiPreferences.py
 msgid ""
@@ -1400,15 +1401,17 @@ msgstr "Thoát sau khi dọn dẹp"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Confirm before delete"
-msgstr ""
+msgstr "Xác nhận trước khi xóa"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
 msgstr ""
+"Dùng hệ đơn vị IEC (1 KiB = 1024 bytes) thay vì SI (1 kB = 1000 bytes) cho "
+"kích cỡ tệp"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Remember window geometry"
-msgstr ""
+msgstr "Nhớ vị trí cửa sổ"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Show debug messages"
