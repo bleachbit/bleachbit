@@ -159,7 +159,7 @@ msgstr "Trình quản lý gói"
 
 #: ../cleaners/dnf.xml
 msgid "Remove packages that were formerly dependencies"
-msgstr ""
+msgstr "Gỡ bỏ các gói bổ trợ không còn dùng đến"
 
 #: ../cleaners/dnf.xml
 msgid ""
@@ -494,7 +494,7 @@ msgstr "Các tệp đính kèm"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Xung đột đồng bộ"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -809,7 +809,7 @@ msgstr "Quét sâu không hỗ trợ những biến nhiều giá trị"
 #: ../bleachbit/Action.py
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
-msgstr ""
+msgstr "search=\"walk.all\" đã dùng với tệp path=\"%s\""
 
 #. TRANSLATORS: This is a lint-style warning that the CleanerML file
 #. specified a search for glob, but the path specified didn't have any
@@ -819,7 +819,7 @@ msgstr ""
 #: ../bleachbit/Action.py
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
-msgstr ""
+msgstr "path=\"%s\" không phải biểu thức chọn tệp"
 
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Action.py ../bleachbit/Command.py
@@ -845,16 +845,18 @@ msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 msgstr ""
+"Gặp lỗi trong handle_cleaner_option() của trình dọn id = {cleaner_id}, tùy "
+"chọn XML={option_xml}"
 
 #: ../bleachbit/CleanerML.py
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr ""
+msgstr "Đang bỏ qua trình dọn vì nó thuộc chỉ mục công cộng: %s"
 
 #: ../bleachbit/CleanerML.py
 #, python-format
 msgid "Error reading cleaner: %s"
-msgstr ""
+msgstr "Gặp lỗi khi đọc trình dọn: %s"
 
 #. TRANSLATORS: An action is something like cleaning a specific file.
 #. "Not usable" means the whole cleaner will be ignored.
@@ -863,6 +865,8 @@ msgstr ""
 #, python-format
 msgid "Cleaner is not usable on this OS because it has no actions: %s"
 msgstr ""
+"Trình dọn không định nghĩa hành động nào cho hệ điều hành này nên sẽ bị bỏ "
+"qua: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1032,10 +1036,11 @@ msgstr "xem trước các tập tin bị xóa và các thay đổi khác"
 #: ../bleachbit/CLI.py
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr ""
+"chạy các trình dọn để xóa các tập tin hoặc tạo các thay đổi vĩnh viễn khác"
 
 #: ../bleachbit/CLI.py
 msgid "shred specific files or folders"
-msgstr ""
+msgstr "ghi đè các tệp hoăc thư mục nhất định"
 
 #: ../bleachbit/CLI.py
 msgid "wipe free space in the given paths"
@@ -1373,7 +1378,7 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Automatically detect the system language"
-msgstr "Tự động dùng ngôn ngữ hệ thống"
+msgstr "Tự động nhận dạng và dùng ngôn ngữ hệ thống"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Language:"
@@ -1473,10 +1478,8 @@ msgid "This path already exists in the whitelist."
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "Lỗi: %d"
+msgstr "Lỗi"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
@@ -1538,11 +1541,11 @@ msgstr ""
 
 #: ../bleachbit/GUI.py
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 #: ../bleachbit/GUI.py
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "Chương trình dọn các tệp tin rác"
 
 #: ../bleachbit/GUI.py
 msgid ""
@@ -1574,7 +1577,7 @@ msgstr "Hoạt động"
 #. much space an option would clean or did clean
 #: ../bleachbit/GUI.py
 msgid "Size"
-msgstr ""
+msgstr "Kích cỡ"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
@@ -1659,11 +1662,11 @@ msgstr "Huỷ bỏ quá trình xem trước hoặc dọn dẹp"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "Cập nhật"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "Cập nhật BleachBit lên phiên bản mới nhất"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1703,7 +1706,7 @@ msgstr ""
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Freeing %s of memory."
-msgstr ""
+msgstr "Đang giải phóng %s bộ nhớ."
 
 #: ../bleachbit/Memory.py
 #, python-brace-format
@@ -1748,30 +1751,29 @@ msgid "The child memory-wiping process returned code %d."
 msgstr ""
 
 #: ../bleachbit/Network.py
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
-msgstr "Tải URL thất bại:  %s"
+msgstr "Tải URL thất bại: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr ""
+msgstr "Đĩa bị đầy khi viết cấu hình vào tệp: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr ""
+msgstr "Quyền truy cập bị từ chối khi viết cấu hình vào tệp: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Error checking whether path exists: %s"
-msgstr ""
+msgstr "Gặp lỗi khi kiểm tra nếu đường dẫn tồn tại: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Automatically preserving language %s."
-msgstr ""
+msgstr "Tự động giữ ngôn ngữ %s."
 
 #: ../bleachbit/Options.py
 msgid "Error when setting the default drives to shred."
