@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-02-04 17:43+0000\n"
+"PO-Revision-Date: 2025-07-06 03:52+0000\n"
 "Last-Translator: ovl-1 <ovl-002@mailinator.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "bleachbit/main/nb_NO/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 "X-Launchpad-Export-Date: 2019-10-26 13:12+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1779,16 +1779,14 @@ msgid "Downloading URL failed: %s"
 msgstr ""
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "Disken var full da oppsettet ble skrevet til filen %s"
+msgstr "Disken var full da oppsettet ble skrevet til filen: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "Disken var full da oppsettet ble skrevet til filen %s"
+msgstr "Tillatelse nektet ved skriving av oppsettet til filen: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1909,10 +1907,9 @@ msgstr ""
 "Unntak forekom under kjøringen av operasjonen '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Fant ikke programfil: %s"
+msgstr "Fant ikke fil: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
