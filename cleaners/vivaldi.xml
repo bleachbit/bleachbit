@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cleaner id="vivaldi" os="linux">
+  <label>Vivaldi Browser</label>
+  <description>Deep clean for Vivaldi browser</description>
+
+  <!-- Ana cache -->
+  <option id="main_cache">
+    <label>Main Cache</label>
+    <description>Delete general browser cache</description>
+    <action command="delete" search="walk.all" path="$HOME/.cache/vivaldi/Default/Cache"/>
+    <action command="delete" search="walk.all" path="$HOME/.cache/vivaldi/Default/Code Cache"/>
+  </option>
+
+  <!-- GPU + Dawn cache -->
+  <option id="gpu_cache">
+    <label>GPU &amp; Dawn Cache</label>
+    <description>Delete GPU and WebGPU caches</description>
+    <action command="delete" search="walk.all" path="$HOME/.config/vivaldi/Default/GPUCache"/>
+    <action command="delete" search="walk.all" path="$HOME/.config/vivaldi/Default/DawnWebGPUCache"/>
+    <action command="delete" search="walk.all" path="$HOME/.config/vivaldi/Default/DawnGraphiteCache"/>
+  </option>
+
+  <!-- Script & Worker -->
+  <option id="workers">
+    <label>Service Workers</label>
+    <description>Delete Service Worker Script and CacheStorage</description>
+    <action command="delete" search="walk.all" path="$HOME/.config/vivaldi/Default/Service Worker/ScriptCache"/>
+    <action command="delete" search="walk.all" path="$HOME/.config/vivaldi/Default/Service Worker/CacheStorage"/>
+  </option>
+
+  <!-- WebStorage -->
+  <option id="webstorage_cache">
+    <label>WebStorage Cache</label>
+    <description>Delete WebStorage CacheStorage</description>
+    <action command="delete" search="walk.all" path="$HOME/.config/vivaldi/Default/WebStorage"/>
+  </option>
+
+  <!-- Shared Dictionary -->
+  <option id="shared_dictionary">
+    <label>Shared Dictionary Cache</label>
+    <description>Delete Shared Dictionary Cache</description>
+    <action command="delete" search="walk.all" path="$HOME/.config/vivaldi/Default/Shared Dictionary/cache"/>
+    <action command="delete" search="walk.all" path="$HOME/.config/vivaldi/System Profile/Shared Dictionary/cache"/>
+  </option>
+
+  <!-- Extensions Cache -->
+  <option id="extensions_cache">
+    <label>Extensions Cache</label>
+    <description>Delete extension-related caches</description>
+    <action command="delete" search="walk.all" path="$HOME/.config/vivaldi/extensions_crx_cache"/>
+    <action command="delete" search="walk.all" path="$HOME/.config/vivaldi/component_crx_cache"/>
+  </option>
+
+  <!-- Shader / Graphite / GrShader -->
+  <option id="shader_cache">
+    <label>Shader and Graphite Cache</label>
+    <description>Delete shader/graphite caches</description>
+    <action command="delete" search="walk.all" path="$HOME/.config/vivaldi/ShaderCache"/>
+    <action command="delete" search="walk.all" path="$HOME/.config/vivaldi/GrShaderCache"/>
+    <action command="delete" search="walk.all" path="$HOME/.config/vivaldi/GraphiteDawnCache"/>
+  </option>
+
+</cleaner>
+
+
+
+
+
