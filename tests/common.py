@@ -157,11 +157,13 @@ class BleachbitTestCase(unittest.TestCase):
     #
     # file creation functions
     #
-    def write_file(self, filename, contents=b'', mode='wb'):
+    def write_file(self, filename, contents=b'', mode='wb', encoding=None):
         """Create a temporary file, optionally writing contents to it"""
+        if not encoding and mode == 'w':
+            encoding = 'utf-8'
         if not os.path.isabs(filename):
             filename = os.path.join(self.tempdir, filename)
-        with open(extended_path(filename), mode) as f:
+        with open(extended_path(filename), mode, encoding=encoding) as f:
             f.write(contents)
         assert (os.path.exists(extended_path(filename)))
         return filename

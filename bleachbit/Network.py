@@ -22,21 +22,29 @@
 Check for updates via the Internet
 """
 
+# standard library
 import hashlib
 import logging
 import os
+import socket
 import sys
-
-import requests
+import platform
+from collections.abc import Callable
 from urllib3.util.retry import Retry
 
-from bleachbit import bleachbit_exe_path
-from bleachbit.Language import get_text as _
+# third party
+import requests
+
+# local imports
+from bleachbit import bleachbit_exe_path, APP_VERSION
+from bleachbit.FileUtilities import delete
+from bleachbit.Language import get_active_language_code, get_text as _
 
 logger = logging.getLogger(__name__)
 
 
-def download_url_to_fn(url, fn, expected_sha512=None, on_error=None, max_retries=3, backoff_factor=0.5, timeout=60):
+def download_url_to_fn(url, fn, expected_sha512=None, on_error=None,
+                       max_retries=3, backoff_factor=0.5, timeout=60):
     """Download a URL to the given filename
 
     fn: target filename
@@ -57,7 +65,6 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None, max_retries
     assert isinstance(url, str)
     assert isinstance(fn, str), f'fn is not a string: {repr(fn)}'
     assert isinstance(expected_sha512, (type(None), str))
-    from collections.abc import Callable
     assert isinstance(on_error, (type(None), Callable))
     assert isinstance(max_retries, int)
     assert isinstance(backoff_factor, float)
@@ -68,7 +75,6 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None, max_retries
     def do_error(msg2):
         if on_error:
             on_error(msg, msg2)
-        from bleachbit.FileUtilities import delete
         delete(fn, ignore_missing=True)  # delete any partial download
 
     try:
@@ -76,8 +82,8 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None, max_retries
     except requests.exceptions.RequestException as exc:
         # For retryable errors (like 503), use a simplified error message
         if isinstance(exc, requests.exceptions.RetryError):
-            msg2 = f'Server temporarily unavailable (retries exceeded)'
-            logger.warning(f"{msg}: {type(exc).__name__}")
+            msg2 = 'Server temporarily unavailable (retries exceeded)'
+            logger.warning("%s: %s", msg, type(exc).__name__)
         else:
             msg2 = f'{type(exc).__name__}: {exc}'
             logger.exception(msg)
@@ -88,7 +94,6 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None, max_retries
         msg2 = f'HTTP status code: {response.status_code}'
         do_error(msg2)
         return False
-
     if expected_sha512:
         hash_actual = hashlib.sha512(response.content).hexdigest()
         if hash_actual != expected_sha512:
@@ -128,13 +133,13 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60):
     assert timeout > 0
     if hasattr(sys, 'frozen'):
         # when frozen by py2exe, certificates are in alternate location
-        CA_BUNDLE = os.path.join(bleachbit_exe_path, 'cacert.pem')
-        if os.path.exists(CA_BUNDLE):
-            requests.utils.DEFAULT_CA_BUNDLE_PATH = CA_BUNDLE
-            requests.adapters.DEFAULT_CA_BUNDLE_PATH = CA_BUNDLE
+        ca_bundle = os.path.join(bleachbit_exe_path, 'cacert.pem')
+        if os.path.exists(ca_bundle):
+            requests.utils.DEFAULT_CA_BUNDLE_PATH = ca_bundle
+            requests.adapters.DEFAULT_CA_BUNDLE_PATH = ca_bundle
         else:
             logger.error(
-                'Application is frozen but certificate file not found: %s', CA_BUNDLE)
+                'Application is frozen but certificate file not found: %s', ca_bundle)
     headers = {'User-Agent': get_user_agent()}
     # 408: request timeout
     # 429: too many requests
@@ -162,10 +167,12 @@ def get_gtk_version():
     """
 
     try:
+        # pylint: disable=import-outside-toplevel
         import gi
     except ModuleNotFoundError:
         return None
     gi.require_version('Gtk', '3.0')
+    # pylint: disable=import-outside-toplevel, import-error
     from gi.repository import Gtk
     gtk_version = (Gtk.get_major_version(),
                    Gtk.get_minor_version(), Gtk.get_micro_version())
@@ -180,7 +187,6 @@ def get_ip_for_url(url):
     if len(url_split) < 3:
         return '(bad URL)'
     hostname = url.split('/')[2]
-    import socket
     try:
         ip_address = socket.gethostbyname(hostname)
     except socket.gaierror:
@@ -190,11 +196,11 @@ def get_ip_for_url(url):
 
 def get_user_agent():
     """Return the user agent string"""
-    import platform
     __platform = platform.system()  # 'Linux', 'Windows', etc.
     # On Windows, version is like '10.0.22631'.
     __os = platform.uname().version
     if sys.platform == 'linux':
+        # pylint: disable=import-outside-toplevel
         from bleachbit.Unix import get_distribution_name_version
         __os = get_distribution_name_version()
     elif sys.platform[:6] == 'netbsd':
@@ -202,15 +208,12 @@ def get_user_agent():
         mach = platform.machine()
         rel = platform.release()
         __os = __sys + '/' + mach + ' ' + rel
-    from bleachbit.Language import get_active_language_code
     __locale = get_active_language_code()
     gtk_ver_raw = get_gtk_version()
     if gtk_ver_raw:
-        gtk_ver = '; GTK %s' % gtk_ver_raw
+        gtk_ver = f'; GTK {gtk_ver_raw}'
     else:
         gtk_ver = ''
 
-    from bleachbit import APP_VERSION
-    agent = "BleachBit/%s (%s; %s; %s%s)" % (APP_VERSION,
-                                             __platform, __os, __locale, gtk_ver)
+    agent = f"BleachBit/{APP_VERSION} ({__platform}; {__os}; {__locale}{gtk_ver})"
     return agent

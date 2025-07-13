@@ -22,13 +22,16 @@
 Test case for module Network
 """
 
+import ipaddress
 import logging
 import os
 import requests
 
+import bleachbit
 from tests import common
-from bleachbit.Network import download_url_to_fn, fetch_url, get_gtk_version, get_ip_for_url, get_user_agent
-import bleachbit.Network
+from bleachbit.FileUtilities import delete
+from bleachbit.Network import (download_url_to_fn, fetch_url, get_gtk_version,
+                              get_ip_for_url, get_user_agent)
 
 logger = logging.getLogger(__name__)
 
@@ -54,24 +57,21 @@ class NetworkTestCase(common.BleachbitTestCase):
             print(
                 f'test on_error: {error_type} error for {msg1.split(":")[-1].strip()}')
             on_error_called[0] = True
-        for test in tests:
-            self.assertNotExists(fn)
-            url = test[0]
-            expected_rc = test[1]
-            on_error_called = [False]
-            rc = download_url_to_fn(
-                url, fn, None, on_error=on_error, timeout=20)
-            err_msg = 'test_download_url_to_fn({}) returned {} instead of {}'.format(
-                url, rc, expected_rc)
-            self.assertEqual(rc, expected_rc, err_msg)
-            if expected_rc:
-                self.assertExists(fn)
-            self.assertNotEqual(rc, on_error_called[0])
-            # minimal parameters
-            rc = download_url_to_fn(url, fn)
-            self.assertEqual(rc, expected_rc, err_msg)
-            from bleachbit.FileUtilities import delete
-            delete(fn, ignore_missing=True)
+        for (url, expected_rc) in tests:
+            with self.subTest(url=url, expected_rc=expected_rc):
+                self.assertNotExists(fn)
+                on_error_called = [False]
+                rc = download_url_to_fn(url, fn, None,
+                                        on_error=on_error, timeout=20)
+                err_msg = f'test_download_url_to_fn({url}) returned {rc} instead of {expected_rc}'
+                self.assertEqual(rc, expected_rc, err_msg)
+                if expected_rc:
+                    self.assertExists(fn)
+                self.assertNotEqual(rc, on_error_called[0])
+                # minimal parameters
+                rc = download_url_to_fn(url, fn)
+                self.assertEqual(rc, expected_rc, err_msg)
+                delete(fn, ignore_missing=True)
 
     def test_get_gtk_version(self):
         """Unit test for get_gtk_version()"""
@@ -83,12 +83,11 @@ class NetworkTestCase(common.BleachbitTestCase):
         """Unit test for get_ip_for_url()"""
         for good_url in ('https://www.example.com', bleachbit.update_check_url):
             ip_str = get_ip_for_url(good_url)
-            import ipaddress
-            ip = ipaddress.ip_address(ip_str)
+            _ = ipaddress.ip_address(ip_str)
         for bad_url in (None, '', 'https://test.invalid'):
             ret = get_ip_for_url(bad_url)
-            self.assertEqual(
-                ret[0], '(', 'get_ip_for_url({})={}'.format(bad_url, ret))
+            self.assertEqual(ret[0], '(',
+                             f'get_ip_for_url({bad_url})={ret}')
 
     def test_get_user_agent(self):
         """Unit test for method get_user_agent()"""
@@ -120,7 +119,7 @@ class NetworkTestCase(common.BleachbitTestCase):
                 fetch_url(url, max_retries=1, timeout=2)
 
     def test_fetch_url_invalid(self):
-        # Test connection error
+        """Unit test for fetch_url() with invalid URL"""
         url = 'https://test.invalid'
         with self.assertRaises(requests.exceptions.RequestException):
             fetch_url(url)
