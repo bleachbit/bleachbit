@@ -195,9 +195,11 @@ class GuiChaffTestCase(common.BleachbitTestCase):
 
         # Simulate clicking make button
         self.dialog.make_button.clicked()
+        self.refresh_gui(0.1)
 
         # Verify make_files_thread was called with correct arguments
         mock_make_files.assert_called_once()
+        self.assertIsInstance(mock_make_files.call_args, tuple)
         args = mock_make_files.call_args[0]
         self.assertEqual(args[0], 10)  # file_count
         self.assertEqual(args[1], 0)   # inspiration (2600)
