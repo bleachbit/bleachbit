@@ -41,12 +41,13 @@ class NetworkTestCase(common.BleachbitTestCase):
 
     def test_download_url_to_fn(self):
         """Unit test for function download_url_to_fn()"""
-        # 200: no error
-        # 404: not retryable error
-        # 503: retryable error
-        tests = (('http://httpstat.us/200', True),
-                 ('http://httpstat.us/404', False),
-                 ('http://httpstat.us/503', False))
+        # Test different HTTP status codes
+        # 200: success
+        # 404: not found (non-retryable error)
+        # 500: server error (retryable error)
+        tests = (('https://httpbin.org/status/200', True),
+                 ('https://httpbin.org/status/404', False),
+                 ('https://httpbin.org/status/500', False))
         fn = os.path.join(self.tempdir, 'download')
         on_error_called = [False]
 
@@ -100,11 +101,12 @@ class NetworkTestCase(common.BleachbitTestCase):
         schemes = ('http', 'https')
         status_codes = (200, 404)
         # As of 2025-03-09, httpstat.us returns the number without the text.
-        expected_content = {200: ['200 OK', '200'],
-                            404: ['404 Not Found', '404']}
+        # httpbin.org returns blank page.
+        expected_content = {200: ['200 OK', ''],
+                            404: ['404 Not Found', '']}
         for scheme in schemes:
             for status_code in status_codes:
-                url = scheme + '://httpstat.us/' + str(status_code)
+                url = scheme + '://httpbin.org/status/' + str(status_code)
                 response = fetch_url(url, max_retries=0, timeout=5)
                 self.assertEqual(response.status_code, status_code)
                 self.assertIn(response.text.strip(),
@@ -114,7 +116,7 @@ class NetworkTestCase(common.BleachbitTestCase):
         """Unit test for fetch_url() with retry"""
         schemes = ('http', 'https')
         for scheme in schemes:
-            url = scheme + '://httpstat.us/500'
+            url = scheme + '://httpbin.org/status/500'
             with self.assertRaises(requests.exceptions.RetryError):
                 fetch_url(url, max_retries=1, timeout=2)
 
