@@ -298,6 +298,7 @@ class CLITestCase(common.BleachbitTestCase):
                 self.assertEqual(output[0], 0)
                 self.assertNotExists(filename)
 
+    @common.test_also_with_sudo
     def test_sysinfo(self):
         """Unit test for --sysinfo
 
@@ -312,6 +313,9 @@ class CLITestCase(common.BleachbitTestCase):
         for env_prefix in env_configs:
             args = env_prefix + [get_executable(), 'bleachbit.py', '--sysinfo']
             output = run_external(args)
+            if os.name == 'posix' and os.environ.get('USER') == 'root' and \
+                output[0] == 1:
+                continue
             self.assertEqual(output[0], 0, output)
             self.assertIn('sys.version', output[1])
             # FIXME: verify that there is not a message like
