@@ -377,7 +377,7 @@ class Bleachbit(Gtk.Application):
         #
         # Rebuild a minimal bleachbit.ini when quitting
         GLib.idle_add(self.quit, None, None, True,
-                      priority=GObject.PRIORITY_LOW)
+                      priority=GLib.PRIORITY_LOW)
 
     def cb_wipe_free_space(self, action, param):
         """callback to wipe free space in arbitrary folder"""
@@ -480,13 +480,13 @@ class Bleachbit(Gtk.Application):
         self._window.present()
         if self._shred_paths:
             GLib.idle_add(GUI.shred_paths, self._window,
-                          self._shred_paths, priority=GObject.PRIORITY_LOW)
+                          self._shred_paths, priority=GLib.PRIORITY_LOW)
             # When we shred paths and auto exit with the Windows Explorer context menu command we close the
             # application in GUI.shred_paths, because if it is closed from here there are problems.
             # Most probably this is something related with how GTK handles idle quit calls.
         elif self._auto_exit:
             GLib.idle_add(self.quit,
-                          priority=GObject.PRIORITY_LOW)
+                          priority=GLib.PRIORITY_LOW)
             print('Success')
 
 
@@ -905,7 +905,7 @@ class GUI(Gtk.ApplicationWindow):
 
         if self._auto_exit:
             GLib.idle_add(self.close,
-                          priority=GObject.PRIORITY_LOW)
+                          priority=GLib.PRIORITY_LOW)
 
         # user aborted
         return False
