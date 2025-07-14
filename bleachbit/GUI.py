@@ -868,9 +868,9 @@ class GUI(Gtk.ApplicationWindow):
     def build_appindicator_menu(self):
         """Build the app indicator menu"""
         menu = Gtk.Menu()
-        item_clean = Gtk.MenuItem('Clean')
+        item_clean = Gtk.MenuItem(label=_("Clean"))
         item_clean.connect('activate', self.run_operations)
-        item_quit = Gtk.MenuItem('Quit BleachBit')
+        item_quit = Gtk.MenuItem(label=_("Quit"))
         item_quit.connect('activate', self.on_quit)
         menu.append(item_clean)
         menu.append(item_quit)

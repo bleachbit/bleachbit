@@ -27,11 +27,11 @@ from bleachbit.Options import options
 from bleachbit import FileUtilities, Special
 from tests import common
 
+import contextlib
 import os
 import os.path
 import shutil
 import sqlite3
-import contextlib
 
 chrome_bookmarks = b"""
 {
@@ -274,7 +274,7 @@ class SpecialAssertions:
         """Asserts SQLite tables exists and are empty"""
         if not os.path.lexists(path):
             raise AssertionError('Path does not exist: %s' % path)
-        with sqlite3.connect(path) as conn:
+        with contextlib.closing(sqlite3.connect(path)) as conn:
             cursor = conn.cursor()
             for table in tables:
                 cursor.execute('select 1 from %s limit 1' % table)
@@ -564,6 +564,7 @@ INSERT INTO "meta" VALUES('version','20');"""
         This may raise a ResourceWarning on Python 3.13
         """
         for _ in range(100):
-            self.test_sqlite_table_exists()
+            self.test_delete_chrome_autofill()
             self.test_get_sqlite_int()
             self.test_get_sqlite_values()
+            self.test_sqlite_table_exists()

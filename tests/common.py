@@ -28,6 +28,7 @@ import sys
 import tempfile
 import time
 import unittest
+import warnings
 from unittest import mock
 
 if 'win32' == sys.platform:
@@ -46,7 +47,15 @@ class BleachbitTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """Create a temporary directory for the testcase"""
+        """Do common setup for the test case
+
+        * Create a temporary directory for the testcase.
+        * Treat warnings as errors.
+        This is also set by environment variable in `Makefile` and
+        `appveyor.yml`.
+        * Patch options paths.
+        """
+        warnings.simplefilter("error")
         cls.tempdir = tempfile.mkdtemp(prefix=cls.__name__)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             cls._patch_options_paths()
@@ -66,7 +75,12 @@ class BleachbitTestCase(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """remove the temporary directory"""
+        """Do common teardown for the test case
+
+        * Collect garbage.
+        * Remove the temporary directory.
+        * Restore options paths.
+        """
         gc_collect()
         # On Windows, a file may be temporarily locked, so retry.
         for attempt in range(5):
