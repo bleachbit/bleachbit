@@ -25,6 +25,7 @@ File-related utilities
 
 # standard imports
 import atexit
+import contextlib
 import ctypes
 import errno
 import glob
@@ -513,17 +514,16 @@ def execute_sqlite3(path, cmds):
     from bleachbit.Options import options
     assert isinstance(path, str)
     assert isinstance(cmds, str)
-    with sqlite3.connect(path) as conn:
-        cursor = conn.cursor()
-
+    with contextlib.closing(sqlite3.connect(path)) as conn:
         # overwrites deleted content with zeros
         # https://www.sqlite.org/pragma.html#pragma_secure_delete
         if options.get('shred'):
-            cursor.execute('PRAGMA secure_delete=ON')
+            conn.execute('PRAGMA secure_delete=ON')
+            assert conn.execute('PRAGMA secure_delete').fetchone()[0] == 1
 
         for cmd in cmds.split(';'):
             try:
-                cursor.execute(cmd)
+                conn.execute(cmd)
             except sqlite3.OperationalError as exc:
                 if str(exc).find('no such function: ') >= 0:
                     # fixme: determine why randomblob and zeroblob are not
@@ -534,8 +534,9 @@ def execute_sqlite3(path, cmds):
             except sqlite3.DatabaseError as exc:
                 raise sqlite3.DatabaseError(f'{exc}: {path}')
 
-        cursor.close()
-        bleachbit.General.gc_collect()
+        conn.commit()
+
+    bleachbit.General.gc_collect()
 
 
 def expand_glob_join(pathname1, pathname2):

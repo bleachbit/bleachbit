@@ -523,3 +523,47 @@ INSERT INTO "meta" VALUES('version','20');"""
         ver = Special.get_sqlite_int(
             filename, 'select value from meta where key="version"')
         self.assertEqual(ver, [20])
+
+    def test_get_sqlite_values(self):
+        """Unit test for get_sqlite_values()"""
+        ddl = """CREATE TABLE foo(id int, value int);INSERT INTO foo VALUES(12, 34), (56, 78);"""
+        # create test file
+        filename = self.mkstemp(prefix='bleachbit-test-sqlite')
+        FileUtilities.execute_sqlite3(filename, ddl)
+        self.assertExists(filename)
+        # run the test
+        sql = 'select id, value from foo'
+        # pylint: disable=protected-access
+        ver = Special._get_sqlite_values(filename, sql)
+        self.assertEqual(ver, [(12, 34), (56, 78)])
+        ver = Special._get_sqlite_values(
+            filename, f'{sql} where id = 0')
+        self.assertEqual(ver, [])
+        with self.assertRaises(sqlite3.OperationalError):
+            Special._get_sqlite_values(
+                filename, 'select id, value from does_not_exist')
+        with self.assertRaises(sqlite3.OperationalError):
+            Special._get_sqlite_values('doesnotexist', sql)
+
+    def test_sqlite_table_exists(self):
+        """Unit test for _sqlite_table_exists()"""
+        # create test file
+        filename = self.mkstemp(prefix='bleachbit-test-sqlite')
+        sql = "CREATE TABLE foo(id int)"
+        FileUtilities.execute_sqlite3(filename, sql)
+        self.assertExists(filename)
+        # run the test
+        # pylint: disable=protected-access
+        self.assertTrue(Special._sqlite_table_exists(filename, 'foo'))
+        self.assertFalse(Special._sqlite_table_exists(
+            filename, 'does_not_exist'))
+
+    def test_sqlite_loop(self):
+        """Repeat SQLite tests
+
+        This may raise a ResourceWarning on Python 3.13
+        """
+        for _ in range(100):
+            self.test_sqlite_table_exists()
+            self.test_get_sqlite_int()
+            self.test_get_sqlite_values()

@@ -24,6 +24,7 @@ Test case for module FileUtilities
 """
 
 # standard library
+import contextlib
 import ctypes
 import json
 import locale
@@ -37,6 +38,7 @@ import sys
 import tempfile
 import time
 import unittest
+import warnings
 
 # local import
 from bleachbit.FileUtilities import (
@@ -607,6 +609,12 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         execute_sqlite3(db_path, ';'.join(cmds))
         execute_sqlite3(db_path, 'vacuum')
 
+        with contextlib.closing(sqlite3.connect(db_path)) as conn:
+            res = conn.execute('select 1 from test where name = "A"')
+            row = res.fetchone()
+            self.assertIsNotNone(row)
+            self.assertEqual(row[0], 1)
+
         gc_collect()
         os.unlink(db_path)
         self.assertNotExists(db_path)
@@ -998,6 +1006,16 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         gc_collect()
         delete(path)
         self.assertNotExists(path)
+
+    def test_sqlite_loop(self):
+        """Repeat SQLite tests
+
+        This may raise ResourceWarning on Python 3.13.
+        """
+        warnings.simplefilter("error")
+        for _ in range(50):
+            self.test_execute_sqlite3()
+            self.test_vacuum_sqlite3()
 
     def test_whitelisted(self):
         """Unit test for whitelisted()"""
