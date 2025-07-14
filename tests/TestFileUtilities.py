@@ -731,20 +731,39 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
     @common.skipUnlessWindows
     def test_free_space_windows(self):
-        """Unit test for free_space() on Windows"""
+        """Unit test for free_space() on Windows
+
+        Repeat because of possible race condition.
+        """
         args = ['wmic', 'LogicalDisk', 'get', 'DeviceID,', 'FreeSpace']
-        (rc, stdout, stderr) = run_external(args)
-        if rc:
-            print(f'error calling WMIC\nargs={args}\nstderr={stderr}')
-            return
-        for line in stdout.split('\n'):
-            line = line.strip()
-            if not re.match(r'([A-Z]):\s+(\d+)', line):
-                continue
-            drive, bytes_free = re.split(r'\s+', line)
-            bytes_free = int(bytes_free)
-            free = free_space(drive)
-            self.assertEqual(bytes_free, free)
+        max_attempts = 3
+
+        def compare_free_space():
+            """Returns whether all drives have equal free space"""
+            (rc, stdout, stderr) = run_external(args)
+            self.assertEqual(rc, 0, f'error calling WMIC\nargs={args}\nstderr={stderr}')
+            lines = stdout.splitlines()
+            self.assertGreater(len(lines), 0)
+            for line in lines:
+                line = line.strip()
+                if not re.match(r'([A-Z]):\s+(\d+)', line):
+                    continue
+                drive, bytes_free = re.split(r'\s+', line)
+                bytes_free = int(bytes_free)
+                free = free_space(drive)
+                if free != bytes_free:
+                    logger.debug('Free space mismatch for drive %s: %s != %s', drive, free, bytes_free)
+                    return False
+            return True
+
+        for attempt in range(max_attempts):
+            if attempt > 0:
+                time.sleep(0.5)
+            if compare_free_space():
+                return
+            if attempt == max_attempts - 1:
+                self.fail(f'Failed to find equal free space after {max_attempts} attempts')
+
 
     def test_get_filesystem_type(self):
         """Unit test for get_filesystem_type()"""
