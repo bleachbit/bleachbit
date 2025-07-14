@@ -67,6 +67,7 @@ from bleachbit.FileUtilities import (
     open_files_lsof,
     OpenFiles,
     same_partition,
+    sync,
     uris_to_paths,
     vacuum_sqlite3,
     whitelisted,
@@ -959,6 +960,10 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                 this_drive = os.path.splitdrive(drive)[0]
                 self.assertEqual(same_partition(home, drive),
                                  home_drive == this_drive)
+
+    def test_sync(self):
+        """Unit test for sync()"""
+        sync()
 
     def test_uris_to_paths(self):
         """Unit test for uris_to_paths()"""
