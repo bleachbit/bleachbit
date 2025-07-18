@@ -25,19 +25,59 @@ Test case for module Network
 import ipaddress
 import logging
 import os
+import random
 import requests
 
 import bleachbit
 from tests import common
 from bleachbit.FileUtilities import delete
 from bleachbit.Network import (download_url_to_fn, fetch_url, get_gtk_version,
-                              get_ip_for_url, get_user_agent)
+                               get_ip_for_url, get_user_agent)
 
 logger = logging.getLogger(__name__)
 
 
+def response_to_error_msg(response):
+    """Convert response to error message"""
+    return "URL: {url}\n" + \
+           f"Status: {response.status_code} {response.reason}\n" + \
+           f"Response headers: {dict(response.headers)}\n" + \
+           f"Response content: {response.text}"
+
+
 class NetworkTestCase(common.BleachbitTestCase):
     """Test case for module Network"""
+    status_generators = [
+        'https://httpbin.org/status/{}',
+        'https://httpbingo.org/status/{}',
+        'https://mock.httpstatus.io/{}',
+        'https://postman-echo.com/status/{}',
+        'https://the-internet.herokuapp.com/status_codes/{}'
+    ]
+    status_generator_url = None
+
+    @classmethod
+    def setUpClass(cls):
+        super(NetworkTestCase, cls).setUpClass()
+        status_generators = list(cls.status_generators)
+        random.shuffle(status_generators)
+        for generator in status_generators:
+            url = generator.format(200)
+            try:
+                response = fetch_url(url, timeout=5, max_retries=0)
+                if response.status_code == 200:
+                    cls.status_generator_url = generator
+                    logger.info('Using status generator: %s',
+                                cls.status_generator_url)
+                    return
+                else:
+                    logger.warning('Status generator %s returned %s',
+                                   generator, response.status_code)
+            except requests.exceptions.RequestException as e:
+                logger.warning('Status generator failed: %s (%s)',
+                               generator.format('...'), e)
+        if not cls.status_generator_url:
+            raise RuntimeError('No working HTTP status code generator found.')
 
     def test_download_url_to_fn(self):
         """Unit test for function download_url_to_fn()"""
@@ -45,9 +85,9 @@ class NetworkTestCase(common.BleachbitTestCase):
         # 200: success
         # 404: not found (non-retryable error)
         # 500: server error (retryable error)
-        tests = (('https://httpbin.org/status/200', True),
-                 ('https://httpbin.org/status/404', False),
-                 ('https://httpbin.org/status/500', False))
+        tests = ((self.status_generator_url.format(200), True),
+                 (self.status_generator_url.format(404), False),
+                 (self.status_generator_url.format(500), False))
         fn = os.path.join(self.tempdir, 'download')
         on_error_called = [False]
 
@@ -98,27 +138,20 @@ class NetworkTestCase(common.BleachbitTestCase):
 
     def test_fetch_url_nonretry(self):
         """Unit test for fetch_url() without retry"""
-        schemes = ('http', 'https')
         status_codes = (200, 404)
-        # As of 2025-03-09, httpstat.us returns the number without the text.
-        # httpbin.org returns blank page.
-        expected_content = {200: ['200 OK', ''],
-                            404: ['404 Not Found', '']}
-        for scheme in schemes:
-            for status_code in status_codes:
-                url = scheme + '://httpbin.org/status/' + str(status_code)
+        for status_code in status_codes:
+            url = self.status_generator_url.format(status_code)
+            with self.subTest(status_code=status_code):
                 response = fetch_url(url, max_retries=0, timeout=5)
-                self.assertEqual(response.status_code, status_code)
-                self.assertIn(response.text.strip(),
-                              expected_content[status_code])
+                error_msg = response_to_error_msg(response)
+                self.assertEqual(response.status_code, status_code,
+                                 error_msg)
 
     def test_fetch_url_retry(self):
         """Unit test for fetch_url() with retry"""
-        schemes = ('http', 'https')
-        for scheme in schemes:
-            url = scheme + '://httpbin.org/status/500'
-            with self.assertRaises(requests.exceptions.RetryError):
-                fetch_url(url, max_retries=1, timeout=2)
+        url = self.status_generator_url.format(500)
+        with self.assertRaises(requests.exceptions.RetryError):
+            fetch_url(url, max_retries=1, timeout=2)
 
     def test_fetch_url_invalid(self):
         """Unit test for fetch_url() with invalid URL"""
