@@ -370,6 +370,13 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
 
        If shred is enabled as a function parameter or the BleachBit global
        parameter, the path will be shredded unless allow_shred = False.
+
+       All links are removed without following the link. This includes:
+       * Linux symlink
+       * Windows symlink (soft link)
+       * Windows hard link
+       * Windows junction
+       * Windows .lnk files
     """
     from bleachbit.Options import options
     is_special = False
