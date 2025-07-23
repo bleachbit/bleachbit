@@ -163,10 +163,13 @@ class Function:
                 try:
                     self.func(self.path)
                 except DatabaseError as e:
-                    if -1 == e.message.find('file is encrypted or is not a database') and \
-                       -1 == e.message.find('or missing database'):
-                        raise
-                    logger.exception(e.message)
+                    # Firefox version 140 added a collation sequence that
+                    # cannot be vacuumed.
+                    # https://github.com/bleachbit/bleachbit/issues/1866
+                    if 'no such collation sequence' in str(e):
+                        logger.debug(str(e))
+                        return
+                    logger.exception(e)
                     return
                 try:
                     newsize = FileUtilities.getsize(self.path)

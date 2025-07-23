@@ -23,6 +23,7 @@ Test case for Command
 """
 
 import os
+from unittest import mock
 
 from tests import common
 from bleachbit import FileUtilities
@@ -67,6 +68,22 @@ class CommandTestCase(common.BleachbitTestCase):
         self.assertGreater(ret['size'], 0)
         self.assertEqual(ret['path'], path)
         self.assertNotExists(path)
+
+    def test_Function_no_collation(self):
+        """Unit test for Function with no collation
+
+        See https://github.com/bleachbit/bleachbit/issues/1866
+        """
+        path = self.write_file('test_Function_no_collation', b'')
+        cmd = Function(path,
+                       lambda p: FileUtilities.execute_sqlite3(
+                           p, 'CREATE TABLE test (name TEXT COLLATE foo);'),
+                       'test_no_collation')
+
+        with mock.patch('bleachbit.Command.logger.debug') as mock_debug:
+            with self.assertRaises(StopIteration):
+                next(cmd.execute(True))
+            mock_debug.assert_called_with(mock.ANY)
 
     def test_Shred(self):
         """Unit test for Shred"""

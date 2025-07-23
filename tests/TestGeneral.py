@@ -28,6 +28,9 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
+import time
+import warnings
 
 # local
 from bleachbit import logger
@@ -39,6 +42,7 @@ from bleachbit.General import (
     get_real_username,
     makedirs,
     run_external,
+    shell_split,
     sudo_mode)
 from tests import common
 from tests.common import test_also_with_sudo
@@ -92,7 +96,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
         # Test that UID is exists in passwd
         # Import pwd here because it would fail on Windows.
-        import pwd # pylint: disable=import-outside-toplevel
+        import pwd  # pylint: disable=import-outside-toplevel
         try:
             pwd_entry = pwd.getpwuid(uid)
             self.assertIsInstance(pwd_entry.pw_name, str)
@@ -169,23 +173,122 @@ class GeneralTestCase(common.BleachbitTestCase):
         """Unit test for run_external"""
         args = {'nt': ['cmd.exe', '/c', 'dir', r'%windir%\system32', '/s', '/b'],
                 'posix': ['find', '/usr/bin']}
-        (rc, stdout, stderr) = run_external(args[os.name])
+        (rc, _stdout, stderr) = run_external(args[os.name])
         self.assertEqual(0, rc)
         self.assertEqual(0, len(stderr))
 
-        self.assertRaises(OSError, run_external, ['cmddoesnotexist'])
+    @common.skipUnlessWindows
+    def test_run_external_quote(self):
+        """Unit test for run_external() with quoted command"""
+        tests = [
+            (('cmd.exe', '/c', 'echo "hello world"'), 'hello world'),
+            ((os.path.expandvars('%windir%\\system32\\ping.exe'), '/?'), 'Usage: ping')
+        ]
+        for args, expected in tests:
+            (rc, stdout, stderr) = run_external(args)
+            self.assertEqual(0, rc)
+            self.assertIn(expected, stdout.strip())
+            self.assertEqual(0, len(stderr))
 
+    def test_run_external_does_not_exist(self):
+        """Unit test for run_external() with non-existent command"""
+        self.assertRaises(OSError, run_external, ['cmddoesnotexist'])
         args = {'nt': ['cmd.exe', '/c', 'dir', r'c:\doesnotexist'],
                 'posix': ['ls', '/doesnotexist']}
-        (rc, stdout, stderr) = run_external(args[os.name])
+        (rc, _stdout, _stderr) = run_external(args[os.name])
         self.assertNotEqual(0, rc)
+
+    def test_run_external_nowait(self):
+        """Unit test for run_external() with wait=False"""
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("error")
+
+            args = {'nt': ['cmd.exe', '/c', 'dir', r'%windir%\system32', '/s', '/b'],
+                    'posix': ['find', '/usr/bin']}
+            (rc, stdout, stderr) = run_external(args[os.name], wait=False)
+            self.assertEqual(0, rc)
+            self.assertEqual(0, len(stdout))
+            self.assertEqual(0, len(stderr))
+
+    def test_run_external_command_completion(self):
+        """Test that run_external() commands complete successfully"""
+        with warnings.catch_warnings(record=True) as w:
+            # Any warning is an error.
+            warnings.simplefilter("error")
+            with tempfile.TemporaryDirectory() as temp_dir:
+                test_file = os.path.join(temp_dir, 'test_file.txt')
+
+                if os.name == 'posix':
+                    cmd = ['touch', test_file]
+                    expected_stdout = ''
+                else:
+                    cmd = ['cmd.exe', '/c', 'copy', 'nul', test_file]
+                    expected_stdout = '1 file(s) copied.'
+
+                # Wait for the command to complete.
+                (rc, stdout, stderr) = run_external(cmd, timeout=5)
+                self.assertEqual(0, rc, stderr)
+                self.assertEqual('', stderr)
+                self.assertEqual(expected_stdout, stdout.strip())
+                self.assertExists(test_file)
+
+                os.unlink(test_file)
+                self.assertNotExists(test_file)
+
+                # Test with wait=False
+                (rc, stdout, stderr) = run_external(cmd, wait=False)
+                self.assertEqual(0, rc)
+                self.assertEqual('', stdout)
+                self.assertEqual('', stderr)
+                time.sleep(1)
+                self.assertExists(test_file)
+
+    def test_run_external_with_timeout_failure(self):
+        """Test run_external() with timeout value that is too short"""
+        if os.name == 'posix':
+            args = ['sleep', '5']
+        else:
+            args = ['ping', '-n', '10', '127.0.0.1']
+        with self.assertRaises(subprocess.TimeoutExpired):
+            run_external(args, timeout=1)
+
+    def test_run_external_stdout(self):
+        """Test that run_external properly captures stdout"""
+        if os.name == 'posix':
+            args = ['echo', 'test output']
+        else:
+            args = ['cmd.exe', '/c', 'echo test output']
+        (rc, stdout, stderr) = run_external(args)
+        self.assertEqual(0, rc)
+        self.assertIn('test output', stdout)
+        self.assertEqual('', stderr)
+
+    def test_run_external_stderr(self):
+        """Test that run_external properly captures stderr"""
+        if os.name == 'posix':
+            args = ['sh', '-c', 'echo "error message" >&2']
+        else:
+            args = ['cmd.exe', '/c', 'echo error message 1>&2']
+        (rc, stdout, stderr) = run_external(args)
+        self.assertEqual(0, rc)
+        self.assertEqual('', stdout)
+        self.assertIn('error message', stderr)
+
+    def test_run_external_return_codes(self):
+        """Test that run_external() properly returns non-zero exit codes"""
+        if os.name == 'posix':
+            args = ['false']
+        else:
+            args = ['cmd.exe', '/c', 'exit 1']
+        (rc, _, _) = run_external(args)
+        self.assertEqual(1, rc)
 
     @common.skipIfWindows
     def test_run_external_clean_env(self):
         """Unit test for clean_env parameter to run_external()"""
 
         def run(args, clean_env):
-            (rc, stdout, stderr) = run_external(args, clean_env=clean_env)
+            (rc, stdout, _stderr) = run_external(args, clean_env=clean_env)
             self.assertEqual(rc, 0)
             return stdout.rstrip('\n')
 
@@ -211,14 +314,14 @@ class GeneralTestCase(common.BleachbitTestCase):
         lc_all_old = common.get_env('LC_ALL')
         lang_old = common.get_env('LANG')
         common.put_env('LC_ALL', 'C')
-        (rc, stdout, stderr) = run_external(
+        (rc, _, stderr) = run_external(
             ['ls', '/doesnotexist'], clean_env=False)
         self.assertEqual(rc, 2)
         self.assertIn('No such file', stderr)
 
         # Set parent environment to Spanish.
         common.put_env('LC_ALL', 'es_MX.UTF-8')
-        (rc, stdout, stderr) = run_external(
+        (rc, _, stderr) = run_external(
             ['ls', '/doesnotexist'], clean_env=False)
         self.assertEqual(rc, 2)
         if os.path.exists('/usr/share/locale-langpack/es/LC_MESSAGES/coreutils.mo'):
@@ -227,7 +330,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
         # Here the parent environment has Spanish, but the child process
         # should use English.
-        (rc, stdout, stderr) = run_external(
+        (rc, _, stderr) = run_external(
             ['ls', '/doesnotexist'], clean_env=True)
         self.assertEqual(rc, 2)
         self.assertIn('No such file', stderr)
@@ -255,14 +358,15 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external_timeout(self):
         """Unit test for run_external() with timeout"""
-        if 'posix' == os.name:
+        if os.name == 'posix':
             args = ['sleep', '10']
-            with self.assertRaises(subprocess.TimeoutExpired):
-                run_external(args, timeout=1)
         if os.name == 'nt':
             args = ['ping', '-n', '10', '127.0.0.1']
-            with self.assertRaises(subprocess.TimeoutExpired):
-                run_external(args, timeout=1)
+        start_time = time.time()
+        with self.assertRaises(subprocess.TimeoutExpired):
+            run_external(args, timeout=1)
+        elapsed_time = time.time() - start_time
+        self.assertLess(elapsed_time, 2)
 
     @common.skipIfWindows
     def test_dconf(self):
@@ -281,6 +385,24 @@ class GeneralTestCase(common.BleachbitTestCase):
         self.assertEqual(0, rc, stderr)
         self.assertEqual('', stderr)
         self.assertEqual('', stdout)
+
+    def test_shell_split(self):
+        """Unit test for shell_split()"""
+        tests = [('', []),
+                 ('a', ['a']),
+                 ('a b', ['a', 'b'])
+                 ]
+        if os.name == 'nt':
+            tests.append(('"a b"', ['a b']))
+            tests.append(('"a b" c', ['a b', 'c']))
+            tests.append(("echo 'a b'", ['echo', "'a b'"]))
+            tests.append(('echo a\\ b', ['echo', 'a\\', 'b']))
+        elif os.name == 'posix':
+            tests.append(("echo 'a b'", ['echo', 'a b']))
+            tests.append(("echo 'a b' c", ['echo', 'a b', 'c']))
+            tests.append(('echo a\\ b', ['echo', 'a b']))
+        for test in tests:
+            self.assertEqual(test[1], shell_split(test[0]))
 
     @common.skipIfWindows
     @test_also_with_sudo

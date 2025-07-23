@@ -27,11 +27,11 @@ from bleachbit.Options import options
 from bleachbit import FileUtilities, Special
 from tests import common
 
+import contextlib
 import os
 import os.path
 import shutil
 import sqlite3
-import contextlib
 
 chrome_bookmarks = b"""
 {
@@ -274,7 +274,7 @@ class SpecialAssertions:
         """Asserts SQLite tables exists and are empty"""
         if not os.path.lexists(path):
             raise AssertionError('Path does not exist: %s' % path)
-        with sqlite3.connect(path) as conn:
+        with contextlib.closing(sqlite3.connect(path)) as conn:
             cursor = conn.cursor()
             for table in tables:
                 cursor.execute('select 1 from %s limit 1' % table)
@@ -523,3 +523,48 @@ INSERT INTO "meta" VALUES('version','20');"""
         ver = Special.get_sqlite_int(
             filename, 'select value from meta where key="version"')
         self.assertEqual(ver, [20])
+
+    def test_get_sqlite_values(self):
+        """Unit test for get_sqlite_values()"""
+        ddl = """CREATE TABLE foo(id int, value int);INSERT INTO foo VALUES(12, 34), (56, 78);"""
+        # create test file
+        filename = self.mkstemp(prefix='bleachbit-test-sqlite')
+        FileUtilities.execute_sqlite3(filename, ddl)
+        self.assertExists(filename)
+        # run the test
+        sql = 'select id, value from foo'
+        # pylint: disable=protected-access
+        ver = Special._get_sqlite_values(filename, sql)
+        self.assertEqual(ver, [(12, 34), (56, 78)])
+        ver = Special._get_sqlite_values(
+            filename, f'{sql} where id = 0')
+        self.assertEqual(ver, [])
+        with self.assertRaises(sqlite3.OperationalError):
+            Special._get_sqlite_values(
+                filename, 'select id, value from does_not_exist')
+        with self.assertRaises(sqlite3.OperationalError):
+            Special._get_sqlite_values('doesnotexist', sql)
+
+    def test_sqlite_table_exists(self):
+        """Unit test for _sqlite_table_exists()"""
+        # create test file
+        filename = self.mkstemp(prefix='bleachbit-test-sqlite')
+        sql = "CREATE TABLE foo(id int)"
+        FileUtilities.execute_sqlite3(filename, sql)
+        self.assertExists(filename)
+        # run the test
+        # pylint: disable=protected-access
+        self.assertTrue(Special._sqlite_table_exists(filename, 'foo'))
+        self.assertFalse(Special._sqlite_table_exists(
+            filename, 'does_not_exist'))
+
+    def test_sqlite_loop(self):
+        """Repeat SQLite tests
+
+        This may raise a ResourceWarning on Python 3.13
+        """
+        for _ in range(100):
+            self.test_delete_chrome_autofill()
+            self.test_get_sqlite_int()
+            self.test_get_sqlite_values()
+            self.test_sqlite_table_exists()

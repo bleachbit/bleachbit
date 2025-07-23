@@ -9,6 +9,8 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
+
+
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -39,6 +41,9 @@ import unittest
 import xml.parsers.expat
 from unittest import mock
 from xml.dom.minidom import parseString
+from xml.sax.saxutils import quoteattr
+import subprocess
+import time
 
 
 def _action_str_to_commands(action_str):
@@ -100,15 +105,14 @@ class ActionTestCase(common.BleachbitTestCase):
     """Test cases for Action"""
 
     _TEST_PROCESS_CMDS = {'nt': 'cmd.exe /c dir', 'posix': 'dir'}
-    _TEST_PROCESS_SIMPLE = '<action command="process" cmd="%s" />'
+    _TEST_PROCESS_SIMPLE = '<action command="process" cmd={cmd} />'
 
     def _test_action_str(self, action_str, expect_exists=True):
         """Parse <action> and test it"""
         try:
             dom = parseString(action_str)
         except xml.parsers.expat.ExpatError as e:
-            print(action_str)
-            raise e
+            self.fail(f"parse error: {action_str}: {e}")
         action_node = dom.childNodes[0]
         command = action_node.getAttribute('command')
         filename = action_node.getAttribute('path')
@@ -265,15 +269,22 @@ class ActionTestCase(common.BleachbitTestCase):
     def test_process(self):
         """Unit test for process action"""
         tests = [ActionTestCase._TEST_PROCESS_SIMPLE,
-                 '<action command="process" wait="false" cmd="%s" />',
-                 '<action command="process" wait="f" cmd="%s" />',
-                 '<action command="process" wait="no" cmd="%s" />',
-                 '<action command="process" wait="n" cmd="%s" />'
+                 '<action command="process" cmd={cmd} wait="{wait}" />',
                  ]
 
-        for test in tests:
-            self._test_action_str(
-                test % ActionTestCase._TEST_PROCESS_CMDS[os.name])
+        if os.name == 'nt':
+            cmds = [
+                'ping /?',
+                '%windir%\\System32\\ping.exe /?',
+                '"%windir%\\System32\\ping.exe" /?',
+            ]
+        else:
+            cmds = ['ls', 'ls --version', '/bin/ls --version', '/bin/ls']
+        for cmd in cmds:
+            cmd_qa = quoteattr(cmd)
+            for wait in ('true', 't', 'false', 'f', 'no', 'n'):
+                for test in tests:
+                    self._test_action_str(test.format(cmd=cmd_qa, wait=wait))
 
     def test_process_space(self):
         """Unit test for process action with space in path
@@ -303,7 +314,7 @@ class ActionTestCase(common.BleachbitTestCase):
                     # When GtkLoggerHandler is used the exceptions are raised directly
                     # and handleError is not called
                     self._test_action_str(
-                        ActionTestCase._TEST_PROCESS_SIMPLE % ActionTestCase._TEST_PROCESS_CMDS[os.name])
+                        ActionTestCase._TEST_PROCESS_SIMPLE.format(cmd=quoteattr(ActionTestCase._TEST_PROCESS_CMDS[os.name])))
                 except UnicodeDecodeError:
                     self.fail(
                         "test_process_unicode_stderr() raised UnicodeDecodeError unexpectedly!")

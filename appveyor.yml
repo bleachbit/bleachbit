@@ -47,6 +47,8 @@ test_script:
 # shorten very long path because of error https://github.com/az0/bleachbit/issues/166
   - 'set PATH=c:\windows\system32;c:\windows;c:\windows\system32\wbem;c:\windows\SysWOW64\WindowsPowerShell\v1.0\'
   - 'SET DESTRUCTIVE_TESTS=T'
+# Catch warnings as errors. Also set in `tests/common.py`.
+  - 'SET PYTHONWARNINGS=error'
   - '%PYTHON_HOME%\Scripts\coverage.exe run --include="bleachbit/*" tests/TestAll.py'
 
 artifacts:

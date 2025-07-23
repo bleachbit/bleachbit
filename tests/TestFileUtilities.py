@@ -23,7 +23,24 @@
 Test case for module FileUtilities
 """
 
+# standard library
+import contextlib
+import ctypes
+import json
+import locale
+import os
+import random
+import re
+import sqlite3
+import stat
+import subprocess
+import sys
+import tempfile
+import time
+import unittest
+import warnings
 
+# local import
 from bleachbit.FileUtilities import (
     bytes_to_human,
     children_in_directory,
@@ -33,6 +50,7 @@ from bleachbit.FileUtilities import (
     detect_encoding,
     ego_owner,
     exe_exists,
+    execute_sqlite3,
     exists_in_path,
     expand_glob_join,
     extended_path_undo,
@@ -49,6 +67,7 @@ from bleachbit.FileUtilities import (
     open_files_lsof,
     OpenFiles,
     same_partition,
+    sync,
     uris_to_paths,
     vacuum_sqlite3,
     whitelisted,
@@ -61,60 +80,62 @@ from bleachbit.Options import options
 from bleachbit import logger
 from tests import common
 
-import json
-import locale
-import os
-import random
-import re
-import subprocess
-import sys
-import tempfile
-import time
-import unittest
+if 'nt' == os.name:
+    # pylint: disable=import-error
+    import win32api
+    import win32com.shell
+    import win32con
 
 
 def test_ini_helper(self, execute):
     """Used to test .ini cleaning in TestAction and in TestFileUtilities"""
 
-    teststrings = [
-        b'#Test\n[RecentsMRL]\nlist=C:\\Users\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n\n',
-    ]
-    for teststr in teststrings:
+    teststr = '#Test\n[RecentsMRL]\nlist=C:\\Users\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n'
+    for encoding in ['utf-8', 'utf-8-sig']:
+        with self.subTest(encoding=encoding):
+            extra_size = 0
+            if 'utf-8-sig' == encoding:
+                extra_size = 3
+            if 'nt' == os.name:
+                extra_size += teststr.count('\n')
 
-        # create test file
-        filename = self.write_file('bleachbit-test-ini', teststr)
-        self.assertExists(filename)
-        size = os.path.getsize(filename)
-        self.assertEqual(len(teststr), size)
+            # create test file
+            filename = self.write_file(
+                'bleachbit-test-ini', teststr, mode='w', encoding=encoding)
+            self.assertExists(filename)
+            size = os.path.getsize(filename)
+            self.assertEqual(len(teststr) + extra_size, size)
 
-        # The section does not exist, so no change.
-        execute(filename, 'Recents', None)
-        self.assertEqual(len(teststr), os.path.getsize(filename))
+            # The section does not exist, so no change.
+            execute(filename, 'Recents', None)
+            self.assertEqual(len(teststr) + extra_size,
+                             os.path.getsize(filename))
 
-        # The parameter does not exist, so no change.
-        execute(filename, 'RecentsMRL', 'files')
-        self.assertEqual(len(teststr), os.path.getsize(filename))
+            # The parameter does not exist, so no change.
+            execute(filename, 'RecentsMRL', 'files')
+            self.assertEqual(len(teststr) + extra_size,
+                             os.path.getsize(filename))
 
-        # The parameter does exist, so the file shrinks.
-        # The file will be size 14 if chardet is available.
-        # Otherwise, size will be 17 with BOM.
-        execute(filename, 'RecentsMRL', 'list')
-        self.assertIn(os.path.getsize(filename), (14,17))
+            # The parameter does exist, so the file shrinks.
+            # The file will be size 14 if chardet is available.
+            # Otherwise, size will be 17 with BOM.
+            execute(filename, 'RecentsMRL', 'list')
+            self.assertIn(os.path.getsize(filename), (14, 17))
 
-        # The section does exist, so the file shrinks.
-        execute(filename, 'RecentsMRL', None)
-        self.assertEqual(0, os.path.getsize(filename))
+            # The section does exist, so the file shrinks.
+            execute(filename, 'RecentsMRL', None)
+            self.assertEqual(0, os.path.getsize(filename))
 
-        # clean up
-        delete(filename)
-        self.assertNotExists(filename)
+            # clean up
+            delete(filename)
+            self.assertNotExists(filename)
 
 
 def test_json_helper(self, execute):
     """Used to test JSON cleaning in TestAction and in TestFileUtilities"""
 
     def load_js(js_fn):
-        with open(js_fn, 'r') as js_fd:
+        with open(js_fn, 'r', encoding='utf-8') as js_fd:
             return json.load(js_fd)
 
     expected = {'deleteme': 1, 'spareme': {'deletemetoo': 1}}
@@ -180,9 +201,10 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                         locale.setlocale(locale.LC_NUMERIC, self.old_locale[0])
                     except locale.Error as e:
                         print(
-                            f'Failed to restore locale with just language code {self.old_locale[0]}: {e}')
+                            "Failed to restore locale with just language code "
+                            f"{self.old_locale[0]}: {e}")
         except locale.Error as e:
-            print(f'Failed to restore locale {self.old_locale}: {e}')
+            print(f"Failed to restore locale {self.old_locale}: {e}")
         # Check that running getlocale again does not raise an exception.
         # For me, getlocale() fails after successful setlocale(..., 'en_MX') on Windows.
         locale.getlocale(locale.LC_NUMERIC)
@@ -214,14 +236,15 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         for test in tests:
             iec = bytes_to_human(test[0])
             self.assertEqual(test[2], iec,
-                             'bytes_to_human(%d) IEC = %s but expected %s' % (test[0], iec, test[2]))
+                             f"bytes_to_human({test[0]}) IEC = {iec}"
+                             f" but expected {test[2]}")
 
         options.set('units_iec', False)
         for test in tests:
             si = bytes_to_human(test[0])
             self.assertEqual(test[1], si,
-                             'bytes_to_human(%d) SI = %s but expected %s' % (test[0], si, test[1]))
-
+                             f"bytes_to_human({test[0]}) SI = {si}"
+                             f" but expected {test[1]}")
 
     def test_bytes_to_human_roundtrip(self):
         """Test roundtrip conversion of bytes_to_human()
@@ -235,7 +258,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             bytes2 = human_to_bytes(human)
             error = abs(float(bytes2 - bytes1) / bytes1)
             self.assertLess(abs(
-                error), 0.02, f"{bytes1:,} ({human}) is {error * 100:.2f}% different than {bytes2:,}")
+                error), 0.02, f"{bytes1:,} ({human}) is "
+                f"{error * 100:.2f}% different than {bytes2:,}")
 
     def test_bytes_to_human_localization(self):
         """Test localization of bytes_to_human()"""
@@ -243,8 +267,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             self.skipTest('Locale module does not support format_string')
         try:
             locale.setlocale(locale.LC_NUMERIC, 'de_DE.utf8')
-        except:
-            logger.warning('exception when setlocale to de_DE.utf8')
+        except locale.Error as e:
+            logger.warning('exception when setlocale to de_DE.utf8: %s', e)
         else:
             self.assertEqual("1,01GB", bytes_to_human(1000 ** 3 + 5812389))
 
@@ -350,8 +374,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         def symlink_helper(link_fn):
             if 'nt' == os.name:
-                from win32com.shell import shell
-                if not shell.IsUserAnAdmin():
+                # pylint: disable=no-member
+                if not win32com.shell.shell.IsUserAnAdmin():
                     self.skipTest(
                         'skipping symlink test because of insufficient privileges')
 
@@ -396,15 +420,14 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         if 'nt' == os.name:
             logger.debug('testing symbolic link')
-            import ctypes
             kern = ctypes.windll.LoadLibrary("kernel32.dll")
 
             def win_symlink(src, linkname):
                 rc = kern.CreateSymbolicLinkW(linkname, src, 0)
                 if rc == 0:
-                    print('CreateSymbolicLinkW(%s, %s)' % (linkname, src))
-                    print('CreateSymolicLinkW() failed, error = %s' %
-                          ctypes.FormatError())
+                    print(f'CreateSymbolicLinkW({linkname}, {src})')
+                    print(
+                        f'CreateSymolicLinkW() failed, error = {ctypes.FormatError()}')
                     self.assertNotEqual(rc, 0)
             symlink_helper(win_symlink)
 
@@ -441,8 +464,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         for shred in (False, True):
             fn = os.path.join(self.tempdir, 'hidden')
             common.touch_file(fn)
-            import win32api
-            import win32con
+            # pylint: disable=possibly-used-before-assignment, c-extension-no-member
             win32api.SetFileAttributes(fn, win32con.FILE_ATTRIBUTE_HIDDEN)
             self.assertExists(fn)
             delete(fn, shred=shred)
@@ -468,6 +490,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         f = os.open(filename, os.O_WRONLY | os.O_EXCL)
         self.assertExists(filename)
         self.assertEqual(3, getsize(filename))
+        # pylint: disable=undefined-variable
         with self.assertRaises(WindowsError):
             delete(filename)
         os.close(f)
@@ -484,6 +507,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             fd = os.open(filename, os.O_APPEND | os.O_EXCL)
             self.assertExists(filename)
             self.assertEqual(3, getsize(filename))
+            # pylint: disable=undefined-variable
             with self.assertRaises(WindowsError):
                 delete(filename, shred=allow_shred, allow_shred=allow_shred)
             os.close(fd)
@@ -504,16 +528,16 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         os.mkdir(from_dir)
         os.mkdir(to_dir)
         args = ['mount', '--bind', from_dir, to_dir]
-        (rc, stdout, stderr) = run_external(args)
-        msg = 'error calling mount\nargs=%s\nstderr=%s' % (args, stderr)
-        self.assertEqual(rc, 0, msg)
+        (rc, _, stderr) = run_external(args)
+        self.assertEqual(
+            rc, 0, f'error calling mount\nargs={args}\nstderr={stderr}')
 
         delete(to_dir)
 
         args = ['umount', to_dir]
-        (rc, stdout, stderr) = run_external(args)
-        msg = 'error calling umount\nargs=%s\nstderr=%s' % (args, stderr)
-        self.assertEqual(rc, 0, msg)
+        (rc, _, stderr) = run_external(args)
+        self.assertEqual(
+            rc, 0, f'error calling umount\nargs={args}\nstderr={stderr}')
 
     def test_delete_not_empty(self):
         """Test for scenario directory is not empty"""
@@ -544,7 +568,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         for shred in (False, True):
             fn = os.path.join(self.tempdir, 'read-only')
             common.touch_file(fn)
-            import stat
             os.chmod(fn, stat.S_IREAD)
             self.assertExists(fn)
             delete(fn, shred=shred)
@@ -560,21 +583,23 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                  (bom, 'UTF-8-SIG'))
         for file_contents, expected_encoding in tests:
             with self.subTest(encoding=expected_encoding):
-                with tempfile.NamedTemporaryFile(mode='w', delete=False, encoding=expected_encoding) as temp:
+                with tempfile.NamedTemporaryFile(mode='w', delete=False,
+                                                 encoding=expected_encoding) as temp:
                     temp.write(file_contents)
                     temp.flush()
                 det = detect_encoding(temp.name)
                 self.assertEqual(
-                    det, expected_encoding, f"{file_contents} -> {det}, check that chardet is available")
+                    det, expected_encoding,
+                    f"{file_contents} -> {det}, check that chardet is available")
 
     @common.skipIfWindows
     def test_ego_owner(self):
         """Unit test for ego_owner()"""
+        # pylint: disable=no-member
         self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
 
     def test_execute_sqlite3(self):
         """Unit test for execute_sqlite3()"""
-        from bleachbit.FileUtilities import execute_sqlite3
         db_path = self.mkstemp(prefix='bleachbit-test-file', suffix='.sqlite')
 
         cmds = ['CREATE TABLE test (id INTEGER PRIMARY KEY, name TEXT)',
@@ -584,6 +609,12 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         execute_sqlite3(db_path, ';'.join(cmds))
         execute_sqlite3(db_path, 'vacuum')
+
+        with contextlib.closing(sqlite3.connect(db_path)) as conn:
+            res = conn.execute('select 1 from test where name = "A"')
+            row = res.fetchone()
+            self.assertIsNotNone(row)
+            self.assertEqual(row[0], 1)
 
         gc_collect()
         os.unlink(db_path)
@@ -639,10 +670,10 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         """
 
         if 'nt' == os.name:
-            vars = ('%USERPROFILE%', '$userprofile', '${USERprofile}')
+            home_vars = ('%USERPROFILE%', '$userprofile', '${USERprofile}')
         else:
-            vars = ['$HOME', '${HOME}']
-        for var in vars:
+            home_vars = ['$HOME', '${HOME}']
+        for var in home_vars:
             if not os.getenv(var):
                 self.skipTest(f'Environment variable {var} not set')
             expanded = os.path.expandvars(var)
@@ -700,20 +731,39 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
     @common.skipUnlessWindows
     def test_free_space_windows(self):
-        """Unit test for free_space() on Windows"""
+        """Unit test for free_space() on Windows
+
+        Repeat because of possible race condition.
+        """
         args = ['wmic', 'LogicalDisk', 'get', 'DeviceID,', 'FreeSpace']
-        (rc, stdout, stderr) = run_external(args)
-        if rc:
-            print('error calling WMIC\nargs=%s\nstderr=%s' % (args, stderr))
-            return
-        for line in stdout.split('\n'):
-            line = line.strip()
-            if not re.match(r'([A-Z]):\s+(\d+)', line):
-                continue
-            drive, bytes_free = re.split(r'\s+', line)
-            bytes_free = int(bytes_free)
-            free = free_space(drive)
-            self.assertEqual(bytes_free, free)
+        max_attempts = 3
+
+        def compare_free_space():
+            """Returns whether all drives have equal free space"""
+            (rc, stdout, stderr) = run_external(args)
+            self.assertEqual(rc, 0, f'error calling WMIC\nargs={args}\nstderr={stderr}')
+            lines = stdout.splitlines()
+            self.assertGreater(len(lines), 0)
+            for line in lines:
+                line = line.strip()
+                if not re.match(r'([A-Z]):\s+(\d+)', line):
+                    continue
+                drive, bytes_free = re.split(r'\s+', line)
+                bytes_free = int(bytes_free)
+                free = free_space(drive)
+                if free != bytes_free:
+                    logger.debug('Free space mismatch for drive %s: %s != %s', drive, free, bytes_free)
+                    return False
+            return True
+
+        for attempt in range(max_attempts):
+            if attempt > 0:
+                time.sleep(0.5)
+            if compare_free_space():
+                return
+            if attempt == max_attempts - 1:
+                self.fail(f'Failed to find equal free space after {max_attempts} attempts')
+
 
     def test_get_filesystem_type(self):
         """Unit test for get_filesystem_type()"""
@@ -758,7 +808,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                 # Expand the directory names, which are in the short format,
                 # to test the case where the full path (including the directory)
                 # is longer than 255 characters.
-                import win32api
+                # pylint: disable=possibly-used-before-assignment, c-extension-no-member
                 lname = win32api.GetLongPathNameW(extended_path(filename))
                 self.assertEqual(getsize(lname), 10 * 12345)
                 # this function returns a byte string instead of Unicode
@@ -770,10 +820,11 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             if 'posix' == os.name:
                 encoding = sys.getdefaultencoding()
                 output = str(subprocess.Popen(
-                    ["du", "-h", filename], stdout=subprocess.PIPE).communicate()[0], encoding=encoding)
+                    ["du", "-h", filename],
+                    stdout=subprocess.PIPE).communicate()[0], encoding=encoding)
                 output = output.replace("\n", "")
-                du_size = output.split("\t")[0] + "B"
-                print("output = '%s', size='%s'" % (output, du_size))
+                du_size = output.split('\t', maxsplit=1)[0] + "B"
+                print(f"output = '{output}', size='{du_size}'")
                 du_bytes = human_to_bytes(du_size, 'du')
                 print(output, du_size, du_bytes)
                 self.assertEqual(getsize(filename), du_bytes)
@@ -807,7 +858,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             delete(linkname)
         os.symlink(filename, linkname)
         self.assertLess(getsize(linkname), 8192,
-                        "Symlink size is %d" % getsize(filename))
+                        f"Symlink size is {getsize(filename)}")
         delete(filename)
 
         if 'darwin' == sys.platform:
@@ -837,7 +888,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         """Unit test for guess_overwrite_paths()"""
         for path in guess_overwrite_paths():
             self.assertTrue(os.path.isdir(path),
-                            '%s is not a directory' % path)
+                            f'{path} is not a directory')
 
     def test_human_to_bytes(self):
         """Unit test for human_to_bytes()"""
@@ -865,6 +916,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         elif 'nt' == os.name:
             dir1 = os.path.expandvars(r'%windir%\fonts')
             dir2 = os.path.expandvars(r'%windir%\logs')
+        else:
+            raise NotImplementedError()
         # If these directories do not exist, the test results are not valid.
         self.assertExists(dir1)
         self.assertExists(dir2)
@@ -886,25 +939,25 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             self.assertLExists(pathname)
 
     def test_open_files_lsof(self):
+        """Unit test for open_files_lsof()"""
         self.assertEqual(list(open_files_lsof(
             lambda: 'n/bar/foo\nn/foo/bar\nnoise')), ['/bar/foo', '/foo/bar'])
 
     @common.skipIfWindows
-    def test_OpenFiles(self):
+    def test_open_files(self):
         """Unit test for class OpenFiles"""
 
         filename = os.path.join(self.tempdir, 'bleachbit-test-open-files')
-        f = open(filename, 'w')
-        openfiles = OpenFiles()
-        self.assertTrue(openfiles.is_open(filename),
-                        "Expected is_open(%s) to return True)\n"
-                        "openfiles.last_scan_time (ago)=%s\n"
-                        "openfiles.files=%s" %
-                        (filename,
-                         time.time() - openfiles.last_scan_time,
-                         openfiles.files))
+        with open(filename, 'wb'):
+            openfiles = OpenFiles()
+            ago = None
+            if openfiles.last_scan_time:
+                ago = time.time() - openfiles.last_scan_time
+            self.assertTrue(openfiles.is_open(filename),
+                            f"Expected is_open({filename}) to return True)\n"
+                            f"openfiles.last_scan_time (ago)={ago}\n"
+                            f"openfiles.files={openfiles.files}")
 
-        f.close()
         openfiles.scan()
         self.assertFalse(openfiles.is_open(filename))
 
@@ -920,11 +973,16 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             self.assertFalse(same_partition(home, '/dev'))
         elif 'nt' == os.name:
             home_drive = os.path.splitdrive(home)[0]
+            # pylint: disable=import-outside-toplevel
             from bleachbit.Windows import get_fixed_drives
             for drive in get_fixed_drives():
                 this_drive = os.path.splitdrive(drive)[0]
                 self.assertEqual(same_partition(home, drive),
                                  home_drive == this_drive)
+
+    def test_sync(self):
+        """Unit test for sync()"""
+        sync()
 
     def test_uris_to_paths(self):
         """Unit test for uris_to_paths()"""
@@ -949,8 +1007,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""
-        import sqlite3
-
         path = os.path.join(self.tempdir, 'bleachbit.tmp.sqlite3')
         conn = sqlite3.connect(path)
         conn.execute('create table numbers (number)')
@@ -974,6 +1030,16 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         gc_collect()
         delete(path)
         self.assertNotExists(path)
+
+    def test_sqlite_loop(self):
+        """Repeat SQLite tests
+
+        This may raise ResourceWarning on Python 3.13.
+        """
+        warnings.simplefilter("error")
+        for _ in range(50):
+            self.test_execute_sqlite3()
+            self.test_vacuum_sqlite3()
 
     def test_whitelisted(self):
         """Unit test for whitelisted()"""
@@ -1080,8 +1146,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             for p in paths:
                 _ = whitelisted(p)
         t1 = time.time()
-        logger.info('whitelisted() with {} repetitions and {} paths took {:.3g} seconds '.format(
-            reps, len(paths), t1 - t0))
+        logger.info('whitelisted() with %d repetitions and %d paths took %g seconds',
+                    reps, len(paths), t1 - t0)
 
         options.set_whitelist_paths(old_whitelist)
 
@@ -1163,7 +1229,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         self.assertNotExists(dir0)
 
     @unittest.skipUnless(os.getenv('ALLTESTS') is not None,
-                         'warning: skipping long test test_wipe_path() because environment variable ALLTESTS not set')
+                         'warning: skipping long test test_wipe_path() because'
+                         ' environment variable ALLTESTS not set')
     def test_wipe_path(self):
         """Unit test for wipe_path()"""
 

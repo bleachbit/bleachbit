@@ -92,7 +92,7 @@ class WindowsTestCase(common.BleachbitTestCase):
     def test_get_recycle_bin(self):
         """Unit test for get_recycle_bin"""
         for f in get_recycle_bin():
-            self.assertExists(extended_path(f))
+            self.assertLExists(extended_path(f))
 
     @common.skipUnlessDestructive
     def test_get_recycle_bin_destructive(self):

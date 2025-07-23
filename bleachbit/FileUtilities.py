@@ -23,37 +23,54 @@
 File-related utilities
 """
 
-import bleachbit
-from bleachbit.Language import get_text as _
-
+# standard imports
 import atexit
+import contextlib
+import ctypes
 import errno
 import glob
+import json
 import locale
 import logging
 import os
 import os.path
 import random
 import re
+import sqlite3
 import stat
 import string
-import sys
 import subprocess
+import sys
 import tempfile
 import time
+import urllib.parse
+import urllib.request
+import warnings
+from pathlib import Path
+
+# local imports
+import bleachbit
+from bleachbit.Language import get_text as _
+
 
 logger = logging.getLogger(__name__)
 
 if 'nt' == os.name:
+    # pylint: disable=import-error, no-name-in-module
     from pywintypes import error as pywinerror
     import win32file
+    # pylint: disable=import-error
+    from win32com.shell.shell import IsUserAnAdmin
+    # pylint: disable=ungrouped-imports
     import bleachbit.Windows
     os_path_islink = os.path.islink
     os.path.islink = lambda path: os_path_islink(
         path) or bleachbit.Windows.is_junction(path)
 
 if 'posix' == os.name:
+    # pylint: disable=redefined-builtin
     from bleachbit.General import WindowsError
+    # pylint: disable=invalid-name
     pywinerror = WindowsError
 
 try:
@@ -66,7 +83,9 @@ try:
 
         class _Win32DirEntryPython(scandir.Win32DirEntryPython):
             def is_symlink(self):
-                return super(_Win32DirEntryPython, self).is_symlink() or bleachbit.Windows.is_junction(self.path)
+                """internal use"""
+                return super(_Win32DirEntryPython, self).is_symlink() or \
+                    bleachbit.Windows.is_junction(self.path)
 
         scandir.scandir = scandir.scandir_python
         scandir.DirEntry = scandir.Win32DirEntryPython = _Win32DirEntryPython
@@ -76,6 +95,7 @@ except ImportError:
 
 
 def open_files_linux():
+    """Return iterator of open files on Linux"""
     return glob.iglob("/proc/*/fd/*")
 
 
@@ -94,8 +114,8 @@ def get_filesystem_type(path):
     * On Windows: NTFS, FAT32, CDFS
     """
     try:
+        # pylint: disable=import-outside-toplevel
         import psutil
-        from pathlib import Path
     except ImportError:
         logger.warning(
             'To get the file system type from the given path, you need to install psutil package')
@@ -113,22 +133,23 @@ def get_filesystem_type(path):
         partitions[mount_path] = (partition.fstype, partition.device)
 
     # Exact match
-    for mount_path in partitions:
+    for mount_path, fs_info in partitions.items():
         if path_obj == mount_path:
-            return partitions[mount_path]
+            return fs_info
 
     # Try parent paths
     current = path_obj
     while current.parent != current:  # Stop at root
         current = current.parent
-        for mount_path in partitions:
+        for mount_path, fs_info in partitions.items():
             if current == mount_path:
-                return partitions[mount_path]
+                return fs_info
 
     return ("unknown", "none")
 
 
 def open_files_lsof(run_lsof=None):
+    """Return iterator of open files using lsof"""
     if run_lsof is None:
         def run_lsof():
             return subprocess.check_output(["lsof", "-Fn", "-n"])
@@ -138,6 +159,7 @@ def open_files_lsof(run_lsof=None):
 
 
 def open_files():
+    """Return iterator of open files"""
     if sys.platform == 'linux':
         files = open_files_linux()
     elif 'darwin' == sys.platform or sys.platform.startswith('freebsd'):
@@ -209,7 +231,7 @@ def bytes_to_human(bytes_i):
         prefixes = ['', 'k', 'M', 'G', 'T', 'P']
         base = 1000.0
 
-    assert (isinstance(bytes_i, int))
+    assert isinstance(bytes_i, int)
 
     if 0 == bytes_i:
         return '0B'
@@ -221,19 +243,18 @@ def bytes_to_human(bytes_i):
     else:
         decimals = 0
 
-    for exponent in range(0, len(prefixes)):
+    for _exponent, prefix in enumerate(prefixes):
         if bytes_i < base:
             abbrev = round(bytes_i, decimals)
-            suf = prefixes[exponent]
+            suf = prefix
             return locale.str(abbrev) + suf + 'B'
-        else:
-            bytes_i /= base
+        bytes_i /= base
     return 'A lot.'
 
 
 def children_in_directory(top, list_directories=False):
     """Iterate files and, optionally, subdirectories in directory"""
-    if type(top) is tuple:
+    if isinstance(top, tuple):
         for top_ in top:
             yield from children_in_directory(top_, list_directories)
         return
@@ -259,13 +280,13 @@ def clean_ini(path, section, parameter):
         removing a cast to str. This is needed to handle unicode chars.
         """
         if parser._defaults:
-            ini_file.write("[%s]\n" % "DEFAULT")
+            ini_file.write("[DEFAULT]\n")
             for (key, value) in parser._defaults.items():
-                ini_file.write("%s = %s\n" %
-                               (key, str(value).replace('\n', '\n\t')))
+                value_str = str(value).replace('\n', '\n\t')
+                ini_file.write(f"{key} = {value_str}\n")
             ini_file.write("\n")
         for section in parser._sections:
-            ini_file.write("[%s]\n" % section)
+            ini_file.write(f"[{section}]\n")
             for (key, value) in parser._sections[section].items():
                 if key == "__name__":
                     continue
@@ -274,7 +295,7 @@ def clean_ini(path, section, parameter):
                     # This is the original line for reference:
                     # key = " = ".join((key, str(value).replace('\n', '\n\t')))
                     key = " = ".join((key, value.replace('\n', '\n\t')))
-                ini_file.write("%s\n" % (key))
+                ini_file.write(f"{key}\n")
             ini_file.write("\n")
 
     encoding = detect_encoding(path) or 'utf_8_sig'
@@ -308,7 +329,6 @@ def clean_ini(path, section, parameter):
 
 def clean_json(path, target):
     """Delete key in the JSON file"""
-    import json
     changed = False
     targets = target.split('/')
 
@@ -328,7 +348,7 @@ def clean_json(path, target):
         elif new_target in pos:
             # delete terminal target
             changed = True
-            del (pos[new_target])
+            del pos[new_target]
         else:
             # target not found
             break
@@ -350,6 +370,13 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
 
        If shred is enabled as a function parameter or the BleachBit global
        parameter, the path will be shredded unless allow_shred = False.
+
+       All links are removed without following the link. This includes:
+       * Linux symlink
+       * Windows symlink (soft link)
+       * Windows hard link
+       * Windows junction
+       * Windows .lnk files
     """
     from bleachbit.Options import options
     is_special = False
@@ -370,7 +397,8 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         delpath = path
         if do_shred:
             if not is_dir_empty(path):
-                # Avoid renaming non-empty directory like https://github.com/bleachbit/bleachbit/issues/783
+                # Avoid renaming non-empty directory like
+                # https://github.com/bleachbit/bleachbit/issues/783
                 logger.info(_("Directory is not empty: %s"), path)
                 return
             delpath = wipe_name(path)
@@ -402,7 +430,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         if do_shred:
             try:
                 wipe_contents(path)
-            except pywinerror as e:
+            except pywinerror as e:  # pylint: disable=possibly-used-before-assignment
                 # 2 = The system cannot find the file specified.
                 # This can happen with a broken symlink
                 # https://github.com/bleachbit/bleachbit/issues/195
@@ -427,6 +455,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
 def detect_encoding(fn):
     """Detect the encoding of the file"""
     try:
+        # pylint: disable=import-outside-toplevel
         import chardet
     except ImportError:
         logger.warning(
@@ -444,7 +473,11 @@ def detect_encoding(fn):
 
 
 def ego_owner(filename):
-    """Return whether current user owns the file"""
+    """Return whether current user owns the file
+
+    POSIX only"""
+    assert 'posix' == os.name
+    # pylint: disable=no-member
     return os.lstat(filename).st_uid == os.getuid()
 
 
@@ -485,36 +518,32 @@ def execute_sqlite3(path, cmds):
     Returns:
         None
     """
-    import sqlite3
     from bleachbit.Options import options
     assert isinstance(path, str)
     assert isinstance(cmds, str)
-    with sqlite3.connect(path) as conn:
-        cursor = conn.cursor()
-
+    with contextlib.closing(sqlite3.connect(path)) as conn:
         # overwrites deleted content with zeros
         # https://www.sqlite.org/pragma.html#pragma_secure_delete
         if options.get('shred'):
-            cursor.execute('PRAGMA secure_delete=ON')
+            conn.execute('PRAGMA secure_delete=ON')
+            assert conn.execute('PRAGMA secure_delete').fetchone()[0] == 1
 
         for cmd in cmds.split(';'):
             try:
-                cursor.execute(cmd)
+                conn.execute(cmd)
             except sqlite3.OperationalError as exc:
                 if str(exc).find('no such function: ') >= 0:
                     # fixme: determine why randomblob and zeroblob are not
                     # available
                     logger.exception(exc.message)
                 else:
-                    raise sqlite3.OperationalError(
-                        '%s: %s' % (exc, path))
+                    raise sqlite3.OperationalError(f'{exc}: {path}')
             except sqlite3.DatabaseError as exc:
-                raise sqlite3.DatabaseError(
-                    '%s: %s' % (exc, path))
+                raise sqlite3.DatabaseError(f'{exc}: {path}')
 
-        cursor.close()
-        from bleachbit.General import gc_collect
-        gc_collect()
+        conn.commit()
+
+    bleachbit.General.gc_collect()
 
 
 def expand_glob_join(pathname1, pathname2):
@@ -526,9 +555,18 @@ def expand_glob_join(pathname1, pathname2):
 
 
 def extended_path(path):
-    """If applicable, return the extended Windows pathname"""
-    # Do not extend the Sysnative paths because on some systems there are problems with path resolution,
-    # for example: https://github.com/bleachbit/bleachbit/issues/1574.
+    r"""Return the extended Windows pathname
+
+    example: c:\foo\bar.txt to \\?\c:\foo\bar.txt
+
+    The path is returned unchanged if:
+    * Path was already extended
+    * Path is a sysnative path
+    * System is not Windows
+    """
+    # Do not extend the Sysnative paths because on some systems there are
+    # problems with path resolution. For example:
+    # https://github.com/bleachbit/bleachbit/issues/1574.
     if 'nt' == os.name and 'Sysnative' not in path.split(os.sep):
         if path.startswith(r'\\?'):
             return path
@@ -539,7 +577,10 @@ def extended_path(path):
 
 
 def extended_path_undo(path):
-    """"""
+    r"""Undo extended path
+
+    For example: \\c:\foo\bar.txt -> c:\foo\bar.txt
+    """
     if 'nt' == os.name:
         if path.startswith(r'\\?\unc'):
             return '\\' + path[7:]
@@ -551,8 +592,11 @@ def extended_path_undo(path):
 def free_space(pathname):
     """Return free space in bytes"""
     if 'nt' == os.name:
+        # pylint: disable=import-error,import-outside-toplevel
         import psutil
         return psutil.disk_usage(pathname).free
+    assert 'posix' == os.name
+    # pylint: disable=no-member
     mystat = os.statvfs(pathname)
     return mystat.f_bfree * mystat.f_bsize
 
@@ -577,6 +621,7 @@ def getsize(path):
         # Also, apply prefix to use extended-length paths to support longer
         # filenames.
         try:
+            # pylint: disable=c-extension-no-member
             finddata = win32file.FindFilesW(extended_path(path))
         except pywinerror as e:
             if e.winerror == 3:  # 3 = The system cannot find the path specified.
@@ -603,7 +648,7 @@ def getsizedir(path):
 
 def globex(pathname, regex):
     """Yield a list of files with pathname and filter by regex"""
-    if type(pathname) is tuple:
+    if isinstance(pathname, tuple):
         for singleglob in pathname:
             yield from globex(singleglob, regex)
     else:
@@ -630,8 +675,7 @@ def guess_overwrite_paths():
             logger.warning(
                 _("The environment variable TMP refers to a directory that does not exist: %s"), localtmp)
             localtmp = None
-        from bleachbit.Windows import get_fixed_drives
-        for drive in get_fixed_drives():
+        for drive in bleachbit.Windows.get_fixed_drives():
             if localtmp and same_partition(localtmp, drive):
                 ret.append(localtmp)
             else:
@@ -653,11 +697,10 @@ def human_to_bytes(human, hformat='si'):
         base = 1024
         suffixes = 'KMGTE'
     else:
-        raise ValueError("Invalid format: '%s'" % hformat)
+        raise ValueError(f"Invalid format: '{hformat}'")
     matches = re.match(r'^(\d+(?:\.\d+)?) ?([' + suffixes + ']?)B?$', human)
     if matches is None:
-        raise ValueError("Invalid input for '%s' (hformat='%s')" %
-                         (human, hformat))
+        raise ValueError(f"Invalid input for '{human}' (hformat='{hformat}')")
     (amount, suffix) = matches.groups()
 
     if '' == suffix:
@@ -683,7 +726,7 @@ def listdir(directory):
 
     Path may be a tuple of directories."""
 
-    if type(directory) is tuple:
+    if isinstance(directory, tuple):
         for dirname in directory:
             yield from listdir(dirname)
         return
@@ -708,6 +751,7 @@ def same_partition(dir1, dir2):
                 # https://github.com/az0/bleachbit/issues/27
                 return dir1[0] == dir2[0]
             raise
+    # pylint: disable=no-member
     stat1 = os.statvfs(dir1)
     stat2 = os.statvfs(dir2)
     return stat1[stat.ST_DEV] == stat2[stat.ST_DEV]
@@ -716,12 +760,11 @@ def same_partition(dir1, dir2):
 def sync():
     """Flush file system buffers. sync() is different than fsync()"""
     if 'posix' == os.name:
-        import ctypes
         rc = ctypes.cdll.LoadLibrary('libc.so.6').sync()
         if 0 != rc:
             logger.error('sync() returned code %d', rc)
     elif 'nt' == os.name:
-        import ctypes
+        # pylint: disable=protected-access
         ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()
 
 
@@ -738,8 +781,6 @@ def truncate_f(f):
 
 def uris_to_paths(file_uris):
     """Return a list of paths from text/uri-list"""
-    import urllib.parse
-    import urllib.request
     assert isinstance(file_uris, (tuple, list))
     file_paths = []
     for file_uri in file_uris:
@@ -829,12 +870,11 @@ def wipe_contents(path, truncate=True):
         os.fsync(f.fileno())  # force write to disk
         return f
 
-    if 'nt' == os.name:
-        from win32com.shell.shell import IsUserAnAdmin
-
+    # pylint: disable=possibly-used-before-assignment
     if 'nt' == os.name and IsUserAnAdmin():
+        # The import placement here avoids a circular import.
+        # pylint: disable=import-outside-toplevel
         from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
-        import warnings
         try:
             file_wipe(path)
         except pywinerror as e:
@@ -847,7 +887,7 @@ def wipe_contents(path, truncate=True):
             # Try to truncate the file. This makes the behavior consistent
             # with Linux and with Windows when IsUserAdmin=False.
             try:
-                with open(path, 'w') as f:
+                with open(path, 'wb') as f:
                     truncate_f(f)
             except IOError as e2:
                 if errno.EACCES == e2.errno:
@@ -862,7 +902,7 @@ def wipe_contents(path, truncate=True):
             f = wipe_write()
         else:
             # The wipe succeed, so prepare to truncate.
-            f = open(path, 'w')
+            f = open(path, 'wb')
     else:
         f = wipe_write()
     if truncate:
@@ -996,8 +1036,10 @@ def wipe_path(pathname, idle=False):
                 try:
                     if fstype != 'vfat':
                         f.write(blanks)
-                    # On Ubuntu, the size of file should be less then 4GB. If not, there should be EFBIG error,
-                    # so the maximum file size should be less than or equal to "4GB - 65536byte".
+                    # On Ubuntu, the size of file should be less than
+                    # 4GB. If not, there should be EFBIG error, so the
+                    # maximum file size should be less than or equal to
+                    # "4GB - 65536byte".
                     elif writtensize < 4 * 1024 * 1024 * 1024 - 65536:
                         writtensize += f.write(blanks)
                     else:
@@ -1026,9 +1068,9 @@ def wipe_path(pathname, idle=False):
                 # IOError: [Errno 28] No space left on device
                 # seen on Microsoft Windows XP SP3 with ~30GB free space but
                 # not on another XP SP3 with 64MB free space
-                if not e.errno == errno.ENOSPC:
+                if e.errno != errno.ENOSPC:
                     logger.error(
-                        _("Error #%d when flushing the file buffer." % e.errno))
+                        _("Error #%d when flushing the file buffer."), e.errno)
 
             os.fsync(f.fileno())  # write to disk
             # For statistics
@@ -1042,6 +1084,7 @@ def wipe_path(pathname, idle=False):
                 files=len(files), bytes=total_bytes, seconds=int(elapsed_sec), rate=rate_mbs))
             # how much free space is left (should be near zero)
             if 'posix' == os.name:
+                # pylint: disable=no-member
                 stats = os.statvfs(pathname)
                 logger.debug(_("{bytes:,} bytes and {inodes:,} inodes available to non-super-user").format(
                     bytes=stats.f_bsize * stats.f_bavail, inodes=stats.f_favail))
@@ -1058,11 +1101,12 @@ def wipe_path(pathname, idle=False):
             estimated_free_space = start_free_bytes - total_bytes
             if estimated_free_space < 2:
                 logger.debug(
-                    f'Estimated free space {estimated_free_space} is less than 2 bytes, breaking')
+                    'Estimated free space %s is less than 2 bytes, breaking', estimated_free_space)
                 break
         done_wiping = True
     finally:
-        # Ensure files are closed and deleted even if an exception occurs or generator is not fully consumed.
+        # Ensure files are closed and deleted even if an exception
+        # occurs or generator is not fully consumed.
         # Truncate and close files.
         for f in files:
             if done_wiping:
@@ -1070,7 +1114,7 @@ def wipe_path(pathname, idle=False):
                     truncate_f(f)
                 except Exception as e:
                     logger.error(
-                        f'After wiping, truncating file {f.name} failed: {e}')
+                        'After wiping, truncating file %s failed: %s', f.name, e)
 
             while True:
                 try:
@@ -1089,7 +1133,7 @@ def wipe_path(pathname, idle=False):
                 delete(f.name, ignore_missing=True)
             except Exception as e:
                 logger.error(
-                    f'After wiping, error deleting file {f.name}: {e}')
+                    'After wiping, error deleting file %s: %s', f.name, e)
 
 
 def vacuum_sqlite3(path):

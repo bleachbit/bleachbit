@@ -24,6 +24,7 @@ def discover_sudo_tests():
 
     # Import test modules to scan for decorated tests
     test_modules = [
+        'tests.TestCLI',
         'tests.TestGeneral',
         'tests.TestUnix',
     ]
