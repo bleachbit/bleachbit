@@ -36,6 +36,7 @@ import sys
 import bleachbit
 from bleachbit import FileUtilities, General
 from bleachbit.General import get_real_uid, get_real_username
+from bleachbit.FileUtilities import exe_exists
 from bleachbit.Language import get_text as _, native_locale_names
 
 logger = logging.getLogger(__name__)
@@ -722,6 +723,26 @@ def dnf_autoremove():
     logger.debug(
         'dnf_autoremove >> total freed bytes: %s', freed_bytes)
     return freed_bytes
+
+
+def pacman_cache():
+    """Clean cache in pacman"""
+    if os.path.exists('/var/lib/pacman/db.lck'):
+        msg = _(
+            "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "pacman"
+        raise RuntimeError(msg)
+    if not exe_exists('paccache'):
+        raise RuntimeError('paccache not found')
+    cmd = ['paccache', '-rk0']
+    (rc, stdout, stderr) = General.run_external(cmd)
+    if rc > 0:
+        raise RuntimeError(f'paccache raised error {rc}: {stderr}')
+    # parse line like this: "==> finished: 3 packages removed (42.31 MiB freed)"
+    cregex = re.compile(r"==> finished: ([\d.]+) packages removed \(([\d.]+[\s]+[BkMG]) freed)")
+    match = cregex.search(stdout)
+    if match:
+        return parse_size(match.group(2))
+    return 0
 
 
 def has_gui():

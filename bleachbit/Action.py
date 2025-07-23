@@ -688,3 +688,17 @@ class DnfAutoremove(ActionProvider):
             None,
             Unix.dnf_autoremove,
             'dnf autoremove')
+
+class PacmanCache(ActionProvider):
+
+    """Action to run `paccache -rk0'"""
+    action_key = 'pacman.cache'
+
+    def __init__(self, action_element, path_vars=None):
+        ActionProvider.__init__(self, action_element, path_vars)
+
+    def get_commands(self):
+        yield Command.Function(
+            None,
+            Unix.pacman_cache,
+            'paccache -rk0')

@@ -38,33 +38,34 @@ from bleachbit.General import get_executable, get_real_username
 from tests.common import test_also_with_sudo
 from bleachbit.FileUtilities import children_in_directory, exe_exists
 from bleachbit.Unix import (
+    _is_broken_xdg_desktop_application,
     apt_autoclean,
     apt_autoremove,
+    dnf_autoremove,
+    dnf_clean,
     find_available_locales,
-    get_distribution_name_version,
+    find_best_locale,
+    get_apt_size,
     get_distribution_name_version_distro,
     get_distribution_name_version_os_release,
     get_distribution_name_version_platform_freedesktop,
-    has_gui,
-    Locales,
-    _is_broken_xdg_desktop_application,
-    is_broken_xdg_desktop,
+    get_distribution_name_version,
     get_purgeable_locales,
-    get_apt_size,
-    find_best_locale,
+    has_gui,
+    is_broken_xdg_desktop,
+    is_process_running_ps_aux,
+    is_process_running,
+    is_unix_display_protocol_wayland,
+    journald_clean,
+    JOURNALD_REGEX,
     LocaleCleanerPath,
-    yum_clean,
-    dnf_clean,
-    dnf_autoremove,
-    wine_to_linux_path,
+    Locales,
+    pacman_cache,
     root_is_not_allowed_to_X_session,
     rotated_logs,
     run_cleaner_cmd,
-    journald_clean,
-    is_unix_display_protocol_wayland,
-    is_process_running_ps_aux,
-    is_process_running,
-    JOURNALD_REGEX
+    wine_to_linux_path,
+    yum_clean,
 )
 
 
@@ -757,6 +758,17 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             0, 'Remove  112 Packages\nFreed space: 299 M\n', 'stderr')
         bytes_freed = dnf_autoremove()
         self.assertEqual(bytes_freed, 299000000)
+
+    @common.skipIfWindows
+    def test_pacman_cache(self):
+        """Unit test for pacman_cache()"""
+        if 0 != os.geteuid() or os.path.exists('/var/lib/pacman/db.lck') \
+                or not exe_exists('paccache'):
+            self.assertRaises(RuntimeError, pacman_cache)
+        else:
+            bytes_freed = pacman_cache()
+            self.assertIsInteger(bytes_freed)
+            logger.debug('pacman bytes cleaned %d', bytes_freed)
 
     @common.skipIfWindows
     def test_has_gui(self):
