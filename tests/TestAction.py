@@ -298,7 +298,8 @@ class ActionTestCase(common.BleachbitTestCase):
         if os.name == 'nt':
             cmd = f'cmd /c del &quot;{fn}&quot;'
         else:
-            cmd = f'rm {fn.replace(" ", "\\ ")}'
+            fn_for_cmd = fn.replace(" ", "\\ ")
+            cmd = f'rm {fn_for_cmd}'
         action_str = f'<action command="process" wait="true" cmd="{cmd}" />'
         self._test_action_str(action_str)
         self.assertNotExists(fn)
@@ -545,7 +546,7 @@ def main():
                 rates.append(rate)
             # combine all the rates for easy copy and paste into R for analysis
             print(
-                f'rates for filter {this_filter}={','.join([str(rate) for rate in rates])}')
+                f'rates for filter {this_filter}={",".join([str(rate) for rate in rates])}')
         sys.exit()
     unittest.main()
 
