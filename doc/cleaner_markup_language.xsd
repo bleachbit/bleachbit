@@ -123,9 +123,9 @@
                       <xs:attribute name="command" use="required">
                         <xs:simpleType>
                           <xs:restriction base="xs:string">
-                            <xs:enumeration value="apt.clean"/>
                             <xs:enumeration value="apt.autoclean"/>
                             <xs:enumeration value="apt.autoremove"/>
+                            <xs:enumeration value="apt.clean"/>
                             <xs:enumeration value="chrome.autofill"/>
                             <xs:enumeration value="chrome.databases_db"/>
                             <xs:enumeration value="chrome.favicons"/>
@@ -140,7 +140,9 @@
                             <xs:enumeration value="mozilla.favicons"/>
                             <xs:enumeration value="mozilla.url.history"/>
                             <xs:enumeration value="office_registrymodifications"/>
+                            <xs:enumeration value="pacman.cache"/>
                             <xs:enumeration value="process"/>
+                            <xs:enumeration value="snap.disabled"/>
                             <xs:enumeration value="sqlite.vacuum"/>
                             <xs:enumeration value="truncate"/>
                             <xs:enumeration value="win.shell.change.notify"/>
