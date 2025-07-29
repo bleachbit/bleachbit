@@ -357,11 +357,13 @@ class System(Cleaner):
         if 'custom' == option_id:
             for (c_type, c_path) in options.get_custom_paths():
                 if 'file' == c_type:
-                    yield Command.Delete(c_path)
+                    if os.path.lexists(c_path):
+                        yield Command.Delete(c_path)
                 elif 'folder' == c_type:
-                    for path in children_in_directory(c_path, True):
-                        yield Command.Delete(path)
-                    yield Command.Delete(c_path)
+                    if os.path.lexists(c_path):
+                        for path in children_in_directory(c_path, True):
+                            yield Command.Delete(path)
+                        yield Command.Delete(c_path)
                 else:
                     raise RuntimeError(
                         f'custom folder has invalid type {c_type}')

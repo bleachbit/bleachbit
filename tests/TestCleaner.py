@@ -285,3 +285,43 @@ class CleanerTestCase(common.BleachbitTestCase):
                 self.assertFalse('/.cache/obexd/' in cmd.path)
         from bleachbit.FileUtilities import delete
         delete(obexd_fn, ignore_missing=True)
+
+    def test_custom(self):
+        """Test system.custom"""
+        from bleachbit.Options import options
+        original_custom_paths = options.get_custom_paths()
+
+        list(register_cleaners())
+        test_pathname = os.path.join(self.tempdir, 'foo')
+
+        # Check that custom cleaner doesn't iterate non-existent object
+        for obj_type in ('folder', 'file'):
+            options.set_custom_paths([(obj_type, test_pathname)])
+            for cmd in backends['system'].get_commands('custom'):
+                results = list(cmd.execute(really_delete=False))
+                self.assertEqual(len(results), 0)
+
+        # Create the file
+        common.touch_file(test_pathname)
+        self.assertExists(test_pathname)
+
+        # Check it returns the file now
+        for cmd in backends['system'].get_commands('custom'):
+            results = list(cmd.execute(really_delete=False))
+            self.assertEqual(len(results), 1)
+            self.assertEqual(results[0]['path'], test_pathname)
+
+        # Prepare an empty folder.
+        test_dirname = os.path.join(self.tempdir, 'subdir')
+        os.makedirs(test_dirname)
+        self.assertExists(test_dirname)
+        options.set_custom_paths([('folder', test_dirname)])
+
+        # Check it returns the folder now.
+        for cmd in backends['system'].get_commands('custom'):
+            results = list(cmd.execute(really_delete=False))
+            self.assertEqual(len(results), 1)
+            self.assertEqual(results[0]['path'], test_dirname)
+
+        # Restore the original settings.
+        options.set_custom_paths(original_custom_paths)
