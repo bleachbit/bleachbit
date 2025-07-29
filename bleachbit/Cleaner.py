@@ -643,15 +643,20 @@ class System(Cleaner):
             '^' + os.path.expanduser('~/.cache/obexd($|/)'),
             # KDE/Plasma cache files
             # https://github.com/bleachbit/bleachbit/issues/1853
-            '^' + os.path.expanduser('~/.cache/kwin($|/)'), # folder
-            '^' + os.path.expanduser('~/.cache/mesa_shader_cache($|/)'), # folder
-            '^' + os.path.expanduser('~/.cache/plasmashell($|/)'), # folder
-            '^' + os.path.expanduser('~/.cache/icon-cache.kcache$'), # file
-            r'^' + os.path.expanduser(r'~/.cache/plasma_theme_.*\.kcache$'), # file
-            '^' + os.path.expanduser('~/.cache/drkonqi($|/)'), # folder
-            '^' + os.path.expanduser('~/.cache/mesa_shader_cache_db($|/)'), # folder
-            '^' + os.path.expanduser('~/.cache/qtshadercache-[^/]+($|/)'), # folder
-            '^' + os.path.expanduser('~/.cache/plasma_theme_default.kcache$')] # file
+            '^' + os.path.expanduser('~/.cache/kwin($|/)'),  # folder
+            # folder
+            '^' + os.path.expanduser('~/.cache/mesa_shader_cache($|/)'),
+            '^' + os.path.expanduser('~/.cache/plasmashell($|/)'),  # folder
+            '^' + os.path.expanduser('~/.cache/icon-cache.kcache$'),  # file
+            # file
+            r'^' + os.path.expanduser(r'~/.cache/plasma_theme_.*\.kcache$'),
+            '^' + os.path.expanduser('~/.cache/drkonqi($|/)'),  # folder
+            # folder
+            '^' + os.path.expanduser('~/.cache/mesa_shader_cache_db($|/)'),
+            # folder
+            '^' + os.path.expanduser('~/.cache/qtshadercache-[^/]+($|/)'),
+            # file
+            '^' + os.path.expanduser('~/.cache/plasma_theme_default.kcache$')]
 
         for regex in regexes:
             self.regexes_compiled.append(re.compile(regex))

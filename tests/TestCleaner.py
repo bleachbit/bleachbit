@@ -269,7 +269,8 @@ class CleanerTestCase(common.BleachbitTestCase):
         ]
         list(register_cleaners())
         for pathname, expected in tests:
-            path = os.path.expanduser(pathname) if pathname.startswith('~') else pathname
+            path = os.path.expanduser(
+                pathname) if pathname.startswith('~') else pathname
             self.assertEqual(
                 backends['system'].whitelisted(path), expected, pathname)
         # Make sure directory ~/.cache/obexd is ignored

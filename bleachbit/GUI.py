@@ -538,7 +538,8 @@ class TreeInfoModel:
                 o_value = options.get_tree(c_id, o_id)
                 self.tree_store.append(parent, (o_name, o_value, o_id, ""))
         if hidden_cleaners:
-            logger.debug("automatically hid %d cleaners: %s", len(hidden_cleaners), ', '.join(hidden_cleaners))
+            logger.debug("automatically hid %d cleaners: %s", len(
+                hidden_cleaners), ', '.join(hidden_cleaners))
         self.row_changed_handler_id = self.tree_store.connect("row-changed",
                                                               self.on_row_changed)
 

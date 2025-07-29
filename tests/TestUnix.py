@@ -333,7 +333,8 @@ PrefersNonDefaultGPU=false""")
         """Unit test for .desktop file with valid Unix exe (not env)"""
         fake_config = FakeConfig({"Desktop Entry": {"Exec": "ls"}})
         if os.getenv('PATH'):
-            result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
+            result = _is_broken_xdg_desktop_application(
+                fake_config, "foo.desktop")
             self.assertFalse(result)
         else:
             with self.assertRaises(RuntimeError):
@@ -345,7 +346,8 @@ PrefersNonDefaultGPU=false""")
         fake_config = FakeConfig(
             {"Desktop Entry": {"Exec": "env ENVVAR=bar ls \"notepad.exe"}})
         if os.getenv('PATH'):
-            result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
+            result = _is_broken_xdg_desktop_application(
+                fake_config, "foo.desktop")
             self.assertTrue(result)
         else:
             with self.assertRaises(RuntimeError):
@@ -470,14 +472,16 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                 with open('/proc/self/stat', 'r', encoding='utf-8') as f:
                     exe = f.read().split()[1].strip('()')
             except (IOError, IndexError):
-                self.skipTest("Could not determine current process name from /proc/self/stat")
+                self.skipTest(
+                    "Could not determine current process name from /proc/self/stat")
         tests = [
             # (expected, exe, require_same_user)
             (True, exe, False),  # Check the actual process name
             (True, exe, True),  # Check the actual process name
         ]
         # These processes may be running but not by the current user.
-        non_user_exes = ('polkitd', 'bluetoothd', 'NetworkManager', 'gdm3', 'snapd', 'systemd-journald')
+        non_user_exes = ('polkitd', 'bluetoothd', 'NetworkManager',
+                         'gdm3', 'snapd', 'systemd-journald')
         tests += [(False, name, True) for name in non_user_exes]
         # These do not exist.
         tests += [

@@ -741,7 +741,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         def compare_free_space():
             """Returns whether all drives have equal free space"""
             (rc, stdout, stderr) = run_external(args)
-            self.assertEqual(rc, 0, f'error calling WMIC\nargs={args}\nstderr={stderr}')
+            self.assertEqual(
+                rc, 0, f'error calling WMIC\nargs={args}\nstderr={stderr}')
             lines = stdout.splitlines()
             self.assertGreater(len(lines), 0)
             for line in lines:
@@ -752,7 +753,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                 bytes_free = int(bytes_free)
                 free = free_space(drive)
                 if free != bytes_free:
-                    logger.debug('Free space mismatch for drive %s: %s != %s', drive, free, bytes_free)
+                    logger.debug(
+                        'Free space mismatch for drive %s: %s != %s', drive, free, bytes_free)
                     return False
             return True
 
@@ -762,8 +764,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             if compare_free_space():
                 return
             if attempt == max_attempts - 1:
-                self.fail(f'Failed to find equal free space after {max_attempts} attempts')
-
+                self.fail(
+                    f'Failed to find equal free space after {max_attempts} attempts')
 
     def test_get_filesystem_type(self):
         """Unit test for get_filesystem_type()"""

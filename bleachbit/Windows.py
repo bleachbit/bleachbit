@@ -536,7 +536,7 @@ def load_i18n_dll():
     Either way, it comes from gettext.
 
     Returns None if the dll is not available.
-    """    
+    """
     dirs = set([bleachbit.bleachbit_exe_path, os.path.dirname(sys.executable)])
     lib_path = None
     for dir in dirs:
