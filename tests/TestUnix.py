@@ -62,6 +62,9 @@ from bleachbit.Unix import (
     Locales,
     pacman_cache,
     root_is_not_allowed_to_X_session,
+    snap_disabled_clean,
+    snap_disabled_preview,
+    snap_parse_list,
     rotated_logs,
     run_cleaner_cmd,
     wine_to_linux_path,
@@ -769,6 +772,50 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             bytes_freed = pacman_cache()
             self.assertIsInteger(bytes_freed)
             logger.debug('pacman bytes cleaned %d', bytes_freed)
+
+    @common.skipIfWindows
+    @common.skipUnlessDestructive
+    def test_snap_disabled_clean(self):
+        """Unit test for snap_disabled_clean()"""
+        if not exe_exists('snap'):
+            self.assertRaises(RuntimeError, snap_disabled_clean)
+        else:
+            bytes_freed = snap_disabled_clean()
+            self.assertIsInteger(bytes_freed)
+            logger.debug('snap disabled bytes freed %d', bytes_freed)
+
+    @common.skipIfWindows
+    def test_snap_disabled_preview(self):
+        """Unit test for snap_disabled_preview()"""
+        if not exe_exists('snap'):
+            self.assertRaises(RuntimeError, snap_disabled_preview)
+        else:
+            bytes_freed = snap_disabled_preview()
+            self.assertIsInstance(bytes_freed, int)
+            logger.debug('snap disabled bytes freed %d', bytes_freed)
+
+    def test_snap_parse_list_real_data(self):
+        """Unit test for snap_parse_list() with real 'snap list --all' output"""
+        sample = (
+            "Name                       Version                         Rev    Tracking            Publisher             Notes\n"
+            "astral-uv                  0.8.9                           902    latest/stable       lengau                classic\n"
+            "astral-uv                  0.7.21                          759    latest/stable       lengau                disabled,classic\n"
+            "bare                       1.0                             5      latest/stable       canonical**           base\n"
+            "cheese                     44.1                            78     latest/stable       ken-vandine*          -\n"
+            "cheese                     44.1                            76     latest/stable       ken-vandine*          disabled\n"
+        )
+        expected = [
+            ('astral-uv', '759'),
+            ('cheese', '76')
+        ]
+        result = snap_parse_list(sample)
+        self.assertEqual(result, expected)
+
+    def test_snap_parse_list_no_snaps_message(self):
+        """Unit test for snap_parse_list() with 'no snaps installed' output"""
+        sample = "No snaps are installed yet. Try 'snap install hello-world'.\n"
+        result = snap_parse_list(sample)
+        self.assertEqual(result, [])
 
     @common.skipIfWindows
     def test_has_gui(self):

@@ -689,6 +689,7 @@ class DnfAutoremove(ActionProvider):
             Unix.dnf_autoremove,
             'dnf autoremove')
 
+
 class PacmanCache(ActionProvider):
 
     """Action to run `paccache -rk0'"""
@@ -702,3 +703,19 @@ class PacmanCache(ActionProvider):
             None,
             Unix.pacman_cache,
             'paccache -rk0')
+
+
+class SnapDisabled(ActionProvider):
+
+    """Action to remove disabled snaps"""
+    action_key = 'snap.disabled'
+
+    def __init__(self, action_element, path_vars=None):
+        ActionProvider.__init__(self, action_element, path_vars)
+
+    def get_commands(self):
+        yield Command.Function(
+            None,
+            Unix.snap_disabled_clean,
+            'snap remove disabled',
+            Unix.snap_disabled_preview)
