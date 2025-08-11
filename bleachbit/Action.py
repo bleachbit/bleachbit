@@ -616,7 +616,7 @@ class WinShellChangeNotify(ActionProvider):
             None,
             # pylint: disable=possibly-used-before-assignment
             Windows.shell_change_notify,
-            None)
+            _('Refresh Windows shell'))
 
 
 class Winreg(ActionProvider):
