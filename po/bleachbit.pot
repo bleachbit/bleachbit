@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-09 22:12-0600\n"
+"POT-Creation-Date: 2025-08-14 08:08-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -120,15 +120,16 @@ msgstr ""
 #: ../cleaners/beagle.xml ../cleaners/yum.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/waterfox.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
+#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/thumbnails.xml
+#: ../cleaners/exaile.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/smartftp.xml ../cleaners/apt.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/flash.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr ""
 
@@ -149,7 +150,8 @@ msgstr ""
 msgid "Delete the most recently used list"
 msgstr ""
 
-#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
+#: ../cleaners/apt.xml ../cleaners/snap.xml
 msgid "Package manager"
 msgstr ""
 
@@ -366,6 +368,22 @@ msgstr ""
 msgid "Delete the command history"
 msgstr ""
 
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr ""
+
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr ""
+
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
 msgstr ""
@@ -426,22 +444,6 @@ msgstr ""
 #: ../cleaners/transmission.xml ../cleaners/gftp.xml ../cleaners/amule.xml
 #: ../cleaners/vuze.xml
 msgid "File transfer client"
-msgstr ""
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Temporary files"
-msgstr ""
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Delete the temporary files"
 msgstr ""
 
 #: ../cleaners/epiphany.xml
@@ -630,6 +632,14 @@ msgstr ""
 msgid "Graphics editor"
 msgstr ""
 
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr ""
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr ""
+
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
 msgstr ""
@@ -767,9 +777,11 @@ msgstr ""
 msgid "Free space and maintain privacy"
 msgstr ""
 
-#. TRANSLATORS: Multi-value variables are explained in the online documentation.
-#. Basically, they are like an environment variable, but each multi-value variable
-#. can have multiple values. They're a way to make CleanerML files more concise.
+#. TRANSLATORS: Multi-value variables are explained
+#. in the online documentation. Basically, they are like
+#. an environment variable, but each multi-value variable
+#. can have multiple values. They're a way to make CleanerML
+#. files more concise.
 #: ../bleachbit/Action.py
 msgid "Deep scan does not support multi-value variable."
 msgstr ""
@@ -811,6 +823,10 @@ msgstr ""
 msgid "Run external command: %s"
 msgstr ""
 
+#: ../bleachbit/Action.py
+msgid "Refresh Windows shell"
+msgstr ""
+
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
 msgid ""
@@ -826,14 +842,6 @@ msgstr ""
 #: ../bleachbit/CleanerML.py
 #, python-format
 msgid "Error reading cleaner: %s"
-msgstr ""
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
 msgstr ""
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
@@ -1140,11 +1148,6 @@ msgstr ""
 msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
-msgstr ""
-
-#: ../bleachbit/FileUtilities.py
-#, python-brace-format
-msgid "Wiping path {pathname} with file system type {fstype}"
 msgstr ""
 
 #: ../bleachbit/FileUtilities.py
@@ -1544,6 +1547,10 @@ msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr ""
 
 #: ../bleachbit/GUI.py
+msgid "Quit"
+msgstr ""
+
+#: ../bleachbit/GUI.py
 msgid "You must select an operation"
 msgstr ""
 
@@ -1610,6 +1617,10 @@ msgstr ""
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
+msgstr ""
+
+#: ../bleachbit/GUI.py
+msgid "Press F11 to exit fullscreen mode."
 msgstr ""
 
 #: ../bleachbit/GUI.py
@@ -1808,6 +1819,10 @@ msgstr ""
 
 #: ../bleachbit/Winapp.py
 msgid "Imported from winapp2.ini"
+msgstr ""
+
+#: ../bleachbit/Windows.py
+msgid "Administrator privileges are required to clean Windows Updates"
 msgstr ""
 
 #: ../bleachbit/Windows.py
