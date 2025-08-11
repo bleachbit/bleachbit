@@ -516,19 +516,20 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
         sql = """CREATE TABLE meta(key LONGVARCHAR NOT NULL UNIQUE PRIMARY KEY,value LONGVARCHAR);
 INSERT INTO "meta" VALUES('version','20');"""
         # create test file
-        filename = self.mkstemp(prefix='bleachbit-test-sqlite')
+        filename = os.path.join(self.tempdir, 'test_get_sqlite_int.sqlite')
         FileUtilities.execute_sqlite3(filename, sql)
         self.assertExists(filename)
         # run the test
         ver = Special.get_sqlite_int(
             filename, 'select value from meta where key="version"')
         self.assertEqual(ver, [20])
+        os.unlink(filename)
 
     def test_get_sqlite_values(self):
         """Unit test for get_sqlite_values()"""
         ddl = """CREATE TABLE foo(id int, value int);INSERT INTO foo VALUES(12, 34), (56, 78);"""
         # create test file
-        filename = self.mkstemp(prefix='bleachbit-test-sqlite')
+        filename = os.path.join(self.tempdir, 'test_get_sqlite_values.sqlite')
         FileUtilities.execute_sqlite3(filename, ddl)
         self.assertExists(filename)
         # run the test
@@ -544,11 +545,13 @@ INSERT INTO "meta" VALUES('version','20');"""
                 filename, 'select id, value from does_not_exist')
         with self.assertRaises(sqlite3.OperationalError):
             Special._get_sqlite_values('doesnotexist', sql)
+        os.unlink(filename)
 
     def test_sqlite_table_exists(self):
         """Unit test for _sqlite_table_exists()"""
         # create test file
-        filename = self.mkstemp(prefix='bleachbit-test-sqlite')
+        filename = os.path.join(
+            self.tempdir, 'test_sqlite_table_exists.sqlite')
         sql = "CREATE TABLE foo(id int)"
         FileUtilities.execute_sqlite3(filename, sql)
         self.assertExists(filename)
@@ -557,6 +560,7 @@ INSERT INTO "meta" VALUES('version','20');"""
         self.assertTrue(Special._sqlite_table_exists(filename, 'foo'))
         self.assertFalse(Special._sqlite_table_exists(
             filename, 'does_not_exist'))
+        os.unlink(filename)
 
     def test_sqlite_loop(self):
         """Repeat SQLite tests

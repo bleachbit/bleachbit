@@ -117,6 +117,8 @@ class NetworkTestCase(common.BleachbitTestCase):
     def test_get_gtk_version(self):
         """Unit test for get_gtk_version()"""
         gtk_ver = get_gtk_version()
+        if gtk_ver is None:
+            self.skipTest("GTK is not installed")
         self.assertIsInstance(gtk_ver, str)
         self.assertRegex(gtk_ver, r"^\d+\.\d+\.\d+$")
 
