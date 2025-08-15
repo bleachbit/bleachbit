@@ -89,15 +89,10 @@ Requires:       xdg-utils
 
 
 %description
-Delete traces of your activities and other junk files to free disk
-space and maintain privacy.  BleachBit identifies and erases
-broken menu entries, cache, cookies, localizations, recent document
-lists, and temporary files in Firefox, Google Chrome, Flash, and 60
-other applications.
-
-Shred files to prevent recovery, and wipe free disk space to
-hide previously deleted files.
-
+BleachBit frees disk space and maintains privacy by quickly removing
+unnecessary files such as cache, cookies, browser history, temporary
+files, and system logs. It can also shred files  and clean free disk
+space to prevent data recovery.
 
 %prep
 %setup -q
