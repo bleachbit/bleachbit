@@ -543,8 +543,11 @@ INSERT INTO "meta" VALUES('version','20');"""
         with self.assertRaises(sqlite3.OperationalError):
             Special._get_sqlite_values(
                 filename, 'select id, value from does_not_exist')
+        # If file is missing, raise exception and do not create the file.
+        non_existing_file = os.path.join(self.tempdir, 'non_existing_file')
         with self.assertRaises(sqlite3.OperationalError):
-            Special._get_sqlite_values('doesnotexist', sql)
+            Special._get_sqlite_values(non_existing_file, sql)
+        self.assertNotExists(non_existing_file)
         os.unlink(filename)
 
     def test_sqlite_table_exists(self):
@@ -559,7 +562,11 @@ INSERT INTO "meta" VALUES('version','20');"""
         # pylint: disable=protected-access
         self.assertTrue(Special._sqlite_table_exists(filename, 'foo'))
         self.assertFalse(Special._sqlite_table_exists(
-            filename, 'does_not_exist'))
+            filename, 'table_does_not_exist'))
+        non_existing_file = os.path.join(self.tempdir, 'file_does_not_exist')
+        self.assertFalse(Special._sqlite_table_exists(
+            non_existing_file, 'table_does_not_exist'))
+        self.assertNotExists(non_existing_file)
         os.unlink(filename)
 
     def test_sqlite_loop(self):
