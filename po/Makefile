@@ -3,6 +3,7 @@ POFILES = $(wildcard *.po)
 MOFILES = $(patsubst %.po,%.mo,$(POFILES))
 SRC = $(wildcard ../bleachbit/*.py) ../data/app-menu.ui
 POTFILE = $(APP).pot
+ITS = /usr/share/gettext/its/metainfo.its
 
 # Use PYTHON environment variable if available, otherwise default to python3
 PYTHON ?= python3
@@ -23,15 +24,29 @@ desktop.pot: ../org.bleachbit.BleachBit.desktop
 	echo "msgstr \"\"" >> desktop.pot
 	echo >> desktop.pot
 
+metainfo.pot: ../org.bleachbit.BleachBit.metainfo.xml
+	@echo "* Extracting translatable strings from metainfo.xml using xgettext with ITS"
+	@if [ -f "$(ITS)" ]; then \
+		xgettext -o $@ \
+			--from-code=UTF-8 \
+			--add-comments=TRANSLATORS \
+			--add-location=file \
+			--its=$(ITS) \
+			$<; \
+	else \
+		echo "WARNING: Required file '$(ITS)' is missing. Skipping metainfo extraction (creating stub)."; \
+		echo "APT users, try: sudo apt install appstream"; \
+		echo '# metainfo.pot stub (ITS file missing)' > $@; \
+	fi
 
-$(POTFILE): $(SRC) cleanerml.pot desktop.pot
+$(POTFILE): $(SRC) cleanerml.pot desktop.pot metainfo.pot
 	@echo "* Generating $(POTFILE)"
 	@if [ -f $(POTFILE) ]; then \
 		cp $(POTFILE) $(POTFILE).old; \
 		echo " Words before update: "; \
 		tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq |wc --words; \
 	fi
-	cat cleanerml.pot desktop.pot > $(POTFILE)
+	cat cleanerml.pot desktop.pot metainfo.pot > $(POTFILE)
 	# --add-location=file: reduces size of diff
 	xgettext -o $(POTFILE) \
 		--join-existing \
@@ -91,7 +106,7 @@ done
 clean:
 	echo "* Cleaning"
 	@rm -fv *.mo
-	@rm -fv $(POTFILE) $(POTFILE).old cleanerml.pot desktop.pot diff.pot
+	@rm -fv $(POTFILE) $(POTFILE).old cleanerml.pot desktop.pot metainfo.pot diff.pot
 	@rm -rfv ../locale
 
 all: $(POTFILE) $(MOFILES)
