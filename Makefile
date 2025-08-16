@@ -9,7 +9,7 @@
 # On some systems if not explicitly given, make uses /bin/sh
 SHELL := /bin/bash
 
-.PHONY: clean install tests build tests-with-sudo
+.PHONY: clean install tests build tests-with-sudo lint delete_windows_files pretty
 
 prefix ?= /usr/local
 bindir ?= $(prefix)/bin
@@ -17,6 +17,7 @@ datadir ?= $(prefix)/share
 
 INSTALL = install
 INSTALL_DATA = $(INSTALL) -m 644
+INSTALL_SCRIPT = $(INSTALL) -m 755
 
 # if not specified, do not check coverage
 PYTHON ?= python3
@@ -32,7 +33,7 @@ clean:
 	@rm -rf BleachBit-Portable # created by windows/setup.bat
 	@rm -rf BleachBit-*-portable.zip
 	@rm -vf MANIFEST # created by setup.py
-	make -C po clean
+	$(MAKE) -C po clean
 	@rm -vrf locale
 	@rm -vrf {*/,./}*.{pylint,pyflakes}.log
 	@rm -vrf windows/BleachBit-*-setup*.{exe,zip}
@@ -42,8 +43,7 @@ clean:
 install:
 	# "binary"
 	mkdir -p $(DESTDIR)$(bindir)
-	$(INSTALL_DATA) bleachbit.py $(DESTDIR)$(bindir)/bleachbit
-	chmod 0755 $(DESTDIR)$(bindir)/bleachbit
+	$(INSTALL_SCRIPT) bleachbit.py $(DESTDIR)$(bindir)/bleachbit
 
 	# application launcher
 	mkdir -p $(DESTDIR)$(datadir)/applications
@@ -75,20 +75,20 @@ install:
 	$(INSTALL_DATA) bleachbit-indicator.svg $(DESTDIR)$(datadir)/pixmaps/
 
 	# translations
-	make -C po install DESTDIR=$(DESTDIR)
+	$(MAKE) -C po install DESTDIR=$(DESTDIR)
 
 	# PolicyKit
 	mkdir -p $(DESTDIR)$(datadir)/polkit-1/actions
 	$(INSTALL_DATA) org.bleachbit.policy $(DESTDIR)$(datadir)/polkit-1/actions/
 
 lint:
-	[ -x "$$(command -v pyflakes3)" ] ||  echo "WARNING: pyflakes3 not found"
-	[ -x "$$(command -v pylint)" ] ||  echo "WARNING: pylint not found"
+	command -v pyflakes3 >/dev/null 2>&1 || echo "WARNING: Missing pyflakes3. APT users, try: sudo apt install pyflakes3"
+	command -v pylint >/dev/null 2>&1 || echo "WARNING: Missing pylint. APT users, try: sudo apt install pylint"
 	for f in *py */*py; \
 	do \
 		echo "$$f"; \
-		( [ -x "$$(command -v pyflakes3)" ] && pyflakes3 "$$f" > "$$f".pyflakes.log ); \
-		( [ -x "$$(command -v pylint)" ] && pylint "$$f" > "$$f".pylint.log ); \
+		( pyflakes3 "$$f" > "$$f".pyflakes.log ); \
+		( pylint "$$f" > "$$f".pylint.log ); \
 	done; \
 	exit 0
 
@@ -99,20 +99,31 @@ delete_windows_files:
 	# Remove Windows-specific modules.
 	rm -f bleachbit/{Winapp,Windows*}.py 
 
-
 tests:
 	# Catch warnings as errors. Also set in `tests/common.py`.
-	make -C cleaners tests; cleaners_status=$$?; \
+	$(MAKE) -C cleaners tests; cleaners_status=$$?; \
 	PYTHONWARNINGS=error $(COVERAGE) -m unittest discover -p Test*.py -v; py_status=$$?; \
 	exit $$(($$cleaners_status + $$py_status))
 
 tests-with-sudo:
 	# Run tests marked with @test_also_with_sudo using sudo
-	PYTHONWARNINGS=error python3 tests/test_with_sudo.py
+	PYTHONWARNINGS=error $(PYTHON) tests/test_with_sudo.py
 
 pretty:
-	autopep8 -i {.,bleachbit,tests}/*py
-	dos2unix  {.,bleachbit,tests}/*py
-	make -C cleaners pretty
-	xmllint --format doc/cleaner_markup_language.xsd > doc/cleaner_markup_language.xsd.tmp
-	mv doc/cleaner_markup_language.xsd.tmp doc/cleaner_markup_language.xsd
+	@if command -v autopep8 >/dev/null 2>&1; then \
+		autopep8 -i {.,bleachbit,tests}/*py; \
+	else \
+		echo "WARNING: Missing autopep8. APT users, try: sudo apt install python3-autopep8"; \
+	fi
+	@if command -v dos2unix >/dev/null 2>&1; then \
+		dos2unix {.,bleachbit,tests}/*py; \
+	else \
+		echo "WARNING: Missing dos2unix. APT users, try: sudo apt install dos2unix"; \
+	fi
+	$(MAKE) -C cleaners pretty
+	if command -v xmllint >/dev/null 2>&1; then \
+		xmllint --format doc/cleaner_markup_language.xsd > doc/cleaner_markup_language.xsd.tmp; \
+		mv doc/cleaner_markup_language.xsd.tmp doc/cleaner_markup_language.xsd; \
+	else \
+		echo "WARNING: Missing xmllint. APT users, try: sudo apt install libxml2-utils"; \
+	fi

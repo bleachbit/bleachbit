@@ -26,11 +26,15 @@ Test case for module Windows
 from tests import common
 
 from bleachbit import FileUtilities, General
+from bleachbit.Command import Delete, Function
 from bleachbit.FileUtilities import extended_path, extended_path_undo
 from bleachbit.Windows import (
     delete_locked_file,
     delete_registry_key,
     delete_registry_value,
+    delete_updates,
+    is_service_running,
+    run_net_service_command,
     detect_registry_key,
     empty_recycle_bin,
     get_clipboard_paths,
@@ -57,6 +61,7 @@ import shutil
 import sys
 import tempfile
 from decimal import Decimal
+import time
 
 if 'win32' == sys.platform:
     import pywintypes
@@ -253,6 +258,97 @@ class WindowsTestCase(common.BleachbitTestCase):
         self.assertTrue(return_value)
         return_value = delete_registry_key('HKCU\\' + key, True)
         self.assertFalse(return_value)
+
+    def test_delete_updates(self):
+        """Unit test for delete_updates
+
+        As a preview, this does not modify services or delete files.
+        """
+        if not shell.IsUserAnAdmin():
+            # It should return None without doing any work.
+            for _ in delete_updates():
+                pass
+            return
+
+        counter = 0
+        for cmd in delete_updates():
+            counter += 1
+            self.assertIsInstance(cmd, (Delete, Function))
+        logger.debug('delete_updates() returned %s commands', f'{counter:,}')
+
+    def test_is_service_running(self):
+        """Unit test for is_service_running()"""
+        # RPC is always running.
+        self.assertTrue(is_service_running('rpcss'))
+        # Windows Update is sometimes running.
+        self.assertIsInstance(is_service_running('wuauserv'), bool)
+        # Non-existent service should raise an error.
+        with self.assertRaises(pywintypes.error):
+            is_service_running('does_not_exist')
+        # None should raise an error.
+        with self.assertRaises(AssertionError):
+            is_service_running(None)
+
+    @common.skipUnlessDestructive
+    def test_run_net_service_command(self):
+        """Integration test for run_net_service_command().
+
+        Actually stop/start Windows Update service.
+
+        spooler (Print Spooler) is often on by default and has no dependencies.
+
+        Windows Audio Endpoint Builder (AudioEndpointBuilder) is often on
+        by default and depends on audiosrv (Windows Audio).
+
+        Requires admin.
+        """
+        if not shell.IsUserAnAdmin():
+            self.skipTest('requires administrator privileges')
+        for service in ('AudioEndpointBuilder', 'spooler'):
+
+            initial_running = is_service_running(service)
+
+            try:
+                # Stop service
+                run_net_service_command(service, False)
+                self.assertFalse(is_service_running(service))
+                if service == 'AudioEndpointBuilder':
+                    self.assertFalse(is_service_running('audiosrv'))
+
+                # Stop again
+                run_net_service_command(service, False)
+                self.assertFalse(is_service_running(service))
+
+                # Start service
+                run_net_service_command(service, True)
+                self.assertTrue(is_service_running(service))
+
+                # Start again
+                run_net_service_command(service, True)
+                self.assertTrue(is_service_running(service))
+            finally:
+                # Restore initial state
+                run_net_service_command(service, initial_running)
+                self.assertEqual(initial_running, is_service_running(service))
+
+    def test_run_net_service_command_not_admin(self):
+        """Test as run_net_service_command() as not admin user"""
+        if shell.IsUserAnAdmin():
+            self.skipTest('requires non-admin user')
+        service = 'wuauserv'
+        initial_running = is_service_running(service)
+        for start in (True, False):
+            with self.assertRaises(RuntimeError):
+                run_net_service_command(service, start)
+            self.assertEqual(is_service_running(service), initial_running)
+
+    def test_run_net_service_command_invalid_service(self):
+        """Test as run_net_service_command() with invalid service"""
+        for service in ('does_not_exist', None):
+            for start in (True, False):
+                with self.subTest(service=service, start=start):
+                    with self.assertRaises((AssertionError, RuntimeError)):
+                        run_net_service_command(service, start)
 
     def test_delete_registry_value(self):
         """Unit test for delete_registry_value"""

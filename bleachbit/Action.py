@@ -23,19 +23,23 @@
 Actions that perform cleaning
 """
 
-from bleachbit import Command, FileUtilities, General, Special, DeepScan
-from bleachbit import fs_scan_re_flags
-from bleachbit.Language import get_text as _
-
+# standard imports
 import glob
 import logging
 import os
 import re
+from itertools import product
 
+# first party imports
+from bleachbit import Command, FileUtilities, General, Special, DeepScan
+from bleachbit import fs_scan_re_flags
+from bleachbit.Language import get_text as _
 
-if 'posix' == os.name:
+if os.name == 'posix':
     from bleachbit import Unix
 
+if os.name == 'nt':
+    from bleachbit import Windows
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +62,7 @@ def expand_multi_var(s, variables):
     var_keys_used = []
     ret = []
     for var_key in variables.keys():
-        sub = '$$%s$$' % var_key
+        sub = f'$${var_key}$$'
         if s.find(sub) > -1:
             var_keys_used.append(var_key)
     if not var_keys_used:
@@ -68,13 +72,12 @@ def expand_multi_var(s, variables):
     vars_used = {key: value for key,
                  value in variables.items() if key in var_keys_used}
     # create a product of combinations
-    from itertools import product
     vars_product = (dict(zip(vars_used, x))
                     for x in product(*vars_used.values()))
     for var_set in vars_product:
         ms = s  # modified version of input string
         for var_key, var_value in var_set.items():
-            sub = '$$%s$$' % var_key
+            sub = f'$${var_key}$$'
             ms = ms.replace(sub, var_value)
         ret.append(ms)
     if ret:
@@ -92,7 +95,7 @@ class PluginMount(type):
 
     """A simple plugin framework"""
 
-    def __init__(cls, name, bases, attrs):
+    def __init__(cls, _name, _bases, _attrs):
         if not hasattr(cls, 'plugins'):
             cls.plugins = []
         else:
@@ -147,9 +150,11 @@ class FileActionProvider(ActionProvider):
                 wholeregex=self.wholeregex, nwholeregex=self.nwholeregex))
             if len(self.paths) != 1:
                 logger.warning(
-                    # TRANSLATORS: Multi-value variables are explained in the online documentation.
-                    # Basically, they are like an environment variable, but each multi-value variable
-                    # can have multiple values. They're a way to make CleanerML files more concise.
+                    # TRANSLATORS: Multi-value variables are explained
+                    # in the online documentation. Basically, they are like
+                    # an environment variable, but each multi-value variable
+                    # can have multiple values. They're a way to make CleanerML
+                    # files more concise.
                     _("Deep scan does not support multi-value variable."))
         if not any([self.object_type, self.regex, self.nregex,
                     self.wholeregex, self.nwholeregex]):
@@ -280,7 +285,7 @@ class FileActionProvider(ActionProvider):
         }
 
         if self.search not in search_functions:
-            raise RuntimeError("Invalid search='%s'" % self.search)
+            raise RuntimeError(f"Invalid search='{self.search}'")
 
         func = search_functions[self.search]
 
@@ -336,7 +341,9 @@ class AptAutoclean(ActionProvider):
 
     def get_commands(self):
         # Checking executable allows auto-hide to work for non-APT systems
+        assert os.name == 'posix'
         if FileUtilities.exe_exists('apt-get'):
+            # pylint: disable=possibly-used-before-assignment
             yield Command.Function(None,
                                    Unix.apt_autoclean,
                                    'apt-get autoclean')
@@ -552,12 +559,13 @@ class Process(ActionProvider):
                 (rc, stdout, stderr) = General.run_external(args, wait=self.wait)
             except Exception as e:
                 raise RuntimeError(
-                    'Exception in external command\nCommand: %s\nError: %s' % (args, str(e))) from e
+                    f'Exception in external command\nCommand: {args}\nError: {str(e)}') from e
             if self.wait and 0 != rc:
-                msg = 'Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n'
-                logger.warning(msg, args, rc, stdout, stderr)
+                logger.warning('Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n',
+                               args, rc, stdout, stderr)
             return 0
-        yield Command.Function(path=None, func=run_process, label=_("Run external command: %s") % self.cmd)
+        yield Command.Function(path=None, func=run_process,
+                               label=_("Run external command: %s") % self.cmd)
 
 
 class Shred(FileActionProvider):
@@ -603,11 +611,12 @@ class WinShellChangeNotify(ActionProvider):
     action_key = 'win.shell.change.notify'
 
     def get_commands(self):
-        from bleachbit import Windows
+        assert os.name == 'nt'
         yield Command.Function(
             None,
+            # pylint: disable=possibly-used-before-assignment
             Windows.shell_change_notify,
-            None)
+            _('Refresh Windows shell'))
 
 
 class Winreg(ActionProvider):
@@ -679,3 +688,34 @@ class DnfAutoremove(ActionProvider):
             None,
             Unix.dnf_autoremove,
             'dnf autoremove')
+
+
+class PacmanCache(ActionProvider):
+
+    """Action to run `paccache -rk0'"""
+    action_key = 'pacman.cache'
+
+    def __init__(self, action_element, path_vars=None):
+        ActionProvider.__init__(self, action_element, path_vars)
+
+    def get_commands(self):
+        yield Command.Function(
+            None,
+            Unix.pacman_cache,
+            'paccache -rk0')
+
+
+class SnapDisabled(ActionProvider):
+
+    """Action to remove disabled snaps"""
+    action_key = 'snap.disabled'
+
+    def __init__(self, action_element, path_vars=None):
+        ActionProvider.__init__(self, action_element, path_vars)
+
+    def get_commands(self):
+        yield Command.Function(
+            None,
+            Unix.snap_disabled_clean,
+            'snap remove disabled',
+            Unix.snap_disabled_preview)

@@ -63,8 +63,20 @@ def run_sudo_tests(test_list):
     print("Running sudo tests...")
     print('=' * 60)
 
-    # Run all sudo tests in a single command
-    cmd = ['sudo', '-E', sys.executable, '-m', 'unittest'] + test_list + ['-v']
+    base_cmd = [sys.executable, '-m', 'unittest'] + test_list + ['-v']
+
+    if os.name == 'posix' and os.geteuid() == 0:
+        sudo_uid = os.getenv('SUDO_UID')
+        if sudo_uid and sudo_uid != '0':
+            print("\nDetected EUID=0 with SUDO_UID preserved; skipping nested sudo.")
+            cmd = base_cmd
+        else:
+            print("\nERROR: Do not run tests/test_with_sudo.py with sudo or as root.")
+            print("Run it unprivileged; it will invoke sudo internally.")
+            print("Try: make tests-with-sudo or python3 tests/test_with_sudo.py")
+            return False
+    else:
+        cmd = ['sudo', '-E'] + base_cmd
 
     try:
         result = subprocess.run(cmd, check=False)

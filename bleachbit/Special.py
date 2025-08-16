@@ -53,9 +53,13 @@ def __get_chrome_history(path, fn='History'):
 def _sqlite_table_exists(pathname, table):
     """Check whether a table exists in the SQLite database"""
     cmd = "select name from sqlite_master where type='table' and name=?;"
-    with contextlib.closing(sqlite3.connect(pathname)) as conn:
-        if conn.execute(cmd, (table,)).fetchone():
-            return True
+    try:
+        with contextlib.closing(sqlite3.connect(f'file:{pathname}?mode=ro', uri=True)) as conn:
+            if conn.execute(cmd, (table,)).fetchone():
+                return True
+    except sqlite3.OperationalError:
+        # Database does not exist or cannot be opened in read-only mode
+        return False
     return False
 
 
@@ -85,7 +89,7 @@ def get_sqlite_int(path, sql, parameters=()):
 
 def _get_sqlite_values(path, sql, row_factory=None, parameters=()):
     """Run SQL on database in 'path' and return the integers"""
-    with contextlib.closing(sqlite3.connect(path)) as conn:
+    with contextlib.closing(sqlite3.connect(f'file:{path}?mode=ro', uri=True)) as conn:
         if row_factory is not None:
             conn.row_factory = row_factory
         cursor = conn.execute(sql, parameters)

@@ -61,6 +61,8 @@ if 'win32' == sys.platform:
     import win32gui
     import win32process
     import win32security
+    import win32service
+    import win32serviceutil
 
     from ctypes import windll, byref
     from win32com.shell import shell, shellcon
@@ -219,7 +221,14 @@ def delete_registry_key(parent_key, really_delete):
 
 
 def delete_updates():
-    """Returns commands for deleting Windows Updates files"""
+    """Returns commands for deleting Windows Updates files
+
+    Yields commands
+    """
+    if not shell.IsUserAnAdmin():
+        logger.warning(
+            _("Administrator privileges are required to clean Windows Updates"))
+        return
     windir = os.path.expandvars('%windir%')
     dirs = glob.glob(os.path.join(windir, '$NtUninstallKB*'))
     dirs += [os.path.expandvars(r'%windir%\SoftwareDistribution')]
@@ -236,24 +245,20 @@ def delete_updates():
         # if nothing to delete, then also do not restart service
         return
 
-    args = []
+    # Closure to bind service/start into a zero-arg callback for Command.Function
+    def make_run_service(service, start):
+        def run_wu_service():
+            return run_net_service_command(service, start)
+        return run_wu_service
 
-    def run_wu_service():
-        General.run_external(args)
-        return 0
-
-    services = {}
     all_services = ('wuauserv', 'cryptsvc', 'bits', 'msiserver')
+    restart_services = []
     for service in all_services:
-        import win32serviceutil
-        services[service] = win32serviceutil.QueryServiceStatus(service)[
-            1] == 4
-        logger.debug('Windows service {} has current state: {}'.format(
-            service, services[service]))
-
-        if services[service]:
-            args = ['net', 'stop', service]
-            yield Command.Function(None, run_wu_service, " ".join(args))
+        if not is_service_running(service):
+            continue
+        restart_services.append(service)
+        label = _(f"stop Windows service {service}")
+        yield Command.Function(None, make_run_service(service, False), label)
 
     for path1 in dirs:
         for path2 in FileUtilities.children_in_directory(path1, True):
@@ -261,10 +266,69 @@ def delete_updates():
         if os.path.exists(path1):
             yield Command.Delete(path1)
 
-    for this_service in all_services:
-        if services[this_service]:
-            args = ['net', 'start', this_service]
-            yield Command.Function(None, run_wu_service, " ".join(args))
+    for service in restart_services:
+        label = _(f"start Windows service {service}")
+        yield Command.Function(None, make_run_service(service, True), label)
+
+
+def is_service_running(service):
+    """Return True if service is running."""
+    assert isinstance(service, str)
+    service_status_code = win32serviceutil.QueryServiceStatus(service)[1]
+    logger.debug('Windows service %s has current state %d',
+                 service, service_status_code)
+    # Throw error if status is pending.
+    if service_status_code not in (1, 4, 7):
+        raise RuntimeError(
+            f'Unexpected service status code: {service_status_code}')
+    return service_status_code == 4  # running
+
+
+def run_net_service_command(service, start):
+    """Start or stop a Windows service
+
+    Args:
+        service (str): Service name, e.g. 'wuauserv'.
+        start (bool): True to start, False to stop.
+
+    Behavior:
+    - On success, return 0 because no space was freed.
+    - Treat "already running" (start) and "not active/not started" (stop) like a success.
+    - On other errors, raise RuntimeError.
+    - If service has dependencies, this will stop them too.
+    """
+    assert isinstance(service, str)
+    assert isinstance(start, bool)
+    if start:
+        action = win32serviceutil.StartService
+        ignore_code = 1056  # already running
+        ignore_msgs = ('already',)
+        verb = 'start'
+        desired = win32service.SERVICE_RUNNING
+        state_txt = 'RUNNING'
+    else:
+        action = win32serviceutil.StopServiceWithDeps
+        ignore_code = 1062  # not active
+        ignore_msgs = ('not active', 'not been started', 'is not started')
+        verb = 'stop'
+        state_txt = 'STOPPED'
+        desired = win32service.SERVICE_STOPPED
+
+    try:
+        action(service)
+    except pywintypes.error as e:
+        # Treat common benign states as success
+        msg = str(e).lower()
+        if getattr(e, 'winerror', None) == ignore_code or any(s in msg for s in ignore_msgs):
+            return 0
+        raise RuntimeError(f'Failed to {verb} service {service}: {e}') from e
+
+    try:
+        win32serviceutil.WaitForServiceStatus(service, desired, 60)
+    except Exception as wait_err:
+        logger.info('WaitForServiceStatus(%s, %s, ...) had an issue: %s',
+                    service, state_txt, wait_err)
+    return 0
 
 
 def detect_registry_key(parent_key):
@@ -536,7 +600,7 @@ def load_i18n_dll():
     Either way, it comes from gettext.
 
     Returns None if the dll is not available.
-    """    
+    """
     dirs = set([bleachbit.bleachbit_exe_path, os.path.dirname(sys.executable)])
     lib_path = None
     for dir in dirs:

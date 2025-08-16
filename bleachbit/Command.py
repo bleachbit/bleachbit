@@ -108,17 +108,29 @@ class Function:
 
     """Execute a simple Python function"""
 
-    def __init__(self, path, func, label):
-        """Path is a pathname that exists or None.  If
-        it exists, func takes the pathname.  Otherwise,
-        function returns the size."""
+    def __init__(self, path, func, label, preview_func=None):
+        """Initialize a Function command
+
+        Parameters:
+            path (str or None): Path to file or None if function doesn't operate on a file
+            func (function): Function to execute that takes path or returns size
+            label (str): Label for display in the UI
+            preview_func (function, optional): Function to call in preview mode
+
+        func and preview_func take no arguments and return an integer.
+        """
         self.path = path
         self.func = func
         self.label = label
-        try:
-            assert isinstance(func, types.FunctionType)
-        except AssertionError:
-            raise AssertionError('Expected MethodType but got %s' % type(func))
+        self.preview_func = preview_func
+        assert isinstance(path, (str, type(None)))
+        if not isinstance(func, types.FunctionType):
+            raise TypeError(
+                f'Expected FunctionType for func but got {type(func)}')
+        assert isinstance(label, str)
+        if not isinstance(preview_func, (types.FunctionType, type(None))):
+            raise TypeError(
+                f'Expected FunctionType or None for preview_func but got {type(preview_func)}')
 
     def __str__(self):
         if self.path:
@@ -126,6 +138,7 @@ class Function:
         return 'Function: %s' % (self.label)
 
     def execute(self, really_delete):
+        """Execute the function and return results"""
 
         if self.path is not None and FileUtilities.whitelisted(self.path):
             yield whitelist(self.path)
@@ -138,7 +151,16 @@ class Function:
             'path': self.path,
             'size': None}
 
-        if really_delete:
+        if not really_delete and self.preview_func is not None:
+            # Preview mode: call preview function to get list of items that would be deleted
+            try:
+                preview_items = self.preview_func()
+                if isinstance(preview_items, int):
+                    ret['size'] = preview_items
+            except Exception as e:
+                logger.warning(f'Preview function failed: {e}')
+                ret['size'] = 0
+        elif really_delete:
             if self.path is None:
                 # Function takes no path.  It returns the size.
                 func_ret = self.func()

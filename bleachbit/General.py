@@ -250,6 +250,9 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
 
     The caller must expand environment variables before calling this function.
 
+    timeout is in seconds. On timeout, this function raises subprocess.TimeoutExpired.
+    No tuple is returned in this case.
+
     If wait=False, the process will be started but not waited for, and (0, '', '') will be returned.
     """
     assert args is not None

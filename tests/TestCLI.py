@@ -317,7 +317,7 @@ class CLITestCase(common.BleachbitTestCase):
             args = env_prefix + [get_executable(), 'bleachbit.py', '--sysinfo']
             output = run_external(args, timeout=RUN_EXTERNAL_TIMEOUT)
             if os.name == 'posix' and os.environ.get('USER') == 'root' and \
-                output[0] == 1:
+                    output[0] == 1:
                 continue
             self.assertEqual(output[0], 0, output)
             self.assertIn('sys.version', output[1])

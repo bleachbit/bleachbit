@@ -346,14 +346,20 @@ class Options:
         self.__flush()
 
     def set_custom_paths(self, values):
-        """Save the customlist"""
+        """Save the custom paths
+
+        @param values: list of tuples containing (path_type, path)
+            where path_type is either 'file' or 'folder'
+        """
         section = "custom/paths"
         if self.config.has_section(section):
             self.config.remove_section(section)
         self.config.add_section(section)
         for counter, value in enumerate(values):
-            self.config.set(section, str(counter) + '_type', value[0])
-            self.config.set(section, str(counter) + '_path', value[1])
+            path_type, path = value
+            assert path_type in ('file', 'folder')
+            self.config.set(section, str(counter) + '_type', path_type)
+            self.config.set(section, str(counter) + '_path', path)
         self.__flush()
 
     def set_language(self, langid, value):

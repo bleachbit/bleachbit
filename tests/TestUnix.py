@@ -38,33 +38,37 @@ from bleachbit.General import get_executable, get_real_username
 from tests.common import test_also_with_sudo
 from bleachbit.FileUtilities import children_in_directory, exe_exists
 from bleachbit.Unix import (
+    _is_broken_xdg_desktop_application,
     apt_autoclean,
     apt_autoremove,
+    dnf_autoremove,
+    dnf_clean,
     find_available_locales,
-    get_distribution_name_version,
+    find_best_locale,
+    get_apt_size,
     get_distribution_name_version_distro,
     get_distribution_name_version_os_release,
     get_distribution_name_version_platform_freedesktop,
-    has_gui,
-    Locales,
-    _is_broken_xdg_desktop_application,
-    is_broken_xdg_desktop,
+    get_distribution_name_version,
     get_purgeable_locales,
-    get_apt_size,
-    find_best_locale,
-    LocaleCleanerPath,
-    yum_clean,
-    dnf_clean,
-    dnf_autoremove,
-    wine_to_linux_path,
-    root_is_not_allowed_to_X_session,
-    rotated_logs,
-    run_cleaner_cmd,
-    journald_clean,
-    is_unix_display_protocol_wayland,
+    has_gui,
+    is_broken_xdg_desktop,
     is_process_running_ps_aux,
     is_process_running,
-    JOURNALD_REGEX
+    is_unix_display_protocol_wayland,
+    journald_clean,
+    JOURNALD_REGEX,
+    LocaleCleanerPath,
+    Locales,
+    pacman_cache,
+    root_is_not_allowed_to_X_session,
+    snap_disabled_clean,
+    snap_disabled_preview,
+    snap_parse_list,
+    rotated_logs,
+    run_cleaner_cmd,
+    wine_to_linux_path,
+    yum_clean,
 )
 
 
@@ -329,7 +333,8 @@ PrefersNonDefaultGPU=false""")
         """Unit test for .desktop file with valid Unix exe (not env)"""
         fake_config = FakeConfig({"Desktop Entry": {"Exec": "ls"}})
         if os.getenv('PATH'):
-            result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
+            result = _is_broken_xdg_desktop_application(
+                fake_config, "foo.desktop")
             self.assertFalse(result)
         else:
             with self.assertRaises(RuntimeError):
@@ -341,7 +346,8 @@ PrefersNonDefaultGPU=false""")
         fake_config = FakeConfig(
             {"Desktop Entry": {"Exec": "env ENVVAR=bar ls \"notepad.exe"}})
         if os.getenv('PATH'):
-            result = _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
+            result = _is_broken_xdg_desktop_application(
+                fake_config, "foo.desktop")
             self.assertTrue(result)
         else:
             with self.assertRaises(RuntimeError):
@@ -466,14 +472,16 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                 with open('/proc/self/stat', 'r', encoding='utf-8') as f:
                     exe = f.read().split()[1].strip('()')
             except (IOError, IndexError):
-                self.skipTest("Could not determine current process name from /proc/self/stat")
+                self.skipTest(
+                    "Could not determine current process name from /proc/self/stat")
         tests = [
             # (expected, exe, require_same_user)
             (True, exe, False),  # Check the actual process name
             (True, exe, True),  # Check the actual process name
         ]
         # These processes may be running but not by the current user.
-        non_user_exes = ('polkitd', 'bluetoothd', 'NetworkManager', 'gdm3', 'snapd', 'systemd-journald')
+        non_user_exes = ('polkitd', 'bluetoothd', 'NetworkManager',
+                         'gdm3', 'snapd', 'systemd-journald')
         tests += [(False, name, True) for name in non_user_exes]
         # These do not exist.
         tests += [
@@ -757,6 +765,61 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             0, 'Remove  112 Packages\nFreed space: 299 M\n', 'stderr')
         bytes_freed = dnf_autoremove()
         self.assertEqual(bytes_freed, 299000000)
+
+    @common.skipIfWindows
+    def test_pacman_cache(self):
+        """Unit test for pacman_cache()"""
+        if 0 != os.geteuid() or os.path.exists('/var/lib/pacman/db.lck') \
+                or not exe_exists('paccache'):
+            self.assertRaises(RuntimeError, pacman_cache)
+        else:
+            bytes_freed = pacman_cache()
+            self.assertIsInteger(bytes_freed)
+            logger.debug('pacman bytes cleaned %d', bytes_freed)
+
+    @common.skipIfWindows
+    @common.skipUnlessDestructive
+    def test_snap_disabled_clean(self):
+        """Unit test for snap_disabled_clean()"""
+        if not exe_exists('snap'):
+            self.assertRaises(RuntimeError, snap_disabled_clean)
+        else:
+            bytes_freed = snap_disabled_clean()
+            self.assertIsInteger(bytes_freed)
+            logger.debug('snap disabled bytes freed %d', bytes_freed)
+
+    @common.skipIfWindows
+    def test_snap_disabled_preview(self):
+        """Unit test for snap_disabled_preview()"""
+        if not exe_exists('snap'):
+            self.assertRaises(RuntimeError, snap_disabled_preview)
+        else:
+            bytes_freed = snap_disabled_preview()
+            self.assertIsInstance(bytes_freed, int)
+            logger.debug('snap disabled bytes freed %d', bytes_freed)
+
+    def test_snap_parse_list_real_data(self):
+        """Unit test for snap_parse_list() with real 'snap list --all' output"""
+        sample = (
+            "Name                       Version                         Rev    Tracking            Publisher             Notes\n"
+            "astral-uv                  0.8.9                           902    latest/stable       lengau                classic\n"
+            "astral-uv                  0.7.21                          759    latest/stable       lengau                disabled,classic\n"
+            "bare                       1.0                             5      latest/stable       canonical**           base\n"
+            "cheese                     44.1                            78     latest/stable       ken-vandine*          -\n"
+            "cheese                     44.1                            76     latest/stable       ken-vandine*          disabled\n"
+        )
+        expected = [
+            ('astral-uv', '759'),
+            ('cheese', '76')
+        ]
+        result = snap_parse_list(sample)
+        self.assertEqual(result, expected)
+
+    def test_snap_parse_list_no_snaps_message(self):
+        """Unit test for snap_parse_list() with 'no snaps installed' output"""
+        sample = "No snaps are installed yet. Try 'snap install hello-world'.\n"
+        result = snap_parse_list(sample)
+        self.assertEqual(result, [])
 
     @common.skipIfWindows
     def test_has_gui(self):

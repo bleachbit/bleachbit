@@ -357,11 +357,13 @@ class System(Cleaner):
         if 'custom' == option_id:
             for (c_type, c_path) in options.get_custom_paths():
                 if 'file' == c_type:
-                    yield Command.Delete(c_path)
+                    if os.path.lexists(c_path):
+                        yield Command.Delete(c_path)
                 elif 'folder' == c_type:
-                    for path in children_in_directory(c_path, True):
-                        yield Command.Delete(path)
-                    yield Command.Delete(c_path)
+                    if os.path.lexists(c_path):
+                        for path in children_in_directory(c_path, True):
+                            yield Command.Delete(path)
+                        yield Command.Delete(c_path)
                 else:
                     raise RuntimeError(
                         f'custom folder has invalid type {c_type}')
@@ -638,7 +640,24 @@ class System(Cleaner):
             '^' + os.path.expanduser('~/.cache/ibus/'),
             # Linux Bluetooth daemon obexd directory is typically empty, so be careful
             # not to delete the empty directory.
-            '^' + os.path.expanduser('~/.cache/obexd($|/)')]
+            '^' + os.path.expanduser('~/.cache/obexd($|/)'),
+            # KDE/Plasma cache files
+            # https://github.com/bleachbit/bleachbit/issues/1853
+            '^' + os.path.expanduser('~/.cache/kwin($|/)'),  # folder
+            # folder
+            '^' + os.path.expanduser('~/.cache/mesa_shader_cache($|/)'),
+            '^' + os.path.expanduser('~/.cache/plasmashell($|/)'),  # folder
+            '^' + os.path.expanduser('~/.cache/icon-cache.kcache$'),  # file
+            # file
+            r'^' + os.path.expanduser(r'~/.cache/plasma_theme_.*\.kcache$'),
+            '^' + os.path.expanduser('~/.cache/drkonqi($|/)'),  # folder
+            # folder
+            '^' + os.path.expanduser('~/.cache/mesa_shader_cache_db($|/)'),
+            # folder
+            '^' + os.path.expanduser('~/.cache/qtshadercache-[^/]+($|/)'),
+            # file
+            '^' + os.path.expanduser('~/.cache/plasma_theme_default.kcache$')]
+
         for regex in regexes:
             self.regexes_compiled.append(re.compile(regex))
 

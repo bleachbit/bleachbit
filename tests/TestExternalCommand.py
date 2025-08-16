@@ -114,9 +114,21 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
             self._test_as_non_admin_with_context_menu_path(fn_prefix)
 
     def test_context_menu_command_while_the_app_is_running(self):
+        """Test the context menu while the application is running"""
         p = subprocess.Popen([sys.executable, 'bleachbit.py'], shell=False)
-        self._context_helper('while_app_is_running', allow_opened_window=True)
-        subprocess.Popen.kill(p)
+        try:
+            self._context_helper('while_app_is_running',
+                                 allow_opened_window=True)
+        finally:
+            # Ensure the process is terminated and reaped to prevent ResourceWarning
+            try:
+                p.kill()
+            except Exception:
+                pass
+            try:
+                p.wait(timeout=15)
+            except Exception:
+                pass
 
     def _test_as_non_admin_with_context_menu_path(self, fn_prefix):
         """
