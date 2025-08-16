@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-14 20:35-0600\n"
-"PO-Revision-Date: 2025-04-10 14:13+0000\n"
+"PO-Revision-Date: 2025-08-17 04:01+0000\n"
 "Last-Translator: Ghost of Sparta <makesocialfoss32@keemail.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/bleachbit/main/"
 "hu/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Launchpad-Export-Date: 2019-12-26 01:52+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -374,7 +374,7 @@ msgstr "Hibakeresési naplók törlése"
 
 #: ../cleaners/bash.xml
 msgid "Shell"
-msgstr "Parancsértelmező"
+msgstr "Shell"
 
 #: ../cleaners/bash.xml ../cleaners/sqlite3.xml ../cleaners/octave.xml
 msgid "Delete the command history"
@@ -658,11 +658,11 @@ msgstr "Képszerkesztő program"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "Letiltva"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "Letiltott csomagok eltávolítása"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -810,7 +810,7 @@ msgstr "Hely felszabadítása és magánszférájának fenntartása"
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "Andrew Ziem és közreműködők"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -819,11 +819,17 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"A BleachBit lemezterületet szabadít fel és védi a magánszférát azáltal, hogy "
+"gyorsan eltávolítja a felesleges fájlokat, például a gyorsítótárat, sütiket, "
+"böngészési előzményeket, ideiglenes fájlokat és rendszernaplókat. Emellett "
+"képes a fájlokat véglegesen törölni (shredelni), valamint a szabad "
+"lemezterületet is megtisztítani, hogy megakadályozza az adatok "
+"visszaállítását."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr ""
+msgstr "Alapértelmezett sötét mód, talált szemétfájlok megjelenítése"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -873,7 +879,7 @@ msgstr "Külső parancs futtatása: %s"
 
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "Windows Shell frissítése"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1654,7 +1660,7 @@ msgstr "Konfigurációs fájl visszaállítása, mert sérült: %s"
 
 #: ../bleachbit/GUI.py
 msgid "Quit"
-msgstr ""
+msgstr "Kilépés"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1738,7 +1744,7 @@ msgstr "A BleachBit frissítése a legújabb verzióra"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "Nyomja meg az F11-et a teljes képernyős mód elhagyásához."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1954,6 +1960,7 @@ msgstr "Importálva a winapp2.ini fájlból"
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr ""
+"Rendszergazdai jogosultságok szükségesek a Windows-frissítések tisztításához"
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
