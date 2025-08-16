@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-14 20:35-0600\n"
-"PO-Revision-Date: 2025-07-19 11:03+0000\n"
+"PO-Revision-Date: 2025-08-17 04:01+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/bleachbit/main/"
 "et/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -655,11 +655,11 @@ msgstr "Graafikarakendus"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "Pole kasutusel"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "Eemalda kasutusel mitteolevad paketid"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -805,7 +805,7 @@ msgstr "Vabasta ruumi ja säilita privaatsus"
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "Andrew Ziem ja kaasautorid"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -814,11 +814,15 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"BleachBit vabastab arvuti andmeruumi ning eemaldab sealt mittevajalikud "
+"failid, nagu puhvrid, küpsised, brauserite ajalugu, ajutised failid ja "
+"logid. Vältimaks andmete taastamist on võimalik kustutatud failid juhuslike "
+"andmetega mitu korda üle kirjutada."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr ""
+msgstr "Vaikimisi tume kujundus, näha on leitud mittevajalikud failid"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -868,7 +872,7 @@ msgstr "Käivita väline käsk: %s"
 
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "Värskenda Windowsi kesta"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1630,7 +1634,7 @@ msgstr "Lähtestame konfiguratsioonifaili, kuna see on rikutud: %s"
 
 #: ../bleachbit/GUI.py
 msgid "Quit"
-msgstr ""
+msgstr "Välju"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1712,7 +1716,7 @@ msgstr "Uuenda BleachBit viimase versioonini"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "Täisekraanivaatest väljumiseks vajuta F11."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1925,7 +1929,7 @@ msgstr "Imporditud winapp2.ini-st"
 
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
-msgstr ""
+msgstr "Windowsi uuenduste eemaldamiseks on vajalikud administraatori õigused"
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
