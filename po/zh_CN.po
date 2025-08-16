@@ -6,11 +6,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-14 20:35-0600\n"
-"PO-Revision-Date: 2025-03-11 10:54+0000\n"
-"Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate."
-"org>\n"
+"PO-Revision-Date: 2025-08-17 04:02+0000\n"
+"Last-Translator: 大王叫我来巡山 "
+"<hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/bleachbit/main/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -637,11 +637,11 @@ msgstr "图像编辑器"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "已停用"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "删除已停用的包"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -785,7 +785,7 @@ msgstr "释放空间并保护隐私"
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "Andrew Ziem 和贡献者们"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -794,11 +794,14 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"Bleachbit "
+"快速删除缓存、cookies、浏览器历史记录、临时文件和系统日志等不必要的文件来释放"
+"磁盘空间并维持隐私。它还能粉碎文件并清理空闲的磁盘空间来防止数据恢复。"
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr ""
+msgstr "默认深色模式，显示找到的垃圾文件"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -848,7 +851,7 @@ msgstr "执行外部命令：%s"
 
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "刷新 Windows shell"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1603,7 +1606,7 @@ msgstr "正在重置损坏的配置文件：%s"
 
 #: ../bleachbit/GUI.py
 msgid "Quit"
-msgstr ""
+msgstr "退出"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1680,7 +1683,7 @@ msgstr "更新 BleachBit 到最新版"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "按下 F11 键退出全屏模式。"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1886,7 +1889,7 @@ msgstr "从 Winapp2.ini 导入"
 
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
-msgstr ""
+msgstr "清除 Windows Update 文件需要管理员权限"
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
