@@ -50,6 +50,11 @@ jobs:
           notification-daemon \
           xvfb \
           ${{ matrix.python-extra-dep }}
+        # for tests.TestLanguage
+        sudo locale-gen es_ES.UTF-8
+        sudo locale-gen pl_PL.UTF-8
+        sudo locale-gen en_AU.UTF-8
+        sudo update-locale
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
