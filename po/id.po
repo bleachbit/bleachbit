@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2025-03-09 22:12-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-14 20:35-0600\n"
 "PO-Revision-Date: 2025-07-22 04:02+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/bleachbit/"
@@ -124,15 +124,16 @@ msgstr "Tembolok"
 #: ../cleaners/beagle.xml ../cleaners/yum.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/waterfox.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
+#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/thumbnails.xml
+#: ../cleaners/exaile.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/smartftp.xml ../cleaners/apt.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/flash.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "Hapus tembolok"
 
@@ -153,7 +154,8 @@ msgstr "Terakhir digunakan"
 msgid "Delete the most recently used list"
 msgstr "Hapus daftar yang paling terakhir digunakan"
 
-#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
+#: ../cleaners/apt.xml ../cleaners/snap.xml
 msgid "Package manager"
 msgstr "Manajer Paket"
 
@@ -378,6 +380,22 @@ msgstr "Shell"
 msgid "Delete the command history"
 msgstr "Hapus riwayat perintah"
 
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr "Berkas-berkas sementara"
+
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr "Hapus berkas-berkas sementara"
+
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
 msgstr "Alat pencarian"
@@ -441,22 +459,6 @@ msgstr "Hapus tembolok avatar dan emotikon"
 #: ../cleaners/vuze.xml
 msgid "File transfer client"
 msgstr "Klien pentransfer berkas"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Temporary files"
-msgstr "Berkas-berkas sementara"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Delete the temporary files"
-msgstr "Hapus berkas-berkas sementara"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -653,6 +655,14 @@ msgstr "Sistem windowing"
 msgid "Graphics editor"
 msgstr "Penyunting Grafis"
 
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr ""
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr ""
+
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
 msgstr "Penampil dokumen"
@@ -792,13 +802,33 @@ msgstr ""
 msgid "Unnecessary file cleaner"
 msgstr "Pembersih berkas yang tidak diperlukan"
 
-#: ../org.bleachbit.BleachBit.desktop
+#: ../org.bleachbit.BleachBit.desktop ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Free space and maintain privacy"
 msgstr "Bersihkan ruang dan pertahankan privasi"
 
-#. TRANSLATORS: Multi-value variables are explained in the online documentation.
-#. Basically, they are like an environment variable, but each multi-value variable
-#. can have multiple values. They're a way to make CleanerML files more concise.
+#. TRANSLATORS: Name of the developers
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Andrew Ziem and contributors"
+msgstr ""
+
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid ""
+"BleachBit frees disk space and maintains privacy by quickly removing "
+"unnecessary files such as cache, cookies, browser history, temporary files, "
+"and system logs. It can also shred files and clean free disk space to "
+"prevent data recovery."
+msgstr ""
+
+#. TRANSLATORS: Caption for screenshot
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Default dark mode, showing found junk files"
+msgstr ""
+
+#. TRANSLATORS: Multi-value variables are explained
+#. in the online documentation. Basically, they are like
+#. an environment variable, but each multi-value variable
+#. can have multiple values. They're a way to make CleanerML
+#. files more concise.
 #: ../bleachbit/Action.py
 msgid "Deep scan does not support multi-value variable."
 msgstr "Pemindaian secara mendalam tidak mendukung variabel multinilai."
@@ -840,6 +870,10 @@ msgstr "Bersihkan"
 msgid "Run external command: %s"
 msgstr "Jalankan perintah eksternal: %s"
 
+#: ../bleachbit/Action.py
+msgid "Refresh Windows shell"
+msgstr ""
+
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
 msgid ""
@@ -858,15 +892,6 @@ msgstr "Abaikan pembersih karena dapat ditulis: %s"
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "Gagal membaca pembersih: %s"
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr ""
-"Pembersih tidak dapat digunakan pada OS ini karena tidak ada tindakan: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1190,11 +1215,6 @@ msgid ""
 msgstr ""
 "Setidaknya ada satu berkas dalam sebuah sistem berkas yang tidak mendukung "
 "penimpaan berkas tingkat lanjut."
-
-#: ../bleachbit/FileUtilities.py
-#, python-brace-format
-msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr "Menghapus jalur {pathname} dengan tipe sistem berkas {fstype}"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1631,6 +1651,10 @@ msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "Mengatur ulang berkas konfigurasi karena rusak: %s"
 
 #: ../bleachbit/GUI.py
+msgid "Quit"
+msgstr ""
+
+#: ../bleachbit/GUI.py
 msgid "You must select an operation"
 msgstr "Anda harus memilih operasi"
 
@@ -1707,6 +1731,10 @@ msgstr "Pembaruan"
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
 msgstr "Perbarui BleachBit ke versi terbaru"
+
+#: ../bleachbit/GUI.py
+msgid "Press F11 to exit fullscreen mode."
+msgstr ""
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1919,6 +1947,10 @@ msgid "Imported from winapp2.ini"
 msgstr "Diimpor dari winapp2.ini"
 
 #: ../bleachbit/Windows.py
+msgid "Administrator privileges are required to clean Windows Updates"
+msgstr ""
+
+#: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
 msgstr "Sedang memulai BleachBit...\n"
 
@@ -2072,6 +2104,15 @@ msgstr "_Bantuan"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "Tent_ang BleachBit"
+
+#, python-format
+#~ msgid "Cleaner is not usable on this OS because it has no actions: %s"
+#~ msgstr ""
+#~ "Pembersih tidak dapat digunakan pada OS ini karena tidak ada tindakan: %s"
+
+#, python-brace-format
+#~ msgid "Wiping path {pathname} with file system type {fstype}"
+#~ msgstr "Menghapus jalur {pathname} dengan tipe sistem berkas {fstype}"
 
 #~ msgid "IRC client formerly known as XChat"
 #~ msgstr "Klien IRC yang sebelumnya dikenal sebagai XChat"

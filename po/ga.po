@@ -6,18 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2025-03-09 22:12-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-14 20:35-0600\n"
 "PO-Revision-Date: 2025-05-14 09:33+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
-"Language-Team: Irish <https://hosted.weblate.org/projects/bleachbit/main/ga/>"
-"\n"
+"Language-Team: Irish <https://hosted.weblate.org/projects/bleachbit/main/ga/"
+">\n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :("
-"n>6 && n<11) ? 3 : 4;\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :"
+"(n>6 && n<11) ? 3 : 4;\n"
 "X-Generator: Weblate 5.12-dev\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -124,15 +124,16 @@ msgstr "Taisce"
 #: ../cleaners/beagle.xml ../cleaners/yum.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/waterfox.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
+#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/thumbnails.xml
+#: ../cleaners/exaile.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/smartftp.xml ../cleaners/apt.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/flash.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "Scrios an taisce"
 
@@ -153,7 +154,8 @@ msgstr "An chuid is mó a úsáideadh le déanaí"
 msgid "Delete the most recently used list"
 msgstr "Scrios an liosta is déanaí a úsáideadh"
 
-#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
+#: ../cleaners/apt.xml ../cleaners/snap.xml
 msgid "Package manager"
 msgstr "Bainisteoir pacáistí"
 
@@ -166,8 +168,8 @@ msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
 msgstr ""
-"Déan athbhreithniú cúramach ar liosta na bpacáistí a bhainfear trí "
-"\"dnf list autoremove\" a rith."
+"Déan athbhreithniú cúramach ar liosta na bpacáistí a bhainfear trí \"dnf "
+"list autoremove\" a rith."
 
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
@@ -381,6 +383,22 @@ msgstr "Blaosc"
 msgid "Delete the command history"
 msgstr "Scrios stair an ordaithe"
 
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr "Comhaid shealadacha"
+
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr "Scrios na comhaid shealadacha"
+
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
 msgstr "Uirlis chuardaigh"
@@ -445,22 +463,6 @@ msgstr "Scrios an taisce avatars agus straoiseoga"
 #: ../cleaners/vuze.xml
 msgid "File transfer client"
 msgstr "Cliant aistrithe comhad"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Temporary files"
-msgstr "Comhaid shealadacha"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Delete the temporary files"
-msgstr "Scrios na comhaid shealadacha"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -659,6 +661,14 @@ msgstr "Córas fuinneoga"
 msgid "Graphics editor"
 msgstr "Eagarthóir grafaicí"
 
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr ""
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr ""
+
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
 msgstr "Amharcóir cáipéisí"
@@ -801,13 +811,33 @@ msgstr ""
 msgid "Unnecessary file cleaner"
 msgstr "Glantóir comhad gan ghá"
 
-#: ../org.bleachbit.BleachBit.desktop
+#: ../org.bleachbit.BleachBit.desktop ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Free space and maintain privacy"
 msgstr "Spás saor in aisce agus príobháideacht a choinneáil"
 
-#. TRANSLATORS: Multi-value variables are explained in the online documentation.
-#. Basically, they are like an environment variable, but each multi-value variable
-#. can have multiple values. They're a way to make CleanerML files more concise.
+#. TRANSLATORS: Name of the developers
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Andrew Ziem and contributors"
+msgstr ""
+
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid ""
+"BleachBit frees disk space and maintains privacy by quickly removing "
+"unnecessary files such as cache, cookies, browser history, temporary files, "
+"and system logs. It can also shred files and clean free disk space to "
+"prevent data recovery."
+msgstr ""
+
+#. TRANSLATORS: Caption for screenshot
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Default dark mode, showing found junk files"
+msgstr ""
+
+#. TRANSLATORS: Multi-value variables are explained
+#. in the online documentation. Basically, they are like
+#. an environment variable, but each multi-value variable
+#. can have multiple values. They're a way to make CleanerML
+#. files more concise.
 #: ../bleachbit/Action.py
 msgid "Deep scan does not support multi-value variable."
 msgstr "Ní thacaíonn scanadh domhain le haróg illuacha."
@@ -849,14 +879,18 @@ msgstr "Glan"
 msgid "Run external command: %s"
 msgstr "Rith ordú seachtrach: %s"
 
+#: ../bleachbit/Action.py
+msgid "Refresh Windows shell"
+msgstr ""
+
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
 msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 msgstr ""
-"Earráid i handle_cleaner_option () le haghaidh id níos glaine = {cleaner_id}"
-", rogha XML={option_xml}"
+"Earráid i handle_cleaner_option () le haghaidh id níos glaine = "
+"{cleaner_id}, rogha XML={option_xml}"
 
 #: ../bleachbit/CleanerML.py
 #, python-format
@@ -869,16 +903,6 @@ msgstr ""
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "Earráid agus glantóir á léamh: %s"
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr ""
-"Níl an glantóir inúsáidte ar an OS seo toisc nach bhfuil aon ghníomhartha "
-"aige: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -893,7 +917,8 @@ msgstr "Comhaid deisce briste"
 
 #: ../bleachbit/Cleaner.py
 msgid "Delete broken application menu entries and file associations"
-msgstr "Scrios iontrálacha briste roghchláir feidhmchláir agus cumainn chomhaid"
+msgstr ""
+"Scrios iontrálacha briste roghchláir feidhmchláir agus cumainn chomhaid"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
@@ -1200,11 +1225,6 @@ msgid ""
 msgstr ""
 "Bhí comhad amháin ar a laghad ar chóras comhad nach dtacaíonn le forscríobh "
 "chun cinn."
-
-#: ../bleachbit/FileUtilities.py
-#, python-brace-format
-msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr "Ag glanadh cosáin {pathname} le cineál córais comhaid {fstype}"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1629,6 +1649,10 @@ msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "An comhad cumraíochta á athshocrú toisc go bhfuil sé truaillithe: %s"
 
 #: ../bleachbit/GUI.py
+msgid "Quit"
+msgstr ""
+
+#: ../bleachbit/GUI.py
 msgid "You must select an operation"
 msgstr "Ní mór duit oibríocht a roghnú"
 
@@ -1709,6 +1733,10 @@ msgstr "Nuashonraigh"
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
 msgstr "Nuashonraigh BleachBit go dtí an leagan is déanaí"
+
+#: ../bleachbit/GUI.py
+msgid "Press F11 to exit fullscreen mode."
+msgstr ""
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1923,6 +1951,10 @@ msgid "Imported from winapp2.ini"
 msgstr "Iompórtáilte ó winapp2.ini"
 
 #: ../bleachbit/Windows.py
+msgid "Administrator privileges are required to clean Windows Updates"
+msgstr ""
+
+#: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
 msgstr "Tá BleachBit ag tosú...\n"
 
@@ -1943,7 +1975,8 @@ msgstr "Níor aimsíodh comhad: %s"
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr "Diúltaíodh rochtain agus comhad á bhratach le scriosadh níos déanaí: %s"
+msgstr ""
+"Diúltaíodh rochtain agus comhad á bhratach le scriosadh níos déanaí: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
@@ -2080,3 +2113,13 @@ msgstr "_Help"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_Maidir le BleachBit"
+
+#, python-format
+#~ msgid "Cleaner is not usable on this OS because it has no actions: %s"
+#~ msgstr ""
+#~ "Níl an glantóir inúsáidte ar an OS seo toisc nach bhfuil aon ghníomhartha "
+#~ "aige: %s"
+
+#, python-brace-format
+#~ msgid "Wiping path {pathname} with file system type {fstype}"
+#~ msgstr "Ag glanadh cosáin {pathname} le cineál córais comhaid {fstype}"

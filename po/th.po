@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit 0.7.3-1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-09 22:12-0600\n"
+"POT-Creation-Date: 2025-08-14 20:35-0600\n"
 "PO-Revision-Date: 2022-04-14 11:11+0000\n"
 "Last-Translator: Sukhon Tanuwatparitpol <steamhrk@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/bleachbit/main/th/"
@@ -122,15 +122,16 @@ msgstr "แคช"
 #: ../cleaners/beagle.xml ../cleaners/yum.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/waterfox.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
+#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/thumbnails.xml
+#: ../cleaners/exaile.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/smartftp.xml ../cleaners/apt.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/flash.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "ลบแคช"
 
@@ -151,7 +152,8 @@ msgstr "ที่ใช้ล่าสุด"
 msgid "Delete the most recently used list"
 msgstr "ลบรายการที่ใช้ล่าสุด"
 
-#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
+#: ../cleaners/apt.xml ../cleaners/snap.xml
 msgid "Package manager"
 msgstr "เครื่องมือจัดการแพ็กเกจ"
 
@@ -369,6 +371,22 @@ msgstr "หน่วยติดต่อผู้ใช้ (Shell)"
 msgid "Delete the command history"
 msgstr "ลบประวัติคำสั่ง"
 
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr "แฟ้มชั่วคราว"
+
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr "ลบแฟ้มชั่วคราว"
+
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
 msgstr "เครื่องมือค้นหา"
@@ -430,22 +448,6 @@ msgstr "ลบแคชอวาตาร์และอีโมติคอน
 #: ../cleaners/vuze.xml
 msgid "File transfer client"
 msgstr "โปรแกรมถ่ายโอนไฟล์"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Temporary files"
-msgstr "แฟ้มชั่วคราว"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Delete the temporary files"
-msgstr "ลบแฟ้มชั่วคราว"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -635,6 +637,14 @@ msgstr "ระบบการวางหน้าต่าง"
 msgid "Graphics editor"
 msgstr "โปรแกรมแก้ไขรูปภาพ"
 
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr ""
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr ""
+
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
 msgstr "โปรแกรมดูเอกสาร"
@@ -771,13 +781,33 @@ msgstr ""
 msgid "Unnecessary file cleaner"
 msgstr "เครื่องมือทำความสะอาดแฟ้มที่ไม่จำเป็น"
 
-#: ../org.bleachbit.BleachBit.desktop
+#: ../org.bleachbit.BleachBit.desktop ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Free space and maintain privacy"
 msgstr "พื้นที่ว่างและการรักษาความเป็นส่วนตัว"
 
-#. TRANSLATORS: Multi-value variables are explained in the online documentation.
-#. Basically, they are like an environment variable, but each multi-value variable
-#. can have multiple values. They're a way to make CleanerML files more concise.
+#. TRANSLATORS: Name of the developers
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Andrew Ziem and contributors"
+msgstr ""
+
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid ""
+"BleachBit frees disk space and maintains privacy by quickly removing "
+"unnecessary files such as cache, cookies, browser history, temporary files, "
+"and system logs. It can also shred files and clean free disk space to "
+"prevent data recovery."
+msgstr ""
+
+#. TRANSLATORS: Caption for screenshot
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Default dark mode, showing found junk files"
+msgstr ""
+
+#. TRANSLATORS: Multi-value variables are explained
+#. in the online documentation. Basically, they are like
+#. an environment variable, but each multi-value variable
+#. can have multiple values. They're a way to make CleanerML
+#. files more concise.
 #: ../bleachbit/Action.py
 msgid "Deep scan does not support multi-value variable."
 msgstr "การสแกนละเอียดไม่รองรับตัวแปรหลายค่า"
@@ -819,6 +849,10 @@ msgstr "ล้าง"
 msgid "Run external command: %s"
 msgstr "เรียกใช้คำสั่งภายนอก: %s"
 
+#: ../bleachbit/Action.py
+msgid "Refresh Windows shell"
+msgstr ""
+
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
 msgid ""
@@ -837,15 +871,6 @@ msgstr "เพิกเฉยต่อเครื่องมือทำคว
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "เกิดข้อผิดพลาดในการอ่านเครื่องมือทำความสะอาด: %s"
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr ""
-"เครื่องมือวทำความสะอาดไม่สามารถใช้งานได้บนระบบปฏิบัติการนี้ เนื่องจากไม่มีการดำเนินการ: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1157,11 +1182,6 @@ msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr "นี่คือแฟ้มอย่างน้อยหนึ่งแฟ้มบนระบบแฟ้มที่ไม่สนับสนุนการเขียนทับขั้นสูง"
-
-#: ../bleachbit/FileUtilities.py
-#, python-brace-format
-msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1589,6 +1609,10 @@ msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "กำลังรีเซ็ตไฟล์การกำหนดค่าเนื่องจากเสียหาย: %s"
 
 #: ../bleachbit/GUI.py
+msgid "Quit"
+msgstr ""
+
+#: ../bleachbit/GUI.py
 msgid "You must select an operation"
 msgstr "คุณต้องเลือกการทำงาน"
 
@@ -1658,6 +1682,10 @@ msgstr ""
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
+msgstr ""
+
+#: ../bleachbit/GUI.py
+msgid "Press F11 to exit fullscreen mode."
 msgstr ""
 
 #: ../bleachbit/GUI.py
@@ -1867,6 +1895,10 @@ msgid "Imported from winapp2.ini"
 msgstr "นำเข้าจาก winapp2.ini"
 
 #: ../bleachbit/Windows.py
+msgid "Administrator privileges are required to clean Windows Updates"
+msgstr ""
+
+#: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
 msgstr "BleachBit กำลังเริ่มดำเนินการ...\n"
 
@@ -2019,6 +2051,11 @@ msgstr "_วิธีใช้"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_เกี่ยวกับ BleachBit"
+
+#, python-format
+#~ msgid "Cleaner is not usable on this OS because it has no actions: %s"
+#~ msgstr ""
+#~ "เครื่องมือวทำความสะอาดไม่สามารถใช้งานได้บนระบบปฏิบัติการนี้ เนื่องจากไม่มีการดำเนินการ: %s"
 
 #~ msgid "IRC client formerly known as XChat"
 #~ msgstr "ไคลเอนท์ (IRC Client) เดิมชื่อ XChat"

@@ -6,12 +6,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2025-03-09 22:12-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-14 20:35-0600\n"
 "PO-Revision-Date: 2025-04-27 19:46+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
-"Language-Team: Tamil <https://hosted.weblate.org/projects/bleachbit/main/ta/>"
-"\n"
+"Language-Team: Tamil <https://hosted.weblate.org/projects/bleachbit/main/ta/"
+">\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -124,15 +124,16 @@ msgstr "இடைமாற்று"
 #: ../cleaners/beagle.xml ../cleaners/yum.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/waterfox.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
+#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/thumbnails.xml
+#: ../cleaners/exaile.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/smartftp.xml ../cleaners/apt.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/flash.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "நினைவில் உள்ளதை அழி"
 
@@ -153,7 +154,8 @@ msgstr "சமீபத்தில் பாவிக்கப்பட்ட�
 msgid "Delete the most recently used list"
 msgstr "அழி மிக சமீபத்திய வரலாற்று பட்டியலை"
 
-#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
+#: ../cleaners/apt.xml ../cleaners/snap.xml
 msgid "Package manager"
 msgstr "தொகுப்பு மேலாளர்"
 
@@ -376,6 +378,22 @@ msgstr "ஓடு"
 msgid "Delete the command history"
 msgstr "கட்டளை வரலாற்றை அழி"
 
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr "தற்காலிக கோப்புகள்"
+
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr "தற்காலிக கோப்புகளை அழி"
+
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
 msgstr "தேடற் கருவி"
@@ -439,22 +457,6 @@ msgstr "அவதாரங்கள் மற்றும் எமோடிக�
 #: ../cleaners/vuze.xml
 msgid "File transfer client"
 msgstr "கோப்பு பரிமாற்ற வாங்கி"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Temporary files"
-msgstr "தற்காலிக கோப்புகள்"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Delete the temporary files"
-msgstr "தற்காலிக கோப்புகளை அழி"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -648,6 +650,14 @@ msgstr "சாளரம் அமைப்பு"
 msgid "Graphics editor"
 msgstr "கிராபிக்ச் ஆசிரியர்"
 
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr ""
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr ""
+
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
 msgstr "ஆவண பார்வையாளர்"
@@ -785,13 +795,33 @@ msgstr ""
 msgid "Unnecessary file cleaner"
 msgstr "தேவையற்ற கோப்புகளை நீக்கும் மென்பொருள்"
 
-#: ../org.bleachbit.BleachBit.desktop
+#: ../org.bleachbit.BleachBit.desktop ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Free space and maintain privacy"
 msgstr "இடத்தை வெற்றாக்கவும் தகவல் பாதுகாப்பை பேணவும்"
 
-#. TRANSLATORS: Multi-value variables are explained in the online documentation.
-#. Basically, they are like an environment variable, but each multi-value variable
-#. can have multiple values. They're a way to make CleanerML files more concise.
+#. TRANSLATORS: Name of the developers
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Andrew Ziem and contributors"
+msgstr ""
+
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid ""
+"BleachBit frees disk space and maintains privacy by quickly removing "
+"unnecessary files such as cache, cookies, browser history, temporary files, "
+"and system logs. It can also shred files and clean free disk space to "
+"prevent data recovery."
+msgstr ""
+
+#. TRANSLATORS: Caption for screenshot
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Default dark mode, showing found junk files"
+msgstr ""
+
+#. TRANSLATORS: Multi-value variables are explained
+#. in the online documentation. Basically, they are like
+#. an environment variable, but each multi-value variable
+#. can have multiple values. They're a way to make CleanerML
+#. files more concise.
 #: ../bleachbit/Action.py
 msgid "Deep scan does not support multi-value variable."
 msgstr "ஆழமான ச்கேன் பல மதிப்பு மாறியை ஆதரிக்காது."
@@ -833,6 +863,10 @@ msgstr "துடை"
 msgid "Run external command: %s"
 msgstr "வெளிப்புற கட்டளையை இயக்கவும்: %s"
 
+#: ../bleachbit/Action.py
+msgid "Refresh Windows shell"
+msgstr ""
+
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
 msgid ""
@@ -849,14 +883,6 @@ msgstr "துப்புரவாளரைப் புறக்கணித�
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "கிளீனரை வாசிப்பது பிழை: %s"
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr "இந்த OS இல் கிளீனர் பயன்படுத்த முடியாது, ஏனெனில் அதற்கு எந்த செயலும் இல்லை: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1172,11 +1198,6 @@ msgid ""
 msgstr ""
 "மேம்பட்ட மேலெழுதலை ஆதரிக்காத ஒரு கோப்பு முறைமையில் குறைந்தது ஒரு கோப்பையாவது "
 "இருந்தது."
-
-#: ../bleachbit/FileUtilities.py
-#, python-brace-format
-msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr "{fstype} கோப்பு முறைமை வகை {pathname} பாதையை அழிக்கிறது"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1599,6 +1620,12 @@ msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "உள்ளமைவு கோப்பை மீட்டெடுப்பதால் அது ஊழல் நிறைந்ததாக இருப்பதால்: %s"
 
 #: ../bleachbit/GUI.py
+#, fuzzy
+#| msgid "_Quit"
+msgid "Quit"
+msgstr "வெளியேறு (_Q)"
+
+#: ../bleachbit/GUI.py
 msgid "You must select an operation"
 msgstr "நீங்கள் ஒரு செயல்பாட்டைத் தேர்ந்தெடுக்க வேண்டும்"
 
@@ -1675,6 +1702,10 @@ msgstr "புதுப்பிப்பு"
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
 msgstr "அண்மைக் கால பதிப்பிற்கு ப்ளீச்சிட்டைப் புதுப்பிக்கவும்"
+
+#: ../bleachbit/GUI.py
+msgid "Press F11 to exit fullscreen mode."
+msgstr ""
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1886,6 +1917,10 @@ msgid "Imported from winapp2.ini"
 msgstr "WinApp2.ini இலிருந்து இறக்குமதி செய்யப்பட்டது"
 
 #: ../bleachbit/Windows.py
+msgid "Administrator privileges are required to clean Windows Updates"
+msgstr ""
+
+#: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
 msgstr "ப்ளீச்சிட் தொடங்குகிறது ...\n"
 
@@ -2041,6 +2076,14 @@ msgstr "உதவி (_H)"
 msgid "_About BleachBit"
 msgstr "_About bleachbit"
 
+#, python-format
+#~ msgid "Cleaner is not usable on this OS because it has no actions: %s"
+#~ msgstr "இந்த OS இல் கிளீனர் பயன்படுத்த முடியாது, ஏனெனில் அதற்கு எந்த செயலும் இல்லை: %s"
+
+#, python-brace-format
+#~ msgid "Wiping path {pathname} with file system type {fstype}"
+#~ msgstr "{fstype} கோப்பு முறைமை வகை {pathname} பாதையை அழிக்கிறது"
+
 #~ msgid "IRC client formerly known as XChat"
 #~ msgstr "ஐ.ஆர்.சி வாங்கி முன்பு Xchat என்று அழைக்கப்பட்டார்"
 
@@ -2065,9 +2108,6 @@ msgstr "_About bleachbit"
 
 #~ msgid "Warning"
 #~ msgstr "எச்சரிக்கை"
-
-#~ msgid "_Quit"
-#~ msgstr "வெளியேறு (_Q)"
 
 #~ msgid "_File"
 #~ msgstr "கோப்பு (_F)"

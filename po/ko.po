@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2025-03-09 22:12-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-14 20:35-0600\n"
 "PO-Revision-Date: 2025-04-17 10:05+0000\n"
 "Last-Translator: Minji <chloe9936@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/bleachbit/main/ko/"
@@ -122,15 +122,16 @@ msgstr "캐시"
 #: ../cleaners/beagle.xml ../cleaners/yum.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/waterfox.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
+#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/thumbnails.xml
+#: ../cleaners/exaile.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/smartftp.xml ../cleaners/apt.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/flash.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "캐시 삭제"
 
@@ -151,7 +152,8 @@ msgstr "최근 사용순"
 msgid "Delete the most recently used list"
 msgstr "가장 최근에 사용된 파일 목록 삭제"
 
-#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
+#: ../cleaners/apt.xml ../cleaners/snap.xml
 msgid "Package manager"
 msgstr "패키지 관리자"
 
@@ -163,7 +165,8 @@ msgstr "이전의 의존성 패키지 제거"
 msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
-msgstr "\"dnf 목록 자동 제거\"를 실행하여 제거될 패키지 목록을 자세히 검토하십시오."
+msgstr ""
+"\"dnf 목록 자동 제거\"를 실행하여 제거될 패키지 목록을 자세히 검토하십시오."
 
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
@@ -369,6 +372,22 @@ msgstr "셸"
 msgid "Delete the command history"
 msgstr "명령어 기록 삭제"
 
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr "임시 파일"
+
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr "임시 파일 삭제"
+
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
 msgstr "검색 도구"
@@ -430,22 +449,6 @@ msgstr "아바타와 이모티콘 캐시 삭제"
 #: ../cleaners/vuze.xml
 msgid "File transfer client"
 msgstr "파일 전송 클라이언트"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Temporary files"
-msgstr "임시 파일"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Delete the temporary files"
-msgstr "임시 파일 삭제"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -633,6 +636,14 @@ msgstr "윈도잉 시스템"
 msgid "Graphics editor"
 msgstr "그래픽 편집기"
 
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr ""
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr ""
+
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
 msgstr "문서 뷰어"
@@ -760,20 +771,41 @@ msgstr "파일 기록, 명령어 사용 기록, 버퍼 등의 정보를 포함�
 msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
-msgstr "웹 캐시를 삭제하면 재방문한 페이지를 표시하는 시간이 줄어듭니다. 이 작업은 "
-"즐겨찾기한 GIF도 함께 삭제합니다."
+msgstr ""
+"웹 캐시를 삭제하면 재방문한 페이지를 표시하는 시간이 줄어듭니다. 이 작업은 즐"
+"겨찾기한 GIF도 함께 삭제합니다."
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
 msgstr "불필요한 파일 클리너"
 
-#: ../org.bleachbit.BleachBit.desktop
+#: ../org.bleachbit.BleachBit.desktop ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Free space and maintain privacy"
 msgstr "여유 공간 확보 및 개인정보 유지"
 
-#. TRANSLATORS: Multi-value variables are explained in the online documentation.
-#. Basically, they are like an environment variable, but each multi-value variable
-#. can have multiple values. They're a way to make CleanerML files more concise.
+#. TRANSLATORS: Name of the developers
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Andrew Ziem and contributors"
+msgstr ""
+
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid ""
+"BleachBit frees disk space and maintains privacy by quickly removing "
+"unnecessary files such as cache, cookies, browser history, temporary files, "
+"and system logs. It can also shred files and clean free disk space to "
+"prevent data recovery."
+msgstr ""
+
+#. TRANSLATORS: Caption for screenshot
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Default dark mode, showing found junk files"
+msgstr ""
+
+#. TRANSLATORS: Multi-value variables are explained
+#. in the online documentation. Basically, they are like
+#. an environment variable, but each multi-value variable
+#. can have multiple values. They're a way to make CleanerML
+#. files more concise.
 #: ../bleachbit/Action.py
 msgid "Deep scan does not support multi-value variable."
 msgstr "정밀 스캔은 다중 값 변수를 지원하지 않습니다."
@@ -815,6 +847,10 @@ msgstr "정리"
 msgid "Run external command: %s"
 msgstr "외부 명령어 실행: %s"
 
+#: ../bleachbit/Action.py
+msgid "Refresh Windows shell"
+msgstr ""
+
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
 msgid ""
@@ -833,14 +869,6 @@ msgstr "모든 사용자가 쓸 수 있으므로 클리너 무시 : %s"
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "클리너 읽는 중 오류 발생: %s"
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr "액션이 없어 이 운영체제에서 클리너 사용 불가능: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -923,8 +951,9 @@ msgstr "설치 제거 프로그램 업데이트"
 msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
-msgstr "핫픽스, 서비스 팩, Internet Explorer 업데이트를 포함한 Microsoft 업데이트 "
-"제거 프로그램 삭제"
+msgstr ""
+"핫픽스, 서비스 팩, Internet Explorer 업데이트를 포함한 Microsoft 업데이트 제"
+"거 프로그램 삭제"
 
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
@@ -1103,8 +1132,8 @@ msgid ""
 "At least one file was locked by another process, so its contents could not "
 "be overwritten. It will be marked for deletion upon system reboot."
 msgstr ""
-"다른 프로세스에 의해 최소 하나의 파일이 잠겨 있어, 항목을 덮어쓸 수 "
-"없었습니다. 시스템 재시작 시 삭제를 위해 표시될 것입니다."
+"다른 프로세스에 의해 최소 하나의 파일이 잠겨 있어, 항목을 덮어쓸 수 없었습니"
+"다. 시스템 재시작 시 삭제를 위해 표시될 것입니다."
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
@@ -1152,11 +1181,6 @@ msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr "파일 시스템에 고급 덮어쓰기를 지원하지 않는 파일이 하나 이상 있습니다."
-
-#: ../bleachbit/FileUtilities.py
-#, python-brace-format
-msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr "경로{pathname}를 파일 시스템 유형 {fstype}으로 지우기"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1214,9 +1238,9 @@ msgid ""
 "Use this to hide your use of BleachBit or to reset its settings. The next "
 "time you start BleachBit, the settings will initialize to default values."
 msgstr ""
-"이 기능은 모든 BleachBit 설정을 삭제하고 프로그램을 종료합니다. BleachBit "
-"사용 기록을 숨기거나 설정을 초기화하기 위해 사용하십시오. 다음에 BleachBit를 "
-"실행하면 설정값이 기본값으로 초기화됩니다."
+"이 기능은 모든 BleachBit 설정을 삭제하고 프로그램을 종료합니다. BleachBit 사"
+"용 기록을 숨기거나 설정을 초기화하기 위해 사용하십시오. 다음에 BleachBit를 실"
+"행하면 설정값이 기본값으로 초기화됩니다."
 
 #: ../bleachbit/GuiBasic.py
 msgid ""
@@ -1377,8 +1401,9 @@ msgstr "복구 방지를 위해 파일 항목 덮어쓰기"
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
-msgstr "덮어쓰기는 일부 파일 시스템과 특정 BleachBit 작업에서 비효율적입니다. 덮어 "
-"씌우기는 상당히 느립니다."
+msgstr ""
+"덮어쓰기는 일부 파일 시스템과 특정 BleachBit 작업에서 비효율적입니다. 덮어 씌"
+"우기는 상당히 느립니다."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
@@ -1583,6 +1608,10 @@ msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "구성 파일이 손상되어 다시 설정하는 중: %s"
 
 #: ../bleachbit/GUI.py
+msgid "Quit"
+msgstr ""
+
+#: ../bleachbit/GUI.py
 msgid "You must select an operation"
 msgstr "반드시 작업을 선택해야 합니다"
 
@@ -1658,6 +1687,10 @@ msgid "Update BleachBit to the latest version"
 msgstr "BleachBit 최신 버전으로 업데이트하기"
 
 #: ../bleachbit/GUI.py
+msgid "Press F11 to exit fullscreen mode."
+msgstr ""
+
+#: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
 msgstr "업데이트 확인 중 오류: "
 
@@ -1665,8 +1698,9 @@ msgstr "업데이트 확인 중 오류: "
 msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
-msgstr "명령어 'swapoff -s' 실행에 실패하여, 스와프 정보를 위해 /proc/swaps로 "
-"돌아갑니다."
+msgstr ""
+"명령어 'swapoff -s' 실행에 실패하여, 스와프 정보를 위해 /proc/swaps로 돌아갑"
+"니다."
 
 #: ../bleachbit/Memory.py
 msgid "Disabling swap."
@@ -1781,9 +1815,9 @@ msgid ""
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
 msgstr ""
-"이러한 청소 설정은 새로 생겼거나 변경되었습니다. 악의적인 설정은 시스템을 "
-"손상시킬 수 있습니다. 만약 변경 사항을 신뢰할 수 없다면 파일을 삭제하거나 "
-"종료하세요."
+"이러한 청소 설정은 새로 생겼거나 변경되었습니다. 악의적인 설정은 시스템을 손"
+"상시킬 수 있습니다. 만약 변경 사항을 신뢰할 수 없다면 파일을 삭제하거나 종료"
+"하세요."
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
@@ -1833,8 +1867,8 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
-"업데이트 확인을 위해 네트워크 연결 중 에러가 발생했습니다. 방화벽의 응용 "
-"프로그램 차단 여부와 인터넷 연결을 확인하십시오. 에러 메세지 : {}"
+"업데이트 확인을 위해 네트워크 연결 중 에러가 발생했습니다. 방화벽의 응용 프로"
+"그램 차단 여부와 인터넷 연결을 확인하십시오. 에러 메세지 : {}"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py
@@ -1863,6 +1897,10 @@ msgstr "게임"
 #: ../bleachbit/Winapp.py
 msgid "Imported from winapp2.ini"
 msgstr "winapp2.ini에서 가져옴"
+
+#: ../bleachbit/Windows.py
+msgid "Administrator privileges are required to clean Windows Updates"
+msgstr ""
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
@@ -2018,6 +2056,14 @@ msgstr "도움말(_H)"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "BleachBit 정보(_A)"
+
+#, python-format
+#~ msgid "Cleaner is not usable on this OS because it has no actions: %s"
+#~ msgstr "액션이 없어 이 운영체제에서 클리너 사용 불가능: %s"
+
+#, python-brace-format
+#~ msgid "Wiping path {pathname} with file system type {fstype}"
+#~ msgstr "경로{pathname}를 파일 시스템 유형 {fstype}으로 지우기"
 
 #~ msgid "IRC client formerly known as XChat"
 #~ msgstr "IRC 클라이언트 (구 XChat)"
