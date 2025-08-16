@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-14 20:35-0600\n"
-"PO-Revision-Date: 2025-03-23 14:18+0000\n"
+"PO-Revision-Date: 2025-08-17 04:01+0000\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/bleachbit/main/"
 "tr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Launchpad-Export-Date: 2021-06-25 03:40+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -654,11 +654,11 @@ msgstr "Grafik düzenleyici"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "Devre dışı"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "Devre dışı paketleri kaldır"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -804,7 +804,7 @@ msgstr "Alanı boşalt ve gizliliği sağla"
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "Andrew Ziem ve katkıcılar"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -813,11 +813,15 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"BleachBit önbellek, çerez, tarayıcı geçmişi, geçici dosya ve sistem günlüğü "
+"gibi gereksiz dosyaları hızla kaldırarak disk alanını boşaltır ve gizliliği "
+"sağlar. Veri kurtarmayı önlemek için dosyaları parçalayabilir ve boş disk "
+"alanını temizleyebilir."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr ""
+msgstr "Öntanımlı koyu kip, gereksiz dosyaları gösteriyor"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -867,7 +871,7 @@ msgstr "Dış komut çalıştır: %s"
 
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "Windows kabuğunu yenile"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1636,7 +1640,7 @@ msgstr "Yapılandırma dosyası bozuk olduğu için sıfırlanıyor: %s"
 
 #: ../bleachbit/GUI.py
 msgid "Quit"
-msgstr ""
+msgstr "Çık"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1719,7 +1723,7 @@ msgstr "BleachBit’i son sürüme güncelle"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "Tam ekran kipinden çıkmak için F11'e bas."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1835,7 +1839,7 @@ msgstr "%s dili kendiliğinden korunuyor."
 
 #: ../bleachbit/Options.py
 msgid "Error when setting the default drives to shred."
-msgstr "Varsayılan sürücüleri parçalamak üzere ayarlarken hata oluştu."
+msgstr "Öntanımlı sürücüleri parçalamak üzere ayarlarken hata oluştu."
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
@@ -1934,7 +1938,7 @@ msgstr "winapp2.ini dosyasından içe aktarıldı"
 
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
-msgstr ""
+msgstr "Windows Güncellemeleri temizliği için yönetici öncelikleri gereklidir"
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
