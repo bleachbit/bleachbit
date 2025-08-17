@@ -6,19 +6,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-05-14 09:33+0000\n"
+"PO-Revision-Date: 2025-08-18 10:02+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
-"Language-Team: Irish <https://hosted.weblate.org/projects/bleachbit/main/ga/"
-">\n"
+"Language-Team: Irish <https://hosted.weblate.org/projects/bleachbit/main/ga/>"
+"\n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :"
-"(n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :("
+"n>6 && n<11) ? 3 : 4;\n"
+"X-Generator: Weblate 5.13\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
@@ -660,11 +660,11 @@ msgstr "Eagarthóir grafaicí"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "Díchumasaithe"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "Bain pacáistí díchumasaithe"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -815,7 +815,7 @@ msgstr "Spás saor in aisce agus príobháideacht a choinneáil"
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "Andrew Ziem agus rannpháirtithe"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -824,11 +824,16 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"Saorann BleachBit spás diosca agus coinníonn sé príobháideacht trí chomhaid "
+"neamhriachtanacha a bhaint go tapa, amhail taisce, fianáin, stair "
+"bhrabhsálaí, comhaid shealadacha, agus logaí córais. Is féidir leis comhaid "
+"a scriosadh agus spás diosca saor a ghlanadh freisin chun aisghabháil sonraí "
+"a chosc."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr ""
+msgstr "Mód dorcha réamhshocraithe, ag taispeáint comhaid dramhaíola aimsithe"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -878,7 +883,7 @@ msgstr "Rith ordú seachtrach: %s"
 
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "Athnuachan sliogán Windows"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1647,7 +1652,7 @@ msgstr "An comhad cumraíochta á athshocrú toisc go bhfuil sé truaillithe: %s
 
 #: ../bleachbit/GUI.py
 msgid "Quit"
-msgstr ""
+msgstr "Scoir"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1733,7 +1738,7 @@ msgstr "Nuashonraigh BleachBit go dtí an leagan is déanaí"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "Brúigh F11 chun mód lánscáileáin a fhágáil."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1950,6 +1955,7 @@ msgstr "Iompórtáilte ó winapp2.ini"
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr ""
+"Tá pribhléidí riarthóra ag teastáil chun Nuashonruithe Windows a ghlanadh"
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
