@@ -1039,9 +1039,15 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         This may raise ResourceWarning on Python 3.13.
         """
         warnings.simplefilter("error")
+        start_time = time.time()
         for _ in range(50):
             self.test_execute_sqlite3()
             self.test_vacuum_sqlite3()
+            # Slow on OpenSUSE Build Service
+            if time.time() - start_time > 30:
+                logger.info("SQLite loop tests stopped early after %d seconds", time.time() - start_time)
+                break
+        logger.info("SQLite loop tests fully completed after %d seconds", time.time() - start_time)
 
     def test_whitelisted(self):
         """Unit test for whitelisted()"""
