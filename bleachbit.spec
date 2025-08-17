@@ -18,7 +18,8 @@
 #  CentOS_9_Stream reports centos_version=900
 #  Fedora 41 reports fedora_version=41
 
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
+
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?almalinux_version} || 0%{?rocky_version}
 %define is_redhat_family 1
 %else
 %define is_redhat_family 0
@@ -26,6 +27,16 @@
 
 %if 0%{?is_opensuse}
 %define pyprefix %{primary_python}
+%endif
+
+%if !0%{?is_opensuse} && !%{is_redhat_family}
+%{error:This package is only for openSUSE or Red Hat family distributions}
+%endif
+
+%if 0%{?almalinux_version}
+%define has_fdupes 0
+%else
+%define has_fdupes 1
 %endif
 
 # Fedora 42 unified /usr/sbin https://fedoraproject.org/wiki/Changes/Unify_bin_and_sbin
@@ -46,14 +57,14 @@ BuildArch:      noarch
 
 %if %{is_redhat_family}
 BuildRequires:  desktop-file-utils
-BuildRequires:  fdupes
 BuildRequires:  gettext
 BuildRequires:  python3-chardet
 BuildRequires:  python3-psutil
 BuildRequires:  python3-setuptools
+Requires(post): desktop-file-utils
+Requires(postun): desktop-file-utils
 Requires:       python3
 Requires:       gtk3
-Requires:       usermode
 Requires:       python3-chardet
 Requires:       python3-gobject
 Requires:       python3-psutil
@@ -61,7 +72,6 @@ Requires:       python3-psutil
 
 %if 0%{?is_opensuse}
 BuildRequires:  desktop-file-utils
-BuildRequires:  fdupes
 BuildRequires:  make
 BuildRequires:  openSUSE-release
 BuildRequires:  %{pyprefix}
@@ -86,7 +96,9 @@ Requires:       typelib(Notify)
 Requires:       xdg-utils
 %endif
 
-
+%if %{has_fdupes}
+BuildRequires:  fdupes
+%endif
 
 %description
 BleachBit frees disk space and maintains privacy by quickly removing
@@ -126,9 +138,7 @@ make delete_windows_files
 
 
 %install
-make install PYTHON=%{__python3} DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix}
-
-desktop-file-validate %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit.desktop
+make install PYTHON=%{__python3} DESTDIR=%{buildroot} prefix=%{_prefix}
 
 %if %{is_redhat_family}
 
@@ -164,11 +174,16 @@ desktop-file-install \
 %suse_update_desktop_file org.bleachbit.BleachBit Utility Filesystem
 %endif
 
-make -C po install DESTDIR=$RPM_BUILD_ROOT
+desktop-file-validate %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit.desktop
+desktop-file-validate %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit-root.desktop
+
+make -C po install DESTDIR=%{buildroot}
 %find_lang %{name}
 
+%if %{has_fdupes}
 # Make symlinks for redundant .pyc files.
 %fdupes -s %{buildroot}
+%endif
 
 
 %check
