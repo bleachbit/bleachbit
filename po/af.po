@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 20:35-0600\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
 "PO-Revision-Date: 2021-10-28 15:34+0000\n"
 "Last-Translator: Bernard Stafford <Unknown>\n"
 "Language-Team: Afrikaans <af@li.org>\n"
@@ -20,7 +20,8 @@ msgstr ""
 "X-Generator: Launchpad (build 0d8de2bfee2024772b3040d4d19f42f47395ac0d)\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "Mediaspeler"
 
@@ -410,10 +411,6 @@ msgstr "Vee die koekies, besoekte URLs, en soek geskiedenis uit"
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "woordverwerker"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "Oudio speler"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -2110,6 +2107,9 @@ msgstr "_Hulp"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_About BleachBit"
+
+#~ msgid "Audio player"
+#~ msgstr "Oudio speler"
 
 #, python-format
 #~ msgid "Cleaner is not usable on this OS because it has no actions: %s"

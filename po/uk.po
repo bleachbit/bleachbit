@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2025-08-14 20:35-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
 "PO-Revision-Date: 2025-08-17 04:01+0000\n"
 "Last-Translator: Dan <jonweblin2205@protonmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/bleachbit/main/"
@@ -22,7 +22,8 @@ msgstr ""
 "X-Launchpad-Export-Date: 2020-02-18 20:16+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "Медіапрогравач"
 
@@ -414,10 +415,6 @@ msgstr "Видалити файли cookie, відвідані посиланн�
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "Текстовий процесор"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "Аудіопрогравач"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -2114,6 +2111,9 @@ msgstr "_Допомога"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_Про BleachBit"
+
+#~ msgid "Audio player"
+#~ msgstr "Аудіопрогравач"
 
 #, python-format
 #~ msgid "Cleaner is not usable on this OS because it has no actions: %s"

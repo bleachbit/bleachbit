@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 20:35-0600\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
 "PO-Revision-Date: 2025-03-11 10:54+0000\n"
 "Last-Translator: bovirus <roberto.boriotti@canon.it>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bleachbit/main/"
@@ -21,7 +21,8 @@ msgstr ""
 "X-Launchpad-Export-Date: 2021-06-15 14:24+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "Lettore multimediale"
 
@@ -412,10 +413,6 @@ msgstr "Elimina i cookie, gli indirizzi visitati e la cronologia ricerche"
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "Elaboratore testi"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "Riproduttore audio"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -2126,6 +2123,9 @@ msgstr "_Aiuto"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_Info su BleachBit"
+
+#~ msgid "Audio player"
+#~ msgstr "Riproduttore audio"
 
 #, python-format
 #~ msgid "Cleaner is not usable on this OS because it has no actions: %s"

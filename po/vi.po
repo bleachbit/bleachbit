@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 20:35-0600\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
 "PO-Revision-Date: 2025-07-04 07:02+0000\n"
 "Last-Translator: ducdat0507 <ducdat0507@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/bleachbit/"
@@ -21,7 +21,8 @@ msgstr ""
 "X-Launchpad-Export-Date: 2021-12-02 04:08+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "Trình phát đa phương tiện"
 
@@ -413,10 +414,6 @@ msgstr "Xóa cookie, các liên kết web đã xem, và lịch sử tìm kiếm"
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "Trình xử lý văn bản"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "Trình phát âm thanh"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -2053,6 +2050,9 @@ msgstr "Trợ _giúp"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr ""
+
+#~ msgid "Audio player"
+#~ msgstr "Trình phát âm thanh"
 
 #, python-format
 #~ msgid "Cleaner is not usable on this OS because it has no actions: %s"

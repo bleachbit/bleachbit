@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 20:35-0600\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
 "PO-Revision-Date: 2015-01-08 15:35+0000\n"
 "Last-Translator: Alexander Mackinnon Jansen <alexander.jansen@hesbynett.no>\n"
 "Language-Team: Norwegian Nynorsk <nn@li.org>\n"
@@ -20,7 +20,8 @@ msgstr ""
 "X-Generator: Launchpad (build 17298)\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr ""
 
@@ -406,12 +407,6 @@ msgstr "Slett informasjonskapslane, vitja URL-ar, og søkehistorikken"
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr ""
-
-#: ../cleaners/audacious.xml
-#, fuzzy
-#| msgid "Audio files tagger"
-msgid "Audio player"
-msgstr "Taggeprogram for lydfiler"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -2071,6 +2066,11 @@ msgstr ""
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Audio files tagger"
+#~ msgid "Audio player"
+#~ msgstr "Taggeprogram for lydfiler"
 
 #~ msgid "Widgets for the desktop"
 #~ msgstr "Miniprogram til skrivebordet"

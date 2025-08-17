@@ -6,11 +6,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2025-08-14 20:35-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
 "PO-Revision-Date: 2025-08-17 04:02+0000\n"
-"Last-Translator: 大王叫我来巡山 "
-"<hamburger2048@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate."
+"org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/bleachbit/main/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -22,7 +22,8 @@ msgstr ""
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "媒体播放器"
 
@@ -402,10 +403,6 @@ msgstr "删除 Cookie、访问过的 URL 和搜索历史记录"
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "文字处理程序"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "音频播放器"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -794,9 +791,9 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
-"Bleachbit "
-"快速删除缓存、cookies、浏览器历史记录、临时文件和系统日志等不必要的文件来释放"
-"磁盘空间并维持隐私。它还能粉碎文件并清理空闲的磁盘空间来防止数据恢复。"
+"Bleachbit 快速删除缓存、cookies、浏览器历史记录、临时文件和系统日志等不必要的"
+"文件来释放磁盘空间并维持隐私。它还能粉碎文件并清理空闲的磁盘空间来防止数据恢"
+"复。"
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
@@ -2044,6 +2041,9 @@ msgstr "帮助(_H)"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "关于 BleachBit (_A)"
+
+#~ msgid "Audio player"
+#~ msgstr "音频播放器"
 
 #, python-format
 #~ msgid "Cleaner is not usable on this OS because it has no actions: %s"

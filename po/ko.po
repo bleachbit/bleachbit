@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 20:35-0600\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
 "PO-Revision-Date: 2025-04-17 10:05+0000\n"
 "Last-Translator: Minji <chloe9936@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/bleachbit/main/ko/"
@@ -21,7 +21,8 @@ msgstr ""
 "X-Launchpad-Export-Date: 2020-04-02 02:28+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "미디어 플레이어"
 
@@ -403,10 +404,6 @@ msgstr "쿠키 파일, 방문한 URL, 검색 기록 삭제"
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "워드 프로세서"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "오디오 플레이어"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -2056,6 +2053,9 @@ msgstr "도움말(_H)"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "BleachBit 정보(_A)"
+
+#~ msgid "Audio player"
+#~ msgstr "오디오 플레이어"
 
 #, python-format
 #~ msgid "Cleaner is not usable on this OS because it has no actions: %s"

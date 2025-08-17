@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 20:35-0600\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
 "PO-Revision-Date: 2021-05-02 00:30+0000\n"
 "Last-Translator: Ibrahim Sikirić <Unknown>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -21,7 +21,8 @@ msgstr ""
 "X-Generator: Launchpad (build 02afa4875ac52c169f5cddf0d1bcdd6e149a3754)\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "Medijski plejer"
 
@@ -411,10 +412,6 @@ msgstr "Obriši kolačiće, posjećene URL-ove i historiju pretraživanja"
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "Program za obradu teksta"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "Audio plejer"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -2098,6 +2095,9 @@ msgstr "_Pomoć"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_O BleachBit-u"
+
+#~ msgid "Audio player"
+#~ msgstr "Audio plejer"
 
 #, python-format
 #~ msgid "Cleaner is not usable on this OS because it has no actions: %s"

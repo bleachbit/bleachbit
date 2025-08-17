@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 20:35-0600\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
 "PO-Revision-Date: 2023-09-18 23:02+0000\n"
 "Last-Translator: Harisfazillah Jamel <linuxmalaysia@gmail.com>\n"
 "Language-Team: Malay <https://hosted.weblate.org/projects/bleachbit/main/ms/"
@@ -21,7 +21,8 @@ msgstr ""
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "Pemain media"
 
@@ -412,10 +413,6 @@ msgstr "Padam kuki, URL yang dilawati dan sejarah gelintar"
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "Pemproses perkataan"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "Pemain audio"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -2095,6 +2092,9 @@ msgstr "_Bantuan"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "Perih_al BleachBit"
+
+#~ msgid "Audio player"
+#~ msgstr "Pemain audio"
 
 #, python-format
 #~ msgid "Cleaner is not usable on this OS because it has no actions: %s"

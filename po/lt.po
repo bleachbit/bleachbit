@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 20:35-0600\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
 "PO-Revision-Date: 2025-03-13 19:09+0000\n"
 "Last-Translator: J4mm3ris <dr.simonas@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/bleachbit/"
@@ -23,7 +23,8 @@ msgstr ""
 "X-Launchpad-Export-Date: 2020-12-28 15:48+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "Medija grotuvas"
 
@@ -413,10 +414,6 @@ msgstr "Išvalyti slapukus, aplankytus URL ir paieškos istoriją"
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "Tekstų rengyklė"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "Garso grotuvas"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -2104,6 +2101,9 @@ msgstr "_Žinynas"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_Apie BleachBit"
+
+#~ msgid "Audio player"
+#~ msgstr "Garso grotuvas"
 
 #, python-format
 #~ msgid "Cleaner is not usable on this OS because it has no actions: %s"

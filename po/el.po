@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 20:35-0600\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
 "PO-Revision-Date: 2025-07-22 04:02+0000\n"
 "Last-Translator: \"Vasilis K.\" <skyhirules@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/bleachbit/main/el/"
@@ -21,7 +21,8 @@ msgstr ""
 "X-Launchpad-Export-Date: 2021-06-15 14:28+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "Αναπαραγωγέας πολυμέσων"
 
@@ -414,10 +415,6 @@ msgstr "Διαγραφή cookies, ήδη ανοιγμένων URLs και ιστ
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "Eπεξεργαστής κειμένου"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "Αναπαραγωγέας ήχου"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -2123,6 +2120,9 @@ msgstr "_Βοήθεια"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_Περί του BleachBit"
+
+#~ msgid "Audio player"
+#~ msgstr "Αναπαραγωγέας ήχου"
 
 #, python-format
 #~ msgid "Cleaner is not usable on this OS because it has no actions: %s"

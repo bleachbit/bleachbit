@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-14 20:35-0600\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
 "PO-Revision-Date: 2025-07-22 04:02+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/bleachbit/"
@@ -21,7 +21,8 @@ msgstr ""
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "Pemutar media"
 
@@ -411,10 +412,6 @@ msgstr "Hapus kuki, URL yang dikunjungi, dan riwayat pencarian"
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "Pengolah kata"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "Pemutar audio"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -2104,6 +2101,9 @@ msgstr "_Bantuan"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "Tent_ang BleachBit"
+
+#~ msgid "Audio player"
+#~ msgstr "Pemutar audio"
 
 #, python-format
 #~ msgid "Cleaner is not usable on this OS because it has no actions: %s"
