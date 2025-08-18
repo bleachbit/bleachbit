@@ -5,26 +5,34 @@ image: Visual Studio 2013
 environment:
     PYTHON_HOME: 'c:\projects\bleachbit\vcpkg_installed\x86-windows\tools\python3'
     SZ_EXE   :   '"C:/Program Files/7-Zip/7z.exe"'
-    make : 'C:/MinGW/bin/mingw32-make.exe'
+    mingwBin : 'C:/MinGW/bin'
+    make : '%mingwBin%/mingw32-make.exe'
+    msgunfmt : '%mingwBin%/msgunfmt.exe'
 
 init:
   - 'systeminfo | findstr /B /C:"OS Name" /C:"OS Version"' # show Windows version
   - 'echo PYTHON_HOME=%PYTHON_HOME%'
+  - ps: $PSVersionTable.PSVersion # show PowerShell version
   - ps: |
       Get-WmiObject Win32_Process | Select-Object ProcessName, @{Name="UserName";Expression={$_.GetOwner().User}} | Format-Table -AutoSize
+  - 'where msgunfmt'
+
 
 install:
   - ps: '& "$env:APPVEYOR_BUILD_FOLDER\windows\python-gtk3-install.ps1"'
-  # UPX 4.0.2, 4.1.0, and 4.2.3 cause ModuleNotFoundError during build
+  # UPX 4.0.2, 4.1.0, and 4.2.3 cause ModuleNotFoundError during build.
   # UPX 4.0.1 works
   - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v4.0.1/upx-4.0.1-win64.zip" -FileName upx.zip}
-  - ps: Get-FileHash upx.zip
-  - '%SZ_EXE% x upx.zip'
-  - 'rename upx-4.0.1-win64 upx'
-  - 'dir .\upx\'
-  - set PATH=%PATH%;%PYTHON_HOME%\..\gettext\bin
+  - ps: Get-FileHash upx.zip -Algorithm SHA256 | Format-List
+  - ps: |
+      $sevenZip = $env:SZ_EXE.Trim('"')
+      # Reminder: Prefer absolute paths.
+      $upxZip   = Join-Path $env:APPVEYOR_BUILD_FOLDER 'upx.zip'
+      & $sevenZip x $upxZip
+      Rename-Item -Path (Join-Path $env:APPVEYOR_BUILD_FOLDER 'upx-4.0.1-win64') -NewName 'upx'
+      Get-ChildItem -Path (Join-Path $env:APPVEYOR_BUILD_FOLDER 'upx')
+  - ps: '& $env:msgunfmt -V'
 # Show version numbers of installed software.
-  - 'msgunfmt -V'
 #  - 'strip.exe -V'
   - '"c:\Program Files (x86)\NSIS\makensis.exe" /version'
 
@@ -32,11 +40,34 @@ build_script:
   - ps: $env:REV8 = $env:APPVEYOR_REPO_COMMIT.Substring(0,8)
   - 'echo revision = "%REV8%" > bleachbit\Revision.py'
   - 'echo build_number = "%APPVEYOR_BUILD_NUMBER%" > bleachbit\Revision.py'
-  - '%make% PYTHON=%PYTHON_HOME%\python.exe -C po local bleachbit.pot'
+  - 'dir %mingwBin%'
+  - ps: |
+      $oldPath = $env:PATH
+      Write-Host "Old Path = $oldPath"
+      try {
+        $env:PATH = "$env:mingwBin;$oldPath"
+        Write-Host "New Path = $env:PATH"
+        & $env:make "PYTHON=$env:PYTHON_HOME\python.exe" -C po local bleachbit.pot
+      } finally {
+        $env:PATH = $oldPath
+      }
   - '%PYTHON_HOME%\python.exe -m windows.setup'
   - 'move windows\BleachBit*.exe .'
   - 'move windows\BleachBit*.zip .'
+
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
+after_build:
   - ps: Get-FileHash BleachBit-*
+  # Generate a CycloneDX SBOM for Python environment.
+  - '%PYTHON_HOME%\python.exe -m pip install cyclonedx-bom'
+  - '%PYTHON_HOME%\Scripts\cyclonedx-bom.exe --format xml -o sbom-python.xml'
+  # Show available Python package updates.
+  - '%PYTHON_HOME%\python.exe -m pip list --outdated'
+  # Freeze exact versions.
+  - ps: |
+      & "$env:PYTHON_HOME\python.exe" -m pip freeze | Out-File -FilePath "$env:APPVEYOR_BUILD_FOLDER\windows\requirements.lock.txt" -Encoding ascii
 
 cache:
   - gtk3.24-x86-windows.zip -> appveyor.yml, windows/python-gtk3-deps.lst, windows/python-gtk3-install.ps1
@@ -62,6 +93,12 @@ artifacts:
     name: Portable
 
   - path: .coverage
+
+  - path: sbom-python.xml
+    name: SBOM
+
+  - path: windows/requirements.lock.txt
+    name: RequirementsLock
 
 deploy:
   - provider: S3

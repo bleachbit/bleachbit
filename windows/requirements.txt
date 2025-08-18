@@ -1,10 +1,16 @@
 # requirements for BleachBit on Windows
-certifi
-chardet
-plyer
-psutil
-py2exe
-pypiwin32
-requests
-scandir # FIXME: switch to os.walk() on Windows
-winshell
+cachetools==6.1.0
+certifi==2025.8.3
+chardet==5.2.0
+charset-normalizer==3.4.3
+idna==3.10
+pefile==2024.8.26
+plyer==2.1.0
+psutil==7.0.0
+py2exe==0.14.0.0
+pypiwin32==223
+pywin32==311
+requests==2.32.4
+scandir==1.10.0  # FIXME: switch to os.walk() on Windows
+urllib3==2.5.0
+winshell==0.6
