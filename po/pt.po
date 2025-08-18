@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-03-21 11:12+0000\n"
-"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
+"PO-Revision-Date: 2025-08-19 21:02+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/bleachbit/"
 "main/pt/>\n"
 "Language: pt\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Launchpad-Export-Date: 2021-07-06 03:44+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -654,11 +654,11 @@ msgstr "Editor de gráficos"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "Desativado"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "Remover pacotes desativados"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -815,6 +815,10 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"A BleachBit libera espaço no disco e mantém a privacidade a remover "
+"rapidamente ficheiros desnecessários, como cache, cookies, histórico do "
+"navegador, ficheiros temporários e logs do sistema. Também pode rasgar "
+"ficheiros e limpar espaço no disco para evitar a recuperação de dados."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
@@ -869,7 +873,7 @@ msgstr "Executar comando externo: %s"
 
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "Refrescar o shell do Windows"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1656,7 +1660,7 @@ msgstr "O ficheiro de configuração está danificado e será reposto: %s"
 
 #: ../bleachbit/GUI.py
 msgid "Quit"
-msgstr ""
+msgstr "Fechar"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1736,7 +1740,7 @@ msgstr "Atualiza o BleachBit para a versão mais recente"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "Pressione F11 para sair do modo de ecrã cheio."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1951,6 +1955,8 @@ msgstr "Importado de winapp2.ini"
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr ""
+"Privilégios de administrador são necessários para limpar atualizações do "
+"Windows"
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
