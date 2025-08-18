@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-04-20 13:59+0000\n"
+"PO-Revision-Date: 2025-08-18 10:02+0000\n"
 "Last-Translator: Pin-Hsien Lee <phsnlee@ncpy.dev>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/bleachbit/main/zh_Hant/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -633,11 +633,11 @@ msgstr "圖像編輯器"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "停用"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "刪除已停用的包"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -779,7 +779,7 @@ msgstr "釋放空間並維護隱私"
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "Andrew Ziem 和貢獻者們"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -788,11 +788,14 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"Bleachbit "
+"可快速刪除緩存、cookies、瀏覽器歷史記錄、暫存檔和系統日誌等非必要檔案來釋放磁"
+"碟空間並維持隱私。它也能粉碎檔案並清理空閒的磁盤空間以避免數據恢復。"
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr ""
+msgstr "預設深色模式，顯示找到的垃圾檔案"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -842,7 +845,7 @@ msgstr "執行外部指令：%s"
 
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "刷新 Windows shell"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1588,7 +1591,7 @@ msgstr "重設損壞的設置檔：%s"
 
 #: ../bleachbit/GUI.py
 msgid "Quit"
-msgstr ""
+msgstr "退出"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1665,7 +1668,7 @@ msgstr "更新 BleachBit 至最新版本"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "按下 F11 離開全螢幕模式。"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1871,7 +1874,7 @@ msgstr "從 winapp2.ini 匯入"
 
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
-msgstr ""
+msgstr "需要管理員權限以清除 Windows Update 檔案"
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
