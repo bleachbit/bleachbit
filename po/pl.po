@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-03-12 23:15+0000\n"
-"Last-Translator: Michał Miłobędzki <mfriik@gmail.com>\n"
+"PO-Revision-Date: 2025-08-22 16:02+0000\n"
+"Last-Translator: Piotr Strebski <strebski@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/bleachbit/main/pl/"
 ">\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Launchpad-Export-Date: 2021-11-11 16:00+0000\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
@@ -657,11 +657,11 @@ msgstr "Edytor grafiki"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "Wyłączone"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "Usuń wyłączone pakiety"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -808,7 +808,7 @@ msgstr "Zwolnij miejsce na dysku i zachowaj prywatność"
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "Andrew Ziem i współpracownicy"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -817,11 +817,15 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"BleachBit zwalnia miejsce na dysku i dba o prywatność, szybko usuwając "
+"niepotrzebne pliki, takie jak pamięć podręczna, pliki cookie, historię "
+"przeglądarki, pliki tymczasowe i dzienniki systemowe. Może również niszczyć "
+"pliki i czyścić wolne miejsce na dysku, uniemożliwiając odzyskanie danych."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr ""
+msgstr "Domyślny tryb ciemny, pokazujący znalezione niepotrzebne pliki"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -871,7 +875,7 @@ msgstr "Uruchom komendę zewnętrzną: %s"
 
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "Odśwież powłokę systemu Windows"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1639,7 +1643,7 @@ msgstr "Resetowanie pliku konfiguracyjnego, ponieważ jest uszkodzony: %s"
 
 #: ../bleachbit/GUI.py
 msgid "Quit"
-msgstr ""
+msgstr "Wyjdź"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1719,7 +1723,7 @@ msgstr "Aktualizuj BleachBit do najnowszej wersji"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "Naciśnij klawisz F11, aby wyjść z trybu pełnoekranowego."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1936,6 +1940,8 @@ msgstr "Zaimportowano z pliku winapp2.ini"
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr ""
+"Do czyszczenia aktualizacji systemu Windows wymagane są uprawnienia "
+"administratora"
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
