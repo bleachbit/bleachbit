@@ -124,7 +124,7 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60):
         requests.RequestException: If there is an error fetching the URL
     """
     assert isinstance(url, str)
-    assert url.startswith('http')
+    assert url.startswith('http'), f"URL must start with http, got {url}"
     assert isinstance(max_retries, int)
     assert max_retries >= 0
     assert isinstance(backoff_factor, float)
