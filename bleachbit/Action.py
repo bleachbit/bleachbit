@@ -340,13 +340,15 @@ class AptAutoclean(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        # Checking executable allows auto-hide to work for non-APT systems
         assert os.name == 'posix'
-        if FileUtilities.exe_exists('apt-get'):
-            # pylint: disable=possibly-used-before-assignment
-            yield Command.Function(None,
-                                   Unix.apt_autoclean,
-                                   'apt-get autoclean')
+        # If apt-get is not installed, then enable fast auto-hide.
+        # The exe_exists() function is fast.
+        if not FileUtilities.exe_exists('apt-get'):
+            return
+        yield Command.Function(None,
+                               # pylint: disable=possibly-used-before-assignment
+                               Unix.apt_autoclean,
+                               'apt-get autoclean')
 
 
 class AptAutoremove(ActionProvider):
@@ -358,11 +360,11 @@ class AptAutoremove(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        # Checking executable allows auto-hide to work for non-APT systems
-        if FileUtilities.exe_exists('apt-get'):
-            yield Command.Function(None,
-                                   Unix.apt_autoremove,
-                                   'apt-get autoremove')
+        if not FileUtilities.exe_exists('apt-get'):
+            return
+        yield Command.Function(None,
+                               Unix.apt_autoremove,
+                               'apt-get autoremove')
 
 
 class AptClean(ActionProvider):
@@ -374,11 +376,11 @@ class AptClean(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        # Checking executable allows auto-hide to work for non-APT systems
-        if FileUtilities.exe_exists('apt-get'):
-            yield Command.Function(None,
-                                   Unix.apt_clean,
-                                   'apt-get clean')
+        if not FileUtilities.exe_exists('apt-get'):
+            return
+        yield Command.Function(None,
+                               Unix.apt_clean,
+                               'apt-get clean')
 
 
 class ChromeAutofill(FileActionProvider):
@@ -481,8 +483,10 @@ class Journald(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        if FileUtilities.exe_exists('journalctl'):
-            yield Command.Function(None, Unix.journald_clean, 'journalctl --vacuum-time=1')
+        # If journalctl is not installed, then enable fast auto-hide.
+        if not FileUtilities.exe_exists('journalctl'):
+            return
+        yield Command.Function(None, Unix.journald_clean, 'journalctl --vacuum-time=1')
 
 
 class Json(FileActionProvider):
@@ -642,7 +646,7 @@ class YumCleanAll(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        # Checking allows auto-hide to work for non-APT systems
+        # If yum is not installed, then enable fast auto-hide.
         if not FileUtilities.exe_exists('yum'):
             return
 
@@ -661,7 +665,7 @@ class DnfCleanAll(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        # Checking allows auto-hide to work for non-APT systems
+        # If dnf is not installed, then enable fast auto-hide.
         if not FileUtilities.exe_exists('dnf'):
             return
 
@@ -680,7 +684,7 @@ class DnfAutoremove(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        # Checking allows auto-hide to work for non-APT systems
+        # If dnf is not installed, then enable fast auto-hide.
         if not FileUtilities.exe_exists('dnf'):
             return
 
@@ -699,6 +703,9 @@ class PacmanCache(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
+        if not FileUtilities.exe_exists('paccache'):
+            return
+
         yield Command.Function(
             None,
             Unix.pacman_cache,
@@ -714,8 +721,11 @@ class SnapDisabled(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
+        # If snap is not installed, then enable fast auto-hide.
+        if not FileUtilities.exe_exists('snap'):
+            return
         yield Command.Function(
             None,
             Unix.snap_disabled_clean,
             'snap remove disabled',
-            Unix.snap_disabled_preview)
+            preview_func=Unix.snap_disabled_preview)

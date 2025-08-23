@@ -43,6 +43,7 @@ from xml.sax.saxutils import quoteattr
 import bleachbit.FileUtilities
 from bleachbit import logger
 from bleachbit.Action import ActionProvider, Command, Delete, has_glob, expand_multi_var
+from bleachbit.CleanerML import CleanerML
 from tests import common
 from tests.TestFileUtilities import test_ini_helper
 from tests.TestFileUtilities import test_json_helper
@@ -532,6 +533,21 @@ class ActionTestCase(common.BleachbitTestCase):
             results += 1
         self.assertGreater(results, 0)
 
+    def test_package_manager_missing(self):
+        """Unit test for when package manager is not installed"""
+        with mock.patch('bleachbit.Language.setup_translation', return_value=None), \
+                mock.patch('bleachbit.FileUtilities.exe_exists', return_value=False), \
+                mock.patch('bleachbit.Unix.exe_exists', return_value=False):
+            # APT is excluded because it includes walk.all.
+            for cleaner_name in ['snap', 'pacman', 'yum', 'dnf']:
+                # Reset run_external mock for each test.
+                with self.subTest(cleaner_name=cleaner_name), mock.patch('bleachbit.General.run_external') as mock_run_external:
+                    cleaner = CleanerML(
+                        f'cleaners/{cleaner_name}.xml').get_cleaner()
+                    # Cleaner remains usable because the action is registered, but it should auto-hide.
+                    self.assertEqual(os.name == 'posix', cleaner.is_usable())
+                    self.assertTrue(cleaner.auto_hide())
+                    mock_run_external.assert_not_called()
 
 def main():
     """Main function"""
