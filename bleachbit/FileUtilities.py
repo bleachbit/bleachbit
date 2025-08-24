@@ -39,6 +39,7 @@ import re
 import sqlite3
 import stat
 import string
+import struct
 import subprocess
 import sys
 import tempfile
@@ -68,6 +69,7 @@ if 'nt' == os.name:
         path) or bleachbit.Windows.is_junction(path)
 
 if 'posix' == os.name:
+    import fcntl
     # pylint: disable=redefined-builtin
     from bleachbit.General import WindowsError
     # pylint: disable=invalid-name
@@ -946,6 +948,42 @@ def wipe_name(pathname1):
     return pathname3
 
 
+def fitrim(pathname):
+    """Perform FITRIM (fstrim) to discard unused blocks on a supported filesystem
+
+    pathname: path to directory
+    """
+    if os.name != 'posix':
+        return False
+
+    fitrim_id = 0xC0185879
+    try:
+
+        try:
+            # Open the directory
+            fd = os.open(pathname, os.O_RDONLY)
+            # Get filesystem stats to determine range
+            stats = os.statvfs(pathname)
+
+            # struct fstrim_range {
+            #     __u64 start;
+            #     __u64 len;
+            #     __u64 minlen;
+            # };
+            # Set range to the entire filesystem
+            trim_range = struct.pack('QQQ', 0, stats.f_blocks * stats.f_bsize, 0)
+            fcntl.ioctl(fd, fitrim_id, trim_range)
+            logger.debug("Successfully performed FITRIM on filesystem at %s", pathname)
+            return True
+        finally:
+            os.close(fd)
+    except Exception as e:
+        if os.geteuid() == 0:
+            logger.info("FITRIM failed: %s", e)
+        else:
+            logger.debug("FITRIM failed: %s", e)
+        return False
+
 def wipe_path(pathname, idle=False):
     """Wipe the free space in the path
     This function uses an iterator to update the GUI."""
@@ -1001,6 +1039,9 @@ def wipe_path(pathname, idle=False):
         logger.error(
             _("Path to wipe must be an existing directory: %s"), pathname)
         return
+
+    if fstype in ('ext4', 'btrfs'):
+        fitrim(pathname)
 
     files = []
     total_bytes = 0
