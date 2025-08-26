@@ -6,10 +6,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-03-16 11:49+0000\n"
-"Last-Translator: Сергей <asvmail.as@gmail.com>\n"
+"PO-Revision-Date: 2025-08-27 15:02+0000\n"
+"Last-Translator: 439JBYL80IGQTF25UXNR0X1BG "
+"<439JBYL80IGQTF25UXNR0X1BG@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/bleachbit/main/"
 "ru/>\n"
 "Language: ru\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -652,11 +653,11 @@ msgstr "Графический редактор"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "Отключено"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "Удалить отключённые пакеты"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -805,7 +806,7 @@ msgstr "Освобождение дискового пространства и 
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "Andrew Ziem и соавторы"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -814,11 +815,15 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"BleachBit освобождает место на диске и обеспечивает приватность путём "
+"быстрого удаления ненужных файлов, таких как кэш, куки-файлы, история "
+"браузера, временные файлы, и системные логи. Он также может уничтожать файлы "
+"и очищать место на диске, чтобы предотвратить восстановление данных."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr ""
+msgstr "Тёмный режим по умолчанию, показывая обнаруженные ненужные файлы"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -868,7 +873,7 @@ msgstr "Выполнить внешнюю команду: %s"
 
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "Обновить оболочку Windows"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1650,7 +1655,7 @@ msgstr "Сброс конфигурационного файла из за ег�
 
 #: ../bleachbit/GUI.py
 msgid "Quit"
-msgstr ""
+msgstr "Выйти"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1731,7 +1736,7 @@ msgstr "Обновить BleachBit до последней версии"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "Нажмите F11, чтобы выйти из полноэкранного режима."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1945,7 +1950,7 @@ msgstr "Импортировано из winapp2.ini"
 
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
-msgstr ""
+msgstr "Привелегии администратора необходимы для очистки Обновлений Windows"
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
