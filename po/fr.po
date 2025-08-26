@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-05-12 21:03+0000\n"
-"Last-Translator: Hephaistos <hephaistos@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2025-08-27 15:02+0000\n"
+"Last-Translator: \"David D.\" <dadu042@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/bleachbit/main/fr/"
 ">\n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -662,11 +662,11 @@ msgstr "Éditeur graphique"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "Désactivé"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "Supprimer paquetages désactivés"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -776,10 +776,8 @@ msgid "Memory dump"
 msgstr "Vidage mémoire"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Environnement de bureau"
+msgstr "Widgets de bureau"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -820,7 +818,7 @@ msgstr "Libérez de l'espace et préservez votre vie privée"
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "Andrew Ziem et contributeurs"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -829,11 +827,16 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"BleachBit libère de l’espace disque et préserve la confidentialité en "
+"supprimant rapidement les fichiers inutiles tels que le cache, les cookies, "
+"l’historique du navigateur, les fichiers temporaires et les journaux "
+"système. Il peut également déchiqueter des fichiers et nettoyer l’espace "
+"disque libre pour empêcher la récupération de données."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr ""
+msgstr "Mode sombre par défaut, montrant les fichiers indésirables trouvés"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -885,7 +888,7 @@ msgstr "Lancer la commande externe : %s"
 
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "Rafraîchir le shell de Windows"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -970,7 +973,7 @@ msgstr "Cette option est expérimentale et peut causer des problèmes système."
 #. TRANSLATORS: Prefetch is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py
 msgid "Prefetch"
-msgstr "Prefetch"
+msgstr "Prélecture"
 
 #: ../bleachbit/Cleaner.py
 msgid "Recycle bin"
@@ -1443,16 +1446,12 @@ msgid "Auto-detect language"
 msgstr "Détection automatique de la langue"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "Préservation automatique de la langue %s."
+msgstr "Détecte automatiquement la langue du système"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "Langues"
+msgstr "Langue :"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1705,7 +1704,7 @@ msgstr ""
 
 #: ../bleachbit/GUI.py
 msgid "Quit"
-msgstr ""
+msgstr "Quitter"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1792,7 +1791,7 @@ msgstr "Mettre à jour Bleachbit vers la dernière version"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "Presser F11 pour quitter le mode plein écran."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1888,19 +1887,17 @@ msgid "Downloading URL failed: %s"
 msgstr "Échec du téléchargement de l'URL : %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
 msgstr ""
-"Le disque était plein lors de l’écriture de la configuration dans le fichier "
-"%s"
+"Le disque était plein lors de l’écriture de la configuration dans le fichier "
+": %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
 msgstr ""
-"Le disque était plein lors de l’écriture de la configuration dans le fichier "
+"Permission refusée lors de l’écriture de la configuration dans le fichier : "
 "%s"
 
 #: ../bleachbit/Options.py
@@ -2017,6 +2014,8 @@ msgstr "Importé depuis le fichier winapp2.ini"
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr ""
+"Les privilèges d’administrateur sont requis pour nettoyer les mises à jour "
+"de Windows"
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
@@ -2032,10 +2031,9 @@ msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "Erreur lors de l’exécution de « %(operation)s » : « %(msg)s »"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Exécutable non trouvé : %s"
+msgstr "Fichier non trouvé : %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
