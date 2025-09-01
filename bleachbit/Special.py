@@ -26,10 +26,10 @@ Cross-platform, special cleaning operations
 import contextlib
 import json
 import logging
-import os.path
+import os
 import sqlite3
 import xml.dom.minidom
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import quote, urlparse, urlunparse
 
 
 # local application imports
@@ -50,11 +50,22 @@ def __get_chrome_history(path, fn='History'):
     return ver
 
 
-def _sqlite_table_exists(pathname, table):
+def _sqlite_readonly_uri(pathname):
+    """Return a proper SQLite URI for read-only access to pathname"""
+    assert isinstance(pathname, str)
+    abs_path = os.path.abspath(pathname)
+    if os.name == 'nt':
+        abs_path = abs_path.replace('\\', '/')
+    quoted = quote(abs_path, safe='/:')
+    return f'file:{quoted}?mode=ro'
+
+
+def sqlite_table_exists(pathname, table):
     """Check whether a table exists in the SQLite database"""
     cmd = "select name from sqlite_master where type='table' and name=?;"
     try:
-        with contextlib.closing(sqlite3.connect(f'file:{pathname}?mode=ro', uri=True)) as conn:
+        uri = _sqlite_readonly_uri(pathname)
+        with contextlib.closing(sqlite3.connect(uri, uri=True)) as conn:
             if conn.execute(cmd, (table,)).fetchone():
                 return True
     except sqlite3.OperationalError:
@@ -65,7 +76,7 @@ def _sqlite_table_exists(pathname, table):
 
 def __shred_sqlite_char_columns(table, cols=None, where="", path=None):
     """Create an SQL command to shred character columns"""
-    if path and not _sqlite_table_exists(path, table):
+    if path and not sqlite_table_exists(path, table):
         return ""
     cmd = ""
     if not where:
@@ -278,7 +289,7 @@ def delete_mozilla_url_history(path):
 
     cmds = ""
 
-    have_places = _sqlite_table_exists(path, 'moz_places')
+    have_places = sqlite_table_exists(path, 'moz_places')
 
     if have_places:
         # delete the URLs in moz_places
@@ -308,7 +319,7 @@ def delete_mozilla_url_history(path):
     # Firefox 78 no longer has a table named moz_favicons, and it no
     # longer has a column favicon_id in the table moz_places. This
     # change probably happened before version 78.
-    if have_places and _sqlite_table_exists(path, 'moz_favicons'):
+    if have_places and sqlite_table_exists(path, 'moz_favicons'):
         fav_suffix = "where id not in (select favicon_id " \
             "from moz_places where favicon_id is not null ); "
         cols = ('url', 'data')
@@ -316,14 +327,14 @@ def delete_mozilla_url_history(path):
                                             cols, fav_suffix, path)
 
     # Delete orphaned origins.
-    if have_places and _sqlite_table_exists(path, 'moz_origins'):
+    if have_places and sqlite_table_exists(path, 'moz_origins'):
         origins_where = 'where id not in (select distinct origin_id from moz_places)'
         cmds += __shred_sqlite_char_columns('moz_origins',
                                             ('host',), origins_where, path)
         # For any remaining origins, reset the statistic.
         cmds += "update moz_origins set frecency=-1;"
 
-    if _sqlite_table_exists(path, 'moz_meta'):
+    if sqlite_table_exists(path, 'moz_meta'):
         cmds += "delete from moz_meta where key like 'origin_frecency_%';"
 
     # Delete all history visits.
@@ -340,7 +351,7 @@ def delete_mozilla_url_history(path):
     # Reference: https://bugzilla.mozilla.org/show_bug.cgi?id=932036
     # Reference:
     # https://support.mozilla.org/en-US/questions/937290#answer-400987
-    if _sqlite_table_exists(path, 'moz_hosts'):
+    if sqlite_table_exists(path, 'moz_hosts'):
         cmds += __shred_sqlite_char_columns('moz_hosts', ('host',), path=path)
         cmds += "delete from moz_hosts;"
 

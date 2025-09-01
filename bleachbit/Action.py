@@ -28,10 +28,12 @@ import glob
 import logging
 import os
 import re
+import json
+import bleachbit
 from itertools import product
 
 # first party imports
-from bleachbit import Command, FileUtilities, General, Special, DeepScan
+from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod  # mod=module
 from bleachbit import fs_scan_re_flags
 from bleachbit.Language import get_text as _
 
@@ -446,6 +448,89 @@ class ChromeKeywords(FileActionProvider):
                 path,
                 Special.delete_chrome_keywords,
                 _('Clean file'))
+
+
+class Cookie(FileActionProvider):
+
+    """Action to selectively clean cookies in Chromium/Mozilla browsers"""
+    action_key = 'cookie'
+
+    def get_commands(self):
+        allowlist = self._load_allowlist_domains()
+
+        if not allowlist:
+            # If nothing is being kept, use regular delete for better performance
+            for path in self.get_paths():
+                yield Command.Delete(path)
+            return
+
+        # Otherwise, use the allowlist-based cookie cleaning
+        for path in self.get_paths():
+            def delete_func(p=path):
+                # perform deletion; return value is ignored by Command.Function for file paths
+                try:
+                    CookieMod.delete_cookies(p, allowlist, really_delete=True)
+                except Exception as e:
+                    logger.warning('Cookie allowlist failed on %s: %s', p, e)
+                return 0
+
+            def preview_func(p=path):
+                # return estimated file size reduction
+                try:
+                    result = CookieMod.delete_cookies(
+                        p, allowlist, really_delete=False)
+                    return result.get('file_size_reduction', 0)
+                except Exception as e:
+                    logger.warning(
+                        'Cookie allowlist preview failed on %s: %s', p, e)
+                    return 0
+
+            yield Command.Function(
+                path,
+                delete_func,
+                _('Clean cookies'),
+                preview_func)
+
+    def _load_allowlist_domains(self):
+        """Load cookie allowlist domains from options directory.
+
+        Supports either a list of strings (domains) or a list of objects
+        with a 'domain' key (cookie name field is ignored in v1).
+        """
+        path = os.path.join(bleachbit.options_dir, 'cookie_allowlist.json')
+        domains = set()
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            if isinstance(data, list):
+                for item in data:
+                    if isinstance(item, str):
+                        d = item
+                    elif isinstance(item, dict):
+                        d = item.get('domain')
+                    else:
+                        d = None
+                    if isinstance(d, str) and d:
+                        domains.add(d.lstrip('.').lower())
+        except (FileNotFoundError, json.JSONDecodeError, OSError):
+            pass
+        return domains
+
+    def _delete_cookies_with_allowlist(self, path):
+        """Delete cookies with allowlist support"""
+        allowlist = self._load_allowlist_domains()
+        if not allowlist:
+            return 0
+        result = CookieMod.delete_cookies(path, allowlist, really_delete=True)
+        return result.get('file_size_reduction', 0)
+
+    def _preview_cookies_deletion(self, path):
+        """Preview cookies deletion using allowlist"""
+        allowlist = self._load_allowlist_domains()
+        if not allowlist:
+            return 0
+        result = CookieMod.delete_cookies(path, allowlist, really_delete=False)
+        return result.get('file_size_reduction', 0)
 
 
 class Delete(FileActionProvider):
