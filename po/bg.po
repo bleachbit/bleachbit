@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BleachBit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2023-08-06 05:49+0000\n"
-"Last-Translator: Salif Mehmed <mail@salif.eu>\n"
+"PO-Revision-Date: 2025-09-02 15:22+0000\n"
+"Last-Translator: Ivan Kostov <jiveq1@gmail.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/bleachbit/main/"
 "bg/>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.13.1-dev\n"
 "X-Launchpad-Export-Date: 2014-01-24 03:57+0000\n"
 "X-Poedit-Country: BULGARIA\n"
 "X-Poedit-Language: Bulgarian\n"
@@ -27,7 +27,7 @@ msgstr ""
 #: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
 #: ../cleaners/vlc.xml
 msgid "Media player"
-msgstr ""
+msgstr "Медиен плеър"
 
 #: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/safari.xml
 #: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/konqueror.xml
@@ -161,17 +161,19 @@ msgstr "Изтриване на списъка най-често употреб�
 #: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
 #: ../cleaners/apt.xml ../cleaners/snap.xml
 msgid "Package manager"
-msgstr ""
+msgstr "Пакетен мениджър"
 
 #: ../cleaners/dnf.xml
 msgid "Remove packages that were formerly dependencies"
-msgstr ""
+msgstr "Премахване на вече ненужни зависимости"
 
 #: ../cleaners/dnf.xml
 msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
 msgstr ""
+"Внимателно прегледай списъка с пакетите, които ще бъдат премахнати, като "
+"изпълниш \" dnf list autoremove“."
 
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
@@ -348,13 +350,15 @@ msgstr ""
 
 #: ../cleaners/rhythmbox.xml
 msgid "Database"
-msgstr ""
+msgstr "База данни"
 
 #: ../cleaners/rhythmbox.xml
 msgid ""
 "Delete the database, which contains information such as play count and last "
 "played"
 msgstr ""
+"Изтрий базата данни, която пази информация като брой пускания и последно "
+"пускане"
 
 #: ../cleaners/microsoft_office.xml ../cleaners/libreoffice.xml
 #: ../bleachbit/Cleaner.py
@@ -374,7 +378,7 @@ msgstr "Изтриване на дневниците с грешки"
 
 #: ../cleaners/bash.xml
 msgid "Shell"
-msgstr ""
+msgstr "Обвивка"
 
 #: ../cleaners/bash.xml ../cleaners/sqlite3.xml ../cleaners/octave.xml
 msgid "Delete the command history"
@@ -410,7 +414,7 @@ msgstr "Изтриване на бисквитките, посетените а�
 
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
-msgstr ""
+msgstr "Текстообработваща програма"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -427,7 +431,7 @@ msgstr "Игра"
 #. This software edits metadata tags, such as title and artist, in audio files
 #: ../cleaners/easytag.xml
 msgid "Audio files tagger"
-msgstr ""
+msgstr "Таг редактор за аудио файлове"
 
 #: ../cleaners/safari.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
 #: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/brave.xml
@@ -492,11 +496,11 @@ msgstr "Клиент за моментални съобщения"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "прикачени файлове"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Конфликт при синхронизация"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -504,7 +508,7 @@ msgstr "Тази настройка е бавна"
 
 #: ../cleaners/wine.xml
 msgid "Compatibility layer for Windows software"
-msgstr ""
+msgstr "Слой за съвместимост за Windows програми"
 
 #: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
