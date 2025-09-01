@@ -60,7 +60,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_ENGLISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_ENGLISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_ENGLISH} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_ENGLISH} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ENGLISH} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_ENGLISH} "The next step is building font cache, during which you may see a black window."
@@ -119,7 +119,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_AFRIKAANS} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_AFRIKAANS} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_AFRIKAANS} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_AFRIKAANS} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_AFRIKAANS} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_AFRIKAANS} "The next step is building font cache, during which you may see a black window."
@@ -178,7 +178,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_ALBANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_ALBANIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_ALBANIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_ALBANIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ALBANIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_ALBANIAN} "The next step is building font cache, during which you may see a black window."
@@ -237,7 +237,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_ARABIC} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_ARABIC} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_ARABIC} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_ARABIC} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ARABIC} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_ARABIC} "The next step is building font cache, during which you may see a black window."
@@ -296,7 +296,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_ARMENIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_ARMENIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_ARMENIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_ARMENIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ARMENIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_ARMENIAN} "The next step is building font cache, during which you may see a black window."
@@ -355,7 +355,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_ASTURIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_ASTURIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_ASTURIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_ASTURIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ASTURIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_ASTURIAN} "The next step is building font cache, during which you may see a black window."
@@ -414,7 +414,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_BASQUE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_BASQUE} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_BASQUE} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_BASQUE} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_BASQUE} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_BASQUE} "The next step is building font cache, during which you may see a black window."
@@ -473,7 +473,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_BELARUSIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_BELARUSIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_BELARUSIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_BELARUSIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_BELARUSIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_BELARUSIAN} "The next step is building font cache, during which you may see a black window."
@@ -532,7 +532,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_BOSNIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_BOSNIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_BOSNIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_BOSNIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_BOSNIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_BOSNIAN} "The next step is building font cache, during which you may see a black window."
@@ -591,7 +591,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_BRETON} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_BRETON} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_BRETON} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_BRETON} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_BRETON} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_BRETON} "The next step is building font cache, during which you may see a black window."
@@ -650,7 +650,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_BULGARIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_BULGARIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_BULGARIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_BULGARIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_BULGARIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_BULGARIAN} "The next step is building font cache, during which you may see a black window."
@@ -709,7 +709,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_CATALAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_CATALAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_CATALAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_CATALAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_CATALAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_CATALAN} "The next step is building font cache, during which you may see a black window."
@@ -768,7 +768,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_CORSICAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_CORSICAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_CORSICAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_CORSICAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_CORSICAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_CORSICAN} "The next step is building font cache, during which you may see a black window."
@@ -827,7 +827,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_CROATIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_CROATIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_CROATIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_CROATIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_CROATIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_CROATIAN} "The next step is building font cache, during which you may see a black window."
@@ -886,7 +886,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_CZECH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_CZECH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_CZECH} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_CZECH} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_CZECH} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_CZECH} "The next step is building font cache, during which you may see a black window."
@@ -945,7 +945,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_DANISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_DANISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_DANISH} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_DANISH} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_DANISH} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_DANISH} "The next step is building font cache, during which you may see a black window."
@@ -1004,7 +1004,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_DUTCH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_DUTCH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_DUTCH} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_DUTCH} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_DUTCH} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_DUTCH} "The next step is building font cache, during which you may see a black window."
@@ -1063,7 +1063,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_ESPERANTO} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_ESPERANTO} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_ESPERANTO} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_ESPERANTO} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ESPERANTO} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_ESPERANTO} "The next step is building font cache, during which you may see a black window."
@@ -1122,7 +1122,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_ESTONIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_ESTONIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_ESTONIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_ESTONIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ESTONIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_ESTONIAN} "The next step is building font cache, during which you may see a black window."
@@ -1181,7 +1181,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_FARSI} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_FARSI} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_FARSI} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_FARSI} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_FARSI} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_FARSI} "The next step is building font cache, during which you may see a black window."
@@ -1240,7 +1240,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_FINNISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_FINNISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_FINNISH} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_FINNISH} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_FINNISH} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_FINNISH} "The next step is building font cache, during which you may see a black window."
@@ -1299,7 +1299,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_FRENCH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_FRENCH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_FRENCH} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_FRENCH} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_FRENCH} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_FRENCH} "The next step is building font cache, during which you may see a black window."
@@ -1358,7 +1358,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_GALICIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_GALICIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_GALICIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_GALICIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_GALICIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_GALICIAN} "The next step is building font cache, during which you may see a black window."
@@ -1417,7 +1417,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_GEORGIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_GEORGIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_GEORGIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_GEORGIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_GEORGIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_GEORGIAN} "The next step is building font cache, during which you may see a black window."
@@ -1477,7 +1477,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_GERMAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_GERMAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_GERMAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_GERMAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_GERMAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_GERMAN} "The next step is building font cache, during which you may see a black window."
@@ -1536,7 +1536,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_GREEK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_GREEK} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_GREEK} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_GREEK} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_GREEK} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_GREEK} "The next step is building font cache, during which you may see a black window."
@@ -1595,7 +1595,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_HEBREW} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_HEBREW} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_HEBREW} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_HEBREW} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_HEBREW} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_HEBREW} "The next step is building font cache, during which you may see a black window."
@@ -1654,7 +1654,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_HUNGARIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_HUNGARIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_HUNGARIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_HUNGARIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_HUNGARIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_HUNGARIAN} "The next step is building font cache, during which you may see a black window."
@@ -1713,7 +1713,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_ICELANDIC} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_ICELANDIC} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_ICELANDIC} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_ICELANDIC} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ICELANDIC} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_ICELANDIC} "The next step is building font cache, during which you may see a black window."
@@ -1772,7 +1772,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_INDONESIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_INDONESIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_INDONESIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_INDONESIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_INDONESIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_INDONESIAN} "The next step is building font cache, during which you may see a black window."
@@ -1831,7 +1831,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_IRISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_IRISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_IRISH} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_IRISH} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_IRISH} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_IRISH} "The next step is building font cache, during which you may see a black window."
@@ -1956,7 +1956,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_JAPANESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_JAPANESE} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_JAPANESE} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_JAPANESE} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_JAPANESE} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_JAPANESE} "The next step is building font cache, during which you may see a black window."
@@ -2015,7 +2015,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_KOREAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_KOREAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_KOREAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_KOREAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_KOREAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_KOREAN} "The next step is building font cache, during which you may see a black window."
@@ -2074,7 +2074,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_KURDISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_KURDISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_KURDISH} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_KURDISH} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_KURDISH} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_KURDISH} "The next step is building font cache, during which you may see a black window."
@@ -2133,7 +2133,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_LATVIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_LATVIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_LATVIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_LATVIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_LATVIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_LATVIAN} "The next step is building font cache, during which you may see a black window."
@@ -2192,7 +2192,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_LITHUANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_LITHUANIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_LITHUANIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_LITHUANIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_LITHUANIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_LITHUANIAN} "The next step is building font cache, during which you may see a black window."
@@ -2251,7 +2251,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_LUXEMBOURGISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_LUXEMBOURGISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_LUXEMBOURGISH} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_LUXEMBOURGISH} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_LUXEMBOURGISH} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_LUXEMBOURGISH} "The next step is building font cache, during which you may see a black window."
@@ -2310,7 +2310,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_MACEDONIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_MACEDONIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_MACEDONIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_MACEDONIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_MACEDONIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_MACEDONIAN} "The next step is building font cache, during which you may see a black window."
@@ -2369,7 +2369,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_MALAY} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_MALAY} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_MALAY} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_MALAY} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_MALAY} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_MALAY} "The next step is building font cache, during which you may see a black window."
@@ -2428,7 +2428,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_MONGOLIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_MONGOLIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_MONGOLIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_MONGOLIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_MONGOLIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_MONGOLIAN} "The next step is building font cache, during which you may see a black window."
@@ -2487,7 +2487,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_NORWEGIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_NORWEGIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_NORWEGIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_NORWEGIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_NORWEGIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_NORWEGIAN} "The next step is building font cache, during which you may see a black window."
@@ -2546,7 +2546,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_NORWEGIANNYNORSK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_NORWEGIANNYNORSK} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_NORWEGIANNYNORSK} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_NORWEGIANNYNORSK} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_NORWEGIANNYNORSK} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_NORWEGIANNYNORSK} "The next step is building font cache, during which you may see a black window."
@@ -2605,7 +2605,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_PASHTO} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_PASHTO} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_PASHTO} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_PASHTO} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_PASHTO} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_PASHTO} "The next step is building font cache, during which you may see a black window."
@@ -2664,7 +2664,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_POLISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_POLISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_POLISH} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_POLISH} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_POLISH} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_POLISH} "The next step is building font cache, during which you may see a black window."
@@ -2723,7 +2723,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_PORTUGUESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_PORTUGUESE} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_PORTUGUESE} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_PORTUGUESE} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_PORTUGUESE} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_PORTUGUESE} "The next step is building font cache, during which you may see a black window."
@@ -2782,7 +2782,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_PORTUGUESEBR} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_PORTUGUESEBR} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_PORTUGUESEBR} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_PORTUGUESEBR} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_PORTUGUESEBR} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_PORTUGUESEBR} "The next step is building font cache, during which you may see a black window."
@@ -2841,7 +2841,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_ROMANIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_ROMANIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_ROMANIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_ROMANIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_ROMANIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_ROMANIAN} "The next step is building font cache, during which you may see a black window."
@@ -2900,7 +2900,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_RUSSIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_RUSSIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_RUSSIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_RUSSIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_RUSSIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_RUSSIAN} "The next step is building font cache, during which you may see a black window."
@@ -2959,7 +2959,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_SCOTSGAELIC} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_SCOTSGAELIC} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_SCOTSGAELIC} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_SCOTSGAELIC} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SCOTSGAELIC} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_SCOTSGAELIC} "The next step is building font cache, during which you may see a black window."
@@ -3018,7 +3018,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_SERBIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_SERBIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_SERBIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_SERBIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SERBIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_SERBIAN} "The next step is building font cache, during which you may see a black window."
@@ -3077,7 +3077,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_SERBIANLATIN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_SERBIANLATIN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_SERBIANLATIN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_SERBIANLATIN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SERBIANLATIN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_SERBIANLATIN} "The next step is building font cache, during which you may see a black window."
@@ -3136,7 +3136,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_SIMPCHINESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_SIMPCHINESE} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_SIMPCHINESE} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_SIMPCHINESE} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SIMPCHINESE} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_SIMPCHINESE} "The next step is building font cache, during which you may see a black window."
@@ -3195,7 +3195,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_SLOVAK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_SLOVAK} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_SLOVAK} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_SLOVAK} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SLOVAK} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_SLOVAK} "The next step is building font cache, during which you may see a black window."
@@ -3254,7 +3254,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_SLOVENIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_SLOVENIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_SLOVENIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_SLOVENIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SLOVENIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_SLOVENIAN} "The next step is building font cache, during which you may see a black window."
@@ -3313,7 +3313,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_SPANISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_SPANISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_SPANISH} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_SPANISH} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SPANISH} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_SPANISH} "The next step is building font cache, during which you may see a black window."
@@ -3372,7 +3372,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_SPANISHINTERNATIONAL} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_SPANISHINTERNATIONAL} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_SPANISHINTERNATIONAL} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_SPANISHINTERNATIONAL} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SPANISHINTERNATIONAL} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_SPANISHINTERNATIONAL} "The next step is building font cache, during which you may see a black window."
@@ -3431,7 +3431,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_SWEDISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_SWEDISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_SWEDISH} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_SWEDISH} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SWEDISH} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_SWEDISH} "The next step is building font cache, during which you may see a black window."
@@ -3490,7 +3490,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_TATAR} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_TATAR} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_TATAR} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_TATAR} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_TATAR} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_TATAR} "The next step is building font cache, during which you may see a black window."
@@ -3549,7 +3549,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_THAI} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_THAI} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_THAI} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_THAI} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_THAI} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_THAI} "The next step is building font cache, during which you may see a black window."
@@ -3608,7 +3608,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_TRADCHINESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_TRADCHINESE} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_TRADCHINESE} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_TRADCHINESE} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_TRADCHINESE} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_TRADCHINESE} "The next step is building font cache, during which you may see a black window."
@@ -3667,7 +3667,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_TURKISH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_TURKISH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_TURKISH} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_TURKISH} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_TURKISH} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_TURKISH} "The next step is building font cache, during which you may see a black window."
@@ -3726,7 +3726,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_UKRAINIAN} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_UKRAINIAN} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_UKRAINIAN} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_UKRAINIAN} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_UKRAINIAN} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_UKRAINIAN} "The next step is building font cache, during which you may see a black window."
@@ -3785,7 +3785,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_UZBEK} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_UZBEK} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_UZBEK} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_UZBEK} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_UZBEK} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_UZBEK} "The next step is building font cache, during which you may see a black window."
@@ -3844,7 +3844,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_VIETNAMESE} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_VIETNAMESE} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_VIETNAMESE} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_VIETNAMESE} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_VIETNAMESE} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_VIETNAMESE} "The next step is building font cache, during which you may see a black window."
@@ -3903,7 +3903,7 @@ Version: 2023-02-223
 	LangString UNINSTALL_TEXT ${LANG_WELSH} "${prodname} will be uninstalled from the following folder.$\r$\nClick Uninstall to start the uninstallation.$\r$\nWARNING: The uninstaller completely removes the installation directory including any files (such as custom cleaners) that you may have added or changed."
 	LangString ALREADY_INSTALLED ${LANG_WELSH} "${prodname} is already installed.$\r$\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 	; shred shell integration menu name
-	LangString SHRED_SHELL_MENU ${LANG_WELSH} "Shred with${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_WELSH} "Shred with ${prodname}"
 	; Finish message
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_WELSH} "Visit the ${prodname} web site"
 	LangString MULTIPRINT1 ${LANG_WELSH} "The next step is building font cache, during which you may see a black window."
