@@ -551,23 +551,42 @@ INSERT INTO "meta" VALUES('version','20');"""
         os.unlink(filename)
 
     def test_sqlite_table_exists(self):
-        """Unit test for _sqlite_table_exists()"""
-        # create test file
-        filename = os.path.join(
-            self.tempdir, 'test_sqlite_table_exists.sqlite')
-        sql = "CREATE TABLE foo(id int)"
-        FileUtilities.execute_sqlite3(filename, sql)
-        self.assertExists(filename)
-        # run the test
-        # pylint: disable=protected-access
-        self.assertTrue(Special._sqlite_table_exists(filename, 'foo'))
-        self.assertFalse(Special._sqlite_table_exists(
-            filename, 'table_does_not_exist'))
+        """Unit test for sqlite_table_exists()"""
+        # Create test files with different filenames
+        # Add a space to check for proper escaping/encoding
+        test_filenames = [
+            os.path.join(self.tempdir, 'test_sqlite_table_exists.sqlite'),
+            os.path.join(self.tempdir, 'space in name.sqlite'),
+            os.path.join(self.tempdir, 'hash#in#name#.sqlite'),
+            os.path.join(self.tempdir, 'percent%in%name.sqlite'),
+        ]
+
+        # Windows does not support question mark in filenames.
+        if os.name != 'nt':
+            test_filenames.append(
+                os.path.join(self.tempdir, 'question?mark.sqlite'))
+
+        for filename in test_filenames:
+            with self.subTest(filename=filename):
+                # On Windows, use absolute path to test drive letter and slashes.
+                self.assertTrue(os.path.isabs(filename))
+                sql = "CREATE TABLE foo(id int)"
+                FileUtilities.execute_sqlite3(filename, sql)
+                self.assertExists(filename)
+
+                # run the test
+                # pylint: disable=protected-access
+                self.assertTrue(Special.sqlite_table_exists(filename, 'foo'))
+                self.assertFalse(Special.sqlite_table_exists(
+                    filename, 'table_does_not_exist'))
+
+                os.unlink(filename)
+
+        # Test non-existing file
         non_existing_file = os.path.join(self.tempdir, 'file_does_not_exist')
-        self.assertFalse(Special._sqlite_table_exists(
+        self.assertFalse(Special.sqlite_table_exists(
             non_existing_file, 'table_does_not_exist'))
         self.assertNotExists(non_existing_file)
-        os.unlink(filename)
 
     def test_sqlite_loop(self):
         """Repeat SQLite tests
