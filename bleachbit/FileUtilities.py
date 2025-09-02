@@ -301,7 +301,7 @@ def clean_ini(path, section, parameter):
     encoding = detect_encoding(path) or 'utf_8_sig'
 
     # read file to parser
-    config = bleachbit.RawConfigParser()
+    config = bleachbit.RawConfigParser(delimiters='=')
     config.optionxform = lambda option: option
     config.write = write
     with open(path, 'r', encoding=encoding) as fp:

@@ -318,6 +318,44 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         options.set('shred', True, commit=False)
         test_ini_helper(self, clean_ini)
 
+    def test_clean_ini_kde(self):
+        """Unit test for clean_ini() with KDE ini file
+
+        It was reading the colon as a delimiter, but now delimiters are limited to equals sign.
+        See https://github.com/bleachbit/bleachbit/issues/1902
+        """
+
+        ini_content_kfile = """
+[KFileDialog Settings]
+Recent Files[$e]=file:///run/media/AAA1/BBBBB/cccc_ddddddd.zip
+Recent URLs[$e]=file:///run/media/AAA1/BBBBB/
+""".lstrip()
+
+        ini_content_mainwindow = """
+[MainWindow]
+1680x1050 screen: Height=600
+1680x1050 screen: Width=990
+State=AAAA/wA...
+""".lstrip()
+
+        path = os.path.join(self.tempdir, "arkstaterc")
+
+        tests = [
+            ("KFileDialog Settings", ini_content_mainwindow),
+            ("MainWindow", ini_content_kfile),
+        ]
+        for section, content in tests:
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(ini_content_kfile + "\n" + ini_content_mainwindow)
+
+            clean_ini(path, section=section, parameter=None)
+
+            with open(path, "r", encoding="utf-8") as f:
+                cleaned_content = f.read()
+
+            self.assertEqual(
+                content.strip(), cleaned_content.strip().replace(" = ", "="))
+
     def test_clean_json(self):
         """Unit test for clean_json()"""
         print("testing test_clean_json() with shred = False")
