@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-05-09 04:02+0000\n"
-"Last-Translator: abdelbasset jabrane <ribago9317@cubene.com>\n"
+"PO-Revision-Date: 2025-09-11 04:02+0000\n"
+"Last-Translator: Ziad El-sayed <ziadelsayed1797@tutamail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/bleachbit/main/ar/"
 ">\n"
 "Language: ar\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 "X-Launchpad-Export-Date: 2021-07-18 20:36+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -652,11 +652,11 @@ msgstr "محرر الرسوميات"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "معطل"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "إزالة الحزم المعطلة"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -806,7 +806,7 @@ msgstr "لإخلاء مساحات التخزين و الحفاظ على الخص
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "Ziad El-sayed"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -815,11 +815,15 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"يفرغ BleachBit مساحة القرص ويحافظ علي الخصوصية عن طريق إزالة الملفات الغير "
+"ضرورية، مثل ذاكرة التخزين المؤقت، الكوكيز، سجل التصفح، الملفات المؤقتة، "
+"وسجلات النظام. كما يمكنه حذف الملفات بطريقة أمنة وتنظيف مساحة القرص الفارغة "
+"لمنع إسترجاع البيانات."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr ""
+msgstr "الوضع الداكن الإفتراضي، عرض الملفات الغير ضرورية التي تم العثور عليها"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -869,7 +873,7 @@ msgstr "تشغيل أمل خارجي: %s"
 
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "تحديث واجهة النافذة"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1636,7 +1640,7 @@ msgstr "إعادة ضبط ملف التكوين لأنه تالف: %s"
 
 #: ../bleachbit/GUI.py
 msgid "Quit"
-msgstr ""
+msgstr "خروج"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1717,7 +1721,7 @@ msgstr "قم بتحديث BleachBit إلى أحدث إصدار"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "إضغط F11 للخروج من وضع ملء الشاشة."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1788,7 +1792,7 @@ msgstr "إعادة تهيئة جهاز المبادلة %s."
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Detected these swap devices: %s"
-msgstr "تم اكتشاف أجهزة المبادلة هذه: %s."
+msgstr "تم الكشف عن أجهزة التبديل التالية: %s"
 
 #. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
 #: ../bleachbit/Memory.py
@@ -1927,7 +1931,7 @@ msgstr "مستوردة من ملف winapp2.ini"
 
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
-msgstr ""
+msgstr "يلزم الحصول علي صلاحيات المسؤول لتنظيف تحديثات ويندوز"
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
