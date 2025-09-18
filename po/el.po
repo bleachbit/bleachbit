@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-09-19 04:01+0000\n"
-"Last-Translator: Lefterisp <leparashos@hotmail.com>\n"
+"PO-Revision-Date: 2025-09-19 04:02+0000\n"
+"Last-Translator: \"Vasilis K.\" <skyhirules@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/bleachbit/main/el/>"
 "\n"
 "Language: el\n"
@@ -814,7 +814,7 @@ msgstr "Ελευθερώστε χώρο και διατηρήστε το ιδι�
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "Andrew Ziem και συνεργάτες"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -823,11 +823,17 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"Το BleachBit ελευθερώνει χώρο στο δίσκο και διατηρεί το απόρρητο, αφαιρώντας "
+"γρήγορα περιττά αρχεία, όπως προσωρινή μνήμη, cookies, ιστορικό προγράμματος "
+"περιήγησης, προσωρινά αρχεία και αρχεία καταγραφής συστήματος. Μπορεί επίσης "
+"να καταστρέψει αρχεία και να καθαρίσει τον ελεύθερο χώρο στο δίσκο για να "
+"αποτρέψει την ανάκτηση δεδομένων."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
 msgstr ""
+"Προεπιλεγμένη σκοτεινή λειτουργία, εμφάνιση ανεπιθύμητων αρχείων που βρέθηκαν"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -877,7 +883,7 @@ msgstr "Εκτελέστε εξωτερική εντολή: %s"
 
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "Ανανέωση κελύφους των Windows"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1661,7 +1667,7 @@ msgstr "Επαναφορά του αρχείου διαμόρφωσης γιατ
 
 #: ../bleachbit/GUI.py
 msgid "Quit"
-msgstr ""
+msgstr "Κλείσιμο"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1746,7 +1752,7 @@ msgstr "Ενημέρωση του BleachBit στην πιο πρόσφατη έ�
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "Πατήστε F11 για έξοδο από τη λειτουργία πλήρους οθόνης."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1962,6 +1968,8 @@ msgstr "Εισήχθει από το winapp2.ini"
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr ""
+"Απαιτούνται δικαιώματα διαχειριστή για τον καθαρισμό των ενημερώσεων των "
+"Windows"
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
