@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-10-05 10:02+0000\n"
+"PO-Revision-Date: 2025-10-14 10:07+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/bleachbit/main/"
 "fi/>\n"
@@ -1272,8 +1272,9 @@ msgid ""
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr ""
-"Haluatko varmasti poistaa tiedostot valittujen operaatioiden mukaisesti? "
-"Poistettavat tiedostot ovat voineet muuttua sitten edellisen esikatselun."
+"Oletko varma, että haluat poistaa tiedostot pysyvästi valittujen toimintojen "
+"mukaisesti? Poistettavat tiedostot ovat saattaneet muuttua esikatselun "
+"suorittamisen jälkeen."
 
 #: ../bleachbit/GuiBasic.py
 msgid "Are you sure you want to permanently delete these files?"
@@ -1429,7 +1430,7 @@ msgid ""
 "operations.  Overwriting is significantly slower."
 msgstr ""
 "Päällekirjoitus ei tehoa joissain tiedostojärjestelmissä ja tietyissä "
-"BleachBitin operaatioissa. Päällekirjoitus on huomattavasti hitaampaa."
+"BleachBitin toiminnoissa. Päällekirjoitus on huomattavasti hitaampaa."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
@@ -1572,7 +1573,7 @@ msgstr "Polkuja ei löytynyt leikepöydältä."
 
 #: ../bleachbit/GUI.py
 msgid "_OK"
-msgstr "_OK"
+msgstr "_Selvä"
 
 #: ../bleachbit/GUI.py
 msgid "Program to clean unnecessary files"
@@ -1633,7 +1634,7 @@ msgstr "Poistu"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
-msgstr "Sinun pitää valita operaatio"
+msgstr "Sinun on valittava jokin toiminto"
 
 #: ../bleachbit/GUI.py
 msgid "Done."
@@ -1686,7 +1687,7 @@ msgstr "Esikatselu"
 
 #: ../bleachbit/GUI.py
 msgid "Preview files in the selected operations (without deleting any files)"
-msgstr "Esikatsele valittujen operaatioiden tiedostot (poistamatta tiedostoja)"
+msgstr "Esikatsele tiedostoja valituissa toiminnoissa (poistamatta tiedostoja)"
 
 #: ../bleachbit/GUI.py
 msgid "Clean files in the selected operations"
@@ -1939,7 +1940,7 @@ msgstr "BleachBit käynnistyy...\n"
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "Virhe suoritettaessa operaatiota '%(operation)s': '%(msg)s'"
+msgstr "Poikkeus suoritettaessa toimintoa '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py
 #, python-format
@@ -2028,7 +2029,7 @@ msgstr "Poistettavia tiedostoja: %d"
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Special operations: %d"
-msgstr "Erikoisoperaatiot: %d"
+msgstr "Erikoistoiminnot: %d"
 
 #: ../bleachbit/Worker.py
 #, python-format
@@ -2050,7 +2051,7 @@ msgstr "Odota. Esikatsellaan kohdetta %s."
 
 #: ../data/app-menu.ui
 msgid "_Shred Files"
-msgstr "Tee sil_ppua tiedostoista"
+msgstr "Tee _silppua tiedostoista"
 
 #: ../data/app-menu.ui
 msgid "Sh_red Folders"
