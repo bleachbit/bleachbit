@@ -12,12 +12,15 @@
 #  * %clean
 # https://en.opensuse.org/openSUSE:Specfile_guidelines
 
-# 2025-03-15
+# Standard macro definitions on OBS.
+#  openSUSE:Leap:15.6 reports suse_version 1500
+#  openSUSE:Leap:16.0 reports suse_version 1600
 #  openSUSE:Slowroll reports suse_version=1699
 #  openSUSE:Tumbleweed reports suse_version=1699
 #  CentOS_9_Stream reports centos_version=900
 #  Fedora 41 reports fedora_version=41
 
+%define pyexe %{__python3}
 
 %if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?almalinux_version} || 0%{?rocky_version}
 %define is_redhat_family 1
@@ -26,8 +29,15 @@
 %endif
 
 %if 0%{?is_opensuse}
-%define pyprefix %{primary_python}
-%endif
+%define pyprefix %{modern_python}
+%define is_leap 0
+%if 0%{?suse_version} <= 1600
+%define is_leap 1
+%endif # suse_version <= 1600
+%if 0%{?suse_version} == 1500
+%define pyexe /usr/bin/python3.11
+%endif # suse_version == 1500
+%endif # is_opensuse
 
 %if !0%{?is_opensuse} && !%{is_redhat_family}
 %{error:This package is only for openSUSE or Red Hat family distributions}
@@ -73,13 +83,15 @@ Requires:       python3-psutil
 %if 0%{?is_opensuse}
 BuildRequires:  desktop-file-utils
 BuildRequires:  make
-BuildRequires:  openSUSE-release
 BuildRequires:  %{pyprefix}
 BuildRequires:  python-rpm-macros
+BuildRequires:  %{pyprefix}-base
 BuildRequires:  %{pyprefix}-chardet
 BuildRequires:  %{pyprefix}-psutil
 BuildRequires:  %{pyprefix}-setuptools
+%if ! %{is_leap}
 BuildRequires:  %{pyprefix}-sqlite-utils
+%endif
 BuildRequires:  %{pyprefix}-xml
 BuildRequires:  update-desktop-files
 Requires:       gobject-introspection
@@ -88,10 +100,11 @@ Requires:       %{pyprefix}-chardet
 Requires:       %{pyprefix}-gobject
 Requires:       %{pyprefix}-gobject-Gdk
 Requires:       %{pyprefix}-psutil
+%if ! %{is_leap}
 Requires:       %{pyprefix}-sqlite-utils
+%endif
 Requires:       %{pyprefix}-xml
-Requires:		openSUSE-release
-Requires:       typelib(Gtk)
+Requires: 		typelib(Gtk) = 3.0
 Requires:       typelib(Notify)
 Requires:       xdg-utils
 %endif
@@ -108,12 +121,11 @@ space to prevent data recovery.
 
 %prep
 %setup -q
-python3 -V
-%{__python3} -V
+%{pyexe} -V
 
 
 %build
-%{__python3} setup.py build
+%{pyexe} setup.py build
 cp org.bleachbit.BleachBit.desktop org.bleachbit.BleachBit-root.desktop
 sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' org.bleachbit.BleachBit-root.desktop
 
@@ -138,7 +150,7 @@ make delete_windows_files
 
 
 %install
-make install PYTHON=%{__python3} DESTDIR=%{buildroot} prefix=%{_prefix}
+make install PYTHON=%{pyexe} DESTDIR=%{buildroot} prefix=%{_prefix}
 
 %if %{is_redhat_family}
 
@@ -187,10 +199,10 @@ make -C po install DESTDIR=%{buildroot}
 
 
 %check
-python3 bleachbit.py --sysinfo
-python3 bleachbit.py -l | wc -l
-python3 bleachbit.py -p system.cache | wc -l
-python3 -m unittest -v tests.TestFileUtilities tests.TestUnix
+%{pyexe} bleachbit.py --sysinfo
+%{pyexe} bleachbit.py -l | wc -l
+%{pyexe} bleachbit.py -p system.cache | wc -l
+%{pyexe} -m unittest -v tests.TestFileUtilities tests.TestUnix
 
 
 %if %{is_redhat_family}
