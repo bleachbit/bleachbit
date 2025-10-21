@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-07-06 03:52+0000\n"
+"PO-Revision-Date: 2025-10-22 14:02+0000\n"
 "Last-Translator: ovl-1 <ovl-002@mailinator.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "bleachbit/main/nb_NO/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 "X-Launchpad-Export-Date: 2019-10-26 13:12+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -490,7 +490,7 @@ msgstr "Vedlegg"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Synkroniseringskonflikt"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -652,11 +652,11 @@ msgstr "Bilderedigeringsprogram"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "Deaktivert"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "Fjern deaktiverte pakker"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -801,7 +801,7 @@ msgstr "Frigjør plass og beskytt personvernet"
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "Andrew Ziem og bidragsytere"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -1194,6 +1194,7 @@ msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr ""
+"Det var minst én fil på et filsystem som ikke støtter avansert overskriving."
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1626,7 +1627,7 @@ msgstr "Tilbakestiller innstillingsfilen fordi den er skadet: %s"
 
 #: ../bleachbit/GUI.py
 msgid "Quit"
-msgstr ""
+msgstr "Avslutt"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1697,15 +1698,15 @@ msgstr "Avbryt forhåndsvisningen eller renseprosessen"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "Oppdater"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "Oppdater BleachBit til den siste versjonen"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "Trykk F11 for å avslutte fullskjermmodus."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1730,7 +1731,7 @@ msgstr "Aktiverer vekselminne på nytt."
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Setting nice value %d for this process."
-msgstr ""
+msgstr "Setter nice-verdi %d for denne prosessen."
 
 #: ../bleachbit/Memory.py
 #, python-brace-format
@@ -1811,7 +1812,7 @@ msgstr "Tillatelse nektet da oppsettet ble skrevet til filen: %s"
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Error checking whether path exists: %s"
-msgstr ""
+msgstr "Feil ved å sjekke om banen eksisterer: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1883,6 +1884,9 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
+"Feil ved åpning av en nettverkstilkobling for å se etter oppdateringer. "
+"Kontroller at nettverket fungerer og at en brannmur ikke blokkerer dette "
+"programmet. Feilmelding: {}"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py
