@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-03-10 08:40+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2025-10-30 21:02+0000\n"
+"Last-Translator: Avshalom Begler <avshalom210@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/he/"
 ">\n"
 "Language: he\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -643,11 +643,11 @@ msgstr "עורך גרפי"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "מושבת"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "הסר חבילות מושבתות"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -791,7 +791,7 @@ msgstr "פינוי מקום ושמירה על הפרטיות"
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "אנדרו זים ותורמים"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -800,11 +800,14 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"BleachBit משחרר מקום בדיסק ושומר על פרטיות על ידי הסרה מהירה של קבצים "
+"מיותרים כמו מטמון, עוגיות, היסטוריית דפדפן, קבצים זמניים ויומני מערכת. הוא "
+"גם יכול לגרוס קבצים ולנקות שטח דיסק פנוי כדי למנוע שחזור נתונים."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr ""
+msgstr "מצב כהה כברירת מחדל, מציג קבצי זבל שנמצאו"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -854,7 +857,7 @@ msgstr "הפעלת פקודה חיצונית: %s"
 
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "רענן את מעטפת Windows"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1610,7 +1613,7 @@ msgstr "קובץ ההגדרות מתאפס כי הוא כנראה פגום: %s"
 
 #: ../bleachbit/GUI.py
 msgid "Quit"
-msgstr ""
+msgstr "יציאה"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1688,7 +1691,7 @@ msgstr "עדכון BleachBit לגרסה העדכנית ביותר"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "לחץ F11 כדי לצאת ממצב מסך מלא."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1898,7 +1901,7 @@ msgstr "יובא מהקובץ winapp2.ini"
 
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
-msgstr ""
+msgstr "נדרשות הרשאות מנהל כדי לנקות עדכוני Windows"
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
