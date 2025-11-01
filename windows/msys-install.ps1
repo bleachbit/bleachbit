@@ -24,16 +24,20 @@ $ErrorActionPreference = "Stop"
 #$msys_root = ".\msys2"
 # The .sfx.exe file is a self-extracting archive built using 7-zip.
 # The i686 version was last updated 2021.
-$msys_exe_fn = "msys2-base-i686-20210705.sfx.exe"
-$msys_exe_url = "https://repo.msys2.org/distrib/i686/$msys_exe_fn"
-$msys_root = ".\msys32"
-if (-not (Test-Path $msys_exe_fn)) {
+$msys_exe_fn = "msys2-base-x86_64-20250830.sfx.exe"
+$msys_exe_full_path = Join-Path -Path (Get-Location) -ChildPath $msys_exe_fn
+$msys_exe_url = "https://github.com/msys2/msys2-installer/releases/download/2025-08-30/$msys_exe_fn"
+$msys_root = ".\msys64"
+if (-not (Test-Path $msys_exe_full_path)) {
     Write-Host "Downloading MSYS2 from $msys_exe_url..."
-    Invoke-WebRequest -Uri $msys_exe_url -OutFile $msys_exe_fn -ErrorAction Stop
-    Get-FileHash -Path $msys_exe_fn -Algorithm SHA256 | Format-List
+    Invoke-WebRequest -Uri $msys_exe_url -OutFile $msys_exe_full_path -ErrorAction Stop
 } else {
     Write-Host "MSYS2 is already downloaded."
 }
+$fileSizeMB = (Get-Item $msys_exe_full_path).Length
+Write-Host "File size: $($fileSizeMB.ToString('N0')) bytes"
+$fileHash = Get-FileHash -Path $msys_exe_full_path -Algorithm SHA256
+Write-Host "File hash: $($fileHash.Hash)"
 
 #$msys_root_install = Join-Path ("$msys_root", "..").Path |  Resolve-Path
 $msys_root_install = (Resolve-Path (Split-Path $msys_root -Parent)).Path
@@ -43,10 +47,17 @@ if (Test-Path "$msys_root\usr\bin\ls.exe")  {
     Write-Host "MSYS2 is already installed."
 } else {
     Write-Host "Installing MSYS2..."
-    $p = Start-Process -FilePath $msys_exe_fn -ArgumentList "-y", "-O$msys_root_install" -Wait -NoNewWindow -PassThru
-    if ($p.ExitCode -ne 0) {
-        Write-Error "Failed to install MSYS2"
-        exit $p.ExitCode
+    Write-Host "Installer: $msys_exe_full_path"
+
+    try {
+        $p = Start-Process -FilePath "$msys_exe_full_path" -ArgumentList "-y -o$msys_root_install" -Wait -NoNewWindow -PassThru
+        if ($p.ExitCode -ne 0) {
+            Write-Error "Failed to install MSYS2, exit code: $($p.ExitCode)"
+            exit $p.ExitCode
+        }
+    } catch {
+        Write-Error "Exception during MSYS2 installation: $_"
+        exit 1
     }
 }
 
@@ -78,14 +89,17 @@ Update-Pacman
 # Run a second time to update remaining packages
 Update-Pacman
 
-$GETTEXT_PKG = "mingw-w64-i686-gettext-runtime"
+$GETTEXT_PKG = "mingw-w64-x86_64-gettext-runtime"
 $p = Start-Process "$pacman_path" -ArgumentList "-S", "$GETTEXT_PKG", "--noconfirm" -Wait -NoNewWindow -PassThru
 if ($p.ExitCode -ne 0) {
     Write-Error "Failed to install package $GETTEXT_PKG"
     exit $p.ExitCode
 }
 
-$libintl_path = "$msys_root\mingw32\bin\libintl-8.dll"
+Write-Host "Checking for msgunfmt.exe..."
+Get-ChildItem -Path $msys_root -Filter msgunfmt.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
+
+$libintl_path = "$msys_root\mingw64\bin\libintl-8.dll"
 if (-not (Test-Path $libintl_path)) {
     Write-Error "libintl-8.dll not found in $libintl_path"
     exit 1
