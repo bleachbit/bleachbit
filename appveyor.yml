@@ -15,7 +15,11 @@ init:
 
 install:
   - cmd: call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
+  - # The Visual Studio 2013 image had msys, but Visual Studio 2022 image does not.
+  - ps: '& "$env:APPVEYOR_BUILD_FOLDER\windows\msys-install.ps1"'
   - ps: '& "$env:APPVEYOR_BUILD_FOLDER\windows\python-gtk3-install.ps1"'
+  # Set PATH for gettext tools after MSYS2 installation
+  - set PATH=%PATH%;%PYTHON_HOME%\..\mingw64\bin
   # UPX 4.0.2, 4.1.0, and 4.2.3 cause ModuleNotFoundError during build
   # UPX 4.0.1 works
   - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v4.0.1/upx-4.0.1-win64.zip" -FileName upx.zip}
@@ -23,7 +27,6 @@ install:
   - '%SZ_EXE% x upx.zip'
   - 'rename upx-4.0.1-win64 upx'
   - 'dir .\upx\'
-  - set PATH=%PATH%;%PYTHON_HOME%\..\gettext\bin
 # Show version numbers of installed software.
   - 'msgunfmt -V'
 #  - 'strip.exe -V'
