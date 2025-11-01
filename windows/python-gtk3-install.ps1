@@ -201,16 +201,37 @@ Get-Content "$script_dir\python-gtk3-deps.lst" | ForEach-Object {
     }
 }
 
+Write-Host "Copying gdk-pixbuf-2.0..."
 $GDK_PIXBUF_DIR = "$python_home\lib\gdk-pixbuf-2.0\2.10.0"
 if (-not (Test-Path $GDK_PIXBUF_DIR)) {
     Write-Host "Creating $GDK_PIXBUF_DIR..."
     New-Item -Path $GDK_PIXBUF_DIR -ItemType Directory -Force
 }
 
+$GDK_PIXBUF_LOADER_DIR = Join-Path $GDK_PIXBUF_DIR "loaders"
+if (-not (Test-Path $GDK_PIXBUF_LOADER_DIR)) {
+    New-Item -Path $GDK_PIXBUF_LOADER_DIR -ItemType Directory -Force | Out-Null
+}
+$svg_loader_src = Join-Path $root_dir "lib\gdk-pixbuf-2.0\2.10.0\loaders\pixbufloader-svg.dll"
+if (Test-Path $svg_loader_src) {
+    Copy-Item -Path $svg_loader_src -Destination $GDK_PIXBUF_LOADER_DIR -Force
+}
+Get-ChildItem -Path $GDK_PIXBUF_LOADER_DIR | Format-List -Property Name, Length
+
 # Update cache file for GDK pixbuf.
 $env:GDK_PIXBUF_MODULE_FILE = "$GDK_PIXBUF_DIR\loaders.cache"
 if (-not (Test-Path $env:GDK_PIXBUF_MODULE_FILE)) {
     Write-Host "Creating $env:GDK_PIXBUF_MODULE_FILE..."
-    $env:PATH += ";$root_dir\tools\gtk3"
-    & "$root_dir\tools\gdk-pixbuf\gdk-pixbuf-query-loaders.exe" --update-cache "$python_home\pixbufloader-svg.dll"
+    $prevPath = $env:PATH
+    try {
+        $env:GDK_PIXBUF_MODULEDIR = $GDK_PIXBUF_LOADER_DIR
+        $env:PATH = "$python_home\bin;$python_home;$python_home\Scripts;$root_dir\tools\gtk3;$prevPath"
+        & "$root_dir\tools\gdk-pixbuf\gdk-pixbuf-query-loaders.exe" --update-cache
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "gdk-pixbuf-query-loaders.exe failed with exit code $LASTEXITCODE"
+            exit $LASTEXITCODE
+        }
+    } finally {
+        $env:PATH = $prevPath
+    }
 }
