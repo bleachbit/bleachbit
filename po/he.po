@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-10-30 21:02+0000\n"
-"Last-Translator: Avshalom Begler <avshalom210@gmail.com>\n"
+"PO-Revision-Date: 2025-11-02 16:51+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/he/"
 ">\n"
 "Language: he\n"
@@ -647,7 +647,7 @@ msgstr "מושבת"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr "הסר חבילות מושבתות"
+msgstr "הסרת חבילות מושבתות"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -800,14 +800,14 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
-"BleachBit משחרר מקום בדיסק ושומר על פרטיות על ידי הסרה מהירה של קבצים "
+"BleachBit משחרר מקום בכונן ושומר על פרטיות על ידי הסרה מהירה של קבצים "
 "מיותרים כמו מטמון, עוגיות, היסטוריית דפדפן, קבצים זמניים ויומני מערכת. הוא "
-"גם יכול לגרוס קבצים ולנקות שטח דיסק פנוי כדי למנוע שחזור נתונים."
+"גם יכול לגרוס קבצים ולנקות שטח כונן פנוי כדי למנוע שחזור נתונים."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr "מצב כהה כברירת מחדל, מציג קבצי זבל שנמצאו"
+msgstr "מצב כהה כברירת מחדל, מופיעים קובצי זבל שנמצאו"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1691,18 +1691,18 @@ msgstr "עדכון BleachBit לגרסה העדכנית ביותר"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr "לחץ F11 כדי לצאת ממצב מסך מלא."
+msgstr "לחיצה על F11 תעביר ממסך מלא למסך רגיל."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
-msgstr "שגיאה בעת בדיקה אחר עדכונים: "
+msgstr "שגיאה בעת איתור עדכונים: "
 
 #: ../bleachbit/Memory.py
 msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"הפקודה ‚swapoff -s’ נכשלה, לכן בוצעה נסיגה אל /proc/swaps לפרטי שטח הדפדוף."
+"הפקודה ‚swapoff -s’ נכשלה, לכן בוצעה נסיגה אל ‎/proc/swaps לפרטי שטח הדפדוף."
 
 #: ../bleachbit/Memory.py
 msgid "Disabling swap."
