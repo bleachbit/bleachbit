@@ -110,7 +110,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # Add Python home and scripts to PATH.
-if ($env:PATH -notlike "*$PYTHON_HOME*") {
+if ($env:PATH -notlike "*$python_home*") {
     Write-Host "Adding Python home and scripts to PATH..."
     $env:PATH += ";$python_home;$python_home\Scripts"
     Write-Host "Updated PATH: $env:PATH"
