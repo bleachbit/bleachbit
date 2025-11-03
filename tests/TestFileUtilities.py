@@ -179,36 +179,40 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
     def setUp(self):
         """Call before each test method"""
         super().setUp()
-        self.old_locale = locale.getlocale(locale.LC_NUMERIC)
+        self.old_locale_tuple = locale.getlocale(locale.LC_NUMERIC)
+        self.old_locale_str = locale.setlocale(locale.LC_NUMERIC)
         locale.setlocale(locale.LC_NUMERIC, 'C')
 
     def tearDown(self):
         """Call after each test method"""
-        if self.old_locale == (None, None):
+        if self.old_locale_tuple == (None, None):
             locale.setlocale(locale.LC_NUMERIC, 'C')
             return
         try:
-            if self.old_locale[0] is None:
-                locale.setlocale(locale.LC_NUMERIC, None)
-            else:
-                try:
-                    # First try with the full locale string
-                    locale.setlocale(locale.LC_NUMERIC, '.'.join(
-                        filter(None, self.old_locale)))
-                except locale.Error:
-                    # If that fails, try just the language code part
+            try:
+                locale.setlocale(locale.LC_NUMERIC, self.old_locale_str)
+            except locale.Error:
+                if self.old_locale_tuple[0] is None:
+                    locale.setlocale(locale.LC_NUMERIC, None)
+                else:
                     try:
-                        locale.setlocale(locale.LC_NUMERIC, self.old_locale[0])
-                    except locale.Error as e:
-                        print(
-                            "Failed to restore locale with just language code "
-                            f"{self.old_locale[0]}: {e}")
+                        # First try with the full locale string
+                        locale.setlocale(locale.LC_NUMERIC, '.'.join(
+                            filter(None, self.old_locale_tuple)))
+                    except locale.Error:
+                        # If that fails, try just the language code part
+                        try:
+                            locale.setlocale(locale.LC_NUMERIC, self.old_locale_tuple[0])
+                        except locale.Error as e:
+                            print(
+                                "Failed to restore locale with just language code "
+                                f"{self.old_locale_tuple[0]}: {e}")
         except locale.Error as e:
-            print(f"Failed to restore locale {self.old_locale}: {e}")
+            print(f"Failed to restore locale {self.old_locale_tuple}: {e}")
         # Check that running getlocale again does not raise an exception.
         # For me, getlocale() fails after successful setlocale(..., 'en_MX') on Windows.
         locale.getlocale(locale.LC_NUMERIC)
-        self.assertEqual(locale.getlocale(locale.LC_NUMERIC), self.old_locale)
+        self.assertEqual(locale.setlocale(locale.LC_NUMERIC), self.old_locale_str)
 
     def test_bytes_to_human_one_way(self):
         """Test one-way conversion of bytes_to_human()"""
