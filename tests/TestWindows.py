@@ -66,6 +66,7 @@ import time
 if 'win32' == sys.platform:
     import pywintypes
     import win32api
+    import win32service
     import winreg
     from win32com.shell import shell
 
@@ -304,30 +305,83 @@ class WindowsTestCase(common.BleachbitTestCase):
         """
         if not shell.IsUserAnAdmin():
             self.skipTest('requires administrator privileges')
-        for service in ('AudioEndpointBuilder', 'spooler'):
-
-            initial_running = is_service_running(service)
-
+        def _service_exists_and_enabled(svc):
+            scm = win32service.OpenSCManager(None, None, win32service.SC_MANAGER_CONNECT)
             try:
-                # Stop service
-                run_net_service_command(service, False)
+                hs = win32service.OpenService(scm, svc, win32service.SERVICE_QUERY_STATUS | win32service.SERVICE_QUERY_CONFIG)
+                try:
+                    cfg = win32service.QueryServiceConfig(hs)
+                    return True if cfg[1] != win32service.SERVICE_DISABLED else False
+                finally:
+                    win32service.CloseServiceHandle(hs)
+            except pywintypes.error:
+                return False
+            finally:
+                win32service.CloseServiceHandle(scm)
+
+        def _can_open_all_access(svc):
+            scm = win32service.OpenSCManager(None, None, win32service.SC_MANAGER_CONNECT)
+            try:
+                try:
+                    hs = win32service.OpenService(scm, svc, win32service.SERVICE_ALL_ACCESS)
+                except pywintypes.error:
+                    return False
+                else:
+                    win32service.CloseServiceHandle(hs)
+                    return True
+            finally:
+                win32service.CloseServiceHandle(scm)
+
+        is_ci = os.environ.get('APPVEYOR') == 'True'
+        if is_ci:
+            candidates = ('bits', 'wuauserv', 'AudioEndpointBuilder', 'spooler')
+            service = None
+            # Prefer already-running to avoid state changes
+            for s in candidates:
+                if _service_exists_and_enabled(s) and _can_open_all_access(s) and is_service_running(s):
+                    service = s
+                    break
+            # If none are running, pick any we can open with required access
+            if not service:
+                for s in candidates:
+                    if _service_exists_and_enabled(s) and _can_open_all_access(s):
+                        service = s
+                        break
+        else:
+            candidates = ('AudioEndpointBuilder', 'spooler', 'bits', 'wuauserv')
+            service = None
+            for s in candidates:
+                if _service_exists_and_enabled(s):
+                    service = s
+                    break
+        if not service:
+            self.skipTest('no suitable startable service on this machine')
+
+        initial_running = is_service_running(service)
+
+        try:
+            if is_ci:
+                ret = run_net_service_command(service, True)
+                self.assertEqual(ret, 0)
+                ret = run_net_service_command(service, True)
+                self.assertEqual(ret, 0)
+            else:
+                ret = run_net_service_command(service, False)
+                self.assertEqual(ret, 0)
                 self.assertFalse(is_service_running(service))
                 if service == 'AudioEndpointBuilder':
                     self.assertFalse(is_service_running('audiosrv'))
-
-                # Stop again
-                run_net_service_command(service, False)
+                ret = run_net_service_command(service, False)
+                self.assertEqual(ret, 0)
                 self.assertFalse(is_service_running(service))
-
-                # Start service
-                run_net_service_command(service, True)
+                ret = run_net_service_command(service, True)
+                self.assertEqual(ret, 0)
                 self.assertTrue(is_service_running(service))
-
-                # Start again
-                run_net_service_command(service, True)
+                ret = run_net_service_command(service, True)
+                self.assertEqual(ret, 0)
                 self.assertTrue(is_service_running(service))
-            finally:
-                # Restore initial state
+        finally:
+            if not is_ci:
                 run_net_service_command(service, initial_running)
                 self.assertEqual(initial_running, is_service_running(service))
 
