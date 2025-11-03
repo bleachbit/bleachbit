@@ -1,11 +1,13 @@
 build: off
 version: 5.0.2.{build}
-image: Visual Studio 2013
+image: Visual Studio 2022
 
 environment:
     PYTHON_HOME: 'c:\projects\bleachbit\vcpkg_installed\x86-windows\tools\python3'
+    PYTHON_EXE: '%PYTHON_HOME%\python.exe'
+    MSYS_BIN: 'C:\msys64\usr\bin'
     SZ_EXE   :   '"C:/Program Files/7-Zip/7z.exe"'
-    make : 'C:/MinGW/bin/mingw32-make.exe'
+    make : '%MSYS_BIN%\make.exe'
 
 init:
   - 'systeminfo | findstr /B /C:"OS Name" /C:"OS Version"' # show Windows version
@@ -14,6 +16,9 @@ init:
       Get-WmiObject Win32_Process | Select-Object ProcessName, @{Name="UserName";Expression={$_.GetOwner().User}} | Format-Table -AutoSize
 
 install:
+  - cmd: call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
+  - # The Visual Studio 2013 image had msys, but Visual Studio 2022 image does not.
+  #- ps: '& "$env:APPVEYOR_BUILD_FOLDER\windows\msys-install.ps1"'
   - ps: '& "$env:APPVEYOR_BUILD_FOLDER\windows\python-gtk3-install.ps1"'
   # UPX 4.0.2, 4.1.0, and 4.2.3 cause ModuleNotFoundError during build
   # UPX 4.0.1 works
@@ -22,18 +27,22 @@ install:
   - '%SZ_EXE% x upx.zip'
   - 'rename upx-4.0.1-win64 upx'
   - 'dir .\upx\'
-  - set PATH=%PATH%;%PYTHON_HOME%\..\gettext\bin
 # Show version numbers of installed software.
-  - 'msgunfmt -V'
-#  - 'strip.exe -V'
+# This also checks that the software is installed.
+  - '%make% -v'
+  - '%MSYS_BIN%\msgunfmt.exe -V'
+  - '%MSYS_BIN%\strip.exe -V'
+  - '%PYTHON_EXE% -V'
   - '"c:\Program Files (x86)\NSIS\makensis.exe" /version'
 
 build_script:
   - ps: $env:REV8 = $env:APPVEYOR_REPO_COMMIT.Substring(0,8)
   - 'echo revision = "%REV8%" > bleachbit\Revision.py'
   - 'echo build_number = "%APPVEYOR_BUILD_NUMBER%" > bleachbit\Revision.py'
-  - '%make% PYTHON=%PYTHON_HOME%\python.exe -C po local bleachbit.pot'
-  - '%PYTHON_HOME%\python.exe -m windows.setup'
+  - 'set PATH=%MSYS_BIN%;%PATH%'
+  - 'echo %PATH%'
+  - '%make% PYTHON=%PYTHON_EXE% -C po local bleachbit.pot'
+  - '%PYTHON_EXE% -m windows.setup'
   - 'move windows\BleachBit*.exe .'
   - 'move windows\BleachBit*.zip .'
   - ps: Get-FileHash BleachBit-*
