@@ -6,18 +6,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2021-06-26 16:00+0000\n"
-"Last-Translator: Firefly <Unknown>\n"
-"Language-Team: Bengali <bn@li.org>\n"
+"PO-Revision-Date: 2025-11-09 09:51+0000\n"
+"Last-Translator: Safa Abbas Bahar Chowdhury <sabc994@gmail.com>\n"
+"Language-Team: Bengali <https://hosted.weblate.org/projects/bleachbit/main/"
+"bn/>\n"
 "Language: bn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Launchpad-Export-Date: 2021-06-27 14:32+0000\n"
-"X-Generator: Launchpad (build 40cc6dba4163ba9ca785b26ad91f43c87d70ba4d)\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
@@ -483,11 +484,11 @@ msgstr "ইমেইল আশ্রিতা"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "সংযুক্তিগুলি"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "তথ্য সিঙ্ক করার সময় সমস্যা হয়েছে﻿"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -647,11 +648,11 @@ msgstr "গ্রাফিক্স এডিটর"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "নিষ্ক্রিয়"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "নিষ্ক্রিয় প্যাকেজগুলো সরান"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -756,10 +757,8 @@ msgid "Memory dump"
 msgstr "মেমরি ডাম্প"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "ডেস্কটপের পরিবেশ"
+msgstr "ডেস্কটপের উইজেট"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -780,12 +779,11 @@ msgid ""
 msgstr "~/.viminfo ডিলিট করুন, যাতে ফাইল হিস্ট্রি, কমান্ড হিস্ট্রি এবং বাফারস আছে"
 
 #: ../cleaners/discord.xml
-#, fuzzy
-#| msgid "Delete the web cache, which reduces time to display revisited pages"
 msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
-msgstr "ওয়েব ক্যাশে মুছে ফেলুন, যার ফলে পৃষ্ঠাগুলো পুনরায় প্রদর্শন হতে অল্প সময় লাগবে"
+msgstr ""
+"ওয়েব ক্যাশ মুছে ফেলুন, এতে আগে দেখা পেজ দ্রুত খুলবে। এতে ফেভারিট GIF-ও মুছে যাবে।﻿"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
@@ -807,11 +805,14 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"ব্লিচবিট একটি ফ্রি এবং ওপেন-সোর্স সফটওয়্যার যা অপ্রয়োজনীয় ফাইল যেমন ক্যাশ, কুকিজ, ব্রাউজারের ইতিহাস, "
+"টেম্পোরারি ফাইল এবং সিস্টেম লগ দ্রুত মুছে ফেলে, যা ডিস্কের জায়গা মুক্ত করে এবং গোপনীয়তা রক্ষা করে। এটি ফাইল শেড "
+"করতে এবং মুক্ত ডিস্ক স্পেস পরিষ্কার করতে পারে যাতে ডেটা পুনরুদ্ধার সম্ভব না হয়।।"
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr ""
+msgstr "ডিফল্ট ডার্ক মোড, পাওয়া গিয়েছে এমন জাঙ্ক ফাইলগুলো দেখাচ্ছে﻿"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -861,7 +862,7 @@ msgstr "এক্সটার্নাল কমান্ড রান করু
 
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "উইন্ডোজ শেল রিফ্রেশ করুন﻿"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1294,7 +1295,7 @@ msgstr "%s এর জন্য ওয়েব ব্রাউজার ওপে�
 
 #: ../bleachbit/GuiBasic.py ../bleachbit/GUI.py
 msgid "Confirm"
-msgstr ""
+msgstr "কনফার্ম"
 
 #: ../bleachbit/GuiChaff.py
 msgid "Deleting files"
@@ -1399,13 +1400,11 @@ msgstr "কমিউনিটি থেকে ক্লিনার ডাউন
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "স্বয়ংক্রিয়ভাবে ভাষা শনাক্ত করুন﻿"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "ভাষা %s স্বয়ংক্রিয়ভাবে সংরক্ষণ করা হচ্ছে।"
+msgstr "সিস্টেমের ভাষা স্বয়ংক্রিয়ভাবে শনাক্ত করুন﻿"
 
 #: ../bleachbit/GuiPreferences.py
 #, fuzzy
@@ -1452,7 +1451,7 @@ msgstr "ডিবাগ মেসেজ দেখুন"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Add the shred context menu to KDE Plasma"
-msgstr ""
+msgstr "KDE Plasma তে শ্রেড কনটেক্সট মেনু যোগ করুন﻿"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Dark mode"
@@ -1505,17 +1504,15 @@ msgstr "নাম"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "এই পাথটি ইতিমধ্যে হোয়াইটলিস্টে আছে﻿।"
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "ইরোর সমূহ: %d"
+msgstr "এরর"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "এই পাথটি ইতিমধ্যে কাস্টম তালিকায় আছে﻿।"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1526,10 +1523,8 @@ msgid "Folder"
 msgstr "ফোল্ডার"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
-msgstr "এই পাঠগুলো ডিলিট করা অথবা পরিবর্তন করা হবেনা।"
+msgstr "এই পাথগুলো মুছে ফেলা বা পরিবর্তন করা হবে না﻿"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "These locations can be selected for deletion."
@@ -1577,7 +1572,7 @@ msgstr "_ওকে"
 
 #: ../bleachbit/GUI.py
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "অপ্রয়োজনীয় ফাইলগুলো পরিষ্কার করার প্রোগ্রাম﻿"
 
 #: ../bleachbit/GUI.py
 msgid ""
@@ -1679,6 +1674,8 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"মাইক্রোসফট স্টোরে ব্লিচবিটের অফিসিয়াল ভার্সন নেই। আসল ভার্সনটি পেতে গেলে https://www.bleachbit.org "
+"থেকে ডাউনলোড করুন, এখানে এটি সবসময় বিনামূল্যে পাওয়া যায়।"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1706,15 +1703,15 @@ msgstr "প্রিভিউ অথবা ক্লিনিং প্রসে
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "আপডেট"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "ব্লিচবিটকে সর্বশেষ ভার্সনে আপডেট করুন﻿"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "ফুলস্ক্রিন মোড থেকে বের হতে F11 চাপুন।"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1803,10 +1800,9 @@ msgid "The child memory-wiping process returned code %d."
 msgstr "চাইল্ড মেমরি-ওয়াইপিং প্রসেস কোড %d দেখাচ্ছে।"
 
 #: ../bleachbit/Network.py
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
-msgstr "url ডাউনলোড করা ব্যর্থ হয়েছে: %s"
+msgstr "URL ডাউনলোড করতে ব্যর্থ: %s﻿"
 
 #: ../bleachbit/Options.py
 #, fuzzy, python-format
