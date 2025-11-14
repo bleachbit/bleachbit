@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: BleachBit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-11-14 07:51+0000\n"
+"PO-Revision-Date: 2025-11-15 20:51+0000\n"
 "Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/bleachbit/main/"
@@ -444,16 +444,12 @@ msgstr ""
 "зареждане на вече посещаваните страници"
 
 #: ../cleaners/journald.xml
-#, fuzzy
-#| msgid "System information"
 msgid "System journals"
-msgstr "Системна информация"
+msgstr "Системен дневник"
 
 #: ../cleaners/journald.xml
-#, fuzzy
-#| msgid "Delete old system logs"
 msgid "Clean old system journals"
-msgstr "Изтриване на стари системни доклади"
+msgstr "Премахване на стари системни дневници"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
@@ -490,10 +486,8 @@ msgid "Delete downloaded podcasts"
 msgstr "Премахва изтеглените подкасти"
 
 #: ../cleaners/geary.xml ../cleaners/thunderbird.xml ../cleaners/evolution.xml
-#, fuzzy
-#| msgid "Chat client"
 msgid "Email client"
-msgstr "Клиент за моментални съобщения"
+msgstr "Клиент за електронна поща"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
@@ -770,7 +764,7 @@ msgstr "Премахване на файла"
 
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
-msgstr "Изтриване на списъка с игрови сървъри"
+msgstr "Премахване на списъка с игрови сървъри"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
@@ -805,8 +799,8 @@ msgstr ""
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"Изтриване на файла ~/.viminfo, съдържащ история на файловете, историята на "
-"командите и буфери"
+"Премахване на файла ~/.viminfo, съдържащ история на файлове, командите и "
+"буфери"
 
 #: ../cleaners/discord.xml
 #, fuzzy
