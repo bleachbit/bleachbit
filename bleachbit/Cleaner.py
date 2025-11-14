@@ -317,6 +317,7 @@ class System(Cleaner):
             # the uninstallers for software updates.
             self.add_option('updates', _('Update uninstallers'), _(
                 'Delete uninstallers for Microsoft updates including hotfixes, service packs, and Internet Explorer updates'))
+            self.set_warning('updates', _('This option may prevent uninstalling some updates.'))
 
         #
         # options for GTK+
