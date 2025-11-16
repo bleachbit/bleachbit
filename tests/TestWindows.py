@@ -23,6 +23,7 @@
 Test case for module Windows
 """
 
+
 from tests import common
 
 from bleachbit import FileUtilities, General
@@ -51,7 +52,9 @@ from bleachbit.Windows import (
     set_environ,
     setup_environment,
     shell_change_notify,
-    split_registry_key
+    split_registry_key,
+    get_sid_token_48,
+    is_ots_elevation,
 )
 from bleachbit import logger
 
@@ -61,7 +64,8 @@ import shutil
 import sys
 import tempfile
 from decimal import Decimal
-import time
+from unittest import mock
+
 
 if 'win32' == sys.platform:
     import pywintypes
@@ -290,6 +294,42 @@ class WindowsTestCase(common.BleachbitTestCase):
         with self.assertRaises(AssertionError):
             is_service_running(None)
 
+    def test_is_ots_elevation_without_flag_returns_false(self):
+        """Without --uac-sid-token, is_ots_elevation() returns False"""
+        argv = ['bleachbit.exe', '--gui']
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            self.assertFalse(is_ots_elevation())
+
+    def test_is_ots_elevation_false_when_tokens_match(self):
+        """If current token matches parent token, there is no elevation"""
+        parent_token = 'ABCDEFGH'
+        argv = ['bleachbit.exe', '--gui', '--uac-sid-token', parent_token]
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            with mock.patch('bleachbit.Windows.get_sid_token_48', return_value=parent_token):
+                self.assertFalse(is_ots_elevation())
+
+    def test_is_ots_elevation_true_when_tokens_differ(self):
+        """If current token differs from parent token, elevation is detected"""
+        parent_token = 'ABCDEFGH'
+        argv = ['bleachbit.exe', '--gui', '--uac-sid-token', parent_token]
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            with mock.patch('bleachbit.Windows.get_sid_token_48', return_value='DIFFERNT'):
+                self.assertTrue(is_ots_elevation())
+
+    def test_is_ots_elevation_ignores_flag_without_value(self):
+        """A trailing --uac-sid-token without value should not crash and returns False"""
+        argv = ['bleachbit.exe', '--gui', '--uac-sid-token']
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            self.assertFalse(is_ots_elevation())
+
+    def test_is_ots_elevation_returns_false_on_get_sid_error(self):
+        """If get_sid_token_48() raises, is_ots_elevation() falls back to False"""
+        parent_token = 'ABCDEFGH'
+        argv = ['bleachbit.exe', '--gui', '--uac-sid-token', parent_token]
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            with mock.patch('bleachbit.Windows.get_sid_token_48', side_effect=RuntimeError('error')):
+                self.assertFalse(is_ots_elevation())
+
     @common.skipUnlessDestructive
     def test_run_net_service_command(self):
         """Integration test for run_net_service_command().
@@ -504,6 +544,25 @@ class WindowsTestCase(common.BleachbitTestCase):
             drives.append(drive)
             self.assertEqual(drive, drive.upper())
         self.assertIn("C:\\", drives)
+
+    def test_get_sid_token_48_basic_properties(self):
+        """get_sid_token_48() returns an 8-char, URL-safe ASCII string"""
+        token = get_sid_token_48()
+        self.assertIsString(token)
+        # 6 bytes (48 bits) become 8 base64-url characters without padding
+        self.assertEqual(len(token), 8)
+        for ch in token:
+            self.assertLess(ord(ch), 128)
+        # urlsafe_b64encode must not use '+', '/', or '='
+        self.assertNotIn('+', token)
+        self.assertNotIn('/', token)
+        self.assertNotIn('=', token)
+
+    def test_get_sid_token_48_is_deterministic_for_current_process(self):
+        """Multiple calls for the same process should yield the same token"""
+        t1 = get_sid_token_48()
+        t2 = get_sid_token_48()
+        self.assertEqual(t1, t2)
 
     def test_get_windows_version(self):
         """Unit test for get_windows_version"""

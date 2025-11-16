@@ -49,6 +49,8 @@ import os
 import shutil
 import sys
 import xml.dom.minidom
+import base64
+import hashlib
 from decimal import Decimal
 from threading import Thread, Event
 
@@ -351,6 +353,36 @@ def detect_registry_key(parent_key):
     return True
 
 
+def get_sid_token_48():
+    """Return a 48-bit token for the current user"""
+    htoken = win32security.OpenProcessToken(
+        win32api.GetCurrentProcess(), win32security.TOKEN_QUERY)
+    try:
+        token_user = win32security.GetTokenInformation(
+            htoken, win32security.TokenUser)
+        sid_obj = token_user[0]
+        sid_str = win32security.ConvertSidToStringSid(sid_obj)
+    finally:
+        win32file.CloseHandle(htoken)
+    digest = hashlib.blake2b(sid_str.encode('ascii'), digest_size=6).digest()
+    return base64.urlsafe_b64encode(digest).rstrip(b'=').decode('ascii')
+
+
+def is_ots_elevation():
+    """Return True if UAC changed credentials"""
+    if os.name != 'nt':
+        return False
+    argv = sys.argv
+    for i, arg in enumerate(argv):
+        if arg == '--uac-sid-token' and i + 1 < len(argv):
+            parent_token = argv[i + 1]
+            try:
+                return get_sid_token_48() != parent_token
+            except Exception:
+                return False
+    return False
+
+
 def elevate_privileges(uac):
     """On Windows Vista and later, try to get administrator
     privileges.  If successful, return True (so original process
@@ -387,6 +419,12 @@ def elevate_privileges(uac):
             return False
         parameters = '"%s" --gui --no-uac' % pyfile
         exe = sys.executable
+
+    try:
+        token = get_sid_token_48()
+        parameters = f"{parameters} --uac-sid-token {token}"
+    except Exception as e:
+        logger.error('could not compute SID token: %s', e)
 
     parameters = _add_command_line_parameters(parameters)
 

@@ -1136,6 +1136,9 @@ class GUI(Gtk.ApplicationWindow):
                 self.append_text(
                     _('Run BleachBit with administrator privileges to improve the accuracy of overwriting the contents of files.'))
                 self.append_text('\n')
+        if os.name == 'nt' and Windows.is_ots_elevation():
+            self.append_text(
+                _('You elevated privileges using a different account to clean shared parts of the system. User-specific paths will refer to the administrator account, so to clean your profile, run BleachBit again as a standard user.') + '\n')
 
         if 'windowsapps' in sys.executable.lower():
             self.append_text(

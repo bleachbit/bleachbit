@@ -182,6 +182,8 @@ def process_cmd_line():
     else:
         uac_help = optparse.SUPPRESS_HELP
     parser.add_option("--no-uac", action="store_true", help=uac_help)
+    if 'nt' == os.name:
+        parser.add_option('--uac-sid-token', help=optparse.SUPPRESS_HELP)
     parser.add_option('--pot', action='store_true',
                       help=optparse.SUPPRESS_HELP)
     if 'nt' == os.name:
