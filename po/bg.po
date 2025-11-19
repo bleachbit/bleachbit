@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: BleachBit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-11-19 02:25+0000\n"
+"PO-Revision-Date: 2025-11-20 05:51+0000\n"
 "Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/bleachbit/main/"
@@ -773,16 +773,12 @@ msgid "Desktop widgets"
 msgstr ""
 
 #: ../cleaners/winrar.xml
-#, fuzzy
-#| msgid "File transfer client"
 msgid "File archiver"
-msgstr "Клиент за трансфер на файлове"
+msgstr "Архивиране на файлове"
 
 #: ../cleaners/amule.xml
-#, fuzzy
-#| msgid "Download history"
 msgid "Known files history"
-msgstr "История на изтеглянията"
+msgstr "История на познати файлове"
 
 #. http://wiki.amule.org/wiki/Friend
 #: ../cleaners/amule.xml
@@ -793,18 +789,16 @@ msgstr ""
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr ""
-"Премахване на файла ~/.viminfo, съдържащ история на файлове, командите и "
-"буфери"
+"Премахване на файла ~/.viminfo, съдържащ история на файлове, команди и буфери"
 
 #: ../cleaners/discord.xml
-#, fuzzy
-#| msgid "Delete the web cache, which reduces time to display revisited pages"
 msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
 msgstr ""
-"Изтриване на кешираните данни от уеб страници, които намаляват времето за "
-"зареждане на вече посещавани страници"
+"Премахване на временните данни от интернет страници, които намаляват времето "
+"за зареждане на посещаваните страници. Също изчиства избраните изображения "
+"GIF."
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
@@ -895,10 +889,9 @@ msgid "Ignoring cleaner because it is world writable: %s"
 msgstr ""
 
 #: ../bleachbit/CleanerML.py
-#, fuzzy, python-format
-#| msgid "not a valid cleaner: %s"
+#, python-format
 msgid "Error reading cleaner: %s"
-msgstr "невалиден чистач: %s"
+msgstr "Грешка при четене на шаблона за почистване: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -989,12 +982,12 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
-msgstr "Буфер за обмен"
+msgstr "Памет за обмен"
 
 #: ../bleachbit/Cleaner.py
 msgid "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
-"Буферът за обмен на работната среда, служещ за операциите копиране и "
+"Паметта за обмен на работната среда се използва при действията копиране и "
 "поставяне"
 
 #. TRANSLATORS: "Custom" is an option allowing the user to specify which
@@ -1005,23 +998,23 @@ msgstr "По избор"
 
 #: ../bleachbit/Cleaner.py
 msgid "Delete user-specified files and folders"
-msgstr "Изтриване на избраните потребителски каталози и файлове"
+msgstr "Премахване на избраните от потребителя папки и файлове"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Free disk space"
-msgstr "Свободно пространство"
+msgstr "Свободно дисково пространство"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Overwrite free disk space to hide deleted files"
 msgstr ""
-"Презаписване на свободното дисково пространство, за да се скрият изтритите "
-"файлове"
+"Презаписване на свободното дисково пространство, за да бъдат заличени "
+"премахнатите файлове"
 
 #: ../bleachbit/Cleaner.py
 msgid "This option is very slow."
-msgstr "Тази настройка е много бавна."
+msgstr "Това действие е много бавно."
 
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
@@ -1036,7 +1029,7 @@ msgstr "Система"
 #: ../bleachbit/Cleaner.py
 #, python-format
 msgid "Overwrite free disk space %s"
-msgstr "Презапиши свободното пространство %s"
+msgstr "Презаписване на свободно дисково пространство на %s"
 
 #: ../bleachbit/Cleaner.py
 msgid "Loading native cleaners."
@@ -1051,7 +1044,7 @@ msgstr "Внесено от winapp2.ini"
 #: ../bleachbit/CLI.py
 #, python-format
 msgid "not a valid cleaner: %s"
-msgstr "невалиден чистач: %s"
+msgstr "неприемлив шаблон за изчистване: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1060,15 +1053,15 @@ msgstr "невалиден чистач: %s"
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgstr "употреба: %prog [опции] чистач.опция1 чистач.опция2"
+msgstr "употреба: %prog [настройки] почистване.настройка1 почистване.настройка2"
 
 #: ../bleachbit/CLI.py
 msgid "list cleaners"
-msgstr "чистачи на списъци"
+msgstr "списък на шаблони за почистване"
 
 #: ../bleachbit/CLI.py
 msgid "preview files to be deleted and other changes"
-msgstr "прегледай файловете за изитриване и прилагане на други промени"
+msgstr "преглед на файловете за премахване и други промени"
 
 #. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
 #. This is different than cleaning an arbitrary file, such as a
@@ -1087,11 +1080,11 @@ msgstr ""
 
 #: ../bleachbit/CLI.py
 msgid "overwrite files to hide contents"
-msgstr "презапиши файлове за да скриеш съдържанието"
+msgstr "презаписване на файлове, за да бъде скрито съдържанието"
 
 #: ../bleachbit/CLI.py
 msgid "launch the graphical interface"
-msgstr "стартирате на графичния интерфейс"
+msgstr "стартиране на графичния интерфейс"
 
 #: ../bleachbit/CLI.py
 msgid "use options set in the graphical interface"
