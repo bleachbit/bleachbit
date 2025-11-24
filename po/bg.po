@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: BleachBit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-11-23 21:51+0000\n"
+"PO-Revision-Date: 2025-11-24 21:15+0000\n"
 "Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/bleachbit/main/"
@@ -1538,7 +1538,7 @@ msgstr "Тези места могат да бъдат избрани за из�
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Type"
-msgstr "Тип"
+msgstr "Вид"
 
 #. TRANSLATORS: In the tree view "Path" is used generically to refer to a
 #. file, a folder, or a pattern describing either
@@ -1562,11 +1562,11 @@ msgstr "Добавяне на папка"
 
 #: ../bleachbit/GUI.py
 msgid "Choose files to shred"
-msgstr "Избери файлове за раздробяване"
+msgstr "Изберете файлове за презаписване"
 
 #: ../bleachbit/GUI.py
 msgid "Choose folder to shred"
-msgstr "Изберете папка за изтриване"
+msgstr "Изберете папка за презаписване"
 
 #: ../bleachbit/GUI.py
 msgid "No paths found in clipboard."
@@ -1578,7 +1578,7 @@ msgstr ""
 
 #: ../bleachbit/GUI.py
 msgid "Program to clean unnecessary files"
-msgstr "Програма за изчистване на непотребните файлове"
+msgstr "Приложение за почистване на непотребни файлове"
 
 #: ../bleachbit/GUI.py
 msgid ""
@@ -1610,7 +1610,7 @@ msgstr "Системна информация"
 
 #: ../bleachbit/GUI.py
 msgid "Active"
-msgstr "Активен"
+msgstr "Включено"
 
 #. TRANSLATORS: Size is the label for the column that shows how
 #. much space an option would clean or did clean
@@ -1638,10 +1638,8 @@ msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr ""
 
 #: ../bleachbit/GUI.py
-#, fuzzy
-#| msgid "_Quit"
 msgid "Quit"
-msgstr "_Изход"
+msgstr "Изход"
 
 #: ../bleachbit/GUI.py
 msgid "You must select an operation"
@@ -1831,7 +1829,7 @@ msgstr ""
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
-msgstr "Предупреждение за безопасност"
+msgstr "Предупреждение за сигурността"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgid ""
@@ -1865,8 +1863,8 @@ msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
 msgstr ""
-"%s не може да бъде почистен, защото в момента работи. Затворете го и "
-"пробвайте отново."
+"%s не може да бъде почистен, защото в момента работи. Затворете и пробвайте "
+"отново."
 
 #: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
@@ -1878,13 +1876,13 @@ msgstr "Обновяване на BleachBit"
 
 #: ../bleachbit/Update.py
 msgid "A new version is available."
-msgstr "Налична е нова версия."
+msgstr "Налично е ново издание."
 
 #. TRANSLATORS: %s expands to version such as '4.6.0'
 #: ../bleachbit/Update.py
 #, python-format
 msgid "Update to version %s"
-msgstr "Обновяване до версия %s"
+msgstr "Обновяване до издание %s"
 
 #: ../bleachbit/Update.py
 msgid ""
@@ -1936,13 +1934,12 @@ msgstr ""
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
-msgstr "Грешка при изпълнение на операцията '%(operation)s': '%(msg)s'"
+msgstr "Грешка при извършване на действието „%(operation)s“: „%(msg)s“"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Не е открит изпълнимият файл: %s"
+msgstr "Файлът не е открит: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
@@ -1972,8 +1969,7 @@ msgstr ""
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py
 msgid "Please wait.  Wiping free disk space."
-msgstr ""
-"Моля, почакайте. Извършва се почистване на свободното дисково пространство."
+msgstr "Изчакайте. Извършва се презаписване на свободното дисково пространство."
 
 #: ../bleachbit/Worker.py
 msgid ""
@@ -1988,7 +1984,7 @@ msgstr ""
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "Моля изчакайте. Изчистване на %s."
+msgstr "Изчакайте. Изчистване на %s."
 
 #: ../bleachbit/Worker.py
 #, python-format
@@ -2002,14 +1998,14 @@ msgstr[1] "Остават още %d минути."
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Disk space recovered: %s"
-msgstr "Възстановено пространство: %s"
+msgstr "Освободено дисково пространство: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Disk space to be recovered: %s"
-msgstr "Пространство за възстановяване: %s"
+msgstr "Пространство, което ще бъде освободено: %s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
@@ -2028,7 +2024,7 @@ msgstr "Файлове за премахване: %d"
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Special operations: %d"
-msgstr "Специални операции: %d"
+msgstr "Специални действия: %d"
 
 #: ../bleachbit/Worker.py
 #, python-format
@@ -2046,15 +2042,15 @@ msgstr "Изчакайте, извършва се щателна проверк�
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Please wait.  Previewing %s."
-msgstr "Моля изчакайте. Преглеждане на %s."
+msgstr "Изчакайте. Преглеждане на %s."
 
 #: ../data/app-menu.ui
 msgid "_Shred Files"
-msgstr "_Раздробяване на файлове"
+msgstr "П_резаписване на файлове"
 
 #: ../data/app-menu.ui
 msgid "Sh_red Folders"
-msgstr "Премахване на директории (безвъзвратно)"
+msgstr "_Презаписване на папки"
 
 #: ../data/app-menu.ui
 msgid "Shred Paths from Clipboard"
@@ -2062,7 +2058,7 @@ msgstr ""
 
 #: ../data/app-menu.ui
 msgid "_Wipe Free Space"
-msgstr "_Почисти свободното място"
+msgstr "Презаписване _свободното дисково пространство"
 
 #: ../data/app-menu.ui
 msgid "_Make Chaff"
@@ -2070,7 +2066,7 @@ msgstr ""
 
 #: ../data/app-menu.ui
 msgid "S_hred Settings and Quit"
-msgstr "И_зтриване на настройките и изход"
+msgstr "Презаписване на _настройките и изход"
 
 #: ../data/app-menu.ui
 msgid "S_ystem Information"
