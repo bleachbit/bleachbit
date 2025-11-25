@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: BleachBit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-11-24 21:15+0000\n"
+"PO-Revision-Date: 2025-11-25 21:51+0000\n"
 "Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/bleachbit/main/"
@@ -157,7 +157,7 @@ msgstr "Последно използвани"
 #: ../cleaners/winamp.xml ../cleaners/winzip.xml ../cleaners/teamviewer.xml
 #: ../cleaners/vlc.xml
 msgid "Delete the most recently used list"
-msgstr "Премахване на списъка последно употребяваните"
+msgstr "Премахване на списъка с последно употребяваните"
 
 #: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
 #: ../cleaners/apt.xml ../cleaners/snap.xml
@@ -180,13 +180,13 @@ msgstr ""
 #: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
 #: ../cleaners/zoom.xml ../cleaners/skype.xml ../cleaners/discord.xml
 msgid "Chat client"
-msgstr "Клиент за моментални съобщения"
+msgstr "Клиент за незабавни съобщения"
 
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
 #: ../cleaners/seamonkey.xml
 msgid "Chat logs"
-msgstr "Дневници на моментални съобщения"
+msgstr "Дневници на незабавни съобщения"
 
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
@@ -750,7 +750,7 @@ msgstr "Премахване на торенти (само описателни 
 
 #: ../cleaners/transmission.xml ../cleaners/vuze.xml
 msgid "Statistics"
-msgstr ""
+msgstr "Статистика"
 
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Delete the file"
@@ -762,7 +762,7 @@ msgstr "Премахване на списъка с игрови сървъри"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
-msgstr ""
+msgstr "Приложение за отдалечено управление"
 
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Memory dump"
@@ -770,7 +770,7 @@ msgstr "Съдържание на паметта"
 
 #: ../cleaners/screenlets.xml
 msgid "Desktop widgets"
-msgstr ""
+msgstr "Приспособления за работния плот"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -783,7 +783,7 @@ msgstr "История на познати файлове"
 #. http://wiki.amule.org/wiki/Friend
 #: ../cleaners/amule.xml
 msgid "Known clients and friends"
-msgstr ""
+msgstr "Клиенти и приятели"
 
 #: ../cleaners/vim.xml
 msgid ""
@@ -811,7 +811,7 @@ msgstr "Освобождаване на място и поддръжане на 
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "Андрю Зием и сътрудници"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -824,7 +824,7 @@ msgstr ""
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr ""
+msgstr "Стандартният тъмен режим, показващ намерени ненужни файлове"
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -857,7 +857,7 @@ msgstr ""
 #. TRANSLATORS: Parts of this file will be deleted
 #: ../bleachbit/Action.py ../bleachbit/Command.py
 msgid "Clean file"
-msgstr "Изчистване на файл"
+msgstr "Почистване на файл"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -970,7 +970,7 @@ msgstr "Изпразване на кошчето"
 #. the uninstallers for software updates.
 #: ../bleachbit/Cleaner.py
 msgid "Update uninstallers"
-msgstr "Деинсталатори на обновления"
+msgstr "Деинсталатори на обновявания"
 
 #: ../bleachbit/Cleaner.py
 msgid ""
@@ -1088,7 +1088,7 @@ msgstr "стартиране на графичния интерфейс"
 
 #: ../bleachbit/CLI.py
 msgid "use options set in the graphical interface"
-msgstr "използвайте зададените настройки в графичния интерфейс"
+msgstr "използване на зададените настройки в графичния интерфейс"
 
 #: ../bleachbit/CLI.py
 msgid "enable all options that do not have a warning"
@@ -1104,15 +1104,15 @@ msgstr ""
 
 #: ../bleachbit/CLI.py
 msgid "show system information"
-msgstr "показване на системна информация"
+msgstr "показване на сведения за системата"
 
 #: ../bleachbit/CLI.py
 msgid "output version information and exit"
-msgstr "извеждане на информация за версията и изход"
+msgstr "извеждане на информация за изданието и изход"
 
 #: ../bleachbit/CLI.py
 msgid "do not prompt for administrator privileges"
-msgstr "не питай за администраторски права"
+msgstr "без питане за администраторски права"
 
 #: ../bleachbit/CLI.py
 msgid "update winapp2.ini, if a new version is available"
@@ -1166,7 +1166,7 @@ msgstr ""
 #. system reboots
 #: ../bleachbit/Command.py
 msgid "Mark for deletion"
-msgstr "Маркирай за изтриване"
+msgstr "Отбелязване за премахване"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
 #: ../bleachbit/Command.py
@@ -1289,15 +1289,15 @@ msgid ""
 "browser:\n"
 "%s"
 msgstr ""
-"Тъй като работите като root, моля отворете ръчно следната връзка в уеб "
-"четец:\n"
+"Тъй като сте отворили приложението катосуперпотребителя , моля отворете "
+"ръчно следната препратка в мрежов четец:\n"
 "%s"
 
 #. TRANSLATORS: %s expands to www.bleachbit.org or similar
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Open web browser to %s?"
-msgstr "Зареждане на %s в уеб четеца?"
+msgstr "Посещаване на %s в мрежовия четец?"
 
 #: ../bleachbit/GuiBasic.py ../bleachbit/GUI.py
 msgid "Confirm"
@@ -1393,8 +1393,8 @@ msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
 msgstr ""
-"Ако е намерено обновление, ще ви се даде възможност да видите информация за "
-"него. След това ще можете ръчно да изтеглите и инсталирате обновлението."
+"Ако е намерено обновяване, ще имате възможност да видите сведения за него. "
+"След това ще можете ръчно да го изтеглите и инсталирате."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Check for new beta releases"
@@ -1433,7 +1433,7 @@ msgid ""
 "operations.  Overwriting is significantly slower."
 msgstr ""
 "Презаписването е неефективно при някои файлови системи и при определени "
-"операции на BleachBit. Презаписването е значително по-бавно."
+"действия на BleachBit. То е и значително по-бавно."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
@@ -1475,8 +1475,8 @@ msgstr "Изберете папка"
 msgid ""
 "Choose a writable folder for each drive for which to overwrite free space."
 msgstr ""
-"Изберете папка с права за запис за всяко устройтво, за което желаете да "
-"презапишете свободното пространство."
+"Изберете папка с права за запис за всяко устройтво, за което желаете "
+"свободното дисково пространство да бъде презаписано."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -1534,7 +1534,7 @@ msgstr "Тези пътища няма да бъдат премахнати ил
 
 #: ../bleachbit/GuiPreferences.py
 msgid "These locations can be selected for deletion."
-msgstr "Тези места могат да бъдат избрани за изтриване."
+msgstr "Тези места могат да бъдат избрани за премахвне."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Type"
@@ -1548,7 +1548,7 @@ msgstr "Път"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Choose a file"
-msgstr "Избор на фаил"
+msgstr "Изберете файл"
 
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
@@ -1606,7 +1606,7 @@ msgstr ""
 
 #: ../bleachbit/GUI.py
 msgid "System information"
-msgstr "Системна информация"
+msgstr "Сведения за системата"
 
 #: ../bleachbit/GUI.py
 msgid "Active"
