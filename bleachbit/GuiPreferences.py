@@ -68,7 +68,7 @@ class PreferencesDialog:
             notebook.append_page(self.__languages_page(),
                                  Gtk.Label(label=_("Languages")))
         notebook.append_page(self.__locations_page(
-            LOCATIONS_WHITELIST), Gtk.Label(label=_("Whitelist")))
+            LOCATIONS_WHITELIST), Gtk.Label(label=_("Allowlist")))
 
         # pack_start parameters: child, expand (reserve space), fill (actually fill it), padding
         self.dialog.get_content_area().pack_start(notebook, True, True, 0)
@@ -431,7 +431,7 @@ class PreferencesDialog:
         # Check in whitelist
         for path in whitelist_paths:
             if pathname == path[1]:
-                msg = _("This path already exists in the whitelist.")
+                msg = _("This path already exists in the allowlist.")
                 GuiBasic.message_dialog(self.dialog,
                                         msg,
                                         Gtk.MessageType.ERROR,
