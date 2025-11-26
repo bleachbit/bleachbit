@@ -26,6 +26,7 @@ import os
 import sys
 
 have_gui = True
+_options = None
 
 if 'posix' == os.name:
     if os.path.isdir('/usr/share/bleachbit'):
@@ -36,6 +37,7 @@ if 'posix' == os.name:
     # The two imports from bleachbit must come after sys.path.append(..)
     import bleachbit.Unix
     from bleachbit.Language import get_text as _
+    from bleachbit.Options import options as _options
 
     if (
         bleachbit.Unix.is_display_protocol_wayland_and_root_not_allowed()
@@ -50,6 +52,24 @@ if 'posix' == os.name:
         have_gui = bleachbit.Unix.has_gui()
     else:
         have_gui = False
+else:
+    from bleachbit.Options import options as _options
+
+options = _options
+
+
+def _apply_fontconfig_backend_preference():
+    if os.name != 'nt' or options is None:
+        return
+    try:
+        use_fontconfig_backend = options.get('use_fontconfig_backend')
+    except Exception:
+        return
+    if use_fontconfig_backend:
+        os.environ['PANGOCAIRO_BACKEND'] = 'fc'
+
+
+_apply_fontconfig_backend_preference()
 
 if os.name == 'nt':
     # change error handling to avoid popup with GTK 3

@@ -271,6 +271,15 @@ class PreferencesDialog:
 
         vbox.pack_start(font_box, False, True, 0)
 
+        if os.name == 'nt':
+            self.cb_fontconfig_backend = Gtk.CheckButton(
+                label=_("Use fontconfig backend to draw text"))
+            self.cb_fontconfig_backend.set_active(
+                options.get('use_fontconfig_backend'))
+            self.cb_fontconfig_backend.connect(
+                'toggled', self.on_fontconfig_backend_toggled)
+            vbox.pack_start(self.cb_fontconfig_backend, False, True, 0)
+
     def on_font_set(self, widget):
         """Callback for when the font is selected"""
         font_desc = widget.get_font_desc()
@@ -279,13 +288,32 @@ class PreferencesDialog:
         logger.debug("Setting font to %s", font)
         settings = Gtk.Settings.get_default()
         settings.set_property("gtk-font-name", font)
-        
+
         # Update font size in the main GUI if available
         from bleachbit.GUI import get_font_size_from_name
         if hasattr(self, 'window') and hasattr(self.window, 'font_size'):
             new_size = get_font_size_from_name(font)
             if new_size:
                 self.window.font_size = new_size
+
+    def __show_restart_notice(self):
+        dialog = Gtk.MessageDialog(
+            transient_for=self.dialog,
+            flags=Gtk.DialogFlags.MODAL,
+            message_type=Gtk.MessageType.INFO,
+            buttons=Gtk.ButtonsType.OK,
+            text=_("Restart required"),
+        )
+        dialog.format_secondary_text(
+            _("Restart BleachBit for the fontconfig backend change to take effect."))
+        dialog.run()
+        dialog.destroy()
+
+    def on_fontconfig_backend_toggled(self, widget):
+        """Callback for fontconfig toggle"""
+        is_enabled = widget.get_active()
+        options.set('use_fontconfig_backend', is_enabled)
+        self.__show_restart_notice()
 
     def __general_page(self):
         """Return a widget containing the general page"""

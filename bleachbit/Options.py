@@ -52,6 +52,7 @@ boolean_keys = ['auto_hide',
                 'remember_geometry',
                 'shred',
                 'units_iec',
+                'use_fontconfig_backend',
                 'window_maximized',
                 'window_fullscreen']
 if 'nt' == os.name:
@@ -296,6 +297,7 @@ class Options:
         self.__set_default("remember_geometry", True)
         self.__set_default("shred", False)
         self.__set_default("units_iec", False)
+        self.__set_default("use_fontconfig_backend", False)
         self.__set_default("window_fullscreen", False)
         self.__set_default("window_maximized", False)
 
