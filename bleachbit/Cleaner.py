@@ -35,23 +35,24 @@ from bleachbit.Options import options
 from bleachbit import Action, CleanerML, Command, FileUtilities, Memory, Special
 
 
-# Suppress GTK warning messages while running in CLI #34
-
-warnings.simplefilter("ignore", Warning)
-try:
-    from bleachbit.GuiBasic import Gtk, Gdk
-    HAVE_GTK = Gdk.get_default_root_window() is not None
-except (ImportError, RuntimeError, ValueError):
-    # ImportError happens when GTK is not installed.
-    # RuntimeError can happen when X is not available (e.g., cron, ssh).
-    # ValueError seen on BleachBit 3.0 with GTK 3 (GitHub issue 685)
-    HAVE_GTK = False
-
-
 if 'posix' == os.name:
     from bleachbit import Unix
+    # Suppress GTK warning messages while running in CLI #34
+    warnings.simplefilter("ignore", Warning)
+    try:
+        from bleachbit.GuiBasic import Gtk, Gdk
+        HAVE_GTK = Gdk.get_default_root_window() is not None
+    except (ImportError, RuntimeError, ValueError):
+        # ImportError happens when GTK is not installed.
+        # RuntimeError can happen when X is not available (e.g., cron, ssh).
+        # ValueError seen on BleachBit 3.0 with GTK 3 (GitHub issue 685)
+        HAVE_GTK = False
 elif 'nt' == os.name:
     from bleachbit import Windows
+    from bleachbit.GuiBasic import Gtk, Gdk
+    HAVE_GTK = True
+else:
+    raise RuntimeError(f"Unknown OS '{os.name}'")
 
 
 # a module-level variable for holding cleaners
@@ -235,7 +236,8 @@ class OpenOfficeOrg(Cleaner):
 
         if 'recent_documents' == option_id:
             for prefix in self.prefixes:
-                for path in FileUtilities.expand_glob_join(prefix, "user/registry/data/org/openoffice/Office/Common.xcu"):
+                for path in FileUtilities.expand_glob_join(prefix,
+                                                           "user/registry/data/org/openoffice/Office/Common.xcu"):
                     if os.path.lexists(path):
                         yield Command.Function(path,
                                                Special.delete_ooo_history,
@@ -244,7 +246,8 @@ class OpenOfficeOrg(Cleaner):
                 #       Apache OpenOffice.org 3.4.1 from openoffice.org on Ubuntu 13.04
                 # %AppData%\OpenOffice.org\3\user\registrymodifications.xcu
                 # Apache OpenOffice.org 3.4.1 from openoffice.org on Windows XP
-                for path in FileUtilities.expand_glob_join(prefix, "user/registrymodifications.xcu"):
+                for path in FileUtilities.expand_glob_join(prefix,
+                                                           "user/registrymodifications.xcu"):
                     if os.path.lexists(path):
                         yield Command.Function(path,
                                                Special.delete_office_registrymodifications,
@@ -314,6 +317,7 @@ class System(Cleaner):
             # the uninstallers for software updates.
             self.add_option('updates', _('Update uninstallers'), _(
                 'Delete uninstallers for Microsoft updates including hotfixes, service packs, and Internet Explorer updates'))
+            self.set_warning('updates', _('This option may prevent uninstalling some updates.'))
 
         #
         # options for GTK+
@@ -354,11 +358,13 @@ class System(Cleaner):
         if 'custom' == option_id:
             for (c_type, c_path) in options.get_custom_paths():
                 if 'file' == c_type:
-                    yield Command.Delete(c_path)
+                    if os.path.lexists(c_path):
+                        yield Command.Delete(c_path)
                 elif 'folder' == c_type:
-                    for path in children_in_directory(c_path, True):
-                        yield Command.Delete(path)
-                    yield Command.Delete(c_path)
+                    if os.path.lexists(c_path):
+                        for path in children_in_directory(c_path, True):
+                            yield Command.Delete(path)
+                        yield Command.Delete(c_path)
                 else:
                     raise RuntimeError(
                         f'custom folder has invalid type {c_type}')
@@ -575,7 +581,7 @@ class System(Cleaner):
         if 'nt' == os.name and 'recycle_bin' == option_id:
             # This method allows shredding
             recycled_any = False
-            # pylint: disable=used-before-assignment
+            # pylint: disable=possibly-used-before-assignment
             for path in Windows.get_recycle_bin():
                 recycled_any = True
                 yield Command.Delete(path)
@@ -635,7 +641,24 @@ class System(Cleaner):
             '^' + os.path.expanduser('~/.cache/ibus/'),
             # Linux Bluetooth daemon obexd directory is typically empty, so be careful
             # not to delete the empty directory.
-            '^' + os.path.expanduser('~/.cache/obexd($|/)')]
+            '^' + os.path.expanduser('~/.cache/obexd($|/)'),
+            # KDE/Plasma cache files
+            # https://github.com/bleachbit/bleachbit/issues/1853
+            '^' + os.path.expanduser('~/.cache/kwin($|/)'),  # folder
+            # folder
+            '^' + os.path.expanduser('~/.cache/mesa_shader_cache($|/)'),
+            '^' + os.path.expanduser('~/.cache/plasmashell($|/)'),  # folder
+            '^' + os.path.expanduser('~/.cache/icon-cache.kcache$'),  # file
+            # file
+            r'^' + os.path.expanduser(r'~/.cache/plasma_theme_.*\.kcache$'),
+            '^' + os.path.expanduser('~/.cache/drkonqi($|/)'),  # folder
+            # folder
+            '^' + os.path.expanduser('~/.cache/mesa_shader_cache_db($|/)'),
+            # folder
+            '^' + os.path.expanduser('~/.cache/qtshadercache-[^/]+($|/)'),
+            # file
+            '^' + os.path.expanduser('~/.cache/plasma_theme_default.kcache$')]
+
         for regex in regexes:
             self.regexes_compiled.append(re.compile(regex))
 
@@ -696,6 +719,7 @@ def create_simple_cleaner(paths):
     cleaner.name = _("System")  # shows up in progress bar
 
     class CustomFileAction(Action.ActionProvider):
+        """Custom file action"""
         action_key = '__customfileaction'
 
         def get_commands(self):

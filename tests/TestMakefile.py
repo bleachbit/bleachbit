@@ -23,83 +23,79 @@ Test case for Makefile
 """
 
 import os
-import shutil
-import subprocess
-import sys
-import tempfile
-import unittest
 
 from tests import common
-from bleachbit.General import get_executable
-
-
-has_make = True
-
-try:
-    subprocess.check_call(['make', '--version'])
-except FileNotFoundError:
-    has_make = False
-
-skip_tests = not has_make
-skip_msg = 'missing make'
-
-make_temp_dir = tempfile.mkdtemp('bleachbit-makefile')
+from bleachbit import APP_VERSION
+from bleachbit.FileUtilities import exe_exists
+from bleachbit.General import get_executable, run_external
 
 
 class MakefileTestCase(common.BleachbitTestCase):
     """Test case for Makefile"""
 
-    def setUp(self):
-        self.base_dir = os.path.abspath(
+    def test_make_source(self):
+        """Test Makefile for source distribution"""
+        src_base_dir = os.path.abspath(
             os.path.join(os.path.dirname(__file__), '..'))
-        os.chdir(self.base_dir)
-        if skip_tests:
-            import warnings
-            warnings.warn(skip_msg)
-            return
+        os.chdir(src_base_dir)
+        # appveyor.yml defines %make%
+        make_exe = None
+        for exe in ('make', os.getenv('make')):
+            if exe and exe_exists(exe):
+                make_exe = exe
+                break
+        if not make_exe:
+            self.skipTest('make not found in PATH or in $make')
+        tar_in_make_dir = os.path.join(src_base_dir, 'tar')
+        tar_exe = None
+        for exe in ('tar', tar_in_make_dir):
+            if exe and exe_exists(exe):
+                tar_exe = exe
+                break
+        if not tar_exe:
+            self.skipTest('tar not found in PATH or in directory of make')
 
-    @classmethod
-    def tearDownClass(cls):
-        shutil.rmtree(make_temp_dir)
-
-    @unittest.skipIf(skip_tests, skip_msg)
-    def test_make(self):
-
-        from bleachbit import APP_VERSION
         ver_name = 'bleachbit-' + APP_VERSION
 
+        # clean up from any previous test
         pkg_fn = os.path.join('dist', ver_name + '.tar.gz')
         if os.path.exists(pkg_fn):
             os.remove(pkg_fn)
         self.assertNotExists(pkg_fn)
 
+        # build source distribution
         sdist_cmd = [get_executable(), 'setup.py', 'sdist']
-        subprocess.check_call(sdist_cmd)
+        (rc, _, stderr) = run_external(sdist_cmd)
+        self.assertEqual(rc, 0, stderr)
         pkg_fn = os.path.join('dist', ver_name + '.tar.gz')
         self.assertExists(pkg_fn)
 
-        extract_dir = os.path.join(make_temp_dir, 'extract')
+        # extract source distribution
+        extract_dir = os.path.join(self.tempdir, 'extract')
         os.mkdir(extract_dir)
-        tar_cmd = ['tar', 'xzf', pkg_fn, '-C', extract_dir]
-        subprocess.check_call(tar_cmd)
+        tar_cmd = [tar_exe, 'xzf', pkg_fn, '-C', extract_dir]
+        (rc, _, stderr) = run_external(tar_cmd)
+        self.assertEqual(rc, 0, stderr)
         extract_subdir = os.path.join(extract_dir, ver_name)
         self.assertExists(os.path.join(extract_subdir, 'Makefile'))
 
+        # delete Windows files using make
         canary_fn = os.path.join(
             extract_subdir, 'cleaners', 'windows_explorer.xml')
         self.assertExists(canary_fn)
-        del_win_command = ['make', 'delete_windows_files']
-        subprocess.check_call(del_win_command, cwd=extract_subdir)
+        del_win_command = [make_exe, 'delete_windows_files']
+        os.chdir(extract_subdir)
+        (rc, _, stderr) = run_external(del_win_command)
+        self.assertEqual(rc, 0, stderr)
         self.assertNotExists(canary_fn)
 
-        install_tgt_dir = os.path.join(make_temp_dir, 'install')
-        install_command = ['make', 'install', 'DESTDIR=' + install_tgt_dir]
-        subprocess.check_call(install_command, cwd=extract_subdir)
+        # install using make
+        install_tgt_dir = os.path.join(self.tempdir, 'install')
+        install_command = [make_exe,
+                           'install', 'DESTDIR=' + install_tgt_dir]
+        os.chdir(extract_subdir)
+        (rc, _, stderr) = run_external(install_command)
+        self.assertEqual(rc, 0, stderr)
         self.assertTrue(os.path.isdir(install_tgt_dir))
         self.assertExists(os.path.join(
             install_tgt_dir, 'usr/local/share/bleachbit/cleaners/chromium.xml'))
-
-    def test_exists(self):
-        """This has a side effect of causing setUp() to run and emit a warning, if exes are missing"""
-        mk_fn = os.path.join(self.base_dir, 'Makefile')
-        self.assertExists(mk_fn)

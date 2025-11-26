@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-04-25 11:10+0000\n"
-"Last-Translator: Nelson Kerber Hennemann Filho <nelsonhf@outlook.com>\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
+"PO-Revision-Date: 2025-08-19 21:02+0000\n"
+"Last-Translator: Cirnos <cirnos@tuta.io>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "bleachbit/main/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,11 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Launchpad-Export-Date: 2020-12-28 15:48+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "Reprodutor de mídia"
 
@@ -124,15 +125,16 @@ msgstr "Cache"
 #: ../cleaners/beagle.xml ../cleaners/yum.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/waterfox.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
+#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/thumbnails.xml
+#: ../cleaners/exaile.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/smartftp.xml ../cleaners/apt.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/flash.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "Apagar o cache"
 
@@ -153,7 +155,8 @@ msgstr "Utilizado mais recentemente"
 msgid "Delete the most recently used list"
 msgstr "Apagar a lista de utilizado mais recentemente"
 
-#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
+#: ../cleaners/apt.xml ../cleaners/snap.xml
 msgid "Package manager"
 msgstr "Gerenciador de pacotes"
 
@@ -379,6 +382,22 @@ msgstr "Terminal"
 msgid "Delete the command history"
 msgstr "Apagar o histórico de comandos"
 
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr "Arquivos temporários"
+
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr "Apagar os arquivos temporários"
+
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
 msgstr "Ferramenta de pesquisa"
@@ -394,10 +413,6 @@ msgstr "Apagar os cookies, URLs visitados e histórico de pesquisa"
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "Processador de texto"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "Reprodutor de áudio"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -441,22 +456,6 @@ msgstr "Apagar os avatares e emoticons no cache"
 #: ../cleaners/vuze.xml
 msgid "File transfer client"
 msgstr "Cliente de transferência de arquivos"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Temporary files"
-msgstr "Arquivos temporários"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Delete the temporary files"
-msgstr "Apagar os arquivos temporários"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -651,6 +650,14 @@ msgstr "Sistema de janelas"
 msgid "Graphics editor"
 msgstr "Editor de gráficos"
 
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr "Desabilitado"
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr "Remover pacotes desabilitados"
+
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
 msgstr "Visualizador de documentos"
@@ -790,13 +797,37 @@ msgstr ""
 msgid "Unnecessary file cleaner"
 msgstr "Limpar arquivos desnecessários"
 
-#: ../org.bleachbit.BleachBit.desktop
+#: ../org.bleachbit.BleachBit.desktop ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Free space and maintain privacy"
 msgstr "Libera espaço e mantém sua privacidade"
 
-#. TRANSLATORS: Multi-value variables are explained in the online documentation.
-#. Basically, they are like an environment variable, but each multi-value variable
-#. can have multiple values. They're a way to make CleanerML files more concise.
+#. TRANSLATORS: Name of the developers
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Andrew Ziem and contributors"
+msgstr "Andrew Ziem e contribuidores"
+
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid ""
+"BleachBit frees disk space and maintains privacy by quickly removing "
+"unnecessary files such as cache, cookies, browser history, temporary files, "
+"and system logs. It can also shred files and clean free disk space to "
+"prevent data recovery."
+msgstr ""
+"BleachBit libera espaço em disco e mantém privacidade removendo rapidamente "
+"arquivos desnecessários como cache, cookies, histórico de navegadores, "
+"arquivos temporários e registros do sistema. Ele também pode destruir "
+"arquivos e limpar espaço em disco livre para prevenir recuperação de dados."
+
+#. TRANSLATORS: Caption for screenshot
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Default dark mode, showing found junk files"
+msgstr "Modo escuro padrão, mostrando arquivos inúteis encontrados"
+
+#. TRANSLATORS: Multi-value variables are explained
+#. in the online documentation. Basically, they are like
+#. an environment variable, but each multi-value variable
+#. can have multiple values. They're a way to make CleanerML
+#. files more concise.
 #: ../bleachbit/Action.py
 msgid "Deep scan does not support multi-value variable."
 msgstr "Varredura profunda é incompatível com variáveis de multi-valor."
@@ -838,6 +869,10 @@ msgstr "Limpar"
 msgid "Run external command: %s"
 msgstr "Executar comando externo: %s"
 
+#: ../bleachbit/Action.py
+msgid "Refresh Windows shell"
+msgstr "Atualizar shell do Windows"
+
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
 msgid ""
@@ -856,16 +891,6 @@ msgstr "Ignorando o limpador %s porque ele esta em modo de leitura"
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "Erro ao ler o limpador: %s"
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr ""
-"O limpador é incompatível com este sistema operacional, porque não possui "
-"ações: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1185,11 +1210,6 @@ msgid ""
 msgstr ""
 "Havia pelo menos um arquivo no sistema de arquivos que era incompatível com "
 "sobrescrição avançada."
-
-#: ../bleachbit/FileUtilities.py
-#, python-brace-format
-msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr "Apagando caminho {pathname} com sistema de arquivos do tipo {fstype}"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1637,6 +1657,10 @@ msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "Redefinindo o arquivo de configuração porque está corrompido: %s"
 
 #: ../bleachbit/GUI.py
+msgid "Quit"
+msgstr "Sair"
+
+#: ../bleachbit/GUI.py
 msgid "You must select an operation"
 msgstr "Você deve selecionar uma operação"
 
@@ -1715,6 +1739,10 @@ msgstr "Atualizar"
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
 msgstr "Atualizar BleachBit para a versão mais recente"
+
+#: ../bleachbit/GUI.py
+msgid "Press F11 to exit fullscreen mode."
+msgstr "Aperte F11 para sair do modo tela cheia."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1928,6 +1956,12 @@ msgid "Imported from winapp2.ini"
 msgstr "Importado do winapp2.ini"
 
 #: ../bleachbit/Windows.py
+msgid "Administrator privileges are required to clean Windows Updates"
+msgstr ""
+"Privilégios de administrador são necessários para limpar Atualizações do "
+"Windows"
+
+#: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
 msgstr "O BleachBit está iniciando...\n"
 
@@ -2082,6 +2116,20 @@ msgstr "_Ajuda"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_Sobre o BleachBit"
+
+#~ msgid "Audio player"
+#~ msgstr "Reprodutor de áudio"
+
+#, python-format
+#~ msgid "Cleaner is not usable on this OS because it has no actions: %s"
+#~ msgstr ""
+#~ "O limpador é incompatível com este sistema operacional, porque não possui "
+#~ "ações: %s"
+
+#, python-brace-format
+#~ msgid "Wiping path {pathname} with file system type {fstype}"
+#~ msgstr ""
+#~ "Apagando caminho {pathname} com sistema de arquivos do tipo {fstype}"
 
 #~ msgid "IRC client formerly known as XChat"
 #~ msgstr "Cliente de IRC conhecido anteriormente como XChat"

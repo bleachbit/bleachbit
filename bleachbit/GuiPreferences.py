@@ -108,7 +108,7 @@ class PreferencesDialog:
         if not online_update_notification_enabled:
             return
         cb_updates = Gtk.CheckButton.new_with_label(
-            _("Check periodically for software updates via the Internet"))
+            label=_("Check periodically for software updates via the Internet"))
         cb_updates.set_active(options.get('check_online_updates'))
         cb_updates.connect(
             'toggled', self.__toggle_callback, 'check_online_updates')
@@ -129,7 +129,7 @@ class PreferencesDialog:
 
         if 'nt' == os.name:
             self.cb_winapp2 = Gtk.CheckButton.new_with_label(
-                _("Download and update cleaners from community (winapp2.ini)"))
+                label=_("Download and update cleaners from community (winapp2.ini)"))
             self.cb_winapp2.set_active(options.get('update_winapp2'))
             self.cb_winapp2.set_sensitive(
                 options.get('check_online_updates'))
@@ -331,7 +331,7 @@ class PreferencesDialog:
 
         if 'nt' == os.name:
             # Windows 10 theme
-            cb_win10_theme = Gtk.CheckButton(_("Windows 10 theme"))
+            cb_win10_theme = Gtk.CheckButton(label=_("Windows 10 theme"))
             cb_win10_theme.set_active(options.get("win10_theme"))
             cb_win10_theme.connect(
                 'toggled', self.__toggle_callback, 'win10_theme')

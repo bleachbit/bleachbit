@@ -6,21 +6,23 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2021-06-26 16:00+0000\n"
-"Last-Translator: Firefly <Unknown>\n"
-"Language-Team: Bengali <bn@li.org>\n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
+"PO-Revision-Date: 2025-11-09 09:51+0000\n"
+"Last-Translator: Safa Abbas Bahar Chowdhury <sabc994@gmail.com>\n"
+"Language-Team: Bengali <https://hosted.weblate.org/projects/bleachbit/main/"
+"bn/>\n"
 "Language: bn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Weblate 5.15-dev\n"
 "X-Launchpad-Export-Date: 2021-06-27 14:32+0000\n"
-"X-Generator: Launchpad (build 40cc6dba4163ba9ca785b26ad91f43c87d70ba4d)\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "মিডিয়া প্লেয়ার"
 
@@ -123,15 +125,16 @@ msgstr "ক্যাশে (Cache)"
 #: ../cleaners/beagle.xml ../cleaners/yum.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/waterfox.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
+#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/thumbnails.xml
+#: ../cleaners/exaile.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/smartftp.xml ../cleaners/apt.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/flash.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "ক্যাশ পরিস্কার করো"
 
@@ -152,7 +155,8 @@ msgstr "সম্প্রতি ব্যবহৃত"
 msgid "Delete the most recently used list"
 msgstr "সবচেয়ে সাম্প্রতিক সময়ে ব্যবহৃত লিস্টটি ডিলিট করুন"
 
-#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
+#: ../cleaners/apt.xml ../cleaners/snap.xml
 msgid "Package manager"
 msgstr "প্যাকেজ পরিচালক"
 
@@ -376,6 +380,22 @@ msgstr "শেল"
 msgid "Delete the command history"
 msgstr "অনুশাসনের ইতিহাস মুছে ফেলুন"
 
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr "অস্থায়ী নথিসমুহ"
+
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr "অস্থায়ী ফাইল মুছে ফেলুন"
+
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
 msgstr "সার্চ টুল"
@@ -391,10 +411,6 @@ msgstr "কুকিসমূহ, প্রদর্শিত URL'সমূহ, 
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "ওয়ার্ড প্রসেসর"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "অডিও প্লেয়ার"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -438,22 +454,6 @@ msgstr "এভাটার এবং ইমোটিকনস ক্যাচ �
 msgid "File transfer client"
 msgstr "নথি হস্তান্তরকারক"
 
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Temporary files"
-msgstr "অস্থায়ী নথিসমুহ"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Delete the temporary files"
-msgstr "অস্থায়ী ফাইল মুছে ফেলুন"
-
 #: ../cleaners/epiphany.xml
 msgid "Places"
 msgstr "অবস্থান"
@@ -484,11 +484,11 @@ msgstr "ইমেইল আশ্রিতা"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "সংযুক্তিগুলি"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "তথ্য সিঙ্ক করার সময় সমস্যা হয়েছে﻿"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -646,6 +646,14 @@ msgstr "উইন্ডোয়ার্ড সিস্টেম"
 msgid "Graphics editor"
 msgstr "গ্রাফিক্স এডিটর"
 
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr "নিষ্ক্রিয়"
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr "নিষ্ক্রিয় প্যাকেজগুলো সরান"
+
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
 msgstr "ডকুমেন্ট ভিউয়ার"
@@ -749,10 +757,8 @@ msgid "Memory dump"
 msgstr "মেমরি ডাম্প"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "ডেস্কটপের পরিবেশ"
+msgstr "ডেস্কটপের উইজেট"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
@@ -773,24 +779,46 @@ msgid ""
 msgstr "~/.viminfo ডিলিট করুন, যাতে ফাইল হিস্ট্রি, কমান্ড হিস্ট্রি এবং বাফারস আছে"
 
 #: ../cleaners/discord.xml
-#, fuzzy
-#| msgid "Delete the web cache, which reduces time to display revisited pages"
 msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
-msgstr "ওয়েব ক্যাশে মুছে ফেলুন, যার ফলে পৃষ্ঠাগুলো পুনরায় প্রদর্শন হতে অল্প সময় লাগবে"
+msgstr ""
+"ওয়েব ক্যাশ মুছে ফেলুন, এতে আগে দেখা পেজ দ্রুত খুলবে। এতে ফেভারিট GIF-ও মুছে যাবে।﻿"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
 msgstr "অপ্রয়োজনীয় ফাইল ক্লিনার"
 
-#: ../org.bleachbit.BleachBit.desktop
+#: ../org.bleachbit.BleachBit.desktop ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Free space and maintain privacy"
 msgstr "স্পেস খালি করুন এবং গোপনীয়তা রক্ষা করুন"
 
-#. TRANSLATORS: Multi-value variables are explained in the online documentation.
-#. Basically, they are like an environment variable, but each multi-value variable
-#. can have multiple values. They're a way to make CleanerML files more concise.
+#. TRANSLATORS: Name of the developers
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Andrew Ziem and contributors"
+msgstr ""
+
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid ""
+"BleachBit frees disk space and maintains privacy by quickly removing "
+"unnecessary files such as cache, cookies, browser history, temporary files, "
+"and system logs. It can also shred files and clean free disk space to "
+"prevent data recovery."
+msgstr ""
+"ব্লিচবিট একটি ফ্রি এবং ওপেন-সোর্স সফটওয়্যার যা অপ্রয়োজনীয় ফাইল যেমন ক্যাশ, কুকিজ, ব্রাউজারের ইতিহাস, "
+"টেম্পোরারি ফাইল এবং সিস্টেম লগ দ্রুত মুছে ফেলে, যা ডিস্কের জায়গা মুক্ত করে এবং গোপনীয়তা রক্ষা করে। এটি ফাইল শেড "
+"করতে এবং মুক্ত ডিস্ক স্পেস পরিষ্কার করতে পারে যাতে ডেটা পুনরুদ্ধার সম্ভব না হয়।।"
+
+#. TRANSLATORS: Caption for screenshot
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Default dark mode, showing found junk files"
+msgstr "ডিফল্ট ডার্ক মোড, পাওয়া গিয়েছে এমন জাঙ্ক ফাইলগুলো দেখাচ্ছে﻿"
+
+#. TRANSLATORS: Multi-value variables are explained
+#. in the online documentation. Basically, they are like
+#. an environment variable, but each multi-value variable
+#. can have multiple values. They're a way to make CleanerML
+#. files more concise.
 #: ../bleachbit/Action.py
 msgid "Deep scan does not support multi-value variable."
 msgstr "ডিপ স্ক্যান মাল্টি-ভ্যালু ভ্যারিয়েবল সাপোর্ট করেনা।"
@@ -832,6 +860,10 @@ msgstr "ক্লিন করুন"
 msgid "Run external command: %s"
 msgstr "এক্সটার্নাল কমান্ড রান করুন: %s"
 
+#: ../bleachbit/Action.py
+msgid "Refresh Windows shell"
+msgstr "উইন্ডোজ শেল রিফ্রেশ করুন﻿"
+
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
 msgid ""
@@ -850,14 +882,6 @@ msgstr "ক্লিনার ইগনোর করা হচ্ছে, কে�
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "ক্লিনার রিড করতে ইরোর দেখা দিয়েছে: %s"
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr "এই OS এ ক্লিনার ব্যবহারযোগ্য নয়, কেননা এটির কোন কাজ নেই: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1178,11 +1202,6 @@ msgstr ""
 "একটি ফাইল সিস্টেমে অন্তত একটি ফাইল আছে যা এডভান্সড ওভাররাইটিংকে সাপোর্ট করেনা।"
 
 #: ../bleachbit/FileUtilities.py
-#, python-brace-format
-msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
-
-#: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
 msgstr "ওয়াইপ করার জন্য পাথটিকে অবশ্যই অস্তিত্ব আছে এমন একটি ডিরেক্টরি হতে হবে: %s"
@@ -1276,7 +1295,7 @@ msgstr "%s এর জন্য ওয়েব ব্রাউজার ওপে�
 
 #: ../bleachbit/GuiBasic.py ../bleachbit/GUI.py
 msgid "Confirm"
-msgstr ""
+msgstr "কনফার্ম"
 
 #: ../bleachbit/GuiChaff.py
 msgid "Deleting files"
@@ -1381,13 +1400,11 @@ msgstr "কমিউনিটি থেকে ক্লিনার ডাউন
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "স্বয়ংক্রিয়ভাবে ভাষা শনাক্ত করুন﻿"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "ভাষা %s স্বয়ংক্রিয়ভাবে সংরক্ষণ করা হচ্ছে।"
+msgstr "সিস্টেমের ভাষা স্বয়ংক্রিয়ভাবে শনাক্ত করুন﻿"
 
 #: ../bleachbit/GuiPreferences.py
 #, fuzzy
@@ -1434,7 +1451,7 @@ msgstr "ডিবাগ মেসেজ দেখুন"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Add the shred context menu to KDE Plasma"
-msgstr ""
+msgstr "KDE Plasma তে শ্রেড কনটেক্সট মেনু যোগ করুন﻿"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Dark mode"
@@ -1487,17 +1504,15 @@ msgstr "নাম"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the whitelist."
-msgstr ""
+msgstr "এই পাথটি ইতিমধ্যে হোয়াইটলিস্টে আছে﻿।"
 
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GUI.py
-#, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
-msgstr "ইরোর সমূহ: %d"
+msgstr "এরর"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "এই পাথটি ইতিমধ্যে কাস্টম তালিকায় আছে﻿।"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1508,10 +1523,8 @@ msgid "Folder"
 msgstr "ফোল্ডার"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
 msgid "These paths will not be deleted or modified."
-msgstr "এই পাঠগুলো ডিলিট করা অথবা পরিবর্তন করা হবেনা।"
+msgstr "এই পাথগুলো মুছে ফেলা বা পরিবর্তন করা হবে না﻿"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "These locations can be selected for deletion."
@@ -1559,7 +1572,7 @@ msgstr "_ওকে"
 
 #: ../bleachbit/GUI.py
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "অপ্রয়োজনীয় ফাইলগুলো পরিষ্কার করার প্রোগ্রাম﻿"
 
 #: ../bleachbit/GUI.py
 msgid ""
@@ -1617,6 +1630,10 @@ msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "কনফিগারেশন ফাইল রিসেট করা হচ্ছে, কেননা এটি করাপ্ট: %s"
 
 #: ../bleachbit/GUI.py
+msgid "Quit"
+msgstr ""
+
+#: ../bleachbit/GUI.py
 msgid "You must select an operation"
 msgstr "আপনাকে অবশ্যই একটি অপারেশন বাছাই করতে হবে"
 
@@ -1657,6 +1674,8 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"মাইক্রোসফট স্টোরে ব্লিচবিটের অফিসিয়াল ভার্সন নেই। আসল ভার্সনটি পেতে গেলে https://www.bleachbit.org "
+"থেকে ডাউনলোড করুন, এখানে এটি সবসময় বিনামূল্যে পাওয়া যায়।"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1684,11 +1703,15 @@ msgstr "প্রিভিউ অথবা ক্লিনিং প্রসে
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "আপডেট"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "ব্লিচবিটকে সর্বশেষ ভার্সনে আপডেট করুন﻿"
+
+#: ../bleachbit/GUI.py
+msgid "Press F11 to exit fullscreen mode."
+msgstr "ফুলস্ক্রিন মোড থেকে বের হতে F11 চাপুন।"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1777,10 +1800,9 @@ msgid "The child memory-wiping process returned code %d."
 msgstr "চাইল্ড মেমরি-ওয়াইপিং প্রসেস কোড %d দেখাচ্ছে।"
 
 #: ../bleachbit/Network.py
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
+#, python-format
 msgid "Downloading URL failed: %s"
-msgstr "url ডাউনলোড করা ব্যর্থ হয়েছে: %s"
+msgstr "URL ডাউনলোড করতে ব্যর্থ: %s﻿"
 
 #: ../bleachbit/Options.py
 #, fuzzy, python-format
@@ -1901,6 +1923,10 @@ msgstr "গেমস"
 #: ../bleachbit/Winapp.py
 msgid "Imported from winapp2.ini"
 msgstr "winapp2.ini থেকে ইমপোর্ট করা হয়েছে"
+
+#: ../bleachbit/Windows.py
+msgid "Administrator privileges are required to clean Windows Updates"
+msgstr ""
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
@@ -2060,6 +2086,13 @@ msgstr "_সাহায্য"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_BleachBit সম্পর্কে"
+
+#~ msgid "Audio player"
+#~ msgstr "অডিও প্লেয়ার"
+
+#, python-format
+#~ msgid "Cleaner is not usable on this OS because it has no actions: %s"
+#~ msgstr "এই OS এ ক্লিনার ব্যবহারযোগ্য নয়, কেননা এটির কোন কাজ নেই: %s"
 
 #~ msgid "IRC client formerly known as XChat"
 #~ msgstr "IRC ক্লায়েন্ট যা পূর্বে XChat নামে পরিচিত ছিল"

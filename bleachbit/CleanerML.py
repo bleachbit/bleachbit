@@ -328,6 +328,7 @@ def pot_fragment(msgid, pathname, translators=None):
         translators = f"#. {translators}\n"
     else:
         translators = ""
+    pathname = pathname.replace('\\', '/')
     ret = f'''{translators}#: {pathname}
 msgid "{msgid}"
 msgstr ""
@@ -337,9 +338,14 @@ msgstr ""
 
 
 def create_pot():
-    """Create a .pot for translation using gettext"""
+    """Create a .pot for translation using gettext
 
-    with open('../po/cleanerml.pot', 'w', encoding='utf-8') as f:
+    This function is called from the Makefile.
+
+    Paths and newlines are normalized to Unix style.
+    """
+
+    with open('../po/cleanerml.pot', 'w', encoding='utf-8', newline='\n') as f:
         for pathname in listdir('../cleaners'):
             if not pathname.lower().endswith(".xml"):
                 continue

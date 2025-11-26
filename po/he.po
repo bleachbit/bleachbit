@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-10 08:40+0000\n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
+"PO-Revision-Date: 2025-11-02 16:51+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/he/"
 ">\n"
@@ -17,11 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "נגן מדיה"
 
@@ -123,15 +124,16 @@ msgstr "מטמון"
 #: ../cleaners/beagle.xml ../cleaners/yum.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/waterfox.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
+#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/thumbnails.xml
+#: ../cleaners/exaile.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/smartftp.xml ../cleaners/apt.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/flash.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "מחיקת המטמון"
 
@@ -152,7 +154,8 @@ msgstr "בשימוש לאחרונה"
 msgid "Delete the most recently used list"
 msgstr "מחיקת רשימת הפריטים בהם נעשה שימוש לאחרונה"
 
-#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
+#: ../cleaners/apt.xml ../cleaners/snap.xml
 msgid "Package manager"
 msgstr "מנהל חבילות"
 
@@ -374,6 +377,22 @@ msgstr "מעטפת"
 msgid "Delete the command history"
 msgstr "מחיקת היסטוריית הפקודות"
 
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr "קבצים זמניים"
+
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr "מחיקת הקבצים הזמניים"
+
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
 msgstr "כלי חיפוש"
@@ -389,10 +408,6 @@ msgstr "מחיקת העוגיות, הכתובות בהן ביקרת, והיסט�
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "מעבד תמלילים"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "נגן שמע"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -435,22 +450,6 @@ msgstr "מחיקת מטמון תמונות המשתמשים והרגשונים"
 #: ../cleaners/vuze.xml
 msgid "File transfer client"
 msgstr "לקוח העברת קבצים"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Temporary files"
-msgstr "קבצים זמניים"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Delete the temporary files"
-msgstr "מחיקת הקבצים הזמניים"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -642,6 +641,14 @@ msgstr "מערכת חלונאית"
 msgid "Graphics editor"
 msgstr "עורך גרפי"
 
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr "מושבת"
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr "הסרת חבילות מושבתות"
+
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
 msgstr "מציג מסמכים"
@@ -777,13 +784,36 @@ msgstr ""
 msgid "Unnecessary file cleaner"
 msgstr "מנקה הקבצים הבלתי נחוצים"
 
-#: ../org.bleachbit.BleachBit.desktop
+#: ../org.bleachbit.BleachBit.desktop ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Free space and maintain privacy"
 msgstr "פינוי מקום ושמירה על הפרטיות"
 
-#. TRANSLATORS: Multi-value variables are explained in the online documentation.
-#. Basically, they are like an environment variable, but each multi-value variable
-#. can have multiple values. They're a way to make CleanerML files more concise.
+#. TRANSLATORS: Name of the developers
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Andrew Ziem and contributors"
+msgstr "אנדרו זים ותורמים"
+
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid ""
+"BleachBit frees disk space and maintains privacy by quickly removing "
+"unnecessary files such as cache, cookies, browser history, temporary files, "
+"and system logs. It can also shred files and clean free disk space to "
+"prevent data recovery."
+msgstr ""
+"BleachBit משחרר מקום בכונן ושומר על פרטיות על ידי הסרה מהירה של קבצים "
+"מיותרים כמו מטמון, עוגיות, היסטוריית דפדפן, קבצים זמניים ויומני מערכת. הוא "
+"גם יכול לגרוס קבצים ולנקות שטח כונן פנוי כדי למנוע שחזור נתונים."
+
+#. TRANSLATORS: Caption for screenshot
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Default dark mode, showing found junk files"
+msgstr "מצב כהה כברירת מחדל, מופיעים קובצי זבל שנמצאו"
+
+#. TRANSLATORS: Multi-value variables are explained
+#. in the online documentation. Basically, they are like
+#. an environment variable, but each multi-value variable
+#. can have multiple values. They're a way to make CleanerML
+#. files more concise.
 #: ../bleachbit/Action.py
 msgid "Deep scan does not support multi-value variable."
 msgstr "סריקה עמוקה לא תומכת במשתנים מרובי ערכים."
@@ -825,6 +855,10 @@ msgstr "ניקוי"
 msgid "Run external command: %s"
 msgstr "הפעלת פקודה חיצונית: %s"
 
+#: ../bleachbit/Action.py
+msgid "Refresh Windows shell"
+msgstr "רענן את מעטפת Windows"
+
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
 msgid ""
@@ -843,14 +877,6 @@ msgstr "התעלמות מהמנקה כיוון שיש הרשאות כתיבה ל
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "שגיאה בקריאת המנקה: %s"
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr "המנקה אינו שמיש במערכת ההפעלה הזאת כיוון שאין לו את הפעולות: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1163,11 +1189,6 @@ msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr "היה לפחות קובץ אחד במערכת שלא תומך בשכתוב מתקדם."
-
-#: ../bleachbit/FileUtilities.py
-#, python-brace-format
-msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr "הנתיב {pathname} עם מערכת הקבצים {fstype} מנופה"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1591,6 +1612,10 @@ msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "קובץ ההגדרות מתאפס כי הוא כנראה פגום: %s"
 
 #: ../bleachbit/GUI.py
+msgid "Quit"
+msgstr "יציאה"
+
+#: ../bleachbit/GUI.py
 msgid "You must select an operation"
 msgstr "יש לבחור בפעולה"
 
@@ -1665,15 +1690,19 @@ msgid "Update BleachBit to the latest version"
 msgstr "עדכון BleachBit לגרסה העדכנית ביותר"
 
 #: ../bleachbit/GUI.py
+msgid "Press F11 to exit fullscreen mode."
+msgstr "לחיצה על F11 תעביר ממסך מלא למסך רגיל."
+
+#: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
-msgstr "שגיאה בעת בדיקה אחר עדכונים: "
+msgstr "שגיאה בעת איתור עדכונים: "
 
 #: ../bleachbit/Memory.py
 msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"הפקודה ‚swapoff -s’ נכשלה, לכן בוצעה נסיגה אל /proc/swaps לפרטי שטח הדפדוף."
+"הפקודה ‚swapoff -s’ נכשלה, לכן בוצעה נסיגה אל ‎/proc/swaps לפרטי שטח הדפדוף."
 
 #: ../bleachbit/Memory.py
 msgid "Disabling swap."
@@ -1871,6 +1900,10 @@ msgid "Imported from winapp2.ini"
 msgstr "יובא מהקובץ winapp2.ini"
 
 #: ../bleachbit/Windows.py
+msgid "Administrator privileges are required to clean Windows Updates"
+msgstr "נדרשות הרשאות מנהל כדי לנקות עדכוני Windows"
+
+#: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
 msgstr "BleachBit מופעל…\n"
 
@@ -2025,6 +2058,17 @@ msgstr "ע_זרה"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_על אודות BleachBit"
+
+#~ msgid "Audio player"
+#~ msgstr "נגן שמע"
+
+#, python-format
+#~ msgid "Cleaner is not usable on this OS because it has no actions: %s"
+#~ msgstr "המנקה אינו שמיש במערכת ההפעלה הזאת כיוון שאין לו את הפעולות: %s"
+
+#, python-brace-format
+#~ msgid "Wiping path {pathname} with file system type {fstype}"
+#~ msgstr "הנתיב {pathname} עם מערכת הקבצים {fstype} מנופה"
 
 #~ msgid "IRC client formerly known as XChat"
 #~ msgstr "לקוח IRC, לשעבר XChat"

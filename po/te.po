@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-09 22:12-0600\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
 "PO-Revision-Date: 2021-06-18 15:40+0000\n"
 "Last-Translator: N.SUJATHA DEVI <Unknown>\n"
 "Language-Team: Telugu <te@li.org>\n"
@@ -20,7 +20,8 @@ msgstr ""
 "X-Generator: Launchpad (build 3619498b5524a71696f3dd612f4d11bd63449bb1)\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "మీడియా ప్లేయర్"
 
@@ -123,15 +124,16 @@ msgstr "క్యాషె"
 #: ../cleaners/beagle.xml ../cleaners/yum.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/waterfox.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
+#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/thumbnails.xml
+#: ../cleaners/exaile.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/smartftp.xml ../cleaners/apt.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/flash.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "క్యాషెను డిలీట్ చేయండి"
 
@@ -152,7 +154,8 @@ msgstr "ఇటీవలి వాడినవి"
 msgid "Delete the most recently used list"
 msgstr "ఇటీవలి ఉపయోగించిన జాబితాను డిలీట్ చేయండి"
 
-#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
+#: ../cleaners/apt.xml ../cleaners/snap.xml
 msgid "Package manager"
 msgstr "ప్యాకేజ్ మేనేజర్"
 
@@ -371,6 +374,22 @@ msgstr "షెల్"
 msgid "Delete the command history"
 msgstr "కమాండ్ హిస్టరీని డిలీట్ చేయండి"
 
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr "తాత్కాలిక ఫైళ్ళు"
+
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr "తాత్కాలిక ఫైళ్ళను డిలీట్ చేయండి"
+
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
 msgstr "సెర్చ్ టూల్"
@@ -386,10 +405,6 @@ msgstr "కుకీలు, సందర్శించిన URLలు, మర�
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "వర్డ్ ప్రాసెసర్"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "ఆడియో ప్లేయర్"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -432,22 +447,6 @@ msgstr "అవతార్స్ మరియు ఎమోటికాన్స�
 #: ../cleaners/vuze.xml
 msgid "File transfer client"
 msgstr "ఫైల్ ట్రాన్స్ఫర్ క్లయింట్"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Temporary files"
-msgstr "తాత్కాలిక ఫైళ్ళు"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Delete the temporary files"
-msgstr "తాత్కాలిక ఫైళ్ళను డిలీట్ చేయండి"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -637,6 +636,14 @@ msgstr "విండోయింగ్ సిస్టం"
 msgid "Graphics editor"
 msgstr "గ్రాఫిక్స్ ఎడిటర్"
 
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr ""
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr ""
+
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
 msgstr "డాక్యుమెంట్ వ్యూయర్"
@@ -774,13 +781,33 @@ msgstr "వెబ్ క్యాషెను డిలీట్ చేయండ
 msgid "Unnecessary file cleaner"
 msgstr "అనవసరమైన ఫైల్ క్లీనర్"
 
-#: ../org.bleachbit.BleachBit.desktop
+#: ../org.bleachbit.BleachBit.desktop ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Free space and maintain privacy"
 msgstr "స్థలాన్ని ఖాళీ చేసి, గోప్యతను పాటించండి"
 
-#. TRANSLATORS: Multi-value variables are explained in the online documentation.
-#. Basically, they are like an environment variable, but each multi-value variable
-#. can have multiple values. They're a way to make CleanerML files more concise.
+#. TRANSLATORS: Name of the developers
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Andrew Ziem and contributors"
+msgstr ""
+
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid ""
+"BleachBit frees disk space and maintains privacy by quickly removing "
+"unnecessary files such as cache, cookies, browser history, temporary files, "
+"and system logs. It can also shred files and clean free disk space to "
+"prevent data recovery."
+msgstr ""
+
+#. TRANSLATORS: Caption for screenshot
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Default dark mode, showing found junk files"
+msgstr ""
+
+#. TRANSLATORS: Multi-value variables are explained
+#. in the online documentation. Basically, they are like
+#. an environment variable, but each multi-value variable
+#. can have multiple values. They're a way to make CleanerML
+#. files more concise.
 #: ../bleachbit/Action.py
 msgid "Deep scan does not support multi-value variable."
 msgstr "డీప్ స్కాన్ మల్టీ-వాల్యూ వేరియబుల్‌కు మద్దతు ఇవ్వదు."
@@ -822,6 +849,10 @@ msgstr "క్లీన్ చేయండి"
 msgid "Run external command: %s"
 msgstr "బాహ్య కమాండ్‌ను రన్ చేయండి: %s"
 
+#: ../bleachbit/Action.py
+msgid "Refresh Windows shell"
+msgstr ""
+
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
 msgid ""
@@ -840,14 +871,6 @@ msgstr "క్లీనర్ వరల్డ్ రైటబుల్ కాబ
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "క్లీనర్‌ను చదవడంలో దోషం ఏర్పడింది: %s"
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr "ఈ OS లో క్లీనర్ ఉపయోగించబడదు ఎందుకంటే దీనికి చర్యలు లేవు: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1158,11 +1181,6 @@ msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr "అధునాతన ఓవర్‌రైటింగ్ కు మద్దతు ఇవ్వని ఒక ఫైల్ సిస్టం లో కనీసం ఒక ఫైల్ ఉండింది."
-
-#: ../bleachbit/FileUtilities.py
-#, python-brace-format
-msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1588,6 +1606,10 @@ msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "కాన్ఫిగరేషన్ ఫైల్ పాడైపోయినందున దాన్ని రీసెట్ చేయడం: %s"
 
 #: ../bleachbit/GUI.py
+msgid "Quit"
+msgstr ""
+
+#: ../bleachbit/GUI.py
 msgid "You must select an operation"
 msgstr "మీరు ఒక ఆపరేషన్‌ను ఎంచుకోవాలి"
 
@@ -1657,6 +1679,10 @@ msgstr ""
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
+msgstr ""
+
+#: ../bleachbit/GUI.py
+msgid "Press F11 to exit fullscreen mode."
 msgstr ""
 
 #: ../bleachbit/GUI.py
@@ -1867,6 +1893,10 @@ msgid "Imported from winapp2.ini"
 msgstr "winapp2.ini నుండి ఇంపోర్ట్ చేయబడింది"
 
 #: ../bleachbit/Windows.py
+msgid "Administrator privileges are required to clean Windows Updates"
+msgstr ""
+
+#: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
 msgstr ""
 
@@ -2022,6 +2052,13 @@ msgstr "_సహాయం"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_BleachBit గురించి"
+
+#~ msgid "Audio player"
+#~ msgstr "ఆడియో ప్లేయర్"
+
+#, python-format
+#~ msgid "Cleaner is not usable on this OS because it has no actions: %s"
+#~ msgstr "ఈ OS లో క్లీనర్ ఉపయోగించబడదు ఎందుకంటే దీనికి చర్యలు లేవు: %s"
 
 #~ msgid "IRC client formerly known as XChat"
 #~ msgstr "IRC క్లయింట్‌ను గతంలో XChat అని పిలిచేవారు"

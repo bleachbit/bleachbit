@@ -29,7 +29,7 @@ import getpass
 from bleachbit import Log
 from configparser import RawConfigParser, NoOptionError  # used in other files
 
-APP_VERSION = "5.0.0"
+APP_VERSION = "5.0.2"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 APP_COPYRIGHT = "Copyright (C) 2008-2025 Andrew Ziem"

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-03-13 08:09+0000\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
+"PO-Revision-Date: 2025-08-18 10:02+0000\n"
 "Last-Translator: Nick Wick <NickWick@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/bleachbit/main/"
 "sv/>\n"
@@ -18,11 +18,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.13\n"
 "X-Launchpad-Export-Date: 2022-01-23 20:20+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "Mediaspelare"
 
@@ -125,15 +126,16 @@ msgstr "Cache"
 #: ../cleaners/beagle.xml ../cleaners/yum.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/waterfox.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
+#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/thumbnails.xml
+#: ../cleaners/exaile.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/smartftp.xml ../cleaners/apt.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/flash.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "Ta bort cachen"
 
@@ -154,7 +156,8 @@ msgstr "Senast använda"
 msgid "Delete the most recently used list"
 msgstr "Ta bort listan över senast använda"
 
-#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
+#: ../cleaners/apt.xml ../cleaners/snap.xml
 msgid "Package manager"
 msgstr "Pakethanterare"
 
@@ -379,6 +382,22 @@ msgstr "Skal"
 msgid "Delete the command history"
 msgstr "Ta bort kommandohistoriken"
 
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr "Temporära filer"
+
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr "Ta bort temporära filer"
+
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
 msgstr "Sökverktyg"
@@ -394,10 +413,6 @@ msgstr "Ta bort kakor, besökta webbadresser och sökhistorik"
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "Ordbehandlare"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "Ljudspelare"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -440,22 +455,6 @@ msgstr "Ta bort cache för avatarer och uttryckssymboler"
 #: ../cleaners/vuze.xml
 msgid "File transfer client"
 msgstr "Filöverföringsklient"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Temporary files"
-msgstr "Temporära filer"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Delete the temporary files"
-msgstr "Ta bort temporära filer"
 
 #: ../cleaners/epiphany.xml
 msgid "Places"
@@ -653,6 +652,14 @@ msgstr "Fönstersystem"
 msgid "Graphics editor"
 msgstr "Grafikredigerare"
 
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr "Inaktiverad"
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr "Ta bort inaktiverade paket"
+
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
 msgstr "Dokumentvisare"
@@ -789,13 +796,37 @@ msgstr ""
 msgid "Unnecessary file cleaner"
 msgstr "Städare av onödiga filer"
 
-#: ../org.bleachbit.BleachBit.desktop
+#: ../org.bleachbit.BleachBit.desktop ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Free space and maintain privacy"
 msgstr "Frigör utrymme och bibehåll integritet"
 
-#. TRANSLATORS: Multi-value variables are explained in the online documentation.
-#. Basically, they are like an environment variable, but each multi-value variable
-#. can have multiple values. They're a way to make CleanerML files more concise.
+#. TRANSLATORS: Name of the developers
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Andrew Ziem and contributors"
+msgstr "Andrew Ziem och bidragsgivare"
+
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid ""
+"BleachBit frees disk space and maintains privacy by quickly removing "
+"unnecessary files such as cache, cookies, browser history, temporary files, "
+"and system logs. It can also shred files and clean free disk space to "
+"prevent data recovery."
+msgstr ""
+"BleachBit frigör diskutrymme och bibehåller integriteten genom att snabbt ta "
+"bort onödiga filer som cache, kakor, webbhistorik, tillfälliga filer och "
+"systemloggar. Det kan också strimla filer och frigöra diskutrymme för att "
+"förhindra dataåterställning."
+
+#. TRANSLATORS: Caption for screenshot
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Default dark mode, showing found junk files"
+msgstr "Standard mörkt läge, visar hittade skräpfiler"
+
+#. TRANSLATORS: Multi-value variables are explained
+#. in the online documentation. Basically, they are like
+#. an environment variable, but each multi-value variable
+#. can have multiple values. They're a way to make CleanerML
+#. files more concise.
 #: ../bleachbit/Action.py
 msgid "Deep scan does not support multi-value variable."
 msgstr "Djupskanning stöder inte flervärdiga variabler."
@@ -837,6 +868,10 @@ msgstr "Städa"
 msgid "Run external command: %s"
 msgstr "Kör externt kommando: %s"
 
+#: ../bleachbit/Action.py
+msgid "Refresh Windows shell"
+msgstr "Uppdatera Windows shell"
+
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
 msgid ""
@@ -855,16 +890,6 @@ msgstr "Ignorera städaren eftersom den är skrivbar för alla: %s"
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "Fel vid läsning av städaren: %s"
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr ""
-"Städaren kan inte användas på det här operativsystemet eftersom den inte har "
-"några åtgärder: %s"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1179,11 +1204,6 @@ msgid ""
 msgstr ""
 "Det fanns åtminstone en fil i ett filsystem som inte har stöd för avancerad "
 "överskrivning."
-
-#: ../bleachbit/FileUtilities.py
-#, python-brace-format
-msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr "Städar sökväg {pathname} med filsystemstyp {fstype}"
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1620,6 +1640,10 @@ msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "Återställer konfigurationsfilen eftersom den är skadad: %s"
 
 #: ../bleachbit/GUI.py
+msgid "Quit"
+msgstr "Avsluta"
+
+#: ../bleachbit/GUI.py
 msgid "You must select an operation"
 msgstr "Du måste välja en åtgärd"
 
@@ -1696,6 +1720,10 @@ msgstr "Uppdatera"
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
 msgstr "Uppdatera BleachBit till den senaste versionen"
+
+#: ../bleachbit/GUI.py
+msgid "Press F11 to exit fullscreen mode."
+msgstr "Tryck på F11 för att avsluta helskärmsläge."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1908,6 +1936,10 @@ msgid "Imported from winapp2.ini"
 msgstr "Importerat från winapp2.ini"
 
 #: ../bleachbit/Windows.py
+msgid "Administrator privileges are required to clean Windows Updates"
+msgstr "Administratörsbehörighet krävs för att rensa Windows-uppdateringar"
+
+#: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
 msgstr "BleachBit startar...\n"
 
@@ -2062,6 +2094,19 @@ msgstr "_Hjälp"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_Om BleachBit"
+
+#~ msgid "Audio player"
+#~ msgstr "Ljudspelare"
+
+#, python-format
+#~ msgid "Cleaner is not usable on this OS because it has no actions: %s"
+#~ msgstr ""
+#~ "Städaren kan inte användas på det här operativsystemet eftersom den inte "
+#~ "har några åtgärder: %s"
+
+#, python-brace-format
+#~ msgid "Wiping path {pathname} with file system type {fstype}"
+#~ msgstr "Städar sökväg {pathname} med filsystemstyp {fstype}"
 
 #~ msgid "IRC client formerly known as XChat"
 #~ msgstr "IRC-klient tidigare känd som XChat"

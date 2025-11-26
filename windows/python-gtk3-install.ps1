@@ -36,7 +36,7 @@ $VC_REDIST_FN = "VC_redist.x86.exe"
 $VC_REDIST_URL = "https://aka.ms/vs/17/release/vc_redist.x86.exe"
 if ($env:APPVEYOR -ne $true) {
     if (-not (Test-Path $VC_REDIST_FN)) {
-        Write-Host "Downloading Visual C++ Redistributable..." 
+        Write-Host "Downloading Visual C++ Redistributable..."
         Invoke-WebRequest -Uri $VC_REDIST_URL -OutFile $VC_REDIST_FN
         Get-FileHash -Path $VC_REDIST_FN -Algorithm SHA256 | Format-List
         $fileSizeMB = (Get-Item $VC_REDIST_FN).Length / 1MB
@@ -110,7 +110,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # Add Python home and scripts to PATH.
-if ($env:PATH -notlike "*$PYTHON_HOME*") {
+if ($env:PATH -notlike "*$python_home*") {
     Write-Host "Adding Python home and scripts to PATH..."
     $env:PATH += ";$python_home;$python_home\Scripts"
     Write-Host "Updated PATH: $env:PATH"
@@ -124,8 +124,12 @@ Write-Host "Checking pip version"
 
 Write-Host "Updating pip..."
 & "$python_home\python.exe" -m pip install --upgrade pip
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Failed to update pip: exit code $LASTEXITCODE"
+    exit $LASTEXITCODE
+}
 
-if (-not (Test-Path gtk-themes.zip)) { 
+if (-not (Test-Path gtk-themes.zip)) {
     Write-Host "Downloading GTK themes..."
     #Invoke-WebRequest -Uri "$base_download_url/gtk-themes.zip" -OutFile "gtk-themes.zip"
     #FIXME: use new themes
@@ -153,11 +157,24 @@ if (Test-Path "gtk-themes") {
     Remove-Item -Path "gtk-themes" -Recurse
 }
 
+# psutil 7.1.2 stopped providing 32-bit wheels.
+# It needs MSVC++ with the python3.lib.
+Write-Host "Copying python311.lib..."
+New-Item -ItemType Directory -Path "$python_home\libs" -Force
+$pylibdest = "$python_home\libs\python3.lib"
+Copy-Item -Path "$root_dir\lib\python311.lib" -Destination $pylibdest
+Get-ChildItem -Path $pylibdest | Format-List -Property Name, Length
+
 # Install pip packages
+Write-Host "pip install -r requirements.txt..."
 & "$python_home\Scripts\pip3.exe" install -r "$script_dir\requirements.txt"
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Failed to update pip: exit code $LASTEXITCODE"
+    exit $LASTEXITCODE
+}
 
 $PYGOBJECT_FN = "pygobject-3.51.0-cp311-cp311-win32.whl"
-if (-not (Test-Path $PYGOBJECT_FN)) { 
+if (-not (Test-Path $PYGOBJECT_FN)) {
     Write-Host "Downloading PyGObject..."
     Invoke-WebRequest -Uri "$base_download_url/$PYGOBJECT_FN" -OutFile "$PYGOBJECT_FN"
     Get-FileHash -Path $PYGOBJECT_FN -Algorithm SHA256 | Format-List
@@ -184,16 +201,37 @@ Get-Content "$script_dir\python-gtk3-deps.lst" | ForEach-Object {
     }
 }
 
+Write-Host "Copying gdk-pixbuf-2.0..."
 $GDK_PIXBUF_DIR = "$python_home\lib\gdk-pixbuf-2.0\2.10.0"
 if (-not (Test-Path $GDK_PIXBUF_DIR)) {
     Write-Host "Creating $GDK_PIXBUF_DIR..."
     New-Item -Path $GDK_PIXBUF_DIR -ItemType Directory -Force
 }
 
+$GDK_PIXBUF_LOADER_DIR = Join-Path $GDK_PIXBUF_DIR "loaders"
+if (-not (Test-Path $GDK_PIXBUF_LOADER_DIR)) {
+    New-Item -Path $GDK_PIXBUF_LOADER_DIR -ItemType Directory -Force | Out-Null
+}
+$svg_loader_src = Join-Path $root_dir "lib\gdk-pixbuf-2.0\2.10.0\loaders\pixbufloader-svg.dll"
+if (Test-Path $svg_loader_src) {
+    Copy-Item -Path $svg_loader_src -Destination $GDK_PIXBUF_LOADER_DIR -Force
+}
+Get-ChildItem -Path $GDK_PIXBUF_LOADER_DIR | Format-List -Property Name, Length
+
 # Update cache file for GDK pixbuf.
 $env:GDK_PIXBUF_MODULE_FILE = "$GDK_PIXBUF_DIR\loaders.cache"
 if (-not (Test-Path $env:GDK_PIXBUF_MODULE_FILE)) {
     Write-Host "Creating $env:GDK_PIXBUF_MODULE_FILE..."
-    $env:PATH += ";$root_dir\tools\gtk3"
-    & "$root_dir\tools\gdk-pixbuf\gdk-pixbuf-query-loaders.exe" --update-cache "$python_home\pixbufloader-svg.dll"
+    $prevPath = $env:PATH
+    try {
+        $env:GDK_PIXBUF_MODULEDIR = $GDK_PIXBUF_LOADER_DIR
+        $env:PATH = "$python_home\bin;$python_home;$python_home\Scripts;$root_dir\tools\gtk3;$prevPath"
+        & "$root_dir\tools\gdk-pixbuf\gdk-pixbuf-query-loaders.exe" --update-cache
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "gdk-pixbuf-query-loaders.exe failed with exit code $LASTEXITCODE"
+            exit $LASTEXITCODE
+        }
+    } finally {
+        $env:PATH = $prevPath
+    }
 }

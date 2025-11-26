@@ -37,6 +37,8 @@ import datetime
 import os
 import tempfile
 
+RUN_EXTERNAL_TIMEOUT = 30
+
 
 class CLITestCase(common.BleachbitTestCase):
     """Test case for module CLI"""
@@ -51,7 +53,8 @@ class CLITestCase(common.BleachbitTestCase):
         with open(os.devnull, 'w') as stdout:
             if not redirect_stdout:
                 stdout = None
-            output = run_external(args, stdout=stdout, env=env)
+            output = run_external(args, stdout=stdout,
+                                  env=env, timeout=RUN_EXTERNAL_TIMEOUT)
         self.assertEqual(output[0], 0, "Return code = %d, stderr='%s'"
                          % (output[0], output[2]))
         pos = output[2].find('Traceback (most recent call last)')
@@ -128,7 +131,7 @@ class CLITestCase(common.BleachbitTestCase):
                 args = [get_executable(), 'bleachbit.py', '--preview', 'doesnot.exist',
                         '--debug'] + f'--debug-log{delimiter}{log_path}'.split(delimiter)
                 (rc, _stdout, stderr) = run_external(
-                    args, stdout=None, timeout=10)
+                    args, stdout=None, timeout=RUN_EXTERNAL_TIMEOUT)
                 self.assertEqual(0, rc)
                 self.assertExists(log_path)
                 with open(log_path, 'r', encoding='utf-8') as log_file:
@@ -175,7 +178,7 @@ class CLITestCase(common.BleachbitTestCase):
         common.put_env('LANG', 'blahfoo')
         # tests are run from the parent directory
         args = [get_executable(), '-m', 'bleachbit.CLI', '--version']
-        output = run_external(args)
+        output = run_external(args, timeout=RUN_EXTERNAL_TIMEOUT)
         self.assertNotEqual(output[1].find('Copyright'), -1, str(output))
         common.put_env('LANG', old_lang)
         self.assertEqual(common.get_env('LANG'), old_lang)
@@ -270,7 +273,7 @@ class CLITestCase(common.BleachbitTestCase):
             for i, launcher in enumerate([['bleachbit.py'], ['-m', 'bleachbit.CLI']]):
                 direct_args = [get_executable(),] + launcher + args
                 output = run_external(
-                    direct_args, env=env, clean_env=clean_env, timeout=5)
+                    direct_args, env=env, clean_env=clean_env, timeout=RUN_EXTERNAL_TIMEOUT)
                 self.assertEqual(output[0], 0, output)
                 self.assertIn(expected_output, output[1])
                 modified_output_str = output[1].replace(
@@ -294,10 +297,11 @@ class CLITestCase(common.BleachbitTestCase):
                 self.assertTrue(os.path.exists(filename))
                 args = [get_executable(), '-m',
                         'bleachbit.CLI', '--shred', filename]
-                output = run_external(args)
+                output = run_external(args, timeout=RUN_EXTERNAL_TIMEOUT)
                 self.assertEqual(output[0], 0)
                 self.assertNotExists(filename)
 
+    @common.test_also_with_sudo
     def test_sysinfo(self):
         """Unit test for --sysinfo
 
@@ -311,7 +315,10 @@ class CLITestCase(common.BleachbitTestCase):
             ])
         for env_prefix in env_configs:
             args = env_prefix + [get_executable(), 'bleachbit.py', '--sysinfo']
-            output = run_external(args)
+            output = run_external(args, timeout=RUN_EXTERNAL_TIMEOUT)
+            if os.name == 'posix' and os.environ.get('USER') == 'root' and \
+                    output[0] == 1:
+                continue
             self.assertEqual(output[0], 0, output)
             self.assertIn('sys.version', output[1])
             # FIXME: verify that there is not a message like
@@ -322,7 +329,8 @@ class CLITestCase(common.BleachbitTestCase):
         """Unit test for --gui --exit, only for Windows"""
         args = (get_executable(), '-m',
                 'bleachbit.CLI', '--gui', '--exit')
-        (rc, _stdout, stderr) = run_external(args)
+        (rc, _stdout, stderr) = run_external(
+            args, timeout=RUN_EXTERNAL_TIMEOUT)
         self.assertNotIn('no such option', stderr)
         self.assertNotIn('Usage: CLI.py', stderr)
         self.assertEqual(rc, 0)

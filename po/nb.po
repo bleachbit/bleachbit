@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-09 22:12-0600\n"
-"PO-Revision-Date: 2025-02-04 17:43+0000\n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
+"POT-Creation-Date: 2025-08-16 23:52-0600\n"
+"PO-Revision-Date: 2025-10-22 14:02+0000\n"
 "Last-Translator: ovl-1 <ovl-002@mailinator.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "bleachbit/main/nb_NO/>\n"
@@ -17,11 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 "X-Launchpad-Export-Date: 2019-10-26 13:12+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winamp.xml ../cleaners/vlc.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "Medieavspiller"
 
@@ -124,15 +125,16 @@ msgstr "Hurtiglager"
 #: ../cleaners/beagle.xml ../cleaners/yum.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/waterfox.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/thumbnails.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
+#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/thumbnails.xml
+#: ../cleaners/exaile.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/smartftp.xml ../cleaners/apt.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/flash.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "Slett hurtiglager"
 
@@ -153,7 +155,8 @@ msgstr "Nylig brukte"
 msgid "Delete the most recently used list"
 msgstr "Slett listen over nylig brukte elementer"
 
-#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/apt.xml
+#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
+#: ../cleaners/apt.xml ../cleaners/snap.xml
 msgid "Package manager"
 msgstr "Pakkebehandler"
 
@@ -377,6 +380,22 @@ msgstr "Skall"
 msgid "Delete the command history"
 msgstr "Slett kommandohistorikken"
 
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr "Midlertidige filer"
+
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr "Slett midlertidige filer"
+
 #: ../cleaners/beagle.xml ../cleaners/recoll.xml
 msgid "Search tool"
 msgstr "Søkeverktøy"
@@ -392,10 +411,6 @@ msgstr "Slett informasjonskapslene, besøkte nettadresser og søkehistorikk"
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "Tekstbehandler"
-
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "Lydavspiller"
 
 #: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
@@ -441,22 +456,6 @@ msgstr "Slett hurtiglageret for avatarer og smilefjes"
 msgid "File transfer client"
 msgstr "Filoverføringsklient"
 
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Temporary files"
-msgstr "Midlertidige filer"
-
-#: ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Delete the temporary files"
-msgstr "Slett midlertidige filer"
-
 #: ../cleaners/epiphany.xml
 msgid "Places"
 msgstr "Steder"
@@ -487,11 +486,11 @@ msgstr "E-postklient"
 
 #: ../cleaners/geary.xml
 msgid "Attachments"
-msgstr ""
+msgstr "Vedlegg"
 
 #: ../cleaners/geary.xml
 msgid "Sync conflict"
-msgstr ""
+msgstr "Synkroniseringskonflikt"
 
 #: ../cleaners/geary.xml ../cleaners/deepscan.xml
 msgid "This option is slow."
@@ -651,6 +650,14 @@ msgstr "Vindussystem"
 msgid "Graphics editor"
 msgstr "Bilderedigeringsprogram"
 
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr "Deaktivert"
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr "Fjern deaktiverte pakker"
+
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
 msgstr "Dokumentviser"
@@ -753,14 +760,12 @@ msgid "Memory dump"
 msgstr "Minnedump"
 
 #: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Desktop widgets"
-msgstr "Skrivebordsmiljø"
+msgstr "Skrivebordmoduler"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
-msgstr "Filarkiver"
+msgstr "Filarkiveringsprogram"
 
 #: ../cleaners/amule.xml
 msgid "Known files history"
@@ -789,13 +794,33 @@ msgstr ""
 msgid "Unnecessary file cleaner"
 msgstr "Unødvendig filrenser"
 
-#: ../org.bleachbit.BleachBit.desktop
+#: ../org.bleachbit.BleachBit.desktop ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Free space and maintain privacy"
 msgstr "Frigjør plass og beskytt personvernet"
 
-#. TRANSLATORS: Multi-value variables are explained in the online documentation.
-#. Basically, they are like an environment variable, but each multi-value variable
-#. can have multiple values. They're a way to make CleanerML files more concise.
+#. TRANSLATORS: Name of the developers
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Andrew Ziem and contributors"
+msgstr "Andrew Ziem og bidragsytere"
+
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid ""
+"BleachBit frees disk space and maintains privacy by quickly removing "
+"unnecessary files such as cache, cookies, browser history, temporary files, "
+"and system logs. It can also shred files and clean free disk space to "
+"prevent data recovery."
+msgstr ""
+
+#. TRANSLATORS: Caption for screenshot
+#: ../org.bleachbit.BleachBit.metainfo.xml
+msgid "Default dark mode, showing found junk files"
+msgstr ""
+
+#. TRANSLATORS: Multi-value variables are explained
+#. in the online documentation. Basically, they are like
+#. an environment variable, but each multi-value variable
+#. can have multiple values. They're a way to make CleanerML
+#. files more concise.
 #: ../bleachbit/Action.py
 msgid "Deep scan does not support multi-value variable."
 msgstr ""
@@ -837,6 +862,10 @@ msgstr "Rydd opp"
 msgid "Run external command: %s"
 msgstr "Kjør ekstern kommando: %s"
 
+#: ../bleachbit/Action.py
+msgid "Refresh Windows shell"
+msgstr ""
+
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
 msgid ""
@@ -852,14 +881,6 @@ msgstr ""
 #: ../bleachbit/CleanerML.py
 #, python-format
 msgid "Error reading cleaner: %s"
-msgstr ""
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
 msgstr ""
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
@@ -1173,11 +1194,7 @@ msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr ""
-
-#: ../bleachbit/FileUtilities.py
-#, python-brace-format
-msgid "Wiping path {pathname} with file system type {fstype}"
-msgstr ""
+"Det var minst én fil på et filsystem som ikke støtter avansert overskriving."
 
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -1378,19 +1395,15 @@ msgstr "Last ned og oppdater renseprosesser (winapp2.ini) fra nett"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "Oppdag språk automatisk"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "Automatisk bevaring av språket %s."
+msgstr "Oppdag automatisk systemspråket"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "Språk"
+msgstr "Språk:"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1613,6 +1626,10 @@ msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "Tilbakestiller innstillingsfilen fordi den er skadet: %s"
 
 #: ../bleachbit/GUI.py
+msgid "Quit"
+msgstr "Avslutt"
+
+#: ../bleachbit/GUI.py
 msgid "You must select an operation"
 msgstr "Du må velge en handling"
 
@@ -1681,11 +1698,15 @@ msgstr "Avbryt forhåndsvisningen eller renseprosessen"
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "Oppdater"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "Oppdater BleachBit til den siste versjonen"
+
+#: ../bleachbit/GUI.py
+msgid "Press F11 to exit fullscreen mode."
+msgstr "Trykk F11 for å avslutte fullskjermmodus."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1710,7 +1731,7 @@ msgstr "Aktiverer vekselminne på nytt."
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Setting nice value %d for this process."
-msgstr ""
+msgstr "Setter nice-verdi %d for denne prosessen."
 
 #: ../bleachbit/Memory.py
 #, python-brace-format
@@ -1779,21 +1800,19 @@ msgid "Downloading URL failed: %s"
 msgstr ""
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "Disken var full da oppsettet ble skrevet til filen %s"
+msgstr "Disken var full da oppsettet ble skrevet til filen: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "Disken var full da oppsettet ble skrevet til filen %s"
+msgstr "Tillatelse nektet da oppsettet ble skrevet til filen: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Error checking whether path exists: %s"
-msgstr ""
+msgstr "Feil ved å sjekke om banen eksisterer: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1865,6 +1884,9 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
+"Feil ved åpning av en nettverkstilkobling for å se etter oppdateringer. "
+"Kontroller at nettverket fungerer og at en brannmur ikke blokkerer dette "
+"programmet. Feilmelding: {}"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py
@@ -1895,6 +1917,10 @@ msgid "Imported from winapp2.ini"
 msgstr "Importert fra winapp2.ini"
 
 #: ../bleachbit/Windows.py
+msgid "Administrator privileges are required to clean Windows Updates"
+msgstr ""
+
+#: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
 msgstr "BleachBit starter...\n"
 
@@ -1909,10 +1935,9 @@ msgstr ""
 "Unntak forekom under kjøringen av operasjonen '%(operation)s': '%(msg)s'"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
-#| msgid "Executable not found: %s"
+#, python-format
 msgid "File not found: %s"
-msgstr "Fant ikke programfil: %s"
+msgstr "Fant ikke fil: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
@@ -1932,7 +1957,7 @@ msgstr ""
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Tilgang nektet: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
@@ -2051,6 +2076,13 @@ msgstr "_Hjelp"
 #: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_Om BleachBit"
+
+#~ msgid "Audio player"
+#~ msgstr "Lydavspiller"
+
+#, python-brace-format
+#~ msgid "Wiping path {pathname} with file system type {fstype}"
+#~ msgstr "Overskriver bane {pathname} med filsystemtype {fstype}"
 
 #~ msgid "IRC client formerly known as XChat"
 #~ msgstr "IRC-klient tidligere kjent som XChat"

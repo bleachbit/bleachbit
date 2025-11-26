@@ -65,11 +65,10 @@ def run_setup(args={}):
           classifiers=[
               'Development Status :: 5 - Production/Stable',
               'Programming Language :: Python',
-              'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
               'Operating System :: Microsoft :: Windows',
               'Operating System :: POSIX :: Linux',
           ],
-          license='GPLv3+',
+          license='GPL-3.0-or-later',
           # py_requires='>=3.8',
           # Ubuntu 20.04 LTS is EOL on April 2025, and it has Python 3.8.
           platforms='Linux and Windows, Python v3.8+, GTK v3.24+',

@@ -377,7 +377,7 @@ class Bleachbit(Gtk.Application):
         #
         # Rebuild a minimal bleachbit.ini when quitting
         GLib.idle_add(self.quit, None, None, True,
-                      priority=GObject.PRIORITY_LOW)
+                      priority=GLib.PRIORITY_LOW)
 
     def cb_wipe_free_space(self, action, param):
         """callback to wipe free space in arbitrary folder"""
@@ -480,13 +480,13 @@ class Bleachbit(Gtk.Application):
         self._window.present()
         if self._shred_paths:
             GLib.idle_add(GUI.shred_paths, self._window,
-                          self._shred_paths, priority=GObject.PRIORITY_LOW)
+                          self._shred_paths, priority=GLib.PRIORITY_LOW)
             # When we shred paths and auto exit with the Windows Explorer context menu command we close the
             # application in GUI.shred_paths, because if it is closed from here there are problems.
             # Most probably this is something related with how GTK handles idle quit calls.
         elif self._auto_exit:
             GLib.idle_add(self.quit,
-                          priority=GObject.PRIORITY_LOW)
+                          priority=GLib.PRIORITY_LOW)
             print('Success')
 
 
@@ -538,7 +538,8 @@ class TreeInfoModel:
                 o_value = options.get_tree(c_id, o_id)
                 self.tree_store.append(parent, (o_name, o_value, o_id, ""))
         if hidden_cleaners:
-            logger.debug("automatically hid %d cleaners: %s", len(hidden_cleaners), ', '.join(hidden_cleaners))
+            logger.debug("automatically hid %d cleaners: %s", len(
+                hidden_cleaners), ', '.join(hidden_cleaners))
         self.row_changed_handler_id = self.tree_store.connect("row-changed",
                                                               self.on_row_changed)
 
@@ -920,9 +921,9 @@ class GUI(Gtk.ApplicationWindow):
     def build_appindicator_menu(self):
         """Build the app indicator menu"""
         menu = Gtk.Menu()
-        item_clean = Gtk.MenuItem('Clean')
+        item_clean = Gtk.MenuItem(label=_("Clean"))
         item_clean.connect('activate', self.run_operations)
-        item_quit = Gtk.MenuItem('Quit BleachBit')
+        item_quit = Gtk.MenuItem(label=_("Quit"))
         item_quit.connect('activate', self.on_quit)
         menu.append(item_clean)
         menu.append(item_quit)
@@ -957,7 +958,7 @@ class GUI(Gtk.ApplicationWindow):
 
         if self._auto_exit:
             GLib.idle_add(self.close,
-                          priority=GObject.PRIORITY_LOW)
+                          priority=GLib.PRIORITY_LOW)
 
         # user aborted
         return False
@@ -1218,6 +1219,9 @@ class GUI(Gtk.ApplicationWindow):
                 self.append_text(
                     _('Run BleachBit with administrator privileges to improve the accuracy of overwriting the contents of files.'))
                 self.append_text('\n')
+        if os.name == 'nt' and Windows.is_ots_elevation():
+            self.append_text(
+                _('You elevated privileges using a different account to clean shared parts of the system. User-specific paths will refer to the administrator account, so to clean your profile, run BleachBit again as a standard user.') + '\n')
 
         if 'windowsapps' in sys.executable.lower():
             self.append_text(

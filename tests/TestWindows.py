@@ -23,14 +23,19 @@
 Test case for module Windows
 """
 
+
 from tests import common
 
 from bleachbit import FileUtilities, General
+from bleachbit.Command import Delete, Function
 from bleachbit.FileUtilities import extended_path, extended_path_undo
 from bleachbit.Windows import (
     delete_locked_file,
     delete_registry_key,
     delete_registry_value,
+    delete_updates,
+    is_service_running,
+    run_net_service_command,
     detect_registry_key,
     empty_recycle_bin,
     get_clipboard_paths,
@@ -47,7 +52,9 @@ from bleachbit.Windows import (
     set_environ,
     setup_environment,
     shell_change_notify,
-    split_registry_key
+    split_registry_key,
+    get_sid_token_48,
+    is_ots_elevation,
 )
 from bleachbit import logger
 
@@ -57,10 +64,13 @@ import shutil
 import sys
 import tempfile
 from decimal import Decimal
+from unittest import mock
+
 
 if 'win32' == sys.platform:
     import pywintypes
     import win32api
+    import win32service
     import winreg
     from win32com.shell import shell
 
@@ -92,7 +102,7 @@ class WindowsTestCase(common.BleachbitTestCase):
     def test_get_recycle_bin(self):
         """Unit test for get_recycle_bin"""
         for f in get_recycle_bin():
-            self.assertExists(extended_path(f))
+            self.assertLExists(extended_path(f))
 
     @common.skipUnlessDestructive
     def test_get_recycle_bin_destructive(self):
@@ -254,6 +264,186 @@ class WindowsTestCase(common.BleachbitTestCase):
         return_value = delete_registry_key('HKCU\\' + key, True)
         self.assertFalse(return_value)
 
+    def test_delete_updates(self):
+        """Unit test for delete_updates
+
+        As a preview, this does not modify services or delete files.
+        """
+        if not shell.IsUserAnAdmin():
+            # It should return None without doing any work.
+            for _ in delete_updates():
+                pass
+            return
+
+        counter = 0
+        for cmd in delete_updates():
+            counter += 1
+            self.assertIsInstance(cmd, (Delete, Function))
+        logger.debug('delete_updates() returned %s commands', f'{counter:,}')
+
+    def test_is_service_running(self):
+        """Unit test for is_service_running()"""
+        # RPC is always running.
+        self.assertTrue(is_service_running('rpcss'))
+        # Windows Update is sometimes running.
+        self.assertIsInstance(is_service_running('wuauserv'), bool)
+        # Non-existent service should raise an error.
+        with self.assertRaises(pywintypes.error):
+            is_service_running('does_not_exist')
+        # None should raise an error.
+        with self.assertRaises(AssertionError):
+            is_service_running(None)
+
+    def test_is_ots_elevation_without_flag_returns_false(self):
+        """Without --uac-sid-token, is_ots_elevation() returns False"""
+        argv = ['bleachbit.exe', '--gui']
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            self.assertFalse(is_ots_elevation())
+
+    def test_is_ots_elevation_false_when_tokens_match(self):
+        """If current token matches parent token, there is no elevation"""
+        parent_token = 'ABCDEFGH'
+        argv = ['bleachbit.exe', '--gui', '--uac-sid-token', parent_token]
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            with mock.patch('bleachbit.Windows.get_sid_token_48', return_value=parent_token):
+                self.assertFalse(is_ots_elevation())
+
+    def test_is_ots_elevation_true_when_tokens_differ(self):
+        """If current token differs from parent token, elevation is detected"""
+        parent_token = 'ABCDEFGH'
+        argv = ['bleachbit.exe', '--gui', '--uac-sid-token', parent_token]
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            with mock.patch('bleachbit.Windows.get_sid_token_48', return_value='DIFFERNT'):
+                self.assertTrue(is_ots_elevation())
+
+    def test_is_ots_elevation_ignores_flag_without_value(self):
+        """A trailing --uac-sid-token without value should not crash and returns False"""
+        argv = ['bleachbit.exe', '--gui', '--uac-sid-token']
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            self.assertFalse(is_ots_elevation())
+
+    def test_is_ots_elevation_returns_false_on_get_sid_error(self):
+        """If get_sid_token_48() raises, is_ots_elevation() falls back to False"""
+        parent_token = 'ABCDEFGH'
+        argv = ['bleachbit.exe', '--gui', '--uac-sid-token', parent_token]
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            with mock.patch('bleachbit.Windows.get_sid_token_48', side_effect=RuntimeError('error')):
+                self.assertFalse(is_ots_elevation())
+
+    @common.skipUnlessDestructive
+    def test_run_net_service_command(self):
+        """Integration test for run_net_service_command().
+
+        Actually stop/start Windows Update service.
+
+        spooler (Print Spooler) is often on by default and has no dependencies.
+
+        Windows Audio Endpoint Builder (AudioEndpointBuilder) is often on
+        by default and depends on audiosrv (Windows Audio).
+
+        Requires admin.
+        """
+        if not shell.IsUserAnAdmin():
+            self.skipTest('requires administrator privileges')
+        def _service_exists_and_enabled(svc):
+            scm = win32service.OpenSCManager(None, None, win32service.SC_MANAGER_CONNECT)
+            try:
+                hs = win32service.OpenService(scm, svc, win32service.SERVICE_QUERY_STATUS | win32service.SERVICE_QUERY_CONFIG)
+                try:
+                    cfg = win32service.QueryServiceConfig(hs)
+                    return True if cfg[1] != win32service.SERVICE_DISABLED else False
+                finally:
+                    win32service.CloseServiceHandle(hs)
+            except pywintypes.error:
+                return False
+            finally:
+                win32service.CloseServiceHandle(scm)
+
+        def _can_open_all_access(svc):
+            scm = win32service.OpenSCManager(None, None, win32service.SC_MANAGER_CONNECT)
+            try:
+                try:
+                    hs = win32service.OpenService(scm, svc, win32service.SERVICE_ALL_ACCESS)
+                except pywintypes.error:
+                    return False
+                else:
+                    win32service.CloseServiceHandle(hs)
+                    return True
+            finally:
+                win32service.CloseServiceHandle(scm)
+
+        is_ci = os.environ.get('APPVEYOR') == 'True'
+        if is_ci:
+            candidates = ('bits', 'wuauserv', 'AudioEndpointBuilder', 'spooler')
+            service = None
+            # Prefer already-running to avoid state changes
+            for s in candidates:
+                if _service_exists_and_enabled(s) and _can_open_all_access(s) and is_service_running(s):
+                    service = s
+                    break
+            # If none are running, pick any we can open with required access
+            if not service:
+                for s in candidates:
+                    if _service_exists_and_enabled(s) and _can_open_all_access(s):
+                        service = s
+                        break
+        else:
+            candidates = ('AudioEndpointBuilder', 'spooler', 'bits', 'wuauserv')
+            service = None
+            for s in candidates:
+                if _service_exists_and_enabled(s):
+                    service = s
+                    break
+        if not service:
+            self.skipTest('no suitable startable service on this machine')
+
+        initial_running = is_service_running(service)
+
+        try:
+            if is_ci:
+                ret = run_net_service_command(service, True)
+                self.assertEqual(ret, 0)
+                ret = run_net_service_command(service, True)
+                self.assertEqual(ret, 0)
+            else:
+                ret = run_net_service_command(service, False)
+                self.assertEqual(ret, 0)
+                self.assertFalse(is_service_running(service))
+                if service == 'AudioEndpointBuilder':
+                    self.assertFalse(is_service_running('audiosrv'))
+                ret = run_net_service_command(service, False)
+                self.assertEqual(ret, 0)
+                self.assertFalse(is_service_running(service))
+                ret = run_net_service_command(service, True)
+                self.assertEqual(ret, 0)
+                self.assertTrue(is_service_running(service))
+                ret = run_net_service_command(service, True)
+                self.assertEqual(ret, 0)
+                self.assertTrue(is_service_running(service))
+        finally:
+            if not is_ci:
+                run_net_service_command(service, initial_running)
+                self.assertEqual(initial_running, is_service_running(service))
+
+    def test_run_net_service_command_not_admin(self):
+        """Test as run_net_service_command() as not admin user"""
+        if shell.IsUserAnAdmin():
+            self.skipTest('requires non-admin user')
+        service = 'wuauserv'
+        initial_running = is_service_running(service)
+        for start in (True, False):
+            with self.assertRaises(RuntimeError):
+                run_net_service_command(service, start)
+            self.assertEqual(is_service_running(service), initial_running)
+
+    def test_run_net_service_command_invalid_service(self):
+        """Test as run_net_service_command() with invalid service"""
+        for service in ('does_not_exist', None):
+            for start in (True, False):
+                with self.subTest(service=service, start=start):
+                    with self.assertRaises((AssertionError, RuntimeError)):
+                        run_net_service_command(service, start)
+
     def test_delete_registry_value(self):
         """Unit test for delete_registry_value"""
 
@@ -354,6 +544,25 @@ class WindowsTestCase(common.BleachbitTestCase):
             drives.append(drive)
             self.assertEqual(drive, drive.upper())
         self.assertIn("C:\\", drives)
+
+    def test_get_sid_token_48_basic_properties(self):
+        """get_sid_token_48() returns an 8-char, URL-safe ASCII string"""
+        token = get_sid_token_48()
+        self.assertIsString(token)
+        # 6 bytes (48 bits) become 8 base64-url characters without padding
+        self.assertEqual(len(token), 8)
+        for ch in token:
+            self.assertLess(ord(ch), 128)
+        # urlsafe_b64encode must not use '+', '/', or '='
+        self.assertNotIn('+', token)
+        self.assertNotIn('/', token)
+        self.assertNotIn('=', token)
+
+    def test_get_sid_token_48_is_deterministic_for_current_process(self):
+        """Multiple calls for the same process should yield the same token"""
+        t1 = get_sid_token_48()
+        t2 = get_sid_token_48()
+        self.assertEqual(t1, t2)
 
     def test_get_windows_version(self):
         """Unit test for get_windows_version"""

@@ -23,20 +23,23 @@
 Actions that perform cleaning
 """
 
-from bleachbit import Command, FileUtilities, General, Special, DeepScan
-from bleachbit import fs_scan_re_flags
-from bleachbit.Language import get_text as _
-
+# standard imports
 import glob
 import logging
 import os
 import re
-import shlex
+from itertools import product
 
+# first party imports
+from bleachbit import Command, FileUtilities, General, Special, DeepScan
+from bleachbit import fs_scan_re_flags
+from bleachbit.Language import get_text as _
 
-if 'posix' == os.name:
+if os.name == 'posix':
     from bleachbit import Unix
 
+if os.name == 'nt':
+    from bleachbit import Windows
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +62,7 @@ def expand_multi_var(s, variables):
     var_keys_used = []
     ret = []
     for var_key in variables.keys():
-        sub = '$$%s$$' % var_key
+        sub = f'$${var_key}$$'
         if s.find(sub) > -1:
             var_keys_used.append(var_key)
     if not var_keys_used:
@@ -69,13 +72,12 @@ def expand_multi_var(s, variables):
     vars_used = {key: value for key,
                  value in variables.items() if key in var_keys_used}
     # create a product of combinations
-    from itertools import product
     vars_product = (dict(zip(vars_used, x))
                     for x in product(*vars_used.values()))
     for var_set in vars_product:
         ms = s  # modified version of input string
         for var_key, var_value in var_set.items():
-            sub = '$$%s$$' % var_key
+            sub = f'$${var_key}$$'
             ms = ms.replace(sub, var_value)
         ret.append(ms)
     if ret:
@@ -93,7 +95,7 @@ class PluginMount(type):
 
     """A simple plugin framework"""
 
-    def __init__(cls, name, bases, attrs):
+    def __init__(cls, _name, _bases, _attrs):
         if not hasattr(cls, 'plugins'):
             cls.plugins = []
         else:
@@ -148,9 +150,11 @@ class FileActionProvider(ActionProvider):
                 wholeregex=self.wholeregex, nwholeregex=self.nwholeregex))
             if len(self.paths) != 1:
                 logger.warning(
-                    # TRANSLATORS: Multi-value variables are explained in the online documentation.
-                    # Basically, they are like an environment variable, but each multi-value variable
-                    # can have multiple values. They're a way to make CleanerML files more concise.
+                    # TRANSLATORS: Multi-value variables are explained
+                    # in the online documentation. Basically, they are like
+                    # an environment variable, but each multi-value variable
+                    # can have multiple values. They're a way to make CleanerML
+                    # files more concise.
                     _("Deep scan does not support multi-value variable."))
         if not any([self.object_type, self.regex, self.nregex,
                     self.wholeregex, self.nwholeregex]):
@@ -281,7 +285,7 @@ class FileActionProvider(ActionProvider):
         }
 
         if self.search not in search_functions:
-            raise RuntimeError("Invalid search='%s'" % self.search)
+            raise RuntimeError(f"Invalid search='{self.search}'")
 
         func = search_functions[self.search]
 
@@ -336,11 +340,15 @@ class AptAutoclean(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        # Checking executable allows auto-hide to work for non-APT systems
-        if FileUtilities.exe_exists('apt-get'):
-            yield Command.Function(None,
-                                   Unix.apt_autoclean,
-                                   'apt-get autoclean')
+        assert os.name == 'posix'
+        # If apt-get is not installed, then enable fast auto-hide.
+        # The exe_exists() function is fast.
+        if not FileUtilities.exe_exists('apt-get'):
+            return
+        yield Command.Function(None,
+                               # pylint: disable=possibly-used-before-assignment
+                               Unix.apt_autoclean,
+                               'apt-get autoclean')
 
 
 class AptAutoremove(ActionProvider):
@@ -352,11 +360,11 @@ class AptAutoremove(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        # Checking executable allows auto-hide to work for non-APT systems
-        if FileUtilities.exe_exists('apt-get'):
-            yield Command.Function(None,
-                                   Unix.apt_autoremove,
-                                   'apt-get autoremove')
+        if not FileUtilities.exe_exists('apt-get'):
+            return
+        yield Command.Function(None,
+                               Unix.apt_autoremove,
+                               'apt-get autoremove')
 
 
 class AptClean(ActionProvider):
@@ -368,11 +376,11 @@ class AptClean(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        # Checking executable allows auto-hide to work for non-APT systems
-        if FileUtilities.exe_exists('apt-get'):
-            yield Command.Function(None,
-                                   Unix.apt_clean,
-                                   'apt-get clean')
+        if not FileUtilities.exe_exists('apt-get'):
+            return
+        yield Command.Function(None,
+                               Unix.apt_clean,
+                               'apt-get clean')
 
 
 class ChromeAutofill(FileActionProvider):
@@ -475,8 +483,10 @@ class Journald(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        if FileUtilities.exe_exists('journalctl'):
-            yield Command.Function(None, Unix.journald_clean, 'journalctl --vacuum-time=1')
+        # If journalctl is not installed, then enable fast auto-hide.
+        if not FileUtilities.exe_exists('journalctl'):
+            return
+        yield Command.Function(None, Unix.journald_clean, 'journalctl --vacuum-time=1')
 
 
 class Json(FileActionProvider):
@@ -549,21 +559,17 @@ class Process(ActionProvider):
 
         def run_process():
             try:
-                if self.wait:
-                    args = shlex.split(self.cmd)
-                    (rc, stdout, stderr) = General.run_external(args)
-                else:
-                    rc = 0  # unknown because we don't wait
-                    from subprocess import Popen
-                    Popen(self.cmd)
+                args = General.shell_split(self.cmd)
+                (rc, stdout, stderr) = General.run_external(args, wait=self.wait)
             except Exception as e:
                 raise RuntimeError(
-                    'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e))) from e
-            if 0 != rc:
-                msg = 'Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n'
-                logger.warning(msg, self.cmd, rc, stdout, stderr)
+                    f'Exception in external command\nCommand: {args}\nError: {str(e)}') from e
+            if self.wait and 0 != rc:
+                logger.warning('Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n',
+                               args, rc, stdout, stderr)
             return 0
-        yield Command.Function(path=None, func=run_process, label=_("Run external command: %s") % self.cmd)
+        yield Command.Function(path=None, func=run_process,
+                               label=_("Run external command: %s") % self.cmd)
 
 
 class Shred(FileActionProvider):
@@ -609,11 +615,12 @@ class WinShellChangeNotify(ActionProvider):
     action_key = 'win.shell.change.notify'
 
     def get_commands(self):
-        from bleachbit import Windows
+        assert os.name == 'nt'
         yield Command.Function(
             None,
+            # pylint: disable=possibly-used-before-assignment
             Windows.shell_change_notify,
-            None)
+            _('Refresh Windows shell'))
 
 
 class Winreg(ActionProvider):
@@ -639,7 +646,7 @@ class YumCleanAll(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        # Checking allows auto-hide to work for non-APT systems
+        # If yum is not installed, then enable fast auto-hide.
         if not FileUtilities.exe_exists('yum'):
             return
 
@@ -658,7 +665,7 @@ class DnfCleanAll(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        # Checking allows auto-hide to work for non-APT systems
+        # If dnf is not installed, then enable fast auto-hide.
         if not FileUtilities.exe_exists('dnf'):
             return
 
@@ -677,7 +684,7 @@ class DnfAutoremove(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        # Checking allows auto-hide to work for non-APT systems
+        # If dnf is not installed, then enable fast auto-hide.
         if not FileUtilities.exe_exists('dnf'):
             return
 
@@ -685,3 +692,40 @@ class DnfAutoremove(ActionProvider):
             None,
             Unix.dnf_autoremove,
             'dnf autoremove')
+
+
+class PacmanCache(ActionProvider):
+
+    """Action to run `paccache -rk0'"""
+    action_key = 'pacman.cache'
+
+    def __init__(self, action_element, path_vars=None):
+        ActionProvider.__init__(self, action_element, path_vars)
+
+    def get_commands(self):
+        if not FileUtilities.exe_exists('paccache'):
+            return
+
+        yield Command.Function(
+            None,
+            Unix.pacman_cache,
+            'paccache -rk0')
+
+
+class SnapDisabled(ActionProvider):
+
+    """Action to remove disabled snaps"""
+    action_key = 'snap.disabled'
+
+    def __init__(self, action_element, path_vars=None):
+        ActionProvider.__init__(self, action_element, path_vars)
+
+    def get_commands(self):
+        # If snap is not installed, then enable fast auto-hide.
+        if not FileUtilities.exe_exists('snap'):
+            return
+        yield Command.Function(
+            None,
+            Unix.snap_disabled_clean,
+            'snap remove disabled',
+            preview_func=Unix.snap_disabled_preview)

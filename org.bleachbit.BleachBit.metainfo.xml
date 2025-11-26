@@ -3,28 +3,27 @@
   <id>org.bleachbit.BleachBit</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0</project_license>
-  <name>BleachBit</name>
+  <name translate="no">BleachBit</name>
   <developer id="org.bleachbit">
-    <name>BleachBit Developers</name>
+    <!-- TRANSLATORS: Name of the developers -->
+    <name>Andrew Ziem and contributors</name>
+    <url>https://github.com/bleachbit/bleachbit/graphs/contributors</url>
   </developer>
   <!-- Empty content_rating element indicates BleachBit is free of potentially offensive content (like most software tools). -->
   <content_rating type="oars-1.0" />
   <launchable type="desktop-id">org.bleachbit.BleachBit.desktop</launchable>
-  <summary>Cleans files to free disk space and to maintain privacy</summary>
+  <summary>Free space and maintain privacy</summary>
   <description>
-    <p>
-      BleachBit quickly frees disk space and tirelessly guards your privacy. Free cache, delete cookies, clear Internet history, shred temporary files, delete logs, and discard junk you didn't know was there. It wipes clean a thousand applications including Firefox, Adobe Flash, Google Chrome, Opera, and more.
-    </p>
-    <p>
-      Beyond simply deleting files, BleachBit includes advanced features such as shredding files to prevent recovery, wiping free disk space to hide traces of files deleted by other applications, and vacuuming Firefox to make it faster.
-    </p>
+     <p>BleachBit frees disk space and maintains privacy by quickly removing unnecessary files such as cache, cookies, browser history, temporary files, and system logs. It can also shred files and clean free disk space to prevent data recovery.</p>
   </description>
   <screenshots>
     <screenshot type="default">
+      <!-- TRANSLATORS: Caption for screenshot -->
       <caption>Default dark mode, showing found junk files</caption>
       <image>https://www.bleachbit.org/images/bleachbit320_windows10_preview.png</image>
     </screenshot>
   </screenshots>
+  <translation domain="bleachbit"/>
   <url type="homepage">https://www.bleachbit.org/</url>
   <url type="bugtracker">https://github.com/bleachbit/bleachbit/issues</url>
   <url type="help">https://docs.bleachbit.org/</url>

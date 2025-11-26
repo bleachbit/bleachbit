@@ -229,6 +229,7 @@ class CleanerTestCase(common.BleachbitTestCase):
 
     @common.skipIfWindows
     def test_whitelist(self):
+        """Unit test for method Cleaner.whitelisted"""
         tests = [
             ('/tmp/.truecrypt_aux_mnt1/control', True),
             ('/tmp/.truecrypt_aux_mnt1/volume', True),
@@ -237,24 +238,41 @@ class CleanerTestCase(common.BleachbitTestCase):
             ('/tmp/gconfd-foo/lock/ior', True),
             ('/tmp/ksocket-foo/Arts_SoundServerV2', True),
             ('/tmp/ksocket-foo/secret-cookie', True),
-            ('/tmp/orbit-foo/bonobo-activation-server-ior', True),
+            ('/tmp/orbit-foo/bonobo-activation-register-a9cd6cc4973af098918b154c4957a93f.lock', True),
             ('/tmp/orbit-foo/bonobo-activation-register.lock', True),
-            ('/tmp/orbit-foo/bonobo-activation-server-a9cd6cc4973af098918b154c4957a93f-ior',
-             True),
-            ('/tmp/orbit-foo/bonobo-activation-register-a9cd6cc4973af098918b154c4957a93f.lock',
-             True),
+            ('/tmp/orbit-foo/bonobo-activation-server-a9cd6cc4973af098918b154c4957a93f-ior', True),
+            ('/tmp/orbit-foo/bonobo-activation-server-ior', True),
             ('/tmp/pulse-foo/pid', True),
             ('/tmp/tmpsDOBFd', False),
-            (os.path.expanduser('~/.cache/obexd'), True),
-            (os.path.expanduser('~/.cache/obexd/'), True),
-            (os.path.expanduser('~/.cache/obexd/foo'), True),
-            (os.path.expanduser('~/.cache/obex'), False),
-            (os.path.expanduser('~/.cache/obexd-foo'), False)
+            ('~/.cache/obexd', True),
+            ('~/.cache/obexd/', True),
+            ('~/.cache/obexd/foo', True),
+            ('~/.cache/obex', False),
+            ('~/.cache/obexd-foo', False),
+            ('~/.cache/kwin', True),
+            ('~/.cache/kwi', False),
+            ('~/.cache/kwi/foo.txt', False),
+            ('~/.cache/kwin/test_file', True),
+            ('~/.cache/mesa_shader_cache', True),
+            ('~/.cache/mesa_shader_cache/test_file', True),
+            ('~/.cache/plasmashell', True),
+            ('~/.cache/plasmashell/test_file', True),
+            ('~/.cache/icon-cache.kcache', True),
+            ('~/.cache/plasma_theme_breeze-light_v5.103.0.kcache', True),
+            ('~/.cache/drkonqi', True),
+            ('~/.cache/drkonqi/test_file', True),
+            ('~/.cache/mesa_shader_cache_db', True),
+            ('~/.cache/mesa_shader_cache_db/test_file', True),
+            ('~/.cache/qtshadercache-x86_64-little_endian-lp64', True),
+            ('~/.cache/qtshadercache-x86_64-little_endian-lp64/test_file', True),
+            ('~/.cache/plasma_theme_default.kcache', True)
         ]
         list(register_cleaners())
-        for test in tests:
+        for pathname, expected in tests:
+            path = os.path.expanduser(
+                pathname) if pathname.startswith('~') else pathname
             self.assertEqual(
-                backends['system'].whitelisted(test[0]), test[1], test[0])
+                backends['system'].whitelisted(path), expected, pathname)
         # Make sure directory ~/.cache/obexd is ignored
         # https://github.com/bleachbit/bleachbit/issues/572
         obexd_dir = os.path.expanduser('~/.cache/obexd')
@@ -268,3 +286,43 @@ class CleanerTestCase(common.BleachbitTestCase):
                 self.assertFalse('/.cache/obexd/' in cmd.path)
         from bleachbit.FileUtilities import delete
         delete(obexd_fn, ignore_missing=True)
+
+    def test_custom(self):
+        """Test system.custom"""
+        from bleachbit.Options import options
+        original_custom_paths = options.get_custom_paths()
+
+        list(register_cleaners())
+        test_pathname = os.path.join(self.tempdir, 'foo')
+
+        # Check that custom cleaner doesn't iterate non-existent object
+        for obj_type in ('folder', 'file'):
+            options.set_custom_paths([(obj_type, test_pathname)])
+            for cmd in backends['system'].get_commands('custom'):
+                results = list(cmd.execute(really_delete=False))
+                self.assertEqual(len(results), 0)
+
+        # Create the file
+        common.touch_file(test_pathname)
+        self.assertExists(test_pathname)
+
+        # Check it returns the file now
+        for cmd in backends['system'].get_commands('custom'):
+            results = list(cmd.execute(really_delete=False))
+            self.assertEqual(len(results), 1)
+            self.assertEqual(results[0]['path'], test_pathname)
+
+        # Prepare an empty folder.
+        test_dirname = os.path.join(self.tempdir, 'subdir')
+        os.makedirs(test_dirname)
+        self.assertExists(test_dirname)
+        options.set_custom_paths([('folder', test_dirname)])
+
+        # Check it returns the folder now.
+        for cmd in backends['system'].get_commands('custom'):
+            results = list(cmd.execute(really_delete=False))
+            self.assertEqual(len(results), 1)
+            self.assertEqual(results[0]['path'], test_dirname)
+
+        # Restore the original settings.
+        options.set_custom_paths(original_custom_paths)

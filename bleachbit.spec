@@ -12,20 +12,41 @@
 #  * %clean
 # https://en.opensuse.org/openSUSE:Specfile_guidelines
 
-# 2025-03-15
+# Standard macro definitions on OBS.
+#  openSUSE:Leap:15.6 reports suse_version 1500
+#  openSUSE:Leap:16.0 reports suse_version 1600
 #  openSUSE:Slowroll reports suse_version=1699
 #  openSUSE:Tumbleweed reports suse_version=1699
 #  CentOS_9_Stream reports centos_version=900
 #  Fedora 41 reports fedora_version=41
 
-%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version}
+%define pyexe %{__python3}
+
+%if 0%{?fedora_version} || 0%{?rhel_version} || 0%{?centos_version} || 0%{?almalinux_version} || 0%{?rocky_version}
 %define is_redhat_family 1
 %else
 %define is_redhat_family 0
 %endif
 
 %if 0%{?is_opensuse}
-%define pyprefix %{primary_python}
+%define pyprefix %{modern_python}
+%define is_leap 0
+%if 0%{?suse_version} <= 1600
+%define is_leap 1
+%endif # suse_version <= 1600
+%if 0%{?suse_version} == 1500
+%define pyexe /usr/bin/python3.11
+%endif # suse_version == 1500
+%endif # is_opensuse
+
+%if !0%{?is_opensuse} && !%{is_redhat_family}
+%{error:This package is only for openSUSE or Red Hat family distributions}
+%endif
+
+%if 0%{?almalinux_version}
+%define has_fdupes 0
+%else
+%define has_fdupes 1
 %endif
 
 # Fedora 42 unified /usr/sbin https://fedoraproject.org/wiki/Changes/Unify_bin_and_sbin
@@ -36,7 +57,7 @@
 %endif
 
 Name:           bleachbit
-Version:        5.0.0
+Version:        5.0.2
 Release:        1%{?dist}
 Summary:        Remove unnecessary files, free space, and maintain privacy
 License:        GPL-3.0-or-later
@@ -46,14 +67,14 @@ BuildArch:      noarch
 
 %if %{is_redhat_family}
 BuildRequires:  desktop-file-utils
-BuildRequires:  fdupes
 BuildRequires:  gettext
 BuildRequires:  python3-chardet
 BuildRequires:  python3-psutil
 BuildRequires:  python3-setuptools
+Requires(post): desktop-file-utils
+Requires(postun): desktop-file-utils
 Requires:       python3
 Requires:       gtk3
-Requires:       usermode
 Requires:       python3-chardet
 Requires:       python3-gobject
 Requires:       python3-psutil
@@ -61,15 +82,16 @@ Requires:       python3-psutil
 
 %if 0%{?is_opensuse}
 BuildRequires:  desktop-file-utils
-BuildRequires:  fdupes
 BuildRequires:  make
-BuildRequires:  openSUSE-release
 BuildRequires:  %{pyprefix}
 BuildRequires:  python-rpm-macros
+BuildRequires:  %{pyprefix}-base
 BuildRequires:  %{pyprefix}-chardet
 BuildRequires:  %{pyprefix}-psutil
 BuildRequires:  %{pyprefix}-setuptools
+%if ! %{is_leap}
 BuildRequires:  %{pyprefix}-sqlite-utils
+%endif
 BuildRequires:  %{pyprefix}-xml
 BuildRequires:  update-desktop-files
 Requires:       gobject-introspection
@@ -78,35 +100,32 @@ Requires:       %{pyprefix}-chardet
 Requires:       %{pyprefix}-gobject
 Requires:       %{pyprefix}-gobject-Gdk
 Requires:       %{pyprefix}-psutil
+%if ! %{is_leap}
 Requires:       %{pyprefix}-sqlite-utils
+%endif
 Requires:       %{pyprefix}-xml
-Requires:		openSUSE-release
-Requires:       typelib(Gtk)
+Requires: 		typelib(Gtk) = 3.0
 Requires:       typelib(Notify)
 Requires:       xdg-utils
 %endif
 
-
+%if %{has_fdupes}
+BuildRequires:  fdupes
+%endif
 
 %description
-Delete traces of your activities and other junk files to free disk
-space and maintain privacy.  BleachBit identifies and erases
-broken menu entries, cache, cookies, localizations, recent document
-lists, and temporary files in Firefox, Google Chrome, Flash, and 60
-other applications.
-
-Shred files to prevent recovery, and wipe free disk space to
-hide previously deleted files.
-
+BleachBit frees disk space and maintains privacy by quickly removing
+unnecessary files such as cache, cookies, browser history, temporary
+files, and system logs. It can also shred files  and clean free disk
+space to prevent data recovery.
 
 %prep
 %setup -q
-python3 -V
-%{__python3} -V
+%{pyexe} -V
 
 
 %build
-%{__python3} setup.py build
+%{pyexe} setup.py build
 cp org.bleachbit.BleachBit.desktop org.bleachbit.BleachBit-root.desktop
 sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' org.bleachbit.BleachBit-root.desktop
 
@@ -131,9 +150,7 @@ make delete_windows_files
 
 
 %install
-make install PYTHON=%{__python3} DESTDIR=$RPM_BUILD_ROOT prefix=%{_prefix}
-
-desktop-file-validate %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit.desktop
+make install PYTHON=%{pyexe} DESTDIR=%{buildroot} prefix=%{_prefix}
 
 %if %{is_redhat_family}
 
@@ -169,18 +186,23 @@ desktop-file-install \
 %suse_update_desktop_file org.bleachbit.BleachBit Utility Filesystem
 %endif
 
-make -C po install DESTDIR=$RPM_BUILD_ROOT
+desktop-file-validate %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit.desktop
+desktop-file-validate %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit-root.desktop
+
+make -C po install DESTDIR=%{buildroot}
 %find_lang %{name}
 
+%if %{has_fdupes}
 # Make symlinks for redundant .pyc files.
 %fdupes -s %{buildroot}
+%endif
 
 
 %check
-python3 bleachbit.py --sysinfo
-python3 bleachbit.py -l | wc -l
-python3 bleachbit.py -p system.cache | wc -l
-python3 -m unittest -v tests.TestFileUtilities tests.TestUnix
+%{pyexe} bleachbit.py --sysinfo
+%{pyexe} bleachbit.py -l | wc -l
+%{pyexe} bleachbit.py -p system.cache | wc -l
+%{pyexe} -m unittest -v tests.TestFileUtilities tests.TestUnix
 
 
 %if %{is_redhat_family}
@@ -218,6 +240,6 @@ update-desktop-database &> /dev/null ||:
 
 %changelog
 
-* Tue Mar 18 2025 Andrew Ziem <andrew@bleachbit.org> - 5.0.0-1
-- Update to 5.0.0
+* Tue Mar 18 2025 Andrew Ziem <andrew@bleachbit.org> - 5.0.2-1
+- Update to 5.0.2
 - See https://www.bleachbit.org/news

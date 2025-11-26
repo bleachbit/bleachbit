@@ -26,19 +26,19 @@
   <var name="accounts">
     <value search="glob">~/.local/share/geary/*</value>
     <value search="glob">$XDG_DATA_HOME/geary/*</value>
-    <value search="glob">~/.var/app/org.gnome.Geary/data/geary/*</value> <!-- Flatpak -->
+    <value search="glob">~/.var/app/org.gnome.Geary/data/geary/*</value>
   </var>
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
     <action command="delete" search="walk.all" path="~/.cache/geary"/>
     <action command="delete" search="walk.all" path="$XDG_CACHE_HOME/geary"/>
-    <action command="delete" search="walk.all" path="~/.var/app/org.gnome.Geary/cache"/> <!-- Flatpak -->
+    <action command="delete" search="walk.all" path="~/.var/app/org.gnome.Geary/cache"/>
   </option>
   <option id="attachments">
     <label>Attachments</label>
     <description>Delete the files</description>
-    <!-- I use both the "walk.all" and "files" search options 
+    <!-- I use both the "walk.all" and "files" search options
          to print the files being removed and to remove the attachments directory. -->
     <action command="delete" search="walk.top" path="$$accounts$$/attachments"/>
     <action command="delete" search="file" path="$$accounts$$/attachments"/>

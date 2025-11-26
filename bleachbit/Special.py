@@ -22,18 +22,27 @@
 Cross-platform, special cleaning operations
 """
 
-from bleachbit.Options import options
-from bleachbit import FileUtilities
-
+# standard library imports
+import contextlib
+import json
 import logging
 import os.path
+import sqlite3
+import xml.dom.minidom
 from urllib.parse import urlparse, urlunparse
+
+
+# local application imports
+from bleachbit import FileUtilities
+from bleachbit.Options import options
 
 logger = logging.getLogger(__name__)
 
 
 def __get_chrome_history(path, fn='History'):
-    """Get Google Chrome or Chromium history version.  'path' is name of any file in same directory"""
+    """Get Google Chrome or Chromium history version.
+
+    'path' is name of any file in same directory"""
     path_history = os.path.join(os.path.dirname(path), fn)
     ver = get_sqlite_int(
         path_history, 'select value from meta where key="version"')[0]
@@ -41,66 +50,50 @@ def __get_chrome_history(path, fn='History'):
     return ver
 
 
-def __sqlite_table_exists(pathname, table):
+def _sqlite_table_exists(pathname, table):
     """Check whether a table exists in the SQLite database"""
     cmd = "select name from sqlite_master where type='table' and name=?;"
-    import sqlite3
-    conn = sqlite3.connect(pathname)
-    cursor = conn.cursor()
-    ret = False
-    cursor.execute(cmd, (table,))
-    if cursor.fetchone():
-        ret = True
-    cursor.close()
-    conn.commit()
-    conn.close()
-    return ret
+    try:
+        with contextlib.closing(sqlite3.connect(f'file:{pathname}?mode=ro', uri=True)) as conn:
+            if conn.execute(cmd, (table,)).fetchone():
+                return True
+    except sqlite3.OperationalError:
+        # Database does not exist or cannot be opened in read-only mode
+        return False
+    return False
 
 
 def __shred_sqlite_char_columns(table, cols=None, where="", path=None):
     """Create an SQL command to shred character columns"""
-    if path and not __sqlite_table_exists(path, table):
+    if path and not _sqlite_table_exists(path, table):
         return ""
     cmd = ""
     if not where:
         # If None, set to empty string.
         where = ""
     if cols and options.get('shred'):
-        cmd += "update or ignore %s set %s %s;" % \
-            (table, ",".join(["%s = randomblob(length(%s))" % (col, col)
-                              for col in cols]), where)
-        cmd += "update or ignore %s set %s %s;" % \
-            (table, ",".join(["%s = zeroblob(length(%s))" % (col, col)
-                              for col in cols]), where)
-    cmd += "delete from %s %s;" % (table, where)
+        for blob_type in ('randomblob', 'zeroblob'):
+            updates = [f'{col} = {blob_type}(length({col}))' for col in cols]
+            cmd += f"update or ignore {table} set {', '.join(updates)} {where};"
+    cmd += f"delete from {table} {where};"
     return cmd
 
 
-def get_sqlite_int(path, sql, parameters=None):
+def get_sqlite_int(path, sql, parameters=()):
     """Run SQL on database in 'path' and return the integers"""
-    def row_factory(cursor, row): return int(row[0])
+    def row_factory(_cursor, row):
+        """Convert row to integer"""
+        return int(row[0])
     return _get_sqlite_values(path, sql, row_factory, parameters)
 
 
-def _get_sqlite_values(path, sql, row_factory=None, parameters=None):
+def _get_sqlite_values(path, sql, row_factory=None, parameters=()):
     """Run SQL on database in 'path' and return the integers"""
-    import sqlite3
-    conn = sqlite3.connect(path)
-
-    if row_factory is not None:
-        conn.row_factory = row_factory
-
-    cursor = conn.cursor()
-    if parameters:
-        cursor.execute(sql, parameters)
-    else:
-        cursor.execute(sql)
-
-    values = cursor.fetchall()
-    cursor.close()
-    conn.close()
-
-    return values
+    with contextlib.closing(sqlite3.connect(f'file:{path}?mode=ro', uri=True)) as conn:
+        if row_factory is not None:
+            conn.row_factory = row_factory
+        cursor = conn.execute(sql, parameters)
+        return cursor.fetchall()
 
 
 def delete_chrome_autofill(path):
@@ -172,7 +165,7 @@ def delete_chrome_favicons(path):
         cols = ('page_url',)
         where = None
         if os.path.exists(path_history):
-            cmds += "attach database \"%s\" as History;" % path_history
+            cmds += f"attach database \"{path_history}\" as History;"
             where = "where page_url not in (select distinct url from History.urls)"
         cmds += __shred_sqlite_char_columns('icon_mapping', cols, where, path)
 
@@ -197,11 +190,11 @@ def delete_chrome_favicons(path):
         cols = ('url', 'image_data')
         where = None
         if os.path.exists(path_history):
-            cmds += "attach database \"%s\" as History;" % path_history
+            cmds += f"attach database \"{path_history}\" as History;"
             where = "where id not in(select distinct favicon_id from History.urls)"
         cmds += __shred_sqlite_char_columns('favicons', cols, where, path)
     else:
-        raise RuntimeError('%s is version %d' % (path, ver))
+        raise RuntimeError(f'{path} is version {ver}')
 
     FileUtilities.execute_sqlite3(path, cmds)
 
@@ -210,14 +203,14 @@ def delete_chrome_history(path):
     """Clean history from History and Favicon files without affecting bookmarks"""
     if not os.path.exists(path):
         logger.debug(
-            'aborting delete_chrome_history() because history does not exist: %s' % path)
+            'aborting delete_chrome_history() because history does not exist: %s', path)
         return
     cols = ('url', 'title')
     where = ""
     ids_int = get_chrome_bookmark_ids(path)
     if ids_int:
         ids_str = ",".join([str(id0) for id0 in ids_int])
-        where = "where id not in (%s) " % ids_str
+        where = f"where id not in ({ids_str})"
     cmds = __shred_sqlite_char_columns('urls', cols, where, path)
     cmds += __shred_sqlite_char_columns('visits', path=path)
     # Google Chrome 79 no longer has lower_term in keyword_search_terms
@@ -252,7 +245,8 @@ def delete_chrome_keywords(path):
     cmds += "update keywords set usage_count = 0;"
     ver = __get_chrome_history(path, 'Web Data')
     if 43 <= ver < 49:
-        # keywords_backup table first seen in Google Chrome 17 / Chromium 17 which is Web Data version 43
+        # keywords_backup table first seen in Google Chrome 17 / Chromium 17
+        # which is Web Data version 43.
         # In Google Chrome 25, the table is gone.
         cmds += __shred_sqlite_char_columns('keywords_backup',
                                             cols, where, path)
@@ -263,13 +257,13 @@ def delete_chrome_keywords(path):
 
 def delete_office_registrymodifications(path):
     """Erase LibreOffice 3.4 and Apache OpenOffice.org 3.4 MRU in registrymodifications.xcu"""
-    import xml.dom.minidom
     dom1 = xml.dom.minidom.parse(path)
     modified = False
+    pathprefix = '/org.openoffice.Office.Histories/Histories/'
     for node in dom1.getElementsByTagName("item"):
         if not node.hasAttribute("oor:path"):
             continue
-        if not node.getAttribute("oor:path").startswith('/org.openoffice.Office.Histories/Histories/'):
+        if not node.getAttribute("oor:path").startswith(pathprefix):
             continue
         node.parentNode.removeChild(node)
         node.unlink()
@@ -284,7 +278,7 @@ def delete_mozilla_url_history(path):
 
     cmds = ""
 
-    have_places = __sqlite_table_exists(path, 'moz_places')
+    have_places = _sqlite_table_exists(path, 'moz_places')
 
     if have_places:
         # delete the URLs in moz_places
@@ -311,9 +305,10 @@ def delete_mozilla_url_history(path):
             'moz_annos', ('content', ), annos_suffix, path)
 
     # Delete any orphaned favicons.
-    # Firefox 78 no longer has a table named moz_favicons, and it no longer has
-    # a column favicon_id in the table moz_places. (This change probably happened before version 78.)
-    if have_places and __sqlite_table_exists(path, 'moz_favicons'):
+    # Firefox 78 no longer has a table named moz_favicons, and it no
+    # longer has a column favicon_id in the table moz_places. This
+    # change probably happened before version 78.
+    if have_places and _sqlite_table_exists(path, 'moz_favicons'):
         fav_suffix = "where id not in (select favicon_id " \
             "from moz_places where favicon_id is not null ); "
         cols = ('url', 'data')
@@ -321,14 +316,14 @@ def delete_mozilla_url_history(path):
                                             cols, fav_suffix, path)
 
     # Delete orphaned origins.
-    if have_places and __sqlite_table_exists(path, 'moz_origins'):
+    if have_places and _sqlite_table_exists(path, 'moz_origins'):
         origins_where = 'where id not in (select distinct origin_id from moz_places)'
         cmds += __shred_sqlite_char_columns('moz_origins',
                                             ('host',), origins_where, path)
         # For any remaining origins, reset the statistic.
         cmds += "update moz_origins set frecency=-1;"
 
-    if __sqlite_table_exists(path, 'moz_meta'):
+    if _sqlite_table_exists(path, 'moz_meta'):
         cmds += "delete from moz_meta where key like 'origin_frecency_%';"
 
     # Delete all history visits.
@@ -345,7 +340,7 @@ def delete_mozilla_url_history(path):
     # Reference: https://bugzilla.mozilla.org/show_bug.cgi?id=932036
     # Reference:
     # https://support.mozilla.org/en-US/questions/937290#answer-400987
-    if __sqlite_table_exists(path, 'moz_hosts'):
+    if _sqlite_table_exists(path, 'moz_hosts'):
         cmds += __shred_sqlite_char_columns('moz_hosts', ('host',), path=path)
         cmds += "delete from moz_hosts;"
 
@@ -354,7 +349,9 @@ def delete_mozilla_url_history(path):
 
 
 def delete_mozilla_favicons(path):
-    """Delete favorites icon in Mozilla places.favicons only if they are not bookmarks (Firefox 3 and family)"""
+    """Delete favorites icons in Mozilla places.favicons
+
+    Bookmarks are not deleted."""
 
     def remove_path_from_url(url):
         url = urlparse(url.lstrip('fake-favicon-uri:'))
@@ -363,14 +360,14 @@ def delete_mozilla_favicons(path):
     cmds = ""
 
     places_path = os.path.join(os.path.dirname(path), 'places.sqlite')
-    cmds += 'attach database "{}" as places;'.format(places_path)
+    cmds += f'attach database "{places_path}" as places;'
 
     bookmarked_urls_query = ("select url from {db}moz_places where id in "
-                             "(select distinct fk from {db}moz_bookmarks where fk is not null){filter}")
+                             "(select distinct fk from {db}moz_bookmarks "
+                             "where fk is not null){filter}")
 
     # delete all not bookmarked pages with icons
-    urls_where = "where page_url not in ({})".format(
-        bookmarked_urls_query.format(db='places.', filter=''))
+    urls_where = f"where page_url not in ({bookmarked_urls_query.format(db='places.', filter='')})"
     cmds += __shred_sqlite_char_columns('moz_pages_w_icons',
                                         ('page_url',), urls_where, path)
 
@@ -379,24 +376,32 @@ def delete_mozilla_favicons(path):
     cmds += __shred_sqlite_char_columns('moz_icons_to_pages',
                                         where=mapping_where, path=path)
 
-    # this intermediate cleaning is needed for the next query to favicons db which collects
-    # icon ids that don't have a bookmark or have domain level bookmark
+    # This intermediate cleaning is needed for the next query to favicons
+    # db which collects icon ids that don't have a bookmark or have domain
+    # level bookmark.
     FileUtilities.execute_sqlite3(path, cmds)
 
-    # collect favicons that are not bookmarked with their full url which collects also domain level bookmarks
+    # Collect favicons that are not bookmarked with their full url,
+    # which collects also domain level bookmarks.
     id_and_url_pairs = _get_sqlite_values(path,
                                           "select id, icon_url from moz_icons where "
                                           "(id not in (select icon_id from moz_icons_to_pages))")
 
-    # We query twice the bookmarked urls and this is a kind of duplication. This is because the first usage of
-    # bookmarks is for refining further queries to favicons db and if we first extract the bookmarks as a Python list
-    # and give them to the query we could cause an error in execute_sqlite3 since it splits the cmds string by ';' and
-    # bookmarked url could contain a ';'. Also if we have a Python list with urls we need to pay attention to escaping
-    # JavaScript strings in some bookmarks and probably other things. So the safer way for now is to not compose a query
-    # with Python list of extracted urls.
+    # We query twice the bookmarked urls and this is a kind of
+    # duplication. This is because the first usage of bookmarks
+    # is for refining further queries to favicons db and if we
+    # first extract the bookmarks as a Python list and give them
+    # to the query we could cause an error in execute_sqlite3 since
+    # it splits the cmds string by ';' and bookmarked url could
+    # contain a ';'. Also if we have a Python list with urls we
+    # need to pay attention to escaping JavaScript strings in some
+    # bookmarks and probably other things. So the safer way for now
+    # is to not compose a query with Python list of extracted urls.
 
-    def row_factory(cursor, row): return row[0]
-    # with the row_factory bookmarked_urls is a list of urls, instead of list of tuples with first element a url
+    def row_factory(_cursor, row):
+        return row[0]
+    # With the row_factory bookmarked_urls is a list of urls, instead
+    # of list of tuples with first element a url
     bookmarked_urls = _get_sqlite_values(places_path,
                                          bookmarked_urls_query.format(
                                              db='', filter=" and url NOT LIKE 'javascript:%'"),
@@ -405,17 +410,18 @@ def delete_mozilla_favicons(path):
     bookmarked_urls_domains = list(map(remove_path_from_url, bookmarked_urls))
     ids_to_delete = [id for id, url in id_and_url_pairs
                      if (
-                         # collect only favicons with not bookmarked urls with same domain or
-                         # their domain is a part of a bookmarked url but the favicons are not domain level
-                         # in other words collect all that are not bookmarked
+                         # Collect only favicons with not bookmarked
+                         # urls with same domain or their domain is a
+                         # part of a bookmarked url but the favicons are
+                         # not domain level. In other words, collect all
+                         # that are not bookmarked.
                          remove_path_from_url(url) not in bookmarked_urls_domains or
                          urlparse(url).path.count('/') > 1
                      )
                      ]
 
     # delete all not bookmarked icons
-    icons_where = "where (id in ({}))".format(
-        str(ids_to_delete).replace('[', '').replace(']', ''))
+    icons_where = f"where (id in ({str(ids_to_delete).replace('[', '').replace(']', '')}))"
     cols = ('icon_url', 'data')
     cmds += __shred_sqlite_char_columns('moz_icons', cols, icons_where, path)
 
@@ -424,7 +430,6 @@ def delete_mozilla_favicons(path):
 
 def delete_ooo_history(path):
     """Erase the OpenOffice.org MRU in Common.xcu.  No longer valid in Apache OpenOffice.org 3.4."""
-    import xml.dom.minidom
     dom1 = xml.dom.minidom.parse(path)
     changed = False
     for node in dom1.getElementsByTagName("node"):
@@ -454,8 +459,6 @@ def get_chrome_bookmark_ids(history_path):
 
 def get_chrome_bookmark_urls(path):
     """Return a list of bookmarked URLs in Google Chrome/Chromium"""
-    import json
-
     # read file to parser
     with open(path, 'r', encoding='utf-8') as f:
         js = json.load(f)

@@ -19,22 +19,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<cleaner id="audacious" os="linux">
-  <label>Audacious</label>
-  <description>Media player</description>
-  <option id="cache">
-    <label>Cache</label>
-    <description>Delete the cache</description>
-    <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/audacious/thumbs/"/>
-  </option>
-  <option id="log">
-    <label>Logs</label>
-    <description>Delete the logs</description>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/audacious/log"/>
-  </option>
-  <option id="mru">
-    <label>Most recently used</label>
-    <description>Delete the list of recently used documents</description>
-    <action command="delete" search="file" path="$XDG_CONFIG_HOME/audacious/playlist.xspf"/>
+<cleaner id="snap" os="linux">
+  <label>snap</label>
+  <description>Package manager</description>
+  <running type="exe" same_user="false">snap</running>
+  <option id="disabled">
+    <label>Disabled</label>
+    <description>Remove disabled packages</description>
+    <action command="snap.disabled"/>
   </option>
 </cleaner>
