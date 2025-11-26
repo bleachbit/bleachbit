@@ -35,6 +35,37 @@ from bleachbit.FileUtilities import execute_sqlite3
 from tests import common
 
 
+DEFAULT_COOKIE_FIXTURES = (
+    ('example.com', 'session_id'),
+    ('google.com', 'pref'),
+    ('github.com', 'auth'),
+)
+
+DOMAIN_MATCHING_CASES = (
+    ('example.com', 'example.com', True, 'Exact host match'),
+    ('example.com', '.example.com', True,
+     'Domain cookie canonicalizes to base host'),
+    ('example.com', 'shop.example.com', True,
+     'Subdomain should be preserved when base is allowlisted'),
+    ('example.com', '.shop.example.com', True,
+     'Firefox/Chromium store domain cookies with dots'),
+    ('example.com', 'thisisanexample.com', False,
+     'Substring matches must not count'),
+    ('example.com', 'example.com.attacker.net', False,
+     'Extra label to the right is a different domain'),
+    ('example.com', 'shop-example.com', False,
+     'Hyphenated host is unrelated'),
+    ('www.example.com', 'example.com', False,
+     'Host-only cookies should not match parent domain'),
+    ('.example.com', 'example.com', True,
+     'Leading dots in allowlist should be ignored'),
+    ('.example.com', 'www.example.com', True,
+     'Leading dots in allowlist should match subdomains'),
+    ('.example.com', 'fooexample.com', False,
+     'Canonical registrable domain mismatch'),
+)
+
+
 # Additional coverage:
 # - Non-SQLite file with non-empty keep list should not be deleted (raises ValueError)
 # - SQLite DB with unknown table and non-empty keep list should not be deleted (raises ValueError)
@@ -61,6 +92,16 @@ class CookieTestCase(common.BleachbitTestCase):
         with open(filepath, 'rb') as f:
             return hashlib.sha256(f.read()).digest()
 
+    def _sample_cookies(self, dotted=False):
+        """Return a reusable copy of the default cookie fixtures"""
+        cookies = DEFAULT_COOKIE_FIXTURES
+        if dotted:
+            return [
+                (host if host.startswith('.') else f'.{host}', name)
+                for host, name in cookies
+            ]
+        return [(host, name) for host, name in cookies]
+
     def _create_chrome_cookies_db(self, cookies=None):
         """Create a Chrome cookies database for testing
 
@@ -72,13 +113,11 @@ class CookieTestCase(common.BleachbitTestCase):
             str: Path to the created cookies database
         """
         if cookies is None:
-            cookies = [
-                ('example.com', 'session_id'),
-                ('google.com', 'pref'),
-                ('github.com', 'auth'),
-            ]
+            cookies = self._sample_cookies()
 
         path = os.path.join(self.temp_dir, 'chrome_cookies.db')
+        if os.path.exists(path):
+            os.unlink(path)
         sql = '''
             CREATE TABLE cookies (
                 host_key TEXT NOT NULL,
@@ -133,13 +172,11 @@ class CookieTestCase(common.BleachbitTestCase):
             str: Path to the created cookies database
         """
         if cookies is None:
-            cookies = [
-                ('.example.com', 'session_id'),
-                ('.google.com', 'pref'),
-                ('.github.com', 'auth'),
-            ]
+            cookies = self._sample_cookies(dotted=True)
 
         path = os.path.join(self.temp_dir, 'firefox_cookies.db')
+        if os.path.exists(path):
+            os.unlink(path)
         sql = '''
             CREATE TABLE moz_cookies (
                 id INTEGER PRIMARY KEY,
@@ -234,13 +271,7 @@ class CookieTestCase(common.BleachbitTestCase):
 
     def test_delete_cookies_chrome_with_allowlist(self):
         """Test selectively deleting Chrome cookies with allowlist"""
-        # Create test cookies with custom data
-        custom_cookies = [
-            ('example.com', 'session_id'),
-            ('google.com', 'pref'),
-            ('github.com', 'auth'),
-        ]
-        path = self._create_chrome_cookies_db(custom_cookies)
+        path = self._create_chrome_cookies_db()
 
         # Test deletion with allowlist (keep google.com)
         keep_list = ['google.com']
@@ -286,13 +317,7 @@ class CookieTestCase(common.BleachbitTestCase):
 
     def test_delete_cookies_when_no_hosts_match_kept(self):
         """If no hosts match keep list, all rows are deleted and file is removed"""
-        # Create test cookies with custom data
-        custom_cookies = [
-            ('example.com', 'session_id'),
-            ('google.com', 'pref'),
-            ('github.com', 'auth'),
-        ]
-        path = self._create_chrome_cookies_db(custom_cookies)
+        path = self._create_chrome_cookies_db()
 
         result = Cookie.delete_cookies(
             path, {'no-such-host.example'}, really_delete=True)
@@ -308,13 +333,7 @@ class CookieTestCase(common.BleachbitTestCase):
 
     def test_delete_cookies_firefox_with_allowlist(self):
         """Test selectively deleting Firefox cookies with allowlist"""
-        # Create test cookies
-        cookies_data = [
-            ('example.com', 'session_id'),
-            ('google.com', 'pref'),
-            ('github.com', 'auth'),
-        ]
-        path = self._create_firefox_cookies_db(cookies_data)
+        path = self._create_firefox_cookies_db()
 
         # Test deletion with whitelist (keep google.com)
         keep_list = ['google.com']
@@ -406,13 +425,7 @@ class CookieTestCase(common.BleachbitTestCase):
 
     def test_preview_cookies_deletion_chrome(self):
         """Test previewing Chrome cookie deletion"""
-        # Create test cookies with custom data
-        custom_cookies = [
-            ('example.com', 'session_id'),
-            ('google.com', 'pref'),
-            ('github.com', 'auth'),
-        ]
-        path = self._create_chrome_cookies_db(custom_cookies)
+        path = self._create_chrome_cookies_db()
 
         # Test preview with allowlist
         keep_list = ['google.com']
@@ -432,6 +445,22 @@ class CookieTestCase(common.BleachbitTestCase):
         conn.close()
 
         self.assertEqual(len(all_cookies), 3)  # All cookies still there
+
+    def test_allowlist_domain_matching_matrix(self):
+        """Table-driven coverage for allowlist domain semantics"""
+        for selection, host_value, expect_keep, reason in DOMAIN_MATCHING_CASES:
+            with self.subTest(selection=selection, host=host_value, reason=reason):
+                cookies = [(host_value, 'token')]
+                path = self._create_chrome_cookies_db(cookies)
+                result = Cookie.delete_cookies(
+                    path, {selection}, really_delete=False)
+
+                if expect_keep:
+                    self.assertEqual(result['total_kept'], 1, reason)
+                    self.assertEqual(result['total_deleted'], 0)
+                else:
+                    self.assertEqual(result['total_kept'], 0, reason)
+                    self.assertEqual(result['total_deleted'], 1)
 
     def test_preview_cookies_deletion_no_allowlist(self):
         """Test previewing cookie deletion with no allowlist"""

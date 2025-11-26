@@ -32,6 +32,8 @@ from bleachbit.Special import sqlite_table_exists
 
 logger = logging.getLogger(__name__)
 
+COOKIE_KEEP_LIST_FILENAME = "cookie_keep_list.json"
+
 
 def _estimate_in_memory_size(conn, table_name, delete_query, params):
     """Return estimated database size (bytes) after deleting rows in-memory.
@@ -298,3 +300,48 @@ def delete_cookies(path, keep_list, really_delete=False):
             "whole_file_deleted": False,
             "file_size_reduction": 0,
         }
+
+
+def list_unique_cookies():
+    """Return unique cookie hostnames across all cleaners with cookie actions.
+
+    Iterates through every registered cleaner, locates actions whose
+    ``command="cookie"`` and aggregates the existing cookie database files
+    they target.  Each database is opened using :func:`list_cookies`, and the
+    distinct host entries are returned as a sorted list.
+
+    Returns:
+        list[str]: Sorted, de-duplicated list of cookie host strings.
+    """
+
+    cookie_files = set()
+    # Import here to avoid a circular import.
+    from bleachbit.Cleaner import backends as cleaner_backends
+    for cleaner in cleaner_backends.values():
+        actions = getattr(cleaner, 'actions', ())
+        for option_id, action in actions:
+            if getattr(action, 'action_key', None) != 'cookie':
+                continue
+            try:
+                paths = list(action.get_paths())
+            except (OSError, RuntimeError) as exc:
+                logger.debug('Unable to enumerate cookie paths for %s.%s: %s',
+                             cleaner.get_id(), option_id, exc)
+                continue
+            for path in paths:
+                if path and os.path.isfile(path):
+                    cookie_files.add(path)
+
+    unique_hosts = set()
+    for path in cookie_files:
+        try:
+            rows = list_cookies(path)
+        except (ValueError, sqlite3.Error, OSError) as exc:
+            logger.debug('Skipping cookie database %s: %s', path, exc)
+            continue
+        for row in rows:
+            host = row[0] if isinstance(row, (list, tuple)) else row
+            if host:
+                unique_hosts.add(str(host))
+
+    return sorted(unique_hosts)
