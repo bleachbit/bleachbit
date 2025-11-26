@@ -42,7 +42,7 @@ COOKIE_DISCOVERY_WARN_THRESHOLD = 2.0  # seconds
 class CookieManagerDialog(Gtk.Window):
     """Manage cookies to keep"""
     def __init__(self):
-        Gtk.Window.__init__(self, title=_("Manage Cookies to Keep"))
+        Gtk.Window.__init__(self, title=_("Manage cookies to keep"))
         self.set_default_size(600, 500)
         self.set_border_width(10)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -53,7 +53,7 @@ class CookieManagerDialog(Gtk.Window):
 
         # Instructions label
         instructions = Gtk.Label()
-        instructions.set_markup("<b>Select the cookies to keep when cleaning cookies across browsers.</b>")
+        instructions.set_markup("<b>" + _("Select the cookies to keep when cleaning cookies across browsers.") + "</b>")
         instructions.set_line_wrap(True)
         instructions.set_xalign(0)  # Left align
         vbox.pack_start(instructions, False, False, 0)
@@ -105,7 +105,7 @@ class CookieManagerDialog(Gtk.Window):
         self.treeview.append_column(column_toggle)
 
         renderer_text = Gtk.CellRendererText()
-        column_domain = Gtk.TreeViewColumn("Host", renderer_text, text=1)
+        column_domain = Gtk.TreeViewColumn(_("Host"), renderer_text, text=1)
         column_domain.set_sort_column_id(1)
         column_domain.set_resizable(True)
         column_domain.set_expand(True)
@@ -133,7 +133,7 @@ class CookieManagerDialog(Gtk.Window):
         button_box.pack_start(self.deselect_all_btn, False, False, 0)
 
         # Action buttons
-        self.cancel_btn = Gtk.Button.new_with_label(_("Cancel"))
+        self.cancel_btn = Gtk.Button.new_with_mnemonic(_("_Cancel"))
         self.cancel_btn.connect("clicked", self.on_cancel_clicked)
         button_box.pack_start(self.cancel_btn, False, False, 0)
 
@@ -150,15 +150,19 @@ class CookieManagerDialog(Gtk.Window):
         selected = sum(1 for row in self.cookie_store if row[0])
         visible = sum(1 for _row in self.cookie_filter)
         if visible < total:
+            # TRANSLATORS: %(selected)d is the count of selected cookies,
+            # %(total)d is the total count, %(visible)d is the visible count
             self.stat_label.set_text(
-                _n(f"{selected} of {total} cookie allowed ({visible} visible)",
-                   f"{selected} of {total} cookies allowed ({visible} visible)",
-                   selected))
+                _n("%(selected)d of %(total)d cookie allowed (%(visible)d visible)",
+                   "%(selected)d of %(total)d cookies allowed (%(visible)d visible)",
+                   selected) % {'selected': selected, 'total': total, 'visible': visible})
         else:
+            # TRANSLATORS: %(selected)d is the count of selected cookies,
+            # %(total)d is the total count
             self.stat_label.set_text(
-                _n(f"{selected} of {total} cookie allowed",
-                   f"{selected} of {total} cookies allowed",
-                   selected))
+                _n("%(selected)d of %(total)d cookie allowed",
+                   "%(selected)d of %(total)d cookies allowed",
+                   selected) % {'selected': selected, 'total': total})
 
     def on_cell_toggled(self, _widget, path):
         """Toggle the checkbox in the child model"""
