@@ -202,13 +202,33 @@ class GeneralTestCase(common.BleachbitTestCase):
         """Unit test for run_external() with wait=False"""
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("error")
+            output_file = os.path.join(self.tempdir, 'run_external_nowait.txt')
 
-            args = {'nt': ['cmd.exe', '/c', 'dir', r'%windir%\system32', '/s', '/b'],
-                    'posix': ['find', '/usr/bin']}
-            (rc, stdout, stderr) = run_external(args[os.name], wait=False)
+            if os.name == 'posix':
+                script = self.write_file(
+                    'run_external_nowait.sh',
+                    contents='#!/bin/sh\nsleep 2\ntouch "$1"\n',
+                    mode='w')
+                os.chmod(script, 0o700)
+                cmd = ['sh', script, output_file]
+            else:
+                script = self.write_file(
+                    'run_external_nowait.bat',
+                    contents='@echo off\nping -n 3 127.0.0.1 >nul\necho done>"%~1"\n',
+                    mode='w')
+                cmd = ['cmd.exe', '/c', script, output_file]
+
+            self.assertNotExists(output_file)
+
+            (rc, stdout, stderr) = run_external(cmd, wait=False)
             self.assertEqual(0, rc)
-            self.assertEqual(0, len(stdout))
-            self.assertEqual(0, len(stderr))
+            self.assertEqual('', stdout)
+            self.assertEqual('', stderr)
+
+            self.assertNotExists(output_file)
+
+            time.sleep(5)
+            self.assertExists(output_file)
 
     def test_run_external_command_completion(self):
         """Test that run_external() commands complete successfully"""
