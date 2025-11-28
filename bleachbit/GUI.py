@@ -1541,14 +1541,21 @@ class GUI(Gtk.ApplicationWindow):
         self.set_titlebar(self.headerbar)
 
         # split main window twice
-        hbox = Gtk.Box(homogeneous=False)
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, homogeneous=False)
         self.add(vbox)
-        vbox.add(hbox)
+        paned = Gtk.Paned.new(Gtk.Orientation.HORIZONTAL)
+        paned.set_hexpand(True)
+        paned.set_vexpand(True)
+        paned.set_wide_handle(True)
+        self._max_operations_pane_width = 420
+        paned.connect("notify::position", self.on_operations_paned_notify_position)
+        vbox.add(paned)
 
         # add operations to left
         operations = self.create_operations_box()
-        hbox.pack_start(operations, False, True, 0)
+        operations.set_hexpand(False)
+        operations.set_vexpand(True)
+        paned.pack1(operations, resize=True, shrink=True)
 
         # create the right side of the window
         right_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -1565,7 +1572,10 @@ class GUI(Gtk.ApplicationWindow):
         self.textview.set_wrap_mode(Gtk.WrapMode.WORD)
         swindow.add(self.textview)
         right_box.add(swindow)
-        hbox.add(right_box)
+        right_box.set_hexpand(True)
+        right_box.set_vexpand(True)
+        paned.pack2(right_box, resize=True, shrink=False)
+        paned.set_position(260)
 
         # add markup tags
         tt = self.textbuffer.get_tag_table()
@@ -1598,6 +1608,15 @@ class GUI(Gtk.ApplicationWindow):
         # done
         self.show_all()
         self.progressbar.hide()
+
+    def on_operations_paned_notify_position(self, paned, _param):
+        """Limit the maximum width of the operations pane."""
+        if not hasattr(self, "_max_operations_pane_width"):
+            return
+        max_width = self._max_operations_pane_width
+        position = paned.get_position()
+        if position > max_width:
+            paned.set_position(max_width)
 
     @threaded
     def check_online_updates(self):
