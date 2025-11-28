@@ -1373,6 +1373,36 @@ class GUI(Gtk.ApplicationWindow):
         self.stop_button.connect('clicked', self.cb_stop_operations)
         box.add(self.stop_button)
 
+        # TEMPORARY: create button to show system information
+        self.system_info_button = Gtk.Button.new_from_icon_name(
+            'dialog-information', icon_size)
+        self.system_info_button.set_label('System Information')
+        self.system_info_button.set_always_show_image(True)
+        self.system_info_button.connect(
+            'clicked', lambda *dummy: self.get_application().system_information_dialog(None, None))
+        hbar.pack_end(self.system_info_button)
+
+
+
+        # Add Firefox diagnostics toggle button
+        self.firefox_diag_button = Gtk.ToggleButton.new_with_label(_('Firefox diagnostics'))
+        self.firefox_diag_button.set_active(options.get('firefox_access_diag'))
+        self.firefox_diag_button.set_tooltip_text(_('Enable extra Firefox access-denied logging for troubleshooting'))
+
+        def on_firefox_diag_toggled(button):
+            from bleachbit.Log import set_root_log_level
+            enabled = button.get_active()
+            options.set('firefox_access_diag', enabled)
+            # Also enable debug logging when Firefox diagnostics is on
+            options.set('debug', enabled)
+            set_root_log_level(enabled)
+            if hasattr(self, 'gtklog'):
+                self.gtklog.update_log_level()
+            state_text = _('enabled') if enabled else _('disabled')
+            self.append_text(_('Firefox diagnostics %s (debug logging also %s)\n') % (state_text, state_text))
+
+        self.firefox_diag_button.connect('toggled', on_firefox_diag_toggled)
+        hbar.pack_end(self.firefox_diag_button)
         hbar.pack_start(box)
 
         # Add hamburger menu on the right.

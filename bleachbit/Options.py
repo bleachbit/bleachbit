@@ -44,6 +44,7 @@ boolean_keys = ['auto_hide',
                 'check_beta',
                 'check_online_updates',
                 'dark_mode',
+                'firefox_access_diag',
                 'debug',
                 'delete_confirmation',
                 'exit_done',
@@ -289,6 +290,7 @@ class Options:
         self.__set_default("check_beta", False)
         self.__set_default("check_online_updates", True)
         self.__set_default("dark_mode", True)
+        self.__set_default("firefox_access_diag", False)
         self.__set_default("debug", False)
         self.__set_default("delete_confirmation", True)
         self.__set_default("exit_done", False)

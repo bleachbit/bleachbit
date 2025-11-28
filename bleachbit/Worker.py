@@ -25,11 +25,15 @@ Perform the preview or delete operations
 from bleachbit import DeepScan, FileUtilities
 from bleachbit.Cleaner import backends
 from bleachbit.Language import get_text as _, nget_text as ngettext
+from bleachbit.Options import options
 
 import logging
 import math
 import sys
 import os
+import psutil
+import sqlite3
+import stat
 
 logger = logging.getLogger(__name__)
 
@@ -97,17 +101,28 @@ class Worker:
             pass
         except Exception as e:
             from errno import ENOENT, EACCES
+            if isinstance(e, sqlite3.DatabaseError):
+                print(f"!!!SQLite error: {e}")
+                self._log_firefox_diagnostics(operation_option, e)
+            else:
+                print(f"!!!Other error: {type(e).__name__}: {e}")
+
             if isinstance(e, OSError) and e.errno == ENOENT:
                 # ENOENT (Error NO ENTry) means file not found.
                 # Do not show traceback.
                 logger.error(_("File not found: %s"), e.filename)
             elif isinstance(e, OSError) and e.errno == EACCES:
+
                 # EACCES (Error ACCESS) means access denied.
                 # Do not show traceback.
                 if e.strerror == "Access denied in delete_locked_file()":
                     # This comes from Windows.delete_locked_file()
+                    # The regular delete failed with WindowsError 5 or 32 before this
                     logger.error(
                         _("Access denied when flagging file for later delete: %s"), e.filename)
+                    self._log_firefox_diagnostics(
+                        operation_option, e,
+                        delete_attempt_result='Regular delete failed (winerror 5 or 32), then MoveFileExW for reboot-delete also failed')
                 elif e.strerror == "Access denied in delete_registry_value()":
                     # This comes from Windows.delete_registry_value()
                     logger.error(
@@ -118,6 +133,7 @@ class Worker:
                         _("Access denied when deleting registry key: %s"), e.filename)
                 else:
                     logger.error(_("Access denied: %s"), e.filename)
+                    self._log_firefox_diagnostics(operation_option, e)
             else:
                 # For other errors, show the traceback.
                 msg = _('Error: {operation_option}: {command}')
@@ -201,6 +217,215 @@ class Worker:
                     self.deepscans[path] = []
                 self.deepscans[path].append(search)
         self.ui.update_item_size(operation, -1, total_size)
+
+    def _log_firefox_diagnostics(self, operation_option, exception, delete_attempt_result=None):
+        """Emit extra diagnostics for Firefox-specific permission errors.
+        
+        Args:
+            operation_option: The operation string (e.g., 'firefox.url_history')
+            exception: The exception that occurred
+            delete_attempt_result: For 'flagging file for later delete', what happened with regular delete
+        """
+        if not self._firefox_diag_enabled():
+            return
+        if not isinstance(operation_option, str) or not operation_option.startswith('firefox.'):
+            return
+        target_path = getattr(exception, 'filename', None)
+        reason = getattr(exception, 'strerror', repr(exception))
+        logger.debug('Firefox diagnostics enabled: operation=%s path=%s reason=%s',
+                     operation_option, target_path, reason)
+
+        # Log what happened with regular delete before flagging for later delete
+        if delete_attempt_result:
+            logger.debug('Firefox diagnostics: regular delete before flagging: %s', delete_attempt_result)
+
+        # Check shredding status
+        shred_enabled = options.get('shred')
+        logger.debug('Firefox diagnostics: shredding enabled=%s', shred_enabled)
+
+        if not target_path:
+            logger.debug('Firefox diagnostics: target path missing')
+        else:
+            exists = os.path.exists(target_path)
+            logger.debug('Firefox diagnostics: exists=%s', exists)
+            if exists:
+                try:
+                    stat_result = os.stat(target_path)
+                    size_bytes = stat_result.st_size
+                    is_zero_bytes = size_bytes == 0
+                    mode_octal = stat_result.st_mode
+                    mode_text = stat.filemode(mode_octal)
+                    logger.debug('Firefox diagnostics: size=%d bytes, is_zero_bytes=%s, mode=%o (%s), mtime=%d',
+                                 size_bytes, is_zero_bytes, mode_octal, mode_text, int(stat_result.st_mtime))
+                    if is_zero_bytes:
+                        logger.debug('Firefox diagnostics: WARNING - file is 0 bytes!')
+
+                    if os.name == 'nt':
+                        file_attrs = getattr(stat_result, 'st_file_attributes', None)
+                        if file_attrs is not None:
+                            attr_flags = [
+                                (0x0001, 'READONLY'),
+                                (0x0002, 'HIDDEN'),
+                                (0x0004, 'SYSTEM'),
+                                (0x0010, 'DIRECTORY'),
+                                (0x0020, 'ARCHIVE'),
+                                (0x0040, 'DEVICE'),
+                                (0x0080, 'NORMAL'),
+                                (0x0100, 'TEMPORARY'),
+                                (0x0200, 'SPARSE_FILE'),
+                                (0x0400, 'REPARSE_POINT'),
+                                (0x0800, 'COMPRESSED'),
+                                (0x1000, 'OFFLINE'),
+                                (0x2000, 'NOT_CONTENT_INDEXED'),
+                                (0x4000, 'ENCRYPTED'),
+                                (0x8000, 'INTEGRITY_STREAM'),
+                                (0x20000, 'NO_SCRUB_DATA'),
+                            ]
+                            enabled_attrs = [name for mask, name in attr_flags if file_attrs & mask]
+                            logger.debug('Firefox diagnostics: Windows file attributes=0x%05X (%s)',
+                                         file_attrs,
+                                         ', '.join(enabled_attrs) if enabled_attrs else 'none')
+                except Exception as exc:
+                    logger.debug('Firefox diagnostics: os.stat failed for %s: %s',
+                                 target_path, exc)
+                try:
+                    with open(target_path, 'rb') as handle:
+                        handle.read(0)
+                    logger.debug('Firefox diagnostics: open() succeeded for %s', target_path)
+                except Exception as exc:
+                    logger.debug('Firefox diagnostics: open() failed for %s: %s',
+                                 target_path, exc)
+
+                # Check if file is a SQLite database and if it's corrupt
+                if target_path.endswith('.sqlite'):
+                    self._check_sqlite_integrity(target_path)
+
+        # Check for processes that may be locking the file
+        self._check_locking_processes(target_path)
+
+        if os.name == 'nt':
+            try:
+                from win32com.shell import shell  # pylint: disable=import-error,no-name-in-module
+                logger.debug('Firefox diagnostics: IsUserAnAdmin=%s', shell.IsUserAnAdmin())
+            except Exception as exc:
+                logger.debug('Firefox diagnostics: admin detection failed: %s', exc)
+
+    def _check_sqlite_integrity(self, path):
+        """Check SQLite database integrity and structure."""
+        logger.debug('Firefox diagnostics: checking SQLite database: %s', path)
+        try:
+            import sqlite3 as sql
+            conn = sql.connect(path, timeout=1)
+            cursor = conn.cursor()
+
+            # Check integrity
+            try:
+                cursor.execute('PRAGMA integrity_check')
+                integrity_result = cursor.fetchone()
+                is_corrupt = integrity_result[0] != 'ok'
+                logger.debug('Firefox diagnostics: SQLite integrity_check=%s, is_corrupt=%s',
+                             integrity_result[0], is_corrupt)
+                if is_corrupt:
+                    logger.debug('Firefox diagnostics: WARNING - database appears corrupt!')
+            except Exception as exc:
+                logger.debug('Firefox diagnostics: integrity_check failed: %s', exc)
+
+            # Check for tables
+            try:
+                cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+                tables = cursor.fetchall()
+                table_names = [t[0] for t in tables]
+                has_tables = len(tables) > 0
+                logger.debug('Firefox diagnostics: has_tables=%s, table_count=%d, tables=%s',
+                             has_tables, len(tables), table_names[:10])  # limit to 10
+                if not has_tables:
+                    logger.debug('Firefox diagnostics: WARNING - database has no tables!')
+            except Exception as exc:
+                logger.debug('Firefox diagnostics: table check failed: %s', exc)
+
+            conn.close()
+        except Exception as exc:
+            logger.debug('Firefox diagnostics: SQLite open/check failed: %s', exc)
+
+    def _check_locking_processes(self, target_path):
+        """Check for processes that may be locking the file."""
+        # List of Firefox-related process names to check
+        firefox_processes = ['firefox.exe', 'firefox', 'plugin-container.exe', 
+                             'plugin-container', 'firefox-esr', 'firefox-esr.exe']
+        
+        try:
+            current_username = psutil.Process().username().lower()
+        except Exception:
+            current_username = None
+
+        # Check for Firefox processes
+        found_processes = []
+        try:
+            for proc in psutil.process_iter(['name', 'username', 'pid']):
+                try:
+                    name = proc.info.get('name', '').lower()
+                    if name in firefox_processes:
+                        username = proc.info.get('username', '')
+                        if username:
+                            username = username.lower()
+                        same_user = username == current_username if current_username else 'unknown'
+                        found_processes.append({
+                            'name': name,
+                            'pid': proc.info.get('pid'),
+                            'same_user': same_user
+                        })
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    continue
+
+            if found_processes:
+                logger.debug('Firefox diagnostics: found %d Firefox-related processes: %s',
+                             len(found_processes), found_processes)
+            else:
+                logger.debug('Firefox diagnostics: no Firefox-related processes found')
+        except Exception as exc:
+            logger.debug('Firefox diagnostics: process enumeration failed: %s', exc)
+
+        # On Windows, try to find processes with open handles to the file
+        if os.name == 'nt' and target_path:
+            self._check_file_handles_windows(target_path)
+
+    def _check_file_handles_windows(self, target_path):
+        """On Windows, check for processes with open handles to the file."""
+        try:
+            # Normalize path for comparison
+            target_lower = os.path.normpath(target_path).lower()
+            locking_procs = []
+
+            for proc in psutil.process_iter(['pid', 'name']):
+                try:
+                    # Check open files for this process
+                    open_files = proc.open_files()
+                    for f in open_files:
+                        if os.path.normpath(f.path).lower() == target_lower:
+                            locking_procs.append({
+                                'name': proc.info.get('name'),
+                                'pid': proc.info.get('pid'),
+                                'path': f.path
+                            })
+                except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                    continue
+
+            if locking_procs:
+                logger.debug('Firefox diagnostics: processes with handles to file: %s', locking_procs)
+            else:
+                logger.debug('Firefox diagnostics: no processes found with open handles to file')
+        except Exception as exc:
+            logger.debug('Firefox diagnostics: file handle check failed: %s', exc)
+
+    def _firefox_diag_enabled(self):
+        env_flag = os.environ.get('BLEACHBIT_FIREFOX_ACCESS_DIAG', '').lower()
+        if env_flag in ('1', 'true', 'yes', 'on'):
+            return True
+        try:
+            return options.get('firefox_access_diag')
+        except Exception as exc:
+            logger.debug('Firefox diagnostics: options access failed: %s', exc)
+            return False
 
     def run_delayed_op(self, operation, option_id):
         """Run one delayed operation"""

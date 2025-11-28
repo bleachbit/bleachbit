@@ -534,14 +534,23 @@ def execute_sqlite3(path, cmds):
             try:
                 conn.execute(cmd)
             except sqlite3.OperationalError as exc:
-                if str(exc).find('no such function: ') >= 0:
+                exc_msg = str(exc)
+                if 'unable to open database file' in exc_msg:
+                    if not os.path.exists(path):
+                        raise FileNotFoundError(errno.ENOENT,
+                                                os.strerror(errno.ENOENT),
+                                                path) from exc
+                    raise OSError(errno.EACCES,
+                                  _("Access denied when opening SQLite database"),
+                                  path) from exc
+                if exc_msg.find('no such function: ') >= 0:
                     # fixme: determine why randomblob and zeroblob are not
                     # available
-                    logger.exception(exc.message)
+                    logger.exception(exc_msg)
                 else:
-                    raise sqlite3.OperationalError(f'{exc}: {path}')
+                    raise sqlite3.OperationalError(f'{exc}: {path}') from exc
             except sqlite3.DatabaseError as exc:
-                raise sqlite3.DatabaseError(f'{exc}: {path}')
+                raise sqlite3.DatabaseError(f'{exc}: {path}') from exc
 
         conn.commit()
 
