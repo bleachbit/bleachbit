@@ -53,7 +53,7 @@ if sys.platform == 'linux':
 
 # local
 import bleachbit
-from bleachbit import APP_NAME, appicon_path, portable_mode, windows10_theme_path
+from bleachbit import APP_NAME, appicon_path, portable_mode, windows10_theme_path, General
 from bleachbit import Cleaner, FileUtilities, GuiBasic
 from bleachbit.Cleaner import backends, register_cleaners
 from bleachbit.GuiPreferences import PreferencesDialog
@@ -62,6 +62,11 @@ from bleachbit.Log import set_root_log_level
 from bleachbit.Options import options
 if os.name == 'nt':
     from bleachbit import Windows
+    from bleachbit.FontCheckDialog import (
+        create_font_check_dialog,
+        RESPONSE_TEXT_BLURRY,
+        RESPONSE_TEXT_UNREADABLE,
+    )
 
 # Now that the configuration is loaded, honor the debug preference there.
 set_root_log_level(options.get('debug'))
@@ -226,6 +231,8 @@ class Bleachbit(Gtk.Application):
             self, application_id=application_id, flags=Gio.ApplicationFlags.FLAGS_NONE)
         GLib.set_prgname('org.bleachbit.BleachBit')
 
+        self._font_check_prompt_scheduled = False
+
         if auto_exit:
             # This is used for automated testing of whether the GUI can start.
             # It is called from assert_execute_console() in windows/setup.py
@@ -244,6 +251,9 @@ class Bleachbit(Gtk.Application):
         is_context_menu_executed = auto_exit and shred_paths
         if not os.name == 'nt':
             return ''
+        env_suffix = os.environ.pop('BLEACHBIT_APP_INSTANCE_SUFFIX', '')
+        if env_suffix:
+            application_id_suffix = env_suffix
         if Windows.elevate_privileges(uac):
             # privileges escalated in other process
             sys.exit(0)
@@ -488,6 +498,70 @@ class Bleachbit(Gtk.Application):
             GLib.idle_add(self.quit,
                           priority=GLib.PRIORITY_LOW)
             print('Success')
+
+        self._maybe_prompt_font_check()
+
+    def _should_show_font_check_dialog(self):
+        """Determine whether to show the font check dialog on Windows."""
+        if os.name != 'nt':
+            return False
+        if self._auto_exit:
+            return False
+        if self._shred_paths:
+            return False
+        # User made an explicit choice of a backend.
+        if os.environ.get('PANGOCAIRO_BACKEND', ''):
+            return False
+        if options.get('use_fontconfig_backend'):
+            return False
+        if options.get('font_check_completed'):
+            return False
+        return True
+
+    def _maybe_prompt_font_check(self):
+        if not self._should_show_font_check_dialog():
+            return
+        if self._font_check_prompt_scheduled:
+            return
+        self._font_check_prompt_scheduled = True
+        GLib.idle_add(self._show_font_check_dialog,
+                      priority=GLib.PRIORITY_DEFAULT_IDLE)
+
+    def _show_font_check_dialog(self):
+        if not self._window:
+            return False
+        dialog = create_font_check_dialog(self._window)
+        response = dialog.run()
+        dialog.destroy()
+        if response == Gtk.ResponseType.YES:
+            options.set('font_check_completed', True)
+        elif response in (RESPONSE_TEXT_BLURRY, RESPONSE_TEXT_UNREADABLE):
+            options.set('font_check_completed', True, commit=False)
+            options.set('use_fontconfig_backend', True)
+            self._restart_with_fontconfig_backend()
+        # If user dismisses the dialog, then ask again next time.
+        return False
+
+    def _restart_with_fontconfig_backend(self):
+        executable = General.get_executable()
+        if getattr(sys, 'frozen', False):
+            cmd = [executable] + sys.argv[1:]
+        else:
+            script_path = os.path.abspath(sys.argv[0])
+            cmd = [executable, script_path] + sys.argv[1:]
+        if not cmd:
+            logger.error('Could not construct restart command for fontconfig backend change.')
+            return
+        cmd = cmd + ['--debug', '--debug-log=c:\\projects\\bleachbit.log', '--gui']
+        logger.info('Restarting BleachBit with fontconfig backend: %s', cmd)
+        env = None
+        if os.name == 'nt':
+            env = os.environ.copy()
+            env['BLEACHBIT_APP_INSTANCE_SUFFIX'] = f'Restart{os.getpid()}'
+        if not General.run_external_nowait(cmd, env=env, kwargs={}):
+            logger.error('Failed to restart BleachBit after enabling fontconfig backend.')
+            return
+        GLib.idle_add(self.quit, priority=GLib.PRIORITY_LOW)
 
 
 class TreeInfoModel:
@@ -896,12 +970,19 @@ class GUI(Gtk.ApplicationWindow):
 
     def _show_splash_screen(self):
         """Show the splash screen on Windows because startup may be slow"""
+        # Show only on Windows
         if os.name != 'nt':
+            return
+        # If user wants fontconfig, then keep going.
+        # If user wants win32, then return.
+        if not options.get('use_fontconfig_backend'):
+            return
+        if os.environ.get('PANGOCAIRO_BACKEND', '').lower() == 'win32':
             return
 
         font_conf_file = Windows.get_font_conf_file()
         if not os.path.exists(font_conf_file):
-            logger.error('No fonts.conf file {}'.format(font_conf_file))
+            logger.error('No fonts.conf file %s', font_conf_file)
             return
 
         has_cache = Windows.has_fontconfig_cache(font_conf_file)

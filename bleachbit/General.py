@@ -194,22 +194,22 @@ def run_external_nowait(args, env=None, kwargs=None):
     """
     try:
         if sys.platform == 'win32':
+            if kwargs is None:
+                kwargs = {}
             kwargs['creationflags'] = subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP
-            # Set close_fds to True to prevent Python from tracking the process
-            # Also prevents ResourceWarnings
+            # Set close_fds to True to prevent handle inheritance and
+            # avoid ResourceWarning about unclosed handles.
             kwargs['close_fds'] = True
             try:
-                # Start the process with explicit None for stdio to prevent handle inheritance
-                process = subprocess.Popen(args,
-                                           stdin=None,
-                                           stdout=None,
-                                           stderr=None,
-                                           env=env, **kwargs)
-                # Close the process handle to prevent ResourceWarning
-                process.returncode = 0
-                # This prevents the ResourceWarning in __del__
-                process._handle.Close()
-                process._handle = None
+                # Start the process detached from the parent and ignore stdio.
+                subprocess.Popen(
+                    args,
+                    stdin=subprocess.DEVNULL,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    env=env,
+                    **kwargs,
+                )
                 return True
             except Exception as e:
                 logger.warning('Failed to start process %s: %s', args, e)

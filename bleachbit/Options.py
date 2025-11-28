@@ -47,6 +47,7 @@ boolean_keys = ['auto_hide',
                 'debug',
                 'delete_confirmation',
                 'exit_done',
+                'font_check_completed',
                 'first_start',
                 'kde_shred_menu_option',
                 'remember_geometry',
@@ -293,6 +294,7 @@ class Options:
         self.__set_default("debug", False)
         self.__set_default("delete_confirmation", True)
         self.__set_default("exit_done", False)
+        self.__set_default("font_check_completed", False)
         self.__set_default("kde_shred_menu_option", False)
         self.__set_default("remember_geometry", True)
         self.__set_default("shred", False)

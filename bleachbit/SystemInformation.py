@@ -88,7 +88,7 @@ def get_gtk_info():
     except ImportError:
         info['Cairo version'] = 'not found'
 
-    try:        
+    try:
         gi.require_version('Pango', '1.0')
         from gi.repository import Pango
         info['Pango version'] = Pango.version_string()
@@ -507,8 +507,8 @@ def get_system_information():
 
     info['SQLite version'] = sqlite3.sqlite_version
 
-    
-    
+
+
 
     # System environment information
     info['locale.getlocale'] = str(locale.getlocale())
@@ -593,7 +593,8 @@ def get_system_information():
         envs = ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID')
     elif 'nt' == os.name:
         envs = ('APPDATA', 'cd', 'LocalAppData', 'LocalAppDataLow', 'Music',
-                'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
+                'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP','PANGOCAIRO_BACKEND',
+                'FONTCONFIG_FILE', 'FONTCONFIG_PATH')
     else:
         envs = ()
 
