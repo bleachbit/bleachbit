@@ -25,11 +25,13 @@ Perform the preview or delete operations
 from bleachbit import DeepScan, FileUtilities
 from bleachbit.Cleaner import backends
 from bleachbit.Language import get_text as _, nget_text as ngettext
+from bleachbit.Options import options
 
 import logging
 import math
 import sys
 import os
+import psutil
 
 logger = logging.getLogger(__name__)
 
@@ -102,6 +104,7 @@ class Worker:
                 # Do not show traceback.
                 logger.error(_("File not found: %s"), e.filename)
             elif isinstance(e, OSError) and e.errno == EACCES:
+                self._log_firefox_diagnostics(operation_option, e)
                 # EACCES (Error ACCESS) means access denied.
                 # Do not show traceback.
                 if e.strerror == "Access denied in delete_locked_file()":
@@ -201,6 +204,72 @@ class Worker:
                     self.deepscans[path] = []
                 self.deepscans[path].append(search)
         self.ui.update_item_size(operation, -1, total_size)
+
+    def _log_firefox_diagnostics(self, operation_option, exception):
+        """Emit extra diagnostics for Firefox-specific permission errors."""
+        if not self._firefox_diag_enabled():
+            return
+        if not isinstance(operation_option, str) or not operation_option.startswith('firefox.'):
+            return
+        target_path = getattr(exception, 'filename', None)
+        reason = getattr(exception, 'strerror', repr(exception))
+        logger.debug('Firefox diagnostics enabled: operation=%s path=%s reason=%s',
+                     operation_option, target_path, reason)
+
+        if not target_path:
+            logger.debug('Firefox diagnostics: target path missing')
+        else:
+            exists = os.path.exists(target_path)
+            logger.debug('Firefox diagnostics: exists=%s', exists)
+            if exists:
+                try:
+                    stat_result = os.stat(target_path)
+                    logger.debug('Firefox diagnostics: size=%d bytes, mode=%o, mtime=%d',
+                                 stat_result.st_size, stat_result.st_mode, int(stat_result.st_mtime))
+                except Exception as exc:
+                    logger.debug('Firefox diagnostics: os.stat failed for %s: %s',
+                                 target_path, exc)
+                try:
+                    with open(target_path, 'rb') as handle:
+                        handle.read(0)
+                    logger.debug('Firefox diagnostics: open() succeeded for %s', target_path)
+                except Exception as exc:
+                    logger.debug('Firefox diagnostics: open() failed for %s: %s',
+                                 target_path, exc)
+
+        if os.name == 'nt':
+            try:
+                current_username = psutil.Process().username().lower()
+                same_user = False
+                any_user = False
+                for proc in psutil.process_iter(['name', 'username']):
+                    name = proc.info.get('name', '').lower()
+                    if name != 'firefox.exe':
+                        continue
+                    any_user = True
+                    username = proc.info.get('username', '').lower()
+                    if username == current_username:
+                        same_user = True
+                        break
+                logger.debug('Firefox diagnostics: firefox.exe running (same user)=%s (any user)=%s',
+                             same_user, any_user)
+            except Exception as exc:
+                logger.debug('Firefox diagnostics: process check failed: %s', exc)
+            try:
+                from win32com.shell import shell  # pylint: disable=import-error,no-name-in-module
+                logger.debug('Firefox diagnostics: IsUserAnAdmin=%s', shell.IsUserAnAdmin())
+            except Exception as exc:
+                logger.debug('Firefox diagnostics: admin detection failed: %s', exc)
+
+    def _firefox_diag_enabled(self):
+        env_flag = os.environ.get('BLEACHBIT_FIREFOX_ACCESS_DIAG', '').lower()
+        if env_flag in ('1', 'true', 'yes', 'on'):
+            return True
+        try:
+            return options.get('firefox_access_diag')
+        except Exception as exc:
+            logger.debug('Firefox diagnostics: options access failed: %s', exc)
+            return False
 
     def run_delayed_op(self, operation, option_id):
         """Run one delayed operation"""
