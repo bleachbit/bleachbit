@@ -24,23 +24,14 @@ Basic GUI code
 # standard library
 import os
 
-# third party
-try:
-    import gi
-except ModuleNotFoundError as e:
-    print('*' * 60)
-    print('Please install PyGObject')
-    print('https://pygobject.readthedocs.io/en/latest/getting_started.html')
-    print('*' * 60)
-    raise e
-
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk  # keep after gi.require_version()
-
 # local import
+from bleachbit.GtkShim import Gtk, Gdk, require_gtk
 from bleachbit.Language import get_text as _
 if os.name == 'nt':
     from bleachbit import Windows
+
+# Ensure GTK is available for this GUI module
+require_gtk()
 
 
 def browse_folder(parent, title, multiple, stock_button):

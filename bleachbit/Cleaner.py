@@ -27,31 +27,18 @@ import os.path
 import re
 import sys
 import tempfile
-import warnings
 
 from bleachbit.Language import get_text as _
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
 from bleachbit import Action, CleanerML, Command, FileUtilities, Memory, Special
-
+from bleachbit.GtkShim import Gtk, Gdk, HAVE_GTK
 
 if 'posix' == os.name:
     from bleachbit import Unix
-    # Suppress GTK warning messages while running in CLI #34
-    warnings.simplefilter("ignore", Warning)
-    try:
-        from bleachbit.GuiBasic import Gtk, Gdk
-        HAVE_GTK = Gdk.get_default_root_window() is not None
-    except (ImportError, RuntimeError, ValueError):
-        # ImportError happens when GTK is not installed.
-        # RuntimeError can happen when X is not available (e.g., cron, ssh).
-        # ValueError seen on BleachBit 3.0 with GTK 3 (GitHub issue 685)
-        HAVE_GTK = False
 elif 'nt' == os.name:
     from bleachbit import Windows
-    from bleachbit.GuiBasic import Gtk, Gdk
-    HAVE_GTK = True
-else:
+elif os.name not in ('posix', 'nt'):
     raise RuntimeError(f"Unknown OS '{os.name}'")
 
 

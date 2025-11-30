@@ -40,27 +40,18 @@ logger = logging.getLogger(__name__)
 
 def get_gtk_info():
     """Get dictionary of information about GTK"""
+    # pylint: disable=import-outside-toplevel
+    from bleachbit.GtkShim import gi, Gtk, HAVE_GTK, get_gtk_unavailable_reason
+
     info = {}
-    try:
-        # pylint: disable=import-outside-toplevel
-        import gi
-    except ImportError:
-        logger.debug('import gi failed')
+    if gi is None:
+        logger.debug('gi module not available')
         return info
 
     info['gi.version'] = gi.__version__
-    try:
-        gi.require_version('Gtk', '3.0')
-    except ValueError:
-        logger.debug(
-            'gi.require_version failed: GTK 3.0 not found or not available')
-        return info
 
-    # pylint: disable=import-outside-toplevel
-    try:
-        from gi.repository import Gtk
-    except (ImportError, ValueError):
-        logger.debug('import Gtk failed: GTK 3.0 not found or not available')
+    if not HAVE_GTK:
+        logger.debug('GTK not available: %s', get_gtk_unavailable_reason())
         return info
 
     settings = Gtk.Settings.get_default()

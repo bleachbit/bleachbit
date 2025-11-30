@@ -47,7 +47,8 @@ if 'posix' == os.name:
     # Check for GUI only when needed: this avoids a Gtk warning when
     # a display is not available.
     if len(sys.argv) == 1 or '--gui' in sys.argv:
-        have_gui = bleachbit.Unix.has_gui()
+        from bleachbit.GtkShim import HAVE_GTK
+        have_gui = HAVE_GTK
     else:
         have_gui = False
 
