@@ -308,6 +308,7 @@ def load_cleaners(cb_progress=lambda x: None):
         cleaner = xmlcleaner.get_cleaner()
         if cleaner.is_usable():
             Cleaner.backends[cleaner.id] = cleaner
+            logger.debug("Loaded cleaner %s from %s", cleaner.id, pathname)
         else:
             if cleaner.id:
                 not_usable.append(cleaner.id)

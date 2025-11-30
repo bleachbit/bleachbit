@@ -523,17 +523,26 @@ class TreeInfoModel:
             self.tree_store.disconnect(self.row_changed_handler_id)
         self.tree_store.clear()
         hidden_cleaners = []
+        auto_hide_enabled = options.get('auto_hide')
+        logger.debug("refresh_rows: auto_hide preference = %s", auto_hide_enabled)
+        logger.debug("refresh_rows: processing %d backends", len(backends))
         for key in sorted(backends):
             if not any(backends[key].get_options()):
                 # localizations has no options, so it should be hidden
                 # https://github.com/az0/bleachbit/issues/110
+                logger.debug("refresh_rows: skipping '%s' (no options)", key)
                 continue
             c_name = backends[key].get_name()
             c_id = backends[key].get_id()
             c_value = options.get_tree(c_id, None)
-            if not c_value and options.get('auto_hide') and backends[key].auto_hide():
+            logger.debug("refresh_rows: cleaner '%s' (%s): c_value=%s, auto_hide_enabled=%s",
+                         c_id, c_name, c_value, auto_hide_enabled)
+            if not c_value and auto_hide_enabled and backends[key].auto_hide():
+                logger.debug("refresh_rows: hiding '%s' (auto_hide returned True)", c_id)
                 hidden_cleaners.append(c_id)
                 continue
+            logger.debug("refresh_rows: showing '%s' (c_value=%s or auto_hide not applicable)",
+                         c_id, c_value)
             parent = self.tree_store.append(None, (c_name, c_value, c_id, ""))
             for (o_id, o_name) in backends[key].get_options():
                 o_value = options.get_tree(c_id, o_id)
