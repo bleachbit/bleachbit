@@ -64,7 +64,8 @@ if os.name == 'nt':
     from bleachbit import Windows
 
 # Now that the configuration is loaded, honor the debug preference there.
-set_root_log_level(options.get('debug'))
+from bleachbit.Log import FORCE_DEBUG_LOGGING
+set_root_log_level(FORCE_DEBUG_LOGGING or options.get('debug'))
 logger = logging.getLogger(__name__)
 
 
