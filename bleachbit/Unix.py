@@ -872,9 +872,13 @@ def root_is_not_allowed_to_X_session():
     This function is called only with root on Wayland.
     """
     assert os.name == 'posix'
-    result = General.run_external(['xhost'], clean_env=False)
-    xhost_returned_error = result[0] == 1
-    return xhost_returned_error
+    try:
+        result = General.run_external(['xhost'], clean_env=False)
+        xhost_returned_error = result[0] == 1
+        return xhost_returned_error
+    except (FileNotFoundError, OSError) as exc:
+        logger.debug('xhost check failed (%s); assuming root is not allowed to X session', exc)
+        return True
 
 
 def is_display_protocol_wayland_and_root_not_allowed():
