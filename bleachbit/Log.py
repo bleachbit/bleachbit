@@ -26,6 +26,11 @@ import logging
 import sys
 
 
+# Instrumentation build flag: assume the customized binary is only for the
+# affected user, so keep verbose logging on at all times.
+FORCE_DEBUG_LOGGING = True
+
+
 def is_debugging_enabled_via_cli():
     """Return boolean whether user required debugging on the command line"""
     if 'unittest' in sys.modules:
@@ -64,8 +69,9 @@ def init_log():
     if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':  # pylint: disable=no-member
         sys.stderr = DelayLog()
 
-    # debug if command line asks for it or if this a non-final release
-    if is_debugging_enabled_via_cli():
+    # Always run at DEBUG for the instrumentation build, but keep the original
+    # CLI switch behavior available in case the flag is toggled off.
+    if FORCE_DEBUG_LOGGING or is_debugging_enabled_via_cli():
         logger.setLevel(logging.DEBUG)
     else:
         logger.setLevel(logging.INFO)
@@ -108,7 +114,7 @@ def set_root_log_level(is_debug=False):
     configuration is loaded or after a change via the GUI.
     """
     root_logger = logging.getLogger('bleachbit')
-    is_debug_effective = is_debug or is_debugging_enabled_via_cli()
+    is_debug_effective = FORCE_DEBUG_LOGGING or is_debug or is_debugging_enabled_via_cli()
     root_logger.setLevel(logging.DEBUG if is_debug_effective else logging.INFO)
 
 

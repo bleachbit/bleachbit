@@ -55,6 +55,9 @@ else:
     raise RuntimeError(f"Unknown OS '{os.name}'")
 
 
+# module-level logging setup for instrumentation visibility
+logger = logging.getLogger(__name__)
+
 # a module-level variable for holding cleaners
 backends = {}
 
@@ -90,17 +93,32 @@ class Cleaner:
     def auto_hide(self):
         """Return boolean whether it is OK to automatically hide this
         cleaner"""
-        for (option_id, __name) in self.get_options():
+        options_to_check = list(self.get_options())
+        logger.debug("auto_hide(%s/%s): evaluating %d option(s): %s",
+                     self.id, self.name, len(options_to_check),
+                     [opt for (opt, _opt_name) in options_to_check])
+        for (option_id, option_name) in options_to_check:
             try:
+                logger.debug("auto_hide(%s/%s): checking option '%s' (%s)",
+                             self.id, self.name, option_id, option_name)
                 for cmd in self.get_commands(option_id):
-                    for _dummy in cmd.execute(False):
+                    logger.debug("auto_hide(%s/%s): previewing command %s for option '%s'",
+                                 self.id, self.name, cmd, option_id)
+                    for preview_item in cmd.execute(False):
+                        logger.debug(
+                            "auto_hide(%s/%s): command %s produced preview %s -> cannot hide",
+                            self.id, self.name, cmd, preview_item)
                         return False
-                for _ds in self.get_deep_scan(option_id):
+                for ds_entry in self.get_deep_scan(option_id):
+                    logger.debug(
+                        "auto_hide(%s/%s): deep scan requested for option '%s': %s -> cannot hide",
+                        self.id, self.name, option_id, ds_entry)
                     return False
             except Exception:
-                logger = logging.getLogger(__name__)
                 logger.exception('exception in auto_hide(), cleaner=%s, option=%s',
                                  self.name, option_id)
+        logger.debug("auto_hide(%s/%s): no matches found -> eligible for hiding",
+                     self.id, self.name)
         return True
 
     def get_commands(self, option_id):
