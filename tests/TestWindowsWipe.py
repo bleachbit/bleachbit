@@ -90,8 +90,8 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
         self.assertIsNotNone(file_handle)
         close_file(file_handle)
 
-    def test_get_extents(self):
-        """Unit test for get_extents()"""
+    def test_get_extents_system32(self):
+        """Unit test for get_extents() with system32 files"""
 
         error_count = 0
         zero_extents_count = 0
@@ -121,7 +121,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
             # so they have zero clusters.
             fsize = os.path.getsize(path)
             if fsize > 1000:
-                self.assertGreater(len(ret), 0)
+                self.assertGreater(len(ret), 0, f"File {path} has size {fsize:,} but no extents")
             elif fsize < 200:
                 self.assertEqual(len(ret), 0)
         total_files = zero_extents_count + nonzero_extents_count + error_count
@@ -133,6 +133,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
         print(f"\ntest_get_extents() stats: {error_count:,} errors; {zero_extents_count:,} files with zero extents; {nonzero_extents_count:,} files with nonzero extents; {int(elapsed_seconds)} seconds; {int(files_per_second) if files_per_second else None} files per second")
         self.assertGreater(zero_extents_count, 10)
         self.assertGreater(nonzero_extents_count, 100)
+
 
     def test_get_file_basic_info(self):
         """Unit test for get_file_basic_info()"""
@@ -216,15 +217,49 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
         if not shell.IsUserAnAdmin():
             self.skipTest("Test requires administrator privileges")
 
-        tmp_path = os.path.join(self.tempdir, 'file_wipe_basic')
-        write_data = b'This is test data that should be wiped'
-        self.write_file(tmp_path, write_data)
+        cases = [
+            {
+                "name": "file_wipe_basic_small",
+                "data": b'This is test data that should be wiped',
+                "expect_zero_extents": True,
+            },
+            {
+                "name": "file_wipe_basic_large",
+                "data": os.urandom(4 * 1024 * 1024),
+                "expect_zero_extents": False,
+            },
+        ]
 
-        file_wipe(tmp_path)
+        for case in cases:
+            tmp_path = os.path.join(self.tempdir, case["name"])
+            write_data = case["data"]
+            self.write_file(tmp_path, write_data)
 
-        with open(tmp_path, 'rb') as f:
-            data = f.read()
-            self.assertEqual(data, b'\x00' * len(write_data))
+            file_handle = open_file(tmp_path)
+            try:
+                extents = get_extents(file_handle, filename=tmp_path)
+            finally:
+                close_file(file_handle)
+
+            if case["expect_zero_extents"]:
+                self.assertEqual(extents, [])
+            else:
+                self.assertIsInstance(extents, list)
+                self.assertGreater(len(extents), 0)
+
+            total_clusters = sum((end - start + 1) for start, end in extents)
+            if total_clusters > 0:
+                volume = volume_from_file(tmp_path)
+                volume_info = get_volume_information(volume)
+                cluster_size = (volume_info.sectors_per_cluster *
+                                volume_info.bytes_per_sector)
+                self.assertGreaterEqual(total_clusters * cluster_size, len(write_data))
+
+            file_wipe(tmp_path)
+
+            with open(tmp_path, 'rb') as f:
+                data = f.read()
+                self.assertEqual(data, b'\x00' * len(write_data))
 
     def test_file_wipe_locked(self):
         """Test file_wipe() with a locked file"""
