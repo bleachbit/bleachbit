@@ -24,8 +24,8 @@ GUI for making chaff
 """
 
 from bleachbit.Language import get_text as _
+from bleachbit.GtkShim import Gtk, GLib
 
-from gi.repository import Gtk, GLib
 import logging
 import os
 

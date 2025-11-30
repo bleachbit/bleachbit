@@ -30,10 +30,11 @@ import threading
 import time
 
 
-# third party import
-import gi
-gi.require_version('Gtk', '3.0')  # Keep this above `import Gtk`.
-from gi.repository import Gtk, Gdk, GObject, GLib, Gio
+# third party import (via centralized shim)
+from bleachbit.GtkShim import gi, Gtk, Gdk, GObject, GLib, Gio, require_gtk
+
+# Ensure GTK is available for this GUI module
+require_gtk()
 
 APP_INDICATOR_FOUND = True
 

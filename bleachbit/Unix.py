@@ -830,20 +830,6 @@ def snap_disabled_preview():
     return snap_disabled_full(False)
 
 
-def has_gui():
-    """Return True if the GUI is available"""
-    assert os.name == 'posix'
-    if not os.environ.get('DISPLAY') and not os.environ.get('WAYLAND_DISPLAY'):
-        return False
-    try:
-        import gi
-        gi.require_version('Gtk', '3.0')
-        from gi.repository import Gtk
-        return True
-    except ImportError:
-        return False
-
-
 def is_unix_display_protocol_wayland():
     """Return True if the display protocol is Wayland."""
     assert os.name == 'posix'

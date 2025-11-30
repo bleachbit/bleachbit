@@ -24,25 +24,15 @@ Test case for module GuiChaff
 """
 
 
-import os
 import tempfile
 import time
 import unittest
 from unittest.mock import patch, MagicMock
 
 from tests import common
-
-HAVE_GTK = True
-if os.name == 'posix':
-    from bleachbit.Unix import has_gui
-    HAVE_GTK = has_gui()
-if os.name == 'nt':
-    HAVE_GTK = True
+from bleachbit.GtkShim import HAVE_GTK, Gtk, GLib, Gio
 
 if HAVE_GTK:
-    import gi
-    gi.require_version('Gtk', '3.0')
-    from gi.repository import Gtk, Gio
     from bleachbit.GUI import Bleachbit
 
 
@@ -60,7 +50,7 @@ class GuiChaffTestCase(common.BleachbitTestCase):
             cls.app.register()
             cls.app.hold()  # Keep application alive during tests
             cls.app.activate()
-        except gi.repository.GLib.GError as e:
+        except GLib.GError as e:
             if not "already exported" in str(e):
                 raise
             # Application already registered, just hold it

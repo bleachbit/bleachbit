@@ -29,15 +29,9 @@ import time
 import types
 from unittest import mock
 
-HAVE_GTK = True
-if os.name == 'posix':
-    from bleachbit.Unix import has_gui
-    HAVE_GTK = has_gui()
+from bleachbit.GtkShim import HAVE_GTK, Gtk
 
 if HAVE_GTK:
-    import gi
-    gi.require_version('Gtk', '3.0')
-    from gi.repository import Gtk
     from bleachbit.GUI import Bleachbit
 
 import bleachbit

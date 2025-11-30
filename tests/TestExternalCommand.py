@@ -29,14 +29,10 @@ import sys
 import subprocess
 from unittest import mock
 
-try:
-    import gi
-    gi.require_version('Gtk', '3.0')
-    from gi.repository import Gtk  # pylint: disable=unused-import
+from bleachbit.GtkShim import HAVE_GTK
+
+if HAVE_GTK:
     from bleachbit.GUI import Bleachbit
-    HAVE_GTK = True
-except ImportError:
-    HAVE_GTK = False
 
 import bleachbit
 from bleachbit.Options import options

@@ -29,8 +29,8 @@ from bleachbit import GuiBasic
 from bleachbit.GuiCookie import CookieManagerDialog
 from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _, pget_text as _p
+from bleachbit.GtkShim import Gtk
 
-from gi.repository import Gtk
 import logging
 import os
 
