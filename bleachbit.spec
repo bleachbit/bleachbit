@@ -78,6 +78,7 @@ Requires:       gtk3
 Requires:       python3-chardet
 Requires:       python3-gobject
 Requires:       python3-psutil
+Recommends:     libayatana-appindicator-gtk3
 %endif
 
 %if 0%{?is_opensuse}
@@ -107,6 +108,7 @@ Requires:       %{pyprefix}-xml
 Requires: 		typelib(Gtk) = 3.0
 Requires:       typelib(Notify)
 Requires:       xdg-utils
+Recommends: 	libayatana-appindicator3-1
 %endif
 
 %if %{has_fdupes}
