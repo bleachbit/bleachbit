@@ -69,6 +69,16 @@ class ChaffDialog(Gtk.Dialog):
         self.set_border_width(5)
         box = self.get_content_area()
 
+        # Add InfoBar for non-blocking messages
+        self.infobar = Gtk.InfoBar()
+        self.infobar.set_show_close_button(True)
+        self.infobar.connect('response', self._on_infobar_response)
+        self.infobar_label = Gtk.Label()
+        self.infobar_label.set_line_wrap(True)
+        self.infobar.get_content_area().add(self.infobar_label)
+        box.pack_start(self.infobar, False, False, 0)
+        self._infobar_timeout_id = None
+
         label = Gtk.Label(
             label=_("Make randomly-generated messages inspired by documents."))
         box.add(label)
@@ -128,6 +138,30 @@ class ChaffDialog(Gtk.Dialog):
         self.make_button.connect('clicked', self.on_make_files)
         box.add(self.make_button)
 
+    def _on_infobar_response(self, infobar, response_id):
+        """Handle InfoBar close button click"""
+        if self._infobar_timeout_id:
+            GLib.source_remove(self._infobar_timeout_id)
+            self._infobar_timeout_id = None
+        self.infobar.hide()
+
+    def _hide_infobar(self):
+        """Hide the InfoBar (used for auto-dismiss timeout)"""
+        self._infobar_timeout_id = None
+        self.infobar.hide()
+        return False  # Remove from GLib timeout
+
+    def show_infobar(self, message, message_type=Gtk.MessageType.ERROR):
+        """Show a non-blocking InfoBar message that auto-dismisses"""
+        if self._infobar_timeout_id:
+            GLib.source_remove(self._infobar_timeout_id)
+            self._infobar_timeout_id = None
+        self.infobar_label.set_text(message)
+        self.infobar.set_message_type(message_type)
+        self.infobar.show_all()
+        self._infobar_timeout_id = GLib.timeout_add_seconds(
+            15, self._hide_infobar)
+
     def download_models_gui(self):
         """Download models and return whether successful as boolean"""
         def on_download_error(msg, msg2):
@@ -160,10 +194,8 @@ class ChaffDialog(Gtk.Dialog):
         delete_when_finished = self.when_finished_combo.get_active() == 0
         inspiration = self.inspiration_combo.get_active()
         if not output_dir:
-            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
-                                       Gtk.ButtonsType.CANCEL, _("Select destination folder"))
-            dialog.run()
-            dialog.destroy()
+            self.show_infobar(_("Select destination folder"),
+                              Gtk.MessageType.ERROR)
             return
 
         from bleachbit.Chaff import have_models
@@ -201,3 +233,4 @@ class ChaffDialog(Gtk.Dialog):
     def run(self):
         """Run the dialog"""
         self.show_all()
+        self.infobar.hide()

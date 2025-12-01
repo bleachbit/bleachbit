@@ -28,7 +28,7 @@ from bleachbit.Options import options
 from bleachbit import GuiBasic
 from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _, pget_text as _p
-from bleachbit.GtkShim import Gtk
+from bleachbit.GtkShim import Gtk, GLib
 
 import logging
 import os
@@ -54,6 +54,16 @@ class PreferencesDialog:
                                  destroy_with_parent=True)
         self.dialog.set_default_size(300, 200)
 
+        # Add InfoBar for non-blocking messages
+        self.infobar = Gtk.InfoBar()
+        self.infobar.set_show_close_button(True)
+        self.infobar.connect('response', self._on_infobar_response)
+        self.infobar_label = Gtk.Label()
+        self.infobar_label.set_line_wrap(True)
+        self.infobar.get_content_area().add(self.infobar_label)
+        self.dialog.get_content_area().pack_start(self.infobar, False, False, 0)
+        self._infobar_timeout_id = None
+
         notebook = Gtk.Notebook()
         notebook.append_page(self.__general_page(),
                              Gtk.Label(label=_("General")))
@@ -78,6 +88,36 @@ class PreferencesDialog:
         if self.refresh_operations:
             # refresh the list of cleaners
             self.cb_refresh_operations()
+
+    def _on_infobar_response(self, infobar, response_id):
+        """Handle InfoBar close button click"""
+        if self._infobar_timeout_id:
+            GLib.source_remove(self._infobar_timeout_id)
+            self._infobar_timeout_id = None
+        self.infobar.hide()
+
+    def _hide_infobar(self):
+        """Hide the InfoBar (used for auto-dismiss timeout)"""
+        self._infobar_timeout_id = None
+        self.infobar.hide()
+        return False  # Remove from GLib timeout
+
+    def show_infobar(self, message, message_type=Gtk.MessageType.ERROR):
+        """Show a non-blocking InfoBar message that auto-dismisses
+
+        Args:
+            message: The message to display
+            message_type: Gtk.MessageType (ERROR, WARNING, INFO, etc.)
+        """
+        # Cancel any existing timeout
+        if self._infobar_timeout_id:
+            GLib.source_remove(self._infobar_timeout_id)
+            self._infobar_timeout_id = None
+        self.infobar_label.set_text(message)
+        self.infobar.set_message_type(message_type)
+        self.infobar.show_all()
+        self._infobar_timeout_id = GLib.timeout_add_seconds(
+            15, self._hide_infobar)
 
     def __toggle_callback(self, cell, path):
         """Callback function to toggle option"""
@@ -197,6 +237,10 @@ class PreferencesDialog:
                 "No language code found in combobox for text %s", text)
         setup_translation()
         self.refresh_operations = True
+        # TRANSLATORS: Shown after changing language in preferences
+        self.show_infobar(
+            _("Restart BleachBit for full effect."),
+            Gtk.MessageType.INFO)
 
     def on_auto_detect_toggled(self, widget):
         """Callback for when the auto-detect language checkbox is toggled."""
@@ -207,6 +251,10 @@ class PreferencesDialog:
             options.set("forced_language", "", section="bleachbit")
         setup_translation()
         self.refresh_operations = True
+        # TRANSLATORS: Shown after changing language in preferences
+        self.show_infobar(
+            _("Restart BleachBit for full effect."),
+            Gtk.MessageType.INFO)
 
     def __create_general_checkboxes(self, vbox):
         """Create and configure general checkboxes."""
@@ -429,22 +477,14 @@ class PreferencesDialog:
         for path in whitelist_paths:
             if pathname == path[1]:
                 msg = _("This path already exists in the whitelist.")
-                GuiBasic.message_dialog(self.dialog,
-                                        msg,
-                                        Gtk.MessageType.ERROR,
-                                        Gtk.ButtonsType.OK,
-                                        _('Error'))
+                self.show_infobar(msg, Gtk.MessageType.ERROR)
                 return True
 
         # Check in custom
         for path in custom_paths:
             if pathname == path[1]:
                 msg = _("This path already exists in the custom list.")
-                GuiBasic.message_dialog(self.dialog,
-                                        msg,
-                                        Gtk.MessageType.ERROR,
-                                        Gtk.ButtonsType.OK,
-                                        _('Error'))
+                self.show_infobar(msg, Gtk.MessageType.ERROR)
                 return True
 
         return False
@@ -463,6 +503,10 @@ class PreferencesDialog:
         else:
             options.set_custom_paths(pathnames)
 
+        # TRANSLATORS: %s is a file or folder path that was just added
+        self.show_infobar(_("Added: %s") % pathname,
+                          Gtk.MessageType.INFO)
+
     def _remove_path(self, treeview, liststore, pathnames, page_type):
         """Common function to remove a path from either whitelist or custom list"""
         treeselection = treeview.get_selection()
@@ -478,6 +522,10 @@ class PreferencesDialog:
                     options.set_whitelist_paths(pathnames)
                 else:
                     options.set_custom_paths(pathnames)
+                # TRANSLATORS: %s is a file or folder path that was just removed
+                self.show_infobar(_("Removed: %s") % pathname,
+                                  Gtk.MessageType.INFO)
+                break
 
     def __locations_page(self, page_type):
         """Return a widget containing a list of files and folders"""
@@ -582,5 +630,6 @@ class PreferencesDialog:
     def run(self):
         """Run the dialog"""
         self.dialog.show_all()
+        self.infobar.hide()
         self.dialog.run()
         self.dialog.destroy()

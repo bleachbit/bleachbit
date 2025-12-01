@@ -677,6 +677,7 @@ class GUI(Gtk.ApplicationWindow):
         self._show_splash_screen()
 
         self._auto_exit = auto_exit
+        self._infobar_timeout_id = None
 
         self.set_property('name', APP_NAME)
         self.set_property('role', APP_NAME)
@@ -842,6 +843,36 @@ class GUI(Gtk.ApplicationWindow):
             Gtk.main_quit()
         else:
             self.destroy()
+
+    def _on_infobar_response(self, infobar, response_id):
+        """Handle InfoBar close button click"""
+        timeout_id = getattr(self, '_infobar_timeout_id', None)
+        if timeout_id is not None:
+            GLib.source_remove(timeout_id)
+            self._infobar_timeout_id = None
+        self.infobar.hide()
+
+    def _hide_infobar(self):
+        """Hide the InfoBar (used for auto-dismiss timeout)"""
+        self.infobar.hide()
+        self._infobar_timeout_id = None
+        return False  # Remove from GLib timeout
+
+    def show_infobar(self, message, message_type=Gtk.MessageType.ERROR):
+        """Show a non-blocking InfoBar message that auto-dismisses
+
+        Args:
+            message: The message to display
+            message_type: Gtk.MessageType (ERROR, WARNING, INFO, etc.)
+        """
+        # Cancel any existing timeout before creating a new one
+        timeout_id = getattr(self, '_infobar_timeout_id', None)
+        if timeout_id is not None:
+            GLib.source_remove(timeout_id)
+        self.infobar_label.set_text(message)
+        self.infobar.set_message_type(message_type)
+        self.infobar.show_all()
+        self._infobar_timeout_id = GLib.timeout_add_seconds(15, self._hide_infobar)
 
     def _show_splash_screen(self):
         """Show the splash screen on Windows because startup may be slow"""
@@ -1022,11 +1053,8 @@ class GUI(Gtk.ApplicationWindow):
             }
         assert isinstance(operations, dict)
         if not operations:  # empty
-            GuiBasic.message_dialog(self,
-                                    _("You must select an operation"),
-                                    Gtk.MessageType.ERROR,
-                                    Gtk.ButtonsType.OK,
-                                    _('Error'))
+            self.show_infobar(_("You must select an operation"),
+                              Gtk.MessageType.ERROR)
             return
         try:
             self.set_sensitive(False)
@@ -1544,6 +1572,16 @@ class GUI(Gtk.ApplicationWindow):
         # split main window twice
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, homogeneous=False)
         self.add(vbox)
+
+        # add InfoBar for non-blocking messages
+        self.infobar = Gtk.InfoBar()
+        self.infobar.set_show_close_button(True)
+        self.infobar.connect('response', self._on_infobar_response)
+        self.infobar_label = Gtk.Label()
+        self.infobar_label.set_line_wrap(True)
+        self.infobar.get_content_area().add(self.infobar_label)
+        vbox.pack_start(self.infobar, False, False, 0)
+
         paned = Gtk.Paned.new(Gtk.Orientation.HORIZONTAL)
         paned.set_hexpand(True)
         paned.set_vexpand(True)
@@ -1609,6 +1647,7 @@ class GUI(Gtk.ApplicationWindow):
         # done
         self.show_all()
         self.progressbar.hide()
+        self.infobar.hide()
 
     def on_operations_paned_notify_position(self, paned, _param):
         """Limit the maximum width of the operations pane."""
