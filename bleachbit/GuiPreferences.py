@@ -419,7 +419,7 @@ class PreferencesDialog:
         swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         swindow.set_size_request(300, 200)
         swindow.add(treeview)
-        vbox.pack_start(swindow, False, True, 0)
+        vbox.pack_start(swindow, True, True, 0)
         return vbox
 
     def _check_path_exists(self, pathname, page_type):
@@ -547,7 +547,7 @@ class PreferencesDialog:
         swindow.set_size_request(300, 200)
         swindow.add(treeview)
 
-        vbox.pack_start(swindow, False, True, 0)
+        vbox.pack_start(swindow, True, True, 0)
 
         # buttons that modify the list
         def add_file_cb(button):
