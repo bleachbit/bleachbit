@@ -36,6 +36,24 @@ from bleachbit.GtkShim import gi, Gtk, Gdk, GObject, GLib, Gio, require_gtk
 # Ensure GTK is available for this GUI module
 require_gtk()
 
+from gi.repository import Pango
+
+APP_INDICATOR_FOUND = True
+
+if sys.platform == 'linux':
+    try:
+        # Ubuntu: sudo apt install gir1.2-ayatanaappindicator3-0.1
+        gi.require_version('AyatanaAppIndicator3', '0.1')  # throws ValueError
+        from gi.repository import AyatanaAppIndicator3 as AppIndicator
+    except (ValueError, ImportError):
+        try:
+            from gi.repository import AppIndicator3 as AppIndicator
+        except ImportError:
+            try:
+                from gi.repository import AppIndicator
+            except ImportError:
+                APP_INDICATOR_FOUND = False
+
 # local
 import bleachbit
 from bleachbit import APP_NAME, appicon_path, portable_mode, windows10_theme_path
@@ -565,7 +583,10 @@ class TreeDisplayModel:
 
         # first column
         self.renderer0 = Gtk.CellRendererText()
+        self.renderer0.set_property('ellipsize', Pango.EllipsizeMode.END)
         self.column0 = Gtk.TreeViewColumn(_("Name"), self.renderer0, text=0)
+        # Allow the Name column to expand and fill available horizontal space
+        self.column0.set_expand(True)
         self.view.append_column(self.column0)
         self.view.set_search_column(0)
 
@@ -1567,8 +1588,17 @@ class GUI(Gtk.ApplicationWindow):
         paned.set_hexpand(True)
         paned.set_vexpand(True)
         paned.set_wide_handle(True)
+        self._min_operations_pane_width = 50
         self._max_operations_pane_width = 420
+        threshold_offset = 60
+        self._operations_closed_threshold = min(
+            self._max_operations_pane_width,
+            self._min_operations_pane_width + threshold_offset)
+        self._saved_operations_pane_position = 260  # default open position
+        self._paned_press_position = None
         paned.connect("notify::position", self.on_operations_paned_notify_position)
+        paned.connect("button-press-event", self.on_operations_paned_button_press)
+        paned.connect("button-release-event", self.on_operations_paned_button_release)
         vbox.add(paned)
 
         # add operations to left
@@ -1654,13 +1684,66 @@ class GUI(Gtk.ApplicationWindow):
 
 
     def on_operations_paned_notify_position(self, paned, _param):
-        """Limit the maximum width of the operations pane."""
-        if not hasattr(self, "_max_operations_pane_width"):
-            return
-        max_width = self._max_operations_pane_width
+        """Limit the width of the operations pane to min/max bounds."""
         position = paned.get_position()
-        if position > max_width:
+        min_width = getattr(self, '_min_operations_pane_width', 50)
+        max_width = getattr(self, '_max_operations_pane_width', 420)
+        closed_threshold = getattr(
+            self, '_operations_closed_threshold', min_width + 60)
+        closed_threshold = max(min_width, min(closed_threshold, max_width))
+        if position < min_width:
+            paned.set_position(min_width)
+        elif position > max_width:
             paned.set_position(max_width)
+        # Save position when open (above minimum threshold)
+        elif position > closed_threshold:
+            self._saved_operations_pane_position = position
+
+    def _is_paned_handle_event(self, paned, event):
+        """Return True if the event occurred on the paned handle."""
+        handle_window = paned.get_handle_window()
+        return handle_window is not None and event.window == handle_window
+
+    def on_operations_paned_button_press(self, paned, event):
+        """Track handle press to differentiate clicks from drags."""
+        if event.type != Gdk.EventType.BUTTON_PRESS or event.button != 1:
+            return False
+        if not self._is_paned_handle_event(paned, event):
+            self._paned_press_position = None
+            return False
+        # Record position to detect drag distance on release
+        self._paned_press_position = paned.get_position()
+        return False  # allow GTK to continue (enables dragging)
+
+    def on_operations_paned_button_release(self, paned, event):
+        """Toggle pane if the handle was clicked (not dragged)."""
+        if event.type != Gdk.EventType.BUTTON_RELEASE or event.button != 1:
+            return False
+        if not self._is_paned_handle_event(paned, event):
+            return False
+        press_position = getattr(self, '_paned_press_position', None)
+        self._paned_press_position = None
+        if press_position is None:
+            return False
+        current_position = paned.get_position()
+        # Treat as click only if the handle did not move noticeably.
+        if abs(current_position - press_position) > 3:
+            return False
+
+        min_width = getattr(self, '_min_operations_pane_width', 50)
+        max_width = getattr(self, '_max_operations_pane_width', 420)
+        closed_threshold = getattr(
+            self, '_operations_closed_threshold', min_width + 60)
+        closed_threshold = max(min_width, min(closed_threshold, max_width))
+        if current_position <= closed_threshold:
+            saved = getattr(self, '_saved_operations_pane_position', max_width)
+            if saved <= closed_threshold:
+                saved = max_width
+            paned.set_position(saved)
+        else:
+            self._saved_operations_pane_position = current_position
+            paned.set_position(min_width)
+        return True
 
     @threaded
     def check_online_updates(self):
