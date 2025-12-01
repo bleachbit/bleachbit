@@ -165,15 +165,10 @@ def get_gtk_version():
 
     If GTK is not available, returns None.
     """
-
-    try:
-        # pylint: disable=import-outside-toplevel
-        import gi
-    except ModuleNotFoundError:
-        return None
-    gi.require_version('Gtk', '3.0')
     # pylint: disable=import-outside-toplevel, import-error
-    from gi.repository import Gtk
+    from bleachbit.GtkShim import Gtk, HAVE_GTK
+    if not HAVE_GTK:
+        return None
     gtk_version = (Gtk.get_major_version(),
                    Gtk.get_minor_version(), Gtk.get_micro_version())
     return '.'.join([str(x) for x in gtk_version])
