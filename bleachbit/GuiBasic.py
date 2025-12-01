@@ -27,6 +27,7 @@ import os
 # local import
 from bleachbit.GtkShim import Gtk, Gdk, require_gtk
 from bleachbit.Language import get_text as _
+from bleachbit.Options import options
 if os.name == 'nt':
     from bleachbit import Windows
 
@@ -138,6 +139,10 @@ def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
     question.set_line_wrap(True)
     vbox.pack_start(question, False, True, 0)
 
+    cb_popup = Gtk.CheckButton(label=_("Confirm before delete"))
+    cb_popup.set_active(options.get('delete_confirmation'))
+    vbox.pack_start(cb_popup, False, True, 0)
+
     dialog.get_content_area().pack_start(vbox, False, True, 0)
     dialog.get_content_area().set_spacing(10)
 
@@ -147,6 +152,7 @@ def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
 
     dialog.show_all()
     ret = dialog.run()
+    options.set('delete_confirmation', cb_popup.get_active())
     dialog.destroy()
     return ret == Gtk.ResponseType.ACCEPT
 
