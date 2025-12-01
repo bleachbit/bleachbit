@@ -1165,6 +1165,23 @@ class GUI(Gtk.ApplicationWindow):
         """Callback to stop the preview/cleaning process"""
         self.worker.abort()
 
+    def cb_manage_cookies(self, widget):
+        """Callback to launch the cookie manager dialog"""
+        from bleachbit.GuiCookie import CookieManagerDialog
+        dialog = CookieManagerDialog()
+        dialog.show_all()
+
+    def _option_has_cookie_command(self, cleaner_id, option_id):
+        """Return True if the given option runs a cookie command."""
+        cleaner = backends.get(cleaner_id)
+        if not cleaner:
+            return False
+        actions = getattr(cleaner, 'actions', ())
+        for opt_id, action in actions:
+            if opt_id == option_id and getattr(action, 'action_key', None) == 'cookie':
+                return True
+        return False
+
     def context_menu_event(self, treeview, event):
         """When user right clicks on the tree view"""
         if event.button != 3:
@@ -1195,6 +1212,14 @@ class GUI(Gtk.ApplicationWindow):
         clean_item.connect('activate', self.cb_run_option,
                            True, cleaner_id, option_id)
         menu.append(clean_item)
+
+        # Check if this option has a cookie command
+        if self._option_has_cookie_command(cleaner_id, option_id):
+            menu.append(Gtk.SeparatorMenuItem())
+            # TRANSLATORS: this is the context menu
+            cookie_item = Gtk.MenuItem(label=_("Manage Cookies"))
+            cookie_item.connect('activate', self.cb_manage_cookies)
+            menu.append(cookie_item)
 
         # show the context menu
         menu.attach_to_widget(treeview)
