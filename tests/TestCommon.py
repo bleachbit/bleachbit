@@ -38,6 +38,8 @@ class CommonTestCase(common.BleachbitTestCase):
             'C.utf8',
             'C',
             'de_DE.iso88591',
+            'de-CH', # seen in Fedora in Docker
+            'en-US',
             'en_US',
             'en',
             'fr_FR.utf8',
@@ -49,7 +51,7 @@ class CommonTestCase(common.BleachbitTestCase):
             'zh_Hant',
         ]
 
-        invalid_codes = ['e', 'en_', 'english', 'en_US_', '123', 'en-US',
+        invalid_codes = ['e', 'en_', 'english', 'en_US_', '123',
                          'en_us', 'en_US.',
                          'en_us.utf8',
                          'en_us.UTF-8',
@@ -76,11 +78,15 @@ class CommonTestCase(common.BleachbitTestCase):
         from bleachbit import locale_dir
         locale_dirs = list(set([locale_dir, '/usr/share/locale']))
         lang_codes = []
+        # Skip directories that are not valid language codes
+        skip_dirs = {'l10n'}
         for locale_dir in locale_dirs:
             if not os.path.isdir(locale_dir):
                 continue
             for lang_code in os.listdir(locale_dir):
                 if not os.path.isdir(os.path.join(locale_dir, lang_code)):
+                    continue
+                if lang_code in skip_dirs:
                     continue
                 lang_codes.append(lang_code)
         if os.path.exists('/etc/locale.alias'):
@@ -91,7 +97,13 @@ class CommonTestCase(common.BleachbitTestCase):
                         parts = line.split()
                         if len(parts) > 1:
                             lang_codes.append(parts[1])
+        # /etc/locale.alias may list the qaa-qtz range, which is reserved for
+        # private use rather than a concrete locale. Skip it if present.
+        skip_alias_codes = {'qaa-qtz'}
+
         for lang_code in lang_codes:
+            if lang_code in skip_alias_codes:
+                continue
             self.assertIsLanguageCode(lang_code)
 
     def test_environment(self):
