@@ -53,7 +53,7 @@ python tests/TestAll.py
 ````
 * Make commits in small, logical units to make them easier to review.
 * Submit the pull request.
-* Check that it passes the tests by Travis CI and AppVeyor.
+* Check that it passes the tests by GitHub Actions and AppVeyor.
 
 If you have multiple commits around multiple themes (such as adding two, unrelated features), please consider breaking them up into multiple pull requests by using multiple branches. Smaller pull requests are easier to review and commit.
 

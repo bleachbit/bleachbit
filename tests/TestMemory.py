@@ -45,7 +45,6 @@ class MemoryTestCase(common.BleachbitTestCase):
     """Test case for module Memory"""
 
     @common.skipIfWindows
-    @unittest.skipIf(os.getenv('TRAVIS', 'f') == 'true', 'Not supported on Travis CI')
     def test_get_proc_swaps(self):
         """Test for method get_proc_swaps"""
         if not exe_exists('swapon'):
