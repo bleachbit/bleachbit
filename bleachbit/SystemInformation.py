@@ -48,7 +48,10 @@ def get_gtk_info():
         logger.debug('gi module not available')
         return info
 
-    info['gi.version'] = gi.__version__
+    if not hasattr(gi, 'version_info'):
+        logger.debug('gi.version_info not available')
+    else:
+        info['gi.version'] = gi.__version__
 
     if not HAVE_GTK:
         logger.debug('GTK not available: %s', get_gtk_unavailable_reason())
