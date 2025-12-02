@@ -106,7 +106,7 @@ class LanguageTestCase(common.BleachbitTestCase):
 
     @skipIfMissingPo
     def test_get_text_au(self):
-        """Test Austrlian English
+        """Test Australian English
 
         It should not get confused with American English.
         """
