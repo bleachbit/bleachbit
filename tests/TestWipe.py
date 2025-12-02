@@ -43,6 +43,7 @@ sudo python3 -m tests.TestWipe --destroy /dev/sdb4 --format ext3
 import argparse
 import logging
 import os
+import shutil
 import stat
 import sys
 import tempfile
@@ -57,7 +58,18 @@ logger = logging.getLogger('bleachbit')
 
 IMAGE_SIZE_BYTES = 2097152
 MAX_WIPES = 3
-FS_TYPES = ('ext3', 'ext4', 'ntfs', 'vfat')  # 'xfs'
+FS_FORMAT_COMMANDS = {
+    'ext3': ('/sbin/mkfs.ext3', '-q', '-F'),
+    'ext4': ('/sbin/mkfs.ext4', '-q', '-F'),
+    # 'xfs': ('/sbin/mkfs.xfs', '-q', '-f'),
+    'ntfs': ('/sbin/mkntfs', '-F'),
+    'vfat': ('/sbin/mkfs.fat', '-F', '32'),
+}
+FS_TYPES = tuple(FS_FORMAT_COMMANDS.keys())
+
+
+def _format_tool_available(fs_type):
+    return _resolve_executable(FS_FORMAT_COMMANDS[fs_type][0]) is not None
 
 
 def create_disk_image(n_bytes, fs_type):
@@ -84,6 +96,20 @@ def run_or_die(args):
     return stdout
 
 
+def _resolve_executable(path):
+    """Return executable path if available, else None."""
+    candidates = []
+    if os.path.isabs(path):
+        candidates.append(path)
+        candidates.append(shutil.which(os.path.basename(path)))
+    else:
+        candidates.append(shutil.which(path))
+    for candidate in candidates:
+        if candidate and os.path.exists(candidate) and os.access(candidate, os.X_OK):
+            return candidate
+    return None
+
+
 def format_filesystem(filename, fs_type):
     """Format filesystem
 
@@ -96,14 +122,11 @@ def format_filesystem(filename, fs_type):
     mkfs.ntfs accepts argument as sector size (512B)
     mkfs.ext4 accepts argument as 1024B blocks or with optional suffix like 5G
     """
-    fs_commands = {
-        'ext3': ('/sbin/mkfs.ext3', '-q', '-F', filename),
-        'ext4': ('/sbin/mkfs.ext4', '-q', '-F', filename),
-        # 'xfs': ('/sbin/mkfs.xfs', '-q', '-f', filename),
-        'ntfs': ('/sbin/mkntfs', '-F', filename),
-        'vfat': ('/sbin/mkfs.fat', '-F', '32', filename)
-    }
-    cmd = fs_commands[fs_type]
+    base_cmd = FS_FORMAT_COMMANDS[fs_type]
+    exe_path = _resolve_executable(base_cmd[0])
+    if not exe_path:
+        raise FileNotFoundError(base_cmd[0])
+    cmd = (exe_path, *base_cmd[1:], filename)
     run_or_die(cmd)
 
 
@@ -350,15 +373,26 @@ class WipeTestCase(common.BleachbitTestCase):
     @common.test_also_with_sudo
     def test_wipe(self):
         """Test wiping on several kinds of file systems"""
-        fs_types = FS_TYPES
+        requested_fs = FS_TYPES
         # Optional filter example: sudo BB_FS=ext3 python3 -m unittest tests.TestWipe
         env_fs = os.environ.get('BB_FS') or os.environ.get('bb_fs')
         if env_fs:
             if env_fs not in FS_TYPES:
                 raise ValueError(
                     f'BB_FS={env_fs} did not match valid file system type')
-            fs_types = (env_fs,)
-        for fs_type in fs_types:
+            requested_fs = (env_fs,)
+
+        available_fs = tuple(fs for fs in requested_fs if _format_tool_available(fs))
+        missing_fs = tuple(fs for fs in requested_fs if fs not in available_fs)
+
+        if missing_fs:
+            logger.warning('Skipping wipe tests for filesystems lacking mkfs utilities: %s',
+                           ', '.join(missing_fs))
+        if not available_fs:
+            missing_list = ', '.join(missing_fs) or 'unknown'
+            self.skipTest(f'Missing mkfs utilities for requested filesystems: {missing_list}')
+
+        for fs_type in available_fs:
             if common.have_root():
                 wipe_helper(fs_type=fs_type,
                             n_bytes=IMAGE_SIZE_BYTES)
