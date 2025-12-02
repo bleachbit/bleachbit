@@ -111,12 +111,13 @@ class CommonTestCase(common.BleachbitTestCase):
         # useful for researching
         # grep -Poh "([\\$%]\w+)" cleaners/*xml | cut -b2- | sort | uniq -i
         # bleachbit/init.py sets these variables on posix, if they do not exist.
-        envs = {'posix': ['HOME', 'USER', 'XDG_CACHE_HOME', 'XDG_CONFIG_HOME', 'XDG_DATA_HOME'],
+        # Docker does not set USER
+        envs = {'posix': ['HOME', 'XDG_CACHE_HOME', 'XDG_CONFIG_HOME', 'XDG_DATA_HOME'],
                 'nt': ['AppData', 'CommonAppData', 'Documents', 'ProgramFiles', 'UserProfile', 'WinDir']}
         for env in envs[os.name]:
             e = os.getenv(env)
-            self.assertIsNotNone(e)
-            self.assertNotEqual(e.strip(), '')
+            self.assertIsNotNone(e, f"Environment variable {env} is not set")
+            self.assertNotEqual(e.strip(), "", f"Environment variable {env} is empty")
 
     def test_get_put_env(self):
         """Unit test for get_env() and put_env()"""

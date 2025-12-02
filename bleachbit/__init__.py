@@ -83,6 +83,14 @@ for lf in license_filenames:
 portable_mode = False
 options_dir = None
 if 'posix' == os.name:
+    # os.path.expanduser('~') returns '~' unchanged when HOME is unset
+    # and the user has no passwd entry (e.g., Docker containers).
+    if not os.getenv('HOME'):
+        _home = os.path.expanduser('~')
+        if _home == '~':
+            _home = '/tmp'
+            logger.warning('HOME not set and no passwd entry; using %s', _home)
+        os.environ['HOME'] = _home
     options_dir = os.path.expanduser("~/.config/bleachbit")
 elif 'nt' == os.name:
     os.environ.pop('FONTCONFIG_FILE', None)
@@ -200,13 +208,16 @@ if 'nt' == os.name:
 if 'posix' == os.name:
     # Set fallbacks for environment variables.
     envs = {
-        'HOME': os.path.expanduser('~'),
         'PATH': '/usr/bin:/bin:/usr/sbin:/sbin',
-        'USER': getpass.getuser(),
         'XDG_CACHE_HOME': os.path.expanduser('~/.cache'),
         'XDG_CONFIG_HOME': os.path.expanduser('~/.config'),
         'XDG_DATA_HOME': os.path.expanduser('~/.local/share')
     }
+    if not os.getenv('USER'):
+        try:
+            envs['USER'] = getpass.getuser()
+        except (OSError, KeyError):
+            pass
     for varname, value in envs.items():
         if not os.getenv(varname):
             os.environ[varname] = value

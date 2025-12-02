@@ -31,6 +31,7 @@ import sys
 import tempfile
 import time
 import warnings
+from unittest import mock
 
 # local
 from bleachbit import logger
@@ -143,6 +144,19 @@ class GeneralTestCase(common.BleachbitTestCase):
         uid_after = get_real_uid()
         self.assertEqual(uid, uid_after)
 
+    def test_get_real_uid_numeric_login_without_passwd_entry(self):
+        """Docker containers may advertise UID as username without /etc/passwd."""
+        if 'posix' != os.name:
+            self.skipTest('POSIX-only behavior')
+
+        # Ensure the code path executes past the SUDO_UID shortcut.
+        env_overrides = {'SUDO_UID': ''}
+        with mock.patch.dict(os.environ, env_overrides, clear=False):
+            with mock.patch('os.getlogin', return_value='1000'):
+                with mock.patch('pwd.getpwnam', side_effect=KeyError):
+                    uid = get_real_uid()
+        self.assertEqual(uid, 1000)
+
     @test_also_with_sudo
     def test_get_real_username(self):
         """Test for get_real_username()"""
@@ -154,6 +168,31 @@ class GeneralTestCase(common.BleachbitTestCase):
         self.assertGreater(len(username), 0)
         if sudo_mode():
             self.assertNotEqual(username, 'root')
+
+    def test_get_real_username_container_env_fallback(self):
+        """Ensure container fallback uses LOGNAME when getpass fails."""
+        if 'posix' != os.name:
+            self.skipTest('POSIX-only behavior')
+
+        env = {'LOGNAME': 'containeruser'}
+        with mock.patch.dict(os.environ, env, clear=True):
+            with mock.patch('os.getlogin', side_effect=OSError('no tty')):
+                with mock.patch('getpass.getuser', side_effect=KeyError):
+                    username = get_real_username()
+        self.assertEqual(username, 'containeruser')
+
+    def test_get_real_username_container_uid_fallback(self):
+        """Ensure fallback returns UID string when everything else fails."""
+        if 'posix' != os.name:
+            self.skipTest('POSIX-only behavior')
+
+        env = {}
+        with mock.patch.dict(os.environ, env, clear=True):
+            with mock.patch('os.getlogin', side_effect=OSError('no tty')):
+                with mock.patch('getpass.getuser', side_effect=OSError('no user')):
+                    with mock.patch('os.getuid', return_value=4242):
+                        username = get_real_username()
+        self.assertEqual(username, '4242')
 
     @test_also_with_sudo
     def test_makedirs(self):
