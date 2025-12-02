@@ -301,6 +301,9 @@ def wipe_swap_linux(devices, proc_swaps):
 
 def wipe_memory():
     """Wipe unallocated memory"""
+    for cmd in ('swapon', 'swapoff', 'blkid'):
+        if not FileUtilities.exe_exists(cmd):
+            raise RuntimeError(f"wipe_memory: Command {cmd} not found")
     # cache the file because 'swapoff' changes it
     proc_swaps = get_proc_swaps()
     devices = disable_swap_linux()
