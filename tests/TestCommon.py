@@ -38,6 +38,7 @@ class CommonTestCase(common.BleachbitTestCase):
             'C.utf8',
             'C',
             'de_DE.iso88591',
+            'de-CH', # seen in Fedora in Docker
             'en_US',
             'en',
             'fr_FR.utf8',
