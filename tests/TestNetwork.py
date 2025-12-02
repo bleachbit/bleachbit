@@ -152,8 +152,14 @@ class NetworkTestCase(common.BleachbitTestCase):
     def test_fetch_url_retry(self):
         """Unit test for fetch_url() with retry"""
         url = self.status_generator_url.format(500)
-        with self.assertRaises(requests.exceptions.RetryError):
-            fetch_url(url, max_retries=1, timeout=2)
+        try:
+            fetch_url(url, max_retries=1, timeout=5)
+        except requests.exceptions.RetryError:
+            return
+        except (requests.exceptions.ConnectionError,
+                requests.exceptions.Timeout) as exc:
+            self.skipTest(f"Status generator unavailable ({exc})")
+        self.fail('fetch_url() did not raise RetryError for HTTP 500 response')
 
     def test_fetch_url_invalid(self):
         """Unit test for fetch_url() with invalid URL"""
