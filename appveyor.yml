@@ -68,6 +68,14 @@ cache:
   - gtk3.24-x86-windows.zip -> appveyor.yml, windows/python-gtk3-deps.lst, windows/python-gtk3-install.ps1
 
 test_script:
+  # admin
+  - '%PYTHON_EXE% bleachbit.py --sysinfo'
+  # test for not admin
+  - 'if exist sysinfo-limited.log del sysinfo-limited.log'
+  - 'echo %time%'
+  - 'runas /trustlevel:0x20000 "cmd /c \"cd /d %APPVEYOR_BUILD_FOLDER% && \"%PYTHON_EXE%\" bleachbit.py --sysinfo > sysinfo-limited.log 2>&1\""'
+  - 'echo %time%'
+  - 'if exist sysinfo-limited.log (type sysinfo-limited.log) else (echo sysinfo-limited.log missing)'
 # coveralls.io
   - '%PYTHON_HOME%\Scripts\pip3.exe install python-coveralls requests[security]'
 # shorten very long path because of error https://github.com/az0/bleachbit/issues/166
@@ -76,6 +84,7 @@ test_script:
 # Catch warnings as errors. Also set in `tests/common.py`.
   - 'SET PYTHONWARNINGS=error'
   - '%PYTHON_HOME%\Scripts\coverage.exe run --include="bleachbit/*" tests/TestAll.py'
+
 
 artifacts:
   - path: BleachBit-*-setup.exe
