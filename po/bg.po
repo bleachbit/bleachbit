@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: BleachBit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-08-16 23:52-0600\n"
-"PO-Revision-Date: 2025-11-29 22:00+0000\n"
+"PO-Revision-Date: 2025-12-03 23:02+0000\n"
 "Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/bleachbit/main/"
@@ -525,7 +525,7 @@ msgstr "Изпълняване"
 #: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/google_toolbar.xml
 msgid "Search history"
-msgstr "История на търсенията"
+msgstr "История на търсене"
 
 #: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
 #: ../cleaners/google_toolbar.xml
@@ -1693,6 +1693,8 @@ msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
 msgstr ""
+"Стартирайте BleachBit с администраторски права, за да подобрите точността "
+"при пресаписване съдържанието на файлове."
 
 #: ../bleachbit/GUI.py
 msgid ""
@@ -1700,6 +1702,8 @@ msgid ""
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"Официално издание на BleachBit в Microsoft Store не съществува. Изтеглете "
+"истинското издание от https://www.bleachbit.org, където винаги е безплатно."
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
@@ -1718,24 +1722,24 @@ msgstr "Почистване на файлове за избраните опе�
 
 #: ../bleachbit/GUI.py
 msgid "Abort"
-msgstr ""
+msgstr "Прекъсване"
 
 #: ../bleachbit/GUI.py
 msgid "Abort the preview or cleaning process"
-msgstr ""
+msgstr "Прекъсва процеса на преглед или почистване"
 
 #. TRANSLATORS: Button in headerbar to update the application
 #: ../bleachbit/GUI.py
 msgid "Update"
-msgstr ""
+msgstr "Обновяване"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr ""
+msgstr "Обновяване на BleachBit до последното издание"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "Натиснете F11, за да излезете от режима на цял екран."
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -1760,24 +1764,26 @@ msgstr "Повторно включване на файла за виртуал�
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Setting nice value %d for this process."
-msgstr ""
+msgstr "Задаване на стойност %d на nice за този процес."
 
 #: ../bleachbit/Memory.py
 #, python-brace-format
 msgid "Dropping privileges of process ID {pid} to user ID {uid}."
 msgstr ""
+"Понижаване правата на процеса с идентификатор {pid} до потребител с "
+"идентификатор {uid}."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr ""
+msgstr "Задвляне и почистване на %s памет."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Freeing %s of memory."
-msgstr ""
+msgstr "Освобождаване на %s памет."
 
 #: ../bleachbit/Memory.py
 #, python-brace-format
@@ -1788,7 +1794,7 @@ msgstr "Намерен е UUID на файла за виртуална паме�
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Physical free memory is %s."
-msgstr ""
+msgstr "Свободната физическа памет е %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py
@@ -1821,22 +1827,22 @@ msgstr ""
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr ""
+msgstr "Дъщерния процес за почистване на памет върна код %d."
 
 #: ../bleachbit/Network.py
 #, python-format
 msgid "Downloading URL failed: %s"
-msgstr ""
+msgstr "Грешка при изтегляне от адрес: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr ""
+msgstr "Дискът е запълнен при записване на файла с настройките: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr ""
+msgstr "Достъпът е отказан при записване на файла с настройките: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -1846,7 +1852,7 @@ msgstr "Грешка при проверка за съществуващ път:
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Automatically preserving language %s."
-msgstr ""
+msgstr "Автоматично запазване на езика „%s“."
 
 #: ../bleachbit/Options.py
 msgid "Error when setting the default drives to shred."
@@ -1916,6 +1922,9 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
+"Грешка при установяване на връзка при проверка за обновяване. Уверете се, че "
+"има достъп до интернет и приложението не е забранено в защитната стена. "
+"Съобщение за грешка: {}"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py
@@ -1947,11 +1956,11 @@ msgstr "Внесено от winapp2.ini"
 
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
-msgstr ""
+msgstr "За почистване обновяванията на Windows са нужни администраторски права"
 
 #: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
-msgstr ""
+msgstr "BleachBit стартира…\n"
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -1985,12 +1994,12 @@ msgstr "Отказан достъп при премахване на ключ о
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Достъпът отказан: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
-msgstr ""
+msgstr "Грешка: {operation_option}: {command}"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Worker.py
@@ -2088,7 +2097,7 @@ msgstr "Презаписване _свободното дисково прост
 
 #: ../data/app-menu.ui
 msgid "_Make Chaff"
-msgstr ""
+msgstr "Създаване на _цифрова плява"
 
 #: ../data/app-menu.ui
 msgid "S_hred Settings and Quit"
