@@ -1,0 +1,49 @@
+# syntax=docker/dockerfile:1.7
+
+FROM fedora:43
+
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+RUN dnf -y update \
+    && dnf install -y --setopt=install_weak_deps=False \
+        desktop-file-utils \
+        fdupes \
+        findutils \
+        gawk \
+        gettext \
+        glibc-langpack-en \
+        gobject-introspection \
+        gtk3 \
+        libnotify \
+        # libxml2 provides xmllint
+        libxml2 \
+        make \
+        patch \
+        python3 \
+        python3-chardet \
+        python3-gobject \
+        python3-gobject-base \
+        python3-pip \
+        python3-psutil \
+        python3-setuptools \
+        redhat-rpm-config \
+        rpm-build \
+        # rpmdevtools provides rpmdev-setuptree
+        rpmdevtools \
+        tar \
+        which \
+        xz \
+    && dnf clean all \
+    && rm -rf /var/cache/dnf
+
+RUN rpm -qa --qf '%{SIZE}\t%{NAME}-%{VERSION}-%{RELEASE}\n' | sort -nr | head -n 20
+
+RUN localedef -i en_US -f UTF-8 en_US.UTF-8 || true
+
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+
+WORKDIR /work
+
+CMD ["/bin/bash"]

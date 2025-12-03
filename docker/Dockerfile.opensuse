@@ -1,0 +1,42 @@
+# syntax=docker/dockerfile:1.7
+
+FROM opensuse/tumbleweed
+
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+
+RUN zypper --non-interactive refresh \
+    && zypper --non-interactive dup --auto-agree-with-licenses \
+    && zypper --non-interactive install --no-recommends \
+        desktop-file-utils \
+        fdupes \
+        gettext-tools \
+        gobject-introspection \
+        gtk3 \
+        # libxml2-tools provides xmllint
+        libxml2-tools \
+        make \
+        python313 \
+        python313-base \
+        python313-chardet \
+        python313-gobject \
+        python313-psutil \
+        python313-requests \
+        python313-setuptools \
+        python313-sqlite-utils \
+        python313-pip \
+        python-rpm-macros \
+        rpm-build \
+        # rpmdevtools provides rpmdev-setuptree \
+        rpmdevtools \
+        timezone \
+        update-desktop-files \
+    && zypper clean --all
+
+RUN rpm -qa --qf '%{SIZE}\t%{NAME}-%{VERSION}-%{RELEASE}\n' | sort -nr | head -n 20
+
+RUN localedef -i en_US -f UTF-8 en_US.UTF-8 || true
+
+WORKDIR /work
+
+CMD ["/bin/bash"]
