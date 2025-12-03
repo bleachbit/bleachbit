@@ -73,7 +73,7 @@ test_script:
   # test for not admin
   - 'if exist sysinfo-limited.log del sysinfo-limited.log'
   - 'echo %time%'
-  - 'runas /trustlevel:0x20000 "cmd /c \"cd /d %APPVEYOR_BUILD_FOLDER% && \"%PYTHON_EXE%\" bleachbit.py --sysinfo > sysinfo-limited.log 2>&1\""'
+  - ps: Start-Process -FilePath "runas" -ArgumentList "/trustlevel:0x20000", "cmd /c `"cd /d $env:APPVEYOR_BUILD_FOLDER && `"$env:PYTHON_EXE`" bleachbit.py --sysinfo > sysinfo-limited.log 2>&1`"" -Wait -NoNewWindow
   - 'echo %time%'
   - 'if exist sysinfo-limited.log (type sysinfo-limited.log) else (echo sysinfo-limited.log missing)'
 # coveralls.io
