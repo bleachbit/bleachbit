@@ -41,6 +41,20 @@ from bleachbit.FileUtilities import extended_path
 from bleachbit.General import gc_collect, sudo_mode
 
 
+def _supports_stdout_char(char: str) -> bool:
+    """Return True if sys.stdout can encode the given character."""
+    encoding = (
+        getattr(bleachbit, 'stdout_encoding', None)
+        or getattr(sys.stdout, 'encoding', None)
+        or sys.getdefaultencoding()
+    )
+    try:
+        char.encode(encoding)
+    except (UnicodeEncodeError, LookupError):
+        return False
+    return True
+
+
 class BleachbitTestCase(unittest.TestCase):
     """TestCase class with several convenience methods and asserts"""
     _patchers = []
@@ -100,6 +114,22 @@ class BleachbitTestCase(unittest.TestCase):
     def _stop_patch_options_paths(cls):
         for patcher in cls._patchers:
             patcher.stop()
+
+    def run(self, result=None):
+        """Run the test case with conditional timer message"""
+        start = time.perf_counter()
+        outcome = super().run(result)
+        duration = time.perf_counter() - start
+        threshold = os.getenv('BLEACHBIT_SLOW_TEST_THRESHOLD') # in seconds
+        if threshold:
+            threshold = float(threshold)
+        if not threshold or threshold < 0:
+            threshold = 30.0
+        if duration >= threshold:
+            test_id = f"{self.__class__.__name__}.{self._testMethodName}"
+            prefix = "🐌 " if _supports_stdout_char("🐌") else ""
+            print(f"{prefix}SLOW TEST: {test_id} ({duration:.1f}s)", flush=True)
+        return outcome
 
     def setUp(cls):
         """Call before each test method"""
