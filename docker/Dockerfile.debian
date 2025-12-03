@@ -1,0 +1,44 @@
+# syntax=docker/dockerfile:1.7
+
+FROM debian:trixie
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        ca-certificates \
+        debhelper \
+        desktop-file-utils \
+        devscripts \
+        dh-python \
+        fakeroot \
+        gobject-introspection \
+        gir1.2-gtk-3.0 \
+        gir1.2-notify-0.7 \
+        libgtk-3-0 \
+        lintian \
+        locales \
+        libxml2-utils \
+        python3 \
+        python3-chardet \
+        python3-gi \
+        python3-pip \
+        python3-psutil \
+        python3-requests \
+        python3-setuptools \
+        sudo \
+        tzdata \
+        xdg-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+
+
+RUN sed -i 's/# \(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
+    && locale-gen
+
+WORKDIR /work
+
+CMD ["/bin/bash"]

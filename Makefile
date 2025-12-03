@@ -39,6 +39,7 @@ clean:
 	@rm -vrf windows/BleachBit-*-setup*.{exe,zip}
 	@rm -vrf htmlcov .coverage # code coverage reports
 	@rm -vrf *.egg-info # Python package metadata
+	@rm -vrf docker-artifacts # Docker build outputs
 
 install:
 	# "binary"
@@ -97,7 +98,7 @@ delete_windows_files:
 	# Remove Windows-specific cleaners.
 	grep -l "cleaner id=\"\w*\" os=\"windows\"" cleaners/*xml | xargs rm -f
 	# Remove Windows-specific modules.
-	rm -f bleachbit/{Winapp,Windows*}.py 
+	rm -f bleachbit/{Winapp,Windows*}.py
 
 tests:
 	# Catch warnings as errors. Also set in `tests/common.py`.

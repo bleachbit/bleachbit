@@ -45,3 +45,14 @@ markovify is licensed under the [MIT License](https://github.com/jsvine/markovif
 * [CleanerML Repository](https://github.com/bleachbit/cleanerml)
 * [BleachBit Miscellaneous Repository](https://github.com/bleachbit/bleachbit-misc)
 * [Winapp2.ini Repository](https://github.com/bleachbit/winapp2.ini)
+
+### Docker-based Linux builds
+
+The `docker/build.sh` script sets up a container, runs `make tests`,
+and builds packages for a selected distribution. Usage:
+
+```
+./docker/build.sh <distro> # distro is one of {debian, fedora, opensuse}
+```
+
+Artifacts are copied to `./docker-artifacts/<distro>` on the host.
