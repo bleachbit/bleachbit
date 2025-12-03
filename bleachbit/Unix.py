@@ -671,7 +671,11 @@ def yum_clean():
     old_size = FileUtilities.getsizedir('/var/cache/yum')
     args = ['--enablerepo=*', 'clean', 'all']
     invalid = ['You need to be root', 'Cannot remove rpmdb file']
-    run_cleaner_cmd('yum', args, '^unused regex$', invalid)
+    try:
+        run_cleaner_cmd('yum', args, '^unused regex$', invalid)
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(
+            f"Error calling '{' '.join(str(part) for part in e.cmd)}':\n{e.output}") from e
     new_size = FileUtilities.getsizedir('/var/cache/yum')
     return old_size - new_size
 
@@ -686,7 +690,11 @@ def dnf_clean():
     old_size = FileUtilities.getsizedir('/var/cache/dnf')
     args = ['--enablerepo=*', 'clean', 'all']
     invalid = ['You need to be root', 'Cannot remove rpmdb file']
-    run_cleaner_cmd('dnf', args, '^unused regex$', invalid)
+    try:
+        run_cleaner_cmd('dnf', args, '^unused regex$', invalid)
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(
+            f"Error calling '{' '.join(str(part) for part in e.cmd)}':\n{e.output}") from e
     new_size = FileUtilities.getsizedir('/var/cache/dnf')
 
     return old_size - new_size
