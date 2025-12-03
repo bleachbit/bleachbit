@@ -101,6 +101,16 @@ class Options:
         self.config.BOOLEAN_STATES['f'] = False
         self.restore()
 
+        old_option = 'system.free_disk_space'
+        try:
+            if self.config.has_section("tree") and self.config.has_option('tree', old_option):
+                logger.debug("Migrating legacy option '%s' to 'system.empty_space'", old_option)
+                self.config.set('tree', 'system.empty_space', 'true')
+                self.config.remove_option('tree', old_option)
+        except Exception:
+            logger.exception("Error migrating legacy option '%s'", old_option)
+
+
     def __flush(self):
         """Write information to disk"""
         if not self.purged:
@@ -235,10 +245,19 @@ class Options:
         return self.get_paths("custom/paths")
 
     def get_tree(self, parent, child):
-        """Retrieve an option for the tree view.  The child may be None."""
+        """Retrieve an option for the tree view.
+
+        Args:
+            parent: The cleaner ID (e.g., 'system', 'firefox')
+            child: The option ID within the cleaner (e.g., 'cache'), or None for the cleaner itself
+
+        Returns:
+            bool: True if the option is enabled, False otherwise
+        """
         option = parent
         if child is not None:
             option += "." + child
+
         if not self.config.has_option('tree', option):
             return False
         try:

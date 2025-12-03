@@ -278,7 +278,7 @@ class Bleachbit(Gtk.Application):
         actions = {'shredFiles': self.cb_shred_file,
                    'shredFolders': self.cb_shred_folder,
                    'shredClipboard': self.cb_shred_clipboard,
-                   'wipeFreeSpace': self.cb_wipe_free_space,
+                   'wipeEmptySpace': self.cb_wipe_empty_space,
                    'makeChaff': self.cb_make_chaff,
                    'shredQuit': self.cb_shred_quit,
                    'preferences': self.cb_preferences_dialog,
@@ -380,8 +380,8 @@ class Bleachbit(Gtk.Application):
         GLib.idle_add(self.quit, None, None, True,
                       priority=GLib.PRIORITY_LOW)
 
-    def cb_wipe_free_space(self, action, param):
-        """callback to wipe free space in arbitrary folder"""
+    def cb_wipe_empty_space(self, action, param):
+        """callback to wipe empty space in arbitrary folder"""
         path = GuiBasic.browse_folder(self._window,
                                       _("Choose a folder"),
                                       multiple=False, stock_button=_('_OK'))
@@ -389,10 +389,10 @@ class Bleachbit(Gtk.Application):
             # user cancelled
             return
 
-        backends['_gui'] = Cleaner.create_wipe_cleaner(path)
+        backends['_gui'] = Cleaner.create_wipe_empty_space_cleaner(path)
 
         # execute
-        operations = {'_gui': ['free_disk_space']}
+        operations = {'_gui': ['empty_space']}
         self._window.preview_or_run_operations(True, operations)
 
     def get_preferences_dialog(self):

@@ -379,13 +379,24 @@ class PreferencesDialog:
             pathnames.remove(pathname)
             options.set_list('shred_drives', pathnames)
 
-        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
 
-        # TRANSLATORS: 'free' means 'unallocated'
+        # TRANSLATORS: 'empty' means 'unallocated'
         notice = Gtk.Label(label=_(
-            "Choose a writable folder for each drive for which to overwrite free space."))
+            "Choose a writable folder for each drive for which to wipe empty space."))
         notice.set_line_wrap(True)
+        notice.set_xalign(0.0)
+        notice.set_margin_start(12)
+        notice.set_margin_end(12)
         vbox.pack_start(notice, False, True, 0)
+
+        notice2 = Gtk.Label(label=_(
+            "Wiping empty space removes traces of files that were deleted without shredding, but it will not free additional disk space. The process can take a very long time and may temporarily slow your computer. It is not necessary if your drive is protected with full-disk encryption. The method works best on traditional hard drives. On solid-state drives, it is less reliable, and frequent use contributes to wear."))
+        notice2.set_line_wrap(True)
+        notice2.set_xalign(0.0)
+        notice2.set_margin_start(12)
+        notice2.set_margin_end(12)
+        vbox.pack_start(notice2, False, True, 0)
 
         liststore = Gtk.ListStore(str)
 

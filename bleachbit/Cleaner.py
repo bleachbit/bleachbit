@@ -321,11 +321,11 @@ class System(Cleaner):
         # files and folders will be erased.
         self.add_option('custom', _('Custom'), _(
             'Delete user-specified files and folders'))
-        # TRANSLATORS: 'free' means 'unallocated'
-        self.add_option('free_disk_space', _('Free disk space'),
-                        # TRANSLATORS: 'free' means 'unallocated'
-                        _('Overwrite free disk space to hide deleted files'))
-        self.set_warning('free_disk_space', _('This option is very slow.'))
+        # TRANSLATORS: 'empty' means 'unallocated'
+        self.add_option('empty_space', _('Empty space'),
+                        # TRANSLATORS: 'empty' means 'unallocated'
+                        _('Wipe empty space to hide deleted files'))
+        self.set_warning('empty_space', _('Wiping empty space removes traces of files that were deleted without shredding, but it will not free additional disk space. The process can take a very long time and may temporarily slow your computer. It is not necessary if your drive is protected with full-disk encryption. The method works best on traditional hard drives. On solid-state drives, it is less reliable, and frequent use contributes to wear.'))
         self.add_option(
             'tmp', _('Temporary files'), _('Delete the temporary files'))
 
@@ -536,13 +536,13 @@ class System(Cleaner):
                 return 0
             yield Command.Function(None, clear_clipboard, _('Clipboard'))
 
-        # overwrite free space
+        # wipe empty space
         shred_drives = options.get_list('shred_drives')
-        if 'free_disk_space' == option_id and shred_drives:
+        if 'empty_space' == option_id and shred_drives:
             for pathname in shred_drives:
-                # TRANSLATORS: 'Free' means 'unallocated.'
+                # TRANSLATORS: 'Empty' means 'unallocated.'
                 # %s expands to a path such as C:\ or /tmp/
-                display = _("Overwrite free disk space %s") % pathname
+                display = _("Wipe empty space in %s") % pathname
 
                 def wipe_path_func(path=pathname):
                     # Yield control to GTK idle because this process
@@ -725,15 +725,15 @@ def create_simple_cleaner(paths):
     return cleaner
 
 
-def create_wipe_cleaner(path):
-    """Wipe free disk space of arbitrary paths (used in GUI)"""
+def create_wipe_empty_space_cleaner(path):
+    """Wipe empty space of arbitrary paths (used in GUI)"""
     cleaner = Cleaner()
     cleaner.add_option(
-        option_id='free_disk_space', name='', description='')
+        option_id='empty_space', name='', description='')
     cleaner.name = ''
 
     # create a temporary cleaner object
-    display = _("Overwrite free disk space %s") % path
+    display = _("Wipe empty space %s") % path
 
     def wipe_path_func():
         yield from FileUtilities.wipe_path(path, idle=True)
@@ -745,5 +745,5 @@ def create_wipe_cleaner(path):
         def get_commands(self):
             yield Command.Function(None, wipe_path_func, display)
     provider = CustomWipeAction(None)
-    cleaner.add_action('free_disk_space', provider)
+    cleaner.add_action('empty_space', provider)
     return cleaner

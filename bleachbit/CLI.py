@@ -108,7 +108,17 @@ def args_to_operations_list(preset, all_but_warning):
 
 
 def args_to_operations(args, preset, all_but_warning):
-    """Read arguments and return list of operations as dictionary"""
+    """Convert command-line arguments to a dictionary of operations
+
+    Args:
+        args: List of cleaner.option strings (e.g., ['system.tmp', 'firefox.cache'])
+        preset: Boolean indicating whether to use saved preset operations
+        all_but_warning: Boolean indicating whether to include all non-warning operations
+
+    Returns:
+        Dictionary mapping cleaner IDs to lists of option IDs
+        Example: {'system': ['tmp'], 'firefox': ['cache']}
+    """
     list(register_cleaners())
     operations = {}
     if not args:
@@ -128,10 +138,16 @@ def args_to_operations(args, preset, all_but_warning):
                 for (option_id2, _o_name) in backends[cleaner_id].get_options()
             ]
             continue
+        # backwards compatibility
+        if ('system' == cleaner_id and 'free_disk_space' == option_id):
+            logger.info("Change 'system.free_disk_space' (deprecated) to 'system.empty_space'")
+            option_id = 'empty_space'
         # add the specified option
         if cleaner_id not in operations:
+            # initialize list of options for this cleaner
             operations[cleaner_id] = []
         if option_id not in operations[cleaner_id]:
+            # add option to list
             operations[cleaner_id].append(option_id)
     for (k, v) in operations.items():
         operations[k] = sorted(v)
@@ -159,8 +175,9 @@ def process_cmd_line():
                       help=_("run cleaners to delete files and make other permanent changes"))
     parser.add_option("-s", "--shred", action="store_true",
                       help=_("shred specific files or folders"))
-    parser.add_option("-w", "--wipe-free-space", action="store_true",
-                      help=_("wipe free space in the given paths"))
+    parser.add_option("-w", "--wipe-empty-space","--wipe-free-space",
+                      action="store_true", dest="wipe_empty_space",
+                      help=_("wipe empty space in the given paths"))
     parser.add_option('-o', '--overwrite', action='store_true',
                       help=_('overwrite files to hide contents'))
     parser.add_option("--gui", action="store_true",
@@ -205,12 +222,12 @@ def process_cmd_line():
 
     (options, args) = parser.parse_args()
 
-    cmd_list = (options.list_cleaners, options.wipe_free_space,
+    cmd_list = (options.list_cleaners, options.wipe_empty_space,
                 options.preview, options.clean)
     cmd_count = sum(x is True for x in cmd_list)
     if cmd_count > 1:
         logger.error(
-            _('Specify only one of these commands: --list-cleaners, --wipe-free-space, --preview, --clean'))
+            _('Specify only one of these commands: --list-cleaners, --wipe-empty-space, --preview, --clean'))
         sys.exit(1)
 
     did_something = False
@@ -249,13 +266,13 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         from bleachbit.CleanerML import create_pot
         create_pot()
         sys.exit(0)
-    if options.wipe_free_space:
+    if options.wipe_empty_space:
         if len(args) < 1:
-            logger.error(_("No directories given for --wipe-free-space"))
+            logger.error(_("No directories given for --wipe-empty-space"))
             sys.exit(1)
-        logger.info(_("Wiping free space can take a long time."))
+        logger.info(_("Wiping empty space can take a long time."))
         for wipe_path in args:
-            logger.info('Wiping free space in path: %s', wipe_path)
+            logger.info(_("Wipe empty space in %s"), wipe_path)
             import bleachbit.FileUtilities
             for _ret in bleachbit.FileUtilities.wipe_path(wipe_path):
                 pass
