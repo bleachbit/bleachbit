@@ -205,11 +205,11 @@ class Worker:
     def run_delayed_op(self, operation, option_id):
         """Run one delayed operation"""
         self.ui.update_progress_bar(0.0)
-        if 'free_disk_space' == option_id:
-            # TRANSLATORS: 'free' means 'unallocated'
-            msg = _("Please wait.  Wiping free disk space.")
+        if 'empty_space' == option_id:
+            # TRANSLATORS: 'empty' means 'unallocated'
+            msg = _("Please wait. Wiping empty space.")
             self.ui.append_text(
-                _('Wiping free disk space erases remnants of files that were deleted without shredding. It does not free up space.'))
+                _('Wiping empty space removes traces of files that were deleted without shredding, but it will not free additional disk space. The process can take a very long time and may temporarily slow your computer. It is not necessary if your drive is protected with full-disk encryption. The method works best on traditional hard drives. On solid-state drives, it is less reliable, and frequent use contributes to wear.'))
             self.ui.append_text('\n')
         elif 'memory' == option_id:
             msg = _("Please wait.  Cleaning %s.") % _("Memory")
@@ -224,7 +224,7 @@ class Worker:
                     # A while ago there were other phase numbers. Currently it's just 1
                     if phase != 1:
                         raise RuntimeError(
-                            'While wiping free space, unexpected phase %d' % phase)
+                            'While wiping empty space, unexpected phase %d' % phase)
                     percent_done = ret[1]
                     eta_seconds = ret[2]
                     self.ui.update_progress_bar(percent_done)
@@ -248,12 +248,12 @@ class Worker:
         1. General cleaning
         2. Deep scan
         3. Memory
-        4. Free disk space"""
+        4. Empty space"""
         self.deepscans = {}
         # prioritize
         self.delayed_ops = []
         for operation in self.operations:
-            delayables = ['free_disk_space', 'memory']
+            delayables = ['empty_space', 'memory']
             for delayable in delayables:
                 if operation not in ('system', '_gui'):
                     continue
@@ -261,7 +261,7 @@ class Worker:
                     i = self.operations[operation].index(delayable)
                     del self.operations[operation][i]
                     priority = 99
-                    if 'free_disk_space' == delayable:
+                    if 'empty_space' == delayable:
                         priority = 100
                     new_op = (priority, {operation: [delayable]})
                     self.delayed_ops.append(new_op)

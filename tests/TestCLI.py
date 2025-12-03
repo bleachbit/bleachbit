@@ -81,7 +81,7 @@ class CLITestCase(common.BleachbitTestCase):
         self.assertTrue('system.tmp' in o)
         gui_available = os.name == 'nt' or HAVE_GTK
         self.assertEqual(gui_available, 'system.clipboard' in o)
-        self.assertFalse('system.free_disk_space' in o)
+        self.assertFalse('system.empty_space' in o)
         self.assertFalse('system.memory' in o)
 
     def test_args_to_operations(self):
