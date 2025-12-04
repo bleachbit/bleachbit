@@ -29,7 +29,7 @@ $python_home = Join-Path $root_dir "tools\python3"
 $themes_dir = Join-Path $python_home "share\themes"
 # location of this .ps1 script
 $script_dir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$base_download_url = "https://github.com/bleachbit/pygtkwin/releases/download/v2025-02-15/"
+$base_download_url = "https://github.com/bleachbit/pygtkwin/releases/download/v2025-12-03/"
 
 # Visual C++ Redistributable 2015 x86
 $VC_REDIST_FN = "VC_redist.x86.exe"
@@ -159,10 +159,10 @@ if (Test-Path "gtk-themes") {
 
 # psutil 7.1.2 stopped providing 32-bit wheels.
 # It needs MSVC++ with the python3.lib.
-Write-Host "Copying python311.lib..."
+Write-Host "Copying python312.lib..."
 New-Item -ItemType Directory -Path "$python_home\libs" -Force
 $pylibdest = "$python_home\libs\python3.lib"
-Copy-Item -Path "$root_dir\lib\python311.lib" -Destination $pylibdest
+Copy-Item -Path "$root_dir\lib\python312.lib" -Destination $pylibdest
 Get-ChildItem -Path $pylibdest | Format-List -Property Name, Length
 
 # Install pip packages
@@ -173,7 +173,7 @@ if ($LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 }
 
-$PYGOBJECT_FN = "pygobject-3.51.0-cp311-cp311-win32.whl"
+$PYGOBJECT_FN = "pygobject-3.55.0-cp312-cp312-win32.whl"
 if (-not (Test-Path $PYGOBJECT_FN)) {
     Write-Host "Downloading PyGObject..."
     Invoke-WebRequest -Uri "$base_download_url/$PYGOBJECT_FN" -OutFile "$PYGOBJECT_FN"
