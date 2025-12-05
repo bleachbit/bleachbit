@@ -601,7 +601,7 @@ class TreeDisplayModel:
         self.view.expand_all()
         return self.view
 
-    def set_cleaner(self, path, model, parent_window, value):
+    def set_cleaner(self, path, model, parent_window, value, all_toggled):
         """Activate or deactivate option of cleaner."""
         assert isinstance(value, bool)
         assert isinstance(model, Gtk.TreeStore)
@@ -626,7 +626,7 @@ class TreeDisplayModel:
                 {'cleaner': model[parent][0],
                  'option': model[path][0],
                  'warning': warning}
-            if warning:
+            if warning and not all_toggled:
                 resp = GuiBasic.message_dialog(parent_window,
                                                msg,
                                                Gtk.MessageType.WARNING,
@@ -634,13 +634,24 @@ class TreeDisplayModel:
                                                _('Confirm'))
                 if Gtk.ResponseType.OK != resp:
                     # user cancelled, so don't toggle option
-                    return
+                    return None
+                
+            elif warning and all_toggled:
+                return msg, path
+                
         model[path][1] = value
+        return None
+        
 
     def col1_toggled_cb(self, cell, path, model, parent_window):
         """Callback for toggling cleaners"""
-        is_toggled_on = not model[path][1]  # Is the new state enabled?
-        self.set_cleaner(path, model, parent_window, is_toggled_on)
+        return self.col1_toggled(path, model, parent_window)
+    
+    def col1_toggled(self, path, model, parent_window, is_toggled_on=None, all_toggled=False):
+        if is_toggled_on is None:
+            is_toggled_on = not model[path][1] # Is the new state enabled?
+
+        self.set_cleaner(path, model, parent_window, is_toggled_on, all_toggled)
         i = model.get_iter(path)
         parent = model.iter_parent(i)
         if parent and is_toggled_on:
@@ -658,9 +669,26 @@ class TreeDisplayModel:
                 model[parent][1] = False
         # If toggled and has children, then do the same for each child.
         child = model.iter_children(i)
+        msgs_paths = []
         while child:
-            self.set_cleaner(child, model, parent_window, is_toggled_on)
+            msg_path = self.set_cleaner(child, model, parent_window, is_toggled_on, all_toggled)
+            if msg_path is not None:
+                msgs_paths.append(msg_path)
             child = model.iter_next(child)
+            
+        if msgs_paths:
+            msgs = list(zip(*msgs_paths))[0]
+            msgs = '\n\n'.join(msgs)
+            resp = GuiBasic.message_dialog(parent_window,
+                                msgs,
+                                Gtk.MessageType.WARNING,
+                                Gtk.ButtonsType.OK_CANCEL,
+                                _('Confirm'))
+            if Gtk.ResponseType.OK == resp:
+                paths = list(zip(*msgs_paths))[1]
+                for path in paths:
+                    model[path][1] = True
+            
         return
 
 
@@ -998,6 +1026,18 @@ class GUI(Gtk.ApplicationWindow):
         self.run_button.set_sensitive(is_sensitive)
         self.stop_button.set_sensitive(not is_sensitive)
 
+    def select_all_pressed(self, select_all_button):
+        count = 0
+        model = self.tree_store.get_model()
+        is_select_all = select_all_button == self._select_all_button
+        iterator = model.iter_children()
+        while iterator:
+            self.display.col1_toggled(str(count), model, self, is_toggled_on=is_select_all, all_toggled=True)
+            iterator = model.iter_next(iterator)
+            count += 1
+            
+        options.set_tree("select_all", None, is_select_all)
+
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
         # fixme: should present this dialog after finding operations
@@ -1068,9 +1108,9 @@ class GUI(Gtk.ApplicationWindow):
             Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         scrolled_window.set_overlay_scrolling(False)
         self.tree_store = TreeInfoModel()
-        display = TreeDisplayModel()
+        self.display = TreeDisplayModel()
         mdl = self.tree_store.get_model()
-        self.view = display.make_view(
+        self.view = self.display.make_view(
             mdl, self, self.context_menu_event)
         self.view.get_selection().connect("changed", self.on_selection_changed)
         scrollbar_width = scrolled_window.get_vscrollbar().get_preferred_width()[
@@ -1540,15 +1580,33 @@ class GUI(Gtk.ApplicationWindow):
         self.headerbar = self.create_headerbar()
         self.set_titlebar(self.headerbar)
 
+        check_box_container = Gtk.Box(homogeneous=False)
+        # self.add(check_box_container)
+
+        self._select_all_button = Gtk.Button(label="Select all")
+        self._select_all_button.connect("pressed", self.select_all_pressed)
+        
+        self._deselect_all_button = Gtk.Button(label="Deselect all")
+        self._deselect_all_button.connect("pressed", self.select_all_pressed)
+
+        # check_box_container.pack_end(self._select_all_checkbox, True, True, 0)
+
         # split main window twice
         hbox = Gtk.Box(homogeneous=False)
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, homogeneous=False)
         self.add(vbox)
+        hbox_select_buttons = Gtk.Box(homogeneous=False)
+        hbox_select_buttons.add(self._select_all_button)
+        hbox_select_buttons.add(self._deselect_all_button)
+        # vbox.add(hbox_select_buttons)
         vbox.add(hbox)
 
         # add operations to left
+        vbox_operations = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, homogeneous=False)
         operations = self.create_operations_box()
-        hbox.pack_start(operations, False, True, 0)
+        vbox_operations.pack_start(hbox_select_buttons, False, False, 0)
+        vbox_operations.pack_start(operations, True, True, 0)
+        hbox.pack_start(vbox_operations, False, True, 0)
 
         # create the right side of the window
         right_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)

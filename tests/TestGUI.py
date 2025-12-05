@@ -54,7 +54,6 @@ bleachbit.online_update_notification_enabled = False
 class GUITestCase(common.BleachbitTestCase):
     app = Bleachbit(auto_exit=False, uac=False) if HAVE_GTK else None
     options_get_tree = options.get_tree
-    _NEW_CLEANER_ID, _NEW_OPTION_ID = 'test_run_operations', 'test1'
 
     """Test case for module GUI"""
     @classmethod
@@ -75,6 +74,12 @@ class GUITestCase(common.BleachbitTestCase):
         super(GUITestCase, GUITestCase).tearDownClass()
         options.get_tree = cls.options_get_tree
         common.put_env('LANGUAGE', cls.old_language)
+        
+    def setUp(self):
+        self._gui = self.app._window
+        self._cleaner_id, self._option_id = 'cleaner', 'option'
+        self._cleaner_id_2, self._option_id_2 = 'cleaner2', 'option2'
+        self._dirname = self.mkdtemp()
 
     @classmethod
     def refresh_gui(cls, delay=0):
@@ -120,16 +125,28 @@ class GUITestCase(common.BleachbitTestCase):
             it = model.iter_next(it)
         return None
 
-    def _put_checkmark_on_cleaner(self, gui, cleaner_id, option_id):
-        model = gui.view.get_model()
-        tree = self.find_widget(gui, Gtk.TreeView)
+    def _put_checkmark_on_cleaner(self, cleaner_id, option_id):
+        it = self._cleaner_in_tree(cleaner_id, option_id)
+        model = self._gui.view.get_model()
+        model[model.iter_parent(it)][1] = True
+        model[it][1] = True
+        self.refresh_gui()
+        
+    def _get_checkmark_state_for_cleaner(self, cleaner_id, option_id):
+        it = self._cleaner_in_tree(cleaner_id, option_id)
+        model = self._gui.view.get_model()
+        parent_check_mark_state = model[model.iter_parent(it)][1]
+        checkmark_state = model[it][1]
+        return parent_check_mark_state, checkmark_state
+
+    def _cleaner_in_tree(self, cleaner_id, option_id):
+        model = self._gui.view.get_model()
+        tree = self.find_widget(self._gui, Gtk.TreeView)
         self.assertIsNotNone(tree)
         it = self.find_option(model, cleaner_id, option_id)
         self.assertIsNotNone(it)
         tree.scroll_to_cell(model.get_path(it), None, False, 0, 0)
-        model[model.iter_parent(it)][1] = True
-        model[it][1] = True
-        self.refresh_gui()
+        return it
 
     def click_button(self, dialog, label):
         b = self.find_widget(dialog, Gtk.Button, label)
@@ -231,7 +248,7 @@ class GUITestCase(common.BleachbitTestCase):
         """Select cleaner option and clicks preview button"""
         gui = self.app._window
         self.refresh_gui()
-        self._put_checkmark_on_cleaner(gui, 'system', 'tmp')
+        self._put_checkmark_on_cleaner('system', 'tmp')
         self.refresh_gui()
         b = self.click_button(gui, _("Preview"))
         self.refresh_gui()
@@ -278,67 +295,125 @@ class GUITestCase(common.BleachbitTestCase):
         for obj in test_files_dirs:
             self.assertNotExists(obj)
 
-    @mock.patch('bleachbit.CleanerML.list_cleanerml_files')
     @mock.patch('bleachbit.RecognizeCleanerML.cleaner_change_dialog')
-    def _setup_new_cleaner(self, gui, mock_cleaner_change_dialog, mock_list_cleanerml_files):
-        def _create_cleaner_file_in_directory(dirname):
+    def _setup_new_cleaner(self, dirname, cleaner_id, option_id, mock_cleaner_change_dialog):#, mock_list_cleanerml_files):
+        def _create_cleaner_file_in_directory(cleaner_id, option_id, dirname):
             cleaner_content = ('<?xml version="1.0" encoding="UTF-8"?>'
-                               '<cleaner id="{}">'
-                               '<label>Test run_operations</label>'
-                               '<option id="{}">'
-                               '<label>Test1</label>'
+                               '<cleaner id="{0}">'
+                               '<label>{0}_label</label>'
+                               '<option id="{1}">'
+                               '<label>{1}_label</label>'
                                '<description>Delete files in a test directory</description>'
-                               '<action command="delete" search="walk.all" path="{}"/>'
+                               '<action command="delete" search="walk.all" path="{2}"/>'
                                '</option>'
-                               '</cleaner>'.format(self._NEW_CLEANER_ID, self._NEW_OPTION_ID, dirname))
+                               '</cleaner>'.format(cleaner_id, option_id, dirname))
             cleaner_filename = os.path.join(
-                dirname, 'test_run_operations_cleaner.xml')
+                dirname, 'test_gui_cleaner_{}.xml'.format(cleaner_id))
             self.write_file(cleaner_filename, cleaner_content, 'w')
             return cleaner_filename
 
-        def _set_mocks_return_values(cleaner_filename, mock_cleaner_change_dialog, mock_list_cleanerml_files):
-            mock_list_cleanerml_files.return_value = [cleaner_filename]
+        def _set_mocks_return_values(mock_cleaner_change_dialog):
             mock_cleaner_change_dialog.return_value = None
 
-        def _load_new_cleaner_in_gui(gui):
-            # to load the new test cleaner with id 'test_run_operations'
-            gui.cb_refresh_operations()
+        def _load_new_cleaner_in_gui():
+            # to load the new test cleaner
+            self._gui.cb_refresh_operations()
             self.refresh_gui()
 
-        dirname = self.mkdtemp(prefix='bleachbit-test-run_operations')
-        cleaner_filename = _create_cleaner_file_in_directory(dirname)
+        cleaner_filename = _create_cleaner_file_in_directory(cleaner_id, option_id, dirname)
         self.assertExists(cleaner_filename)
-        _set_mocks_return_values(
-            cleaner_filename, mock_cleaner_change_dialog, mock_list_cleanerml_files)
-        _load_new_cleaner_in_gui(gui)
+        _set_mocks_return_values(mock_cleaner_change_dialog)
+        _load_new_cleaner_in_gui()
         file_to_clean = self.mkstemp(prefix="somefile", dir=dirname)
         self.assertExists(file_to_clean)
         return file_to_clean
 
     def test_run_operations(self):
-        gui = self.app._window
-        file_to_clean = self._setup_new_cleaner(gui)
-        self._put_checkmark_on_cleaner(
-            gui, self._NEW_CLEANER_ID, self._NEW_OPTION_ID)
+        with mock.patch('bleachbit.system_cleaners_dir', self._dirname):
+            file_to_clean = self._setup_new_cleaner(self._dirname, self._cleaner_id, self._option_id)
+            self._put_checkmark_on_cleaner(self._cleaner_id, self._option_id)
 
-        with mock.patch('bleachbit.GUI.GUI._confirm_delete', return_value=True):
-            self.assertTrue(gui._confirm_delete(False, False))
-            # same as b = self.click_button(gui, _("Clean"))
-            gui.run_operations(None)
-
-        self.refresh_gui()
-        self.assertNotExists(file_to_clean)
-
-    def test_cb_run_option(self):
-        gui = self.app._window
-        file_to_clean = self._setup_new_cleaner(gui)
-
-        for really_delete, assert_method in [(False, self.assertExists), (True, self.assertNotExists)]:
             with mock.patch('bleachbit.GUI.GUI._confirm_delete', return_value=True):
-                self.assertTrue(gui._confirm_delete(False, False))
-                gui.cb_run_option(
-                    None, really_delete, self._NEW_CLEANER_ID, self._NEW_OPTION_ID
-                )  # activated from context menu
+                self.assertTrue(self._gui._confirm_delete(False, False))
+                # same as b = self.click_button(gui, _("Clean"))
+                self._gui.run_operations(None)
 
             self.refresh_gui()
-            assert_method(file_to_clean)
+            self.assertNotExists(file_to_clean)
+
+    def test_cb_run_option(self):
+        with mock.patch('bleachbit.system_cleaners_dir', self._dirname):
+            file_to_clean = self._setup_new_cleaner(self._dirname, self._cleaner_id, self._option_id)
+
+            for really_delete, assert_method in [(False, self.assertExists), (True, self.assertNotExists)]:
+                with mock.patch('bleachbit.GUI.GUI._confirm_delete', return_value=True):
+                    self.assertTrue(self._gui._confirm_delete(False, False))
+                    self._gui.cb_run_option(
+                        None, really_delete, self._cleaner_id, self._option_id
+                    )  # activated from context menu
+
+                self.refresh_gui()
+                assert_method(file_to_clean)
+    
+    def _assert_checkmark_active(self, cleaner_id, option_id, is_checkmark_active):
+        assert_function = self.assertTrue if is_checkmark_active else self.assertFalse
+        parent_check_mark_state, checkmark_state = self._get_checkmark_state_for_cleaner(cleaner_id, option_id)
+        assert_function(parent_check_mark_state)
+        assert_function(checkmark_state)
+    
+    def test_deselect_all_based_on_clean_selection(self):
+        with mock.patch('bleachbit.system_cleaners_dir', self._dirname):
+            self._setup_new_cleaner(self._dirname, self._cleaner_id, self._option_id)
+            
+            self._assert_checkmark_active(self._cleaner_id, self._option_id, False)
+            
+            self._gui._deselect_all_button.emit("pressed")
+            self.refresh_gui()
+            
+            self._assert_checkmark_active(self._cleaner_id, self._option_id, False)
+
+    @mock.patch('bleachbit.Cleaner.System.get_options')
+    def test_select_all_deselect_all_based_on_clean_selection(self, mock_system_get_options):
+        mock_system_get_options.return_value = [] # do not show System cleaner in the GUI
+        with mock.patch('bleachbit.system_cleaners_dir', self._dirname):
+            self._setup_new_cleaner(self._dirname, self._cleaner_id, self._option_id)
+            self._gui._select_all_button.emit("pressed")
+            self.refresh_gui()
+
+            self._assert_checkmark_active(self._cleaner_id, self._option_id, True)
+
+            self._gui._deselect_all_button.emit("pressed")
+
+            self._assert_checkmark_active(self._cleaner_id, self._option_id, False)
+
+    @mock.patch('bleachbit.Cleaner.System.get_options')
+    def test_select_all_based_on_existing_selection(self, mock_system_get_options):
+        mock_system_get_options.return_value = [] # do not show System cleaner in the GUI
+        with mock.patch('bleachbit.system_cleaners_dir', self._dirname):
+            from bleachbit.Cleaner import backends
+            self._setup_new_cleaner(self._dirname, self._cleaner_id, self._option_id)
+            self._setup_new_cleaner(self._dirname, self._cleaner_id_2, self._option_id_2)
+
+            self._put_checkmark_on_cleaner(self._cleaner_id, self._option_id)
+            self._assert_checkmark_active(self._cleaner_id, self._option_id, True)
+            self._assert_checkmark_active(self._cleaner_id_2, self._option_id_2, False)
+
+            self._gui._select_all_button.emit("pressed")
+            self.refresh_gui()
+            self._assert_checkmark_active(self._cleaner_id, self._option_id, True)
+            self._assert_checkmark_active(self._cleaner_id_2, self._option_id_2, True)
+
+    def test_deselect_all_based_on_existing_selection(self):
+        with mock.patch('bleachbit.system_cleaners_dir', self._dirname):
+            self._setup_new_cleaner(self._dirname, self._cleaner_id, self._option_id)
+            self._setup_new_cleaner(self._dirname, self._cleaner_id_2, self._option_id_2)
+            
+            self._put_checkmark_on_cleaner(self._cleaner_id, self._option_id)
+            self._assert_checkmark_active(self._cleaner_id, self._option_id, True)
+            self._assert_checkmark_active(self._cleaner_id_2, self._option_id_2, False)
+            
+            self._gui._deselect_all_button.emit("pressed")
+            self.refresh_gui()
+            
+            self._assert_checkmark_active(self._cleaner_id, self._option_id, False)
+            self._assert_checkmark_active(self._cleaner_id_2, self._option_id_2, False)
