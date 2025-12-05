@@ -26,6 +26,7 @@ Preferences dialog
 from bleachbit import online_update_notification_enabled
 from bleachbit.Options import options
 from bleachbit import GuiBasic
+from bleachbit.GuiCookie import CookieManagerDialog
 from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _, pget_text as _p
 
@@ -54,6 +55,8 @@ class PreferencesDialog:
                                  destroy_with_parent=True)
         self.dialog.set_default_size(300, 200)
 
+        self.cookie_manager_dialog = None
+
         notebook = Gtk.Notebook()
         notebook.append_page(self.__general_page(),
                              Gtk.Label(label=_("General")))
@@ -65,7 +68,7 @@ class PreferencesDialog:
             notebook.append_page(self.__languages_page(),
                                  Gtk.Label(label=_("Languages")))
         notebook.append_page(self.__locations_page(
-            LOCATIONS_WHITELIST), Gtk.Label(label=_("Whitelist")))
+            LOCATIONS_WHITELIST), Gtk.Label(label=_("Allowlist")))
 
         # pack_start parameters: child, expand (reserve space), fill (actually fill it), padding
         self.dialog.get_content_area().pack_start(notebook, True, True, 0)
@@ -428,7 +431,7 @@ class PreferencesDialog:
         # Check in whitelist
         for path in whitelist_paths:
             if pathname == path[1]:
-                msg = _("This path already exists in the whitelist.")
+                msg = _("This path already exists in the allowlist.")
                 GuiBasic.message_dialog(self.dialog,
                                         msg,
                                         Gtk.MessageType.ERROR,
@@ -501,6 +504,16 @@ class PreferencesDialog:
                 raise RuntimeError("Invalid type code: '%s'" % type_code)
             path = paths[1]
             liststore.append([type_str, path])
+
+        if LOCATIONS_WHITELIST == page_type:
+            button_cookie_manager = Gtk.Button.new_with_label(
+                label=_("Manage cookies to keep..."))
+            button_cookie_manager.set_halign(Gtk.Align.START)
+            button_cookie_manager.set_margin_bottom(6)
+            button_cookie_manager.connect(
+                "clicked", self.__on_manage_cookies_clicked)
+            vbox.pack_start(button_cookie_manager, False, False, 0)
+
 
         if LOCATIONS_WHITELIST == page_type:
             # TRANSLATORS: "Paths" is used generically to refer to both files
@@ -578,6 +591,34 @@ class PreferencesDialog:
 
         # return page
         return vbox
+
+    def __on_manage_cookies_clicked(self, _button):
+        """Open the cookie manager dialog, reusing an existing window if open."""
+        if self.cookie_manager_dialog:
+            self.cookie_manager_dialog.present()
+            return
+
+        # Temporarily lift modality on the preferences dialog and disable it
+        self.dialog.set_modal(False)
+        self.dialog.set_sensitive(False)
+
+        self.cookie_manager_dialog = CookieManagerDialog()
+        self.cookie_manager_dialog.set_modal(True)
+
+        if isinstance(self.cookie_manager_dialog, Gtk.Window):
+            self.cookie_manager_dialog.set_transient_for(self.dialog)
+            self.cookie_manager_dialog.set_destroy_with_parent(True)
+
+        self.cookie_manager_dialog.connect(
+            "destroy", self.__on_cookie_manager_destroyed)
+        self.cookie_manager_dialog.show_all()
+
+    def __on_cookie_manager_destroyed(self, _widget):
+        """Reset reference when cookie manager window closes."""
+        self.cookie_manager_dialog = None
+        # Restore preferences dialog modality and interactivity
+        self.dialog.set_sensitive(True)
+        self.dialog.set_modal(True)
 
     def run(self):
         """Run the dialog"""

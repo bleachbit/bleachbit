@@ -342,3 +342,42 @@ class GUITestCase(common.BleachbitTestCase):
 
             self.refresh_gui()
             assert_method(file_to_clean)
+
+    def test_context_menu_cookie_manager(self):
+        """Test cookie manager helper returns correct value for options"""
+        gui = self.app._window
+        from bleachbit.Cleaner import backends
+
+        class _DummyAction:
+            def __init__(self, action_key):
+                self.action_key = action_key
+
+        cookie_cleaner_id = '_unit_test_cookie_cleaner'
+        non_cookie_cleaner_id = '_unit_test_non_cookie_cleaner'
+        saved_cookie_cleaner = backends.get(cookie_cleaner_id)
+        saved_non_cookie_cleaner = backends.get(non_cookie_cleaner_id)
+
+        try:
+            cookie_cleaner = type('DummyCleaner', (), {})()
+            cookie_cleaner.actions = [('cookies', _DummyAction('cookie'))]
+            non_cookie_cleaner = type('DummyCleaner', (), {})()
+            non_cookie_cleaner.actions = [('logs', _DummyAction('delete'))]
+
+            backends[cookie_cleaner_id] = cookie_cleaner
+            backends[non_cookie_cleaner_id] = non_cookie_cleaner
+
+            self.assertTrue(
+                gui._option_has_cookie_command(cookie_cleaner_id, 'cookies'),
+                'Expected test cookie cleaner option to be detected as cookie action')
+            self.assertFalse(
+                gui._option_has_cookie_command(non_cookie_cleaner_id, 'logs'),
+                'Expected test non-cookie cleaner option to not be detected as cookie action')
+        finally:
+            if saved_cookie_cleaner is None:
+                backends.pop(cookie_cleaner_id, None)
+            else:
+                backends[cookie_cleaner_id] = saved_cookie_cleaner
+            if saved_non_cookie_cleaner is None:
+                backends.pop(non_cookie_cleaner_id, None)
+            else:
+                backends[non_cookie_cleaner_id] = saved_non_cookie_cleaner
