@@ -66,8 +66,8 @@
     <!-- example: /home/bob/.mozilla/seamonkey/*.default/cookies.sqlite (SeaMonkey 2.0, Fedora 14) -->
     <!-- example: C:\Documents and Settings\bob\Application Data\Mozilla\SeaMonkey\Profiles\mpt1tdce.default (SeaMonkey 2.4.1, Windows XP) -->
     <action command="delete" search="glob" path="~/.mozilla/*/????????.slt/cookies.txt"/>
-    <action command="delete" search="glob" path="~/.mozilla/seamonkey/*.default/cookies.sqlite"/>
-    <action command="delete" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\cookies.sqlite"/>
+    <action command="cookie" search="glob" path="~/.mozilla/seamonkey/*.default/cookies.sqlite"/>
+    <action command="cookie" search="glob" path="$APPDATA\Mozilla\SeaMonkey\Profiles\*\cookies.sqlite"/>
     <action command="delete" search="glob" path="$APPDATA\Mozilla\Profiles\default\????????.slt\cookies.txt"/>
   </option>
   <option id="download_history">

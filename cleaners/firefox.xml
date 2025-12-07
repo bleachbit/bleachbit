@@ -77,8 +77,7 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action command="delete" search="file" path="$$profile$$/cookies.txt"/>
     <action command="cookie" search="file" path="$$profile$$/cookies.sqlite"/>
-    <action command="delete" search="file" path="$$profile$$/cookies.sqlite-shm"/>
-    <action command="delete" search="file" path="$$profile$$/cookies.sqlite-wal"/>
+
     <!-- this deletes contents of the http directories -->
     <!-- this deletes the http directories -->
     <action command="delete" search="walk.all" path="$$profile$$/storage/default/http*"/>
