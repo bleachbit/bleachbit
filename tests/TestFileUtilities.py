@@ -48,6 +48,7 @@ from bleachbit.FileUtilities import (
     clean_json,
     delete,
     detect_encoding,
+    detect_orphaned_wipe_files,
     ego_owner,
     exe_exists,
     execute_sqlite3,
@@ -1301,3 +1302,58 @@ State=AAAA/wA...
             if counter >= 3:
                 break
         self.assertGreater(counter, 0)
+
+    def test_detect_orphaned_wipe_files(self):
+        """Unit test for detect_orphaned_wipe_files()"""
+        # Save original shred_drives
+        original_drives = options.get_list('shred_drives')
+
+        # Set shred_drives to include our temp directory
+        options.set_list('shred_drives', [self.tempdir])
+
+        try:
+            # Test 1: No orphaned files initially
+            orphaned = detect_orphaned_wipe_files()
+            self.assertEqual(orphaned, [])
+
+            # Test 2: Create a file that matches criteria
+            # Must start with 'empty_', >100 chars, no extension, contain null bytes
+            long_suffix = 'a' * 120
+            orphan_name = 'empty_' + long_suffix
+            orphan_path = os.path.join(self.tempdir, orphan_name)
+            with open(orphan_path, 'wb') as f:
+                f.write(b'\x00' * 1000)
+
+            orphaned = detect_orphaned_wipe_files()
+            self.assertEqual(len(orphaned), 1)
+            self.assertEqual(orphaned[0], orphan_path)
+
+            # Test 3: File with extension should NOT be detected
+            with_ext_path = os.path.join(self.tempdir, orphan_name + '.txt')
+            with open(with_ext_path, 'wb') as f:
+                f.write(b'\x00' * 1000)
+
+            orphaned = detect_orphaned_wipe_files()
+            self.assertEqual(len(orphaned), 1)  # Still just the original
+
+            # Test 4: Short filename should NOT be detected
+            short_name = 'empty_short'
+            short_path = os.path.join(self.tempdir, short_name)
+            with open(short_path, 'wb') as f:
+                f.write(b'\x00' * 1000)
+
+            orphaned = detect_orphaned_wipe_files()
+            self.assertEqual(len(orphaned), 1)  # Still just the original
+
+            # Test 5: File without null bytes should NOT be detected
+            no_null_path = os.path.join(self.tempdir, 'empty_' + 'b' * 120)
+            with open(no_null_path, 'wb') as f:
+                f.write(b'x' * 1000)
+
+            orphaned = detect_orphaned_wipe_files()
+            self.assertEqual(len(orphaned), 1)  # Still just the original
+
+        finally:
+            # Restore original shred_drives
+            if original_drives:
+                options.set_list('shred_drives', original_drives)

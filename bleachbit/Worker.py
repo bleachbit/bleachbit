@@ -210,6 +210,10 @@ class Worker:
             msg = _("Please wait. Wiping empty space.")
             self.ui.append_text(
                 _('Wiping empty space removes traces of files that were deleted without shredding, but it will not free additional disk space. The process can take a very long time and may temporarily slow your computer. It is not necessary if your drive is protected with full-disk encryption. The method works best on traditional hard drives. On solid-state drives, it is less reliable, and frequent use contributes to wear.'))
+            self.ui.append_text('\n\n')
+            self.ui.append_text(_('To stop this process, press the abort button on the toolbar and wait.'))
+            self.ui.append_text('\n\n')
+            self.ui.append_text(_('If the application is force closed before the process is complete, large files may remain on the disk, and they may use all available space. To remove them, start BleachBit again.'))
             self.ui.append_text('\n')
         elif 'memory' == option_id:
             msg = _("Please wait.  Cleaning %s.") % _("Memory")

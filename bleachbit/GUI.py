@@ -489,6 +489,10 @@ class Bleachbit(Gtk.Application):
             GLib.idle_add(self.quit,
                           priority=GLib.PRIORITY_LOW)
             print('Success')
+        else:
+            # Check for orphaned wipe files from interrupted operations
+            GLib.idle_add(self._window.check_orphaned_wipe_files,
+                          priority=GLib.PRIORITY_LOW)
 
 
 class TreeInfoModel:
@@ -1663,6 +1667,29 @@ class GUI(Gtk.ApplicationWindow):
         self.show_all()
         self.progressbar.hide()
         self.infobar.hide()
+
+    def check_orphaned_wipe_files(self):
+        """Check for orphaned wipe files and offer to delete them.
+
+        These files are created by wipe_path() to fill empty disk space."""
+        orphaned_files = FileUtilities.detect_orphaned_wipe_files()
+        if not orphaned_files:
+            return
+
+        # TRANSLATORS: This message is shown when orphaned temporary files
+        # from an interrupted disk wipe operation are detected.
+        msg = _("BleachBit detected leftover files from an interrupted "
+                "disk wipe operation. Would you like to preview them with an option to delete them?")
+
+        resp = GuiBasic.message_dialog(self,
+                                       msg,
+                                       Gtk.MessageType.WARNING,
+                                       Gtk.ButtonsType.YES_NO,
+                                       _('Confirm'))
+
+        if resp == Gtk.ResponseType.YES:
+            self.shred_paths(orphaned_files)
+
 
     @threaded
     def check_online_updates(self):

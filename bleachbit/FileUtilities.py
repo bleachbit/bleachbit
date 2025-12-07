@@ -998,7 +998,11 @@ def wipe_path(pathname, idle=False):
         while True:
             try:
                 f = tempfile.NamedTemporaryFile(
-                    dir=pathname, suffix=__random_string(maxlen), delete=False)
+                        dir=pathname,
+                        suffix=__random_string(maxlen),
+                        delete=False,
+                        prefix="empty_"
+                )
                 # In case the application closes prematurely, make sure this
                 # file is deleted
                 atexit.register(
@@ -1182,6 +1186,57 @@ def wipe_path(pathname, idle=False):
 def vacuum_sqlite3(path):
     """Vacuum SQLite database"""
     execute_sqlite3(path, 'vacuum')
+
+
+def detect_orphaned_wipe_files():
+    """Detect orphaned temporary files from interrupted wipe_path operations.
+
+    These files are created by wipe_path() to fill free disk space with zeros.
+
+    Detection criteria:
+    - Located in directories from options shred_drives
+    - Filename starts with 'empty_'
+    - Filename has >100 characters (due to random suffix)
+    - No file extension
+    - Contains only null bytes when sampled
+
+    Returns:
+        list: Paths to detected orphaned wipe files
+    """
+    from bleachbit.Options import options
+    orphaned_files = []
+
+    shred_drives = options.get_list('shred_drives')
+    if not shred_drives:
+        return orphaned_files
+
+    for drive_path in shred_drives:
+        if not os.path.isdir(drive_path):
+            continue
+        try:
+            for entry in os.scandir(drive_path):
+                if not entry.is_file():
+                    continue
+                filename = entry.name
+                # Check criteria: starts with 'empty_', >100 chars, no extension
+                if not filename.startswith('empty_'):
+                    continue
+                if len(filename) <= 100:
+                    continue
+                if '.' in filename:
+                    continue
+                # Read a small sample to check for null bytes
+                try:
+                    with open(entry.path, 'rb') as f:
+                        sample = f.read(4096)
+                        if sample and all(b == 0 for b in sample):
+                            orphaned_files.append(entry.path)
+                except (IOError, OSError) as e:
+                    logger.debug('Could not read file %s: %s', entry.path, e)
+        except (IOError, OSError) as e:
+            logger.debug('Could not scan directory %s: %s', drive_path, e)
+
+    return orphaned_files
 
 
 openfiles = OpenFiles()
