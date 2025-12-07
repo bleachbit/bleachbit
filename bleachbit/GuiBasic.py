@@ -24,23 +24,15 @@ Basic GUI code
 # standard library
 import os
 
-# third party
-try:
-    import gi
-except ModuleNotFoundError as e:
-    print('*' * 60)
-    print('Please install PyGObject')
-    print('https://pygobject.readthedocs.io/en/latest/getting_started.html')
-    print('*' * 60)
-    raise e
-
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk  # keep after gi.require_version()
-
 # local import
+from bleachbit.GtkShim import Gtk, Gdk, require_gtk
 from bleachbit.Language import get_text as _
+from bleachbit.Options import options
 if os.name == 'nt':
     from bleachbit import Windows
+
+# Ensure GTK is available for this GUI module
+require_gtk()
 
 
 def browse_folder(parent, title, multiple, stock_button):
@@ -147,6 +139,10 @@ def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
     question.set_line_wrap(True)
     vbox.pack_start(question, False, True, 0)
 
+    cb_popup = Gtk.CheckButton(label=_("Confirm before delete"))
+    cb_popup.set_active(options.get('delete_confirmation'))
+    vbox.pack_start(cb_popup, False, True, 0)
+
     dialog.get_content_area().pack_start(vbox, False, True, 0)
     dialog.get_content_area().set_spacing(10)
 
@@ -156,6 +152,7 @@ def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
 
     dialog.show_all()
     ret = dialog.run()
+    options.set('delete_confirmation', cb_popup.get_active())
     dialog.destroy()
     return ret == Gtk.ResponseType.ACCEPT
 

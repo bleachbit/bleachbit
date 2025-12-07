@@ -32,6 +32,8 @@ from bleachbit.Special import sqlite_table_exists
 
 logger = logging.getLogger(__name__)
 
+COOKIE_KEEP_LIST_FILENAME = "cookie_keep_list.json"
+
 
 def _estimate_in_memory_size(conn, table_name, delete_query, params):
     """Return estimated database size (bytes) after deleting rows in-memory.

@@ -671,7 +671,11 @@ def yum_clean():
     old_size = FileUtilities.getsizedir('/var/cache/yum')
     args = ['--enablerepo=*', 'clean', 'all']
     invalid = ['You need to be root', 'Cannot remove rpmdb file']
-    run_cleaner_cmd('yum', args, '^unused regex$', invalid)
+    try:
+        run_cleaner_cmd('yum', args, '^unused regex$', invalid)
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(
+            f"Error calling '{' '.join(str(part) for part in e.cmd)}':\n{e.output}") from e
     new_size = FileUtilities.getsizedir('/var/cache/yum')
     return old_size - new_size
 
@@ -686,7 +690,11 @@ def dnf_clean():
     old_size = FileUtilities.getsizedir('/var/cache/dnf')
     args = ['--enablerepo=*', 'clean', 'all']
     invalid = ['You need to be root', 'Cannot remove rpmdb file']
-    run_cleaner_cmd('dnf', args, '^unused regex$', invalid)
+    try:
+        run_cleaner_cmd('dnf', args, '^unused regex$', invalid)
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(
+            f"Error calling '{' '.join(str(part) for part in e.cmd)}':\n{e.output}") from e
     new_size = FileUtilities.getsizedir('/var/cache/dnf')
 
     return old_size - new_size
@@ -830,20 +838,6 @@ def snap_disabled_preview():
     return snap_disabled_full(False)
 
 
-def has_gui():
-    """Return True if the GUI is available"""
-    assert os.name == 'posix'
-    if not os.environ.get('DISPLAY') and not os.environ.get('WAYLAND_DISPLAY'):
-        return False
-    try:
-        import gi
-        gi.require_version('Gtk', '3.0')
-        from gi.repository import Gtk
-        return True
-    except ImportError:
-        return False
-
-
 def is_unix_display_protocol_wayland():
     """Return True if the display protocol is Wayland."""
     assert os.name == 'posix'
@@ -886,9 +880,13 @@ def root_is_not_allowed_to_X_session():
     This function is called only with root on Wayland.
     """
     assert os.name == 'posix'
-    result = General.run_external(['xhost'], clean_env=False)
-    xhost_returned_error = result[0] == 1
-    return xhost_returned_error
+    try:
+        result = General.run_external(['xhost'], clean_env=False)
+        xhost_returned_error = result[0] == 1
+        return xhost_returned_error
+    except (FileNotFoundError, OSError) as exc:
+        logger.debug('xhost check failed (%s); assuming root is not allowed to X session', exc)
+        return True
 
 
 def is_display_protocol_wayland_and_root_not_allowed():

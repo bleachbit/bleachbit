@@ -588,6 +588,25 @@ INSERT INTO "meta" VALUES('version','20');"""
             non_existing_file, 'table_does_not_exist'))
         self.assertNotExists(non_existing_file)
 
+    def test_sqlite_is_valid_database(self):
+        """Unit test for _sqlite_is_valid_database()"""
+        # create test file
+        filename = os.path.join(
+            self.tempdir, 'test_sqlite_is_valid_database.sqlite')
+        sql = "CREATE TABLE foo(id int)"
+        FileUtilities.execute_sqlite3(filename, sql)
+        self.assertExists(filename)
+        # run the test
+        self.assertTrue(Special._sqlite_is_valid_database(filename))
+        # create test file
+        other_file = os.path.join(
+            self.tempdir, 'test_sqlite_is_valid_database_invalid.sqlite')
+        with open(other_file, 'w', encoding='utf-8') as f:
+            f.write('this is not a valid sqlite3 database file')
+        self.assertExists(other_file)
+        self.assertFalse(Special._sqlite_is_valid_database(other_file))
+        os.unlink(other_file)
+
     def test_sqlite_loop(self):
         """Repeat SQLite tests
 

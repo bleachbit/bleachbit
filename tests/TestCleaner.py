@@ -207,11 +207,10 @@ class CleanerTestCase(common.BleachbitTestCase):
     @common.skipUnlessDestructive
     def test_system_recent_documents(self):
         """Clean recent documents in GTK"""
-        import Gtk
+        from bleachbit.GtkShim import Gtk, Gio, GLib
         mgr = Gtk.RecentManager().get_default()
         fn = self.mkstemp(suffix='.txt')
         self.assertExists(fn)
-        from gi.repository import Gio, GLib
         uri = Gio.File.new_for_path(fn).get_uri()
         self.assertTrue(mgr.add_item(uri))
         GLib.idle_add(Gtk.main_quit)

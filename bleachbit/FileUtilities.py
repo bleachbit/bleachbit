@@ -669,8 +669,10 @@ def guess_overwrite_paths():
         if not os.path.exists(home):
             home = os.path.expanduser("~")
         ret.append(home)
-        if not same_partition(home, '/tmp/'):
-            ret.append('/tmp')
+        # Debian on Docker did not have /tmp
+        if os.path.exists('/tmp'):
+            if not same_partition(home, '/tmp/'):
+                ret.append('/tmp')
     elif 'nt' == os.name:
         localtmp = os.path.expandvars('$TMP')
         if not os.path.exists(localtmp):

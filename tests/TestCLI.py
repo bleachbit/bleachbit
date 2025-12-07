@@ -28,7 +28,7 @@ from bleachbit.CLI import (
     cleaners_list,
     preview_or_clean)
 from bleachbit.General import get_executable, run_external
-from bleachbit.Unix import has_gui
+from bleachbit.GtkShim import HAVE_GTK
 from bleachbit import FileUtilities
 from tests import common
 
@@ -79,7 +79,7 @@ class CLITestCase(common.BleachbitTestCase):
         self.assertIsInstance(o, list)
         self.assertTrue('google_chrome.cache' in o)
         self.assertTrue('system.tmp' in o)
-        gui_available = os.name == 'nt' or has_gui()
+        gui_available = os.name == 'nt' or HAVE_GTK
         self.assertEqual(gui_available, 'system.clipboard' in o)
         self.assertFalse('system.free_disk_space' in o)
         self.assertFalse('system.memory' in o)

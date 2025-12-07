@@ -50,8 +50,7 @@ def cleaner_change_dialog(changes, parent):
         model.set(__iter, 0, value)
 
     # TODO: move to GuiBasic
-    from bleachbit.GuiBasic import Gtk
-    from gi.repository import GObject
+    from bleachbit.GtkShim import Gtk, GObject
 
     dialog = Gtk.Dialog(title=_("Security warning"),
                         transient_for=parent,

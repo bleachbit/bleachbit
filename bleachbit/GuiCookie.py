@@ -31,16 +31,18 @@ from gi.repository import Gtk
 
 # local import
 import bleachbit
-from bleachbit.Cookie import list_unique_cookies
+from bleachbit.Cookie import list_unique_cookies, COOKIE_KEEP_LIST_FILENAME
 from bleachbit.Language import get_text as _, nget_text as _n
 
 logger = logging.getLogger(__name__)
 
-COOKIE_ALLOWLIST_FILENAME = "cookie_allowlist.json"
+
 COOKIE_DISCOVERY_WARN_THRESHOLD = 2.0  # seconds
+
 
 class CookieManagerDialog(Gtk.Window):
     """Manage cookies to keep"""
+
     def __init__(self):
         Gtk.Window.__init__(self, title=_("Manage cookies to keep"))
         self.set_default_size(600, 500)
@@ -53,7 +55,8 @@ class CookieManagerDialog(Gtk.Window):
 
         # Instructions label
         instructions = Gtk.Label()
-        instructions.set_markup("<b>" + _("Select the cookies to keep when cleaning cookies across browsers.") + "</b>")
+        instructions.set_markup(
+            "<b>" + _("Select the cookies to keep when cleaning cookies across browsers.") + "</b>")
         instructions.set_line_wrap(True)
         instructions.set_xalign(0)  # Left align
         vbox.pack_start(instructions, False, False, 0)
@@ -71,7 +74,8 @@ class CookieManagerDialog(Gtk.Window):
         search_box.pack_start(self.search_entry, True, True, 0)
 
         self.selected_toggle = Gtk.ToggleButton(label=_("Show Selected"))
-        self.selected_toggle.set_tooltip_text(_("Only show cookies that are currently selected"))
+        self.selected_toggle.set_tooltip_text(
+            _("Only show cookies that are currently selected"))
         self.selected_toggle.connect("toggled", self.on_selected_toggle)
         search_box.pack_start(self.selected_toggle, False, False, 0)
 
@@ -83,8 +87,8 @@ class CookieManagerDialog(Gtk.Window):
         scrolled.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
         vbox.pack_start(scrolled, True, True, 0)
 
-        self.allowlist_path = os.path.join(
-            bleachbit.options_dir, COOKIE_ALLOWLIST_FILENAME)
+        self.keep_list_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
         self.saved_domains = self._load_saved_domains()
 
         # Create cookie list store: checkbox, domain
@@ -114,7 +118,8 @@ class CookieManagerDialog(Gtk.Window):
         scrolled.add(self.treeview)
 
         # Button box
-        button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        button_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         button_box.set_halign(Gtk.Align.END)
         vbox.pack_start(button_box, False, False, 0)
 
@@ -153,15 +158,15 @@ class CookieManagerDialog(Gtk.Window):
             # TRANSLATORS: %(selected)d is the count of selected cookies,
             # %(total)d is the total count, %(visible)d is the visible count
             self.stat_label.set_text(
-                _n("%(selected)d of %(total)d cookie allowed (%(visible)d visible)",
-                   "%(selected)d of %(total)d cookies allowed (%(visible)d visible)",
+                _n("%(selected)d of %(total)d cookie kept (%(visible)d visible)",
+                   "%(selected)d of %(total)d cookies kept (%(visible)d visible)",
                    selected) % {'selected': selected, 'total': total, 'visible': visible})
         else:
             # TRANSLATORS: %(selected)d is the count of selected cookies,
             # %(total)d is the total count
             self.stat_label.set_text(
-                _n("%(selected)d of %(total)d cookie allowed",
-                   "%(selected)d of %(total)d cookies allowed",
+                _n("%(selected)d of %(total)d cookie kept",
+                   "%(selected)d of %(total)d cookies kept",
                    selected) % {'selected': selected, 'total': total})
 
     def on_cell_toggled(self, _widget, path):
@@ -186,12 +191,18 @@ class CookieManagerDialog(Gtk.Window):
 
     def _set_filtered_selection(self, is_selected):
         """Set selection state only for rows visible in the current filter."""
+        # Collect paths first to prevent iterator invalidation when rows disappear
+        # from the filter (e.g., deselecting while 'Show Selected' is active).
+        paths = []
         tree_iter = self.cookie_filter.get_iter_first()
         while tree_iter:
             child_iter = self.cookie_filter.convert_iter_to_child_iter(tree_iter)
-            if child_iter is not None:
-                self.cookie_store[child_iter][0] = is_selected
+            if child_iter:
+                paths.append(self.cookie_store.get_path(child_iter))
             tree_iter = self.cookie_filter.iter_next(tree_iter)
+
+        for path in paths:
+            self.cookie_store[path][0] = is_selected
 
     def on_cancel_clicked(self, _widget):
         """Cancel the dialog"""
@@ -199,16 +210,16 @@ class CookieManagerDialog(Gtk.Window):
 
     def on_keep_clicked(self, _widget):
         """Keep the selected cookies"""
-        whitelist = sorted(self._iter_selected_domains())
+        keep_list = sorted(self._iter_selected_domains())
 
-        # Save whitelist to file
+        # Save keep list to file
         try:
-            with open(self.allowlist_path, "w", encoding="utf-8") as f:
-                json.dump(whitelist, f, indent=2)
-            self.saved_domains = set(whitelist)
+            with open(self.keep_list_path, "w", encoding="utf-8") as f:
+                json.dump(keep_list, f, indent=2)
+            self.saved_domains = set(keep_list)
         except OSError as exc:
-            logger.error("Failed to save cookie allowlist %s: %s",
-                         self.allowlist_path, exc)
+            logger.error("Failed to save cookie keep list %s: %s",
+                         self.keep_list_path, exc)
             return
 
         self.destroy()
@@ -233,14 +244,13 @@ class CookieManagerDialog(Gtk.Window):
     def on_selected_toggle(self, widget):
         """Toggle whether only selected cookies should be visible."""
         self.show_selected_only = widget.get_active()
-        #self.cookie_filter.refilter()
+        self.cookie_filter.refilter()
         self.update_stat_label()
 
     def on_search_changed(self, _widget):
         """Called when the search text changes"""
         self.cookie_filter.refilter()
         self.update_stat_label()
-
 
     def _populate_cookie_store(self):
         """Populate the list store with discovered and saved cookie hosts."""
@@ -272,13 +282,13 @@ class CookieManagerDialog(Gtk.Window):
     def _load_saved_domains(self):
         """Load saved cookie hostnames from disk."""
         try:
-            with open(self.allowlist_path, "r", encoding="utf-8") as f:
+            with open(self.keep_list_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
         except FileNotFoundError:
             return set()
         except (json.JSONDecodeError, OSError) as exc:
-            logger.warning("Failed to read cookie allowlist %s: %s",
-                           self.allowlist_path, exc)
+            logger.warning("Failed to read cookie keep list %s: %s",
+                           self.keep_list_path, exc)
             return set()
 
         domains = set()
@@ -293,4 +303,3 @@ class CookieManagerDialog(Gtk.Window):
                 if isinstance(candidate, str) and candidate:
                     domains.add(candidate.strip())
         return domains
-

@@ -51,7 +51,6 @@ from bleachbit.Unix import (
     get_distribution_name_version_platform_freedesktop,
     get_distribution_name_version,
     get_purgeable_locales,
-    has_gui,
     is_broken_xdg_desktop,
     is_process_running_ps_aux,
     is_process_running,
@@ -820,11 +819,6 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         sample = "No snaps are installed yet. Try 'snap install hello-world'.\n"
         result = snap_parse_list(sample)
         self.assertEqual(result, [])
-
-    @common.skipIfWindows
-    def test_has_gui(self):
-        """Unit test for has_gui()"""
-        self.assertIsInstance(has_gui(), bool)
 
     @common.skipIfWindows
     def test_is_unix_display_protocol_wayland_no_mock(self):

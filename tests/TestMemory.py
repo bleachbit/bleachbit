@@ -24,10 +24,10 @@ Test case for module Memory
 
 import os
 import re
-import unittest
 
 from tests import common
 from bleachbit import logger
+from bleachbit.FileUtilities import exe_exists
 from bleachbit.Memory import (
     count_swap_linux,
     disable_swap_linux,
@@ -45,9 +45,10 @@ class MemoryTestCase(common.BleachbitTestCase):
     """Test case for module Memory"""
 
     @common.skipIfWindows
-    @unittest.skipIf(os.getenv('TRAVIS', 'f') == 'true', 'Not supported on Travis CI')
     def test_get_proc_swaps(self):
         """Test for method get_proc_swaps"""
+        if not exe_exists('swapon'):
+            self.skipTest('swapon not found')
         ret = get_proc_swaps()
         self.assertGreater(len(ret), 10)
         if not re.search(r'Filename\s+Type\s+Size', ret):
@@ -117,6 +118,8 @@ Swapouts:                              20258188.
     @common.skipIfWindows
     def test_get_swap_size_linux(self):
         """Test for get_swap_size_linux()"""
+        if not exe_exists('swapon'):
+            self.skipTest('swapon not found')
         with open('/proc/swaps') as f:
             swapdev = f.read().split('\n')[1].split(' ')[0]
         if 0 == len(swapdev):
@@ -134,6 +137,8 @@ Swapouts:                              20258188.
     @common.skipIfWindows
     def test_get_swap_uuid(self):
         """Test for method get_swap_uuid"""
+        if not exe_exists('blkid'):
+            self.skipTest('blkid not found')
         self.assertEqual(get_swap_uuid('/dev/doesnotexist'), None)
 
     def test_parse_swapoff(self):

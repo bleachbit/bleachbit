@@ -13,7 +13,24 @@ init:
   - 'systeminfo | findstr /B /C:"OS Name" /C:"OS Version"' # show Windows version
   - 'echo PYTHON_HOME=%PYTHON_HOME%'
   - ps: |
-      Get-WmiObject Win32_Process | Select-Object ProcessName, @{Name="UserName";Expression={$_.GetOwner().User}} | Format-Table -AutoSize
+      Get-WmiObject Win32_Process | Select-Object ProcessName, @{Name="UserName";Expression={$_.GetOwner().User}} | Sort-Object ProcessName, UserName -Unique | Format-Table -AutoSize
+  # kill unneeded processes
+  - ps: |
+      $targetProcesses = @('SearchUI.exe', 'updater.exe', 'TiWorker.exe', 'TrustedInstaller.exe', 'MicrosoftEdgeUpdate.exe', 'ShellExperienceHost.exe')
+      Get-WmiObject Win32_Process |
+        Where-Object { $_.ProcessName -in $targetProcesses } |
+        ForEach-Object {
+          $result = $_.Terminate()
+          $status = if ($result -and $result.ReturnValue -eq 0) {
+            'terminated'
+          } elseif ($result) {
+            "failed ($($result.ReturnValue))"
+          } else {
+            'unknown'
+          }
+          Write-Output ("{0}: {1}" -f $_.ProcessName, $status)
+        }
+
 
 install:
   - cmd: call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x86

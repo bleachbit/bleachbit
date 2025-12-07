@@ -42,7 +42,17 @@ markovify is licensed under the [MIT License](https://github.com/jsvine/markovif
 
 ## Development
 * [BleachBit on AppVeyor](https://ci.appveyor.com/project/az0/bleachbit)  ![Build status](https://ci.appveyor.com/api/projects/status/7p8amofd7rv7n268?svg=true)
-* [BleachBit on Travis CI](https://travis-ci.com/github/bleachbit/bleachbit)  ![Build Status](https://travis-ci.com/bleachbit/bleachbit.svg?branch=master)
 * [CleanerML Repository](https://github.com/bleachbit/cleanerml)
 * [BleachBit Miscellaneous Repository](https://github.com/bleachbit/bleachbit-misc)
 * [Winapp2.ini Repository](https://github.com/bleachbit/winapp2.ini)
+
+### Docker-based Linux builds
+
+The `docker/build.sh` script sets up a container, runs `make tests`,
+and builds packages for a selected distribution. Usage:
+
+```
+./docker/build.sh <distro> # distro is one of {debian, fedora, opensuse}
+```
+
+Artifacts are copied to `./docker-artifacts/<distro>` on the host.

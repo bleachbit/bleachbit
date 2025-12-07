@@ -132,13 +132,33 @@ def get_real_username():
 
     On GitHub Actions, os.getlogin() returns
     OSError: [Errno 25] Inappropriate ioctl for device
+
+    In Docker containers, getpass.getuser() may fail with KeyError.
     """
     if 'posix' != os.name:
         raise RuntimeError('get_real_username() requires POSIX')
+    sudo_user = os.getenv('SUDO_USER')
+    if sudo_user:
+        return sudo_user
+
     try:
-        return os.getenv('SUDO_USER') or os.getlogin()
+        return os.getlogin()
     except OSError:
+        pass
+
+    try:
         return getpass.getuser()
+    except (KeyError, OSError):
+        # Happens inside containers when UID lacks an /etc/passwd entry or
+        # when getpass gives up because no username-related env vars exist.
+        pass
+
+    for env_var in ('LOGNAME', 'USER'):
+        fallback = os.getenv(env_var)
+        if fallback:
+            return fallback
+
+    return str(os.getuid())
 
 
 def get_real_uid():
@@ -159,11 +179,19 @@ def get_real_uid():
     except:
         login = os.getenv('LOGNAME')
 
+    if login:
+        login = login.strip()
+
     if login and 'root' != login:
         # pwd does not exist on Windows, so global unconditional import
         # would cause a ModuleNotFoundError.
         import pwd  # pylint: disable=import-outside-toplevel
-        return pwd.getpwnam(login).pw_uid
+        try:
+            return pwd.getpwnam(login).pw_uid
+        except KeyError:
+            # Docker containers may set LOGNAME to a raw UID that lacks a passwd entry.
+            if login.isdigit():
+                return int(login)
 
     # os.getuid() returns 0 for sudo, so use it as a last resort.
     return os.getuid()

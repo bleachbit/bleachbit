@@ -29,15 +29,9 @@ import time
 import types
 from unittest import mock
 
-HAVE_GTK = True
-if os.name == 'posix':
-    from bleachbit.Unix import has_gui
-    HAVE_GTK = has_gui()
+from bleachbit.GtkShim import HAVE_GTK, Gtk
 
 if HAVE_GTK:
-    import gi
-    gi.require_version('Gtk', '3.0')
-    from gi.repository import Gtk
     from bleachbit.GUI import Bleachbit
 
 import bleachbit
@@ -236,7 +230,6 @@ class GUITestCase(common.BleachbitTestCase):
         b = self.click_button(gui, _("Preview"))
         self.refresh_gui()
 
-    @unittest.skipIf(os.getenv('TRAVIS', 'f') == 'true', 'Not supported on Travis CI')
     def test_notify(self):
         """Test a pop-up notification"""
         from bleachbit.GUI import notify
