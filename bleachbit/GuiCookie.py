@@ -55,12 +55,8 @@ class CookieManagerDialog(Gtk.Window):
 
         # Instructions label
         instructions = Gtk.Label()
-<<<<<<< HEAD
         instructions.set_markup(
             "<b>" + _("Select the cookies to keep when cleaning cookies across browsers.") + "</b>")
-=======
-        instructions.set_markup("<b>" + _("Select the cookies to keep when cleaning cookies across browsers.") + "</b>")
->>>>>>> af92b0c1 (Improve user-visible strings and i18n)
         instructions.set_line_wrap(True)
         instructions.set_xalign(0)  # Left align
         vbox.pack_start(instructions, False, False, 0)
