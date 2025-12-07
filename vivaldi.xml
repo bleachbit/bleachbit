@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cleaner id="vivaldi">
+  <label>Vivaldi</label>
+  <description>Deep clean for Vivaldi browser (Windows, Linux, macOS)</description>
+
+  <!-- Detect running process -->
+  <running type="exe" os="windows" same_user="true">vivaldi.exe</running>
+  <running type="exe" os="linux" same_user="true">vivaldi</running>
+  <running type="exe" os="macos" same_user="true">Vivaldi</running>
+
+  <!-- Base configuration directory -->
+  <var name="base">
+    <value os="windows">%LOCALAPPDATA%\Vivaldi\User Data</value>
+    <value os="linux">$XDG_CONFIG_HOME/vivaldi</value>
+    <value os="linux">~/.config/vivaldi</value>
+    <value os="macos">$HOME/Library/Application Support/Vivaldi</value>
+  </var>
+
+  <!-- Default profile directory -->
+  <var name="profile">
+    <value>$$base$$/Default</value>
+  </var>
+
+  <!-- Cache cleaning -->
+  <option id="cache">
+    <label>Cache</label>
+    <description>Delete general cache, code cache, GPU and shader cache</description>
+    <action command="delete" search="walk.files" path="$$profile$$/Cache"/>
+    <action command="delete" search="walk.files" path="$$profile$$/Code Cache"/>
+    <action command="delete" search="walk.files" path="$$profile$$/GPUCache"/>
+    <action command="delete" search="walk.files" path="$$profile$$/ShaderCache"/>
+    <action command="delete" search="walk.files" path="$$profile$$/GrShaderCache"/>
+    <action command="delete" search="walk.files" path="$$profile$$/GraphiteDawnCache"/>
+  </option>
+
+  <!-- Cookies -->
+  <option id="cookies">
+    <label>Cookies</label>
+    <description>Delete cookies and associated files</description>
+    <action command="delete" search="file" path="$$profile$$/Cookies"/>
+    <action command="delete" search="file" path="$$profile$$/Cookies-journal"/>
+  </option>
+
+  <!-- Browsing history -->
+  <option id="history">
+    <label>Browsing History</label>
+    <description>Delete browsing history, top sites, and related records</description>
+    <action command="delete" search="file" path="$$profile$$/History"/>
+    <action command="delete" search="file" path="$$profile$$/History Provider Cache"/>
+    <action command="delete" search="file" path="$$profile$$/Top Sites"/>
+    <action command="delete" search="file" path="$$profile$$/Visited Links"/>
+  </option>
+
+  <!-- Web storage -->
+  <option id="webstorage">
+    <label>Web Storage</label>
+    <description>Clear Local Storage, IndexedDB, and Session Storage</description>
+    <action command="delete" search="walk.all" path="$$profile$$/Local Storage"/>
+    <action command="delete" search="walk.all" path="$$profile$$/IndexedDB"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Session Storage"/>
+    <action command="delete" search="walk.all" path="$$profile$$/WebStorage"/>
+  </option>
+
+  <!-- Extension cache -->
+  <option id="extensions">
+    <label>Extensions Cache</label>
+    <description>Delete cached extension data</description>
+    <action command="delete" search="walk.files" path="$$base$$/component_crx_cache"/>
+    <action command="delete" search="walk.files" path="$$base$$/extensions_crx_cache"/>
+  </option>
+</cleaner>
