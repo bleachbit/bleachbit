@@ -78,7 +78,6 @@ Requires:       gtk3
 Requires:       python3-chardet
 Requires:       python3-gobject
 Requires:       python3-psutil
-Recommends:     libayatana-appindicator-gtk3
 %endif
 
 %if 0%{?is_opensuse}

@@ -777,6 +777,25 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             logger.debug('pacman bytes cleaned %d', bytes_freed)
 
     @common.skipIfWindows
+    @mock.patch('bleachbit.Unix.General.run_external')
+    @mock.patch('bleachbit.Unix.exe_exists')
+    @mock.patch('bleachbit.Unix.os.path')
+    def test_pacman_cache_mock(self, mock_path, mock_exe_exists, mock_run):
+        """Unit test pacman_cache() parse logic without pacman installed"""
+        mock_path.exists.return_value = False
+        mock_exe_exists.return_value = True
+        mock_run.return_value = (
+            0,
+            "==> finished: 3 packages removed (42.31 M freed)\n",
+            ''
+        )
+
+        bytes_freed = pacman_cache()
+        self.assertEqual(bytes_freed, 42310000)
+
+        mock_run.assert_called_once_with(['paccache', '-rk0'])
+
+    @common.skipIfWindows
     @common.skipUnlessDestructive
     def test_snap_disabled_clean(self):
         """Unit test for snap_disabled_clean()"""

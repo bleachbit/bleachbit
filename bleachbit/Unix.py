@@ -747,7 +747,7 @@ def pacman_cache():
         raise RuntimeError(f'paccache raised error {rc}: {stderr}')
     # parse line like this: "==> finished: 3 packages removed (42.31 MiB freed)"
     cregex = re.compile(
-        r"==> finished: ([\d.]+) packages removed \(([\d.]+[\s]+[BkMG]) freed)")
+        r"==> finished: ([\d.]+) packages removed \(([\d.]+\s+[BkMG]) freed\)")
     match = cregex.search(stdout)
     if match:
         return parse_size(match.group(2))
