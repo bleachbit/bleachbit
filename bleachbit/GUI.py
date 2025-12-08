@@ -1646,7 +1646,11 @@ class GUI(Gtk.ApplicationWindow):
     @threaded
     def check_online_updates(self):
         """Check for software updates in background"""
-        from bleachbit import Update
+        try:
+            from bleachbit import Update
+        except ImportError as e :
+            logger.error("Cannot check online for updates: %s", e)
+            return
         try:
             updates = Update.check_updates(options.get('check_beta'),
                                            options.get('update_winapp2'),
