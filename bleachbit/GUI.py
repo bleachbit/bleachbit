@@ -36,17 +36,6 @@ from bleachbit.GtkShim import gi, Gtk, Gdk, GObject, GLib, Gio, require_gtk
 # Ensure GTK is available for this GUI module
 require_gtk()
 
-APP_INDICATOR_FOUND = True
-
-if sys.platform == 'linux':
-    try:
-        # Ubuntu: sudo apt install gir1.2-ayatanaappindicator3-0.1
-        # Fedora: dnf install libayatana-appindicator-gtk3
-        gi.require_version('AyatanaAppIndicator3', '0.1')  # throws ValueError
-        from gi.repository import AyatanaAppIndicator3 as AppIndicator
-    except (ValueError, ImportError):
-        APP_INDICATOR_FOUND = False
-
 # local
 import bleachbit
 from bleachbit import APP_NAME, appicon_path, portable_mode, windows10_theme_path
@@ -726,26 +715,6 @@ class GUI(Gtk.ApplicationWindow):
         self.connect("key-press-event", self.on_key_press_event)
         self._font_css_provider = None
 
-        self._set_appindicator()
-
-    def _set_appindicator(self):
-        """Setup the app indicator"""
-        if not (sys.platform == 'linux' and APP_INDICATOR_FOUND):
-            return
-        APPINDICATOR_ID = 'BLEACHBIT'
-        icon_dir = os.path.dirname(appicon_path)
-        menu_icon_path = os.path.join(icon_dir, 'bleachbit-indicator.svg')
-        if not os.path.exists(menu_icon_path):
-            if os.path.exists(appicon_path):
-                menu_icon_path = appicon_path
-            else:
-                menu_icon_path = 'user-trash'
-        indicator_category = AppIndicator.IndicatorCategory.SYSTEM_SERVICES
-        self.indicator = AppIndicator.Indicator.new(
-            APPINDICATOR_ID, menu_icon_path, indicator_category)
-        self.indicator.set_status(AppIndicator.IndicatorStatus.ACTIVE)
-        self.indicator.set_menu(self.build_appindicator_menu())
-
     def set_font_size(self, absolute_size=None, relative_size=None):
         """Set the font size of the entire application"""
         assert absolute_size is not None or relative_size is not None
@@ -896,18 +865,6 @@ class GUI(Gtk.ApplicationWindow):
         """Prevent textbuffer usage during UI destruction"""
         self.textbuffer = None
         super(GUI, self).destroy()
-
-    def build_appindicator_menu(self):
-        """Build the app indicator menu"""
-        menu = Gtk.Menu()
-        item_clean = Gtk.MenuItem(label=_("Clean"))
-        item_clean.connect('activate', self.run_operations)
-        item_quit = Gtk.MenuItem(label=_("Quit"))
-        item_quit.connect('activate', self.on_quit)
-        menu.append(item_clean)
-        menu.append(item_quit)
-        menu.show_all()
-        return menu
 
     def get_preferences_dialog(self):
         return PreferencesDialog(
