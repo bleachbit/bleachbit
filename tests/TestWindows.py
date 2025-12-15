@@ -721,7 +721,7 @@ class WindowsTestCase(common.BleachbitTestCase):
     def test_read_registry_key(self):
         """Unit test for read_registry_key"""
         tests = (('HKCR\\.bmp', 'PerceivedType', 'Image'),
-                 ('HKCR\\.wav', 'Content Type', 'audio/wav'))
+                 ('HKCU\\Software\\BleachBit\\DoesNotExist', 'DoesNotExist', None))
         for (input_key, input_value, expected_value) in tests:
             value = read_registry_key(input_key, input_value)
             self.assertEqual(expected_value, value)
