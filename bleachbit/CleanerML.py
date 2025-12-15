@@ -258,10 +258,12 @@ class CleanerML:
             search_type = value_element.getAttribute('search')
             if search_type == 'glob':
                 value_list = expand_glob_join(value_str, '')
-            elif search_type == 'winreg' and 'win32' == sys.platform:
+            elif search_type == 'winreg':
+                if 'win32' != sys.platform:
+                    continue
                 value_list = read_registry_key(value_element.getAttribute('path'), value_str)
                 if value_list == None:
-                    value_list = []
+                    continue
                 else:
                     value_list = [value_list, ]
             else:
