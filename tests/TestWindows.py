@@ -720,10 +720,12 @@ class WindowsTestCase(common.BleachbitTestCase):
 
     def test_read_registry_key(self):
         """Unit test for read_registry_key"""
-        tests = (('HKCR\\.bmp', 'PerceivedType', 'Image'),
+        tests = (('HKCR\\.bmp', 'PerceivedType', 'image'),
                  ('HKCU\\Software\\BleachBit\\DoesNotExist', 'DoesNotExist', None))
         for (input_key, input_value, expected_value) in tests:
             value = read_registry_key(input_key, input_value)
+            if value != None:
+                value = value.lower() # AppVeyor: image, Windows 11: Image
             self.assertEqual(expected_value, value)
 
     def test_parse_windows_build(self):
