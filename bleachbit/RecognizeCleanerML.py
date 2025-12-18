@@ -149,9 +149,12 @@ class RecognizeCleanerML:
 
     def __recognized(self, pathname):
         """Is pathname recognized?"""
-        with open(pathname) as f:
-            body = f.read()
-        new_hash = hashdigest(self.salt + body)
+        try:
+            with open(pathname, 'rb') as f:
+                body = f.read()
+        except OSError: # The file is locked, what to do next?
+            return NEW, hashdigest(b"")
+        new_hash = hashdigest(str.encode(self.salt, encoding='utf-8') + body)
         try:
             known_hash = options.get_hashpath(pathname)
         except bleachbit.NoOptionError:
