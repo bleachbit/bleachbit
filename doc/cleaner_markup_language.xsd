@@ -83,7 +83,16 @@
                   <xs:simpleContent>
                     <xs:extension base="xs:string">
                       <xs:attributeGroup ref="operatingSystem"/>
-                      <xs:attribute name="search" use="optional" type="xs:string"/>
+                      <xs:attribute name="search" use="optional">
+                        <xs:simpleType>
+                          <xs:restriction base="xs:string">
+                            <xs:enumeration value="glob"/>
+                            <xs:enumeration value="winreg"/>
+                          </xs:restriction>
+                        </xs:simpleType>
+                      </xs:attribute>
+                      <xs:attribute name="path" use="optional" type="xs:string"/>
+                      <xs:attribute name="name" use="optional" type="xs:string"/>
                     </xs:extension>
                   </xs:simpleContent>
                 </xs:complexType>
