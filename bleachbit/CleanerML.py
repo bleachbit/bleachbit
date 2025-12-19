@@ -36,6 +36,8 @@ from bleachbit.FileUtilities import expand_glob_join, listdir
 from bleachbit.General import boolstr_to_bool, getText
 from bleachbit.Language import get_text as _
 from bleachbit import Cleaner
+if 'win32' == sys.platform:
+    from bleachbit.Windows import read_registry_key
 
 logger = logging.getLogger(__name__)
 
@@ -245,6 +247,7 @@ class CleanerML:
          <value search="glob">~/.config/f*</value>
          <value>~/.config/foo</value>
          <value>%AppData\foo</value>
+         <value search="winreg" path="HKCU\Software\Valve\Steam" name="SteamPath"></value>
          </var>
         """
         var_name = var.getAttribute('name')
@@ -252,9 +255,17 @@ class CleanerML:
             if not self.os_match(value_element.getAttribute('os')):
                 continue
             value_str = getText(value_element.childNodes)
-            is_glob = value_element.getAttribute('search') == 'glob'
-            if is_glob:
+            search_type = value_element.getAttribute('search')
+            if search_type == 'glob':
                 value_list = expand_glob_join(value_str, '')
+            elif search_type == 'winreg':
+                if 'win32' != sys.platform:
+                    continue
+                value_list = read_registry_key(value_element.getAttribute('path'), value_element.getAttribute('name'))
+                if value_list == None:
+                    continue
+                else:
+                    value_list = [value_list, ]
             else:
                 value_list = [value_str, ]
             if var_name in self.vars:

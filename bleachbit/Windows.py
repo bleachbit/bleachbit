@@ -789,6 +789,23 @@ def split_registry_key(full_key):
         raise RuntimeError("Invalid Windows registry hive '%s'" % k1)
     return hive_map[k1], k2
 
+def read_registry_key(full_key, value_name):
+    try:
+        (hive, sub_key) = split_registry_key(full_key)
+    except RuntimeError as e:
+        return None
+    try:
+        with winreg.OpenKey(hive, sub_key, 0, winreg.KEY_QUERY_VALUE) as hkey:
+            (reg_value, reg_type) = winreg.QueryValueEx(hkey, value_name)
+            if reg_type == winreg.REG_EXPAND_SZ or reg_type == winreg.REG_SZ:
+                return reg_value
+            else:
+                return None
+    except OSError as e:
+        if e.winerror == errno.ENOENT:
+            # ENOENT = 'file not found' means value does not exist
+            return None
+        raise
 
 def symlink_or_copy(src, dst):
     """Symlink with fallback to copy
