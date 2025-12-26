@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-12-25 16:46-0700\n"
-"PO-Revision-Date: 2025-08-17 04:02+0000\n"
+"PO-Revision-Date: 2025-12-27 01:00+0000\n"
 "Last-Translator: 大王叫我来巡山 "
 "<hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -839,10 +839,8 @@ msgid "Clean file"
 msgstr "优化文件"
 
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Clean cookies"
-msgstr "Cookie"
+msgstr "清除 Cookie"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -965,7 +963,7 @@ msgstr "用来回滚微软更新的程序，包括热补丁、服务包和 IE �
 
 #: ../bleachbit/Cleaner.py
 msgid "This option may prevent uninstalling some updates."
-msgstr ""
+msgstr "此选项可能阻止卸载某些更新。"
 
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
@@ -988,14 +986,12 @@ msgstr "删除用户指定的文件和文件夹"
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Empty space"
-msgstr ""
+msgstr "未分配空间"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Overwrite free disk space to hide deleted files"
 msgid "Wipe empty space to hide deleted files"
-msgstr "覆盖磁盘空闲区域以粉碎已删除的文件"
+msgstr "擦除未分配空间隐藏已删除的文件"
 
 #: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
 #: ../bleachbit/Worker.py
@@ -1007,6 +1003,10 @@ msgid ""
 "on traditional hard drives. On solid-state drives, it is less reliable, and "
 "frequent use contributes to wear."
 msgstr ""
+"擦除未分配区域可删除未经粉碎操作删除的文件的残留痕迹，但不会释放额外的磁盘空"
+"间。此过程可能耗时很长，并可能暂时降低计算机速度。如果您的硬盘已启用全盘加密"
+"，则无需执行此操作。此方法在传统机械硬盘上效果最佳。在固态硬盘上，此方法的可"
+"靠性较低，且频繁使用会加速硬盘磨损。"
 
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
@@ -1021,7 +1021,7 @@ msgstr "系统"
 #: ../bleachbit/Cleaner.py ../bleachbit/CLI.py
 #, python-format
 msgid "Wipe empty space in %s"
-msgstr ""
+msgstr "擦除 %s 中的未分配空间"
 
 #: ../bleachbit/Cleaner.py
 msgid "Loading native cleaners."
@@ -1032,10 +1032,9 @@ msgid "Importing cleaners from Winapp2.ini."
 msgstr "正在从 Winapp2.ini 中导入清理规则。"
 
 #: ../bleachbit/Cleaner.py
-#, fuzzy, python-format
-#| msgid "_Wipe Free Space"
+#, python-format
 msgid "Wipe empty space %s"
-msgstr "抹去磁盘上的空闲区域(_W)"
+msgstr "擦除未分配区域 %s"
 
 #: ../bleachbit/CLI.py
 #, python-format
@@ -1071,10 +1070,8 @@ msgid "shred specific files or folders"
 msgstr "粉碎指定的文件或文件夹"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "wipe free space in the given paths"
 msgid "wipe empty space in the given paths"
-msgstr "擦除给定路径中的空闲区域"
+msgstr "擦除给定路径中的未分配区域"
 
 #: ../bleachbit/CLI.py
 msgid "overwrite files to hide contents"
@@ -1117,31 +1114,22 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "当有新版本可用时更新 Winapp2.ini"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid ""
-#| "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
-#| "preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean"
-msgstr ""
-"以下命令不能同时使用：--list-cleaners, --wipe-free-space, --preview, --clean"
+msgstr "以下命令不能同时使用：--list-cleaners, --wipe-empty-space, --preview, --clean"
 
 #: ../bleachbit/CLI.py
 msgid "Checking online for updates to winapp2.ini"
 msgstr "正在联网检查 Winapp2.ini 的更新"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "No directories given for --wipe-free-space"
 msgid "No directories given for --wipe-empty-space"
-msgstr "没有为 --wipe-free-space 指定目录"
+msgstr "没有为 --wipe-empty-space 指定目录"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "Wiping free space can take a long time."
 msgid "Wiping empty space can take a long time."
-msgstr "擦除磁盘空闲区域可能需要很长时间。"
+msgstr "擦除磁盘未分配区域可能需要很长时间。"
 
 #: ../bleachbit/CLI.py
 msgid "No work to do. Specify options."
@@ -1376,45 +1364,43 @@ msgstr "正在生成文件"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Manage cookies to keep"
-msgstr ""
+msgstr "管理要保留的 cookies"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select the cookies to keep when cleaning cookies across browsers."
-msgstr ""
+msgstr "选择清理浏览器缓存时要保留的 cookie。"
 
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Search tool"
 msgid "Search:"
-msgstr "搜索工具"
+msgstr "搜索："
 
 #: ../bleachbit/GuiCookie.py
 msgid "Filter cookies..."
-msgstr ""
+msgstr "筛选 cookies..."
 
 #: ../bleachbit/GuiCookie.py
 msgid "Show Selected"
-msgstr ""
+msgstr "显示已选中"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Only show cookies that are currently selected"
-msgstr ""
+msgstr "只显示当前选中的 cookies"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Host"
-msgstr ""
+msgstr "主机"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select All"
-msgstr ""
+msgstr "全选"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Deselect All"
-msgstr ""
+msgstr "全不选"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Keep Selected"
-msgstr ""
+msgstr "保留所选"
 
 #: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
 msgid "Preferences"
@@ -1434,7 +1420,7 @@ msgstr "语言"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
-msgstr ""
+msgstr "保留列表"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
@@ -1468,7 +1454,7 @@ msgstr "语言："
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Restart BleachBit for full effect."
-msgstr ""
+msgstr "重启 Bleachbit 以完全生效。"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1517,11 +1503,8 @@ msgid "Choose a folder"
 msgstr "选择一个文件夹"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid ""
-#| "Choose a writable folder for each drive for which to overwrite free space."
 msgid "Choose a writable folder for each drive for which to wipe empty space."
-msgstr "为每个要擦除空闲区域的驱动器选择一个可写文件夹。"
+msgstr "为每个要擦除未分配区域的驱动器选择一个可写文件夹。"
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -1554,10 +1537,8 @@ msgid "Name"
 msgstr "名称"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "This path already exists in the whitelist."
 msgid "This path already exists in the keep list."
-msgstr "此路径已在白名单中。"
+msgstr "此路径已在保留名单中。"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
@@ -1573,22 +1554,19 @@ msgstr "文件夹"
 
 #. TRANSLATORS: %s is a file or folder path that was just added
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgid "Access denied: %s"
+#, python-format
 msgid "Added: %s"
-msgstr "访问被拒：%s"
+msgstr "已添加：%s"
 
 #. TRANSLATORS: %s is a file or folder path that was just removed
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgctxt "button"
-#| msgid "Remove"
+#, python-format
 msgid "Removed: %s"
-msgstr "移出"
+msgstr "已删除：%s"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Manage cookies to keep..."
-msgstr ""
+msgstr "管理要保留的 cookies..."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "These paths will not be deleted or modified."
@@ -1744,6 +1722,8 @@ msgid ""
 "the system. User-specific paths will refer to the administrator account, so "
 "to clean your profile, run BleachBit again as a standard user."
 msgstr ""
+"您使用其他账户提升了权限来清理系统的共享部分。用户指定的路径将指向管理员账户"
+"，因此要清理您的用户配置文件，请以标准用户身份再次运行 BleachBit。"
 
 #: ../bleachbit/GUI.py
 msgid ""
@@ -1763,10 +1743,8 @@ msgstr "预览"
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/GUI.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Manage Cookies"
-msgstr "Cookie"
+msgstr "管理 Cookie"
 
 #: ../bleachbit/GUI.py
 msgid "Preview files in the selected operations (without deleting any files)"
@@ -1804,6 +1782,8 @@ msgid ""
 "BleachBit detected leftover files from an interrupted disk wipe operation. "
 "Would you like to preview them with an option to delete them?"
 msgstr ""
+"BleachBit 检测到来自终止的磁盘擦除操作的残留文件。您想预览这些文件并选择是否"
+"删除它们吗？"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -2056,14 +2036,12 @@ msgstr "错误：{operation_option}: {command}"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Worker.py
-#, fuzzy
-#| msgid "Please wait.  Wiping free disk space."
 msgid "Please wait. Wiping empty space."
-msgstr "请稍等。正在擦除磁盘空闲区域。"
+msgstr "请稍等。正在擦除磁盘未分配区域。"
 
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
-msgstr ""
+msgstr "要停止该过程，按下工具栏上的“终止”按钮并等待。"
 
 #: ../bleachbit/Worker.py
 msgid ""
@@ -2071,6 +2049,8 @@ msgid ""
 "files may remain on the disk, and they may use all available space. To "
 "remove them, start BleachBit again."
 msgstr ""
+"如果应用程序在进程完成之前被强制关闭，磁盘上可能会残留大量文件，并可能占用所"
+"有可用空间。要删除这些文件，请重新启动 BleachBit。"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py
@@ -2148,10 +2128,8 @@ msgid "Shred Paths from Clipboard"
 msgstr "粉碎来自剪贴板的路径"
 
 #: ../data/app-menu.ui
-#, fuzzy
-#| msgid "_Wipe Free Space"
 msgid "_Wipe Empty Space"
-msgstr "抹去磁盘上的空闲区域(_W)"
+msgstr "抹去磁盘上的未分配区域(_W)"
 
 #: ../data/app-menu.ui
 msgid "_Make Chaff"
