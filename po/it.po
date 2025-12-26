@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-12-25 16:46-0700\n"
-"PO-Revision-Date: 2025-08-21 08:02+0000\n"
+"PO-Revision-Date: 2025-12-27 01:00+0000\n"
 "Last-Translator: bovirus <roberto.boriotti@canon.it>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bleachbit/main/"
 "it/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Launchpad-Export-Date: 2021-06-15 14:24+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -870,10 +870,8 @@ msgid "Clean file"
 msgstr "Pulisci file"
 
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Clean cookies"
-msgstr "Cookie"
+msgstr "Cancella cookie"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -1000,6 +998,7 @@ msgstr ""
 #: ../bleachbit/Cleaner.py
 msgid "This option may prevent uninstalling some updates."
 msgstr ""
+"Questa opzione potrebbe impedire la disinstallazione di alcuni aggiornamenti."
 
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
@@ -1023,16 +1022,12 @@ msgstr "Elimina i file e le cartelle specificati dall'utente"
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Empty space"
-msgstr ""
+msgstr "Spazio vuoto"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Overwrite free disk space to hide deleted files"
 msgid "Wipe empty space to hide deleted files"
-msgstr ""
-"Sovrascrive lo spazio libero su disco per impedire il recupero dei file "
-"eliminati"
+msgstr "Pulisci lo spazio vuoto per nascondere i file eliminati"
 
 #: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
 #: ../bleachbit/Worker.py
@@ -1044,6 +1039,13 @@ msgid ""
 "on traditional hard drives. On solid-state drives, it is less reliable, and "
 "frequent use contributes to wear."
 msgstr ""
+"La cancellazione dello spazio vuoto rimuove le tracce dei file che sono "
+"stati eliminati senza distruzione, ma non libererà ulteriore spazio su "
+"disco. Il processo può richiedere molto tempo e rallentare temporaneamente "
+"il computer. Non è necessario se l'unità è protetta con crittografia "
+"dell'intero disco. Il metodo funziona meglio nei dischi fissi tradizionali. "
+"Nelle unità a stato solido è meno affidabile e l'uso frequente contribuisce "
+"all'usura dell'unità."
 
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
@@ -1058,7 +1060,7 @@ msgstr "Sistema"
 #: ../bleachbit/Cleaner.py ../bleachbit/CLI.py
 #, python-format
 msgid "Wipe empty space in %s"
-msgstr ""
+msgstr "Cancella spazio vuoto in %s"
 
 #: ../bleachbit/Cleaner.py
 msgid "Loading native cleaners."
@@ -1069,10 +1071,9 @@ msgid "Importing cleaners from Winapp2.ini."
 msgstr "Importazione procedure di pulizia da Winapp2.ini."
 
 #: ../bleachbit/Cleaner.py
-#, fuzzy, python-format
-#| msgid "_Wipe Free Space"
+#, python-format
 msgid "Wipe empty space %s"
-msgstr "_Pulisci spazio libero"
+msgstr "_Pulisci spazio vuoto in %s"
 
 #: ../bleachbit/CLI.py
 #, python-format
@@ -1109,8 +1110,6 @@ msgid "shred specific files or folders"
 msgstr "sovrascrivi specifici file e cartelle"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "wipe free space in the given paths"
 msgid "wipe empty space in the given paths"
 msgstr "cancella lo spazio libero nei percorsi specificati"
 
@@ -1155,15 +1154,11 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "aggiorna winapp2.ini, se è disponibile una nuova versione"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid ""
-#| "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
-#| "preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean"
 msgstr ""
-"Specifica solo uno di questi comandi: --list-cleaners, --wipe-free-space, --"
+"Specifica solo uno di questi comandi: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean"
 
 #: ../bleachbit/CLI.py
@@ -1171,16 +1166,12 @@ msgid "Checking online for updates to winapp2.ini"
 msgstr "Controllo online per aggiornamenti di winapp2.ini"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "No directories given for --wipe-free-space"
 msgid "No directories given for --wipe-empty-space"
-msgstr "Nessuna cartella indicata per --wipe-free-space"
+msgstr "Nessuna cartella indicata per --wipe-empty-space"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "Wiping free space can take a long time."
 msgid "Wiping empty space can take a long time."
-msgstr "La pulizia dello spazio libero può impiegare molto tempo."
+msgstr "La pulizia dello spazio vuoto può impiegare molto tempo."
 
 #: ../bleachbit/CLI.py
 msgid "No work to do. Specify options."
@@ -1426,45 +1417,44 @@ msgstr "Generazione file"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Manage cookies to keep"
-msgstr ""
+msgstr "Gestisci cookie da mantenere"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select the cookies to keep when cleaning cookies across browsers."
 msgstr ""
+"Durante la pulizia dei cookie nei browser seleziona i cookie da mantenere."
 
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Search tool"
 msgid "Search:"
-msgstr "Strumento indicizzazione e ricerca file"
+msgstr "Cerca:"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Filter cookies..."
-msgstr ""
+msgstr "Filtra cookie..."
 
 #: ../bleachbit/GuiCookie.py
 msgid "Show Selected"
-msgstr ""
+msgstr "Visualizza selezionati"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Only show cookies that are currently selected"
-msgstr ""
+msgstr "Visualizza solo i cookie attualmente selezionati"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select All"
-msgstr ""
+msgstr "Seleziona tutto"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Deselect All"
-msgstr ""
+msgstr "Deseleziona tutto"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Keep Selected"
-msgstr ""
+msgstr "Mantieni selezionati"
 
 #: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
 msgid "Preferences"
@@ -1484,7 +1474,7 @@ msgstr "Lingue"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
-msgstr ""
+msgstr "Elenco mantenuti"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
@@ -1521,7 +1511,7 @@ msgstr "Lingua:"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Restart BleachBit for full effect."
-msgstr ""
+msgstr "Per ottenere il massimo effetto riavvia BleachBit."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1573,13 +1563,10 @@ msgid "Choose a folder"
 msgstr "Scegli una cartella"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid ""
-#| "Choose a writable folder for each drive for which to overwrite free space."
 msgid "Choose a writable folder for each drive for which to wipe empty space."
 msgstr ""
-"Scegli una cartella scrivibile per ogni unità nella quale sovrascrivere lo "
-"spazio libero."
+"Scegli una cartella scrivibile per ogni unità nella quale pulire lo spazio "
+"vuoto."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -1612,10 +1599,8 @@ msgid "Name"
 msgstr "Nome"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "This path already exists in the whitelist."
 msgid "This path already exists in the keep list."
-msgstr "Questo percorso esiste già nell'elenco autorizzati."
+msgstr "Questo percorso esiste già nell'elenco mantenuti."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
@@ -1631,22 +1616,19 @@ msgstr "Cartella"
 
 #. TRANSLATORS: %s is a file or folder path that was just added
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgid "Access denied: %s"
+#, python-format
 msgid "Added: %s"
-msgstr "Accesso negata: %s"
+msgstr "Aggiunto: %s"
 
 #. TRANSLATORS: %s is a file or folder path that was just removed
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgctxt "button"
-#| msgid "Remove"
+#, python-format
 msgid "Removed: %s"
-msgstr "Rimuovi"
+msgstr "Rimosso: %s"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Manage cookies to keep..."
-msgstr ""
+msgstr "Gestisci cookie da mantenere..."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "These paths will not be deleted or modified."
@@ -1813,6 +1795,10 @@ msgid ""
 "the system. User-specific paths will refer to the administrator account, so "
 "to clean your profile, run BleachBit again as a standard user."
 msgstr ""
+"Hai elevato i privilegi usando un account diverso per pulire le parti "
+"condivise del sistema. I percorsi specifici dell'utente faranno riferimento "
+"all'account amministratore, quindi per pulire il tuo profilo, esegui "
+"nuovamente BleachBit come utente standard."
 
 #: ../bleachbit/GUI.py
 msgid ""
@@ -1832,10 +1818,8 @@ msgstr "Anteprima"
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/GUI.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Manage Cookies"
-msgstr "Cookie"
+msgstr "Gestisci cookie"
 
 #: ../bleachbit/GUI.py
 msgid "Preview files in the selected operations (without deleting any files)"
@@ -1874,6 +1858,9 @@ msgid ""
 "BleachBit detected leftover files from an interrupted disk wipe operation. "
 "Would you like to preview them with an option to delete them?"
 msgstr ""
+"BleachBit ha rilevato file rimanenti da un'operazione di cancellazione del "
+"disco interrotta. Vuoi visualizzarne l'anteprima con la possibilità di "
+"eliminarli?"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -2142,14 +2129,14 @@ msgstr "Errore: {operation_option}: {command}"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Worker.py
-#, fuzzy
-#| msgid "Please wait.  Wiping free disk space."
 msgid "Please wait. Wiping empty space."
-msgstr "Attendi. Pulizia dello spazio libero in corso."
+msgstr "Attendi. Pulizia spazio vuoto in corso."
 
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
+"Per interrompere questo processo, nella barra degli strumenti seleziona "
+"'Interrompi' e attendi."
 
 #: ../bleachbit/Worker.py
 msgid ""
@@ -2157,6 +2144,9 @@ msgid ""
 "files may remain on the disk, and they may use all available space. To "
 "remove them, start BleachBit again."
 msgstr ""
+"Se l'applicazione viene chiusa forzatamente prima del completamento del "
+"processo, nel disco potrebbero rimanere file di grandi dimensioni che usano "
+"tutto lo spazio disponibile. Per rimuoverli, avvia nuovamente BleachBit."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py
@@ -2235,10 +2225,8 @@ msgid "Shred Paths from Clipboard"
 msgstr "Percorsi sovrascrittura dagli Appunti"
 
 #: ../data/app-menu.ui
-#, fuzzy
-#| msgid "_Wipe Free Space"
 msgid "_Wipe Empty Space"
-msgstr "_Pulisci spazio libero"
+msgstr "_Pulisci spazio vuoto"
 
 #: ../data/app-menu.ui
 msgid "_Make Chaff"
