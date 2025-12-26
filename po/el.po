@@ -6,18 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-12-25 16:46-0700\n"
-"PO-Revision-Date: 2025-09-19 04:02+0000\n"
+"PO-Revision-Date: 2025-12-27 01:00+0000\n"
 "Last-Translator: \"Vasilis K.\" <skyhirules@gmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/bleachbit/main/el/"
-">\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/bleachbit/main/el/>"
+"\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Launchpad-Export-Date: 2021-06-15 14:28+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -874,10 +874,8 @@ msgid "Clean file"
 msgstr "Καθαρισμός αρχείου"
 
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Clean cookies"
-msgstr "Cookies"
+msgstr "Καθαρισμός cookies"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -1035,8 +1033,6 @@ msgstr ""
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Overwrite free disk space to hide deleted files"
 msgid "Wipe empty space to hide deleted files"
 msgstr "Διαγραφή ελεύθερου χώρου για απόκρυψη διαγραμμένων αρχείων"
 
@@ -1075,10 +1071,9 @@ msgid "Importing cleaners from Winapp2.ini."
 msgstr "Εισαγωγή εκκαθαριστών από το Winapp2.ini."
 
 #: ../bleachbit/Cleaner.py
-#, fuzzy, python-format
-#| msgid "_Wipe Free Space"
+#, python-format
 msgid "Wipe empty space %s"
-msgstr "Ε_κκαθάριση ελεύθερου χώρου"
+msgstr "Εκκαθάριση ελεύθερου χώρου %s"
 
 #: ../bleachbit/CLI.py
 #, python-format
