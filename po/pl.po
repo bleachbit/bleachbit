@@ -6,19 +6,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-12-25 16:46-0700\n"
-"PO-Revision-Date: 2025-08-22 16:02+0000\n"
+"PO-Revision-Date: 2025-12-28 08:00+0000\n"
 "Last-Translator: Piotr Strebski <strebski@gmail.com>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/bleachbit/main/pl/"
-">\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/bleachbit/main/"
+"pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Launchpad-Export-Date: 2021-11-11 16:00+0000\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
@@ -866,10 +866,8 @@ msgid "Clean file"
 msgstr "Czyszczenie pliku"
 
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Clean cookies"
-msgstr "Pliki cookie"
+msgstr "Wyczyść pliki cookies"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -996,7 +994,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py
 msgid "This option may prevent uninstalling some updates."
-msgstr ""
+msgstr "Opcja ta może uniemożliwić odinstalowanie niektórych aktualizacji."
 
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
@@ -1019,14 +1017,12 @@ msgstr "Usuwa wskazane przez użytkownika pliki i katalogi"
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Empty space"
-msgstr ""
+msgstr "Pusta przestrzeń"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Overwrite free disk space to hide deleted files"
 msgid "Wipe empty space to hide deleted files"
-msgstr "Nadpisuje wolną przestrzeń dysku celem zamazania usuniętych plików"
+msgstr "Wyczyść pustą przestrzeń, aby ukryć usunięte pliki"
 
 #: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
 #: ../bleachbit/Worker.py
@@ -1038,6 +1034,12 @@ msgid ""
 "on traditional hard drives. On solid-state drives, it is less reliable, and "
 "frequent use contributes to wear."
 msgstr ""
+"Wyczyszczenie pustej przestrzeni usuwa ślady plików, które zostały usunięte "
+"bez ich zniszczenia, ale nie zwalnia dodatkowego miejsca na dysku. Proces "
+"ten może zająć bardzo dużo czasu i tymczasowo spowolnić działanie komputera. "
+"Nie jest to konieczne, jeśli dysk jest chroniony pełnym szyfrowaniem. Metoda "
+"ta działa najlepiej na tradycyjnych dyskach twardych. W przypadku dysków SSD "
+"jest mniej niezawodna, a częste używanie przyczynia się do ich zużycia."
 
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
