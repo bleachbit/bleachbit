@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-12-25 16:46-0700\n"
-"PO-Revision-Date: 2025-08-17 04:01+0000\n"
+"PO-Revision-Date: 2025-12-28 08:00+0000\n"
 "Last-Translator: Ghost of Sparta <makesocialfoss32@keemail.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/bleachbit/main/"
 "hu/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Launchpad-Export-Date: 2019-12-26 01:52+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -867,10 +867,8 @@ msgid "Clean file"
 msgstr "Fájl megtisztítása"
 
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Clean cookies"
-msgstr "Sütik"
+msgstr "Sütik törlése"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -996,7 +994,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py
 msgid "This option may prevent uninstalling some updates."
-msgstr ""
+msgstr "Ez a beállítás megakadályozhatja bizonyos frissítések eltávolítását."
 
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
@@ -1021,14 +1019,12 @@ msgstr "A felhasználó által megadott fájlok és mappák törlése"
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Empty space"
-msgstr ""
+msgstr "Szabad hely"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Overwrite free disk space to hide deleted files"
 msgid "Wipe empty space to hide deleted files"
-msgstr "Szabad lemezterület felülírása a törölt fájlok elrejtésére"
+msgstr "Szabad hely törlése a törölt fájlok elrejtéséhez"
 
 #: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
 #: ../bleachbit/Worker.py
@@ -1040,6 +1036,12 @@ msgid ""
 "on traditional hard drives. On solid-state drives, it is less reliable, and "
 "frequent use contributes to wear."
 msgstr ""
+"A szabad hely törlése eltávolítja azoknak a fájloknak a nyomait, amelyeket "
+"törléskor nem semmisítettek meg, de nem szabadít fel további tárhelyet. A "
+"folyamat nagyon hosszú ideig tarthat, és átmenetileg lelassíthatja a "
+"számítógépet. Nem szükséges, ha a meghajtó teljes lemezes titkosítással "
+"védett. A módszer legjobban a hagyományos merevlemezeken működik. Az SSD-ken "
+"kevésbé megbízható, és a gyakori használat gyorsíthatja az elhasználódást."
 
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
@@ -1054,7 +1056,7 @@ msgstr "Rendszer"
 #: ../bleachbit/Cleaner.py ../bleachbit/CLI.py
 #, python-format
 msgid "Wipe empty space in %s"
-msgstr ""
+msgstr "Szabad hely törlése a(z) %s meghajtón"
 
 #: ../bleachbit/Cleaner.py
 msgid "Loading native cleaners."
@@ -1065,10 +1067,9 @@ msgid "Importing cleaners from Winapp2.ini."
 msgstr "Tisztítók importálása a Winapp2.ini-ből."
 
 #: ../bleachbit/Cleaner.py
-#, fuzzy, python-format
-#| msgid "_Wipe Free Space"
+#, python-format
 msgid "Wipe empty space %s"
-msgstr "_Szabad terület törlése"
+msgstr "Szabad hely törlése: %s"
 
 #: ../bleachbit/CLI.py
 #, python-format
@@ -1106,10 +1107,8 @@ msgid "shred specific files or folders"
 msgstr "adott fájlok és mappák megsemmisítése"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "wipe free space in the given paths"
 msgid "wipe empty space in the given paths"
-msgstr "szabad terület törlése az adott útvonalakon"
+msgstr "Szabad hely törlése a megadott elérési útvonalokon"
 
 #: ../bleachbit/CLI.py
 msgid "overwrite files to hide contents"
@@ -1152,32 +1151,24 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "winapp2.ini frissítése ha új verzió érhető el"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid ""
-#| "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
-#| "preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean"
 msgstr ""
-"A következő parancsok közül csak egyet adjon meg: --list-cleaners, --wipe-"
-"free-space, --preview, --clean"
+"Csak az egyik parancsot adja meg: --list-cleaners, --wipe-empty-space, --"
+"preview, --clean"
 
 #: ../bleachbit/CLI.py
 msgid "Checking online for updates to winapp2.ini"
 msgstr "A winapp2.ini frissítéseinek keresése online"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "No directories given for --wipe-free-space"
 msgid "No directories given for --wipe-empty-space"
-msgstr "Nincsenek könyvtárak a --wipe-free-space számára"
+msgstr "Nincsenek megadva könyvtárak a --wipe-empty-space parancshoz"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "Wiping free space can take a long time."
 msgid "Wiping empty space can take a long time."
-msgstr "A szabad terület törlése sok időt vehet igénybe."
+msgstr "A szabad hely törlése hosszú ideig tarthat."
 
 #: ../bleachbit/CLI.py
 msgid "No work to do. Specify options."
@@ -1424,45 +1415,43 @@ msgstr "Fájlok generálása"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Manage cookies to keep"
-msgstr ""
+msgstr "Megtartandó sütik kezelése"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select the cookies to keep when cleaning cookies across browsers."
-msgstr ""
+msgstr "Válassza ki a megtartandó sütiket a böngészők közötti sütitörlésnél."
 
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Search tool"
 msgid "Search:"
-msgstr "Kereső eszköz"
+msgstr "Keresés:"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Filter cookies..."
-msgstr ""
+msgstr "Sütik szűrése..."
 
 #: ../bleachbit/GuiCookie.py
 msgid "Show Selected"
-msgstr ""
+msgstr "Kiválasztottak megjelenítése"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Only show cookies that are currently selected"
-msgstr ""
+msgstr "Csak a jelenleg kiválasztott sütik megjelenítése"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Host"
-msgstr ""
+msgstr "Kiszolgáló"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select All"
-msgstr ""
+msgstr "Összes kijelölése"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Deselect All"
-msgstr ""
+msgstr "Összes kijelölés megszüntetése"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Keep Selected"
-msgstr ""
+msgstr "Kiválasztottak megtartása"
 
 #: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
 msgid "Preferences"
@@ -1482,7 +1471,7 @@ msgstr "Nyelvek"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
-msgstr ""
+msgstr "Megtartandó lista"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
@@ -1519,7 +1508,7 @@ msgstr "Nyelv:"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Restart BleachBit for full effect."
-msgstr ""
+msgstr "Indítsa újra a BleachBit programot a teljes hatás elérése érdekében."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1571,13 +1560,10 @@ msgid "Choose a folder"
 msgstr "Mappa kiválasztása"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid ""
-#| "Choose a writable folder for each drive for which to overwrite free space."
 msgid "Choose a writable folder for each drive for which to wipe empty space."
 msgstr ""
-"Válasszon egy írható mappát minden egyes meghajtónak, a szabad terület "
-"felülírásához."
+"Válasszon egy írható mappát minden olyan meghajtóhoz, ahol szabad helyet "
+"kíván törölni."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -1610,10 +1596,8 @@ msgid "Name"
 msgstr "Név"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "This path already exists in the whitelist."
 msgid "This path already exists in the keep list."
-msgstr "Ez az útvonal már létezik az engedélyezési listán."
+msgstr "Ez az útvonal már szerepel a megtartandók listájában."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
@@ -1629,22 +1613,19 @@ msgstr "Mappa"
 
 #. TRANSLATORS: %s is a file or folder path that was just added
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgid "Access denied: %s"
+#, python-format
 msgid "Added: %s"
-msgstr "Hozzáférés megtagadva: %s"
+msgstr "Hozzáadva: %s"
 
 #. TRANSLATORS: %s is a file or folder path that was just removed
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgctxt "button"
-#| msgid "Remove"
+#, python-format
 msgid "Removed: %s"
-msgstr "Eltávolítás"
+msgstr "Eltávolítva: %s"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Manage cookies to keep..."
-msgstr ""
+msgstr "Megtartandó sütik kezelése..."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "These paths will not be deleted or modified."
@@ -1802,6 +1783,10 @@ msgid ""
 "the system. User-specific paths will refer to the administrator account, so "
 "to clean your profile, run BleachBit again as a standard user."
 msgstr ""
+"A rendszergazdai jogosultságokat egy másik fiókkal emelte meg a rendszer "
+"megosztott részeinek tisztításához. A felhasználóspecifikus elérési "
+"útvonalak a rendszergazdai fiókra fognak hivatkozni, ezért a saját profilja "
+"tisztításához futtassa a BleachBit programot ismét normál felhasználóként."
 
 #: ../bleachbit/GUI.py
 msgid ""
@@ -1822,10 +1807,8 @@ msgstr "Előnézet"
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/GUI.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Manage Cookies"
-msgstr "Sütik"
+msgstr "Sütik kezelése"
 
 #: ../bleachbit/GUI.py
 msgid "Preview files in the selected operations (without deleting any files)"
@@ -1865,6 +1848,9 @@ msgid ""
 "BleachBit detected leftover files from an interrupted disk wipe operation. "
 "Would you like to preview them with an option to delete them?"
 msgstr ""
+"A BleachBit észlelt maradék fájlokat egy megszakított lemez törlési "
+"műveletből. Szeretné előnézetben megtekinteni őket, és lehetőséget kapni a "
+"törlésükre?"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -2128,14 +2114,14 @@ msgstr "Hiba: {operation_option}: {command}"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Worker.py
-#, fuzzy
-#| msgid "Please wait.  Wiping free disk space."
 msgid "Please wait. Wiping empty space."
-msgstr "Várjon.  Szabad lemezterület törlése."
+msgstr "Várjon. Szabad lemezterület törlése."
 
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
+"A folyamat leállításához nyomja meg a megszakítás gombot az eszköztáron, "
+"majd várjon."
 
 #: ../bleachbit/Worker.py
 msgid ""
@@ -2143,6 +2129,9 @@ msgid ""
 "files may remain on the disk, and they may use all available space. To "
 "remove them, start BleachBit again."
 msgstr ""
+"Ha az alkalmazás a folyamat befejezése előtt kényszerítetten zárul be, nagy "
+"fájlok maradhatnak a lemezen, és azok elfoglalhatják az összes rendelkezésre "
+"álló helyet. Ezek eltávolításához indítsa újra a BleachBit programot."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py
@@ -2221,8 +2210,6 @@ msgid "Shred Paths from Clipboard"
 msgstr "Útvonalak megsemmisítése a vágólapról"
 
 #: ../data/app-menu.ui
-#, fuzzy
-#| msgid "_Wipe Free Space"
 msgid "_Wipe Empty Space"
 msgstr "_Szabad terület törlése"
 
