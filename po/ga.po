@@ -6,19 +6,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-12-25 16:46-0700\n"
-"PO-Revision-Date: 2025-08-18 10:02+0000\n"
+"PO-Revision-Date: 2025-12-29 14:00+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
-"Language-Team: Irish <https://hosted.weblate.org/projects/bleachbit/main/ga/"
-">\n"
+"Language-Team: Irish <https://hosted.weblate.org/projects/bleachbit/main/ga/>"
+"\n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :"
-"(n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 5.13\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
+"6 && n<11) ? 3 : 4;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
@@ -874,10 +874,8 @@ msgid "Clean file"
 msgstr "Glan comhad"
 
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Clean cookies"
-msgstr "Fianáin"
+msgstr "Glan fianáin"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -1008,6 +1006,7 @@ msgstr ""
 #: ../bleachbit/Cleaner.py
 msgid "This option may prevent uninstalling some updates."
 msgstr ""
+"D’fhéadfadh an rogha seo cosc a chur ar dhíshuiteáil roinnt nuashonruithe."
 
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
@@ -1032,14 +1031,12 @@ msgstr "Scrios comhaid agus fillteáin atá sonraithe ag an úsáideoir"
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Empty space"
-msgstr ""
+msgstr "Spás folamh"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Overwrite free disk space to hide deleted files"
 msgid "Wipe empty space to hide deleted files"
-msgstr "Forscríobh spás diosca saor in aisce chun comhaid scriosta a cheilt"
+msgstr "Scrios spás folamh chun comhaid scriosta a cheilt"
 
 #: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
 #: ../bleachbit/Worker.py
@@ -1051,6 +1048,13 @@ msgid ""
 "on traditional hard drives. On solid-state drives, it is less reliable, and "
 "frequent use contributes to wear."
 msgstr ""
+"Trí spás folamh a ghlanadh, baintear rianta comhad a scriosadh gan iad a "
+"mhilleadh, ach ní shaorfaidh sé spás diosca breise. Féadfaidh an próiseas "
+"tamall an-fhada a thógáil agus d’fhéadfadh sé do ríomhaire a mhoilliú go "
+"sealadach. Níl sé riachtanach má tá do thiomántán cosanta le criptiú lán-"
+"diosca. Oibríonn an modh is fearr ar thiomántáin chrua traidisiúnta. Ar "
+"thiomántáin stáit sholadaigh, níl sé chomh hiontaofa, agus cuireann úsáid "
+"mhinic le caitheamh."
 
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
@@ -1065,7 +1069,7 @@ msgstr "Córas"
 #: ../bleachbit/Cleaner.py ../bleachbit/CLI.py
 #, python-format
 msgid "Wipe empty space in %s"
-msgstr ""
+msgstr "Scrios spás folamh i %s"
 
 #: ../bleachbit/Cleaner.py
 msgid "Loading native cleaners."
@@ -1076,10 +1080,9 @@ msgid "Importing cleaners from Winapp2.ini."
 msgstr "Glantóirí a allmhairiú as Winapp2.ini."
 
 #: ../bleachbit/Cleaner.py
-#, fuzzy, python-format
-#| msgid "_Wipe Free Space"
+#, python-format
 msgid "Wipe empty space %s"
-msgstr "_Wipe Spás Saor in Aisce"
+msgstr "Scrios spás folamh %s"
 
 #: ../bleachbit/CLI.py
 #, python-format
@@ -1117,10 +1120,8 @@ msgid "shred specific files or folders"
 msgstr "scrios comhaid nó fillteáin shonracha"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "wipe free space in the given paths"
 msgid "wipe empty space in the given paths"
-msgstr "scrios spás saor sna cosáin tugtha"
+msgstr "scrios spás folamh sna cosáin tugtha"
 
 #: ../bleachbit/CLI.py
 msgid "overwrite files to hide contents"
@@ -1163,32 +1164,24 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "nuashonraigh winapp2.ini, má tá leagan nua ar fáil"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid ""
-#| "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
-#| "preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean"
 msgstr ""
-"Sonraigh ach ceann amháin de na horduithe seo: --list-cleaners, --wipe-free-"
-"space, --preview, --clean"
+"Ná sonraigh ach ceann amháin de na horduithe seo: --list-cleaners, --wipe-"
+"empty-space, --preview, --clean"
 
 #: ../bleachbit/CLI.py
 msgid "Checking online for updates to winapp2.ini"
 msgstr "Seiceáil ar líne le haghaidh nuashonruithe ar winapp2.ini"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "No directories given for --wipe-free-space"
 msgid "No directories given for --wipe-empty-space"
-msgstr "Níl aon eolairí tugtha le haghaidh --wipe-free-space"
+msgstr "Níor tugadh aon eolairí do --wipe-empty-space"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "Wiping free space can take a long time."
 msgid "Wiping empty space can take a long time."
-msgstr "Is féidir le spás saor in aisce a ghlanadh tamall fada."
+msgstr "Is féidir go dtógfaidh sé tamall fada spás folamh a ghlanadh."
 
 #: ../bleachbit/CLI.py
 msgid "No work to do. Specify options."
@@ -1431,45 +1424,45 @@ msgstr "Comhaid á nginiúint"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Manage cookies to keep"
-msgstr ""
+msgstr "Bainistigh fianáin le coinneáil"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select the cookies to keep when cleaning cookies across browsers."
 msgstr ""
+"Roghnaigh na fianáin le coinneáil agus fianáin á nglanadh ar fud "
+"brabhsálaithe."
 
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Search tool"
 msgid "Search:"
-msgstr "Uirlis chuardaigh"
+msgstr "Cuardaigh:"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Filter cookies..."
-msgstr ""
+msgstr "Scag fianáin..."
 
 #: ../bleachbit/GuiCookie.py
 msgid "Show Selected"
-msgstr ""
+msgstr "Taispeáin Roghnaithe"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Only show cookies that are currently selected"
-msgstr ""
+msgstr "Taispeáin fianáin atá roghnaithe faoi láthair amháin"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Host"
-msgstr ""
+msgstr "Óstach"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select All"
-msgstr ""
+msgstr "Roghnaigh Uile"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Deselect All"
-msgstr ""
+msgstr "Díroghnaigh Gach Rud"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Keep Selected"
-msgstr ""
+msgstr "Coinnigh Roghnaithe"
 
 #: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
 msgid "Preferences"
@@ -1489,7 +1482,7 @@ msgstr "Teangacha"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
-msgstr ""
+msgstr "Coinnigh an liosta"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
@@ -1526,7 +1519,7 @@ msgstr "Teanga:"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Restart BleachBit for full effect."
-msgstr ""
+msgstr "Atosaigh BleachBit chun éifeacht iomlán a fháil."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1579,13 +1572,10 @@ msgid "Choose a folder"
 msgstr "Roghnaigh fillteán"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid ""
-#| "Choose a writable folder for each drive for which to overwrite free space."
 msgid "Choose a writable folder for each drive for which to wipe empty space."
 msgstr ""
-"Roghnaigh fillteán inscríobhta do gach tiomántán chun forscríobh spás saor "
-"in aisce."
+"Roghnaigh fillteán inscríofa do gach tiomántán ar a mbeidh spás folamh le "
+"scriosadh."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -1618,10 +1608,8 @@ msgid "Name"
 msgstr "Ainm"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "This path already exists in the whitelist."
 msgid "This path already exists in the keep list."
-msgstr "Tá an cosán seo ar an liosta bán cheana féin."
+msgstr "Tá an cosán seo ann cheana féin sa liosta coimeádta."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
@@ -1637,22 +1625,19 @@ msgstr "Fillteán"
 
 #. TRANSLATORS: %s is a file or folder path that was just added
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgid "Access denied: %s"
+#, python-format
 msgid "Added: %s"
-msgstr "Diúltaíodh rochtain: %s"
+msgstr "Curtha leis: %s"
 
 #. TRANSLATORS: %s is a file or folder path that was just removed
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgctxt "button"
-#| msgid "Remove"
+#, python-format
 msgid "Removed: %s"
-msgstr "Bain"
+msgstr "Bainte: %s"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Manage cookies to keep..."
-msgstr ""
+msgstr "Bainistigh fianáin chun coinneáil..."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "These paths will not be deleted or modified."
@@ -1800,6 +1785,10 @@ msgid ""
 "the system. User-specific paths will refer to the administrator account, so "
 "to clean your profile, run BleachBit again as a standard user."
 msgstr ""
+"Ardaigh tú pribhléidí ag baint úsáide as cuntas difriúil chun codanna "
+"comhroinnte den chóras a ghlanadh. Tagróidh cosáin úsáideora-shonracha chuig "
+"an gcuntas riarthóra, mar sin chun do phróifíl a ghlanadh, rith BleachBit "
+"arís mar úsáideoir caighdeánach."
 
 #: ../bleachbit/GUI.py
 msgid ""
@@ -1819,10 +1808,8 @@ msgstr "Réamhamharc"
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/GUI.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Manage Cookies"
-msgstr "Fianáin"
+msgstr "Bainistigh Fianáin"
 
 #: ../bleachbit/GUI.py
 msgid "Preview files in the selected operations (without deleting any files)"
@@ -1862,6 +1849,9 @@ msgid ""
 "BleachBit detected leftover files from an interrupted disk wipe operation. "
 "Would you like to preview them with an option to delete them?"
 msgstr ""
+"Bhraith BleachBit comhaid atá fágtha ó oibríocht scriosadh diosca a cuireadh "
+"isteach. Ar mhaith leat réamhamharc a dhéanamh orthu leis an rogha iad a "
+"scriosadh?"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -2126,14 +2116,14 @@ msgstr "Earráid: {operation_option}: {command}"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Worker.py
-#, fuzzy
-#| msgid "Please wait.  Wiping free disk space."
 msgid "Please wait. Wiping empty space."
-msgstr "Fan, le do thoil.  Spás diosca saor in aisce a ghlanadh."
+msgstr "Fan le do thoil. Ag glanadh an spáis fholamh."
 
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
+"Chun an próiseas seo a stopadh, brúigh an cnaipe Toirmisc ar an mbarra "
+"uirlisí agus fan."
 
 #: ../bleachbit/Worker.py
 msgid ""
@@ -2141,6 +2131,9 @@ msgid ""
 "files may remain on the disk, and they may use all available space. To "
 "remove them, start BleachBit again."
 msgstr ""
+"Má dhúnfar an feidhmchlár le fórsa sula mbeidh an próiseas críochnaithe, "
+"d’fhéadfadh comhaid mhóra fanacht ar an diosca, agus d’fhéadfadh siad an "
+"spás go léir atá ar fáil a úsáid. Chun iad a bhaint, atosaigh BleachBit arís."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py
@@ -2222,10 +2215,8 @@ msgid "Shred Paths from Clipboard"
 msgstr "Cosáin a Shred ón nGearrthaisce"
 
 #: ../data/app-menu.ui
-#, fuzzy
-#| msgid "_Wipe Free Space"
 msgid "_Wipe Empty Space"
-msgstr "_Wipe Spás Saor in Aisce"
+msgstr "_Scrios Spás Folamh"
 
 #: ../data/app-menu.ui
 msgid "_Make Chaff"
