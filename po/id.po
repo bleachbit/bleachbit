@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-12-25 16:46-0700\n"
-"PO-Revision-Date: 2025-11-01 01:02+0000\n"
-"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
+"PO-Revision-Date: 2025-12-29 14:00+0000\n"
+"Last-Translator: Ruang Din <ruangdin@proton.me>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/bleachbit/"
 "main/id/>\n"
 "Language: id\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -865,10 +865,8 @@ msgid "Clean file"
 msgstr "Bersihkan berkas"
 
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Clean cookies"
-msgstr "Kuki"
+msgstr "Bersihkan Kuki"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -996,7 +994,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py
 msgid "This option may prevent uninstalling some updates."
-msgstr ""
+msgstr "Opsi ini dapat mencegah penghapusan sejumlah pembaruan."
 
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
@@ -1020,16 +1018,12 @@ msgstr "Hapus berkas dan folder yang ditentukan pengguna"
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Empty space"
-msgstr ""
+msgstr "Ruang kosong"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Overwrite free disk space to hide deleted files"
 msgid "Wipe empty space to hide deleted files"
-msgstr ""
-"Timpa ruang takteralokasikan pada diska untuk menyembunyikan berkas yang "
-"telah dihapus"
+msgstr "Bersihkan ruang kosong untuk menghilangkan file yang telah dihapus"
 
 #: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
 #: ../bleachbit/Worker.py
@@ -1041,6 +1035,14 @@ msgid ""
 "on traditional hard drives. On solid-state drives, it is less reliable, and "
 "frequent use contributes to wear."
 msgstr ""
+"Membersihkan ruang kosong akan menghapus jejak file yang dihapus tanpa "
+"pencacahan, tetapi tidak akan menambah ruang kosong pada penyimpanan. Proses "
+"ini dapat memakan waktu sangat lama dan dapat memperlambat komputer Anda "
+"sementara waktu. Hal ini tidak diperlukan jika penyimpanan Anda dilindungi "
+"dengan enkripsi penuh. Metode ini bekerja paling baik pada media penyimpanan "
+"tradisional (seperti HDD). Pada media penyimpanan modern (seperti SSD), "
+"metode ini kurang dapat diandalkan, dan penggunaan yang sering dapat "
+"mempercepat keausan."
 
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
@@ -1055,7 +1057,7 @@ msgstr "Sistem"
 #: ../bleachbit/Cleaner.py ../bleachbit/CLI.py
 #, python-format
 msgid "Wipe empty space in %s"
-msgstr ""
+msgstr "Hapus ruang kosong di %s"
 
 #: ../bleachbit/Cleaner.py
 msgid "Loading native cleaners."
@@ -1066,10 +1068,9 @@ msgid "Importing cleaners from Winapp2.ini."
 msgstr "Impor pembersih dari Winapp2.ini."
 
 #: ../bleachbit/Cleaner.py
-#, fuzzy, python-format
-#| msgid "_Wipe Free Space"
+#, python-format
 msgid "Wipe empty space %s"
-msgstr "_Bersihkan Ruang Kosong"
+msgstr "Bersihkan ruang kosong %s"
 
 #: ../bleachbit/CLI.py
 #, python-format
@@ -1107,10 +1108,8 @@ msgid "shred specific files or folders"
 msgstr "sobek berkas atau folder tertentu"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "wipe free space in the given paths"
 msgid "wipe empty space in the given paths"
-msgstr "sapu ruang kosong pada alamat yang diberikan"
+msgstr "bersihkan ruang kosong di jalur yang telah ditentukan"
 
 #: ../bleachbit/CLI.py
 msgid "overwrite files to hide contents"
@@ -1153,15 +1152,11 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "mutakhirkan winapp2.ini jika ada versi baru yang tersedia"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid ""
-#| "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
-#| "preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean"
 msgstr ""
-"Tentukan satu saja dari perintah ini: --list-cleaners, --wipe-free-space, --"
+"Pilih salah satu perintah berikut ini: --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
 
 #: ../bleachbit/CLI.py
@@ -1169,16 +1164,12 @@ msgid "Checking online for updates to winapp2.ini"
 msgstr "Memeriksa winapp2.ini secara daring"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "No directories given for --wipe-free-space"
 msgid "No directories given for --wipe-empty-space"
-msgstr "Tidak ada direktori --wipe-free-space yang diberikan"
+msgstr "Tidak ada direktori yang ditentukan untuk opsi --wipe-empty-space"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "Wiping free space can take a long time."
 msgid "Wiping empty space can take a long time."
-msgstr "Menyapu ruang kosong dapat memakan waktu yang lama."
+msgstr "Membersihkan ruang kosong dapat memakan waktu yang lama."
 
 #: ../bleachbit/CLI.py
 msgid "No work to do. Specify options."
@@ -1423,45 +1414,44 @@ msgstr "Membuat berkas"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Manage cookies to keep"
-msgstr ""
+msgstr "Kelola kuki untuk disimpan"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select the cookies to keep when cleaning cookies across browsers."
 msgstr ""
+"Pilih kuki yang ingin Anda simpan saat membersihkan kuki di berbagai browser."
 
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Search tool"
 msgid "Search:"
-msgstr "Alat pencarian"
+msgstr "Cari:"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Filter cookies..."
-msgstr ""
+msgstr "Saring kuki..."
 
 #: ../bleachbit/GuiCookie.py
 msgid "Show Selected"
-msgstr ""
+msgstr "Tampilkan yang Terpilih"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Only show cookies that are currently selected"
-msgstr ""
+msgstr "Hanya tampilkan kuki yang saat ini dipilih"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select All"
-msgstr ""
+msgstr "Pilih Semua"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Deselect All"
-msgstr ""
+msgstr "Batal Memilih Semua"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Keep Selected"
-msgstr ""
+msgstr "Pertahankan Pilihan"
 
 #: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
 msgid "Preferences"
@@ -1473,7 +1463,7 @@ msgstr "Umum"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Drives"
-msgstr "Drives"
+msgstr "Penyimpanan"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Languages"
@@ -1481,7 +1471,7 @@ msgstr "Bahasa"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
-msgstr ""
+msgstr "Pertahankan daftar"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
@@ -1518,7 +1508,7 @@ msgstr "Bahasa:"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Restart BleachBit for full effect."
-msgstr ""
+msgstr "Mulai ulang BleachBit untuk hasil yang optimal."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1569,13 +1559,10 @@ msgid "Choose a folder"
 msgstr "Pilih folder"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid ""
-#| "Choose a writable folder for each drive for which to overwrite free space."
 msgid "Choose a writable folder for each drive for which to wipe empty space."
 msgstr ""
-"Pilih folder yang dapat ditulis untuk tiap drive yang akan digunakan untuk "
-"menimpa ruang kosong yang ada."
+"Pilih folder yang dapat ditulis untuk setiap penyimpanan yang akan "
+"dibersihkan ruang kosongnya."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -1608,10 +1595,8 @@ msgid "Name"
 msgstr "Nama"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "This path already exists in the whitelist."
 msgid "This path already exists in the keep list."
-msgstr "Jalur ini sudah ada dalam daftar putih."
+msgstr "Jalur ini telah ada dalam daftar simpan."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
@@ -1623,26 +1608,23 @@ msgstr "Berkas"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Folder"
-msgstr "Folder"
+msgstr "Folde"
 
 #. TRANSLATORS: %s is a file or folder path that was just added
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgid "Access denied: %s"
+#, python-format
 msgid "Added: %s"
-msgstr "Akses ditolak: %s"
+msgstr "Ditambahkan: %s"
 
 #. TRANSLATORS: %s is a file or folder path that was just removed
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgctxt "button"
-#| msgid "Remove"
+#, python-format
 msgid "Removed: %s"
-msgstr "Hapus"
+msgstr "Dihapus: %s"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Manage cookies to keep..."
-msgstr ""
+msgstr "Kelola kuki untuk disimpan..."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "These paths will not be deleted or modified."
@@ -1710,19 +1692,7 @@ msgstr ""
 #. in the 'About' box.
 #: ../bleachbit/GUI.py
 msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-" Abdul Munif Hanafi https://launchpad.net/~hahnavi\n"
-" Andika Triwidada https://launchpad.net/~andika\n"
-" Ari Setyo Wibowo https://launchpad.net/~ari-el-uno\n"
-" Arief Setiadi Wibowo https://launchpad.net/~q-thrynx\n"
-" Ferri Fakhruzi https://launchpad.net/~ferridom\n"
-" Ivan S. https://launchpad.net/~freeazy\n"
-" Muhammad Radifar https://launchpad.net/~m-radifar05\n"
-" Ramdhani Fathurrohman https://launchpad.net/~dhani-fathur\n"
-" Trisno Pamuji https://launchpad.net/~tri.snowman\n"
-" Waluyo Adi Siswanto https://launchpad.net/~was-wlk\n"
-" Wiliams Andrian https://launchpad.net/~saviour"
+msgstr "Kredit bagi Penerjemah"
 
 #: ../bleachbit/GUI.py
 msgid "System information"
@@ -1798,6 +1768,10 @@ msgid ""
 "the system. User-specific paths will refer to the administrator account, so "
 "to clean your profile, run BleachBit again as a standard user."
 msgstr ""
+"Anda telah memberikan hak akses tingkat tinggi melalui akun yang berbeda "
+"untuk membersihkan bagian-bagian sistem yang dibagikan. Jalur khusus "
+"pengguna akan merujuk ke akun administrator, jadi untuk membersihkan profil "
+"Anda, jalankan BleachBit lagi sebagai pengguna standar."
 
 #: ../bleachbit/GUI.py
 msgid ""
@@ -1817,10 +1791,8 @@ msgstr "Pratinjau"
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/GUI.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Manage Cookies"
-msgstr "Kuki"
+msgstr "Kelola Kuki"
 
 #: ../bleachbit/GUI.py
 msgid "Preview files in the selected operations (without deleting any files)"
@@ -1860,6 +1832,9 @@ msgid ""
 "BleachBit detected leftover files from an interrupted disk wipe operation. "
 "Would you like to preview them with an option to delete them?"
 msgstr ""
+"BleachBit mendeteksi file sisa dari proses pembersihan penyimpanan yang "
+"terputus. Apakah Anda ingin melihat pratinjau file-file tersebut dengan opsi "
+"untuk menghapusnya?"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -2120,14 +2095,13 @@ msgstr "Galat: {operation_option}: {command}"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Worker.py
-#, fuzzy
-#| msgid "Please wait.  Wiping free disk space."
 msgid "Please wait. Wiping empty space."
-msgstr "Silakan tunggu.  Sedang menyapu ruang kosong pada diska."
+msgstr "Harap tunggu. Membersihkan ruang kosong."
 
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
+"Untuk menghentikan proses ini, tekan tombol batal di bilah alat dan tunggu."
 
 #: ../bleachbit/Worker.py
 msgid ""
@@ -2135,6 +2109,9 @@ msgid ""
 "files may remain on the disk, and they may use all available space. To "
 "remove them, start BleachBit again."
 msgstr ""
+"Jika aplikasi ditutup paksa sebelum proses selesai, berkas-berkas besar "
+"mungkin tetap tersimpan di penyimpanan, dan berpotensi menghabiskan seluruh "
+"ruang yang tersedia. Untuk menghapusnya, jalankan kembali BleachBit."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py
@@ -2212,8 +2189,6 @@ msgid "Shred Paths from Clipboard"
 msgstr "Lenyapkan alamat dari Papan Klip"
 
 #: ../data/app-menu.ui
-#, fuzzy
-#| msgid "_Wipe Free Space"
 msgid "_Wipe Empty Space"
 msgstr "_Bersihkan Ruang Kosong"
 
