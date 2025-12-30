@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-12-25 16:46-0700\n"
-"PO-Revision-Date: 2025-09-24 01:01+0000\n"
+"PO-Revision-Date: 2025-12-31 12:01+0000\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "bleachbit/main/en_GB/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -859,10 +859,8 @@ msgid "Clean file"
 msgstr "Clean file"
 
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Clean cookies"
-msgstr "Cookies"
+msgstr "Clean cookies"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -987,7 +985,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py
 msgid "This option may prevent uninstalling some updates."
-msgstr ""
+msgstr "This option may prevent uninstalling some updates."
 
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
@@ -1010,14 +1008,12 @@ msgstr "Delete user-specified files and folders"
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Empty space"
-msgstr ""
+msgstr "Empty space"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Overwrite free disk space to hide deleted files"
 msgid "Wipe empty space to hide deleted files"
-msgstr "Overwrite free disk space to hide deleted files"
+msgstr "Wipe empty space to hide deleted files"
 
 #: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
 #: ../bleachbit/Worker.py
@@ -1029,6 +1025,12 @@ msgid ""
 "on traditional hard drives. On solid-state drives, it is less reliable, and "
 "frequent use contributes to wear."
 msgstr ""
+"Wiping empty space removes traces of files that were deleted without "
+"shredding, but it will not free additional disk space. The process can take "
+"a very long time and may temporarily slow your computer. It is not necessary "
+"if your drive is protected with full-disk encryption. The method works best "
+"on traditional hard drives. On solid-state drives, it is less reliable, and "
+"frequent use contributes to wear."
 
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
@@ -1043,7 +1045,7 @@ msgstr "System"
 #: ../bleachbit/Cleaner.py ../bleachbit/CLI.py
 #, python-format
 msgid "Wipe empty space in %s"
-msgstr ""
+msgstr "Wipe empty space in %s"
 
 #: ../bleachbit/Cleaner.py
 msgid "Loading native cleaners."
@@ -1054,10 +1056,9 @@ msgid "Importing cleaners from Winapp2.ini."
 msgstr "Importing cleaners from Winapp2.ini."
 
 #: ../bleachbit/Cleaner.py
-#, fuzzy, python-format
-#| msgid "_Wipe Free Space"
+#, python-format
 msgid "Wipe empty space %s"
-msgstr "_Wipe Free Space"
+msgstr "Wipe empty space %s"
 
 #: ../bleachbit/CLI.py
 #, python-format
