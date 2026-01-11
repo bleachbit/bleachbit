@@ -44,13 +44,18 @@
     <value os="linux">$XDG_CONFIG_HOME/opera</value>
   </var>
   <var name="profile">
+    <!-- Is it still needed without Default? -->
     <value os="windows" search="glob">%AppData%\Opera Software\Opera*</value>
+    <value os="windows" search="glob">%AppData%\Opera Software\Opera*\Default</value>
     <value os="linux">$XDG_CONFIG_HOME/opera</value>
     <!-- examples:
         ~/snap/opera/current/.config/opera
         ~/snap/opera-beta/60/.config/opera-beta
+        ~/snap/opera/420/.config/opera/Default on Opera 126 installed by snap
         -->
+    <!-- Is it still needed without Default? -->
     <value os="linux" search="glob">~/snap/opera*/*/.config/opera*</value>
+    <value os="linux" search="glob">~/snap/opera*/*/.config/opera*/Default</value>
   </var>
   <var name="localapp">
     <value os="windows" search="glob">%LocalAppData%\Opera Software\Opera*</value>
@@ -58,8 +63,10 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
+    <!-- Opera 126: C:\Users\username\AppData\Roaming\Opera Software\Opera Stable\ShaderCache-->
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
     <action command="delete" search="walk.all" path="$$profile$$/File System"/>
+    <!-- Opera 126: C:\Users\username\AppData\Roaming\Opera Software\Opera Stable\Default\Service Worker -->
     <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
     <action command="delete" search="walk.files" path="$$profile$$/GPUCache/"/>
     <action command="delete" search="file" path="$$profile$$/Preferences.backup"/>
@@ -92,6 +99,8 @@
     <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
     <action command="cookie" search="file" path="$$profile$$/Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Cookies-journal"/>
+    <action command="cookie" search="file" path="$$profile$$/Network/Cookies"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
     <action command="cookie" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
     <action command="delete" search="walk.all" path="$$profile$$/IndexedDB/"/>
@@ -183,6 +192,10 @@
     <action command="delete" search="file" path="$$profile$$/Current Tabs"/>
     <action command="delete" search="file" path="$$profile$$/Last Session"/>
     <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
+    <!-- Opera 126 has C:\Users\username\AppData\Roaming\Opera Software\Opera Stable\Default\Sessions\Session_#################
+      and Tabs_################# that end with many numbers
+    -->
+    <action command="delete" search="walk.all" path="$$profile$$/Sessions/"/>
     <!-- Last Tabs was found on Opera 56 but not on Google Chrome 69 -->
     <action command="delete" search="file" path="$$profile$$/Last Tabs"/>
     <!-- Session Storage were found on Opera 68 but not on Google Chrome 80 -->
@@ -198,6 +211,7 @@
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/autoupdate_checker.sqlite"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Network/Cookies"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/History"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Login Data"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Origin Bound Certs"/>
@@ -205,6 +219,13 @@
     <action command="sqlite.vacuum" search="file" path="$$profile$$/previews_opt_out.db"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/QuotaManager"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Shortcuts"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/SharedStorage"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Affiliation Database"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Trust Tokens"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/DIPS"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/MediaDeviceSalts"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/ServerCertificate"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Reporting and NEL"/>
     <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Thumbnails" type="f"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Web Data"/>
