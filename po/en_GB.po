@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-12-25 16:46-0700\n"
-"PO-Revision-Date: 2025-12-31 12:01+0000\n"
+"PO-Revision-Date: 2026-01-16 13:01+0000\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "bleachbit/main/en_GB/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1094,10 +1094,8 @@ msgid "shred specific files or folders"
 msgstr "shred specific files or folders"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "wipe free space in the given paths"
 msgid "wipe empty space in the given paths"
-msgstr "wipe free space in the given paths"
+msgstr "wipe empty space in the given paths"
 
 #: ../bleachbit/CLI.py
 msgid "overwrite files to hide contents"
@@ -1140,15 +1138,11 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "update winapp2.ini, if a new version is available"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid ""
-#| "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
-#| "preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean"
 msgstr ""
-"Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
+"Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean"
 
 #: ../bleachbit/CLI.py
@@ -1156,16 +1150,12 @@ msgid "Checking online for updates to winapp2.ini"
 msgstr "Checking online for updates to winapp2.ini"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "No directories given for --wipe-free-space"
 msgid "No directories given for --wipe-empty-space"
-msgstr "No directories given for --wipe-free-space"
+msgstr "No directories given for --wipe-empty-space"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "Wiping free space can take a long time."
 msgid "Wiping empty space can take a long time."
-msgstr "Wiping free space can take a long time."
+msgstr "Wiping empty space can take a long time."
 
 #: ../bleachbit/CLI.py
 msgid "No work to do. Specify options."
@@ -1407,7 +1397,7 @@ msgstr "Generating files"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Manage cookies to keep"
-msgstr ""
+msgstr "Manage cookies to keep"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select the cookies to keep when cleaning cookies across browsers."
