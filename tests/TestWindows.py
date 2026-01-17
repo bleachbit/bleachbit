@@ -56,6 +56,7 @@ from bleachbit.Windows import (
     read_registry_key,
     get_sid_token_48,
     is_ots_elevation,
+    SplashThread,
 )
 from bleachbit import logger
 
@@ -63,6 +64,7 @@ import os
 import platform
 import shutil
 import sys
+import time
 import tempfile
 from decimal import Decimal
 from unittest import mock
@@ -752,6 +754,57 @@ class WindowsTestCase(common.BleachbitTestCase):
         """Unit test for shell_change_notify"""
         ret = shell_change_notify()
         self.assertEqual(ret, 0)
+
+    def test_splash_screen(self):
+        """Unit test for splash screen"""
+        splash_thread = SplashThread()
+        icon_path = splash_thread.get_icon_path()
+        self.assertTrue(icon_path.is_absolute())
+        self.assertExists(icon_path)
+        splash_thread.start()
+        timeout = 5.0  # seconds
+        start_time = time.time()
+        time.sleep(1)
+        while not splash_thread.is_alive() and (time.time() - start_time) < timeout:
+            time.sleep(0.1)
+        self.assertTrue(splash_thread.is_alive(),
+                        'Splash thread did not start within timeout')
+        splash_thread.join()
+
+    def test_splash_screen_window_pos(self):
+        """Unit test for calculate_window_position()"""
+        splash_thread = SplashThread()
+
+        # Test with a typical 1080p display
+        display_width = 1920
+        display_height = 1080
+        x, y, width, height = splash_thread.calculate_window_position(
+            display_width, display_height)
+
+        # The window should have positive dimensions
+        self.assertGreater(width, 0)
+        self.assertGreater(height, 0)
+
+        # The window position should be positive (on screen)
+        self.assertGreaterEqual(x, 0)
+        self.assertGreaterEqual(y, 0)
+
+        # The window should fit within the display
+        self.assertLessEqual(x + width, display_width)
+        self.assertLessEqual(y + height, display_height)
+
+        # The window should be roughly centered
+        # x should be approximately (display_width - width) / 2
+        expected_x = (display_width - width) // 2
+        self.assertEqual(x, expected_x)
+        # y should be approximately (display_height - height) / 2
+        expected_y = (display_height - height) // 2
+        self.assertEqual(y, expected_y)
+
+        # Width should be 1/4 of display width (480 for 1920)
+        self.assertEqual(width, display_width // 4)
+        # Height should be 100
+        self.assertEqual(height, 100)
 
     def test_set_environ(self):
         for folder in ['folderäö', 'folder']:

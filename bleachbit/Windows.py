@@ -52,6 +52,7 @@ import xml.dom.minidom
 import base64
 import hashlib
 from decimal import Decimal
+from pathlib import Path
 from threading import Thread, Event
 
 if 'win32' == sys.platform:
@@ -789,6 +790,7 @@ def split_registry_key(full_key):
         raise RuntimeError("Invalid Windows registry hive '%s'" % k1)
     return hive_map[k1], k2
 
+
 def read_registry_key(full_key, value_name):
     try:
         (hive, sub_key) = split_registry_key(full_key)
@@ -806,6 +808,7 @@ def read_registry_key(full_key, value_name):
             # ENOENT = 'file not found' means value does not exist
             return None
         raise
+
 
 def symlink_or_copy(src, dst):
     """Symlink with fallback to copy
@@ -891,6 +894,30 @@ class SplashThread(Thread):
                              win32con.WM_CLOSE, 0, 0)
         Thread.join(self, *args)
 
+    def get_icon_path(self):
+        """Return the full path to icon file"""
+        if hasattr(sys, 'frozen'):
+            # running frozen in py2exe
+            icon_dir = Path(sys.argv[0]) / 'share'
+        else:
+            # running from source, and `__file__`` may be at either level
+            # - `tests/TestWindows.py`
+            # - `bleachbit.py``
+            module_dir = Path(__file__).absolute().parent
+            icon_dir = module_dir / 'windows'
+            icon_path = module_dir / 'bleachbit.ico'
+            if not icon_path.exists():
+                icon_dir = module_dir.parent / 'windows'
+        return (icon_dir / 'bleachbit.ico').absolute()
+
+    def calculate_window_position(self, display_width, display_height):
+        """Calculate centered window position and size"""
+        width = display_width // 4
+        height = 100
+        x = (display_width - width) // 2
+        y = (display_height - height) // 2
+        return (x, y, width, height)
+
     def _show_splash_screen(self):
         # get instance handle
         hInstance = win32api.GetModuleHandle()
@@ -916,11 +943,9 @@ class SplashThread(Thread):
             raise e
 
         displayWidth = win32api.GetSystemMetrics(0)
-        displayHeigh = win32api.GetSystemMetrics(1)
-        self._splash_screen_height = 100
-        self._splash_screen_width = displayWidth // 4
-        windowPosX = (displayWidth - self._splash_screen_width) // 2
-        windowPosY = (displayHeigh - self._splash_screen_height) // 2
+        displayHeight = win32api.GetSystemMetrics(1)
+        windowPosX, windowPosY, self._splash_screen_width, self._splash_screen_height = \
+            self.calculate_window_position(displayWidth, displayHeight)
 
         hWindow = win32gui.CreateWindow(
             wndClassAtom,  # it seems message dispatching only works with the atom, not the class name
@@ -1028,25 +1053,28 @@ class SplashThread(Thread):
 
         if message == win32con.WM_PAINT:
             hDC, paintStruct = win32gui.BeginPaint(hWnd)
-            folder_with_ico_file = 'share' if hasattr(
-                sys, 'frozen') else 'windows'
-            filename = os.path.join(os.path.dirname(
-                sys.argv[0]), folder_with_ico_file, 'bleachbit.ico')
-            flags = win32con.LR_LOADFROMFILE
-            hIcon = win32gui.LoadImage(
-                0, filename, win32con.IMAGE_ICON,
-                0, 0, flags)
+            filename = self.get_icon_path()
+            if not filename.exists():
+                logger.warning('Icon file not found: {} with current working directory: {}.'.format(
+                    filename, os.getcwd()))
+                text_left_margin = 10
+            else:
+                flags = win32con.LR_LOADFROMFILE
+                hIcon = win32gui.LoadImage(
+                    0, str(filename), win32con.IMAGE_ICON,
+                    0, 0, flags)
 
-            # Default icon size seems to be 32 pixels so we center the icon vertically.
-            default_icon_size = 32
-            icon_top_margin = self._splash_screen_height - \
-                2 * (default_icon_size + 2)
-            win32gui.DrawIcon(hDC, 0, icon_top_margin, hIcon)
-            # win32gui.DrawIconEx(hDC, 0, 0, hIcon, 64, 64, 0, 0, win32con.DI_NORMAL)
+                # Default icon size seems to be 32 pixels so we center the icon vertically.
+                default_icon_size = 32
+                icon_top_margin = self._splash_screen_height - \
+                    2 * (default_icon_size + 2)
+                win32gui.DrawIcon(hDC, 0, icon_top_margin, hIcon)
+                # win32gui.DrawIconEx(hDC, 0, 0, hIcon, 64, 64, 0, 0, win32con.DI_NORMAL)
+                text_left_margin = 2 * default_icon_size
 
             rect = win32gui.GetClientRect(hWnd)
             textmetrics = win32gui.GetTextMetrics(hDC)
-            text_left_margin = 2 * default_icon_size
+
             text_rect = (text_left_margin,
                          (rect[3] - textmetrics['Height']) // 2, rect[2], rect[3])
             win32gui.DrawText(
