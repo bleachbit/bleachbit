@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-12-25 16:46-0700\n"
-"PO-Revision-Date: 2025-12-28 08:00+0000\n"
+"PO-Revision-Date: 2026-01-18 12:01+0000\n"
 "Last-Translator: Ghost of Sparta <makesocialfoss32@keemail.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/bleachbit/main/"
 "hu/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 "X-Launchpad-Export-Date: 2019-12-26 01:52+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1136,7 +1136,7 @@ msgstr "hibakeresési üzenetek naplózása fájlba"
 
 #: ../bleachbit/CLI.py
 msgid "show system information"
-msgstr "rendszerinformáció megjelenítése"
+msgstr "rendszerinformációk megjelenítése"
 
 #: ../bleachbit/CLI.py
 msgid "output version information and exit"
@@ -1523,7 +1523,7 @@ msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
 msgstr ""
-"A felülírás hatástalan néhány fájlrendszeren és bizonyos BleachBit "
+"A felülírás hatástalan néhány fájlrendszeren és bizonyos BleachBit-"
 "műveleteknél.  A felülírás lényegesen lassabb."
 
 #: ../bleachbit/GuiPreferences.py
@@ -1710,7 +1710,7 @@ msgstr ""
 
 #: ../bleachbit/GUI.py
 msgid "System information"
-msgstr "Rendszerinformáció"
+msgstr "Rendszerinformációk"
 
 #: ../bleachbit/GUI.py
 msgid "Active"
@@ -1765,7 +1765,7 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
-"Rendszergazdai jogokkal futtatja a BleachBit-et a rendszer megosztott "
+"Rendszergazdai jogokkal futtatja a BleachBit programot a rendszer megosztott "
 "részeinek tisztítása végett, a felhasználói profil könyvtárra vonatkozó "
 "utalások csak a root fiókot fogják megtisztítani."
 
@@ -1835,7 +1835,7 @@ msgstr "Frissítés"
 
 #: ../bleachbit/GUI.py
 msgid "Update BleachBit to the latest version"
-msgstr "A BleachBit frissítése a legújabb verzióra"
+msgstr "BleachBit frissítése a legújabb verzióra"
 
 #: ../bleachbit/GUI.py
 msgid "Press F11 to exit fullscreen mode."
@@ -2223,7 +2223,7 @@ msgstr "_Beállítások törlése és kilépés"
 
 #: ../data/app-menu.ui
 msgid "S_ystem Information"
-msgstr "Rendszerinformáció"
+msgstr "R_endszer-információk"
 
 #: ../data/app-menu.ui
 msgid "_Help"
