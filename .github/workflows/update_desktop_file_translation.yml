@@ -33,11 +33,15 @@ jobs:
       - name: Run extract_desktop.py
         run: python3 extract_desktop.py
 
+      # Generate NsisInclude/BleachBitLang.nsh from po/*.po
+      - name: Run NSIS translation generator
+        run: python3 windows/nsis_translations.py --generate
+
       - name: Commit if changed
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
-          git add org.bleachbit.BleachBit.desktop
+          git add org.bleachbit.BleachBit.desktop windows/NsisInclude/NsisMultiUserLang.nsh
           if [ -z "$(git diff --cached --exit-code)" ]; then
               echo "No changes to commit."
           else
