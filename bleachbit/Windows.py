@@ -226,6 +226,9 @@ def delete_registry_key(parent_key, really_delete):
 def delete_updates():
     """Returns commands for deleting Windows Updates files
 
+    Reference:
+    https://learn.microsoft.com/en-us/troubleshoot/windows-client/installing-updates-features-roles/additional-resources-for-windows-update
+
     Yields commands
     """
     if not shell.IsUserAnAdmin():
@@ -304,15 +307,19 @@ def run_net_service_command(service, start):
     assert isinstance(start, bool)
     if start:
         action = win32serviceutil.StartService
-        ignore_code = 1056  # already running
+        ignore_codes = (1056,)  # already running
         ignore_msgs = ('already',)
         verb = 'start'
         desired = win32service.SERVICE_RUNNING
         state_txt = 'RUNNING'
     else:
         action = win32serviceutil.StopServiceWithDeps
-        ignore_code = 1062  # not active
-        ignore_msgs = ('not active', 'not been started', 'is not started')
+        ignore_codes = (
+            1052,  # ERROR_INVALID_SERVICE_CONTROL: control not valid for this service
+            1062,  # ERROR_SERVICE_NOT_ACTIVE: not active
+        )
+        ignore_msgs = ('not active', 'not been started', 'is not started',
+                       'control is not valid')
         verb = 'stop'
         state_txt = 'STOPPED'
         desired = win32service.SERVICE_STOPPED
@@ -322,7 +329,7 @@ def run_net_service_command(service, start):
     except pywintypes.error as e:
         # Treat common benign states as success
         msg = str(e).lower()
-        if getattr(e, 'winerror', None) == ignore_code or any(s in msg for s in ignore_msgs):
+        if getattr(e, 'winerror', None) in ignore_codes or any(s in msg for s in ignore_msgs):
             return 0
         raise RuntimeError(f'Failed to {verb} service {service}: {e}') from e
 
