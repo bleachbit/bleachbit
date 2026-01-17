@@ -26,6 +26,7 @@ from bleachbit.CLI import (
     args_to_operations,
     args_to_operations_list,
     cleaners_list,
+    parse_cmd_line,
     preview_or_clean)
 from bleachbit.General import get_executable, run_external
 from bleachbit.GtkShim import HAVE_GTK
@@ -88,13 +89,45 @@ class CLITestCase(common.BleachbitTestCase):
         """Unit test for args_to_operations()"""
         # test explicit cleaners (without --preset or --all-but-warning)
         tests = (
-            (['adobe_reader.*'],
+            (['adobe_reader.*'], [],
              {'adobe_reader': ['cache', 'mru', 'tmp']}),
-            (['adobe_reader.mru'], {'adobe_reader': ['mru']}))
-        for test in tests:
-            o = args_to_operations(test[0], False, False)
+            (['adobe_reader.mru'], [], {'adobe_reader': ['mru']}),
+            (['adobe_reader.*'], ['adobe_reader.cache'],
+             {'adobe_reader': ['mru', 'tmp']}))
+        for test_args, excludes, expected in tests:
+            o = args_to_operations(test_args, False, False, excludes)
             self.assertIsInstance(o, dict)
-            self.assertEqual(o, test[1])
+            self.assertEqual(o, expected)
+
+        # Test failure on wildcard
+        with self.assertRaises(SystemExit) as cm:
+            args_to_operations(
+                ['adobe_reader.mru'], False, False, ['adobe_reader.*'])
+        self.assertEqual(cm.exception.code, 1)
+
+    def test_parse_cmd_line_except(self):
+        """Unit test for parse_cmd_line() --except handling"""
+        tests = (
+            (['--clean', 'firefox.*', 'chromium.*',
+              '--except', 'firefox.passwords,chromium.passwords'],
+             ['firefox.*', 'chromium.*'],
+             ['firefox.passwords', 'chromium.passwords']),
+            (['--clean', 'firefox.*', 'chromium.*',
+              '--except', 'firefox.passwords',
+              '--except', 'chromium.passwords'],
+             ['firefox.*', 'chromium.*'],
+             ['firefox.passwords', 'chromium.passwords']),
+            (['--clean', 'chromium.*',
+              '--except', 'firefox.passwords',
+              'firefox.*',
+              '--except', 'chromium.passwords'],
+             ['chromium.*', 'firefox.*'],
+             ['firefox.passwords', 'chromium.passwords']))
+        for argv, expected_args, expected_excludes in tests:
+            _parser, options, args, excludes = parse_cmd_line(argv)
+            self.assertTrue(options.clean)
+            self.assertEqual(expected_args, args)
+            self.assertEqual(expected_excludes, excludes)
 
     def test_cleaners_list(self):
         """Unit test for cleaners_list()"""
@@ -132,7 +165,7 @@ class CLITestCase(common.BleachbitTestCase):
                         '--debug'] + f'--debug-log{delimiter}{log_path}'.split(delimiter)
                 (rc, _stdout, stderr) = run_external(
                     args, stdout=None, timeout=RUN_EXTERNAL_TIMEOUT)
-                self.assertEqual(0, rc)
+                self.assertEqual(0, rc, f"rc={rc}, stderr={stderr}")
                 self.assertExists(log_path)
                 with open(log_path, 'r', encoding='utf-8') as log_file:
                     log_content = log_file.read()
