@@ -237,19 +237,23 @@ def delete_updates():
         return
     windir = os.path.expandvars('%windir%')
     dirs = glob.glob(os.path.join(windir, '$NtUninstallKB*'))
-    dirs += [os.path.expandvars(r'%windir%\SoftwareDistribution')]
-    dirs += [os.path.expandvars(r'%windir%\SoftwareDistribution.old')]
-    dirs += [os.path.expandvars(r'%windir%\SoftwareDistribution.bak')]
-    dirs += [os.path.expandvars(r'%windir%\ie7updates')]
-    dirs += [os.path.expandvars(r'%windir%\ie8updates')]
-    # see https://github.com/bleachbit/bleachbit/issues/1215 about catroot2
-    # dirs += [os.path.expandvars(r'%windir%\system32\catroot2')]
-    dirs += [os.path.expandvars(r'%systemdrive%\windows.old')]
-    dirs += [os.path.expandvars(r'%systemdrive%\$windows.~bt')]
-    dirs += [os.path.expandvars(r'%systemdrive%\$windows.~ws')]
-    if not dirs:
-        # if nothing to delete, then also do not restart service
-        return
+    for path_to_add in [r'%windir%\SoftwareDistribution.old',
+                        r'%windir%\SoftwareDistribution.bak',
+                        r'%windir%\ie7updates',
+                        r'%windir%\ie8updates',
+                        # see https://github.com/bleachbit/bleachbit/issues/1215 about catroot2
+                        # r'%windir%\system32\catroot2',
+                        r'%systemdrive%\windows.old',
+                        r'%systemdrive%\$windows.~bt',
+                        r'%systemdrive%\$windows.~ws']:
+        dirs.append(os.path.expandvars(path_to_add))
+
+    # First, delete objects that do not require services to be stopped.
+    for path1 in dirs:
+        for path2 in FileUtilities.children_in_directory(path1, True):
+            yield Command.Delete(path2)
+        if os.path.exists(path1):
+            yield Command.Delete(path1)
 
     # Closure to bind service/start into a zero-arg callback for Command.Function
     def make_run_service(service, start):
@@ -260,17 +264,25 @@ def delete_updates():
     all_services = ('wuauserv', 'cryptsvc', 'bits', 'msiserver')
     restart_services = []
     for service in all_services:
-        if not is_service_running(service):
-            continue
-        restart_services.append(service)
-        label = _(f"stop Windows service {service}")
-        yield Command.Function(None, make_run_service(service, False), label)
+        if is_service_running(service):
+            restart_services.append(service)
+    services_stopped = False
+    sdist_dir = os.path.expandvars(r'%windir%\SoftwareDistribution')
+    if not os.path.exists(sdist_dir):
+        return
 
-    for path1 in dirs:
-        for path2 in FileUtilities.children_in_directory(path1, True):
-            yield Command.Delete(path2)
-        if os.path.exists(path1):
-            yield Command.Delete(path1)
+    for path2 in FileUtilities.children_in_directory(sdist_dir, True):
+        # If we find any files, stop services.
+        if not services_stopped:
+            services_stopped = True
+            for service in restart_services:
+                label = _(f"stop Windows service {service}")
+                yield Command.Function(None, make_run_service(service, False), label)
+        yield Command.Delete(path2)
+    yield Command.Delete(sdist_dir)
+
+    if not services_stopped:
+        return
 
     for service in restart_services:
         label = _(f"start Windows service {service}")
@@ -302,6 +314,10 @@ def run_net_service_command(service, start):
     - Treat "already running" (start) and "not active/not started" (stop) like a success.
     - On other errors, raise RuntimeError.
     - If service has dependencies, this will stop them too.
+
+    Reference:
+    - https://github.com/bleachbit/bleachbit/issues/1932
+    - https://github.com/bleachbit/bleachbit/issues/1854
     """
     assert isinstance(service, str)
     assert isinstance(start, bool)
