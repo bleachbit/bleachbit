@@ -890,6 +890,7 @@ def get_font_conf_file():
 
 
 class SplashThread(Thread):
+    _class_atom = None
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs={}, Verbose=None):
         super().__init__(group, self._show_splash_screen, name, args, kwargs)
@@ -897,15 +898,30 @@ class SplashThread(Thread):
         self._splash_screen_handle = None
         self._splash_screen_height = None
         self._splash_screen_width = None
+        self._startup_error = None
 
     def start(self):
         Thread.start(self)
-        self._splash_screen_started.wait()
-        logger.debug('SplashThread started')
+        started = self._splash_screen_started.wait(timeout=10)
+        if not started:
+            logger.warning('SplashThread did not start within timeout')
+        else:
+            logger.debug('SplashThread started')
+
+        if self._startup_error:
+            raise self._startup_error
 
     def run(self):
-        self._splash_screen_handle = self._target()
-        self._splash_screen_started.set()
+        try:
+            self._splash_screen_handle = self._target()
+        except Exception as exc:
+            self._startup_error = exc
+            logger.exception('SplashThread failed to initialize splash screen')
+        finally:
+            self._splash_screen_started.set()
+
+        if self._startup_error:
+            return
 
         # Dispatch messages
         win32gui.PumpMessages()
@@ -913,6 +929,9 @@ class SplashThread(Thread):
     def join(self, *args):
         import win32con
         import win32gui
+        if not self._splash_screen_handle:
+            Thread.join(self, *args)
+            return
         win32gui.PostMessage(self._splash_screen_handle,
                              win32con.WM_CLOSE, 0, 0)
         Thread.join(self, *args)
@@ -941,6 +960,29 @@ class SplashThread(Thread):
         y = (display_height - height) // 2
         return (x, y, width, height)
 
+    def _register_window_class(self, wndClass):
+        """Register splash screen window class, handling reuse."""
+        cached_atom = self.__class__._class_atom
+        if cached_atom:
+            return cached_atom
+
+        try:
+            atom = win32gui.RegisterClass(wndClass)
+        except pywintypes.error as err:
+            if getattr(err, 'winerror', None) != 1410:  # ERROR_CLASS_ALREADY_EXISTS
+                raise
+            existing = win32gui.GetClassInfo(
+                wndClass.hInstance, wndClass.lpszClassName)
+            if isinstance(existing, tuple):
+                atom = existing[0]
+            else:
+                atom = existing
+            if not atom:
+                raise
+
+        self.__class__._class_atom = atom
+        return atom
+
     def _show_splash_screen(self):
         # get instance handle
         hInstance = win32api.GetModuleHandle()
@@ -959,11 +1001,7 @@ class SplashThread(Thread):
         wndClass.lpszClassName = className
 
         # register window class
-        wndClassAtom = None
-        try:
-            wndClassAtom = win32gui.RegisterClass(wndClass)
-        except Exception as e:
-            raise e
+        wndClassAtom = self._register_window_class(wndClass)
 
         displayWidth = win32api.GetSystemMetrics(0)
         displayHeight = win32api.GetSystemMetrics(1)
