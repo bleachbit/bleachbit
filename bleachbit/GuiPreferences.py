@@ -56,6 +56,7 @@ class PreferencesDialog:
         self.dialog.set_default_size(300, 200)
 
         self.cookie_manager_dialog = None
+        self._locations_notice_css_provider = None
 
         # Add InfoBar for non-blocking messages
         self.infobar = Gtk.InfoBar()
@@ -588,16 +589,55 @@ class PreferencesDialog:
                 "clicked", self.__on_manage_cookies_clicked)
             vbox.pack_start(button_cookie_manager, False, False, 0)
 
+        if not self._locations_notice_css_provider:
+            self._locations_notice_css_provider = Gtk.CssProvider()
+            self._locations_notice_css_provider.load_from_data(b"""
+                .bb-locations-notice-whitelist {
+                    background-color: rgba(46, 139, 87, 0.12);
+                    border-radius: 6px;
+                    padding: 6px;
+                }
+                .bb-locations-notice-custom {
+                    background-color: rgba(210, 120, 0, 0.12);
+                    border-radius: 6px;
+                    padding: 6px;
+                }
+            """)
 
         if LOCATIONS_WHITELIST == page_type:
             # TRANSLATORS: "Paths" is used generically to refer to both files
             # and folders
-            notice = Gtk.Label(
-                label=_("These paths will not be deleted or modified."))
+            notice_text = _("These paths will not be deleted or modified.")
+            notice_icon = "emblem-readonly"
+            notice_class = "bb-locations-notice-whitelist"
         elif LOCATIONS_CUSTOM == page_type:
-            notice = Gtk.Label(
-                label=_("These locations can be selected for deletion."))
-        vbox.pack_start(notice, False, False, 0)
+            notice_text = _("These locations can be selected for deletion.")
+            notice_icon = "edit-delete"
+            notice_class = "bb-locations-notice-custom"
+
+        notice_label = Gtk.Label(label=notice_text)
+        notice_label.set_line_wrap(True)
+        notice_label.set_xalign(0.0)
+
+        notice_image = Gtk.Image.new_from_icon_name(
+            notice_icon, Gtk.IconSize.MENU)
+        notice_image.set_valign(Gtk.Align.START)
+
+        notice_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        notice_box.pack_start(notice_image, False, False, 0)
+        notice_box.pack_start(notice_label, True, True, 0)
+
+        notice_frame = Gtk.EventBox()
+        notice_frame.set_visible_window(True)
+        notice_frame.add(notice_box)
+        notice_frame.set_margin_bottom(6)
+        notice_frame.set_margin_top(6)
+        style_context = notice_frame.get_style_context()
+        style_context.add_provider(
+            self._locations_notice_css_provider,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        style_context.add_class(notice_class)
+        vbox.pack_start(notice_frame, False, False, 0)
 
         # create treeview
         treeview = Gtk.TreeView.new_with_model(liststore)
