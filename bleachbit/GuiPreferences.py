@@ -146,6 +146,13 @@ class PreferencesDialog:
             from bleachbit.DesktopMenuOptions import install_kde_service_menu_file
             install_kde_service_menu_file()
 
+    def __reset_warning_preferences(self, _button):
+        """Reset saved warning confirmations."""
+        options.clear_warning_preferences()
+        self.show_infobar(
+            _("Warning confirmations reset."),
+            Gtk.MessageType.INFO)
+
     def __create_update_widgets(self, vbox):
         """Create and configure update-related checkboxes."""
         if not online_update_notification_enabled:
@@ -295,6 +302,14 @@ class PreferencesDialog:
         cb_popup.connect(
             'toggled', self.__toggle_callback, 'delete_confirmation')
         vbox.pack_start(cb_popup, False, True, 0)
+
+        reset_warnings_button = Gtk.Button.new_with_label(
+            label=_("Reset warning confirmations"))
+        reset_warnings_button.set_halign(Gtk.Align.START)
+        reset_warnings_button.set_margin_top(6)
+        reset_warnings_button.connect(
+            'clicked', self.__reset_warning_preferences)
+        vbox.pack_start(reset_warnings_button, False, True, 0)
 
         # Use base 1000 over 1024?
         cb_units_iec = Gtk.CheckButton(

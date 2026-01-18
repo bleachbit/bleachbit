@@ -25,7 +25,7 @@ Basic GUI code
 import os
 
 # local import
-from bleachbit.GtkShim import Gtk, Gdk, require_gtk
+from bleachbit.GtkShim import Gtk, Gdk, GLib, require_gtk
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 if os.name == 'nt':
@@ -155,6 +155,52 @@ def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
     options.set('delete_confirmation', cb_popup.get_active())
     dialog.destroy()
     return ret == Gtk.ResponseType.ACCEPT
+
+
+def warning_confirm_dialog(parent, option_name, warning_text):
+    """Show a warning dialog when enabling an option.
+
+    Returns tuple (confirmed: bool, remember_choice: bool).
+    """
+    dialog = Gtk.Dialog(title=_('Enable %(option)s') % {'option': option_name},
+                        transient_for=parent,
+                        modal=True,
+                        destroy_with_parent=True)
+    content = dialog.get_content_area()
+    content.set_border_width(12)
+    content.set_spacing(10)
+
+    warning_label = Gtk.Label(label=warning_text)
+    warning_label.set_line_wrap(True)
+    warning_label.set_xalign(0.0)
+    content.pack_start(warning_label, False, False, 0)
+
+    remember_cb = Gtk.CheckButton(
+        label=_('Remember my choice for %(option)s') % {'option': option_name})
+    remember_cb.set_halign(Gtk.Align.START)
+    content.pack_start(remember_cb, False, False, 0)
+
+    cancel_button = dialog.add_button(_('_Cancel'), Gtk.ResponseType.CANCEL)
+    enable_button = dialog.add_button(_("_Enable anyway"), Gtk.ResponseType.OK)
+    enable_button.get_style_context().add_class('destructive-action')
+    dialog.set_default_response(Gtk.ResponseType.CANCEL)
+    cancel_button.grab_focus()
+
+    # Disable enable button for a moment to prevent accident by double-clicking.
+    enable_button.set_sensitive(False)
+
+    def enable_button_after_delay():
+        enable_button.set_sensitive(True)
+        return False
+
+    GLib.timeout_add(500, enable_button_after_delay)
+
+    dialog.show_all()
+    response = dialog.run()
+    remember_choice = response == Gtk.ResponseType.OK and remember_cb.get_active()
+    dialog.destroy()
+
+    return response == Gtk.ResponseType.OK, remember_choice
 
 
 def message_dialog(parent, msg, mtype=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.OK, title=None):
