@@ -714,6 +714,7 @@ def strip():
                            error_counter, strip_file)
         if not os.path.exists(strip_file):
             os.rename('strip.tmp', strip_file)
+    assert_execute_console()
 
 
 @count_size_improvement
