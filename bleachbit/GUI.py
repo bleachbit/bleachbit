@@ -608,7 +608,8 @@ class TreeDisplayModel:
             # When enabling an option, present any warnings.
             # (When disabling an option, there is no need to present warnings.)
             warning = backends[cleaner_id].get_warning(option_id)
-            if warning and not options.get_warning_preference(cleaner_id, option_id):
+            warning_key = 'cleaner:' + cleaner_id + ':' + option_id
+            if warning and not options.get_warning_preference(warning_key):
                 # TRANSLATORS: %(cleaner) may be Firefox, System, etc.
                 # %(option) may be cache, logs, cookies, etc.
                 option_name = _("%(cleaner)s - %(option)s") % {
@@ -621,7 +622,7 @@ class TreeDisplayModel:
                     # user cancelled, so don't toggle option
                     return
                 if remember_choice:
-                    options.remember_warning_confirmation(cleaner_id, option_id)
+                    options.remember_warning_preference(warning_key)
         model[path][1] = value
 
     def col1_toggled_cb(self, cell, path, model, parent_window):

@@ -34,6 +34,7 @@ import bleachbit
 from bleachbit.Action import ActionProvider
 from bleachbit.FileUtilities import expand_glob_join, listdir
 from bleachbit.General import boolstr_to_bool, getText
+from bleachbit.General import os_match as general_os_match
 from bleachbit.Language import get_text as _
 from bleachbit import Cleaner
 if 'win32' == sys.platform:
@@ -103,27 +104,11 @@ class CleanerML:
         os_str -- the required operating system as written in XML
         platform -- used only for unit tests
         """
-        # If blank or if in .pot-creation-mode, return true.
-        if len(os_str) == 0 or self.xlate_mode:
+        # If in .pot-creation-mode, return true.
+        if self.xlate_mode:
             return True
-        # Otherwise, check platform.
-        # Define the current operating system.
-        if platform == 'darwin':
-            current_os = ('darwin', 'bsd', 'unix')
-        elif platform == 'linux':
-            current_os = ('linux', 'unix')
-        elif platform.startswith('openbsd'):
-            current_os = ('bsd', 'openbsd', 'unix')
-        elif platform.startswith('netbsd'):
-            current_os = ('bsd', 'netbsd', 'unix')
-        elif platform.startswith('freebsd'):
-            current_os = ('bsd', 'freebsd', 'unix')
-        elif platform == 'win32':
-            current_os = ('windows',)
-        else:
-            raise RuntimeError(f'Unknown operating system: {sys.platform}')
-        # Compare current OS against required OS.
-        return os_str in current_os
+
+        return general_os_match(os_str, platform)
 
     def handle_cleaner(self, cleaner):
         """<cleaner> element"""

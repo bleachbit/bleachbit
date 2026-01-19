@@ -23,13 +23,14 @@
 Preferences dialog
 """
 
-from bleachbit import online_update_notification_enabled
-from bleachbit.Options import options
 from bleachbit import GuiBasic
+from bleachbit import online_update_notification_enabled
+from bleachbit import ProtectedPath
+from bleachbit.GtkShim import Gtk, GLib
 from bleachbit.GuiCookie import CookieManagerDialog
 from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _, pget_text as _p
-from bleachbit.GtkShim import Gtk, GLib
+from bleachbit.Options import options
 
 import logging
 import os
@@ -519,10 +520,52 @@ class PreferencesDialog:
 
         return False
 
+    def _check_protected_path(self, pathname):
+        """Check if path is protected and warn user if so.
+
+        Returns True if it's safe to proceed, False if user cancelled.
+        """
+        logger.debug("Checking protected path: %s", pathname)
+        match_info = ProtectedPath.check_protected_path(pathname)
+        if match_info is None:
+            return True
+
+        # Check if user already confirmed this path
+        normalized = ProtectedPath._normalize_for_comparison(
+            pathname, match_info['case_sensitive'])
+        warning_key = 'protected_path:' + normalized
+        if options.get_warning_preference(warning_key):
+            return True
+
+        # Calculate impact
+        # FIXME later: this can be very slow with many objects
+        logger.debug("Checking protected path impact: %s", pathname)
+        impact = ProtectedPath.calculate_impact(pathname)
+
+        # Generate warning message
+        warning_msg = ProtectedPath.get_warning_message(pathname, impact)
+
+        # Show warning dialog
+        confirmed, remember = GuiBasic.warning_confirm_dialog(
+            self.dialog,
+            _("Protected Path"),
+            warning_msg
+        )
+
+        if confirmed and remember:
+            options.remember_warning_preference(warning_key)
+
+        return confirmed
+
     def _add_path(self, pathname, path_type, page_type, liststore, pathnames):
         """Common function to add a path to either whitelist or custom list"""
         if self._check_path_exists(pathname, page_type):
             return
+
+        # Check for protected paths when adding to custom (delete) list
+        if page_type == LOCATIONS_CUSTOM:
+            if not self._check_protected_path(pathname):
+                return
 
         type_str = _('File') if path_type == 'file' else _('Folder')
         liststore.append([type_str, pathname])

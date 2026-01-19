@@ -211,6 +211,36 @@ def makedirs(path):
         chownself(path)
 
 
+def os_match(os_str, platform=sys.platform):
+    """Return boolean whether operating system matches
+
+    Keyword arguments:
+    os_str -- the required operating system as written in XML
+    platform -- used only for unit tests
+    """
+    # If blank, return true.
+    if len(os_str) == 0:
+        return True
+    # Otherwise, check platform.
+    # Define the current operating system.
+    if platform == 'darwin':
+        current_os = ('darwin', 'bsd', 'unix')
+    elif platform == 'linux':
+        current_os = ('linux', 'unix')
+    elif platform.startswith('openbsd'):
+        current_os = ('bsd', 'openbsd', 'unix')
+    elif platform.startswith('netbsd'):
+        current_os = ('bsd', 'netbsd', 'unix')
+    elif platform.startswith('freebsd'):
+        current_os = ('bsd', 'freebsd', 'unix')
+    elif platform == 'win32':
+        current_os = ('windows',)
+    else:
+        raise RuntimeError(f'Unknown operating system: {sys.platform}')
+    # Compare current OS against required OS.
+    return os_str in current_os
+
+
 def run_external_nowait(args, env=None, kwargs=None):
     """Run an external program in the background. Return immediately.
 
