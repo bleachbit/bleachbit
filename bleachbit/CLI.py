@@ -271,12 +271,15 @@ def process_cmd_line():
 
     parser, options, args, excludes = parse_cmd_line()
 
-    cmd_list = (options.list_cleaners, options.wipe_empty_space,
-                options.preview, options.clean)
+    cmd_list = (options.list_cleaners,
+                options.clean,
+                options.preview,
+                options.shred,
+                options.wipe_empty_space)
     cmd_count = sum(x is True for x in cmd_list)
     if cmd_count > 1:
         logger.error(
-            _('Specify only one of these commands: --list-cleaners, --wipe-empty-space, --preview, --clean'))
+            _('Specify only one of these commands: --list-cleaners, --wipe-empty-space, --preview, --clean, --shred'))
         sys.exit(1)
 
     did_something = False
