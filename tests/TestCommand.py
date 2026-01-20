@@ -51,6 +51,22 @@ class CommandTestCase(common.BleachbitTestCase):
         self.assertEqual(ret['path'], path)
         self.assertNotExists(path)
 
+    def test_delete_permission(self):
+        """Test delete with permission denied for getsize()"""
+        path = self.write_file('test_delete_permission', b'foo')
+        cmd = Delete(path)
+        self.assertExists(path)
+
+        with mock.patch('bleachbit.FileUtilities.getsize') as mock_getsize:
+            mock_getsize.side_effect = PermissionError('Permission denied')
+
+            # preview
+            ret = next(cmd.execute(really_delete=False))
+            self.assertIsNone(ret['size'])
+            self.assertEqual(ret['path'], path)
+            self.assertExists(path)
+
+
     def test_Function(self):
         """Unit test for Function"""
         path = self.write_file('test_Function', b'foo')
