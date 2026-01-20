@@ -38,7 +38,8 @@ from bleachbit.ProtectedPath import (
     get_warning_message,
     load_protected_paths)
 from bleachbit import ProtectedPath as protected_path_module
-from bleachbit.Cleaner import backends, register_cleaners
+from bleachbit.Cleaner import backends
+from tests.TestCleaner import register_all_cleaners
 
 
 CASE_METHODS = (
@@ -388,11 +389,6 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
 
     def test_get_warning_message_no_files(self):
         """Test get_warning_message with no files"""
-        match_info = {
-            'path': '/some/path',
-            'depth': 0,
-            'case_sensitive': True,
-        }
         impact = {
             'file_count': 0,
             'total_size': 0,
@@ -415,9 +411,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
 
     def test_preview_all(self):
         """Check whether any real cleaners return protected paths"""
-        if not backends:
-            list(register_cleaners())
-        assert len(backends) > 1
+        register_all_cleaners()
 
         def check_option(co_key, co_option_id):
             for cmd in backends[co_key].get_commands(co_option_id):

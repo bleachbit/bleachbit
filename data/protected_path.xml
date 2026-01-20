@@ -75,11 +75,14 @@ here. Examples:
     <path>c:\windows</path>
     <path>%userprofile%</path>
     <path>c:\users\%username%</path>
+    <!-- winapp2.ini cleans %userprofile%\IconCache.db -->
+    <path>%localappdata%</path>
+    <!-- winapp2.ini cleans %userprofile%\Searches\Everywhere.search-ms -->
+    <path>%userprofile%\Searches</path>
   </paths>
   <paths os="windows" depth="1">
     <path>%appdata%</path>
     <path>%commonappdata%</path>
-    <path>%localappdata%</path>
     <path>%localappdatalow%</path>
     <path>%programdata%</path>
     <path>%programfiles%</path>
@@ -107,7 +110,6 @@ here. Examples:
     <path>%userprofile%\My Virtual Machines</path>
     <path>%userprofile%\OneDrive</path>
     <path>%userprofile%\Saved games</path>
-    <path>%userprofile%\Searches</path>
   </paths>
 <!--
 cross platform
