@@ -196,8 +196,7 @@ elif sys.platform.startswith("openbsd") or sys.platform.startswith("freebsd"):
 # URLs
 #
 base_url = "https://update.bleachbit.org"
-help_contents_url = "%s/help/%s" \
-    % (base_url, APP_VERSION)
+help_contents_url = https://www.bleachbit.org/help"
 update_check_url = "%s/update/%s" % (base_url, APP_VERSION)
 
 # set up environment variables
