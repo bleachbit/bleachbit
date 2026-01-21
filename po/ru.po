@@ -6,11 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2025-12-25 16:46-0700\n"
-"PO-Revision-Date: 2025-08-27 15:02+0000\n"
-"Last-Translator: 439JBYL80IGQTF25UXNR0X1BG "
-"<439JBYL80IGQTF25UXNR0X1BG@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-01-22 02:46+0000\n"
+"Last-Translator: Сергей <asvmail.as@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/bleachbit/main/"
 "ru/>\n"
 "Language: ru\n"
@@ -19,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.16-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -864,10 +863,8 @@ msgid "Clean file"
 msgstr "Очистить файл"
 
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Clean cookies"
-msgstr "Cookies"
+msgstr "Очистить Cookies"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -992,7 +989,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py
 msgid "This option may prevent uninstalling some updates."
-msgstr ""
+msgstr "Этот параметр может помешать удалению некоторых обновлений."
 
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
@@ -1017,16 +1014,14 @@ msgstr "Удаление выбранных пользователем папо�
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Empty space"
-msgstr ""
+msgstr "Свободное место на диске"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Overwrite free disk space to hide deleted files"
 msgid "Wipe empty space to hide deleted files"
 msgstr ""
-"Перезаписать свободное дисковое пространство, чтобы удалённые файлы "
-"невозможно было восстановить"
+"Очистить свободное место на диске, чтобы удалённые файлы невозможно было "
+"восстановить"
 
 #: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
 #: ../bleachbit/Worker.py
@@ -1052,7 +1047,7 @@ msgstr "Система"
 #: ../bleachbit/Cleaner.py ../bleachbit/CLI.py
 #, python-format
 msgid "Wipe empty space in %s"
-msgstr ""
+msgstr "Очистить свободное место на %s"
 
 #: ../bleachbit/Cleaner.py
 msgid "Loading native cleaners."
@@ -1063,10 +1058,9 @@ msgid "Importing cleaners from Winapp2.ini."
 msgstr "Импорт уборщиков из Winapp2.ini."
 
 #: ../bleachbit/Cleaner.py
-#, fuzzy, python-format
-#| msgid "_Wipe Free Space"
+#, python-format
 msgid "Wipe empty space %s"
-msgstr "_Очистить свободное место"
+msgstr "Очистить свободное место %s"
 
 #: ../bleachbit/CLI.py
 #, python-format
