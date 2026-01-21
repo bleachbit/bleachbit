@@ -955,7 +955,7 @@ class SplashThread(Thread):
         """Return the full path to icon file"""
         if hasattr(sys, 'frozen'):
             # running frozen in py2exe
-            icon_dir = Path(sys.argv[0]) / 'share'
+            icon_dir = Path(sys.argv[0]).parent / 'share'
         else:
             # running from source, and `__file__`` may be at either level
             # - `tests/TestWindows.py`
