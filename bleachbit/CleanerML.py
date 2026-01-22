@@ -27,13 +27,14 @@ import logging
 import os
 import stat
 import sys
-import xml.dom.minidom
+import xml.etree.ElementTree
+import xml.parsers.expat
 
 # local import
 import bleachbit
 from bleachbit.Action import ActionProvider
 from bleachbit.FileUtilities import expand_glob_join, listdir
-from bleachbit.General import boolstr_to_bool, getText
+from bleachbit.General import boolstr_to_bool
 from bleachbit.General import os_match as general_os_match
 from bleachbit.Language import get_text as _
 from bleachbit import Cleaner
@@ -41,6 +42,70 @@ if 'win32' == sys.platform:
     from bleachbit.Windows import read_registry_key
 
 logger = logging.getLogger(__name__)
+
+
+class _ETSimpleTextNode:
+
+    ELEMENT_NODE = 1
+    TEXT_NODE = 3
+
+    def __init__(self, data):
+        self.nodeType = self.TEXT_NODE
+        self.data = data
+
+
+class _ETSimpleElementNode:
+
+    ELEMENT_NODE = 1
+    TEXT_NODE = 3
+
+    def __init__(self, element):
+        self._element = element
+        self.nodeType = self.ELEMENT_NODE
+        self.nodeName = element.tag
+
+    def getAttribute(self, name):
+        return self._element.attrib.get(name, '')
+
+    def hasAttribute(self, name):
+        return name in self._element.attrib
+
+    @property
+    def childNodes(self):
+        nodes = []
+        if self._element.text:
+            nodes.append(_ETSimpleTextNode(self._element.text))
+        for child in list(self._element):
+            nodes.append(_ETSimpleElementNode(child))
+            if child.tail:
+                nodes.append(_ETSimpleTextNode(child.tail))
+        return nodes
+
+
+class _ETActionElementAdapter:
+
+    def __init__(self, element):
+        self._element = element
+
+    def getAttribute(self, name):
+        return self._element.attrib.get(name, '')
+
+    def toxml(self):
+        return xml.etree.ElementTree.tostring(self._element, encoding='unicode')
+
+
+def _gettext_etree(element):
+    """Return text like General.getText() would for minidom nodes."""
+    if element is None:
+        return ''
+    rc = element.text or ''
+    for child in list(element):
+        rc += child.tail or ''
+    return rc
+
+
+def _toxml_etree(element):
+    return xml.etree.ElementTree.tostring(element, encoding='unicode')
 
 
 def default_vars():
@@ -85,13 +150,23 @@ class CleanerML:
             self.xlate_mode = True
 
         try:
-            dom = xml.dom.minidom.parse(pathname)
-        except xml.parsers.expat.ExpatError as e:
+            tree = xml.etree.ElementTree.parse(pathname)
+            root_element = tree.getroot()
+        except (xml.etree.ElementTree.ParseError, xml.parsers.expat.ExpatError) as e:
             logger.error(
                 "Error parsing CleanerML file %s with error %s", pathname, e)
             return
 
-        self.handle_cleaner(dom.getElementsByTagName('cleaner')[0])
+        if root_element.tag == 'cleaner':
+            cleaner_element = root_element
+        else:
+            cleaner_element = root_element.find('.//cleaner')
+            if cleaner_element is None:
+                logger.error(
+                    "Error parsing CleanerML file %s: missing <cleaner> element", pathname)
+                return
+
+        self.handle_cleaner(cleaner_element)
 
     def get_cleaner(self):
         """Return the created cleaner"""
@@ -112,68 +187,80 @@ class CleanerML:
 
     def handle_cleaner(self, cleaner):
         """<cleaner> element"""
-        self.cleaner.id = cleaner.getAttribute('id')
-        if not self.os_match(cleaner.getAttribute('os')):
+        self.cleaner.id = cleaner.attrib.get('id', '')
+        if not self.os_match(cleaner.attrib.get('os', '')):
             return
-        self.handle_cleaner_label(cleaner.getElementsByTagName('label')[0])
-        description = cleaner.getElementsByTagName('description')
-        if description and description[0].parentNode == cleaner:
-            self.handle_cleaner_description(description[0])
-        for var in cleaner.getElementsByTagName('var'):
+
+        label = cleaner.find('label')
+        if label is None:
+            raise IndexError('missing <label> element')
+        self.handle_cleaner_label(label)
+
+        description = cleaner.find('description')
+        if description is not None:
+            self.handle_cleaner_description(description)
+
+        for var in cleaner.findall('var'):
             self.handle_cleaner_var(var)
-        for option in cleaner.getElementsByTagName('option'):
+
+        for option in cleaner.findall('option'):
             try:
                 self.handle_cleaner_option(option)
             except Exception:
                 exc_msg = _(
                     "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option XML={option_xml}")
                 logger.exception(exc_msg.format(
-                    cleaner_id=self.cleaner.id, option_xml=option.toxml()))
-        self.handle_cleaner_running(cleaner.getElementsByTagName('running'))
-        self.handle_localizations(
-            cleaner.getElementsByTagName('localizations'))
+                    cleaner_id=self.cleaner.id, option_xml=_toxml_etree(option)))
+        self.handle_cleaner_running(cleaner.findall('running'))
+        self.handle_localizations(cleaner.findall('localizations'))
 
     def handle_cleaner_label(self, label):
         """<label> element under <cleaner>"""
-        self.cleaner.name = _(getText(label.childNodes))
-        translate = label.getAttribute('translate')
+        self.cleaner.name = _(_gettext_etree(label))
+        translate = label.attrib.get('translate', '')
         if translate and boolstr_to_bool(translate):
             self.xlate_cb(self.cleaner.name)
 
     def handle_cleaner_description(self, description):
         """<description> element under <cleaner>"""
-        self.cleaner.description = _(getText(description.childNodes))
-        translators = description.getAttribute('translators')
+        self.cleaner.description = _(_gettext_etree(description))
+        translators = description.attrib.get('translators', '')
         self.xlate_cb(self.cleaner.description, translators)
 
     def handle_cleaner_running(self, running_elements):
         """<running> element under <cleaner>"""
         # example: <running type="command">opera</running>
         for running in running_elements:
-            if not self.os_match(running.getAttribute('os')):
+            if not self.os_match(running.attrib.get('os', '')):
                 continue
-            detection_type = running.getAttribute('type')
-            value = getText(running.childNodes)
-            same_user = running.getAttribute('same_user') or False
+            detection_type = running.attrib.get('type', '')
+            value = _gettext_etree(running)
+            same_user = running.attrib.get('same_user') or False
             self.cleaner.add_running(detection_type, value, same_user)
 
     def handle_cleaner_option(self, option):
         """<option> element"""
-        self.option_id = option.getAttribute('id')
+        self.option_id = option.attrib.get('id', '')
         self.option_description = None
         self.option_name = None
 
-        self.handle_cleaner_option_label(
-            option.getElementsByTagName('label')[0])
-        description = option.getElementsByTagName('description')
-        self.handle_cleaner_option_description(description[0])
-        warning = option.getElementsByTagName('warning')
-        if warning:
-            self.handle_cleaner_option_warning(warning[0])
+        label = option.find('label')
+        if label is None:
+            raise IndexError('missing <label> under <option>')
+        self.handle_cleaner_option_label(label)
+
+        description = option.find('description')
+        if description is None:
+            raise IndexError('missing <description> under <option>')
+        self.handle_cleaner_option_description(description)
+
+        warning = option.find('warning')
+        if warning is not None:
+            self.handle_cleaner_option_warning(warning)
             if self.option_warning:
                 self.cleaner.set_warning(self.option_id, self.option_warning)
 
-        for action in option.getElementsByTagName('action'):
+        for action in option.findall('action'):
             self.handle_cleaner_option_action(action)
 
         self.cleaner.add_option(
@@ -181,32 +268,33 @@ class CleanerML:
 
     def handle_cleaner_option_label(self, label):
         """<label> element under <option>"""
-        self.option_name = _(getText(label.childNodes))
-        translate = label.getAttribute('translate')
-        translators = label.getAttribute('translators')
+        self.option_name = _(_gettext_etree(label))
+        translate = label.attrib.get('translate', '')
+        translators = label.attrib.get('translators', '')
         if not translate or boolstr_to_bool(translate):
             self.xlate_cb(self.option_name, translators)
 
     def handle_cleaner_option_description(self, description):
         """<description> element under <option>"""
-        self.option_description = _(getText(description.childNodes))
-        translators = description.getAttribute('translators')
+        self.option_description = _(_gettext_etree(description))
+        translators = description.attrib.get('translators', '')
         self.xlate_cb(self.option_description, translators)
 
     def handle_cleaner_option_warning(self, warning):
         """<warning> element under <option>"""
-        self.option_warning = _(getText(warning.childNodes))
+        self.option_warning = _(_gettext_etree(warning))
         self.xlate_cb(self.option_warning)
 
     def handle_cleaner_option_action(self, action_node):
         """<action> element under <option>"""
-        if not self.os_match(action_node.getAttribute('os')):
+        if not self.os_match(action_node.attrib.get('os', '')):
             return
-        command = action_node.getAttribute('command')
+        command = action_node.attrib.get('command', '')
         provider = None
         for actionplugin in ActionProvider.plugins:
             if actionplugin.action_key == command:
-                provider = actionplugin(action_node, self.vars)
+                provider = actionplugin(
+                    _ETActionElementAdapter(action_node), self.vars)
         if provider is None:
             raise RuntimeError(f"Invalid command '{command}'")
         self.cleaner.add_action(self.option_id, provider)
@@ -218,8 +306,8 @@ class CleanerML:
         # pylint: disable=import-outside-toplevel
         from bleachbit import Unix
         for localization_node in localization_nodes:
-            for child_node in localization_node.childNodes:
-                Unix.locales.add_xml(child_node)
+            for child_element in list(localization_node):
+                Unix.locales.add_xml(_ETSimpleElementNode(child_element))
         # Add a dummy action so the file isn't reported as unusable
         self.cleaner.add_action('localization', ActionProvider(None))
 
@@ -235,18 +323,19 @@ class CleanerML:
          <value search="winreg" path="HKCU\Software\Valve\Steam" name="SteamPath"></value>
          </var>
         """
-        var_name = var.getAttribute('name')
-        for value_element in var.getElementsByTagName('value'):
-            if not self.os_match(value_element.getAttribute('os')):
+        var_name = var.attrib.get('name', '')
+        for value_element in var.findall('value'):
+            if not self.os_match(value_element.attrib.get('os', '')):
                 continue
-            value_str = getText(value_element.childNodes)
-            search_type = value_element.getAttribute('search')
+            value_str = _gettext_etree(value_element)
+            search_type = value_element.attrib.get('search', '')
             if search_type == 'glob':
                 value_list = expand_glob_join(value_str, '')
             elif search_type == 'winreg':
                 if 'win32' != sys.platform:
                     continue
-                value_list = read_registry_key(value_element.getAttribute('path'), value_element.getAttribute('name'))
+                value_list = read_registry_key(value_element.attrib.get(
+                    'path', ''), value_element.attrib.get('name', ''))
                 if value_list == None:
                     continue
                 else:
