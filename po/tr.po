@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-21 23:03-0700\n"
-"PO-Revision-Date: 2026-01-19 16:01+0000\n"
-"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
+"PO-Revision-Date: 2026-01-23 01:59+0000\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/bleachbit/main/"
 "tr/>\n"
 "Language: tr\n"
@@ -831,16 +831,19 @@ msgid ""
 "${prodname} is already installed.$\\r$\\nClick 'OK' to uninstall the old "
 "version before upgrading, or click 'Cancel' to abort the upgrade."
 msgstr ""
+"${prodname} zaten kuruludur.$\\r$\\n"
+"Yükseltmeden önce eski sürümü kaldırmak için 'Tamam'a ya da yükseltmeden "
+"vazgeçmek için 'İptal Et'e tıkla."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
 msgid "Visit the ${prodname} web site"
-msgstr ""
+msgstr "${prodname} web sitesini ziyaret et"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:INSTALLER_CAPTION"
 msgid "${prodname} ${VERSION} Setup"
-msgstr ""
+msgstr "${prodname} ${VERSION} Kurulumu"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT1"
@@ -848,123 +851,125 @@ msgid ""
 "The next step is building font cache, during which you may see a black "
 "window."
 msgstr ""
+"Sonraki adım yazı tipi önbelleği inşasıdır, sürerken siyah pencere "
+"görebilirsiniz."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT2"
 msgid "It usually finishes in one minute, but sometimes it takes ten minutes."
-msgstr ""
+msgstr "Genellikle bir dakikada biter, ancak bazen on dakika sürebilir."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
 msgid ""
 "You need to login with an account that is a member of the administrators "
 "group to continue."
-msgstr ""
+msgstr "Sürdürmek için yönetici grubu üyesi bir hesapla oturum açmalısınız."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required."
-msgstr ""
+msgstr "Yönetici yetkileri gereklidir."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Administrator privileges are required to clean Windows Updates"
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required for uninstall."
-msgstr "Windows Güncellemeleri temizliği için yönetici öncelikleri gereklidir"
+msgstr "Kaldırmak için yönetici yetkileri gereklidir."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS"
 msgid "For &anyone who uses this computer (all users)"
-msgstr ""
+msgstr "Bu bilgisayarı kullanan &herkes için (tüm kullanıcılar)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS_UMUI"
 msgid "For anyone who uses this computer (all users)"
-msgstr ""
+msgstr "Bu bilgisayarı kullanan herkes için (tüm kullanıcılar)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER"
 msgid "For &me ({USER})"
-msgstr ""
+msgstr "Yalnızca &ben ({USER})"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER_UMUI"
 msgid "For me ({USER})"
-msgstr ""
+msgstr "Yalnızca ben ({USER})"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
 msgid "Unable to elevate, error {ERROR}."
-msgstr ""
+msgstr "Yükselinemedi, {ERROR} hatası."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_NOT_SUPPORTED"
 msgid "The operating system doesn't support elevation."
-msgstr ""
+msgstr "İşletim sistemi yükselmeyi desteklemiyor."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLATION_FOR_CURRENT_USER_NOT_SUPPORTED"
 msgid "The operating system doesn't support current user installations."
-msgstr ""
+msgstr "İşletim sistemi geçerli kullanıcı kurulumlarını desteklemiyor."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_ALL_USERS"
 msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
-msgstr ""
+msgstr "Tüm kullanıcılar için \"{FOLDER}\" içine {VERSION} sürümü kuruldu."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for current user in \"{FOLDER}\"."
-msgstr ""
+msgstr "Geçerli kullanıcı için \"{FOLDER}\" içine {VERSION} sürümü kuruldu."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
 msgid "Select whether to install $(^NameDA) for all users or for current user."
 msgstr ""
+"$(^NameDA) kurulumunun tüm kullanıcılar için mi yoksa geçerli kullanıcı için "
+"mi yapılacağını seç."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to install $(^NameDA)."
-msgstr ""
+msgstr "Hangi kullanıcılar için $(^NameDA) kurulacağını seç."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
 msgid "Invalid combination of paramaters."
-msgstr ""
+msgstr "Geçersiz parametre birleştirmesi."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_LOGON_SERVICE_NOT_RUNNING"
 msgid "Unable to elevate, Secondary Logon service not running."
-msgstr ""
+msgstr "Yükselinemedi, İkincil Oturum Açma hizmeti çalışmıyor."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
 msgid "Fresh install for all users."
-msgstr ""
+msgstr "Tüm kullanıcılar için temiz kurulum."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
 msgid "Fresh install for current user."
-msgstr ""
+msgstr "Geçerli kullanıcı için temiz kurulum."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NOT_INSTALLED"
 msgid "There is no installation of $(^NameDA)."
-msgstr ""
+msgstr "$(^NameDA) kurulumu yok."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Choose a folder"
 msgctxt "nsis:MULTIUSER_PAGE_TITLE"
 msgid "Choose Users"
-msgstr "Klasör seç"
+msgstr "Kullanıcı Seç"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS"
 msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 msgstr ""
+"{OLD_VERSION} sürümünü kaldır ve tüm kullanıcılar için {VERSION} sürümünü "
+"kur."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
@@ -972,21 +977,23 @@ msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for current "
 "user."
 msgstr ""
+"{OLD_VERSION} sürümünü kaldır ve geçerli kullanıcı için {VERSION} sürümünü "
+"kur."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS"
 msgid "Reinstall version {VERSION} for all users."
-msgstr ""
+msgstr "Tüm kullanıcılar için {VERSION} sürümünü yeniden kur."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
 msgid "Reinstall version {VERSION} for current user."
-msgstr ""
+msgstr "Geçerli kullanıcı için {VERSION} sürümünü yeniden kur."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
 msgid "You need to run this program as administrator."
-msgstr ""
+msgstr "Bu programı yönetici olarak çalıştırmalısınız."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
@@ -994,76 +1001,77 @@ msgid ""
 "$(^NameDA) is installed both for all users and for current user.$\\r$"
 "\\nSelect which installation to remove."
 msgstr ""
+"$(^NameDA) hem tüm kullanıcılar hem de geçerli kullanıcı için kurulmuş.$\\"
+"r$\\n"
+"Hangi kurulumun kaldırılacağını seç."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to remove $(^NameDA)."
-msgstr ""
+msgstr "Hangi kullanıcılar için $(^NameDA) kaldırılacağını seç."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
 msgid "This are the basic files needed for ${prodname} to function (required)."
 msgstr ""
+"Bunlar, ${prodname} işlevi için gereksinilen temel dosyalardır (gerekli)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Choose files to shred"
 msgctxt "nsis:SECTION_CORE_NAME"
 msgid "Core files (required)"
-msgstr "Parçalanacak dosyaları seç"
+msgstr "Çekirdek dosyalar (gerekli)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
 msgid "Create the shortcut on desktop."
-msgstr ""
+msgstr "Masaüstünde kısayol oluştur."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Desktop widgets"
 msgctxt "nsis:SECTION_DESKTOP_NAME"
 msgid "Desktop"
-msgstr "Masaüstü parçacıkları"
+msgstr "Masaüstü"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
 msgid ""
 "Add an option to delete files from the file context menu in Windows explorer."
 msgstr ""
+"Windows gezgininde dosya bağlam menüsünden dosya silmek için seçenek ekle."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_NAME"
 msgid "Integrate Shred"
-msgstr ""
+msgstr "Parçalama Tümleşimi"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
 msgid "Create the shortcut on Quick Launch."
-msgstr ""
+msgstr "Hızlı Başlat'ta kısayol oluştur."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
 msgid "Quick launch"
-msgstr ""
+msgstr "Hızlı başlat"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
 msgid "Create shortcuts to ${prodname} on -"
-msgstr ""
+msgstr "Kısayol oluştur: ${prodname} -"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_NAME"
 msgid "Shortcuts"
-msgstr ""
+msgstr "Kısayollar"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
 msgid "Create the shortcut in Start menu."
-msgstr ""
+msgstr "Başlat menüsünde kısayol oluştur."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_NAME"
 msgid "Start menu"
-msgstr ""
+msgstr "Başlat menüsü"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
@@ -1071,40 +1079,38 @@ msgid ""
 "Use ${prodname} in your preferred local system language, install the needed "
 "language files."
 msgstr ""
+"Yeğlediğiniz yerel sistem dilinde ${prodname} kullanın, gerekli dil "
+"dosyalarını kurun."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Localizations"
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
 msgid "Translations"
-msgstr "Yerelleştirmeler"
+msgstr "Çeviriler"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
 msgid "Add uninstall program."
-msgstr ""
+msgstr "Program kaldır ekle."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Update uninstallers"
 msgctxt "nsis:SECTION_UNINSTALL_NAME"
 msgid "Uninstall"
-msgstr "Uygulama kaldırıcıları güncelle"
+msgstr "Kaldır"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_DEBUGGING_TERMINAL"
 msgid "${prodname} Debugging Terminal"
-msgstr ""
+msgstr "${prodname} Hata Ayıklama Uçbirimi"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_NO_UAC"
 msgid "${prodname} No UAC."
-msgstr ""
+msgstr "${prodname} UAC yok."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHRED_SHELL_MENU"
 msgid "Shred with ${prodname}"
-msgstr ""
+msgstr "${prodname} ile parçala"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:UNINSTALL_TEXT"
@@ -1114,6 +1120,10 @@ msgid ""
 "completely removes the installation directory including any files (such as "
 "custom cleaners) that you may have added or changed."
 msgstr ""
+"${prodname} şu klasörden kaldırılacaktır.$\\r$\\n"
+"Kaldırmayı başlatmak için Kaldır'a tıklayın.$\\r$\\n"
+"UYARI: Kaldırıcı eklemiş ya da değiştirmiş olabileceğiniz (özel "
+"temizleyiciler gibi) tüm dosyaları içeren kurulum dizinini tümüyle kaldırır."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1358,7 +1368,7 @@ msgstr "geçerli temizleyici değil: %s"
 #: ../bleachbit/CLI.py
 #, python-format
 msgid "Wildcard characters are not allowed in --except: %s"
-msgstr ""
+msgstr "--except içinde joker karakterlere izin verilmez: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1366,10 +1376,9 @@ msgstr ""
 #. More information about the command line is here
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
-msgstr "kullanım: %prog [seçenekler] temizleyici.seçenek1 temizleyici.seçenek2"
+msgstr ""
+"kullanım: %prog [seçenekler] temizleyici.seçenek1 [temizleyici.seçenek2 ...]"
 
 #: ../bleachbit/CLI.py
 msgid "list cleaners"
@@ -1414,7 +1423,7 @@ msgstr "uyarısı olmayan tüm seçenekleri etkinleştir"
 
 #: ../bleachbit/CLI.py
 msgid "exclude cleaner options (can be repeated, comma-separated)"
-msgstr ""
+msgstr "temizleyici seçeneklerini dışla (yinelenebilir, virgülle ayrılmış)"
 
 #: ../bleachbit/CLI.py
 msgid "set log level to verbose"
@@ -1441,16 +1450,12 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "yeni sürümü varsa winapp2.ini dosyasını güncelle"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid ""
-#| "Specify only one of these commands: --list-cleaners, --wipe-empty-space, "
-#| "--preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean, --shred"
 msgstr ""
 "Bu komutlardan yalnızca birini belirtin: --list-cleaners, --wipe-empty-"
-"space, --preview, --clean"
+"space, --preview, --clean, --shred"
 
 #: ../bleachbit/CLI.py
 msgid "Checking online for updates to winapp2.ini"
@@ -1622,16 +1627,16 @@ msgstr "Silmeden önce onayla"
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Enable %(option)s"
-msgstr ""
+msgstr "%(option)s etkinleştir"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Remember my choice for %(option)s"
-msgstr ""
+msgstr "%(option)s için seçeneğimi anımsa"
 
 #: ../bleachbit/GuiBasic.py
 msgid "_Enable anyway"
-msgstr ""
+msgstr "_Yine de etkinleştir"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
@@ -1778,7 +1783,7 @@ msgstr "Kalacakların listesi"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Warning confirmations reset."
-msgstr ""
+msgstr "Uyarı onayları sıfırlaması."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
@@ -1837,10 +1842,8 @@ msgid "Exit after cleaning"
 msgstr "Temizledikten sonra çık"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Delete confirmation"
 msgid "Reset warning confirmations"
-msgstr "Silme onayı"
+msgstr "Uyarı onaylarını sıfırla"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
@@ -1914,7 +1917,7 @@ msgstr "Bu yol zaten özel listede var."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Protected Path"
-msgstr ""
+msgstr "Korunan Yol"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -2041,16 +2044,9 @@ msgstr "Boyut"
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #: ../bleachbit/GUI.py
-#, fuzzy, python-format
-#| msgid ""
-#| "Warning regarding %(cleaner)s - %(option)s:\n"
-#| "\n"
-#| "%(warning)s"
+#, python-format
 msgid "%(cleaner)s - %(option)s"
-msgstr ""
-"%(cleaner)s - %(option)s ile ilgili uyarılar:\n"
-"\n"
-"%(warning)s"
+msgstr "%(cleaner)s - %(option)s"
 
 #: ../bleachbit/GUI.py
 #, python-format
@@ -2293,6 +2289,11 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"Uyarı: '%(path)s' önemli dosyalar içerebilir.\n"
+"\n"
+"Etki: %(files)d dosya, %(size)s\n"
+"\n"
+"Bu yolu eklemek istediğinizden emin misiniz?"
 
 #. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
 #: ../bleachbit/ProtectedPath.py
@@ -2302,6 +2303,9 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"Uyarı: '%(path)s' önemli dosyalar içerebilir.\n"
+"\n"
+"Bu yolu eklemek istediğinizden emin misiniz?"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
