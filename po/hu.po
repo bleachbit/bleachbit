@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-21 23:03-0700\n"
-"PO-Revision-Date: 2026-01-19 16:01+0000\n"
+"PO-Revision-Date: 2026-01-23 01:59+0000\n"
 "Last-Translator: Ghost of Sparta <makesocialfoss32@keemail.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/bleachbit/main/"
 "hu/>\n"
@@ -839,16 +839,19 @@ msgid ""
 "${prodname} is already installed.$\\r$\\nClick 'OK' to uninstall the old "
 "version before upgrading, or click 'Cancel' to abort the upgrade."
 msgstr ""
+"A(z) ${prodname} már telepítve van.$\\r$\\n"
+"Kattintson az „OK” gombra a régi verzió eltávolításához a frissítés előtt, "
+"vagy a frissítés megszakításához kattintson a „Mégse” gombra."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
 msgid "Visit the ${prodname} web site"
-msgstr ""
+msgstr "A(z) ${prodname} weboldalának meglátogatása"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:INSTALLER_CAPTION"
 msgid "${prodname} ${VERSION} Setup"
-msgstr ""
+msgstr "${prodname} ${VERSION} telepítő"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT1"
@@ -856,11 +859,15 @@ msgid ""
 "The next step is building font cache, during which you may see a black "
 "window."
 msgstr ""
+"A következő lépés a betűkészlet-gyorsítótár felépítése, amely során egy "
+"fekete ablak jelenhet meg."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT2"
 msgid "It usually finishes in one minute, but sometimes it takes ten minutes."
 msgstr ""
+"Ez általában egy percen belül befejeződik, de néha akár tíz percig is "
+"eltarthat."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
@@ -868,112 +875,124 @@ msgid ""
 "You need to login with an account that is a member of the administrators "
 "group to continue."
 msgstr ""
+"A folytatáshoz rendszergazdai jogosultságokkal rendelkező felhasználói "
+"fiókkal kell bejelentkeznie."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required."
-msgstr ""
+msgstr "Rendszergazdai jogosultság szükséges."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Administrator privileges are required to clean Windows Updates"
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required for uninstall."
-msgstr ""
-"Rendszergazdai jogosultságok szükségesek a Windows-frissítések tisztításához"
+msgstr "Az eltávolításhoz rendszergazdai jogosultságok szükségesek."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS"
 msgid "For &anyone who uses this computer (all users)"
-msgstr ""
+msgstr "&Bárki számára, aki ezt a számítógépet használja (összes felhasználó)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS_UMUI"
 msgid "For anyone who uses this computer (all users)"
-msgstr ""
+msgstr "Bárki számára, aki ezt a számítógépet használja (minden felhasználó)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER"
 msgid "For &me ({USER})"
-msgstr ""
+msgstr "Csak &nekem ({USER})"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER_UMUI"
 msgid "For me ({USER})"
-msgstr ""
+msgstr "Csak nekem ({USER})"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
 msgid "Unable to elevate, error {ERROR}."
-msgstr ""
+msgstr "Nem sikerült rendszergazdai jogosultságot szerezni, hiba: {ERROR}."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_NOT_SUPPORTED"
 msgid "The operating system doesn't support elevation."
 msgstr ""
+"Az operációs rendszer nem támogatja a rendszergazdai jogosultságok "
+"megszerzését."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLATION_FOR_CURRENT_USER_NOT_SUPPORTED"
 msgid "The operating system doesn't support current user installations."
 msgstr ""
+"Az operációs rendszer nem támogatja a jelenlegi felhasználó általi "
+"telepítést."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_ALL_USERS"
 msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
 msgstr ""
+"A(z) {VERSION} verzió az összes felhasználónak telepítve van: \"{FOLDER}\"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for current user in \"{FOLDER}\"."
 msgstr ""
+"A(z) {VERSION} verzió a jelenlegi felhasználó számára van telepítve itt: „"
+"{FOLDER}”."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
 msgid "Select whether to install $(^NameDA) for all users or for current user."
 msgstr ""
+"Válassza ki, hogy a $(^NameDA) telepítése minden felhasználóra vagy csak a "
+"jelenlegi felhasználóra vonatkozzon."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to install $(^NameDA)."
 msgstr ""
+"Válassza ki, hogy mely felhasználók számára történjen a(z) $(^NameDA) "
+"telepítése."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
 msgid "Invalid combination of paramaters."
-msgstr ""
+msgstr "A megadott paraméterek kombinációja érvénytelen."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_LOGON_SERVICE_NOT_RUNNING"
 msgid "Unable to elevate, Secondary Logon service not running."
 msgstr ""
+"Nem sikerült rendszergazdai jogosultságot szerezni, mert a másodlagos "
+"bejelentkezés (Secondary Logon) szolgáltatás nem fut."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
 msgid "Fresh install for all users."
-msgstr ""
+msgstr "Új telepítés az összes felhasználó számára."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
 msgid "Fresh install for current user."
-msgstr ""
+msgstr "Új telepítés a jelenlegi felhasználó számára."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NOT_INSTALLED"
 msgid "There is no installation of $(^NameDA)."
-msgstr ""
+msgstr "A(z) $(^NameDA) nincs telepítve."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Choose a folder"
 msgctxt "nsis:MULTIUSER_PAGE_TITLE"
 msgid "Choose Users"
-msgstr "Mappa kiválasztása"
+msgstr "Válassza ki a felhasználókat"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS"
 msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 msgstr ""
+"A(z) {OLD_VERSION} eltávolítása, majd a(z) {VERSION} telepítése az összes "
+"felhasználónak."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
@@ -981,21 +1000,23 @@ msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for current "
 "user."
 msgstr ""
+"A(z) {OLD_VERSION} eltávolítása, majd a(z) {VERSION} telepítése a jelenlegi "
+"felhasználónak."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS"
 msgid "Reinstall version {VERSION} for all users."
-msgstr ""
+msgstr "A(z) {VERSION} verzió újratelepítése az összes felhasználó számára."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
 msgid "Reinstall version {VERSION} for current user."
-msgstr ""
+msgstr "A(z) {VERSION} verzió újratelepítése a jelenlegi felhasználónak."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
 msgid "You need to run this program as administrator."
-msgstr ""
+msgstr "A program futtatásához rendszergazdai jogosultság szükséges."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
@@ -1003,76 +1024,76 @@ msgid ""
 "$(^NameDA) is installed both for all users and for current user.$\\r$"
 "\\nSelect which installation to remove."
 msgstr ""
+"$(^NameDA) mind a jelenlegi, mind az összes felhasználó számára telepítve "
+"van.\\r\\n"
+"Válassza ki az eltávolítandó példányt."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to remove $(^NameDA)."
 msgstr ""
+"Válassza ki, mely felhasználók számára törölje a(z) $(^NameDA) programot."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
 msgid "This are the basic files needed for ${prodname} to function (required)."
-msgstr ""
+msgstr "Ezek az alapfájlok szükségesek a ${prodname} működéséhez (kötelező)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Choose files to shred"
 msgctxt "nsis:SECTION_CORE_NAME"
 msgid "Core files (required)"
-msgstr "Válassza ki a megsemmisítendő fájlokat"
+msgstr "Alapfájlok (kötelező)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
 msgid "Create the shortcut on desktop."
-msgstr ""
+msgstr "Parancsikon létrehozása az asztalon."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Desktop widgets"
 msgctxt "nsis:SECTION_DESKTOP_NAME"
 msgid "Desktop"
-msgstr "Grafikus felületi elemek"
+msgstr "Asztal"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
 msgid ""
 "Add an option to delete files from the file context menu in Windows explorer."
-msgstr ""
+msgstr "Lehetőség hozzáadása a fájlok törlésére a Windows Intéző menüjében."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_NAME"
 msgid "Integrate Shred"
-msgstr ""
+msgstr "Megsemmisítés integrálása"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
 msgid "Create the shortcut on Quick Launch."
-msgstr ""
+msgstr "Parancsikon létrehozása a Gyorsindításban."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
 msgid "Quick launch"
-msgstr ""
+msgstr "Gyorsindítás"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
 msgid "Create shortcuts to ${prodname} on -"
-msgstr ""
+msgstr "Parancsikonok létrehozása a ${prodname} számára a következő helyeken:"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_NAME"
 msgid "Shortcuts"
-msgstr ""
+msgstr "Parancsikonok"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
 msgid "Create the shortcut in Start menu."
-msgstr ""
+msgstr "Parancsikon létrehozása a Start menüben."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_NAME"
 msgid "Start menu"
-msgstr ""
+msgstr "Start menü"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
@@ -1080,40 +1101,38 @@ msgid ""
 "Use ${prodname} in your preferred local system language, install the needed "
 "language files."
 msgstr ""
+"A ${prodname} használata a kívánt nyelven, telepítse a szükséges nyelvi "
+"fájlokat."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Localizations"
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
 msgid "Translations"
-msgstr "Lokalizáció"
+msgstr "Fordítások"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
 msgid "Add uninstall program."
-msgstr ""
+msgstr "Eltávolító program hozzáadása."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Update uninstallers"
 msgctxt "nsis:SECTION_UNINSTALL_NAME"
 msgid "Uninstall"
-msgstr "Eltávolítók frissítése"
+msgstr "Eltávolítás"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_DEBUGGING_TERMINAL"
 msgid "${prodname} Debugging Terminal"
-msgstr ""
+msgstr "${prodname} hibakereső terminál"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_NO_UAC"
 msgid "${prodname} No UAC."
-msgstr ""
+msgstr "${prodname} UAC nélkül."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHRED_SHELL_MENU"
 msgid "Shred with ${prodname}"
-msgstr ""
+msgstr "Megsemmisítés ezzel: ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:UNINSTALL_TEXT"
@@ -1123,6 +1142,11 @@ msgid ""
 "completely removes the installation directory including any files (such as "
 "custom cleaners) that you may have added or changed."
 msgstr ""
+"A ${prodname} a következő mappából lesz eltávolítva.\\r\\n"
+"Kattintson az Eltávolítás gombra az eltávolítás megkezdéséhez.\\r\\n"
+"FIGYELEM: Az eltávolító program teljesen törli a telepítési könyvtárat, "
+"beleértve minden olyan fájlt is (például egyedi tisztítókat), amelyeket Ön "
+"hozzáadott vagy módosított."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1370,7 +1394,7 @@ msgstr "nem érvényes takarító: %s"
 #: ../bleachbit/CLI.py
 #, python-format
 msgid "Wildcard characters are not allowed in --except: %s"
-msgstr ""
+msgstr "A helyettesítő karakterek nem engedélyezettek a --except opcióban: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1378,10 +1402,8 @@ msgstr ""
 #. More information about the command line is here
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
-msgstr "használat: %prog[opciók] takarító.opció1 takarító.opció2"
+msgstr "%prog [beállítások] tisztító.opció1 [tisztító.opció2 ...]"
 
 #: ../bleachbit/CLI.py
 msgid "list cleaners"
@@ -1426,7 +1448,7 @@ msgstr "Minden olyan opció engedélyezése, amelyhez nem tartozik figyelmeztet�
 
 #: ../bleachbit/CLI.py
 msgid "exclude cleaner options (can be repeated, comma-separated)"
-msgstr ""
+msgstr "tisztító beállítások kizárása (ismételhető, vesszővel elválasztva)"
 
 #: ../bleachbit/CLI.py
 msgid "set log level to verbose"
