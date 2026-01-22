@@ -6,12 +6,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-21 23:03-0700\n"
-"PO-Revision-Date: 2026-01-22 06:04+0000\n"
+"PO-Revision-Date: 2026-01-23 01:59+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/he/"
-">\n"
+"Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/"
+"he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -820,40 +820,43 @@ msgid ""
 "${prodname} is already installed.$\\r$\\nClick 'OK' to uninstall the old "
 "version before upgrading, or click 'Cancel' to abort the upgrade."
 msgstr ""
+"${prodname} כבר מותקן.$\\r$\\n"
+"לחיצה על ‚אישור’ תסיר את הגרסה הישנה לפני השדרוג, לחלופין, לחיצה על ‚ביטול’ "
+"תבטל את השדרוג."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
 msgid "Visit the ${prodname} web site"
-msgstr ""
+msgstr "ביקור באתר ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:INSTALLER_CAPTION"
 msgid "${prodname} ${VERSION} Setup"
-msgstr ""
+msgstr "התקנת ${prodname} ${VERSION}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT1"
 msgid ""
 "The next step is building font cache, during which you may see a black "
 "window."
-msgstr ""
+msgstr "השלב הבא הוא בניית מטמון גופנים, שבמהלכו עלול להופיע חלון שחור."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT2"
 msgid "It usually finishes in one minute, but sometimes it takes ten minutes."
-msgstr ""
+msgstr "זה בדרך כלל מסתיים תוך דקה, אבל לפעמים זה יכול לקחת גם עשר דקות."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
 msgid ""
 "You need to login with an account that is a member of the administrators "
 "group to continue."
-msgstr ""
+msgstr "צריך להיכנס עם חשבון שחבר בקבוצת המנהלים כדי להמשיך."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required."
-msgstr ""
+msgstr "נדרשים פרטי גישה לניהול."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 #, fuzzy
@@ -1823,10 +1826,8 @@ msgid "Exit after cleaning"
 msgstr "יציאה לאחר הניקיון"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Delete confirmation"
 msgid "Reset warning confirmations"
-msgstr "אימות המחיקה"
+msgstr "איפוס אישורי אזהרות"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
