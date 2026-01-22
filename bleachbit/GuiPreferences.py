@@ -23,13 +23,14 @@
 Preferences dialog
 """
 
-from bleachbit import online_update_notification_enabled
-from bleachbit.Options import options
 from bleachbit import GuiBasic
+from bleachbit import online_update_notification_enabled
+from bleachbit import ProtectedPath
+from bleachbit.GtkShim import Gtk, GLib
 from bleachbit.GuiCookie import CookieManagerDialog
 from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _, pget_text as _p
-from bleachbit.GtkShim import Gtk, GLib
+from bleachbit.Options import options
 
 import logging
 import os
@@ -56,6 +57,7 @@ class PreferencesDialog:
         self.dialog.set_default_size(300, 200)
 
         self.cookie_manager_dialog = None
+        self._locations_notice_css_provider = None
 
         # Add InfoBar for non-blocking messages
         self.infobar = Gtk.InfoBar()
@@ -145,6 +147,13 @@ class PreferencesDialog:
         if 'kde_shred_menu_option' == path:
             from bleachbit.DesktopMenuOptions import install_kde_service_menu_file
             install_kde_service_menu_file()
+
+    def __reset_warning_preferences(self, _button):
+        """Reset saved warning confirmations."""
+        options.clear_warning_preferences()
+        self.show_infobar(
+            _("Warning confirmations reset."),
+            Gtk.MessageType.INFO)
 
     def __create_update_widgets(self, vbox):
         """Create and configure update-related checkboxes."""
@@ -295,6 +304,14 @@ class PreferencesDialog:
         cb_popup.connect(
             'toggled', self.__toggle_callback, 'delete_confirmation')
         vbox.pack_start(cb_popup, False, True, 0)
+
+        reset_warnings_button = Gtk.Button.new_with_label(
+            label=_("Reset warning confirmations"))
+        reset_warnings_button.set_halign(Gtk.Align.START)
+        reset_warnings_button.set_margin_top(6)
+        reset_warnings_button.connect(
+            'clicked', self.__reset_warning_preferences)
+        vbox.pack_start(reset_warnings_button, False, True, 0)
 
         # Use base 1000 over 1024?
         cb_units_iec = Gtk.CheckButton(
@@ -503,10 +520,52 @@ class PreferencesDialog:
 
         return False
 
+    def _check_protected_path(self, pathname):
+        """Check if path is protected and warn user if so.
+
+        Returns True if it's safe to proceed, False if user cancelled.
+        """
+        logger.debug("Checking protected path: %s", pathname)
+        match_info = ProtectedPath.check_protected_path(pathname)
+        if match_info is None:
+            return True
+
+        # Check if user already confirmed this path
+        normalized = ProtectedPath._normalize_for_comparison(
+            pathname, match_info['case_sensitive'])
+        warning_key = 'protected_path:' + normalized
+        if options.get_warning_preference(warning_key):
+            return True
+
+        # Calculate impact
+        # FIXME later: this can be very slow with many objects
+        logger.debug("Checking protected path impact: %s", pathname)
+        impact = ProtectedPath.calculate_impact(pathname)
+
+        # Generate warning message
+        warning_msg = ProtectedPath.get_warning_message(pathname, impact)
+
+        # Show warning dialog
+        confirmed, remember = GuiBasic.warning_confirm_dialog(
+            self.dialog,
+            _("Protected Path"),
+            warning_msg
+        )
+
+        if confirmed and remember:
+            options.remember_warning_preference(warning_key)
+
+        return confirmed
+
     def _add_path(self, pathname, path_type, page_type, liststore, pathnames):
         """Common function to add a path to either whitelist or custom list"""
         if self._check_path_exists(pathname, page_type):
             return
+
+        # Check for protected paths when adding to custom (delete) list
+        if page_type == LOCATIONS_CUSTOM:
+            if not self._check_protected_path(pathname):
+                return
 
         type_str = _('File') if path_type == 'file' else _('Folder')
         liststore.append([type_str, pathname])
@@ -573,16 +632,55 @@ class PreferencesDialog:
                 "clicked", self.__on_manage_cookies_clicked)
             vbox.pack_start(button_cookie_manager, False, False, 0)
 
+        if not self._locations_notice_css_provider:
+            self._locations_notice_css_provider = Gtk.CssProvider()
+            self._locations_notice_css_provider.load_from_data(b"""
+                .bb-locations-notice-whitelist {
+                    background-color: rgba(46, 139, 87, 0.12);
+                    border-radius: 6px;
+                    padding: 6px;
+                }
+                .bb-locations-notice-custom {
+                    background-color: rgba(210, 120, 0, 0.12);
+                    border-radius: 6px;
+                    padding: 6px;
+                }
+            """)
 
         if LOCATIONS_WHITELIST == page_type:
             # TRANSLATORS: "Paths" is used generically to refer to both files
             # and folders
-            notice = Gtk.Label(
-                label=_("These paths will not be deleted or modified."))
+            notice_text = _("These paths will not be deleted or modified.")
+            notice_icon = "emblem-readonly"
+            notice_class = "bb-locations-notice-whitelist"
         elif LOCATIONS_CUSTOM == page_type:
-            notice = Gtk.Label(
-                label=_("These locations can be selected for deletion."))
-        vbox.pack_start(notice, False, False, 0)
+            notice_text = _("These locations can be selected for deletion.")
+            notice_icon = "edit-delete"
+            notice_class = "bb-locations-notice-custom"
+
+        notice_label = Gtk.Label(label=notice_text)
+        notice_label.set_line_wrap(True)
+        notice_label.set_xalign(0.0)
+
+        notice_image = Gtk.Image.new_from_icon_name(
+            notice_icon, Gtk.IconSize.MENU)
+        notice_image.set_valign(Gtk.Align.START)
+
+        notice_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        notice_box.pack_start(notice_image, False, False, 0)
+        notice_box.pack_start(notice_label, True, True, 0)
+
+        notice_frame = Gtk.EventBox()
+        notice_frame.set_visible_window(True)
+        notice_frame.add(notice_box)
+        notice_frame.set_margin_bottom(6)
+        notice_frame.set_margin_top(6)
+        style_context = notice_frame.get_style_context()
+        style_context.add_provider(
+            self._locations_notice_css_provider,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        style_context.add_class(notice_class)
+        vbox.pack_start(notice_frame, False, False, 0)
 
         # create treeview
         treeview = Gtk.TreeView.new_with_model(liststore)

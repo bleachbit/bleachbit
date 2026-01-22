@@ -44,12 +44,14 @@ KEYFULL = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
 
 def get_winapp2():
     """Download and cache winapp2.ini.  Return local filename."""
-    url = "https://rawgit.com/bleachbit/winapp2.ini/master/Winapp2-BleachBit.ini"
+    url = "https://raw.githubusercontent.com/bleachbit/winapp2.ini/refs/heads/master/Winapp2-BleachBit.ini"
     tmpdir = None
     if os.name == 'posix':
         tmpdir = '/tmp'
     if os.name == 'nt':
         tmpdir = os.getenv('TMP')
+    if not tmpdir:
+        tmpdir = tempfile.gettempdir()
     fname = os.path.join(tmpdir, 'bleachbit_test_winapp2.ini')
     if os.path.exists(fname):
         import time
@@ -60,7 +62,8 @@ def get_winapp2():
             os.remove(fname)
     if not os.path.exists(fname):
         from bleachbit.Network import download_url_to_fn
-        download_url_to_fn(url, fname)
+        assert download_url_to_fn(url, fname)
+    assert os.path.exists(fname)
     return fname
 
 

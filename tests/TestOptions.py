@@ -222,3 +222,10 @@ class OptionsTestCase(common.BleachbitTestCase):
         self.assertIn('Permission denied', log_context.output[0])
         self.assertIn(bleachbit.options_file, log_context.output[0])
         self.assertEqual(o.get('test_key'), 'test_value')
+
+    def test_warning(self):
+        """Test warning preferences"""
+        o = bleachbit.Options.options
+        self.assertFalse(o.get_warning_preference('test_key'))
+        o.remember_warning_preference('test_key')
+        self.assertTrue(o.get_warning_preference('test_key'))

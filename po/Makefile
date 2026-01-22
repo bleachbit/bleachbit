@@ -47,14 +47,17 @@ metainfo.pot: ../org.bleachbit.BleachBit.metainfo.xml require-gettext
 		echo '# metainfo.pot stub (ITS file missing)' > $@; \
 	fi
 
-$(POTFILE): $(SRC) cleanerml.pot desktop.pot metainfo.pot require-gettext
+nsis.pot: ../windows/NsisInclude/NsisMultiUserLang.nsh ../windows/nsis_translations.py
+	$(PYTHON) ../windows/nsis_translations.py --pot
+
+$(POTFILE): $(SRC) cleanerml.pot desktop.pot metainfo.pot nsis.pot require-gettext
 	@echo "* Generating $(POTFILE)"
 	@if [ -f $(POTFILE) ]; then \
 		cp $(POTFILE) $(POTFILE).old; \
 		echo " Words before update: "; \
 		tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq |wc --words; \
 	fi
-	cat cleanerml.pot desktop.pot metainfo.pot > $(POTFILE)
+	cat cleanerml.pot desktop.pot metainfo.pot nsis.pot > $(POTFILE)
 	# --add-location=file: reduces size of diff
 	xgettext -o $(POTFILE) \
 		--join-existing \
@@ -117,7 +120,7 @@ clean:
 	echo "* Cleaning"
 	@rm -fv -- *.mo
 	# Keep $(POTFILE) because it is stored in Git for Weblate.
-	@rm -fv $(POTFILE).old cleanerml.pot desktop.pot metainfo.pot diff.pot
+	@rm -fv $(POTFILE).old cleanerml.pot desktop.pot metainfo.pot nsis.pot diff.pot
 	@rm -rfv ../locale
 
 all: $(POTFILE) $(MOFILES)

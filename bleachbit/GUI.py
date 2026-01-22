@@ -608,22 +608,21 @@ class TreeDisplayModel:
             # When enabling an option, present any warnings.
             # (When disabling an option, there is no need to present warnings.)
             warning = backends[cleaner_id].get_warning(option_id)
-            # TRANSLATORS: %(cleaner) may be Firefox, System, etc.
-            # %(option) may be cache, logs, cookies, etc.
-            # %(warning) may be 'This option is really slow'
-            msg = _("Warning regarding %(cleaner)s - %(option)s:\n\n%(warning)s") % \
-                {'cleaner': model[parent][0],
-                 'option': model[path][0],
-                 'warning': warning}
-            if warning:
-                resp = GuiBasic.message_dialog(parent_window,
-                                               msg,
-                                               Gtk.MessageType.WARNING,
-                                               Gtk.ButtonsType.OK_CANCEL,
-                                               _('Confirm'))
-                if Gtk.ResponseType.OK != resp:
+            warning_key = 'cleaner:' + cleaner_id + ':' + option_id
+            if warning and not options.get_warning_preference(warning_key):
+                # TRANSLATORS: %(cleaner) may be Firefox, System, etc.
+                # %(option) may be cache, logs, cookies, etc.
+                option_name = _("%(cleaner)s - %(option)s") % {
+                    'cleaner': model[parent][0],
+                    'option': model[path][0],
+                }
+                confirmed, remember_choice = GuiBasic.warning_confirm_dialog(
+                    parent_window, option_name, warning)
+                if not confirmed:
                     # user cancelled, so don't toggle option
                     return
+                if remember_choice:
+                    options.remember_warning_preference(warning_key)
         model[path][1] = value
 
     def col1_toggled_cb(self, cell, path, model, parent_window):

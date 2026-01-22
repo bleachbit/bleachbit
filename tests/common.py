@@ -29,6 +29,7 @@ import tempfile
 import time
 import unittest
 import warnings
+from pathlib import Path
 from unittest import mock
 
 if 'win32' == sys.platform:
@@ -176,6 +177,10 @@ class BleachbitTestCase(unittest.TestCase):
     #
     def assertExists(self, path, msg='', func=os.stat):
         """File, directory, or any path exists"""
+        if isinstance(path, Path):
+            path = str(path)
+        assert isinstance(
+            path, str), f'path must be a string, not {type(path)}'
         path = os.path.expandvars(path)
         if not self.check_exists(func, getTestPath(path)):
             raise AssertionError(

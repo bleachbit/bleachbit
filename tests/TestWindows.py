@@ -56,6 +56,7 @@ from bleachbit.Windows import (
     read_registry_key,
     get_sid_token_48,
     is_ots_elevation,
+    SplashThread,
 )
 from bleachbit import logger
 
@@ -63,6 +64,7 @@ import os
 import platform
 import shutil
 import sys
+import time
 import tempfile
 from decimal import Decimal
 from unittest import mock
@@ -330,6 +332,50 @@ class WindowsTestCase(common.BleachbitTestCase):
         with mock.patch('bleachbit.Windows.sys.argv', argv):
             with mock.patch('bleachbit.Windows.get_sid_token_48', side_effect=RuntimeError('error')):
                 self.assertFalse(is_ots_elevation())
+
+    def test_splash_thread_reuses_cached_class_atom(self):
+        """_register_window_class skips RegisterClass when cached."""
+        splash = SplashThread()
+        self.addCleanup(lambda: setattr(SplashThread, '_class_atom', None))
+        SplashThread._class_atom = 9876
+        with mock.patch('bleachbit.Windows.win32gui.RegisterClass') as mock_register:
+            atom = splash._register_window_class(mock.Mock())
+        self.assertEqual(atom, 9876)
+        mock_register.assert_not_called()
+
+    def test_splash_thread_recovers_when_class_exists(self):
+        """_register_window_class handles ERROR_CLASS_ALREADY_EXISTS."""
+        splash = SplashThread()
+        self.addCleanup(lambda: setattr(SplashThread, '_class_atom', None))
+        SplashThread._class_atom = None
+        wnd_class = mock.Mock()
+        wnd_class.hInstance = mock.sentinel.instance
+        wnd_class.lpszClassName = 'SimpleWin32'
+        register_error = pywintypes.error(1410, 'RegisterClass', 'Class already exists.')
+        with mock.patch('bleachbit.Windows.win32gui.RegisterClass', side_effect=register_error) as mock_register, \
+                mock.patch('bleachbit.Windows.win32gui.GetClassInfo', return_value=(4321,)) as mock_get_class_info:
+            atom = splash._register_window_class(wnd_class)
+        self.assertEqual(atom, 4321)
+        self.assertEqual(SplashThread._class_atom, 4321)
+        mock_register.assert_called_once_with(wnd_class)
+        mock_get_class_info.assert_called_once_with(wnd_class.hInstance, wnd_class.lpszClassName)
+
+    def test_splash_thread_propagates_startup_error(self):
+        """start() raises if splash initialization fails."""
+        splash = SplashThread()
+        with mock.patch.object(splash, '_show_splash_screen', side_effect=RuntimeError('boom')):
+            with self.assertRaises(RuntimeError):
+                splash.start()
+        self.assertIsNotNone(splash._startup_error)
+
+    def test_splash_thread_join_handles_missing_window(self):
+        """join() succeeds even when window handle was never created."""
+        splash = SplashThread()
+        splash._startup_error = RuntimeError('boom')
+        splash._splash_screen_started.set()
+        splash.start = lambda: None  # prevent thread start
+        # Directly call join; should not raise even though handle is None
+        splash.join(timeout=0)
 
     @common.skipUnlessDestructive
     def test_run_net_service_command(self):
@@ -752,6 +798,63 @@ class WindowsTestCase(common.BleachbitTestCase):
         """Unit test for shell_change_notify"""
         ret = shell_change_notify()
         self.assertEqual(ret, 0)
+
+    def test_splash_screen(self):
+        """Unit test for splash screen"""
+        splash_thread = SplashThread()
+        icon_path = splash_thread.get_icon_path()
+        self.assertTrue(icon_path.is_absolute())
+        self.assertExists(icon_path)
+        splash_thread.start()
+        timeout = 5.0  # seconds
+        start_time = time.time()
+        time.sleep(1)
+        while not splash_thread.is_alive() and (time.time() - start_time) < timeout:
+            time.sleep(0.1)
+        self.assertTrue(splash_thread.is_alive(),
+                        'Splash thread did not start within timeout')
+        splash_thread.join()
+
+        # Originally, running twice in same process caused indefinite hang,
+        # so run it twice.
+        repeat = SplashThread()
+        repeat.start()
+        repeat.join()
+
+    def test_splash_screen_window_pos(self):
+        """Unit test for calculate_window_position()"""
+        splash_thread = SplashThread()
+
+        # Test with a typical 1080p display
+        display_width = 1920
+        display_height = 1080
+        x, y, width, height = splash_thread.calculate_window_position(
+            display_width, display_height)
+
+        # The window should have positive dimensions
+        self.assertGreater(width, 0)
+        self.assertGreater(height, 0)
+
+        # The window position should be positive (on screen)
+        self.assertGreaterEqual(x, 0)
+        self.assertGreaterEqual(y, 0)
+
+        # The window should fit within the display
+        self.assertLessEqual(x + width, display_width)
+        self.assertLessEqual(y + height, display_height)
+
+        # The window should be roughly centered
+        # x should be approximately (display_width - width) / 2
+        expected_x = (display_width - width) // 2
+        self.assertEqual(x, expected_x)
+        # y should be approximately (display_height - height) / 2
+        expected_y = (display_height - height) // 2
+        self.assertEqual(y, expected_y)
+
+        # Width should be 1/4 of display width (480 for 1920)
+        self.assertEqual(width, display_width // 4)
+        # Height should be 100
+        self.assertEqual(height, 100)
 
     def test_set_environ(self):
         for folder in ['folderäö', 'folder']:

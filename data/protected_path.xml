@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<!--
+These paths are not automatically put into a keep list (a.k.a. whitelist).
+Instead, if user adds any of these to the delete list, the application
+shows a warning.
+
+Windows is case-insensitive.
+Linux is case-sensitive except where `case="insensitive"`.
+Omit trailing slashes.
+
+Paths with data that can be safely deleted or regenerated does _not_ belong
+here. Examples:
+~/.cache
+%tmp%
+%temp%
+.cargo
+.npm
+.venv
+-->
+<protected_paths>
+  <paths os="unix" depth="0">
+    <path>/</path>
+    <path>/media</path>
+    <path>/mnt</path>
+    <!-- user may want to delete /root/.cache -->
+    <path>/root</path>
+    <path>$XDG_DATA_HOME</path>
+    <!-- ~/.local/share/recently-used.xbel -->
+    <path>~/.local/share</path>
+  </paths>
+  <paths os="unix" depth="1">
+    <path>/home</path>
+    <path>$XDG_CONFIG_HOME</path>
+    <path>~/.config</path>
+    <path>~/.mozilla</path>
+    <path>~/.thunderbird</path>
+    <path>~/.wine</path>
+    <path>$XDG_DATA_DIRS</path>
+    <path>/usr/local/share</path>
+    <!-- common to delete file like /var/log/foo.log -->
+    <path>/var</path>
+  </paths>
+  <paths os="unix" depth="2">
+    <path>/usr</path>
+  </paths>
+  <paths os="unix" depth="any">
+    <path>/bin</path>
+    <path>/boot</path>
+    <path>/dev</path>
+    <path>/etc</path>
+    <path>/lib</path>
+    <path>/opt</path>
+    <path>/proc</path>
+    <path>/run</path>
+    <path>/sbin</path>
+    <path>/snap</path>
+    <path>/srv</path>
+    <path>/sys</path>
+    <path>~/.android</path>
+    <path>~/.docker</path>
+    <path>~/.nvm</path>
+    <path>~/.password-store</path>
+    <path>~/.vscode</path>
+  </paths>
+  <paths os="windows" depth="0">
+    <path>%systemdrive%</path>
+    <path>%homedrive%</path>
+    <path>c:\</path>
+    <path>c:\pagefile.sys</path>
+    <path>c:\hiberfil.sys</path>
+    <!-- user may want to delete %windir%\WindowsUpdate.log -->
+    <path>%windir%</path>
+    <!-- systemroot often expands to c:\windows-->
+    <path>%systemroot%</path>
+    <path>c:\windows</path>
+    <path>%userprofile%</path>
+    <path>c:\users\%username%</path>
+    <!-- winapp2.ini cleans %userprofile%\IconCache.db -->
+    <path>%localappdata%</path>
+    <!-- winapp2.ini cleans %userprofile%\Searches\Everywhere.search-ms -->
+    <path>%userprofile%\Searches</path>
+  </paths>
+  <paths os="windows" depth="1">
+    <path>%appdata%</path>
+    <path>%commonappdata%</path>
+    <path>%localappdatalow%</path>
+    <path>%programdata%</path>
+    <path>%programfiles%</path>
+    <path>%public%</path>
+    <!-- user may want to delete recordings under %Documents%\Zoom\-->
+    <path>%documents%</path>
+    <path>c:\users</path>
+    <path>c:\boot</path>
+    <path>c:\recovery</path>
+    <path>c:\windows\system32</path>
+    <path>c:\program files</path>
+    <path>c:\program files (x86)</path>
+    <path>c:\programdata</path>
+  </paths>
+  <paths os="windows" depth="any">
+    <path>%music%</path>
+    <path>%pictures%</path>
+    <path>%video%</path>
+    <path>%userprofile%\Box</path>
+    <path>%userprofile%\Creative Cloud Files</path>
+    <path>%userprofile%\Dropbox</path>
+    <path>%userprofile%\Favorites</path>
+    <path>%userprofile%\Google Drive</path>
+    <path>%userprofile%\Links</path>
+    <path>%userprofile%\My Virtual Machines</path>
+    <path>%userprofile%\OneDrive</path>
+    <path>%userprofile%\Saved games</path>
+  </paths>
+<!--
+cross platform
+case sensitive
+do not match child objects
+-->
+  <paths depth="0">
+    <path>~</path>
+  </paths>
+  <paths depth="1" case="insensitive">
+    <path>~/Documents</path>
+  </paths>
+<!--
+cross platform
+case sensitive
+also matches any child objects
+-->
+  <paths depth="any">
+    <path>~/.ansible</path>
+    <path>~/.aws</path>
+    <path>~/.azure</path>
+    <path>~/.env</path>
+    <path>~/.gcloud</path>
+    <path>~/.git-credentials</path>
+    <path>~/.gnupg</path>
+    <path>~/.idea</path>
+    <path>~/.kube</path>
+    <path>~/.netrc</path>
+    <path>~/.ssh</path>
+  </paths>
+<!--
+cross platform
+case insensitive
+also matches any child objects
+-->
+  <paths depth="any" case="insensitive">
+    <path>~/backup</path>
+    <path>~/backups</path>
+    <path>~/dev</path>
+    <path>~/code</path>
+    <path>~/Desktop</path>
+    <path>~/Music</path>
+    <path>~/Nextcloud</path>
+    <path>~/owncloud</path>
+    <path>~/Pictures</path>
+    <path>~/projects</path>
+    <path>~/sync</path>
+    <path>~/Videos</path>
+    <path>~/Virtualbox VMs</path>
+    <path>~/VMs</path>
+  </paths>
+<!--
+Without an absolute path, warn if adding a certain path under any directory.
+-->
+  <paths depth="any">
+    <path>.bzr</path>
+    <path>.git</path>
+    <path>.hg</path>
+    <path>.svn</path>
+  </paths>
+</protected_paths>

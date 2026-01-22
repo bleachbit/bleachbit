@@ -99,8 +99,14 @@ class Worker:
             from errno import ENOENT, EACCES
             if isinstance(e, OSError) and e.errno == ENOENT:
                 # ENOENT (Error NO ENTry) means file not found.
+                # Normalize Windows extended paths (\\?\) before logging
+                # so the user sees the canonical form and tests avoid
+                # double-backslash sequences.
+                filename = e.filename
+                if os.name == 'nt' and filename:
+                    filename = FileUtilities.extended_path_undo(filename)
                 # Do not show traceback.
-                logger.error(_("File not found: %s"), e.filename)
+                logger.error(_("File not found: %s"), filename)
             elif isinstance(e, OSError) and e.errno == EACCES:
                 # EACCES (Error ACCESS) means access denied.
                 # Do not show traceback.

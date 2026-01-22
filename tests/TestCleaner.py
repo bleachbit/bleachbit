@@ -23,11 +23,13 @@
 Test case for module Cleaner
 """
 
+import glob
 import logging
 import os
-import glob
+import shutil
 from xml.dom.minidom import parseString
 
+import bleachbit
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import Cleaner, backends, create_simple_cleaner, register_cleaners
 
@@ -57,6 +59,25 @@ def actions_to_cleaner(action_strs):
         cleaner.add_option('option%d' % count, 'name%d' %
                            count, 'description%d' % count)
     return cleaner
+
+def register_all_cleaners():
+    """Register all cleaners for testing
+
+    _patch_options_paths() changes the options directory during testing
+    to a clean directory, so by default it will not have Winapp2.ini.
+    """
+    if os.name == 'nt':
+        from tests.TestWinapp import get_winapp2  # pylint: disable=import-outside-toplevel
+
+        os.makedirs(bleachbit.personal_cleaners_dir, exist_ok=True)
+        print(f"personal_cleaners_dir: {bleachbit.personal_cleaners_dir}")
+        shutil.copyfile(
+            get_winapp2(),
+                os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini'),
+            )
+    if not backends:
+        list(register_cleaners())
+    assert len(backends) > 1
 
 
 class CleanerTestCase(common.BleachbitTestCase):
@@ -161,7 +182,7 @@ class CleanerTestCase(common.BleachbitTestCase):
 
         def get_files(option_id):
             ret = []
-            list(register_cleaners())
+            register_all_cleaners()
             for cmd in backends['system'].get_commands(option_id):
                 result = next(cmd.execute(False))
                 ret.append(result['path'])
@@ -200,8 +221,11 @@ class CleanerTestCase(common.BleachbitTestCase):
 
     def test_register_cleaners(self):
         """Unit test for register_cleaners"""
-        list(register_cleaners())
-        list(register_cleaners())
+        register_all_cleaners()
+        register_all_cleaners()
+        backends.clear()
+        register_all_cleaners()
+
 
     @common.skipIfWindows  # FIXME later: reevaluate
     @common.skipUnlessDestructive
@@ -219,7 +243,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         self.assertGreater(len(mgr.get_items()), 0)
         self.assertTrue(mgr.has_item(uri))
 
-        list(register_cleaners())
+        register_all_cleaners()
         for cmd in backends['system'].get_commands('recent_documents'):
             for result in cmd.execute(really_delete=True):
                 common.validate_result(self, result, True)
@@ -266,7 +290,7 @@ class CleanerTestCase(common.BleachbitTestCase):
             ('~/.cache/qtshadercache-x86_64-little_endian-lp64/test_file', True),
             ('~/.cache/plasma_theme_default.kcache', True)
         ]
-        list(register_cleaners())
+        register_all_cleaners()
         for pathname, expected in tests:
             path = os.path.expanduser(
                 pathname) if pathname.startswith('~') else pathname
@@ -291,7 +315,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         from bleachbit.Options import options
         original_custom_paths = options.get_custom_paths()
 
-        list(register_cleaners())
+        register_all_cleaners()
         test_pathname = os.path.join(self.tempdir, 'foo')
 
         # Check that custom cleaner doesn't iterate non-existent object

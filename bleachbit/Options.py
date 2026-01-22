@@ -244,6 +244,33 @@ class Options:
         """Return list of custom paths"""
         return self.get_paths("custom/paths")
 
+    def get_warning_preference(self, key):
+        """Return whether a specific warning is already confirmed."""
+        section = "warnings"
+        if not self.config.has_section(section):
+            return False
+        if not self.config.has_option(section, key):
+            return False
+        try:
+            return self.config.getboolean(section, key)
+        except ValueError:
+            logger.exception("Error reading warning preference for %s", key)
+            return False
+
+    def remember_warning_preference(self, key):
+        """Persist that a specific warning was confirmed once."""
+        section = "warnings"
+        if not self.config.has_section(section):
+            self.config.add_section(section)
+        self.config.set(section, key, 'True')
+
+    def clear_warning_preferences(self):
+        """Clear all saved warning confirmations."""
+        section = "warnings"
+        if self.config.has_section(section):
+            self.config.remove_section(section)
+            self.__flush()
+
     def get_tree(self, parent, child):
         """Retrieve an option for the tree view.
 

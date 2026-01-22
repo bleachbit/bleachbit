@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2008-2025 Andrew Ziem
+    https://www.bleachbit.org
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:attributeGroup name="operatingSystem">
+    <xs:attribute name="os" use="optional">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="bsd"/>
+          <xs:enumeration value="darwin"/>
+          <xs:enumeration value="linux"/>
+          <xs:enumeration value="netbsd"/>
+          <xs:enumeration value="openbsd"/>
+          <xs:enumeration value="freebsd"/>
+          <xs:enumeration value="unix"/>
+          <xs:enumeration value="windows"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+
+  <xs:simpleType name="depthType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:nonNegativeInteger"/>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="any"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+
+  <xs:simpleType name="caseType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="sensitive"/>
+      <xs:enumeration value="insensitive"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="protected_paths">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="paths" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="path" type="xs:string" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attributeGroup ref="operatingSystem"/>
+            <xs:attribute name="depth" type="depthType" default="0"/>
+            <xs:attribute name="case" type="caseType" default="sensitive"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

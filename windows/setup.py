@@ -714,13 +714,12 @@ def strip():
                            error_counter, strip_file)
         if not os.path.exists(strip_file):
             os.rename('strip.tmp', strip_file)
+    assert_execute_console()
 
 
 @count_size_improvement
 def upx(fast_build):
     """Compress executables with UPX to reduce size"""
-    logger.warning('UPX causes application to not launch, so UPX is disabled for now')
-    return
     if fast_build:
         logger.warning('Fast mode: Skipped executable with UPX')
         return
@@ -799,7 +798,10 @@ def shrink(fast_build):
     clean_translations()
     remove_empty_dirs('dist')
     strip()
-    upx(fast_build)
+    if False:
+        upx(fast_build)
+    else:
+        logger.warning('upx disabled because it breaks startup')
     clean_dist_locale()
 
     delete_linux_only()

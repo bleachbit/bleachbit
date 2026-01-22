@@ -107,13 +107,14 @@ def args_to_operations_list(preset, all_but_warning):
     return args
 
 
-def args_to_operations(args, preset, all_but_warning):
+def args_to_operations(args, preset, all_but_warning, excludes=None):
     """Convert command-line arguments to a dictionary of operations
 
     Args:
         args: List of cleaner.option strings (e.g., ['system.tmp', 'firefox.cache'])
         preset: Boolean indicating whether to use saved preset operations
         all_but_warning: Boolean indicating whether to include all non-warning operations
+        excludes: Optional list of cleaner.option strings to remove from operations
 
     Returns:
         Dictionary mapping cleaner IDs to lists of option IDs
@@ -123,8 +124,20 @@ def args_to_operations(args, preset, all_but_warning):
     operations = {}
     if not args:
         args = []
-    args = set(args + args_to_operations_list(preset, all_but_warning))
-    for arg in args:
+
+    if excludes is None:
+        excludes = []
+    positive_args = set(
+        args + args_to_operations_list(preset, all_but_warning))
+
+    def fix_deprecated(cid, oid):
+        if 'system' == cid and 'free_disk_space' == oid:
+            logger.info(
+                "Change 'system.free_disk_space' (deprecated) to 'system.empty_space'")
+            return 'empty_space'
+        return oid
+
+    for arg in positive_args:
         if 2 != len(arg.split('.')):
             logger.warning(_("not a valid cleaner: %s"), arg)
             continue
@@ -139,9 +152,7 @@ def args_to_operations(args, preset, all_but_warning):
             ]
             continue
         # backwards compatibility
-        if ('system' == cleaner_id and 'free_disk_space' == option_id):
-            logger.info("Change 'system.free_disk_space' (deprecated) to 'system.empty_space'")
-            option_id = 'empty_space'
+        option_id = fix_deprecated(cleaner_id, option_id)
         # add the specified option
         if cleaner_id not in operations:
             # initialize list of options for this cleaner
@@ -149,20 +160,48 @@ def args_to_operations(args, preset, all_but_warning):
         if option_id not in operations[cleaner_id]:
             # add option to list
             operations[cleaner_id].append(option_id)
+
+    for arg in excludes:
+        if '*' in arg or '?' in arg:
+            logger.error(
+                _("Wildcard characters are not allowed in --except: %s"), arg)
+            # Exit to avoid over-cleaning.
+            sys.exit(1)
+        if 2 != len(arg.split('.')):
+            logger.error(_("not a valid cleaner: %s"), arg)
+            # Exit to avoid over-cleaning.
+            sys.exit(1)
+        (cleaner_id, option_id) = arg.split('.')
+        option_id = fix_deprecated(cleaner_id, option_id)
+        if cleaner_id in operations and option_id in operations[cleaner_id]:
+            operations[cleaner_id].remove(option_id)
+            if not operations[cleaner_id]:
+                del operations[cleaner_id]
+
     for (k, v) in operations.items():
         operations[k] = sorted(v)
     return operations
 
 
-def process_cmd_line():
-    """Parse the command line and execute given commands."""
+def _split_excludes(values):
+    excludes = []
+    for value in values:
+        if value is None:
+            continue
+        excludes.extend(item.strip()
+                        for item in value.split(',') if item.strip())
+    return excludes
+
+
+def parse_cmd_line(argv=None):
+    """Parse the command line and return parser, options, args, and excludes."""
 
     # TRANSLATORS: This is the command line usage.  Don't translate
     # %prog, but do translate options, cleaner, and option.
     # Don't translate and add "usage:" - it gets added by Python.
     # More information about the command line is here
     # https://www.bleachbit.org/documentation/command-line
-    usage = _("usage: %prog [options] cleaner.option1 cleaner.option2")
+    usage = _("usage: %prog [options] cleaner.option1 [cleaner.option2 ...]")
     parser = optparse.OptionParser(usage)
     parser.add_option("-l", "--list-cleaners", action="store_true",
                       help=_("list cleaners"))
@@ -175,7 +214,7 @@ def process_cmd_line():
                       help=_("run cleaners to delete files and make other permanent changes"))
     parser.add_option("-s", "--shred", action="store_true",
                       help=_("shred specific files or folders"))
-    parser.add_option("-w", "--wipe-empty-space","--wipe-free-space",
+    parser.add_option("-w", "--wipe-empty-space", "--wipe-free-space",
                       action="store_true", dest="wipe_empty_space",
                       help=_("wipe empty space in the given paths"))
     parser.add_option('-o', '--overwrite', action='store_true',
@@ -186,6 +225,8 @@ def process_cmd_line():
                       help=_("use options set in the graphical interface"))
     parser.add_option("--all-but-warning", action="store_true",
                       help=_("enable all options that do not have a warning"))
+    parser.add_option("--except", dest="excludes", action="append", default=[],
+                      help=_("exclude cleaner options (can be repeated, comma-separated)"))
     parser.add_option(
         '--debug', help=_("set log level to verbose"), action="store_true")
     parser.add_option('--debug-log', help=_("log debug messages to file"))
@@ -220,14 +261,25 @@ def process_cmd_line():
     parser.add_option("--context-menu", action="callback", callback=expand_context_menu_option,
                       help=optparse.SUPPRESS_HELP)
 
-    (options, args) = parser.parse_args()
+    (options, args) = parser.parse_args(args=argv)
+    excludes = _split_excludes(options.excludes)
+    return parser, options, args, excludes
 
-    cmd_list = (options.list_cleaners, options.wipe_empty_space,
-                options.preview, options.clean)
+
+def process_cmd_line():
+    """Parse the command line and execute given commands."""
+
+    parser, options, args, excludes = parse_cmd_line()
+
+    cmd_list = (options.list_cleaners,
+                options.clean,
+                options.preview,
+                options.shred,
+                options.wipe_empty_space)
     cmd_count = sum(x is True for x in cmd_list)
     if cmd_count > 1:
         logger.error(
-            _('Specify only one of these commands: --list-cleaners, --wipe-empty-space, --preview, --clean'))
+            _('Specify only one of these commands: --list-cleaners, --wipe-empty-space, --preview, --clean, --shred'))
         sys.exit(1)
 
     did_something = False
@@ -279,7 +331,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         sys.exit(0)
     if options.preview or options.clean:
         operations = args_to_operations(
-            args, options.preset, options.all_but_warning)
+            args, options.preset, options.all_but_warning, excludes)
         if not operations:
             logger.error(_("No work to do. Specify options."))
             sys.exit(1)

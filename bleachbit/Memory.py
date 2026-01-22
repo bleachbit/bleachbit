@@ -106,16 +106,10 @@ def enable_swap_linux():
 
 def make_self_oom_target_linux():
     """Make the current process the primary target for Linux out-of-memory killer"""
-    # In Linux 2.6.36 the system changed from oom_adj to oom_score_adj
-    path = '/proc/%d/oom_score_adj' % os.getpid()
+    path = f'/proc/{os.getpid()}/oom_score_adj'
     if os.path.exists(path):
-        with open(path, 'w') as f:
+        with open(path, 'w', encoding='utf-8') as f:
             f.write('1000')
-    else:
-        path = '/proc/%d/oomadj' % os.getpid()
-        if os.path.exists(path):
-            with open(path, 'w') as f:
-                f.write('15')
     # OOM likes nice processes
     logger.debug(_("Setting nice value %d for this process."), os.nice(19))
     # OOM prefers non-privileged processes

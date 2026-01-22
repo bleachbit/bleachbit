@@ -74,6 +74,17 @@ class Delete:
         if FileUtilities.whitelisted(self.path):
             yield whitelist(self.path)
             return
+        try:
+            size = FileUtilities.getsize(self.path)
+        except (PermissionError):
+            size = None
+        except Exception as e:
+            # Handle Windows-specific pywintypes.error
+            # pywintypes.error: (5, 'FindFirstFileW', 'Access is denied.')
+            if hasattr(e, 'winerror'):
+                size = None
+            else:
+                raise
         ret = {
             # TRANSLATORS: This is the label in the log indicating will be
             # deleted (for previews) or was actually deleted
@@ -81,7 +92,7 @@ class Delete:
             'n_deleted': 1,
             'n_special': 0,
             'path': self.path,
-            'size': FileUtilities.getsize(self.path)}
+            'size': size}
         if really_delete:
             try:
                 FileUtilities.delete(self.path, self.shred)
