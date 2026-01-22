@@ -38,7 +38,7 @@ require_gtk()
 
 # local
 import bleachbit
-from bleachbit import APP_NAME, appicon_path, portable_mode, windows10_theme_path
+from bleachbit import APP_NAME, appicon_path, get_share_path, portable_mode, windows10_theme_path
 from bleachbit import Cleaner, FileUtilities, GuiBasic
 from bleachbit.Cleaner import backends, register_cleaners
 from bleachbit.GuiPreferences import PreferencesDialog
@@ -251,12 +251,17 @@ class Bleachbit(Gtk.Application):
         """
         from bleachbit.Language import setup_translation
         setup_translation()
-        builder = Gtk.Builder()
+
         # set_translation_domain() seems to have no effect.
         # builder.set_translation_domain('bleachbit')
-        builder.add_from_file(bleachbit.app_menu_filename)
-        menu = builder.get_object('app-menu')
-        self.set_app_menu(menu)
+        app_menu_path = get_share_path('app-menu.ui')
+        if app_menu_path:
+            builder = Gtk.Builder()
+            builder.add_from_file(app_menu_path)
+            menu = builder.get_object('app-menu')
+            self.set_app_menu(menu)
+        else:
+            logger.error('build_app_menu(): app-menu.ui not found')
 
         # set up mappings between <attribute name="action"> in app-menu.ui and methods in this class
         actions = {'shredFiles': self.cb_shred_file,
@@ -1393,10 +1398,14 @@ class GUI(Gtk.ApplicationWindow):
         icon = Gio.ThemedIcon(name="open-menu-symbolic")
         image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
         builder = Gtk.Builder()
-        builder.add_from_file(bleachbit.app_menu_filename)
-        menu_button.set_menu_model(builder.get_object('app-menu'))
-        menu_button.add(image)
-        hbar.pack_end(menu_button)
+        app_menu_path = get_share_path('app-menu.ui')
+        if app_menu_path:
+            builder.add_from_file(app_menu_path)
+            menu_button.set_menu_model(builder.get_object('app-menu'))
+            menu_button.add(image)
+            hbar.pack_end(menu_button)
+        else:
+            hbar.pack_end(Gtk.Label('error: app-menu.ui not found'))
 
         # Update all labels and tooltips
         self.update_headerbar_labels()

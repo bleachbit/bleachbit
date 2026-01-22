@@ -23,9 +23,10 @@
 Test cases for __init__
 """
 
-from tests import common
-
 import os
+
+from bleachbit import get_share_dirs, get_share_path
+from tests import common
 
 
 class InitTestCase(common.BleachbitTestCase):
@@ -56,6 +57,20 @@ class InitTestCase(common.BleachbitTestCase):
             if os.name == 'posix':
                 self.assertTrue(os.path.samefile(
                     test_output, os.path.expanduser(test_input)))
+
+    def test_get_share_dirs(self):
+        """Unit test for get_share_dirs()"""
+        got_shared_dirs = get_share_dirs()
+        self.assertGreater(len(got_shared_dirs), 0)
+        for d in got_shared_dirs:
+            self.assertExists(d)
+            self.assertTrue(os.path.isdir(d))
+
+    def test_get_share_path(self):
+        """Unit test for get_share_path()"""
+        for fn in ('app-menu.ui', 'protected_path.xml'):
+            self.assertExists(get_share_path(fn))
+        self.assertIsNone(get_share_path('nonexistent'))
 
 
 def suite():

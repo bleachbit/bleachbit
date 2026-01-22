@@ -114,28 +114,7 @@ def _normalize_for_comparison(path, case_sensitive):
 
 def _get_protected_path_xml():
     """Return the path to the protected_path.xml file."""
-    # Check in data directory relative to bleachbit package
-    data_path = os.path.join(os.path.dirname(bleachbit.__file__),
-                             '..', 'data', 'protected_path.xml')
-    data_path = os.path.normpath(data_path)
-    if os.path.exists(data_path):
-        return data_path
-
-    # Check in system data directory (for installed packages)
-    if hasattr(bleachbit, 'system_cleaners_dir'):
-        system_path = os.path.join(os.path.dirname(bleachbit.system_cleaners_dir),
-                                   'data', 'protected_path.xml')
-        if os.path.exists(system_path):
-            return system_path
-
-    # Fallback for development
-    dev_path = os.path.join(os.path.dirname(__file__),
-                            '..', 'data', 'protected_path.xml')
-    dev_path = os.path.normpath(dev_path)
-    if os.path.exists(dev_path):
-        return dev_path
-
-    return None
+    return bleachbit.get_share_path('protected_path.xml')
 
 
 def load_protected_paths(force_reload=False):

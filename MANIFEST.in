@@ -9,8 +9,8 @@ include bleachbit.py
 include bleachbit.spec
 include cleaners/*xml
 include cleaners/Makefile
-include data/app-menu.ui
-include data/protected_path.xml
+include share/app-menu.ui
+include share/protected_path.xml
 include debian/bleachbit.dsc
 include debian/compat
 include debian/copyright

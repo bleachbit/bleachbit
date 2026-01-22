@@ -147,6 +147,50 @@ local_cleaners_dir = None
 if portable_mode:
     local_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
 
+
+def get_share_dirs():
+    """Return ordered list of directories to search for shared data files."""
+    if hasattr(sys, 'frozen'):
+        # frozen in py2exe
+        base_dirs = [
+            os.path.join(bleachbit_exe_path, 'share'),
+            bleachbit_exe_path,
+        ]
+    else:
+        # installed .rpm has `__file__` = "/usr/share/bleachbit/__init__.py",
+        # so that dirname() is the share directory.
+        package_dir = os.path.dirname(__file__)
+        # When running from source, share directory is `../share/` from `__init__.py`.
+        repo_root = os.path.normpath(os.path.join(package_dir, '..'))
+        base_dirs = [
+            package_dir,
+            os.path.join(repo_root, 'share')
+        ]
+    if system_cleaners_dir:
+        # One directory up from the system cleaners directory.
+        # This works when installed, like under `/usr/share`.
+        base_dirs.append(os.path.dirname(system_cleaners_dir))
+    # Remove duplicates while preserving the order.
+    seen = set()
+    unique_dirs = []
+    for base_dir in base_dirs:
+        if base_dir in seen:
+            continue
+        seen.add(base_dir)
+        unique_dirs.append(base_dir)
+    return unique_dirs
+
+
+def get_share_path(filename):
+    """Return path to a shared data file if it exists, else None."""
+    for base_dir in get_share_dirs():
+        candidate = os.path.normpath(os.path.join(base_dir, filename))
+        if os.path.exists(candidate):
+            return candidate
+    logger.error('unknown location for %s', filename)
+    return None
+
+
 # windows10 theme
 windows10_theme_path = os.path.normpath(
     os.path.join(bleachbit_exe_path, 'themes/windows10'))
@@ -165,17 +209,6 @@ appicon_path = None
 for __icon in __icons:
     if os.path.exists(__icon):
         appicon_path = __icon
-
-# menu
-# This path works when running from source (cross platform) or when
-# installed on Windows.
-app_menu_filename = os.path.join(bleachbit_exe_path, 'data', 'app-menu.ui')
-if not os.path.exists(app_menu_filename) and system_cleaners_dir:
-    # This path works when installed on Linux.
-    app_menu_filename = os.path.abspath(
-        os.path.join(system_cleaners_dir, '../app-menu.ui'))
-if not os.path.exists(app_menu_filename):
-    logger.error('unknown location for app-menu.ui')
 
 # locale directory
 if os.path.exists("./locale/"):
