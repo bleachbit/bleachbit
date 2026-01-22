@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-21 23:03-0700\n"
-"PO-Revision-Date: 2026-01-22 06:04+0000\n"
+"PO-Revision-Date: 2026-01-23 01:59+0000\n"
 "Last-Translator: 大王叫我来巡山 "
 "<hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -1324,10 +1324,9 @@ msgid "not a valid cleaner: %s"
 msgstr "无效清理规则：%s"
 
 #: ../bleachbit/CLI.py
-#, fuzzy, python-format
-#| msgid "Wildcard characters are not allowed in negation: -%s"
+#, python-format
 msgid "Wildcard characters are not allowed in --except: %s"
-msgstr "不允许通配符： -%s"
+msgstr "不允许通配符，%s 除外"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1335,10 +1334,8 @@ msgstr "不允许通配符： -%s"
 #. More information about the command line is here
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "usage: %prog [options] cleaner.option1 [-cleaner.option2 ...]"
 msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
-msgstr "用法： %prog [options] cleaner.option1 [-cleaner.option2 ...]"
+msgstr "用法：%prog [options] cleaner.option1 [cleaner.option2 ...]"
 
 #: ../bleachbit/CLI.py
 msgid "list cleaners"
@@ -1381,7 +1378,7 @@ msgstr "启用所有无警告的选项"
 
 #: ../bleachbit/CLI.py
 msgid "exclude cleaner options (can be repeated, comma-separated)"
-msgstr ""
+msgstr "排除清理规则选项（可重复，用英文逗号分隔）"
 
 #: ../bleachbit/CLI.py
 msgid "set log level to verbose"
@@ -1408,15 +1405,12 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "当有新版本可用时更新 Winapp2.ini"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid ""
-#| "Specify only one of these commands: --list-cleaners, --wipe-empty-space, "
-#| "--preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean, --shred"
 msgstr ""
-"以下命令不能同时使用：--list-cleaners, --wipe-empty-space, --preview, --clean"
+"以下命令不能同时使用：--list-cleaners, --wipe-empty-space, --preview, --"
+"clean, --shred"
 
 #: ../bleachbit/CLI.py
 msgid "Checking online for updates to winapp2.ini"
@@ -1583,16 +1577,16 @@ msgstr "删除前确认"
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Enable %(option)s"
-msgstr ""
+msgstr "启用 %(option)s"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Remember my choice for %(option)s"
-msgstr ""
+msgstr "记住 %(option)s 的选择"
 
 #: ../bleachbit/GuiBasic.py
 msgid "_Enable anyway"
-msgstr ""
+msgstr "仍要启用（_E)"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
@@ -1737,7 +1731,7 @@ msgstr "保留列表"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Warning confirmations reset."
-msgstr ""
+msgstr "重置警告确认。"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
@@ -1792,10 +1786,8 @@ msgid "Exit after cleaning"
 msgstr "清理完成后退出"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Delete confirmation"
 msgid "Reset warning confirmations"
-msgstr "删除确认"
+msgstr "重置警告确认"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
@@ -1869,7 +1861,7 @@ msgstr "此路径已经在自定义列表中。"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Protected Path"
-msgstr ""
+msgstr "受保护路径"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1997,16 +1989,9 @@ msgstr "清理大小"
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #: ../bleachbit/GUI.py
-#, fuzzy, python-format
-#| msgid ""
-#| "Warning regarding %(cleaner)s - %(option)s:\n"
-#| "\n"
-#| "%(warning)s"
+#, python-format
 msgid "%(cleaner)s - %(option)s"
-msgstr ""
-"来自 %(cleaner)s.%(option)s 的警告:\n"
-"\n"
-"%(warning)s"
+msgstr "%(cleaner)s - %(option)s"
 
 #: ../bleachbit/GUI.py
 #, python-format
@@ -2236,6 +2221,11 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"警告： '%(path)s' 可能包含重要文件。\n"
+"\n"
+"影响：%(files)d 个文件，%(size)s\n"
+"\n"
+"确定要添加此路径码？"
 
 #. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
 #: ../bleachbit/ProtectedPath.py
@@ -2245,6 +2235,9 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"警告： '%(path)s' 可能包含重要文件。\n"
+"\n"
+"确定要添加此路径吗？"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
