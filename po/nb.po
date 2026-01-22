@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-17 15:16-0700\n"
+"POT-Creation-Date: 2026-01-21 23:03-0700\n"
 "PO-Revision-Date: 2025-10-22 14:02+0000\n"
 "Last-Translator: ovl-1 <ovl-002@mailinator.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
@@ -1349,14 +1349,8 @@ msgstr "%s er en ugyldig renseprosess"
 
 #: ../bleachbit/CLI.py
 #, python-format
-msgid "Wildcard characters are not allowed in negation: -%s"
+msgid "Wildcard characters are not allowed in --except: %s"
 msgstr ""
-
-#: ../bleachbit/CLI.py
-#, fuzzy, python-format
-#| msgid "not a valid cleaner: %s"
-msgid "not a valid cleaner: -%s"
-msgstr "%s er en ugyldig renseprosess"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1366,7 +1360,7 @@ msgstr "%s er en ugyldig renseprosess"
 #: ../bleachbit/CLI.py
 #, fuzzy
 #| msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgid "usage: %prog [options] cleaner.option1 [-cleaner.option2 ...]"
+msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
 msgstr "bruk: %prog [valg] rens.valg1 rens.valg2"
 
 #: ../bleachbit/CLI.py
@@ -1412,6 +1406,10 @@ msgid "enable all options that do not have a warning"
 msgstr "aktiver alle alternativer som ikke har en advarsel"
 
 #: ../bleachbit/CLI.py
+msgid "exclude cleaner options (can be repeated, comma-separated)"
+msgstr ""
+
+#: ../bleachbit/CLI.py
 msgid "set log level to verbose"
 msgstr ""
 
@@ -1438,7 +1436,7 @@ msgstr "oppdater winapp2.ini hvis det finnes en ny versjon"
 #: ../bleachbit/CLI.py
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
-"preview, --clean"
+"preview, --clean, --shred"
 msgstr ""
 
 #: ../bleachbit/CLI.py
@@ -1614,6 +1612,20 @@ msgstr "Bekreft sletting"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
+msgid "Enable %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
+msgid "Remember my choice for %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+msgid "_Enable anyway"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
 "browser:\n"
@@ -1736,7 +1748,7 @@ msgstr ""
 msgid "Keep Selected"
 msgstr ""
 
-#: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
+#: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
 msgid "Preferences"
 msgstr "Innstillinger"
 
@@ -1754,6 +1766,10 @@ msgstr "Språk"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Warning confirmations reset."
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
@@ -1811,6 +1827,12 @@ msgstr ""
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
 msgstr "Avslutt etter rensing"
+
+#: ../bleachbit/GuiPreferences.py
+#, fuzzy
+#| msgid "Delete confirmation"
+msgid "Reset warning confirmations"
+msgstr "Slette-bekreftelse"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
@@ -1889,6 +1911,10 @@ msgid "This path already exists in the custom list."
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
+msgid "Protected Path"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
 msgid "File"
 msgstr "Fil"
 
@@ -1915,6 +1941,8 @@ msgstr "Fjern"
 msgid "Manage cookies to keep..."
 msgstr ""
 
+#. TRANSLATORS: "Paths" is used generically to refer to both files
+#. and folders
 #: ../bleachbit/GuiPreferences.py
 msgid "These paths will not be deleted or modified."
 msgstr "Disse fil/mappe-banene blir ikke slettet eller endret."
@@ -2008,13 +2036,13 @@ msgstr "Størrelse"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
-#. %(warning) may be 'This option is really slow'
 #: ../bleachbit/GUI.py
-#, python-format
-msgid ""
-"Warning regarding %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
+#, fuzzy, python-format
+#| msgid ""
+#| "Warning regarding %(cleaner)s - %(option)s:\n"
+#| "\n"
+#| "%(warning)s"
+msgid "%(cleaner)s - %(option)s"
 msgstr ""
 "Advarsel om %(cleaner)s - %(option)s:\n"
 "\n"
@@ -2241,6 +2269,27 @@ msgstr "Automatisk bevaring av språket %s."
 msgid "Error when setting the default drives to shred."
 msgstr "Feil ved innstilling av standardstasjoner for sikker sletting."
 
+#. TRANSLATORS: Warning shown when user tries to add a protected path.
+#. %(path)s is the path, %(files)d is number of files, %(size)s is human-readable size
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Impact: %(files)d file(s), %(size)s\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
+#. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
 msgstr "Sikkerhetsadvarsel"
@@ -2464,43 +2513,48 @@ msgstr "Vent litt. Kjører grundig skanning."
 msgid "Please wait.  Previewing %s."
 msgstr "Vent litt. Forhåndsviser %s."
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Shred Files"
 msgstr "_Sikker sletting av filer"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Sh_red Folders"
 msgstr "Si_kker sletting av mapper"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Shred Paths from Clipboard"
 msgstr "Sikker sletting av baner fra utklippstavle"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 #, fuzzy
 #| msgid "_Wipe Free Space"
 msgid "_Wipe Empty Space"
 msgstr "_Overskriv ledig diskplass"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Make Chaff"
 msgstr ""
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_hred Settings and Quit"
 msgstr "S_ikker sletting av innstillinger og avslutt"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_ystem Information"
 msgstr "S_ysteminformasjon"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Help"
 msgstr "_Hjelp"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_Om BleachBit"
+
+#, fuzzy, python-format
+#~| msgid "not a valid cleaner: %s"
+#~ msgid "not a valid cleaner: -%s"
+#~ msgstr "%s er en ugyldig renseprosess"
 
 #~ msgid "Free disk space"
 #~ msgstr "Ledig diskplass"

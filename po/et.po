@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-17 15:16-0700\n"
+"POT-Creation-Date: 2026-01-21 23:03-0700\n"
 "PO-Revision-Date: 2025-12-28 08:00+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/bleachbit/main/"
@@ -1362,14 +1362,8 @@ msgstr "pole ehtne puhastaja: %s"
 
 #: ../bleachbit/CLI.py
 #, python-format
-msgid "Wildcard characters are not allowed in negation: -%s"
+msgid "Wildcard characters are not allowed in --except: %s"
 msgstr ""
-
-#: ../bleachbit/CLI.py
-#, fuzzy, python-format
-#| msgid "not a valid cleaner: %s"
-msgid "not a valid cleaner: -%s"
-msgstr "pole ehtne puhastaja: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1379,7 +1373,7 @@ msgstr "pole ehtne puhastaja: %s"
 #: ../bleachbit/CLI.py
 #, fuzzy
 #| msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgid "usage: %prog [options] cleaner.option1 [-cleaner.option2 ...]"
+msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
 msgstr "kasutus: %prog [valikud] puhastaja.valik1 puhastaja.valik2"
 
 #: ../bleachbit/CLI.py
@@ -1424,6 +1418,10 @@ msgid "enable all options that do not have a warning"
 msgstr "luba kõik valikud, millel pole hoiatust"
 
 #: ../bleachbit/CLI.py
+msgid "exclude cleaner options (can be repeated, comma-separated)"
+msgstr ""
+
+#: ../bleachbit/CLI.py
 msgid "set log level to verbose"
 msgstr "määra logitasemeks paljusõnaline"
 
@@ -1448,9 +1446,13 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "värskenda winapp2.ini, kui uus versioon on saadaval"
 
 #: ../bleachbit/CLI.py
+#, fuzzy
+#| msgid ""
+#| "Specify only one of these commands: --list-cleaners, --wipe-empty-space, "
+#| "--preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
-"preview, --clean"
+"preview, --clean, --shred"
 msgstr ""
 "Määra ainult üks järgmistest käskudest: --list-cleaners, --wipe-empty-space, "
 "--preview, --clean"
@@ -1625,6 +1627,20 @@ msgstr "Kinnita enne kustutamist"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
+msgid "Enable %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
+msgid "Remember my choice for %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+msgid "_Enable anyway"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
 "browser:\n"
@@ -1746,7 +1762,7 @@ msgstr "Eemalda kogu valik"
 msgid "Keep Selected"
 msgstr "Säilita valitud"
 
-#: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
+#: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
 msgid "Preferences"
 msgstr "Eelistused"
 
@@ -1765,6 +1781,10 @@ msgstr "Keeled"
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
 msgstr "Säilita loend"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Warning confirmations reset."
+msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
@@ -1822,6 +1842,12 @@ msgstr ""
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
 msgstr "Pärast puhastamist välju"
+
+#: ../bleachbit/GuiPreferences.py
+#, fuzzy
+#| msgid "Delete confirmation"
+msgid "Reset warning confirmations"
+msgstr "Kustutamise kinnitus"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
@@ -1896,6 +1922,10 @@ msgid "This path already exists in the custom list."
 msgstr "See asukoht on juba olemas sinu loodud nimekirjas."
 
 #: ../bleachbit/GuiPreferences.py
+msgid "Protected Path"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
 msgid "File"
 msgstr "Fail"
 
@@ -1919,6 +1949,8 @@ msgstr "Eemaldatud: %s"
 msgid "Manage cookies to keep..."
 msgstr "Halda säilitatavaid küpsiseid..."
 
+#. TRANSLATORS: "Paths" is used generically to refer to both files
+#. and folders
 #: ../bleachbit/GuiPreferences.py
 msgid "These paths will not be deleted or modified."
 msgstr "Neid asukohti ei kustutata ega muudeta."
@@ -2005,13 +2037,13 @@ msgstr "Suurus"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
-#. %(warning) may be 'This option is really slow'
 #: ../bleachbit/GUI.py
-#, python-format
-msgid ""
-"Warning regarding %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
+#, fuzzy, python-format
+#| msgid ""
+#| "Warning regarding %(cleaner)s - %(option)s:\n"
+#| "\n"
+#| "%(warning)s"
+msgid "%(cleaner)s - %(option)s"
 msgstr ""
 "Hoiatus %(cleaner)s - %(option)s:\n"
 "\n"
@@ -2245,6 +2277,27 @@ msgstr "Automaatselt säilitame keele %s."
 msgid "Error when setting the default drives to shred."
 msgstr "Viga andmekandjate seadistamisel hävitamise kontekstis."
 
+#. TRANSLATORS: Warning shown when user tries to add a protected path.
+#. %(path)s is the path, %(files)d is number of files, %(size)s is human-readable size
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Impact: %(files)d file(s), %(size)s\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
+#. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
 msgstr "Turvahoiatus"
@@ -2469,41 +2522,46 @@ msgstr "Palun oota. Teostame põhjalikku uuringut."
 msgid "Please wait.  Previewing %s."
 msgstr "Palun oota. Kuvame  %s -i eelvaadet."
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Shred Files"
 msgstr "Hävita _fail"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Sh_red Folders"
 msgstr "Hävita _kaust"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Shred Paths from Clipboard"
 msgstr "Hävita asukohad lõikelaualt"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Wipe Empty Space"
 msgstr "_Puhasta tühi kettaruum"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Make Chaff"
 msgstr "_Tekita läbu"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_hred Settings and Quit"
 msgstr "Hävita _seaded ja välju"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_ystem Information"
 msgstr "S_üsteemi info"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Help"
 msgstr "_Abiteave"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "BleachBiti _teave"
+
+#, fuzzy, python-format
+#~| msgid "not a valid cleaner: %s"
+#~ msgid "not a valid cleaner: -%s"
+#~ msgstr "pole ehtne puhastaja: %s"
 
 #~ msgid "Free disk space"
 #~ msgstr "Jaotamata kettaruumi suurus"

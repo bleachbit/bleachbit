@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-17 15:16-0700\n"
+"POT-Creation-Date: 2026-01-21 23:03-0700\n"
 "PO-Revision-Date: 2021-10-28 15:34+0000\n"
 "Last-Translator: Bernard Stafford <Unknown>\n"
 "Language-Team: Afrikaans <af@li.org>\n"
@@ -1361,14 +1361,8 @@ msgstr "nie 'n geldige skoonmaker: %s"
 
 #: ../bleachbit/CLI.py
 #, python-format
-msgid "Wildcard characters are not allowed in negation: -%s"
+msgid "Wildcard characters are not allowed in --except: %s"
 msgstr ""
-
-#: ../bleachbit/CLI.py
-#, fuzzy, python-format
-#| msgid "not a valid cleaner: %s"
-msgid "not a valid cleaner: -%s"
-msgstr "nie 'n geldige skoonmaker: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1378,7 +1372,7 @@ msgstr "nie 'n geldige skoonmaker: %s"
 #: ../bleachbit/CLI.py
 #, fuzzy
 #| msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgid "usage: %prog [options] cleaner.option1 [-cleaner.option2 ...]"
+msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
 msgstr "usage: %prog [options] cleaner.option1 cleaner.option2"
 
 #: ../bleachbit/CLI.py
@@ -1425,6 +1419,10 @@ msgid "enable all options that do not have a warning"
 msgstr "in staat stel om al die opsies wat nie 'n Waarskuwing het nie"
 
 #: ../bleachbit/CLI.py
+msgid "exclude cleaner options (can be repeated, comma-separated)"
+msgstr ""
+
+#: ../bleachbit/CLI.py
 msgid "set log level to verbose"
 msgstr "stel log vlak na verbose"
 
@@ -1455,7 +1453,7 @@ msgstr "opdateer winaoo2.ini, as 'n nuwe weergawe beskikbaar is"
 #| "preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
-"preview, --clean"
+"preview, --clean, --shred"
 msgstr ""
 "Spesifiseer slegs een van die bevele:  --list-cleaners, --wipe-free-space, --"
 "preview, --clean"
@@ -1634,6 +1632,20 @@ msgstr "Bevestig voordat jy skrap."
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
+msgid "Enable %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
+msgid "Remember my choice for %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+msgid "_Enable anyway"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
 "browser:\n"
@@ -1756,7 +1768,7 @@ msgstr ""
 msgid "Keep Selected"
 msgstr ""
 
-#: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
+#: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
 msgid "Preferences"
 msgstr "Voorkeure"
 
@@ -1774,6 +1786,10 @@ msgstr "Tale"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Warning confirmations reset."
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
@@ -1836,6 +1852,12 @@ msgstr ""
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
 msgstr "Verlaat na skoon maak."
+
+#: ../bleachbit/GuiPreferences.py
+#, fuzzy
+#| msgid "Delete confirmation"
+msgid "Reset warning confirmations"
+msgstr "Bevesting uitvee"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
@@ -1915,6 +1937,10 @@ msgid "This path already exists in the custom list."
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
+msgid "Protected Path"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
 msgid "File"
 msgstr "Lêer"
 
@@ -1940,6 +1966,8 @@ msgstr "Verwyder"
 msgid "Manage cookies to keep..."
 msgstr ""
 
+#. TRANSLATORS: "Paths" is used generically to refer to both files
+#. and folders
 #: ../bleachbit/GuiPreferences.py
 #, fuzzy
 #| msgid "Theses paths will not be deleted or modified."
@@ -2032,13 +2060,13 @@ msgstr "Grootte"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
-#. %(warning) may be 'This option is really slow'
 #: ../bleachbit/GUI.py
-#, python-format
-msgid ""
-"Warning regarding %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
+#, fuzzy, python-format
+#| msgid ""
+#| "Warning regarding %(cleaner)s - %(option)s:\n"
+#| "\n"
+#| "%(warning)s"
+msgid "%(cleaner)s - %(option)s"
 msgstr ""
 "Waarskuwing rakende %(cleaner)s - %(option)s:\n"
 "%(warning)s"
@@ -2271,6 +2299,27 @@ msgstr "Preserveer outomaties taal %s."
 msgid "Error when setting the default drives to shred."
 msgstr "Fout met instelling van verstek aandrywers om te versnipper."
 
+#. TRANSLATORS: Warning shown when user tries to add a protected path.
+#. %(path)s is the path, %(files)d is number of files, %(size)s is human-readable size
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Impact: %(files)d file(s), %(size)s\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
+#. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
 msgstr "Sekuriteit waarskuwing"
@@ -2496,43 +2545,48 @@ msgstr "Wag asseblief. Besig met in diepte skandering."
 msgid "Please wait.  Previewing %s."
 msgstr "Wag asseblief. Voorskou %s."
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Shred Files"
 msgstr "_Versnipper Lêers"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Sh_red Folders"
 msgstr "Sh_red Vouers"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Shred Paths from Clipboard"
 msgstr "Versnipper Paaie na Knipbord"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 #, fuzzy
 #| msgid "_Wipe Free Space"
 msgid "_Wipe Empty Space"
 msgstr "_Wipe Oop Spasie"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Make Chaff"
 msgstr "_Maak Strooi"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_hred Settings and Quit"
 msgstr "S_hred Instellings en Staak"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_ystem Information"
 msgstr "S_telsel Inligting"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Help"
 msgstr "_Hulp"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_About BleachBit"
+
+#, fuzzy, python-format
+#~| msgid "not a valid cleaner: %s"
+#~ msgid "not a valid cleaner: -%s"
+#~ msgstr "nie 'n geldige skoonmaker: %s"
 
 #~ msgid "Free disk space"
 #~ msgstr "Maak skyf spasie skoon"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit 0.7.3-1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-17 15:16-0700\n"
+"POT-Creation-Date: 2026-01-21 23:03-0700\n"
 "PO-Revision-Date: 2025-08-28 16:02+0000\n"
 "Last-Translator: Anucha Hlownonkor <tony.chompoo@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/bleachbit/main/th/"
@@ -1335,14 +1335,8 @@ msgstr "ไม่ใช่เครื่องมือทำความสะ
 
 #: ../bleachbit/CLI.py
 #, python-format
-msgid "Wildcard characters are not allowed in negation: -%s"
+msgid "Wildcard characters are not allowed in --except: %s"
 msgstr ""
-
-#: ../bleachbit/CLI.py
-#, fuzzy, python-format
-#| msgid "not a valid cleaner: %s"
-msgid "not a valid cleaner: -%s"
-msgstr "ไม่ใช่เครื่องมือทำความสะอาดที่ถูกต้อง: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1352,7 +1346,7 @@ msgstr "ไม่ใช่เครื่องมือทำความสะ
 #: ../bleachbit/CLI.py
 #, fuzzy
 #| msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgid "usage: %prog [options] cleaner.option1 [-cleaner.option2 ...]"
+msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
 msgstr "วิธีใช้: %prog [ตัวเลือก] เครื่องมือความสะอาด.ตัวเลือก1 เครื่องมือความสะอาด.ตัวเลือก2"
 
 #: ../bleachbit/CLI.py
@@ -1397,6 +1391,10 @@ msgid "enable all options that do not have a warning"
 msgstr "เปิดใช้งานตัวเลือกทั้งหมดที่ไม่มีคำเตือน"
 
 #: ../bleachbit/CLI.py
+msgid "exclude cleaner options (can be repeated, comma-separated)"
+msgstr ""
+
+#: ../bleachbit/CLI.py
 msgid "set log level to verbose"
 msgstr "ตั้งค่าระดับบันทึกเป็น verbose"
 
@@ -1427,7 +1425,7 @@ msgstr "อัปเดตข้อมูลสำหรับ winapp2.ini ถ�
 #| "preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
-"preview, --clean"
+"preview, --clean, --shred"
 msgstr ""
 "ระบุเพียงหนึ่งคำสั่งเหล่านี้: --list-cleaners, --wipe-free-space, --preview, --clean"
 
@@ -1599,6 +1597,20 @@ msgstr "ยืนยันก่อนลบ"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
+msgid "Enable %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
+msgid "Remember my choice for %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+msgid "_Enable anyway"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
 "browser:\n"
@@ -1720,7 +1732,7 @@ msgstr ""
 msgid "Keep Selected"
 msgstr ""
 
-#: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
+#: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
 msgid "Preferences"
 msgstr "การตั้งค่า"
 
@@ -1738,6 +1750,10 @@ msgstr "ภาษา"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Warning confirmations reset."
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
@@ -1795,6 +1811,12 @@ msgstr ""
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
 msgstr "ปิดโปรแกรมหลังจากล้างเสร็จแล้ว"
+
+#: ../bleachbit/GuiPreferences.py
+#, fuzzy
+#| msgid "Delete confirmation"
+msgid "Reset warning confirmations"
+msgstr "ลบการยืนยัน"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
@@ -1872,6 +1894,10 @@ msgid "This path already exists in the custom list."
 msgstr "เส้นทางนี้มีอยู่แล้วในรายการ"
 
 #: ../bleachbit/GuiPreferences.py
+msgid "Protected Path"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
 msgid "File"
 msgstr "แฟ้ม"
 
@@ -1898,6 +1924,8 @@ msgstr "ลบ"
 msgid "Manage cookies to keep..."
 msgstr ""
 
+#. TRANSLATORS: "Paths" is used generically to refer to both files
+#. and folders
 #: ../bleachbit/GuiPreferences.py
 msgid "These paths will not be deleted or modified."
 msgstr "เส้นทางเหล่านี้จะไม่ถูกลบหรือแก้ไข"
@@ -1982,13 +2010,13 @@ msgstr "ขนาด"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
-#. %(warning) may be 'This option is really slow'
 #: ../bleachbit/GUI.py
-#, python-format
-msgid ""
-"Warning regarding %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
+#, fuzzy, python-format
+#| msgid ""
+#| "Warning regarding %(cleaner)s - %(option)s:\n"
+#| "\n"
+#| "%(warning)s"
+msgid "%(cleaner)s - %(option)s"
 msgstr ""
 "คำเตือนเกี่ยวกับ%(cleaner)s - %(option)s:\n"
 "%(warning)s"
@@ -2208,6 +2236,27 @@ msgstr "การรักษาภาษา %s โดยอัตโนมั�
 #: ../bleachbit/Options.py
 msgid "Error when setting the default drives to shred."
 msgstr "เกิดข้อผิดพลาดเมื่อตั้งค่าไดรฟ์เริ่มต้นเป็นทำลาย"
+
+#. TRANSLATORS: Warning shown when user tries to add a protected path.
+#. %(path)s is the path, %(files)d is number of files, %(size)s is human-readable size
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Impact: %(files)d file(s), %(size)s\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
+#. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
@@ -2429,43 +2478,48 @@ msgstr "โปรดรอสักครู่ กำลังทำการ�
 msgid "Please wait.  Previewing %s."
 msgstr "โปรดรอสักครู่ กำลังแสดงตัวอย่าง %s"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Shred Files"
 msgstr "_ล้างแฟ้ม"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Sh_red Folders"
 msgstr "ล้า_งโฟลเดอร์"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Shred Paths from Clipboard"
 msgstr "ล้างเส้นทางจากคลิปบอร์ด"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 #, fuzzy
 #| msgid "_Wipe Free Space"
 msgid "_Wipe Empty Space"
 msgstr "_ล้างเพื่อเพิ่มพื้นที่ว่าง"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Make Chaff"
 msgstr "_สร้างเป้าลวง (chaff)"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_hred Settings and Quit"
 msgstr "ล้_างการตั้งค่าทั้งหมดแล้วออก"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_ystem Information"
 msgstr "ข้_อมูลระบบ"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Help"
 msgstr "_วิธีใช้"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_เกี่ยวกับ BleachBit"
+
+#, fuzzy, python-format
+#~| msgid "not a valid cleaner: %s"
+#~ msgid "not a valid cleaner: -%s"
+#~ msgstr "ไม่ใช่เครื่องมือทำความสะอาดที่ถูกต้อง: %s"
 
 #~ msgid "Free disk space"
 #~ msgstr "พื้นที่ว่างในดิสก์"

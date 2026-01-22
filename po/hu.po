@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-17 15:16-0700\n"
+"POT-Creation-Date: 2026-01-21 23:03-0700\n"
 "PO-Revision-Date: 2026-01-19 16:01+0000\n"
 "Last-Translator: Ghost of Sparta <makesocialfoss32@keemail.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/bleachbit/main/"
@@ -1369,14 +1369,8 @@ msgstr "nem érvényes takarító: %s"
 
 #: ../bleachbit/CLI.py
 #, python-format
-msgid "Wildcard characters are not allowed in negation: -%s"
+msgid "Wildcard characters are not allowed in --except: %s"
 msgstr ""
-
-#: ../bleachbit/CLI.py
-#, fuzzy, python-format
-#| msgid "not a valid cleaner: %s"
-msgid "not a valid cleaner: -%s"
-msgstr "nem érvényes takarító: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1386,7 +1380,7 @@ msgstr "nem érvényes takarító: %s"
 #: ../bleachbit/CLI.py
 #, fuzzy
 #| msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgid "usage: %prog [options] cleaner.option1 [-cleaner.option2 ...]"
+msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
 msgstr "használat: %prog[opciók] takarító.opció1 takarító.opció2"
 
 #: ../bleachbit/CLI.py
@@ -1431,6 +1425,10 @@ msgid "enable all options that do not have a warning"
 msgstr "Minden olyan opció engedélyezése, amelyhez nem tartozik figyelmeztetés"
 
 #: ../bleachbit/CLI.py
+msgid "exclude cleaner options (can be repeated, comma-separated)"
+msgstr ""
+
+#: ../bleachbit/CLI.py
 msgid "set log level to verbose"
 msgstr "naplózási szint bőbeszédűre állítása"
 
@@ -1455,9 +1453,13 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "winapp2.ini frissítése ha új verzió érhető el"
 
 #: ../bleachbit/CLI.py
+#, fuzzy
+#| msgid ""
+#| "Specify only one of these commands: --list-cleaners, --wipe-empty-space, "
+#| "--preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
-"preview, --clean"
+"preview, --clean, --shred"
 msgstr ""
 "Csak az egyik parancsot adja meg: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean"
@@ -1637,6 +1639,20 @@ msgstr "Megerősítés törlés előtt"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
+msgid "Enable %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
+msgid "Remember my choice for %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+msgid "_Enable anyway"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
 "browser:\n"
@@ -1757,7 +1773,7 @@ msgstr "Összes kijelölés megszüntetése"
 msgid "Keep Selected"
 msgstr "Kiválasztottak megtartása"
 
-#: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
+#: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
 msgid "Preferences"
 msgstr "Beállítások"
 
@@ -1776,6 +1792,10 @@ msgstr "Nyelvek"
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
 msgstr "Megtartandó lista"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Warning confirmations reset."
+msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
@@ -1833,6 +1853,12 @@ msgstr ""
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
 msgstr "Kilépés tisztítás után"
+
+#: ../bleachbit/GuiPreferences.py
+#, fuzzy
+#| msgid "Delete confirmation"
+msgid "Reset warning confirmations"
+msgstr "Törlés megerősítése"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
@@ -1908,6 +1934,10 @@ msgid "This path already exists in the custom list."
 msgstr "Ez az útvonal már létezik az egyéni listán."
 
 #: ../bleachbit/GuiPreferences.py
+msgid "Protected Path"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
 msgid "File"
 msgstr "Fájl"
 
@@ -1931,6 +1961,8 @@ msgstr "Eltávolítva: %s"
 msgid "Manage cookies to keep..."
 msgstr "Megtartandó sütik kezelése..."
 
+#. TRANSLATORS: "Paths" is used generically to refer to both files
+#. and folders
 #: ../bleachbit/GuiPreferences.py
 msgid "These paths will not be deleted or modified."
 msgstr "Ezek az útvonalak nem kerülnek törlésre vagy módosításra."
@@ -2028,13 +2060,13 @@ msgstr "Méret"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
-#. %(warning) may be 'This option is really slow'
 #: ../bleachbit/GUI.py
-#, python-format
-msgid ""
-"Warning regarding %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
+#, fuzzy, python-format
+#| msgid ""
+#| "Warning regarding %(cleaner)s - %(option)s:\n"
+#| "\n"
+#| "%(warning)s"
+msgid "%(cleaner)s - %(option)s"
 msgstr ""
 "Figyelmeztetés:%(cleaner)s - %(option)s:\n"
 "\n"
@@ -2273,6 +2305,27 @@ msgstr "Nyelv automatikus megőrzése: %s."
 msgid "Error when setting the default drives to shred."
 msgstr "Hiba az alapértelmezett meghajtók megsemmisítésre állítása során."
 
+#. TRANSLATORS: Warning shown when user tries to add a protected path.
+#. %(path)s is the path, %(files)d is number of files, %(size)s is human-readable size
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Impact: %(files)d file(s), %(size)s\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
+#. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
 msgstr "Biztonsági figyelmeztetés"
@@ -2501,41 +2554,46 @@ msgstr "Várjon.  Alapos keresés futtatása."
 msgid "Please wait.  Previewing %s."
 msgstr "Várjon.  %s előnézete."
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Shred Files"
 msgstr "_Megsemmisítendő fájlok"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Sh_red Folders"
 msgstr "M_egsemmisítendő mappák"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Shred Paths from Clipboard"
 msgstr "Útvonalak megsemmisítése a vágólapról"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Wipe Empty Space"
 msgstr "_Szabad terület törlése"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Make Chaff"
 msgstr "_Áladatok létrehozása"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_hred Settings and Quit"
 msgstr "_Beállítások törlése és kilépés"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_ystem Information"
 msgstr "R_endszer-információk"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Help"
 msgstr "_Súgó"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_A BleachBit névjegye"
+
+#, fuzzy, python-format
+#~| msgid "not a valid cleaner: %s"
+#~ msgid "not a valid cleaner: -%s"
+#~ msgstr "nem érvényes takarító: %s"
 
 #~ msgid "Free disk space"
 #~ msgstr "Szabad lemezterület"

@@ -6,12 +6,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-01-17 15:16-0700\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-21 23:03-0700\n"
 "PO-Revision-Date: 2026-01-22 06:04+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/"
-"he/>\n"
+"Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/he/"
+">\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1341,14 +1341,8 @@ msgstr "אינו מנקה תקף: %s"
 
 #: ../bleachbit/CLI.py
 #, python-format
-msgid "Wildcard characters are not allowed in negation: -%s"
+msgid "Wildcard characters are not allowed in --except: %s"
 msgstr ""
-
-#: ../bleachbit/CLI.py
-#, fuzzy, python-format
-#| msgid "not a valid cleaner: %s"
-msgid "not a valid cleaner: -%s"
-msgstr "אינו מנקה תקף: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1358,7 +1352,7 @@ msgstr "אינו מנקה תקף: %s"
 #: ../bleachbit/CLI.py
 #, fuzzy
 #| msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgid "usage: %prog [options] cleaner.option1 [-cleaner.option2 ...]"
+msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
 msgstr "יש להשתמש ב־: ‎%prog [options] cleaner.option1 cleaner.option2"
 
 #: ../bleachbit/CLI.py
@@ -1403,6 +1397,10 @@ msgid "enable all options that do not have a warning"
 msgstr "להפעיל את כל האפשרויות שאינן גורמות לאזהרה"
 
 #: ../bleachbit/CLI.py
+msgid "exclude cleaner options (can be repeated, comma-separated)"
+msgstr ""
+
+#: ../bleachbit/CLI.py
 msgid "set log level to verbose"
 msgstr "הגדרת רמת התיעוד למפורטת"
 
@@ -1433,7 +1431,7 @@ msgstr "עדכון winapp2.ini, אם גרסה חדשה זמינה"
 #| "preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
-"preview, --clean"
+"preview, --clean, --shred"
 msgstr ""
 "לציין רק אחת מהפקודות האלו: ‎--list-cleaners,‏ ‎--wipe-free-space,‏ ‎--preview,‏ ‎--"
 "clean"
@@ -1609,6 +1607,20 @@ msgstr "אישור בטרם מחיקה"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
+msgid "Enable %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
+msgid "Remember my choice for %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+msgid "_Enable anyway"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
 "browser:\n"
@@ -1730,7 +1742,7 @@ msgstr ""
 msgid "Keep Selected"
 msgstr ""
 
-#: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
+#: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
 msgid "Preferences"
 msgstr "העדפות"
 
@@ -1748,6 +1760,10 @@ msgstr "שפות"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Warning confirmations reset."
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
@@ -1805,6 +1821,12 @@ msgstr ""
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
 msgstr "יציאה לאחר הניקיון"
+
+#: ../bleachbit/GuiPreferences.py
+#, fuzzy
+#| msgid "Delete confirmation"
+msgid "Reset warning confirmations"
+msgstr "אימות המחיקה"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
@@ -1884,6 +1906,10 @@ msgid "This path already exists in the custom list."
 msgstr "הנתיב הזה כבר קיים ברשימה המותאמת אישית."
 
 #: ../bleachbit/GuiPreferences.py
+msgid "Protected Path"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
 msgid "File"
 msgstr "קובץ"
 
@@ -1910,6 +1936,8 @@ msgstr "הסרה"
 msgid "Manage cookies to keep..."
 msgstr ""
 
+#. TRANSLATORS: "Paths" is used generically to refer to both files
+#. and folders
 #: ../bleachbit/GuiPreferences.py
 msgid "These paths will not be deleted or modified."
 msgstr "נתיבים אלו לא ימחקו או ישתנו."
@@ -1998,13 +2026,13 @@ msgstr "גודל"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
-#. %(warning) may be 'This option is really slow'
 #: ../bleachbit/GUI.py
-#, python-format
-msgid ""
-"Warning regarding %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
+#, fuzzy, python-format
+#| msgid ""
+#| "Warning regarding %(cleaner)s - %(option)s:\n"
+#| "\n"
+#| "%(warning)s"
+msgid "%(cleaner)s - %(option)s"
 msgstr ""
 "אזהרה בנוגע ל־%(cleaner)s‏ - %(option)s:\n"
 "\n"
@@ -2228,6 +2256,27 @@ msgstr "השפה %s משומרת אוטומטית."
 msgid "Error when setting the default drives to shred."
 msgstr "אירעה שגיאה בעת הגדרת כונני בררת המחדל לגריסה."
 
+#. TRANSLATORS: Warning shown when user tries to add a protected path.
+#. %(path)s is the path, %(files)d is number of files, %(size)s is human-readable size
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Impact: %(files)d file(s), %(size)s\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
+#. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
 msgstr "אזהרת אבטחה"
@@ -2450,43 +2499,48 @@ msgstr "נא להמתין. הסריקה המקיפה מופעלת."
 msgid "Please wait.  Previewing %s."
 msgstr "נא להמתין. מתבצעת הצגת %s."
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Shred Files"
 msgstr "ה_שמדת קבצים"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Sh_red Folders"
 msgstr "ה_שמדת תיקיות"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Shred Paths from Clipboard"
 msgstr "השמדת נתיבים מלוח הגזירים"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 #, fuzzy
 #| msgid "_Wipe Free Space"
 msgid "_Wipe Empty Space"
 msgstr "מ_חיקה מוחלטת של השטח הפנוי"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Make Chaff"
 msgstr "י_צירת מוץ"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_hred Settings and Quit"
 msgstr "_חיסול ההגדרות ויציאה"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_ystem Information"
 msgstr "פרטי המ_ערכת"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Help"
 msgstr "ע_זרה"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_על אודות BleachBit"
+
+#, fuzzy, python-format
+#~| msgid "not a valid cleaner: %s"
+#~ msgid "not a valid cleaner: -%s"
+#~ msgstr "אינו מנקה תקף: %s"
 
 #~ msgid "Free disk space"
 #~ msgstr "שטח פנוי בכונן"

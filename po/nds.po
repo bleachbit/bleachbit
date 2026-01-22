@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-17 15:16-0700\n"
+"POT-Creation-Date: 2026-01-21 23:03-0700\n"
 "PO-Revision-Date: 2017-05-27 15:14+0000\n"
 "Last-Translator: Tee Zocker <Unknown>\n"
 "Language-Team: Low German <nds@li.org>\n"
@@ -1314,12 +1314,7 @@ msgstr ""
 
 #: ../bleachbit/CLI.py
 #, python-format
-msgid "Wildcard characters are not allowed in negation: -%s"
-msgstr ""
-
-#: ../bleachbit/CLI.py
-#, python-format
-msgid "not a valid cleaner: -%s"
+msgid "Wildcard characters are not allowed in --except: %s"
 msgstr ""
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
@@ -1328,7 +1323,7 @@ msgstr ""
 #. More information about the command line is here
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py
-msgid "usage: %prog [options] cleaner.option1 [-cleaner.option2 ...]"
+msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
 msgstr ""
 
 #: ../bleachbit/CLI.py
@@ -1371,6 +1366,10 @@ msgid "enable all options that do not have a warning"
 msgstr ""
 
 #: ../bleachbit/CLI.py
+msgid "exclude cleaner options (can be repeated, comma-separated)"
+msgstr ""
+
+#: ../bleachbit/CLI.py
 msgid "set log level to verbose"
 msgstr ""
 
@@ -1397,7 +1396,7 @@ msgstr ""
 #: ../bleachbit/CLI.py
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
-"preview, --clean"
+"preview, --clean, --shred"
 msgstr ""
 
 #: ../bleachbit/CLI.py
@@ -1559,6 +1558,20 @@ msgstr ""
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
+msgid "Enable %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
+msgid "Remember my choice for %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+msgid "_Enable anyway"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
 "browser:\n"
@@ -1688,7 +1701,7 @@ msgstr ""
 msgid "Keep Selected"
 msgstr ""
 
-#: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
+#: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
 msgid "Preferences"
 msgstr ""
 
@@ -1706,6 +1719,10 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Warning confirmations reset."
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
@@ -1758,6 +1775,10 @@ msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Reset warning confirmations"
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
@@ -1831,6 +1852,10 @@ msgid "This path already exists in the custom list."
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
+msgid "Protected Path"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
 msgid "File"
 msgstr ""
 
@@ -1854,6 +1879,8 @@ msgstr ""
 msgid "Manage cookies to keep..."
 msgstr ""
 
+#. TRANSLATORS: "Paths" is used generically to refer to both files
+#. and folders
 #: ../bleachbit/GuiPreferences.py
 msgid "These paths will not be deleted or modified."
 msgstr ""
@@ -1940,13 +1967,9 @@ msgstr ""
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
-#. %(warning) may be 'This option is really slow'
 #: ../bleachbit/GUI.py
 #, python-format
-msgid ""
-"Warning regarding %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
+msgid "%(cleaner)s - %(option)s"
 msgstr ""
 
 #: ../bleachbit/GUI.py
@@ -2158,6 +2181,27 @@ msgstr ""
 
 #: ../bleachbit/Options.py
 msgid "Error when setting the default drives to shred."
+msgstr ""
+
+#. TRANSLATORS: Warning shown when user tries to add a protected path.
+#. %(path)s is the path, %(files)d is number of files, %(size)s is human-readable size
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Impact: %(files)d file(s), %(size)s\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
+#. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Are you sure you want to add this path?"
 msgstr ""
 
 #: ../bleachbit/RecognizeCleanerML.py
@@ -2374,39 +2418,39 @@ msgstr ""
 msgid "Please wait.  Previewing %s."
 msgstr ""
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Shred Files"
 msgstr ""
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Sh_red Folders"
 msgstr ""
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Shred Paths from Clipboard"
 msgstr ""
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Wipe Empty Space"
 msgstr ""
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Make Chaff"
 msgstr ""
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_hred Settings and Quit"
 msgstr ""
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_ystem Information"
 msgstr ""
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Help"
 msgstr ""
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr ""
 

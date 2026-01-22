@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-01-17 15:16-0700\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-21 23:03-0700\n"
 "PO-Revision-Date: 2026-01-22 06:04+0000\n"
 "Last-Translator: 大王叫我来巡山 "
 "<hamburger2048@users.noreply.hosted.weblate.org>\n"
@@ -811,8 +811,8 @@ msgid ""
 "${prodname} is already installed.$\\r$\\nClick 'OK' to uninstall the old "
 "version before upgrading, or click 'Cancel' to abort the upgrade."
 msgstr ""
-"${prodname} 已安装。$\\r$\\n单击“好”在升级前卸载旧版本，或单击“取消”终止升级"
-"。"
+"${prodname} 已安装。$\\r$\\n单击“好”在升级前卸载旧版本，或单击“取消”终止升"
+"级。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
@@ -1324,14 +1324,10 @@ msgid "not a valid cleaner: %s"
 msgstr "无效清理规则：%s"
 
 #: ../bleachbit/CLI.py
-#, python-format
-msgid "Wildcard characters are not allowed in negation: -%s"
+#, fuzzy, python-format
+#| msgid "Wildcard characters are not allowed in negation: -%s"
+msgid "Wildcard characters are not allowed in --except: %s"
 msgstr "不允许通配符： -%s"
-
-#: ../bleachbit/CLI.py
-#, python-format
-msgid "not a valid cleaner: -%s"
-msgstr "无效清理规则：-%s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1339,7 +1335,9 @@ msgstr "无效清理规则：-%s"
 #. More information about the command line is here
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py
-msgid "usage: %prog [options] cleaner.option1 [-cleaner.option2 ...]"
+#, fuzzy
+#| msgid "usage: %prog [options] cleaner.option1 [-cleaner.option2 ...]"
+msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
 msgstr "用法： %prog [options] cleaner.option1 [-cleaner.option2 ...]"
 
 #: ../bleachbit/CLI.py
@@ -1382,6 +1380,10 @@ msgid "enable all options that do not have a warning"
 msgstr "启用所有无警告的选项"
 
 #: ../bleachbit/CLI.py
+msgid "exclude cleaner options (can be repeated, comma-separated)"
+msgstr ""
+
+#: ../bleachbit/CLI.py
 msgid "set log level to verbose"
 msgstr "将日志级别设置为详细"
 
@@ -1406,9 +1408,13 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "当有新版本可用时更新 Winapp2.ini"
 
 #: ../bleachbit/CLI.py
+#, fuzzy
+#| msgid ""
+#| "Specify only one of these commands: --list-cleaners, --wipe-empty-space, "
+#| "--preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
-"preview, --clean"
+"preview, --clean, --shred"
 msgstr ""
 "以下命令不能同时使用：--list-cleaners, --wipe-empty-space, --preview, --clean"
 
@@ -1576,6 +1582,20 @@ msgstr "删除前确认"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
+msgid "Enable %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
+msgid "Remember my choice for %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+msgid "_Enable anyway"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
 "browser:\n"
@@ -1695,7 +1715,7 @@ msgstr "全不选"
 msgid "Keep Selected"
 msgstr "保留所选"
 
-#: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
+#: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
 msgid "Preferences"
 msgstr "选项"
 
@@ -1714,6 +1734,10 @@ msgstr "语言"
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
 msgstr "保留列表"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Warning confirmations reset."
+msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
@@ -1766,6 +1790,12 @@ msgstr "在某些文件系统和 BleachBit 操作中粉碎文件是无效的。�
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
 msgstr "清理完成后退出"
+
+#: ../bleachbit/GuiPreferences.py
+#, fuzzy
+#| msgid "Delete confirmation"
+msgid "Reset warning confirmations"
+msgstr "删除确认"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
@@ -1838,6 +1868,10 @@ msgid "This path already exists in the custom list."
 msgstr "此路径已经在自定义列表中。"
 
 #: ../bleachbit/GuiPreferences.py
+msgid "Protected Path"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
 msgid "File"
 msgstr "文件"
 
@@ -1861,6 +1895,8 @@ msgstr "已删除：%s"
 msgid "Manage cookies to keep..."
 msgstr "管理要保留的 cookies..."
 
+#. TRANSLATORS: "Paths" is used generically to refer to both files
+#. and folders
 #: ../bleachbit/GuiPreferences.py
 msgid "These paths will not be deleted or modified."
 msgstr "将阻止删除或修改这些文件与文件夹。"
@@ -1960,13 +1996,13 @@ msgstr "清理大小"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
-#. %(warning) may be 'This option is really slow'
 #: ../bleachbit/GUI.py
-#, python-format
-msgid ""
-"Warning regarding %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
+#, fuzzy, python-format
+#| msgid ""
+#| "Warning regarding %(cleaner)s - %(option)s:\n"
+#| "\n"
+#| "%(warning)s"
+msgid "%(cleaner)s - %(option)s"
 msgstr ""
 "来自 %(cleaner)s.%(option)s 的警告:\n"
 "\n"
@@ -2189,6 +2225,27 @@ msgstr "自动保留语言 %s 。"
 msgid "Error when setting the default drives to shred."
 msgstr "设置默认擦除空闲空间的驱动器时出错。"
 
+#. TRANSLATORS: Warning shown when user tries to add a protected path.
+#. %(path)s is the path, %(files)d is number of files, %(size)s is human-readable size
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Impact: %(files)d file(s), %(size)s\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
+#. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
 msgstr "安全警告"
@@ -2408,41 +2465,45 @@ msgstr "请稍候。正在进行深度扫描。"
 msgid "Please wait.  Previewing %s."
 msgstr "请稍等。正在预览 %s 清理项。"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Shred Files"
 msgstr "粉碎文件(_S)"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Sh_red Folders"
 msgstr "粉碎文件夹(_R)"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Shred Paths from Clipboard"
 msgstr "粉碎来自剪贴板的路径"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Wipe Empty Space"
 msgstr "抹去磁盘上的未分配区域(_W)"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Make Chaff"
 msgstr "制作干扰文件(_M)"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_hred Settings and Quit"
 msgstr "初始化 BleachBit 设置并退出程序(_H)"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_ystem Information"
 msgstr "系统信息(_Y)"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "关于 BleachBit (_A)"
+
+#, python-format
+#~ msgid "not a valid cleaner: -%s"
+#~ msgstr "无效清理规则：-%s"
 
 #~ msgid "Free disk space"
 #~ msgstr "释放磁盘空闲区域"

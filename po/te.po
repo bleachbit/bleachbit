@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-17 15:16-0700\n"
+"POT-Creation-Date: 2026-01-21 23:03-0700\n"
 "PO-Revision-Date: 2021-06-18 15:40+0000\n"
 "Last-Translator: N.SUJATHA DEVI <Unknown>\n"
 "Language-Team: Telugu <te@li.org>\n"
@@ -1337,14 +1337,8 @@ msgstr "చెల్లుబాటు అయ్యే క్లీనర్ క
 
 #: ../bleachbit/CLI.py
 #, python-format
-msgid "Wildcard characters are not allowed in negation: -%s"
+msgid "Wildcard characters are not allowed in --except: %s"
 msgstr ""
-
-#: ../bleachbit/CLI.py
-#, fuzzy, python-format
-#| msgid "not a valid cleaner: %s"
-msgid "not a valid cleaner: -%s"
-msgstr "చెల్లుబాటు అయ్యే క్లీనర్ కాదు: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1354,7 +1348,7 @@ msgstr "చెల్లుబాటు అయ్యే క్లీనర్ క
 #: ../bleachbit/CLI.py
 #, fuzzy
 #| msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
-msgid "usage: %prog [options] cleaner.option1 [-cleaner.option2 ...]"
+msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
 msgstr "%prog [ఎంపికలు] క్లీనర్.ఎంపిక1 క్లీనర్.ఎంపిక2"
 
 #: ../bleachbit/CLI.py
@@ -1399,6 +1393,10 @@ msgid "enable all options that do not have a warning"
 msgstr "వార్నింగ్ లేని అన్ని ఎంపికలను ఎనేబుల్ చేయండి"
 
 #: ../bleachbit/CLI.py
+msgid "exclude cleaner options (can be repeated, comma-separated)"
+msgstr ""
+
+#: ../bleachbit/CLI.py
 msgid "set log level to verbose"
 msgstr "లాగ్ లెవెల్‌ను వెర్బోస్‌కు సెట్ చేయండి"
 
@@ -1429,7 +1427,7 @@ msgstr "కొత్త వెర్షన్ అందుబాటులో ఉ
 #| "preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
-"preview, --clean"
+"preview, --clean, --shred"
 msgstr "ఈ కమాండ్‌లలో ఒకదాన్ని మాత్రమే పేర్కొనండి: -లిస్ట్-క్లీనర్స్, --వైప్-ఫ్రీ-స్పేస్, --ప్రివ్యూ, --క్లీన్"
 
 #: ../bleachbit/CLI.py
@@ -1602,6 +1600,20 @@ msgstr "డిలీట్ చేసే ముందు ధృవీకరిం
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
+msgid "Enable %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
+msgid "Remember my choice for %(option)s"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+msgid "_Enable anyway"
+msgstr ""
+
+#: ../bleachbit/GuiBasic.py
+#, python-format
 msgid ""
 "Because you are running as root, please manually open this link in a web "
 "browser:\n"
@@ -1721,7 +1733,7 @@ msgstr ""
 msgid "Keep Selected"
 msgstr ""
 
-#: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
+#: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
 msgid "Preferences"
 msgstr "ప్రాధాన్యతలు"
 
@@ -1739,6 +1751,10 @@ msgstr "భాషలు"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Warning confirmations reset."
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
@@ -1800,6 +1816,12 @@ msgstr ""
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
 msgstr "క్లీన్ చేసిన తర్వాత నిష్క్రమించండి"
+
+#: ../bleachbit/GuiPreferences.py
+#, fuzzy
+#| msgid "Delete confirmation"
+msgid "Reset warning confirmations"
+msgstr "తొలగింపు నిర్ధారణ"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
@@ -1875,6 +1897,10 @@ msgid "This path already exists in the custom list."
 msgstr ""
 
 #: ../bleachbit/GuiPreferences.py
+msgid "Protected Path"
+msgstr ""
+
+#: ../bleachbit/GuiPreferences.py
 msgid "File"
 msgstr "ఫైల్"
 
@@ -1900,6 +1926,8 @@ msgstr "తొలగించండి"
 msgid "Manage cookies to keep..."
 msgstr ""
 
+#. TRANSLATORS: "Paths" is used generically to refer to both files
+#. and folders
 #: ../bleachbit/GuiPreferences.py
 #, fuzzy
 #| msgid "Theses paths will not be deleted or modified."
@@ -1989,13 +2017,13 @@ msgstr "సైజ్"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
-#. %(warning) may be 'This option is really slow'
 #: ../bleachbit/GUI.py
-#, python-format
-msgid ""
-"Warning regarding %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
+#, fuzzy, python-format
+#| msgid ""
+#| "Warning regarding %(cleaner)s - %(option)s:\n"
+#| "\n"
+#| "%(warning)s"
+msgid "%(cleaner)s - %(option)s"
 msgstr ""
 "%(cleaner)s - %(option)sకు సంబంధించిన హెచ్చరిక:\n"
 "\n"
@@ -2219,6 +2247,27 @@ msgstr "%s భాషను స్వయంచాలకంగా సంరక్�
 msgid "Error when setting the default drives to shred."
 msgstr "డిఫాల్ట్ డ్రైవ్‌లను ష్రెడ్ కు సెట్ చేసేటప్పుడు దోషం."
 
+#. TRANSLATORS: Warning shown when user tries to add a protected path.
+#. %(path)s is the path, %(files)d is number of files, %(size)s is human-readable size
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Impact: %(files)d file(s), %(size)s\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
+#. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
+#: ../bleachbit/ProtectedPath.py
+#, python-format
+msgid ""
+"Warning: '%(path)s' may contain important files.\n"
+"\n"
+"Are you sure you want to add this path?"
+msgstr ""
+
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
 msgstr "భద్రతాహెచ్చరిక"
@@ -2441,45 +2490,50 @@ msgstr "దయచేసి వేచి ఉండండి. డీప్ స్�
 msgid "Please wait.  Previewing %s."
 msgstr "దయచేసి వేచి ఉండండి, %s ను ప్రివ్యూ చేస్తోంది."
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Shred Files"
 msgstr "_ష్రెడ్ ఫైల్స్"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Sh_red Folders"
 msgstr "ష్రెడ్ ఫోల్డర్స్"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "Shred Paths from Clipboard"
 msgstr "క్లిప్‌బోర్డ్ నుండి ష్రెడ్ పాథ్స్"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 #, fuzzy
 #| msgid "_Wipe Free Space"
 msgid "_Wipe Empty Space"
 msgstr "_వైప్ ఫ్రీ స్పేస్"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Make Chaff"
 msgstr "_చాఫ్‌ను తయారుచేయండి"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "S_hred Settings and Quit"
 msgstr "సెట్టింగ్లను ష్రెడ్ చేసి, నిష్క్రమించండి"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 #, fuzzy
 #| msgid "System information"
 msgid "S_ystem Information"
 msgstr "సిస్టం సమాచారం"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_Help"
 msgstr "_సహాయం"
 
-#: ../data/app-menu.ui
+#: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_BleachBit గురించి"
+
+#, fuzzy, python-format
+#~| msgid "not a valid cleaner: %s"
+#~ msgid "not a valid cleaner: -%s"
+#~ msgstr "చెల్లుబాటు అయ్యే క్లీనర్ కాదు: %s"
 
 #~ msgid "Free disk space"
 #~ msgstr "ఫ్రీ డిస్క్ స్పేస్‌"
