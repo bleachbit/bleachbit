@@ -136,6 +136,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         mklink /d=directory symbolic link
         requires administrator privileges
         """
+        assert mklink_option in ('/j', '/d')
         if mklink_option == '/d':
             self.skipUnlessAdmin()
         # make a normal directory with a file in it
@@ -162,10 +163,14 @@ class WindowsTestCase(common.BleachbitTestCase):
         args = ('cmd', '/c', 'mklink', mklink_option,
                 link_pathname, target_dir)
         from bleachbit.General import run_external
-        (rc, stdout, stderr) = run_external(args)
+        (rc, _stdout, stderr) = run_external(args)
         self.assertEqual(rc, 0, stderr)
         self.assertExists(link_pathname)
-        self.assertTrue(is_junction(link_pathname))
+        if mklink_option == '/j':
+            self.assertTrue(is_junction(link_pathname))
+        else:
+            self.assertFalse(is_junction(link_pathname))
+            self.assertTrue(os.path.islink(link_pathname))
 
         # put the link in the recycle bin
         move_to_recycle_bin(container_dir)

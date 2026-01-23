@@ -39,6 +39,7 @@ import tempfile
 import time
 import unittest
 import warnings
+from pathlib import Path
 
 # local import
 from bleachbit.FileUtilities import (
@@ -86,6 +87,7 @@ if 'nt' == os.name:
     import win32api
     import win32com.shell
     import win32con
+    from bleachbit import Windows
 
 
 def test_ini_helper(self, execute):
@@ -172,6 +174,13 @@ def test_json_helper(self, execute):
     # clean up
     delete(filename)
     self.assertNotExists(filename)
+
+
+def _is_child_path(parent_path, child_path):
+    """Check whether child_path is a child of parent_path."""
+    parent = os.path.abspath(parent_path)
+    child = os.path.abspath(child_path)
+    return os.path.commonpath([parent]) == os.path.commonpath([parent, child])
 
 
 class FileUtilitiesTestCase(common.BleachbitTestCase):
@@ -308,6 +317,170 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         os.rmdir(subdirname)
 
         os.rmdir(dirname)
+
+    @common.skipIfWindows
+    def test_children_in_directory_posix_symlink(self):
+        """POSIX: ensure directory symlinks are not followed"""
+
+        base_dir = os.path.join(self.tempdir, 'children-symlink-primary')
+        os.mkdir(base_dir)
+
+        # Real directory inside base for normal traversal
+        real_dir = os.path.join(base_dir, 'real-dir')
+        os.mkdir(real_dir)
+        real_file = self.mkstemp(prefix='real-file-', dir=real_dir)
+
+        # Symlink inside base pointing outside of base_dir
+        external_target = os.path.join(
+            self.tempdir, 'children-symlink-external')
+        os.mkdir(external_target)
+        external_file = self.mkstemp(
+            prefix='external-file-', dir=external_target)
+        self.assertExists(external_target)
+        self.assertExists(external_file)
+        link_dir = os.path.join(base_dir, 'linked-dir')
+        os.symlink(external_target, link_dir)
+        self.assertExists(link_dir)
+
+        # list_directories=True should yield the link itself but not descend
+        entries_with_dirs = list(children_in_directory(base_dir, True))
+        self.assertIn(link_dir, entries_with_dirs)
+        self.assertIn(real_file, entries_with_dirs)
+        self.assertIn(real_dir, entries_with_dirs)
+        self.assertEqual(len(entries_with_dirs), 3)
+
+        # list_directories=False should only yield the real file
+        entries_files_only = list(children_in_directory(base_dir, False))
+        self.assertEqual(entries_files_only, [real_file])
+        self.assertEqual(len(entries_files_only), 1)
+
+    @common.skipIfWindows
+    def test_children_in_directory_posix_circular_symlink(self):
+        """POSIX: ensure circular directory symlinks are not followed"""
+
+        base_dir = os.path.join(self.tempdir, 'children-circular-')
+        os.mkdir(base_dir)
+
+        # Create a normal directory and file inside the base directory
+        real_dir = os.path.join(base_dir, 'real-dir')
+        os.mkdir(real_dir)
+        real_file = self.mkstemp(prefix='real-file-', dir=real_dir)
+
+        # Symlink inside base pointing back to base_dir to create circular reference
+        loop_link = os.path.join(base_dir, 'loop-link')
+        os.symlink(base_dir, loop_link)
+        self.assertExists(loop_link)
+
+        entries_with_dirs = list(children_in_directory(base_dir, True))
+        self.assertIn(loop_link, entries_with_dirs)
+        self.assertIn(real_file, entries_with_dirs)
+        self.assertIn(real_dir, entries_with_dirs)
+        self.assertEqual(len(entries_with_dirs), 3)
+
+        entries_files_only = list(children_in_directory(base_dir, False))
+        self.assertEqual(entries_files_only, [real_file])
+        self.assertEqual(len(entries_files_only), 1)
+
+    @common.skipUnlessWindows
+    def test_children_in_directory_windows_links(self):
+        """Windows: ensure symlinked dirs and junctions are not followed"""
+
+        base_dir = os.path.join(self.tempdir, 'children-links')
+        os.mkdir(base_dir)
+
+        # Regular directory to confirm normal traversal still works
+        normal_dir = os.path.join(base_dir, 'normal-dir')
+        os.mkdir(normal_dir)
+        normal_file = os.path.join(normal_dir, 'normal-file')
+        common.touch_file(normal_file)
+        self.assertExists(normal_file)
+
+        # Symlink target lives outside base_dir
+        symlink_target = os.path.join(self.tempdir, 'children-symlink-target')
+        os.mkdir(symlink_target)
+        symlink_target_file = self.mkstemp(
+            prefix='symlink-target-file-', dir=symlink_target)
+        symlink_path = os.path.join(base_dir, 'symlinked-dir')
+        try:
+            self._win_create_dir_symlink(symlink_target, symlink_path)
+        except OSError as exc:
+            self.skipTest(f'Cannot create Windows directory symlink: {exc}')
+
+        # Junction target lives outside base_dir
+        junction_target = os.path.join(
+            self.tempdir, 'children-junction-target')
+        os.mkdir(junction_target)
+        junction_target_file = self.mkstemp(
+            prefix='junction-target-file-', dir=junction_target)
+        junction_path = os.path.join(base_dir, 'junction-dir')
+        try:
+            self._win_create_junction(junction_target, junction_path)
+        except (OSError, subprocess.CalledProcessError) as exc:
+            self.skipTest(f'Cannot create Windows junction: {exc}')
+
+        entries_with_dirs = list(children_in_directory(base_dir, True))
+        entries_files_only = list(children_in_directory(base_dir, False))
+
+        self.assertIn(normal_file, entries_files_only)
+        for link_dir in (symlink_path, junction_path):
+            self.assertIn(link_dir, entries_with_dirs)
+            # There must be no children of the linked directories.
+            offending_paths = [
+                path for path in entries_with_dirs + entries_files_only
+                if _is_child_path(link_dir, path) and path != link_dir
+            ]
+            self.assertEqual(
+                offending_paths,
+                [],
+                f"Traversal into {link_dir} detected in children_in_directory results",
+            )
+
+        # Files living only behind the link targets should never appear
+        for hidden_file in (symlink_target_file, junction_target_file):
+            self.assertNotIn(hidden_file, entries_with_dirs)
+            self.assertNotIn(hidden_file, entries_files_only)
+
+        self.assertEqual(len(entries_with_dirs), 4)
+        self.assertEqual(len(entries_files_only), 1)
+
+    def _win_create_dir_symlink(self, target, linkname):
+        """Create a directory symlink, raising OSError on failure."""
+
+        if os.path.lexists(linkname):
+            raise OSError(f'Link already exists: {linkname}')
+
+        # Use Windows API directly to avoid spawning subprocesses that may need extra quoting
+        kernel32 = ctypes.windll.kernel32
+        kernel32.CreateSymbolicLinkW.argtypes = [
+            ctypes.c_wchar_p,
+            ctypes.c_wchar_p,
+            ctypes.c_uint32,
+        ]
+        kernel32.CreateSymbolicLinkW.restype = ctypes.c_ubyte
+        result = kernel32.CreateSymbolicLinkW(
+            linkname, target, 1)  # SYMBOLIC_LINK_FLAG_DIRECTORY
+        if result == 0:
+            err = ctypes.GetLastError()
+            raise OSError(err, ctypes.FormatError(err))
+        self.assertExists(linkname)
+        path = Path(linkname)
+        self.assertTrue(path.is_symlink())
+        self.assertTrue(path.is_dir())
+        self.assertFalse(Windows.is_junction(linkname))
+
+    def _win_create_junction(self, target, linkname):
+        """Create a directory junction using mklink /J."""
+
+        if os.path.lexists(linkname):
+            raise OSError(f'Link already exists: {linkname}')
+        cmd = ['cmd', '/c', 'mklink', '/J',
+               extended_path(linkname), extended_path(target)]
+        subprocess.check_call(cmd)
+        self.assertExists(linkname)
+        self.assertTrue(Windows.is_junction(linkname))
+        path = Path(linkname)
+        self.assertTrue(path.is_dir())
+        self.assertFalse(path.is_symlink())
 
     def test_clean_ini(self):
         """Unit test for clean_ini()"""

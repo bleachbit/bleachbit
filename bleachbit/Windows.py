@@ -87,6 +87,9 @@ if 'win32' == sys.platform:
 
 logger = logging.getLogger(__name__)
 
+IO_REPARSE_TAG_MOUNT_POINT = 0xA0000003
+FILE_ATTRIBUTE_REPARSE_POINT = 0x400
+
 
 def browse_file(_, title):
     """Ask the user to select a single file.  Return full path"""
@@ -625,13 +628,31 @@ def get_windows_version():
 
 
 def is_junction(path):
-    """Check whether the path is a link
+    """Check whether the path is a junction (mount point) on Windows.
 
-    On Python 2.7 the function os.path.islink() always returns False,
-    so this is needed
+    Python 3.12 added os.is_junction()
+    https://docs.python.org/3/library/os.html#os.DirEntry.is_junction
     """
-    FILE_ATTRIBUTE_REPARSE_POINT = 0x400
+    if sys.platform != 'win32':
+        return False
+    if hasattr(os, 'is_junction'):
+        return os.is_junction(path)
+
+    # Get reparse tag from stat result
+    try:
+        stat_result = os.stat(path, follow_symlinks=False)
+        tag = getattr(stat_result, 'st_reparse_tag', None)
+        if tag is not None:
+            return tag == IO_REPARSE_TAG_MOUNT_POINT
+    except (OSError, AttributeError):
+        pass
+
     attr = windll.kernel32.GetFileAttributesW(path)
+    if attr == 0xFFFFFFFF:  # INVALID_FILE_ATTRIBUTES indicates GetFileAttributesW failed
+        error_code = windll.kernel32.GetLastError()
+        logger.error(
+            'GetFileAttributesW() failed for path %s with error code %d', path, error_code)
+        return False
     return bool(attr & FILE_ATTRIBUTE_REPARSE_POINT)
 
 
