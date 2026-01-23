@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-21 23:03-0700\n"
-"PO-Revision-Date: 2026-01-23 01:59+0000\n"
+"PO-Revision-Date: 2026-01-24 09:01+0000\n"
 "Last-Translator: Сергей <asvmail.as@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/bleachbit/main/"
 "ru/>\n"
@@ -855,11 +855,13 @@ msgid ""
 "The next step is building font cache, during which you may see a black "
 "window."
 msgstr ""
+"Следующим шагом является создание кэша шрифтов, во время которого вы можете "
+"увидеть черное окно."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT2"
 msgid "It usually finishes in one minute, but sometimes it takes ten minutes."
-msgstr ""
+msgstr "Обычно это длится не более минуты, но иногда требуется больше времени."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
@@ -867,28 +869,28 @@ msgid ""
 "You need to login with an account that is a member of the administrators "
 "group to continue."
 msgstr ""
+"Для продолжения вам необходимо войти в систему под учётной записью, имеющей "
+"права администратора."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required."
-msgstr ""
+msgstr "Требуются права администратора."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Administrator privileges are required to clean Windows Updates"
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required for uninstall."
-msgstr "Привелегии администратора необходимы для очистки Обновлений Windows"
+msgstr "Для удаления требуются права администратора."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS"
 msgid "For &anyone who uses this computer (all users)"
-msgstr ""
+msgstr "Для &всех, кто пользуется этим компьютером (все пользователи)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS_UMUI"
 msgid "For anyone who uses this computer (all users)"
-msgstr ""
+msgstr "Для всех, кто пользуется этим компьютером (все пользователи)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER"
@@ -918,27 +920,29 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_ALL_USERS"
 msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
-msgstr ""
+msgstr "Установлена версия {VERSION} для всех пользователей в «{FOLDER}»."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for current user in \"{FOLDER}\"."
-msgstr ""
+msgstr "Установлена версия {VERSION} для текущего пользователя в «{FOLDER}»."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
 msgid "Select whether to install $(^NameDA) for all users or for current user."
 msgstr ""
+"Выберите, следует ли устанавливать $(^NameDA) для всех пользователей или "
+"только для текущего."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to install $(^NameDA)."
-msgstr ""
+msgstr "Выберите, для каких пользователей установить $(^NameDA)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
 msgid "Invalid combination of paramaters."
-msgstr ""
+msgstr "Недопустимая комбинация параметров."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_LOGON_SERVICE_NOT_RUNNING"
@@ -972,6 +976,8 @@ msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS"
 msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 msgstr ""
+"Деинсталлировать версию {OLD_VERSION} и установить версию {VERSION} для всех "
+"пользователей."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
@@ -979,21 +985,23 @@ msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for current "
 "user."
 msgstr ""
+"Деинсталлировать версию {OLD_VERSION} и установить версию {VERSION} для "
+"текущего пользователя."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS"
 msgid "Reinstall version {VERSION} for all users."
-msgstr ""
+msgstr "Переустановить версию {VERSION} для всех пользователей."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
 msgid "Reinstall version {VERSION} for current user."
-msgstr ""
+msgstr "Переустановить версию {VERSION} для текущего пользователя."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
 msgid "You need to run this program as administrator."
-msgstr ""
+msgstr "Вам необходимо запустить эту программу от имени администратора."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
@@ -1080,11 +1088,9 @@ msgid ""
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Localizations"
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
 msgid "Translations"
-msgstr "Локализации"
+msgstr "Переводы"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
@@ -1363,7 +1369,7 @@ msgstr "неверный шаблон очистки: %s"
 #: ../bleachbit/CLI.py
 #, python-format
 msgid "Wildcard characters are not allowed in --except: %s"
-msgstr ""
+msgstr "Не допускается использование подстановочных символов в --except: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1396,10 +1402,8 @@ msgid "shred specific files or folders"
 msgstr "удаление отдельных файлов или папок"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "wipe free space in the given paths"
 msgid "wipe empty space in the given paths"
-msgstr "перезаписать свободное пространство для заданных путей"
+msgstr "очистить свободное место для заданных путей"
 
 #: ../bleachbit/CLI.py
 msgid "overwrite files to hide contents"
@@ -1419,7 +1423,7 @@ msgstr "включить все опции, которые не имеют пр�
 
 #: ../bleachbit/CLI.py
 msgid "exclude cleaner options (can be repeated, comma-separated)"
-msgstr ""
+msgstr "исключить опции очистки (могут быть повторены через запятую)"
 
 #: ../bleachbit/CLI.py
 msgid "set log level to verbose"
@@ -1446,32 +1450,24 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "обновить winapp2.ini, если доступна новая версия"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid ""
-#| "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
-#| "preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean, --shred"
 msgstr ""
-"Укажите только одну из этих команд: --list-cleaners, --wipe-free-space, --"
-"preview, --clean"
+"Укажите только одну из этих команд: --list-cleaners, --wipe-empty-space, --"
+"preview, --clean, --shred"
 
 #: ../bleachbit/CLI.py
 msgid "Checking online for updates to winapp2.ini"
 msgstr "Проверка обновлений для winapp2.ini"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "No directories given for --wipe-free-space"
 msgid "No directories given for --wipe-empty-space"
-msgstr "Не заданы каталоги для --wipe-free-space"
+msgstr "Не заданы каталоги для --wipe-empty-space"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "Wiping free space can take a long time."
 msgid "Wiping empty space can take a long time."
-msgstr "Стирание свободного пространства может занять много времени."
+msgstr "Очистка свободного места может занять много времени."
 
 #: ../bleachbit/CLI.py
 msgid "No work to do. Specify options."
