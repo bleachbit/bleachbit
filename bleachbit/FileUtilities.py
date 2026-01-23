@@ -47,6 +47,7 @@ import time
 import urllib.parse
 import urllib.request
 import warnings
+from os import walk
 from pathlib import Path
 
 # local imports
@@ -74,26 +75,6 @@ if 'posix' == os.name:
     from bleachbit.General import WindowsError
     # pylint: disable=invalid-name
     pywinerror = WindowsError
-
-try:
-    # FIXME: replace scandir.walk() with os.scandir()
-    # Preserve behavior added in 25e694.
-    # Test that os.walk() behaves the same on Windows.
-    from scandir import walk
-    if 'nt' == os.name:
-        import scandir
-
-        class _Win32DirEntryPython(scandir.Win32DirEntryPython):
-            def is_symlink(self):
-                """internal use"""
-                return super(_Win32DirEntryPython, self).is_symlink() or \
-                    bleachbit.Windows.is_junction(self.path)
-
-        scandir.scandir = scandir.scandir_python
-        scandir.DirEntry = scandir.Win32DirEntryPython = _Win32DirEntryPython
-except ImportError:
-    # Since Python 3.5, os.walk() calls os.scandir().
-    from os import walk
 
 
 def open_files_linux():
@@ -260,12 +241,44 @@ def children_in_directory(top, list_directories=False):
         for top_ in top:
             yield from children_in_directory(top_, list_directories)
         return
-    for (dirpath, dirnames, filenames) in walk(top, topdown=False):
+
+    def _normalized_prefix(path):
+        norm_path = os.path.normpath(path)
+        if os.name == 'nt':
+            norm_path = norm_path.lower()
+        if not norm_path.endswith(os.sep):
+            norm_path += os.sep
+        return norm_path
+
+    pending_dirs = [] if list_directories else None
+
+    for (dirpath, dirnames, filenames) in walk(top, topdown=True, followlinks=False):
+        if list_directories:
+            current_prefix = _normalized_prefix(dirpath)
+            while pending_dirs and not current_prefix.startswith(pending_dirs[-1][1]):
+                yield pending_dirs.pop()[0]
+
+        if 'nt' == os.name and dirnames:
+            # Avoid traversing Windows symlinks or junctions.
+            link_dirnames = []
+            for dirname in list(dirnames):
+                if os.path.islink(os.path.join(dirpath, dirname)):
+                    link_dirnames.append(dirname)
+                    dirnames.remove(dirname)
+            if list_directories:
+                for dirname in link_dirnames:
+                    yield os.path.join(dirpath, dirname)
         if list_directories:
             for dirname in dirnames:
-                yield os.path.join(dirpath, dirname)
+                full_path = os.path.join(dirpath, dirname)
+                pending_dirs.append((full_path, _normalized_prefix(full_path)))
         for filename in filenames:
             yield os.path.join(dirpath, filename)
+
+    if list_directories:
+        current_prefix = ''
+        while pending_dirs:
+            yield pending_dirs.pop()[0]
 
 
 def clean_ini(path, section, parameter):
