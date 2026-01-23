@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-21 23:03-0700\n"
-"PO-Revision-Date: 2026-01-23 01:59+0000\n"
+"PO-Revision-Date: 2026-01-23 08:06+0000\n"
 "Last-Translator: Ghost of Sparta <makesocialfoss32@keemail.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/bleachbit/main/"
 "hu/>\n"
@@ -1475,16 +1475,12 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "winapp2.ini frissítése ha új verzió érhető el"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid ""
-#| "Specify only one of these commands: --list-cleaners, --wipe-empty-space, "
-#| "--preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean, --shred"
 msgstr ""
-"Csak az egyik parancsot adja meg: --list-cleaners, --wipe-empty-space, --"
-"preview, --clean"
+"Csak a következő parancsok egyikét adja meg: --list-cleaners, --wipe-empty-"
+"space, --preview, --clean, --shred"
 
 #: ../bleachbit/CLI.py
 msgid "Checking online for updates to winapp2.ini"
@@ -1662,16 +1658,16 @@ msgstr "Megerősítés törlés előtt"
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Enable %(option)s"
-msgstr ""
+msgstr "%(option)s engedélyezése"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Remember my choice for %(option)s"
-msgstr ""
+msgstr "Választás megjegyzése (%(option)s)"
 
 #: ../bleachbit/GuiBasic.py
 msgid "_Enable anyway"
-msgstr ""
+msgstr "_Engedélyezés mindenképpen"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
@@ -1817,7 +1813,7 @@ msgstr "Megtartandó lista"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Warning confirmations reset."
-msgstr ""
+msgstr "Figyelmeztetések megerősítései visszaállítva."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
@@ -1877,10 +1873,8 @@ msgid "Exit after cleaning"
 msgstr "Kilépés tisztítás után"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Delete confirmation"
 msgid "Reset warning confirmations"
-msgstr "Törlés megerősítése"
+msgstr "Figyelmeztető megerősítések visszaállítása"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
@@ -1957,7 +1951,7 @@ msgstr "Ez az útvonal már létezik az egyéni listán."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Protected Path"
-msgstr ""
+msgstr "Védett elérési út"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -2083,16 +2077,9 @@ msgstr "Méret"
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #: ../bleachbit/GUI.py
-#, fuzzy, python-format
-#| msgid ""
-#| "Warning regarding %(cleaner)s - %(option)s:\n"
-#| "\n"
-#| "%(warning)s"
+#, python-format
 msgid "%(cleaner)s - %(option)s"
-msgstr ""
-"Figyelmeztetés:%(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
+msgstr "%(cleaner)s - %(option)s"
 
 #: ../bleachbit/GUI.py
 #, python-format
@@ -2338,6 +2325,11 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"Figyelmeztetés: a(z) „%(path)s” fontos fájlokat tartalmazhat.\n"
+"\n"
+"Hatás: %(files)d fájl, %(size)s\n"
+"\n"
+"Biztosan hozzá szeretné adni ezt az útvonalat?"
 
 #. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
 #: ../bleachbit/ProtectedPath.py
@@ -2347,6 +2339,9 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"Figyelmeztetés: a(z) „%(path)s” fontos fájlokat tartalmazhat.\n"
+"\n"
+"Biztosan hozzá szeretné adni ezt az útvonalat?"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
