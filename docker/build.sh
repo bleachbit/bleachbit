@@ -89,10 +89,11 @@ mkdir -p "$ARTIFACT_DIR"
 DOCKER_BUILD_CONTEXT="$DOCKER_DIR"
 
 echo "[docker] Building image $IMAGE from $(basename "$DOCKERFILE")" >&2
-docker build --pull -f "$DOCKERFILE" -t "$IMAGE" "$DOCKER_BUILD_CONTEXT"
+docker build --pull --network=host -f "$DOCKERFILE" -t "$IMAGE" "$DOCKER_BUILD_CONTEXT"
 
 echo "[docker] Running build and tests inside $IMAGE" >&2
 docker run --rm \
+    --network=host \
     --user "$USER_ID:$GROUP_ID" \
     -v "$ROOT_DIR":/work:ro \
     -v "$ARTIFACT_DIR":/artifacts \
