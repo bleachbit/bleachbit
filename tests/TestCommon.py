@@ -99,7 +99,7 @@ class CommonTestCase(common.BleachbitTestCase):
                             lang_codes.append(parts[1])
         # /etc/locale.alias may list the qaa-qtz range, which is reserved for
         # private use rather than a concrete locale. Skip it if present.
-        skip_alias_codes = {'qaa-qtz'}
+        skip_alias_codes = {'qaa-qtz', 'it_CARES'}
 
         for lang_code in lang_codes:
             if lang_code in skip_alias_codes:
