@@ -33,7 +33,7 @@ from tests import common
 from bleachbit.GtkShim import HAVE_GTK, Gtk, GLib, Gio
 
 if HAVE_GTK:
-    from bleachbit.GUI import Bleachbit
+    from bleachbit.GuiApplication import Bleachbit
 
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')

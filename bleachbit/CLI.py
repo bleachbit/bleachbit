@@ -344,8 +344,8 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         preview_or_clean(operations, options.clean)
         sys.exit(0)
     if options.gui:
-        import bleachbit.GUI
-        app = bleachbit.GUI.Bleachbit(
+        import bleachbit.GuiApplication
+        app = bleachbit.GuiApplication.Bleachbit(
             uac=not options.no_uac, shred_paths=args, auto_exit=options.exit)
         sys.exit(app.run())
     if options.shred:
