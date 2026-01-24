@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Perform (or assist with) cleaning operations.
@@ -33,6 +20,7 @@ from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
 from bleachbit import Action, CleanerML, Command, FileUtilities, Memory, Special
 from bleachbit.GtkShim import Gtk, Gdk, HAVE_GTK
+from bleachbit.Wipe import wipe_path
 
 if 'posix' == os.name:
     from bleachbit import Unix
@@ -547,7 +535,7 @@ class System(Cleaner):
                 def wipe_path_func(path=pathname):
                     # Yield control to GTK idle because this process
                     # is very slow.  Also display progress.
-                    yield from FileUtilities.wipe_path(path, idle=True)
+                    yield from wipe_path(path, idle=True)
                     yield 0
                 yield Command.Function(None, wipe_path_func, display)
 
@@ -736,7 +724,7 @@ def create_wipe_empty_space_cleaner(path):
     display = _("Wipe empty space %s") % path
 
     def wipe_path_func():
-        yield from FileUtilities.wipe_path(path, idle=True)
+        yield from bleachbit.Wipe.wipe_path(path, idle=True)
         yield 0
 
     class CustomWipeAction(Action.ActionProvider):
