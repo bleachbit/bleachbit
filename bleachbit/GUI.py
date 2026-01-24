@@ -45,6 +45,7 @@ from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.Language import get_text as _
 from bleachbit.Log import set_root_log_level
 from bleachbit.Options import options
+from bleachbit.Wipe import detect_orphaned_wipe_files
 if os.name == 'nt':
     from bleachbit import Windows
 
@@ -1623,7 +1624,7 @@ class GUI(Gtk.ApplicationWindow):
         """Check for orphaned wipe files and offer to delete them.
 
         These files are created by wipe_path() to fill empty disk space."""
-        orphaned_files = FileUtilities.detect_orphaned_wipe_files()
+        orphaned_files = detect_orphaned_wipe_files()
         if not orphaned_files:
             return
 
