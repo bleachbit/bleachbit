@@ -64,8 +64,8 @@ if os.name == 'nt':
 if 1 == len(sys.argv) and have_gui:
     # Import GUI inside the condition for Linux packagers to
     # separate GUI into another package.
-    import bleachbit.GUI  # pylint: disable=ungrouped-imports
-    app = bleachbit.GUI.Bleachbit()
+    import bleachbit.GuiApplication  # pylint: disable=ungrouped-imports
+    app = bleachbit.GuiApplication.Bleachbit()
     sys.exit(app.run(sys.argv))
 else:
     # Either CLI args were provided or no display is available
