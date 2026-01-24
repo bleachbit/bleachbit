@@ -32,7 +32,7 @@ from unittest import mock
 from bleachbit.GtkShim import HAVE_GTK
 
 if HAVE_GTK:
-    from bleachbit.GUI import Bleachbit
+    from bleachbit.GuiApplication import Bleachbit
 
 import bleachbit
 from bleachbit.Options import options
