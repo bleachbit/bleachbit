@@ -233,7 +233,6 @@ update-desktop-database &> /dev/null ||:
 %{_datadir}/applications/org.bleachbit.BleachBit-root.desktop
 %{_datadir}/%{name}/
 %{_datadir}/pixmaps/%{name}.png
-%{_datadir}/pixmaps/%{name}-indicator.svg
 %dir %{_datadir}/polkit-1
 %dir %{_datadir}/polkit-1/actions
 %{_datadir}/polkit-1/actions/org.bleachbit.policy
