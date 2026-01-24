@@ -38,7 +38,11 @@ DOCKER_DIR="$ROOT_DIR/docker"
 ARTIFACT_ROOT="$ROOT_DIR/docker-artifacts" # cleaned by `make clean`
 mkdir -p "$ARTIFACT_ROOT"
 
-HOME_IN_CONTAINER=/tmp/home # used by BleachBit, dnf, etc.
+# Set HOME for BleachBit, dnf, etc.
+# Setting HOME to /tmp/home is unrealistic and breaks some
+# tests in BleachBit. Instead, we need to make the directory
+# and set the permissions.
+HOME_IN_CONTAINER=/home/user
 RUN_ENV=(--env HOME="$HOME_IN_CONTAINER" --env DISTRO_NAME="$DISTRO")
 if [[ -n "${SKIP_TESTS:-}" ]]; then
     RUN_ENV+=(--env SKIP_TESTS="$SKIP_TESTS")
@@ -89,7 +93,15 @@ mkdir -p "$ARTIFACT_DIR"
 DOCKER_BUILD_CONTEXT="$DOCKER_DIR"
 
 echo "[docker] Building image $IMAGE from $(basename "$DOCKERFILE")" >&2
-docker build --pull --network=host -f "$DOCKERFILE" -t "$IMAGE" "$DOCKER_BUILD_CONTEXT"
+docker build \
+    --pull \
+    --network=host \
+    --build-arg HOME_IN_CONTAINER="$HOME_IN_CONTAINER" \
+    --build-arg USER_ID="$USER_ID" \
+    --build-arg GROUP_ID="$GROUP_ID" \
+    -f "$DOCKERFILE" \
+    -t "$IMAGE" \
+    "$DOCKER_BUILD_CONTEXT"
 
 echo "[docker] Running build and tests inside $IMAGE" >&2
 docker run --rm \

@@ -37,6 +37,11 @@ RUN rpm -qa --qf '%{SIZE}\t%{NAME}-%{VERSION}-%{RELEASE}\n' | sort -nr | head -n
 
 RUN localedef -i en_US -f UTF-8 en_US.UTF-8 || true
 
+ARG HOME_IN_CONTAINER=/home/user
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+RUN mkdir -p "$HOME_IN_CONTAINER" && chown "$USER_ID:$GROUP_ID" "$HOME_IN_CONTAINER"
+
 WORKDIR /work
 
 CMD ["/bin/bash"]

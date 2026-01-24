@@ -39,6 +39,11 @@ RUN apt-get update \
 RUN sed -i 's/# \(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
     && locale-gen
 
+ARG HOME_IN_CONTAINER=/home/user
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+RUN mkdir -p "$HOME_IN_CONTAINER" && chown "$USER_ID:$GROUP_ID" "$HOME_IN_CONTAINER"
+
 WORKDIR /work
 
 CMD ["/bin/bash"]
