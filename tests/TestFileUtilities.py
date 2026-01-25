@@ -60,6 +60,7 @@ from bleachbit.General import gc_collect, run_external
 from bleachbit.Options import options
 from bleachbit import logger
 from tests import common
+from tests.TestWindows import WindowsLinksMixIn
 
 if 'nt' == os.name:
     # pylint: disable=import-error
@@ -162,7 +163,7 @@ def _is_child_path(parent_path, child_path):
     return os.path.commonpath([parent]) == os.path.commonpath([parent, child])
 
 
-class FileUtilitiesTestCase(common.BleachbitTestCase):
+class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     """Test case for module FileUtilities"""
 
     def setUp(self):
@@ -383,7 +384,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             prefix='symlink-target-file-', dir=symlink_target)
         symlink_path = os.path.join(base_dir, 'symlinked-dir')
         try:
-            self._win_create_dir_symlink(symlink_target, symlink_path)
+            self._create_win_dir_symlink(symlink_target, symlink_path)
         except OSError as exc:
             self.skipTest(f'Cannot create Windows directory symlink: {exc}')
 
@@ -395,7 +396,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             prefix='junction-target-file-', dir=junction_target)
         junction_path = os.path.join(base_dir, 'junction-dir')
         try:
-            self._win_create_junction(junction_target, junction_path)
+            self._create_win_junction(junction_target, junction_path)
         except (OSError, subprocess.CalledProcessError) as exc:
             self.skipTest(f'Cannot create Windows junction: {exc}')
 
@@ -423,45 +424,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         self.assertEqual(len(entries_with_dirs), 4)
         self.assertEqual(len(entries_files_only), 1)
-
-    def _win_create_dir_symlink(self, target, linkname):
-        """Create a directory symlink, raising OSError on failure."""
-
-        if os.path.lexists(linkname):
-            raise OSError(f'Link already exists: {linkname}')
-
-        # Use Windows API directly to avoid spawning subprocesses that may need extra quoting
-        kernel32 = ctypes.windll.kernel32
-        kernel32.CreateSymbolicLinkW.argtypes = [
-            ctypes.c_wchar_p,
-            ctypes.c_wchar_p,
-            ctypes.c_uint32,
-        ]
-        kernel32.CreateSymbolicLinkW.restype = ctypes.c_ubyte
-        result = kernel32.CreateSymbolicLinkW(
-            linkname, target, 1)  # SYMBOLIC_LINK_FLAG_DIRECTORY
-        if result == 0:
-            err = ctypes.GetLastError()
-            raise OSError(err, ctypes.FormatError(err))
-        self.assertExists(linkname)
-        path = Path(linkname)
-        self.assertTrue(path.is_symlink())
-        self.assertTrue(path.is_dir())
-        self.assertFalse(Windows.is_junction(linkname))
-
-    def _win_create_junction(self, target, linkname):
-        """Create a directory junction using mklink /J."""
-
-        if os.path.lexists(linkname):
-            raise OSError(f'Link already exists: {linkname}')
-        cmd = ['cmd', '/c', 'mklink', '/J',
-               extended_path(linkname), extended_path(target)]
-        subprocess.check_call(cmd)
-        self.assertExists(linkname)
-        self.assertTrue(Windows.is_junction(linkname))
-        path = Path(linkname)
-        self.assertTrue(path.is_dir())
-        self.assertFalse(path.is_symlink())
 
     def test_clean_ini(self):
         """Unit test for clean_ini()"""
