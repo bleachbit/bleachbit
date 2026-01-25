@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-21 23:03-0700\n"
-"PO-Revision-Date: 2026-01-25 10:21+0000\n"
+"PO-Revision-Date: 2026-01-25 14:08+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/"
 "he/>\n"
@@ -859,11 +859,9 @@ msgid "Administrator credentials required."
 msgstr "נדרשים פרטי גישה לניהול."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Administrator privileges are required to clean Windows Updates"
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required for uninstall."
-msgstr "נדרשות הרשאות מנהל כדי לנקות עדכוני Windows"
+msgstr "נדרשות הרשאות ניהול להסרה."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS"
@@ -923,40 +921,38 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
 msgid "Invalid combination of paramaters."
-msgstr ""
+msgstr "שילוב שגוי של משתנים."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_LOGON_SERVICE_NOT_RUNNING"
 msgid "Unable to elevate, Secondary Logon service not running."
-msgstr ""
+msgstr "לא ניתן להסלים מבחינת הגדרות, שירות כניסה משנית לא פעיל."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
 msgid "Fresh install for all users."
-msgstr ""
+msgstr "התקנה חדשה לכל המשתמשים."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
 msgid "Fresh install for current user."
-msgstr ""
+msgstr "התקנה חדשה למשתמש הנוכחי."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NOT_INSTALLED"
 msgid "There is no installation of $(^NameDA)."
-msgstr ""
+msgstr "אין התקנה של $(^NameDA)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Choose a folder"
 msgctxt "nsis:MULTIUSER_PAGE_TITLE"
 msgid "Choose Users"
-msgstr "בחירת תיקייה"
+msgstr "בחירת משתמשים"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS"
 msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
-msgstr ""
+msgstr "להסיר את גרסה {OLD_VERSION} ולהתקין את גרסה {VERSION} לכל המשתמשים."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
@@ -968,17 +964,17 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS"
 msgid "Reinstall version {VERSION} for all users."
-msgstr ""
+msgstr "התקנת גרסה {VERSION} מחדש לכל המשתמשים."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
 msgid "Reinstall version {VERSION} for current user."
-msgstr ""
+msgstr "להתקין את גרסה {VERSION} מחדש לכל המשתמשים."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
 msgid "You need to run this program as administrator."
-msgstr ""
+msgstr "יש להריץ את התוכנית הזאת כמנהל."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
@@ -1061,8 +1057,6 @@ msgid ""
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Localizations"
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
 msgid "Translations"
 msgstr "תרגומים"
@@ -1332,10 +1326,9 @@ msgid "Importing cleaners from Winapp2.ini."
 msgstr "מיובאים מנקים מ־Winapp2.ini."
 
 #: ../bleachbit/Cleaner.py
-#, fuzzy, python-format
-#| msgid "_Wipe Free Space"
+#, python-format
 msgid "Wipe empty space %s"
-msgstr "מ_חיקה מוחלטת של השטח הפנוי"
+msgstr "מחיקה מוחלטת של השטח הריק %s"
 
 #: ../bleachbit/CLI.py
 #, python-format
@@ -1712,10 +1705,8 @@ msgid "Select the cookies to keep when cleaning cookies across browsers."
 msgstr ""
 
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Search tool"
 msgid "Search:"
-msgstr "כלי חיפוש"
+msgstr "חיפוש:"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Filter cookies..."
@@ -1927,11 +1918,9 @@ msgstr "הגישה נדחתה: %s"
 
 #. TRANSLATORS: %s is a file or folder path that was just removed
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgctxt "button"
-#| msgid "Remove"
+#, python-format
 msgid "Removed: %s"
-msgstr "הסרה"
+msgstr "הוסרו: %s"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Manage cookies to keep..."
@@ -2028,16 +2017,9 @@ msgstr "גודל"
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #: ../bleachbit/GUI.py
-#, fuzzy, python-format
-#| msgid ""
-#| "Warning regarding %(cleaner)s - %(option)s:\n"
-#| "\n"
-#| "%(warning)s"
+#, python-format
 msgid "%(cleaner)s - %(option)s"
-msgstr ""
-"אזהרה בנוגע ל־%(cleaner)s‏ - %(option)s:\n"
-"\n"
-"%(warning)s"
+msgstr "%(cleaner)s - %(option)s"
 
 #: ../bleachbit/GUI.py
 #, python-format
