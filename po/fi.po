@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-21 23:03-0700\n"
-"PO-Revision-Date: 2025-10-15 13:02+0000\n"
-"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
+"PO-Revision-Date: 2026-01-25 09:44+0000\n"
+"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/bleachbit/main/"
 "fi/>\n"
 "Language: fi\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.16-dev\n"
 "X-Launchpad-Export-Date: 2021-12-02 04:08+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -830,16 +830,19 @@ msgid ""
 "${prodname} is already installed.$\\r$\\nClick 'OK' to uninstall the old "
 "version before upgrading, or click 'Cancel' to abort the upgrade."
 msgstr ""
+"${prodname} on jo asennettu.$\\r$\\n"
+"Napsauta 'OK' poistaaksesi vanhan version asennuksen ennen päivitystä, tai "
+"napsauta 'Peru' keskeyttääksesi päivityksen."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
 msgid "Visit the ${prodname} web site"
-msgstr ""
+msgstr "Vieraile ${prodname}in verkkosivustolla"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:INSTALLER_CAPTION"
 msgid "${prodname} ${VERSION} Setup"
-msgstr ""
+msgstr "${prodname} ${VERSION} -määritys"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT1"
@@ -847,11 +850,15 @@ msgid ""
 "The next step is building font cache, during which you may see a black "
 "window."
 msgstr ""
+"Seuraava vaihe on fonttien välimuistin koostaminen; sen aikana saatat nähdä "
+"mustan ikkunan."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT2"
 msgid "It usually finishes in one minute, but sometimes it takes ten minutes."
 msgstr ""
+"Se valmistuu yleensä minuutissa, mutta toisinaan voi kestää jopa kymmenen "
+"minuuttia."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
@@ -859,39 +866,39 @@ msgid ""
 "You need to login with an account that is a member of the administrators "
 "group to continue."
 msgstr ""
+"Jatkaaksesi sinun täytyy kirjautua tilillä, joka on "
+"järjestelmänvalvojaryhmän jäsen."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required."
-msgstr ""
+msgstr "Järjestelmänvalvojan käyttöoikeudet vaaditaan."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Administrator privileges are required to clean Windows Updates"
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required for uninstall."
 msgstr ""
-"Windows Updates:n puhdistaminen edellyttää järjestelmänvalvojan oikeuksia"
+"Järjestelmänvalvojan käyttöoikeudet vaaditaan asennuksen poistamista varten."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS"
 msgid "For &anyone who uses this computer (all users)"
-msgstr ""
+msgstr "Jokaiselle &tätä tietokonetta käyttävälle (kaikki käyttäjät)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS_UMUI"
 msgid "For anyone who uses this computer (all users)"
-msgstr ""
+msgstr "Jokaiselle tätä tietokonetta käyttävälle (kaikki käyttäjät)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER"
 msgid "For &me ({USER})"
-msgstr ""
+msgstr "&Minulle ({USER})"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER_UMUI"
 msgid "For me ({USER})"
-msgstr ""
+msgstr "Minulle ({USER})"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
@@ -912,26 +919,31 @@ msgstr ""
 msgctxt "nsis:MULTIUSER_INSTALLED_ALL_USERS"
 msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
 msgstr ""
+"Versio {VERSION} on asennettu kaikille käyttäjille hakemistoon \"{FOLDER}\"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for current user in \"{FOLDER}\"."
 msgstr ""
+"Versio {VERSION} on asennettu nykyiselle käyttäjälle hakemistoon \"{FOLDER}"
+"\"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
 msgid "Select whether to install $(^NameDA) for all users or for current user."
 msgstr ""
+"Valitse, asennetaanko $(^NameDA) kaikille käyttäjille vai nykyiselle "
+"käyttäjälle."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to install $(^NameDA)."
-msgstr ""
+msgstr "Valitse, kenelle kaikille käyttäjille $(^NameDA) asennetaan."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
 msgid "Invalid combination of paramaters."
-msgstr ""
+msgstr "Virheellinen yhdistelmä parametrejä."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_LOGON_SERVICE_NOT_RUNNING"
@@ -941,30 +953,30 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
 msgid "Fresh install for all users."
-msgstr ""
+msgstr "Puhdas asennus kaikille käyttäjille."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
 msgid "Fresh install for current user."
-msgstr ""
+msgstr "Puhdas asennus nykyiselle käyttäjälle."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NOT_INSTALLED"
 msgid "There is no installation of $(^NameDA)."
-msgstr ""
+msgstr "Sovelluksesta $(^NameDA) ei ole asennusta."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Choose a folder"
 msgctxt "nsis:MULTIUSER_PAGE_TITLE"
 msgid "Choose Users"
-msgstr "Valitse kansio"
+msgstr "Valitse käyttäjät"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS"
 msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 msgstr ""
+"Poista version {OLD_VERSION} asennus ja asenna versio {VERSION} kaikille "
+"käyttäjille."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
@@ -972,21 +984,23 @@ msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for current "
 "user."
 msgstr ""
+"Poista version {OLD_VERSION} asennus ja asenna versio {VERSION} nykyiselle "
+"käyttäjälle."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS"
 msgid "Reinstall version {VERSION} for all users."
-msgstr ""
+msgstr "Asenna uudelleen versio {VERSION} kaikille käyttäjille."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
 msgid "Reinstall version {VERSION} for current user."
-msgstr ""
+msgstr "Asenna uudelleen versio {VERSION} nykyiselle käyttäjälle."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
 msgid "You need to run this program as administrator."
-msgstr ""
+msgstr "Tämä ohjelma tulee suorittaa järjestelmävalvojana."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
@@ -994,11 +1008,14 @@ msgid ""
 "$(^NameDA) is installed both for all users and for current user.$\\r$"
 "\\nSelect which installation to remove."
 msgstr ""
+"$(^NameDA) on asennettu sekä kaikille käyttäjille että nykyiselle "
+"käyttäjälle.$\\r$\\n"
+"Valitse poistettava asennus."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to remove $(^NameDA)."
-msgstr ""
+msgstr "Valitse käyttäjät, joilta $(^NameDA) poistetaan."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
@@ -1006,29 +1023,27 @@ msgid "This are the basic files needed for ${prodname} to function (required)."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Choose files to shred"
 msgctxt "nsis:SECTION_CORE_NAME"
 msgid "Core files (required)"
-msgstr "Valitse silputtavat tiedostot"
+msgstr "Keskeisimmät tiedostot (vaaditaan)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
 msgid "Create the shortcut on desktop."
-msgstr ""
+msgstr "Luo pikakuvake työpöydälle."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Desktop widgets"
 msgctxt "nsis:SECTION_DESKTOP_NAME"
 msgid "Desktop"
-msgstr "Työpöytävimpaimet"
+msgstr "Työpöytä"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
 msgid ""
 "Add an option to delete files from the file context menu in Windows explorer."
 msgstr ""
+"Lisää Windowsin tiedostonhallinnan kontekstivalikkoon valinta, jonka avulla "
+"voi poistaa tiedostoja."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_NAME"
@@ -1038,12 +1053,12 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
 msgid "Create the shortcut on Quick Launch."
-msgstr ""
+msgstr "Luo pikakuvake pikakäynnistykseen."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
 msgid "Quick launch"
-msgstr ""
+msgstr "Pikakäynnistys"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
@@ -1058,12 +1073,12 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
 msgid "Create the shortcut in Start menu."
-msgstr ""
+msgstr "Luo pikakuvake Käynnistä-valikkoon."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_NAME"
 msgid "Start menu"
-msgstr ""
+msgstr "Käynnistä-valikko"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
@@ -1071,25 +1086,23 @@ msgid ""
 "Use ${prodname} in your preferred local system language, install the needed "
 "language files."
 msgstr ""
+"Käytä ${prodname}ia suosimallasi järjestelmän kielellä, asenna tarvittavat "
+"kielitiedostot."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Localizations"
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
 msgid "Translations"
-msgstr "Lokalisaatiot"
+msgstr "Käännökset"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
 msgid "Add uninstall program."
-msgstr ""
+msgstr "Lisää ohjelma asennuksen poistoa varten."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Update uninstallers"
 msgctxt "nsis:SECTION_UNINSTALL_NAME"
 msgid "Uninstall"
-msgstr "Päivitysten poisto-ohjelmat"
+msgstr "Asennuksen poisto"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_DEBUGGING_TERMINAL"
@@ -1149,10 +1162,8 @@ msgid "Clean file"
 msgstr "Puhdista tiedosto"
 
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Clean cookies"
-msgstr "Evästeet"
+msgstr "Siivoa evästeet"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -1300,7 +1311,7 @@ msgstr "Poista käyttäjän määrittämät tiedostot ja kansiot"
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Empty space"
-msgstr ""
+msgstr "Tyhjä tila"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
@@ -1614,8 +1625,8 @@ msgid ""
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
 msgstr ""
-"Oletko varma, että haluat poistaa tiedostot pysyvästi valittujen toimintojen "
-"mukaisesti? Poistettavat tiedostot ovat saattaneet muuttua esikatselun "
+"Haluatko varmasti poistaa tiedostot pysyvästi valittujen toimintojen "
+"mukaisesti?  Poistettavat tiedostot ovat saattaneet muuttua esikatselun "
 "suorittamisen jälkeen."
 
 #: ../bleachbit/GuiBasic.py
@@ -1638,7 +1649,7 @@ msgstr ""
 
 #: ../bleachbit/GuiBasic.py
 msgid "_Enable anyway"
-msgstr ""
+msgstr "_Käytä silti"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
@@ -1726,29 +1737,27 @@ msgstr "Generoidaan tiedostoja"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Manage cookies to keep"
-msgstr ""
+msgstr "Hallitse säilytettäviä evästeitä"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select the cookies to keep when cleaning cookies across browsers."
-msgstr ""
+msgstr "Valitse säilytettävät evästeet, kun evästeistä siivotaan selaimista."
 
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Search tool"
 msgid "Search:"
-msgstr "Hakutyökalu"
+msgstr "Etsi:"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Filter cookies..."
-msgstr ""
+msgstr "Suodata evästeitä..."
 
 #: ../bleachbit/GuiCookie.py
 msgid "Show Selected"
-msgstr ""
+msgstr "Näytä valitut"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Only show cookies that are currently selected"
-msgstr ""
+msgstr "Näytä vain evästeet, jotka on tällä hetkellä valittu"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Host"
@@ -1756,15 +1765,15 @@ msgstr ""
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select All"
-msgstr ""
+msgstr "Valitse kaikki"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Deselect All"
-msgstr ""
+msgstr "Poista kaikkien valinta"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Keep Selected"
-msgstr ""
+msgstr "Säilytä valitut"
 
 #: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
 msgid "Preferences"
@@ -1933,7 +1942,7 @@ msgstr "Tämä polku on jo olemassa mukautetussa listassa."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Protected Path"
-msgstr ""
+msgstr "Suojattu polku"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1945,22 +1954,19 @@ msgstr "Kansio"
 
 #. TRANSLATORS: %s is a file or folder path that was just added
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgid "Access denied: %s"
+#, python-format
 msgid "Added: %s"
-msgstr "Käyttö estetty: %s"
+msgstr "Lisätty: %s"
 
 #. TRANSLATORS: %s is a file or folder path that was just removed
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgctxt "button"
-#| msgid "Remove"
+#, python-format
 msgid "Removed: %s"
-msgstr "Poista"
+msgstr "Poistettu: %s"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Manage cookies to keep..."
-msgstr ""
+msgstr "Hallitse säilytettäviä evästeitä..."
 
 #. TRANSLATORS: "Paths" is used generically to refer to both files
 #. and folders
@@ -2030,7 +2036,20 @@ msgstr ""
 #. in the 'About' box.
 #: ../bleachbit/GUI.py
 msgid "translator-credits"
-msgstr "kääntäjä-hyvitykset"
+msgstr ""
+"Launchpad Contributions:\n"
+"  Heidi Mattila https://launchpad.net/~hessuk-deactivatedaccount\n"
+"  Jan Forsbacka https://launchpad.net/~shopanda\n"
+"  Jiri Grönroos https://launchpad.net/~jiri-gronroos\n"
+"  Kimmo Lahtinen https://launchpad.net/~kimple\n"
+"  Lauri Lappalainen https://launchpad.net/~lappla1\n"
+"  Pekka Niemi https://launchpad.net/~pekka-niemi\n"
+"  Sami Korkalainen https://launchpad.net/~zazaamm\n"
+"  Tommi Saira https://launchpad.net/~tommisaira\n"
+"  emp https://launchpad.net/~emp500\n"
+"  papukaija https://launchpad.net/~papukaija\n"
+"\n"
+"BoxLos https://hosted.weblate.org/user/BoxLos/"
 
 #: ../bleachbit/GUI.py
 msgid "System information"
@@ -2127,10 +2146,8 @@ msgstr "Esikatselu"
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/GUI.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Manage Cookies"
-msgstr "Evästeet"
+msgstr "Hallitse evästeitä"
 
 #: ../bleachbit/GUI.py
 msgid "Preview files in the selected operations (without deleting any files)"
@@ -2296,6 +2313,11 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"Varoitus: '%(path)s' saattaa sisältää tärkeitä tiedostoja.\n"
+"\n"
+"Vaikutus: %(files)d tiedosto(a), %(size)s\n"
+"\n"
+"Haluatko varmasti lisätä tämän polun?"
 
 #. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
 #: ../bleachbit/ProtectedPath.py
@@ -2305,6 +2327,9 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"Varoitus: '%(path)s' saattaa sisältää tärkeitä tiedostoja.\n"
+"\n"
+"Haluatko varmasti lisätä tämän polun?"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
@@ -2451,14 +2476,14 @@ msgstr "Virhe: {operation_option}: {command}"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Worker.py
-#, fuzzy
-#| msgid "Please wait.  Wiping free disk space."
 msgid "Please wait. Wiping empty space."
 msgstr "Odota, tyhjennetään vapaata levytilaa."
 
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
+"Pysäyttääksesi tämän prosessin, napsauta Keskeytä-painiketta työkalupalkista "
+"ja odota hetki."
 
 #: ../bleachbit/Worker.py
 msgid ""
@@ -2544,10 +2569,8 @@ msgid "Shred Paths from Clipboard"
 msgstr "Tee silppua leikepöydän poluista"
 
 #: ../share/app-menu.ui
-#, fuzzy
-#| msgid "_Wipe Free Space"
 msgid "_Wipe Empty Space"
-msgstr "Ty_hjennä levytilaa"
+msgstr "Ty_hjennä vapaata levytilaa"
 
 #: ../share/app-menu.ui
 msgid "_Make Chaff"
