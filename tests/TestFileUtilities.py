@@ -463,13 +463,17 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
     def test_clean_ini(self):
         """Unit test for clean_ini()"""
-        print("testing test_clean_ini() with shred = False")
-        options.set('shred', False, commit=False)
-        test_ini_helper(self, clean_ini)
+        old_shred = options.get('shred')
+        try:
+            print("testing test_clean_ini() with shred = False")
+            options.set('shred', False, commit=False)
+            test_ini_helper(self, clean_ini)
 
-        print("testing test_clean_ini() with shred = True")
-        options.set('shred', True, commit=False)
-        test_ini_helper(self, clean_ini)
+            print("testing test_clean_ini() with shred = True")
+            options.set('shred', True, commit=False)
+            test_ini_helper(self, clean_ini)
+        finally:
+            options.set('shred', old_shred, commit=False)
 
     def test_clean_ini_kde(self):
         """Unit test for clean_ini() with KDE ini file
@@ -511,13 +515,17 @@ State=AAAA/wA...
 
     def test_clean_json(self):
         """Unit test for clean_json()"""
-        print("testing test_clean_json() with shred = False")
-        options.set('shred', False, commit=False)
-        test_json_helper(self, clean_json)
+        old_shred = options.get('shred')
+        try:
+            print("testing test_clean_json() with shred = False")
+            options.set('shred', False, commit=False)
+            test_json_helper(self, clean_json)
 
-        print("testing test_clean_json() with shred = True")
-        options.set('shred', True, commit=False)
-        test_json_helper(self, clean_json)
+            print("testing test_clean_json() with shred = True")
+            options.set('shred', True, commit=False)
+            test_json_helper(self, clean_json)
+        finally:
+            options.set('shred', old_shred, commit=False)
 
     def test_delete(self):
         """Unit test for method delete()"""
