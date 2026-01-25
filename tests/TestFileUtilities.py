@@ -191,7 +191,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                     except locale.Error:
                         # If that fails, try just the language code part
                         try:
-                            locale.setlocale(locale.LC_NUMERIC, self.old_locale_tuple[0])
+                            locale.setlocale(
+                                locale.LC_NUMERIC, self.old_locale_tuple[0])
                         except locale.Error as e:
                             print(
                                 "Failed to restore locale with just language code "
@@ -201,7 +202,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         # Check that running getlocale again does not raise an exception.
         # For me, getlocale() fails after successful setlocale(..., 'en_MX') on Windows.
         locale.getlocale(locale.LC_NUMERIC)
-        self.assertEqual(locale.setlocale(locale.LC_NUMERIC), self.old_locale_str)
+        self.assertEqual(locale.setlocale(
+            locale.LC_NUMERIC), self.old_locale_str)
 
     def test_bytes_to_human_one_way(self):
         """Test one-way conversion of bytes_to_human()"""
@@ -630,7 +632,7 @@ State=AAAA/wA...
                 if rc == 0:
                     print(f'CreateSymbolicLinkW({linkname}, {src})')
                     print(
-                        f'CreateSymolicLinkW() failed, error = {ctypes.FormatError()}')
+                        f'CreateSymbolicLinkW() failed, error = {ctypes.FormatError()}')
                     self.assertNotEqual(rc, 0)
             symlink_helper(win_symlink)
 
@@ -750,8 +752,7 @@ State=AAAA/wA...
         os.mkdir(dirname)
         self.assertFalse(is_dir_empty(self.tempdir))
         self.assertTrue(is_dir_empty(dirname))
-        fn = os.path.join(dirname, 'a_file')
-        common.touch_file(fn)
+        fn = self.write_file(os.path.join(dirname, 'a_file'), b'content')
         self.assertFalse(is_dir_empty(dirname))
         self.assertExists(fn)
         self.assertExists(dirname)
@@ -766,15 +767,23 @@ State=AAAA/wA...
         os.remove(fn)
         self.assertTrue(is_dir_empty(dirname))
 
-    def test_delete_read_only(self):
+    def test_delete_read_only_file(self):
         """Unit test for delete() with read-only file"""
         for shred in (False, True):
-            fn = os.path.join(self.tempdir, 'read-only')
-            common.touch_file(fn)
+            tmp_dir = self.mkdtemp(prefix=f'read-only-{shred}')
+            self.assertDirectoryCount(tmp_dir, 0)
+
+            fn = self.write_file(
+                os.path.join(tmp_dir, f'read-only-{shred}'),
+                b'read-only content',
+            )
             os.chmod(fn, stat.S_IREAD)
             self.assertExists(fn)
+            self.assertDirectoryCount(tmp_dir, 1)
+
             delete(fn, shred=shred)
             self.assertNotExists(fn)
+            self.assertDirectoryCount(tmp_dir, 0)
 
     def test_detect_encoding(self):
         """Unit test for detect_encoding"""
@@ -1244,9 +1253,11 @@ State=AAAA/wA...
             self.test_vacuum_sqlite3()
             # Slow on OpenSUSE Build Service
             if time.time() - start_time > 30:
-                logger.info("SQLite loop tests stopped early after %d seconds", time.time() - start_time)
+                logger.info(
+                    "SQLite loop tests stopped early after %d seconds", time.time() - start_time)
                 break
-        logger.info("SQLite loop tests fully completed after %d seconds", time.time() - start_time)
+        logger.info(
+            "SQLite loop tests fully completed after %d seconds", time.time() - start_time)
 
     def test_whitelisted(self):
         """Unit test for whitelisted()"""

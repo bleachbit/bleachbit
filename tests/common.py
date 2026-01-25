@@ -38,7 +38,7 @@ if 'win32' == sys.platform:
 
 import bleachbit
 import bleachbit.Options
-from bleachbit.FileUtilities import extended_path
+from bleachbit.FileUtilities import children_in_directory, extended_path
 from bleachbit.General import gc_collect, sudo_mode
 
 
@@ -121,7 +121,7 @@ class BleachbitTestCase(unittest.TestCase):
         start = time.perf_counter()
         outcome = super().run(result)
         duration = time.perf_counter() - start
-        threshold = os.getenv('BLEACHBIT_SLOW_TEST_THRESHOLD') # in seconds
+        threshold = os.getenv('BLEACHBIT_SLOW_TEST_THRESHOLD')  # in seconds
         if threshold:
             threshold = float(threshold)
         if not threshold or threshold < 0:
@@ -203,6 +203,18 @@ class BleachbitTestCase(unittest.TestCase):
         else:
             self.assertNotExists(path, msg)
 
+    def assertDirectoryCount(self, path, count, list_directories=True):
+        """Assert that a directory has a specific number of files
+
+        - Counts recursively
+        - Counts links
+        - Does not recurse links
+
+        """
+        object_list = list(children_in_directory(path, list_directories))
+        self.assertEqual(len(object_list), count, f"contains {len(object_list)} objects "
+                         f"such as {object_list[:2]}, expected {count}")
+
     #
     # file creation functions
     #
@@ -215,6 +227,13 @@ class BleachbitTestCase(unittest.TestCase):
         with open(extended_path(filename), mode, encoding=encoding) as f:
             f.write(contents)
         assert (os.path.exists(extended_path(filename)))
+        with open(extended_path(filename), 'rb' if 'b' in mode else 'r', encoding=encoding if 'b' not in mode else None) as f:
+            written_contents = f.read()
+        expected = contents if 'b' in mode else contents.encode(
+            encoding) if encoding else contents
+        actual = written_contents if 'b' in mode else written_contents.encode(
+            encoding) if encoding else written_contents
+        assert actual == expected, f"File contents mismatch: expected {expected!r}, got {actual!r}"
         return filename
 
     def mkstemp(self, **kwargs):
@@ -225,6 +244,10 @@ class BleachbitTestCase(unittest.TestCase):
         return filename
 
     def mkdtemp(self, **kwargs):
+        """Create a temporary directory
+
+        Objects under self.tempdir are automatically removed after testing.
+        """
         if 'dir' not in kwargs:
             kwargs['dir'] = self.tempdir
         return tempfile.mkdtemp(**kwargs)
