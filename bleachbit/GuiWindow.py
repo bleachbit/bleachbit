@@ -13,7 +13,7 @@ import bleachbit
 from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path
 from bleachbit.Cleaner import backends, register_cleaners
 from bleachbit.GUI import logger
-from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk
+from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
 from bleachbit.GuiUtil import get_font_size_from_name, get_window_info, notify, threaded
@@ -23,6 +23,9 @@ from bleachbit.Wipe import detect_orphaned_wipe_files
 
 if os.name == 'nt':
     from bleachbit import Windows
+
+# Ensure GTK is available for this GUI module
+require_gtk()
 
 
 class GUI(Gtk.ApplicationWindow):
@@ -57,9 +60,13 @@ class GUI(Gtk.ApplicationWindow):
             # if stderr was redirected - keep redirecting it
             sys.stderr = self.gtklog
 
-        self.set_windows10_theme()
-        Gtk.Settings.get_default().set_property(
-            'gtk-application-prefer-dark-theme', options.get('dark_mode'))
+        dark_mode = options.get('dark_mode')
+        settings = self.get_settings() or Gtk.Settings.get_default()
+        if settings:
+            settings.set_property(
+                'gtk-application-prefer-dark-theme', dark_mode)
+        else:
+            logger.warning("Could not get GTK settings to apply dark mode")
 
         if options.is_corrupt():
             logger.error(
@@ -185,19 +192,74 @@ class GUI(Gtk.ApplicationWindow):
         self.progressbar.hide()
         self.infobar.hide()
 
-    def set_windows10_theme(self):
-        """Toggle the Windows 10 theme"""
+    def _get_windows10_theme_css(self):
+        """Load the Windows 10 theme CSS files (if not already loaded)"""
         if not 'nt' == os.name:
             return
 
-        if not self._style_provider_regular:
-            self._style_provider_regular = Gtk.CssProvider()
-            self._style_provider_regular.load_from_path(
-                os.path.join(windows10_theme_path, 'gtk.css'))
+        if not options.get("win10_theme"):
+            return
+
+        # Load regular theme CSS
+        dark_mode = options.get('dark_mode')
+        if not dark_mode:
+            if not self._style_provider_regular:
+                self._style_provider_regular = Gtk.CssProvider()
+                regular_path = os.path.join(windows10_theme_path, 'gtk.css')
+                logger.debug(
+                    'Loading Windows 10 regular theme from: %s', regular_path)
+                try:
+                    self._style_provider_regular.load_from_path(regular_path)
+                    logger.debug('Successfully loaded regular theme')
+                except Exception as e:
+                    logger.error(
+                        'Failed to load Windows 10 regular theme: %s', e)
+                    self._style_provider_regular = None
+            return self._style_provider_regular
+
+        # Load dark theme CSS
         if not self._style_provider_dark:
             self._style_provider_dark = Gtk.CssProvider()
-            self._style_provider_dark.load_from_path(
-                os.path.join(windows10_theme_path, 'gtk-dark.css'))
+            dark_path = os.path.join(windows10_theme_path, 'gtk-dark.css')
+            logger.debug('Loading Windows 10 dark theme from: %s', dark_path)
+            try:
+                self._style_provider_dark.load_from_path(dark_path)
+                logger.debug('Successfully loaded dark theme')
+            except Exception as e:
+                logger.error('Failed to load Windows 10 dark theme: %s', e)
+                self._style_provider_dark = None
+        return self._style_provider_dark
+
+    def set_windows10_theme(self):
+        """Apply or remove the Windows 10 theme based on current settings"""
+        if not 'nt' == os.name:
+            return
+
+        # Get the screen - if not available yet (e.g., during __init__), return early
+        screen = self.get_screen()
+        if screen is None:
+            logger.info(
+                'Screen not available yet, deferring theme application')
+            return
+
+        # Remove the current style provider if it's active
+        if self._style_provider is not None:
+            Gtk.StyleContext.remove_provider_for_screen(
+                screen, self._style_provider)
+            self._style_provider = None
+
+        # Apply the theme if the option is enabled
+        if options.get("win10_theme"):
+            self._style_provider = self._get_windows10_theme_css()
+
+            if self._style_provider is not None:
+                Gtk.StyleContext.add_provider_for_screen(
+                    screen, self._style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+            else:
+                logger.warning(
+                    'Windows 10 theme style provider is None, cannot apply theme')
+        else:
+            logger.debug('Windows 10 theme disabled, using default theme')
 
     def _show_splash_screen(self):
         """Show the splash screen on Windows because startup may be slow"""
@@ -225,7 +287,7 @@ class GUI(Gtk.ApplicationWindow):
         provider.load_from_data(css.encode())
 
         # Remove any previous provider to avoid stacking rules.
-        screen = Gdk.Screen.get_default()
+        screen = self.get_screen()
         if self._font_css_provider is not None:
             Gtk.StyleContext.remove_provider_for_screen(
                 screen, self._font_css_provider)
@@ -827,7 +889,7 @@ class GUI(Gtk.ApplicationWindow):
             }
         """)
         Gtk.StyleContext.add_provider_for_screen(
-            Gdk.Screen.get_default(),
+            self.get_screen(),
             css_provider,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.update_button.get_style_context().add_class('update-available')
@@ -979,19 +1041,9 @@ class GUI(Gtk.ApplicationWindow):
         elif options.get("window_maximized"):
             self.maximize()
 
-        screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
-        if self._style_provider is not None:
-            Gtk.StyleContext.remove_provider_for_screen(
-                screen, self._style_provider)
-        if os.name == 'nt' and options.get("win10_theme"):
-            if options.get("dark_mode"):
-                self._style_provider = self._style_provider_dark
-            else:
-                self._style_provider = self._style_provider_regular
-            Gtk.StyleContext.add_provider_for_screen(
-                screen, self._style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-        else:
-            self._style_provider = None
+        # Apply Windows 10 theme if on Windows and enabled
+        if os.name == 'nt':
+            self.set_windows10_theme()
 
     def check_orphaned_wipe_files(self):
         """Check for orphaned wipe files and offer to delete them.
