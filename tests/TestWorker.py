@@ -1,36 +1,27 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
 Test case for module Worker
 """
 
+import os
+import tempfile
 
 from tests import TestCleaner, common
+from tests.TestFileUtilities import _open_blocking_handle
 from bleachbit import CLI, Command
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import backends
 from bleachbit.Worker import Worker
 
-import os
-import tempfile
+if os.name == 'nt':
+    import win32con
+    import win32file
 
 
 class AccessDeniedActionAction(ActionProvider):
@@ -141,18 +132,18 @@ class LockedAction(ActionProvider):
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
-        # Open the file with a non-exclusive lock, so the file should
-        # be truncated and marked for deletion. This is checked just on
-        # on Windows.
-        fd = os.open(self.pathname, os.O_RDWR)
+        # Open the file with a blocking handle that allows read/write but blocks delete.
+        # This causes delete() to truncate and mark for deletion. Windows only.
+        share_mode = win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE
+        handle = _open_blocking_handle(self.pathname, share_mode)
         from bleachbit.FileUtilities import getsize
         # Without admin privileges, this delete fails.
         yield Command.Delete(self.pathname)
         assert (os.path.exists(self.pathname))
         fsize = getsize(self.pathname)
-        if not fsize == 3:  # Contents is "123"
-            raise RuntimeError('Locked file has size %dB (not 3B)' % fsize)
-        os.close(fd)
+        if not fsize == 0:  # File should be truncated to 0 bytes
+            raise RuntimeError('Locked file has size %dB (not 0B)' % fsize)
+        win32file.CloseHandle(handle)
 
         # Now that the file is not locked, admin privileges
         # are not required to delete it.
@@ -268,15 +259,17 @@ class WorkerTestCase(common.BleachbitTestCase):
         """Test Worker using Action.LockedAction"""
         from win32com.shell import shell
         if shell.IsUserAnAdmin():
-            # If an admin, the first attempt will mark for delete (3 bytes),
-            # and the second attempt will actually delete it (3 bytes).
+            # If an admin, the first attempt, with locking, will mark for
+            # delete (3 bytes), and the second attempt will actually delete
+            # it (0 bytes, already truncated).
             errors_expected = 0
-            bytes_expected = 3 + 3
+            bytes_expected = 3 + 0
             total_deleted = 2
         else:
-            # If not an admin, the first attempt will fail, and the second will succeed.
+            # If not an admin, the first attempt (locked) truncates (to 0B) and fails,
+            # then the second attempt (unlocked) deletes the 0-byte file.
             errors_expected = 1
-            bytes_expected = 3
+            bytes_expected = 0
             total_deleted = 1
         self.action_test_helper(
             'locked', 0, errors_expected, None, None, bytes_expected, total_deleted)
