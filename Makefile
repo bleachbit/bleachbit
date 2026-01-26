@@ -23,6 +23,14 @@ INSTALL_SCRIPT = $(INSTALL) -m 755
 PYTHON ?= python3
 COVERAGE ?= $(PYTHON)
 
+ifneq ($(COVERAGE),$(PYTHON))
+BLEACHBIT_SUDO_COVERAGE_RUNNER := $(COVERAGE) --append
+BLEACHBIT_SUDO_COVERAGE_FILE := $(if $(COVERAGE_FILE),$(COVERAGE_FILE),.coverage)
+else
+BLEACHBIT_SUDO_COVERAGE_RUNNER :=
+BLEACHBIT_SUDO_COVERAGE_FILE :=
+endif
+
 build:
 	echo Nothing to build
 
@@ -107,7 +115,10 @@ tests:
 
 tests-with-sudo:
 	# Run tests marked with @test_also_with_sudo using sudo
-	PYTHONWARNINGS=error $(PYTHON) tests/test_with_sudo.py
+	PYTHONWARNINGS=error \
+		BLEACHBIT_COVERAGE_RUNNER="$(BLEACHBIT_SUDO_COVERAGE_RUNNER)" \
+		BLEACHBIT_COVERAGE_FILE="$(BLEACHBIT_SUDO_COVERAGE_FILE)" \
+		$(PYTHON) tests/test_with_sudo.py
 
 pretty:
 	@if command -v autopep8 >/dev/null 2>&1; then \
