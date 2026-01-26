@@ -11,6 +11,7 @@ Test case for module FileUtilities
 # standard library
 import contextlib
 import ctypes
+import itertools
 import json
 import locale
 import os
@@ -23,15 +24,16 @@ import sys
 import tempfile
 import time
 import warnings
-from pathlib import Path
 
 # local import
 from bleachbit.FileUtilities import (
+    _remove_windows_readonly,
     bytes_to_human,
     children_in_directory,
     clean_ini,
     clean_json,
     delete,
+    delete_file,
     detect_encoding,
     ego_owner,
     exe_exists,
@@ -67,6 +69,7 @@ if 'nt' == os.name:
     import win32api
     import win32com.shell
     import win32con
+    import win32file
     from bleachbit import Windows
 
 
@@ -161,6 +164,26 @@ def _is_child_path(parent_path, child_path):
     parent = os.path.abspath(parent_path)
     child = os.path.abspath(child_path)
     return os.path.commonpath([parent]) == os.path.commonpath([parent, child])
+
+
+def _open_blocking_handle(path, share_mode):
+    """Open a file handle with the given share mode to block other processes.
+
+    Args:
+        path: Path to the file to open
+        share_mode: Windows share mode (e.g., win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE)
+    Returns:
+        File handle that blocks other processes from accessing the file
+    """
+    return win32file.CreateFile(
+        path,
+        win32con.GENERIC_READ | win32con.GENERIC_WRITE,
+        share_mode,
+        None,
+        win32con.OPEN_ALWAYS,
+        win32con.FILE_ATTRIBUTE_NORMAL,
+        None,
+    )
 
 
 class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
@@ -598,6 +621,12 @@ State=AAAA/wA...
                     self.assertNotEqual(rc, 0)
             symlink_helper(win_symlink)
 
+            # test empty directory on Windows
+            path = self.mkdtemp(prefix='bleachbit-test-delete-dir')
+            self.assertExists(path)
+            delete(path, shred)
+            self.assertNotExists(path)
+
             return
 
         # below this point, only posix
@@ -638,52 +667,75 @@ State=AAAA/wA...
             self.assertNotExists(fn)
 
     @common.skipUnlessWindows
-    def test_delete_locked(self):
+    def test_delete_locked_file(self):
         """Unit test for delete() with locked file"""
         # set up
-        def test_delete_locked_setup():
+        def test_delete_locked_setup(share_mode):
             (fd, filename) = tempfile.mkstemp(
                 prefix='bleachbit-test-fileutilities')
             os.write(fd, b'123')
             os.close(fd)
             self.assertExists(filename)
             self.assertEqual(3, getsize(filename))
-            return filename
+            handle = _open_blocking_handle(filename, share_mode)
+            return filename, handle
 
-        # File is open but not opened exclusive, so expect that the
-        # file is truncated but not deleted.
-        # O_EXCL = fail if file exists (i.e., not an exclusive lock)
-        filename = test_delete_locked_setup()
-        f = os.open(filename, os.O_WRONLY | os.O_EXCL)
-        self.assertExists(filename)
-        self.assertEqual(3, getsize(filename))
-        # pylint: disable=undefined-variable
-        with self.assertRaises(WindowsError):
-            delete(filename)
-        os.close(f)
-        self.assertExists(filename)
-        self.assertEqual(0, getsize(filename))
-        delete(filename)
-        self.assertNotExists(filename)
+        # Each test is:
+        #   (share_mode, delete_expected, truncate_expected)
+        # The overall outcomes in matrix:
+        #  - file deleted (True, None)
+        #  - file truncated but not deleted (False, True)
+        #  - file not deleted and not truncated (False, False)
+        tests = [
 
-        # File is open with exclusive lock, so expect the file is neither
-        # deleted nor truncated.
-        for allow_shred in (False, True):
-            filename = test_delete_locked_setup()
-            self.assertEqual(3, getsize(filename))
-            fd = os.open(filename, os.O_APPEND | os.O_EXCL)
-            self.assertExists(filename)
-            self.assertEqual(3, getsize(filename))
-            # pylint: disable=undefined-variable
-            with self.assertRaises(WindowsError):
-                delete(filename, shred=allow_shred, allow_shred=allow_shred)
-            os.close(fd)
-            self.assertExists(filename)
-            if not allow_shred:
-                # A shredding attempt truncates the file.
-                self.assertEqual(3, getsize(filename))
-            delete(filename)
-            self.assertNotExists(filename)
+
+            (0, False, False),  # exclusive
+
+            (win32con.FILE_SHARE_READ, False, False),  # read-only sharing
+
+            (
+                win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE,
+                False,
+                True,
+            ),
+
+            (
+                win32con.FILE_SHARE_READ | win32con.FILE_SHARE_DELETE,
+                True,
+                None,  # truncate not attempted
+            ),
+
+            (
+                win32con.FILE_SHARE_READ
+                | win32con.FILE_SHARE_WRITE
+                | win32con.FILE_SHARE_DELETE,
+                True,
+                None,  # truncate not attempted
+            ),
+        ]
+
+        for (share_mode, delete_expected, truncate_expected), shred in itertools.product(tests, (False, True)):
+            with self.subTest(share_mode=share_mode, shred=shred):
+                filename, handle = test_delete_locked_setup(share_mode)
+
+                if delete_expected:
+                    # Delete expected to suceed.
+                    delete_file(filename, shred)
+                else:
+                    # Delete expected to fail.
+                    # pylint: disable=undefined-variable
+                    with self.assertRaises(WindowsError):
+                        delete_file(filename, shred)
+                win32file.CloseHandle(handle)
+                if delete_expected:
+                    self.assertNotExists(filename)
+                else:
+                    self.assertExists(filename)
+                    self.assertIsNotNone(truncate_expected)
+                    expected_size = 0 if truncate_expected else 3
+                    self.assertEqual(expected_size, getsize(filename))
+                    delete(filename)
+                    self.assertNotExists(filename)
 
     @common.skipIfWindows
     def test_delete_mount_point(self):
@@ -731,21 +783,139 @@ State=AAAA/wA...
 
     def test_delete_read_only_file(self):
         """Unit test for delete() with read-only file"""
+        for option_shred, parameter_shred, delete_func in itertools.product(
+            [False, True], [False, True], [delete, delete_file]
+        ):
+            with self.subTest(option_shred=option_shred, parameter_shred=parameter_shred, delete_func=delete_func.__name__):
+                options.set('shred', option_shred, commit=False)
+                shred = parameter_shred
+                variation_dir = f"{option_shred}-{parameter_shred}-{delete_func.__name__}"
+                # The directory is not read-only, but it used for the read-only test.
+                tmp_dir = self.mkdtemp(prefix=f'read-only-dir_{variation_dir}')
+                self.assertDirectoryCount(tmp_dir, 0)
+
+                fn = self.write_file(
+                    os.path.join(tmp_dir, f'read-only-file_{variation_dir}'),
+                    b'read-only content',
+                )
+                os.chmod(fn, stat.S_IREAD)
+                self.assertExists(fn)
+                self.assertDirectoryCount(tmp_dir, 1)
+                try:
+                    delete_func(fn, shred=shred)
+                except PermissionError as e:
+                    _remove_windows_readonly(fn)
+                    raise e
+                self.assertNotExists(fn)
+                self.assertDirectoryCount(tmp_dir, 0)
+
+    @common.skipUnlessWindows
+    def test_delete_hard_link(self):
+        """Unit test for delete() with Windows hard link"""
         for shred in (False, True):
-            tmp_dir = self.mkdtemp(prefix=f'read-only-{shred}')
-            self.assertDirectoryCount(tmp_dir, 0)
+            with self.subTest(shred=shred):
+                tmp_dir = self.mkdtemp(prefix=f'delete_hard_{shred}')
+                target = self.write_file(
+                    os.path.join(tmp_dir, f'hardlink-target-{shred}-'),
+                    b'canary data',
+                )
+                self.assertDirectoryCount(tmp_dir, 1)
 
-            fn = self.write_file(
-                os.path.join(tmp_dir, f'read-only-{shred}'),
-                b'read-only content',
-            )
-            os.chmod(fn, stat.S_IREAD)
-            self.assertExists(fn)
-            self.assertDirectoryCount(tmp_dir, 1)
+                link = os.path.join(tmp_dir, f'hardlink-{shred}')
+                self._create_win_hard_link(target, link)
+                self.assertExists(link)
+                self.assertFalse(os.path.islink(link))
+                self.assertFalse(Windows.is_junction(link))
+                self.assertDirectoryCount(tmp_dir, 2)
 
-            delete(fn, shred=shred)
-            self.assertNotExists(fn)
-            self.assertDirectoryCount(tmp_dir, 0)
+                delete(link, shred=shred)
+                self.assertNotExists(link)
+                self.assertExists(target)
+                if not shred:
+                    # With shred=True, content is wiped through the hard link
+                    # (expected: both names point to same file data)
+                    with open(target, 'rb') as f:
+                        self.assertEqual(f.read(), b'canary data')
+                self.assertDirectoryCount(tmp_dir, 1)
+
+                delete(target, shred=False)
+                self.assertDirectoryCount(tmp_dir, 0)
+
+    @common.skipUnlessWindows
+    def test_delete_junction(self):
+        """Unit test for delete() with Windows junction"""
+        for shred in (False, True):
+            with self.subTest(shred=shred):
+                tmp_dir = self.mkdtemp(prefix=f'delete_junction_{shred}')
+                # Use empty target: with shred=True, non-empty dirs trigger early return
+                target_dir = self.mkdtemp(
+                    prefix=f'junction-target-{shred}', dir=tmp_dir)
+                self.assertDirectoryCount(tmp_dir, 1)
+
+                junction = os.path.join(tmp_dir, f'junction-{shred}')
+                self._create_win_junction(target_dir, junction)
+                self.assertExists(junction)
+                self.assertTrue(Windows.is_junction(junction))
+                self.assertDirectoryCount(tmp_dir, 2)
+
+                delete(junction, shred=shred)
+                self.assertNotExists(junction)
+                self.assertExists(target_dir)
+                self.assertDirectoryCount(tmp_dir, 1)
+
+                delete(target_dir, shred=False)
+                self.assertDirectoryCount(tmp_dir, 0)
+
+    @common.skipUnlessWindows
+    def test_delete_read_only_directory(self):
+        """Unit test for delete() with read-only directory on Windows"""
+        kernel32 = ctypes.windll.kernel32
+        FILE_ATTRIBUTE_READONLY = 0x1
+        for shred in (False, True):
+            with self.subTest(shred=shred):
+                container = self.mkdtemp(prefix=f'ro-container-{shred}')
+                self.assertTrue(is_dir_empty(container))
+                self.assertDirectoryCount(container, 0)
+
+                ro_dir = os.path.join(container, f'readonly-{shred}')
+                os.mkdir(ro_dir)
+                kernel32.SetFileAttributesW(ro_dir, FILE_ATTRIBUTE_READONLY)
+                self.assertExists(ro_dir)
+                self.assertDirectoryCount(container, 1)
+
+                try:
+                    delete(ro_dir, shred=shred)
+
+                    self.assertNotExists(ro_dir)
+                    self.assertDirectoryCount(container, 0)
+                except Exception:
+                    # Cleanup: clear read-only attribute so tearDown can remove it
+                    for item in os.listdir(container):
+                        item_path = os.path.join(container, item)
+                        _remove_windows_readonly(item_path)
+                    raise
+
+    @common.skipUnlessWindows
+    def test_delete_extended_path(self):
+        """Unit test for delete() with extended Windows path (>260 chars)"""
+        for shred in (False, True):
+            with self.subTest(shred=shred):
+                long_name = 'x' * 200
+                long_dir = os.path.join(
+                    self.tempdir, f'{long_name}-dir-{shred}')
+                os.mkdir(extended_path(long_dir))
+
+                long_file = self.write_file(
+                    extended_path(os.path.join(
+                        long_dir, f'{long_name}-file-{shred}.txt')),
+                    b'canary data',
+                )
+
+                delete(long_file, shred=shred)
+                self.assertNotExists(extended_path(long_file))
+
+                delete(long_dir, shred=shred)
+                self.assertNotExists(extended_path(long_dir))
 
     def test_detect_encoding(self):
         """Unit test for detect_encoding"""
