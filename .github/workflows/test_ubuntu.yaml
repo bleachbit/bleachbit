@@ -28,6 +28,9 @@ jobs:
 
     runs-on: ${{ matrix.ubuntu-version }}
 
+    env:
+      COVERAGE: "coverage run --include='bleachbit/*'"
+
     steps:
     - uses: actions/checkout@v3
 
@@ -65,7 +68,7 @@ jobs:
 
     - name: Install Python dependencies
       run: |
-        pip install chardet "PyGObject${{ matrix.pygobject-version }}" requests setuptools
+        pip install chardet "PyGObject${{ matrix.pygobject-version }}" requests setuptools coverage coveralls appveyor-artifacts
 
     - name: Generate Revision.py
       run: |
@@ -75,18 +78,21 @@ jobs:
     - name: Generate translations
       run: make -C po local bleachbit.pot
 
-    - name: Run tests
+    - name: Run tests (regular and sudo)
       run: |
         export DISPLAY=":1.0"
         export $(dbus-launch)
         sudo Xvfb :1 -screen 0 800x600x24 &
         sleep 5
-        dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run make tests'
+        dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make tests && make tests-with-sudo"'
 
-    - name: Run tests with sudo
+    - name: Combine Linux and Windows coverage, upload to Coveralls
+      if: matrix.python-version == '3.13'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        export DISPLAY=":1.0"
-        export $(dbus-launch)
-        sudo Xvfb :1 -screen 0 800x600x24 &
-        sleep 5
-        dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run make tests-with-sudo'
+        mv .coverage .coverage.ubuntu
+        appveyor-artifacts -o az0 -n bleachbit -m -c ${{ github.sha }} download
+        coverage combine
+        coverage report
+        coveralls

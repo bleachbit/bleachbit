@@ -9,6 +9,7 @@ Usage:
 
 import inspect
 import os
+import shlex
 import subprocess
 import sys
 import unittest
@@ -49,6 +50,22 @@ def discover_sudo_tests():
     return sudo_tests
 
 
+def _build_test_command(test_list):
+    """Return command list to run unittest (optionally under coverage)."""
+    coverage_runner = os.environ.get('BLEACHBIT_COVERAGE_RUNNER') or ''
+    coverage_file = os.environ.get('BLEACHBIT_COVERAGE_FILE') or ''
+
+    if coverage_file:
+        os.environ['COVERAGE_FILE'] = coverage_file
+
+    if coverage_runner.strip():
+        runner_parts = shlex.split(coverage_runner)
+    else:
+        runner_parts = [sys.executable]
+
+    return runner_parts + ['-m', 'unittest'] + test_list + ['-v']
+
+
 def run_sudo_tests(test_list):
     """Run a list of tests with sudo privileges"""
     if not test_list:
@@ -63,7 +80,7 @@ def run_sudo_tests(test_list):
     print("Running sudo tests...")
     print('=' * 60)
 
-    base_cmd = [sys.executable, '-m', 'unittest'] + test_list + ['-v']
+    base_cmd = _build_test_command(test_list)
 
     if os.name == 'posix' and os.geteuid() == 0:
         sudo_uid = os.getenv('SUDO_UID')
