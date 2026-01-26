@@ -848,8 +848,9 @@ State=AAAA/wA...
         else:
             home_vars = ['$HOME', '${HOME}']
         for var in home_vars:
-            if not os.getenv(var):
-                self.skipTest(f'Environment variable {var} not set')
+            var_stripped = var.strip('%${}')
+            if not os.getenv(var_stripped):
+                self.skipTest(f'Environment variable {var_stripped} not set')
             expanded = os.path.expandvars(var)
             self.assertIsString(expanded)
             self.assertNotEqual(
