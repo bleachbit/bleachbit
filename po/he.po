@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-21 23:03-0700\n"
-"PO-Revision-Date: 2026-01-25 15:12+0000\n"
+"PO-Revision-Date: 2026-01-27 05:12+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/"
 "he/>\n"
@@ -871,7 +871,7 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS_UMUI"
 msgid "For anyone who uses this computer (all users)"
-msgstr ""
+msgstr "לכל המשתמשים במחשב הזה (כל המשתמשים)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER"
@@ -881,7 +881,7 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER_UMUI"
 msgid "For me ({USER})"
-msgstr ""
+msgstr "בשבילי ({USER})"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
@@ -891,7 +891,7 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_NOT_SUPPORTED"
 msgid "The operating system doesn't support elevation."
-msgstr ""
+msgstr "מערכת ההפעלה לא תומכת בהסלמת הרשאות."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLATION_FOR_CURRENT_USER_NOT_SUPPORTED"
@@ -1129,10 +1129,8 @@ msgid "Clean file"
 msgstr "ניקוי הקובץ"
 
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Clean cookies"
-msgstr "עוגיות"
+msgstr "פינוי עוגיות"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -1284,10 +1282,8 @@ msgstr ""
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Overwrite free disk space to hide deleted files"
 msgid "Wipe empty space to hide deleted files"
-msgstr "שכתוב השטח הפנוי בכונן להסתרת קבצים שנמחקו"
+msgstr "מחיקת השטח הריק בכונן להסתרת קבצים שנמחקו"
 
 #: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
 #: ../bleachbit/Worker.py
@@ -1344,10 +1340,8 @@ msgstr ""
 #. More information about the command line is here
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
-msgstr "יש להשתמש ב־: ‎%prog [options] cleaner.option1 cleaner.option2"
+msgstr "יש להשתמש ב־: ‎%prog [options] cleaner.option1 [cleaner.option2 …]"
 
 #: ../bleachbit/CLI.py
 msgid "list cleaners"
@@ -1369,10 +1363,8 @@ msgid "shred specific files or folders"
 msgstr "גריסת קבצים ותיקיות מסוימים"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "wipe free space in the given paths"
 msgid "wipe empty space in the given paths"
-msgstr "למחוק באופן מוחלט בנתיבים שסופקו"
+msgstr "למחוק מקום ריק באופן מוחלט בנתיבים שסופקו"
 
 #: ../bleachbit/CLI.py
 msgid "overwrite files to hide contents"
@@ -1419,32 +1411,24 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "עדכון winapp2.ini, אם גרסה חדשה זמינה"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid ""
-#| "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
-#| "preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean, --shred"
 msgstr ""
-"לציין רק אחת מהפקודות האלו: ‎--list-cleaners,‏ ‎--wipe-free-space,‏ ‎--preview,‏ ‎--"
-"clean"
+"לציין רק אחת מהפקודות האלו: ‎--list-cleaners,‏ ‎--wipe-empty-space,‏ ‎--"
+"preview,‏ ‎--clean,‎ --shred"
 
 #: ../bleachbit/CLI.py
 msgid "Checking online for updates to winapp2.ini"
 msgstr "מתבצע איתור מקוון אחר עדכונים ל־winapp2.ini"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "No directories given for --wipe-free-space"
 msgid "No directories given for --wipe-empty-space"
-msgstr "לא סופקו תיקיות לטובת ‎--wipe-free-space"
+msgstr "לא סופקו תיקיות לטובת ‎--wipe-empty-space"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "Wiping free space can take a long time."
 msgid "Wiping empty space can take a long time."
-msgstr "מחיקת המקום הפנוי עשויה לארוך זמן רב."
+msgstr "מחיקת המקום הריק עשויה לארוך זמן רב."
 
 #: ../bleachbit/CLI.py
 msgid "No work to do. Specify options."
@@ -1792,7 +1776,7 @@ msgstr "שפה:"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Restart BleachBit for full effect."
-msgstr ""
+msgstr "יש להפעיל את BleachBit מחדש לקבלת המימוש המלא."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -1849,11 +1833,8 @@ msgid "Choose a folder"
 msgstr "בחירת תיקייה"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid ""
-#| "Choose a writable folder for each drive for which to overwrite free space."
 msgid "Choose a writable folder for each drive for which to wipe empty space."
-msgstr "בחירת תיקייה הניתנת לכתיבה בכל כונן שבה ישוכתב המקום הפנוי."
+msgstr "בחירת תיקייה הניתנת לכתיבה בכל כונן שבה המקום הריק יימחק לחלוטין."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -1886,10 +1867,8 @@ msgid "Name"
 msgstr "שם"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "This path already exists in the whitelist."
 msgid "This path already exists in the keep list."
-msgstr "הנתיב הזה כבר קיים ברשימת ההיתר."
+msgstr "הנתיב הזה כבר קיים ברשימת השימור."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
@@ -1897,7 +1876,7 @@ msgstr "הנתיב הזה כבר קיים ברשימה המותאמת אישית
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Protected Path"
-msgstr ""
+msgstr "נתיב מוגן"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -1909,10 +1888,9 @@ msgstr "תיקייה"
 
 #. TRANSLATORS: %s is a file or folder path that was just added
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgid "Access denied: %s"
+#, python-format
 msgid "Added: %s"
-msgstr "הגישה נדחתה: %s"
+msgstr "נוסף: %s"
 
 #. TRANSLATORS: %s is a file or folder path that was just removed
 #: ../bleachbit/GuiPreferences.py
@@ -1922,7 +1900,7 @@ msgstr "הוסרו: %s"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Manage cookies to keep..."
-msgstr ""
+msgstr "ניהול עוגיות לשימור…"
 
 #. TRANSLATORS: "Paths" is used generically to refer to both files
 #. and folders
@@ -2082,10 +2060,8 @@ msgstr "תצוגה מקדימה"
 
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/GUI.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Manage Cookies"
-msgstr "עוגיות"
+msgstr "ניהול עוגיות"
 
 #: ../bleachbit/GUI.py
 msgid "Preview files in the selected operations (without deleting any files)"
@@ -2400,14 +2376,13 @@ msgstr "שגיאה: {operation_option}: {command}"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Worker.py
-#, fuzzy
-#| msgid "Please wait.  Wiping free disk space."
 msgid "Please wait. Wiping empty space."
-msgstr "נא להמתין. השטח הפנוי מתנקה."
+msgstr "נא להמתין. השטח הריק נמחק לחלוטין."
 
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
+"כדי לעצור את התהליך הזה, יש ללחוץ על כפתור הביטול הגורף בסרגל הכלים ולהמתין."
 
 #: ../bleachbit/Worker.py
 msgid ""
@@ -2493,10 +2468,8 @@ msgid "Shred Paths from Clipboard"
 msgstr "השמדת נתיבים מלוח הגזירים"
 
 #: ../share/app-menu.ui
-#, fuzzy
-#| msgid "_Wipe Free Space"
 msgid "_Wipe Empty Space"
-msgstr "מ_חיקה מוחלטת של השטח הפנוי"
+msgstr "מ_חיקה מוחלטת של השטח הריק"
 
 #: ../share/app-menu.ui
 msgid "_Make Chaff"
