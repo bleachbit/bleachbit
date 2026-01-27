@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-21 23:03-0700\n"
-"PO-Revision-Date: 2026-01-27 09:10+0000\n"
+"PO-Revision-Date: 2026-01-27 16:09+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/"
 "he/>\n"
@@ -1303,6 +1303,11 @@ msgid ""
 "on traditional hard drives. On solid-state drives, it is less reliable, and "
 "frequent use contributes to wear."
 msgstr ""
+"מחיקה של שטח ריק לחלוטין מסירה עקבות של קבצים שנמחקו אבל לא נגרסו, לא יתפנה "
+"עוד מקום בכונן. התהליך יכול להיות ארוך מאוד ועלול להאט את המחשב שלך זמנים. "
+"הוא אינו הכרחי אם הכונן של מוגן בהצפנת כונן מלא. השיטה עובדת הכי טוב על "
+"כוננים קשירים מסורתיים. בכוננים שבביים (SSD), הוא פחות אמין, ושימוש תכוף "
+"גורם לבלאי מוגבר."
 
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
@@ -1317,7 +1322,7 @@ msgstr "מערכת"
 #: ../bleachbit/Cleaner.py ../bleachbit/CLI.py
 #, python-format
 msgid "Wipe empty space in %s"
-msgstr ""
+msgstr "מחיקת השטח הריק ב־%s לחלוטין"
 
 #: ../bleachbit/Cleaner.py
 msgid "Loading native cleaners."
@@ -2049,6 +2054,9 @@ msgid ""
 "the system. User-specific paths will refer to the administrator account, so "
 "to clean your profile, run BleachBit again as a standard user."
 msgstr ""
+"הסלמת את ההרשאות באמצעות חשבון אחר כדי לנקות חלקים משותפים במערכת. נתיבים "
+"נקודתיים למשתמש יפנו לחשבון הניהול, אז כדי לנקות את הפרופיל שלך, יש להריץ את "
+"BleachBit מחדש כמשתמש רגיל."
 
 #: ../bleachbit/GUI.py
 msgid ""
