@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-27 08:54-0700\n"
-"PO-Revision-Date: 2026-01-27 18:13+0000\n"
+"PO-Revision-Date: 2026-01-28 10:48+0000\n"
 "Last-Translator: Mona Lisa <nickwick@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/bleachbit/main/"
 "sv/>\n"
@@ -1054,7 +1054,7 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_NAME"
 msgid "Integrate Shred"
-msgstr "Integrera förstöra"
+msgstr "Integrera förstör"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
@@ -1174,7 +1174,7 @@ msgstr "Städa fil"
 
 #: ../bleachbit/Action.py
 msgid "Clean cookies"
-msgstr "Rensa cookies"
+msgstr "Rensa kakor"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the clean button on the main window.
@@ -1264,7 +1264,7 @@ msgstr "Minne"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Wipe the swap and free memory"
-msgstr "Städa swappen och ofördelat minne"
+msgstr "Städa swappen och ledigt minne"
 
 #: ../bleachbit/Cleaner.py
 msgid "This option is experimental and may cause system problems."
@@ -1328,7 +1328,7 @@ msgstr "Oanvänt utrymme"
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Wipe empty space to hide deleted files"
-msgstr "Skriv över ofördelat diskutrymme för att dölja borttagna filer"
+msgstr "Städa ledigt diskutrymme för att dölja borttagna filer"
 
 #: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
 #: ../bleachbit/Worker.py
@@ -1340,12 +1340,12 @@ msgid ""
 "on traditional hard drives. On solid-state drives, it is less reliable, and "
 "frequent use contributes to wear."
 msgstr ""
-"Att rensa oanvänt utrymme tar bort spår av filer som raderats utan säker "
-"förstöring, men det kommer inte att frigöra ytterligare diskutrymme. "
-"Processen kan ta mycket lång tid och tillfälligt sakta ner din dator. Det är "
-"inte nödvändigt om din enhet är skyddad med fullständig diskkryptering. "
-"Metoden fungerar bäst på traditionella hårddiskar. På solid stateenheter är "
-"det mindre tillförlitligt och frekvent användning bidrar till slitage."
+"Att städa tomt utrymme tar bort spår av filer som togs bort utan att "
+"förstöring, men det frigör inte ytterligare diskutrymme. Processen kan ta "
+"mycket lång tid och kan tillfälligt göra datorn långsammare. Det är inte "
+"nödvändigt om din enhet är skyddad med fullständig diskkryptering. Metoden "
+"fungerar bäst på traditionella hårddiskar. På SSD-diskar är den mindre "
+"tillförlitlig och frekvent användning bidrar till slitage."
 
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
@@ -1360,7 +1360,7 @@ msgstr "System"
 #: ../bleachbit/Cleaner.py ../bleachbit/CLI.py
 #, python-format
 msgid "Wipe empty space in %s"
-msgstr "Rensa oanvänt utrymme i %s"
+msgstr "Städa oanvänt utrymme i %s"
 
 #: ../bleachbit/Cleaner.py
 msgid "Loading native cleaners."
@@ -1373,7 +1373,7 @@ msgstr "Importerar städare från Winapp2.ini."
 #: ../bleachbit/Cleaner.py
 #, python-format
 msgid "Wipe empty space %s"
-msgstr "Radera ledigt utrymme %s"
+msgstr "Städa ledigt utrymme %s"
 
 #: ../bleachbit/CLI.py
 #, python-format
@@ -1383,7 +1383,7 @@ msgstr "ogiltig städare: %s"
 #: ../bleachbit/CLI.py
 #, python-format
 msgid "Wildcard characters are not allowed in --except: %s"
-msgstr "Jokertecken är inte tillåtna i --förutom: %s"
+msgstr "Jokertecken är inte tillåtna i --except: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1416,7 +1416,7 @@ msgstr "förstör specifika filer eller mappar"
 
 #: ../bleachbit/CLI.py
 msgid "wipe empty space in the given paths"
-msgstr "Rensa ledigt utrymme i de angivna sökvägarna"
+msgstr "Städa ledigt utrymme i de angivna sökvägarna"
 
 #: ../bleachbit/CLI.py
 msgid "overwrite files to hide contents"
@@ -1436,7 +1436,7 @@ msgstr "aktivera alla alternativ som inte har någon varning"
 
 #: ../bleachbit/CLI.py
 msgid "exclude cleaner options (can be repeated, comma-separated)"
-msgstr "exkludera renarflaggor (kan upprepas, kommasepareras)"
+msgstr "exkludera reningsflaggor (kan upprepas, kommasepareras)"
 
 #: ../bleachbit/CLI.py
 msgid "set log level to verbose"
@@ -1476,11 +1476,11 @@ msgstr "Söker på nätet efter uppdateringar av winapp2.ini"
 
 #: ../bleachbit/CLI.py
 msgid "No directories given for --wipe-empty-space"
-msgstr "Inga mappar angivna för -- wipe-empty-space"
+msgstr "Inga mappar angivna för --wipe-empty-space"
 
 #: ../bleachbit/CLI.py
 msgid "Wiping empty space can take a long time."
-msgstr "Rensning av ledigt utrymme kan ta lång tid."
+msgstr "Städning av ledigt utrymme kan ta lång tid."
 
 #: ../bleachbit/CLI.py
 msgid "No work to do. Specify options."
@@ -1737,11 +1737,11 @@ msgstr "Genererar filer"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Manage cookies to keep"
-msgstr "Hantera cookies som ska behållas"
+msgstr "Hantera kakor som ska behållas"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select the cookies to keep when cleaning cookies across browsers."
-msgstr "Välj de cookies som ska sparas när cookies rensas på flera browsers."
+msgstr "Välj de kakor som ska sparas när kakor rensas i olika webbläsare."
 
 #: ../bleachbit/GuiCookie.py
 msgid "Search:"
@@ -1749,7 +1749,7 @@ msgstr "Sök:"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Filter cookies..."
-msgstr "Filtrera cookies..."
+msgstr "Filtrera kakor..."
 
 #: ../bleachbit/GuiCookie.py
 msgid "Show Selected"
@@ -1757,7 +1757,7 @@ msgstr "Visa valda"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Only show cookies that are currently selected"
-msgstr "Visa enbart cookies som för nuvarande är valda"
+msgstr "Visa enbart kakor som för nuvarande är valda"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Host"
@@ -1848,8 +1848,8 @@ msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
 msgstr ""
-"Skriva över filer är ineffektivt på vissa filsystem och med vissa åtgärder i "
-"BleachBit.  Skriva över är betydligt långsammare."
+"Överskrivning är ineffektiv på vissa filsystem och med vissa åtgärder i "
+"BleachBit. Överskrivning är betydligt långsammare."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
@@ -1874,7 +1874,7 @@ msgstr "Visa felsökningsmeddelanden"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Add the shred context menu to KDE Plasma"
-msgstr "Lägg till förstöra-snabbmenyn till KDE Plasma"
+msgstr "Lägg till förstör-snabbmenyn till KDE Plasma"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Dark mode"
@@ -1890,8 +1890,7 @@ msgstr "Välj en mapp"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Choose a writable folder for each drive for which to wipe empty space."
-msgstr ""
-"Välj en skrivbar mapp för varje disk vars lediga utrymme ska skrivas över."
+msgstr "Välj en skrivbar mapp för varje disk vars lediga utrymme ska städas."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -1957,7 +1956,7 @@ msgstr "Tog bort: %s"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Manage cookies to keep..."
-msgstr "Hantera cookies som ska behållas..."
+msgstr "Hantera kakor som ska behållas..."
 
 #. TRANSLATORS: "Paths" is used generically to refer to both files
 #. and folders
@@ -1995,11 +1994,11 @@ msgstr "Lägg till mapp"
 
 #: ../bleachbit/GUI.py
 msgid "Choose files to shred"
-msgstr "Välj filer att förstöra"
+msgstr "Välj filer som ska förstöras"
 
 #: ../bleachbit/GUI.py
 msgid "Choose folder to shred"
-msgstr "Välj mapp att förstöra"
+msgstr "Välj mapp som ska förstöras"
 
 #: ../bleachbit/GUI.py
 msgid "No paths found in clipboard."
@@ -2080,8 +2079,7 @@ msgstr "Klart."
 #: ../bleachbit/GUI.py
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
-msgstr ""
-"Tillgång till programmenyn genom att klicka på hamburger-ikonen på menyraden."
+msgstr "Öppna programmenyn genom att klicka på hamburgarikonen i menyraden."
 
 #: ../bleachbit/GUI.py
 msgid "Access the application menu by clicking the logo on the title bar."
@@ -2103,7 +2101,7 @@ msgid ""
 "overwriting the contents of files."
 msgstr ""
 "Kör BleachBit med administratörsbehörighet för att förbättra noggrannheten "
-"för att skriva över innehållet i filer."
+"när innehållet i filer skrivs över."
 
 #: ../bleachbit/GUI.py
 msgid ""
@@ -2135,7 +2133,7 @@ msgstr "Förhandvisning"
 #. TRANSLATORS: this is the context menu
 #: ../bleachbit/GUI.py
 msgid "Manage Cookies"
-msgstr "Hantera cookies"
+msgstr "Hantera kakor"
 
 #: ../bleachbit/GUI.py
 msgid "Preview files in the selected operations (without deleting any files)"
@@ -2174,8 +2172,9 @@ msgid ""
 "BleachBit detected leftover files from an interrupted disk wipe operation. "
 "Would you like to preview them with an option to delete them?"
 msgstr ""
-"BleachBit hittade kvarlämnade filer ifrån en avbruten hårddiskrensning. Vill "
-"du förhandsgranska dessa med möjligheten att radera dem?"
+"BleachBit upptäckte kvarvarande filer från en avbruten "
+"diskstädningsoperation. Vill du förhandsgranska dessa med möjligheten att ta "
+"bort dem?"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -2290,7 +2289,7 @@ msgstr "Bevara automatiskt språk %s."
 
 #: ../bleachbit/Options.py
 msgid "Error when setting the default drives to shred."
-msgstr "Fel vid inställning av standardenheter att förstöra."
+msgstr "Fel när standardenheter för förstöring skulle anges."
 
 #. TRANSLATORS: Warning shown when user tries to add a protected path.
 #. %(path)s is the path, %(files)d is number of files, %(size)s is human-readable size
