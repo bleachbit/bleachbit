@@ -104,7 +104,8 @@ tests:
 	# Catch warnings as errors. Also set in `tests/common.py`.
 	$(MAKE) -C cleaners tests; cleaners_status=$$?; \
 	PYTHONWARNINGS=error $(COVERAGE) -m unittest discover -p Test*.py -v; py_status=$$?; \
-	exit $$(($$cleaners_status + $$py_status))
+	$(PYTHON) windows/nsis_translations.py --unittest; nsis_status=$$?; \
+	exit $$(($$cleaners_status + $$py_status + $$nsis_status))
 
 tests-with-sudo:
 	# Run tests marked with @test_also_with_sudo using sudo

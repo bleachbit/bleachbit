@@ -1,14 +1,29 @@
 #!/usr/bin/python3
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
+#
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
-"""Generate NSIS translation resources from PO files."""
+"""Generate NSIS translation resources from PO files.
+
+Reads strings:
+- English strings from windows/NsisInclude/NsisMultiUserLang.nsh
+- localized from strings po/*.po
+
+Then, it writes:
+- English strings to po/nsis.pot (template)
+- localized strings to windows/NsisInclude/NsisMultiUserLang.nsh
+
+This script is invoked by ``make nsis.pot`` in po/ (``po/Makefile``)
+or run manually via CLI flags."""
 
 import argparse
 import ast
 import os
 import re
 import sys
+import unittest
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PO_DIR = os.path.join(ROOT_DIR, 'po')
@@ -155,9 +170,9 @@ def _parse_nsis_lang_strings(nsh_path):
 
 def _unescape_nsis_text(text):
     """Convert NSIS-escaped sequences to plain text for PO generation."""
-    text = text.replace('$\r$\n', '\n')
-    text = text.replace('$\n', '\n').replace('$\r', '\n')
-    text = text.replace('$\\"', '"').replace('$"', '"')
+    text = text.replace(r'$\r$\n', '\n')
+    text = text.replace(r'$\n', '\n').replace(r'$\r', '\n')
+    text = text.replace(r'$\"', '"')
     return text
 
 
@@ -171,8 +186,8 @@ def _escape_po_text(text):
 def _escape_nsis_text(text):
     """Escape arbitrary text so it is valid inside an NSIS LangString."""
     text = text.replace('\r\n', '\n').replace('\r', '\n')
-    text = text.replace('\n', '$\\r$\\n')
-    text = text.replace('"', '$\\"')
+    text = text.replace('\n', r'$\r$\n')
+    text = text.replace('"', r'$\"')
     return text
 
 
@@ -256,6 +271,88 @@ def write_nsis_langfile():
         nsh_file.write(''.join(lines))
 
 
+class TestNsisEscaping(unittest.TestCase):
+    """Test cases for NSIS text escaping and unescaping functions."""
+
+    def test_unescape_nsis_newlines(self):
+        """Test unescaping NSIS newline sequences."""
+        self.assertEqual(_unescape_nsis_text(r'Line1$\r$\nLine2'), 'Line1\nLine2')
+        self.assertEqual(_unescape_nsis_text(r'Line1$\nLine2'), 'Line1\nLine2')
+        self.assertEqual(_unescape_nsis_text(r'Line1$\rLine2'), 'Line1\nLine2')
+
+    def test_unescape_nsis_quotes(self):
+        """Test unescaping NSIS quote sequences."""
+        self.assertEqual(_unescape_nsis_text(r'Text with $\"quotes$\"'), 'Text with "quotes"')
+
+    def test_unescape_nsis_dollar_signs(self):
+        """Test that literal dollar signs in NSIS strings are preserved."""
+        self.assertEqual(_unescape_nsis_text(r'$\"{FOLDER}$\"'), '"{FOLDER}"')
+        self.assertEqual(_unescape_nsis_text('Price: $100'), 'Price: $100')
+
+    def test_unescape_nsis_no_double_escaping(self):
+        """Regression test: ensure we don't treat $$ as an escape sequence."""
+        text = r'$\"{FOLDER}$\"'
+        result = _unescape_nsis_text(text)
+        self.assertEqual(result, '"{FOLDER}"')
+        self.assertNotIn('$$', result)
+
+    def test_escape_po_text_backslashes(self):
+        """Test escaping backslashes for PO format."""
+        self.assertEqual(_escape_po_text('path\\to\\file'), 'path\\\\to\\\\file')
+
+    def test_escape_po_text_quotes(self):
+        """Test escaping quotes for PO format."""
+        self.assertEqual(_escape_po_text('Say "hello"'), 'Say \\"hello\\"')
+
+    def test_escape_po_text_newlines(self):
+        """Test escaping newlines for PO format."""
+        self.assertEqual(_escape_po_text('Line1\nLine2'), 'Line1\\nLine2')
+
+    def test_escape_nsis_newlines(self):
+        """Test escaping newlines for NSIS format."""
+        self.assertEqual(_escape_nsis_text('Line1\nLine2'), 'Line1$\\r$\\nLine2')
+        self.assertEqual(_escape_nsis_text('Line1\r\nLine2'), 'Line1$\\r$\\nLine2')
+
+    def test_escape_nsis_quotes(self):
+        """Test escaping quotes for NSIS format."""
+        self.assertEqual(_escape_nsis_text('Text with "quotes"'), 'Text with $\\"quotes$\\"')
+
+    def test_escape_nsis_no_dollar_escaping(self):
+        """Regression test: ensure we don't escape literal $ as $$."""
+        text = 'Price: $100'
+        result = _escape_nsis_text(text)
+        self.assertEqual(result, 'Price: $100')
+        self.assertNotIn('$$', result)
+
+    def test_roundtrip_nsis_to_po_to_nsis(self):
+        """Test that NSIS -> PO -> NSIS roundtrip preserves content."""
+        original_nsis = r'Version {VERSION} is installed in $\"{FOLDER}$\".'
+        unescaped = _unescape_nsis_text(original_nsis)
+        self.assertEqual(unescaped, 'Version {VERSION} is installed in "{FOLDER}".')
+        po_escaped = _escape_po_text(unescaped)
+        self.assertEqual(po_escaped, 'Version {VERSION} is installed in \\"{FOLDER}\\".')
+        back_to_plain = po_escaped.replace('\\n', '\n').replace('\\"', '"').replace('\\\\', '\\')
+        self.assertEqual(back_to_plain, 'Version {VERSION} is installed in "{FOLDER}".')
+        back_to_nsis = _escape_nsis_text(back_to_plain)
+        self.assertEqual(back_to_nsis, original_nsis)
+
+    def test_complex_string_with_multiple_escapes(self):
+        """Test handling of strings with multiple escape sequences."""
+        nsis_text = r'${prodname} is installed.$\r$\nClick $\"OK$\" to continue.'
+        unescaped = _unescape_nsis_text(nsis_text)
+        self.assertEqual(unescaped, '${prodname} is installed.\nClick "OK" to continue.')
+        re_escaped = _escape_nsis_text(unescaped)
+        self.assertEqual(re_escaped, nsis_text)
+
+    def test_parse_po_string(self):
+        """Test PO string literal parsing."""
+        self.assertEqual(_parse_po_string('"Hello world"'), 'Hello world')
+        self.assertEqual(_parse_po_string('"Line1\\nLine2"'), 'Line1\nLine2')
+        self.assertEqual(_parse_po_string('"Say \\"hi\\""'), 'Say "hi"')
+        self.assertEqual(_parse_po_string(''), '')
+        self.assertEqual(_parse_po_string('  '), '')
+
+
 def main():
     """CLI entry point for generating NSIS POT and language files."""
     parser = argparse.ArgumentParser(
@@ -264,7 +361,15 @@ def main():
                         help='Generate po/nsis.pot from NSIS English strings.')
     parser.add_argument('--generate', action='store_true',
                         help='Generate NsisInclude/BleachBitLang.nsh from po/*.po.')
+    parser.add_argument('--unittest', action='store_true',
+                        help='Run unit tests.')
     args = parser.parse_args()
+
+    if args.unittest:
+        suite = unittest.TestLoader().loadTestsFromTestCase(TestNsisEscaping)
+        runner = unittest.TextTestRunner(verbosity=2)
+        result = runner.run(suite)
+        return 0 if result.wasSuccessful() else 1
 
     if not args.pot and not args.generate:
         parser.print_help()
