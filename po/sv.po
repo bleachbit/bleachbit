@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-27 08:54-0700\n"
-"PO-Revision-Date: 2026-01-16 13:01+0000\n"
-"Last-Translator: Daniel Wiik <d.wiik@outlook.com>\n"
+"PO-Revision-Date: 2026-01-27 18:13+0000\n"
+"Last-Translator: Mona Lisa <nickwick@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/bleachbit/main/"
 "sv/>\n"
 "Language: sv\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16-dev\n"
 "X-Launchpad-Export-Date: 2022-01-23 20:20+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -819,7 +819,7 @@ msgid ""
 msgstr ""
 "BleachBit frigör diskutrymme och bibehåller integriteten genom att snabbt ta "
 "bort onödiga filer som cache, kakor, webbhistorik, tillfälliga filer och "
-"systemloggar. Det kan också strimla filer och frigöra diskutrymme för att "
+"systemloggar. Det kan också förstöra filer och frigöra diskutrymme för att "
 "förhindra dataåterställning."
 
 #. TRANSLATORS: Caption for screenshot
@@ -834,16 +834,19 @@ msgid ""
 "Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' "
 "to abort the upgrade."
 msgstr ""
+"${prodname} är redan installerat.\n"
+"Klicka på 'OK' för att avinstallera den gamla versionen innan du "
+"uppgraderar, eller klicka på 'Avbryt' för att avbryta uppgraderingen."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
 msgid "Visit the ${prodname} website"
-msgstr ""
+msgstr "Besök webbplatsen för ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:INSTALLER_CAPTION"
 msgid "${prodname} ${VERSION} Setup"
-msgstr ""
+msgstr "${prodname} ${VERSION} Installation"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT1"
@@ -851,12 +854,14 @@ msgid ""
 "The next step is building the font cache, during which a black console "
 "window may appear."
 msgstr ""
+"Nästa steg är att bygga teckensnittscachen, under vilken ett svart "
+"konsolfönster kan visas."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT2"
 msgid ""
 "It usually finishes in one minute, but sometimes it takes up to ten minutes."
-msgstr ""
+msgstr "Det brukar ta en minut, men ibland tar det upp till tio minuter."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
@@ -864,112 +869,117 @@ msgid ""
 "You need to log in with an account that is a member of the administrators "
 "group to continue."
 msgstr ""
+"Du måste logga in med ett konto som är medlem i administratörsgruppen för "
+"att fortsätta."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required."
-msgstr ""
+msgstr "Administratörsuppgifter krävs."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Administrator privileges are required to clean Windows Updates"
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required to uninstall."
-msgstr "Administratörsbehörighet krävs för att rensa Windows-uppdateringar"
+msgstr "Administratörsuppgifter krävs för avinstallation."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS"
 msgid "For &anyone who uses this computer (all users)"
-msgstr ""
+msgstr "För &alla som använder den här datorn (alla användare)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS_UMUI"
 msgid "For anyone who uses this computer (all users)"
-msgstr ""
+msgstr "För alla som använder den här datorn (alla användare)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER"
 msgid "For &me ({USER})"
-msgstr ""
+msgstr "För &mig ({USER})"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER_UMUI"
 msgid "For me ({USER})"
-msgstr ""
+msgstr "För mig ({USER})"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
 msgid "Unable to elevate, error {ERROR}."
-msgstr ""
+msgstr "Det gick inte att höja, fel {ERROR}."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_NOT_SUPPORTED"
 msgid "The operating system doesn't support elevation."
-msgstr ""
+msgstr "Operativsystemet stöder inte höjning."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLATION_FOR_CURRENT_USER_NOT_SUPPORTED"
 msgid "The operating system doesn't support current user installations."
-msgstr ""
+msgstr "Operativsystemet stöder inte installationer av nuvarande användare."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_ALL_USERS"
 msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
-msgstr ""
+msgstr "Version {VERSION} är installerad för alla användare i \"{FOLDER}\"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
 msgstr ""
+"Version {VERSION} är installerad för den aktuella användaren i \"{FOLDER}\"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
 msgid ""
 "Select whether to install $(^NameDA) for all users or for the current user."
 msgstr ""
+"Välj om du vill installera $(^NameDA) för alla användare eller för den "
+"aktuella användaren."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to install $(^NameDA)."
-msgstr ""
+msgstr "Välj för vilka användare $(^NameDA) ska installeras."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
 msgid "Invalid combination of parameters."
-msgstr ""
+msgstr "Ogiltig parameterkombination."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_LOGON_SERVICE_NOT_RUNNING"
 msgid "Unable to elevate, Secondary Logon service not running."
 msgstr ""
+"Det gick inte att höja behörigheten, den sekundära inloggningstjänsten körs "
+"inte."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
 msgid "Fresh installation for all users."
-msgstr ""
+msgstr "Ny installation för alla användare."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
 msgid "Fresh installation for the current user."
-msgstr ""
+msgstr "Ny installation för den nuvarande användaren."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NOT_INSTALLED"
 msgid "There is no installation of $(^NameDA)."
-msgstr ""
+msgstr "Det finns ingen installation av $(^NameDA)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Choose a folder"
 msgctxt "nsis:MULTIUSER_PAGE_TITLE"
 msgid "Choose Users"
-msgstr "Välj en mapp"
+msgstr "Välj användare"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS"
 msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 msgstr ""
+"Avinstallera version {OLD_VERSION} och installera version {VERSION} för alla "
+"användare."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
@@ -977,21 +987,23 @@ msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for the "
 "current user."
 msgstr ""
+"Avinstallera version {OLD_VERSION} och installera version {VERSION} för den "
+"aktuella användaren."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS"
 msgid "Reinstall version {VERSION} for all users."
-msgstr ""
+msgstr "Installera om version {VERSION} för alla användare."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
 msgid "Reinstall version {VERSION} for the current user."
-msgstr ""
+msgstr "Installera om version {VERSION} för den aktuella användaren."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
 msgid "You need to run this program as an administrator."
-msgstr ""
+msgstr "Du måste köra det här programmet som administratör."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
@@ -999,119 +1011,118 @@ msgid ""
 "$(^NameDA) is installed both for all users and for the current user.\n"
 "Select which installation to remove."
 msgstr ""
+"$(^NameDA) är installerat både för alla användare och för den aktuella "
+"användaren.\n"
+"Välj vilken installation som ska tas bort."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to remove $(^NameDA)."
-msgstr ""
+msgstr "Välj för vilka användare $(^NameDA) ska tas bort."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
 msgid ""
 "These are the basic files needed for ${prodname} to function (required)."
 msgstr ""
+"Det här är de grundläggande filerna som behövs för att ${prodname} ska "
+"fungera (obligatoriskt)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Choose files to shred"
 msgctxt "nsis:SECTION_CORE_NAME"
 msgid "Core files (required)"
-msgstr "Välj filer att förstöra"
+msgstr "Kärnfiler (obligatoriskt)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Widgets for the desktop"
 msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
 msgid "Create a shortcut on the desktop."
-msgstr "Gränssnittskomponenter för skrivbordet"
+msgstr "Skapa en genväg på skrivbordet."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Desktop widgets"
 msgctxt "nsis:SECTION_DESKTOP_NAME"
 msgid "Desktop"
-msgstr "Skrivbordsgränssnittskomponenter"
+msgstr "Skrivbord"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
 msgid ""
 "Add an option to delete files from the file context menu in Windows Explorer."
 msgstr ""
+"Lägg till ett alternativ för att ta bort filer från filmenyn i Windows "
+"Utforskaren."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_NAME"
 msgid "Integrate Shred"
-msgstr ""
+msgstr "Integrera förstöra"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
 msgid "Create a shortcut on the Quick Launch bar."
-msgstr ""
+msgstr "Skapa en genväg i snabbstartsfältet."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
 msgid "Quick Launch"
-msgstr ""
+msgstr "Snabbstart"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
 msgid "Create shortcuts to ${prodname}"
-msgstr ""
+msgstr "Skapa genvägar till ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_NAME"
 msgid "Shortcuts"
-msgstr ""
+msgstr "Genvägar"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
 msgid "Create a shortcut in the Start menu."
-msgstr ""
+msgstr "Skapa en genväg i Start-menyn."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_NAME"
 msgid "Start menu"
-msgstr ""
+msgstr "Startmeny"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
 msgid ""
 "Install language files to use ${prodname} in your preferred local language."
 msgstr ""
+"Installera språkfiler för att använda ${prodname} på ditt föredragna lokala "
+"språk."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Localizations"
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
 msgid "Translations"
-msgstr "Språk"
+msgstr "Översättningar"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
 msgid "Add an uninstall program."
-msgstr ""
+msgstr "Lägg till ett avinstallationsprogram."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Update uninstallers"
 msgctxt "nsis:SECTION_UNINSTALL_NAME"
 msgid "Uninstall"
-msgstr "Avinstallationsprogram för uppdateringar"
+msgstr "Avinstallera"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_DEBUGGING_TERMINAL"
 msgid "${prodname} Debugging Terminal"
-msgstr ""
+msgstr "${prodname} felsökningsterminal"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_NO_UAC"
 msgid "${prodname} (No UAC)."
-msgstr ""
+msgstr "${prodname} (inget användargränssnitt)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHRED_SHELL_MENU"
 msgid "Shred with ${prodname}"
-msgstr ""
+msgstr "Förstör med ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:UNINSTALL_TEXT"
@@ -1122,6 +1133,11 @@ msgid ""
 "including any files (such as custom cleaners) that you may have added or "
 "changed."
 msgstr ""
+"${prodname} kommer att avinstalleras från följande mapp.\n"
+"Klicka på Avinstallera för att starta avinstallationen.\n"
+"VARNING: Avinstalleraren tar bort installationskatalogen helt, inklusive "
+"alla filer (t.ex. anpassade rensningsfiler) som du kan ha lagt till eller "
+"ändrat."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1325,11 +1341,11 @@ msgid ""
 "frequent use contributes to wear."
 msgstr ""
 "Att rensa oanvänt utrymme tar bort spår av filer som raderats utan säker "
-"radering, men det kommer inte att frigöra ytterligare diskutrymme. Processen "
-"kan ta mycket lång tid och tillfälligt sakta ner din dator. Det är inte "
-"nödvändigt om din enhet är skyddad med fullständig diskkryptering. Metoden "
-"fungerar bäst på traditionella hårddiskar. På solid stateenheter är det "
-"mindre tillförlitligt och frekvent användning bidrar till slitage."
+"förstöring, men det kommer inte att frigöra ytterligare diskutrymme. "
+"Processen kan ta mycket lång tid och tillfälligt sakta ner din dator. Det är "
+"inte nödvändigt om din enhet är skyddad med fullständig diskkryptering. "
+"Metoden fungerar bäst på traditionella hårddiskar. På solid stateenheter är "
+"det mindre tillförlitligt och frekvent användning bidrar till slitage."
 
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
@@ -1367,7 +1383,7 @@ msgstr "ogiltig städare: %s"
 #: ../bleachbit/CLI.py
 #, python-format
 msgid "Wildcard characters are not allowed in --except: %s"
-msgstr ""
+msgstr "Jokertecken är inte tillåtna i --förutom: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1375,10 +1391,9 @@ msgstr ""
 #. More information about the command line is here
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
-msgstr "användning: %prog [flagga] städare.alt1 städare.alt2"
+msgstr ""
+"användning: %prog [flaggor] städare.alternativ1 [städare.alternativ2 ...]"
 
 #: ../bleachbit/CLI.py
 msgid "list cleaners"
@@ -1421,7 +1436,7 @@ msgstr "aktivera alla alternativ som inte har någon varning"
 
 #: ../bleachbit/CLI.py
 msgid "exclude cleaner options (can be repeated, comma-separated)"
-msgstr ""
+msgstr "exkludera renarflaggor (kan upprepas, kommasepareras)"
 
 #: ../bleachbit/CLI.py
 msgid "set log level to verbose"
@@ -1448,16 +1463,12 @@ msgid "update winapp2.ini, if a new version is available"
 msgstr "uppdatera winapp2.ini om en ny version är tillgänglig"
 
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid ""
-#| "Specify only one of these commands: --list-cleaners, --wipe-empty-space, "
-#| "--preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean, --shred"
 msgstr ""
-"Ange endast ett av de här kommandona: --list-cleaners, --wipe-free-space, --"
-"preview, --clean"
+"Ange endast ett av dessa kommandon: --list-cleaners, --wipe-empty-space, --"
+"preview, --clean, --shred"
 
 #: ../bleachbit/CLI.py
 msgid "Checking online for updates to winapp2.ini"
@@ -1631,16 +1642,16 @@ msgstr "Bekräfta innan borttagning"
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Enable %(option)s"
-msgstr ""
+msgstr "Aktivera %(option)s"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Remember my choice for %(option)s"
-msgstr ""
+msgstr "Kom ihåg mitt val för %(option)s"
 
 #: ../bleachbit/GuiBasic.py
 msgid "_Enable anyway"
-msgstr ""
+msgstr "_Aktivera ändå"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
@@ -1786,7 +1797,7 @@ msgstr "Behåll lista"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Warning confirmations reset."
-msgstr ""
+msgstr "Varningsbekräftelser återställda."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
@@ -1845,10 +1856,8 @@ msgid "Exit after cleaning"
 msgstr "Avsluta efter städning"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Delete confirmation"
 msgid "Reset warning confirmations"
-msgstr "Bekräfta borttagning"
+msgstr "Återställ varningsbekräftelser"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
@@ -1924,7 +1933,7 @@ msgstr "Den här sökvägen finns redan i den anpassade listan."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Protected Path"
-msgstr ""
+msgstr "Skyddad sökväg"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
@@ -2051,16 +2060,9 @@ msgstr "Storlek"
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #: ../bleachbit/GUI.py
-#, fuzzy, python-format
-#| msgid ""
-#| "Warning regarding %(cleaner)s - %(option)s:\n"
-#| "\n"
-#| "%(warning)s"
+#, python-format
 msgid "%(cleaner)s - %(option)s"
-msgstr ""
-"Varning angående %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
+msgstr "%(cleaner)s - %(option)s"
 
 #: ../bleachbit/GUI.py
 #, python-format
@@ -2301,6 +2303,11 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"Varning: '%(path)s' kan innehålla viktiga filer.\n"
+"\n"
+"Påverkan: %(files)d fil(er), %(size)s\n"
+"\n"
+"Är du säker på att du vill lägga till den här sökvägen?"
 
 #. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
 #: ../bleachbit/ProtectedPath.py
@@ -2310,6 +2317,9 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"Varning: '%(path)s' kan innehålla viktiga filer.\n"
+"\n"
+"Är du säker på att du vill lägga till den här sökvägen?"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
