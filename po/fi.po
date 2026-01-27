@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-01-21 23:03-0700\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-27 08:54-0700\n"
 "PO-Revision-Date: 2026-01-25 09:44+0000\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/bleachbit/main/"
@@ -825,18 +825,27 @@ msgid "Default dark mode, showing found junk files"
 msgstr "Tumma oletustila, näyttää löydetyt roskatiedostot"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:ALREADY_INSTALLED"
+#| msgid ""
+#| "${prodname} is already installed.$\\r$\\nClick 'OK' to uninstall the old "
+#| "version before upgrading, or click 'Cancel' to abort the upgrade."
 msgctxt "nsis:ALREADY_INSTALLED"
 msgid ""
-"${prodname} is already installed.$\\r$\\nClick 'OK' to uninstall the old "
-"version before upgrading, or click 'Cancel' to abort the upgrade."
+"${prodname} is already installed.\n"
+"Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' "
+"to abort the upgrade."
 msgstr ""
-"${prodname} on jo asennettu.$\\r$\\n"
-"Napsauta 'OK' poistaaksesi vanhan version asennuksen ennen päivitystä, tai "
-"napsauta 'Peru' keskeyttääksesi päivityksen."
+"${prodname} on jo asennettu.$\\r$\\nNapsauta 'OK' poistaaksesi vanhan "
+"version asennuksen ennen päivitystä, tai napsauta 'Peru' keskeyttääksesi "
+"päivityksen."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
+#| msgid "Visit the ${prodname} web site"
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
-msgid "Visit the ${prodname} web site"
+msgid "Visit the ${prodname} website"
 msgstr "Vieraile ${prodname}in verkkosivustolla"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -845,25 +854,40 @@ msgid "${prodname} ${VERSION} Setup"
 msgstr "${prodname} ${VERSION} -määritys"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIPRINT1"
+#| msgid ""
+#| "The next step is building font cache, during which you may see a black "
+#| "window."
 msgctxt "nsis:MULTIPRINT1"
 msgid ""
-"The next step is building font cache, during which you may see a black "
-"window."
+"The next step is building the font cache, during which a black console "
+"window may appear."
 msgstr ""
 "Seuraava vaihe on fonttien välimuistin koostaminen; sen aikana saatat nähdä "
 "mustan ikkunan."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIPRINT2"
+#| msgid ""
+#| "It usually finishes in one minute, but sometimes it takes ten minutes."
 msgctxt "nsis:MULTIPRINT2"
-msgid "It usually finishes in one minute, but sometimes it takes ten minutes."
+msgid ""
+"It usually finishes in one minute, but sometimes it takes up to ten minutes."
 msgstr ""
 "Se valmistuu yleensä minuutissa, mutta toisinaan voi kestää jopa kymmenen "
 "minuuttia."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
+#| msgid ""
+#| "You need to login with an account that is a member of the administrators "
+#| "group to continue."
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
 msgid ""
-"You need to login with an account that is a member of the administrators "
+"You need to log in with an account that is a member of the administrators "
 "group to continue."
 msgstr ""
 "Jatkaaksesi sinun täytyy kirjautua tilillä, joka on "
@@ -875,8 +899,11 @@ msgid "Administrator credentials required."
 msgstr "Järjestelmänvalvojan käyttöoikeudet vaaditaan."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
+#| msgid "Administrator credentials required for uninstall."
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
-msgid "Administrator credentials required for uninstall."
+msgid "Administrator credentials required to uninstall."
 msgstr ""
 "Järjestelmänvalvojan käyttöoikeudet vaaditaan asennuksen poistamista varten."
 
@@ -922,15 +949,23 @@ msgstr ""
 "Versio {VERSION} on asennettu kaikille käyttäjille hakemistoon \"{FOLDER}\"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
+#| msgid "Version {VERSION} is installed for current user in \"{FOLDER}\"."
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
-msgid "Version {VERSION} is installed for current user in \"{FOLDER}\"."
+msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
 msgstr ""
 "Versio {VERSION} on asennettu nykyiselle käyttäjälle hakemistoon \"{FOLDER}"
 "\"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
+#| msgid ""
+#| "Select whether to install $(^NameDA) for all users or for current user."
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
-msgid "Select whether to install $(^NameDA) for all users or for current user."
+msgid ""
+"Select whether to install $(^NameDA) for all users or for the current user."
 msgstr ""
 "Valitse, asennetaanko $(^NameDA) kaikille käyttäjille vai nykyiselle "
 "käyttäjälle."
@@ -941,8 +976,11 @@ msgid "Choose for which users to install $(^NameDA)."
 msgstr "Valitse, kenelle kaikille käyttäjille $(^NameDA) asennetaan."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
+#| msgid "Invalid combination of paramaters."
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
-msgid "Invalid combination of paramaters."
+msgid "Invalid combination of parameters."
 msgstr "Virheellinen yhdistelmä parametrejä."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -951,13 +989,19 @@ msgid "Unable to elevate, Secondary Logon service not running."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
+#| msgid "Fresh install for all users."
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
-msgid "Fresh install for all users."
+msgid "Fresh installation for all users."
 msgstr "Puhdas asennus kaikille käyttäjille."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
+#| msgid "Fresh install for current user."
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
-msgid "Fresh install for current user."
+msgid "Fresh installation for the current user."
 msgstr "Puhdas asennus nykyiselle käyttäjälle."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -979,10 +1023,15 @@ msgstr ""
 "käyttäjille."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
+#| msgid ""
+#| "Uninstall version {OLD_VERSION} and install version {VERSION} for current "
+#| "user."
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
 msgid ""
-"Uninstall version {OLD_VERSION} and install version {VERSION} for current "
-"user."
+"Uninstall version {OLD_VERSION} and install version {VERSION} for the "
+"current user."
 msgstr ""
 "Poista version {OLD_VERSION} asennus ja asenna versio {VERSION} nykyiselle "
 "käyttäjälle."
@@ -993,24 +1042,34 @@ msgid "Reinstall version {VERSION} for all users."
 msgstr "Asenna uudelleen versio {VERSION} kaikille käyttäjille."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
+#| msgid "Reinstall version {VERSION} for current user."
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
-msgid "Reinstall version {VERSION} for current user."
+msgid "Reinstall version {VERSION} for the current user."
 msgstr "Asenna uudelleen versio {VERSION} nykyiselle käyttäjälle."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
+#| msgid "You need to run this program as administrator."
 msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
-msgid "You need to run this program as administrator."
+msgid "You need to run this program as an administrator."
 msgstr "Tämä ohjelma tulee suorittaa järjestelmävalvojana."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
+#| msgid ""
+#| "$(^NameDA) is installed both for all users and for current user.$\\r$"
+#| "\\nSelect which installation to remove."
 msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
 msgid ""
-"$(^NameDA) is installed both for all users and for current user.$\\r$"
-"\\nSelect which installation to remove."
+"$(^NameDA) is installed both for all users and for the current user.\n"
+"Select which installation to remove."
 msgstr ""
 "$(^NameDA) on asennettu sekä kaikille käyttäjille että nykyiselle "
-"käyttäjälle.$\\r$\\n"
-"Valitse poistettava asennus."
+"käyttäjälle.$\\r$\\nValitse poistettava asennus."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_PAGE_SUBTITLE"
@@ -1019,7 +1078,8 @@ msgstr "Valitse käyttäjät, joilta $(^NameDA) poistetaan."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
-msgid "This are the basic files needed for ${prodname} to function (required)."
+msgid ""
+"These are the basic files needed for ${prodname} to function (required)."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1028,8 +1088,11 @@ msgid "Core files (required)"
 msgstr "Keskeisimmät tiedostot (vaaditaan)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
+#| msgid "Create the shortcut on desktop."
 msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
-msgid "Create the shortcut on desktop."
+msgid "Create a shortcut on the desktop."
 msgstr "Luo pikakuvake työpöydälle."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1038,9 +1101,14 @@ msgid "Desktop"
 msgstr "Työpöytä"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
+#| msgid ""
+#| "Add an option to delete files from the file context menu in Windows "
+#| "explorer."
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
 msgid ""
-"Add an option to delete files from the file context menu in Windows explorer."
+"Add an option to delete files from the file context menu in Windows Explorer."
 msgstr ""
 "Lisää Windowsin tiedostonhallinnan kontekstivalikkoon valinta, jonka avulla "
 "voi poistaa tiedostoja."
@@ -1051,19 +1119,28 @@ msgid "Integrate Shred"
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
+#| msgid "Create the shortcut on Quick Launch."
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
-msgid "Create the shortcut on Quick Launch."
+msgid "Create a shortcut on the Quick Launch bar."
 msgstr "Luo pikakuvake pikakäynnistykseen."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
+#| msgid "Quick launch"
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
-msgid "Quick launch"
+msgid "Quick Launch"
 msgstr "Pikakäynnistys"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
+#| msgid "Create the shortcut on desktop."
 msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
-msgid "Create shortcuts to ${prodname} on -"
-msgstr ""
+msgid "Create shortcuts to ${prodname}"
+msgstr "Luo pikakuvake työpöydälle."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_NAME"
@@ -1071,8 +1148,11 @@ msgid "Shortcuts"
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
+#| msgid "Create the shortcut in Start menu."
 msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
-msgid "Create the shortcut in Start menu."
+msgid "Create a shortcut in the Start menu."
 msgstr "Luo pikakuvake Käynnistä-valikkoon."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1083,11 +1163,8 @@ msgstr "Käynnistä-valikko"
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
 msgid ""
-"Use ${prodname} in your preferred local system language, install the needed "
-"language files."
+"Install language files to use ${prodname} in your preferred local language."
 msgstr ""
-"Käytä ${prodname}ia suosimallasi järjestelmän kielellä, asenna tarvittavat "
-"kielitiedostot."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
@@ -1095,8 +1172,11 @@ msgid "Translations"
 msgstr "Käännökset"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
+#| msgid "Add uninstall program."
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
-msgid "Add uninstall program."
+msgid "Add an uninstall program."
 msgstr "Lisää ohjelma asennuksen poistoa varten."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1111,7 +1191,7 @@ msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_NO_UAC"
-msgid "${prodname} No UAC."
+msgid "${prodname} (No UAC)."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1122,10 +1202,11 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:UNINSTALL_TEXT"
 msgid ""
-"${prodname} will be uninstalled from the following folder.$\\r$\\nClick "
-"Uninstall to start the uninstallation.$\\r$\\nWARNING: The uninstaller "
-"completely removes the installation directory including any files (such as "
-"custom cleaners) that you may have added or changed."
+"${prodname} will be uninstalled from the following folder.\n"
+"Click Uninstall to start the uninstallation.\n"
+"WARNING: The uninstaller completely removes the installation directory, "
+"including any files (such as custom cleaners) that you may have added or "
+"changed."
 msgstr ""
 
 #. TRANSLATORS: Multi-value variables are explained
@@ -2591,6 +2672,14 @@ msgstr "_Ohje"
 #: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_Tietoja - BleachBit"
+
+#~ msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
+#~ msgid ""
+#~ "Use ${prodname} in your preferred local system language, install the "
+#~ "needed language files."
+#~ msgstr ""
+#~ "Käytä ${prodname}ia suosimallasi järjestelmän kielellä, asenna "
+#~ "tarvittavat kielitiedostot."
 
 #, fuzzy, python-format
 #~| msgid "not a valid cleaner: %s"

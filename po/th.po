@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit 0.7.3-1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-21 23:03-0700\n"
+"POT-Creation-Date: 2026-01-27 08:54-0700\n"
 "PO-Revision-Date: 2025-08-28 16:02+0000\n"
 "Last-Translator: Anucha Hlownonkor <tony.chompoo@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/bleachbit/main/th/"
@@ -807,13 +807,14 @@ msgstr "โหมดมืด และแสดงไฟล์ขยะที�
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:ALREADY_INSTALLED"
 msgid ""
-"${prodname} is already installed.$\\r$\\nClick 'OK' to uninstall the old "
-"version before upgrading, or click 'Cancel' to abort the upgrade."
+"${prodname} is already installed.\n"
+"Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' "
+"to abort the upgrade."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
-msgid "Visit the ${prodname} web site"
+msgid "Visit the ${prodname} website"
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -824,19 +825,20 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT1"
 msgid ""
-"The next step is building font cache, during which you may see a black "
-"window."
+"The next step is building the font cache, during which a black console "
+"window may appear."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT2"
-msgid "It usually finishes in one minute, but sometimes it takes ten minutes."
+msgid ""
+"It usually finishes in one minute, but sometimes it takes up to ten minutes."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
 msgid ""
-"You need to login with an account that is a member of the administrators "
+"You need to log in with an account that is a member of the administrators "
 "group to continue."
 msgstr ""
 
@@ -849,7 +851,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Administrator privileges are required to clean Windows Updates"
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
-msgid "Administrator credentials required for uninstall."
+msgid "Administrator credentials required to uninstall."
 msgstr "จำเป็นต้องมีสิทธิ์ผู้ดูแลระบบเพื่ออัปเดต Windows"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -894,12 +896,13 @@ msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
-msgid "Version {VERSION} is installed for current user in \"{FOLDER}\"."
+msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
-msgid "Select whether to install $(^NameDA) for all users or for current user."
+msgid ""
+"Select whether to install $(^NameDA) for all users or for the current user."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -909,7 +912,7 @@ msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
-msgid "Invalid combination of paramaters."
+msgid "Invalid combination of parameters."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -919,12 +922,12 @@ msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
-msgid "Fresh install for all users."
+msgid "Fresh installation for all users."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
-msgid "Fresh install for current user."
+msgid "Fresh installation for the current user."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -948,8 +951,8 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
 msgid ""
-"Uninstall version {OLD_VERSION} and install version {VERSION} for current "
-"user."
+"Uninstall version {OLD_VERSION} and install version {VERSION} for the "
+"current user."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -959,19 +962,19 @@ msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
-msgid "Reinstall version {VERSION} for current user."
+msgid "Reinstall version {VERSION} for the current user."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
-msgid "You need to run this program as administrator."
+msgid "You need to run this program as an administrator."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
 msgid ""
-"$(^NameDA) is installed both for all users and for current user.$\\r$"
-"\\nSelect which installation to remove."
+"$(^NameDA) is installed both for all users and for the current user.\n"
+"Select which installation to remove."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -981,7 +984,8 @@ msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
-msgid "This are the basic files needed for ${prodname} to function (required)."
+msgid ""
+"These are the basic files needed for ${prodname} to function (required)."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -992,9 +996,11 @@ msgid "Core files (required)"
 msgstr "เลือกแฟ้มที่จะทำลาย"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgid "Widgets for the desktop"
 msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
-msgid "Create the shortcut on desktop."
-msgstr ""
+msgid "Create a shortcut on the desktop."
+msgstr "วิดเจ็ตสำหรับเดสก์ท็อป"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 #, fuzzy
@@ -1006,7 +1012,7 @@ msgstr "วิดเจ็ตเดสก์ท็อป"
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
 msgid ""
-"Add an option to delete files from the file context menu in Windows explorer."
+"Add an option to delete files from the file context menu in Windows Explorer."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1016,17 +1022,17 @@ msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
-msgid "Create the shortcut on Quick Launch."
+msgid "Create a shortcut on the Quick Launch bar."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
-msgid "Quick launch"
+msgid "Quick Launch"
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
-msgid "Create shortcuts to ${prodname} on -"
+msgid "Create shortcuts to ${prodname}"
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1036,7 +1042,7 @@ msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
-msgid "Create the shortcut in Start menu."
+msgid "Create a shortcut in the Start menu."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1047,8 +1053,7 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
 msgid ""
-"Use ${prodname} in your preferred local system language, install the needed "
-"language files."
+"Install language files to use ${prodname} in your preferred local language."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1060,7 +1065,7 @@ msgstr "แฟ้มภาษา"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
-msgid "Add uninstall program."
+msgid "Add an uninstall program."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1077,7 +1082,7 @@ msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_NO_UAC"
-msgid "${prodname} No UAC."
+msgid "${prodname} (No UAC)."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1088,10 +1093,11 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:UNINSTALL_TEXT"
 msgid ""
-"${prodname} will be uninstalled from the following folder.$\\r$\\nClick "
-"Uninstall to start the uninstallation.$\\r$\\nWARNING: The uninstaller "
-"completely removes the installation directory including any files (such as "
-"custom cleaners) that you may have added or changed."
+"${prodname} will be uninstalled from the following folder.\n"
+"Click Uninstall to start the uninstallation.\n"
+"WARNING: The uninstaller completely removes the installation directory, "
+"including any files (such as custom cleaners) that you may have added or "
+"changed."
 msgstr ""
 
 #. TRANSLATORS: Multi-value variables are explained
@@ -2555,9 +2561,6 @@ msgstr "_เกี่ยวกับ BleachBit"
 
 #~ msgid "IRC client formerly known as XChat"
 #~ msgstr "ไคลเอนท์ (IRC Client) เดิมชื่อ XChat"
-
-#~ msgid "Widgets for the desktop"
-#~ msgstr "วิดเจ็ตสำหรับเดสก์ท็อป"
 
 #, python-format
 #~ msgid "Wiping path: %s"

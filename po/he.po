@@ -6,12 +6,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-01-21 23:03-0700\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-27 08:54-0700\n"
 "PO-Revision-Date: 2026-01-27 16:09+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/"
-"he/>\n"
+"Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/he/"
+">\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -815,18 +815,26 @@ msgid "Default dark mode, showing found junk files"
 msgstr "מצב כהה כברירת מחדל, מופיעים קובצי זבל שנמצאו"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:ALREADY_INSTALLED"
+#| msgid ""
+#| "${prodname} is already installed.$\\r$\\nClick 'OK' to uninstall the old "
+#| "version before upgrading, or click 'Cancel' to abort the upgrade."
 msgctxt "nsis:ALREADY_INSTALLED"
 msgid ""
-"${prodname} is already installed.$\\r$\\nClick 'OK' to uninstall the old "
-"version before upgrading, or click 'Cancel' to abort the upgrade."
+"${prodname} is already installed.\n"
+"Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' "
+"to abort the upgrade."
 msgstr ""
-"${prodname} כבר מותקן.$\\r$\\n"
-"לחיצה על ‚אישור’ תסיר את הגרסה הישנה לפני השדרוג, לחלופין, לחיצה על ‚ביטול’ "
-"תבטל את השדרוג."
+"${prodname} כבר מותקן.$\\r$\\nלחיצה על ‚אישור’ תסיר את הגרסה הישנה לפני "
+"השדרוג, לחלופין, לחיצה על ‚ביטול’ תבטל את השדרוג."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
+#| msgid "Visit the ${prodname} web site"
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
-msgid "Visit the ${prodname} web site"
+msgid "Visit the ${prodname} website"
 msgstr "ביקור באתר ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -835,21 +843,36 @@ msgid "${prodname} ${VERSION} Setup"
 msgstr "התקנת ${prodname} ${VERSION}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIPRINT1"
+#| msgid ""
+#| "The next step is building font cache, during which you may see a black "
+#| "window."
 msgctxt "nsis:MULTIPRINT1"
 msgid ""
-"The next step is building font cache, during which you may see a black "
-"window."
+"The next step is building the font cache, during which a black console "
+"window may appear."
 msgstr "השלב הבא הוא בניית מטמון גופנים, שבמהלכו עלול להופיע חלון שחור."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIPRINT2"
+#| msgid ""
+#| "It usually finishes in one minute, but sometimes it takes ten minutes."
 msgctxt "nsis:MULTIPRINT2"
-msgid "It usually finishes in one minute, but sometimes it takes ten minutes."
+msgid ""
+"It usually finishes in one minute, but sometimes it takes up to ten minutes."
 msgstr "זה בדרך כלל מסתיים תוך דקה, אבל לפעמים זה יכול לקחת גם עשר דקות."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
+#| msgid ""
+#| "You need to login with an account that is a member of the administrators "
+#| "group to continue."
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
 msgid ""
-"You need to login with an account that is a member of the administrators "
+"You need to log in with an account that is a member of the administrators "
 "group to continue."
 msgstr "צריך להיכנס עם חשבון שחבר בקבוצת המנהלים כדי להמשיך."
 
@@ -859,8 +882,11 @@ msgid "Administrator credentials required."
 msgstr "נדרשים פרטי גישה לניהול."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
+#| msgid "Administrator credentials required for uninstall."
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
-msgid "Administrator credentials required for uninstall."
+msgid "Administrator credentials required to uninstall."
 msgstr "נדרשות הרשאות ניהול להסרה."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -904,13 +930,21 @@ msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
 msgstr "גרסה {VERSION} מותקנת לכל המשתמשים תחת „{FOLDER}”."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
+#| msgid "Version {VERSION} is installed for current user in \"{FOLDER}\"."
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
-msgid "Version {VERSION} is installed for current user in \"{FOLDER}\"."
+msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
 msgstr "גרסה {VERSION} מותקנת למשתמש הנוכחי תחת „{FOLDER}”."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
+#| msgid ""
+#| "Select whether to install $(^NameDA) for all users or for current user."
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
-msgid "Select whether to install $(^NameDA) for all users or for current user."
+msgid ""
+"Select whether to install $(^NameDA) for all users or for the current user."
 msgstr "נא לבחור איפה להתקין את $(^NameDA) לכל המשתמשים או למשתמש הנוכחי."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -919,8 +953,11 @@ msgid "Choose for which users to install $(^NameDA)."
 msgstr "נא לבחור לאילו משתמשים להתקין את $(^NameDA)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
+#| msgid "Invalid combination of paramaters."
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
-msgid "Invalid combination of paramaters."
+msgid "Invalid combination of parameters."
 msgstr "שילוב שגוי של משתנים."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -929,13 +966,19 @@ msgid "Unable to elevate, Secondary Logon service not running."
 msgstr "לא ניתן להסלים מבחינת הגדרות, שירות כניסה משנית לא פעיל."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
+#| msgid "Fresh install for all users."
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
-msgid "Fresh install for all users."
+msgid "Fresh installation for all users."
 msgstr "התקנה חדשה לכל המשתמשים."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
+#| msgid "Fresh install for current user."
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
-msgid "Fresh install for current user."
+msgid "Fresh installation for the current user."
 msgstr "התקנה חדשה למשתמש הנוכחי."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -955,10 +998,15 @@ msgid ""
 msgstr "להסיר את גרסה {OLD_VERSION} ולהתקין את גרסה {VERSION} לכל המשתמשים."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
+#| msgid ""
+#| "Uninstall version {OLD_VERSION} and install version {VERSION} for current "
+#| "user."
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
 msgid ""
-"Uninstall version {OLD_VERSION} and install version {VERSION} for current "
-"user."
+"Uninstall version {OLD_VERSION} and install version {VERSION} for the "
+"current user."
 msgstr "הסרת גרסה {OLD_VERSION} והתקנת {VERSION} למשתמש הנוכחי."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -967,23 +1015,34 @@ msgid "Reinstall version {VERSION} for all users."
 msgstr "התקנת גרסה {VERSION} מחדש לכל המשתמשים."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
+#| msgid "Reinstall version {VERSION} for current user."
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
-msgid "Reinstall version {VERSION} for current user."
+msgid "Reinstall version {VERSION} for the current user."
 msgstr "להתקין את גרסה {VERSION} מחדש לכל המשתמשים."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
+#| msgid "You need to run this program as administrator."
 msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
-msgid "You need to run this program as administrator."
+msgid "You need to run this program as an administrator."
 msgstr "יש להריץ את התוכנית הזאת כמנהל."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
+#| msgid ""
+#| "$(^NameDA) is installed both for all users and for current user.$\\r$"
+#| "\\nSelect which installation to remove."
 msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
 msgid ""
-"$(^NameDA) is installed both for all users and for current user.$\\r$"
-"\\nSelect which installation to remove."
+"$(^NameDA) is installed both for all users and for the current user.\n"
+"Select which installation to remove."
 msgstr ""
-"$(^NameDA) מותקן גם לכל המשתמשים וגם למשתמש הנוכחי.$\\r$\\n"
-"נא לבחור איזו התקנה להסיר."
+"$(^NameDA) מותקן גם לכל המשתמשים וגם למשתמש הנוכחי.$\\r$\\nנא לבחור איזו "
+"התקנה להסיר."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_PAGE_SUBTITLE"
@@ -991,8 +1050,13 @@ msgid "Choose for which users to remove $(^NameDA)."
 msgstr "נא לבחור לאילו משתמשים להסיר את $(^NameDA)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_CORE_DESCRIPTION"
+#| msgid ""
+#| "This are the basic files needed for ${prodname} to function (required)."
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
-msgid "This are the basic files needed for ${prodname} to function (required)."
+msgid ""
+"These are the basic files needed for ${prodname} to function (required)."
 msgstr "אלו הקבצים הבסיסיים הנחוצים כדי ש־${prodname} יתפקד (חובה)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1001,8 +1065,11 @@ msgid "Core files (required)"
 msgstr "קובצי ליבה (הכרחי)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
+#| msgid "Create the shortcut on desktop."
 msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
-msgid "Create the shortcut on desktop."
+msgid "Create a shortcut on the desktop."
 msgstr "יצירת קיצור הדרך על שולחן העבודה."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1011,9 +1078,14 @@ msgid "Desktop"
 msgstr "שולחן עבודה"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
+#| msgid ""
+#| "Add an option to delete files from the file context menu in Windows "
+#| "explorer."
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
 msgid ""
-"Add an option to delete files from the file context menu in Windows explorer."
+"Add an option to delete files from the file context menu in Windows Explorer."
 msgstr "הוספת אפשרות למחוק קבצים מתפריט ההקשר של הקובץ בסייר של Windows."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1022,18 +1094,27 @@ msgid "Integrate Shred"
 msgstr "שילוב גריסה"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
+#| msgid "Create the shortcut on Quick Launch."
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
-msgid "Create the shortcut on Quick Launch."
+msgid "Create a shortcut on the Quick Launch bar."
 msgstr "יצירת קיצור הדרך בשיגור המהיר."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
+#| msgid "Quick launch"
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
-msgid "Quick launch"
+msgid "Quick Launch"
 msgstr "שיגור מהיר"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
+#| msgid "Create shortcuts to ${prodname} on -"
 msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
-msgid "Create shortcuts to ${prodname} on -"
+msgid "Create shortcuts to ${prodname}"
 msgstr "יצירת קיצורי דרך ל־${prodname} תחת -"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1042,8 +1123,11 @@ msgid "Shortcuts"
 msgstr "קיצורי דרך"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
+#| msgid "Create the shortcut in Start menu."
 msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
-msgid "Create the shortcut in Start menu."
+msgid "Create a shortcut in the Start menu."
 msgstr "יצירת קיצור הדרך בתפריט ההתחלה."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1054,11 +1138,8 @@ msgstr "תפריט התחלה"
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
 msgid ""
-"Use ${prodname} in your preferred local system language, install the needed "
-"language files."
+"Install language files to use ${prodname} in your preferred local language."
 msgstr ""
-"כדי להשתמש ב־${prodname} בשפת המערכת המקומית המועדפת עליך, יש להתקין את "
-"קובצי השפה ההכרחיים."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
@@ -1066,8 +1147,11 @@ msgid "Translations"
 msgstr "תרגומים"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
+#| msgid "Add uninstall program."
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
-msgid "Add uninstall program."
+msgid "Add an uninstall program."
 msgstr "הוספת תוכנית הסרה."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1081,8 +1165,11 @@ msgid "${prodname} Debugging Terminal"
 msgstr "מסוף ניפוי שגיאות של ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SHORTCUT_NO_UAC"
+#| msgid "${prodname} No UAC."
 msgctxt "nsis:SHORTCUT_NO_UAC"
-msgid "${prodname} No UAC."
+msgid "${prodname} (No UAC)."
 msgstr "${prodname} אין UAC."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1091,17 +1178,24 @@ msgid "Shred with ${prodname}"
 msgstr "גריסה עם ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:UNINSTALL_TEXT"
+#| msgid ""
+#| "${prodname} will be uninstalled from the following folder.$\\r$\\nClick "
+#| "Uninstall to start the uninstallation.$\\r$\\nWARNING: The uninstaller "
+#| "completely removes the installation directory including any files (such "
+#| "as custom cleaners) that you may have added or changed."
 msgctxt "nsis:UNINSTALL_TEXT"
 msgid ""
-"${prodname} will be uninstalled from the following folder.$\\r$\\nClick "
-"Uninstall to start the uninstallation.$\\r$\\nWARNING: The uninstaller "
-"completely removes the installation directory including any files (such as "
-"custom cleaners) that you may have added or changed."
+"${prodname} will be uninstalled from the following folder.\n"
+"Click Uninstall to start the uninstallation.\n"
+"WARNING: The uninstaller completely removes the installation directory, "
+"including any files (such as custom cleaners) that you may have added or "
+"changed."
 msgstr ""
-"${prodname} יוסר מהתיקייה הבאה.$\\r$\\n"
-"לחיצה על הסרה תסיר את ההתקנה.$\\r$\\n"
-"אזהרה: תוכנית ההסרה תסיר את תיקיית ההתקנה לחלוטין לרבות כל קבצים שאולי נוספו "
-"או נערכו (כגון מנקים שנכתבו ידנית)."
+"${prodname} יוסר מהתיקייה הבאה.$\\r$\\nלחיצה על הסרה תסיר את ההתקנה.$\\r$"
+"\\nאזהרה: תוכנית ההסרה תסיר את תיקיית ההתקנה לחלוטין לרבות כל קבצים שאולי "
+"נוספו או נערכו (כגון מנקים שנכתבו ידנית)."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1428,8 +1522,8 @@ msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean, --shred"
 msgstr ""
-"לציין רק אחת מהפקודות האלו: ‎--list-cleaners,‏ ‎--wipe-empty-space,‏ ‎--"
-"preview,‏ ‎--clean,‎ --shred"
+"לציין רק אחת מהפקודות האלו: ‎--list-cleaners,‏ ‎--wipe-empty-space,‏ ‎--preview,‏ "
+"‎--clean,‎ --shred"
 
 #: ../bleachbit/CLI.py
 msgid "Checking online for updates to winapp2.ini"
@@ -2519,6 +2613,14 @@ msgstr "ע_זרה"
 #: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_על אודות BleachBit"
+
+#~ msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
+#~ msgid ""
+#~ "Use ${prodname} in your preferred local system language, install the "
+#~ "needed language files."
+#~ msgstr ""
+#~ "כדי להשתמש ב־${prodname} בשפת המערכת המקומית המועדפת עליך, יש להתקין את "
+#~ "קובצי השפה ההכרחיים."
 
 #, fuzzy, python-format
 #~| msgid "not a valid cleaner: %s"

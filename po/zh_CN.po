@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-01-21 23:03-0700\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-27 08:54-0700\n"
 "PO-Revision-Date: 2026-01-23 01:59+0000\n"
 "Last-Translator: 大王叫我来巡山 "
 "<hamburger2048@users.noreply.hosted.weblate.org>\n"
@@ -806,17 +806,26 @@ msgid "Default dark mode, showing found junk files"
 msgstr "默认深色模式，显示找到的垃圾文件"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:ALREADY_INSTALLED"
+#| msgid ""
+#| "${prodname} is already installed.$\\r$\\nClick 'OK' to uninstall the old "
+#| "version before upgrading, or click 'Cancel' to abort the upgrade."
 msgctxt "nsis:ALREADY_INSTALLED"
 msgid ""
-"${prodname} is already installed.$\\r$\\nClick 'OK' to uninstall the old "
-"version before upgrading, or click 'Cancel' to abort the upgrade."
+"${prodname} is already installed.\n"
+"Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' "
+"to abort the upgrade."
 msgstr ""
 "${prodname} 已安装。$\\r$\\n单击“好”在升级前卸载旧版本，或单击“取消”终止升"
 "级。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
+#| msgid "Visit the ${prodname} web site"
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
-msgid "Visit the ${prodname} web site"
+msgid "Visit the ${prodname} website"
 msgstr "访问 ${prodname} 网站"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -825,21 +834,36 @@ msgid "${prodname} ${VERSION} Setup"
 msgstr "${prodname} ${VERSION} 安装包"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIPRINT1"
+#| msgid ""
+#| "The next step is building font cache, during which you may see a black "
+#| "window."
 msgctxt "nsis:MULTIPRINT1"
 msgid ""
-"The next step is building font cache, during which you may see a black "
-"window."
+"The next step is building the font cache, during which a black console "
+"window may appear."
 msgstr "下一步是构建字体缓存，在此期间可能看到黑屏。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIPRINT2"
+#| msgid ""
+#| "It usually finishes in one minute, but sometimes it takes ten minutes."
 msgctxt "nsis:MULTIPRINT2"
-msgid "It usually finishes in one minute, but sometimes it takes ten minutes."
+msgid ""
+"It usually finishes in one minute, but sometimes it takes up to ten minutes."
 msgstr "通常在一分钟内完成，但有时会花十分钟。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
+#| msgid ""
+#| "You need to login with an account that is a member of the administrators "
+#| "group to continue."
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
 msgid ""
-"You need to login with an account that is a member of the administrators "
+"You need to log in with an account that is a member of the administrators "
 "group to continue."
 msgstr "要继续，需要用管理员组成员的账户登录。"
 
@@ -849,8 +873,11 @@ msgid "Administrator credentials required."
 msgstr "需要管理员凭证。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
+#| msgid "Administrator credentials required for uninstall."
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
-msgid "Administrator credentials required for uninstall."
+msgid "Administrator credentials required to uninstall."
 msgstr "卸载需要管理员凭证。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -894,13 +921,21 @@ msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
 msgstr "版本 {VERSION} 为所有用户安装于“{FOLDER}” 中。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
+#| msgid "Version {VERSION} is installed for current user in \"{FOLDER}\"."
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
-msgid "Version {VERSION} is installed for current user in \"{FOLDER}\"."
+msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
 msgstr "版本 {VERSION} 为当前用户安装于 “{FOLDER}” 中。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
+#| msgid ""
+#| "Select whether to install $(^NameDA) for all users or for current user."
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
-msgid "Select whether to install $(^NameDA) for all users or for current user."
+msgid ""
+"Select whether to install $(^NameDA) for all users or for the current user."
 msgstr "选择是为所有用户还是当前用户安装 $(^NameDA)。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -909,8 +944,11 @@ msgid "Choose for which users to install $(^NameDA)."
 msgstr "选择为哪些用户安装 $(^NameDA)。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
+#| msgid "Invalid combination of paramaters."
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
-msgid "Invalid combination of paramaters."
+msgid "Invalid combination of parameters."
 msgstr "无效的参数组合。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -919,13 +957,19 @@ msgid "Unable to elevate, Secondary Logon service not running."
 msgstr "无法提权，Secondary Logon 服务未在运行。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
+#| msgid "Fresh install for all users."
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
-msgid "Fresh install for all users."
+msgid "Fresh installation for all users."
 msgstr "所有用户的全新安装。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
+#| msgid "Fresh install for current user."
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
-msgid "Fresh install for current user."
+msgid "Fresh installation for the current user."
 msgstr "当前用户的全新安装。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -945,10 +989,15 @@ msgid ""
 msgstr "为所有用户卸载版本 {OLD_VERSION} 并安装版本 {VERSION}。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
+#| msgid ""
+#| "Uninstall version {OLD_VERSION} and install version {VERSION} for current "
+#| "user."
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
 msgid ""
-"Uninstall version {OLD_VERSION} and install version {VERSION} for current "
-"user."
+"Uninstall version {OLD_VERSION} and install version {VERSION} for the "
+"current user."
 msgstr "为当前用户卸载版本 {OLD_VERSION} 并安装版本 {VERSION}。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -957,20 +1006,31 @@ msgid "Reinstall version {VERSION} for all users."
 msgstr "为所有用户重新安装版本 {VERSION}。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
+#| msgid "Reinstall version {VERSION} for current user."
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
-msgid "Reinstall version {VERSION} for current user."
+msgid "Reinstall version {VERSION} for the current user."
 msgstr "为当前用户重新安装版本 {VERSION}。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
+#| msgid "You need to run this program as administrator."
 msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
-msgid "You need to run this program as administrator."
+msgid "You need to run this program as an administrator."
 msgstr "需要以管理员身份运行此程序。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
+#| msgid ""
+#| "$(^NameDA) is installed both for all users and for current user.$\\r$"
+#| "\\nSelect which installation to remove."
 msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
 msgid ""
-"$(^NameDA) is installed both for all users and for current user.$\\r$"
-"\\nSelect which installation to remove."
+"$(^NameDA) is installed both for all users and for the current user.\n"
+"Select which installation to remove."
 msgstr "所有用户和当前用户均已安装 $(^NameDA) 。$\\r$\\n选择要删除哪个安装。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -979,8 +1039,13 @@ msgid "Choose for which users to remove $(^NameDA)."
 msgstr "选择为哪些用户删除 $(^NameDA)。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_CORE_DESCRIPTION"
+#| msgid ""
+#| "This are the basic files needed for ${prodname} to function (required)."
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
-msgid "This are the basic files needed for ${prodname} to function (required)."
+msgid ""
+"These are the basic files needed for ${prodname} to function (required)."
 msgstr "这是 ${prodname} 工作所需的基本文件（必需）。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -989,8 +1054,11 @@ msgid "Core files (required)"
 msgstr "核心文件（必需）"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
+#| msgid "Create the shortcut on desktop."
 msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
-msgid "Create the shortcut on desktop."
+msgid "Create a shortcut on the desktop."
 msgstr "在桌面上创建快捷方式。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -999,9 +1067,14 @@ msgid "Desktop"
 msgstr "桌面"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
+#| msgid ""
+#| "Add an option to delete files from the file context menu in Windows "
+#| "explorer."
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
 msgid ""
-"Add an option to delete files from the file context menu in Windows explorer."
+"Add an option to delete files from the file context menu in Windows Explorer."
 msgstr "添加 Windows 资源管理器选项从文件右键菜单删除文件。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1010,18 +1083,27 @@ msgid "Integrate Shred"
 msgstr "集成擦除"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
+#| msgid "Create the shortcut on Quick Launch."
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
-msgid "Create the shortcut on Quick Launch."
+msgid "Create a shortcut on the Quick Launch bar."
 msgstr "在快速启动栏创建快捷方式。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
+#| msgid "Quick launch"
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
-msgid "Quick launch"
+msgid "Quick Launch"
 msgstr "快速启动"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
+#| msgid "Create shortcuts to ${prodname} on -"
 msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
-msgid "Create shortcuts to ${prodname} on -"
+msgid "Create shortcuts to ${prodname}"
 msgstr "创建 ${prodname} 快捷方式的位置 -"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1030,8 +1112,11 @@ msgid "Shortcuts"
 msgstr "快捷方式"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
+#| msgid "Create the shortcut in Start menu."
 msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
-msgid "Create the shortcut in Start menu."
+msgid "Create a shortcut in the Start menu."
 msgstr "在开始菜单创建快捷方式。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1042,9 +1127,8 @@ msgstr "开始菜单"
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
 msgid ""
-"Use ${prodname} in your preferred local system language, install the needed "
-"language files."
-msgstr "用偏好的本地系统语言使用 ${prodname}，安装所需的语言文件。"
+"Install language files to use ${prodname} in your preferred local language."
+msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
@@ -1052,8 +1136,11 @@ msgid "Translations"
 msgstr "本地化"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
+#| msgid "Add uninstall program."
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
-msgid "Add uninstall program."
+msgid "Add an uninstall program."
 msgstr "添加卸载程序。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1067,8 +1154,11 @@ msgid "${prodname} Debugging Terminal"
 msgstr "${prodname} 调试终端"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:SHORTCUT_NO_UAC"
+#| msgid "${prodname} No UAC."
 msgctxt "nsis:SHORTCUT_NO_UAC"
-msgid "${prodname} No UAC."
+msgid "${prodname} (No UAC)."
 msgstr "${prodname} 无 UAC。"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1077,12 +1167,20 @@ msgid "Shred with ${prodname}"
 msgstr "用 ${prodname} 擦除"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#, fuzzy
+#| msgctxt "nsis:UNINSTALL_TEXT"
+#| msgid ""
+#| "${prodname} will be uninstalled from the following folder.$\\r$\\nClick "
+#| "Uninstall to start the uninstallation.$\\r$\\nWARNING: The uninstaller "
+#| "completely removes the installation directory including any files (such "
+#| "as custom cleaners) that you may have added or changed."
 msgctxt "nsis:UNINSTALL_TEXT"
 msgid ""
-"${prodname} will be uninstalled from the following folder.$\\r$\\nClick "
-"Uninstall to start the uninstallation.$\\r$\\nWARNING: The uninstaller "
-"completely removes the installation directory including any files (such as "
-"custom cleaners) that you may have added or changed."
+"${prodname} will be uninstalled from the following folder.\n"
+"Click Uninstall to start the uninstallation.\n"
+"WARNING: The uninstaller completely removes the installation directory, "
+"including any files (such as custom cleaners) that you may have added or "
+"changed."
 msgstr ""
 "将从下列文件夹卸载 ${prodname}。$\\r$\\n单击卸载启动卸载过程。$\\r$\\n警告："
 "卸载程序彻底删除安装目录，包括任何可能已添加或更改的文件（如自定义清理器）。"
@@ -2493,6 +2591,12 @@ msgstr "帮助(_H)"
 #: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "关于 BleachBit (_A)"
+
+#~ msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
+#~ msgid ""
+#~ "Use ${prodname} in your preferred local system language, install the "
+#~ "needed language files."
+#~ msgstr "用偏好的本地系统语言使用 ${prodname}，安装所需的语言文件。"
 
 #, python-format
 #~ msgid "not a valid cleaner: -%s"
