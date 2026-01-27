@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-21 23:03-0700\n"
-"PO-Revision-Date: 2026-01-27 07:40+0000\n"
+"PO-Revision-Date: 2026-01-27 08:25+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/"
 "he/>\n"
@@ -886,7 +886,7 @@ msgstr "בשבילי ({USER})"
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
 msgid "Unable to elevate, error {ERROR}."
-msgstr ""
+msgstr "לא ניתן להסלים הרשאות, שגיאה {ERROR}."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_NOT_SUPPORTED"
@@ -906,17 +906,17 @@ msgstr "גרסה {VERSION} מותקנת לכל המשתמשים תחת „{FOLDE
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for current user in \"{FOLDER}\"."
-msgstr ""
+msgstr "גרסה {VERSION} מותקנת למשתמש הנוכחי תחת „{FOLDER}”."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
 msgid "Select whether to install $(^NameDA) for all users or for current user."
-msgstr ""
+msgstr "נא לבחור איפה להתקין את $(^NameDA) לכל המשתמשים או למשתמש הנוכחי."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to install $(^NameDA)."
-msgstr ""
+msgstr "נא לבחור לאילו משתמשים להתקין את $(^NameDA)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
@@ -959,7 +959,7 @@ msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
 msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for current "
 "user."
-msgstr ""
+msgstr "הסרת גרסה {OLD_VERSION} והתקנת {VERSION} למשתמש הנוכחי."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS"
@@ -982,16 +982,18 @@ msgid ""
 "$(^NameDA) is installed both for all users and for current user.$\\r$"
 "\\nSelect which installation to remove."
 msgstr ""
+"$(^NameDA) מותקן גם לכל המשתמשים וגם למשתמש הנוכחי.$\\r$\\n"
+"נא לבחור איזו התקנה להסיר."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to remove $(^NameDA)."
-msgstr ""
+msgstr "נא לבחור לאילו משתמשים להסיר את $(^NameDA)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
 msgid "This are the basic files needed for ${prodname} to function (required)."
-msgstr ""
+msgstr "אלו הקבצים הבסיסיים הנחוצים כדי ש־${prodname} יתפקד (חובה)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_NAME"
@@ -1012,42 +1014,42 @@ msgstr "שולחן עבודה"
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
 msgid ""
 "Add an option to delete files from the file context menu in Windows explorer."
-msgstr ""
+msgstr "הוספת אפשרות למחוק קבצים מתפריט ההקשר של הקובץ בסייר של Windows."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_NAME"
 msgid "Integrate Shred"
-msgstr ""
+msgstr "שילוב גריסה"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
 msgid "Create the shortcut on Quick Launch."
-msgstr ""
+msgstr "יצירת קיצור הדרך בשיגור המהיר."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
 msgid "Quick launch"
-msgstr ""
+msgstr "שיגור מהיר"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
 msgid "Create shortcuts to ${prodname} on -"
-msgstr ""
+msgstr "יצירת קיצורי דרך ל־${prodname} תחת -"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_NAME"
 msgid "Shortcuts"
-msgstr ""
+msgstr "קיצורי דרך"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
 msgid "Create the shortcut in Start menu."
-msgstr ""
+msgstr "יצירת קיצור הדרך בתפריט ההתחלה."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_NAME"
 msgid "Start menu"
-msgstr ""
+msgstr "תפריט התחלה"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
@@ -1055,6 +1057,8 @@ msgid ""
 "Use ${prodname} in your preferred local system language, install the needed "
 "language files."
 msgstr ""
+"כדי להשתמש ב־${prodname} בשפת המערכת המקומית המועדפת עליך, יש להתקין את "
+"קובצי השפה ההכרחיים."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
@@ -1064,7 +1068,7 @@ msgstr "תרגומים"
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
 msgid "Add uninstall program."
-msgstr ""
+msgstr "הוספת תוכנית הסרה."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_UNINSTALL_NAME"
@@ -1074,17 +1078,17 @@ msgstr "הסרה"
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_DEBUGGING_TERMINAL"
 msgid "${prodname} Debugging Terminal"
-msgstr ""
+msgstr "מסוף ניפוי שגיאות של ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_NO_UAC"
 msgid "${prodname} No UAC."
-msgstr ""
+msgstr "${prodname} אין UAC."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHRED_SHELL_MENU"
 msgid "Shred with ${prodname}"
-msgstr ""
+msgstr "גריסה עם ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:UNINSTALL_TEXT"
