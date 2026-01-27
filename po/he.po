@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-21 23:03-0700\n"
-"PO-Revision-Date: 2026-01-27 08:25+0000\n"
+"PO-Revision-Date: 2026-01-27 09:10+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/"
 "he/>\n"
@@ -1098,6 +1098,10 @@ msgid ""
 "completely removes the installation directory including any files (such as "
 "custom cleaners) that you may have added or changed."
 msgstr ""
+"${prodname} יוסר מהתיקייה הבאה.$\\r$\\n"
+"לחיצה על הסרה תסיר את ההתקנה.$\\r$\\n"
+"אזהרה: תוכנית ההסרה תסיר את תיקיית ההתקנה לחלוטין לרבות כל קבצים שאולי נוספו "
+"או נערכו (כגון מנקים שנכתבו ידנית)."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1259,7 +1263,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py
 msgid "This option may prevent uninstalling some updates."
-msgstr ""
+msgstr "האפשרות הזאת עלולה למנוע את הסרת חלק מהעדכונים."
 
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
@@ -1282,7 +1286,7 @@ msgstr "מחיקת קבצים ותיקיות שהוגדרו על ידי המשת
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Empty space"
-msgstr ""
+msgstr "שטח ריק"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
@@ -1336,7 +1340,7 @@ msgstr "אינו מנקה תקף: %s"
 #: ../bleachbit/CLI.py
 #, python-format
 msgid "Wildcard characters are not allowed in --except: %s"
-msgstr ""
+msgstr "אסור תווי הכללה ב־‎--except‏: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1388,7 +1392,7 @@ msgstr "להפעיל את כל האפשרויות שאינן גורמות לאז
 
 #: ../bleachbit/CLI.py
 msgid "exclude cleaner options (can be repeated, comma-separated)"
-msgstr ""
+msgstr "החרגת אפשרויות מנקה (אפשר לחזור אליהן, מופרדות בפסיקים)"
 
 #: ../bleachbit/CLI.py
 msgid "set log level to verbose"
@@ -1590,16 +1594,16 @@ msgstr "אישור בטרם מחיקה"
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Enable %(option)s"
-msgstr ""
+msgstr "הפעלת %(option)s"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Remember my choice for %(option)s"
-msgstr ""
+msgstr "לזכור את הבחירה שלי עבור %(option)s"
 
 #: ../bleachbit/GuiBasic.py
 msgid "_Enable anyway"
-msgstr ""
+msgstr "להפעיל ב_כל זאת"
 
 #: ../bleachbit/GuiBasic.py
 #, python-format
@@ -1684,11 +1688,11 @@ msgstr "קבצים נוצרים"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Manage cookies to keep"
-msgstr ""
+msgstr "ניהול עוגיות לשימור"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select the cookies to keep when cleaning cookies across browsers."
-msgstr ""
+msgstr "נא לבחור את העוגיות לשימור בעת פינוי העוגיות מכלל הדפדפנים."
 
 #: ../bleachbit/GuiCookie.py
 msgid "Search:"
@@ -1696,31 +1700,31 @@ msgstr "חיפוש:"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Filter cookies..."
-msgstr ""
+msgstr "סינון עוגיות…"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Show Selected"
-msgstr ""
+msgstr "להציג את הנבחרות"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Only show cookies that are currently selected"
-msgstr ""
+msgstr "להציג רק את העוגיות שנבחרו"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Host"
-msgstr ""
+msgstr "מארח"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Select All"
-msgstr ""
+msgstr "בחירה בהכול"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Deselect All"
-msgstr ""
+msgstr "ביטול בחירה"
 
 #: ../bleachbit/GuiCookie.py
 msgid "Keep Selected"
-msgstr ""
+msgstr "לשמר את הנבחרות"
 
 #: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
 msgid "Preferences"
@@ -1740,11 +1744,11 @@ msgstr "שפות"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
-msgstr ""
+msgstr "רשימת שימור"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Warning confirmations reset."
-msgstr ""
+msgstr "איפוס אישורי אזהרה."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
@@ -2103,6 +2107,8 @@ msgid ""
 "BleachBit detected leftover files from an interrupted disk wipe operation. "
 "Would you like to preview them with an option to delete them?"
 msgstr ""
+"BleachBit זיהה קבצים שנשארו מאחור עקב פעולת מחיקת כונן מוחלטת שנקטעה. להציג "
+"אותם באופן כללי עם אפשרות למחוק אותם?"
 
 #: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
@@ -2228,6 +2234,11 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"אזהרה: ‚%(path)s’ עלול להכיל קבצים חשובים.\n"
+"\n"
+"השפעה: %(files)d קבצים, %(size)s\n"
+"\n"
+"להוסיף את הנתיב הזה?"
 
 #. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
 #: ../bleachbit/ProtectedPath.py
@@ -2237,6 +2248,9 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"אזהרה: ‚%(path)s’ עלול להכיל קבצים חשובים.\n"
+"\n"
+"להוסיף את הנתיב הזה?"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
@@ -2394,6 +2408,9 @@ msgid ""
 "files may remain on the disk, and they may use all available space. To "
 "remove them, start BleachBit again."
 msgstr ""
+"אם נכפתה סגירה על היישום הזה לפני השלמת התהליך, קבצים גדולים עלולים להישאר "
+"בכונן והם עלולים גם להשתמש בכל המקום הפנוי. כדי להסיר אותם, יש להפעיל את "
+"BleachBit שוב."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py
