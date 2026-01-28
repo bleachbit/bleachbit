@@ -648,7 +648,14 @@ def extended_path_undo(path):
 
 
 def free_space(pathname):
-    """Return free space in bytes"""
+    """Return free space in bytes
+
+    pathname may be any directory within a valid file system.
+
+    POSIX systems may reserve space for the root user, and this function
+    returns the amount available to the current user for accurate
+    estimation of completion time in wipe_path().
+    """
     if 'nt' == os.name:
         # pylint: disable=import-error,import-outside-toplevel
         import psutil
@@ -656,7 +663,11 @@ def free_space(pathname):
     assert 'posix' == os.name
     # pylint: disable=no-member
     mystat = os.statvfs(pathname)
-    return mystat.f_bfree * mystat.f_bsize
+    if os.getuid() == 0:
+        # root
+        return mystat.f_bfree * mystat.f_bsize
+    # non-root
+    return mystat.f_bavail * mystat.f_bsize
 
 
 def getsize(path):
