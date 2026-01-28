@@ -68,7 +68,7 @@ jobs:
 
     - name: Install Python dependencies
       run: |
-        pip install chardet "PyGObject${{ matrix.pygobject-version }}" requests setuptools coverage coveralls appveyor-artifacts
+        pip install chardet "PyGObject${{ matrix.pygobject-version }}" requests setuptools coverage coveralls appveyor-artifacts psutil
 
     - name: Generate Revision.py
       run: |
