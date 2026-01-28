@@ -50,6 +50,7 @@ jobs:
           libnotify-bin \
           libxml2-utils \
           notification-daemon \
+          python3-psutil \
           xvfb \
           ${{ matrix.python-extra-dep }}
         # for tests.TestLanguage
