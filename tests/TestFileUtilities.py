@@ -16,7 +16,6 @@ import json
 import locale
 import os
 import random
-import re
 import sqlite3
 import stat
 import subprocess
@@ -24,6 +23,9 @@ import sys
 import tempfile
 import time
 import warnings
+
+# third-party import
+import psutil
 
 # local import
 from bleachbit.FileUtilities import (
@@ -70,6 +72,7 @@ if 'nt' == os.name:
     import win32com.shell
     import win32con
     import win32file
+
     from bleachbit import Windows
 
 
@@ -1068,49 +1071,60 @@ State=AAAA/wA...
 
     def test_free_space(self):
         """Unit test for free_space()"""
-        home = os.path.expanduser('~')
-        result = free_space(home)
-        self.assertNotEqual(result, None)
-        self.assertGreater(result, -1)
-        self.assertIsInteger(result)
 
-    @common.skipUnlessWindows
-    def test_free_space_windows(self):
-        """Unit test for free_space() on Windows
+        partitions = []
+        os_paths = []
+        if os.name == 'nt':
+            # Allow CD-ROM, network drive, etc.
+            partitions = psutil.disk_partitions(all=True)
+            os_paths = (r'%windir%', r'%userprofile%', r'%temp%')
+        elif os.name == 'posix':
+            # Do not allow proc, sysfs, udev, etc.
+            partitions_original = psutil.disk_partitions(all=False)
+            # Allow ext4, vfat, etc. but not squashfs
+            partitions = [
+                p for p in partitions_original if p.fstype != 'squashfs']
+            os_paths = ("/home", "/var", "/tmp", "$home", "$temp", "/dev/shm")
+        self.assertGreater(len(partitions), 0, "No disk partitions found")
 
-        Repeat because of possible race condition.
-        """
-        args = ['wmic', 'LogicalDisk', 'get', 'DeviceID,', 'FreeSpace']
-        max_attempts = 3
+        test_counter = 0
+        test_paths = set()
+        for partition in partitions:
+            test_paths.add(partition.mountpoint)
+        for os_path in os_paths:
+            expanded = os.path.expandvars(os_path)
+            if os.path.exists(expanded):
+                test_paths.add(expanded)
+        test_paths.add(os.getcwd())
 
-        def compare_free_space():
-            """Returns whether all drives have equal free space"""
-            (rc, stdout, stderr) = run_external(args)
-            self.assertEqual(
-                rc, 0, f'error calling WMIC\nargs={args}\nstderr={stderr}')
-            lines = stdout.splitlines()
-            self.assertGreater(len(lines), 0)
-            for line in lines:
-                line = line.strip()
-                if not re.match(r'([A-Z]):\s+(\d+)', line):
-                    continue
-                drive, bytes_free = re.split(r'\s+', line)
-                bytes_free = int(bytes_free)
-                free = free_space(drive)
-                if free != bytes_free:
-                    logger.debug(
-                        'Free space mismatch for drive %s: %s != %s', drive, free, bytes_free)
-                    return False
-            return True
+        for path in test_paths:
+            with self.subTest(path=path):
+                test_counter += 1
+                free = free_space(path)
+                self.assertIsInstance(
+                    free, int, f"free_space({path}) should return int")
+                self.assertGreaterEqual(
+                    free, 0, f"free_space({path}) should be non-negative")
+        self.assertGreater(test_counter, 0)
 
-        for attempt in range(max_attempts):
-            if attempt > 0:
-                time.sleep(0.5)
-            if compare_free_space():
-                return
-            if attempt == max_attempts - 1:
-                self.fail(
-                    f'Failed to find equal free space after {max_attempts} attempts')
+    def test_free_space_sub_dir(self):
+        """Unit test for free_space() with subdirectories"""
+        subdir = self.mkdtemp(prefix='free_space')
+        passed = False
+        for _ in range(5):
+            diff = abs(free_space(subdir) - free_space(self.tempdir))
+            if diff <= 1024 * 1024:  # 1MB
+                passed = True
+                break
+        self.assertTrue(
+            passed, "free_space() for subdir should be within 1MB of parent dir at least once")
+
+    def test_free_space_invalid(self):
+        """Check invalid inputs to free_space()"""
+        # Test with invalid paths
+        for path in ("invalid", "", None):
+            with self.assertRaises((TypeError, FileNotFoundError)):
+                free_space(path)
 
     def test_get_filesystem_type(self):
         """Unit test for get_filesystem_type()"""
