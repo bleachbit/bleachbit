@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-27 08:54-0700\n"
-"PO-Revision-Date: 2026-01-26 06:51+0000\n"
+"PO-Revision-Date: 2026-01-28 11:21+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/bleachbit/"
 "main/id/>\n"
@@ -848,9 +848,6 @@ msgstr ""
 "peningkatan versi."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
-#| msgid "Visit the ${prodname} web site"
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
 msgid "Visit the ${prodname} website"
 msgstr "Kunjungi situs web ${prodname}"
@@ -861,37 +858,23 @@ msgid "${prodname} ${VERSION} Setup"
 msgstr "Penyiapan ${prodname} ${VERSION}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIPRINT1"
-#| msgid ""
-#| "The next step is building font cache, during which you may see a black "
-#| "window."
 msgctxt "nsis:MULTIPRINT1"
 msgid ""
 "The next step is building the font cache, during which a black console "
 "window may appear."
 msgstr ""
-"Langkah berikutnya adalah membangun cache font, selama proses ini Anda "
-"mungkin melihat jendela hitam."
+"Langkah berikutnya adalah membangun cache font, di mana jendela konsol hitam "
+"mungkin muncul."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIPRINT2"
-#| msgid ""
-#| "It usually finishes in one minute, but sometimes it takes ten minutes."
 msgctxt "nsis:MULTIPRINT2"
 msgid ""
 "It usually finishes in one minute, but sometimes it takes up to ten minutes."
 msgstr ""
-"Biasanya selesai dalam satu menit, tetapi terkadang memerlukan waktu sepuluh "
-"menit."
+"Biasanya selesai dalam satu menit, tetapi terkadang memakan waktu hingga "
+"sepuluh menit."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
-#| msgid ""
-#| "You need to login with an account that is a member of the administrators "
-#| "group to continue."
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
 msgid ""
 "You need to log in with an account that is a member of the administrators "
@@ -906,9 +889,6 @@ msgid "Administrator credentials required."
 msgstr "Kredensial administrator diperlukan."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
-#| msgid "Administrator credentials required for uninstall."
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required to uninstall."
 msgstr "Kredensial administrator diperlukan untuk menghapus instalasi."
@@ -954,18 +934,11 @@ msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
 msgstr "Versi {VERSION} terinstal untuk semua pengguna di \"{FOLDER}\"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
-#| msgid "Version {VERSION} is installed for current user in \"{FOLDER}\"."
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
-msgstr "Versi {VERSION} terinstal untuk pengguna saat ini di \"{FOLDER}\"."
+msgstr "Versi {VERSION} terinstal untuk pengguna saat ini di \\\"{FOLDER}\\\"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
-#| msgid ""
-#| "Select whether to install $(^NameDA) for all users or for current user."
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
 msgid ""
 "Select whether to install $(^NameDA) for all users or for the current user."
@@ -979,9 +952,6 @@ msgid "Choose for which users to install $(^NameDA)."
 msgstr "Pilih untuk pengguna mana $(^NameDA) akan diinstal."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
-#| msgid "Invalid combination of paramaters."
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
 msgid "Invalid combination of parameters."
 msgstr "Kombinasi parameter tidak valid."
@@ -993,17 +963,11 @@ msgstr ""
 "Tidak dapat meningkatkan hak akses, layanan Secondary Logon tidak berjalan."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
-#| msgid "Fresh install for all users."
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
 msgid "Fresh installation for all users."
 msgstr "Instalasi baru untuk semua pengguna."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
-#| msgid "Fresh install for current user."
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
 msgid "Fresh installation for the current user."
 msgstr "Instalasi baru untuk pengguna saat ini."
@@ -1027,18 +991,12 @@ msgstr ""
 "pengguna."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
-#| msgid ""
-#| "Uninstall version {OLD_VERSION} and install version {VERSION} for current "
-#| "user."
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
 msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for the "
 "current user."
 msgstr ""
-"Hapus instalasi versi {OLD_VERSION} dan instal versi {VERSION} untuk "
-"pengguna saat ini."
+"Hapus versi {OLD_VERSION} dan instal versi {VERSION} untuk pengguna saat ini."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS"
@@ -1046,34 +1004,23 @@ msgid "Reinstall version {VERSION} for all users."
 msgstr "Instal ulang versi {VERSION} untuk semua pengguna."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
-#| msgid "Reinstall version {VERSION} for current user."
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
 msgid "Reinstall version {VERSION} for the current user."
 msgstr "Instal ulang versi {VERSION} untuk pengguna saat ini."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
-#| msgid "You need to run this program as administrator."
 msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
 msgid "You need to run this program as an administrator."
 msgstr "Anda perlu menjalankan program ini sebagai administrator."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
-#| msgid ""
-#| "$(^NameDA) is installed both for all users and for current user.$\\r$"
-#| "\\nSelect which installation to remove."
 msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
 msgid ""
 "$(^NameDA) is installed both for all users and for the current user.\n"
 "Select which installation to remove."
 msgstr ""
 "$(^NameDA) terinstal baik untuk semua pengguna maupun untuk pengguna saat "
-"ini.$\\\r$\\\n"
+"ini.\\\n"
 "Pilih instalasi mana yang akan dihapus."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1082,15 +1029,12 @@ msgid "Choose for which users to remove $(^NameDA)."
 msgstr "Pilih untuk pengguna mana $(^NameDA) akan dihapus."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_CORE_DESCRIPTION"
-#| msgid ""
-#| "This are the basic files needed for ${prodname} to function (required)."
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
 msgid ""
 "These are the basic files needed for ${prodname} to function (required)."
 msgstr ""
-"Ini adalah file dasar yang diperlukan agar ${prodname} berfungsi (wajib)."
+"Ini adalah file dasar yang diperlukan agar ${prodname} berfungsi (diperlukan)"
+"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_NAME"
@@ -1098,9 +1042,6 @@ msgid "Core files (required)"
 msgstr "Berkas inti (diperlukan)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
-#| msgid "Create the shortcut on desktop."
 msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
 msgid "Create a shortcut on the desktop."
 msgstr "Buat pintasan di desktop."
@@ -1111,11 +1052,6 @@ msgid "Desktop"
 msgstr "Desktop"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
-#| msgid ""
-#| "Add an option to delete files from the file context menu in Windows "
-#| "explorer."
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
 msgid ""
 "Add an option to delete files from the file context menu in Windows Explorer."
@@ -1129,28 +1065,19 @@ msgid "Integrate Shred"
 msgstr "Integrasikan Shred"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
-#| msgid "Create the shortcut on Quick Launch."
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
 msgid "Create a shortcut on the Quick Launch bar."
-msgstr "Buat pintasan di Quick Launch."
+msgstr "Buat pintasan di bilah Quick Launch."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
-#| msgid "Quick launch"
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
 msgid "Quick Launch"
 msgstr "Quick Launch"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
-#| msgid "Create shortcuts to ${prodname} on -"
 msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
 msgid "Create shortcuts to ${prodname}"
-msgstr "Buat pintasan ke ${prodname} di -"
+msgstr "Buat pintasan ke ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_NAME"
@@ -1158,9 +1085,6 @@ msgid "Shortcuts"
 msgstr "Pintasan"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
-#| msgid "Create the shortcut in Start menu."
 msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
 msgid "Create a shortcut in the Start menu."
 msgstr "Buat pintasan di menu Start."
@@ -1175,6 +1099,8 @@ msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
 msgid ""
 "Install language files to use ${prodname} in your preferred local language."
 msgstr ""
+"Instal file bahasa untuk menggunakan ${prodname} dalam bahasa lokal pilihan "
+"Anda."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
@@ -1182,12 +1108,9 @@ msgid "Translations"
 msgstr "Terjemahan"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
-#| msgid "Add uninstall program."
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
 msgid "Add an uninstall program."
-msgstr "Tambahkan program penghapus instalasi."
+msgstr "Tambahkan program uninstal."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_UNINSTALL_NAME"
@@ -1200,12 +1123,9 @@ msgid "${prodname} Debugging Terminal"
 msgstr "Terminal Debugging ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SHORTCUT_NO_UAC"
-#| msgid "${prodname} No UAC."
 msgctxt "nsis:SHORTCUT_NO_UAC"
 msgid "${prodname} (No UAC)."
-msgstr "${prodname} Tanpa UAC."
+msgstr "${prodname} (Tanpa UAC)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHRED_SHELL_MENU"
@@ -1213,13 +1133,6 @@ msgid "Shred with ${prodname}"
 msgstr "Hancurkan dengan ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:UNINSTALL_TEXT"
-#| msgid ""
-#| "${prodname} will be uninstalled from the following folder.$\\r$\\nClick "
-#| "Uninstall to start the uninstallation.$\\r$\\nWARNING: The uninstaller "
-#| "completely removes the installation directory including any files (such "
-#| "as custom cleaners) that you may have added or changed."
 msgctxt "nsis:UNINSTALL_TEXT"
 msgid ""
 "${prodname} will be uninstalled from the following folder.\n"
@@ -1228,11 +1141,11 @@ msgid ""
 "including any files (such as custom cleaners) that you may have added or "
 "changed."
 msgstr ""
-"${prodname} akan dihapus instalasinya dari folder berikut.$\\\r$\\\n"
-"Klik Uninstall untuk memulai penghapusan instalasi.$\\\r$\\\n"
-"PERINGATAN: Program penghapus instalasi sepenuhnya menghapus direktori "
-"instalasi termasuk file apa pun (seperti pembersih kustom) yang mungkin "
-"telah Anda tambahkan atau ubah."
+"${prodname} akan dihapus instalasinya dari folder berikut.\\\n"
+"Klik Uninstall untuk memulai penghapusan instalasi.\\\n"
+"PERINGATAN: Uninstaller sepenuhnya menghapus direktori instalasi, termasuk "
+"file apa pun (seperti pembersih khusus) yang mungkin telah Anda tambahkan "
+"atau ubah."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
