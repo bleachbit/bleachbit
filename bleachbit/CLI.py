@@ -284,8 +284,9 @@ def process_cmd_line():
 
     did_something = False
     if options.debug:
-        # set in __init__ so it takes effect earlier
-        pass
+        # Debug is set in __init__ so it takes effect earlier.
+        # Also, set the override.
+        Options.options.set_override('debug', True)
     elif options.preset:
         # but if --preset is given, check if GUI option sets debug
         if Options.options.get('debug'):
@@ -339,7 +340,7 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         if not options.clean or options.shred:
             logger.warning(
                 _("--overwrite is intended only for use with --clean"))
-        Options.options.set('shred', True, commit=False)
+        Options.options.set_override('shred', True)
     if options.clean or options.preview:
         preview_or_clean(operations, options.clean)
         sys.exit(0)

@@ -229,3 +229,88 @@ class OptionsTestCase(common.BleachbitTestCase):
         self.assertFalse(o.get_warning_preference('test_key'))
         o.remember_warning_preference('test_key')
         self.assertTrue(o.get_warning_preference('test_key'))
+
+    def test_overrides(self):
+        """Test CLI override functionality"""
+        o = bleachbit.Options.options
+
+        # Save original values
+        original_shred = o.get('shred')
+        original_debug = o.get('debug')
+        original_delete_confirmation = o.get('delete_confirmation')
+
+        # Test basic override
+        o.set_override('shred', True)
+        self.assertTrue(o.get('shred'))
+
+        # Test that override takes precedence over get
+        o.set('shred', False, commit=False)
+        self.assertTrue(o.get('shred'))  # override should still return True
+
+        # Test multiple overrides
+        o.set_override('debug', True)
+        o.set_override('delete_confirmation', False)
+        self.assertTrue(o.get('debug'))
+        self.assertFalse(o.get('delete_confirmation'))
+
+        # Test that flush doesn't write overridden values
+        # First set persistent values different from overrides
+        o.set('shred', False, commit=False)
+        o.set('debug', False, commit=False)
+        o.set('delete_confirmation', True, commit=False)
+        o.commit()
+
+        # Verify overrides still work after flush
+        self.assertTrue(o.get('shred'))
+        self.assertTrue(o.get('debug'))
+        self.assertFalse(o.get('delete_confirmation'))
+
+        # Create new instance to verify persistent values were written correctly
+        o2 = bleachbit.Options.Options()
+        self.assertFalse(o2.get('shred'))  # persistent value, not override
+        self.assertFalse(o2.get('debug'))  # persistent value, not override
+        self.assertTrue(o2.get('delete_confirmation'))  # persistent value, not override
+
+        # Clean up - restore original values
+        o.overrides.clear()
+        o.set('shred', original_shred)
+        o.set('debug', original_debug)
+        o.set('delete_confirmation', original_delete_confirmation)
+
+    def test_override_does_not_persist(self):
+        """Test that overrides don't persist after process restart"""
+        o = bleachbit.Options.options
+
+        # Set an override
+        o.set_override('shred', True)
+        self.assertTrue(o.get('shred'))
+
+        # Create new instance (simulating process restart)
+        o2 = bleachbit.Options.Options()
+        # Override should not exist in new instance
+        self.assertNotIn(('bleachbit', 'shred'), o2.overrides)
+
+        # Clean up
+        o.overrides.clear()
+
+    def test_override_with_sections(self):
+        """Test overrides work with different sections"""
+        o = bleachbit.Options.options
+
+        # Test override in non-default section
+        if not o.config.has_section('test_section'):
+            o.config.add_section('test_section')
+        o.config.set('test_section', 'test_key', 'original_value')
+
+        o.set_override('test_key', 'override_value', section='test_section')
+        self.assertEqual(o.get('test_key', section='test_section'), 'override_value')
+
+        # Verify flush doesn't write override
+        o.commit()
+        o2 = bleachbit.Options.Options()
+        self.assertEqual(o2.get('test_key', section='test_section'), 'original_value')
+
+        # Clean up
+        o.overrides.clear()
+        if o.config.has_section('test_section'):
+            o.config.remove_section('test_section')
