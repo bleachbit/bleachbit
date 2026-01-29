@@ -248,6 +248,10 @@ def parse_cmd_line(argv=None):
         parser.add_option("--update-winapp2", action="store_true",
                           help=_("update winapp2.ini, if a new version is available"))
 
+    parser.add_option("--no-delete-confirmation", action="store_true",
+                      dest="no_delete_confirmation",
+                      help=optparse.SUPPRESS_HELP)
+
     # added for testing py2exe build
     # https://github.com/bleachbit/bleachbit/commit/befe244efee9b2d4859c6b6c31f8bedfd4d85aad#diff-b578cd35e15095f69822ebe497bf8691da1b587d6cc5f5ec252ff4f186dbed56
     parser.add_option('--exit', action='store_true',
@@ -270,6 +274,9 @@ def process_cmd_line():
     """Parse the command line and execute given commands."""
 
     parser, options, args, excludes = parse_cmd_line()
+
+    if getattr(options, 'no_delete_confirmation', False):
+        Options.options.set_override('delete_confirmation', False)
 
     cmd_list = (options.list_cleaners,
                 options.clean,
