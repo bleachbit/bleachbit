@@ -99,6 +99,7 @@ class Options:
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
         self.config.BOOLEAN_STATES['t'] = True
         self.config.BOOLEAN_STATES['f'] = False
+        self.overrides = {}
         self.restore()
 
         old_option = 'system.free_disk_space'
@@ -182,6 +183,9 @@ class Options:
             if is_debugging_enabled_via_cli():
                 # command line overrides stored configuration
                 return True
+        override_key = (section, option)
+        if override_key in self.overrides:
+            return self.overrides[override_key]
         if section == 'hashpath' and option[1] == ':':
             option = option[0] + option[2:]
         if option in boolean_keys:
@@ -359,7 +363,9 @@ class Options:
 
     def set(self, key, value, section='bleachbit', commit=True):
         """Set a general option"""
-        self.config.set(section, key, str(value))
+        override_key = (section, key)
+        if override_key not in self.overrides:
+            self.config.set(section, key, str(value))
         if commit:
             self.__flush()
 
@@ -434,6 +440,11 @@ class Options:
     def toggle(self, key):
         """Toggle a boolean key"""
         self.set(key, not self.get(key))
+
+    def set_override(self, key, value, section='bleachbit'):
+        """Set a CLI override that will never be written to disk"""
+        override_key = (section, key)
+        self.overrides[override_key] = value
 
 
 options = Options()
