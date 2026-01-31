@@ -39,24 +39,43 @@ from bleachbit.Language import get_text as _
 
 logger = logging.getLogger(__name__)
 
-boolean_keys = ['auto_hide',
-                'auto_detect_lang',
-                'check_beta',
-                'check_online_updates',
-                'dark_mode',
-                'debug',
-                'delete_confirmation',
-                'exit_done',
-                'first_start',
-                'kde_shred_menu_option',
-                'remember_geometry',
-                'shred',
-                'units_iec',
-                'window_maximized',
-                'window_fullscreen']
-if 'nt' == os.name:
-    boolean_keys.append('update_winapp2')
-    boolean_keys.append('win10_theme')
+OPTION_DEFAULTS = {
+    'auto_hide': {'value': True},
+    'auto_detect_lang': {'value': True},
+    'check_beta': {'value': False},
+    'check_online_updates': {'value': True},
+    'dark_mode': {'value': True},
+    'debug': {'value': False},
+    'delete_confirmation': {'value': True},
+    'exit_done': {'value': False},
+    'first_start': {'value': False},
+    'kde_shred_menu_option': {'value': False},
+    'remember_geometry': {'value': True},
+    'shred': {'value': False},
+    'units_iec': {'value': False},
+    'window_maximized': {'value': False},
+    'window_fullscreen': {'value': False},
+    'update_winapp2': {'value': False, 'platforms': ('nt',)},
+    'win10_theme': {'value': False, 'platforms': ('nt',)},
+}
+
+
+def _platform_allows(meta):
+    platforms = meta.get('platforms')
+    return not platforms or os.name in platforms
+
+
+def _get_default_value(option):
+    meta = OPTION_DEFAULTS.get(option)
+    if not meta or not _platform_allows(meta):
+        return None
+    return meta['value']
+
+
+boolean_keys = [
+    key for key, meta in OPTION_DEFAULTS.items()
+    if _platform_allows(meta)
+]
 int_keys = ['window_x', 'window_y', 'window_width', 'window_height', ]
 
 
@@ -111,7 +130,6 @@ class Options:
         except Exception:
             logger.exception("Error migrating legacy option '%s'", old_option)
 
-
     def __flush(self):
         """Write information to disk"""
         if not self.purged:
@@ -165,11 +183,6 @@ class Options:
             logger.info(_("Automatically preserving language %s."), lang_id)
             self.set_language(lang_id, True)
 
-    def __set_default(self, key, value):
-        """Set the default value"""
-        if not self.config.has_option('bleachbit', key):
-            self.set(key, value)
-
     def has_option(self, option, section='bleachbit'):
         """Check if option is set"""
         return self.config.has_option(section, option)
@@ -188,10 +201,18 @@ class Options:
             return self.overrides[override_key]
         if section == 'hashpath' and option[1] == ':':
             option = option[0] + option[2:]
-        if option in boolean_keys:
-            return self.config.getboolean(section, option)
-        elif option in int_keys:
-            return self.config.getint(section, option)
+        if self.config.has_option(section, option):
+            if option in boolean_keys:
+                return self.config.getboolean(section, option)
+            if option in int_keys:
+                return self.config.getint(section, option)
+            return self.config.get(section, option)
+
+        if section == 'bleachbit':
+            default = _get_default_value(option)
+            if default is not None:
+                return default
+
         return self.config.get(section, option)
 
     def get_hashpath(self, pathname):
@@ -333,26 +354,6 @@ class Options:
             except:
                 logger.exception(
                     _("Error when setting the default drives to shred."))
-        # set defaults
-        self.__set_default("auto_hide", True)
-        self.__set_default("auto_detect_lang", True)
-        self.__set_default("check_beta", False)
-        self.__set_default("check_online_updates", True)
-        self.__set_default("dark_mode", True)
-        self.__set_default("debug", False)
-        self.__set_default("delete_confirmation", True)
-        self.__set_default("exit_done", False)
-        self.__set_default("kde_shred_menu_option", False)
-        self.__set_default("remember_geometry", True)
-        self.__set_default("shred", False)
-        self.__set_default("units_iec", False)
-        self.__set_default("window_fullscreen", False)
-        self.__set_default("window_maximized", False)
-
-        if 'nt' == os.name:
-            self.__set_default("update_winapp2", False)
-            self.__set_default("win10_theme", False)
-
         # BleachBit upgrade or first start ever
         if not self.config.has_option('bleachbit', 'version') or \
                 self.get('version') != bleachbit.APP_VERSION:
