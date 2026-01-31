@@ -28,7 +28,7 @@ from unittest import mock
 
 from tests import common
 import bleachbit.Options
-from bleachbit import NoOptionError
+from bleachbit.Log import is_debugging_enabled_via_cli
 
 
 class OptionsTestCase(common.BleachbitTestCase):
@@ -161,7 +161,7 @@ class OptionsTestCase(common.BleachbitTestCase):
         # write something, which triggers the purge
         o3.set('dummypath', 'dummyvalue', 'hashpath')
         # verify the path was purged
-        self.assertRaises(NoOptionError, lambda: o3.get_hashpath(pathname))
+        self.assertIsNone(o3.get_hashpath(pathname))
 
     def test_abbreviations(self):
         """Test non-standard, abbreviated booleans T and F"""
@@ -234,10 +234,12 @@ class OptionsTestCase(common.BleachbitTestCase):
         """Test CLI override functionality"""
         o = bleachbit.Options.options
 
-        # Save original values
-        original_shred = o.get('shred')
-        original_debug = o.get('debug')
-        original_delete_confirmation = o.get('delete_confirmation')
+        debug_default = is_debugging_enabled_via_cli()
+
+        # Check defaults which are assumed in later tests.
+        self.assertFalse(o.get('shred'))
+        self.assertEqual(o.get('debug'), debug_default)
+        self.assertTrue(o.get('delete_confirmation'))
 
         # Test basic override
         o.set_override('shred', True)
@@ -267,15 +269,9 @@ class OptionsTestCase(common.BleachbitTestCase):
 
         # Create new instance to verify persistent values were written correctly
         o2 = bleachbit.Options.Options()
-        self.assertFalse(o2.get('shred'))  # persistent value, not override
-        self.assertFalse(o2.get('debug'))  # persistent value, not override
-        self.assertTrue(o2.get('delete_confirmation'))  # persistent value, not override
-
-        # Clean up - restore original values
-        o.overrides.clear()
-        o.set('shred', original_shred)
-        o.set('debug', original_debug)
-        o.set('delete_confirmation', original_delete_confirmation)
+        self.assertFalse(o2.get('shred'))
+        self.assertEqual(o2.get('debug'), debug_default)
+        self.assertTrue(o2.get('delete_confirmation'))
 
     def test_override_does_not_persist(self):
         """Test that overrides don't persist after process restart"""
@@ -303,12 +299,14 @@ class OptionsTestCase(common.BleachbitTestCase):
         o.config.set('test_section', 'test_key', 'original_value')
 
         o.set_override('test_key', 'override_value', section='test_section')
-        self.assertEqual(o.get('test_key', section='test_section'), 'override_value')
+        self.assertEqual(
+            o.get('test_key', section='test_section'), 'override_value')
 
         # Verify flush doesn't write override
         o.commit()
         o2 = bleachbit.Options.Options()
-        self.assertEqual(o2.get('test_key', section='test_section'), 'original_value')
+        self.assertEqual(
+            o2.get('test_key', section='test_section'), 'original_value')
 
         # Clean up
         o.overrides.clear()
