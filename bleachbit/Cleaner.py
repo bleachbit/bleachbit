@@ -671,6 +671,11 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
     backends["openofficeorg"] = OpenOfficeOrg()
     backends["system"] = System()
 
+    if not options.get("load_cleaners"):
+        cb_done()
+        yield False
+        return
+
     # register CleanerML cleaners
     cb_progress(_('Loading native cleaners.'))
     yield from CleanerML.load_cleaners(cb_progress)
