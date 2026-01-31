@@ -86,7 +86,7 @@ def path_to_option(pathname):
     # On Windows expand DOS-8.3-style pathnames.
     if 'nt' == os.name and os.path.exists(pathname):
         pathname = GetLongPathName(pathname)
-    if ':' == pathname[1]:
+    if len(pathname) > 1 and ':' == pathname[1]:
         # ConfigParser treats colons in a special way
         pathname = pathname[0] + pathname[2:]
     return pathname
@@ -191,7 +191,7 @@ class Options:
         """Retrieve a general option"""
         if not 'nt' == os.name and 'update_winapp2' == option:
             return False
-        if section == 'bleachit' and option == 'debug':
+        if section == 'bleachbit' and option == 'debug':
             from bleachbit.Log import is_debugging_enabled_via_cli
             if is_debugging_enabled_via_cli():
                 # command line overrides stored configuration
@@ -199,7 +199,7 @@ class Options:
         override_key = (section, option)
         if override_key in self.overrides:
             return self.overrides[override_key]
-        if section == 'hashpath' and option[1] == ':':
+        if section == 'hashpath' and len(option) > 1 and option[1] == ':':
             option = option[0] + option[2:]
         if self.config.has_option(section, option):
             if option in boolean_keys:
@@ -213,7 +213,7 @@ class Options:
             if default is not None:
                 return default
 
-        return self.config.get(section, option)
+        return None
 
     def get_hashpath(self, pathname):
         """Recall the hash for a file"""
@@ -239,8 +239,8 @@ class Options:
         if not self.config.has_section(section):
             return None
         values = [
-            self.config.get(section, option)
-            for option in sorted(self.config.options(section))
+            self.config.get(section, opt)
+            for opt in sorted(self.config.options(section), key=lambda x: int(x))
         ]
         return values
 
@@ -249,15 +249,15 @@ class Options:
         if not self.config.has_section(section):
             return []
         myoptions = []
-        for option in sorted(self.config.options(section)):
-            pos = option.find('_')
+        for opt in sorted(self.config.options(section), key=lambda x: int(x.split('_')[0])):
+            pos = opt.find('_')
             if -1 == pos:
                 continue
-            myoptions.append(option[0:pos])
+            myoptions.append(opt[0:pos])
         values = []
-        for option in set(myoptions):
-            p_type = self.config.get(section, option + '_type')
-            p_path = self.config.get(section, option + '_path')
+        for opt in sorted(set(myoptions), key=lambda x: int(x)):
+            p_type = self.config.get(section, opt + '_type')
+            p_path = self.config.get(section, opt + '_path')
             values.append((p_type, p_path))
         return values
 
