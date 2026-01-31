@@ -50,6 +50,7 @@ OPTION_DEFAULTS = {
     'exit_done': {'value': False},
     'first_start': {'value': False},
     'kde_shred_menu_option': {'value': False},
+    'load_cleaners': {'value': True},
     'remember_geometry': {'value': True},
     'shred': {'value': False},
     'units_iec': {'value': False},
