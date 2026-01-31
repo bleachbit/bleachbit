@@ -373,13 +373,14 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
 
         # clean the file
         old_shred = options.get('shred')
-        options.set('shred', False, commit=False)
+        #options.set('shred', False, commit=False)
+        options.set_override('shred', False)
         self.assertFalse(options.get('shred'))
         clean_func(filename)
-        options.set('shred', True, commit=False)
+        options.set_override('shred', True)
         self.assertTrue(options.get('shred'))
         clean_func(filename)
-        options.set('shred', old_shred, commit=False)
+        options.set_override('shred', old_shred)
         self.assertExists(filename)
 
         # check
