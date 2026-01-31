@@ -50,7 +50,6 @@ jobs:
           libnotify-bin \
           libxml2-utils \
           notification-daemon \
-          python3-psutil \
           xvfb \
           ${{ matrix.python-extra-dep }}
         # for tests.TestLanguage
@@ -69,7 +68,7 @@ jobs:
 
     - name: Install Python dependencies
       run: |
-        pip install chardet "PyGObject${{ matrix.pygobject-version }}" requests setuptools coverage coveralls appveyor-artifacts
+        pip install chardet "PyGObject${{ matrix.pygobject-version }}" requests setuptools coverage coveralls appveyor-artifacts psutil
 
     - name: Generate Revision.py
       run: |
