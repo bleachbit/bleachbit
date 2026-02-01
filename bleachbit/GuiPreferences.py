@@ -172,6 +172,9 @@ class PreferencesDialog:
             self.refresh_operations = True
         if 'dark_mode' == path:
             logger.debug("Toggling dark mode to %s", options.get('dark_mode'))
+            if not os.name == 'nt':
+                self.show_infobar(
+                    _("Some GTK themes support do not support both light and dark modes."), Gtk.MessageType.WARNING)
             if 'nt' == os.name and options.get('win10_theme'):
                 self.cb_set_windows10_theme()
 
