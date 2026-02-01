@@ -100,7 +100,6 @@ class CookieManagerDialog(Gtk.Window):
 
         # Create the TreeView
         self.treeview = Gtk.TreeView(model=self.cookie_filter)
-        self.treeview.set_rules_hint(True)  # Alternating row colors
 
         # Create columns
         renderer_toggle = Gtk.CellRendererToggle()
