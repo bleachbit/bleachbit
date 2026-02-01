@@ -258,7 +258,7 @@ class Bleachbit(Gtk.Application):
 
     def get_system_information_dialog(self):
         """Show system information dialog"""
-        dialog = Gtk.Dialog(_("System information"), self._window)
+        dialog = Gtk.Dialog(title=_("System information"), transient_for=self._window)
         dialog.set_default_size(600, 400)
         txtbuffer = Gtk.TextBuffer()
         from bleachbit import SystemInformation
