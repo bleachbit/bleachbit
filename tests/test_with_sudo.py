@@ -10,6 +10,7 @@ Usage:
 import inspect
 import os
 import shlex
+import shutil
 import subprocess
 import sys
 import unittest
@@ -60,6 +61,10 @@ def _build_test_command(test_list):
 
     if coverage_runner.strip():
         runner_parts = shlex.split(coverage_runner)
+        if runner_parts and not os.path.isabs(runner_parts[0]):
+            absolute = shutil.which(runner_parts[0])
+            if absolute:
+                runner_parts[0] = absolute
     else:
         runner_parts = [sys.executable]
 
