@@ -356,11 +356,18 @@ def get_winregistry_value(key, subkey):
 
 
 def get_opened_windows_titles():
+    """
+    Get the titles of all opened windows.
+
+    Returns:
+        list: A list of window titles.
+    """
     opened_windows_titles = []
 
     def enumerate_opened_windows_titles(hwnd, ctx):
-        if win32gui.IsWindowVisible(hwnd):
-            opened_windows_titles.append(win32gui.GetWindowText(hwnd))
+        text = win32gui.GetWindowText(hwnd)
+        if win32gui.IsWindowVisible(hwnd) and text:
+            opened_windows_titles.append(text)
 
     win32gui.EnumWindows(enumerate_opened_windows_titles, None)
     return opened_windows_titles

@@ -1,61 +1,144 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
-Test case for application level functions
+Test case for the context menu command
 """
 
 
 import os
 import sys
 import subprocess
+import time
 from unittest import mock
 
+import psutil
+
+import bleachbit
 from bleachbit.GtkShim import HAVE_GTK
+from bleachbit.Options import options
+from tests import common
 
 if HAVE_GTK:
     from bleachbit.GuiApplication import Bleachbit
 
-import bleachbit
-from bleachbit.Options import options
-from tests import common
+
+def wait_for_process_tree_windows(process, timeout=60, poll_interval=0.1):
+    """Wait for a process and its grandchildren to complete on Windows.
+
+    This function handles the case where a child process spawns a grandchild
+    and then exits. It monitors the process tree to ensure all descendants
+    have completed before returning.
+
+    Args:
+        process: subprocess.Popen object for the child process
+        timeout: Maximum time to wait in seconds (default: 60)
+        poll_interval: How often to check process status in seconds (default: 0.1)
+
+    Returns:
+        The return code of the child process
+
+    Raises:
+        subprocess.TimeoutExpired: If the process tree doesn't complete within timeout
+    """
+
+    start_time = time.time()
+    child_pid = process.pid
+    grandchild_pids = set()
+    child_exited = False
+
+    while True:
+        elapsed = time.time() - start_time
+        if elapsed > timeout:
+            process.kill()
+            process.wait()
+            raise subprocess.TimeoutExpired(process.args, timeout)
+
+        if not child_exited:
+            child_status = process.poll()
+            if child_status is not None:
+                child_exited = True
+            else:
+                try:
+                    parent_process = psutil.Process(child_pid)
+                    current_children = {
+                        child.pid for child in parent_process.children(recursive=True)}
+                    grandchild_pids.update(current_children)
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    pass
+
+        if child_exited:
+            if not grandchild_pids:
+                return process.returncode
+
+            still_running = set()
+            for pid in grandchild_pids:
+                try:
+                    if psutil.pid_exists(pid):
+                        proc = psutil.Process(pid)
+                        if proc.is_running() and proc.status() != psutil.STATUS_ZOMBIE:
+                            still_running.add(pid)
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    pass
+
+            grandchild_pids = still_running
+            if not grandchild_pids:
+                return process.returncode
+
+        time.sleep(poll_interval)
 
 
-@common.skipUnlessWindows
 class ExternalCommandTestCase(common.BleachbitTestCase):
-    """Test case for application level functions"""
+    """Test case for the context menu command"""
 
     @classmethod
     def setUpClass(cls):
-        bleachbit.online_update_notification_enabled = False
+        """Set up the test case"""
         cls.old_language = common.get_env('LANGUAGE')
         common.put_env('LANGUAGE', 'en')
         super(ExternalCommandTestCase, ExternalCommandTestCase).setUpClass()
-        options.set('first_start', False)
-        options.set('check_online_updates', False)  # avoid pop-up window
+        cls.environment_changed = False
+        # Avoid pop-up windows.
+        options.set('first_start', False, commit=False)
+        # This should not be needed because of using CLI arg --no-delete-confirmation.
+        options.set('delete_confirmation', False, commit=True)
+        if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
+            # Set environment variable for child process.
+            common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', cls.tempdir)
+            cls.environment_changed = True
 
     @classmethod
     def tearDownClass(cls):
+        """Tear down the test case"""
         super(ExternalCommandTestCase, ExternalCommandTestCase).tearDownClass()
         common.put_env('LANGUAGE', cls.old_language)
+        if cls.environment_changed:
+            # We don't want to affect other tests, executed after this one.
+            common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', None)
+
+    def assertNotRunning(self):
+        """Assert that no BleachBit GUI processes are running"""
+        # First, check using process name and arguments..
+        for process in psutil.process_iter(['name', 'cmdline']):
+            try:
+                name = process.info['name'] or ''
+                cmdline = process.info['cmdline'] or []
+                if name.lower().startswith('python') and any(arg in ('--context-menu', '--no-load-cleaners') for arg in cmdline):
+                    self.fail(
+                        f"BleachBit GUI process is still running: {process}")
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                pass
+        # Second, check using window titles.
+        if not os.name == 'nt':
+            return
+        opened_windows_titles = common.get_opened_windows_titles()
+        self.assertFalse(
+            any(['BleachBit' == window_title for window_title in opened_windows_titles]),
+            f"BleachBit window is still open: {opened_windows_titles}")
 
     def _context_helper(self, fn_prefix, allow_opened_window=False):
         """Unit test for 'Shred with BleachBit' Windows Explorer context menu command"""
@@ -65,73 +148,96 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         # but it is more explicit to have it here as a separate case.
         # It covers a single case where one file is shred without delete confirmation dialog.
 
-        def set_curdir_to_bleachbit():
-            os.curdir = os.path.split(__file__)[0]
-            os.curdir = os.path.split(os.curdir)[0]
-
         file_to_shred = self.mkstemp(prefix=fn_prefix)
         print('file_to_shred = {}'.format(file_to_shred))
         self.assertExists(file_to_shred)
-        set_curdir_to_bleachbit()
+        if not allow_opened_window:
+            self.assertNotRunning()
         shred_command_string = self._get_shred_command_string(file_to_shred)
-        self._run_shred_command(shred_command_string)
+        self._run_shred_command(shred_command_string,
+                                cwd=bleachbit.bleachbit_exe_path)
         self.assertNotExists(file_to_shred)
 
         if not allow_opened_window:
-            opened_windows_titles = common.get_opened_windows_titles()
-            # Assert that the Bleachbit window has been closed after the context menu operation had finished.
-            # If any windows is titled BleachBit the test will fail.
-            # This could happen with Windows Explorer opened with folder BleachBit for example.
-            self.assertFalse(
-                any(['BleachBit' == window_title for window_title in opened_windows_titles]))
+            self.assertNotRunning()
 
     def _get_shred_command_string(self, file_to_shred):
-        shred_command_string = r'{} bleachbit.py --context-menu "{}"'.format(sys.executable,
-                                                                             file_to_shred)
+        """Build the command string like the context menu command"""
+        shred_command_string = (
+            # Disable confirmation for automated tests.
+            f'{sys.executable} bleachbit.py --no-delete-confirmation '
+            f'--context-menu "{file_to_shred}"'  # The pathname must be last.
+        )
         return shred_command_string
 
-    def _run_shred_command(self, shred_command_string):
-        environment_changed = False
-        if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
-            # We need to set env var because of the new process that executes the context menu command string
-            common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', self.tempdir)
-            environment_changed = True
+    def _run_shred_command(self, shred_command_string, cwd=None):
+        """Run the shred command
 
-        options.set('delete_confirmation', False)
-        os.system(shred_command_string)
-
-        if environment_changed:
-            # We don't want to affect other tests, executed after this one.
-            common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', None)
-
-    def test_windows_explorer_context_menu_command(self):
-        for fn_prefix in ('file_to_shred_with_context_menu_command', 'embedded space'):
-            self._context_helper(fn_prefix)
-            self._test_as_non_admin_with_context_menu_path(fn_prefix)
-
-    def test_context_menu_command_while_the_app_is_running(self):
-        """Test the context menu while the application is running"""
-        p = subprocess.Popen([sys.executable, 'bleachbit.py'], shell=False)
+        In case of privilege escalation, the child process
+        will launch an elevated process, so the child will exit.
+        We must wait for the grandchild to finish.
+        """
+        process = subprocess.Popen(shred_command_string,
+                                   shell=True, cwd=cwd)
         try:
+            returncode = wait_for_process_tree_windows(process, timeout=60)
+        except subprocess.TimeoutExpired:
+            self.fail("Shred command timed out")
+        self.assertEqual(
+            returncode, 0, f"Shred command failed with return code {returncode}")
+
+    def test_windows_explorer_context_menu_natural(self):
+        """Test shredding a file with the context menu command in a natural way"""
+        # First, test the simple case of a pathname without embedded spaces.
+        # Then, test a pathname with a space.
+        self.assertNotRunning()
+        if not HAVE_GTK:
+            self.skipTest('GTK is not available')
+        for fn_prefix in ('shred_target_no_spaces', 'shred target with spaces'):
+            self._context_helper(fn_prefix)
+        self.assertNotRunning()
+
+    @common.skipUnlessWindows
+    def test_windows_explorer_context_menu_privilege_escalation(self):
+        """Test shredding a file with the context menu command with privilege escalation"""
+        if bleachbit.Windows.path_on_network(bleachbit.bleachbit_exe_path):
+            self.skipTest('Escalation is not attempted on network paths.')
+        if not HAVE_GTK:
+            self.skipTest('GTK is not available')
+        self.assertNotRunning()
+        for fn_prefix in ('shred_target_no_spaces', 'shred target with spaces'):
+            self._test_as_non_admin_with_context_menu_path(fn_prefix)
+        self.assertNotRunning()
+
+    @common.skipUnlessWindows
+    def test_context_menu_command_while_the_app_is_running(self):
+        """Test the context menu command while the application is running"""
+        self.assertNotRunning()
+        if not HAVE_GTK:
+            self.skipTest('GTK is not available')
+        # Start an idle process that will keep running.
+        # The --no-uac flag prevents launching grandchild process.
+        # The --no-load-cleaners makes it faster.
+        args = [sys.executable, 'bleachbit.py',
+                '--gui', '--no-load-cleaners']
+        if os.name == 'nt':
+            args.append('--no-uac')
+        p = subprocess.Popen(args, shell=False)
+        try:
+            # Run a second process that will shred a file.
             self._context_helper('while_app_is_running',
                                  allow_opened_window=True)
         finally:
-            # Ensure the process is terminated and reaped to prevent ResourceWarning
-            try:
-                p.kill()
-            except Exception:
-                pass
-            try:
-                p.wait(timeout=15)
-            except Exception:
-                pass
+            # Kill the first process immediately after context menu operation completes
+            p.kill()
+            p.wait()
+        self.assertNotRunning()
 
     def _test_as_non_admin_with_context_menu_path(self, fn_prefix):
         """
         This tests covers elevate_privileges in the case where we pretend that we are not admin.
         """
-        from bleachbit.Options import options
-
+        self.assertTrue(os.name == 'nt')
         file_to_shred = self.mkstemp(prefix=fn_prefix)
         self.assertExists(file_to_shred)
 
@@ -139,11 +245,10 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
 
         def shell_execute_synchronous(lpVerb='', lpFile='', lpParameters='', nShow=''):
             """
-            We need a synchronous call the ShellExecuteEx so we can assert after it finishes.
+            We need a synchronous call the ShellExecuteEx, so we can assert after it finishes.
             """
             from win32com.shell import shell, shellcon
             import win32event
-
             bleachbit.Windows.shell.ShellExecuteEx = original
             rc = shell.ShellExecuteEx(lpVerb=lpVerb,
                                       lpFile=lpFile,
@@ -155,24 +260,58 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
             win32event.WaitForSingleObject(hproc, win32event.INFINITE)
             return rc
 
-        environment_changed = False
-        if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
-            # We need to set env var because of the new process that executes the context menu command string
-            common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', self.tempdir)
-            environment_changed = True
-        options.set('delete_confirmation', False)
-
         # We redirect the ShellExecuteEx call like this because if we do it in a mock we enter recursion
         # because we call ShellExecuteEx in shell_execute_synchronous
         bleachbit.Windows.shell.ShellExecuteEx = shell_execute_synchronous
         with mock.patch('bleachbit.Windows.shell.IsUserAnAdmin', return_value=False):
-            with mock.patch('bleachbit.GUI.sys.exit'):
-                with mock.patch('bleachbit.Windows.sys.argv', ['dummy-arg', '--context-menu', file_to_shred]):
+            # Do not actually exit the process during the test.
+            with mock.patch('bleachbit.GuiApplication.sys.exit'):
+                # Mock the command line arguments to be inherited to the child process.
+                custom_argv = [
+                    'dummy-arg',
+                    '--no-delete-confirmation',
+                    '--context-menu',
+                    file_to_shred,  # The pathname must be last
+                ]
+                with mock.patch('bleachbit.Windows.sys.argv', custom_argv):
                     Bleachbit(auto_exit=True, shred_paths=[
                               file_to_shred], uac=True)
 
         self.assertNotExists(file_to_shred)
 
-        if environment_changed:
-            # We don't want to affect other tests, executed after this one.
-            common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', None)
+    def test_wait_for_grandchild_process(self):
+        """Test that wait_for_process_tree_windows waits for grandchild processes"""
+        marker_file = self.mkstemp(prefix='grandchild_marker_')
+        os.remove(marker_file)
+        self.assertNotExists(marker_file)
+
+        grandchild_script = os.path.join(self.tempdir, 'grandchild.py')
+        with open(grandchild_script, 'w', encoding='utf-8') as f:
+            f.write(f'''import time
+import sys
+time.sleep(2)
+with open({repr(marker_file)}, "w") as f:
+    f.write("grandchild completed")
+sys.exit(0)
+''')
+
+        child_script = os.path.join(self.tempdir, 'child.py')
+        with open(child_script, 'w', encoding='utf-8') as f:
+            f.write(f'''import subprocess
+import sys
+import time
+p = subprocess.Popen([sys.executable, {repr(grandchild_script)}])
+time.sleep(0.5)
+p.wait()
+sys.exit(0)
+''')
+
+        process = subprocess.Popen([sys.executable, child_script])
+
+        start_time = time.time()
+        returncode = wait_for_process_tree_windows(process, timeout=10)
+        elapsed = time.time() - start_time
+
+        self.assertEqual(returncode, 0)
+        self.assertExists(marker_file)
+        self.assertGreater(elapsed, 1.5)
