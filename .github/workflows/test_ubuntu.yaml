@@ -91,8 +91,12 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        echo "Linux-only coverage before combine:"
+        coverage report
         mv .coverage .coverage.ubuntu
         appveyor-artifacts -o az0 -n bleachbit -m -c ${{ github.sha }} download
+        mv .coverage .coverage.windows
+        echo "Combined coverage:"
         coverage combine
         coverage report
         coveralls

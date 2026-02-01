@@ -76,6 +76,8 @@ test_script:
 # Catch warnings as errors. Also set in `tests/common.py`.
   - 'SET PYTHONWARNINGS=error'
   - '%PYTHON_HOME%\Scripts\coverage.exe run --include="bleachbit/*" tests/TestAll.py'
+  - '%PYTHON_HOME%\Scripts\coverage.exe report'
+
 
 artifacts:
   - path: BleachBit-*-setup.exe
