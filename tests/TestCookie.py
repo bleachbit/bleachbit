@@ -388,6 +388,8 @@ class CookieTestCase(common.BleachbitTestCase):
                 random_hosts = cursor.execute(
                     f'SELECT DISTINCT host FROM moz_cookies ORDER BY RANDOM() LIMIT {random_count}').fetchall()
                 conn.close()
+                if not random_hosts:
+                    self.skipTest('No hosts found in live Firefox database')
                 keep_list = {host[0].lstrip('.') for host in random_hosts}
             else:
                 keep_list = {doesnotexist}
