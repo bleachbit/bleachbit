@@ -334,7 +334,7 @@ class CLITestCase(common.BleachbitTestCase):
                 self.assertEqual(output[0], 0)
                 self.assertNotExists(filename)
 
-    @common.test_also_with_sudo
+    @common.also_with_sudo
     def test_sysinfo(self):
         """Unit test for --sysinfo
 

@@ -29,7 +29,7 @@ import time
 import types
 from unittest import mock
 
-from bleachbit.GtkShim import HAVE_GTK, Gtk
+from bleachbit.GtkShim import HAVE_GTK, Gtk, GLib, Gio
 
 if HAVE_GTK:
     from bleachbit.GuiApplication import Bleachbit
@@ -59,7 +59,13 @@ class GUITestCase(common.BleachbitTestCase):
         options.set('check_online_updates', False)  # avoid pop-up window
         options.get_tree = types.MethodType(
             lambda self, parent, child: False, options)
-        cls.app.register()
+        try:
+            cls.app.register()
+        except GLib.GError as e:
+            if "already exported" in str(e):
+                cls.app = Gio.Application.get_default()
+            else:
+                raise
         cls.app.activate()
         cls.refresh_gui()
 

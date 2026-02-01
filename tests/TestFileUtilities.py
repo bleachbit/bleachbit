@@ -76,7 +76,7 @@ if 'nt' == os.name:
     from bleachbit import Windows
 
 
-def test_ini_helper(self, execute):
+def ini_helper(self, execute):
     """Used to test .ini cleaning in TestAction and in TestFileUtilities"""
 
     teststr = '#Test\n[RecentsMRL]\nlist=C:\\Users\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n'
@@ -120,7 +120,7 @@ def test_ini_helper(self, execute):
             self.assertNotExists(filename)
 
 
-def test_json_helper(self, execute):
+def json_helper(self, execute):
     """Used to test JSON cleaning in TestAction and in TestFileUtilities"""
 
     def load_js(js_fn):
@@ -457,11 +457,11 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         try:
             print("testing test_clean_ini() with shred = False")
             options.set('shred', False, commit=False)
-            test_ini_helper(self, clean_ini)
+            ini_helper(self, clean_ini)
 
             print("testing test_clean_ini() with shred = True")
             options.set('shred', True, commit=False)
-            test_ini_helper(self, clean_ini)
+            ini_helper(self, clean_ini)
         finally:
             options.set('shred', old_shred, commit=False)
 
@@ -509,11 +509,11 @@ State=AAAA/wA...
         try:
             print("testing test_clean_json() with shred = False")
             options.set('shred', False, commit=False)
-            test_json_helper(self, clean_json)
+            json_helper(self, clean_json)
 
             print("testing test_clean_json() with shred = True")
             options.set('shred', True, commit=False)
-            test_json_helper(self, clean_json)
+            json_helper(self, clean_json)
         finally:
             options.set('shred', old_shred, commit=False)
 

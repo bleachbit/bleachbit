@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Utility script to discover and run tests marked for sudo execution.
-Tests are marked with the @requires_sudo decorator.
+Tests are marked with the @also_with_sudo decorator.
 
 Usage:
     make tests-with-sudo
@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def discover_sudo_tests():
-    """Discover all test methods marked with @test_also_with_sudo decorator"""
+    """Discover all test methods marked with @also_with_sudo decorator"""
     sudo_tests = []
 
     # Import test modules to scan for decorated tests
@@ -41,7 +41,7 @@ def discover_sudo_tests():
                     # Find all test methods in the class
                     for method_name, method in inspect.getmembers(obj):
                         if (method_name.startswith('test_') and
-                                hasattr(method, '_test_also_with_sudo')):
+                                hasattr(method, '_also_with_sudo')):
                             test_path = f"{module_name}.{name}.{method_name}"
                             sudo_tests.append(test_path)
 
@@ -109,11 +109,11 @@ def run_sudo_tests(test_list):
 
 
 def main():
-    """Discover and run all tests marked with @test_also_with_sudo"""
+    """Discover and run all tests marked with @also_with_sudo"""
     sudo_tests = discover_sudo_tests()
 
     if not sudo_tests:
-        print("No tests marked with @test_also_with_sudo found")
+        print("No tests marked with @also_with_sudo found")
         sys.exit(0)
 
     if run_sudo_tests(sudo_tests):

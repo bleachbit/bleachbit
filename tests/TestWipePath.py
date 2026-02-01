@@ -371,7 +371,7 @@ class WipeTestCase(common.BleachbitTestCase):
     """Test case for file wiping operations"""
 
     @common.skipIfWindows
-    @common.test_also_with_sudo
+    @common.also_with_sudo
     def test_wipe(self):
         """Test wiping on several kinds of file systems"""
         requested_fs = FS_TYPES
