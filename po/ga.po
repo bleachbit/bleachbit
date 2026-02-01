@@ -6,18 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-27 08:54-0700\n"
-"PO-Revision-Date: 2026-01-23 01:59+0000\n"
+"PO-Revision-Date: 2026-02-01 18:01+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
-"Language-Team: Irish <https://hosted.weblate.org/projects/bleachbit/main/ga/"
-">\n"
+"Language-Team: Irish <https://hosted.weblate.org/projects/bleachbit/main/ga/>"
+"\n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :"
-"(n>6 && n<11) ? 3 : 4;\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
+"6 && n<11) ? 3 : 4;\n"
 "X-Generator: Weblate 5.16-dev\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -841,25 +841,17 @@ msgid "Default dark mode, showing found junk files"
 msgstr "Mód dorcha réamhshocraithe, ag taispeáint comhaid dramhaíola aimsithe"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:ALREADY_INSTALLED"
-#| msgid ""
-#| "${prodname} is already installed.$\\r$\\nClick 'OK' to uninstall the old "
-#| "version before upgrading, or click 'Cancel' to abort the upgrade."
 msgctxt "nsis:ALREADY_INSTALLED"
 msgid ""
 "${prodname} is already installed.\n"
 "Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' "
 "to abort the upgrade."
 msgstr ""
-"Tá ${prodname} suiteáilte cheana féin.$\\r$\\nCliceáil 'Ceart go leor' chun "
-"an seanleagan a dhíshuiteáil sula ndéantar uasghrádú, nó cliceáil 'Cealaigh' "
-"chun an t-uasghrádú a chur ar ceal."
+"Tá ${prodname} suiteáilte cheana féin.\n"
+"Cliceáil 'Ceart go leor' chun an seanleagan a dhíshuiteáil sula ndéantar "
+"uasghrádú, nó cliceáil 'Cealaigh' chun an t-uasghrádú a chur ar ceal."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
-#| msgid "Visit the ${prodname} web site"
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
 msgid "Visit the ${prodname} website"
 msgstr "Tabhair cuairt ar shuíomh gréasáin ${prodname}"
@@ -870,44 +862,30 @@ msgid "${prodname} ${VERSION} Setup"
 msgstr "Socrú ${prodname} ${VERSION}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIPRINT1"
-#| msgid ""
-#| "The next step is building font cache, during which you may see a black "
-#| "window."
 msgctxt "nsis:MULTIPRINT1"
 msgid ""
 "The next step is building the font cache, during which a black console "
 "window may appear."
 msgstr ""
-"Is é an chéad chéim eile taisce clónna a thógáil, agus le linn na tréimhse "
-"sin, d’fhéadfá fuinneog dhubh a fheiceáil."
+"Is é an chéad chéim eile ná an taisce clónna a thógáil, agus d’fhéadfadh "
+"fuinneog chonsóil dhubh teacht chun solais le linn na tréimhse sin."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIPRINT2"
-#| msgid ""
-#| "It usually finishes in one minute, but sometimes it takes ten minutes."
 msgctxt "nsis:MULTIPRINT2"
 msgid ""
 "It usually finishes in one minute, but sometimes it takes up to ten minutes."
 msgstr ""
-"De ghnáth críochnaíonn sé i nóiméad amháin, ach uaireanta tógann sé deich "
-"nóiméad."
+"De ghnáth críochnaíonn sé i nóiméad amháin, ach uaireanta tógann sé suas le "
+"deich nóiméad."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
-#| msgid ""
-#| "You need to login with an account that is a member of the administrators "
-#| "group to continue."
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
 msgid ""
 "You need to log in with an account that is a member of the administrators "
 "group to continue."
 msgstr ""
-"Ní mór duit logáil isteach le cuntas atá ina bhall den ghrúpa riarthóirí le "
-"leanúint ar aghaidh."
+"Ní mór duit logáil isteach le cuntas atá ina bhall den ghrúpa riarthóirí "
+"chun leanúint ar aghaidh."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_CREDENTIALS_REQUIRED"
@@ -915,9 +893,6 @@ msgid "Administrator credentials required."
 msgstr "Tá dintiúir riarthóra ag teastáil."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
-#| msgid "Administrator credentials required for uninstall."
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required to uninstall."
 msgstr "Tá dintiúir riarthóra ag teastáil le haghaidh díshuiteála."
@@ -963,18 +938,11 @@ msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
 msgstr "Tá leagan {VERSION} suiteáilte do gach úsáideoir i \"{FOLDER}\"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
-#| msgid "Version {VERSION} is installed for current user in \"{FOLDER}\"."
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
 msgstr "Tá leagan {VERSION} suiteáilte don úsáideoir reatha i \"{FOLDER}\"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
-#| msgid ""
-#| "Select whether to install $(^NameDA) for all users or for current user."
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
 msgid ""
 "Select whether to install $(^NameDA) for all users or for the current user."
@@ -988,9 +956,6 @@ msgid "Choose for which users to install $(^NameDA)."
 msgstr "Roghnaigh cé na húsáideoirí ar cheart $(^NameDA) a shuiteáil dóibh."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
-#| msgid "Invalid combination of paramaters."
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
 msgid "Invalid combination of parameters."
 msgstr "Teaglaim neamhbhailí paraiméadair."
@@ -1003,17 +968,11 @@ msgstr ""
 "Tánaisteach ag rith."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
-#| msgid "Fresh install for all users."
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
 msgid "Fresh installation for all users."
 msgstr "Suiteáil úr do gach úsáideoir."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
-#| msgid "Fresh install for current user."
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
 msgid "Fresh installation for the current user."
 msgstr "Suiteáil úr don úsáideoir reatha."
@@ -1037,11 +996,6 @@ msgstr ""
 "úsáideoir."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
-#| msgid ""
-#| "Uninstall version {OLD_VERSION} and install version {VERSION} for current "
-#| "user."
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
 msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for the "
@@ -1056,34 +1010,23 @@ msgid "Reinstall version {VERSION} for all users."
 msgstr "Athshuiteáil leagan {VERSION} do gach úsáideoir."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
-#| msgid "Reinstall version {VERSION} for current user."
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
 msgid "Reinstall version {VERSION} for the current user."
 msgstr "Athshuiteáil leagan {VERSION} don úsáideoir reatha."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
-#| msgid "You need to run this program as administrator."
 msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
 msgid "You need to run this program as an administrator."
 msgstr "Ní mór duit an clár seo a rith mar riarthóir."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
-#| msgid ""
-#| "$(^NameDA) is installed both for all users and for current user.$\\r$"
-#| "\\nSelect which installation to remove."
 msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
 msgid ""
 "$(^NameDA) is installed both for all users and for the current user.\n"
 "Select which installation to remove."
 msgstr ""
-"Tá $(^NameDA) suiteáilte do gach úsáideoir agus don úsáideoir reatha araon.$"
-"\\r$\\nRoghnaigh cén suiteáil atá le baint."
+"Tá $(^NameDA) suiteáilte do gach úsáideoir agus don úsáideoir reatha araon.\n"
+"Roghnaigh cén suiteáil atá le baint."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_PAGE_SUBTITLE"
@@ -1091,10 +1034,6 @@ msgid "Choose for which users to remove $(^NameDA)."
 msgstr "Roghnaigh cé na húsáideoirí ar mhaith leat $(^NameDA a bhaint dóibh)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_CORE_DESCRIPTION"
-#| msgid ""
-#| "This are the basic files needed for ${prodname} to function (required)."
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
 msgid ""
 "These are the basic files needed for ${prodname} to function (required)."
@@ -1108,12 +1047,9 @@ msgid "Core files (required)"
 msgstr "Comhaid lárnacha (riachtanach)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
-#| msgid "Create the shortcut on desktop."
 msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
 msgid "Create a shortcut on the desktop."
-msgstr "Cruthaigh an aicearra ar an deasc."
+msgstr "Cruthaigh aicearra ar an deasc."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_DESKTOP_NAME"
@@ -1121,11 +1057,6 @@ msgid "Desktop"
 msgstr "Deasc"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
-#| msgid ""
-#| "Add an option to delete files from the file context menu in Windows "
-#| "explorer."
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
 msgid ""
 "Add an option to delete files from the file context menu in Windows Explorer."
@@ -1139,28 +1070,19 @@ msgid "Integrate Shred"
 msgstr "Comhtháthaigh Shred"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
-#| msgid "Create the shortcut on Quick Launch."
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
 msgid "Create a shortcut on the Quick Launch bar."
-msgstr "Cruthaigh an aicearra ar an Seoladh Tapa."
+msgstr "Cruthaigh aicearra ar an mbarra Seoladh Tapa."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
-#| msgid "Quick launch"
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
 msgid "Quick Launch"
-msgstr "Seoladh tapa"
+msgstr "Seoladh Tapa"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
-#| msgid "Create shortcuts to ${prodname} on -"
 msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
 msgid "Create shortcuts to ${prodname}"
-msgstr "Cruthaigh aicearraí chuig ${prodname} ar -"
+msgstr "Cruthaigh aicearraí chuig ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_NAME"
@@ -1168,12 +1090,9 @@ msgid "Shortcuts"
 msgstr "Aicearraí"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
-#| msgid "Create the shortcut in Start menu."
 msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
 msgid "Create a shortcut in the Start menu."
-msgstr "Cruthaigh an aicearra sa roghchlár Tosaigh."
+msgstr "Cruthaigh aicearra sa roghchlár Tosaigh."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_NAME"
@@ -1185,6 +1104,8 @@ msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
 msgid ""
 "Install language files to use ${prodname} in your preferred local language."
 msgstr ""
+"Suiteáil comhaid teanga chun ${prodname} a úsáid i do theanga áitiúil is "
+"fearr leat."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
@@ -1192,9 +1113,6 @@ msgid "Translations"
 msgstr "Aistriúcháin"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
-#| msgid "Add uninstall program."
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
 msgid "Add an uninstall program."
 msgstr "Cuir clár díshuiteála leis."
@@ -1210,12 +1128,9 @@ msgid "${prodname} Debugging Terminal"
 msgstr "Críochfort Dífhabhtaithe ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SHORTCUT_NO_UAC"
-#| msgid "${prodname} No UAC."
 msgctxt "nsis:SHORTCUT_NO_UAC"
 msgid "${prodname} (No UAC)."
-msgstr "${prodname} Gan UAC."
+msgstr "${prodname} (Gan UAC)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHRED_SHELL_MENU"
@@ -1223,13 +1138,6 @@ msgid "Shred with ${prodname}"
 msgstr "Stróic le ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:UNINSTALL_TEXT"
-#| msgid ""
-#| "${prodname} will be uninstalled from the following folder.$\\r$\\nClick "
-#| "Uninstall to start the uninstallation.$\\r$\\nWARNING: The uninstaller "
-#| "completely removes the installation directory including any files (such "
-#| "as custom cleaners) that you may have added or changed."
 msgctxt "nsis:UNINSTALL_TEXT"
 msgid ""
 "${prodname} will be uninstalled from the following folder.\n"
@@ -1238,11 +1146,11 @@ msgid ""
 "including any files (such as custom cleaners) that you may have added or "
 "changed."
 msgstr ""
-"Díshuiteálfar ${prodname} ón bhfillteán seo a leanas.$\\r$\\nCliceáil "
-"Díshuiteáil chun an díshuiteáil a thosú.$\\r$\\nRABHADH: Baintear an t-"
-"eolaire suiteála go hiomlán leis an díshuiteálaí, lena n-áirítear aon "
-"chomhaid (mar shampla glantóirí saincheaptha) a d'fhéadfadh a bheith curtha "
-"leis nó athraithe agat."
+"Díshuiteálfar ${prodname} ón bhfillteán seo a leanas.\n"
+"Cliceáil Díshuiteáil chun an díshuiteáil a thosú.\n"
+"RABHADH: Baintear an t-eolaire suiteála go hiomlán leis an díshuiteálaí, "
+"lena n-áirítear aon chomhaid (amhail glantóirí saincheaptha) a d'fhéadfadh a "
+"bheith curtha leis nó athraithe agat."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
