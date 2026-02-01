@@ -298,13 +298,13 @@ def skipUnlessWindows(f):
     return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')(f)
 
 
-def test_also_with_sudo(test_func):
+def also_with_sudo(test_func):
     """
     Decorator to mark test methods that should be run both normally and with sudo.
 
     See also `tests/test_with_sudo.py`.
     """
-    test_func._test_also_with_sudo = True
+    test_func._also_with_sudo = True
     return test_func
 
 

@@ -46,7 +46,7 @@ from bleachbit.General import (
     shell_split,
     sudo_mode)
 from tests import common
-from tests.common import test_also_with_sudo
+from tests.common import also_with_sudo
 
 
 class GeneralTestCase(common.BleachbitTestCase):
@@ -72,7 +72,7 @@ class GeneralTestCase(common.BleachbitTestCase):
         if sys.executable:
             self.assertEqual(exe, sys.executable)
 
-    @test_also_with_sudo
+    @also_with_sudo
     def test_get_real_uid(self):
         """Test for get_real_uid()"""
         if 'posix' != os.name:
@@ -157,7 +157,7 @@ class GeneralTestCase(common.BleachbitTestCase):
                     uid = get_real_uid()
         self.assertEqual(uid, 1000)
 
-    @test_also_with_sudo
+    @also_with_sudo
     def test_get_real_username(self):
         """Test for get_real_username()"""
         if 'posix' != os.name:
@@ -194,7 +194,7 @@ class GeneralTestCase(common.BleachbitTestCase):
                         username = get_real_username()
         self.assertEqual(username, '4242')
 
-    @test_also_with_sudo
+    @also_with_sudo
     def test_makedirs(self):
         """Unit test for makedirs"""
 
@@ -275,11 +275,17 @@ class GeneralTestCase(common.BleachbitTestCase):
                 self.assertNotExists(test_file)
 
                 # Test with wait=False
-                (rc, stdout, stderr) = run_external(cmd, wait=False)
+                (rc, stdout, stderr) = run_external(cmd, wait=False, timeout=5)
+
                 self.assertEqual(0, rc)
                 self.assertEqual('', stdout)
                 self.assertEqual('', stderr)
-                time.sleep(1)
+                # Poll for file creation. Touch normally completes in milliseconds,
+                # so one second is plenty.
+                for _ in range(100):
+                    if os.path.exists(test_file):
+                        break
+                    time.sleep(0.01)
                 self.assertExists(test_file)
 
     def test_run_external_with_timeout_failure(self):
@@ -444,7 +450,7 @@ class GeneralTestCase(common.BleachbitTestCase):
             self.assertEqual(test[1], shell_split(test[0]))
 
     @common.skipIfWindows
-    @test_also_with_sudo
+    @also_with_sudo
     def test_sudo_mode(self):
         """Unit test for sudo_mode"""
         self.assertIsInstance(sudo_mode(), bool)

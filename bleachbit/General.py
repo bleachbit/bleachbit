@@ -280,12 +280,14 @@ def run_external_nowait(args, env=None, kwargs=None):
             try:
                 # Detach from parent session
                 os.setsid()
-                # Redirect standard streams to devnull
-                with open(os.devnull, 'w', encoding=bleachbit.stdout_encoding) as devnull:
-                    os.dup2(devnull.fileno(), sys.stdout.fileno())
-                    os.dup2(devnull.fileno(), sys.stderr.fileno())
-                with open(os.devnull, 'r', encoding=bleachbit.stdout_encoding) as devnull:
-                    os.dup2(devnull.fileno(), sys.stdin.fileno())
+                # Redirect standard streams to devnull using raw fd numbers
+                # (0=stdin, 1=stdout, 2=stderr) to avoid issues with pytest
+                # or other frameworks that replace sys.stdout/stderr objects.
+                devnull_fd = os.open(os.devnull, os.O_RDWR)
+                os.dup2(devnull_fd, 0)  # stdin
+                os.dup2(devnull_fd, 1)  # stdout
+                os.dup2(devnull_fd, 2)  # stderr
+                os.close(devnull_fd)
                 # Set environment if needed
                 if env:
                     os.environ.clear()
