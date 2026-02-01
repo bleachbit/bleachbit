@@ -88,6 +88,42 @@ class PreferencesDialog:
 
         self.refresh_operations = False
 
+    def _create_checkbox(self, label, option_id, vbox=None, tooltip=None,
+                         requires_option=None, store_as_attr=None):
+        """Helper to create a checkbox with common patterns.
+
+        Args:
+            label: The checkbox label text
+            option_id: The option ID to connect to
+            vbox: Optional vbox to pack the checkbox into
+            tooltip: Optional tooltip text
+            requires_option: Optional option ID that must be enabled for sensitivity
+            store_as_attr: Optional attribute name to store checkbox as self.{name}
+
+        Returns:
+            The created Gtk.CheckButton
+        """
+        cb = Gtk.CheckButton(label=label)
+        cb.set_active(options.get(option_id))
+        cb.connect('toggled', self.__toggle_callback, option_id)
+
+        if tooltip:
+            cb.set_tooltip_text(tooltip)
+
+        if requires_option is not None and not options.get(requires_option):
+            cb.set_sensitive(False)
+        elif options.has_override(option_id):
+            cb.set_sensitive(False)
+
+        if store_as_attr:
+            setattr(self, store_as_attr, cb)
+
+        if vbox is None:
+            vbox = self.general_vbox
+        vbox.pack_start(cb, False, True, 0)
+
+        return cb
+
     def __del__(self):
         """Destructor called when the dialog is closing"""
         if self.refresh_operations:
@@ -165,43 +201,35 @@ class PreferencesDialog:
         """Create and configure update-related checkboxes."""
         if not online_update_notification_enabled:
             return
-        cb_updates = Gtk.CheckButton.new_with_label(
-            label=_("Check periodically for software updates via the Internet"))
-        cb_updates.set_active(options.get('check_online_updates'))
-        cb_updates.connect(
-            'toggled', self.__toggle_callback, 'check_online_updates')
-        cb_updates.set_tooltip_text(
-            _("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
-        vbox.pack_start(cb_updates, False, True, 0)
+        self._create_checkbox(
+            _("Check periodically for software updates via the Internet"),
+            'check_online_updates',
+            tooltip=_("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
 
         updates_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         updates_box.set_border_width(10)
 
-        self.cb_beta = Gtk.CheckButton.new_with_label(
-            label=_("Check for new beta releases"))
-        self.cb_beta.set_active(options.get('check_beta'))
-        self.cb_beta.set_sensitive(options.get('check_online_updates'))
-        self.cb_beta.connect(
-            'toggled', self.__toggle_callback, 'check_beta')
-        updates_box.pack_start(self.cb_beta, False, True, 0)
+        self._create_checkbox(
+            _("Check for new beta releases"),
+            'check_beta',
+            vbox=updates_box,
+            requires_option='check_online_updates',
+            store_as_attr='cb_beta')
 
         if 'nt' == os.name:
-            self.cb_winapp2 = Gtk.CheckButton.new_with_label(
-                label=_("Download and update cleaners from community (winapp2.ini)"))
-            self.cb_winapp2.set_active(options.get('update_winapp2'))
-            self.cb_winapp2.set_sensitive(
-                options.get('check_online_updates'))
-            self.cb_winapp2.connect(
-                'toggled', self.__toggle_callback, 'update_winapp2')
-            updates_box.pack_start(self.cb_winapp2, False, True, 0)
+            self._create_checkbox(
+                _("Download and update cleaners from community (winapp2.ini)"),
+                'update_winapp2',
+                vbox=updates_box,
+                requires_option='check_online_updates',
+                store_as_attr='cb_winapp2')
         vbox.pack_start(updates_box, False, True, 0)
 
     def __create_language_widgets(self, vbox):
         """Create and configure language selection widgets."""
         lang_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        self.cb_auto_lang = Gtk.CheckButton(
-            label=_("Auto-detect language"))
         is_auto_detect = options.get("auto_detect_lang")
+        self.cb_auto_lang = Gtk.CheckButton(label=_("Auto-detect language"))
         self.cb_auto_lang.set_active(is_auto_detect)
         self.cb_auto_lang.set_tooltip_text(
             _("Automatically detect the system language"))
@@ -280,36 +308,25 @@ class PreferencesDialog:
         # nothing.  For example, if Firefox were never used on
         # this system, this option would hide Firefox to simplify
         # the list of cleaners.
-        cb_auto_hide = Gtk.CheckButton.new_with_label(
-            label=_("Hide irrelevant cleaners"))
-        cb_auto_hide.set_active(options.get('auto_hide'))
-        cb_auto_hide.connect('toggled', self.__toggle_callback, 'auto_hide')
-        vbox.pack_start(cb_auto_hide, False, True, 0)
+        self._create_checkbox(
+            _("Hide irrelevant cleaners"),
+            'auto_hide')
 
         # TRANSLATORS: Overwriting is the same as shredding.  It is a way
         # to prevent recovery of the data. You could also translate
         # 'Shred files to prevent recovery.'
-        cb_shred = Gtk.CheckButton(
-            label=_("Overwrite contents of files to prevent recovery"))
-        cb_shred.set_active(options.get('shred'))
-        cb_shred.connect('toggled', self.__toggle_callback, 'shred')
-        cb_shred.set_tooltip_text(
-            _("Overwriting is ineffective on some file systems and with certain BleachBit operations.  Overwriting is significantly slower."))
-        vbox.pack_start(cb_shred, False, True, 0)
+        self._create_checkbox(
+            _("Overwrite contents of files to prevent recovery"),
+            'shred',
+            tooltip=_("Overwriting is ineffective on some file systems and with certain BleachBit operations.  Overwriting is significantly slower."))
 
-        # Close the application after cleaning is complete.
-        cb_exit = Gtk.CheckButton.new_with_label(
-            label=_("Exit after cleaning"))
-        cb_exit.set_active(options.get('exit_done'))
-        cb_exit.connect('toggled', self.__toggle_callback, 'exit_done')
-        vbox.pack_start(cb_exit, False, True, 0)
+        self._create_checkbox(
+            _("Exit after cleaning"),
+            'exit_done')
 
-        # Disable delete confirmation message.
-        cb_popup = Gtk.CheckButton(label=_("Confirm before delete"))
-        cb_popup.set_active(options.get('delete_confirmation'))
-        cb_popup.connect(
-            'toggled', self.__toggle_callback, 'delete_confirmation')
-        vbox.pack_start(cb_popup, False, True, 0)
+        self._create_checkbox(
+            _("Confirm before delete"),
+            'delete_confirmation')
 
         reset_warnings_button = Gtk.Button.new_with_label(
             label=_("Reset warning confirmations"))
@@ -319,63 +336,44 @@ class PreferencesDialog:
             'clicked', self.__reset_warning_preferences)
         vbox.pack_start(reset_warnings_button, False, True, 0)
 
-        # Use base 1000 over 1024?
-        cb_units_iec = Gtk.CheckButton(
-            label=_("Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"))
-        cb_units_iec.set_active(options.get("units_iec"))
-        cb_units_iec.connect('toggled', self.__toggle_callback, 'units_iec')
-        vbox.pack_start(cb_units_iec, False, True, 0)
+        self._create_checkbox(
+            _("Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"),
+            "units_iec")
 
     def __general_page(self):
         """Return a widget containing the general page"""
 
-        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.general_vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
-        self.__create_update_widgets(vbox)
+        self.__create_update_widgets(self.general_vbox)
 
-        self.__create_general_checkboxes(vbox)
+        self.__create_general_checkboxes(self.general_vbox)
 
-        # Remember window geometry (position and size)
-        self.cb_geom = Gtk.CheckButton(label=_("Remember window geometry"))
-        self.cb_geom.set_active(options.get("remember_geometry"))
-        self.cb_geom.connect(
-            'toggled', self.__toggle_callback, 'remember_geometry')
-        vbox.pack_start(self.cb_geom, False, True, 0)
+        self._create_checkbox(
+            _("Remember window geometry"),
+            'remember_geometry')
 
-        # Debug logging
-        cb_debug = Gtk.CheckButton(label=_("Show debug messages"))
-        cb_debug.set_active(options.get("debug"))
-        cb_debug.connect('toggled', self.__toggle_callback, 'debug')
-        vbox.pack_start(cb_debug, False, True, 0)
+        self._create_checkbox(
+            _("Show debug messages"),
+            'debug')
 
-        # KDE context menu shred option
         if 'nt' != os.name:
-            cb_kde_shred_menu_option = Gtk.CheckButton(
-                label=_("Add the shred context menu to KDE Plasma"))
-            cb_kde_shred_menu_option.set_active(
-                options.get("kde_shred_menu_option"))
-            cb_kde_shred_menu_option.connect(
-                'toggled', self.__toggle_callback, 'kde_shred_menu_option')
-            vbox.pack_start(cb_kde_shred_menu_option, False, True, 0)
+            self._create_checkbox(
+                _("Add the shred context menu to KDE Plasma"),
+                'kde_shred_menu_option')
 
-        # Dark theme
-        self.cb_dark_mode = Gtk.CheckButton(label=_("Dark mode"))
-        self.cb_dark_mode.set_active(options.get("dark_mode"))
-        self.cb_dark_mode.connect(
-            'toggled', self.__toggle_callback, 'dark_mode')
-        vbox.pack_start(self.cb_dark_mode, False, True, 0)
+        self._create_checkbox(
+            _("Dark mode"),
+            'dark_mode')
 
         if 'nt' == os.name:
-            # Windows 10 theme
-            cb_win10_theme = Gtk.CheckButton(label=_("Windows 10 theme"))
-            cb_win10_theme.set_active(options.get("win10_theme"))
-            cb_win10_theme.connect(
-                'toggled', self.__toggle_callback, 'win10_theme')
-            vbox.pack_start(cb_win10_theme, False, True, 0)
+            self._create_checkbox(
+                _("Windows 10 theme"),
+                'win10_theme')
 
-        self.__create_language_widgets(vbox)
+        self.__create_language_widgets(self.general_vbox)
 
-        return vbox
+        return self.general_vbox
 
     def __drives_page(self):
         """Return widget containing the drives page"""

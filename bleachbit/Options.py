@@ -188,6 +188,10 @@ class Options:
         """Check if option is set"""
         return self.config.has_option(section, option)
 
+    def has_override(self, option, section='bleachbit'):
+        """Check if option is overridden"""
+        return (section, option) in self.overrides
+
     def get(self, option, section='bleachbit'):
         """Retrieve a general option"""
         if not 'nt' == os.name and 'update_winapp2' == option:
