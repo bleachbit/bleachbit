@@ -32,6 +32,10 @@ class Bleachbit(Gtk.Application):
 
         application_id_suffix = self._init_windows_misc(
             auto_exit, shred_paths, uac)
+        # Support pytest-xdist parallel workers by making application ID unique
+        xdist_worker = os.environ.get('PYTEST_XDIST_WORKER', '')
+        if xdist_worker:
+            application_id_suffix += xdist_worker
         application_id = '{}{}'.format(
             'org.gnome.Bleachbit', application_id_suffix)
         Gtk.Application.__init__(
