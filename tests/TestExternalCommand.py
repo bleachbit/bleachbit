@@ -191,6 +191,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         # First, test the simple case of a pathname without embedded spaces.
         # Then, test a pathname with a space.
         self.assertNotRunning()
+        if not HAVE_GTK:
+            self.skipTest('GTK is not available')
         for fn_prefix in ('shred_target_no_spaces', 'shred target with spaces'):
             self._context_helper(fn_prefix)
         self.assertNotRunning()
@@ -200,6 +202,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         """Test shredding a file with the context menu command with privilege escalation"""
         if bleachbit.Windows.path_on_network(bleachbit.bleachbit_exe_path):
             self.skipTest('Escalation is not attempted on network paths.')
+        if not HAVE_GTK:
+            self.skipTest('GTK is not available')
         self.assertNotRunning()
         for fn_prefix in ('shred_target_no_spaces', 'shred target with spaces'):
             self._test_as_non_admin_with_context_menu_path(fn_prefix)
@@ -209,6 +213,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
     def test_context_menu_command_while_the_app_is_running(self):
         """Test the context menu command while the application is running"""
         self.assertNotRunning()
+        if not HAVE_GTK:
+            self.skipTest('GTK is not available')
         # Start an idle process that will keep running.
         # The --no-uac flag prevents launching grandchild process.
         # The --no-load-cleaners makes it faster.
@@ -277,6 +283,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         """Test that wait_for_process_tree_windows waits for grandchild processes"""
         marker_file = self.mkstemp(prefix='grandchild_marker_')
         os.remove(marker_file)
+        self.assertNotExists(marker_file)
 
         grandchild_script = os.path.join(self.tempdir, 'grandchild.py')
         with open(grandchild_script, 'w', encoding='utf-8') as f:
@@ -293,8 +300,9 @@ sys.exit(0)
             f.write(f'''import subprocess
 import sys
 import time
-subprocess.Popen([sys.executable, {repr(grandchild_script)}])
+p = subprocess.Popen([sys.executable, {repr(grandchild_script)}])
 time.sleep(0.5)
+p.wait()
 sys.exit(0)
 ''')
 
