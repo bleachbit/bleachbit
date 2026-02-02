@@ -26,7 +26,7 @@ Test case for module Windows
 
 from tests import common
 
-from bleachbit import FileUtilities, General, Windows
+from bleachbit import FileUtilities, General
 from bleachbit.Command import Delete, Function
 from bleachbit.FileUtilities import extended_path, extended_path_undo
 from bleachbit.Windows import (
@@ -79,6 +79,8 @@ if 'win32' == sys.platform:
     import win32service
     import winreg
     from win32com.shell import shell
+
+    from bleachbit import Windows
 
 
 def put_files_into_recycle_bin():
