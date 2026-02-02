@@ -75,8 +75,10 @@ install:
 	mkdir -p $(DESTDIR)$(datadir)/bleachbit/cleaners
 	$(INSTALL_DATA) cleaners/*.xml $(DESTDIR)$(datadir)/bleachbit/cleaners
 
-	# menu
-	$(INSTALL_DATA) data/app-menu.ui $(DESTDIR)$(datadir)/bleachbit
+	# share files
+	mkdir -p $(DESTDIR)$(datadir)/bleachbit/share
+	$(INSTALL_DATA) share/app-menu.ui $(DESTDIR)$(datadir)/bleachbit/share
+	$(INSTALL_DATA) share/protected_path.xml $(DESTDIR)$(datadir)/bleachbit/share
 
 	# icon
 	mkdir -p $(DESTDIR)$(datadir)/pixmaps

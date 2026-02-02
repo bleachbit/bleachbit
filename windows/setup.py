@@ -519,7 +519,9 @@ def build():
     for dll in glob.glob1(GTK_LIBDIR, '*.dll'):
         copy_file(os.path.join(GTK_LIBDIR, dll), 'dist\\' + dll)
 
-    copy_file('data\\app-menu.ui', 'dist\\data\\app-menu.ui')
+    # Copy share files
+    copy_file('share\\app-menu.ui', 'dist\\share\\app-menu.ui')
+    copy_file('share\\protected_path.xml', 'dist\\share\\protected_path.xml')
 
     logger.info('Copying themes')
     copy_tree('themes', 'dist\\themes')

@@ -166,15 +166,45 @@ for __icon in __icons:
     if os.path.exists(__icon):
         appicon_path = __icon
 
+# share directory - centralized function for finding share location
+def get_share_dir():
+    r"""Get the share directory location for BleachBit data files.
+
+    Covers scenarios:
+    - Running from source (local share/ directory)
+    - Windows installer (C:\Program Files (x86)\BleachBit\share)
+    - Windows portable mode (share/ next to executable)
+    - Linux packages (/usr/share/bleachbit)
+
+    Returns:
+        str: Path to share directory, or None if not found
+    """
+    # Check relative to bleachbit package (running from source)
+    source_share = os.path.join(os.path.dirname(__file__), '..', 'share')
+    source_share = os.path.normpath(source_share)
+    if os.path.exists(source_share):
+        return source_share
+
+    # Check in system data directory (Linux packages)
+    if system_cleaners_dir:
+        system_share = os.path.join(os.path.dirname(system_cleaners_dir), 'share')
+        if os.path.exists(system_share):
+            return system_share
+
+    # Check relative to executable (Windows portable/installer)
+    exe_share = os.path.join(bleachbit_exe_path, 'share')
+    if os.path.exists(exe_share):
+        return exe_share
+
+    return None
+
 # menu
-# This path works when running from source (cross platform) or when
-# installed on Windows.
-app_menu_filename = os.path.join(bleachbit_exe_path, 'data', 'app-menu.ui')
-if not os.path.exists(app_menu_filename) and system_cleaners_dir:
-    # This path works when installed on Linux.
-    app_menu_filename = os.path.abspath(
-        os.path.join(system_cleaners_dir, '../app-menu.ui'))
-if not os.path.exists(app_menu_filename):
+app_menu_filename = None
+share_dir = get_share_dir()
+if share_dir:
+    app_menu_filename = os.path.join(share_dir, 'app-menu.ui')
+
+if not app_menu_filename or not os.path.exists(app_menu_filename):
     logger.error('unknown location for app-menu.ui')
 
 # locale directory
