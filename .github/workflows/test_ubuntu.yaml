@@ -82,9 +82,6 @@ jobs:
         echo "revision = \"`git rev-parse --short HEAD`\"" > bleachbit/Revision.py
         echo "build_number = \"${{ github.run_number }}\"" >> bleachbit/Revision.py
 
-    - name: Remove Windows-specific files
-      run: make delete_windows_files
-
     - name: Generate translations
       run: make -C po local bleachbit.pot
 
