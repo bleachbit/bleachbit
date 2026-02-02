@@ -33,9 +33,9 @@ from bleachbit.GtkShim import HAVE_GTK, Gtk, GLib, Gio
 
 if HAVE_GTK:
     from bleachbit.GuiApplication import Bleachbit
+    from bleachbit.GuiUtil import get_font_size_from_name, get_window_info
 
 import bleachbit
-from bleachbit.GuiUtil import get_font_size_from_name, get_window_info
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 from tests import common
