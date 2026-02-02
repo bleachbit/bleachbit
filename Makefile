@@ -106,8 +106,15 @@ delete_windows_files:
 	# This is used for building .deb and .rpm packages.
 	# Remove Windows-specific cleaners.
 	grep -l "cleaner id=\"\w*\" os=\"windows\"" cleaners/*xml | xargs rm -f
-	# Remove Windows-specific modules.
-	rm -f bleachbit/{Winapp,Windows*}.py
+	# Remove Windows-specific code.
+	rm -f bleachbit/{Winapp,Windows*}.py tests/TestWindows{,Wipe}.py
+	# Remove the whole directory after verifying it's the Windows build directory.
+	# This is disabled because it break po/Makefile
+	#@if [ -f windows/bleachbit.nsi ]; then \
+	#	rm -rf windows; \
+	#else \
+	#	echo "WARNING: windows/bleachbit.nsi not found, skipping windows directory removal"; \
+	#fi
 
 tests:
 	# Catch warnings as errors. Also set in `tests/common.py`.
