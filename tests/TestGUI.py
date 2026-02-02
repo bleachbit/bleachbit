@@ -27,6 +27,7 @@ import os
 import unittest
 import time
 import types
+import warnings
 from unittest import mock
 
 from bleachbit.GtkShim import HAVE_GTK, Gtk, GLib, Gio
@@ -52,6 +53,13 @@ class GUITestCase(common.BleachbitTestCase):
     """Test case for module GUI"""
     @classmethod
     def setUpClass(cls):
+        # Python 3.14 warns about asyncio.AbstractEventLoopPolicy, which
+        # we would normally treat as an error.
+        warnings.filterwarnings(
+            "ignore",
+            message=".*asyncio.AbstractEventLoopPolicy.*",
+            category=DeprecationWarning
+        )
         cls.old_language = common.get_env('LANGUAGE')
         common.put_env('LANGUAGE', 'en')
         super(GUITestCase, GUITestCase).setUpClass()

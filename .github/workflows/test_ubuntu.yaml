@@ -15,13 +15,17 @@ jobs:
   test:
     strategy:
       matrix:
-        python-version: ['3.9', '3.13']
+        python-version: ['3.9', '3.13', '3.14']
         include:
           - python-version: '3.9'
             ubuntu-version: ubuntu-22.04
             python-extra-dep: ''
             pygobject-version: '<3.51.0'
           - python-version: '3.13'
+            ubuntu-version: ubuntu-latest
+            python-extra-dep: 'libgirepository-2.0-dev'
+            pygobject-version: ''
+          - python-version: '3.14'
             ubuntu-version: ubuntu-latest
             python-extra-dep: 'libgirepository-2.0-dev'
             pygobject-version: ''
@@ -69,6 +73,9 @@ jobs:
     - name: Install Python dependencies
       run: |
         pip install chardet "PyGObject${{ matrix.pygobject-version }}" requests setuptools coverage coveralls appveyor-artifacts psutil
+        if [ "${{ matrix.python-version }}" == "3.14" ]; then
+          pip install pytest pytest-xdist
+        fi
 
     - name: Generate Revision.py
       run: |
@@ -84,7 +91,11 @@ jobs:
         export $(dbus-launch)
         sudo Xvfb :1 -screen 0 800x600x24 &
         sleep 5
-        dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make tests && make tests-with-sudo"'
+        if [ "${{ matrix.python-version }}" == "3.14" ]; then
+          dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "PYTHONPATH=. pytest -n auto"'
+        else
+          dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make tests && make tests-with-sudo"'
+        fi
 
     - name: Combine Linux and Windows coverage, upload to Coveralls
       if: matrix.python-version == '3.13'
