@@ -95,7 +95,7 @@ jobs:
         sudo Xvfb :1 -screen 0 800x600x24 &
         sleep 5
         if [ "${{ matrix.python-version }}" == "3.14" ]; then
-          dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "pytest -n auto"'
+          dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "PYTHONPATH=. pytest -n auto"'
         else
           dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make tests && make tests-with-sudo"'
         fi
