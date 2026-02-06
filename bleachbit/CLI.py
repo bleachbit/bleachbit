@@ -242,6 +242,9 @@ def parse_cmd_line(argv=None):
     parser.add_option("--no-load-cleaners", action="store_false",
                       dest="load_cleaners",
                       help=optparse.SUPPRESS_HELP)
+    parser.add_option("--no-check-online-updates", action="store_false",
+                      dest="check_online_updates",
+                      help=optparse.SUPPRESS_HELP)
 
     if 'nt' == os.name:
         uac_help = _("do not prompt for administrator privileges")
@@ -265,6 +268,7 @@ def parse_cmd_line(argv=None):
         setattr(parser.values, 'gui', True)
         setattr(parser.values, 'exit', True)
         setattr(parser.values, 'load_cleaners', False)
+        setattr(parser.values, 'check_online_updates', False)
     parser.add_option("--context-menu", action="callback", callback=expand_context_menu_option,
                       help=optparse.SUPPRESS_HELP)
 
@@ -278,7 +282,7 @@ def process_cmd_line():
 
     parser, options, args, excludes = parse_cmd_line()
 
-    for opt in ('delete_confirmation', 'load_cleaners'):
+    for opt in ('delete_confirmation', 'load_cleaners', 'check_online_updates'):
         if hasattr(options, opt) and getattr(options, opt) is not None:
             Options.options.set_override(opt, getattr(options, opt))
 
