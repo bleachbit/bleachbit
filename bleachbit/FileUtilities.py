@@ -792,6 +792,11 @@ def is_dir_empty(dirname):
     return True
 
 
+def is_hard_link(path):
+    """Check if a file is a hard link."""
+    return os.path.isfile(path) and os.stat(path).st_nlink > 1
+
+
 def listdir(directory):
     """Return full path of files in directory.
 

@@ -35,10 +35,11 @@ from unittest import mock
 if 'win32' == sys.platform:
     import winreg
     import win32gui
+    from bleachbit import Windows
 
 import bleachbit
 import bleachbit.Options
-from bleachbit.FileUtilities import children_in_directory, extended_path
+from bleachbit.FileUtilities import children_in_directory, extended_path, is_hard_link
 from bleachbit.General import gc_collect, sudo_mode
 
 
@@ -235,6 +236,25 @@ class BleachbitTestCase(unittest.TestCase):
             encoding) if encoding else written_contents
         assert actual == expected, f"File contents mismatch: expected {expected!r}, got {actual!r}"
         return filename
+
+    def mkdir(self, dirname):
+        """Create a directory with a given name
+
+        If dirname is not absolute, it will be created in self.tempdir.
+
+        Returns the path to the created directory.
+        """
+        assert isinstance(dirname, str)
+        if not os.path.isabs(dirname):
+            dirname = os.path.join(self.tempdir, dirname)
+        os.makedirs(extended_path(dirname), exist_ok=True)
+        self.assertExists(extended_path(dirname))
+        self.assertTrue(os.path.isdir(extended_path(dirname)))
+        self.assertFalse(is_hard_link(extended_path(dirname)))
+        self.assertFalse(os.path.isfile(extended_path(dirname)))
+        if os.name == 'nt':
+            self.assertFalse(Windows.is_junction(extended_path(dirname)))
+        return dirname
 
     def mkstemp(self, **kwargs):
         if 'dir' not in kwargs:

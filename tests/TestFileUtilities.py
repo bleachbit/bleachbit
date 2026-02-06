@@ -52,6 +52,7 @@ from bleachbit.FileUtilities import (
     guess_overwrite_paths,
     human_to_bytes,
     is_dir_empty,
+    is_hard_link,
     listdir,
     open_files_lsof,
     OpenFiles,
@@ -61,7 +62,7 @@ from bleachbit.FileUtilities import (
     whitelisted
 )
 from bleachbit.General import gc_collect, run_external
-from bleachbit.Options import options
+from bleachbit.Options import init_configuration, options
 from bleachbit import logger
 from tests import common
 from tests.TestWindows import WindowsLinksMixIn
@@ -198,6 +199,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.old_locale_tuple = locale.getlocale(locale.LC_NUMERIC)
         self.old_locale_str = locale.setlocale(locale.LC_NUMERIC)
         locale.setlocale(locale.LC_NUMERIC, 'C')
+        init_configuration(log=False)
 
     def tearDown(self):
         """Call after each test method"""
@@ -316,7 +318,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
         # test subdirectory
         subdirname = os.path.join(dirname, "subdir")
-        os.mkdir(subdirname)
+        self.mkdir(subdirname)
         for filename in children_in_directory(dirname, True):
             self.assertEqual(filename, subdirname)
         for filename in children_in_directory(dirname, False):
@@ -330,18 +332,15 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_children_in_directory_posix_symlink(self):
         """POSIX: ensure directory symlinks are not followed"""
 
-        base_dir = os.path.join(self.tempdir, 'children-symlink-primary')
-        os.mkdir(base_dir)
+        base_dir = self.mkdir('children-symlink-primary')
 
         # Real directory inside base for normal traversal
         real_dir = os.path.join(base_dir, 'real-dir')
-        os.mkdir(real_dir)
+        self.mkdir(real_dir)
         real_file = self.mkstemp(prefix='real-file-', dir=real_dir)
 
         # Symlink inside base pointing outside of base_dir
-        external_target = os.path.join(
-            self.tempdir, 'children-symlink-external')
-        os.mkdir(external_target)
+        external_target = self.mkdir('children-symlink-external')
         external_file = self.mkstemp(
             prefix='external-file-', dir=external_target)
         self.assertExists(external_target)
@@ -366,12 +365,11 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_children_in_directory_posix_circular_symlink(self):
         """POSIX: ensure circular directory symlinks are not followed"""
 
-        base_dir = os.path.join(self.tempdir, 'children-circular-')
-        os.mkdir(base_dir)
+        base_dir = self.mkdir('children-circular-')
 
         # Create a normal directory and file inside the base directory
         real_dir = os.path.join(base_dir, 'real-dir')
-        os.mkdir(real_dir)
+        self.mkdir(real_dir)
         real_file = self.mkstemp(prefix='real-file-', dir=real_dir)
 
         # Symlink inside base pointing back to base_dir to create circular reference
@@ -393,19 +391,17 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_children_in_directory_windows_links(self):
         """Windows: ensure symlinked dirs and junctions are not followed"""
 
-        base_dir = os.path.join(self.tempdir, 'children-links')
-        os.mkdir(base_dir)
+        base_dir = self.mkdir('children-links')
 
         # Regular directory to confirm normal traversal still works
         normal_dir = os.path.join(base_dir, 'normal-dir')
-        os.mkdir(normal_dir)
+        self.mkdir(normal_dir)
         normal_file = os.path.join(normal_dir, 'normal-file')
         common.touch_file(normal_file)
         self.assertExists(normal_file)
 
         # Symlink target lives outside base_dir
-        symlink_target = os.path.join(self.tempdir, 'children-symlink-target')
-        os.mkdir(symlink_target)
+        symlink_target = self.mkdir('children-symlink-target')
         symlink_target_file = self.mkstemp(
             prefix='symlink-target-file-', dir=symlink_target)
         symlink_path = os.path.join(base_dir, 'symlinked-dir')
@@ -413,11 +409,11 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self._create_win_dir_symlink(symlink_target, symlink_path)
         except OSError as exc:
             self.skipTest(f'Cannot create Windows directory symlink: {exc}')
+        self.assertFalse(is_hard_link(symlink_target))
+        self.assertFalse(is_hard_link(symlink_path))
 
         # Junction target lives outside base_dir
-        junction_target = os.path.join(
-            self.tempdir, 'children-junction-target')
-        os.mkdir(junction_target)
+        junction_target = self.mkdir('children-junction-target')
         junction_target_file = self.mkstemp(
             prefix='junction-target-file-', dir=junction_target)
         junction_path = os.path.join(base_dir, 'junction-dir')
@@ -425,6 +421,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self._create_win_junction(junction_target, junction_path)
         except (OSError, subprocess.CalledProcessError) as exc:
             self.skipTest(f'Cannot create Windows junction: {exc}')
+        self.assertFalse(is_hard_link(junction_target))
+        self.assertFalse(is_hard_link(junction_path))
 
         entries_with_dirs = list(children_in_directory(base_dir, True))
         entries_files_only = list(children_in_directory(base_dir, False))
@@ -453,17 +451,10 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
     def test_clean_ini(self):
         """Unit test for clean_ini()"""
-        old_shred = options.get('shred')
-        try:
-            print("testing test_clean_ini() with shred = False")
-            options.set('shred', False, commit=False)
-            ini_helper(self, clean_ini)
-
-            print("testing test_clean_ini() with shred = True")
-            options.set('shred', True, commit=False)
-            ini_helper(self, clean_ini)
-        finally:
-            options.set('shred', old_shred, commit=False)
+        for shred in (False, True):
+            with self.subTest(shred=shred):
+                options.set('shred', shred)
+                ini_helper(self, clean_ini)
 
     def test_clean_ini_kde(self):
         """Unit test for clean_ini() with KDE ini file
@@ -505,25 +496,19 @@ State=AAAA/wA...
 
     def test_clean_json(self):
         """Unit test for clean_json()"""
-        old_shred = options.get('shred')
-        try:
-            print("testing test_clean_json() with shred = False")
-            options.set('shred', False, commit=False)
-            json_helper(self, clean_json)
-
-            print("testing test_clean_json() with shred = True")
-            options.set('shred', True, commit=False)
-            json_helper(self, clean_json)
-        finally:
-            options.set('shred', old_shred, commit=False)
+        for shred in (False, True):
+            with self.subTest(shred=shred):
+                options.set('shred', shred)
+                json_helper(self, clean_json)
 
     def test_delete(self):
         """Unit test for method delete()"""
-        print("testing delete() with shred = False")
-        self.delete_helper(shred=False)
-        print("testing delete() with shred = True")
-        self.delete_helper(shred=True)
-        # exercise ignore_missing
+        for shred in (False, True):
+            with self.subTest(shred=shred):
+                self.delete_helper(shred=shred)
+
+    def test_delete_ignore_missing(self):
+        """Unit test for delete() with ignore_missing=True"""
         delete('does-not-exist', ignore_missing=True)
         self.assertRaises(OSError, delete, 'does-not-exist')
 
@@ -666,6 +651,7 @@ State=AAAA/wA...
             # pylint: disable=possibly-used-before-assignment, c-extension-no-member
             win32api.SetFileAttributes(fn, win32con.FILE_ATTRIBUTE_HIDDEN)
             self.assertExists(fn)
+            self.assertFalse(is_hard_link(fn))
             delete(fn, shred=shred)
             self.assertNotExists(fn)
 
@@ -681,6 +667,7 @@ State=AAAA/wA...
             self.assertExists(filename)
             self.assertEqual(3, getsize(filename))
             handle = _open_blocking_handle(filename, share_mode)
+            self.assertFalse(is_hard_link(filename))
             return filename, handle
 
         # Each test is:
@@ -745,10 +732,10 @@ State=AAAA/wA...
         """Unit test for deleting a mount point in use"""
         if not common.have_root():
             self.skipTest('not enough privileges')
-        from_dir = os.path.join(self.tempdir, 'mount_from')
-        to_dir = os.path.join(self.tempdir, 'mount_to')
-        os.mkdir(from_dir)
-        os.mkdir(to_dir)
+        from_dir = self.mkdir('mount_from')
+        to_dir = self.mkdir('mount_to')
+        self.assertFalse(is_hard_link(from_dir))
+        self.assertFalse(is_hard_link(to_dir))
         args = ['mount', '--bind', from_dir, to_dir]
         (rc, _, stderr) = run_external(args)
         self.assertEqual(
@@ -765,15 +752,15 @@ State=AAAA/wA...
         """Test for scenario directory is not empty"""
         # common.py puts bleachbit.ini in self.tempdir, but it may
         # not be flushed
-        dirname = os.path.join(self.tempdir, 'a_dir')
-        os.mkdir(dirname)
+        dirname = self.mkdir('a_dir')
         self.assertFalse(is_dir_empty(self.tempdir))
         self.assertTrue(is_dir_empty(dirname))
         fn = self.write_file(os.path.join(dirname, 'a_file'), b'content')
         self.assertFalse(is_dir_empty(dirname))
-        self.assertExists(fn)
-        self.assertExists(dirname)
-        self.assertExists(self.tempdir)
+
+        for path in (fn, dirname, self.tempdir):
+            self.assertExists(path)
+            self.assertFalse(is_hard_link(path))
 
         # Make sure shredding does not leave a renamed directory like
         # in https://github.com/bleachbit/bleachbit/issues/783
@@ -790,9 +777,9 @@ State=AAAA/wA...
             [False, True], [False, True], [delete, delete_file]
         ):
             with self.subTest(option_shred=option_shred, parameter_shred=parameter_shred, delete_func=delete_func.__name__):
-                options.set('shred', option_shred, commit=False)
                 shred = parameter_shred
                 variation_dir = f"{option_shred}-{parameter_shred}-{delete_func.__name__}"
+                options.set('shred', option_shred)
                 # The directory is not read-only, but it used for the read-only test.
                 tmp_dir = self.mkdtemp(prefix=f'read-only-dir_{variation_dir}')
                 self.assertDirectoryCount(tmp_dir, 0)
@@ -803,6 +790,7 @@ State=AAAA/wA...
                 )
                 os.chmod(fn, stat.S_IREAD)
                 self.assertExists(fn)
+                self.assertFalse(is_hard_link(fn))
                 self.assertDirectoryCount(tmp_dir, 1)
                 try:
                     delete_func(fn, shred=shred)
@@ -829,7 +817,10 @@ State=AAAA/wA...
                 self.assertExists(link)
                 self.assertFalse(os.path.islink(link))
                 self.assertFalse(Windows.is_junction(link))
+                self.assertTrue(os.path.isfile(link))
                 self.assertDirectoryCount(tmp_dir, 2)
+                self.assertTrue(is_hard_link(link))
+                self.assertTrue(is_hard_link(target))
 
                 delete(link, shred=shred)
                 self.assertNotExists(link)
@@ -859,6 +850,9 @@ State=AAAA/wA...
                 self._create_win_junction(target_dir, junction)
                 self.assertExists(junction)
                 self.assertTrue(Windows.is_junction(junction))
+                self.assertFalse(Windows.is_junction(target_dir))
+                self.assertFalse(is_hard_link(junction))
+                self.assertFalse(is_hard_link(target_dir))
                 self.assertDirectoryCount(tmp_dir, 2)
 
                 delete(junction, shred=shred)
@@ -881,7 +875,7 @@ State=AAAA/wA...
                 self.assertDirectoryCount(container, 0)
 
                 ro_dir = os.path.join(container, f'readonly-{shred}')
-                os.mkdir(ro_dir)
+                self.mkdir(ro_dir)
                 kernel32.SetFileAttributesW(ro_dir, FILE_ATTRIBUTE_READONLY)
                 self.assertExists(ro_dir)
                 self.assertDirectoryCount(container, 1)
@@ -904,9 +898,7 @@ State=AAAA/wA...
         for shred in (False, True):
             with self.subTest(shred=shred):
                 long_name = 'x' * 200
-                long_dir = os.path.join(
-                    self.tempdir, f'{long_name}-dir-{shred}')
-                os.mkdir(extended_path(long_dir))
+                long_dir = self.mkdir(f'{long_name}-dir-{shred}')
 
                 long_file = self.write_file(
                     extended_path(os.path.join(
@@ -1466,8 +1458,7 @@ State=AAAA/wA...
         """Symlink test for whitelisted_posix()"""
         # setup
         old_whitelist = options.get_whitelist_paths()
-        tmpdir = os.path.join(self.tempdir, 'bleachbit-whitelist')
-        os.mkdir(tmpdir)
+        tmpdir = self.mkdir('bleachbit-whitelist')
         realpath = self.write_file('real')
         linkpath = os.path.join(tmpdir, 'link')
         os.symlink(realpath, linkpath)
