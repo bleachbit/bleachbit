@@ -800,9 +800,8 @@ State=AAAA/wA...
                 self.assertNotExists(fn)
                 self.assertDirectoryCount(tmp_dir, 0)
 
-    @common.skipUnlessWindows
     def test_delete_hard_link(self):
-        """Unit test for delete() with Windows hard link"""
+        """Unit test for delete() with hard link"""
         for shred in (False, True):
             with self.subTest(shred=shred):
                 tmp_dir = self.mkdtemp(prefix=f'delete_hard_{shred}')
@@ -813,11 +812,12 @@ State=AAAA/wA...
                 self.assertDirectoryCount(tmp_dir, 1)
 
                 link = os.path.join(tmp_dir, f'hardlink-{shred}')
-                self._create_win_hard_link(target, link)
+                os.link(target, link)
                 self.assertExists(link)
                 self.assertFalse(os.path.islink(link))
-                self.assertFalse(Windows.is_junction(link))
                 self.assertTrue(os.path.isfile(link))
+                if os.name == 'nt':
+                    self.assertFalse(Windows.is_junction(link))
                 self.assertDirectoryCount(tmp_dir, 2)
                 self.assertTrue(is_hard_link(link))
                 self.assertTrue(is_hard_link(target))
@@ -825,11 +825,9 @@ State=AAAA/wA...
                 delete(link, shred=shred)
                 self.assertNotExists(link)
                 self.assertExists(target)
-                if not shred:
-                    # With shred=True, content is wiped through the hard link
-                    # (expected: both names point to same file data)
-                    with open(target, 'rb') as f:
-                        self.assertEqual(f.read(), b'canary data')
+                # Regardless of shred setting, original should have canary data
+                with open(target, 'rb') as f:
+                    self.assertEqual(f.read(), b'canary data')
                 self.assertDirectoryCount(tmp_dir, 1)
 
                 delete(target, shred=False)
