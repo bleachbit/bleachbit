@@ -13,6 +13,7 @@ Supported distributions:
   debian    - run `make tests` and build .deb packages on Debian
   fedora    - run `make tests` and build RPM/SRPM packages on Fedora
   opensuse  - run `make tests` and build RPM/SRPM packages on openSUSE
+  py314-pytest - run selected tests with Python 3.14 + pytest
 
 Optional environment overrides:
   FEDORA_VERSION   Set Fedora macro used by the spec file
@@ -68,6 +69,10 @@ case "$DISTRO" in
         DOCKERFILE="$DOCKER_DIR/Dockerfile.opensuse"
         SUSE_VERSION=${SUSE_VERSION:-1699}
         RUN_ENV+=(--env SUSE_VERSION="$SUSE_VERSION")
+        ;;
+    py314-pytest)
+        IMAGE=bleachbit-test:py314-pytest
+        DOCKERFILE="$DOCKER_DIR/Dockerfile.py314-pytest"
         ;;
     *)
         echo "ERROR: unsupported distro '$DISTRO'" >&2

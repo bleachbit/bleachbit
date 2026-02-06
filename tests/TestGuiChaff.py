@@ -27,6 +27,8 @@ Test case for module GuiChaff
 import tempfile
 import time
 import unittest
+import warnings
+import sys
 from unittest.mock import patch, MagicMock
 
 from tests import common
@@ -64,7 +66,22 @@ class GuiChaffTestCase(common.BleachbitTestCase):
     @classmethod
     def refresh_gui(cls, delay=0):
         while Gtk.events_pending():
-            Gtk.main_iteration_do(blocking=False)
+            if sys.version_info >= (3, 14):
+                with warnings.catch_warnings():
+                    warnings.simplefilter("error")
+                    warnings.filterwarnings(
+                        "ignore",
+                        message=".*asyncio.AbstractEventLoopPolicy.*",
+                        category=DeprecationWarning
+                    )
+                    warnings.filterwarnings(
+                        "ignore",
+                        message=".*asyncio.get_event_loop_policy.*",
+                        category=DeprecationWarning
+                    )
+                    Gtk.main_iteration_do(blocking=False)
+            else:
+                Gtk.main_iteration_do(blocking=False)
         time.sleep(delay)
 
     def setUp(self):
