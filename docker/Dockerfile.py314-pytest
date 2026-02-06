@@ -1,0 +1,50 @@
+# syntax=docker/dockerfile:1.7
+
+FROM python:3.14-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        ca-certificates \
+        cmake \
+        gobject-introspection \
+        gir1.2-gtk-3.0 \
+        gir1.2-notify-0.7 \
+        libffi-dev \
+        libglib2.0-dev \
+        libgirepository-2.0-dev \
+        libgtk-3-0 \
+        libgirepository1.0-dev \
+        libcairo2-dev \
+        locales \
+        meson \
+        ninja-build \
+        pkg-config \
+        xauth \
+        xvfb \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN sed -i 's/# \(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
+    && locale-gen
+
+RUN python -m pip install --no-cache-dir -U pip setuptools wheel
+RUN python -m pip install --no-cache-dir \
+        chardet \
+        psutil \
+        requests \
+        pycairo \
+        PyGObject \
+        pytest
+
+ARG HOME_IN_CONTAINER=/home/user
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+RUN mkdir -p "$HOME_IN_CONTAINER" && chown "$USER_ID:$GROUP_ID" "$HOME_IN_CONTAINER"
+
+WORKDIR /work
+
+CMD ["/bin/bash"]
