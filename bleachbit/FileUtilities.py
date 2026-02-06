@@ -395,7 +395,7 @@ def delete_file(path, shred):
     Returns None.
     """
     # wipe contents
-    if shred:
+    if shred and not is_hard_link(path):
         try:
             wipe_contents(path)
         except pywinerror as e:  # pylint: disable=possibly-used-before-assignment
@@ -409,6 +409,7 @@ def delete_file(path, shred):
             # permission denied (13) happens shredding MSIE 8 on Windows 7
             logger.debug("IOError #%s shredding '%s'",
                          e.errno, path)
+    if shred:
         # wipe name
         os.remove(wipe_name(path))
         return
