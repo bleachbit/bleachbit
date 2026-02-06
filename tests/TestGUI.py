@@ -24,6 +24,7 @@ Test case for module GUI
 """
 
 import os
+import sys
 import unittest
 import time
 import types
@@ -53,13 +54,6 @@ class GUITestCase(common.BleachbitTestCase):
     """Test case for module GUI"""
     @classmethod
     def setUpClass(cls):
-        # Python 3.14 warns about asyncio.AbstractEventLoopPolicy, which
-        # we would normally treat as an error.
-        warnings.filterwarnings(
-            "ignore",
-            message=".*asyncio.AbstractEventLoopPolicy.*",
-            category=DeprecationWarning
-        )
         cls.old_language = common.get_env('LANGUAGE')
         common.put_env('LANGUAGE', 'en')
         super(GUITestCase, GUITestCase).setUpClass()
@@ -86,7 +80,22 @@ class GUITestCase(common.BleachbitTestCase):
     @classmethod
     def refresh_gui(cls, delay=0):
         while Gtk.events_pending():
-            Gtk.main_iteration_do(blocking=False)
+            if sys.version_info >= (3, 14):
+                with warnings.catch_warnings():
+                    warnings.simplefilter("error")
+                    warnings.filterwarnings(
+                        "ignore",
+                        message=".*asyncio.AbstractEventLoopPolicy.*",
+                        category=DeprecationWarning
+                    )
+                    warnings.filterwarnings(
+                        "ignore",
+                        message=".*asyncio.get_event_loop_policy.*",
+                        category=DeprecationWarning
+                    )
+                    Gtk.main_iteration_do(blocking=False)
+            else:
+                Gtk.main_iteration_do(blocking=False)
         time.sleep(delay)
 
     @classmethod
