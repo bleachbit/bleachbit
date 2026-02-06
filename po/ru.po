@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-01-27 08:54-0700\n"
-"PO-Revision-Date: 2026-01-24 09:01+0000\n"
+"PO-Revision-Date: 2026-02-07 07:01+0000\n"
 "Last-Translator: Сергей <asvmail.as@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/bleachbit/main/"
 "ru/>\n"
@@ -830,25 +830,17 @@ msgid "Default dark mode, showing found junk files"
 msgstr "Тёмный режим по умолчанию, показывая обнаруженные ненужные файлы"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:ALREADY_INSTALLED"
-#| msgid ""
-#| "${prodname} is already installed.$\\r$\\nClick 'OK' to uninstall the old "
-#| "version before upgrading, or click 'Cancel' to abort the upgrade."
 msgctxt "nsis:ALREADY_INSTALLED"
 msgid ""
 "${prodname} is already installed.\n"
 "Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' "
 "to abort the upgrade."
 msgstr ""
-"Приложение ${prodname} уже установлено.$\\r$\\nНажмите «ОК», чтобы удалить "
-"старую версию перед обновлением, или нажмите «Отменить», чтобы отменить "
-"обновление."
+"Приложение ${prodname} уже установлено.\n"
+"Нажмите «ОК», чтобы удалить старую версию перед обновлением, или нажмите «"
+"Отменить», чтобы отменить обновление."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
-#| msgid "Visit the ${prodname} web site"
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
 msgid "Visit the ${prodname} website"
 msgstr "Посетите ваб-сайт приложения ${prodname}"
@@ -856,38 +848,26 @@ msgstr "Посетите ваб-сайт приложения ${prodname}"
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:INSTALLER_CAPTION"
 msgid "${prodname} ${VERSION} Setup"
-msgstr ""
+msgstr "Установить ${prodname} ${VERSION}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIPRINT1"
-#| msgid ""
-#| "The next step is building font cache, during which you may see a black "
-#| "window."
 msgctxt "nsis:MULTIPRINT1"
 msgid ""
 "The next step is building the font cache, during which a black console "
 "window may appear."
 msgstr ""
-"Следующим шагом является создание кэша шрифтов, во время которого вы можете "
-"увидеть черное окно."
+"Следующим шагом является создание кэша шрифтов, в ходе которого может "
+"появиться чёрное окно консоли."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIPRINT2"
-#| msgid ""
-#| "It usually finishes in one minute, but sometimes it takes ten minutes."
 msgctxt "nsis:MULTIPRINT2"
 msgid ""
 "It usually finishes in one minute, but sometimes it takes up to ten minutes."
-msgstr "Обычно это длится не более минуты, но иногда требуется больше времени."
+msgstr ""
+"Обычно это длится не более минуты, но иногда может потребоваться больше "
+"времени."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
-#| msgid ""
-#| "You need to login with an account that is a member of the administrators "
-#| "group to continue."
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
 msgid ""
 "You need to log in with an account that is a member of the administrators "
@@ -902,9 +882,6 @@ msgid "Administrator credentials required."
 msgstr "Требуются права администратора."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
-#| msgid "Administrator credentials required for uninstall."
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required to uninstall."
 msgstr "Для удаления требуются права администратора."
