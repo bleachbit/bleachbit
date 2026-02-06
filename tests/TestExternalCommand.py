@@ -219,9 +219,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         # The --no-uac flag prevents launching grandchild process.
         # The --no-load-cleaners makes it faster.
         args = [sys.executable, 'bleachbit.py',
-                '--gui', '--no-load-cleaners']
-        if os.name == 'nt':
-            args.append('--no-uac')
+                '--gui', '--no-load-cleaners', '--no-check-online-updates','--no-uac']
+        print(args)
         p = subprocess.Popen(args, shell=False)
         try:
             # Run a second process that will shred a file.
