@@ -93,12 +93,13 @@ def path_to_option(pathname):
     return pathname
 
 
-def init_configuration():
+def init_configuration(*, log=True):
     """Initialize an empty configuration, if necessary"""
     if not os.path.exists(bleachbit.options_dir):
         General.makedirs(bleachbit.options_dir)
     if os.path.lexists(bleachbit.options_file):
-        logger.debug('Deleting configuration: %s ' % bleachbit.options_file)
+        if log:
+            logger.debug('Deleting configuration: %s ' % bleachbit.options_file)
         os.remove(bleachbit.options_file)
     with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as f_ini:
         f_ini.write('[bleachbit]\n')
