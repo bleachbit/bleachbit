@@ -161,6 +161,23 @@ def csidl_to_environ(varname, csidl):
     # there is exception handling in set_environ()
     set_environ(varname, sppath)
 
+def delete_file(pathname, func_remove=None):
+    """Safely delete a file"""
+    handle = win32file.CreateFile(
+        os.path.dirname(os.path.abspath(pathname)),
+        win32file.GENERIC_READ,
+        win32file.FILE_SHARE_READ,
+        None,
+        win32file.OPEN_EXISTING,
+        win32con.FILE_FLAG_BACKUP_SEMANTICS,
+        None
+    )
+    if handle != win32file.INVALID_HANDLE_VALUE:
+        if func_remove:
+            func_remove(pathname)
+        else:
+            win32file.DeleteFile(pathname)
+        win32file.CloseHandle(handle)
 
 def delete_locked_file(pathname):
     """Delete a file that is currently in use"""
