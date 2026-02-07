@@ -392,7 +392,7 @@ def delete_file(path, shred):
     - Not for use with directories.
     - Does not check the user's preferences.
 
-    Returns None.
+    Returns True.
     """
     # wipe contents
     if shred and not is_hard_link(path):
@@ -412,7 +412,7 @@ def delete_file(path, shred):
     if shred:
         # wipe name
         os.remove(wipe_name(path))
-        return
+        return True
     # Code below is shred == False
     try:
         os.remove(path)
@@ -428,7 +428,7 @@ def delete_file(path, shred):
                     _remove_windows_readonly(path):
                 # If read-only attribute was removed, try again.
                 os.remove(path)
-                return
+                return True
         raise
     except WindowsError as e:
         if e.winerror == 32:
@@ -449,6 +449,8 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
        * Windows hard link
        * Windows junction
        * Windows .lnk files
+
+       Returns True if the path was deleted, False otherwise.
     """
     from bleachbit.Options import options
     is_special = False
@@ -456,7 +458,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
     do_shred = allow_shred and (shred or options.get('shred'))
     if not os.path.lexists(path):
         if ignore_missing:
-            return
+            return False
         raise OSError(2, 'No such file or directory', path)
     if 'posix' == os.name:
         # With certain (relatively rare) files on Windows os.lstat()
@@ -465,6 +467,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         is_special = stat.S_ISFIFO(mode) or stat.S_ISLNK(mode)
     if is_special:
         os.remove(path)
+        return True
     elif os.path.isdir(path):
         delpath = path
         if do_shred:
@@ -472,7 +475,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
                 # Avoid renaming non-empty directory like
                 # https://github.com/bleachbit/bleachbit/issues/783
                 logger.info(_("Directory is not empty: %s"), path)
-                return
+                return False
             delpath = wipe_name(path)
         try:
             os.rmdir(delpath)
@@ -481,11 +484,13 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # https://bugs.launchpad.net/bleachbit/+bug/1012930
             if errno.ENOTEMPTY == e.errno:
                 logger.info(_("Directory is not empty: %s"), path)
+                return False
             elif errno.EBUSY == e.errno:
                 if os.name == 'posix' and os.path.ismount(path):
                     logger.info(_("Skipping mount point: %s"), path)
                 else:
                     logger.info(_("Device or resource is busy: %s"), path)
+                return False
             elif os.name == 'nt' and errno.EACCES == e.errno:
                 # On Windows, read-only directories cause Access Denied
                 if _remove_windows_readonly(delpath):
@@ -501,14 +506,19 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # during reboot.
             if 145 == e.winerror:
                 logger.info(_("Directory is not empty: %s"), path)
+                return False
             else:
                 raise
+        return True
     elif os.path.isfile(path):
         delete_file(path, do_shred)
+        return True
     elif os.path.islink(path):
         os.remove(path)
+        return True
     else:
         logger.info(_("Special file type cannot be deleted: %s"), path)
+        return False
 
 
 def detect_encoding(fn):

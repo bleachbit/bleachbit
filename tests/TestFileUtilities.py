@@ -12,6 +12,7 @@ Test case for module FileUtilities
 import contextlib
 import ctypes
 import itertools
+import unittest.mock
 import json
 import locale
 import os
@@ -507,10 +508,22 @@ State=AAAA/wA...
             with self.subTest(shred=shred):
                 self.delete_helper(shred=shred)
 
+
     def test_delete_ignore_missing(self):
         """Unit test for delete() with ignore_missing=True"""
-        delete('does-not-exist', ignore_missing=True)
+        self.assertFalse(delete('does-not-exist', ignore_missing=True))
         self.assertRaises(OSError, delete, 'does-not-exist')
+
+    def test_delete_access_denied(self):
+        """delete() raises PermissionError on access denied"""
+        path = self.write_file('test_delete_access_denied', b'secret')
+        e = PermissionError(13, 'Access is denied', path)
+        if os.name == 'nt':
+            e.winerror = 5
+        with unittest.mock.patch('os.remove', side_effect=e):
+            with self.assertRaises(PermissionError):
+                delete(path, shred=False)
+        self.assertExists(path)
 
     def delete_helper(self, shred):
         """Called by test_delete() with shred = False and = True"""
@@ -541,13 +554,13 @@ State=AAAA/wA...
             # create the file
             filename = self.write_file(test, b"top secret")
             # delete the file
-            delete(filename, shred)
+            self.assertTrue(delete(filename, shred))
             self.assertNotExists(filename)
 
             # delete an empty directory
             dirname = self.mkdtemp(prefix=test)
             self.assertExists(dirname)
-            delete(dirname, shred)
+            self.assertTrue(delete(dirname, shred))
             self.assertNotExists(dirname)
 
         def symlink_helper(link_fn):
@@ -569,12 +582,12 @@ State=AAAA/wA...
             self.assertLExists(linkname)
 
             # delete symlink
-            delete(linkname, shred)
+            self.assertTrue(delete(linkname, shred))
             self.assertExists(srcname)
             self.assertNotLExists(linkname)
 
             # delete regular file
-            delete(srcname, shred)
+            self.assertTrue(delete(srcname, shred))
             self.assertNotExists(srcname)
 
             #
@@ -587,12 +600,12 @@ State=AAAA/wA...
             self.assertExists(linkname)
 
             # delete regular file first
-            delete(srcname, shred)
+            self.assertTrue(delete(srcname, shred))
             self.assertNotExists(srcname)
             self.assertLExists(linkname)
 
             # clean up
-            delete(linkname, shred)
+            self.assertTrue(delete(linkname, shred))
             self.assertNotExists(linkname)
             self.assertNotLExists(linkname)
 
@@ -612,7 +625,7 @@ State=AAAA/wA...
             # test empty directory on Windows
             path = self.mkdtemp(prefix='bleachbit-test-delete-dir')
             self.assertExists(path)
-            delete(path, shred)
+            self.assertTrue(delete(path, shred))
             self.assertNotExists(path)
 
             return
@@ -622,7 +635,7 @@ State=AAAA/wA...
         # test file with mode 0444/-r--r--r--
         filename = self.write_file('bleachbit-test-0444')
         os.chmod(filename, 0o444)
-        delete(filename, shred)
+        self.assertTrue(delete(filename, shred))
         self.assertNotExists(filename)
 
         # test symlink
@@ -633,13 +646,13 @@ State=AAAA/wA...
         ret = subprocess.call(args)
         self.assertEqual(ret, 0)
         self.assertExists(filename)
-        delete(filename, shred)
+        self.assertTrue(delete(filename, shred))
         self.assertNotExists(filename)
 
         # test directory
         path = self.mkdtemp(prefix='bleachbit-test-delete-dir')
         self.assertExists(path)
-        delete(path, shred)
+        self.assertTrue(delete(path, shred))
         self.assertNotExists(path)
 
     @common.skipUnlessWindows
@@ -652,7 +665,7 @@ State=AAAA/wA...
             win32api.SetFileAttributes(fn, win32con.FILE_ATTRIBUTE_HIDDEN)
             self.assertExists(fn)
             self.assertFalse(is_hard_link(fn))
-            delete(fn, shred=shred)
+            self.assertTrue(delete(fn, shred=shred))
             self.assertNotExists(fn)
 
     @common.skipUnlessWindows
@@ -728,25 +741,38 @@ State=AAAA/wA...
                     self.assertNotExists(filename)
 
     @common.skipIfWindows
+    @common.also_with_sudo
     def test_delete_mount_point(self):
         """Unit test for deleting a mount point in use"""
         if not common.have_root():
             self.skipTest('not enough privileges')
         from_dir = self.mkdir('mount_from')
+        from_file = os.path.join(from_dir, 'normal-file')
+        common.touch_file(from_file)
         to_dir = self.mkdir('mount_to')
-        self.assertFalse(is_hard_link(from_dir))
-        self.assertFalse(is_hard_link(to_dir))
         args = ['mount', '--bind', from_dir, to_dir]
         (rc, _, stderr) = run_external(args)
         self.assertEqual(
             rc, 0, f'error calling mount\nargs={args}\nstderr={stderr}')
-
-        delete(to_dir)
-
-        args = ['umount', to_dir]
-        (rc, _, stderr) = run_external(args)
-        self.assertEqual(
-            rc, 0, f'error calling umount\nargs={args}\nstderr={stderr}')
+        self.assertTrue(os.path.isdir(to_dir))
+        to_file = os.path.join(to_dir, 'normal-file')
+        all_objs = (to_file, from_file, to_dir, from_dir)
+        for func in (os.path.islink, os.path.isjunction, os.path.ismount, is_hard_link):
+            for pathname in all_objs:
+                self.assertFalse(func(pathname))
+        try:
+            # delete() should return False for a busy mount point
+            ret = delete(to_dir)
+            self.assertFalse(ret)
+            # The mount point and its contents should still exist.
+            for pathname in all_objs:
+                self.assertExists(pathname)
+        finally:
+            args = ['umount', to_dir]
+            (rc, _, stderr) = run_external(args)
+            self.assertEqual(
+                rc, 0, f'error calling umount\nargs={args}\nstderr={stderr}')
+            self.assertNotExists(to_file)
 
     def test_delete_not_empty(self):
         """Test for scenario directory is not empty"""
@@ -765,7 +791,7 @@ State=AAAA/wA...
         # Make sure shredding does not leave a renamed directory like
         # in https://github.com/bleachbit/bleachbit/issues/783
         for allow_shred in (False, True):
-            delete(dirname, allow_shred=allow_shred)
+            self.assertFalse(delete(dirname, allow_shred=allow_shred))
             self.assertExists(fn)
             self.assertExists(dirname)
         os.remove(fn)
@@ -822,7 +848,7 @@ State=AAAA/wA...
                 self.assertTrue(is_hard_link(link))
                 self.assertTrue(is_hard_link(target))
 
-                delete(link, shred=shred)
+                self.assertTrue(delete(link, shred=shred))
                 self.assertNotExists(link)
                 self.assertExists(target)
                 # Regardless of shred setting, original should have canary data
