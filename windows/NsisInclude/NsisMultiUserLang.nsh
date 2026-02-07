@@ -1998,9 +1998,9 @@ Version: 2023-02-223
 !ifdef LANG_RUSSIAN
 	LangString ALREADY_INSTALLED ${LANG_RUSSIAN} "Приложение ${prodname} уже установлено.$\r$\nНажмите «ОК», чтобы удалить старую версию перед обновлением, или нажмите «Отменить», чтобы отменить обновление."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_RUSSIAN} "Посетите ваб-сайт приложения ${prodname}"
-	LangString INSTALLER_CAPTION ${LANG_RUSSIAN} "${prodname} ${VERSION} Setup"
-	LangString MULTIPRINT1 ${LANG_RUSSIAN} "Следующим шагом является создание кэша шрифтов, во время которого вы можете увидеть черное окно."
-	LangString MULTIPRINT2 ${LANG_RUSSIAN} "Обычно это длится не более минуты, но иногда требуется больше времени."
+	LangString INSTALLER_CAPTION ${LANG_RUSSIAN} "Установить ${prodname} ${VERSION}"
+	LangString MULTIPRINT1 ${LANG_RUSSIAN} "Следующим шагом является создание кэша шрифтов, в ходе которого может появиться чёрное окно консоли."
+	LangString MULTIPRINT2 ${LANG_RUSSIAN} "Обычно это длится не более минуты, но иногда может потребоваться больше времени."
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_RUSSIAN} "Для продолжения вам необходимо войти в систему под учётной записью, имеющей права администратора."
 	LangString MULTIUSER_ADMIN_CREDENTIALS_REQUIRED ${LANG_RUSSIAN} "Требуются права администратора."
 	LangString MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED ${LANG_RUSSIAN} "Для удаления требуются права администратора."
