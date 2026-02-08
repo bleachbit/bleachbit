@@ -13,6 +13,7 @@ Supported distributions:
   debian    - run `make tests` and build .deb packages on Debian
   fedora    - run `make tests` and build RPM/SRPM packages on Fedora
   opensuse  - run `make tests` and build RPM/SRPM packages on openSUSE
+  py314-pytest - run selected tests with Python 3.14 + pytest
 
 Optional environment overrides:
   FEDORA_VERSION   Set Fedora macro used by the spec file
@@ -38,7 +39,11 @@ DOCKER_DIR="$ROOT_DIR/docker"
 ARTIFACT_ROOT="$ROOT_DIR/docker-artifacts" # cleaned by `make clean`
 mkdir -p "$ARTIFACT_ROOT"
 
-HOME_IN_CONTAINER=/tmp/home # used by BleachBit, dnf, etc.
+# Set HOME for BleachBit, dnf, etc.
+# Setting HOME to /tmp/home is unrealistic and breaks some
+# tests in BleachBit. Instead, we need to make the directory
+# and set the permissions.
+HOME_IN_CONTAINER=/home/user
 RUN_ENV=(--env HOME="$HOME_IN_CONTAINER" --env DISTRO_NAME="$DISTRO")
 if [[ -n "${SKIP_TESTS:-}" ]]; then
     RUN_ENV+=(--env SKIP_TESTS="$SKIP_TESTS")
@@ -65,6 +70,10 @@ case "$DISTRO" in
         SUSE_VERSION=${SUSE_VERSION:-1699}
         RUN_ENV+=(--env SUSE_VERSION="$SUSE_VERSION")
         ;;
+    py314-pytest)
+        IMAGE=bleachbit-test:py314-pytest
+        DOCKERFILE="$DOCKER_DIR/Dockerfile.py314-pytest"
+        ;;
     *)
         echo "ERROR: unsupported distro '$DISTRO'" >&2
         usage >&2
@@ -89,10 +98,19 @@ mkdir -p "$ARTIFACT_DIR"
 DOCKER_BUILD_CONTEXT="$DOCKER_DIR"
 
 echo "[docker] Building image $IMAGE from $(basename "$DOCKERFILE")" >&2
-docker build --pull -f "$DOCKERFILE" -t "$IMAGE" "$DOCKER_BUILD_CONTEXT"
+docker build \
+    --pull \
+    --network=host \
+    --build-arg HOME_IN_CONTAINER="$HOME_IN_CONTAINER" \
+    --build-arg USER_ID="$USER_ID" \
+    --build-arg GROUP_ID="$GROUP_ID" \
+    -f "$DOCKERFILE" \
+    -t "$IMAGE" \
+    "$DOCKER_BUILD_CONTEXT"
 
 echo "[docker] Running build and tests inside $IMAGE" >&2
 docker run --rm \
+    --network=host \
     --user "$USER_ID:$GROUP_ID" \
     -v "$ROOT_DIR":/work:ro \
     -v "$ARTIFACT_DIR":/artifacts \

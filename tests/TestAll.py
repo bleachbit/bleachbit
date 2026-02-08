@@ -27,9 +27,11 @@ import unittest
 import sys
 import tempfile
 import shutil
+import time
 
 
-if __name__ == '__main__':
+def main():
+    """Run all tests"""
     testdir = tempfile.mkdtemp(prefix='TestAll ' + __name__)
     os.environ['BLEACHBIT_TEST_OPTIONS_DIR'] = testdir
 
@@ -37,12 +39,22 @@ if __name__ == '__main__':
     python -m unittest discover -p Test*.py                       # run all tests
     python -m unittest tests.TestCLI                              # run only the CLI tests
     python -m unittest tests.TestCLI.CLITestCase.test_encoding    # run only a single test""")
+
+    start_time = time.time()
     suite = unittest.defaultTestLoader.discover(
         os.getcwd(), pattern='Test*.py')
     success = unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()
+    elapsed_time = time.time() - start_time
+
+    minutes = int(elapsed_time // 60)
+    seconds = elapsed_time % 60
+    print(f"\nTotal test time: {minutes} minutes {seconds:.2f} seconds")
 
     del os.environ['BLEACHBIT_TEST_OPTIONS_DIR']
     if os.path.exists(testdir):
         shutil.rmtree(testdir)
 
     sys.exit(success == False)
+
+if __name__ == '__main__':
+    main()

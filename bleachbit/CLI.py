@@ -234,19 +234,28 @@ def parse_cmd_line(argv=None):
                       help=_("show system information"))
     parser.add_option("-v", "--version", action="store_true",
                       help=_("output version information and exit"))
+    parser.add_option('--pot', action='store_true',
+                      help=optparse.SUPPRESS_HELP)
+    parser.add_option("--no-delete-confirmation", action="store_false",
+                      dest="delete_confirmation",
+                      help=optparse.SUPPRESS_HELP)
+    parser.add_option("--no-load-cleaners", action="store_false",
+                      dest="load_cleaners",
+                      help=optparse.SUPPRESS_HELP)
+    parser.add_option("--no-check-online-updates", action="store_false",
+                      dest="check_online_updates",
+                      help=optparse.SUPPRESS_HELP)
 
     if 'nt' == os.name:
         uac_help = _("do not prompt for administrator privileges")
-    else:
-        uac_help = optparse.SUPPRESS_HELP
-    parser.add_option("--no-uac", action="store_true", help=uac_help)
-    if 'nt' == os.name:
+        parser.add_option("--no-uac", action="store_true", help=uac_help)
+
         parser.add_option('--uac-sid-token', help=optparse.SUPPRESS_HELP)
-    parser.add_option('--pot', action='store_true',
-                      help=optparse.SUPPRESS_HELP)
-    if 'nt' == os.name:
         parser.add_option("--update-winapp2", action="store_true",
                           help=_("update winapp2.ini, if a new version is available"))
+
+
+
 
     # added for testing py2exe build
     # https://github.com/bleachbit/bleachbit/commit/befe244efee9b2d4859c6b6c31f8bedfd4d85aad#diff-b578cd35e15095f69822ebe497bf8691da1b587d6cc5f5ec252ff4f186dbed56
@@ -258,6 +267,8 @@ def parse_cmd_line(argv=None):
     def expand_context_menu_option(_option, _opt, _value, parser):
         setattr(parser.values, 'gui', True)
         setattr(parser.values, 'exit', True)
+        setattr(parser.values, 'load_cleaners', False)
+        setattr(parser.values, 'check_online_updates', False)
     parser.add_option("--context-menu", action="callback", callback=expand_context_menu_option,
                       help=optparse.SUPPRESS_HELP)
 
@@ -270,6 +281,10 @@ def process_cmd_line():
     """Parse the command line and execute given commands."""
 
     parser, options, args, excludes = parse_cmd_line()
+
+    for opt in ('delete_confirmation', 'load_cleaners', 'check_online_updates'):
+        if hasattr(options, opt) and getattr(options, opt) is not None:
+            Options.options.set_override(opt, getattr(options, opt))
 
     cmd_list = (options.list_cleaners,
                 options.clean,
@@ -284,8 +299,9 @@ def process_cmd_line():
 
     did_something = False
     if options.debug:
-        # set in __init__ so it takes effect earlier
-        pass
+        # Debug is set in __init__ so it takes effect earlier.
+        # Also, set the override.
+        Options.options.set_override('debug', True)
     elif options.preset:
         # but if --preset is given, check if GUI option sets debug
         if Options.options.get('debug'):
@@ -339,14 +355,15 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         if not options.clean or options.shred:
             logger.warning(
                 _("--overwrite is intended only for use with --clean"))
-        Options.options.set('shred', True, commit=False)
+        Options.options.set_override('shred', True)
     if options.clean or options.preview:
         preview_or_clean(operations, options.clean)
         sys.exit(0)
     if options.gui:
-        import bleachbit.GUI
-        app = bleachbit.GUI.Bleachbit(
-            uac=not options.no_uac, shred_paths=args, auto_exit=options.exit)
+        import bleachbit.GuiApplication
+        enable_uac = os.name == 'nt' and not options.no_uac
+        app = bleachbit.GuiApplication.Bleachbit(
+            uac=enable_uac, shred_paths=args, auto_exit=options.exit)
         sys.exit(app.run())
     if options.shred:
         # delete arbitrary files without GUI

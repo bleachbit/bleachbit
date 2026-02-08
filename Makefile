@@ -23,6 +23,14 @@ INSTALL_SCRIPT = $(INSTALL) -m 755
 PYTHON ?= python3
 COVERAGE ?= $(PYTHON)
 
+ifneq ($(COVERAGE),$(PYTHON))
+BLEACHBIT_SUDO_COVERAGE_RUNNER := $(COVERAGE) --append
+BLEACHBIT_SUDO_COVERAGE_FILE := $(if $(COVERAGE_FILE),$(COVERAGE_FILE),.coverage)
+else
+BLEACHBIT_SUDO_COVERAGE_RUNNER :=
+BLEACHBIT_SUDO_COVERAGE_FILE :=
+endif
+
 build:
 	echo Nothing to build
 
@@ -67,9 +75,10 @@ install:
 	mkdir -p $(DESTDIR)$(datadir)/bleachbit/cleaners
 	$(INSTALL_DATA) cleaners/*.xml $(DESTDIR)$(datadir)/bleachbit/cleaners
 
-	# general shared data
-	$(INSTALL_DATA) share/app-menu.ui $(DESTDIR)$(datadir)/bleachbit
-	$(INSTALL_DATA) share/protected_path.xml $(DESTDIR)$(datadir)/bleachbit
+	# share files
+	mkdir -p $(DESTDIR)$(datadir)/bleachbit/share
+	$(INSTALL_DATA) share/app-menu.ui $(DESTDIR)$(datadir)/bleachbit/share
+	$(INSTALL_DATA) share/protected_path.xml $(DESTDIR)$(datadir)/bleachbit/share
 
 	# icon
 	mkdir -p $(DESTDIR)$(datadir)/pixmaps
@@ -97,8 +106,15 @@ delete_windows_files:
 	# This is used for building .deb and .rpm packages.
 	# Remove Windows-specific cleaners.
 	grep -l "cleaner id=\"\w*\" os=\"windows\"" cleaners/*xml | xargs rm -f
-	# Remove Windows-specific modules.
-	rm -f bleachbit/{Winapp,Windows*}.py
+	# Remove Windows-specific code.
+	rm -f bleachbit/{Winapp,Windows*}.py tests/TestWindows{,Wipe}.py
+	# Remove the whole directory after verifying it's the Windows build directory.
+	# This is disabled because it break po/Makefile
+	#@if [ -f windows/bleachbit.nsi ]; then \
+	#	rm -rf windows; \
+	#else \
+	#	echo "WARNING: windows/bleachbit.nsi not found, skipping windows directory removal"; \
+	#fi
 
 tests:
 	# Catch warnings as errors. Also set in `tests/common.py`.
@@ -109,7 +125,10 @@ tests:
 
 tests-with-sudo:
 	# Run tests marked with @test_also_with_sudo using sudo
-	PYTHONWARNINGS=error $(PYTHON) tests/test_with_sudo.py
+	PYTHONWARNINGS=error \
+		BLEACHBIT_COVERAGE_RUNNER="$(BLEACHBIT_SUDO_COVERAGE_RUNNER)" \
+		BLEACHBIT_COVERAGE_FILE="$(BLEACHBIT_SUDO_COVERAGE_FILE)" \
+		$(PYTHON) tests/test_with_sudo.py
 
 pretty:
 	@if command -v autopep8 >/dev/null 2>&1; then \

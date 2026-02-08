@@ -99,7 +99,7 @@ class CommonTestCase(common.BleachbitTestCase):
                             lang_codes.append(parts[1])
         # /etc/locale.alias may list the qaa-qtz range, which is reserved for
         # private use rather than a concrete locale. Skip it if present.
-        skip_alias_codes = {'qaa-qtz'}
+        skip_alias_codes = {'qaa-qtz', 'it_CARES'}
 
         for lang_code in lang_codes:
             if lang_code in skip_alias_codes:
@@ -128,6 +128,22 @@ class CommonTestCase(common.BleachbitTestCase):
 
         common.put_env('PUTENV_TEST', None)
         self.assertIsNone(common.get_env('PUTENV_TEST'))
+
+    @common.skipUnlessWindows
+    def test_get_opened_windows_titles(self):
+        """Unit test for get_opened_windows_titles()"""
+        titles = common.get_opened_windows_titles()
+
+        self.assertIsInstance(titles, list, "Should return a list")
+        self.assertGreater(len(titles), 0,
+                           f"Should have at least one window title. Got: {titles}")
+
+        # Verify all items are strings and none are empty
+        for title in titles:
+            self.assertIsInstance(
+                title, str, f"All titles should be strings, got {type(title)}")
+            self.assertGreater(len(title.strip()), 0,
+                               f"Window title should not be empty or whitespace-only: '{title}'")
 
     def test_touch_file(self):
         """Unit test for touch_file"""

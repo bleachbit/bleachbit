@@ -1,23 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test case for module FileUtilities
@@ -26,29 +11,33 @@ Test case for module FileUtilities
 # standard library
 import contextlib
 import ctypes
+import itertools
+import unittest.mock
 import json
 import locale
 import os
 import random
-import re
 import sqlite3
 import stat
 import subprocess
 import sys
 import tempfile
 import time
-import unittest
 import warnings
+
+# third-party import
+import psutil
 
 # local import
 from bleachbit.FileUtilities import (
+    _remove_windows_readonly,
     bytes_to_human,
     children_in_directory,
     clean_ini,
     clean_json,
     delete,
+    delete_file,
     detect_encoding,
-    detect_orphaned_wipe_files,
     ego_owner,
     exe_exists,
     execute_sqlite3,
@@ -64,31 +53,32 @@ from bleachbit.FileUtilities import (
     guess_overwrite_paths,
     human_to_bytes,
     is_dir_empty,
+    is_hard_link,
     listdir,
     open_files_lsof,
     OpenFiles,
     same_partition,
-    sync,
     uris_to_paths,
     vacuum_sqlite3,
-    whitelisted,
-    wipe_contents,
-    wipe_name,
-    wipe_path
+    whitelisted
 )
 from bleachbit.General import gc_collect, run_external
-from bleachbit.Options import options
+from bleachbit.Options import init_configuration, options
 from bleachbit import logger
 from tests import common
+from tests.TestWindows import WindowsLinksMixIn
 
 if 'nt' == os.name:
     # pylint: disable=import-error
     import win32api
     import win32com.shell
     import win32con
+    import win32file
+
+    from bleachbit import Windows
 
 
-def test_ini_helper(self, execute):
+def ini_helper(self, execute):
     """Used to test .ini cleaning in TestAction and in TestFileUtilities"""
 
     teststr = '#Test\n[RecentsMRL]\nlist=C:\\Users\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n'
@@ -132,7 +122,7 @@ def test_ini_helper(self, execute):
             self.assertNotExists(filename)
 
 
-def test_json_helper(self, execute):
+def json_helper(self, execute):
     """Used to test JSON cleaning in TestAction and in TestFileUtilities"""
 
     def load_js(js_fn):
@@ -174,7 +164,34 @@ def test_json_helper(self, execute):
     self.assertNotExists(filename)
 
 
-class FileUtilitiesTestCase(common.BleachbitTestCase):
+def _is_child_path(parent_path, child_path):
+    """Check whether child_path is a child of parent_path."""
+    parent = os.path.abspath(parent_path)
+    child = os.path.abspath(child_path)
+    return os.path.commonpath([parent]) == os.path.commonpath([parent, child])
+
+
+def _open_blocking_handle(path, share_mode):
+    """Open a file handle with the given share mode to block other processes.
+
+    Args:
+        path: Path to the file to open
+        share_mode: Windows share mode (e.g., win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE)
+    Returns:
+        File handle that blocks other processes from accessing the file
+    """
+    return win32file.CreateFile(
+        path,
+        win32con.GENERIC_READ | win32con.GENERIC_WRITE,
+        share_mode,
+        None,
+        win32con.OPEN_ALWAYS,
+        win32con.FILE_ATTRIBUTE_NORMAL,
+        None,
+    )
+
+
+class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     """Test case for module FileUtilities"""
 
     def setUp(self):
@@ -183,6 +200,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         self.old_locale_tuple = locale.getlocale(locale.LC_NUMERIC)
         self.old_locale_str = locale.setlocale(locale.LC_NUMERIC)
         locale.setlocale(locale.LC_NUMERIC, 'C')
+        init_configuration(log=False)
 
     def tearDown(self):
         """Call after each test method"""
@@ -203,7 +221,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                     except locale.Error:
                         # If that fails, try just the language code part
                         try:
-                            locale.setlocale(locale.LC_NUMERIC, self.old_locale_tuple[0])
+                            locale.setlocale(
+                                locale.LC_NUMERIC, self.old_locale_tuple[0])
                         except locale.Error as e:
                             print(
                                 "Failed to restore locale with just language code "
@@ -213,7 +232,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         # Check that running getlocale again does not raise an exception.
         # For me, getlocale() fails after successful setlocale(..., 'en_MX') on Windows.
         locale.getlocale(locale.LC_NUMERIC)
-        self.assertEqual(locale.setlocale(locale.LC_NUMERIC), self.old_locale_str)
+        self.assertEqual(locale.setlocale(
+            locale.LC_NUMERIC), self.old_locale_str)
 
     def test_bytes_to_human_one_way(self):
         """Test one-way conversion of bytes_to_human()"""
@@ -299,7 +319,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         # test subdirectory
         subdirname = os.path.join(dirname, "subdir")
-        os.mkdir(subdirname)
+        self.mkdir(subdirname)
         for filename in children_in_directory(dirname, True):
             self.assertEqual(filename, subdirname)
         for filename in children_in_directory(dirname, False):
@@ -309,15 +329,133 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         os.rmdir(dirname)
 
+    @common.skipIfWindows
+    def test_children_in_directory_posix_symlink(self):
+        """POSIX: ensure directory symlinks are not followed"""
+
+        base_dir = self.mkdir('children-symlink-primary')
+
+        # Real directory inside base for normal traversal
+        real_dir = os.path.join(base_dir, 'real-dir')
+        self.mkdir(real_dir)
+        real_file = self.mkstemp(prefix='real-file-', dir=real_dir)
+
+        # Symlink inside base pointing outside of base_dir
+        external_target = self.mkdir('children-symlink-external')
+        external_file = self.mkstemp(
+            prefix='external-file-', dir=external_target)
+        self.assertExists(external_target)
+        self.assertExists(external_file)
+        link_dir = os.path.join(base_dir, 'linked-dir')
+        os.symlink(external_target, link_dir)
+        self.assertExists(link_dir)
+
+        # list_directories=True should yield the link itself but not descend
+        entries_with_dirs = list(children_in_directory(base_dir, True))
+        self.assertIn(link_dir, entries_with_dirs)
+        self.assertIn(real_file, entries_with_dirs)
+        self.assertIn(real_dir, entries_with_dirs)
+        self.assertEqual(len(entries_with_dirs), 3)
+
+        # list_directories=False should only yield the real file
+        entries_files_only = list(children_in_directory(base_dir, False))
+        self.assertEqual(entries_files_only, [real_file])
+        self.assertEqual(len(entries_files_only), 1)
+
+    @common.skipIfWindows
+    def test_children_in_directory_posix_circular_symlink(self):
+        """POSIX: ensure circular directory symlinks are not followed"""
+
+        base_dir = self.mkdir('children-circular-')
+
+        # Create a normal directory and file inside the base directory
+        real_dir = os.path.join(base_dir, 'real-dir')
+        self.mkdir(real_dir)
+        real_file = self.mkstemp(prefix='real-file-', dir=real_dir)
+
+        # Symlink inside base pointing back to base_dir to create circular reference
+        loop_link = os.path.join(base_dir, 'loop-link')
+        os.symlink(base_dir, loop_link)
+        self.assertExists(loop_link)
+
+        entries_with_dirs = list(children_in_directory(base_dir, True))
+        self.assertIn(loop_link, entries_with_dirs)
+        self.assertIn(real_file, entries_with_dirs)
+        self.assertIn(real_dir, entries_with_dirs)
+        self.assertEqual(len(entries_with_dirs), 3)
+
+        entries_files_only = list(children_in_directory(base_dir, False))
+        self.assertEqual(entries_files_only, [real_file])
+        self.assertEqual(len(entries_files_only), 1)
+
+    @common.skipUnlessWindows
+    def test_children_in_directory_windows_links(self):
+        """Windows: ensure symlinked dirs and junctions are not followed"""
+
+        base_dir = self.mkdir('children-links')
+
+        # Regular directory to confirm normal traversal still works
+        normal_dir = os.path.join(base_dir, 'normal-dir')
+        self.mkdir(normal_dir)
+        normal_file = os.path.join(normal_dir, 'normal-file')
+        common.touch_file(normal_file)
+        self.assertExists(normal_file)
+
+        # Symlink target lives outside base_dir
+        symlink_target = self.mkdir('children-symlink-target')
+        symlink_target_file = self.mkstemp(
+            prefix='symlink-target-file-', dir=symlink_target)
+        symlink_path = os.path.join(base_dir, 'symlinked-dir')
+        try:
+            self._create_win_dir_symlink(symlink_target, symlink_path)
+        except OSError as exc:
+            self.skipTest(f'Cannot create Windows directory symlink: {exc}')
+        self.assertFalse(is_hard_link(symlink_target))
+        self.assertFalse(is_hard_link(symlink_path))
+
+        # Junction target lives outside base_dir
+        junction_target = self.mkdir('children-junction-target')
+        junction_target_file = self.mkstemp(
+            prefix='junction-target-file-', dir=junction_target)
+        junction_path = os.path.join(base_dir, 'junction-dir')
+        try:
+            self._create_win_junction(junction_target, junction_path)
+        except (OSError, subprocess.CalledProcessError) as exc:
+            self.skipTest(f'Cannot create Windows junction: {exc}')
+        self.assertFalse(is_hard_link(junction_target))
+        self.assertFalse(is_hard_link(junction_path))
+
+        entries_with_dirs = list(children_in_directory(base_dir, True))
+        entries_files_only = list(children_in_directory(base_dir, False))
+
+        self.assertIn(normal_file, entries_files_only)
+        for link_dir in (symlink_path, junction_path):
+            self.assertIn(link_dir, entries_with_dirs)
+            # There must be no children of the linked directories.
+            offending_paths = [
+                path for path in entries_with_dirs + entries_files_only
+                if _is_child_path(link_dir, path) and path != link_dir
+            ]
+            self.assertEqual(
+                offending_paths,
+                [],
+                f"Traversal into {link_dir} detected in children_in_directory results",
+            )
+
+        # Files living only behind the link targets should never appear
+        for hidden_file in (symlink_target_file, junction_target_file):
+            self.assertNotIn(hidden_file, entries_with_dirs)
+            self.assertNotIn(hidden_file, entries_files_only)
+
+        self.assertEqual(len(entries_with_dirs), 4)
+        self.assertEqual(len(entries_files_only), 1)
+
     def test_clean_ini(self):
         """Unit test for clean_ini()"""
-        print("testing test_clean_ini() with shred = False")
-        options.set('shred', False, commit=False)
-        test_ini_helper(self, clean_ini)
-
-        print("testing test_clean_ini() with shred = True")
-        options.set('shred', True, commit=False)
-        test_ini_helper(self, clean_ini)
+        for shred in (False, True):
+            with self.subTest(shred=shred):
+                options.set('shred', shred)
+                ini_helper(self, clean_ini)
 
     def test_clean_ini_kde(self):
         """Unit test for clean_ini() with KDE ini file
@@ -359,23 +497,33 @@ State=AAAA/wA...
 
     def test_clean_json(self):
         """Unit test for clean_json()"""
-        print("testing test_clean_json() with shred = False")
-        options.set('shred', False, commit=False)
-        test_json_helper(self, clean_json)
-
-        print("testing test_clean_json() with shred = True")
-        options.set('shred', True, commit=False)
-        test_json_helper(self, clean_json)
+        for shred in (False, True):
+            with self.subTest(shred=shred):
+                options.set('shred', shred)
+                json_helper(self, clean_json)
 
     def test_delete(self):
         """Unit test for method delete()"""
-        print("testing delete() with shred = False")
-        self.delete_helper(shred=False)
-        print("testing delete() with shred = True")
-        self.delete_helper(shred=True)
-        # exercise ignore_missing
-        delete('does-not-exist', ignore_missing=True)
+        for shred in (False, True):
+            with self.subTest(shred=shred):
+                self.delete_helper(shred=shred)
+
+
+    def test_delete_ignore_missing(self):
+        """Unit test for delete() with ignore_missing=True"""
+        self.assertFalse(delete('does-not-exist', ignore_missing=True))
         self.assertRaises(OSError, delete, 'does-not-exist')
+
+    def test_delete_access_denied(self):
+        """delete() raises PermissionError on access denied"""
+        path = self.write_file('test_delete_access_denied', b'secret')
+        e = PermissionError(13, 'Access is denied', path)
+        if os.name == 'nt':
+            e.winerror = 5
+        with unittest.mock.patch('os.remove', side_effect=e):
+            with self.assertRaises(PermissionError):
+                delete(path, shred=False)
+        self.assertExists(path)
 
     def delete_helper(self, shred):
         """Called by test_delete() with shred = False and = True"""
@@ -406,13 +554,13 @@ State=AAAA/wA...
             # create the file
             filename = self.write_file(test, b"top secret")
             # delete the file
-            delete(filename, shred)
+            self.assertTrue(delete(filename, shred))
             self.assertNotExists(filename)
 
             # delete an empty directory
             dirname = self.mkdtemp(prefix=test)
             self.assertExists(dirname)
-            delete(dirname, shred)
+            self.assertTrue(delete(dirname, shred))
             self.assertNotExists(dirname)
 
         def symlink_helper(link_fn):
@@ -434,12 +582,12 @@ State=AAAA/wA...
             self.assertLExists(linkname)
 
             # delete symlink
-            delete(linkname, shred)
+            self.assertTrue(delete(linkname, shred))
             self.assertExists(srcname)
             self.assertNotLExists(linkname)
 
             # delete regular file
-            delete(srcname, shred)
+            self.assertTrue(delete(srcname, shred))
             self.assertNotExists(srcname)
 
             #
@@ -452,12 +600,12 @@ State=AAAA/wA...
             self.assertExists(linkname)
 
             # delete regular file first
-            delete(srcname, shred)
+            self.assertTrue(delete(srcname, shred))
             self.assertNotExists(srcname)
             self.assertLExists(linkname)
 
             # clean up
-            delete(linkname, shred)
+            self.assertTrue(delete(linkname, shred))
             self.assertNotExists(linkname)
             self.assertNotLExists(linkname)
 
@@ -470,9 +618,15 @@ State=AAAA/wA...
                 if rc == 0:
                     print(f'CreateSymbolicLinkW({linkname}, {src})')
                     print(
-                        f'CreateSymolicLinkW() failed, error = {ctypes.FormatError()}')
+                        f'CreateSymbolicLinkW() failed, error = {ctypes.FormatError()}')
                     self.assertNotEqual(rc, 0)
             symlink_helper(win_symlink)
+
+            # test empty directory on Windows
+            path = self.mkdtemp(prefix='bleachbit-test-delete-dir')
+            self.assertExists(path)
+            self.assertTrue(delete(path, shred))
+            self.assertNotExists(path)
 
             return
 
@@ -481,7 +635,7 @@ State=AAAA/wA...
         # test file with mode 0444/-r--r--r--
         filename = self.write_file('bleachbit-test-0444')
         os.chmod(filename, 0o444)
-        delete(filename, shred)
+        self.assertTrue(delete(filename, shred))
         self.assertNotExists(filename)
 
         # test symlink
@@ -492,13 +646,13 @@ State=AAAA/wA...
         ret = subprocess.call(args)
         self.assertEqual(ret, 0)
         self.assertExists(filename)
-        delete(filename, shred)
+        self.assertTrue(delete(filename, shred))
         self.assertNotExists(filename)
 
         # test directory
         path = self.mkdtemp(prefix='bleachbit-test-delete-dir')
         self.assertExists(path)
-        delete(path, shred)
+        self.assertTrue(delete(path, shred))
         self.assertNotExists(path)
 
     @common.skipUnlessWindows
@@ -510,111 +664,277 @@ State=AAAA/wA...
             # pylint: disable=possibly-used-before-assignment, c-extension-no-member
             win32api.SetFileAttributes(fn, win32con.FILE_ATTRIBUTE_HIDDEN)
             self.assertExists(fn)
-            delete(fn, shred=shred)
+            self.assertFalse(is_hard_link(fn))
+            self.assertTrue(delete(fn, shred=shred))
             self.assertNotExists(fn)
 
     @common.skipUnlessWindows
-    def test_delete_locked(self):
+    def test_delete_locked_file(self):
         """Unit test for delete() with locked file"""
         # set up
-        def test_delete_locked_setup():
+        def test_delete_locked_setup(share_mode):
             (fd, filename) = tempfile.mkstemp(
                 prefix='bleachbit-test-fileutilities')
             os.write(fd, b'123')
             os.close(fd)
             self.assertExists(filename)
             self.assertEqual(3, getsize(filename))
-            return filename
+            handle = _open_blocking_handle(filename, share_mode)
+            self.assertFalse(is_hard_link(filename))
+            return filename, handle
 
-        # File is open but not opened exclusive, so expect that the
-        # file is truncated but not deleted.
-        # O_EXCL = fail if file exists (i.e., not an exclusive lock)
-        filename = test_delete_locked_setup()
-        f = os.open(filename, os.O_WRONLY | os.O_EXCL)
-        self.assertExists(filename)
-        self.assertEqual(3, getsize(filename))
-        # pylint: disable=undefined-variable
-        with self.assertRaises(WindowsError):
-            delete(filename)
-        os.close(f)
-        self.assertExists(filename)
-        self.assertEqual(0, getsize(filename))
-        delete(filename)
-        self.assertNotExists(filename)
+        # Each test is:
+        #   (share_mode, delete_expected, truncate_expected)
+        # The overall outcomes in matrix:
+        #  - file deleted (True, None)
+        #  - file truncated but not deleted (False, True)
+        #  - file not deleted and not truncated (False, False)
+        tests = [
 
-        # File is open with exclusive lock, so expect the file is neither
-        # deleted nor truncated.
-        for allow_shred in (False, True):
-            filename = test_delete_locked_setup()
-            self.assertEqual(3, getsize(filename))
-            fd = os.open(filename, os.O_APPEND | os.O_EXCL)
-            self.assertExists(filename)
-            self.assertEqual(3, getsize(filename))
-            # pylint: disable=undefined-variable
-            with self.assertRaises(WindowsError):
-                delete(filename, shred=allow_shred, allow_shred=allow_shred)
-            os.close(fd)
-            self.assertExists(filename)
-            if not allow_shred:
-                # A shredding attempt truncates the file.
-                self.assertEqual(3, getsize(filename))
-            delete(filename)
-            self.assertNotExists(filename)
+
+            (0, False, False),  # exclusive
+
+            (win32con.FILE_SHARE_READ, False, False),  # read-only sharing
+
+            (
+                win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE,
+                False,
+                True,
+            ),
+
+            (
+                win32con.FILE_SHARE_READ | win32con.FILE_SHARE_DELETE,
+                True,
+                None,  # truncate not attempted
+            ),
+
+            (
+                win32con.FILE_SHARE_READ
+                | win32con.FILE_SHARE_WRITE
+                | win32con.FILE_SHARE_DELETE,
+                True,
+                None,  # truncate not attempted
+            ),
+        ]
+
+        for (share_mode, delete_expected, truncate_expected), shred in itertools.product(tests, (False, True)):
+            with self.subTest(share_mode=share_mode, shred=shred):
+                filename, handle = test_delete_locked_setup(share_mode)
+
+                if delete_expected:
+                    # Delete expected to suceed.
+                    delete_file(filename, shred)
+                else:
+                    # Delete expected to fail.
+                    # pylint: disable=undefined-variable
+                    with self.assertRaises(WindowsError):
+                        delete_file(filename, shred)
+                win32file.CloseHandle(handle)
+                if delete_expected:
+                    self.assertNotExists(filename)
+                else:
+                    self.assertExists(filename)
+                    self.assertIsNotNone(truncate_expected)
+                    expected_size = 0 if truncate_expected else 3
+                    self.assertEqual(expected_size, getsize(filename))
+                    delete(filename)
+                    self.assertNotExists(filename)
 
     @common.skipIfWindows
+    @common.also_with_sudo
     def test_delete_mount_point(self):
         """Unit test for deleting a mount point in use"""
         if not common.have_root():
             self.skipTest('not enough privileges')
-        from_dir = os.path.join(self.tempdir, 'mount_from')
-        to_dir = os.path.join(self.tempdir, 'mount_to')
-        os.mkdir(from_dir)
-        os.mkdir(to_dir)
+        from_dir = self.mkdir('mount_from')
+        from_file = os.path.join(from_dir, 'normal-file')
+        common.touch_file(from_file)
+        to_dir = self.mkdir('mount_to')
         args = ['mount', '--bind', from_dir, to_dir]
         (rc, _, stderr) = run_external(args)
         self.assertEqual(
             rc, 0, f'error calling mount\nargs={args}\nstderr={stderr}')
-
-        delete(to_dir)
-
-        args = ['umount', to_dir]
-        (rc, _, stderr) = run_external(args)
-        self.assertEqual(
-            rc, 0, f'error calling umount\nargs={args}\nstderr={stderr}')
+        self.assertTrue(os.path.isdir(to_dir))
+        to_file = os.path.join(to_dir, 'normal-file')
+        all_objs = (to_file, from_file, to_dir, from_dir)
+        for func in (os.path.islink, os.path.isjunction, os.path.ismount, is_hard_link):
+            for pathname in all_objs:
+                self.assertFalse(func(pathname))
+        try:
+            # delete() should return False for a busy mount point
+            ret = delete(to_dir)
+            self.assertFalse(ret)
+            # The mount point and its contents should still exist.
+            for pathname in all_objs:
+                self.assertExists(pathname)
+        finally:
+            args = ['umount', to_dir]
+            (rc, _, stderr) = run_external(args)
+            self.assertEqual(
+                rc, 0, f'error calling umount\nargs={args}\nstderr={stderr}')
+            self.assertNotExists(to_file)
 
     def test_delete_not_empty(self):
         """Test for scenario directory is not empty"""
         # common.py puts bleachbit.ini in self.tempdir, but it may
         # not be flushed
-        dirname = os.path.join(self.tempdir, 'a_dir')
-        os.mkdir(dirname)
+        dirname = self.mkdir('a_dir')
         self.assertFalse(is_dir_empty(self.tempdir))
         self.assertTrue(is_dir_empty(dirname))
-        fn = os.path.join(dirname, 'a_file')
-        common.touch_file(fn)
+        fn = self.write_file(os.path.join(dirname, 'a_file'), b'content')
         self.assertFalse(is_dir_empty(dirname))
-        self.assertExists(fn)
-        self.assertExists(dirname)
-        self.assertExists(self.tempdir)
+
+        for path in (fn, dirname, self.tempdir):
+            self.assertExists(path)
+            self.assertFalse(is_hard_link(path))
 
         # Make sure shredding does not leave a renamed directory like
         # in https://github.com/bleachbit/bleachbit/issues/783
         for allow_shred in (False, True):
-            delete(dirname, allow_shred=allow_shred)
+            self.assertFalse(delete(dirname, allow_shred=allow_shred))
             self.assertExists(fn)
             self.assertExists(dirname)
         os.remove(fn)
         self.assertTrue(is_dir_empty(dirname))
 
-    def test_delete_read_only(self):
+    def test_delete_read_only_file(self):
         """Unit test for delete() with read-only file"""
+        for option_shred, parameter_shred, delete_func in itertools.product(
+            [False, True], [False, True], [delete, delete_file]
+        ):
+            with self.subTest(option_shred=option_shred, parameter_shred=parameter_shred, delete_func=delete_func.__name__):
+                shred = parameter_shred
+                variation_dir = f"{option_shred}-{parameter_shred}-{delete_func.__name__}"
+                options.set('shred', option_shred)
+                # The directory is not read-only, but it used for the read-only test.
+                tmp_dir = self.mkdtemp(prefix=f'read-only-dir_{variation_dir}')
+                self.assertDirectoryCount(tmp_dir, 0)
+
+                fn = self.write_file(
+                    os.path.join(tmp_dir, f'read-only-file_{variation_dir}'),
+                    b'read-only content',
+                )
+                os.chmod(fn, stat.S_IREAD)
+                self.assertExists(fn)
+                self.assertFalse(is_hard_link(fn))
+                self.assertDirectoryCount(tmp_dir, 1)
+                try:
+                    delete_func(fn, shred=shred)
+                except PermissionError as e:
+                    _remove_windows_readonly(fn)
+                    raise e
+                self.assertNotExists(fn)
+                self.assertDirectoryCount(tmp_dir, 0)
+
+    def test_delete_hard_link(self):
+        """Unit test for delete() with hard link"""
         for shred in (False, True):
-            fn = os.path.join(self.tempdir, 'read-only')
-            common.touch_file(fn)
-            os.chmod(fn, stat.S_IREAD)
-            self.assertExists(fn)
-            delete(fn, shred=shred)
-            self.assertNotExists(fn)
+            with self.subTest(shred=shred):
+                tmp_dir = self.mkdtemp(prefix=f'delete_hard_{shred}')
+                target = self.write_file(
+                    os.path.join(tmp_dir, f'hardlink-target-{shred}-'),
+                    b'canary data',
+                )
+                self.assertDirectoryCount(tmp_dir, 1)
+
+                link = os.path.join(tmp_dir, f'hardlink-{shred}')
+                os.link(target, link)
+                self.assertExists(link)
+                self.assertFalse(os.path.islink(link))
+                self.assertTrue(os.path.isfile(link))
+                if os.name == 'nt':
+                    self.assertFalse(Windows.is_junction(link))
+                self.assertDirectoryCount(tmp_dir, 2)
+                self.assertTrue(is_hard_link(link))
+                self.assertTrue(is_hard_link(target))
+
+                self.assertTrue(delete(link, shred=shred))
+                self.assertNotExists(link)
+                self.assertExists(target)
+                # Regardless of shred setting, original should have canary data
+                with open(target, 'rb') as f:
+                    self.assertEqual(f.read(), b'canary data')
+                self.assertDirectoryCount(tmp_dir, 1)
+
+                delete(target, shred=False)
+                self.assertDirectoryCount(tmp_dir, 0)
+
+    @common.skipUnlessWindows
+    def test_delete_junction(self):
+        """Unit test for delete() with Windows junction"""
+        for shred in (False, True):
+            with self.subTest(shred=shred):
+                tmp_dir = self.mkdtemp(prefix=f'delete_junction_{shred}')
+                # Use empty target: with shred=True, non-empty dirs trigger early return
+                target_dir = self.mkdtemp(
+                    prefix=f'junction-target-{shred}', dir=tmp_dir)
+                self.assertDirectoryCount(tmp_dir, 1)
+
+                junction = os.path.join(tmp_dir, f'junction-{shred}')
+                self._create_win_junction(target_dir, junction)
+                self.assertExists(junction)
+                self.assertTrue(Windows.is_junction(junction))
+                self.assertFalse(Windows.is_junction(target_dir))
+                self.assertFalse(is_hard_link(junction))
+                self.assertFalse(is_hard_link(target_dir))
+                self.assertDirectoryCount(tmp_dir, 2)
+
+                delete(junction, shred=shred)
+                self.assertNotExists(junction)
+                self.assertExists(target_dir)
+                self.assertDirectoryCount(tmp_dir, 1)
+
+                delete(target_dir, shred=False)
+                self.assertDirectoryCount(tmp_dir, 0)
+
+    @common.skipUnlessWindows
+    def test_delete_read_only_directory(self):
+        """Unit test for delete() with read-only directory on Windows"""
+        kernel32 = ctypes.windll.kernel32
+        FILE_ATTRIBUTE_READONLY = 0x1
+        for shred in (False, True):
+            with self.subTest(shred=shred):
+                container = self.mkdtemp(prefix=f'ro-container-{shred}')
+                self.assertTrue(is_dir_empty(container))
+                self.assertDirectoryCount(container, 0)
+
+                ro_dir = os.path.join(container, f'readonly-{shred}')
+                self.mkdir(ro_dir)
+                kernel32.SetFileAttributesW(ro_dir, FILE_ATTRIBUTE_READONLY)
+                self.assertExists(ro_dir)
+                self.assertDirectoryCount(container, 1)
+
+                try:
+                    delete(ro_dir, shred=shred)
+
+                    self.assertNotExists(ro_dir)
+                    self.assertDirectoryCount(container, 0)
+                except Exception:
+                    # Cleanup: clear read-only attribute so tearDown can remove it
+                    for item in os.listdir(container):
+                        item_path = os.path.join(container, item)
+                        _remove_windows_readonly(item_path)
+                    raise
+
+    @common.skipUnlessWindows
+    def test_delete_extended_path(self):
+        """Unit test for delete() with extended Windows path (>260 chars)"""
+        for shred in (False, True):
+            with self.subTest(shred=shred):
+                long_name = 'x' * 200
+                long_dir = self.mkdir(f'{long_name}-dir-{shred}')
+
+                long_file = self.write_file(
+                    extended_path(os.path.join(
+                        long_dir, f'{long_name}-file-{shred}.txt')),
+                    b'canary data',
+                )
+
+                delete(long_file, shred=shred)
+                self.assertNotExists(extended_path(long_file))
+
+                delete(long_dir, shred=shred)
+                self.assertNotExists(extended_path(long_dir))
 
     def test_detect_encoding(self):
         """Unit test for detect_encoding"""
@@ -717,8 +1037,9 @@ State=AAAA/wA...
         else:
             home_vars = ['$HOME', '${HOME}']
         for var in home_vars:
-            if not os.getenv(var):
-                self.skipTest(f'Environment variable {var} not set')
+            var_stripped = var.strip('%${}')
+            if not os.getenv(var_stripped):
+                self.skipTest(f'Environment variable {var_stripped} not set')
             expanded = os.path.expandvars(var)
             self.assertIsString(expanded)
             self.assertNotEqual(
@@ -766,49 +1087,60 @@ State=AAAA/wA...
 
     def test_free_space(self):
         """Unit test for free_space()"""
-        home = os.path.expanduser('~')
-        result = free_space(home)
-        self.assertNotEqual(result, None)
-        self.assertGreater(result, -1)
-        self.assertIsInteger(result)
 
-    @common.skipUnlessWindows
-    def test_free_space_windows(self):
-        """Unit test for free_space() on Windows
+        partitions = []
+        os_paths = []
+        if os.name == 'nt':
+            # Allow CD-ROM, network drive, etc.
+            partitions = psutil.disk_partitions(all=True)
+            os_paths = (r'%windir%', r'%userprofile%', r'%temp%')
+        elif os.name == 'posix':
+            # Do not allow proc, sysfs, udev, etc.
+            partitions_original = psutil.disk_partitions(all=False)
+            # Allow ext4, vfat, etc. but not squashfs
+            partitions = [
+                p for p in partitions_original if p.fstype != 'squashfs']
+            os_paths = ("/home", "/var", "/tmp", "$home", "$temp", "/dev/shm")
+        self.assertGreater(len(partitions), 0, "No disk partitions found")
 
-        Repeat because of possible race condition.
-        """
-        args = ['wmic', 'LogicalDisk', 'get', 'DeviceID,', 'FreeSpace']
-        max_attempts = 3
+        test_counter = 0
+        test_paths = set()
+        for partition in partitions:
+            test_paths.add(partition.mountpoint)
+        for os_path in os_paths:
+            expanded = os.path.expandvars(os_path)
+            if os.path.exists(expanded):
+                test_paths.add(expanded)
+        test_paths.add(os.getcwd())
 
-        def compare_free_space():
-            """Returns whether all drives have equal free space"""
-            (rc, stdout, stderr) = run_external(args)
-            self.assertEqual(
-                rc, 0, f'error calling WMIC\nargs={args}\nstderr={stderr}')
-            lines = stdout.splitlines()
-            self.assertGreater(len(lines), 0)
-            for line in lines:
-                line = line.strip()
-                if not re.match(r'([A-Z]):\s+(\d+)', line):
-                    continue
-                drive, bytes_free = re.split(r'\s+', line)
-                bytes_free = int(bytes_free)
-                free = free_space(drive)
-                if free != bytes_free:
-                    logger.debug(
-                        'Free space mismatch for drive %s: %s != %s', drive, free, bytes_free)
-                    return False
-            return True
+        for path in test_paths:
+            with self.subTest(path=path):
+                test_counter += 1
+                free = free_space(path)
+                self.assertIsInstance(
+                    free, int, f"free_space({path}) should return int")
+                self.assertGreaterEqual(
+                    free, 0, f"free_space({path}) should be non-negative")
+        self.assertGreater(test_counter, 0)
 
-        for attempt in range(max_attempts):
-            if attempt > 0:
-                time.sleep(0.5)
-            if compare_free_space():
-                return
-            if attempt == max_attempts - 1:
-                self.fail(
-                    f'Failed to find equal free space after {max_attempts} attempts')
+    def test_free_space_sub_dir(self):
+        """Unit test for free_space() with subdirectories"""
+        subdir = self.mkdtemp(prefix='free_space')
+        passed = False
+        for _ in range(5):
+            diff = abs(free_space(subdir) - free_space(self.tempdir))
+            if diff <= 1024 * 1024:  # 1MB
+                passed = True
+                break
+        self.assertTrue(
+            passed, "free_space() for subdir should be within 1MB of parent dir at least once")
+
+    def test_free_space_invalid(self):
+        """Check invalid inputs to free_space()"""
+        # Test with invalid paths
+        for path in ("invalid", "", None):
+            with self.assertRaises((TypeError, FileNotFoundError)):
+                free_space(path)
 
     def test_get_filesystem_type(self):
         """Unit test for get_filesystem_type()"""
@@ -1025,10 +1357,6 @@ State=AAAA/wA...
                 self.assertEqual(same_partition(home, drive),
                                  home_drive == this_drive)
 
-    def test_sync(self):
-        """Unit test for sync()"""
-        sync()
-
     def test_uris_to_paths(self):
         """Unit test for uris_to_paths()"""
         self.assertEqual(uris_to_paths(['']), [])
@@ -1088,9 +1416,11 @@ State=AAAA/wA...
             self.test_vacuum_sqlite3()
             # Slow on OpenSUSE Build Service
             if time.time() - start_time > 30:
-                logger.info("SQLite loop tests stopped early after %d seconds", time.time() - start_time)
+                logger.info(
+                    "SQLite loop tests stopped early after %d seconds", time.time() - start_time)
                 break
-        logger.info("SQLite loop tests fully completed after %d seconds", time.time() - start_time)
+        logger.info(
+            "SQLite loop tests fully completed after %d seconds", time.time() - start_time)
 
     def test_whitelisted(self):
         """Unit test for whitelisted()"""
@@ -1152,8 +1482,7 @@ State=AAAA/wA...
         """Symlink test for whitelisted_posix()"""
         # setup
         old_whitelist = options.get_whitelist_paths()
-        tmpdir = os.path.join(self.tempdir, 'bleachbit-whitelist')
-        os.mkdir(tmpdir)
+        tmpdir = self.mkdir('bleachbit-whitelist')
         realpath = self.write_file('real')
         linkpath = os.path.join(tmpdir, 'link')
         os.symlink(realpath, linkpath)
@@ -1201,159 +1530,3 @@ State=AAAA/wA...
                     reps, len(paths), t1 - t0)
 
         options.set_whitelist_paths(old_whitelist)
-
-    def test_wipe_contents(self):
-        """Unit test for wipe_delete()"""
-
-        # create test file
-        filename = self.write_file(
-            'bleachbit-test-wipe', b'abcdefghij' * 12345)
-
-        # wipe it
-        wipe_contents(filename)
-
-        # check it
-        f = open(filename, 'rb')
-        while True:
-            byte = f.read(1)
-            if b"" == byte:
-                break
-            self.assertEqual(byte, 0)
-        f.close()
-
-        # clean up
-        os.remove(filename)
-
-    def wipe_name_helper(self, filename):
-        """Helper for test_wipe_name()"""
-
-        self.assertExists(filename)
-
-        # test
-        newname = wipe_name(filename)
-        self.assertGreater(len(filename), len(newname))
-        self.assertNotExists(filename)
-        self.assertExists(newname)
-
-        # clean
-        os.remove(newname)
-        self.assertNotExists(newname)
-
-    def test_wipe_name(self):
-        """Unit test for wipe_name()"""
-
-        # create test file with moderately long name
-        filename = self.write_file('bleachbit-test-wipe' + '0' * 50)
-        self.wipe_name_helper(filename)
-
-        # create file with short name in temporary directory with long name
-        if 'nt' == os.name:
-            # In Windows, the maximum path length is 260 characters
-            # http://msdn.microsoft.com/en-us/library/aa365247%28VS.85%29.aspx#maxpath
-            dir0len = 100
-            dir1len = 5
-        else:
-            dir0len = 210
-            dir1len = 210
-        filelen = 10
-
-        dir0 = self.mkdtemp(prefix="0" * dir0len)
-        self.assertExists(dir0)
-
-        dir1 = self.mkdtemp(prefix="1" * dir1len, dir=dir0)
-        self.assertExists(dir1)
-
-        filename = self.write_file(os.path.join(dir1, '2' * filelen))
-        self.wipe_name_helper(filename)
-        self.assertExists(dir0)
-        self.assertExists(dir1)
-
-        # wipe a directory name
-        dir1new = wipe_name(dir1)
-        self.assertGreater(len(dir1), len(dir1new))
-        self.assertNotExists(dir1)
-        self.assertExists(dir1new)
-        os.rmdir(dir1new)
-
-        # wipe the directory
-        os.rmdir(dir0)
-        self.assertNotExists(dir0)
-
-    @unittest.skipUnless(os.getenv('ALLTESTS') is not None,
-                         'warning: skipping long test test_wipe_path() because'
-                         ' environment variable ALLTESTS not set')
-    def test_wipe_path(self):
-        """Unit test for wipe_path()"""
-
-        for _ret in wipe_path(self.tempdir):
-            # no idle handler
-            pass
-
-    def test_wipe_path_fast(self):
-        """Unit test for wipe_path() with fast mode
-
-        This test runs three iterations of the generator
-        and then aborts. Each iteration takes a little more
-        than two seconds.
-        """
-        counter = 0
-        for _i in wipe_path(self.tempdir, True):
-            counter += 1
-            if counter >= 3:
-                break
-        self.assertGreater(counter, 0)
-
-    def test_detect_orphaned_wipe_files(self):
-        """Unit test for detect_orphaned_wipe_files()"""
-        # Save original shred_drives
-        original_drives = options.get_list('shred_drives')
-
-        # Set shred_drives to include our temp directory
-        options.set_list('shred_drives', [self.tempdir])
-
-        try:
-            # Test 1: No orphaned files initially
-            orphaned = detect_orphaned_wipe_files()
-            self.assertEqual(orphaned, [])
-
-            # Test 2: Create a file that matches criteria
-            # Must start with 'empty_', >100 chars, no extension, contain null bytes
-            long_suffix = 'a' * 120
-            orphan_name = 'empty_' + long_suffix
-            orphan_path = os.path.join(self.tempdir, orphan_name)
-            with open(orphan_path, 'wb') as f:
-                f.write(b'\x00' * 1000)
-
-            orphaned = detect_orphaned_wipe_files()
-            self.assertEqual(len(orphaned), 1)
-            self.assertEqual(orphaned[0], orphan_path)
-
-            # Test 3: File with extension should NOT be detected
-            with_ext_path = os.path.join(self.tempdir, orphan_name + '.txt')
-            with open(with_ext_path, 'wb') as f:
-                f.write(b'\x00' * 1000)
-
-            orphaned = detect_orphaned_wipe_files()
-            self.assertEqual(len(orphaned), 1)  # Still just the original
-
-            # Test 4: Short filename should NOT be detected
-            short_name = 'empty_short'
-            short_path = os.path.join(self.tempdir, short_name)
-            with open(short_path, 'wb') as f:
-                f.write(b'\x00' * 1000)
-
-            orphaned = detect_orphaned_wipe_files()
-            self.assertEqual(len(orphaned), 1)  # Still just the original
-
-            # Test 5: File without null bytes should NOT be detected
-            no_null_path = os.path.join(self.tempdir, 'empty_' + 'b' * 120)
-            with open(no_null_path, 'wb') as f:
-                f.write(b'x' * 1000)
-
-            orphaned = detect_orphaned_wipe_files()
-            self.assertEqual(len(orphaned), 1)  # Still just the original
-
-        finally:
-            # Restore original shred_drives
-            if original_drives:
-                options.set_list('shred_drives', original_drives)

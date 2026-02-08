@@ -1,32 +1,15 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 File-related utilities
 """
 
 # standard imports
-import atexit
 import contextlib
-import ctypes
 import errno
 import glob
 import json
@@ -34,24 +17,21 @@ import locale
 import logging
 import os
 import os.path
-import random
 import re
 import sqlite3
 import stat
-import string
-import struct
 import subprocess
 import sys
-import tempfile
 import time
 import urllib.parse
 import urllib.request
-import warnings
+from os import walk
 from pathlib import Path
 
 # local imports
 import bleachbit
 from bleachbit.Language import get_text as _
+from bleachbit.Wipe import wipe_contents, wipe_name
 
 
 logger = logging.getLogger(__name__)
@@ -60,8 +40,9 @@ if 'nt' == os.name:
     # pylint: disable=import-error, no-name-in-module
     from pywintypes import error as pywinerror
     import win32file
-    # pylint: disable=import-error
-    from win32com.shell.shell import IsUserAnAdmin
+    from win32file import GetFileAttributesW, SetFileAttributesW
+    from win32con import FILE_ATTRIBUTE_READONLY
+
     # pylint: disable=ungrouped-imports
     import bleachbit.Windows
     os_path_islink = os.path.islink
@@ -69,31 +50,27 @@ if 'nt' == os.name:
         path) or bleachbit.Windows.is_junction(path)
 
 if 'posix' == os.name:
-    import fcntl
     # pylint: disable=redefined-builtin
     from bleachbit.General import WindowsError
     # pylint: disable=invalid-name
     pywinerror = WindowsError
 
-try:
-    # FIXME: replace scandir.walk() with os.scandir()
-    # Preserve behavior added in 25e694.
-    # Test that os.walk() behaves the same on Windows.
-    from scandir import walk
-    if 'nt' == os.name:
-        import scandir
 
-        class _Win32DirEntryPython(scandir.Win32DirEntryPython):
-            def is_symlink(self):
-                """internal use"""
-                return super(_Win32DirEntryPython, self).is_symlink() or \
-                    bleachbit.Windows.is_junction(self.path)
+def _remove_windows_readonly(path):
+    """Clear Windows read-only attribute so deletion/wiping succeeds
 
-        scandir.scandir = scandir.scandir_python
-        scandir.DirEntry = scandir.Win32DirEntryPython = _Win32DirEntryPython
-except ImportError:
-    # Since Python 3.5, os.walk() calls os.scandir().
-    from os import walk
+    Returns True if file was read-only and was cleared. Otherwise, False.
+    """
+    if os.name != 'nt':
+        return False
+    try:
+        attrs = GetFileAttributesW(path)
+    except pywinerror:
+        return False
+    if attrs & FILE_ATTRIBUTE_READONLY:
+        SetFileAttributesW(path, attrs & ~FILE_ATTRIBUTE_READONLY)
+        return True
+    return False
 
 
 def open_files_linux():
@@ -212,12 +189,6 @@ class OpenFiles:
         return os.path.realpath(filename) in self.files
 
 
-def __random_string(length):
-    """Return random alphanumeric characters of given length"""
-    return ''.join(random.choice(string.ascii_letters + '0123456789_.-')
-                   for i in range(length))
-
-
 def bytes_to_human(bytes_i):
     # type: (int) -> str
     """Display a file size in human terms (megabytes, etc.) using preferred standard (SI or IEC)"""
@@ -260,12 +231,44 @@ def children_in_directory(top, list_directories=False):
         for top_ in top:
             yield from children_in_directory(top_, list_directories)
         return
-    for (dirpath, dirnames, filenames) in walk(top, topdown=False):
+
+    def _normalized_prefix(path):
+        norm_path = os.path.normpath(path)
+        if os.name == 'nt':
+            norm_path = norm_path.lower()
+        if not norm_path.endswith(os.sep):
+            norm_path += os.sep
+        return norm_path
+
+    pending_dirs = [] if list_directories else None
+
+    for (dirpath, dirnames, filenames) in walk(top, topdown=True, followlinks=False):
+        if list_directories:
+            current_prefix = _normalized_prefix(dirpath)
+            while pending_dirs and not current_prefix.startswith(pending_dirs[-1][1]):
+                yield pending_dirs.pop()[0]
+
+        if 'nt' == os.name and dirnames:
+            # Avoid traversing Windows symlinks or junctions.
+            link_dirnames = []
+            for dirname in list(dirnames):
+                if os.path.islink(os.path.join(dirpath, dirname)):
+                    link_dirnames.append(dirname)
+                    dirnames.remove(dirname)
+            if list_directories:
+                for dirname in link_dirnames:
+                    yield os.path.join(dirpath, dirname)
         if list_directories:
             for dirname in dirnames:
-                yield os.path.join(dirpath, dirname)
+                full_path = os.path.join(dirpath, dirname)
+                pending_dirs.append((full_path, _normalized_prefix(full_path)))
         for filename in filenames:
             yield os.path.join(dirpath, filename)
+
+    if list_directories:
+        current_prefix = ''
+        while pending_dirs:
+            yield pending_dirs.pop()[0]
 
 
 def clean_ini(path, section, parameter):
@@ -367,6 +370,73 @@ def clean_json(path, target):
             json.dump(js, f)
 
 
+def _truncate_locked_file(path):
+    """Best-effort truncate of a locked file (Windows).
+
+    Returns True if truncation succeeded, False otherwise.
+    Shared locks allow truncation, exclusive locks prevent it.
+    """
+    try:
+        with open(path, 'r+b') as handle:
+            handle.truncate(0)
+        return True
+    except (OSError, PermissionError):
+        logger.debug("Unable to truncate locked file %s", path)
+        return False
+
+
+def delete_file(path, shred):
+    """"Delete a file
+
+    - File must exist.
+    - Not for use with directories.
+    - Does not check the user's preferences.
+
+    Returns True.
+    """
+    # wipe contents
+    if shred and not is_hard_link(path):
+        try:
+            wipe_contents(path)
+        except pywinerror as e:  # pylint: disable=possibly-used-before-assignment
+            # 2 = The system cannot find the file specified.
+            # This can happen with a broken symlink
+            # https://github.com/bleachbit/bleachbit/issues/195
+            if 2 != e.winerror:
+                raise
+            # If a broken symlink, try os.remove() below.
+        except IOError as e:
+            # permission denied (13) happens shredding MSIE 8 on Windows 7
+            logger.debug("IOError #%s shredding '%s'",
+                         e.errno, path)
+    if shred:
+        # wipe name
+        os.remove(wipe_name(path))
+        return True
+    # Code below is shred == False
+    try:
+        os.remove(path)
+    except PermissionError as e:
+        if os.name == 'nt' and hasattr(e, 'winerror'):
+            if e.winerror == 32:
+                # File is locked, try to truncate it first
+                _truncate_locked_file(path)
+                # Command.py watches for this exception.
+                raise WindowsError(e.errno, e.strerror,
+                                   e.filename, e.winerror) from e
+            if e.errno == errno.EACCES and e.winerror == 5 and \
+                    _remove_windows_readonly(path):
+                # If read-only attribute was removed, try again.
+                os.remove(path)
+                return True
+        raise
+    except WindowsError as e:
+        if e.winerror == 32:
+            # File is locked, try to truncate it first
+            _truncate_locked_file(path)
+        raise
+
+
 def delete(path, shred=False, ignore_missing=False, allow_shred=True):
     """Delete path that is either file, directory, link or FIFO.
 
@@ -379,6 +449,8 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
        * Windows hard link
        * Windows junction
        * Windows .lnk files
+
+       Returns True if the path was deleted, False otherwise.
     """
     from bleachbit.Options import options
     is_special = False
@@ -386,7 +458,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
     do_shred = allow_shred and (shred or options.get('shred'))
     if not os.path.lexists(path):
         if ignore_missing:
-            return
+            return False
         raise OSError(2, 'No such file or directory', path)
     if 'posix' == os.name:
         # With certain (relatively rare) files on Windows os.lstat()
@@ -395,6 +467,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         is_special = stat.S_ISFIFO(mode) or stat.S_ISLNK(mode)
     if is_special:
         os.remove(path)
+        return True
     elif os.path.isdir(path):
         delpath = path
         if do_shred:
@@ -402,7 +475,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
                 # Avoid renaming non-empty directory like
                 # https://github.com/bleachbit/bleachbit/issues/783
                 logger.info(_("Directory is not empty: %s"), path)
-                return
+                return False
             delpath = wipe_name(path)
         try:
             os.rmdir(delpath)
@@ -411,11 +484,19 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # https://bugs.launchpad.net/bleachbit/+bug/1012930
             if errno.ENOTEMPTY == e.errno:
                 logger.info(_("Directory is not empty: %s"), path)
+                return False
             elif errno.EBUSY == e.errno:
                 if os.name == 'posix' and os.path.ismount(path):
                     logger.info(_("Skipping mount point: %s"), path)
                 else:
                     logger.info(_("Device or resource is busy: %s"), path)
+                return False
+            elif os.name == 'nt' and errno.EACCES == e.errno:
+                # On Windows, read-only directories cause Access Denied
+                if _remove_windows_readonly(delpath):
+                    os.rmdir(delpath)
+                else:
+                    raise
             else:
                 raise
         except WindowsError as e:
@@ -425,33 +506,19 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # during reboot.
             if 145 == e.winerror:
                 logger.info(_("Directory is not empty: %s"), path)
+                return False
             else:
                 raise
+        return True
     elif os.path.isfile(path):
-        # wipe contents
-        if do_shred:
-            try:
-                wipe_contents(path)
-            except pywinerror as e:  # pylint: disable=possibly-used-before-assignment
-                # 2 = The system cannot find the file specified.
-                # This can happen with a broken symlink
-                # https://github.com/bleachbit/bleachbit/issues/195
-                if 2 != e.winerror:
-                    raise
-                # If a broken symlink, try os.remove() below.
-            except IOError as e:
-                # permission denied (13) happens shredding MSIE 8 on Windows 7
-                logger.debug("IOError #%s shredding '%s'",
-                             e.errno, path, exc_info=True)
-            # wipe name
-            os.remove(wipe_name(path))
-        else:
-            # unlink
-            os.remove(path)
+        delete_file(path, do_shred)
+        return True
     elif os.path.islink(path):
         os.remove(path)
+        return True
     else:
         logger.info(_("Special file type cannot be deleted: %s"), path)
+        return False
 
 
 def detect_encoding(fn):
@@ -592,7 +659,14 @@ def extended_path_undo(path):
 
 
 def free_space(pathname):
-    """Return free space in bytes"""
+    """Return free space in bytes
+
+    pathname may be any directory within a valid file system.
+
+    POSIX systems may reserve space for the root user, and this function
+    returns the amount available to the current user for accurate
+    estimation of completion time in wipe_path().
+    """
     if 'nt' == os.name:
         # pylint: disable=import-error,import-outside-toplevel
         import psutil
@@ -600,7 +674,11 @@ def free_space(pathname):
     assert 'posix' == os.name
     # pylint: disable=no-member
     mystat = os.statvfs(pathname)
-    return mystat.f_bfree * mystat.f_bsize
+    if os.getuid() == 0:
+        # root
+        return mystat.f_bfree * mystat.f_bsize
+    # non-root
+    return mystat.f_bavail * mystat.f_bsize
 
 
 def getsize(path):
@@ -725,6 +803,11 @@ def is_dir_empty(dirname):
     return True
 
 
+def is_hard_link(path):
+    """Check if a file is a hard link."""
+    return os.path.isfile(path) and os.stat(path).st_nlink > 1
+
+
 def listdir(directory):
     """Return full path of files in directory.
 
@@ -759,17 +842,6 @@ def same_partition(dir1, dir2):
     stat1 = os.statvfs(dir1)
     stat2 = os.statvfs(dir2)
     return stat1[stat.ST_DEV] == stat2[stat.ST_DEV]
-
-
-def sync():
-    """Flush file system buffers. sync() is different than fsync()"""
-    if 'posix' == os.name:
-        rc = ctypes.cdll.LoadLibrary('libc.so.6').sync()
-        if 0 != rc:
-            logger.error('sync() returned code %d', rc)
-    elif 'nt' == os.name:
-        # pylint: disable=protected-access
-        ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()
 
 
 def truncate_f(f):
@@ -847,396 +919,9 @@ else:
     whitelisted = whitelisted_posix
 
 
-def wipe_contents(path, truncate=True):
-    """Wipe files contents
-
-    http://en.wikipedia.org/wiki/Data_remanence
-    2006 NIST Special Publication 800-88 (p. 7): "Studies have
-    shown that most of today's media can be effectively cleared
-    by one overwrite"
-    """
-
-    def wipe_write():
-        size = getsize(path)
-        try:
-            f = open(path, 'wb')
-        except IOError as e:
-            if e.errno == errno.EACCES:  # permission denied
-                os.chmod(path, 0o200)  # user write only
-                f = open(path, 'wb')
-            else:
-                raise
-        blanks = b'\0' * 4096
-        while size > 0:
-            f.write(blanks)
-            size -= 4096
-        f.flush()  # flush to OS buffer
-        os.fsync(f.fileno())  # force write to disk
-        return f
-
-    # pylint: disable=possibly-used-before-assignment
-    if 'nt' == os.name and IsUserAnAdmin():
-        # The import placement here avoids a circular import.
-        # pylint: disable=import-outside-toplevel
-        from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
-        try:
-            file_wipe(path)
-        except pywinerror as e:
-            # 32=The process cannot access the file because it is being used by another process.
-            # 33=The process cannot access the file because another process has
-            # locked a portion of the file.
-            if not e.winerror in (32, 33):
-                # handle only locking errors
-                raise
-            # Try to truncate the file. This makes the behavior consistent
-            # with Linux and with Windows when IsUserAdmin=False.
-            try:
-                with open(path, 'wb') as f:
-                    truncate_f(f)
-            except IOError as e2:
-                if errno.EACCES == e2.errno:
-                    # Common when the file is locked
-                    # Errno 13 Permission Denied
-                    pass
-            # translate exception to mark file to deletion in Command.py
-            raise WindowsError(e.winerror, e.strerror)
-        except UnsupportedFileSystemError:
-            warnings.warn(
-                _('There was at least one file on a file system that does not support advanced overwriting.'), UserWarning)
-            f = wipe_write()
-        else:
-            # The wipe succeed, so prepare to truncate.
-            f = open(path, 'wb')
-    else:
-        f = wipe_write()
-    if truncate:
-        truncate_f(f)
-    f.close()
-
-
-def wipe_name(pathname1):
-    """Wipe the original filename and return the new pathname"""
-    (head, _tail) = os.path.split(pathname1)
-    # reference http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
-    maxlen = 226
-    # first, rename to a long name
-    i = 0
-    while True:
-        try:
-            pathname2 = os.path.join(head, __random_string(maxlen))
-            os.rename(pathname1, pathname2)
-            break
-        except OSError:
-            if maxlen > 10:
-                maxlen -= 10
-            i += 1
-            if i > 100:
-                logger.info('exhausted long rename: %s', pathname1)
-                pathname2 = pathname1
-                break
-    # finally, rename to a short name
-    i = 0
-    while True:
-        try:
-            pathname3 = os.path.join(head, __random_string(i + 1))
-            os.rename(pathname2, pathname3)
-            break
-        except:
-            i += 1
-            if i > 100:
-                logger.info('exhausted short rename: %s', pathname2)
-                pathname3 = pathname2
-                break
-    return pathname3
-
-
-def fitrim(pathname):
-    """Perform FITRIM (fstrim) to discard unused blocks on a supported filesystem
-
-    pathname: path to directory
-    """
-    if os.name != 'posix':
-        return False
-
-    fitrim_id = 0xC0185879
-    try:
-
-        try:
-            # Open the directory
-            fd = os.open(pathname, os.O_RDONLY)
-            # Get filesystem stats to determine range
-            stats = os.statvfs(pathname)
-
-            # struct fstrim_range {
-            #     __u64 start;
-            #     __u64 len;
-            #     __u64 minlen;
-            # };
-            # Set range to the entire filesystem
-            trim_range = struct.pack('QQQ', 0, stats.f_blocks * stats.f_bsize, 0)
-            fcntl.ioctl(fd, fitrim_id, trim_range)
-            logger.debug("Successfully performed FITRIM on filesystem at %s", pathname)
-            return True
-        finally:
-            os.close(fd)
-    except Exception as e:
-        if os.geteuid() == 0:
-            logger.info("FITRIM failed: %s", e)
-        else:
-            logger.debug("FITRIM failed: %s", e)
-        return False
-
-def wipe_path(pathname, idle=False):
-    """Wipe the free space in the path
-    This function uses an iterator to update the GUI."""
-
-    def temporaryfile():
-        # reference
-        # http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
-        maxlen = 185
-        f = None
-        while True:
-            try:
-                f = tempfile.NamedTemporaryFile(
-                        dir=pathname,
-                        suffix=__random_string(maxlen),
-                        delete=False,
-                        prefix="empty_"
-                )
-                # In case the application closes prematurely, make sure this
-                # file is deleted
-                atexit.register(
-                    delete, f.name, allow_shred=False, ignore_missing=True)
-                break
-            except OSError as e:
-                if e.errno in (errno.ENAMETOOLONG, errno.ENOSPC, errno.ENOENT, errno.EINVAL):
-                    # ext3 on Linux 3.5 returns ENOSPC if the full path is greater than 264.
-                    # Shrinking the size helps.
-
-                    # Microsoft Windows returns ENOENT "No such file or directory"
-                    # or EINVAL "Invalid argument"
-                    # when the path is too long such as %TEMP% but not in C:\
-                    if maxlen > 5:
-                        maxlen -= 5
-                        continue
-                raise
-        return f
-
-    def estimate_completion():
-        """Return (percent, seconds) to complete"""
-        remaining_bytes = free_space(pathname)
-        done_bytes = start_free_bytes - remaining_bytes
-        if done_bytes < 0:
-            # maybe user deleted large file after starting wipe
-            done_bytes = 0
-        if 0 == start_free_bytes:
-            done_percent = 0
-        else:
-            done_percent = 1.0 * done_bytes / (start_free_bytes + 1)
-        done_time = time.time() - start_time
-        rate = done_bytes / (done_time + 0.0001)  # bytes per second
-        remaining_seconds = int(remaining_bytes / (rate + 0.0001))
-        return 1, done_percent, remaining_seconds
-
-    # Get the file system type from the given path
-    fstype = get_filesystem_type(pathname)[0]
-    logger.debug(_(f"Wiping path {pathname} with file system type {fstype}"))
-    if not os.path.isdir(pathname):
-        logger.error(
-            _("Path to wipe must be an existing directory: %s"), pathname)
-        return
-
-    if fstype in ('ext4', 'btrfs'):
-        fitrim(pathname)
-
-    files = []
-    total_bytes = 0
-    start_free_bytes = free_space(pathname)
-    start_time = time.time()
-    done_wiping = False
-    try:
-
-        # Because FAT32 has a maximum file size of 4,294,967,295 bytes,
-        # this loop is sometimes necessary to create multiple files.
-        while True:
-            try:
-                logger.debug(
-                    _('Creating new, temporary file for wiping free space.'))
-                f = temporaryfile()
-            except OSError as e:
-                # Linux gives errno 24
-                # Windows gives errno 28 No space left on device
-                if e.errno in (errno.EMFILE, errno.ENOSPC):
-                    break
-                else:
-                    raise
-
-            # Remember to delete
-            files.append(f)
-            last_idle = time.time()
-            # Write large blocks to quickly fill the disk.
-            blanks = b'\0' * 65536
-            writtensize = 0
-
-            while True:
-
-                try:
-                    if fstype != 'vfat':
-                        f.write(blanks)
-                    # On Ubuntu, the size of file should be less than
-                    # 4GB. If not, there should be EFBIG error, so the
-                    # maximum file size should be less than or equal to
-                    # "4GB - 65536byte".
-                    elif writtensize < 4 * 1024 * 1024 * 1024 - 65536:
-                        writtensize += f.write(blanks)
-                    else:
-                        break
-
-                except IOError as e:
-                    if e.errno == errno.ENOSPC:
-                        if len(blanks) > 1:
-                            # Try writing smaller blocks
-                            blanks = blanks[0:len(blanks) // 2]
-                        else:
-                            break
-                    elif e.errno == errno.EFBIG:
-                        break
-                    else:
-                        raise
-                if idle and (time.time() - last_idle) > 2:
-                    # Keep the GUI responding, and allow the user to abort.
-                    # Also display the ETA.
-                    yield estimate_completion()
-                    last_idle = time.time()
-            # Write to OS buffer
-            try:
-                f.flush()
-            except IOError as e:
-                # IOError: [Errno 28] No space left on device
-                # seen on Microsoft Windows XP SP3 with ~30GB free space but
-                # not on another XP SP3 with 64MB free space
-                if e.errno != errno.ENOSPC:
-                    logger.error(
-                        _("Error #%d when flushing the file buffer."), e.errno)
-
-            os.fsync(f.fileno())  # write to disk
-            # For statistics
-            total_bytes += f.tell()
-            # sync to disk
-            sync()
-            # statistics
-            elapsed_sec = time.time() - start_time
-            rate_mbs = (total_bytes / (1000 * 1000)) / elapsed_sec
-            logger.debug(_('Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at {rate:.2f} MB/s').format(
-                files=len(files), bytes=total_bytes, seconds=int(elapsed_sec), rate=rate_mbs))
-            # how much free space is left (should be near zero)
-            if 'posix' == os.name:
-                # pylint: disable=no-member
-                stats = os.statvfs(pathname)
-                logger.debug(_("{bytes:,} bytes and {inodes:,} inodes available to non-super-user").format(
-                    bytes=stats.f_bsize * stats.f_bavail, inodes=stats.f_favail))
-                logger.debug(_("{bytes:,} bytes and {inodes:,} inodes available to super-user").format(
-                    bytes=stats.f_bsize * stats.f_bfree, inodes=stats.f_ffree))
-            # If no bytes were written to this file, then do not try to create another file.
-            # Linux allows writing several 4K files when free_space() = 0,
-            # so do not check free_space() < 1.
-            # See
-            #  * https://github.com/bleachbit/bleachbit/issues/502
-            #    Replace `f.tell() < 2` with `len(blanks) < 2`
-            #  * https://github.com/bleachbit/bleachbit/issues/1051
-            #    Replace `len(blanks) < 2` with `estimated_free_space < 2`
-            estimated_free_space = start_free_bytes - total_bytes
-            if estimated_free_space < 2:
-                logger.debug(
-                    'Estimated free space %s is less than 2 bytes, breaking', estimated_free_space)
-                break
-        done_wiping = True
-    finally:
-        # Ensure files are closed and deleted even if an exception
-        # occurs or generator is not fully consumed.
-        # Truncate and close files.
-        for f in files:
-            if done_wiping:
-                try:
-                    truncate_f(f)
-                except Exception as e:
-                    logger.error(
-                        'After wiping, truncating file %s failed: %s', f.name, e)
-
-            while True:
-                try:
-                    # Nikita: I noticed a bug that prevented file handles from
-                    # being closed on FAT32. It sometimes takes two .close() calls
-                    # to do actually close (and therefore delete) a temporary file
-                    f.close()
-                    break
-                except IOError as e:
-                    if e.errno == 0:
-                        logger.debug(
-                            _("Handled unknown error #0 while truncating file."))
-                    time.sleep(0.1)
-            # explicitly delete
-            try:
-                delete(f.name, ignore_missing=True)
-            except Exception as e:
-                logger.error(
-                    'After wiping, error deleting file %s: %s', f.name, e)
-
-
 def vacuum_sqlite3(path):
     """Vacuum SQLite database"""
     execute_sqlite3(path, 'vacuum')
-
-
-def detect_orphaned_wipe_files():
-    """Detect orphaned temporary files from interrupted wipe_path operations.
-
-    These files are created by wipe_path() to fill free disk space with zeros.
-
-    Detection criteria:
-    - Located in directories from options shred_drives
-    - Filename starts with 'empty_'
-    - Filename has >100 characters (due to random suffix)
-    - No file extension
-    - Contains only null bytes when sampled
-
-    Returns:
-        list: Paths to detected orphaned wipe files
-    """
-    from bleachbit.Options import options
-    orphaned_files = []
-
-    shred_drives = options.get_list('shred_drives')
-    if not shred_drives:
-        return orphaned_files
-
-    for drive_path in shred_drives:
-        if not os.path.isdir(drive_path):
-            continue
-        try:
-            for entry in os.scandir(drive_path):
-                if not entry.is_file():
-                    continue
-                filename = entry.name
-                # Check criteria: starts with 'empty_', >100 chars, no extension
-                if not filename.startswith('empty_'):
-                    continue
-                if len(filename) <= 100:
-                    continue
-                if '.' in filename:
-                    continue
-                # Read a small sample to check for null bytes
-                try:
-                    with open(entry.path, 'rb') as f:
-                        sample = f.read(4096)
-                        if sample and all(b == 0 for b in sample):
-                            orphaned_files.append(entry.path)
-                except (IOError, OSError) as e:
-                    logger.debug('Could not read file %s: %s', entry.path, e)
-        except (IOError, OSError) as e:
-            logger.debug('Could not scan directory %s: %s', drive_path, e)
-
-    return orphaned_files
 
 
 openfiles = OpenFiles()

@@ -367,7 +367,7 @@ class CookieTestCase(common.BleachbitTestCase):
             self.skipTest(
                 'Skipping live Firefox test because cookies.sqlite was not found')
 
-        def test_scenario(random_count):
+        def run_test_scenario(random_count):
             """Helper to test a cookie deletion scenario"""
             self.assertGreaterEqual(random_count, 0)
             temp_db = os.path.join(
@@ -388,6 +388,8 @@ class CookieTestCase(common.BleachbitTestCase):
                 random_hosts = cursor.execute(
                     f'SELECT DISTINCT host FROM moz_cookies ORDER BY RANDOM() LIMIT {random_count}').fetchall()
                 conn.close()
+                if not random_hosts:
+                    self.skipTest('No hosts found in live Firefox database')
                 keep_list = {host[0].lstrip('.') for host in random_hosts}
             else:
                 keep_list = {doesnotexist}
@@ -418,10 +420,10 @@ class CookieTestCase(common.BleachbitTestCase):
                 os.unlink(temp_db)
 
         # Test scenario 1: Delete all cookies (keep non-existent domain)
-        test_scenario(0)
+        run_test_scenario(0)
         # Test scenario 2: Delete several random cookies
-        test_scenario(10)
-        test_scenario(50)
+        run_test_scenario(10)
+        run_test_scenario(50)
 
     def test_preview_cookies_deletion_chrome(self):
         """Test previewing Chrome cookie deletion"""

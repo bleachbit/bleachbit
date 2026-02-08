@@ -26,6 +26,8 @@ import os
 import tempfile
 import unittest
 
+from functools import wraps
+
 from tests import common
 from bleachbit.ProtectedPath import (
     _check_exempt,
@@ -38,6 +40,7 @@ from bleachbit.ProtectedPath import (
     get_warning_message,
     load_protected_paths)
 from bleachbit import ProtectedPath as protected_path_module
+from bleachbit import get_share_path
 from bleachbit.Cleaner import backends
 from tests.TestCleaner import register_all_cleaners
 
@@ -48,6 +51,16 @@ CASE_METHODS = (
     str.title,
     str.swapcase,
     lambda x: x)
+
+
+def requirePPXML(test_func):
+    """Decorator to skip test if protected path XML is not found"""
+    @wraps(test_func)
+    def wrapper(self):
+        if not _get_protected_path_xml():
+            self.skipTest('Protected path XML not found')
+        return test_func(self)
+    return wrapper
 
 
 class ProtectedPathTestCase(common.BleachbitTestCase):
@@ -98,11 +111,15 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
 
     def test_get_protected_path_xml(self):
         """Test that protected path XML file can be found"""
-        xml_path = _get_protected_path_xml()
-        self.assertIsNotNone(xml_path)
-        self.assertTrue(os.path.exists(xml_path))
-        self.assertTrue(xml_path.endswith('protected_path.xml'))
+        xml_path = get_share_path('protected_path.xml')
+        self.assertIsNotNone(xml_path, 'protected_path.xml not found via get_share_path')
+        self.assertExists(xml_path)
+        xml_path2 = _get_protected_path_xml()
+        self.assertIsNotNone(xml_path2, 'Protected path XML not found')
+        self.assertExists(xml_path2)
+        self.assertTrue(xml_path2.endswith('protected_path.xml'))
 
+    @requirePPXML
     def test_load_protected_paths(self):
         """Test loading protected paths from XML"""
         paths = load_protected_paths()
@@ -120,6 +137,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
                 ppath['depth'], int) or ppath['depth'] is None)
             self.assertIsInstance(ppath['case_sensitive'], bool)
 
+    @requirePPXML
     @common.skipIfWindows
     def test_expand_path_entries_split_os_pathsep(self):
         """Environment variables with os.pathsep values expand into multiple entries"""
@@ -147,6 +165,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
                 os.environ['XDG_DATA_DIRS'] = original_value
             clear_cache()
 
+    @requirePPXML
     def test_load_protected_paths_caching(self):
         """Test that protected paths are cached"""
         paths1 = load_protected_paths()
@@ -237,6 +256,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
         result = check_protected_path(zoom_path)
         self.assertIsNone(result)
 
+    @requirePPXML
     def test_check_protected_path_exact_match(self):
         """Test check_protected_path with exact match"""
         home = os.path.expanduser('~')
@@ -248,6 +268,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
             self.assertIn('path', result)
             self.assertIn('depth', result)
 
+    @requirePPXML
     def test_check_protected_path_child_match(self):
         """Test check_protected_path with child of protected path
 
@@ -266,6 +287,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
                     self.assertGreater(result['depth'], 0)
                 break
 
+    @requirePPXML
     def test_check_protected_path_parent_match(self):
         """Test that parent of protected path triggers warning
 
@@ -288,6 +310,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
                     self.assertIsNotNone(result)
                 break
 
+    @requirePPXML
     def test_check_protected_path_git_variations(self):
         """Test that .git entries are detected at various nesting levels"""
         git_paths = [
@@ -301,6 +324,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
             self.assertIsNotNone(result, msg=f"Expected .git match for {path}")
             self.assertEqual(result['path'], '.git')
 
+    @requirePPXML
     def test_check_protected_path_desktop_suffix(self):
         """Ensure Desktop.old variants do not match Desktop protected entry"""
         desktop = os.path.expanduser('~/Desktop')
@@ -370,11 +394,6 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
 
     def test_get_warning_message(self):
         """Test get_warning_message function"""
-        match_info = {
-            'path': '/home/user',
-            'depth': 1,
-            'case_sensitive': True,
-        }
         impact = {
             'file_count': 10,
             'total_size': 1024000,
@@ -399,6 +418,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
         self.assertIsInstance(msg, str)
         self.assertIn('/some/path', msg)
 
+    @requirePPXML
     def test_clear_cache(self):
         """Test clear_cache function"""
         # Load to populate cache
@@ -409,6 +429,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
         clear_cache()
         self.assertIsNone(protected_path_module._protected_paths_cache)
 
+    @requirePPXML
     def test_preview_all(self):
         """Check whether any real cleaners return protected paths"""
         register_all_cleaners()
@@ -435,6 +456,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
                 option_counter += 1
         print(f'checked {option_counter} options')
 
+    @requirePPXML
     def test_path_with_trailing_slash(self):
         """Test that paths with trailing slashes are handled correctly"""
         home = os.path.expanduser('~')
@@ -446,6 +468,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
         self.assertIsNotNone(result2)
         self.assertEqual(result1['path'], result2['path'])
 
+    @requirePPXML
     @common.skipUnlessWindows
     def test_case_insensitive_windows(self):
         """Test case-insensitive matching on Windows"""
@@ -457,6 +480,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
             cased_profile = case_method(profile)
             self.assertIsNotNone(check_protected_path(cased_profile))
 
+    @requirePPXML
     def test_case_insensitive(self):
         """Test case insensitive cross platform"""
         home = os.path.expanduser('~')

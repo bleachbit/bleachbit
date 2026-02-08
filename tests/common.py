@@ -35,10 +35,11 @@ from unittest import mock
 if 'win32' == sys.platform:
     import winreg
     import win32gui
+    from bleachbit import Windows
 
 import bleachbit
 import bleachbit.Options
-from bleachbit.FileUtilities import extended_path
+from bleachbit.FileUtilities import children_in_directory, extended_path, is_hard_link
 from bleachbit.General import gc_collect, sudo_mode
 
 
@@ -121,7 +122,7 @@ class BleachbitTestCase(unittest.TestCase):
         start = time.perf_counter()
         outcome = super().run(result)
         duration = time.perf_counter() - start
-        threshold = os.getenv('BLEACHBIT_SLOW_TEST_THRESHOLD') # in seconds
+        threshold = os.getenv('BLEACHBIT_SLOW_TEST_THRESHOLD')  # in seconds
         if threshold:
             threshold = float(threshold)
         if not threshold or threshold < 0:
@@ -203,6 +204,18 @@ class BleachbitTestCase(unittest.TestCase):
         else:
             self.assertNotExists(path, msg)
 
+    def assertDirectoryCount(self, path, count, list_directories=True):
+        """Assert that a directory has a specific number of files
+
+        - Counts recursively
+        - Counts links
+        - Does not recurse links
+
+        """
+        object_list = list(children_in_directory(path, list_directories))
+        self.assertEqual(len(object_list), count, f"contains {len(object_list)} objects "
+                         f"such as {object_list[:2]}, expected {count}")
+
     #
     # file creation functions
     #
@@ -215,7 +228,33 @@ class BleachbitTestCase(unittest.TestCase):
         with open(extended_path(filename), mode, encoding=encoding) as f:
             f.write(contents)
         assert (os.path.exists(extended_path(filename)))
+        with open(extended_path(filename), 'rb' if 'b' in mode else 'r', encoding=encoding if 'b' not in mode else None) as f:
+            written_contents = f.read()
+        expected = contents if 'b' in mode else contents.encode(
+            encoding) if encoding else contents
+        actual = written_contents if 'b' in mode else written_contents.encode(
+            encoding) if encoding else written_contents
+        assert actual == expected, f"File contents mismatch: expected {expected!r}, got {actual!r}"
         return filename
+
+    def mkdir(self, dirname):
+        """Create a directory with a given name
+
+        If dirname is not absolute, it will be created in self.tempdir.
+
+        Returns the path to the created directory.
+        """
+        assert isinstance(dirname, str)
+        if not os.path.isabs(dirname):
+            dirname = os.path.join(self.tempdir, dirname)
+        os.makedirs(extended_path(dirname), exist_ok=True)
+        self.assertExists(extended_path(dirname))
+        self.assertTrue(os.path.isdir(extended_path(dirname)))
+        self.assertFalse(is_hard_link(extended_path(dirname)))
+        self.assertFalse(os.path.isfile(extended_path(dirname)))
+        if os.name == 'nt':
+            self.assertFalse(Windows.is_junction(extended_path(dirname)))
+        return dirname
 
     def mkstemp(self, **kwargs):
         if 'dir' not in kwargs:
@@ -225,6 +264,10 @@ class BleachbitTestCase(unittest.TestCase):
         return filename
 
     def mkdtemp(self, **kwargs):
+        """Create a temporary directory
+
+        Objects under self.tempdir are automatically removed after testing.
+        """
         if 'dir' not in kwargs:
             kwargs['dir'] = self.tempdir
         return tempfile.mkdtemp(**kwargs)
@@ -275,13 +318,13 @@ def skipUnlessWindows(f):
     return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')(f)
 
 
-def test_also_with_sudo(test_func):
+def also_with_sudo(test_func):
     """
     Decorator to mark test methods that should be run both normally and with sudo.
 
     See also `tests/test_with_sudo.py`.
     """
-    test_func._test_also_with_sudo = True
+    test_func._also_with_sudo = True
     return test_func
 
 
@@ -333,11 +376,18 @@ def get_winregistry_value(key, subkey):
 
 
 def get_opened_windows_titles():
+    """
+    Get the titles of all opened windows.
+
+    Returns:
+        list: A list of window titles.
+    """
     opened_windows_titles = []
 
     def enumerate_opened_windows_titles(hwnd, ctx):
-        if win32gui.IsWindowVisible(hwnd):
-            opened_windows_titles.append(win32gui.GetWindowText(hwnd))
+        text = win32gui.GetWindowText(hwnd)
+        if win32gui.IsWindowVisible(hwnd) and text:
+            opened_windows_titles.append(text)
 
     win32gui.EnumWindows(enumerate_opened_windows_titles, None)
     return opened_windows_titles

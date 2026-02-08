@@ -95,12 +95,12 @@ class Delete:
             'size': size}
         if really_delete:
             try:
-                FileUtilities.delete(self.path, self.shred)
+                deleted = FileUtilities.delete(self.path, self.shred)
             except WindowsError as e:
                 # WindowsError: [Error 32] The process cannot access the file because it is being
                 # used by another process: 'C:\\Documents and
                 # Settings\\username\\Cookies\\index.dat'
-                if e.winerror not in (5, 32):
+                if not e.winerror == 32:
                     raise
 
                 bleachbit.Windows.delete_locked_file(self.path)
@@ -112,6 +112,10 @@ class Delete:
                     # TRANSLATORS: The file will be deleted when the
                     # system reboots
                     ret['label'] = _('Mark for deletion')
+            else:
+                if not deleted:
+                    ret['n_deleted'] = 0
+                    ret['size'] = 0
         yield ret
 
 

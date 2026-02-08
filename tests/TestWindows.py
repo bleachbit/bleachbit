@@ -60,13 +60,16 @@ from bleachbit.Windows import (
 )
 from bleachbit import logger
 
+import ctypes
 import os
 import platform
 import shutil
+import subprocess
 import sys
 import time
 import tempfile
 from decimal import Decimal
+from pathlib import Path
 from unittest import mock
 
 
@@ -76,6 +79,8 @@ if 'win32' == sys.platform:
     import win32service
     import winreg
     from win32com.shell import shell
+
+    from bleachbit import Windows
 
 
 def put_files_into_recycle_bin():
@@ -93,8 +98,97 @@ def put_files_into_recycle_bin():
     move_to_recycle_bin(dirname)
 
 
+class WindowsLinksMixIn():
+    """Mixin class for Windows link creation methods."""
+
+    def _create_win_dir_symlink(self, target, linkname):
+        """Create a directory symlink"""
+
+        self.assertFalse(os.path.lexists(linkname),
+                         f'Link must not exist: {linkname}')
+        self.assertTrue(os.path.isabs(target),
+                        f'Target must be absolute path: {target}')
+        self.assertTrue(os.path.isabs(linkname),
+                        f'Link must be absolute path: {linkname}')
+        self.assertExists(target)
+        target_path = Path(target)
+        self.assertTrue(target_path.is_dir(),
+                        f'Target must be an existing directory: {target}')
+
+        kernel32 = ctypes.windll.kernel32
+        kernel32.CreateSymbolicLinkW.argtypes = [
+            ctypes.c_wchar_p,
+            ctypes.c_wchar_p,
+            ctypes.c_uint32,
+        ]
+        kernel32.CreateSymbolicLinkW.restype = ctypes.c_ubyte
+        result = kernel32.CreateSymbolicLinkW(
+            linkname, target, 1)  # SYMBOLIC_LINK_FLAG_DIRECTORY
+        if result == 0:
+            err = ctypes.GetLastError()
+            raise OSError(err, ctypes.FormatError(err))
+        self.assertExists(linkname)
+        link_path = Path(linkname)
+        self.assertTrue(link_path.is_symlink())
+        self.assertTrue(link_path.is_dir())
+        self.assertFalse(Windows.is_junction(linkname))
+
+    def _create_win_hard_link(self, target, linkname):
+        """Create a hard link to a file"""
+
+        self.assertFalse(os.path.lexists(linkname),
+                         f'Link must not exist: {linkname}')
+        self.assertTrue(os.path.isabs(target),
+                        f'Target must be absolute path: {target}')
+        self.assertTrue(os.path.isabs(linkname),
+                        f'Link must be absolute path: {linkname}')
+        self.assertExists(target)
+        target_path = Path(target)
+        self.assertTrue(target_path.is_file(),
+                        f'Target must be an existing file: {target}')
+        kernel32 = ctypes.windll.kernel32
+        kernel32.CreateHardLinkW.argtypes = [
+            ctypes.c_wchar_p,
+            ctypes.c_wchar_p,
+            ctypes.c_void_p,
+        ]
+        kernel32.CreateHardLinkW.restype = ctypes.c_bool
+        result = kernel32.CreateHardLinkW(linkname, target, None)
+        if not result:
+            err = ctypes.GetLastError()
+            raise OSError(err, ctypes.FormatError(err))
+        self.assertExists(linkname)
+        link_path = Path(linkname)
+        self.assertTrue(link_path.is_file())
+        self.assertFalse(link_path.is_symlink())
+        self.assertFalse(Windows.is_junction(linkname))
+        self.assertTrue(os.path.samefile(target, linkname))
+
+    def _create_win_junction(self, target, linkname):
+        """Create a directory junction using mklink /J."""
+
+        if os.path.lexists(linkname):
+            raise OSError(f'Link already exists: {linkname}')
+        self.assertTrue(os.path.isabs(target),
+                        f'Target must be absolute path: {target}')
+        self.assertTrue(os.path.isabs(linkname),
+                        f'Link must be absolute path: {linkname}')
+        self.assertExists(target)
+        target_path = Path(target)
+        self.assertTrue(target_path.is_dir(),
+                        f'Target must be an existing directory: {target}')
+        cmd = ['cmd', '/c', 'mklink', '/J',
+               extended_path(linkname), extended_path(target)]
+        subprocess.check_call(cmd)
+        self.assertExists(linkname)
+        self.assertTrue(Windows.is_junction(linkname))
+        path = Path(linkname)
+        self.assertTrue(path.is_dir())
+        self.assertFalse(path.is_symlink())
+
+
 @common.skipUnlessWindows
-class WindowsTestCase(common.BleachbitTestCase):
+class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
     """Test case for module Windows"""
 
@@ -136,6 +230,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         mklink /d=directory symbolic link
         requires administrator privileges
         """
+        assert mklink_option in ('/j', '/d')
         if mklink_option == '/d':
             self.skipUnlessAdmin()
         # make a normal directory with a file in it
@@ -159,13 +254,10 @@ class WindowsTestCase(common.BleachbitTestCase):
 
         # create the link
         link_pathname = os.path.join(container_dir, 'link')
-        args = ('cmd', '/c', 'mklink', mklink_option,
-                link_pathname, target_dir)
-        from bleachbit.General import run_external
-        (rc, stdout, stderr) = run_external(args)
-        self.assertEqual(rc, 0, stderr)
-        self.assertExists(link_pathname)
-        self.assertTrue(is_junction(link_pathname))
+        if mklink_option == '/j':
+            self._create_win_junction(target_dir, link_pathname)
+        else:
+            self._create_win_dir_symlink(target_dir, link_pathname)
 
         # put the link in the recycle bin
         move_to_recycle_bin(container_dir)
@@ -189,21 +281,16 @@ class WindowsTestCase(common.BleachbitTestCase):
         # clean up
         cleanup_dirs()
 
-    def test_link_junction_no_clear(self):
-        """Unit test for directory junctions without clearing recycle bin"""
-        self._test_link_helper('/j', False)
-
-    def test_link_junction_clear(self):
-        """Unit test for directory junctions with clearing recycle bin"""
-        self._test_link_helper('/j', True)
-
-    def test_link_symlink_no_clear(self):
-        """Unit test for directory symlink without clearing recycle bin"""
-        self._test_link_helper('/d', False)
-
-    def test_link_symlink_clear(self):
-        """Unit test for directory symlink with clearing recycle bin"""
-        self._test_link_helper('/d', True)
+    def test_link_types(self):
+        """Unit test for directory junctions and symlinks with recycle bin"""
+        for mklink_option, clear_recycle_bin in [
+            ('/j', False),
+            ('/j', True),
+            ('/d', False),
+            ('/d', True),
+        ]:
+            with self.subTest(mklink_option=mklink_option, clear_recycle_bin=clear_recycle_bin):
+                self._test_link_helper(mklink_option, clear_recycle_bin)
 
     def test_delete_locked_file(self):
         """Unit test for delete_locked_file"""

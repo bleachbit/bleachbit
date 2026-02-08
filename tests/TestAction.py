@@ -45,8 +45,8 @@ from bleachbit import logger
 from bleachbit.Action import ActionProvider, Command, Delete, has_glob, expand_multi_var
 from bleachbit.CleanerML import CleanerML
 from tests import common
-from tests.TestFileUtilities import test_ini_helper
-from tests.TestFileUtilities import test_json_helper
+from tests.TestFileUtilities import ini_helper
+from tests.TestFileUtilities import json_helper
 
 
 def _action_str_to_commands(action_str):
@@ -256,7 +256,7 @@ class ActionTestCase(common.BleachbitTestCase):
             )
             self._test_action_str(action_str)
 
-        test_ini_helper(self, execute_ini)
+        ini_helper(self, execute_ini)
 
     def test_json(self):
         """Unit test for class Json"""
@@ -267,7 +267,7 @@ class ActionTestCase(common.BleachbitTestCase):
             )
             self._test_action_str(action_str)
 
-        test_json_helper(self, execute_json)
+        json_helper(self, execute_json)
 
     def test_process(self):
         """Unit test for process action"""

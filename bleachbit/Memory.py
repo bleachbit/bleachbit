@@ -23,15 +23,16 @@
 Wipe memory
 """
 
-from bleachbit import FileUtilities
-from bleachbit import General
-from bleachbit.Language import get_text as _
-
 import logging
 import os
 import re
 import subprocess
 import sys
+
+from bleachbit import FileUtilities
+from bleachbit import General
+from bleachbit.Language import get_text as _
+from bleachbit.Wipe import wipe_contents
 
 logger = logging.getLogger(__name__)
 
@@ -280,7 +281,7 @@ def wipe_swap_linux(devices, proc_swaps):
                 (device, actual_size_bytes, safety_limit_bytes))
         uuid = get_swap_uuid(device)
         # wipe
-        FileUtilities.wipe_contents(device, truncate=False)
+        wipe_contents(device, truncate=False)
         # reinitialize
         # TRANSLATORS: The variable is a device like /dev/sda2
         logger.debug(_("Reinitializing the swap device %s."), device)

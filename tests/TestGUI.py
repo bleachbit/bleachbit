@@ -24,21 +24,22 @@ Test case for module GUI
 """
 
 import os
+import sys
 import unittest
 import time
 import types
+import warnings
 from unittest import mock
 
-from bleachbit.GtkShim import HAVE_GTK, Gtk
+from bleachbit.GtkShim import HAVE_GTK, Gtk, GLib, Gio
 
 if HAVE_GTK:
-    from bleachbit.GUI import Bleachbit
+    from bleachbit.GuiApplication import Bleachbit
+    from bleachbit.GuiUtil import get_font_size_from_name, get_window_info
 
 import bleachbit
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
-
-
 from tests import common
 
 bleachbit.online_update_notification_enabled = False
@@ -60,7 +61,13 @@ class GUITestCase(common.BleachbitTestCase):
         options.set('check_online_updates', False)  # avoid pop-up window
         options.get_tree = types.MethodType(
             lambda self, parent, child: False, options)
-        cls.app.register()
+        try:
+            cls.app.register()
+        except GLib.GError as e:
+            if "already exported" in str(e):
+                cls.app = Gio.Application.get_default()
+            else:
+                raise
         cls.app.activate()
         cls.refresh_gui()
 
@@ -73,7 +80,22 @@ class GUITestCase(common.BleachbitTestCase):
     @classmethod
     def refresh_gui(cls, delay=0):
         while Gtk.events_pending():
-            Gtk.main_iteration_do(blocking=False)
+            if sys.version_info >= (3, 14):
+                with warnings.catch_warnings():
+                    warnings.simplefilter("error")
+                    warnings.filterwarnings(
+                        "ignore",
+                        message=".*asyncio.AbstractEventLoopPolicy.*",
+                        category=DeprecationWarning
+                    )
+                    warnings.filterwarnings(
+                        "ignore",
+                        message=".*asyncio.get_event_loop_policy.*",
+                        category=DeprecationWarning
+                    )
+                    Gtk.main_iteration_do(blocking=False)
+            else:
+                Gtk.main_iteration_do(blocking=False)
         time.sleep(delay)
 
     @classmethod
@@ -134,7 +156,7 @@ class GUITestCase(common.BleachbitTestCase):
     def test_get_window_info(self):
         """Test get_window_info"""
         gui = self.app._window
-        geo = bleachbit.GUI.get_window_info(gui)
+        geo = get_window_info(gui)
         self.assertGreaterEqual(geo.x, 0)
         self.assertGreaterEqual(geo.y, 0)
         self.assertGreaterEqual(geo.width, 0)
@@ -163,7 +185,7 @@ class GUITestCase(common.BleachbitTestCase):
                  ("", None),
                  (None, None))
         for font_name, expected in tests:
-            self.assertEqual(bleachbit.GUI.get_font_size_from_name(
+            self.assertEqual(get_font_size_from_name(
                 font_name), expected, f"Font name '{font_name}' should return {expected}")
 
     def test_preferences(self):
@@ -238,7 +260,7 @@ class GUITestCase(common.BleachbitTestCase):
 
     def test_notify(self):
         """Test a pop-up notification"""
-        from bleachbit.GUI import notify
+        from bleachbit.GuiUtil import notify
         notify('This is a test notification')
         time.sleep(1)  # Pause for 1 second
 
@@ -268,7 +290,7 @@ class GUITestCase(common.BleachbitTestCase):
         gui = self.app._window
         self.refresh_gui()
 
-        with mock.patch('bleachbit.GUI.GUI._confirm_delete', return_value=True):
+        with mock.patch('bleachbit.GuiWindow.GUI._confirm_delete', return_value=True):
             self.assertTrue(gui._confirm_delete(False, False))
             gui.shred_paths(test_files_dirs)
 
@@ -320,7 +342,7 @@ class GUITestCase(common.BleachbitTestCase):
         self._put_checkmark_on_cleaner(
             gui, self._NEW_CLEANER_ID, self._NEW_OPTION_ID)
 
-        with mock.patch('bleachbit.GUI.GUI._confirm_delete', return_value=True):
+        with mock.patch('bleachbit.GuiWindow.GUI._confirm_delete', return_value=True):
             self.assertTrue(gui._confirm_delete(False, False))
             # same as b = self.click_button(gui, _("Clean"))
             gui.run_operations(None)
@@ -333,7 +355,7 @@ class GUITestCase(common.BleachbitTestCase):
         file_to_clean = self._setup_new_cleaner(gui)
 
         for really_delete, assert_method in [(False, self.assertExists), (True, self.assertNotExists)]:
-            with mock.patch('bleachbit.GUI.GUI._confirm_delete', return_value=True):
+            with mock.patch('bleachbit.GuiWindow.GUI._confirm_delete', return_value=True):
                 self.assertTrue(gui._confirm_delete(False, False))
                 gui.cb_run_option(
                     None, really_delete, self._NEW_CLEANER_ID, self._NEW_OPTION_ID

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Utility script to discover and run tests marked for sudo execution.
-Tests are marked with the @requires_sudo decorator.
+Tests are marked with the @also_with_sudo decorator.
 
 Usage:
     make tests-with-sudo
@@ -9,6 +9,8 @@ Usage:
 
 import inspect
 import os
+import shlex
+import shutil
 import subprocess
 import sys
 import unittest
@@ -19,7 +21,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def discover_sudo_tests():
-    """Discover all test methods marked with @test_also_with_sudo decorator"""
+    """Discover all test methods marked with @also_with_sudo decorator"""
     sudo_tests = []
 
     # Import test modules to scan for decorated tests
@@ -39,7 +41,7 @@ def discover_sudo_tests():
                     # Find all test methods in the class
                     for method_name, method in inspect.getmembers(obj):
                         if (method_name.startswith('test_') and
-                                hasattr(method, '_test_also_with_sudo')):
+                                hasattr(method, '_also_with_sudo')):
                             test_path = f"{module_name}.{name}.{method_name}"
                             sudo_tests.append(test_path)
 
@@ -47,6 +49,26 @@ def discover_sudo_tests():
             print(f"Warning: Could not import {module_name}: {e}")
 
     return sudo_tests
+
+
+def _build_test_command(test_list):
+    """Return command list to run unittest (optionally under coverage)."""
+    coverage_runner = os.environ.get('BLEACHBIT_COVERAGE_RUNNER') or ''
+    coverage_file = os.environ.get('BLEACHBIT_COVERAGE_FILE') or ''
+
+    if coverage_file:
+        os.environ['COVERAGE_FILE'] = coverage_file
+
+    if coverage_runner.strip():
+        runner_parts = shlex.split(coverage_runner)
+        if runner_parts and not os.path.isabs(runner_parts[0]):
+            absolute = shutil.which(runner_parts[0])
+            if absolute:
+                runner_parts[0] = absolute
+    else:
+        runner_parts = [sys.executable]
+
+    return runner_parts + ['-m', 'unittest'] + test_list + ['-v']
 
 
 def run_sudo_tests(test_list):
@@ -63,7 +85,7 @@ def run_sudo_tests(test_list):
     print("Running sudo tests...")
     print('=' * 60)
 
-    base_cmd = [sys.executable, '-m', 'unittest'] + test_list + ['-v']
+    base_cmd = _build_test_command(test_list)
 
     if os.name == 'posix' and os.geteuid() == 0:
         sudo_uid = os.getenv('SUDO_UID')
@@ -87,11 +109,11 @@ def run_sudo_tests(test_list):
 
 
 def main():
-    """Discover and run all tests marked with @test_also_with_sudo"""
+    """Discover and run all tests marked with @also_with_sudo"""
     sudo_tests = discover_sudo_tests()
 
     if not sudo_tests:
-        print("No tests marked with @test_also_with_sudo found")
+        print("No tests marked with @also_with_sudo found")
         sys.exit(0)
 
     if run_sudo_tests(sudo_tests):

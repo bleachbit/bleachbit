@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 
-FROM debian:trixie
+FROM python:3.14-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=en_US.UTF-8
@@ -10,34 +10,35 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
         ca-certificates \
-        debhelper \
-        desktop-file-utils \
-        devscripts \
-        dh-python \
-        fakeroot \
+        cmake \
         gobject-introspection \
         gir1.2-gtk-3.0 \
         gir1.2-notify-0.7 \
+        libffi-dev \
+        libglib2.0-dev \
+        libgirepository-2.0-dev \
         libgtk-3-0 \
-        lintian \
+        libgirepository1.0-dev \
+        libcairo2-dev \
         locales \
-        libxml2-utils \
-        python3 \
-        python3-chardet \
-        python3-gi \
-        python3-pip \
-        python3-psutil \
-        python3-requests \
-        python3-setuptools \
-        sudo \
-        tzdata \
-        xdg-utils \
+        meson \
+        ninja-build \
+        pkg-config \
+        xauth \
+        xvfb \
     && rm -rf /var/lib/apt/lists/*
-
-
 
 RUN sed -i 's/# \(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
     && locale-gen
+
+RUN python -m pip install --no-cache-dir -U pip setuptools wheel
+RUN python -m pip install --no-cache-dir \
+        chardet \
+        psutil \
+        requests \
+        pycairo \
+        PyGObject \
+        pytest
 
 ARG HOME_IN_CONTAINER=/home/user
 ARG USER_ID=1000

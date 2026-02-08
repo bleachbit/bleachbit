@@ -216,6 +216,10 @@ def write_nsis_pot():
     for key in sorted(english_strings):
         msgid = _escape_po_text(_unescape_nsis_text(english_strings[key]))
         lines.append('#: windows/NsisInclude/NsisMultiUserLang.nsh\n')
+        if '&' in msgid:
+            lines.append(
+                '#. TRANSLATORS: The character \'&\' positions the keyboard accelerator key.\n'
+                '#. TRANSLATORS: For example, \'&anyone\' sets \'a\' as the accelerator key (Alt+a).\n')
         lines.append(f'msgctxt "nsis:{key}"\n')
         lines.append(f'msgid "{msgid}"\n')
         lines.append('msgstr ""\n\n')

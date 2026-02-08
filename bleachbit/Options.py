@@ -39,24 +39,44 @@ from bleachbit.Language import get_text as _
 
 logger = logging.getLogger(__name__)
 
-boolean_keys = ['auto_hide',
-                'auto_detect_lang',
-                'check_beta',
-                'check_online_updates',
-                'dark_mode',
-                'debug',
-                'delete_confirmation',
-                'exit_done',
-                'first_start',
-                'kde_shred_menu_option',
-                'remember_geometry',
-                'shred',
-                'units_iec',
-                'window_maximized',
-                'window_fullscreen']
-if 'nt' == os.name:
-    boolean_keys.append('update_winapp2')
-    boolean_keys.append('win10_theme')
+OPTION_DEFAULTS = {
+    'auto_hide': {'value': True},
+    'auto_detect_lang': {'value': True},
+    'check_beta': {'value': False},
+    'check_online_updates': {'value': True},
+    'dark_mode': {'value': True},
+    'debug': {'value': False},
+    'delete_confirmation': {'value': True},
+    'exit_done': {'value': False},
+    'first_start': {'value': False},
+    'kde_shred_menu_option': {'value': False},
+    'load_cleaners': {'value': True},
+    'remember_geometry': {'value': True},
+    'shred': {'value': False},
+    'units_iec': {'value': False},
+    'window_maximized': {'value': False},
+    'window_fullscreen': {'value': False},
+    'update_winapp2': {'value': False, 'platforms': ('nt',)},
+    'win10_theme': {'value': False, 'platforms': ('nt',)},
+}
+
+
+def _platform_allows(meta):
+    platforms = meta.get('platforms')
+    return not platforms or os.name in platforms
+
+
+def _get_default_value(option):
+    meta = OPTION_DEFAULTS.get(option)
+    if not meta or not _platform_allows(meta):
+        return None
+    return meta['value']
+
+
+boolean_keys = [
+    key for key, meta in OPTION_DEFAULTS.items()
+    if _platform_allows(meta)
+]
 int_keys = ['window_x', 'window_y', 'window_width', 'window_height', ]
 
 
@@ -67,18 +87,19 @@ def path_to_option(pathname):
     # On Windows expand DOS-8.3-style pathnames.
     if 'nt' == os.name and os.path.exists(pathname):
         pathname = GetLongPathName(pathname)
-    if ':' == pathname[1]:
+    if len(pathname) > 1 and ':' == pathname[1]:
         # ConfigParser treats colons in a special way
         pathname = pathname[0] + pathname[2:]
     return pathname
 
 
-def init_configuration():
+def init_configuration(*, log=True):
     """Initialize an empty configuration, if necessary"""
     if not os.path.exists(bleachbit.options_dir):
         General.makedirs(bleachbit.options_dir)
     if os.path.lexists(bleachbit.options_file):
-        logger.debug('Deleting configuration: %s ' % bleachbit.options_file)
+        if log:
+            logger.debug('Deleting configuration: %s ' % bleachbit.options_file)
         os.remove(bleachbit.options_file)
     with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as f_ini:
         f_ini.write('[bleachbit]\n')
@@ -99,6 +120,7 @@ class Options:
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
         self.config.BOOLEAN_STATES['t'] = True
         self.config.BOOLEAN_STATES['f'] = False
+        self.overrides = {}
         self.restore()
 
         old_option = 'system.free_disk_space'
@@ -109,7 +131,6 @@ class Options:
                 self.config.remove_option('tree', old_option)
         except Exception:
             logger.exception("Error migrating legacy option '%s'", old_option)
-
 
     def __flush(self):
         """Write information to disk"""
@@ -164,31 +185,41 @@ class Options:
             logger.info(_("Automatically preserving language %s."), lang_id)
             self.set_language(lang_id, True)
 
-    def __set_default(self, key, value):
-        """Set the default value"""
-        if not self.config.has_option('bleachbit', key):
-            self.set(key, value)
-
     def has_option(self, option, section='bleachbit'):
         """Check if option is set"""
         return self.config.has_option(section, option)
+
+    def has_override(self, option, section='bleachbit'):
+        """Check if option is overridden"""
+        return (section, option) in self.overrides
 
     def get(self, option, section='bleachbit'):
         """Retrieve a general option"""
         if not 'nt' == os.name and 'update_winapp2' == option:
             return False
-        if section == 'bleachit' and option == 'debug':
+        if section == 'bleachbit' and option == 'debug':
             from bleachbit.Log import is_debugging_enabled_via_cli
             if is_debugging_enabled_via_cli():
                 # command line overrides stored configuration
                 return True
-        if section == 'hashpath' and option[1] == ':':
+        override_key = (section, option)
+        if override_key in self.overrides:
+            return self.overrides[override_key]
+        if section == 'hashpath' and len(option) > 1 and option[1] == ':':
             option = option[0] + option[2:]
-        if option in boolean_keys:
-            return self.config.getboolean(section, option)
-        elif option in int_keys:
-            return self.config.getint(section, option)
-        return self.config.get(section, option)
+        if self.config.has_option(section, option):
+            if option in boolean_keys:
+                return self.config.getboolean(section, option)
+            if option in int_keys:
+                return self.config.getint(section, option)
+            return self.config.get(section, option)
+
+        if section == 'bleachbit':
+            default = _get_default_value(option)
+            if default is not None:
+                return default
+
+        return None
 
     def get_hashpath(self, pathname):
         """Recall the hash for a file"""
@@ -214,8 +245,8 @@ class Options:
         if not self.config.has_section(section):
             return None
         values = [
-            self.config.get(section, option)
-            for option in sorted(self.config.options(section))
+            self.config.get(section, opt)
+            for opt in sorted(self.config.options(section), key=lambda x: int(x))
         ]
         return values
 
@@ -224,15 +255,15 @@ class Options:
         if not self.config.has_section(section):
             return []
         myoptions = []
-        for option in sorted(self.config.options(section)):
-            pos = option.find('_')
+        for opt in sorted(self.config.options(section), key=lambda x: int(x.split('_')[0])):
+            pos = opt.find('_')
             if -1 == pos:
                 continue
-            myoptions.append(option[0:pos])
+            myoptions.append(opt[0:pos])
         values = []
-        for option in set(myoptions):
-            p_type = self.config.get(section, option + '_type')
-            p_path = self.config.get(section, option + '_path')
+        for opt in sorted(set(myoptions), key=lambda x: int(x)):
+            p_type = self.config.get(section, opt + '_type')
+            p_path = self.config.get(section, opt + '_path')
             values.append((p_type, p_path))
         return values
 
@@ -329,26 +360,6 @@ class Options:
             except:
                 logger.exception(
                     _("Error when setting the default drives to shred."))
-        # set defaults
-        self.__set_default("auto_hide", True)
-        self.__set_default("auto_detect_lang", True)
-        self.__set_default("check_beta", False)
-        self.__set_default("check_online_updates", True)
-        self.__set_default("dark_mode", True)
-        self.__set_default("debug", False)
-        self.__set_default("delete_confirmation", True)
-        self.__set_default("exit_done", False)
-        self.__set_default("kde_shred_menu_option", False)
-        self.__set_default("remember_geometry", True)
-        self.__set_default("shred", False)
-        self.__set_default("units_iec", False)
-        self.__set_default("window_fullscreen", False)
-        self.__set_default("window_maximized", False)
-
-        if 'nt' == os.name:
-            self.__set_default("update_winapp2", False)
-            self.__set_default("win10_theme", False)
-
         # BleachBit upgrade or first start ever
         if not self.config.has_option('bleachbit', 'version') or \
                 self.get('version') != bleachbit.APP_VERSION:
@@ -359,7 +370,9 @@ class Options:
 
     def set(self, key, value, section='bleachbit', commit=True):
         """Set a general option"""
-        self.config.set(section, key, str(value))
+        override_key = (section, key)
+        if override_key not in self.overrides:
+            self.config.set(section, key, str(value))
         if commit:
             self.__flush()
 
@@ -434,6 +447,11 @@ class Options:
     def toggle(self, key):
         """Toggle a boolean key"""
         self.set(key, not self.get(key))
+
+    def set_override(self, key, value, section='bleachbit'):
+        """Set a CLI override that will never be written to disk"""
+        override_key = (section, key)
+        self.overrides[override_key] = value
 
 
 options = Options()
