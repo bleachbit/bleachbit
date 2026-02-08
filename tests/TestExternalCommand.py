@@ -27,6 +27,9 @@ if HAVE_GTK:
     from bleachbit.GuiApplication import Bleachbit
 
 
+START_TIMEOUT_SECONDS = 5
+
+
 def wait_for_process_tree_windows(process, timeout=60, poll_interval=0.1):
     """Wait for a process and its grandchildren to complete on Windows.
 
@@ -92,6 +95,25 @@ def wait_for_process_tree_windows(process, timeout=60, poll_interval=0.1):
         time.sleep(poll_interval)
 
 
+def is_application_running():
+    """Check if the application is running"""
+    for process in psutil.process_iter(['name', 'cmdline']):
+        try:
+            name = process.info['name'] or ''
+            cmdline = process.info['cmdline'] or []
+            if name.lower().startswith('python') and any(arg in ('--context-menu', '--no-load-cleaners') for arg in cmdline):
+                return True
+        except (psutil.NoSuchProcess, psutil.AccessDenied):
+            pass
+    # Second, check using window titles.
+    if not os.name == 'nt':
+        return
+    opened_windows_titles = common.get_opened_windows_titles()
+    window_open = any(
+        ['BleachBit' == window_title for window_title in opened_windows_titles])
+    return window_open
+
+
 class ExternalCommandTestCase(common.BleachbitTestCase):
     """Test case for the context menu command"""
 
@@ -120,25 +142,25 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
             # We don't want to affect other tests, executed after this one.
             common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', None)
 
-    def assertNotRunning(self):
-        """Assert that no BleachBit GUI processes are running"""
-        # First, check using process name and arguments..
-        for process in psutil.process_iter(['name', 'cmdline']):
-            try:
-                name = process.info['name'] or ''
-                cmdline = process.info['cmdline'] or []
-                if name.lower().startswith('python') and any(arg in ('--context-menu', '--no-load-cleaners') for arg in cmdline):
-                    self.fail(
-                        f"BleachBit GUI process is still running: {process}")
-            except (psutil.NoSuchProcess, psutil.AccessDenied):
-                pass
-        # Second, check using window titles.
-        if not os.name == 'nt':
-            return
-        opened_windows_titles = common.get_opened_windows_titles()
-        self.assertFalse(
-            any(['BleachBit' == window_title for window_title in opened_windows_titles]),
-            f"BleachBit window is still open: {opened_windows_titles}")
+    def assertRunning(self, expect_running=True, timeout=START_TIMEOUT_SECONDS):
+        """Assert whether BleachBit GUI processes are running or not
+
+        Args:
+            expect_running: If True (default), assert that processes ARE running.
+                           If False, assert that processes are NOT running.
+            timeout: Maximum time to wait for process to be running (only used when expect_running=True)
+        """
+        if expect_running:
+            start_time = time.time()
+            while time.time() - start_time < timeout:
+                if is_application_running():
+                    return
+                time.sleep(0.1)
+            self.fail(
+                "Expected BleachBit GUI process to be running, but none found")
+        else:
+            if is_application_running():
+                self.fail("BleachBit GUI process is still running")
 
     def _context_helper(self, fn_prefix, allow_opened_window=False):
         """Unit test for 'Shred with BleachBit' Windows Explorer context menu command"""
@@ -152,14 +174,14 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         print('file_to_shred = {}'.format(file_to_shred))
         self.assertExists(file_to_shred)
         if not allow_opened_window:
-            self.assertNotRunning()
+            self.assertRunning(False)
         shred_command_string = self._get_shred_command_string(file_to_shred)
         self._run_shred_command(shred_command_string,
                                 cwd=bleachbit.bleachbit_exe_path)
         self.assertNotExists(file_to_shred)
 
         if not allow_opened_window:
-            self.assertNotRunning()
+            self.assertRunning(False)
 
     def _get_shred_command_string(self, file_to_shred):
         """Build the command string like the context menu command"""
@@ -179,6 +201,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         """
         process = subprocess.Popen(shred_command_string,
                                    shell=True, cwd=cwd)
+        self.assertRunning()
         try:
             returncode = wait_for_process_tree_windows(process, timeout=60)
         except subprocess.TimeoutExpired:
@@ -190,12 +213,12 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         """Test shredding a file with the context menu command in a natural way"""
         # First, test the simple case of a pathname without embedded spaces.
         # Then, test a pathname with a space.
-        self.assertNotRunning()
+        self.assertRunning(False)
         if not HAVE_GTK:
             self.skipTest('GTK is not available')
         for fn_prefix in ('shred_target_no_spaces', 'shred target with spaces'):
             self._context_helper(fn_prefix)
-        self.assertNotRunning()
+        self.assertRunning(False)
 
     @common.skipUnlessWindows
     def test_windows_explorer_context_menu_privilege_escalation(self):
@@ -204,35 +227,37 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
             self.skipTest('Escalation is not attempted on network paths.')
         if not HAVE_GTK:
             self.skipTest('GTK is not available')
-        self.assertNotRunning()
+        self.assertRunning(False)
         for fn_prefix in ('shred_target_no_spaces', 'shred target with spaces'):
             self._test_as_non_admin_with_context_menu_path(fn_prefix)
-        self.assertNotRunning()
+        self.assertRunning(False)
 
     @common.skipUnlessWindows
     def test_context_menu_command_while_the_app_is_running(self):
         """Test the context menu command while the application is running"""
-        self.assertNotRunning()
+        self.assertRunning(False)
         if not HAVE_GTK:
             self.skipTest('GTK is not available')
         # Start an idle process that will keep running.
         # The --no-uac flag prevents launching grandchild process.
         # The --no-load-cleaners makes it faster.
         args = [sys.executable, 'bleachbit.py',
-                '--gui', '--no-load-cleaners', '--no-check-online-updates','--no-uac']
+                '--gui', '--no-load-cleaners', '--no-check-online-updates', '--no-uac']
         print(args)
         p = subprocess.Popen(args, shell=False)
         # Let the first process start up before launching the second process.
-        time.sleep(3)
+        time.sleep(START_TIMEOUT_SECONDS)
+        self.assertRunning()
         try:
             # Run a second process that will shred a file.
             self._context_helper('while_app_is_running',
                                  allow_opened_window=True)
         finally:
+            self.assertRunning()
             # Kill the first process immediately after context menu operation completes
             p.kill()
             p.wait()
-        self.assertNotRunning()
+        self.assertRunning(False)
 
     def _test_as_non_admin_with_context_menu_path(self, fn_prefix):
         """
