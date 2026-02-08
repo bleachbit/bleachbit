@@ -257,6 +257,8 @@ class Bleachbit(Gtk.Application):
 
     def quit(self, _action=None, _param=None, init_configuration=False):
         if init_configuration:
+            # After "shred settings and quit", rebuild the minimal configuration.
+            # which is important for portable mode.
             bleachbit.Options.init_configuration()
         self._window.destroy()
 

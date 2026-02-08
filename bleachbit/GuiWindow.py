@@ -422,28 +422,42 @@ class GUI(Gtk.ApplicationWindow):
     def shred_paths(self, paths, shred_settings=False):
         """Shred file or folders
 
-        When shredding_settings=True:
-        If user confirms to delete, then returns True.  If user aborts, returns
-        False.
+        This function has several uses:
+        1. Shred files or folders from the application menu.
+        2. Shred objects in the clipboard, trigger by application menu.
+        3. Shred objects in the clipboard, trigger by pasting.
+        4. Shred objects by drag and drop.
+        5. Shred application settings and quit.
+        6. Integration with the Windows Explorer context menu.
+
+        When shred_settings=True, the caller checks if the user confirmed to delete,
+        so return True or False, depending on the user's confirmation.
+
+        Otherwise, return False to remove from idle queue.
         """
         # create a temporary cleaner object
         backends['_gui'] = Cleaner.create_simple_cleaner(paths)
 
-        # preview and confirm
         operations = {'_gui': ['files']}
-        self.preview_or_run_operations(False, operations)
 
-        if self._confirm_delete(False, shred_settings):
-            # delete
-            self.preview_or_run_operations(True, operations)
-            if shred_settings:
-                return True
+        # If no confirmation is requested, skip the preview.
+        if options.get("delete_confirmation"):
+            self.preview_or_run_operations(False, operations)
+            if not self._confirm_delete(False, shred_settings):
+                # User dis-confirmed the deletion.
+                return False
+
+        # Either confirmation was not required or user approved, so
+        # continue with deletion.
+        self.preview_or_run_operations(True, operations)
+        if shred_settings:
+            return True
 
         if self._auto_exit:
             GLib.idle_add(self.close,
                           priority=GLib.PRIORITY_LOW)
 
-        # user aborted
+        # Return False to remove from idle queue.
         return False
 
     def append_text(self, text, tag=None, __iter=None, scroll=True):
