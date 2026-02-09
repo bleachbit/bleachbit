@@ -47,11 +47,16 @@
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action command="delete" search="file" path="$$base$$/Safe Browsing Channel IDs-journal"/>
     <action command="delete" search="file" path="$$profile$$/Network Persistent State"/>
+    <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
+    <action command="delete" search="walk.all" path="$$base$$/ShaderCache/GPUCache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
     <action command="delete" search="walk.all" path="$$profile$$/File System"/>
     <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
     <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*def/GPUCache"/>
     <action command="delete" search="walk.files" path="$$profile$$/GPUCache/"/>
+    <action command="delete" search="walk.files" path="$$profile$$/DawnCache/"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/host_referral_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/startup_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="net/http_server_properties/servers"/>
@@ -64,6 +69,8 @@
     <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
     <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
     <action command="delete" search="walk.files" path="$$profile$$\Cache\"/>
+    <action command="delete" search="walk.files" path="$$profile$$\Cache\Cache_Data\"/>
+    <action command="delete" search="walk.files" path="$$profile$$\Code Cache\js\"/>
     <action command="delete" search="walk.files" path="$$profile$$\Media Cache\"/>
   </option>
   <option id="cookies">
@@ -90,6 +97,7 @@
     <label>Form history</label>
     <description>A history of forms entered in web sites</description>
     <action command="chrome.autofill" search="file" path="$$profile$$/Web Data"/>
+    <action command="chrome.autofill" search="file" path="$$profile$$/Web Data-journal"/>
   </option>
   <option id="history">
     <label>History</label>
@@ -120,6 +128,8 @@
     <action command="delete" search="file" path="$$profile$$/Visited Links"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
+    <action command="delete" search="file" path="$$profile$$/WebStorage/QuotaManager"/>
+    <action command="delete" search="file" path="$$profile$$/WebStorage/QuotaManager-journal"/>
     <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
     <!-- Windows-specific -->
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsMostVisited\"/>
@@ -157,6 +167,8 @@
     <warning>This option will delete your saved passwords.</warning>
     <action command="delete" search="file" path="$$profile$$/Login Data"/>
     <action command="delete" search="file" path="$$profile$$/Login Data-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Login Data For Account"/>
+    <action command="delete" search="file" path="$$profile$$/Login Data For Account-journal"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
@@ -167,10 +179,12 @@
     <action command="sqlite.vacuum" search="file" path="$$profile$$/History"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/History Index ????-??"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Login Data"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Login Data For Account"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Origin Bound Certs"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Network Action Predictor"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/previews_opt_out.db"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/QuotaManager"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/WebStorage/QuotaManager"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Shortcuts"/>
     <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Thumbnails" type="f"/>
@@ -180,10 +194,6 @@
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/?"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/??"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Sync Data/SyncData.sqlite3"/>
-    <!-- The three below were seen on Google Chrome on Windows before Chrome version 66 -->
-    <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Archived History"/>
-    <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Plugin Data\Google Gears\localserver.db"/>
-    <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Plugin Data\Google Gears\permissions.db"/>
   </option>
   <option id="site_preferences">
     <label>Site preferences</label>
