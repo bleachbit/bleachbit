@@ -49,7 +49,6 @@
     <action command="delete" search="file" path="$$profile$$/Network Persistent State"/>
     <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
-    <action command="delete" search="walk.all" path="$$base$$/ShaderCache/GPUCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
     <action command="delete" search="walk.all" path="$$profile$$/File System"/>
@@ -69,8 +68,7 @@
     <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
     <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
     <action command="delete" search="walk.files" path="$$profile$$\Cache\"/>
-    <action command="delete" search="walk.files" path="$$profile$$\Cache\Cache_Data\"/>
-    <action command="delete" search="walk.files" path="$$profile$$\Code Cache\js\"/>
+    <action command="delete" search="walk.files" path="$$profile$$\Code Cache\"/>
     <action command="delete" search="walk.files" path="$$profile$$\Media Cache\"/>
   </option>
   <option id="cookies">
@@ -97,7 +95,7 @@
     <label>Form history</label>
     <description>A history of forms entered in web sites</description>
     <action command="chrome.autofill" search="file" path="$$profile$$/Web Data"/>
-    <action command="chrome.autofill" search="file" path="$$profile$$/Web Data-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Web Data-journal"/>
   </option>
   <option id="history">
     <label>History</label>
