@@ -32,6 +32,7 @@
     <value os="windows">%LocalAppData%\Chromium\User Data</value>
     <value os="linux">$XDG_CONFIG_HOME/chromium</value>
     <value os="linux">~/snap/chromium/common/chromium</value>
+    <value os="linux">~/.var/app/org.chromium.Chromium/config/chromium</value>
     <value os="freebsd">$XDG_CONFIG_HOME/chromium</value>
     <value os="openbsd">$XDG_CONFIG_HOME/chromium</value>
   </var>
@@ -39,6 +40,7 @@
     <value os="windows">%LocalAppData%\Chromium\User Data\Default</value>
     <value os="linux">$XDG_CONFIG_HOME/chromium/Default</value>
     <value os="linux">~/snap/chromium/common/chromium/Default</value>
+    <value os="linux">~/.var/app/org.chromium.Chromium/config/chromium/Default</value>
     <value os="freebsd">$XDG_CONFIG_HOME/chromium/Default</value>
     <value os="openbsd">$XDG_CONFIG_HOME/chromium/Default</value>
   </var>
