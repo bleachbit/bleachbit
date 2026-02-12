@@ -39,7 +39,12 @@ if 'win32' == sys.platform:
 
 import bleachbit
 import bleachbit.Options
-from bleachbit.FileUtilities import children_in_directory, extended_path, is_hard_link
+from bleachbit.FileUtilities import (
+    children_in_directory,
+    extended_path,
+    is_hard_link,
+    is_normal_directory,
+)
 from bleachbit.General import gc_collect, sudo_mode
 
 
@@ -250,13 +255,15 @@ class BleachbitTestCase(unittest.TestCase):
         assert isinstance(dirname, str)
         if not os.path.isabs(dirname):
             dirname = os.path.join(self.tempdir, dirname)
-        os.makedirs(extended_path(dirname), exist_ok=True)
-        self.assertExists(extended_path(dirname))
-        self.assertTrue(os.path.isdir(extended_path(dirname)))
-        self.assertFalse(is_hard_link(extended_path(dirname)))
-        self.assertFalse(os.path.isfile(extended_path(dirname)))
+        ext_dirname = extended_path(dirname)
+        os.makedirs(ext_dirname, exist_ok=True)
+        self.assertExists(ext_dirname)
+        self.assertTrue(os.path.isdir(ext_dirname))
+        self.assertFalse(is_hard_link(ext_dirname))
+        self.assertTrue(is_normal_directory(ext_dirname))
+        self.assertFalse(os.path.isfile(ext_dirname))
         if os.name == 'nt':
-            self.assertFalse(Windows.is_junction(extended_path(dirname)))
+            self.assertFalse(Windows.is_junction(ext_dirname))
         return dirname
 
     def mkstemp(self, **kwargs):
@@ -340,6 +347,7 @@ def touch_file(filename):
     import pathlib
     pathlib.Path(filename).touch()
     assert (os.path.exists(filename))
+    assert not is_normal_directory(filename)
 
 
 def validate_result(self, result, really_delete=False):

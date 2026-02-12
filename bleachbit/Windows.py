@@ -613,7 +613,7 @@ def get_recycle_bin():
     h = desktop.BindToObject(pidl, None, shell.IID_IShellFolder)
     for item in h:
         path = h.GetDisplayNameOf(item, shellcon.SHGDN_FORPARSING)
-        if os.path.isdir(path):
+        if FileUtilities.is_normal_directory(path):
             # Return the contents of a normal directory, but do
             # not recurse Windows symlinks in the Recycle Bin.
             yield from FileUtilities.children_in_directory(path, True)

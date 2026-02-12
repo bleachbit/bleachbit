@@ -808,6 +808,25 @@ def is_hard_link(path):
     return os.path.isfile(path) and os.stat(path).st_nlink > 1
 
 
+def is_normal_directory(path):
+    """Check whether path is a non-link directory
+
+    Returns False if:
+        - path does not exist
+        - path is a file
+        - path is a reparse point
+    Returns True if a normal directory
+    """
+
+    try:
+        st = os.stat(path, follow_symlinks=False)
+        is_dir = stat.S_ISDIR(st.st_mode)
+        is_reparse = getattr(st, 'st_reparse_tag', 0) != 0
+        return is_dir and not is_reparse
+    except (OSError, ValueError):
+        return False
+
+
 def listdir(directory):
     """Return full path of files in directory.
 

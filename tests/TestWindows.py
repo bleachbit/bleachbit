@@ -62,6 +62,7 @@ from bleachbit import logger
 
 import ctypes
 import os
+import itertools
 import platform
 import shutil
 import subprocess
@@ -71,6 +72,7 @@ import tempfile
 from decimal import Decimal
 from pathlib import Path
 from unittest import mock
+from random import randint
 
 
 if 'win32' == sys.platform:
@@ -132,6 +134,7 @@ class WindowsLinksMixIn():
         self.assertTrue(link_path.is_symlink())
         self.assertTrue(link_path.is_dir())
         self.assertFalse(Windows.is_junction(linkname))
+        self.assertFalse(FileUtilities.is_normal_directory(linkname))
 
     def _create_win_hard_link(self, target, linkname):
         """Create a hard link to a file"""
@@ -163,6 +166,7 @@ class WindowsLinksMixIn():
         self.assertFalse(link_path.is_symlink())
         self.assertFalse(Windows.is_junction(linkname))
         self.assertTrue(os.path.samefile(target, linkname))
+        self.assertFalse(FileUtilities.is_normal_directory(linkname))
 
     def _create_win_junction(self, target, linkname):
         """Create a directory junction using mklink /J."""
@@ -215,42 +219,37 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         for _f in get_recycle_bin():
             self.fail('recycle bin should be empty, but it is not')
 
-    def _test_link_helper(self, mklink_option, clear_recycle_bin):
-        """Helper function for testing for links with is_junction() and
-        get_recycle_bin()
+    def _test_link_helper(self, mklink_option, recycle_container, clear_recycle_bin):
+        """Helper function for testing directory junctions and symlinks in the recycle bin.
 
-        It gets called four times for the combinations of the two
-        parameters. It's called by four unit tests for accounting
-        purposes. In other words, we don't want to count a test as
-        skipped if part of it succeeded.
+        Tests that get_recycle_bin() correctly handles Windows directory links
+        when they are placed in the recycle bin, and verifies that the original
+        target directory and its contents are preserved after clearing the bin.
 
-        mklink /j = directory junction
-        directory junction does not require administrator privileges
+        Args:
+            mklink_option: Link type to create. '/j' for directory junction,
+                '/d' for directory symbolic link.
+            recycle_container: If True, move the container directory to the
+                recycle bin. If False, move only the link itself.
+            clear_recycle_bin: If True, clear the recycle bin after moving
+                the link. If False, manually delete items from get_recycle_bin().
 
-        mklink /d=directory symbolic link
-        requires administrator privileges
+        Note:
+            Directory symbolic links (/d) require administrator privileges.
         """
         assert mklink_option in ('/j', '/d')
         if mklink_option == '/d':
             self.skipUnlessAdmin()
         # make a normal directory with a file in it
-        target_dir = os.path.join(self.tempdir, 'target_dir')
-        os.mkdir(target_dir)
-        self.assertExists(target_dir)
-        self.assertFalse(is_junction(target_dir))
+        target_dir = self.mkdir('target_dir')
 
-        from random import randint
-        canary_fn = os.path.join(
-            target_dir, 'do_not_delete%d' % randint(1000, 9999))
+        canary_base = f'do_not_delete{randint(10000, 9999999)}'
+        canary_fn = os.path.join(target_dir, canary_base)
         common.touch_file(canary_fn)
-        self.assertExists(canary_fn)
         self.assertFalse(is_junction(canary_fn))
 
         # make a normal directory to hold a link
-        container_dir = os.path.join(self.tempdir, 'container_dir')
-        os.mkdir(container_dir)
-        self.assertExists(container_dir)
-        self.assertFalse(is_junction(container_dir))
+        container_dir = self.mkdir('container_dir')
 
         # create the link
         link_pathname = os.path.join(container_dir, 'link')
@@ -260,7 +259,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self._create_win_dir_symlink(target_dir, link_pathname)
 
         # put the link in the recycle bin
-        move_to_recycle_bin(container_dir)
+        move_to_recycle_bin(
+            container_dir if recycle_container else link_pathname)
 
         def cleanup_dirs():
             shutil.rmtree(container_dir, True)
@@ -273,6 +273,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
         # clear the recycle bin
         for f in get_recycle_bin():
+            if canary_base in f:
+                logger.error('get_recycle_bin() returned canary: %s', f)
             FileUtilities.delete(f, shred=False)
 
         # verify the canary is still there
@@ -283,14 +285,14 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
     def test_link_types(self):
         """Unit test for directory junctions and symlinks with recycle bin"""
-        for mklink_option, clear_recycle_bin in [
-            ('/j', False),
-            ('/j', True),
-            ('/d', False),
-            ('/d', True),
-        ]:
-            with self.subTest(mklink_option=mklink_option, clear_recycle_bin=clear_recycle_bin):
-                self._test_link_helper(mklink_option, clear_recycle_bin)
+        for mklink_option, recycle_container, clear_recycle_bin in itertools.product(
+            ('/j', '/d'), (False, True), (False, True)
+        ):
+            with self.subTest(mklink_option=mklink_option,
+                              recycle_container=recycle_container,
+                              clear_recycle_bin=clear_recycle_bin):
+                self._test_link_helper(
+                    mklink_option, recycle_container, clear_recycle_bin)
 
     def test_delete_locked_file(self):
         """Unit test for delete_locked_file"""

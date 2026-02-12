@@ -35,8 +35,8 @@ from bleachbit.FileUtilities import (
     children_in_directory,
     clean_ini,
     clean_json,
-    delete,
     delete_file,
+    delete,
     detect_encoding,
     ego_owner,
     exe_exists,
@@ -54,6 +54,7 @@ from bleachbit.FileUtilities import (
     human_to_bytes,
     is_dir_empty,
     is_hard_link,
+    is_normal_directory,
     listdir,
     open_files_lsof,
     OpenFiles,
@@ -310,6 +311,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         for filename in children_in_directory(dirname, False):
             self.assertTrue(os.path.isabs(filename))
             self.assertFalse(os.path.isdir(filename))
+            self.assertFalse(is_normal_directory(filename))
 
         # test a constructed file in a constructed directory
         dirname = self.mkdtemp(prefix='bleachbit-test-children')
@@ -352,6 +354,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         link_dir = os.path.join(base_dir, 'linked-dir')
         os.symlink(external_target, link_dir)
         self.assertExists(link_dir)
+        self.assertFalse(is_normal_directory(link_dir))
 
         # list_directories=True should yield the link itself but not descend
         entries_with_dirs = list(children_in_directory(base_dir, True))
@@ -380,6 +383,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         loop_link = os.path.join(base_dir, 'loop-link')
         os.symlink(base_dir, loop_link)
         self.assertExists(loop_link)
+        self.assertFalse(is_normal_directory(loop_link))
 
         entries_with_dirs = list(children_in_directory(base_dir, True))
         self.assertIn(loop_link, entries_with_dirs)
@@ -415,6 +419,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.skipTest(f'Cannot create Windows directory symlink: {exc}')
         self.assertFalse(is_hard_link(symlink_target))
         self.assertFalse(is_hard_link(symlink_path))
+        self.assertFalse(is_normal_directory(symlink_path))
+        self.assertTrue(is_normal_directory(symlink_target))
 
         # Junction target lives outside base_dir
         junction_target = self.mkdir('children-junction-target')
@@ -427,6 +433,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.skipTest(f'Cannot create Windows junction: {exc}')
         self.assertFalse(is_hard_link(junction_target))
         self.assertFalse(is_hard_link(junction_path))
+        self.assertFalse(is_normal_directory(junction_path))
+        self.assertTrue(is_normal_directory(junction_target))
 
         entries_with_dirs = list(children_in_directory(base_dir, True))
         entries_files_only = list(children_in_directory(base_dir, False))
@@ -510,7 +518,6 @@ State=AAAA/wA...
         for shred in (False, True):
             with self.subTest(shred=shred):
                 self.delete_helper(shred=shred)
-
 
     def test_delete_ignore_missing(self):
         """Unit test for delete() with ignore_missing=True"""
@@ -668,6 +675,7 @@ State=AAAA/wA...
             win32api.SetFileAttributes(fn, win32con.FILE_ATTRIBUTE_HIDDEN)
             self.assertExists(fn)
             self.assertFalse(is_hard_link(fn))
+            self.assertFalse(is_normal_directory(fn))
             self.assertTrue(delete(fn, shred=shred))
             self.assertNotExists(fn)
 
@@ -1317,6 +1325,31 @@ State=AAAA/wA...
         # Every path found should exist.
         for pathname in paths12:
             self.assertLExists(pathname)
+
+    def test_is_normal_directory_real(self):
+        """Unit test for is_normal_directory() with real files"""
+        # Test with a real directory.
+        self.assertTrue(is_normal_directory(self.tempdir))
+
+        # Test with a normal file.
+        self.assertFalse(is_normal_directory(__file__))
+
+        # Test with a non-existent path.
+        self.assertFalse(is_normal_directory(
+            os.path.join(self.tempdir, 'doesnotexist')))
+
+        # Check common junctions on Windows
+        if 'nt' == os.name:
+            user_docs = os.path.expandvars(r'%userprofile%\My Documents')
+            prog_docs = os.path.expandvars(r'%ProgramData%\Documents')
+            for junction_path in (user_docs, prog_docs):
+                if os.path.exists(junction_path):
+                    self.assertTrue(Windows.is_junction(junction_path),
+                                    f"{junction_path} should be a junction")
+                    self.assertFalse(is_normal_directory(junction_path),
+                                     f"{junction_path} should not be a normal directory")
+                else:
+                    logger.warning("junction not found: %s", junction_path)
 
     def test_open_files_lsof(self):
         """Unit test for open_files_lsof()"""
