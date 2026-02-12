@@ -236,7 +236,9 @@ class CLITestCase(common.BleachbitTestCase):
             # FIXME: do conditional removal
             system_cleaners.remove('system.clipboard')
         non_system_cleaners = [
-            c for c in full_cleaners_list if not c.startswith('system.')]
+            c for c in full_cleaners_list
+            # vim_swap_root walks / and can be very slow
+            if not c.startswith('system.') and c != 'deepscan.vim_swap_root']
         import random
         sample_cleaners = random.sample(non_system_cleaners, 5)
         for cleaner in (system_cleaners + sample_cleaners):
