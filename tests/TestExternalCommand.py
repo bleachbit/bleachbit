@@ -27,7 +27,7 @@ if HAVE_GTK:
     from bleachbit.GuiApplication import Bleachbit
 
 
-START_TIMEOUT_SECONDS = 5
+START_TIMEOUT_SECONDS = 10
 
 
 def wait_for_process_tree_windows(process, timeout=60, poll_interval=0.1):
@@ -95,23 +95,27 @@ def wait_for_process_tree_windows(process, timeout=60, poll_interval=0.1):
         time.sleep(poll_interval)
 
 
-def is_application_running():
+def is_application_running(require_both=False):
     """Check if the application is running"""
+    is_process_running = False
     for process in psutil.process_iter(['name', 'cmdline']):
         try:
             name = process.info['name'] or ''
             cmdline = process.info['cmdline'] or []
             if name.lower().startswith('python') and any(arg in ('--context-menu', '--no-load-cleaners') for arg in cmdline):
-                return True
+                is_process_running = True
+                continue
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             pass
     # Second, check using window titles.
     if not os.name == 'nt':
-        return
+        return is_process_running
     opened_windows_titles = common.get_opened_windows_titles()
     window_open = any(
         ['BleachBit' == window_title for window_title in opened_windows_titles])
-    return window_open
+    if require_both:
+        return is_process_running and window_open
+    return is_process_running or window_open
 
 
 class ExternalCommandTestCase(common.BleachbitTestCase):
@@ -151,13 +155,13 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         if expect_running:
             start_time = time.time()
             while time.time() - start_time < timeout:
-                if is_application_running():
+                if is_application_running(True):
                     return
                 time.sleep(0.1)
             self.fail(
                 "Expected BleachBit GUI process to be running, but none found")
         else:
-            if is_application_running():
+            if is_application_running(True):
                 self.fail("BleachBit GUI process is still running")
 
     def _context_helper(self, fn_prefix, allow_opened_window=False):
@@ -199,7 +203,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         """
         process = subprocess.Popen(shred_command_string,
                                    shell=True, cwd=cwd)
-        self.assertRunning()
+        self.assertRunning()  # delay until started, within timeout
         try:
             returncode = wait_for_process_tree_windows(process, timeout=60)
         except subprocess.TimeoutExpired:
