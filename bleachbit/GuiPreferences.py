@@ -39,6 +39,9 @@ logger = logging.getLogger(__name__)
 
 LOCATIONS_WHITELIST = 1
 LOCATIONS_CUSTOM = 2
+EXPERT_MODE_DESCRIPTION = _(
+    'Expert mode enables advanced features and relaxes guardrails. '
+    'Use extra caution in expert mode.')
 
 
 class PreferencesDialog:
@@ -159,6 +162,27 @@ class PreferencesDialog:
         self.infobar.show_all()
         self._infobar_timeout_id = GLib.timeout_add_seconds(
             15, self._hide_infobar)
+
+    def __on_expert_mode_toggled(self, cb):
+        """Callback for expert mode checkbox"""
+        new_value = cb.get_active()
+        if new_value:
+            from bleachbit.GuiBasic import warning_confirm_dialog
+            confirmed, remember_choice = warning_confirm_dialog(
+                self.dialog,
+                _('Expert mode'),
+                EXPERT_MODE_DESCRIPTION,
+                show_checkbox=False
+            )
+            if not confirmed:
+                cb.set_active(False)
+                return
+        options.set('expert_mode', new_value)
+        self.reset_warnings_button.set_sensitive(new_value)
+        if hasattr(self, 'cb_delete_confirmation'):
+            self.cb_delete_confirmation.set_sensitive(new_value)
+        if hasattr(self, 'cb_refresh_operations') and self.cb_refresh_operations:
+            self.refresh_operations = True
 
     def __toggle_callback(self, cell, path):
         """Callback function to toggle option"""
@@ -329,15 +353,18 @@ class PreferencesDialog:
 
         self._create_checkbox(
             _("Confirm before delete"),
-            'delete_confirmation')
+            'delete_confirmation',
+            requires_option='expert_mode',
+            store_as_attr='cb_delete_confirmation')
 
-        reset_warnings_button = Gtk.Button.new_with_label(
+        self.reset_warnings_button = Gtk.Button.new_with_label(
             label=_("Reset warning confirmations"))
-        reset_warnings_button.set_halign(Gtk.Align.START)
-        reset_warnings_button.set_margin_top(6)
-        reset_warnings_button.connect(
+        self.reset_warnings_button.set_halign(Gtk.Align.START)
+        self.reset_warnings_button.set_margin_top(6)
+        self.reset_warnings_button.connect(
             'clicked', self.__reset_warning_preferences)
-        vbox.pack_start(reset_warnings_button, False, True, 0)
+        self.reset_warnings_button.set_sensitive(options.get('expert_mode'))
+        vbox.pack_start(self.reset_warnings_button, False, True, 0)
 
         self._create_checkbox(
             _("Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"),
@@ -375,6 +402,13 @@ class PreferencesDialog:
                 'win10_theme')
 
         self.__create_language_widgets(self.general_vbox)
+
+        self._create_checkbox(
+            _("Expert mode"),
+            'expert_mode',
+            tooltip=EXPERT_MODE_DESCRIPTION,
+            store_as_attr='cb_expert')
+        self.cb_expert.connect('toggled', self.__on_expert_mode_toggled)
 
         return self.general_vbox
 
@@ -536,6 +570,12 @@ class PreferencesDialog:
         match_info = ProtectedPath.check_protected_path(pathname)
         if match_info is None:
             return True
+
+        if not options.get('expert_mode'):
+            self.show_infobar(
+                _("This path is protected. To bypass protection, enable expert mode."),
+                Gtk.MessageType.WARNING)
+            return False
 
         # Check if user already confirmed this path
         normalized = ProtectedPath._normalize_for_comparison(

@@ -265,6 +265,7 @@ class GUITestCase(common.BleachbitTestCase):
     @mock.patch('bleachbit.GuiBasic.delete_confirmation_dialog')
     def test_confirm_delete(self, mock_delete_confirmation_dialog):
         gui = self.app._window
+        options.set('expert_mode', True)
         for new_delete_confirmation in [True, False]:
             options.set('delete_confirmation',
                         new_delete_confirmation, commit=False)

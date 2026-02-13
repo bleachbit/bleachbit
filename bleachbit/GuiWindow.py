@@ -404,7 +404,7 @@ class GUI(Gtk.ApplicationWindow):
             15, self._hide_infobar)
 
     def _confirm_delete(self, mention_preview, shred_settings=False):
-        if options.get("delete_confirmation"):
+        if options.get("delete_confirmation") or not options.get('expert_mode'):
             return GuiBasic.delete_confirmation_dialog(self, mention_preview, shred_settings=shred_settings)
         return True
 
@@ -557,6 +557,40 @@ class GUI(Gtk.ApplicationWindow):
         if self._confirm_delete(True):
             self.preview_or_run_operations(True)
 
+    def _filter_operations_for_expert_mode(self, operations, really_delete):
+        """Filter out options with warnings when expert mode is disabled.
+
+        When cleaning (really_delete=True) without expert mode, options
+        with warnings are removed and a log message is shown for each.
+        Preview is always allowed.
+        """
+        if not really_delete or options.get('expert_mode'):
+            return operations
+        filtered = {}
+        for cleaner_id, option_ids in operations.items():
+            if option_ids is None:
+                filtered[cleaner_id] = option_ids
+                continue
+            safe_options = []
+            for option_id in option_ids:
+                if backends[cleaner_id].get_warning(option_id):
+                    cleaner_name = backends[cleaner_id].get_name()
+                    option_name = option_id
+                    # Find the friendly option_name for option_id
+                    for (oid, oname) in backends[cleaner_id].get_options():
+                        if oid == option_id:
+                            option_name = oname
+                            break
+                    self.append_text(
+                        _("%(cleaner)s - %(option)s cannot be cleaned because expert mode is disabled.") % {
+                            'cleaner': cleaner_name, 'option': option_name} + "\n",
+                        'error')
+                else:
+                    safe_options.append(option_id)
+            if safe_options:
+                filtered[cleaner_id] = safe_options
+        return filtered
+
     def preview_or_run_operations(self, really_delete, operations=None):
         """Preview operations or run operations (delete files)"""
 
@@ -577,6 +611,12 @@ class GUI(Gtk.ApplicationWindow):
             self.set_sensitive(False)
             self.textbuffer.set_text("")
             self.progressbar.show()
+            operations = self._filter_operations_for_expert_mode(
+                operations, really_delete)
+            if not operations:
+                self.set_sensitive(True)
+                self.progressbar.hide()
+                return
             self.worker = Worker.Worker(self, really_delete, operations)
         except Exception:
             logger.exception('Error in Worker()')
@@ -700,6 +740,12 @@ class GUI(Gtk.ApplicationWindow):
         # preview
         if not really_delete:
             self.preview_or_run_operations(False, operations)
+            return
+
+        # block cleaning of warning options without expert mode
+        if not options.get('expert_mode') and backends[cleaner_id].get_warning(option_id):
+            self.show_infobar(
+                _("This option requires expert mode. Enable it in Preferences."))
             return
 
         # delete

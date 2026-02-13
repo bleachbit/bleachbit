@@ -25,28 +25,34 @@ class TreeDisplayModel:
         # listen for right click (context menu)
         self.view.connect("button_press_event", context_menu_event)
 
-        # first column
-        self.renderer0 = Gtk.CellRendererText()
-        self.column0 = Gtk.TreeViewColumn(_("Name"), self.renderer0, text=0)
-        self.view.append_column(self.column0)
+        # first column: cleaner name
+        renderer_name = Gtk.CellRendererText()
+        column_name = Gtk.TreeViewColumn(_("Name"), renderer_name, text=0)
+        self.view.append_column(column_name)
         self.view.set_search_column(0)
 
-        # second column
-        self.renderer1 = Gtk.CellRendererToggle()
-        self.renderer1.set_property('activatable', True)
-        self.renderer1.connect('toggled', self.col1_toggled_cb, model, parent)
-        self.column1 = Gtk.TreeViewColumn(_("Active"), self.renderer1)
-        self.column1.add_attribute(self.renderer1, "active", 1)
-        self.view.append_column(self.column1)
+        # second column: alert icon
+        renderer_alert = Gtk.CellRendererPixbuf()
+        column_alert = Gtk.TreeViewColumn("", renderer_alert)
+        column_alert.add_attribute(renderer_alert, "icon-name", 4)
+        self.view.append_column(column_alert)
 
-        # third column
-        self.renderer2 = Gtk.CellRendererText()
-        self.renderer2.set_alignment(1.0, 0.0)
+        # third column: checkbox
+        renderer_active = Gtk.CellRendererToggle()
+        renderer_active.set_property('activatable', True)
+        renderer_active.connect('toggled', self.col1_toggled_cb, model, parent)
+        column_active = Gtk.TreeViewColumn(_("Active"), renderer_active)
+        column_active.add_attribute(renderer_active, "active", 1)
+        self.view.append_column(column_active)
+
+        # fourth column: size
+        renderer_size = Gtk.CellRendererText()
+        renderer_size.set_alignment(1.0, 0.0)
         # TRANSLATORS: Size is the label for the column that shows how
         # much space an option would clean or did clean
-        self.column2 = Gtk.TreeViewColumn(_("Size"), self.renderer2, text=3)
-        self.column2.set_alignment(1.0)
-        self.view.append_column(self.column2)
+        column_size = Gtk.TreeViewColumn(_("Size"), renderer_size, text=3)
+        column_size.set_alignment(1.0)
+        self.view.append_column(column_size)
 
         # finish
         self.view.expand_all()
@@ -70,6 +76,13 @@ class TreeDisplayModel:
             # When enabling an option, present any warnings.
             # (When disabling an option, there is no need to present warnings.)
             warning = backends[cleaner_id].get_warning(option_id)
+            if warning and not options.get('expert_mode'):
+                if hasattr(parent_window, 'show_infobar'):
+                    parent_window.show_infobar(
+                        _("This option is protected. To bypass protection, enable expert mode."))
+                # Show an alert icon by the option name.
+                model[path][4] = "dialog-warning"
+                return
             warning_key = 'cleaner:' + cleaner_id + ':' + option_id
             if warning and not options.get_warning_preference(warning_key):
                 # TRANSLATORS: %(cleaner) may be Firefox, System, etc.
@@ -86,6 +99,7 @@ class TreeDisplayModel:
                 if remember_choice:
                     options.remember_warning_preference(warning_key)
         model[path][1] = value
+        model[path][4] = ""
 
     def col1_toggled_cb(self, cell, path, model, parent_window):
         """Callback for toggling cleaners"""
@@ -119,7 +133,7 @@ class TreeInfoModel:
 
     def __init__(self):
         self.tree_store = Gtk.TreeStore(
-            GObject.TYPE_STRING, GObject.TYPE_BOOLEAN, GObject.TYPE_PYOBJECT, GObject.TYPE_STRING)
+            GObject.TYPE_STRING, GObject.TYPE_BOOLEAN, GObject.TYPE_PYOBJECT, GObject.TYPE_STRING, GObject.TYPE_STRING)
         if not self.tree_store:
             raise Exception("cannot create tree store")
         self.row_changed_handler_id = None
@@ -157,10 +171,11 @@ class TreeInfoModel:
             if not c_value and options.get('auto_hide') and backends[key].auto_hide():
                 hidden_cleaners.append(c_id)
                 continue
-            parent = self.tree_store.append(None, (c_name, c_value, c_id, ""))
+            parent = self.tree_store.append(
+                None, (c_name, c_value, c_id, "", ""))
             for (o_id, o_name) in backends[key].get_options():
                 o_value = options.get_tree(c_id, o_id)
-                self.tree_store.append(parent, (o_name, o_value, o_id, ""))
+                self.tree_store.append(parent, (o_name, o_value, o_id, "", ""))
         if hidden_cleaners:
             logger.debug("automatically hid %d cleaners: %s", len(
                 hidden_cleaners), ', '.join(hidden_cleaners))

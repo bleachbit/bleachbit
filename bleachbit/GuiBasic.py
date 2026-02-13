@@ -139,9 +139,10 @@ def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
     question.set_line_wrap(True)
     vbox.pack_start(question, False, True, 0)
 
-    cb_popup = Gtk.CheckButton(label=_("Confirm before delete"))
-    cb_popup.set_active(options.get('delete_confirmation'))
-    vbox.pack_start(cb_popup, False, True, 0)
+    if options.get('expert_mode'):
+        cb_popup = Gtk.CheckButton(label=_("Confirm before delete"))
+        cb_popup.set_active(options.get('delete_confirmation'))
+        vbox.pack_start(cb_popup, False, True, 0)
 
     dialog.get_content_area().pack_start(vbox, False, True, 0)
     dialog.get_content_area().set_spacing(10)
@@ -152,12 +153,13 @@ def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
 
     dialog.show_all()
     ret = dialog.run()
-    options.set('delete_confirmation', cb_popup.get_active())
+    if options.get('expert_mode'):
+        options.set('delete_confirmation', cb_popup.get_active())
     dialog.destroy()
     return ret == Gtk.ResponseType.ACCEPT
 
 
-def warning_confirm_dialog(parent, option_name, warning_text):
+def warning_confirm_dialog(parent, option_name, warning_text, show_checkbox=True):
     """Show a warning dialog when enabling an option.
 
     Returns tuple (confirmed: bool, remember_choice: bool).
@@ -178,7 +180,8 @@ def warning_confirm_dialog(parent, option_name, warning_text):
     remember_cb = Gtk.CheckButton(
         label=_('Remember my choice for %(option)s') % {'option': option_name})
     remember_cb.set_halign(Gtk.Align.START)
-    content.pack_start(remember_cb, False, False, 0)
+    if show_checkbox:
+        content.pack_start(remember_cb, False, False, 0)
 
     cancel_button = dialog.add_button(_('_Cancel'), Gtk.ResponseType.CANCEL)
     enable_button = dialog.add_button(_("_Enable anyway"), Gtk.ResponseType.OK)
@@ -197,7 +200,7 @@ def warning_confirm_dialog(parent, option_name, warning_text):
 
     dialog.show_all()
     response = dialog.run()
-    remember_choice = response == Gtk.ResponseType.OK and remember_cb.get_active()
+    remember_choice = response == Gtk.ResponseType.OK and show_checkbox and remember_cb.get_active()
     dialog.destroy()
 
     return response == Gtk.ResponseType.OK, remember_choice

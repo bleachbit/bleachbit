@@ -47,6 +47,7 @@ OPTION_DEFAULTS = {
     'dark_mode': {'value': True},
     'debug': {'value': False},
     'delete_confirmation': {'value': True},
+    'expert_mode': {'value': False},
     'exit_done': {'value': False},
     'first_start': {'value': False},
     'kde_shred_menu_option': {'value': False},
