@@ -763,6 +763,19 @@ class GUI(Gtk.ApplicationWindow):
         dialog = CookieManagerDialog()
         dialog.show_all()
 
+    def cb_manage_custom_paths(self, widget):
+        """Callback to launch the preferences dialog with Custom tab"""
+        pref = self.get_preferences_dialog()
+        pref.dialog.show_all()
+        pref.infobar.hide()
+        # Switch to Custom tab (index 1: General=0, Custom=1)
+        notebook = pref.dialog.get_content_area().get_children()[1]
+        notebook.set_current_page(1)
+        pref.dialog.run()
+        pref.dialog.destroy()
+        if pref.refresh_operations:
+            self.cb_refresh_operations()
+
     def _option_has_cookie_command(self, cleaner_id, option_id):
         """Return True if the given option runs a cookie command."""
         cleaner = backends.get(cleaner_id)
@@ -812,6 +825,14 @@ class GUI(Gtk.ApplicationWindow):
             cookie_item = Gtk.MenuItem(label=_("Manage Cookies"))
             cookie_item.connect('activate', self.cb_manage_cookies)
             menu.append(cookie_item)
+
+        # Check if this is the system.custom option
+        if cleaner_id == 'system' and option_id == 'custom':
+            menu.append(Gtk.SeparatorMenuItem())
+            # TRANSLATORS: this is the context menu
+            custom_paths_item = Gtk.MenuItem(label=_("Manage custom paths"))
+            custom_paths_item.connect('activate', self.cb_manage_custom_paths)
+            menu.append(custom_paths_item)
 
         # show the context menu
         menu.attach_to_widget(treeview)
