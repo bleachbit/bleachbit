@@ -574,7 +574,8 @@ class Journald(ActionProvider):
             return
         yield Command.Function(None,
                                Unix.journald_clean,
-                               'journalctl --rotate --vacuum-size=1')
+                               'journalctl --rotate --vacuum-size=1',
+                               preview_func=Unix.journald_preview)
 
 
 class Json(FileActionProvider):

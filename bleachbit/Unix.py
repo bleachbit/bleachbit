@@ -601,6 +601,16 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
     return freed_space
 
 
+def journald_preview():
+    (rc, stdout, stderr) = General.run_external(['journalctl', '--disk-usage'])
+    if rc != 0:
+        raise RuntimeError(f'`journalctl --disk-usage` raised error {rc}: {stderr}')
+    human_size = stdout.strip() \
+                 .removeprefix('Archived and active journals take up ') \
+                 .removesuffix(' in the file system.')
+    return FileUtilities.human_to_bytes(human_size)
+
+
 def journald_clean():
     """Clean the system journals"""
     try:
