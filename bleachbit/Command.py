@@ -123,7 +123,7 @@ class Function:
 
     """Execute a simple Python function"""
 
-    def __init__(self, path, func, label, preview_func=None):
+    def __init__(self, path, func, label, *, preview_func=None):
         """Initialize a Function command
 
         Parameters:

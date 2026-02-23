@@ -490,7 +490,7 @@ class Cookie(FileActionProvider):
                 path,
                 delete_func,
                 _('Clean cookies'),
-                preview_func)
+                preview_func=preview_func)
 
     def _load_keep_list(self):
         """Load cookie domains to keep from options directory.
