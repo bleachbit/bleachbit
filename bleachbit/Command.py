@@ -167,13 +167,15 @@ class Function:
             'size': None}
 
         if not really_delete and self.preview_func is not None:
-            # Preview mode: call preview function to get list of items that would be deleted
+            # Preview mode: call preview function to get size of items that would be deleted
             try:
-                preview_items = self.preview_func()
-                if isinstance(preview_items, int):
-                    ret['size'] = preview_items
+                preview = self.preview_func()
             except Exception as e:
                 logger.warning(f'Preview function failed: {e}')
+            if isinstance(preview, int):
+                ret['size'] = preview
+            else:
+                logger.warning(f'Preview function returned non-int value: {preview}')
                 ret['size'] = 0
         elif really_delete:
             if self.path is None:
