@@ -52,8 +52,10 @@ class ChaffDialog(Gtk.Dialog):
 # missiles. For more explanation, see the online documentation.
         Gtk.Dialog.__init__(self, title=_("Make chaff"), transient_for=parent)
         Gtk.Dialog.set_modal(self, True)
-        self.set_border_width(5)
+        self.set_border_width(10)
+        self.set_default_size(400, -1)
         box = self.get_content_area()
+        box.set_spacing(10)
 
         # Add InfoBar for non-blocking messages
         self.infobar = Gtk.InfoBar()
@@ -65,34 +67,45 @@ class ChaffDialog(Gtk.Dialog):
         box.pack_start(self.infobar, False, False, 0)
         self._infobar_timeout_id = None
 
-        label = Gtk.Label(
-            label=_("Make randomly-generated messages inspired by documents."))
-        box.add(label)
+        # TRANSLATORS: Label at the top of the chaff dialog
+        dialog_label = _("Make randomly-generated messages "
+                         "inspired by documents.")
+        label = Gtk.Label(label=dialog_label)
+        label.set_line_wrap(True)
+        label.set_xalign(0)
+        box.pack_start(label, False, False, 0)
 
-        inspiration_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        grid = Gtk.Grid()
+        grid.set_column_spacing(12)
+        grid.set_row_spacing(8)
+        box.pack_start(grid, False, False, 0)
 
-        # TRANSLATORS: Inspiration is a choice of documents from which random
-        # text will be generated.
-        inspiration_box.add(Gtk.Label(label=_("Inspiration")))
+        # TRANSLATORS: Label for the inspiration combo box.
+        # 'Inspiration' is a choice of documents from which random text will be generated.
+        inspiration_label = Gtk.Label(label=_("Inspiration"))
+        inspiration_label.set_xalign(0)
+        grid.attach(inspiration_label, 0, 0, 1, 1)
         self.inspiration_combo = Gtk.ComboBoxText()
+        self.inspiration_combo.set_hexpand(True)
         self.inspiration_combo_options = (
             _('2600 Magazine'), _("Hillary Clinton's emails"))
         for combo_option in self.inspiration_combo_options:
             self.inspiration_combo.append_text(combo_option)
         self.inspiration_combo.set_active(0)  # Set default
-        inspiration_box.add(self.inspiration_combo)
-        box.add(inspiration_box)
+        grid.attach(self.inspiration_combo, 1, 0, 1, 1)
 
-        spin_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        spin_box.add(Gtk.Label(label=_("Number of files")))
+        file_count_label = Gtk.Label(label=_("Number of files"))
+        file_count_label.set_xalign(0)
+        grid.attach(file_count_label, 0, 1, 1, 1)
         adjustment = Gtk.Adjustment(
             value=100, lower=1, upper=99999, step_increment=1, page_increment=1000, page_size=0)
         self.file_count = Gtk.SpinButton(adjustment=adjustment)
-        spin_box.add(self.file_count)
-        box.add(spin_box)
+        self.file_count.set_hexpand(True)
+        grid.attach(self.file_count, 1, 1, 1, 1)
 
-        folder_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        folder_box.add(Gtk.Label(label=_("Select destination folder")))
+        folder_label = Gtk.Label(label=_("Select destination folder"))
+        folder_label.set_xalign(0)
+        grid.attach(folder_label, 0, 2, 1, 1)
         # The file chooser button displays a stock GTK icon. When some parts of GTK are not
         # set up correctly on Windows, then the application may crash here with the error
         # message "No GSettings schemas".
@@ -102,43 +115,49 @@ class ChaffDialog(Gtk.Dialog):
             Gtk.FileChooserAction.SELECT_FOLDER)
         import tempfile
         self.choose_folder_button.set_filename(tempfile.gettempdir())
-        folder_box.add(self.choose_folder_button)
-        box.add(folder_box)
+        self.choose_folder_button.set_hexpand(True)
+        grid.attach(self.choose_folder_button, 1, 2, 1, 1)
 
-        delete_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        delete_box.add(Gtk.Label(label=_("When finished")))
+        finished_label = Gtk.Label(label=_("When finished"))
+        finished_label.set_xalign(0)
+        grid.attach(finished_label, 0, 3, 1, 1)
         self.when_finished_combo = Gtk.ComboBoxText()
+        self.when_finished_combo.set_hexpand(True)
         self.combo_options = (
             _('Delete without shredding'), _('Do not delete'))
         for combo_option in self.combo_options:
             self.when_finished_combo.append_text(combo_option)
         self.when_finished_combo.set_active(0)  # Set default
-        delete_box.add(self.when_finished_combo)
-        box.add(delete_box)
+        grid.attach(self.when_finished_combo, 1, 3, 1, 1)
 
         # Loading indicator for download (hidden by default)
-        self._download_spinner_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        self._download_spinner_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         self._download_spinner_box.set_halign(Gtk.Align.CENTER)
         self._download_spinner = Gtk.Spinner()
         self._download_spinner.set_size_request(24, 24)
-        self._download_spinner_box.pack_start(self._download_spinner, False, False, 0)
+        self._download_spinner_box.pack_start(
+            self._download_spinner, False, False, 0)
         # TRANSLATORS: This is a label in a dialog shown when the user
         # clicks the button to download models for chaff generation.
-        self._download_label = Gtk.Label(label=_("Downloading inspiration content…"))
-        self._download_spinner_box.pack_start(self._download_label, False, False, 0)
-        box.add(self._download_spinner_box)
+        self._download_label = Gtk.Label(
+            label=_("Downloading inspiration content\u2026"))
+        self._download_spinner_box.pack_start(
+            self._download_label, False, False, 0)
+        box.pack_start(self._download_spinner_box, False, False, 0)
         self._download_spinner_box.set_no_show_all(True)
         self._download_spinner_box.hide()
 
         self.progressbar = Gtk.ProgressBar()
-        box.add(self.progressbar)
+        box.pack_start(self.progressbar, False, False, 0)
         self.progressbar.hide()
 
         # TRANSLATORS: Button label in a dialog window to start making
         # chaff files.
         self.make_button = Gtk.Button(label=_("Make files"))
+        self.make_button.get_style_context().add_class('suggested-action')
         self.make_button.connect('clicked', self.on_make_files)
-        box.add(self.make_button)
+        box.pack_start(self.make_button, False, False, 0)
 
     def _on_infobar_response(self, infobar, response_id):
         """Handle InfoBar close button click"""
@@ -175,7 +194,8 @@ class ChaffDialog(Gtk.Dialog):
 
         def on_download_error(msg, msg2):
             # Use idle_add to show error from main thread
-            GLib.idle_add(lambda: self.show_infobar(f"{msg}: {msg2}", Gtk.MessageType.ERROR))
+            GLib.idle_add(lambda: self.show_infobar(
+                f"{msg}: {msg2}", Gtk.MessageType.ERROR))
 
         def download_models_thread(on_error):
             """Download models in a background thread."""
@@ -225,12 +245,15 @@ class ChaffDialog(Gtk.Dialog):
             # Download models first, then proceed to file generation
             def on_download_complete(success):
                 if success:
-                    self._start_file_generation(file_count, inspiration, output_dir, delete_when_finished)
+                    self._start_file_generation(
+                        file_count, inspiration, output_dir, delete_when_finished)
                 else:
-                    self.show_infobar(_("Download failed"), Gtk.MessageType.ERROR)
+                    self.show_infobar(_("Download failed"),
+                                      Gtk.MessageType.ERROR)
             self.download_models_gui(on_download_complete)
         else:
-            self._start_file_generation(file_count, inspiration, output_dir, delete_when_finished)
+            self._start_file_generation(
+                file_count, inspiration, output_dir, delete_when_finished)
 
     def _start_file_generation(self, file_count, inspiration, output_dir, delete_when_finished):
         """Start generating files after download is complete."""
