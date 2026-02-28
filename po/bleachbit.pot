@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-23 09:52-0700\n"
+"POT-Creation-Date: 2026-02-28 11:39-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1085,6 +1085,13 @@ msgid ""
 "changed."
 msgstr ""
 
+#. TRANSLATORS: This is the name of a cleaning action. 'Clean' is a verb.
+#. It shows in the log of actions that would be performed (preview mode) or
+#. in the log of actions that were performed (clean mode).
+#: ../bleachbit/Action.py
+msgid "Clean file"
+msgstr ""
+
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
 #. an environment variable, but each multi-value variable
@@ -1451,15 +1458,8 @@ msgstr ""
 msgid "--overwrite is intended only for use with --clean"
 msgstr ""
 
-#. TRANSLATORS: This is the name of a cleaning action. 'Clean' is a verb.
-#. It shows in the log of actions that would be performed (preview mode) or
-#. in the log of actions that were performed (clean mode).
-#: ../bleachbit/Command.py
-msgid "Clean file"
-msgstr ""
-
 #. TRANSLATORS: This is the label in the log indicating a path
-#. was skipped because it matches the whitelist
+#. was skipped because it matches the keep list
 #: ../bleachbit/Command.py
 msgid "Skip"
 msgstr ""
