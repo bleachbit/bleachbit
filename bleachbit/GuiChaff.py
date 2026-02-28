@@ -265,6 +265,10 @@ class ChaffDialog(Gtk.Dialog):
             if is_done:
                 self.progressbar.hide()
                 self.make_button.set_sensitive(True)
+                # TRANSLATORS: Notification shown in an infobar when chaff file generation
+                # is complete.
+                self.show_infobar(_("Chaff generation complete"),
+                                  Gtk.MessageType.INFO)
 
         def on_progress(fraction, msg=None, is_done=False):
             """Callback for progress bar"""
