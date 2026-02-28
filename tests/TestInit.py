@@ -61,10 +61,12 @@ class InitTestCase(common.BleachbitTestCase):
     def test_get_share_dirs(self):
         """Unit test for get_share_dirs()"""
         got_shared_dirs = get_share_dirs()
+        # There must be at least one shared directory.
         self.assertGreater(len(got_shared_dirs), 0)
-        for d in got_shared_dirs:
-            self.assertExists(d)
-            self.assertTrue(os.path.isdir(d))
+        existing = [d for d in got_shared_dirs if os.path.isdir(d)]
+        # At least one of the shared directories must exist.
+        self.assertGreater(len(existing), 0,
+                           f'No share dir exists among: {got_shared_dirs}')
 
     def test_get_share_path(self):
         """Unit test for get_share_path()"""

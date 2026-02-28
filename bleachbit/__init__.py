@@ -143,13 +143,13 @@ def get_share_dirs():
             bleachbit_exe_path,
         ]
     else:
-        # installed .rpm has `__file__` = "/usr/share/bleachbit/__init__.py",
-        # so that dirname() is the share directory.
+        # installed .deb or .rpm has `__file__` = "/usr/share/bleachbit/__init__.py",
+        # so that dirname() is "/usr/share/bleachbit"
         package_dir = os.path.dirname(__file__)
         # When running from source, share directory is `../share/` from `__init__.py`.
         repo_root = os.path.normpath(os.path.join(package_dir, '..'))
         base_dirs = [
-            package_dir,
+            os.path.join(package_dir, 'share'),
             os.path.join(repo_root, 'share')
         ]
     if system_cleaners_dir:
