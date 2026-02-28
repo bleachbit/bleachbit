@@ -180,13 +180,13 @@ class CleanerTestCase(common.BleachbitTestCase):
             desc = backends[key].get_description()
             if desc is not None:
                 self.assertIsString(
-                    desc, "description for '%s' is '%s'" % (key, desc))
+                    desc, msg="description for '%s' is '%s'" % (key, desc))
 
     def test_get_options(self):
         for key in sorted(backends):
             for (test_id, name) in backends[key].get_options():
                 self.assertIsString(
-                    test_id, '%s.%s is not a string' % (key, test_id))
+                    test_id, msg='%s.%s is not a string' % (key, test_id))
                 self.assertIsString(name)
 
     def test_get_commands(self):
