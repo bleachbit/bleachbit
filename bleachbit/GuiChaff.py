@@ -1,33 +1,19 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 GUI for making chaff
 """
 
-from bleachbit.Language import get_text as _
-from bleachbit.GtkShim import Gtk, GLib
-
 import logging
 import os
+import threading
+
+from bleachbit.Language import get_text as _
+from bleachbit.GtkShim import Gtk, GLib
 
 
 logger = logging.getLogger(__name__)
@@ -130,6 +116,20 @@ class ChaffDialog(Gtk.Dialog):
         delete_box.add(self.when_finished_combo)
         box.add(delete_box)
 
+        # Loading indicator for download (hidden by default)
+        self._download_spinner_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        self._download_spinner_box.set_halign(Gtk.Align.CENTER)
+        self._download_spinner = Gtk.Spinner()
+        self._download_spinner.set_size_request(24, 24)
+        self._download_spinner_box.pack_start(self._download_spinner, False, False, 0)
+        # TRANSLATORS: This is a label in a dialog shown when the user
+        # clicks the button to download models for chaff generation.
+        self._download_label = Gtk.Label(label=_("Downloading inspiration content…"))
+        self._download_spinner_box.pack_start(self._download_label, False, False, 0)
+        box.add(self._download_spinner_box)
+        self._download_spinner_box.set_no_show_all(True)
+        self._download_spinner_box.hide()
+
         self.progressbar = Gtk.ProgressBar()
         box.add(self.progressbar)
         self.progressbar.hide()
@@ -164,32 +164,50 @@ class ChaffDialog(Gtk.Dialog):
         self._infobar_timeout_id = GLib.timeout_add_seconds(
             15, self._hide_infobar)
 
-    def download_models_gui(self):
-        """Download models and return whether successful as boolean"""
-        def on_download_error(msg, msg2):
-            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
-                                       Gtk.ButtonsType.CANCEL, msg)
-            dialog.format_secondary_text(msg2)
-            dialog.run()
-            dialog.destroy()
-        import bleachbit.Chaff
-        return bleachbit.Chaff.download_models(on_error=on_download_error)
+    def download_models_gui(self, on_complete):
+        """Download models in a background thread.
 
-    def download_models_dialog(self):
-        """Download models"""
-        # TRANSLATORS: The question shows in a dialog.
-        msg = _("Download data needed for chaff generator?")
-        dialog = Gtk.MessageDialog(parent=self, flags=0, message_type=Gtk.MessageType.QUESTION,
-                                   buttons=Gtk.ButtonsType.OK_CANCEL, text=msg)
-        response = dialog.run()
-        ret = None
-        if response == Gtk.ResponseType.OK:
-            # User wants to download
-            ret = self.download_models_gui()  # True if successful
-        elif response == Gtk.ResponseType.CANCEL:
-            ret = False
-        dialog.destroy()
-        return ret
+        Shows a spinner in the main dialog during download.
+        Calls on_complete(success) when done, where success is boolean.
+        """
+
+        self._download_success = None
+
+        def on_download_error(msg, msg2):
+            # Use idle_add to show error from main thread
+            GLib.idle_add(lambda: self.show_infobar(f"{msg}: {msg2}", Gtk.MessageType.ERROR))
+
+        def download_models_thread(on_error):
+            """Download models in a background thread."""
+            import bleachbit.Chaff
+            return bleachbit.Chaff.download_models(on_error=on_error)
+
+        def _finish_download(success):
+            """Called on main thread when download completes."""
+            self._download_spinner.stop()
+            self._download_spinner_box.hide()
+            self._download_spinner_box.set_no_show_all(True)
+            self.make_button.set_sensitive(True)
+            on_complete(success)
+            return False
+
+        def on_thread_complete(success):
+            """Callback when download thread completes."""
+            GLib.idle_add(_finish_download, success)
+
+        # Show loading state
+        self._download_spinner.start()
+        self._download_spinner_box.set_no_show_all(False)
+        self._download_spinner_box.show_all()
+        self.make_button.set_sensitive(False)
+
+        # Start download in background thread
+        def _worker():
+            success = download_models_thread(on_download_error)
+            on_thread_complete(success)
+
+        thread = threading.Thread(target=_worker)
+        thread.start()
 
     def on_make_files(self, widget):
         """Callback for make files button"""
@@ -198,17 +216,24 @@ class ChaffDialog(Gtk.Dialog):
         delete_when_finished = self.when_finished_combo.get_active() == 0
         inspiration = self.inspiration_combo.get_active()
         if not output_dir:
-            # TRANSLATORS: This is an error message shown in an infobar
-            # when the user has not selected a destination folder.
             self.show_infobar(_("Select destination folder"),
                               Gtk.MessageType.ERROR)
             return
 
         from bleachbit.Chaff import have_models
         if not have_models():
-            if not self.download_models_dialog():
-                return
+            # Download models first, then proceed to file generation
+            def on_download_complete(success):
+                if success:
+                    self._start_file_generation(file_count, inspiration, output_dir, delete_when_finished)
+                else:
+                    self.show_infobar(_("Download failed"), Gtk.MessageType.ERROR)
+            self.download_models_gui(on_download_complete)
+        else:
+            self._start_file_generation(file_count, inspiration, output_dir, delete_when_finished)
 
+    def _start_file_generation(self, file_count, inspiration, output_dir, delete_when_finished):
+        """Start generating files after download is complete."""
         def _on_progress(fraction, msg, is_done):
             """Update progress bar from GLib main loop"""
             if msg:

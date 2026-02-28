@@ -134,7 +134,7 @@ class GuiChaffTestCase(common.BleachbitTestCase):
     @patch('bleachbit.Chaff.download_models')
     @patch('bleachbit.Chaff.have_models')
     def test_make_files(self, mock_have_models, mock_download_models, mock_make_files):
-        """Test make files functionality"""
+        """Test make files functionality with automatic download"""
         # Set up mocks
         mock_have_models.return_value = False  # Need to download models
         mock_download_models.return_value = True
@@ -143,52 +143,41 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         self.dialog.file_count.set_value(10)
         self.dialog.inspiration_combo.set_active(0)
 
-        # Mock the dialog response
-        def mock_dialog_run(parent, *args, **kwargs):
-            dialog = MagicMock()
-            dialog.run = lambda: Gtk.ResponseType.OK
-            dialog.destroy = lambda: None
-            return dialog
+        # Simulate clicking make button
+        self.dialog.make_button.clicked()
+        self.refresh_gui(0.1)
 
-        # Patch Gtk.MessageDialog during the test
-        with patch('gi.repository.Gtk.MessageDialog', side_effect=mock_dialog_run):
-            # Simulate clicking make button
-            self.dialog.make_button.clicked()
+        # Verify models were downloaded
+        mock_download_models.assert_called_once()
 
-            # Verify models were downloaded
-            mock_download_models.assert_called_once()
+        # Verify make_files_thread was called with correct arguments
+        mock_make_files.assert_called_once()
+        args = mock_make_files.call_args[0]
+        self.assertEqual(args[0], 10)  # file_count
+        self.assertEqual(args[1], 0)   # inspiration (2600)
+        self.assertEqual(args[2], self.tempdir)  # output_folder
 
-            # Verify make_files_thread was called with correct arguments
-            mock_make_files.assert_called_once()
-            args = mock_make_files.call_args[0]
-            self.assertEqual(args[0], 10)  # file_count
-            self.assertEqual(args[1], 0)   # inspiration (2600)
-            self.assertEqual(args[2], self.tempdir)  # output_folder
-
+    @patch('bleachbit.GuiChaff.make_files_thread')
     @patch('bleachbit.Chaff.download_models')
     @patch('bleachbit.Chaff.have_models')
-    def test_make_files_cancel_download(self, mock_have_models, mock_download_models):
-        """Test canceling the download models dialog"""
+    def test_make_files_download_fails(self, mock_have_models, mock_download_models, mock_make_files):
+        """Test handling when download fails"""
         mock_have_models.return_value = False  # Need to download models
+        mock_download_models.return_value = False  # Download fails
 
         self.dialog.choose_folder_button.set_filename(self.tempdir)
         self.dialog.file_count.set_value(10)
         self.dialog.inspiration_combo.set_active(0)
 
-        # Mock the dialog response
-        def mock_dialog_run(parent, *args, **kwargs):
-            dialog = MagicMock()
-            dialog.run = lambda: Gtk.ResponseType.CANCEL
-            dialog.destroy = lambda: None
-            return dialog
+        # Simulate clicking make button
+        self.dialog.make_button.clicked()
+        self.refresh_gui(0.1)
 
-        # Patch Gtk.MessageDialog during the test
-        with patch('gi.repository.Gtk.MessageDialog', side_effect=mock_dialog_run):
-            # Simulate clicking make button
-            self.dialog.make_button.clicked()
+        # Verify models download was attempted
+        mock_download_models.assert_called_once()
 
-            # Verify models were not downloaded
-            mock_download_models.assert_not_called()
+        # Verify make_files_thread was NOT called because download failed
+        mock_make_files.assert_not_called()
 
     @patch('bleachbit.GuiChaff.make_files_thread')
     @patch('bleachbit.Chaff.have_models')
