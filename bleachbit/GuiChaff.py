@@ -40,12 +40,12 @@ def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
     """Create a should_stop callback based on the stop mode.
 
     The returned callable accepts generated_file_names (list of paths)
-    and returns True when generation should stop.
+    and cumulative_size (total bytes written so far).
 
     Returns (should_stop, file_count).
     """
     if stop_mode == STOP_MODE_FILE_COUNT:
-        def should_stop(generated_file_names):  # pylint: disable=unused-argument
+        def should_stop(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
             return abort_event.is_set()
 
         return should_stop, stop_value
@@ -53,20 +53,17 @@ def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
     if stop_mode == STOP_MODE_TOTAL_SIZE:
         target_bytes = stop_value * 1024 * 1024  # MB to bytes
 
-        def should_stop(generated_file_names):
+        def should_stop(generated_file_names, cumulative_size=0):
             if abort_event.is_set():
                 return True
-            total = sum(os.path.getsize(fn)
-                        for fn in generated_file_names
-                        if os.path.exists(fn))
-            return total >= target_bytes
+            return cumulative_size >= target_bytes
 
         return should_stop, MAX_FILE_COUNT
 
     if stop_mode == STOP_MODE_FREE_SPACE:
         target_free_pct = stop_value
 
-        def should_stop(generated_file_names):  # pylint: disable=unused-argument
+        def should_stop(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
             if abort_event.is_set():
                 return True
             usage = shutil.disk_usage(output_folder)
@@ -82,11 +79,11 @@ def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
     """Create a progress callback appropriate for the stop mode.
 
     For file count mode, the fraction from Chaff is already correct.
-    For size/free-space modes, we compute our own fraction from file
-    sizes or disk usage, ignoring the fraction passed by Chaff.
+    For size/free-space modes, we use cumulative_size passed from Chaff
+    or compute from disk usage.
     """
     if stop_mode == STOP_MODE_FILE_COUNT:
-        def progress_cb(fraction, generated_file_names=None):  # pylint: disable=unused-argument
+        def progress_cb(fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
             on_progress(fraction)
 
         return progress_cb
@@ -94,12 +91,9 @@ def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
     if stop_mode == STOP_MODE_TOTAL_SIZE:
         target_bytes = stop_value * 1024 * 1024
 
-        def progress_cb(fraction, generated_file_names=None):
-            if generated_file_names:
-                total = sum(os.path.getsize(fn)
-                            for fn in generated_file_names
-                            if os.path.exists(fn))
-                on_progress(min(1.0, total / target_bytes))
+        def progress_cb(fraction, generated_file_names=None, cumulative_size=0):
+            if cumulative_size > 0:
+                on_progress(min(1.0, cumulative_size / target_bytes))
             else:
                 on_progress(fraction)
 
@@ -110,7 +104,7 @@ def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
         initial_usage = shutil.disk_usage(output_folder)
         initial_free_pct = 100.0 * initial_usage.free / initial_usage.total
 
-        def progress_cb(_fraction, generated_file_names=None):  # pylint: disable=unused-argument
+        def progress_cb(_fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
             usage = shutil.disk_usage(output_folder)
             current_free_pct = 100.0 * usage.free / usage.total
             if initial_free_pct > target_free_pct:

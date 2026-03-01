@@ -210,6 +210,7 @@ def generate_emails(number_of_emails,
     content_model = load_content_model(content_model_path)
     logger.debug('Generating {:,} emails'.format(number_of_emails))
     generated_file_names = []
+    cumulative_size = 0
     for i in range(1, number_of_emails + 1):
         with tempfile.NamedTemporaryFile(mode='w+', prefix='outlook-', suffix='.eml', dir=email_output_dir, delete=False) as email_output_file:
             email_generator = email.generator.Generator(email_output_file)
@@ -217,10 +218,12 @@ def generate_emails(number_of_emails,
                 subject_model, content_model, number_of_sentences=number_of_sentences)
             email_generator.write(msg.as_string())
             generated_file_names.append(email_output_file.name)
+            cumulative_size += email_output_file.tell()
         if on_progress:
             on_progress(1.0 * i / number_of_emails,
-                        generated_file_names=generated_file_names)
-        if should_stop and should_stop(generated_file_names):
+                        generated_file_names=generated_file_names,
+                        cumulative_size=cumulative_size)
+        if should_stop and should_stop(generated_file_names, cumulative_size):
             break
     return generated_file_names
 
@@ -244,15 +247,18 @@ def generate_2600(file_count,
     model = _load_model(model_path)
     logger.debug(f'Generating {file_count:,} files')
     generated_file_names = []
+    cumulative_size = 0
     for i in range(1, file_count + 1):
         with tempfile.NamedTemporaryFile(mode='w+', encoding='utf-8', prefix='2600-', suffix='.txt', dir=output_dir, delete=False) as output_file:
             txt = _generate_2600_file(model)
             output_file.write(txt)
             generated_file_names.append(output_file.name)
+            cumulative_size += output_file.tell()
         if on_progress:
             on_progress(1.0 * i / file_count,
-                        generated_file_names=generated_file_names)
-        if should_stop and should_stop(generated_file_names):
+                        generated_file_names=generated_file_names,
+                        cumulative_size=cumulative_size)
+        if should_stop and should_stop(generated_file_names, cumulative_size):
             break
     return generated_file_names
 
