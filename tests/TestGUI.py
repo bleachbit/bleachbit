@@ -240,7 +240,7 @@ class GUITestCase(common.BleachbitTestCase):
         os.mkdir(chaff_dst_dir)
         cd.choose_folder_button.set_filename(chaff_dst_dir)
         cd.when_finished_combo.set_active(1)  # do not delete after generation
-        cd.file_count.set_value(10)
+        cd.stop_value_spin.set_value(10)
         self.refresh_gui()
         self.click_button(cd, _("Make files"))
         cd.thread.join()

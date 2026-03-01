@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 import bz2
 from datetime import datetime
@@ -28,9 +14,7 @@ import os
 import random
 import tempfile
 
-
 from bleachbit import options_dir
-
 
 from . import markovify
 
@@ -215,6 +199,7 @@ def generate_emails(number_of_emails,
                     models_dir=DEFAULT_MODELS_DIR,
                     number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_CLINTON,
                     on_progress=None,
+                    should_stop=None,
                     *kwargs):
     logger.debug('Loading two email models')
     subject_model_path = os.path.join(
@@ -233,7 +218,10 @@ def generate_emails(number_of_emails,
             email_generator.write(msg.as_string())
             generated_file_names.append(email_output_file.name)
         if on_progress:
-            on_progress(1.0 * i / number_of_emails)
+            on_progress(1.0 * i / number_of_emails,
+                        generated_file_names=generated_file_names)
+        if should_stop and should_stop(generated_file_names):
+            break
     return generated_file_names
 
 
@@ -249,7 +237,8 @@ def _generate_2600_file(model, number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_2
 def generate_2600(file_count,
                   output_dir,
                   model_dir=DEFAULT_MODELS_DIR,
-                  on_progress=None):
+                  on_progress=None,
+                  should_stop=None):
     logger.debug('Loading 2600 model')
     model_path = os.path.join(model_dir, '2600_model.json.bz2')
     model = _load_model(model_path)
@@ -261,7 +250,10 @@ def generate_2600(file_count,
             output_file.write(txt)
             generated_file_names.append(output_file.name)
         if on_progress:
-            on_progress(1.0 * i / file_count)
+            on_progress(1.0 * i / file_count,
+                        generated_file_names=generated_file_names)
+        if should_stop and should_stop(generated_file_names):
+            break
     return generated_file_names
 
 

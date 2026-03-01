@@ -10,31 +10,151 @@ GUI for making chaff
 
 import logging
 import os
+import shutil
 import threading
 
 from bleachbit.Language import get_text as _
 from bleachbit.GtkShim import Gtk, GLib
+from bleachbit.Chaff import generate_emails, generate_2600
 
 
 logger = logging.getLogger(__name__)
 
 
-def make_files_thread(file_count, inspiration, output_folder, delete_when_finished, on_progress):
+STOP_MODE_FILE_COUNT = 0
+STOP_MODE_TOTAL_SIZE = 1
+STOP_MODE_FREE_SPACE = 2
+
+MAX_FILE_COUNT = 999999
+MAX_MB_COUNT = 999999
+MAX_FREE_SPACE_PCT = 99
+
+STOP_MODE_LABELS = {
+    STOP_MODE_FILE_COUNT: _("Number of files"),
+    STOP_MODE_TOTAL_SIZE: _("Size (MB)"),
+    STOP_MODE_FREE_SPACE: _("Free space (%)"),
+}
+
+
+def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
+    """Create a should_stop callback based on the stop mode.
+
+    The returned callable accepts generated_file_names (list of paths)
+    and returns True when generation should stop.
+
+    Returns (should_stop, file_count).
+    """
+    if stop_mode == STOP_MODE_FILE_COUNT:
+        def should_stop(generated_file_names):  # pylint: disable=unused-argument
+            return abort_event.is_set()
+
+        return should_stop, stop_value
+
+    if stop_mode == STOP_MODE_TOTAL_SIZE:
+        target_bytes = stop_value * 1024 * 1024  # MB to bytes
+
+        def should_stop(generated_file_names):
+            if abort_event.is_set():
+                return True
+            total = sum(os.path.getsize(fn)
+                        for fn in generated_file_names
+                        if os.path.exists(fn))
+            return total >= target_bytes
+
+        return should_stop, MAX_FILE_COUNT
+
+    if stop_mode == STOP_MODE_FREE_SPACE:
+        target_free_pct = stop_value
+
+        def should_stop(generated_file_names):  # pylint: disable=unused-argument
+            if abort_event.is_set():
+                return True
+            usage = shutil.disk_usage(output_folder)
+            free_pct = 100.0 * usage.free / usage.total
+            return free_pct <= target_free_pct
+
+        return should_stop, MAX_FILE_COUNT
+
+    raise ValueError(f'Invalid stop_mode {stop_mode}')
+
+
+def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
+    """Create a progress callback appropriate for the stop mode.
+
+    For file count mode, the fraction from Chaff is already correct.
+    For size/free-space modes, we compute our own fraction from file
+    sizes or disk usage, ignoring the fraction passed by Chaff.
+    """
+    if stop_mode == STOP_MODE_FILE_COUNT:
+        def progress_cb(fraction, generated_file_names=None):  # pylint: disable=unused-argument
+            on_progress(fraction)
+
+        return progress_cb
+
+    if stop_mode == STOP_MODE_TOTAL_SIZE:
+        target_bytes = stop_value * 1024 * 1024
+
+        def progress_cb(fraction, generated_file_names=None):
+            if generated_file_names:
+                total = sum(os.path.getsize(fn)
+                            for fn in generated_file_names
+                            if os.path.exists(fn))
+                on_progress(min(1.0, total / target_bytes))
+            else:
+                on_progress(fraction)
+
+        return progress_cb
+
+    if stop_mode == STOP_MODE_FREE_SPACE:
+        target_free_pct = stop_value
+        initial_usage = shutil.disk_usage(output_folder)
+        initial_free_pct = 100.0 * initial_usage.free / initial_usage.total
+
+        def progress_cb(_fraction, generated_file_names=None):  # pylint: disable=unused-argument
+            usage = shutil.disk_usage(output_folder)
+            current_free_pct = 100.0 * usage.free / usage.total
+            if initial_free_pct > target_free_pct:
+                frac = (initial_free_pct - current_free_pct) / \
+                    (initial_free_pct - target_free_pct)
+                frac = min(1.0, max(0.0, frac))
+            else:
+                frac = 1.0
+            on_progress(frac)
+
+        return progress_cb
+
+    raise ValueError(f'Invalid stop_mode {stop_mode}')
+
+
+def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
+                      delete_when_finished, on_progress, abort_event):
+    """Make files in a separate thread"""
+    should_stop, file_count = _make_should_stop(
+        stop_mode, stop_value, output_folder, abort_event)
+    progress_cb = _make_progress_cb(
+        stop_mode, stop_value, output_folder, on_progress)
+
     if inspiration == 0:
-        from bleachbit.Chaff import generate_2600
+
         generated_file_names = generate_2600(
-            file_count, output_folder, on_progress=on_progress)
+            file_count, output_folder, on_progress=progress_cb,
+            should_stop=should_stop)
     elif inspiration == 1:
-        from bleachbit.Chaff import generate_emails
+
         generated_file_names = generate_emails(
-            file_count, output_folder, on_progress=on_progress)
+            file_count, output_folder, on_progress=progress_cb,
+            should_stop=should_stop)
     else:
         raise ValueError(f'Invalid inspiration {inspiration}')
-    if delete_when_finished:
-        on_progress(0, msg=_('Deleting files'))
-        for i in range(0, file_count):
-            os.unlink(generated_file_names[i])
-            on_progress(1.0 * (i + 1) / file_count)
+
+    if delete_when_finished and not abort_event.is_set():
+        on_progress(0, msg=_('Deleting files\u2026'))
+        count = len(generated_file_names)
+        for i, fn in enumerate(generated_file_names):
+            if abort_event.is_set():
+                break
+            os.unlink(fn)
+            on_progress(1.0 * (i + 1) / count)
     on_progress(1.0, is_done=True)
 
 
@@ -94,18 +214,43 @@ class ChaffDialog(Gtk.Dialog):
         self.inspiration_combo.set_active(0)  # Set default
         grid.attach(self.inspiration_combo, 1, 0, 1, 1)
 
-        file_count_label = Gtk.Label(label=_("Number of files"))
-        file_count_label.set_xalign(0)
-        grid.attach(file_count_label, 0, 1, 1, 1)
-        adjustment = Gtk.Adjustment(
-            value=100, lower=1, upper=99999, step_increment=1, page_increment=1000, page_size=0)
-        self.file_count = Gtk.SpinButton(adjustment=adjustment)
-        self.file_count.set_hexpand(True)
-        grid.attach(self.file_count, 1, 1, 1, 1)
+        # TRANSLATORS: Label for the combo box that selects when to stop
+        # generating chaff files.
+        stop_after_label = Gtk.Label(label=_("Stop after"))
+        stop_after_label.set_xalign(0)
+        grid.attach(stop_after_label, 0, 1, 1, 1)
+        self.stop_mode_combo = Gtk.ComboBoxText()
+        self.stop_mode_combo.set_hexpand(True)
+        for mode in (STOP_MODE_FILE_COUNT, STOP_MODE_TOTAL_SIZE, STOP_MODE_FREE_SPACE):
+            self.stop_mode_combo.append_text(STOP_MODE_LABELS[mode])
+        self.stop_mode_combo.set_active(STOP_MODE_FILE_COUNT)
+        self.stop_mode_combo.connect('changed', self._on_stop_mode_changed)
+        grid.attach(self.stop_mode_combo, 1, 1, 1, 1)
+
+        # TRANSLATORS: Label for the spin button that selects the stop value.
+        self.stop_value_label = Gtk.Label(
+            label=STOP_MODE_LABELS[self.stop_mode_combo.get_active()])
+        self.stop_value_label.set_xalign(0)
+        grid.attach(self.stop_value_label, 0, 2, 1, 1)
+        self._stop_value_adjustments = {
+            STOP_MODE_FILE_COUNT: Gtk.Adjustment(
+                value=100, lower=1, upper=MAX_FILE_COUNT,
+                step_increment=1, page_increment=1000, page_size=0),
+            STOP_MODE_TOTAL_SIZE: Gtk.Adjustment(
+                value=100, lower=1, upper=MAX_MB_COUNT,
+                step_increment=100, page_increment=1000, page_size=0),
+            STOP_MODE_FREE_SPACE: Gtk.Adjustment(
+                value=1, lower=1, upper=MAX_FREE_SPACE_PCT,
+                step_increment=1, page_increment=10, page_size=0),
+        }
+        self.stop_value_spin = Gtk.SpinButton(
+            adjustment=self._stop_value_adjustments[STOP_MODE_FILE_COUNT])
+        self.stop_value_spin.set_hexpand(True)
+        grid.attach(self.stop_value_spin, 1, 2, 1, 1)
 
         folder_label = Gtk.Label(label=_("Select destination folder"))
         folder_label.set_xalign(0)
-        grid.attach(folder_label, 0, 2, 1, 1)
+        grid.attach(folder_label, 0, 3, 1, 1)
         # The file chooser button displays a stock GTK icon. When some parts of GTK are not
         # set up correctly on Windows, then the application may crash here with the error
         # message "No GSettings schemas".
@@ -116,11 +261,11 @@ class ChaffDialog(Gtk.Dialog):
         import tempfile
         self.choose_folder_button.set_filename(tempfile.gettempdir())
         self.choose_folder_button.set_hexpand(True)
-        grid.attach(self.choose_folder_button, 1, 2, 1, 1)
+        grid.attach(self.choose_folder_button, 1, 3, 1, 1)
 
         finished_label = Gtk.Label(label=_("When finished"))
         finished_label.set_xalign(0)
-        grid.attach(finished_label, 0, 3, 1, 1)
+        grid.attach(finished_label, 0, 4, 1, 1)
         self.when_finished_combo = Gtk.ComboBoxText()
         self.when_finished_combo.set_hexpand(True)
         self.combo_options = (
@@ -128,7 +273,7 @@ class ChaffDialog(Gtk.Dialog):
         for combo_option in self.combo_options:
             self.when_finished_combo.append_text(combo_option)
         self.when_finished_combo.set_active(0)  # Set default
-        grid.attach(self.when_finished_combo, 1, 3, 1, 1)
+        grid.attach(self.when_finished_combo, 1, 4, 1, 1)
 
         # Loading indicator for download (hidden by default)
         self._download_spinner_box = Gtk.Box(
@@ -159,12 +304,35 @@ class ChaffDialog(Gtk.Dialog):
         self.make_button.connect('clicked', self.on_make_files)
         box.pack_start(self.make_button, False, False, 0)
 
+        # TRANSLATORS: Button label to abort chaff file generation
+        # while it is in progress.
+        self.abort_button = Gtk.Button(label=_("Abort"))
+        self.abort_button.get_style_context().add_class('destructive-action')
+        self.abort_button.connect('clicked', self._on_abort)
+        box.pack_start(self.abort_button, False, False, 0)
+        self.abort_button.set_no_show_all(True)
+        self.abort_button.hide()
+
+        self._abort_event = None
+
     def _on_infobar_response(self, infobar, response_id):
         """Handle InfoBar close button click"""
         if self._infobar_timeout_id:
             GLib.source_remove(self._infobar_timeout_id)
             self._infobar_timeout_id = None
         self.infobar.hide()
+
+    def _on_stop_mode_changed(self, combo):
+        """Update the value spin button when the stop mode changes"""
+        mode = combo.get_active()
+        self.stop_value_label.set_text(STOP_MODE_LABELS[mode])
+        self.stop_value_spin.set_adjustment(
+            self._stop_value_adjustments[mode])
+
+    def _on_abort(self, widget):
+        """Callback for abort button"""
+        if self._abort_event:
+            self._abort_event.set()
 
     def _hide_infobar(self):
         """Hide the InfoBar (used for auto-dismiss timeout)"""
@@ -231,7 +399,8 @@ class ChaffDialog(Gtk.Dialog):
 
     def on_make_files(self, widget):
         """Callback for make files button"""
-        file_count = self.file_count.get_value_as_int()
+        stop_mode = self.stop_mode_combo.get_active()
+        stop_value = self.stop_value_spin.get_value_as_int()
         output_dir = self.choose_folder_button.get_filename()
         delete_when_finished = self.when_finished_combo.get_active() == 0
         inspiration = self.inspiration_combo.get_active()
@@ -246,17 +415,19 @@ class ChaffDialog(Gtk.Dialog):
             def on_download_complete(success):
                 if success:
                     self._start_file_generation(
-                        file_count, inspiration, output_dir, delete_when_finished)
+                        stop_mode, stop_value, inspiration, output_dir, delete_when_finished)
                 else:
                     self.show_infobar(_("Download failed"),
                                       Gtk.MessageType.ERROR)
             self.download_models_gui(on_download_complete)
         else:
             self._start_file_generation(
-                file_count, inspiration, output_dir, delete_when_finished)
+                stop_mode, stop_value, inspiration, output_dir, delete_when_finished)
 
-    def _start_file_generation(self, file_count, inspiration, output_dir, delete_when_finished):
+    def _start_file_generation(self, stop_mode, stop_value, inspiration, output_dir, delete_when_finished):
         """Start generating files after download is complete."""
+        self._abort_event = threading.Event()
+
         def _on_progress(fraction, msg, is_done):
             """Update progress bar from GLib main loop"""
             if msg:
@@ -264,11 +435,18 @@ class ChaffDialog(Gtk.Dialog):
             self.progressbar.set_fraction(fraction)
             if is_done:
                 self.progressbar.hide()
+                self.abort_button.hide()
                 self.make_button.set_sensitive(True)
-                # TRANSLATORS: Notification shown in an infobar when chaff file generation
-                # is complete.
-                self.show_infobar(_("Chaff generation complete"),
-                                  Gtk.MessageType.INFO)
+                if self._abort_event and self._abort_event.is_set():
+                    # TRANSLATORS: Notification shown in an infobar when
+                    # chaff file generation is aborted by the user.
+                    self.show_infobar(_("Chaff generation aborted"),
+                                      Gtk.MessageType.WARNING)
+                else:
+                    # TRANSLATORS: Notification shown in an infobar when chaff file generation
+                    # is complete.
+                    self.show_infobar(_("Chaff generation complete"),
+                                      Gtk.MessageType.INFO)
 
         def on_progress(fraction, msg=None, is_done=False):
             """Callback for progress bar"""
@@ -282,9 +460,10 @@ class ChaffDialog(Gtk.Dialog):
         self.progressbar.set_show_text(True)
         self.progressbar.set_fraction(0.0)
         self.make_button.set_sensitive(False)
-        import threading
-        args = (file_count, inspiration, output_dir,
-                delete_when_finished, on_progress)
+        self.abort_button.set_no_show_all(False)
+        self.abort_button.show()
+        args = (stop_mode, stop_value, inspiration, output_dir,
+                delete_when_finished, on_progress, self._abort_event)
         self.thread = threading.Thread(target=make_files_thread, args=args)
         self.thread.start()
 
