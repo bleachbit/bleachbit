@@ -304,8 +304,7 @@ class ChaffDialog(Gtk.Dialog):
         self.abort_button.get_style_context().add_class('destructive-action')
         self.abort_button.connect('clicked', self._on_abort)
         box.pack_start(self.abort_button, False, False, 0)
-        self.abort_button.set_no_show_all(True)
-        self.abort_button.hide()
+        self.abort_button.set_sensitive(False)
 
         self._abort_event = None
 
@@ -429,7 +428,7 @@ class ChaffDialog(Gtk.Dialog):
             self.progressbar.set_fraction(fraction)
             if is_done:
                 self.progressbar.hide()
-                self.abort_button.hide()
+                self.abort_button.set_sensitive(False)
                 self.make_button.set_sensitive(True)
                 if self._abort_event and self._abort_event.is_set():
                     # TRANSLATORS: Notification shown in an infobar when
@@ -454,8 +453,7 @@ class ChaffDialog(Gtk.Dialog):
         self.progressbar.set_show_text(True)
         self.progressbar.set_fraction(0.0)
         self.make_button.set_sensitive(False)
-        self.abort_button.set_no_show_all(False)
-        self.abort_button.show()
+        self.abort_button.set_sensitive(True)
         args = (stop_mode, stop_value, inspiration, output_dir,
                 delete_when_finished, on_progress, self._abort_event)
         self.thread = threading.Thread(target=make_files_thread, args=args)
