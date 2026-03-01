@@ -168,6 +168,7 @@ class ChaffDialog(Gtk.Dialog):
         Gtk.Dialog.set_modal(self, True)
         self.set_border_width(10)
         self.set_default_size(400, -1)
+        self.connect('delete-event', self._on_delete_event)
         box = self.get_content_area()
         box.set_spacing(10)
 
@@ -326,6 +327,12 @@ class ChaffDialog(Gtk.Dialog):
         """Callback for abort button"""
         if self._abort_event:
             self._abort_event.set()
+
+    def _on_delete_event(self, _widget, _event):
+        """Handle dialog close (e.g., X button) by aborting the thread."""
+        if self._abort_event:
+            self._abort_event.set()
+        return False  # Allow the dialog to close
 
     def _hide_infobar(self):
         """Hide the InfoBar (used for auto-dismiss timeout)"""
