@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-02-23 09:52-0700\n"
-"PO-Revision-Date: 2026-02-27 15:09+0000\n"
+"PO-Revision-Date: 2026-03-03 01:36+0000\n"
 "Last-Translator: Cirnos <cirnos@tuta.io>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "bleachbit/main/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Launchpad-Export-Date: 2020-12-28 15:48+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1960,7 +1960,7 @@ msgstr "Modo especialista"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Some GTK themes do not support both light and dark modes."
-msgstr "Algums temas do GTK não suportam ambos os modos claros e escuros."
+msgstr "Algums temas do GTK não suportam ambos os modos claro e escuro."
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Warning confirmations reset."
@@ -2097,7 +2097,7 @@ msgstr "Este caminho já existe na lista customizada."
 #: ../bleachbit/GuiPreferences.py
 msgid "This path is protected. To bypass protection, enable expert mode."
 msgstr ""
-"Este caminho está protegido. Para transpassar tal proteção, habilite o modo "
+"Este caminho está protegido. Para burlar esta proteção, habilite o modo "
 "especialista."
 
 #: ../bleachbit/GuiPreferences.py
@@ -2175,7 +2175,7 @@ msgstr "Tamanho"
 #: ../bleachbit/GuiTreeModels.py
 msgid "This option is protected. To bypass protection, enable expert mode."
 msgstr ""
-"Esta opção está protegida. Para transpassar tal proteção, habilite o modo "
+"Esta opção está protegida. Para burlar esta proteção, habilite o modo "
 "especialista."
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
@@ -2256,16 +2256,15 @@ msgstr ""
 "genuína em https://www.bleachbit.org onde é sempre gratuita."
 
 #: ../bleachbit/GuiWindow.py
-#, fuzzy
 msgid "This option requires expert mode. Enable it in Preferences."
-msgstr "Esta opção requer o modo especialista. Habilite-o nas Preferências."
+msgstr "Esta opção requer o modo especialista. Habilite-a em Preferências."
 
 #. TRANSLATORS: Label in a context menu. 'Preview' is a verb.
 #. TRANSLATORS: This is the preview button on the main window.  It
 #. previews changes.
 #: ../bleachbit/GuiWindow.py
 msgid "Preview"
-msgstr "Pré-visualização"
+msgstr "Pré-visualizar"
 
 #. TRANSLATORS: Label in a context menu. 'Clean' is a verb.
 #. TRANSLATORS: Label for the clean button on header bar of the
