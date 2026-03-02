@@ -20,6 +20,7 @@ class TreeDisplayModel:
         self.view = Gtk.TreeView.new_with_model(model)
 
         # hide headers
+        # These commits disabled the header: 5d0b5b7ab,49ad443.
         self.view.set_headers_visible(False)
 
         # listen for right click (context menu)
@@ -27,6 +28,9 @@ class TreeDisplayModel:
 
         # first column: cleaner name
         renderer_name = Gtk.CellRendererText()
+        # TRANSLATORS: Column header for the cleaner name.
+        # Used in the tree view on the main screen.
+        # 'Name' is a noun.
         column_name = Gtk.TreeViewColumn(_("Name"), renderer_name, text=0)
         self.view.append_column(column_name)
         self.view.set_search_column(0)
@@ -41,6 +45,8 @@ class TreeDisplayModel:
         renderer_active = Gtk.CellRendererToggle()
         renderer_active.set_property('activatable', True)
         renderer_active.connect('toggled', self.col1_toggled_cb, model, parent)
+        # TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
+        # Used in the tree view on the main screen.
         column_active = Gtk.TreeViewColumn(_("Active"), renderer_active)
         column_active.add_attribute(renderer_active, "active", 1)
         self.view.append_column(column_active)
@@ -48,8 +54,10 @@ class TreeDisplayModel:
         # fourth column: size
         renderer_size = Gtk.CellRendererText()
         renderer_size.set_alignment(1.0, 0.0)
-        # TRANSLATORS: Size is the label for the column that shows how
-        # much space an option would clean or did clean
+        # TRANSLATORS: Column header for the size of the cleaner.
+        # Used in the tree view on the main screen.
+        # 'Size' is a noun and refers to the amount of space that the cleaner
+        # would clean (preview mode) or did clean (cleaning mode).
         column_size = Gtk.TreeViewColumn(_("Size"), renderer_size, text=3)
         column_size.set_alignment(1.0)
         self.view.append_column(column_size)
@@ -79,6 +87,7 @@ class TreeDisplayModel:
             if warning and not options.get('expert_mode'):
                 if hasattr(parent_window, 'show_infobar'):
                     parent_window.show_infobar(
+                        # TRANSLATORS: Warning shown in the infobar.
                         _("This option is protected. To bypass protection, enable expert mode."))
                 # Show an alert icon by the option name.
                 model[path][4] = "dialog-warning"

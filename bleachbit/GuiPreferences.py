@@ -39,9 +39,16 @@ logger = logging.getLogger(__name__)
 
 LOCATIONS_WHITELIST = 1
 LOCATIONS_CUSTOM = 2
+# TRANSLATORS: Shown as a tooltip in the preferences window and as
+# a description in a confirmation dialog.
 EXPERT_MODE_DESCRIPTION = _(
     'Expert mode enables advanced features and relaxes guardrails. '
     'Use extra caution in expert mode.')
+
+# TRANSLATORS: Used both as (1) a checkbox label in the preferences dialog
+# to bypass some safety guardails for advanced users and (2) the title of
+# dialog asking to confirm this choice.
+EXPERT_MODE_MSG=_('Expert mode')
 
 
 class PreferencesDialog:
@@ -170,7 +177,7 @@ class PreferencesDialog:
             from bleachbit.GuiBasic import warning_confirm_dialog
             confirmed, remember_choice = warning_confirm_dialog(
                 self.dialog,
-                _('Expert mode'),
+                EXPERT_MODE_MSG,
                 EXPERT_MODE_DESCRIPTION,
                 show_checkbox=False
             )
@@ -198,7 +205,10 @@ class PreferencesDialog:
             logger.debug("Toggling dark mode to %s", options.get('dark_mode'))
             if not os.name == 'nt':
                 self.show_infobar(
-                    _("Some GTK themes do not support both light and dark modes."), Gtk.MessageType.WARNING)
+                    # TRANSLATORS: Notice shown in an infobar when toggling
+                    # dark mode on Linux.
+                    _("Some GTK themes do not support both light and dark modes."),
+                    Gtk.MessageType.WARNING)
             if 'nt' == os.name and options.get('win10_theme'):
                 self.cb_set_windows10_theme()
 
@@ -221,6 +231,7 @@ class PreferencesDialog:
         """Reset saved warning confirmations."""
         options.clear_warning_preferences()
         self.show_infobar(
+            # TRANSLATORS: Success message shown in the infobar.
             _("Warning confirmations reset."),
             Gtk.MessageType.INFO)
 
@@ -229,6 +240,7 @@ class PreferencesDialog:
         if not online_update_notification_enabled:
             return
         self._create_checkbox(
+            # TRANSLATORS: Checkbox label in the preferences dialog.
             _("Check periodically for software updates via the Internet"),
             'check_online_updates',
             tooltip=_("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
@@ -237,6 +249,7 @@ class PreferencesDialog:
         updates_box.set_border_width(10)
 
         self._create_checkbox(
+            # TRANSLATORS: Checkbox label in the preferences dialog.
             _("Check for new beta releases"),
             'check_beta',
             vbox=updates_box,
@@ -245,6 +258,9 @@ class PreferencesDialog:
 
         if 'nt' == os.name:
             self._create_checkbox(
+                # TRANSLATORS: Checkbox label in the preferences dialog.
+                # Winapp2.ini is a set of cleaning rules from this project:
+                # https://github.com/MoscaDotTo/Winapp2
                 _("Download and update cleaners from community (winapp2.ini)"),
                 'update_winapp2',
                 vbox=updates_box,
@@ -256,13 +272,16 @@ class PreferencesDialog:
         """Create and configure language selection widgets."""
         lang_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         is_auto_detect = options.get("auto_detect_lang")
+        # TRANSLATORS: Checkbutton label in the preferences dialog.
         self.cb_auto_lang = Gtk.CheckButton(label=_("Auto-detect language"))
         self.cb_auto_lang.set_active(is_auto_detect)
         self.cb_auto_lang.set_tooltip_text(
+            # TRANSLATORS: Tooltip explaining the auto-detect language option.
             _("Automatically detect the system language"))
         lang_box.pack_start(self.cb_auto_lang, False, True, 0)
 
         self.lang_select_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        # TRANSLATORS: Label for the language selection dropdown.
         lang_label = Gtk.Label(label=_("Language:"))
         lang_label.set_margin_start(20)  # Add some indentation
         self.lang_select_box.pack_start(lang_label, False, True, 5)
@@ -310,9 +329,9 @@ class PreferencesDialog:
                 "No language code found in combobox for text %s", text)
         setup_translation()
         self.refresh_operations = True
-        # TRANSLATORS: Shown after changing language in preferences
-        self.show_infobar(
-            _("Restart BleachBit for full effect."),
+        # TRANSLATORS: Notice shown in an infobar after changing
+        # language in the preferences.
+        self.show_infobar(_("Restart BleachBit for full effect."),
             Gtk.MessageType.INFO)
 
     def on_auto_detect_toggled(self, widget):
@@ -358,6 +377,7 @@ class PreferencesDialog:
             store_as_attr='cb_delete_confirmation')
 
         self.reset_warnings_button = Gtk.Button.new_with_label(
+            # TRANSLATORS: Button label in the preferences. 'Reset' is a verb.
             label=_("Reset warning confirmations"))
         self.reset_warnings_button.set_halign(Gtk.Align.START)
         self.reset_warnings_button.set_margin_top(6)
@@ -367,6 +387,7 @@ class PreferencesDialog:
         vbox.pack_start(self.reset_warnings_button, False, True, 0)
 
         self._create_checkbox(
+            # TRANSLATORS: Checkbox label in the preferences.
             _("Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"),
             "units_iec")
 
@@ -380,31 +401,39 @@ class PreferencesDialog:
         self.__create_general_checkboxes(self.general_vbox)
 
         self._create_checkbox(
+            # TRANSLATORS: Checkbox label in the preferences to enable
+            # remembering the window size and position across sessions.
             _("Remember window geometry"),
             'remember_geometry')
 
         self._create_checkbox(
+            # TRANSLATORS: Checkbox label in the preferences dialog.
             _("Show debug messages"),
             'debug')
 
         if 'nt' != os.name:
             self._create_checkbox(
+                # TRANSLATORS: Checkbox label in the preferences dialog.
                 _("Add the shred context menu to KDE Plasma"),
                 'kde_shred_menu_option')
 
         self._create_checkbox(
+            # TRANSLATORS: Checkbox label in the preferences dialog to enable
+            # dark mode.
             _("Dark mode"),
             'dark_mode')
 
         if 'nt' == os.name:
             self._create_checkbox(
+                # TRANSLATORS: Checkbox label in the preferences dialog to enable
+                # the Windows 10 visual theme.
                 _("Windows 10 theme"),
                 'win10_theme')
 
         self.__create_language_widgets(self.general_vbox)
 
         self._create_checkbox(
-            _("Expert mode"),
+            EXPERT_MODE_MSG,
             'expert_mode',
             tooltip=EXPERT_MODE_DESCRIPTION,
             store_as_attr='cb_expert')
@@ -502,6 +531,8 @@ class PreferencesDialog:
 
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         notice = Gtk.Label(
+            # TRANSLATORS: Warning label on the languages page of the
+            # preferences dialog.
             label=_("All languages will be deleted except those checked."))
         vbox.pack_start(notice, False, False, 0)
 
@@ -517,15 +548,21 @@ class PreferencesDialog:
         self.renderer0 = Gtk.CellRendererToggle()
         self.renderer0.set_property('activatable', True)
         self.renderer0.connect('toggled', preserve_toggled_cb, liststore)
-        self.column0 = Gtk.TreeViewColumn(
-            _("Preserve"), self.renderer0, active=0)
+        # TRANSLATORS: Column header in the languages treeview.
+        # This column controls whether to preserve (keep) the language.
+        self.column0 = Gtk.TreeViewColumn(_("Preserve"),
+            self.renderer0, active=0)
         treeview.append_column(self.column0)
 
         self.renderer1 = Gtk.CellRendererText()
+        # TRANSLATORS: Column header in the languages treeview showing the
+        # language code (e.g., 'en_US').
         self.column1 = Gtk.TreeViewColumn(_("Code"), self.renderer1, text=1)
         treeview.append_column(self.column1)
 
         self.renderer2 = Gtk.CellRendererText()
+        # TRANSLATORS: Column header in the languages treeview showing the
+        # native name of the language.
         self.column2 = Gtk.TreeViewColumn(_("Name"), self.renderer2, text=2)
         treeview.append_column(self.column2)
         treeview.set_search_column(2)
@@ -548,6 +585,7 @@ class PreferencesDialog:
         # Check in whitelist
         for path in whitelist_paths:
             if pathname == path[1]:
+                # TRANSLATORS: Error message shown in the infobar.
                 msg = _("This path already exists in the keep list.")
                 self.show_infobar(msg, Gtk.MessageType.ERROR)
                 return True
@@ -555,6 +593,7 @@ class PreferencesDialog:
         # Check in custom
         for path in custom_paths:
             if pathname == path[1]:
+                # TRANSLATORS: Error message shown in the infobar.
                 msg = _("This path already exists in the custom list.")
                 self.show_infobar(msg, Gtk.MessageType.ERROR)
                 return True
@@ -573,6 +612,7 @@ class PreferencesDialog:
 
         if not options.get('expert_mode'):
             self.show_infobar(
+                # TRANSLATORS: Error message shown in the infobar.
                 _("This path is protected. To bypass protection, enable expert mode."),
                 Gtk.MessageType.WARNING)
             return False
@@ -595,6 +635,7 @@ class PreferencesDialog:
         # Show warning dialog
         confirmed, remember = GuiBasic.warning_confirm_dialog(
             self.dialog,
+            # TRANSLATORS: Title of warning dialog shown when adding a protected path.
             _("Protected Path"),
             warning_msg
         )
@@ -614,7 +655,11 @@ class PreferencesDialog:
             if not self._check_protected_path(pathname):
                 return
 
-        type_str = _('File') if path_type == 'file' else _('Folder')
+        # TRANSLATORS: Noun used as a column header in the preferences dialog.
+        type_str_file = _('File')
+        # TRANSLATORS: Noun used as a column header in the preferences dialog.
+        type_str_folder = _('Folder')
+        type_str = type_str_file if path_type == 'file' else type_str_folder
         liststore.append([type_str, pathname])
         pathnames.append([path_type, pathname])
 
@@ -695,12 +740,15 @@ class PreferencesDialog:
             """)
 
         if LOCATIONS_WHITELIST == page_type:
-            # TRANSLATORS: "Paths" is used generically to refer to both files
-            # and folders
+            # TRANSLATORS: Notice label at the top of the keeplist (whitelist)
+            # page in the preferences dialog.
+            # "Paths" is used generically to refer to both files and folders.
             notice_text = _("These paths will not be deleted or modified.")
             notice_icon = "emblem-readonly"
             notice_class = "bb-locations-notice-whitelist"
         elif LOCATIONS_CUSTOM == page_type:
+            # TRANSLATORS: Notice label at the top of the custom (delete)
+            # page in the preferences dialog.
             notice_text = _("These locations can be selected for deletion.")
             notice_icon = "edit-delete"
             notice_class = "bb-locations-notice-custom"
@@ -734,6 +782,8 @@ class PreferencesDialog:
 
         # create column views
         self.renderer0 = Gtk.CellRendererText()
+        # TRANSLATORS: Column header in the preferences dialog showing whether
+        # the item is a file or folder.
         self.column0 = Gtk.TreeViewColumn(_("Type"), self.renderer0, text=0)
         treeview.append_column(self.column0)
 
@@ -756,6 +806,7 @@ class PreferencesDialog:
         # buttons that modify the list
         def add_file_cb(button):
             """Callback for adding a file"""
+            # TRANSLATORS: Title of a file chooser dialog.
             title = _("Choose a file")
             pathname = GuiBasic.browse_file(self.parent, title)
             if pathname:
@@ -764,6 +815,7 @@ class PreferencesDialog:
 
         def add_folder_cb(button):
             """Callback for adding a folder"""
+            # TRANSLATORS: Title of a folder chooser dialog.
             title = _("Choose a folder")
             pathname = GuiBasic.browse_folder(self.parent, title,
                                               multiple=False, stock_button=Gtk.STOCK_ADD)

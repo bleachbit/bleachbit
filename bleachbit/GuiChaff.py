@@ -30,11 +30,24 @@ MAX_MB_COUNT = 999999
 MAX_FREE_SPACE_PCT = 99
 
 STOP_MODE_LABELS = {
+    # TRANSLATORS: Option in combo box to choose to stop after a number
+    # of files have been generated.
     STOP_MODE_FILE_COUNT: _("Number of files"),
+    # TRANSLATORS: Option in combo box to choose to stop after a total
+    # size (in megabytes) has been generated.
     STOP_MODE_TOTAL_SIZE: _("Size (MB)"),
+    # TRANSLATORS: Option in combo box to choose to stop when free space
+    # reaches a certain percentage.
+    # The percentage symbol (%) is a literal character, not a format
+    # placeholder.
     STOP_MODE_FREE_SPACE: _("Free space (%)"),
 }
 
+
+# TRANSLATORS: Used for (1) label for folder chooser button and
+# (2) error message shown in the infobar when the folder has not
+# been set. 'Select' is a verb.
+SELECT_DEST_FOLDER_MSG = _("Select destination folder")
 
 def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
     """Create a should_stop callback based on the stop mode.
@@ -142,6 +155,7 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
         raise ValueError(f'Invalid inspiration {inspiration}')
 
     if delete_when_finished and not abort_event.is_set():
+        # TRANSLATORS: Progress message shown while deleting chaff files.
         on_progress(0, msg=_('Deleting files\u2026'))
         count = len(generated_file_names)
         for i, fn in enumerate(generated_file_names):
@@ -161,9 +175,9 @@ class ChaffDialog(Gtk.Dialog):
 
     def _make_dialog(self, parent):
         """Make the main dialog"""
-# TRANSLATORS: BleachBit creates digital chaff like that is like the
-# physical chaff airplanes use to protect themselves from radar-guided
-# missiles. For more explanation, see the online documentation.
+        # TRANSLATORS: Title for dialog window.
+        # Digital chaff is like physical chaff that airplanes use to protect themselves
+        # from radar-guided missiles. For more explanation, see the online documentation.
         Gtk.Dialog.__init__(self, title=_("Make chaff"), transient_for=parent)
         Gtk.Dialog.set_modal(self, True)
         self.set_border_width(10)
@@ -243,7 +257,8 @@ class ChaffDialog(Gtk.Dialog):
         self.stop_value_spin.set_hexpand(True)
         grid.attach(self.stop_value_spin, 1, 2, 1, 1)
 
-        folder_label = Gtk.Label(label=_("Select destination folder"))
+
+        folder_label = Gtk.Label(label=SELECT_DEST_FOLDER_MSG)
         folder_label.set_xalign(0)
         grid.attach(folder_label, 0, 3, 1, 1)
         # The file chooser button displays a stock GTK icon. When some parts of GTK are not
@@ -258,13 +273,19 @@ class ChaffDialog(Gtk.Dialog):
         self.choose_folder_button.set_hexpand(True)
         grid.attach(self.choose_folder_button, 1, 3, 1, 1)
 
+        # TRANSLATORS: Label for the combo box that selects what to do
+        # when chaff generation is finished.
         finished_label = Gtk.Label(label=_("When finished"))
         finished_label.set_xalign(0)
         grid.attach(finished_label, 0, 4, 1, 1)
         self.when_finished_combo = Gtk.ComboBoxText()
         self.when_finished_combo.set_hexpand(True)
         self.combo_options = (
-            _('Delete without shredding'), _('Do not delete'))
+            # TRANSLATORS: Option in combo box to delete generated chaff
+            # files without shredding them.
+            _('Delete without shredding'),
+            # TRANSLATORS: Option in combo box to keep generated chaff files.
+            _('Do not delete'))
         for combo_option in self.combo_options:
             self.when_finished_combo.append_text(combo_option)
         self.when_finished_combo.set_active(0)  # Set default
@@ -405,7 +426,7 @@ class ChaffDialog(Gtk.Dialog):
         delete_when_finished = self.when_finished_combo.get_active() == 0
         inspiration = self.inspiration_combo.get_active()
         if not output_dir:
-            self.show_infobar(_("Select destination folder"),
+            self.show_infobar(SELECT_DEST_FOLDER_MSG,
                               Gtk.MessageType.ERROR)
             return
 
@@ -417,6 +438,8 @@ class ChaffDialog(Gtk.Dialog):
                     self._start_file_generation(
                         stop_mode, stop_value, inspiration, output_dir, delete_when_finished)
                 else:
+                    # TRANSLATORS: Error message shown when downloading
+                    # chaff models failed.
                     self.show_infobar(_("Download failed"),
                                       Gtk.MessageType.ERROR)
             self.download_models_gui(on_download_complete)
@@ -453,6 +476,7 @@ class ChaffDialog(Gtk.Dialog):
             # Use idle_add() because threads cannot make GDK calls.
             GLib.idle_add(_on_progress, fraction, msg, is_done)
 
+        # TRANSLATORS: Progress message shown while generating chaff files.
         msg = _('Generating files')
         logger.info(msg)
         self.progressbar.show()
