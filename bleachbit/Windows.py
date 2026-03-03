@@ -651,7 +651,9 @@ def is_junction(path):
         pass
 
     attr = windll.kernel32.GetFileAttributesW(path)
-    if attr == 0xFFFFFFFF:  # INVALID_FILE_ATTRIBUTES indicates GetFileAttributesW failed
+    # INVALID_FILE_ATTRIBUTES (0xFFFFFFFF) indicates GetFileAttributesW failed
+    # On 64-bit Python, ctypes may interpret this as signed -1 instead of unsigned 0xFFFFFFFF
+    if attr == 0xFFFFFFFF or attr == -1:
         error_code = windll.kernel32.GetLastError()
         logger.error(
             'GetFileAttributesW() failed for path %s with error code %d', path, error_code)

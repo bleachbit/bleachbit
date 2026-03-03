@@ -215,13 +215,12 @@ def physical_free_linux():
 def physical_free_windows():
     """Return physical free memory on Windows"""
 
-    from ctypes import c_long, c_ulonglong
-    from ctypes.wintypes import Structure, sizeof, windll, byref
+    from ctypes import c_ulong, c_ulonglong, Structure, sizeof, windll, byref
 
     class MEMORYSTATUSEX(Structure):
         _fields_ = [
-            ('dwLength', c_long),
-            ('dwMemoryLoad', c_long),
+            ('dwLength', c_ulong),
+            ('dwMemoryLoad', c_ulong),
             ('ullTotalPhys', c_ulonglong),
             ('ullAvailPhys', c_ulonglong),
             ('ullTotalPageFile', c_ulonglong),
