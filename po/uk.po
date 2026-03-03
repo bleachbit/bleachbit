@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-02-23 09:52-0700\n"
-"PO-Revision-Date: 2026-02-15 06:09+0000\n"
+"PO-Revision-Date: 2026-03-04 04:51+0000\n"
 "Last-Translator: Dan <jonweblin2205@protonmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/bleachbit/main/"
 "uk/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Launchpad-Export-Date: 2020-02-18 20:16+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -46,10 +46,6 @@ msgstr "Файли cookie"
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#, fuzzy
-#| msgid ""
-#| "Delete cookies, which contain information such as web site preferences, "
-#| "authentication, and tracking identification"
 msgid ""
 "Delete cookies, which contain information such as website preferences, "
 "authentication, and tracking identification"
@@ -263,8 +259,6 @@ msgstr "Історія форм"
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
-#, fuzzy
-#| msgid "A history of forms entered in web sites and in the Search bar"
 msgid "A history of forms entered in websites and in the Search bar"
 msgstr "Історія заповнених форм на вебсайтах та у пошуковій панелі"
 
@@ -304,7 +298,7 @@ msgstr "Відновлення сесії"
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Restores the previous session when the browser next starts."
-msgstr ""
+msgstr "Відновлює попередній сеанс при наступному запуску браузера."
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -475,10 +469,6 @@ msgid "Places"
 msgstr "Місця"
 
 #: ../cleaners/epiphany.xml
-#, fuzzy
-#| msgid ""
-#| "A database of URLs including bookmarks, favicons, and a history of "
-#| "visited web sites"
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "websites"
@@ -556,8 +546,6 @@ msgstr "Видалити поточну сесію"
 
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#, fuzzy
-#| msgid "A history of forms entered in web sites"
 msgid "A history of forms entered in websites"
 msgstr "Історія заповнених форм на вебсайтах"
 
@@ -604,9 +592,6 @@ msgstr "Синхронізація"
 
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
-#, fuzzy
-#| msgid ""
-#| "Delete the sync data, including web apps, and sign out of the browser"
 msgid "Delete the sync data (including web apps) and sign out of the browser"
 msgstr ""
 "Видалити синхронізовані дані, включно з вебзастосунками, та вийти з браузера"
@@ -755,10 +740,8 @@ msgid "Blocklists"
 msgstr "Списки блокування"
 
 #: ../cleaners/transmission.xml
-#, fuzzy
-#| msgid "Blocklists will need update to work."
 msgid "Blocklists will need to be updated to work."
-msgstr "Для роботи списків блокування потрібно оновлення."
+msgstr "Для роботи списків блокування потрібно їх оновити."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -1163,8 +1146,6 @@ msgstr ""
 #. can have multiple values. They're a way to make CleanerML
 #. files more concise.
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Deep scan does not support multi-value variable."
 msgid "Deep scan does not support multi-value variables."
 msgstr "Глибоке сканування не підтримує багатозначні змінні."
 
@@ -1534,10 +1515,8 @@ msgstr "Очищення пустого простору може зайняти
 
 #. TRANSLATORS: Error message on the CLI.
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "No work to do. Specify options."
 msgid "No operations selected. Specify cleaner options."
-msgstr "Нічого виконувати. Вкажіть опції."
+msgstr "Операції не вибрано. Вкажіть параметри очищення."
 
 #. TRANSLATORS: '--overwrite' and '--clean' are command line options
 #: ../bleachbit/CLI.py
@@ -1947,8 +1926,6 @@ msgid "Expert mode"
 msgstr "Експертний режим"
 
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Some GTK themes support do not support both light and dark modes."
 msgid "Some GTK themes do not support both light and dark modes."
 msgstr "Деякі теми GTK не підтримують одночасно світлий і темний режими."
 
@@ -2603,10 +2580,8 @@ msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
 msgstr "Доступно {bytes:,} байтів та {inodes:,} інодів для суперкористувача"
 
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Handled unknown error #0 while truncating file."
 msgid "Encountered unknown error #0 while truncating file."
-msgstr "Виявлено невідому помилку #0 при обрізанні файлу."
+msgstr "Під час обрізання файлу сталася невідома помилка #0."
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
