@@ -11,7 +11,7 @@ RUN apt-get update \
         build-essential \
         ca-certificates \
         cmake \
-        gettext \ # for tests.TestMakefile.MakefileTestCase.test_make_source
+        gettext \
         gobject-introspection \
         gir1.2-gtk-3.0 \
         gir1.2-notify-0.7 \
