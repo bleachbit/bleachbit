@@ -152,7 +152,6 @@ class GuiChaffTestCase(common.BleachbitTestCase):
 
     def test_stop_mode_changed(self):
         """Test that changing stop mode updates the label and adjustment"""
-        from bleachbit.GuiChaff import STOP_MODE_FILE_COUNT, STOP_MODE_TOTAL_SIZE, STOP_MODE_FREE_SPACE
         self.dialog.stop_mode_combo.set_active(STOP_MODE_TOTAL_SIZE)
         self.refresh_gui()
         self.assertIn('MB', self.dialog.stop_value_label.get_text())
@@ -250,21 +249,21 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         self.dialog.stop_value_spin.set_value(10)
         self.dialog.inspiration_combo.set_active(0)
 
-        # Initially abort button should be hidden
-        self.assertFalse(self.dialog.abort_button.get_visible())
+        # Initially, the abort button should be disabled.
+        self.assertFalse(self.dialog.abort_button.get_sensitive())
 
         # Start generation
         self.dialog.make_button.clicked()
         self.refresh_gui(0.1)
 
-        # Abort button should now be visible
-        self.assertTrue(self.dialog.abort_button.get_visible())
+        # The abort button should now be enabled.
+        self.assertTrue(self.dialog.abort_button.get_sensitive())
 
-        # Click abort
+        # Click abort.
         self.dialog.abort_button.clicked()
         self.refresh_gui()
 
-        # Verify abort event was set
+        # Verify that the abort event was set.
         abort_event = mock_make_files.call_args[0][6]
         self.assertIsInstance(abort_event, threading.Event)
         self.assertTrue(abort_event.is_set())

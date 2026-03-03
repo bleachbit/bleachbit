@@ -1185,9 +1185,15 @@ class SplashThread(Thread):
 
             text_rect = (text_left_margin,
                          (rect[3] - textmetrics['Height']) // 2, rect[2], rect[3])
+
+            # TRANSLATORS: Splash screen message shown while the application is starting.
+            # "Starting" is a present participle (ongoing action).
+            # To indicate an ongoing operation, include the ellipsis as literal
+            # Unicode (…) or as Unicode escape (\u2026).
+            splash_msg = _("Starting\u2026")
             win32gui.DrawText(
                 hDC,
-                _("BleachBit is starting...\n"),
+                splash_msg,
                 -1,
                 text_rect,
                 win32con.DT_WORDBREAK)

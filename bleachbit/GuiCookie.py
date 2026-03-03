@@ -281,7 +281,10 @@ class CookieManagerDialog(Gtk.Window):
         spinner_box.pack_start(self._spinner, False, False, 0)
         # TRANSLATORS: Status message shown while the cookie list is loading
         # in the cookie manager dialog window.
-        self._loading_label = Gtk.Label(label=_("Loading cookies…"))
+        # "Loading" is a present participle (ongoing action).
+        # To indicate an ongoing operation, include the ellipsis as literal
+        # Unicode (…) or as Unicode escape (\u2026).
+        self._loading_label = Gtk.Label(label=_("Loading cookies\u2026"))
         spinner_box.pack_start(self._loading_label, False, False, 0)
         vbox.pack_start(spinner_box, False, False, 0)
         vbox.reorder_child(spinner_box, vbox.get_children().index(scrolled))

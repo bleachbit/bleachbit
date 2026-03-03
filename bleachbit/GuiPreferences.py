@@ -26,6 +26,7 @@ Preferences dialog
 from bleachbit import GuiBasic
 from bleachbit import online_update_notification_enabled
 from bleachbit import ProtectedPath
+from bleachbit.Constant import EMPTY_SPACE_WARNING, MANAGE_COOKIES_TO_KEEP
 from bleachbit.GtkShim import Gtk, GLib
 from bleachbit.GuiCookie import CookieManagerDialog
 from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
@@ -48,7 +49,7 @@ EXPERT_MODE_DESCRIPTION = _(
 # TRANSLATORS: Used both as (1) a checkbox label in the preferences dialog
 # to bypass some safety guardails for advanced users and (2) the title of
 # dialog asking to confirm this choice.
-EXPERT_MODE_MSG=_('Expert mode')
+EXPERT_MODE_MSG = _('Expert mode')
 
 
 class PreferencesDialog:
@@ -477,8 +478,7 @@ class PreferencesDialog:
         notice.set_margin_end(12)
         vbox.pack_start(notice, False, True, 0)
 
-        notice2 = Gtk.Label(label=_(
-            "Wiping empty space removes traces of files that were deleted without shredding, but it will not free additional disk space. The process can take a very long time and may temporarily slow your computer. It is not necessary if your drive is protected with full-disk encryption. The method works best on traditional hard drives. On solid-state drives, it is less reliable, and frequent use contributes to wear."))
+        notice2 = Gtk.Label(label=EMPTY_SPACE_WARNING)
         notice2.set_line_wrap(True)
         notice2.set_xalign(0.0)
         notice2.set_margin_start(12)
@@ -521,8 +521,8 @@ class PreferencesDialog:
     def __languages_page(self):
         """Return widget containing the languages page"""
 
-        def preserve_toggled_cb(cell, path, liststore):
-            """Callback for toggling the 'preserve' column"""
+        def keep_lang_toggled_cb(cell, path, liststore):
+            """Callback for toggling the 'keep' column"""
             __iter = liststore.get_iter_from_string(path)
             value = not liststore.get_value(__iter, 0)
             liststore.set(__iter, 0, value)
@@ -547,10 +547,10 @@ class PreferencesDialog:
         # create column views
         self.renderer0 = Gtk.CellRendererToggle()
         self.renderer0.set_property('activatable', True)
-        self.renderer0.connect('toggled', preserve_toggled_cb, liststore)
+        self.renderer0.connect('toggled', keep_lang_toggled_cb, liststore)
         # TRANSLATORS: Column header in the languages treeview.
-        # This column controls whether to preserve (keep) the language.
-        self.column0 = Gtk.TreeViewColumn(_("Preserve"),
+        # This column controls whether to keep the language.
+        self.column0 = Gtk.TreeViewColumn(_("Keep"),
             self.renderer0, active=0)
         treeview.append_column(self.column0)
 
@@ -717,7 +717,7 @@ class PreferencesDialog:
 
         if LOCATIONS_WHITELIST == page_type:
             button_cookie_manager = Gtk.Button.new_with_label(
-                label=_("Manage cookies to keep..."))
+                label=MANAGE_COOKIES_TO_KEEP)
             button_cookie_manager.set_halign(Gtk.Align.START)
             button_cookie_manager.set_margin_bottom(6)
             button_cookie_manager.connect(

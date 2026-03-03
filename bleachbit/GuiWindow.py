@@ -12,17 +12,29 @@ import time
 import bleachbit
 from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path
 from bleachbit.Cleaner import backends, register_cleaners
+from bleachbit.Constant import ABORT_BUTTON_LABEL, MANAGE_COOKIES_TO_KEEP
 from bleachbit.GUI import logger
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
 from bleachbit.GuiUtil import get_font_size_from_name, get_window_info, notify, threaded
-from bleachbit.Language import get_text as _
+from bleachbit.Language import get_text as _, pget_text as _p
 from bleachbit.Options import options
 from bleachbit.Wipe import detect_orphaned_wipe_files
 
 if os.name == 'nt':
     from bleachbit import Windows
+
+
+# TRANSLATORS: Button label on the headerbar and context menu item
+# in the treeview.
+# 'Preview' is a verb.
+PREVIEW_MSG = _('Preview')
+
+# TRANSLATORS: Button label on the headerbar and context menu item
+# in the treeview.
+# 'Clean' is a verb.
+CLEAN_MSG = _('Clean')
 
 # Ensure GTK is available for this GUI module
 require_gtk()
@@ -637,8 +649,10 @@ class GUI(Gtk.ApplicationWindow):
         """Callback for when Worker is done"""
         self.progressbar.set_text("")
         self.progressbar.set_fraction(1)
-        # TRANSLATORS: Status message shown on the progress bar.
-        self.progressbar.set_text(_("Done."))
+        # TRANSLATORS: Status message shown on the progress bar and in a popup
+        # notification.
+        done_msg = _("Done.")
+        self.progressbar.set_text(done_msg)
         self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
         self.set_sensitive(True)
 
@@ -654,8 +668,7 @@ class GUI(Gtk.ApplicationWindow):
         logger.debug('elapsed time: %d seconds', elapsed)
         if elapsed < 10 or self.is_active():
             return
-        # TRANSLATORS: Notification message.
-        notify(_("Done."))
+        notify(done_msg)
 
     def create_operations_box(self):
         """Create and return the operations box (which holds a tree view)"""
@@ -829,13 +842,11 @@ class GUI(Gtk.ApplicationWindow):
         # make a menu
         menu = Gtk.Menu()
         menu.connect('hide', lambda widget: widget.detach())
-        # TRANSLATORS: Label in a context menu. 'Preview' is a verb.
-        preview_item = Gtk.MenuItem(label=_("Preview"))
+        preview_item = Gtk.MenuItem(label=PREVIEW_MSG)
         preview_item.connect('activate', self.cb_run_option,
                              False, cleaner_id, option_id)
         menu.append(preview_item)
-        # TRANSLATORS: Label in a context menu. 'Clean' is a verb.
-        clean_item = Gtk.MenuItem(label=_("Clean"))
+        clean_item = Gtk.MenuItem(label=CLEAN_MSG)
         clean_item.connect('activate', self.cb_run_option,
                            True, cleaner_id, option_id)
         menu.append(clean_item)
@@ -843,16 +854,17 @@ class GUI(Gtk.ApplicationWindow):
         # Check if this option has a cookie command
         if self._option_has_cookie_command(cleaner_id, option_id):
             menu.append(Gtk.SeparatorMenuItem())
-            # TRANSLATORS: Label in a context menu.
-            cookie_item = Gtk.MenuItem(label=_("Manage Cookies"))
+            cookie_item = Gtk.MenuItem(label=MANAGE_COOKIES_TO_KEEP)
             cookie_item.connect('activate', self.cb_manage_cookies)
             menu.append(cookie_item)
 
         # Check if this is the system.custom option
         if cleaner_id == 'system' and option_id == 'custom':
             menu.append(Gtk.SeparatorMenuItem())
-            # TRANSLATORS: this is the context menu
-            custom_paths_item = Gtk.MenuItem(label=_("Manage custom paths"))
+            # TRANSLATORS: Context menu item in the tree view that opens the preferences dialog.
+            # Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
+            custom_paths_label = _("Manage custom paths\u2026")
+            custom_paths_item = Gtk.MenuItem(label=custom_paths_label)
             custom_paths_item.connect('activate', self.cb_manage_custom_paths)
             menu.append(custom_paths_item)
 
@@ -927,9 +939,7 @@ class GUI(Gtk.ApplicationWindow):
     def update_headerbar_labels(self):
         """Update the labels and tooltips in the headerbar buttons"""
         # Preview button
-        # TRANSLATORS: Button label on the headerbar.
-        # 'Preview' is a verb.
-        self.preview_button.set_label(_('Preview'))
+        self.preview_button.set_label(PREVIEW_MSG)
         self.preview_button.set_tooltip_text(
             # TRANSLATORS: Tooltip for the preview button on the headerbar.
             # 'Preview' is a verb, and 'selected operations' refers to
@@ -937,19 +947,14 @@ class GUI(Gtk.ApplicationWindow):
             _("Preview files in the selected operations (without deleting any files)"))
 
         # Clean button
-        # TRANSLATORS: Button label on the headerbar.
-        # 'Clean' is a verb.
-        self.run_button.set_label(_('Clean'))
+        self.run_button.set_label(CLEAN_MSG)
         self.run_button.set_tooltip_text(
             # TRANSLATORS: Tooltip for the clean button on the headerbar.
             # 'Clean' is a verb, and 'operations' are cleaning options (e.g.,
             #  Firefox - Cache).
             _("Clean files in the selected operations"))
 
-        # Stop button
-        # TRANSLATORS: Button label on the headerbar.
-        # 'Abort' is a verb.
-        self.stop_button.set_label(_('Abort'))
+        self.stop_button.set_label(ABORT_BUTTON_LABEL)
         self.stop_button.set_tooltip_text(
             # TRANSLATORS: Tooltip for the abort button on the headerbar,
             # and 'abort' ia a verb.
@@ -1192,10 +1197,13 @@ class GUI(Gtk.ApplicationWindow):
     @threaded
     def check_online_updates(self):
         """Check for software updates in background"""
+        # TRANSLATORS: Error message shown when checking for updates fails.
+        # %s is the error details.
+        log_msg = _("Error when checking for updates: %s")
         try:
             from bleachbit import Update
         except ImportError as e:
-            logger.error("Cannot check online for updates: %s", e)
+            logger.error(log_msg, e)
             return
         try:
             updates = Update.check_updates(options.get('check_beta'),
@@ -1203,8 +1211,8 @@ class GUI(Gtk.ApplicationWindow):
                                            self.append_text,
                                            lambda: GLib.idle_add(self.cb_refresh_operations))
 
-        except Exception:
-            logger.exception(_("Error when checking for updates: "))
+        except Exception as e:
+            logger.exception(log_msg, e)
         else:
             self._available_updates = updates
 

@@ -35,6 +35,7 @@ from itertools import product
 # first party imports
 from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod  # mod=module
 from bleachbit import fs_scan_re_flags
+from bleachbit.Constant import CLEAN_FILE_LABEL
 from bleachbit.Cookie import COOKIE_KEEP_LIST_FILENAME
 from bleachbit.Language import get_text as _
 
@@ -45,12 +46,6 @@ if os.name == 'nt':
     from bleachbit import Windows
 
 logger = logging.getLogger(__name__)
-
-# This string is used several times. Listing it here helps with translation.
-# TRANSLATORS: This is the name of a cleaning action. 'Clean' is a verb.
-# It shows in the log of actions that would be performed (preview mode) or
-# in the log of actions that were performed (clean mode).
-CLEAN_FILE_LABEL = _('Clean file')
 
 
 def has_glob(s):

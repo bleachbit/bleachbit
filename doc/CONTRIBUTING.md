@@ -67,3 +67,66 @@ Please consider reviewing someone else's pull requests and asking him or her to 
 ````autopep8 -i bleachbit/Action.py````
 * Follow other best practices such as they relate to readability, documentation, error handling, and performance.
 * See OpenStack [Git Commit Good Practice](https://wiki.openstack.org/wiki/GitCommitMessages) for advice on writing good Git commit messages. In particular, the first line of the commit message is important.
+
+## Messages in the user interface
+
+Scenarios to use an ellipsis:
+- An ongoing action, such as "Downloading...".
+- A button or context menu item that opens a dialog requiring user interaction.
+  (Button that immediately performs action does not use ellipsis.)
+
+For ongoing action, use the present participle (e.g., "Downloading...") with
+an ellipsis instead of "Download in progress".
+
+Messages default to sentence case (with just the first word capitalized),
+except for window titles and proper nouns that use title case instead.
+
+### Writing localizable strings
+
+For messages with multiple placeholders, use named placeholders, so the order
+can be changed.
+
+To avoid extra work for translators, reuse an existing message when possible.
+Check `po/bleachbit.pot` for existing messages.
+
+### Translation hints
+
+Help translators by including a helpful translator comment. Types of
+information to include:
+- UI element type (e.g., button label).
+- Clarification for parts of speech (e.g., "file" could be a verb or noun).
+- Clarification regarding any unique words.
+- Clarification regarding any placeholders.
+
+Omit obvious information, and do not repeat the string itself.
+
+In Python, the hint must start with the capitalized keyword TRANSLATORS. It
+must be on the previous row before the string to translate. It is okay for
+the translation hint comment to be multiple lines.
+
+The following hint would not be detected because of the extra line between
+the hint and localizable string.
+
+```py
+# TRANSLATORS: Title of a folder chooser dialog.
+show_the_browse_folder_dialog(self.window,
+    _("Choose folder to shred"))
+```
+
+In this example, the hint would apply only to the first string,
+and there would be no hint for the second string.
+
+```py
+# TRANSLATORS: Noun indicating file type - either 'File' or 'Folder'.
+type_str = _('File') if path_type == 'file' else _('Folder')
+```
+
+The following works:
+
+```py
+show_the_browse_folder_dialog(self.window,
+# TRANSLATORS: Title of a folder chooser dialog.
+# More translation hint on a second line.
+# Third line of hint.
+    _("Choose folder to shred"))
+```

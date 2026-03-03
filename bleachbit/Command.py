@@ -26,8 +26,9 @@ else is counted as special commands: run any external process, edit
 JSON or INI file, delete registry key, edit SQLite3 database, etc.
 """
 
-from bleachbit.Language import get_text as _
 from bleachbit import FileUtilities
+from bleachbit.Constant import CLEAN_FILE_LABEL
+from bleachbit.Language import get_text as _
 
 import logging
 import os
@@ -40,8 +41,6 @@ else:
     from bleachbit.General import WindowsError
 
 logger = logging.getLogger(__name__)
-
-
 
 
 def ret_keep_list(path):
@@ -242,10 +241,6 @@ class Ini:
     def execute(self, really_delete):
         """Make changes and return results"""
 
-        # Import here to avoid a circular import.
-        # pylint: disable=import-outside-toplevel
-        from bleachbit.Action import CLEAN_FILE_LABEL
-
         if FileUtilities.whitelisted(self.path):
             yield ret_keep_list(self.path)
             return
@@ -279,10 +274,6 @@ class Json:
 
     def execute(self, really_delete):
         """Make changes and return results"""
-
-        # Import here to avoid a circular import.
-        # pylint: disable=import-outside-toplevel
-        from bleachbit.Action import CLEAN_FILE_LABEL
 
         if FileUtilities.whitelisted(self.path):
             yield ret_keep_list(self.path)

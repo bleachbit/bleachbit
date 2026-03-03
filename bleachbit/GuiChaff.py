@@ -13,9 +13,11 @@ import os
 import shutil
 import threading
 
-from bleachbit.Language import get_text as _
-from bleachbit.GtkShim import Gtk, GLib
+
 from bleachbit.Chaff import generate_emails, generate_2600
+from bleachbit.Constant import ABORT_BUTTON_LABEL
+from bleachbit.GtkShim import Gtk, GLib
+from bleachbit.Language import get_text as _
 
 
 logger = logging.getLogger(__name__)
@@ -48,6 +50,7 @@ STOP_MODE_LABELS = {
 # (2) error message shown in the infobar when the folder has not
 # been set. 'Select' is a verb.
 SELECT_DEST_FOLDER_MSG = _("Select destination folder")
+
 
 def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
     """Create a should_stop callback based on the stop mode.
@@ -156,6 +159,9 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
 
     if delete_when_finished and not abort_event.is_set():
         # TRANSLATORS: Progress message shown while deleting chaff files.
+        # 'Deleting files' is a present participle.
+        # To indicate an ongoing operation, include the ellipsis as literal
+        # Unicode (…) or as Unicode escape (\u2026).
         on_progress(0, msg=_('Deleting files\u2026'))
         count = len(generated_file_names)
         for i, fn in enumerate(generated_file_names):
@@ -257,7 +263,6 @@ class ChaffDialog(Gtk.Dialog):
         self.stop_value_spin.set_hexpand(True)
         grid.attach(self.stop_value_spin, 1, 2, 1, 1)
 
-
         folder_label = Gtk.Label(label=SELECT_DEST_FOLDER_MSG)
         folder_label.set_xalign(0)
         grid.attach(folder_label, 0, 3, 1, 1)
@@ -301,8 +306,13 @@ class ChaffDialog(Gtk.Dialog):
             self._download_spinner, False, False, 0)
         # TRANSLATORS: This is a label in a dialog shown when the user
         # clicks the button to download models for chaff generation.
-        self._download_label = Gtk.Label(
-            label=_("Downloading inspiration content\u2026"))
+        # 'Downloading' is a present participle.
+        # 'Inspiration content' refers to source documents from which
+        # random text will be generated.
+        # To indicate an ongoing operation, include the ellipsis as literal
+        # Unicode (…) or as Unicode escape (\u2026).
+        download_label_str = _("Downloading inspiration content\u2026")
+        self._download_label = Gtk.Label(label=download_label_str)
         self._download_spinner_box.pack_start(
             self._download_label, False, False, 0)
         box.pack_start(self._download_spinner_box, False, False, 0)
@@ -320,9 +330,7 @@ class ChaffDialog(Gtk.Dialog):
         self.make_button.connect('clicked', self.on_make_files)
         box.pack_start(self.make_button, False, False, 0)
 
-        # TRANSLATORS: Button label to abort chaff file generation
-        # while it is in progress.
-        self.abort_button = Gtk.Button(label=_("Abort"))
+        self.abort_button = Gtk.Button(label=ABORT_BUTTON_LABEL)
         self.abort_button.get_style_context().add_class('destructive-action')
         self.abort_button.connect('clicked', self._on_abort)
         box.pack_start(self.abort_button, False, False, 0)
@@ -477,7 +485,10 @@ class ChaffDialog(Gtk.Dialog):
             GLib.idle_add(_on_progress, fraction, msg, is_done)
 
         # TRANSLATORS: Progress message shown while generating chaff files.
-        msg = _('Generating files')
+        # 'Generating' is a present participle.
+        # To indicate an ongoing operation, include the ellipsis as literal
+        # Unicode (…) or as Unicode escape (\u2026).
+        msg = _('Generating files\u2026')
         logger.info(msg)
         self.progressbar.show()
         self.progressbar.set_text(msg)
