@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-23 09:52-0700\n"
+"POT-Creation-Date: 2026-03-02 23:12-0700\n"
 "PO-Revision-Date: 2024-02-29 15:02+0000\n"
 "Last-Translator: Scrambled777 <weblate.scrambled777@simplelogin.com>\n"
 "Language-Team: Hindi <https://hosted.weblate.org/projects/bleachbit/main/hi/"
@@ -1319,17 +1319,6 @@ msgstr ""
 msgid "Wipe empty space to hide deleted files"
 msgstr "डिलीट की गई फाइलों को छिपाने के लिए डिस्क में जगह ओवरराइट करें"
 
-#: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
-#: ../bleachbit/Worker.py
-msgid ""
-"Wiping empty space removes traces of files that were deleted without "
-"shredding, but it will not free additional disk space. The process can take "
-"a very long time and may temporarily slow your computer. It is not necessary "
-"if your drive is protected with full-disk encryption. The method works best "
-"on traditional hard drives. On solid-state drives, it is less reliable, and "
-"frequent use contributes to wear."
-msgstr ""
-
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
 msgstr "सामान्य रूप से सिस्टम"
@@ -1346,12 +1335,26 @@ msgstr "सिस्टम"
 msgid "Wipe empty space in %s"
 msgstr ""
 
+#. TRANSLATORS: Progress message shown typically on startup.
+#. 'Native' refers to the .xml cleaners designed for this application,
+#. as contrasted to Winapp2.ini, which is native to another application.
+#. 'Loading' is a present participle.
+#. To indicate an ongoing operation, include the ellipsis as literal
+#. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-msgid "Loading native cleaners."
+#, fuzzy
+#| msgid "Loading native cleaners."
+msgid "Loading native cleaners…"
 msgstr "नेटिव क्लीनर लोड कर रहा है।"
 
+#. TRANSLATORS: Progress message shown typically on startup.
+#. 'Importing' is a present participle.
+#. To indicate an ongoing operation, include the ellipsis as literal
+#. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-msgid "Importing cleaners from Winapp2.ini."
+#, fuzzy
+#| msgid "Importing cleaners from Winapp2.ini."
+msgid "Importing cleaners from Winapp2.ini…"
 msgstr "Winapp2.ini से क्लीनर इम्पोर्ट कर रहा है।"
 
 #: ../bleachbit/Cleaner.py
@@ -1519,15 +1522,8 @@ msgstr "करने के लिए कोई काम नहीं है।
 msgid "--overwrite is intended only for use with --clean"
 msgstr "--overwrite केवल --clean के साथ उपयोग किया जाना चाहिए"
 
-#. TRANSLATORS: This is the name of a cleaning action. 'Clean' is a verb.
-#. It shows in the log of actions that would be performed (preview mode) or
-#. in the log of actions that were performed (clean mode).
-#: ../bleachbit/Command.py
-msgid "Clean file"
-msgstr "फाइल साफ करें"
-
 #. TRANSLATORS: This is the label in the log indicating a path
-#. was skipped because it matches the whitelist
+#. was skipped because it matches the keep list
 #: ../bleachbit/Command.py
 msgid "Skip"
 msgstr "छोड़ें"
@@ -1562,6 +1558,43 @@ msgstr "छोटा करें"
 #: ../bleachbit/Command.py
 msgid "Delete registry key"
 msgstr "रजिस्ट्री की डिलीट करें"
+
+#. TRANSLATORS: Button label on (1) the headerbar and (2) the chaff dialog.
+#. 'Abort' is a verb.
+#: ../bleachbit/Constant.py
+msgid "Abort"
+msgstr "निरस्त करें"
+
+#. TRANSLATORS: This is the name of a cleaning action. 'Clean' is a verb.
+#. It shows in the log of actions that would be performed (preview mode) or
+#. in the log of actions that are performed (clean mode).
+#: ../bleachbit/Constant.py
+msgid "Clean file"
+msgstr "फाइल साफ करें"
+
+#. TRANSLATORS: This message is used in two places to open the cookie preference
+#. manager dialog.
+#. (1) Context menu in the tree view.
+#. (2) Button in the preferences dialogs
+#. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
+#: ../bleachbit/Constant.py
+#, fuzzy
+#| msgid "Cookies"
+msgid "Manage cookies to keep…"
+msgstr "कुकीज़"
+
+#. TRANSLATORS: This message is used in three places (1) label at top of the
+#. preferences dialog (2) confirmation dialog when enabling the cleaning option
+#. (3) log message when starting to clean empty space.
+#: ../bleachbit/Constant.py
+msgid ""
+"Wiping empty space removes traces of files that were deleted without "
+"shredding, but it will not free additional disk space. The process can take "
+"a very long time and may temporarily slow your computer. It is not necessary "
+"if your drive is protected with full-disk encryption. The method works best "
+"on traditional hard drives. On solid-state drives, it is less reliable, and "
+"frequent use contributes to wear."
+msgstr ""
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -1759,27 +1792,66 @@ msgid "Open web browser to %s?"
 msgstr "वेब ब्राउज़र को %s में खोलना है?"
 
 #. TRANSLATORS: Title of a confirmation dialog.
+#. TRANSLATORS: Title of confirmation dialog for deleting orphaned wipe files.
 #: ../bleachbit/GuiBasic.py ../bleachbit/GuiWindow.py
 msgid "Confirm"
 msgstr "पुष्टि करें"
 
+#. TRANSLATORS: Option in combo box to choose to stop after a number
+#. of files have been generated.
 #: ../bleachbit/GuiChaff.py
-msgid "Deleting files"
+msgid "Number of files"
+msgstr "फाइलों की संख्या"
+
+#. TRANSLATORS: Option in combo box to choose to stop after a total
+#. size (in megabytes) has been generated.
+#: ../bleachbit/GuiChaff.py
+#, fuzzy
+#| msgid "Size"
+msgid "Size (MB)"
+msgstr "साइज़"
+
+#. TRANSLATORS: Option in combo box to choose to stop when free space
+#. reaches a certain percentage.
+#. The percentage symbol (%) is a literal character, not a format
+#. placeholder.
+#: ../bleachbit/GuiChaff.py
+#, fuzzy
+#| msgid "Free disk space"
+msgid "Free space (%)"
+msgstr "डिस्क में जगह खाली करें"
+
+#. TRANSLATORS: Used for (1) label for folder chooser button and
+#. (2) error message shown in the infobar when the folder has not
+#. been set. 'Select' is a verb.
+#: ../bleachbit/GuiChaff.py
+msgid "Select destination folder"
+msgstr "डेस्टिनेशन फोल्डर सिलेक्ट करें"
+
+#. TRANSLATORS: Progress message shown while deleting chaff files.
+#. 'Deleting files' is a present participle.
+#. To indicate an ongoing operation, include the ellipsis as literal
+#. Unicode (…) or as Unicode escape (\u2026).
+#: ../bleachbit/GuiChaff.py
+#, fuzzy
+#| msgid "Deleting files"
+msgid "Deleting files…"
 msgstr "फ़ाइलें डिलीट कर रहा है"
 
-#. TRANSLATORS: BleachBit creates digital chaff like that is like the
-#. physical chaff airplanes use to protect themselves from radar-guided
-#. missiles. For more explanation, see the online documentation.
+#. TRANSLATORS: Title for dialog window.
+#. Digital chaff is like physical chaff that airplanes use to protect themselves
+#. from radar-guided missiles. For more explanation, see the online documentation.
 #: ../bleachbit/GuiChaff.py
 msgid "Make chaff"
 msgstr "शाफ़ (डिजिटल कवच) बनाएँ"
 
+#. TRANSLATORS: Label at the top of the chaff dialog
 #: ../bleachbit/GuiChaff.py
 msgid "Make randomly-generated messages inspired by documents."
 msgstr "रैंडम मैसेज बनाएँ जो दस्तावेजों पर आधारित हों।"
 
-#. TRANSLATORS: Inspiration is a choice of documents from which random
-#. text will be generated.
+#. TRANSLATORS: Label for the inspiration combo box.
+#. 'Inspiration' is a choice of documents from which random text will be generated.
 #: ../bleachbit/GuiChaff.py
 msgid "Inspiration"
 msgstr "प्रेरणा"
@@ -1792,27 +1864,39 @@ msgstr "2600 मैगज़ीन"
 msgid "Hillary Clinton's emails"
 msgstr "हिलेरी क्लिंटन की ईमेल"
 
+#. TRANSLATORS: Label for the combo box that selects when to stop
+#. generating chaff files.
 #: ../bleachbit/GuiChaff.py
-msgid "Number of files"
-msgstr "फाइलों की संख्या"
+msgid "Stop after"
+msgstr ""
 
-#. TRANSLATORS: This is an error message shown in an infobar
-#. when the user has not selected a destination folder.
-#: ../bleachbit/GuiChaff.py
-msgid "Select destination folder"
-msgstr "डेस्टिनेशन फोल्डर सिलेक्ट करें"
-
+#. TRANSLATORS: Label for the combo box that selects what to do
+#. when chaff generation is finished.
 #: ../bleachbit/GuiChaff.py
 msgid "When finished"
 msgstr "जब खत्म हो जाए"
 
+#. TRANSLATORS: Option in combo box to delete generated chaff
+#. files without shredding them.
 #: ../bleachbit/GuiChaff.py
 msgid "Delete without shredding"
 msgstr "बिना श्रेडिंग किए डिलीट करें"
 
+#. TRANSLATORS: Option in combo box to keep generated chaff files.
 #: ../bleachbit/GuiChaff.py
 msgid "Do not delete"
 msgstr "डिलीट न करें"
+
+#. TRANSLATORS: This is a label in a dialog shown when the user
+#. clicks the button to download models for chaff generation.
+#. 'Downloading' is a present participle.
+#. 'Inspiration content' refers to source documents from which
+#. random text will be generated.
+#. To indicate an ongoing operation, include the ellipsis as literal
+#. Unicode (…) or as Unicode escape (\u2026).
+#: ../bleachbit/GuiChaff.py
+msgid "Downloading inspiration content…"
+msgstr ""
 
 #. TRANSLATORS: Button label in a dialog window to start making
 #. chaff files.
@@ -1820,13 +1904,34 @@ msgstr "डिलीट न करें"
 msgid "Make files"
 msgstr "फाइलें बनाएँ"
 
-#. TRANSLATORS: The question shows in a dialog.
+#. TRANSLATORS: Error message shown when downloading
+#. chaff models failed.
 #: ../bleachbit/GuiChaff.py
-msgid "Download data needed for chaff generator?"
-msgstr "शाफ़ (डिजिटल कवच) जनरेटर के लिए डाटा डाऊनलोड करना है?"
+#, fuzzy
+#| msgid "Downloading URL failed: %s"
+msgid "Download failed"
+msgstr "URL डाउनलोड विफल रहा: %s"
 
+#. TRANSLATORS: Notification shown in an infobar when
+#. chaff file generation is aborted by the user.
 #: ../bleachbit/GuiChaff.py
-msgid "Generating files"
+msgid "Chaff generation aborted"
+msgstr ""
+
+#. TRANSLATORS: Notification shown in an infobar when chaff file generation
+#. is complete.
+#: ../bleachbit/GuiChaff.py
+msgid "Chaff generation complete"
+msgstr ""
+
+#. TRANSLATORS: Progress message shown while generating chaff files.
+#. 'Generating' is a present participle.
+#. To indicate an ongoing operation, include the ellipsis as literal
+#. Unicode (…) or as Unicode escape (\u2026).
+#: ../bleachbit/GuiChaff.py
+#, fuzzy
+#| msgid "Generating files"
+msgid "Generating files…"
 msgstr "फाइलें बना रहा है"
 
 #. TRANSLATORS: Title of the dialog to manage cookies to keep
@@ -1882,11 +1987,31 @@ msgstr ""
 msgid "Keep Selected"
 msgstr ""
 
+#. TRANSLATORS: Status message shown while the cookie list is loading
+#. in the cookie manager dialog window.
+#. "Loading" is a present participle (ongoing action).
+#. To indicate an ongoing operation, include the ellipsis as literal
+#. Unicode (…) or as Unicode escape (\u2026).
+#: ../bleachbit/GuiCookie.py
+#, fuzzy
+#| msgid "Cookies"
+msgid "Loading cookies…"
+msgstr "कुकीज़"
+
 #: ../bleachbit/GuiPreferences.py
 msgid ""
 "Expert mode enables advanced features and relaxes guardrails. Use extra "
 "caution in expert mode."
 msgstr ""
+
+#. TRANSLATORS: Used both as (1) a checkbox label in the preferences dialog
+#. to bypass some safety guardails for advanced users and (2) the title of
+#. dialog asking to confirm this choice.
+#: ../bleachbit/GuiPreferences.py
+#, fuzzy
+#| msgid "Dark mode"
+msgid "Expert mode"
+msgstr "डार्क मोड"
 
 #: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
 msgid "Preferences"
@@ -1908,20 +2033,18 @@ msgstr "भाषाएँ"
 msgid "Keep list"
 msgstr ""
 
-#: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Dark mode"
-msgid "Expert mode"
-msgstr "डार्क मोड"
-
+#. TRANSLATORS: Notice shown in an infobar when toggling
+#. dark mode on Linux.
 #: ../bleachbit/GuiPreferences.py
 msgid "Some GTK themes do not support both light and dark modes."
 msgstr ""
 
+#. TRANSLATORS: Success message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
 msgid "Warning confirmations reset."
 msgstr ""
 
+#. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
 msgstr "इंटरनेट के जरिए समय-समय पर सॉफ्टवेयर अपडेट चेक करें"
@@ -1934,30 +2057,39 @@ msgstr ""
 "यदि कोई अपडेट मिलेगा तो आपको उसकी जानकारी देखने के लिए विकल्प दिया जाएगा। इसके बाद "
 "आप इसे मैनुअल डाऊनलोड करके अपडेट इन्स्टाल कर सकते हैं।"
 
+#. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Check for new beta releases"
 msgstr "नए बीटा रिलीज़ के लिए चेक करें"
 
+#. TRANSLATORS: Checkbox label in the preferences dialog.
+#. Winapp2.ini is a set of cleaning rules from this project:
+#. https://github.com/MoscaDotTo/Winapp2
 #: ../bleachbit/GuiPreferences.py
 msgid "Download and update cleaners from community (winapp2.ini)"
 msgstr "कम्यूनिटी से क्लीनर डाऊनलोड और अपडेट करें (winapp2.ini)"
 
+#. TRANSLATORS: Checkbutton label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
 msgstr ""
 
+#. TRANSLATORS: Tooltip explaining the auto-detect language option.
 #: ../bleachbit/GuiPreferences.py
 #, fuzzy
 #| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
 msgstr "भाषा %s को अपने-आप प्रिसर्व कर रहा है।"
 
+#. TRANSLATORS: Label for the language selection dropdown.
 #: ../bleachbit/GuiPreferences.py
 #, fuzzy
 #| msgid "Languages"
 msgid "Language:"
 msgstr "भाषाएँ"
 
+#. TRANSLATORS: Notice shown in an infobar after changing
+#. language in the preferences.
 #: ../bleachbit/GuiPreferences.py
 msgid "Restart BleachBit for full effect."
 msgstr ""
@@ -1982,34 +2114,44 @@ msgstr ""
 msgid "Exit after cleaning"
 msgstr "क्लीनिंग के बाद एक्ज़िट करें"
 
+#. TRANSLATORS: Button label in the preferences. 'Reset' is a verb.
 #: ../bleachbit/GuiPreferences.py
 #, fuzzy
 #| msgid "Delete confirmation"
 msgid "Reset warning confirmations"
 msgstr "कॉन्फ़िगुरेशन डिलीट करें"
 
+#. TRANSLATORS: Checkbox label in the preferences.
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
 msgstr "SI (1 kB = 1000 बाइट) की जगह IEC साइज़ (1 KiB = 1024 बाइट) उपयोग करें"
 
+#. TRANSLATORS: Checkbox label in the preferences to enable
+#. remembering the window size and position across sessions.
 #: ../bleachbit/GuiPreferences.py
 msgid "Remember window geometry"
 msgstr "विंडो ज्यामिति याद रखें"
 
+#. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Show debug messages"
 msgstr "डीबग मैसेज दिखाएँ"
 
+#. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 #, fuzzy
 #| msgid "Add shred context menu option (KDE Plasma specific)"
 msgid "Add the shred context menu to KDE Plasma"
 msgstr "श्रेड प्रसंग मेनू विकल्प जोड़ें (KDE Plasma विशिष्ट)"
 
+#. TRANSLATORS: Checkbox label in the preferences dialog to enable
+#. dark mode.
 #: ../bleachbit/GuiPreferences.py
 msgid "Dark mode"
 msgstr "डार्क मोड"
 
+#. TRANSLATORS: Checkbox label in the preferences dialog to enable
+#. the Windows 10 visual theme.
 #: ../bleachbit/GuiPreferences.py
 msgid "Windows 10 theme"
 msgstr "Windows 10 थीम"
@@ -2037,42 +2179,59 @@ msgctxt "button"
 msgid "Remove"
 msgstr "हटाएँ"
 
+#. TRANSLATORS: Warning label on the languages page of the
+#. preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "All languages will be deleted except those checked."
 msgstr "टिक की गई भाषा को छोड़कर सभी भाषाओं को डिलीट कर दिया जाएगा।"
 
+#. TRANSLATORS: Column header in the languages treeview.
+#. This column controls whether to keep the language.
 #: ../bleachbit/GuiPreferences.py
-msgid "Preserve"
-msgstr "प्रिसर्व करें"
+msgid "Keep"
+msgstr ""
 
+#. TRANSLATORS: Column header in the languages treeview showing the
+#. language code (e.g., 'en_US').
 #: ../bleachbit/GuiPreferences.py
 msgid "Code"
 msgstr "कोड"
 
+#. TRANSLATORS: Column header in the languages treeview showing the
+#. native name of the language.
+#. TRANSLATORS: Column header for the cleaner name.
+#. Used in the tree view on the main screen.
+#. 'Name' is a noun.
 #: ../bleachbit/GuiPreferences.py ../bleachbit/GuiTreeModels.py
 msgid "Name"
 msgstr "नाम"
 
+#. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the keep list."
 msgstr ""
 
+#. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
 msgstr ""
 
+#. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
 msgid "This path is protected. To bypass protection, enable expert mode."
 msgstr ""
 
+#. TRANSLATORS: Title of warning dialog shown when adding a protected path.
 #: ../bleachbit/GuiPreferences.py
 msgid "Protected Path"
 msgstr ""
 
+#. TRANSLATORS: Noun used as a column header in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "File"
 msgstr "फ़ाइल"
 
+#. TRANSLATORS: Noun used as a column header in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Folder"
 msgstr "फोल्डर"
@@ -2091,20 +2250,21 @@ msgstr ""
 msgid "Removed: %s"
 msgstr "हटाएँ"
 
-#: ../bleachbit/GuiPreferences.py
-msgid "Manage cookies to keep..."
-msgstr ""
-
-#. TRANSLATORS: "Paths" is used generically to refer to both files
-#. and folders
+#. TRANSLATORS: Notice label at the top of the keeplist (whitelist)
+#. page in the preferences dialog.
+#. "Paths" is used generically to refer to both files and folders.
 #: ../bleachbit/GuiPreferences.py
 msgid "These paths will not be deleted or modified."
 msgstr "ये पथ हटाए या संशोधित नहीं किए जाएंगे।"
 
+#. TRANSLATORS: Notice label at the top of the custom (delete)
+#. page in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "These locations can be selected for deletion."
 msgstr "डिलीट करने के लिए ये लोकेशन सिलेक्ट की जा सकती हैं।"
 
+#. TRANSLATORS: Column header in the preferences dialog showing whether
+#. the item is a file or folder.
 #: ../bleachbit/GuiPreferences.py
 msgid "Type"
 msgstr "टाइप"
@@ -2115,6 +2275,7 @@ msgstr "टाइप"
 msgid "Path"
 msgstr "पाथ"
 
+#. TRANSLATORS: Title of a file chooser dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Choose a file"
 msgstr "कोई फ़ाइल चुनें"
@@ -2129,16 +2290,21 @@ msgctxt "button"
 msgid "Add folder"
 msgstr "फोल्डर जोड़ें"
 
+#. TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
+#. Used in the tree view on the main screen.
 #: ../bleachbit/GuiTreeModels.py
 msgid "Active"
 msgstr "एक्टिव"
 
-#. TRANSLATORS: Size is the label for the column that shows how
-#. much space an option would clean or did clean
+#. TRANSLATORS: Column header for the size of the cleaner.
+#. Used in the tree view on the main screen.
+#. 'Size' is a noun and refers to the amount of space that the cleaner
+#. would clean (preview mode) or did clean (cleaning mode).
 #: ../bleachbit/GuiTreeModels.py
 msgid "Size"
 msgstr "साइज़"
 
+#. TRANSLATORS: Warning shown in the infobar.
 #: ../bleachbit/GuiTreeModels.py
 msgid "This option is protected. To bypass protection, enable expert mode."
 msgstr ""
@@ -2157,34 +2323,63 @@ msgstr ""
 "\n"
 "%(warning)s"
 
+#. TRANSLATORS: Button label on the headerbar and context menu item
+#. in the treeview.
+#. 'Preview' is a verb.
+#: ../bleachbit/GuiWindow.py
+msgid "Preview"
+msgstr "प्रीव्यू"
+
+#. TRANSLATORS: Button label on the headerbar and context menu item
+#. in the treeview.
+#. 'Clean' is a verb.
+#: ../bleachbit/GuiWindow.py
+msgid "Clean"
+msgstr "साफ करें"
+
+#. TRANSLATORS: Error message shown in the log on the main window.
+#. %s is the file path.
 #: ../bleachbit/GuiWindow.py
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "कॉन्फ़िगुरेशन फाइल रीसेट कर रहा है क्योंकि ये करप्ट है: %s"
 
+#. TRANSLATORS: Error message shown when a cleaner option
+#. cannot be used because expert mode is disabled.
+#. %(cleaner)s is the cleaner name, %(option)s is the option name.
 #: ../bleachbit/GuiWindow.py
 #, python-format
 msgid ""
 "%(cleaner)s - %(option)s cannot be cleaned because expert mode is disabled."
 msgstr ""
 
+#. TRANSLATORS: Error message shown in the infobar when the user clicks
+#. the preview or clean button without selecting any cleaner options.
 #: ../bleachbit/GuiWindow.py
 msgid "You must select an operation"
 msgstr "आपको कोई एक ऑपरेशन चुनना होगा"
 
+#. TRANSLATORS: Status message shown on the progress bar and in a popup
+#. notification.
 #: ../bleachbit/GuiWindow.py
 msgid "Done."
 msgstr "पूरा हुआ।"
 
+#. TRANSLATORS: First-start hint for Linux users shown in
+#. the log on the main screen.
 #: ../bleachbit/GuiWindow.py
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
 msgstr "एप्लिकेशन मेनू में एक्सेस के लिए टाइटल बार में हैमबर्गर आइकॉन पर क्लिक करें।"
 
+#. TRANSLATORS: First-start hint for Windows users shown in
+#. the log on the main screen.
 #: ../bleachbit/GuiWindow.py
 msgid "Access the application menu by clicking the logo on the title bar."
 msgstr "एप्लिकेशन मेनू में एक्सेस के लिए टाइटल बार में लोगो पर क्लिक करें।"
 
+#. TRANSLATORS: Warning shown on startup when running BleachBit as root on Linux.
+#. It means, for example, that cleaning a browser will clean root's browser data.
 #: ../bleachbit/GuiWindow.py
 msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
@@ -2194,6 +2389,7 @@ msgstr ""
 "आप BleachBit को सिस्टम के शेयर्ड हिस्सों को क्लीन करने की एड्मिनिस्ट्रेटिव प्रिविलेज से चला "
 "रहे हैं, और यूज़र प्रोफाइल फोंल्डर के रेफेरेंस केवल रूट अकाउंट को साफ करेंगे।"
 
+#. TRANSLATORS: Warning shown on startup on Windows.
 #: ../bleachbit/GuiWindow.py
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
@@ -2202,6 +2398,8 @@ msgstr ""
 "एडमिनिस्ट्रेटिव प्रिविलेजेस से BleachBit चलाएं और फाइलों के कंटेंट को ओवरराइट करने की "
 "एक्यूरेसी बढ़ाएँ।"
 
+#. TRANSLATORS: Warning shown on startup on Windows when elevated with different account.
+#. It means, for example, that cleaning a browser will clean the browser data of the administrator account.
 #: ../bleachbit/GuiWindow.py
 msgid ""
 "You elevated privileges using a different account to clean shared parts of "
@@ -2209,6 +2407,8 @@ msgid ""
 "to clean your profile, run BleachBit again as a standard user."
 msgstr ""
 
+#. TRANSLATORS: Warning shown on startup on Windows when running unofficial Microsoft Store version.
+#. Advises user to get genuine version from official website.
 #: ../bleachbit/GuiWindow.py
 msgid ""
 "There is no official version of BleachBit on the Microsoft Store. Get the "
@@ -2218,63 +2418,50 @@ msgstr ""
 "Microsoft स्टोर पर ब्लीचबिट का कोई आधिकारिक संस्करण नहीं है। वास्तविक संस्करण https://"
 "www.bleachbit.org पर प्राप्त करें जहां यह हमेशा निःशुल्क है।"
 
+#. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiWindow.py
 msgid "This option requires expert mode. Enable it in Preferences."
 msgstr ""
 
-#. TRANSLATORS: Label in a context menu. 'Preview' is a verb.
-#. TRANSLATORS: This is the preview button on the main window.  It
-#. previews changes.
+#. TRANSLATORS: Context menu item in the tree view that opens the preferences dialog.
+#. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
-msgid "Preview"
-msgstr "प्रीव्यू"
-
-#. TRANSLATORS: Label in a context menu. 'Clean' is a verb.
-#. TRANSLATORS: Label for the clean button on header bar of the
-#. the main window. 'Clean' is a verb.
-#: ../bleachbit/GuiWindow.py
-msgid "Clean"
-msgstr "साफ करें"
-
-#. TRANSLATORS: Label in a context menu.
-#: ../bleachbit/GuiWindow.py
-#, fuzzy
-#| msgid "Cookies"
-msgid "Manage Cookies"
-msgstr "कुकीज़"
-
-#. TRANSLATORS: this is the context menu
-#: ../bleachbit/GuiWindow.py
-msgid "Manage custom paths"
+msgid "Manage custom paths…"
 msgstr ""
 
+#. TRANSLATORS: Tooltip for the preview button on the headerbar.
+#. 'Preview' is a verb, and 'selected operations' refers to
+#. the cleaning options (e.g., Firefox - Cache).
 #: ../bleachbit/GuiWindow.py
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "चयनित आपरेशनों में फाइलों को प्रीव्यू करें (किसी भी फाइल को डिलीट किए बिना)"
 
+#. TRANSLATORS: Tooltip for the clean button on the headerbar.
+#. 'Clean' is a verb, and 'operations' are cleaning options (e.g.,
+#. Firefox - Cache).
 #: ../bleachbit/GuiWindow.py
 msgid "Clean files in the selected operations"
 msgstr "चयनित परिचालनों में फ़ाइलें साफ़ करें"
 
-#. TRANSLATORS: Label for the stop button on header bar of the
-#. the main window. 'Abort' is a verb.
-#: ../bleachbit/GuiWindow.py
-msgid "Abort"
-msgstr "निरस्त करें"
-
+#. TRANSLATORS: Tooltip for the abort button on the headerbar,
+#. and 'abort' ia a verb.
 #: ../bleachbit/GuiWindow.py
 msgid "Abort the preview or cleaning process"
 msgstr "प्रीव्यू या साफ करने की प्रोसेस निरस्त करें"
 
-#. TRANSLATORS: Button in headerbar to update the application
+#. TRANSLATORS: Button in headerbar to update the application.
+#. 'Update' is a verb.
 #: ../bleachbit/GuiWindow.py
 msgid "Update"
 msgstr ""
 
+#. TRANSLATORS: Tooltip for the update button in the headerbar.
+#. 'Update' is a verb.
 #: ../bleachbit/GuiWindow.py
 msgid "Update BleachBit to the latest version"
 msgstr ""
 
+#. TRANSLATORS: Hint shown when starting in fullscreen mode.
 #: ../bleachbit/GuiWindow.py
 msgid "Press F11 to exit fullscreen mode."
 msgstr ""
@@ -2287,8 +2474,12 @@ msgid ""
 "Would you like to preview them with an option to delete them?"
 msgstr ""
 
+#. TRANSLATORS: Error message shown when checking for updates fails.
+#. %s is the error details.
 #: ../bleachbit/GuiWindow.py
-msgid "Error when checking for updates: "
+#, fuzzy, python-format
+#| msgid "Error when checking for updates: "
+msgid "Error when checking for updates: %s"
 msgstr "अपडेट चेक करते समय त्रुटि: "
 
 #: ../bleachbit/Memory.py
@@ -2523,9 +2714,13 @@ msgstr "winapp2.ini से इम्पोर्ट"
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr ""
 
+#. TRANSLATORS: Splash screen message shown while the application is starting.
+#. "Starting" is a present participle (ongoing action).
+#. To indicate an ongoing operation, include the ellipsis as literal
+#. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Windows.py
-msgid "BleachBit is starting...\n"
-msgstr "BleachBit प्रारंभ हो रहा है…\n"
+msgid "Starting…"
+msgstr ""
 
 #: ../bleachbit/Wipe.py
 msgid ""
@@ -2730,6 +2925,15 @@ msgstr "_सहायता"
 msgid "_About BleachBit"
 msgstr "_BleachBit के बारे में"
 
+#~ msgid "Download data needed for chaff generator?"
+#~ msgstr "शाफ़ (डिजिटल कवच) जनरेटर के लिए डाटा डाऊनलोड करना है?"
+
+#~ msgid "Preserve"
+#~ msgstr "प्रिसर्व करें"
+
+#~ msgid "BleachBit is starting...\n"
+#~ msgstr "BleachBit प्रारंभ हो रहा है…\n"
+
 #~ msgid "Loads the initial session after the browser closes or crashes"
 #~ msgstr "यदि ब्राउज़र बंद हो जाए या क्रैश हो जाए तो पहला सत्र लोड कर देता है"
 
@@ -2737,9 +2941,6 @@ msgstr "_BleachBit के बारे में"
 #~| msgid "not a valid cleaner: %s"
 #~ msgid "not a valid cleaner: -%s"
 #~ msgstr "एक मान्य क्लीनर नहीं है: %s"
-
-#~ msgid "Free disk space"
-#~ msgstr "डिस्क में जगह खाली करें"
 
 #~ msgid "This option is very slow."
 #~ msgstr "यह ऑप्शन बहुत धीमा है।"
