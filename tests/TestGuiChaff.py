@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -24,18 +10,24 @@ Test case for module GuiChaff
 """
 
 
+import sys
 import tempfile
+import threading
 import time
 import unittest
 import warnings
-import sys
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 from tests import common
+
 from bleachbit.GtkShim import HAVE_GTK, Gtk, GLib, Gio
 
 if HAVE_GTK:
     from bleachbit.GuiApplication import Bleachbit
+    from bleachbit.GuiChaff import (STOP_MODE_FILE_COUNT,
+                                    STOP_MODE_TOTAL_SIZE,
+                                    STOP_MODE_FREE_SPACE,
+                                    MAX_FILE_COUNT)
 
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
@@ -98,9 +90,12 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         # Test combo box
         self.assertIsNotNone(self.dialog.inspiration_combo)
         self.assertEqual(self.dialog.inspiration_combo.get_active(), 0)
-        # Test file count spinner
-        self.assertIsNotNone(self.dialog.file_count)
-        self.assertEqual(self.dialog.file_count.get_value_as_int(), 100)
+        # Test stop mode combo
+        self.assertIsNotNone(self.dialog.stop_mode_combo)
+        self.assertEqual(self.dialog.stop_mode_combo.get_active(), 0)
+        # Test stop value spinner
+        self.assertIsNotNone(self.dialog.stop_value_spin)
+        self.assertEqual(self.dialog.stop_value_spin.get_value_as_int(), 100)
         # Test folder chooser
         self.assertIsNotNone(self.dialog.choose_folder_button)
         self.assertEqual(
@@ -118,77 +113,107 @@ class GuiChaffTestCase(common.BleachbitTestCase):
                 self.dialog.inspiration_combo.get_active_text(),
                 option)
 
-    def test_file_count_spinner(self):
-        """Test file count spinner limits and adjustment"""
-        self.dialog.file_count.set_value(1)
-        self.assertEqual(self.dialog.file_count.get_value_as_int(), 1)
-        self.dialog.file_count.set_value(99999)
-        self.assertEqual(self.dialog.file_count.get_value_as_int(), 99999)
+    def test_stop_value_spinner_file_count(self):
+        """Test stop value spinner limits for file count mode"""
+        self.dialog.stop_mode_combo.set_active(STOP_MODE_FILE_COUNT)
+        self.dialog.stop_value_spin.set_value(1)
+        self.assertEqual(self.dialog.stop_value_spin.get_value_as_int(), 1)
+        self.dialog.stop_value_spin.set_value(MAX_FILE_COUNT)
+        self.assertEqual(
+            self.dialog.stop_value_spin.get_value_as_int(), MAX_FILE_COUNT)
         # Test out of bounds values
-        self.dialog.file_count.set_value(0)
-        self.assertEqual(self.dialog.file_count.get_value_as_int(), 1)
-        self.dialog.file_count.set_value(100000)
-        self.assertEqual(self.dialog.file_count.get_value_as_int(), 99999)
+        self.dialog.stop_value_spin.set_value(0)
+        self.assertEqual(self.dialog.stop_value_spin.get_value_as_int(), 1)
+        self.dialog.stop_value_spin.set_value(MAX_FILE_COUNT + 1)
+        self.assertEqual(
+            self.dialog.stop_value_spin.get_value_as_int(), MAX_FILE_COUNT)
+
+    def test_stop_value_spinner_total_size(self):
+        """Test stop value spinner limits for total size mode"""
+        self.dialog.stop_mode_combo.set_active(STOP_MODE_TOTAL_SIZE)
+        self.dialog.stop_value_spin.set_value(1)
+        self.assertEqual(self.dialog.stop_value_spin.get_value_as_int(), 1)
+        self.dialog.stop_value_spin.set_value(999999)
+        self.assertEqual(
+            self.dialog.stop_value_spin.get_value_as_int(), 999999)
+
+    def test_stop_value_spinner_free_space(self):
+        """Test stop value spinner limits for free space mode"""
+        self.dialog.stop_mode_combo.set_active(STOP_MODE_FREE_SPACE)
+        self.dialog.stop_value_spin.set_value(1)
+        self.assertEqual(self.dialog.stop_value_spin.get_value_as_int(), 1)
+        self.dialog.stop_value_spin.set_value(99)
+        self.assertEqual(self.dialog.stop_value_spin.get_value_as_int(), 99)
+        # Test out of bounds
+        self.dialog.stop_value_spin.set_value(0)
+        self.assertEqual(self.dialog.stop_value_spin.get_value_as_int(), 1)
+        self.dialog.stop_value_spin.set_value(100)
+        self.assertEqual(self.dialog.stop_value_spin.get_value_as_int(), 99)
+
+    def test_stop_mode_changed(self):
+        """Test that changing stop mode updates the label and adjustment"""
+        self.dialog.stop_mode_combo.set_active(STOP_MODE_TOTAL_SIZE)
+        self.refresh_gui()
+        self.assertIn('MB', self.dialog.stop_value_label.get_text())
+
+        self.dialog.stop_mode_combo.set_active(STOP_MODE_FREE_SPACE)
+        self.refresh_gui()
+        self.assertIn('%', self.dialog.stop_value_label.get_text())
+
+        self.dialog.stop_mode_combo.set_active(STOP_MODE_FILE_COUNT)
+        self.refresh_gui()
+        self.assertIn('files', self.dialog.stop_value_label.get_text().lower())
 
     @patch('bleachbit.GuiChaff.make_files_thread')
     @patch('bleachbit.Chaff.download_models')
     @patch('bleachbit.Chaff.have_models')
     def test_make_files(self, mock_have_models, mock_download_models, mock_make_files):
-        """Test make files functionality"""
+        """Test make files functionality with automatic download"""
         # Set up mocks
         mock_have_models.return_value = False  # Need to download models
         mock_download_models.return_value = True
 
         self.dialog.choose_folder_button.set_filename(self.tempdir)
-        self.dialog.file_count.set_value(10)
+        self.dialog.stop_value_spin.set_value(10)
         self.dialog.inspiration_combo.set_active(0)
 
-        # Mock the dialog response
-        def mock_dialog_run(parent, *args, **kwargs):
-            dialog = MagicMock()
-            dialog.run = lambda: Gtk.ResponseType.OK
-            dialog.destroy = lambda: None
-            return dialog
+        # Simulate clicking make button
+        self.dialog.make_button.clicked()
+        self.refresh_gui(0.1)
 
-        # Patch Gtk.MessageDialog during the test
-        with patch('gi.repository.Gtk.MessageDialog', side_effect=mock_dialog_run):
-            # Simulate clicking make button
-            self.dialog.make_button.clicked()
+        # Verify models were downloaded
+        mock_download_models.assert_called_once()
 
-            # Verify models were downloaded
-            mock_download_models.assert_called_once()
+        # Verify make_files_thread was called with correct arguments
+        mock_make_files.assert_called_once()
+        args = mock_make_files.call_args[0]
+        self.assertEqual(args[0], 0)   # stop_mode (file count)
+        self.assertEqual(args[1], 10)  # stop_value
+        self.assertEqual(args[2], 0)   # inspiration (2600)
+        self.assertEqual(args[3], self.tempdir)  # output_folder
+        self.assertIsInstance(args[6], threading.Event)  # abort_event
 
-            # Verify make_files_thread was called with correct arguments
-            mock_make_files.assert_called_once()
-            args = mock_make_files.call_args[0]
-            self.assertEqual(args[0], 10)  # file_count
-            self.assertEqual(args[1], 0)   # inspiration (2600)
-            self.assertEqual(args[2], self.tempdir)  # output_folder
-
+    @patch('bleachbit.GuiChaff.make_files_thread')
     @patch('bleachbit.Chaff.download_models')
     @patch('bleachbit.Chaff.have_models')
-    def test_make_files_cancel_download(self, mock_have_models, mock_download_models):
-        """Test canceling the download models dialog"""
+    def test_make_files_download_fails(self, mock_have_models, mock_download_models, mock_make_files):
+        """Test handling when download fails"""
         mock_have_models.return_value = False  # Need to download models
+        mock_download_models.return_value = False  # Download fails
 
         self.dialog.choose_folder_button.set_filename(self.tempdir)
-        self.dialog.file_count.set_value(10)
+        self.dialog.stop_value_spin.set_value(10)
         self.dialog.inspiration_combo.set_active(0)
 
-        # Mock the dialog response
-        def mock_dialog_run(parent, *args, **kwargs):
-            dialog = MagicMock()
-            dialog.run = lambda: Gtk.ResponseType.CANCEL
-            dialog.destroy = lambda: None
-            return dialog
+        # Simulate clicking make button
+        self.dialog.make_button.clicked()
+        self.refresh_gui(0.1)
 
-        # Patch Gtk.MessageDialog during the test
-        with patch('gi.repository.Gtk.MessageDialog', side_effect=mock_dialog_run):
-            # Simulate clicking make button
-            self.dialog.make_button.clicked()
+        # Verify models download was attempted
+        mock_download_models.assert_called_once()
 
-            # Verify models were not downloaded
-            mock_download_models.assert_not_called()
+        # Verify make_files_thread was NOT called because download failed
+        mock_make_files.assert_not_called()
 
     @patch('bleachbit.GuiChaff.make_files_thread')
     @patch('bleachbit.Chaff.have_models')
@@ -197,7 +222,7 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         mock_have_models.return_value = True  # Models already exist
 
         self.dialog.choose_folder_button.set_filename(self.tempdir)
-        self.dialog.file_count.set_value(10)
+        self.dialog.stop_value_spin.set_value(10)
         self.dialog.inspiration_combo.set_active(0)
 
         # Simulate clicking make button
@@ -208,6 +233,37 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         mock_make_files.assert_called_once()
         self.assertIsInstance(mock_make_files.call_args, tuple)
         args = mock_make_files.call_args[0]
-        self.assertEqual(args[0], 10)  # file_count
-        self.assertEqual(args[1], 0)   # inspiration (2600)
-        self.assertEqual(args[2], self.tempdir)  # output_folder
+        self.assertEqual(args[0], 0)   # stop_mode (file count)
+        self.assertEqual(args[1], 10)  # stop_value
+        self.assertEqual(args[2], 0)   # inspiration (2600)
+        self.assertEqual(args[3], self.tempdir)  # output_folder
+        self.assertIsInstance(args[6], threading.Event)  # abort_event
+
+    @patch('bleachbit.GuiChaff.make_files_thread')
+    @patch('bleachbit.Chaff.have_models')
+    def test_abort_button(self, mock_have_models, mock_make_files):
+        """Test that abort button sets the abort event"""
+        mock_have_models.return_value = True
+
+        self.dialog.choose_folder_button.set_filename(self.tempdir)
+        self.dialog.stop_value_spin.set_value(10)
+        self.dialog.inspiration_combo.set_active(0)
+
+        # Initially, the abort button should be disabled.
+        self.assertFalse(self.dialog.abort_button.get_sensitive())
+
+        # Start generation
+        self.dialog.make_button.clicked()
+        self.refresh_gui(0.1)
+
+        # The abort button should now be enabled.
+        self.assertTrue(self.dialog.abort_button.get_sensitive())
+
+        # Click abort.
+        self.dialog.abort_button.clicked()
+        self.refresh_gui()
+
+        # Verify that the abort event was set.
+        abort_event = mock_make_files.call_args[0][6]
+        self.assertIsInstance(abort_event, threading.Event)
+        self.assertTrue(abort_event.is_set())

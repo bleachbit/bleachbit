@@ -925,8 +925,15 @@ def move_file(volume_handle, file_handle, starting_vcn,
     """
     assert file_handle is not None
     # Assemble input structure for our request.
-    # We include a couple of zero ints for 64-bit alignment.
-    input_struct = struct.pack('IIqqII', int(file_handle), 0, starting_vcn,
+    # Split 64-bit handle into two 32-bit integers to support both 32-bit and 64-bit Python.
+    # On 32-bit Windows, HANDLE is 4 bytes + 4 bytes padding before 8-byte aligned LARGE_INTEGER.
+    # On 64-bit Windows, HANDLE is 8 bytes (stored as two consecutive 32-bit values in little-endian).
+    # This single code path works for both architectures without runtime branching.
+    handle_val = int(file_handle)
+    handle_lo = handle_val & 0xFFFFFFFF
+    handle_hi = (handle_val >> 32) & 0xFFFFFFFF
+
+    input_struct = struct.pack('IIqqII', handle_lo, handle_hi, starting_vcn,
                                starting_lcn, cluster_count, 0)
     _vb_struct = DeviceIoControl(volume_handle, FSCTL_MOVE_FILE,
                                  input_struct, None)
@@ -1006,7 +1013,10 @@ def wipe_file_direct(file_handle, extents, cluster_size, file_size):
 
     # Remember that file_size measures full expanded content of the file,
     # which may not always match with size on disk (eg. if file compressed).
-    LockFile(file_handle, 0, 0, file_size & 0xFFFF, file_size >> 16)
+    # LockFile(handle, offsetLow, offsetHigh, lengthLow, lengthHigh)
+    # Split 64-bit file_size into low and high 32-bit DWORDs for 64-bit file support
+    LockFile(file_handle, 0, 0, file_size & 0xFFFFFFFF,
+             (file_size >> 32) & 0xFFFFFFFF)
 
     if extents:
         # Use size on disk to determine how many clusters of zeros we write.

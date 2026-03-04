@@ -15,6 +15,7 @@ import re
 import sys
 import tempfile
 
+from bleachbit.Constant import EMPTY_SPACE_WARNING
 from bleachbit.Language import get_text as _
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
@@ -328,7 +329,7 @@ class System(Cleaner):
         self.add_option('empty_space', _('Empty space'),
                         # TRANSLATORS: 'empty' means 'unallocated'
                         _('Wipe empty space to hide deleted files'))
-        self.set_warning('empty_space', _('Wiping empty space removes traces of files that were deleted without shredding, but it will not free additional disk space. The process can take a very long time and may temporarily slow your computer. It is not necessary if your drive is protected with full-disk encryption. The method works best on traditional hard drives. On solid-state drives, it is less reliable, and frequent use contributes to wear.'))
+        self.set_warning('empty_space', EMPTY_SPACE_WARNING)
         self.add_option(
             'tmp', _('Temporary files'), _('Delete the temporary files'))
 
@@ -692,12 +693,22 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
         return
 
     # register CleanerML cleaners
-    cb_progress(_('Loading native cleaners.'))
+    # TRANSLATORS: Progress message shown typically on startup.
+    # 'Native' refers to the .xml cleaners designed for this application,
+    # as contrasted to Winapp2.ini, which is native to another application.
+    # 'Loading' is a present participle.
+    # To indicate an ongoing operation, include the ellipsis as literal
+    # Unicode (…) or as Unicode escape (\u2026).
+    cb_progress(_('Loading native cleaners\u2026'))
     yield from CleanerML.load_cleaners(cb_progress)
 
     # register Winapp2.ini cleaners
     if 'nt' == os.name:
-        cb_progress(_('Importing cleaners from Winapp2.ini.'))
+        # TRANSLATORS: Progress message shown typically on startup.
+        # 'Importing' is a present participle.
+        # To indicate an ongoing operation, include the ellipsis as literal
+        # Unicode (…) or as Unicode escape (\u2026).
+        cb_progress(_('Importing cleaners from Winapp2.ini\u2026'))
         # pylint: disable=import-outside-toplevel
         from bleachbit import Winapp
         yield from Winapp.load_cleaners(cb_progress)

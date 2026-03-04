@@ -226,7 +226,11 @@ def bytes_to_human(bytes_i):
 
 
 def children_in_directory(top, list_directories=False):
-    """Iterate files and, optionally, subdirectories in directory"""
+    """Iterate files and, optionally, subdirectories in directory
+
+    Directories are returned after children to avoid trying to delete
+    a non-empty directory.
+    """
     if isinstance(top, tuple):
         for top_ in top:
             yield from children_in_directory(top_, list_directories)
@@ -243,11 +247,6 @@ def children_in_directory(top, list_directories=False):
     pending_dirs = [] if list_directories else None
 
     for (dirpath, dirnames, filenames) in walk(top, topdown=True, followlinks=False):
-        if list_directories:
-            current_prefix = _normalized_prefix(dirpath)
-            while pending_dirs and not current_prefix.startswith(pending_dirs[-1][1]):
-                yield pending_dirs.pop()[0]
-
         if 'nt' == os.name and dirnames:
             # Avoid traversing Windows symlinks or junctions.
             link_dirnames = []
@@ -266,7 +265,7 @@ def children_in_directory(top, list_directories=False):
             yield os.path.join(dirpath, filename)
 
     if list_directories:
-        current_prefix = ''
+        pending_dirs.sort(key=lambda x: len(x[1]))
         while pending_dirs:
             yield pending_dirs.pop()[0]
 

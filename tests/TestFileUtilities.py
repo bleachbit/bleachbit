@@ -334,6 +334,42 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
         os.rmdir(dirname)
 
+    def test_children_in_directory_ordering(self):
+        """Verify children_in_directory yields files before their parent directories.
+
+        Regression test: with sibling directories, a dir could appear in the
+        output before files contained inside it, causing rmdir to fail on a
+        non-empty directory.
+
+        Tree:
+          root/
+            file_root.txt
+            sub1/
+              file1.txt
+            sub2/
+              file2.txt
+        """
+        root = self.mkdir('directory-order-root')  # relative to self.tempdir
+        sub1 = self.mkdir(os.path.join(root, 'sub1'))
+        sub2 = self.mkdir(os.path.join(root, 'sub2'))
+
+        file_root = self.mkstemp(prefix='file_root', dir=root)
+        file1 = self.mkstemp(prefix='file1', dir=sub1)
+        file2 = self.mkstemp(prefix='file2', dir=sub2)
+
+        children = list(children_in_directory(root, list_directories=True))
+
+        idx = {p: children.index(p)
+               for p in [file_root, file1, file2, sub1, sub2]}
+
+        self.assertLess(idx[file1], idx[sub1],
+                        'file1 must appear before sub1')
+        self.assertLess(idx[file2], idx[sub2],
+                        'file2 must appear before sub2')
+        for child in children:
+            self.assertTrue(delete(child))
+        self.assertNotExists(sub1)
+
     @common.skipIfWindows
     def test_children_in_directory_posix_symlink(self):
         """POSIX: ensure directory symlinks are not followed"""

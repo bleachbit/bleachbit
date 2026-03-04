@@ -651,7 +651,9 @@ def is_junction(path):
         pass
 
     attr = windll.kernel32.GetFileAttributesW(path)
-    if attr == 0xFFFFFFFF:  # INVALID_FILE_ATTRIBUTES indicates GetFileAttributesW failed
+    # INVALID_FILE_ATTRIBUTES (0xFFFFFFFF) indicates GetFileAttributesW failed
+    # On 64-bit Python, ctypes may interpret this as signed -1 instead of unsigned 0xFFFFFFFF
+    if attr == 0xFFFFFFFF or attr == -1:
         error_code = windll.kernel32.GetLastError()
         logger.error(
             'GetFileAttributesW() failed for path %s with error code %d', path, error_code)
@@ -1185,9 +1187,15 @@ class SplashThread(Thread):
 
             text_rect = (text_left_margin,
                          (rect[3] - textmetrics['Height']) // 2, rect[2], rect[3])
+
+            # TRANSLATORS: Splash screen message shown while the application is starting.
+            # "Starting" is a present participle (ongoing action).
+            # To indicate an ongoing operation, include the ellipsis as literal
+            # Unicode (…) or as Unicode escape (\u2026).
+            splash_msg = _("Starting\u2026")
             win32gui.DrawText(
                 hDC,
-                _("BleachBit is starting...\n"),
+                splash_msg,
                 -1,
                 text_rect,
                 win32con.DT_WORDBREAK)

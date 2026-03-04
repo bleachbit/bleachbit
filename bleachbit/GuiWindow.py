@@ -12,17 +12,29 @@ import time
 import bleachbit
 from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path
 from bleachbit.Cleaner import backends, register_cleaners
+from bleachbit.Constant import ABORT_BUTTON_LABEL, MANAGE_COOKIES_TO_KEEP
 from bleachbit.GUI import logger
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
 from bleachbit.GuiUtil import get_font_size_from_name, get_window_info, notify, threaded
-from bleachbit.Language import get_text as _
+from bleachbit.Language import get_text as _, pget_text as _p
 from bleachbit.Options import options
 from bleachbit.Wipe import detect_orphaned_wipe_files
 
 if os.name == 'nt':
     from bleachbit import Windows
+
+
+# TRANSLATORS: Button label on the headerbar and context menu item
+# in the treeview.
+# 'Preview' is a verb.
+PREVIEW_MSG = _('Preview')
+
+# TRANSLATORS: Button label on the headerbar and context menu item
+# in the treeview.
+# 'Clean' is a verb.
+CLEAN_MSG = _('Clean')
 
 # Ensure GTK is available for this GUI module
 require_gtk()
@@ -70,6 +82,8 @@ class GUI(Gtk.ApplicationWindow):
 
         if options.is_corrupt():
             logger.error(
+                # TRANSLATORS: Error message shown in the log on the main window.
+                # %s is the file path.
                 _('Resetting the configuration file because it is corrupt: %s') % bleachbit.options_file)
             bleachbit.Options.init_configuration()
 
@@ -582,6 +596,9 @@ class GUI(Gtk.ApplicationWindow):
                             option_name = oname
                             break
                     self.append_text(
+                        # TRANSLATORS: Error message shown when a cleaner option
+                        # cannot be used because expert mode is disabled.
+                        # %(cleaner)s is the cleaner name, %(option)s is the option name.
                         _("%(cleaner)s - %(option)s cannot be cleaned because expert mode is disabled.") % {
                             'cleaner': cleaner_name, 'option': option_name} + "\n",
                         'error')
@@ -604,7 +621,10 @@ class GUI(Gtk.ApplicationWindow):
             }
         assert isinstance(operations, dict)
         if not operations:  # empty
-            self.show_infobar(_("You must select an operation"),
+            self.show_infobar(
+                # TRANSLATORS: Error message shown in the infobar when the user clicks
+                # the preview or clean button without selecting any cleaner options.
+                _("You must select an operation"),
                               Gtk.MessageType.ERROR)
             return
         try:
@@ -629,7 +649,10 @@ class GUI(Gtk.ApplicationWindow):
         """Callback for when Worker is done"""
         self.progressbar.set_text("")
         self.progressbar.set_fraction(1)
-        self.progressbar.set_text(_("Done."))
+        # TRANSLATORS: Status message shown on the progress bar and in a popup
+        # notification.
+        done_msg = _("Done.")
+        self.progressbar.set_text(done_msg)
         self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
         self.set_sensitive(True)
 
@@ -645,7 +668,7 @@ class GUI(Gtk.ApplicationWindow):
         logger.debug('elapsed time: %d seconds', elapsed)
         if elapsed < 10 or self.is_active():
             return
-        notify(_("Done."))
+        notify(done_msg)
 
     def create_operations_box(self):
         """Create and return the operations box (which holds a tree view)"""
@@ -704,30 +727,41 @@ class GUI(Gtk.ApplicationWindow):
         if options.get("first_start") and not self._auto_exit:
             if os.name == 'posix':
                 self.append_text(
+                    # TRANSLATORS: First-start hint for Linux users shown in
+                    # the log on the main screen.
                     _('Access the application menu by clicking the hamburger icon on the title bar.'))
                 pref = self.get_preferences_dialog()
                 pref.run()
             elif os.name == 'nt':
                 self.append_text(
+                    # TRANSLATORS: First-start hint for Windows users shown in
+                    # the log on the main screen.
                     _('Access the application menu by clicking the logo on the title bar.'))
             options.set('first_start', False)
 
         # Show notice about admin privileges.
         if os.name == 'posix' and os.path.expanduser('~') == '/root':
             self.append_text(
+                # TRANSLATORS: Warning shown on startup when running BleachBit as root on Linux.
+                # It means, for example, that cleaning a browser will clean root's browser data.
                 _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.') + '\n')
         if os.name == 'nt' and options.get('shred'):
             from win32com.shell.shell import IsUserAnAdmin
             if not IsUserAnAdmin():
                 self.append_text(
+                    # TRANSLATORS: Warning shown on startup on Windows.
                     _('Run BleachBit with administrator privileges to improve the accuracy of overwriting the contents of files.'))
                 self.append_text('\n')
         if os.name == 'nt' and Windows.is_ots_elevation():
             self.append_text(
+                # TRANSLATORS: Warning shown on startup on Windows when elevated with different account.
+                # It means, for example, that cleaning a browser will clean the browser data of the administrator account.
                 _('You elevated privileges using a different account to clean shared parts of the system. User-specific paths will refer to the administrator account, so to clean your profile, run BleachBit again as a standard user.') + '\n')
 
         if 'windowsapps' in sys.executable.lower():
             self.append_text(
+                # TRANSLATORS: Warning shown on startup on Windows when running unofficial Microsoft Store version.
+                # Advises user to get genuine version from official website.
                 _('There is no official version of BleachBit on the Microsoft Store. Get the genuine version at https://www.bleachbit.org where it is always free of charge.') + '\n', 'error')
 
         # remove from idle loop (see GObject.idle_add)
@@ -745,6 +779,7 @@ class GUI(Gtk.ApplicationWindow):
         # block cleaning of warning options without expert mode
         if not options.get('expert_mode') and backends[cleaner_id].get_warning(option_id):
             self.show_infobar(
+                # TRANSLATORS: Error message shown in the infobar.
                 _("This option requires expert mode. Enable it in Preferences."))
             return
 
@@ -807,13 +842,11 @@ class GUI(Gtk.ApplicationWindow):
         # make a menu
         menu = Gtk.Menu()
         menu.connect('hide', lambda widget: widget.detach())
-        # TRANSLATORS: Label in a context menu. 'Preview' is a verb.
-        preview_item = Gtk.MenuItem(label=_("Preview"))
+        preview_item = Gtk.MenuItem(label=PREVIEW_MSG)
         preview_item.connect('activate', self.cb_run_option,
                              False, cleaner_id, option_id)
         menu.append(preview_item)
-        # TRANSLATORS: Label in a context menu. 'Clean' is a verb.
-        clean_item = Gtk.MenuItem(label=_("Clean"))
+        clean_item = Gtk.MenuItem(label=CLEAN_MSG)
         clean_item.connect('activate', self.cb_run_option,
                            True, cleaner_id, option_id)
         menu.append(clean_item)
@@ -821,16 +854,17 @@ class GUI(Gtk.ApplicationWindow):
         # Check if this option has a cookie command
         if self._option_has_cookie_command(cleaner_id, option_id):
             menu.append(Gtk.SeparatorMenuItem())
-            # TRANSLATORS: Label in a context menu.
-            cookie_item = Gtk.MenuItem(label=_("Manage Cookies"))
+            cookie_item = Gtk.MenuItem(label=MANAGE_COOKIES_TO_KEEP)
             cookie_item.connect('activate', self.cb_manage_cookies)
             menu.append(cookie_item)
 
         # Check if this is the system.custom option
         if cleaner_id == 'system' and option_id == 'custom':
             menu.append(Gtk.SeparatorMenuItem())
-            # TRANSLATORS: this is the context menu
-            custom_paths_item = Gtk.MenuItem(label=_("Manage custom paths"))
+            # TRANSLATORS: Context menu item in the tree view that opens the preferences dialog.
+            # Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
+            custom_paths_label = _("Manage custom paths\u2026")
+            custom_paths_item = Gtk.MenuItem(label=custom_paths_label)
             custom_paths_item.connect('activate', self.cb_manage_custom_paths)
             menu.append(custom_paths_item)
 
@@ -905,24 +939,25 @@ class GUI(Gtk.ApplicationWindow):
     def update_headerbar_labels(self):
         """Update the labels and tooltips in the headerbar buttons"""
         # Preview button
+        self.preview_button.set_label(PREVIEW_MSG)
         self.preview_button.set_tooltip_text(
+            # TRANSLATORS: Tooltip for the preview button on the headerbar.
+            # 'Preview' is a verb, and 'selected operations' refers to
+            # the cleaning options (e.g., Firefox - Cache).
             _("Preview files in the selected operations (without deleting any files)"))
-        # TRANSLATORS: This is the preview button on the main window.  It
-        # previews changes.
-        self.preview_button.set_label(_('Preview'))
 
         # Clean button
-        # TRANSLATORS: Label for the clean button on header bar of the
-        # the main window. 'Clean' is a verb.
-        self.run_button.set_label(_('Clean'))
+        self.run_button.set_label(CLEAN_MSG)
         self.run_button.set_tooltip_text(
+            # TRANSLATORS: Tooltip for the clean button on the headerbar.
+            # 'Clean' is a verb, and 'operations' are cleaning options (e.g.,
+            #  Firefox - Cache).
             _("Clean files in the selected operations"))
 
-        # Stop button
-        # TRANSLATORS: Label for the stop button on header bar of the
-        # the main window. 'Abort' is a verb.
-        self.stop_button.set_label(_('Abort'))
+        self.stop_button.set_label(ABORT_BUTTON_LABEL)
         self.stop_button.set_tooltip_text(
+            # TRANSLATORS: Tooltip for the abort button on the headerbar,
+            # and 'abort' ia a verb.
             _('Abort the preview or cleaning process'))
 
     def on_update_button_clicked(self, widget):
@@ -949,9 +984,12 @@ class GUI(Gtk.ApplicationWindow):
         self.update_button = Gtk.Button()
         self.update_button.set_visible(False)
         self.update_button.connect('clicked', self.on_update_button_clicked)
-        # TRANSLATORS: Button in headerbar to update the application
+        # TRANSLATORS: Button in headerbar to update the application.
+        # 'Update' is a verb.
         self.update_button.set_label(_('Update'))
         self.update_button.set_tooltip_text(
+            # TRANSLATORS: Tooltip for the update button in the headerbar.
+            # 'Update' is a verb.
             _('Update BleachBit to the latest version'))
 
         # Add CSS to animate the update button.
@@ -1123,6 +1161,7 @@ class GUI(Gtk.ApplicationWindow):
         if options.get("window_fullscreen"):
             self.fullscreen()
             self.append_text(
+                # TRANSLATORS: Hint shown when starting in fullscreen mode.
                 _("Press F11 to exit fullscreen mode.") + '\n')
         elif options.get("window_maximized"):
             self.maximize()
@@ -1144,11 +1183,13 @@ class GUI(Gtk.ApplicationWindow):
         msg = _("BleachBit detected leftover files from an interrupted "
                 "disk wipe operation. Would you like to preview them with an option to delete them?")
 
+        # TRANSLATORS: Title of confirmation dialog for deleting orphaned wipe files.
+        title = _("Confirm")
         resp = GuiBasic.message_dialog(self,
                                        msg,
                                        Gtk.MessageType.WARNING,
                                        Gtk.ButtonsType.YES_NO,
-                                       _('Confirm'))
+                                       title)
 
         if resp == Gtk.ResponseType.YES:
             self.shred_paths(orphaned_files)
@@ -1156,10 +1197,13 @@ class GUI(Gtk.ApplicationWindow):
     @threaded
     def check_online_updates(self):
         """Check for software updates in background"""
+        # TRANSLATORS: Error message shown when checking for updates fails.
+        # %s is the error details.
+        log_msg = _("Error when checking for updates: %s")
         try:
             from bleachbit import Update
         except ImportError as e:
-            logger.error("Cannot check online for updates: %s", e)
+            logger.error(log_msg, e)
             return
         try:
             updates = Update.check_updates(options.get('check_beta'),
@@ -1167,8 +1211,8 @@ class GUI(Gtk.ApplicationWindow):
                                            self.append_text,
                                            lambda: GLib.idle_add(self.cb_refresh_operations))
 
-        except Exception:
-            logger.exception(_("Error when checking for updates: "))
+        except Exception as e:
+            logger.exception(log_msg, e)
         else:
             self._available_updates = updates
 

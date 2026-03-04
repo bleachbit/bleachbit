@@ -147,6 +147,28 @@ class CleanerTestCase(common.BleachbitTestCase):
         for target in targets:
             self.assertNotExists(target)
 
+    def test_create_simple_cleaner_recursive(self):
+        """Verify create_simple_cleaner deletes recursive directory trees"""
+        # Build:  root/
+        #           file.txt
+        #           sub1/
+        #             file.txt
+        #             sub2/
+        #               file.txt
+        root = self.mkdir('csc-recursive')  # relative to self.tempdir
+        sub1 = self.mkdir(os.path.join(root, 'sub1'))
+        sub2 = self.mkdir(os.path.join(sub1, 'sub2'))
+        dirnames = [root, sub1, sub2]
+        for dirname in dirnames:
+            common.touch_file(os.path.join(dirname, 'file.txt'))
+
+        cleaner = create_simple_cleaner([root])
+        for cmd in cleaner.get_commands('files'):
+            list(cmd.execute(True))
+
+        for dirname in dirnames:
+            self.assertNotExists(dirname)
+
     def test_get_name(self):
         for key in sorted(backends):
             self.assertIsString(backends[key].get_name())
@@ -158,13 +180,13 @@ class CleanerTestCase(common.BleachbitTestCase):
             desc = backends[key].get_description()
             if desc is not None:
                 self.assertIsString(
-                    desc, "description for '%s' is '%s'" % (key, desc))
+                    desc, msg="description for '%s' is '%s'" % (key, desc))
 
     def test_get_options(self):
         for key in sorted(backends):
             for (test_id, name) in backends[key].get_options():
                 self.assertIsString(
-                    test_id, '%s.%s is not a string' % (key, test_id))
+                    test_id, msg='%s.%s is not a string' % (key, test_id))
                 self.assertIsString(name)
 
     def test_get_commands(self):

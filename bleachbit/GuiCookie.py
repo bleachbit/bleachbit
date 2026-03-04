@@ -22,12 +22,13 @@
 import json
 import logging
 import os
+import threading
 import time
 
 # third party
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+from gi.repository import GLib, Gtk
 
 # local import
 import bleachbit
@@ -266,15 +267,50 @@ class CookieManagerDialog(Gtk.Window):
 
     def _populate_cookie_store(self):
         """Populate the list store with discovered and saved cookie hosts."""
-        start = time.monotonic()
-        discovered = []
-        try:
-            discovered = list_unique_cookies()
-        except (OSError, RuntimeError, ValueError) as exc:  # pragma: no cover - defensive logging
-            logger.error("Failed to enumerate cookies: %s", exc)
-        duration = time.monotonic() - start
-        if duration >= COOKIE_DISCOVERY_WARN_THRESHOLD:
-            logger.warning("Enumerating cookie hosts took %.2fs", duration)
+        self._spinner = Gtk.Spinner()
+        self._spinner.set_size_request(24, 24)
+        self._spinner.start()
+        # Insert spinner row placeholder so the button_box area is not empty
+        # while loading; we embed the spinner above the treeview instead.
+        self.treeview.set_sensitive(False)
+        # Find the scrolled window's parent vbox and insert a spinner overlay
+        scrolled = self.treeview.get_parent()
+        vbox = scrolled.get_parent()
+        spinner_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        spinner_box.set_halign(Gtk.Align.CENTER)
+        spinner_box.pack_start(self._spinner, False, False, 0)
+        # TRANSLATORS: Status message shown while the cookie list is loading
+        # in the cookie manager dialog window.
+        # "Loading" is a present participle (ongoing action).
+        # To indicate an ongoing operation, include the ellipsis as literal
+        # Unicode (…) or as Unicode escape (\u2026).
+        self._loading_label = Gtk.Label(label=_("Loading cookies\u2026"))
+        spinner_box.pack_start(self._loading_label, False, False, 0)
+        vbox.pack_start(spinner_box, False, False, 0)
+        vbox.reorder_child(spinner_box, vbox.get_children().index(scrolled))
+        self._spinner_box = spinner_box
+        self.show_all()
+
+        def _worker():
+            start = time.monotonic()
+            discovered = []
+            try:
+                discovered = list_unique_cookies()
+            except (OSError, RuntimeError, ValueError) as exc:  # pragma: no cover - defensive logging
+                logger.error("Failed to enumerate cookies: %s", exc)
+            duration = time.monotonic() - start
+            if duration >= COOKIE_DISCOVERY_WARN_THRESHOLD:
+                logger.warning("Enumerating cookie hosts took %.2fs", duration)
+            GLib.idle_add(self._finish_populate, discovered)
+
+        t = threading.Thread(target=_worker, daemon=True)
+        t.start()
+
+    def _finish_populate(self, discovered):
+        """Called on the GTK main thread after cookie discovery finishes."""
+        self._spinner.stop()
+        self._spinner_box.destroy()
+        self.treeview.set_sensitive(True)
 
         all_hosts = {h.strip() for h in discovered if h}
         all_hosts.update(self.saved_domains)
@@ -285,6 +321,7 @@ class CookieManagerDialog(Gtk.Window):
             self.cookie_store.append([is_saved, host])
 
         self.update_stat_label()
+        return False
 
     def _iter_selected_domains(self):
         for row in self.cookie_store:
