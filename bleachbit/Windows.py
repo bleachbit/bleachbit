@@ -837,6 +837,44 @@ def setup_environment():
         logger.warning('XDG_DATA_DIRS not set and gschemas.compiled not found')
 
 
+def setup_accessibility_environment():
+    """Best-effort accessibility bootstrap for GTK on Windows.
+
+    Notes:
+    - BleachBit currently uses GTK3, where screen reader support on Windows is
+      historically limited.
+    - We still enable accessibility-related environment defaults so users can
+      benefit from improvements in newer GTK runtimes and custom builds.
+    - User-provided environment values always take precedence.
+    """
+    if os.name != 'nt':
+        return
+
+    # Keep the bridge enabled unless user explicitly overrides.
+    os.environ.setdefault('NO_AT_BRIDGE', '0')
+
+    # Help GTK3 discover accessibility modules when available.
+    sep = os.pathsep
+    gtk3_modules = os.environ.get('GTK3_MODULES', '').strip()
+    if not gtk3_modules:
+        os.environ['GTK3_MODULES'] = f'gail{sep}atk-bridge'
+    else:
+        parts = [p.strip().lower() for p in gtk3_modules.split(sep) if p.strip()]
+        if 'gail' not in parts:
+            gtk3_modules = f'{gtk3_modules}{sep}gail'
+        if 'atk-bridge' not in parts:
+            gtk3_modules = f'{gtk3_modules}{sep}atk-bridge'
+        os.environ['GTK3_MODULES'] = gtk3_modules
+
+    # GTK also reads GTK_MODULES. Keep it aligned for compatibility.
+    gtk_modules = os.environ.get('GTK_MODULES', '').strip()
+    if not gtk_modules:
+        os.environ['GTK_MODULES'] = os.environ['GTK3_MODULES']
+
+    # Forward-compatible default for GTK4 runtimes that include AccessKit.
+    os.environ.setdefault('GTK_A11Y', 'accesskit')
+
+
 def split_registry_key(full_key):
     r"""Given a key like HKLM\Software split into tuple (hive, key).
     Used internally."""

@@ -50,6 +50,7 @@ from bleachbit.Windows import (
     parse_windows_build,
     path_on_network,
     set_environ,
+    setup_accessibility_environment,
     setup_environment,
     shell_change_notify,
     split_registry_key,
@@ -842,6 +843,27 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 'localappdata', 'localappdatalow']
         for env in envs:
             self.assertExists(os.environ[env])
+
+    def test_setup_accessibility_environment(self):
+        """Unit test for setup_accessibility_environment"""
+        keys = ('NO_AT_BRIDGE', 'GTK3_MODULES', 'GTK_MODULES', 'GTK_A11Y')
+        old = {k: os.environ.get(k) for k in keys}
+        try:
+            for k in keys:
+                os.environ.pop(k, None)
+            setup_accessibility_environment()
+            self.assertEqual('0', os.environ.get('NO_AT_BRIDGE'))
+            self.assertIn('gail', os.environ.get('GTK3_MODULES', '').lower())
+            self.assertIn('atk-bridge', os.environ.get('GTK3_MODULES', '').lower())
+            self.assertEqual(os.environ.get('GTK3_MODULES'),
+                             os.environ.get('GTK_MODULES'))
+            self.assertEqual('accesskit', os.environ.get('GTK_A11Y'))
+        finally:
+            for k, v in old.items():
+                if v is None:
+                    os.environ.pop(k, None)
+                else:
+                    os.environ[k] = v
 
     def test_split_registry_key(self):
         """Unit test for split_registry_key"""

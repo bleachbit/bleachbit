@@ -224,6 +224,9 @@ def parse_cmd_line(argv=None):
                       # TRANSLATORS: Help for the --gui option on the CLI,
                       # and 'launch' is a verb
                       help=_("launch the graphical interface"))
+    parser.add_option("--gui-qt", action="store_true",
+                      # TRANSLATORS: Help for the --gui-qt option on the CLI.
+                      help=_("launch the Qt graphical interface (experimental)"))
     parser.add_option("--preset", action="store_true",
                       # TRANSLATORS: Help for the --preset option on the CLI,
                       # and 'use' is a verb, referring to enabling options set earlier.
@@ -391,6 +394,16 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         app = bleachbit.GuiApplication.Bleachbit(
             uac=enable_uac, shred_paths=args, auto_exit=options.exit)
         sys.exit(app.run())
+    if options.gui_qt:
+        if os.name != 'nt':
+            logger.error(_("--gui-qt is currently supported only on Windows"))
+            sys.exit(1)
+        try:
+            from bleachbit.QtApplication import run_qt_gui
+        except Exception as e:
+            logger.error(_("Failed to start Qt GUI: %s"), e)
+            sys.exit(1)
+        sys.exit(run_qt_gui(auto_exit=options.exit))
     if options.shred:
         # delete arbitrary files without GUI
         Options.options.set_override('first_start', False)
