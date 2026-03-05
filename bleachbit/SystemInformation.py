@@ -105,6 +105,57 @@ def get_windows_font_info():
     from ctypes import windll
     from winreg import OpenKey, QueryValueEx, HKEY_LOCAL_MACHINE, CloseKey
 
+    # Get Windows default system font
+    try:
+        class LOGFONTW(ctypes.Structure):
+            _fields_ = [
+                ('lfHeight', ctypes.c_long),
+                ('lfWidth', ctypes.c_long),
+                ('lfEscapement', ctypes.c_long),
+                ('lfOrientation', ctypes.c_long),
+                ('lfWeight', ctypes.c_long),
+                ('lfItalic', ctypes.c_byte),
+                ('lfUnderline', ctypes.c_byte),
+                ('lfStrikeOut', ctypes.c_byte),
+                ('lfCharSet', ctypes.c_byte),
+                ('lfOutPrecision', ctypes.c_byte),
+                ('lfClipPrecision', ctypes.c_byte),
+                ('lfQuality', ctypes.c_byte),
+                ('lfPitchAndFamily', ctypes.c_byte),
+                ('lfFaceName', ctypes.c_wchar * 32),
+            ]
+
+        class NONCLIENTMETRICSW(ctypes.Structure):
+            _fields_ = [
+                ('cbSize', ctypes.c_uint),
+                ('iBorderWidth', ctypes.c_int),
+                ('iScrollWidth', ctypes.c_int),
+                ('iScrollHeight', ctypes.c_int),
+                ('iCaptionWidth', ctypes.c_int),
+                ('iCaptionHeight', ctypes.c_int),
+                ('lfCaptionFont', LOGFONTW),
+                ('iSmCaptionWidth', ctypes.c_int),
+                ('iSmCaptionHeight', ctypes.c_int),
+                ('lfSmCaptionFont', LOGFONTW),
+                ('iMenuWidth', ctypes.c_int),
+                ('iMenuHeight', ctypes.c_int),
+                ('lfMenuFont', LOGFONTW),
+                ('lfStatusFont', LOGFONTW),
+                ('lfMessageFont', LOGFONTW),
+                ('iPaddedBorderWidth', ctypes.c_int),
+            ]
+
+        SPI_GETNONCLIENTMETRICS = 0x0029
+        ncm = NONCLIENTMETRICSW()
+        ncm.cbSize = ctypes.sizeof(NONCLIENTMETRICSW)
+
+        if windll.user32.SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, ncm.cbSize, byref(ncm), 0):
+            info['Windows System Default Font'] = ncm.lfMessageFont.lfFaceName
+        else:
+            info['Windows System Default Font'] = 'failed to retrieve'
+    except Exception as e:
+        info['Windows System Default Font error'] = str(e)
+
     # Get Windows font file sizes
     try:
         windows_fonts_dir = os.path.join(os.getenv('WINDIR', r'c:\windows'), 'Fonts')
