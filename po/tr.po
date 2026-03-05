@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-03-02 23:12-0700\n"
-"PO-Revision-Date: 2026-02-24 06:09+0000\n"
+"PO-Revision-Date: 2026-03-06 07:09+0000\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/bleachbit/main/"
 "tr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Launchpad-Export-Date: 2021-06-25 03:40+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1344,20 +1344,16 @@ msgstr "%s içindeki boş alanı temizle"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Loading native cleaners."
 msgid "Loading native cleaners…"
-msgstr "Yerel temizleyiciler yükleniyor."
+msgstr "Yerel temizleyiciler yükleniyor…"
 
 #. TRANSLATORS: Progress message shown typically on startup.
 #. 'Importing' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Importing cleaners from Winapp2.ini."
 msgid "Importing cleaners from Winapp2.ini…"
-msgstr "Winapp2.ini'den temizleyiciler içe aktarılıyor."
+msgstr "Winapp2.ini'den temizleyiciler içe aktarılıyor…"
 
 #: ../bleachbit/Cleaner.py
 #, python-format
@@ -1568,10 +1564,8 @@ msgstr "Dosyayı temizle"
 #. (2) Button in the preferences dialogs
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Constant.py
-#, fuzzy
-#| msgid "Manage cookies to keep"
 msgid "Manage cookies to keep…"
-msgstr "Kalacak çerezleri yönet"
+msgstr "Kalacak çerezleri yönet…"
 
 #. TRANSLATORS: This message is used in three places (1) label at top of the
 #. preferences dialog (2) confirmation dialog when enabling the cleaning option
@@ -1807,20 +1801,16 @@ msgstr "Dosya sayısı"
 #. TRANSLATORS: Option in combo box to choose to stop after a total
 #. size (in megabytes) has been generated.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Size"
 msgid "Size (MB)"
-msgstr "Boyut"
+msgstr "Boyut (MB)"
 
 #. TRANSLATORS: Option in combo box to choose to stop when free space
 #. reaches a certain percentage.
 #. The percentage symbol (%) is a literal character, not a format
 #. placeholder.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Free disk space"
 msgid "Free space (%)"
-msgstr "Boş disk alanı"
+msgstr "Boş alan (%)"
 
 #. TRANSLATORS: Used for (1) label for folder chooser button and
 #. (2) error message shown in the infobar when the folder has not
@@ -1834,10 +1824,8 @@ msgstr "Hedef klasörü seç"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Deleting files"
 msgid "Deleting files…"
-msgstr "Dosyalar siliniyor"
+msgstr "Dosyalar siliniyor…"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves
@@ -1869,7 +1857,7 @@ msgstr "Hillary Clinton'ın e-postaları"
 #. generating chaff files.
 #: ../bleachbit/GuiChaff.py
 msgid "Stop after"
-msgstr ""
+msgstr "Şundan sonra durdur"
 
 #. TRANSLATORS: Label for the combo box that selects what to do
 #. when chaff generation is finished.
@@ -1897,7 +1885,7 @@ msgstr "Silme"
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
 msgid "Downloading inspiration content…"
-msgstr ""
+msgstr "Esin içeriği indiriliyor…"
 
 #. TRANSLATORS: Button label in a dialog window to start making
 #. chaff files.
@@ -1908,32 +1896,28 @@ msgstr "Dosya yap"
 #. TRANSLATORS: Error message shown when downloading
 #. chaff models failed.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Downloading URL failed: %s"
 msgid "Download failed"
-msgstr "URL indirilemedi: %s"
+msgstr "İndirme başarısız"
 
 #. TRANSLATORS: Notification shown in an infobar when
 #. chaff file generation is aborted by the user.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation aborted"
-msgstr ""
+msgstr "Saman yapımından vazgeçildi"
 
 #. TRANSLATORS: Notification shown in an infobar when chaff file generation
 #. is complete.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation complete"
-msgstr ""
+msgstr "Saman yapımı bitti"
 
 #. TRANSLATORS: Progress message shown while generating chaff files.
 #. 'Generating' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Generating files"
 msgid "Generating files…"
-msgstr "Dosyalar oluşturuluyor"
+msgstr "Dosyalar oluşturuluyor…"
 
 #. TRANSLATORS: Title of the dialog to manage cookies to keep
 #: ../bleachbit/GuiCookie.py
@@ -1993,10 +1977,8 @@ msgstr "Seçilenler Kalsın"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Clean cookies"
 msgid "Loading cookies…"
-msgstr "Çerezleri temizle"
+msgstr "Çerezler yükleniyor…"
 
 #: ../bleachbit/GuiPreferences.py
 msgid ""
@@ -2175,10 +2157,8 @@ msgstr "Seçilenler dışındaki tüm diller silinecektir."
 #. TRANSLATORS: Column header in the languages treeview.
 #. This column controls whether to keep the language.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Keep list"
 msgid "Keep"
-msgstr "Kalacakların listesi"
+msgstr "Tut"
 
 #. TRANSLATORS: Column header in the languages treeview showing the
 #. language code (e.g., 'en_US').
@@ -2413,10 +2393,8 @@ msgstr "Bu seçenek uzman kipini gerektirir. Tercihlerden etkinleştirin."
 #. TRANSLATORS: Context menu item in the tree view that opens the preferences dialog.
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
-#, fuzzy
-#| msgid "Manage custom paths"
 msgid "Manage custom paths…"
-msgstr "Özel yolları yönet"
+msgstr "Özel yolları yönet…"
 
 #. TRANSLATORS: Tooltip for the preview button on the headerbar.
 #. 'Preview' is a verb, and 'selected operations' refers to
@@ -2470,10 +2448,9 @@ msgstr ""
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
 #: ../bleachbit/GuiWindow.py
-#, fuzzy, python-format
-#| msgid "Error when checking for updates: "
+#, python-format
 msgid "Error when checking for updates: %s"
-msgstr "Güncellemeler denetlenirken hata oluştu: "
+msgstr "Güncellemeler denetlenirken hata oluştu: %s"
 
 #: ../bleachbit/Memory.py
 msgid ""
@@ -2721,7 +2698,7 @@ msgstr "Windows Güncellemeleri temizliği için yönetici öncelikleri gereklid
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Windows.py
 msgid "Starting…"
-msgstr ""
+msgstr "Başlatılıyor…"
 
 #: ../bleachbit/Wipe.py
 msgid ""
