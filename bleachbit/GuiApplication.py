@@ -19,6 +19,10 @@ from bleachbit.Language import get_text as _
 # Ensure GTK is available for this GUI module
 require_gtk()
 
+# Constants for dialog response codes
+RESPONSE_ANONYMIZE = 101
+RESPONSE_COPY = 100
+
 if os.name == 'nt':
     from bleachbit import Windows
 
@@ -293,28 +297,42 @@ class Bleachbit(Gtk.Application):
                             transient_for=self._window)
         dialog.set_default_size(600, 400)
         txtbuffer = Gtk.TextBuffer()
-        from bleachbit import SystemInformation
-        txt = SystemInformation.get_system_information()
+        from bleachbit.SystemInformation import get_system_information
+        txt = get_system_information()
         txtbuffer.set_text(txt)
         textview = Gtk.TextView.new_with_buffer(txtbuffer)
         textview.set_editable(False)
         swindow = Gtk.ScrolledWindow()
         swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         swindow.add(textview)
-        dialog.vbox.pack_start(swindow, True, True, 0)
-        dialog.add_buttons(Gtk.STOCK_COPY, 100,
+        dialog.get_content_area().pack_start(swindow, True, True, 0)
+        # TRANSLATORS: Button label in the system information dialog to
+        # replace the username with a placeholder.
+        dialog.add_buttons(_("Anonymize"), RESPONSE_ANONYMIZE,
+                           Gtk.STOCK_COPY, RESPONSE_COPY,
                            Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
-        return (dialog, txt)
+        return (dialog, txt, txtbuffer)
 
     def system_information_dialog(self, _action, _param):
-        dialog, txt = self.get_system_information_dialog()
+        from bleachbit.SystemInformation import anonymize_system_information
+        dialog, txt, txtbuffer = self.get_system_information_dialog()
         dialog.show_all()
         while True:
             rc = dialog.run()
-            if rc != 100:
+            if rc == RESPONSE_COPY:
+                clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+                current_text = txtbuffer.get_text(
+                    txtbuffer.get_start_iter(),
+                    txtbuffer.get_end_iter(),
+                    True)
+                clipboard.set_text(current_text, -1)
+            elif rc == RESPONSE_ANONYMIZE:
+                anonymized_txt = anonymize_system_information(txt)
+                txtbuffer.set_text(anonymized_txt)
+                # The button is single use.
+                dialog.get_widget_for_response(RESPONSE_ANONYMIZE).set_sensitive(False)
+            else:
                 break
-            clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-            clipboard.set_text(txt, -1)
         dialog.destroy()
 
     def do_activate(self):

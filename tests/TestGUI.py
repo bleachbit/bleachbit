@@ -202,7 +202,7 @@ class GUITestCase(common.BleachbitTestCase):
 
     def test_system_information(self):
         """Opens the system information dialog and closes it"""
-        dialog, txt = self.app.get_system_information_dialog()
+        dialog, _txt, _txtbuffer = self.app.get_system_information_dialog()
         dialog.show_all()
         self.refresh_gui()
 
