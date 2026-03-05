@@ -313,19 +313,32 @@ class Bleachbit(Gtk.Application):
         swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         swindow.add(textview)
         dialog.vbox.pack_start(swindow, True, True, 0)
-        dialog.add_buttons(Gtk.STOCK_COPY, 100,
+        # TRANSLATORS: Button label in the system information dialog to
+        # replace the username with a placeholder.
+        dialog.add_buttons(_("Anonymize"), 101,
+                           Gtk.STOCK_COPY, 100,
                            Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
-        return (dialog, txt)
+        return (dialog, txt, txtbuffer)
 
     def system_information_dialog(self, _action, _param):
-        dialog, txt = self.get_system_information_dialog()
+        from bleachbit import SystemInformation
+        dialog, txt, txtbuffer = self.get_system_information_dialog()
         dialog.show_all()
         while True:
             rc = dialog.run()
-            if rc != 100:
+            if rc == 100:
+                clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+                current_text = txtbuffer.get_text(
+                    txtbuffer.get_start_iter(),
+                    txtbuffer.get_end_iter(),
+                    True)
+                clipboard.set_text(current_text, -1)
+            elif rc == 101:
+                anonymized_txt = SystemInformation.anonymize_system_information(
+                    txt)
+                txtbuffer.set_text(anonymized_txt)
+            else:
                 break
-            clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-            clipboard.set_text(txt, -1)
         dialog.destroy()
 
     def do_activate(self):

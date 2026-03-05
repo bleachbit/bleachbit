@@ -27,7 +27,7 @@ import os
 import tempfile
 
 from tests import common
-from bleachbit.SystemInformation import get_system_information, get_version
+from bleachbit.SystemInformation import get_system_information, get_version, anonymize_system_information
 
 
 class SystemInformationTestCase(common.BleachbitTestCase):
@@ -98,3 +98,75 @@ class SystemInformationTestCase(common.BleachbitTestCase):
                 del os.environ[env_key]
             else:
                 os.environ[env_key] = orig_env
+
+    def test_anonymize_system_information(self):
+        """Test anonymize_system_information function"""
+        home_dir = os.path.expanduser('~')
+
+        # Test path anonymization via expanduser
+        test_input = f"""BleachBit version = 4.6.0
+local_cleaners_dir = {home_dir}/.local/share/bleachbit/cleaners
+options_dir = {home_dir}/.config/bleachbit
+os.getenv(LOGNAME) = testuser
+os.getenv(USER) = testuser
+os.getenv(SUDO_UID) = 1000"""
+
+        result = anonymize_system_information(test_input)
+
+        # Home directory should be replaced with ~
+        self.assertIn(
+            'local_cleaners_dir = ~/.local/share/bleachbit/cleaners', result)
+        self.assertIn('options_dir = ~/.config/bleachbit', result)
+        self.assertNotIn(home_dir, result)
+
+        # Non-root user should be masked
+        self.assertIn('os.getenv(LOGNAME) = *non-root*', result)
+        self.assertIn('os.getenv(USER) = *non-root*', result)
+
+        # SUDO_UID should remain unchanged
+        self.assertIn('os.getenv(SUDO_UID) = 1000', result)
+
+        # Test root user detection
+        test_root = """os.getenv(LOGNAME) = root
+os.getenv(USER) = root"""
+
+        result_root = anonymize_system_information(test_root)
+        self.assertIn('os.getenv(LOGNAME) = *root*', result_root)
+        self.assertIn('os.getenv(USER) = *root*', result_root)
+
+        # Windows paths go through expanduser too
+        if os.name == 'nt':
+            test_windows = f"""os.getenv(APPDATA) = {home_dir}\\AppData\\Roaming
+os.getenv(USERPROFILE) = {home_dir}
+os.getenv(LocalAppData) = {home_dir}\\AppData\\Local"""
+
+            result_windows = anonymize_system_information(test_windows)
+            self.assertIn(
+                'os.getenv(APPDATA) = ~\\AppData\\Roaming', result_windows)
+            self.assertIn(
+                'os.getenv(USERPROFILE) = %userprofile%', result_windows)
+            self.assertIn(
+                'os.getenv(LocalAppData) = ~\\AppData\\Local', result_windows)
+            self.assertNotIn(home_dir, result_windows)
+
+        # Test that non-sensitive data remains unchanged
+        test_unchanged = """BleachBit version = 5.1.0
+gi.version = 3.55.0
+GTK version = 3.24.51"""
+
+        result_unchanged = anonymize_system_information(test_unchanged)
+        self.assertEqual(test_unchanged, result_unchanged)
+
+    def test_anonymize_preserves_structure(self):
+        """Test that anonymization preserves the structure of system information"""
+        original = get_system_information()
+        anonymized = anonymize_system_information(original)
+
+        # Both should have the same number of lines
+        self.assertEqual(len(original.split('\n')),
+                         len(anonymized.split('\n')))
+
+        # Both should be non-empty strings
+        self.assertIsString(original)
+        self.assertIsString(anonymized)
+        self.assertTrue(len(anonymized) > 0)

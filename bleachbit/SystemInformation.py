@@ -506,6 +506,30 @@ def get_windows_language_info():
     return info
 
 
+def anonymize_system_information(text):
+    """Anonymize username in system information text."""
+    home_dir = os.path.expanduser('~') or ''
+    home_token = '~' if os.name == 'posix' else '%userprofile%'
+
+    def mask_user_line(line):
+        if not (line.startswith('os.getenv(LOGNAME)') or line.startswith('os.getenv(USER)')):
+            return line
+        key, _, value = line.partition(' = ')
+        if value == 'root':
+            return f'{key} = *root*'
+        if value and value != 'None':
+            return f'{key} = *non-root*'
+        return line
+
+    anonymized_lines = []
+    for line in text.split('\n'):
+        if home_dir:
+            line = line.replace(home_dir, home_token)
+        anonymized_lines.append(mask_user_line(line))
+
+    return '\n'.join(anonymized_lines)
+
+
 def get_version(four_parts=False):
     """Return version information as a string.
 
