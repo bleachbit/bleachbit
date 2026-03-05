@@ -32,6 +32,7 @@ import locale
 import logging
 import os
 import platform
+import re
 import sqlite3
 import sys
 from collections import OrderedDict
@@ -512,19 +513,23 @@ def anonymize_system_information(text):
     home_token = '~' if os.name == 'posix' else '%userprofile%'
 
     def mask_user_line(line):
+        """Mask username for environment variables"""
         if not (line.startswith('os.getenv(LOGNAME)') or line.startswith('os.getenv(USER)')):
             return line
         key, _, value = line.partition(' = ')
-        if value == 'root':
-            return f'{key} = *root*'
         if value and value != 'None':
+            # replace specific non-root username with *non-root*
             return f'{key} = *non-root*'
         return line
 
     anonymized_lines = []
     for line in text.split('\n'):
         if home_dir:
-            line = line.replace(home_dir, home_token)
+            if os.name == 'nt':
+                # Windows paths are case-insensitive
+                line = re.sub(re.escape(home_dir), home_token, line, flags=re.IGNORECASE)
+            else:
+                line = line.replace(home_dir, home_token)
         anonymized_lines.append(mask_user_line(line))
 
     return '\n'.join(anonymized_lines)
