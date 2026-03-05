@@ -47,6 +47,10 @@ from bleachbit.FileUtilities import (
 )
 from bleachbit.General import gc_collect, sudo_mode
 
+# /etc/locale.alias may list the qaa-qtz range, which is reserved for
+# private use rather than a concrete locale. Skip it if present.
+SKIP_ALIAS_CODES = {'qaa-qtz', 'it_CARES'}
+
 
 def _supports_stdout_char(char: str) -> bool:
     """Return True if sys.stdout can encode the given character."""

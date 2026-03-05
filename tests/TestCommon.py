@@ -97,12 +97,8 @@ class CommonTestCase(common.BleachbitTestCase):
                         parts = line.split()
                         if len(parts) > 1:
                             lang_codes.append(parts[1])
-        # /etc/locale.alias may list the qaa-qtz range, which is reserved for
-        # private use rather than a concrete locale. Skip it if present.
-        skip_alias_codes = {'qaa-qtz', 'it_CARES'}
-
         for lang_code in lang_codes:
-            if lang_code in skip_alias_codes:
+            if lang_code in common.SKIP_ALIAS_CODES:
                 continue
             self.assertIsLanguageCode(lang_code)
 
