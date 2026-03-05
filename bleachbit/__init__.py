@@ -29,7 +29,9 @@ if sys.version_info < (3, 8, 0):
 if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
     stdout_encoding = 'utf-8'
 else:
-    stdout_encoding = sys.stdout.encoding
+    # In windowed/frozen runtimes (e.g., PyInstaller --windowed), sys.stdout
+    # may be None. Keep a safe default instead of crashing at import time.
+    stdout_encoding = getattr(sys.stdout, 'encoding', None) or 'utf-8'
 
 logger = Log.init_log()
 
@@ -222,6 +224,7 @@ update_check_url = "%s/update/%s" % (base_url, APP_VERSION)
 if 'nt' == os.name:
     from bleachbit import Windows
     Windows.setup_environment()
+    Windows.setup_accessibility_environment()
 
 if 'posix' == os.name:
     # Set fallbacks for environment variables.

@@ -62,6 +62,15 @@ if os.name == 'nt':
 
 # Use GUI if no arguments provided and display is available
 if 1 == len(sys.argv) and have_gui:
+    # On Windows prefer Qt frontend for better screen reader support when
+    # available, and fall back to GTK frontend.
+    if os.name == 'nt':
+        try:
+            from bleachbit.QtApplication import run_qt_gui
+        except Exception:
+            pass
+        else:
+            sys.exit(run_qt_gui())
     # Import GUI inside the condition for Linux packagers to
     # separate GUI into another package.
     import bleachbit.GuiApplication  # pylint: disable=ungrouped-imports
