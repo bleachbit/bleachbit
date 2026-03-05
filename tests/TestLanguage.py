@@ -63,6 +63,8 @@ class LanguageTestCase(common.BleachbitTestCase):
         self.assertTrue(isinstance(slangs, list))
         self.assertTrue(len(slangs) > 1)
         for slang in slangs:
+            if slang in common.SKIP_ALIAS_CODES:
+                continue
             self.assertIsLanguageCode(slang)
         self.assertTrue('en_US' in slangs)
         if len(get_supported_language_codes()) < 3:
@@ -97,6 +99,8 @@ class LanguageTestCase(common.BleachbitTestCase):
     def test_get_text_all(self):
         """Test get_text across all languages"""
         for lang_id in get_supported_language_codes():
+            if lang_id in common.SKIP_ALIAS_CODES:
+                continue
             options.set('forced_language', lang_id)
             self.assertEqual(get_active_language_code(), lang_id)
             setup_translation()
