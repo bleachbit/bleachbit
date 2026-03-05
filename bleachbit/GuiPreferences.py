@@ -431,7 +431,7 @@ class PreferencesDialog:
         settings.set_property("gtk-font-name", font)
 
         # Update font size in the main GUI if available
-        from bleachbit.GUI import get_font_size_from_name
+        from bleachbit.GuiUtil import get_font_size_from_name
         if hasattr(self, 'window') and hasattr(self.window, 'font_size'):
             new_size = get_font_size_from_name(font)
             if new_size:
