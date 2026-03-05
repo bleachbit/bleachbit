@@ -1,6 +1,7 @@
 
 # vim: ts=4:sw=4:expandtab
 # -*- coding: UTF-8 -*-
+# pylint: disable=import-outside-toplevel,line-too-long,broad-exception-caught,invalid-name
 
 # BleachBit
 # Copyright (C) 2008-2025 Andrew Ziem
@@ -25,11 +26,16 @@ Show system information
 """
 
 # standard library
-import logging
+import configparser
+import ctypes
 import locale
+import logging
 import os
 import platform
+import sqlite3
 import sys
+from collections import OrderedDict
+from ctypes import byref, Structure, c_uint, c_ulong, c_wchar_p, create_unicode_buffer, POINTER
 
 # local
 import bleachbit
@@ -57,17 +63,395 @@ def get_gtk_info():
         logger.debug('GTK not available: %s', get_gtk_unavailable_reason())
         return info
 
-    settings = Gtk.Settings.get_default()
+    settings = Gtk.Settings.get_default() # pylint: disable=no-value-for-parameter
     if not settings:
-        logger.debug('GTK settings not found')
+        info['GTK settings'] = 'not found'
         return info
 
-    info['GTK version'] = f"{Gtk.get_major_version()}.{Gtk.get_minor_version()}.{Gtk.get_micro_version()}"
+    info['GTK version'] = f"{Gtk.get_major_version()}.{Gtk.get_minor_version()}.{Gtk.get_micro_version()}" # pylint: disable=no-value-for-parameter
     info['GTK theme'] = settings.get_property('gtk-theme-name')
     info['GTK icon theme'] = settings.get_property('gtk-icon-theme-name')
     info['GTK prefer dark theme'] = settings.get_property(
         'gtk-application-prefer-dark-theme')
+    info['GTK font name'] = settings.get_property('gtk-font-name')
 
+    # Graphics library versions
+    try:
+        import cairo
+        info['Cairo version'] = cairo.cairo_version_string()
+    except ImportError:
+        info['Cairo version'] = 'not found'
+
+    try:
+        gi.require_version('Pango', '1.0')
+        from gi.repository import Pango
+        info['Pango version'] = Pango.version_string()
+    except (ImportError, ValueError):
+        info['Pango version'] = 'not found'
+
+    try:
+        gi.require_version('HarfBuzz', '0.0')
+        from gi.repository import HarfBuzz
+        info['HarfBuzz version'] = HarfBuzz.VERSION_STRING
+    except (ImportError, ValueError, AttributeError) as e:
+        info['HarfBuzz version'] = str(e)
+
+    return info
+
+
+def get_windows_font_info():
+    """Get Windows font information."""
+    info = {}
+    from ctypes import windll
+    from winreg import OpenKey, QueryValueEx, HKEY_LOCAL_MACHINE, CloseKey
+
+    # Get Windows font file sizes
+    try:
+        windows_fonts_dir = os.path.join(os.getenv('WINDIR', r'c:\windows'), 'Fonts')
+        for font_file in ['segoeui.ttf', 'tahoma.ttf']:
+            font_path = os.path.join(windows_fonts_dir, font_file)
+            if os.path.exists(font_path):
+                info[f'{font_file} size'] = f"{os.path.getsize(font_path):,} bytes"
+            else:
+                info[f'{font_file}'] = 'not found'
+    except Exception as e:
+        info['Windows font file error'] = str(e)
+
+    # Font smoothing and ClearType information
+    SPI_GETFONTSMOOTHING = 0x004A
+    SPI_GETFONTSMOOTHINGTYPE = 0x200A
+    FE_FONTSMOOTHINGCLEARTYPE = 0x0002
+    font_smoothing = ctypes.c_uint(0)
+    smoothing_type = ctypes.c_uint(0)
+    try:
+
+        if windll.user32.SystemParametersInfoW(SPI_GETFONTSMOOTHING, 0, byref(font_smoothing), 0):
+            info['Font Smoothing Enabled'] = bool(font_smoothing.value)
+
+            if windll.user32.SystemParametersInfoW(SPI_GETFONTSMOOTHINGTYPE, 0, byref(smoothing_type), 0):
+                info['Font Smoothing Type'] = 'ClearType' if smoothing_type.value == FE_FONTSMOOTHINGCLEARTYPE else 'Standard'
+    except Exception as e:
+        info['Font smoothing API error'] = str(e)
+
+
+    # Check for font registry values
+    try:
+        font_reg_path = r'SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts'
+        font_key = OpenKey(HKEY_LOCAL_MACHINE, font_reg_path)
+
+        # Add Segoe UI font values
+        segoe_ui_fonts = [
+            "Segoe UI (TrueType)",
+            "Segoe UI Bold (TrueType)",
+            "Segoe UI Bold Italic (TrueType)",
+            "Segoe UI Italic (TrueType)",
+            "Segoe UI Light (TrueType)",
+            "Segoe UI Semibold (TrueType)",
+            "Segoe UI Symbol (TrueType)",
+            "Tahoma (TrueType)",
+            "Tahoma Bold (TrueType)",
+        ]
+
+        for font_name in segoe_ui_fonts:
+            try:
+                value, _ = QueryValueEx(font_key, font_name)
+                info[f'Font registry: {font_name}'] = value
+            except WindowsError:
+                info[f'Font registry: {font_name}'] = 'not found'
+        CloseKey(font_key)
+
+        # Check font substitution
+        subst_reg_path = r'SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes'
+        subst_key = OpenKey(HKEY_LOCAL_MACHINE, subst_reg_path)
+
+        for font_name in ('Segoe UI', 'Tahoma'):
+            try:
+                value, _ = QueryValueEx(subst_key, font_name)
+                info[f'Font Substitute: {font_name}'] = value
+            except WindowsError:
+                info[f'Font Substitute: {font_name}'] = 'not found'
+        CloseKey(subst_key)
+    except Exception as e:
+        info['Font registry error'] = str(e)
+    return info
+
+
+def get_windows_display_info():
+    """Get Windows display information including ClearType, display count, resolution, and DPI."""
+    from ctypes import WINFUNCTYPE, WinDLL
+    from winreg import OpenKey, QueryValueEx, HKEY_CURRENT_USER, KEY_READ, EnumKey
+
+    class RECT(Structure):
+        _fields_ = [
+            ('left', ctypes.c_long),
+            ('top', ctypes.c_long),
+            ('right', ctypes.c_long),
+            ('bottom', ctypes.c_long)
+        ]
+
+    class DEVMODEW(Structure):
+        _fields_ = [
+            ('dmDeviceName', c_wchar_p * 32),
+            ('dmSpecVersion', ctypes.c_ushort),
+            ('dmDriverVersion', ctypes.c_ushort),
+            ('dmSize', ctypes.c_ushort),
+            ('dmDriverExtra', ctypes.c_ushort),
+            ('dmFields', ctypes.c_ulong),
+            ('dmPositionX', ctypes.c_long),
+            ('dmPositionY', ctypes.c_long),
+            ('dmDisplayOrientation', ctypes.c_ulong),
+            ('dmDisplayFixedOutput', ctypes.c_ulong),
+            ('dmColor', ctypes.c_short),
+            ('dmDuplex', ctypes.c_short),
+            ('dmYResolution', ctypes.c_short),
+            ('dmTTOption', ctypes.c_short),
+            ('dmCollate', ctypes.c_short),
+            ('dmFormName', c_wchar_p * 32),
+            ('dmLogPixels', ctypes.c_ushort),
+            ('dmBitsPerPel', ctypes.c_ulong),
+            ('dmPelsWidth', ctypes.c_ulong),
+            ('dmPelsHeight', ctypes.c_ulong),
+            ('dmDisplayFlags', ctypes.c_ulong),
+            ('dmDisplayFrequency', ctypes.c_ulong),
+            ('dmICMMethod', ctypes.c_ulong),
+            ('dmICMIntent', ctypes.c_ulong),
+            ('dmMediaType', ctypes.c_ulong),
+            ('dmDitherType', ctypes.c_ulong),
+            ('dmReserved1', ctypes.c_ulong),
+            ('dmReserved2', ctypes.c_ulong),
+            ('dmPanningWidth', ctypes.c_ulong),
+            ('dmPanningHeight', ctypes.c_ulong)
+        ]
+
+    info = {}
+
+    # ClearType is enabled?
+    try:
+        try:
+            key = OpenKey(HKEY_CURRENT_USER, r"Software\Microsoft\Avalon.Graphics", 0, KEY_READ)
+            i = 0
+            while True:
+                try:
+                    subkey_name = EnumKey(key, i)
+                    with OpenKey(key, subkey_name) as subkey:
+                        try:
+                            cleartype_level, _ = QueryValueEx(subkey, 'ClearTypeLevel')
+                            info[f'Display {subkey_name} ClearTypeLevel'] = cleartype_level
+                        except WindowsError:
+                            pass
+                    i += 1
+                except WindowsError:
+                    break
+        except FileNotFoundError:
+            info['ClearType registry'] = 'Key not found (ClearType settings not available)'
+        except Exception as e:
+            info['ClearType registry error'] = str(e)
+    except ImportError:
+        info['ClearType check error'] = 'winreg module not available'
+
+
+    try:
+        try:
+            MonitorEnumProc = WINFUNCTYPE(ctypes.c_int, ctypes.c_ulong, ctypes.c_ulong,
+                                        POINTER(RECT), ctypes.c_double)
+
+            display_count = [0]
+
+            def enum_proc(_hmonitor, _hdc, _lprect, _lparam):
+                display_count[0] += 1
+                return 1
+
+            # Enumerate all monitors
+            ctypes.windll.user32.EnumDisplayMonitors(0, 0, MonitorEnumProc(enum_proc), 0)
+            info['Display Count'] = display_count[0]
+
+            # Get display information for each display
+            # Use DISPLAY_DEVICE structure to enumerate devices
+            class DISPLAY_DEVICEW(ctypes.Structure):
+                _fields_ = [
+                    ("cb", ctypes.c_ulong),
+                    ("DeviceName", ctypes.c_wchar * 32),
+                    ("DeviceString", ctypes.c_wchar * 128),
+                    ("StateFlags", ctypes.c_ulong),
+                    ("DeviceID", ctypes.c_wchar * 128),
+                    ("DeviceKey", ctypes.c_wchar * 128)
+                ]
+
+            i = 0
+            while True:
+                display_device = DISPLAY_DEVICEW()
+                display_device.cb = ctypes.sizeof(DISPLAY_DEVICEW)
+                if not ctypes.windll.user32.EnumDisplayDevicesW(None, i, ctypes.byref(display_device), 0):
+                    break
+                device_name = display_device.DeviceName
+                device_string = display_device.DeviceString
+
+                # Get display settings
+                devmode = DEVMODEW()
+                devmode.dmSize = ctypes.sizeof(DEVMODEW)
+                if ctypes.windll.user32.EnumDisplaySettingsW(device_name, -1, ctypes.byref(devmode)):
+                    info[f'Display {i} Name'] = device_name
+                    info[f'Display {i} String'] = device_string
+                    info[f'Display {i} Resolution'] = f"{devmode.dmPelsWidth}x{devmode.dmPelsHeight}"
+                else:
+                    info[f'Display {i} Name'] = device_name
+                    info[f'Display {i} String'] = device_string
+                    info[f'Display {i} Resolution'] = 'Unknown'
+
+                # DPI and scale as before
+                try:
+                    shcore = WinDLL('shcore')
+                    PROCESS_PER_MONITOR_DPI_AWARE = 2
+                    shcore.SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE)
+                    MONITOR_DEFAULTTONEAREST = 2
+                    # Use MonitorFromPoint with a point inside the display
+                    point = ctypes.wintypes.POINT(getattr(devmode, 'dmPositionX', 0) + 1, getattr(devmode, 'dmPositionY', 0) + 1)
+                    hmonitor = ctypes.windll.user32.MonitorFromPoint(point, MONITOR_DEFAULTTONEAREST)
+                    dpiX = ctypes.c_uint()
+                    dpiY = ctypes.c_uint()
+                    shcore.GetDpiForMonitor(hmonitor, 0, ctypes.byref(dpiX), ctypes.byref(dpiY))
+                    info[f'Display {i} DPI'] = f"{dpiX.value}x{dpiY.value}"
+                    scale_x = round((dpiX.value / 96.0) * 100)
+                    scale_y = round((dpiY.value / 96.0) * 100)
+                    info[f'Display {i} Scale'] = f"{scale_x}% x {scale_y}%"
+                except Exception:
+                    hdc = ctypes.windll.user32.GetDC(0)
+                    dpi_x = ctypes.windll.gdi32.GetDeviceCaps(hdc, 88)
+                    dpi_y = ctypes.windll.gdi32.GetDeviceCaps(hdc, 90)
+                    ctypes.windll.user32.ReleaseDC(0, hdc)
+                    scale_x = round((dpi_x / 96.0) * 100)
+                    scale_y = round((dpi_y / 96.0) * 100)
+                    info[f'Display {i} Scale (legacy)'] = f"{scale_x}% x {scale_y}%"
+                i += 1
+
+                # Get DPI information (Windows 8.1+)
+                try:
+                    shcore = WinDLL('shcore')
+                    PROCESS_PER_MONITOR_DPI_AWARE = 2
+                    shcore.SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE)
+
+                    MONITOR_DEFAULTTONEAREST = 2
+                    hmonitor = ctypes.windll.user32.MonitorFromPoint(
+                        ctypes.wintypes.POINT(devmode.dmPosition.x + 1, devmode.dmPosition.y + 1),
+                        MONITOR_DEFAULTTONEAREST)
+
+                    dpiX = ctypes.c_uint()
+                    dpiY = ctypes.c_uint()
+                    shcore.GetDpiForMonitor(hmonitor, 0, byref(dpiX), byref(dpiY))
+                    info[f'Display {i} DPI'] = f"{dpiX.value}x{dpiY.value}"
+
+                    # Calculate scale percentage (assuming 96 DPI = 100%)
+                    scale_x = round((dpiX.value / 96.0) * 100)
+                    scale_y = round((dpiY.value / 96.0) * 100)
+                    info[f'Display {i} Scale'] = f"{scale_x}% x {scale_y}%"
+
+                except (OSError, AttributeError):
+                    # Fallback for Windows versions before 8.1
+                    hdc = ctypes.windll.user32.GetDC(0)
+                    dpi_x = ctypes.windll.gdi32.GetDeviceCaps(hdc, 88)  # LOGPIXELSX
+                    dpi_y = ctypes.windll.gdi32.GetDeviceCaps(hdc, 90)  # LOGPIXELSY
+                    ctypes.windll.user32.ReleaseDC(0, hdc)
+
+                    scale_x = round((dpi_x / 96.0) * 100)
+                    scale_y = round((dpi_y / 96.0) * 100)
+                    info[f'Display {i} Scale (legacy)'] = f"{scale_x}% x {scale_y}%"
+
+                except Exception as e:
+                    info[f'Display {i} error'] = str(e)
+                    continue
+
+        except Exception as e:
+            info['Display enumeration error'] = str(e)
+
+    except Exception as e:
+        info['Windows display info error'] = str(e)
+
+    return info
+
+
+def get_windows_language_info():
+    from ctypes import windll
+    info = {}
+    # Check Windows registry for code page settings
+    try:
+        import winreg
+        reg_path = r'SYSTEM\CurrentControlSet\Control\Nls\CodePage'
+        registry_key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, reg_path)
+
+        for value_name in ('ACP', 'OEMCP', 'MACCP'):
+            try:
+                value, _ = winreg.QueryValueEx(registry_key, value_name)
+                info[f'Windows Registry CodePage {value_name}'] = value
+            except WindowsError:
+                info[f'Windows Registry CodePage {value_name}'] = 'not found'
+
+        winreg.CloseKey(registry_key)
+    except Exception as e:
+        info['Windows Registry error'] = str(e)
+
+    # Get the Windows ANSI Code Page and OEM Code Page using the Windows API
+    class CPINFO(Structure):
+        _fields_ = [("MaxCharSize", c_uint),
+                    ("DefaultChar", c_uint * 2),
+                    ("LeadByte", c_uint * 12)]
+    cp_info = CPINFO()
+    lcid = None
+    try:
+        info['Windows API GetACP'] = str(windll.kernel32.GetACP())
+        info['Windows API GetOEMCP'] = str(windll.kernel32.GetOEMCP())
+        if windll.kernel32.GetCPInfo(windll.kernel32.GetACP(), byref(cp_info)):
+            info['Windows API MaxCharSize'] = str(cp_info.MaxCharSize)
+
+        # Get language information
+        kernel32 = windll.kernel32
+        lcid = kernel32.GetUserDefaultLCID()
+        info['Windows LCID'] = str(lcid)
+
+        # Get UI language preferences
+        info['Windows GetUserDefaultUILanguage'] = str(
+            kernel32.GetUserDefaultUILanguage())
+    except Exception as e:
+        info['Windows API part 1 language error'] = str(e)
+
+    # Get preferred UI languages
+    MUI_LANGUAGE_NAME = 0x8
+    num_languages = c_ulong(0)
+    buffer_size = c_ulong(0)
+
+    try:
+        # Get buffer size needed
+        if kernel32.GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, byref(num_languages), None, byref(buffer_size)):
+            buffer = create_unicode_buffer(buffer_size.value)
+            if kernel32.GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, byref(num_languages), buffer, byref(buffer_size)):
+                languages = []
+                offset = 0
+                for _ in range(num_languages.value):
+                    languages.append(buffer[offset:].split('\0')[0])
+                    offset += len(languages[-1]) + 1
+                info['Windows GetUserPreferredUILanguages'] = ", ".join(
+                    languages)
+
+        # Get thread preferred UI languages
+        num_languages = c_ulong(0)
+        buffer_size = c_ulong(0)
+        if kernel32.GetThreadPreferredUILanguages(MUI_LANGUAGE_NAME, byref(num_languages), None, byref(buffer_size)):
+            buffer = create_unicode_buffer(buffer_size.value)
+            if kernel32.GetThreadPreferredUILanguages(MUI_LANGUAGE_NAME, byref(num_languages), buffer, byref(buffer_size)):
+                languages = []
+                offset = 0
+                for _ in range(num_languages.value):
+                    languages.append(buffer[offset:].split('\0')[0])
+                    offset += len(languages[-1]) + 1
+                info['Windows GetThreadPreferredUILanguages'] = ", ".join(
+                    languages)
+
+    except Exception as e:
+        info['Windows API part 2 language error'] = str(e)
+    # Convert Windows LCID to RFC1766 (e.g., en-US).
+    if lcid:
+        info['Windows locale'] = locale.windows_locale.get(lcid, '')
+    else:
+        info['Windows locale'] = 'unknown'
     return info
 
 
@@ -99,7 +483,6 @@ def get_version(four_parts=False):
 
 def get_system_information():
     """Return system information as a string."""
-    from collections import OrderedDict
     info = OrderedDict()
 
     # Application and library versions
@@ -115,8 +498,81 @@ def get_system_information():
 
     info.update(get_gtk_info())
 
-    import sqlite3
     info['SQLite version'] = sqlite3.sqlite_version
+
+
+
+
+    # System environment information
+    info['locale.getlocale'] = str(locale.getlocale())
+
+    # check whether GTK_CONFIG_HOME exists
+    # Linux: USER_CONFIG_HOME/gtk-3.0
+    # Windows: %LOCALAPPDATA%\gtk-3.0
+    # settings.ini may not work on Windows
+    if os.name == 'nt':
+        gtk_config_home = os.getenv('LOCALAPPDATA')
+    else:
+        gtk_config_home = os.getenv('XDG_CONFIG_HOME')
+    if gtk_config_home:
+        gtk_config_home = os.path.join(gtk_config_home, 'gtk-3.0')
+        if os.path.exists(gtk_config_home):
+            info['GTK_CONFIG_HOME'] = 'found'
+            gtk_css = os.path.join(gtk_config_home, 'gtk.css')
+            if os.path.exists(gtk_css):
+                info['GTK_CSS'] = f"{os.path.getsize(gtk_css):,} bytes"
+            else:
+                info['GTK_CSS'] = 'not found'
+            gtk_settings_ini = os.path.join(gtk_config_home, 'settings.ini')
+            if os.path.exists(gtk_settings_ini):
+                info['GTK_SETTINGS_INI'] = f"{os.path.getsize(gtk_settings_ini):,} bytes"
+                config = configparser.ConfigParser()
+                try:
+                    config.read(gtk_settings_ini)
+                    if 'Settings' in config and 'gtk-font-name' in config['Settings']:
+                        info['GTK font name'] = config['Settings']['gtk-font-name']
+                    else:
+                        info['GTK font name'] = 'not found in settings.ini'
+                except Exception as e:
+                    info['GTK_SETTINGS_INI error'] = str(e)
+            else:
+                info['GTK_SETTINGS_INI'] = 'not found'
+        else:
+            info['GTK_CONFIG_HOME'] = 'not found'
+
+
+
+    if os.name == 'nt':
+        fontconfig_dir = os.path.join(os.getenv('LOCALAPPDATA'), 'fontconfig')
+        if os.path.exists(fontconfig_dir):
+            info['Windows fontconfig directory'] = 'found'
+            try:
+                fontconfig_files = []
+                for root, dirs, files in os.walk(fontconfig_dir):
+                    # Only go one level deep
+                    if root != fontconfig_dir and os.path.dirname(root) != fontconfig_dir:
+                        continue
+                    for filename in files:
+                        rel_path = os.path.relpath(os.path.join(root, filename), fontconfig_dir)
+                        fontconfig_files.append(rel_path)
+                        filepath = os.path.join(root, filename)
+                        if os.path.isfile(filepath):
+                            info[f'Windows fontconfig {rel_path}'] = f"{os.path.getsize(filepath):,} bytes"
+                #info['Windows fontconfig files'] = ', '.join(fontconfig_files) if fontconfig_files else 'empty directory'
+            except Exception as e:
+                info['Windows fontconfig error'] = str(e)
+        else:
+            info['Windows fontconfig directory'] = 'not found'
+
+        language_info = get_windows_language_info()
+        if language_info:
+            info.update(language_info)
+        display_info = get_windows_display_info()
+        if display_info:
+            info.update(display_info)
+        font_info = get_windows_font_info()
+        if font_info:
+            info.update(font_info)
 
     # Variables defined in __init__.py
     info['local_cleaners_dir'] = bleachbit.local_cleaners_dir
@@ -125,15 +581,13 @@ def get_system_information():
     info['personal_cleaners_dir'] = bleachbit.personal_cleaners_dir
     info['system_cleaners_dir'] = bleachbit.system_cleaners_dir
 
-    # System environment information
-    info['locale.getlocale'] = str(locale.getlocale())
-
     # Environment variables
     if 'posix' == os.name:
         envs = ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID')
     elif 'nt' == os.name:
         envs = ('APPDATA', 'cd', 'LocalAppData', 'LocalAppDataLow', 'Music',
-                'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
+                'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP','PANGOCAIRO_BACKEND',
+                'FONTCONFIG_FILE', 'FONTCONFIG_PATH')
     else:
         envs = ()
 
@@ -163,7 +617,7 @@ def get_system_information():
     info['sys.executable'] = get_executable()
     info['sys.version'] = sys.version
     if 'nt' == os.name:
-        from win32com.shell import shell
+        from win32com.shell import shell # pylint: disable=import-error,no-name-in-module
         info['IsUserAnAdmin()'] = shell.IsUserAnAdmin()
     info['__file__'] = __file__
 

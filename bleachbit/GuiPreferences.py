@@ -28,6 +28,7 @@ from bleachbit import online_update_notification_enabled
 from bleachbit import ProtectedPath
 from bleachbit.Constant import EMPTY_SPACE_WARNING, MANAGE_COOKIES_TO_KEEP
 from bleachbit.GtkShim import Gtk, GLib
+from gi.repository import Pango
 from bleachbit.GuiCookie import CookieManagerDialog
 from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _, pget_text as _p
@@ -392,6 +393,69 @@ class PreferencesDialog:
             _("Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"),
             "units_iec")
 
+    def __create_font_widgets(self, vbox):
+        """Create and configure font selection widgets"""
+        font_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        font_box.set_margin_top(5)
+        font_box.set_margin_bottom(5)
+
+        font_label = Gtk.Label(label=_('Application font:'))
+        font_label.set_halign(Gtk.Align.START)
+        font_box.pack_start(font_label, False, True, 0)
+
+        current_font = options.get('app_font') if options.has_option('app_font') else 'Calibri 10'
+
+        self.font_button = Gtk.FontButton()
+        self.font_button.set_font(current_font)
+        self.font_button.connect('font-set', self.on_font_set)
+        font_box.pack_start(self.font_button, False, True, 5)
+
+        vbox.pack_start(font_box, False, True, 0)
+
+        if os.name == 'nt':
+            self.cb_fontconfig_backend = Gtk.CheckButton(
+                label=_("Use fontconfig backend to draw text"))
+            self.cb_fontconfig_backend.set_active(
+                options.get('use_fontconfig_backend'))
+            self.cb_fontconfig_backend.connect(
+                'toggled', self.on_fontconfig_backend_toggled)
+            vbox.pack_start(self.cb_fontconfig_backend, False, True, 0)
+
+    def on_font_set(self, widget):
+        """Callback for when the font is selected"""
+        font_desc = widget.get_font_desc()
+        font = font_desc.to_string()
+        options.set('app_font', font)
+        logger.debug("Setting font to %s", font)
+        settings = Gtk.Settings.get_default()
+        settings.set_property("gtk-font-name", font)
+
+        # Update font size in the main GUI if available
+        from bleachbit.GUI import get_font_size_from_name
+        if hasattr(self, 'window') and hasattr(self.window, 'font_size'):
+            new_size = get_font_size_from_name(font)
+            if new_size:
+                self.window.font_size = new_size
+
+    def __show_restart_notice(self):
+        dialog = Gtk.MessageDialog(
+            transient_for=self.dialog,
+            flags=Gtk.DialogFlags.MODAL,
+            message_type=Gtk.MessageType.INFO,
+            buttons=Gtk.ButtonsType.OK,
+            text=_("Restart required"),
+        )
+        dialog.format_secondary_text(
+            _("Restart BleachBit for the fontconfig backend change to take effect."))
+        dialog.run()
+        dialog.destroy()
+
+    def on_fontconfig_backend_toggled(self, widget):
+        """Callback for fontconfig toggle"""
+        is_enabled = widget.get_active()
+        options.set('use_fontconfig_backend', is_enabled)
+        self.__show_restart_notice()
+
     def __general_page(self):
         """Return a widget containing the general page"""
 
@@ -400,6 +464,9 @@ class PreferencesDialog:
         self.__create_update_widgets(self.general_vbox)
 
         self.__create_general_checkboxes(self.general_vbox)
+
+        # Add font chooser widgets
+        self.__create_font_widgets(self.general_vbox)
 
         self._create_checkbox(
             # TRANSLATORS: Checkbox label in the preferences to enable
