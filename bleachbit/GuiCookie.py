@@ -41,19 +41,12 @@ logger = logging.getLogger(__name__)
 COOKIE_DISCOVERY_WARN_THRESHOLD = 2.0  # seconds
 
 
-class CookieManagerDialog(Gtk.Window):
-    """Manage cookies to keep"""
+class CookieManagerPane(Gtk.Box):
+    """Widget for managing cookies to keep when cleaning."""
 
-    def __init__(self):
-        # TRANSLATORS: Title of the dialog to manage cookies to keep
-        Gtk.Window.__init__(self, title=_("Manage cookies to keep"))
-        self.set_default_size(600, 500)
-        self.set_border_width(10)
-        self.set_position(Gtk.WindowPosition.CENTER)
-
-        # Main vertical box
-        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-        self.add(vbox)
+    def __init__(self, bottom_widget=None):
+        Gtk.Box.__init__(
+            self, orientation=Gtk.Orientation.VERTICAL, spacing=10)
 
         # Instructions label
         instructions = Gtk.Label()
@@ -61,12 +54,12 @@ class CookieManagerDialog(Gtk.Window):
             # TRANSLATORS: Instruction label in the manage cookies dialog.
             "<b>" + _("Select the cookies to keep when cleaning cookies across browsers.") + "</b>")
         instructions.set_line_wrap(True)
-        instructions.set_xalign(0)  # Left align
-        vbox.pack_start(instructions, False, False, 0)
+        instructions.set_xalign(0)
+        self.pack_start(instructions, False, False, 0)
 
         # Search box
         search_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-        vbox.pack_start(search_box, False, False, 0)
+        self.pack_start(search_box, False, False, 0)
 
         # TRANSLATORS: Label for the search entry in the manage cookies dialog.
         search_label = Gtk.Label(label=_("Search:"))
@@ -74,11 +67,14 @@ class CookieManagerDialog(Gtk.Window):
 
         self.search_entry = Gtk.Entry()
         # TRANSLATORS: Placeholder text in the search entry in the manage cookies dialog.
+        # 'Filter' is a verb meaning to narrow down the list by typing.
         self.search_entry.set_placeholder_text(_("Filter cookies..."))
         self.search_entry.connect("changed", self.on_search_changed)
         search_box.pack_start(self.search_entry, True, True, 0)
 
         # TRANSLATORS: Toggle button label in the manage cookies dialog.
+        # "Show" is a command (imperative).
+        # 'Selected' refers to selected cookies (the noun "cookies" is implied).
         self.selected_toggle = Gtk.ToggleButton(label=_("Show Selected"))
         self.selected_toggle.set_tooltip_text(
             # TRANSLATORS: Tooltip for the "Show Selected" toggle button.
@@ -92,7 +88,7 @@ class CookieManagerDialog(Gtk.Window):
         scrolled = Gtk.ScrolledWindow()
         scrolled.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         scrolled.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
-        vbox.pack_start(scrolled, True, True, 0)
+        self.pack_start(scrolled, True, True, 0)
 
         self.keep_list_path = os.path.join(
             bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
@@ -116,6 +112,7 @@ class CookieManagerDialog(Gtk.Window):
 
         renderer_text = Gtk.CellRendererText()
         # TRANSLATORS: Column header in the manage cookies dialog.
+        # 'Host' is a noun meaning the website hostname (domain name) of the cookie.
         column_domain = Gtk.TreeViewColumn(_("Host"), renderer_text, text=1)
         column_domain.set_sort_column_id(1)
         column_domain.set_resizable(True)
@@ -128,7 +125,7 @@ class CookieManagerDialog(Gtk.Window):
         button_box = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         button_box.set_halign(Gtk.Align.END)
-        vbox.pack_start(button_box, False, False, 0)
+        self.pack_start(button_box, False, False, 0)
 
         # Stat label
         self.stat_label = Gtk.Label()
@@ -142,25 +139,28 @@ class CookieManagerDialog(Gtk.Window):
         button_box.pack_start(self.select_all_btn, False, False, 0)
 
         # TRANSLATORS: Button label in the manage cookies dialog.
-        # The underscore indicates the accelerator key.
         self.deselect_all_btn = Gtk.Button.new_with_label(_("Deselect All"))
         self.deselect_all_btn.connect("clicked", self.on_deselect_all_clicked)
         button_box.pack_start(self.deselect_all_btn, False, False, 0)
 
-        # Action buttons
-        # TRANSLATORS: Button label in the manage cookies dialog.
-        # The underscore indicates the accelerator key.
-        self.cancel_btn = Gtk.Button.new_with_mnemonic(_("_Cancel"))
-        self.cancel_btn.connect("clicked", self.on_cancel_clicked)
-        button_box.pack_start(self.cancel_btn, False, False, 0)
-
-        # TRANSLATORS: Button label in the manage cookies dialog.
-        self.keep_btn = Gtk.Button.new_with_label(_("Keep Selected"))
-        self.keep_btn.get_style_context().add_class("suggested-action")
-        self.keep_btn.connect("clicked", self.on_keep_clicked)
-        button_box.pack_start(self.keep_btn, False, False, 0)
+        if bottom_widget is not None:
+            self.pack_start(bottom_widget, False, False, 0)
 
         self._populate_cookie_store()
+
+    def save_changes(self):
+        """Save choices to a JSON file."""
+        keep_list = sorted(self._iter_selected_domains())
+
+        try:
+            with open(self.keep_list_path, "w", encoding="utf-8") as f:
+                json.dump(keep_list, f, indent=2)
+            self.saved_domains = set(keep_list)
+            return True
+        except OSError as exc:
+            logger.error("Failed to save cookie keep list %s: %s",
+                         self.keep_list_path, exc)
+            return False
 
     def update_stat_label(self):
         """Update the stat label: how many selected"""
@@ -190,16 +190,19 @@ class CookieManagerDialog(Gtk.Window):
 
         # Toggle the checkbox in the child model
         self.cookie_store[child_path][0] = not self.cookie_store[child_path][0]
+        self.save_changes()
         self.update_stat_label()
 
     def on_select_all_clicked(self, _widget):
         """Select all cookies"""
         self._set_filtered_selection(True)
+        self.save_changes()
         self.update_stat_label()
 
     def on_deselect_all_clicked(self, _widget):
         """Deselect all cookies"""
         self._set_filtered_selection(False)
+        self.save_changes()
         self.update_stat_label()
 
     def _set_filtered_selection(self, is_selected):
@@ -209,33 +212,14 @@ class CookieManagerDialog(Gtk.Window):
         paths = []
         tree_iter = self.cookie_filter.get_iter_first()
         while tree_iter:
-            child_iter = self.cookie_filter.convert_iter_to_child_iter(tree_iter)
+            child_iter = self.cookie_filter.convert_iter_to_child_iter(
+                tree_iter)
             if child_iter:
                 paths.append(self.cookie_store.get_path(child_iter))
             tree_iter = self.cookie_filter.iter_next(tree_iter)
 
         for path in paths:
             self.cookie_store[path][0] = is_selected
-
-    def on_cancel_clicked(self, _widget):
-        """Cancel the dialog"""
-        self.destroy()
-
-    def on_keep_clicked(self, _widget):
-        """Keep the selected cookies"""
-        keep_list = sorted(self._iter_selected_domains())
-
-        # Save keep list to file
-        try:
-            with open(self.keep_list_path, "w", encoding="utf-8") as f:
-                json.dump(keep_list, f, indent=2)
-            self.saved_domains = set(keep_list)
-        except OSError as exc:
-            logger.error("Failed to save cookie keep list %s: %s",
-                         self.keep_list_path, exc)
-            return
-
-        self.destroy()
 
     def filter_cookies(self, model, tree_iter, _data):
         """Filter function for the cookie list"""
@@ -276,7 +260,8 @@ class CookieManagerDialog(Gtk.Window):
         # Find the scrolled window's parent vbox and insert a spinner overlay
         scrolled = self.treeview.get_parent()
         vbox = scrolled.get_parent()
-        spinner_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        spinner_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         spinner_box.set_halign(Gtk.Align.CENTER)
         spinner_box.pack_start(self._spinner, False, False, 0)
         # TRANSLATORS: Status message shown while the cookie list is loading
@@ -324,6 +309,7 @@ class CookieManagerDialog(Gtk.Window):
         return False
 
     def _iter_selected_domains(self):
+        """Yield domain names for all selected (checked) cookies."""
         for row in self.cookie_store:
             if row[0]:
                 yield row[1]

@@ -24,13 +24,6 @@ ABORT_BUTTON_LABEL = _('Abort')
 # in the log of actions that are performed (clean mode).
 CLEAN_FILE_LABEL = _('Clean file')
 
-# TRANSLATORS: This message is used in two places to open the cookie preference
-# manager dialog.
-# (1) Context menu in the tree view.
-# (2) Button in the preferences dialogs
-# Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
-MANAGE_COOKIES_TO_KEEP = _("Manage cookies to keep\u2026")
-
 # TRANSLATORS: This message is used in three places (1) label at top of the
 # preferences dialog (2) confirmation dialog when enabling the cleaning option
 # (3) log message when starting to clean empty space.

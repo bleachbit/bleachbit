@@ -12,7 +12,7 @@ import time
 import bleachbit
 from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path
 from bleachbit.Cleaner import backends, register_cleaners
-from bleachbit.Constant import ABORT_BUTTON_LABEL, MANAGE_COOKIES_TO_KEEP
+from bleachbit.Constant import ABORT_BUTTON_LABEL
 from bleachbit.GUI import logger
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiPreferences import PreferencesDialog
@@ -35,6 +35,11 @@ PREVIEW_MSG = _('Preview')
 # in the treeview.
 # 'Clean' is a verb.
 CLEAN_MSG = _('Clean')
+
+# TRANSLATORS: Button in tree view's context menu to open the cookie
+# manager.
+# Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
+MANAGE_COOKIES_TO_KEEP = _("Manage cookies to keep\u2026")
 
 # Ensure GTK is available for this GUI module
 require_gtk()
@@ -433,6 +438,18 @@ class GUI(Gtk.ApplicationWindow):
             self.cb_refresh_operations,
             self.set_windows10_theme)
 
+    def show_preferences_dialog(self, page_name=None):
+        """Show the preferences dialog.
+
+        Args:
+            page_name: The name of the page to open, or None for the default page.
+        """
+        pref = self.get_preferences_dialog()
+        pref.run(page_name)
+        if pref.refresh_operations:
+            self.cb_refresh_operations()
+        self.update_log_level()
+
     def shred_paths(self, paths, shred_settings=False):
         """Shred file or folders
 
@@ -625,7 +642,7 @@ class GUI(Gtk.ApplicationWindow):
                 # TRANSLATORS: Error message shown in the infobar when the user clicks
                 # the preview or clean button without selecting any cleaner options.
                 _("You must select an operation"),
-                              Gtk.MessageType.ERROR)
+                Gtk.MessageType.ERROR)
             return
         try:
             self.set_sensitive(False)
@@ -793,23 +810,12 @@ class GUI(Gtk.ApplicationWindow):
         self.worker.abort()
 
     def cb_manage_cookies(self, widget):
-        """Callback to launch the cookie manager dialog"""
-        from bleachbit.GuiCookie import CookieManagerDialog
-        dialog = CookieManagerDialog()
-        dialog.show_all()
+        """Callback to launch the preferences dialog with Cookies page"""
+        self.show_preferences_dialog('cookies')
 
     def cb_manage_custom_paths(self, widget):
-        """Callback to launch the preferences dialog with Custom tab"""
-        pref = self.get_preferences_dialog()
-        pref.dialog.show_all()
-        pref.infobar.hide()
-        # Switch to Custom tab (index 1: General=0, Custom=1)
-        notebook = pref.dialog.get_content_area().get_children()[1]
-        notebook.set_current_page(1)
-        pref.dialog.run()
-        pref.dialog.destroy()
-        if pref.refresh_operations:
-            self.cb_refresh_operations()
+        """Callback to launch the preferences dialog with Custom page"""
+        self.show_preferences_dialog('custom')
 
     def _option_has_cookie_command(self, cleaner_id, option_id):
         """Return True if the given option runs a cookie command."""
