@@ -15,6 +15,7 @@ from bleachbit.GUI import logger
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiWindow import GUI
 from bleachbit.Language import get_text as _
+from bleachbit.Options import options
 
 # Ensure GTK is available for this GUI module
 require_gtk()
@@ -25,6 +26,11 @@ RESPONSE_COPY = 100
 
 if os.name == 'nt':
     from bleachbit import Windows
+    from bleachbit.FontCheckDialog import (
+        create_font_check_dialog,
+        RESPONSE_TEXT_BLURRY,
+        RESPONSE_TEXT_UNREADABLE,
+    )
 
 
 class Bleachbit(Gtk.Application):
@@ -46,6 +52,8 @@ class Bleachbit(Gtk.Application):
             self, application_id=application_id, flags=Gio.ApplicationFlags.FLAGS_NONE)
         GLib.set_prgname('org.bleachbit.BleachBit')
 
+        self._font_check_prompt_scheduled = False
+
         if auto_exit:
             # This is used for automated testing of whether the GUI can start.
             # It is called from assert_execute_console() in windows/setup.py
@@ -64,6 +72,9 @@ class Bleachbit(Gtk.Application):
         is_context_menu_executed = auto_exit and shred_paths
         if not os.name == 'nt':
             return ''
+        env_suffix = os.environ.pop('BLEACHBIT_APP_INSTANCE_SUFFIX', '')
+        if env_suffix:
+            application_id_suffix = env_suffix
         if Windows.elevate_privileges(uac):
             # privileges escalated in other process
             sys.exit(0)
@@ -354,3 +365,70 @@ class Bleachbit(Gtk.Application):
             # Check for orphaned wipe files from interrupted operations
             GLib.idle_add(self._window.check_orphaned_wipe_files,
                           priority=GLib.PRIORITY_LOW)
+
+        self._maybe_prompt_font_check()
+
+    def _should_show_font_check_dialog(self):
+        """Determine whether to show the font check dialog on Windows."""
+        if os.name != 'nt':
+            return False
+        if self._auto_exit:
+            return False
+        if self._shred_paths:
+            return False
+        # User made an explicit choice of a backend.
+        if os.environ.get('PANGOCAIRO_BACKEND', ''):
+            return False
+        if options.get('use_fontconfig_backend'):
+            return False
+        if options.get('font_check_completed'):
+            return False
+        return True
+
+    def _maybe_prompt_font_check(self):
+        """Schedule the font check dialog if needed."""
+        if not self._should_show_font_check_dialog():
+            return
+        if self._font_check_prompt_scheduled:
+            return
+        self._font_check_prompt_scheduled = True
+        GLib.idle_add(self._show_font_check_dialog,
+                      priority=GLib.PRIORITY_DEFAULT_IDLE)
+
+    def _show_font_check_dialog(self):
+        """Show the font check dialog and handle the response."""
+        if not self._window:
+            return False
+        dialog = create_font_check_dialog(self._window)
+        response = dialog.run()
+        dialog.destroy()
+        if response == Gtk.ResponseType.YES:
+            options.set('font_check_completed', True)
+        elif response in (RESPONSE_TEXT_BLURRY, RESPONSE_TEXT_UNREADABLE):
+            self._restart_with_fontconfig_backend()
+        # If user dismisses the dialog, ask again next time.
+        return False
+
+    def _restart_with_fontconfig_backend(self):
+        """Restart BleachBit with the fontconfig Pango backend."""
+        from bleachbit import General
+        executable = General.get_executable()
+        if getattr(sys, 'frozen', False):
+            cmd = [executable] + sys.argv[1:]
+        else:
+            script_path = os.path.abspath(sys.argv[0])
+            cmd = [executable, script_path] + sys.argv[1:]
+        logger.info('Restarting BleachBit with fontconfig backend: %s', cmd)
+        env = os.environ.copy()
+        env['PANGOCAIRO_BACKEND'] = 'fc'
+        env['BLEACHBIT_APP_INSTANCE_SUFFIX'] = f'Restart{os.getpid()}'
+        options.set('font_check_completed', True, commit=False)
+        options.set('use_fontconfig_backend', True)
+        if General.run_external_nowait(cmd, env=env):
+            self.quit()
+        else:
+            # This logs to the main application window
+            logger.error('Failed to restart BleachBit with fontconfig backend')
+            options.set('font_check_completed', False, commit=False)
+            options.set('use_fontconfig_backend', False)
+

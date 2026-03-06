@@ -57,7 +57,9 @@ OPTION_DEFAULTS = {
     'units_iec': {'value': False},
     'window_maximized': {'value': False},
     'window_fullscreen': {'value': False},
+    'font_check_completed': {'value': False, 'platforms': ('nt',)},
     'update_winapp2': {'value': False, 'platforms': ('nt',)},
+    'use_fontconfig_backend': {'value': False, 'platforms': ('nt',)},
     'win10_theme': {'value': False, 'platforms': ('nt',)},
 }
 
