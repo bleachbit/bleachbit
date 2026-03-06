@@ -56,6 +56,7 @@ from bleachbit.Windows import (
     read_registry_key,
     get_sid_token_48,
     is_ots_elevation,
+    get_splash_screen_delay_seconds,
     SplashThread,
 )
 from bleachbit import logger
@@ -465,6 +466,23 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         splash.start = lambda: None  # prevent thread start
         # Directly call join; should not raise even though handle is None
         splash.join(timeout=0)
+
+    def test_get_splash_screen_delay_seconds_default(self):
+        with mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop('BLEACHBIT_SPLASH_SCREEN_DELAY', None)
+            self.assertEqual(get_splash_screen_delay_seconds(), 0.0)
+
+    def test_get_splash_screen_delay_seconds_valid(self):
+        with mock.patch.dict(os.environ, {'BLEACHBIT_SPLASH_SCREEN_DELAY': '3.5'}, clear=False):
+            self.assertEqual(get_splash_screen_delay_seconds(), 3.5)
+
+    def test_get_splash_screen_delay_seconds_invalid(self):
+        with mock.patch.dict(os.environ, {'BLEACHBIT_SPLASH_SCREEN_DELAY': 'abc'}, clear=False):
+            self.assertEqual(get_splash_screen_delay_seconds(), 0.0)
+
+    def test_get_splash_screen_delay_seconds_negative(self):
+        with mock.patch.dict(os.environ, {'BLEACHBIT_SPLASH_SCREEN_DELAY': '-1'}, clear=False):
+            self.assertEqual(get_splash_screen_delay_seconds(), 0.0)
 
     @common.skipUnlessDestructive
     def test_run_net_service_command(self):
@@ -940,10 +958,9 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         expected_y = (display_height - height) // 2
         self.assertEqual(y, expected_y)
 
-        # Width should be 1/4 of display width (480 for 1920)
-        self.assertEqual(width, display_width // 4)
-        # Height should be 100
-        self.assertEqual(height, 100)
+        # Splash screen is the square logo.
+        self.assertEqual(width, 256)
+        self.assertEqual(height, 256)
 
     def test_set_environ(self):
         for folder in ['folderäö', 'folder']:

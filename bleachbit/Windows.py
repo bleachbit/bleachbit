@@ -48,12 +48,15 @@ import logging
 import os
 import shutil
 import sys
+import time
 import xml.dom.minidom
 import base64
 import hashlib
+from ctypes import wintypes
 from decimal import Decimal
 from pathlib import Path
 from threading import Thread, Event
+from uuid import UUID
 
 if 'win32' == sys.platform:
     import winreg
@@ -89,6 +92,70 @@ logger = logging.getLogger(__name__)
 
 IO_REPARSE_TAG_MOUNT_POINT = 0xA0000003
 FILE_ATTRIBUTE_REPARSE_POINT = 0x400
+
+SPLASH_ICON_SIZE_PX = 256  # 256x256 pixels
+
+
+class _POINT(ctypes.Structure):
+    _fields_ = [('x', wintypes.LONG), ('y', wintypes.LONG)]
+
+
+class _SIZE(ctypes.Structure):
+    _fields_ = [('cx', wintypes.LONG), ('cy', wintypes.LONG)]
+
+
+class _BLENDFUNCTION(ctypes.Structure):
+    _fields_ = [
+        ('BlendOp', wintypes.BYTE),
+        ('BlendFlags', wintypes.BYTE),
+        ('SourceConstantAlpha', wintypes.BYTE),
+        ('AlphaFormat', wintypes.BYTE),
+    ]
+
+
+class _BITMAPINFOHEADER(ctypes.Structure):
+    _fields_ = [
+        ('biSize', wintypes.DWORD),
+        ('biWidth', wintypes.LONG),
+        ('biHeight', wintypes.LONG),
+        ('biPlanes', wintypes.WORD),
+        ('biBitCount', wintypes.WORD),
+        ('biCompression', wintypes.DWORD),
+        ('biSizeImage', wintypes.DWORD),
+        ('biXPelsPerMeter', wintypes.LONG),
+        ('biYPelsPerMeter', wintypes.LONG),
+        ('biClrUsed', wintypes.DWORD),
+        ('biClrImportant', wintypes.DWORD),
+    ]
+
+
+class _BITMAPINFO(ctypes.Structure):
+    _fields_ = [('bmiHeader', _BITMAPINFOHEADER),
+                ('bmiColors', wintypes.DWORD * 3)]
+
+
+_BI_RGB = 0
+_DIB_RGB_COLORS = 0
+_AC_SRC_OVER = 0
+_AC_SRC_ALPHA = 1
+_ULW_ALPHA = 2
+
+
+def get_splash_screen_delay_seconds():
+    value = os.environ.get('BLEACHBIT_SPLASH_SCREEN_DELAY')
+    if not value:
+        return 0.0
+    try:
+        delay = float(value)
+    except ValueError:
+        logger.warning(
+            'invalid BLEACHBIT_SPLASH_SCREEN_DELAY value: %r', value)
+        return 0.0
+    if delay < 0:
+        logger.warning(
+            'negative BLEACHBIT_SPLASH_SCREEN_DELAY value: %r', value)
+        return 0.0
+    return delay
 
 
 def browse_file(_, title):
@@ -554,9 +621,6 @@ def get_known_folder_path(folder_name):
     Based on the code Michael Kropat (mkropat) from
     <https://gist.github.com/mkropat/7550097>
     licensed  under the GNU GPL"""
-    import ctypes
-    from ctypes import wintypes
-    from uuid import UUID
 
     class GUID(ctypes.Structure):
         _fields_ = [
@@ -973,6 +1037,11 @@ class SplashThread(Thread):
         if not self._splash_screen_handle:
             Thread.join(self, timeout=timeout)
             return
+        splash_delay = get_splash_screen_delay_seconds()
+        if splash_delay > 0:
+            logger.debug(
+                'Delaying splash screen close by %s seconds', splash_delay)
+            time.sleep(splash_delay)
         win32gui.PostMessage(self._splash_screen_handle,
                              win32con.WM_CLOSE, 0, 0)
         Thread.join(self, timeout=timeout)
@@ -995,11 +1064,127 @@ class SplashThread(Thread):
 
     def calculate_window_position(self, display_width, display_height):
         """Calculate centered window position and size"""
-        width = display_width // 4
-        height = 100
-        x = (display_width - width) // 2
-        y = (display_height - height) // 2
-        return (x, y, width, height)
+        x = (display_width - SPLASH_ICON_SIZE_PX) // 2
+        y = (display_height - SPLASH_ICON_SIZE_PX) // 2
+        return (x, y, SPLASH_ICON_SIZE_PX, SPLASH_ICON_SIZE_PX)
+
+    def _render_splash(self, hWnd):
+        """Load image and render the splash screen"""
+        filename = self.get_icon_path()
+        if not filename.exists():
+            logger.warning(
+                'Icon file not found: %s with current working directory: %s.', filename, os.getcwd())
+            return
+
+        user32 = ctypes.windll.user32
+        gdi32 = ctypes.windll.gdi32
+        icon_size = 256
+        flags = win32con.LR_LOADFROMFILE
+        hIcon = win32gui.LoadImage(
+            0, str(filename), win32con.IMAGE_ICON, icon_size, icon_size, flags)
+        if not hIcon:
+            return
+
+        user32.UpdateLayeredWindow.argtypes = [
+            wintypes.HWND,
+            wintypes.HDC,
+            ctypes.POINTER(_POINT),
+            ctypes.POINTER(_SIZE),
+            wintypes.HDC,
+            ctypes.POINTER(_POINT),
+            wintypes.COLORREF,
+            ctypes.POINTER(_BLENDFUNCTION),
+            wintypes.DWORD,
+        ]
+        user32.UpdateLayeredWindow.restype = wintypes.BOOL
+        gdi32.CreateCompatibleDC.argtypes = [wintypes.HDC]
+        gdi32.CreateCompatibleDC.restype = wintypes.HDC
+        gdi32.CreateDIBSection.argtypes = [
+            wintypes.HDC,
+            ctypes.POINTER(_BITMAPINFO),
+            wintypes.UINT,
+            ctypes.POINTER(ctypes.c_void_p),
+            wintypes.HANDLE,
+            wintypes.DWORD,
+        ]
+        gdi32.CreateDIBSection.restype = wintypes.HBITMAP
+        gdi32.SelectObject.argtypes = [wintypes.HDC, wintypes.HGDIOBJ]
+        gdi32.SelectObject.restype = wintypes.HGDIOBJ
+        gdi32.DeleteObject.argtypes = [wintypes.HGDIOBJ]
+        gdi32.DeleteObject.restype = wintypes.BOOL
+        gdi32.DeleteDC.argtypes = [wintypes.HDC]
+        gdi32.DeleteDC.restype = wintypes.BOOL
+
+        hdc_screen = None
+        hdc_mem = None
+        hbm = None
+        hold = None
+        try:
+            hdc_screen = win32gui.GetDC(0)
+            if not hdc_screen:
+                return
+
+            hdc_mem = gdi32.CreateCompatibleDC(hdc_screen)
+            if not hdc_mem:
+                return
+
+            bitmap_info = _BITMAPINFO()
+            bitmap_info.bmiHeader.biSize = ctypes.sizeof(_BITMAPINFOHEADER)
+            bitmap_info.bmiHeader.biWidth = icon_size
+            bitmap_info.bmiHeader.biHeight = -icon_size
+            bitmap_info.bmiHeader.biPlanes = 1
+            bitmap_info.bmiHeader.biBitCount = 32
+            bitmap_info.bmiHeader.biCompression = _BI_RGB
+
+            bits = ctypes.c_void_p()
+            hbm = gdi32.CreateDIBSection(
+                hdc_screen,
+                ctypes.byref(bitmap_info),
+                _DIB_RGB_COLORS,
+                ctypes.byref(bits),
+                None,
+                0)
+            if not hbm or not bits.value:
+                return
+
+            hold = gdi32.SelectObject(hdc_mem, hbm)
+            ctypes.memset(bits.value, 0, icon_size * icon_size * 4)
+
+            try:
+                win32gui.DrawIconEx(
+                    hdc_mem, 0, 0, hIcon, icon_size, icon_size, 0, 0, win32con.DI_NORMAL)
+                rect = win32gui.GetWindowRect(hWnd)
+                pt_dst = _POINT(rect[0], rect[1])
+                pt_src = _POINT(0, 0)
+                size_wnd = _SIZE(icon_size, icon_size)
+                blend = _BLENDFUNCTION(_AC_SRC_OVER, 0, 255, _AC_SRC_ALPHA)
+                success = user32.UpdateLayeredWindow(
+                    hWnd,
+                    hdc_screen,
+                    ctypes.byref(pt_dst),
+                    ctypes.byref(size_wnd),
+                    hdc_mem,
+                    ctypes.byref(pt_src),
+                    0,
+                    ctypes.byref(blend),
+                    _ULW_ALPHA)
+                if not success:
+                    logger.warning('UpdateLayeredWindow failed: %s',
+                                   ctypes.get_last_error())
+            finally:
+                if hold:
+                    gdi32.SelectObject(hdc_mem, hold)
+        finally:
+            if hbm:
+                gdi32.DeleteObject(hbm)
+            if hdc_mem:
+                gdi32.DeleteDC(hdc_mem)
+            if hdc_screen:
+                win32gui.ReleaseDC(0, hdc_screen)
+            try:
+                win32gui.DestroyIcon(hIcon)
+            except Exception:
+                pass
 
     def _register_window_class(self, wndClass):
         """Register splash screen window class, handling reuse."""
@@ -1033,6 +1218,7 @@ class SplashThread(Thread):
         return atom
 
     def _show_splash_screen(self):
+        """Create window and render the splash screen."""
         # get instance handle
         hInstance = win32api.GetModuleHandle()
 
@@ -1046,7 +1232,7 @@ class SplashThread(Thread):
         wndClass.hInstance = hInstance
         wndClass.hIcon = win32gui.LoadIcon(0, win32con.IDI_APPLICATION)
         wndClass.hCursor = win32gui.LoadCursor(0, win32con.IDC_ARROW)
-        wndClass.hbrBackground = win32gui.GetStockObject(win32con.WHITE_BRUSH)
+        wndClass.hbrBackground = win32gui.GetStockObject(win32con.NULL_BRUSH)
         wndClass.lpszClassName = className
 
         # register window class
@@ -1054,13 +1240,14 @@ class SplashThread(Thread):
 
         displayWidth = win32api.GetSystemMetrics(0)
         displayHeight = win32api.GetSystemMetrics(1)
-        windowPosX, windowPosY, self._splash_screen_width, self._splash_screen_height = \
-            self.calculate_window_position(displayWidth, displayHeight)
+        windowPosX, windowPosY, self._splash_screen_width, self._splash_screen_height = self.calculate_window_position(
+            displayWidth, displayHeight)
 
-        hWindow = win32gui.CreateWindow(
+        hWindow = win32gui.CreateWindowEx(
+            win32con.WS_EX_LAYERED | win32con.WS_EX_TOOLWINDOW | win32con.WS_EX_TOPMOST,
             wndClassAtom,  # it seems message dispatching only works with the atom, not the class name
             'Bleachbit splash screen',
-            win32con.WS_POPUPWINDOW |
+            win32con.WS_POPUP |
             win32con.WS_VISIBLE,
             windowPosX,
             windowPosY,
@@ -1071,6 +1258,9 @@ class SplashThread(Thread):
             hInstance,
             None)
 
+        win32gui.UpdateWindow(hWindow)
+        self._render_splash(hWindow)
+
         is_splash_screen_on_top = self._force_set_foreground_window(hWindow)
         logger.debug(
             'Is splash screen on top: {}'.format(is_splash_screen_on_top)
@@ -1079,6 +1269,7 @@ class SplashThread(Thread):
         return hWindow
 
     def _force_set_foreground_window(self, hWindow):
+        """Keep the splash screen on top"""
         # As there are some restrictions about which processes can call SetForegroundWindow as described here:
         # https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setforegroundwindow
         # we try consecutively three different ways to show the splash screen on top of all other windows.
@@ -1160,46 +1351,21 @@ class SplashThread(Thread):
         return False
 
     def wndProc(self, hWnd, message, wParam, lParam):
+        """Window procedure for handling messages"""
+
+        if message == win32con.WM_CREATE:
+            self._render_splash(hWnd)
+            return 0
+
+        if message == win32con.WM_ERASEBKGND:
+            return 1
 
         if message == win32con.WM_PAINT:
             hDC, paintStruct = win32gui.BeginPaint(hWnd)
-            filename = self.get_icon_path()
-            if not filename.exists():
-                logger.warning('Icon file not found: {} with current working directory: {}.'.format(
-                    filename, os.getcwd()))
-                text_left_margin = 10
-            else:
-                flags = win32con.LR_LOADFROMFILE
-                hIcon = win32gui.LoadImage(
-                    0, str(filename), win32con.IMAGE_ICON,
-                    0, 0, flags)
-
-                # Default icon size seems to be 32 pixels so we center the icon vertically.
-                default_icon_size = 32
-                icon_top_margin = self._splash_screen_height - \
-                    2 * (default_icon_size + 2)
-                win32gui.DrawIcon(hDC, 0, icon_top_margin, hIcon)
-                # win32gui.DrawIconEx(hDC, 0, 0, hIcon, 64, 64, 0, 0, win32con.DI_NORMAL)
-                text_left_margin = 2 * default_icon_size
-
-            rect = win32gui.GetClientRect(hWnd)
-            textmetrics = win32gui.GetTextMetrics(hDC)
-
-            text_rect = (text_left_margin,
-                         (rect[3] - textmetrics['Height']) // 2, rect[2], rect[3])
-
-            # TRANSLATORS: Splash screen message shown while the application is starting.
-            # "Starting" is a present participle (ongoing action).
-            # To indicate an ongoing operation, include the ellipsis as literal
-            # Unicode (…) or as Unicode escape (\u2026).
-            splash_msg = _("Starting\u2026")
-            win32gui.DrawText(
-                hDC,
-                splash_msg,
-                -1,
-                text_rect,
-                win32con.DT_WORDBREAK)
-            win32gui.EndPaint(hWnd, paintStruct)
+            try:
+                self._render_splash(hWnd)
+            finally:
+                win32gui.EndPaint(hWnd, paintStruct)
             return 0
 
         elif message == win32con.WM_DESTROY:

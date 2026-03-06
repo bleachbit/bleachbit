@@ -285,6 +285,12 @@ class GUI(Gtk.ApplicationWindow):
         if os.name != 'nt':
             return
 
+        # Check if splash screen is forced via environment variable
+        splash_delay = os.environ.get('BLEACHBIT_SPLASH_SCREEN_DELAY')
+        if splash_delay is not None:
+            Windows.splash_thread.start()
+            return
+
         font_conf_file = Windows.get_font_conf_file()
         if not os.path.exists(font_conf_file):
             logger.error('No fonts.conf file {}'.format(font_conf_file))
