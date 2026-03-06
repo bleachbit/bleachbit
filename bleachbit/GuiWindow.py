@@ -12,7 +12,7 @@ import time
 import bleachbit
 from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path
 from bleachbit.Cleaner import backends, register_cleaners
-from bleachbit.Constant import ABORT_BUTTON_LABEL, MANAGE_COOKIES_TO_KEEP
+from bleachbit.Constant import ABORT_BUTTON_LABEL
 from bleachbit.GUI import logger
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiPreferences import PreferencesDialog
@@ -35,6 +35,13 @@ PREVIEW_MSG = _('Preview')
 # in the treeview.
 # 'Clean' is a verb.
 CLEAN_MSG = _('Clean')
+
+# TRANSLATORS: This message is used in two places to open the cookie preference
+# manager dialog.
+# (1) Context menu in the tree view.
+# (2) Button in the preferences dialogs
+# Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
+MANAGE_COOKIES_TO_KEEP = _("Manage cookies to keep\u2026")
 
 # Ensure GTK is available for this GUI module
 require_gtk()
@@ -625,7 +632,7 @@ class GUI(Gtk.ApplicationWindow):
                 # TRANSLATORS: Error message shown in the infobar when the user clicks
                 # the preview or clean button without selecting any cleaner options.
                 _("You must select an operation"),
-                              Gtk.MessageType.ERROR)
+                Gtk.MessageType.ERROR)
             return
         try:
             self.set_sensitive(False)
@@ -793,21 +800,14 @@ class GUI(Gtk.ApplicationWindow):
         self.worker.abort()
 
     def cb_manage_cookies(self, widget):
-        """Callback to launch the cookie manager dialog"""
-        from bleachbit.GuiCookie import CookieManagerDialog
-        dialog = CookieManagerDialog()
-        dialog.show_all()
+        """Callback to launch the preferences dialog with Cookies page"""
+        pref = self.get_preferences_dialog()
+        pref.run('cookies')
 
     def cb_manage_custom_paths(self, widget):
-        """Callback to launch the preferences dialog with Custom tab"""
+        """Callback to launch the preferences dialog with Custom page"""
         pref = self.get_preferences_dialog()
-        pref.dialog.show_all()
-        pref.infobar.hide()
-        # Switch to Custom tab (index 1: General=0, Custom=1)
-        notebook = pref.dialog.get_content_area().get_children()[1]
-        notebook.set_current_page(1)
-        pref.dialog.run()
-        pref.dialog.destroy()
+        pref.run('custom')
         if pref.refresh_operations:
             self.cb_refresh_operations()
 
