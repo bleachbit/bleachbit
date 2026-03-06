@@ -23,10 +23,13 @@
 Test case for module SystemInformation
 """
 
+import os
+import re
+from unittest import mock
+
+
 from tests import common
 from bleachbit.SystemInformation import get_system_information, get_version, anonymize_system_information
-from unittest import mock
-import os
 
 
 class SystemInformationTestCase(common.BleachbitTestCase):
