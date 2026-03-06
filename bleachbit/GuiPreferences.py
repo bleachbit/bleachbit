@@ -51,6 +51,10 @@ EXPERT_MODE_DESCRIPTION = _(
 # dialog asking to confirm this choice.
 EXPERT_MODE_MSG = _('Expert mode')
 
+# TRANSLATORS: Notice shown in an infobar after changing a preference
+# that requires starting the application to be effective.
+RESTART_APP_MSG = _("Restart BleachBit for full effect.")
+
 
 class PreferencesDialog:
 
@@ -227,6 +231,8 @@ class PreferencesDialog:
         if 'kde_shred_menu_option' == path:
             from bleachbit.DesktopMenuOptions import install_kde_service_menu_file
             install_kde_service_menu_file()
+        if 'use_fontconfig_backend' == path:
+            self.show_infobar(RESTART_APP_MSG, Gtk.MessageType.INFO)
 
     def __reset_warning_preferences(self, _button):
         """Reset saved warning confirmations."""
@@ -330,10 +336,7 @@ class PreferencesDialog:
                 "No language code found in combobox for text %s", text)
         setup_translation()
         self.refresh_operations = True
-        # TRANSLATORS: Notice shown in an infobar after changing
-        # language in the preferences.
-        self.show_infobar(_("Restart BleachBit for full effect."),
-            Gtk.MessageType.INFO)
+        self.show_infobar(RESTART_APP_MSG, Gtk.MessageType.INFO)
 
     def on_auto_detect_toggled(self, widget):
         """Callback for when the auto-detect language checkbox is toggled."""
@@ -344,10 +347,7 @@ class PreferencesDialog:
             options.set("forced_language", "", section="bleachbit")
         setup_translation()
         self.refresh_operations = True
-        # TRANSLATORS: Shown after changing language in preferences
-        self.show_infobar(
-            _("Restart BleachBit for full effect."),
-            Gtk.MessageType.INFO)
+        self.show_infobar(RESTART_APP_MSG, Gtk.MessageType.INFO)
 
     def __create_general_checkboxes(self, vbox):
         """Create and configure general checkboxes."""
@@ -430,6 +430,14 @@ class PreferencesDialog:
                 # the Windows 10 visual theme.
                 _("Windows 10 theme"),
                 'win10_theme')
+
+            self._create_checkbox(
+                # TRANSLATORS: Checkbox label in the preferences dialog to use
+                # the fontconfig text rendering backend on Windows. This may
+                # fix blurry or unreadable text.
+                _("Use fontconfig text rendering backend"),
+                'use_fontconfig_backend',
+                tooltip=_("May fix blurry or unreadable text. Requires restart."))
 
         self.__create_language_widgets(self.general_vbox)
 
