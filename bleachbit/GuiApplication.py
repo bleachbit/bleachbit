@@ -251,11 +251,7 @@ class Bleachbit(Gtk.Application):
 
     def cb_preferences_dialog(self, action, param):
         """Callback for preferences dialog"""
-        pref = self.get_preferences_dialog()
-        pref.run()
-
-        # In case the user changed the log level...
-        GUI.update_log_level(self._window)
+        self._window.show_preferences_dialog()
 
     def get_about_dialog(self):
         # TRANSLATORS: Title of the 'About' dialog.

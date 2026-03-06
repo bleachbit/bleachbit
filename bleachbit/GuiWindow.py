@@ -438,6 +438,18 @@ class GUI(Gtk.ApplicationWindow):
             self.cb_refresh_operations,
             self.set_windows10_theme)
 
+    def show_preferences_dialog(self, page_name=None):
+        """Show the preferences dialog.
+
+        Args:
+            page_name: The name of the page to open, or None for the default page.
+        """
+        pref = self.get_preferences_dialog()
+        pref.run(page_name)
+        if pref.refresh_operations:
+            self.cb_refresh_operations()
+        self.update_log_level()
+
     def shred_paths(self, paths, shred_settings=False):
         """Shred file or folders
 
@@ -799,15 +811,11 @@ class GUI(Gtk.ApplicationWindow):
 
     def cb_manage_cookies(self, widget):
         """Callback to launch the preferences dialog with Cookies page"""
-        pref = self.get_preferences_dialog()
-        pref.run('cookies')
+        self.show_preferences_dialog('cookies')
 
     def cb_manage_custom_paths(self, widget):
         """Callback to launch the preferences dialog with Custom page"""
-        pref = self.get_preferences_dialog()
-        pref.run('custom')
-        if pref.refresh_operations:
-            self.cb_refresh_operations()
+        self.show_preferences_dialog('custom')
 
     def _option_has_cookie_command(self, cleaner_id, option_id):
         """Return True if the given option runs a cookie command."""
