@@ -93,6 +93,7 @@ class CookieManagerPane(Gtk.Box):
         self.keep_list_path = os.path.join(
             bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
         self.saved_domains = self._load_saved_domains()
+        self._is_loading = False
 
         # Create cookie list store: checkbox, domain
         self.cookie_store = Gtk.ListStore(bool, str)
@@ -195,12 +196,16 @@ class CookieManagerPane(Gtk.Box):
 
     def on_select_all_clicked(self, _widget):
         """Select all cookies"""
+        if self._is_loading:
+            return
         self._set_filtered_selection(True)
         self.save_changes()
         self.update_stat_label()
 
     def on_deselect_all_clicked(self, _widget):
         """Deselect all cookies"""
+        if self._is_loading:
+            return
         self._set_filtered_selection(False)
         self.save_changes()
         self.update_stat_label()
@@ -251,12 +256,15 @@ class CookieManagerPane(Gtk.Box):
 
     def _populate_cookie_store(self):
         """Populate the list store with discovered and saved cookie hosts."""
+        self._is_loading = True
         self._spinner = Gtk.Spinner()
         self._spinner.set_size_request(24, 24)
         self._spinner.start()
         # Insert spinner row placeholder so the button_box area is not empty
         # while loading; we embed the spinner above the treeview instead.
         self.treeview.set_sensitive(False)
+        self.select_all_btn.set_sensitive(False)
+        self.deselect_all_btn.set_sensitive(False)
         # Find the scrolled window's parent vbox and insert a spinner overlay
         scrolled = self.treeview.get_parent()
         vbox = scrolled.get_parent()
@@ -293,9 +301,12 @@ class CookieManagerPane(Gtk.Box):
 
     def _finish_populate(self, discovered):
         """Called on the GTK main thread after cookie discovery finishes."""
+        self._is_loading = False
         self._spinner.stop()
         self._spinner_box.destroy()
         self.treeview.set_sensitive(True)
+        self.select_all_btn.set_sensitive(True)
+        self.deselect_all_btn.set_sensitive(True)
 
         all_hosts = {h.strip() for h in discovered if h}
         all_hosts.update(self.saved_domains)
