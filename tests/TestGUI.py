@@ -247,6 +247,43 @@ class GUITestCase(common.BleachbitTestCase):
         self.refresh_gui()
         self.assertEqual(len(os.listdir(chaff_dst_dir)), 10)
 
+    def test_cookie_manager_bulk_actions_wait_for_loading(self):
+        """Bulk cookie actions should not save until loading finishes"""
+        import bleachbit.GuiCookie
+
+        class FakeThread:
+            def __init__(self, target=None, daemon=None):
+                self.target = target
+                self.daemon = daemon
+
+            def start(self):
+                return None
+
+        with mock.patch('bleachbit.GuiCookie.threading.Thread', FakeThread):
+            pane = bleachbit.GuiCookie.CookieManagerPane()
+
+        self.assertTrue(pane._is_loading)
+        self.assertFalse(pane.select_all_btn.get_sensitive())
+        self.assertFalse(pane.deselect_all_btn.get_sensitive())
+
+        with mock.patch.object(pane, 'save_changes') as save_changes:
+            pane.on_select_all_clicked(None)
+            pane.on_deselect_all_clicked(None)
+            save_changes.assert_not_called()
+
+        pane._finish_populate(['example.com'])
+        self.refresh_gui()
+
+        self.assertFalse(pane._is_loading)
+        self.assertTrue(pane.select_all_btn.get_sensitive())
+        self.assertTrue(pane.deselect_all_btn.get_sensitive())
+
+        with mock.patch.object(pane, 'save_changes') as save_changes:
+            pane.on_select_all_clicked(None)
+            save_changes.assert_called_once_with()
+        self.assertTrue(all(row[0] for row in pane.cookie_store))
+        pane.destroy()
+
     def test_preview(self):
         """Select cleaner option and clicks preview button"""
         gui = self.app._window
