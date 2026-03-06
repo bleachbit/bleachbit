@@ -36,10 +36,8 @@ PREVIEW_MSG = _('Preview')
 # 'Clean' is a verb.
 CLEAN_MSG = _('Clean')
 
-# TRANSLATORS: This message is used in two places to open the cookie preference
-# manager dialog.
-# (1) Context menu in the tree view.
-# (2) Button in the preferences dialogs
+# TRANSLATORS: Button in tree view's context menu to open the cookie
+# manager.
 # Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 MANAGE_COOKIES_TO_KEEP = _("Manage cookies to keep\u2026")
 
