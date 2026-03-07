@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -42,9 +29,21 @@ Usage:
         # do GTK stuff
 """
 
+import ctypes
 import logging
 import os
+import sys
+import tempfile
 import warnings
+import webbrowser
+from pathlib import PureWindowsPath
+from html import escape as esc
+from traceback import format_exc
+
+from bleachbit import bleachbit_exe_path
+
+HELP_URL = 'https://link.bleachbit.org/get-help'
+PYGOBJECT_URL = 'https://link.bleachbit.org/pygobject-lib-bin-error'
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +58,135 @@ Gio = None
 
 # Reason that GTK is unavailable
 _gtk_unavailable_reason = None
+
+
+def path_has_lib_or_bin(path):
+    """Check if any directory component is exactly 'lib' or 'bin'.
+
+    This detects a PyGObject bug where certain directory names cause
+    Gtk to fail to import.
+
+    https://github.com/bleachbit/bleachbit/issues/1822
+    https://github.com/bleachbit/bleachbit/issues/1978
+
+    Returns the matched component name, or None.
+    """
+    if not path:
+        return None
+
+    try:
+        parts = PureWindowsPath(path).parts
+    except TypeError:
+        return None
+
+    for part in parts:
+        if part and part.lower() in ('lib', 'bin'):
+            return part.lower()
+    return None
+
+
+def _build_error_html(error, exe_path=None, traceback_text=None):
+    """Build an HTML error report string.
+
+    Include traceback, system information, and a copyable bug-report block.
+
+    It does not write to a file.
+    """
+
+    try:
+        # Import here to avoid a circular import.
+        from bleachbit.SystemInformation import get_system_information
+        sysinfo_text = get_system_information()
+    except Exception:
+        sysinfo_text = '(unavailable)'
+
+    bug_info = (
+        f"Error: {error}\n\n"
+        f"{traceback_text or ''}\n\n"  # It already has "Traceback:" header
+        f"System information:\n{sysinfo_text}"
+    )
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>BleachBit Error</title>
+<style>
+body {{ font-family: sans-serif; margin: 2em; }}
+pre {{ background: #f4f4f4; padding: 1em; overflow-x: auto; }}
+textarea {{ width: 100%; font-family: monospace; }}
+</style>
+<script type="text/javascript">
+function copyBugReport() {{
+  var textarea = document.getElementById('bug-report');
+  var confirm = document.getElementById('copy-confirm');
+  if (!textarea) {{
+    return;
+  }}
+  textarea.focus();
+  textarea.select();
+  try {{
+    document.execCommand('copy');
+    if (confirm) {{
+      confirm.style.display = 'inline';
+      setTimeout(function() {{ confirm.style.display = 'none'; }}, 2000);
+    }}
+  }} catch (error) {{
+  }}
+}}
+</script>
+</head>
+<body>
+<h2>BleachBit cannot start</h2>
+<p id="pygobject-unknown-error">BleachBit failed to load its graphical interface.</p>
+<p>Error: {esc(str(error))}</p>
+<p><a id="get-help" href="{esc(HELP_URL)}">Get help</a></p>
+<h3>Copy this for a bug report</h3>
+<p><button type="button" onclick="copyBugReport()">Copy to clipboard</button>
+<span id="copy-confirm" style="display:none; color:green; margin-left:1em;">Copied!</span></p>
+<textarea id="bug-report" rows="10" cols="80" readonly onclick="this.select()">{esc(bug_info)}</textarea>
+</body>
+</html>
+"""
+
+
+def _show_windows_error_dialog(title, html_content):
+    """Show a concise error dialog on Windows and optionally save an HTML log.
+
+    Prompts the user with Yes/No: if Yes, writes an HTML file to %TEMP% and
+    opens it in the default browser.  If No, closes silently.
+    """
+    assert os.name == 'nt'
+    prompt = (
+        "BleachBit failed to load the graphical interface.\n\n"
+        "This may be a bug or a broken installation."
+        "\n\nSave error details to file and open in browser?"
+    )
+    try:
+        MB_YESNO = 0x00000004
+        MB_ICONERROR = 0x00000010
+        IDYES = 6
+        result = ctypes.windll.user32.MessageBoxW(
+            0, prompt, title, MB_YESNO | MB_ICONERROR)
+        if result == IDYES:
+            tmp_dir = os.environ.get('TEMP', tempfile.gettempdir())
+            html_path = os.path.join(tmp_dir, 'bleachbit_error.html')
+            with open(html_path, 'w', encoding='utf-8') as f:
+                f.write(html_content)
+            webbrowser.open(f'file:///{html_path}')
+    except Exception as e:
+        logger.error('Failed to show Windows error dialog: %s', e)
+
+
+def _handle_gtk_import_error(error):
+    """On Windows, show a helpful error dialog when GTK import fails."""
+    if os.name != 'nt':
+        return
+
+    logger.error('GTK not available: %s\n%s', error, format_exc())
+    html_content = _build_error_html(
+        error, traceback_text=format_exc())
+    _show_windows_error_dialog('BleachBit', html_content)
 
 
 def _check_display_available():
@@ -88,7 +216,7 @@ def _try_import_gtk():
     Returns:
         tuple: (success: bool, reason: str or None)
     """
-    global gi, Gtk, Gdk, GObject, GLib, Gio, HAVE_GTK
+    global gi, Gtk, Gdk, GObject, GLib, Gio
 
     # Suppress GTK warning messages during import
     with warnings.catch_warnings():
@@ -96,8 +224,7 @@ def _try_import_gtk():
 
         # Always try to import gi first (for gi.version reporting)
         try:
-            import gi as _gi
-            gi = _gi
+            import gi
         except ImportError:
             return False, 'PyGObject (gi) module not installed'
 
@@ -106,9 +233,21 @@ def _try_import_gtk():
         if not display_available:
             return False, display_reason
 
+        if path_has_lib_or_bin(bleachbit_exe_path) and hasattr(sys, 'frozen'):
+            # Setting search path prevents crash when importing GTK
+            # when application is run from directory with foldername lib or bin.
+            typelib_dir = os.path.join(
+                bleachbit_exe_path, 'lib', 'girepository-1.0')
+            if typelib_dir:
+                logger.debug('Setting typelib search path to: %s', typelib_dir)
+                gi._gi.Repository.get_default().prepend_search_path(typelib_dir)
+            else:
+                logger.warning('Typelib directory not found: %s', typelib_dir)
+
         try:
             gi.require_version('Gtk', '3.0')
-        except ValueError as e:
+        except Exception as e:
+            _handle_gtk_import_error(e)
             return False, f'GTK 3.0 not available: {e}'
 
         try:
@@ -125,6 +264,7 @@ def _try_import_gtk():
             Gio = _Gio
 
         except (ImportError, RuntimeError, ValueError) as e:
+            _handle_gtk_import_error(e)
             return False, f'Failed to import GTK libraries: {e}'
 
         # On POSIX, verify we can actually get a display

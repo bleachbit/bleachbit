@@ -397,7 +397,7 @@ def is_unregistered_mime(mimetype):
     """Returns True if the MIME type is known to be unregistered. If
     registered or unknown, conservatively returns False."""
     try:
-        from gi.repository import Gio  # pylint: disable=import-outside-toplevel
+        from bleachbit.GtkShim import Gio  # pylint: disable=import-outside-toplevel
         if 0 == len(Gio.app_info_get_all_for_type(mimetype)):
             return True
     except ImportError:

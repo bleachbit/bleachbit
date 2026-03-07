@@ -67,7 +67,7 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
 def update_dialog(parent, updates):
     """Updates contains the version numbers and URLs"""
     # import these here to allow headless mode.
-    from gi.repository import Gtk  # pylint: disable=import-outside-toplevel
+    from bleachbit.GtkShim import Gtk  # pylint: disable=import-outside-toplevel
     from bleachbit.GuiBasic import open_url  # pylint: disable=import-outside-toplevel
     dlg = Gtk.Dialog(title=_("Update BleachBit"),
                      transient_for=parent,
