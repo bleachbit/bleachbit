@@ -737,6 +737,13 @@ class GUI(Gtk.ApplicationWindow):
         # expand tree view
         self.view.expand_all()
 
+        # Add a workaround for an OpenSSL crash before checking for updates.
+        # https://github.com/bleachbit/bleachbit/issues/1826
+        if os.name == 'nt' and os.environ.get('SSLKEYLOGFILE'):
+            self.append_text(
+                'The environment variable SSLKEYLOGFILE is not supported', 'error')
+            del os.environ['SSLKEYLOGFILE']
+
         # Check for online updates.
         if not self._auto_exit and \
             bleachbit.online_update_notification_enabled and \
