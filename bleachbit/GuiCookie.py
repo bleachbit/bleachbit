@@ -26,9 +26,7 @@ import threading
 import time
 
 # third party
-import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import GLib, Gtk
+from bleachbit.GtkShim import GLib, Gtk
 
 # local import
 import bleachbit
