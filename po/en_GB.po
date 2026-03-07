@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-03-02 23:12-0700\n"
-"PO-Revision-Date: 2026-03-01 09:09+0000\n"
+"PO-Revision-Date: 2026-03-08 05:09+0000\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "bleachbit/main/en_GB/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1345,20 +1345,16 @@ msgstr "Wipe empty space in %s"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Loading native cleaners."
 msgid "Loading native cleaners…"
-msgstr "Loading native cleaners."
+msgstr "Loading native cleaners…"
 
 #. TRANSLATORS: Progress message shown typically on startup.
 #. 'Importing' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Importing cleaners from Winapp2.ini."
 msgid "Importing cleaners from Winapp2.ini…"
-msgstr "Importing cleaners from Winapp2.ini."
+msgstr "Importing cleaners from Winapp2.ini…"
 
 #: ../bleachbit/Cleaner.py
 #, python-format
@@ -1566,10 +1562,8 @@ msgstr "Clean file"
 #. (2) Button in the preferences dialogs
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Constant.py
-#, fuzzy
-#| msgid "Manage cookies to keep"
 msgid "Manage cookies to keep…"
-msgstr "Manage cookies to keep"
+msgstr "Manage cookies to keep…"
 
 #. TRANSLATORS: This message is used in three places (1) label at top of the
 #. preferences dialog (2) confirmation dialog when enabling the cleaning option
@@ -1799,20 +1793,16 @@ msgstr "Number of files"
 #. TRANSLATORS: Option in combo box to choose to stop after a total
 #. size (in megabytes) has been generated.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Size"
 msgid "Size (MB)"
-msgstr "Freed"
+msgstr "Size (MB)"
 
 #. TRANSLATORS: Option in combo box to choose to stop when free space
 #. reaches a certain percentage.
 #. The percentage symbol (%) is a literal character, not a format
 #. placeholder.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Free disk space"
 msgid "Free space (%)"
-msgstr "Free disk space"
+msgstr "Free space (%)"
 
 #. TRANSLATORS: Used for (1) label for folder chooser button and
 #. (2) error message shown in the infobar when the folder has not
@@ -1826,10 +1816,8 @@ msgstr "Select destination folder"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Deleting files"
 msgid "Deleting files…"
-msgstr "Deleting files"
+msgstr "Deleting files…"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves
