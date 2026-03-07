@@ -179,6 +179,7 @@ VIFileVersion ${File_VERSION}
 !include NsisMultiUser.nsh
 !include LogicLib.nsh
 !include StdUtils.nsh
+!include WinVer.nsh
 
 Caption "$(INSTALLER_CAPTION)"
 
@@ -340,7 +341,7 @@ Section "$(SECTION_CORE_NAME)" SectionCore
     SectionIn RO
 
     !include FilesToInstall.nsh
-    
+
     # uninstaller
     WriteUninstaller "$INSTDIR\uninstall.exe"
 
@@ -357,7 +358,7 @@ Section "$(SECTION_CORE_NAME)" SectionCore
         "URLUpdateInfo" "https://www.bleachbit.org/download"
     WriteRegStr SHCTX "${MULTIUSER_INSTALLMODE_UNINSTALL_REGISTRY_KEY_PATH}$0" \
                  "DisplayName" "${prodname}"
-  
+
     # Build cache now while there is a GUI progress bar.
     DetailPrint "$(MULTIPRINT1)"
     DetailPrint "$(MULTIPRINT2)"
@@ -430,6 +431,11 @@ SectionEnd
 
 Function .onInit
 
+  ${If} ${AtMostWin7}
+    MessageBox MB_OK|MB_ICONEXCLAMATION "This version of Windows is not compatible with this version of BleachBit. Please see https://www.bleachbit.org/bleachbit-windows-7 to download a compatible version." /SD IDOK
+    Abort
+  ${EndIf}
+
   !insertmacro MULTIUSER_INIT
 
   ; Language display dialog
@@ -501,16 +507,16 @@ SectionEnd
 
   ;Assign descriptions to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore}         "$(SECTION_CORE_DESCRIPTION)" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortCuts}    "$(SECTION_SHORTCUTS_DESCRIPTION)" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionStart}        "$(SECTION_START_MENU_DESCRIPTION)" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop}      "$(SECTION_DESKTOP_DESCRIPTION)" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch}  "$(SECTION_QUICK_LAUNCH_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionCore}         "$(SECTION_CORE_DESCRIPTION)"
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShortCuts}    "$(SECTION_SHORTCUTS_DESCRIPTION)"
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionStart}        "$(SECTION_START_MENU_DESCRIPTION)"
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionDesktop}      "$(SECTION_DESKTOP_DESCRIPTION)"
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionQuickLaunch}  "$(SECTION_QUICK_LAUNCH_DESCRIPTION)"
     !ifndef NoTranslations
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} "$(SECTION_TRANSLATIONS_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionTranslations} "$(SECTION_TRANSLATIONS_DESCRIPTION)"
     !endif
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred}        "$(SECTION_INTEGRATE_SHRED_DESCRIPTION)" 
-    !insertmacro MUI_DESCRIPTION_TEXT ${SectionUninstall}    "$(SECTION_UNINSTALL_DESCRIPTION)" 
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionShred}        "$(SECTION_INTEGRATE_SHRED_DESCRIPTION)"
+    !insertmacro MUI_DESCRIPTION_TEXT ${SectionUninstall}    "$(SECTION_UNINSTALL_DESCRIPTION)"
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
