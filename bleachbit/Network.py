@@ -43,6 +43,24 @@ from bleachbit.Language import get_active_language_code, get_text as _
 logger = logging.getLogger(__name__)
 
 
+def unset_sslkeylogfile(use_logger):
+    """Unset environment variable SSLKEYLOGFILE
+
+    Workaround for an OpenSSL crash before checking for updates.
+    https://github.com/bleachbit/bleachbit/issues/1826
+
+    Returns True if unset
+    """
+    if not os.name == 'nt':
+        return False
+    if not os.environ.get('SSLKEYLOGFILE'):
+        return False
+    del os.environ['SSLKEYLOGFILE']
+    if use_logger:
+        logger.debug('The environment variable SSLKEYLOGFILE is not supported')
+    return True
+
+
 def download_url_to_fn(url, fn, expected_sha512=None, on_error=None,
                        max_retries=3, backoff_factor=0.5, timeout=60):
     """Download a URL to the given filename
@@ -69,6 +87,8 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None,
     assert isinstance(max_retries, int)
     assert isinstance(backoff_factor, float)
     assert isinstance(timeout, int)
+
+    unset_sslkeylogfile(True)
 
     msg = _('Downloading URL failed: %s') % url
 
@@ -146,6 +166,7 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
     request_headers = {'User-Agent': get_user_agent()}
     if headers:
         request_headers.update(headers)
+    unset_sslkeylogfile(True)
     # 408: request timeout
     # 429: too many requests
     # 500: internal server error

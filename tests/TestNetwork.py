@@ -33,7 +33,7 @@ import bleachbit
 from tests import common
 from bleachbit.FileUtilities import delete
 from bleachbit.Network import (download_url_to_fn, fetch_url, get_gtk_version,
-                               get_ip_for_url, get_user_agent)
+                               get_ip_for_url, get_user_agent, unset_sslkeylogfile)
 
 logger = logging.getLogger(__name__)
 
@@ -79,6 +79,17 @@ class NetworkTestCase(common.BleachbitTestCase):
                                generator.format('...'), e)
         if not cls.status_generator_url:
             raise RuntimeError('No working HTTP status code generator found.')
+
+    def setUp(self):
+        """Set up the test environment before each test method."""
+        super().setUp()
+        os.environ['SSLKEYLOGFILE'] = 'ssl.log'
+
+    def test_unset_sslkeylogfile(self):
+        """Test the function unset_sslkeylogfile()."""
+        # SSLKEYLOGFILE is set in setUp().
+        self.assertEqual(unset_sslkeylogfile(True), os.name == 'nt')
+        self.assertFalse(unset_sslkeylogfile(True))
 
     def test_download_url_to_fn(self):
         """Unit test for function download_url_to_fn()"""

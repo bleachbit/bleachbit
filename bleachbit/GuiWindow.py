@@ -19,6 +19,7 @@ from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
 from bleachbit.GuiUtil import get_font_size_from_name, get_window_info, notify, threaded
 from bleachbit.Language import get_text as _, pget_text as _p
+from bleachbit.Network import unset_sslkeylogfile
 from bleachbit.Options import options
 from bleachbit.Wipe import detect_orphaned_wipe_files
 
@@ -736,6 +737,10 @@ class GUI(Gtk.ApplicationWindow):
         self.tree_store.refresh_rows()
         # expand tree view
         self.view.expand_all()
+
+        if unset_sslkeylogfile(False):
+            self.append_text(
+                'The environment variable SSLKEYLOGFILE is not supported', 'error')
 
         # Check for online updates.
         if not self._auto_exit and \
