@@ -168,14 +168,16 @@ def notify_gi(msg):
         return
     from gi.repository import Notify
     if Notify.init(APP_NAME):
-        notify = Notify.Notification.new('BleachBit', msg, 'bleachbit')
-        notify.set_hint("desktop-entry", GLib.Variant('s', 'bleachbit'))
+        notification_obj = Notify.Notification.new(
+            'BleachBit', msg, 'bleachbit')
+        notification_obj.set_hint(
+            "desktop-entry", GLib.Variant('s', 'bleachbit'))
         try:
-            notify.show()
+            notification_obj.show()
         except gi.repository.GLib.GError as e:
             logger.debug('Notify.Notification.show() failed: %s', e)
             return
-        notify.set_timeout(10000)
+        notification_obj.set_timeout(10000)
 
 
 def notify_plyer(msg):
