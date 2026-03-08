@@ -28,7 +28,11 @@ from bleachbit import online_update_notification_enabled
 from bleachbit import ProtectedPath
 from bleachbit.Constant import EMPTY_SPACE_WARNING
 from bleachbit.GtkShim import Gtk, GLib
-from bleachbit.GuiCookie import CookieManagerPane
+from bleachbit.GuiUtil import (detect_dark_background, flush_gtk_events,
+                               get_font_size_from_name, get_window_info,
+                               notify, should_show_dark_mode_warning,
+                               threaded)
+from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
 from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _, pget_text as _p
 from bleachbit.Options import options
@@ -253,12 +257,8 @@ class PreferencesDialog:
             self.refresh_operations = True
         if 'dark_mode' == path:
             logger.debug("Toggling dark mode to %s", options.get('dark_mode'))
-            if not os.name == 'nt':
-                self.show_infobar(
-                    # TRANSLATORS: Notice shown in an infobar when toggling
-                    # dark mode on Linux.
-                    _("Some GTK themes do not support both light and dark modes."),
-                    Gtk.MessageType.WARNING)
+            theme_widget = self.parent or self.dialog
+            before_dark = detect_dark_background(theme_widget)
             if 'nt' == os.name and options.get('win10_theme'):
                 self.cb_set_windows10_theme()
 
@@ -268,6 +268,16 @@ class PreferencesDialog:
                     'gtk-application-prefer-dark-theme', options.get('dark_mode'))
             else:
                 logger.warning("Could not get GTK settings to apply dark mode")
+
+            flush_gtk_events()
+            after_dark = detect_dark_background(theme_widget)
+
+            if not os.name == 'nt' and should_show_dark_mode_warning(before_dark, after_dark):
+                self.show_infobar(
+                    # TRANSLATORS: Notice shown in an infobar when toggling
+                    # dark mode on Linux.
+                    _("Some GTK themes do not support both light and dark modes."),
+                    Gtk.MessageType.WARNING)
         if 'win10_theme' == path:
             self.cb_set_windows10_theme()
         if 'debug' == path:
