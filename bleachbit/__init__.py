@@ -26,7 +26,7 @@ if sys.version_info < (3, 8, 0):
     print('BleachBit requires Python version 3.8 or later')
     sys.exit(1)
 
-if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
+if hasattr(sys, 'frozen'):
     stdout_encoding = 'utf-8'
 else:
     stdout_encoding = sys.stdout.encoding
