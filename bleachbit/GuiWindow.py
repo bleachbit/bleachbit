@@ -17,7 +17,8 @@ from bleachbit.GUI import logger
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
-from bleachbit.GuiUtil import get_font_size_from_name, get_window_info, notify, threaded
+from bleachbit.GuiUtil import (detect_dark_background, get_font_size_from_name,
+                               get_window_info, notify, threaded)
 from bleachbit.Language import get_text as _, pget_text as _p
 from bleachbit.Network import unset_sslkeylogfile
 from bleachbit.Options import options
@@ -51,6 +52,7 @@ class GUI(Gtk.ApplicationWindow):
     _style_provider = None
     _style_provider_regular = None
     _style_provider_dark = None
+    _error_tag_color = None
 
     def __init__(self, auto_exit, *args, **kwargs):
         super(GUI, self).__init__(*args, **kwargs)
@@ -200,8 +202,11 @@ class GUI(Gtk.ApplicationWindow):
         tt.add(style_option_label)
 
         style_operation = Gtk.TextTag.new('error')
-        style_operation.set_property('foreground', '#b00000')
         tt.add(style_operation)
+        # This event fires when the theme changes, e.g., the system
+        # theme changes or the application changes its style.
+        self.textview.connect('style-updated', self._update_error_tag_color)
+        self._update_error_tag_color()
 
         self.status_bar = Gtk.Statusbar()
         vbox.add(self.status_bar)
@@ -211,6 +216,34 @@ class GUI(Gtk.ApplicationWindow):
         self.show_all()
         self.progressbar.hide()
         self.infobar.hide()
+
+    def _update_error_tag_color(self, *_args):
+        """Ensure error messages stay high contrast in current theme"""
+        if not self.textbuffer:
+            return
+
+        tag_table = self.textbuffer.get_tag_table()
+        if not tag_table:
+            return
+
+        error_tag = tag_table.lookup('error')
+        if not error_tag:
+            return
+
+        light_theme_color = '#b00000'
+        dark_theme_color = '#ff6b6b'
+        dark_background = options.get('dark_mode')
+
+        detected_dark = detect_dark_background(self.textview)
+        if detected_dark is not None:
+            dark_background = detected_dark
+
+        chosen_color = dark_theme_color if dark_background else light_theme_color
+        if self._error_tag_color is not None and not self._error_tag_color == chosen_color:
+            logger.debug("Updating error tag color from %s to %s",
+                         self._error_tag_color, chosen_color)
+        error_tag.set_property('foreground', chosen_color)
+        self._error_tag_color = chosen_color
 
     def _get_windows10_theme_css(self):
         """Load the Windows 10 theme CSS files (if not already loaded)"""

@@ -6,6 +6,8 @@
 
 import os
 import threading
+from enum import Enum
+from typing import Optional
 
 from bleachbit import APP_NAME
 from bleachbit.GUI import logger
@@ -83,6 +85,64 @@ def get_window_info(window):
     else:
         monitor_model = "(unknown)"
     return WindowInfo(geo.x, geo.y, geo.width, geo.height, monitor_model)
+
+
+class ThemeChangeStatus(Enum):
+    """State machine for detecting whether a theme update occurred."""
+
+    CHANGED = "changed"
+    UNCHANGED = "unchanged"
+    UNKNOWN = "unknown"
+
+
+def detect_dark_background(widget: Optional[Gtk.Widget]) -> Optional[bool]:
+    """Return True if the widget background is dark, False if light, None on failure."""
+    threshold = 0.45
+    if widget is None:
+        return None
+
+    try:
+        style_context = widget.get_style_context()
+        rgba = None
+        if style_context is not None and hasattr(style_context, 'lookup_color'):
+            lookup = style_context.lookup_color('theme_bg_color')
+            if lookup:
+                rgba = lookup[-1] if isinstance(lookup, tuple) else lookup
+
+        if rgba is None:
+            return None
+
+        luminance = 0.2126 * rgba.red + 0.7152 * rgba.green + 0.0722 * rgba.blue
+        is_dark = luminance < threshold
+        # logger.debug("Detected widget luminance=%f -> dark=%s", luminance, is_dark)
+        return is_dark
+    except Exception:
+        logger.debug("Failed to detect widget background", exc_info=True)
+        return None
+
+
+def classify_theme_change(before_dark: Optional[bool], after_dark: Optional[bool]) -> ThemeChangeStatus:
+    """Compare observations before and after a toggle to classify change."""
+    if before_dark is None or after_dark is None:
+        return ThemeChangeStatus.UNKNOWN
+    if before_dark == after_dark:
+        return ThemeChangeStatus.UNCHANGED
+    return ThemeChangeStatus.CHANGED
+
+
+def should_show_dark_mode_warning(before_dark: Optional[bool], after_dark: Optional[bool]) -> bool:
+    """Return True when we should warn the user about theme toggles."""
+    status = classify_theme_change(before_dark, after_dark)
+    # Warn when the theme did not change or when we cannot tell (UNKNOWN).
+    return status != ThemeChangeStatus.CHANGED
+
+
+def flush_gtk_events(max_iterations: int = 5):
+    """Process pending GTK events to allow style updates to land."""
+    iterations = 0
+    while Gtk.events_pending() and (max_iterations is None or iterations < max_iterations):
+        Gtk.main_iteration_do(False)
+        iterations += 1
 
 
 def notify(msg):
