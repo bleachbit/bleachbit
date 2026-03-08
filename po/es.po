@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-03-02 23:12-0700\n"
-"PO-Revision-Date: 2026-02-16 10:09+0000\n"
+"PO-Revision-Date: 2026-03-09 12:09+0000\n"
 "Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/bleachbit/main/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Launchpad-Export-Date: 2021-12-14 04:36+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -45,10 +45,6 @@ msgstr "Cookies"
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#, fuzzy
-#| msgid ""
-#| "Delete cookies, which contain information such as web site preferences, "
-#| "authentication, and tracking identification"
 msgid ""
 "Delete cookies, which contain information such as website preferences, "
 "authentication, and tracking identification"
@@ -262,8 +258,6 @@ msgstr "Historial de los formularios"
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
-#, fuzzy
-#| msgid "A history of forms entered in web sites and in the Search bar"
 msgid "A history of forms entered in websites and in the Search bar"
 msgstr ""
 "Historial de los formularios completados en los sitios web y en la barra de "
@@ -305,7 +299,7 @@ msgstr "Restaurar la sesión"
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 msgid "Restores the previous session when the browser next starts."
-msgstr ""
+msgstr "Restablece la sesión anterior cuando el explorador inicia el siguiente."
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -477,10 +471,6 @@ msgid "Places"
 msgstr "Lugares"
 
 #: ../cleaners/epiphany.xml
-#, fuzzy
-#| msgid ""
-#| "A database of URLs including bookmarks, favicons, and a history of "
-#| "visited web sites"
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "websites"
@@ -558,8 +548,6 @@ msgstr "Eliminar la sesión actual"
 
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#, fuzzy
-#| msgid "A history of forms entered in web sites"
 msgid "A history of forms entered in websites"
 msgstr "Historial de los formularios completados en los sitios web"
 
@@ -608,12 +596,9 @@ msgstr "Sincronización"
 
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
-#, fuzzy
-#| msgid ""
-#| "Delete the sync data, including web apps, and sign out of the browser"
 msgid "Delete the sync data (including web apps) and sign out of the browser"
 msgstr ""
-"Eliminar los datos de sincronización, incluyendo las apps de web, y cerrar "
+"Elimina los datos de sincronización (incluyendo las apps) de web, y cerrar "
 "la sesión del navegador"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
@@ -762,10 +747,8 @@ msgid "Blocklists"
 msgstr "Listas de bloqueo"
 
 #: ../cleaners/transmission.xml
-#, fuzzy
-#| msgid "Blocklists will need update to work."
 msgid "Blocklists will need to be updated to work."
-msgstr "Se tendrán que actualizar las listas de bloqueo para que funcionen."
+msgstr "Tendrán que ser actualizadas las listas de bloqueo para que funcionen."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -1181,11 +1164,8 @@ msgstr ""
 #. can have multiple values. They're a way to make CleanerML
 #. files more concise.
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Deep scan does not support multi-value variable."
 msgid "Deep scan does not support multi-value variables."
-msgstr ""
-"La exploración en profundidad no admite variables con múltiples valores."
+msgstr "La exploración en profundidad no admite variable con múltiples valores."
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
@@ -1392,20 +1372,16 @@ msgstr "Purga espacio vacío en %s"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Loading native cleaners."
 msgid "Loading native cleaners…"
-msgstr "Cargando limpiadores nativos."
+msgstr "Cargando limpiadores nativos…"
 
 #. TRANSLATORS: Progress message shown typically on startup.
 #. 'Importing' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Importing cleaners from Winapp2.ini."
 msgid "Importing cleaners from Winapp2.ini…"
-msgstr "Importando limpiadores desde Winapp2.ini."
+msgstr "Importando limpiadores desde Winapp2.ini…"
 
 #: ../bleachbit/Cleaner.py
 #, python-format
@@ -1551,10 +1527,8 @@ msgstr "Purgado de espacio libre puede tardar mucho."
 
 #. TRANSLATORS: Error message on the CLI.
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "No work to do. Specify options."
 msgid "No operations selected. Specify cleaner options."
-msgstr "No hay nada que hacer. Especifique las opciones."
+msgstr "Ninguna operación seleccionada. Especifique las opciones del limpiador."
 
 #. TRANSLATORS: '--overwrite' and '--clean' are command line options
 #: ../bleachbit/CLI.py
@@ -1618,10 +1592,8 @@ msgstr "Vaciar archivo"
 #. (2) Button in the preferences dialogs
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Constant.py
-#, fuzzy
-#| msgid "Manage cookies to keep"
 msgid "Manage cookies to keep…"
-msgstr "Gestiona las cookies a conservar"
+msgstr "Gestiona las cookies a conservar…"
 
 #. TRANSLATORS: This message is used in three places (1) label at top of the
 #. preferences dialog (2) confirmation dialog when enabling the cleaning option
@@ -1881,20 +1853,16 @@ msgstr "Número de archivos"
 #. TRANSLATORS: Option in combo box to choose to stop after a total
 #. size (in megabytes) has been generated.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Size"
 msgid "Size (MB)"
-msgstr "Tamaño"
+msgstr "Tamaño (MB)"
 
 #. TRANSLATORS: Option in combo box to choose to stop when free space
 #. reaches a certain percentage.
 #. The percentage symbol (%) is a literal character, not a format
 #. placeholder.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Free disk space"
 msgid "Free space (%)"
-msgstr "Espacio libre en disco"
+msgstr "Espacio libre (%)"
 
 #. TRANSLATORS: Used for (1) label for folder chooser button and
 #. (2) error message shown in the infobar when the folder has not
@@ -1908,10 +1876,8 @@ msgstr "Seleccione la carpeta de destino"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Deleting files"
 msgid "Deleting files…"
-msgstr "Eliminando archivos"
+msgstr "Eliminando archivos…"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves
@@ -1943,7 +1909,7 @@ msgstr "Correos electrónicos de Hillary Clinton"
 #. generating chaff files.
 #: ../bleachbit/GuiChaff.py
 msgid "Stop after"
-msgstr ""
+msgstr "Detener tras"
 
 #. TRANSLATORS: Label for the combo box that selects what to do
 #. when chaff generation is finished.
@@ -1971,7 +1937,7 @@ msgstr "No eliminar"
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
 msgid "Downloading inspiration content…"
-msgstr ""
+msgstr "Descargando contenido de inspiración…"
 
 #. TRANSLATORS: Button label in a dialog window to start making
 #. chaff files.
@@ -1982,32 +1948,28 @@ msgstr "Crear los archivos"
 #. TRANSLATORS: Error message shown when downloading
 #. chaff models failed.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Downloading URL failed: %s"
 msgid "Download failed"
-msgstr "Error en la descarga de la URL: %s"
+msgstr "Descarga incorrecta"
 
 #. TRANSLATORS: Notification shown in an infobar when
 #. chaff file generation is aborted by the user.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation aborted"
-msgstr ""
+msgstr "Generación de paja interrumpida"
 
 #. TRANSLATORS: Notification shown in an infobar when chaff file generation
 #. is complete.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation complete"
-msgstr ""
+msgstr "Generación de paja completa"
 
 #. TRANSLATORS: Progress message shown while generating chaff files.
 #. 'Generating' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Generating files"
 msgid "Generating files…"
-msgstr "Generando los archivos"
+msgstr "Generando archivos…"
 
 #. TRANSLATORS: Title of the dialog to manage cookies to keep
 #: ../bleachbit/GuiCookie.py
@@ -2068,10 +2030,8 @@ msgstr "Conservar Seleccionados"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Clean cookies"
 msgid "Loading cookies…"
-msgstr "Vaciar cookies"
+msgstr "Cargando cookies…"
 
 #: ../bleachbit/GuiPreferences.py
 msgid ""
@@ -2111,10 +2071,8 @@ msgstr "Conservar listado"
 #. TRANSLATORS: Notice shown in an infobar when toggling
 #. dark mode on Linux.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Some GTK themes support do not support both light and dark modes."
 msgid "Some GTK themes do not support both light and dark modes."
-msgstr "Algunos temas GTK admiten no admitir ambos modos claros y oscuros."
+msgstr "Algunos temas GTK no admiten ambos modos claros y oscuros a la vez."
 
 #. TRANSLATORS: Success message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
@@ -2257,10 +2215,8 @@ msgstr "Se eliminarán todos los idiomas salvo los marcados."
 #. TRANSLATORS: Column header in the languages treeview.
 #. This column controls whether to keep the language.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Keep list"
 msgid "Keep"
-msgstr "Conservar listado"
+msgstr "Conservar"
 
 #. TRANSLATORS: Column header in the languages treeview showing the
 #. language code (e.g., 'en_US').
@@ -2503,10 +2459,8 @@ msgstr "Esta opción requiere modo experto. Habilítelo en Preferencias."
 #. TRANSLATORS: Context menu item in the tree view that opens the preferences dialog.
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
-#, fuzzy
-#| msgid "Manage custom paths"
 msgid "Manage custom paths…"
-msgstr "Gestiona rutas adaptadas"
+msgstr "Gestiona rutas adaptadas…"
 
 #. TRANSLATORS: Tooltip for the preview button on the headerbar.
 #. 'Preview' is a verb, and 'selected operations' refers to
@@ -2560,10 +2514,9 @@ msgstr ""
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
 #: ../bleachbit/GuiWindow.py
-#, fuzzy, python-format
-#| msgid "Error when checking for updates: "
+#, python-format
 msgid "Error when checking for updates: %s"
-msgstr "Error al comprobar actualizaciones: "
+msgstr "Error al comprobar actualizaciones: %s"
 
 #: ../bleachbit/Memory.py
 msgid ""
@@ -2818,7 +2771,7 @@ msgstr ""
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Windows.py
 msgid "Starting…"
-msgstr ""
+msgstr "Iniciar…"
 
 #: ../bleachbit/Wipe.py
 msgid ""
@@ -2861,10 +2814,8 @@ msgstr ""
 "{bytes:,} bytes y {inodes:,} nodos índice disponibles para el superusuario"
 
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Handled unknown error #0 while truncating file."
 msgid "Encountered unknown error #0 while truncating file."
-msgstr "Se ha gestionado el error desconocido núm. 0 al truncar el archivo."
+msgstr "Se ha encontrado error desconocido núm. 0 al truncar el archivo."
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
