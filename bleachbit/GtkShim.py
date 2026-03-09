@@ -36,7 +36,7 @@ import sys
 import tempfile
 import warnings
 import webbrowser
-from pathlib import Path
+from pathlib import PureWindowsPath
 from html import escape as esc
 from traceback import format_exc
 
@@ -71,11 +71,16 @@ def path_has_lib_or_bin(path):
 
     Returns the matched component name, or None.
     """
-    if not os.name == 'nt':
+    if not path:
         return None
-    p = Path(path)
-    for part in p.parts:
-        if part.lower() in ('lib', 'bin'):
+
+    try:
+        parts = PureWindowsPath(path).parts
+    except TypeError:
+        return None
+
+    for part in parts:
+        if part and part.lower() in ('lib', 'bin'):
             return part.lower()
     return None
 
@@ -111,7 +116,7 @@ body {{ font-family: sans-serif; margin: 2em; }}
 pre {{ background: #f4f4f4; padding: 1em; overflow-x: auto; }}
 textarea {{ width: 100%; font-family: monospace; }}
 </style>
-<script>
+<script type="text/javascript">
 function copyBugReport() {{
   var textarea = document.getElementById('bug-report');
   var confirm = document.getElementById('copy-confirm');
@@ -181,7 +186,6 @@ def _handle_gtk_import_error(error):
     logger.error('GTK not available: %s\n%s', error, format_exc())
     html_content = _build_error_html(
         error, traceback_text=format_exc())
-
     _show_windows_error_dialog('BleachBit', html_content)
 
 
