@@ -493,7 +493,7 @@ class Cookie(FileActionProvider):
                 # TRANSLATORS: This is the name of a cleaning action. 'Clean' is a verb.
                 # It shows in the log of actions performed.
                 _('Clean cookies'),
-                preview_func)
+                preview_func=preview_func)
 
     def _load_keep_list(self):
         """Load cookie domains to keep from options directory.
@@ -565,7 +565,7 @@ class Ini(FileActionProvider):
 
 
 class Journald(ActionProvider):
-    """Action to run 'journalctl --vacuum-time=1'"""
+    """Action to run 'journalctl --rotate --vacuum-size=1'"""
     action_key = 'journald.clean'
 
     def __init__(self, action_element, path_vars=None):
@@ -575,7 +575,10 @@ class Journald(ActionProvider):
         # If journalctl is not installed, then enable fast auto-hide.
         if not FileUtilities.exe_exists('journalctl'):
             return
-        yield Command.Function(None, Unix.journald_clean, 'journalctl --vacuum-time=1')
+        yield Command.Function(None,
+                               Unix.journald_clean,
+                               'journalctl --rotate --vacuum-size=1',
+                               preview_func=Unix.journald_preview)
 
 
 class Json(FileActionProvider):

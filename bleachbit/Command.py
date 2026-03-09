@@ -126,13 +126,13 @@ class Function:
 
     """Execute a simple Python function"""
 
-    def __init__(self, path, func, label, preview_func=None):
+    def __init__(self, path, func, label, *, preview_func=None):
         """Initialize a Function command
 
         Parameters:
             path (str or None): Path to file or None if function doesn't operate on a file
             func (function): Function to execute that takes path or returns size
-            label (str): Label for display in the UI
+            label (str): Label for log output (for UI label see cleaner XML file)
             preview_func (function, optional): Function to call in preview mode
 
         func and preview_func take no arguments and return an integer.
@@ -170,13 +170,15 @@ class Function:
             'size': None}
 
         if not really_delete and self.preview_func is not None:
-            # Preview mode: call preview function to get list of items that would be deleted
+            # Preview mode: call preview function to get size of items that would be deleted
             try:
-                preview_items = self.preview_func()
-                if isinstance(preview_items, int):
-                    ret['size'] = preview_items
+                preview = self.preview_func()
             except Exception as e:
                 logger.warning(f'Preview function failed: {e}')
+            if isinstance(preview, int):
+                ret['size'] = preview
+            else:
+                logger.warning(f'Preview function returned non-int value: {preview}')
                 ret['size'] = 0
         elif really_delete:
             if self.path is None:
