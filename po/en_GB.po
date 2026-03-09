@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-03-02 23:12-0700\n"
-"PO-Revision-Date: 2026-03-08 05:09+0000\n"
+"PO-Revision-Date: 2026-03-10 14:09+0000\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "bleachbit/main/en_GB/>\n"
@@ -1849,7 +1849,7 @@ msgstr "Hillary Clintons' emails"
 #. generating chaff files.
 #: ../bleachbit/GuiChaff.py
 msgid "Stop after"
-msgstr ""
+msgstr "Stop after"
 
 #. TRANSLATORS: Label for the combo box that selects what to do
 #. when chaff generation is finished.
@@ -1877,7 +1877,7 @@ msgstr "Do not delete"
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
 msgid "Downloading inspiration content…"
-msgstr ""
+msgstr "Downloading inspiration content…"
 
 #. TRANSLATORS: Button label in a dialog window to start making
 #. chaff files.
@@ -1888,32 +1888,28 @@ msgstr "Create files"
 #. TRANSLATORS: Error message shown when downloading
 #. chaff models failed.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Downloading URL failed: %s"
 msgid "Download failed"
-msgstr "Downloading URL failed: %s"
+msgstr "Download failed"
 
 #. TRANSLATORS: Notification shown in an infobar when
 #. chaff file generation is aborted by the user.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation aborted"
-msgstr ""
+msgstr "Chaff generation aborted"
 
 #. TRANSLATORS: Notification shown in an infobar when chaff file generation
 #. is complete.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation complete"
-msgstr ""
+msgstr "Chaff generation complete"
 
 #. TRANSLATORS: Progress message shown while generating chaff files.
 #. 'Generating' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Generating files"
 msgid "Generating files…"
-msgstr "Generating files"
+msgstr "Generating files…"
 
 #. TRANSLATORS: Title of the dialog to manage cookies to keep
 #: ../bleachbit/GuiCookie.py
@@ -1972,10 +1968,8 @@ msgstr "Keep Selected"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Clean cookies"
 msgid "Loading cookies…"
-msgstr "Clean cookies"
+msgstr "Loading cookies…"
 
 #: ../bleachbit/GuiPreferences.py
 msgid ""
@@ -2155,10 +2149,8 @@ msgstr "All languages will be deleted except those selected."
 #. TRANSLATORS: Column header in the languages treeview.
 #. This column controls whether to keep the language.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Keep list"
 msgid "Keep"
-msgstr "Keep list"
+msgstr "Keep"
 
 #. TRANSLATORS: Column header in the languages treeview showing the
 #. language code (e.g., 'en_US').
@@ -2393,10 +2385,8 @@ msgstr "This option requires expert mode. Enable it in Preferences."
 #. TRANSLATORS: Context menu item in the tree view that opens the preferences dialog.
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
-#, fuzzy
-#| msgid "Manage custom paths"
 msgid "Manage custom paths…"
-msgstr "Manage custom paths"
+msgstr "Manage custom paths…"
 
 #. TRANSLATORS: Tooltip for the preview button on the headerbar.
 #. 'Preview' is a verb, and 'selected operations' refers to
@@ -2448,10 +2438,9 @@ msgstr ""
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
 #: ../bleachbit/GuiWindow.py
-#, fuzzy, python-format
-#| msgid "Error when checking for updates: "
+#, python-format
 msgid "Error when checking for updates: %s"
-msgstr "Error when checking for updates: "
+msgstr "Error when checking for updates: %s"
 
 #: ../bleachbit/Memory.py
 msgid ""
@@ -2698,7 +2687,7 @@ msgstr "Administrator privileges are required to clean Windows Updates"
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Windows.py
 msgid "Starting…"
-msgstr ""
+msgstr "Starting…"
 
 #: ../bleachbit/Wipe.py
 msgid ""
