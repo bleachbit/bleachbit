@@ -16,11 +16,11 @@ from bleachbit.Constant import ABORT_BUTTON_LABEL
 from bleachbit.GUI import logger
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiPreferences import PreferencesDialog
+from bleachbit.GuiStartup import get_startup_messages
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
 from bleachbit.GuiUtil import (detect_dark_background, get_font_size_from_name,
                                get_window_info, notify, threaded)
 from bleachbit.Language import get_text as _, pget_text as _p
-from bleachbit.Network import unset_sslkeylogfile
 from bleachbit.Options import options
 from bleachbit.Wipe import detect_orphaned_wipe_files
 
@@ -53,6 +53,7 @@ class GUI(Gtk.ApplicationWindow):
     _style_provider_regular = None
     _style_provider_dark = None
     _error_tag_color = None
+    _showed_startup_messages = False
 
     def __init__(self, auto_exit, *args, **kwargs):
         super(GUI, self).__init__(*args, **kwargs)
@@ -771,61 +772,22 @@ class GUI(Gtk.ApplicationWindow):
         # expand tree view
         self.view.expand_all()
 
-        if unset_sslkeylogfile(False):
-            self.append_text(
-                'The environment variable SSLKEYLOGFILE is not supported', 'error')
+        if self._showed_startup_messages:
+            # remove from idle loop (see GObject.idle_add)
+            return False
+
+        startup_msgs = get_startup_messages(self._auto_exit)
+        for (msg, is_error) in startup_msgs:
+            self.append_text(msg + '\n', 'error' if is_error else None)
 
         # Check for online updates.
+        # Do this after unset_sslkeylogfile.
         if not self._auto_exit and \
-            bleachbit.online_update_notification_enabled and \
-            options.get("check_online_updates") and \
-                not hasattr(self, 'checked_for_updates'):
-            self.checked_for_updates = True
+                bleachbit.online_update_notification_enabled and \
+                options.get("check_online_updates"):
             self.check_online_updates()
 
-        # Show information for first start.
-        # (The first start flag is set also for each new version.)
-        if options.get("first_start") and not self._auto_exit:
-            if os.name == 'posix':
-                self.append_text(
-                    # TRANSLATORS: First-start hint for Linux users shown in
-                    # the log on the main screen.
-                    _('Access the application menu by clicking the hamburger icon on the title bar.'))
-                pref = self.get_preferences_dialog()
-                pref.run()
-            elif os.name == 'nt':
-                self.append_text(
-                    # TRANSLATORS: First-start hint for Windows users shown in
-                    # the log on the main screen.
-                    _('Access the application menu by clicking the logo on the title bar.'))
-            options.set('first_start', False)
-
-        # Show notice about admin privileges.
-        if os.name == 'posix' and os.path.expanduser('~') == '/root':
-            self.append_text(
-                # TRANSLATORS: Warning shown on startup when running BleachBit as root on Linux.
-                # It means, for example, that cleaning a browser will clean root's browser data.
-                _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.') + '\n')
-        if os.name == 'nt' and options.get('shred'):
-            from win32com.shell.shell import IsUserAnAdmin
-            if not IsUserAnAdmin():
-                self.append_text(
-                    # TRANSLATORS: Warning shown on startup on Windows.
-                    _('Run BleachBit with administrator privileges to improve the accuracy of overwriting the contents of files.'))
-                self.append_text('\n')
-        if os.name == 'nt' and Windows.is_ots_elevation():
-            self.append_text(
-                # TRANSLATORS: Warning shown on startup on Windows when elevated with different account.
-                # It means, for example, that cleaning a browser will clean the browser data of the administrator account.
-                _('You elevated privileges using a different account to clean shared parts of the system. User-specific paths will refer to the administrator account, so to clean your profile, run BleachBit again as a standard user.') + '\n')
-
-        if 'windowsapps' in sys.executable.lower():
-            self.append_text(
-                # TRANSLATORS: Warning shown on startup on Windows when running unofficial Microsoft Store version.
-                # Advises user to get genuine version from official website.
-                _('There is no official version of BleachBit on the Microsoft Store. Get the genuine version at https://www.bleachbit.org where it is always free of charge.') + '\n', 'error')
-
-        # remove from idle loop (see GObject.idle_add)
+        self._showed_startup_messages = True
         return False
 
     def cb_run_option(self, widget, really_delete, cleaner_id, option_id):
