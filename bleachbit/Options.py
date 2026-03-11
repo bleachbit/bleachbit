@@ -124,6 +124,7 @@ class Options:
         self.config.BOOLEAN_STATES['t'] = True
         self.config.BOOLEAN_STATES['f'] = False
         self.overrides = {}
+        self.old_version = None  # Store previous version in memory
         self.restore()
 
         old_option = 'system.free_disk_space'
@@ -370,7 +371,9 @@ class Options:
         # BleachBit upgrade or first start ever
         if not self.config.has_option('bleachbit', 'version') or \
                 self.get('version') != bleachbit.APP_VERSION:
-            self.set('first_start', True)
+            if self.config.has_option('bleachbit', 'version'):
+                self.old_version = self.get('version')
+            self.set('first_start', True, commit=False)
 
         # set version
         self.set("version", bleachbit.APP_VERSION)
@@ -459,6 +462,10 @@ class Options:
         """Set a CLI override that will never be written to disk"""
         override_key = (section, key)
         self.overrides[override_key] = value
+
+    def get_old_version(self):
+        """Get the previous version before current upgrade"""
+        return self.old_version
 
 
 options = Options()

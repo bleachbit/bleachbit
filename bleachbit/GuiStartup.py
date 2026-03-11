@@ -15,6 +15,23 @@ if os.name == 'nt':
     from bleachbit import Windows
 
 
+def _is_version_upgrade(old_version, target_version):
+    """Check if upgrading from old_version to >= target_version"""
+    try:
+        old_parts = [int(x) for x in old_version.split('.')]
+        target_parts = [int(x) for x in target_version.split('.')]
+
+        # Pad shorter version with zeros
+        max_len = max(len(old_parts), len(target_parts))
+        old_parts.extend([0] * (max_len - len(old_parts)))
+        target_parts.extend([0] * (max_len - len(target_parts)))
+
+        # Check if old_version < target_version
+        return old_parts < target_parts
+    except (ValueError, AttributeError):
+        return False
+
+
 def get_startup_messages(auto_exit):
     """Return a list of startup messages
 
@@ -31,6 +48,15 @@ def get_startup_messages(auto_exit):
     if unset_sslkeylogfile(False):
         ret_msgs.append((
             'The environment variable SSLKEYLOGFILE is not supported', True))
+
+    # Show version update advice for upgrades from <5.1.0 to >=5.1.0
+    old_version = options.get_old_version()
+    if old_version and _is_version_upgrade(old_version, "5.1.0"):
+        ret_msgs.append((
+            # TRANSLATORS: Update notification for users upgrading from versions
+            # older than 5.1.0.
+            _('Cleaning options with warnings now require expert mode. Enable it in '
+              'preferences to clean them.'), False))
 
     # Show information for first start.
     # (The first start flag is set also for each new version.)
