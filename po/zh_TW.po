@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-03-02 23:12-0700\n"
-"PO-Revision-Date: 2026-02-22 23:09+0000\n"
+"PO-Revision-Date: 2026-03-12 02:09+0000\n"
 "Last-Translator: Pin-Hsien Lee <plesry@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/bleachbit/main/zh_Hant/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1306,20 +1306,16 @@ msgstr "擦除 %s 中的未分配空間"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Loading native cleaners."
 msgid "Loading native cleaners…"
-msgstr "正在載入原生清理器。"
+msgstr "正在載入自帶的清理器…"
 
 #. TRANSLATORS: Progress message shown typically on startup.
 #. 'Importing' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Importing cleaners from Winapp2.ini."
 msgid "Importing cleaners from Winapp2.ini…"
-msgstr "正在從 Winapp2.ini 匯入清理器。"
+msgstr "正在從 Winapp2.ini 匯入清理器…"
 
 #: ../bleachbit/Cleaner.py
 #, python-format
@@ -1527,10 +1523,8 @@ msgstr "清理檔案"
 #. (2) Button in the preferences dialogs
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Constant.py
-#, fuzzy
-#| msgid "Manage cookies to keep"
 msgid "Manage cookies to keep…"
-msgstr "管理要保留的 Cookie"
+msgstr "管理要保留的 Cookie…"
 
 #. TRANSLATORS: This message is used in three places (1) label at top of the
 #. preferences dialog (2) confirmation dialog when enabling the cleaning option
@@ -1750,20 +1744,16 @@ msgstr "檔案數量"
 #. TRANSLATORS: Option in combo box to choose to stop after a total
 #. size (in megabytes) has been generated.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Size"
 msgid "Size (MB)"
-msgstr "大小"
+msgstr "大小 (MB)"
 
 #. TRANSLATORS: Option in combo box to choose to stop when free space
 #. reaches a certain percentage.
 #. The percentage symbol (%) is a literal character, not a format
 #. placeholder.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Free disk space"
 msgid "Free space (%)"
-msgstr "硬碟可用空間"
+msgstr "可用空間 (%)"
 
 #. TRANSLATORS: Used for (1) label for folder chooser button and
 #. (2) error message shown in the infobar when the folder has not
@@ -1777,10 +1767,8 @@ msgstr "選擇目的資料夾"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Deleting files"
 msgid "Deleting files…"
-msgstr "刪除檔案中"
+msgstr "正在刪除檔案…"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves
@@ -1812,7 +1800,7 @@ msgstr "希拉蕊・柯林頓的 E-mail"
 #. generating chaff files.
 #: ../bleachbit/GuiChaff.py
 msgid "Stop after"
-msgstr ""
+msgstr "多久後停止生成"
 
 #. TRANSLATORS: Label for the combo box that selects what to do
 #. when chaff generation is finished.
@@ -1840,7 +1828,7 @@ msgstr "不要刪除"
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
 msgid "Downloading inspiration content…"
-msgstr ""
+msgstr "正在下載生成干擾文件的源文檔…"
 
 #. TRANSLATORS: Button label in a dialog window to start making
 #. chaff files.
@@ -1851,32 +1839,28 @@ msgstr "製造檔案"
 #. TRANSLATORS: Error message shown when downloading
 #. chaff models failed.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Downloading URL failed: %s"
 msgid "Download failed"
-msgstr "下載 URL 失敗：%s"
+msgstr "下載失敗"
 
 #. TRANSLATORS: Notification shown in an infobar when
 #. chaff file generation is aborted by the user.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation aborted"
-msgstr ""
+msgstr "干擾文件生成中斷"
 
 #. TRANSLATORS: Notification shown in an infobar when chaff file generation
 #. is complete.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation complete"
-msgstr ""
+msgstr "干擾文件生成完畢"
 
 #. TRANSLATORS: Progress message shown while generating chaff files.
 #. 'Generating' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Generating files"
 msgid "Generating files…"
-msgstr "產生檔案"
+msgstr "正在生成檔案…"
 
 #. TRANSLATORS: Title of the dialog to manage cookies to keep
 #: ../bleachbit/GuiCookie.py
@@ -1935,10 +1919,8 @@ msgstr "保留所選"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Clean cookies"
 msgid "Loading cookies…"
-msgstr "清除 Cookie"
+msgstr "正在載入 Cookie…"
 
 #: ../bleachbit/GuiPreferences.py
 msgid ""
@@ -2113,10 +2095,8 @@ msgstr "沒有勾選的語言將會被刪除。"
 #. TRANSLATORS: Column header in the languages treeview.
 #. This column controls whether to keep the language.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Keep list"
 msgid "Keep"
-msgstr "保留清單"
+msgstr "保留"
 
 #. TRANSLATORS: Column header in the languages treeview showing the
 #. language code (e.g., 'en_US').
@@ -2344,10 +2324,8 @@ msgstr "此選項需要專家模式。在「偏好設定」中啟用它。"
 #. TRANSLATORS: Context menu item in the tree view that opens the preferences dialog.
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
-#, fuzzy
-#| msgid "Manage custom paths"
 msgid "Manage custom paths…"
-msgstr "管理自定義路徑"
+msgstr "管理自定義路徑…"
 
 #. TRANSLATORS: Tooltip for the preview button on the headerbar.
 #. 'Preview' is a verb, and 'selected operations' refers to
@@ -2399,10 +2377,9 @@ msgstr ""
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
 #: ../bleachbit/GuiWindow.py
-#, fuzzy, python-format
-#| msgid "Error when checking for updates: "
+#, python-format
 msgid "Error when checking for updates: %s"
-msgstr "檢查更新時發生錯誤： "
+msgstr "檢查更新時發生錯誤：%s"
 
 #: ../bleachbit/Memory.py
 msgid ""
@@ -2641,7 +2618,7 @@ msgstr "需要管理員權限以清除 Windows Update 檔案"
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Windows.py
 msgid "Starting…"
-msgstr ""
+msgstr "正在啟動…"
 
 #: ../bleachbit/Wipe.py
 msgid ""
