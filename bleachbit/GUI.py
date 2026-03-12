@@ -32,7 +32,7 @@ require_gtk()
 
 # local
 from bleachbit.Log import set_root_log_level
-from bleachbit.Options import options # keep
+from bleachbit.Options import options  # keep
 
 # Now that the configuration is loaded, honor the debug preference there.
 set_root_log_level(options.get('debug'))

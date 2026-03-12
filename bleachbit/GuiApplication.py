@@ -418,13 +418,13 @@ class Bleachbit(Gtk.Application):
         env = os.environ.copy()
         env['PANGOCAIRO_BACKEND'] = 'fc'
         env['BLEACHBIT_APP_INSTANCE_SUFFIX'] = f'Restart{os.getpid()}'
-        options.set('font_check_completed', True, commit=False)
+        options.set('font_check_completed', True)
         options.set('use_fontconfig_backend', True)
         if General.run_external_nowait(cmd, env=env):
             self.quit()
         else:
             # This logs to the main application window
             logger.error('Failed to restart BleachBit with fontconfig backend')
-            options.set('font_check_completed', False, commit=False)
+            options.set('font_check_completed', False)
             options.set('use_fontconfig_backend', False)
 

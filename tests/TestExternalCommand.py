@@ -301,7 +301,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         super(ExternalCommandTestCase, ExternalCommandTestCase).setUpClass()
         cls.environment_changed = False
         # This should not be needed because of using CLI arg --no-delete-confirmation.
-        options.set('delete_confirmation', False, commit=True)
+        options.set('delete_confirmation', False)
+        options.commit()
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             # Set environment variable for child process.
             common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', cls.tempdir)

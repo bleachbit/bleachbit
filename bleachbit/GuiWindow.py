@@ -370,7 +370,7 @@ class GUI(Gtk.ApplicationWindow):
                 self.unfullscreen()
             else:
                 self.fullscreen()
-            options.set("window_fullscreen", is_fullscreen, commit=False)
+            options.set("window_fullscreen", is_fullscreen)
             return True
         if not ctrl:
             return False
@@ -1103,10 +1103,10 @@ class GUI(Gtk.ApplicationWindow):
                     return True
 
         # save window position and size
-        options.set("window_x", x, commit=False)
-        options.set("window_y", y, commit=False)
-        options.set("window_width", width, commit=False)
-        options.set("window_height", height, commit=False)
+        options.set("window_x", x)
+        options.set("window_y", y)
+        options.set("window_width", width)
+        options.set("window_height", height)
         return False
 
     def on_window_state_event(self, widget, event):
@@ -1128,9 +1128,9 @@ class GUI(Gtk.ApplicationWindow):
         is_tiled = event.new_window_state & tiling_states != 0
         fullscreen = (event.new_window_state &
                       Gdk.WindowState.FULLSCREEN != 0) and not is_tiled
-        options.set("window_fullscreen", fullscreen, commit=False)
+        options.set("window_fullscreen", fullscreen)
         maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
-        options.set("window_maximized", maximized, commit=False)
+        options.set("window_maximized", maximized)
         if 'nt' == os.name:
             logger.debug(
                 f'window state = {event.new_window_state}, full screen = {fullscreen}, maximized = {maximized}')
@@ -1138,7 +1138,7 @@ class GUI(Gtk.ApplicationWindow):
 
     def on_delete_event(self, widget, event):
         # commit options to disk
-        options.commit()
+        options.close()
         return False
 
     def on_show(self, _widget):

@@ -23,10 +23,12 @@ Store and retrieve user preferences
 """
 
 # standard library imports
+import atexit
 import errno
 import logging
 import os
 import re
+import threading
 
 # third-party imports
 if 'nt' == os.name:
@@ -38,6 +40,8 @@ from bleachbit import General
 from bleachbit.Language import get_text as _
 
 logger = logging.getLogger(__name__)
+
+FLUSH_DELAY_SECS = 15.0  # decimal seconds
 
 OPTION_DEFAULTS = {
     'auto_hide': {'value': True},
@@ -125,6 +129,11 @@ class Options:
         self.config.BOOLEAN_STATES['f'] = False
         self.overrides = {}
         self.old_version = None  # Store previous version in memory
+        self._dirty = False
+        self._flush_generation = 0
+        self._flush_lock = threading.RLock()
+        self._flush_timer = None
+        atexit.register(self.close)
         self.restore()
 
         old_option = 'system.free_disk_space'
@@ -133,11 +142,48 @@ class Options:
                 logger.debug("Migrating legacy option '%s' to 'system.empty_space'", old_option)
                 self.config.set('tree', 'system.empty_space', 'true')
                 self.config.remove_option('tree', old_option)
+                self.__schedule_flush()
         except Exception:
             logger.exception("Error migrating legacy option '%s'", old_option)
 
-    def __flush(self):
-        """Write information to disk"""
+    def __cancel_flush_timer(self):
+        """Invalidate and stop any pending delayed flush timer."""
+        self._flush_generation += 1
+        timer = self._flush_timer
+        self._flush_timer = None
+        if timer is not None:
+            timer.cancel()
+
+    def __flush_after_delay(self, generation):
+        """Timer callback that flushes if the timer is still current."""
+        with self._flush_lock:
+            if generation != self._flush_generation:
+                return
+            self._flush_timer = None
+            self.__flush_locked()
+
+    def __schedule_flush(self):
+        """Mark configuration dirty and schedule a delayed flush."""
+        with self._flush_lock:
+            self._dirty = True
+            self._flush_generation += 1
+            generation = self._flush_generation
+            if self._flush_timer is not None:
+                self._flush_timer.cancel()
+            self._flush_timer = threading.Timer(
+                FLUSH_DELAY_SECS, self.__flush_after_delay, args=(generation,))
+            self._flush_timer.daemon = True
+            self._flush_timer.start()
+
+    def __flush(self, force=False):
+        """Acquire the lock and flush to disk."""
+        with self._flush_lock:
+            self.__flush_locked(force=force)
+
+    def __flush_locked(self, force=False):
+        """Write configuration to disk while holding the flush lock."""
+        if not force and not self._dirty:
+            return
         if not self.purged:
             self.__purge()
 
@@ -158,6 +204,8 @@ class Options:
                     _("Permission denied when writing configuration to file: %s"), bleachbit.options_file)
             else:
                 raise
+        else:
+            self._dirty = False
 
     def __purge(self):
         """Clear out obsolete data"""
@@ -298,13 +346,14 @@ class Options:
         if not self.config.has_section(section):
             self.config.add_section(section)
         self.config.set(section, key, 'True')
+        self.__schedule_flush()
 
     def clear_warning_preferences(self):
         """Clear all saved warning confirmations."""
         section = "warnings"
         if self.config.has_section(section):
             self.config.remove_section(section)
-            self.__flush()
+            self.__schedule_flush()
 
     def get_tree(self, parent, child):
         """Retrieve an option for the tree view.
@@ -352,7 +401,17 @@ class Options:
         self.overrides.clear()
 
     def restore(self):
-        """Restore saved options from disk"""
+        """Restore saved options from disk
+
+        Abandons any changes not written to disk.
+        """
+        with self._flush_lock:
+            self.__cancel_flush_timer()
+            self._dirty = False
+            # Reading configuration merges with existing data,
+            # so clear it first.
+            for section in self.config.sections():
+                self.config.remove_section(section)
         try:
             self.config.read(bleachbit.options_file, encoding='utf-8-sig')
         except:
@@ -373,21 +432,38 @@ class Options:
                 self.get('version') != bleachbit.APP_VERSION:
             if self.config.has_option('bleachbit', 'version'):
                 self.old_version = self.get('version')
-            self.set('first_start', True, commit=False)
+            self.set('first_start', True)
 
         # set version
         self.set("version", bleachbit.APP_VERSION)
 
-    def set(self, key, value, section='bleachbit', commit=True):
+    def set(self, key, value, section='bleachbit'):
         """Set a general option"""
+        assert isinstance(key, str), f"key must be a string: {key}"
+        assert isinstance(section, str), f"section must be a string: {section}"
         override_key = (section, key)
         if override_key not in self.overrides:
-            self.config.set(section, key, str(value))
-        if commit:
-            self.__flush()
+            value = str(value)
+            if self.config.has_option(section, key) and self.config.get(section, key) == value:
+                return
+            self.config.set(section, key, value)
+            self.__schedule_flush()
 
     def commit(self):
-        self.__flush()
+        """Cancel times and write changes
+
+        Identical to close() except different intent.
+        """
+        with self._flush_lock:
+            self.__cancel_flush_timer()
+            self.__flush(force=True)
+
+    def close(self):
+        """Cancel times and write changes
+
+        Identical to commit() except different intent.
+        """
+        self.commit()
 
     def set_hashpath(self, pathname, hashvalue):
         """Remember the hash of a path"""
@@ -395,24 +471,29 @@ class Options:
 
     def set_list(self, key, values):
         """Set a value which is a list data type"""
+        assert isinstance(key, str), f"key must be a string: {key}"
         section = "list/%s" % key
+        # Remove existing section first to clear old values
+        # before writing new ones.
         if self.config.has_section(section):
             self.config.remove_section(section)
         self.config.add_section(section)
         for counter, value in enumerate(values):
             self.config.set(section, str(counter), value)
-        self.__flush()
+        self.__schedule_flush()
 
     def set_whitelist_paths(self, values):
         """Save the keep list (formerly whitelist)"""
         section = "whitelist/paths"
+        # Remove existing section first to clear old values
+        # before writing new ones.
         if self.config.has_section(section):
             self.config.remove_section(section)
         self.config.add_section(section)
         for counter, value in enumerate(values):
             self.config.set(section, str(counter) + '_type', value[0])
             self.config.set(section, str(counter) + '_path', value[1])
-        self.__flush()
+        self.__schedule_flush()
 
     def set_custom_paths(self, values):
         """Save the custom paths
@@ -421,6 +502,8 @@ class Options:
             where path_type is either 'file' or 'folder'
         """
         section = "custom/paths"
+        # Remove existing section first to clear old values
+        # before writing new ones.
         if self.config.has_section(section):
             self.config.remove_section(section)
         self.config.add_section(section)
@@ -429,7 +512,7 @@ class Options:
             assert path_type in ('file', 'folder')
             self.config.set(section, str(counter) + '_type', path_type)
             self.config.set(section, str(counter) + '_path', path)
-        self.__flush()
+        self.__schedule_flush()
 
     def set_language(self, langid, value):
         """Set the value for a locale (whether to preserve it)"""
@@ -439,7 +522,7 @@ class Options:
             self.config.remove_option('preserve_languages', langid)
         else:
             self.config.set('preserve_languages', langid, str(value))
-        self.__flush()
+        self.__schedule_flush()
 
     def set_tree(self, parent, child, value):
         """Set an option for the tree view.  The child may be None."""
@@ -452,7 +535,7 @@ class Options:
             self.config.remove_option('tree', option)
         else:
             self.config.set('tree', option, str(value))
-        self.__flush()
+        self.__schedule_flush()
 
     def toggle(self, key):
         """Toggle a boolean key"""

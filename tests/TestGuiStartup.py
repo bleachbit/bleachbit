@@ -19,7 +19,7 @@ class StubOptions:
         """Return stored option value."""
         return self.values.get(key)
 
-    def set(self, key, value, _commit=True):
+    def set(self, key, value):
         """Set a option value."""
         self.values[key] = value
 

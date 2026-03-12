@@ -305,7 +305,7 @@ class GUITestCase(common.BleachbitTestCase):
         options.set('expert_mode', True)
         for new_delete_confirmation in [True, False]:
             options.set('delete_confirmation',
-                        new_delete_confirmation, commit=False)
+                        new_delete_confirmation)
             gui._confirm_delete(False, False)
 
         # We should have a single call to delete_confirmation_dialog
