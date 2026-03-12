@@ -349,7 +349,7 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
             sql and fn, "sql and fn are mutually exclusive ways to create the data")
 
         if fn and sql:
-            raise RuntimError(
+            raise RuntimeError(
                 'sqlite_clean_helper: supply either fn or sql but not both')
         elif fn:
             filename = os.path.normpath(os.path.join(self.dir_base, fn))
