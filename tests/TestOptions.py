@@ -28,6 +28,7 @@ from unittest import mock
 
 from tests import common
 import bleachbit.Options
+from bleachbit.Options import _option_index
 from bleachbit.Log import is_debugging_enabled_via_cli
 
 
@@ -73,6 +74,13 @@ check_online_updates=True
 [hashpath]
 [list/shred_drives]
 ''')
+
+    def test_option_index(self):
+        """Unit test for _option_index"""
+        self.assertEqual(_option_index('0'), 0)
+        self.assertEqual(_option_index('3'), 3)
+        self.assertEqual(_option_index('1_type'), 1)
+        self.assertEqual(_option_index('2_path'), 2)
 
     def test_Options(self):
         """Unit test for class Options"""

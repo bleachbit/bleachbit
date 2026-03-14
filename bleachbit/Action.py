@@ -25,14 +25,14 @@ Actions that perform cleaning
 
 # standard imports
 import glob
+import json
 import logging
 import os
 import re
-import json
-import bleachbit
 from itertools import product
 
 # first party imports
+import bleachbit
 from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod  # mod=module
 from bleachbit import fs_scan_re_flags
 from bleachbit.Constant import CLEAN_FILE_LABEL
@@ -160,10 +160,9 @@ class FileActionProvider(ActionProvider):
                     # can have multiple values. They're a way to make CleanerML
                     # files more concise.
                     _("Deep scan does not support multi-value variables."))
-        if not any([self.object_type, self.regex, self.nregex,
-                    self.wholeregex, self.nwholeregex]):
-            # If the filter is not needed, bypass it for speed.
-            self.get_paths = self._get_paths
+        # If the filter is not needed, bypass it for speed.
+        self._use_fast_path = not any([self.object_type, self.regex, self.nregex,
+                                       self.wholeregex, self.nwholeregex])
 
     def _set_paths(self, raw_path, path_vars):
         """Set the list of paths to work on"""
@@ -184,6 +183,13 @@ class FileActionProvider(ActionProvider):
         yield self.ds
 
     def get_paths(self):
+        """Dispatch to fast or filtered path retrieval based on filter configuration."""
+        if self._use_fast_path:
+            yield from self._get_paths()
+        else:
+            yield from self._get_paths_filtered()
+
+    def _get_paths_filtered(self):
         """Process the filters: regex, nregex, type
 
         If a filter is defined and it fails to match, this function
@@ -234,7 +240,7 @@ class FileActionProvider(ActionProvider):
             if object_type:
                 if 'f' == object_type and not os.path.isfile(path):
                     continue
-                elif 'd' == object_type and not os.path.isdir(path):
+                if 'd' == object_type and not os.path.isdir(path):
                     continue
 
             yield path
@@ -725,7 +731,8 @@ class Winreg(ActionProvider):
         self.name = action_element.getAttribute('name')
 
     def get_commands(self):
-        yield Command.Winreg(self.keyname, self.name)
+        if 'nt' == os.name:
+            yield Command.Winreg(self.keyname, self.name)
 
 
 class YumCleanAll(ActionProvider):

@@ -87,6 +87,15 @@ boolean_keys = [
 int_keys = ['window_x', 'window_y', 'window_width', 'window_height', ]
 
 
+def _option_index(option_name):
+    """Extract the numeric index from an option name.
+
+    Handles both plain integer keys (e.g. '0', '1') used by get_list
+    and compound keys (e.g. '1_type', '2_path') used by get_paths.
+    """
+    return int(option_name.split('_')[0])
+
+
 def path_to_option(pathname):
     """Change a pathname to a .ini option name (a key)"""
     # On Windows change to lowercase and use backwards slashes.
@@ -106,7 +115,7 @@ def init_configuration(*, log=True):
         General.makedirs(bleachbit.options_dir)
     if os.path.lexists(bleachbit.options_file):
         if log:
-            logger.debug('Deleting configuration: %s ' % bleachbit.options_file)
+            logger.debug('Deleting configuration: %s', bleachbit.options_file)
         os.remove(bleachbit.options_file)
     with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as f_ini:
         f_ini.write('[bleachbit]\n')
@@ -139,7 +148,8 @@ class Options:
         old_option = 'system.free_disk_space'
         try:
             if self.config.has_section("tree") and self.config.has_option('tree', old_option):
-                logger.debug("Migrating legacy option '%s' to 'system.empty_space'", old_option)
+                logger.debug(
+                    "Migrating legacy option '%s' to 'system.empty_space'", old_option)
                 self.config.set('tree', 'system.empty_space', 'true')
                 self.config.remove_option('tree', old_option)
                 self.__schedule_flush()
@@ -293,12 +303,12 @@ class Options:
 
     def get_list(self, option):
         """Return an option which is a list data type"""
-        section = "list/%s" % option
+        section = f"list/{option}"
         if not self.config.has_section(section):
             return None
         values = [
             self.config.get(section, opt)
-            for opt in sorted(self.config.options(section), key=lambda x: int(x))
+            for opt in sorted(self.config.options(section), key=_option_index)
         ]
         return values
 
@@ -307,13 +317,13 @@ class Options:
         if not self.config.has_section(section):
             return []
         myoptions = []
-        for opt in sorted(self.config.options(section), key=lambda x: int(x.split('_')[0])):
+        for opt in sorted(self.config.options(section), key=_option_index):
             pos = opt.find('_')
             if -1 == pos:
                 continue
             myoptions.append(opt[0:pos])
         values = []
-        for opt in sorted(set(myoptions), key=lambda x: int(x)):
+        for opt in sorted(set(myoptions), key=_option_index):
             p_type = self.config.get(section, opt + '_type')
             p_path = self.config.get(section, opt + '_path')
             values.append((p_type, p_path))
@@ -472,7 +482,7 @@ class Options:
     def set_list(self, key, values):
         """Set a value which is a list data type"""
         assert isinstance(key, str), f"key must be a string: {key}"
-        section = "list/%s" % key
+        section = f"list/{key}"
         # Remove existing section first to clear old values
         # before writing new ones.
         if self.config.has_section(section):

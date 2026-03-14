@@ -85,7 +85,7 @@ def path_has_lib_or_bin(path):
     return None
 
 
-def _build_error_html(error, exe_path=None, traceback_text=None):
+def _build_error_html(error, traceback_text=None):
     """Build an HTML error report string.
 
     Include traceback, system information, and a copyable bug-report block.

@@ -290,7 +290,7 @@ class GUITestCase(common.BleachbitTestCase):
         self.refresh_gui()
         self._put_checkmark_on_cleaner(gui, 'system', 'tmp')
         self.refresh_gui()
-        b = self.click_button(gui, _("Preview"))
+        self.click_button(gui, _("Preview"))
         self.refresh_gui()
 
     def test_notify(self):

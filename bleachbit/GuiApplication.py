@@ -189,7 +189,8 @@ class Bleachbit(Gtk.Application):
             # Plain text pasted from a text editor
             text = clipboard.wait_for_text()
             if text:
-                shred_paths = [p.strip() for p in text.splitlines() if p.strip()]
+                shred_paths = [p.strip()
+                               for p in text.splitlines() if p.strip()]
         if shred_paths:
             GUI.shred_paths(self._window, shred_paths)
         else:
@@ -337,7 +338,8 @@ class Bleachbit(Gtk.Application):
                 anonymized_txt = anonymize_system_information(txt)
                 txtbuffer.set_text(anonymized_txt)
                 # The button is single use.
-                dialog.get_widget_for_response(RESPONSE_ANONYMIZE).set_sensitive(False)
+                dialog.get_widget_for_response(
+                    RESPONSE_ANONYMIZE).set_sensitive(False)
             else:
                 break
         dialog.destroy()
@@ -427,4 +429,3 @@ class Bleachbit(Gtk.Application):
             logger.error('Failed to restart BleachBit with fontconfig backend')
             options.set('font_check_completed', False)
             options.set('use_fontconfig_backend', False)
-

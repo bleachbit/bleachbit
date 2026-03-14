@@ -885,7 +885,8 @@ def root_is_not_allowed_to_X_session():
         xhost_returned_error = result[0] == 1
         return xhost_returned_error
     except (FileNotFoundError, OSError) as exc:
-        logger.debug('xhost check failed (%s); assuming root is not allowed to X session', exc)
+        logger.debug(
+            'xhost check failed (%s); assuming root is not allowed to X session', exc)
         return True
 
 

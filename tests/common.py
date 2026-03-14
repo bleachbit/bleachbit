@@ -23,6 +23,7 @@ Common code for unit tests
 """
 
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -163,12 +164,11 @@ class BleachbitTestCase(unittest.TestCase):
     def assertIsBytes(self, obj, msg=''):
         self.assertIsInstance(obj, bytes, msg)
 
-    def assertIsLanguageCode(self, lang_id, msg=''):
+    def assertIsLanguageCode(self, lang_id):
         self.assertIsInstance(lang_id, str)
         if lang_id in ('C', 'C.UTF-8', 'C.utf8', 'POSIX'):
             return
         self.assertTrue(len(lang_id) >= 2)
-        import re
         pattern = r'^[a-z]{2,3}([_-][A-Z][A-Za-z]{1,3})?(@\w+)?(\.[a-zA-Z][a-zA-Z0-9-]+)?$'
         self.assertTrue(re.match(pattern, lang_id),
                         f'Invalid language code format: {lang_id}')
@@ -348,8 +348,7 @@ def touch_file(filename):
     if not os.path.exists(dname):
         # Make the directory, if it does not exist.
         os.makedirs(dname)
-    import pathlib
-    pathlib.Path(filename).touch()
+    Path(filename).touch()
     assert (os.path.exists(filename))
     assert not is_normal_directory(filename)
 
@@ -399,7 +398,7 @@ def get_opened_windows_titles():
     """
     opened_windows_titles = []
 
-    def enumerate_opened_windows_titles(hwnd, ctx):
+    def enumerate_opened_windows_titles(hwnd, _ctx):
         text = win32gui.GetWindowText(hwnd)
         if win32gui.IsWindowVisible(hwnd) and text:
             opened_windows_titles.append(text)

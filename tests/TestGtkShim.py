@@ -77,7 +77,6 @@ class PathHasLibOrBinTestCase(unittest.TestCase):
 class BuildErrorHtmlTestCase(unittest.TestCase):
     """Tests for _build_error_html()."""
 
-
     def test_unknown_error_includes_traceback_and_sysinfo(self):
         """Unknown-error HTML must include traceback and system information."""
         html = _build_error_html(
@@ -106,7 +105,6 @@ class BuildErrorHtmlTestCase(unittest.TestCase):
         """Output must be valid minimal HTML with required elements."""
         html = _build_error_html(
             Exception('test'),
-            exe_path=r'C:\app\bin\BleachBit',
         )
         self.assertIn('<!DOCTYPE html>', html)
         self.assertIn('<html', html)

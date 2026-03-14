@@ -23,7 +23,11 @@ Test cases for module Winapp
 
 import os
 import shutil
+import stat
+import string
+import struct
 import tempfile
+import time
 from unittest import mock
 
 from tests import common
@@ -54,8 +58,6 @@ def get_winapp2():
         tmpdir = tempfile.gettempdir()
     fname = os.path.join(tmpdir, 'bleachbit_test_winapp2.ini')
     if os.path.exists(fname):
-        import time
-        import stat
         age_seconds = time.time() - os.stat(fname)[stat.ST_MTIME]
         if age_seconds > (24 * 36 * 36):
             logger.info('deleting stale file %s ', fname)
@@ -138,7 +140,6 @@ class WinappTestCase(common.BleachbitTestCase):
         # On 64-bit Windows, Winapp2.ini expands the %ProgramFiles% environment
         # variable to also %ProgramW6432%, so test unique entries in
         # %ProgramW6432%.
-        import struct
         if os.getenv('ProgramW6432'):
             dir_64 = os.listdir(os.getenv('ProgramFiles'))
             dir_32 = os.listdir(os.getenv('ProgramW6432'))
@@ -583,14 +584,12 @@ FileKey1=%CommonAppData%\Initech\TPSReports\Logs|*.*""")
             suffix='.ini', prefix='winapp2')
         os.close(ini_h)
 
-        import string
         searches = ';'.join(
             ['*.%s' % letter for letter in string.ascii_letters[0:26]])
         cleaner = self.ini2cleaner(
             'FileKey1=%s|%s|RECURSE' % (tmp_dir, searches))
 
         # preview
-        import time
         t0 = time.time()
         self.run_all(cleaner, False)
         t1 = time.time()

@@ -24,6 +24,22 @@ Test case for module Windows
 """
 
 
+# standard imports
+import ctypes
+import itertools
+import os
+import platform
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
+from decimal import Decimal
+from pathlib import Path
+from unittest import mock
+from random import randint
+
+# first party imports
 from tests import common
 
 from bleachbit import FileUtilities, General
@@ -60,20 +76,6 @@ from bleachbit.Windows import (
     SplashThread,
 )
 from bleachbit import logger
-
-import ctypes
-import os
-import itertools
-import platform
-import shutil
-import subprocess
-import sys
-import time
-import tempfile
-from decimal import Decimal
-from pathlib import Path
-from unittest import mock
-from random import randint
 
 
 if 'win32' == sys.platform:
@@ -304,7 +306,6 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 delete=False)
             pathname = f.name
             f.close()
-            import time
             time.sleep(5)  # avoid race condition
             self.assertExists(pathname)
             logger.debug('delete_locked_file(%s) ' % pathname)
@@ -441,14 +442,16 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         wnd_class = mock.Mock()
         wnd_class.hInstance = mock.sentinel.instance
         wnd_class.lpszClassName = 'SimpleWin32'
-        register_error = pywintypes.error(1410, 'RegisterClass', 'Class already exists.')
+        register_error = pywintypes.error(
+            1410, 'RegisterClass', 'Class already exists.')
         with mock.patch('bleachbit.Windows.win32gui.RegisterClass', side_effect=register_error) as mock_register, \
                 mock.patch('bleachbit.Windows.win32gui.GetClassInfo', return_value=(4321,)) as mock_get_class_info:
             atom = splash._register_window_class(wnd_class)
         self.assertEqual(atom, 4321)
         self.assertEqual(SplashThread._class_atom, 4321)
         mock_register.assert_called_once_with(wnd_class)
-        mock_get_class_info.assert_called_once_with(wnd_class.hInstance, wnd_class.lpszClassName)
+        mock_get_class_info.assert_called_once_with(
+            wnd_class.hInstance, wnd_class.lpszClassName)
 
     def test_splash_thread_propagates_startup_error(self):
         """start() raises if splash initialization fails."""
@@ -499,10 +502,13 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         """
         if not shell.IsUserAnAdmin():
             self.skipTest('requires administrator privileges')
+
         def _service_exists_and_enabled(svc):
-            scm = win32service.OpenSCManager(None, None, win32service.SC_MANAGER_CONNECT)
+            scm = win32service.OpenSCManager(
+                None, None, win32service.SC_MANAGER_CONNECT)
             try:
-                hs = win32service.OpenService(scm, svc, win32service.SERVICE_QUERY_STATUS | win32service.SERVICE_QUERY_CONFIG)
+                hs = win32service.OpenService(
+                    scm, svc, win32service.SERVICE_QUERY_STATUS | win32service.SERVICE_QUERY_CONFIG)
                 try:
                     cfg = win32service.QueryServiceConfig(hs)
                     return True if cfg[1] != win32service.SERVICE_DISABLED else False
@@ -514,10 +520,12 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 win32service.CloseServiceHandle(scm)
 
         def _can_open_all_access(svc):
-            scm = win32service.OpenSCManager(None, None, win32service.SC_MANAGER_CONNECT)
+            scm = win32service.OpenSCManager(
+                None, None, win32service.SC_MANAGER_CONNECT)
             try:
                 try:
-                    hs = win32service.OpenService(scm, svc, win32service.SERVICE_ALL_ACCESS)
+                    hs = win32service.OpenService(
+                        scm, svc, win32service.SERVICE_ALL_ACCESS)
                 except pywintypes.error:
                     return False
                 else:
@@ -528,7 +536,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
         is_ci = os.environ.get('APPVEYOR') == 'True'
         if is_ci:
-            candidates = ('bits', 'wuauserv', 'AudioEndpointBuilder', 'spooler')
+            candidates = ('bits', 'wuauserv',
+                          'AudioEndpointBuilder', 'spooler')
             service = None
             # Prefer already-running to avoid state changes
             for s in candidates:
@@ -542,7 +551,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                         service = s
                         break
         else:
-            candidates = ('AudioEndpointBuilder', 'spooler', 'bits', 'wuauserv')
+            candidates = ('AudioEndpointBuilder',
+                          'spooler', 'bits', 'wuauserv')
             service = None
             for s in candidates:
                 if _service_exists_and_enabled(s):
@@ -878,7 +888,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         for (input_key, input_value, expected_value) in tests:
             value = read_registry_key(input_key, input_value)
             if value != None:
-                value = value.lower() # AppVeyor: image, Windows 11: Image
+                value = value.lower()  # AppVeyor: image, Windows 11: Image
             self.assertEqual(expected_value, value)
 
     def test_parse_windows_build(self):

@@ -8,12 +8,13 @@
 Code that is commonly shared throughout BleachBit
 """
 
+import getpass
 import os
 import re
 import sys
-import getpass
+from configparser import NoOptionError, RawConfigParser  # used in other files
+
 from bleachbit import Log
-from configparser import RawConfigParser, NoOptionError  # used in other files
 
 APP_VERSION = "5.1.0"
 APP_NAME = "BleachBit"
@@ -216,7 +217,7 @@ elif sys.platform.startswith("openbsd") or sys.platform.startswith("freebsd"):
 #
 base_url = "https://update.bleachbit.org"
 help_contents_url = "https://www.bleachbit.org/help"
-update_check_url = "%s/update/%s" % (base_url, APP_VERSION)
+update_check_url = f"{base_url}/update/{APP_VERSION}"
 
 # set up environment variables
 if 'nt' == os.name:

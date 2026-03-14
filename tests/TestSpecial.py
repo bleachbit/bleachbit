@@ -23,17 +23,19 @@
 Test case for module Special
 """
 
+# standard imports
+import contextlib
+import os
+import re
+import shutil
+import sqlite3
+
+# first party imports
 from bleachbit.Options import options
 from bleachbit import FileUtilities, Special
 from tests import common
 
-import contextlib
-import os
-import os.path
-import shutil
-import sqlite3
-
-chrome_bookmarks = b"""
+CHROME_BOOKMARKS = b"""
 {
    "checksum": "0313bd70dd6343134782af4b233016bf",
    "roots": {
@@ -92,7 +94,7 @@ chrome_bookmarks = b"""
 }"""
 
 # <Default/History> from Google Chrome 23
-chrome_history_sql = """
+CHROME_HISTORY_SQL = """
 CREATE TABLE meta(key LONGVARCHAR NOT NULL UNIQUE PRIMARY KEY, value LONGVARCHAR);
 INSERT INTO "meta" VALUES('version','23');
 CREATE TABLE urls(id INTEGER PRIMARY KEY,url LONGVARCHAR,title LONGVARCHAR,visit_count INTEGER DEFAULT 0 NOT NULL,typed_count INTEGER DEFAULT 0 NOT NULL,last_visit_time INTEGER NOT NULL,hidden INTEGER DEFAULT 0 NOT NULL,favicon_id INTEGER DEFAULT 0 NOT NULL);
@@ -110,7 +112,7 @@ CREATE TABLE segment_usage (id INTEGER PRIMARY KEY,segment_id INTEGER NOT NULL,t
 
 
 # <Default/Web Data> from Google Chrome 23
-chrome_webdata = """
+CHROME_WEBDATA = """
 CREATE TABLE meta(key LONGVARCHAR NOT NULL UNIQUE PRIMARY KEY, value LONGVARCHAR);
 INSERT INTO "meta" VALUES('version','46');
 CREATE TABLE keywords (id INTEGER PRIMARY KEY,short_name VARCHAR NOT NULL,keyword VARCHAR NOT NULL,favicon_url VARCHAR NOT NULL,url VARCHAR NOT NULL,safe_for_autoreplace INTEGER,originating_url VARCHAR,date_created INTEGER DEFAULT 0,usage_count INTEGER DEFAULT 0,input_encodings VARCHAR,show_in_default_list INTEGER,suggest_url VARCHAR,prepopulate_id INTEGER DEFAULT 0,created_by_policy INTEGER DEFAULT 0,instant_url VARCHAR,last_modified INTEGER DEFAULT 0,sync_guid VARCHAR);
@@ -174,14 +176,14 @@ INSERT INTO "server_addresses" VALUES('a','','123 anywhere','ST','City','',NULL,
 """
 
 # databases/Databases.db from Chromium 12
-chrome_databases_db = """
+CHROME_DATABASES_DB = """
 CREATE TABLE Databases (id INTEGER PRIMARY KEY AUTOINCREMENT, origin TEXT NOT NULL, name TEXT NOT NULL, description TEXT NOT NULL, estimated_size INTEGER NOT NULL);
 INSERT INTO "Databases" VALUES(1,'chrome-extension_fjnbnpbmkenffdnngjfgmeleoegfcffe_0','stylish','Stylish Styles',5242880);
 INSERT INTO "Databases" VALUES(2,'http_samy.pl_0','sqlite_evercookie','evercookie',1048576);
 """
 
 
-firefox78_places_sql = """
+FIREFOX78_PLACES_SQL = """
 CREATE TABLE moz_annos (  id INTEGER PRIMARY KEY, place_id INTEGER NOT NULL, anno_attribute_id INTEGER, content LONGVARCHAR, flags INTEGER DEFAULT 0, expiration INTEGER DEFAULT 0, type INTEGER DEFAULT 0, dateAdded INTEGER DEFAULT 0, lastModified INTEGER DEFAULT 0);
 CREATE TABLE moz_historyvisits (  id INTEGER PRIMARY KEY, from_visit INTEGER, place_id INTEGER, visit_date INTEGER, visit_type INTEGER, session INTEGER);
 INSERT INTO moz_historyvisits VALUES(1,0,13,1597441943359769,2,0);
@@ -273,14 +275,14 @@ class SpecialAssertions:
     def assertTablesAreEmpty(self, path, tables):
         """Asserts SQLite tables exists and are empty"""
         if not os.path.lexists(path):
-            raise AssertionError('Path does not exist: %s' % path)
+            raise AssertionError(f'Path does not exist: {path}')
         with contextlib.closing(sqlite3.connect(path)) as conn:
             cursor = conn.cursor()
             for table in tables:
-                cursor.execute('select 1 from %s limit 1' % table)
+                cursor.execute(f'select 1 from {table} limit 1')
                 row = cursor.fetchone()
                 if row:
-                    raise AssertionError('Table is not empty: %s ' % table)
+                    raise AssertionError(f'Table is not empty: {table}')
 
 
 class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
@@ -302,20 +304,20 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
         bookmark_path = os.path.join(
             dir_google_chrome_default, 'Bookmarks')
         with open(bookmark_path, 'wb') as f:
-            f.write(chrome_bookmarks)
+            f.write(CHROME_BOOKMARKS)
 
         # google-chrome/Default/Web Data
         FileUtilities.execute_sqlite3(os.path.join(
-            dir_google_chrome_default, 'Web Data'), chrome_webdata)
+            dir_google_chrome_default, 'Web Data'), CHROME_WEBDATA)
 
         # google-chrome/Default/History
         FileUtilities.execute_sqlite3(os.path.join(
-            dir_google_chrome_default, 'History'), chrome_history_sql)
+            dir_google_chrome_default, 'History'), CHROME_HISTORY_SQL)
 
         # google-chrome/Default/databases/Databases.db
         os.makedirs(os.path.join(dir_google_chrome_default, 'databases'))
         FileUtilities.execute_sqlite3(
-            os.path.join(dir_google_chrome_default, 'databases/Databases.db'), chrome_databases_db)
+            os.path.join(dir_google_chrome_default, 'databases/Databases.db'), CHROME_DATABASES_DB)
 
         dir_firefox_default = os.path.join(
             self.dir_base, 'firefox/default-release/')
@@ -323,7 +325,7 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
 
         # firefox/xxxxx.default-release/places.sqlite
         FileUtilities.execute_sqlite3(
-            os.path.join(dir_firefox_default, 'places.sqlite'), firefox78_places_sql)
+            os.path.join(dir_firefox_default, 'places.sqlite'), FIREFOX78_PLACES_SQL)
 
         # firefox/xxxxx.default-release/favicons.sqlite
         FileUtilities.execute_sqlite3(
@@ -373,7 +375,7 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
 
         # clean the file
         old_shred = options.get('shred')
-        #options.set('shred', False, commit=False)
+        # options.set('shred', False, commit=False)
         options.set_override('shred', False)
         self.assertFalse(options.get('shred'))
         clean_func(filename)
@@ -408,7 +410,8 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
     def test_delete_chrome_databases_db(self):
         """Unit test for delete_chrome_databases_db"""
         self.sqlite_clean_helper(
-            None, "google-chrome/Default/databases/Databases.db", Special.delete_chrome_databases_db)
+            None, "google-chrome/Default/databases/Databases.db",
+            Special.delete_chrome_databases_db)
 
     def test_delete_chrome_history(self):
         """Unit test for delete_chrome_history"""
@@ -446,18 +449,19 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
             finally:
                 conn.close()
 
-        self.sqlite_clean_helper(None, "google-chrome/Default/Web Data", Special.delete_chrome_keywords,
+        self.sqlite_clean_helper(None, "google-chrome/Default/Web Data",
+                                 Special.delete_chrome_keywords,
                                  check_chrome_keywords)
 
     def test_delete_mozilla_url_history(self):
         """Test for delete_mozilla_url_history"""
         self.sqlite_clean_helper(
-            None, "firefox/default-release/places.sqlite", Special.delete_mozilla_url_history)
+            None, "firefox/default-release/places.sqlite",
+            Special.delete_mozilla_url_history)
 
         # Pale Moon 28 comes from an older Firefox, and it does not have moz_origins or moz_meta in places.sqlite.
-        import re
         re_palemoon = '(CREATE TABLE|INSERT INTO) moz_(meta|origins)'
-        sql_palemoon = '\n'.join([line for line in firefox78_places_sql.split(
+        sql_palemoon = '\n'.join([line for line in FIREFOX78_PLACES_SQL.split(
             '\n') if not re.search(re_palemoon, line)])
         self.sqlite_clean_helper(
             sql_palemoon, None, Special.delete_mozilla_url_history)
@@ -467,7 +471,7 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
 
         See https://github.com/bleachbit/bleachbit/issues/1423
         """
-        sql_no_places = firefox78_places_sql + ";\ndrop table moz_places;"
+        sql_no_places = FIREFOX78_PLACES_SQL + ";\ndrop table moz_places;"
         self.sqlite_clean_helper(
             sql_no_places, None, Special.delete_mozilla_url_history)
 
@@ -503,7 +507,7 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
 
     def test_get_chrome_bookmark_urls(self):
         """Unit test for get_chrome_bookmark_urls()"""
-        path = self.write_file('bleachbit-test-sqlite', chrome_bookmarks)
+        path = self.write_file('bleachbit-test-sqlite', CHROME_BOOKMARKS)
 
         self.assertExists(path)
         urls = Special.get_chrome_bookmark_urls(path)

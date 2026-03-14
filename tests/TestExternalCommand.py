@@ -50,7 +50,8 @@ def is_bleachbit_running_process(process_name, cmdline):
         'bleachbit.py' in arg
         for arg in normalized_cmdline
     )
-    has_context_arg = any('--context-menu' in arg or '--gui' in arg for arg in normalized_cmdline)
+    has_context_arg = any(
+        '--context-menu' in arg or '--gui' in arg for arg in normalized_cmdline)
     return has_bleachbit_entrypoint and has_context_arg
 
 

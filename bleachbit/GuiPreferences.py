@@ -23,22 +23,21 @@
 Preferences dialog
 """
 
+# standard imports
+import logging
+import os
+
+# first party imports
 from bleachbit import GuiBasic
 from bleachbit import online_update_notification_enabled
 from bleachbit import ProtectedPath
 from bleachbit.Constant import EMPTY_SPACE_WARNING
 from bleachbit.GtkShim import Gtk, GLib
 from bleachbit.GuiUtil import (detect_dark_background, flush_gtk_events,
-                               get_font_size_from_name, get_window_info,
-                               notify, should_show_dark_mode_warning,
-                               threaded)
-from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
+                               should_show_dark_mode_warning)
 from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _, pget_text as _p
 from bleachbit.Options import options
-
-import logging
-import os
 
 logger = logging.getLogger(__name__)
 
@@ -194,7 +193,7 @@ class PreferencesDialog:
             # refresh the list of cleaners
             self.cb_refresh_operations()
 
-    def _on_infobar_response(self, infobar, response_id):
+    def _on_infobar_response(self, _infobar, _response_id):
         """Handle InfoBar close button click"""
         if self._infobar_timeout_id:
             GLib.source_remove(self._infobar_timeout_id)
@@ -229,7 +228,7 @@ class PreferencesDialog:
         new_value = cb.get_active()
         if new_value:
             from bleachbit.GuiBasic import warning_confirm_dialog
-            confirmed, remember_choice = warning_confirm_dialog(
+            confirmed, _remember_choice = warning_confirm_dialog(
                 self.dialog,
                 EXPERT_MODE_MSG,
                 EXPERT_MODE_DESCRIPTION,
@@ -245,7 +244,7 @@ class PreferencesDialog:
         if hasattr(self, 'cb_refresh_operations') and self.cb_refresh_operations:
             self.refresh_operations = True
 
-    def __toggle_callback(self, cell, path):
+    def __toggle_callback(self, _cell, path):
         """Callback function to toggle option"""
         options.toggle(path)
         if online_update_notification_enabled:
@@ -357,8 +356,8 @@ class PreferencesDialog:
         active_language_idx = None
         try:
             supported_langs = get_supported_language_code_name_dict().items()
-        except:
-            logger.error("Failed to get list of supported languages")
+        except (KeyError, ValueError, Exception) as e:
+            logger.error("Failed to get list of supported languages: %s", e)
             supported_langs = [('en_us', 'English')]
         for lang_code, native in supported_langs:
             if native:
@@ -395,7 +394,7 @@ class PreferencesDialog:
         self.refresh_operations = True
         self.show_infobar(RESTART_APP_MSG, Gtk.MessageType.INFO)
 
-    def on_auto_detect_toggled(self, widget):
+    def on_auto_detect_toggled(self, _widget):
         """Callback for when the auto-detect language checkbox is toggled."""
         self.__toggle_callback(None, 'auto_detect_lang')
         is_auto_detect = options.get("auto_detect_lang")
@@ -736,7 +735,7 @@ class PreferencesDialog:
         cleanup_box.pack_start(swindow, True, True, 0)
         return vbox
 
-    def _check_path_exists(self, pathname, page_type):
+    def _check_path_exists(self, pathname):
         """Check if a path exists in either keep lists or custom lists
         Returns True if path exists, False otherwise"""
         whitelist_paths = options.get_whitelist_paths()
@@ -807,7 +806,7 @@ class PreferencesDialog:
 
     def _add_path(self, pathname, path_type, page_type, liststore, pathnames):
         """Common function to add a path to either whitelist or custom list"""
-        if self._check_path_exists(pathname, page_type):
+        if self._check_path_exists(pathname):
             return
 
         # Check for protected paths when adding to custom (delete) list
@@ -907,6 +906,8 @@ class PreferencesDialog:
             notice_text = _("These locations can be selected for deletion.")
             notice_icon = "edit-delete"
             notice_class = "bb-locations-notice-custom"
+        else:
+            raise RuntimeError(f"Invalid page type: {page_type}")
 
         notice_label = Gtk.Label(label=notice_text)
         notice_label.set_line_wrap(True)

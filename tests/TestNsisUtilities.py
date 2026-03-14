@@ -201,7 +201,7 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
                          actual_delete_expressions)
 
     @classmethod
-    def _walk_with_sorted_files(cls, top, topdown=True, onerror=None, followlinks=False):
+    def _walk_with_sorted_files(cls, top, _topdown=True, _onerror=None, _followlinks=False):
         for root, dirs, files in cls._os_walk_original(top):
             yield root, dirs, sorted(files)
 

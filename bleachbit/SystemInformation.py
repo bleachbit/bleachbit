@@ -31,6 +31,7 @@ import os
 import platform
 import re
 import sys
+from collections import OrderedDict
 
 # local
 import bleachbit
@@ -161,7 +162,6 @@ def get_version(four_parts=False):
 
 def get_system_information():
     """Return system information as a string."""
-    from collections import OrderedDict
     info = OrderedDict()
 
     # Application and library versions

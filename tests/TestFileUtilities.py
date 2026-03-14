@@ -607,7 +607,8 @@ State=AAAA/wA...
             # delete an empty directory
             dirname = self.mkdtemp(prefix=test)
             self.assertExists(dirname)
-            self.assertTrue(delete(dirname, shred)) # delete_file() doesn't do directories
+            # delete_file() doesn't delete directories, so do not use delete_func.
+            self.assertTrue(delete(dirname, shred))
             self.assertNotExists(dirname)
 
         def symlink_helper(link_fn):

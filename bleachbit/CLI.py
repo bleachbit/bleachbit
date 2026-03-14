@@ -8,18 +8,28 @@
 Command line interface
 """
 
+import logging
+import optparse
+import os
+import sys
+
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
 from bleachbit import APP_VERSION
 from bleachbit import SystemInformation, Options, Worker
 from bleachbit.Language import get_text as _
 from bleachbit.Log import set_root_log_level
 
-import logging
-import optparse
-import os
-import sys
-
 logger = logging.getLogger(__name__)
+
+
+def _write_update_output(value):
+    """Write output to stdout"""
+    sys.stdout.write(f"{value}\n")
+
+
+def _noop():
+    """Do nothing"""
+    return None
 
 
 class CliCallback:
@@ -52,7 +62,7 @@ def cleaners_list():
     for key in sorted(backends):
         c_id = backends[key].get_id()
         for (o_id, _o_name) in backends[key].get_options():
-            yield "%s.%s" % (c_id, o_id)
+            yield f"{c_id}.{o_id}"
 
 
 def list_cleaners():
@@ -160,7 +170,7 @@ def args_to_operations(args, preset, all_but_warning, excludes=None):
             # Exit to avoid over-cleaning.
             sys.exit(1)
         if 2 != len(arg.split('.')):
-            logger.error(not_valid_msg, arg)
+            logger.error(not_valid_cleaner_msg, arg)
             # Exit to avoid over-cleaning.
             sys.exit(1)
         (cleaner_id, option_id) = arg.split('.')
@@ -314,7 +324,8 @@ def process_cmd_line():
     if cmd_count > 1:
         logger.error(
             # TRANSLATORS: Error message shown on CLI.
-            _('Specify only one of these commands: --list-cleaners, --wipe-empty-space, --preview, --clean, --shred'))
+            _('Specify only one of these commands: --list-cleaners, --wipe-empty-space, '
+              '--preview, --clean, --shred'))
         sys.exit(1)
 
     did_something = False
@@ -332,20 +343,20 @@ def process_cmd_line():
         # Just add system information to the log
         logger.info(SystemInformation.get_system_information())
     if options.version:
-        print("""
-BleachBit version %s
+        version_message = f"""
+BleachBit version {APP_VERSION}
 Copyright (C) 2008-2026 Andrew Ziem.  All rights reserved.
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
+There is NO WARRANTY, to the extent permitted by law.
+"""
+        print(version_message)
         sys.exit(0)
     if 'nt' == os.name and options.update_winapp2:
         from bleachbit import Update
         # TRANSLATORS: Log message on the CLI.
         logger.info(_("Checking online for updates to winapp2.ini"))
-        Update.check_updates(False, True,
-                             lambda x: sys.stdout.write("%s\n" % x),
-                             lambda: None)
+        Update.check_updates(False, True, _write_update_output, _noop)
         # updates can be combined with --list-cleaners, --preview, --clean
         did_something = True
     if options.list_cleaners:

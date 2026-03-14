@@ -148,7 +148,7 @@ def wipe_contents(path, truncate=True):
     by one overwrite"
     """
     # pylint: disable=import-outside-toplevel
-    from bleachbit.FileUtilities import getsize, truncate_f
+    from bleachbit.FileUtilities import truncate_f
 
     def wipe_write():
         from bleachbit.FileUtilities import getsize as _getsize
@@ -302,7 +302,8 @@ def wipe_path(pathname, idle=False):
 
     # Get the file system type from the given path
     fstype = get_filesystem_type(pathname)[0]
-    logger.debug(_(f"Wiping path {pathname} with file system type {fstype}"))
+    logger.debug(_("Wiping path %s with file system type %s"),
+                 pathname, fstype)
     if not os.path.isdir(pathname):
         logger.error(
             _("Path to wipe must be an existing directory: %s"), pathname)
@@ -389,16 +390,16 @@ def wipe_path(pathname, idle=False):
             # statistics
             elapsed_sec = time.time() - start_time
             rate_mbs = (total_bytes / (1000 * 1000)) / elapsed_sec
-            logger.debug(_('Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at {rate:.2f} MB/s').format(
-                files=len(files), bytes=total_bytes, seconds=int(elapsed_sec), rate=rate_mbs))
+            logger.debug(_('Wrote %d files and %d bytes in %d seconds at %.2f MB/s'),
+                         len(files), total_bytes, int(elapsed_sec), rate_mbs)
             # how much free space is left (should be near zero)
             if 'posix' == os.name:
                 # pylint: disable=no-member
                 stats = os.statvfs(pathname)
-                logger.debug(_("{bytes:,} bytes and {inodes:,} inodes available to non-super-user").format(
-                    bytes=stats.f_bsize * stats.f_bavail, inodes=stats.f_favail))
-                logger.debug(_("{bytes:,} bytes and {inodes:,} inodes available to super-user").format(
-                    bytes=stats.f_bsize * stats.f_bfree, inodes=stats.f_ffree))
+                logger.debug(_("%d bytes and %d inodes available to non-super-user"),
+                             stats.f_bsize * stats.f_bavail, stats.f_favail)
+                logger.debug(_("%d bytes and %d inodes available to super-user"),
+                             stats.f_bsize * stats.f_bfree, stats.f_ffree)
             # If no bytes were written to this file, then do not try to create another file.
             # Linux allows writing several 4K files when free_space() = 0,
             # so do not check free_space() < 1.

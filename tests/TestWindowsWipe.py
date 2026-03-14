@@ -121,7 +121,8 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
             # so they have zero clusters.
             fsize = os.path.getsize(path)
             if fsize > 1000:
-                self.assertGreater(len(ret), 0, f"File {path} has size {fsize:,} but no extents")
+                self.assertGreater(
+                    len(ret), 0, f"File {path} has size {fsize:,} but no extents")
             elif fsize < 200:
                 self.assertEqual(len(ret), 0)
         total_files = zero_extents_count + nonzero_extents_count + error_count
@@ -133,7 +134,6 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
         print(f"\ntest_get_extents() stats: {error_count:,} errors; {zero_extents_count:,} files with zero extents; {nonzero_extents_count:,} files with nonzero extents; {int(elapsed_seconds)} seconds; {int(files_per_second) if files_per_second else None} files per second")
         self.assertGreater(zero_extents_count, 10)
         self.assertGreater(nonzero_extents_count, 100)
-
 
     def test_get_file_basic_info(self):
         """Unit test for get_file_basic_info()"""
@@ -253,7 +253,8 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
                 volume_info = get_volume_information(volume)
                 cluster_size = (volume_info.sectors_per_cluster *
                                 volume_info.bytes_per_sector)
-                self.assertGreaterEqual(total_clusters * cluster_size, len(write_data))
+                self.assertGreaterEqual(
+                    total_clusters * cluster_size, len(write_data))
 
             file_wipe(tmp_path)
 

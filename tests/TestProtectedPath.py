@@ -112,7 +112,8 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
     def test_get_protected_path_xml(self):
         """Test that protected path XML file can be found"""
         xml_path = get_share_path('protected_path.xml')
-        self.assertIsNotNone(xml_path, 'protected_path.xml not found via get_share_path')
+        self.assertIsNotNone(
+            xml_path, 'protected_path.xml not found via get_share_path')
         self.assertExists(xml_path)
         xml_path2 = _get_protected_path_xml()
         self.assertIsNotNone(xml_path2, 'Protected path XML not found')

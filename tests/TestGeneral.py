@@ -239,7 +239,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external_nowait(self):
         """Unit test for run_external() with wait=False"""
-        with warnings.catch_warnings(record=True) as w:
+        with warnings.catch_warnings(record=True):
             warnings.simplefilter("error")
 
             output_file = os.path.join(self.tempdir, 'run_external_nowait.txt')
@@ -275,7 +275,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external_command_completion(self):
         """Test that run_external() commands complete successfully"""
-        with warnings.catch_warnings(record=True) as w:
+        with warnings.catch_warnings(record=True):
             # Any warning is an error.
             warnings.simplefilter("error")
             with tempfile.TemporaryDirectory() as temp_dir:

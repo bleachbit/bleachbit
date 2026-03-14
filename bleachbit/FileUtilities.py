@@ -468,7 +468,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
     if is_special:
         os.remove(path)
         return True
-    elif os.path.isdir(path):
+    if os.path.isdir(path):
         delpath = path
         # TRANSLATORS: Log message where %s is the pathname.
         not_empty_msg = _("Directory is not empty: %s")

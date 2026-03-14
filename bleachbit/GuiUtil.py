@@ -185,6 +185,8 @@ def notify_plyer(msg):
 
     Linux distributions do not include plyer, so this is just for Windows.
     """
+    if not os.name == 'nt':
+        raise RuntimeError("notify_plyer() is only for Windows")
     from bleachbit import bleachbit_exe_path
 
     # On Windows 10,  PNG does not work.

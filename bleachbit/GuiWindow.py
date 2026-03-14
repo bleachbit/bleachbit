@@ -20,7 +20,7 @@ from bleachbit.GuiStartup import get_startup_messages
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
 from bleachbit.GuiUtil import (detect_dark_background, get_font_size_from_name,
                                get_window_info, notify, threaded)
-from bleachbit.Language import get_text as _, pget_text as _p
+from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 from bleachbit.Wipe import detect_orphaned_wipe_files
 
@@ -328,7 +328,7 @@ class GUI(Gtk.ApplicationWindow):
 
         font_conf_file = Windows.get_font_conf_file()
         if not os.path.exists(font_conf_file):
-            logger.error('No fonts.conf file {}'.format(font_conf_file))
+            logger.error('No fonts.conf file %s', font_conf_file)
             return
 
         has_cache = Windows.has_fontconfig_cache(font_conf_file)
@@ -425,14 +425,14 @@ class GUI(Gtk.ApplicationWindow):
 
         return False
 
-    def on_quit(self, *args):
+    def on_quit(self, *_args):
         """Quit the application, used with CTRL+Q or CTRL+W"""
         if Gtk.main_level() > 0:
             Gtk.main_quit()
         else:
             self.destroy()
 
-    def _on_infobar_response(self, infobar, response_id):
+    def _on_infobar_response(self, _infobar, _response_id):
         """Handle InfoBar close button click"""
         timeout_id = getattr(self, '_infobar_timeout_id', None)
         if timeout_id is not None:
@@ -468,7 +468,7 @@ class GUI(Gtk.ApplicationWindow):
             return GuiBasic.delete_confirmation_dialog(self, mention_preview, shred_settings=shred_settings)
         return True
 
-    def destroy(self):
+    def destroy(self, *_args):
         """Prevent textbuffer usage during UI destruction"""
         self.textbuffer = None
         super(GUI, self).destroy()
@@ -887,7 +887,7 @@ class GUI(Gtk.ApplicationWindow):
         return True
 
     def setup_drag_n_drop(self):
-        def cb_drag_data_received(widget, _context, _x, _y, data, info, _time):
+        def cb_drag_data_received(_widget, _context, _x, _y, data, info, _time):
             if info == 80:
                 uris = data.get_uris()
                 paths = FileUtilities.uris_to_paths(uris)
@@ -900,8 +900,7 @@ class GUI(Gtk.ApplicationWindow):
 
         setup_widget(self)
         setup_widget(self.textview)
-        self.textview.connect('drag_motion', lambda widget,
-                              context, x, y, time: True)
+        self.textview.connect('drag_motion', lambda *_: True)
 
     def update_progress_bar(self, status):
         """Callback to update the progress bar with number or text"""
@@ -926,7 +925,7 @@ class GUI(Gtk.ApplicationWindow):
             __iter = model.get_iter(treepath)
         except ValueError:
             logger.warning(
-                'ValueError in get_iter() when updating file size for tree path=%s' % treepath)
+                'ValueError in get_iter() when updating file size for tree path=%s', treepath)
             return
         while __iter:
             if model[__iter][2] == option:
@@ -972,7 +971,7 @@ class GUI(Gtk.ApplicationWindow):
             # and 'abort' ia a verb.
             _('Abort the preview or cleaning process'))
 
-    def on_update_button_clicked(self, widget):
+    def on_update_button_clicked(self, _widget):
         """Callback when the update button on the headerbar is clicked"""
         if not (hasattr(self, '_available_updates') and self._available_updates):
             return
@@ -980,7 +979,7 @@ class GUI(Gtk.ApplicationWindow):
         self.update_button.get_style_context().remove_class('update-available')
         updates = self._available_updates
         if len(updates) == 1:
-            ver, url = updates[0]
+            _ver, url = updates[0]
             GuiBasic.open_url(url, self, False)
             return
         # If multiple updates are available, find out which one the user wants.
@@ -1086,7 +1085,7 @@ class GUI(Gtk.ApplicationWindow):
         self.update_headerbar_labels()
         return hbar
 
-    def on_configure_event(self, widget, event):
+    def on_configure_event(self, _widget, _event):
         (x, y) = self.get_position()
         (width, height) = self.get_size()
 
@@ -1097,8 +1096,8 @@ class GUI(Gtk.ApplicationWindow):
             if window.get_state() & Gdk.WindowState.MAXIMIZED != 0:
                 g = get_window_info(self)
                 if x < g.x or x >= g.x + g.width or y < g.y or y >= g.y + g.height:
-                    logger.debug("Maximized window {}+{}: {}".format(
-                        (x, y), (width, height), str(g)))
+                    logger.debug("Maximized window %s+%s: %s",
+                                 (x, y), (width, height), str(g))
                     self.move(g.x, g.y)
                     return True
 
@@ -1109,7 +1108,7 @@ class GUI(Gtk.ApplicationWindow):
         options.set("window_height", height)
         return False
 
-    def on_window_state_event(self, widget, event):
+    def on_window_state_event(self, _widget, event):
         """Save window state
 
         GTK version 3.24.34 on Windows 11 behaves strangely:
@@ -1133,10 +1132,10 @@ class GUI(Gtk.ApplicationWindow):
         options.set("window_maximized", maximized)
         if 'nt' == os.name:
             logger.debug(
-                f'window state = {event.new_window_state}, full screen = {fullscreen}, maximized = {maximized}')
+                'window state = %s, full screen = %s, maximized = %s', event.new_window_state, fullscreen, maximized)
         return False
 
-    def on_delete_event(self, widget, event):
+    def on_delete_event(self, _widget, _event):
         # commit options to disk
         options.close()
         return False
@@ -1166,8 +1165,8 @@ class GUI(Gtk.ApplicationWindow):
             # is within the closest monitor
             if r.x >= g.x and r.x < g.x + g.width and \
                r.y >= g.y and r.y < g.y + g.height:
-                logger.debug("closest monitor {}, prior window geometry = {}+{}".format(
-                    str(g), (r.x, r.y), (r.width, r.height)))
+                logger.debug("closest monitor %s, prior window geometry = %s+%s",
+                             str(g), (r.x, r.y), (r.width, r.height))
                 self.move(r.x, r.y)
                 self.resize(r.width, r.height)
         if options.get("window_fullscreen"):

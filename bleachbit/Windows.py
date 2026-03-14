@@ -37,26 +37,32 @@ These are the terms:
 
 """
 
-import bleachbit
-from bleachbit import FileUtilities
-from bleachbit.Language import get_text as _
-
+# standard imports
+import base64
 import ctypes
+import decimal
 import errno
 import glob
+import hashlib
 import logging
 import os
+import pathlib
 import shutil
 import sys
+import threading
 import time
+import uuid
 import xml.dom.minidom
-import base64
-import hashlib
 from ctypes import wintypes
 from decimal import Decimal
 from pathlib import Path
 from threading import Thread, Event
 from uuid import UUID
+
+# first party imports
+import bleachbit
+from bleachbit import FileUtilities
+from bleachbit.Language import get_text as _
 
 if 'win32' == sys.platform:
     import winreg

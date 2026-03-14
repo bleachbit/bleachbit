@@ -27,16 +27,17 @@ from unittest import mock
 import os
 import random
 import re
+import subprocess
 import sys
 import tempfile
 import unittest
 from xml.dom.minidom import parseString
 
 from tests import common
-from bleachbit import logger
-from bleachbit.General import get_executable, get_real_username
 from tests.common import also_with_sudo
+from bleachbit import logger
 from bleachbit.FileUtilities import children_in_directory, exe_exists
+from bleachbit.General import get_real_username
 from bleachbit.Unix import (
     _is_broken_xdg_desktop_application,
     apt_autoclean,
@@ -678,12 +679,11 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
     @common.skipIfWindows
     def test_run_cleaner_cmd(self):
         """Unit test for run_cleaner_cmd()"""
-        from subprocess import CalledProcessError
         self.assertRaises(RuntimeError, run_cleaner_cmd,
                           '/hopethisdoesntexist', [])
         # Use absolute path in case like `env -i`.
         which_sh = 'sh' if exe_exists('sh') else '/usr/bin/sh'
-        self.assertRaises(CalledProcessError, run_cleaner_cmd,
+        self.assertRaises(subprocess.CalledProcessError, run_cleaner_cmd,
                           which_sh, ['-c', 'echo errormsg; false'])
         # test if regexes for invalid lines work
         self.assertRaises(RuntimeError, run_cleaner_cmd, 'echo', ['This is an invalid line'],

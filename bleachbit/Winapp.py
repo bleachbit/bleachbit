@@ -23,9 +23,10 @@
 Import Winapp2.ini files
 """
 
+import fnmatch
+import glob
 import logging
 import os
-import glob
 import re
 from xml.dom.minidom import parseString
 
@@ -76,6 +77,16 @@ def section2option(s):
     return ret
 
 
+def _noop_progress(_fraction):
+    """Default progress callback used when one is not provided."""
+    return None
+
+
+def _always_false():
+    """Return False for cleaner auto_hide overrides."""
+    return False
+
+
 def detectos(required_ver, mock=False):
     """Returns boolean whether the detectos is compatible with the
     current operating system, or the mock version, if given."""
@@ -105,9 +116,9 @@ def winapp_expand_vars(pathname):
     subs = (('ProgramFiles', 'ProgramW6432'),
             ('CommonProgramFiles', 'CommonProgramW6432'))
     for (sub_orig, sub_repl) in subs:
-        pattern = re.compile('%{}%'.format(sub_orig), flags=re.IGNORECASE)
+        pattern = re.compile(f'%{sub_orig}%', flags=re.IGNORECASE)
         if pattern.match(pathname):
-            expand2 = pattern.sub('%{}%'.format(sub_repl), pathname)
+            expand2 = pattern.sub(f'%{sub_repl}%', pathname)
             return expand1, os.path.expandvars(expand2)
     return expand1,
 
@@ -138,7 +149,6 @@ def special_detect(code):
 
 def fnmatch_translate(pattern):
     """Same as the original without the end"""
-    import fnmatch
     ret = fnmatch.translate(pattern)
     if ret.endswith('$'):
         return ret[:-1]
@@ -149,7 +159,7 @@ class Winapp:
 
     """Create cleaners from a Winapp2.ini-style file"""
 
-    def __init__(self, pathname, cb_progress=lambda x: None):
+    def __init__(self, pathname, cb_progress=_noop_progress):
         """Create cleaners from a Winapp2.ini-style file"""
 
         self.cleaners = {}
@@ -184,7 +194,7 @@ class Winapp:
         self.cleaners[cleaner_id].description = _('Imported from winapp2.ini')
         # The detect() function in this module effectively does what
         # auto_hide() does, so this avoids redundant, slow processing.
-        self.cleaners[cleaner_id].auto_hide = lambda: False
+        self.cleaners[cleaner_id].auto_hide = _always_false
 
     def section_to_cleanerid(self, langsecref):
         """Given a langsecref (or section name), find the internal
@@ -227,8 +237,7 @@ class Winapp:
                     files = None
             elif len(files) > 1:
                 # multiple file patterns like *.log;*.bak
-                files_regex = '(%s)' % '|'.join(
-                    [fnmatch_translate(f) for f in files])
+                files_regex = f"({'|'.join(fnmatch_translate(f) for f in files)})"
 
         # the middle part contains the file
         regexes = []
@@ -248,7 +257,7 @@ class Winapp:
         if len(regexes) == 1:
             return regexes[0]
         else:
-            return '(%s)' % '|'.join(regexes)
+            return f"({'|'.join(regexes)})"
 
     def detect(self, section):
         """Check whether to show the section
@@ -348,9 +357,7 @@ class Winapp:
                 if removeself:
                     search = 'walk.all'
             else:
-                import fnmatch
-                regex = ' regex="^%s$" ' % xml_escape(
-                    fnmatch.translate(filename))
+                regex = f' regex="^{xml_escape(fnmatch.translate(filename))}$" '
         else:
             search = 'glob'
             path = os.path.join(dirname, filename)
@@ -360,20 +367,18 @@ class Winapp:
         if excludekeys:
             if len(excludekeys) > 1:
                 # multiple
-                exclude_str = '(%s)' % '|'.join(excludekeys)
+                exclude_str = f"({'|'.join(excludekeys)})"
             else:
                 # just one
                 exclude_str = excludekeys[0]
-            excludekeysxml = 'nwholeregex="%s"' % xml_escape(exclude_str)
-        action_str = '<option command="delete" search="%s" path="%s" %s %s/>' % \
-                     (search, xml_escape(path), regex, excludekeysxml)
+            excludekeysxml = f'nwholeregex="{xml_escape(exclude_str)}"'
+        action_str = f'<option command="delete" search="{search}" path="{xml_escape(path)}" {regex}{excludekeysxml}/>'
         yield Delete(parseString(action_str).childNodes[0])
         if removeself:
             search = 'file'
             if dirname.find('*') > -1:
                 search = 'glob'
-            action_str = '<option command="delete" search="%s" path="%s" type="d"/>' % \
-                         (search, xml_escape(dirname))
+            action_str = f'<option command="delete" search="{search}" path="{xml_escape(dirname)}" type="d"/>'
             yield Delete(parseString(action_str).childNodes[0])
 
     def handle_filekey(self, lid, ini_section, ini_option, excludekeys):
@@ -402,8 +407,8 @@ class Winapp:
             for dirname in dirnames:
                 # If dirname is a drive letter it needs a special treatment on Windows:
                 # https://www.reddit.com/r/learnpython/comments/gawqne/why_cant_i_ospathjoin_on_a_drive_letterc/
-                dirname = '{}{}'.format(dirname, os.path.sep) if os.path.splitdrive(dirname)[
-                    0] == dirname else dirname
+                if os.path.splitdrive(dirname)[0] == dirname:
+                    dirname = f'{dirname}{os.path.sep}'
                 for provider in self.__make_file_provider(dirname, filename, recurse, removeself, excludekeys):
                     self.cleaners[lid].add_action(
                         section2option(ini_section), provider)
@@ -415,8 +420,8 @@ class Winapp:
         path = xml_escape(elements[0])
         name = ""
         if len(elements) == 2:
-            name = 'name="%s"' % xml_escape(elements[1])
-        action_str = '<option command="winreg" path="%s" %s/>' % (path, name)
+            name = f' name="{xml_escape(elements[1])}"'
+        action_str = f'<option command="winreg" path="{path}"{name}/>'
         provider = Winreg(parseString(action_str).childNodes[0])
         self.cleaners[lid].add_action(section2option(ini_section), provider)
 
@@ -435,7 +440,7 @@ def list_winapp_files():
             yield fname
 
 
-def load_cleaners(cb_progress=lambda x: None):
+def load_cleaners(cb_progress=_noop_progress):
     """Scan for winapp2.ini files and load them"""
     cb_progress(0.0)
     for pathname in list_winapp_files():

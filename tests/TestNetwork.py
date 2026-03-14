@@ -22,13 +22,17 @@
 Test case for module Network
 """
 
+# standard imports
 import ipaddress
 import logging
 import os
 import random
-import requests
 from unittest.mock import MagicMock, Mock, patch
 
+# third party imports
+import requests
+
+# first party imports
 import bleachbit
 from tests import common
 from bleachbit.FileUtilities import delete

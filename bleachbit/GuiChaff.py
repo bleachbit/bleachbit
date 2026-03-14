@@ -8,9 +8,11 @@
 GUI for making chaff
 """
 
+import functools
 import logging
 import os
 import shutil
+import tempfile
 import threading
 
 
@@ -69,7 +71,7 @@ def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
     if stop_mode == STOP_MODE_TOTAL_SIZE:
         target_bytes = stop_value * 1024 * 1024  # MB to bytes
 
-        def should_stop(generated_file_names, cumulative_size=0):
+        def should_stop(_generated_file_names, cumulative_size=0):
             if abort_event.is_set():
                 return True
             return cumulative_size >= target_bytes
@@ -79,7 +81,7 @@ def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
     if stop_mode == STOP_MODE_FREE_SPACE:
         target_free_pct = stop_value
 
-        def should_stop(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
+        def should_stop(_generated_file_names, _cumulative_size=0):  # pylint: disable=unused-argument
             if abort_event.is_set():
                 return True
             usage = shutil.disk_usage(output_folder)
@@ -107,7 +109,7 @@ def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
     if stop_mode == STOP_MODE_TOTAL_SIZE:
         target_bytes = stop_value * 1024 * 1024
 
-        def progress_cb(fraction, generated_file_names=None, cumulative_size=0):
+        def progress_cb(fraction, _generated_file_names=None, cumulative_size=0):
             if cumulative_size > 0:
                 on_progress(min(1.0, cumulative_size / target_bytes))
             else:
@@ -120,7 +122,7 @@ def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
         initial_usage = shutil.disk_usage(output_folder)
         initial_free_pct = 100.0 * initial_usage.free / initial_usage.total
 
-        def progress_cb(_fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
+        def progress_cb(_fraction, _generated_file_names=None, _cumulative_size=0):  # pylint: disable=unused-argument
             usage = shutil.disk_usage(output_folder)
             current_free_pct = 100.0 * usage.free / usage.total
             if initial_free_pct > target_free_pct:
@@ -175,6 +177,11 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
 class ChaffDialog(Gtk.Dialog):
 
     """Present the dialog to make chaff"""
+
+    _infobar_timeout_id = None
+    _download_success = None
+    _abort_event = None
+    thread = None
 
     def __init__(self, parent):
         self._make_dialog(parent)
@@ -273,7 +280,6 @@ class ChaffDialog(Gtk.Dialog):
         self.choose_folder_button = Gtk.FileChooserButton()
         self.choose_folder_button.set_action(
             Gtk.FileChooserAction.SELECT_FOLDER)
-        import tempfile
         self.choose_folder_button.set_filename(tempfile.gettempdir())
         self.choose_folder_button.set_hexpand(True)
         grid.attach(self.choose_folder_button, 1, 3, 1, 1)
@@ -338,7 +344,7 @@ class ChaffDialog(Gtk.Dialog):
 
         self._abort_event = None
 
-    def _on_infobar_response(self, infobar, response_id):
+    def _on_infobar_response(self, _infobar, _response_id):
         """Handle InfoBar close button click"""
         if self._infobar_timeout_id:
             GLib.source_remove(self._infobar_timeout_id)
@@ -352,7 +358,7 @@ class ChaffDialog(Gtk.Dialog):
         self.stop_value_spin.set_adjustment(
             self._stop_value_adjustments[mode])
 
-    def _on_abort(self, widget):
+    def _on_abort(self, _widget):
         """Callback for abort button"""
         if self._abort_event:
             self._abort_event.set()
@@ -391,8 +397,9 @@ class ChaffDialog(Gtk.Dialog):
 
         def on_download_error(msg, msg2):
             # Use idle_add to show error from main thread
-            GLib.idle_add(lambda: self.show_infobar(
-                f"{msg}: {msg2}", Gtk.MessageType.ERROR))
+            message = f'{msg}: {msg2}'
+            GLib.idle_add(
+                functools.partial(self.show_infobar, message, Gtk.MessageType.ERROR))
 
         def download_models_thread(on_error):
             """Download models in a background thread."""
@@ -426,7 +433,7 @@ class ChaffDialog(Gtk.Dialog):
         thread = threading.Thread(target=_worker)
         thread.start()
 
-    def on_make_files(self, widget):
+    def on_make_files(self, _widget):
         """Callback for make files button"""
         stop_mode = self.stop_mode_combo.get_active()
         stop_value = self.stop_value_spin.get_value_as_int()
@@ -455,7 +462,8 @@ class ChaffDialog(Gtk.Dialog):
             self._start_file_generation(
                 stop_mode, stop_value, inspiration, output_dir, delete_when_finished)
 
-    def _start_file_generation(self, stop_mode, stop_value, inspiration, output_dir, delete_when_finished):
+    def _start_file_generation(self, stop_mode, stop_value, inspiration,
+                               output_dir, delete_when_finished):
         """Start generating files after download is complete."""
         self._abort_event = threading.Event()
 

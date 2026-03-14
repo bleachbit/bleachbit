@@ -240,7 +240,7 @@ def delete_cookies(path, keep_list, really_delete=False):
                     conn.isolation_level = None
                     cursor.execute('VACUUM')
                 except sqlite3.Error as e:
-                    logger.warning(f"VACUUM failed on {path}: {e}")
+                    logger.warning("VACUUM failed on %s: %s", path, e)
                 finally:
                     conn.isolation_level = prev_isolation
                 if shred_enabled:
@@ -292,7 +292,7 @@ def delete_cookies(path, keep_list, really_delete=False):
             }
 
     except sqlite3.Error as e:
-        logger.error(f"SQLite error processing {path}: {e}")
+        logger.error("SQLite error processing %s: %s", path, e)
         return {
             "total_deleted": 0,
             "total_kept": 0,
