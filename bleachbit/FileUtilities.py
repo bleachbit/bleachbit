@@ -434,6 +434,7 @@ def delete_file(path, shred):
             # File is locked, try to truncate it first
             _truncate_locked_file(path)
         raise
+    return True
 
 
 def delete(path, shred=False, ignore_missing=False, allow_shred=True):
