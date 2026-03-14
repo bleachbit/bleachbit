@@ -215,7 +215,11 @@ class CleanerTestCase(common.BleachbitTestCase):
             self.assertNotIn(tmp_path, trash_paths)
 
     def test_no_files_exist(self):
-        """Verify only existing files are returned"""
+        """Verify only existing files are returned
+
+        It monkeypatches file system functions to return no files.
+        Then, it tries every cleaning option.
+        """
         _exists = os.path.exists
         _iglob = glob.iglob
         _lexists = os.path.lexists
@@ -227,14 +231,9 @@ class CleanerTestCase(common.BleachbitTestCase):
             os.walk = lambda top, topdown = True, onerror = None, followlinks = False: []
             for key in sorted(backends):
                 for (option_id, __name) in backends[key].get_options():
-                    for cmd in backends[key].get_commands(option_id):
-                        for result in cmd.execute(really_delete=False):
-                            if result != True:
-                                break
-                            msg = "Expected no files to be deleted but got '%s'" % str(
-                                result)
-                            self.assertNotIsInstance(cmd, Command.Delete, msg)
-                            common.validate_result(self, result)
+                    for _cmd in backends[key].get_commands(option_id):
+                        self.fail(
+                            f"Expected no files to be returned for {key}.{option_id}")
         finally:
             glob.iglob = _iglob
             os.path.exists = _exists
