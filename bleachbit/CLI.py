@@ -365,8 +365,8 @@ There is NO WARRANTY, to the extent permitted by law.""" % APP_VERSION)
         for wipe_path in args:
             # TRANSLATORS: Shows activity in the CLI, and %s is the path to the directory.
             logger.info(_("Wipe empty space in %s"), wipe_path)
-            import bleachbit.FileUtilities
-            for _ret in bleachbit.FileUtilities.wipe_path(wipe_path):
+            import bleachbit.Wipe
+            for _ret in bleachbit.Wipe.wipe_path(wipe_path):
                 pass
         sys.exit(0)
     if options.preview or options.clean:
