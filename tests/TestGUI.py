@@ -226,7 +226,8 @@ class GUITestCase(common.BleachbitTestCase):
         import bleachbit.GuiChaff
         import bleachbit.Chaff
         # common.py patches the download directory, so have_models() will return False.
-        bleachbit.Chaff.download_models()
+        if not bleachbit.Chaff.download_models():
+            self.skipTest('Unable to download chaff models for GUI test')
         gui = self.app._window
         cd = bleachbit.GuiChaff.ChaffDialog(gui)
         cd.show_all()
@@ -243,6 +244,8 @@ class GUITestCase(common.BleachbitTestCase):
         cd.stop_value_spin.set_value(10)
         self.refresh_gui()
         self.click_button(cd, _("Make files"))
+        self.assertIsNotNone(
+            cd.thread, 'Chaff generation thread did not start')
         cd.thread.join()
         self.refresh_gui()
         self.assertEqual(len(os.listdir(chaff_dst_dir)), 10)
