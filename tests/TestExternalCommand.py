@@ -312,11 +312,11 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
     @classmethod
     def tearDownClass(cls):
         """Tear down the test case"""
-        super(ExternalCommandTestCase, ExternalCommandTestCase).tearDownClass()
         common.put_env('LANGUAGE', cls.old_language)
         if cls.environment_changed:
             # We don't want to affect other tests, executed after this one.
             common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', None)
+        super(ExternalCommandTestCase, ExternalCommandTestCase).tearDownClass()
 
     def assertRunning(self, expect_running=True, check_window_title=True, timeout=START_TIMEOUT_SECONDS):
         """Assert whether BleachBit GUI processes are running or not

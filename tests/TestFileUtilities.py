@@ -553,7 +553,7 @@ State=AAAA/wA...
         """Unit test for method delete()"""
         for shred in (False, True):
             for delete_func in (delete, delete_file):
-                with self.subTest(delete_func=delete_func, shred=shred):
+                with self.subTest(delete_func=delete_func.__name__, shred=shred):
                     self.delete_helper(delete_func, shred=shred)
 
     def test_delete_ignore_missing(self):

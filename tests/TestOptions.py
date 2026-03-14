@@ -434,3 +434,15 @@ check_online_updates=True
                     # Clean up for next iteration
                     self.tearDown()
                     self.setUp()
+
+    def test_close_unregisters_atexit_and_is_idempotent(self):
+        """Test close() unregisters its atexit callback and only flushes once."""
+        self._write_seed_options_file()
+        with mock.patch('bleachbit.Options.atexit.unregister') as mock_unregister:
+            o = bleachbit.Options.Options()
+            with mock.patch.object(o, '_Options__flush') as mock_flush:
+                o.close()
+                o.close()
+
+            mock_flush.assert_called_once_with(force=False)
+            mock_unregister.assert_called_once()

@@ -84,9 +84,7 @@ case "$DISTRO_NAME" in
         # Run all tests with unittest.
         run_optional_tests
         # Run GUI tests with pytest.
-        xvfb-run -a python -m pytest --numprocesses auto \
-            tests/TestGUI.py \
-            tests/TestGuiChaff.py
+        xvfb-run -a python -m pytest --numprocesses auto tests/
         ;;
     fedora)
         prep_redhat

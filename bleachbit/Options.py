@@ -139,10 +139,12 @@ class Options:
         self.overrides = {}
         self.old_version = None  # Store previous version in memory
         self._dirty = False
+        self._closed = False
         self._flush_generation = 0
         self._flush_lock = threading.RLock()
         self._flush_timer = None
-        atexit.register(self.close)
+        self._atexit_close = self.close
+        atexit.register(self._atexit_close)
         self.restore()
 
         old_option = 'system.free_disk_space'
@@ -460,20 +462,20 @@ class Options:
             self.__schedule_flush()
 
     def commit(self):
-        """Cancel times and write changes
-
-        Identical to close() except different intent.
-        """
+        """Cancel times and write changes"""
         with self._flush_lock:
             self.__cancel_flush_timer()
             self.__flush(force=True)
 
     def close(self):
-        """Cancel times and write changes
-
-        Identical to commit() except different intent.
-        """
-        self.commit()
+        """Cancel times and write changes"""
+        with self._flush_lock:
+            if self._closed:
+                return
+            self._closed = True
+            atexit.unregister(self._atexit_close)
+            self.__cancel_flush_timer()
+            self.__flush(force=False)
 
     def set_hashpath(self, pathname, hashvalue):
         """Remember the hash of a path"""
