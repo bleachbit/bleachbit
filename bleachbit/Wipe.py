@@ -302,8 +302,12 @@ def wipe_path(pathname, idle=False):
 
     # Get the file system type from the given path
     fstype = get_filesystem_type(pathname)[0]
-    logger.debug(_("Wiping path %s with file system type %s"),
-                 pathname, fstype)
+    # TRANSLATORS: Debug log message shown during file wiping. 'Wiping' is a
+    # present participle (ongoing action). %(pathname)s is the file/directory
+    # path; %(fstype)s is the file system type (e.g., ext3, ntfs).
+    # Do not translate variables.
+    logger.debug(_("Wiping path %(pathname)s with file system type %(fstype)s"),
+                 {"pathname": pathname, "fstype": fstype})
     if not os.path.isdir(pathname):
         logger.error(
             _("Path to wipe must be an existing directory: %s"), pathname)
@@ -390,16 +394,29 @@ def wipe_path(pathname, idle=False):
             # statistics
             elapsed_sec = time.time() - start_time
             rate_mbs = (total_bytes / (1000 * 1000)) / elapsed_sec
-            logger.debug(_('Wrote %d files and %d bytes in %d seconds at %.2f MB/s'),
-                         len(files), total_bytes, int(elapsed_sec), rate_mbs)
+            # TRANSLATORS: Debug message summarizing a write operation. All placeholders
+            # are numeric: %(file_count)d = integer number of files written;
+            # %(total_bytes)d = integer total bytes written; %(elapsed_sec)d = integer
+            # elapsed seconds; %(rate_mbs).2f = decimal megabytes per second (e.g., 3.14).
+            # Do not translate variables.
+            logger.debug(_('Wrote %(file_count)d files and %(total_bytes)d bytes '
+                         'in %(elapsed_sec)d seconds at %(rate_mbs).2f MB/s'),
+                         {"file_count": len(files), "total_bytes": total_bytes,
+                         "elapsed_sec": int(elapsed_sec), "rate_mbs": rate_mbs})
             # how much free space is left (should be near zero)
             if 'posix' == os.name:
                 # pylint: disable=no-member
                 stats = os.statvfs(pathname)
-                logger.debug(_("%d bytes and %d inodes available to non-super-user"),
-                             stats.f_bsize * stats.f_bavail, stats.f_favail)
-                logger.debug(_("%d bytes and %d inodes available to super-user"),
-                             stats.f_bsize * stats.f_bfree, stats.f_ffree)
+                # TRANSLATORS: Debug message showing disk space available to regular (non-root) users.
+                # %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
+                # Do not translate variables.
+                logger.debug(_("%(bytes)d bytes and %(inodes)d inodes available to non-super-user"),
+                             {"bytes": stats.f_bsize * stats.f_bavail, "inodes": stats.f_favail})
+                # TRANSLATORS: Debug message showing disk space available to the root (admin) user.
+                # %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
+                # Do not translate variables.
+                logger.debug(_("%(bytes)d bytes and %(inodes)d inodes available to super-user"),
+                             {"bytes": stats.f_bsize * stats.f_bfree, "inodes": stats.f_ffree})
             # If no bytes were written to this file, then do not try to create another file.
             # Linux allows writing several 4K files when free_space() = 0,
             # so do not check free_space() < 1.

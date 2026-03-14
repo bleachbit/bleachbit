@@ -117,8 +117,10 @@ def make_self_oom_target_linux():
     try:
         uid = General.get_real_uid()
         if uid > 0:
-            logger.debug(
-                _("Dropping privileges of process ID %d to user ID %d."), os.getpid(), uid)
+            # TRANSLATORS: Debug message when a process gives up root/admin privileges.
+            # %(pid)d is the integer process ID; %(uid)d is the integer user ID to switch to.
+            drop_msg = _("Dropping privileges of process ID %(pid)d to user ID %(uid)d.")
+            logger.debug(drop_msg, {'pid': os.getpid(), 'uid': uid})
             os.seteuid(uid)
     except:
         logger.exception('Error when dropping privileges')
@@ -171,7 +173,12 @@ def get_swap_uuid(device):
         ret = re.search(r"^%s: UUID=\"([a-z0-9-]+)\"" % device, line)
         if ret is not None:
             uuid = ret.group(1)
-    logger.debug(_("Found UUID for swap file %s is %s."), device, uuid)
+    # TRANSLATORS: Debug message. 'Found' is a past tense verb (short for
+    # "Found [that] the UUID for swap device ..."). %(device)s is the device
+    # path (e.g., /dev/sda5); %(uuid)s is a UUID string
+    # (e.g., ee0e85f6-6e5c-42b9-902f-776531938bbf). Do not translate variables.
+    logger.debug(_("Found UUID for swap device %(device)s is %(uuid)s."),
+                 {'device': device, 'uuid': uuid})
     return uuid
 
 
