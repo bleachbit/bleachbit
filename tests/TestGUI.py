@@ -200,6 +200,20 @@ class GUITestCase(common.BleachbitTestCase):
         # destroy
         pref.dialog.destroy()
 
+    def test_preferences_cookies_page(self):
+        """Opens the preferences dialog and navigates to cookies page"""
+        pref = self.app.get_preferences_dialog()
+        pref.dialog.show_all()
+        self.refresh_gui()
+
+        # Navigate to cookies page - this will trigger cookie manager loading
+        pref.select_page('cookies')
+        self.refresh_gui()
+
+        # click close button
+        self.click_button(pref.dialog, Gtk.STOCK_CLOSE)
+        pref.dialog.destroy()
+
     def test_system_information(self):
         """Opens the system information dialog and closes it"""
         dialog, _txt, _txtbuffer = self.app.get_system_information_dialog()

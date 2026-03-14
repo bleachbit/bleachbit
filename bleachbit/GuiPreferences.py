@@ -33,6 +33,7 @@ from bleachbit import online_update_notification_enabled
 from bleachbit import ProtectedPath
 from bleachbit.Constant import EMPTY_SPACE_WARNING
 from bleachbit.GtkShim import Gtk, GLib
+from bleachbit.GuiCookie import CookieManagerPane
 from bleachbit.GuiUtil import (detect_dark_background, flush_gtk_events,
                                should_show_dark_mode_warning)
 from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
