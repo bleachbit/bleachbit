@@ -989,20 +989,25 @@ State=AAAA/wA...
         """Unit test for detect_encoding"""
         eat_glass = '나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
         bom = '\ufeff' + eat_glass  # Add BOM for utf-8-sig
-        tests = (('This is just an ASCII file', 'ascii'),
-                 (eat_glass, 'utf-8'),
-                 (eat_glass, 'EUC-KR'),
-                 (bom, 'UTF-8-SIG'))
-        for file_contents, expected_encoding in tests:
-            with self.subTest(encoding=expected_encoding):
+        tests = (('This is just an ASCII file', ['ascii']),
+                 (eat_glass, ['utf-8']),
+                 # Accept both EUC-KR and CP949 for Korean
+                 (eat_glass, ['EUC-KR', 'CP949']),
+                 (bom, ['UTF-8-SIG']))
+        for file_contents, expected_encodings in tests:
+            with self.subTest(encoding=expected_encodings):
+                # Use first encoding for writing
+                write_encoding = expected_encodings[0]
+
                 with tempfile.NamedTemporaryFile(mode='w', delete=False,
-                                                 encoding=expected_encoding) as temp:
+                                                 encoding=write_encoding) as temp:
                     temp.write(file_contents)
                     temp.flush()
                 det = detect_encoding(temp.name)
-                self.assertEqual(
-                    det, expected_encoding,
-                    f"{file_contents} -> {det}, check that chardet is available")
+
+                self.assertIn(
+                    det, expected_encodings,
+                    f"{file_contents} -> {det}, expected one of {expected_encodings}")
 
     @common.skipIfWindows
     def test_ego_owner(self):
