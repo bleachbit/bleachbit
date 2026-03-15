@@ -6,12 +6,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-03-14 15:00-0600\n"
-"PO-Revision-Date: 2026-03-09 12:09+0000\n"
+"PO-Revision-Date: 2026-03-16 19:09+0000\n"
 "Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/bleachbit/main/de/"
-">\n"
+"Language-Team: German <https://hosted.weblate.org/projects/bleachbit/main/"
+"de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1657,30 +1657,30 @@ msgstr ""
 #. TRANSLATORS: Title of the font check dialog
 #: ../bleachbit/FontCheckDialog.py
 msgid "Font check"
-msgstr ""
+msgstr "Schriftartprüfung"
 
 #. TRANSLATORS: Button label in the font check dialog
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is okay"
-msgstr ""
+msgstr "Text ist in Ordnung"
 
 #. TRANSLATORS: Button label in the font check dialog
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is blurry"
-msgstr ""
+msgstr "Text ist unscharf"
 
 #. TRANSLATORS: Button label in the font check dialog in case the font
 #. looks like an alien language.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is unrecognizable"
-msgstr ""
+msgstr "Text ist nicht erkennbar"
 
 #. TRANSLATORS: Question shown in the font check dialog displayed
 #. on startup on Windows. There are bugs that for some users the
 #. font is blurry or resembles an alien language.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Does all the text in this window look okay?"
-msgstr ""
+msgstr "Sieht der gesamte Text in diesem Fenster in Ordnung aus?"
 
 #. TRANSLATORS: Title of a file chooser dialog.
 #: ../bleachbit/GuiApplication.py
@@ -1746,7 +1746,7 @@ msgstr "Systeminformationen"
 #. replace the username with a placeholder.
 #: ../bleachbit/GuiApplication.py
 msgid "Anonymize"
-msgstr ""
+msgstr "Verbergen"
 
 #. TRANSLATORS: Label for the Cancel button in several dialog windows:
 #. file chooser, folder choose, delete confirmation, and warning dialogs.
@@ -2067,10 +2067,8 @@ msgstr "Allgemein"
 
 #. TRANSLATORS: Sidebar label for the software updates page of the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Update"
 msgid "Updates"
-msgstr "Aktualisieren"
+msgstr "Aktualisierungen"
 
 #. TRANSLATORS: Sidebar label for the "Languages" page in the Preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2183,26 +2181,20 @@ msgstr ""
 
 #. TRANSLATORS: Section title on the preferences updates page.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Update to version %s"
 msgid "Update notifications"
-msgstr "Auf Version %s aktualisieren"
+msgstr "Benachrichtigungen über Aktualisierungen"
 
 #. TRANSLATORS: Section title (noun) on the Preferences - General page
 #. for options related to cleaning stored data.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Clean"
 msgid "Cleaning"
-msgstr "Bereinigen"
+msgstr "Reinigung"
 
 #. TRANSLATORS: Section title in Preferences for user interface options
 #. such as dark mode and window behavior.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Internet"
 msgid "Interface"
-msgstr "Internet"
+msgstr "Oberfläche"
 
 #. TRANSLATORS: Checkbox label to remember the window size and position
 #. between application launches.
@@ -2225,18 +2217,18 @@ msgstr "Windows 10-Design"
 #. instead of the default Windows renderer. May improve blurry text.
 #: ../bleachbit/GuiPreferences.py
 msgid "Use fontconfig text rendering backend"
-msgstr ""
+msgstr "Fontconfig-Backend für die Textdarstellung verwenden"
 
 #. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "May fix blurry or unreadable text. Requires restart."
-msgstr ""
+msgstr "Kann unscharfen oder unlesbaren Text beheben. Neustart erforderlich."
 
 #. TRANSLATORS: Section title on the preferences general page,
 #. labelling options for OS integration and advanced/developer features.
 #: ../bleachbit/GuiPreferences.py
 msgid "Integration and advanced"
-msgstr ""
+msgstr "Integration und fortgeschritten"
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #. 'Shred' means securely delete a file to prevent data recovery.
@@ -2275,12 +2267,13 @@ msgstr "Entfernen"
 #. TRANSLATORS: Section title on the preferences languages page.
 #: ../bleachbit/GuiPreferences.py
 msgid "BleachBit interface language"
-msgstr ""
+msgstr "Sprache der BleachBit-Benutzeroberfläche"
 
 #. TRANSLATORS: Section title on the preferences languages page.
 #: ../bleachbit/GuiPreferences.py
 msgid "Language files to keep when cleaning applications"
 msgstr ""
+"Sprachdateien, die beim Bereinigen von Anwendungen erhalten bleiben sollen"
 
 #. TRANSLATORS: Column header in the languages treeview.
 #. This column controls whether to keep the language.
@@ -2390,14 +2383,12 @@ msgstr "Ordner hinzufügen"
 #. TRANSLATORS: Update notification for users upgrading from versions
 #. older than 5.1.0.
 #: ../bleachbit/GuiStartup.py
-#, fuzzy
-#| msgid "This option requires expert mode. Enable it in Preferences."
 msgid ""
 "Cleaning options with warnings now require expert mode. Enable it in "
 "preferences to clean them."
 msgstr ""
-"Diese Option erfordert den Expertenmodus. Aktivieren Sie ihn in den "
-"Einstellungen."
+"Reinigungsoptionen mit Warnungen erfordern jetzt den Expertenmodus. "
+"Aktivieren Sie diesen in den Einstellungen, um sie zu bereinigen."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
@@ -2636,11 +2627,10 @@ msgstr "Festlegen eines guten Werts %d für diesen Prozess."
 #. TRANSLATORS: Debug message when a process gives up root/admin privileges.
 #. %(pid)d is the integer process ID; %(uid)d is the integer user ID to switch to.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid "Dropping privileges of process ID {pid} to user ID {uid}."
+#, python-format
 msgid "Dropping privileges of process ID %(pid)d to user ID %(uid)d."
 msgstr ""
-"Die Berechtigungen der Prozess-ID {pid} werden auf die Benutzer-ID {uid} "
+"Die Berechtigungen der Prozess-ID %(pid)d werden auf die Benutzer-ID %(uid)d "
 "übertragen."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
@@ -2660,10 +2650,9 @@ msgstr "%s des Speichers freigeben."
 #. path (e.g., /dev/sda5); %(uuid)s is a UUID string
 #. (e.g., ee0e85f6-6e5c-42b9-902f-776531938bbf). Do not translate variables.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid "Found UUID for swap file {device} is {uuid}."
+#, python-format
 msgid "Found UUID for swap device %(device)s is %(uuid)s."
-msgstr "Gefundene UUID für die Auslagerungsdatei {device} ist {uuid}."
+msgstr "Gefundene UUID für die Auslagerungsdatei %(device)s ist %(uuid)s."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2692,16 +2681,12 @@ msgstr "Diese Auslagerungsgeräte wurden erkannt: %s"
 #. TRANSLATORS: This is a debugging message that the parent process
 #. is waiting for the child process.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The function wipe_memory() with process ID {pid} is waiting for child "
-#| "process ID {cid}."
+#, python-format
 msgid ""
 "The function wipe_memory() with process ID %d is waiting for child process "
 "ID %d."
 msgstr ""
-"Die Funktion wipe_memory() mit Prozess-ID {pid} wartet auf Kindprozess-ID "
-"{cid}."
+"Die Funktion wipe_memory() mit Prozess-ID %d wartet auf Kindprozess-ID %d."
 
 #: ../bleachbit/Memory.py
 #, python-format
@@ -2881,10 +2866,9 @@ msgstr ""
 #. path; %(fstype)s is the file system type (e.g., ext3, ntfs).
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "Wiping path {pathname} with file system type {fstype}"
+#, python-format
 msgid "Wiping path %(pathname)s with file system type %(fstype)s"
-msgstr "Pfad {pathname} mit Dateisystemtyp {fstype} wird gelöscht"
+msgstr "Pfad %(pathname)s mit Dateisystemtyp %(fstype)s wird gelöscht"
 
 #: ../bleachbit/Wipe.py
 #, python-format
@@ -2908,34 +2892,29 @@ msgstr "Fehler #%d beim Leeren des Dateipuffers."
 #. elapsed seconds; %(rate_mbs).2f = decimal megabytes per second (e.g., 3.14).
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid ""
-#| "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
-#| "{rate:.2f} MB/s"
+#, python-format
 msgid ""
 "Wrote %(file_count)d files and %(total_bytes)d bytes in %(elapsed_sec)d "
 "seconds at %(rate_mbs).2f MB/s"
 msgstr ""
-"{files:,} Dateien und {bytes:,} Bytes wurden in {seconds:,} Sekunden mit "
-"{rate:.2f} MB/s geschrieben"
+"%(file_count)d Dateien und %(total_bytes)d Bytes wurden in %(elapsed_sec)d "
+"Sekunden mit %(rate_mbs).2f MB/s geschrieben"
 
 #. TRANSLATORS: Debug message showing disk space available to regular (non-root) users.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
+#, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to non-super-user"
-msgstr "{bytes:,} Bytes und {inodes:,} Inodes verfügbar für Nicht-Superuser"
+msgstr "%(bytes)d Bytes und %(inodes)d Inodes verfügbar für Nicht-Superuser"
 
 #. TRANSLATORS: Debug message showing disk space available to the root (admin) user.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
+#, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to super-user"
-msgstr "{bytes:,} Bytes und {Inodes:,} Inodes verfügbar für Superuser"
+msgstr "%(bytes)d Bytes und %(inodes)d Inodes verfügbar für Superuser"
 
 #: ../bleachbit/Wipe.py
 msgid "Encountered unknown error #0 while truncating file."
