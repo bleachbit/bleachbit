@@ -239,19 +239,43 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external_nowait(self):
         """Unit test for run_external() with wait=False"""
-        with warnings.catch_warnings(record=True) as w:
+        with warnings.catch_warnings(record=True):
             warnings.simplefilter("error")
 
-            args = {'nt': ['cmd.exe', '/c', 'dir', r'%windir%\system32', '/s', '/b'],
-                    'posix': ['find', '/usr/bin']}
-            (rc, stdout, stderr) = run_external(args[os.name], wait=False)
+            output_file = os.path.join(self.tempdir, 'run_external_nowait.txt')
+
+            if os.name == 'posix':
+                script = self.write_file(
+                    'run_external_nowait.sh',
+                    contents='#!/bin/sh\nsleep 2\ntouch "$1"\n',
+                    mode='w')
+                os.chmod(script, 0o700)
+                cmd = ['sh', script, output_file]
+            else:
+                script = self.write_file(
+                    'run_external_nowait.bat',
+                    contents='@echo off\nping -n 3 127.0.0.1 >nul\necho done>"%~1"\n',
+                    mode='w')
+                cmd = ['cmd.exe', '/c', script, output_file]
+
+            self.assertNotExists(output_file)
+
+            (rc, stdout, stderr) = run_external(cmd, wait=False)
             self.assertEqual(0, rc)
             self.assertEqual(0, len(stdout))
             self.assertEqual(0, len(stderr))
 
+            self.assertNotExists(output_file)
+
+            for _ in range(50):
+                if os.path.exists(output_file):
+                    break
+                time.sleep(0.1)
+            self.assertExists(output_file)
+
     def test_run_external_command_completion(self):
         """Test that run_external() commands complete successfully"""
-        with warnings.catch_warnings(record=True) as w:
+        with warnings.catch_warnings(record=True):
             # Any warning is an error.
             warnings.simplefilter("error")
             with tempfile.TemporaryDirectory() as temp_dir:

@@ -22,6 +22,12 @@
 Test cases for module CleanerML
 """
 
+# standard imports
+import os
+import shutil
+import sys
+
+# first party imports
 import bleachbit
 from tests import common
 from bleachbit import Cleaner
@@ -32,9 +38,6 @@ from bleachbit.CleanerML import (
     list_cleanerml_files,
     load_cleaners,
     pot_fragment)
-
-import os
-import sys
 
 
 class CleanerMLTestCase(common.BleachbitTestCase):
@@ -102,7 +105,6 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.write_file(os.path.join(bleachbit.personal_cleaners_dir, 'invalid.xml'),
                         contents=b'<xml><broken>')
         list(load_cleaners())
-        import shutil
         shutil.rmtree(bleachbit.personal_cleaners_dir)
         bleachbit.personal_cleaners_dir = pcd
 

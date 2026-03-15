@@ -22,6 +22,15 @@
 Test case for module CLI
 """
 
+# standard imports
+import copy
+import datetime
+import locale
+import os
+import random
+import tempfile
+
+# first party imports
 from bleachbit.CLI import (
     args_to_operations,
     args_to_operations_list,
@@ -32,11 +41,6 @@ from bleachbit.General import get_executable, run_external
 from bleachbit.GtkShim import HAVE_GTK
 from bleachbit import FileUtilities
 from tests import common
-
-import copy
-import datetime
-import os
-import tempfile
 
 RUN_EXTERNAL_TIMEOUT = 30
 
@@ -205,7 +209,6 @@ class CLITestCase(common.BleachbitTestCase):
 
     def test_invalid_locale(self):
         """Unit test for invalid locales"""
-        import locale
         original_locale = locale.getlocale(locale.LC_NUMERIC)
         old_lang = common.get_env('LANG')
         common.put_env('LANG', 'blahfoo')
@@ -239,7 +242,6 @@ class CLITestCase(common.BleachbitTestCase):
             c for c in full_cleaners_list
             # vim_swap_root walks / and can be very slow
             if not c.startswith('system.') and c != 'deepscan.vim_swap_root']
-        import random
         sample_cleaners = random.sample(non_system_cleaners, 5)
         for cleaner in (system_cleaners + sample_cleaners):
             args_list.append(
@@ -266,7 +268,7 @@ class CLITestCase(common.BleachbitTestCase):
             deleted_paths = []
             crash = [False]
 
-            def dummy_delete(path, shred=False):
+            def dummy_delete(path, _shred=False):
                 try:
                     self.assertExists(path)
                 except:

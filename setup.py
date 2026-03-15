@@ -48,8 +48,10 @@ elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
     data_files.append(('/usr/local/share/pixmaps/', ['./bleachbit.png']))
 
 
-def run_setup(args={}):
+def run_setup(args=None):
     """Run setup from setuptools"""
+    if args is None:
+        args = {}
     # pylint: disable=import-outside-toplevel
     from setuptools import setup
     setup(name='bleachbit',

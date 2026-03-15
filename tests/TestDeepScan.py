@@ -23,12 +23,17 @@
 Test case for module DeepScan
 """
 
-from tests import common
-from bleachbit.DeepScan import DeepScan, Search, normalized_walk
-
+# standard imports
 import os
+import shutil
 import sys
 import unittest
+from unittest import mock
+
+# first party imports
+from tests import common
+from tests import TestCleaner
+from bleachbit.DeepScan import DeepScan, Search, normalized_walk
 
 
 class DeepScanTestCase(common.BleachbitTestCase):
@@ -63,7 +68,6 @@ class DeepScanTestCase(common.BleachbitTestCase):
         os.unlink(fullpath)
         self.assertNotExists(fullpath)
 
-        import shutil
         shutil.rmtree(subdir)
 
     def test_encoding(self):
@@ -104,7 +108,6 @@ class DeepScanTestCase(common.BleachbitTestCase):
         def run_deep_scan(regex):
             astr = '<action command="{}" search="deep" cache="false" path="{}" {}/>'.format(
                 command, self.tempdir, regex)
-            from tests import TestCleaner
             cleaner = TestCleaner.action_to_cleaner(astr)
             from bleachbit.Worker import backends, Worker
             backends['test'] = cleaner
@@ -144,7 +147,6 @@ class DeepScanTestCase(common.BleachbitTestCase):
 
     @unittest.skipUnless('darwin' == sys.platform, 'Not on Darwin')
     def test_normalized_walk_darwin(self):
-        from unittest import mock
 
         with mock.patch('os.walk') as mock_walk:
             mock_walk.return_value = [

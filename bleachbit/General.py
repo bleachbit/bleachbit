@@ -43,7 +43,7 @@ def boolstr_to_bool(value):
         return True
     if 'false' == value.lower():
         return False
-    raise RuntimeError("Invalid boolean: '%s'" % value)
+    raise RuntimeError(f"Invalid boolean: '{value}'")
 
 
 def getText(nodelist):

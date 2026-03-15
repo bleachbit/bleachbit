@@ -22,15 +22,17 @@
 Check local CleanerML files as a security measure
 """
 
-from bleachbit.Language import get_text as _, pget_text as _p
-import bleachbit
-from bleachbit.CleanerML import list_cleanerml_files
-from bleachbit.Options import options
-
+# standard imports
 import hashlib
 import logging
 import os
 import sys
+
+# first party imports
+from bleachbit.Language import get_text as _, pget_text as _p
+import bleachbit
+from bleachbit.CleanerML import list_cleanerml_files
+from bleachbit.Options import options
 
 
 logger = logging.getLogger(__name__)
@@ -43,7 +45,7 @@ NEW = 3
 def cleaner_change_dialog(changes, parent):
     """Present a dialog regarding the change of cleaner definitions"""
 
-    def toggled(cell, path, model):
+    def toggled(_cell, path, model):
         """Callback for clicking the checkbox"""
         __iter = model.get_iter_from_string(path)
         value = not model.get_value(__iter, 0)
@@ -152,7 +154,7 @@ class RecognizeCleanerML:
         try:
             with open(pathname, 'rb') as f:
                 body = f.read()
-        except OSError: # The file is locked, what to do next?
+        except OSError:  # The file is locked, what to do next?
             return NEW, hashdigest(b"")
         new_hash = hashdigest(str.encode(self.salt, encoding='utf-8') + body)
         try:

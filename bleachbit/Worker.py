@@ -22,15 +22,17 @@
 Perform the preview or delete operations
 """
 
+# standard imports
+import logging
+import math
+import os
+import sys
+
+# first party imports
 from bleachbit import DeepScan, FileUtilities
 from bleachbit.Cleaner import backends
 from bleachbit.Constant import EMPTY_SPACE_WARNING
 from bleachbit.Language import get_text as _, nget_text as ngettext
-
-import logging
-import math
-import sys
-import os
 
 logger = logging.getLogger(__name__)
 
@@ -217,9 +219,13 @@ class Worker:
             msg = _("Please wait. Wiping empty space.")
             self.ui.append_text(EMPTY_SPACE_WARNING)
             self.ui.append_text('\n\n')
-            self.ui.append_text(_('To stop this process, press the abort button on the toolbar and wait.'))
+            self.ui.append_text(
+                _('To stop this process, press the abort button on the toolbar and wait.'))
             self.ui.append_text('\n\n')
-            self.ui.append_text(_('If the application is force closed before the process is complete, large files may remain on the disk, and they may use all available space. To remove them, start BleachBit again.'))
+            self.ui.append_text(
+                _('If the application is force closed before the process is complete, '
+                  'large files may remain on the disk, and they may use all available space. '
+                  'To remove them, start BleachBit again.'))
             self.ui.append_text('\n')
         elif 'memory' == option_id:
             msg = _("Please wait.  Cleaning %s.") % _("Memory")

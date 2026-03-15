@@ -83,7 +83,7 @@ class ChaffTestCase(common.BleachbitTestCase):
         tmp_dir = mkdtemp(prefix='bleachbit-chaff')
 
         # Test when primary download mirror fails but secondary succeeds.
-        def succeed_on_second(*args, **kwargs):
+        def succeed_on_second(*args, **_kwargs):
             url = args[0]
             if 'sourceforge' in url:
                 return False

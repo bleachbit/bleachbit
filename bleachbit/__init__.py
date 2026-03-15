@@ -8,14 +8,15 @@
 Code that is commonly shared throughout BleachBit
 """
 
+import getpass
 import os
 import re
 import sys
-import getpass
-from bleachbit import Log
-from configparser import RawConfigParser, NoOptionError  # used in other files
+from configparser import NoOptionError, RawConfigParser  # used in other files
 
-APP_VERSION = "5.1.0"
+from bleachbit import Log
+
+APP_VERSION = "5.1.1"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 APP_COPYRIGHT = "Copyright (C) 2008-2026 Andrew Ziem"
@@ -26,7 +27,7 @@ if sys.version_info < (3, 8, 0):
     print('BleachBit requires Python version 3.8 or later')
     sys.exit(1)
 
-if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
+if hasattr(sys, 'frozen'):
     stdout_encoding = 'utf-8'
 else:
     stdout_encoding = sys.stdout.encoding
@@ -216,7 +217,7 @@ elif sys.platform.startswith("openbsd") or sys.platform.startswith("freebsd"):
 #
 base_url = "https://update.bleachbit.org"
 help_contents_url = "https://www.bleachbit.org/help"
-update_check_url = "%s/update/%s" % (base_url, APP_VERSION)
+update_check_url = f"{base_url}/update/{APP_VERSION}"
 
 # set up environment variables
 if 'nt' == os.name:

@@ -23,14 +23,19 @@ Test case for module Update
 """
 
 
-from tests import common
-import bleachbit
-from bleachbit import logger
-from bleachbit.Update import check_updates, update_winapp2
-import bleachbit.Update
-
+# standard imports
+import http.client
 import os
 import os.path
+from unittest.mock import Mock, patch
+import xml
+
+# first party imports
+from tests import common
+import bleachbit
+from bleachbit import logger, personal_cleaners_dir
+from bleachbit.Network import fetch_url
+from bleachbit.Update import check_updates, update_winapp2
 
 
 class UpdateTestCase(common.BleachbitTestCase):
@@ -38,9 +43,6 @@ class UpdateTestCase(common.BleachbitTestCase):
 
     def test_check_updates_mock(self):
         """Unit test for function check_updates() using mock"""
-        from unittest.mock import Mock, patch
-        from bleachbit.Update import check_updates
-
         wa = '<winapp2 url="http://katana.oooninja.com/bleachbit/winapp2.ini" sha512="ce9e18252f608c8aff28811e372124d29a86404f328d3cd51f1f220578744bb8b15f55549eabfe8f1a80657fc940f6d6deece28e0532b3b0901a4c74110f7ba7"/>'
         update_tests = [
             ('<updates><stable ver="0.8.4">http://084</stable><beta ver="0.8.5beta">http://085beta</beta>%s</updates>' % wa,
@@ -100,15 +102,12 @@ class UpdateTestCase(common.BleachbitTestCase):
 
     def test_update_url(self):
         """Check that the real update URL returns XML"""
-        from bleachbit.Network import fetch_url
         response = fetch_url(bleachbit.update_check_url)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.text.startswith('<?xml version='))
-        import xml
         xml.dom.minidom.parseString(response.text)
 
     def test_update_winapp2(self):
-        from bleachbit import personal_cleaners_dir
         fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
         if os.path.exists(fn):
             logger.info('deleting %s', fn)
@@ -138,5 +137,4 @@ class UpdateTestCase(common.BleachbitTestCase):
 
     def test_environment(self):
         """Check the sanity of the environment"""
-        import http.client
         self.assertTrue(hasattr(http.client, 'HTTPSConnection'))

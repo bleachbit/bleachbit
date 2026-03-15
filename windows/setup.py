@@ -309,9 +309,9 @@ def build_py2exe():
         'compressed': 1,     # Create compressed archive
         'optimize': 2,       # Extra optimization (like python -OO)
         'includes': ['gi'],
-        'packages': ['encodings', 'gi', 'gi.overrides', 'plyer'],
+        'packages': ['chardet', 'encodings', 'gi', 'gi.overrides', 'plyer'],
         'excludes': ['pyreadline', 'difflib', 'doctest',
-                     'pickle', 'ftplib', 'bleachbit.Unix'],
+                     'pickle', 'ftplib', 'bleachbit.Unix', 'charset_normalizer'],
         'dll_excludes': [
             'libgstreamer-1.0-0.dll',
             'CRYPT32.DLL',  # required by ssl

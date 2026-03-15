@@ -27,6 +27,7 @@ import logging
 import os
 import platform
 import re
+import time
 import unicodedata
 from collections import namedtuple
 from bleachbit import fs_scan_re_flags
@@ -103,7 +104,6 @@ class DeepScan:
         """Perform requested searches and yield each match"""
         logging.getLogger(__name__).debug(
             'DeepScan.scan: searches=%s', str(self.searches))
-        import time
         yield_time = time.time()
 
         for (top, searches) in self.searches.items():

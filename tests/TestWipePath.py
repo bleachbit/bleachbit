@@ -383,7 +383,8 @@ class WipeTestCase(common.BleachbitTestCase):
                     f'BB_FS={env_fs} did not match valid file system type')
             requested_fs = (env_fs,)
 
-        available_fs = tuple(fs for fs in requested_fs if _format_tool_available(fs))
+        available_fs = tuple(
+            fs for fs in requested_fs if _format_tool_available(fs))
         missing_fs = tuple(fs for fs in requested_fs if fs not in available_fs)
 
         if missing_fs:
@@ -391,7 +392,8 @@ class WipeTestCase(common.BleachbitTestCase):
                            ', '.join(missing_fs))
         if not available_fs:
             missing_list = ', '.join(missing_fs) or 'unknown'
-            self.skipTest(f'Missing mkfs utilities for requested filesystems: {missing_list}')
+            self.skipTest(
+                f'Missing mkfs utilities for requested filesystems: {missing_list}')
 
         for fs_type in available_fs:
             if common.have_root():

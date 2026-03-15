@@ -22,9 +22,11 @@
 Test case for Common
 """
 
-from tests import common
-
+# standard imports
 import os
+
+# first party imports
+from tests import common
 
 
 class CommonTestCase(common.BleachbitTestCase):
@@ -38,7 +40,7 @@ class CommonTestCase(common.BleachbitTestCase):
             'C.utf8',
             'C',
             'de_DE.iso88591',
-            'de-CH', # seen in Fedora in Docker
+            'de-CH',  # seen in Fedora in Docker
             'en-US',
             'en_US',
             'en',
@@ -97,12 +99,8 @@ class CommonTestCase(common.BleachbitTestCase):
                         parts = line.split()
                         if len(parts) > 1:
                             lang_codes.append(parts[1])
-        # /etc/locale.alias may list the qaa-qtz range, which is reserved for
-        # private use rather than a concrete locale. Skip it if present.
-        skip_alias_codes = {'qaa-qtz', 'it_CARES'}
-
         for lang_code in lang_codes:
-            if lang_code in skip_alias_codes:
+            if lang_code in common.SKIP_ALIAS_CODES:
                 continue
             self.assertIsLanguageCode(lang_code)
 
@@ -117,7 +115,8 @@ class CommonTestCase(common.BleachbitTestCase):
         for env in envs[os.name]:
             e = os.getenv(env)
             self.assertIsNotNone(e, f"Environment variable {env} is not set")
-            self.assertNotEqual(e.strip(), "", f"Environment variable {env} is empty")
+            self.assertNotEqual(
+                e.strip(), "", f"Environment variable {env} is empty")
 
     def test_get_put_env(self):
         """Unit test for get_env() and put_env()"""

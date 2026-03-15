@@ -6,6 +6,8 @@
 
 import os
 import threading
+from enum import Enum
+from typing import Optional
 
 from bleachbit import APP_NAME
 from bleachbit.GUI import logger
@@ -85,6 +87,64 @@ def get_window_info(window):
     return WindowInfo(geo.x, geo.y, geo.width, geo.height, monitor_model)
 
 
+class ThemeChangeStatus(Enum):
+    """State machine for detecting whether a theme update occurred."""
+
+    CHANGED = "changed"
+    UNCHANGED = "unchanged"
+    UNKNOWN = "unknown"
+
+
+def detect_dark_background(widget: Optional[Gtk.Widget]) -> Optional[bool]:
+    """Return True if the widget background is dark, False if light, None on failure."""
+    threshold = 0.45
+    if widget is None:
+        return None
+
+    try:
+        style_context = widget.get_style_context()
+        rgba = None
+        if style_context is not None and hasattr(style_context, 'lookup_color'):
+            lookup = style_context.lookup_color('theme_bg_color')
+            if lookup:
+                rgba = lookup[-1] if isinstance(lookup, tuple) else lookup
+
+        if rgba is None:
+            return None
+
+        luminance = 0.2126 * rgba.red + 0.7152 * rgba.green + 0.0722 * rgba.blue
+        is_dark = luminance < threshold
+        # logger.debug("Detected widget luminance=%f -> dark=%s", luminance, is_dark)
+        return is_dark
+    except Exception:
+        logger.debug("Failed to detect widget background", exc_info=True)
+        return None
+
+
+def classify_theme_change(before_dark: Optional[bool], after_dark: Optional[bool]) -> ThemeChangeStatus:
+    """Compare observations before and after a toggle to classify change."""
+    if before_dark is None or after_dark is None:
+        return ThemeChangeStatus.UNKNOWN
+    if before_dark == after_dark:
+        return ThemeChangeStatus.UNCHANGED
+    return ThemeChangeStatus.CHANGED
+
+
+def should_show_dark_mode_warning(before_dark: Optional[bool], after_dark: Optional[bool]) -> bool:
+    """Return True when we should warn the user about theme toggles."""
+    status = classify_theme_change(before_dark, after_dark)
+    # Warn when the theme did not change or when we cannot tell (UNKNOWN).
+    return status != ThemeChangeStatus.CHANGED
+
+
+def flush_gtk_events(max_iterations: int = 5):
+    """Process pending GTK events to allow style updates to land."""
+    iterations = 0
+    while Gtk.events_pending() and (max_iterations is None or iterations < max_iterations):
+        Gtk.main_iteration_do(False)
+        iterations += 1
+
+
 def notify(msg):
     """Show a popup-notification"""
     import importlib
@@ -108,14 +168,16 @@ def notify_gi(msg):
         return
     from gi.repository import Notify
     if Notify.init(APP_NAME):
-        notify = Notify.Notification.new('BleachBit', msg, 'bleachbit')
-        notify.set_hint("desktop-entry", GLib.Variant('s', 'bleachbit'))
+        notification_obj = Notify.Notification.new(
+            'BleachBit', msg, 'bleachbit')
+        notification_obj.set_hint(
+            "desktop-entry", GLib.Variant('s', 'bleachbit'))
         try:
-            notify.show()
+            notification_obj.show()
         except gi.repository.GLib.GError as e:
             logger.debug('Notify.Notification.show() failed: %s', e)
             return
-        notify.set_timeout(10000)
+        notification_obj.set_timeout(10000)
 
 
 def notify_plyer(msg):
@@ -123,6 +185,8 @@ def notify_plyer(msg):
 
     Linux distributions do not include plyer, so this is just for Windows.
     """
+    if not os.name == 'nt':
+        raise RuntimeError("notify_plyer() is only for Windows")
     from bleachbit import bleachbit_exe_path
 
     # On Windows 10,  PNG does not work.

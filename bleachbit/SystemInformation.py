@@ -29,11 +29,13 @@ import logging
 import locale
 import os
 import platform
+import re
 import sys
+from collections import OrderedDict
 
 # local
 import bleachbit
-from bleachbit.General import get_executable
+from bleachbit.General import get_executable, get_real_uid
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +73,67 @@ def get_gtk_info():
     return info
 
 
+def _get_home_dirs_to_anonymize():
+    """Return home directories that should be anonymized."""
+    home_dirs = []
+    home_dir = os.path.expanduser('~') or ''
+    home_dirs.append(home_dir)
+
+    if os.name == 'posix':
+        real_home_dir = ''
+        try:
+            # reminder: pwd is not available on Windows
+            import pwd  # pylint: disable=import-outside-toplevel
+            real_home_dir = pwd.getpwuid(get_real_uid()).pw_dir
+        except (ImportError, KeyError, RuntimeError, ValueError):
+            pass
+        home_dirs.append(real_home_dir)
+
+    # Filter out root directories and duplicates
+    filtered_dirs = []
+    for d in home_dirs:
+        if not d:
+            continue
+        if d in ('/', '/root'):
+            continue
+        if d not in filtered_dirs:
+            filtered_dirs.append(d)
+
+    return filtered_dirs
+
+
+def anonymize_system_information(text):
+    """Anonymize non-generic username in system information text.
+
+    root is not anonymized.
+    """
+    home_dirs = _get_home_dirs_to_anonymize()
+    home_token = '~' if os.name == 'posix' else '%userprofile%'
+
+    def mask_user_line(line):
+        """Mask username for environment variables"""
+        if not (line.startswith('os.getenv(LOGNAME)') or line.startswith('os.getenv(USER)')):
+            return line
+        key, _, value = line.partition(' = ')
+        if value and value != 'None' and value.strip() != 'root':
+            # replace specific non-root username with *non-root*
+            return f'{key} = *non-root*'
+        return line
+
+    anonymized_lines = []
+    for line in text.split('\n'):
+        for home_dir in home_dirs:
+            if os.name == 'nt':
+                # Windows paths are case-insensitive
+                line = re.sub(re.escape(home_dir), home_token,
+                              line, flags=re.IGNORECASE)
+            else:
+                line = line.replace(home_dir, home_token)
+        anonymized_lines.append(mask_user_line(line))
+
+    return '\n'.join(anonymized_lines)
+
+
 def get_version(four_parts=False):
     """Return version information as a string.
 
@@ -99,7 +162,6 @@ def get_version(four_parts=False):
 
 def get_system_information():
     """Return system information as a string."""
-    from collections import OrderedDict
     info = OrderedDict()
 
     # Application and library versions
@@ -114,9 +176,6 @@ def get_system_information():
         pass
 
     info.update(get_gtk_info())
-
-    import sqlite3
-    info['SQLite version'] = sqlite3.sqlite_version
 
     # Variables defined in __init__.py
     info['local_cleaners_dir'] = bleachbit.local_cleaners_dir

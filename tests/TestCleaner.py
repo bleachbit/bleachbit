@@ -30,8 +30,9 @@ import shutil
 from xml.dom.minidom import parseString
 
 import bleachbit
-from bleachbit.Action import ActionProvider
+from bleachbit.Action import ActionProvider, Command
 from bleachbit.Cleaner import Cleaner, backends, create_simple_cleaner, register_cleaners
+import bleachbit.FileUtilities
 
 from tests import common
 
@@ -55,10 +56,11 @@ def actions_to_cleaner(action_strs):
         for actionplugin in ActionProvider.plugins:
             if actionplugin.action_key == command:
                 provider = actionplugin(action_node)
-        cleaner.add_action('option%d' % count, provider)
-        cleaner.add_option('option%d' % count, 'name%d' %
-                           count, 'description%d' % count)
+        cleaner.add_action(f'option{count}', provider)
+        cleaner.add_option(
+            f'option{count}', f'name{count}', f'description{count}')
     return cleaner
+
 
 def register_all_cleaners():
     """Register all cleaners for testing
@@ -73,8 +75,8 @@ def register_all_cleaners():
         print(f"personal_cleaners_dir: {bleachbit.personal_cleaners_dir}")
         shutil.copyfile(
             get_winapp2(),
-                os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini'),
-            )
+            os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini'),
+        )
     if not backends:
         list(register_cleaners())
     assert len(backends) > 1
@@ -94,7 +96,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         elif 'posix' == os.name:
             print(__file__)
             self.actions += [
-                '<action command="delete" search="file" path="%s"/>' % __file__,
+                f'<action command="delete" search="file" path="{__file__}"/>',
                 '<action command="delete" search="glob" path="/bin/*sh"/>',
                 '<action command="delete" search="walk.files" path="/bin/"/>',
                 '<action command="delete" search="walk.all" path="/var/log/"/>']
@@ -110,10 +112,10 @@ class CleanerTestCase(common.BleachbitTestCase):
                     self.assertEqual(result['n_deleted'], 1)
                     pathname = result['path']
                     self.assertLExists(
-                        pathname, "Does not exist: '%s'" % pathname)
+                        pathname, f"Does not exist: '{pathname}'")
                     count += 1
                     common.validate_result(self, result)
-            self.assertGreater(count, 0, "No files found for %s" % action_str)
+            self.assertGreater(count, 0, f"No files found for {action_str}")
         # should yield nothing
         cleaner.add_option('option2', 'name2', 'description2')
         for cmd in cleaner.get_commands('option2'):
@@ -215,31 +217,44 @@ class CleanerTestCase(common.BleachbitTestCase):
             self.assertNotIn(tmp_path, trash_paths)
 
     def test_no_files_exist(self):
-        """Verify only existing files are returned"""
+        """Verify only existing files are returned
+
+        It monkeypatches file system functions to return no files.
+        Then, it tries every cleaning option.
+        """
         _exists = os.path.exists
         _iglob = glob.iglob
+        _isdir = os.path.isdir
         _lexists = os.path.lexists
+        _listdir = os.listdir
         _oswalk = os.walk
+        _fu_walk = bleachbit.FileUtilities.walk
         try:
             glob.iglob = lambda path, *args, **kwargs: []
             os.path.exists = lambda path: False
+            os.path.isdir = lambda path: False
             os.path.lexists = lambda path: False
-            os.walk = lambda top, topdown = True, onerror = None, followlinks = False: []
+            os.listdir = lambda path: []
+            os.walk = lambda top, topdown=True, onerror=None, followlinks=False: []
+            bleachbit.FileUtilities.walk = lambda top, topdown=True, onerror=None, followlinks=False: []
             for key in sorted(backends):
                 for (option_id, __name) in backends[key].get_options():
                     for cmd in backends[key].get_commands(option_id):
+                        # Some cleaners can still return a command, so next run
+                        # a preview.
                         for result in cmd.execute(really_delete=False):
-                            if result != True:
+                            if not result:
                                 break
-                            msg = "Expected no files to be deleted but got '%s'" % str(
-                                result)
+                            msg = f"Expected no files to be deleted but got '{result}'"
                             self.assertNotIsInstance(cmd, Command.Delete, msg)
-                            common.validate_result(self, result)
         finally:
             glob.iglob = _iglob
             os.path.exists = _exists
+            os.path.isdir = _isdir
             os.path.lexists = _lexists
+            os.listdir = _listdir
             os.walk = _oswalk
+            bleachbit.FileUtilities.walk = _fu_walk
 
     def test_register_cleaners(self):
         """Unit test for register_cleaners"""
@@ -247,7 +262,6 @@ class CleanerTestCase(common.BleachbitTestCase):
         register_all_cleaners()
         backends.clear()
         register_all_cleaners()
-
 
     @common.skipIfWindows  # FIXME later: reevaluate
     @common.skipUnlessDestructive

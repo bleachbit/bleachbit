@@ -12,13 +12,15 @@ import time
 import bleachbit
 from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path
 from bleachbit.Cleaner import backends, register_cleaners
-from bleachbit.Constant import ABORT_BUTTON_LABEL, MANAGE_COOKIES_TO_KEEP
+from bleachbit.Constant import ABORT_BUTTON_LABEL
 from bleachbit.GUI import logger
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiPreferences import PreferencesDialog
+from bleachbit.GuiStartup import get_startup_messages
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
-from bleachbit.GuiUtil import get_font_size_from_name, get_window_info, notify, threaded
-from bleachbit.Language import get_text as _, pget_text as _p
+from bleachbit.GuiUtil import (detect_dark_background, get_font_size_from_name,
+                               get_window_info, notify, threaded)
+from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 from bleachbit.Wipe import detect_orphaned_wipe_files
 
@@ -36,6 +38,11 @@ PREVIEW_MSG = _('Preview')
 # 'Clean' is a verb.
 CLEAN_MSG = _('Clean')
 
+# TRANSLATORS: Button in tree view's context menu to open the cookie
+# manager.
+# Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
+MANAGE_COOKIES_TO_KEEP = _("Manage cookies to keep\u2026")
+
 # Ensure GTK is available for this GUI module
 require_gtk()
 
@@ -45,6 +52,8 @@ class GUI(Gtk.ApplicationWindow):
     _style_provider = None
     _style_provider_regular = None
     _style_provider_dark = None
+    _error_tag_color = None
+    _showed_startup_messages = False
 
     def __init__(self, auto_exit, *args, **kwargs):
         super(GUI, self).__init__(*args, **kwargs)
@@ -194,8 +203,11 @@ class GUI(Gtk.ApplicationWindow):
         tt.add(style_option_label)
 
         style_operation = Gtk.TextTag.new('error')
-        style_operation.set_property('foreground', '#b00000')
         tt.add(style_operation)
+        # This event fires when the theme changes, e.g., the system
+        # theme changes or the application changes its style.
+        self.textview.connect('style-updated', self._update_error_tag_color)
+        self._update_error_tag_color()
 
         self.status_bar = Gtk.Statusbar()
         vbox.add(self.status_bar)
@@ -205,6 +217,34 @@ class GUI(Gtk.ApplicationWindow):
         self.show_all()
         self.progressbar.hide()
         self.infobar.hide()
+
+    def _update_error_tag_color(self, *_args):
+        """Ensure error messages stay high contrast in current theme"""
+        if not self.textbuffer:
+            return
+
+        tag_table = self.textbuffer.get_tag_table()
+        if not tag_table:
+            return
+
+        error_tag = tag_table.lookup('error')
+        if not error_tag:
+            return
+
+        light_theme_color = '#b00000'
+        dark_theme_color = '#ff6b6b'
+        dark_background = options.get('dark_mode')
+
+        detected_dark = detect_dark_background(self.textview)
+        if detected_dark is not None:
+            dark_background = detected_dark
+
+        chosen_color = dark_theme_color if dark_background else light_theme_color
+        if self._error_tag_color is not None and not self._error_tag_color == chosen_color:
+            logger.debug("Updating error tag color from %s to %s",
+                         self._error_tag_color, chosen_color)
+        error_tag.set_property('foreground', chosen_color)
+        self._error_tag_color = chosen_color
 
     def _get_windows10_theme_css(self):
         """Load the Windows 10 theme CSS files (if not already loaded)"""
@@ -280,9 +320,15 @@ class GUI(Gtk.ApplicationWindow):
         if os.name != 'nt':
             return
 
+        # Check if splash screen is forced via environment variable
+        splash_delay = os.environ.get('BLEACHBIT_SPLASH_SCREEN_DELAY')
+        if splash_delay is not None:
+            Windows.splash_thread.start()
+            return
+
         font_conf_file = Windows.get_font_conf_file()
         if not os.path.exists(font_conf_file):
-            logger.error('No fonts.conf file {}'.format(font_conf_file))
+            logger.error('No fonts.conf file %s', font_conf_file)
             return
 
         has_cache = Windows.has_fontconfig_cache(font_conf_file)
@@ -324,7 +370,7 @@ class GUI(Gtk.ApplicationWindow):
                 self.unfullscreen()
             else:
                 self.fullscreen()
-            options.set("window_fullscreen", is_fullscreen, commit=False)
+            options.set("window_fullscreen", is_fullscreen)
             return True
         if not ctrl:
             return False
@@ -379,14 +425,14 @@ class GUI(Gtk.ApplicationWindow):
 
         return False
 
-    def on_quit(self, *args):
+    def on_quit(self, *_args):
         """Quit the application, used with CTRL+Q or CTRL+W"""
         if Gtk.main_level() > 0:
             Gtk.main_quit()
         else:
             self.destroy()
 
-    def _on_infobar_response(self, infobar, response_id):
+    def _on_infobar_response(self, _infobar, _response_id):
         """Handle InfoBar close button click"""
         timeout_id = getattr(self, '_infobar_timeout_id', None)
         if timeout_id is not None:
@@ -422,7 +468,7 @@ class GUI(Gtk.ApplicationWindow):
             return GuiBasic.delete_confirmation_dialog(self, mention_preview, shred_settings=shred_settings)
         return True
 
-    def destroy(self):
+    def destroy(self, *_args):
         """Prevent textbuffer usage during UI destruction"""
         self.textbuffer = None
         super(GUI, self).destroy()
@@ -432,6 +478,18 @@ class GUI(Gtk.ApplicationWindow):
             self,
             self.cb_refresh_operations,
             self.set_windows10_theme)
+
+    def show_preferences_dialog(self, page_name=None):
+        """Show the preferences dialog.
+
+        Args:
+            page_name: The name of the page to open, or None for the default page.
+        """
+        pref = self.get_preferences_dialog()
+        pref.run(page_name)
+        if pref.refresh_operations:
+            self.cb_refresh_operations()
+        self.update_log_level()
 
     def shred_paths(self, paths, shred_settings=False):
         """Shred file or folders
@@ -625,7 +683,7 @@ class GUI(Gtk.ApplicationWindow):
                 # TRANSLATORS: Error message shown in the infobar when the user clicks
                 # the preview or clean button without selecting any cleaner options.
                 _("You must select an operation"),
-                              Gtk.MessageType.ERROR)
+                Gtk.MessageType.ERROR)
             return
         try:
             self.set_sensitive(False)
@@ -714,57 +772,22 @@ class GUI(Gtk.ApplicationWindow):
         # expand tree view
         self.view.expand_all()
 
+        if self._showed_startup_messages:
+            # remove from idle loop (see GObject.idle_add)
+            return False
+
+        startup_msgs = get_startup_messages(self._auto_exit)
+        for (msg, is_error) in startup_msgs:
+            self.append_text(msg + '\n', 'error' if is_error else None)
+
         # Check for online updates.
+        # Do this after unset_sslkeylogfile.
         if not self._auto_exit and \
-            bleachbit.online_update_notification_enabled and \
-            options.get("check_online_updates") and \
-                not hasattr(self, 'checked_for_updates'):
-            self.checked_for_updates = True
+                bleachbit.online_update_notification_enabled and \
+                options.get("check_online_updates"):
             self.check_online_updates()
 
-        # Show information for first start.
-        # (The first start flag is set also for each new version.)
-        if options.get("first_start") and not self._auto_exit:
-            if os.name == 'posix':
-                self.append_text(
-                    # TRANSLATORS: First-start hint for Linux users shown in
-                    # the log on the main screen.
-                    _('Access the application menu by clicking the hamburger icon on the title bar.'))
-                pref = self.get_preferences_dialog()
-                pref.run()
-            elif os.name == 'nt':
-                self.append_text(
-                    # TRANSLATORS: First-start hint for Windows users shown in
-                    # the log on the main screen.
-                    _('Access the application menu by clicking the logo on the title bar.'))
-            options.set('first_start', False)
-
-        # Show notice about admin privileges.
-        if os.name == 'posix' and os.path.expanduser('~') == '/root':
-            self.append_text(
-                # TRANSLATORS: Warning shown on startup when running BleachBit as root on Linux.
-                # It means, for example, that cleaning a browser will clean root's browser data.
-                _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.') + '\n')
-        if os.name == 'nt' and options.get('shred'):
-            from win32com.shell.shell import IsUserAnAdmin
-            if not IsUserAnAdmin():
-                self.append_text(
-                    # TRANSLATORS: Warning shown on startup on Windows.
-                    _('Run BleachBit with administrator privileges to improve the accuracy of overwriting the contents of files.'))
-                self.append_text('\n')
-        if os.name == 'nt' and Windows.is_ots_elevation():
-            self.append_text(
-                # TRANSLATORS: Warning shown on startup on Windows when elevated with different account.
-                # It means, for example, that cleaning a browser will clean the browser data of the administrator account.
-                _('You elevated privileges using a different account to clean shared parts of the system. User-specific paths will refer to the administrator account, so to clean your profile, run BleachBit again as a standard user.') + '\n')
-
-        if 'windowsapps' in sys.executable.lower():
-            self.append_text(
-                # TRANSLATORS: Warning shown on startup on Windows when running unofficial Microsoft Store version.
-                # Advises user to get genuine version from official website.
-                _('There is no official version of BleachBit on the Microsoft Store. Get the genuine version at https://www.bleachbit.org where it is always free of charge.') + '\n', 'error')
-
-        # remove from idle loop (see GObject.idle_add)
+        self._showed_startup_messages = True
         return False
 
     def cb_run_option(self, widget, really_delete, cleaner_id, option_id):
@@ -793,23 +816,12 @@ class GUI(Gtk.ApplicationWindow):
         self.worker.abort()
 
     def cb_manage_cookies(self, widget):
-        """Callback to launch the cookie manager dialog"""
-        from bleachbit.GuiCookie import CookieManagerDialog
-        dialog = CookieManagerDialog()
-        dialog.show_all()
+        """Callback to launch the preferences dialog with Cookies page"""
+        self.show_preferences_dialog('cookies')
 
     def cb_manage_custom_paths(self, widget):
-        """Callback to launch the preferences dialog with Custom tab"""
-        pref = self.get_preferences_dialog()
-        pref.dialog.show_all()
-        pref.infobar.hide()
-        # Switch to Custom tab (index 1: General=0, Custom=1)
-        notebook = pref.dialog.get_content_area().get_children()[1]
-        notebook.set_current_page(1)
-        pref.dialog.run()
-        pref.dialog.destroy()
-        if pref.refresh_operations:
-            self.cb_refresh_operations()
+        """Callback to launch the preferences dialog with Custom page"""
+        self.show_preferences_dialog('custom')
 
     def _option_has_cookie_command(self, cleaner_id, option_id):
         """Return True if the given option runs a cookie command."""
@@ -875,7 +887,7 @@ class GUI(Gtk.ApplicationWindow):
         return True
 
     def setup_drag_n_drop(self):
-        def cb_drag_data_received(widget, _context, _x, _y, data, info, _time):
+        def cb_drag_data_received(_widget, _context, _x, _y, data, info, _time):
             if info == 80:
                 uris = data.get_uris()
                 paths = FileUtilities.uris_to_paths(uris)
@@ -888,8 +900,7 @@ class GUI(Gtk.ApplicationWindow):
 
         setup_widget(self)
         setup_widget(self.textview)
-        self.textview.connect('drag_motion', lambda widget,
-                              context, x, y, time: True)
+        self.textview.connect('drag_motion', lambda *_: True)
 
     def update_progress_bar(self, status):
         """Callback to update the progress bar with number or text"""
@@ -914,7 +925,7 @@ class GUI(Gtk.ApplicationWindow):
             __iter = model.get_iter(treepath)
         except ValueError:
             logger.warning(
-                'ValueError in get_iter() when updating file size for tree path=%s' % treepath)
+                'ValueError in get_iter() when updating file size for tree path=%s', treepath)
             return
         while __iter:
             if model[__iter][2] == option:
@@ -960,7 +971,7 @@ class GUI(Gtk.ApplicationWindow):
             # and 'abort' ia a verb.
             _('Abort the preview or cleaning process'))
 
-    def on_update_button_clicked(self, widget):
+    def on_update_button_clicked(self, _widget):
         """Callback when the update button on the headerbar is clicked"""
         if not (hasattr(self, '_available_updates') and self._available_updates):
             return
@@ -968,7 +979,7 @@ class GUI(Gtk.ApplicationWindow):
         self.update_button.get_style_context().remove_class('update-available')
         updates = self._available_updates
         if len(updates) == 1:
-            ver, url = updates[0]
+            _ver, url = updates[0]
             GuiBasic.open_url(url, self, False)
             return
         # If multiple updates are available, find out which one the user wants.
@@ -1074,7 +1085,7 @@ class GUI(Gtk.ApplicationWindow):
         self.update_headerbar_labels()
         return hbar
 
-    def on_configure_event(self, widget, event):
+    def on_configure_event(self, _widget, _event):
         (x, y) = self.get_position()
         (width, height) = self.get_size()
 
@@ -1085,19 +1096,19 @@ class GUI(Gtk.ApplicationWindow):
             if window.get_state() & Gdk.WindowState.MAXIMIZED != 0:
                 g = get_window_info(self)
                 if x < g.x or x >= g.x + g.width or y < g.y or y >= g.y + g.height:
-                    logger.debug("Maximized window {}+{}: {}".format(
-                        (x, y), (width, height), str(g)))
+                    logger.debug("Maximized window %s+%s: %s",
+                                 (x, y), (width, height), str(g))
                     self.move(g.x, g.y)
                     return True
 
         # save window position and size
-        options.set("window_x", x, commit=False)
-        options.set("window_y", y, commit=False)
-        options.set("window_width", width, commit=False)
-        options.set("window_height", height, commit=False)
+        options.set("window_x", x)
+        options.set("window_y", y)
+        options.set("window_width", width)
+        options.set("window_height", height)
         return False
 
-    def on_window_state_event(self, widget, event):
+    def on_window_state_event(self, _widget, event):
         """Save window state
 
         GTK version 3.24.34 on Windows 11 behaves strangely:
@@ -1116,17 +1127,17 @@ class GUI(Gtk.ApplicationWindow):
         is_tiled = event.new_window_state & tiling_states != 0
         fullscreen = (event.new_window_state &
                       Gdk.WindowState.FULLSCREEN != 0) and not is_tiled
-        options.set("window_fullscreen", fullscreen, commit=False)
+        options.set("window_fullscreen", fullscreen)
         maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
-        options.set("window_maximized", maximized, commit=False)
+        options.set("window_maximized", maximized)
         if 'nt' == os.name:
             logger.debug(
-                f'window state = {event.new_window_state}, full screen = {fullscreen}, maximized = {maximized}')
+                'window state = %s, full screen = %s, maximized = %s', event.new_window_state, fullscreen, maximized)
         return False
 
-    def on_delete_event(self, widget, event):
+    def on_delete_event(self, _widget, _event):
         # commit options to disk
-        options.commit()
+        options.close()
         return False
 
     def on_show(self, _widget):
@@ -1154,8 +1165,8 @@ class GUI(Gtk.ApplicationWindow):
             # is within the closest monitor
             if r.x >= g.x and r.x < g.x + g.width and \
                r.y >= g.y and r.y < g.y + g.height:
-                logger.debug("closest monitor {}, prior window geometry = {}+{}".format(
-                    str(g), (r.x, r.y), (r.width, r.height)))
+                logger.debug("closest monitor %s, prior window geometry = %s+%s",
+                             str(g), (r.x, r.y), (r.width, r.height))
                 self.move(r.x, r.y)
                 self.resize(r.width, r.height)
         if options.get("window_fullscreen"):

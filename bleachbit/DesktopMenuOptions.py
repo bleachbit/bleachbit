@@ -1,10 +1,13 @@
-from bleachbit.Options import options
+"""Helper utilities to install optional desktop service menus."""
 
 import os
 from pathlib import Path
 
+from bleachbit.Options import options
+
 
 def install_kde_service_menu_file():
+    """Create or remove the KDE service menu entry for shredding."""
     try:
         # Honor the XDG Base Directory Specification first
         # and check if $XDG_DATA_HOME has already been defined.

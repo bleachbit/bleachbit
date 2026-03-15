@@ -669,7 +669,7 @@ class System(Cleaner):
 def _is_process_running(exename, require_same_user):
     if 'posix' == os.name:
         return Unix.is_process_running(exename, require_same_user)
-    elif 'nt' == os.name:
+    if 'nt' == os.name:
         return Windows.is_process_running(exename, require_same_user)
     raise NotImplementedError('_is_process_running: Unsupported platform')
 

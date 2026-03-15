@@ -140,8 +140,9 @@ def _get_random_recipient():
 
 
 def _get_random_datetime(min_year=2011, max_year=2012):
-    date = datetime.strptime('{} {}'.format(random.randint(
-        1, 365), random.randint(min_year, max_year)), '%j %Y')
+    date = datetime.strptime(
+        f'{random.randint(1, 365)} {random.randint(min_year, max_year)}',
+        '%j %Y')
     # Saturday, September 15, 2012 2:20 PM
     return date.strftime('%A, %B %d, %Y %I:%M %p')
 
@@ -200,7 +201,7 @@ def generate_emails(number_of_emails,
                     number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_CLINTON,
                     on_progress=None,
                     should_stop=None,
-                    *kwargs):
+                    *_kwargs):
     logger.debug('Loading two email models')
     subject_model_path = os.path.join(
         models_dir, 'clinton_subject_model.json.bz2')
@@ -208,7 +209,7 @@ def generate_emails(number_of_emails,
         models_dir, 'clinton_content_model.json.bz2')
     subject_model = load_subject_model(subject_model_path)
     content_model = load_content_model(content_model_path)
-    logger.debug('Generating {:,} emails'.format(number_of_emails))
+    logger.debug('Generating %s emails', f'{number_of_emails:,}')
     generated_file_names = []
     cumulative_size = 0
     for i in range(1, number_of_emails + 1):
@@ -245,7 +246,7 @@ def generate_2600(file_count,
     logger.debug('Loading 2600 model')
     model_path = os.path.join(model_dir, '2600_model.json.bz2')
     model = _load_model(model_path)
-    logger.debug(f'Generating {file_count:,} files')
+    logger.debug('Generating %s files', f'{file_count:,}')
     generated_file_names = []
     cumulative_size = 0
     for i in range(1, file_count + 1):

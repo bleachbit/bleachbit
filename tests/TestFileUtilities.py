@@ -552,8 +552,9 @@ State=AAAA/wA...
     def test_delete(self):
         """Unit test for method delete()"""
         for shred in (False, True):
-            with self.subTest(shred=shred):
-                self.delete_helper(shred=shred)
+            for delete_func in (delete, delete_file):
+                with self.subTest(delete_func=delete_func.__name__, shred=shred):
+                    self.delete_helper(delete_func, shred=shred)
 
     def test_delete_ignore_missing(self):
         """Unit test for delete() with ignore_missing=True"""
@@ -571,7 +572,7 @@ State=AAAA/wA...
                 delete(path, shred=False)
         self.assertExists(path)
 
-    def delete_helper(self, shred):
+    def delete_helper(self, delete_func, shred):
         """Called by test_delete() with shred = False and = True"""
 
         # test deleting with various kinds of filenames
@@ -600,12 +601,13 @@ State=AAAA/wA...
             # create the file
             filename = self.write_file(test, b"top secret")
             # delete the file
-            self.assertTrue(delete(filename, shred))
+            self.assertTrue(delete_func(filename, shred))
             self.assertNotExists(filename)
 
             # delete an empty directory
             dirname = self.mkdtemp(prefix=test)
             self.assertExists(dirname)
+            # delete_file() doesn't delete directories, so do not use delete_func.
             self.assertTrue(delete(dirname, shred))
             self.assertNotExists(dirname)
 
@@ -770,7 +772,7 @@ State=AAAA/wA...
 
                 if delete_expected:
                     # Delete expected to suceed.
-                    delete_file(filename, shred)
+                    self.assertTrue(delete_file(filename, shred))
                 else:
                     # Delete expected to fail.
                     # pylint: disable=undefined-variable

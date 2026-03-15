@@ -200,9 +200,23 @@ class GUITestCase(common.BleachbitTestCase):
         # destroy
         pref.dialog.destroy()
 
+    def test_preferences_cookies_page(self):
+        """Opens the preferences dialog and navigates to cookies page"""
+        pref = self.app.get_preferences_dialog()
+        pref.dialog.show_all()
+        self.refresh_gui()
+
+        # Navigate to cookies page - this will trigger cookie manager loading
+        pref.select_page('cookies')
+        self.refresh_gui()
+
+        # click close button
+        self.click_button(pref.dialog, Gtk.STOCK_CLOSE)
+        pref.dialog.destroy()
+
     def test_system_information(self):
         """Opens the system information dialog and closes it"""
-        dialog, txt = self.app.get_system_information_dialog()
+        dialog, _txt, _txtbuffer = self.app.get_system_information_dialog()
         dialog.show_all()
         self.refresh_gui()
 
@@ -226,7 +240,8 @@ class GUITestCase(common.BleachbitTestCase):
         import bleachbit.GuiChaff
         import bleachbit.Chaff
         # common.py patches the download directory, so have_models() will return False.
-        bleachbit.Chaff.download_models()
+        if not bleachbit.Chaff.download_models():
+            self.skipTest('Unable to download chaff models for GUI test')
         gui = self.app._window
         cd = bleachbit.GuiChaff.ChaffDialog(gui)
         cd.show_all()
@@ -243,9 +258,48 @@ class GUITestCase(common.BleachbitTestCase):
         cd.stop_value_spin.set_value(10)
         self.refresh_gui()
         self.click_button(cd, _("Make files"))
+        self.assertIsNotNone(
+            cd.thread, 'Chaff generation thread did not start')
         cd.thread.join()
         self.refresh_gui()
         self.assertEqual(len(os.listdir(chaff_dst_dir)), 10)
+
+    def test_cookie_manager_bulk_actions_wait_for_loading(self):
+        """Bulk cookie actions should not save until loading finishes"""
+        import bleachbit.GuiCookie
+
+        class FakeThread:
+            def __init__(self, target=None, daemon=None):
+                self.target = target
+                self.daemon = daemon
+
+            def start(self):
+                return None
+
+        with mock.patch('bleachbit.GuiCookie.threading.Thread', FakeThread):
+            pane = bleachbit.GuiCookie.CookieManagerPane()
+
+        self.assertTrue(pane._is_loading)
+        self.assertFalse(pane.select_all_btn.get_sensitive())
+        self.assertFalse(pane.deselect_all_btn.get_sensitive())
+
+        with mock.patch.object(pane, 'save_changes') as save_changes:
+            pane.on_select_all_clicked(None)
+            pane.on_deselect_all_clicked(None)
+            save_changes.assert_not_called()
+
+        pane._finish_populate(['example.com'])
+        self.refresh_gui()
+
+        self.assertFalse(pane._is_loading)
+        self.assertTrue(pane.select_all_btn.get_sensitive())
+        self.assertTrue(pane.deselect_all_btn.get_sensitive())
+
+        with mock.patch.object(pane, 'save_changes') as save_changes:
+            pane.on_select_all_clicked(None)
+            save_changes.assert_called_once_with()
+        self.assertTrue(all(row[0] for row in pane.cookie_store))
+        pane.destroy()
 
     def test_preview(self):
         """Select cleaner option and clicks preview button"""
@@ -253,7 +307,7 @@ class GUITestCase(common.BleachbitTestCase):
         self.refresh_gui()
         self._put_checkmark_on_cleaner(gui, 'system', 'tmp')
         self.refresh_gui()
-        b = self.click_button(gui, _("Preview"))
+        self.click_button(gui, _("Preview"))
         self.refresh_gui()
 
     def test_notify(self):
@@ -268,7 +322,7 @@ class GUITestCase(common.BleachbitTestCase):
         options.set('expert_mode', True)
         for new_delete_confirmation in [True, False]:
             options.set('delete_confirmation',
-                        new_delete_confirmation, commit=False)
+                        new_delete_confirmation)
             gui._confirm_delete(False, False)
 
         # We should have a single call to delete_confirmation_dialog

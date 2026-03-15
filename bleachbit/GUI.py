@@ -24,15 +24,12 @@ GTK graphical user interface
 # standard library
 import logging
 
-# third party import (via centralized shim)
 from bleachbit.GtkShim import require_gtk
+from bleachbit.Log import set_root_log_level
+from bleachbit.Options import options  # keep
 
 # Ensure GTK is available for this GUI module
 require_gtk()
-
-# local
-from bleachbit.Log import set_root_log_level
-from bleachbit.Options import options # keep
 
 # Now that the configuration is loaded, honor the debug preference there.
 set_root_log_level(options.get('debug'))

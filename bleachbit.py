@@ -27,6 +27,24 @@ import sys
 
 have_gui = True
 
+
+def _apply_fontconfig_backend_preference():
+    """On Windows, set PANGOCAIRO_BACKEND=fc if the user chose fontconfig.
+
+    It is important that this runs before Gtk.
+    """
+    if os.name != 'nt':
+        return
+    try:
+        from bleachbit.Options import options
+        if options.get('use_fontconfig_backend'):
+            os.environ['PANGOCAIRO_BACKEND'] = 'fc'
+    except Exception:
+        pass
+
+
+_apply_fontconfig_backend_preference()
+
 if 'posix' == os.name:
     if os.path.isdir('/usr/share/bleachbit'):
         # This path contains bleachbit/{C,G}LI.py .  This section is

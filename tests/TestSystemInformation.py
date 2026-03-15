@@ -23,8 +23,13 @@
 Test case for module SystemInformation
 """
 
+import os
+import re
+from unittest import mock
+
+
 from tests import common
-from bleachbit.SystemInformation import get_system_information, get_version
+from bleachbit.SystemInformation import get_system_information, get_version, anonymize_system_information
 
 
 class SystemInformationTestCase(common.BleachbitTestCase):
@@ -46,3 +51,106 @@ class SystemInformationTestCase(common.BleachbitTestCase):
         self.assertIsString(ret)
         # check it is in a.b.c.d format
         self.assertRegex(ret, r'^\d+\.\d+\.\d+\.\d+$')
+
+    @common.skipIfWindows
+    def test_anonymize_system_information_posix_non_root(self):
+        """Test anonymization on POSIX with a non-root home directory."""
+        home_dir = os.path.expanduser('~')
+        if home_dir in ('/root', '/'):
+            self.skipTest('requires a non-root POSIX home directory')
+
+        test_input = f"""BleachBit version = 5.1.0
+local_cleaners_dir = {home_dir}/.local/share/bleachbit/cleaners
+options_dir = {home_dir}/.config/bleachbit
+os.getenv(LOGNAME) = testuser
+os.getenv(USER) = testuser
+os.getenv(SUDO_UID) = 1000"""
+
+        result = anonymize_system_information(test_input)
+
+        self.assertIn(
+            'local_cleaners_dir = ~/.local/share/bleachbit/cleaners', result)
+        self.assertIn('options_dir = ~/.config/bleachbit', result)
+        self.assertNotIn(home_dir, result)
+        self.assertNotIn(home_dir.lower(), result.lower())
+        self.assertIn('os.getenv(LOGNAME) = *non-root*', result)
+        self.assertIn('os.getenv(USER) = *non-root*', result)
+        self.assertIn('os.getenv(SUDO_UID) = 1000', result)
+
+    @common.skipUnlessWindows
+    def test_anonymize_system_information_windows(self):
+        """Test anonymization on Windows with environment variables."""
+        home_dir = os.path.expanduser('~')
+        test_input = f"""os.getenv(APPDATA) = {home_dir.upper()}\\AppData\\Roaming
+os.getenv(USERPROFILE) = {home_dir.lower()}
+os.getenv(LocalAppData) = {home_dir}\\AppData\\Local"""
+
+        result = anonymize_system_information(test_input)
+
+        self.assertIn(
+            'os.getenv(APPDATA) = %userprofile%\\AppData\\Roaming', result)
+        self.assertIn(
+            'os.getenv(USERPROFILE) = %userprofile%', result)
+        self.assertIn(
+            'os.getenv(LocalAppData) = %userprofile%\\AppData\\Local', result)
+        self.assertIsNone(re.search(re.escape(home_dir),
+                          result, flags=re.IGNORECASE))
+
+    def test_anonymize_system_information_preserves_non_sensitive_data(self):
+        """Test that non-sensitive data remains unchanged during anonymization."""
+        test_unchanged = """BleachBit version = 5.1.0
+gi.version = 3.55.0
+GTK version = 3.24.51"""
+
+        result = anonymize_system_information(test_unchanged)
+        self.assertEqual(test_unchanged, result)
+
+    def test_anonymize_system_information_preserves_root(self):
+        """Root username should not be mislabeled as non-root."""
+        test_input = """BleachBit version = 5.1.0
+local_cleaners_dir = /root/.local/share/bleachbit/cleaners
+options_dir = /root/.config/bleachbit
+personal_cleaners_dir = /root/.config/bleachbit/cleaners
+os.getenv(LOGNAME) = root
+os.getenv(USER) = root
+os.getenv(SUDO_UID) = 1000
+os.path.expanduser(~") = /root"""
+        result = anonymize_system_information(test_input)
+        self.assertEqual(test_input, result)
+
+    def test_anonymize_system_information_masks_real_home_dir(self):
+        """Preserve /root while anonymizing the real non-root home directory."""
+        # Mixing /root and user-specific paths is a normal scenario when
+        # running from source `sudo python3 bleachbit.py`.
+        test_input = """personal_cleaners_dir = /root/.config/bleachbit/cleaners
+system_cleaners_dir = /home/regularuser/software/bleachbit/cleaners
+__file__ = /home/regularuser/software/bleachbit/bleachbit/SystemInformation.py"""
+        home_token = '~' if os.name == 'posix' else '%userprofile%'
+
+        with mock.patch('bleachbit.SystemInformation._get_home_dirs_to_anonymize',
+                        return_value=['/home/regularuser']):
+            result = anonymize_system_information(test_input)
+
+        self.assertIn(
+            f'system_cleaners_dir = {home_token}/software/bleachbit/cleaners', result)
+        self.assertIn(
+            f'__file__ = {home_token}/software/bleachbit/bleachbit/SystemInformation.py', result)
+        self.assertNotIn('/home/regularuser', result)
+
+    def test_anonymize_preserves_structure(self):
+        """Test that anonymization preserves the structure of system information"""
+        # This is the only anonymization test with the real get_system_information().
+        original = get_system_information()
+        anonymized = anonymize_system_information(original)
+
+        # Both should have the same number of lines
+        self.assertEqual(len(original.split('\n')),
+                         len(anonymized.split('\n')))
+
+        # Both should have the same number of equal signs (key-value delimiters)
+        self.assertEqual(original.count(' = '), anonymized.count(' = '))
+
+        # Both should be non-empty strings
+        self.assertIsString(original)
+        self.assertIsString(anonymized)
+        self.assertTrue(len(anonymized) > 0)

@@ -88,8 +88,8 @@ def disable_swap_linux():
             continue
         ret = parse_swapoff(line)
         if ret is None:
-            raise RuntimeError("Unexpected output:\nargs='%(args)s'\nstdout='%(stdout)s'\nstderr='%(stderr)s'"
-                               % {'args': str(args), 'stdout': stdout, 'stderr': stderr})
+            raise RuntimeError(f"Unexpected output:\nargs='{args}'\n"
+                               f"stdout='{stdout}'\nstderr='{stderr}'")
         devices.append(ret)
     return devices
 
@@ -117,8 +117,10 @@ def make_self_oom_target_linux():
     try:
         uid = General.get_real_uid()
         if uid > 0:
-            logger.debug(
-                _("Dropping privileges of process ID {pid} to user ID {uid}.").format(pid=os.getpid(), uid=uid))
+            # TRANSLATORS: Debug message when a process gives up root/admin privileges.
+            # %(pid)d is the integer process ID; %(uid)d is the integer user ID to switch to.
+            drop_msg = _("Dropping privileges of process ID %(pid)d to user ID %(uid)d.")
+            logger.debug(drop_msg, {'pid': os.getpid(), 'uid': uid})
             os.seteuid(uid)
     except:
         logger.exception('Error when dropping privileges')
@@ -171,8 +173,12 @@ def get_swap_uuid(device):
         ret = re.search(r"^%s: UUID=\"([a-z0-9-]+)\"" % device, line)
         if ret is not None:
             uuid = ret.group(1)
-    logger.debug(_("Found UUID for swap file {device} is {uuid}.").format(
-        device=device, uuid=uuid))
+    # TRANSLATORS: Debug message. 'Found' is a past tense verb (short for
+    # "Found [that] the UUID for swap device ..."). %(device)s is the device
+    # path (e.g., /dev/sda5); %(uuid)s is a UUID string
+    # (e.g., ee0e85f6-6e5c-42b9-902f-776531938bbf). Do not translate variables.
+    logger.debug(_("Found UUID for swap device %(device)s is %(uuid)s."),
+                 {'device': device, 'uuid': uuid})
     return uuid
 
 
@@ -276,8 +282,8 @@ def wipe_swap_linux(devices, proc_swaps):
         actual_size_bytes = get_swap_size_linux(device, proc_swaps)
         if actual_size_bytes > safety_limit_bytes:
             raise RuntimeError(
-                'swap device %s is larger (%d) than expected (%d)' %
-                (device, actual_size_bytes, safety_limit_bytes))
+                f'swap device {device} is larger ({actual_size_bytes})'
+                f' than expected ({safety_limit_bytes})')
         uuid = get_swap_uuid(device)
         # wipe
         wipe_contents(device, truncate=False)
@@ -312,9 +318,11 @@ def wipe_memory():
         fill_memory_linux()
         os._exit(0)
     else:
-        # TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
-        logger.debug(_("The function wipe_memory() with process ID {pid} is waiting for child process ID {cid}.").format(
-                     pid=os.getpid(), cid=child_pid))
+        # TRANSLATORS: This is a debugging message that the parent process
+        # is waiting for the child process.
+        logger.debug(_("The function wipe_memory() with process ID %d is "
+                       "waiting for child process ID %d."),
+                     os.getpid(), child_pid)
         rc = os.waitpid(child_pid, 0)[1]
         if rc not in [0, 9]:
             logger.warning(

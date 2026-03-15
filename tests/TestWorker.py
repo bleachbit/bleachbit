@@ -9,6 +9,7 @@
 Test case for module Worker
 """
 
+import errno
 import os
 import tempfile
 
@@ -33,7 +34,6 @@ class AccessDeniedActionAction(ActionProvider):
     def get_commands(self):
         # access denied, should fail and continue
         def accessdenied():
-            import errno
             raise OSError(
                 errno.EACCES, 'Permission denied: c:\\access\\denied', 'c:\\access\\denied')
         yield Command.Function(None, accessdenied, 'Test access denied')
@@ -83,7 +83,7 @@ class FunctionPathAction(ActionProvider):
 
     def get_commands(self):
         # function with path, should succeed
-        def pathfunc(path):
+        def pathfunc(_path):
             pass
         # self.pathname must exist because it checks the file size
         yield Command.Function(self.pathname, pathfunc, 'pathfunc')

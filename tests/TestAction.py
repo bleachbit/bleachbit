@@ -549,6 +549,7 @@ class ActionTestCase(common.BleachbitTestCase):
                     self.assertTrue(cleaner.auto_hide())
                     mock_run_external.assert_not_called()
 
+
 def main():
     """Main function"""
     if 1 < len(sys.argv) and 'benchmark' == sys.argv[1]:

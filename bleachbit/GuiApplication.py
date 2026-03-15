@@ -15,12 +15,22 @@ from bleachbit.GUI import logger
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiWindow import GUI
 from bleachbit.Language import get_text as _
+from bleachbit.Options import options
 
 # Ensure GTK is available for this GUI module
 require_gtk()
 
+# Constants for dialog response codes
+RESPONSE_ANONYMIZE = 101
+RESPONSE_COPY = 100
+
 if os.name == 'nt':
     from bleachbit import Windows
+    from bleachbit.FontCheckDialog import (
+        create_font_check_dialog,
+        RESPONSE_TEXT_BLURRY,
+        RESPONSE_TEXT_UNREADABLE,
+    )
 
 
 class Bleachbit(Gtk.Application):
@@ -42,6 +52,8 @@ class Bleachbit(Gtk.Application):
             self, application_id=application_id, flags=Gio.ApplicationFlags.FLAGS_NONE)
         GLib.set_prgname('org.bleachbit.BleachBit')
 
+        self._font_check_prompt_scheduled = False
+
         if auto_exit:
             # This is used for automated testing of whether the GUI can start.
             # It is called from assert_execute_console() in windows/setup.py
@@ -60,6 +72,9 @@ class Bleachbit(Gtk.Application):
         is_context_menu_executed = auto_exit and shred_paths
         if not os.name == 'nt':
             return ''
+        env_suffix = os.environ.pop('BLEACHBIT_APP_INSTANCE_SUFFIX', '')
+        if env_suffix:
+            application_id_suffix = env_suffix
         if Windows.elevate_privileges(uac):
             # privileges escalated in other process
             sys.exit(0)
@@ -174,7 +189,8 @@ class Bleachbit(Gtk.Application):
             # Plain text pasted from a text editor
             text = clipboard.wait_for_text()
             if text:
-                shred_paths = [p.strip() for p in text.splitlines() if p.strip()]
+                shred_paths = [p.strip()
+                               for p in text.splitlines() if p.strip()]
         if shred_paths:
             GUI.shred_paths(self._window, shred_paths)
         else:
@@ -236,11 +252,7 @@ class Bleachbit(Gtk.Application):
 
     def cb_preferences_dialog(self, action, param):
         """Callback for preferences dialog"""
-        pref = self.get_preferences_dialog()
-        pref.run()
-
-        # In case the user changed the log level...
-        GUI.update_log_level(self._window)
+        self._window.show_preferences_dialog()
 
     def get_about_dialog(self):
         # TRANSLATORS: Title of the 'About' dialog.
@@ -293,28 +305,43 @@ class Bleachbit(Gtk.Application):
                             transient_for=self._window)
         dialog.set_default_size(600, 400)
         txtbuffer = Gtk.TextBuffer()
-        from bleachbit import SystemInformation
-        txt = SystemInformation.get_system_information()
+        from bleachbit.SystemInformation import get_system_information
+        txt = get_system_information()
         txtbuffer.set_text(txt)
         textview = Gtk.TextView.new_with_buffer(txtbuffer)
         textview.set_editable(False)
         swindow = Gtk.ScrolledWindow()
         swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         swindow.add(textview)
-        dialog.vbox.pack_start(swindow, True, True, 0)
-        dialog.add_buttons(Gtk.STOCK_COPY, 100,
+        dialog.get_content_area().pack_start(swindow, True, True, 0)
+        # TRANSLATORS: Button label in the system information dialog to
+        # replace the username with a placeholder.
+        dialog.add_buttons(_("Anonymize"), RESPONSE_ANONYMIZE,
+                           Gtk.STOCK_COPY, RESPONSE_COPY,
                            Gtk.STOCK_CLOSE, Gtk.ResponseType.CLOSE)
-        return (dialog, txt)
+        return (dialog, txt, txtbuffer)
 
     def system_information_dialog(self, _action, _param):
-        dialog, txt = self.get_system_information_dialog()
+        from bleachbit.SystemInformation import anonymize_system_information
+        dialog, txt, txtbuffer = self.get_system_information_dialog()
         dialog.show_all()
         while True:
             rc = dialog.run()
-            if rc != 100:
+            if rc == RESPONSE_COPY:
+                clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+                current_text = txtbuffer.get_text(
+                    txtbuffer.get_start_iter(),
+                    txtbuffer.get_end_iter(),
+                    True)
+                clipboard.set_text(current_text, -1)
+            elif rc == RESPONSE_ANONYMIZE:
+                anonymized_txt = anonymize_system_information(txt)
+                txtbuffer.set_text(anonymized_txt)
+                # The button is single use.
+                dialog.get_widget_for_response(
+                    RESPONSE_ANONYMIZE).set_sensitive(False)
+            else:
                 break
-            clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-            clipboard.set_text(txt, -1)
         dialog.destroy()
 
     def do_activate(self):
@@ -336,3 +363,69 @@ class Bleachbit(Gtk.Application):
             # Check for orphaned wipe files from interrupted operations
             GLib.idle_add(self._window.check_orphaned_wipe_files,
                           priority=GLib.PRIORITY_LOW)
+
+        self._maybe_prompt_font_check()
+
+    def _should_show_font_check_dialog(self):
+        """Determine whether to show the font check dialog on Windows."""
+        if os.name != 'nt':
+            return False
+        if self._auto_exit:
+            return False
+        if self._shred_paths:
+            return False
+        # User made an explicit choice of a backend.
+        if os.environ.get('PANGOCAIRO_BACKEND', ''):
+            return False
+        if options.get('use_fontconfig_backend'):
+            return False
+        if options.get('font_check_completed'):
+            return False
+        return True
+
+    def _maybe_prompt_font_check(self):
+        """Schedule the font check dialog if needed."""
+        if not self._should_show_font_check_dialog():
+            return
+        if self._font_check_prompt_scheduled:
+            return
+        self._font_check_prompt_scheduled = True
+        GLib.idle_add(self._show_font_check_dialog,
+                      priority=GLib.PRIORITY_DEFAULT_IDLE)
+
+    def _show_font_check_dialog(self):
+        """Show the font check dialog and handle the response."""
+        if not self._window:
+            return False
+        dialog = create_font_check_dialog(self._window)
+        response = dialog.run()
+        dialog.destroy()
+        if response == Gtk.ResponseType.YES:
+            options.set('font_check_completed', True)
+        elif response in (RESPONSE_TEXT_BLURRY, RESPONSE_TEXT_UNREADABLE):
+            self._restart_with_fontconfig_backend()
+        # If user dismisses the dialog, ask again next time.
+        return False
+
+    def _restart_with_fontconfig_backend(self):
+        """Restart BleachBit with the fontconfig Pango backend."""
+        from bleachbit import General
+        executable = General.get_executable()
+        if getattr(sys, 'frozen', False):
+            cmd = [executable] + sys.argv[1:]
+        else:
+            script_path = os.path.abspath(sys.argv[0])
+            cmd = [executable, script_path] + sys.argv[1:]
+        logger.info('Restarting BleachBit with fontconfig backend: %s', cmd)
+        env = os.environ.copy()
+        env['PANGOCAIRO_BACKEND'] = 'fc'
+        env['BLEACHBIT_APP_INSTANCE_SUFFIX'] = f'Restart{os.getpid()}'
+        options.set('font_check_completed', True)
+        options.set('use_fontconfig_backend', True)
+        if General.run_external_nowait(cmd, env=env):
+            self.quit()
+        else:
+            # This logs to the main application window
+            logger.error('Failed to restart BleachBit with fontconfig backend')
+            options.set('font_check_completed', False)
+            options.set('use_fontconfig_backend', False)

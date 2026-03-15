@@ -66,7 +66,6 @@ class CommandTestCase(common.BleachbitTestCase):
             self.assertEqual(ret['path'], path)
             self.assertExists(path)
 
-
     def test_Function(self):
         """Unit test for Function"""
         path = self.write_file('test_Function', b'foo')

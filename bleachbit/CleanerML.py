@@ -339,10 +339,9 @@ class CleanerML:
                     continue
                 value_list = read_registry_key(value_element.attrib.get(
                     'path', ''), value_element.attrib.get('name', ''))
-                if value_list == None:
+                if value_list is None:
                     continue
-                else:
-                    value_list = [value_list, ]
+                value_list = [value_list, ]
             else:
                 value_list = [value_str, ]
             if var_name in self.vars:
@@ -371,7 +370,7 @@ def list_cleanerml_files(local_only=False):
             # TRANSLATORS: Warning printed to the log.
             # %s expands to the path of the XML cleaner file that was skipped
             warning_msg = _("Ignoring cleaner because it is "
-                "world writable: %s")
+                            "world writable: %s")
             logger.warning(warning_msg, pathname)
             continue
         yield pathname

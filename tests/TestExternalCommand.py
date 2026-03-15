@@ -50,7 +50,8 @@ def is_bleachbit_running_process(process_name, cmdline):
         'bleachbit.py' in arg
         for arg in normalized_cmdline
     )
-    has_context_arg = any('--context-menu' in arg or '--gui' in arg for arg in normalized_cmdline)
+    has_context_arg = any(
+        '--context-menu' in arg or '--gui' in arg for arg in normalized_cmdline)
     return has_bleachbit_entrypoint and has_context_arg
 
 
@@ -301,7 +302,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         super(ExternalCommandTestCase, ExternalCommandTestCase).setUpClass()
         cls.environment_changed = False
         # This should not be needed because of using CLI arg --no-delete-confirmation.
-        options.set('delete_confirmation', False, commit=True)
+        options.set('delete_confirmation', False)
+        options.commit()
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             # Set environment variable for child process.
             common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', cls.tempdir)
@@ -310,11 +312,11 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
     @classmethod
     def tearDownClass(cls):
         """Tear down the test case"""
-        super(ExternalCommandTestCase, ExternalCommandTestCase).tearDownClass()
         common.put_env('LANGUAGE', cls.old_language)
         if cls.environment_changed:
             # We don't want to affect other tests, executed after this one.
             common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', None)
+        super(ExternalCommandTestCase, ExternalCommandTestCase).tearDownClass()
 
     def assertRunning(self, expect_running=True, check_window_title=True, timeout=START_TIMEOUT_SECONDS):
         """Assert whether BleachBit GUI processes are running or not
