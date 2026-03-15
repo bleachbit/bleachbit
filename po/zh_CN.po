@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-03-02 23:12-0700\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-14 15:00-0600\n"
 "PO-Revision-Date: 2026-03-05 05:09+0000\n"
 "Last-Translator: 大王叫我来巡山 "
 "<hamburger2048@users.noreply.hosted.weblate.org>\n"
@@ -27,6 +27,8 @@ msgstr ""
 msgid "Media player"
 msgstr "媒体播放器"
 
+#. TRANSLATORS: Sidebar label for the page managing browser cookies in
+#. the Preferences dialog.
 #: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/safari.xml
 #: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
 #: ../cleaners/konqueror.xml ../cleaners/silverlight.xml
@@ -35,6 +37,7 @@ msgstr "媒体播放器"
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../bleachbit/GuiPreferences.py
 msgid "Cookies"
 msgstr "Cookie"
 
@@ -1268,6 +1271,8 @@ msgstr "桌面环境下的用于复制和粘贴操作的剪贴板"
 
 #. TRANSLATORS: "Custom" is an option allowing the user to specify which
 #. files and folders will be erased.
+#. TRANSLATORS: Sidebar label for the page where users add their own paths to clean.
+#. Short label meaning "Custom locations".
 #: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
 msgid "Custom"
 msgstr "自定义"
@@ -1519,15 +1524,6 @@ msgstr "终止"
 msgid "Clean file"
 msgstr "优化文件"
 
-#. TRANSLATORS: This message is used in two places to open the cookie preference
-#. manager dialog.
-#. (1) Context menu in the tree view.
-#. (2) Button in the preferences dialogs
-#. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
-#: ../bleachbit/Constant.py
-msgid "Manage cookies to keep…"
-msgstr "管理要保留的 cookies…"
-
 #. TRANSLATORS: This message is used in three places (1) label at top of the
 #. preferences dialog (2) confirmation dialog when enabling the cleaning option
 #. (3) log message when starting to clean empty space.
@@ -1575,6 +1571,34 @@ msgstr "无法删除特殊文件类型：%s"
 msgid ""
 "The environment variable TMP refers to a directory that does not exist: %s"
 msgstr "环境变量 TMP 指向一个不存在的目录：%s"
+
+#. TRANSLATORS: Title of the font check dialog
+#: ../bleachbit/FontCheckDialog.py
+msgid "Font check"
+msgstr ""
+
+#. TRANSLATORS: Button label in the font check dialog
+#: ../bleachbit/FontCheckDialog.py
+msgid "Text is okay"
+msgstr ""
+
+#. TRANSLATORS: Button label in the font check dialog
+#: ../bleachbit/FontCheckDialog.py
+msgid "Text is blurry"
+msgstr ""
+
+#. TRANSLATORS: Button label in the font check dialog in case the font
+#. looks like an alien language.
+#: ../bleachbit/FontCheckDialog.py
+msgid "Text is unrecognizable"
+msgstr ""
+
+#. TRANSLATORS: Question shown in the font check dialog displayed
+#. on startup on Windows. There are bugs that for some users the
+#. font is blurry or resembles an alien language.
+#: ../bleachbit/FontCheckDialog.py
+msgid "Does all the text in this window look okay?"
+msgstr ""
 
 #. TRANSLATORS: Title of a file chooser dialog.
 #: ../bleachbit/GuiApplication.py
@@ -1651,12 +1675,16 @@ msgstr ""
 msgid "System information"
 msgstr "系统信息"
 
+#. TRANSLATORS: Button label in the system information dialog to
+#. replace the username with a placeholder.
+#: ../bleachbit/GuiApplication.py
+msgid "Anonymize"
+msgstr ""
+
 #. TRANSLATORS: Label for the Cancel button in several dialog windows:
 #. file chooser, folder choose, delete confirmation, and warning dialogs.
 #. The underscore indicates the accelerator key.
-#. TRANSLATORS: Button label in the manage cookies dialog.
-#. The underscore indicates the accelerator key.
-#: ../bleachbit/GuiBasic.py ../bleachbit/GuiCookie.py
+#: ../bleachbit/GuiBasic.py
 msgid "_Cancel"
 msgstr "取消(_C)"
 
@@ -1700,6 +1728,8 @@ msgstr "您确定要永久删除这些文件吗？"
 
 #. TRANSLATORS: Check button shown in the confirm delete dialog.
 #. If unchecked, then it will not confirm next time.
+#. TRANSLATORS: Checkbox label in the preferences dialog.
+#. Ask for confirmation before deleting items.
 #: ../bleachbit/GuiBasic.py ../bleachbit/GuiPreferences.py
 msgid "Confirm before delete"
 msgstr "删除前确认"
@@ -1876,11 +1906,6 @@ msgstr "干扰文件生成完毕"
 msgid "Generating files…"
 msgstr "正在生成文件…"
 
-#. TRANSLATORS: Title of the dialog to manage cookies to keep
-#: ../bleachbit/GuiCookie.py
-msgid "Manage cookies to keep"
-msgstr "管理要保留的 cookies"
-
 #. TRANSLATORS: Instruction label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
 msgid "Select the cookies to keep when cleaning cookies across browsers."
@@ -1892,11 +1917,14 @@ msgid "Search:"
 msgstr "搜索："
 
 #. TRANSLATORS: Placeholder text in the search entry in the manage cookies dialog.
+#. 'Filter' is a verb meaning to narrow down the list by typing.
 #: ../bleachbit/GuiCookie.py
 msgid "Filter cookies..."
 msgstr "筛选 cookies..."
 
 #. TRANSLATORS: Toggle button label in the manage cookies dialog.
+#. "Show" is a command (imperative).
+#. 'Selected' refers to selected cookies (the noun "cookies" is implied).
 #: ../bleachbit/GuiCookie.py
 msgid "Show Selected"
 msgstr "显示已选中"
@@ -1907,6 +1935,7 @@ msgid "Only show cookies that are currently selected"
 msgstr "只显示当前选中的 cookies"
 
 #. TRANSLATORS: Column header in the manage cookies dialog.
+#. 'Host' is a noun meaning the website hostname (domain name) of the cookie.
 #: ../bleachbit/GuiCookie.py
 msgid "Host"
 msgstr "主机"
@@ -1917,15 +1946,9 @@ msgid "Select All"
 msgstr "全选"
 
 #. TRANSLATORS: Button label in the manage cookies dialog.
-#. The underscore indicates the accelerator key.
 #: ../bleachbit/GuiCookie.py
 msgid "Deselect All"
 msgstr "全不选"
-
-#. TRANSLATORS: Button label in the manage cookies dialog.
-#: ../bleachbit/GuiCookie.py
-msgid "Keep Selected"
-msgstr "保留所选"
 
 #. TRANSLATORS: Status message shown while the cookie list is loading
 #. in the cookie manager dialog window.
@@ -1949,25 +1972,45 @@ msgstr "专家模式启用高级功能并放松限制。使用该模式时请倍
 msgid "Expert mode"
 msgstr "专家模式"
 
+#. TRANSLATORS: Notice shown in an infobar after changing a preference
+#. that requires starting the application to be effective.
+#: ../bleachbit/GuiPreferences.py
+msgid "Restart BleachBit for full effect."
+msgstr "重启 Bleachbit 以完全生效。"
+
+#. TRANSLATORS: Title for the preferences dialog
 #: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
 msgid "Preferences"
 msgstr "选项"
 
+#. TRANSLATORS: Sidebar label for the general settings page of the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "General"
 msgstr "常规"
 
+#. TRANSLATORS: Sidebar label for the software updates page of the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
-msgid "Drives"
-msgstr "驱动器"
+#, fuzzy
+#| msgid "Update"
+msgid "Updates"
+msgstr "更新"
 
+#. TRANSLATORS: Sidebar label for the "Languages" page in the Preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Languages"
 msgstr "语言"
 
+#. TRANSLATORS: Sidebar label for the "keep list" (whitelist) page of
+#. the preferences dialog. This page lists paths that will be preserved
+#. (not deleted) during cleaning.
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
 msgstr "保留列表"
+
+#. TRANSLATORS: Sidebar label for the drives page of the preferences dialog.
+#: ../bleachbit/GuiPreferences.py
+msgid "Drives"
+msgstr "驱动器"
 
 #. TRANSLATORS: Notice shown in an infobar when toggling
 #. dark mode on Linux.
@@ -1985,6 +2028,7 @@ msgstr "重置警告确认。"
 msgid "Check periodically for software updates via the Internet"
 msgstr "联网定期检查软件更新"
 
+#. TRANSLATORS: Tooltip for the online updates checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid ""
 "If an update is found, you will be given the option to view information "
@@ -2018,26 +2062,19 @@ msgstr "自动检测系统语言"
 msgid "Language:"
 msgstr "语言："
 
-#. TRANSLATORS: Notice shown in an infobar after changing
-#. language in the preferences.
-#: ../bleachbit/GuiPreferences.py
-msgid "Restart BleachBit for full effect."
-msgstr "重启 Bleachbit 以完全生效。"
-
-#: ../bleachbit/GuiPreferences.py
-msgid "Hide irrelevant cleaners"
-msgstr "隐藏不适合当前环境的清理规则"
-
+#. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Overwrite contents of files to prevent recovery"
 msgstr "粉碎文件以防被恢复"
 
+#. TRANSLATORS: Tooltip for the shred checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
 msgstr "在某些文件系统和 BleachBit 操作中粉碎文件是无效的。覆盖操作非常耗时。"
 
+#. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
 msgstr "清理完成后退出"
@@ -2047,38 +2084,85 @@ msgstr "清理完成后退出"
 msgid "Reset warning confirmations"
 msgstr "重置警告确认"
 
+#: ../bleachbit/GuiPreferences.py
+msgid "Hide irrelevant cleaners"
+msgstr "隐藏不适合当前环境的清理规则"
+
 #. TRANSLATORS: Checkbox label in the preferences.
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
 msgstr "使用 IEC 单位（1 KiB = 1024 Byte）而非 SI 单位（1 kB = 1000 Byte）"
 
-#. TRANSLATORS: Checkbox label in the preferences to enable
-#. remembering the window size and position across sessions.
+#. TRANSLATORS: Section title on the preferences updates page.
+#: ../bleachbit/GuiPreferences.py
+#, fuzzy
+#| msgid "Update to version %s"
+msgid "Update notifications"
+msgstr "更新到版本 %s"
+
+#. TRANSLATORS: Section title (noun) on the Preferences - General page
+#. for options related to cleaning stored data.
+#: ../bleachbit/GuiPreferences.py
+#, fuzzy
+#| msgid "Clean"
+msgid "Cleaning"
+msgstr "清理"
+
+#. TRANSLATORS: Section title in Preferences for user interface options
+#. such as dark mode and window behavior.
+#: ../bleachbit/GuiPreferences.py
+#, fuzzy
+#| msgid "Internet"
+msgid "Interface"
+msgstr "互联网"
+
+#. TRANSLATORS: Checkbox label to remember the window size and position
+#. between application launches.
 #: ../bleachbit/GuiPreferences.py
 msgid "Remember window geometry"
 msgstr "记忆窗口大小和位置"
 
-#. TRANSLATORS: Checkbox label in the preferences dialog.
-#: ../bleachbit/GuiPreferences.py
-msgid "Show debug messages"
-msgstr "显示调试信息"
-
-#. TRANSLATORS: Checkbox label in the preferences dialog.
-#: ../bleachbit/GuiPreferences.py
-msgid "Add the shred context menu to KDE Plasma"
-msgstr "添加文件粉碎右键菜单到 KDE Plasma"
-
-#. TRANSLATORS: Checkbox label in the preferences dialog to enable
-#. dark mode.
+#. TRANSLATORS: Checkbox label to enable dark mode in the UI.
 #: ../bleachbit/GuiPreferences.py
 msgid "Dark mode"
 msgstr "暗色模式"
 
-#. TRANSLATORS: Checkbox label in the preferences dialog to enable
-#. the Windows 10 visual theme.
+#. TRANSLATORS: Checkbox label to use the Windows 10-style visual theme
+#. for the application interface.
 #: ../bleachbit/GuiPreferences.py
 msgid "Windows 10 theme"
 msgstr "Windows 10 主题"
+
+#. TRANSLATORS: Checkbox label to use the Fontconfig text rendering backend
+#. instead of the default Windows renderer. May improve blurry text.
+#: ../bleachbit/GuiPreferences.py
+msgid "Use fontconfig text rendering backend"
+msgstr ""
+
+#. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
+#: ../bleachbit/GuiPreferences.py
+msgid "May fix blurry or unreadable text. Requires restart."
+msgstr ""
+
+#. TRANSLATORS: Section title on the preferences general page,
+#. labelling options for OS integration and advanced/developer features.
+#: ../bleachbit/GuiPreferences.py
+msgid "Integration and advanced"
+msgstr ""
+
+#. TRANSLATORS: Checkbox label in the preferences dialog.
+#. 'Shred' means securely delete a file to prevent data recovery.
+#. 'Context menu' is the menu shown on right-click.
+#. 'KDE Plasma' is a Linux desktop environment (proper noun, do not translate).
+#: ../bleachbit/GuiPreferences.py
+msgid "Add the shred context menu to KDE Plasma"
+msgstr "添加文件粉碎右键菜单到 KDE Plasma"
+
+#. TRANSLATORS: Checkbox label to show diagnostic log messages for
+#. troubleshooting.
+#: ../bleachbit/GuiPreferences.py
+msgid "Show debug messages"
+msgstr "显示调试信息"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Choose a writable folder for each drive for which to wipe empty space."
@@ -2098,11 +2182,15 @@ msgctxt "button"
 msgid "Remove"
 msgstr "移出"
 
-#. TRANSLATORS: Warning label on the languages page of the
-#. preferences dialog.
+#. TRANSLATORS: Section title on the preferences languages page.
 #: ../bleachbit/GuiPreferences.py
-msgid "All languages will be deleted except those checked."
-msgstr "未勾选的所有语言都将被删除。"
+msgid "BleachBit interface language"
+msgstr ""
+
+#. TRANSLATORS: Section title on the preferences languages page.
+#: ../bleachbit/GuiPreferences.py
+msgid "Language files to keep when cleaning applications"
+msgstr ""
 
 #. TRANSLATORS: Column header in the languages treeview.
 #. This column controls whether to keep the language.
@@ -2207,6 +2295,71 @@ msgctxt "button"
 msgid "Add folder"
 msgstr "添加文件夹"
 
+#. TRANSLATORS: Update notification for users upgrading from versions
+#. older than 5.1.0.
+#: ../bleachbit/GuiStartup.py
+#, fuzzy
+#| msgid "This option requires expert mode. Enable it in Preferences."
+msgid ""
+"Cleaning options with warnings now require expert mode. Enable it in "
+"preferences to clean them."
+msgstr "此选项需要专家模式。在“首选项”中启用它。"
+
+#. TRANSLATORS: First-start hint for Linux users shown in
+#. the log on the main screen.
+#: ../bleachbit/GuiStartup.py
+msgid ""
+"Access the application menu by clicking the hamburger icon on the title bar."
+msgstr "单击标题栏上的汉堡图标打开应用程序菜单。"
+
+#. TRANSLATORS: First-start hint for Windows users shown in
+#. the log on the main screen.
+#: ../bleachbit/GuiStartup.py
+msgid "Access the application menu by clicking the logo on the title bar."
+msgstr "单击标题栏上的徽标打开应用程序菜单。"
+
+#. TRANSLATORS: Warning shown on startup when running BleachBit as root on Linux.
+#. It means, for example, that cleaning a browser will clean root's browser data.
+#: ../bleachbit/GuiStartup.py
+msgid ""
+"You are running BleachBit with administrative privileges for cleaning shared "
+"parts of the system, and references to the user profile folder will clean "
+"only the root account."
+msgstr ""
+"您正在以管理员权限运行 BleachBit 以清理系统的共享部分，对用户配置文件文件夹的"
+"引用将仅指向根用户。"
+
+#. TRANSLATORS: Warning shown on startup on Windows.
+#: ../bleachbit/GuiStartup.py
+msgid ""
+"Run BleachBit with administrator privileges to improve the accuracy of "
+"overwriting the contents of files."
+msgstr "以管理员权限运行 BleachBit 来改进粉碎的文件的准确性。"
+
+#. TRANSLATORS: Warning shown on startup on Windows when elevated
+#. with different account. It means, for example, that cleaning a
+#. browser will clean the browser data of the administrator account.
+#: ../bleachbit/GuiStartup.py
+msgid ""
+"You elevated privileges using a different account to clean shared parts of "
+"the system. User-specific paths will refer to the administrator account, so "
+"to clean your profile, run BleachBit again as a standard user."
+msgstr ""
+"您使用其他账户提升了权限来清理系统的共享部分。用户指定的路径将指向管理员账"
+"户，因此要清理您的用户配置文件，请以标准用户身份再次运行 BleachBit。"
+
+#. TRANSLATORS: Warning shown on startup on Windows when running
+#. unofficial Microsoft Store version. Advises user to get genuine
+#. version from official website.
+#: ../bleachbit/GuiStartup.py
+msgid ""
+"There is no official version of BleachBit on the Microsoft Store. Get the "
+"genuine version at https://www.bleachbit.org where it is always free of "
+"charge."
+msgstr ""
+"微软商店上没有官方版本的 BleachBit 。请访问官网 https://www.bleachbit.org 获"
+"取正版软件。本程序始终免费。"
+
 #. TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
 #. Used in the tree view on the main screen.
 #: ../bleachbit/GuiTreeModels.py
@@ -2247,6 +2400,13 @@ msgstr "预览"
 msgid "Clean"
 msgstr "清理"
 
+#. TRANSLATORS: Button in tree view's context menu to open the cookie
+#. manager.
+#. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
+#: ../bleachbit/GuiWindow.py
+msgid "Manage cookies to keep…"
+msgstr "管理要保留的 cookies…"
+
 #. TRANSLATORS: Error message shown in the log on the main window.
 #. %s is the file path.
 #: ../bleachbit/GuiWindow.py
@@ -2274,59 +2434,6 @@ msgstr "你必须选择一项操作"
 #: ../bleachbit/GuiWindow.py
 msgid "Done."
 msgstr "完成。"
-
-#. TRANSLATORS: First-start hint for Linux users shown in
-#. the log on the main screen.
-#: ../bleachbit/GuiWindow.py
-msgid ""
-"Access the application menu by clicking the hamburger icon on the title bar."
-msgstr "单击标题栏上的汉堡图标打开应用程序菜单。"
-
-#. TRANSLATORS: First-start hint for Windows users shown in
-#. the log on the main screen.
-#: ../bleachbit/GuiWindow.py
-msgid "Access the application menu by clicking the logo on the title bar."
-msgstr "单击标题栏上的徽标打开应用程序菜单。"
-
-#. TRANSLATORS: Warning shown on startup when running BleachBit as root on Linux.
-#. It means, for example, that cleaning a browser will clean root's browser data.
-#: ../bleachbit/GuiWindow.py
-msgid ""
-"You are running BleachBit with administrative privileges for cleaning shared "
-"parts of the system, and references to the user profile folder will clean "
-"only the root account."
-msgstr ""
-"您正在以管理员权限运行 BleachBit 以清理系统的共享部分，对用户配置文件文件夹的"
-"引用将仅指向根用户。"
-
-#. TRANSLATORS: Warning shown on startup on Windows.
-#: ../bleachbit/GuiWindow.py
-msgid ""
-"Run BleachBit with administrator privileges to improve the accuracy of "
-"overwriting the contents of files."
-msgstr "以管理员权限运行 BleachBit 来改进粉碎的文件的准确性。"
-
-#. TRANSLATORS: Warning shown on startup on Windows when elevated with different account.
-#. It means, for example, that cleaning a browser will clean the browser data of the administrator account.
-#: ../bleachbit/GuiWindow.py
-msgid ""
-"You elevated privileges using a different account to clean shared parts of "
-"the system. User-specific paths will refer to the administrator account, so "
-"to clean your profile, run BleachBit again as a standard user."
-msgstr ""
-"您使用其他账户提升了权限来清理系统的共享部分。用户指定的路径将指向管理员账"
-"户，因此要清理您的用户配置文件，请以标准用户身份再次运行 BleachBit。"
-
-#. TRANSLATORS: Warning shown on startup on Windows when running unofficial Microsoft Store version.
-#. Advises user to get genuine version from official website.
-#: ../bleachbit/GuiWindow.py
-msgid ""
-"There is no official version of BleachBit on the Microsoft Store. Get the "
-"genuine version at https://www.bleachbit.org where it is always free of "
-"charge."
-msgstr ""
-"微软商店上没有官方版本的 BleachBit 。请访问官网 https://www.bleachbit.org 获"
-"取正版软件。本程序始终免费。"
 
 #. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiWindow.py
@@ -2412,9 +2519,12 @@ msgstr "正在重新启用交换空间。"
 msgid "Setting nice value %d for this process."
 msgstr "正在将此进程设置进程优先级（ nice 值）设置为 %d 。"
 
+#. TRANSLATORS: Debug message when a process gives up root/admin privileges.
+#. %(pid)d is the integer process ID; %(uid)d is the integer user ID to switch to.
 #: ../bleachbit/Memory.py
-#, python-brace-format
-msgid "Dropping privileges of process ID {pid} to user ID {uid}."
+#, fuzzy, python-format
+#| msgid "Dropping privileges of process ID {pid} to user ID {uid}."
+msgid "Dropping privileges of process ID %(pid)d to user ID %(uid)d."
 msgstr "正将进程 ID {pid} 的特权授予用户 ID {uid}。"
 
 #. TRANSLATORS: The variable is a quantity like 5kB
@@ -2429,9 +2539,14 @@ msgstr "正在分配并擦除 %s 的空间。"
 msgid "Freeing %s of memory."
 msgstr "正释放 %s 的内存。"
 
+#. TRANSLATORS: Debug message. 'Found' is a past tense verb (short for
+#. "Found [that] the UUID for swap device ..."). %(device)s is the device
+#. path (e.g., /dev/sda5); %(uuid)s is a UUID string
+#. (e.g., ee0e85f6-6e5c-42b9-902f-776531938bbf). Do not translate variables.
 #: ../bleachbit/Memory.py
-#, python-brace-format
-msgid "Found UUID for swap file {device} is {uuid}."
+#, fuzzy, python-format
+#| msgid "Found UUID for swap file {device} is {uuid}."
+msgid "Found UUID for swap device %(device)s is %(uuid)s."
 msgstr "发现交换文件 {device} 的 UUID为 {uuid} 。"
 
 #. TRANSLATORS: The variable is a quantity like 5kB
@@ -2458,12 +2573,16 @@ msgstr "正在重新初始化交换区 %s 。"
 msgid "Detected these swap devices: %s"
 msgstr "检测到这些交换区：%s"
 
-#. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
+#. TRANSLATORS: This is a debugging message that the parent process
+#. is waiting for the child process.
 #: ../bleachbit/Memory.py
-#, python-brace-format
+#, fuzzy, python-format
+#| msgid ""
+#| "The function wipe_memory() with process ID {pid} is waiting for child "
+#| "process ID {cid}."
 msgid ""
-"The function wipe_memory() with process ID {pid} is waiting for child "
-"process ID {cid}."
+"The function wipe_memory() with process ID %d is waiting for child process "
+"ID %d."
 msgstr "进程 ID {pid} 的函数 wipe_memory() 正等待子进程 ID {cid} 退出。"
 
 #: ../bleachbit/Memory.py
@@ -2624,19 +2743,21 @@ msgstr "从 Winapp2.ini 导入"
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr "清除 Windows Update 文件需要管理员权限"
 
-#. TRANSLATORS: Splash screen message shown while the application is starting.
-#. "Starting" is a present participle (ongoing action).
-#. To indicate an ongoing operation, include the ellipsis as literal
-#. Unicode (…) or as Unicode escape (\u2026).
-#: ../bleachbit/Windows.py
-msgid "Starting…"
-msgstr "启动中…"
-
 #: ../bleachbit/Wipe.py
 msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr "文件系统中至少有一个文件不支持高级覆盖。"
+
+#. TRANSLATORS: Debug log message shown during file wiping. 'Wiping' is a
+#. present participle (ongoing action). %(pathname)s is the file/directory
+#. path; %(fstype)s is the file system type (e.g., ext3, ntfs).
+#. Do not translate variables.
+#: ../bleachbit/Wipe.py
+#, fuzzy, python-format
+#| msgid "Wiping path {pathname} with file system type {fstype}"
+msgid "Wiping path %(pathname)s with file system type %(fstype)s"
+msgstr "擦除文件系统类型为 {fstype} 的路径 {pathname}"
 
 #: ../bleachbit/Wipe.py
 #, python-format
@@ -2652,20 +2773,39 @@ msgstr "正在创建新的临时文件以清除可用空间。"
 msgid "Error #%d when flushing the file buffer."
 msgstr "刷新文件缓冲区时出现错误 #%d 。"
 
+#. TRANSLATORS: Debug message summarizing a write operation. All placeholders
+#. are numeric: %(file_count)d = integer number of files written;
+#. %(total_bytes)d = integer total bytes written; %(elapsed_sec)d = integer
+#. elapsed seconds; %(rate_mbs).2f = decimal megabytes per second (e.g., 3.14).
+#. Do not translate variables.
 #: ../bleachbit/Wipe.py
+#, fuzzy, python-format
+#| msgid ""
+#| "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
+#| "{rate:.2f} MB/s"
 msgid ""
-"Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
-"{rate:.2f} MB/s"
+"Wrote %(file_count)d files and %(total_bytes)d bytes in %(elapsed_sec)d "
+"seconds at %(rate_mbs).2f MB/s"
 msgstr ""
 "以 {rate:.2f}MB/s 的速度在 {seconds:,} 秒内写入了 {bytes:,} 字节的 {files:,} "
 "个文件"
 
+#. TRANSLATORS: Debug message showing disk space available to regular (non-root) users.
+#. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
+#. Do not translate variables.
 #: ../bleachbit/Wipe.py
-msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
+#, fuzzy, python-format
+#| msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
+msgid "%(bytes)d bytes and %(inodes)d inodes available to non-super-user"
 msgstr "非超级用户可以使用 {bytes:,} 字节和 {inodes:,} 个索引节点"
 
+#. TRANSLATORS: Debug message showing disk space available to the root (admin) user.
+#. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
+#. Do not translate variables.
 #: ../bleachbit/Wipe.py
-msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
+#, fuzzy, python-format
+#| msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
+msgid "%(bytes)d bytes and %(inodes)d inodes available to super-user"
 msgstr "超级用户可以使用 {bytes:,} 字节和 {inodes:,} 个索引节点"
 
 #: ../bleachbit/Wipe.py
@@ -2828,6 +2968,18 @@ msgstr "帮助(_H)"
 msgid "_About BleachBit"
 msgstr "关于 BleachBit (_A)"
 
+#~ msgid "Manage cookies to keep"
+#~ msgstr "管理要保留的 cookies"
+
+#~ msgid "Keep Selected"
+#~ msgstr "保留所选"
+
+#~ msgid "All languages will be deleted except those checked."
+#~ msgstr "未勾选的所有语言都将被删除。"
+
+#~ msgid "Starting…"
+#~ msgstr "启动中…"
+
 #~ msgid "Download data needed for chaff generator?"
 #~ msgstr "下载干扰文件生成器所需的数据？"
 
@@ -2884,10 +3036,6 @@ msgstr "关于 BleachBit (_A)"
 #, python-format
 #~ msgid "Cleaner is not usable on this OS because it has no actions: %s"
 #~ msgstr "清理规则在此操作系统上因没有包含任何操作而被忽略：%s"
-
-#, python-brace-format
-#~ msgid "Wiping path {pathname} with file system type {fstype}"
-#~ msgstr "擦除文件系统类型为 {fstype} 的路径 {pathname}"
 
 #~ msgid "IRC client formerly known as XChat"
 #~ msgstr "IRC 客户端，例如 XChat"
