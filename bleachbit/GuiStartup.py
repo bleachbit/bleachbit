@@ -6,6 +6,7 @@
 
 import os
 import sys
+from importlib import import_module
 
 from bleachbit.Language import get_text as _
 from bleachbit.Network import unset_sslkeylogfile
@@ -32,6 +33,24 @@ def _is_version_upgrade(old_version, target_version):
         return False
 
 
+def _get_missing_dependencies():
+    """Check for missing optional dependencies.
+
+    Returns: list of missing dependency names
+    """
+    deps = ['chardet', 'psutil', 'requests', 'urllib3']
+    if os.name == 'nt':
+        deps.append('plyer')
+
+    missing = []
+    for dep in deps:
+        try:
+            import_module(dep)
+        except ImportError:
+            missing.append(dep)
+    return sorted(missing)
+
+
 def get_startup_messages(auto_exit):
     """Return a list of startup messages
 
@@ -43,6 +62,13 @@ def get_startup_messages(auto_exit):
     for error messages.
     """
     ret_msgs = []
+
+    missing_deps = _get_missing_dependencies()
+
+    if missing_deps:
+        ret_msgs.append((
+            f'Missing optional Python packages: {", ".join(missing_deps)}. '
+            'Some features may be limited.', True))
 
     # Call unset_sslkeylogfile before checking for updates.
     if unset_sslkeylogfile(False):

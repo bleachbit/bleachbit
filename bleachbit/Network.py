@@ -30,7 +30,11 @@ import socket
 import sys
 import platform
 from collections.abc import Callable
-from urllib3.util.retry import Retry
+try:
+    from urllib3.util.retry import Retry
+    HAVE_URLLIB3 = True
+except ImportError:
+    HAVE_URLLIB3 = False
 
 # third party
 import requests
@@ -174,16 +178,17 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
     # 503: service unavailable
     # 504: gateway_timeout
     status_forcelist = (408, 429, 500, 502, 503, 504)
-    retries = Retry(total=max_retries, backoff_factor=backoff_factor,
-                    status_forcelist=status_forcelist, redirect=5)
     with requests.Session() as session:
-        session.mount(
-            'http://', requests.adapters.HTTPAdapter(max_retries=retries))
-        session.mount(
-            'https://', requests.adapters.HTTPAdapter(max_retries=retries))
+        if HAVE_URLLIB3:
+            retries = Retry(total=max_retries, backoff_factor=backoff_factor,
+                            status_forcelist=status_forcelist, redirect=5)
+            session.mount(
+                'http://', requests.adapters.HTTPAdapter(max_retries=retries))
+            session.mount(
+                'https://', requests.adapters.HTTPAdapter(max_retries=retries))
         response = session.get(url, headers=request_headers,
                                timeout=timeout, verify=True)
-        return response
+    return response
 
 
 def _get_os_name_version():
