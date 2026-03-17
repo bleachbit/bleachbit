@@ -2,6 +2,17 @@ build: off
 version: 5.1.1.{build}
 image: Visual Studio 2022
 
+skip_commits:
+  files:
+    - bleachbit.spec
+    - debian/
+    - doc/
+    - docker/
+    - org.bleachbit.*
+    - po/
+    - README.md
+    - windows/NsisInclude/NsisMultiUserLang.nsh
+
 environment:
     PYTHON_HOME: 'c:\projects\bleachbit\vcpkg_installed\x86-windows\tools\python3'
     PYTHON_EXE: '%PYTHON_HOME%\python.exe'

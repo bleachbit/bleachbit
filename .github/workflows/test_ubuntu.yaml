@@ -5,8 +5,20 @@ on:
     branches:
       - '**'
     paths-ignore:
-      - 'po/*.po'
+      - 'bleachbit.spec'
+      - 'debian/**'
+      - 'doc/**'
+      - 'po/**'
+      - 'README.md'
+      - 'windows/**'
   pull_request:  # Run on all pull requests
+    paths-ignore:
+      - 'bleachbit.spec'
+      - 'debian/**'
+      - 'doc/**'
+      - 'po/**'
+      - 'README.md'
+      - 'windows/**'
 
 # 2025-05-01: ubuntu-latest is currently 24.04, and its native
 # python version is 3.12.
