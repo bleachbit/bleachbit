@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-03-14 15:00-0600\n"
-"PO-Revision-Date: 2026-03-06 07:09+0000\n"
+"PO-Revision-Date: 2026-03-20 11:09+0000\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/bleachbit/main/"
 "tr/>\n"
@@ -1616,30 +1616,30 @@ msgstr "TMP ortam değişkeni var olmayan dizini işaret ediyor: %s"
 #. TRANSLATORS: Title of the font check dialog
 #: ../bleachbit/FontCheckDialog.py
 msgid "Font check"
-msgstr ""
+msgstr "Yazı tipi denetimi"
 
 #. TRANSLATORS: Button label in the font check dialog
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is okay"
-msgstr ""
+msgstr "Metin iyi"
 
 #. TRANSLATORS: Button label in the font check dialog
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is blurry"
-msgstr ""
+msgstr "Metin bulanık"
 
 #. TRANSLATORS: Button label in the font check dialog in case the font
 #. looks like an alien language.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is unrecognizable"
-msgstr ""
+msgstr "Metin tanınamaz durumda"
 
 #. TRANSLATORS: Question shown in the font check dialog displayed
 #. on startup on Windows. There are bugs that for some users the
 #. font is blurry or resembles an alien language.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Does all the text in this window look okay?"
-msgstr ""
+msgstr "Bu penceredeki tüm metinler iyi görünüyor mu?"
 
 #. TRANSLATORS: Title of a file chooser dialog.
 #: ../bleachbit/GuiApplication.py
@@ -1695,19 +1695,7 @@ msgstr ""
 #: ../bleachbit/GuiApplication.py
 msgid "translator-credits"
 msgstr ""
-"Amed Çeko Jiyan\n"
-"Aydin Ilker Alp\n"
-"Burak Ilgıcıoğlu\n"
-"Ekrem Kocadere\n"
-"Mehmet Gülmen\n"
-"Murad Biskin\n"
-"Sabri Ünal\n"
-"Ufuk Yıldırım\n"
-"Volkan Gezer\n"
-"Yusuf Kayan\n"
-"alperyilmaz\n"
-"etc\n"
-"Özgür Baskin\n"
+"Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Oğuz Ersen"
 
 #. TRANSLATORS: Title of the system information dialog.
@@ -1719,7 +1707,7 @@ msgstr "Sistem bilgisi"
 #. replace the username with a placeholder.
 #: ../bleachbit/GuiApplication.py
 msgid "Anonymize"
-msgstr ""
+msgstr "Anonimleştir"
 
 #. TRANSLATORS: Label for the Cancel button in several dialog windows:
 #. file chooser, folder choose, delete confirmation, and warning dialogs.
@@ -2036,10 +2024,8 @@ msgstr "Genel"
 
 #. TRANSLATORS: Sidebar label for the software updates page of the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Update"
 msgid "Updates"
-msgstr "Güncelle"
+msgstr "Güncellemeler"
 
 #. TRANSLATORS: Sidebar label for the "Languages" page in the Preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2145,26 +2131,20 @@ msgstr "SI (1 kB = 1000 bayt) yerine IEC ölçülerini (1 KiB = 1024 bayt) kulla
 
 #. TRANSLATORS: Section title on the preferences updates page.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Update to version %s"
 msgid "Update notifications"
-msgstr "%s sürümüne güncelle"
+msgstr "Güncelleme bildirimleri"
 
 #. TRANSLATORS: Section title (noun) on the Preferences - General page
 #. for options related to cleaning stored data.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Clean"
 msgid "Cleaning"
-msgstr "Temizle"
+msgstr "Temizlik"
 
 #. TRANSLATORS: Section title in Preferences for user interface options
 #. such as dark mode and window behavior.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Internet"
 msgid "Interface"
-msgstr "İnternet"
+msgstr "Arayüz"
 
 #. TRANSLATORS: Checkbox label to remember the window size and position
 #. between application launches.
@@ -2187,18 +2167,19 @@ msgstr "Windows 10 teması"
 #. instead of the default Windows renderer. May improve blurry text.
 #: ../bleachbit/GuiPreferences.py
 msgid "Use fontconfig text rendering backend"
-msgstr ""
+msgstr "Fontconfig metin gerçekleme arka ucunu kullan"
 
 #. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "May fix blurry or unreadable text. Requires restart."
 msgstr ""
+"Bulanık ya da okunamayan metni düzeltebilir. Yeniden başlatma gerektirir."
 
 #. TRANSLATORS: Section title on the preferences general page,
 #. labelling options for OS integration and advanced/developer features.
 #: ../bleachbit/GuiPreferences.py
 msgid "Integration and advanced"
-msgstr ""
+msgstr "Tümleşim ve gelişmiş"
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #. 'Shred' means securely delete a file to prevent data recovery.
@@ -2235,12 +2216,12 @@ msgstr "Kaldır"
 #. TRANSLATORS: Section title on the preferences languages page.
 #: ../bleachbit/GuiPreferences.py
 msgid "BleachBit interface language"
-msgstr ""
+msgstr "BleachBit arayüz dili"
 
 #. TRANSLATORS: Section title on the preferences languages page.
 #: ../bleachbit/GuiPreferences.py
 msgid "Language files to keep when cleaning applications"
-msgstr ""
+msgstr "Uygulamalar temizlenirken tutulacak dil dosyaları"
 
 #. TRANSLATORS: Column header in the languages treeview.
 #. This column controls whether to keep the language.
@@ -2348,12 +2329,12 @@ msgstr "Klasör ekle"
 #. TRANSLATORS: Update notification for users upgrading from versions
 #. older than 5.1.0.
 #: ../bleachbit/GuiStartup.py
-#, fuzzy
-#| msgid "This option requires expert mode. Enable it in Preferences."
 msgid ""
 "Cleaning options with warnings now require expert mode. Enable it in "
 "preferences to clean them."
-msgstr "Bu seçenek uzman kipini gerektirir. Tercihlerden etkinleştirin."
+msgstr ""
+"Uyarılı temizlik seçenekleri uzman kipi gerektirir. Temizlemek için "
+"tercihlerden etkinleştirin."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
@@ -2583,11 +2564,11 @@ msgstr "Bu işlem için %d hassas değeri atanıyor."
 #. TRANSLATORS: Debug message when a process gives up root/admin privileges.
 #. %(pid)d is the integer process ID; %(uid)d is the integer user ID to switch to.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid "Dropping privileges of process ID {pid} to user ID {uid}."
+#, python-format
 msgid "Dropping privileges of process ID %(pid)d to user ID %(uid)d."
 msgstr ""
-"{pid} işlem kimliğinin ayrıcalıkları {uid} kullanıcı kimliğine bırakılıyor."
+"%(pid)d işlem kimliğinin ayrıcalıkları %(uid)d kullanıcı kimliğine "
+"bırakılıyor."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2606,10 +2587,9 @@ msgstr "%s bellek boşaltılıyor."
 #. path (e.g., /dev/sda5); %(uuid)s is a UUID string
 #. (e.g., ee0e85f6-6e5c-42b9-902f-776531938bbf). Do not translate variables.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid "Found UUID for swap file {device} is {uuid}."
+#, python-format
 msgid "Found UUID for swap device %(device)s is %(uuid)s."
-msgstr "{device} takas dosyası için UUID {uuid} bulundu."
+msgstr "%(device)s takas dosyası için UUID %(uuid)s bulundu."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2638,16 +2618,12 @@ msgstr "Bu takas aygıtları saptandı: %s"
 #. TRANSLATORS: This is a debugging message that the parent process
 #. is waiting for the child process.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The function wipe_memory() with process ID {pid} is waiting for child "
-#| "process ID {cid}."
+#, python-format
 msgid ""
 "The function wipe_memory() with process ID %d is waiting for child process "
 "ID %d."
 msgstr ""
-"İşlem kimliği {pid} olan wipe_memory() işlevi, {cid} alt işlem kimliğini "
-"bekliyor."
+"İşlem kimliği %d olan wipe_memory() işlevi, %d alt işlem kimliğini bekliyor."
 
 #: ../bleachbit/Memory.py
 #, python-format
@@ -2824,10 +2800,9 @@ msgstr ""
 #. path; %(fstype)s is the file system type (e.g., ext3, ntfs).
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "Wiping path {pathname} with file system type {fstype}"
+#, python-format
 msgid "Wiping path %(pathname)s with file system type %(fstype)s"
-msgstr "{fstype} dosya sistem türlü {pathname} yolu temizleniyor"
+msgstr "%(fstype)s dosya sistem türlü %(pathname)s yolu temizleniyor"
 
 #: ../bleachbit/Wipe.py
 #, python-format
@@ -2849,34 +2824,29 @@ msgstr "Dosya arabelleğinin boşlukları doldurulurken #%d hatası."
 #. elapsed seconds; %(rate_mbs).2f = decimal megabytes per second (e.g., 3.14).
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid ""
-#| "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
-#| "{rate:.2f} MB/s"
+#, python-format
 msgid ""
 "Wrote %(file_count)d files and %(total_bytes)d bytes in %(elapsed_sec)d "
 "seconds at %(rate_mbs).2f MB/s"
 msgstr ""
-"{seconds:,} saniyede {rate:.2f} MB/s hızında {files:,} dosya ve {bytes:,} "
-"bayt yazıldı"
+"%(elapsed_sec)d saniyede %(rate_mbs).2f MB/s hızında %(file_count)d dosya ve "
+"%(total_bytes)d bayt yazıldı"
 
 #. TRANSLATORS: Debug message showing disk space available to regular (non-root) users.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
+#, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to non-super-user"
-msgstr "{bytes:,} bayt ve {inodes:,} inode yetkisiz kullanıcılar için hazır"
+msgstr "Yetkisiz kullanıcı için %(bytes)d bayt ve %(inodes)d inode hazır"
 
 #. TRANSLATORS: Debug message showing disk space available to the root (admin) user.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
+#, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to super-user"
-msgstr "{bytes:,} bayt ve {inodes:,} inode yetkili kullanıcılar için hazır"
+msgstr "Yetkili kullanıcı için %(bytes)d bayt ve %(inodes)d inode hazır"
 
 #: ../bleachbit/Wipe.py
 msgid "Encountered unknown error #0 while truncating file."
