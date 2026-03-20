@@ -152,7 +152,7 @@ class CleanerML:
         try:
             tree = xml.etree.ElementTree.parse(pathname)
             root_element = tree.getroot()
-        except (xml.etree.ElementTree.ParseError, xml.parsers.expat.ExpatError) as e:
+        except Exception as e:
             logger.error(
                 "Error parsing CleanerML file %s with error %s", pathname, e)
             return
@@ -394,6 +394,9 @@ def load_cleaners(cb_progress=lambda x: None):
             # TRANSLATORS: Error message printed to the log.
             # %s expands to the path of the XML cleaner file
             logger.exception(_("Error reading cleaner: %s"), pathname)
+            files_done += 1
+            cb_progress(1.0 * files_done / total_files)
+            yield True
             continue
         cleaner = xmlcleaner.get_cleaner()
         if cleaner.is_usable():

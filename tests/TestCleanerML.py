@@ -108,6 +108,26 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         shutil.rmtree(bleachbit.personal_cleaners_dir)
         bleachbit.personal_cleaners_dir = pcd
 
+    def test_load_cleaners_invalid_utf8(self):
+        """Unit test for load_cleaners() with invalid UTF-8 encoding"""
+        pcd = bleachbit.personal_cleaners_dir
+        bleachbit.personal_cleaners_dir = self.mkdtemp(
+            prefix='bleachbit-cleanerml-utf8')
+        self.write_file(os.path.join(bleachbit.personal_cleaners_dir, 'broken_encoding.xml'),
+                        contents=b'<cleaner id="poison">\n\xff\xfe\xfd Broken\n')
+        list(load_cleaners())
+        shutil.rmtree(bleachbit.personal_cleaners_dir)
+        bleachbit.personal_cleaners_dir = pcd
+
+    def test_CleanerML_invalid_utf8(self):
+        """Unit test for CleanerML() with invalid UTF-8 encoding"""
+        fn = os.path.join(self.mkdtemp(prefix='bleachbit-cleanerml-utf8'),
+                          'broken.xml')
+        self.write_file(fn, contents=b'<cleaner id="poison">\n\xff\xfe\xfd\n')
+        xmlcleaner = CleanerML(fn)
+        self.assertIsInstance(xmlcleaner, CleanerML)
+        self.assertFalse(xmlcleaner.cleaner.is_usable())
+
     def test_os_match(self):
         """Unit test for os_match"""
         xmlcleaner = CleanerML("doc/example_cleaner.xml")
