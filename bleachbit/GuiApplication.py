@@ -14,7 +14,7 @@ from bleachbit.Cleaner import backends
 from bleachbit.GUI import logger
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiWindow import GUI
-from bleachbit.Language import get_text as _
+from bleachbit.Language import get_text as _, get_active_language_code
 from bleachbit.Options import options
 
 # Ensure GTK is available for this GUI module
@@ -383,6 +383,12 @@ class Bleachbit(Gtk.Application):
             return False
         if options.get('font_check_completed'):
             return False
+        # Skip for CJK languages (Chinese, Japanese, Korean).
+        # They do not support Arial font, and they seem not to
+        # be affected by the font bug.
+        lang = get_active_language_code()
+        if lang.startswith(('zh', 'ja', 'ko')):
+            return False
         return True
 
     def _maybe_prompt_font_check(self):
@@ -397,6 +403,8 @@ class Bleachbit(Gtk.Application):
 
     def _show_font_check_dialog(self):
         """Show the font check dialog and handle the response."""
+        if os.name != 'nt':
+            return False
         if not self._window:
             return False
         dialog = create_font_check_dialog(self._window)
