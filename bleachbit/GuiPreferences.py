@@ -31,7 +31,7 @@ import os
 from bleachbit import GuiBasic
 from bleachbit import online_update_notification_enabled
 from bleachbit import ProtectedPath
-from bleachbit.Constant import EMPTY_SPACE_WARNING
+from bleachbit.Constant import EMPTY_SPACE_WARNING, REQUIRES_EXPERT_MODE
 from bleachbit.GtkShim import Gtk, GLib
 from bleachbit.GuiCookie import CookieManagerPane
 from bleachbit.GuiUtil import (detect_dark_background, flush_gtk_events,
@@ -431,6 +431,7 @@ class PreferencesDialog:
             _("Confirm before delete"),
             'delete_confirmation',
             vbox=vbox,
+            tooltip=REQUIRES_EXPERT_MODE,
             requires_option='expert_mode',
             store_as_attr='cb_delete_confirmation')
 
@@ -439,6 +440,7 @@ class PreferencesDialog:
             label=_("Reset warning confirmations"))
         self.reset_warnings_button.set_halign(Gtk.Align.START)
         self.reset_warnings_button.set_margin_top(6)
+        self.reset_warnings_button.set_tooltip_text(REQUIRES_EXPERT_MODE)
         self.reset_warnings_button.connect(
             'clicked', self.__reset_warning_preferences)
         self.reset_warnings_button.set_sensitive(options.get('expert_mode'))

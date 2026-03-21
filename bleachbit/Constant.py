@@ -32,3 +32,8 @@ EMPTY_SPACE_WARNING = _("Wiping empty space removes traces of files that were "
                         "It is not necessary if your drive is protected with full-disk encryption. "
                         "The method works best on traditional hard drives. On solid-state drives, it "
                         "is less reliable, and frequent use contributes to wear.")
+
+# TRANSLATORS: Error message shown in the infobar or notice shown in a tooltip.
+# Expert mode is an option in the preferences to relax guardrails.
+REQUIRES_EXPERT_MODE = _("This option requires expert mode. "
+                         "Enable it in Preferences.")

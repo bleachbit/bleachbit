@@ -12,7 +12,7 @@ import time
 import bleachbit
 from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path
 from bleachbit.Cleaner import backends, register_cleaners
-from bleachbit.Constant import ABORT_BUTTON_LABEL
+from bleachbit.Constant import ABORT_BUTTON_LABEL, REQUIRES_EXPERT_MODE
 from bleachbit.GUI import logger
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiPreferences import PreferencesDialog
@@ -801,9 +801,7 @@ class GUI(Gtk.ApplicationWindow):
 
         # block cleaning of warning options without expert mode
         if not options.get('expert_mode') and backends[cleaner_id].get_warning(option_id):
-            self.show_infobar(
-                # TRANSLATORS: Error message shown in the infobar.
-                _("This option requires expert mode. Enable it in Preferences."))
+            self.show_infobar(REQUIRES_EXPERT_MODE)
             return
 
         # delete
