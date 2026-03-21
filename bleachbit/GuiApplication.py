@@ -185,12 +185,14 @@ class Bleachbit(Gtk.Application):
             shred_uris = clipboard.wait_for_contents(
                 Gdk.atom_intern_static_string('text/uri-list')).get_uris()
             shred_paths = FileUtilities.uris_to_paths(shred_uris)
-        elif Gdk.atom_intern_static_string('text/plain') in targets:
+        elif Gdk.atom_intern_static_string('text/plain') in targets or \
+                Gdk.atom_intern_static_string('UTF8_STRING') in targets:
             # Plain text pasted from a text editor
             text = clipboard.wait_for_text()
             if text:
                 shred_paths = [p.strip()
                                for p in text.splitlines() if p.strip()]
+
         if shred_paths:
             GUI.shred_paths(self._window, shred_paths)
         else:
