@@ -12,6 +12,7 @@ from bleachbit.Language import get_text as _
 # This module centralizes constants.
 # By reducing imports, this module avoids circular dependencies.
 
+URL_COOKIE_MGR = "https://docs.bleachbit.org/doc/cookie-manager.html"
 
 # TRANSLATORS: Button label on (1) the headerbar and (2) the chaff dialog.
 # 'Abort' is a verb.

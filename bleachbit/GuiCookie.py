@@ -30,7 +30,9 @@ from bleachbit.GtkShim import GLib, Gtk
 
 # local import
 import bleachbit
+from bleachbit.Constant import URL_COOKIE_MGR
 from bleachbit.Cookie import list_unique_cookies, COOKIE_KEEP_LIST_FILENAME
+from bleachbit.GuiBasic import open_url
 from bleachbit.Language import get_text as _, nget_text as _n
 
 logger = logging.getLogger(__name__)
@@ -54,6 +56,25 @@ class CookieManagerPane(Gtk.Box):
         instructions.set_line_wrap(True)
         instructions.set_xalign(0)
         self.pack_start(instructions, False, False, 0)
+
+        # Notice about supported cookie types
+        notice_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        notice_label = Gtk.Label()
+        notice_label.set_markup(
+            # TRANSLATORS: This is a notice in the cookie manager about supported
+            # cookie types. The hyperlink points to the documentation website.
+            # Cookies refer to standard HTTP cookies.
+            # Site data includes LocalStorage, IndexedDB, and other website storage.
+            _("Only cookies are preserved. Site data is always deleted. "
+              "<a href='{url}'>Learn more</a>").format(
+                url=URL_COOKIE_MGR))
+        notice_label.set_line_wrap(True)
+        notice_label.set_xalign(0)
+        notice_label.connect(
+            "activate-link",
+            lambda _label, url: open_url(url, parent_window=None, prompt=True))
+        notice_box.pack_start(notice_label, False, False, 0)
+        self.pack_start(notice_box, False, False, 0)
 
         # Search box
         search_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
