@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-03-14 15:00-0600\n"
-"PO-Revision-Date: 2026-03-23 06:09+0000\n"
+"PO-Revision-Date: 2026-03-24 10:09+0000\n"
 "Last-Translator: Mona Lisa <nickwick@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/bleachbit/main/"
 "sv/>\n"
@@ -2863,7 +2863,7 @@ msgstr ""
 #, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to non-super-user"
 msgstr ""
-"%(bytes)d bytes och %(inodes)d inoder tillgängliga för icke-superanvändare"
+"%(bytes)d byte och %(inodes)d inoder tillgängliga för icke-superanvändare"
 
 #. TRANSLATORS: Debug message showing disk space available to the root (admin) user.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
@@ -2871,7 +2871,7 @@ msgstr ""
 #: ../bleachbit/Wipe.py
 #, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to super-user"
-msgstr "%(bytes)d bytes och %(inodes)d inoder tillgängliga för superanvändare"
+msgstr "%(bytes)d byte och %(inodes)d inoder tillgängliga för superanvändare"
 
 #: ../bleachbit/Wipe.py
 msgid "Encountered unknown error #0 while truncating file."
