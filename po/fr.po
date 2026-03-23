@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-03-14 15:00-0600\n"
-"PO-Revision-Date: 2026-03-23 06:09+0000\n"
+"PO-Revision-Date: 2026-03-24 10:09+0000\n"
 "Last-Translator: \"David D.\" <dadu042@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/bleachbit/main/"
 "fr/>\n"
@@ -2221,10 +2221,8 @@ msgstr ""
 
 #. TRANSLATORS: Section title on the preferences updates page.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Update to version %s"
 msgid "Update notifications"
-msgstr "Mettre à jour vers la version %s"
+msgstr "Notifications de mise à jour"
 
 #. TRANSLATORS: Section title (noun) on the Preferences - General page
 #. for options related to cleaning stored data.
@@ -2259,7 +2257,7 @@ msgstr "Thème Windows 10"
 #. instead of the default Windows renderer. May improve blurry text.
 #: ../bleachbit/GuiPreferences.py
 msgid "Use fontconfig text rendering backend"
-msgstr ""
+msgstr "Utiliser le backend de rendu de texte Fontconfig"
 
 #. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2270,7 +2268,7 @@ msgstr "Peut corriger un texte flou ou illisible. Nécessite un redémarrage."
 #. labelling options for OS integration and advanced/developer features.
 #: ../bleachbit/GuiPreferences.py
 msgid "Integration and advanced"
-msgstr ""
+msgstr "Intégration et avancé"
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #. 'Shred' means securely delete a file to prevent data recovery.
@@ -2423,13 +2421,12 @@ msgstr "Ajouter un dossier"
 #. TRANSLATORS: Update notification for users upgrading from versions
 #. older than 5.1.0.
 #: ../bleachbit/GuiStartup.py
-#, fuzzy
-#| msgid "This option requires expert mode. Enable it in Preferences."
 msgid ""
 "Cleaning options with warnings now require expert mode. Enable it in "
 "preferences to clean them."
 msgstr ""
-"Cette option nécessite le mode expert. Activez-la dans les préférences."
+"Les options de nettoyage avec avertissements nécessitent maintenant le mode "
+"expert. Activez-le dans les préférences pour les nettoyer."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
@@ -2693,10 +2690,9 @@ msgstr "Libération de %s de mémoire."
 #. path (e.g., /dev/sda5); %(uuid)s is a UUID string
 #. (e.g., ee0e85f6-6e5c-42b9-902f-776531938bbf). Do not translate variables.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid "Found UUID for swap file {device} is {uuid}."
+#, python-format
 msgid "Found UUID for swap device %(device)s is %(uuid)s."
-msgstr "L'UUID trouvé pour le fichier d'échange {device} est {uuid}."
+msgstr "L'UUID trouvé pour le fichier d'échange %(device)s  est %(uuid)s."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2725,16 +2721,13 @@ msgstr "Détection de ces périphériques d’échange : %s"
 #. TRANSLATORS: This is a debugging message that the parent process
 #. is waiting for the child process.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The function wipe_memory() with process ID {pid} is waiting for child "
-#| "process ID {cid}."
+#, python-format
 msgid ""
 "The function wipe_memory() with process ID %d is waiting for child process "
 "ID %d."
 msgstr ""
-"La fonction wipe_memory() avec l’identifiant de processus {pid} est en "
-"attente du processus enfant {cid}."
+"La fonction wipe_memory() avec l’identifiant de processus %d est en attente "
+"du processus enfant ID %d."
 
 #: ../bleachbit/Memory.py
 #, python-format
@@ -2919,11 +2912,11 @@ msgstr ""
 #. path; %(fstype)s is the file system type (e.g., ext3, ntfs).
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "Wiping path {pathname} with file system type {fstype}"
+#, python-format
 msgid "Wiping path %(pathname)s with file system type %(fstype)s"
 msgstr ""
-"Effacement du chemin {pathname} avec le type de système de fichiers {fstype}"
+"Effacement du chemin %(pathname)s avec le type de système de fichiers %"
+"(fstype)s"
 
 #: ../bleachbit/Wipe.py
 #, python-format
@@ -2960,29 +2953,25 @@ msgstr ""
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
+#, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to non-super-user"
 msgstr ""
-"{bytes:,} octets et {inodes:,} nœuds d’index disponibles pour les "
+"%(bytes)d octets et %(inodes)d nœuds d’index disponibles pour les "
 "utilisateurs standards"
 
 #. TRANSLATORS: Debug message showing disk space available to the root (admin) user.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
+#, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to super-user"
 msgstr ""
-"{bytes:,} octets et {inodes:,} nœuds d’index disponibles pour le super-"
+"%(bytes)d octets et %(inodes)d nœuds d’index disponibles pour le super-"
 "utilisateur"
 
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Handled unknown error #0 while truncating file."
 msgid "Encountered unknown error #0 while truncating file."
-msgstr "L’erreur inconnue n° 0 a été gérée lors de la troncature du fichier."
+msgstr "Erreur inconnue #0 rencontrée lors de la troncation du fichier."
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
