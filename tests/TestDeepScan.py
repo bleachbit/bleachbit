@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -33,6 +19,7 @@ from unittest import mock
 # first party imports
 from tests import common
 from tests import TestCleaner
+from tests.common import SPECIAL_TEST_STRINGS
 from bleachbit.DeepScan import DeepScan, Search, normalized_walk
 
 
@@ -42,7 +29,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
     def _test_encoding(self, fn):
         """Test encoding"""
 
-        fullpath = self.write_file(fn)
+        fullpath = self.write_file(fn + ".bak")
 
         # Add Unicode paths to encourage a crash.
         subdir = os.path.join(self.tempdir, 'ɡælɪk.dir')
@@ -72,7 +59,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
 
     def test_encoding(self):
         """Test encoding"""
-        for test in ('ascii.bak', 'äöüßÄÖÜ.bak', "עִבְרִית.bak", 'ɡælɪk.bak'):
+        for test in SPECIAL_TEST_STRINGS:
             self._test_encoding(test)
 
     def test_DeepScan(self):

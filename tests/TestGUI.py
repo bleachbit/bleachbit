@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -149,6 +135,16 @@ class GUITestCase(common.BleachbitTestCase):
         b = self.find_widget(dialog, Gtk.Button, label)
         self.assertIsNotNone(b)
         b.clicked()
+        self.refresh_gui()
+
+    def test_append_text(self):
+        """Test append_text handles special strings"""
+        gui = self.app._window
+        for test_str in common.SPECIAL_TEST_STRINGS:
+            gui.append_text(test_str + "\n")
+            gui.append_text(f"prefix{test_str}suffix\n")
+            gui.append_text(test_str + "\n", tag='error')
+            gui.append_text(f"Deleting file: /path/to/file_{test_str}.txt\n")
         self.refresh_gui()
 
     def test_get_window_info(self):

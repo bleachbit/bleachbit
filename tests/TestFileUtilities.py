@@ -576,27 +576,10 @@ State=AAAA/wA...
         """Called by test_delete() with shred = False and = True"""
 
         # test deleting with various kinds of filenames
-        hebrew = "עִבְרִית"
-        katanana = "アメリカ"
-        umlauts = "ÄäǞǟËëḦḧÏïḮḯÖöȪȫṎṏT̈ẗÜüǕǖǗǘǙǚǛǜṲṳṺṻẄẅẌẍŸÿ"
-
-        tests = ['.prefixandsuffix',  # simple
-                 "x".zfill(150),  # long
-                 ' begins_with_space',
-                 "''",  # quotation mark
-                 "~`!@#$%^&()-_+=x",  # non-alphanumeric characters
-                 "[]{};'.,x",  # non-alphanumeric characters
-                 'abcdefgh',  # simple Unicode
-                 'J\xf8rgen Scandinavian',
-                 '\u2014em-dash',  # LP#1454030
-                 hebrew,
-                 katanana,
-                 umlauts,
-                 'sigil-should$not-change']
+        tests = common.SPECIAL_TEST_STRINGS.copy()
         if 'posix' == os.name:
             # Windows doesn't allow these characters but Unix systems do
-            tests += ['"*', '\t\\', ':?<>|',
-                      ' ', '.file.']  # Windows filenames cannot end with space or period
+            tests += common.POSIX_SPECIAL_TEST_STRINGS
         for test in tests:
             # create the file
             filename = self.write_file(test, b"top secret")

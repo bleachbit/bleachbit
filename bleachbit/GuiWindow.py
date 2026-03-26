@@ -539,6 +539,10 @@ class GUI(Gtk.ApplicationWindow):
             return
         if not __iter:
             __iter = self.textbuffer.get_end_iter()
+        # Sanitize text to handle surrogate characters that GTK cannot encode.
+        # Surrogates (like \udcd6) can appear in filenames from the filesystem
+        # and cause UnicodeEncodeError when GTK tries to insert them.
+        text = text.encode('utf-8', errors='replace').decode('utf-8')
         if tag:
             self.textbuffer.insert_with_tags_by_name(__iter, text, tag)
         else:

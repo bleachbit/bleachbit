@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -406,3 +393,41 @@ def get_opened_windows_titles():
 
     win32gui.EnumWindows(enumerate_opened_windows_titles, None)
     return opened_windows_titles
+
+
+# Common test strings for filename testing across different test modules
+# https://github.com/bleachbit/bleachbit/issues/1709
+SPECIAL_TEST_STRINGS = [
+    '.prefixandsuffix',  # simple
+    "x".zfill(150),  # long
+    ' begins_with_space',
+    "''",  # quotation mark
+    "~`!@#$%^&()-_+=x",  # non-alphanumeric characters
+    "[]{};'.,x",  # non-alphanumeric characters
+    'abcdefgh',  # simple Unicode
+    'J\xf8rgen Scandinavian',
+    '\u2014em-dash',  # LP#1454030
+    "עִבְרִית",  # Hebrew
+    "アメリカ",  # Katakana
+    "ÄäǞǟËëḦḧÏïḮḯÖöȪȫṎṏT̈ẗÜüǕǖǗǘǙǚǛǜṲṳṺṻẄẅẌẍŸÿ",  # umlauts
+    'sigil-should$not-change',
+    'issue_1709_\udcd6',  # GitHub issue 1709
+    'invalid_unicode_surrogate_\udce9',
+    'multi_surrogate_\udcd6\udcd7\udcd8',
+    'fire_emoji_\U0001F525',
+    'ascii.bak',
+    'äöüßÄÖÜ.bak',
+    "עִבְרִית.bak",
+    'ɡælɪk.bak'
+]
+
+# Additional strings for POSIX systems.
+# Windows doesn't allow or requires special handling for these characters.
+POSIX_SPECIAL_TEST_STRINGS = [
+    '"*',
+    '\t\\',
+    ':?<>|',
+    ' ',
+    'endspace ',
+    'endperiod.'  # Windows filenames cannot end with space or period
+]

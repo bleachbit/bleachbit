@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -32,6 +19,7 @@ import tempfile
 
 # first party imports
 from bleachbit.CLI import (
+    CliCallback,
     args_to_operations,
     args_to_operations_list,
     cleaners_list,
@@ -287,6 +275,17 @@ class CLITestCase(common.BleachbitTestCase):
             os.remove(filename)
             self.assertNotExists(filename)
             self.assertFalse(crash[0])
+
+    def test_append_text(self):
+        """Unit test for CliCallback.append_text() with special strings"""
+        cb = CliCallback(quiet=False)
+        for test_str in common.SPECIAL_TEST_STRINGS:
+            # Test that append_text handles special strings without crashing
+            cb.append_text(test_str + "\n")
+            # Test with newlines stripped (as implementation does)
+            cb.append_text(f"prefix{test_str}suffix\n")
+            # Test tag parameter (ignored but should not crash)
+            cb.append_text(test_str + "\n", _tag="test_tag")
 
     def test_return_text(self):
         """Check for correct text in output"""
