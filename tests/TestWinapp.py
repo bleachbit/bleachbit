@@ -655,4 +655,4 @@ FileKey1=%CommonAppData%\Initech\TPSReports\Logs|*.*""",
         print(f'Elapsed time in preview: {t1 - t0:.4f} seconds ')
 
         # delete
-        self.run_all(cleaner, False)
+        self.run_all(cleaner, True)
