@@ -729,10 +729,11 @@ class Winreg(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
         self.keyname = action_element.getAttribute('path')
         self.name = action_element.getAttribute('name')
+        self.excludekeys = []
 
     def get_commands(self):
         if 'nt' == os.name:
-            yield Command.Winreg(self.keyname, self.name)
+            yield Command.Winreg(self.keyname, self.name, self.excludekeys)
 
 
 class YumCleanAll(ActionProvider):

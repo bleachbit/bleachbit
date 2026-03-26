@@ -1,23 +1,8 @@
-
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Import Winapp2.ini files
@@ -210,7 +195,7 @@ class Winapp:
         return cleanerid
 
     def excludekey_to_nwholeregex(self, excludekey):
-        r"""Translate one ExcludeKey to CleanerML nwholeregex
+        r"""Translate one ExcludeKey to CleanerML nwholeregex or return None for REG
 
         Supported examples
         FILE=%LocalAppData%\BleachBit\BleachBit.ini
@@ -219,11 +204,12 @@ class Winapp:
         FILE=%LocalAppData%\BleachBit\|*.ini;*.bak
         PATH=%LocalAppData%\BleachBit\
         PATH=%LocalAppData%\BleachBit\|*.*
+        REG|HKCU\Software\BleachBit
         """
         parts = excludekey.split('|')
         parts[0] = parts[0].upper()
         if parts[0] == 'REG':
-            raise NotImplementedError('REG not supported in ExcludeKey')
+            return None  # REG exclusions are handled separately
 
         # the last part contains the filename(s)
         files = None
@@ -299,11 +285,21 @@ class Winapp:
         if not self.detect(section):
             return
         # excludekeys ignores a file, path, or registry key
-        excludekeys = [
-            self.excludekey_to_nwholeregex(self.parser.get(section, option))
-            for option in self.parser.options(section)
-            if re.match(self.re_excludekey, option)
-        ]
+        # FILE/PATH exclusions use regex patterns for file matching
+        # REG exclusions are handled separately as registry key patterns
+        file_excludekeys = []
+        reg_excludekeys = []
+        for option in self.parser.options(section):
+            if re.match(self.re_excludekey, option):
+                excludekey_val = self.parser.get(section, option)
+                nwholeregex = self.excludekey_to_nwholeregex(excludekey_val)
+                if nwholeregex is None:
+                    # REG exclusion: extract the registry path
+                    parts = excludekey_val.split('|')
+                    if len(parts) >= 2:
+                        reg_excludekeys.append(parts[1])
+                else:
+                    file_excludekeys.append(nwholeregex)
         # there are two ways to specify sections: langsecref= and section=
         if self.parser.has_option(section, 'langsecref'):
             # verify the langsecref number is known
@@ -336,9 +332,9 @@ class Winapp:
             ):
                 continue
             if option.startswith('filekey'):
-                self.handle_filekey(lid, section, option, excludekeys)
+                self.handle_filekey(lid, section, option, file_excludekeys)
             elif option.startswith('regkey'):
-                self.handle_regkey(lid, section, option)
+                self.handle_regkey(lid, section, option, reg_excludekeys)
             elif option == 'warning':
                 self.cleaners[lid].set_warning(
                     section2option(section), self.parser.get(section, 'warning'))
@@ -413,16 +409,30 @@ class Winapp:
                     self.cleaners[lid].add_action(
                         section2option(ini_section), provider)
 
-    def handle_regkey(self, lid, ini_section, ini_option):
+    def handle_regkey(self, lid, ini_section, ini_option, reg_excludekeys):
         """Parse a RegKey# option"""
         elements = self.parser.get(
             ini_section, ini_option).strip().split('|')
-        path = xml_escape(elements[0])
+        path = elements[0]
+
+        # Check if this registry key is excluded (exact match or starts with exclusion)
+        for exclude_path in reg_excludekeys:
+            # Normalize paths for comparison
+            normalized_path = path.upper().replace('\\', '\\\\')
+            normalized_exclude = exclude_path.upper().replace('\\', '\\\\')
+            # Check if the path matches the exclusion (exact match or starts with exclusion)
+            if normalized_path == normalized_exclude or \
+               normalized_path.startswith(normalized_exclude + '\\\\'):
+                logger.debug('Skipping excluded registry key: %s', path)
+                return
+
+        path = xml_escape(path)
         name = ""
         if len(elements) == 2:
             name = f' name="{xml_escape(elements[1])}"'
         action_str = f'<option command="winreg" path="{path}"{name}/>'
         provider = Winreg(parseString(action_str).childNodes[0])
+        provider.excludekeys = reg_excludekeys
         self.cleaners[lid].add_action(section2option(ini_section), provider)
 
     def get_cleaners(self):
