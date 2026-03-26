@@ -51,7 +51,8 @@ KEYFULL = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
 
 def get_winapp2():
     """Download and cache winapp2.ini.  Return local filename."""
-    url = "https://raw.githubusercontent.com/bleachbit/winapp2.ini/refs/heads/master/Winapp2-BleachBit.ini"
+    url = ("https://raw.githubusercontent.com/bleachbit/winapp2.ini"
+            "/refs/heads/master/Winapp2-BleachBit.ini")
     tmpdir = None
     if os.name == 'posix':
         tmpdir = '/tmp'
@@ -124,12 +125,12 @@ class WinappTestCase(common.BleachbitTestCase):
                  # 10.0 is the minimum
                  ('10.0|', '5.1', False),
                  ('10.0|', '10.0', True))
-        for (req, mock, expected_return) in tests:
-            mock = parse_windows_build(mock)
-            actual_return = detectos(req, mock)
-            self.assertEqual(expected_return, actual_return,
-                             'detectos(%s, %s)==%s instead of %s' % (req, mock,
-                                                                     actual_return, expected_return))
+        for (req, mock_ver, expected_return) in tests:
+            mock_ver = parse_windows_build(mock_ver)
+            actual_return = detectos(req, mock_ver)
+            msg = (f'detectos({req}, {mock_ver})=={actual_return}'
+                   f' instead of {expected_return}')
+            self.assertEqual(expected_return, actual_return, msg)
 
     @common.skipUnlessWindows
     def test_detect_file(self):
@@ -153,13 +154,13 @@ class WinappTestCase(common.BleachbitTestCase):
                 raise RuntimeError(
                     'Test expects objects in %ProgramW6432% not in %ProgramFiles%')
             for pathname in dir_32_unique:
-                tests.append(('%%ProgramFiles%%\\%s' % pathname, True))
+                tests.append((f'%ProgramFiles%\\{pathname}', True))
         else:
             logger.info(
                 'skipping %ProgramW6432% tests because WoW64 not detected')
-        for (pathname, expected_return) in tests:
+        for pathname, expected_return in tests:
             actual_return = detect_file(pathname)
-            msg = 'detect_file(%s) returned %s' % (pathname, actual_return)
+            msg = f'detect_file({pathname}) returned {actual_return}'
             self.assertEqual(expected_return, actual_return, msg)
 
     def setup_fake(self, f1_filename=None):
@@ -168,17 +169,13 @@ class WinappTestCase(common.BleachbitTestCase):
 
         # put ampersand in directory name to test
         # https://github.com/bleachbit/bleachbit/issues/308
-        dirname = tempfile.mkdtemp(prefix='bleachbit-test-winapp&')
-        fname1 = os.path.join(dirname, f1_filename or 'deleteme.log')
-        open(fname1, 'w').close()
+        dirname = self.mkdtemp(prefix='bleachbit-test-winapp&')
+        fname1 = self.write_file(os.path.join(dirname, f1_filename or 'deleteme.log'), b'', 'wb')
 
-        dirname2 = os.path.join(dirname, 'sub')
-        os.mkdir(dirname2)
-        fname2 = os.path.join(dirname2, 'deleteme.log')
-        open(fname2, 'w').close()
+        dirname2 = self.mkdir(os.path.join(dirname, 'sub'))
+        fname2 = self.write_file(os.path.join(dirname2, 'deleteme.log'), b'', 'wb')
 
-        fbak = os.path.join(dirname, 'deleteme.bak')
-        open(fbak, 'w').close()
+        fbak = self.write_file(os.path.join(dirname, 'deleteme.bak'), b'', 'wb')
 
         self.assertExists(fname1)
         self.assertExists(fname2)
@@ -187,28 +184,25 @@ class WinappTestCase(common.BleachbitTestCase):
         _create_registry_keys(subkey)
 
         self.assertTrue(detect_registry_key(KEYFULL))
-        self.assertTrue(detect_registry_key('HKCU\\%s' % subkey))
+        self.assertTrue(detect_registry_key(f'HKCU\\{subkey}'))
 
         return dirname, fname1, fname2, fbak
 
     def ini2cleaner(self, body, do_next=True):
         """Write a minimal Winapp2.ini"""
-        with open(self.ini_fn, 'w') as ini:
+        with open(self.ini_fn, 'w', encoding='utf-8') as ini:
             ini.write('[someapp]\nLangSecRef=3021\n' + body + '\n')
         self.assertExists(self.ini_fn)
         if do_next:
             return next(Winapp(self.ini_fn).get_cleaners())
-        else:
-            return Winapp(self.ini_fn).get_cleaners()
+        return Winapp(self.ini_fn).get_cleaners()
 
     @common.skipUnlessWindows
     def test_fake(self):
         """Test with fake file"""
 
         # reuse this path to store a winapp2.ini file in
-        (ini_h, self.ini_fn) = tempfile.mkstemp(
-            suffix='.ini', prefix='winapp2')
-        os.close(ini_h)
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2')
 
         # a set of tests
         # this map explains what each position in the test tuple means
@@ -266,7 +260,7 @@ class WinappTestCase(common.BleachbitTestCase):
                 "\nDetect=HKCU\\Software\\Microsoft\nDetectFile=%%APPDATA%%\\does_not_exist",
                     "\nDetect=HKCU\\Software\\does_not_exist\nDetectFile=%%APPDATA%%\\Microsoft"):
                 new_ini = test[0] + detect
-                new_test = [new_ini, ] + [x for x in test[1:]]
+                new_test = [new_ini, ] + list(test[1:])
                 new_tests.append(new_test)
         positive_tests = tests + new_tests
 
@@ -296,9 +290,10 @@ class WinappTestCase(common.BleachbitTestCase):
                 "\nDetectFile1=c:\\does_not_exist1\nDetectFile2=c:\\does_not_exist2",
                 "\nDetect=HKCU\\Software\\does_not_exist",
                 "\nDetect=HKCU\\Software\\does_not_exist_&'",
-                    "\nDetect1=HKCU\\Software\\does_not_exist1\nDetect2=HKCU\\Software\\does_not_exist1"):
+                    "\nDetect1=HKCU\\Software\\does_not_exist1"
+                    "\nDetect2=HKCU\\Software\\does_not_exist1"):
                 new_ini = test[0] + detect
-                test_full = [new_ini, ] + [x for x in test[1:]]
+                test_full = [new_ini, ] + list(test[1:])
                 print('negative test', test_full)
                 # execute the test
                 (dirname, fname1, fname2, fbak) = self.setup_fake()
@@ -308,7 +303,7 @@ class WinappTestCase(common.BleachbitTestCase):
 
         # registry key, basic
         (dirname, fname1, fname2, fbak) = self.setup_fake()
-        cleaner = self.ini2cleaner('RegKey1=%s' % KEYFULL)
+        cleaner = self.ini2cleaner(f'RegKey1={KEYFULL}')
         self.run_all(cleaner, False)
         self.assertTrue(detect_registry_key(KEYFULL))
         self.run_all(cleaner, True)
@@ -328,9 +323,7 @@ class WinappTestCase(common.BleachbitTestCase):
         """Test for ExcludeKey"""
 
         # reuse this path to store a winapp2.ini file in
-        (ini_h, self.ini_fn) = tempfile.mkstemp(
-            suffix='.ini', prefix='winapp2', dir=self.tempdir)
-        os.close(ini_h)
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2')
 
         # Each tuple contains:
         #   [0] = Body of winapp2.ini configuration
@@ -408,13 +401,19 @@ class WinappTestCase(common.BleachbitTestCase):
             ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.bak;*.log',
              True, True, True),
             # multiple ExcludeKey, neither of which should do anything
-            ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|c:\\doesnotexist|*.*\nExcludeKey2=PATH|c:\\alsodoesnotexist\\|*.*',
+            ('FileKey1=%(d)s|deleteme.*|RECURSE'
+             '\nExcludeKey1=PATH|c:\\doesnotexist|*.*'
+             '\nExcludeKey2=PATH|c:\\alsodoesnotexist\\|*.*',
              False, False, False),
             # multiple ExcludeKey, the first should work
-            ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.log\nExcludeKey2=PATH|c:\\alsodoesnotexist\\|*.*',
+            ('FileKey1=%(d)s|deleteme.*|RECURSE'
+             '\nExcludeKey1=PATH|%(d)s|*.log'
+             '\nExcludeKey2=PATH|c:\\alsodoesnotexist\\|*.*',
              True, False, True),
             # multiple ExcludeKey, both should work
-            ('FileKey1=%(d)s|deleteme.*|RECURSE\nExcludeKey1=PATH|%(d)s|*.log\nExcludeKey2=PATH|%(d)s|*.bak',
+            ('FileKey1=%(d)s|deleteme.*|RECURSE'
+             '\nExcludeKey1=PATH|%(d)s|*.log'
+             '\nExcludeKey2=PATH|%(d)s|*.bak',
              True, True, True),
             # glob should exclude the directory called 'sub'
             ('FileKey1=%(d)s|*.*\nExcludeKey1=PATH|%(d)s\\s*',
@@ -422,12 +421,12 @@ class WinappTestCase(common.BleachbitTestCase):
         )
 
         for test in tests:
-            msg = '\nTest:\n%s' % test[0]
+            msg = f'\nTest:\n{test[0]}'
             # setup
             (dirname, _fname1, _fname2, _fbak) = self.setup_fake()
-            self.assertExists(r'%s\deleteme.log' % dirname, msg)
-            self.assertExists(r'%s\deleteme.bak' % dirname, msg)
-            self.assertExists(r'%s\sub\deleteme.log' % dirname, msg)
+            self.assertExists(rf'{dirname}\deleteme.log', msg)
+            self.assertExists(rf'{dirname}\deleteme.bak', msg)
+            self.assertExists(rf'{dirname}\sub\deleteme.log', msg)
             # set environment variable for testing
             os.environ['bbtestdir'] = dirname
             self.assertExists(r'$bbtestdir\deleteme.log', msg)
@@ -435,10 +434,10 @@ class WinappTestCase(common.BleachbitTestCase):
             cleaner = self.ini2cleaner(test[0] % {'d': dirname})
             self.run_all(cleaner, True)
             # test
-            self.assertCondExists(test[1], r'%s\deleteme.log' % dirname, msg)
-            self.assertCondExists(test[2], r'%s\deleteme.bak' % dirname, msg)
+            self.assertCondExists(test[1], rf'{dirname}\deleteme.log', msg)
+            self.assertCondExists(test[2], rf'{dirname}\deleteme.bak', msg)
             self.assertCondExists(
-                test[3], r'%s\sub\deleteme.log' % dirname, msg)
+                test[3], rf'{dirname}\sub\deleteme.log', msg)
 
             # cleanup
             shutil.rmtree(dirname, True)
@@ -457,9 +456,7 @@ class WinappTestCase(common.BleachbitTestCase):
         """Test for ExcludeKey with REG type to prevent registry key deletion"""
 
         # reuse this path to store a winapp2.ini file in
-        (ini_h, self.ini_fn) = tempfile.mkstemp(
-            suffix='.ini', prefix='winapp2', dir=self.tempdir)
-        os.close(ini_h)
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2')
 
         test_key_parent = r'Software\BleachBitTest\ExcludeKey'
         test_key_child0 = rf'{test_key_parent}\Child0'
@@ -478,7 +475,9 @@ class WinappTestCase(common.BleachbitTestCase):
         for exclude_key, parent_should_remain, child0_should_remain, child1_should_remain in tests:
             with self.subTest(exclude_key=exclude_key):
                 try:
-                    _create_registry_keys(test_key_parent, test_key_child0, test_key_child1, test_key_not_exc)
+                    _create_registry_keys(
+                        test_key_parent, test_key_child0,
+                        test_key_child1, test_key_not_exc)
                     cleaner_ini = f'''RegKey1=HKCU\\{test_key_parent}
 RegKey2=HKCU\\{test_key_child0}
 RegKey3=HKCU\\{test_key_child1}
@@ -500,13 +499,14 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
                         test_key_not_exc: False,
                     })
                 finally:
-                    _delete_registry_keys(test_key_parent, test_key_child0, test_key_child1, test_key_not_exc)
+                    _delete_registry_keys(
+                        test_key_parent, test_key_child0,
+                        test_key_child1, test_key_not_exc)
 
     @common.skipUnlessWindows
     def test_filekey_with_path_including_systemdrive(self):
-        (ini_h, self.ini_fn) = tempfile.mkstemp(
-            suffix='.ini', prefix='winapp2')
-        os.close(ini_h)
+        """Test FileKey with path including SystemDrive"""
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2')
         # lexists(r'C:filename') returns False
         # FindFilesW(r'C:filename') throws an exception
         # So assert that we use r'C:\filename'.
@@ -537,39 +537,39 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
 
         # indexes for test
         # position 0: FileKey statement
-        # position 1: whether the file `dir_c\subdir\foo.log` should exist after operation is complete
+        # position 1: whether the file `dir_c\subdir\foo.log` should exist
+        #              after operation is complete
         # position 2: path of top-folder which should have been deleted
+        d = self.tempdir
         tests = (
             # Refer to directory directly (i.e., without a glob).
-            (r'FileKey1=%s\dir_c|*.*|REMOVESELF' %
-             self.tempdir, False, r'%s\dir_c' % self.tempdir),
+            (rf'FileKey1={d}\dir_c|*.*|REMOVESELF',
+             False, rf'{d}\dir_c'),
             # Refer to file that exists. This is invalid, so nothing happens.
-            (r'FileKey1=%s\dir_c\submarine_sandwich.log|*.*|REMOVESELF' %
-             self.tempdir, True, ''),
-            (r'FileKey1=%s\dir_c\submarine*|*.*|REMOVESELF' %
-             self.tempdir, True, ''),
+            (rf'FileKey1={d}\dir_c\submarine_sandwich.log|*.*|REMOVESELF',
+             True, ''),
+            (rf'FileKey1={d}\dir_c\submarine*|*.*|REMOVESELF',
+             True, ''),
             # Refer to path that does not exist, so nothing happens.
-            (r'FileKey1=%s\dir_c\doesnotexist.log|*.*|REMOVESELF' %
-             self.tempdir, True, ''),
+            (rf'FileKey1={d}\dir_c\doesnotexist.log|*.*|REMOVESELF',
+             True, ''),
             # Refer by glob to both a file and directory (which both start with `sub`).
             # This should affect only the directory.
-            (r'FileKey1=%s\dir_a\sub*|*.*|REMOVESELF' %
-             self.tempdir, True, r'%s\dir_a\subdir' % self.tempdir),
+            (rf'FileKey1={d}\dir_a\sub*|*.*|REMOVESELF',
+             True, rf'{d}\dir_a\subdir'),
             # glob in middle of directory path with whole directory entry
-            (r'FileKey1=%s\*c\subdir|*.*|REMOVESELF' %
-             self.tempdir, False, r'%s\dir_c\subdir' % self.tempdir),
-            (r'FileKey1=%s\*doesnotexist\subdir|*.*|REMOVESELF' %
-             self.tempdir, True, ''),
+            (rf'FileKey1={d}\*c\subdir|*.*|REMOVESELF',
+             False, rf'{d}\dir_c\subdir'),
+            (rf'FileKey1={d}\*doesnotexist\subdir|*.*|REMOVESELF',
+             True, ''),
             # glob at end of path
-            (r'FileKey1=%s\dir_c\sub*|*.*|REMOVESELF' %
-             self.tempdir, False, r'%s\dir_c\subdir' % self.tempdir),
-            (r'FileKey1=%s\dir_c\doesnotexist*|*.*|REMOVESELF' %
-             self.tempdir, True, '')
+            (rf'FileKey1={d}\dir_c\sub*|*.*|REMOVESELF',
+             False, rf'{d}\dir_c\subdir'),
+            (rf'FileKey1={d}\dir_c\doesnotexist*|*.*|REMOVESELF',
+             True, '')
         )
 
-        (ini_h, self.ini_fn) = tempfile.mkstemp(
-            suffix='.ini', prefix='winapp2')
-        os.close(ini_h)
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2')
 
         for filekey, c_log_expected, top_log_expected in tests:
             for letter in ('a', 'b', 'c'):
@@ -608,20 +608,20 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
 
     def test_section_not_found(self):
         """Test a section that is found"""
-        tmp_ini_fn = os.path.join(self.tempdir, 'section_not_found.ini')
-
-        with open(tmp_ini_fn, 'w') as f:
-            f.write(r"""[Initech TPS Reports *]
+        tmp_ini_fn = self.write_file(
+            'section_not_found.ini',
+            r"""[Initech TPS Reports *]
 LangSecRef=3023
 DetectFile=%CommonAppData%\Initech\TPSReports
-FileKey1=%CommonAppData%\Initech\TPSReports\Logs|*.*""")
+FileKey1=%CommonAppData%\Initech\TPSReports\Logs|*.*""",
+            mode='w')
 
         with mock.patch.object(Winapp, 'detect', return_value=True) as mock_detect:
             winapps = Winapp(tmp_ini_fn)
             cleaner_list = list(winapps.get_cleaners())
             self.assertEqual(len(cleaner_list), 1)
             self.assertEqual(cleaner_list[0].get_name(), 'Multimedia')
-            this_option = [x for x in cleaner_list[0].get_options()][0]
+            this_option = list(cleaner_list[0].get_options())[0]
             self.assertEqual(this_option[0], 'initech_tps_reports')
             self.assertEqual(this_option[1], 'Initech TPS Reports')
             mock_detect.assert_called()
@@ -635,32 +635,24 @@ FileKey1=%CommonAppData%\Initech\TPSReports\Logs|*.*""")
         # set up environment
         file_count = 1000
         dir_count = 10
-        print('Making %d files in each of %d directories.' %
-              (file_count, dir_count))
-        tmp_dir = tempfile.mkdtemp()
+        print(f'Making {file_count} files in each of {dir_count} directories.')
         for i_d in range(1, dir_count + 1):
-            sub_dir = os.path.join(tmp_dir, 'dir%d' % i_d)
+            sub_dir = self.mkdir(os.path.join(self.tempdir, f'dir{i_d}'))
             for i_f in range(1, file_count + 1):
-                tmp_fn = os.path.join(sub_dir, 'file%d' % i_f)
-                common.touch_file(tmp_fn)
+                self.write_file(os.path.join(sub_dir, f'file{i_f}'))
 
-        (ini_h, self.ini_fn) = tempfile.mkstemp(
-            suffix='.ini', prefix='winapp2')
-        os.close(ini_h)
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2')
 
         searches = ';'.join(
-            ['*.%s' % letter for letter in string.ascii_letters[0:26]])
+            [f'*.{letter}' for letter in string.ascii_letters[0:26]])
         cleaner = self.ini2cleaner(
-            'FileKey1=%s|%s|RECURSE' % (tmp_dir, searches))
+            f'FileKey1={self.tempdir}|{searches}|RECURSE')
 
         # preview
         t0 = time.time()
         self.run_all(cleaner, False)
         t1 = time.time()
-        print('Elapsed time in preview: %.4f seconds ' % (t1 - t0))
+        print(f'Elapsed time in preview: {t1 - t0:.4f} seconds ')
 
         # delete
         self.run_all(cleaner, False)
-
-        # clean up
-        shutil.rmtree(tmp_dir)
