@@ -17,16 +17,17 @@ import types
 import warnings
 from unittest import mock
 
-from bleachbit.GtkShim import HAVE_GTK, Gtk, GLib, Gio
-
-if HAVE_GTK:
-    from bleachbit.GuiApplication import Bleachbit
-    from bleachbit.GuiUtil import get_font_size_from_name, get_window_info
-
 import bleachbit
+from bleachbit.GtkShim import HAVE_GTK
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 from tests import common
+
+if HAVE_GTK:
+    from bleachbit.GtkShim import Gtk, GLib, Gio, GObject
+    from bleachbit.GuiApplication import Bleachbit
+    from bleachbit.GuiUtil import get_font_size_from_name, get_window_info
+    from bleachbit.GuiTreeModels import TreeDisplayModel
 
 bleachbit.online_update_notification_enabled = False
 
@@ -451,3 +452,35 @@ class GUITestCase(common.BleachbitTestCase):
                 backends.pop(non_cookie_cleaner_id, None)
             else:
                 backends[non_cookie_cleaner_id] = saved_non_cookie_cleaner
+
+    def test_parent_unchecked_when_all_children_blocked_by_expert_mode(self):
+        """When all children are blocked by expert mode, parent must stay unchecked."""
+
+        model = Gtk.TreeStore(
+            GObject.TYPE_STRING,   # 0: name
+            GObject.TYPE_BOOLEAN,  # 1: active
+            GObject.TYPE_PYOBJECT,  # 2: id
+            GObject.TYPE_STRING,   # 3: size
+            GObject.TYPE_STRING,   # 4: icon
+        )
+        parent_iter = model.append(
+            None, ("TestCleaner", False, "test_cleaner", "", ""))
+        model.append(parent_iter, ("Option1", False, "option1", "", ""))
+        model.append(parent_iter, ("Option2", False, "option2", "", ""))
+
+        tdm = TreeDisplayModel()
+
+        def blocked_warning(_option_id):
+            return "This option requires expert mode."
+
+        with mock.patch('bleachbit.GuiTreeModels.backends',
+                        {"test_cleaner": mock.Mock(get_warning=blocked_warning)}), \
+                mock.patch('bleachbit.GuiTreeModels.options') as mock_options:
+            mock_options.get.return_value = False  # expert_mode off
+            mock_options.get_warning_preference.return_value = False
+
+            parent_path = model.get_path(parent_iter)
+            tdm.col1_toggled_cb(None, str(parent_path), model, None)
+
+        self.assertFalse(model[parent_iter][1],
+                         "Parent should remain unchecked when all children are blocked by expert mode")

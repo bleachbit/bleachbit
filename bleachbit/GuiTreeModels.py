@@ -134,6 +134,17 @@ class TreeDisplayModel:
         while child:
             self.set_cleaner(child, model, parent_window, is_toggled_on)
             child = model.iter_next(child)
+        # If the parent was just enabled but all children were blocked
+        # by expert mode, leave the parent unchecked.
+        if not parent and is_toggled_on:
+            child = model.iter_children(i)
+            any_child_enabled = False
+            while child:
+                if model[child][1]:
+                    any_child_enabled = True
+                child = model.iter_next(child)
+            if not any_child_enabled:
+                model[i][1] = False
         return
 
 
