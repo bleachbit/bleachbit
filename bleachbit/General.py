@@ -250,6 +250,8 @@ def run_external_nowait(args, env=None, kwargs=None):
     Returns a boolean whether the process was started successfully.
 
     """
+    if kwargs is None:
+        kwargs = {}
     try:
         if sys.platform == 'win32':
             kwargs['creationflags'] = subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP

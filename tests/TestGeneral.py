@@ -43,6 +43,7 @@ from bleachbit.General import (
     get_real_username,
     makedirs,
     run_external,
+    run_external_nowait,
     shell_split,
     sudo_mode)
 from tests import common
@@ -272,6 +273,13 @@ class GeneralTestCase(common.BleachbitTestCase):
                     break
                 time.sleep(0.1)
             self.assertExists(output_file)
+
+    @common.skipUnlessWindows
+    def test_run_external_nowait_no_kwargs(self):
+        """Test run_external_nowait with kwargs=None"""
+        cmd = ['cmd.exe', '/c', 'exit', '0']
+        result = run_external_nowait(cmd)
+        self.assertTrue(result)
 
     def test_run_external_command_completion(self):
         """Test that run_external() commands complete successfully"""
