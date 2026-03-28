@@ -55,8 +55,6 @@
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
-    <action command="delete" search="walk.all" path="$$profile$$/File System"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
     <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*def/GPUCache"/>
     <action command="delete" search="walk.files" path="$$profile$$/GPUCache/"/>
     <action command="delete" search="walk.files" path="$$profile$$/DawnCache/"/>
@@ -84,16 +82,6 @@
     <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
     <action command="cookie" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
-  </option>
-  <option id="dom">
-    <label>DOM Storage</label>
-    <description>Delete HTML5 cookies</description>
-    <!-- do not delete extension preferences ~/.config/chromium/Default/database/chrome-extension* (Fedora 14, Chromium 12) -->
-    <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
-    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage"/>
-    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage-journal"/>
-    <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
   </option>
   <option id="form_history">
     <label>Form history</label>
@@ -128,8 +116,6 @@
     <action command="delete" search="file" path="$$profile$$/Top Sites"/>
     <action command="delete" search="file" path="$$profile$$/Top Sites-journal"/>
     <action command="delete" search="file" path="$$profile$$/Visited Links"/>
-    <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
-    <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
     <action command="delete" search="file" path="$$profile$$/WebStorage/QuotaManager"/>
     <action command="delete" search="file" path="$$profile$$/WebStorage/QuotaManager-journal"/>
     <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
@@ -152,6 +138,20 @@
     <action command="delete" search="file" path="$$profile$$/Last Session"/>
     <action command="delete" search="file" path="$$profile$$/Last Tabs"/>
     <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
+  </option>
+  <option id="site_data">
+    <label>Site data</label>
+    <description>Delete LocalStorage, IndexedDB, and other data stored by websites.</description>
+    <!-- do not delete extension preferences ~/.config/chromium/Default/database/chrome-extension* (Fedora 14, Chromium 12) -->
+    <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
+    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage"/>
+    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage-journal"/>
+    <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
+    <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
+    <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
+    <action command="delete" search="walk.all" path="$$profile$$/File System"/>
   </option>
   <option id="sync">
     <label>Sync</label>

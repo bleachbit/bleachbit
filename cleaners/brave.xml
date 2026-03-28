@@ -38,9 +38,7 @@
     <action command="delete" search="file" path="$$base$$/Safe Browsing Channel IDs-journal"/>
     <action command="delete" search="file" path="$$profile$$/Network Persistent State"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
-    <action command="delete" search="walk.all" path="$$profile$$/File System"/>
     <action command="delete" search="walk.all" path="$$profile$$/Pepper Data/Shockwave Flash/CacheWritableAdobeRoot/"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
     <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*def/GPUCache"/>
     <action command="delete" search="walk.files" path="$$profile$$/GPUCache/"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/host_referral_list"/>
@@ -65,17 +63,6 @@
     <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
     <action command="cookie" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
-    <action command="delete" search="walk.all" path="$$profile$$/IndexedDB/"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Pepper Data/Shockwave Flash/WritableRoot/"/>
-  </option>
-  <option id="dom">
-    <label>DOM Storage</label>
-    <description>Delete HTML5 cookies</description>
-    <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
-    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage"/>
-    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage-journal"/>
-    <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
   </option>
   <option id="form_history">
     <label>Form history</label>
@@ -109,8 +96,6 @@
     <action command="delete" search="file" path="$$profile$$/Top Sites"/>
     <action command="delete" search="file" path="$$profile$$/Top Sites-journal"/>
     <action command="delete" search="file" path="$$profile$$/Visited Links"/>
-    <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
-    <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
     <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
     <!-- Windows-specific -->
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsMostVisited\"/>
@@ -132,6 +117,21 @@
     <action command="delete" search="file" path="$$profile$$/Last Tabs"/>
     <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
     <action command="delete" search="walk.all" path="$$profile$$/Sessions"/>
+  </option>
+  <option id="site_data">
+    <label>Site data</label>
+    <description>Delete LocalStorage, IndexedDB, and other data stored by websites.</description>
+    <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
+    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage"/>
+    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage-journal"/>
+    <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/IndexedDB/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Pepper Data/Shockwave Flash/WritableRoot/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
+    <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
+    <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
+    <action command="delete" search="walk.all" path="$$profile$$/File System"/>
   </option>
   <option id="sync">
     <label>Sync</label>
