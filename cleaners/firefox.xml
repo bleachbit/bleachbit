@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    BleachBit
-    Copyright (C) 2008-2025 Andrew Ziem
-    https://www.bleachbit.org
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
 
 -->
 <cleaner id="firefox">
@@ -31,19 +19,15 @@
   <running type="pathname">~/.var/app/org.mozilla.firefox/.mozilla/firefox/*.default*/lock</running>
   <var name="base">
     <value os="windows">%AppData%\Mozilla\Firefox</value>
-    <value os="linux">~/.mozilla/firefox</value>
+    <value os="unix">~/.mozilla/firefox</value>
     <value os="linux">~/snap/firefox/common/.mozilla/firefox</value>
     <value os="linux">~/.var/app/org.mozilla.firefox/.mozilla/firefox</value>
-    <value os="freebsd">~/.mozilla/firefox</value>
-    <value os="openbsd">~/.mozilla/firefox</value>
   </var>
   <var name="profile">
     <value search="glob" os="windows">%AppData%\Mozilla\Firefox\Profiles\*</value>
-    <value search="glob" os="linux">~/.mozilla/firefox/*</value>
+    <value search="glob" os="unix">~/.mozilla/firefox/*</value>
     <value search="glob" os="linux">~/snap/firefox/common/.mozilla/firefox/*</value>
     <value search="glob" os="linux">~/.var/app/org.mozilla.firefox/.mozilla/firefox/*</value>
-    <value search="glob" os="freebsd">~/.mozilla/firefox/*</value>
-    <value search="glob" os="openbsd">~/.mozilla/firefox/*</value>
   </var>
   <option id="backup">
     <label>Backup files</label>
@@ -59,7 +43,7 @@ This Linux path is whitelisted under the System - Cache cleaner, so it is not
 redundant. Also, this Linux path contains the cache2 and OfflineCache directories.
 -->
     <action command="delete" search="walk.all" path="~/.cache/mozilla/"/>
-    <action command="delete" search="walk.all" path="~/snap/firefox/common/.cache/mozilla/"/>
+    <action command="delete" search="walk.all" path="~/snap/firefox/common/.cache/"/>
     <action command="delete" search="walk.all" path="~/.var/app/org.mozilla.firefox/cache/mozilla/"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\cache2"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\jumpListCache"/>
@@ -133,16 +117,20 @@ sessionstore-backups/recovery.jsonlz4
     <action command="delete" search="walk.all" path="$$profile$$/storage/default/http*"/>
     <action command="delete" search="glob" path="$$profile$$/storage/default/http*"/>
     <action command="delete" search="file" path="$$profile$$/webappsstore.sqlite"/>
+    <action command="delete" search="file" path="$$profile$$/storage.sqlite"/>
   </option>
   <option id="site_preferences">
     <label>Site preferences</label>
     <description>Settings for individual sites</description>
     <action command="delete" search="file" path="$$profile$$/content-prefs.sqlite"/>
+    <action command="delete" search="file" path="$$profile$$/permissions.sqlite"/>
   </option>
   <option id="url_history">
     <label>URL history</label>
     <description>List of visited web pages</description>
+    <action command="delete" search="file" path="$$profile$$/bounce-tracking-protection.sqlite"/>
     <action command="delete" search="file" path="$$profile$$/SiteSecurityServiceState.txt"/>
+    <action command="delete" search="file" path="$$profile$$/SiteSecurityServiceState.bin"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Mozilla\Firefox\Profiles\*\thumbnails"/>
     <!-- Firefox versions 1 and 2 -->
     <action command="delete" search="file" path="$$profile$$/history.dat"/>
@@ -154,6 +142,8 @@ sessionstore-backups/recovery.jsonlz4
     <action command="mozilla.favicons" search="file" path="$$profile$$/favicons.sqlite"/>
     <!-- Firefox 108 has alternative services with visited domains -->
     <action command="delete" search="file" path="$$profile$$/AlternateServices.txt"/>
+    <!-- Firefox 148 has AlternateServices.bin instead of .txt -->
+    <action command="delete" search="file" path="$$profile$$/AlternateServices.bin"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
