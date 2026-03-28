@@ -76,11 +76,6 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
     <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
     <action command="delete" search="glob" path="$$profile$$/minidumps/*.dmp"/>
   </option>
-  <option id="dom">
-    <label translators="DOM=Document Object Model">DOM Storage</label>
-    <description>Delete HTML5 cookies</description>
-    <action command="delete" search="file" path="$$profile$$/webappsstore.sqlite"/>
-  </option>
   <option id="forms">
     <label>Form history</label>
     <description>A history of forms entered in websites and in the Search bar</description>
@@ -116,6 +111,11 @@ upgrade.jsonlz4-20180905220717
     <action command="delete" search="file" path="$$profile$$/sessionstore-backups/recovery.js"/>
     <action command="delete" search="file" path="$$profile$$/sessionstore-backups/previous.bak"/>
     <action command="delete" search="glob" path="$$profile$$/sessionstore-backups/upgrade.js*-20*"/>
+  </option>
+  <option id="site_data">
+    <label>Site data</label>
+    <description>Delete LocalStorage, IndexedDB, and other data stored by websites.</description>
+    <action command="delete" search="file" path="$$profile$$/webappsstore.sqlite"/>
   </option>
   <option id="site_preferences">
     <label>Site preferences</label>
