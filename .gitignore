@@ -1,13 +1,15 @@
 # dynamically created during build
 bleachbit/Revision.py
 
-# code coverage
+# test/code coverage
 .coverage
 htmlcov
 docker-artifacts/
+.pytest_cache/
 
 # Byte-compiled / optimized / DLL files
 *.py[cod]
+__pycache__/
 
 # Compiled language files
 po/*.mo
