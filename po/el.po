@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 15:00-0600\n"
+"POT-Creation-Date: 2026-03-28 18:09-0600\n"
 "PO-Revision-Date: 2026-01-22 06:04+0000\n"
 "Last-Translator: \"Vasilis K.\" <skyhirules@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/bleachbit/main/el/"
@@ -235,25 +235,6 @@ msgstr "Αναφορές κατάρρευσης"
 msgid "Delete the files"
 msgstr "Διαγραφή των αρχείων"
 
-#. DOM=Document Object Model
-#. DOM=Document Object Model
-#. DOM=Document Object Model
-#. DOM=Document Object Model
-#. DOM=Document Object Model
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "DOM Storage"
-msgstr "Αποθήκη δεδομένων DOM"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Delete HTML5 cookies"
-msgstr "Διαγραφή HTML5 cookies"
-
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
@@ -306,7 +287,23 @@ msgstr "Επαναφορά συνεδρίας"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-msgid "Restores the previous session when the browser next starts."
+msgid "Restores the previous session when the browser next starts"
+msgstr ""
+
+#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Site data"
+msgstr ""
+
+#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
 msgstr ""
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
@@ -1625,6 +1622,12 @@ msgid ""
 "frequent use contributes to wear."
 msgstr ""
 
+#. TRANSLATORS: Error message shown in the infobar or notice shown in a tooltip.
+#. Expert mode is an option in the preferences to relax guardrails.
+#: ../bleachbit/Constant.py
+msgid "This option requires expert mode. Enable it in Preferences."
+msgstr ""
+
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
 #, python-format
@@ -2006,6 +2009,17 @@ msgstr "Δημιουργία αρχείων"
 #. TRANSLATORS: Instruction label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
 msgid "Select the cookies to keep when cleaning cookies across browsers."
+msgstr ""
+
+#. TRANSLATORS: This is a notice in the cookie manager about supported
+#. cookie types. The hyperlink points to the documentation website.
+#. Cookies refer to standard HTTP cookies.
+#. Site data includes LocalStorage, IndexedDB, and other website storage.
+#: ../bleachbit/GuiCookie.py
+#, python-brace-format
+msgid ""
+"Only cookies are preserved. Site data is always deleted. <a "
+"href='{url}'>Learn more</a>"
 msgstr ""
 
 #. TRANSLATORS: Label for the search entry in the manage cookies dialog.
@@ -2571,11 +2585,6 @@ msgstr "Πρέπει να επιλέξετε μια ενέργεια"
 msgid "Done."
 msgstr "Ολοκληρώθηκε."
 
-#. TRANSLATORS: Error message shown in the infobar.
-#: ../bleachbit/GuiWindow.py
-msgid "This option requires expert mode. Enable it in Preferences."
-msgstr ""
-
 #. TRANSLATORS: Context menu item in the tree view that opens the preferences dialog.
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
@@ -3115,6 +3124,12 @@ msgstr "_Βοήθεια"
 #: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_Περί του BleachBit"
+
+#~ msgid "DOM Storage"
+#~ msgstr "Αποθήκη δεδομένων DOM"
+
+#~ msgid "Delete HTML5 cookies"
+#~ msgstr "Διαγραφή HTML5 cookies"
 
 #~ msgid "All languages will be deleted except those checked."
 #~ msgstr "Όλες οι γλώσσες θα διαγραφούν εκτός από αυτές που έχουν επιλεγεί."
