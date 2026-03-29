@@ -119,7 +119,7 @@
   </option>
   <option id="site_data">
     <label>Site data</label>
-    <description>Delete LocalStorage, IndexedDB, and other data stored by websites.</description>
+    <description>Delete LocalStorage, IndexedDB, and other data stored by websites</description>
     <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
     <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
     <action command="delete" search="walk.all" path="$$profile$$/IndexedDB/"/>

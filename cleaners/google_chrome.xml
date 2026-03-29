@@ -141,8 +141,8 @@
     <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
   </option>
   <option id="site_data">
-    <label>Site data</label>
-    <description translators="LocalStorage and IndexedDB are proper nouns: do not translate">Delete LocalStorage, IndexedDB, and other data stored by websites.</description>
+    <label translators="Label for cleaning option to delete site data such as LocalStorage and IndexedDB">Site data</label>
+    <description translators="Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate">Delete LocalStorage, IndexedDB, and other data stored by websites</description>
     <!-- Examples for Google Chrome 7.0 on Fedora 13.  Notice we avoid deleting extension (add-on) preferences.
         ~/.config/google-chrome/Default/Local Storage/chrome-extension_mmffncokckfccddfenhkhnllmlobdahm_0.localstorage
         ~/.config/google-chrome/Default/Local Storage/http_samy.pl_0.localstorage -->

@@ -82,7 +82,7 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
   </option>
   <option id="session_restore">
     <label>Session restore</label>
-    <description>Restores the previous session when the browser next starts.</description>
+    <description>Restores the previous session when the browser next starts</description>
     <!--
 example names
 sessionstore.js
@@ -98,7 +98,7 @@ upgrade.jsonlz4-20180905220717
   </option>
   <option id="site_data">
     <label>Site data</label>
-    <description>Delete LocalStorage, IndexedDB, and other data stored by websites.</description>
+    <description>Delete LocalStorage, IndexedDB, and other data stored by websites</description>
     <action command="delete" search="walk.all" path="$$profile$$/storage/default/http*"/>
     <action command="delete" search="glob" path="$$profile$$/storage/default/http*"/>
     <action command="delete" search="file" path="$$profile$$/webappsstore.sqlite"/>
