@@ -52,14 +52,13 @@
     <action command="delete" search="file" path="$$base$$/Safe Browsing Channel IDs-journal"/>
     <action command="delete" search="file" path="$$profile$$/Network Persistent State"/>
     <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State"/>
-    <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
-    <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
-    <action command="delete" search="walk.all" path="$$profile$$/File System"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
+    <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
+    <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
     <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*def/GPUCache"/>
-    <action command="delete" search="walk.files" path="$$profile$$/GPUCache/"/>
+    <action command="delete" search="walk.files" path="$$profile$$/Code Cache"/>
     <action command="delete" search="walk.files" path="$$profile$$/DawnCache/"/>
+    <action command="delete" search="walk.files" path="$$profile$$/GPUCache/"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/host_referral_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/startup_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="net/http_server_properties/servers"/>
@@ -68,11 +67,12 @@
     <!-- Linux-specific -->
     <action command="delete" search="walk.files" path="$XDG_CACHE_HOME/chromium/"/>
     <action command="delete" search="walk.files" path="$$profile$$/Cache"/>
+    <action command="delete" search="walk.files" path="~/.var/app/org.chromium.Chromium/cache/"/>
+    <action command="delete" search="walk.files" path="~/.var/app/io.github.ungoogled_software.ungoogled_chromium/cache/"/>
     <!-- Windows-specific -->
     <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
     <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
     <action command="delete" search="walk.files" path="$$profile$$\Cache\"/>
-    <action command="delete" search="walk.files" path="$$profile$$\Code Cache\"/>
     <action command="delete" search="walk.files" path="$$profile$$\Media Cache\"/>
   </option>
   <option id="cookies">
@@ -84,16 +84,6 @@
     <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
     <action command="cookie" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
-  </option>
-  <option id="dom">
-    <label>DOM Storage</label>
-    <description>Delete HTML5 cookies</description>
-    <!-- do not delete extension preferences ~/.config/chromium/Default/database/chrome-extension* (Fedora 14, Chromium 12) -->
-    <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
-    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage"/>
-    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage-journal"/>
-    <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
   </option>
   <option id="form_history">
     <label>Form history</label>
@@ -109,18 +99,22 @@
     <action command="chrome.favicons" search="file" path="$$profile$$/Favicons"/>
     <action command="delete" search="file" path="$$base$$/chrome_shutdown_ms.txt"/>
     <action command="delete" search="file" path="$$base$$/Safe Browsing Cookies-journal"/>
-    <action command="delete" search="file" path="$$profile$$/Archived History"/>
     <action command="delete" search="file" path="$$profile$$/Archived History-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Archived History"/>
     <action command="delete" search="file" path="$$profile$$/DownloadMetadata"/>
-    <action command="delete" search="file" path="$$profile$$/History-journal"/>
-    <action command="delete" search="glob" path="$$profile$$/History Index ????-??"/>
-    <action command="delete" search="glob" path="$$profile$$/History Index ????-??-journal"/>
     <action command="delete" search="file" path="$$profile$$/History Provider Cache"/>
-    <action command="delete" search="file" path="$$profile$$/Network Action Predictor"/>
+    <action command="delete" search="file" path="$$profile$$/History-journal"/>
+    <action command="delete" search="file" path="$$profile$$/MediaDeviceSalts-journal"/>
+    <action command="delete" search="file" path="$$profile$$/MediaDeviceSalts"/>
     <action command="delete" search="file" path="$$profile$$/Network Action Predictor-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Network Action Predictor"/>
     <action command="delete" search="file" path="$$profile$$/Origin Bound Certs-journal"/>
-    <action command="delete" search="file" path="$$profile$$/Shortcuts"/>
+    <action command="delete" search="file" path="$$profile$$/Reporting and NEL-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Reporting and NEL"/>
     <action command="delete" search="file" path="$$profile$$/Shortcuts-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Shortcuts"/>
+    <action command="delete" search="glob" path="$$profile$$/History Index ????-??-journal"/>
+    <action command="delete" search="glob" path="$$profile$$/History Index ????-??"/>
     <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
     <action command="delete" search="file" path="$$profile$$/Thumbnails"/>
     <action command="delete" search="walk.files" path="$$profile$$/Thumbnails"/>
@@ -128,11 +122,11 @@
     <action command="delete" search="file" path="$$profile$$/Top Sites"/>
     <action command="delete" search="file" path="$$profile$$/Top Sites-journal"/>
     <action command="delete" search="file" path="$$profile$$/Visited Links"/>
-    <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
-    <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
     <action command="delete" search="file" path="$$profile$$/WebStorage/QuotaManager"/>
     <action command="delete" search="file" path="$$profile$$/WebStorage/QuotaManager-journal"/>
-    <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="savefile"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="zerosuggest/cachedresults"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="zerosuggest/cachedresults_with_url"/>
     <!-- Windows-specific -->
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsMostVisited\"/>
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsOld\"/>
@@ -152,6 +146,23 @@
     <action command="delete" search="file" path="$$profile$$/Last Session"/>
     <action command="delete" search="file" path="$$profile$$/Last Tabs"/>
     <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Sessions"/>
+    <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
+  </option>
+  <option id="site_data">
+    <label>Site data</label>
+    <description>Delete LocalStorage, IndexedDB, and other data stored by websites</description>
+    <!-- do not delete extension preferences ~/.config/chromium/Default/database/chrome-extension* (Fedora 14, Chromium 12) -->
+    <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
+    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage"/>
+    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage-journal"/>
+    <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/IndexedDB/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
+    <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
+    <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
+    <action command="delete" search="walk.all" path="$$profile$$/File System"/>
   </option>
   <option id="sync">
     <label>Sync</label>
@@ -184,6 +195,8 @@
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Login Data For Account"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Origin Bound Certs"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Network Action Predictor"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Reporting and NEL"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/MediaDeviceSalts"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/previews_opt_out.db"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/QuotaManager"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/WebStorage/QuotaManager"/>

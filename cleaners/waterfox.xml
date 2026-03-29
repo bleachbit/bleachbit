@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    BleachBit
-    Copyright (C) 2008-2025 Andrew Ziem
-    https://www.bleachbit.org
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
 
 -->
 <cleaner id="waterfox">
@@ -29,15 +17,13 @@
   <running type="pathname">~/.waterfox/*.default/lock</running>
   <var name="base">
     <value os="windows">%AppData%\Waterfox</value>
-    <value os="linux">~/.waterfox</value>
-    <value os="freebsd">~/.waterfox</value>
-    <value os="openbsd">~/.waterfox</value>
+    <value os="unix">~/.waterfox</value>
+    <value os="linux">~/.var/app/net.waterfox.waterfox/.waterfox</value>
   </var>
   <var name="profile">
     <value search="glob" os="windows">%AppData%\Waterfox\Profiles\*</value>
-    <value search="glob" os="linux">~/.waterfox/*</value>
-    <value search="glob" os="freebsd">~/.waterfox/*</value>
-    <value search="glob" os="openbsd">~/.waterfox/*</value>
+    <value search="glob" os="unix">~/.waterfox/*</value>
+    <value search="glob" os="linux">~/.var/app/net.waterfox.waterfox/.waterfox/*</value>
   </var>
   <option id="backup">
     <label>Backup files</label>
@@ -53,6 +39,7 @@ This Linux path is whitelisted under the System - Cache cleaner, so it is not
 redundant. Also, this Linux path contains the cache2 and OfflineCache directories.
 -->
     <action command="delete" search="walk.all" path="~/.cache/waterfox/"/>
+    <action command="delete" search="walk.all" path="~/.var/app/net.waterfox.waterfox/cache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\cache2"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\jumpListCache"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Waterfox\Profiles\*\OfflineCache"/>
@@ -76,11 +63,6 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
     <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
     <action command="delete" search="glob" path="$$profile$$/minidumps/*.dmp"/>
   </option>
-  <option id="dom">
-    <label translators="DOM=Document Object Model">DOM Storage</label>
-    <description>Delete HTML5 cookies</description>
-    <action command="delete" search="file" path="$$profile$$/webappsstore.sqlite"/>
-  </option>
   <option id="forms">
     <label>Form history</label>
     <description>A history of forms entered in websites and in the Search bar</description>
@@ -100,7 +82,7 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
   </option>
   <option id="session_restore">
     <label>Session restore</label>
-    <description>Restores the previous session when the browser next starts.</description>
+    <description>Restores the previous session when the browser next starts</description>
     <!--
 example names
 sessionstore.js
@@ -112,26 +94,36 @@ upgrade.jsonlz4-20180905220717
 -->
     <action command="delete" search="glob" path="$$profile$$/sessionstore*.js*"/>
     <action command="delete" search="glob" path="$$profile$$/sessionstore.bak*"/>
-    <action command="delete" search="glob" path="$$profile$$/sessionstore-backups/previous.js*"/>
-    <action command="delete" search="file" path="$$profile$$/sessionstore-backups/recovery.js"/>
-    <action command="delete" search="file" path="$$profile$$/sessionstore-backups/previous.bak"/>
-    <action command="delete" search="glob" path="$$profile$$/sessionstore-backups/upgrade.js*-20*"/>
+    <action command="delete" search="walk.all" path="$$profile$$/sessionstore-backups/"/>
+  </option>
+  <option id="site_data">
+    <label>Site data</label>
+    <description>Delete LocalStorage, IndexedDB, and other data stored by websites</description>
+    <action command="delete" search="walk.all" path="$$profile$$/storage/default/http*"/>
+    <action command="delete" search="glob" path="$$profile$$/storage/default/http*"/>
+    <action command="delete" search="file" path="$$profile$$/webappsstore.sqlite"/>
+    <action command="delete" search="file" path="$$profile$$/storage.sqlite"/>
   </option>
   <option id="site_preferences">
     <label>Site preferences</label>
     <description>Settings for individual sites</description>
     <action command="delete" search="file" path="$$profile$$/content-prefs.sqlite"/>
+    <action command="delete" search="file" path="$$profile$$/permissions.sqlite"/>
   </option>
   <option id="url_history">
     <label>URL history</label>
     <description>List of visited web pages</description>
+    <action command="delete" search="file" path="$$profile$$/bounce-tracking-protection.sqlite"/>
     <action command="delete" search="file" path="$$profile$$/SiteSecurityServiceState.txt"/>
+    <action command="delete" search="file" path="$$profile$$/SiteSecurityServiceState.bin"/>
     <!-- Firefox versions 1 and 2 -->
     <action command="delete" search="file" path="$$profile$$/history.dat"/>
     <action command="delete" search="file" path="$$profile$$/downloads.rdf"/>
     <!-- Firefox 3 introduced downloads.sqlite and places.sqlite -->
     <action command="delete" search="file" path="$$profile$$/downloads.sqlite"/>
     <action command="mozilla.url.history" search="file" path="$$profile$$/places.sqlite"/>
+    <action command="mozilla.favicons" search="file" path="$$profile$$/favicons.sqlite"/>
+    <action command="delete" search="file" path="$$profile$$/AlternateServices.bin"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>

@@ -65,9 +65,7 @@
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <!-- Opera 126: C:\Users\username\AppData\Roaming\Opera Software\Opera Stable\ShaderCache-->
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
-    <action command="delete" search="walk.all" path="$$profile$$/File System"/>
-    <!-- Opera 126: C:\Users\username\AppData\Roaming\Opera Software\Opera Stable\Default\Service Worker -->
-    <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
+    <action command="delete" search="walk.files" path="$$profile$$/Code Cache"/>
     <action command="delete" search="walk.files" path="$$profile$$/GPUCache/"/>
     <action command="delete" search="file" path="$$profile$$/Preferences.backup"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/host_referral_list"/>
@@ -103,23 +101,12 @@
     <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
     <action command="cookie" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
-    <action command="delete" search="walk.all" path="$$profile$$/IndexedDB/"/>
     <!-- below are entries valid before Opera 15 -->
     <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera\cookies.txt -->
     <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera 11.00 beta\cookies.txt -->
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\cookies4.dat"/>
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\profile\cookies4.dat"/>
     <action command="delete" search="file" path="~/.opera/cookies4.dat"/>
-  </option>
-  <option id="dom">
-    <label>DOM Storage</label>
-    <description>Delete HTML5 cookies</description>
-    <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
-    <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
-    <!-- below are entries valid before Opera 15 -->
-    <action command="delete" search="walk.all" path="%AppData%\Opera\Opera*\pstorage\"/>
-    <action command="delete" search="walk.all" path="~/.opera/pstorage/"/>
   </option>
   <option id="form_history">
     <label>Form history</label>
@@ -132,17 +119,20 @@
     <!-- keep /History before /Favicons -->
     <action command="chrome.history" search="file" path="$$profile$$/History"/>
     <action command="chrome.favicons" search="file" path="$$profile$$/Favicons"/>
-    <action command="delete" search="file" path="$$profile$$/History-journal"/>
-    <action command="delete" search="file" path="$$profile$$/History Provider Cache"/>
     <action command="delete" search="file" path="$$profile$$/Favicons-journal"/>
-    <action command="delete" search="file" path="$$profile$$/Network Action Predictor"/>
+    <action command="delete" search="file" path="$$profile$$/History Provider Cache"/>
+    <action command="delete" search="file" path="$$profile$$/History-journal"/>
+    <action command="delete" search="file" path="$$profile$$/MediaDeviceSalts-journal"/>
+    <action command="delete" search="file" path="$$profile$$/MediaDeviceSalts"/>
     <action command="delete" search="file" path="$$profile$$/Network Action Predictor-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Network Action Predictor"/>
     <action command="delete" search="file" path="$$profile$$/Origin Bound Certs-journal"/>
-    <action command="delete" search="file" path="$$profile$$/Shortcuts"/>
+    <action command="delete" search="file" path="$$profile$$/Reporting and NEL-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Reporting and NEL"/>
     <action command="delete" search="file" path="$$profile$$/Shortcuts-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Shortcuts"/>
     <action command="delete" search="file" path="$$profile$$/Visited Links"/>
-    <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
-    <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
+    <action command="json" search="file" path="$$profile$$/Preferences" address="savefile"/>
     <!-- Windows-specific -->
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIconsOld\"/>
     <action command="delete" search="walk.files" path="$$profile$$\JumpListIcons\"/>
@@ -176,6 +166,21 @@
     <action command="delete" search="glob" path="~/.opera/icons/*.idx"/>
     <action command="delete" search="glob" path="~/.opera/vps/????/md.dat"/>
   </option>
+  <option id="site_data">
+    <label>Site data</label>
+    <description>Delete LocalStorage, IndexedDB, and other data stored by websites</description>
+    <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
+    <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/IndexedDB/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
+    <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
+    <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
+    <action command="delete" search="walk.all" path="$$profile$$/File System"/>
+    <!-- below are entries valid before Opera 15 -->
+    <action command="delete" search="walk.all" path="%AppData%\Opera\Opera*\pstorage\"/>
+    <action command="delete" search="walk.all" path="~/.opera/pstorage/"/>
+  </option>
   <option id="passwords">
     <label>Passwords</label>
     <description>A database of usernames and passwords as well as a list of sites that should not store passwords</description>
@@ -191,14 +196,9 @@
     <action command="delete" search="file" path="$$profile$$/Current Session"/>
     <action command="delete" search="file" path="$$profile$$/Current Tabs"/>
     <action command="delete" search="file" path="$$profile$$/Last Session"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
-    <!-- Opera 126 has C:\Users\username\AppData\Roaming\Opera Software\Opera Stable\Default\Sessions\Session_#################
-      and Tabs_################# that end with many numbers
-    -->
-    <action command="delete" search="walk.all" path="$$profile$$/Sessions/"/>
-    <!-- Last Tabs was found on Opera 56 but not on Google Chrome 69 -->
     <action command="delete" search="file" path="$$profile$$/Last Tabs"/>
-    <!-- Session Storage were found on Opera 68 but not on Google Chrome 80 -->
+    <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Sessions/"/>
     <action command="delete" search="walk.all" path="$$profile$$/Session Storage"/>
     <!-- below are entries valid before Opera 15 -->
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\sessions\autosave.win"/>

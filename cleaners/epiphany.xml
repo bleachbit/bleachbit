@@ -59,9 +59,9 @@
     <action command="delete" search="file" path="$XDG_CONFIG_HOME/epiphany/session_state.xml"/>
     <action command="delete" search="file" path="$XDG_CONFIG_HOME/epiphany/session_state.xml~"/>
   </option>
-  <option id="dom">
-    <label>DOM Storage</label>
-    <description>Delete HTML5 cookies</description>
+  <option id="site_data">
+    <label>Site data</label>
+    <description>Delete LocalStorage, IndexedDB, and other data stored by websites</description>
     <action command="delete" search="walk.files" path="$XDG_DATA_HOME/webkitgtk/localstorage/"/>
   </option>
 </cleaner>

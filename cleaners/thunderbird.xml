@@ -62,7 +62,7 @@
   <option id="sessionjson">
     <!-- delete the session, i.e. open windows and tabs  -->
     <label>Session restore</label>
-    <description>Restores the previous session when the browser next starts.</description>
+    <description>Restores the previous session when the browser next starts</description>
     <action command="delete" search="file" path="$$profile$$/session.json"/>
   </option>
   <option id="passwords">
