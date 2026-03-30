@@ -36,14 +36,17 @@ later.  See the COPYING file in the top-level directory.
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action command="delete" search="file" path="$$profile$$/Network Persistent State"/>
-    <action command="delete" search="walk.files" path="~/snap/vivaldi/common/.cache/"/>
-    <action command="delete" search="walk.files" path="$$base$$/component_crx_cache"/>
-    <action command="delete" search="walk.files" path="$$base$$/extensions_crx_cache"/>
-    <action command="delete" search="walk.files" path="$$base$$/GraphiteDawnCache"/>
-    <action command="delete" search="walk.files" path="$$base$$/GrShaderCache"/>
+    <action command="delete" search="walk.all" path="$$base$$/component_crx_cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/extensions_crx_cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
-    <action command="delete" search="walk.files" path="$$profile$$/Code Cache"/>
-    <action command="delete" search="walk.files" path="$$profile$$/GPUCache/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Code Cache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/GPUCache/"/>
+    <!-- specific to OS or packaging -->
+    <action command="delete" search="walk.all" path="~/snap/vivaldi/common/.cache/mesa_shader_cache_db"/>
+    <action command="delete" search="walk.all" path="~/snap/vivaldi/common/.cache/mesa_shader_cache"/>
+    <action command="delete" search="walk.all" path="~/snap/vivaldi/common/.cache/vivaldi"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -94,10 +97,13 @@ later.  See the COPYING file in the top-level directory.
   <option id="site_data">
     <label>Site data</label>
     <description>Delete LocalStorage, IndexedDB, and other data stored by websites</description>
-    <action command="delete" search="walk.all" path="$$profile$$/Local Storage"/>
+    <action command="delete" search="walk.all" path="$$profile$$/File System"/>
     <action command="delete" search="walk.all" path="$$profile$$/IndexedDB"/>
-    <action command="delete" search="walk.all" path="$$profile$$/WebStorage"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Local Storage"/>
     <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
+    <action command="delete" search="walk.all" path="$$profile$$/WebStorage"/>
+    <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
+    <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
   </option>
   <option id="sync">
     <label>Sync</label>
