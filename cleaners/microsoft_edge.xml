@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    BleachBit
-    Copyright (C) 2008-2025 Andrew Ziem
-    https://www.bleachbit.org
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
 
 -->
 <cleaner id="microsoft_edge">
@@ -37,18 +26,22 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
+    <action command="delete" search="walk.all" path="$$base$$/component_crx_cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/extensions_crx_cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
+    <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="file" path="$$profile$$/Network Persistent State"/>
     <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State"/>
-    <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/GPUCache/"/>
     <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*def/GPUCache"/>
-    <action command="delete" search="walk.files" path="$$profile$$/GPUCache/"/>
     <!-- Windows-specific -->
     <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
     <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
-    <action command="delete" search="walk.files" path="$$profile$$\Cache\"/>
+    <action command="delete" search="walk.all" path="$$profile$$\Cache\"/>
     <!-- Linux stores the Code Cache under ~/.cache/ , so it doesn't need an extra rule -->
-    <action command="delete" search="walk.files" path="$$profile$$\Code Cache\"/>
-    <action command="delete" search="walk.files" path="$$profile$$\Media Cache\"/>
+    <action command="delete" search="walk.all" path="$$profile$$\Code Cache\"/>
+    <action command="delete" search="walk.all" path="$$profile$$\Media Cache\"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
@@ -59,6 +52,11 @@
     <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
     <action command="cookie" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
+  </option>
+  <option id="crash_reports">
+    <label>Crash reports</label>
+    <description>Delete the files</description>
+    <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
   </option>
   <option id="form_history">
     <label>Form history</label>
@@ -76,6 +74,7 @@
     <action command="delete" search="file" path="$$profile$$/Archived History-journal"/>
     <action command="delete" search="file" path="$$profile$$/Archived History"/>
     <action command="delete" search="file" path="$$profile$$/DownloadMetadata"/>
+    <action command="delete" search="file" path="$$profile$$/DIPS"/>
     <action command="delete" search="file" path="$$profile$$/History Provider Cache"/>
     <action command="delete" search="file" path="$$profile$$/History-journal"/>
     <action command="delete" search="file" path="$$profile$$/MediaDeviceSalts-journal"/>
@@ -93,8 +92,8 @@
     <action command="delete" search="file" path="$$profile$$/Thumbnails"/>
     <action command="delete" search="walk.files" path="$$profile$$/Thumbnails"/>
     <action command="delete" search="file" path="$$profile$$/Thumbnails-journal"/>
-    <action command="delete" search="file" path="$$profile$$/Top Sites"/>
     <action command="delete" search="file" path="$$profile$$/Top Sites-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Top Sites"/>
     <action command="delete" search="file" path="$$profile$$/Visited Links"/>
     <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="savefile"/>
@@ -121,12 +120,13 @@
     <label>Site data</label>
     <description>Delete LocalStorage, IndexedDB, and other data stored by websites</description>
     <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
-    <action command="delete" search="walk.all" path="$$profile$$/IndexedDB/"/>
+    <action command="delete" search="walk.all" path="$$profile$$/File System"/>
+    <action command="delete" search="walk.all" path="$$profile$$/IndexedDB"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Local Storage"/>
     <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
+    <action command="delete" search="walk.all" path="$$profile$$/WebStorage"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
-    <action command="delete" search="walk.all" path="$$profile$$/File System"/>
   </option>
   <option id="sync">
     <label>Sync</label>

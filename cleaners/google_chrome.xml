@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    BleachBit
-    Copyright (C) 2008-2025 Andrew Ziem
-    https://www.bleachbit.org
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
 
 -->
 <cleaner id="google_chrome">
@@ -42,13 +31,17 @@
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action command="delete" search="file" path="$$base$$/Safe Browsing Channel IDs-journal"/>
+    <action command="delete" search="walk.all" path="$$base$$/component_crx_cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/extensions_crx_cache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
+    <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
+    <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
     <!-- Google Chrome 126 on Linux stores Network Persistent State directly under $$profile$$ while Chrome 126 on Windows stores it under $$profile$$/Network -->
     <action command="delete" search="file" path="$$profile$$/Network Persistent State"/>
     <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State"/>
-    <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
+    <action command="delete" search="walk.all" path="$$profile$$/GPUCache/"/>
     <action command="delete" search="walk.all" path="$$profile$$/Pepper Data/Shockwave Flash/CacheWritableAdobeRoot/"/>
     <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*def/GPUCache"/>
-    <action command="delete" search="walk.files" path="$$profile$$/GPUCache/"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/host_referral_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="dns_prefetching/startup_list"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="net/http_server_properties/servers"/>
@@ -78,6 +71,11 @@
     <action command="cookie" search="file" path="$$profile$$/Network/Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
   </option>
+  <option id="crash_reports">
+    <label>Crash reports</label>
+    <description>Delete the files</description>
+    <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
+  </option>
   <option id="form_history">
     <label>Form history</label>
     <description>A history of forms entered in websites</description>
@@ -94,6 +92,7 @@
     <action command="delete" search="file" path="$$profile$$/Archived History-journal"/>
     <action command="delete" search="file" path="$$profile$$/Archived History"/>
     <action command="delete" search="file" path="$$profile$$/DownloadMetadata"/>
+    <action command="delete" search="file" path="$$profile$$/DIPS"/>
     <action command="delete" search="file" path="$$profile$$/History Provider Cache"/>
     <action command="delete" search="file" path="$$profile$$/History-journal"/>
     <action command="delete" search="file" path="$$profile$$/MediaDeviceSalts-journal"/>
@@ -111,8 +110,8 @@
     <action command="delete" search="file" path="$$profile$$/Thumbnails"/>
     <action command="delete" search="walk.files" path="$$profile$$/Thumbnails"/>
     <action command="delete" search="file" path="$$profile$$/Thumbnails-journal"/>
-    <action command="delete" search="file" path="$$profile$$/Top Sites"/>
     <action command="delete" search="file" path="$$profile$$/Top Sites-journal"/>
+    <action command="delete" search="file" path="$$profile$$/Top Sites"/>
     <action command="delete" search="file" path="$$profile$$/Visited Links"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="savefile"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="prefetch/search_prefetch/cache"/>
@@ -143,20 +142,16 @@
   <option id="site_data">
     <label translators="Label for cleaning option to delete site data such as LocalStorage and IndexedDB">Site data</label>
     <description translators="Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate">Delete LocalStorage, IndexedDB, and other data stored by websites</description>
-    <!-- Examples for Google Chrome 7.0 on Fedora 13.  Notice we avoid deleting extension (add-on) preferences.
-        ~/.config/google-chrome/Default/Local Storage/chrome-extension_mmffncokckfccddfenhkhnllmlobdahm_0.localstorage
-        ~/.config/google-chrome/Default/Local Storage/http_samy.pl_0.localstorage -->
     <action command="chrome.databases_db" search="file" path="$$profile$$/databases/Databases.db"/>
-    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage"/>
-    <action command="delete" search="glob" path="$$profile$$/Local Storage/http*localstorage-journal"/>
     <action command="delete" search="walk.all" path="$$profile$$/databases/http*/"/>
-    <action command="delete" search="walk.all" path="$$profile$$/IndexedDB/"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Local Storage/leveldb"/>
+    <action command="delete" search="walk.all" path="$$profile$$/File System"/>
+    <action command="delete" search="walk.all" path="$$profile$$/IndexedDB"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Local Storage"/>
     <action command="delete" search="walk.all" path="$$profile$$/Pepper Data/Shockwave Flash/WritableRoot/"/>
     <action command="delete" search="walk.all" path="$$profile$$/Service Worker"/>
+    <action command="delete" search="walk.all" path="$$profile$$/WebStorage"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
-    <action command="delete" search="walk.all" path="$$profile$$/File System"/>
   </option>
   <option id="sync">
     <label>Sync</label>
@@ -178,26 +173,51 @@
   <option id="vacuum">
     <label>Vacuum</label>
     <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
+    <action command="sqlite.vacuum" search="file" path="$$base$$/first_party_sets.db"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Account Web Data"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Affiliation Database"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/AggregationService"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/BrowsingTopicsSiteData"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/CdmStorage.db"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Conversions"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/DIPS"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Extension Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Favicons-journal"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Favicons"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/heavy_ad_intervention_opt_out.db"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/History"/>
-    <action command="sqlite.vacuum" search="glob" path="$$profile$$/History Index ????-??"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/HistoryEmbeddings"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/InterestGroups"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/KAnonymityService"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Login Data For Account"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Login Data"/>
-    <action command="sqlite.vacuum" search="file" path="$$profile$$/Origin Bound Certs"/>
-    <action command="sqlite.vacuum" search="file" path="$$profile$$/Network Action Predictor"/>
-    <action command="sqlite.vacuum" search="file" path="$$profile$$/Reporting and NEL"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/MediaDeviceSalts"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Network Action Predictor"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Origin Bound Certs"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/previews_opt_out.db"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/PrivateAggregation"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/QuotaManager"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Reporting and NEL"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Safe Browsing Cookies"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/ServerCertificate"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/SharedStorage"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Shortcuts"/>
+    <action command="sqlite.vacuum" search="glob" path="$$profile$$/History Index ????-??"/>
     <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Thumbnails" type="f"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Top Sites"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Trust Tokens"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Collaboration/MessageDB"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/DataSharing/DataSharingDB"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Web Data"/>
+    <!-- one or more levels below $$profile$$ -->
     <action command="sqlite.vacuum" search="file" path="$$profile$$/databases/Databases.db"/>
-    <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/?"/>
-    <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/??"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/Shared Dictionary/db"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Sync Data/SyncData.sqlite3"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/WebStorage/QuotaManager"/>
+    <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/??"/>
+    <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/?"/>
     <!-- The three below were seen on Google Chrome on Windows before Chrome version 66 -->
     <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Archived History"/>
     <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Plugin Data\Google Gears\localserver.db"/>
