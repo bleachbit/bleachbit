@@ -27,6 +27,7 @@ import hashlib
 import logging
 import os
 import socket
+import struct
 import sys
 import platform
 from collections.abc import Callable
@@ -218,6 +219,10 @@ def get_update_request_headers():
 
     if (gtk_version := get_gtk_version()):
         headers['X-GTK-Version'] = gtk_version
+
+    if os.name == 'nt':
+        headers['X-Python-Version'] = platform.python_version()
+        headers['X-Pointer-Bits'] = str(8 * struct.calcsize('P'))
 
     return headers
 
