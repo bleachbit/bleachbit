@@ -62,7 +62,7 @@
   </option>
   <option id="cookies">
     <label>Cookies</label>
-    <description>Delete cookies, which contain information such as website preferences, authentication, and tracking identification</description>
+    <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="delete" search="walk.all" path="$$macromedia$$/#SharedObjects/"/>
     <action command="delete" search="walk.all" path="$$macromedia$$/macromedia.com/support/flashplayer/sys/"/>
   </option>

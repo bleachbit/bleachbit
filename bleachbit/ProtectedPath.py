@@ -344,6 +344,9 @@ def get_warning_message(user_path, impact):
     if impact['file_count'] > 0:
         # TRANSLATORS: Warning shown when user tries to add a protected path.
         # %(path)s is the path, %(files)d is number of files, %(size)s is human-readable size
+        # Do not translate the placeholders.
+        # Adapt quotation marks around the path placeholder to the typographic conventions of
+        # your language.
         msg = _("Warning: '%(path)s' may contain important files.\n\n"
                 "Impact: %(files)d file(s), %(size)s\n\n"
                 "Are you sure you want to add this path?") % {
@@ -352,7 +355,10 @@ def get_warning_message(user_path, impact):
             'size': impact['size_human'],
         }
     else:
-        # TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
+        # TRANSLATORS: Warning shown when user tries to add a protected path (no files found).
+        # Do not translate the placeholder %(path)s.
+        # Adapt quotation marks around the path placeholder to the typographic conventions of
+        # your language.
         msg = _("Warning: '%(path)s' may contain important files.\n\n"
                 "Are you sure you want to add this path?") % {
             'path': user_path,

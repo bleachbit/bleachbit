@@ -34,7 +34,7 @@
   </option>
   <option id="cookies">
     <label>Cookies</label>
-    <description>Delete cookies, which contain information such as website preferences, authentication, and tracking identification</description>
+    <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/cookies.txt"/>
     <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite"/>
     <action command="delete" search="file" path="~/.gnome2/epiphany/mozilla/epiphany/cookies.sqlite-journal"/>

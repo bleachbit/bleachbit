@@ -53,7 +53,7 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
   </option>
   <option id="cookies">
     <label>Cookies</label>
-    <description>Delete cookies, which contain information such as website preferences, authentication, and tracking identification</description>
+    <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="delete" search="file" path="$$profile$$/cookies.txt"/>
     <action command="cookie" search="file" path="$$profile$$/cookies.sqlite"/>
   </option>
@@ -65,7 +65,7 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
   </option>
   <option id="forms">
     <label>Form history</label>
-    <description>A history of forms entered in websites and in the Search bar</description>
+    <description>Saved form entries and search bar history</description>
     <action command="delete" search="file" path="$$profile$$/formhistory.dat"/>
     <action command="delete" search="file" path="$$profile$$/formhistory.sqlite"/>
   </option>

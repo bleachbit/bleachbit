@@ -303,9 +303,9 @@ def wipe_path(pathname, idle=False):
     # Get the file system type from the given path
     fstype = get_filesystem_type(pathname)[0]
     # TRANSLATORS: Debug log message shown during file wiping. 'Wiping' is a
-    # present participle (ongoing action). %(pathname)s is the file/directory
-    # path; %(fstype)s is the file system type (e.g., ext3, ntfs).
-    # Do not translate variables.
+    # present participle (ongoing action) refering to secure overwrite.
+    # %(pathname)s is the file/directory path; %(fstype)s is the file system type
+    # (e.g., ext3, ntfs). Do not translate placeholders.
     logger.debug(_("Wiping path %(pathname)s with file system type %(fstype)s"),
                  {"pathname": pathname, "fstype": fstype})
     if not os.path.isdir(pathname):

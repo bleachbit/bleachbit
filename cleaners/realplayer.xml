@@ -24,7 +24,7 @@
   <description>Media player</description>
   <option id="cookies">
     <label>Cookies</label>
-    <description>Delete cookies, which contain information such as website preferences, authentication, and tracking identification</description>
+    <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="delete" search="file" path="$XDG_CONFIG_HOME/real/rpcookies.txt"/>
     <action command="delete" search="file" path="$APPDATA\Real\RealPlayer\cookies.txt"/>
   </option>

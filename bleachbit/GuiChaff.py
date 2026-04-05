@@ -37,8 +37,12 @@ STOP_MODE_LABELS = {
     # TRANSLATORS: Option in combo box to choose to stop after a number
     # of files have been generated.
     STOP_MODE_FILE_COUNT: _("Number of files"),
-    # TRANSLATORS: Option in combo box to choose to stop after a total
-    # size (in megabytes) has been generated.
+    # TRANSLATORS: Option in a combo box for choosing the stop condition
+    # when generating chaff (dummy) files. This option means "stop after
+    # the total size of generated files reaches a threshold in megabytes."
+    # "MB" is the megabyte unit abbreviation. Localize it if your language
+    # has an official abbreviation (e.g., "Mo" in French); otherwise keep
+    # "MB".
     STOP_MODE_TOTAL_SIZE: _("Size (MB)"),
     # TRANSLATORS: Option in combo box to choose to stop when free space
     # reaches a certain percentage.

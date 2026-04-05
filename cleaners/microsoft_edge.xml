@@ -45,7 +45,7 @@ later.  See the COPYING file in the top-level directory.
   </option>
   <option id="cookies">
     <label>Cookies</label>
-    <description>Delete cookies, which contain information such as website preferences, authentication, and tracking identification</description>
+    <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="cookie" search="file" path="$$profile$$/Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Cookies-journal"/>
     <action command="cookie" search="file" path="$$profile$$/Network/Cookies"/>

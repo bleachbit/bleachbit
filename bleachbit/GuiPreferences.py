@@ -551,8 +551,9 @@ class PreferencesDialog:
 
             self._create_checkbox(
                 # TRANSLATORS: Checkbox label to use the Fontconfig text rendering backend
-                # instead of the default Windows renderer. May improve blurry text.
-                _("Use fontconfig text rendering backend"),
+                # instead of the default Windows renderer. The option may improve blurry text.
+                # Fontconfig, which is software, is a proper noun.
+                _("Use Fontconfig text rendering backend"),
                 'use_fontconfig_backend',
                 vbox=interface_box,
                 # TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
@@ -619,9 +620,14 @@ class PreferencesDialog:
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
         vbox.set_border_width(12)
 
-        # TRANSLATORS: 'empty' means 'unallocated'
-        notice = Gtk.Label(label=_(
-            "Choose a writable folder for each drive for which to wipe empty space."))
+        # TRANSLATORS: 'empty' means 'unallocated'.
+        # The user should decide which drives to wipe. Then, for each
+        # chosen drive, the user should specify one folder per drive.
+        # For example, to wipe C:\, the user may choose %TEMP% which
+        # is a folder anywhere on C:.
+        drive_instruction_label = _("Choose a writable folder for each drive for "
+                                    "which to wipe empty space.")
+        notice = Gtk.Label(label=drive_instruction_label)
         notice.set_line_wrap(True)
         notice.set_xalign(0.0)
         notice.set_margin_start(12)

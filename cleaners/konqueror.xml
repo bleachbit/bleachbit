@@ -25,7 +25,7 @@
   <running type="exe" same_user="true">konqueror</running>
   <option id="cookies">
     <label>Cookies</label>
-    <description>Delete cookies, which contain information such as website preferences, authentication, and tracking identification</description>
+    <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="delete" search="file" path="~/.kde/share/apps/kcookiejar/cookies"/>
     <!-- Chakra 2014.02 uses ~/.kde4/ -->
     <action command="delete" search="file" path="~/.kde4/share/apps/kcookiejar/cookies"/>

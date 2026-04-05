@@ -57,10 +57,13 @@ def create_font_check_dialog(parent=None):
     dialog.add_buttons(
         # TRANSLATORS: Button label in the font check dialog
         _("Text is okay"), Gtk.ResponseType.YES,
-        # TRANSLATORS: Button label in the font check dialog
+        # TRANSLATORS: Button label in the font check dialog. This is one of
+        # three buttons the user can click to report how the text appears.
+        # The user clicks this if the text is readable but appears fuzzy.
         _("Text is blurry"), RESPONSE_TEXT_BLURRY,
         # TRANSLATORS: Button label in the font check dialog in case the font
-        # looks like an alien language.
+        # looks like an alien language. This is one of three buttons the user
+        # can click to report how the text appears.
         _("Text is unrecognizable"), RESPONSE_TEXT_UNREADABLE,
     )
 

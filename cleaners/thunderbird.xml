@@ -50,7 +50,7 @@
   </option>
   <option id="cookies">
     <label>Cookies</label>
-    <description>Delete cookies, which contain information such as website preferences, authentication, and tracking identification</description>
+    <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="delete" search="file" path="$$profile$$/cookies.sqlite"/>
   </option>
   <option id="index">
