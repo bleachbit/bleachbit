@@ -5,6 +5,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Dialog shown when an older version is detected. {prodname} is replaced with the product name. Do not translate placeholder.
 msgctxt "nsis:ALREADY_INSTALLED"
 msgid "${prodname} is already installed.\nClick 'OK' to uninstall the old version before upgrading, or click 'Cancel' to abort the upgrade."
 msgstr ""
@@ -35,16 +36,19 @@ msgid "You need to log in with an account that is a member of the administrators
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Message shown on the installation mode page description when admin rights are needed.
 msgctxt "nsis:MULTIUSER_ADMIN_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Message shown on the installation mode page description when admin rights are needed to uninstall.
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required to uninstall."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Radio button label. The & sets the keyboard accelerator (hotkey). Place & before the letter that should be the shortcut key.
 #. TRANSLATORS: The character '&' positions the keyboard accelerator key.
 #. TRANSLATORS: For example, '&anyone' sets 'a' as the accelerator key (Alt+a).
 msgctxt "nsis:MULTIUSER_ALL_USERS"
@@ -52,11 +56,13 @@ msgid "For &anyone who uses this computer (all users)"
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_ALL_USERS but without the & accelerator.
 msgctxt "nsis:MULTIUSER_ALL_USERS_UMUI"
 msgid "For anyone who uses this computer (all users)"
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Radio button label. The & sets the keyboard accelerator (hotkey). Place & before the letter that should be the shortcut key. {USER} is a placeholder that will be replaced with the Windows username.
 #. TRANSLATORS: The character '&' positions the keyboard accelerator key.
 #. TRANSLATORS: For example, '&anyone' sets 'a' as the accelerator key (Alt+a).
 msgctxt "nsis:MULTIUSER_CURRENT_USER"
@@ -64,31 +70,31 @@ msgid "For &me ({USER})"
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_CURRENT_USER but without the & accelerator. {USER} is a placeholder that will be replaced with the Windows username.
 msgctxt "nsis:MULTIUSER_CURRENT_USER_UMUI"
 msgid "For me ({USER})"
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Error message shown in dialog box during installation on Windows. {ERROR} is a placeholder that will be replaced with the error details.
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
 msgid "Unable to elevate, error {ERROR}."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Error message shown in a dialog box when Windows does not support elevation.
 msgctxt "nsis:MULTIUSER_ELEVATION_NOT_SUPPORTED"
 msgid "The operating system doesn't support elevation."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-msgctxt "nsis:MULTIUSER_INSTALLATION_FOR_CURRENT_USER_NOT_SUPPORTED"
-msgid "The operating system doesn't support current user installations."
-msgstr ""
-
-#: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 msgctxt "nsis:MULTIUSER_INSTALLED_ALL_USERS"
 msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
 msgstr ""
@@ -129,6 +135,7 @@ msgid "There is no installation of $(^NameDA)."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Title of the installation mode page in the Windows installer. User selects whether to install for all users or the current user.
 msgctxt "nsis:MULTIUSER_PAGE_TITLE"
 msgid "Choose Users"
 msgstr ""
@@ -184,6 +191,7 @@ msgid "Create a shortcut on the desktop."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Name of the desktop section in the Windows installer: user selects which desktop items to install.
 msgctxt "nsis:SECTION_DESKTOP_NAME"
 msgid "Desktop"
 msgstr ""
@@ -204,6 +212,7 @@ msgid "Create a shortcut on the Quick Launch bar."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Name of the quick launch section in the Windows installer: quick launch is a toolbar in the Windows taskbar that allows users to quickly access frequently used programs.
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
 msgid "Quick Launch"
 msgstr ""
@@ -214,6 +223,7 @@ msgid "Create shortcuts to ${prodname}"
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Name of the shortcuts section in the Windows installer: user selects which shortcuts to install.
 msgctxt "nsis:SECTION_SHORTCUTS_NAME"
 msgid "Shortcuts"
 msgstr ""
@@ -224,6 +234,7 @@ msgid "Create a shortcut in the Start menu."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Name of the start menu section in the Windows installer: user selects which start menu items to install.
 msgctxt "nsis:SECTION_START_MENU_NAME"
 msgid "Start menu"
 msgstr ""
@@ -234,6 +245,7 @@ msgid "Install language files to use ${prodname} in your preferred local languag
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Name of the translations section in the Windows installer: user selects which translations to install.
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
 msgid "Translations"
 msgstr ""
@@ -244,21 +256,19 @@ msgid "Add an uninstall program."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-msgctxt "nsis:SECTION_UNINSTALL_NAME"
-msgid "Uninstall"
-msgstr ""
-
-#: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Shortcut name for a desktop shortcut that opens a debugging terminal.
 msgctxt "nsis:SHORTCUT_DEBUGGING_TERMINAL"
 msgid "${prodname} Debugging Terminal"
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Shortcut name for a desktop shortcut that runs without UAC elevation (admin privileges).
 msgctxt "nsis:SHORTCUT_NO_UAC"
 msgid "${prodname} (No UAC)."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
+#. TRANSLATORS: Context menu item in Windows Explorer for securely shredding files.
 msgctxt "nsis:SHRED_SHELL_MENU"
 msgid "Shred with ${prodname}"
 msgstr ""
