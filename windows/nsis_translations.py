@@ -85,6 +85,54 @@ LANGUAGE_MAP = [
     ('vi', 'LANG_VIETNAMESE'),
 ]
 
+TRANSLATION_HINTS = {
+    'ALREADY_INSTALLED': 'Dialog shown when an older version is detected. {prodname} is replaced with the product name. Do not translate placeholder.',
+    'MULTIUSER_ADMIN_CREDENTIALS_REQUIRED': 'Message shown on the installation mode page description when admin rights are needed.',
+    'MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED': 'Message shown on the installation mode page description when admin rights are needed to uninstall.',
+    'MULTIUSER_ALL_USERS_UMUI': 'Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_ALL_USERS but without the & accelerator.',
+    'MULTIUSER_ALL_USERS': 'Radio button label. The & sets the keyboard accelerator (hotkey). Place & before the letter that should be the shortcut key.',
+    'MULTIUSER_CURRENT_USER_UMUI': 'Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_CURRENT_USER but without the & accelerator. {USER} is a placeholder that will be replaced with the Windows username.',
+    'MULTIUSER_CURRENT_USER': 'Radio button label. The & sets the keyboard accelerator (hotkey). Place & before the letter that should be the shortcut key. {USER} is a placeholder that will be replaced with the Windows username.',
+    'MULTIUSER_ELEVATION_ERROR': 'Error message shown in dialog box during installation on Windows. {ERROR} is a placeholder that will be replaced with the error details.',
+    'MULTIUSER_ELEVATION_NOT_SUPPORTED': 'Error message shown in a dialog box when Windows does not support elevation.',
+    'MULTIUSER_INSTALLED_ALL_USERS': 'Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.',
+    'MULTIUSER_INSTALLED_CURRENT_USER': 'Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.',
+    'MULTIUSER_PAGE_TITLE': 'Title of the installation mode page in the Windows installer. User selects whether to install for all users or the current user.',
+    'SECTION_DESKTOP_NAME': 'Name of the desktop section in the Windows installer: user selects which desktop items to install.',
+    'SECTION_QUICK_LAUNCH_NAME': 'Name of the quick launch section in the Windows installer: quick launch is a toolbar in the Windows taskbar that allows users to quickly access frequently used programs.',
+    'SECTION_SHORTCUTS_NAME': 'Name of the shortcuts section in the Windows installer: user selects which shortcuts to install.',
+    'SECTION_START_MENU_NAME': 'Name of the start menu section in the Windows installer: user selects which start menu items to install.',
+    'SECTION_TRANSLATIONS_NAME': 'Name of the translations section in the Windows installer: user selects which translations to install.',
+    'SHORTCUT_DEBUGGING_TERMINAL': 'Shortcut name for a desktop shortcut that opens a debugging terminal.',
+    'SHORTCUT_NO_UAC': 'Shortcut name for a desktop shortcut that runs without UAC elevation (admin privileges).',
+    'SHRED_SHELL_MENU': 'Context menu item in Windows Explorer for securely shredding files.',
+}
+
+
+def _get_all_nsis_langstring_keys():
+    """Extract all unique LangString key names from the NSIS language file."""
+    _header, lang_strings = _parse_nsis_lang_strings(NSIS_MULTIUSER_LANG)
+    all_keys = set()
+    for _lang_macro, strings in lang_strings.items():
+        all_keys.update(strings.keys())
+    return all_keys
+
+
+def validate_translation_hints():
+    """Validate that all TRANSLATION_HINTS keys correspond to real LangString definitions.
+
+    Raises:
+        RuntimeError: If any hints reference non-existent LangString keys.
+    """
+    actual_keys = _get_all_nsis_langstring_keys()
+    hint_keys = set(TRANSLATION_HINTS.keys())
+    orphaned_hints = hint_keys - actual_keys
+
+    if orphaned_hints:
+        raise RuntimeError(
+            f'TRANSLATION_HINTS contains orphaned keys not found in NSIS files: '
+            f'{sorted(orphaned_hints)}'
+        )
 
 def _parse_po_string(token):
     """Return the decoded PO string literal from the raw token."""
@@ -199,6 +247,8 @@ def _escape_nsis_text(text):
 
 def write_nsis_pot():
     """Generate the template POT file using the English NSIS strings."""
+    # Validate hints before generating POT
+    validate_translation_hints()
     _header, lang_strings = _parse_nsis_lang_strings(NSIS_MULTIUSER_LANG)
     english_strings = lang_strings.get('LANG_ENGLISH', {})
     if not english_strings:
@@ -216,6 +266,9 @@ def write_nsis_pot():
     for key in sorted(english_strings):
         msgid = _escape_po_text(_unescape_nsis_text(english_strings[key]))
         lines.append('#: windows/NsisInclude/NsisMultiUserLang.nsh\n')
+        hint = TRANSLATION_HINTS.get(key)
+        if hint:
+            lines.append(f'#. TRANSLATORS: {hint}\n')
         if '&' in msgid:
             lines.append(
                 '#. TRANSLATORS: The character \'&\' positions the keyboard accelerator key.\n'
@@ -437,6 +490,25 @@ Header line 2
             self.assertEqual(re_escaped, original_escaped)
             # Should never have doubled escapes like $\$\
             self.assertNotIn('$\\$\\', re_escaped)
+
+    def test_validate_translation_hints_passes_with_valid_hints(self):
+        """Test that validation passes when all hints correspond to real strings."""
+        # This should not raise any exception since we cleaned up orphaned hints
+        validate_translation_hints()
+
+    def test_validate_translation_hints_fails_on_orphaned_hints(self):
+        """Test that validation raises RuntimeError for orphaned hints."""
+        original_hints = TRANSLATION_HINTS.copy()
+        try:
+            # Add a fake hint that doesn't correspond to any real LangString
+            TRANSLATION_HINTS['FAKE_ORPHANED_KEY'] = 'This hint has no corresponding LangString.'
+            with self.assertRaises(RuntimeError) as context:
+                validate_translation_hints()
+            self.assertIn('FAKE_ORPHANED_KEY', str(context.exception))
+        finally:
+            # Restore original hints
+            TRANSLATION_HINTS.clear()
+            TRANSLATION_HINTS.update(original_hints)
 
 
 def main():

@@ -25,7 +25,7 @@ RequestExecutionLevel user ; will ask elevation only if necessary
 ; exit and error codes
 !define MULTIUSER_ERROR_INVALID_PARAMETERS 666660 ; invalid command-line parameters
 !define MULTIUSER_ERROR_ELEVATION_NOT_ALLOWED 666661 ; elevation is restricted by MULTIUSER_INSTALLMODE_ALLOW_ELEVATION or MULTIUSER_INSTALLMODE_ALLOW_ELEVATION_IF_SILENT
-!define MULTIUSER_ERROR_NOT_INSTALLED 666662 ; returned from uninstaller when no version is installed
+!define MULTIUSER_ERROR_NOT_INSTALLED 666662 ; uninstaller found no registry entries for any installation (per-machine or per-user)
 !define MULTIUSER_ERROR_RUN_UNINSTALLER_FAILED 666663 ; returned from installer if executing the uninstaller failed
 !define MULTIUSER_ERROR_ELEVATION_FAILED 666666 ; returned by the outer instance when the inner instance cannot start (user aborted elevation dialog, Logon service not running, UAC is not supported by the OS, user without admin priv. is used in the runas dialog), or started, but was not admin
 !define MULTIUSER_INNER_INSTANCE_BACK 666667 ; returned by the inner instance when the user presses the Back button on the first visible page (display outer instance)
