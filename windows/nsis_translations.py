@@ -134,6 +134,44 @@ def validate_translation_hints():
             f'{sorted(orphaned_hints)}'
         )
 
+
+def validate_keys_usage():
+    """Validate that all LangString keys are used in NSIS installer files.
+
+    Checks that each key in windows/NsisInclude/NsisMultiUserLang.nsh is
+    referenced in either windows/bleachbit.nsi or
+    windows/NsisInclude/NsisMultiUser.nsh.
+
+    Raises:
+        RuntimeError: If any keys are not found in the NSIS files.
+    """
+    nsis_files = [
+        os.path.join(ROOT_DIR, 'windows', 'bleachbit.nsi'),
+        os.path.join(ROOT_DIR, 'windows', 'NsisInclude', 'NsisMultiUser.nsh')
+    ]
+
+    # Collect all text from NSIS files
+    all_nsis_content = ''
+    for nsis_file in nsis_files:
+        if os.path.exists(nsis_file):
+            with open(nsis_file, encoding='utf-8') as f:
+                all_nsis_content += f.read()
+
+    # Check each key from the NSIS language file (includes all keys from po/nsis.pot)
+    unused_keys = []
+    for key in _get_all_nsis_langstring_keys():
+        # NSIS references LangStrings as $(KEY)
+        pattern = rf'\$\({re.escape(key)}\)'
+        if not re.search(pattern, all_nsis_content):
+            unused_keys.append(key)
+
+    if unused_keys:
+        raise RuntimeError(
+            f'LangString keys not used in NSIS files: '
+            f'{sorted(unused_keys)}'
+        )
+
+
 def _parse_po_string(token):
     """Return the decoded PO string literal from the raw token."""
     token = token.strip()
@@ -519,6 +557,8 @@ def main():
                         help='Generate po/nsis.pot from NSIS English strings.')
     parser.add_argument('--generate', action='store_true',
                         help='Generate NsisInclude/BleachBitLang.nsh from po/*.po.')
+    parser.add_argument('--check-keys', action='store_true',
+                        help='Check that TRANSLATION_HINTS keys exist in NSIS files.')
     parser.add_argument('--unittest', action='store_true',
                         help='Run unit tests.')
     args = parser.parse_args()
@@ -528,6 +568,11 @@ def main():
         runner = unittest.TextTestRunner(verbosity=2)
         result = runner.run(suite)
         return 0 if result.wasSuccessful() else 1
+
+    if args.check_keys:
+        validate_keys_usage()
+        print('All TRANSLATION_HINTS keys are used in NSIS files.')
+        return 0
 
     if not args.pot and not args.generate:
         parser.print_help()
