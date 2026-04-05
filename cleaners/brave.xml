@@ -118,14 +118,12 @@ later.  See the COPYING file in the top-level directory.
   </option>
   <option id="session">
     <label>Session</label>
-    <description>Delete the current and last sessions</description>
+    <description>Previously open tabs and windows</description>
     <action command="delete" search="file" path="$$profile$$/Current Session"/>
     <action command="delete" search="file" path="$$profile$$/Current Tabs"/>
     <action command="delete" search="file" path="$$profile$$/Last Session"/>
     <action command="delete" search="file" path="$$profile$$/Last Tabs"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
     <action command="delete" search="walk.all" path="$$profile$$/Sessions"/>
-    <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
   </option>
   <option id="site_data">
     <label>Site data</label>
@@ -140,6 +138,8 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="$$profile$$/WebStorage"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
+    <action command="delete" search="walk.files" path="$$profile$$/Session Storage/"/>
   </option>
   <option id="sync">
     <label>Sync</label>

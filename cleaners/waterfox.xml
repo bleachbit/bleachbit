@@ -80,9 +80,9 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
     <action command="delete" search="file" path="$$profile$$/signons.sqlite"/>
     <action command="delete" search="file" path="$$profile$$/logins.json"/>
   </option>
-  <option id="session_restore">
-    <label>Session restore</label>
-    <description>Restores the previous session when the browser next starts</description>
+  <option id="session">
+    <label>Session</label>
+    <description>Previously open tabs and windows</description>
     <!--
 example names
 sessionstore.js

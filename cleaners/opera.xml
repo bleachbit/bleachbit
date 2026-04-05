@@ -180,6 +180,8 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="$$profile$$/WebStorage"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager"/>
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
+    <action command="delete" search="walk.all" path="$$profile$$/Session Storage"/>
     <!-- below are entries valid before Opera 15 -->
     <action command="delete" search="walk.all" path="%AppData%\Opera\Opera*\pstorage\"/>
     <action command="delete" search="walk.all" path="~/.opera/pstorage/"/>
@@ -195,14 +197,12 @@ later.  See the COPYING file in the top-level directory.
   </option>
   <option id="session">
     <label>Session</label>
-    <description>Delete the current and last sessions</description>
+    <description>Previously open tabs and windows</description>
     <action command="delete" search="file" path="$$profile$$/Current Session"/>
     <action command="delete" search="file" path="$$profile$$/Current Tabs"/>
     <action command="delete" search="file" path="$$profile$$/Last Session"/>
     <action command="delete" search="file" path="$$profile$$/Last Tabs"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
     <action command="delete" search="walk.all" path="$$profile$$/Sessions/"/>
-    <action command="delete" search="walk.all" path="$$profile$$/Session Storage"/>
     <!-- below are entries valid before Opera 15 -->
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\sessions\autosave.win"/>
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\sessions\autosave.win.bak"/>
