@@ -160,6 +160,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/MediaDeviceSalts"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/previews_opt_out.db"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/QuotaManager"/>
+    <action command="sqlite.vacuum" search="file" path="$$profile$$/WebStorage/QuotaManager"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Shortcuts"/>
     <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Thumbnails" type="f"/>
