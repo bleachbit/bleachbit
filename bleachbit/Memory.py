@@ -319,10 +319,11 @@ def wipe_memory():
         os._exit(0)
     else:
         # TRANSLATORS: This is a debugging message that the parent process
-        # is waiting for the child process.
-        logger.debug(_("The function wipe_memory() with process ID %d is "
-                       "waiting for child process ID %d."),
-                     os.getpid(), child_pid)
+        # is waiting for the child process. %(parent_pid)d is the parent
+        # process ID; %(child_pid)d is the child process ID.
+        logger.debug(_("The function wipe_memory() with process ID %(parent_pid)d is "
+                       "waiting for child process ID %(child_pid)d."),
+                     {'parent_pid': os.getpid(), 'child_pid': child_pid})
         rc = os.waitpid(child_pid, 0)[1]
         if rc not in [0, 9]:
             logger.warning(
