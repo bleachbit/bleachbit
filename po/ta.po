@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 18:09-0600\n"
+"POT-Creation-Date: 2026-04-05 14:48-0600\n"
 "PO-Revision-Date: 2025-04-27 19:46+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/bleachbit/main/ta/"
@@ -28,9 +28,9 @@ msgstr "ஊடக இயக்கி"
 
 #. TRANSLATORS: Sidebar label for the page managing browser cookies in
 #. the Preferences dialog.
-#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
-#: ../cleaners/konqueror.xml ../cleaners/silverlight.xml
+#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
@@ -40,9 +40,9 @@ msgstr "ஊடக இயக்கி"
 msgid "Cookies"
 msgstr "நினைவிகள்"
 
-#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
-#: ../cleaners/konqueror.xml ../cleaners/silverlight.xml
+#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
@@ -53,21 +53,22 @@ msgstr "நினைவிகள்"
 #| "Delete cookies, which contain information such as web site preferences, "
 #| "authentication, and tracking identification"
 msgid ""
-"Delete cookies, which contain information such as website preferences, "
-"authentication, and tracking identification"
+"Delete cookies, which store login information, website preferences, and "
+"tracking identifiers"
 msgstr ""
 "இணைய தள விருப்பத்தேர்வுகள், நுழைவனுமதி மற்றும் கண்காணிப்பு அடையாளம் போன்ற தகவல்களைக் "
 "கொண்ட குக்கீகளை நீக்கவும்"
 
 #: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
-#: ../cleaners/easytag.xml ../cleaners/safari.xml ../cleaners/chromium.xml
-#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
-#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
-#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
-#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
-#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/vim.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml ../cleaners/octave.xml
+#: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
+#: ../cleaners/chromium.xml ../cleaners/sqlite3.xml
+#: ../cleaners/windows_defender.xml ../cleaners/slack.xml ../cleaners/brave.xml
+#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
+#: ../cleaners/libreoffice.xml ../cleaners/seamonkey.xml
+#: ../cleaners/google_chrome.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/vim.xml ../cleaners/opera.xml
+#: ../cleaners/discord.xml ../cleaners/octave.xml
 msgid "History"
 msgstr "வரலாறு"
 
@@ -110,13 +111,13 @@ msgstr "வரைகலை பார்வையாளர்"
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
 #: ../cleaners/librewolf.xml ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/emesene.xml ../cleaners/nexuiz.xml
-#: ../cleaners/java.xml ../cleaners/epiphany.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/thumbnails.xml
-#: ../cleaners/exaile.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
+#: ../cleaners/vivaldi.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/pidgin.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/emesene.xml
+#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/epiphany.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
+#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/brave.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
@@ -199,13 +200,13 @@ msgstr "அரட்டை பதிவுகள்"
 msgid "Delete the chat logs"
 msgstr "அரட்டை பதிவுகளை அழி"
 
-#: ../cleaners/librewolf.xml ../cleaners/elinks.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
-#: ../cleaners/konqueror.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/links2.xml
-#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/elinks.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/links2.xml ../cleaners/seamonkey.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Web browser"
 msgstr "வலைய உலாவி"
 
@@ -223,21 +224,26 @@ msgstr "காப்புக் கோப்புகள்"
 msgid "Delete the backup files"
 msgstr "காப்புக் கோப்புகளை அழி"
 
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Crash reports"
 msgstr "சிதைவு அறிக்கைகள்"
 
-#: ../cleaners/librewolf.xml ../cleaners/beagle.xml ../cleaners/waterfox.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/windows_defender.xml
+#: ../cleaners/librewolf.xml ../cleaners/beagle.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/geary.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/windows_defender.xml
 #: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/deepscan.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
+#: ../cleaners/brave.xml ../cleaners/deepscan.xml ../cleaners/google_chrome.xml
+#: ../cleaners/transmission.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/vuze.xml ../cleaners/opera.xml
 msgid "Delete the files"
 msgstr "கோப்புகளை அழி"
 
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Form history"
@@ -247,23 +253,23 @@ msgstr "படிவ வரலாறு"
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
 #, fuzzy
-#| msgid "A history of forms entered in web sites and in the Search bar"
-msgid "A history of forms entered in websites and in the Search bar"
-msgstr "வலைத்தளங்களிலும் தேடல் பட்டையிலும் உள்ளிடப்பட்ட படிவங்களின் வரலாறு"
+#| msgid "Delete the search history"
+msgid "Saved form entries and search bar history"
+msgstr "தேடல் வரலாற்றை அழி"
 
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Passwords"
 msgstr "கடவுச்சொற்கள்"
 
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
@@ -271,37 +277,43 @@ msgstr ""
 "பயனர்பெயர்கள் மற்றும் கடவுச்சொற்களின் தரவுத்தளம் மற்றும் கடவுச்சொற்களை சேமிக்காத தளங்களின் "
 "பட்டியல்"
 
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "This option will delete your saved passwords."
 msgstr "இந்தத் தேர்வு உங்கள் சேமிக்கப்பட்ட கடவுச்சொல்லை நீக்குவதற்கானது."
 
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-msgid "Session restore"
-msgstr "அமர்வு மீட்டமை"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-msgid "Restores the previous session when the browser next starts"
-msgstr ""
-
-#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
 #: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
 #: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Session"
+msgstr "அமர்வு"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Previously open tabs and windows"
+msgstr ""
+
+#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Site data"
 msgstr ""
 
 #. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
 msgstr ""
 
@@ -334,22 +346,23 @@ msgstr "பார்த்த இனைய பக்கங்களை பட்
 #. from the SQLite database.  Microsoft Access uses
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
-#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/gpodder.xml ../cleaners/geary.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../bleachbit/Action.py
+#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
+#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Action.py
 msgid "Vacuum"
 msgstr "வெற்றிடம்"
 
-#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/gpodder.xml ../cleaners/geary.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
+#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
@@ -430,6 +443,43 @@ msgstr "சொல் செயலி"
 msgid "Delete the list of recently used documents"
 msgstr "சமீபத்தில் பாவித்த கோப்புகளின் பட்டியலை அழி"
 
+#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/epiphany.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
+#: ../cleaners/brave.xml ../cleaners/seamonkey.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Delete the web cache, which reduces time to display revisited pages"
+msgstr ""
+"வலை தற்காலிக சேமிப்பை நீக்கவும், இது மறுபரிசீலனை செய்யப்பட்ட பக்கங்களைக் காண்பிக்கும் "
+"நேரத்தை குறைக்கிறது"
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+#, fuzzy
+#| msgid "A history of forms entered in web sites"
+msgid "A history of forms entered in websites"
+msgstr "இணையதளங்களில் உள்ளிடப்பட்ட படிவங்களின் வரலாறு"
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/slack.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+msgid ""
+"Delete the history which includes visited sites, downloads, and thumbnails"
+msgstr "பார்வையிட்ட தளங்கள், பதிவிறக்கங்கள் மற்றும் சிறுபடங்கள் அடங்கிய வரலாற்றை நீக்கவும்"
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+msgid "Sync"
+msgstr "ஒத்திசைவு"
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#, fuzzy
+#| msgid "Delete the sync data and sign out of the browser"
+msgid "Delete the sync data (including web apps) and sign out of the browser"
+msgstr "ஒத்திசைவு தரவை நீக்கி, உலாவியில் இருந்து வெளியேறவும்"
+
 #: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
 #: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/gl-117.xml ../cleaners/tremulous.xml
@@ -440,15 +490,6 @@ msgstr "விளையாட்டு"
 #: ../cleaners/easytag.xml
 msgid "Audio files tagger"
 msgstr "ஆடியோ கோப்புகள் குறிச்சொற்கள்"
-
-#: ../cleaners/safari.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/brave.xml
-#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr ""
-"வலை தற்காலிக சேமிப்பை நீக்கவும், இது மறுபரிசீலனை செய்யப்பட்ட பக்கங்களைக் காண்பிக்கும் "
-"நேரத்தை குறைக்கிறது"
 
 #: ../cleaners/journald.xml
 msgid "System journals"
@@ -553,20 +594,6 @@ msgid "Delete the current session"
 msgstr "நடப்பு அமர்வை அழி"
 
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#, fuzzy
-#| msgid "A history of forms entered in web sites"
-msgid "A history of forms entered in websites"
-msgstr "இணையதளங்களில் உள்ளிடப்பட்ட படிவங்களின் வரலாறு"
-
-#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml
-msgid ""
-"Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr "பார்வையிட்ட தளங்கள், பதிவிறக்கங்கள் மற்றும் சிறுபடங்கள் அடங்கிய வரலாற்றை நீக்கவும்"
-
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 msgid "Search engines"
 msgstr "தேடு பொறிகள்"
@@ -583,28 +610,6 @@ msgid ""
 msgstr ""
 "தேடுபொறி பயன்பாட்டு வரலாற்றை மீட்டமைக்கவும், காரணி அல்லாத தேடுபொறிகளை நீக்கவும், அவற்றில் "
 "சில தானாக சேர்க்கப்படுகின்றன"
-
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Session"
-msgstr "அமர்வு"
-
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Delete the current and last sessions"
-msgstr "நடப்பு மற்றும் கடந்த அமர்வுகளை அழி"
-
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-msgid "Sync"
-msgstr "ஒத்திசைவு"
-
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-#, fuzzy
-#| msgid "Delete the sync data and sign out of the browser"
-msgid "Delete the sync data (including web apps) and sign out of the browser"
-msgstr "ஒத்திசைவு தரவை நீக்கி, உலாவியில் இருந்து வெளியேறவும்"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
 msgid "File manager"
@@ -651,6 +656,14 @@ msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
 msgstr "குறியீட்டை நீக்குவது செய்தி பட்டியலில் உள்ள நெடுவரிசைகளின் உள்ளமைவை மீட்டமைக்கும்."
+
+#: ../cleaners/thunderbird.xml
+msgid "Session restore"
+msgstr "அமர்வு மீட்டமை"
+
+#: ../cleaners/thunderbird.xml
+msgid "Restores the previous session when the browser next starts"
+msgstr ""
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -837,6 +850,7 @@ msgstr ""
 msgid "Default dark mode, showing found junk files"
 msgstr ""
 
+#. TRANSLATORS: Dialog shown when an older version is detected. {prodname} is replaced with the product name. Do not translate placeholder.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:ALREADY_INSTALLED"
 msgid ""
@@ -875,16 +889,19 @@ msgid ""
 "group to continue."
 msgstr ""
 
+#. TRANSLATORS: Message shown on the installation mode page description when admin rights are needed.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required."
 msgstr ""
 
+#. TRANSLATORS: Message shown on the installation mode page description when admin rights are needed to uninstall.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required to uninstall."
 msgstr ""
 
+#. TRANSLATORS: Radio button label. The & sets the keyboard accelerator (hotkey). Place & before the letter that should be the shortcut key.
 #. TRANSLATORS: The character '&' positions the keyboard accelerator key.
 #. TRANSLATORS: For example, '&anyone' sets 'a' as the accelerator key (Alt+a).
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -892,11 +909,13 @@ msgctxt "nsis:MULTIUSER_ALL_USERS"
 msgid "For &anyone who uses this computer (all users)"
 msgstr ""
 
+#. TRANSLATORS: Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_ALL_USERS but without the & accelerator.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS_UMUI"
 msgid "For anyone who uses this computer (all users)"
 msgstr ""
 
+#. TRANSLATORS: Radio button label. The & sets the keyboard accelerator (hotkey). Place & before the letter that should be the shortcut key. {USER} is a placeholder that will be replaced with the Windows username.
 #. TRANSLATORS: The character '&' positions the keyboard accelerator key.
 #. TRANSLATORS: For example, '&anyone' sets 'a' as the accelerator key (Alt+a).
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -904,31 +923,31 @@ msgctxt "nsis:MULTIUSER_CURRENT_USER"
 msgid "For &me ({USER})"
 msgstr ""
 
+#. TRANSLATORS: Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_CURRENT_USER but without the & accelerator. {USER} is a placeholder that will be replaced with the Windows username.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER_UMUI"
 msgid "For me ({USER})"
 msgstr ""
 
+#. TRANSLATORS: Error message shown in dialog box during installation on Windows. {ERROR} is a placeholder that will be replaced with the error details.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
 msgid "Unable to elevate, error {ERROR}."
 msgstr ""
 
+#. TRANSLATORS: Error message shown in a dialog box when Windows does not support elevation.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_NOT_SUPPORTED"
 msgid "The operating system doesn't support elevation."
 msgstr ""
 
-#: windows/NsisInclude/NsisMultiUserLang.nsh
-msgctxt "nsis:MULTIUSER_INSTALLATION_FOR_CURRENT_USER_NOT_SUPPORTED"
-msgid "The operating system doesn't support current user installations."
-msgstr ""
-
+#. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_ALL_USERS"
 msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
 msgstr ""
 
+#. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
@@ -970,6 +989,7 @@ msgctxt "nsis:MULTIUSER_NOT_INSTALLED"
 msgid "There is no installation of $(^NameDA)."
 msgstr ""
 
+#. TRANSLATORS: Title of the installation mode page in the Windows installer. User selects whether to install for all users or the current user.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 #, fuzzy
 #| msgid "Choose a folder"
@@ -1037,6 +1057,7 @@ msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
 msgid "Create a shortcut on the desktop."
 msgstr "திரைமுகப்பிற்கான சாளரங்கள்"
 
+#. TRANSLATORS: Name of the desktop section in the Windows installer: user selects which desktop items to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 #, fuzzy
 #| msgid "Desktop widgets"
@@ -1060,6 +1081,7 @@ msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
 msgid "Create a shortcut on the Quick Launch bar."
 msgstr ""
 
+#. TRANSLATORS: Name of the quick launch section in the Windows installer: quick launch is a toolbar in the Windows taskbar that allows users to quickly access frequently used programs.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
 msgid "Quick Launch"
@@ -1070,6 +1092,7 @@ msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
 msgid "Create shortcuts to ${prodname}"
 msgstr ""
 
+#. TRANSLATORS: Name of the shortcuts section in the Windows installer: user selects which shortcuts to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_NAME"
 msgid "Shortcuts"
@@ -1080,6 +1103,7 @@ msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
 msgid "Create a shortcut in the Start menu."
 msgstr ""
 
+#. TRANSLATORS: Name of the start menu section in the Windows installer: user selects which start menu items to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_NAME"
 msgid "Start menu"
@@ -1091,6 +1115,7 @@ msgid ""
 "Install language files to use ${prodname} in your preferred local language."
 msgstr ""
 
+#. TRANSLATORS: Name of the translations section in the Windows installer: user selects which translations to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 #, fuzzy
 #| msgid "Localizations"
@@ -1103,23 +1128,19 @@ msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
 msgid "Add an uninstall program."
 msgstr ""
 
-#: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Update uninstallers"
-msgctxt "nsis:SECTION_UNINSTALL_NAME"
-msgid "Uninstall"
-msgstr "நிறுவல் நீக்குபவர்களைப் புதுப்பிக்கவும்"
-
+#. TRANSLATORS: Shortcut name for a desktop shortcut that opens a debugging terminal.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_DEBUGGING_TERMINAL"
 msgid "${prodname} Debugging Terminal"
 msgstr ""
 
+#. TRANSLATORS: Shortcut name for a desktop shortcut that runs without UAC elevation (admin privileges).
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_NO_UAC"
 msgid "${prodname} (No UAC)."
 msgstr ""
 
+#. TRANSLATORS: Context menu item in Windows Explorer for securely shredding files.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHRED_SHELL_MENU"
 msgid "Shred with ${prodname}"
@@ -1642,13 +1663,16 @@ msgstr ""
 msgid "Text is okay"
 msgstr ""
 
-#. TRANSLATORS: Button label in the font check dialog
+#. TRANSLATORS: Button label in the font check dialog. This is one of
+#. three buttons the user can click to report how the text appears.
+#. The user clicks this if the text is readable but appears fuzzy.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is blurry"
 msgstr ""
 
 #. TRANSLATORS: Button label in the font check dialog in case the font
-#. looks like an alien language.
+#. looks like an alien language. This is one of three buttons the user
+#. can click to report how the text appears.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is unrecognizable"
 msgstr ""
@@ -1833,8 +1857,12 @@ msgstr "உறுதிப்படுத்தவும்"
 msgid "Number of files"
 msgstr "கோப்புகளின் எண்ணிக்கை"
 
-#. TRANSLATORS: Option in combo box to choose to stop after a total
-#. size (in megabytes) has been generated.
+#. TRANSLATORS: Option in a combo box for choosing the stop condition
+#. when generating chaff (dummy) files. This option means "stop after
+#. the total size of generated files reaches a threshold in megabytes."
+#. "MB" is the megabyte unit abbreviation. Localize it if your language
+#. has an official abbreviation (e.g., "Mo" in French); otherwise keep
+#. "MB".
 #: ../bleachbit/GuiChaff.py
 #, fuzzy
 #| msgid "Size"
@@ -2217,9 +2245,10 @@ msgid "Windows 10 theme"
 msgstr "சாளரங்கள் 10 கருப்பொருள்"
 
 #. TRANSLATORS: Checkbox label to use the Fontconfig text rendering backend
-#. instead of the default Windows renderer. May improve blurry text.
+#. instead of the default Windows renderer. The option may improve blurry text.
+#. Fontconfig, which is software, is a proper noun.
 #: ../bleachbit/GuiPreferences.py
-msgid "Use fontconfig text rendering backend"
+msgid "Use Fontconfig text rendering backend"
 msgstr ""
 
 #. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
@@ -2247,6 +2276,11 @@ msgstr "KDE பிளாச்மாவில் துண்டாக்கப�
 msgid "Show debug messages"
 msgstr "பிழைத்திருத்த செய்திகளைக் காட்டு"
 
+#. TRANSLATORS: 'empty' means 'unallocated'.
+#. The user should decide which drives to wipe. Then, for each
+#. chosen drive, the user should specify one folder per drive.
+#. For example, to wipe C:\, the user may choose %TEMP% which
+#. is a folder anywhere on C:.
 #: ../bleachbit/GuiPreferences.py
 #, fuzzy
 #| msgid ""
@@ -2672,15 +2706,16 @@ msgid "Detected these swap devices: %s"
 msgstr "இந்த இடமாற்று சாதனங்களைக் கண்டறிந்தது: %s"
 
 #. TRANSLATORS: This is a debugging message that the parent process
-#. is waiting for the child process.
+#. is waiting for the child process. %(parent_pid)d is the parent
+#. process ID; %(child_pid)d is the child process ID.
 #: ../bleachbit/Memory.py
 #, fuzzy, python-format
 #| msgid ""
 #| "The function wipe_memory() with process ID {pid} is waiting for child "
 #| "process ID {cid}."
 msgid ""
-"The function wipe_memory() with process ID %d is waiting for child process "
-"ID %d."
+"The function wipe_memory() with process ID %(parent_pid)d is waiting for "
+"child process ID %(child_pid)d."
 msgstr ""
 "செயல்முறை ஐடி {pid} உடன் wipe_memory() செயல்பாடு குழந்தை செயல்முறை ஐடி {cid}க்காகக் "
 "காத்திருக்கிறது."
@@ -2721,6 +2756,9 @@ msgstr "இயல்புநிலை இயக்கிகளை துண்�
 
 #. TRANSLATORS: Warning shown when user tries to add a protected path.
 #. %(path)s is the path, %(files)d is number of files, %(size)s is human-readable size
+#. Do not translate the placeholders.
+#. Adapt quotation marks around the path placeholder to the typographic conventions of
+#. your language.
 #: ../bleachbit/ProtectedPath.py
 #, python-format
 msgid ""
@@ -2731,7 +2769,10 @@ msgid ""
 "Are you sure you want to add this path?"
 msgstr ""
 
-#. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
+#. TRANSLATORS: Warning shown when user tries to add a protected path (no files found).
+#. Do not translate the placeholder %(path)s.
+#. Adapt quotation marks around the path placeholder to the typographic conventions of
+#. your language.
 #: ../bleachbit/ProtectedPath.py
 #, python-format
 msgid ""
@@ -2847,9 +2888,9 @@ msgstr ""
 "இருந்தது."
 
 #. TRANSLATORS: Debug log message shown during file wiping. 'Wiping' is a
-#. present participle (ongoing action). %(pathname)s is the file/directory
-#. path; %(fstype)s is the file system type (e.g., ext3, ntfs).
-#. Do not translate variables.
+#. present participle (ongoing action) refering to secure overwrite.
+#. %(pathname)s is the file/directory path; %(fstype)s is the file system type
+#. (e.g., ext3, ntfs). Do not translate placeholders.
 #: ../bleachbit/Wipe.py
 #, fuzzy, python-format
 #| msgid "Wiping path {pathname} with file system type {fstype}"
@@ -3070,6 +3111,20 @@ msgstr "உதவி (_H)"
 #: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_About bleachbit"
+
+#, fuzzy
+#~| msgid "A history of forms entered in web sites and in the Search bar"
+#~ msgid "A history of forms entered in websites and in the Search bar"
+#~ msgstr "வலைத்தளங்களிலும் தேடல் பட்டையிலும் உள்ளிடப்பட்ட படிவங்களின் வரலாறு"
+
+#~ msgid "Delete the current and last sessions"
+#~ msgstr "நடப்பு மற்றும் கடந்த அமர்வுகளை அழி"
+
+#, fuzzy
+#~| msgid "Update uninstallers"
+#~ msgctxt "nsis:SECTION_UNINSTALL_NAME"
+#~ msgid "Uninstall"
+#~ msgstr "நிறுவல் நீக்குபவர்களைப் புதுப்பிக்கவும்"
 
 #~ msgid "DOM Storage"
 #~ msgstr "DOM சேமிப்பு"

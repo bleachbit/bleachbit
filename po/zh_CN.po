@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-03-28 18:09-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-05 14:48-0600\n"
 "PO-Revision-Date: 2026-03-29 09:11+0000\n"
 "Last-Translator: 大王叫我来巡山 "
 "<hamburger2048@users.noreply.hosted.weblate.org>\n"
@@ -29,9 +29,9 @@ msgstr "媒体播放器"
 
 #. TRANSLATORS: Sidebar label for the page managing browser cookies in
 #. the Preferences dialog.
-#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
-#: ../cleaners/konqueror.xml ../cleaners/silverlight.xml
+#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
@@ -41,28 +41,33 @@ msgstr "媒体播放器"
 msgid "Cookies"
 msgstr "Cookie"
 
-#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
-#: ../cleaners/konqueror.xml ../cleaners/silverlight.xml
+#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#, fuzzy
+#| msgid ""
+#| "Delete cookies, which contain information such as website preferences, "
+#| "authentication, and tracking identification"
 msgid ""
-"Delete cookies, which contain information such as website preferences, "
-"authentication, and tracking identification"
+"Delete cookies, which store login information, website preferences, and "
+"tracking identifiers"
 msgstr "删除 Cookie 文件，它们保存网站首选项、身份认证和跟踪标识符等信息"
 
 #: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
-#: ../cleaners/easytag.xml ../cleaners/safari.xml ../cleaners/chromium.xml
-#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
-#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
-#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
-#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
-#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/vim.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml ../cleaners/octave.xml
+#: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
+#: ../cleaners/chromium.xml ../cleaners/sqlite3.xml
+#: ../cleaners/windows_defender.xml ../cleaners/slack.xml ../cleaners/brave.xml
+#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
+#: ../cleaners/libreoffice.xml ../cleaners/seamonkey.xml
+#: ../cleaners/google_chrome.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/vim.xml ../cleaners/opera.xml
+#: ../cleaners/discord.xml ../cleaners/octave.xml
 msgid "History"
 msgstr "历史记录"
 
@@ -105,13 +110,13 @@ msgstr "多媒体程序播放器"
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
 #: ../cleaners/librewolf.xml ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/emesene.xml ../cleaners/nexuiz.xml
-#: ../cleaners/java.xml ../cleaners/epiphany.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/thumbnails.xml
-#: ../cleaners/exaile.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
+#: ../cleaners/vivaldi.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/pidgin.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/emesene.xml
+#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/epiphany.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
+#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/brave.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
@@ -192,13 +197,13 @@ msgstr "聊天记录"
 msgid "Delete the chat logs"
 msgstr "删除聊天记录"
 
-#: ../cleaners/librewolf.xml ../cleaners/elinks.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
-#: ../cleaners/konqueror.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/links2.xml
-#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/elinks.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/links2.xml ../cleaners/seamonkey.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Web browser"
 msgstr "网页浏览器"
 
@@ -216,21 +221,26 @@ msgstr "备份文件"
 msgid "Delete the backup files"
 msgstr "删除备份文件"
 
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Crash reports"
 msgstr "崩溃报告"
 
-#: ../cleaners/librewolf.xml ../cleaners/beagle.xml ../cleaners/waterfox.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/windows_defender.xml
+#: ../cleaners/librewolf.xml ../cleaners/beagle.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/geary.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/windows_defender.xml
 #: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/deepscan.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
+#: ../cleaners/brave.xml ../cleaners/deepscan.xml ../cleaners/google_chrome.xml
+#: ../cleaners/transmission.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/vuze.xml ../cleaners/opera.xml
 msgid "Delete the files"
 msgstr "删除这些文件"
 
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Form history"
@@ -239,58 +249,66 @@ msgstr "表单历史"
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
-msgid "A history of forms entered in websites and in the Search bar"
-msgstr "在网站和搜索栏中输入的表单的历史记录"
+#, fuzzy
+#| msgid "Delete the search history"
+msgid "Saved form entries and search bar history"
+msgstr "删除查询记录"
 
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Passwords"
 msgstr "密码"
 
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
 msgstr "包含用户名和密码的数据库以及不应存储密码的站点列表"
 
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "This option will delete your saved passwords."
 msgstr "这个选项将会删除您已保存的密码。"
 
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-msgid "Session restore"
-msgstr "浏览状态还原"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-msgid "Restores the previous session when the browser next starts"
-msgstr "浏览器下次启动时恢复之前会话"
-
-#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
 #: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
 #: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Session"
+msgstr "会话"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Previously open tabs and windows"
+msgstr ""
+
+#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Site data"
 msgstr "站点数据"
 
 #. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
 msgstr "删除 LocalStorage、IndexedDB 和其他网站存储的数据"
 
@@ -323,22 +341,23 @@ msgstr "访问过的网页列表"
 #. from the SQLite database.  Microsoft Access uses
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
-#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/gpodder.xml ../cleaners/geary.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../bleachbit/Action.py
+#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
+#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Action.py
 msgid "Vacuum"
 msgstr "整理优化数据库"
 
-#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/safari.xml
-#: ../cleaners/waterfox.xml ../cleaners/gpodder.xml ../cleaners/geary.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
+#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
@@ -417,6 +436,37 @@ msgstr "文字处理程序"
 msgid "Delete the list of recently used documents"
 msgstr "删除最近使用文档列表"
 
+#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/epiphany.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
+#: ../cleaners/brave.xml ../cleaners/seamonkey.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Delete the web cache, which reduces time to display revisited pages"
+msgstr "删除为减少显示重新访问的页面的时间而产生的Web缓存"
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "A history of forms entered in websites"
+msgstr "在网站中输入的表单的历史记录"
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/slack.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+msgid ""
+"Delete the history which includes visited sites, downloads, and thumbnails"
+msgstr "删除历史记录，其中包括访问过的网站，下载的文件和缩略图"
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+msgid "Sync"
+msgstr "同步数据"
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+msgid "Delete the sync data (including web apps) and sign out of the browser"
+msgstr "删除包括 web 应用在内的同步数据并退出浏览器登录"
+
 #: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
 #: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/gl-117.xml ../cleaners/tremulous.xml
@@ -427,13 +477,6 @@ msgstr "游戏"
 #: ../cleaners/easytag.xml
 msgid "Audio files tagger"
 msgstr "音频文件标签编辑器"
-
-#: ../cleaners/safari.xml ../cleaners/epiphany.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/brave.xml
-#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr "删除为减少显示重新访问的页面的时间而产生的Web缓存"
 
 #: ../cleaners/journald.xml
 msgid "System journals"
@@ -532,18 +575,6 @@ msgid "Delete the current session"
 msgstr "删除当前会话"
 
 #: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "A history of forms entered in websites"
-msgstr "在网站中输入的表单的历史记录"
-
-#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml
-msgid ""
-"Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr "删除历史记录，其中包括访问过的网站，下载的文件和缩略图"
-
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 msgid "Search engines"
 msgstr "搜索引擎"
@@ -558,26 +589,6 @@ msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
 msgstr "重置搜索引擎使用历史记录并删除非出厂搜索引擎，其中一些是自动添加的"
-
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Session"
-msgstr "会话"
-
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Delete the current and last sessions"
-msgstr "删除当前及过去的会话"
-
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-msgid "Sync"
-msgstr "同步数据"
-
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-msgid "Delete the sync data (including web apps) and sign out of the browser"
-msgstr "删除包括 web 应用在内的同步数据并退出浏览器登录"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
 msgid "File manager"
@@ -622,6 +633,14 @@ msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
 msgstr "删除索引将重置邮件列表中列的顺序。"
+
+#: ../cleaners/thunderbird.xml
+msgid "Session restore"
+msgstr "浏览状态还原"
+
+#: ../cleaners/thunderbird.xml
+msgid "Restores the previous session when the browser next starts"
+msgstr "浏览器下次启动时恢复之前会话"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -807,6 +826,7 @@ msgstr ""
 msgid "Default dark mode, showing found junk files"
 msgstr "默认深色模式，显示找到的垃圾文件"
 
+#. TRANSLATORS: Dialog shown when an older version is detected. {prodname} is replaced with the product name. Do not translate placeholder.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:ALREADY_INSTALLED"
 msgid ""
@@ -847,16 +867,19 @@ msgid ""
 "group to continue."
 msgstr "要继续，需要用管理员组成员的账户登录。"
 
+#. TRANSLATORS: Message shown on the installation mode page description when admin rights are needed.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required."
 msgstr "需要管理员凭证。"
 
+#. TRANSLATORS: Message shown on the installation mode page description when admin rights are needed to uninstall.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required to uninstall."
 msgstr "卸载需要管理员凭证。"
 
+#. TRANSLATORS: Radio button label. The & sets the keyboard accelerator (hotkey). Place & before the letter that should be the shortcut key.
 #. TRANSLATORS: The character '&' positions the keyboard accelerator key.
 #. TRANSLATORS: For example, '&anyone' sets 'a' as the accelerator key (Alt+a).
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -864,11 +887,13 @@ msgctxt "nsis:MULTIUSER_ALL_USERS"
 msgid "For &anyone who uses this computer (all users)"
 msgstr "任何使用该计算机的人（&A）"
 
+#. TRANSLATORS: Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_ALL_USERS but without the & accelerator.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS_UMUI"
 msgid "For anyone who uses this computer (all users)"
 msgstr "任何使用该计算机的人（所有用户）"
 
+#. TRANSLATORS: Radio button label. The & sets the keyboard accelerator (hotkey). Place & before the letter that should be the shortcut key. {USER} is a placeholder that will be replaced with the Windows username.
 #. TRANSLATORS: The character '&' positions the keyboard accelerator key.
 #. TRANSLATORS: For example, '&anyone' sets 'a' as the accelerator key (Alt+a).
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -876,31 +901,31 @@ msgctxt "nsis:MULTIUSER_CURRENT_USER"
 msgid "For &me ({USER})"
 msgstr "当前用户 {USER}（&M)"
 
+#. TRANSLATORS: Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_CURRENT_USER but without the & accelerator. {USER} is a placeholder that will be replaced with the Windows username.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER_UMUI"
 msgid "For me ({USER})"
 msgstr "当前用户（{USER}）"
 
+#. TRANSLATORS: Error message shown in dialog box during installation on Windows. {ERROR} is a placeholder that will be replaced with the error details.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
 msgid "Unable to elevate, error {ERROR}."
 msgstr "无法提权，错误 {ERROR}。"
 
+#. TRANSLATORS: Error message shown in a dialog box when Windows does not support elevation.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_NOT_SUPPORTED"
 msgid "The operating system doesn't support elevation."
 msgstr "操作系统不支持提权。"
 
-#: windows/NsisInclude/NsisMultiUserLang.nsh
-msgctxt "nsis:MULTIUSER_INSTALLATION_FOR_CURRENT_USER_NOT_SUPPORTED"
-msgid "The operating system doesn't support current user installations."
-msgstr "操作系统不支持当前用户安装。"
-
+#. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_ALL_USERS"
 msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
 msgstr "版本 {VERSION} 为所有用户安装于“{FOLDER}” 中。"
 
+#. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
@@ -942,6 +967,7 @@ msgctxt "nsis:MULTIUSER_NOT_INSTALLED"
 msgid "There is no installation of $(^NameDA)."
 msgstr "没有 $(^NameDA) 的安装。"
 
+#. TRANSLATORS: Title of the installation mode page in the Windows installer. User selects whether to install for all users or the current user.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_PAGE_TITLE"
 msgid "Choose Users"
@@ -1005,6 +1031,7 @@ msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
 msgid "Create a shortcut on the desktop."
 msgstr "在桌面上创建快捷方式。"
 
+#. TRANSLATORS: Name of the desktop section in the Windows installer: user selects which desktop items to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_DESKTOP_NAME"
 msgid "Desktop"
@@ -1026,6 +1053,7 @@ msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
 msgid "Create a shortcut on the Quick Launch bar."
 msgstr "在快速启动栏创建快捷方式。"
 
+#. TRANSLATORS: Name of the quick launch section in the Windows installer: quick launch is a toolbar in the Windows taskbar that allows users to quickly access frequently used programs.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
 msgid "Quick Launch"
@@ -1036,6 +1064,7 @@ msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
 msgid "Create shortcuts to ${prodname}"
 msgstr "创建 ${prodname} 快捷方式"
 
+#. TRANSLATORS: Name of the shortcuts section in the Windows installer: user selects which shortcuts to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_NAME"
 msgid "Shortcuts"
@@ -1046,6 +1075,7 @@ msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
 msgid "Create a shortcut in the Start menu."
 msgstr "在开始菜单创建快捷方式。"
 
+#. TRANSLATORS: Name of the start menu section in the Windows installer: user selects which start menu items to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_NAME"
 msgid "Start menu"
@@ -1057,6 +1087,7 @@ msgid ""
 "Install language files to use ${prodname} in your preferred local language."
 msgstr "安装语言文件用偏好的本地语言使用 ${prodname}。"
 
+#. TRANSLATORS: Name of the translations section in the Windows installer: user selects which translations to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
 msgid "Translations"
@@ -1067,21 +1098,19 @@ msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
 msgid "Add an uninstall program."
 msgstr "添加卸载程序。"
 
-#: windows/NsisInclude/NsisMultiUserLang.nsh
-msgctxt "nsis:SECTION_UNINSTALL_NAME"
-msgid "Uninstall"
-msgstr "卸载"
-
+#. TRANSLATORS: Shortcut name for a desktop shortcut that opens a debugging terminal.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_DEBUGGING_TERMINAL"
 msgid "${prodname} Debugging Terminal"
 msgstr "${prodname} 调试终端"
 
+#. TRANSLATORS: Shortcut name for a desktop shortcut that runs without UAC elevation (admin privileges).
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_NO_UAC"
 msgid "${prodname} (No UAC)."
 msgstr "${prodname} （无 UAC）。"
 
+#. TRANSLATORS: Context menu item in Windows Explorer for securely shredding files.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHRED_SHELL_MENU"
 msgid "Shred with ${prodname}"
@@ -1585,13 +1614,16 @@ msgstr "字体检查"
 msgid "Text is okay"
 msgstr "文本正常"
 
-#. TRANSLATORS: Button label in the font check dialog
+#. TRANSLATORS: Button label in the font check dialog. This is one of
+#. three buttons the user can click to report how the text appears.
+#. The user clicks this if the text is readable but appears fuzzy.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is blurry"
 msgstr "文本模糊"
 
 #. TRANSLATORS: Button label in the font check dialog in case the font
-#. looks like an alien language.
+#. looks like an alien language. This is one of three buttons the user
+#. can click to report how the text appears.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is unrecognizable"
 msgstr "无法识别文本"
@@ -1788,8 +1820,12 @@ msgstr "确认"
 msgid "Number of files"
 msgstr "文件数量"
 
-#. TRANSLATORS: Option in combo box to choose to stop after a total
-#. size (in megabytes) has been generated.
+#. TRANSLATORS: Option in a combo box for choosing the stop condition
+#. when generating chaff (dummy) files. This option means "stop after
+#. the total size of generated files reaches a threshold in megabytes."
+#. "MB" is the megabyte unit abbreviation. Localize it if your language
+#. has an official abbreviation (e.g., "Mo" in French); otherwise keep
+#. "MB".
 #: ../bleachbit/GuiChaff.py
 msgid "Size (MB)"
 msgstr "大小（MB）"
@@ -2140,9 +2176,12 @@ msgid "Windows 10 theme"
 msgstr "Windows 10 主题"
 
 #. TRANSLATORS: Checkbox label to use the Fontconfig text rendering backend
-#. instead of the default Windows renderer. May improve blurry text.
+#. instead of the default Windows renderer. The option may improve blurry text.
+#. Fontconfig, which is software, is a proper noun.
 #: ../bleachbit/GuiPreferences.py
-msgid "Use fontconfig text rendering backend"
+#, fuzzy
+#| msgid "Use fontconfig text rendering backend"
+msgid "Use Fontconfig text rendering backend"
 msgstr "使用fontconfig 文本渲染后端"
 
 #. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
@@ -2170,6 +2209,11 @@ msgstr "添加文件粉碎右键菜单到 KDE Plasma"
 msgid "Show debug messages"
 msgstr "显示调试信息"
 
+#. TRANSLATORS: 'empty' means 'unallocated'.
+#. The user should decide which drives to wipe. Then, for each
+#. chosen drive, the user should specify one folder per drive.
+#. For example, to wipe C:\, the user may choose %TEMP% which
+#. is a folder anywhere on C:.
 #: ../bleachbit/GuiPreferences.py
 msgid "Choose a writable folder for each drive for which to wipe empty space."
 msgstr "为每个要擦除未分配区域的驱动器选择一个可写文件夹。"
@@ -2571,12 +2615,16 @@ msgid "Detected these swap devices: %s"
 msgstr "检测到这些交换区：%s"
 
 #. TRANSLATORS: This is a debugging message that the parent process
-#. is waiting for the child process.
+#. is waiting for the child process. %(parent_pid)d is the parent
+#. process ID; %(child_pid)d is the child process ID.
 #: ../bleachbit/Memory.py
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "The function wipe_memory() with process ID %d is waiting for child "
+#| "process ID %d."
 msgid ""
-"The function wipe_memory() with process ID %d is waiting for child process "
-"ID %d."
+"The function wipe_memory() with process ID %(parent_pid)d is waiting for "
+"child process ID %(child_pid)d."
 msgstr "进程 ID %d 的函数 wipe_memory() 正等待子进程 ID %d。"
 
 #: ../bleachbit/Memory.py
@@ -2615,6 +2663,9 @@ msgstr "设置默认擦除空闲空间的驱动器时出错。"
 
 #. TRANSLATORS: Warning shown when user tries to add a protected path.
 #. %(path)s is the path, %(files)d is number of files, %(size)s is human-readable size
+#. Do not translate the placeholders.
+#. Adapt quotation marks around the path placeholder to the typographic conventions of
+#. your language.
 #: ../bleachbit/ProtectedPath.py
 #, python-format
 msgid ""
@@ -2630,7 +2681,10 @@ msgstr ""
 "\n"
 "确定要添加此路径码？"
 
-#. TRANSLATORS: Warning shown when user tries to add a protected path (no files found)
+#. TRANSLATORS: Warning shown when user tries to add a protected path (no files found).
+#. Do not translate the placeholder %(path)s.
+#. Adapt quotation marks around the path placeholder to the typographic conventions of
+#. your language.
 #: ../bleachbit/ProtectedPath.py
 #, python-format
 msgid ""
@@ -2744,9 +2798,9 @@ msgid ""
 msgstr "文件系统中至少有一个文件不支持高级覆盖。"
 
 #. TRANSLATORS: Debug log message shown during file wiping. 'Wiping' is a
-#. present participle (ongoing action). %(pathname)s is the file/directory
-#. path; %(fstype)s is the file system type (e.g., ext3, ntfs).
-#. Do not translate variables.
+#. present participle (ongoing action) refering to secure overwrite.
+#. %(pathname)s is the file/directory path; %(fstype)s is the file system type
+#. (e.g., ext3, ntfs). Do not translate placeholders.
 #: ../bleachbit/Wipe.py
 #, python-format
 msgid "Wiping path %(pathname)s with file system type %(fstype)s"
@@ -2955,6 +3009,20 @@ msgstr "帮助(_H)"
 #: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "关于 BleachBit (_A)"
+
+#~ msgid "A history of forms entered in websites and in the Search bar"
+#~ msgstr "在网站和搜索栏中输入的表单的历史记录"
+
+#~ msgid "Delete the current and last sessions"
+#~ msgstr "删除当前及过去的会话"
+
+#~ msgctxt "nsis:MULTIUSER_INSTALLATION_FOR_CURRENT_USER_NOT_SUPPORTED"
+#~ msgid "The operating system doesn't support current user installations."
+#~ msgstr "操作系统不支持当前用户安装。"
+
+#~ msgctxt "nsis:SECTION_UNINSTALL_NAME"
+#~ msgid "Uninstall"
+#~ msgstr "卸载"
 
 #~ msgid "DOM Storage"
 #~ msgstr "DOM（文档对象模型）存储"
