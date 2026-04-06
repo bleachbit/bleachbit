@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-04-05 14:48-0600\n"
-"PO-Revision-Date: 2026-03-30 13:09+0000\n"
+"PO-Revision-Date: 2026-04-07 15:09+0000\n"
 "Last-Translator: Mona Lisa <nickwick@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/bleachbit/main/"
 "sv/>\n"
@@ -49,16 +49,12 @@ msgstr "Kakor"
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#, fuzzy
-#| msgid ""
-#| "Delete cookies, which contain information such as website preferences, "
-#| "authentication, and tracking identification"
 msgid ""
 "Delete cookies, which store login information, website preferences, and "
 "tracking identifiers"
 msgstr ""
-"Ta bort kakor som innehåller information som webbplatsinställningar, "
-"autentisering och spårningsidentifiering"
+"Ta bort kakor som lagrar inloggningsinformation, webbplatsinställningar och "
+"spårningsidentifierare"
 
 #: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
 #: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
@@ -253,10 +249,8 @@ msgstr "Formulärhistorik"
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
-#, fuzzy
-#| msgid "Delete the search history"
 msgid "Saved form entries and search bar history"
-msgstr "Ta bort sökhistoriken"
+msgstr "Sparade formulärposter och sökfältshistorik"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
 #: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
@@ -298,7 +292,7 @@ msgstr "Session"
 #: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Previously open tabs and windows"
-msgstr ""
+msgstr "Tidigare öppna flikar och fönster"
 
 #. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
@@ -2245,10 +2239,8 @@ msgstr "Windows 10-tema"
 #. instead of the default Windows renderer. The option may improve blurry text.
 #. Fontconfig, which is software, is a proper noun.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Use fontconfig text rendering backend"
 msgid "Use Fontconfig text rendering backend"
-msgstr "Använd fontconfig textrenderingsbackend"
+msgstr "Använd Fontconfig-textrenderingsbackend"
 
 #. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2699,15 +2691,13 @@ msgstr "Detekterade de här swap-enheterna: %s"
 #. is waiting for the child process. %(parent_pid)d is the parent
 #. process ID; %(child_pid)d is the child process ID.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The function wipe_memory() with process ID %d is waiting for child "
-#| "process ID %d."
+#, python-format
 msgid ""
 "The function wipe_memory() with process ID %(parent_pid)d is waiting for "
 "child process ID %(child_pid)d."
 msgstr ""
-"Funktionen wipe_memory() med process-ID %d väntar på underprocess-ID %d."
+"Funktionen wipe_memory() med process-ID %(parent_pid)d väntar på "
+"underprocess-ID %(child_pid)d."
 
 #: ../bleachbit/Memory.py
 #, python-format
