@@ -6,18 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-04-05 14:48-0600\n"
-"PO-Revision-Date: 2026-03-30 13:09+0000\n"
+"PO-Revision-Date: 2026-04-08 19:09+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
-"Language-Team: Irish <https://hosted.weblate.org/projects/bleachbit/main/ga/"
-">\n"
+"Language-Team: Irish <https://hosted.weblate.org/projects/bleachbit/main/ga/>"
+"\n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :"
-"(n>6 && n<11) ? 3 : 4;\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
+"6 && n<11) ? 3 : 4;\n"
 "X-Generator: Weblate 5.17-dev\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -48,16 +48,12 @@ msgstr "Fianáin"
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#, fuzzy
-#| msgid ""
-#| "Delete cookies, which contain information such as website preferences, "
-#| "authentication, and tracking identification"
 msgid ""
 "Delete cookies, which store login information, website preferences, and "
 "tracking identifiers"
 msgstr ""
-"Scrios fianáin, ina bhfuil faisnéis amhail roghanna gréasáin, fíordheimhniú "
-"agus aitheantas rianaithe"
+"Scrios fianáin, a stórálann faisnéis logála isteach, roghanna gréasáin, agus "
+"aitheantóirí rianaithe"
 
 #: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
 #: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
@@ -252,10 +248,8 @@ msgstr "Stair na bhfoirmeacha"
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
-#, fuzzy
-#| msgid "Delete the search history"
 msgid "Saved form entries and search bar history"
-msgstr "Scrios an stair chuardaigh"
+msgstr "Iontrálacha foirme sábháilte agus stair an bharra cuardaigh"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
 #: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
@@ -297,7 +291,7 @@ msgstr "Seisiún"
 #: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Previously open tabs and windows"
-msgstr ""
+msgstr "Cluaisíní agus fuinneoga a bhí oscailte roimhe seo"
 
 #. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
@@ -2260,10 +2254,8 @@ msgstr "Téama Windows 10"
 #. instead of the default Windows renderer. The option may improve blurry text.
 #. Fontconfig, which is software, is a proper noun.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Use fontconfig text rendering backend"
 msgid "Use Fontconfig text rendering backend"
-msgstr "Úsáid cúlra rindreála téacs fontconfig"
+msgstr "Úsáid cúltaca rindreála téacs Fontconfig"
 
 #. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2725,16 +2717,13 @@ msgstr "Braitheadh na gléasanna babhtála seo: %s"
 #. is waiting for the child process. %(parent_pid)d is the parent
 #. process ID; %(child_pid)d is the child process ID.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The function wipe_memory() with process ID %d is waiting for child "
-#| "process ID %d."
+#, python-format
 msgid ""
 "The function wipe_memory() with process ID %(parent_pid)d is waiting for "
 "child process ID %(child_pid)d."
 msgstr ""
-"Tá an feidhm wipe_memory() le haitheantas an phróisis %d ag fanacht le "
-"haitheantas an phróisis linbh %d."
+"Tá an feidhm wipe_memory() le haitheantas an phróisis %(parent_pid)d ag "
+"fanacht le haitheantas an phróisis linbh %(child_pid)d."
 
 #: ../bleachbit/Memory.py
 #, python-format
