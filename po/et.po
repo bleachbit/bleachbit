@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-04-05 14:48-0600\n"
-"PO-Revision-Date: 2026-02-19 07:09+0000\n"
+"PO-Revision-Date: 2026-04-08 19:09+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/bleachbit/main/"
 "et/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -48,16 +48,12 @@ msgstr "Küpsised"
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#, fuzzy
-#| msgid ""
-#| "Delete cookies, which contain information such as website preferences, "
-#| "authentication, and tracking identification"
 msgid ""
 "Delete cookies, which store login information, website preferences, and "
 "tracking identifiers"
 msgstr ""
-"Kustuta küpsised, mis sisaldavad informatsiooni nagu veebisaitide "
-"atribuudid, autentimised ja jälgimistunnustused"
+"Kustuta küpsised, mis salvestavad teavet nagu sisselogimiste andmed, "
+"veebisaitide eelistused ja jälgimistunnustused"
 
 #: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
 #: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
@@ -252,10 +248,8 @@ msgstr "Tekstiväljade ajalugu"
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
-#, fuzzy
-#| msgid "Delete the search history"
 msgid "Saved form entries and search bar history"
-msgstr "Kustuta otsinguajalugu"
+msgstr "Vormidelt salvestatud andmed ja otsinguriba ajalugu"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
 #: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
@@ -297,7 +291,7 @@ msgstr "seanss"
 #: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Previously open tabs and windows"
-msgstr ""
+msgstr "Hiljuti avatud vahekaardid ja aknad"
 
 #. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
@@ -306,7 +300,7 @@ msgstr ""
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Site data"
-msgstr ""
+msgstr "Saitide andmed"
 
 #. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
@@ -315,7 +309,7 @@ msgstr ""
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
-msgstr ""
+msgstr "Kustuta „LocalStorage“, „IndexedDB“ ja muud veebisaitide andmehoidlad"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -659,10 +653,8 @@ msgid "Session restore"
 msgstr "Seansi taastamine"
 
 #: ../cleaners/thunderbird.xml
-#, fuzzy
-#| msgid "Restores the previous session when the browser next starts."
 msgid "Restores the previous session when the browser next starts"
-msgstr "Brauseri järgmisel käivitamisel taastab viimase sessiooni."
+msgstr "Brauseri järgmisel käivitamisel taastub viimane sessioon"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -1392,20 +1384,16 @@ msgstr "Kirjuta üle jaotamata andmeruum asukohas „%s“"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Loading native cleaners."
 msgid "Loading native cleaners…"
-msgstr "Kohaliku puhastaja laadimine."
+msgstr "Laadin kohalikku puhastajat…"
 
 #. TRANSLATORS: Progress message shown typically on startup.
 #. 'Importing' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Importing cleaners from Winapp2.ini."
 msgid "Importing cleaners from Winapp2.ini…"
-msgstr "Impordi puhastusloogika Winapp2.ini loendist."
+msgstr "Impordin puhastusloogikat Winapp2.ini loendist…"
 
 #: ../bleachbit/Cleaner.py
 #, python-format
@@ -1672,33 +1660,33 @@ msgstr "Keskkonnamuutuja TMP viitab kaustale, mida pole olemas: %s"
 #. TRANSLATORS: Title of the font check dialog
 #: ../bleachbit/FontCheckDialog.py
 msgid "Font check"
-msgstr ""
+msgstr "Kirjatüübi kontroll"
 
 #. TRANSLATORS: Button label in the font check dialog
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is okay"
-msgstr ""
+msgstr "Tekst on korralik"
 
 #. TRANSLATORS: Button label in the font check dialog. This is one of
 #. three buttons the user can click to report how the text appears.
 #. The user clicks this if the text is readable but appears fuzzy.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is blurry"
-msgstr ""
+msgstr "Tekst on hägune"
 
 #. TRANSLATORS: Button label in the font check dialog in case the font
 #. looks like an alien language. This is one of three buttons the user
 #. can click to report how the text appears.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is unrecognizable"
-msgstr ""
+msgstr "Tekst pole loetav"
 
 #. TRANSLATORS: Question shown in the font check dialog displayed
 #. on startup on Windows. There are bugs that for some users the
 #. font is blurry or resembles an alien language.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Does all the text in this window look okay?"
-msgstr ""
+msgstr "Kas tekst selles aknas on loetav ja korras?"
 
 #. TRANSLATORS: Title of a file chooser dialog.
 #: ../bleachbit/GuiApplication.py
@@ -1766,7 +1754,7 @@ msgstr "Süsteemiinfo"
 #. replace the username with a placeholder.
 #: ../bleachbit/GuiApplication.py
 msgid "Anonymize"
-msgstr ""
+msgstr "Anonümiseeri"
 
 #. TRANSLATORS: Label for the Cancel button in several dialog windows:
 #. file chooser, folder choose, delete confirmation, and warning dialogs.
@@ -1882,20 +1870,16 @@ msgstr "Failide arv"
 #. has an official abbreviation (e.g., "Mo" in French); otherwise keep
 #. "MB".
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Size"
 msgid "Size (MB)"
-msgstr "Suurus"
+msgstr "Suurus (MB)"
 
 #. TRANSLATORS: Option in combo box to choose to stop when free space
 #. reaches a certain percentage.
 #. The percentage symbol (%) is a literal character, not a format
 #. placeholder.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Free disk space"
 msgid "Free space (%)"
-msgstr "Jaotamata kettaruumi suurus"
+msgstr "Vaba kettaruum (%)"
 
 #. TRANSLATORS: Used for (1) label for folder chooser button and
 #. (2) error message shown in the infobar when the folder has not
@@ -1909,10 +1893,8 @@ msgstr "Vali sihtkaust"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Deleting files"
 msgid "Deleting files…"
-msgstr "Kustutame faile"
+msgstr "Kustutame faile…"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves
@@ -1944,7 +1926,7 @@ msgstr "Hillary Clintoni e-kirjad"
 #. generating chaff files.
 #: ../bleachbit/GuiChaff.py
 msgid "Stop after"
-msgstr ""
+msgstr "Peatu pärast"
 
 #. TRANSLATORS: Label for the combo box that selects what to do
 #. when chaff generation is finished.
@@ -1972,7 +1954,7 @@ msgstr "Ära kustuta"
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
 msgid "Downloading inspiration content…"
-msgstr ""
+msgstr "Laadin alla Inspireerivat sisu…"
 
 #. TRANSLATORS: Button label in a dialog window to start making
 #. chaff files.
@@ -1983,32 +1965,28 @@ msgstr "Loo faile"
 #. TRANSLATORS: Error message shown when downloading
 #. chaff models failed.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Downloading URL failed: %s"
 msgid "Download failed"
-msgstr "Võrguaadressi allalaadimine ei õnnestunud: %s"
+msgstr "Allalaadimine ei õnnestunud"
 
 #. TRANSLATORS: Notification shown in an infobar when
 #. chaff file generation is aborted by the user.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation aborted"
-msgstr ""
+msgstr "Läbu tekitamine on katkestatud"
 
 #. TRANSLATORS: Notification shown in an infobar when chaff file generation
 #. is complete.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation complete"
-msgstr ""
+msgstr "Läbu tekitamine on lõppenud"
 
 #. TRANSLATORS: Progress message shown while generating chaff files.
 #. 'Generating' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Generating files"
 msgid "Generating files…"
-msgstr "Loome faile"
+msgstr "Loome faile…"
 
 #. TRANSLATORS: Instruction label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
@@ -2027,6 +2005,8 @@ msgid ""
 "Only cookies are preserved. Site data is always deleted. <a "
 "href='{url}'>Learn more</a>"
 msgstr ""
+"Vaid küpsised säilivad. Veebisaitide andmed kuuluvad alati kustutamisele. <a "
+"href='{url}'>Lisateave</a>"
 
 #. TRANSLATORS: Label for the search entry in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
@@ -2073,10 +2053,8 @@ msgstr "Eemalda kogu valik"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Clean cookies"
 msgid "Loading cookies…"
-msgstr "Eemalda küpsised"
+msgstr "Laadin küpsised…"
 
 #: ../bleachbit/GuiPreferences.py
 msgid ""
@@ -2111,10 +2089,8 @@ msgstr "Üldine"
 
 #. TRANSLATORS: Sidebar label for the software updates page of the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Update"
 msgid "Updates"
-msgstr "Uuenda"
+msgstr "Uuendused"
 
 #. TRANSLATORS: Sidebar label for the "Languages" page in the Preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2221,26 +2197,20 @@ msgstr "Kasuta SI (1 kB = 1000 baiti) asemel IEC suurusi (1 KiB = 1024 baiti)"
 
 #. TRANSLATORS: Section title on the preferences updates page.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Update to version %s"
 msgid "Update notifications"
-msgstr "Uuenda versioonile %s"
+msgstr "Uuenduste teavitused"
 
 #. TRANSLATORS: Section title (noun) on the Preferences - General page
 #. for options related to cleaning stored data.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Clean"
 msgid "Cleaning"
-msgstr "Puhasta"
+msgstr "Puhastamine"
 
 #. TRANSLATORS: Section title in Preferences for user interface options
 #. such as dark mode and window behavior.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Internet"
 msgid "Interface"
-msgstr "Internet"
+msgstr "Kasutajaliides"
 
 #. TRANSLATORS: Checkbox label to remember the window size and position
 #. between application launches.
@@ -2264,18 +2234,20 @@ msgstr "Windows 10 kujundus"
 #. Fontconfig, which is software, is a proper noun.
 #: ../bleachbit/GuiPreferences.py
 msgid "Use Fontconfig text rendering backend"
-msgstr ""
+msgstr "Kasuta Fontconfigi teksti esitusvalmendamise taustateenust"
 
 #. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "May fix blurry or unreadable text. Requires restart."
 msgstr ""
+"Võib parandada hägusa või loetamatu teksti tekkimise. Eeldab uuesti "
+"käivitamist."
 
 #. TRANSLATORS: Section title on the preferences general page,
 #. labelling options for OS integration and advanced/developer features.
 #: ../bleachbit/GuiPreferences.py
 msgid "Integration and advanced"
-msgstr ""
+msgstr "Lõimingud ja lisavõimalused"
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #. 'Shred' means securely delete a file to prevent data recovery.
@@ -2319,20 +2291,18 @@ msgstr "Eemalda"
 #. TRANSLATORS: Section title on the preferences languages page.
 #: ../bleachbit/GuiPreferences.py
 msgid "BleachBit interface language"
-msgstr ""
+msgstr "BleachBiti kasutajaliidese keel"
 
 #. TRANSLATORS: Section title on the preferences languages page.
 #: ../bleachbit/GuiPreferences.py
 msgid "Language files to keep when cleaning applications"
-msgstr ""
+msgstr "Rakenduste puhastamisel säilitatavad keelefailid"
 
 #. TRANSLATORS: Column header in the languages treeview.
 #. This column controls whether to keep the language.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Keep list"
 msgid "Keep"
-msgstr "Säilita loend"
+msgstr "Säilita"
 
 #. TRANSLATORS: Column header in the languages treeview showing the
 #. language code (e.g., 'en_US').
@@ -2436,14 +2406,13 @@ msgstr "Lisa kaust"
 #. TRANSLATORS: Update notification for users upgrading from versions
 #. older than 5.1.0.
 #: ../bleachbit/GuiStartup.py
-#, fuzzy
-#| msgid "This option requires expert mode. Enable it in Preferences."
 msgid ""
 "Cleaning options with warnings now require expert mode. Enable it in "
 "preferences to clean them."
 msgstr ""
-"Selle eelistuse kasutamine eeldab asjatundjatele mõeldud režiimi pruukimist. "
-"Saad ta eelistustest sisse lülitada."
+"Hoiatustega eemaldamisvalikute kasutamine eeldab asjatundjatele mõeldud "
+"režiimi pruukimist. Antud objektide puhastamiseks saad ta eelistustest sisse "
+"lülitada."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
@@ -2551,10 +2520,8 @@ msgstr "Puhasta"
 #. manager.
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
-#, fuzzy
-#| msgid "Manage cookies to keep"
 msgid "Manage cookies to keep…"
-msgstr "Halda säilitatavaid küpsiseid"
+msgstr "Halda säilitatavaid küpsiseid…"
 
 #. TRANSLATORS: Error message shown in the log on the main window.
 #. %s is the file path.
@@ -2589,10 +2556,8 @@ msgstr "Valmis."
 #. TRANSLATORS: Context menu item in the tree view that opens the preferences dialog.
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
-#, fuzzy
-#| msgid "Manage custom paths"
 msgid "Manage custom paths…"
-msgstr "Halda kohandatud asukohti"
+msgstr "Halda kohandatud asukohti…"
 
 #. TRANSLATORS: Tooltip for the preview button on the headerbar.
 #. 'Preview' is a verb, and 'selected operations' refers to
@@ -2646,10 +2611,9 @@ msgstr ""
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
 #: ../bleachbit/GuiWindow.py
-#, fuzzy, python-format
-#| msgid "Error when checking for updates: "
+#, python-format
 msgid "Error when checking for updates: %s"
-msgstr "Viga uuenduste kontrollimisel: "
+msgstr "Viga uuenduste kontrollimisel: %s"
 
 #: ../bleachbit/Memory.py
 msgid ""
@@ -2675,10 +2639,9 @@ msgstr "Seadistame selle protsessi prioriteediks %d."
 #. TRANSLATORS: Debug message when a process gives up root/admin privileges.
 #. %(pid)d is the integer process ID; %(uid)d is the integer user ID to switch to.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid "Dropping privileges of process ID {pid} to user ID {uid}."
+#, python-format
 msgid "Dropping privileges of process ID %(pid)d to user ID %(uid)d."
-msgstr "Protsessi ID {pid} õiguste kaotamine kasutaja ID-le {uid}."
+msgstr "Protsessi ID-ga %(pid)d õigused antakse üle kasutaja ID-ga %(uid)d."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2697,10 +2660,9 @@ msgstr "%s mälu vabastamine."
 #. path (e.g., /dev/sda5); %(uuid)s is a UUID string
 #. (e.g., ee0e85f6-6e5c-42b9-902f-776531938bbf). Do not translate variables.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid "Found UUID for swap file {device} is {uuid}."
+#, python-format
 msgid "Found UUID for swap device %(device)s is %(uuid)s."
-msgstr "Saaleala {device} jaoks leitud UUID on {uuid}."
+msgstr "Saaleala %(device)s jaoks leitud UUID on %(uuid)s."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2730,16 +2692,13 @@ msgstr "Tuvastasime saalealad: %s"
 #. is waiting for the child process. %(parent_pid)d is the parent
 #. process ID; %(child_pid)d is the child process ID.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The function wipe_memory() with process ID {pid} is waiting for child "
-#| "process ID {cid}."
+#, python-format
 msgid ""
 "The function wipe_memory() with process ID %(parent_pid)d is waiting for "
 "child process ID %(child_pid)d."
 msgstr ""
-"Funktsioon wipe_memory() protsessi ID-ga {pid} ootab alamprotsessi ID-d "
-"{cid}."
+"Funktsioon wipe_memory() protsessi ID-ga %(parent_pid)d} ootab alamprotsessi "
+"ID-ga %(child_pid)d."
 
 #: ../bleachbit/Memory.py
 #, python-format
@@ -2920,11 +2879,11 @@ msgstr ""
 #. %(pathname)s is the file/directory path; %(fstype)s is the file system type
 #. (e.g., ext3, ntfs). Do not translate placeholders.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "Wiping path {pathname} with file system type {fstype}"
+#, python-format
 msgid "Wiping path %(pathname)s with file system type %(fstype)s"
 msgstr ""
-"Kustutame andmeid asukohas „{pathname}“, kus failisüsteemiks on „{fstype}“"
+"Kustutame andmeid asukohas „%(pathname)s“, kus failisüsteemiks on „%(fstype)s"
+"“"
 
 #: ../bleachbit/Wipe.py
 #, python-format
@@ -2946,35 +2905,31 @@ msgstr "Viga #%d failipuhvri loputamisel."
 #. elapsed seconds; %(rate_mbs).2f = decimal megabytes per second (e.g., 3.14).
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid ""
-#| "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
-#| "{rate:.2f} MB/s"
+#, python-format
 msgid ""
 "Wrote %(file_count)d files and %(total_bytes)d bytes in %(elapsed_sec)d "
 "seconds at %(rate_mbs).2f MB/s"
 msgstr ""
-"Kirjutas {files:,} faili ja {baiti:,} baiti {seconds:,} sekundiga kiirusega "
-"{rate:.2f} MB/s"
+"Kirjutas %(elapsed_sec)d sekundiga %(file_count)d faili ja %(total_bytes)d "
+"baiti kiirusega %(rate_mbs).2f MB/s"
 
 #. TRANSLATORS: Debug message showing disk space available to regular (non-root) users.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
+#, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to non-super-user"
 msgstr ""
-"{bytes:,} baiti ja {inodes:,} inoodi on saadaval mitte-super-kasutajatele"
+"%(bytes)d baiti ja %(inodes)d indekssõlme on saadaval muudele, kui "
+"peakasutajatele"
 
 #. TRANSLATORS: Debug message showing disk space available to the root (admin) user.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
+#, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to super-user"
-msgstr "Superkasutajale on saadaval {baiti:,} baiti ja {inodes:,} inoodi"
+msgstr "Peakasutajale on saadaval %(bytes)d baiti ja %(inodes)d indekssõlme"
 
 #: ../bleachbit/Wipe.py
 msgid "Encountered unknown error #0 while truncating file."
