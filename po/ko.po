@@ -6,18 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-04-05 14:48-0600\n"
-"PO-Revision-Date: 2025-04-17 10:05+0000\n"
-"Last-Translator: Minji <chloe9936@naver.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/bleachbit/main/ko/"
-">\n"
+"PO-Revision-Date: 2026-04-11 12:09+0000\n"
+"Last-Translator: Juneyong <juneyong87@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/bleachbit/main/"
+"ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "X-Launchpad-Export-Date: 2020-04-02 02:28+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -2002,10 +2002,8 @@ msgstr ""
 
 #. TRANSLATORS: Label for the search entry in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Search tool"
 msgid "Search:"
-msgstr "검색 도구"
+msgstr "검색:"
 
 #. TRANSLATORS: Placeholder text in the search entry in the manage cookies dialog.
 #. 'Filter' is a verb meaning to narrow down the list by typing.
@@ -2100,7 +2098,7 @@ msgstr "언어"
 #. (not deleted) during cleaning.
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
-msgstr ""
+msgstr "제외 목록"
 
 #. TRANSLATORS: Sidebar label for the drives page of the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2180,10 +2178,8 @@ msgstr "정리 후 종료"
 
 #. TRANSLATORS: Button label in the preferences. 'Reset' is a verb.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Delete confirmation"
 msgid "Reset warning confirmations"
-msgstr "삭제 확인"
+msgstr "경고 확인 초기화"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -2272,13 +2268,8 @@ msgstr "디버그 메시지 표시"
 #. For example, to wipe C:\, the user may choose %TEMP% which
 #. is a folder anywhere on C:.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid ""
-#| "Choose a writable folder for each drive for which to overwrite free space."
 msgid "Choose a writable folder for each drive for which to wipe empty space."
-msgstr ""
-"디스크 여유 공간을 덮어쓰기 위해 각 드라이브마다 쓰기가 가능한 폴더를 선택하"
-"십시오."
+msgstr "빈 공간을 지우기 위해 각 드라이브마다 쓰기가 가능한 폴더를 선택하십시오."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -2341,11 +2332,13 @@ msgstr "이 경로는 이미 사용자 지정 목록에 존재합니다."
 #: ../bleachbit/GuiPreferences.py
 msgid "This path is protected. To bypass protection, enable expert mode."
 msgstr ""
+"이 경로는 보호되어 있습니다. 보호를 무시하고 진행하려면 전문가 모드를 "
+"켜주세요."
 
 #. TRANSLATORS: Title of warning dialog shown when adding a protected path.
 #: ../bleachbit/GuiPreferences.py
 msgid "Protected Path"
-msgstr ""
+msgstr "보호된 경로"
 
 #. TRANSLATORS: Noun used as a column header in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2366,11 +2359,9 @@ msgstr "접근이 거부되었습니다 : %s"
 
 #. TRANSLATORS: %s is a file or folder path that was just removed
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgctxt "button"
-#| msgid "Remove"
+#, python-format
 msgid "Removed: %s"
-msgstr "제거"
+msgstr "제거됨: %s"
 
 #. TRANSLATORS: Notice label at the top of the keeplist (whitelist)
 #. page in the preferences dialog.
@@ -2419,6 +2410,8 @@ msgid ""
 "Cleaning options with warnings now require expert mode. Enable it in "
 "preferences to clean them."
 msgstr ""
+"경고가 있는 청소 옵션을 사용하려면 이제 전문가 모드가 필요합니다. 해당 "
+"항목을 청소하려면 환경 설정에서 전문가 모드를 켜주세요."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
@@ -2600,7 +2593,7 @@ msgstr "BleachBit 최신 버전으로 업데이트하기"
 #. TRANSLATORS: Hint shown when starting in fullscreen mode.
 #: ../bleachbit/GuiWindow.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "F11을 눌러서 전체화면 나가기."
 
 #. TRANSLATORS: This message is shown when orphaned temporary files
 #. from an interrupted disk wipe operation are detected.
