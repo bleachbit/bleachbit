@@ -656,6 +656,32 @@ def is_dir_empty(dirname):
     return len(os.listdir(dirname)) == 0
 
 
+def is_normal_directory(path):
+    """Check whether path is a non-link directory
+
+    Returns False if:
+        - path does not exist
+        - path is a file
+        - path is a reparse point (junction, symlink)
+    Returns True if a normal directory
+    """
+
+    if not os.path.isdir(path):
+        return False
+    if 'nt' == os.name:
+        # On Windows, use GetFileAttributesW to check for reparse point
+        # because os.stat().st_reparse_tag is not available in Python 3.4.
+        FILE_ATTRIBUTE_REPARSE_POINT = 0x400
+        from ctypes import windll
+        attr = windll.kernel32.GetFileAttributesW(path)
+        if attr == 0xFFFFFFFF:
+            return False
+        return not bool(attr & FILE_ATTRIBUTE_REPARSE_POINT)
+    else:
+        # On POSIX, check for symlink
+        return not os.path.islink(path)
+
+
 def listdir(directory):
     """Return full path of files in directory.
 

@@ -44,6 +44,7 @@ from bleachbit.FileUtilities import (
     guess_overwrite_paths,
     human_to_bytes,
     is_dir_empty,
+    is_normal_directory,
     listdir,
     open_files_lsof,
     OpenFiles,
@@ -219,6 +220,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         for filename in children_in_directory(dirname, False):
             self.assertTrue(os.path.isabs(filename))
             self.assertFalse(os.path.isdir(filename))
+            self.assertFalse(is_normal_directory(filename))
 
         # test a constructed file in a constructed directory
         dirname = self.mkdtemp(prefix='bleachbit-test-children')
@@ -436,6 +438,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             import win32con
             win32api.SetFileAttributes(fn, win32con.FILE_ATTRIBUTE_HIDDEN)
             self.assertExists(fn)
+            self.assertFalse(is_normal_directory(fn))
             delete(fn, shred=shred)
             self.assertNotExists(fn)
 
@@ -1028,6 +1031,32 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         os.unlink(filename)
         openfiles.scan()
         self.assertFalse(openfiles.is_open(filename))
+
+    def test_is_normal_directory_real(self):
+        """Unit test for is_normal_directory() with real files"""
+        # Test with a real directory.
+        self.assertTrue(is_normal_directory(self.tempdir))
+
+        # Test with a normal file.
+        self.assertFalse(is_normal_directory(__file__))
+
+        # Test with a non-existent path.
+        self.assertFalse(is_normal_directory(
+            os.path.join(self.tempdir, 'doesnotexist')))
+
+        # Check common junctions on Windows
+        if 'nt' == os.name:
+            from bleachbit.Windows import is_junction
+            user_docs = os.path.expandvars(r'%userprofile%\My Documents')
+            prog_docs = os.path.expandvars(r'%ProgramData%\Documents')
+            for junction_path in (user_docs, prog_docs):
+                if os.path.exists(junction_path):
+                    self.assertTrue(is_junction(junction_path),
+                                    '%s should be a junction' % junction_path)
+                    self.assertFalse(is_normal_directory(junction_path),
+                                     '%s should not be a normal directory' % junction_path)
+                else:
+                    logger.warning('junction not found: %s', junction_path)
 
     def test_open_files_lsof(self):
         self.assertEqual(list(open_files_lsof(

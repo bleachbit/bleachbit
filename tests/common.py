@@ -35,7 +35,7 @@ if 'win32' == sys.platform:
 
 import bleachbit
 import bleachbit.Options
-from bleachbit.FileUtilities import extended_path
+from bleachbit.FileUtilities import extended_path, is_normal_directory
 from bleachbit.General import sudo_mode
 
 
@@ -144,6 +144,22 @@ class BleachbitTestCase(unittest.TestCase):
         assert (os.path.exists(extended_path(filename)))
         return filename
 
+    def mkdir(self, dirname):
+        """Create a directory, checking it is a normal directory"""
+        assert isinstance(dirname, str)
+        if not os.path.isabs(dirname):
+            dirname = os.path.join(self.tempdir, dirname)
+        ext_dirname = extended_path(dirname)
+        os.makedirs(ext_dirname, exist_ok=True)
+        self.assertExists(ext_dirname)
+        self.assertTrue(os.path.isdir(ext_dirname))
+        self.assertTrue(is_normal_directory(ext_dirname))
+        self.assertFalse(os.path.isfile(ext_dirname))
+        if os.name == 'nt':
+            from bleachbit.Windows import is_junction
+            self.assertFalse(is_junction(ext_dirname))
+        return dirname
+
     def mkstemp(self, **kwargs):
         if 'dir' not in kwargs:
             kwargs['dir'] = self.tempdir
@@ -207,6 +223,7 @@ def touch_file(filename):
     import pathlib
     pathlib.Path(filename).touch()
     assert(os.path.exists(filename))
+    assert not is_normal_directory(filename)
 
 
 def validate_result(self, result, really_delete=False):
