@@ -355,6 +355,10 @@ class System(Cleaner):
         # custom
         if 'custom' == option_id:
             for (c_type, c_path) in options.get_custom_paths():
+                if not os.path.lexists(c_path):
+                    # Skip non-existent paths to avoid errors
+                    # https://github.com/bleachbit/bleachbit/issues/831
+                    continue
                 if 'file' == c_type:
                     yield Command.Delete(c_path)
                 elif 'folder' == c_type:
@@ -698,6 +702,10 @@ def create_simple_cleaner(paths):
                         'expected path as string but got %s' % str(path))
                 if not os.path.isabs(path):
                     path = os.path.abspath(path)
+                if not os.path.lexists(path):
+                    # Skip non-existent paths to avoid errors
+                    # https://github.com/bleachbit/bleachbit/issues/831
+                    continue
                 if os.path.isdir(path):
                     for child in children_in_directory(path, True):
                         yield Command.Shred(child)

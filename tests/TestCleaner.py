@@ -126,6 +126,33 @@ class CleanerTestCase(common.BleachbitTestCase):
         for target in targets:
             self.assertNotExists(target)
 
+    def test_create_simple_cleaner_nonexistent(self):
+        """Unit test for create_simple_cleaner with non-existent paths
+
+        Non-existent paths should be skipped without error.
+        https://github.com/bleachbit/bleachbit/issues/831
+        """
+        # Use a path that does not exist
+        non_existent_path = os.path.join(self.mkdtemp(), 'does_not_exist')
+        self.assertNotExists(non_existent_path)
+        cleaner = create_simple_cleaner([non_existent_path])
+        # Should yield no commands for non-existent path
+        commands = list(cleaner.get_commands('files'))
+        self.assertEqual(len(commands), 0, "Non-existent path should not yield commands")
+        # Mix of existing and non-existing paths
+        dirname = self.mkdtemp(prefix='bleachbit-test-create-simple-cleaner-mixed')
+        filename = os.path.join(dirname, 'testfile')
+        common.touch_file(filename)
+        non_existent_path2 = os.path.join(dirname, 'does_not_exist')
+        targets = [non_existent_path, filename, non_existent_path2]
+        cleaner2 = create_simple_cleaner(targets)
+        commands = list(cleaner2.get_commands('files'))
+        # Should yield exactly one command for the existing file
+        self.assertEqual(len(commands), 1, "Should yield command only for existing file")
+        # Clean up
+        os.remove(filename)
+        os.rmdir(dirname)
+
     def test_get_name(self):
         for key in sorted(backends):
             self.assertIsString(backends[key].get_name())
