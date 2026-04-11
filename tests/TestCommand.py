@@ -23,6 +23,7 @@ Test case for Command
 """
 
 import os
+from unittest import mock
 
 from tests import common
 from bleachbit import FileUtilities
@@ -68,6 +69,38 @@ class CommandTestCase(common.BleachbitTestCase):
         self.assertEqual(ret['path'], path)
         self.assertNotExists(path)
 
+    def test_Function_no_collation(self):
+        """Unit test for Function with no collation
+
+        See https://github.com/bleachbit/bleachbit/issues/1866
+        """
+        path = self.write_file('test_Function_no_collation', b'')
+        cmd = Function(path,
+                       lambda p: FileUtilities.execute_sqlite3(
+                           p, 'CREATE TABLE test (name TEXT COLLATE foo);'),
+                       'test_no_collation')
+
+        with mock.patch('bleachbit.Command.logger.debug') as mock_debug:
+            with self.assertRaises(StopIteration):
+                next(cmd.execute(True))
+            mock_debug.assert_called_with(mock.ANY)
+
     def test_Shred(self):
         """Unit test for Shred"""
         self.test_Delete(Shred)
+
+    def test_Function_sqlite_error(self):
+        """Unit test for Function handling sqlite3 database errors"""
+        import sqlite3
+        path = self.write_file('test_Function_sqlite_error', b'not a valid sqlite database')
+
+        def raise_database_error(path):
+            # This simulates what happens when vacuum is called on a non-database file
+            conn = sqlite3.connect(path)
+            conn.execute('VACUUM')
+            conn.close()
+
+        cmd = Function(path, raise_database_error, 'test')
+        # Should not raise an exception, just log and return
+        with self.assertRaises(StopIteration):
+            next(cmd.execute(True))

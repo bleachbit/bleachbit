@@ -57,6 +57,18 @@ def __sqlite_table_exists(pathname, table):
     return ret
 
 
+def _sqlite_is_valid_database(pathname):
+    """Return boolean indicating whether pathname points to a readable SQLite database."""
+    import contextlib
+    import sqlite3
+    try:
+        with contextlib.closing(sqlite3.connect('file:%s?mode=ro' % pathname, uri=True)) as conn:
+            conn.execute('select 1 from sqlite_master limit 1;')
+            return True
+    except (sqlite3.DatabaseError, sqlite3.OperationalError):
+        return False
+
+
 def __shred_sqlite_char_columns(table, cols=None, where="", path=None):
     """Create an SQL command to shred character columns"""
     if path and not __sqlite_table_exists(path, table):
@@ -279,6 +291,17 @@ def delete_office_registrymodifications(path):
 def delete_mozilla_url_history(path):
     """Delete URL history in Mozilla places.sqlite (Firefox 3 and family)"""
 
+    import sqlite3
+
+    if not os.path.exists(path):
+        raise sqlite3.DatabaseError('%s does not exist' % path)
+
+    if os.path.getsize(path) == 0:
+        raise sqlite3.DatabaseError('%s is an empty file' % path)
+
+    if not _sqlite_is_valid_database(path):
+        raise sqlite3.DatabaseError('%s is not a valid SQLite database' % path)
+
     cmds = ""
 
     have_places = __sqlite_table_exists(path, 'moz_places')
@@ -329,7 +352,8 @@ def delete_mozilla_url_history(path):
         cmds += "delete from moz_meta where key like 'origin_frecency_%';"
 
     # Delete all history visits.
-    cmds += "delete from moz_historyvisits;"
+    if __sqlite_table_exists(path, 'moz_historyvisits'):
+        cmds += "delete from moz_historyvisits;"
 
     # delete any orphaned input history
     if have_places:
