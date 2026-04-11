@@ -1107,8 +1107,17 @@ class GUI(Gtk.ApplicationWindow):
 
     def on_window_state_event(self, widget, event):
         # save window state
+        # GTK on Windows behaves strangely regarding full screen and maximized:
+        # When transitioning from normal to maximized, the event contains both
+        # MAXIMIZED and FULLSCREEN. However, when transitioning from maximized
+        # to normal, neither bit is set. The reverse happens when transitioning
+        # from normal to full screen: both bits are set. When transitioning
+        # from full screen to normal, neither bit is set. Therefore, we save
+        # both states separately.
         maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
         options.set("window_maximized", maximized, commit=False)
+        fullscreen = event.new_window_state & Gdk.WindowState.FULLSCREEN != 0
+        options.set("window_fullscreen", fullscreen, commit=False)
         return False
 
     def on_delete_event(self, widget, event):
@@ -1143,8 +1152,26 @@ class GUI(Gtk.ApplicationWindow):
                     monitor_num, (g.x, g.y), (g.width, g.height), (r.x, r.y), (r.width, r.height)))
                 self.move(r.x, r.y)
                 self.resize(r.width, r.height)
-        if options.get("window_maximized"):
+        if options.get("window_fullscreen"):
+            self.fullscreen()
+            self.append_text(
+                _("Press F11 to exit fullscreen mode.") + '\n')
+        elif options.get("window_maximized"):
             self.maximize()
+
+    def on_key_press_event(self, _widget, event):
+        """Handle key press events"""
+        ctrl = event.state & Gdk.ModifierType.CONTROL_MASK
+
+        if event.keyval == Gdk.KEY_F11 and not ctrl:
+            is_fullscreen = self.get_window().get_state() & Gdk.WindowState.FULLSCREEN
+            if is_fullscreen:
+                self.unfullscreen()
+            else:
+                self.fullscreen()
+            options.set("window_fullscreen", is_fullscreen, commit=False)
+            return True
+        return False
 
     def set_windows10_theme(self):
         """Toggle the Windows 10 theme"""
@@ -1184,6 +1211,7 @@ class GUI(Gtk.ApplicationWindow):
         self.connect("window-state-event", self.on_window_state_event)
         self.connect("delete-event", self.on_delete_event)
         self.connect("show", self.on_show)
+        self.connect("key-press-event", self.on_key_press_event)
 
         if appicon_path and os.path.exists(appicon_path):
             self.set_icon_from_file(appicon_path)
