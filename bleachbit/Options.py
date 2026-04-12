@@ -152,7 +152,7 @@ class Options:
         """Retrieve a general option"""
         if not 'nt' == os.name and 'update_winapp2' == option:
             return False
-        if section == 'bleachit' and option == 'debug':
+        if section == 'bleachbit' and option == 'debug':
             from bleachbit.Log import is_debugging_enabled_via_cli
             if is_debugging_enabled_via_cli():
                 # command line overrides stored configuration

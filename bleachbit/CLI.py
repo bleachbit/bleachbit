@@ -221,7 +221,14 @@ def process_cmd_line():
             set_root_log_level(Options.options.get('debug'))
             logger.debug("Debugging is enabled in GUI settings.")
     if options.debug_log:
-        logger.addHandler(logging.FileHandler(options.debug_log))
+        # Configure the root logger to write debug messages to a file.
+        # This must be done before any other logging.
+        root_logger = logging.getLogger('bleachbit')
+        root_logger.setLevel(logging.DEBUG)
+        log_file_handler = logging.FileHandler(options.debug_log)
+        log_file_handler.setLevel(logging.DEBUG)
+        root_logger.addHandler(log_file_handler)
+        logger.debug('Debug logging to file: %s', options.debug_log)
         logger.info(SystemInformation.get_system_information())
     if options.version:
         print("""

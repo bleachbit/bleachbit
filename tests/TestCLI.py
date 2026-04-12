@@ -219,3 +219,22 @@ class CLITestCase(common.BleachbitTestCase):
         # Is the application still running?
         opened_windows_titles = common.get_opened_windows_titles()
         self.assertFalse('BleachBit' in opened_windows_titles)
+
+    def test_debug_log(self):
+        """Unit test for --debug-log option"""
+        import tempfile
+        (fd, log_file) = tempfile.mkstemp(prefix='bleachbit-test-debug-log')
+        os.close(fd)
+        args = [sys.executable, '-m', 'bleachbit.CLI',
+                '--debug-log', log_file, '--list-cleaners']
+        (rc, stdout, stderr) = run_external(args)
+        self.assertEqual(rc, 0, stderr)
+        # Check that the log file was created and contains debug info
+        self.assertExists(log_file)
+        with open(log_file, 'r') as f:
+            log_content = f.read()
+        # The log file should have content (debug messages)
+        self.assertGreater(len(log_content), 0)
+        # Clean up
+        os.remove(log_file)
+        self.assertNotExists(log_file)

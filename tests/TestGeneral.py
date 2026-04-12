@@ -151,3 +151,27 @@ class GeneralTestCase(common.BleachbitTestCase):
     def test_sudo_mode(self):
         """Unit test for sudo_mode"""
         self.assertIsInstance(sudo_mode(), bool)
+
+    def test_set_root_log_level(self):
+        """Unit test for set_root_log_level"""
+        import logging
+        from bleachbit.Log import set_root_log_level
+        root_logger = logging.getLogger('bleachbit')
+        # Save original level to restore later
+        original_level = root_logger.level
+        try:
+            # Test that set_root_log_level respects existing DEBUG level
+            root_logger.setLevel(logging.DEBUG)
+            set_root_log_level(False)  # Should NOT change from DEBUG
+            self.assertEqual(root_logger.level, logging.DEBUG)
+            # Test that set_root_log_level can set INFO when not DEBUG
+            root_logger.setLevel(logging.INFO)
+            set_root_log_level(False)
+            self.assertEqual(root_logger.level, logging.INFO)
+            # Test that set_root_log_level can enable DEBUG
+            root_logger.setLevel(logging.INFO)
+            set_root_log_level(True)
+            self.assertEqual(root_logger.level, logging.DEBUG)
+        finally:
+            # Restore original level
+            root_logger.setLevel(original_level)
