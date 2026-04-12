@@ -23,11 +23,11 @@ Logging
 """
 
 import logging
+import sys
 
 
 def is_debugging_enabled_via_cli():
     """Return boolean whether user required debugging on the command line"""
-    import sys
     return any(arg.startswith('--debug') for arg in sys.argv)
 
 
@@ -69,7 +69,33 @@ def init_log():
     else:
         logger.setLevel(logging.INFO)
     logger_sh = logging.StreamHandler()
+    console_formatter = logging.Formatter('%(message)s')
+    logger_sh.setFormatter(console_formatter)
     logger.addHandler(logger_sh)
+
+    # If --debug-log parameter was passed, set up the file handler here instead
+    # of in CLI.py, so logs are captured from the very beginning.
+    debug_log_path = None
+    for i, arg in enumerate(sys.argv):
+        # --debug-log /path/file format (space delimited)
+        if arg == '--debug-log' and i + 1 < len(sys.argv):
+            debug_log_path = sys.argv[i + 1]
+            break
+        # --debug-log=/path/file format (delimited with equals sign)
+        if arg.startswith('--debug-log='):
+            debug_log_path = arg.split('=', 1)[1]
+            break
+
+    if debug_log_path:
+        file_handler = logging.FileHandler(debug_log_path)
+        # Always use DEBUG level for log file.
+        file_handler.setLevel(logging.DEBUG)
+        file_formatter = logging.Formatter(
+            '%(asctime)s -  %(levelname)s - %(message)s')
+        file_handler.setFormatter(file_formatter)
+        logger.addHandler(file_handler)
+        logger.debug('Debug log file initialized at %s', debug_log_path)
+
     return logger
 
 
@@ -78,8 +104,15 @@ def set_root_log_level(is_debug=False):
 
     This runs later in the application's startup process when the
     configuration is loaded or after a change via the GUI.
+
+    If the user enabled debugging via the command line, this function
+    will not disable it.
     """
     root_logger = logging.getLogger('bleachbit')
+    if root_logger.level == logging.DEBUG:
+        # The user enabled debugging via the command line, so
+        # do not disable it.
+        return
     root_logger.setLevel(logging.DEBUG if is_debug else logging.INFO)
 
 
@@ -93,7 +126,7 @@ class GtkLoggerHandler(logging.Handler):
     def update_log_level(self):
         """Set the log level"""
         from bleachbit.Options import options
-        if options.get('debug'):
+        if is_debugging_enabled_via_cli() or options.get('debug'):
             self.min_level = logging.DEBUG
         else:
             self.min_level = logging.WARNING
