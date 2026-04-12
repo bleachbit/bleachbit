@@ -370,6 +370,31 @@ class Bleachbit(Gtk.Application):
             clipboard.set_text(txt, -1)
         dialog.destroy()
 
+    def _check_os_version(self):
+        """Check the OS version and warn if this version of BleachBit is not intended for it."""
+        if os.name != 'nt':
+            msg = _('This version of BleachBit is intended only for Windows. '
+                    'For other operating systems, please update to BleachBit 5.x or newer.')
+            self._show_version_warning(msg)
+        else:
+            from decimal import Decimal
+            win_ver = Windows.get_windows_version()
+            if win_ver >= Decimal('6.2'):
+                msg = _('This version of BleachBit is intended for old versions of Windows. '
+                        'For Windows 8 or newer, please update to BleachBit 5.x or newer.')
+                self._show_version_warning(msg)
+
+    def _show_version_warning(self, msg):
+        """Show a warning dialog about the OS version."""
+        dialog = Gtk.MessageDialog(
+            transient_for=self._window,
+            flags=Gtk.DialogFlags.MODAL,
+            message_type=Gtk.MessageType.WARNING,
+            buttons=Gtk.ButtonsType.OK,
+            text=msg)
+        dialog.run()
+        dialog.destroy()
+
     def do_activate(self):
         if not self._window:
             self._window = GUI(
@@ -377,6 +402,7 @@ class Bleachbit(Gtk.Application):
         if 'nt' == os.name:
             Windows.check_dll_hijacking(self._window)
         self._window.present()
+        self._check_os_version()
         if self._shred_paths:
             GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths, priority=GObject.PRIORITY_LOW)
             # When we shred paths and auto exit with the Windows Explorer context menu command we close the
