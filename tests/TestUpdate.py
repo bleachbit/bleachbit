@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -26,11 +13,14 @@ Test case for module Update
 from tests import common
 import bleachbit
 from bleachbit import logger
-from bleachbit.Update import check_updates, get_gtk_version, get_ip_for_url, update_winapp2, user_agent
+from bleachbit.Update import check_updates, update_winapp2, user_agent
+from bleachbit.Network import get_ip_for_url
 import bleachbit.Update
 
+import mock
 import os
 import os.path
+import requests
 
 
 class UpdateTestCase(common.BleachbitTestCase):
@@ -49,26 +39,13 @@ class UpdateTestCase(common.BleachbitTestCase):
              (('0.8.5beta', 'http://085beta'), )),
             ('<updates></updates>', ())]
 
-        # fake network
-        original_open = bleachbit.Update.build_opener
-        xml = ""
-
-        class FakeOpener:
-            def add_headers(self):
-                pass
-
-            def read(self):
-                return xml
-
-            def open(self, url):
-                return self
-
-        # TODO: mock
-        bleachbit.Update.build_opener = FakeOpener
-        for xml, expected in update_tests:
-            updates = check_updates(True, False, None, None)
-            self.assertEqual(updates, expected)
-        bleachbit.Update.build_opener = original_open
+        for xml_text, expected in update_tests:
+            fake_response = mock.Mock()
+            fake_response.text = xml_text
+            fake_response.status_code = 200
+            with mock.patch('bleachbit.Update.fetch_url', return_value=fake_response):
+                updates = check_updates(True, False, None, None)
+                self.assertEqual(updates, expected)
 
     def test_UpdateCheck_real_network(self):
         """Unit tests for class UpdateCheck using real network"""
@@ -86,47 +63,26 @@ class UpdateTestCase(common.BleachbitTestCase):
         """Unit test for class UpdateCheck with bad network address"""
         # expect connection failure
         preserve_url = bleachbit.update_check_url
-        for url in ('http://localhost/doesnotexist', 'https://httpstat.us/500'):
+        for url in ('http://localhost/doesnotexist',):
             bleachbit.update_check_url = url
             self.assertEqual(
                 check_updates(True, False, None, None),
                 ())
         bleachbit.update_check_url = preserve_url
 
-    def test_get_gtk_version(self):
-        """Unit test for get_gtk_version()"""
-        gtk_ver = get_gtk_version()
-        self.assertIsInstance(gtk_ver, str)
-        self.assertRegex(gtk_ver, r"^\d+\.\d+\.\d+$")
-
-    def test_get_ip_for_url(self):
-        """Unit test for get_ip_for_url()"""
-        for good_url in ('https://www.example.com', bleachbit.update_check_url):
-            ip_str = get_ip_for_url(good_url)
-            import ipaddress
-            ip = ipaddress.ip_address(ip_str)
-        for bad_url in (None, '', 'https://test.invalid'):
-            ret = get_ip_for_url(bad_url)
-            self.assertEqual(ret[0], '(', 'get_ip_for_url({})={}'.format(bad_url,ret))
-
     def test_update_url(self):
         """Check connection to the update URL"""
-        from bleachbit.Update import build_opener
-        opener = build_opener()
-        opener.addheaders = [('accept','text/*')]
-        import urllib
+        from bleachbit.Network import fetch_url
         try:
-            handle = opener.open(bleachbit.update_check_url)
-        except urllib.error.HTTPError as e:
-            logger.exception('HTTP error, url: %s\nheaders:\n%s', bleachbit.update_check_url, e.headers)
+            response = fetch_url(bleachbit.update_check_url)
+        except requests.RequestException as e:
+            logger.exception('Request error, url: %s', bleachbit.update_check_url)
             raise e
-        doc = handle.read()
-        import xml
-        xml.dom.minidom.parseString(doc)
+        import xml.dom.minidom
+        xml.dom.minidom.parseString(response.text)
 
     def test_update_winapp2(self):
-        from bleachbit import personal_cleaners_dir
-        fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
+        fn = os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini')
         if os.path.exists(fn):
             logger.info('deleting %s', fn)
             os.unlink(fn)

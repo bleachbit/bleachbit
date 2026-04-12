@@ -1,133 +1,63 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Check for updates via the Internet
 """
 
-import bleachbit
-from bleachbit import _
-
+# standard library
 import hashlib
 import logging
 import os
-import os.path
-import platform
-import socket
 import sys
 import xml.dom.minidom
-from urllib.request import build_opener
-from urllib.error import URLError
+
+# third-party
+import requests
+
+# local
+import bleachbit
+from bleachbit import _
+from bleachbit.Network import (download_url_to_fn, fetch_url,
+                               get_ip_for_url, get_update_request_headers)
 
 
 logger = logging.getLogger(__name__)
 
 
-def get_gtk_version():
-    """Return the version of GTK
-
-    If GTK is not available, returns None.
-    """
-
-    try:
-        import gi
-    except ModuleNotFoundError:
-        return none
-    gi.require_version('Gtk', '3.0')
-    from gi.repository import Gtk
-    gtk_version = (Gtk.get_major_version(),
-                   Gtk.get_minor_version(), Gtk.get_micro_version())
-    return '.'.join([str(x) for x in gtk_version])
-
-
 def update_winapp2(url, hash_expected, append_text, cb_success):
     """Download latest winapp2.ini file.  Hash is sha512 or None to disable checks"""
     # first, determine whether an update is necessary
-    from bleachbit import personal_cleaners_dir
-    fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
-    delete_current = False
+
+    fn = os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini')
     if os.path.exists(fn):
         with open(fn, 'rb') as f:
             hash_current = hashlib.sha512(f.read()).hexdigest()
             if not hash_expected or hash_current == hash_expected:
                 # update is same as current
                 return
-        delete_current = True
     # download update
-    # FIXME: refactor this to share code with bleachbit.Chaff.download_url_to_fn()
-    opener = build_opener()
-    opener.addheaders = [('User-Agent', user_agent())]
-    doc = opener.open(fullurl=url, timeout=20).read()
-    # verify hash
-    hash_actual = hashlib.sha512(doc).hexdigest()
-    if hash_expected and not hash_actual == hash_expected:
-        raise RuntimeError("hash for %s actually %s instead of %s" %
-                           (url, hash_actual, hash_expected))
-    # delete current
-    if delete_current:
-        from bleachbit.FileUtilities import delete
-        delete(fn, True)
-    # write file
-    if not os.path.exists(personal_cleaners_dir):
-        os.mkdir(personal_cleaners_dir)
-    with open(fn, 'wb') as f:
-        f.write(doc)
-    append_text(_('New winapp2.ini was downloaded.'))
-    cb_success()
+    # Define error handler to propagate download errors
+
+    def on_error(msg, msg2):
+        raise RuntimeError("%s: %s" % (msg, msg2))
+
+    if download_url_to_fn(url, fn, hash_expected, on_error):
+        append_text(_('New winapp2.ini was downloaded.'))
+        cb_success()
 
 
 def user_agent():
-    """Return the user agent string"""
-    __platform = platform.system()  # Linux or Windows
-    __os = platform.uname()[2]  # e.g., 2.6.28-12-generic or XP
-    if sys.platform == "win32":
-        # misleading: Python 2.5.4 shows uname()[2] as Vista on Windows 7
-        __os = platform.uname()[3][
-            0:3]  # 5.1 = Windows XP, 6.0 = Vista, 6.1 = 7
-    elif sys.platform.startswith('linux'):
-        dist = platform.linux_distribution()
-        # example: ('fedora', '11', 'Leonidas')
-        # example: ('', '', '') for Arch Linux
-        if 0 < len(dist[0]):
-            __os = dist[0] + '/' + dist[1] + '-' + dist[2]
-    elif sys.platform[:6] == 'netbsd':
-        __sys = platform.system()
-        mach = platform.machine()
-        rel = platform.release()
-        __os = __sys + '/' + mach + ' ' + rel
-    __locale = ""
-    try:
-        import locale
-        __locale = locale.getdefaultlocale()[0]  # e.g., en_US
-    except:
-        logger.exception('Exception when getting default locale')
+    """Return the user agent string
 
-    gtk_ver_raw = get_gtk_version()
-    if gtk_ver_raw:
-        gtk_ver = '; GTK %s' % gtk_ver_raw
-    else:
-        gtk_ver = ''
-
-    agent = "BleachBit/%s (%s; %s; %s%s)" % (bleachbit.APP_VERSION,
-                                             __platform, __os, __locale, gtk_ver)
-    return agent
+    Deprecated: use bleachbit.Network.get_user_agent() instead.
+    Kept for backward compatibility.
+    """
+    from bleachbit.Network import get_user_agent
+    return get_user_agent()
 
 
 def update_dialog(parent, updates):
@@ -165,52 +95,35 @@ def update_dialog(parent, updates):
     return False
 
 
-def get_ip_for_url(url):
-    """Given an https URL, return the IP address"""
-    if not url:
-        return '(no URL)'
-    url_split = url.split('/')
-    if len(url_split) < 3:
-        return '(bad URL)'
-    hostname = url.split('/')[2]
-    import socket
-    try:
-        ip_address = socket.gethostbyname(hostname)
-    except socket.gaierror:
-        return '(socket.gaierror)'
-    return ip_address
-
-
 def check_updates(check_beta, check_winapp2, append_text, cb_success):
     """Check for updates via the Internet"""
-    opener = build_opener()
-    socket.setdefaulttimeout(bleachbit.socket_timeout)
-    opener.addheaders = [('User-Agent', user_agent())]
-    import encodings.idna  # https://github.com/bleachbit/bleachbit/issues/760
     url = bleachbit.update_check_url
     if 'windowsapp' in sys.executable.lower():
         url += '?windowsapp=1'
     try:
-        handle = opener.open(url)
-    except URLError as e:
+        response = fetch_url(url,
+                             headers=get_update_request_headers())
+    except requests.RequestException as e:
         logger.error(
             _('Error when opening a network connection to check for updates. Please verify the network is working and that a firewall is not blocking this application. Error message: {}').format(e))
-        logger.debug('URL {} has IP address {}'.format(
-            url, get_ip_for_url(url)))
-        if hasattr(e, 'headers'):
-            logger.debug(e.headers)
+        logger.debug('URL %s has IP address %s', url, get_ip_for_url(url))
+        if hasattr(e, 'response') and e.response is not None:
+            logger.debug(e.response.headers)
         return ()
-    doc = handle.read()
     try:
-        dom = xml.dom.minidom.parseString(doc)
+        dom = xml.dom.minidom.parseString(response.text)
     except:
-        logger.exception('The update information does not parse: %s', doc)
+        logger.exception(
+            'The update information does not parse: %s', response.text)
         return ()
 
     def parse_updates(element):
         if element:
             ver = element[0].getAttribute('ver')
             url = element[0].firstChild.data
+            assert isinstance(ver, str)
+            assert isinstance(url, str)
+            assert url.startswith('http')
             return ver, url
         return ()
 
@@ -226,9 +139,9 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     dom.unlink()
 
     if stable and beta and check_beta:
-        return stable, beta
+        return (stable, beta)
     if stable:
-        return stable,
+        return (stable,)
     if beta and check_beta:
-        return beta,
+        return (beta,)
     return ()
