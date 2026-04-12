@@ -31,12 +31,38 @@ from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
 from bleachbit.Windows import detect_registry_key, parse_windows_build
 from bleachbit import logger
 
+if os.name == 'nt':
+    import winreg
+
 
 def create_sub_key(sub_key):
     """Create a registry key"""
     import winreg
     hkey = winreg.CreateKey(winreg.HKEY_CURRENT_USER, sub_key)
     hkey.Close()
+
+
+def _create_registry_keys(*key_paths):
+    """Create registry keys, ignoring errors if they already exist"""
+    if os.name != 'nt':
+        return
+    for key_path in key_paths:
+        try:
+            hkey = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path)
+            hkey.Close()
+        except OSError:
+            pass
+
+
+def _delete_registry_keys(*key_paths):
+    """Delete registry keys, ignoring errors if they don't exist"""
+    if os.name != 'nt':
+        return
+    for key_path in key_paths:
+        try:
+            winreg.DeleteKey(winreg.HKEY_CURRENT_USER, key_path)
+        except OSError:
+            pass
 
 
 KEYFULL = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
@@ -68,6 +94,8 @@ def get_winapp2():
 
 class WinappTestCase(common.BleachbitTestCase):
     """Test cases for Winapp"""
+
+    ini_fn = None
 
     def run_all(self, cleaner, really_delete):
         """Test all the cleaner options"""
@@ -434,6 +462,69 @@ class WinappTestCase(common.BleachbitTestCase):
 
             # cleanup
             shutil.rmtree(dirname, True)
+
+    def _verify_keys_state(self, expected_state):
+        """Verify registry keys match expected state (dict of key_path -> exists)"""
+        for key_path, should_exist in expected_state.items():
+            exists = detect_registry_key('HKCU\\' + key_path)
+            if should_exist:
+                self.assertTrue(exists, 'Key %s should exist' % key_path)
+            else:
+                self.assertFalse(exists, 'Key %s should not exist' % key_path)
+
+    @common.skipUnlessWindows
+    def test_excludekey_reg(self):
+        """Test for ExcludeKey with REG type to prevent registry key deletion"""
+
+        # reuse this path to store a winapp2.ini file in
+        (ini_h, self.ini_fn) = tempfile.mkstemp(
+            suffix='.ini', prefix='winapp2', dir=self.tempdir)
+        os.close(ini_h)
+
+        test_key_parent = r'Software\BleachBitTest\ExcludeKey'
+        test_key_child0 = test_key_parent + r'\Child0'
+        test_key_child1 = test_key_parent + r'\Child1'
+        test_key_not_exc = test_key_parent + '_NotExcluded'
+
+        tests = (
+            # (exclude_key, parent_should_remain, child0_should_remain, child1_should_remain)
+            # Excluding a child key also implicitly protects the parent,
+            # since the parent must exist for the excluded child to persist.
+            (test_key_parent, True, True, True),
+            (test_key_child0, True, True, False),
+            (test_key_child1, True, False, True),
+        )
+
+        for exclude_key, parent_should_remain, child0_should_remain, child1_should_remain in tests:
+            with self.subTest(exclude_key=exclude_key):
+                try:
+                    _create_registry_keys(test_key_parent, test_key_child0, test_key_child1, test_key_not_exc)
+                    cleaner_ini = ('RegKey1=HKCU\\%s\n'
+                                   'RegKey2=HKCU\\%s\n'
+                                   'RegKey3=HKCU\\%s\n'
+                                   'RegKey4=HKCU\\%s\n'
+                                   'ExcludeKey1=REG|HKCU\\%s') % (
+                                       test_key_parent, test_key_child0,
+                                       test_key_child1, test_key_not_exc,
+                                       exclude_key)
+                    cleaner = self.ini2cleaner(cleaner_ini)
+                    self.run_all(cleaner, False)
+                    self._verify_keys_state({
+                        test_key_parent: True,
+                        test_key_child0: True,
+                        test_key_child1: True,
+                        test_key_not_exc: True,
+                    })
+                    self.run_all(cleaner, True)
+                    self._verify_keys_state({
+                        test_key_parent: parent_should_remain,
+                        test_key_child0: child0_should_remain,
+                        test_key_child1: child1_should_remain,
+                        test_key_not_exc: False,
+                    })
+                finally:
+                    _delete_registry_keys(test_key_child0, test_key_child1,
+                                          test_key_not_exc, test_key_parent)
 
     @common.skipUnlessWindows
     def test_filekey_with_path_including_systemdrive(self):
