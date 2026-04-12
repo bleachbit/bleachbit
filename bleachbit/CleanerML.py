@@ -294,6 +294,9 @@ def load_cleaners(cb_progress=lambda x: None):
             xmlcleaner = CleanerML(pathname)
         except:
             logger.exception(_("Error reading cleaner: %s"), pathname)
+            files_done += 1
+            cb_progress(1.0 * files_done / total_files)
+            yield True
             continue
         cleaner = xmlcleaner.get_cleaner()
         if cleaner.is_usable():
