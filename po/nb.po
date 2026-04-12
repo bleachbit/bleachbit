@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-04-05 14:48-0600\n"
-"PO-Revision-Date: 2026-03-31 16:09+0000\n"
+"PO-Revision-Date: 2026-04-13 09:09+0000\n"
 "Last-Translator: ovl-1 <ovl-002@mailinator.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "bleachbit/main/nb_NO/>\n"
@@ -48,16 +48,12 @@ msgstr "Informasjonskapsler"
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#, fuzzy
-#| msgid ""
-#| "Delete cookies, which contain information such as website preferences, "
-#| "authentication, and tracking identification"
 msgid ""
 "Delete cookies, which store login information, website preferences, and "
 "tracking identifiers"
 msgstr ""
-"Slett informasjonskapsler, som inneholder informasjon om blant annet "
-"nettsidepreferanser, autentisering og sporingsidentifikasjon"
+"Slett informasjonskapsler som lagrer innloggingsinformasjon, "
+"nettsidepreferanser og sporingsidentifikatorer"
 
 #: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
 #: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
@@ -250,10 +246,8 @@ msgstr "Skjemahistorikk"
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
-#, fuzzy
-#| msgid "Delete the search history"
 msgid "Saved form entries and search bar history"
-msgstr "Slett søkehistorikken"
+msgstr "Lagrede skjemaoppføringer og søkefelthistorikk"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
 #: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
@@ -295,7 +289,7 @@ msgstr "Økt"
 #: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Previously open tabs and windows"
-msgstr ""
+msgstr "Tidligere åpne faner og vinduer"
 
 #. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
@@ -2630,16 +2624,13 @@ msgstr "Oppdaget disse vekselminneenhetene: %s"
 #. is waiting for the child process. %(parent_pid)d is the parent
 #. process ID; %(child_pid)d is the child process ID.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The function wipe_memory() with process ID %d is waiting for child "
-#| "process ID %d."
+#, python-format
 msgid ""
 "The function wipe_memory() with process ID %(parent_pid)d is waiting for "
 "child process ID %(child_pid)d."
 msgstr ""
-"Funksjonen wipe_memory() med prosess-ID %d venter på underordnet prosess-ID "
-"%d."
+"Funksjonen wipe_memory() med prosess-ID %(parent_pid)d venter på underordnet "
+"prosess-ID %(child_pid)d."
 
 #: ../bleachbit/Memory.py
 #, python-format
