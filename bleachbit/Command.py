@@ -299,10 +299,11 @@ class Winreg:
 
     """Clean Windows registry"""
 
-    def __init__(self, keyname, valuename):
+    def __init__(self, keyname, valuename, excludekeys=None):
         """Create the Windows registry cleaner"""
         self.keyname = keyname
         self.valuename = valuename
+        self.excludekeys = excludekeys or []
 
     def __str__(self):
         return 'Command to clean registry, key=%s, value=%s ' % (self.keyname, self.valuename)
@@ -319,7 +320,7 @@ class Winreg:
                                                           self.valuename, really_delete)
         else:
             ret = bleachbit.Windows.delete_registry_key(
-                self.keyname, really_delete)
+                self.keyname, really_delete, self.excludekeys)
             _str = self.keyname
         if not ret:
             # Nothing to delete or nothing was deleted.  This return
