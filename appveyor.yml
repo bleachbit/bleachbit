@@ -17,8 +17,10 @@ init:
 install:
   - '%PYTHON_HOME%/python.exe -m pip install --upgrade pip'
   - '%PYTHON_HOME%/Scripts/pip.exe --version' # show pip version
-  - '%PYTHON_HOME%/Scripts/pip.exe install https://download.bleachbit.org/appveyor/psutil-5.6.7-cp34-cp34m-win32.whl'
-  - '%PYTHON_HOME%/Scripts/pip.exe install https://download.bleachbit.org/appveyor/pywin32-227-cp34-cp34m-win32.whl'
+  - ps: if (-not (Test-Path psutil-5.6.7-cp34-cp34m-win32.whl)) { Start-FileDownload "https://sourceforge.net/projects/bleachbit/files/dependencies/2020-01-08/psutil-5.6.7-cp34-cp34m-win32.whl/download" -FileName psutil-5.6.7-cp34-cp34m-win32.whl }
+  - ps: if (-not (Test-Path pywin32-227-cp34-cp34m-win32.whl)) { Start-FileDownload "https://sourceforge.net/projects/bleachbit/files/dependencies/2020-01-08/pywin32-227-cp34-cp34m-win32.whl/download" -FileName pywin32-227-cp34-cp34m-win32.whl }
+  - '%PYTHON_HOME%/Scripts/pip.exe install psutil-5.6.7-cp34-cp34m-win32.whl'
+  - '%PYTHON_HOME%/Scripts/pip.exe install pywin32-227-cp34-cp34m-win32.whl'
   - '%PYTHON_HOME%/Scripts/pip.exe install pypiwin32'
   - '%PYTHON_HOME%/Scripts/pip.exe install winshell'
   # pefile 2021.5.13 uses a f-string that fails with Python 3.4
