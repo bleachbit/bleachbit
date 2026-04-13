@@ -18,30 +18,30 @@ install:
   - '%PYTHON_HOME%/python.exe -m pip install --upgrade pip'
   - '%PYTHON_HOME%/Scripts/pip.exe --version' # show pip version
   - ps: if (-not (Test-Path psutil-5.6.7-cp34-cp34m-win32.whl)) { Start-FileDownload "https://sourceforge.net/projects/bleachbit/files/dependencies/2020-01-08/psutil-5.6.7-cp34-cp34m-win32.whl/download" -FileName psutil-5.6.7-cp34-cp34m-win32.whl }
-  - 'ps: $hash = (Get-FileHash psutil-5.6.7-cp34-cp34m-win32.whl -Algorithm SHA256).Hash; if ($hash -ne "DFE4D8DA295AC722B3676F14BBA7EF80241D715CFB5FF57D6B32E86A5B7DAB5A") { throw "SHA256 mismatch: $hash" }'
+  - "ps: $hash = (Get-FileHash psutil-5.6.7-cp34-cp34m-win32.whl -Algorithm SHA256).Hash; if ($hash -ne 'DFE4D8DA295AC722B3676F14BBA7EF80241D715CFB5FF57D6B32E86A5B7DAB5A') { throw \"SHA256 mismatch: $hash\" }"
   - ps: if (-not (Test-Path pywin32-227-cp34-cp34m-win32.whl)) { Start-FileDownload "https://sourceforge.net/projects/bleachbit/files/dependencies/2020-01-08/pywin32-227-cp34-cp34m-win32.whl/download" -FileName pywin32-227-cp34-cp34m-win32.whl }
-  - 'ps: $hash = (Get-FileHash pywin32-227-cp34-cp34m-win32.whl -Algorithm SHA256).Hash; if ($hash -ne "097F3BCFC79F37E4D8CD95DBFBCF178D24F83309C5756B567756322912DC06F8") { throw "SHA256 mismatch: $hash" }'
+  - "ps: $hash = (Get-FileHash pywin32-227-cp34-cp34m-win32.whl -Algorithm SHA256).Hash; if ($hash -ne '097F3BCFC79F37E4D8CD95DBFBCF178D24F83309C5756B567756322912DC06F8') { throw \"SHA256 mismatch: $hash\" }"
   - '%PYTHON_HOME%/Scripts/pip.exe install psutil-5.6.7-cp34-cp34m-win32.whl'
   - '%PYTHON_HOME%/Scripts/pip.exe install pywin32-227-cp34-cp34m-win32.whl'
   - '%PYTHON_HOME%/Scripts/pip.exe install -r requirements.txt'
 
   - ps: if (-not (Test-Path pygi-aio.exe )) { Start-FileDownload "https://sourceforge.net/projects/pygobjectwin32/files/pygi-aio-3.24.1_rev1-setup_049a323fe25432b10f7e9f543b74598d4be74a39.exe/download" -FileName pygi-aio.exe}
-  - 'ps: $hash = (Get-FileHash pygi-aio.exe -Algorithm SHA256).Hash; if ($hash -ne "98f28e95f360282d7065fec2aa4790ec9bbbb85ede6914ba096b1ea02aeebd0a") { throw "SHA256 mismatch: $hash" }'
+  - "ps: $hash = (Get-FileHash pygi-aio.exe -Algorithm SHA256).Hash; if ($hash -ne '98f28e95f360282d7065fec2aa4790ec9bbbb85ede6914ba096b1ea02aeebd0a') { throw \"SHA256 mismatch: $hash\" }"
   - 'pygi-aio.exe %PYTHON_HOME% GTK'
 
   - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v4.1.0/upx-4.1.0-win64.zip" -FileName upx.zip}
-  - 'ps: $hash = (Get-FileHash upx.zip -Algorithm SHA256).Hash; if ($hash -ne "382cee168d6261a76c3b6a98b3ca2de44930bf5faa5f2dc2ced4fa3850fe8ff6") { throw "SHA256 mismatch: $hash" }'
+  - "ps: $hash = (Get-FileHash upx.zip -Algorithm SHA256).Hash; if ($hash -ne '382cee168d6261a76c3b6a98b3ca2de44930bf5faa5f2dc2ced4fa3850fe8ff6') { throw \"SHA256 mismatch: $hash\" }"
   - ps: Get-FileHash upx.zip
   - '%SZ_EXE% x upx.zip'
   - 'rename upx-4.1.0-win64 upx'
   - 'dir .\upx\'
 
   - ps: if (-not (Test-Path gettext.zip)) { Start-FileDownload "https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.21-v1.16/gettext0.21-iconv1.16-static-32.zip" -FileName gettext.zip}
-  - 'ps: $hash = (Get-FileHash gettext.zip -Algorithm SHA256).Hash; if ($hash -ne "73a1b64a15fff9e6a5dc980d0a69cf3a24bde51bd47091a1b3fef68827ef23a8") { throw "SHA256 mismatch: $hash" }'
+  - "ps: $hash = (Get-FileHash gettext.zip -Algorithm SHA256).Hash; if ($hash -ne '73a1b64a15fff9e6a5dc980d0a69cf3a24bde51bd47091a1b3fef68827ef23a8') { throw \"SHA256 mismatch: $hash\" }"
   - '%SZ_EXE% x gettext.zip -ogettext'
 
   - ps: if (-not (Test-Path sqlite.zip)) { Start-FileDownload "https://sqlite.org/2023/sqlite-dll-win32-x86-3430200.zip" -FileName sqlite.zip }
-  - 'ps: $hash = (Get-FileHash sqlite.zip -Algorithm SHA256).Hash; if ($hash -ne "0b64b189cb41d065f9355de93ce2f41c40865429801bec3a555b30aca839058c") { throw "SHA256 mismatch: $hash" }'
+  - "ps: $hash = (Get-FileHash sqlite.zip -Algorithm SHA256).Hash; if ($hash -ne '0b64b189cb41d065f9355de93ce2f41c40865429801bec3a555b30aca839058c') { throw \"SHA256 mismatch: $hash\" }"
   - '%SZ_EXE% x sqlite.zip'
   - 'move /y sqlite3.dll %PYTHON_HOME%\DLLs\'
 #  - ps: if (-not (Test-Path vcredist_x86.exe)) { Start-FileDownload "https://download.microsoft.com/download/5/B/C/5BC5DBB3-652D-4DCE-B14A-475AB85EEF6E/vcredist_x86.exe" -FileName vcredist_x86.exe }
