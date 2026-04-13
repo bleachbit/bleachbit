@@ -1,0 +1,12 @@
+  pypiwin32==223
+  winshell==0.6
+  # pefile 2021.5.13 uses a f-string that fails with Python 3.4
+  pefile==2019.4.18
+  # py2exe 0.10.0.2 dropped support for Python 3.4
+  py2exe # 0.6.9
+  scandir==1.10.0
+  chardet==5.2.0
+  requests
+  # Python 3.4 support dropped https://github.com/kivy/plyer/pull/720/files
+  plyer==2.0.0
+  win-unicode-console==0.5
