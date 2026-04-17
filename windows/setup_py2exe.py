@@ -121,20 +121,34 @@ def assert_module(module):
         logger.error('Process aborted because of error!')
         sys.exit(1)
 
+def assert_execute(args, expected_output, timeout=120):
+    """Run a command and check it returns the expected output.
 
-def assert_execute(args, expected_output):
-    """Run a command and check it returns the expected output"""
-    actual_output = subprocess.check_output(args).decode(setup_encoding)
+    A timeout guards against hangs (e.g., GTK main loop not quitting).
+    On timeout, the child is killed and any captured output is logged
+    to aid troubleshooting.
+    """
+    try:
+        actual_output = subprocess.check_output(
+            args, stderr=subprocess.STDOUT, timeout=timeout).decode(SetupEncoding)
+    except subprocess.TimeoutExpired as e:
+        partial = (e.output or b'').decode(SetupEncoding, errors='replace')
+        logger.error('Command %s timed out after %ss. Partial output:\n%s',
+                     args, timeout, partial)
+        raise RuntimeError(f'Timeout running {args} after {timeout}s') from e
     if -1 == actual_output.find(expected_output):
-        raise RuntimeError('When running command {} expected output {} but got {}'.format(
-            args, expected_output, actual_output))
+        raise RuntimeError(
+            f'When running command {args} expected output {expected_output} but got {actual_output}')
 
 
 def assert_execute_console():
     """Check the application starts"""
     logger.info('Checking bleachbit_console.exe starts')
+    assert_execute([r'dist\bleachbit_console.exe', '--sysinfo', ,
+                   '__file__')
     assert_execute([r'dist\bleachbit_console.exe', '--gui', '--exit', '--no-uac'],
                    'Success')
+
 
 
 def run_cmd(cmd):
