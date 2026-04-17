@@ -121,6 +121,7 @@ def assert_module(module):
         logger.error('Process aborted because of error!')
         sys.exit(1)
 
+
 def assert_execute(args, expected_output, timeout=120):
     """Run a command and check it returns the expected output.
 
@@ -153,9 +154,9 @@ def assert_execute_console():
 
 def run_cmd(cmd):
     logger.info(cmd)
-    p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
+    p=subprocess.Popen(cmd, stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = p.communicate()
+    stdout, stderr=p.communicate()
     logger.info(stdout.decode(setup_encoding))
     if stderr:
         logger.error(stderr.decode(setup_encoding))
@@ -167,10 +168,10 @@ def sign_files(filenames):
     Passing multiple filenames in one function call can be faster than
     two calls.
     """
-    filenames_str = ' '.join(filenames)
+    filenames_str=' '.join(filenames)
     if os.path.exists('CodeSign.bat'):
         logger.info('Signing code: %s' % filenames_str)
-        cmd = 'CodeSign.bat %s' % filenames_str
+        cmd='CodeSign.bat %s' % filenames_str
         run_cmd(cmd)
     else:
         logger.warning('CodeSign.bat not available for %s' % filenames_str)
@@ -178,10 +179,10 @@ def sign_files(filenames):
 
 def get_dir_size(start_path='.'):
     # http://stackoverflow.com/questions/1392413/calculating-a-directory-size-using-python
-    total_size = 0
+    total_size=0
     for dirpath, _dirnames, filenames in os.walk(start_path):
         for f in filenames:
-            fp = os.path.join(dirpath, f)
+            fp=os.path.join(dirpath, f)
             total_size += os.path.getsize(fp)
     return total_size
 
@@ -189,18 +190,18 @@ def get_dir_size(start_path='.'):
 def copytree(src, dst):
     # Microsoft xcopy is about twice as fast as shutil.copytree
     logger.info('copying {} to {}'.format(src, dst))
-    cmd = 'xcopy {} {} /i /s /q'.format(src, dst)
+    cmd='xcopy {} {} /i /s /q'.format(src, dst)
     os.system(cmd)
 
 
 def count_size_improvement(func):
     def wrapper():
         import time
-        t0 = time.time()
-        size0 = get_dir_size('dist')
+        t0=time.time()
+        size0=get_dir_size('dist')
         func()
-        size1 = get_dir_size('dist')
-        t1 = time.time()
+        size1=get_dir_size('dist')
+        t1=time.time()
         logger.info('Reduced size of the dist directory by {:,} B from {:,} B to {:,} B in {:.1f} s'.format(
             size0 - size1, size0, size1, t1 - t0))
     return wrapper
@@ -234,7 +235,7 @@ def build():
 
     logger.info('Running py2exe')
     shutil.copyfile('bleachbit.py', 'bleachbit_console.py')
-    cmd = sys.executable + ' -OO setup.py py2exe'
+    cmd=sys.executable + ' -OO setup.py py2exe'
     run_cmd(cmd)
     assert_exist('dist\\bleachbit.exe')
     assert_exist('dist\\bleachbit_console.exe')
@@ -245,28 +246,30 @@ def build():
 
     logger.info('Copying GTK helpers')
     for exe in glob.glob1(GTK_LIBDIR, 'gspawn-win*-helper*.exe'):
-        shutil.copyfile(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
+        shutil.copyfile(os.path.join(GTK_LIBDIR, exe),
+                        os.path.join('dist', exe))
     for exe in ('fc-cache.exe',):
-        shutil.copyfile(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
+        shutil.copyfile(os.path.join(GTK_LIBDIR, exe),
+                        os.path.join('dist', exe))
 
     logger.info('Copying GTK files and icon')
     for d in ('dbus-1', 'fonts', 'gtk-3.0', 'pango'):
-        path = os.path.join(GTK_DIR, 'etc', d)
+        path=os.path.join(GTK_DIR, 'etc', d)
         if os.path.exists(path):
             copytree(path, os.path.join('dist', 'etc', d))
     for d in ('girepository-1.0', 'glade', 'gtk-3.0'):
-        path = os.path.join(GTK_DIR, 'lib', d)
+        path=os.path.join(GTK_DIR, 'lib', d)
         if os.path.exists(path):
             copytree(path, os.path.join('dist', 'lib', d))
 
     logger.info('Remove windows fonts dir from fonts.conf file')
     # fonts are not needed https://github.com/bleachbit/bleachbit/issues/863
     for d in ('icons',):
-        path = os.path.join(GTK_DIR, 'share', d)
+        path=os.path.join(GTK_DIR, 'share', d)
         if os.path.exists(path):
             copytree(path, os.path.join('dist', 'share', d))
-    SCHEMAS_DIR = 'share\\glib-2.0\\schemas'
-    gschemas_compiled = os.path.join(GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled')
+    SCHEMAS_DIR='share\\glib-2.0\\schemas'
+    gschemas_compiled=os.path.join(GTK_DIR, SCHEMAS_DIR, 'gschemas.compiled')
     if os.path.exists(gschemas_compiled):
         os.makedirs(os.path.join('dist', SCHEMAS_DIR))
         shutil.copyfile(gschemas_compiled,
@@ -289,16 +292,16 @@ def build():
     shutil.copyfile(requests.utils.DEFAULT_CA_BUNDLE_PATH,
                     os.path.join('dist', 'cacert.pem'))
 
-    dist_locale_dir = r'dist\share\locale'
+    dist_locale_dir=r'dist\share\locale'
     shutil.rmtree(dist_locale_dir, ignore_errors=True)
     os.makedirs(dist_locale_dir)
 
     logger.info('Copying GTK localizations')
-    locale_dir = os.path.join(GTK_DIR, 'share\\locale\\')
+    locale_dir=os.path.join(GTK_DIR, 'share\\locale\\')
     for f in recursive_glob(locale_dir, ['gtk30.mo']):
         if not f.startswith(locale_dir):
             continue
-        rel_f = f[len(locale_dir):]
+        rel_f=f[len(locale_dir):]
         os.makedirs(os.path.join(dist_locale_dir, os.path.dirname(rel_f)))
         shutil.copyfile(f, os.path.join(dist_locale_dir, rel_f))
     assert_exist(os.path.join(dist_locale_dir, r'es\LC_MESSAGES\gtk30.mo'))
@@ -310,7 +313,7 @@ def build():
     logger.info('Copying BleachBit cleaners')
     if not os.path.exists('dist\\share\\cleaners'):
         os.makedirs('dist\\share\\cleaners')
-    cleaners_files = recursive_glob('cleaners', ['*.xml'])
+    cleaners_files=recursive_glob('cleaners', ['*.xml'])
     for file in cleaners_files:
         shutil.copy(file,  'dist\\share\\cleaners')
 
@@ -328,13 +331,13 @@ def build():
     assert_execute_console()
 
 
-@count_size_improvement
+@ count_size_improvement
 def delete_unnecessary():
     logger.info('Deleting unnecessary files')
     # Remove SVG to reduce space and avoid this error
     # Error loading theme icon 'dialog-warning' for stock: Unable to load image-loading module: C:/PythonXY/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll: `C:/PythonXY/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll': The specified module could not be found.
     # https://bugs.launchpad.net/bleachbit/+bug/1650907
-    delete_paths = [
+    delete_paths=[
         r'_win32sysloader.pyd',
         r'perfmon.pyd',
         r'servicemanager.pyd',
@@ -344,12 +347,12 @@ def delete_unnecessary():
         r'win32wnet.pyd',
     ]
     for path in delete_paths:
-        path = r'dist\{}'.format(path)
+        path=r'dist\{}'.format(path)
         if not os.path.exists(path):
             logger.warning('Path does not exist: ' + path)
             continue
         if os.path.isdir(path):
-            this_dir_size = get_dir_size(path)
+            this_dir_size=get_dir_size(path)
             shutil.rmtree(path, ignore_errors=True)
             logger.info('Deleting directory {} saved {:,} B'.format(
                 path, this_dir_size))
@@ -359,11 +362,11 @@ def delete_unnecessary():
             os.remove(path)
 
 
-@count_size_improvement
+@ count_size_improvement
 def delete_icons():
     logger.info('Deleting unused PNG/SVG icons')
     # This whitelist comes from analyze_process_monitor_events.py
-    icon_whitelist = [
+    icon_whitelist=[
         'edit-clear-all.png',
         'edit-delete.png',
         'edit-find.png',
@@ -377,7 +380,7 @@ def delete_icons():
         'window-minimize-symbolic.svg',  # no png
         'window-restore-symbolic.svg'  # no png
     ]
-    strip_list = recursive_glob(r'dist\share\icons', ['*.png', '*.svg'])
+    strip_list=recursive_glob(r'dist\share\icons', ['*.png', '*.svg'])
     for f in strip_list:
         if os.path.basename(f) not in icon_whitelist:
             os.remove(f)
@@ -396,7 +399,7 @@ def remove_empty_dirs(root):
                 os.rmdir(entry.path)
 
 
-@count_size_improvement
+@ count_size_improvement
 def clean_translations():
     """Clean translations (localizations)"""
     logger.info('Cleaning translations')
@@ -404,20 +407,20 @@ def clean_translations():
         os.remove(r'dist\share\locale\locale.alias')
     else:
         logger.warning('locale.alias does not exist')
-    pygtk_translations = os.listdir('dist/share/locale')
-    supported_translations = [f[3:-3] for f in glob.glob('po/*.po')]
+    pygtk_translations=os.listdir('dist/share/locale')
+    supported_translations=[f[3:-3] for f in glob.glob('po/*.po')]
     for pt in pygtk_translations:
         if pt not in supported_translations:
-            path = 'dist/share/locale/' + pt
+            path='dist/share/locale/' + pt
             shutil.rmtree(path)
 
 
-@count_size_improvement
+@ count_size_improvement
 def strip():
     logger.info('Stripping executables')
-    strip_list = recursive_glob('dist', ['*.dll', '*.pyd'])
-    strip_whitelist = ['_sqlite3.dll']
-    strip_files_str = [f for f in strip_list if os.path.basename(
+    strip_list=recursive_glob('dist', ['*.dll', '*.pyd'])
+    strip_whitelist=['_sqlite3.dll']
+    strip_files_str=[f for f in strip_list if os.path.basename(
         f) not in strip_whitelist]
     # Process each file individually in case it is locked. See
     # https://github.com/bleachbit/bleachbit/issues/690
@@ -427,7 +430,7 @@ def strip():
         if not os.path.exists(strip_file):
             logger.error('%s does not exist before stripping', strip_file)
             continue
-        cmd = 'strip.exe --strip-debug --discard-all --preserve-dates -o strip.tmp %s' % strip_file
+        cmd='strip.exe --strip-debug --discard-all --preserve-dates -o strip.tmp %s' % strip_file
         run_cmd(cmd)
         if not os.path.exists(strip_file):
             logger.error('%s does not exist after stripping', strip_file)
@@ -435,7 +438,7 @@ def strip():
         if not os.path.exists('strip.tmp'):
             logger.warning('strip.tmp missing while processing %s', strip_file)
             continue
-        error_counter = 0
+        error_counter=0
         while error_counter < 100:
             try:
                 os.remove(strip_file)
@@ -453,7 +456,7 @@ def strip():
             os.rename('strip.tmp', strip_file)
 
 
-@count_size_improvement
+@ count_size_improvement
 def upx():
     if fast:
         logger.warning('Fast mode: Skipped executable with UPX')
@@ -467,24 +470,24 @@ def upx():
     logger.info('Compressing executables')
     # Do not compress bleachbit.exe and bleachbit_console.exe to avoid false positives
     # with antivirus software. Not much is space with gained with these small files, anyway.
-    upx_files = recursive_glob('dist', ['*.dll', '*.pyd'])
-    cmd = '{} {} {}'.format(UPX_EXE, UPX_OPTS, ' '.join(upx_files))
+    upx_files=recursive_glob('dist', ['*.dll', '*.pyd'])
+    cmd='{} {} {}'.format(UPX_EXE, UPX_OPTS, ' '.join(upx_files))
     run_cmd(cmd)
 
 
-@count_size_improvement
+@ count_size_improvement
 def delete_linux_only():
     logger.info('Checking for Linux-only cleaners')
-    files = recursive_glob('dist/share/cleaners/', ['*.xml'])
+    files=recursive_glob('dist/share/cleaners/', ['*.xml'])
     for fn in files:
         from bleachbit.CleanerML import CleanerML
-        cml = CleanerML(fn)
+        cml=CleanerML(fn)
         if not cml.get_cleaner().is_usable():
             logger.warning('Deleting cleaner not usable on this OS: ' + fn)
             os.remove(fn)
 
 
-@count_size_improvement
+@ count_size_improvement
 def recompress_library():
     """Recompress library.zip"""
     if fast:
@@ -500,31 +503,31 @@ def recompress_library():
     # extract library.zip
     if not os.path.exists('dist\\library'):
         os.makedirs('dist\\library')
-    cmd = SZ_EXE + ' x  dist\\library.zip' + ' -odist\\library  -y'
+    cmd=SZ_EXE + ' x  dist\\library.zip' + ' -odist\\library  -y'
     run_cmd(cmd)
-    file_size_old = os.path.getsize('dist\\library.zip')
+    file_size_old=os.path.getsize('dist\\library.zip')
     os.remove('dist\\library.zip')
 
     # clean unused modules from library.zip
-    delete_paths = ['distutils', 'plyer\\platforms\\android',
+    delete_paths=['distutils', 'plyer\\platforms\\android',
                     'plyer\\platforms\\ios', 'plyer\\platforms\\linux', 'plyer\\platforms\\macosx']
     for p in delete_paths:
-        path = os.path.join('dist', 'library', p)
+        path=os.path.join('dist', 'library', p)
         if os.path.exists(path):
             shutil.rmtree(path)
 
     # recompress library.zip
-    cmd = SZ_EXE + ' a {} ..\\library.zip'.format(SZ_OPTS)
+    cmd=SZ_EXE + ' a {} ..\\library.zip'.format(SZ_OPTS)
     logger.info(cmd)
-    p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+    p=subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE, cwd='dist\\library')
-    stdout, stderr = p.communicate()
+    stdout, stderr=p.communicate()
     logger.info(stdout.decode(setup_encoding))
     if stderr:
         logger.error(stderr.decode(setup_encoding))
 
-    file_size_new = os.path.getsize('dist\\library.zip')
-    file_size_diff = file_size_old - file_size_new
+    file_size_new=os.path.getsize('dist\\library.zip')
+    file_size_diff=file_size_old - file_size_new
     logger.info('Recompression of library.dll reduced size by {:,} from {:,} to {:,}'.format(
         file_size_diff, file_size_old, file_size_new))
     shutil.rmtree('dist\\library', ignore_errors=True)
@@ -550,7 +553,7 @@ def shrink():
 
     logger.info('Purging unnecessary GTK+ files')
     # FIXME: move clean-dist into this program
-    cmd = sys.executable + ' setup.py clean-dist'
+    cmd=sys.executable + ' setup.py clean-dist'
     run_cmd(cmd)
 
     delete_linux_only()
@@ -579,7 +582,7 @@ def nsis(opts, exe_name, nsi_path):
     if os.path.exists(exe_name):
         logger.info('Deleting old file: ' + exe_name)
         os.remove(exe_name)
-    cmd = NSIS_EXE + \
+    cmd=NSIS_EXE +
         ' {} /DVERSION={} /DSHRED_REGEX_KEY={} {}'.format(
             opts, BB_VER, SHRED_REGEX_KEY, nsi_path)
     run_cmd(cmd)
@@ -597,12 +600,12 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
 
     write_nsis_expressions_to_files()
 
-    exe_name_multilang = 'windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
-    exe_name_en = 'windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER)
+    exe_name_multilang='windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
+    exe_name_en='windows\\BleachBit-{0}-setup-English.exe'.format(BB_VER)
     # Was:
     # opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
     # Now: Done in NSIS file!
-    opts = '' if fast else '/V3 /Dpackhdr /DCompressor'
+    opts='' if fast else '/V3 /Dpackhdr /DCompressor'
     nsis(opts, exe_name_multilang, nsi_path)
 
     if fast:
@@ -617,9 +620,9 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
     if os.path.exists(SZ_EXE):
         logger.info('Zipping installer')
         # Please note that the archive does not have the folder name
-        outfile = ROOT_DIR + \
+        outfile=ROOT_DIR +
             '\\windows\\BleachBit-{0}-setup.zip'.format(BB_VER)
-        infile = ROOT_DIR + '\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
+        infile=ROOT_DIR + '\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
         archive(infile, outfile)
     else:
         logger.warning(SZ_EXE + ' does not exist')
@@ -628,10 +631,10 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
 if '__main__' == __name__:
     logger.info('Getting BleachBit version')
     import bleachbit
-    BB_VER = bleachbit.APP_VERSION
-    build_number = os.getenv('APPVEYOR_BUILD_NUMBER')
+    BB_VER=bleachbit.APP_VERSION
+    build_number=os.getenv('APPVEYOR_BUILD_NUMBER')
     if build_number:
-        BB_VER = '%s.%s' % (BB_VER, build_number)
+        BB_VER='%s.%s' % (BB_VER, build_number)
     logger.info('BleachBit version ' + BB_VER)
 
     environment_check()
