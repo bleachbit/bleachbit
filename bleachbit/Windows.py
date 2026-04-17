@@ -126,7 +126,7 @@ def browse_folder(_, title):
     return fullpath
 
 
-def check_dll_hijacking(window=None):
+def check_dll_hijacking(window=None, show_modal=False):
     """Check for possible DLL search-order hijacking
 
     https://bugs.python.org/issue27410
@@ -142,7 +142,7 @@ def check_dll_hijacking(window=None):
     # This workaround will be removed when the Python 3.10 branch is ready.
     msg = _(r'The file python3.dll was found in c:\ or c:\dlls, which indicates a possible attempt at DLL search-order hijacking.')
     logger.error(msg)
-    if window:
+    if window and show_modal:
         from bleachbit.GuiBasic import message_dialog
         from gi.repository import Gtk
         message_dialog(
@@ -783,6 +783,7 @@ class SplashThread(Thread):
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs={}, Verbose=None):
         super().__init__(group, self._show_splash_screen, name, args, kwargs)
+        self.daemon = True
         self._splash_screen_started = Event()
         self._splash_screen_handle = None
         self._splash_screen_height = None
