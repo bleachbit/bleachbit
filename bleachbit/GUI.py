@@ -132,7 +132,7 @@ class Bleachbit(Gtk.Application):
         if auto_exit:
             # This is used for automated testing of whether the GUI can start.
             # It is called from assert_execute_console() in windows/setup_py2exe.py
-            self._auto_exit = True        
+            self._auto_exit = True
 
         if shred_paths:
             self._shred_paths = shred_paths
@@ -370,22 +370,25 @@ class Bleachbit(Gtk.Application):
             clipboard.set_text(txt, -1)
         dialog.destroy()
 
-    def _check_os_version(self):
+    def _check_os_version(self, show_modal):
         """Check the OS version and warn if this version of BleachBit is not intended for it."""
+        msg = None
         if os.name != 'nt':
             msg = _('This version of BleachBit is intended only for Windows. '
                     'For other operating systems, please update to BleachBit 5.x or newer.')
-            self._show_version_warning(msg)
+
+
         else:
             from decimal import Decimal
             win_ver = Windows.get_windows_version()
             if win_ver >= Decimal('6.2'):
                 msg = _('This version of BleachBit is intended for old versions of Windows. '
                         'For Windows 8 or newer, please update to BleachBit 5.x or newer.')
-                self._show_version_warning(msg)
-
-    def _show_version_warning(self, msg):
-        """Show a warning dialog about the OS version."""
+        if not msg:
+            return
+        logging.warning(msg)
+        if not show_modal:
+            return
         dialog = Gtk.MessageDialog(
             transient_for=self._window,
             flags=Gtk.DialogFlags.MODAL,
@@ -400,9 +403,9 @@ class Bleachbit(Gtk.Application):
             self._window = GUI(
                 application=self, title=APP_NAME, auto_exit=self._auto_exit)
         if 'nt' == os.name:
-            Windows.check_dll_hijacking(self._window)
+            Windows.check_dll_hijacking(self._window, show_modal=not self._auto_exit)
         self._window.present()
-        self._check_os_version()
+        self._check_os_version(show_modal=not self._auto_exit)
         if self._shred_paths:
             GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths, priority=GObject.PRIORITY_LOW)
             # When we shred paths and auto exit with the Windows Explorer context menu command we close the
