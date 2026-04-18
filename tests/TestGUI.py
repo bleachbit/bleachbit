@@ -49,7 +49,7 @@ bleachbit.online_update_notification_enabled = False
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
 class GUITestCase(common.BleachbitTestCase):
-    app = Bleachbit(auto_exit=False, uac=False)
+    app = Bleachbit(auto_exit=False, uac=False, interactive=False)
     options_get_tree = options.get_tree
     _NEW_CLEANER_ID, _NEW_OPTION_ID = 'test_run_operations', 'test1'
 
