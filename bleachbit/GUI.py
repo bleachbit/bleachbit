@@ -389,7 +389,7 @@ class Bleachbit(Gtk.Application):
                         'For Windows 8 or newer, please update to BleachBit 5.x or newer.')
         if not msg:
             return
-        logging.warning(msg)
+        logger.warning(msg)
         if not show_modal:
             return
         dialog = Gtk.MessageDialog(

@@ -73,6 +73,10 @@ def init_log():
     logger_sh.setFormatter(console_formatter)
     logger.addHandler(logger_sh)
 
+    # Prevent messages from propagating to the root logger, which would
+    # cause duplicate messages if the root logger also has a handler.
+    logger.propagate = False
+
     # If --debug-log parameter was passed, set up the file handler here instead
     # of in CLI.py, so logs are captured from the very beginning.
     debug_log_path = None
