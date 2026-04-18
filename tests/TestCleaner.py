@@ -71,7 +71,7 @@ def register_all_cleaners():
         from tests.TestWinapp import get_winapp2  # pylint: disable=import-outside-toplevel
 
         os.makedirs(bleachbit.personal_cleaners_dir, exist_ok=True)
-        print(f"personal_cleaners_dir: {bleachbit.personal_cleaners_dir}")
+        print("personal_cleaners_dir: %s" % bleachbit.personal_cleaners_dir)
         shutil.copyfile(
             get_winapp2(),
                 os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini'),
