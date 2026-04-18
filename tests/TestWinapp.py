@@ -70,12 +70,14 @@ KEYFULL = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
 
 def get_winapp2():
     """Download and cache winapp2.ini.  Return local filename."""
-    url = "https://rawgit.com/bleachbit/winapp2.ini/master/Winapp2-BleachBit.ini"
+    url = "https://raw.githubusercontent.com/bleachbit/winapp2.ini/refs/heads/master/Winapp2-BleachBit.ini"
     tmpdir = None
     if os.name == 'posix':
         tmpdir = '/tmp'
     if os.name == 'nt':
         tmpdir = os.getenv('TMP')
+    if not tmpdir:
+        tmpdir = tempfile.gettempdir()
     fname = os.path.join(tmpdir, 'bleachbit_test_winapp2.ini')
     if os.path.exists(fname):
         import time
@@ -85,10 +87,9 @@ def get_winapp2():
             logger.info('deleting stale file %s ', fname)
             os.remove(fname)
     if not os.path.exists(fname):
-        with open(fname, 'w', encoding='utf-8') as fobj:
-            import urllib.request
-            txt = urllib.request.urlopen(url).read()
-            fobj.write(txt.decode('utf-8'))
+        from bleachbit.Network import download_url_to_fn
+        assert download_url_to_fn(url, fname)
+    assert os.path.exists(fname)
     return fname
 
 
@@ -174,7 +175,14 @@ class WinappTestCase(common.BleachbitTestCase):
                 raise RuntimeError(
                     'Test expects objects in %ProgramW6432% not in %ProgramFiles%')
             for pathname in dir_32_unique:
-                tests.append(('%%ProgramFiles%%\\%s' % pathname, True))
+                test_path = '%%ProgramFiles%%\\%s' % pathname
+                full_path = os.path.join(os.getenv('ProgramFiles'), pathname)
+                try:
+                    os.listdir(full_path) if os.path.isdir(full_path) else open(full_path, 'rb').close()
+                    tests.append((test_path, True))
+                except (FileNotFoundError,PermissionError):
+                    logger.info(
+                        'skipping detect_file test for %s because it is not accessible', test_path)
         else:
             logger.info(
                 'skipping %ProgramW6432% tests because WoW64 not detected')
@@ -543,7 +551,10 @@ class WinappTestCase(common.BleachbitTestCase):
         # clean their targets.
 
         filename = os.path.join('C:\\', 'deleteme.txt')
-        open(filename, 'w').close()
+        try:
+            open(filename, 'w').close()
+        except PermissionError:
+            self.skipTest('cannot write to system drive root (needs admin)')
         self.assertExists(filename)
 
         with mock.patch('os.path.lexists') as mock_lexists:
