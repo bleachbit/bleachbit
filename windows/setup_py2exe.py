@@ -609,7 +609,7 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
     if os.path.exists(SZ_EXE):
         logger.info('Zipping installer')
         # Please note that the archive does not have the folder name
-        outfile=ROOT_DIR +
+        outfile=ROOT_DIR + \
             '\\windows\\BleachBit-{0}-setup.zip'.format(BB_VER)
         infile=ROOT_DIR + '\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
         archive(infile, outfile)
