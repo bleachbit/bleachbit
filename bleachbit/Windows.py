@@ -126,7 +126,7 @@ def browse_folder(_, title):
     return fullpath
 
 
-def check_dll_hijacking(window=None):
+def check_dll_hijacking(window=None, show_modal=False):
     """Check for possible DLL search-order hijacking
 
     https://bugs.python.org/issue27410
@@ -142,7 +142,7 @@ def check_dll_hijacking(window=None):
     # This workaround will be removed when the Python 3.10 branch is ready.
     msg = _(r'The file python3.dll was found in c:\ or c:\dlls, which indicates a possible attempt at DLL search-order hijacking.')
     logger.error(msg)
-    if window:
+    if window and show_modal:
         from bleachbit.GuiBasic import message_dialog
         from gi.repository import Gtk
         message_dialog(

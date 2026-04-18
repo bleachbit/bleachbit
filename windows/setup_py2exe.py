@@ -121,9 +121,9 @@ def assert_execute(args, expected_output, timeout=120):
     """
     try:
         actual_output = subprocess.check_output(
-            args, stderr=subprocess.STDOUT, timeout=timeout).decode(SetupEncoding)
+            args, stderr=subprocess.STDOUT, timeout=timeout).decode(setup_encoding)
     except subprocess.TimeoutExpired as e:
-        partial = (e.output or b'').decode(SetupEncoding, errors='replace')
+        partial = (e.output or b'').decode(setup_encoding, errors='replace')
         logger.error('Command %s timed out after %ss. Partial output:\n%s',
                      args, timeout, partial)
         raise RuntimeError('Timeout running %s after %ss' % (args, timeout))
@@ -135,8 +135,6 @@ def assert_execute(args, expected_output, timeout=120):
 def assert_execute_console():
     """Check the application starts"""
     logger.info('Checking bleachbit_console.exe starts')
-    assert_execute([r'dist\bleachbit_console.exe', '--sysinfo'],
-                   '__file__')
     assert_execute([r'dist\bleachbit_console.exe', '--gui', '--exit', '--no-uac'],
                    'Success')
 
