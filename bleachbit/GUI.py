@@ -119,8 +119,9 @@ class Bleachbit(Gtk.Application):
     _window = None
     _shred_paths = None
     _auto_exit = False
+    _interactive = True
 
-    def __init__(self, uac=True, shred_paths=None, auto_exit=False):
+    def __init__(self, uac=True, shred_paths=None, auto_exit=False, interactive=True):
 
         application_id_suffix = self._init_windows_misc(auto_exit, shred_paths, uac)
         application_id = '{}{}'.format('org.gnome.Bleachbit', application_id_suffix)
@@ -133,6 +134,8 @@ class Bleachbit(Gtk.Application):
             # This is used for automated testing of whether the GUI can start.
             # It is called from assert_execute_console() in windows/setup_py2exe.py
             self._auto_exit = True
+
+        self._interactive = interactive
 
         if shred_paths:
             self._shred_paths = shred_paths
@@ -403,9 +406,9 @@ class Bleachbit(Gtk.Application):
             self._window = GUI(
                 application=self, title=APP_NAME, auto_exit=self._auto_exit)
         if 'nt' == os.name:
-            Windows.check_dll_hijacking(self._window, show_modal=not self._auto_exit)
+            Windows.check_dll_hijacking(self._window, show_modal=self._interactive)
         self._window.present()
-        self._check_os_version(show_modal=not self._auto_exit)
+        self._check_os_version(show_modal=self._interactive)
         if self._shred_paths:
             GLib.idle_add(GUI.shred_paths, self._window, self._shred_paths, priority=GObject.PRIORITY_LOW)
             # When we shred paths and auto exit with the Windows Explorer context menu command we close the
@@ -875,7 +878,7 @@ class GUI(Gtk.ApplicationWindow):
         self.view.expand_all()
 
         # Check for online updates.
-        if not self._auto_exit and \
+        if self._interactive and \
             bleachbit.online_update_notification_enabled and \
             options.get("check_online_updates") and \
                 not hasattr(self, 'checked_for_updates'):
