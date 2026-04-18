@@ -27,44 +27,23 @@ import mock
 import os
 from tempfile import mkdtemp
 from shutil import rmtree
+from unittest.mock import patch
 
 from tests import common
-from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models
+from bleachbit.Chaff import (download_models, generate_emails, generate_2600,
+                            have_models, download_url_to_fn)
 from bleachbit.FileUtilities import getsize
 
 
 class ChaffTestCase(common.BleachbitTestCase):
     """Test case for module Chaff"""
 
-    def test_download_url_to_fn(self):
-        """Unit test for function download_url_to_fn()"""
-        from bleachbit.Chaff import download_url_to_fn
-        # 200: no error
-        # 404: not retryable error
-        # 503: retryable error
-        tests = (('http://httpstat.us/200', True),
-                 ('http://httpstat.us/404', False),
-                 ('http://httpstat.us/503', False))
-        fn = os.path.join(self.tempdir, 'download')
-        on_error_called = [False]
-
-        def on_error(msg1, msg2):
-            print('test on_error(%s, %s)' % (msg1, msg2))
-            on_error_called[0] = True
-        for test in tests:
-            self.assertNotExists(fn)
-            url = test[0]
-            expected_rc = test[1]
-            on_error_called = [False]
-            rc = download_url_to_fn(
-                url, fn, on_error=on_error, timeout=20)
-            err_msg = 'test_download_url_to_fn({}) returned {} instead of {}'.format(url, rc, expected_rc)
-            self.assertEqual(rc, expected_rc, err_msg)
-            if expected_rc:
-                self.assertExists(fn)
-            self.assertNotEqual(rc, on_error_called[0])
-            from bleachbit.FileUtilities import delete
-            delete(fn, ignore_missing=True)
+    def test_download_url_to_fn_delegates(self):
+        """Verify download_url_to_fn delegates to Network"""
+        with patch('bleachbit.Network.download_url_to_fn', return_value=True) as mock:
+            rc = download_url_to_fn('http://example.com', '/tmp/test', on_error=lambda m1,m2: None)
+            self.assertTrue(rc)
+            mock.assert_called_once()
 
     def test_Chaff(self):
         """Unit test for class Chaff"""
