@@ -1,18 +1,8 @@
-"""
-BleachBit
-Copyright (C) 2008-2024 Andrew Ziem
-https://www.bleachbit.org
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
+#
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 from __future__ import absolute_import, print_function
 
@@ -145,7 +135,7 @@ def assert_execute(args, expected_output, timeout=120):
 def assert_execute_console():
     """Check the application starts"""
     logger.info('Checking bleachbit_console.exe starts')
-    assert_execute([r'dist\bleachbit_console.exe', '--sysinfo', ,
+    assert_execute([r'dist\bleachbit_console.exe', '--sysinfo'],
                    '__file__')
     assert_execute([r'dist\bleachbit_console.exe', '--gui', '--exit', '--no-uac'],
                    'Success')
@@ -582,9 +572,8 @@ def nsis(opts, exe_name, nsi_path):
     if os.path.exists(exe_name):
         logger.info('Deleting old file: ' + exe_name)
         os.remove(exe_name)
-    cmd=NSIS_EXE +
-        ' {} /DVERSION={} /DSHRED_REGEX_KEY={} {}'.format(
-            opts, BB_VER, SHRED_REGEX_KEY, nsi_path)
+    cmd = NSIS_EXE + ' {} /DVERSION={} /DSHRED_REGEX_KEY={} {}'.format(
+        opts, BB_VER, SHRED_REGEX_KEY, nsi_path)
     run_cmd(cmd)
     assert_exist(exe_name)
 
@@ -620,7 +609,7 @@ def package_installer(nsi_path=r'windows\bleachbit.nsi'):
     if os.path.exists(SZ_EXE):
         logger.info('Zipping installer')
         # Please note that the archive does not have the folder name
-        outfile=ROOT_DIR +
+        outfile=ROOT_DIR + \
             '\\windows\\BleachBit-{0}-setup.zip'.format(BB_VER)
         infile=ROOT_DIR + '\\windows\\BleachBit-{0}-setup.exe'.format(BB_VER)
         archive(infile, outfile)
