@@ -783,6 +783,7 @@ class SplashThread(Thread):
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs={}, Verbose=None):
         super().__init__(group, self._show_splash_screen, name, args, kwargs)
+        self.daemon = True
         self._splash_screen_started = Event()
         self._splash_screen_handle = None
         self._splash_screen_height = None
