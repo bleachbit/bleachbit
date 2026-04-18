@@ -126,7 +126,7 @@ def browse_folder(_, title):
     return fullpath
 
 
-def check_dll_hijacking(window=None, show_modal):
+def check_dll_hijacking(window=None, show_modal=False):
     """Check for possible DLL search-order hijacking
 
     https://bugs.python.org/issue27410
