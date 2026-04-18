@@ -404,7 +404,8 @@ class Bleachbit(Gtk.Application):
     def do_activate(self):
         if not self._window:
             self._window = GUI(
-                application=self, title=APP_NAME, auto_exit=self._auto_exit)
+                application=self, title=APP_NAME, auto_exit=self._auto_exit,
+                interactive=self._interactive)
         if 'nt' == os.name:
             Windows.check_dll_hijacking(self._window, show_modal=self._interactive)
         self._window.present()
@@ -596,12 +597,13 @@ class GUI(Gtk.ApplicationWindow):
     _style_provider_regular = None
     _style_provider_dark = None
 
-    def __init__(self, auto_exit, *args, **kwargs):
+    def __init__(self, auto_exit, interactive=True, *args, **kwargs):
         super(GUI, self).__init__(*args, **kwargs)
 
         self._show_splash_screen()
 
         self._auto_exit = auto_exit
+        self._interactive = interactive
 
         self.set_wmclass(APP_NAME, APP_NAME)
         self.populate_window()
