@@ -140,9 +140,21 @@ def assert_module(module):
         sys.exit(1)
 
 
-def assert_execute(args, expected_output):
-    """Run a command and check it returns the expected output"""
-    actual_output = subprocess.check_output(args).decode(SetupEncoding)
+def assert_execute(args, expected_output, timeout=120):
+    """Run a command and check it returns the expected output.
+
+    A timeout guards against hangs (e.g., GTK main loop not quitting).
+    On timeout, the child is killed and any captured output is logged
+    to aid troubleshooting.
+    """
+    try:
+        actual_output = subprocess.check_output(
+            args, stderr=subprocess.STDOUT, timeout=timeout).decode(SetupEncoding)
+    except subprocess.TimeoutExpired as e:
+        partial = (e.output or b'').decode(SetupEncoding, errors='replace')
+        logger.error('Command %s timed out after %ss. Partial output:\n%s',
+                     args, timeout, partial)
+        raise RuntimeError(f'Timeout running {args} after {timeout}s') from e
     if -1 == actual_output.find(expected_output):
         raise RuntimeError(
             f'When running command {args} expected output {expected_output} but got {actual_output}')
