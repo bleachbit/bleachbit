@@ -136,10 +136,10 @@ def assert_execute(args, expected_output, timeout=120):
         partial = (e.output or b'').decode(SetupEncoding, errors='replace')
         logger.error('Command %s timed out after %ss. Partial output:\n%s',
                      args, timeout, partial)
-        raise RuntimeError(f'Timeout running {args} after {timeout}s') from e
+        raise RuntimeError('Timeout running %s after %ss' % (args, timeout))
     if -1 == actual_output.find(expected_output):
         raise RuntimeError(
-            f'When running command {args} expected output {expected_output} but got {actual_output}')
+            'When running command %s expected output %s but got %s' % (args, expected_output, actual_output))
 
 
 def assert_execute_console():
