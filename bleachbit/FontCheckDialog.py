@@ -48,8 +48,8 @@ def create_font_check_dialog(parent=None):
     dialog = Gtk.Dialog(
         # TRANSLATORS: Title of the font check dialog
         title=_("Font check"),
-        parent=parent,
-        flags=Gtk.DialogFlags.MODAL,
+        transient_for=parent,
+        modal=True
     )
     dialog.set_border_width(12)
     dialog.set_resizable(False)
