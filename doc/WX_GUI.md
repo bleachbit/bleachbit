@@ -43,6 +43,7 @@ bleachbit/GUIwx/
     App.py                      # wx.App entry point
     MainFrame.py                # main window, tree, results table, log
     LoaderThread.py             # threads bleachbit.Cleaner.register_cleaners
+    PreferencesDialog.py        # minimal preferences dialog
     WorkerThread.py             # threads bleachbit.Worker.Worker
 ```
 
@@ -88,14 +89,64 @@ The right pane is a `wx.Notebook` with two tabs:
   - *Always skip this path (add to keep list)* — append the selected
     paths to `Options.whitelist_paths` (`folder` entry if the path is
     a directory, otherwise `file`).
-- **Log** — the original plain-text log.
+  - *Uncheck option: \<Cleaner\> — \<Option\>* — one entry per
+    distinct `(cleaner_id, option_id)` across the selection; toggles
+    the matching tree checkbox off and persists via `set_tree`.
+- **Log** — plain-text log.
+
+A filter bar above the notebook applies to both tabs:
+
+- Text box — case-insensitive substring match against the Cleaner,
+  Option, Path and Action columns in Results, and against each log
+  line in Log.
+- *Errors only* checkbox — hide result rows (which have no error
+  concept) and hide any log line whose tag is not `'error'`.  When
+  toggled on, the Log tab is automatically selected so the user sees
+  the filtered messages immediately.
+
+## Persistence and preferences
+
+- Checkbox state in the cleaner tree is persisted to
+  `Options.set_tree(cleaner_id, option_id, value)` on every change and
+  restored from `Options.get_tree()` when the tree is populated.  This
+  is the same `[tree]` section used by the GTK UI, so selections
+  carry across both front-ends.
+- `File → Preferences…` opens a minimal `PreferencesDialog` with
+  checkboxes for the options most users actually change in the GTK UI:
+  `delete_confirmation`, `shred`, `check_online_updates`, `debug`.
+
+## Shredding arbitrary files or folders
+
+`File → Shred files…` opens a multi-select `wx.FileDialog`.
+`File → Shred folders…` opens `wx.DirDialog` repeatedly until the user
+cancels, allowing multiple folders to be picked.  Both feed into the
+same path used by the GTK UI and CLI:
+
+```python
+Cleaner.backends['_gui'] = Cleaner.create_simple_cleaner(paths)
+self._start_worker(really_delete=True, operations={'_gui': ['files']})
+```
+
+When `delete_confirmation` is enabled (the default), a confirmation
+dialog is shown before shredding.
+
+## Aborting a long-running operation
+
+The **Abort** toolbar button sets `Worker.is_aborted = True`.  The
+worker generator checks that flag at every yield point, including the
+2-second yield inside `Wipe.wipe_path` used for `system.empty_space`,
+so pressing Abort during a free-space wipe causes the wipe to stop
+and clean up its temporary files at the next checkpoint (up to a
+couple of seconds later).  The temporary files have an `atexit` hook
+as a safety net even if the process is killed outright.
 
 ## Known MVP limitations
 
 - No expert mode / warning confirmation flow yet (warnings are just
   marked with `⚠` in the tree).
-- Preferences, whitelist editor, chaff, shred-files, and empty-space
-  wiping are not wired up.
+- Preferences dialog is intentionally minimal: no whitelist editor,
+  languages tab, drives selector, or per-cleaner options yet.
+- Chaff generator is not wired up.
 - No menu / keyboard shortcut coverage beyond Exit and About.
 - Not translated through the wx machinery yet (strings go through
   `bleachbit.Language.get_text`, but accelerators are missing).
