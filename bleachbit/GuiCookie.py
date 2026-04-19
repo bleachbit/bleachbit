@@ -38,7 +38,8 @@ from bleachbit.Language import get_text as _, nget_text as _n
 logger = logging.getLogger(__name__)
 
 
-COOKIE_DISCOVERY_WARN_THRESHOLD = 2.0  # seconds
+COOKIE_DISCOVERY_WARN_THRESHOLD = 15.0  # seconds
+COOKIE_DISCOVERY_DEBUG_THRESHOLD = 5.0  # seconds
 
 
 class CookieManagerPane(Gtk.Box):
@@ -313,6 +314,8 @@ class CookieManagerPane(Gtk.Box):
             duration = time.monotonic() - start
             if duration >= COOKIE_DISCOVERY_WARN_THRESHOLD:
                 logger.warning("Enumerating cookie hosts took %.2fs", duration)
+            elif duration >= COOKIE_DISCOVERY_DEBUG_THRESHOLD:
+                logger.debug("Enumerating cookie hosts took %.2fs", duration)
             GLib.idle_add(self._finish_populate, discovered)
 
         t = threading.Thread(target=_worker, daemon=True)
