@@ -113,7 +113,7 @@ def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
     if stop_mode == STOP_MODE_TOTAL_SIZE:
         target_bytes = stop_value * 1024 * 1024
 
-        def progress_cb(fraction, _generated_file_names=None, cumulative_size=0):
+        def progress_cb(fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
             if cumulative_size > 0:
                 on_progress(min(1.0, cumulative_size / target_bytes))
             else:
@@ -126,7 +126,7 @@ def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
         initial_usage = shutil.disk_usage(output_folder)
         initial_free_pct = 100.0 * initial_usage.free / initial_usage.total
 
-        def progress_cb(_fraction, _generated_file_names=None, _cumulative_size=0):  # pylint: disable=unused-argument
+        def progress_cb(_fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
             usage = shutil.disk_usage(output_folder)
             current_free_pct = 100.0 * usage.free / usage.total
             if initial_free_pct > target_free_pct:
