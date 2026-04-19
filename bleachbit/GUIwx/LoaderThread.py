@@ -20,7 +20,7 @@ import threading
 
 import wx
 
-from bleachbit.Cleaner import register_cleaners
+from bleachbit.Cleaner import backends, register_cleaners
 
 logger = logging.getLogger(__name__)
 
@@ -57,8 +57,40 @@ class LoaderThread(threading.Thread):
                 # Drain the generator; progress is delivered via the
                 # callback.  The yielded values are not meaningful here.
                 pass
+            # Compute the set of cleaner IDs that should be auto-hidden
+            # here on the background thread: Cleaner.auto_hide() can be
+            # slow because it invokes get_commands().execute(False),
+            # which walks globs and the filesystem.  Doing it here keeps
+            # the wx main thread responsive when _populate_tree runs.
+            wx.CallAfter(self._on_progress,
+                         'Detecting usable cleaners\u2026')
+            hidden = _compute_auto_hidden()
         except Exception as exc:  # pylint: disable=broad-except
             logger.exception('register_cleaners failed')
             wx.CallAfter(self._on_error, exc)
             return
-        wx.CallAfter(self._on_done)
+        wx.CallAfter(self._on_done, hidden)
+
+
+def _compute_auto_hidden():
+    """Return a ``set`` of cleaner IDs that have nothing to clean.
+
+    Mirrors the GTK behavior in
+    :meth:`bleachbit.GuiTreeModels.TreeInfoModel.refresh_rows`:
+    skip cleaners with no options at all, and hide those whose
+    ``auto_hide()`` reports they would do nothing on this system.
+    """
+    hidden = set()
+    for cid in list(backends):
+        if cid == '_gui':
+            continue
+        cleaner = backends[cid]
+        try:
+            if not any(cleaner.get_options()):
+                hidden.add(cid)
+                continue
+            if cleaner.auto_hide():
+                hidden.add(cid)
+        except Exception:  # pylint: disable=broad-except
+            logger.exception('auto_hide probe failed for %s', cid)
+    return hidden
