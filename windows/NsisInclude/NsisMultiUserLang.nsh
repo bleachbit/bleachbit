@@ -2278,7 +2278,7 @@ Version: 2023-02-223
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SWEDISH} "Skapa en genväg på skrivbordet."
 	LangString SECTION_DESKTOP_NAME ${LANG_SWEDISH} "Skrivbord"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_SWEDISH} "Lägg till ett alternativ för att ta bort filer från filmenyn i Windows Utforskaren."
-	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_SWEDISH} "Integrera förstör"
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_SWEDISH} "Integrera säkerhetsradera"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_SWEDISH} "Skapa en genväg i snabbstartsfältet."
 	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_SWEDISH} "Snabbstart"
 	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_SWEDISH} "Skapa genvägar till ${prodname}"
@@ -2290,7 +2290,7 @@ Version: 2023-02-223
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_SWEDISH} "Lägg till ett avinstallationsprogram."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SWEDISH} "${prodname} felsökningsterminal"
 	LangString SHORTCUT_NO_UAC ${LANG_SWEDISH} "${prodname} (inget användargränssnitt)."
-	LangString SHRED_SHELL_MENU ${LANG_SWEDISH} "Förstör med ${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_SWEDISH} "Säkerhetsradera med ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_SWEDISH} "Välj en skrivbar mapp för varje disk vars lediga utrymme ska städas."
 !endif
 
