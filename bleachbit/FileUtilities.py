@@ -854,13 +854,15 @@ def same_partition(dir1, dir2):
     if 'nt' == os.name:
         try:
             return free_space(dir1) == free_space(dir2)
-        except pywinerror as e:
-            if 5 == e.winerror:
-                # Microsoft Office 2010 Starter Edition has a virtual
-                # drive that gives access denied
-                # https://bugs.launchpad.net/bleachbit/+bug/1372179
-                # https://bugs.launchpad.net/bleachbit/+bug/1474848
-                # https://github.com/az0/bleachbit/issues/27
+        except OSError as e:
+            # psutil.disk_usage() raises OSError (with .winerror on Windows).
+            # 5 = access denied: Microsoft Office 2010 Starter Edition has a
+            #     virtual drive that gives access denied.
+            #     https://bugs.launchpad.net/bleachbit/+bug/1372179
+            #     https://bugs.launchpad.net/bleachbit/+bug/1474848
+            #     https://github.com/az0/bleachbit/issues/27
+            # 1326 = logon failure: disconnected network drive.
+            if getattr(e, 'winerror', None) in (5, 1326):
                 return dir1[0] == dir2[0]
             raise
     # pylint: disable=no-member
