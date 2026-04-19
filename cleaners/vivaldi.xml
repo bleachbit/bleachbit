@@ -81,7 +81,6 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$profile$$/Top Sites"/>
     <action command="delete" search="file" path="$$profile$$/Visited Links"/>
     <action command="delete" search="walk.files" path="$$profile$$/VivaldiThumbnails"/>
-    <action command="json" search="file" path="$$profile$$/Preferences" address="savefile"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="prefetch/search_prefetch/cache"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="zerosuggest/cachedresults"/>
     <action command="json" search="file" path="$$profile$$/Preferences" address="zerosuggest/cachedresults_with_url"/>
