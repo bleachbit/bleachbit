@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-04-05 14:48-0600\n"
-"PO-Revision-Date: 2026-04-07 15:09+0000\n"
+"PO-Revision-Date: 2026-04-19 15:05+0000\n"
 "Last-Translator: Mona Lisa <nickwick@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/bleachbit/main/"
 "sv/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 "X-Launchpad-Export-Date: 2022-01-23 20:20+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -701,15 +701,15 @@ msgstr "Städa filer som är utspridda över disken"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
-msgstr "Granska förhandsvisning för filer du vill behålla."
+msgstr "Granska förhandsvisningen för filer du vill behålla."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
-msgstr "VIM swap-filer under användarprofil"
+msgstr "VIM växlingsutrymmets filer under användarprofil"
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files across system"
-msgstr "VIM swap-filer över system"
+msgstr "VIM växlingsutrymmets filer över system"
 
 #: ../cleaners/gedit.xml ../cleaners/vim.xml
 msgid "Editor"
@@ -835,10 +835,10 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
-"BleachBit frigör diskutrymme och bibehåller integriteten genom att snabbt ta "
+"BleachBit frigör diskutrymme och skyddar integriteten genom att snabbt ta "
 "bort onödiga filer som cache, kakor, webbhistorik, tillfälliga filer och "
-"systemloggar. Det kan också förstöra filer och frigöra diskutrymme för att "
-"förhindra dataåterställning."
+"systemloggar. Det kan också säkerhetsradera filer och rensa ledigt "
+"diskutrymme för att förhindra dataåterställning."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
@@ -1084,7 +1084,7 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_NAME"
 msgid "Integrate Shred"
-msgstr "Integrera förstör"
+msgstr "Integrera säkerhetsradera"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
@@ -1154,7 +1154,7 @@ msgstr "${prodname} (inget användargränssnitt)."
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHRED_SHELL_MENU"
 msgid "Shred with ${prodname}"
-msgstr "Förstör med ${prodname}"
+msgstr "Säkerhetsradera med ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:UNINSTALL_TEXT"
@@ -1248,7 +1248,7 @@ msgstr "Fel vid läsning av städaren: %s"
 #. http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
 #: ../bleachbit/Cleaner.py
 msgid "Broken desktop files"
-msgstr "Trasiga skrivbordsfiler"
+msgstr "Felaktiga skrivbordsfiler"
 
 #: ../bleachbit/Cleaner.py
 msgid "Delete broken application menu entries and file associations"
@@ -1291,7 +1291,7 @@ msgstr "Minne"
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Wipe the swap and free memory"
-msgstr "Städa swappen och ledigt minne"
+msgstr "Rensa växlingsutrymmet och ledigt minne"
 
 #: ../bleachbit/Cleaner.py
 msgid "This option is experimental and may cause system problems."
@@ -1443,7 +1443,7 @@ msgstr "kör städare för att ta bort filer och göra andra permanenta ändring
 #. and 'shred' is a verb
 #: ../bleachbit/CLI.py
 msgid "shred specific files or folders"
-msgstr "förstör specifika filer eller mappar"
+msgstr "Säkerhetsradera specifika filer eller mappar"
 
 #. TRANSLATORS: Help for the --wipe-empty-space
 #. command on the CLI, and 'wipe' is a verb
@@ -1609,8 +1609,8 @@ msgid ""
 "frequent use contributes to wear."
 msgstr ""
 "Att städa tomt utrymme tar bort spår av filer som togs bort utan att "
-"förstöring, men det frigör inte ytterligare diskutrymme. Processen kan ta "
-"mycket lång tid och kan tillfälligt göra datorn långsammare. Det är inte "
+"säkerhetsradera, men det frigör inte ytterligare diskutrymme. Processen kan "
+"ta mycket lång tid och kan tillfälligt göra datorn långsammare. Det är inte "
 "nödvändigt om din enhet är skyddad med fullständig diskkryptering. Metoden "
 "fungerar bäst på traditionella hårddiskar. På SSD-diskar är den mindre "
 "tillförlitlig och frekvent användning bidrar till slitage."
@@ -1686,12 +1686,12 @@ msgstr "Ser all text i det här fönstret okej ut?"
 #. TRANSLATORS: Title of a file chooser dialog.
 #: ../bleachbit/GuiApplication.py
 msgid "Choose files to shred"
-msgstr "Välj filer som ska förstöras"
+msgstr "Välj filer som ska säkerhetsraderas"
 
 #. TRANSLATORS: Title of a folder chooser dialog.
 #: ../bleachbit/GuiApplication.py
 msgid "Choose folder to shred"
-msgstr "Välj mapp som ska förstöras"
+msgstr "Välj mapp som ska säkerhetsraderas"
 
 #. TRANSLATORS: Button label in a folder chooser dialog.
 #. TRANSLATORS: Label for the Delete button in the file choose dialog
@@ -1946,7 +1946,7 @@ msgstr "När det är klart"
 #. files without shredding them.
 #: ../bleachbit/GuiChaff.py
 msgid "Delete without shredding"
-msgstr "Ta bort utan att förstöra"
+msgstr "Ta bort utan att säkerhetsradera"
 
 #. TRANSLATORS: Option in combo box to keep generated chaff files.
 #: ../bleachbit/GuiChaff.py
@@ -2259,7 +2259,7 @@ msgstr "Integration och avancerat"
 #. 'KDE Plasma' is a Linux desktop environment (proper noun, do not translate).
 #: ../bleachbit/GuiPreferences.py
 msgid "Add the shred context menu to KDE Plasma"
-msgstr "Lägg till förstör-snabbmenyn till KDE Plasma"
+msgstr "Lägg till säkerhetsradera-snabbmenyn till KDE Plasma"
 
 #. TRANSLATORS: Checkbox label to show diagnostic log messages for
 #. troubleshooting.
@@ -2620,15 +2620,15 @@ msgid ""
 "information."
 msgstr ""
 "Kommandot \"swapoff -s\" misslyckades, så faller tillbaka till /proc/swaps "
-"för swap-information."
+"för växlingsutrymmets information."
 
 #: ../bleachbit/Memory.py
 msgid "Disabling swap."
-msgstr "Inaktiverar swap."
+msgstr "Inaktiverar växlingsutrymmet."
 
 #: ../bleachbit/Memory.py
 msgid "Re-enabling swap."
-msgstr "Återaktiverar swap."
+msgstr "Återaktiverar växlingsutrymmet."
 
 #: ../bleachbit/Memory.py
 #, python-format
@@ -2661,7 +2661,7 @@ msgstr "Frigör %s minne."
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Found UUID for swap device %(device)s is %(uuid)s."
-msgstr "Hittat UUID för swap-enheten %(device)s är %(uuid)s."
+msgstr "Hittat UUID för växlingsutrymmesenheten %(device)s är %(uuid)s."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2673,19 +2673,19 @@ msgstr "Fysiskt ledigt minne är %s."
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Wiping the swap device %s."
-msgstr "Städar swap-enheten %s."
+msgstr "Städar växlingsutrymmesenheten %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Reinitializing the swap device %s."
-msgstr "Återinitierar swap-enheten %s."
+msgstr "Återinitierar växlingsutrymmesenheten %s."
 
 #. TRANSLATORS: The variable is a device like /dev/sda2
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Detected these swap devices: %s"
-msgstr "Detekterade de här swap-enheterna: %s"
+msgstr "Detekterade de här växlingsutrymmesenheterna: %s"
 
 #. TRANSLATORS: This is a debugging message that the parent process
 #. is waiting for the child process. %(parent_pid)d is the parent
@@ -2731,7 +2731,7 @@ msgstr "Bevara automatiskt språk %s."
 
 #: ../bleachbit/Options.py
 msgid "Error when setting the default drives to shred."
-msgstr "Fel när standardenheter för förstöring skulle anges."
+msgstr "Fel när standardenheter att säkerhetsradera skulle anges."
 
 #. TRANSLATORS: Warning shown when user tries to add a protected path.
 #. %(path)s is the path, %(files)d is number of files, %(size)s is human-readable size
@@ -3059,7 +3059,7 @@ msgstr "Vänta.  Förhandsgranskar %s."
 
 #: ../share/app-menu.ui
 msgid "_Shred Files"
-msgstr "_Förstör filer"
+msgstr "_Säkerhetsradera filer"
 
 #: ../share/app-menu.ui
 msgid "Sh_red Folders"
@@ -3067,7 +3067,7 @@ msgstr "F_örstör mappar"
 
 #: ../share/app-menu.ui
 msgid "Shred Paths from Clipboard"
-msgstr "Förstör sökvägar från urklipp"
+msgstr "Säkerhetsradera sökvägar från urklipp"
 
 #: ../share/app-menu.ui
 msgid "_Wipe Empty Space"
