@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-04-05 14:48-0600\n"
-"PO-Revision-Date: 2026-01-25 09:44+0000\n"
+"PO-Revision-Date: 2026-04-19 14:50+0000\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/bleachbit/main/"
 "fi/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 "X-Launchpad-Export-Date: 2021-12-02 04:08+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -295,7 +295,7 @@ msgstr "Istunto"
 #: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Previously open tabs and windows"
-msgstr ""
+msgstr "Aiemmin avoinna olleet välilehdet ja ikkunat"
 
 #. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
@@ -304,7 +304,7 @@ msgstr ""
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Site data"
-msgstr ""
+msgstr "Sivustodata"
 
 #. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
@@ -313,7 +313,7 @@ msgstr ""
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
-msgstr ""
+msgstr "Poista LocalStorage, IndexedDB ja muut verkkosivustojen tallentama data"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -662,7 +662,7 @@ msgstr "Istunnon palautus"
 
 #: ../cleaners/thunderbird.xml
 msgid "Restores the previous session when the browser next starts"
-msgstr ""
+msgstr "Palauttaa aiemman istunnon kun selain käynnistyy"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -873,9 +873,6 @@ msgstr ""
 "päivityksen."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
-#| msgid "Visit the ${prodname} web site"
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
 msgid "Visit the ${prodname} website"
 msgstr "Vieraile ${prodname}in verkkosivustolla"
@@ -900,10 +897,6 @@ msgstr ""
 "mustan ikkunan."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIPRINT2"
-#| msgid ""
-#| "It usually finishes in one minute, but sometimes it takes ten minutes."
 msgctxt "nsis:MULTIPRINT2"
 msgid ""
 "It usually finishes in one minute, but sometimes it takes up to ten minutes."
@@ -912,11 +905,6 @@ msgstr ""
 "minuuttia."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
-#| msgid ""
-#| "You need to login with an account that is a member of the administrators "
-#| "group to continue."
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
 msgid ""
 "You need to log in with an account that is a member of the administrators "
@@ -933,9 +921,6 @@ msgstr "Järjestelmänvalvojan käyttöoikeudet vaaditaan."
 
 #. TRANSLATORS: Message shown on the installation mode page description when admin rights are needed to uninstall.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
-#| msgid "Administrator credentials required for uninstall."
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required to uninstall."
 msgstr ""
@@ -990,9 +975,6 @@ msgstr ""
 
 #. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
-#| msgid "Version {VERSION} is installed for current user in \"{FOLDER}\"."
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
 msgstr ""
@@ -1000,10 +982,6 @@ msgstr ""
 "\"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
-#| msgid ""
-#| "Select whether to install $(^NameDA) for all users or for current user."
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
 msgid ""
 "Select whether to install $(^NameDA) for all users or for the current user."
@@ -1017,9 +995,6 @@ msgid "Choose for which users to install $(^NameDA)."
 msgstr "Valitse, kenelle kaikille käyttäjille $(^NameDA) asennetaan."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
-#| msgid "Invalid combination of paramaters."
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
 msgid "Invalid combination of parameters."
 msgstr "Virheellinen yhdistelmä parametrejä."
@@ -1030,17 +1005,11 @@ msgid "Unable to elevate, Secondary Logon service not running."
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
-#| msgid "Fresh install for all users."
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
 msgid "Fresh installation for all users."
 msgstr "Puhdas asennus kaikille käyttäjille."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
-#| msgid "Fresh install for current user."
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
 msgid "Fresh installation for the current user."
 msgstr "Puhdas asennus nykyiselle käyttäjälle."
@@ -1065,11 +1034,6 @@ msgstr ""
 "käyttäjille."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
-#| msgid ""
-#| "Uninstall version {OLD_VERSION} and install version {VERSION} for current "
-#| "user."
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
 msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for the "
@@ -1084,34 +1048,24 @@ msgid "Reinstall version {VERSION} for all users."
 msgstr "Asenna uudelleen versio {VERSION} kaikille käyttäjille."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
-#| msgid "Reinstall version {VERSION} for current user."
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
 msgid "Reinstall version {VERSION} for the current user."
 msgstr "Asenna uudelleen versio {VERSION} nykyiselle käyttäjälle."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
-#| msgid "You need to run this program as administrator."
 msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
 msgid "You need to run this program as an administrator."
 msgstr "Tämä ohjelma tulee suorittaa järjestelmävalvojana."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
-#| msgid ""
-#| "$(^NameDA) is installed both for all users and for current user.$\\r$"
-#| "\\nSelect which installation to remove."
 msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
 msgid ""
 "$(^NameDA) is installed both for all users and for the current user.\n"
 "Select which installation to remove."
 msgstr ""
 "$(^NameDA) on asennettu sekä kaikille käyttäjille että nykyiselle "
-"käyttäjälle.$\\r$\\nValitse poistettava asennus."
+"käyttäjälle.\n"
+"Valitse poistettava asennus."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_PAGE_SUBTITLE"
@@ -1130,9 +1084,6 @@ msgid "Core files (required)"
 msgstr "Keskeisimmät tiedostot (vaaditaan)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
-#| msgid "Create the shortcut on desktop."
 msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
 msgid "Create a shortcut on the desktop."
 msgstr "Luo pikakuvake työpöydälle."
@@ -1144,11 +1095,6 @@ msgid "Desktop"
 msgstr "Työpöytä"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
-#| msgid ""
-#| "Add an option to delete files from the file context menu in Windows "
-#| "explorer."
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
 msgid ""
 "Add an option to delete files from the file context menu in Windows Explorer."
@@ -1162,40 +1108,28 @@ msgid "Integrate Shred"
 msgstr ""
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
-#| msgid "Create the shortcut on Quick Launch."
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
 msgid "Create a shortcut on the Quick Launch bar."
 msgstr "Luo pikakuvake pikakäynnistykseen."
 
 #. TRANSLATORS: Name of the quick launch section in the Windows installer: quick launch is a toolbar in the Windows taskbar that allows users to quickly access frequently used programs.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
-#| msgid "Quick launch"
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
 msgid "Quick Launch"
 msgstr "Pikakäynnistys"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
-#| msgid "Create the shortcut on desktop."
 msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
 msgid "Create shortcuts to ${prodname}"
-msgstr "Luo pikakuvake työpöydälle."
+msgstr "Luo pikakuvake ${prodname}iin"
 
 #. TRANSLATORS: Name of the shortcuts section in the Windows installer: user selects which shortcuts to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_NAME"
 msgid "Shortcuts"
-msgstr ""
+msgstr "Pikakuvakkeet"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
-#| msgid "Create the shortcut in Start menu."
 msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
 msgid "Create a shortcut in the Start menu."
 msgstr "Luo pikakuvake Käynnistä-valikkoon."
@@ -1210,7 +1144,7 @@ msgstr "Käynnistä-valikko"
 msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
 msgid ""
 "Install language files to use ${prodname} in your preferred local language."
-msgstr ""
+msgstr "Asenna kielitiedostot käyttääksesi ${prodname}iä suosimallasi kielellä."
 
 #. TRANSLATORS: Name of the translations section in the Windows installer: user selects which translations to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1236,13 +1170,13 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_NO_UAC"
 msgid "${prodname} (No UAC)."
-msgstr ""
+msgstr "${prodname} (Ei UAC:tä)."
 
 #. TRANSLATORS: Context menu item in Windows Explorer for securely shredding files.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHRED_SHELL_MENU"
 msgid "Shred with ${prodname}"
-msgstr ""
+msgstr "Silppua ${prodname}illä"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:UNINSTALL_TEXT"
@@ -1720,7 +1654,7 @@ msgstr ""
 #. Expert mode is an option in the preferences to relax guardrails.
 #: ../bleachbit/Constant.py
 msgid "This option requires expert mode. Enable it in Preferences."
-msgstr ""
+msgstr "Tämä asetus vaatii asiantuntijatilan. Ota se käyttöön asetuksissa."
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -1756,33 +1690,33 @@ msgstr "Ympäristömuuttuja TMP viittaa hakemistoon jota ei ole olemassa: %s"
 #. TRANSLATORS: Title of the font check dialog
 #: ../bleachbit/FontCheckDialog.py
 msgid "Font check"
-msgstr ""
+msgstr "Fonttitarkistus"
 
 #. TRANSLATORS: Button label in the font check dialog
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is okay"
-msgstr ""
+msgstr "Teksti on kelvollista"
 
 #. TRANSLATORS: Button label in the font check dialog. This is one of
 #. three buttons the user can click to report how the text appears.
 #. The user clicks this if the text is readable but appears fuzzy.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is blurry"
-msgstr ""
+msgstr "Teksti on sumeaa"
 
 #. TRANSLATORS: Button label in the font check dialog in case the font
 #. looks like an alien language. This is one of three buttons the user
 #. can click to report how the text appears.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is unrecognizable"
-msgstr ""
+msgstr "Teksti ei ole tunnistettavissa"
 
 #. TRANSLATORS: Question shown in the font check dialog displayed
 #. on startup on Windows. There are bugs that for some users the
 #. font is blurry or resembles an alien language.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Does all the text in this window look okay?"
-msgstr ""
+msgstr "Näyttääkö kaikki tämän ikkunan teksti kelvolliselta?"
 
 #. TRANSLATORS: Title of a file chooser dialog.
 #: ../bleachbit/GuiApplication.py
@@ -1861,7 +1795,7 @@ msgstr "Järjestelmätiedot"
 #. replace the username with a placeholder.
 #: ../bleachbit/GuiApplication.py
 msgid "Anonymize"
-msgstr ""
+msgstr "Anonymisoi"
 
 #. TRANSLATORS: Label for the Cancel button in several dialog windows:
 #. file chooser, folder choose, delete confirmation, and warning dialogs.
@@ -1924,7 +1858,7 @@ msgstr "Pyydä vahvistus ennen poistamista"
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Enable %(option)s"
-msgstr ""
+msgstr "Ota käyttöön %(option)s"
 
 #. TRANSLATORS: Check button label. %(option)s is the name of
 #. the option being enabled (e.g. "shred files").
@@ -2123,6 +2057,8 @@ msgid ""
 "Only cookies are preserved. Site data is always deleted. <a "
 "href='{url}'>Learn more</a>"
 msgstr ""
+"Vain evästeet säästetään. Sivustodata poistetaan aina. <a href='{url}'>Lue "
+"lisää</a>"
 
 #. TRANSLATORS: Label for the search entry in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
@@ -2184,16 +2120,14 @@ msgstr ""
 #. to bypass some safety guardails for advanced users and (2) the title of
 #. dialog asking to confirm this choice.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Dark mode"
 msgid "Expert mode"
-msgstr "Tumma tila"
+msgstr "Asiantuntijatila"
 
 #. TRANSLATORS: Notice shown in an infobar after changing a preference
 #. that requires starting the application to be effective.
 #: ../bleachbit/GuiPreferences.py
 msgid "Restart BleachBit for full effect."
-msgstr ""
+msgstr "Käynnistä BleachBit uudelleen, jotta kaikki muutokset tulevat voimaan."
 
 #. TRANSLATORS: Title for the preferences dialog
 #: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
@@ -2222,7 +2156,7 @@ msgstr "Kielet"
 #. (not deleted) during cleaning.
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
-msgstr ""
+msgstr "Säilytyslista"
 
 #. TRANSLATORS: Sidebar label for the drives page of the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2233,7 +2167,7 @@ msgstr "Levyt"
 #. dark mode on Linux.
 #: ../bleachbit/GuiPreferences.py
 msgid "Some GTK themes do not support both light and dark modes."
-msgstr ""
+msgstr "Jotkin GTK-teemat eivät tue sekä vaaleaa että tummaa tilaa."
 
 #. TRANSLATORS: Success message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
@@ -2328,18 +2262,14 @@ msgstr "Päivitä versioon %s"
 #. TRANSLATORS: Section title (noun) on the Preferences - General page
 #. for options related to cleaning stored data.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Clean"
 msgid "Cleaning"
-msgstr "Puhdista"
+msgstr "Puhdistus"
 
 #. TRANSLATORS: Section title in Preferences for user interface options
 #. such as dark mode and window behavior.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Internet"
 msgid "Interface"
-msgstr "Internet"
+msgstr "Käyttöliittymä"
 
 #. TRANSLATORS: Checkbox label to remember the window size and position
 #. between application launches.
@@ -2374,7 +2304,7 @@ msgstr ""
 #. labelling options for OS integration and advanced/developer features.
 #: ../bleachbit/GuiPreferences.py
 msgid "Integration and advanced"
-msgstr ""
+msgstr "Integraatio ja lisäasetukset"
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #. 'Shred' means securely delete a file to prevent data recovery.
@@ -2421,18 +2351,18 @@ msgstr "Poista"
 #. TRANSLATORS: Section title on the preferences languages page.
 #: ../bleachbit/GuiPreferences.py
 msgid "BleachBit interface language"
-msgstr ""
+msgstr "BleachBit-käyttöliittymän kieli"
 
 #. TRANSLATORS: Section title on the preferences languages page.
 #: ../bleachbit/GuiPreferences.py
 msgid "Language files to keep when cleaning applications"
-msgstr ""
+msgstr "Sovellusten siivoamisen yhteydessä säilytettävät kielitiedostot"
 
 #. TRANSLATORS: Column header in the languages treeview.
 #. This column controls whether to keep the language.
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep"
-msgstr ""
+msgstr "Säilytä"
 
 #. TRANSLATORS: Column header in the languages treeview showing the
 #. language code (e.g., 'en_US').
@@ -2465,6 +2395,8 @@ msgstr "Tämä polku on jo olemassa mukautetussa listassa."
 #: ../bleachbit/GuiPreferences.py
 msgid "This path is protected. To bypass protection, enable expert mode."
 msgstr ""
+"Tämä polku on suojattu. Ota asiantuntijatila käyttöön ohittaaksesi "
+"suojauksen."
 
 #. TRANSLATORS: Title of warning dialog shown when adding a protected path.
 #: ../bleachbit/GuiPreferences.py
@@ -2617,6 +2549,8 @@ msgstr "Koko"
 #: ../bleachbit/GuiTreeModels.py
 msgid "This option is protected. To bypass protection, enable expert mode."
 msgstr ""
+"Tämä asetus on suojattu. Ota asiantuntijatila käyttöön ohittaaksesi "
+"suojauksen."
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
