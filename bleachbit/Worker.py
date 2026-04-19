@@ -155,6 +155,13 @@ class Worker:
                 # the label may be a hidden operation
                 # (e.g., win.shell.change.notify)
                 self.ui.append_text(line)
+                # Optional structured-row hook for UIs that want a table
+                # view instead of (or in addition to) the plain-text log.
+                # The GTK UI does not implement this method; ignored there.
+                append_row = getattr(self.ui, 'append_row', None)
+                if append_row is not None:
+                    append_row(operation_option, ret['label'],
+                               ret['size'], ret['path'])
 
     def clean_operation(self, operation):
         """Perform a single cleaning operation"""

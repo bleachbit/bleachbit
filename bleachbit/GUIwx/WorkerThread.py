@@ -46,6 +46,7 @@ class WxUIProxy:
 
     _FORWARDED = (
         'append_text',
+        'append_row',
         'update_progress_bar',
         'update_total_size',
         'update_item_size',

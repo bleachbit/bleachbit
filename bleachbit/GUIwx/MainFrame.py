@@ -10,6 +10,8 @@ Main window for the experimental wxPython GUI (MVP).
 
 import logging
 import os
+import subprocess
+import sys
 
 import wx
 from wx.lib.agw.customtreectrl import (
@@ -21,25 +23,22 @@ from wx.lib.agw.customtreectrl import (
 )
 
 from bleachbit import APP_NAME, APP_VERSION, FileUtilities
-from bleachbit.Cleaner import backends, register_cleaners
+from bleachbit.Cleaner import backends
 from bleachbit.Language import get_text as _
+from bleachbit.Options import options
 
+from bleachbit.GUIwx.LoaderThread import LoaderThread
 from bleachbit.GUIwx.WorkerThread import WorkerThread
 
 logger = logging.getLogger(__name__)
 
 
-# Custom wx event for "cleaners are loaded" so work happens on the main
-# thread even though register_cleaners() might be driven asynchronously
-# in a future iteration.
-CLEANERS_LOADED_EVT = wx.NewEventType()
-EVT_CLEANERS_LOADED = wx.PyEventBinder(CLEANERS_LOADED_EVT, 0)
-
-
-class _CleanersLoadedEvent(wx.PyEvent):
-    def __init__(self):
-        super().__init__()
-        self.SetEventType(CLEANERS_LOADED_EVT)
+# Results ListCtrl columns.
+COL_CLEANER = 0
+COL_OPTION = 1
+COL_PATH = 2
+COL_SIZE = 3
+COL_ACTION = 4
 
 
 class MainFrame(wx.Frame):
@@ -53,11 +52,14 @@ class MainFrame(wx.Frame):
         # Per-(cleaner, option) size tracking.  Key '-1' means total.
         self._item_map = {}  # (cleaner_id, option_id) -> TreeItemId
         self._worker_thread = None
+        self._loader_thread = None
+        # Raw byte sizes keyed by results row index, so sorting by size
+        # is numeric even though the visible column is humanised.
+        self._row_sizes = []
 
         self._build_ui()
         self._build_menu()
 
-        self.Bind(EVT_CLEANERS_LOADED, self._on_cleaners_loaded)
         self.Bind(wx.EVT_CLOSE, self._on_close)
 
         # Kick off cleaner registration after the window is shown.
@@ -108,14 +110,36 @@ class MainFrame(wx.Frame):
 
         right = wx.Panel(splitter)
         right_sizer = wx.BoxSizer(wx.VERTICAL)
+
+        self.notebook = wx.Notebook(right)
+
+        # Results tab ---------------------------------------------------
+        self.results = wx.ListCtrl(
+            self.notebook,
+            style=wx.LC_REPORT | wx.BORDER_SUNKEN,
+        )
+        self.results.InsertColumn(COL_CLEANER, _('Cleaner'), width=120)
+        self.results.InsertColumn(COL_OPTION, _('Option'), width=120)
+        self.results.InsertColumn(COL_PATH, _('Path'), width=360)
+        self.results.InsertColumn(
+            COL_SIZE, _('Size'), format=wx.LIST_FORMAT_RIGHT, width=90)
+        self.results.InsertColumn(COL_ACTION, _('Action'), width=100)
+        self.results.Bind(
+            wx.EVT_LIST_ITEM_RIGHT_CLICK, self._on_result_context_menu)
+        self.results.Bind(wx.EVT_LIST_COL_CLICK, self._on_result_col_click)
+        self.notebook.AddPage(self.results, _('Results'))
+
+        # Log tab -------------------------------------------------------
         self.log = wx.TextCtrl(
-            right,
+            self.notebook,
             style=wx.TE_MULTILINE | wx.TE_READONLY
             | wx.TE_DONTWRAP | wx.HSCROLL,
         )
         font = wx.Font(wx.FontInfo(10).Family(wx.FONTFAMILY_TELETYPE))
         self.log.SetFont(font)
-        right_sizer.Add(self.log, 1, wx.EXPAND | wx.ALL, 2)
+        self.notebook.AddPage(self.log, _('Log'))
+
+        right_sizer.Add(self.notebook, 1, wx.EXPAND | wx.ALL, 2)
         right.SetSizer(right_sizer)
 
         splitter.SplitVertically(self.tree, right, 320)
@@ -150,32 +174,39 @@ class MainFrame(wx.Frame):
         self.SetMenuBar(mb)
 
     # ------------------------------------------------------------------
-    # Cleaner registration
+    # Cleaner registration (async)
     # ------------------------------------------------------------------
     def _load_cleaners(self):
         self.SetStatusText(_('Loading cleaners\u2026'))
         self.gauge.Pulse()
-        # For MVP, drain the generator synchronously.  This matches the
-        # CLI path.  It is fast on Linux; slower on Windows because of
-        # Winapp2, which we can move to a thread later.
-        try:
-            list(register_cleaners(
-                cb_progress=lambda msg: None,
-                cb_done=lambda: None,
-            ))
-        except Exception:
-            logger.exception('register_cleaners failed')
-            wx.MessageBox(
-                _('Failed to load cleaners.  See log for details.'),
-                APP_NAME, wx.ICON_ERROR)
-            return
-        wx.PostEvent(self, _CleanersLoadedEvent())
+        # Disable action buttons until registration finishes.
+        self.btn_preview.Disable()
+        self.btn_clean.Disable()
+        self._loader_thread = LoaderThread(
+            on_progress=self._on_loader_progress,
+            on_done=self._on_loader_done,
+            on_error=self._on_loader_error,
+        )
+        self._loader_thread.start()
 
-    def _on_cleaners_loaded(self, _evt):
+    def _on_loader_progress(self, msg):
+        self.SetStatusText(msg)
+
+    def _on_loader_done(self):
+        self._loader_thread = None
         self.gauge.SetValue(0)
         self._populate_tree()
+        self.btn_preview.Enable()
+        self.btn_clean.Enable()
         self.SetStatusText(
             _('%d cleaners loaded.') % len(backends))
+
+    def _on_loader_error(self, _exc):
+        self._loader_thread = None
+        self.gauge.SetValue(0)
+        wx.MessageBox(
+            _('Failed to load cleaners.  See log for details.'),
+            APP_NAME, wx.ICON_ERROR)
 
     def _populate_tree(self):
         self.tree.DeleteChildren(self._root)
@@ -300,13 +331,19 @@ class MainFrame(wx.Frame):
             self._no_selection()
             return
         self.log.SetValue('')
+        self._clear_results()
         self.gauge.SetValue(0)
         self.status.SetLabel('')
         self.btn_preview.Disable()
         self.btn_clean.Disable()
         self.btn_abort.Enable()
+        self._current_really_delete = really_delete
         self._worker_thread = WorkerThread(self, really_delete, operations)
         self._worker_thread.start()
+
+    def _clear_results(self):
+        self.results.DeleteAllItems()
+        self._row_sizes = []
 
     # ------------------------------------------------------------------
     # Worker UI callbacks (invoked on main thread via WxUIProxy)
@@ -316,6 +353,39 @@ class MainFrame(wx.Frame):
             # No rich formatting yet; prefix.
             msg = '[!] ' + msg
         self.log.AppendText(msg)
+
+    def append_row(self, operation_option, label, size, path):
+        """Add one structured result row (called via WxUIProxy).
+
+        ``operation_option`` is 'operation.option_id' as passed to
+        :meth:`bleachbit.Worker.Worker.execute`.  ``label`` is the
+        action label ('delete', 'shred', 'truncate', ...).
+        """
+        if '.' in operation_option:
+            op_id, opt_id = operation_option.split('.', 1)
+        else:
+            op_id, opt_id = operation_option, ''
+        cleaner = backends.get(op_id)
+        cleaner_name = cleaner.get_name() if cleaner else op_id
+        option_name = opt_id
+        if cleaner:
+            for o_id, o_name in cleaner.get_options():
+                if o_id == opt_id:
+                    option_name = o_name
+                    break
+        if isinstance(size, int):
+            human_size = FileUtilities.bytes_to_human(size)
+            size_sort = size
+        else:
+            human_size = '?'
+            size_sort = -1
+        idx = self.results.InsertItem(
+            self.results.GetItemCount(), cleaner_name)
+        self.results.SetItem(idx, COL_OPTION, option_name)
+        self.results.SetItem(idx, COL_PATH, path or '')
+        self.results.SetItem(idx, COL_SIZE, human_size)
+        self.results.SetItem(idx, COL_ACTION, label or '')
+        self._row_sizes.append(size_sort)
 
     def update_progress_bar(self, value):
         if isinstance(value, str):
@@ -364,6 +434,132 @@ class MainFrame(wx.Frame):
             done_msg = _('Aborted.')
         else:
             done_msg = _('Done.')
-        self.status.SetLabel(done_msg)
+        # Append summary to status bar.
+        n_rows = self.results.GetItemCount()
+        if really_delete:
+            summary = _('%s\u2003Deleted %d items.') % (done_msg, n_rows)
+        else:
+            summary = _('%s\u2003%d items in preview.') % (done_msg, n_rows)
+        self.status.SetLabel(summary)
         self.SetStatusText(done_msg)
         self._worker_thread = None
+
+    # ------------------------------------------------------------------
+    # Results context menu
+    # ------------------------------------------------------------------
+    def _selected_paths(self):
+        paths = []
+        idx = self.results.GetFirstSelected()
+        while idx != -1:
+            paths.append(self.results.GetItemText(idx, COL_PATH))
+            idx = self.results.GetNextSelected(idx)
+        return [p for p in paths if p]
+
+    def _on_result_context_menu(self, _evt):
+        paths = self._selected_paths()
+        if not paths:
+            return
+        menu = wx.Menu()
+        item_copy = menu.Append(wx.ID_ANY, _('Copy path'))
+        item_open = menu.Append(wx.ID_ANY, _('Open file location'))
+        item_skip = menu.Append(
+            wx.ID_ANY, _('Always skip this path (add to keep list)'))
+        self.Bind(wx.EVT_MENU,
+                  lambda _e: self._copy_paths(paths), item_copy)
+        self.Bind(wx.EVT_MENU,
+                  lambda _e: self._open_locations(paths), item_open)
+        self.Bind(wx.EVT_MENU,
+                  lambda _e: self._whitelist_paths(paths), item_skip)
+        self.results.PopupMenu(menu)
+        menu.Destroy()
+
+    def _copy_paths(self, paths):
+        if not wx.TheClipboard.Open():
+            return
+        try:
+            wx.TheClipboard.SetData(
+                wx.TextDataObject('\n'.join(paths)))
+        finally:
+            wx.TheClipboard.Close()
+        self.SetStatusText(
+            _('Copied %d path(s) to clipboard.') % len(paths))
+
+    def _open_locations(self, paths):
+        # De-duplicate parent directories to avoid opening the same
+        # folder many times when several selected rows share a parent.
+        seen = set()
+        for path in paths:
+            folder = os.path.dirname(path) or path
+            if folder in seen:
+                continue
+            seen.add(folder)
+            self._open_folder(path, folder)
+
+    @staticmethod
+    def _open_folder(path, folder):
+        """Open the file manager at ``folder`` and, on Windows, select
+        ``path`` inside it.
+        """
+        try:
+            if os.name == 'nt':
+                # Windows Explorer can highlight the file.
+                if os.path.exists(path):
+                    subprocess.Popen(
+                        ['explorer', '/select,', os.path.normpath(path)])
+                else:
+                    os.startfile(folder)  # pylint: disable=no-member
+            elif sys.platform == 'darwin':
+                if os.path.exists(path):
+                    subprocess.Popen(['open', '-R', path])
+                else:
+                    subprocess.Popen(['open', folder])
+            else:
+                subprocess.Popen(['xdg-open', folder])
+        except OSError:
+            logger.exception('Failed to open %s', folder)
+
+    def _whitelist_paths(self, paths):
+        existing = options.get_whitelist_paths()
+        existing_paths = {p for (_t, p) in existing}
+        added = 0
+        new_entries = list(existing)
+        for path in paths:
+            if not path or path in existing_paths:
+                continue
+            entry_type = 'folder' if os.path.isdir(path) else 'file'
+            new_entries.append((entry_type, path))
+            existing_paths.add(path)
+            added += 1
+        if added:
+            options.set_whitelist_paths(new_entries)
+        self.SetStatusText(
+            _('Added %d path(s) to keep list.') % added)
+
+    def _on_result_col_click(self, evt):
+        col = evt.GetColumn()
+        self._sort_results(col)
+
+    def _sort_results(self, col):
+        """Sort the results ListCtrl by ``col``.
+
+        ``wx.ListCtrl`` does not sort itself; rebuild rows in-memory.
+        """
+        n = self.results.GetItemCount()
+        rows = []
+        for i in range(n):
+            row = [self.results.GetItemText(i, c) for c in range(5)]
+            size_val = (self._row_sizes[i]
+                        if i < len(self._row_sizes) else -1)
+            rows.append((row, size_val))
+        if col == COL_SIZE:
+            rows.sort(key=lambda r: r[1])
+        else:
+            rows.sort(key=lambda r: r[0][col].lower())
+        self.results.DeleteAllItems()
+        self._row_sizes = []
+        for row, size_val in rows:
+            idx = self.results.InsertItem(
+                self.results.GetItemCount(), row[COL_CLEANER])
+            for c in range(1, 5):
+                self.results.SetItem(idx, c, row[c])
+            self._row_sizes.append(size_val)

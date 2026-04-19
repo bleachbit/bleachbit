@@ -41,7 +41,8 @@ bleachbit-wx.py                 # launcher (top level)
 bleachbit/GUIwx/
     __init__.py
     App.py                      # wx.App entry point
-    MainFrame.py                # main window, tree, log, toolbar
+    MainFrame.py                # main window, tree, results table, log
+    LoaderThread.py             # threads bleachbit.Cleaner.register_cleaners
     WorkerThread.py             # threads bleachbit.Worker.Worker
 ```
 
@@ -51,29 +52,50 @@ are untouched.
 ## Architecture
 
 - `bleachbit.Cleaner`, `bleachbit.CleanerML`, `bleachbit.Options` and
-  `bleachbit.Worker` are reused unchanged.
+  `bleachbit.Worker` are reused unchanged apart from one optional hook
+  (see below).
 - `bleachbit.Worker.Worker` expects a UI object with
   `append_text`, `update_progress_bar`, `update_total_size`,
-  `update_item_size`, and `worker_done` methods.
+  `update_item_size`, and `worker_done` methods.  It also calls an
+  optional `append_row(operation_option, label, size, path)` when that
+  attribute is present, so a UI can build a structured results view
+  without parsing the plain-text log.  The GTK front-end does not
+  implement `append_row` and is therefore unaffected.
 - `WorkerThread.WxUIProxy` implements that interface and forwards every
   call to `MainFrame` via `wx.CallAfter`, so the `Worker` generator can
   be drained on a background thread while all widget updates happen on
   the wx main thread.
+- `LoaderThread` drains `Cleaner.register_cleaners()` on a background
+  thread so the UI remains responsive while CleanerML and Winapp2.ini
+  cleaners are loaded.  Progress messages are forwarded to the status
+  bar via `wx.CallAfter`.
 - `MainFrame._start_worker()` creates a `WorkerThread`, which is the
   only thing the front-end needs to swap out later to move the worker
   into a subprocess (elevated or not).
+
+## Right pane layout
+
+The right pane is a `wx.Notebook` with two tabs:
+
+- **Results** — a `wx.ListCtrl` in report mode with columns
+  *Cleaner*, *Option*, *Path*, *Size*, *Action*.  Click a column
+  header to sort (size sort is numeric; all others are case-insensitive
+  text).  Right-click one or more rows for a context menu:
+  - *Copy path* — join selected paths with newlines on the clipboard.
+  - *Open file location* — open the containing folder in the
+    platform file manager (Explorer selects the file on Windows,
+    Finder reveals it on macOS, `xdg-open` on Linux).
+  - *Always skip this path (add to keep list)* — append the selected
+    paths to `Options.whitelist_paths` (`folder` entry if the path is
+    a directory, otherwise `file`).
+- **Log** — the original plain-text log.
 
 ## Known MVP limitations
 
 - No expert mode / warning confirmation flow yet (warnings are just
   marked with `⚠` in the tree).
-- Log is a plain `wx.TextCtrl`; the
-  [`bleachbit_gui_next_gen`](https://github.com/) table view is a
-  planned upgrade.
 - Preferences, whitelist editor, chaff, shred-files, and empty-space
   wiping are not wired up.
-- Cleaner registration runs synchronously at startup.  On Windows with
-  Winapp2 this can take a few seconds; should move to a thread.
 - No menu / keyboard shortcut coverage beyond Exit and About.
 - Not translated through the wx machinery yet (strings go through
   `bleachbit.Language.get_text`, but accelerators are missing).
