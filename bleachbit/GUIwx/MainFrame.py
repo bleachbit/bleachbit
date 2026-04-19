@@ -42,6 +42,36 @@ COL_PATH = 2
 COL_SIZE = 3
 COL_ACTION = 4
 
+_ROW_FIELDS = ('cleaner_name', 'option_name', 'path', 'size_human', 'action')
+
+
+class _VirtualResultsList(wx.ListCtrl):
+    """Virtual ``wx.ListCtrl`` backed by ``MainFrame._visible_rows()``.
+
+    A virtual control renders only the visible items on demand, so
+    ``append_row`` becomes O(1) regardless of how many rows we have
+    already accumulated.  Without this, inserting tens of thousands
+    of rows during a preview of, for example, Firefox cache freezes
+    the wx main thread for many seconds.
+    """
+
+    def __init__(self, parent, owner):
+        super().__init__(
+            parent,
+            style=wx.LC_REPORT | wx.LC_VIRTUAL | wx.BORDER_SUNKEN,
+        )
+        self._owner = owner
+
+    # ``OnGetItemText`` is called by wx for every cell it needs to
+    # paint.  Keep it trivial.
+    def OnGetItemText(self, item, column):  # noqa: N802 - wx naming
+        rows = self._owner._visible
+        if not 0 <= item < len(rows):
+            return ''
+        row = rows[item]
+        field = _ROW_FIELDS[column]
+        return row[field]
+
 
 class MainFrame(wx.Frame):
     """Top-level window for the wx MVP."""
@@ -56,12 +86,12 @@ class MainFrame(wx.Frame):
         self._worker_thread = None
         self._loader_thread = None
         # All result rows as dicts {cleaner_id, option_id, cleaner_name,
-        # option_name, path, size, size_human, action}.  The visible
-        # ListCtrl is a filtered, possibly sorted projection of this.
+        # option_name, path, size, size_human, action}.  ``_visible`` is
+        # the filtered/sorted projection that the virtual ListCtrl reads
+        # from; it is the same list object as ``_rows`` when no filter
+        # is active.
         self._rows = []
-        # Parallel list of raw byte sizes matching the ListCtrl order,
-        # so column-sort by size is numeric.
-        self._row_sizes = []
+        self._visible = self._rows
         # All log entries as (msg, tag).  The log TextCtrl is a filtered
         # projection of this.
         self._log_entries = []
@@ -70,6 +100,8 @@ class MainFrame(wx.Frame):
         self._errors_only = False
         # Block the tree-check handler while we restore persisted state.
         self._suspend_check_persist = False
+        # True while WxUIProxy is delivering a batch of worker callbacks.
+        self._in_batch = False
 
         self._build_ui()
         self._build_menu()
@@ -148,10 +180,10 @@ class MainFrame(wx.Frame):
         self.notebook = wx.Notebook(right)
 
         # Results tab ---------------------------------------------------
-        self.results = wx.ListCtrl(
-            self.notebook,
-            style=wx.LC_REPORT | wx.BORDER_SUNKEN,
-        )
+        # Virtual list: the widget pulls cells from ``self._visible``
+        # via ``_VirtualResultsList.OnGetItemText`` on demand, which
+        # keeps append_row O(1) even for very large previews.
+        self.results = _VirtualResultsList(self.notebook, self)
         self.results.InsertColumn(COL_CLEANER, _('Cleaner'), width=120)
         self.results.InsertColumn(COL_OPTION, _('Option'), width=120)
         self.results.InsertColumn(COL_PATH, _('Path'), width=360)
@@ -426,16 +458,38 @@ class MainFrame(wx.Frame):
         self._worker_thread.start()
 
     def _clear_results(self):
-        self.results.DeleteAllItems()
-        self._row_sizes = []
         self._rows = []
+        self._visible = self._rows
+        self.results.SetItemCount(0)
 
     # ------------------------------------------------------------------
     # Worker UI callbacks (invoked on main thread via WxUIProxy)
     # ------------------------------------------------------------------
+    def begin_batch(self):
+        """Freeze heavy widgets around a chunk of worker callbacks.
+
+        Called by :class:`WxUIProxy` before a batch of queued events is
+        delivered, so thousands of ``AppendText`` calls do not trigger a
+        repaint per item.  We also suppress per-row ``SetItemCount``
+        calls inside :meth:`append_row`; the count is synced in
+        :meth:`end_batch` instead.
+        """
+        self._in_batch = True
+        self.log.Freeze()
+
+    def end_batch(self):
+        """Thaw the widgets frozen by :meth:`begin_batch` and sync row count."""
+        self.log.Thaw()
+        self._in_batch = False
+        # Single SetItemCount per chunk instead of one per appended row.
+        self.results.SetItemCount(len(self._visible))
+
     def append_text(self, msg, tag=None):
         self._log_entries.append((msg, tag))
         if self._log_entry_visible(msg, tag):
+            # ``wx.TextCtrl.AppendText`` on GTK scrolls and repaints per
+            # call; during a large preview the batching in WxUIProxy
+            # already Freezes this widget for us.
             display = ('[!] ' + msg) if tag == 'error' else msg
             self.log.AppendText(display)
 
@@ -475,8 +529,14 @@ class MainFrame(wx.Frame):
             'action': label or '',
         }
         self._rows.append(row)
-        if self._row_visible(row):
-            self._insert_row_widget(row)
+        # Fast path: when no filter is active ``_visible`` is the same
+        # list object as ``_rows`` and is therefore already up to date.
+        if self._visible is not self._rows and self._row_visible(row):
+            self._visible.append(row)
+        # Inside a WxUIProxy batch, SetItemCount is deferred to
+        # end_batch so we do not call it thousands of times per second.
+        if not getattr(self, '_in_batch', False):
+            self.results.SetItemCount(len(self._visible))
 
     def update_progress_bar(self, value):
         if isinstance(value, str):
@@ -683,6 +743,7 @@ class MainFrame(wx.Frame):
             COL_SIZE: lambda r: r['size'],
             COL_ACTION: lambda r: r['action'].lower(),
         }
+        # Sort the underlying list, then rebuild the filter projection.
         self._rows.sort(key=keys.get(col, keys[COL_CLEANER]))
         self._refresh_results()
 
@@ -724,27 +785,26 @@ class MainFrame(wx.Frame):
         return True
 
     def _visible_rows(self):
-        return [r for r in self._rows if self._row_visible(r)]
-
-    def _insert_row_widget(self, row):
-        idx = self.results.InsertItem(
-            self.results.GetItemCount(), row['cleaner_name'])
-        self.results.SetItem(idx, COL_OPTION, row['option_name'])
-        self.results.SetItem(idx, COL_PATH, row['path'])
-        self.results.SetItem(idx, COL_SIZE, row['size_human'])
-        self.results.SetItem(idx, COL_ACTION, row['action'])
-        self._row_sizes.append(row['size'])
+        return self._visible
 
     def _refresh_results(self):
-        self.results.Freeze()
-        try:
-            self.results.DeleteAllItems()
-            self._row_sizes = []
-            for row in self._rows:
-                if self._row_visible(row):
-                    self._insert_row_widget(row)
-        finally:
-            self.results.Thaw()
+        """Rebuild ``self._visible`` from ``self._rows`` + filter."""
+        if self._errors_only:
+            # Results have no 'error' concept.
+            self._visible = []
+        elif not self._filter_text:
+            self._visible = self._rows
+        else:
+            needle = self._filter_text
+            self._visible = [
+                r for r in self._rows
+                if needle in r['cleaner_name'].lower()
+                or needle in r['option_name'].lower()
+                or needle in r['path'].lower()
+                or needle in r['action'].lower()
+            ]
+        self.results.SetItemCount(len(self._visible))
+        self.results.Refresh()
 
     def _refresh_log(self):
         self.log.Freeze()

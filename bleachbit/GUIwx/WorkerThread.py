@@ -37,11 +37,26 @@ logger = logging.getLogger(__name__)
 
 
 class WxUIProxy:
-    """Thread-safe proxy that forwards Worker UI callbacks to the main thread.
+    """Thread-safe, batching proxy for Worker UI callbacks.
 
-    All attribute access returns a callable that, when invoked from the
-    worker thread, schedules the matching method on ``target`` via
-    :func:`wx.CallAfter`.
+    The worker can emit tens of thousands of ``append_text`` /
+    ``append_row`` calls in a very short burst (e.g. Firefox cache
+    clean).  Forwarding each one through its own :func:`wx.CallAfter`
+    floods the wx main-thread event queue and blocks the UI until
+    every event has been processed, which appears to the user as a
+    frozen window with all rows arriving at once at the end.
+
+    Instead, every call is appended to an in-memory queue, and at most
+    one flush is scheduled via ``wx.CallAfter`` at a time.  The flush
+    drains the queue in capped chunks so the main thread can repaint
+    between chunks; if there are still queued events after a chunk, a
+    follow-up flush is scheduled.
+
+    If the ``target`` exposes ``begin_batch()`` / ``end_batch()``, they
+    are called around each chunk; :class:`MainFrame` uses them to
+    :meth:`wx.Window.Freeze` / :meth:`wx.Window.Thaw` the heavy widgets
+    so rapid ``InsertItem`` and ``AppendText`` calls do not trigger a
+    re-layout per item.
     """
 
     _FORWARDED = (
@@ -53,18 +68,72 @@ class WxUIProxy:
         'worker_done',
     )
 
+    # Maximum number of queued events to process in one flush before
+    # yielding back to the main loop.  Tuned so a 10k-row preview is
+    # broken into ~10 repaints rather than a single multi-second block.
+    _CHUNK_SIZE = 1000
+
     def __init__(self, target):
         self._target = target
+        self._queue = []
+        self._lock = threading.Lock()
+        self._scheduled = False
 
     def __getattr__(self, name):
         if name not in self._FORWARDED:
             raise AttributeError(name)
-        target = self._target
-        method = getattr(target, name)
 
-        def _forward(*args, **kwargs):
-            wx.CallAfter(method, *args, **kwargs)
-        return _forward
+        def _enqueue(*args, **kwargs):
+            with self._lock:
+                self._queue.append((name, args, kwargs))
+                if self._scheduled:
+                    return
+                self._scheduled = True
+            # Schedule outside the lock to avoid any chance of deadlock
+            # with a main-thread path that tries to acquire _lock.
+            wx.CallAfter(self._flush)
+        return _enqueue
+
+    def _flush(self):
+        """Drain up to ``_CHUNK_SIZE`` queued events on the main thread."""
+        with self._lock:
+            chunk = self._queue[:self._CHUNK_SIZE]
+            self._queue = self._queue[self._CHUNK_SIZE:]
+            more = bool(self._queue)
+            # Keep _scheduled True across the re-schedule so no other
+            # thread posts a duplicate CallAfter in between.
+            self._scheduled = more
+
+        target = self._target
+        begin = getattr(target, 'begin_batch', None)
+        end = getattr(target, 'end_batch', None)
+        if begin is not None:
+            try:
+                begin()
+            except Exception:  # pylint: disable=broad-except
+                logger.exception('begin_batch failed')
+        try:
+            for name, args, kwargs in chunk:
+                try:
+                    getattr(target, name)(*args, **kwargs)
+                except Exception:  # pylint: disable=broad-except
+                    logger.exception('UI callback %s failed', name)
+        finally:
+            if end is not None:
+                try:
+                    end()
+                except Exception:  # pylint: disable=broad-except
+                    logger.exception('end_batch failed')
+
+        if more:
+            # Re-schedule via the timer queue (``CallLater``) rather
+            # than pushing another pending-event (``CallAfter``).  Back-
+            # to-back ``CallAfter`` re-schedules run without returning
+            # to the main loop's idle phase, which starves paint and
+            # timer events and makes the window appear frozen during a
+            # large burst.  A zero-delay timer yields just long enough
+            # for pending repaints and timers to interleave.
+            wx.CallLater(0, self._flush)
 
 
 class WorkerThread(threading.Thread):
