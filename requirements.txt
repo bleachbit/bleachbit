@@ -1,9 +1,18 @@
-cachetools
-chardet==3.0.4
+# see additional installations in appveyor.yml
+#   - pywin32==227 special build
+#   - psutil-5.6.7 special build
+# urllib3 1.25.8 dropped support for Python 3.4, but it conflicts with requests==2.21.0
+# requests 2.21.0 has requirement urllib3<1.25,>=1.21.1, so 1.24.3 is a solution.
+
+cachetools==3.1.1 # cachetools 4.0.0 requires Python 3.5+
+chardet==3.0.4 # chardet 4.0.0 and 5.0.0 both dropped support for Python 3.4
+mock
 pefile==2019.4.18   # pefile 2021.5.13 uses a f-string that fails with Python 3.4
 plyer==2.0.0 # Python 3.4 support dropped https://github.com/kivy/plyer/pull/720/files
 pypiwin32==223
-requests
+requests==2.21.0 # requests 2.22.0 dropped support for Python 3.4
 scandir==1.10.0
+six==1.17.0 # latest on pypi
+urllib3==1.24.3
 win-unicode-console==0.5
 winshell==0.6
