@@ -117,7 +117,7 @@ if 'py2exe' in sys.argv:
     }]
     args['options'] = {
         'py2exe': {
-            'packages': ['encodings', 'gi', 'gi.overrides', 'plyer', 'queue'],
+            'packages': ['encodings', 'gi', 'gi.overrides', 'plyer'],
             'optimize': 2,  # extra optimization (like python -OO)
             'includes': ['gi'],
             'excludes': ['pyreadline', 'difflib', 'doctest',
