@@ -14,10 +14,9 @@ from tests import common
 import bleachbit
 from bleachbit import logger
 from bleachbit.Update import check_updates, update_winapp2, user_agent
-from bleachbit.Network import get_ip_for_url
-import bleachbit.Update
 
 import mock
+import threading
 import os
 import os.path
 import requests
@@ -59,6 +58,15 @@ class UpdateTestCase(common.BleachbitTestCase):
             self.assertIsInstance(ver, (type(None), str))
             self.assertIsInstance(url, (type(None), str))
 
+
+    def test_check_updates_threaded(self):
+        """Test check_update() in thread
+        
+        https://github.com/bleachbit/bleachbit/issues/2095"""
+        thread = threading.Thread(target=check_updates, args=(True, False, None, None))
+        thread.start()
+        thread.join()
+
     def test_UpdateCheck_real(self):
         """Unit test for class UpdateCheck with bad network address"""
         # expect connection failure
@@ -80,6 +88,25 @@ class UpdateTestCase(common.BleachbitTestCase):
             raise e
         import xml.dom.minidom
         xml.dom.minidom.parseString(response.text)
+
+    def test_import_requests(self):
+        """Test import requests
+        
+        https://github.com/bleachbit/bleachbit/issues/2095"""
+        import requests
+
+
+    def test_import_urllib3(self):
+        """Import urllib3
+        
+        https://github.com/bleachbit/bleachbit/issues/2095"""
+        import urllib3
+
+    def test_import_queue(self):
+        """Import queue
+        
+        https://github.com/bleachbit/bleachbit/issues/2095"""
+        import queue
 
     def test_update_winapp2(self):
         fn = os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini')

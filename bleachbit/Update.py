@@ -15,9 +15,6 @@ import os
 import sys
 import xml.dom.minidom
 
-# third-party
-import requests
-
 # local
 import bleachbit
 from bleachbit import _
@@ -100,6 +97,23 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     url = bleachbit.update_check_url
     if 'windowsapp' in sys.executable.lower():
         url += '?windowsapp=1'
+    # https://github.com/bleachbit/bleachbit/issues/2095
+    # requests fails to import on Windows XP/7
+    try:
+        import queue
+    except ImportError:
+        logger.exception('check_updates: queue library is not available')
+        return ()
+    try:
+        import urllib3
+    except ImportError:
+        logger.exception('check_updates: urllib3 library is not available')
+        return ()
+    try:
+        import requests
+    except ImportError:
+        logger.exception('check_updates: requests library is not available')
+        return ()
     try:
         response = fetch_url(url,
                              headers=get_update_request_headers())
