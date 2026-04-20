@@ -15,7 +15,8 @@ init:
   - 'set PIP_DEFAULT_TIMEOUT=180'
 
 install:
-  - '%PYTHON_HOME%/python.exe -m pip install --upgrade pip'
+  # pip dropped support for Python 3.4
+  - '%PYTHON_HOME%/python.exe -m pip install pip==19.1.1'
   - '%PYTHON_HOME%/Scripts/pip.exe --version' # show pip version
   - ps: if (-not (Test-Path psutil-5.6.7-cp34-cp34m-win32.whl)) { Start-FileDownload "https://download.bleachbit.org/deps/psutil-5.6.7-cp34-cp34m-win32.whl" -FileName psutil-5.6.7-cp34-cp34m-win32.whl }
   - ps: $hash = (Get-FileHash psutil-5.6.7-cp34-cp34m-win32.whl -Algorithm SHA256).Hash; if ($hash -ne 'DFE4D8DA295AC722B3676F14BBA7EF80241D715CFB5FF57D6B32E86A5B7DAB5A') { throw "SHA256 mismatch=$hash" }
