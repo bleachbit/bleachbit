@@ -1152,8 +1152,15 @@ State=AAAA/wA...
 
         for path in test_paths:
             with self.subTest(path=path):
+                if os.name == 'nt' and not os.path.exists(path):
+                    # e.g., disconnected network drive or empty CD-ROM
+                    continue
                 test_counter += 1
-                free = free_space(path)
+                try:
+                    free = free_space(path)
+                except OSError:
+                    # e.g., disconnected network drive
+                    continue
                 self.assertIsInstance(
                     free, int, f"free_space({path}) should return int")
                 self.assertGreaterEqual(
