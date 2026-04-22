@@ -106,6 +106,25 @@ class ChaffTestCase(common.BleachbitTestCase):
 
         rmtree(tmp_dir)
 
+    def test_make_sentence_none(self):
+        """Test that make_sentence() returning None does not cause TypeError"""
+        from bleachbit.Chaff import _get_random_content, _generate_2600_file, _generate_email
+
+        model = mock.MagicMock()
+        model.make_sentence.return_value = None
+        model.make_short_sentence.return_value = None
+
+        result = _get_random_content(model, number_of_sentences=2)
+        self.assertIsNotNone(result)
+
+        result = _generate_2600_file(model, number_of_sentences=2)
+        self.assertIsInstance(result, str)
+
+        subject_model = mock.MagicMock()
+        subject_model.make_short_sentence.return_value = None
+        msg = _generate_email(subject_model, model, number_of_sentences=2)
+        self.assertEqual(msg['Subject'], '')
+
     def test_have_models(self):
         """Test for function have_models()"""
         download_models()
