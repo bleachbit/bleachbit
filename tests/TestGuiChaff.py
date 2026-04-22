@@ -27,7 +27,9 @@ if HAVE_GTK:
     from bleachbit.GuiChaff import (STOP_MODE_FILE_COUNT,
                                     STOP_MODE_TOTAL_SIZE,
                                     STOP_MODE_FREE_SPACE,
-                                    MAX_FILE_COUNT)
+                                    MAX_FILE_COUNT,
+                                    _make_should_stop,
+                                    _make_progress_cb)
 
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
@@ -238,6 +240,42 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         self.assertEqual(args[2], 0)   # inspiration (2600)
         self.assertEqual(args[3], self.tempdir)  # output_folder
         self.assertIsInstance(args[6], threading.Event)  # abort_event
+
+    def test_progress_cb_keyword_args(self):
+        """Regression test: _make_progress_cb must accept keyword args from Chaff.py
+
+        Chaff.py calls on_progress(fraction, generated_file_names=..., cumulative_size=...)
+        so the callbacks must accept those keyword names.
+        """
+
+        collected = []
+
+        def on_progress(fraction):
+            collected.append(fraction)
+
+        for stop_mode in (STOP_MODE_FILE_COUNT, STOP_MODE_TOTAL_SIZE, STOP_MODE_FREE_SPACE):
+            cb = _make_progress_cb(stop_mode, 100, self.tempdir, on_progress)
+            # Must accept keyword arguments as Chaff.py passes them
+            cb(0.5, generated_file_names=['/tmp/fake'], cumulative_size=12345)
+            self.assertEqual(len(collected), 1, f'stop_mode={stop_mode}')
+            collected.clear()
+
+    def test_should_stop_keyword_args(self):
+        """Regression test: _make_should_stop must accept keyword args from Chaff.py
+
+        Chaff.py calls should_stop(generated_file_names, cumulative_size=...)
+        so the callbacks must accept those parameter names.
+        """
+
+
+        abort_event = threading.Event()
+
+        for stop_mode in (STOP_MODE_FILE_COUNT, STOP_MODE_TOTAL_SIZE, STOP_MODE_FREE_SPACE):
+            should_stop, _file_count = _make_should_stop(
+                stop_mode, 100, self.tempdir, abort_event)
+            # Must accept keyword argument as Chaff.py passes it
+            result = should_stop(['/tmp/fake'], cumulative_size=12345)
+            self.assertIsInstance(result, bool)
 
     @patch('bleachbit.GuiChaff.make_files_thread')
     @patch('bleachbit.Chaff.have_models')

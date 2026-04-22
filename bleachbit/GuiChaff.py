@@ -75,7 +75,7 @@ def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
     if stop_mode == STOP_MODE_TOTAL_SIZE:
         target_bytes = stop_value * 1024 * 1024  # MB to bytes
 
-        def should_stop(_generated_file_names, cumulative_size=0):
+        def should_stop(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
             if abort_event.is_set():
                 return True
             return cumulative_size >= target_bytes
@@ -85,10 +85,13 @@ def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
     if stop_mode == STOP_MODE_FREE_SPACE:
         target_free_pct = stop_value
 
-        def should_stop(_generated_file_names, _cumulative_size=0):  # pylint: disable=unused-argument
+        def should_stop(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
             if abort_event.is_set():
                 return True
-            usage = shutil.disk_usage(output_folder)
+            try:
+                usage = shutil.disk_usage(output_folder)
+            except FileNotFoundError:
+                return False
             free_pct = 100.0 * usage.free / usage.total
             return free_pct <= target_free_pct
 
@@ -123,15 +126,20 @@ def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
 
     if stop_mode == STOP_MODE_FREE_SPACE:
         target_free_pct = stop_value
-        initial_usage = shutil.disk_usage(output_folder)
-        initial_free_pct = 100.0 * initial_usage.free / initial_usage.total
+        initial_free_pct = [None]  # Use list to allow mutation in nested function
 
-        def progress_cb(_fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
-            usage = shutil.disk_usage(output_folder)
+        def progress_cb(_fraction, _generated_file_names=None, _cumulative_size=0):  # pylint: disable=unused-argument
+            try:
+                usage = shutil.disk_usage(output_folder)
+            except FileNotFoundError:
+                on_progress(0.0)
+                return
             current_free_pct = 100.0 * usage.free / usage.total
-            if initial_free_pct > target_free_pct:
-                frac = (initial_free_pct - current_free_pct) / \
-                    (initial_free_pct - target_free_pct)
+            if initial_free_pct[0] is None:
+                initial_free_pct[0] = current_free_pct
+            if initial_free_pct[0] > target_free_pct:
+                frac = (initial_free_pct[0] - current_free_pct) / \
+                    (initial_free_pct[0] - target_free_pct)
                 frac = min(1.0, max(0.0, frac))
             else:
                 frac = 1.0
