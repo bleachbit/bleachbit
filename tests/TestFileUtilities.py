@@ -533,6 +533,16 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             filename = 'cmd.exe'
         self.assertTrue(exists_in_path(filename))
 
+    def test_exists_in_path_none(self):
+        """Test exists_in_path() with PATH=none"""
+        original_path = os.environ.get('PATH')
+        try:
+            del os.environ['PATH']
+            self.assertFalse(exists_in_path('filename'))
+        finally:
+            if original_path is not None:
+                os.environ['PATH'] = original_path
+
     def test_exe_exists(self):
         """Unit test for exe_exists()"""
         tests = [("/bin/sh", True),
