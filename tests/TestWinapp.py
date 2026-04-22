@@ -83,7 +83,7 @@ def get_winapp2():
         import time
         import stat
         age_seconds = time.time() - os.stat(fname)[stat.ST_MTIME]
-        if age_seconds > (24 * 36 * 36):
+        if age_seconds > (24 * 60 * 60):
             logger.info('deleting stale file %s ', fname)
             os.remove(fname)
     if not os.path.exists(fname):
