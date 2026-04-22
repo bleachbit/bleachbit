@@ -165,9 +165,9 @@ def csidl_to_environ(varname, csidl):
     """Define an environment variable from a CSIDL for use in CleanerML and Winapp2.ini"""
     try:
         sppath = shell.SHGetSpecialFolderPath(None, csidl)
-    except:
+    except Exception:
         logger.info(
-            'exception when getting special folder path for %s', varname)
+            'exception when getting special folder path for %s', varname, exc_info=True)
         return
     # there is exception handling in set_environ()
     set_environ(varname, sppath)
