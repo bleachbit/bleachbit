@@ -23,10 +23,8 @@
 File-related utilities
 """
 
-import bleachbit
-from bleachbit import _
-
 import atexit
+import ctypes
 import errno
 import glob
 import locale
@@ -37,24 +35,25 @@ import random
 import re
 import stat
 import string
-import sys
 import subprocess
+import sys
 import tempfile
 import time
+from ctypes import wintypes
+
+import psutil
+import win32file
+from pywintypes import error as pywinerror
+
+import bleachbit
+import bleachbit.Windows
+from bleachbit import _
 
 logger = logging.getLogger(__name__)
 
-if 'nt' == os.name:
-    from pywintypes import error as pywinerror
-    import win32file
-    import bleachbit.Windows
-    os_path_islink = os.path.islink
-    os.path.islink = lambda path: os_path_islink(
-        path) or bleachbit.Windows.is_junction(path)
-
-if 'posix' == os.name:
-    from bleachbit.General import WindowsError
-    pywinerror = WindowsError
+os_path_islink = os.path.islink
+os.path.islink = lambda path: os_path_islink(
+    path) or bleachbit.Windows.is_junction(path)
 
 try:
     from scandir import walk
@@ -528,11 +527,18 @@ def extended_path_undo(path):
 
 def free_space(pathname):
     """Return free space in bytes"""
-    if 'nt' == os.name:
-        import psutil
+    try:
         return psutil.disk_usage(pathname).free
-    mystat = os.statvfs(pathname)
-    return mystat.f_bfree * mystat.f_bsize
+    except ImportError:
+        free_bytes = wintypes.ULARGE_INTEGER()
+        ret = ctypes.windll.kernel32.GetDiskFreeSpaceExW(
+            pathname,
+            ctypes.byref(free_bytes),
+            None,
+            None)
+        if 0 == ret:
+            raise ctypes.WinError(ctypes.get_last_error())
+        return free_bytes.value
 
 
 def getsize(path):
@@ -994,7 +1000,7 @@ def wipe_path(pathname, idle=False):
         # Write large blocks to quickly fill the disk.
         blanks = b'\0' * 65536
         writtensize = 0
-        
+
         while True:
             try:
                 if fstype != 'vfat':
@@ -1005,7 +1011,7 @@ def wipe_path(pathname, idle=False):
                     writtensize += f.write(blanks)
                 else:
                     break
-            
+
             except IOError as e:
                 if e.errno == errno.ENOSPC:
                     if len(blanks) > 1:
