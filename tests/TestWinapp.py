@@ -176,7 +176,7 @@ class WinappTestCase(common.BleachbitTestCase):
                     'Test expects objects in %ProgramW6432% not in %ProgramFiles%')
             for pathname in dir_32_unique:
                 test_path = '%%ProgramFiles%%\\%s' % pathname
-                full_path = os.path.join(os.getenv('ProgramFiles'), pathname)
+                full_path = os.path.join(os.getenv('ProgramW6432'), pathname)
                 try:
                     os.listdir(full_path) if os.path.isdir(full_path) else open(full_path, 'rb').close()
                     tests.append((test_path, True))
