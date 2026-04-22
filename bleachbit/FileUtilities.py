@@ -446,7 +446,10 @@ def exists_in_path(filename):
     delimiter = ':'
     if 'nt' == os.name:
         delimiter = ';'
-    for dirname in os.getenv('PATH').split(delimiter):
+    path_env = os.getenv('PATH')
+    if path_env is None:
+        return False
+    for dirname in path_env.split(delimiter):
         if os.path.exists(os.path.join(dirname, filename)):
             return True
     return False
