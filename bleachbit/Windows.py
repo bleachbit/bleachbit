@@ -725,22 +725,6 @@ def split_registry_key(full_key):
     return hive_map[k1], k2
 
 
-def symlink_or_copy(src, dst):
-    """Symlink with fallback to copy
-
-    Symlink is faster and uses virtually no storage, but it it requires administrator
-    privileges or Windows developer mode.
-
-    If symlink is not available, just copy the file.
-    """
-    try:
-        os.symlink(src, dst)
-        logger.debug('linked %s to %s', src, dst)
-    except (PermissionError, OSError):
-        shutil.copy(src, dst)
-        logger.debug('copied %s to %s', src, dst)
-
-
 def has_fontconfig_cache(font_conf_file):
     dom = xml.dom.minidom.parse(font_conf_file)
     fc_element = dom.getElementsByTagName('fontconfig')[0]
