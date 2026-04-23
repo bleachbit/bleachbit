@@ -460,6 +460,7 @@ class ChaffDialog(Gtk.Dialog):
 
     def on_make_files(self, _widget):
         """Callback for make files button"""
+        self.infobar.hide()
         stop_mode = self.stop_mode_combo.get_active()
         stop_value = self.stop_value_spin.get_value_as_int()
         output_dir = self.choose_folder_button.get_filename()
