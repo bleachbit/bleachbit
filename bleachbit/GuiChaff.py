@@ -158,31 +158,44 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
     progress_cb = _make_progress_cb(
         stop_mode, stop_value, output_folder, on_progress)
 
-    if inspiration == 0:
-
-        generated_file_names = generate_2600(
-            file_count, output_folder, on_progress=progress_cb,
-            should_stop=should_stop)
-    elif inspiration == 1:
-
-        generated_file_names = generate_emails(
-            file_count, output_folder, on_progress=progress_cb,
-            should_stop=should_stop)
-    else:
-        raise ValueError(f'Invalid inspiration {inspiration}')
-
-    if delete_when_finished and not abort_event.is_set():
-        # TRANSLATORS: Progress message shown while deleting chaff files.
-        # 'Deleting files' is a present participle.
-        # To indicate an ongoing operation, include the ellipsis as literal
-        # Unicode (…) or as Unicode escape (\u2026).
-        on_progress(0, msg=_('Deleting files\u2026'))
-        count = len(generated_file_names)
-        for i, fn in enumerate(generated_file_names):
-            if abort_event.is_set():
-                break
-            os.unlink(fn)
-            on_progress(1.0 * (i + 1) / count)
+    try:
+        if inspiration == 0:
+            generated_file_names = generate_2600(
+                file_count, output_folder, on_progress=progress_cb,
+                should_stop=should_stop)
+        elif inspiration == 1:
+            generated_file_names = generate_emails(
+                file_count, output_folder, on_progress=progress_cb,
+                should_stop=should_stop)
+        else:
+            raise ValueError(f'Invalid inspiration {inspiration}')
+    except Exception as exc:
+        logger.exception('Error generating chaff')
+        # TRANSLATORS: Error message shown when chaff file generation fails.
+        # The placeholder is for the technical error details.
+        error_msg = _("Error generating chaff: {error}").format(error=str(exc))
+        on_progress(1.0, is_done=True, error=error_msg)
+        return
+    try:
+        if delete_when_finished and not abort_event.is_set():
+            # TRANSLATORS: Progress message shown while deleting chaff files.
+            # 'Deleting files' is a present participle.
+            # To indicate an ongoing operation, include the ellipsis as literal
+            # Unicode (…) or as Unicode escape (\u2026).
+            on_progress(0, msg=_('Deleting files\u2026'))
+            count = len(generated_file_names)
+            for i, fn in enumerate(generated_file_names):
+                if abort_event.is_set():
+                    break
+                os.unlink(fn)
+                on_progress(1.0 * (i + 1) / count)
+    except Exception as exc:
+        logger.exception('Error deleting chaff files')
+        # TRANSLATORS: Error message shown when deleting chaff files fails.
+        # The placeholder is for the technical error details.
+        error_msg = _("Error deleting chaff files: {error}").format(error=str(exc))
+        on_progress(1.0, is_done=True, error=error_msg)
+        return
     on_progress(1.0, is_done=True)
 
 
@@ -479,7 +492,7 @@ class ChaffDialog(Gtk.Dialog):
         """Start generating files after download is complete."""
         self._abort_event = threading.Event()
 
-        def _on_progress(fraction, msg, is_done):
+        def _on_progress(fraction, msg, is_done, error=None):
             """Update progress bar from GLib main loop"""
             if msg:
                 self.progressbar.set_text(msg)
@@ -488,7 +501,9 @@ class ChaffDialog(Gtk.Dialog):
                 self.progressbar.hide()
                 self.abort_button.set_sensitive(False)
                 self.make_button.set_sensitive(True)
-                if self._abort_event and self._abort_event.is_set():
+                if error:
+                    self.show_infobar(error, Gtk.MessageType.ERROR)
+                elif self._abort_event and self._abort_event.is_set():
                     # TRANSLATORS: Notification shown in an infobar when
                     # chaff file generation is aborted by the user.
                     self.show_infobar(_("Chaff generation aborted"),
@@ -499,10 +514,10 @@ class ChaffDialog(Gtk.Dialog):
                     self.show_infobar(_("Chaff generation complete"),
                                       Gtk.MessageType.INFO)
 
-        def on_progress(fraction, msg=None, is_done=False):
+        def on_progress(fraction, msg=None, is_done=False, error=None):
             """Callback for progress bar"""
             # Use idle_add() because threads cannot make GDK calls.
-            GLib.idle_add(_on_progress, fraction, msg, is_done)
+            GLib.idle_add(_on_progress, fraction, msg, is_done, error)
 
         # TRANSLATORS: Progress message shown while generating chaff files.
         # 'Generating' is a present participle.

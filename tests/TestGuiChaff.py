@@ -305,3 +305,29 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         abort_event = mock_make_files.call_args[0][6]
         self.assertIsInstance(abort_event, threading.Event)
         self.assertTrue(abort_event.is_set())
+
+    @patch('bleachbit.GuiChaff.make_files_thread')
+    @patch('bleachbit.Chaff.have_models')
+    def test_make_files_error(self, mock_have_models, mock_make_files):
+        """Test that error from make_files_thread shows in infobar"""
+        mock_have_models.return_value = True
+
+        self.dialog.choose_folder_button.set_filename(self.tempdir)
+        self.dialog.stop_value_spin.set_value(10)
+        self.dialog.inspiration_combo.set_active(0)
+
+        self.dialog.make_button.clicked()
+        self.refresh_gui(0.1)
+
+        # Get the on_progress callback passed to the thread
+        on_progress = mock_make_files.call_args[0][5]
+        on_progress(1.0, msg=None, is_done=True, error='Test error')
+        self.refresh_gui(0.1)
+
+        self.assertTrue(self.dialog.infobar.get_visible())
+        self.assertIn('Test error', self.dialog.infobar_label.get_text())
+        self.assertEqual(
+            self.dialog.infobar.get_message_type(), Gtk.MessageType.ERROR)
+        self.assertFalse(self.dialog.progressbar.get_visible())
+        self.assertFalse(self.dialog.abort_button.get_sensitive())
+        self.assertTrue(self.dialog.make_button.get_sensitive())
