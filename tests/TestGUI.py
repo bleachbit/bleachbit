@@ -43,9 +43,12 @@ class GUITestCase(common.BleachbitTestCase):
     def setUpClass(cls):
         cls.old_language = common.get_env('LANGUAGE')
         common.put_env('LANGUAGE', 'en')
+        # reminder: the set up in the parent class creates a clean
+        # configuration file.
         super(GUITestCase, GUITestCase).setUpClass()
         options.get_tree = types.MethodType(
             lambda self, parent, child: False, options)
+        options.set('font_check_completed', True)
         try:
             cls.app.register()
         except GLib.GError as e:

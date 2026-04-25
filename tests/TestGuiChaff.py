@@ -21,6 +21,7 @@ from unittest.mock import patch
 from tests import common
 
 from bleachbit.GtkShim import HAVE_GTK, Gtk, GLib, Gio
+from bleachbit.Options import options
 
 if HAVE_GTK:
     from bleachbit.GuiApplication import Bleachbit
@@ -40,6 +41,7 @@ class GuiChaffTestCase(common.BleachbitTestCase):
     @classmethod
     def setUpClass(cls):
         super(GuiChaffTestCase, cls).setUpClass()
+        options.set('font_check_completed', True)
 
         # Try to register the application, catch the error if already registered
         try:
