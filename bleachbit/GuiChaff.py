@@ -128,7 +128,7 @@ def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
         target_free_pct = stop_value
         initial_free_pct = [None]  # Use list to allow mutation in nested function
 
-        def progress_cb(_fraction, _generated_file_names=None, _cumulative_size=0):  # pylint: disable=unused-argument
+        def progress_cb(_fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
             try:
                 usage = shutil.disk_usage(output_folder)
             except FileNotFoundError:
