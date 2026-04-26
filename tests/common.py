@@ -421,6 +421,16 @@ SPECIAL_TEST_STRINGS = [
     'ɡælɪk.bak'
 ]
 
+# macOS (APFS/HFS+) rejects filenames containing lone UTF-16 surrogates
+# (\ud800-\udfff), raising OSError with errno 92 (EILSEQ). Filter them out
+# on darwin so the surrogate-related test cases run only where the
+# filesystem supports them.
+if sys.platform == 'darwin':
+    SPECIAL_TEST_STRINGS = [
+        s for s in SPECIAL_TEST_STRINGS
+        if not any(0xD800 <= ord(ch) <= 0xDFFF for ch in s)
+    ]
+
 # Additional strings for POSIX systems.
 # Windows doesn't allow or requires special handling for these characters.
 POSIX_SPECIAL_TEST_STRINGS = [

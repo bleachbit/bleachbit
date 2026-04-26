@@ -82,6 +82,8 @@ class DeepScanTestCase(common.BleachbitTestCase):
         f_del = self.write_file('foo.txt.bbtestbak')
         f_keep = self.write_file('foo.txt')
         subdir = os.path.join(self.tempdir, 'sub')
+        if os.path.isdir(subdir):
+            shutil.rmtree(subdir)
         os.mkdir(subdir)
         f_del2 = self.write_file(os.path.join(subdir, 'bar.ini.bbtestbak'))
         f_del3 = self.write_file(os.path.join(subdir, 'bar.ini.bbtestBAK'))

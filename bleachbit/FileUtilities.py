@@ -131,7 +131,7 @@ def open_files_lsof(run_lsof=None):
     """Return iterator of open files using lsof"""
     if run_lsof is None:
         def run_lsof():
-            return subprocess.check_output(["lsof", "-Fn", "-n"])
+            return subprocess.check_output(["lsof", "-Fn", "-n"], text=True)
     for f in run_lsof().split("\n"):
         if f.startswith("n/"):
             yield f[1:]  # Drop lsof's "n"
