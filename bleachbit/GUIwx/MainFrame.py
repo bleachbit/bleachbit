@@ -14,13 +14,7 @@ import subprocess
 import sys
 
 import wx
-from wx.lib.agw.customtreectrl import (
-    CustomTreeCtrl,
-    EVT_TREE_ITEM_CHECKED,
-    TR_DEFAULT_STYLE,
-    TR_HAS_BUTTONS,
-    TR_HIDE_ROOT,
-)
+import wx.dataview as dv
 
 from bleachbit import APP_NAME, APP_VERSION, Cleaner, FileUtilities
 from bleachbit.Cleaner import backends
@@ -146,6 +140,221 @@ class _SystemInformationDialog(wx.Dialog):
             wx.TheClipboard.Close()
 
 
+class _CleanerNode:
+    """Stable identity object for a cleaner row in the tree."""
+    __slots__ = ('cleaner_id', 'name', 'display')
+
+    def __init__(self, cleaner_id, name):
+        self.cleaner_id = cleaner_id
+        self.name = name
+        # ``display`` is what the model returns for the text column.
+        # ``update_item_size`` mutates this to append a size suffix.
+        self.display = name
+
+
+class _OptionNode:
+    """Stable identity object for an option row in the tree."""
+    __slots__ = ('cleaner_id', 'option_id', 'label', 'display')
+
+    def __init__(self, cleaner_id, option_id, label):
+        self.cleaner_id = cleaner_id
+        self.option_id = option_id
+        self.label = label
+        self.display = label
+
+
+class _CleanerTreeModel(dv.PyDataViewModel):
+    """``wx.dataview`` model exposing cleaners and options.
+
+    Two columns:
+
+    * Column 0 — boolean toggle (the per-row checkbox).  Activated by
+      mouse click or by the space bar when the row is selected.  This
+      maps directly to UIA's *Toggle* pattern on Windows, so screen
+      readers (NVDA, JAWS, Narrator) announce the check state — the
+      central reason for this rewrite.
+    * Column 1 — text label (cleaner name or option label, possibly
+      with a size suffix appended after a preview run).
+
+    Check state lives in :class:`Options` (the same ``[tree]`` section
+    used by the GTK UI), not in this model: ``GetValue`` reads it,
+    ``SetValue`` writes it.  Cascading parent <-> children semantics
+    are implemented in ``SetValue``.
+    """
+
+    def __init__(self):
+        super().__init__()
+        # Lifetime of the Python objects we hand to the view via
+        # ``ObjectToItem`` is managed by us; ``UseWeakRefs(False)``
+        # tells the C++ side it can keep them.
+        self.UseWeakRefs(False)
+        self._cleaners = []  # type: list[_CleanerNode]
+        self._cleaner_by_id = {}
+        self._options = {}   # cleaner_id -> [_OptionNode]
+        self._filter = ''
+
+    # -- data setup ---------------------------------------------------
+    def set_data(self, entries):
+        """Replace all data.  ``entries`` is the list produced by
+        :meth:`MainFrame._populate_tree`.
+        """
+        self._cleaners = []
+        self._cleaner_by_id = {}
+        self._options = {}
+        for cleaner_id, name, opts in entries:
+            cn = _CleanerNode(cleaner_id, name)
+            self._cleaners.append(cn)
+            self._cleaner_by_id[cleaner_id] = cn
+            self._options[cleaner_id] = [
+                _OptionNode(cleaner_id, oid, lbl) for oid, lbl in opts]
+        self.Cleared()
+
+    def set_filter(self, text):
+        self._filter = text or ''
+        self.Cleared()
+
+    # -- filter helpers ----------------------------------------------
+    def _cleaner_matches(self, cn):
+        if not self._filter:
+            return True
+        if self._filter in cn.name.lower():
+            return True
+        return any(self._filter in o.label.lower()
+                   for o in self._options.get(cn.cleaner_id, ()))
+
+    def _visible_cleaners(self):
+        if not self._filter:
+            return self._cleaners
+        return [c for c in self._cleaners if self._cleaner_matches(c)]
+
+    def _visible_options(self, cleaner_id):
+        opts = self._options.get(cleaner_id, [])
+        if not self._filter:
+            return opts
+        cn = self._cleaner_by_id.get(cleaner_id)
+        if cn and self._filter in cn.name.lower():
+            return opts
+        return [o for o in opts if self._filter in o.label.lower()]
+
+    def all_options(self, cleaner_id):
+        return self._options.get(cleaner_id, [])
+
+    def cleaner_node(self, cleaner_id):
+        return self._cleaner_by_id.get(cleaner_id)
+
+    def option_node(self, cleaner_id, option_id):
+        for o in self._options.get(cleaner_id, ()):
+            if o.option_id == option_id:
+                return o
+        return None
+
+    def cleaner_nodes(self):
+        return list(self._cleaners)
+
+    def is_cleaner_partial(self, cleaner_id):
+        opts = self._options.get(cleaner_id, [])
+        if not opts:
+            return False
+        n = sum(1 for o in opts
+                if options.get_tree(cleaner_id, o.option_id))
+        return 0 < n < len(opts)
+
+    def is_cleaner_any_checked(self, cleaner_id):
+        return any(options.get_tree(cleaner_id, o.option_id)
+                   for o in self._options.get(cleaner_id, ()))
+
+    # -- DataViewModel interface -------------------------------------
+    def IsContainer(self, item):  # noqa: N802 - wx API
+        if not item:
+            return True  # invisible root
+        obj = self.ItemToObject(item)
+        return isinstance(obj, _CleanerNode)
+
+    def HasContainerColumns(self, item):  # noqa: N802
+        # ``item`` is part of the wx interface; we always say yes so
+        # cleaner rows render text + toggle just like option rows.
+        del item
+        return True
+
+    def GetParent(self, item):  # noqa: N802
+        if not item:
+            return dv.NullDataViewItem
+        obj = self.ItemToObject(item)
+        if isinstance(obj, _CleanerNode):
+            return dv.NullDataViewItem
+        cn = self._cleaner_by_id.get(obj.cleaner_id)
+        if cn is None:
+            return dv.NullDataViewItem
+        return self.ObjectToItem(cn)
+
+    def GetChildren(self, parent, children):  # noqa: N802
+        if not parent:
+            kids = self._visible_cleaners()
+        else:
+            obj = self.ItemToObject(parent)
+            if isinstance(obj, _CleanerNode):
+                kids = self._visible_options(obj.cleaner_id)
+            else:
+                return 0
+        for k in kids:
+            children.append(self.ObjectToItem(k))
+        return len(kids)
+
+    def GetColumnCount(self):  # noqa: N802
+        return 2
+
+    def GetColumnType(self, col):  # noqa: N802
+        return 'bool' if col == 0 else 'string'
+
+    def GetValue(self, item, col):  # noqa: N802
+        obj = self.ItemToObject(item)
+        if col == 0:
+            if isinstance(obj, _OptionNode):
+                return options.get_tree(obj.cleaner_id, obj.option_id)
+            return self.is_cleaner_any_checked(obj.cleaner_id)
+        # Text column.
+        return obj.display
+
+    def SetValue(self, value, item, col):  # noqa: N802
+        if col != 0:
+            return False
+        obj = self.ItemToObject(item)
+        new = bool(value)
+        if isinstance(obj, _OptionNode):
+            options.set_tree(obj.cleaner_id, obj.option_id, new)
+            cn = self._cleaner_by_id.get(obj.cleaner_id)
+            if cn is not None:
+                # Recompute parent's check + bold attribute.
+                self.ItemChanged(self.ObjectToItem(cn))
+        else:
+            for o in self._options.get(obj.cleaner_id, ()):
+                options.set_tree(o.cleaner_id, o.option_id, new)
+                self.ValueChanged(self.ObjectToItem(o), 0)
+            self.ItemChanged(item)
+        return True
+
+    def GetAttr(self, item, col, attr):  # noqa: N802
+        obj = self.ItemToObject(item)
+        if (isinstance(obj, _CleanerNode) and col == 1
+                and self.is_cleaner_partial(obj.cleaner_id)):
+            attr.SetBold(True)
+            return True
+        return False
+
+    # -- label updates (size suffix) ---------------------------------
+    def set_display(self, cleaner_id, option_id, display):
+        if option_id is None or option_id == -1:
+            cn = self._cleaner_by_id.get(cleaner_id)
+            if cn is not None:
+                cn.display = display
+                self.ItemChanged(self.ObjectToItem(cn))
+            return
+        o = self.option_node(cleaner_id, option_id)
+        if o is not None:
+            o.display = display
+            self.ItemChanged(self.ObjectToItem(o))
+
+
 class MainFrame(wx.Frame):
     """Top-level window for the wx MVP."""
 
@@ -154,8 +363,6 @@ class MainFrame(wx.Frame):
         super().__init__(None, title=title, size=(900, 650))
         self.SetMinSize((640, 480))
 
-        # Per-(cleaner, option) size tracking.  Key '-1' means total.
-        self._item_map = {}  # (cleaner_id, option_id) -> TreeItemId
         self._worker_thread = None
         self._loader_thread = None
         # All result rows as dicts {cleaner_id, option_id, cleaner_name,
@@ -176,10 +383,6 @@ class MainFrame(wx.Frame):
         # Filter state.
         self._filter_text = ''
         self._errors_only = False
-        # Block the tree-check handler while we restore persisted state
-        # or while we programmatically cascade check changes.
-        self._suspend_check_persist = False
-        self._suspend_cascade = False
         # Current tree filter query (case-insensitive substring match).
         self._tree_filter_text = ''
         # True while WxUIProxy is delivering a batch of worker callbacks.
@@ -265,19 +468,41 @@ class MainFrame(wx.Frame):
             wx.EVT_SEARCHCTRL_CANCEL_BTN,
             lambda _e: self.tree_search.SetValue(''))
         tree_sizer.Add(self.tree_search, 0, wx.EXPAND | wx.BOTTOM, 2)
-        self.tree = CustomTreeCtrl(
+        # ``wx.dataview.DataViewCtrl`` driven by a custom
+        # :class:`_CleanerTreeModel`.  Unlike ``CustomTreeCtrl`` (which
+        # is owner-drawn and invisible to MSAA/UIA), DataViewCtrl maps
+        # to a native UIA Grid on Windows and exposes the toggle
+        # column via the *Toggle* pattern, so screen readers (NVDA,
+        # JAWS, Narrator) announce the per-row check state.  This is
+        # the central accessibility win for blind users.
+        self.tree = dv.DataViewCtrl(
             tree_panel,
-            agwStyle=TR_DEFAULT_STYLE | TR_HAS_BUTTONS | TR_HIDE_ROOT,
+            style=dv.DV_SINGLE | dv.DV_NO_HEADER | dv.DV_ROW_LINES,
         )
-        # Accessible name for screen readers.  Note: CustomTreeCtrl is
-        # an owner-drawn (generic) control; on Windows it does not
-        # expose itself via MSAA/UIA, so screen readers may still not
-        # read individual rows.  See doc/WX_GUI.md.
         self.tree.SetName(_('Cleaners'))
-        # Hidden root; serves only as the anchor for top-level cleaner items.
-        self._root = self.tree.AddRoot('')
-        self.tree.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK,
-                       self._on_tree_context_menu)
+        self._tree_model = _CleanerTreeModel()
+        self.tree.AssociateModel(self._tree_model)
+        # ``AssociateModel`` does not take ownership in PyDataViewModel;
+        # ``DecRef`` balances the implicit ``IncRef`` so the model is
+        # garbage-collected with the frame.
+        self._tree_model.DecRef()
+        # Toggle column: activatable so a click or space bar toggles
+        # the bool, which the model persists via ``Options.set_tree``.
+        toggle = dv.DataViewToggleRenderer(
+            mode=dv.DATAVIEW_CELL_ACTIVATABLE)
+        col_toggle = dv.DataViewColumn(
+            _('On'), toggle, 0, width=28,
+            align=wx.ALIGN_CENTER)
+        self.tree.AppendColumn(col_toggle)
+        text = dv.DataViewTextRenderer()
+        col_text = dv.DataViewColumn(
+            _('Cleaner'), text, 1, width=260,
+            align=wx.ALIGN_LEFT,
+            flags=dv.DATAVIEW_COL_RESIZABLE)
+        self.tree.AppendColumn(col_text)
+        self.tree.Bind(
+            dv.EVT_DATAVIEW_ITEM_CONTEXT_MENU,
+            self._on_tree_context_menu)
         tree_sizer.Add(self.tree, 1, wx.EXPAND)
         tree_panel.SetSizer(tree_sizer)
 
@@ -390,9 +615,6 @@ class MainFrame(wx.Frame):
 
         self.SetMenuBar(mb)
 
-        # Tree-check persistence.
-        self.tree.Bind(EVT_TREE_ITEM_CHECKED, self._on_tree_item_checked)
-
     def _build_accelerators(self):
         """Bind global keyboard shortcuts for accessibility.
 
@@ -483,148 +705,48 @@ class MainFrame(wx.Frame):
             APP_NAME, wx.ICON_ERROR)
 
     def _populate_tree(self):
-        self.tree.DeleteChildren(self._root)
-        self._item_map.clear()
-        # Restore persisted check state from Options; skip change events
-        # while we do so to avoid writing everything back out.
-        self._suspend_check_persist = True
-        try:
-            hidden = getattr(self, '_hidden_cleaners', set())
-            for cleaner_id in sorted(backends):
-                cleaner = backends[cleaner_id]
-                # Hide the synthetic '_gui' cleaner used for shred.
-                if cleaner_id == '_gui':
-                    continue
-                # Auto-hide: skip cleaners that have nothing to clean.
-                # The hidden set is computed off the main thread by
-                # LoaderThread so this stays cheap.
-                if cleaner_id in hidden:
-                    continue
-                name = cleaner.get_name() or cleaner_id
-                parent = self.tree.AppendItem(
-                    self._root, name, ct_type=1)
-                # Plain 2-state checkbox.  CustomTreeCtrl's 3-state
-                # click handler cycles UNCHECKED -> CHECKED ->
-                # UNDETERMINED, which feels broken for a toggle, so we
-                # indicate "partial" (some but not all children
-                # checked) by making the parent bold in
-                # _refresh_parent_state.
-                self.tree.SetItemData(parent, (cleaner_id, None))
-                self._item_map[(cleaner_id, -1)] = parent
-                for option_id, option_name in cleaner.get_options():
-                    warning = cleaner.get_warning(option_id)
-                    label = option_name
-                    if warning:
-                        # Mark warnings with an exclamation mark; the
-                        # full text appears on hover / status.
-                        label = u'\u26a0  ' + label
-                    child = self.tree.AppendItem(parent, label, ct_type=1)
-                    self.tree.SetItemData(child, (cleaner_id, option_id))
-                    self._item_map[(cleaner_id, option_id)] = child
-                    if options.get_tree(cleaner_id, option_id):
-                        self.tree.CheckItem(child, True)
-                self._refresh_parent_state(parent)
-        finally:
-            self._suspend_check_persist = False
-        self._apply_tree_filter()
+        """Build cleaner metadata and hand it to the model.
 
-    def _on_tree_item_checked(self, evt):
-        """Cascade check state between parent and children and persist.
-
-        Fires for both the cleaner row (parent) and the option row
-        (child).  When a parent is toggled we force all its children to
-        match; when a child is toggled we recompute the parent's
-        all/none/mixed state and persist the child.
+        The model owns the per-row check state (read/written via
+        :class:`Options`) and renders rows lazily via the DataViewCtrl,
+        so we no longer need to walk live tree items here.
         """
-        evt.Skip()
-        if self._suspend_check_persist or self._suspend_cascade:
-            return
-        item = evt.GetItem()
-        data = self.tree.GetItemData(item)
-        if not data:
-            return
-        cleaner_id, option_id = data
-        self._suspend_cascade = True
-        try:
-            if option_id is None:
-                # Parent toggled by the user: propagate to children.
-                checked = bool(self.tree.IsItemChecked(item))
-                child, cookie = self.tree.GetFirstChild(item)
-                while child and child.IsOk():
-                    cdata = self.tree.GetItemData(child)
-                    if bool(self.tree.IsItemChecked(child)) != checked:
-                        self.tree.CheckItem(child, checked)
-                        if cdata and cdata[1] is not None:
-                            options.set_tree(cdata[0], cdata[1], checked)
-                    child, cookie = self.tree.GetNextChild(item, cookie)
-                # Parent cannot be "partial" after a user toggle; make
-                # sure the bold-for-mixed styling is cleared.
-                self.tree.SetItemBold(item, False)
-                self.tree.RefreshLine(item)
-            else:
-                # Child toggled: persist and refresh the parent.
-                options.set_tree(
-                    cleaner_id, option_id,
-                    self.tree.IsItemChecked(item))
-                parent = self.tree.GetItemParent(item)
-                self._refresh_parent_state(parent)
-        finally:
-            self._suspend_cascade = False
-
-    def _refresh_parent_state(self, parent):
-        """Sync ``parent`` checkbox + bold marker to its children.
-
-        * All children checked -> parent CHECKED, normal weight.
-        * No children checked  -> parent UNCHECKED, normal weight.
-        * Some children checked -> parent CHECKED + bold (mixed hint).
-
-        Uses ``CheckItem`` rather than ``SetItem3StateValue`` because
-        the latter does not call ``RefreshLine``, leaving collapsed
-        parents visually stale.
-        """
-        if not parent or not parent.IsOk():
-            return
-        n_total = 0
-        n_checked = 0
-        child, cookie = self.tree.GetFirstChild(parent)
-        while child and child.IsOk():
-            n_total += 1
-            if self.tree.IsItemChecked(child):
-                n_checked += 1
-            child, cookie = self.tree.GetNextChild(parent, cookie)
-        if n_total == 0:
-            return
-        target = n_checked > 0
-        is_partial = 0 < n_checked < n_total
-        prev = self._suspend_cascade
-        self._suspend_cascade = True
-        try:
-            if bool(self.tree.IsItemChecked(parent)) != target:
-                self.tree.CheckItem(parent, target)
-            self.tree.SetItemBold(parent, is_partial)
-            self.tree.RefreshLine(parent)
-        finally:
-            self._suspend_cascade = prev
+        hidden = getattr(self, '_hidden_cleaners', set())
+        entries = []
+        for cleaner_id in sorted(backends):
+            if cleaner_id == '_gui':
+                continue
+            if cleaner_id in hidden:
+                continue
+            cleaner = backends[cleaner_id]
+            name = cleaner.get_name() or cleaner_id
+            opts = []
+            for option_id, option_name in cleaner.get_options():
+                warning = cleaner.get_warning(option_id)
+                label = option_name
+                if warning:
+                    # Mark warnings with an exclamation mark; the full
+                    # text appears on hover / status.
+                    label = u'\u26a0  ' + option_name
+                opts.append((option_id, label))
+            entries.append((cleaner_id, name, opts))
+        self._tree_model.set_data(entries)
 
     # ------------------------------------------------------------------
     # Selection helpers
     # ------------------------------------------------------------------
     def _collect_operations(self):
-        """Return dict {cleaner_id: [option_id, ...]} for checked options."""
+        """Return dict {cleaner_id: [option_id, ...]} for checked options.
+
+        Reads :class:`Options` directly so check state is honoured even
+        when the tree filter has hidden some rows.
+        """
         operations = {}
-        cleaner_item, cookie = self.tree.GetFirstChild(self._root)
-        while cleaner_item and cleaner_item.IsOk():
-            opt_item, opt_cookie = self.tree.GetFirstChild(cleaner_item)
-            while opt_item and opt_item.IsOk():
-                if self.tree.IsItemChecked(opt_item):
-                    data = self.tree.GetItemData(opt_item)
-                    if data and data[1] is not None:
-                        cid, oid = data
-                        operations.setdefault(cid, []).append(oid)
-                opt_item, opt_cookie = self.tree.GetNextChild(
-                    cleaner_item, opt_cookie)
-            cleaner_item, cookie = self.tree.GetNextChild(
-                self._root, cookie)
+        for cn in self._tree_model.cleaner_nodes():
+            for o in self._tree_model.all_options(cn.cleaner_id):
+                if options.get_tree(o.cleaner_id, o.option_id):
+                    operations.setdefault(o.cleaner_id, []).append(
+                        o.option_id)
         for k in list(operations):
             operations[k].sort()
         return operations
@@ -633,82 +755,51 @@ class MainFrame(wx.Frame):
     # Button handlers
     # ------------------------------------------------------------------
     def _on_toggle_expand(self, _evt):
-        if self.chk_expand.IsChecked():
-            self.tree.ExpandAll()
-        else:
-            # CustomTreeCtrl does not implement CollapseAll; walk the
-            # top-level cleaner items and collapse each one instead.
-            item, cookie = self.tree.GetFirstChild(self._root)
-            while item and item.IsOk():
+        expand = self.chk_expand.IsChecked()
+        for cn in self._tree_model.cleaner_nodes():
+            item = self._tree_model.ObjectToItem(cn)
+            if expand:
+                self.tree.Expand(item)
+            else:
                 self.tree.Collapse(item)
-                item, cookie = self.tree.GetNextChild(self._root, cookie)
 
     # ------------------------------------------------------------------
     # Tree filter / bulk-selection helpers
     # ------------------------------------------------------------------
-    def _iter_tree(self):
-        """Yield (parent_item, child_item, cleaner_id, option_id)."""
-        parent, pcookie = self.tree.GetFirstChild(self._root)
-        while parent and parent.IsOk():
-            child, ccookie = self.tree.GetFirstChild(parent)
-            while child and child.IsOk():
-                cdata = self.tree.GetItemData(child) or (None, None)
-                yield parent, child, cdata[0], cdata[1]
-                child, ccookie = self.tree.GetNextChild(parent, ccookie)
-            parent, pcookie = self.tree.GetNextChild(self._root, pcookie)
-
     def _on_tree_filter_changed(self, _evt):
         self._tree_filter_text = (
             self.tree_search.GetValue().strip().lower())
-        self._apply_tree_filter()
-
-    def _apply_tree_filter(self):
-        """Hide tree rows that do not match ``self._tree_filter_text``."""
-        needle = self._tree_filter_text
-        parent, pcookie = self.tree.GetFirstChild(self._root)
-        while parent and parent.IsOk():
-            pname = self.tree.GetItemText(parent).lower()
-            parent_match = (not needle) or (needle in pname)
-            any_child_visible = False
-            child, ccookie = self.tree.GetFirstChild(parent)
-            while child and child.IsOk():
-                cname = self.tree.GetItemText(child).lower()
-                visible = (not needle) or parent_match or (needle in cname)
-                self.tree.HideItem(child, not visible)
-                any_child_visible = any_child_visible or visible
-                child, ccookie = self.tree.GetNextChild(parent, ccookie)
-            self.tree.HideItem(
-                parent, not (parent_match or any_child_visible))
-            if needle and (parent_match or any_child_visible):
-                self.tree.Expand(parent)
-            parent, pcookie = self.tree.GetNextChild(self._root, pcookie)
-        self.tree.Refresh()
+        self._tree_model.set_filter(self._tree_filter_text)
+        # When filtering, expand all visible cleaners so matching
+        # options are immediately readable by a screen reader.
+        if self._tree_filter_text:
+            for cn in self._tree_model.cleaner_nodes():
+                self.tree.Expand(self._tree_model.ObjectToItem(cn))
 
     def _set_all_checked(self, checked, predicate=None):
         """Check or uncheck every option that ``predicate`` accepts.
 
         ``predicate`` receives ``(cleaner_id, option_id, option_label)``.
-        Runs with the cascade guard active so we only refresh each
-        parent once at the end.
+        Iterates over the model's full dataset (not the live view) so
+        options hidden by the current filter are still updated.
         """
-        self._suspend_cascade = True
-        touched_parents = set()
-        try:
-            for parent, child, cid, oid in self._iter_tree():
-                if oid is None:
+        touched = set()
+        for cn in self._tree_model.cleaner_nodes():
+            for o in self._tree_model.all_options(cn.cleaner_id):
+                if predicate is not None and not predicate(
+                        o.cleaner_id, o.option_id, o.label):
                     continue
-                if predicate is not None:
-                    label = self.tree.GetItemText(child)
-                    if not predicate(cid, oid, label):
-                        continue
-                if self.tree.IsItemChecked(child) != checked:
-                    self.tree.CheckItem(child, checked)
-                    options.set_tree(cid, oid, checked)
-                touched_parents.add(parent)
-        finally:
-            self._suspend_cascade = False
-        for parent in touched_parents:
-            self._refresh_parent_state(parent)
+                cur = options.get_tree(o.cleaner_id, o.option_id)
+                if cur != checked:
+                    options.set_tree(o.cleaner_id, o.option_id, checked)
+                    self._tree_model.ValueChanged(
+                        self._tree_model.ObjectToItem(o), 0)
+                    touched.add(o.cleaner_id)
+        for cleaner_id in touched:
+            cn = self._tree_model.cleaner_node(cleaner_id)
+            if cn is not None:
+                self._tree_model.ItemChanged(
+                    self._tree_model.ObjectToItem(cn))
 
     def _on_select_safe(self, _evt):
         """Check only low-risk options; uncheck everything else."""
@@ -729,57 +820,58 @@ class MainFrame(wx.Frame):
     def _on_tree_context_menu(self, evt):
         item = evt.GetItem()
         menu = wx.Menu()
-        # Per-option actions (only when right-clicking an option row).
+        obj = None
         if item and item.IsOk():
-            data = self.tree.GetItemData(item)
-            if data and data[1] is not None:
-                cid, oid = data
-                cleaner = backends.get(cid)
-                cname = cleaner.get_name() if cleaner else cid
-                oname = oid
-                if cleaner:
-                    for o_id, o_name in cleaner.get_options():
-                        if o_id == oid:
-                            oname = o_name
-                            break
-                label = _('%(cleaner)s \u2014 %(option)s') % {
-                    'cleaner': cname, 'option': oname}
-                mi_preview_one = menu.Append(
-                    wx.ID_ANY, _('Preview only %s') % label)
-                mi_clean_one = menu.Append(
-                    wx.ID_ANY, _('Clean only %s') % label)
-                mi_filter_log = menu.Append(
-                    wx.ID_ANY, _('Filter log by %s') % label)
-                self.Bind(
-                    wx.EVT_MENU,
-                    lambda _e, c=cid, o=oid:
-                        self._run_single_option(c, o, really_delete=False),
-                    mi_preview_one)
-                self.Bind(
-                    wx.EVT_MENU,
-                    lambda _e, c=cid, o=oid:
-                        self._run_single_option(c, o, really_delete=True),
-                    mi_clean_one)
-                self.Bind(
-                    wx.EVT_MENU,
-                    lambda _e, text=oname: self._filter_log_by(text),
-                    mi_filter_log)
-                menu.AppendSeparator()
-            elif data and data[1] is None:
-                # Parent row: quick (un)check all children.
-                mi_check_cleaner = menu.Append(
-                    wx.ID_ANY, _('Check all options in this cleaner'))
-                mi_uncheck_cleaner = menu.Append(
-                    wx.ID_ANY, _('Uncheck all options in this cleaner'))
-                self.Bind(
-                    wx.EVT_MENU,
-                    lambda _e, p=item: self._set_parent_children(p, True),
-                    mi_check_cleaner)
-                self.Bind(
-                    wx.EVT_MENU,
-                    lambda _e, p=item: self._set_parent_children(p, False),
-                    mi_uncheck_cleaner)
-                menu.AppendSeparator()
+            obj = self._tree_model.ItemToObject(item)
+        if isinstance(obj, _OptionNode):
+            cid, oid = obj.cleaner_id, obj.option_id
+            cleaner = backends.get(cid)
+            cname = cleaner.get_name() if cleaner else cid
+            oname = oid
+            if cleaner:
+                for o_id, o_name in cleaner.get_options():
+                    if o_id == oid:
+                        oname = o_name
+                        break
+            label = _('%(cleaner)s \u2014 %(option)s') % {
+                'cleaner': cname, 'option': oname}
+            mi_preview_one = menu.Append(
+                wx.ID_ANY, _('Preview only %s') % label)
+            mi_clean_one = menu.Append(
+                wx.ID_ANY, _('Clean only %s') % label)
+            mi_filter_log = menu.Append(
+                wx.ID_ANY, _('Filter log by %s') % label)
+            self.Bind(
+                wx.EVT_MENU,
+                lambda _e, c=cid, o=oid:
+                    self._run_single_option(c, o, really_delete=False),
+                mi_preview_one)
+            self.Bind(
+                wx.EVT_MENU,
+                lambda _e, c=cid, o=oid:
+                    self._run_single_option(c, o, really_delete=True),
+                mi_clean_one)
+            self.Bind(
+                wx.EVT_MENU,
+                lambda _e, text=oname: self._filter_log_by(text),
+                mi_filter_log)
+            menu.AppendSeparator()
+        elif isinstance(obj, _CleanerNode):
+            mi_check_cleaner = menu.Append(
+                wx.ID_ANY, _('Check all options in this cleaner'))
+            mi_uncheck_cleaner = menu.Append(
+                wx.ID_ANY, _('Uncheck all options in this cleaner'))
+            self.Bind(
+                wx.EVT_MENU,
+                lambda _e, c=obj.cleaner_id:
+                    self._set_cleaner_children(c, True),
+                mi_check_cleaner)
+            self.Bind(
+                wx.EVT_MENU,
+                lambda _e, c=obj.cleaner_id:
+                    self._set_cleaner_children(c, False),
+                mi_uncheck_cleaner)
+            menu.AppendSeparator()
         mi_deselect = menu.Append(
             wx.ID_ANY, _('Deselect all options'))
         self.Bind(wx.EVT_MENU, self._on_deselect_all, mi_deselect)
@@ -820,21 +912,17 @@ class MainFrame(wx.Frame):
         self.notebook.SetSelection(1)
         self.SetStatusText(_('Log filtered by %s.') % text)
 
-    def _set_parent_children(self, parent, checked):
-        """Check/uncheck every child of ``parent`` and refresh state."""
-        self._suspend_cascade = True
-        try:
-            child, cookie = self.tree.GetFirstChild(parent)
-            while child and child.IsOk():
-                cdata = self.tree.GetItemData(child)
-                if self.tree.IsItemChecked(child) != checked:
-                    self.tree.CheckItem(child, checked)
-                    if cdata and cdata[1] is not None:
-                        options.set_tree(cdata[0], cdata[1], checked)
-                child, cookie = self.tree.GetNextChild(parent, cookie)
-        finally:
-            self._suspend_cascade = False
-        self._refresh_parent_state(parent)
+    def _set_cleaner_children(self, cleaner_id, checked):
+        """Check/uncheck every option of ``cleaner_id`` via the model."""
+        for o in self._tree_model.all_options(cleaner_id):
+            if options.get_tree(o.cleaner_id, o.option_id) != checked:
+                options.set_tree(o.cleaner_id, o.option_id, checked)
+                self._tree_model.ValueChanged(
+                    self._tree_model.ObjectToItem(o), 0)
+        cn = self._tree_model.cleaner_node(cleaner_id)
+        if cn is not None:
+            self._tree_model.ItemChanged(
+                self._tree_model.ObjectToItem(cn))
 
     def _on_preview(self, _evt):
         self._start_worker(really_delete=False)
@@ -1062,13 +1150,6 @@ class MainFrame(wx.Frame):
 
     def update_item_size(self, op, opid, size):
         human = FileUtilities.bytes_to_human(size)
-        if opid == -1:
-            key = (op, -1)
-        else:
-            key = (op, opid)
-        item = self._item_map.get(key)
-        if not item:
-            return
         cleaner = backends.get(op)
         if opid == -1:
             base = cleaner.get_name() if cleaner else op
@@ -1081,7 +1162,8 @@ class MainFrame(wx.Frame):
                         break
             if base is None:
                 base = opid
-        self.tree.SetItemText(item, '%s  \u2014  %s' % (base, human))
+        display = '%s  \u2014  %s' % (base, human)
+        self._tree_model.set_display(op, opid, display)
 
     def worker_done(self, worker, really_delete):
         self.btn_preview.Enable()
@@ -1175,13 +1257,19 @@ class MainFrame(wx.Frame):
         menu.Destroy()
 
     def _uncheck_option(self, cleaner_id, option_id):
-        """Uncheck (cleaner_id, option_id) in the tree and persist."""
-        item = self._item_map.get((cleaner_id, option_id))
-        if item is None:
+        """Uncheck (cleaner_id, option_id) via the model and persist."""
+        o = self._tree_model.option_node(cleaner_id, option_id)
+        if o is None:
             return
-        # Unchecking fires EVT_TREE_ITEM_CHECKED which persists via
-        # Options.set_tree.  No extra bookkeeping needed here.
-        self.tree.CheckItem(item, False)
+        # Persist + notify the model so the row repaints and the
+        # cleaner's check/bold state recomputes.
+        options.set_tree(cleaner_id, option_id, False)
+        self._tree_model.ValueChanged(
+            self._tree_model.ObjectToItem(o), 0)
+        cn = self._tree_model.cleaner_node(cleaner_id)
+        if cn is not None:
+            self._tree_model.ItemChanged(
+                self._tree_model.ObjectToItem(cn))
         cleaner = backends.get(cleaner_id)
         cname = cleaner.get_name() if cleaner else cleaner_id
         self.SetStatusText(

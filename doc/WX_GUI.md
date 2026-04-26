@@ -170,12 +170,36 @@ The wx front-end aims to be usable by blind users via screen readers
   **Ctrl+Shift+F** Shred files, **Ctrl+Shift+D** Shred folders,
   **F1** About.
 
-Known limitation: the cleaner/option tree uses
-`wx.lib.agw.customtreectrl.CustomTreeCtrl`, which is an owner-drawn
-generic control and does **not** expose itself to MSAA/UIA on
-Windows.  Replacing it with `wx.dataview.DataViewTreeCtrl` (or the
-native `wx.TreeCtrl` with state images) is tracked as a follow-up
-for full screen-reader support of individual rows.
+### Tree control
+
+The cleaner/option tree is a `wx.dataview.DataViewCtrl` driven by a
+custom `wx.dataview.PyDataViewModel` (`_CleanerTreeModel` in
+`bleachbit/GUIwx/MainFrame.py`).  Two columns: a
+`DataViewToggleRenderer` for the checkbox and a
+`DataViewTextRenderer` for the cleaner / option label.
+
+Why this control rather than `wx.lib.agw.customtreectrl.CustomTreeCtrl`
+or `wx.TreeCtrl`:
+
+- `CustomTreeCtrl` is owner-drawn and does **not** expose itself to
+  MSAA/UIA on Windows, so screen readers cannot read individual rows
+  or announce check state.
+- `wx.TreeCtrl.EnableCheckBoxes` (the native checkbox path added in
+  wxWidgets 3.1.5) is **not** bound in wxPython 4.2.3 Phoenix at the
+  time of writing, so the native-checkbox approach is unavailable.
+- `DataViewCtrl` maps to a native UIA Grid on Windows; a toggle
+  column exposes the *Toggle* pattern, so NVDA/JAWS/Narrator
+  announce the per-row check state and the space bar toggles it.
+  This is the actual accessibility win for blind users.
+
+The model holds no check state of its own: `GetValue` reads from
+`Options.get_tree(cleaner_id, option_id)` and `SetValue` writes via
+`Options.set_tree(...)`, the same `[tree]` section the GTK UI uses.
+Cascading parent <-> children semantics live in `SetValue` and
+`GetAttr` (a partially-checked cleaner row is rendered bold).
+Filtering is implemented in the model: `set_filter` updates the
+substring needle and calls `Cleared()`, after which the view asks
+the model again for visible children.
 
 ## Smoke test
 
