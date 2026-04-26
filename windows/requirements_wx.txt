@@ -1,0 +1,9 @@
+# General dependencies
+-r ../requirements.txt
+# Windows specific dependencies for wxWidgets build
+certifi
+py2exe
+pypiwin32
+pywin32
+winshell
+wxPython==4.2.5
