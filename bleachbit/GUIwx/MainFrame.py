@@ -187,6 +187,7 @@ class MainFrame(wx.Frame):
 
         self._build_ui()
         self._build_menu()
+        self._build_accelerators()
 
         # Route ``bleachbit`` logger records (e.g. Worker's per-file
         # "Access denied: ..." errors) to the Log tab.  Despite its
@@ -212,8 +213,15 @@ class MainFrame(wx.Frame):
         toolbar = wx.BoxSizer(wx.HORIZONTAL)
 
         self.btn_preview = wx.Button(panel, label=_('Preview'))
+        self.btn_preview.SetToolTip(
+            _('Preview what would be cleaned without deleting anything '
+              '(F5).'))
         self.btn_clean = wx.Button(panel, label=_('Clean'))
+        self.btn_clean.SetToolTip(
+            _('Permanently delete the selected items (Ctrl+Enter).'))
         self.btn_abort = wx.Button(panel, label=_('Abort'))
+        self.btn_abort.SetToolTip(
+            _('Abort the running operation (Esc).'))
         self.btn_abort.Disable()
         self.btn_select_safe = wx.Button(panel, label=_('Select safe'))
         self.btn_select_safe.SetToolTip(
@@ -248,6 +256,8 @@ class MainFrame(wx.Frame):
         tree_sizer = wx.BoxSizer(wx.VERTICAL)
         self.tree_search = wx.SearchCtrl(
             tree_panel, style=wx.TE_PROCESS_ENTER)
+        # Accessible name for screen readers (no visible label).
+        self.tree_search.SetName(_('Search cleaners and options'))
         self.tree_search.SetDescriptiveText(_('Search options\u2026'))
         self.tree_search.ShowCancelButton(True)
         self.tree_search.Bind(wx.EVT_TEXT, self._on_tree_filter_changed)
@@ -259,6 +269,11 @@ class MainFrame(wx.Frame):
             tree_panel,
             agwStyle=TR_DEFAULT_STYLE | TR_HAS_BUTTONS | TR_HIDE_ROOT,
         )
+        # Accessible name for screen readers.  Note: CustomTreeCtrl is
+        # an owner-drawn (generic) control; on Windows it does not
+        # expose itself via MSAA/UIA, so screen readers may still not
+        # read individual rows.  See doc/WX_GUI.md.
+        self.tree.SetName(_('Cleaners'))
         # Hidden root; serves only as the anchor for top-level cleaner items.
         self._root = self.tree.AddRoot('')
         self.tree.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK,
@@ -276,6 +291,7 @@ class MainFrame(wx.Frame):
             0, wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 4)
         self.filter_entry = wx.SearchCtrl(
             right, style=wx.TE_PROCESS_ENTER)
+        self.filter_entry.SetName(_('Filter results and log'))
         self.filter_entry.ShowCancelButton(True)
         self.filter_entry.Bind(wx.EVT_TEXT, self._on_filter_changed)
         self.filter_entry.Bind(
@@ -296,6 +312,7 @@ class MainFrame(wx.Frame):
         # via ``_VirtualResultsList.OnGetItemText`` on demand, which
         # keeps append_row O(1) even for very large previews.
         self.results = _VirtualResultsList(self.notebook, self)
+        self.results.SetName(_('Results'))
         self.results.InsertColumn(COL_CLEANER, _('Cleaner'), width=120)
         self.results.InsertColumn(COL_OPTION, _('Option'), width=120)
         self.results.InsertColumn(COL_PATH, _('Path'), width=360)
@@ -313,6 +330,7 @@ class MainFrame(wx.Frame):
             style=wx.TE_MULTILINE | wx.TE_READONLY
             | wx.TE_DONTWRAP | wx.HSCROLL,
         )
+        self.log.SetName(_('Log'))
         font = wx.Font(wx.FontInfo(10).Family(wx.FONTFAMILY_TELETYPE))
         self.log.SetFont(font)
         self.notebook.AddPage(self.log, _('Log'))
@@ -326,7 +344,9 @@ class MainFrame(wx.Frame):
         # Progress bar and status --------------------------------------
         status_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.gauge = wx.Gauge(panel, range=100)
+        self.gauge.SetName(_('Progress'))
         self.status = wx.StaticText(panel, label='')
+        self.status.SetName(_('Status'))
         status_sizer.Add(self.gauge, 0, wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, 8)
         status_sizer.Add(self.status, 1, wx.ALIGN_CENTER_VERTICAL)
         outer.Add(status_sizer, 0, wx.ALL | wx.EXPAND, 6)
@@ -341,19 +361,20 @@ class MainFrame(wx.Frame):
         mb = wx.MenuBar()
         file_menu = wx.Menu()
         item_shred_files = file_menu.Append(
-            wx.ID_ANY, _('Shred files\u2026'),
+            wx.ID_ANY, _('Shred files\u2026') + '\tCtrl+Shift+F',
             _('Permanently delete specific files.'))
         self.Bind(wx.EVT_MENU, self._on_shred_files, item_shred_files)
         item_shred_folders = file_menu.Append(
-            wx.ID_ANY, _('Shred folders\u2026'),
+            wx.ID_ANY, _('Shred folders\u2026') + '\tCtrl+Shift+D',
             _('Permanently delete specific folders.'))
         self.Bind(wx.EVT_MENU, self._on_shred_folders, item_shred_folders)
         file_menu.AppendSeparator()
         item_prefs = file_menu.Append(
-            wx.ID_PREFERENCES, _('Preferences\u2026'))
+            wx.ID_PREFERENCES, _('Preferences\u2026') + '\tCtrl+,')
         self.Bind(wx.EVT_MENU, self._on_preferences, item_prefs)
         file_menu.AppendSeparator()
-        item_exit = file_menu.Append(wx.ID_EXIT, _('Exit'))
+        item_exit = file_menu.Append(
+            wx.ID_EXIT, _('Exit') + '\tCtrl+Q')
         self.Bind(wx.EVT_MENU, lambda _e: self.Close(), item_exit)
         mb.Append(file_menu, _('File'))
 
@@ -362,7 +383,8 @@ class MainFrame(wx.Frame):
             wx.ID_ANY, _('System information\u2026'),
             _('Show information useful for bug reports.'))
         self.Bind(wx.EVT_MENU, self._on_system_information, item_sysinfo)
-        item_about = help_menu.Append(wx.ID_ABOUT, _('About'))
+        item_about = help_menu.Append(
+            wx.ID_ABOUT, _('About') + '\tF1')
         self.Bind(wx.EVT_MENU, self._on_about, item_about)
         mb.Append(help_menu, _('Help'))
 
@@ -370,6 +392,51 @@ class MainFrame(wx.Frame):
 
         # Tree-check persistence.
         self.tree.Bind(EVT_TREE_ITEM_CHECKED, self._on_tree_item_checked)
+
+    def _build_accelerators(self):
+        """Bind global keyboard shortcuts for accessibility.
+
+        These are deliberately added via ``wx.AcceleratorTable`` rather
+        than baked into translatable button labels, so existing
+        translations are not invalidated.  They give screen-reader and
+        keyboard-only users a way to drive the main actions without
+        tabbing through the toolbar.
+        """
+        id_preview = wx.NewIdRef()
+        id_clean = wx.NewIdRef()
+        id_abort = wx.NewIdRef()
+        id_focus_filter = wx.NewIdRef()
+        id_focus_tree_search = wx.NewIdRef()
+
+        def _safe(handler, btn):
+            def _wrapped(_evt):
+                if btn.IsEnabled():
+                    handler(None)
+            return _wrapped
+
+        self.Bind(wx.EVT_MENU,
+                  _safe(self._on_preview, self.btn_preview), id=id_preview)
+        self.Bind(wx.EVT_MENU,
+                  _safe(self._on_clean, self.btn_clean), id=id_clean)
+        self.Bind(wx.EVT_MENU,
+                  _safe(self._on_abort, self.btn_abort), id=id_abort)
+        self.Bind(wx.EVT_MENU,
+                  lambda _e: self.filter_entry.SetFocus(),
+                  id=id_focus_filter)
+        self.Bind(wx.EVT_MENU,
+                  lambda _e: self.tree_search.SetFocus(),
+                  id=id_focus_tree_search)
+
+        entries = [
+            wx.AcceleratorEntry(wx.ACCEL_NORMAL, wx.WXK_F5, id_preview),
+            wx.AcceleratorEntry(
+                wx.ACCEL_CTRL, wx.WXK_RETURN, id_clean),
+            wx.AcceleratorEntry(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, id_abort),
+            wx.AcceleratorEntry(wx.ACCEL_CTRL, ord('F'), id_focus_filter),
+            wx.AcceleratorEntry(
+                wx.ACCEL_CTRL, ord('L'), id_focus_tree_search),
+        ]
+        self.SetAcceleratorTable(wx.AcceleratorTable(entries))
 
     # ------------------------------------------------------------------
     # Cleaner registration (async)

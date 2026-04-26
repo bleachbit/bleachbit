@@ -147,9 +147,35 @@ as a safety net even if the process is killed outright.
 - Preferences dialog is intentionally minimal: no whitelist editor,
   languages tab, drives selector, or per-cleaner options yet.
 - Chaff generator is not wired up.
-- No menu / keyboard shortcut coverage beyond Exit and About.
 - Not translated through the wx machinery yet (strings go through
   `bleachbit.Language.get_text`, but accelerators are missing).
+
+## Accessibility
+
+The wx front-end aims to be usable by blind users via screen readers
+(NVDA / Narrator on Windows, Orca on Linux):
+
+- Every interactive control has either a visible label or an
+  accessible name set via `SetName`, including the gauge, status
+  text, results list, log, tree, and the two search/filter boxes.
+- Buttons (Preview, Clean, Abort) have tooltips that name their
+  keyboard shortcut.
+- Global keyboard shortcuts (see `MainFrame._build_accelerators`):
+  - **F5** — Preview
+  - **Ctrl+Enter** — Clean
+  - **Esc** — Abort
+  - **Ctrl+F** — focus the results/log filter
+  - **Ctrl+L** — focus the tree search
+- Menu shortcuts: **Ctrl+Q** Exit, **Ctrl+,** Preferences,
+  **Ctrl+Shift+F** Shred files, **Ctrl+Shift+D** Shred folders,
+  **F1** About.
+
+Known limitation: the cleaner/option tree uses
+`wx.lib.agw.customtreectrl.CustomTreeCtrl`, which is an owner-drawn
+generic control and does **not** expose itself to MSAA/UIA on
+Windows.  Replacing it with `wx.dataview.DataViewTreeCtrl` (or the
+native `wx.TreeCtrl` with state images) is tracked as a follow-up
+for full screen-reader support of individual rows.
 
 ## Smoke test
 
