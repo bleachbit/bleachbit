@@ -66,7 +66,7 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot metainfo.pot nsis.pot require-gette
 		--default-domain=$(APP) \
 		--add-location=file \
 		$(SRC)
-	sed -i 's/charset=CHARSET/charset=utf-8/g' $(POTFILE)
+	sed -i.bak 's/charset=CHARSET/charset=utf-8/g' $(POTFILE) && rm -f $(POTFILE).bak
 	echo " Words after update: " \
 		`tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq | wc -w`
 	if [ -f $(POTFILE).old ]; then \
