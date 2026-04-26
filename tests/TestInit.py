@@ -48,14 +48,14 @@ class InitTestCase(common.BleachbitTestCase):
         # should be expanded
         if os.name == 'nt':
             test_inputs = ('~', r'~\ntuser.dat')
+        elif os.uname().sysname == 'Darwin':
+            test_inputs = ('~', '~/.bashrc')
         elif os.name == 'posix':
             test_inputs = ('~', '~/.profile')
         for test_input in test_inputs:
             test_output = os.path.expanduser(test_input)
             self.assertNotEqual(test_input, test_output)
             self.assertExists(test_output)
-            if os.uname().sysname == 'Darwin':
-                print(f"listdir(~): {os.listdir(os.path.expanduser('~'))}")
             if os.name == 'posix':
                 self.assertTrue(os.path.samefile(
                     test_output, os.path.expanduser(test_input)))

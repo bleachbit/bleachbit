@@ -393,14 +393,15 @@ class GeneralTestCase(common.BleachbitTestCase):
         common.put_env('LC_ALL', 'C')
         (rc, stdout, stderr) = run_external(
             ['ls', '/doesnotexist'], clean_env=False)
-        self.assertEqual(rc, 2, f"Expected rc=2, got rc={rc}, stdout='{stdout}', stderr='{stderr}'")
+        # Linux returns 2, macOS returns 1.
+        self.assertIn(rc, (1, 2), f"Expected rc=1 or rc=2, got rc={rc}, stdout='{stdout}', stderr='{stderr}'")
         self.assertIn('No such file', stderr)
 
         # Set parent environment to Spanish.
         common.put_env('LC_ALL', 'es_MX.UTF-8')
         (rc, _, stderr) = run_external(
             ['ls', '/doesnotexist'], clean_env=False)
-        self.assertEqual(rc, 2)
+        self.assertIn(rc, (1, 2))
         if os.path.exists('/usr/share/locale-langpack/es/LC_MESSAGES/coreutils.mo'):
             # Spanish language pack is installed.
             self.assertIn('No existe el archivo', stderr)
@@ -409,7 +410,7 @@ class GeneralTestCase(common.BleachbitTestCase):
         # should use English.
         (rc, _, stderr) = run_external(
             ['ls', '/doesnotexist'], clean_env=True)
-        self.assertEqual(rc, 2)
+        self.assertIn(rc, (1, 2))
         self.assertIn('No such file', stderr)
 
         # Reset environment
