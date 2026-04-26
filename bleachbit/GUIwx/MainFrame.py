@@ -732,15 +732,12 @@ class MainFrame(wx.Frame):
             self._worker_thread.abort()
 
     def _on_about(self, _evt):
-        info = wx.adv.AboutDialogInfo() if hasattr(wx, 'adv') else None
-        if info is None:
-            import wx.adv  # pylint: disable=import-outside-toplevel
-            info = wx.adv.AboutDialogInfo()
+        import wx.adv  # pylint: disable=import-outside-toplevel
+        info = wx.adv.AboutDialogInfo()
         info.SetName(APP_NAME)
         info.SetVersion(APP_VERSION + ' (wx MVP)')
         info.SetDescription(
             _('Experimental wxPython front-end for BleachBit.'))
-        import wx.adv  # pylint: disable=import-outside-toplevel
         wx.adv.AboutBox(info)
 
     def _on_close(self, evt):
