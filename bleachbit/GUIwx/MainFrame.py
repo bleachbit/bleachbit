@@ -491,7 +491,7 @@ class MainFrame(wx.Frame):
         toggle = dv.DataViewToggleRenderer(
             mode=dv.DATAVIEW_CELL_ACTIVATABLE)
         col_toggle = dv.DataViewColumn(
-            _('On'), toggle, 0, width=28,
+            _('On'), toggle, 0, width=44,
             align=wx.ALIGN_CENTER)
         self.tree.AppendColumn(col_toggle)
         text = dv.DataViewTextRenderer()
@@ -500,6 +500,11 @@ class MainFrame(wx.Frame):
             align=wx.ALIGN_LEFT,
             flags=dv.DATAVIEW_COL_RESIZABLE)
         self.tree.AppendColumn(col_text)
+        # By default ``DataViewCtrl`` draws the tree expander button on
+        # the first column, which would overlap the checkbox and eat
+        # its clicks.  Move the expander to the text column so column 0
+        # is dedicated to the toggle.
+        self.tree.SetExpanderColumn(col_text)
         self.tree.Bind(
             dv.EVT_DATAVIEW_ITEM_CONTEXT_MENU,
             self._on_tree_context_menu)
