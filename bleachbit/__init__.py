@@ -39,6 +39,23 @@ logger = Log.init_log()
 online_update_notification_enabled = True
 
 #
+# Platform
+#
+
+# platform
+IS_WINDOWS = os.name == 'nt'
+IS_POSIX = os.name == 'posix'
+IS_LINUX = sys.platform.startswith('linux')
+IS_MAC = sys.platform == 'darwin'
+IS_BSD = sys.platform.startswith(('freebsd', 'openbsd', 'netbsd'))
+IS_NETBSD = sys.platform[:6] == 'netbsd'
+
+# file system attributes
+FS_CASE_SENSITIVE = not (IS_WINDOWS or IS_MAC)
+FS_SCAN_RE_FLAGS = 0 if FS_CASE_SENSITIVE else re.IGNORECASE
+
+
+#
 # Paths
 #
 
@@ -69,7 +86,7 @@ for lf in license_filenames:
 # configuration
 portable_mode = False
 options_dir = None
-if 'posix' == os.name:
+if IS_POSIX:
     # os.path.expanduser('~') returns '~' unchanged when HOME is unset
     # and the user has no passwd entry (e.g., Docker containers).
     if not os.getenv('HOME'):
@@ -79,7 +96,7 @@ if 'posix' == os.name:
             logger.warning('HOME not set and no passwd entry; using %s', _home)
         os.environ['HOME'] = _home
     options_dir = os.path.expanduser("~/.config/bleachbit")
-elif 'nt' == os.name:
+elif IS_WINDOWS:
     os.environ.pop('FONTCONFIG_FILE', None)
     if os.path.exists(os.path.join(bleachbit_exe_path, 'bleachbit.ini')):
         # portable mode
@@ -116,13 +133,13 @@ personal_cleaners_dir = os.path.join(options_dir, "cleaners")
 # personal_cleaners_dir.
 if os.path.isdir(os.path.join(bleachbit_exe_path, 'cleaners')) and not portable_mode:
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
-elif sys.platform in ('linux', 'darwin'):
+elif IS_LINUX or IS_MAC:
     system_cleaners_dir = '/usr/share/bleachbit/cleaners'
-elif sys.platform == 'win32':
+elif IS_WINDOWS:
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
-elif sys.platform[:6] == 'netbsd':
+elif IS_NETBSD:
     system_cleaners_dir = '/usr/pkg/share/bleachbit/cleaners'
-elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
+elif IS_BSD:
     system_cleaners_dir = '/usr/local/share/bleachbit/cleaners'
 else:
     system_cleaners_dir = None
@@ -220,11 +237,11 @@ help_contents_url = "https://www.bleachbit.org/help"
 update_check_url = f"{base_url}/update/{APP_VERSION}"
 
 # set up environment variables
-if 'nt' == os.name:
+if IS_WINDOWS:
     from bleachbit import Windows
     Windows.setup_environment()
 
-if 'posix' == os.name:
+if IS_POSIX:
     # Set fallbacks for environment variables.
     envs = {
         'PATH': '/usr/bin:/bin:/usr/sbin:/sbin',
@@ -241,10 +258,8 @@ if 'posix' == os.name:
         if not os.getenv(varname):
             os.environ[varname] = value
 
-# should be re.IGNORECASE on macOS
-fs_scan_re_flags = 0 if os.name == 'posix' else re.IGNORECASE
 
-if 'win32' == sys.platform:
+if IS_WINDOWS:
     import win32process
 
     for process in win32process.EnumProcessModules(-1):

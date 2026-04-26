@@ -30,7 +30,7 @@ import re
 import time
 import unicodedata
 from collections import namedtuple
-from bleachbit import fs_scan_re_flags
+from bleachbit import FS_SCAN_RE_FLAGS
 from . import Command
 
 
@@ -67,7 +67,7 @@ class CompiledSearch:
         self.command = search.command
 
         def re_compile(regex):
-            return re.compile(regex, fs_scan_re_flags) if regex else None
+            return re.compile(regex, FS_SCAN_RE_FLAGS) if regex else None
 
         self.regex = re_compile(search.regex)
         self.nregex = re_compile(search.nregex)

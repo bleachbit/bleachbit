@@ -34,7 +34,7 @@ from itertools import product
 # first party imports
 import bleachbit
 from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod  # mod=module
-from bleachbit import fs_scan_re_flags
+from bleachbit import FS_SCAN_RE_FLAGS
 from bleachbit.Constant import CLEAN_FILE_LABEL
 from bleachbit.Cookie import COOKIE_KEEP_LIST_FILENAME
 from bleachbit.Language import get_text as _
@@ -203,24 +203,24 @@ class FileActionProvider(ActionProvider):
         basename = os.path.basename
         object_type = self.object_type
         if self.regex:
-            regex_c_search = re.compile(self.regex, fs_scan_re_flags).search
+            regex_c_search = re.compile(self.regex, FS_SCAN_RE_FLAGS).search
         else:
             regex_c_search = None
 
         if self.nregex:
-            nregex_c_search = re.compile(self.nregex, fs_scan_re_flags).search
+            nregex_c_search = re.compile(self.nregex, FS_SCAN_RE_FLAGS).search
         else:
             nregex_c_search = None
 
         if self.wholeregex:
             wholeregex_c_search = re.compile(
-                self.wholeregex, fs_scan_re_flags).search
+                self.wholeregex, FS_SCAN_RE_FLAGS).search
         else:
             wholeregex_c_search = None
 
         if self.nwholeregex:
             nwholeregex_c_search = re.compile(
-                self.nwholeregex, fs_scan_re_flags).search
+                self.nwholeregex, FS_SCAN_RE_FLAGS).search
         else:
             nwholeregex_c_search = None
 
