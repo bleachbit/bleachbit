@@ -99,6 +99,38 @@ class GtkUIProxyTestCase(common.BleachbitTestCase):
         with self.assertRaises(AttributeError):
             _ = proxy.not_a_real_method
 
+    def test_optional_target_methods_feature_detect(self):
+        """Forwarded names absent on the target must report as absent.
+
+        The Worker uses ``getattr(ui, 'append_row', None)`` to feature-
+        detect optional callbacks.  The GTK MainWindow does not
+        implement ``append_row``, so the proxy must propagate the
+        absence rather than enqueue calls that will fail at flush.
+        """
+        class MinimalTarget:
+            # Implements only the mandatory subset (no append_row).
+            def append_text(self, msg, tag=None):
+                pass
+
+            def update_progress_bar(self, value):
+                pass
+
+            def update_total_size(self, size):
+                pass
+
+            def update_item_size(self, op, opid, size):
+                pass
+
+            def worker_done(self, worker, really_delete):
+                pass
+
+        proxy = GtkUIProxy(MinimalTarget(),
+                           scheduler=self._make_sync_scheduler())
+        # Implemented methods are exposed.
+        self.assertTrue(callable(proxy.append_text))
+        # Unimplemented optional method must NOT appear on the proxy.
+        self.assertIsNone(getattr(proxy, 'append_row', None))
+
     def test_fifo_delivery_with_sync_scheduler(self):
         """Calls are delivered in the order they were enqueued."""
         target = _RecordingTarget()
@@ -188,6 +220,39 @@ class GtkUIProxyTestCase(common.BleachbitTestCase):
         self.assertEqual(target.calls, ['ok-1', 'boom', 'ok-2'])
         # The exception was logged, including the method name.
         self.assertTrue(any('append_text' in line for line in ctx.output))
+
+    def test_discard_pending_drops_queued_events(self):
+        """``discard_pending`` clears the queue but lets future enqueues flow.
+
+        Models the abort scenario: ~200K events are queued on the proxy
+        but not yet flushed; abort drops them so the GUI can stop
+        rendering, while the worker's post-abort summary lines still
+        get delivered.
+        """
+        target = _RecordingTarget()
+        scheduled = []
+
+        def deferred_scheduler(callback):
+            scheduled.append(callback)
+
+        proxy = GtkUIProxy(target, scheduler=deferred_scheduler)
+        # Queue a large burst (no flush yet).
+        for i in range(5000):
+            proxy.append_text('pre-abort %d' % i)
+        self.assertEqual(len(scheduled), 1)
+        # Abort: drop everything queued so far.
+        proxy.discard_pending()
+        # New events posted after discard still queue normally.
+        proxy.append_text('summary line')
+        proxy.worker_done(object(), False)
+        # Drain the (still-scheduled) flush plus any follow-ups.
+        while scheduled:
+            scheduled.pop(0)()
+        # Only the post-discard events were delivered.
+        self.assertEqual(target.calls, [
+            ('append_text', 'summary line', None),
+            ('worker_done', False),
+        ])
 
     def test_thread_safe_concurrent_enqueue(self):
         """Concurrent enqueues do not lose events (FIFO per producer)."""
@@ -300,6 +365,24 @@ class GtkWorkerThreadTestCase(common.BleachbitTestCase):
         self.assertIsNotNone(wt.worker)
         self.assertEqual(wt.worker.total_errors, 0)
         self.assertEqual(wt.worker.total_deleted, 1)
+
+    def test_abort_calls_discard_pending(self):
+        """``GtkWorkerThread.abort()`` drops pending UI events.
+
+        Constructs the thread but does not start it, then mocks the
+        proxy and the underlying worker to verify abort wires both
+        signals.  This is the unit-level guarantee behind the GTK
+        responsiveness fix; the deferred-scheduler proxy test above
+        already verifies the queue-drop behaviour itself.
+        """
+        from unittest import mock
+        wt = GtkWorkerThread(
+            _RecordingTarget(), False, {'dummy': ['only']})
+        wt._ui_proxy = mock.Mock(spec=['discard_pending'])
+        wt.worker = mock.Mock()
+        wt.abort()
+        wt.worker.abort.assert_called_once_with()
+        wt._ui_proxy.discard_pending.assert_called_once_with()
 
     def test_abort_stops_worker(self):
         # Build many files so the loop has work to abort partway through.

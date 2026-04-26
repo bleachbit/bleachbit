@@ -112,8 +112,30 @@ class GtkUIProxy:
         self._scheduled = False
         self._scheduler = scheduler or _default_scheduler
 
+    def discard_pending(self):
+        """Drop any queued UI callbacks.
+
+        Called on abort.  At ~200K files, the worker can enqueue
+        hundreds of thousands of ``append_text``/``append_row`` events
+        before the user clicks the abort button.  Without dropping
+        them, the GUI keeps rendering the queued events for many
+        seconds after abort, so abort appears to have no effect.
+
+        New callbacks enqueued after this call (e.g. the worker's
+        post-abort summary lines and ``worker_done``) flow normally.
+        """
+        with self._lock:
+            self._queue.clear()
+
     def __getattr__(self, name):
         if name not in self._FORWARDED:
+            raise AttributeError(name)
+        # Only expose forwarded methods that the target actually
+        # implements.  Worker uses ``getattr(ui, 'append_row', None)``
+        # to feature-detect optional callbacks; the GTK MainWindow
+        # provides no append_row, so the proxy must report it as
+        # absent rather than enqueue calls that will later fail.
+        if not hasattr(self._target, name):
             raise AttributeError(name)
 
         def _enqueue(*args, **kwargs):
@@ -183,9 +205,18 @@ class GtkWorkerThread(threading.Thread):
         self.worker = None
 
     def abort(self):
-        """Request the worker to stop at the next safe point."""
+        """Request the worker to stop at the next safe point.
+
+        Also drop any UI callbacks that the worker enqueued before the
+        user clicked abort, so the GUI does not keep rendering work
+        the user no longer cares about.  Without this, a preview of a
+        very large cleaner (e.g. System - Cache with hundreds of
+        thousands of files) would appear to ignore abort because the
+        main thread is still draining queued ``append_text`` events.
+        """
         if self.worker is not None:
             self.worker.abort()
+        self._ui_proxy.discard_pending()
 
     @property
     def is_aborted(self):
