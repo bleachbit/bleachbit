@@ -50,6 +50,7 @@ class CommonTestCase(common.BleachbitTestCase):
             'nb_NO.ISO-8859-1',
             'POSIX',
             'ru_RU.KOI8-R',
+            'sr_RS.UTF-8@latin', # seen on macOS
             'zh_Hant',
         ]
 

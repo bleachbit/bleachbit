@@ -54,6 +54,8 @@ class InitTestCase(common.BleachbitTestCase):
             test_output = os.path.expanduser(test_input)
             self.assertNotEqual(test_input, test_output)
             self.assertExists(test_output)
+            if os.uname().sysname == 'Darwin':
+                print(f"listdir(~): {os.listdir(os.path.expanduser('~'))}")
             if os.name == 'posix':
                 self.assertTrue(os.path.samefile(
                     test_output, os.path.expanduser(test_input)))

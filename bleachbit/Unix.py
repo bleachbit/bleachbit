@@ -465,20 +465,26 @@ def is_process_running_ps_aux(exename, require_same_user):
     """
     ps_out = subprocess.check_output(["ps", "aux", "-c"],
                                      universal_newlines=True)
+    print(f"DEBUG ps_out:\n{ps_out}")
     first_line = ps_out.split('\n', maxsplit=1)[0].strip()
+    print(f"DEBUG first_line: {first_line}")
     if "USER" not in first_line or "COMMAND" not in first_line:
         raise RuntimeError("Unexpected ps header format")
 
     for line in ps_out.split("\n")[1:]:
         parts = line.split()
         if len(parts) < 11:
+            print(f"DEBUG skipping line (too few parts): {line}")
             continue
         process_user = parts[0]
         process_cmd = parts[10]
+        print(f"DEBUG process_user={process_user}, process_cmd={process_cmd}, exename={exename}")
         if process_cmd != exename:
             continue
         if not require_same_user or process_user == get_real_username():
+            print(f"DEBUG found match, returning True")
             return True
+    print(f"DEBUG no match found, returning False")
     return False
 
 

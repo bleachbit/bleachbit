@@ -391,9 +391,9 @@ class GeneralTestCase(common.BleachbitTestCase):
         lc_all_old = common.get_env('LC_ALL')
         lang_old = common.get_env('LANG')
         common.put_env('LC_ALL', 'C')
-        (rc, _, stderr) = run_external(
+        (rc, stdout, stderr) = run_external(
             ['ls', '/doesnotexist'], clean_env=False)
-        self.assertEqual(rc, 2)
+        self.assertEqual(rc, 2, f"Expected rc=2, got rc={rc}, stdout='{stdout}', stderr='{stderr}'")
         self.assertIn('No such file', stderr)
 
         # Set parent environment to Spanish.
