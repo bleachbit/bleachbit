@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-04-05 14:48-0600\n"
-"PO-Revision-Date: 2026-04-08 19:09+0000\n"
-"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
+"PO-Revision-Date: 2026-04-27 08:09+0000\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/bleachbit/main/"
 "tr/>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 "X-Launchpad-Export-Date: 2021-06-25 03:40+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -309,9 +309,7 @@ msgstr "Site verileri"
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
-msgstr ""
-"LocalStorage, IndexedDB ve web siteleri tarafından depolanan diğer verileri "
-"sil"
+msgstr "LocalStorage, IndexedDB ve web sitelerince depolanan diğer verileri sil"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -1336,7 +1334,7 @@ msgstr "Özel"
 
 #: ../bleachbit/Cleaner.py
 msgid "Delete user-specified files and folders"
-msgstr "Kullanıcı tarafından belirtilen dosya ve klasörleri sil"
+msgstr "Kullanıcıca belirtilen dosya ve klasörleri sil"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
@@ -1553,8 +1551,8 @@ msgid ""
 "At least one file was locked by another process, so its contents could not "
 "be overwritten. It will be marked for deletion upon system reboot."
 msgstr ""
-"En az bir dosya başka işlem tarafından kilitlendi, bu yüzden içeriğinin "
-"üzerine yazılamadı. Sistem yeniden başlatıldığında silmek için imlenecektir."
+"En az bir dosya başka işlemce kilitlendi, bu yüzden içeriğinin üzerine "
+"yazılamadı. Sistem yeniden başlatıldığında silmek için imlenecektir."
 
 #. TRANSLATORS: Label in the log when the file will be deleted
 #. when the system reboots. 'Mark' is a verb.
@@ -1988,8 +1986,8 @@ msgid ""
 "Only cookies are preserved. Site data is always deleted. <a "
 "href='{url}'>Learn more</a>"
 msgstr ""
-"Yalnızca çerezler korunur. Site verileri her zaman silinir. <a "
-"href='{url}'>Daha fazla bilgi</a>"
+"Yalnızca çerezler korunur. Site verileri her zaman silinir. <a href='{url}'>"
+"Daha çok bilgi</a>"
 
 #. TRANSLATORS: Label for the search entry in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
