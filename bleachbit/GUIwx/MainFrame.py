@@ -1064,6 +1064,13 @@ class MainFrame(wx.Frame):
         item_copy.Enable(bool(paths))
         item_open = menu.Append(wx.ID_ANY, _('Open file location'))
         item_open.Enable(bool(paths))
+        # "Delete now" only makes sense in preview mode: after a clean
+        # run the files are already gone.  Registry rows have no path
+        # and are filtered out by the ``paths`` list.
+        in_preview = not getattr(self, '_current_really_delete', False)
+        item_delete = menu.Append(
+            wx.ID_ANY, _('Delete selected file(s)'))
+        item_delete.Enable(bool(paths) and in_preview)
         item_skip = menu.Append(
             wx.ID_ANY, _('Always skip this path (add to keep list)'))
         item_skip.Enable(bool(paths))
@@ -1091,6 +1098,8 @@ class MainFrame(wx.Frame):
                   lambda _e: self._open_locations(paths), item_open)
         self.Bind(wx.EVT_MENU,
                   lambda _e: self._whitelist_paths(paths), item_skip)
+        self.Bind(wx.EVT_MENU,
+                  lambda _e: self._shred_paths(paths), item_delete)
         for item, key in uncheck_items:
             self.Bind(wx.EVT_MENU,
                       lambda _e, k=key: self._uncheck_option(*k), item)
