@@ -55,7 +55,7 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot metainfo.pot nsis.pot require-gette
 	@if [ -f $(POTFILE) ]; then \
 		cp $(POTFILE) $(POTFILE).old; \
 		echo " Words before update: "; \
-		tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq |wc --words; \
+		tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq | wc -w; \
 	fi
 	cat cleanerml.pot desktop.pot metainfo.pot nsis.pot > $(POTFILE)
 	# --add-location=file: reduces size of diff
@@ -68,7 +68,7 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot metainfo.pot nsis.pot require-gette
 		$(SRC)
 	sed -i 's/charset=CHARSET/charset=utf-8/g' $(POTFILE)
 	echo " Words after update: " \
-		`tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq | wc --words`
+		`tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq | wc -w`
 	if [ -f $(POTFILE).old ]; then \
 		echo "msgid added or removed"; \
 		msgcomm -u $(POTFILE) $(POTFILE).old > diff.pot; \
@@ -88,7 +88,7 @@ refresh-po: $(POTFILE) require-gettext
 spelling: $(POTFILE) require-gettext
 	@echo "* Checking spelling"
 	@echo
-	@echo Word count: `msggrep -Kie . --no-wrap $(POTFILE)  | grep ^msgid  | cut -c 8- | wc --words`
+	@echo Word count: `msggrep -Kie . --no-wrap $(POTFILE)  | grep ^msgid  | cut -c 8- | wc -w`
 	@echo
 	@command -v aspell >/dev/null 2>&1 || { echo "WARNING: Missing 'aspell'. apt users, try: sudo apt install aspell"; exit 0; }
 	msggrep -Kie . --no-wrap $(POTFILE)  | grep ^msgid  | cut -c 8- | aspell --personal=./aspell.pws list | sort -u
