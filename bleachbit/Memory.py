@@ -196,7 +196,10 @@ def physical_free_darwin(run_vmstat=None):
     if run_vmstat is None:
         def run_vmstat():
             return subprocess.check_output(["vm_stat"])
-    output = iter(run_vmstat().split("\n"))
+    vmstat_output = run_vmstat()
+    if isinstance(vmstat_output, bytes):
+        vmstat_output = vmstat_output.decode("utf-8", errors="replace")
+    output = iter(vmstat_output.split("\n"))
     page_size = get_page_size(next(output))
     vm_stat = dict(parse_line(*l.split(":")) for l in output if l != "")
     return vm_stat["Pages free"] * page_size

@@ -68,7 +68,7 @@ class MemoryTestCase(common.BleachbitTestCase):
         # restore
         os.seteuid(euid)
 
-    @common.skipIfWindows
+    @common.skipUnlessLinux
     def test_count_linux_swap(self):
         """Test for method count_linux_swap"""
         n_swaps = count_swap_linux()

@@ -15,6 +15,7 @@ import os
 import random
 import string
 import struct
+import sys
 import tempfile
 import time
 import warnings
@@ -131,7 +132,8 @@ def fitrim(pathname):
 def sync():
     """Flush file system buffers. sync() is different than fsync()"""
     if 'posix' == os.name:
-        rc = ctypes.cdll.LoadLibrary('libc.so.6').sync()
+        libc_name = 'libc.dylib' if sys.platform == 'darwin' else 'libc.so.6'
+        rc = ctypes.cdll.LoadLibrary(libc_name).sync()
         if 0 != rc:
             logger.error('sync() returned code %d', rc)
     elif 'nt' == os.name:

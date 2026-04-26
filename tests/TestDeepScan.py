@@ -87,6 +87,9 @@ class DeepScanTestCase(common.BleachbitTestCase):
         os.mkdir(subdir)
         f_del2 = self.write_file(os.path.join(subdir, 'bar.ini.bbtestbak'))
         f_del3 = self.write_file(os.path.join(subdir, 'bar.ini.bbtestBAK'))
+        # Detect case-insensitive filesystem (e.g., default macOS APFS).
+        case_sensitive_fs = (
+            'posix' == os.name and os.path.samefile(f_del2, f_del3) is False)
 
         # sanity check
         self.assertExists(f_del)
@@ -112,7 +115,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
         self.assertExists(f_del)
         self.assertExists(f_keep)
         self.assertFalse(os.path.exists(f_del2))
-        if 'posix' == os.name:
+        if case_sensitive_fs:
             self.assertExists(f_del3)
         else:
             self.assertFalse(os.path.exists(f_del3))
@@ -124,7 +127,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
 
         # cleanup
         os.unlink(f_keep)
-        if 'posix' == os.name:
+        if case_sensitive_fs:
             os.unlink(f_del3)
         os.rmdir(subdir)
 
