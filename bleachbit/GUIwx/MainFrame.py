@@ -19,6 +19,7 @@ from wx.lib.agw.customtreectrl import (
     EVT_TREE_ITEM_CHECKED,
     TR_DEFAULT_STYLE,
     TR_HAS_BUTTONS,
+    TR_HIDE_ROOT,
 )
 
 from bleachbit import APP_NAME, APP_VERSION, Cleaner, FileUtilities
@@ -256,9 +257,9 @@ class MainFrame(wx.Frame):
         tree_sizer.Add(self.tree_search, 0, wx.EXPAND | wx.BOTTOM, 2)
         self.tree = CustomTreeCtrl(
             tree_panel,
-            agwStyle=TR_DEFAULT_STYLE | TR_HAS_BUTTONS,
+            agwStyle=TR_DEFAULT_STYLE | TR_HAS_BUTTONS | TR_HIDE_ROOT,
         )
-        # Placeholder root; hidden.
+        # Hidden root; serves only as the anchor for top-level cleaner items.
         self._root = self.tree.AddRoot('')
         self.tree.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK,
                        self._on_tree_context_menu)
