@@ -674,7 +674,7 @@ class GUI(Gtk.ApplicationWindow):
         """Preview operations or run operations (delete files)"""
 
         assert isinstance(really_delete, bool)
-        from bleachbit import Worker
+        from bleachbit.WorkerThread import GtkWorkerThread
         self.start_time = None
         if not operations:
             operations = {
@@ -699,13 +699,16 @@ class GUI(Gtk.ApplicationWindow):
                 self.set_sensitive(True)
                 self.progressbar.hide()
                 return
-            self.worker = Worker.Worker(self, really_delete, operations)
+            # Run the cleaning generator on a background thread so a
+            # long-running command (e.g. wiping empty space) cannot
+            # block the GTK main loop.  All UI callbacks are marshalled
+            # back to the main thread by GtkUIProxy.
+            self.worker = GtkWorkerThread(self, really_delete, operations)
         except Exception:
-            logger.exception('Error in Worker()')
+            logger.exception('Error in GtkWorkerThread()')
         else:
             self.start_time = time.time()
-            worker = self.worker.run()
-            GLib.idle_add(worker.__next__)
+            self.worker.start()
 
     def worker_done(self, worker, really_delete):
         """Callback for when Worker is done"""
