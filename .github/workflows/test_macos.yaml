@@ -1,0 +1,123 @@
+name: Run tests on macOS
+
+on:
+  push:
+    branches:
+      - '**'
+    paths-ignore:
+      - 'bleachbit.spec'
+      - 'debian/**'
+      - 'doc/**'
+      - 'po/**'
+      - 'README.md'
+      - 'windows/**'
+  pull_request:
+    paths-ignore:
+      - 'bleachbit.spec'
+      - 'debian/**'
+      - 'doc/**'
+      - 'po/**'
+      - 'README.md'
+      - 'windows/**'
+
+# CLI / headless tests on macOS. GUI tests (tests.TestGUI*) are
+# excluded for now and will be enabled in a follow-up.
+jobs:
+  test:
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-13, macos-latest]
+        python-version: ['3.12']
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install system dependencies (Homebrew)
+      run: |
+        brew update
+        # GTK stack is required because bleachbit imports Gtk via
+        # bleachbit.GtkShim even from CLI code paths.
+        brew install \
+          gettext \
+          gobject-introspection \
+          gtk+3 \
+          pygobject3 \
+          pkg-config \
+          cairo \
+          py3cairo
+        # Make Homebrew gettext (msgfmt) available on PATH.
+        echo "$(brew --prefix gettext)/bin" >> "$GITHUB_PATH"
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Update Python packages
+      run: |
+        python -m pip install --upgrade pip
+        pip list
+
+    - name: Install Python dependencies
+      run: |
+        # Ensure pkg-config can find Homebrew libraries when building
+        # PyGObject and pycairo wheels from source.
+        BREW_PREFIX="$(brew --prefix)"
+        export PKG_CONFIG_PATH="$BREW_PREFIX/lib/pkgconfig:$BREW_PREFIX/share/pkgconfig:$PKG_CONFIG_PATH"
+        echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH" >> "$GITHUB_ENV"
+        pip install coverage -r requirements.txt
+
+    - name: Generate Revision.py
+      run: |
+        echo "revision = \"`git rev-parse --short HEAD`\"" > bleachbit/Revision.py
+        echo "build_number = \"${{ github.run_number }}\"" >> bleachbit/Revision.py
+
+    - name: Generate translations
+      run: make -C po local bleachbit.pot
+
+    - name: Smoke test (CLI --version and --list)
+      run: |
+        python bleachbit.py --version
+        python bleachbit.py --list | head -n 20
+
+    - name: Run CLI / headless tests
+      timeout-minutes: 20
+      env:
+        # Avoid attempting to open any display; bleachbit's GTK imports
+        # still succeed without a display for non-GUI code paths.
+        PYTHONWARNINGS: error
+      run: |
+        # Exclude GUI test modules; they will be addressed in a
+        # follow-up change.
+        python -m unittest -v \
+          tests.TestCLI \
+          tests.TestChaff \
+          tests.TestCleaner \
+          tests.TestCleanerML \
+          tests.TestCommand \
+          tests.TestCommon \
+          tests.TestCookie \
+          tests.TestDeepScan \
+          tests.TestFileUtilities \
+          tests.TestGeneral \
+          tests.TestGtkShim \
+          tests.TestInit \
+          tests.TestLanguage \
+          tests.TestMakefile \
+          tests.TestMemory \
+          tests.TestNetwork \
+          tests.TestOptions \
+          tests.TestProtectedPath \
+          tests.TestRecognizeCleanerML \
+          tests.TestSpecial \
+          tests.TestSystemInformation \
+          tests.TestUnix \
+          tests.TestUpdate \
+          tests.TestWipe \
+          tests.TestWipePath \
+          tests.TestWorker
+
