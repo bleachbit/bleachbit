@@ -40,6 +40,29 @@ from bleachbit.General import get_executable, get_real_uid
 logger = logging.getLogger(__name__)
 
 
+def get_wx_info():
+    """Get dictionary of information about wxPython/wxWidgets."""
+    # pylint: disable=import-outside-toplevel
+    info = {}
+    try:
+        import wx
+    except ImportError as exc:
+        logger.debug('wx module not available: %s', exc)
+        return info
+
+    info['wxPython version'] = wx.version()
+    # wx.PlatformInformation requires a live wx.App; only query it
+    # when one already exists to avoid noisy assertions on the CLI.
+    if wx.GetApp() is not None:
+        try:
+            plat = wx.PlatformInformation()
+            info['wx platform'] = plat.GetPortIdName()
+            info['wx OS'] = plat.GetOperatingSystemIdName()
+        except Exception:  # pylint: disable=broad-except
+            pass
+    return info
+
+
 def get_gtk_info():
     """Get dictionary of information about GTK"""
     # pylint: disable=import-outside-toplevel
@@ -160,8 +183,14 @@ def get_version(four_parts=False):
     return f'{bleachbit.APP_VERSION}.{build_number}'
 
 
-def get_system_information():
-    """Return system information as a string."""
+def get_system_information(gui=None):
+    """Return system information as a string.
+
+    ``gui`` selects which GUI toolkit information to include:
+    ``'gtk'`` (default) calls :func:`get_gtk_info`, ``'wx'`` calls
+    :func:`get_wx_info`, and ``None`` picks based on the active
+    front-end, falling back to GTK.
+    """
     info = OrderedDict()
 
     # Application and library versions
@@ -175,7 +204,16 @@ def get_system_information():
     except ImportError:
         pass
 
-    info.update(get_gtk_info())
+    if gui is None:
+        # Auto-detect based on which GUI module has been imported.
+        if 'bleachbit.GUIwx' in sys.modules or 'wx' in sys.modules:
+            gui = 'wx'
+        else:
+            gui = 'gtk'
+    if gui == 'wx':
+        info.update(get_wx_info())
+    else:
+        info.update(get_gtk_info())
 
     # Variables defined in __init__.py
     info['local_cleaners_dir'] = bleachbit.local_cleaners_dir

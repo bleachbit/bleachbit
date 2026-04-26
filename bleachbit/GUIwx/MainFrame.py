@@ -87,6 +87,64 @@ class _VirtualResultsList(wx.ListCtrl):
         return row[field]
 
 
+class _SystemInformationDialog(wx.Dialog):
+    """Dialog showing system information with Copy/Anonymize buttons."""
+
+    def __init__(self, parent, text, anonymize_func):
+        super().__init__(
+            parent,
+            # TRANSLATORS: Title of the system information dialog.
+            title=_('System information'),
+            size=(640, 480),
+            style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+        )
+        self._original_text = text
+        self._anonymize_func = anonymize_func
+
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        self._text_ctrl = wx.TextCtrl(
+            self, value=text,
+            style=wx.TE_MULTILINE | wx.TE_READONLY
+            | wx.TE_DONTWRAP | wx.HSCROLL,
+        )
+        font = wx.Font(wx.FontInfo(10).Family(wx.FONTFAMILY_TELETYPE))
+        self._text_ctrl.SetFont(font)
+        sizer.Add(self._text_ctrl, 1, wx.EXPAND | wx.ALL, 6)
+
+        btns = wx.BoxSizer(wx.HORIZONTAL)
+        # TRANSLATORS: Button label in the system information dialog to
+        # replace the username with a placeholder.
+        self._btn_anonymize = wx.Button(self, label=_('Anonymize'))
+        self._btn_anonymize.Bind(wx.EVT_BUTTON, self._on_anonymize)
+        self._btn_copy = wx.Button(self, label=_('Copy'))
+        self._btn_copy.Bind(wx.EVT_BUTTON, self._on_copy)
+        btn_close = wx.Button(self, wx.ID_CLOSE, _('Close'))
+        btn_close.Bind(wx.EVT_BUTTON, lambda _e: self.EndModal(wx.ID_CLOSE))
+        self.SetEscapeId(wx.ID_CLOSE)
+        btns.AddStretchSpacer()
+        btns.Add(self._btn_anonymize, 0, wx.RIGHT, 6)
+        btns.Add(self._btn_copy, 0, wx.RIGHT, 6)
+        btns.Add(btn_close, 0)
+        sizer.Add(btns, 0, wx.EXPAND | wx.ALL, 6)
+
+        self.SetSizer(sizer)
+
+    def _on_anonymize(self, _evt):
+        anonymized = self._anonymize_func(self._text_ctrl.GetValue())
+        self._text_ctrl.SetValue(anonymized)
+        # Single-use button.
+        self._btn_anonymize.Disable()
+
+    def _on_copy(self, _evt):
+        if not wx.TheClipboard.Open():
+            return
+        try:
+            wx.TheClipboard.SetData(
+                wx.TextDataObject(self._text_ctrl.GetValue()))
+        finally:
+            wx.TheClipboard.Close()
+
+
 class MainFrame(wx.Frame):
     """Top-level window for the wx MVP."""
 
@@ -299,6 +357,10 @@ class MainFrame(wx.Frame):
         mb.Append(file_menu, _('File'))
 
         help_menu = wx.Menu()
+        item_sysinfo = help_menu.Append(
+            wx.ID_ANY, _('System information\u2026'),
+            _('Show information useful for bug reports.'))
+        self.Bind(wx.EVT_MENU, self._on_system_information, item_sysinfo)
         item_about = help_menu.Append(wx.ID_ABOUT, _('About'))
         self.Bind(wx.EVT_MENU, self._on_about, item_about)
         mb.Append(help_menu, _('Help'))
@@ -730,6 +792,17 @@ class MainFrame(wx.Frame):
         if self._worker_thread is not None:
             self.SetStatusText(_('Aborting\u2026'))
             self._worker_thread.abort()
+
+    def _on_system_information(self, _evt):
+        """Show the system information dialog."""
+        from bleachbit.SystemInformation import (
+            anonymize_system_information, get_system_information)
+        txt = get_system_information(gui='wx')
+        dlg = _SystemInformationDialog(self, txt, anonymize_system_information)
+        try:
+            dlg.ShowModal()
+        finally:
+            dlg.Destroy()
 
     def _on_about(self, _evt):
         import wx.adv  # pylint: disable=import-outside-toplevel

@@ -29,6 +29,12 @@ def main():
     if os.name == 'posix' and os.path.isdir('/usr/share/bleachbit'):
         sys.path.append('/usr/share/')
 
+    # Handle --sysinfo without requiring wx (but use wx info if available).
+    if '--sysinfo' in sys.argv[1:]:
+        from bleachbit.SystemInformation import get_system_information
+        print(get_system_information(gui='wx'))
+        return 0
+
     try:
         import wx  # noqa: F401  (verify availability early)
     except ImportError as exc:
