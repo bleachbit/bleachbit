@@ -19,6 +19,7 @@ from bleachbit.Constant import EMPTY_SPACE_WARNING
 from bleachbit.Language import get_text as _
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
+from bleachbit.Process import is_process_running
 from bleachbit import Action, CleanerML, Command, FileUtilities, Memory, Special
 from bleachbit.GtkShim import Gtk, Gdk, HAVE_GTK
 from bleachbit.Wipe import wipe_path
@@ -137,7 +138,7 @@ class Cleaner:
         logger = logging.getLogger(__name__)
         for (test, pathname, same_user) in self.running:
             if 'exe' == test:
-                if _is_process_running(pathname, same_user):
+                if is_process_running(pathname, same_user):
                     logger.debug("process '%s' is running", pathname)
                     return True
             elif 'pathname' == test:
@@ -664,14 +665,6 @@ class System(Cleaner):
             if regex.match(pathname) is not None:
                 return True
         return False
-
-
-def _is_process_running(exename, require_same_user):
-    if 'posix' == os.name:
-        return Unix.is_process_running(exename, require_same_user)
-    if 'nt' == os.name:
-        return Windows.is_process_running(exename, require_same_user)
-    raise NotImplementedError('_is_process_running: Unsupported platform')
 
 
 def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):

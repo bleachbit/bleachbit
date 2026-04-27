@@ -1,23 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test case for module Unix
@@ -28,16 +13,13 @@ import os
 import random
 import re
 import subprocess
-import sys
 import tempfile
 import unittest
 from xml.dom.minidom import parseString
 
 from tests import common
-from tests.common import also_with_sudo
 from bleachbit import logger
 from bleachbit.FileUtilities import children_in_directory, exe_exists
-from bleachbit.General import get_real_username
 from bleachbit.Unix import (
     _is_broken_xdg_desktop_application,
     apt_autoclean,
@@ -53,8 +35,6 @@ from bleachbit.Unix import (
     get_distribution_name_version,
     get_purgeable_locales,
     is_broken_xdg_desktop,
-    is_process_running_ps_aux,
-    is_process_running,
     is_unix_display_protocol_wayland,
     journald_clean,
     JOURNALD_REGEX,
@@ -417,81 +397,6 @@ PrefersNonDefaultGPU=false""")
                 result = is_broken_xdg_desktop(tf.name)
                 self.assertTrue(result, f"Failed case: {description}")
             os.unlink(tf.name)
-
-    @mock.patch('subprocess.check_output')
-    @common.skipIfWindows
-    @also_with_sudo
-    def test_is_process_running_ps_aux(self, mock_check_output):
-        username = get_real_username()
-        ps_out = f"""USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
-root               703   0.0  0.0  2471428   2792   ??  Ss   20May16   0:01.30 SubmitDiagInfo
-alocaluseraccount   681   0.0  0.0  2471568    856   ??  S    20May16   0:00.81 DiskUnmountWatcher
-alocaluseraccount   666   0.0  0.0  2507092   3488   ??  S    20May16   0:17.47 SpotlightNetHelper
-root               665   0.0  0.0  2497508    512   ??  Ss   20May16   0:11.30 check_afp
-alocaluseraccount   646   0.0  0.1  2502484   5656   ??  S    20May16   0:03.62 DataDetectorsDynamicData
-alocaluseraccount   632   0.0  0.0  2471288    320   ??  S    20May16   0:02.79 mdflagwriter
-alocaluseraccount   616   0.0  0.0  2497596    520   ??  S    20May16   0:00.41 familycircled
-alocaluseraccount   573   0.0  0.0  3602328   2440   ??  S    20May16   0:39.64 storedownloadd
-alocaluseraccount   572   0.0  0.0  2531184   3116   ??  S    20May16   0:02.93 LaterAgent
-{username}   561   0.0  0.0  2471492    584   ??  S    20May16   0:00.21 USBAgent
-alocaluseraccount   535   0.0  0.0  2496656    524   ??  S    20May16   0:00.33 storelegacy
-root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 suhelperd
-"""
-        mock_check_output.return_value = ps_out
-
-        tests = [
-            (True, 'USBAgent', False),
-            (True, 'USBAgent', True),
-            (False, 'does-not-exist', False),
-            (False, 'does-not-exist', True)
-        ]
-
-        for expected, exename, require_same_user in tests:
-            with self.subTest(exename=exename, require_same_user=require_same_user):
-                result = is_process_running_ps_aux(exename, require_same_user)
-                self.assertEqual(
-                    expected, result, f'is_process_running_ps_aux(exename={exename}, require_same_user={require_same_user})')
-
-        mock_check_output.return_value = 'invalid-input'
-        self.assertRaises(
-            RuntimeError, is_process_running_ps_aux, 'foo', False)
-        self.assertRaises(RuntimeError, is_process_running_ps_aux, 'foo', True)
-
-    @common.skipIfWindows
-    @common.also_with_sudo
-    def test_is_process_running(self):
-        """Unit test for method is_process_running()"""
-        # Do not use get_executable() here because of how it
-        # handles symlinks.
-        # sys.executable may look like /usr/bin/python3
-        # When running under `env -i`, then sys.executable is empty.
-        if sys.executable:
-            exe = os.path.basename(os.path.realpath(sys.executable))
-        else:
-            try:
-                with open('/proc/self/stat', 'r', encoding='utf-8') as f:
-                    exe = f.read().split()[1].strip('()')
-            except (IOError, IndexError):
-                self.skipTest(
-                    "Could not determine current process name from /proc/self/stat")
-        tests = [
-            # (expected, exe, require_same_user)
-            (True, exe, False),  # Check the actual process name
-            (True, exe, True),  # Check the actual process name
-        ]
-        # These processes may be running but not by the current user.
-        non_user_exes = ('polkitd', 'bluetoothd', 'NetworkManager',
-                         'gdm3', 'snapd', 'systemd-journald')
-        tests += [(False, name, True) for name in non_user_exes]
-        # These do not exist.
-        tests += [
-            (False, 'does-not-exist', True),
-            (False, 'does-not-exist', False),
-        ]
-        for expected, exename, require_same_user in tests:
-            with self.subTest(exename=exename, require_same_user=require_same_user):
-                self.assertEqual(is_process_running(exename, require_same_user), expected,
-                                 f'is_running({exename}, {require_same_user})')
 
     @common.skipIfWindows
     def test_journald_clean(self):

@@ -755,34 +755,6 @@ def is_junction(path):
     return bool(attr & FILE_ATTRIBUTE_REPARSE_POINT)
 
 
-def is_process_running(exename, require_same_user):
-    """Return boolean whether process (like firefox.exe) is running
-
-    exename: name of the executable
-    require_same_user: if True, ignore processes run by other users
-    """
-
-    import psutil
-    exename = exename.lower()
-    current_username = psutil.Process().username().lower()
-    for proc in psutil.process_iter():
-        try:
-            proc_name = proc.name().lower()
-        except psutil.NoSuchProcess:
-            continue
-        if not proc_name == exename:
-            continue
-        if not require_same_user:
-            return True
-        try:
-            proc_username = proc.username().lower()
-        except psutil.AccessDenied:
-            continue
-        if proc_username == current_username:
-            return True
-    return False
-
-
 def load_i18n_dll():
     """Load internationalization library
 
