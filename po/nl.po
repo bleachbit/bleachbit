@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-04-05 14:48-0600\n"
-"PO-Revision-Date: 2026-04-27 08:09+0000\n"
+"PO-Revision-Date: 2026-04-28 15:09+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/bleachbit/main/nl/>"
 "\n"
@@ -492,7 +492,7 @@ msgstr "Systeemverslagen"
 
 #: ../cleaners/journald.xml
 msgid "Clean old system journals"
-msgstr "Verwijder verouderde systeemverslagen"
+msgstr "Verouderde systeemverslagen opschonen"
 
 #: ../cleaners/emesene.xml
 msgid "Delete the avatars and emoticons cache"
@@ -696,7 +696,7 @@ msgstr "Grondige scan"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
-msgstr "Verwijderd over de schijf verspreide bestanden"
+msgstr "Over de schijf verspreide bestanden opschonen"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
@@ -819,7 +819,7 @@ msgstr ""
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
-msgstr "Verwijder overbodige bestanden"
+msgstr "Overbodige bestanden opschonen"
 
 #: ../org.bleachbit.BleachBit.desktop ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Free space and maintain privacy"
@@ -883,6 +883,7 @@ msgctxt "nsis:MULTIPRINT2"
 msgid ""
 "It usually finishes in one minute, but sometimes it takes up to ten minutes."
 msgstr ""
+"Het eindigt meestal in één minuut, maar soms duurt het wel tien minuten."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
@@ -890,21 +891,20 @@ msgid ""
 "You need to log in with an account that is a member of the administrators "
 "group to continue."
 msgstr ""
+"U moet inloggen met een account dat lid is van de beheerdersgroep om door te "
+"gaan."
 
 #. TRANSLATORS: Message shown on the installation mode page description when admin rights are needed.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required."
-msgstr ""
+msgstr "Beheerdersreferenties vereist."
 
 #. TRANSLATORS: Message shown on the installation mode page description when admin rights are needed to uninstall.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Administrator privileges are required to clean Windows Updates"
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required to uninstall."
-msgstr ""
-"Administrator privileges zijn vereist om Windows Updates te schoonmaken"
+msgstr "Beheerdersreferenties zijn vereist voor deïnstallatie."
 
 #. TRANSLATORS: Radio button label. The & sets the keyboard accelerator (hotkey). Place & before the letter that should be the shortcut key.
 #. TRANSLATORS: The character '&' positions the keyboard accelerator key.
@@ -912,13 +912,13 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS"
 msgid "For &anyone who uses this computer (all users)"
-msgstr ""
+msgstr "Voor &iedereen die deze computer gebruikt (alle gebruikers)"
 
 #. TRANSLATORS: Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_ALL_USERS but without the & accelerator.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS_UMUI"
 msgid "For anyone who uses this computer (all users)"
-msgstr ""
+msgstr "Voor iedereen die deze computer gebruikt (alle gebruikers)"
 
 #. TRANSLATORS: Radio button label. The & sets the keyboard accelerator (hotkey). Place & before the letter that should be the shortcut key. {USER} is a placeholder that will be replaced with the Windows username.
 #. TRANSLATORS: The character '&' positions the keyboard accelerator key.
@@ -926,81 +926,84 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER"
 msgid "For &me ({USER})"
-msgstr ""
+msgstr "Voor &mij ({USER})"
 
 #. TRANSLATORS: Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_CURRENT_USER but without the & accelerator. {USER} is a placeholder that will be replaced with the Windows username.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER_UMUI"
 msgid "For me ({USER})"
-msgstr ""
+msgstr "Voor mij ({USER})"
 
 #. TRANSLATORS: Error message shown in dialog box during installation on Windows. {ERROR} is a placeholder that will be replaced with the error details.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
 msgid "Unable to elevate, error {ERROR}."
-msgstr ""
+msgstr "Kan niet ophogen, fout {ERROR}."
 
 #. TRANSLATORS: Error message shown in a dialog box when Windows does not support elevation.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_NOT_SUPPORTED"
 msgid "The operating system doesn't support elevation."
-msgstr ""
+msgstr "Het besturingssysteem ondersteunt geen ophogen."
 
 #. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_ALL_USERS"
 msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
-msgstr ""
+msgstr "Versie {VERSION} is voor alle gebruikers geïnstalled in \"{FOLDER}\"."
 
 #. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
 msgstr ""
+"Versie {VERSION} is voor de huidige gebruiker geïnstalleerd in \"{FOLDER}\"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
 msgid ""
 "Select whether to install $(^NameDA) for all users or for the current user."
 msgstr ""
+"Selecteer of $(^NameDA) voor alle gebruikers of voor de huidige gebruiker "
+"moet worden geïnstalleerd."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to install $(^NameDA)."
-msgstr ""
+msgstr "Kies voor welke gebruikers $(^NameDA) moet worden geïnstalleerd."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
 msgid "Invalid combination of parameters."
-msgstr ""
+msgstr "Ongeldige combinatie van parameters."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_LOGON_SERVICE_NOT_RUNNING"
 msgid "Unable to elevate, Secondary Logon service not running."
 msgstr ""
+"Kan niet worden opgehoogd, de secundaire aanmeldingsservice wordt niet "
+"uitgevoerd."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
 msgid "Fresh installation for all users."
-msgstr ""
+msgstr "Verse installatie voor alle gebruikers."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
 msgid "Fresh installation for the current user."
-msgstr ""
+msgstr "Verse installatie voor de huidige gebruiker."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NOT_INSTALLED"
 msgid "There is no installation of $(^NameDA)."
-msgstr ""
+msgstr "Er is geen installatie van $(^NameDA)."
 
 #. TRANSLATORS: Title of the installation mode page in the Windows installer. User selects whether to install for all users or the current user.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Choose a folder"
 msgctxt "nsis:MULTIUSER_PAGE_TITLE"
 msgid "Choose Users"
-msgstr "Kies een map"
+msgstr "Kies gebruikers"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS"
@@ -1785,7 +1788,7 @@ msgstr "_Openen"
 #. TRANSLATORS: Title of the delete confirmation dialog.
 #: ../bleachbit/GuiBasic.py
 msgid "Delete confirmation"
-msgstr "Verwijderen bevestigen"
+msgstr "Verwijderdering bevestigen"
 
 #. TRANSLATORS: This message appears in a dialog window when the user
 #. chooses to shred settings and quit.
@@ -1824,7 +1827,7 @@ msgstr "Weet u zeker dat u deze bestanden permanent wilt verwijderen?"
 #. Ask for confirmation before deleting items.
 #: ../bleachbit/GuiBasic.py ../bleachbit/GuiPreferences.py
 msgid "Confirm before delete"
-msgstr "Verwijderen bevestigen"
+msgstr "Bevestigen voor verwijdering"
 
 #. TRANSLATORS: Title of a warning dialog. %(option)s is the name
 #. of the option being enabled (e.g. "shred files").
@@ -2117,7 +2120,7 @@ msgstr "Talen"
 #. (not deleted) during cleaning.
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
-msgstr ""
+msgstr "Bewaarlijst"
 
 #. TRANSLATORS: Sidebar label for the drives page of the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2134,7 +2137,7 @@ msgstr ""
 #. TRANSLATORS: Success message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
 msgid "Warning confirmations reset."
-msgstr ""
+msgstr "Waarschuwingsbevestigingen hersteld."
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2166,14 +2169,12 @@ msgstr "Download en werk schoonmakers vanuit de gemeenschap (winapp2.ini) bij"
 #. TRANSLATORS: Checkbutton label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Auto-detect language"
-msgstr ""
+msgstr "Taal autom. detecteren"
 
 #. TRANSLATORS: Tooltip explaining the auto-detect language option.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "De taal '%s' wordt automatisch behouden."
+msgstr "Automatisch de systeemtaal detecteren"
 
 #. TRANSLATORS: Label for the language selection dropdown.
 #: ../bleachbit/GuiPreferences.py
@@ -2197,14 +2198,12 @@ msgstr ""
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Exit after cleaning"
-msgstr "Afsluiten na opruimen"
+msgstr "Afsluiten na opschonen"
 
 #. TRANSLATORS: Button label in the preferences. 'Reset' is a verb.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Delete confirmation"
 msgid "Reset warning confirmations"
-msgstr "Verwijderen bevestigen"
+msgstr "Waarschuwingsbevestigingen herstellen"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -2219,26 +2218,20 @@ msgstr ""
 
 #. TRANSLATORS: Section title on the preferences updates page.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Update to version %s"
 msgid "Update notifications"
-msgstr "Bijwerken naar versie %s"
+msgstr "Meldingen van updates"
 
 #. TRANSLATORS: Section title (noun) on the Preferences - General page
 #. for options related to cleaning stored data.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Clean"
 msgid "Cleaning"
-msgstr "Opruimen"
+msgstr "Opschonen"
 
 #. TRANSLATORS: Section title in Preferences for user interface options
 #. such as dark mode and window behavior.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Internet"
 msgid "Interface"
-msgstr "Internet"
+msgstr "Interface"
 
 #. TRANSLATORS: Checkbox label to remember the window size and position
 #. between application launches.
@@ -2262,18 +2255,18 @@ msgstr "Windows 10-thema"
 #. Fontconfig, which is software, is a proper noun.
 #: ../bleachbit/GuiPreferences.py
 msgid "Use Fontconfig text rendering backend"
-msgstr ""
+msgstr "Backend voor tekstweergave van lettertypeconfig gebruiken"
 
 #. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "May fix blurry or unreadable text. Requires restart."
-msgstr ""
+msgstr "Kan wazige of onleesbare tekst repareren. Vereist herstart."
 
 #. TRANSLATORS: Section title on the preferences general page,
 #. labelling options for OS integration and advanced/developer features.
 #: ../bleachbit/GuiPreferences.py
 msgid "Integration and advanced"
-msgstr ""
+msgstr "Integratie en geavanceerd"
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #. 'Shred' means securely delete a file to prevent data recovery.
@@ -2295,13 +2288,10 @@ msgstr "Foutopsporingsberichten tonen"
 #. For example, to wipe C:\, the user may choose %TEMP% which
 #. is a folder anywhere on C:.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid ""
-#| "Choose a writable folder for each drive for which to overwrite free space."
 msgid "Choose a writable folder for each drive for which to wipe empty space."
 msgstr ""
-"Kies een beschrijfbare map voor elke schijf om de vrije schijfruimte te "
-"overschrijven."
+"Kies een beschrijfbare map voor elke schijf om de lege schijfruimte te "
+"wissen."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -2320,18 +2310,18 @@ msgstr "Verwijderen"
 #. TRANSLATORS: Section title on the preferences languages page.
 #: ../bleachbit/GuiPreferences.py
 msgid "BleachBit interface language"
-msgstr ""
+msgstr "BleachBit interfacetaal"
 
 #. TRANSLATORS: Section title on the preferences languages page.
 #: ../bleachbit/GuiPreferences.py
 msgid "Language files to keep when cleaning applications"
-msgstr ""
+msgstr "Taalbestanden die u wilt behouden bij het opschonen van applicaties"
 
 #. TRANSLATORS: Column header in the languages treeview.
 #. This column controls whether to keep the language.
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep"
-msgstr ""
+msgstr "Behouden"
 
 #. TRANSLATORS: Column header in the languages treeview showing the
 #. language code (e.g., 'en_US').
@@ -2350,25 +2340,25 @@ msgstr "Naam"
 
 #. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "This path already exists in the whitelist."
 msgid "This path already exists in the keep list."
-msgstr "Dit path bestaat al in de whitelist."
+msgstr "Dit pad bestaat al in de bewaarlijst."
 
 #. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr "Dit path bestaat al in de gepersonaliseerde lijst"
+msgstr "Dit pad bestaat al in de aangepaste lijst."
 
 #. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
 msgid "This path is protected. To bypass protection, enable expert mode."
 msgstr ""
+"Dit pad is beveiligd. Schakel de expertmodus in om de beveiliging te "
+"omzeilen."
 
 #. TRANSLATORS: Title of warning dialog shown when adding a protected path.
 #: ../bleachbit/GuiPreferences.py
 msgid "Protected Path"
-msgstr ""
+msgstr "Beveiligd pad"
 
 #. TRANSLATORS: Noun used as a column header in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2382,17 +2372,15 @@ msgstr "Map"
 
 #. TRANSLATORS: %s is a file or folder path that was just added
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
+#, python-format
 msgid "Added: %s"
-msgstr "Toegang verboden: %s"
+msgstr "Toegevoegd: %s"
 
 #. TRANSLATORS: %s is a file or folder path that was just removed
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgctxt "button"
-#| msgid "Remove"
+#, python-format
 msgid "Removed: %s"
-msgstr "Verwijderen"
+msgstr "Verwijderd: %s"
 
 #. TRANSLATORS: Notice label at the top of the keeplist (whitelist)
 #. page in the preferences dialog.
@@ -2441,6 +2429,8 @@ msgid ""
 "Cleaning options with warnings now require expert mode. Enable it in "
 "preferences to clean them."
 msgstr ""
+"Schoonmaakopties met waarschuwingen vereisen nu de expertmodus. Schakel deze "
+"in Voorkeuren in om ze toe te passen."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
@@ -2465,9 +2455,9 @@ msgid ""
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
 msgstr ""
-"U gebruikt BleachBit met een beheerderswachtwoord voor het opruimen van "
+"U gebruikt BleachBit met een beheerderswachtwoord voor het opschonen van "
 "gedeelde gedeelten van het systeem. Verwijzingen naar de "
-"gebruikersprofielmap zijn alleen van toepassing het rootaccount."
+"gebruikersprofielmap zijn alleen van toepassing op het rootaccount."
 
 #. TRANSLATORS: Warning shown on startup on Windows.
 #: ../bleachbit/GuiStartup.py
@@ -2487,6 +2477,10 @@ msgid ""
 "the system. User-specific paths will refer to the administrator account, so "
 "to clean your profile, run BleachBit again as a standard user."
 msgstr ""
+"U verhoogde rechten met behulp van een ander account om gedeelde delen van "
+"het systeem schoon te maken. Gebruikersspecifieke paden verwijzen naar het "
+"beheerdersaccount, dus om uw profiel op te schonen, moet u BleachBit opnieuw "
+"starten als standaardgebruiker."
 
 #. TRANSLATORS: Warning shown on startup on Windows when running
 #. unofficial Microsoft Store version. Advises user to get genuine
@@ -2519,20 +2513,15 @@ msgstr "Grootte"
 #: ../bleachbit/GuiTreeModels.py
 msgid "This option is protected. To bypass protection, enable expert mode."
 msgstr ""
+"Deze optie is beschermd. Schakel de expertmodus in om de bescherming te "
+"omzeilen."
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #: ../bleachbit/GuiTreeModels.py
-#, fuzzy, python-format
-#| msgid ""
-#| "Warning regarding %(cleaner)s - %(option)s:\n"
-#| "\n"
-#| "%(warning)s"
+#, python-format
 msgid "%(cleaner)s - %(option)s"
-msgstr ""
-"Waarschuwing bij %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
+msgstr "%(cleaner)s - %(option)s"
 
 #. TRANSLATORS: Button label on the headerbar and context menu item
 #. in the treeview.
@@ -2546,16 +2535,14 @@ msgstr "Voorvertonen"
 #. 'Clean' is a verb.
 #: ../bleachbit/GuiWindow.py
 msgid "Clean"
-msgstr "Opruimen"
+msgstr "Opschonen"
 
 #. TRANSLATORS: Button in tree view's context menu to open the cookie
 #. manager.
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Manage cookies to keep…"
-msgstr "Cookies"
+msgstr "Te behouden cookies beheren…"
 
 #. TRANSLATORS: Error message shown in the log on the main window.
 #. %s is the file path.
@@ -2573,6 +2560,8 @@ msgstr ""
 msgid ""
 "%(cleaner)s - %(option)s cannot be cleaned because expert mode is disabled."
 msgstr ""
+"%(cleaner)s - %(option)s kan niet worden toegepast omdat de expertmodus is "
+"uitgeschakeld."
 
 #. TRANSLATORS: Error message shown in the infobar when the user clicks
 #. the preview or clean button without selecting any cleaner options.
@@ -2590,7 +2579,7 @@ msgstr "Voltooid."
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
 msgid "Manage custom paths…"
-msgstr ""
+msgstr "Aangepaste paden beheren…"
 
 #. TRANSLATORS: Tooltip for the preview button on the headerbar.
 #. 'Preview' is a verb, and 'selected operations' refers to
@@ -2606,20 +2595,19 @@ msgstr ""
 #. Firefox - Cache).
 #: ../bleachbit/GuiWindow.py
 msgid "Clean files in the selected operations"
-msgstr ""
-"Verwijder de bestanden die worden meegenomen door de geselecteerde opties"
+msgstr "Bestanden opschonen in de geselecteerde bewerkingen"
 
 #. TRANSLATORS: Tooltip for the abort button on the headerbar,
 #. and 'abort' ia a verb.
 #: ../bleachbit/GuiWindow.py
 msgid "Abort the preview or cleaning process"
-msgstr "Breek het voorvertonings- of verwijderproces af"
+msgstr "Het weergave- of opschoningsproces afbreken"
 
 #. TRANSLATORS: Button in headerbar to update the application.
 #. 'Update' is a verb.
 #: ../bleachbit/GuiWindow.py
 msgid "Update"
-msgstr ""
+msgstr "Bijwerken"
 
 #. TRANSLATORS: Tooltip for the update button in the headerbar.
 #. 'Update' is a verb.
@@ -2630,7 +2618,7 @@ msgstr "Update BleachBit naar de recentste versie"
 #. TRANSLATORS: Hint shown when starting in fullscreen mode.
 #: ../bleachbit/GuiWindow.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr "Druk F11 om volledige scherm modus te verlaten"
+msgstr "Druk op F11 om Volledig scherm te beëindigen."
 
 #. TRANSLATORS: This message is shown when orphaned temporary files
 #. from an interrupted disk wipe operation are detected.
@@ -2639,14 +2627,16 @@ msgid ""
 "BleachBit detected leftover files from an interrupted disk wipe operation. "
 "Would you like to preview them with an option to delete them?"
 msgstr ""
+"BleachBit detecteerde overgebleven bestanden van een onderbroken wissen van "
+"de schijf. Wilt u een voorbeeld ervan bekijken met de optie om ze te "
+"verwijderen?"
 
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
 #: ../bleachbit/GuiWindow.py
-#, fuzzy, python-format
-#| msgid "Error when checking for updates: "
+#, python-format
 msgid "Error when checking for updates: %s"
-msgstr "Kan niet controleren op updates: "
+msgstr "Fout bij het controleren op updates: %s"
 
 #: ../bleachbit/Memory.py
 msgid ""
@@ -2672,12 +2662,11 @@ msgstr "Er wordt een mooie waarde (%d) ingesteld voor dit proces."
 #. TRANSLATORS: Debug message when a process gives up root/admin privileges.
 #. %(pid)d is the integer process ID; %(uid)d is the integer user ID to switch to.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid "Dropping privileges of process ID {pid} to user ID {uid}."
+#, python-format
 msgid "Dropping privileges of process ID %(pid)d to user ID %(uid)d."
 msgstr ""
-"De rechten van proces-id {pid} worden overgeheveld naar de gebruikers-id "
-"{uid}."
+"De rechten van proces-ID %(pid)d worden overgeheveld naar de gebruikers-ID %"
+"(uid)d."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2696,10 +2685,9 @@ msgstr "%s geheugen wordt vrijgemaakt."
 #. path (e.g., /dev/sda5); %(uuid)s is a UUID string
 #. (e.g., ee0e85f6-6e5c-42b9-902f-776531938bbf). Do not translate variables.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid "Found UUID for swap file {device} is {uuid}."
+#, python-format
 msgid "Found UUID for swap device %(device)s is %(uuid)s."
-msgstr "UUID aangetroffen voor wisselgeugenbestand {device} is {uuid}."
+msgstr "UUID voor wisselapparaat %(device)s is %(uuid)s."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2729,16 +2717,13 @@ msgstr "De volgende wisselgeheugenapparaten zijn gedetecteerd: %s"
 #. is waiting for the child process. %(parent_pid)d is the parent
 #. process ID; %(child_pid)d is the child process ID.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The function wipe_memory() with process ID {pid} is waiting for child "
-#| "process ID {cid}."
+#, python-format
 msgid ""
 "The function wipe_memory() with process ID %(parent_pid)d is waiting for "
 "child process ID %(child_pid)d."
 msgstr ""
-"De functie wipe_memory() met proces-id {pid} wacht op onderliggend proces "
-"met id {cid}."
+"De functie wipe_memory() met process-ID %(parent_pid)d wacht op onderliggend "
+"proces met ID %(child_pid)d."
 
 #: ../bleachbit/Memory.py
 #, python-format
@@ -2751,18 +2736,15 @@ msgid "Downloading URL failed: %s"
 msgstr "Kan de url niet ophalen: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr ""
-"De schijf was vol tijdens het wegschrijven van de configuratie naar '%s'"
+msgstr "Schijf was vol bij het schrijven van configuratie naar bestand: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
 msgstr ""
-"De schijf was vol tijdens het wegschrijven van de configuratie naar '%s'"
+"Toestemming geweigerd bij het schrijven van de configuratie naar bestand: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -2792,6 +2774,11 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"Waarschuwing: '%(path)s' kan belangrijke bestanden bevatten.\n"
+"\n"
+"Consequenties: %(files)d bestand en), %(size)s\n"
+"\n"
+"Weet u zeker dat u dit pad wilt toevoegen?"
 
 #. TRANSLATORS: Warning shown when user tries to add a protected path (no files found).
 #. Do not translate the placeholder %(path)s.
@@ -2804,6 +2791,9 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"Waarschuwing: '%(path)s' kan belangrijke bestanden bevatten.\n"
+"\n"
+"Weet u zeker dat u dit pad wilt toevoegen?"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
@@ -2902,8 +2892,7 @@ msgstr "Geïmporteerd uit winapp2.ini"
 
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
-msgstr ""
-"Administrator privileges zijn vereist om Windows Updates te schoonmaken"
+msgstr "Beheerdersreferenties zijn vereist om Windows Updates op te schonen"
 
 #: ../bleachbit/Wipe.py
 msgid ""
@@ -2920,7 +2909,7 @@ msgstr ""
 #: ../bleachbit/Wipe.py
 #, python-format
 msgid "Wiping path %(pathname)s with file system type %(fstype)s"
-msgstr ""
+msgstr "Pad %(pathname)s wissen met bestandssysteemtype %(fstype)s"
 
 #: ../bleachbit/Wipe.py
 #, python-format
@@ -2943,41 +2932,34 @@ msgstr "Fout #%d bij het leegmaken van de bestandsbuffer."
 #. elapsed seconds; %(rate_mbs).2f = decimal megabytes per second (e.g., 3.14).
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid ""
-#| "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
-#| "{rate:.2f} MB/s"
+#, python-format
 msgid ""
 "Wrote %(file_count)d files and %(total_bytes)d bytes in %(elapsed_sec)d "
 "seconds at %(rate_mbs).2f MB/s"
 msgstr ""
-"Weggeschreven: {files :,} bestanden en {bytes :,} bytes in {seconds :,} "
-"seconden met {rate: .2f} MB/s"
+"Weggeschreven: %(file_count)d bestanden en %(total_bytes)d bytes in %"
+"(elapsed_sec)d seconden met %(rate_mbs).2f MB/s"
 
 #. TRANSLATORS: Debug message showing disk space available to regular (non-root) users.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
+#, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to non-super-user"
 msgstr ""
-"{bytes :,} bytes en {inodes :,} inodes beschikbaar voor niet-admingebruiker"
+"%(bytes)d bytes en %(inodes)d inodes beschikbaar voor niet-admingebruiker"
 
 #. TRANSLATORS: Debug message showing disk space available to the root (admin) user.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
+#, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to super-user"
-msgstr "{bytes :,} bytes en {inodes :,} inodes beschikbaar voor admingebruiker"
+msgstr "%(bytes)d bytes en %(inodes)d inodes beschikbaar voor admingebruiker"
 
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Handled unknown error #0 while truncating file."
 msgid "Encountered unknown error #0 while truncating file."
-msgstr "Onbekende fout #0 tijdens het verwerken van het bestand."
+msgstr "Onbekende fout #0 bij het afkappen van bestand."
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -2997,21 +2979,22 @@ msgstr "Bestand niet aangetroffen: %s"
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
 msgstr ""
+"Toegang geweigerd bij het markeren van bestand voor later verwijderen: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Toegang geweigerd bij het verwijderen van registerwaarde: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Toegang geweigerd bij het verwijderen van registersleutel: %s"
 
 #: ../bleachbit/Worker.py
-#, fuzzy, python-format
+#, python-format
 msgid "Access denied: %s"
-msgstr "Toegang verboden: %s"
+msgstr "Toegang geweigerd: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
@@ -3020,14 +3003,13 @@ msgstr "Fout: {operation_option}: {command}"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Worker.py
-#, fuzzy
-#| msgid "Please wait.  Wiping free disk space."
 msgid "Please wait. Wiping empty space."
-msgstr "Bezig met wissen van de vrije schijfruimte…"
+msgstr "Even geduld. Lege ruimte wissen."
 
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
+"Druk de knop Afbreken op de werkbalk om dit proces te stoppen, en wacht."
 
 #: ../bleachbit/Worker.py
 msgid ""
@@ -3035,12 +3017,15 @@ msgid ""
 "files may remain on the disk, and they may use all available space. To "
 "remove them, start BleachBit again."
 msgstr ""
+"Als de applicatie geforceerd wordt gesloten voordat het proces is voltooid, "
+"kunnen er grote bestanden op de schijf blijven staan en kunnen ze alle "
+"beschikbare ruimte gebruiken. Om ze te verwijderen, start BleachBit opnieuw."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "Bezig met opruimen van %s…"
+msgstr "Bezig met opschonen van %s…"
 
 #: ../bleachbit/Worker.py
 #, python-format
@@ -3113,10 +3098,8 @@ msgid "Shred Paths from Clipboard"
 msgstr "Locaties van klembord versnipperen"
 
 #: ../share/app-menu.ui
-#, fuzzy
-#| msgid "_Wipe Free Space"
 msgid "_Wipe Empty Space"
-msgstr "Vrije ruimte _wissen"
+msgstr "Lege ruimte _wissen"
 
 #: ../share/app-menu.ui
 msgid "_Make Chaff"
