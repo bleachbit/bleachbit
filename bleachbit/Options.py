@@ -332,11 +332,17 @@ class Options:
         return values
 
     def get_whitelist_paths(self):
-        """Return the keep list (formerly whitelist) of paths"""
+        """Return the keep list (formerly whitelist) of paths
+
+        Returns a list of tuples (type, path) where type is 'file' or 'folder'
+        """
         return self.get_paths("whitelist/paths")
 
     def get_custom_paths(self):
-        """Return list of custom paths"""
+        """Return list of custom paths
+
+        Returns a list of tuples (type, path) where type is 'file' or 'folder'
+        """
         return self.get_paths("custom/paths")
 
     def get_warning_preference(self, key):

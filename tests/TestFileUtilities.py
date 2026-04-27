@@ -65,7 +65,7 @@ from bleachbit.FileUtilities import (
 )
 from bleachbit.General import gc_collect, run_external
 from bleachbit.Options import init_configuration, options
-from bleachbit import logger
+from bleachbit import logger, FS_CASE_SENSITIVE
 from tests import common
 
 
@@ -1491,89 +1491,127 @@ State=AAAA/wA...
         logger.info(
             "SQLite loop tests fully completed after %d seconds", time.time() - start_time)
 
+    def assert_is_whitelisted(self, path, allow_swapcase=True):
+        """Helper to assert a path is whitelisted"""
+        self.assertTrue(whitelisted(path), f"Path {path} should be whitelisted")
+        if allow_swapcase and not FS_CASE_SENSITIVE:
+            self.assertTrue(whitelisted(path.swapcase()), f"Path {path.swapcase()} should be whitelisted")
+
     def test_whitelisted(self):
         """Unit test for whitelisted()"""
         # FIXME: finish renaming whitelist to keep list
         # setup
-        old_keep_list = options.get_whitelist_paths()
         keep_list = [('file', '/home/foo'), ('folder', '/home/folder')]
         options.set_whitelist_paths(keep_list)
         self.assertEqual(set(keep_list), set(options.get_whitelist_paths()))
 
         # test
-        self.assertFalse(whitelisted(''))
-        self.assertFalse(whitelisted('/'))
+        tests = ('', '/', '/home/foo2', '/home/fo', '/home/', '/home')
+        for path in tests:
+            self.assertFalse(whitelisted(path), f"{path} should not be whitelisted")
 
-        self.assertFalse(whitelisted('/home/foo2'))
-        self.assertFalse(whitelisted('/home/fo'))
-        self.assertTrue(whitelisted('/home/foo'))
+        with self.assertRaises(TypeError):
+            whitelisted(None)
 
-        self.assertTrue(whitelisted('/home/folder'))
+        # Verbatim of whitelisted.
+        self.assert_is_whitelisted('/home/foo')
+        self.assert_is_whitelisted('/home/folder')
         if 'posix' == os.name:
-            self.assertTrue(whitelisted('/home/folder/'))
-            self.assertTrue(whitelisted('/home/folder/file'))
-        self.assertFalse(whitelisted('/home/fold'))
+            # Whitelisted + path separator.
+            self.assert_is_whitelisted('/home/folder/')
+            # File under whitelisted directory.
+            self.assert_is_whitelisted('/home/folder/file')
+        # Same as explicit whitelisted, minus one character.
+        self.assertFalse(whitelisted('/home/folde'))
+        # Same as explicit whitelisted, plus one character.
         self.assertFalse(whitelisted('/home/folder2'))
 
-        if 'nt' == os.name:
-            keep_list = [('folder', 'D:\\'), (
-                'file', 'c:\\windows\\foo.log'), ('folder', 'e:\\users')]
-            options.set_whitelist_paths(keep_list)
-            self.assertTrue(whitelisted('e:\\users'))
-            self.assertTrue(whitelisted('e:\\users\\'))
-            self.assertTrue(whitelisted('e:\\users\\foo.log'))
-            self.assertFalse(whitelisted('e:\\users2'))
-            # case insensitivity
-            self.assertTrue(whitelisted('C:\\WINDOWS\\FOO.LOG'))
-            self.assertTrue(whitelisted('D:\\USERS'))
-
-            # drives letters have the separator at the end while most paths
-            # don't
-            self.assertTrue(whitelisted('D:\\FOLDER\\FOO.LOG'))
-
-        # test blank
+        # Test a blank whitelist.
         options.set_whitelist_paths([])
         self.assertFalse(whitelisted('/home/foo'))
         self.assertFalse(whitelisted('/home/folder'))
         self.assertFalse(whitelisted('/home/folder/file'))
 
+        # Remove the whitelist section from  the configuration.
         options.config.remove_section('whitelist/paths')
         self.assertFalse(whitelisted('/home/foo'))
         self.assertFalse(whitelisted('/home/folder'))
         self.assertFalse(whitelisted('/home/folder/file'))
 
-        # clean up
-        options.set_whitelist_paths(old_keep_list)
-        self.assertEqual(
-            set(old_keep_list), set(options.get_whitelist_paths()))
+    @common.skipUnlessWindows
+    def test_whitelisted_windows(self):
+        """Test whitelisted() on Windows"""
+        keep_list = [('folder', 'D:\\'),
+            ('file', 'c:\\windows\\foo.log'),
+            ('file', 'c:\\de\\straße.txt'),
+            ('folder', 'e:\\users')
+        ]
+        options.set_whitelist_paths(keep_list)
+        # verbatim paths
+        self.assert_is_whitelisted('d:\\')
+        self.assert_is_whitelisted('c:\\windows\\foo.log')
+        self.assert_is_whitelisted('c:\\de\\straße.txt', False)
+        self.assert_is_whitelisted('e:\\users')
+        # explicit folder plus trailing slash
+        self.assert_is_whitelisted('e:\\users\\')
+        # file in explicit folder
+        self.assert_is_whitelisted('e:\\users\\foo.log')
+        self.assert_is_whitelisted('d:\\folder\\foo.log')
+        # file in folder not in keep list
+        self.assertFalse(whitelisted('e:\\windows\\foo.log'))
+        # Same as whitelisted minus one character.
+        self.assertFalse(whitelisted('e:\\user'))
+        # Same as whitelisted plus a character.
+        self.assertFalse(whitelisted('e:\\users2'))
+        # Bare root of whitelisted folder
+        self.assertFalse(whitelisted('e:\\'))
+        self.assertFalse(whitelisted('e:'))
+        # German Eszett
+        # Windows treats 'ß' and 'ss' as separate filenames.
+        self.assertEqual('ß'.lower(), 'ß')
+        self.assertEqual('ß'.swapcase(), 'SS')
+        self.assertNotEqual('ß'.swapcase().swapcase(), 'ß')
+        self.assert_is_whitelisted('c:\\de\\STRAßE.TXT', False)
+        self.assertFalse(whitelisted('c:\\de\\strasse.txt'))
+        self.assertFalse(whitelisted('c:\\de\\straSSe.txt'))
 
     @common.skipIfWindows
     def test_whitelisted_posix_symlink(self):
         """Symlink test for whitelisted_posix()"""
         # setup
-        old_keep_list = options.get_whitelist_paths()
-        tmpdir = self.mkdir('bleachbit-keep-list')
+        # reminder: unit tests run with a fresh config file each time,
+        # so we do not need to keep the old settings.
         realpath = self.write_file('real')
-        linkpath = os.path.join(tmpdir, 'link')
+        linkpath = os.path.join(self.tempdir, 'link')
         os.symlink(realpath, linkpath)
         self.assertExists(realpath)
+        self.assertFalse(os.path.islink(realpath))
         self.assertExists(linkpath)
+        self.assertTrue(os.path.islink(linkpath))
 
         # test 1: the real path is whitelisted
         keep_list1 = [('file', realpath)]
         options.set_whitelist_paths(keep_list1)
-        self.assertFalse(whitelisted(tmpdir))
+        self.assertFalse(whitelisted(self.tempdir))
         self.assertTrue(whitelisted(realpath))
         self.assertTrue(whitelisted(linkpath))
 
         # test 2: the link is whitelisted
         keep_list2 = [('file', linkpath)]
         options.set_whitelist_paths(keep_list2)
-        self.assertFalse(whitelisted(tmpdir))
+        self.assertFalse(whitelisted(self.tempdir))
         self.assertFalse(whitelisted(realpath))
         self.assertTrue(whitelisted(linkpath))
 
-        options.set_whitelist_paths(old_keep_list)
+        # test 3: folder symlinks
+        realfolder = self.mkdir('realfolder')
+        linkfolder = os.path.join(self.tempdir, 'linkfolder')
+        os.symlink(realfolder, linkfolder)
+
+        keep_list3 = [('folder', realfolder)]
+        options.set_whitelist_paths(keep_list3)
+        self.assertTrue(whitelisted(realfolder))
+        self.assertTrue(whitelisted(linkfolder))
 
     def test_whitelisted_speed(self):
         """Benchmark the speed of whitelisted()
