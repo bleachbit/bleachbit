@@ -1,23 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Integration specific to Unix-like operating systems
@@ -31,11 +16,9 @@ import platform
 import re
 import shlex
 import subprocess
-import sys
 
 import bleachbit
 from bleachbit import FileUtilities, General
-from bleachbit.General import get_real_uid, get_real_username
 from bleachbit.FileUtilities import exe_exists
 from bleachbit.Language import get_text as _, native_locale_names
 
@@ -450,96 +433,7 @@ def is_broken_xdg_desktop(pathname):
     if 'application' != file_type:
         logger.warning("unhandled type '%s': file '%s'", file_type, pathname)
         return False
-    if _is_broken_xdg_desktop_application(config, pathname):
-        return True
     return False
-
-
-def is_process_running_ps_aux(exename, require_same_user):
-    """Check whether exename is running by calling 'ps aux -c'
-
-    exename: name of the executable
-    require_same_user: if True, ignore processes run by other users
-
-    When running under sudo, this uses the non-root username.
-    """
-    ps_out = subprocess.check_output(["ps", "aux", "-c"],
-                                     universal_newlines=True)
-    first_line = ps_out.split('\n', maxsplit=1)[0].strip()
-    if "USER" not in first_line or "COMMAND" not in first_line:
-        raise RuntimeError("Unexpected ps header format")
-
-    for line in ps_out.split("\n")[1:]:
-        parts = line.split()
-        if len(parts) < 11:
-            continue
-        process_user = parts[0]
-        process_cmd = parts[10]
-        if process_cmd != exename:
-            continue
-        if not require_same_user or process_user == get_real_username():
-            return True
-    return False
-
-
-def is_process_running_linux(exename, require_same_user):
-    """Check whether exename is running
-
-    The exename is checked two different ways.
-
-    When running under sudo, this uses the non-root user ID.
-    """
-    for filename in glob.iglob("/proc/*/exe"):
-        does_exe_match = False
-        try:
-            target = os.path.realpath(filename)
-        except TypeError:
-            # happens, for example, when link points to
-            # '/etc/password\x00 (deleted)'
-            pass
-        except OSError:
-            # 13 = permission denied
-            pass
-        else:
-            # Google Chrome 74 on Ubuntu 19.04 shows up as
-            # /opt/google/chrome/chrome (deleted)
-            found_exename = os.path.basename(target).replace(' (deleted)', '')
-            does_exe_match = exename == found_exename
-
-        if not does_exe_match:
-            with open(os.path.join(os.path.dirname(filename), 'stat'), 'r', encoding='utf-8') as stat_file:
-                proc_name = stat_file.read().split()[1].strip('()')
-                if proc_name == exename:
-                    does_exe_match = True
-                else:
-                    continue
-
-        if not require_same_user:
-            return True
-
-        try:
-            uid = os.stat(os.path.dirname(filename)).st_uid
-        except OSError:
-            # permission denied means not the same user
-            continue
-        # In case of sudo, use the regular user's ID.
-        if uid == get_real_uid():
-            return True
-    return False
-
-
-def is_process_running(exename, require_same_user):
-    """Check whether exename is running
-
-    exename: name of the executable
-    require_same_user: if True, ignore processes run by other users
-
-    """
-    if sys.platform == 'linux':
-        return is_process_running_linux(exename, require_same_user)
-    if sys.platform == 'darwin' or sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
-        return is_process_running_ps_aux(exename, require_same_user)
-    raise RuntimeError('unsupported platform for is_process_running()')
 
 
 def rotated_logs():

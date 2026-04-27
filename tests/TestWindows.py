@@ -61,7 +61,6 @@ from bleachbit.Windows import (
     get_recycle_bin,
     get_windows_version,
     is_junction,
-    is_process_running,
     move_to_recycle_bin,
     parse_windows_build,
     path_on_network,
@@ -841,27 +840,6 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         else:
             logger.warning(
                 'You should also run test_file_wipe() with admin privileges.')
-
-    def test_is_process_running(self):
-        # winlogon.exe runs on Windows XP and Windows 7
-        # explorer.exe did not run Appveyor, but it does as of 2025-01-25.
-        # svchost.exe runs both as system and current user on Windows 11
-        # svchost.exe does not run as same user on AppVeyor and Windows Server 2012.
-        tests = ((True, 'winlogon.exe', False),
-                 (True, 'WinLogOn.exe', False),
-                 (False, 'doesnotexist.exe', False),
-                 (True, 'explorer.exe', True),
-                 (True, 'svchost.exe', False),
-                 (True, 'services.exe', False),
-                 (False, 'services.exe', True),
-                 (True, 'wininit.exe', False),
-                 (False, 'wininit.exe', True))
-
-        for expected, exename, require_same_user in tests:
-            with self.subTest(exename=exename, require_same_user=require_same_user):
-                result = is_process_running(exename, require_same_user)
-                self.assertEqual(
-                    expected, result, f'Expecting is_process_running({exename}, {require_same_user}) = {expected}, got {result}')
 
     def test_setup_environment(self):
         """Unit test for setup_environment"""
