@@ -709,13 +709,16 @@ class GUI(Gtk.ApplicationWindow):
 
     def worker_done(self, worker, really_delete):
         """Callback for when Worker is done"""
-        self.progressbar.set_text("")
-        self.progressbar.set_fraction(1)
         # TRANSLATORS: Status message shown on the progress bar and in a popup
         # notification.
         done_msg = _("Done.")
-        self.progressbar.set_text(done_msg)
-        self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
+        if self.progressbar is not None:
+            self.progressbar.set_text("")
+            self.progressbar.set_fraction(1)
+            self.progressbar.set_text(done_msg)
+        if self.textbuffer is not None:
+            self.textview.scroll_mark_onscreen(
+                self.textbuffer.get_insert())
         self.set_sensitive(True)
 
         # Close the program after cleaning is completed.
@@ -908,6 +911,8 @@ class GUI(Gtk.ApplicationWindow):
 
     def update_progress_bar(self, status):
         """Callback to update the progress bar with number or text"""
+        if self.progressbar is None:
+            return
         if isinstance(status, float):
             self.progressbar.set_fraction(status)
         elif isinstance(status, str):
@@ -919,6 +924,10 @@ class GUI(Gtk.ApplicationWindow):
     def update_item_size(self, option, option_id, bytes_removed):
         """Update size in tree control"""
         model = self.view.get_model()
+
+        if model is None:
+            # The tree view has been destroyed (e.g. window is closing).
+            return
 
         text = FileUtilities.bytes_to_human(bytes_removed)
         if bytes_removed == 0:
@@ -945,6 +954,8 @@ class GUI(Gtk.ApplicationWindow):
 
     def update_total_size(self, bytes_removed):
         """Callback to update the total size cleaned"""
+        if self.status_bar is None:
+            return
         context_id = self.status_bar.get_context_id('size')
         text = FileUtilities.bytes_to_human(bytes_removed)
         if bytes_removed == 0:
