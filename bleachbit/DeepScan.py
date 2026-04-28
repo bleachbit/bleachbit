@@ -25,12 +25,11 @@ Scan directory tree for files to delete
 
 import logging
 import os
-import platform
 import re
 import time
 import unicodedata
 from collections import namedtuple
-from bleachbit import FS_SCAN_RE_FLAGS
+from bleachbit import FS_SCAN_RE_FLAGS, IS_MAC
 from . import Command
 
 
@@ -45,7 +44,7 @@ def normalized_walk(top, **kwargs):
     except:
         # there is a warning in FileUtilities, so don't warn again here
         from os import walk
-    if 'Darwin' == platform.system():
+    if IS_MAC:
         for dirpath, dirnames, filenames in walk(top, **kwargs):
             yield dirpath, dirnames, [
                 unicodedata.normalize('NFC', fn)

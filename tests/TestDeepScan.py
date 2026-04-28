@@ -145,12 +145,10 @@ class DeepScanTestCase(common.BleachbitTestCase):
                 ('/foo', ('bar',), ['ba\xcc\x80z']),
                 ('/foo/bar', (), ['spam', 'eggs']),
             ]
-            with mock.patch('platform.system') as mock_platform_system:
-                mock_platform_system.return_value = 'Darwin'
-                self.assertEqual(list(normalized_walk('.')), [
-                    ('/foo', ('bar',), ['b\xc3\xa0z']),
-                    ('/foo/bar', (), ['spam', 'eggs']),
-                ])
+            self.assertEqual(list(normalized_walk('.')), [
+                ('/foo', ('bar',), ['b\xc3\xa0z']),
+                ('/foo/bar', (), ['spam', 'eggs']),
+            ])
 
         with mock.patch('os.walk') as mock_walk:
             expected = [
