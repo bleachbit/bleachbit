@@ -111,6 +111,7 @@ class GtkUIProxy:
         self._lock = threading.Lock()
         self._scheduled = False
         self._scheduler = scheduler or _default_scheduler
+        self._errors = []
 
     def discard_pending(self):
         """Drop any queued UI callbacks.
@@ -126,6 +127,13 @@ class GtkUIProxy:
         """
         with self._lock:
             self._queue.clear()
+
+    @property
+    def errors(self):
+        """Return a copy of the list of errors recorded during flushes."""
+        with self._lock:
+            return list(self._errors)
+
 
     def __getattr__(self, name):
         if name not in self._FORWARDED:
@@ -173,6 +181,8 @@ class GtkUIProxy:
                     getattr(target, name)(*args, **kwargs)
                 except Exception:  # pylint: disable=broad-except
                     logger.exception('UI callback %s failed', name)
+                    with self._lock:
+                        self._errors.append((name, args, kwargs))
         finally:
             if end is not None:
                 try:
@@ -222,6 +232,11 @@ class GtkWorkerThread(threading.Thread):
     def is_aborted(self):
         """Return True if abort was requested and the worker observed it."""
         return self.worker is not None and self.worker.is_aborted
+
+    @property
+    def ui_errors(self):
+        """Return UI callback errors recorded by the proxy."""
+        return self._ui_proxy.errors
 
     def run(self):  # noqa: D401 - threading.Thread API
         # Imported here so this module is loadable without registering

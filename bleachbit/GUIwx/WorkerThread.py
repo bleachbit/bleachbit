@@ -78,6 +78,13 @@ class WxUIProxy:
         self._queue = []
         self._lock = threading.Lock()
         self._scheduled = False
+        self._errors = []
+
+    @property
+    def errors(self):
+        """Return a copy of the list of errors recorded during flushes."""
+        with self._lock:
+            return list(self._errors)
 
     def __getattr__(self, name):
         if name not in self._FORWARDED:
@@ -118,6 +125,8 @@ class WxUIProxy:
                     getattr(target, name)(*args, **kwargs)
                 except Exception:  # pylint: disable=broad-except
                     logger.exception('UI callback %s failed', name)
+                    with self._lock:
+                        self._errors.append((name, args, kwargs))
         finally:
             if end is not None:
                 try:
@@ -150,6 +159,11 @@ class WorkerThread(threading.Thread):
         """Request the worker to stop at the next safe point."""
         if self.worker is not None:
             self.worker.abort()
+
+    @property
+    def ui_errors(self):
+        """Return UI callback errors recorded by the proxy."""
+        return self._ui_proxy.errors
 
     def run(self):  # noqa: D401 - threading.Thread API
         try:
