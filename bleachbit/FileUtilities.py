@@ -912,19 +912,30 @@ def whitelisted_posix(path, check_realpath=True, _followed_link=False):
         # resolve symlink
         return whitelisted_posix(os.path.realpath(path), False, _followed_link=True)
     for (keep_type, keep_path) in options.get_whitelist_paths():
+        if not bleachbit.FS_CASE_SENSITIVE:
+            path_cmp = path.lower()
+            keep_cmp = keep_path.lower()
+        else:
+            path_cmp = path
+            keep_cmp = keep_path
         if keep_type == 'file':
-            if path == keep_path:
+            if path_cmp == keep_cmp:
                 return True
-            if _followed_link and path == os.path.realpath(keep_path):
-                return True
+            if _followed_link:
+                real_keep = os.path.realpath(keep_path)
+                if not bleachbit.FS_CASE_SENSITIVE:
+                    real_keep = real_keep.lower()
+                if path_cmp == real_keep:
+                    return True
         if keep_type == 'folder':
-            if path == keep_path:
+            if path_cmp == keep_cmp:
                 return True
-            if path.startswith(keep_path + os.sep):
+            if path_cmp.startswith(keep_cmp + os.sep):
                 return True
             if _followed_link:
                 real_pathname = os.path.realpath(keep_path)
-                if path == real_pathname or path.startswith(real_pathname + os.sep):
+                real_cmp = real_pathname.lower() if not bleachbit.FS_CASE_SENSITIVE else real_pathname
+                if path_cmp == real_cmp or path_cmp.startswith(real_cmp + os.sep):
                     return True
     return False
 
