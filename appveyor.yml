@@ -44,6 +44,10 @@ install:
   - '%SZ_EXE% x upx.zip'
   - 'rename upx-4.0.1-win64 upx'
   - 'dir .\upx\'
+  # Update NSIS from 3.03 to 3.12.
+  - ps: if (-not (Test-Path nsis-3.12-setup.exe)) { Start-FileDownload "https://sourceforge.net/projects/nsis/files/NSIS%203/3.12/nsis-3.12-setup.exe/download" -FileName nsis-3.12-setup.exe }
+  - ps: $hash = (Get-FileHash nsis-3.12-setup.exe -Algorithm SHA256).Hash; if ($hash -ne '3bc2b06253a7e4957111be152ac6a536e0c7478a706e19da814038db5d706495') { throw "SHA256 mismatch=$hash" }
+  - 'nsis-3.12-setup.exe /S'
 # Show version numbers of installed software.
 # This also checks that the software is installed.
   - '%make% -v'
