@@ -931,6 +931,8 @@ def whitelisted_posix(path, check_realpath=True, _followed_link=False):
 
 def whitelisted_windows(path):
     """Check whether this Windows path is whitelisted"""
+    if not isinstance(path, str):
+        raise TypeError(f"Expected str, got {type(path)}")
     from bleachbit.Options import options
     for pathname in options.get_whitelist_paths():
         # Windows is case insensitive
