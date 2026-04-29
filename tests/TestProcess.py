@@ -196,5 +196,6 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                 clear_prefixes=('bleachbit.Process',)):
             import bleachbit.Process as Process
             self.assertFalse(Process._has_psutil)
-        if IS_WINDOWS:
-            self.assertRaises(RuntimeError, enumerate_processes())
+            if IS_WINDOWS:
+                with self.assertRaises(RuntimeError):
+                    list(Process.enumerate_processes())
