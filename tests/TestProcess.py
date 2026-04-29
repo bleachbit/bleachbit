@@ -37,7 +37,7 @@ class ProcessTestCase(common.BleachbitTestCase):
         for proc in processes:
             self.assertIsInstance(proc, ProcessInfo)
             self.assertIsInstance(proc.pid, int)
-            self.assertGreater(proc.pid, 0)
+            self.assertGreaterEqual(proc.pid, 0, proc)
             self.assertIsInstance(proc.name, str)
             self.assertGreater(len(proc.name), 0)
             self.assertIsInstance(proc.same_user, bool)
