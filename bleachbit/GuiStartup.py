@@ -8,12 +8,15 @@ import os
 import sys
 from importlib import import_module
 
+from bleachbit import options_file
 from bleachbit.Language import get_text as _
 from bleachbit.Network import unset_sslkeylogfile
-from bleachbit.Options import options
+from bleachbit.Options import is_config_writable, options
 
 if os.name == 'nt':
     from bleachbit import Windows
+
+
 
 
 def _is_version_upgrade(old_version, target_version):
@@ -62,6 +65,11 @@ def get_startup_messages(auto_exit):
     for error messages.
     """
     ret_msgs = []
+
+    if not is_config_writable():
+        ret_msgs.append((
+            f'The configuration file {options_file} is not writable, so preferences will not '
+            'be saved.', True))
 
     missing_deps = _get_missing_dependencies()
 
