@@ -289,6 +289,20 @@ class ActionTestCase(common.BleachbitTestCase):
                 for test in tests:
                     self._test_action_str(test.format(cmd=cmd_qa, wait=wait))
 
+    def test_process_with_space(self):
+        """Test process action with space in command"""
+        # This is a regression test for a bug where spaces in commands were not handled correctly
+        delete_me = self.write_file('delete me.txt')
+        if os.name == 'nt':
+            cmd = f'cmd /c del "{delete_me}"'
+        else:
+            delete_me_escaped = delete_me.replace(" ", "\\ ")
+            cmd = f'rm {delete_me_escaped}'
+        cmd_qa = quoteattr(cmd)
+        action_str = f'<action command="process" cmd={cmd_qa} wait="true" />'
+        self._test_action_str(action_str)
+        self.assertNotExists(delete_me)
+
     def test_process_space(self):
         """Unit test for process action with space in path
 
