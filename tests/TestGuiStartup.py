@@ -1,5 +1,14 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
+#
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
+"""
+Test case for module GuiStartup
+"""
+
+import sys
 import unittest
 from unittest import mock
 
@@ -77,3 +86,22 @@ class GuiStartupTestCase(unittest.TestCase):
 
         self.assertTrue(any('require expert mode' in msg
                             for msg, _ in messages))
+
+    def test_missing_requests(self):
+        """Missing requests should be reported but not crash GuiStartup."""
+        saved = {}
+        for mod in list(sys.modules.keys()):
+            if any(mod.startswith(p) for p in ['requests', 'urllib3',
+                                                'bleachbit.Network',
+                                                'bleachbit.Update',
+                                                'bleachbit.GuiStartup']):
+                saved[mod] = sys.modules.pop(mod)
+
+        try:
+            with mock.patch.dict('sys.modules', {'requests': None}):
+                import bleachbit.GuiStartup as GuiStartup
+                missing = GuiStartup._get_missing_dependencies()
+                self.assertIn('requests', missing)
+        finally:
+            for mod, mod_obj in saved.items():
+                sys.modules[mod] = mod_obj

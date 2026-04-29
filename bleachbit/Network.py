@@ -38,7 +38,17 @@ except ImportError:
     HAVE_URLLIB3 = False
 
 # third party
-import requests
+try:
+    import requests
+    HAVE_REQUESTS = True
+except ImportError:
+    HAVE_REQUESTS = False
+
+if HAVE_REQUESTS:
+    RequestException = requests.exceptions.RequestException
+else:
+    class RequestException(Exception):
+        pass
 
 # local imports
 from bleachbit import bleachbit_exe_path, APP_VERSION
@@ -104,9 +114,9 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None,
 
     try:
         response = fetch_url(url)
-    except requests.exceptions.RequestException as exc:
+    except RequestException as exc:
         # For retryable errors (like 503), use a simplified error message
-        if isinstance(exc, requests.exceptions.RetryError):
+        if HAVE_REQUESTS and isinstance(exc, requests.exceptions.RetryError):
             msg2 = 'Server temporarily unavailable (retries exceeded)'
             logger.warning("%s: %s", msg, type(exc).__name__)
         else:
@@ -167,6 +177,9 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
         else:
             logger.error(
                 'Application is frozen but certificate file not found: %s', ca_bundle)
+    if not HAVE_REQUESTS:
+        raise RequestException(
+            'The requests package is not installed: network features are disabled.')
     assert headers is None or isinstance(headers, dict)
     request_headers = {'User-Agent': get_user_agent()}
     if headers:

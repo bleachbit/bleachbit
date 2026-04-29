@@ -992,6 +992,27 @@ State=AAAA/wA...
                     det, expected_encodings,
                     f"{file_contents} -> {det}, expected one of {expected_encodings}")
 
+    def test_detect_encoding_missing_chardet(self):
+        """detect_encoding should log a warning when chardet is missing."""
+        # Remove chardet from sys.modules
+        saved = {}
+        for mod in list(sys.modules.keys()):
+            if mod.startswith('chardet'):
+                saved[mod] = sys.modules.pop(mod)
+        try:
+            with unittest.mock.patch.dict('sys.modules', {'chardet': None}):
+                with tempfile.NamedTemporaryFile(mode='w', delete=False,
+                                                 encoding='utf-8') as temp:
+                    temp.write('hello world')
+                    temp.flush()
+                with self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
+                    det = detect_encoding(temp.name)
+                self.assertIn('chardet module is not available', cm.output[0])
+                os.unlink(temp.name)
+        finally:
+            for mod, mod_obj in saved.items():
+                sys.modules[mod] = mod_obj
+
     @common.skipIfWindows
     def test_ego_owner(self):
         """Unit test for ego_owner()"""
