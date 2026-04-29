@@ -28,7 +28,6 @@ from tests import common
 
 class ProcessTestCase(common.BleachbitTestCase):
 
-
     def test_enumerate_processes(self):
         """Test enumerate_processes()"""
         # FIXME: also check the private functions like _enumerate_proc_fs
@@ -42,7 +41,6 @@ class ProcessTestCase(common.BleachbitTestCase):
             self.assertIsInstance(proc.name, str)
             self.assertGreater(len(proc.name), 0)
             self.assertIsInstance(proc.same_user, bool)
-
 
     @mock.patch('subprocess.check_output')
     @common.skipIfWindows
@@ -160,6 +158,14 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                 self.assertEqual(is_process_running(exename, require_same_user), expected,
                                  f'is_running({exename}, {require_same_user})')
 
+    def test_missing_psutil(self):
+        """Process should be importable without psutil and set _has_psutil=False."""
+        with common.mock_missing_package(
+                'psutil',
+                clear_prefixes=('bleachbit.Process',)):
+            import bleachbit.Process as Process
+            self.assertFalse(Process._has_psutil)
+
     @common.skipUnlessWindows
     def test_is_process_running_windows(self):
         """Test is_process_running() on Windows"""
@@ -182,3 +188,13 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                 result = is_process_running(exename, require_same_user)
                 self.assertEqual(
                     expected, result, f'Expecting is_process_running({exename}, {require_same_user}) = {expected}, got {result}')
+
+    def test_missing_psutil_import(self):
+        """Process should be importable without psutil and set _has_psutil=False."""
+        with common.mock_missing_package(
+                'psutil',
+                clear_prefixes=('bleachbit.Process',)):
+            import bleachbit.Process as Process
+            self.assertFalse(Process._has_psutil)
+        if IS_WINDOWS:
+            self.assertRaises(RuntimeError, enumerate_processes())

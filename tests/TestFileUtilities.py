@@ -994,24 +994,15 @@ State=AAAA/wA...
 
     def test_detect_encoding_missing_chardet(self):
         """detect_encoding should log a warning when chardet is missing."""
-        # Remove chardet from sys.modules
-        saved = {}
-        for mod in list(sys.modules.keys()):
-            if mod.startswith('chardet'):
-                saved[mod] = sys.modules.pop(mod)
-        try:
-            with unittest.mock.patch.dict('sys.modules', {'chardet': None}):
-                with tempfile.NamedTemporaryFile(mode='w', delete=False,
-                                                 encoding='utf-8') as temp:
-                    temp.write('hello world')
-                    temp.flush()
-                with self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
-                    det = detect_encoding(temp.name)
-                self.assertIn('chardet module is not available', cm.output[0])
-                os.unlink(temp.name)
-        finally:
-            for mod, mod_obj in saved.items():
-                sys.modules[mod] = mod_obj
+        with common.mock_missing_package('chardet'):
+            with tempfile.NamedTemporaryFile(mode='w', delete=False,
+                                             encoding='utf-8') as temp:
+                temp.write('hello world')
+                temp.flush()
+            with self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
+                det = detect_encoding(temp.name)
+            self.assertIn('chardet module is not available', cm.output[0])
+            os.unlink(temp.name)
 
     @common.skipIfWindows
     def test_ego_owner(self):
@@ -1236,6 +1227,14 @@ State=AAAA/wA...
                 detected_fs = get_filesystem_type(check_path)[0]
                 self.assertIn(detected_fs, ['btrfs', 'ext4', 'ext3', 'squashfs', 'unknown'],
                               f"Unexpected file system type for {check_path}: {detected_fs}")
+
+    def test_get_filesystem_type_missing_psutil(self):
+        """get_filesystem_type should return unknown when psutil is missing."""
+        with common.mock_missing_package('psutil'):
+            with self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
+                result = get_filesystem_type('/')
+            self.assertEqual(result, ("unknown", "none"))
+            self.assertIn('psutil', cm.output[0])
 
     def test_getsize(self):
         """Unit test for method getsize()"""

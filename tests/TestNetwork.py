@@ -27,7 +27,6 @@ import ipaddress
 import logging
 import os
 import random
-import sys
 import unittest
 from unittest.mock import MagicMock, Mock, patch
 
@@ -220,43 +219,20 @@ class NetworkTestCase(common.BleachbitTestCase):
 class MissingPackagesTestCase(unittest.TestCase):
     """Test behavior when optional third-party packages are missing."""
 
-    def _clear_modules(self, *prefixes):
-        """Remove modules matching prefixes from sys.modules."""
-        for mod in list(sys.modules.keys()):
-            if any(mod.startswith(p) for p in prefixes):
-                del sys.modules[mod]
-
     def test_missing_requests(self):
         """Network should be importable without requests."""
-        saved_modules = dict(sys.modules)
-        self._clear_modules('requests', 'urllib3',
-                            'bleachbit.Network', 'bleachbit.Update')
-        try:
-            with patch.dict('sys.modules', {'requests': None}):
-                import bleachbit.Network as Network
-                self.assertFalse(Network.HAVE_REQUESTS)
-                with self.assertRaises(Network.RequestException):
-                    Network.fetch_url('https://example.com')
-        finally:
-            for mod in list(sys.modules.keys()):
-                if mod not in saved_modules:
-                    del sys.modules[mod]
-            for mod, mod_obj in saved_modules.items():
-                if mod not in sys.modules:
-                    sys.modules[mod] = mod_obj
+        with common.mock_missing_package(
+                'requests', 'urllib3',
+                clear_prefixes=('bleachbit.Network', 'bleachbit.Update')):
+            import bleachbit.Network as Network
+            self.assertFalse(Network.HAVE_REQUESTS)
+            with self.assertRaises(Network.RequestException):
+                Network.fetch_url('https://example.com')
 
     def test_missing_urllib3(self):
         """Missing urllib3 should set HAVE_URLLIB3 to False."""
-        saved_modules = dict(sys.modules)
-        self._clear_modules('urllib3', 'bleachbit.Network')
-        try:
-            with patch.dict('sys.modules', {'urllib3': None}):
-                import bleachbit.Network as Network
-                self.assertFalse(Network.HAVE_URLLIB3)
-        finally:
-            for mod in list(sys.modules.keys()):
-                if mod not in saved_modules:
-                    del sys.modules[mod]
-            for mod, mod_obj in saved_modules.items():
-                if mod not in sys.modules:
-                    sys.modules[mod] = mod_obj
+        with common.mock_missing_package(
+                'urllib3',
+                clear_prefixes=('bleachbit.Network',)):
+            import bleachbit.Network as Network
+            self.assertFalse(Network.HAVE_URLLIB3)

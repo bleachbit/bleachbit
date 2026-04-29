@@ -8,10 +8,10 @@
 Test case for module GuiStartup
 """
 
-import sys
 import unittest
 from unittest import mock
 
+from tests import common
 from bleachbit import GuiStartup
 from bleachbit.GuiStartup import _is_version_upgrade
 
@@ -89,19 +89,9 @@ class GuiStartupTestCase(unittest.TestCase):
 
     def test_missing_requests(self):
         """Missing requests should be reported but not crash GuiStartup."""
-        saved = {}
-        for mod in list(sys.modules.keys()):
-            if any(mod.startswith(p) for p in ['requests', 'urllib3',
-                                                'bleachbit.Network',
-                                                'bleachbit.Update',
-                                                'bleachbit.GuiStartup']):
-                saved[mod] = sys.modules.pop(mod)
-
-        try:
-            with mock.patch.dict('sys.modules', {'requests': None}):
-                import bleachbit.GuiStartup as GuiStartup
-                missing = GuiStartup._get_missing_dependencies()
-                self.assertIn('requests', missing)
-        finally:
-            for mod, mod_obj in saved.items():
-                sys.modules[mod] = mod_obj
+        with common.mock_missing_package(
+                'requests',
+                clear_prefixes=('bleachbit.Network', 'bleachbit.Update', 'bleachbit.GuiStartup')):
+            import bleachbit.GuiStartup as GuiStartup
+            missing = GuiStartup._get_missing_dependencies()
+            self.assertIn('requests', missing)

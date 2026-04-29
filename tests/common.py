@@ -9,6 +9,7 @@
 Common code for unit tests
 """
 
+import contextlib
 import os
 import re
 import shutil
@@ -52,6 +53,41 @@ def _supports_stdout_char(char: str) -> bool:
     except (UnicodeEncodeError, LookupError):
         return False
     return True
+
+
+@contextlib.contextmanager
+def mock_missing_package(*package_names, clear_prefixes=()):
+    """Context manager that simulates missing optional packages.
+
+    Saves and restores sys.modules around the block.  Removes all
+    modules matching any of *package_names* or *clear_prefixes* from
+    sys.modules, then patches each package_name as None to prevent
+    re-import.
+
+    Args:
+        *package_names: Package names to make unavailable
+            (e.g. 'requests', 'psutil').  These are both evicted from
+            sys.modules and patched as None.
+        clear_prefixes: Additional module prefixes to evict from
+            sys.modules (e.g. 'bleachbit.Network') so they are
+            re-imported inside the block.  Not patched as None.
+    """
+    saved_modules = dict(sys.modules)
+    all_prefixes = list(package_names) + list(clear_prefixes)
+    for mod in list(sys.modules.keys()):
+        if any(mod.startswith(p) for p in all_prefixes):
+            del sys.modules[mod]
+    try:
+        patch_dict = {name: None for name in package_names}
+        with mock.patch.dict('sys.modules', patch_dict):
+            yield
+    finally:
+        for mod in list(sys.modules.keys()):
+            if mod not in saved_modules:
+                del sys.modules[mod]
+        for mod, mod_obj in saved_modules.items():
+            if mod not in sys.modules:
+                sys.modules[mod] = mod_obj
 
 
 class BleachbitTestCase(unittest.TestCase):

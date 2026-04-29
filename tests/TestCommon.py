@@ -144,6 +144,20 @@ class CommonTestCase(common.BleachbitTestCase):
             self.assertGreater(len(title.strip()), 0,
                                f"Window title should not be empty or whitespace-only: '{title}'")
 
+    def test_mock_missing_package(self):
+        """Test mock_missing_package context manager"""
+        # Inside the context, importing logging should raise an errorl.
+        with common.mock_missing_package('logging', clear_prefixes=('bleachbit.CLI',)):
+            with self.assertRaises(ImportError):
+                import logging  # pylint: disable=import-outside-toplevel
+            with self.assertRaises(ImportError):
+                import bleachbit.CLI  # pylint: disable=import-outside-toplevel
+            # Importing sys should be unaffected.
+            import sys  # pylint: disable=import-outside-toplevel
+        # Outside the context, importing should work.
+        import logging  # pylint: disable=import-outside-toplevel
+        import bleachbit.CLI  # pylint: disable=import-outside-toplevel
+
     def test_touch_file(self):
         """Unit test for touch_file"""
         fn = os.path.join(self.tempdir, 'test_touch_file')
