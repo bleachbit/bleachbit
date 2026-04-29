@@ -4,6 +4,8 @@ image: Visual Studio 2013
 
 environment:
     PYTHON_HOME: 'C:/Python34'
+    PYTHON_EXE: 'C:/Python34/python.exe'
+    PIP_EXE: 'C:/Python34/Scripts/pip.exe'
     SZ_EXE   :   '"C:/Program Files/7-Zip/7z.exe"'
     make : 'C:/MinGW/bin/mingw32-make.exe'
 
@@ -11,23 +13,23 @@ init:
   - 'systeminfo | findstr /B /C:"OS Name" /C:"OS Version"' # show Windows version
   - 'echo PYTHON_HOME=%PYTHON_HOME%'
   - '%PYTHON_HOME%/python.exe -V' # show Python version
-  - '%PYTHON_HOME%/Scripts/pip.exe --version' # show pip version
+  - '%PIP_EXE% --version' # show pip version
   - 'set PIP_DEFAULT_TIMEOUT=180'
 
 install:
-  # pip dropped support for Python 3.4
-  - '%PYTHON_HOME%/python.exe -m pip install pip==19.1.1'
-  - '%PYTHON_HOME%/Scripts/pip.exe --version' # show pip version
+  # pip 19.2 dropped support for Python 3.4
+  - '%PYTHON_EXE% -m pip install pip==19.1.1'
+  - '%PIP_EXE% --version' # show pip version
   - ps: if (-not (Test-Path psutil-5.6.7-cp34-cp34m-win32.whl)) { Start-FileDownload "https://download.bleachbit.org/deps/psutil-5.6.7-cp34-cp34m-win32.whl" -FileName psutil-5.6.7-cp34-cp34m-win32.whl }
   - ps: $hash = (Get-FileHash psutil-5.6.7-cp34-cp34m-win32.whl -Algorithm SHA256).Hash; if ($hash -ne 'DFE4D8DA295AC722B3676F14BBA7EF80241D715CFB5FF57D6B32E86A5B7DAB5A') { throw "SHA256 mismatch=$hash" }
   - ps: if (-not (Test-Path pywin32-227-cp34-cp34m-win32.whl)) { Start-FileDownload "https://download.bleachbit.org/deps/pywin32-227-cp34-cp34m-win32.whl" -FileName pywin32-227-cp34-cp34m-win32.whl }
   - ps: $hash = (Get-FileHash pywin32-227-cp34-cp34m-win32.whl -Algorithm SHA256).Hash; if ($hash -ne '097F3BCFC79F37E4D8CD95DBFBCF178D24F83309C5756B567756322912DC06F8') { throw "SHA256 mismatch=$hash" }
-  - '%PYTHON_HOME%/Scripts/pip.exe install psutil-5.6.7-cp34-cp34m-win32.whl'
-  - '%PYTHON_HOME%/Scripts/pip.exe install pywin32-227-cp34-cp34m-win32.whl'
+  - '%PIP_EXE% install psutil-5.6.7-cp34-cp34m-win32.whl'
+  - '%PIP_EXE% install pywin32-227-cp34-cp34m-win32.whl'
   # some dependencies must be installed before attempting to install py2exe
-  - '%PYTHON_HOME%/Scripts/pip.exe install -r requirements.txt'
-  - '%PYTHON_HOME%/Scripts/pip.exe install py2exe==0.10.0.2'
-  - '%PYTHON_HOME%/Scripts/pip.exe list'
+  - '%PIP_EXE% install -r requirements.txt'
+  - '%PIP_EXE% install py2exe==0.10.0.2'
+  - '%PIP_EXE% list'
 
   - ps: if (-not (Test-Path pygi-aio.exe )) { Start-FileDownload "https://download.bleachbit.org/deps/pygi-aio-3.24.1_rev1-setup_049a323fe25432b10f7e9f543b74598d4be74a39.exe" -FileName pygi-aio.exe}
   - ps: $hash = (Get-FileHash pygi-aio.exe -Algorithm SHA256).Hash; if ($hash -ne '98f28e95f360282d7065fec2aa4790ec9bbbb85ede6914ba096b1ea02aeebd0a') { throw "SHA256 mismatch=$hash" }
@@ -57,6 +59,7 @@ install:
 
   - 'set PATH=%PATH%;%cd%\gettext\bin;C:\MinGW\bin;'
 # Show version numbers of installed software.
+  - '%make% -v'
   - 'msgunfmt -V'
   - 'strip.exe -V'
   - '"c:\Program Files (x86)\NSIS\makensis.exe" /version'
@@ -66,7 +69,7 @@ build_script:
   - 'echo revision = "%REV8%" > bleachbit\Revision.py'
   - 'echo build_number = "%APPVEYOR_BUILD_NUMBER%" >> bleachbit\Revision.py'
   - '%make% PYTHON=%PYTHON_EXE% -C po local bleachbit.pot'
-  - '%PYTHON_HOME%/python.exe -m windows.setup_py2exe'
+  - '%PYTHON_EXE% -m windows.setup_py2exe'
   - 'move windows\BleachBit*.exe .'
   - 'move windows\BleachBit*.zip .'
   - ps: Get-FileHash BleachBit-*
@@ -79,12 +82,12 @@ cache:
 
 test_script:
 # coveralls.io
-  - '%PYTHON_HOME%/Scripts/pip.exe install python-coveralls requests[security]'
+  - '%PIP_EXE% install python-coveralls requests[security]'
 # shorten very long path because of error https://github.com/az0/bleachbit/issues/166
   - 'set PATH=c:\windows\system32;c:\windows;c:\windows\system32\wbem;c:\windows\SysWOW64\WindowsPowerShell\v1.0\'
-  - '%PYTHON_HOME%/Scripts/pip.exe install mock'
+  - '%PIP_EXE% install mock'
   - 'SET DESTRUCTIVE_TESTS=T'
-  - '%PYTHON_HOME%/Scripts/coverage.exe run --include="bleachbit/*" tests/TestAll.py'
+  - '%PYTHON_EXE% -m coverage run --include="bleachbit/*" tests/TestAll.py'
 
 artifacts:
   - path: BleachBit-*-setup.exe
