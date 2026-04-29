@@ -411,6 +411,10 @@ def is_broken_xdg_desktop(pathname):
         logger.info(
             "is_broken_xdg_menu: missing required option 'Type': '%s'", pathname)
         return True
+    if not config.has_option('Desktop Entry', 'Name'):
+        logger.info(
+            "is_broken_xdg_menu: missing required option 'Name': '%s'", pathname)
+        return True
     file_type = config.get('Desktop Entry', 'Type').strip().lower()
     if 'link' == file_type:
         if not config.has_option('Desktop Entry', 'URL') and \
@@ -430,9 +434,9 @@ def is_broken_xdg_desktop(pathname):
                 "is_broken_xdg_menu: MimeType '%s' not registered '%s'", mimetype, pathname)
             return True
         return False
-    if 'application' != file_type:
-        logger.warning("unhandled type '%s': file '%s'", file_type, pathname)
-        return False
+    if 'application' == file_type:
+        return _is_broken_xdg_desktop_application(config, pathname)
+    logger.warning("unhandled type '%s': file '%s'", file_type, pathname)
     return False
 
 
