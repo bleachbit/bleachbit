@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-04-05 14:48-0600\n"
-"PO-Revision-Date: 2026-04-08 19:09+0000\n"
+"PO-Revision-Date: 2026-05-01 10:09+0000\n"
 "Last-Translator: Ghost of Sparta <makesocialfoss32@keemail.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/bleachbit/main/"
 "hu/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 "X-Launchpad-Export-Date: 2019-12-26 01:52+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -225,7 +225,7 @@ msgstr "Törli a biztonsági mentéseket"
 #: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Crash reports"
-msgstr "Összeomlásjelentések"
+msgstr "Összeomlási jelentések"
 
 #: ../cleaners/librewolf.xml ../cleaners/beagle.xml ../cleaners/vivaldi.xml
 #: ../cleaners/waterfox.xml ../cleaners/geary.xml ../cleaners/zen.xml
@@ -1312,7 +1312,7 @@ msgstr "Ez egy kísérleti lehetőség, rendszerproblémákat okozhat."
 #. TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py
 msgid "Prefetch"
-msgstr "Előzetes lekérdezés"
+msgstr "Előtöltési adatok (Prefetch)"
 
 #: ../bleachbit/Cleaner.py
 msgid "Recycle bin"
@@ -1326,7 +1326,7 @@ msgstr "Kuka ürítése"
 #. describe the kind of uninstallers.
 #: ../bleachbit/Cleaner.py
 msgid "Update uninstallers"
-msgstr "Eltávolítók frissítése"
+msgstr "Frissítési eltávolítók"
 
 #. TRANSLATORS: Description of cleaning option.
 #: ../bleachbit/Cleaner.py
@@ -1738,7 +1738,7 @@ msgstr "_OK"
 #. TRANSLATORS: Title of the 'About' dialog.
 #: ../bleachbit/GuiApplication.py
 msgid "Program to clean unnecessary files"
-msgstr "Program a felesleges fájlok törlésére"
+msgstr "Egy program a felesleges fájlok törlésére"
 
 #. TRANSLATORS: License text shown in the 'About' dialog.
 #: ../bleachbit/GuiApplication.py
@@ -2126,7 +2126,7 @@ msgstr "Nyelvek"
 #. (not deleted) during cleaning.
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
-msgstr "Megtartandó lista"
+msgstr "Megtartandók listája"
 
 #. TRANSLATORS: Sidebar label for the drives page of the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2327,7 +2327,7 @@ msgstr "Megtartandó nyelvi fájlok az alkalmazások takarításakor"
 #. This column controls whether to keep the language.
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep"
-msgstr "Megtartandó"
+msgstr "Megtartás"
 
 #. TRANSLATORS: Column header in the languages treeview showing the
 #. language code (e.g., 'en_US').
@@ -2393,7 +2393,7 @@ msgstr "Eltávolítva: %s"
 #. "Paths" is used generically to refer to both files and folders.
 #: ../bleachbit/GuiPreferences.py
 msgid "These paths will not be deleted or modified."
-msgstr "Ezek az útvonalak nem kerülnek törlésre vagy módosításra."
+msgstr "Ezek az útvonalak nem lesznek törölve vagy módosítva."
 
 #. TRANSLATORS: Notice label at the top of the custom (delete)
 #. page in the preferences dialog.
