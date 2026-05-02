@@ -256,6 +256,10 @@ class Bleachbit(Gtk.Application):
         """Callback for preferences dialog"""
         self._window.show_preferences_dialog()
 
+    def show_expert_mode_infobar(self):
+        """Show the expert mode warning infobar"""
+        self._window.show_expert_mode_infobar()
+
     def get_about_dialog(self):
         # TRANSLATORS: Title of the 'About' dialog.
         dialog = Gtk.AboutDialog(comments=_("Program to clean unnecessary files"),
@@ -351,6 +355,8 @@ class Bleachbit(Gtk.Application):
             self._window = GUI(
                 application=self, title=APP_NAME, auto_exit=self._auto_exit)
         self._window.present()
+        # Show expert mode infobar (GUI mockup)
+        self._window.show_expert_mode_infobar()
         if self._shred_paths:
             GLib.idle_add(GUI.shred_paths, self._window,
                           self._shred_paths, priority=GLib.PRIORITY_LOW)

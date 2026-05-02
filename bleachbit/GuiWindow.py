@@ -159,6 +159,24 @@ class GUI(Gtk.ApplicationWindow):
         self.infobar.get_content_area().add(self.infobar_label)
         vbox.pack_start(self.infobar, False, False, 0)
 
+        # add InfoBar for expert mode warning
+        self.expert_mode_infobar = Gtk.InfoBar()
+        self.expert_mode_infobar.set_message_type(Gtk.MessageType.WARNING)
+        self.expert_mode_infobar.connect('response', self._on_expert_mode_infobar_response)
+        # TRANSLATORS: Button in the expert mode infobar to open preferences.
+        self.expert_mode_infobar.add_button(_('Preferences'), Gtk.ResponseType.ACCEPT)
+        # TRANSLATORS: Button in the expert mode infobar to dismiss the message.
+        self.expert_mode_infobar.add_button(_('OK'), Gtk.ResponseType.OK)
+        self.expert_mode_infobar_label = Gtk.Label()
+        self.expert_mode_infobar_label.set_line_wrap(True)
+        # TRANSLATORS: Message shown in an infobar when previously enabled
+        # features require expert mode, which is disabled by default.
+        self.expert_mode_infobar_label.set_text(
+            _('One or more features you previously enabled now require Expert Mode, '
+              'which is disabled by default. To enable Expert Mode, visit the preferences.'))
+        self.expert_mode_infobar.get_content_area().add(self.expert_mode_infobar_label)
+        vbox.pack_start(self.expert_mode_infobar, False, False, 0)
+
         vbox.add(hbox)
 
         # add operations to left
@@ -217,6 +235,7 @@ class GUI(Gtk.ApplicationWindow):
         self.show_all()
         self.progressbar.hide()
         self.infobar.hide()
+        self.expert_mode_infobar.hide()
 
     def _update_error_tag_color(self, *_args):
         """Ensure error messages stay high contrast in current theme"""
@@ -445,6 +464,14 @@ class GUI(Gtk.ApplicationWindow):
         self.infobar.hide()
         self._infobar_timeout_id = None
         return False  # Remove from GLib timeout
+
+    def show_expert_mode_infobar(self):
+        """Show the expert mode warning infobar"""
+        self.expert_mode_infobar.show_all()
+
+    def _on_expert_mode_infobar_response(self, _infobar, response_id):
+        """Handle expert mode infobar button clicks"""
+        self.expert_mode_infobar.hide()
 
     def show_infobar(self, message, message_type=Gtk.MessageType.ERROR):
         """Show a non-blocking InfoBar message that auto-dismisses
