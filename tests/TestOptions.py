@@ -25,6 +25,7 @@ Test case for module Options
 import errno
 import os
 import stat
+import subprocess
 from unittest import mock
 
 from tests import common
@@ -448,19 +449,6 @@ check_online_updates=True
             mock_flush.assert_called_once_with(force=False)
             mock_unregister.assert_called_once()
 
-    def test_is_config_writable(self):
-        """Test read-only configuration file"""
-        o = bleachbit.Options.Options()
-        o.close()
-        os.chmod(bleachbit.options_file, stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
-        self.assertExists(bleachbit.options_file)
-        with self.assertRaises(OSError):
-            with open(bleachbit.options_file, 'r', encoding='utf-8-sig') as f:
-                f.write('test')
-        self.assertFalse(bleachbit.Options.is_config_writable())
-        os.unlink(bleachbit.options_file)
-        self.assertNotExists(bleachbit.options_file)
-
     def test_unicode_paths(self):
         """Test that paths with various Unicode characters"""
         # On Linux, os.listdir() may return filenames with surrogate-escaped
@@ -504,18 +492,3 @@ check_online_updates=True
                 verify_paths(o, keep_list, custom_list)
 
         o.close()
-
-    def test_is_config_writable_when_dir_not_writable(self):
-        """Test when options_file does not exist and options_dir is not writable"""
-        # Create a temporary directory and make it read-only
-        test_dir = self.mkdir('readonly_config_dir')
-        test_options_file = os.path.join(test_dir, 'does-not-exist.ini')
-
-        with mock.patch('bleachbit.options_dir', test_dir), \
-             mock.patch('bleachbit.options_file', test_options_file):
-            self.assertNotExists(test_options_file)
-            os.chmod(test_dir, stat.S_IRUSR | stat.S_IXUSR)
-            try:
-                self.assertFalse(bleachbit.Options.is_config_writable())
-            finally:
-                os.chmod(test_dir, stat.S_IRWXU)

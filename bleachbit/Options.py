@@ -126,25 +126,6 @@ def init_configuration(*, log=True):
     options.restore()
 
 
-def is_config_writable():
-    """Check whether the configuration file can be written.
-
-    Returns: True if writable, False otherwise.
-    """
-    if os.path.exists(bleachbit.options_file):
-        return os.access(bleachbit.options_file, os.W_OK)
-    # File does not exist yet; check directory or its ancestors.
-    dir_path = bleachbit.options_dir
-    while dir_path:
-        if os.path.exists(dir_path):
-            return os.access(dir_path, os.W_OK)
-        parent = os.path.dirname(dir_path)
-        if parent == dir_path:
-            break
-        dir_path = parent
-    return False
-
-
 class Options:
 
     """Store and retrieve user preferences"""
@@ -452,7 +433,10 @@ class Options:
         try:
             with open(bleachbit.options_file, 'r', encoding='utf-8-sig', errors='surrogateescape') as _file:
                 self.config.read_file(_file, bleachbit.options_file)
-        except:
+        except FileNotFoundError:
+            logger.debug("Configuration file does not exist yet: %s",
+                         bleachbit.options_file)
+        except Exception:
             logger.exception("Error reading application's configuration")
         if not self.config.has_section("bleachbit"):
             self.config.add_section("bleachbit")

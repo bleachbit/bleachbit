@@ -8,12 +8,15 @@
 Test case for module GuiStartup
 """
 
-import unittest
+import os
+import stat
 from unittest import mock
 
-from tests import common
+import bleachbit
 from bleachbit import GuiStartup
 from bleachbit.GuiStartup import _is_version_upgrade
+from bleachbit.Options import options
+from tests import common
 
 
 class StubOptions:
@@ -37,7 +40,7 @@ class StubOptions:
         return self._old_version
 
 
-class GuiStartupTestCase(unittest.TestCase):
+class GuiStartupTestCase(common.BleachbitTestCase):
     """Tests for GuiStartup helper logic."""
 
     def test_is_version_upgrade(self):
@@ -95,3 +98,20 @@ class GuiStartupTestCase(unittest.TestCase):
             import bleachbit.GuiStartup as GuiStartup
             missing = GuiStartup._get_missing_dependencies()
             self.assertIn('requests', missing)
+
+    @common.skipIfWindows
+    def test_is_config_writable(self):
+        """Test read-only configuration file"""
+        o = bleachbit.Options.Options()
+        o.close()
+        orig_mode = os.stat(bleachbit.options_file).st_mode
+        os.chmod(bleachbit.options_file, stat.S_IRUSR |
+                 stat.S_IRGRP | stat.S_IROTH)
+        self.assertExists(bleachbit.options_file)
+        try:
+            issues = GuiStartup._get_config_permission_issues()
+            self.assertTrue(any('Write error' in issue for issue in issues))
+        finally:
+            os.chmod(bleachbit.options_file, orig_mode)
+        os.unlink(bleachbit.options_file)
+        self.assertNotExists(bleachbit.options_file)

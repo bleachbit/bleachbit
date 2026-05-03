@@ -4,19 +4,21 @@
 # This work is licensed under the terms of the GNU GPL, version 3 or
 # later.  See the COPYING file in the top-level directory.
 
+import logging
 import os
+import stat
 import sys
 from importlib import import_module
 
-from bleachbit import options_file
+from bleachbit import options_dir, options_file, IS_POSIX, IS_WINDOWS
 from bleachbit.Language import get_text as _
 from bleachbit.Network import unset_sslkeylogfile
-from bleachbit.Options import is_config_writable, options
+from bleachbit.Options import options
 
 if os.name == 'nt':
     from bleachbit import Windows
 
-
+logger = logging.getLogger(__name__)
 
 
 def _is_version_upgrade(old_version, target_version):
@@ -54,6 +56,106 @@ def _get_missing_dependencies():
     return sorted(missing)
 
 
+def _get_config_permission_issues():
+    """Check for permission and file access issues with the
+    configuration.
+
+    If no errors, returns False.
+    If errors found, returns list of strings with info.
+    """
+    lines = []
+    has_error = False
+
+    try:
+        with open(options_file, 'rb') as f:
+            f.read(1)
+    except (IOError, OSError, PermissionError) as e:
+        has_error = True
+        lines.append(f"Read error: {type(e).__name__}: {e}")
+
+    try:
+        with open(options_file, 'a') as f:
+            f.write('')
+    except (IOError, OSError, PermissionError) as e:
+        has_error = True
+        lines.append(f"Write error: {type(e).__name__}: {e}")
+
+    try:
+        fstat = os.stat(options_file)
+        mode = stat.filemode(fstat.st_mode)
+        lines.append(f'File: {options_file}')
+        lines.append(
+            f'Permissions: {mode} ({oct(stat.S_IMODE(fstat.st_mode))})')
+    except OSError as e:
+        has_error = True
+        lines.append(f'Cannot stat {options_file}: {e}')
+
+    # Directory info
+    try:
+        dstat = os.stat(options_dir)
+        dmode = stat.filemode(dstat.st_mode)
+        lines.append(f'Directory: {options_dir}')
+        lines.append(
+            f'Directory permissions: {dmode} ({oct(stat.S_IMODE(dstat.st_mode))})')
+    except OSError as e:
+        has_error = True
+        lines.append(f'Cannot stat directory {options_dir}: {e}')
+
+    # File ownership vs current user
+    if IS_POSIX:
+        import pwd  # pylint: disable=import-outside-toplevel
+        from bleachbit.General import get_real_uid, get_real_username
+        try:
+            file_owner = pwd.getpwuid(fstat.st_uid).pw_name
+        except (KeyError, OverflowError):
+            has_error = True
+            file_owner = str(fstat.st_uid)
+        current_uid = get_real_uid()
+        try:
+            current_user = get_real_username()
+        except RuntimeError:
+            has_error = True
+            current_user = str(current_uid)
+        lines.append(f'File owner: {file_owner} (uid {fstat.st_uid})')
+        lines.append(f'Current user: {current_user} (uid {current_uid})')
+        if fstat.st_uid != current_uid:
+            has_error = True
+            lines.append('File owner does not match current user')
+        # os.access checks
+        lines.append(f'os.access R_OK: {os.access(options_file, os.R_OK)}')
+        lines.append(f'os.access W_OK: {os.access(options_file, os.W_OK)}')
+    elif IS_WINDOWS:
+        try:
+            import win32security  # pylint: disable=import-outside-toplevel
+            file_sd = win32security.GetFileSecurity(
+                options_file, win32security.OWNER_SECURITY_INFORMATION)
+            file_owner_sid = file_sd.GetSecurityDescriptorOwner()
+            file_owner_name = win32security.LookupAccountSid(
+                None, file_owner_sid)[0]
+            process_token = win32security.OpenProcessToken(
+                win32security.GetCurrentProcess(),
+                win32security.TOKEN_QUERY)
+            token_user = win32security.GetTokenInformation(
+                process_token, win32security.TokenUser)
+            current_sid = token_user[0]
+            current_name = win32security.LookupAccountSid(
+                None, current_sid)[0]
+            import win32file  # pylint: disable=import-outside-toplevel
+            win32file.CloseHandle(process_token)
+            lines.append(f'File owner: {file_owner_name}')
+            lines.append(f'Current user: {current_name}')
+            if file_owner_sid != current_sid:
+                has_error = True
+                lines.append('File owner does not match current user')
+        except Exception as e:
+            has_error = True
+            lines.append(f'Could not check file ownership: {e}')
+
+    if has_error:
+        return lines
+    return False
+
+
 def get_startup_messages(auto_exit):
     """Return a list of startup messages
 
@@ -66,10 +168,13 @@ def get_startup_messages(auto_exit):
     """
     ret_msgs = []
 
-    if not is_config_writable():
+    perm_issues_list = _get_config_permission_issues()
+    if perm_issues_list:
+        perm_issues_str = '\n'.join(perm_issues_list)
         ret_msgs.append((
-            f'The configuration file {options_file} is not writable, so preferences will not '
-            'be saved.', True))
+            f'The configuration file {options_file} has a permissions issue, so existing '
+            'preferences might not be loaded, and changes may not be saved.\n\n'
+            f'{perm_issues_str}', True))
 
     missing_deps = _get_missing_dependencies()
 
