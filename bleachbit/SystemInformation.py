@@ -160,6 +160,10 @@ def get_version(four_parts=False):
     return f'{bleachbit.APP_VERSION}.{build_number}'
 
 
+def _escape_invalid_unicode(value):
+    return str(value).encode('utf-8', errors='backslashreplace').decode('utf-8')
+
+
 def get_system_information():
     """Return system information as a string."""
     info = OrderedDict()
@@ -227,4 +231,6 @@ def get_system_information():
     info['__file__'] = __file__
 
     # Render the information as a string
-    return '\n'.join(f'{key} = {value}' for key, value in info.items())
+    return '\n'.join(
+        f'{key} = {_escape_invalid_unicode(value)}'
+        for key, value in info.items())

@@ -41,6 +41,22 @@ class SystemInformationTestCase(common.BleachbitTestCase):
         ret = get_system_information()
         self.assertIsString(ret)
 
+    @common.skipUnlessWindows
+    def test_get_system_information_invalid_unicode_userprofile(self):
+        invalid_userprofile = 'C:\\Users\\invalid\ud803'
+        original_getenv = os.getenv
+
+        def getenv(name, default=None):
+            if name == 'USERPROFILE':
+                return invalid_userprofile
+            return original_getenv(name, default)
+
+        with mock.patch('bleachbit.SystemInformation.os.getenv', side_effect=getenv):
+            ret = get_system_information()
+
+        encoded = ret.encode('utf-8')
+        self.assertIn(b'C:\\Users\\invalid\\ud803', encoded)
+
     def test_get_version(self):
         """Test get_version"""
         ret = get_version()
