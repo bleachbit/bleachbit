@@ -20,6 +20,7 @@ from unittest import mock
 from tests import common
 from tests import TestCleaner
 from tests.common import SPECIAL_TEST_STRINGS
+from bleachbit.Options import options
 from bleachbit.DeepScan import DeepScan, Search, normalized_walk
 
 
@@ -74,6 +75,29 @@ class DeepScanTestCase(common.BleachbitTestCase):
                 # it's yielding control to the GTK idle loop
                 continue
             self.assertLExists(cmd.path)
+
+    def test_skip_whitelisted_directory(self):
+        """DeepScan should not search whitelisted directories."""
+        # Reminder: each test case gets a new options directory,
+        # so we do not need to restore the old keep list (whitelist).
+        keep_dir = self.mkdir('keep')
+        search_dir = self.mkdir('search')
+        keep_file = self.write_file(os.path.join(keep_dir, 'skip.bbtestbak'))
+        search_file = self.write_file(os.path.join(search_dir, 'find.bbtestbak'))
+
+        options.set_whitelist_paths([('folder', keep_dir)])
+        searches = {
+            self.tempdir: [
+                Search(command='delete', regex=r'\.bbtestbak$')
+            ]
+        }
+        paths = [
+            cmd.path
+            for cmd in DeepScan(searches).scan()
+            if cmd is not True
+        ]
+        self.assertNotIn(keep_file, paths)
+        self.assertIn(search_file, paths)
 
     def _test_delete(self, command):
         """Delete files in a test environment"""
