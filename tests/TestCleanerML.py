@@ -119,14 +119,45 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         shutil.rmtree(bleachbit.personal_cleaners_dir)
         bleachbit.personal_cleaners_dir = pcd
 
-    def test_CleanerML_invalid_utf8(self):
-        """Unit test for CleanerML() with invalid UTF-8 encoding"""
+    def test_nvalid_utf8(self):
+        """Test CleanerML() with invalid UTF-8 encoding
+
+        It should fail gracefully.
+        """
         fn = os.path.join(self.mkdtemp(prefix='bleachbit-cleanerml-utf8'),
                           'broken.xml')
         self.write_file(fn, contents=b'<cleaner id="poison">\n\xff\xfe\xfd\n')
         xmlcleaner = CleanerML(fn)
         self.assertIsInstance(xmlcleaner, CleanerML)
         self.assertFalse(xmlcleaner.cleaner.is_usable())
+
+    def test_utf8_non_ascii(self):
+        """Test CleanerML() with UTF-8 non-ASCII text
+
+        It should load successfully.
+        """
+        xml_str = """<?xml version="1.0" encoding="UTF-8"?>
+<cleaner id="test_utf8">
+    <label>Test</label>
+    <!-- 中文注释 -->
+    <option id="opt">
+        <label>测试标签</label>
+        <description>测试描述</description>
+        <action search="file" command="delete" path="C:\\中文路径\\file.txt"/>
+    </option>
+</cleaner>
+"""
+        fn = os.path.join(self.mkdtemp(prefix='bleachbit-cleanerml-utf8'),
+                          'utf8.xml')
+        self.write_file(fn, contents=xml_str.encode('utf-8'))
+        xmlcleaner = CleanerML(fn)
+        self.assertIsInstance(xmlcleaner, CleanerML)
+        self.assertTrue(xmlcleaner.cleaner.is_usable())
+        self.assertEqual('测试标签', xmlcleaner.cleaner.options['opt'][0])
+        self.assertEqual('测试描述',
+                         xmlcleaner.cleaner.options['opt'][1])
+        commands = list(xmlcleaner.cleaner.get_commands('opt'))
+        self.assertEqual(0, len(commands))
 
     def test_os_match(self):
         """Unit test for os_match"""
