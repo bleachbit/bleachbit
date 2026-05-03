@@ -1,7 +1,9 @@
 APP = bleachbit
 POFILES = $(wildcard *.po)
 MOFILES = $(patsubst %.po,%.mo,$(POFILES))
-SRC = $(wildcard ../bleachbit/*.py) ../share/app-menu.ui
+PY_SRC = $(wildcard ../bleachbit/*.py)
+UI_SRC = ../share/app-menu.ui
+SRC = $(PY_SRC) $(UI_SRC)
 POTFILE = $(APP).pot
 ITS ?= /usr/share/gettext/its/metainfo.its
 PYTHON ?= python3
@@ -65,7 +67,13 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot metainfo.pot nsis.pot require-gette
 		--keyword="_p:1c,2" \
 		--default-domain=$(APP) \
 		--add-location=file \
-		$(SRC)
+		$(PY_SRC)
+	xgettext -o $(POTFILE) \
+		--join-existing \
+		--default-domain=$(APP) \
+		--add-location=file \
+		--language=Glade \
+		$(UI_SRC)
 	# While GNU sed requires no argument for -i, BSD sed requires a file extension.
 	# Both accept empty string with no space after -i.
 	sed -i'' 's/charset=CHARSET/charset=utf-8/g' $(POTFILE)
