@@ -1513,9 +1513,11 @@ State=AAAA/wA...
 
     def assert_is_whitelisted(self, path, allow_swapcase=True):
         """Helper to assert a path is whitelisted"""
-        self.assertTrue(whitelisted(path), f"Path {path} should be whitelisted")
+        self.assertTrue(whitelisted(path),
+                        f"Path {path} should be whitelisted")
         if allow_swapcase and not FS_CASE_SENSITIVE:
-            self.assertTrue(whitelisted(path.swapcase()), f"Path {path.swapcase()} should be whitelisted")
+            self.assertTrue(whitelisted(path.swapcase()),
+                            f"Path {path.swapcase()} should be whitelisted")
 
     def test_whitelisted(self):
         """Unit test for whitelisted()"""
@@ -1528,7 +1530,8 @@ State=AAAA/wA...
         # test
         tests = ('', '/', '/home/foo2', '/home/fo', '/home/', '/home')
         for path in tests:
-            self.assertFalse(whitelisted(path), f"{path} should not be whitelisted")
+            self.assertFalse(whitelisted(
+                path), f"{path} should not be whitelisted")
 
         with self.assertRaises(TypeError):
             whitelisted(None)
@@ -1562,10 +1565,10 @@ State=AAAA/wA...
     def test_whitelisted_windows(self):
         """Test whitelisted() on Windows"""
         keep_list = [('folder', 'D:\\'),
-            ('file', 'c:\\windows\\foo.log'),
-            ('file', 'c:\\de\\straße.txt'),
-            ('folder', 'e:\\users')
-        ]
+                     ('file', 'c:\\windows\\foo.log'),
+                     ('file', 'c:\\de\\straße.txt'),
+                     ('folder', 'e:\\users')
+                     ]
         options.set_whitelist_paths(keep_list)
         # verbatim paths
         self.assert_is_whitelisted('d:\\')
