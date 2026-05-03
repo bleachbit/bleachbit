@@ -38,6 +38,7 @@ These are the terms:
 """
 
 # standard imports
+import atexit
 import base64
 import ctypes
 import decimal
@@ -100,6 +101,10 @@ IO_REPARSE_TAG_MOUNT_POINT = 0xA0000003
 FILE_ATTRIBUTE_REPARSE_POINT = 0x400
 
 SPLASH_ICON_SIZE_PX = 256  # 256x256 pixels
+
+_delete_parent_lock_admin = None
+_delete_parent_lock_handle = None
+_delete_parent_lock_key = None
 
 
 class _POINT(ctypes.Structure):
@@ -236,6 +241,118 @@ def csidl_to_environ(varname, csidl):
         return
     # there is exception handling in set_environ()
     set_environ(varname, sppath)
+
+
+def _delete_parent_lock_needed(pathname):
+    if os.name != 'nt':
+        return False
+    global _delete_parent_lock_admin
+    if _delete_parent_lock_admin is None:
+        try:
+            _delete_parent_lock_admin = shell.IsUserAnAdmin()
+        except Exception:
+            logger.exception('error checking whether current user is an administrator')
+            _delete_parent_lock_admin = True
+    return _delete_parent_lock_admin and not _path_in_user_profile(pathname)
+
+
+def _path_for_comparison(pathname):
+    return os.path.normcase(os.path.abspath(
+        FileUtilities.extended_path_undo(pathname)))
+
+
+def _path_in_user_profile(pathname):
+    userprofile = os.environ.get('USERPROFILE')
+    if not userprofile:
+        return False
+    try:
+        profile_path = _path_for_comparison(userprofile)
+        compare_path = _path_for_comparison(pathname)
+        return os.path.commonpath((profile_path, compare_path)) == profile_path
+    except (OSError, ValueError):
+        return False
+
+
+def _delete_parent_directory(pathname):
+    path = os.path.abspath(FileUtilities.extended_path_undo(pathname))
+    return FileUtilities.extended_path(os.path.dirname(path))
+
+
+def _close_delete_parent_lock():
+    global _delete_parent_lock_handle
+    global _delete_parent_lock_key
+    if _delete_parent_lock_handle is not None:
+        win32file.CloseHandle(_delete_parent_lock_handle)
+        _delete_parent_lock_handle = None
+        _delete_parent_lock_key = None
+
+
+def _lock_delete_parent(pathname):
+    global _delete_parent_lock_handle
+    global _delete_parent_lock_key
+    parent = _delete_parent_directory(pathname)
+    parent_key = os.path.normcase(parent)
+    if _delete_parent_lock_handle is not None and _delete_parent_lock_key == parent_key:
+        return
+    _close_delete_parent_lock()
+    flags = win32con.FILE_FLAG_BACKUP_SEMANTICS | getattr(
+        win32con, 'FILE_FLAG_OPEN_REPARSE_POINT', 0x00200000)
+    access = getattr(win32con, 'FILE_READ_ATTRIBUTES', 0x80)
+    try:
+        handle = win32file.CreateFile(
+            parent,
+            access,
+            win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE,
+            None,
+            win32con.OPEN_EXISTING,
+            flags,
+            None)
+    except pywintypes.error as e:
+        raise OSError(errno.EACCES,
+                      "Access denied locking directory before delete()",
+                      pathname) from e
+    if handle == win32file.INVALID_HANDLE_VALUE:
+        raise OSError(errno.EACCES,
+                      "Access denied locking directory before delete()",
+                      pathname)
+    try:
+        attrs = win32file.GetFileAttributesW(parent)
+    except pywintypes.error:
+        win32file.CloseHandle(handle)
+        raise
+    if attrs & FILE_ATTRIBUTE_REPARSE_POINT:
+        win32file.CloseHandle(handle)
+        raise OSError(errno.EACCES,
+                      "Refusing to delete through a directory link",
+                      pathname)
+    _delete_parent_lock_handle = handle
+    _delete_parent_lock_key = parent_key
+
+
+def delete_with_parent_lock(pathname, delete_func):
+    if not _delete_parent_lock_needed(pathname):
+        return delete_func(pathname)
+    _lock_delete_parent(pathname)
+    try:
+        return delete_func(pathname)
+    except Exception:
+        _close_delete_parent_lock()
+        raise
+
+
+def run_with_delete_parent_lock(pathname, func):
+    if not _delete_parent_lock_needed(pathname):
+        return func()
+    _lock_delete_parent(pathname)
+    try:
+        return func()
+    except Exception:
+        _close_delete_parent_lock()
+        raise
+
+
+if 'win32' == sys.platform:
+    atexit.register(_close_delete_parent_lock)
 
 
 def delete_locked_file(pathname):
