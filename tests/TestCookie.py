@@ -529,25 +529,47 @@ class CookieTestCase(common.BleachbitTestCase):
     def test_load_keep_list_valid_json(self):
         """Valid JSON keep list should return the expected domains"""
         keep_data = ["example.com", "example.org"]
-        self.write_file(COOKIE_KEEP_LIST_FILENAME,
-                        json.dumps(keep_data), mode='w')
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        with open(keep_path, 'w', encoding='utf-8') as f:
+            json.dump(keep_data, f)
         result = load_keep_list()
         self.assertEqual(result, {'example.com', 'example.org'})
 
     def test_load_keep_list_json_decode_error(self):
         """Corrupted JSON should raise JSONDecodeError, not return empty set"""
         action = self._make_cookie_action()
-        self.write_file(COOKIE_KEEP_LIST_FILENAME, '{invalid json', mode='w')
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        self.write_file(keep_path, '{invalid json', mode='w')
         with self.assertRaises(json.JSONDecodeError):
             load_keep_list()
         with self.assertRaises(json.JSONDecodeError):
             list(action.get_commands())
 
+    def test_load_keep_list_unicode_decode_error(self):
+        """UnicodeDecodeError should propagate, not return empty set"""
+        action = self._make_cookie_action()
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        # Write invalid UTF-8 bytes
+        with open(keep_path, 'wb') as f:
+            f.write(b'\x80\x81\x82')
+        with self.assertRaises(UnicodeDecodeError):
+            load_keep_list()
+        with self.assertRaises(UnicodeDecodeError):
+            list(action.get_commands())
+
     def test_load_keep_list_permission_error(self):
         """PermissionError (a subtype of OSError) should propagate"""
         action = self._make_cookie_action()
-        keep_path = self.write_file(
-            COOKIE_KEEP_LIST_FILENAME, json.dumps(["example.com"]), mode='w')
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        self.write_file(keep_path, json.dumps(["example.com"]), mode='w')
         real_open = open
 
         def _mock_open(*args, **kwargs):
@@ -564,8 +586,10 @@ class CookieTestCase(common.BleachbitTestCase):
     def test_load_keep_list_chmod(self):
         """Test that chmod affects file access"""
         action = self._make_cookie_action()
-        keep_path = self.write_file(
-            COOKIE_KEEP_LIST_FILENAME, json.dumps(["example.com"]), mode='w')
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        self.write_file(keep_path, json.dumps(["example.com"]), mode='w')
         # Remove read permission
         os.chmod(keep_path, 0o200)  # write-only
         with self.assertRaises(PermissionError):
