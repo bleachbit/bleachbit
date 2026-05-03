@@ -10,7 +10,8 @@ import stat
 import sys
 from importlib import import_module
 
-from bleachbit import options_dir, options_file, IS_POSIX, IS_WINDOWS
+import bleachbit
+from bleachbit import IS_POSIX, IS_WINDOWS
 from bleachbit.Language import get_text as _
 from bleachbit.Network import unset_sslkeylogfile
 from bleachbit.Options import options
@@ -66,40 +67,43 @@ def _get_config_permission_issues():
     lines = []
     has_error = False
 
+    _options_file = bleachbit.options_file
+    _options_dir = bleachbit.options_dir
+
     try:
-        with open(options_file, 'rb') as f:
+        with open(_options_file, 'rb') as f:
             f.read(1)
     except (IOError, OSError, PermissionError) as e:
         has_error = True
         lines.append(f"Read error: {type(e).__name__}: {e}")
 
     try:
-        with open(options_file, 'a') as f:
+        with open(_options_file, 'a') as f:
             f.write('')
     except (IOError, OSError, PermissionError) as e:
         has_error = True
         lines.append(f"Write error: {type(e).__name__}: {e}")
 
     try:
-        fstat = os.stat(options_file)
+        fstat = os.stat(_options_file)
         mode = stat.filemode(fstat.st_mode)
-        lines.append(f'File: {options_file}')
+        lines.append(f'File: {_options_file}')
         lines.append(
             f'Permissions: {mode} ({oct(stat.S_IMODE(fstat.st_mode))})')
     except OSError as e:
         has_error = True
-        lines.append(f'Cannot stat {options_file}: {e}')
+        lines.append(f'Cannot stat {_options_file}: {e}')
 
     # Directory info
     try:
-        dstat = os.stat(options_dir)
+        dstat = os.stat(_options_dir)
         dmode = stat.filemode(dstat.st_mode)
-        lines.append(f'Directory: {options_dir}')
+        lines.append(f'Directory: {_options_dir}')
         lines.append(
             f'Directory permissions: {dmode} ({oct(stat.S_IMODE(dstat.st_mode))})')
     except OSError as e:
         has_error = True
-        lines.append(f'Cannot stat directory {options_dir}: {e}')
+        lines.append(f'Cannot stat directory {_options_dir}: {e}')
 
     # File ownership vs current user
     if IS_POSIX:
@@ -122,13 +126,13 @@ def _get_config_permission_issues():
             has_error = True
             lines.append('File owner does not match current user')
         # os.access checks
-        lines.append(f'os.access R_OK: {os.access(options_file, os.R_OK)}')
-        lines.append(f'os.access W_OK: {os.access(options_file, os.W_OK)}')
+        lines.append(f'os.access R_OK: {os.access(_options_file, os.R_OK)}')
+        lines.append(f'os.access W_OK: {os.access(_options_file, os.W_OK)}')
     elif IS_WINDOWS:
         try:
             import win32security  # pylint: disable=import-outside-toplevel
             file_sd = win32security.GetFileSecurity(
-                options_file, win32security.OWNER_SECURITY_INFORMATION)
+                _options_file, win32security.OWNER_SECURITY_INFORMATION)
             file_owner_sid = file_sd.GetSecurityDescriptorOwner()
             file_owner_name = win32security.LookupAccountSid(
                 None, file_owner_sid)[0]
@@ -172,7 +176,7 @@ def get_startup_messages(auto_exit):
     if perm_issues_list:
         perm_issues_str = '\n'.join(perm_issues_list)
         ret_msgs.append((
-            f'The configuration file {options_file} has a permissions issue, so existing '
+            f'The configuration file {bleachbit.options_file} has a permissions issue, so existing '
             'preferences might not be loaded, and changes may not be saved.\n\n'
             f'{perm_issues_str}', True))
 

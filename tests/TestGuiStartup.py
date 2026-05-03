@@ -104,14 +104,12 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         """Test read-only configuration file"""
         o = bleachbit.Options.Options()
         o.close()
-        orig_mode = os.stat(bleachbit.options_file).st_mode
         os.chmod(bleachbit.options_file, stat.S_IRUSR |
                  stat.S_IRGRP | stat.S_IROTH)
         self.assertExists(bleachbit.options_file)
-        try:
-            issues = GuiStartup._get_config_permission_issues()
-            self.assertTrue(any('Write error' in issue for issue in issues))
-        finally:
-            os.chmod(bleachbit.options_file, orig_mode)
+        issues = GuiStartup._get_config_permission_issues()
         os.unlink(bleachbit.options_file)
         self.assertNotExists(bleachbit.options_file)
+        self.assertIsInstance(issues, list)
+        self.assertGreater(len(issues), 0)
+        self.assertTrue(any('Write error' in issue for issue in issues), f"Expected 'Write error' in issues: {issues}")
