@@ -1,32 +1,20 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Cookie module for selective deletion of cookies
 """
 
 import contextlib
+import json
 import logging
 import os
 import sqlite3
 
+import bleachbit
 from bleachbit import FileUtilities
 from bleachbit.Special import sqlite_table_exists
 
@@ -137,6 +125,28 @@ def list_cookies(path):
         cursor = conn.cursor()
         cursor.execute(f"SELECT distinct {host_column} FROM {table_name}")
         return cursor.fetchall()
+
+
+def load_keep_list():
+    """Load cookie domains to keep from options directory.
+
+    This does not swallow file permission error or JSON parsing errors:
+    when cleaning, these cases should not be treated equally to an empty
+    keep list.
+    """
+    path = os.path.join(bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+    domains = set()
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        return domains
+
+    if isinstance(data, list):
+        for item in data:
+            if isinstance(item, str) and item:
+                domains.add(item.lstrip('.').lower())
+    return domains
 
 
 def delete_cookies(path, keep_list, really_delete=False):

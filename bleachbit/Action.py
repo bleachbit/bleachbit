@@ -1,23 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Actions that perform cleaning
@@ -25,18 +10,16 @@ Actions that perform cleaning
 
 # standard imports
 import glob
-import json
 import logging
 import os
 import re
 from itertools import product
 
 # first party imports
-import bleachbit
 from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod  # mod=module
 from bleachbit import FS_SCAN_RE_FLAGS
 from bleachbit.Constant import CLEAN_FILE_LABEL
-from bleachbit.Cookie import COOKIE_KEEP_LIST_FILENAME
+from bleachbit.Cookie import COOKIE_KEEP_LIST_FILENAME, load_keep_list
 from bleachbit.Language import get_text as _
 
 if os.name == 'posix':
@@ -464,7 +447,7 @@ class Cookie(FileActionProvider):
     action_key = 'cookie'
 
     def get_commands(self):
-        keep_list = self._load_keep_list()
+        keep_list = load_keep_list()
 
         if not keep_list:
             # If nothing is being kept, use regular delete for better performance
@@ -501,34 +484,9 @@ class Cookie(FileActionProvider):
                 _('Clean cookies'),
                 preview_func)
 
-    def _load_keep_list(self):
-        """Load cookie domains to keep from options directory.
-
-        Supports either a list of strings (domains) or a list of objects
-        with a 'domain' key (cookie name field is ignored in v1).
-        """
-        path = os.path.join(bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
-        domains = set()
-        try:
-            with open(path, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-            if isinstance(data, list):
-                for item in data:
-                    if isinstance(item, str):
-                        d = item
-                    elif isinstance(item, dict):
-                        d = item.get('domain')
-                    else:
-                        d = None
-                    if isinstance(d, str) and d:
-                        domains.add(d.lstrip('.').lower())
-        except (FileNotFoundError, json.JSONDecodeError, OSError):
-            pass
-        return domains
-
     def _delete_cookies_with_keep_list(self, path):
         """Delete cookies while honoring the keep list"""
-        keep_list = self._load_keep_list()
+        keep_list = load_keep_list()
         if not keep_list:
             return 0
         result = CookieMod.delete_cookies(path, keep_list, really_delete=True)
@@ -536,7 +494,7 @@ class Cookie(FileActionProvider):
 
     def _preview_cookies_deletion(self, path):
         """Preview cookies deletion, honoring the keep list"""
-        keep_list = self._load_keep_list()
+        keep_list = load_keep_list()
         if not keep_list:
             return 0
         result = CookieMod.delete_cookies(path, keep_list, really_delete=False)

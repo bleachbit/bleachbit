@@ -1,35 +1,26 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test case for module Cookie
 """
 
 import hashlib
+import json
 import os
 import sqlite3
 import tempfile
 import unittest
 import shutil
+from unittest import mock
 
+import bleachbit
 from bleachbit import Cookie
+from bleachbit.Action import Cookie as CookieAction
+from bleachbit.Cookie import COOKIE_KEEP_LIST_FILENAME, load_keep_list
 from bleachbit.Options import options
 from bleachbit.FileUtilities import execute_sqlite3
 from tests import common
@@ -513,6 +504,75 @@ class CookieTestCase(common.BleachbitTestCase):
         self.assertFalse(result['skipped'])
         self.assertFalse(result['whole_file_deleted'])
         self.assertGreaterEqual(result['file_size_reduction'], 0)
+
+    def _make_cookie_action(self):
+        """Create a Cookie action instance with a mock XML element."""
+        elem = mock.MagicMock()
+        elem.getAttribute.return_value = ''
+        elem.getAttribute.side_effect = lambda name: {
+            'command': 'cookie',
+            'search': 'file',
+            'path': os.path.join(self.temp_dir, 'nonexistent'),
+        }.get(name, '')
+        return CookieAction(elem)
+
+    def test_load_keep_list_file_not_found(self):
+        """FileNotFoundError should return empty set (no keep list configured)"""
+        # Ensure the file doesn't exist
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        if os.path.exists(keep_path):
+            os.remove(keep_path)
+        result = load_keep_list()
+        self.assertEqual(result, set())
+
+    def test_load_keep_list_valid_json(self):
+        """Valid JSON keep list should return the expected domains"""
+        keep_data = ["example.com", "example.org"]
+        self.write_file(COOKIE_KEEP_LIST_FILENAME,
+                        json.dumps(keep_data), mode='w')
+        result = load_keep_list()
+        self.assertEqual(result, {'example.com', 'example.org'})
+
+    def test_load_keep_list_json_decode_error(self):
+        """Corrupted JSON should raise JSONDecodeError, not return empty set"""
+        action = self._make_cookie_action()
+        self.write_file(COOKIE_KEEP_LIST_FILENAME, '{invalid json', mode='w')
+        with self.assertRaises(json.JSONDecodeError):
+            load_keep_list()
+        with self.assertRaises(json.JSONDecodeError):
+            list(action.get_commands())
+
+    def test_load_keep_list_permission_error(self):
+        """PermissionError (a subtype of OSError) should propagate"""
+        action = self._make_cookie_action()
+        keep_path = self.write_file(
+            COOKIE_KEEP_LIST_FILENAME, json.dumps(["example.com"]), mode='w')
+        real_open = open
+
+        def _mock_open(*args, **kwargs):
+            if len(args) >= 1 and args[0] == keep_path:
+                raise PermissionError('mock permission denied')
+            return real_open(*args, **kwargs)
+        with mock.patch('builtins.open', _mock_open):
+            with self.assertRaises(PermissionError):
+                load_keep_list()
+            with self.assertRaises(PermissionError):
+                list(action.get_commands())
+
+    @common.skipIfWindows
+    def test_load_keep_list_chmod(self):
+        """Test that chmod affects file access"""
+        action = self._make_cookie_action()
+        keep_path = self.write_file(
+            COOKIE_KEEP_LIST_FILENAME, json.dumps(["example.com"]), mode='w')
+        # Remove read permission
+        os.chmod(keep_path, 0o200)  # write-only
+        with self.assertRaises(PermissionError):
+            load_keep_list()
+        with self.assertRaises(PermissionError):
+            list(action.get_commands())
+        os.chmod(keep_path, 0o600)  # restore read permission
 
 
 if __name__ == '__main__':
