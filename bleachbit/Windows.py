@@ -282,6 +282,7 @@ def _close_delete_parent_lock():
     global _delete_parent_lock_handle
     global _delete_parent_lock_key
     if _delete_parent_lock_handle is not None:
+        logger.debug('Closing parent lock handle for %s', _delete_parent_lock_key)
         win32file.CloseHandle(_delete_parent_lock_handle)
         _delete_parent_lock_handle = None
         _delete_parent_lock_key = None
@@ -293,6 +294,7 @@ def _lock_delete_parent(pathname):
     parent = _delete_parent_directory(pathname)
     parent_key = os.path.normcase(parent)
     if _delete_parent_lock_handle is not None and _delete_parent_lock_key == parent_key:
+        logger.debug('Reusing parent lock handle for %s', parent_key)
         return
     _close_delete_parent_lock()
     flags = win32con.FILE_FLAG_BACKUP_SEMANTICS | getattr(
@@ -325,6 +327,7 @@ def _lock_delete_parent(pathname):
         raise OSError(errno.EACCES,
                       "Refusing to delete through a directory link",
                       pathname)
+    logger.debug('Opened parent lock handle for %s', parent_key)
     _delete_parent_lock_handle = handle
     _delete_parent_lock_key = parent_key
 
@@ -332,6 +335,7 @@ def _lock_delete_parent(pathname):
 def delete_with_parent_lock(pathname, delete_func):
     if not _delete_parent_lock_needed(pathname):
         return delete_func(pathname)
+    logger.debug('delete_with_parent_lock(%s)', pathname)
     _lock_delete_parent(pathname)
     try:
         return delete_func(pathname)
@@ -343,6 +347,7 @@ def delete_with_parent_lock(pathname, delete_func):
 def run_with_delete_parent_lock(pathname, func):
     if not _delete_parent_lock_needed(pathname):
         return func()
+    logger.debug('run_with_delete_parent_lock(%s)', pathname)
     _lock_delete_parent(pathname)
     try:
         return func()
