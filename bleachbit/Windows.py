@@ -302,7 +302,7 @@ def _lock_delete_parent(pathname):
         handle = win32file.CreateFile(
             parent,
             access,
-            win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE,
+            win32con.FILE_SHARE_READ,
             None,
             win32con.OPEN_EXISTING,
             flags,
@@ -402,7 +402,7 @@ def delete_registry_key(parent_key, really_delete, excludekeys=None):
     the key exists."""
     parent_key = str(parent_key)  # Unicode to byte string
     excludekeys = excludekeys or []
-    
+
     # Check if this key is excluded
     for exclude_path in excludekeys:
         # Normalize paths for comparison (case-insensitive)
@@ -413,7 +413,7 @@ def delete_registry_key(parent_key, really_delete, excludekeys=None):
            normalized_parent.startswith(normalized_exclude + '\\'):
             logger.debug('Skipping excluded registry key: %s', parent_key)
             return False
-    
+
     (hive, parent_sub_key) = split_registry_key(parent_key)
     hkey = None
     try:
@@ -431,19 +431,19 @@ def delete_registry_key(parent_key, really_delete, excludekeys=None):
     child_keys = [
         parent_key + '\\' + winreg.EnumKey(hkey, i) for i in range(keys_size)
     ]
-    
+
     # Check if any child keys are excluded
     has_excluded_children = False
     for child_key in child_keys:
         child_deleted = delete_registry_key(child_key, True, excludekeys)
         if not child_deleted:
             has_excluded_children = True
-    
+
     # If any child is excluded, preserve this parent key
     if has_excluded_children:
         logger.debug('Preserving parent key with excluded children: %s', parent_key)
         return False
-    
+
     try:
         winreg.DeleteKey(hive, parent_sub_key)
     except PermissionError:
