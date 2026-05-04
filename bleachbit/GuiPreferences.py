@@ -828,7 +828,8 @@ class PreferencesDialog:
         # TRANSLATORS: Noun used as a column header in the preferences dialog.
         type_str_folder = _('Folder')
         type_str = type_str_file if path_type == 'file' else type_str_folder
-        liststore.append([type_str, pathname])
+        display_path = pathname.encode('utf-8', errors='replace').decode('utf-8')
+        liststore.append([type_str, display_path])
         pathnames.append([path_type, pathname])
 
         if page_type == LOCATIONS_WHITELIST:
@@ -837,7 +838,7 @@ class PreferencesDialog:
             options.set_custom_paths(pathnames)
 
         # TRANSLATORS: %s is a file or folder path that was just added
-        self.show_infobar(_("Added: %s") % pathname,
+        self.show_infobar(_("Added: %s") % display_path,
                           Gtk.MessageType.INFO)
 
     def _remove_path(self, treeview, liststore, pathnames, page_type):
@@ -846,19 +847,18 @@ class PreferencesDialog:
         (model, _iter) = treeselection.get_selected()
         if None == _iter:
             return
-        pathname = model[_iter][1]
+        tree_path = model.get_path(_iter)
+        row_index = tree_path.get_indices()[0]
+        display_path = model[_iter][1]
         liststore.remove(_iter)
-        for this_pathname in pathnames:
-            if this_pathname[1] == pathname:
-                pathnames.remove(this_pathname)
-                if page_type == LOCATIONS_WHITELIST:
-                    options.set_whitelist_paths(pathnames)
-                else:
-                    options.set_custom_paths(pathnames)
-                # TRANSLATORS: %s is a file or folder path that was just removed
-                self.show_infobar(_("Removed: %s") % pathname,
-                                  Gtk.MessageType.INFO)
-                break
+        pathnames.pop(row_index)
+        if page_type == LOCATIONS_WHITELIST:
+            options.set_whitelist_paths(pathnames)
+        else:
+            options.set_custom_paths(pathnames)
+        # TRANSLATORS: %s is a file or folder path that was just removed
+        self.show_infobar(_("Removed: %s") % display_path,
+                          Gtk.MessageType.INFO)
 
     def __locations_page(self, page_type):
         """Return a widget containing a list of files and folders"""
@@ -885,7 +885,8 @@ class PreferencesDialog:
             else:
                 raise RuntimeError("Invalid type code: '%s'" % type_code)
             path = paths[1]
-            liststore.append([type_str, path])
+            display_path = path.encode('utf-8', errors='replace').decode('utf-8')
+            liststore.append([type_str, display_path])
 
         if not self._locations_notice_css_provider:
             self._locations_notice_css_provider = Gtk.CssProvider()
