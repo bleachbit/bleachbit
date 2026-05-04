@@ -52,6 +52,13 @@
     <warning>This option is slow.</warning>
     <action command="delete" search="deep" regex="^\.DS_Store$"/>
   </option>
+  <option id="node_modules">
+    <label translate="false">node_modules</label>
+    <description>Delete the files</description>
+    <warning>This option is slow.</warning>
+    <action command="delete" search="deep" wholeregex="[/\\]node_modules"/>
+  </option>
+
   <option id="thumbs_db">
     <label translate="false">Thumbs.db</label>
     <description>Delete the files</description>
