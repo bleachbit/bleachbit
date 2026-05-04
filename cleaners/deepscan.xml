@@ -27,12 +27,18 @@
     @tested ok v???, Windows 7
     @testeddate 2019-03-10
     @testedby https://github.com/Tobias-B-Besemer
-    @note 
+    @note
 
 -->
 <cleaner id="deepscan">
   <label translate="true">Deep scan</label>
   <description>Clean files widely scattered across the disk</description>
+  <option id="angular">
+    <label translate="false">.angular</label>
+    <description>Delete the files</description>
+    <warning>This option is slow.</warning>
+    <action command="delete" search="deep" wholeregex="[/\\].angular"/>
+  </option>
   <option id="backup">
     <label>Backup files</label>
     <description>Delete the backup files</description>
