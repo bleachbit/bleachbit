@@ -29,7 +29,7 @@ from unittest import mock
 
 
 from tests import common
-from bleachbit.SystemInformation import get_system_information, get_version, anonymize_system_information
+from bleachbit.SystemInformation import _get_home_dirs_to_anonymize, get_system_information, get_version, anonymize_system_information
 
 
 class SystemInformationTestCase(common.BleachbitTestCase):
@@ -111,6 +111,41 @@ os.getenv(LocalAppData) = {home_dir}\\AppData\\Local"""
             'os.getenv(LocalAppData) = %userprofile%\\AppData\\Local', result)
         self.assertIsNone(re.search(re.escape(home_dir),
                           result, flags=re.IGNORECASE))
+
+    @common.skipUnlessWindows
+    def test_anonymize_system_information_windows_short_path(self):
+        """Test anonymization handles Windows short (8.3) paths."""
+        # Create a directory with Unicode characters that will have a short path
+        username = '我可以喝漂白剂而不伤及自身'
+        unicode_dir = self.mkdir(username)
+
+        try:
+            import win32api
+            short_path = win32api.GetShortPathName(unicode_dir)
+        except (ImportError, OSError):
+            self.skipTest('win32api not available or short path not supported')
+
+        if short_path == unicode_dir:
+            self.skipTest('Short path generation not enabled on this system')
+
+        self.assertTrue(os.path.samefile(unicode_dir, short_path))
+
+        with mock.patch('bleachbit.SystemInformation.os.path.expanduser', return_value=unicode_dir):
+            from bleachbit.SystemInformation import _get_home_dirs_to_anonymize
+            home_dirs = _get_home_dirs_to_anonymize()
+
+        self.assertIn(short_path, home_dirs)
+        self.assertTrue(os.path.samefile(home_dirs[0], home_dirs[1]))
+
+        test_input = f"os.getenv(TMP) = {short_path}\\AppData\\Local\\Temp"
+        with mock.patch('bleachbit.SystemInformation._get_home_dirs_to_anonymize',
+                        return_value=[unicode_dir, short_path]):
+            anonymized = anonymize_system_information(test_input)
+
+        self.assertIn('%userprofile%', anonymized)
+        self.assertNotIn(username, anonymized)
+        self.assertNotIn(short_path, anonymized)
+        self.assertNotIn(unicode_dir, anonymized)
 
     def test_anonymize_system_information_preserves_non_sensitive_data(self):
         """Test that non-sensitive data remains unchanged during anonymization."""
