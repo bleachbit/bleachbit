@@ -10,11 +10,15 @@ Test case for module GuiStartup
 
 import os
 import stat
+import sys
+import unittest
+import tempfile
 from unittest import mock
 
+from bleachbit import IS_WINDOWS
 import bleachbit
 from bleachbit import GuiStartup
-from bleachbit.GuiStartup import _is_version_upgrade
+from bleachbit.GuiStartup import _is_version_upgrade, _get_posix_permission_issues, _get_windows_permission_issues
 from bleachbit.Options import options
 from tests import common
 
@@ -112,4 +116,27 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         self.assertNotExists(bleachbit.options_file)
         self.assertIsInstance(issues, list)
         self.assertGreater(len(issues), 0)
-        self.assertTrue(any('Write error' in issue for issue in issues), f"Expected 'Write error' in issues: {issues}")
+        self.assertTrue(any('Write error' in issue for issue in issues),
+                        f"Expected 'Write error' in issues: {issues}")
+
+    def test_config_permission_issues_normal(self):
+        """Test that a normal writable config file reports no issues."""
+        o = bleachbit.Options.Options()
+        o.close()
+        self.assertExists(bleachbit.options_file)
+        issues = GuiStartup._get_config_permission_issues()
+        os.unlink(bleachbit.options_file)
+        self.assertNotExists(bleachbit.options_file)
+        self.assertFalse(issues)
+
+    def test_permission_issues_normal_file(self):
+        """Test  ownership check on a normal file owned by the user."""
+        path = self.write_file('check_me')
+        fstat = os.stat(path)
+        if IS_WINDOWS:
+            has_error, lines = _get_windows_permission_issues(path)
+        else:
+            has_error, lines = _get_posix_permission_issues(fstat, path)
+        self.assertFalse(has_error)
+        self.assertTrue(any('File owner:' in line for line in lines))
+        self.assertTrue(any('Current user:' in line for line in lines))

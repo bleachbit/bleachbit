@@ -57,6 +57,73 @@ def _get_missing_dependencies():
     return sorted(missing)
 
 
+def _get_posix_permission_issues(fstat, options_file):
+    """Check POSIX-specific ownership and access issues.
+
+    Returns (has_error, lines).
+    """
+    lines = []
+    has_error = False
+    import pwd  # pylint: disable=import-outside-toplevel
+    from bleachbit.General import get_real_uid, get_real_username
+    try:
+        file_owner = pwd.getpwuid(fstat.st_uid).pw_name
+    except (KeyError, OverflowError):
+        has_error = True
+        file_owner = str(fstat.st_uid)
+    current_uid = get_real_uid()
+    try:
+        current_user = get_real_username()
+    except RuntimeError:
+        has_error = True
+        current_user = str(current_uid)
+    lines.append(f'File owner: {file_owner} (uid {fstat.st_uid})')
+    lines.append(f'Current user: {current_user} (uid {current_uid})')
+    if fstat.st_uid != current_uid:
+        has_error = True
+        lines.append('File owner does not match current user')
+    # os.access checks
+    lines.append(f'os.access R_OK: {os.access(options_file, os.R_OK)}')
+    lines.append(f'os.access W_OK: {os.access(options_file, os.W_OK)}')
+    return has_error, lines
+
+
+def _get_windows_permission_issues(options_file):
+    """Check Windows-specific ownership issues.
+
+    Returns (has_error, lines).
+    """
+    lines = []
+    has_error = False
+    try:
+        import win32api  # pylint: disable=import-outside-toplevel
+        import win32file  # pylint: disable=import-outside-toplevel
+        import win32security  # pylint: disable=import-outside-toplevel
+        file_sd = win32security.GetFileSecurity(
+            options_file, win32security.OWNER_SECURITY_INFORMATION)
+        file_owner_sid = file_sd.GetSecurityDescriptorOwner()
+        file_owner_name = win32security.LookupAccountSid(
+            None, file_owner_sid)[0]
+        process_token = win32security.OpenProcessToken(
+            win32api.GetCurrentProcess(),
+            win32security.TOKEN_QUERY)
+        token_user = win32security.GetTokenInformation(
+            process_token, win32security.TokenUser)
+        current_sid = token_user[0]
+        current_name = win32security.LookupAccountSid(
+            None, current_sid)[0]
+        win32file.CloseHandle(process_token)
+        lines.append(f'File owner: {file_owner_name}')
+        lines.append(f'Current user: {current_name}')
+        if file_owner_sid != current_sid:
+            has_error = True
+            lines.append('File owner does not match current user')
+    except Exception as e:
+        has_error = True
+        lines.append(f'Could not check file ownership: {e}')
+    return has_error, lines
+
+
 def _get_config_permission_issues():
     """Check for permission and file access issues with the
     configuration.
@@ -106,54 +173,17 @@ def _get_config_permission_issues():
         lines.append(f'Cannot stat directory {_options_dir}: {e}')
 
     # File ownership vs current user
-    if IS_POSIX:
-        import pwd  # pylint: disable=import-outside-toplevel
-        from bleachbit.General import get_real_uid, get_real_username
-        try:
-            file_owner = pwd.getpwuid(fstat.st_uid).pw_name
-        except (KeyError, OverflowError):
-            has_error = True
-            file_owner = str(fstat.st_uid)
-        current_uid = get_real_uid()
-        try:
-            current_user = get_real_username()
-        except RuntimeError:
-            has_error = True
-            current_user = str(current_uid)
-        lines.append(f'File owner: {file_owner} (uid {fstat.st_uid})')
-        lines.append(f'Current user: {current_user} (uid {current_uid})')
-        if fstat.st_uid != current_uid:
-            has_error = True
-            lines.append('File owner does not match current user')
-        # os.access checks
-        lines.append(f'os.access R_OK: {os.access(_options_file, os.R_OK)}')
-        lines.append(f'os.access W_OK: {os.access(_options_file, os.W_OK)}')
-    elif IS_WINDOWS:
-        try:
-            import win32security  # pylint: disable=import-outside-toplevel
-            file_sd = win32security.GetFileSecurity(
-                _options_file, win32security.OWNER_SECURITY_INFORMATION)
-            file_owner_sid = file_sd.GetSecurityDescriptorOwner()
-            file_owner_name = win32security.LookupAccountSid(
-                None, file_owner_sid)[0]
-            process_token = win32security.OpenProcessToken(
-                win32security.GetCurrentProcess(),
-                win32security.TOKEN_QUERY)
-            token_user = win32security.GetTokenInformation(
-                process_token, win32security.TokenUser)
-            current_sid = token_user[0]
-            current_name = win32security.LookupAccountSid(
-                None, current_sid)[0]
-            import win32file  # pylint: disable=import-outside-toplevel
-            win32file.CloseHandle(process_token)
-            lines.append(f'File owner: {file_owner_name}')
-            lines.append(f'Current user: {current_name}')
-            if file_owner_sid != current_sid:
-                has_error = True
-                lines.append('File owner does not match current user')
-        except Exception as e:
-            has_error = True
-            lines.append(f'Could not check file ownership: {e}')
+    if 'fstat' in locals():
+        if IS_POSIX:
+            _has_error, _lines = _get_posix_permission_issues(
+                fstat, _options_file)
+            has_error = has_error or _has_error
+            lines.extend(_lines)
+        elif IS_WINDOWS:
+            _has_error, _lines = _get_windows_permission_issues(
+                _options_file)
+            has_error = has_error or _has_error
+            lines.extend(_lines)
 
     if has_error:
         return lines
