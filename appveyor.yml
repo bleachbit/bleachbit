@@ -52,9 +52,23 @@ install:
 # This also checks that the software is installed.
   - '%make% -v'
   - '%MSYS_BIN%\msgunfmt.exe -V'
+  - '%MSYS_BIN%\xgettext.exe -V'
   - '%MSYS_BIN%\strip.exe -V'
   - '%PYTHON_EXE% -V'
   - '"c:\Program Files (x86)\NSIS\makensis.exe" /version'
+  - ps: |
+      $paths = @(
+        "$env:MSYS_BIN\..\share\gettext\its\gtkbuilder.its"
+        'C:\msys64\usr\share\gettext\its\gtkbuilder.its'
+      )
+      foreach ($path in $paths) {
+        if (Test-Path $path) {
+          Write-Output "EXISTS: $path"
+        } else {
+          Write-Output "NOT FOUND: $path"
+        }
+      }
+
 
 build_script:
   - ps: $env:REV8 = $env:APPVEYOR_REPO_COMMIT.Substring(0,8)
@@ -63,6 +77,7 @@ build_script:
   - 'set PATH=%MSYS_BIN%;%PATH%'
   - 'echo %PATH%'
   - '%make% PYTHON=%PYTHON_EXE% -C po local bleachbit.pot'
+
   - '%PYTHON_EXE% -m windows.setup'
   - 'move windows\BleachBit*.exe .'
   - 'move windows\BleachBit*.zip .'
