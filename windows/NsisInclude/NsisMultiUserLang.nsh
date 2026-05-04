@@ -866,12 +866,12 @@ Version: 2023-02-223
 !ifdef LANG_FRENCH
 	LangString ALREADY_INSTALLED ${LANG_FRENCH} "${prodname} est déjà installé.$\r$\nCliquez sur 'OK' pour désinstaller l’ancienne version avant la mise à niveau, ou cliquez sur 'Annuler' pour annuler la mise à niveau."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_FRENCH} "Visiter le site web ${prodname}"
-	LangString INSTALLER_CAPTION ${LANG_FRENCH} "${prodname} ${VERSION} Setup"
+	LangString INSTALLER_CAPTION ${LANG_FRENCH} "${prodname} ${VERSION} Configuration"
 	LangString MULTIPRINT1 ${LANG_FRENCH} "L’étape suivante est la construction du cache des polices, pendant laquelle une fenêtre de console noire peut apparaître."
 	LangString MULTIPRINT2 ${LANG_FRENCH} "Cela se termine généralement en une minute, mais parfois cela prend jusqu’à dix minutes."
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_FRENCH} "Vous devez vous connecter avec un compte membre du groupe d’administrateurs pour continuer."
 	LangString MULTIUSER_ADMIN_CREDENTIALS_REQUIRED ${LANG_FRENCH} "Identifiants d'administrateur requis."
-	LangString MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED ${LANG_FRENCH} "Les privilèges d’administrateur sont requis pour désinstaller"
+	LangString MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED ${LANG_FRENCH} "Les privilèges d’administrateur sont requis pour désinstaller."
 	LangString MULTIUSER_ALL_USERS ${LANG_FRENCH} "Pour &quiconque utilise cet ordinateur (tous les utilisateurs)"
 	LangString MULTIUSER_ALL_USERS_UMUI ${LANG_FRENCH} "Pour quiconque utilise cet ordinateur (tous les utilisateurs)"
 	LangString MULTIUSER_CURRENT_USER ${LANG_FRENCH} "Pour &moi ({USER})"
@@ -1760,7 +1760,7 @@ Version: 2023-02-223
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_POLISH} "Dodaj deinstalator programu."
 	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_POLISH} "${prodname} Debugging Terminal"
 	LangString SHORTCUT_NO_UAC ${LANG_POLISH} "${prodname} (No UAC)."
-	LangString SHRED_SHELL_MENU ${LANG_POLISH} "Shred with ${prodname}"
+	LangString SHRED_SHELL_MENU ${LANG_POLISH} "Zniszcz za pomocą ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_POLISH} "Wybierz zapisywalny katalog dla każdego napędu, celem nadpisania wolnej przestrzeni."
 !endif
 
