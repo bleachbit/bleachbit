@@ -11,14 +11,19 @@ Test case for module GtkShim
 
 import ctypes
 import os
+import subprocess
+import sys
 import unittest
 from unittest import mock
 
 from tests import common
 from bleachbit.GtkShim import (
     _build_error_html,
+    _fix_arg,
     _handle_gtk_import_error,
+    _patched_argv,
     _show_windows_error_dialog,
+    _try_import_gtk,
     path_has_lib_or_bin,
 )
 
@@ -160,6 +165,83 @@ class HandleGtkImportErrorTestCase(unittest.TestCase):
             _title, html = m.call_args[0]
             self.assertIn('Traceback', html)
             self.assertIn('System information', html)
+
+
+class FixArgTestCase(unittest.TestCase):
+    """Tests for _fix_arg()."""
+
+    def test_ascii_unchanged(self):
+        """ASCII strings must pass through unchanged."""
+        self.assertEqual(_fix_arg('hello'), 'hello')
+
+    def test_surrogate_replaced(self):
+        """Unpaired surrogates must be replaced with the replacement character."""
+        arg = 'prefix' + chr(0xD800) + 'suffix'
+        fixed = _fix_arg(arg)
+        self.assertNotIn(chr(0xD800), fixed)
+        self.assertIn('\ufffd', fixed)
+
+    def test_valid_unicode_unchanged(self):
+        """Valid Unicode characters must pass through unchanged."""
+        self.assertEqual(_fix_arg('\u2014em-dash'), '\u2014em-dash')
+        self.assertEqual(_fix_arg('\U0001F525'), '\U0001F525')
+
+
+class PatchedArgvTestCase(unittest.TestCase):
+    """Tests for _patched_argv()."""
+
+    def test_transform_applied(self):
+        """Transform function must be applied to all argv elements."""
+        original = sys.argv[:]
+        with _patched_argv(lambda a: a.swapcase()):
+            self.assertEqual(sys.argv, [a.swapcase() for a in original])
+        self.assertEqual(sys.argv, original)
+
+    def test_restored_on_exception(self):
+        """sys.argv must be restored even when exception occurs."""
+        original = sys.argv[:]
+        with self.assertRaises(RuntimeError):
+            with _patched_argv(lambda a: 'x'):
+                raise RuntimeError('boom')
+        self.assertEqual(sys.argv, original)
+
+    def test_restores_reference_identity(self):
+        """sys.argv must be restored to the exact same object reference."""
+        original = sys.argv
+        with _patched_argv(lambda a: a):
+            pass
+        self.assertIs(sys.argv, original)
+
+
+class TryImportGtkTestCase(unittest.TestCase):
+    """Test _try_import_gtk."""
+
+    def test_surrogate_in_argv(self):
+        """Must not crash for surrogates in sys.argv."""
+        bad_path = os.path.join(
+            'c:\\', 'temp', 'surrogate') + chr(0xD800) + 'beta_test0'
+
+        script = f'''
+import ctypes
+import sys
+from unittest import mock
+sys.argv = ['bleachbit.py', {bad_path!r}]
+with mock.patch.object(ctypes.windll.user32, 'MessageBoxW', return_value=7):
+    from bleachbit.GtkShim import _try_import_gtk
+    success, reason = _try_import_gtk()
+print(f"OK success={{success}} reason={{reason}}")
+'''
+
+        result = subprocess.run(
+            [sys.executable, '-c', script],
+            capture_output=True, text=True,
+            timeout=30,
+        )
+
+        self.assertEqual(result.returncode, 0,
+                         f'stderr: {{result.stderr}}')
+        self.assertIn('OK success=True', result.stdout,
+                      'surrogate argv caused GTK import to fail')
 
 
 if __name__ == '__main__':

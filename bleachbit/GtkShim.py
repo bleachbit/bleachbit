@@ -36,6 +36,7 @@ import sys
 import tempfile
 import warnings
 import webbrowser
+from contextlib import contextmanager
 from pathlib import PureWindowsPath
 from html import escape as esc
 from traceback import format_exc
@@ -58,6 +59,30 @@ Gio = None
 
 # Reason that GTK is unavailable
 _gtk_unavailable_reason = None
+
+
+def _fix_arg(arg):
+    """Replace unpaired surrogates in an argument with the replacement char.
+
+    Gdk.init_check() inside gi.overrides.Gdk reads sys.argv during import
+    and fails with UnicodeEncodeError if arguments contain unpaired
+    surrogates (e.g., Windows filenames). This sanitizes each argument.
+    """
+    return arg.encode('utf-8', 'surrogatepass').decode('utf-8', 'replace')
+
+
+@contextmanager
+def _patched_argv(transform):
+    """Temporarily replace sys.argv with a transformed copy.
+
+    Guarantees restoration even on exceptions.
+    """
+    original = sys.argv
+    sys.argv = [transform(arg) for arg in sys.argv]
+    try:
+        yield
+    finally:
+        sys.argv = original
 
 
 def path_has_lib_or_bin(path):
@@ -250,18 +275,23 @@ def _try_import_gtk():
             _handle_gtk_import_error(e)
             return False, f'GTK 3.0 not available: {e}'
 
+        # Gdk.init_check() inside gi.overrides.Gdk reads sys.argv during
+        # import and fails with UnicodeEncodeError if arguments contain
+        # unpaired surrogates (e.g., Windows filenames). Sanitize argv
+        # temporarily, so the import can proceed.
         try:
-            from gi.repository import Gtk as _Gtk
-            from gi.repository import Gdk as _Gdk
-            from gi.repository import GObject as _GObject
-            from gi.repository import GLib as _GLib
-            from gi.repository import Gio as _Gio
+            with _patched_argv(_fix_arg):
+                from gi.repository import Gtk as _Gtk
+                from gi.repository import Gdk as _Gdk
+                from gi.repository import GObject as _GObject
+                from gi.repository import GLib as _GLib
+                from gi.repository import Gio as _Gio
 
-            Gtk = _Gtk
-            Gdk = _Gdk
-            GObject = _GObject
-            GLib = _GLib
-            Gio = _Gio
+                Gtk = _Gtk
+                Gdk = _Gdk
+                GObject = _GObject
+                GLib = _GLib
+                Gio = _Gio
 
         except (ImportError, RuntimeError, ValueError) as e:
             _handle_gtk_import_error(e)
