@@ -88,34 +88,71 @@ def _get_posix_permission_issues(fstat, options_file):
     return has_error, lines
 
 
+def _get_windows_user_info():
+    """Get Windows user information.
+
+    Returns (current_sid, current_name, token_groups).
+    """
+    if not IS_WINDOWS:
+        raise RuntimeError("This function is only available on Windows")
+    import win32api  # pylint: disable=import-outside-toplevel
+    import win32file  # pylint: disable=import-outside-toplevel
+    import win32security  # pylint: disable=import-outside-toplevel
+    process_token = win32security.OpenProcessToken(
+        win32api.GetCurrentProcess(),
+        win32security.TOKEN_QUERY)
+    current_sid = win32security.GetTokenInformation(
+        process_token, win32security.TokenUser)[0]
+    current_name = win32security.LookupAccountSid(
+        None, current_sid)[0]
+    token_groups = win32security.GetTokenInformation(
+        process_token, win32security.TokenGroups)
+    win32file.CloseHandle(process_token)
+    # Convert PySID objects to string representation for hashing
+    group_sids = {win32security.ConvertSidToStringSid(
+        g[0]) for g in token_groups}
+    current_sid_str = win32security.ConvertSidToStringSid(current_sid)
+    return current_sid_str, current_name, group_sids
+
+
+def _get_windows_file_owner(filepath):
+    """Get the owner of a file on Windows.
+
+    Returns (owner_sid_str, owner_name).
+    """
+    if not IS_WINDOWS:
+        raise RuntimeError("This function is only available on Windows")
+    import win32security  # pylint: disable=import-outside-toplevel
+    file_sd = win32security.GetFileSecurity(
+        filepath, win32security.OWNER_SECURITY_INFORMATION)
+    file_owner_sid = file_sd.GetSecurityDescriptorOwner()
+    file_owner_name = win32security.LookupAccountSid(
+        None, file_owner_sid)[0]
+    file_owner_sid_str = win32security.ConvertSidToStringSid(file_owner_sid)
+    return file_owner_sid_str, file_owner_name
+
+
 def _get_windows_permission_issues(options_file):
     """Check Windows-specific ownership issues.
 
     Returns (has_error, lines).
     """
+    if not IS_WINDOWS:
+        raise RuntimeError("This function is only available on Windows")
     lines = []
     has_error = False
     try:
-        import win32api  # pylint: disable=import-outside-toplevel
-        import win32file  # pylint: disable=import-outside-toplevel
-        import win32security  # pylint: disable=import-outside-toplevel
-        file_sd = win32security.GetFileSecurity(
-            options_file, win32security.OWNER_SECURITY_INFORMATION)
-        file_owner_sid = file_sd.GetSecurityDescriptorOwner()
-        file_owner_name = win32security.LookupAccountSid(
-            None, file_owner_sid)[0]
-        process_token = win32security.OpenProcessToken(
-            win32api.GetCurrentProcess(),
-            win32security.TOKEN_QUERY)
-        token_user = win32security.GetTokenInformation(
-            process_token, win32security.TokenUser)
-        current_sid = token_user[0]
-        current_name = win32security.LookupAccountSid(
-            None, current_sid)[0]
-        win32file.CloseHandle(process_token)
+        file_owner_sid_str, file_owner_name = _get_windows_file_owner(
+            options_file)
+        current_sid, current_name, group_sids = _get_windows_user_info()
         lines.append(f'File owner: {file_owner_name}')
         lines.append(f'Current user: {current_name}')
-        if file_owner_sid != current_sid:
+        # Administrators owns the directory, and the created file inherits
+        # from the owner. This is not representative of a normal installation.
+        if 'APPVEYOR' in os.environ and file_owner_name == 'Administrators':
+            lines.append('Skipping file ownership check on AppVeyor')
+            return False, lines
+        if file_owner_sid_str != current_sid and file_owner_sid_str not in group_sids:
             has_error = True
             lines.append('File owner does not match current user')
     except Exception as e:

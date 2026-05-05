@@ -140,3 +140,30 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         self.assertFalse(has_error)
         self.assertTrue(any('File owner:' in line for line in lines))
         self.assertTrue(any('Current user:' in line for line in lines))
+
+    @common.skipUnlessWindows
+    def test_get_windows_user_info(self):
+        """Test _get_windows_user_info function."""
+        current_sid, current_name, group_sids = GuiStartup._get_windows_user_info()
+        self.assertIsNotNone(current_sid)
+        self.assertIsNotNone(current_name)
+        self.assertIsNotNone(group_sids)
+        self.assertIsInstance(current_sid, str)
+        self.assertIsInstance(current_name, str)
+        self.assertIsInstance(group_sids, set)
+        self.assertEqual(current_name, os.environ.get('USERNAME', ''))
+
+    @common.skipUnlessWindows
+    def test_get_windows_file_owner(self):
+        """Test _get_windows_file_owner function."""
+        owner_sid_str, owner_name = GuiStartup._get_windows_file_owner(
+            self.tempdir)
+        self.assertIsNotNone(owner_sid_str)
+        self.assertIsNotNone(owner_name)
+        self.assertIsInstance(owner_sid_str, str)
+        self.assertIsInstance(owner_name, str)
+        if 'APPVEYOR' in os.environ:
+            expected_owner = 'Administrators'
+        else:
+            expected_owner = os.environ.get('USERNAME', '')
+        self.assertEqual(owner_name, expected_owner)
