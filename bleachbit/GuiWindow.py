@@ -217,7 +217,6 @@ class GUI(Gtk.ApplicationWindow):
         self.show_all()
         self.progressbar.hide()
         self.infobar.hide()
-        self.expert_mode_infobar.hide()
 
     def _update_error_tag_color(self, *_args):
         """Ensure error messages stay high contrast in current theme"""
@@ -446,14 +445,6 @@ class GUI(Gtk.ApplicationWindow):
         self.infobar.hide()
         self._infobar_timeout_id = None
         return False  # Remove from GLib timeout
-
-    def show_expert_mode_infobar(self):
-        """Show the expert mode warning infobar"""
-        self.expert_mode_infobar.show_all()
-
-    def _on_expert_mode_infobar_response(self, _infobar, response_id):
-        """Handle expert mode infobar button clicks"""
-        self.expert_mode_infobar.hide()
 
     def show_infobar(self, message, message_type=Gtk.MessageType.ERROR):
         """Show a non-blocking InfoBar message that auto-dismisses
