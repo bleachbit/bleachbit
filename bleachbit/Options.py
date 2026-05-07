@@ -568,9 +568,5 @@ class Options:
         override_key = (section, key)
         self.overrides[override_key] = value
 
-    def get_old_version(self):
-        """Get the previous version before current upgrade"""
-        return self.old_version
-
 
 options = Options()

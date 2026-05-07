@@ -227,6 +227,22 @@ def _get_config_permission_issues():
     return False
 
 
+def _has_selected_warning_option():
+    """Check if any selected cleaning option has a warning.
+
+    Returns True if any selected option has a warning, False otherwise.
+    """
+    from bleachbit.Cleaner import backends  # pylint: disable=import-outside-toplevel
+    if not backends:
+        return False
+    for cleaner_id, cleaner in backends.items():
+        for (o_id, _o_name) in cleaner.get_options():
+            if options.get_tree(cleaner_id, o_id):
+                if cleaner.get_warning(o_id):
+                    return True
+    return False
+
+
 def get_startup_messages(auto_exit):
     """Return a list of startup messages
 
@@ -259,14 +275,24 @@ def get_startup_messages(auto_exit):
         ret_msgs.append((
             'The environment variable SSLKEYLOGFILE is not supported', True))
 
-    # Show version update advice for upgrades from <5.1.0 to >=5.1.0
-    old_version = options.get_old_version()
-    if old_version and _is_version_upgrade(old_version, "5.1.0"):
+    # Check if any selected cleaning option has a warning
+    if not options.get('expert_mode') and _has_selected_warning_option():
         ret_msgs.append((
-            # TRANSLATORS: Update notification for users upgrading from versions
-            # older than 5.1.0.
-            _('Cleaning options with warnings now require expert mode. Enable it in '
-              'preferences to clean them.'), False))
+            # TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
+            # Preferences. Keep it consistent with the translation of "Expert Mode"
+            # in the preferences dialog. This message appears when cleaning options
+            # with warnings are selected but expert mode is disabled.
+            _('One or more selected cleaning options have warnings and '
+              'require Expert Mode to clean. Enable it in preferences.'), False))
+
+    if not options.get('delete_confirmation') and not options.get('expert_mode'):
+        ret_msgs.append((
+            # TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
+            # Preferences. Keep it consistent with the translation of "Expert Mode"
+            # in the preferences dialog. This message appears when the user tries to
+            # skip a delete confirmation without enabling Expert Mode.
+            _('Delete confirmation is disabled but expert mode is not enabled. '
+              'Enable Expert Mode in preferences to skip delete confirmations.'), False))
 
     # Show information for first start.
     # (The first start flag is set also for each new version.)
