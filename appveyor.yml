@@ -57,15 +57,18 @@ install:
   - '%PYTHON_EXE% -V'
   - '"c:\Program Files (x86)\NSIS\makensis.exe" /version'
   - ps: |
-      $paths = @(
-        "$env:MSYS_BIN\..\share\gettext\its\gtkbuilder.its"
-        'C:\msys64\usr\share\gettext\its\gtkbuilder.its'
+      $searchDirs = @(
+        "$env:MSYS_BIN\..\.."
+        'C:\msys64'
       )
-      foreach ($path in $paths) {
-        if (Test-Path $path) {
-          Write-Output "EXISTS: $path"
+      foreach ($dir in $searchDirs) {
+        if (Test-Path $dir) {
+          Write-Output "Searching recursively in: $dir"
+          Get-ChildItem -Path $dir -Recurse -Filter "gtkbuilder.its" -ErrorAction SilentlyContinue | ForEach-Object {
+            Write-Output "FOUND: $($_.FullName)"
+          }
         } else {
-          Write-Output "NOT FOUND: $path"
+          Write-Output "Directory not found: $dir"
         }
       }
 
