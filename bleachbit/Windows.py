@@ -353,9 +353,9 @@ def is_handle_valid(h):
     except TypeError:
         # TypeError happens in tests with mock.
         return False
-    except pywintypes.error as e:
-        # ERROR_INVALID_HANDLE = 6
-        return e.winerror != 6
+    except pywintypes.error:
+        # If GetFileType fails for any reason, the handle is likely invalid
+        return False
 
 def with_parent_lock(pathname, func, *args, **kwargs):
     """
