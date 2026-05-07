@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 r"""
 Functionality specific to Microsoft Windows
@@ -62,7 +48,7 @@ from uuid import UUID
 
 # first party imports
 import bleachbit
-from bleachbit import FileUtilities
+from bleachbit import FileUtilities, IS_WINDOWS
 from bleachbit.Language import get_text as _
 
 if 'win32' == sys.platform:
@@ -244,6 +230,12 @@ def csidl_to_environ(varname, csidl):
 
 
 def _delete_parent_lock_needed(pathname):
+    """
+    Check if a parent directory lock is needed.
+
+    This is only needed on Windows for administrator users
+    when the path is not in the user's profile directory.
+    """
     if os.name != 'nt':
         return False
     global _delete_parent_lock_admin
@@ -257,11 +249,17 @@ def _delete_parent_lock_needed(pathname):
 
 
 def _path_for_comparison(pathname):
+    """
+    Normalize a path for comparison.
+    """
     return os.path.normcase(os.path.abspath(
         FileUtilities.extended_path_undo(pathname)))
 
 
 def _path_in_user_profile(pathname):
+    """
+    Check if a path is within the user's profile directory.
+    """
     userprofile = os.environ.get('USERPROFILE')
     if not userprofile:
         return False
@@ -274,11 +272,15 @@ def _path_in_user_profile(pathname):
 
 
 def _delete_parent_directory(pathname):
+    """
+    Get the parent directory of a file or directory.
+    """
     path = os.path.abspath(FileUtilities.extended_path_undo(pathname))
     return FileUtilities.extended_path(os.path.dirname(path))
 
 
 def _close_delete_parent_lock():
+    """Close the parent lock handle."""
     global _delete_parent_lock_handle
     global _delete_parent_lock_key
     if _delete_parent_lock_handle is not None:
@@ -289,6 +291,11 @@ def _close_delete_parent_lock():
 
 
 def _lock_delete_parent(pathname):
+    """
+    Lock the parent directory of pathname to prevent it from being deleted.
+
+    This function does not perform the deletion.
+    """
     global _delete_parent_lock_handle
     global _delete_parent_lock_key
     parent = _delete_parent_directory(pathname)
@@ -332,31 +339,48 @@ def _lock_delete_parent(pathname):
     _delete_parent_lock_key = parent_key
 
 
-def delete_with_parent_lock(pathname, delete_func):
-    if not _delete_parent_lock_needed(pathname):
-        return delete_func(pathname)
-    logger.debug('delete_with_parent_lock(%s)', pathname)
-    _lock_delete_parent(pathname)
+def is_handle_valid(h):
+    """
+    Check if a Windows file handle is still valid.
+
+    FIXME: temporary function
+
+    Returns True if the handle is valid, False otherwise.
+    """
     try:
-        return delete_func(pathname)
-    except Exception:
-        _close_delete_parent_lock()
-        raise
+        win32file.GetFileType(h)
+        return True
+    except TypeError:
+        # TypeError happens in tests with mock.
+        return False
+    except pywintypes.error as e:
+        # ERROR_INVALID_HANDLE = 6
+        return e.winerror != 6
 
+def with_parent_lock(pathname, func, *args, **kwargs):
+    """
+    Run a function with a lock on the parent directory of pathname.
 
-def run_with_delete_parent_lock(pathname, func):
+    This prevents race conditions where the parent directory is deleted
+    while the function is running.
+
+    If args/kwargs are provided, passes them to func.
+    Otherwise, calls func() with no arguments.
+    """
     if not _delete_parent_lock_needed(pathname):
-        return func()
-    logger.debug('run_with_delete_parent_lock(%s)', pathname)
+        return func(*args, **kwargs)
+    logger.debug('with_parent_lock(%s): acquiring lock', pathname)
     _lock_delete_parent(pathname)
+    logger.debug('lock acquired: calling clean function with parent lock, is_handle_valid(%s)=%s',
+        _delete_parent_lock_key,
+        is_handle_valid(_delete_parent_lock_handle))
     try:
-        return func()
-    except Exception:
+        return func(*args, **kwargs)
+    except Exception as e:
         _close_delete_parent_lock()
-        raise
+        raise e from e
 
-
-if 'win32' == sys.platform:
+if IS_WINDOWS:
     atexit.register(_close_delete_parent_lock)
 
 

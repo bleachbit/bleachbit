@@ -348,10 +348,10 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 mock.patch('bleachbit.Windows.win32file.CreateFile', return_value=handle) as create_file, \
                 mock.patch('bleachbit.Windows.win32file.GetFileAttributesW', return_value=0), \
                 mock.patch('bleachbit.Windows.win32file.CloseHandle') as close_handle:
-            self.assertEqual(Windows.delete_with_parent_lock(
-                r'C:\Windows\Temp\one.tmp', delete_func), mock.sentinel.deleted)
-            self.assertEqual(Windows.delete_with_parent_lock(
-                r'C:\Windows\Temp\two.tmp', delete_func), mock.sentinel.deleted)
+            self.assertEqual(Windows.with_parent_lock(
+                r'C:\Windows\Temp\one.tmp', delete_func, r'C:\Windows\Temp\one.tmp'), mock.sentinel.deleted)
+            self.assertEqual(Windows.with_parent_lock(
+                r'C:\Windows\Temp\two.tmp', delete_func, r'C:\Windows\Temp\two.tmp'), mock.sentinel.deleted)
             self.assertEqual(create_file.call_count, 1)
             self.assertEqual(delete_func.call_count, 2)
             Windows._close_delete_parent_lock()
@@ -368,8 +368,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 mock.patch('bleachbit.Windows.win32file.GetFileAttributesW', return_value=0), \
                 mock.patch('bleachbit.Windows.win32file.CloseHandle') as close_handle:
             with self.assertRaises(RuntimeError):
-                Windows.delete_with_parent_lock(
-                    r'C:\Windows\Temp\one.tmp', delete_func)
+                Windows.with_parent_lock(
+                    r'C:\Windows\Temp\one.tmp', delete_func, r'C:\Windows\Temp\one.tmp')
             close_handle.assert_called_once_with(handle)
             self.assertIsNone(Windows._delete_parent_lock_handle)
 

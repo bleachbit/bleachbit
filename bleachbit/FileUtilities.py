@@ -74,18 +74,27 @@ def _remove_windows_readonly(path):
 
 
 def _delete_path(path, delete_func):
+    """
+    Delete a path with parent lock if on Windows.
+    """
     if os.name == 'nt':
-        return bleachbit.Windows.delete_with_parent_lock(path, delete_func)
+        return bleachbit.Windows.with_parent_lock(path, delete_func, path)
     return delete_func(path)
 
 
 def _run_with_delete_lock(path, func):
+    """Run a function with a lock on the parent directory of pathname.
+
+    This prevents race conditions where the parent directory is deleted
+    while the function is running.
+    """
     if os.name == 'nt':
-        return bleachbit.Windows.run_with_delete_parent_lock(path, func)
+        return bleachbit.Windows.with_parent_lock(path, func)
     return func()
 
 
 def close_delete_parent_lock():
+    """Close the delete parent lock if on Windows."""
     if os.name == 'nt':
         bleachbit.Windows._close_delete_parent_lock()
 

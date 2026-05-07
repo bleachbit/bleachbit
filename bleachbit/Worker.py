@@ -33,6 +33,7 @@ from bleachbit import DeepScan, FileUtilities
 from bleachbit.Cleaner import backends
 from bleachbit.Constant import EMPTY_SPACE_WARNING
 from bleachbit.Language import get_text as _, nget_text as ngettext
+from bleachbit.FileUtilities import close_delete_parent_lock
 
 logger = logging.getLogger(__name__)
 
@@ -299,6 +300,10 @@ class Worker:
         # run deep scan
         if self.deepscans:
             yield from self.run_deep_scan()
+
+        # After standard operations and deep scan, close the lock
+        # of the parent directory.
+        close_delete_parent_lock()
 
         # delayed operations
         for op in sorted(self.delayed_ops):
