@@ -52,6 +52,13 @@ install:
   # Verify key packages
   - '%PYTHON_EXE% -c "import textual; print(\"textual\", textual.__version__)"'
   - '%PYTHON_EXE% -c "import win32file; print(\"win32file ok\")"'
+  # with 32-bit Python, UPX 4.0.1 worked, but UPX 4.0.2, 4.1.0, and 4.2.3
+  # caused ModuleNotFoundError during build
+  - ps: if (-not (Test-Path upx.zip)) { Start-FileDownload "https://github.com/upx/upx/releases/download/v4.0.1/upx-4.0.1-win64.zip" -FileName upx.zip}
+  - ps: Get-FileHash upx.zip
+  - '%SZ_EXE% x upx.zip'
+  - 'rename upx-4.0.1-win64 upx'
+  - 'dir .\upx\'
   # Update NSIS to 3.12.
   - ps: if (-not (Test-Path nsis-3.12-setup.exe)) { Start-FileDownload "https://sourceforge.net/projects/nsis/files/NSIS%203/3.12/nsis-3.12-setup.exe/download" -FileName nsis-3.12-setup.exe }
   - ps: $hash = (Get-FileHash nsis-3.12-setup.exe -Algorithm SHA256).Hash; if ($hash -ne '3bc2b06253a7e4957111be152ac6a536e0c7478a706e19da814038db5d706495') { throw "SHA256 mismatch=$hash" }

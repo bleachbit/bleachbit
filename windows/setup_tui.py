@@ -60,6 +60,8 @@ if not os.path.exists(NSIS_EXE) and os.path.exists(NSIS_ALT_EXE):
     logger.info('NSIS found in alternate location: %s', NSIS_ALT_EXE)
     NSIS_EXE = NSIS_ALT_EXE
 SZ_EXE = 'C:\\Program Files\\7-Zip\\7z.exe'
+UPX_EXE = ROOT_DIR + '\\upx\\upx.exe'
+UPX_OPTS = '--best --nrv2e'
 PORTABLE_DIR = 'BleachBit-Portable'
 
 
@@ -481,6 +483,26 @@ def clean_translations():
 
 
 @count_size_improvement
+def upx(fast_build):
+    """Compress executables with UPX to reduce size"""
+    if fast_build:
+        logger.warning('Fast mode: Skipped executable with UPX')
+        return
+
+    if not os.path.exists(UPX_EXE):
+        logger.warning(
+            'UPX not found. To compress executables, install UPX to: %s', UPX_EXE)
+        return
+
+    logger.info('Compressing executables')
+    # Do not compress bleachbit_tui.exe to avoid false positives
+    # with antivirus software.
+    upx_files = recursive_glob('dist', ['*.dll', '*.pyd'])
+    cmd = f'{UPX_EXE} {UPX_OPTS} {" ".join(upx_files)}'
+    run_cmd(cmd)
+
+
+@count_size_improvement
 def delete_linux_only():
     """Delete Linux-only cleaners to reduce size"""
     logger.info('Deleting Linux-only cleaners')
@@ -538,6 +560,7 @@ def shrink(fast_build):
         remove_empty_dirs('dist')
     except PermissionError:
         logger.error('Permission denied removing empty directories in dist: check for files locked by other process')
+    upx(fast_build)
     delete_linux_only()
     recompress_library(fast_build)
 
