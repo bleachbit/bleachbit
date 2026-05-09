@@ -278,7 +278,7 @@ def build_py2exe():
                      'markdown_it', 'mdurl', 'linkify_it'],
         'excludes': ['pyreadline', 'doctest', 'ftplib',
                      'charset_normalizer', 'gi', 'cairo', 'Gtk', 'Gdk', 'GLib',
-                     'Pango', 'bleachbit.GUI',
+                     'Pango', 'tcl', 'tk', 'tkinter', 'bleachbit.GUI',
                      'bleachbit.GuiApplication', 'bleachbit.GuiBasic',
                      'bleachbit.GuiChaff', 'bleachbit.GuiCookie',
                      'bleachbit.GuiPreferences', 'bleachbit.GuiStartup',
@@ -451,6 +451,13 @@ def delete_unnecessary():
         r'win32evtlog.pyd',
         r'win32pipe.pyd',
         r'win32wnet.pyd',
+        r'libcrypto-3.dll',
+        r'libssl-3.dll',
+        r'_decimal.pyd',
+        r'_ssl.pyd',
+        r'_testcapi.pyd',
+        r'_testinternalcapi.pyd',
+        r'_testlimitedcapi.pyd',
     ]
     for path in delete_paths:
         path = fr'dist\{path}'
@@ -534,7 +541,15 @@ def recompress_library(fast_build):
     os.remove('dist\\library.zip')
 
     # Clean unused modules
-    delete_paths = ['distutils']
+    delete_paths = [
+        'distutils',
+        'setuptools',
+        'pydoc_data',
+        'urllib3',
+        'unittest',
+        'packaging',
+        'requests'
+    ]
     for path in delete_paths:
         full_path = os.path.join('dist\\library', path)
         if os.path.exists(full_path):
