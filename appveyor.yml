@@ -47,8 +47,8 @@ install:
   - '%MSYS_BIN%\strip.exe -V'
   - '%PYTHON_EXE% -V'
   - '%PYTHON_EXE% -m pip install --upgrade pip'
-  # TUI dependencies: core BleachBit + Textual + py2exe + Windows libs
   - '%PYTHON_EXE% -m pip install -r windows/requirements_tui.txt'
+  - '%PYTHON_EXE% -m pip list'
   # Verify key packages
   - '%PYTHON_EXE% -c "import textual; print(\"textual\", textual.__version__)"'
   - '%PYTHON_EXE% -c "import win32file; print(\"win32file ok\")"'
