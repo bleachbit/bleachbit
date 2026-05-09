@@ -18,8 +18,6 @@ Example invocation (from parent directory):
 python3 -m windows.setup
 """
 
-from __future__ import absolute_import, print_function
-
 # standard library
 import fnmatch
 import glob
@@ -323,7 +321,9 @@ def build_py2exe():
         'includes': ['gi'],
         'packages': ['chardet', 'encodings', 'gi', 'gi.overrides', 'plyer'],
         'excludes': ['pyreadline', 'difflib', 'doctest',
-                     'pickle', 'ftplib', 'bleachbit.Unix', 'charset_normalizer'],
+                     'pickle', 'ftplib', 'bleachbit.Unix', 'charset_normalizer',
+                     'setuptools', 'pydoc_data', 'unittest', 'test',
+                     'email', 'pygments'],
         'dll_excludes': [
             'libgstreamer-1.0-0.dll',
             'CRYPT32.DLL',  # required by ssl
@@ -789,10 +789,22 @@ def recompress_library(fast_build):
     # clean unused modules from library.zip
     delete_paths = ['distutils', 'plyer\\platforms\\android',
                     'plyer\\platforms\\ios', 'plyer\\platforms\\linux', 'plyer\\platforms\\macosx']
+    # TUI-only: strip modules the TUI doesn't need
+    delete_paths += [
+        'textual\\demo',
+        'urllib3\\contrib\\emscripten',
+        'packaging\\licenses',
+        'bleachbit\\Memory.pyc',
+        '_pydecimal.pyc',
+    ]
     for p in delete_paths:
         path = os.path.join('dist', 'library', p)
-        if os.path.exists(path):
+        if not os.path.exists(path):
+            continue
+        if os.path.isdir(path):
             shutil.rmtree(path)
+        else:
+            os.remove(path)
 
     # recompress library.zip
     os.chdir('dist\\library')

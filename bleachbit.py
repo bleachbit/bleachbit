@@ -1,22 +1,11 @@
 #!/usr/bin/python3
 # vim: ts=4:sw=4:expandtab
 
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Launcher
@@ -78,8 +67,13 @@ if os.name == 'nt':
     win32api.SetErrorMode(win32con.SEM_FAILCRITICALERRORS |
                           win32con.SEM_NOGPFAULTERRORBOX | win32con.SEM_NOOPENFILEERRORBOX)
 
+# Check for --tui flag before defaulting to GUI
+if '--tui' in sys.argv:
+    sys.argv.remove('--tui')
+    from bleachbit.tui.app import BleachBitTUI
+    BleachBitTUI().run()
 # Use GUI if no arguments provided and display is available
-if 1 == len(sys.argv) and have_gui:
+elif 1 == len(sys.argv) and have_gui:
     # Import GUI inside the condition for Linux packagers to
     # separate GUI into another package.
     import bleachbit.GuiApplication  # pylint: disable=ungrouped-imports

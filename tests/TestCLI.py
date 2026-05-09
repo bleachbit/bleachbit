@@ -72,7 +72,7 @@ class CLITestCase(common.BleachbitTestCase):
         self.assertIsInstance(o, list)
         self.assertTrue('google_chrome.cache' in o)
         self.assertTrue('system.tmp' in o)
-        gui_available = os.name == 'nt' or HAVE_GTK
+        gui_available = HAVE_GTK
         self.assertEqual(gui_available, 'system.clipboard' in o)
         self.assertFalse('system.empty_space' in o)
         self.assertFalse('system.memory' in o)
@@ -361,6 +361,7 @@ class CLITestCase(common.BleachbitTestCase):
             # (bleachbit.py:1234): Gdk-CRITICAL **: 23:05:08.581: gdk_screen_get_root_window: assertion 'GDK_IS_SCREEN (screen)' failed
 
     @common.skipUnlessWindows
+    @common.skipIfGtkUnavailable
     def test_gui_exit(self):
         """Unit test for --gui --exit, only for Windows"""
         args = (get_executable(), '-m',

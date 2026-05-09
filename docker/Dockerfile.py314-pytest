@@ -46,6 +46,7 @@ RUN python -m pip list && python -m pip install --no-cache-dir -U pip
 COPY requirements.txt ./
 RUN python -m pip install --no-cache-dir \
         PyGObject pytest pytest-xdist \
+        textual \
         -r requirements.txt
 
 ARG HOME_IN_CONTAINER=/home/user

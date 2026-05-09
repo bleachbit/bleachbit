@@ -688,6 +688,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         for path in paths:
             self.assertExists(path)
 
+    @common.skipIfGtkUnavailable
     def test_get_font_conf_file(self):
         """Unit test for get_font_conf_file"""
         # This tests only one of three situations.

@@ -375,23 +375,24 @@ def setup_translation():
     elif 'nt' == os.name:
         from bleachbit.Windows import load_i18n_dll
         libintl = load_i18n_dll()
-        if not libintl:
-            logger.error(
-                'The internationalization library is not available.')
-        assert isinstance(text_domain, str)
-        encoded_domain = text_domain.encode('utf-8')
-        # wbindtextdomain(char, wchar): first parameter is encoded
-        if hasattr(libintl, 'libintl_wbindtextdomain'):
-            libintl.libintl_wbindtextdomain(encoded_domain, locale_dir)
-            libintl.textdomain(encoded_domain)
-            libintl.bind_textdomain_codeset(encoded_domain, b'UTF-8')
+        if libintl:
+            assert isinstance(text_domain, str)
+            encoded_domain = text_domain.encode('utf-8')
+            # wbindtextdomain(char, wchar): first parameter is encoded
+            if hasattr(libintl, 'libintl_wbindtextdomain'):
+                libintl.libintl_wbindtextdomain(encoded_domain, locale_dir)
+                libintl.textdomain(encoded_domain)
+                libintl.bind_textdomain_codeset(encoded_domain, b'UTF-8')
+                logger.debug(
+                    f"Windows translation domain set to: {text_domain}, dir: {locale_dir}")
+            else:
+                logger.debug(
+                    'libintl_wbindtextdomain() not available in the DLL.')
         else:
-            logger.error(
-                'The function wbindtextdomain() is not available.')
-
-        # Log for debugging
-        logger.debug(
-            f"Windows translation domain set to: {text_domain}, dir: {locale_dir}")
+            logger.debug(
+                'The internationalization library (intl-8.dll) was not found. '
+                'Python gettext translations will still work, but C library '
+                'translations (GTK) will not.')
     else:
         logger.error('The function bindtextdomain() is not available.')
 

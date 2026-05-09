@@ -798,13 +798,14 @@ def load_i18n_dll():
     dirs = set([bleachbit.bleachbit_exe_path, os.path.dirname(sys.executable)])
     lib_path = None
     for dir in dirs:
-        lib_path = os.path.join(dir, 'intl-8.dll')
-        if os.path.exists(lib_path):
+        candidate = os.path.join(dir, 'intl-8.dll')
+        if os.path.exists(candidate):
+            lib_path = candidate
             break
     if not lib_path:
-        logger.warning(
-            'internationalization library was not found, so translations will not work.')
-        return
+        logger.debug(
+            'internationalization library was not found (needed only for GTK translations).')
+        return None
     try:
         libintl = ctypes.cdll.LoadLibrary(lib_path)
     except Exception as e:

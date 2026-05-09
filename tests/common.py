@@ -320,6 +320,19 @@ def skipUnlessWindows(f):
     return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')(f)
 
 
+def skipIfGtkUnavailable(f):
+    """Skip unit test if BLEACHBIT_SKIP_GTK_TESTS environment variable is set.
+
+    Use this for tests that require GTK (e.g., --gui tests).
+    Set BLEACHBIT_SKIP_GTK_TESTS=1 only in TUI-only builds where GTK is
+    intentionally absent.  In CI builds (AppVeyor), do NOT set this variable,
+    so the test will fail loudly if GTK is unexpectedly missing.
+    """
+    return unittest.skipIf(
+        os.getenv('BLEACHBIT_SKIP_GTK_TESTS') == '1',
+        'BLEACHBIT_SKIP_GTK_TESTS is set')(f)
+
+
 def also_with_sudo(test_func):
     """
     Decorator to mark test methods that should be run both normally and with sudo.
