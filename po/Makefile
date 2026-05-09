@@ -1,7 +1,7 @@
 APP = bleachbit
 POFILES = $(wildcard *.po)
 MOFILES = $(patsubst %.po,%.mo,$(POFILES))
-PY_SRC = $(wildcard ../bleachbit/*.py)
+PY_SRC = $(wildcard ../bleachbit/*.py) $(wildcard ../bleachbit/tui/*.py) $(wildcard ../bleachbit/tui/screens/*.py)
 UI_SRC = ../share/app-menu.ui
 SRC = $(PY_SRC) $(UI_SRC)
 POTFILE = $(APP).pot

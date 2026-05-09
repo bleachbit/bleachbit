@@ -230,6 +230,11 @@ def assert_execute(args, expected_output, timeout=120):
         logger.error('Command %s timed out after %ss. Partial output:\n%s',
                      args, timeout, partial)
         raise RuntimeError(f'Timeout running {args} after {timeout}s') from e
+    except subprocess.CalledProcessError as e:
+        output = (e.output or b'').decode(SetupEncoding, errors='replace')
+        logger.error('Command %s failed with exit code %s. Output:\n%s',
+                     args, e.returncode, output)
+        raise
     if -1 == actual_output.find(expected_output):
         raise RuntimeError(
             f'When running command {args} expected output {expected_output} but got {actual_output}')
@@ -485,9 +490,10 @@ def build_py2exe():
         'packages': ['charset_normalizer', 'encodings', 'gi', 'gi.overrides', 'plyer.platforms.win.notification'],
         'excludes': ['pyreadline', 'difflib', 'doctest',
                      'pickle', 'ftplib', 'bleachbit.Unix',
-                     'setuptools', 'tomli', 'wheel', 'backports',
+                     'setuptools', 'pydoc_data', 'tomli', 'wheel', 'backports',
                      'importlib_metadata', 'zipp', 'packaging', 'distutils',
                      'unittest', 'test',
+                     'email', 'pygments',
                      'multiprocessing',
                      'concurrent.futures.process',
                      'chardet',  # not present now, but defensive
@@ -495,7 +501,9 @@ def build_py2exe():
                      '_pydecimal',  # dead fallback
                      # non-Windows platform modules
                      'psutil._psaix', 'psutil._psbsd', 'psutil._pslinux',
-                     'psutil._psosx', 'psutil._pssunos'],
+                     'psutil._psosx', 'psutil._pssunos',
+                     # Exclude TUI packages from the GTK build.
+                     'bleachbit.tui', 'bleachbit.tui.app', 'textual', 'tree_sitter', 'rich'],
     }
 
     freeze(
@@ -955,10 +963,18 @@ def repack_library(settings):
     # clean unused modules from library.zip
     delete_paths = ['plyer\\platforms\\android',
                     'plyer\\platforms\\ios', 'plyer\\platforms\\linux', 'plyer\\platforms\\macosx']
+    # bleachbit.Memory wipes Linux swap/free memory and is never used on
+    # Windows (the 'memory' option is registered only on Linux).  Strip it
+    # from the Windows build.  Safe because Cleaner.py imports it lazily.
+    delete_files = ['bleachbit\\Memory.pyc']
     for p in delete_paths:
         path = os.path.join('dist', 'library', p)
         if os.path.exists(path):
             shutil.rmtree(path)
+    for p in delete_files:
+        path = os.path.join('dist', 'library', p)
+        if os.path.exists(path):
+            os.remove(path)
 
     # Prune unneeded codecs from the encodings package.
     encodings_keep_list = (

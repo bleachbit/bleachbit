@@ -22,7 +22,7 @@ from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
 from bleachbit.PathUtils import path_equal
 from bleachbit.Process import is_process_running
-from bleachbit import Action, CleanerML, Command, FileUtilities, Memory
+from bleachbit import Action, CleanerML, Command, FileUtilities
 from bleachbit import IS_LINUX, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.GtkShim import gtk_may_be_available
 from bleachbit.Wipe import wipe_path
@@ -462,6 +462,8 @@ class System(Cleaner):
 
         # memory
         if IS_LINUX and 'memory' == option_id:
+            # lazy import because it requires Linux.
+            from bleachbit import Memory
             yield Command.Function(None, Memory.wipe_memory, _('Memory'))
 
         # memory dump

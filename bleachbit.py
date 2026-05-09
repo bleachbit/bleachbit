@@ -63,6 +63,12 @@ def main():
         app = bleachbit.GuiApplication.Bleachbit()
         sys.exit(app.run(sys.argv))
 
+    # Check for --tui flag before defaulting to CLI
+    if '--tui' in sys.argv:
+        sys.argv.remove('--tui')
+        from bleachbit.tui.app import BleachBitTUI
+        BleachBitTUI().run()
+        return
     # Either CLI args were provided or no display is available
     import bleachbit.CLI
     # If no args and defaulting to CLI, print usage information

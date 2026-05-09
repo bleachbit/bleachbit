@@ -607,6 +607,7 @@ class CLITestCase(common.BleachbitTestCase):
 
     @pytest.mark.xdist_group('gui')
     @common.skipUnlessWindows
+    @common.skipIfGtkUnavailable
     def test_gui_exit(self):
         """Unit test for --gui --exit, only for Windows"""
         # When running tests without elevated privileges, then --no-uac shows

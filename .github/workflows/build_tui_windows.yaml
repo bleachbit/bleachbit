@@ -1,0 +1,190 @@
+name: Build, Test, and Deploy TUI for Windows
+
+on:
+  push:
+    branches:
+      - tui
+    tags:
+      - 'v*'
+    paths-ignore: &paths-ignore
+      - '.gitignore'
+      - '.gitattributes'
+      - 'bleachbit.png'
+      - 'bleachbit.spec'
+      - 'COPYING'
+      - 'debian/**'
+      - 'doc/**'
+      - 'docker/**'
+      - 'MANIFEST.in'
+      - 'org.bleachbit.BleachBit.desktop'
+      - 'org.bleachbit.BleachBit.metainfo.xml'
+      - 'org.bleachbit.policy'
+      - 'po/*.po'
+      - 'po/*.pot'
+      - 'README.md'
+      - 'windows/NsisInclude/NsisMultiUserLang.nsh'
+  pull_request:
+    branches:
+      - tui
+    paths-ignore: *paths-ignore
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  windows-tui-build:
+    name: windows-tui-build-and-test
+    runs-on: windows-latest
+    timeout-minutes: 20
+    outputs:
+      version: ${{ steps.revision.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.14'
+          architecture: x64
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-test.txt
+            windows/requirements.txt
+            windows/requirements_tui.txt
+
+      - name: Cache downloaded dependencies
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            nsis-3.12-setup.exe
+            upx.zip
+          key: win-tui-build-deps-${{ hashFiles('.github/workflows/build_tui_windows.yaml') }}
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --disable-pip-version-check -r windows/requirements_tui.txt -r windows/requirements.txt -r requirements-test.txt
+          python -c "import textual, win32file; from py2exe import freeze"
+          "PYTHON_EXE=$((Get-Command python).Source)" >> $env:GITHUB_ENV
+
+      - name: Install UPX
+        shell: pwsh
+        run: |
+          if (-not (Test-Path upx.zip)) {
+            Invoke-WebRequest -Uri "https://github.com/upx/upx/releases/download/v5.1.1/upx-5.1.1-win64.zip" -OutFile upx.zip
+          }
+          $hash = (Get-FileHash upx.zip -Algorithm SHA256).Hash
+          if ($hash -ne 'fa5380bca4c2718547aaa0134bc0d8a7fa27e102f0ac6371573d60d1c21d64de') {
+            throw "SHA256 mismatch=$hash"
+          }
+          7z x upx.zip
+          Rename-Item upx-5.1.1-win64 upx
+
+      - name: Install NSIS
+        shell: pwsh
+        run: |
+          if (-not (Test-Path nsis-3.12-setup.exe)) {
+            # sourceforge.net/.../download serves an HTML interstitial; master.dl serves the raw file.
+            Invoke-WebRequest -Uri "https://master.dl.sourceforge.net/project/nsis/NSIS%203/3.12/nsis-3.12-setup.exe?viasf=1" -OutFile nsis-3.12-setup.exe -UserAgent 'Mozilla/5.0'
+          }
+          $hash = (Get-FileHash nsis-3.12-setup.exe -Algorithm SHA256).Hash
+          if ($hash -ne '3bc2b06253a7e4957111be152ac6a536e0c7478a706e19da814038db5d706495') {
+            throw "SHA256 mismatch=$hash"
+          }
+          Start-Process -FilePath .\nsis-3.12-setup.exe -ArgumentList '/S' -Wait
+
+      - name: Generate Revision.py
+        uses: ./.github/actions/generate-revision
+
+      - name: Get version
+        id: revision
+        shell: pwsh
+        run: |
+          $version = & $env:PYTHON_EXE -c "from bleachbit.SystemInformation import get_version; print(get_version())"
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Generate translations
+        shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
+        run: |
+          set PATH=C:\msys64\usr\bin;%PATH%
+          make PYTHON="%PYTHON_EXE%" -C po local
+
+      - name: Run TUI unit tests
+        shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
+        env:
+          PYTHONWARNINGS: error
+        run: '"%PYTHON_EXE%" -m pytest tests/TestTUI.py -v'
+
+      - name: Build TUI executable and installers
+        shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
+        env:
+          SETUP_ARGS: ${{ github.event_name == 'pull_request' && 'fast' || '' }}
+        run: |
+          set PATH=C:\msys64\usr\bin;%PATH%
+          "%PYTHON_EXE%" -m windows.setup_tui %SETUP_ARGS%
+          dist\bleachbit_tui.exe --sysinfo
+          move windows\BleachBit-TUI-*.exe .
+
+      - name: Show artifact hashes
+        shell: pwsh
+        run: |
+          Get-ChildItem BleachBit-TUI-* -File | Get-FileHash | ForEach-Object {
+            "$($_.Hash)  $($_.Path | Split-Path -Leaf)"
+          }
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: windows-tui-build-${{ steps.revision.outputs.version }}
+          if-no-files-found: error
+          compression-level: 9
+          path: |
+            BleachBit-TUI-*-setup.exe
+            BleachBit-TUI-*-portable.zip
+
+      - name: Deploy TUI Windows build
+        # Deploy only trusted branch pushes, tags, and manual runs. Pull-request
+        # workflows never receive the AWS secrets required for this step.
+        if: github.repository == 'bleachbit/bleachbit' && github.event_name != 'pull_request' && !startsWith(github.ref_name, 'dependabot/')
+        shell: pwsh
+        env:
+          VERSION: ${{ steps.revision.outputs.version }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          AWS_ENDPOINT_URL: ${{ secrets.AWS_ENDPOINT_URL }}
+        run: |
+          $ref = ($env:GITHUB_REF_NAME -replace '[^A-Za-z0-9._/-]','_')
+          $ver = ($env:VERSION -replace '[^A-Za-z0-9._-]','_')
+          $run = $env:GITHUB_RUN_NUMBER
+          $runId = $env:GITHUB_RUN_ID
+          $attempt = $env:GITHUB_RUN_ATTEMPT
+          $event = ($env:GITHUB_EVENT_NAME -replace '[^A-Za-z0-9._-]','_')
+          $actor = ($env:GITHUB_TRIGGERING_ACTOR -replace '[^A-Za-z0-9._@-]','_')
+          $sha = $env:GITHUB_SHA.Substring(0,8)
+          $ver3 = (($ver -split '\.')[0..2] -join '.')
+          $branch = ''
+          $tag = ''
+          if ($env:GITHUB_REF_TYPE -eq 'tag') { $tag = $ref } else { $branch = $ref }
+          $dest = "s3://${{ secrets.AWS_BUCKET_NAME }}/"
+          Get-ChildItem BleachBit-TUI-*-setup.exe, BleachBit-TUI-*-portable.zip -File |
+            ForEach-Object {
+              $file = $_.FullName
+              $name = $_.Name
+              $sha256 = (Get-FileHash -Algorithm SHA256 $file).Hash.ToLower()
+              $sha1 = (Get-FileHash -Algorithm SHA1 $file).Hash.ToLower()
+              $md5 = (Get-FileHash -Algorithm MD5 $file).Hash.ToLower()
+              $artifactType = if ($name -like '*-setup.exe') { 'installer' } else { 'portable' }
+              $meta = "ref=$ref,run=$run,run_id=$runId,attempt=$attempt,event=$event,actor=$actor,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5,artifact_type=$artifactType,frontend=tui"
+              aws s3 cp $file "$dest" --metadata "$meta"
+            }
