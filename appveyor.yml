@@ -48,6 +48,7 @@ install:
   - '%PYTHON_EXE% -V'
   - '%PYTHON_EXE% -m pip install --upgrade pip'
   - '%PYTHON_EXE% -m pip install -r windows/requirements_tui.txt'
+  - '%PYTHON_EXE% -m pip install pytest-xdist'
   - '%PYTHON_EXE% -m pip list'
   # Verify key packages
   - '%PYTHON_EXE% -c "import textual; print(\"textual\", textual.__version__)"'
@@ -68,8 +69,9 @@ install:
 test_script:
   # Delete GTK-dependent test files (doesn't change git repo)
   - ps: Remove-Item -Force tests\TestGUI.py, tests\TestGtkShim.py, tests\TestGuiChaff.py, tests\TestGuiStartup.py, tests\TestUnix.py -ErrorAction SilentlyContinue
-  # Run non-GTK tests via unittest discovery
-  - '%PYTHON_EXE% -m unittest discover -s tests -p "Test*.py"'
+  # Run tests with pytest-xdist for parallel execution
+  # AppVeyor has 2 CPUs https://www.appveyor.com/docs/build-environment/#build-vm-configurations
+  - '%PYTHON_EXE% -m pytest -n 2 -sv tests/'
 
 build_script:
   - ps: $env:REV8 = $env:APPVEYOR_REPO_COMMIT.Substring(0,8)
