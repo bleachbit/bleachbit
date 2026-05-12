@@ -6,11 +6,14 @@
 
 import logging
 import os
+import re
+import signal
 import sys
 import time
 
 import bleachbit
-from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path
+from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path, IS_WINDOWS
+from bleachbit import Process
 from bleachbit.Cleaner import backends, register_cleaners
 from bleachbit.Constant import ABORT_BUTTON_LABEL, REQUIRES_EXPERT_MODE
 from bleachbit.GUI import logger
@@ -93,7 +96,8 @@ class GUI(Gtk.ApplicationWindow):
             logger.error(
                 # TRANSLATORS: Error message shown in the log on the main window.
                 # %s is the file path.
-                _('Resetting the configuration file because it is corrupt: %s') % bleachbit.options_file)
+                _('Resetting the configuration file because it is corrupt: %s'),
+                bleachbit.options_file)
             bleachbit.Options.init_configuration()
 
         GLib.idle_add(self.cb_refresh_operations)
@@ -822,6 +826,42 @@ class GUI(Gtk.ApplicationWindow):
         """Callback to stop the preview/cleaning process"""
         self.worker.abort()
 
+    def on_stop_browsers_clicked(self, _widget):
+        """Debug callback to enumerate and stop web browser processes"""
+        browser_pattern = re.compile(r'chrome|firefox|edge', re.IGNORECASE)
+        self.append_text("Enumerating web browser processes...\n")
+        found = False
+        seen_pids = set()
+        for proc in Process.enumerate_processes():
+            if proc.pid in seen_pids:
+                continue
+            if not browser_pattern.search(proc.name):
+                continue
+            seen_pids.add(proc.pid)
+            found = True
+            # Try to get username
+            username = "unknown"
+            try:
+                import psutil
+                p = psutil.Process(proc.pid)
+                username = p.username()
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                username = "same user" if proc.same_user else "other user"
+            self.append_text(
+                "PID %d, name %s, user %s\n" % (proc.pid, proc.name, username))
+            try:
+                if IS_WINDOWS:
+                    import psutil
+                    psutil.Process(proc.pid).kill()
+                else:
+                    os.kill(proc.pid, signal.SIGTERM)
+                self.append_text("  Stopped PID %d\n" % proc.pid)
+            except (ProcessLookupError, PermissionError, OSError) as e:
+                self.append_text(
+                    "  Failed to stop PID %d: %s\n" % (proc.pid, e))
+        if not found:
+            self.append_text("No web browser processes found.\n")
+
     def cb_manage_cookies(self, widget):
         """Callback to launch the preferences dialog with Cookies page"""
         self.show_preferences_dialog('cookies')
@@ -1075,6 +1115,13 @@ class GUI(Gtk.ApplicationWindow):
         self.stop_button.set_sensitive(False)
         self.stop_button.connect('clicked', self.cb_stop_operations)
         box.add(self.stop_button)
+
+        # stop web browsers (debug)
+        self.stop_browsers_button = Gtk.Button.new_with_label(
+            'Stop web browsers.')
+        self.stop_browsers_button.set_always_show_image(True)
+        self.stop_browsers_button.connect('clicked', self.on_stop_browsers_clicked)
+        box.add(self.stop_browsers_button)
 
         hbar.pack_start(box)
 

@@ -26,7 +26,10 @@ Perform the preview or delete operations
 import logging
 import math
 import os
+import re
+import stat
 import sys
+import traceback
 
 # first party imports
 from bleachbit import DeepScan, FileUtilities
@@ -36,6 +39,72 @@ from bleachbit.Language import get_text as _, nget_text as ngettext
 from bleachbit.FileUtilities import close_delete_parent_lock
 
 logger = logging.getLogger(__name__)
+
+# DEBUG BUILD for issue #2046: cap detailed access denied diagnostics
+_MAX_ACCESS_DENIED_DIAGNOSTICS = 10
+
+
+def _get_file_permission_diagnostics(filepath):
+    """Return list of diagnostic strings for file permission issues."""
+    lines = []
+    if not filepath:
+        lines.append('No filename available for diagnostics.')
+        return lines
+    lines.append(f'Diagnostics for: {filepath}')
+    if not os.path.exists(filepath):
+        lines.append('File does not exist')
+        return lines
+    try:
+        fstat = os.stat(filepath)
+        mode = stat.filemode(fstat.st_mode)
+        lines.append(
+            f'File permissions: {mode} ({oct(stat.S_IMODE(fstat.st_mode))})')
+    except OSError as e:
+        lines.append(f'Cannot stat file: {e}')
+        return lines
+    if os.name == 'posix':
+        import pwd
+        from bleachbit.General import get_real_uid
+        try:
+            file_owner = pwd.getpwuid(fstat.st_uid).pw_name
+        except (KeyError, OverflowError):
+            file_owner = str(fstat.st_uid)
+        current_uid = get_real_uid()
+        lines.append(f'File owner: {file_owner} (uid {fstat.st_uid})')
+        lines.append(f'Current user uid: {current_uid}')
+        if fstat.st_uid != current_uid:
+            lines.append('File owner does not match current user')
+        lines.append(f'os.access R_OK: {os.access(filepath, os.R_OK)}')
+        lines.append(f'os.access W_OK: {os.access(filepath, os.W_OK)}')
+    elif os.name == 'nt':
+        try:
+            import win32security
+            import win32api
+            import win32file
+            file_sd = win32security.GetFileSecurity(
+                filepath, win32security.OWNER_SECURITY_INFORMATION)
+            file_owner_sid = file_sd.GetSecurityDescriptorOwner()
+            file_owner_name = win32security.LookupAccountSid(
+                None, file_owner_sid)[0]
+            file_owner_sid_str = win32security.ConvertSidToStringSid(
+                file_owner_sid)
+            lines.append(
+                f'File owner: {file_owner_name} (SID: {file_owner_sid_str})')
+            process_token = win32security.OpenProcessToken(
+                win32api.GetCurrentProcess(), win32security.TOKEN_QUERY)
+            current_sid = win32security.GetTokenInformation(
+                process_token, win32security.TokenUser)[0]
+            current_name = win32security.LookupAccountSid(
+                None, current_sid)[0]
+            current_sid_str = win32security.ConvertSidToStringSid(current_sid)
+            win32file.CloseHandle(process_token)
+            lines.append(
+                f'Current user: {current_name} (SID: {current_sid_str})')
+            if file_owner_sid_str != current_sid_str:
+                lines.append('File owner does not match current user')
+        except Exception as e:
+            lines.append(f'Could not check Windows file ownership: {e}')
+    return lines
 
 
 class Worker:
@@ -66,6 +135,7 @@ class Worker:
         self.total_special = 0  # special operations
         self.yield_time = None
         self.is_aborted = False
+        self.access_denied_diag_count = 0
         if 0 == len(self.operations):
             raise RuntimeError("No work to do")
 
@@ -128,6 +198,31 @@ class Worker:
                         _("Access denied when deleting registry key: %s"), e.filename)
                 else:
                     logger.error(_("Access denied: %s"), e.filename)
+                # DEBUG BUILD: enhanced diagnostics for issue #2046
+                if self.access_denied_diag_count < _MAX_ACCESS_DENIED_DIAGNOSTICS:
+                    self.access_denied_diag_count += 1
+                    diag_lines = []
+                    diag_lines.append(
+                        f'--- Access denied diagnostic #{self.access_denied_diag_count} ---')
+                    diag_lines.append(f'Error: {e}')
+                    if e.filename:
+                        diag_lines.append(f'Path: {e.filename}')
+                    diag_lines.append(f'strerror: {e.strerror}')
+                    # 2A: traceback to show where in the code
+                    diag_lines.append('Traceback:')
+                    diag_lines.append(traceback.format_exc())
+                    # 2B: file permission diagnostics
+                    if e.filename:
+                        diag_lines.extend(
+                            _get_file_permission_diagnostics(e.filename))
+                    # 2D: issue reference
+                    diag_lines.append('--- End diagnostic ---')
+                    diag_text = '\n'.join(diag_lines)
+                    self.ui.append_text(diag_text + '\n', 'error')
+                elif self.access_denied_diag_count == _MAX_ACCESS_DENIED_DIAGNOSTICS:
+                    cap_msg = 'Access denied diagnostics capped at %d. Further access denied errors will not show detailed diagnostics.' % _MAX_ACCESS_DENIED_DIAGNOSTICS
+                    self.ui.append_text(cap_msg + '\n', 'error')
+                    self.access_denied_diag_count += 1
             else:
                 # For other errors, show the traceback.
                 msg = _('Error: {operation_option}: {command}')
@@ -341,6 +436,37 @@ class Worker:
             line = _("Errors: %d") % self.total_errors
             self.ui.append_text("\n%s" % line, 'error')
         self.ui.append_text('\n')
+
+        # DEBUG BUILD: end-of-run diagnostics for issue #2046
+        try:
+            from bleachbit.SystemInformation import get_system_information
+            sysinfo = get_system_information()
+            diag_msg = '\n--- System Information ---\n%s\n--- End System Information ---\n' % sysinfo
+            self.ui.append_text(diag_msg)
+        except Exception as e:
+            logger.error('Error getting system information: %s', e)
+
+        try:
+            from bleachbit.Process import enumerate_processes
+            proc_lines = ['\n--- Running Processes (filtered) ---']
+            match_count = 0
+            for proc in enumerate_processes():
+                if not re.search(r'fox|edge|chrom', proc.name, re.IGNORECASE):
+                    continue
+                match_count += 1
+                user_flag = 'same_user' if proc.same_user else 'other_user'
+                proc_lines.append(
+                    f'{proc.pid}: {proc.name} ({user_flag})')
+            if match_count == 0:
+                proc_lines.append('(no matching processes found)')
+            proc_lines.append('--- End Running Processes ---')
+            proc_msg = '\n'.join(proc_lines)
+            self.ui.append_text(proc_msg + '\n')
+        except Exception as e:
+            logger.error('Error enumerating processes: %s', e)
+
+        self.ui.append_text(
+            'Please share this information to help troubleshoot at https://github.com/bleachbit/bleachbit/issues/2046\n', 'error')
 
         if self.really_delete:
             self.ui.update_total_size(self.total_bytes)
