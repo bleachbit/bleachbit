@@ -863,4 +863,27 @@ def is_display_protocol_wayland_and_root_not_allowed():
     )
 
 
+def flush_dns():
+    """Flush the DNS resolver cache
+
+    Returns 0 on success.
+    Raises RuntimeError on failure.
+    """
+    if exe_exists('resolvectl'):
+        args = ['resolvectl', 'flush-caches']
+    elif exe_exists('systemd-resolve'):
+        args = ['systemd-resolve', '--flush-caches']
+    else:
+        raise RuntimeError('Neither resolvectl nor systemd-resolve found')
+    (rc, stdout, stderr) = General.run_external(args)
+    if 0 != rc:
+        # If service is not found, then there may be nothing to flush.
+        if 'Unit dbus-org.freedesktop.resolve1.service not found' in stderr:
+            logger.warning(stderr)
+            return 0
+        raise RuntimeError(
+            f'Command: {args}\nReturn code: {rc}\nStdout: {stdout}\nStderr: {stderr}')
+    return 0
+
+
 locales = Locales()

@@ -21,7 +21,7 @@ from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
 from bleachbit.Process import is_process_running
 from bleachbit import Action, CleanerML, Command, FileUtilities, Memory, Special
-from bleachbit import IS_POSIX
+from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
 from bleachbit.GtkShim import Gtk, Gdk, HAVE_GTK
 from bleachbit.Wipe import wipe_path
 
@@ -290,6 +290,12 @@ class System(Cleaner):
         #
         # options just for Microsoft Windows
         #
+        if IS_WINDOWS or (IS_LINUX and (FileUtilities.exe_exists('resolvectl') or FileUtilities.exe_exists('systemd-resolve'))):
+            # TRANSLATORS: This is a label for the option to clear the system DNS cache.
+            dns_cache_label =  _('DNS cache'),
+            self.add_option('dns_cache', dns_cache_label,
+                            _('Delete the cache'))
+
         if 'nt' == os.name:
             self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option(
@@ -579,6 +585,13 @@ class System(Cleaner):
             # when in preview mode.
             if recycled_any:
                 yield Command.Function(None, empty_recycle_bin_func, _('Empty the recycle bin'))
+
+        # DNS cache
+        if 'dns_cache' == option_id:
+            if IS_WINDOWS:
+                yield Command.Function(None, Windows.flush_dns, _('DNS cache'))
+            elif sys.platform == 'linux':
+                yield Command.Function(None, Unix.flush_dns, _('DNS cache'))
 
         # Windows Updates
         if 'nt' == os.name and 'updates' == option_id:

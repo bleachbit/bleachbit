@@ -51,7 +51,7 @@ from uuid import UUID
 
 # first party imports
 import bleachbit
-from bleachbit import FileUtilities, ARCH_BITS, IS_WINDOWS
+from bleachbit import FileUtilities, General, ARCH_BITS, IS_WINDOWS
 from bleachbit.Language import get_text as _
 
 if 'win32' == sys.platform:
@@ -847,6 +847,20 @@ def empty_recycle_bin(path, really_delete):
         flags = shellcon.SHERB_NOSOUND | shellcon.SHERB_NOCONFIRMATION | shellcon.SHERB_NOPROGRESSUI
         shell.SHEmptyRecycleBin(None, path, flags)
     return bytes_used
+
+
+def flush_dns():
+    """Flush the DNS resolver cache
+
+    Returns 0 on success.
+    Raises RuntimeError on failure.
+    """
+    args = ['ipconfig', '/flushdns']
+    (rc, stdout, stderr) = General.run_external(args)
+    if 0 != rc:
+        raise RuntimeError(
+            f'Command: {args}\nReturn code: {rc}\nStdout: {stdout}\nStderr: {stderr}')
+    return 0
 
 
 def get_clipboard_paths():
