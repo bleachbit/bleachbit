@@ -94,6 +94,11 @@ install:
 lint:
 	command -v pyflakes3 >/dev/null 2>&1 || echo "WARNING: Missing pyflakes3. APT users, try: sudo apt install pyflakes3"
 	command -v pylint >/dev/null 2>&1 || echo "WARNING: Missing pylint. APT users, try: sudo apt install pylint"
+	@if command -v appstreamcli >/dev/null 2>&1; then \
+		appstreamcli validate org.bleachbit.BleachBit.metainfo.xml; \
+	else \
+		echo "WARNING: Missing appstreamcli. APT users, try: sudo apt install appstream"; \
+	fi
 	for f in *py */*py; \
 	do \
 		echo "$$f"; \
