@@ -332,18 +332,54 @@ PrefersNonDefaultGPU=false""")
             with self.assertRaises(RuntimeError):
                 _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
 
-    @common.skipIfWindows
-    def test_desktop_env_shlex_failure(self):
-        """Unit test for .desktop file with shlex exception"""
+    def test_desktop_shlex_failure(self):
+        """Unit test for .desktop file with shlex exception
+
+        Malformed Exec values (unbalanced quotes) are undefined behavior per
+        the XDG spec. The function returns False so the file is preserved
+        rather than risking deletion of a working launcher.
+        """
         fake_config = FakeConfig(
             {"Desktop Entry": {"Exec": "env ENVVAR=bar ls \"notepad.exe"}})
-        if os.getenv('PATH'):
-            result = _is_broken_xdg_desktop_application(
-                fake_config, "foo.desktop")
-            self.assertTrue(result)
-        else:
-            with self.assertRaises(RuntimeError):
-                _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
+        result = _is_broken_xdg_desktop_application(
+            fake_config, "foo.desktop")
+        self.assertFalse(result)
+
+    @mock.patch('bleachbit.FileUtilities.exe_exists')
+    def test_desktop_quoted_exe_with_spaces(self, mock_exe_exists):
+        """Regression test for #2118: AppImage .desktop with quoted Exec path
+
+        Before the fix, the naive ``split(" ")[0]`` returned the executable
+        path with its surrounding double-quotes still attached, so
+        ``exe_exists`` reported it missing and the .desktop file was flagged
+        for deletion.
+        """
+        mock_exe_exists.return_value = True
+        fake_config = FakeConfig({"Desktop Entry": {
+            "Exec": '"/home/user/Applications/AppManager" %u'}})
+        result = _is_broken_xdg_desktop_application(
+            fake_config, "com.github.AppManager.desktop")
+        self.assertFalse(result)
+        mock_exe_exists.assert_called_with('/home/user/Applications/AppManager')
+
+    @mock.patch('bleachbit.FileUtilities.exe_exists')
+    def test_desktop_quoted_exe_path_containing_spaces(self, mock_exe_exists):
+        """Quoted Exec path that itself contains spaces must round-trip."""
+        mock_exe_exists.return_value = True
+        fake_config = FakeConfig({"Desktop Entry": {
+            "Exec": '"/home/user/Applications/Converter NOW" %f'}})
+        result = _is_broken_xdg_desktop_application(
+            fake_config, "converter.desktop")
+        self.assertFalse(result)
+        mock_exe_exists.assert_called_with(
+            '/home/user/Applications/Converter NOW')
+
+    def test_desktop_empty_exec(self):
+        """Whitespace-only Exec is treated as broken."""
+        fake_config = FakeConfig({"Desktop Entry": {"Exec": "   "}})
+        result = _is_broken_xdg_desktop_application(
+            fake_config, "foo.desktop")
+        self.assertTrue(result)
 
     @common.skipIfWindows
     def test_desktop_env_valid(self):
