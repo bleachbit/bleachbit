@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Check local CleanerML files as a security measure
@@ -140,24 +126,25 @@ class RecognizeCleanerML:
 
     def __init__(self, parent_window=None):
         self.parent_window = parent_window
-        try:
-            self.salt = options.get('hashsalt')
-        except bleachbit.NoOptionError:
+        self.salt = options.get('hashsalt')
+        if self.salt is None:
             self.salt = hashdigest(os.urandom(512))
             options.set('hashsalt', self.salt)
         self.__scan()
 
     def __recognized(self, pathname):
         """Is pathname recognized?"""
+        # __init__ should set the salt.
+        if not self.salt:
+            raise RuntimeError('salt is not set')
         try:
             with open(pathname, 'rb') as f:
                 body = f.read()
         except OSError:  # The file is locked, what to do next?
             return NEW, hashdigest(b"")
         new_hash = hashdigest(str.encode(self.salt, encoding='utf-8') + body)
-        try:
-            known_hash = options.get_hashpath(pathname)
-        except bleachbit.NoOptionError:
+        known_hash = options.get_hashpath(pathname)
+        if known_hash is None:
             return NEW, new_hash
         if new_hash == known_hash:
             return KNOWN, new_hash
