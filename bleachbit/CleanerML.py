@@ -354,14 +354,16 @@ class CleanerML:
                 self.vars[var_name] = value_list
 
 
-def list_cleanerml_files(local_only=False):
+def list_cleanerml_files(local_only=False, system_only=False):
     """List CleanerML files"""
-    cleanerdirs = (bleachbit.personal_cleaners_dir, )
-    if bleachbit.local_cleaners_dir:
-        # If the application is installed, locale_cleaners_dir is None.
-        # If portable mode, local_cleaners_dir is under the directory of
-        # `bleachbit.py`.
-        cleanerdirs += (bleachbit.local_cleaners_dir, )
+    cleanerdirs = ()
+    if not system_only:
+        cleanerdirs += (bleachbit.personal_cleaners_dir, )
+        if bleachbit.local_cleaners_dir:
+            # If the application is installed, locale_cleaners_dir is None.
+            # If portable mode, local_cleaners_dir is under the directory of
+            # `bleachbit.py`.
+            cleanerdirs += (bleachbit.local_cleaners_dir, )
     if not local_only and bleachbit.system_cleaners_dir:
         cleanerdirs += (bleachbit.system_cleaners_dir, )
     for pathname in listdir(cleanerdirs):
@@ -378,9 +380,9 @@ def list_cleanerml_files(local_only=False):
         yield pathname
 
 
-def load_cleaners(cb_progress=lambda x: None):
+def load_cleaners(cb_progress=lambda x: None, allow_local=True):
     """Scan for CleanerML and load them"""
-    cleanerml_files = list(list_cleanerml_files())
+    cleanerml_files = list(list_cleanerml_files(system_only=not allow_local))
     cleanerml_files.sort()
     if not cleanerml_files:
         logger.debug('No CleanerML files to load.')

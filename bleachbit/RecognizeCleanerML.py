@@ -129,8 +129,6 @@ def cleaner_change_dialog(changes, parent):
 
 def hashdigest(string):
     """Return hex digest of hash for a string"""
-
-    # hashlib requires Python 2.5
     if isinstance(string, str):
         string = string.encode()
     return hashlib.sha512(string).hexdigest()

@@ -586,7 +586,7 @@ class System(Cleaner):
         return False
 
 
-def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
+def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None, allow_local=True):
     """Register all known cleaners: system, CleanerML, and Winapp2"""
     # pylint: disable=global-variable-not-assigned
     global backends
@@ -611,7 +611,7 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
     # To indicate an ongoing operation, include the ellipsis as literal
     # Unicode (…) or as Unicode escape (\u2026).
     cb_progress(_('Loading native cleaners\u2026'))
-    yield from CleanerML.load_cleaners(cb_progress)
+    yield from CleanerML.load_cleaners(cb_progress, allow_local=allow_local)
 
     # register Winapp2.ini cleaners
     if 'nt' == os.name:
