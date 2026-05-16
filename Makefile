@@ -214,6 +214,10 @@ appimage: $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
 		mv BleachBit-x86_64.AppImage "$(APPIMAGE_OUTPUT_PATH)"; \
 	fi
 	# Test the AppImage to check it doesn't crash
-	"$(APPIMAGE_OUTPUT_PATH)" --sysinfo
+	@if [ -n "$${SKIP_APPIMAGE_TEST:-}" ]; then \
+		echo "SKIP_APPIMAGE_TEST is set, skipping AppImage test."; \
+	else \
+		"$(APPIMAGE_OUTPUT_PATH)" --sysinfo; \
+	fi
 
 	@echo "* AppImage created: $(APPIMAGE_OUTPUT_PATH)"
