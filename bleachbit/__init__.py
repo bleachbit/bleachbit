@@ -65,9 +65,11 @@ bleachbit_exe_path = None
 if hasattr(sys, 'frozen'):
     # running frozen in py2exe
     bleachbit_exe_path = os.path.dirname(sys.executable)
+    bleachbit_package_path = bleachbit_exe_path
 else:
     # __file__ is absolute path to __init__.py
-    bleachbit_exe_path = os.path.dirname(os.path.dirname(__file__))
+    bleachbit_package_path = os.path.dirname(__file__)
+    bleachbit_exe_path = os.path.dirname(bleachbit_package_path)
 
 # license
 license_filename = None
@@ -132,8 +134,13 @@ personal_cleaners_dir = os.path.join(options_dir, "cleaners")
 # On Windows in portable mode, the bleachbit_exe_path is equal to
 # options_dir, so be careful that system_cleaner_dir is not set to
 # personal_cleaners_dir.
-if os.path.isdir(os.path.join(bleachbit_exe_path, 'cleaners')) and not portable_mode:
-    system_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
+_exe_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
+_package_cleaners_dir = os.path.join(bleachbit_package_path, 'cleaners')
+if os.path.isdir(_exe_cleaners_dir) and not portable_mode:
+    system_cleaners_dir = _exe_cleaners_dir
+elif os.path.isdir(_package_cleaners_dir) and not portable_mode:
+    # AppImage
+    system_cleaners_dir = _package_cleaners_dir
 elif IS_LINUX or IS_MAC:
     system_cleaners_dir = '/usr/share/bleachbit/cleaners'
 elif IS_WINDOWS:
@@ -164,7 +171,7 @@ def get_share_dirs():
     else:
         # installed .deb or .rpm has `__file__` = "/usr/share/bleachbit/__init__.py",
         # so that dirname() is "/usr/share/bleachbit"
-        package_dir = os.path.dirname(__file__)
+        package_dir = bleachbit_package_path
         # When running from source, share directory is `../share/` from `__init__.py`.
         repo_root = os.path.normpath(os.path.join(package_dir, '..'))
         base_dirs = [
@@ -202,9 +209,14 @@ windows10_theme_path = os.path.normpath(
 
 # application icon
 __icons = (
-    '/usr/share/pixmaps/bleachbit.png',  # Linux
-    '/usr/pkg/share/pixmaps/bleachbit.png',  # NetBSD
-    '/usr/local/share/pixmaps/bleachbit.png',  # FreeBSD and OpenBSD
+    # AppImage
+    os.path.normpath(os.path.join(bleachbit_exe_path,
+                                  'pixmaps/bleachbit.png')),
+    # Linux
+    '/usr/share/pixmaps/bleachbit.png',
+    # NetBSD
+    '/usr/pkg/share/pixmaps/bleachbit.png',
+    # FreeBSD and OpenBSD
     os.path.normpath(os.path.join(bleachbit_exe_path,
                                   'share\\bleachbit.png')),  # Windows
     # When running from source (i.e., not installed).
@@ -216,9 +228,13 @@ for __icon in __icons:
         appicon_path = __icon
 
 # locale directory
+_exe_locale_dir = os.path.join(bleachbit_exe_path, 'locale')
 if os.path.exists("./locale/"):
     # local locale (personal)
     locale_dir = os.path.abspath("./locale/")
+elif os.path.exists(_exe_locale_dir):
+    # AppImage
+    locale_dir = _exe_locale_dir
 # system-wide installed locale
 elif sys.platform in ('linux', 'darwin'):
     locale_dir = "/usr/share/locale/"

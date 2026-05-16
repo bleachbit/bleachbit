@@ -16,6 +16,28 @@ import sys
 have_gui = True
 
 
+def _add_posix_share_to_path():
+    """Add the appropriate share directory to sys.path for POSIX systems."""
+    _launcher_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Check if running from source directory
+    if (os.path.isfile(os.path.join(_launcher_dir, 'bleachbit', '__init__.py')) and
+            os.path.isfile(os.path.join(_launcher_dir, 'bleachbit', 'Unix.py'))):
+        return
+
+    # AppImage sets APPDIR environment variable
+    _appdir = os.environ.get('APPDIR')
+    if _appdir:
+        _share = os.path.normpath(os.path.join(_appdir, 'usr/share/'))
+        if os.path.isfile(os.path.join(_share, 'bleachbit', '__init__.py')):
+            sys.path.insert(0, _share)
+            return
+
+    # System installation
+    if os.path.isfile('/usr/share/bleachbit/__init__.py'):
+        sys.path.append('/usr/share/')
+
+
 def _apply_fontconfig_backend_preference():
     """On Windows, set PANGOCAIRO_BACKEND=fc if the user chose fontconfig.
 
@@ -34,12 +56,9 @@ def _apply_fontconfig_backend_preference():
 _apply_fontconfig_backend_preference()
 
 if 'posix' == os.name:
-    if os.path.isdir('/usr/share/bleachbit'):
-        # This path contains bleachbit/{C,G}LI.py .  This section is
-        # unnecessary if installing BleachBit in site-packages.
-        sys.path.append('/usr/share/')
+    _add_posix_share_to_path()
 
-    # The two imports from bleachbit must come after sys.path.append(..)
+    # The two imports from bleachbit must come after sys.path is adjusted.
     import bleachbit.Unix
     from bleachbit.Language import get_text as _
 
