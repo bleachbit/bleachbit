@@ -20,7 +20,7 @@ from bleachbit.Language import get_text as _
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
 from bleachbit.Process import is_process_running
-from bleachbit import Action, CleanerML, Command, FileUtilities, Memory, Special
+from bleachbit import Action, CleanerML, Command, FileUtilities, Memory
 from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
 from bleachbit.GtkShim import Gtk, Gdk, HAVE_GTK
 from bleachbit.Wipe import wipe_path
@@ -160,84 +160,6 @@ class Cleaner:
     def set_warning(self, option_id, description):
         """Set a warning to be displayed when option is selected interactively"""
         self.warnings[option_id] = description
-
-
-class OpenOfficeOrg(Cleaner):
-
-    """Delete OpenOffice.org cache"""
-
-    def __init__(self):
-        Cleaner.__init__(self)
-        self.options = {}
-        self.add_option('cache', _('Cache'), DELETE_CACHE_DESCRIPTION)
-        self.add_option('recent_documents', _('Most recently used'), _(
-            "Delete the list of recently used documents"))
-        self.id = 'openofficeorg'
-        self.name = 'OpenOffice.org'
-        # TRANSLATORS: The description of a cleaner.
-        self.description = _("Office suite")
-
-        # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
-        if 'posix' == os.name:
-            self.prefixes = ["~/.ooo-2.0",
-                             "~/.openoffice.org2",
-                             "~/.openoffice.org2.0",
-                             "~/.openoffice.org/3",
-                             "~/.ooo-dev3",
-                             "~/.config/libreoffice/4"]
-        if 'nt' == os.name:
-            self.prefixes = [
-                "$APPDATA\\OpenOffice.org\\3", "$APPDATA\\OpenOffice.org2"]
-
-    def get_commands(self, option_id):
-        # paths for which to run expand_glob_join
-        egj = []
-        if 'recent_documents' == option_id:
-            egj.append(
-                "user/registry/data/org/openoffice/Office/Histories.xcu")
-            egj.append(
-                "user/registry/cache/org.openoffice.Office.Histories.dat")
-
-        if 'recent_documents' == option_id and not 'cache' == option_id:
-            egj.append("user/registry/cache/org.openoffice.Office.Common.dat")
-
-        for egj_ in egj:
-            for prefix in self.prefixes:
-                for path in FileUtilities.expand_glob_join(prefix, egj_):
-                    if 'nt' == os.name:
-                        path = os.path.normpath(path)
-                    if os.path.lexists(path):
-                        yield Command.Delete(path)
-
-        if 'cache' == option_id:
-            dirs = []
-            for prefix in self.prefixes:
-                dirs += FileUtilities.expand_glob_join(
-                    prefix, "user/registry/cache/")
-            for dirname in dirs:
-                if 'nt' == os.name:
-                    dirname = os.path.normpath(dirname)
-                for filename in children_in_directory(dirname, False):
-                    yield Command.Delete(filename)
-
-        if 'recent_documents' == option_id:
-            for prefix in self.prefixes:
-                for path in FileUtilities.expand_glob_join(prefix,
-                                                           "user/registry/data/org/openoffice/Office/Common.xcu"):
-                    if os.path.lexists(path):
-                        yield Command.Function(path,
-                                               Special.delete_ooo_history,
-                                               _('Delete the usage history'))
-                # ~/.openoffice.org/3/user/registrymodifications.xcu
-                #       Apache OpenOffice.org 3.4.1 from openoffice.org on Ubuntu 13.04
-                # %AppData%\OpenOffice.org\3\user\registrymodifications.xcu
-                # Apache OpenOffice.org 3.4.1 from openoffice.org on Windows XP
-                for path in FileUtilities.expand_glob_join(prefix,
-                                                           "user/registrymodifications.xcu"):
-                    if os.path.lexists(path):
-                        yield Command.Function(path,
-                                               Special.delete_office_registrymodifications,
-                                               _('Delete the usage history'))
 
 
 class System(Cleaner):
@@ -674,7 +596,6 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
     backends.clear()
 
     # initialize "hard coded" (non-CleanerML) backends
-    backends["openofficeorg"] = OpenOfficeOrg()
     backends["system"] = System()
 
     if not options.get("load_cleaners"):
