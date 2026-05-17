@@ -150,8 +150,9 @@ class BleachBitTUI(App):
         # Keep only last 200 lines
         if len(self._log_lines) > 200:
             self._log_lines = self._log_lines[-200:]
-        output = self.query_one("#output-text", Static)
-        output.update("\n".join(self._log_lines))
+        for output in self.query("#output-text").results(Static):
+            output.update("\n".join(self._log_lines))
+            break
 
     # --- Backend message handlers ---
 
@@ -294,7 +295,9 @@ class BleachBitTUI(App):
         op_name = "Deleting" if delete else "Previewing"
         self._update_status("working", f"{op_name}...")
         self._log_lines = []
-        self.query_one("#output-text", Static).update("")
+        for output in self.query("#output-text").results(Static):
+            output.update("")
+            break
 
         operations = build_operations(enabled)
         # Propagate overwrite preference via bleachbit Options
