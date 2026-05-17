@@ -207,6 +207,12 @@ class CleanerML:
         if not self.os_match(action_node.getAttribute('os')):
             return
         command = action_node.getAttribute('command')
+        # Alias 'cookie' command to 'delete'
+        if command == 'cookie':
+            # This provides some backwards compatibility with CleanerML files from
+            # BleachBit 6.
+            logger.debug('Treating "cookie" command as "delete" in cleaner: %s', self.cleaner.id)
+            command = 'delete'
         provider = None
         for actionplugin in ActionProvider.plugins:
             if actionplugin.action_key == command:
