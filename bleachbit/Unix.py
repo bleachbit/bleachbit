@@ -167,7 +167,21 @@ def _is_broken_xdg_desktop_application(config, desktop_pathname):
         logger.info(
             "is_broken_xdg_menu: missing required option 'Exec' in '%s'", desktop_pathname)
         return True
-    exe = config.get('Desktop Entry', 'Exec').split(" ")[0]
+    exec_val = config.get('Desktop Entry', 'Exec')
+    try:
+        exec_parts = shlex.split(exec_val)
+    except ValueError as e:
+        # Malformed quoting in the Exec value. Per the XDG Desktop Entry
+        # spec this is undefined behavior; be conservative and keep the
+        # file rather than risk deleting a working launcher.
+        logger.warning(
+            "is_broken_xdg_menu: cannot parse 'Exec' key (%s) in '%s'", e, desktop_pathname)
+        return False
+    if not exec_parts:
+        logger.info(
+            "is_broken_xdg_menu: empty 'Exec' value in '%s'", desktop_pathname)
+        return True
+    exe = exec_parts[0]
     if not os.path.isabs(exe) and not os.environ.get('PATH'):
         raise RuntimeError(
             f"Cannot find executable '{exe}' because PATH environment variable is not set")
@@ -179,13 +193,7 @@ def _is_broken_xdg_desktop_application(config, desktop_pathname):
         # Wine v1.0 creates .desktop files like this
         # Exec=env WINEPREFIX="/home/z/.wine" wine "C:\\Program
         # Files\\foo\\foo.exe"
-        exec_val = config.get('Desktop Entry', 'Exec')
-        try:
-            execs = shlex.split(exec_val)
-        except ValueError as e:
-            logger.info(
-                "is_broken_xdg_menu: error splitting 'Exec' key '%s' in '%s'", e, desktop_pathname)
-            return True
+        execs = list(exec_parts)
         wineprefix = None
         del execs[0]
         while True:
