@@ -68,6 +68,8 @@ class HelpScreen(ModalScreen):
     Page Down  Scroll down
     n          Next page of files
     p          Previous page of files
+    a          Select/deselect all on page
+    m          Context menu (whitelist/clean list/copy)
     c          Copy file list to clipboard
     e          Export file list to /tmp/
     Escape     Close inline file list / clear filter

@@ -28,6 +28,8 @@ class FileListWidget(VerticalScroll):
         Binding("e", "export_file", "Export to file", show=False),
         Binding("n", "next_page", "Next page", show=False),
         Binding("p", "prev_page", "Previous page", show=False),
+        Binding("m", "context_menu", "Context menu", show=False),
+        Binding("a", "select_all", "Select all", show=False),
     ]
 
     PAGE_SIZE = 500
@@ -40,6 +42,7 @@ class FileListWidget(VerticalScroll):
         self._files: list[tuple[str, int]] = []
         self._total_size = 0
         self._current_page = 0
+        self._selected: set[int] = set()  # indices of selected files
         self.can_focus = True
 
     def on_mount(self):
@@ -67,20 +70,25 @@ class FileListWidget(VerticalScroll):
         end = min(start + self.PAGE_SIZE, len(self._files))
         page_files = self._files[start:end]
 
+        selected_count = len(self._selected)
+        sel_info = f" | {selected_count} selected" if selected_count else ""
+
         lines = [
             f"[bold]Files for {self.cleaner_name} -> {self.option_name}[/bold]",
             f"[dim]{len(self._files)} files, {total_human}  "
             f"| Page {self._current_page + 1}/{total_pages} "
-            f"({start + 1}-{end})[/dim]",
+            f"({start + 1}-{end}){sel_info}[/dim]",
             "",
         ]
-        for path, size in page_files:
+        for i, (path, size) in enumerate(page_files):
+            abs_idx = start + i
+            marker = "[green][X][/green] " if abs_idx in self._selected else "  "
             size_str = bytes_to_human(size) if size else "0"
-            lines.append(f"  {path}  ({size_str})")
+            lines.append(f"  {marker}{path}  ({size_str})")
 
         if total_pages > 1:
             lines.append("")
-            lines.append("[dim]n=next page  p=prev page  c=copy  e=export  esc=close[/dim]")
+            lines.append("[dim]a=select all  m=menu  n/p=page  c=copy  e=export  esc=close[/dim]")
 
         self.mount(Static("\n".join(lines), markup=True))
 
@@ -96,6 +104,45 @@ class FileListWidget(VerticalScroll):
         if self._current_page > 0:
             self._current_page -= 1
             self._render_files()
+
+    def action_select_all(self):
+        """Toggle selection of all files on the current page."""
+        start = self._current_page * self.PAGE_SIZE
+        end = min(start + self.PAGE_SIZE, len(self._files))
+        page_indices = set(range(start, end))
+
+        if page_indices.issubset(self._selected):
+            # All page items already selected — deselect them
+            self._selected -= page_indices
+        else:
+            # Select all page items
+            self._selected |= page_indices
+        self._render_files()
+
+    def action_context_menu(self):
+        """Open context menu for selected (or all page) files."""
+        from bleachbit.tui.screens.file_context_menu import FileContextMenu
+
+        if self._selected:
+            paths = [self._files[i][0] for i in sorted(self._selected)
+                     if i < len(self._files)]
+        else:
+            # No selection — use all files on current page
+            start = self._current_page * self.PAGE_SIZE
+            end = min(start + self.PAGE_SIZE, len(self._files))
+            paths = [self._files[i][0] for i in range(start, end)]
+
+        if paths:
+            self.app.push_screen(FileContextMenu(paths))
+
+    def _get_selected_or_page_paths(self) -> list[str]:
+        """Return paths for context menu: selected files or current page."""
+        if self._selected:
+            return [self._files[i][0] for i in sorted(self._selected)
+                    if i < len(self._files)]
+        start = self._current_page * self.PAGE_SIZE
+        end = min(start + self.PAGE_SIZE, len(self._files))
+        return [self._files[i][0] for i in range(start, end)]
 
     def get_all_text(self) -> str:
         """Return all file paths as plain text (for clipboard/export)."""
@@ -139,6 +186,8 @@ class FileListOverlay(ModalScreen):
         Binding("e", "export_file", "Export to file"),
         Binding("n", "next_page", "Next page"),
         Binding("p", "prev_page", "Previous page"),
+        Binding("m", "context_menu", "Context menu"),
+        Binding("a", "select_all", "Select all"),
     ]
 
     def __init__(self, cleaner_name: str, option_name: str):
@@ -187,3 +236,11 @@ class FileListOverlay(ModalScreen):
     def action_prev_page(self):
         """Navigate to previous page in overlay mode."""
         self.query_one(FileListWidget).action_prev_page()
+
+    def action_select_all(self):
+        """Toggle select all on current page in overlay mode."""
+        self.query_one(FileListWidget).action_select_all()
+
+    def action_context_menu(self):
+        """Open context menu in overlay mode."""
+        self.query_one(FileListWidget).action_context_menu()
