@@ -138,7 +138,7 @@ class BleachBitTUI(App):
         Binding("slash", "start_filter", "Filter", show=True),
         Binding("question_mark", "show_help", "Help", show=True),
         Binding("q", "quit", "Quit", show=True),
-        Binding("escape", "clear_filter", "Clear filter", show=False),
+        Binding("escape", "handle_escape", "Back", show=False),
     ]
 
     def __init__(self):
@@ -399,7 +399,16 @@ class BleachBitTUI(App):
             self.notify("File list mode: inline")
         else:
             self._file_list_mode = "overlay"
+            self._dismiss_inline_file_list()
             self.notify("File list mode: overlay")
+
+    def _dismiss_inline_file_list(self):
+        """Remove inline file list and return focus to tree."""
+        if self._inline_file_list is not None:
+            self._inline_file_list.remove()
+            self._inline_file_list = None
+            tree = self.query_one(CleanerTree)
+            tree.focus()
 
     def action_show_help(self):
         """Show help overlay."""
@@ -412,7 +421,12 @@ class BleachBitTUI(App):
         filter_input.focus()
         filter_input.value = ""
 
-    def action_clear_filter(self):
+    def action_handle_escape(self):
+        """Context-aware Escape: dismiss inline list first, then clear filter."""
+        if self._inline_file_list is not None:
+            self._dismiss_inline_file_list()
+        else:
+            self.action_clear_filter()
         """Hide filter input and restore full tree."""
         filter_input = self.query_one("#filter-input", Input)
         filter_input.remove_class("visible")
@@ -454,9 +468,7 @@ class BleachBitTUI(App):
 
     def _show_inline_file_list(self, cleaner_name: str, option_name: str):
         """Show file list inline below the tree."""
-        if self._inline_file_list is not None:
-            self._inline_file_list.remove()
-            self._inline_file_list = None
+        self._dismiss_inline_file_list()
 
         container = self.query_one("#main-container", Container)
         widget = FileListWidget(cleaner_name, option_name)

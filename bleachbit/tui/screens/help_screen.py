@@ -51,6 +51,7 @@ class HelpScreen(ModalScreen):
     left       Collapse / go up to parent
     g / Home   Jump to top
     G / End    Jump to bottom
+    /          Search/filter cleaners
 
   [bold]Actions[/bold]
     Space      Toggle enable/disable on focused item
@@ -67,6 +68,7 @@ class HelpScreen(ModalScreen):
     Page Down  Scroll down
     c          Copy file list to clipboard
     e          Export file list to /tmp/
+    Escape     Close inline file list / clear filter
 
   [bold]General[/bold]
     ?          This help

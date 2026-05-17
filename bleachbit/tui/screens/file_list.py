@@ -22,6 +22,12 @@ from bleachbit.FileUtilities import bytes_to_human
 class FileListWidget(VerticalScroll):
     """Scrollable file list widget — reusable for both inline and overlay modes."""
 
+    BINDINGS = [
+        Binding("escape", "dismiss_inline", "Close", show=False),
+        Binding("c", "copy_clipboard", "Copy to clipboard", show=False),
+        Binding("e", "export_file", "Export to file", show=False),
+    ]
+
     def __init__(self, cleaner_name: str, option_name: str, file_count: int = 10000):
         super().__init__()
         self.cleaner_name = cleaner_name
@@ -29,6 +35,7 @@ class FileListWidget(VerticalScroll):
         self.file_count = file_count
         self._files: list[tuple[str, int]] = []
         self._total_size = 0
+        self.can_focus = True
 
     def on_mount(self):
         self._load_files()
@@ -67,6 +74,34 @@ class FileListWidget(VerticalScroll):
     def get_all_text(self) -> str:
         """Return all file paths as plain text (for clipboard/export)."""
         return "\n".join(path for path, _ in self._files)
+
+    def action_copy_clipboard(self):
+        """Copy all file paths to clipboard."""
+        text = self.get_all_text()
+        if text:
+            self.app.copy_to_clipboard(text)
+            self.notify(f"Copied {len(text.splitlines())} file paths to clipboard")
+        else:
+            self.notify("No file data available", severity="warning")
+
+    def action_export_file(self):
+        """Export file list to /tmp/."""
+        text = self.get_all_text()
+        if not text:
+            self.notify("No file data available", severity="warning")
+            return
+        path = (
+            f"/tmp/bleachbit-filelist-{self.cleaner_name}-"
+            f"{self.option_name}.txt"
+        )
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(text)
+        self.notify(f"Exported to {path}")
+
+    def action_dismiss_inline(self):
+        """Dismiss inline file list and return focus to tree."""
+        if self.app._inline_file_list is self:
+            self.app._dismiss_inline_file_list()
 
 
 class FileListOverlay(ModalScreen):
