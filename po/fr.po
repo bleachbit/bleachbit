@@ -5,18 +5,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-05-16 22:17-0600\n"
-"PO-Revision-Date: 2026-05-04 17:09+0000\n"
-"Last-Translator: Ludovic Pagès <nanucq@proton.me>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/bleachbit/main/fr/"
-">\n"
+"PO-Revision-Date: 2026-05-18 05:11+0000\n"
+"Last-Translator: \"David D.\" <dadu042@users.noreply.hosted.weblate.org>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/bleachbit/main/"
+"fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -712,14 +712,12 @@ msgstr "Les dossiers personnalisés seront réinitialisés."
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
 msgid "AI assistant"
-msgstr ""
+msgstr "Assistant IA"
 
 #. Description for deleting Claude Code sessions
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the command history"
 msgid "Delete the conversation history"
-msgstr "Supprime l’historique des commandes"
+msgstr "Supprimer l’historique des conversations"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
@@ -784,13 +782,11 @@ msgstr "Supprime la liste des pages Web visitées"
 #. Cleaning option that deletes AI models in a web browser
 #: ../cleaners/google_chrome.xml
 msgid "AI"
-msgstr ""
+msgstr "IA"
 
 #: ../cleaners/google_chrome.xml
-#, fuzzy
-#| msgid "Delete the logs"
 msgid "Delete the AI models"
-msgstr "Supprime les journaux"
+msgstr "Supprimer les modèles IA"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -824,10 +820,8 @@ msgid "Delete the list of game servers"
 msgstr "Supprime la liste des serveurs de jeu"
 
 #: ../cleaners/profanity.xml
-#, fuzzy
-#| msgid "Download failed"
 msgid "Downloaded files"
-msgstr "Téléchargement échoué"
+msgstr "Fichiers téléchargés"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
@@ -2493,16 +2487,13 @@ msgstr "Ajouter un dossier"
 #. in the preferences dialog. This message appears when cleaning options
 #. with warnings are selected but expert mode is disabled.
 #: ../bleachbit/GuiStartup.py
-#, fuzzy
-#| msgid ""
-#| "Cleaning options with warnings now require expert mode. Enable it in "
-#| "preferences to clean them."
 msgid ""
 "One or more selected cleaning options have warnings and require Expert Mode "
 "to clean. Enable it in preferences."
 msgstr ""
-"Les options de nettoyage avec avertissements nécessitent maintenant le mode "
-"expert. Activez-le dans les préférences pour les nettoyer."
+"Une ou plusieurs options de nettoyage sélectionnées contiennent des "
+"avertissements et nécessitent le mode Expert pour être nettoyées. Activez-le "
+"dans les préférences."
 
 #. TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
 #. Preferences. Keep it consistent with the translation of "Expert Mode"
@@ -2513,6 +2504,9 @@ msgid ""
 "Delete confirmation is disabled but expert mode is not enabled. Enable "
 "Expert Mode in preferences to skip delete confirmations."
 msgstr ""
+"La confirmation de suppression est désactivée, mais le mode expert n’est pas "
+"activé. Activez le mode expert dans les préférences pour ignorer les "
+"confirmations de suppression."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
