@@ -9,21 +9,22 @@
 Test cases for module Action
 """
 
-import bleachbit.FileUtilities
-from bleachbit.Action import ActionProvider, Command, Delete, has_glob, expand_multi_var
-from tests import common
-from tests.TestFileUtilities import test_ini_helper
-from tests.TestFileUtilities import test_json_helper
-
 import glob
 import logging
-import mock
 import os
 import shutil
 import sys
 import tempfile
+import time
 import unittest
 from xml.dom.minidom import parseString
+
+import mock
+
+import bleachbit.FileUtilities
+from bleachbit.Action import ActionProvider, Command, Delete, expand_multi_var, has_glob
+from tests import common
+from tests.TestFileUtilities import test_ini_helper, test_json_helper
 
 
 def _action_str_to_commands(action_str):
@@ -53,7 +54,6 @@ def benchmark_filter(this_filter):
         common.touch_file(os.path.join(dirname, str(x)))
 
     # scan directory
-    import time
     start = time.time()
     filter_code = ''
     if 'regex' == this_filter:
@@ -117,7 +117,8 @@ class ActionTestCase(common.BleachbitTestCase):
                 self.assertLExists(filename)
                 os.remove(filename)
                 self.assertNotLExists(filename)
-            elif command in 'process':
+                return
+            if command in ('delete', 'process'):
                 pass
             elif command in ('ini', 'json'):
                 self.assertLExists(filename)
@@ -426,7 +427,8 @@ class ActionTestCase(common.BleachbitTestCase):
             if variant == 'all':
                 self.assertExists(dirname)
                 os.rmdir(dirname)
-            elif variant == 'top':
+                return
+            if variant == 'top':
                 self.assertNotExists(dirname)
 
             # If the path does not exist, it should be silently ignored.

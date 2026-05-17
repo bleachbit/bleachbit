@@ -383,7 +383,7 @@ def execute_sqlite3(path, cmds):
                 if str(exc).find('no such function: ') >= 0:
                     # fixme: determine why randomblob and zeroblob are not
                     # available
-                    logger.exception(exc.message)
+                    logger.exception('SQLite function not available')
                 else:
                     raise sqlite3.OperationalError(
                         '%s: %s' % (exc, path))
@@ -829,7 +829,7 @@ def wipe_path(pathname, idle=False):
         remaining_seconds = int(remaining_bytes / (rate + 0.0001))
         return 1, done_percent, remaining_seconds
 
-    logger.debug(_("Wiping path: %s") % pathname)
+    logger.debug(_("Wiping path: %s"), pathname)
     if not os.path.isdir(pathname):
         logger.error(_("Path to wipe must be an existing directory: %s"), pathname)
         return
@@ -857,7 +857,7 @@ def wipe_path(pathname, idle=False):
             # Get the file system type from the given path
             fstype = get_filesystem_type(pathname)
             fstype = fstype[0]
-            logging.debug('File System:' + fstype)
+            logging.debug('File System: %s', fstype)
             # print(f.name) # Added by Marvin for debugging #issue 1051
             last_idle = time.time()
             # Write large blocks to quickly fill the disk.
@@ -900,7 +900,7 @@ def wipe_path(pathname, idle=False):
                 # not on another XP SP3 with 64MB free space
                 if not e.errno == errno.ENOSPC:
                     logger.error(
-                        _("Error #%d when flushing the file buffer." % e.errno))
+                        _("Error #%d when flushing the file buffer."), e.errno)
 
             os.fsync(f.fileno())  # write to disk
             # For statistics

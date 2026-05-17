@@ -8,13 +8,15 @@
 Actions that perform cleaning
 """
 
-from bleachbit import Command, FileUtilities, General, Special, DeepScan
-from bleachbit import _, fs_scan_re_flags
-
 import glob
 import logging
 import os
 import re
+from itertools import product
+from subprocess import Popen
+
+from bleachbit import Command, FileUtilities, General, Special, DeepScan, Windows
+from bleachbit import _, fs_scan_re_flags
 
 
 logger = logging.getLogger(__name__)
@@ -37,7 +39,7 @@ def expand_multi_var(s, variables):
         return (s,)
     var_keys_used = []
     ret = []
-    for var_key in variables.keys():
+    for var_key in variables:
         sub = '$$%s$$' % var_key
         if s.find(sub) > -1:
             var_keys_used.append(var_key)
@@ -45,10 +47,8 @@ def expand_multi_var(s, variables):
         # No matching variables used, so return input string unmodified.
         return (s,)
     # filter the dictionary to the keys used
-    vars_used = {key: value for key,
-                 value in variables.items() if key in var_keys_used}
+    vars_used = dict((key, value) for key, value in variables.items() if key in var_keys_used)
     # create a product of combinations
-    from itertools import product
     vars_product = (dict(zip(vars_used, x))
                     for x in product(*vars_used.values()))
     for var_set in vars_product:
@@ -472,7 +472,6 @@ class Process(ActionProvider):
                     (rc, stdout, stderr) = General.run_external(args)
                 else:
                     rc = 0  # unknown because we don't wait
-                    from subprocess import Popen
                     Popen(self.cmd)
             except Exception as e:
                 raise RuntimeError(
@@ -527,7 +526,6 @@ class WinShellChangeNotify(ActionProvider):
     action_key = 'win.shell.change.notify'
 
     def get_commands(self):
-        from bleachbit import Windows
         yield Command.Function(
             None,
             Windows.shell_change_notify,

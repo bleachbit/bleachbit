@@ -1,39 +1,42 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
 Test case for module Windows
 """
+import itertools
+import os
+import platform
+import random
+import shutil
+import tempfile
+import time
+from decimal import Decimal
 
-from tests import common
+import ntsecuritycon as con
+import pywintypes
+import win32api
+import win32clipboard
+import win32security
+import winreg
+from win32com.shell import shell
+from win32con import GENERIC_WRITE, WRITE_DAC
 
-from bleachbit import FileUtilities, General
-from bleachbit.FileUtilities import extended_path, extended_path_undo
+from bleachbit import FileUtilities, General, logger
 from bleachbit.Command import Delete, Function
+from bleachbit.FileUtilities import extended_path, extended_path_undo, is_normal_directory
+from bleachbit.General import run_external
 from bleachbit.Windows import (
     delete_locked_file,
     delete_registry_key,
     delete_registry_value,
     delete_updates,
     detect_registry_key,
+    elevate_privileges,
     empty_recycle_bin,
     get_clipboard_paths,
     get_fixed_drives,
@@ -51,26 +54,11 @@ from bleachbit.Windows import (
     set_environ,
     setup_environment,
     shell_change_notify,
-    split_registry_key
+    split_registry_key,
 )
-from bleachbit import logger
-from bleachbit.FileUtilities import is_normal_directory
+from bleachbit.WindowsWipe import close_file, file_make_sparse, file_wipe, open_file
 
-import itertools
-import os
-import platform
-import shutil
-import sys
-import tempfile
-import time
-import unittest
-import mock
-from decimal import Decimal
-
-import pywintypes
-import win32api
-import winreg
-from win32com.shell import shell
+from tests import common
 
 
 def put_files_into_recycle_bin():
@@ -139,8 +127,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         # make a normal directory with a file in it
         target_dir = self.mkdir('target_dir')
 
-        from random import randint
-        canary_base = 'do_not_delete%d' % randint(10000, 9999999)
+        canary_base = 'do_not_delete%d' % random.randint(10000, 9999999)
         canary_fn = os.path.join(target_dir, canary_base)
         common.touch_file(canary_fn)
         self.assertFalse(is_junction(canary_fn))
@@ -152,8 +139,7 @@ class WindowsTestCase(common.BleachbitTestCase):
         link_pathname = os.path.join(container_dir, 'link')
         args = ('cmd', '/c', 'mklink', mklink_option,
                 link_pathname, target_dir)
-        from bleachbit.General import run_external
-        (rc, stdout, stderr) = run_external(args)
+        (rc, _stdout, stderr) = run_external(args)
         self.assertEqual(rc, 0, stderr)
         self.assertExists(link_pathname)
         self.assertTrue(is_junction(link_pathname))
@@ -204,7 +190,6 @@ class WindowsTestCase(common.BleachbitTestCase):
                 delete=False)
             pathname = f.name
             f.close()
-            import time
             time.sleep(5)  # avoid race condition
             self.assertExists(pathname)
             logger.debug('delete_locked_file(%s) ' % pathname)
@@ -401,7 +386,6 @@ class WindowsTestCase(common.BleachbitTestCase):
 
         # Set the clipboard to an unsupported type (text), so expect no
         # files are returned
-        import win32clipboard
         win32clipboard.OpenClipboard()
         win32clipboard.EmptyClipboard()
         fname = r'c:\windows\notepad.exe'
@@ -489,10 +473,6 @@ class WindowsTestCase(common.BleachbitTestCase):
         There are more tests in testwipe.py
         """
 
-        from bleachbit.WindowsWipe import file_wipe, open_file, close_file, file_make_sparse
-        from bleachbit.Windows import elevate_privileges
-        from win32con import GENERIC_WRITE, WRITE_DAC
-
         dirname = tempfile.mkdtemp(prefix='bleachbit-file-wipe')
 
         filenames = ('short', 'long' + 'x' * 250, 'utf8-ɡælɪk')
@@ -502,16 +482,12 @@ class WindowsTestCase(common.BleachbitTestCase):
 
             def _write_file(longname, contents):
                 self.write_file(longname, contents)
-                import win32api
                 shortname = extended_path_undo(
                     win32api.GetShortPathName(extended_path(longname)))
                 self.assertExists(shortname)
                 return shortname
 
             def _deny_access(fh):
-                import win32security
-                import ntsecuritycon as con
-
                 user, _, _ = win32security.LookupAccountName(
                     "", win32api.GetUserName())
                 dacl = win32security.ACL()

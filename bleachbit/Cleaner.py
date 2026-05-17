@@ -11,9 +11,10 @@ Perform (or assist with) cleaning operations.
 import glob
 import logging
 import os.path
+import tempfile
 import warnings
 
-from bleachbit import _, Command, FileUtilities, Special, Windows
+from bleachbit import _, Action, Command, FileUtilities, Special, Windows
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
 
@@ -70,10 +71,10 @@ class Cleaner:
                         return False
                 for _ds in self.get_deep_scan(option_id):
                     return False
-            except Exception:
+            except Exception as e:
                 logger = logging.getLogger(__name__)
-                logger.exception('exception in auto_hide(), cleaner=%s, option=%s',
-                                 self.name, option_id)
+                logger.exception('exception in auto_hide(), cleaner=%s, option=%s, error=%s',
+                                  self.name, option_id, str(e))
         return True
 
     def get_commands(self, option_id):
@@ -402,12 +403,11 @@ class System(Cleaner):
 
             # This is a hack to refresh the icon.
             def empty_recycle_bin_func():
-                import tempfile
                 tmpdir = tempfile.mkdtemp()
                 Windows.move_to_recycle_bin(tmpdir)
                 try:
                     Windows.empty_recycle_bin(None, True)
-                except:
+                except Exception:
                     logging.getLogger(__name__).info(
                         'error in empty_recycle_bin()', exc_info=True)
                 yield 0
@@ -455,8 +455,6 @@ def create_simple_cleaner(paths):
     cleaner.add_option(option_id='files', name='', description='')
     cleaner.name = _("System")  # shows up in progress bar
 
-    from bleachbit import Action
-
     class CustomFileAction(Action.ActionProvider):
         action_key = '__customfileaction'
 
@@ -493,8 +491,6 @@ def create_wipe_cleaner(path):
     def wipe_path_func():
         yield from FileUtilities.wipe_path(path, idle=True)
         yield 0
-
-    from bleachbit import Action
 
     class CustomWipeAction(Action.ActionProvider):
         action_key = '__customwipeaction'

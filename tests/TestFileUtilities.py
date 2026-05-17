@@ -1,29 +1,33 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
 Test case for module FileUtilities
 """
 
+import ctypes
+import json
+import locale
+import os
+import random
+import re
+import sqlite3
+import stat
+import tempfile
+import time
+import unittest
+from unittest import mock
 
+
+import win32api
+import win32con
+from win32com.shell import shell
+
+from bleachbit import logger
 from bleachbit.FileUtilities import (
     bytes_to_human,
     children_in_directory,
@@ -55,16 +59,8 @@ from bleachbit.FileUtilities import (
 )
 from bleachbit.General import run_external
 from bleachbit.Options import options
-from bleachbit import logger
+from bleachbit.Windows import get_fixed_drives, is_junction
 from tests import common
-
-import json
-import locale
-import os
-import tempfile
-import time
-import unittest
-from unittest import mock
 
 
 def test_ini_helper(self, execute):
@@ -106,7 +102,7 @@ def test_json_helper(self, execute):
     """Used to test JSON cleaning in TestAction and in TestFileUtilities"""
 
     def load_js(js_fn):
-        with open(js_fn, 'r') as js_fd:
+        with open(js_fn, 'r', encoding='utf-8') as js_fd:
             return json.load(js_fd)
 
     expected = {'deleteme': 1, 'spareme': {'deletemetoo': 1}}
@@ -175,17 +171,20 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         options.set('units_iec', True)
         for test in tests:
             iec = bytes_to_human(test[0])
-            self.assertEqual(test[2], iec,
-                             'bytes_to_human(%d) IEC = %s but expected %s' % (test[0], iec, test[2]))
+            self.assertEqual(
+                test[2], iec,
+                'bytes_to_human(%d) IEC = %s but expected %s' %
+                (test[0], iec, test[2]))
 
         options.set('units_iec', False)
         for test in tests:
             si = bytes_to_human(test[0])
-            self.assertEqual(test[1], si,
-                             'bytes_to_human(%d) SI = %s but expected %s' % (test[0], si, test[1]))
+            self.assertEqual(
+                test[1], si,
+                'bytes_to_human(%d) SI = %s but expected %s' %
+                (test[0], si, test[1]))
 
         # test roundtrip conversion for random values
-        import random
         for _n in range(0, 1000):
             bytes1 = random.randrange(0, 1000 ** 4)
             human = bytes_to_human(bytes1)
@@ -198,7 +197,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         if hasattr(locale, 'format_string'):
             try:
                 locale.setlocale(locale.LC_NUMERIC, 'de_DE.utf8')
-            except:
+            except locale.Error:
                 logger.warning('exception when setlocale to de_DE.utf8')
             else:
                 self.assertEqual("1,01GB", bytes_to_human(1000 ** 3 + 5812389))
@@ -323,7 +322,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             self.assertNotExists(dirname)
 
         def symlink_helper(link_fn):
-            from win32com.shell import shell
+
             if not shell.IsUserAnAdmin():
                 self.skipTest(
                     'skipping symlink test because of insufficient privileges')
@@ -368,7 +367,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             self.assertNotLExists(linkname)
 
         logger.debug('testing symbolic link')
-        import ctypes
         kern = ctypes.windll.LoadLibrary("kernel32.dll")
 
         def win_symlink(src, linkname):
@@ -385,7 +383,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         for shred in (False, True):
             fn = os.path.join(self.tempdir, 'read-only')
             common.touch_file(fn)
-            import stat
             os.chmod(fn, stat.S_IREAD)
             self.assertExists(fn)
             delete(fn, shred=shred)
@@ -397,8 +394,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         for shred in (False, True):
             fn = os.path.join(self.tempdir, 'hidden')
             common.touch_file(fn)
-            import win32api
-            import win32con
             win32api.SetFileAttributes(fn, win32con.FILE_ATTRIBUTE_HIDDEN)
             self.assertExists(fn)
             self.assertFalse(is_normal_directory(fn))
@@ -526,7 +521,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         if rc:
             print('error calling WMIC\nargs=%s\nstderr=%s' % (args, stderr))
             return
-        import re
         for line in stdout.split('\n'):
             line = line.strip()
             if not re.match(r'([A-Z]):\s+(\d+)', line):
@@ -551,7 +545,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             # Expand the directory names, which are in the short format,
             # to test the case where the full path (including the directory)
             # is longer than 255 characters.
-            import win32api
             lname = win32api.GetLongPathNameW(extended_path(filename))
             self.assertEqual(getsize(lname), 10 * 12345)
             # this function returns a byte string instead of Unicode
@@ -695,7 +688,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         home = os.path.expanduser('~')
         self.assertTrue(same_partition(home, home))
         home_drive = os.path.splitdrive(home)[0]
-        from bleachbit.Windows import get_fixed_drives
         for drive in get_fixed_drives():
             this_drive = os.path.splitdrive(drive)[0]
             self.assertEqual(same_partition(home, drive),
@@ -880,7 +872,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""
-        import sqlite3
 
         path = os.path.abspath('bleachbit.tmp.sqlite3')
         if os.path.lexists(path):
@@ -920,7 +911,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             os.path.join(self.tempdir, 'doesnotexist')))
 
         # Check common junctions on Windows
-        from bleachbit.Windows import is_junction
         user_docs = os.path.expandvars(r'%userprofile%\My Documents')
         prog_docs = os.path.expandvars(r'%ProgramData%\Documents')
         for junction_path in (user_docs, prog_docs):

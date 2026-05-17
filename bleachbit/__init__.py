@@ -1,22 +1,9 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
+#
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 Code that is commonly shared throughout BleachBit
@@ -31,6 +18,8 @@ import platform
 
 from bleachbit import Log
 from configparser import RawConfigParser, NoOptionError # used in other files
+
+import win_unicode_console
 
 APP_VERSION = "4.6.3"
 APP_NAME = "BleachBit"
@@ -47,7 +36,6 @@ if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
 else:
     stdout_encoding = sys.stdout.encoding
     if 'win32' == sys.platform:
-        import win_unicode_console
         win_unicode_console.enable()
 
 if not hasattr(platform, 'linux_distribution'):
@@ -107,7 +95,7 @@ try:
     options_dir = os.environ['BLEACHBIT_TEST_OPTIONS_DIR']
 except KeyError:
     pass
-        
+
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
 # check whether the application is running from the source tree

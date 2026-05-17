@@ -22,23 +22,24 @@ These are the terms:
 
 
 """
-
 import ctypes
-from ctypes import byref, wintypes
-from decimal import Decimal
 import glob
 import logging
 import os
 import sys
-from threading import Event, Thread
+import warnings
 import winreg
 import xml.dom.minidom
+from ctypes import WinError, byref, windll, wintypes
+from decimal import Decimal
+from threading import Event, Thread
+from uuid import UUID
 
-import warnings
 with warnings.catch_warnings():
     warnings.simplefilter('ignore', PendingDeprecationWarning)
     import pywintypes
 import win32api
+import win32clipboard
 import win32con
 import win32file
 import win32gui
@@ -46,7 +47,6 @@ import win32process
 import win32security
 import win32service
 import win32serviceutil
-from ctypes import windll
 from win32com.shell import shell, shellcon
 
 import bleachbit
@@ -57,8 +57,9 @@ kernel = windll.kernel32
 
 logger = logging.getLogger(__name__)
 
+MOVEFILE_DELAY_UNTIL_REBOOT = 4
 
-def browse_file(_, title):
+def browse_file(_widget, title):
     """Ask the user to select a single file.  Return full path"""
     try:
         ret = win32gui.GetOpenFileNameW(None,
@@ -75,7 +76,7 @@ def browse_file(_, title):
     return ret[0]
 
 
-def browse_files(_, title):
+def browse_files(_widget, title):
     """Ask the user to select files.  Return full paths"""
     try:
         # The File parameter is a hack to increase the buffer length.
@@ -101,7 +102,7 @@ def browse_files(_, title):
     return pathnames
 
 
-def browse_folder(_, title):
+def browse_folder(_widget, title):
     """Ask the user to select a folder.  Return full path."""
     flags = 0x0010 #SHBrowseForFolder path input
     pidl = shell.SHBrowseForFolder(None, None, title, flags)[0]
@@ -162,9 +163,7 @@ def csidl_to_environ(varname, csidl):
 def delete_locked_file(pathname):
     """Delete a file that is currently in use"""
     if os.path.exists(pathname):
-        MOVEFILE_DELAY_UNTIL_REBOOT = 4
         if 0 == windll.kernel32.MoveFileExW(pathname, None, MOVEFILE_DELAY_UNTIL_REBOOT):
-            from ctypes import WinError
             raise WinError()
 
 
@@ -183,8 +182,7 @@ def delete_registry_value(key, value_name, really_delete):
                 # 2 = 'file not found' means value does not exist
                 return False
             raise
-        else:
-            return True
+        return True
     try:
         hkey = winreg.OpenKey(hive, sub_key)
         winreg.QueryValueEx(hkey, value_name)
@@ -192,8 +190,7 @@ def delete_registry_value(key, value_name, really_delete):
         if e.winerror == 2:
             return False
         raise
-    else:
-        return True
+    return True
 
 
 def delete_registry_key(parent_key, really_delete, excludekeys=None):
@@ -479,9 +476,10 @@ def empty_recycle_bin(path, really_delete):
     return bytes_used
 
 
+
+
 def get_clipboard_paths():
     """Return a tuple of Unicode pathnames from the clipboard"""
-    import win32clipboard
     win32clipboard.OpenClipboard()
     path_list = ()
     try:
@@ -513,9 +511,6 @@ def get_known_folder_path(folder_name):
     Based on the code Michael Kropat (mkropat) from
     <https://gist.github.com/mkropat/7550097>
     licensed  under the GNU GPL"""
-    import ctypes
-    from ctypes import wintypes
-    from uuid import UUID
 
     class GUID(ctypes.Structure):
         _fields_ = [
@@ -712,7 +707,7 @@ def set_environ(varname, path):
             raise RuntimeError(
                 'Variable %s points to a non-existent path %s' % (varname, path))
         os.environ[varname] = path
-    except:
+    except Exception:
         logger.exception(
             'set_environ(%s, %s): exception when setting environment variable', varname, path)
 
@@ -731,7 +726,7 @@ def setup_environment():
     # SHGetKnownFolderPath in Windows Vista and later
     try:
         path = get_known_folder_path('LocalAppDataLow')
-    except:
+    except Exception:
         logger.exception('exception identifying LocalAppDataLow')
     else:
         set_environ('LocalAppDataLow', path)
@@ -796,7 +791,9 @@ def get_font_conf_file():
 
 class SplashThread(Thread):
     def __init__(self, group=None, target=None, name=None,
-                 args=(), kwargs={}, Verbose=None):
+                 args=(), kwargs=None, Verbose=None):
+        if kwargs is None:
+            kwargs = {}
         super().__init__(group, self._show_splash_screen, name, args, kwargs)
         self.daemon = True
         self._splash_screen_started = Event()
@@ -817,7 +814,6 @@ class SplashThread(Thread):
         win32gui.PumpMessages()
 
     def join(self, *args):
-        import win32con, win32gui
         win32gui.PostMessage(self._splash_screen_handle, win32con.WM_CLOSE, 0, 0)
         Thread.join(self, *args)
 
@@ -868,7 +864,7 @@ class SplashThread(Thread):
 
         is_splash_screen_on_top = self._force_set_foreground_window(hWindow)
         logger.debug(
-            'Is splash screen on top: {}'.format(is_splash_screen_on_top)
+            'Is splash screen on top: %s', is_splash_screen_on_top
         )
 
         return hWindow
@@ -889,9 +885,8 @@ class SplashThread(Thread):
         try:
             win32gui.SetForegroundWindow(hWindow)
         except Exception as e:
-            exc_message = str(e)
             logger.debug(
-                'Failed attempt to show splash screen with keybd_event: {}'.format(exc_message)
+                'Failed attempt to show splash screen with keybd_event: %s', str(e)
             )
 
         if win32gui.GetForegroundWindow() == hWindow:
@@ -910,9 +905,8 @@ class SplashThread(Thread):
                 win32gui.ShowWindow(hWindow, win32con.SW_SHOW)
                 win32process.AttachThreadInput(foreground_thread_id, appThread, False)
             except Exception as e:
-                exc_message = str(e)
                 logger.debug(
-                    'Failed attempt to show splash screen with AttachThreadInput: {}'.format(exc_message)
+                    'Failed attempt to show splash screen with AttachThreadInput: %s', str(e)
                 )
 
         else:
@@ -931,9 +925,8 @@ class SplashThread(Thread):
             win32gui.SetForegroundWindow(hWindow)
             win32gui.SystemParametersInfo(win32con.SPI_SETFOREGROUNDLOCKTIMEOUT, timeout, win32con.SPIF_SENDCHANGE)
         except Exception as e:
-            exc_message = str(e)
             logger.debug(
-                'Failed attempt to show splash screen with SystemParametersInfo: {}'.format(exc_message)
+                'Failed attempt to show splash screen with SystemParametersInfo: %s', str(e)
             )
 
         if win32gui.GetForegroundWindow() == hWindow:

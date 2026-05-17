@@ -9,14 +9,15 @@
 Show system information
 """
 
-import bleachbit
-
 import locale
 import os
 import platform
+import sqlite3
 import sys
 
 from win32com.shell import shell
+
+import bleachbit
 
 
 def get_system_information():
@@ -46,7 +47,6 @@ def get_system_information():
     except ImportError:
         pass
 
-    import sqlite3
     s += "\nSQLite version %s" % sqlite3.sqlite_version
 
     # this section is for variables defined in __init__.py

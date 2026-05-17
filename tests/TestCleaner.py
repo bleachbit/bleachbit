@@ -15,8 +15,9 @@ import shutil
 from xml.dom.minidom import parseString
 
 import bleachbit
-from bleachbit.Action import ActionProvider
+from bleachbit.Action import ActionProvider, Command
 from bleachbit.Cleaner import Cleaner, backends, create_simple_cleaner, register_cleaners
+from tests.TestWinapp import get_winapp2
 
 from tests import common
 
@@ -52,8 +53,6 @@ def register_all_cleaners():
     _patch_options_paths() changes the options directory during testing
     to a clean directory, so by default it will not have Winapp2.ini.
     """
-    from tests.TestWinapp import get_winapp2  # pylint: disable=import-outside-toplevel
-
     os.makedirs(bleachbit.personal_cleaners_dir, exist_ok=True)
     print("personal_cleaners_dir: %s" % bleachbit.personal_cleaners_dir)
     shutil.copyfile(
