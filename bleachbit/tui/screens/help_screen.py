@@ -66,6 +66,8 @@ class HelpScreen(ModalScreen):
   [bold]File List[/bold]
     Page Up    Scroll up
     Page Down  Scroll down
+    n          Next page of files
+    p          Previous page of files
     c          Copy file list to clipboard
     e          Export file list to /tmp/
     Escape     Close inline file list / clear filter

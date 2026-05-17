@@ -26,7 +26,11 @@ class FileListWidget(VerticalScroll):
         Binding("escape", "dismiss_inline", "Close", show=False),
         Binding("c", "copy_clipboard", "Copy to clipboard", show=False),
         Binding("e", "export_file", "Export to file", show=False),
+        Binding("n", "next_page", "Next page", show=False),
+        Binding("p", "prev_page", "Previous page", show=False),
     ]
+
+    PAGE_SIZE = 500
 
     def __init__(self, cleaner_name: str, option_name: str, file_count: int = 10000):
         super().__init__()
@@ -35,6 +39,7 @@ class FileListWidget(VerticalScroll):
         self.file_count = file_count
         self._files: list[tuple[str, int]] = []
         self._total_size = 0
+        self._current_page = 0
         self.can_focus = True
 
     def on_mount(self):
@@ -48,28 +53,49 @@ class FileListWidget(VerticalScroll):
         self._total_size = sum(size for _, size in self._files)
 
     def _render_files(self):
-        """Render the file list with paths and sizes from the backend."""
+        """Render the file list with paths and sizes, paginated."""
+        # Clear existing content
+        self.query("*").remove()
+
         if not self._files:
             self.mount(Static("[dim]No files found for this option.[/dim]"))
             return
 
         total_human = bytes_to_human(self._total_size)
+        total_pages = max(1, (len(self._files) + self.PAGE_SIZE - 1) // self.PAGE_SIZE)
+        start = self._current_page * self.PAGE_SIZE
+        end = min(start + self.PAGE_SIZE, len(self._files))
+        page_files = self._files[start:end]
+
         lines = [
             f"[bold]Files for {self.cleaner_name} -> {self.option_name}[/bold]",
-            f"[dim]{len(self._files)} files, {total_human}[/dim]",
+            f"[dim]{len(self._files)} files, {total_human}  "
+            f"| Page {self._current_page + 1}/{total_pages} "
+            f"({start + 1}-{end})[/dim]",
             "",
         ]
-        for path, size in self._files[:self.file_count]:
+        for path, size in page_files:
             size_str = bytes_to_human(size) if size else "0"
             lines.append(f"  {path}  ({size_str})")
 
-        if len(self._files) > self.file_count:
-            remaining = len(self._files) - self.file_count
-            lines.append(
-                f"  [dim]... and {remaining} more file(s)[/dim]"
-            )
+        if total_pages > 1:
+            lines.append("")
+            lines.append("[dim]n=next page  p=prev page  c=copy  e=export  esc=close[/dim]")
 
         self.mount(Static("\n".join(lines), markup=True))
+
+    def action_next_page(self):
+        """Go to next page of files."""
+        total_pages = max(1, (len(self._files) + self.PAGE_SIZE - 1) // self.PAGE_SIZE)
+        if self._current_page < total_pages - 1:
+            self._current_page += 1
+            self._render_files()
+
+    def action_prev_page(self):
+        """Go to previous page of files."""
+        if self._current_page > 0:
+            self._current_page -= 1
+            self._render_files()
 
     def get_all_text(self) -> str:
         """Return all file paths as plain text (for clipboard/export)."""
@@ -111,6 +137,8 @@ class FileListOverlay(ModalScreen):
         Binding("escape", "dismiss", "Close"),
         Binding("c", "copy_clipboard", "Copy to clipboard"),
         Binding("e", "export_file", "Export to file"),
+        Binding("n", "next_page", "Next page"),
+        Binding("p", "prev_page", "Previous page"),
     ]
 
     def __init__(self, cleaner_name: str, option_name: str):
@@ -151,3 +179,11 @@ class FileListOverlay(ModalScreen):
 
     async def action_dismiss(self, result=None):
         self.dismiss(result)
+
+    def action_next_page(self):
+        """Navigate to next page in overlay mode."""
+        self.query_one(FileListWidget).action_next_page()
+
+    def action_prev_page(self):
+        """Navigate to previous page in overlay mode."""
+        self.query_one(FileListWidget).action_prev_page()
