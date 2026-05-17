@@ -6,12 +6,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-05-11 08:56-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-16 22:17-0600\n"
 "PO-Revision-Date: 2026-05-14 15:11+0000\n"
 "Last-Translator: JimSpecter <mpairasd@protonmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/bleachbit/main/el/>"
-"\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/bleachbit/main/el/"
+">\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -82,10 +82,10 @@ msgstr "Διαγραφή ιστορικού χρήσης"
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
 #: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/teamviewer.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
-#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
+#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Logs"
 msgstr "Αρχεία καταγραφής"
 
@@ -94,10 +94,10 @@ msgstr "Αρχεία καταγραφής"
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
 #: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/teamviewer.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
-#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
+#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the logs"
 msgstr "Διαγραφή αρχείων καταγραφής"
 
@@ -184,7 +184,8 @@ msgstr ""
 
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
-#: ../cleaners/zoom.xml ../cleaners/skype.xml ../cleaners/discord.xml
+#: ../cleaners/zoom.xml ../cleaners/skype.xml ../cleaners/profanity.xml
+#: ../cleaners/discord.xml
 msgid "Chat client"
 msgstr "Εφαρμογή συνομιλίας (chat client)"
 
@@ -236,8 +237,8 @@ msgstr "Αναφορές κατάρρευσης"
 #: ../cleaners/chromium.xml ../cleaners/windows_defender.xml
 #: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/brave.xml ../cleaners/deepscan.xml ../cleaners/google_chrome.xml
-#: ../cleaners/transmission.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/vuze.xml ../cleaners/opera.xml
+#: ../cleaners/transmission.xml ../cleaners/profanity.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/vuze.xml ../cleaners/opera.xml
 msgid "Delete the files"
 msgstr "Διαγραφή των αρχείων"
 
@@ -819,6 +820,12 @@ msgstr "Διαγράψτε το αρχείο"
 msgid "Delete the list of game servers"
 msgstr "Διαγραφή της λίστας εξυπηρετητών των παιχνιδιών"
 
+#: ../cleaners/profanity.xml
+#, fuzzy
+#| msgid "Download failed"
+msgid "Downloaded files"
+msgstr "Η λήψη απέτυχε"
+
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
 msgstr "Λογισμικό απομακρυσμένου ελέγχου"
@@ -900,8 +907,8 @@ msgid ""
 "to abort the upgrade."
 msgstr ""
 "Το ${prodname} είναι ήδη εγκατεστημένο.\n"
-"Πατήστε «OK» για απεγκατάσταση της παλιάς έκδοσης πριν από την αναβάθμιση ή «"
-"Cancel» για ακύρωση της αναβάθμισης."
+"Πατήστε «OK» για απεγκατάσταση της παλιάς έκδοσης πριν από την αναβάθμιση ή "
+"«Cancel» για ακύρωση της αναβάθμισης."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
@@ -2325,7 +2332,8 @@ msgstr "Χρήση του backend απόδοσης κειμένου Fontconfig"
 #. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "May fix blurry or unreadable text. Requires restart."
-msgstr "Μπορεί να διορθώσει θολό ή μη αναγνώσιμο κείμενο. Απαιτεί επανεκκίνηση."
+msgstr ""
+"Μπορεί να διορθώσει θολό ή μη αναγνώσιμο κείμενο. Απαιτεί επανεκκίνηση."
 
 #. TRANSLATORS: Section title on the preferences general page,
 #. labelling options for OS integration and advanced/developer features.
@@ -2991,7 +2999,8 @@ msgstr ""
 #: ../bleachbit/Wipe.py
 #, python-format
 msgid "Wiping path %(pathname)s with file system type %(fstype)s"
-msgstr "Εκκαθάριση διαδρομής %(pathname)s με τύπο συστήματος αρχείων %(fstype)s"
+msgstr ""
+"Εκκαθάριση διαδρομής %(pathname)s με τύπο συστήματος αρχείων %(fstype)s"
 
 #: ../bleachbit/Wipe.py
 #, python-format
@@ -3018,8 +3027,8 @@ msgid ""
 "Wrote %(file_count)d files and %(total_bytes)d bytes in %(elapsed_sec)d "
 "seconds at %(rate_mbs).2f MB/s"
 msgstr ""
-"Εγγράφηκαν %(file_count)d αρχεία και %(total_bytes)d bytes σε %(elapsed_sec)"
-"d δευτερόλεπτα με ταχύτητα %(rate_mbs).2f MB/s"
+"Εγγράφηκαν %(file_count)d αρχεία και %(total_bytes)d bytes σε "
+"%(elapsed_sec)d δευτερόλεπτα με ταχύτητα %(rate_mbs).2f MB/s"
 
 #. TRANSLATORS: Debug message showing disk space available to regular (non-root) users.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
