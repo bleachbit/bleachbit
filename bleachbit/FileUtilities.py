@@ -41,7 +41,7 @@ import tempfile
 import time
 from ctypes import wintypes
 
-import psutil
+# do not import psutil here in case of ImportError, like on Windows XP SP3.
 import win32file
 from pywintypes import error as pywinerror
 
@@ -89,7 +89,8 @@ def get_filesystem_type(path):
     try:
         import psutil
     except ImportError:
-        logger.warning('To get the file system type from the given path, you need to install psutil package')
+        logger.warning(
+            'To get the file system type from the given path, you need to install psutil package')
         return ("unknown", "none")
 
     partitions = {
@@ -105,13 +106,12 @@ def get_filesystem_type(path):
         path = os.sep.join(splitpath[:i]) + os.sep
         if path in partitions:
             return partitions[path]
-            
+
         path = os.sep.join(splitpath[:i])
         if path in partitions:
             return partitions[path]
 
     return ("unknown", "none")
-
 
 
 def open_files_lsof(run_lsof=None):
@@ -528,7 +528,7 @@ def extended_path_undo(path):
 def free_space(pathname):
     """Return free space in bytes"""
     try:
-        return psutil.disk_usage(pathname).free
+        import psutil
     except ImportError:
         free_bytes = wintypes.ULARGE_INTEGER()
         ret = ctypes.windll.kernel32.GetDiskFreeSpaceExW(
@@ -539,6 +539,8 @@ def free_space(pathname):
         if 0 == ret:
             raise ctypes.WinError(ctypes.get_last_error())
         return free_bytes.value
+    else:
+        return psutil.disk_usage(pathname).free
 
 
 def getsize(path):
@@ -593,29 +595,32 @@ def globex(pathname, regex):
 
 def guess_overwrite_paths():
     """Guess which partitions to overwrite (to hide deleted files)"""
-    # In case overwriting leaves large files, placing them in
-    # ~/.config makes it easy to find them and clean them.
     ret = []
-    if 'posix' == os.name:
-        home = os.path.expanduser('~/.cache')
-        if not os.path.exists(home):
-            home = os.path.expanduser("~")
-        ret.append(home)
-        if not same_partition(home, '/tmp/'):
-            ret.append('/tmp')
-    elif 'nt' == os.name:
-        localtmp = os.path.expandvars('$TMP')
-        if not os.path.exists(localtmp):
-            logger.warning(_("The environment variable TMP refers to a directory that does not exist: %s"), localtmp)
-            localtmp = None
-        from bleachbit.Windows import get_fixed_drives
-        for drive in get_fixed_drives():
-            if localtmp and same_partition(localtmp, drive):
-                ret.append(localtmp)
-            else:
-                ret.append(drive)
-    else:
+    if not os.name == 'nt':
         raise NotImplementedError('Unsupported OS in guess_overwrite_paths')
+    localtmp = os.path.expandvars('$TMP')
+    if not os.path.exists(localtmp):
+        logger.warning(
+            _("The environment variable TMP refers to a directory that does not exist: %s"), localtmp)
+        localtmp = None
+    try:
+        from bleachbit.Windows import get_fixed_drives
+    except Exception:
+        logger.exception('get_fixed_drives() failed')
+        return [localtmp,]
+    for drive in get_fixed_drives():
+        try:
+            is_same_partition = same_partition(localtmp, drive)
+        except Exception:
+            logger.exception(
+                "Error in same_partition(%s, %s)", localtmp, drive)
+            continue
+        if localtmp and is_same_partition:
+            ret.append(localtmp)
+        else:
+            ret.append(drive)
+    if not ret and localtmp:
+        return localtmp
     return ret
 
 
