@@ -112,10 +112,13 @@ class CleanerTree(Tree):
                 self._option_errors[(c_id, o_id)] = 0
 
                 # Load option toggle from config.
-                # get_tree() returns False when absent, which is
-                # correct regardless of whether the key was never
-                # configured or explicitly set to False and removed.
-                o_enabled = options.get_tree(c_id, o_id)
+                # When the parent cleaner is disabled, children
+                # default to disabled regardless of stale individual
+                # config values.
+                if c_enabled:
+                    o_enabled = options.get_tree(c_id, o_id)
+                else:
+                    o_enabled = False
                 self._enabled[(c_id, o_id)] = o_enabled
                 if o_enabled:
                     any_child_enabled = True
