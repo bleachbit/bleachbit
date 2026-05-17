@@ -19,6 +19,7 @@ from bleachbit.tui.cleaner_tree import CleanerTree
 from bleachbit.tui.screens.file_list import FileListOverlay, FileListWidget
 from bleachbit.tui.screens.confirm import ConfirmScreen
 from bleachbit.tui.screens.help_screen import HelpScreen
+from bleachbit.tui.screens.preferences import PreferencesScreen
 from bleachbit.tui.backend import (
     get_cleaner_tree_data,
     load_cleaners,
@@ -136,6 +137,7 @@ class BleachBitTUI(App):
         Binding("o", "toggle_overwrite", "Overwrite", show=True),
         Binding("i", "toggle_file_mode", "File mode", show=True),
         Binding("slash", "start_filter", "Filter", show=True),
+        Binding("ctrl_p", "show_preferences", "Preferences", show=True),
         Binding("question_mark", "show_help", "Help", show=True),
         Binding("q", "quit", "Quit", show=True),
         Binding("escape", "handle_escape", "Back", show=False),
@@ -421,6 +423,10 @@ class BleachBitTUI(App):
     def action_show_help(self):
         """Show help overlay."""
         self.push_screen(HelpScreen())
+
+    def action_show_preferences(self):
+        """Show preferences modal."""
+        self.push_screen(PreferencesScreen())
 
     def action_start_filter(self):
         """Show filter input and focus it."""

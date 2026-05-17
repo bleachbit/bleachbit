@@ -74,6 +74,7 @@ class HelpScreen(ModalScreen):
 
   [bold]General[/bold]
     ?          This help
+    Ctrl+P     Preferences
     q          Quit"""
 
     def compose(self) -> ComposeResult:
