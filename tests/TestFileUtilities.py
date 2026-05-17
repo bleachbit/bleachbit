@@ -61,10 +61,10 @@ from tests import common
 import json
 import locale
 import os
-import sys
 import tempfile
 import time
 import unittest
+from unittest import mock
 
 
 def test_ini_helper(self, execute):
@@ -590,9 +590,63 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
     def test_guess_overwrite_paths(self):
         """Unit test for guess_overwrite_paths()"""
-        for path in guess_overwrite_paths():
+        paths = guess_overwrite_paths()
+        self.assertIsInstance(paths, list)
+        for path in paths:
             self.assertTrue(os.path.isdir(path),
                             '%s is not a directory' % path)
+
+    @mock.patch('bleachbit.FileUtilities.same_partition')
+    @mock.patch('bleachbit.Windows.get_fixed_drives')
+    def test_guess_overwrite_paths_partition_dedup(self, mock_drives, mock_same):
+        """Test at most one path per partition (tmp replaces its drive)"""
+        tmp = os.path.expandvars('$TMP')
+        mock_drives.return_value = ['C:\\', 'D:\\']
+        # C:\ is same partition as tmp, D:\ is different
+        mock_same.side_effect = [True, False]
+        paths = guess_overwrite_paths()
+        self.assertIsInstance(paths, list)
+        self.assertEqual(len(paths), 2)
+        self.assertIn(tmp, paths)
+        self.assertIn('D:\\', paths)
+        # C:\ should NOT appear because tmp is on that partition
+        self.assertNotIn('C:\\', paths)
+
+    @mock.patch('bleachbit.FileUtilities.same_partition')
+    @mock.patch('bleachbit.Windows.get_fixed_drives')
+    def test_guess_overwrite_paths_same_partition_error(self, mock_drives, mock_same):
+        """Test same_partition error skips the drive but keeps others"""
+        mock_drives.return_value = ['C:\\', 'D:\\']
+        mock_same.side_effect = [Exception('access denied'), False]
+        paths = guess_overwrite_paths()
+        self.assertIsInstance(paths, list)
+        self.assertEqual(len(paths), 1)
+        self.assertIn('D:\\', paths)
+        self.assertNotIn('C:\\', paths)
+
+    @mock.patch('bleachbit.Windows.get_fixed_drives')
+    def test_guess_overwrite_paths_no_tmp(self, mock_drives):
+        """Test when $TMP does not exist, drives are returned directly"""
+        mock_drives.return_value = ['C:\\', 'D:\\']
+        with mock.patch.dict(os.environ, {'TMP': 'C:\\nonexistent_path'}):
+            paths = guess_overwrite_paths()
+        self.assertIsInstance(paths, list)
+        self.assertIn('C:\\', paths)
+        self.assertIn('D:\\', paths)
+        # same_partition should never be called because localtmp is None
+        self.assertEqual(len(paths), 2)
+
+    @mock.patch('bleachbit.Windows.get_fixed_drives')
+    def test_guess_overwrite_paths_no_drives(self, mock_drives):
+        """Test fallback to tmp when no fixed drives are found"""
+        mock_drives.return_value = []
+        tmp = os.path.expandvars('$TMP')
+        paths = guess_overwrite_paths()
+        self.assertIsInstance(paths, list)
+        if tmp and os.path.exists(tmp):
+            self.assertEqual(paths, [tmp])
+        else:
+            self.assertEqual(paths, [])
 
     def test_human_to_bytes(self):
         """Unit test for human_to_bytes()"""

@@ -481,10 +481,18 @@ def globex(pathname, regex):
 
 
 def guess_overwrite_paths():
-    """Guess which partitions to overwrite (to hide deleted files)"""
+    """Guess which partitions to overwrite (to hide deleted files)
+
+    This returns at most one path per partition.
+
+    Minimally, this returns the user's temporary directory (if it
+    exists).
+
+    If there are eligible paths, this returns an empty list.
+    """
     ret = []
     localtmp = os.path.expandvars('$TMP')
-    if not os.path.exists(localtmp):
+    if localtmp and not os.path.exists(localtmp):
         logger.warning(
             _("The environment variable TMP refers to a directory that does not exist: %s"), localtmp)
         localtmp = None
@@ -492,20 +500,26 @@ def guess_overwrite_paths():
         from bleachbit.Windows import get_fixed_drives
     except Exception:
         logger.exception('get_fixed_drives() failed')
-        return [localtmp,]
+        if localtmp:
+            return [localtmp]
+        return []
     for drive in get_fixed_drives():
+        # $TMP is not defined, so no need to compare to drive.
+        if not localtmp:
+            ret.append(drive)
+            continue
         try:
             is_same_partition = same_partition(localtmp, drive)
         except Exception:
             logger.exception(
                 "Error in same_partition(%s, %s)", localtmp, drive)
             continue
-        if localtmp and is_same_partition:
+        if is_same_partition:
             ret.append(localtmp)
         else:
             ret.append(drive)
     if not ret and localtmp:
-        return localtmp
+        return [localtmp]
     return ret
 
 
@@ -597,13 +611,14 @@ def same_partition(dir1, dir2):
     """Are both directories on the same partition?"""
     try:
         return free_space(dir1) == free_space(dir2)
-    except pywinerror as e:
-        if 5 == e.winerror:
-            # Microsoft Office 2010 Starter Edition has a virtual
-            # drive that gives access denied
-            # https://bugs.launchpad.net/bleachbit/+bug/1372179
-            # https://bugs.launchpad.net/bleachbit/+bug/1474848
-            # https://github.com/az0/bleachbit/issues/27
+    except OSError as e:
+        # 5 = access denied: Microsoft Office 2010 Starter Edition has a
+        #     virtual drive that gives access denied.
+        #     https://bugs.launchpad.net/bleachbit/+bug/1372179
+        #     https://bugs.launchpad.net/bleachbit/+bug/1474848
+        #     https://github.com/az0/bleachbit/issues/27
+        # 1326 = logon failure: disconnected network drive.
+        if getattr(e, 'winerror', None) in (5, 1326):
             return dir1[0] == dir2[0]
         raise
 
