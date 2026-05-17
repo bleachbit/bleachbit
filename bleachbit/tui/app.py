@@ -11,7 +11,7 @@ Phase 2: Connected to real BleachBit backend.
 
 from textual.app import App, ComposeResult
 from textual.containers import Container, VerticalScroll
-from textual.widgets import Header, Footer, Static, ProgressBar
+from textual.widgets import Header, Footer, Static, ProgressBar, Input
 from textual.binding import Binding
 from textual import work
 
@@ -115,6 +115,17 @@ class BleachBitTUI(App):
     ProgressBar--hidden {
         display: none;
     }
+
+    #filter-input {
+        height: 1;
+        border: solid $accent;
+        margin: 0 0 0 0;
+        display: none;
+    }
+
+    #filter-input.visible {
+        display: block;
+    }
     """
 
     BINDINGS = [
@@ -124,8 +135,10 @@ class BleachBitTUI(App):
         Binding("D", "delete_focused", "Delete focused", show=True),
         Binding("o", "toggle_overwrite", "Overwrite", show=True),
         Binding("i", "toggle_file_mode", "File mode", show=True),
+        Binding("slash", "start_filter", "Filter", show=True),
         Binding("question_mark", "show_help", "Help", show=True),
         Binding("q", "quit", "Quit", show=True),
+        Binding("escape", "clear_filter", "Clear filter", show=False),
     ]
 
     def __init__(self):
@@ -140,6 +153,7 @@ class BleachBitTUI(App):
         yield Header(show_clock=True)
         yield Static("This is alpha-level software. Please use caution.", id="alpha-banner")
         yield Static("Status: idle", id="status-bar")
+        yield Input(placeholder="Filter cleaners/options...", id="filter-input")
         with Container(id="progress-container"):
             yield ProgressBar(total=1.0, show_eta=False, id="progress-bar", classes="ProgressBar--hidden")
             yield Static("", id="progress-label")
@@ -390,6 +404,33 @@ class BleachBitTUI(App):
     def action_show_help(self):
         """Show help overlay."""
         self.push_screen(HelpScreen())
+
+    def action_start_filter(self):
+        """Show filter input and focus it."""
+        filter_input = self.query_one("#filter-input", Input)
+        filter_input.add_class("visible")
+        filter_input.focus()
+        filter_input.value = ""
+
+    def action_clear_filter(self):
+        """Hide filter input and restore full tree."""
+        filter_input = self.query_one("#filter-input", Input)
+        filter_input.remove_class("visible")
+        filter_input.value = ""
+        tree = self.query_one(CleanerTree)
+        tree.clear_filter()
+        tree.focus()
+
+    def on_input_changed(self, event: Input.Changed):
+        """Handle filter input changes."""
+        if event.input.id == "filter-input":
+            tree = self.query_one(CleanerTree)
+            tree.filter_tree(event.value)
+
+    def on_input_submitted(self, event: Input.Submitted):
+        """Handle Enter in filter input — dismiss filter."""
+        if event.input.id == "filter-input":
+            self.action_clear_filter()
 
     async def action_quit(self):
         """Quit the application."""

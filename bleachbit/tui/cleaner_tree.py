@@ -61,6 +61,7 @@ class CleanerTree(Tree):
         self._option_nodes: dict[tuple[str, str], TreeNode] = {}  # (c_id, o_id) -> TreeNode
         self._option_errors: dict[tuple[str, str], int] = {}  # (c_id, o_id) -> error count
         self._option_sizes: dict[tuple[str, str], int] = {}  # (c_id, o_id) -> bytes
+        self._all_cleaner_data: list[tuple] = []  # stored for filter restore
         self.show_root = True
 
     def populate_tree(self, cleaner_data: list[tuple]):
@@ -72,6 +73,16 @@ class CleanerTree(Tree):
         Toggle states are loaded from persisted config via
         Options.options.get_tree().
         """
+        self._all_cleaner_data = cleaner_data
+        self._build_tree(cleaner_data)
+
+    def _build_tree(self, cleaner_data: list[tuple]):
+        """Internal: build tree nodes from cleaner data, preserving toggle state."""
+        # Preserve existing toggle/error/size state before clearing node maps
+        old_enabled = self._enabled.copy()
+        old_errors = self._option_errors.copy()
+        old_sizes = self._option_sizes.copy()
+
         self.root.remove_children()
         self._enabled.clear()
         self._cleaner_nodes.clear()
@@ -93,11 +104,12 @@ class CleanerTree(Tree):
             )
             self._cleaner_nodes[c_id] = cleaner_node
 
-            # Load cleaner toggle from config.
-            # get_tree() returns False when the key is absent (whether
-            # it was never configured or explicitly set to False and
-            # removed by set_tree), which is the correct default.
-            c_enabled = options.get_tree(c_id, None)
+            # Load cleaner toggle: prefer old in-memory state, fall back to config
+            old_c_enabled = old_enabled.get((c_id, None))
+            if old_c_enabled is not None:
+                c_enabled = old_c_enabled
+            else:
+                c_enabled = options.get_tree(c_id, None)
             self._enabled[(c_id, None)] = c_enabled
             self._update_cleaner_label(cleaner_node, c_id, c_name)
 
@@ -108,14 +120,15 @@ class CleanerTree(Tree):
                               "option_name": o_name}
                 )
                 self._option_nodes[(c_id, o_id)] = option_node
-                self._option_sizes[(c_id, o_id)] = 0
-                self._option_errors[(c_id, o_id)] = 0
+                # Restore old sizes/errors if available
+                self._option_sizes[(c_id, o_id)] = old_sizes.get((c_id, o_id), 0)
+                self._option_errors[(c_id, o_id)] = old_errors.get((c_id, o_id), 0)
 
-                # Load option toggle from config.
-                # When the parent cleaner is disabled, children
-                # default to disabled regardless of stale individual
-                # config values.
-                if c_enabled:
+                # Load option toggle: prefer old in-memory state, fall back to config
+                old_o_enabled = old_enabled.get((c_id, o_id))
+                if old_o_enabled is not None:
+                    o_enabled = old_o_enabled
+                elif c_enabled:
                     o_enabled = options.get_tree(c_id, o_id)
                 else:
                     o_enabled = False
@@ -130,6 +143,34 @@ class CleanerTree(Tree):
                 self._update_cleaner_label(cleaner_node, c_id, c_name)
 
         self.root.expand()
+
+    def filter_tree(self, query: str):
+        """Filter tree to show only cleaners/options matching *query* (case-insensitive)."""
+        if not query.strip():
+            self.clear_filter()
+            return
+
+        q = query.lower()
+        filtered = []
+        for c_id, c_name, opts in self._all_cleaner_data:
+            c_match = q in c_name.lower()
+            matching_opts = [
+                (o_id, o_name, desc)
+                for o_id, o_name, desc in opts
+                if q in o_name.lower() or q in o_id.lower()
+            ]
+            if c_match:
+                # Cleaner name matches: show all options
+                filtered.append((c_id, c_name, opts))
+            elif matching_opts:
+                # Only some options match: show cleaner with matching options
+                filtered.append((c_id, c_name, matching_opts))
+
+        self._build_tree(filtered)
+
+    def clear_filter(self):
+        """Restore the full unfiltered tree."""
+        self._build_tree(self._all_cleaner_data)
 
     def _update_cleaner_label(self, node: TreeNode, c_id: str, c_name: str):
         """Update a cleaner node's label with name and toggle state."""

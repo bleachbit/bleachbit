@@ -388,3 +388,74 @@ class CleanerTreeParentTogglePersistenceTestCase(unittest.TestCase):
             tree3._enabled.get(("google_chrome", "cookies"), True),
             "BUG: Cookies should remain disabled after reopen, but reverted to enabled"
         )
+
+
+class CleanerTreeFilterTestCase(unittest.TestCase):
+    """Test filter/search functionality on the cleaner tree."""
+
+    def _make_data(self):
+        return [
+            ("firefox", "Firefox", [
+                ("cache", "Cache", "Web cache"),
+                ("cookies", "Cookies", "Browser cookies"),
+            ]),
+            ("system", "System", [
+                ("tmp", "Temporary files", "Temp files"),
+            ]),
+            ("google_chrome", "Google Chrome", [
+                ("cache", "Cache", "Web cache"),
+                ("history", "History", "Browsing history"),
+            ]),
+        ]
+
+    def test_filter_by_cleaner_name(self):
+        """Filtering by cleaner name shows only that cleaner with all options."""
+        tree = CleanerTree()
+        tree.populate_tree(self._make_data())
+        tree.filter_tree("firefox")
+
+        self.assertIn("firefox", tree._cleaner_nodes)
+        self.assertNotIn("system", tree._cleaner_nodes)
+        self.assertNotIn("google_chrome", tree._cleaner_nodes)
+
+    def test_filter_by_option_name(self):
+        """Filtering by option name shows matching cleaners with only matching options."""
+        tree = CleanerTree()
+        tree.populate_tree(self._make_data())
+        tree.filter_tree("cache")
+
+        # Both Firefox and Chrome have "Cache" option
+        self.assertIn("firefox", tree._cleaner_nodes)
+        self.assertNotIn("system", tree._cleaner_nodes)
+        self.assertIn("google_chrome", tree._cleaner_nodes)
+        # Only "cache" option shown, not "cookies" or "history"
+        self.assertIn(("firefox", "cache"), tree._option_nodes)
+        self.assertNotIn(("firefox", "cookies"), tree._option_nodes)
+
+    def test_filter_no_match(self):
+        """Filtering with no match shows empty tree."""
+        tree = CleanerTree()
+        tree.populate_tree(self._make_data())
+        tree.filter_tree("zzz_nonexistent")
+
+        self.assertEqual(len(tree._cleaner_nodes), 0)
+
+    def test_clear_filter_restores_all(self):
+        """clear_filter should restore all cleaners and options."""
+        tree = CleanerTree()
+        tree.populate_tree(self._make_data())
+        tree.filter_tree("firefox")
+        tree.clear_filter()
+
+        self.assertIn("firefox", tree._cleaner_nodes)
+        self.assertIn("system", tree._cleaner_nodes)
+        self.assertIn("google_chrome", tree._cleaner_nodes)
+        self.assertIn(("firefox", "cookies"), tree._option_nodes)
+
+    def test_filter_preserves_toggle_state(self):
+        """Filtering should not reset toggle states."""
+        tree = CleanerTree()
+        tree.populate_tree(self._make_data())
+        tree._enabled[("firefox", "cache")] = True
+        tree.filter_tree("firefox")
+        self.assertTrue(tree._enabled.get(("firefox", "cache"), False))
