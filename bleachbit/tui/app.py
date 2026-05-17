@@ -112,7 +112,7 @@ class BleachBitTUI(App):
         color: $accent;
     }
 
-    ProgressBar--hidden {
+    ProgressBar.hidden {
         display: none;
     }
 
@@ -155,7 +155,7 @@ class BleachBitTUI(App):
         yield Static("Status: idle", id="status-bar")
         yield Input(placeholder="Filter cleaners/options...", id="filter-input")
         with Container(id="progress-container"):
-            yield ProgressBar(total=1.0, show_eta=False, id="progress-bar", classes="ProgressBar--hidden")
+            yield ProgressBar(total=1.0, show_eta=False, id="progress-bar", classes="hidden")
             yield Static("", id="progress-label")
         with Container(id="main-container"):
             yield CleanerTree()
@@ -208,12 +208,12 @@ class BleachBitTUI(App):
         if isinstance(status, (int, float)):
             fraction = float(status)
             bar.update(progress=fraction)
-            bar.remove_class("ProgressBar--hidden")
+            bar.remove_class("hidden")
             pct = int(fraction * 100)
             label.update(f"Progress: {pct}%")
         elif isinstance(status, str):
             bar.update(progress=None)  # indeterminate
-            bar.remove_class("ProgressBar--hidden")
+            bar.remove_class("hidden")
             label.update(status)
 
     def on_total_size_message(self, message: TotalSizeMessage):
@@ -230,7 +230,7 @@ class BleachBitTUI(App):
 
         bar = self.query_one("#progress-bar", ProgressBar)
         bar.update(progress=0.0)
-        bar.add_class("ProgressBar--hidden")
+        bar.add_class("hidden")
         self.query_one("#progress-label", Static).update("")
 
         tree = self.query_one(CleanerTree)
@@ -351,7 +351,7 @@ class BleachBitTUI(App):
             self.notify("No options enabled. Enable some first.", severity="warning")
             self._is_working = False
             bar = self.query_one("#progress-bar", ProgressBar)
-            bar.add_class("ProgressBar--hidden")
+            bar.add_class("hidden")
             self.query_one("#progress-label", Static).update("")
             return
 
@@ -365,7 +365,7 @@ class BleachBitTUI(App):
         # Reset progress bar for new operation
         bar = self.query_one("#progress-bar", ProgressBar)
         bar.update(progress=0.0)
-        bar.remove_class("ProgressBar--hidden")
+        bar.remove_class("hidden")
         self.query_one("#progress-label", Static).update("Starting...")
 
         operations = build_operations(enabled)
