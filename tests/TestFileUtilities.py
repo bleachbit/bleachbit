@@ -21,7 +21,9 @@ import tempfile
 import time
 import unittest
 from unittest import mock
+import warnings
 
+warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
 
 import win32api
 import win32con

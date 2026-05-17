@@ -15,6 +15,7 @@ import os
 import re
 import sys
 import platform
+import warnings
 
 from bleachbit import Log
 from configparser import RawConfigParser, NoOptionError # used in other files
@@ -36,7 +37,9 @@ if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
 else:
     stdout_encoding = sys.stdout.encoding
     if 'win32' == sys.platform:
-        win_unicode_console.enable()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            win_unicode_console.enable()
 
 if not hasattr(platform, 'linux_distribution'):
     from ._platform import _linux_distribution
