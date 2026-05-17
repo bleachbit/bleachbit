@@ -583,12 +583,11 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         mock_get_class_info.assert_called_once_with(
             wnd_class.hInstance, wnd_class.lpszClassName)
 
-    def test_splash_thread_propagates_startup_error(self):
-        """start() raises if splash initialization fails."""
+    def test_splash_thread_suppresses_startup_error(self):
+        """start() does not fail the GUI if splash initialization fails."""
         splash = SplashThread()
         with mock.patch.object(splash, '_show_splash_screen', side_effect=RuntimeError('boom')):
-            with self.assertRaises(RuntimeError):
-                splash.start()
+            splash.start()
         self.assertIsNotNone(splash._startup_error)
 
     def test_splash_thread_join_handles_missing_window(self):
@@ -599,6 +598,42 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         splash.start = lambda: None  # prevent thread start
         # Directly call join; should not raise even though handle is None
         splash.join(timeout=0)
+
+    def test_splash_thread_join_uses_send_message_timeout(self):
+        """join() closes the splash synchronously with a timeout."""
+        splash = SplashThread()
+        splash._splash_screen_handle = 1234
+        with mock.patch.object(splash, 'is_alive', return_value=True), \
+                mock.patch.object(splash, '_hide_window') as mock_hide, \
+                mock.patch('bleachbit.Windows.win32gui.IsWindow', return_value=True), \
+                mock.patch(
+                    'bleachbit.Windows.ctypes.windll.user32.SendMessageTimeoutW',
+                    return_value=1) as mock_send, \
+                mock.patch('bleachbit.Windows.win32gui.PostMessage') as mock_post, \
+                mock.patch('bleachbit.Windows.Thread.join') as mock_thread_join:
+            splash.join(timeout=0)
+
+        mock_send.assert_called_once()
+        mock_hide.assert_called_once_with(1234)
+        mock_post.assert_not_called()
+        mock_thread_join.assert_called_once_with(splash, timeout=0)
+
+    def test_splash_thread_join_falls_back_after_send_failure(self):
+        """join() falls back to PostMessage if synchronous close fails."""
+        splash = SplashThread()
+        splash._splash_screen_handle = 1234
+        with mock.patch.object(splash, 'is_alive', return_value=True), \
+                mock.patch.object(splash, '_hide_window'), \
+                mock.patch('bleachbit.Windows.win32gui.IsWindow', return_value=True), \
+                mock.patch(
+                    'bleachbit.Windows.ctypes.windll.user32.SendMessageTimeoutW',
+                    side_effect=RuntimeError('boom')), \
+                mock.patch('bleachbit.Windows.win32gui.PostMessage') as mock_post, \
+                mock.patch('bleachbit.Windows.Thread.join'):
+            splash.join(timeout=0)
+
+        mock_post.assert_called_once_with(
+            1234, Windows.win32con.WM_CLOSE, 0, 0)
 
     def test_get_splash_screen_delay_seconds_default(self):
         with mock.patch.dict(os.environ, {}, clear=False):

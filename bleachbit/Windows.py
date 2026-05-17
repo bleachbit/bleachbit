@@ -90,6 +90,7 @@ IO_REPARSE_TAG_MOUNT_POINT = 0xA0000003
 FILE_ATTRIBUTE_REPARSE_POINT = 0x400
 
 SPLASH_ICON_SIZE_PX = 256  # 256x256 pixels
+SPLASH_CLOSE_TIMEOUT_MS = 1000
 
 WINDOWS_SYSTEM_VAR = 'WindowsSystem'
 
@@ -1245,14 +1246,24 @@ class SplashThread(Thread):
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs={}, Verbose=None):
         super().__init__(group, self._show_splash_screen, name, args, kwargs)
+        self.daemon = True
         self._splash_screen_started = Event()
+        self._splash_screen_closed = Event()
         self._splash_screen_handle = None
         self._splash_screen_height = None
         self._splash_screen_width = None
         self._startup_error = None
+        self._thread_id = None
 
     def start(self):
-        Thread.start(self)
+        if self.ident is not None:
+            logger.debug('SplashThread was already started')
+            return
+        try:
+            Thread.start(self)
+        except RuntimeError:
+            logger.debug('SplashThread could not be started', exc_info=True)
+            return
         started = self._splash_screen_started.wait(timeout=10)
         if not started:
             logger.warning('SplashThread did not start within timeout')
@@ -1260,10 +1271,11 @@ class SplashThread(Thread):
             logger.debug('SplashThread started')
 
         if self._startup_error:
-            raise self._startup_error
+            logger.debug('Splash screen disabled due to startup error')
 
     def run(self):
         try:
+            self._thread_id = win32api.GetCurrentThreadId()
             self._splash_screen_handle = self._show_splash_screen()
         except Exception as exc:
             self._startup_error = exc
@@ -1272,27 +1284,109 @@ class SplashThread(Thread):
             self._splash_screen_started.set()
 
         if self._startup_error:
+            self._splash_screen_closed.set()
             return
 
         # Dispatch messages
-        win32gui.PumpMessages()
+        try:
+            win32gui.PumpMessages()
+        except Exception:
+            logger.exception('SplashThread message pump failed')
+        finally:
+            self._splash_screen_handle = None
+            self._splash_screen_closed.set()
 
     def join(self, timeout=None):
-        import win32con
-        import win32gui
+        self.close(timeout)
+
+    def close(self, timeout=None):
         if not self.is_alive():
-            return
-        if not self._splash_screen_handle:
-            Thread.join(self, timeout=timeout)
             return
         splash_delay = get_splash_screen_delay_seconds()
         if splash_delay > 0:
             logger.debug(
                 'Delaying splash screen close by %s seconds', splash_delay)
             time.sleep(splash_delay)
-        win32gui.PostMessage(self._splash_screen_handle,
-                             win32con.WM_CLOSE, 0, 0)
+        self._request_close()
         Thread.join(self, timeout=timeout)
+
+    def _request_close(self):
+        """Ask the splash window to close without risking a GUI crash."""
+        if not self._splash_screen_handle:
+            self._post_quit_message()
+            return
+
+        hWindow = self._splash_screen_handle
+        try:
+            if not win32gui.IsWindow(hWindow):
+                self._splash_screen_handle = None
+                self._post_quit_message()
+                return
+        except Exception:
+            logger.debug('Could not verify splash screen window', exc_info=True)
+
+        self._hide_window(hWindow)
+        if self._send_close_message(hWindow):
+            return
+
+        try:
+            win32gui.PostMessage(hWindow, win32con.WM_CLOSE, 0, 0)
+        except Exception:
+            logger.debug('Failed to post close message to splash screen',
+                         exc_info=True)
+            self._post_quit_message()
+
+    def _hide_window(self, hWindow):
+        """Hide the splash window before closing it."""
+        try:
+            show_window_async = ctypes.windll.user32.ShowWindowAsync
+            show_window_async.argtypes = [wintypes.HWND, ctypes.c_int]
+            show_window_async.restype = wintypes.BOOL
+            show_window_async(wintypes.HWND(hWindow), win32con.SW_HIDE)
+        except Exception:
+            logger.debug('Failed to hide splash screen', exc_info=True)
+
+    def _send_close_message(self, hWindow):
+        """Synchronously close the splash window with a timeout."""
+        flags = getattr(win32con, 'SMTO_ABORTIFHUNG', 0x0002)
+        try:
+            send_message_timeout_w = ctypes.windll.user32.SendMessageTimeoutW
+            send_message_timeout_w.argtypes = [
+                wintypes.HWND,
+                wintypes.UINT,
+                wintypes.WPARAM,
+                wintypes.LPARAM,
+                wintypes.UINT,
+                wintypes.UINT,
+                ctypes.POINTER(ctypes.c_void_p),
+            ]
+            send_message_timeout_w.restype = wintypes.LPARAM
+            message_result = ctypes.c_void_p()
+            result = send_message_timeout_w(
+                wintypes.HWND(hWindow), win32con.WM_CLOSE, 0, 0, flags,
+                SPLASH_CLOSE_TIMEOUT_MS, ctypes.byref(message_result))
+            if result:
+                return True
+            logger.debug('SendMessageTimeoutW failed: %s',
+                         ctypes.get_last_error())
+        except Exception:
+            logger.debug('Failed to send close message with ctypes',
+                         exc_info=True)
+
+        return False
+
+    def _post_quit_message(self):
+        """Exit the splash message pump when the window cannot be addressed."""
+        if self._thread_id is None:
+            return
+        post_thread_message = getattr(win32api, 'PostThreadMessage', None)
+        if post_thread_message is None:
+            return
+        try:
+            post_thread_message(self._thread_id, win32con.WM_QUIT, 0, 0)
+        except Exception:
+            logger.debug('Failed to post quit message to splash thread',
+                         exc_info=True)
 
     def get_icon_path(self):
         """Return the full path to icon file"""
@@ -1434,6 +1528,13 @@ class SplashThread(Thread):
             except Exception:
                 pass
 
+    def _safe_render_splash(self, hWnd):
+        """Render the splash screen without letting paint failures escape."""
+        try:
+            self._render_splash(hWnd)
+        except Exception:
+            logger.exception('Failed to render splash screen')
+
     def _register_window_class(self, wndClass):
         """Register splash screen window class, handling reuse."""
         cached_atom = self.__class__._class_atom
@@ -1491,25 +1592,47 @@ class SplashThread(Thread):
         windowPosX, windowPosY, self._splash_screen_width, self._splash_screen_height = self.calculate_window_position(
             displayWidth, displayHeight)
 
-        hWindow = win32gui.CreateWindowEx(
-            win32con.WS_EX_LAYERED | win32con.WS_EX_TOOLWINDOW | win32con.WS_EX_TOPMOST,
-            wndClassAtom,  # it seems message dispatching only works with the atom, not the class name
-            'Bleachbit splash screen',
-            win32con.WS_POPUP |
-            win32con.WS_VISIBLE,
-            windowPosX,
-            windowPosY,
-            self._splash_screen_width,
-            self._splash_screen_height,
-            0,
-            0,
-            hInstance,
-            None)
+        hWindow = None
+        try:
+            hWindow = win32gui.CreateWindowEx(
+                win32con.WS_EX_LAYERED | win32con.WS_EX_TOOLWINDOW | win32con.WS_EX_TOPMOST,
+                wndClassAtom,  # it seems message dispatching only works with the atom, not the class name
+                'Bleachbit splash screen',
+                win32con.WS_POPUP |
+                win32con.WS_VISIBLE,
+                windowPosX,
+                windowPosY,
+                self._splash_screen_width,
+                self._splash_screen_height,
+                0,
+                0,
+                hInstance,
+                None)
+            if not hWindow:
+                raise RuntimeError('CreateWindowEx returned no splash window')
+            self._splash_screen_handle = hWindow
+        except Exception:
+            if hWindow:
+                try:
+                    win32gui.DestroyWindow(hWindow)
+                except Exception:
+                    logger.debug('Failed to destroy incomplete splash window',
+                                 exc_info=True)
+            raise
 
-        win32gui.UpdateWindow(hWindow)
-        self._render_splash(hWindow)
+        try:
+            win32gui.UpdateWindow(hWindow)
+        except Exception:
+            logger.debug('Failed to update splash screen window',
+                         exc_info=True)
+        self._safe_render_splash(hWindow)
 
-        is_splash_screen_on_top = self._force_set_foreground_window(hWindow)
+        try:
+            is_splash_screen_on_top = self._force_set_foreground_window(
+                hWindow)
+        except Exception:
+            logger.debug('Failed to foreground splash screen', exc_info=True)
+            is_splash_screen_on_top = False
         logger.debug(
             'Is splash screen on top: {}'.format(is_splash_screen_on_top)
         )
@@ -1602,7 +1725,7 @@ class SplashThread(Thread):
         """Window procedure for handling messages"""
 
         if message == win32con.WM_CREATE:
-            self._render_splash(hWnd)
+            self._safe_render_splash(hWnd)
             return 0
 
         if message == win32con.WM_ERASEBKGND:
@@ -1611,12 +1734,24 @@ class SplashThread(Thread):
         if message == win32con.WM_PAINT:
             hDC, paintStruct = win32gui.BeginPaint(hWnd)
             try:
-                self._render_splash(hWnd)
+                self._safe_render_splash(hWnd)
             finally:
                 win32gui.EndPaint(hWnd, paintStruct)
             return 0
 
+        elif message == win32con.WM_CLOSE:
+            try:
+                win32gui.DestroyWindow(hWnd)
+                return 0
+            except Exception:
+                logger.debug('Failed to destroy splash screen window',
+                             exc_info=True)
+                return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
+
         elif message == win32con.WM_DESTROY:
+            if hWnd == self._splash_screen_handle:
+                self._splash_screen_handle = None
+            self._splash_screen_closed.set()
             win32gui.PostQuitMessage(0)
             return 0
 
@@ -1625,3 +1760,4 @@ class SplashThread(Thread):
 
 
 splash_thread = SplashThread()
+atexit.register(splash_thread.close)
