@@ -1,23 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Actions that perform cleaning
@@ -30,8 +15,6 @@ import glob
 import logging
 import os
 import re
-if 'posix' == os.name:
-    from bleachbit import Unix
 
 
 logger = logging.getLogger(__name__)
@@ -159,7 +142,7 @@ class FileActionProvider(ActionProvider):
         # expand special $$foo$$ which may give multiple values
         for path2 in expand_multi_var(raw_path, path_vars):
             path3 = os.path.expanduser(os.path.expandvars(path2))
-            if os.name == 'nt' and path3:
+            if path3:
                 # convert forward slash to backslash for compatibility with getsize()
                 # and for display.  Do not convert an empty path, or it will become
                 # the current directory (.).
@@ -322,54 +305,6 @@ class FileActionProvider(ActionProvider):
 #
 
 
-class AptAutoclean(ActionProvider):
-
-    """Action to run 'apt-get autoclean'"""
-    action_key = 'apt.autoclean'
-
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
-
-    def get_commands(self):
-        # Checking executable allows auto-hide to work for non-APT systems
-        if FileUtilities.exe_exists('apt-get'):
-            yield Command.Function(None,
-                                   Unix.apt_autoclean,
-                                   'apt-get autoclean')
-
-
-class AptAutoremove(ActionProvider):
-
-    """Action to run 'apt-get autoremove'"""
-    action_key = 'apt.autoremove'
-
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
-
-    def get_commands(self):
-        # Checking executable allows auto-hide to work for non-APT systems
-        if FileUtilities.exe_exists('apt-get'):
-            yield Command.Function(None,
-                                   Unix.apt_autoremove,
-                                   'apt-get autoremove')
-
-
-class AptClean(ActionProvider):
-
-    """Action to run 'apt-get clean'"""
-    action_key = 'apt.clean'
-
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
-
-    def get_commands(self):
-        # Checking executable allows auto-hide to work for non-APT systems
-        if FileUtilities.exe_exists('apt-get'):
-            yield Command.Function(None,
-                                   Unix.apt_clean,
-                                   'apt-get clean')
-
-
 class ChromeAutofill(FileActionProvider):
 
     """Action to clean 'autofill' table in Google Chrome/Chromium"""
@@ -460,18 +395,6 @@ class Ini(FileActionProvider):
     def get_commands(self):
         for path in self.get_paths():
             yield Command.Ini(path, self.section, self.parameter)
-
-
-class Journald(ActionProvider):
-    """Action to run 'journalctl --vacuum-time=1'"""
-    action_key = 'journald.clean'
-
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
-
-    def get_commands(self):
-        if FileUtilities.exe_exists('journalctl'):
-            yield Command.Function(None, Unix.journald_clean, 'journalctl --vacuum-time=1')
 
 
 class Json(FileActionProvider):
@@ -624,60 +547,3 @@ class Winreg(ActionProvider):
 
     def get_commands(self):
         yield Command.Winreg(self.keyname, self.name, self.excludekeys)
-
-
-class YumCleanAll(ActionProvider):
-
-    """Action to run 'yum clean all'"""
-    action_key = 'yum.clean_all'
-
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
-
-    def get_commands(self):
-        # Checking allows auto-hide to work for non-APT systems
-        if not FileUtilities.exe_exists('yum'):
-            return
-
-        yield Command.Function(
-            None,
-            Unix.yum_clean,
-            'yum clean all')
-
-
-class DnfCleanAll(ActionProvider):
-
-    """Action to run 'dnf clean all'"""
-    action_key = 'dnf.clean_all'
-
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
-
-    def get_commands(self):
-        # Checking allows auto-hide to work for non-APT systems
-        if not FileUtilities.exe_exists('dnf'):
-            return
-
-        yield Command.Function(
-            None,
-            Unix.dnf_clean,
-            'dnf clean all')
-
-
-class DnfAutoremove(ActionProvider):
-
-    """Action to run 'dnf autoremove'"""
-    action_key = 'dnf.autoremove'
-
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
-
-    def get_commands(self):
-        # Checking allows auto-hide to work for non-APT systems
-        if not FileUtilities.exe_exists('dnf'):
-            return
-
-        yield Command.Function(
-            None,
-            Unix.dnf_autoremove,
-            'dnf autoremove')

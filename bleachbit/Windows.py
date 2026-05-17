@@ -31,28 +31,26 @@ import logging
 import os
 import sys
 from threading import Event, Thread
+import winreg
 import xml.dom.minidom
+
+import pywintypes
+import win32api
+import win32con
+import win32file
+import win32gui
+import win32process
+import win32security
+import win32service
+import win32serviceutil
+from ctypes import windll
+from win32com.shell import shell, shellcon
 
 import bleachbit
 from bleachbit import _, Command, FileUtilities
 
-if 'win32' == sys.platform:
-    import winreg
-    import pywintypes
-    import win32api
-    import win32con
-    import win32file
-    import win32gui
-    import win32process
-    import win32security
-    import win32service
-    import win32serviceutil
-
-    from ctypes import windll, byref
-    from win32com.shell import shell, shellcon
-
-    psapi = windll.psapi
-    kernel = windll.kernel32
+psapi = windll.psapi
+kernel = windll.kernel32
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +64,6 @@ def browse_file(_, title):
                                         | win32con.OFN_HIDEREADONLY,
                                         Title=title)
     except pywintypes.error as e:
-        logger = logging.getLogger(__name__)
         if 0 == e.winerror:
             logger.debug('browse_file(): user cancelled')
         else:

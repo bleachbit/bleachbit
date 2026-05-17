@@ -67,11 +67,10 @@ import unittest
 import mock
 from decimal import Decimal
 
-if 'win32' == sys.platform:
-    import pywintypes
-    import win32api
-    import winreg
-    from win32com.shell import shell
+import pywintypes
+import win32api
+import winreg
+from win32com.shell import shell
 
 
 def put_files_into_recycle_bin():
@@ -89,7 +88,6 @@ def put_files_into_recycle_bin():
     move_to_recycle_bin(dirname)
 
 
-@common.skipUnlessWindows
 class WindowsTestCase(common.BleachbitTestCase):
 
     """Test case for module Windows"""

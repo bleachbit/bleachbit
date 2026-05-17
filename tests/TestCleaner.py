@@ -1,23 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# coding=utf-8
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test case for module Cleaner
@@ -67,15 +52,14 @@ def register_all_cleaners():
     _patch_options_paths() changes the options directory during testing
     to a clean directory, so by default it will not have Winapp2.ini.
     """
-    if os.name == 'nt':
-        from tests.TestWinapp import get_winapp2  # pylint: disable=import-outside-toplevel
+    from tests.TestWinapp import get_winapp2  # pylint: disable=import-outside-toplevel
 
-        os.makedirs(bleachbit.personal_cleaners_dir, exist_ok=True)
-        print("personal_cleaners_dir: %s" % bleachbit.personal_cleaners_dir)
-        shutil.copyfile(
-            get_winapp2(),
-                os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini'),
-            )
+    os.makedirs(bleachbit.personal_cleaners_dir, exist_ok=True)
+    print("personal_cleaners_dir: %s" % bleachbit.personal_cleaners_dir)
+    shutil.copyfile(
+        get_winapp2(),
+            os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini'),
+        )
     if not backends:
         list(register_cleaners())
     assert len(backends) > 1
@@ -85,22 +69,11 @@ class CleanerTestCase(common.BleachbitTestCase):
 
     def test_add_action(self):
         """Unit test for Cleaner.add_action()"""
-        self.actions = []
-        if 'nt' == os.name:
-            self.actions += [
-                '<action command="delete" search="file" path="$WINDIR\\explorer.exe"/>',
-                '<action command="delete" search="glob" path="$WINDIR\\system32\\*.dll"/>',
-                '<action command="delete" search="walk.files" path="$WINDIR\\system32\\"/>',
-                '<action command="delete" search="walk.all" path="$WINDIR\\system32\\"/>']
-        elif 'posix' == os.name:
-            print(__file__)
-            self.actions += [
-                '<action command="delete" search="file" path="%s"/>' % __file__,
-                '<action command="delete" search="glob" path="/bin/*sh"/>',
-                '<action command="delete" search="walk.files" path="/bin/"/>',
-                '<action command="delete" search="walk.all" path="/var/log/"/>']
-        else:
-            raise AssertionError('Unknown OS.')
+        self.actions = [
+            '<action command="delete" search="file" path="$WINDIR\\explorer.exe"/>',
+            '<action command="delete" search="glob" path="$WINDIR\\system32\\*.dll"/>',
+            '<action command="delete" search="walk.files" path="$WINDIR\\system32\\"/>',
+            '<action command="delete" search="walk.all" path="$WINDIR\\system32\\"/>']
         self.assertGreater(len(self.actions), 0)
 
         for action_str in self.actions:
@@ -204,21 +177,6 @@ class CleanerTestCase(common.BleachbitTestCase):
                         if result != True:
                             break
                         common.validate_result(self, result)
-        # make sure trash and tmp don't return the same results
-        if 'nt' == os.name:
-            return
-
-        def get_files(option_id):
-            ret = []
-            register_all_cleaners()
-            for cmd in backends['system'].get_commands(option_id):
-                result = next(cmd.execute(False))
-                ret.append(result['path'])
-            return ret
-        trash_paths = get_files('trash')
-        tmp_paths = get_files('tmp')
-        for tmp_path in tmp_paths:
-            self.assertNotIn(tmp_path, trash_paths)
 
     def test_no_files_exist(self):
         """Verify only existing files are returned"""
@@ -253,69 +211,3 @@ class CleanerTestCase(common.BleachbitTestCase):
         register_all_cleaners()
         backends.clear()
         register_all_cleaners()
-
-    @common.skipIfWindows # FIXME later: reevaluate
-    @common.skipUnlessDestructive
-    def test_system_recent_documents(self):
-        """Clean recent documents in GTK"""
-        import Gtk
-        mgr = Gtk.RecentManager().get_default()
-        fn = self.mkstemp(suffix='.txt')
-        self.assertExists(fn)
-        from gi.repository import Gio, GLib
-        uri = Gio.File.new_for_path(fn).get_uri()
-        self.assertTrue(mgr.add_item(uri))
-        GLib.idle_add(Gtk.main_quit)
-        Gtk.main()  # process the addition
-        GLib.idle_add(Gtk.main_quit)
-        self.assertGreater(len(mgr.get_items()), 0)
-        self.assertTrue(mgr.has_item(uri))
-
-        register_all_cleaners()
-        for cmd in backends['system'].get_commands('recent_documents'):
-            for result in cmd.execute(really_delete=True):
-                common.validate_result(self, result, True)
-
-        self.assertEqual(len(mgr.get_items()), 0)
-
-    @common.skipIfWindows
-    def test_whitelist(self):
-        tests = [
-            ('/tmp/.truecrypt_aux_mnt1/control', True),
-            ('/tmp/.truecrypt_aux_mnt1/volume', True),
-            ('/tmp/.vbox-foo-ipc/lock', True),
-            ('/tmp/.wine-500/server-806-102400f/lock', True),
-            ('/tmp/gconfd-foo/lock/ior', True),
-            ('/tmp/ksocket-foo/Arts_SoundServerV2', True),
-            ('/tmp/ksocket-foo/secret-cookie', True),
-            ('/tmp/orbit-foo/bonobo-activation-server-ior', True),
-            ('/tmp/orbit-foo/bonobo-activation-register.lock', True),
-            ('/tmp/orbit-foo/bonobo-activation-server-a9cd6cc4973af098918b154c4957a93f-ior',
-             True),
-            ('/tmp/orbit-foo/bonobo-activation-register-a9cd6cc4973af098918b154c4957a93f.lock',
-             True),
-            ('/tmp/pulse-foo/pid', True),
-            ('/tmp/tmpsDOBFd', False),
-            (os.path.expanduser('~/.cache/obexd'), True),
-            (os.path.expanduser('~/.cache/obexd/'), True),
-            (os.path.expanduser('~/.cache/obexd/foo'), True),
-            (os.path.expanduser('~/.cache/obex'), False),
-            (os.path.expanduser('~/.cache/obexd-foo'), False)
-        ]
-        register_all_cleaners()
-        for test in tests:
-            self.assertEqual(
-                backends['system'].whitelisted(test[0]), test[1], test[0])
-        # Make sure directory ~/.cache/obexd is ignored
-        # https://github.com/bleachbit/bleachbit/issues/572
-        obexd_dir = os.path.expanduser('~/.cache/obexd')
-        if not os.path.exists(obexd_dir):
-            os.makedirs(obexd_dir)
-        obexd_fn = os.path.join(obexd_dir, 'bleachbit-test')
-        common.touch_file(obexd_fn)
-        for cmd in backends['system'].get_commands('cache'):
-            for _result in cmd.execute(really_delete=False):
-                self.assertNotEqual(cmd.path, obexd_fn)
-                self.assertFalse('/.cache/obexd/' in cmd.path)
-        from bleachbit.FileUtilities import delete
-        delete(obexd_fn, ignore_missing=True)

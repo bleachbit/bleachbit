@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# coding=utf-8
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -98,7 +84,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
     """Test cases for Action"""
 
-    _TEST_PROCESS_CMDS = {'nt': 'cmd.exe /c dir', 'posix': 'dir'}
+    _TEST_PROCESS_CMDS = {'nt': 'cmd.exe /c dir'}
     _TEST_PROCESS_SIMPLE = '<action command="process" cmd="%s" />'
 
     def _test_action_str(self, action_str, expect_exists=True):
@@ -145,14 +131,11 @@ class ActionTestCase(common.BleachbitTestCase):
     def test_delete(self):
         """Unit test for class Delete"""
         paths = ['~']
-        if 'nt' == os.name:
-            # Python 2.6 and later supports %foo%
-            paths.append('%USERPROFILE%')
-            # Python 2.5 and later supports $foo
-            paths.append('${USERPROFILE}')
-            paths.append('$USERPROFILE')
-        elif 'posix' == os.name:
-            paths.append('$HOME')
+        # Python 2.6 and later supports %foo%
+        paths.append('%USERPROFILE%')
+        # Python 2.5 and later supports $foo
+        paths.append('${USERPROFILE}')
+        paths.append('$USERPROFILE')
         for path in paths:
             for mode in ('delete', 'truncate', 'delete_forward'):
                 expanded = os.path.expanduser(os.path.expandvars(path))
@@ -161,13 +144,8 @@ class ActionTestCase(common.BleachbitTestCase):
                 command = mode
                 if 'delete_forward' == mode:
                     # forward slash needs to be normalized on Windows
-                    if 'nt' == os.name:
-                        command = 'delete'
-                        filename = filename.replace('\\', '/')
-                    else:
-                        # test not needed on this OS
-                        os.remove(filename)
-                        continue
+                    command = 'delete'
+                    filename = filename.replace('\\', '/')
                 action_str = '<action command="%s" search="file" path="%s" />' % \
                     (command, filename)
                 self._test_action_str(action_str)
@@ -311,11 +289,8 @@ class ActionTestCase(common.BleachbitTestCase):
         # On Windows should be case insensitive
         action_str = '<action command="delete" search="glob" path="/tmp/foo*" regex="^FOO2$"/>'
         results = _action_str_to_results(action_str)
-        if 'nt' == os.name:
-            self.assertEqual(len(results), 1)
-            self.assertEqual(results[0]['path'], '/tmp/foo2')
-        else:
-            self.assertEqual(len(results), 0)
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]['path'], '/tmp/foo2')
 
         # should match second file using negative regex
         action_str = '<action command="delete" search="glob" path="/tmp/foo*" nregex="^(foo1|bar1)$"/>'
@@ -460,7 +435,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_walk_files(self):
         """Unit test for walk.files"""
-        paths = {'posix': '/var', 'nt': r'$WINDIR\system32'}
+        paths = {'nt': r'$WINDIR\system32'}
 
         action_str = '<action command="delete" search="walk.files" path="%s" />' % paths[os.name]
         results = 0

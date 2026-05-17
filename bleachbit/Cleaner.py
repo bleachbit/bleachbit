@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Perform (or assist with) cleaning operations.
@@ -24,17 +11,13 @@ Perform (or assist with) cleaning operations.
 import glob
 import logging
 import os.path
-import re
-import sys
+import warnings
 
-from bleachbit import _
+from bleachbit import _, Command, FileUtilities, Special, Windows
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
-from bleachbit import Command, FileUtilities, Memory, Special
-
 
 # Suppress GTK warning messages while running in CLI #34
-import warnings
 warnings.simplefilter("ignore", Warning)
 try:
     from bleachbit.GuiBasic import Gtk, Gdk
@@ -44,12 +27,6 @@ except (ImportError, RuntimeError, ValueError):
     # RuntimeError can happen when X is not available (e.g., cron, ssh).
     # ValueError seen on BleachBit 3.0 with GTK 3 (GitHub issue 685)
     HAVE_GTK = False
-
-
-if 'posix' == os.name:
-    from bleachbit import Unix
-elif 'nt' == os.name:
-    from bleachbit import Windows
 
 
 # a module-level variable for holding cleaners
@@ -68,7 +45,6 @@ class Cleaner:
         self.options = {}
         self.running = []
         self.warnings = {}
-        self.regexes_compiled = []
 
     def add_action(self, option_id, action):
         """Register 'action' (instance of class Action) to be executed
@@ -156,8 +132,7 @@ class Cleaner:
             test = running[0]
             pathname = running[1]
             if 'exe' == test:
-                if ('posix' == os.name and Unix.is_running(pathname)) or \
-                   ('nt' == os.name and Windows.is_process_running(pathname)):
+                if Windows.is_process_running(pathname):
                     logger.debug("process '%s' is running", pathname)
                     return True
             elif 'pathname' == test:
@@ -196,13 +171,8 @@ class OpenOfficeOrg(Cleaner):
         self.description = _("Office suite")
 
         # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
-        if 'posix' == os.name:
-            self.prefixes = ["~/.ooo-2.0", "~/.openoffice.org2",
-                             "~/.openoffice.org2.0", "~/.openoffice.org/3",
-                             "~/.ooo-dev3"]
-        if 'nt' == os.name:
-            self.prefixes = [
-                "$APPDATA\\OpenOffice.org\\3", "$APPDATA\\OpenOffice.org2"]
+        self.prefixes = [
+            "$APPDATA\\OpenOffice.org\\3", "$APPDATA\\OpenOffice.org2"]
 
     def get_commands(self, option_id):
         # paths for which to run expand_glob_join
@@ -219,8 +189,7 @@ class OpenOfficeOrg(Cleaner):
         for egj_ in egj:
             for prefix in self.prefixes:
                 for path in FileUtilities.expand_glob_join(prefix, egj_):
-                    if 'nt' == os.name:
-                        path = os.path.normpath(path)
+                    path = os.path.normpath(path)
                     if os.path.lexists(path):
                         yield Command.Delete(path)
 
@@ -230,8 +199,7 @@ class OpenOfficeOrg(Cleaner):
                 dirs += FileUtilities.expand_glob_join(
                     prefix, "user/registry/cache/")
             for dirname in dirs:
-                if 'nt' == os.name:
-                    dirname = os.path.normpath(dirname)
+                dirname = os.path.normpath(dirname)
                 for filename in children_in_directory(dirname, False):
                     yield Command.Delete(filename)
 
@@ -260,62 +228,18 @@ class System(Cleaner):
     def __init__(self):
         Cleaner.__init__(self)
 
-        #
-        # options for Linux and BSD
-        #
-        if 'posix' == os.name:
-            # TRANSLATORS: desktop entries are .desktop files in Linux that
-            # make up the application menu (the menu that shows BleachBit,
-            # Firefox, and others.  The .desktop files also associate file
-            # types, so clicking on an .html file in Nautilus brings up
-            # Firefox.
-            # More information:
-            # http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-            self.add_option('desktop_entry', _('Broken desktop files'), _(
-                'Delete broken application menu entries and file associations'))
-            self.add_option('cache', _('Cache'), _('Delete the cache'))
-            # TRANSLATORS: Localizations are files supporting specific
-            # languages, so applications appear in Spanish, etc.
-            self.add_option('localizations', _('Localizations'), _(
-                'Delete files for unwanted languages'))
-            self.set_warning(
-                'localizations', _("Configure this option in the preferences."))
-            # TRANSLATORS: 'Rotated logs' refers to old system log files.
-            # Linux systems often have a scheduled job to rotate the logs
-            # which means compress all except the newest log and then delete
-            # the oldest log.  You could translate this 'old logs.'
-            self.add_option(
-                'rotated_logs', _('Rotated logs'), _('Delete old system logs'))
-            self.add_option('recent_documents', _('Recent documents list'), _(
-                'Delete the list of recently used documents'))
-            self.add_option('trash', _('Trash'), _('Empty the trash'))
-
-        #
-        # options just for Linux
-        #
-        if sys.platform.startswith('linux'):
-            self.add_option('memory', _('Memory'),
-                            # TRANSLATORS: 'free' means 'unallocated'
-                            _('Wipe the swap and free memory'))
-            self.set_warning(
-                'memory', _('This option is experimental and may cause system problems.'))
-
-        #
-        # options just for Microsoft Windows
-        #
-        if 'nt' == os.name:
-            self.add_option('logs', _('Logs'), _('Delete the logs'))
-            self.add_option(
-                'memory_dump', _('Memory dump'), _('Delete the file'))
-            self.add_option('muicache', 'MUICache', _('Delete the cache'))
-            # TRANSLATORS: Prefetch is Microsoft Windows jargon.
-            self.add_option('prefetch', _('Prefetch'), _('Delete the cache'))
-            self.add_option(
-                'recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
-            # TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
-            # the uninstallers for software updates.
-            self.add_option('updates', _('Update uninstallers'), _(
-                'Delete uninstallers for Microsoft updates including hotfixes, service packs, and Internet Explorer updates'))
+        self.add_option('logs', _('Logs'), _('Delete the logs'))
+        self.add_option(
+            'memory_dump', _('Memory dump'), _('Delete the file'))
+        self.add_option('muicache', 'MUICache', _('Delete the cache'))
+        # TRANSLATORS: Prefetch is Microsoft Windows jargon.
+        self.add_option('prefetch', _('Prefetch'), _('Delete the cache'))
+        self.add_option(
+            'recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
+        # TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
+        # the uninstallers for software updates.
+        self.add_option('updates', _('Update uninstallers'), _(
+            'Delete uninstallers for Microsoft updates including hotfixes, service packs, and Internet Explorer updates'))
 
         #
         # options for GTK+
@@ -345,13 +269,6 @@ class System(Cleaner):
         self.name = _("System")
 
     def get_commands(self, option_id):
-        # cache
-        if 'posix' == os.name and 'cache' == option_id:
-            dirname = os.path.expanduser("~/.cache/")
-            for filename in children_in_directory(dirname, True):
-                if not self.whitelisted(filename):
-                    yield Command.Delete(filename)
-
         # custom
         if 'custom' == option_id:
             for (c_type, c_path) in options.get_custom_paths():
@@ -369,35 +286,8 @@ class System(Cleaner):
                     raise RuntimeError(
                         'custom folder has invalid type %s' % c_type)
 
-        # menu
-        menu_dirs = ['~/.local/share/applications',
-                     '~/.config/autostart',
-                     '~/.gnome/apps/',
-                     '~/.gnome2/panel2.d/default/launchers',
-                     '~/.gnome2/vfolders/applications/',
-                     '~/.kde/share/apps/RecentDocuments/',
-                     '~/.kde/share/mimelnk',
-                     '~/.kde/share/mimelnk/application/ram.desktop',
-                     '~/.kde2/share/mimelnk/application/',
-                     '~/.kde2/share/applnk']
-
-        if 'posix' == os.name and 'desktop_entry' == option_id:
-            for path in menu_dirs:
-                dirname = os.path.expanduser(path)
-                for filename in children_in_directory(dirname, False):
-                    if filename.endswith('.desktop') and Unix.is_broken_xdg_desktop(filename):
-                        yield Command.Delete(filename)
-
-        # unwanted locales
-        if 'posix' == os.name and 'localizations' == option_id:
-            for path in Unix.locales.localization_paths(locales_to_keep=options.get_languages()):
-                if os.path.isdir(path):
-                    for f in FileUtilities.children_in_directory(path, True):
-                        yield Command.Delete(f)
-                yield Command.Delete(path)
-
         # Windows logs
-        if 'nt' == os.name and 'logs' == option_id:
+        if 'logs' == option_id:
             paths = (
                 '$ALLUSERSPROFILE\\Application Data\\Microsoft\\Dr Watson\\*.log',
                 '$ALLUSERSPROFILE\\Application Data\\Microsoft\\Dr Watson\\user.dmp',
@@ -441,71 +331,18 @@ class System(Cleaner):
                 for globbed in glob.iglob(expanded):
                     yield Command.Delete(globbed)
 
-        # memory
-        if sys.platform.startswith('linux') and 'memory' == option_id:
-            yield Command.Function(None, Memory.wipe_memory, _('Memory'))
-
         # memory dump
         # how to manually create this file
         # http://www.pctools.com/guides/registry/detail/856/
-        if 'nt' == os.name and 'memory_dump' == option_id:
+        if 'memory_dump' == option_id:
             fname = os.path.expandvars('$windir\\memory.dmp')
             if os.path.exists(fname):
                 yield Command.Delete(fname)
             for fname in glob.iglob(os.path.expandvars('$windir\\Minidump\\*.dmp')):
                 yield Command.Delete(fname)
 
-        # most recently used documents list
-        if 'posix' == os.name and 'recent_documents' == option_id:
-            ru_fn = os.path.expanduser("~/.recently-used")
-            if os.path.lexists(ru_fn):
-                yield Command.Delete(ru_fn)
-            # GNOME 2.26 (as seen on Ubuntu 9.04) will retain the list
-            # in memory if it is simply deleted, so it must be shredded
-            # (or at least truncated).
-            #
-            # GNOME 2.28.1 (Ubuntu 9.10) and 2.30 (10.04) do not re-read
-            # the file after truncation, but do re-read it after
-            # shredding.
-            #
-            # https://bugzilla.gnome.org/show_bug.cgi?id=591404
-
-            def gtk_purge_items():
-                """Purge GTK items"""
-                Gtk.RecentManager().get_default().purge_items()
-                yield 0
-
-            xbel_pathnames = [
-                    '~/.recently-used.xbel',
-                    '~/.local/share/recently-used.xbel*',
-                    '~/snap/*/*/.local/share/recently-used.xbel']
-            for path1 in xbel_pathnames:
-                for path2 in glob.iglob(os.path.expanduser(path1)):
-                    if os.path.lexists(path2):
-                        yield Command.Shred(path2)
-            if HAVE_GTK:
-                # Use the Function to skip when in preview mode
-                yield Command.Function(None, gtk_purge_items, _('Recent documents list'))
-
-        if 'posix' == os.name and 'rotated_logs' == option_id:
-            for path in Unix.rotated_logs():
-                yield Command.Delete(path)
-
         # temporary files
-        if 'posix' == os.name and 'tmp' == option_id:
-            dirnames = ['/tmp', '/var/tmp']
-            for dirname in dirnames:
-                for path in children_in_directory(dirname, True):
-                    is_open = FileUtilities.openfiles.is_open(path)
-                    ok = not is_open and os.path.isfile(path) and \
-                        not os.path.islink(path) and \
-                        FileUtilities.ego_owner(path) and \
-                        not self.whitelisted(path)
-                    if ok:
-                        yield Command.Delete(path)
-
-        # temporary files
-        if 'nt' == os.name and 'tmp' == option_id:
+        if 'tmp' == option_id:
             dirnames = [os.path.expandvars(r'%temp%'), os.path.expandvars("%windir%\\temp\\")]
             # whitelist the folder %TEMP%\Low but not its contents
             # https://bugs.launchpad.net/bleachbit/+bug/1421726
@@ -514,29 +351,6 @@ class System(Cleaner):
                 for filename in children_in_directory(dirname, True):
                     if not low == filename.lower():
                         yield Command.Delete(filename)
-
-        # trash
-        if 'posix' == os.name and 'trash' == option_id:
-            dirname = os.path.expanduser("~/.Trash")
-            for filename in children_in_directory(dirname, False):
-                yield Command.Delete(filename)
-            # fixme http://www.ramendik.ru/docs/trashspec.html
-            # http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
-            # ~/.local/share/Trash
-            # * GNOME 2.22, Fedora 9
-            # * KDE 4.1.3, Ubuntu 8.10
-            dirname = os.path.expanduser("~/.local/share/Trash/files")
-            for filename in children_in_directory(dirname, True):
-                yield Command.Delete(filename)
-            dirname = os.path.expanduser("~/.local/share/Trash/info")
-            for filename in children_in_directory(dirname, True):
-                yield Command.Delete(filename)
-            dirname = os.path.expanduser("~/.local/share/Trash/expunged")
-            # desrt@irc.gimpnet.org tells me that the trash
-            # backend puts files in here temporary, but in some situations
-            # the files are stuck.
-            for filename in children_in_directory(dirname, True):
-                yield Command.Delete(filename)
 
         # clipboard
         if HAVE_GTK and 'clipboard' == option_id:
@@ -563,7 +377,7 @@ class System(Cleaner):
                 yield Command.Function(None, wipe_path_func, display)
 
         # MUICache
-        if 'nt' == os.name and 'muicache' == option_id:
+        if 'muicache' == option_id:
             keys = (
                 'HKCU\\Software\\Microsoft\\Windows\\ShellNoRoam\\MUICache',
                 'HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache')
@@ -571,12 +385,12 @@ class System(Cleaner):
                 yield Command.Winreg(key, None)
 
         # prefetch
-        if 'nt' == os.name and 'prefetch' == option_id:
+        if 'prefetch' == option_id:
             for path in glob.iglob(os.path.expandvars('$windir\\Prefetch\\*.pf')):
                 yield Command.Delete(path)
 
         # recycle bin
-        if 'nt' == os.name and 'recycle_bin' == option_id:
+        if 'recycle_bin' == option_id:
             # This method allows shredding
             recycled_any = False
             for path in Windows.get_recycle_bin():
@@ -603,57 +417,9 @@ class System(Cleaner):
                 yield Command.Function(None, empty_recycle_bin_func, _('Empty the recycle bin'))
 
         # Windows Updates
-        if 'nt' == os.name and 'updates' == option_id:
+        if 'updates' == option_id:
             for wu in Windows.delete_updates():
                 yield wu
-
-    def init_whitelist(self):
-        """Initialize the whitelist only once for performance"""
-        regexes = [
-            '^/tmp/.X0-lock$',
-            '^/tmp/.truecrypt_aux_mnt.*/(control|volume)$',
-            '^/tmp/.vbox-[^/]+-ipc/lock$',
-            '^/tmp/.wine-[0-9]+/server-.*/lock$',
-            '^/tmp/fsa/',  # fsarchiver
-            '^/tmp/gconfd-[^/]+/lock/ior$',
-            '^/tmp/kde-',
-            '^/tmp/kdesudo-',
-            '^/tmp/ksocket-',
-            '^/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock$',
-            '^/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior$',
-            '^/tmp/pulse-[^/]+/pid$',
-            '^/tmp/xauth',
-            '^/var/tmp/kdecache-',
-            '^' + os.path.expanduser('~/.cache/wallpaper/'),
-            # Flatpak mount point
-            '^' + os.path.expanduser('~/.cache/doc($|/)'),
-            # Clean Firefox cache from Firefox cleaner (LP#1295826)
-            '^' + os.path.expanduser('~/.cache/mozilla/'),
-            # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
-            '^' + os.path.expanduser('~/.cache/google-chrome/'),
-            '^' + os.path.expanduser('~/.cache/gnome-control-center/'),
-            # Clean Evolution cache from Evolution cleaner (GitHub #249)
-            '^' + os.path.expanduser('~/.cache/evolution/'),
-            # iBus Pinyin
-            # https://bugs.launchpad.net/bleachbit/+bug/1538919
-            '^' + os.path.expanduser('~/.cache/ibus/'),
-            # Linux Bluetooth daemon obexd directory is typically empty, so be careful
-            # not to delete the empty directory.
-            '^' + os.path.expanduser('~/.cache/obexd($|/)')]
-        for regex in regexes:
-            self.regexes_compiled.append(re.compile(regex))
-
-    def whitelisted(self, pathname):
-        """Return boolean whether file is whitelisted"""
-        if os.name == 'nt':
-            # Whitelist is specific to POSIX
-            return False
-        if not self.regexes_compiled:
-            self.init_whitelist()
-        for regex in self.regexes_compiled:
-            if regex.match(pathname) is not None:
-                return True
-        return False
 
 
 def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
@@ -674,10 +440,9 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
     yield from CleanerML.load_cleaners(cb_progress)
 
     # register Winapp2.ini cleaners
-    if 'nt' == os.name:
-        cb_progress(_('Importing cleaners from Winapp2.ini.'))
-        from bleachbit import Winapp
-        yield from Winapp.load_cleaners(cb_progress)
+    cb_progress(_('Importing cleaners from Winapp2.ini.'))
+    from bleachbit import Winapp
+    yield from Winapp.load_cleaners(cb_progress)
 
     cb_done()
 

@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -33,12 +19,11 @@ import os
 import os.path
 import random
 import re
-import stat
 import string
-import subprocess
 import sys
 import tempfile
 import time
+import warnings
 from ctypes import wintypes
 
 # do not import psutil here in case of ImportError, like on Windows XP SP3.
@@ -57,26 +42,20 @@ os.path.islink = lambda path: os_path_islink(
 
 try:
     from scandir import walk
-    if 'nt' == os.name:
-        import scandir
-        import bleachbit.Windows
+    import scandir
 
-        class _Win32DirEntryPython(scandir.Win32DirEntryPython):
-            def is_symlink(self):
-                return super(_Win32DirEntryPython, self).is_symlink() or bleachbit.Windows.is_junction(self.path)
+    class _Win32DirEntryPython(scandir.Win32DirEntryPython):
+        def is_symlink(self):
+            return super(_Win32DirEntryPython, self).is_symlink() or bleachbit.Windows.is_junction(self.path)
 
-        scandir.scandir = scandir.scandir_python
-        scandir.DirEntry = scandir.Win32DirEntryPython = _Win32DirEntryPython
+    scandir.scandir = scandir.scandir_python
+    scandir.DirEntry = scandir.Win32DirEntryPython = _Win32DirEntryPython
 except ImportError:
     if sys.version_info < (3, 5, 0):
         # Python 3.5 incorporated scandir
         logger.warning(
             'scandir is not available, so falling back to slower os.walk()')
     from os import walk
-
-
-def open_files_linux():
-    return glob.iglob("/proc/*/fd/*")
 
 
 def get_filesystem_type(path):
@@ -112,66 +91,6 @@ def get_filesystem_type(path):
             return partitions[path]
 
     return ("unknown", "none")
-
-
-def open_files_lsof(run_lsof=None):
-    if run_lsof is None:
-        def run_lsof():
-            return subprocess.check_output(["lsof", "-Fn", "-n"])
-    for f in run_lsof().split("\n"):
-        if f.startswith("n/"):
-            yield f[1:]  # Drop lsof's "n"
-
-
-def open_files():
-    if sys.platform.startswith('linux'):
-        files = open_files_linux()
-    elif 'darwin' == sys.platform or sys.platform.startswith('freebsd'):
-        files = open_files_lsof()
-    else:
-        raise RuntimeError('unsupported platform for open_files()')
-    for filename in files:
-        try:
-            target = os.path.realpath(filename)
-        except TypeError:
-            # happens, for example, when link points to
-            # '/etc/password\x00 (deleted)'
-            continue
-        except PermissionError:
-            # /proc/###/fd/0 with systemd
-            # https://github.com/bleachbit/bleachbit/issues/1515
-            continue
-        else:
-            yield target
-
-
-class OpenFiles:
-
-    """Cached way to determine whether a file is open by active process"""
-
-    def __init__(self):
-        self.last_scan_time = None
-        self.files = []
-
-    def file_qualifies(self, filename):
-        """Return boolean whether filename qualifies to enter cache (check \
-        against blacklist)"""
-        return not filename.startswith("/dev") and \
-            not filename.startswith("/proc")
-
-    def scan(self):
-        """Update cache"""
-        self.last_scan_time = time.time()
-        self.files = []
-        for filename in open_files():
-            if self.file_qualifies(filename):
-                self.files.append(filename)
-
-    def is_open(self, filename):
-        """Return boolean whether filename is open by running process"""
-        if self.last_scan_time is None or (time.time() - self.last_scan_time) > 10:
-            self.scan()
-        return os.path.realpath(filename) in self.files
 
 
 def __random_string(length):
@@ -335,21 +254,13 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
        parameter, the path will be shredded unless allow_shred = False.
     """
     from bleachbit.Options import options
-    is_special = False
     path = extended_path(path)
     do_shred = allow_shred and (shred or options.get('shred'))
     if not os.path.lexists(path):
         if ignore_missing:
             return
         raise OSError(2, 'No such file or directory', path)
-    if 'posix' == os.name:
-        # With certain (relatively rare) files on Windows os.lstat()
-        # may return Access Denied
-        mode = os.lstat(path)[stat.ST_MODE]
-        is_special = stat.S_ISFIFO(mode) or stat.S_ISLNK(mode)
-    if is_special:
-        os.remove(path)
-    elif os.path.isdir(path):
+    if os.path.isdir(path):
         delpath = path
         if do_shred:
             if not is_dir_empty(path):
@@ -365,10 +276,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             if errno.ENOTEMPTY == e.errno:
                 logger.info(_("Directory is not empty: %s"), path)
             elif errno.EBUSY == e.errno:
-                if os.name == 'posix' and os.path.ismount(path):
-                    logger.info(_("Skipping mount point: %s"), path)
-                else:
-                    logger.info(_("Device or resource is busy: %s"), path)
+                logger.info(_("Device or resource is busy: %s"), path)
             else:
                 raise
         except WindowsError as e:
@@ -435,16 +343,9 @@ def detect_encoding(fn):
     return detector.result['encoding']
 
 
-def ego_owner(filename):
-    """Return whether current user owns the file"""
-    return os.lstat(filename).st_uid == os.getuid()
-
-
 def exists_in_path(filename):
     """Returns boolean whether the filename exists in the path"""
-    delimiter = ':'
-    if 'nt' == os.name:
-        delimiter = ';'
+    delimiter = ';'
     path_env = os.getenv('PATH')
     if path_env is None:
         return False
@@ -503,10 +404,10 @@ def expand_glob_join(pathname1, pathname2):
 
 
 def extended_path(path):
-    """If applicable, return the extended Windows pathname"""
+    """Return the extended Windows pathname"""
     # Do not extend the Sysnative paths because on some systems there are problems with path resolution,
     # for example: https://github.com/bleachbit/bleachbit/issues/1574.
-    if 'nt' == os.name and 'Sysnative' not in path.split(os.sep):
+    if 'Sysnative' not in path.split(os.sep):
         if path.startswith(r'\\?'):
             return path
         if path.startswith(r'\\'):
@@ -517,11 +418,10 @@ def extended_path(path):
 
 def extended_path_undo(path):
     """"""
-    if 'nt' == os.name:
-        if path.startswith(r'\\?\unc'):
-            return '\\' + path[7:]
-        if path.startswith(r'\\?'):
-            return path[4:]
+    if path.startswith(r'\\?\unc'):
+        return '\\' + path[7:]
+    if path.startswith(r'\\?'):
+        return path[4:]
     return path
 
 
@@ -546,31 +446,18 @@ def free_space(pathname):
 def getsize(path):
     """Return the actual file size considering spare files
        and symlinks"""
-    if 'posix' == os.name:
-        try:
-            __stat = os.lstat(path)
-        except OSError as e:
-            # OSError: [Errno 13] Permission denied
-            # can happen when a regular user is trying to find the size of /var/log/hp/tmp
-            # where /var/log/hp is 0774 and /var/log/hp/tmp is 1774
-            if errno.EACCES == e.errno:
-                return 0
-            raise
-        return __stat.st_blocks * 512
-    if 'nt' == os.name:
-        # On rare files os.path.getsize() returns access denied, so first
-        # try FindFilesW.
-        # Also, apply prefix to use extended-length paths to support longer
-        # filenames.
-        finddata = win32file.FindFilesW(extended_path(path))
-        if not finddata:
-            # FindFilesW does not work for directories, so fall back to
-            # getsize()
-            return os.path.getsize(path)
-        else:
-            size = (finddata[0][4] * (0xffffffff + 1)) + finddata[0][5]
-            return size
-    return os.path.getsize(path)
+    # On rare files os.path.getsize() returns access denied, so first
+    # try FindFilesW.
+    # Also, apply prefix to use extended-length paths to support longer
+    # filenames.
+    finddata = win32file.FindFilesW(extended_path(path))
+    if not finddata:
+        # FindFilesW does not work for directories, so fall back to
+        # getsize()
+        return os.path.getsize(path)
+    else:
+        size = (finddata[0][4] * (0xffffffff + 1)) + finddata[0][5]
+        return size
 
 
 def getsizedir(path):
@@ -596,8 +483,6 @@ def globex(pathname, regex):
 def guess_overwrite_paths():
     """Guess which partitions to overwrite (to hide deleted files)"""
     ret = []
-    if not os.name == 'nt':
-        raise NotImplementedError('Unsupported OS in guess_overwrite_paths')
     localtmp = os.path.expandvars('$TMP')
     if not os.path.exists(localtmp):
         logger.warning(
@@ -682,18 +567,14 @@ def is_normal_directory(path):
 
     if not os.path.isdir(path):
         return False
-    if 'nt' == os.name:
-        # On Windows, use GetFileAttributesW to check for reparse point
-        # because os.stat().st_reparse_tag is not available in Python 3.4.
-        FILE_ATTRIBUTE_REPARSE_POINT = 0x400
-        from ctypes import windll
-        attr = windll.kernel32.GetFileAttributesW(path)
-        if attr == 0xFFFFFFFF:
-            return False
-        return not bool(attr & FILE_ATTRIBUTE_REPARSE_POINT)
-    else:
-        # On POSIX, check for symlink
-        return not os.path.islink(path)
+    # On Windows, use GetFileAttributesW to check for reparse point
+    # because os.stat().st_reparse_tag is not available in Python 3.4.
+    FILE_ATTRIBUTE_REPARSE_POINT = 0x400
+    from ctypes import windll
+    attr = windll.kernel32.GetFileAttributesW(path)
+    if attr == 0xFFFFFFFF:
+        return False
+    return not bool(attr & FILE_ATTRIBUTE_REPARSE_POINT)
 
 
 def listdir(directory):
@@ -714,33 +595,22 @@ def listdir(directory):
 
 def same_partition(dir1, dir2):
     """Are both directories on the same partition?"""
-    if 'nt' == os.name:
-        try:
-            return free_space(dir1) == free_space(dir2)
-        except pywinerror as e:
-            if 5 == e.winerror:
-                # Microsoft Office 2010 Starter Edition has a virtual
-                # drive that gives access denied
-                # https://bugs.launchpad.net/bleachbit/+bug/1372179
-                # https://bugs.launchpad.net/bleachbit/+bug/1474848
-                # https://github.com/az0/bleachbit/issues/27
-                return dir1[0] == dir2[0]
-            raise
-    stat1 = os.statvfs(dir1)
-    stat2 = os.statvfs(dir2)
-    return stat1[stat.ST_DEV] == stat2[stat.ST_DEV]
+    try:
+        return free_space(dir1) == free_space(dir2)
+    except pywinerror as e:
+        if 5 == e.winerror:
+            # Microsoft Office 2010 Starter Edition has a virtual
+            # drive that gives access denied
+            # https://bugs.launchpad.net/bleachbit/+bug/1372179
+            # https://bugs.launchpad.net/bleachbit/+bug/1474848
+            # https://github.com/az0/bleachbit/issues/27
+            return dir1[0] == dir2[0]
+        raise
 
 
 def sync():
     """Flush file system buffers. sync() is different than fsync()"""
-    if 'posix' == os.name:
-        import ctypes
-        rc = ctypes.cdll.LoadLibrary('libc.so.6').sync()
-        if 0 != rc:
-            logger.error('sync() returned code %d', rc)
-    elif 'nt' == os.name:
-        import ctypes
-        ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()
+    ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()
 
 
 def truncate_f(f):
@@ -776,27 +646,7 @@ def uris_to_paths(file_uris):
     return file_paths
 
 
-def whitelisted_posix(path, check_realpath=True):
-    """Check whether this POSIX path is whitelisted"""
-    from bleachbit.Options import options
-    if check_realpath and os.path.islink(path):
-        # also check the link name
-        if whitelisted_posix(path, False):
-            return True
-        # resolve symlink
-        path = os.path.realpath(path)
-    for pathname in options.get_whitelist_paths():
-        if pathname[0] == 'file' and path == pathname[1]:
-            return True
-        if pathname[0] == 'folder':
-            if path == pathname[1]:
-                return True
-            if path.startswith(pathname[1] + os.sep):
-                return True
-    return False
-
-
-def whitelisted_windows(path):
+def whitelisted(path):
     """Check whether this Windows path is whitelisted"""
     from bleachbit.Options import options
     for pathname in options.get_whitelist_paths():
@@ -812,12 +662,6 @@ def whitelisted_windows(path):
             if len(pathname[1]) == 3 and path.lower().startswith(pathname[1].lower()):
                 return True
     return False
-
-
-if 'nt' == os.name:
-    whitelisted = whitelisted_windows
-else:
-    whitelisted = whitelisted_posix
 
 
 def wipe_contents(path, truncate=True):
@@ -847,13 +691,10 @@ def wipe_contents(path, truncate=True):
         os.fsync(f.fileno())  # force write to disk
         return f
 
-    if 'nt' == os.name:
-        from win32com.shell.shell import IsUserAnAdmin
+    from win32com.shell.shell import IsUserAnAdmin
 
-    if 'nt' == os.name and IsUserAnAdmin():
+    if IsUserAnAdmin():
         from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
-        import warnings
-        from bleachbit import _
         try:
             file_wipe(path)
         except pywinerror as e:
@@ -1060,13 +901,6 @@ def wipe_path(pathname, idle=False):
     rate_mbs = (total_bytes / (1000 * 1000)) / elapsed_sec
     logger.info(_('Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at {rate:.2f} MB/s').format(
                 files=len(files), bytes=total_bytes, seconds=int(elapsed_sec), rate=rate_mbs))
-    # how much free space is left (should be near zero)
-    if 'posix' == os.name:
-        stats = os.statvfs(pathname)
-        logger.info(_("{bytes:,} bytes and {inodes:,} inodes available to non-super-user").format(
-                    bytes=stats.f_bsize * stats.f_bavail, inodes=stats.f_favail))
-        logger.info(_("{bytes:,} bytes and {inodes:,} inodes available to super-user").format(
-                    bytes=stats.f_bsize * stats.f_bfree, inodes=stats.f_ffree))
     # truncate and close files
     for f in files:
         truncate_f(f)
@@ -1090,6 +924,3 @@ def wipe_path(pathname, idle=False):
 def vacuum_sqlite3(path):
     """Vacuum SQLite database"""
     execute_sqlite3(path, 'vacuum')
-
-
-openfiles = OpenFiles()
