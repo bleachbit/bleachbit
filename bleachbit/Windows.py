@@ -34,7 +34,10 @@ from threading import Event, Thread
 import winreg
 import xml.dom.minidom
 
-import pywintypes
+import warnings
+with warnings.catch_warnings():
+    warnings.simplefilter('ignore', PendingDeprecationWarning)
+    import pywintypes
 import win32api
 import win32con
 import win32file
