@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 r"""
 Functionality specific to Microsoft Windows
@@ -37,18 +23,18 @@ These are the terms:
 
 """
 
-import bleachbit
-from bleachbit import _, Command, FileUtilities, General
-
+import ctypes
+from ctypes import byref, wintypes
+from decimal import Decimal
 import glob
 import logging
 import os
 import sys
-import shutil
-from threading import Thread, Event
+from threading import Event, Thread
 import xml.dom.minidom
 
-from decimal import Decimal
+import bleachbit
+from bleachbit import _, Command, FileUtilities
 
 if 'win32' == sys.platform:
     import winreg
@@ -614,14 +600,59 @@ def is_junction(path):
     return bool(attr & FILE_ATTRIBUTE_REPARSE_POINT)
 
 
+def _is_process_running_fallback(name):
+    """Fallback for Windows XP using Toolhelp32 API"""
+    TH32CS_SNAPPROCESS = 0x00000002
+    kernel = ctypes.windll.kernel32
+
+    class PROCESSENTRY32(ctypes.Structure):
+        _fields_ = [
+            ("dwSize", wintypes.DWORD),
+            ("cntUsage", wintypes.DWORD),
+            ("th32ProcessID", wintypes.DWORD),
+            ("th32DefaultHeapID", ctypes.POINTER(wintypes.ULONG)),
+            ("th32ModuleID", wintypes.DWORD),
+            ("cntThreads", wintypes.DWORD),
+            ("th32ParentProcessID", wintypes.DWORD),
+            ("pcPriClassBase", wintypes.LONG),
+            ("dwFlags", wintypes.DWORD),
+            ("szExeFile", wintypes.CHAR * 260),
+        ]
+
+    snapshot = kernel.CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0)
+    if snapshot == -1:  # INVALID_HANDLE_VALUE
+        return False
+
+    try:
+        entry = PROCESSENTRY32()
+        entry.dwSize = ctypes.sizeof(PROCESSENTRY32)
+
+        if not kernel.Process32First(snapshot, byref(entry)):
+            return False
+
+        while True:
+            exe_name = entry.szExeFile.decode('utf-8', errors='ignore').lower()
+            if exe_name == name:
+                return True
+            if not kernel.Process32Next(snapshot, byref(entry)):
+                break
+    finally:
+        kernel.CloseHandle(snapshot)
+
+    return False
+
+
 def is_process_running(name):
     """Return boolean whether process (like firefox.exe) is running
 
     Works on Windows Vista or later, but on Windows XP gives an ImportError
     """
-
-    import psutil
     name = name.lower()
+    # Do not import at module level in case of ImportError, like on Windows XP.
+    try:
+        import psutil
+    except ImportError:
+        return _is_process_running_fallback(name)
     for proc in psutil.process_iter():
         try:
             if proc.name().lower() == name:
@@ -950,5 +981,6 @@ class SplashThread(Thread):
 
         else:
             return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
+
 
 splash_thread = SplashThread()
