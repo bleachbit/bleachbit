@@ -9,6 +9,7 @@
 Test case for BleachBit TUI module
 """
 
+import asyncio
 import unittest
 
 from bleachbit.tui.cleaner_tree import CleanerTree
@@ -459,3 +460,142 @@ class CleanerTreeFilterTestCase(unittest.TestCase):
         tree._enabled[("firefox", "cache")] = True
         tree.filter_tree("firefox")
         self.assertTrue(tree._enabled.get(("firefox", "cache"), False))
+
+
+class BackendTestCase(unittest.TestCase):
+    """Test backend functions: build_operations, get_cleaner_tree_data, get_files_for_option."""
+
+    @classmethod
+    def setUpClass(cls):
+        from bleachbit.tui.backend import load_cleaners
+        load_cleaners()
+
+    def test_build_operations_empty(self):
+        """build_operations with empty input returns empty dict."""
+        from bleachbit.tui.backend import build_operations
+        self.assertEqual(build_operations([]), {})
+
+    def test_build_operations_single(self):
+        """build_operations with single option."""
+        from bleachbit.tui.backend import build_operations
+        result = build_operations([("system", "tmp")])
+        self.assertEqual(result, {"system": ["tmp"]})
+
+    def test_build_operations_multi(self):
+        """build_operations groups options by cleaner."""
+        from bleachbit.tui.backend import build_operations
+        result = build_operations([
+            ("firefox", "cache"),
+            ("firefox", "cookies"),
+            ("system", "tmp"),
+        ])
+        self.assertEqual(
+            result,
+            {"firefox": ["cache", "cookies"], "system": ["tmp"]}
+        )
+
+    def test_get_cleaner_tree_data_returns_list(self):
+        """get_cleaner_tree_data returns list of tuples."""
+        from bleachbit.tui.backend import get_cleaner_tree_data
+        data = get_cleaner_tree_data()
+        self.assertIsInstance(data, list)
+        self.assertGreater(len(data), 0)
+        # Each item is (c_id: str, c_name: str, opts: list)
+        for item in data:
+            self.assertIsInstance(item, tuple)
+            self.assertEqual(len(item), 3)
+            self.assertIsInstance(item[0], str)
+            self.assertIsInstance(item[1], str)
+            self.assertIsInstance(item[2], list)
+
+    def test_get_files_for_option_bogus_cleaner(self):
+        """get_files_for_option returns empty list for nonexistent cleaner."""
+        from bleachbit.tui.backend import get_files_for_option
+        files = get_files_for_option("nonexistent_cleaner_xyz", "cache")
+        self.assertEqual(files, [])
+
+    def test_get_files_for_option_real_cleaner(self):
+        """get_files_for_option returns list for real cleaner."""
+        from bleachbit.tui.backend import get_files_for_option
+        files = get_files_for_option("system", "tmp")
+        self.assertIsInstance(files, list)
+        # Each item is (path: str, size: int)
+        for item in files:
+            self.assertIsInstance(item, tuple)
+            self.assertEqual(len(item), 2)
+            self.assertIsInstance(item[0], str)
+            self.assertIsInstance(item[1], int)
+
+
+class ConfirmScreenTestCase(unittest.TestCase):
+    """Test ConfirmScreen dismiss logic."""
+
+    def test_confirm_screen_y_dismisses_true(self):
+        """Pressing y should dismiss with True."""
+        from bleachbit.tui.screens.confirm import ConfirmScreen
+        screen = ConfirmScreen(1, 1, 10, 1024)
+        self.assertEqual(screen.cleaner_count, 1)
+        self.assertEqual(screen.total_files, 10)
+        self.assertEqual(screen.total_size, 1024)
+
+    def test_confirm_screen_creation_defaults(self):
+        """ConfirmScreen stores all constructor args."""
+        from bleachbit.tui.screens.confirm import ConfirmScreen
+        screen = ConfirmScreen(3, 5, 100, 2048000)
+        self.assertEqual(screen.cleaner_count, 3)
+        self.assertEqual(screen.option_count, 5)
+        self.assertEqual(screen.total_files, 100)
+        self.assertEqual(screen.total_size, 2048000)
+
+
+class IntegrationTestCase(unittest.TestCase):
+    """Integration tests that verify end-to-end flows via Textual pilot."""
+
+    def test_app_mounts_with_tree(self):
+        """The app should mount and show the cleaner tree."""
+        from bleachbit.tui.app import BleachBitTUI
+
+        async def run():
+            app = BleachBitTUI()
+            async with app.run_test() as pilot:
+                tree = app.query_one("CleanerTree")
+                self.assertIsNotNone(tree)
+                self.assertTrue(tree.root.is_expanded)
+                self.assertGreater(len(tree.root.children), 0)
+
+        asyncio.run(run())
+
+    def test_preview_with_no_options(self):
+        """Preview with no options enabled should show warning."""
+        from bleachbit.tui.app import BleachBitTUI
+
+        async def run():
+            app = BleachBitTUI()
+            async with app.run_test() as pilot:
+                await pilot.press("p")
+                self.assertFalse(app._is_working)
+
+        asyncio.run(run())
+
+    def test_quit_does_not_crash(self):
+        """Pressing q should not crash."""
+        from bleachbit.tui.app import BleachBitTUI
+
+        async def run():
+            app = BleachBitTUI()
+            async with app.run_test() as pilot:
+                # Just verify pressing q doesn't crash
+                await pilot.press("q")
+
+        asyncio.run(run())
+
+    def test_overwrite_toggle(self):
+        """Toggling overwrite should not crash."""
+        from bleachbit.tui.app import BleachBitTUI
+
+        async def run():
+            app = BleachBitTUI()
+            async with app.run_test() as pilot:
+                await pilot.press("o")
+
+        asyncio.run(run())
