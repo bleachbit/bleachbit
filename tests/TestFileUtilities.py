@@ -535,7 +535,9 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             print('Checking free space for %s' % drive)
             bytes_free = int(bytes_free)
             free = free_space(drive)
-            self.assertEqual(bytes_free, free)
+            # tolerate small error due to timing differences
+            tolerance = 1 * 1024 * 1024  # 1 MB
+            self.assertAlmostEqual(bytes_free, free, delta=tolerance)
 
     def test_getsize(self):
         """Unit test for method getsize()"""
