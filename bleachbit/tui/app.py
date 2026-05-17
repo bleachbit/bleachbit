@@ -11,7 +11,7 @@ Phase 2: Connected to real BleachBit backend.
 
 from textual.app import App, ComposeResult
 from textual.containers import Container, VerticalScroll
-from textual.widgets import Header, Footer, Static
+from textual.widgets import Header, Footer, Static, ProgressBar
 from textual.binding import Binding
 from textual import work
 
@@ -91,6 +91,30 @@ class BleachBitTUI(App):
         background: $surface;
         padding: 0 1;
     }
+
+    #progress-container {
+        height: auto;
+        min-height: 1;
+        max-height: 2;
+        padding: 0 1;
+    }
+
+    #progress-label {
+        height: 1;
+        color: $text-muted;
+    }
+
+    ProgressBar {
+        height: 1;
+    }
+
+    ProgressBar Bar {
+        color: $accent;
+    }
+
+    ProgressBar--hidden {
+        display: none;
+    }
     """
 
     BINDINGS = [
@@ -116,6 +140,9 @@ class BleachBitTUI(App):
         yield Header(show_clock=True)
         yield Static("This is alpha-level software. Please use caution.", id="alpha-banner")
         yield Static("Status: idle", id="status-bar")
+        with Container(id="progress-container"):
+            yield ProgressBar(total=1.0, show_eta=False, id="progress-bar", classes="ProgressBar--hidden")
+            yield Static("", id="progress-label")
         with Container(id="main-container"):
             yield CleanerTree()
         yield VerticalScroll(Static("", id="output-text", markup=False), id="output-log")
@@ -160,7 +187,20 @@ class BleachBitTUI(App):
         self._append_log(message.text.strip())
 
     def on_progress_message(self, message: ProgressMessage):
-        pass  # progress bar not shown in Phase 2 MVP
+        status = message.status
+        bar = self.query_one("#progress-bar", ProgressBar)
+        label = self.query_one("#progress-label", Static)
+
+        if isinstance(status, (int, float)):
+            fraction = float(status)
+            bar.update(progress=fraction)
+            bar.remove_class("ProgressBar--hidden")
+            pct = int(fraction * 100)
+            label.update(f"Progress: {pct}%")
+        elif isinstance(status, str):
+            bar.update(progress=None)  # indeterminate
+            bar.remove_class("ProgressBar--hidden")
+            label.update(status)
 
     def on_total_size_message(self, message: TotalSizeMessage):
         tree = self.query_one(CleanerTree)
@@ -173,6 +213,12 @@ class BleachBitTUI(App):
     def on_worker_done_message(self, message: WorkerDoneMessage):
         self._is_working = False
         self._current_worker = None
+
+        bar = self.query_one("#progress-bar", ProgressBar)
+        bar.update(progress=0.0)
+        bar.add_class("ProgressBar--hidden")
+        self.query_one("#progress-label", Static).update("")
+
         tree = self.query_one(CleanerTree)
 
         if message.total_errors:
@@ -290,6 +336,9 @@ class BleachBitTUI(App):
         if not enabled:
             self.notify("No options enabled. Enable some first.", severity="warning")
             self._is_working = False
+            bar = self.query_one("#progress-bar", ProgressBar)
+            bar.add_class("ProgressBar--hidden")
+            self.query_one("#progress-label", Static).update("")
             return
 
         op_name = "Deleting" if delete else "Previewing"
@@ -298,6 +347,12 @@ class BleachBitTUI(App):
         for output in self.query("#output-text").results(Static):
             output.update("")
             break
+
+        # Reset progress bar for new operation
+        bar = self.query_one("#progress-bar", ProgressBar)
+        bar.update(progress=0.0)
+        bar.remove_class("ProgressBar--hidden")
+        self.query_one("#progress-label", Static).update("Starting...")
 
         operations = build_operations(enabled)
         # Propagate overwrite preference via bleachbit Options
