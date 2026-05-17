@@ -336,7 +336,8 @@ class BleachBitTUI(App):
     async def action_quit(self):
         """Quit the application."""
         if self._is_working:
-            self._is_working = False
+            if self._current_worker is not None:
+                self._current_worker.abort()
             self.notify("Aborting...")
         else:
             self.exit()

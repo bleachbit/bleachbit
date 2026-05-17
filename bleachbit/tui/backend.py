@@ -167,6 +167,7 @@ def run_worker_in_thread(app, really_delete: bool, operations: dict):
     """
     cb = TuiCallback(app)
     worker = Worker.Worker(cb, really_delete, operations)
+    app._current_worker = worker
     try:
         for _ in worker.run():
             # Each ``True`` yield means "give control back to GTK."
