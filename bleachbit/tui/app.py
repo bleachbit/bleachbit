@@ -164,9 +164,17 @@ class BleachBitTUI(App):
 
     def on_mount(self):
         """Load real cleaner data and set up."""
-        load_cleaners()
-        tree = self.query_one(CleanerTree)
-        tree.populate_tree(get_cleaner_tree_data())
+        try:
+            load_cleaners()
+            tree = self.query_one(CleanerTree)
+            tree.populate_tree(get_cleaner_tree_data())
+        except Exception:
+            import logging
+            logging.getLogger(__name__).exception("Failed to load cleaners on mount")
+            self.notify("Error loading cleaners. Check the log.", severity="error")
+            # Still set up the tree with empty data so the UI is functional
+            tree = self.query_one(CleanerTree)
+            tree.populate_tree([])
 
         overwrite = get_overwrite()
         overwrite_status = 'ON' if overwrite else 'OFF'

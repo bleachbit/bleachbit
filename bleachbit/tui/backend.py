@@ -111,10 +111,16 @@ def load_cleaners() -> dict:
 
     Returns the same module-level ``bleachbit.Cleaner.backends`` dict
     keyed by cleaner ID.
+
+    Errors during cleaner registration are logged but not fatal —
+    the TUI will show whatever cleaners loaded successfully.
     """
     global _cleaners_loaded
     if not _cleaners_loaded:
-        list(register_cleaners())
+        try:
+            list(register_cleaners())
+        except Exception:
+            logger.exception("Error loading cleaners — some may be unavailable")
         _cleaners_loaded = True
     return backends
 
@@ -132,24 +138,35 @@ def get_cleaner_tree_data() -> list[tuple]:
     result = []
     for key in sorted(backends):
         backend = backends[key]
-        c_id = backend.get_id()
-        c_name = backend.get_name()
-
-        if not any(backend.get_options()):
-            # Cleaner with no options at all — always skip
+        try:
+            c_id = backend.get_id()
+            c_name = backend.get_name()
+        except Exception:
+            logger.exception("Error reading cleaner %s — skipping", key)
             continue
 
-        # Auto-hide: skip cleaners not already enabled that have no usable options
-        c_enabled = Options.options.get_tree(c_id, None)
-        if not c_enabled and auto_hide_enabled and backend.auto_hide():
+        try:
+            if not any(backend.get_options()):
+                continue
+        except Exception:
+            logger.exception("Error reading options for cleaner %s — skipping", c_id)
             continue
-        # Build description lookup
-        desc_map = {}
-        for dname, ddesc in backend.get_option_descriptions():
-            desc_map[dname] = ddesc
-        opts = []
-        for o_id, o_name in backend.get_options():
-            opts.append((o_id, o_name, desc_map.get(o_name, "")))
+
+        try:
+            # Auto-hide: skip cleaners not already enabled that have no usable options
+            c_enabled = Options.options.get_tree(c_id, None)
+            if not c_enabled and auto_hide_enabled and backend.auto_hide():
+                continue
+            # Build description lookup
+            desc_map = {}
+            for dname, ddesc in backend.get_option_descriptions():
+                desc_map[dname] = ddesc
+            opts = []
+            for o_id, o_name in backend.get_options():
+                opts.append((o_id, o_name, desc_map.get(o_name, "")))
+        except Exception:
+            logger.exception("Error building option list for cleaner %s — skipping", c_id)
+            continue
         result.append((c_id, c_name, opts))
     return result
 
@@ -164,19 +181,22 @@ def run_worker_in_thread(app, really_delete: bool, operations: dict):
     Posts progress/result Messages to *app* via TuiCallback.
     This function is intended to be called from a Textual worker thread
     (``@work(thread=True)``).
+
+    If the Worker crashes, a WorkerDoneMessage is still posted so the
+    TUI never hangs.
     """
     cb = TuiCallback(app)
     worker = Worker.Worker(cb, really_delete, operations)
     app._current_worker = worker
     try:
         for _ in worker.run():
-            # Each ``True`` yield means "give control back to GTK."
-            # In a thread we don't need that — just keep going.
             pass
     except StopIteration:
         pass
     except Exception:
         logger.exception("Worker thread crashed")
+        # Post a done message so the TUI recovers
+        cb.worker_done(worker, really_delete)
 
 
 # ---------------------------------------------------------------------------
@@ -218,31 +238,48 @@ def get_files_for_option(cleaner_id: str, option_id: str) -> list[tuple[str, int
     Uses FileActionProvider.get_paths() when available (CleanerML-based
     cleaners) for expanded file lists.  Falls back to collecting paths
     from Command objects for legacy (hard-coded) cleaners.
+
+    All errors are logged and the function returns whatever files it
+    was able to collect — never raises to the caller.
     """
     from bleachbit import FileUtilities
 
-    load_cleaners()
-    backend = backends.get(cleaner_id)
-    if not backend:
+    try:
+        load_cleaners()
+        backend = backends.get(cleaner_id)
+        if not backend:
+            return []
+    except Exception:
+        logger.exception("Error loading cleaners for file listing")
         return []
 
     files: list[tuple[str, int]] = []
 
-    # Route A: iterate registered action providers (CleanerML-based cleaners)
-    for action_opt_id, action in backend.actions:
-        if action_opt_id != option_id:
-            continue
-        if hasattr(action, 'get_paths'):
-            # FileActionProvider — yields expanded paths
-            for path in action.get_paths():
-                try:
-                    size = FileUtilities.getsize(path)
-                except (OSError, PermissionError):
-                    size = 0
-                files.append((path, size or 0))
-        else:
-            # Non-file actions — collect paths from commands
-            for cmd in action.get_commands():
+    try:
+        # Route A: iterate registered action providers (CleanerML-based cleaners)
+        for action_opt_id, action in backend.actions:
+            if action_opt_id != option_id:
+                continue
+            if hasattr(action, 'get_paths'):
+                for path in action.get_paths():
+                    try:
+                        size = FileUtilities.getsize(path)
+                    except (OSError, PermissionError):
+                        size = 0
+                    files.append((path, size or 0))
+            else:
+                for cmd in action.get_commands():
+                    cmd_path = getattr(cmd, 'path', None)
+                    if cmd_path:
+                        try:
+                            size = FileUtilities.getsize(cmd_path)
+                        except (OSError, PermissionError):
+                            size = 0
+                        files.append((cmd_path, size or 0))
+
+        # Route B: legacy cleaners that override get_commands() directly
+        if not files:
+            for cmd in backend.get_commands(option_id):
                 cmd_path = getattr(cmd, 'path', None)
                 if cmd_path:
                     try:
@@ -250,16 +287,7 @@ def get_files_for_option(cleaner_id: str, option_id: str) -> list[tuple[str, int
                     except (OSError, PermissionError):
                         size = 0
                     files.append((cmd_path, size or 0))
-
-    # Route B: legacy cleaners that override get_commands() directly
-    if not files:
-        for cmd in backend.get_commands(option_id):
-            cmd_path = getattr(cmd, 'path', None)
-            if cmd_path:
-                try:
-                    size = FileUtilities.getsize(cmd_path)
-                except (OSError, PermissionError):
-                    size = 0
-                files.append((cmd_path, size or 0))
+    except Exception:
+        logger.exception("Error collecting files for %s / %s", cleaner_id, option_id)
 
     return files
