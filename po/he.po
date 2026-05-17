@@ -6,18 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-05-16 22:17-0600\n"
-"PO-Revision-Date: 2026-05-12 16:11+0000\n"
+"PO-Revision-Date: 2026-05-18 05:11+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/he/"
-">\n"
+"Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/"
+"he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 2026.5-dev\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -48,15 +48,10 @@ msgstr "עוגיות"
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#, fuzzy
-#| msgid ""
-#| "Delete cookies, which contain information such as website preferences, "
-#| "authentication, and tracking identification"
 msgid ""
 "Delete cookies, which store login information, website preferences, and "
 "tracking identifiers"
-msgstr ""
-"מחיקת עוגיות, המכילות מידע כגון העדפות, אימות ונתוני מעקב לאתרי אינטרנט"
+msgstr "מחיקת עוגיות, המכילות את פרטי הגישה, ההעדפות ומזהי מעקב"
 
 #: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
 #: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
@@ -256,10 +251,8 @@ msgstr "היסטוריית הטפסים"
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
-#, fuzzy
-#| msgid "Delete the search history"
 msgid "Saved form entries and search bar history"
-msgstr "מחיקת היסטוריית החיפוש"
+msgstr "רשומות טופס שמורות והיסטוריית סרגל חיפוש"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
 #: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
@@ -302,7 +295,7 @@ msgstr "הפעלה"
 #: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Previously open tabs and windows"
-msgstr ""
+msgstr "לשוניות וחלונות שהיו פתוחים בעבר"
 
 #. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
@@ -607,7 +600,7 @@ msgid ""
 "some of which are added automatically"
 msgstr ""
 "איפוס היסטוריית השימוש במנוע החיפוש ומחיקת מנועי החיפוש שנוספו לאחר התקנת "
-"התכנה, שחלקם נוספו אוטומטית"
+"התוכנות, שחלקם נוספו אוטומטית"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
 msgid "File manager"
@@ -701,7 +694,7 @@ msgstr "תיקיות בהתאמה אישית יאופסו."
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
 msgid "AI assistant"
-msgstr ""
+msgstr "מסייע בינה מלאכותית"
 
 #. Description for deleting Claude Code sessions
 #: ../cleaners/claude.xml
@@ -767,13 +760,11 @@ msgstr "מחיקת רשימת האתרים בהם ביקרת"
 #. Cleaning option that deletes AI models in a web browser
 #: ../cleaners/google_chrome.xml
 msgid "AI"
-msgstr ""
+msgstr "בינה מלאכותית"
 
 #: ../cleaners/google_chrome.xml
-#, fuzzy
-#| msgid "Delete the logs"
 msgid "Delete the AI models"
-msgstr "מחיקת היומנים"
+msgstr "מחיקת המודלים של הבינה המלאכותית"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -805,14 +796,12 @@ msgid "Delete the list of game servers"
 msgstr "מחיקת רשימת שרתי המשחק"
 
 #: ../cleaners/profanity.xml
-#, fuzzy
-#| msgid "Download failed"
 msgid "Downloaded files"
-msgstr "ההורדה נכשלה"
+msgstr "קבצים שירדו"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
-msgstr "תכנה לשליטה מרחוק"
+msgstr "תוכנה לשליטה מרחוק"
 
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Memory dump"
@@ -1898,7 +1887,7 @@ msgstr "בחירת תיקיית יעד"
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error generating chaff: {error}"
-msgstr ""
+msgstr "שגיאה ביצירת chaff:‏ {error}"
 
 #. TRANSLATORS: Progress message shown while deleting chaff files.
 #. 'Deleting files' is a present participle.
@@ -1913,7 +1902,7 @@ msgstr "קבצים נמחקים…"
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error deleting chaff files: {error}"
-msgstr ""
+msgstr "שגיאה במחיקת קובצי chaff:‏ {error}"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves
@@ -2708,14 +2697,13 @@ msgstr "התקני החלפה אלה זוהו: %s"
 #. is waiting for the child process. %(parent_pid)d is the parent
 #. process ID; %(child_pid)d is the child process ID.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The function wipe_memory() with process ID %d is waiting for child "
-#| "process ID %d."
+#, python-format
 msgid ""
 "The function wipe_memory() with process ID %(parent_pid)d is waiting for "
 "child process ID %(child_pid)d."
-msgstr "הפונקציה wipe_memory()‎ עם מזהה התהליך %d ממתינה למזהה תהליך צאצא %d."
+msgstr ""
+"הפונקציה wipe_memory()‎ עם מזהה התהליך%(parent_pid)d ממתינה למזהה תהליך צאצא %"
+"(child_pid)d."
 
 #: ../bleachbit/Memory.py
 #, python-format
