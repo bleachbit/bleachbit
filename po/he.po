@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-05-16 22:17-0600\n"
-"PO-Revision-Date: 2026-05-18 05:11+0000\n"
+"PO-Revision-Date: 2026-05-19 09:11+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/"
 "he/>\n"
@@ -2408,16 +2408,12 @@ msgstr "הוספת תיקייה"
 #. in the preferences dialog. This message appears when cleaning options
 #. with warnings are selected but expert mode is disabled.
 #: ../bleachbit/GuiStartup.py
-#, fuzzy
-#| msgid ""
-#| "Cleaning options with warnings now require expert mode. Enable it in "
-#| "preferences to clean them."
 msgid ""
 "One or more selected cleaning options have warnings and require Expert Mode "
 "to clean. Enable it in preferences."
 msgstr ""
-"אפשרויות ניקוי עם אזהרות דורשות מעתה מצב מומחה. יש להפעיל אותו בהגדרות כדי "
-"לנקות אותן."
+"לאפשרות ניקוי אחת או יותר יש אזהרות והיא דורשת מצב מומחה. יש להפעיל אותה "
+"בהעדפות."
 
 #. TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
 #. Preferences. Keep it consistent with the translation of "Expert Mode"
@@ -2428,6 +2424,8 @@ msgid ""
 "Delete confirmation is disabled but expert mode is not enabled. Enable "
 "Expert Mode in preferences to skip delete confirmations."
 msgstr ""
+"אישור מחיקה מושבת אבל מצב מומחה פעיל. יש להפעיל מצב מומחה בהעדפות כדי לדלג "
+"על אישורי המחיקה."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
