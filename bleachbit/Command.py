@@ -77,6 +77,7 @@ class Delete:
                     bleachbit.Windows.delete_locked_file(self.path)
                 except:
                     logger.exception('exception when deleting locked file %s', self.path)
+                    raise
                 else:
                     if self.shred:
                         import warnings
