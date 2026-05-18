@@ -1,12 +1,10 @@
-# dynamically created during build
-bleachbit/Revision.py
-
 # code coverage
 .coverage
 htmlcov
 
 # Byte-compiled / optimized / DLL files
 *.py[cod]
+__pycache__/
 
 # Compiled language files
 po/*.mo
@@ -14,14 +12,16 @@ po/cleanerml.pot
 po/desktop.pot
 locale/
 
-# Windows build
+# build
+bleachbit.egg-info/
 build/
 dist/
+upx/
 BleachBit-Portable/
 BleachBit-*-portable.zip
-upx/
 windows/BleachBit*.exe
 windows/BleachBit*.zip
+bleachbit/Revision.py
 
 # editor backups and temporary files
 *~
