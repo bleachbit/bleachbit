@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-05-16 22:17-0600\n"
-"PO-Revision-Date: 2026-05-18 05:11+0000\n"
-"Last-Translator: \"David D.\" <dadu042@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-05-19 09:11+0000\n"
+"Last-Translator: Ludovic Pagès <nanucq@proton.me>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/bleachbit/main/"
 "fr/>\n"
 "Language: fr\n"
@@ -316,8 +316,8 @@ msgstr "Données du site"
 #: ../cleaners/opera.xml
 msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
 msgstr ""
-"Effacer LocalStorage, IndexedDB et autres données stockées par les sites "
-"internet"
+"Supprimer LocalStorage, IndexexDB et autres données stockées par les sites "
+"web"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -722,6 +722,8 @@ msgstr "Supprimer l’historique des conversations"
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
 msgstr ""
+"Vous perdriez les fonctions « Reprendre », « Continuer » et « Revenir en "
+"arrière » pour les sessions précédentes"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -1956,7 +1958,7 @@ msgstr "Choisissez le dossier de destination"
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error generating chaff: {error}"
-msgstr ""
+msgstr "Erreur lors de la génération de données factices : {error}"
 
 #. TRANSLATORS: Progress message shown while deleting chaff files.
 #. 'Deleting files' is a present participle.
@@ -1971,7 +1973,7 @@ msgstr "Suppression des fichiers …"
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error deleting chaff files: {error}"
-msgstr ""
+msgstr "Erreur lors de l'effacement des données factices : {error}"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves
