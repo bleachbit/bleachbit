@@ -1,22 +1,9 @@
-#!/usr/bin/python3
-# vim: ts=4:sw=4:expandtab
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
+#
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 GTK graphical user interface
@@ -33,6 +20,7 @@ set_root_log_level(options.get('debug'))
 
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.Cleaner import backends, register_cleaners
+from bleachbit import Windows
 import bleachbit
 from gi.repository import Gtk, Gdk, GObject, GLib, Gio
 
@@ -47,8 +35,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 
 
-if os.name == 'nt':
-    from bleachbit import Windows
+
 
 logger = logging.getLogger(__name__)
 
@@ -140,10 +127,9 @@ class Bleachbit(Gtk.Application):
         if shred_paths:
             self._shred_paths = shred_paths
 
-        if os.name == 'nt':
-            # clean up nonce files https://github.com/bleachbit/bleachbit/issues/858
-            import atexit
-            atexit.register(Windows.cleanup_nonce)
+        # clean up nonce files https://github.com/bleachbit/bleachbit/issues/858
+        import atexit
+        atexit.register(Windows.cleanup_nonce)
 
         from bleachbit.General import startup_check
         startup_check()
@@ -151,8 +137,6 @@ class Bleachbit(Gtk.Application):
     def _init_windows_misc(self, auto_exit, shred_paths, uac):
         application_id_suffix = ''
         is_context_menu_executed = auto_exit and shred_paths
-        if not os.name == 'nt':
-            return ''
         if Windows.elevate_privileges(uac):
             # privileges escalated in other process
             sys.exit(0)
@@ -252,7 +236,7 @@ class Bleachbit(Gtk.Application):
         """Shred settings (for privacy reasons) and quit"""
         # build a list of paths to delete
         paths = []
-        if os.name == 'nt' and portable_mode:
+        if portable_mode:
             # in portable mode on Windows, the options directory includes
             # executables
             paths.append(bleachbit.options_file)
@@ -376,17 +360,11 @@ class Bleachbit(Gtk.Application):
     def _check_os_version(self, show_modal):
         """Check the OS version and warn if this version of BleachBit is not intended for it."""
         msg = None
-        if os.name != 'nt':
-            msg = _('This version of BleachBit is intended only for Windows. '
-                    'For other operating systems, please update to BleachBit 5.x or newer.')
-
-
-        else:
-            from decimal import Decimal
-            win_ver = Windows.get_windows_version()
-            if win_ver >= Decimal('6.2'):
-                msg = _('This version of BleachBit is intended for old versions of Windows. '
-                        'For Windows 8 or newer, please update to BleachBit 5.x or newer.')
+        from decimal import Decimal
+        win_ver = Windows.get_windows_version()
+        if win_ver >= Decimal('6.2'):
+            msg = _('This version of BleachBit is intended for old versions of Windows. '
+                    'For Windows 8 or newer, please update to BleachBit 5.x or newer.')
         if not msg:
             return
         logger.warning(msg)
@@ -406,8 +384,7 @@ class Bleachbit(Gtk.Application):
             self._window = GUI(
                 application=self, title=APP_NAME, auto_exit=self._auto_exit,
                 interactive=self._interactive)
-        if 'nt' == os.name:
-            Windows.check_dll_hijacking(self._window, show_modal=self._interactive)
+        Windows.check_dll_hijacking(self._window, show_modal=self._interactive)
         self._window.present()
         self._check_os_version(show_modal=self._interactive)
         if self._shred_paths:
@@ -634,8 +611,6 @@ class GUI(Gtk.ApplicationWindow):
         GLib.idle_add(self.cb_refresh_operations)
 
     def _show_splash_screen(self):
-        if os.name != 'nt':
-            return
 
         font_conf_file = Windows.get_font_conf_file()
         if not os.path.exists(font_conf_file):
@@ -890,17 +865,18 @@ class GUI(Gtk.ApplicationWindow):
         # Show information for first start.
         # (The first start flag is set also for each new version.)
         if options.get("first_start") and not self._auto_exit:
-            if os.name == 'posix':
-                self.append_text(
-                    _('Access the application menu by clicking the hamburger icon on the title bar.'))
-                pref = self.get_preferences_dialog()
-                pref.run()
-            elif os.name == 'nt':
-                self.append_text(
-                    _('Access the application menu by clicking the logo on the title bar.'))
+            self.append_text(
+                _('Access the application menu by clicking the logo on the title bar.'))
             options.set('first_start', False)
 
-        if os.name == 'nt':
+        # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
+        # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
+        # http://bleachbit.sourceforge.net/forum/074-fails-errors
+        try:
+            import sqlite3
+        except ImportError:
+            self.append_text(
+                _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
             # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
             # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
             # http://bleachbit.sourceforge.net/forum/074-fails-errors
@@ -911,10 +887,7 @@ class GUI(Gtk.ApplicationWindow):
                     _("Error loading the SQLite module: the antivirus software may be blocking it."), 'error')
 
         # Show notice about admin privileges.
-        if os.name == 'posix' and os.path.expanduser('~') == '/root':
-            self.append_text(
-                _('You are running BleachBit with administrative privileges for cleaning shared parts of the system, and references to the user profile folder will clean only the root account.')+'\n')
-        if os.name == 'nt' and options.get('shred'):
+        if options.get('shred'):
             from win32com.shell.shell import IsUserAnAdmin
             if not IsUserAnAdmin():
                 self.append_text(
@@ -1054,10 +1027,7 @@ class GUI(Gtk.ApplicationWindow):
         box = Gtk.Box()
         Gtk.StyleContext.add_class(box.get_style_context(), "linked")
 
-        if os.name == 'nt':
-            icon_size = Gtk.IconSize.BUTTON
-        else:
-            icon_size = Gtk.IconSize.LARGE_TOOLBAR
+        icon_size = Gtk.IconSize.BUTTON
 
         # create the preview button
         self.preview_button = Gtk.Button.new_from_icon_name(
@@ -1097,22 +1067,8 @@ class GUI(Gtk.ApplicationWindow):
         box.add(self.stop_button)
 
         hbar.pack_start(box)
-
-        # Add hamburger menu on the right.
-        # This is not needed for Microsoft Windows because other code places its
-        # menu on the left side.
-        if os.name == 'nt':
-            return hbar
-        menu_button = Gtk.MenuButton()
-        icon = Gio.ThemedIcon(name="open-menu-symbolic")
-        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
-        builder = Gtk.Builder()
-        builder.add_from_file(bleachbit.app_menu_filename)
-        menu_button.set_menu_model(builder.get_object('app-menu'))
-        menu_button.add(image)
-        hbar.pack_end(menu_button)
-
         return hbar
+
 
     def on_configure_event(self, widget, event):
         (x, y) = self.get_position()
@@ -1120,17 +1076,16 @@ class GUI(Gtk.ApplicationWindow):
 
         # fixup maximized window position:
         # on Windows if a window is maximized on a secondary monitor it is moved off the screen
-        if 'nt' == os.name:
-            window = self.get_window()
-            if window.get_state() & Gdk.WindowState.MAXIMIZED != 0:
-                screen = self.get_screen()
-                monitor_num = screen.get_monitor_at_window(window)
-                g = screen.get_monitor_geometry(monitor_num)
-                if x < g.x or x >= g.x + g.width or y < g.y or y >= g.y + g.height:
-                    logger.debug("Maximized window {}+{}: monitor ({}) geometry = {}+{}".format(
-                        (x, y), (width, height), monitor_num, (g.x, g.y), (g.width, g.height)))
-                    self.move(g.x, g.y)
-                    return True
+        window = self.get_window()
+        if window.get_state() & Gdk.WindowState.MAXIMIZED != 0:
+            screen = self.get_screen()
+            monitor_num = screen.get_monitor_at_window(window)
+            g = screen.get_monitor_geometry(monitor_num)
+            if x < g.x or x >= g.x + g.width or y < g.y or y >= g.y + g.height:
+                logger.debug("Maximized window {}+{}: monitor ({}) geometry = {}+{}".format(
+                    (x, y), (width, height), monitor_num, (g.x, g.y), (g.width, g.height)))
+                self.move(g.x, g.y)
+                return True
 
         # save window position and size
         options.set("window_x", x, commit=False)
@@ -1161,7 +1116,7 @@ class GUI(Gtk.ApplicationWindow):
 
     def on_show(self, widget):
 
-        if 'nt' == os.name and Windows.splash_thread.is_alive():
+        if Windows.splash_thread.is_alive():
             Windows.splash_thread.join(0)
 
         # restore window position, size and state
@@ -1209,8 +1164,6 @@ class GUI(Gtk.ApplicationWindow):
 
     def set_windows10_theme(self):
         """Toggle the Windows 10 theme"""
-        if not 'nt' == os.name:
-            return
 
         if not self._style_provider_regular:
             self._style_provider_regular = Gtk.CssProvider()

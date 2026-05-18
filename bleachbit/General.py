@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 General code
@@ -62,49 +49,8 @@ class WindowsError(Exception):
         return 'this is a dummy class for non-Windows systems'
 
 
-def chownself(path):
-    """Set path owner to real self when running in sudo.
-    If sudo creates a path and the owner isn't changed, the
-    owner may not be able to access the path."""
-    if 'posix' != os.name:
-        return
-    uid = getrealuid()
-    logger.debug('chown(%s, uid=%s)', path, uid)
-    if 0 == path.find('/root'):
-        logger.info('chown for path /root aborted')
-        return
-    try:
-        os.chown(path, uid, -1)
-    except:
-        logger.exception('Error in chown() under chownself()')
-
-
-def getrealuid():
-    """Get the real user ID when running in sudo mode"""
-
-    if 'posix' != os.name:
-        raise RuntimeError('getrealuid() requires POSIX')
-
-    if os.getenv('SUDO_UID'):
-        return int(os.getenv('SUDO_UID'))
-
-    try:
-        login = os.getlogin()
-        # On Ubuntu 9.04, getlogin() under sudo returns non-root user.
-        # On Fedora 11, getlogin() under sudo returns 'root'.
-        # On Fedora 11, getlogin() under su returns non-root user.
-    except:
-        login = os.getenv('LOGNAME')
-
-    if login and 'root' != login:
-        import pwd
-        return pwd.getpwnam(login)[3]
-
-    return os.getuid()
-
-
 def makedirs(path):
-    """Make directory recursively considering sudo permissions.
+    """Make directory recursively.
     'Path' should not end in a delimiter."""
     logger.debug('makedirs(%s)', path)
     if os.path.lexists(path):
@@ -113,37 +59,27 @@ def makedirs(path):
     if not os.path.lexists(parentdir):
         makedirs(parentdir)
     os.mkdir(path, 0o700)
-    if sudo_mode():
-        chownself(path)
 
 
-def run_external(args, stdout=None, env=None, clean_env=True):
-    """Run external command and return (return code, stdout, stderr)"""
+def run_external(args, stdout=None, env=None, clean_env=None):
+    """Run external command and return (return code, stdout, stderr)
+
+    clean_env parameter is unused (kept for backward compatibility)
+    """
     logger.debug('running cmd ' + ' '.join(args))
     import subprocess
     if stdout is None:
         stdout = subprocess.PIPE
     kwargs = {}
     encoding = bleachbit.stdout_encoding
-    if sys.platform == 'win32':
-        # hide the 'DOS box' window
-        import win32process
-        import win32con
-        stui = subprocess.STARTUPINFO()
-        stui.dwFlags = win32process.STARTF_USESHOWWINDOW
-        stui.wShowWindow = win32con.SW_HIDE
-        kwargs['startupinfo'] = stui
-        encoding='mbcs'
-    if not env and clean_env and 'posix' == os.name:
-        # Clean environment variables so that that subprocesses use English
-        # instead of translated text. This helps when checking for certain
-        # strings in the output.
-        # https://github.com/bleachbit/bleachbit/issues/167
-        # https://github.com/bleachbit/bleachbit/issues/168
-        keep_env = ('PATH', 'HOME', 'LD_LIBRARY_PATH', 'TMPDIR', 'BLEACHBIT_TEST_OPTIONS_DIR')
-        env = {key: value for key, value in os.environ.items() if key in keep_env}
-        env['LANG'] = 'C'
-        env['LC_ALL'] = 'C'
+    # hide the 'DOS box' window
+    import win32process
+    import win32con
+    stui = subprocess.STARTUPINFO()
+    stui.dwFlags = win32process.STARTF_USESHOWWINDOW
+    stui.wShowWindow = win32con.SW_HIDE
+    kwargs['startupinfo'] = stui
+    encoding='mbcs'
     p = subprocess.Popen(args, stdout=stdout,
                          stderr=subprocess.PIPE, env=env, **kwargs)
     try:

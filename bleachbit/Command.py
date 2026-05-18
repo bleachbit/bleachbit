@@ -33,10 +33,7 @@ import logging
 import os
 import types
 
-if 'nt' == os.name:
-    import bleachbit.Windows
-else:
-    from bleachbit.General import WindowsError
+import bleachbit.Windows
 
 logger = logging.getLogger(__name__)
 
@@ -310,8 +307,6 @@ class Winreg:
 
     def execute(self, really_delete):
         """Execute the Windows registry cleaner"""
-        if 'nt' != os.name:
-            return
         _str = None  # string representation
         ret = None  # return value meaning 'deleted' or 'delete-able'
         if self.valuename:

@@ -36,14 +36,13 @@ except ModuleNotFoundError as e:
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk  # keep after gi.require_version()
 
-if os.name == 'nt':
-    from bleachbit import Windows
+from bleachbit import Windows
 
 
 def browse_folder(parent, title, multiple, stock_button):
     """Ask the user to select a folder.  Return the full path or None."""
 
-    if os.name == 'nt' and not os.getenv('BB_NATIVE'):
+    if not os.getenv('BB_NATIVE'):
         ret = Windows.browse_folder(parent, title)
         return [ret] if multiple and not ret is None else ret
 
@@ -72,7 +71,7 @@ def browse_folder(parent, title, multiple, stock_button):
 def browse_file(parent, title):
     """Prompt user to select a single file"""
 
-    if os.name == 'nt' and not os.getenv('BB_NATIVE'):
+    if not os.getenv('BB_NATIVE'):
         return Windows.browse_file(parent, title)
 
     chooser = Gtk.FileChooserDialog(title=title,
@@ -96,7 +95,7 @@ def browse_file(parent, title):
 def browse_files(parent, title):
     """Prompt user to select multiple files to delete"""
 
-    if os.name == 'nt' and not os.getenv('BB_NATIVE'):
+    if not os.getenv('BB_NATIVE'):
         return Windows.browse_files(parent, title)
 
     chooser = Gtk.FileChooserDialog(title=title,
@@ -175,13 +174,7 @@ def message_dialog(parent, msg, mtype=Gtk.MessageType.ERROR, buttons=Gtk.Buttons
 
 
 def open_url(url, parent_window=None, prompt=True):
-    """Open an HTTP URL.  Try to run as non-root."""
-    # drop privileges so the web browser is running as a normal process
-    if os.name == 'posix' and os.getuid() == 0:
-        msg = _(
-            "Because you are running as root, please manually open this link in a web browser:\n%s") % url
-        message_dialog(None, msg, Gtk.MessageType.INFO)
-        return
+    """Open an HTTP URL."""
     if prompt:
         # find hostname
         import re
@@ -200,9 +193,8 @@ def open_url(url, parent_window=None, prompt=True):
         if Gtk.ResponseType.OK != resp:
             return
     # open web browser
-    if os.name == 'nt':
-        # in Gtk.show_uri() avoid 'glib.GError: No application is registered as
-        # handling this file'
+    # in Gtk.show_uri() avoid 'glib.GError: No application is registered as
+    # handling this file'
         import webbrowser
         webbrowser.open(url)
     elif (Gtk.get_major_version(), Gtk.get_minor_version()) < (3, 22):

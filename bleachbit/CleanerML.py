@@ -40,8 +40,6 @@ logger = logging.getLogger(__name__)
 def default_vars():
     """Return default multi-value variables"""
     ret = {}
-    if not os.name == 'nt':
-        return ret
     # Expand ProgramFiles to also be ProgramW6432, etc.
     wowvars = (('ProgramFiles', 'ProgramW6432'),
                ('CommonProgramFiles', 'CommonProgramW6432'))
@@ -98,17 +96,7 @@ class CleanerML:
             return True
         # Otherwise, check platform.
         # Define the current operating system.
-        if platform == 'darwin':
-            current_os = ('darwin', 'bsd', 'unix')
-        elif platform.startswith('linux'):
-            current_os = ('linux', 'unix')
-        elif platform.startswith('openbsd'):
-            current_os = ('bsd', 'openbsd', 'unix')
-        elif platform.startswith('netbsd'):
-            current_os = ('bsd', 'netbsd', 'unix')
-        elif platform.startswith('freebsd'):
-            current_os = ('bsd', 'freebsd', 'unix')
-        elif platform == 'win32':
+        if platform == 'win32':
             current_os = ('windows',)
         else:
             raise RuntimeError('Unknown operating system: %s ' % sys.platform)
@@ -135,8 +123,6 @@ class CleanerML:
                 logger.exception(exc_msg.format(
                     cleaner_id=self.cleaner.id, option_xml=option.toxml()))
         self.handle_cleaner_running(cleaner.getElementsByTagName('running'))
-        self.handle_localizations(
-            cleaner.getElementsByTagName('localizations'))
 
     def handle_cleaner_label(self, label):
         """<label> element under <cleaner>"""
@@ -221,17 +207,6 @@ class CleanerML:
             raise RuntimeError("Invalid command '%s'" % command)
         self.cleaner.add_action(self.option_id, provider)
 
-    def handle_localizations(self, localization_nodes):
-        """<localizations> element under <cleaner>"""
-        if not 'posix' == os.name:
-            return
-        from bleachbit import Unix
-        for localization_node in localization_nodes:
-            for child_node in localization_node.childNodes:
-                Unix.locales.add_xml(child_node)
-        # Add a dummy action so the file isn't reported as unusable
-        self.cleaner.add_action('localization', ActionProvider(None))
-
     def handle_cleaner_var(self, var):
         """Handle one <var> element under <cleaner>.
 
@@ -273,14 +248,6 @@ def list_cleanerml_files(local_only=False):
         cleanerdirs += (bleachbit.system_cleaners_dir, )
     for pathname in listdir(cleanerdirs):
         if not pathname.lower().endswith('.xml'):
-            continue
-        import stat
-        st = os.stat(pathname)
-        if sys.platform != 'win32' and stat.S_IMODE(st[stat.ST_MODE]) & 2:
-            # TRANSLATORS: When BleachBit detects the file permissions are
-            # insecure, it will not load the cleaner as if it did not exist.
-            logger.warning(
-                _("Ignoring cleaner because it is world writable: %s"), pathname)
             continue
         yield pathname
 

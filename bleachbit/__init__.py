@@ -14,7 +14,6 @@ import locale
 import os
 import re
 import sys
-import platform
 import warnings
 
 from bleachbit import Log
@@ -36,14 +35,9 @@ if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
     stdout_encoding = 'utf-8'
 else:
     stdout_encoding = sys.stdout.encoding
-    if 'win32' == sys.platform:
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", RuntimeWarning)
-            win_unicode_console.enable()
-
-if not hasattr(platform, 'linux_distribution'):
-    from ._platform import _linux_distribution
-    platform.linux_distribution = _linux_distribution
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        win_unicode_console.enable()
 
 logger = Log.init_log()
 
@@ -66,14 +60,9 @@ else:
 
 # license
 license_filename = None
-license_filenames = ('/usr/share/common-licenses/GPL-3',  # Debian, Ubuntu
-                     # Microsoft Windows
-                     os.path.join(bleachbit_exe_path, 'COPYING'),
-                     '/usr/share/doc/bleachbit-' + APP_VERSION + '/COPYING',  # CentOS, Fedora, RHEL
-                     '/usr/share/licenses/bleachbit/COPYING',  # Fedora 21+, RHEL 7+
-                     '/usr/share/doc/packages/bleachbit/COPYING',  # OpenSUSE 11.1
-                     '/usr/pkg/share/doc/bleachbit/COPYING',  # NetBSD 5
-                     '/usr/share/licenses/common/GPL3/license.txt')  # Arch Linux
+license_filenames = (
+    os.path.join(bleachbit_exe_path, 'COPYING'),
+)
 for lf in license_filenames:
     if os.path.exists(lf):
         license_filename = lf
@@ -82,17 +71,14 @@ for lf in license_filenames:
 # configuration
 portable_mode = False
 options_dir = None
-if 'posix' == os.name:
-    options_dir = os.path.expanduser("~/.config/bleachbit")
-elif 'nt' == os.name:
-    os.environ.pop('FONTCONFIG_FILE', None)
-    if os.path.exists(os.path.join(bleachbit_exe_path, 'bleachbit.ini')):
-        # portable mode
-        portable_mode = True
-        options_dir = bleachbit_exe_path
-    else:
-        # installed mode
-        options_dir = os.path.expandvars(r"${APPDATA}\BleachBit")
+os.environ.pop('FONTCONFIG_FILE', None)
+if os.path.exists(os.path.join(bleachbit_exe_path, 'bleachbit.ini')):
+    # portable mode
+    portable_mode = True
+    options_dir = bleachbit_exe_path
+else:
+    # installed mode
+    options_dir = os.path.expandvars(r"${APPDATA}\BleachBit")
 
 try:
     options_dir = os.environ['BLEACHBIT_TEST_OPTIONS_DIR']
@@ -121,18 +107,8 @@ personal_cleaners_dir = os.path.join(options_dir, "cleaners")
 # personal_cleaners_dir.
 if os.path.isdir(os.path.join(bleachbit_exe_path, 'cleaners')) and not portable_mode:
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
-elif sys.platform.startswith('linux') or sys.platform == 'darwin':
-    system_cleaners_dir = '/usr/share/bleachbit/cleaners'
-elif sys.platform == 'win32':
-    system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
-elif sys.platform[:6] == 'netbsd':
-    system_cleaners_dir = '/usr/pkg/share/bleachbit/cleaners'
-elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
-    system_cleaners_dir = '/usr/local/share/bleachbit/cleaners'
 else:
-    system_cleaners_dir = None
-    logger.warning(
-        'unknown system cleaners directory for platform %s ', sys.platform)
+    system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
 
 # local cleaners directory for running without installation (Windows or Linux)
 local_cleaners_dir = None
@@ -144,11 +120,8 @@ windows10_theme_path = os.path.normpath(os.path.join(bleachbit_exe_path, 'themes
 
 # application icon
 __icons = (
-    '/usr/share/pixmaps/bleachbit.png',  # Linux
-    '/usr/pkg/share/pixmaps/bleachbit.png',  # NetBSD
-    '/usr/local/share/pixmaps/bleachbit.png',  # FreeBSD and OpenBSD
     os.path.normpath(os.path.join(bleachbit_exe_path,
-                                  'share\\bleachbit.png')),  # Windows
+                                  'share\\bleachbit.png')),
     # When running from source (i.e., not installed).
     os.path.normpath(os.path.join(bleachbit_exe_path, 'bleachbit.png')),
 )
@@ -161,10 +134,6 @@ for __icon in __icons:
 # This path works when running from source (cross platform) or when
 # installed on Windows.
 app_menu_filename = os.path.join(bleachbit_exe_path, 'data', 'app-menu.ui')
-if not os.path.exists(app_menu_filename) and system_cleaners_dir:
-    # This path works when installed on Linux.
-    app_menu_filename = os.path.abspath(
-        os.path.join(system_cleaners_dir, '../app-menu.ui'))
 if not os.path.exists(app_menu_filename):
     logger.error('unknown location for app-menu.ui')
 
@@ -172,15 +141,8 @@ if not os.path.exists(app_menu_filename):
 if os.path.exists("./locale/"):
     # local locale (personal)
     locale_dir = os.path.abspath("./locale/")
-# system-wide installed locale
-elif sys.platform.startswith("linux") or sys.platform == "darwin":
-    locale_dir = "/usr/share/locale/"
-elif sys.platform == "win32":
+else:
     locale_dir = os.path.join(bleachbit_exe_path, "share\\locale\\")
-elif sys.platform[:6] == "netbsd":
-    locale_dir = "/usr/pkg/share/locale/"
-elif sys.platform.startswith("openbsd") or sys.platform.startswith("freebsd"):
-    locale_dir = "/usr/local/share/locale/"
 
 
 

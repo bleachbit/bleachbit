@@ -42,8 +42,6 @@ def unset_sslkeylogfile(use_logger):
 
     Returns True if unset
     """
-    if not os.name == 'nt':
-        return False
     if not os.environ.get('SSLKEYLOGFILE'):
         return False
     del os.environ['SSLKEYLOGFILE']
@@ -181,18 +179,8 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
 
 def _get_os_name_version():
     """Return (os_name, os_version) tuple for network requests."""
-    os_name = platform.system()  # 'Linux', 'Windows', etc.
-    if sys.platform.startswith('linux'):
-        dist = platform.linux_distribution()
-        if dist[0]:
-            os_version = '%s/%s-%s' % (dist[0], dist[1], dist[2])
-        else:
-            os_version = platform.uname()[2]
-    elif sys.platform[:6] == 'netbsd':
-        os_version = '%s/%s %s' % (os_name,
-                                   platform.machine(), platform.release())
-    else:
-        os_version = platform.uname()[3]
+    os_name = platform.system()  # 'Windows', etc.
+    os_version = platform.uname()[3]
     return os_name, os_version
 
 
@@ -220,9 +208,8 @@ def get_update_request_headers():
     if gtk_version:
         headers['X-GTK-Version'] = gtk_version
 
-    if os.name == 'nt':
-        headers['X-Python-Version'] = platform.python_version()
-        headers['X-Pointer-Bits'] = str(8 * struct.calcsize('P'))
+    headers['X-Python-Version'] = platform.python_version()
+    headers['X-Pointer-Bits'] = str(8 * struct.calcsize('P'))
 
     return headers
 

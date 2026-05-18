@@ -1,21 +1,9 @@
-# vim: ts=4:sw=4:expandtab
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
+#
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 """
@@ -32,8 +20,7 @@ import re
 
 logger = logging.getLogger(__name__)
 
-if 'nt' == os.name:
-    from win32file import GetLongPathName
+from win32file import GetLongPathName
 
 
 boolean_keys = ['auto_hide',
@@ -49,10 +36,9 @@ boolean_keys = ['auto_hide',
                 'shred',
                 'units_iec',
                 'window_fullscreen',
-                'window_maximized']
-if 'nt' == os.name:
-    boolean_keys.append('update_winapp2')
-    boolean_keys.append('win10_theme')
+                'window_maximized',
+                'update_winapp2',
+                'win10_theme']
 int_keys = ['window_x', 'window_y', 'window_width', 'window_height', ]
 
 
@@ -61,7 +47,7 @@ def path_to_option(pathname):
     # On Windows change to lowercase and use backwards slashes.
     pathname = os.path.normcase(pathname)
     # On Windows expand DOS-8.3-style pathnames.
-    if 'nt' == os.name and os.path.exists(pathname):
+    if os.path.exists(pathname):
         pathname = GetLongPathName(pathname)
     if ':' == pathname[1]:
         # ConfigParser treats colons in a special way
@@ -78,7 +64,7 @@ def init_configuration():
         os.remove(bleachbit.options_file)
     with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as f_ini:
         f_ini.write('[bleachbit]\n')
-        if os.name == 'nt' and bleachbit.portable_mode:
+        if bleachbit.portable_mode:
             f_ini.write('[Portable]\n')
     for section in options.config.sections():
         options.config.remove_section(section)
@@ -103,7 +89,6 @@ class Options:
             self.__purge()
         if not os.path.exists(bleachbit.options_dir):
             General.makedirs(bleachbit.options_dir)
-        mkfile = not os.path.exists(bleachbit.options_file)
         with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as _file:
             try:
                 self.config.write(_file)
@@ -114,8 +99,7 @@ class Options:
                         _("Disk was full when writing configuration to file %s"), bleachbit.options_file)
                 else:
                     raise
-        if mkfile and General.sudo_mode():
-            General.chownself(bleachbit.options_file)
+
 
     def __purge(self):
         """Clear out obsolete data"""
@@ -124,7 +108,7 @@ class Options:
             return
         for option in self.config.options('hashpath'):
             pathname = option
-            if 'nt' == os.name and re.search(r'^[a-z]\\', option):
+            if re.search(r'^[a-z]\\', option):
                 # restore colon lost because ConfigParser treats colon special
                 # in keys
                 pathname = pathname[0] + ':' + pathname[1:]
@@ -151,8 +135,6 @@ class Options:
 
     def get(self, option, section='bleachbit'):
         """Retrieve a general option"""
-        if not 'nt' == os.name and 'update_winapp2' == option:
-            return False
         if section == 'bleachbit' and option == 'debug':
             from bleachbit.Log import is_debugging_enabled_via_cli
             if is_debugging_enabled_via_cli():
@@ -283,9 +265,8 @@ class Options:
         self.__set_default("window_fullscreen", False)
         self.__set_default("window_maximized", False)
 
-        if 'nt' == os.name:
-            self.__set_default("update_winapp2", False)
-            self.__set_default("win10_theme", False)
+        self.__set_default("update_winapp2", False)
+        self.__set_default("win10_theme", False)
 
         if not self.config.has_section('preserve_languages'):
             lang = bleachbit.user_locale

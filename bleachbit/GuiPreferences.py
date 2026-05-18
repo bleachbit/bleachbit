@@ -30,10 +30,6 @@ from bleachbit import GuiBasic
 
 from gi.repository import Gtk
 import logging
-import os
-
-if 'posix' == os.name:
-    from bleachbit import Unix
 
 logger = logging.getLogger(__name__)
 
@@ -63,9 +59,6 @@ class PreferencesDialog:
             LOCATIONS_CUSTOM), Gtk.Label(label=_("Custom")))
         notebook.append_page(self.__drives_page(),
                              Gtk.Label(label=_("Drives")))
-        if 'posix' == os.name:
-            notebook.append_page(self.__languages_page(),
-                                 Gtk.Label(label=_("Languages")))
         notebook.append_page(self.__locations_page(
             LOCATIONS_WHITELIST), Gtk.Label(label=_("Whitelist")))
 
@@ -86,13 +79,12 @@ class PreferencesDialog:
         options.toggle(path)
         if online_update_notification_enabled:
             self.cb_beta.set_sensitive(options.get('check_online_updates'))
-            if 'nt' == os.name:
-                self.cb_winapp2.set_sensitive(
-                    options.get('check_online_updates'))
+            self.cb_winapp2.set_sensitive(
+                options.get('check_online_updates'))
         if 'auto_hide' == path:
             self.refresh_operations = True
         if 'dark_mode' == path:
-            if 'nt' == os.name and options.get('win10_theme'):
+            if options.get('win10_theme'):
                 self.cb_set_windows10_theme()
             Gtk.Settings.get_default().set_property(
                 'gtk-application-prefer-dark-theme', options.get('dark_mode'))
@@ -101,9 +93,6 @@ class PreferencesDialog:
         if 'debug' == path:
             from bleachbit.Log import set_root_log_level
             set_root_log_level(options.get('debug'))
-        if 'kde_shred_menu_option' == path:
-            from bleachbit.DesktopMenuOptions import install_kde_service_menu_file
-            install_kde_service_menu_file()
 
     def __general_page(self):
         """Return a widget containing the general page"""
@@ -131,15 +120,14 @@ class PreferencesDialog:
                 'toggled', self.__toggle_callback, 'check_beta')
             updates_box.pack_start(self.cb_beta, False, True, 0)
 
-            if 'nt' == os.name:
-                self.cb_winapp2 = Gtk.CheckButton.new_with_label(
-                    _("Download and update cleaners from community (winapp2.ini)"))
-                self.cb_winapp2.set_active(options.get('update_winapp2'))
-                self.cb_winapp2.set_sensitive(
-                    options.get('check_online_updates'))
-                self.cb_winapp2.connect(
-                    'toggled', self.__toggle_callback, 'update_winapp2')
-                updates_box.pack_start(self.cb_winapp2, False, True, 0)
+            self.cb_winapp2 = Gtk.CheckButton.new_with_label(
+                _("Download and update cleaners from community (winapp2.ini)"))
+            self.cb_winapp2.set_active(options.get('update_winapp2'))
+            self.cb_winapp2.set_sensitive(
+                options.get('check_online_updates'))
+            self.cb_winapp2.connect(
+                'toggled', self.__toggle_callback, 'update_winapp2')
+            updates_box.pack_start(self.cb_winapp2, False, True, 0)
             vbox.pack_start(updates_box, False, True, 0)
 
         # TRANSLATORS: This means to hide cleaners which would do
@@ -184,13 +172,12 @@ class PreferencesDialog:
         cb_units_iec.connect('toggled', self.__toggle_callback, 'units_iec')
         vbox.pack_start(cb_units_iec, False, True, 0)
 
-        if 'nt' == os.name:
-            # Dark theme
-            cb_win10_theme = Gtk.CheckButton(_("Windows 10 theme"))
-            cb_win10_theme.set_active(options.get("win10_theme"))
-            cb_win10_theme.connect(
-                'toggled', self.__toggle_callback, 'win10_theme')
-            vbox.pack_start(cb_win10_theme, False, True, 0)
+        # Windows 10 theme
+        cb_win10_theme = Gtk.CheckButton(_("Windows 10 theme"))
+        cb_win10_theme.set_active(options.get("win10_theme"))
+        cb_win10_theme.connect(
+            'toggled', self.__toggle_callback, 'win10_theme')
+        vbox.pack_start(cb_win10_theme, False, True, 0)
 
         # Dark theme
         self.cb_dark_mode = Gtk.CheckButton(label=_("Dark mode"))
@@ -209,13 +196,6 @@ class PreferencesDialog:
         cb_debug.set_active(options.get("debug"))
         cb_debug.connect('toggled', self.__toggle_callback, 'debug')
         vbox.pack_start(cb_debug, False, True, 0)
-
-        # KDE context menu shred option
-        if 'nt' != os.name:
-            cb_kde_shred_menu_option = Gtk.CheckButton(label=_("Add the shred context menu to KDE Plasma"))
-            cb_kde_shred_menu_option.set_active(options.get("kde_shred_menu_option"))
-            cb_kde_shred_menu_option.connect('toggled', self.__toggle_callback, 'kde_shred_menu_option')
-            vbox.pack_start(cb_kde_shred_menu_option, False, True, 0)
 
         return vbox
 
@@ -283,56 +263,6 @@ class PreferencesDialog:
         button_box.pack_start(button_remove, True, True, 0)
         vbox.pack_start(button_box, False, True, 0)
 
-        return vbox
-
-    def __languages_page(self):
-        """Return widget containing the languages page"""
-
-        def preserve_toggled_cb(cell, path, liststore):
-            """Callback for toggling the 'preserve' column"""
-            __iter = liststore.get_iter_from_string(path)
-            value = not liststore.get_value(__iter, 0)
-            liststore.set(__iter, 0, value)
-            langid = liststore[path][1]
-            options.set_language(langid, value)
-
-        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        notice = Gtk.Label(
-            label=_("All languages will be deleted except those checked."))
-        vbox.pack_start(notice, False, False, 0)
-
-        # populate data
-        liststore = Gtk.ListStore('gboolean', str, str)
-        for lang, native in sorted(Unix.Locales.native_locale_names.items()):
-            liststore.append([(options.get_language(lang)), lang, native])
-
-        # create treeview
-        treeview = Gtk.TreeView.new_with_model(liststore)
-
-        # create column views
-        self.renderer0 = Gtk.CellRendererToggle()
-        self.renderer0.set_property('activatable', True)
-        self.renderer0.connect('toggled', preserve_toggled_cb, liststore)
-        self.column0 = Gtk.TreeViewColumn(
-            _("Preserve"), self.renderer0, active=0)
-        treeview.append_column(self.column0)
-
-        self.renderer1 = Gtk.CellRendererText()
-        self.column1 = Gtk.TreeViewColumn(_("Code"), self.renderer1, text=1)
-        treeview.append_column(self.column1)
-
-        self.renderer2 = Gtk.CellRendererText()
-        self.column2 = Gtk.TreeViewColumn(_("Name"), self.renderer2, text=2)
-        treeview.append_column(self.column2)
-        treeview.set_search_column(2)
-
-        # finish
-        swindow = Gtk.ScrolledWindow()
-        swindow.set_overlay_scrolling(False)
-        swindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-        swindow.set_size_request(300, 200)
-        swindow.add(treeview)
-        vbox.pack_start(swindow, False, True, 0)
         return vbox
 
     def __locations_page(self, page_type):
