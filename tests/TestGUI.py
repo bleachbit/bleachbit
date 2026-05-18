@@ -192,7 +192,7 @@ class GUITestCase(common.BleachbitTestCase):
         """Test a pop-up notification"""
         from bleachbit.GUI import notify
         notify('This is a test notification')
-        time.sleep
+        time.sleep(1)
 
     @mock.patch('bleachbit.GuiBasic.delete_confirmation_dialog')
     def test_confirm_delete(self, mock_delete_confirmation_dialog):
