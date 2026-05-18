@@ -1,3 +1,4 @@
+# -*- coding: future_fstrings -*-
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (c) 2008-2026 Andrew Ziem.
 #
@@ -192,8 +193,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             human = bytes_to_human(bytes1)
             bytes2 = human_to_bytes(human)
             error = abs(float(bytes2 - bytes1) / bytes1)
-            self.assertLess(abs(error), 0.01, "%d (%s) is %.2f%% different than %d" %
-                            (bytes1, human, error * 100, bytes2))
+            self.assertLess(abs(error), 0.01, f"{bytes1} ({human}) is {error * 100:.2f}% different than {bytes2}")
 
         # test localization
         if hasattr(locale, 'format_string'):
@@ -528,7 +528,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             if not re.match(r'([A-Z]):\s+(\d+)', line):
                 continue
             drive, bytes_free = re.split(r'\s+', line)
-            print('Checking free space for %s' % drive)
+            print(f'Checking free space for {drive}')
             bytes_free = int(bytes_free)
             free = free_space(drive)
             # tolerate small error due to timing differences

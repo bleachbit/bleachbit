@@ -1,8 +1,6 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# -*- coding: future_fstrings -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -216,7 +214,7 @@ class WinappTestCase(common.BleachbitTestCase):
         create_sub_key(subkey)
 
         self.assertTrue(detect_registry_key(KEYFULL))
-        self.assertTrue(detect_registry_key('HKCU\\%s' % subkey))
+        self.assertTrue(detect_registry_key(f'HKCU\\{subkey}'))
 
         return dirname, fname1, fname2, fbak
 
@@ -450,12 +448,12 @@ class WinappTestCase(common.BleachbitTestCase):
         )
 
         for test in tests:
-            msg = '\nTest:\n%s' % test[0]
+            msg = f'\nTest:\n{test[0]}'
             # setup
             (dirname, _fname1, _fname2, _fbak) = self.setup_fake()
-            self.assertExists(r'%s\deleteme.log' % dirname, msg)
-            self.assertExists(r'%s\deleteme.bak' % dirname, msg)
-            self.assertExists(r'%s\sub\deleteme.log' % dirname, msg)
+            self.assertExists(rf'{dirname}\deleteme.log', msg)
+            self.assertExists(rf'{dirname}\deleteme.bak', msg)
+            self.assertExists(rf'{dirname}\sub\deleteme.log', msg)
             # set environment variable for testing
             os.environ['bbtestdir'] = dirname
             self.assertExists(r'$bbtestdir\deleteme.log', msg)

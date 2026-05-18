@@ -1,3 +1,5 @@
+# -*- coding: future_fstrings -*-
+
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (c) 2008-2026 Andrew Ziem.
 #
@@ -40,7 +42,7 @@ def expand_multi_var(s, variables):
     var_keys_used = []
     ret = []
     for var_key in variables:
-        sub = '$$%s$$' % var_key
+        sub = f'$${var_key}$$'
         if s.find(sub) > -1:
             var_keys_used.append(var_key)
     if not var_keys_used:
@@ -54,7 +56,7 @@ def expand_multi_var(s, variables):
     for var_set in vars_product:
         ms = s  # modified version of input string
         for var_key, var_value in var_set.items():
-            sub = '$$%s$$' % var_key
+            sub = f'$${var_key}$$'
             ms = ms.replace(sub, var_value)
         ret.append(ms)
     if ret:
@@ -259,7 +261,7 @@ class FileActionProvider(ActionProvider):
         }
 
         if self.search not in search_functions:
-            raise RuntimeError("Invalid search='%s'" % self.search)
+            raise RuntimeError(f"Invalid search='{self.search}'")
 
         func = search_functions[self.search]
 
@@ -475,7 +477,7 @@ class Process(ActionProvider):
                     Popen(self.cmd)
             except Exception as e:
                 raise RuntimeError(
-                    'Exception in external command\nCommand: %s\nError: %s' % (self.cmd, str(e))) from e
+                    f'Exception in external command\nCommand: {self.cmd}\nError: {str(e)}') from e
             if 0 != rc:
                 msg = 'Command: %s\nReturn code: %d\nStdout: %s\nStderr: %s\n'
                 logger.warning(msg, self.cmd, rc, stdout, stderr)

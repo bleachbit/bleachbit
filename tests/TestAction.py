@@ -1,3 +1,4 @@
+# -*- coding: future_fstrings -*-
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (c) 2008-2026 Andrew Ziem.
 #
@@ -46,7 +47,7 @@ def _action_str_to_results(action_str):
 def benchmark_filter(this_filter):
     """Measure how fast listing files is with and without filter"""
     n_files = 100000
-    print('benchmark of %d files' % n_files)
+    print(f'benchmark of {n_files} files')
 
     # make a directory with many files
     dirname = tempfile.mkdtemp(prefix='bleachbit-action-bench')
@@ -60,14 +61,12 @@ def benchmark_filter(this_filter):
         # This regex matches everything, so the "no filter" and regex
         # are comparable
         filter_code = 'regex="."'
-    action_str = '<action command="delete" search="glob" path="%s/*" %s />' % \
-        (dirname, filter_code)
+    action_str = f'<action command="delete" search="glob" path="{dirname}/*" {filter_code} />'
     _action_str_to_results(action_str)
     end = time.time()
     elapsed_seconds = end - start
     rate = n_files / elapsed_seconds
-    print('filter %s: elapsed: %.2f seconds, %.2f files/second' %
-          (this_filter, elapsed_seconds, rate))
+    print(f'filter {this_filter}: elapsed: {elapsed_seconds:.2f} seconds, {rate:.2f} files/second')
 
     # clean up
     shutil.rmtree(dirname)
@@ -123,11 +122,11 @@ class ActionTestCase(common.BleachbitTestCase):
             elif command in ('ini', 'json'):
                 self.assertLExists(filename)
             else:
-                raise RuntimeError("Unknown command '%s'" % command)
+                raise RuntimeError(f"Unknown command '{command}'")
         if 'walk.all' == search:
             if expect_exists:
                 self.assertTrue(dir_is_empty(
-                    filename), 'directory not empty after walk.all: %s' % filename)
+                    filename), f'directory not empty after walk.all: {filename}')
 
     def test_delete(self):
         """Unit test for class Delete"""
@@ -147,8 +146,7 @@ class ActionTestCase(common.BleachbitTestCase):
                     # forward slash needs to be normalized on Windows
                     command = 'delete'
                     filename = filename.replace('\\', '/')
-                action_str = '<action command="%s" search="file" path="%s" />' % \
-                    (command, filename)
+                action_str = f'<action command="{command}" search="file" path="{filename}" />'
                 self._test_action_str(action_str)
                 self.assertNotExists(filename)
 
@@ -161,7 +159,7 @@ class ActionTestCase(common.BleachbitTestCase):
         ]
         for test in tests:
             pathname = self.write_file(test)
-            action_str = '<action command="delete" search="file" path="%s" />' % pathname
+            action_str = f'<action command="delete" search="file" path="{pathname}" />'
             self._test_action_str(action_str)
             self.assertNotExists(pathname)
 
@@ -211,8 +209,7 @@ class ActionTestCase(common.BleachbitTestCase):
                  (r'c:\windows\temp[abc].log', True))
         for (test_input, test_expected) in tests:
             test_actual = has_glob(test_input)
-            test_msg = 'test input: %s, expected: %s, actual: %s' % (
-                test_input, test_expected, test_actual)
+            test_msg = f'test input: {test_input}, expected: {test_expected}, actual: {test_actual}'
             self.assertEqual(test_actual, test_expected, test_msg)
 
     def test_ini(self):
@@ -220,9 +217,8 @@ class ActionTestCase(common.BleachbitTestCase):
         def execute_ini(path, section, parameter):
             effective_parameter = ""
             if parameter is not None:
-                effective_parameter = 'parameter="%s"' % parameter
-            action_str = '<action command="ini" search="file" path="%s" section="%s" %s />' \
-                % (path, section, effective_parameter)
+                effective_parameter = f'parameter="{parameter}"'
+            action_str = f'<action command="ini" search="file" path="{path}" section="{section}" {effective_parameter} />'
             self._test_action_str(action_str)
 
         test_ini_helper(self, execute_ini)
@@ -230,8 +226,7 @@ class ActionTestCase(common.BleachbitTestCase):
     def test_json(self):
         """Unit test for class Json"""
         def execute_json(path, address):
-            action_str = '<action command="json" search="file" path="%s" address="%s" />' \
-                % (path, address)
+            action_str = f'<action command="json" search="file" path="{path}" address="{address}" />'
             self._test_action_str(action_str)
 
         test_json_helper(self, execute_json)
@@ -337,10 +332,10 @@ class ActionTestCase(common.BleachbitTestCase):
                  os.path.join(self.tempdir, 'a?????g'),
                  os.path.join(self.tempdir, '[a-z]b?d*'))
         for test in tests:
-            print('search="glob" test: %s' % test)
+            print(f'search="glob" test: {test}')
             pathname = self.write_file(fname)
             self.assertExists(pathname)
-            action_str = '<action command="delete" search="glob" path="%s" />' % test
+            action_str = f'<action command="delete" search="glob" path="{test}" />'
             self._test_action_str(action_str)
             self.assertNotExists(pathname)
 
@@ -379,28 +374,28 @@ class ActionTestCase(common.BleachbitTestCase):
 
         # this should not delete anything
         common.touch_file(filename)
-        action_str = '<action command="delete" search="file" type="d" path="%s" />' % filename
+        action_str = f'<action command="delete" search="file" type="d" path="{filename}" />'
         self._test_action_str(action_str)
         self.assertExists(filename)
 
         # should delete file
-        action_str = '<action command="delete" search="file" type="f" path="%s" />' % filename
+        action_str = f'<action command="delete" search="file" type="f" path="{filename}" />'
         self._test_action_str(action_str)
         self.assertNotExists(filename)
 
         # should delete file
         common.touch_file(filename)
-        action_str = '<action command="delete" search="file" path="%s" />' % filename
+        action_str = f'<action command="delete" search="file" path="{filename}" />'
         self._test_action_str(action_str)
         self.assertNotExists(filename)
 
         # should not delete anything
-        action_str = '<action command="delete" search="file" type="f" path="%s" />' % dirname
+        action_str = f'<action command="delete" search="file" type="f" path="{dirname}" />'
         self._test_action_str(action_str)
         self.assertExists(dirname)
 
         # should delete directory
-        action_str = '<action command="delete" search="file" type="d" path="%s" />' % dirname
+        action_str = f'<action command="delete" search="file" type="d" path="{dirname}" />'
         self._test_action_str(action_str)
         self.assertNotExists(dirname)
 
@@ -409,7 +404,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
         variants = ('all', 'top')
         for variant in variants:
-            dirname = self.mkdtemp(prefix='bleachbit-walk-%s' % variant)
+            dirname = self.mkdtemp(prefix=f'bleachbit-walk-{variant}')
 
             # this sub-directory should be deleted
             subdir = os.path.join(dirname, 'sub')
@@ -420,8 +415,7 @@ class ActionTestCase(common.BleachbitTestCase):
             filename = os.path.join(subdir, 'file')
             common.touch_file(filename)
 
-            action_str = '<action command="delete" search="walk.%s" path="%s" />' % (
-                variant, dirname)
+            action_str = f'<action command="delete" search="walk.{variant}" path="{dirname}" />'
             self._test_action_str(action_str)
             self.assertNotExists(subdir)
             if variant == 'all':
@@ -439,13 +433,13 @@ class ActionTestCase(common.BleachbitTestCase):
         """Unit test for walk.files"""
         paths = {'nt': r'$WINDIR\system32'}
 
-        action_str = '<action command="delete" search="walk.files" path="%s" />' % paths[os.name]
+        action_str = f'<action command="delete" search="walk.files" path="{paths[os.name]}" />'
         results = 0
         for cmd in _action_str_to_commands(action_str):
             result = next(cmd.execute(False))
             common.validate_result(self, result)
             path = result['path']
-            self.assertFalse(os.path.isdir(path), "%s is a directory" % path)
+            self.assertFalse(os.path.isdir(path), f"{path} is a directory")
             results += 1
         self.assertGreater(results, 0)
 
@@ -465,7 +459,6 @@ if __name__ == '__main__':
                 rate = benchmark_filter(this_filter)
                 rates.append(rate)
             # combine all the rates for easy copy and paste into R for analysis
-            print('rates for filter %s=%s' %
-                  (this_filter, ','.join([str(rate) for rate in rates])))
+            print(f'rates for filter {this_filter}={",".join([str(rate) for rate in rates])}')
         sys.exit()
     unittest.main()

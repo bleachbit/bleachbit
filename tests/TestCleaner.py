@@ -1,3 +1,4 @@
+# -*- coding: future_fstrings -*-
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (c) 2008-2026 Andrew Ziem.
 #
@@ -41,9 +42,9 @@ def actions_to_cleaner(action_strs):
         for actionplugin in ActionProvider.plugins:
             if actionplugin.action_key == command:
                 provider = actionplugin(action_node)
-        cleaner.add_action('option%d' % count, provider)
-        cleaner.add_option('option%d' % count, 'name%d' %
-                           count, 'description%d' % count)
+        cleaner.add_action(f'option{count}', provider)
+        cleaner.add_option(f'option{count}', f'name{count}',
+                           f'description{count}')
     return cleaner
 
 
@@ -54,7 +55,7 @@ def register_all_cleaners():
     to a clean directory, so by default it will not have Winapp2.ini.
     """
     os.makedirs(bleachbit.personal_cleaners_dir, exist_ok=True)
-    print("personal_cleaners_dir: %s" % bleachbit.personal_cleaners_dir)
+    print(f"personal_cleaners_dir: {bleachbit.personal_cleaners_dir}")
     shutil.copyfile(
         get_winapp2(),
             os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini'),
@@ -83,10 +84,10 @@ class CleanerTestCase(common.BleachbitTestCase):
                     self.assertEqual(result['n_deleted'], 1)
                     pathname = result['path']
                     self.assertLExists(
-                        pathname, "Does not exist: '%s'" % pathname)
+                        pathname, f"Does not exist: '{pathname}'")
                     count += 1
                     common.validate_result(self, result)
-            self.assertGreater(count, 0, "No files found for %s" % action_str)
+            self.assertGreater(count, 0, f"No files found for {action_str}")
         # should yield nothing
         cleaner.add_option('option2', 'name2', 'description2')
         for cmd in cleaner.get_commands('option2'):
@@ -158,13 +159,13 @@ class CleanerTestCase(common.BleachbitTestCase):
             desc = backends[key].get_description()
             if desc is not None:
                 self.assertIsString(
-                    desc, "description for '%s' is '%s'" % (key, desc))
+                    desc, f"description for '{key}' is '{desc}'")
 
     def test_get_options(self):
         for key in sorted(backends):
             for (test_id, name) in backends[key].get_options():
                 self.assertIsString(
-                    test_id, '%s.%s is not a string' % (key, test_id))
+                    test_id, f'{key}.{test_id} is not a string')
                 self.assertIsString(name)
 
     def test_get_commands(self):
@@ -194,8 +195,7 @@ class CleanerTestCase(common.BleachbitTestCase):
                         for result in cmd.execute(really_delete=False):
                             if result != True:
                                 break
-                            msg = "Expected no files to be deleted but got '%s'" % str(
-                                result)
+                            msg = f"Expected no files to be deleted but got '{str(result)}'"
                             self.assertNotIsInstance(cmd, Command.Delete, msg)
                             common.validate_result(self, result)
         finally:

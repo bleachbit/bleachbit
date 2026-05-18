@@ -34,6 +34,7 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot
 		--add-comments=TRANSLATORS \
 		--keyword="_p:1c,2" \
 		--default-domain=$(APP) \
+		--from-code=UTF-8 \
 		$(SRC)
 	sed -i 's/charset=CHARSET/charset=utf-8/g' bleachbit.pot
 	echo " Words after update: " \

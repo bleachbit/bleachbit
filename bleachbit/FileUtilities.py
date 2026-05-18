@@ -1,3 +1,4 @@
+# -*- coding: future_fstrings -*-
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (c) 2008-2026 Andrew Ziem.
 #
@@ -161,13 +162,13 @@ def clean_ini(path, section, parameter):
         removing a cast to str. This is needed to handle unicode chars.
         """
         if parser._defaults:
-            ini_file.write("[%s]\n" % "DEFAULT")
+            ini_file.write("[DEFAULT]\n")
             for (key, value) in parser._defaults.items():
-                ini_file.write("%s = %s\n" %
-                               (key, str(value).replace('\n', '\n\t')))
+                str_value = str(value).replace('\n', '\n\t')
+                ini_file.write(f"{key} = {str_value}\n")
             ini_file.write("\n")
         for section in parser._sections:
-            ini_file.write("[%s]\n" % section)
+            ini_file.write(f"[{section}]\n")
             for (key, value) in parser._sections[section].items():
                 if key == "__name__":
                     continue
@@ -176,7 +177,7 @@ def clean_ini(path, section, parameter):
                     # This is the original line for reference:
                     # key = " = ".join((key, str(value).replace('\n', '\n\t')))
                     key = " = ".join((key, value.replace('\n', '\n\t')))
-                ini_file.write("%s\n" % (key))
+                ini_file.write(f"{key}\n")
             ini_file.write("\n")
 
     encoding = detect_encoding(path) or 'utf_8_sig'
@@ -386,10 +387,10 @@ def execute_sqlite3(path, cmds):
                     logger.exception('SQLite function not available')
                 else:
                     raise sqlite3.OperationalError(
-                        '%s: %s' % (exc, path))
+                        f'{exc}: {path}')
             except sqlite3.DatabaseError as exc:
                 raise sqlite3.DatabaseError(
-                    '%s: %s' % (exc, path))
+                    f'{exc}: {path}')
 
         cursor.close()
         conn.commit()
@@ -535,11 +536,10 @@ def human_to_bytes(human, hformat='si'):
         base = 1024
         suffixes = 'KMGTE'
     else:
-        raise ValueError("Invalid format: '%s'" % hformat)
+        raise ValueError(f"Invalid format: '{hformat}'")
     matches = re.match(r'^(\d+(?:\.\d+)?) ?([' + suffixes + ']?)B?$', human)
     if matches is None:
-        raise ValueError("Invalid input for '%s' (hformat='%s')" %
-                         (human, hformat))
+        raise ValueError(f"Invalid input for '{human}' (hformat='{hformat}')")
     (amount, suffix) = matches.groups()
 
     if '' == suffix:

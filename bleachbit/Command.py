@@ -1,22 +1,9 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# -*- coding: future_fstrings -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Command design pattern implementation for cleaning
@@ -62,8 +49,7 @@ class Delete:
         self.shred = False
 
     def __str__(self):
-        return 'Command to %s %s' % \
-            ('shred' if self.shred else 'delete', self.path)
+        return f"Command to {'shred' if self.shred else 'delete'} {self.path}"
 
     def execute(self, really_delete):
         """Make changes and return results"""
@@ -116,12 +102,12 @@ class Function:
         try:
             assert isinstance(func, types.FunctionType)
         except AssertionError:
-            raise AssertionError('Expected MethodType but got %s' % type(func))
+            raise AssertionError(f'Expected MethodType but got {type(func)}')
 
     def __str__(self):
         if self.path:
-            return 'Function: %s: %s' % (self.label, self.path)
-        return 'Function: %s' % (self.label)
+            return f'Function: {self.label}: {self.path}'
+        return f'Function: {self.label}'
 
     def execute(self, really_delete):
 
@@ -152,8 +138,7 @@ class Function:
                 ret['size'] = func_ret
             else:
                 if os.path.isdir(self.path):
-                    raise RuntimeError('Attempting to run file function %s on directory %s' %
-                                       (self.func.__name__, self.path))
+                    raise RuntimeError(f'Attempting to run file function {self.func.__name__} on directory {self.path}')
                 # Function takes a path.  We check the size.
                 oldsize = FileUtilities.getsize(self.path)
 
@@ -193,8 +178,7 @@ class Ini:
         self.parameter = parameter
 
     def __str__(self):
-        return 'Command to clean .ini path=%s, section=%s, parameter=%s ' % \
-            (self.path, self.section, self.parameter)
+        return f'Command to clean .ini path={self.path}, section={self.section}, parameter={self.parameter} '
 
     def execute(self, really_delete):
         """Make changes and return results"""
@@ -228,8 +212,7 @@ class Json:
         self.address = address
 
     def __str__(self):
-        return 'Command to clean JSON file, path=%s, address=%s ' % \
-            (self.path, self.address)
+        return f'Command to clean JSON file, path={self.path}, address={self.address} '
 
     def execute(self, really_delete):
         """Make changes and return results"""
@@ -262,7 +245,7 @@ class Shred(Delete):
         self.shred = True
 
     def __str__(self):
-        return 'Command to shred %s' % self.path
+        return f'Command to shred {self.path}'
 
 
 class Truncate(Delete):
@@ -270,7 +253,7 @@ class Truncate(Delete):
     """Truncate a single file"""
 
     def __str__(self):
-        return 'Command to truncate %s' % self.path
+        return f'Command to truncate {self.path}'
 
     def execute(self, really_delete):
         """Make changes and return results"""
@@ -303,14 +286,14 @@ class Winreg:
         self.excludekeys = excludekeys or []
 
     def __str__(self):
-        return 'Command to clean registry, key=%s, value=%s ' % (self.keyname, self.valuename)
+        return f'Command to clean registry, key={self.keyname}, value={self.valuename} '
 
     def execute(self, really_delete):
         """Execute the Windows registry cleaner"""
         _str = None  # string representation
         ret = None  # return value meaning 'deleted' or 'delete-able'
         if self.valuename:
-            _str = '%s<%s>' % (self.keyname, self.valuename)
+            _str = f'{self.keyname}<{self.valuename}>'
             ret = bleachbit.Windows.delete_registry_value(self.keyname,
                                                           self.valuename, really_delete)
         else:
