@@ -49,28 +49,11 @@ def threaded(func):
     return wrapper
 
 
-def notify_gi(msg):
-    """Show a pop-up notification.
-
-    The Windows pygy-aio installer does not include notify, so this is just for Linux.
-    """
-    gi.require_version('Notify', '0.7')
-    from gi.repository import Notify
-    if Notify.init(APP_NAME):
-        notify = Notify.Notification.new('BleachBit', msg, 'bleachbit')
-        notify.set_hint("desktop-entry", GLib.Variant('s', 'bleachbit'))
-        notify.show()
-        notify.set_timeout(10000)
-
-
-def notify_plyer(msg):
-    """Show a pop-up notification.
-
-    Linux distributions do not include plyer, so this is just for Windows.
-    """
+def notify(msg):
+    """Show a popup-notification"""
     from bleachbit import bleachbit_exe_path
 
-    # On Windows 10,  PNG does not work.
+    # On Windows 10, PNG does not work.
     __icon_fns = (
         os.path.normpath(os.path.join(bleachbit_exe_path,
                                       'share\\bleachbit.ico')),
@@ -90,17 +73,6 @@ def notify_plyer(msg):
         app_name=APP_NAME,  # not shown on Windows 10
         app_icon=icon_fn,
     )
-
-
-def notify(msg):
-    """Show a popup-notification"""
-    import importlib
-    if importlib.util.find_spec('plyer'):
-        # On Windows, use Plyer.
-        notify_plyer(msg)
-        return
-    # On Linux, use GTK Notify.
-    notify_gi(msg)
 
 
 class Bleachbit(Gtk.Application):
@@ -153,10 +125,7 @@ class Bleachbit(Gtk.Application):
     def build_app_menu(self):
         """Build the application menu
 
-        On Linux with GTK 3.24, this code is necessary but not sufficient for
-        the menu to work. The headerbar code is also needed.
-
-        On Windows with GTK 3.18, this cde is sufficient for the menu to work.
+        On Windows with GTK 3.18, this code is sufficient for the menu to work.
         """
 
         builder = Gtk.Builder()

@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -28,6 +14,9 @@ import os
 import sys
 import subprocess
 from unittest import mock
+
+from win32com.shell import shell, shellcon
+import win32event
 
 try:
     import gi
@@ -43,7 +32,6 @@ from bleachbit.Options import options
 from tests import common
 
 
-@common.skipUnlessWindows
 class ExternalCommandTestCase(common.BleachbitTestCase):
     """Test case for application level functions"""
 
@@ -132,8 +120,6 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
             """
             We need a synchronous call the ShellExecuteEx so we can assert after it finishes.
             """
-            from win32com.shell import shell, shellcon
-            import win32event
 
             bleachbit.Windows.shell.ShellExecuteEx = original
             rc = shell.ShellExecuteEx(lpVerb=lpVerb,

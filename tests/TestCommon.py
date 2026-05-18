@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test case for Common
@@ -39,9 +25,9 @@ class CommonTestCase(common.BleachbitTestCase):
         """Test for important environment variables"""
         # useful for researching
         # grep -Poh "([\\$%]\w+)" cleaners/*xml | cut -b2- | sort | uniq -i
-        envs = {'posix': ['XDG_DATA_HOME', 'XDG_CONFIG_HOME', 'XDG_CACHE_HOME', 'HOME'],
-                'nt': ['AppData', 'CommonAppData', 'Documents', 'ProgramFiles', 'UserProfile', 'WinDir']}
-        for env in envs[os.name]:
+        envs = ['AppData', 'CommonAppData', 'Documents',
+                'ProgramFiles', 'UserProfile', 'WinDir']
+        for env in envs:
             e = os.getenv(env)
             self.assertIsNotNone(e)
             self.assertGreater(len(e), 4)
@@ -55,8 +41,7 @@ class CommonTestCase(common.BleachbitTestCase):
         self.assertEqual(os.path.expanduser(''), '')
 
         # An absolute path should not be altered.
-        abs_dirs = {'posix': '$HOME', 'nt': '%USERPROFILE%'}
-        abs_dir = os.path.expandvars(abs_dirs[os.name])
+        abs_dir = os.path.expandvars('%USERPROFILE%')
         self.assertExists(abs_dir)
         self.assertEqual(os.path.expanduser(abs_dir), abs_dir)
         # A relative path (without a reference to the home directory)

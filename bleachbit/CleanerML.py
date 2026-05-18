@@ -99,6 +99,10 @@ class CleanerML:
         # Define the current operating system.
         if platform == 'win32':
             current_os = ('windows',)
+        elif platform.startswith('linux'):
+            current_os = ('linux', 'unix')
+        elif platform.startswith('darwin'):
+            current_os = ('mac', 'unix')
         else:
             raise RuntimeError(f'Unknown operating system: {sys.platform} ')
         # Compare current OS against required OS.

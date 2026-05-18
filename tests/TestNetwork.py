@@ -79,7 +79,7 @@ class NetworkTestCase(common.BleachbitTestCase):
     def test_unset_sslkeylogfile(self):
         """Test the function unset_sslkeylogfile()."""
         # SSLKEYLOGFILE is set in setUp().
-        self.assertEqual(unset_sslkeylogfile(True), os.name == 'nt')
+        self.assertTrue(unset_sslkeylogfile(True))
         self.assertFalse(unset_sslkeylogfile(True))
 
     def test_download_url_to_fn(self):

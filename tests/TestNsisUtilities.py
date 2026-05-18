@@ -30,7 +30,6 @@ from windows.NsisUtilities import (_generate_add_remove_nsis_expressions,
 from tests import common
 
 
-@common.skipUnlessWindows
 class NsisUtilitiesTestCase(common.BleachbitTestCase):
     """Test case for module NsisUtilities"""
 

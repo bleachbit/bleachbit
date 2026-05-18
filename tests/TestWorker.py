@@ -1,36 +1,26 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# -*- coding: future_fstrings -*-
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test case for module Worker
 """
 
+import errno
+import os
+import tempfile
 
-from tests import TestCleaner, common
+from win32com.shell import shell
+
 from bleachbit import CLI, Command
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import backends
 from bleachbit.Worker import Worker
 
-import os
-import tempfile
+from tests import TestCleaner, common
 
 
 class AccessDeniedActionAction(ActionProvider):
@@ -42,7 +32,6 @@ class AccessDeniedActionAction(ActionProvider):
     def get_commands(self):
         # access denied, should fail and continue
         def accessdenied():
-            import errno
             raise OSError(errno.EACCES, 'Permission denied: /foo/bar')
         yield Command.Function(None, accessdenied, 'Test access denied')
 
@@ -193,8 +182,7 @@ class WorkerTestCase(common.BleachbitTestCase):
     """Test case for module Worker"""
 
     def action_test_helper(self, command, special_expected, errors_expected,
-                           bytes_expected_posix, count_deleted_posix,
-                           bytes_expected_nt, count_deleted_nt):
+                           bytes_expected, count_deleted):
         ui = CLI.CliCallback()
         (fd, filename) = tempfile.mkstemp(
             prefix='bleachbit-test-worker', dir=self.tempdir)
@@ -217,42 +205,36 @@ class WorkerTestCase(common.BleachbitTestCase):
         self.assertEqual(worker.total_errors, errors_expected,
                          'For command %s expecting %d errors but observed %d'
                          % (command, errors_expected, worker.total_errors))
-        if 'posix' == os.name:
-            self.assertEqual(worker.total_bytes, bytes_expected_posix)
-            self.assertEqual(worker.total_deleted, count_deleted_posix)
-        elif 'nt' == os.name:
-            self.assertEqual(worker.total_bytes, bytes_expected_nt)
-            self.assertEqual(worker.total_deleted, count_deleted_nt)
+        self.assertEqual(worker.total_bytes, bytes_expected)
+        self.assertEqual(worker.total_deleted, count_deleted)
 
     def test_AccessDenied(self):
         """Test Worker using Action.AccessDeniedAction"""
-        self.action_test_helper('access.denied', 0, 1, 4096, 1, 3, 1)
+        self.action_test_helper('access.denied', 0, 1, 3, 1)
 
     def test_DoesNotExist(self):
         """Test Worker using Action.DoesNotExistAction"""
-        self.action_test_helper('does.not.exist', 0, 1, 4096, 1, 3, 1)
+        self.action_test_helper('does.not.exist', 0, 1, 3, 1)
 
     def test_FunctionGenerator(self):
         """Test Worker using Action.FunctionGenerator"""
         self.action_test_helper('function.generator', 1,
-                                0, 4096 + 10, 1, 3 + 10, 1)
+                                0, 3 + 10, 1)
 
     def test_FunctionPath(self):
         """Test Worker using Action.FunctionPathAction"""
-        self.action_test_helper('function.path', 1, 0, 4096, 1, 3, 1)
+        self.action_test_helper('function.path', 1, 0, 3, 1)
 
     def test_FunctionPlain(self):
         """Test Worker using Action.FunctionPlainAction"""
-        self.action_test_helper('function.plain', 1, 0, 4096 + 5, 1, 3 + 5, 1)
+        self.action_test_helper('function.plain', 1, 0, 3 + 5, 1)
 
     def test_InvalidEncoding(self):
         """Test Worker using Action.InvalidEncodingAction"""
-        self.action_test_helper('invalid.encoding', 0, 0, 4096, 2, 3, 2)
+        self.action_test_helper('invalid.encoding', 0, 0, 3, 2)
 
-    @common.skipUnlessWindows
     def test_Locked(self):
         """Test Worker using Action.LockedAction"""
-        from win32com.shell import shell
         if shell.IsUserAnAdmin():
             # If an admin, the first attempt will mark for delete (3 bytes),
             # and the second attempt will actually delete it (3 bytes).
@@ -265,19 +247,19 @@ class WorkerTestCase(common.BleachbitTestCase):
             bytes_expected = 3
             total_deleted = 1
         self.action_test_helper(
-            'locked', 0, errors_expected, None, None, bytes_expected, total_deleted)
+            'locked', 0, errors_expected, bytes_expected, total_deleted)
 
     def test_RuntimeError(self):
         """Test Worker using Action.RuntimeErrorAction
         The Worker module handles these differently than
         access denied exceptions
         """
-        self.action_test_helper('runtime', 0, 1, 4096, 1, 3, 1)
+        self.action_test_helper('runtime', 0, 1, 3, 1)
 
     def test_Truncate(self):
         """Test Worker using Action.TruncateTestAction
         """
-        self.action_test_helper('truncate.test', 0, 0, 4096, 2, 3, 2)
+        self.action_test_helper('truncate.test', 0, 0, 3, 2)
 
     def test_deep_scan(self):
         """Test for deep scan"""

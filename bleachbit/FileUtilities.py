@@ -801,9 +801,6 @@ def wipe_path(pathname, idle=False):
                 break
             except OSError as e:
                 if e.errno in (errno.ENAMETOOLONG, errno.ENOSPC, errno.ENOENT, errno.EINVAL):
-                    # ext3 on Linux 3.5 returns ENOSPC if the full path is greater than 264.
-                    # Shrinking the size helps.
-
                     # Microsoft Windows returns ENOENT "No such file or directory"
                     # or EINVAL "Invalid argument"
                     # when the path is too long such as %TEMP% but not in C:\
@@ -847,7 +844,6 @@ def wipe_path(pathname, idle=False):
                 f = temporaryfile()
                 files.append(f)
             except OSError as e:
-                # Linux gives errno 24
                 # Windows gives errno 28 No space left on device
                 if e.errno in (errno.EMFILE, errno.ENOSPC):
                     break

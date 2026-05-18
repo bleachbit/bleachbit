@@ -25,32 +25,20 @@ Scan directory tree for files to delete
 
 import logging
 import os
-import platform
 import re
-import unicodedata
 from collections import namedtuple
 from bleachbit import fs_scan_re_flags
 from . import Command
-
 def normalized_walk(top, **kwargs):
     """
-    macOS uses decomposed UTF-8 to store filenames. This functions
-    is like `os.walk` but recomposes those decomposed filenames on
-    macOS
+    Walk directory tree yielding filenames.
     """
     try:
         from scandir import walk
     except:
         # there is a warning in FileUtilities, so don't warn again here
         from os import walk
-    if 'Darwin' == platform.system():
-        for dirpath, dirnames, filenames in walk(top, **kwargs):
-            yield dirpath, dirnames, [
-                unicodedata.normalize('NFC', fn)
-                for fn in filenames
-            ]
-    else:
-        yield from walk(top, **kwargs)
+    yield from walk(top, **kwargs)
 
 
 Search = namedtuple('Search', ['command', 'regex', 'nregex', 'wholeregex', 'nwholeregex'])

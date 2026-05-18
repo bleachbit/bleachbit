@@ -1,23 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test case for module DeepScan
@@ -120,10 +105,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
         self.assertExists(f_del)
         self.assertExists(f_keep)
         self.assertFalse(os.path.exists(f_del2))
-        if 'posix' == os.name:
-            self.assertExists(f_del3)
-        else:
-            self.assertFalse(os.path.exists(f_del3))
+        self.assertFalse(os.path.exists(f_del3))
 
         # validate results
         run_deep_scan(r'regex="\.bbtestbak$"')
@@ -132,8 +114,6 @@ class DeepScanTestCase(common.BleachbitTestCase):
 
         # cleanup
         os.unlink(f_keep)
-        if 'posix' == os.name:
-            os.unlink(f_del3)
         os.rmdir(subdir)
 
     def test_delete(self):
@@ -141,27 +121,3 @@ class DeepScanTestCase(common.BleachbitTestCase):
 
     def test_shred(self):
         self._test_delete('shred')
-
-    @unittest.skipUnless('darwin' == sys.platform, 'Not on Darwin')
-    def test_normalized_walk_darwin(self):
-        import mock
-
-        with mock.patch('os.walk') as mock_walk:
-            mock_walk.return_value = [
-                ('/foo', ('bar',), ['ba\xcc\x80z']),
-                ('/foo/bar', (), ['spam', 'eggs']),
-            ]
-            with mock.patch('platform.system') as mock_platform_system:
-                mock_platform_system.return_value = 'Darwin'
-                self.assertEqual(list(normalized_walk('.')), [
-                    ('/foo', ('bar',), ['b\xc3\xa0z']),
-                    ('/foo/bar', (), ['spam', 'eggs']),
-                ])
-
-        with mock.patch('os.walk') as mock_walk:
-            expected = [
-                ('/foo', ('bar',), ['baz']),
-                ('/foo/bar', (), ['spam', 'eggs']),
-            ]
-            mock_walk.return_value = expected
-            self.assertEqual(list(normalized_walk('.')), expected)

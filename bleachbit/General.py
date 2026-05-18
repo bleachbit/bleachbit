@@ -10,7 +10,10 @@ General code
 
 import logging
 import os
-import sys
+import subprocess
+
+import win32con
+import win32process
 
 import bleachbit
 
@@ -67,14 +70,11 @@ def run_external(args, stdout=None, env=None, clean_env=None):
     clean_env parameter is unused (kept for backward compatibility)
     """
     logger.debug('running cmd ' + ' '.join(args))
-    import subprocess
     if stdout is None:
         stdout = subprocess.PIPE
     kwargs = {}
     encoding = bleachbit.stdout_encoding
     # hide the 'DOS box' window
-    import win32process
-    import win32con
     stui = subprocess.STARTUPINFO()
     stui.dwFlags = win32process.STARTF_USESHOWWINDOW
     stui.wShowWindow = win32con.SW_HIDE
@@ -97,9 +97,8 @@ def run_external(args, stdout=None, env=None, clean_env=None):
 def startup_check():
     """At application startup, check some things are okay."""
 
-    if 'nt' == os.name:
-        from bleachbit.Windows import check_dll_hijacking
-        check_dll_hijacking()
+    from bleachbit.Windows import check_dll_hijacking
+    check_dll_hijacking()
 
     # BitDefender false positive.  BitDefender didn't mark BleachBit as infected or show
     # anything in its log, but sqlite would fail to import unless BitDefender was in "game mode."
@@ -109,18 +108,5 @@ def startup_check():
         from sqlite3 import SQLITE_OK
     except (ModuleNotFoundError, ImportError):
         logger.exception(
-            'The sqlite3 module could not be loaded. On Windows, the antivirus may be blocking it. On FreeBSD, install the package databases/py-sqlite3.')
+            'The sqlite3 module could not be loaded. The antivirus may be blocking it.')
 
-
-def sudo_mode():
-    """Return whether running in sudo mode"""
-    if not sys.platform.startswith('linux'):
-        return False
-
-    # if 'root' == os.getenv('USER'):
-        # gksu in Ubuntu 9.10 changes the username.  If the username is root,
-        # we're practically not in sudo mode.
-        # Fedora 13: os.getenv('USER') = 'root' under sudo
-        # return False
-
-    return os.getenv('SUDO_UID') is not None

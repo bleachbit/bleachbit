@@ -9,6 +9,7 @@
 Code that is commonly shared throughout BleachBit
 """
 
+
 import gettext
 import locale
 import os
@@ -27,8 +28,12 @@ APP_URL = "https://www.bleachbit.org"
 
 socket_timeout = 10
 
-if sys.version_info < (3,0,0):
-    print('BleachBit no longer supports Python 2.x.')
+if sys.version_info < (3, 4, 4):
+    print('This version requires Python 3.4.4.')
+    sys.exit(1)
+
+if not os.name == 'nt':
+    print('This version requires Windows.')
     sys.exit(1)
 
 if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
@@ -110,7 +115,7 @@ if os.path.isdir(os.path.join(bleachbit_exe_path, 'cleaners')) and not portable_
 else:
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
 
-# local cleaners directory for running without installation (Windows or Linux)
+# local cleaners directory for running without installation
 local_cleaners_dir = None
 if portable_mode:
     local_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
@@ -160,8 +165,8 @@ if user_locale is None:
     user_locale = 'C'
     logger.warning("no default locale found.  Assuming '%s'", user_locale)
 
-if 'win32' == sys.platform:
-    os.environ['LANG'] = user_locale
+# Windows-only
+os.environ['LANG'] = user_locale
 
 try:
     if not os.path.exists(locale_dir):
@@ -176,18 +181,17 @@ except:
 try:
     locale.bindtextdomain('bleachbit', locale_dir)
 except AttributeError:
-    if sys.platform.startswith('win'):
-        try:
-            # We're on Windows; try and use libintl-8.dll instead
-            import ctypes
-            libintl = ctypes.cdll.LoadLibrary('libintl-8.dll')
-        except OSError:
-            # libintl-8.dll isn't available; give up
-            pass
-        else:
-            # bindtextdomain can not handle Unicode
-            libintl.bindtextdomain(b'bleachbit', locale_dir.encode('utf-8'))
-            libintl.bind_textdomain_codeset(b'bleachbit', b'UTF-8')
+    try:
+        # We're on Windows; try and use libintl-8.dll instead
+        import ctypes
+        libintl = ctypes.cdll.LoadLibrary('libintl-8.dll')
+    except OSError:
+        # libintl-8.dll isn't available; give up
+        pass
+    else:
+        # bindtextdomain can not handle Unicode
+        libintl.bindtextdomain(b'bleachbit', locale_dir.encode('utf-8'))
+        libintl.bind_textdomain_codeset(b'bleachbit', b'UTF-8')
 except:
     logger.exception('error binding text domain')
 
@@ -251,23 +255,11 @@ release_notes_url = "%s/release-notes/%s" \
 update_check_url = "%s/update/%s" % (base_url, APP_VERSION)
 
 # set up environment variables
-if 'nt' == os.name:
-    from bleachbit import Windows
-    Windows.setup_environment()
+from bleachbit import Windows
+Windows.setup_environment()
 
-if 'posix' == os.name:
-    # XDG base directory specification
-    envs = {
-        'XDG_DATA_HOME': os.path.expanduser('~/.local/share'),
-        'XDG_CONFIG_HOME': os.path.expanduser('~/.config'),
-        'XDG_CACHE_HOME': os.path.expanduser('~/.cache')
-    }
-    for varname, value in envs.items():
-        if not os.getenv(varname):
-            os.environ[varname] = value
-
-# should be re.IGNORECASE on macOS
-fs_scan_re_flags = 0 if os.name == 'posix' else re.IGNORECASE
+# Windows-only: case-insensitive file system
+fs_scan_re_flags = re.IGNORECASE
 
 #
 # Exceptions

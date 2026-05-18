@@ -390,7 +390,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             delete(fn, shred=shred)
             self.assertNotExists(fn)
 
-    @common.skipUnlessWindows
     def test_delete_hidden(self):
         """Unit test for delete() with hidden file"""
         for shred in (False, True):
@@ -402,7 +401,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             delete(fn, shred=shred)
             self.assertNotExists(fn)
 
-    @common.skipUnlessWindows
     def test_delete_locked(self):
         """Unit test for delete() with locked file"""
         # set up

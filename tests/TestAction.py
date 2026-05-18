@@ -83,7 +83,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
     """Test cases for Action"""
 
-    _TEST_PROCESS_CMDS = {'nt': 'cmd.exe /c dir'}
+    _TEST_PROCESS_CMD = 'cmd.exe /c dir'
     _TEST_PROCESS_SIMPLE = '<action command="process" cmd="%s" />'
 
     def _test_action_str(self, action_str, expect_exists=True):
@@ -242,7 +242,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
         for test in tests:
             self._test_action_str(
-                test % ActionTestCase._TEST_PROCESS_CMDS[os.name])
+                test % ActionTestCase._TEST_PROCESS_CMD)
 
     def test_process_unicode_stderr(self):
         """
@@ -257,7 +257,7 @@ class ActionTestCase(common.BleachbitTestCase):
                     # When GtkLoggerHandler is used the exceptions are raised directly
                     # and handleError is not called
                     self._test_action_str(
-                        ActionTestCase._TEST_PROCESS_SIMPLE % ActionTestCase._TEST_PROCESS_CMDS[os.name])
+                        ActionTestCase._TEST_PROCESS_SIMPLE % ActionTestCase._TEST_PROCESS_CMD)
                 except UnicodeDecodeError:
                     self.fail(
                         "test_process_unicode_stderr() raised UnicodeDecodeError unexpectedly!")
@@ -431,9 +431,9 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_walk_files(self):
         """Unit test for walk.files"""
-        paths = {'nt': r'$WINDIR\system32'}
+        path = r'$WINDIR\system32'
 
-        action_str = f'<action command="delete" search="walk.files" path="{paths[os.name]}" />'
+        action_str = f'<action command="delete" search="walk.files" path="{path}" />'
         results = 0
         for cmd in _action_str_to_commands(action_str):
             result = next(cmd.execute(False))

@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test case for module CLI
@@ -96,24 +82,6 @@ class CLITestCase(common.BleachbitTestCase):
         for cleaner in cleaners_list():
             self.assertIsString(cleaner)
 
-    @common.skipIfWindows
-    def test_encoding(self):
-        """Unit test for encoding"""
-
-        filename = self.write_file(
-            '/tmp/bleachbit-test-cli-encoding-\xe4\xf6\xfc~')
-        # not assertExists because it doesn't cope with invalid encodings
-        self.assertTrue(os.path.exists(filename))
-
-        env = copy.deepcopy(os.environ)
-        env['LANG'] = 'en_US'  # not UTF-8
-        args = [sys.executable, '-m', 'bleachbit.CLI', '-p', 'system.tmp']
-        # If Python pipes stdout to file or devnull, the test may give
-        # a false negative.  It must print stdout to terminal.
-        self._test_preview(args, redirect_stdout=False, env=env)
-
-        os.remove(filename)
-        self.assertNotExists(filename)
 
     def test_invalid_locale(self):
         """Unit test for invalid locales"""
@@ -158,10 +126,8 @@ class CLITestCase(common.BleachbitTestCase):
             '\x8b\x8b-bad-encoding'
         ]
         for i in range(len(prefixes)):
-
             filename = self.mkstemp(prefix=prefixes[i])
-            if 'nt' == os.name:
-                filename = os.path.normcase(filename)
+            filename = os.path.normcase(filename)
             # replace delete function for testing
             save_delete = FileUtilities.delete
 
@@ -207,7 +173,6 @@ class CLITestCase(common.BleachbitTestCase):
                 self.assertEqual(output[0], 0)
                 self.assertNotExists(filename)
 
-    @common.skipUnlessWindows
     def test_gui_exit(self):
         """Unit test for --gui --exit, only for Windows"""
         args = (sys.executable, '-m',

@@ -2,18 +2,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test cases for module Winapp
@@ -29,8 +19,7 @@ from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
 from bleachbit.Windows import detect_registry_key, parse_windows_build
 from bleachbit import logger
 
-if os.name == 'nt':
-    import winreg
+import winreg
 
 
 def create_sub_key(sub_key):
@@ -42,8 +31,6 @@ def create_sub_key(sub_key):
 
 def _create_registry_keys(*key_paths):
     """Create registry keys, ignoring errors if they already exist"""
-    if os.name != 'nt':
-        return
     for key_path in key_paths:
         try:
             hkey = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path)
@@ -54,8 +41,6 @@ def _create_registry_keys(*key_paths):
 
 def _delete_registry_keys(*key_paths):
     """Delete registry keys, ignoring errors if they don't exist"""
-    if os.name != 'nt':
-        return
     for key_path in key_paths:
         try:
             winreg.DeleteKey(winreg.HKEY_CURRENT_USER, key_path)
@@ -69,11 +54,7 @@ KEYFULL = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
 def get_winapp2():
     """Download and cache winapp2.ini.  Return local filename."""
     url = "https://raw.githubusercontent.com/bleachbit/winapp2.ini/refs/heads/master/Winapp2-BleachBit.ini"
-    tmpdir = None
-    if os.name == 'posix':
-        tmpdir = '/tmp'
-    if os.name == 'nt':
-        tmpdir = os.getenv('TMP')
+    tmpdir = os.getenv('TMP')
     if not tmpdir:
         tmpdir = tempfile.gettempdir()
     fname = os.path.join(tmpdir, 'bleachbit_test_winapp2.ini')
@@ -103,7 +84,6 @@ class WinappTestCase(common.BleachbitTestCase):
                 for result in cmd.execute(really_delete):
                     common.validate_result(self, result, really_delete)
 
-    @common.skipUnlessWindows
     def test_remote(self):
         """Test with downloaded file"""
         winapps = Winapp(get_winapp2())
@@ -150,7 +130,6 @@ class WinappTestCase(common.BleachbitTestCase):
                              'detectos(%s, %s)==%s instead of %s' % (req, mock,
                                                                      actual_return, expected_return))
 
-    @common.skipUnlessWindows
     def test_detect_file(self):
         """Test detect_file function"""
         tests = [('%windir%\\system32\\kernel32.dll', True),
@@ -232,7 +211,7 @@ class WinappTestCase(common.BleachbitTestCase):
         else:
             return Winapp(self.ini_fn).get_cleaners()
 
-    @common.skipUnlessWindows
+
     def test_fake(self):
         """Test with fake file"""
 
@@ -354,7 +333,7 @@ class WinappTestCase(common.BleachbitTestCase):
         self.run_all(cleaner, True)
         shutil.rmtree(dirname, True)
 
-    @common.skipUnlessWindows
+
     def test_excludekey(self):
         """Test for ExcludeKey"""
 
@@ -478,7 +457,7 @@ class WinappTestCase(common.BleachbitTestCase):
             else:
                 self.assertFalse(exists, 'Key %s should not exist' % key_path)
 
-    @common.skipUnlessWindows
+
     def test_excludekey_reg(self):
         """Test for ExcludeKey with REG type to prevent registry key deletion"""
 
@@ -532,7 +511,7 @@ class WinappTestCase(common.BleachbitTestCase):
                     _delete_registry_keys(test_key_child0, test_key_child1,
                                           test_key_not_exc, test_key_parent)
 
-    @common.skipUnlessWindows
+
     def test_filekey_with_path_including_systemdrive(self):
         (ini_h, self.ini_fn) = tempfile.mkstemp(
             suffix='.ini', prefix='winapp2')
@@ -562,7 +541,7 @@ class WinappTestCase(common.BleachbitTestCase):
 
         self.assertNotExists(filename)
 
-    @common.skipUnlessWindows
+
     def test_removeself(self):
         """Test for the removeself option"""
 

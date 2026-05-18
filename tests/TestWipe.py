@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test FileUtilities.wipe_path
@@ -23,7 +10,6 @@ Test FileUtilities.wipe_path
 
 from bleachbit.FileUtilities import delete, free_space, listdir, wipe_path
 from bleachbit.General import run_external
-from tests import common
 
 import logging
 import os
@@ -123,87 +109,6 @@ def verify_cleanliness(filename):
     return clean
 
 
-@common.skipIfWindows
-def test_wipe_sub(n_bytes, mkfs_cmd):
-    """Test FileUtilities.wipe_path"""
-
-    filename = create_disk_image(n_bytes)
-    print('created disk image %s' % filename)
-
-    # format filesystem
-    format_filesystem(filename, mkfs_cmd)
-
-    # mount
-    mountpoint = tempfile.mkdtemp(prefix='bleachbit-wipe-mountpoint')
-    mount_filesystem(filename, mountpoint)
-
-    # baseline free disk space
-    print('df for clean filesystem')
-    print(run_external(['df', mountpoint])[1])
-
-    # make dirty
-    make_dirty(mountpoint)
-
-    # verify dirtiness
-    unmount_filesystem(mountpoint)
-    assert(verify_cleanliness(filename) == 11)
-    mount_filesystem(filename, mountpoint)
-
-    # standard delete
-    logger.info('standard delete')
-    delete_counter = 0
-    for secretfile in listdir(mountpoint):
-        if 'secret' not in secretfile:
-            # skip lost+found
-            continue
-        delete(secretfile, shred=False)
-        delete_counter += 1
-    logger.debug('deleted %d files', delete_counter)
-
-    # check
-    print('df for empty, dirty filesystem')
-    print(run_external(['df', mountpoint])[1])
-
-    # verify dirtiness
-    unmount_filesystem(mountpoint)
-    assert(verify_cleanliness(filename) == 11)
-    mount_filesystem(filename, mountpoint)
-    expected_free_space = free_space(mountpoint)
-
-    # measure effectiveness of multiple wipes
-    for i in range(1, 10):
-        print('*' * 30)
-        print('* pass %d *' % i)
-        print('*' * 30)
-
-        # remount
-        if i > 1:
-            mount_filesystem(filename, mountpoint)\
-
-        # really wipe
-        print('wiping %s' % mountpoint)
-        for _w in wipe_path(mountpoint):
-            pass
-
-        # verify cleaning process freed all space it allocated
-        actual_free_space = free_space(mountpoint)
-        if not expected_free_space == actual_free_space:
-            print('expecting %d free space but got %d' %
-                  (expected_free_space, actual_free_space))
-            import pdb
-            pdb.set_trace()
-
-        # unmount
-        unmount_filesystem(mountpoint)
-
-        # verify cleanliness
-        cleanliness = verify_cleanliness(filename)
-
-    assert(cleanliness < 2)
-
-    # remove temporary
-    delete(filename)
-    delete(mountpoint)
 
 
 def test_wipe():

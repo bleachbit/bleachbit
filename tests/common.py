@@ -1,42 +1,27 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Common code for unit tests
 """
 
+import mock
 import os
+import pathlib
 import shutil
-import sys
 import tempfile
 import unittest
-import mock
-if 'win32' == sys.platform:
-    import winreg
-    import win32gui
 
+import winreg
+import win32gui
 
 import bleachbit
 import bleachbit.Options
 from bleachbit.FileUtilities import extended_path, is_normal_directory
-from bleachbit.General import sudo_mode
+from bleachbit.Windows import is_junction
 
 
 class BleachbitTestCase(unittest.TestCase):
@@ -53,7 +38,7 @@ class BleachbitTestCase(unittest.TestCase):
 
     @classmethod
     def _patch_options_paths(cls):
-        to_patch = [('bleachbit.options_dir', cls.tempdir), 
+        to_patch = [('bleachbit.options_dir', cls.tempdir),
                     ('bleachbit.options_file', os.path.join(cls.tempdir, "bleachbit.ini")),
                     ('bleachbit.personal_cleaners_dir', os.path.join(cls.tempdir, "cleaners"))]
         for target, source in to_patch:
@@ -155,9 +140,7 @@ class BleachbitTestCase(unittest.TestCase):
         self.assertTrue(os.path.isdir(ext_dirname))
         self.assertTrue(is_normal_directory(ext_dirname))
         self.assertFalse(os.path.isfile(ext_dirname))
-        if os.name == 'nt':
-            from bleachbit.Windows import is_junction
-            self.assertFalse(is_junction(ext_dirname))
+        self.assertFalse(is_junction(ext_dirname))
         return dirname
 
     def mkstemp(self, **kwargs):
@@ -174,9 +157,7 @@ class BleachbitTestCase(unittest.TestCase):
 
 
 def getTestPath(path):
-    if 'nt' == os.name:
-        return extended_path(os.path.normpath(path))
-    return path
+    return extended_path(os.path.normpath(path))
 
 
 def get_env(key):
@@ -186,10 +167,6 @@ def get_env(key):
     return os.environ[key]
 
 
-def have_root():
-    """Return true if we have root privileges on POSIX systems"""
-    return sudo_mode() or os.getuid() == 0
-
 
 def put_env(key, val):
     """Put an environment variable. None removes the key"""
@@ -198,20 +175,9 @@ def put_env(key, val):
     else:
         os.environ[key] = val
 
-
-def skipIfWindows(f):
-    """Skip unit test if running on Windows"""
-    return unittest.skipIf('win32' == sys.platform, 'running on Windows')(f)
-
-
 def skipUnlessDestructive(f):
     """Skip unless destructive tests are allowed"""
     return unittest.skipUnless(os.getenv('DESTRUCTIVE_TESTS') == 'T', 'environment variable DESTRUCTIVE_TESTS not set to T')(f)
-
-
-def skipUnlessWindows(f):
-    """Skip unit test unless running on Windows"""
-    return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')(f)
 
 
 def touch_file(filename):
@@ -220,7 +186,6 @@ def touch_file(filename):
     if not os.path.exists(dname):
         # Make the directory, if it does not exist.
         os.makedirs(dname)
-    import pathlib
     pathlib.Path(filename).touch()
     assert(os.path.exists(filename))
     assert not is_normal_directory(filename)
