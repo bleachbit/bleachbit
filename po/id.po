@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-05-16 22:17-0600\n"
-"PO-Revision-Date: 2026-04-15 22:09+0000\n"
+"PO-Revision-Date: 2026-05-22 04:11+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/bleachbit/"
 "main/id/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -710,18 +710,18 @@ msgstr "Folder yang telah dimodifikasi akan diatur ulang."
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
 msgid "AI assistant"
-msgstr ""
+msgstr "Asisten AI"
 
 #. Description for deleting Claude Code sessions
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the command history"
 msgid "Delete the conversation history"
-msgstr "Hapus riwayat perintah"
+msgstr "Hapus riwayat percakapan"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
 msgstr ""
+"Anda akan kehilangan fitur lanjutkan, teruskan, dan putar ulang untuk sesi "
+"sebelumnya"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -780,13 +780,11 @@ msgstr "Hapus daftar laman web yang dikunjungi"
 #. Cleaning option that deletes AI models in a web browser
 #: ../cleaners/google_chrome.xml
 msgid "AI"
-msgstr ""
+msgstr "AI"
 
 #: ../cleaners/google_chrome.xml
-#, fuzzy
-#| msgid "Delete the logs"
 msgid "Delete the AI models"
-msgstr "Hapus log"
+msgstr "Hapus model AI"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -818,10 +816,8 @@ msgid "Delete the list of game servers"
 msgstr "Hapus daftar peladen permainan"
 
 #: ../cleaners/profanity.xml
-#, fuzzy
-#| msgid "Download failed"
 msgid "Downloaded files"
-msgstr "Pengunduhan gagal"
+msgstr "File yang diunduh"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
@@ -1942,7 +1938,7 @@ msgstr "Pilih folder tujuan"
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error generating chaff: {error}"
-msgstr ""
+msgstr "Kesalahan saat menghasilkan chaff: {error}"
 
 #. TRANSLATORS: Progress message shown while deleting chaff files.
 #. 'Deleting files' is a present participle.
@@ -1957,7 +1953,7 @@ msgstr "Menghapus file…"
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error deleting chaff files: {error}"
-msgstr ""
+msgstr "Kesalahan saat menghapus file chaff: {error}"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves
@@ -2468,16 +2464,12 @@ msgstr "Tambah folder"
 #. in the preferences dialog. This message appears when cleaning options
 #. with warnings are selected but expert mode is disabled.
 #: ../bleachbit/GuiStartup.py
-#, fuzzy
-#| msgid ""
-#| "Cleaning options with warnings now require expert mode. Enable it in "
-#| "preferences to clean them."
 msgid ""
 "One or more selected cleaning options have warnings and require Expert Mode "
 "to clean. Enable it in preferences."
 msgstr ""
-"Opsi pembersihan dengan peringatan kini memerlukan mode ahli. Aktifkan di "
-"preferensi untuk membersihkannya."
+"Satu atau lebih opsi pembersihan yang dipilih memiliki peringatan dan "
+"memerlukan Mode Ahli untuk dibersihkan. Aktifkan di preferensi."
 
 #. TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
 #. Preferences. Keep it consistent with the translation of "Expert Mode"
@@ -2488,6 +2480,8 @@ msgid ""
 "Delete confirmation is disabled but expert mode is not enabled. Enable "
 "Expert Mode in preferences to skip delete confirmations."
 msgstr ""
+"Konfirmasi penghapusan dinonaktifkan tetapi mode ahli belum diaktifkan. "
+"Aktifkan Mode Ahli di preferensi untuk melewati konfirmasi penghapusan."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
