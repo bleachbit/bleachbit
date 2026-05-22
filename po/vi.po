@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-05-16 22:17-0600\n"
-"PO-Revision-Date: 2026-05-16 16:11+0000\n"
-"Last-Translator: Tín Nguyễn <ntin4481@gmail.com>\n"
+"PO-Revision-Date: 2026-05-22 04:11+0000\n"
+"Last-Translator: 7E2 Lớp <lop7e2nk@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/bleachbit/"
 "main/vi/>\n"
 "Language: vi\n"
@@ -48,16 +48,12 @@ msgstr "Cookie"
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#, fuzzy
-#| msgid ""
-#| "Delete cookies, which contain information such as web site preferences, "
-#| "authentication, and tracking identification"
 msgid ""
 "Delete cookies, which store login information, website preferences, and "
 "tracking identifiers"
 msgstr ""
-"Xóa cookie, các cookie chứa thông tin như các thiết lập trên trang web, "
-"thông tin xác thực, và xác định theo dấu"
+"Xóa cookie, nó chứa thông tin như các thiết lập trên trang web, thông tin "
+"xác thực, và xác định theo dấu"
 
 #: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
 #: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
@@ -468,10 +464,8 @@ msgstr ""
 #: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
-#, fuzzy
-#| msgid "A history of forms entered in web sites"
 msgid "A history of forms entered in websites"
-msgstr "Một lịch sử của các biểu mẫu đã nhập trên các trang web"
+msgstr "Lịch sử của các biểu mẫu đã nhập trên các trang web"
 
 #: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/slack.xml
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
@@ -479,7 +473,8 @@ msgstr "Một lịch sử của các biểu mẫu đã nhập trên các trang w
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
-"Xóa lịch sử chứa các trang web đã ghé thăm, các tải về, và các hình thu nhỏ"
+"Xóa lịch sử chứa các trang web đã ghé thăm, các file đã tải về, và các hình "
+"thu nhỏ"
 
 #: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
@@ -488,10 +483,9 @@ msgstr "Đồng bộ hoá"
 
 #: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#, fuzzy
-#| msgid "Delete the sync data and sign out of the browser"
 msgid "Delete the sync data (including web apps) and sign out of the browser"
-msgstr "Xoá dữ liệu đồng bộ hoá và đăng xuất khỏi trình duyệt"
+msgstr ""
+"Xoá dữ liệu đồng bộ hoá (bao gồm web apps) và đăng xuất khỏi trình duyệt"
 
 #: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
 #: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
@@ -637,7 +631,7 @@ msgstr "Danh sách các tài liệu gần đây"
 msgid ""
 "This option will reset pinned locations in Quick Access to their defaults."
 msgstr ""
-"Tuỳ chọn này sẽ đặt lại các vị trí được ghim trong Quick Access về mặc định"
+"Tuỳ chọn này sẽ đặt lại các vị trí được ghim trong Quick Access về mặc định."
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
@@ -2066,10 +2060,8 @@ msgstr ""
 
 #. TRANSLATORS: Label for the search entry in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Search tool"
 msgid "Search:"
-msgstr "Công cụ tìm kiếm"
+msgstr "Công cụ tìm kiếm:"
 
 #. TRANSLATORS: Placeholder text in the search entry in the manage cookies dialog.
 #. 'Filter' is a verb meaning to narrow down the list by typing.
@@ -3116,7 +3108,7 @@ msgstr "Xóa thư _mục"
 
 #: ../share/app-menu.ui
 msgid "Shred Paths from Clipboard"
-msgstr ""
+msgstr "Ghi đè đường dẫn từ bộ nhớ đệm tạm thời"
 
 #: ../share/app-menu.ui
 #, fuzzy
@@ -3126,7 +3118,7 @@ msgstr "_Dọn dẹp không gian trống"
 
 #: ../share/app-menu.ui
 msgid "_Make Chaff"
-msgstr ""
+msgstr "_Tạo Chaff"
 
 #: ../share/app-menu.ui
 msgid "S_hred Settings and Quit"
@@ -3142,7 +3134,7 @@ msgstr "Trợ _giúp"
 
 #: ../share/app-menu.ui
 msgid "_About BleachBit"
-msgstr ""
+msgstr "_Về BleachBit"
 
 #, fuzzy
 #~| msgid "A history of forms entered in web sites and in the Search bar"
