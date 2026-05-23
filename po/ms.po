@@ -6,18 +6,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-05-16 22:17-0600\n"
-"PO-Revision-Date: 2023-09-18 23:02+0000\n"
-"Last-Translator: Harisfazillah Jamel <linuxmalaysia@gmail.com>\n"
-"Language-Team: Malay <https://hosted.weblate.org/projects/bleachbit/main/ms/"
-">\n"
+"PO-Revision-Date: 2026-05-23 15:11+0000\n"
+"Last-Translator: \"4kŸ\\\"]ãcJ1Ž{æÓC–â^K^;‰-)åÄ7†”ùüÑIù =z–(:FE½«î!ùñ|ßd›”"
+"ïÊ±?\" <sooleehin7@gmail.com>\n"
+"Language-Team: Malay <https://hosted.weblate.org/projects/bleachbit/main/ms/>"
+"\n"
 "Language: ms\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0.2\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1238,10 +1239,8 @@ msgstr "path=\"%s\" bukanlah pola glob"
 #. TRANSLATORS: This is the name of a cleaning action. 'Clean' is a verb.
 #. It shows in the log of actions performed.
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Clean cookies"
-msgstr "Kuki"
+msgstr "Telan Kuki"
 
 #. TRANSLATORS: %s is the command line to be executed
 #: ../bleachbit/Action.py
@@ -1920,10 +1919,8 @@ msgstr "Bilangan fail"
 #. has an official abbreviation (e.g., "Mo" in French); otherwise keep
 #. "MB".
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Size"
 msgid "Size (MB)"
-msgstr "Saiz"
+msgstr "Saiz (MB)"
 
 #. TRANSLATORS: Option in combo box to choose to stop when free space
 #. reaches a certain percentage.
@@ -1954,10 +1951,8 @@ msgstr ""
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Deleting files"
 msgid "Deleting files…"
-msgstr "Memadam fail"
+msgstr "Memadam fail2…"
 
 #. TRANSLATORS: Error message shown when deleting chaff files fails.
 #. The placeholder is for the technical error details.
@@ -2057,10 +2052,8 @@ msgstr ""
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Generating files"
 msgid "Generating files…"
-msgstr "Menjana fail"
+msgstr "Menjana fail2…"
 
 #. TRANSLATORS: Instruction label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
@@ -2125,10 +2118,8 @@ msgstr ""
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Loading cookies…"
-msgstr "Kuki"
+msgstr "Menyusun kuki2…"
 
 #: ../bleachbit/GuiPreferences.py
 msgid ""
@@ -2140,10 +2131,8 @@ msgstr ""
 #. to bypass some safety guardails for advanced users and (2) the title of
 #. dialog asking to confirm this choice.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Dark mode"
 msgid "Expert mode"
-msgstr "Mod gelap"
+msgstr "Mod Terrorr"
 
 #. TRANSLATORS: Notice shown in an infobar after changing a preference
 #. that requires starting the application to be effective.
@@ -2235,10 +2224,8 @@ msgstr "Kekalkan bahasa %s secara automatik."
 
 #. TRANSLATORS: Label for the language selection dropdown.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Languages"
 msgid "Language:"
-msgstr "Bahasa"
+msgstr "Bahasa:"
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2285,10 +2272,8 @@ msgstr "Kemas kini ke versi %s"
 #. TRANSLATORS: Section title (noun) on the Preferences - General page
 #. for options related to cleaning stored data.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Clean"
 msgid "Cleaning"
-msgstr "Bersih"
+msgstr "Bersihkan"
 
 #. TRANSLATORS: Section title in Preferences for user interface options
 #. such as dark mode and window behavior.
@@ -2391,7 +2376,7 @@ msgstr ""
 #. This column controls whether to keep the language.
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep"
-msgstr ""
+msgstr "Simpan"
 
 #. TRANSLATORS: Column header in the languages treeview showing the
 #. language code (e.g., 'en_US').
@@ -2446,11 +2431,9 @@ msgstr ""
 
 #. TRANSLATORS: %s is a file or folder path that was just removed
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgctxt "button"
-#| msgid "Remove"
+#, python-format
 msgid "Removed: %s"
-msgstr "Buang"
+msgstr "Dibuang: %s"
 
 #. TRANSLATORS: Notice label at the top of the keeplist (whitelist)
 #. page in the preferences dialog.
@@ -2620,7 +2603,6 @@ msgstr "Bersih"
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
 #, fuzzy
-#| msgid "Cookies"
 msgid "Manage cookies to keep…"
 msgstr "Kuki"
 
@@ -2706,10 +2688,9 @@ msgstr ""
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
 #: ../bleachbit/GuiWindow.py
-#, fuzzy, python-format
-#| msgid "Error when checking for updates: "
+#, python-format
 msgid "Error when checking for updates: %s"
-msgstr "Ralat ketika memeriksa untuk kemas kini: "
+msgstr "Ralat ketika memeriksa untuk kemas kini: %s"
 
 #: ../bleachbit/Memory.py
 msgid ""
