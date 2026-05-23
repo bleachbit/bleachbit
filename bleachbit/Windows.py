@@ -153,8 +153,13 @@ def csidl_to_environ(varname, csidl):
     try:
         sppath = shell.SHGetSpecialFolderPath(None, csidl)
     except Exception:
-        logger.info(
-            'exception when getting special folder path for %s', varname, exc_info=True)
+        if varname == 'video' and get_windows_version() < Decimal('6.0'):
+            logger.debug(
+                'could not get special folder path for %s', varname)
+        else:
+            logger.info(
+                'exception when getting special folder path for %s',
+                varname, exc_info=True)
         return
     # there is exception handling in set_environ()
     set_environ(varname, sppath)
