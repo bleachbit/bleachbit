@@ -302,6 +302,10 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
                     raise
                 # If a broken symlink, try os.remove() below.
             except IOError as e:
+                # Locked files must propagate so Command.Delete can mark
+                # them for deletion on reboot.
+                if getattr(e, 'winerror', None) in (32, 33):
+                    raise
                 # permission denied (13) happens shredding MSIE 8 on Windows 7
                 logger.debug("IOError #%s shredding '%s'",
                              e.errno, path, exc_info=True)
@@ -730,7 +734,7 @@ def wipe_contents(path, truncate=True):
                     # Errno 13 Permission Denied
                     pass
             # translate exception to mark file to deletion in Command.py
-            raise WindowsError(e.winerror, e.strerror)
+            raise OSError(0, e.strerror, path, e.winerror)
         except UnsupportedFileSystemError:
             warnings.warn(
                 _('There was at least one file on a file system that does not support advanced overwriting.'), UserWarning)

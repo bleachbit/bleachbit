@@ -28,6 +28,7 @@ warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
 
 import win32api
 import win32con
+from pywintypes import error as pywinerror
 from win32com.shell import shell
 
 from bleachbit import logger
@@ -784,6 +785,33 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             reps, len(paths), t1 - t0))
 
         options.set_whitelist_paths(old_whitelist)
+
+    def test_wipe_contents_locked_file_winerror32(self):
+        """wipe_contents must propagate winerror 32 for locked files
+
+        When file_wipe fails because a file is in use (winerror 32),
+        wipe_contents must raise an exception with winerror 32 so callers
+        like Command.Delete can fall back to delete_locked_file().
+        """
+        filename = self.write_file('bleachbit-test-wipe-locked', b'locked')
+        try:
+            with mock.patch('win32com.shell.shell.IsUserAnAdmin',
+                            return_value=True):
+                with mock.patch('bleachbit.WindowsWipe.file_wipe') as mock_wipe:
+                    mock_wipe.side_effect = pywinerror(
+                        32, 'CreateFileW',
+                        'The process cannot access the file because it is '
+                        'being used by another process.')
+                    with self.assertRaises(OSError) as cm:
+                        wipe_contents(filename)
+                    exc = cm.exception
+                    self.assertNotIsInstance(
+                        exc, BrokenPipeError,
+                        'winerror 32 must not be conflated with errno EPIPE')
+                    self.assertEqual(32, exc.winerror)
+        finally:
+            if os.path.exists(filename):
+                os.remove(filename)
 
     def test_wipe_contents(self):
         """Unit test for wipe_delete()"""

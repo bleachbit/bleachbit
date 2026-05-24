@@ -71,7 +71,7 @@ class Delete:
                 # WindowsError: [Error 32] The process cannot access the file because it is being
                 # used by another process: 'C:\\Documents and
                 # Settings\\username\\Cookies\\index.dat'
-                if e.winerror not in (5, 32):
+                if e.winerror not in (5, 32, 33):
                     raise
                 try:
                     bleachbit.Windows.delete_locked_file(self.path)

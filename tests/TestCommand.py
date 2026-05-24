@@ -89,6 +89,28 @@ class CommandTestCase(common.BleachbitTestCase):
         """Unit test for Shred"""
         self.test_Delete(Shred)
 
+    def test_Delete_locked_file_shred_fallback(self):
+        """Shred on a locked file falls back to mark for deletion"""
+        from pywintypes import error as pywinerror
+
+        from bleachbit import Windows
+
+        path = self.write_file('test_Delete_locked', b'locked')
+        cmd = Delete(path)
+        cmd.shred = True
+        with mock.patch('win32com.shell.shell.IsUserAnAdmin',
+                        return_value=True):
+            with mock.patch('bleachbit.WindowsWipe.file_wipe') as mock_wipe:
+                mock_wipe.side_effect = pywinerror(
+                    32, 'CreateFileW',
+                    'The process cannot access the file because it is '
+                    'being used by another process.')
+                with mock.patch.object(Windows, 'delete_locked_file') as mock_del:
+                    ret = next(cmd.execute(really_delete=True))
+                    mock_del.assert_called_once_with(path)
+                    self.assertEqual('Mark for deletion', ret['label'])
+        self.assertExists(path)
+
     def test_Function_sqlite_error(self):
         """Unit test for Function handling sqlite3 database errors"""
         import sqlite3
