@@ -599,3 +599,32 @@ class IntegrationTestCase(unittest.TestCase):
                 await pilot.press("o")
 
         asyncio.run(run())
+
+    def test_progress_messages(self):
+        """Sending numeric and string progress messages should not crash."""
+        from bleachbit.tui.app import BleachBitTUI
+        from bleachbit.tui.backend import ProgressMessage
+
+        async def run():
+            app = BleachBitTUI()
+            async with app.run_test() as pilot:
+                # 1. Send numeric progress message
+                app.post_message(ProgressMessage(0.5))
+                await pilot.pause()
+                bar = app.query_one("#progress-bar")
+                self.assertEqual(bar.progress, 0.5)
+                self.assertEqual(bar.total, 1.0)
+
+                # 2. Send string progress message (indeterminate)
+                app.post_message(ProgressMessage("Cleaning..."))
+                await pilot.pause()
+                self.assertIsNone(bar.progress)
+                self.assertIsNone(bar.total)
+
+                # 3. Send numeric progress message again (restoring total)
+                app.post_message(ProgressMessage(0.75))
+                await pilot.pause()
+                self.assertEqual(bar.progress, 0.75)
+                self.assertEqual(bar.total, 1.0)
+
+        asyncio.run(run())

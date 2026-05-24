@@ -220,11 +220,12 @@ class BleachBitTUI(App):
         if isinstance(status, (int, float)):
             fraction = float(status)
             bar.update(progress=fraction)
+            bar.update(total=1.0)
             bar.remove_class("hidden")
             pct = int(fraction * 100)
             label.update(f"Progress: {pct}%")
         elif isinstance(status, str):
-            bar.update(progress=None)  # indeterminate
+            bar.update(total=None, progress=None)  # indeterminate
             bar.remove_class("hidden")
             label.update(status)
 
@@ -242,6 +243,7 @@ class BleachBitTUI(App):
 
         bar = self.query_one("#progress-bar", ProgressBar)
         bar.update(progress=0.0)
+        bar.update(total=1.0)
         bar.add_class("hidden")
         self.query_one("#progress-label", Static).update("")
 
@@ -377,6 +379,7 @@ class BleachBitTUI(App):
         # Reset progress bar for new operation
         bar = self.query_one("#progress-bar", ProgressBar)
         bar.update(progress=0.0)
+        bar.update(total=1.0)
         bar.remove_class("hidden")
         self.query_one("#progress-label", Static).update("Starting...")
 
