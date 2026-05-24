@@ -76,7 +76,7 @@ class CleanerTree(Tree):
         self._all_cleaner_data = cleaner_data
         self._build_tree(cleaner_data)
 
-    def _build_tree(self, cleaner_data: list[tuple]):
+    def _build_tree(self, cleaner_data: list[tuple], is_filtered: bool = False):
         """Internal: build tree nodes from cleaner data, preserving toggle state."""
         # Preserve existing toggle/error/size state before clearing node maps
         old_enabled = self._enabled.copy()
@@ -99,7 +99,7 @@ class CleanerTree(Tree):
                 continue
 
             cleaner_node = self.root.add(
-                "", expand=False,
+                "", expand=is_filtered,
                 data={"cleaner": c_id, "cleaner_name": c_name}
             )
             self._cleaner_nodes[c_id] = cleaner_node
@@ -166,7 +166,7 @@ class CleanerTree(Tree):
                 # Only some options match: show cleaner with matching options
                 filtered.append((c_id, c_name, matching_opts))
 
-        self._build_tree(filtered)
+        self._build_tree(filtered, is_filtered=True)
 
     def clear_filter(self):
         """Restore the full unfiltered tree."""

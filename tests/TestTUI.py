@@ -418,6 +418,7 @@ class CleanerTreeFilterTestCase(unittest.TestCase):
         self.assertIn("firefox", tree._cleaner_nodes)
         self.assertNotIn("system", tree._cleaner_nodes)
         self.assertNotIn("google_chrome", tree._cleaner_nodes)
+        self.assertTrue(tree._cleaner_nodes["firefox"].is_expanded)
 
     def test_filter_by_option_name(self):
         """Filtering by option name shows matching cleaners with only matching options."""
@@ -432,6 +433,8 @@ class CleanerTreeFilterTestCase(unittest.TestCase):
         # Only "cache" option shown, not "cookies" or "history"
         self.assertIn(("firefox", "cache"), tree._option_nodes)
         self.assertNotIn(("firefox", "cookies"), tree._option_nodes)
+        self.assertTrue(tree._cleaner_nodes["firefox"].is_expanded)
+        self.assertTrue(tree._cleaner_nodes["google_chrome"].is_expanded)
 
     def test_filter_no_match(self):
         """Filtering with no match shows empty tree."""
@@ -452,6 +455,9 @@ class CleanerTreeFilterTestCase(unittest.TestCase):
         self.assertIn("system", tree._cleaner_nodes)
         self.assertIn("google_chrome", tree._cleaner_nodes)
         self.assertIn(("firefox", "cookies"), tree._option_nodes)
+        self.assertFalse(tree._cleaner_nodes["firefox"].is_expanded)
+        self.assertFalse(tree._cleaner_nodes["system"].is_expanded)
+        self.assertFalse(tree._cleaner_nodes["google_chrome"].is_expanded)
 
     def test_filter_preserves_toggle_state(self):
         """Filtering should not reset toggle states."""
