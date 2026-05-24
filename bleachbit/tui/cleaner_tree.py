@@ -56,6 +56,7 @@ class CleanerTree(Tree):
 
     def __init__(self):
         super().__init__("BleachBit Cleaners")
+        self.root.allow_expand = False
         self._enabled: dict[tuple, bool] = {}  # (cleaner_id, option_id) -> bool
         self._cleaner_nodes: dict[str, TreeNode] = {}  # cleaner_id -> TreeNode
         self._option_nodes: dict[tuple[str, str], TreeNode] = {}  # (c_id, o_id) -> TreeNode
@@ -226,8 +227,8 @@ class CleanerTree(Tree):
     def action_collapse_node(self):
         """Collapse the currently focused node or move to parent (Left arrow).
 
-        The root node and cleaner nodes are never collapsed so the tree
-        remains navigable.  Only option (leaf) nodes move to their parent.
+        The root node is never collapsed so the tree remains navigable.
+        Any expanded node collapses, otherwise the cursor moves to its parent.
         """
         node = self.cursor_node
         if node is None:
@@ -235,15 +236,15 @@ class CleanerTree(Tree):
         if node.parent is None:
             # Root node: already at the top; do nothing
             return
-        c_id, o_id = self._resolve_node(node)
-        if c_id is not None and o_id is None:
-            # Cleaner node: jump to parent instead of collapsing
-            self.select_node(node.parent)
-            return
         if node.is_expanded:
             node.collapse()
         else:
             self.select_node(node.parent)
+
+    def on_tree_node_collapsed(self, event: Tree.NodeCollapsed) -> None:
+        """Prevent root node from being collapsed."""
+        if event.node is self.root:
+            event.node.expand()
 
     def action_jump_to_top(self):
         """Jump to the first node in the tree (g or HOME)."""

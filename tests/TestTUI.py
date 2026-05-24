@@ -214,8 +214,8 @@ class CleanerTreeNavigationTestCase(unittest.TestCase):
         self.assertEqual(len(calls), 1,
                          "Right on expanded root should call action_cursor_down")
 
-    def test_cleaner_collapse_blocked(self):
-        """Left arrow on a cleaner node should jump to parent, not collapse."""
+    def test_cleaner_collapse_and_navigation(self):
+        """Left arrow on an expanded cleaner node collapses it, and a second left arrow jumps to parent."""
         tree = CleanerTree()
         cleaner_data = [
             ("test", "Test", [("opt1", "Option 1", "")]),
@@ -226,12 +226,18 @@ class CleanerTreeNavigationTestCase(unittest.TestCase):
         cleaner_node.expand()
         self.assertTrue(cleaner_node.is_expanded)
 
+        # First Left arrow: collapses the expanded node
         tree._cursor_node = cleaner_node
         tree.action_collapse_node()
-        self.assertTrue(cleaner_node.is_expanded,
-                        "Cleaner node should remain expanded")
+        self.assertFalse(cleaner_node.is_expanded,
+                         "Cleaner node should collapse when Left arrow is pressed while expanded")
+        self.assertIs(tree._cursor_node, cleaner_node,
+                      "Cursor should remain on the cleaner node after collapsing it")
+
+        # Second Left arrow: jumps to parent (root) since it's already collapsed
+        tree.action_collapse_node()
         self.assertIs(tree._cursor_node, tree.root,
-                      "Cursor should move to root")
+                      "Cursor should move to parent (root) after Left arrow on collapsed cleaner node")
 
     def test_option_left_moves_to_parent(self):
         """Left arrow on an option (leaf) node should move to its cleaner parent."""
