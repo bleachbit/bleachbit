@@ -624,7 +624,9 @@ def delete_updates():
         if not services_stopped:
             services_stopped = True
             for service in restart_services:
-                label = _(f"stop Windows service {service}")
+                # TRANSLATORS: Message in log file when stopping a Windows service.
+                # The placeholder is the code name of the service.
+                label = _("stop Windows service %(service)s") % {'service': service}
                 yield Command.Function(None, make_run_service(service, False), label)
         yield Command.Delete(path2)
     yield Command.Delete(sdist_dir)
@@ -633,7 +635,9 @@ def delete_updates():
         return
 
     for service in restart_services:
-        label = _(f"start Windows service {service}")
+        # TRANSLATORS: Message in log file when starting a Windows service.
+        # The placeholder is the code name of the service.
+        label = _("start Windows service %(service)s") % {'service': service}
         yield Command.Function(None, make_run_service(service, True), label)
 
 
