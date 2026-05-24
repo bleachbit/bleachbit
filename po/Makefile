@@ -21,6 +21,7 @@ $(POTFILE): $(SRC) cleanerml.pot
 	xgettext -o $(APP).pot \
 		--join-existing \
 		--add-comments=TRANSLATORS \
+		--add-location=file \
 		--keyword="_p:1c,2" \
 		--default-domain=$(APP) \
 		--from-code=UTF-8 \
