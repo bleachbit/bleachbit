@@ -13,22 +13,11 @@ PYTHON ?= python3
 cleanerml.pot: ../bleachbit/CleanerML.py ../cleaners/*xml
 	$(PYTHON) ../bleachbit.py --pot
 
-desktop.pot: ../org.bleachbit.BleachBit.desktop
-	echo "#: ../org.bleachbit.BleachBit.desktop" > desktop.pot
-	echo "msgid \"`perl -n -e '/GenericName=(.*)$$/ && print "$$1\n"' ../org.bleachbit.BleachBit.desktop`\"" >> desktop.pot
-	echo "msgstr \"\"" >> desktop.pot
-	echo >> desktop.pot
-	echo "#: ../org.bleachbit.BleachBit.desktop" >> desktop.pot
-	echo "msgid \"`perl -n -e '/Comment=(.*)$$/ && print "$$1\n"' ../org.bleachbit.BleachBit.desktop`\"" >> desktop.pot
-	echo "msgstr \"\"" >> desktop.pot
-	echo >> desktop.pot
-
-
-$(POTFILE): $(SRC) cleanerml.pot desktop.pot
+$(POTFILE): $(SRC) cleanerml.pot
 	@echo "* Generating $(APP).pot"
 	echo " Words before update: " \
 		`tail -n +20 bleachbit.pot | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | wc --words`
-	cat cleanerml.pot desktop.pot > $(APP).pot
+	cat cleanerml.pot > $(APP).pot
 	xgettext -o $(APP).pot \
 		--join-existing \
 		--add-comments=TRANSLATORS \
@@ -82,7 +71,7 @@ done
 clean:
 	echo "* Cleaning"
 	@rm -fv *.mo
-	@rm -fv $(APP).pot cleanerml.pot desktop.pot
+	@rm -fv $(APP).pot cleanerml.pot
 	@rm -rfv ../locale
 
 all: $(APP).pot $(MOFILES)
