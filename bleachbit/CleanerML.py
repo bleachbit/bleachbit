@@ -150,7 +150,8 @@ class CleanerML:
                 continue
             detection_type = running.getAttribute('type')
             value = getText(running.childNodes)
-            self.cleaner.add_running(detection_type, value)
+            same_user = running.getAttribute('same_user') or False
+            self.cleaner.add_running(detection_type, value, same_user)
 
     def handle_cleaner_option(self, option):
         """<option> element"""

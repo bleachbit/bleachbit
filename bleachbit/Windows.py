@@ -600,7 +600,7 @@ def is_junction(path):
     return bool(attr & FILE_ATTRIBUTE_REPARSE_POINT)
 
 
-def _is_process_running_fallback(name):
+def _is_process_running_fallback(exename, require_same_user=False):
     """Fallback for Windows XP using Toolhelp32 API"""
     TH32CS_SNAPPROCESS = 0x00000002
     kernel = ctypes.windll.kernel32
@@ -632,7 +632,11 @@ def _is_process_running_fallback(name):
 
         while True:
             exe_name = entry.szExeFile.decode('utf-8', errors='ignore').lower()
-            if exe_name == name:
+            if exe_name == exename:
+                if require_same_user:
+                    logger.debug(
+                        'cannot verify process owner on this Windows version; '
+                        'ignoring same_user for %s', exename)
                 return True
             if not kernel.Process32Next(snapshot, byref(entry)):
                 break
@@ -642,23 +646,34 @@ def _is_process_running_fallback(name):
     return False
 
 
-def is_process_running(name):
+def is_process_running(exename, require_same_user=False):
     """Return boolean whether process (like firefox.exe) is running
 
-    Works on Windows Vista or later, but on Windows XP gives an ImportError
+    exename: name of the executable
+    require_same_user: if True, ignore processes run by other users
     """
-    name = name.lower()
+    exename = exename.lower()
     # Do not import at module level in case of ImportError, like on Windows XP.
     try:
         import psutil
     except ImportError:
-        return _is_process_running_fallback(name)
+        return _is_process_running_fallback(exename, require_same_user)
+    current_username = psutil.Process().username().lower()
     for proc in psutil.process_iter():
         try:
-            if proc.name().lower() == name:
-                return True
+            proc_name = proc.name().lower()
         except psutil.NoSuchProcess:
-            pass
+            continue
+        if proc_name != exename:
+            continue
+        if not require_same_user:
+            return True
+        try:
+            proc_username = proc.username().lower()
+        except psutil.AccessDenied:
+            continue
+        if proc_username == current_username:
+            return True
     return False
 
 
