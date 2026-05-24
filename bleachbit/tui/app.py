@@ -118,7 +118,7 @@ class BleachBitTUI(App):
     }
 
     #filter-input {
-        height: 1;
+        height: 3;
         border: solid $accent;
         margin: 0 0 0 0;
         display: none;
@@ -170,6 +170,7 @@ class BleachBitTUI(App):
             load_cleaners()
             tree = self.query_one(CleanerTree)
             tree.populate_tree(get_cleaner_tree_data())
+            tree.focus()
         except Exception:
             import logging
             logging.getLogger(__name__).exception("Failed to load cleaners on mount")
@@ -177,6 +178,7 @@ class BleachBitTUI(App):
             # Still set up the tree with empty data so the UI is functional
             tree = self.query_one(CleanerTree)
             tree.populate_tree([])
+            tree.focus()
 
         overwrite = get_overwrite()
         overwrite_status = 'ON' if overwrite else 'OFF'
@@ -441,6 +443,8 @@ class BleachBitTUI(App):
             self._dismiss_inline_file_list()
         else:
             self.action_clear_filter()
+
+    def action_clear_filter(self):
         """Hide filter input and restore full tree."""
         filter_input = self.query_one("#filter-input", Input)
         filter_input.remove_class("visible")
