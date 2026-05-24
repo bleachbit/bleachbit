@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 
-    BleachBit
-    Copyright (C) 2008-2024 Andrew Ziem
-    https://www.bleachbit.org
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
 
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
@@ -70,6 +59,7 @@
                     </xs:restriction>
                   </xs:simpleType>
                 </xs:attribute>
+                <xs:attribute name="same_user" type="xs:boolean" use="optional"/>
               </xs:extension>
             </xs:simpleContent>
           </xs:complexType>
@@ -82,7 +72,16 @@
                   <xs:simpleContent>
                     <xs:extension base="xs:string">
                       <xs:attributeGroup ref="operatingSystem"/>
-                      <xs:attribute name="search" use="optional" type="xs:string"/>
+                      <xs:attribute name="search" use="optional">
+                        <xs:simpleType>
+                          <xs:restriction base="xs:string">
+                            <xs:enumeration value="glob"/>
+                            <xs:enumeration value="winreg"/>
+                          </xs:restriction>
+                        </xs:simpleType>
+                      </xs:attribute>
+                      <xs:attribute name="path" use="optional" type="xs:string"/>
+                      <xs:attribute name="name" use="optional" type="xs:string"/>
                     </xs:extension>
                   </xs:simpleContent>
                 </xs:complexType>
@@ -122,14 +121,15 @@
                       <xs:attribute name="command" use="required">
                         <xs:simpleType>
                           <xs:restriction base="xs:string">
-                            <xs:enumeration value="apt.clean"/>
                             <xs:enumeration value="apt.autoclean"/>
                             <xs:enumeration value="apt.autoremove"/>
+                            <xs:enumeration value="apt.clean"/>
                             <xs:enumeration value="chrome.autofill"/>
                             <xs:enumeration value="chrome.databases_db"/>
                             <xs:enumeration value="chrome.favicons"/>
                             <xs:enumeration value="chrome.history"/>
                             <xs:enumeration value="chrome.keywords"/>
+                            <xs:enumeration value="cookie"/>
                             <xs:enumeration value="delete"/>
                             <xs:enumeration value="dnf.autoremove"/>
                             <xs:enumeration value="dnf.clean_all"/>
@@ -139,7 +139,9 @@
                             <xs:enumeration value="mozilla.favicons"/>
                             <xs:enumeration value="mozilla.url.history"/>
                             <xs:enumeration value="office_registrymodifications"/>
+                            <xs:enumeration value="pacman.cache"/>
                             <xs:enumeration value="process"/>
+                            <xs:enumeration value="snap.disabled"/>
                             <xs:enumeration value="sqlite.vacuum"/>
                             <xs:enumeration value="truncate"/>
                             <xs:enumeration value="win.shell.change.notify"/>

@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2024 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@
   <description>Multimedia viewer</description>
   <option id="cookies">
     <label>Cookies</label>
-    <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
+    <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Silverlight\is\"/>
     <action command="delete" search="walk.all" path="%LocalAppDataLow%\Microsoft\Silverlight\is\"/>
   </option>

@@ -1,38 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
 
-    BleachBit
-    Copyright (C) 2008-2024 Andrew Ziem
-    https://www.bleachbit.org
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-    @app none
-    @url none
-    @os Windows, Linux, BSD
-    @cleanerversion v1.1.0
-    @cleanerdate 2019-04-23
-    @cleanerby Andrew Ziem (2009-10-07 - 2019-04-19) & Tobias B. Besemer (2019-04-23)
-    @tested ok v???, Windows 7
-    @testeddate 2019-03-10
-    @testedby https://github.com/Tobias-B-Besemer
-    @note 
-
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
 -->
 <cleaner id="deepscan">
   <label translate="true">Deep scan</label>
   <description>Clean files widely scattered across the disk</description>
+  <option id="angular">
+    <label translate="false">.angular</label>
+    <description>Delete the files</description>
+    <warning>This option is slow.</warning>
+    <action command="delete" search="deep" wholeregex="[/\\].angular"/>
+  </option>
   <option id="backup">
     <label>Backup files</label>
     <description>Delete the backup files</description>
@@ -45,6 +27,24 @@
     <description>Delete the files</description>
     <warning>This option is slow.</warning>
     <action command="delete" search="deep" regex="^\.DS_Store$"/>
+  </option>
+  <option id="node_modules">
+    <label translate="false">node_modules</label>
+    <description>Delete the files</description>
+    <warning>This option is slow.</warning>
+    <action command="delete" search="deep" wholeregex="[/\\]node_modules"/>
+  </option>
+  <option id="venv">
+    <label translate="false">venv</label>
+    <description>Delete the files</description>
+    <warning>This option is slow.</warning>
+    <action command="delete" search="deep" wholeregex="[/\\].?venv"/>
+  </option>
+  <option id="pycache">
+    <label translate="false">__pycache__</label>
+    <description>Delete the files</description>
+    <warning>This option is slow.</warning>
+    <action command="delete" search="deep" wholeregex="[/\\]__pycache__"/>
   </option>
   <option id="thumbs_db">
     <label translate="false">Thumbs.db</label>

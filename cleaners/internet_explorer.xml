@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2024 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@
     @tested ok v???, Windows 7
     @testeddate 2019-03-10 (... with an old version of the cleaner!)
     @testedby https://github.com/Tobias-B-Besemer
-    @note 
+    @note
 
 -->
 <cleaner id="internet_explorer" os="windows">
@@ -42,16 +42,9 @@
     <!-- Used e.g. in Windows XP (and maybe before on NT) with e.g. Internet Explorer 8 - Polish-Support: -->
     <value>%UserProfile%\Ustawienia lokalne</value>
   </var>
-  <var name="windirsystem32">
-    <!-- 32-bit applications can use sysnative, but it does not exist to 64-bit processes.
-        FIXME: provide a more general solution
-    -->
-    <value>%WinDir%\System32</value>
-    <value>%WinDir%\Sysnative</value>
-  </var>
   <option id="cookies">
     <label>Cookies</label>
-    <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
+    <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="delete" search="walk.files" path="%UserProfile%\Cookies\"/>
     <action command="delete" search="walk.files" path="%AppData%\Microsoft\Windows\Cookies\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Microsoft\Internet Explorer\DOMStore\"/>
@@ -61,7 +54,7 @@
   <option id="forms">
     <label>Form history</label>
     <!-- Internet Explorer 7 and 8 -->
-    <description>A history of forms entered in web sites and in the Search bar</description>
+    <description>Saved form entries and search bar history</description>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\IntelliForms\Storage1"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\IntelliForms\Storage2"/>
   </option>
@@ -113,7 +106,7 @@
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Temp\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\LocalState\Cache\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\TempState\"/>
-    <action command="delete" search="walk.all" path="$$windirsystem32$$\config\systemprofile\AppData\Local\Microsoft\Windows\INetCache\"/>
+    <action command="delete" search="walk.all" path="%WindowsSystem%\config\systemprofile\AppData\Local\Microsoft\Windows\INetCache\"/>
     <action command="winreg" path="HKCR\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\windows_ie_ac_001\Internet Explorer\DOMStorage"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\LowRegistry\DOMStorage"/>
     <!-- Deletes Feeds Cache: -->
@@ -134,7 +127,7 @@
     <description>Delete the logs</description>
     <action command="delete" search="file" path="%LocalAppData%\Microsoft\Internet Explorer\brndlog.bak"/>
     <action command="delete" search="file" path="%LocalAppData%\Microsoft\Internet Explorer\brndlog.txt"/>
-    <action command="delete" search="file" path="$$windirsystem32$$\config\systemprofile\Application Data\Microsoft\Internet Explorer\brndlog.bak"/>
-    <action command="delete" search="file" path="$$windirsystem32$$\config\systemprofile\Application Data\Microsoft\Internet Explorer\brndlog.txt"/>
+    <action command="delete" search="file" path="%WindowsSystem%\config\systemprofile\Application Data\Microsoft\Internet Explorer\brndlog.bak"/>
+    <action command="delete" search="file" path="%WindowsSystem%\config\systemprofile\Application Data\Microsoft\Internet Explorer\brndlog.txt"/>
   </option>
 </cleaner>

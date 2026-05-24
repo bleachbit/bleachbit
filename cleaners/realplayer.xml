@@ -2,7 +2,7 @@
 <!--
 
     BleachBit
-    Copyright (C) 2008-2024 Andrew Ziem
+    Copyright (C) 2008-2025 Andrew Ziem
     https://www.bleachbit.org
 
     This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@
   <description>Media player</description>
   <option id="cookies">
     <label>Cookies</label>
-    <description>Delete cookies, which contain information such as web site preferences, authentication, and tracking identification</description>
+    <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
     <action command="delete" search="file" path="$XDG_CONFIG_HOME/real/rpcookies.txt"/>
     <action command="delete" search="file" path="$APPDATA\Real\RealPlayer\cookies.txt"/>
   </option>
