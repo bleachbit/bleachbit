@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-05-16 22:17-0600\n"
-"PO-Revision-Date: 2026-03-26 11:10+0000\n"
-"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
+"PO-Revision-Date: 2026-05-25 13:11+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/bleachbit/"
 "main/pt/>\n"
 "Language: pt\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 "X-Launchpad-Export-Date: 2021-07-06 03:44+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -48,16 +48,12 @@ msgstr "Cookies"
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#, fuzzy
-#| msgid ""
-#| "Delete cookies, which contain information such as website preferences, "
-#| "authentication, and tracking identification"
 msgid ""
 "Delete cookies, which store login information, website preferences, and "
 "tracking identifiers"
 msgstr ""
-"Eliminar cookies, os quais podem conter informação sobre as preferências dos "
-"websites, credenciais de autenticação e histórico de comportamento"
+"Apagar cookies, que armazenam informações de sessão, preferências de sites e "
+"identificadores de rastreamento"
 
 #: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
 #: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
@@ -257,10 +253,8 @@ msgstr "Histórico de formulários"
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
-#, fuzzy
-#| msgid "Delete the search history"
 msgid "Saved form entries and search bar history"
-msgstr "Limpar histórico de pesquisas"
+msgstr "Entradas de formulário gravadas e histórico da barra de pesquisa"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
 #: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
@@ -303,7 +297,7 @@ msgstr "Sessão"
 #: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Previously open tabs and windows"
-msgstr ""
+msgstr "Guias e janelas abertas anteriormente"
 
 #. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
@@ -312,7 +306,7 @@ msgstr ""
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Site data"
-msgstr ""
+msgstr "Dados do site"
 
 #. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
@@ -321,7 +315,7 @@ msgstr ""
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
-msgstr ""
+msgstr "Apagar LocalStorage, IndexedDB e outros dados armazenados por sites"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -666,11 +660,8 @@ msgid "Session restore"
 msgstr "Restaurar sessão"
 
 #: ../cleaners/thunderbird.xml
-#, fuzzy
-#| msgid "Restores the previous session when the browser next starts."
 msgid "Restores the previous session when the browser next starts"
-msgstr ""
-"Recupera a sessão anterior na próxima vez que o navegador for iniciado."
+msgstr "Recupera a sessão anterior na próxima vez que o navegador for iniciado"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -712,18 +703,18 @@ msgstr "As pastas personalizadas serão repostas."
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
 msgid "AI assistant"
-msgstr ""
+msgstr "Assistente de IA"
 
 #. Description for deleting Claude Code sessions
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the command history"
 msgid "Delete the conversation history"
-msgstr "Limpar histórico de comandos"
+msgstr "Apagar histórico de conversa"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
 msgstr ""
+"Você perderá as opções de retomar, continuar e retroceder para sessões "
+"anteriores"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -782,13 +773,11 @@ msgstr "Limpar lista de páginas web visitadas"
 #. Cleaning option that deletes AI models in a web browser
 #: ../cleaners/google_chrome.xml
 msgid "AI"
-msgstr ""
+msgstr "IA"
 
 #: ../cleaners/google_chrome.xml
-#, fuzzy
-#| msgid "Delete the logs"
 msgid "Delete the AI models"
-msgstr "Limpar registos"
+msgstr "Apagar os modelos de IA"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -820,10 +809,8 @@ msgid "Delete the list of game servers"
 msgstr "Limpar lista de servidores de jogos"
 
 #: ../cleaners/profanity.xml
-#, fuzzy
-#| msgid "Download failed"
 msgid "Downloaded files"
-msgstr "Falha ao descarregar"
+msgstr "Ficheiros descarregados"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
@@ -2071,6 +2058,8 @@ msgid ""
 "Only cookies are preserved. Site data is always deleted. <a "
 "href='{url}'>Learn more</a>"
 msgstr ""
+"Apenas os cookies são preservados. Os dados do site são sempre apagados. <a "
+"href='{url}'>Saiba mais</a>"
 
 #. TRANSLATORS: Label for the search entry in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
@@ -2297,10 +2286,8 @@ msgstr "Tema Windows 10"
 #. instead of the default Windows renderer. The option may improve blurry text.
 #. Fontconfig, which is software, is a proper noun.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Use fontconfig text rendering backend"
 msgid "Use Fontconfig text rendering backend"
-msgstr "Utilizar o backend de renderização de texto fontconfig"
+msgstr "Utilizar o backend de renderização de texto Fontconfig"
 
 #. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2472,16 +2459,12 @@ msgstr "Adicionar pasta"
 #. in the preferences dialog. This message appears when cleaning options
 #. with warnings are selected but expert mode is disabled.
 #: ../bleachbit/GuiStartup.py
-#, fuzzy
-#| msgid ""
-#| "Cleaning options with warnings now require expert mode. Enable it in "
-#| "preferences to clean them."
 msgid ""
 "One or more selected cleaning options have warnings and require Expert Mode "
 "to clean. Enable it in preferences."
 msgstr ""
-"As opções de limpeza com avisos requerem agora o modo avançado. Ative-o nas "
-"preferências para as limpar."
+"Uma ou mais opções de limpeza selecionadas apresentam avisos e exigem o Modo "
+"Especialista para serem executadas. Ative-o nas preferências."
 
 #. TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
 #. Preferences. Keep it consistent with the translation of "Expert Mode"
@@ -2492,6 +2475,9 @@ msgid ""
 "Delete confirmation is disabled but expert mode is not enabled. Enable "
 "Expert Mode in preferences to skip delete confirmations."
 msgstr ""
+"A confirmação de apagar está desativada, mas o Modo Especialista não está "
+"ativado. Ative o Modo Especialista nas preferências para ignorar as "
+"confirmações de apagar."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
@@ -2769,16 +2755,13 @@ msgstr "Detetados estes dispositivos swap: %s"
 #. is waiting for the child process. %(parent_pid)d is the parent
 #. process ID; %(child_pid)d is the child process ID.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The function wipe_memory() with process ID %d is waiting for child "
-#| "process ID %d."
+#, python-format
 msgid ""
 "The function wipe_memory() with process ID %(parent_pid)d is waiting for "
 "child process ID %(child_pid)d."
 msgstr ""
-"A função wipe_memory() com a ID de processo %d está a aguardar pelo processo "
-"com a ID %d."
+"A função wipe_memory() com a ID de processo %(parent_pid)d está a aguardar "
+"pelo processo com a ID %(child_pid)d."
 
 #: ../bleachbit/Memory.py
 #, python-format
