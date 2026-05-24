@@ -20,7 +20,9 @@ INSTALL_DATA = $(INSTALL) -m 644
 
 # if not specified, do not check coverage
 PYTHON ?= python3
-COVERAGE ?= $(PYTHON)
+# Convert Windows backslash paths to forward slashes for bash compatibility
+PYTHON_FIXED := $(subst \,/,$(PYTHON))
+COVERAGE ?= $(PYTHON_FIXED)
 
 build:
 	echo Nothing to build
@@ -58,8 +60,8 @@ install:
 	$(INSTALL_DATA) bleachbit/markovify/*.py $(DESTDIR)$(datadir)/bleachbit/markovify
 	#note: compileall is recursive
 	cd $(DESTDIR)$(datadir)/bleachbit && \
-	$(PYTHON) -O -c "import compileall; compileall.compile_dir('.')" && \
-	$(PYTHON) -c "import compileall; compileall.compile_dir('.')"
+	$(PYTHON_FIXED) -O -c "import compileall; compileall.compile_dir('.')" && \
+	$(PYTHON_FIXED) -c "import compileall; compileall.compile_dir('.')"
 
 	# cleaners
 	mkdir -p $(DESTDIR)$(datadir)/bleachbit/cleaners

@@ -8,9 +8,20 @@ are encouraged to use the newer version of BleachBit.
 
 ## Running from source
 
-To run BleachBit without installation, setup the Python environment like in `appveyor.yml` and run:
+To run BleachBit without installation, setup the Python environment:
+
+- Run [windows/install_msys2.ps1](windows/install_msys2.ps1) to setup MSYS2 for make (optional)
+- Install Python 3.4.4 32-bit.
+- Install Python dependencies as shown in [appveyor.yml](appveyor.yml).
+
+Then, run
 
 ```
+# Build translations (optional).
+make -C po local
+
+# Start application.
+# Adjust paths according to your system.
 \python34\python.exe bleachbit.py
 ```
 

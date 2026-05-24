@@ -294,6 +294,7 @@ def load_cleaners(cb_progress=lambda x: None):
 def pot_fragment(msgid, pathname, translators=None):
     """Create a string fragment for generating .pot files"""
     msgid = msgid.replace('"', '\\"')  # escape quotation mark
+    pathname = pathname.replace('\\', '/')
     if translators:
         translators = f"#. {translators}\n"
     else:
@@ -309,7 +310,7 @@ msgstr ""
 def create_pot():
     """Create a .pot for translation using gettext"""
 
-    f = open('../po/cleanerml.pot', 'w', encoding='utf-8')
+    f = open('../po/cleanerml.pot', 'w', encoding='utf-8', newline='\n')
 
     for pathname in listdir('../cleaners'):
         if not pathname.lower().endswith(".xml"):
