@@ -640,3 +640,25 @@ class IntegrationTestCase(unittest.TestCase):
                 self.assertEqual(bar.total, 1.0)
 
         asyncio.run(run())
+
+    def test_help_screen_toggle(self):
+        """Pressing ? should show HelpScreen, and pressing Escape should close it."""
+        from bleachbit.tui.app import BleachBitTUI
+        from bleachbit.tui.screens.help_screen import HelpScreen
+
+        async def run():
+            app = BleachBitTUI()
+            async with app.run_test() as pilot:
+                # Initially HelpScreen is not active
+                self.assertFalse(isinstance(app.screen, HelpScreen))
+                await pilot.press("?")
+                # Now HelpScreen should be active
+                self.assertTrue(isinstance(app.screen, HelpScreen))
+                # Check help-title
+                title = app.screen.query_one("#help-title")
+                self.assertEqual(str(title.render()), "[?] Help")
+                await pilot.press("escape")
+                # Now HelpScreen should be dismissed
+                self.assertFalse(isinstance(app.screen, HelpScreen))
+
+        asyncio.run(run())

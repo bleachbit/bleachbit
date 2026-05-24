@@ -28,7 +28,7 @@ class HelpScreen(ModalScreen):
     }
 
     #help-dialog {
-        width: 52;
+        width: 66;
         height: auto;
         border: thick $accent;
         background: $surface;
@@ -81,7 +81,7 @@ class HelpScreen(ModalScreen):
 
     def compose(self) -> ComposeResult:
         with Container(id="help-dialog"):
-            yield Static("\\[?\\] Help", id="help-title")
+            yield Static(r"\[?] Help", id="help-title")
             yield Static(self.HELP_TEXT)
 
     async def action_dismiss(self, result=None):
