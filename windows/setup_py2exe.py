@@ -1,3 +1,4 @@
+# -*- coding: future_fstrings -*-
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (c) 2008-2026 Andrew Ziem.
 #
@@ -8,7 +9,6 @@ from __future__ import absolute_import, print_function
 
 import fnmatch
 import glob
-import imp
 import logging
 import os
 import shutil
@@ -16,7 +16,6 @@ import subprocess
 import sys
 import time
 import win_unicode_console
-import xml.dom.minidom
 
 from windows.NsisUtilities import write_nsis_expressions_to_files
 
@@ -105,7 +104,16 @@ def check_exist(path, msg=None):
 
 def assert_module(module):
     try:
-        imp.find_module(module)
+        # imp was removed in Python 3.12, use importlib instead
+        import importlib
+        if hasattr(importlib, 'util') and hasattr(importlib.util, 'find_spec'):
+            # Python 3.4+
+            spec = importlib.util.find_spec(module)
+            if spec is None:
+                raise ImportError(f"Module {module} not found")
+        else:
+            # Fallback for older Python versions
+            __import__(module)
     except ImportError:
         logger.error('Failed to import ' + module)
         logger.error('Process aborted because of error!')
