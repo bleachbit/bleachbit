@@ -22,7 +22,7 @@ from configparser import RawConfigParser, NoOptionError # used in other files
 
 import win_unicode_console
 
-APP_VERSION = "4.6.3"
+APP_VERSION = "4.7.0"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 
