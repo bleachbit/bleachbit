@@ -30,6 +30,8 @@ from ctypes import wintypes
 # do not import psutil here in case of ImportError, like on Windows XP SP3.
 import win32file
 from pywintypes import error as pywinerror
+from win32con import FILE_ATTRIBUTE_READONLY
+from win32file import GetFileAttributesW, SetFileAttributesW
 
 import bleachbit
 import bleachbit.Windows
@@ -57,6 +59,21 @@ except ImportError:
         logger.warning(
             'scandir is not available, so falling back to slower os.walk()')
     from os import walk
+
+
+def _remove_windows_readonly(path):
+    """Clear Windows read-only attribute so deletion/wiping succeeds
+
+    Returns True if file was read-only and was cleared. Otherwise, False.
+    """
+    try:
+        attrs = GetFileAttributesW(path)
+    except pywinerror:
+        return False
+    if attrs & FILE_ATTRIBUTE_READONLY:
+        SetFileAttributesW(path, attrs & ~FILE_ATTRIBUTE_READONLY)
+        return True
+    return False
 
 
 def get_filesystem_type(path):
@@ -248,18 +265,100 @@ def clean_json(path, target):
             json.dump(js, f)
 
 
+def _truncate_locked_file(path):
+    """Best-effort truncate of a locked file (Windows).
+
+    Returns True if truncation succeeded, False otherwise.
+    Shared locks allow truncation, exclusive locks prevent it.
+    """
+    try:
+        with open(path, 'r+b') as handle:
+            handle.truncate(0)
+        return True
+    except (OSError, PermissionError):
+        logger.debug("Unable to truncate locked file %s", path)
+        return False
+
+
+def _delete_file_impl(path, shred):
+    """Delete a file
+
+    - File must exist.
+    - Not for use with directories.
+    - Does not check the user's preferences.
+
+    Returns True.
+    """
+    if shred:
+        try:
+            wipe_contents(path)
+        except pywinerror as e:
+            # 2 = The system cannot find the file specified.
+            # This can happen with a broken symlink
+            # https://github.com/bleachbit/bleachbit/issues/195
+            if 2 != e.winerror:
+                raise
+            # If a broken symlink, try os.remove() below.
+        except (IOError, OSError) as e:
+            # Wipe may fail on locked files; still try to delete the name.
+            # permission denied (13) happens shredding MSIE 8 on Windows 7
+            logger.debug("IOError #%s shredding '%s'", e.errno, path)
+        try:
+            os.remove(wipe_name(path))
+        except PermissionError as e:
+            if hasattr(e, 'winerror') and e.winerror == 32:
+                _truncate_locked_file(path)
+                raise WindowsError(
+                    e.errno, e.strerror, e.filename, e.winerror)
+            raise
+        except WindowsError as e:
+            if e.winerror == 32:
+                _truncate_locked_file(path)
+            raise
+        return True
+    try:
+        os.remove(path)
+    except PermissionError as e:
+        if hasattr(e, 'winerror'):
+            if e.winerror == 32:
+                # File is locked, try to truncate it first
+                _truncate_locked_file(path)
+                # Command.py watches for this exception.
+                raise WindowsError(
+                    e.errno, e.strerror, e.filename, e.winerror)
+            if e.errno == errno.EACCES and e.winerror == 5 and \
+                    _remove_windows_readonly(path):
+                # If read-only attribute was removed, try again.
+                os.remove(path)
+                return True
+        raise
+    except WindowsError as e:
+        if e.winerror == 32:
+            # File is locked, try to truncate it first
+            _truncate_locked_file(path)
+        raise
+    return True
+
+
+def delete_file(path, shred):
+    """Delete a file. See _delete_file_impl()."""
+    return _delete_file_impl(path, shred)
+
+
 def delete(path, shred=False, ignore_missing=False, allow_shred=True):
     """Delete path that is either file, directory, link or FIFO.
 
        If shred is enabled as a function parameter or the BleachBit global
        parameter, the path will be shredded unless allow_shred = False.
+
+       Returns True if the path was deleted, False otherwise.
     """
     from bleachbit.Options import options
     path = extended_path(path)
     do_shred = allow_shred and (shred or options.get('shred'))
     if not os.path.lexists(path):
         if ignore_missing:
-            return
+            return False
         raise OSError(2, 'No such file or directory', path)
     if os.path.isdir(path):
         delpath = path
@@ -267,7 +366,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             if not is_dir_empty(path):
                 # Avoid renaming non-empty directory like https://github.com/bleachbit/bleachbit/issues/783
                 logger.info(_("Directory is not empty: %s"), path)
-                return
+                return False
             delpath = wipe_name(path)
         try:
             os.rmdir(delpath)
@@ -276,8 +375,16 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # https://bugs.launchpad.net/bleachbit/+bug/1012930
             if errno.ENOTEMPTY == e.errno:
                 logger.info(_("Directory is not empty: %s"), path)
+                return False
             elif errno.EBUSY == e.errno:
                 logger.info(_("Device or resource is busy: %s"), path)
+                return False
+            elif errno.EACCES == e.errno:
+                # On Windows, read-only directories cause Access Denied
+                if _remove_windows_readonly(delpath):
+                    os.rmdir(delpath)
+                else:
+                    raise
             else:
                 raise
         except WindowsError as e:
@@ -287,37 +394,19 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             # during reboot.
             if 145 == e.winerror:
                 logger.info(_("Directory is not empty: %s"), path)
+                return False
             else:
                 raise
+        return True
     elif os.path.isfile(path):
-        # wipe contents
-        if do_shred:
-            try:
-                wipe_contents(path)
-            except pywinerror as e:
-                # 2 = The system cannot find the file specified.
-                # This can happen with a broken symlink
-                # https://github.com/bleachbit/bleachbit/issues/195
-                if 2 != e.winerror:
-                    raise
-                # If a broken symlink, try os.remove() below.
-            except IOError as e:
-                # Locked files must propagate so Command.Delete can mark
-                # them for deletion on reboot.
-                if getattr(e, 'winerror', None) in (32, 33):
-                    raise
-                # permission denied (13) happens shredding MSIE 8 on Windows 7
-                logger.debug("IOError #%s shredding '%s'",
-                             e.errno, path, exc_info=True)
-            # wipe name
-            os.remove(wipe_name(path))
-        else:
-            # unlink
-            os.remove(path)
+        delete_file(path, do_shred)
+        return True
     elif os.path.islink(path):
         os.remove(path)
+        return True
     else:
         logger.info(_("Special file type cannot be deleted: %s"), path)
+        return False
 
 
 def detect_encoding(fn):

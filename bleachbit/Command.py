@@ -16,6 +16,7 @@ JSON or INI file, delete registry key, edit SQLite3 database, etc.
 from bleachbit import _
 from bleachbit import FileUtilities
 
+import errno
 import logging
 import os
 import types
@@ -66,18 +67,23 @@ class Delete:
             'size': FileUtilities.getsize(self.path)}
         if really_delete:
             try:
-                FileUtilities.delete(self.path, self.shred)
-            except WindowsError as e:
+                deleted = FileUtilities.delete(self.path, self.shred)
+            except OSError as e:
                 # WindowsError: [Error 32] The process cannot access the file because it is being
                 # used by another process: 'C:\\Documents and
                 # Settings\\username\\Cookies\\index.dat'
-                if e.winerror not in (5, 32, 33):
+                winerror = getattr(e, 'winerror', None)
+                if winerror not in (5, 32, 33) and e.errno not in (errno.EACCES, 13):
                     raise
                 try:
                     bleachbit.Windows.delete_locked_file(self.path)
-                except:
-                    logger.exception('exception when deleting locked file %s', self.path)
-                    raise
+                except Exception:
+                    logger.error(
+                        _('Cannot delete locked file: %s'), self.path)
+                    raise OSError(
+                        errno.EACCES,
+                        _('Permission denied: %s') % self.path,
+                        self.path)
                 else:
                     if self.shred:
                         import warnings
@@ -86,6 +92,10 @@ class Delete:
                     # TRANSLATORS: The file will be deleted when the
                     # system reboots
                     ret['label'] = _('Mark for deletion')
+            else:
+                if not deleted:
+                    ret['n_deleted'] = 0
+                    ret['size'] = 0
         yield ret
 
 

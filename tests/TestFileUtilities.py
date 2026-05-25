@@ -11,6 +11,7 @@ Test case for module FileUtilities
 """
 
 import ctypes
+import itertools
 import json
 import locale
 import os
@@ -28,16 +29,19 @@ warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
 
 import win32api
 import win32con
+import win32file
 from pywintypes import error as pywinerror
 from win32com.shell import shell
 
 from bleachbit import logger
 from bleachbit.FileUtilities import (
+    _remove_windows_readonly,
     bytes_to_human,
     children_in_directory,
     clean_ini,
     clean_json,
     delete,
+    delete_file,
     detect_encoding,
     exists_in_path,
     exe_exists,
@@ -65,6 +69,19 @@ from bleachbit.General import run_external
 from bleachbit.Options import options
 from bleachbit.Windows import get_fixed_drives, is_junction
 from tests import common
+
+
+def _open_blocking_handle(path, share_mode):
+    """Open a file handle with the given share mode to block other processes."""
+    return win32file.CreateFile(
+        path,
+        win32con.GENERIC_READ | win32con.GENERIC_WRITE,
+        share_mode,
+        None,
+        win32con.OPEN_ALWAYS,
+        win32con.FILE_ATTRIBUTE_NORMAL,
+        None,
+    )
 
 
 def test_ini_helper(self, execute):
@@ -263,13 +280,26 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
     def test_delete(self):
         """Unit test for method delete()"""
-        print("testing delete() with shred = False")
-        self.delete_helper(shred=False)
-        print("testing delete() with shred = True")
-        self.delete_helper(shred=True)
-        # exercise ignore_missing
-        delete('does-not-exist', ignore_missing=True)
+        for shred in (False, True):
+            for delete_func in (delete, delete_file):
+                with self.subTest(delete_func=delete_func.__name__, shred=shred):
+                    self.delete_helper(delete_func, shred=shred)
+
+    def test_delete_ignore_missing(self):
+        """Unit test for delete() with ignore_missing=True"""
+        self.assertFalse(delete('does-not-exist', ignore_missing=True))
         self.assertRaises(OSError, delete, 'does-not-exist')
+
+    def test_delete_access_denied(self):
+        """delete() raises PermissionError on access denied"""
+        options.set('shred', False, commit=False)
+        path = self.write_file('test_delete_access_denied', b'secret')
+        e = PermissionError(13, 'Access is denied', path)
+        e.winerror = 5
+        with mock.patch('bleachbit.FileUtilities.os.remove', side_effect=e):
+            with self.assertRaises(PermissionError):
+                delete(path, shred=False)
+        self.assertExists(path)
 
     def test_delete_not_empty(self):
         """Test for scenario directory is not empty"""
@@ -286,11 +316,11 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         # Make sure shredding does not leave a renamed directory like
         # in https://github.com/bleachbit/bleachbit/issues/783
         for allow_shred in (False, True):
-            delete(dirname, allow_shred=allow_shred)
+            self.assertFalse(delete(dirname, allow_shred=allow_shred))
             self.assertExists(fn)
             self.assertExists(dirname)
 
-    def delete_helper(self, shred):
+    def delete_helper(self, delete_func, shred):
         """Called by test_delete() with shred = False and = True"""
 
         # test deleting with various kinds of filenames
@@ -315,13 +345,13 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             # create the file
             filename = self.write_file(test, b"top secret")
             # delete the file
-            delete(filename, shred)
+            self.assertTrue(delete_func(filename, shred))
             self.assertNotExists(filename)
 
             # delete an empty directory
             dirname = self.mkdtemp(prefix=test)
             self.assertExists(dirname)
-            delete(dirname, shred)
+            self.assertTrue(delete(dirname, shred))
             self.assertNotExists(dirname)
 
         def symlink_helper(link_fn):
@@ -342,12 +372,12 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             self.assertLExists(linkname)
 
             # delete symlink
-            delete(linkname, shred)
+            self.assertTrue(delete(linkname, shred))
             self.assertExists(srcname)
             self.assertNotLExists(linkname)
 
             # delete regular file
-            delete(srcname, shred)
+            self.assertTrue(delete(srcname, shred))
             self.assertNotExists(srcname)
 
             #
@@ -360,12 +390,12 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             self.assertExists(linkname)
 
             # delete regular file first
-            delete(srcname, shred)
+            self.assertTrue(delete(srcname, shred))
             self.assertNotExists(srcname)
             self.assertLExists(linkname)
 
             # clean up
-            delete(linkname, shred)
+            self.assertTrue(delete(linkname, shred))
             self.assertNotExists(linkname)
             self.assertNotLExists(linkname)
 
@@ -381,15 +411,54 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
                 self.assertNotEqual(rc, 0)
         symlink_helper(win_symlink)
 
-    def test_delete_read_only(self):
+        path = self.mkdtemp(prefix='bleachbit-test-delete-dir')
+        self.assertExists(path)
+        self.assertTrue(delete(path, shred))
+        self.assertNotExists(path)
+
+    def test_delete_read_only_file(self):
         """Unit test for delete() with read-only file"""
+        for option_shred, parameter_shred, delete_func in itertools.product(
+                [False, True], [False, True], [delete, delete_file]):
+            with self.subTest(option_shred=option_shred,
+                              parameter_shred=parameter_shred,
+                              delete_func=delete_func.__name__):
+                shred = parameter_shred
+                variation_dir = '%s-%s-%s' % (
+                    option_shred, parameter_shred, delete_func.__name__)
+                options.set('shred', option_shred, commit=False)
+                tmp_dir = self.mkdtemp(prefix='read-only-dir_%s' % variation_dir)
+                fn = self.write_file(
+                    os.path.join(tmp_dir, 'read-only-file_%s' % variation_dir),
+                    b'read-only content',
+                )
+                os.chmod(fn, stat.S_IREAD)
+                self.assertExists(fn)
+                try:
+                    delete_func(fn, shred=shred)
+                except PermissionError as e:
+                    _remove_windows_readonly(fn)
+                    raise e
+                self.assertNotExists(fn)
+
+    def test_delete_read_only_directory(self):
+        """Unit test for delete() with read-only directory on Windows"""
+        kernel32 = ctypes.windll.kernel32
         for shred in (False, True):
-            fn = os.path.join(self.tempdir, 'read-only')
-            common.touch_file(fn)
-            os.chmod(fn, stat.S_IREAD)
-            self.assertExists(fn)
-            delete(fn, shred=shred)
-            self.assertNotExists(fn)
+            with self.subTest(shred=shred):
+                container = self.mkdtemp(prefix='ro-container-%s' % shred)
+                self.assertTrue(is_dir_empty(container))
+                ro_dir = os.path.join(container, 'readonly-%s' % shred)
+                os.mkdir(ro_dir)
+                kernel32.SetFileAttributesW(ro_dir, win32con.FILE_ATTRIBUTE_READONLY)
+                self.assertExists(ro_dir)
+                try:
+                    delete(ro_dir, shred=shred)
+                    self.assertNotExists(ro_dir)
+                except Exception:
+                    for item in os.listdir(container):
+                        _remove_windows_readonly(os.path.join(container, item))
+                    raise
 
     def test_delete_hidden(self):
         """Unit test for delete() with hidden file"""
@@ -399,52 +468,78 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             win32api.SetFileAttributes(fn, win32con.FILE_ATTRIBUTE_HIDDEN)
             self.assertExists(fn)
             self.assertFalse(is_normal_directory(fn))
-            delete(fn, shred=shred)
+            self.assertTrue(delete(fn, shred=shred))
             self.assertNotExists(fn)
 
-    def test_delete_locked(self):
+    def test_delete_shred_permission_denied_fallback(self):
+        """When shredding fails with permission denied, fall back to normal delete"""
+        path = self.write_file('test-shred-perm-denied', b'secret')
+        try:
+            with mock.patch('bleachbit.FileUtilities.wipe_contents') as mock_wipe:
+                mock_wipe.side_effect = PermissionError(
+                    13, 'Permission denied', path)
+                with mock.patch('bleachbit.FileUtilities.logger.debug') as mock_log:
+                    delete(path, shred=True)
+                    for call in mock_log.call_args_list:
+                        self.assertNotIn('exc_info', call[1])
+            self.assertNotExists(path)
+        finally:
+            if os.path.exists(path):
+                os.remove(path)
+
+    def test_delete_locked_file(self):
         """Unit test for delete() with locked file"""
-        # set up
-        def test_delete_locked_setup():
-            (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker')
+        def test_delete_locked_setup(share_mode):
+            (fd, filename) = tempfile.mkstemp(
+                prefix='bleachbit-test-fileutilities')
             os.write(fd, b'123')
             os.close(fd)
             self.assertExists(filename)
             self.assertEqual(3, getsize(filename))
-            return filename
+            handle = _open_blocking_handle(filename, share_mode)
+            return filename, handle
 
-        # File is open but not opened exclusive, so expect that the
-        # file is truncated but not deleted.
-        # O_EXCL = fail if file exists (i.e., not an exclusive lock)
-        filename = test_delete_locked_setup()
-        f = os.open(filename, os.O_WRONLY | os.O_EXCL)
-        self.assertExists(filename)
-        self.assertEqual(3, getsize(filename))
-        with self.assertRaises(WindowsError):
-            delete(filename)
-        os.close(f)
-        self.assertExists(filename)
-        self.assertEqual(0, getsize(filename))
-        delete(filename)
-        self.assertNotExists(filename)
+        tests = [
+            (0, False, False),
+            (win32con.FILE_SHARE_READ, False, False),
+            (
+                win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE,
+                False,
+                True,
+            ),
+            (
+                win32con.FILE_SHARE_READ | win32con.FILE_SHARE_DELETE,
+                True,
+                None,
+            ),
+            (
+                win32con.FILE_SHARE_READ
+                | win32con.FILE_SHARE_WRITE
+                | win32con.FILE_SHARE_DELETE,
+                True,
+                None,
+            ),
+        ]
 
-        # File is open with exclusive lock, so expect the file is neither
-        # deleted nor truncated.
-        for allow_shred in (False, True):
-            filename = test_delete_locked_setup()
-            self.assertEqual(3, getsize(filename))
-            fd = os.open(filename, os.O_APPEND | os.O_EXCL)
-            self.assertExists(filename)
-            self.assertEqual(3, getsize(filename))
-            with self.assertRaises(WindowsError):
-                delete(filename, shred=allow_shred, allow_shred=allow_shred)
-            os.close(fd)
-            self.assertExists(filename)
-            if not allow_shred:
-                # A shredding attempt truncates the file.
-                self.assertEqual(3, getsize(filename))
-            delete(filename)
-            self.assertNotExists(filename)
+        for (share_mode, delete_expected, truncate_expected), shred in \
+                itertools.product(tests, (False, True)):
+            with self.subTest(share_mode=share_mode, shred=shred):
+                filename, handle = test_delete_locked_setup(share_mode)
+                if delete_expected:
+                    self.assertTrue(delete_file(filename, shred))
+                else:
+                    with self.assertRaises(WindowsError):
+                        delete_file(filename, shred)
+                win32file.CloseHandle(handle)
+                if delete_expected:
+                    self.assertNotExists(filename)
+                else:
+                    self.assertExists(filename)
+                    self.assertIsNotNone(truncate_expected)
+                    expected_size = 0 if truncate_expected else 3
+                    self.assertEqual(expected_size, getsize(filename))
+                    delete(filename)
+                    self.assertNotExists(filename)
 
     def test_detect_encoding(self):
         """Unit test for detect_encoding"""

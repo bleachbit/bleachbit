@@ -22,8 +22,13 @@
 Test case for Command
 """
 
+import errno
 import os
+import warnings
 from unittest import mock
+
+import win32con
+import win32file
 
 from tests import common
 from bleachbit import FileUtilities
@@ -89,27 +94,92 @@ class CommandTestCase(common.BleachbitTestCase):
         """Unit test for Shred"""
         self.test_Delete(Shred)
 
-    def test_Delete_locked_file_shred_fallback(self):
-        """Shred on a locked file falls back to mark for deletion"""
+    def test_Delete_not_deleted_reports_zero(self):
+        """Do not report file deleted when delete() returns False"""
+        dirname = self.mkdir('not_empty_delete')
+        self.write_file(os.path.join(dirname, 'a_file'), b'content')
+        cmd = Delete(dirname)
+        ret = next(cmd.execute(really_delete=True))
+        self.assertEqual(0, ret['n_deleted'])
+        self.assertEqual(0, ret['size'])
+        self.assertExists(dirname)
+
+    def test_shred_access_denied_locked_file(self):
+        """Shred on exclusively locked file leaves file intact.
+
+        Non-admin: delete_locked_file fails, OSError (EACCES) is raised.
+        Admin: file is marked for deletion on reboot instead.
+        """
+        path = self.write_file('test_Shred_access_denied', b'secret data')
+        handle = win32file.CreateFile(
+            path,
+            win32con.GENERIC_READ | win32con.GENERIC_WRITE,
+            0,
+            None,
+            win32con.OPEN_EXISTING,
+            win32con.FILE_ATTRIBUTE_NORMAL,
+            None,
+        )
+        try:
+            cmd = Shred(path)
+            with warnings.catch_warnings(record=True) as caught:
+                warnings.simplefilter('always')
+                try:
+                    ret = next(cmd.execute(really_delete=True))
+                except OSError as e:
+                    self.assertEqual(errno.EACCES, e.errno)
+                else:
+                    self.assertEqual('Mark for deletion', ret['label'])
+                    self.assertTrue(caught)
+            self.assertExists(path)
+            self.assertGreater(os.path.getsize(path), 0)
+        finally:
+            win32file.CloseHandle(handle)
+            if os.path.exists(path):
+                FileUtilities.delete(path)
+
+    def test_Delete_locked_file_access_denied_one_line(self):
+        """When delete_locked_file fails, log one line without traceback"""
         from pywintypes import error as pywinerror
 
         from bleachbit import Windows
 
+        path = self.write_file('test_Delete_locked_no_admin', b'locked')
+        cmd = Delete(path)
+        with mock.patch('bleachbit.FileUtilities.delete') as mock_delete:
+            mock_delete.side_effect = PermissionError(
+                13, 'Permission denied', path, 32)
+            with mock.patch.object(Windows, 'delete_locked_file') as mock_del:
+                mock_del.side_effect = pywinerror(
+                    5, 'MoveFileExW', 'Access is denied.')
+                with mock.patch('bleachbit.Command.logger') as mock_logger:
+                    with self.assertRaises(OSError) as cm:
+                        next(cmd.execute(really_delete=True))
+                    self.assertEqual(errno.EACCES, cm.exception.errno)
+                    mock_logger.exception.assert_not_called()
+                    mock_logger.error.assert_called()
+
+    def test_Delete_locked_file_shred_fallback(self):
+        """Shred on a locked file falls back to mark for deletion"""
+        from bleachbit import Windows
+        from tests.TestFileUtilities import _open_blocking_handle
+
         path = self.write_file('test_Delete_locked', b'locked')
+        handle = _open_blocking_handle(path, 0)
         cmd = Delete(path)
         cmd.shred = True
-        with mock.patch('win32com.shell.shell.IsUserAnAdmin',
-                        return_value=True):
-            with mock.patch('bleachbit.WindowsWipe.file_wipe') as mock_wipe:
-                mock_wipe.side_effect = pywinerror(
-                    32, 'CreateFileW',
-                    'The process cannot access the file because it is '
-                    'being used by another process.')
+        try:
+            with mock.patch('win32com.shell.shell.IsUserAnAdmin',
+                            return_value=True):
                 with mock.patch.object(Windows, 'delete_locked_file') as mock_del:
                     ret = next(cmd.execute(really_delete=True))
                     mock_del.assert_called_once_with(path)
                     self.assertEqual('Mark for deletion', ret['label'])
-        self.assertExists(path)
+            self.assertExists(path)
+        finally:
+            win32file.CloseHandle(handle)
+            if os.path.exists(path):
+                FileUtilities.delete(path)
 
     def test_Function_sqlite_error(self):
         """Unit test for Function handling sqlite3 database errors"""
