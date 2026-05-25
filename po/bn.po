@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-29 20:55-0600\n"
+"POT-Creation-Date: 2026-05-24 22:43-0600\n"
 "PO-Revision-Date: 2021-06-26 16:00+0000\n"
 "Last-Translator: Firefly <Unknown>\n"
 "Language-Team: Bengali <bn@li.org>\n"
@@ -16,185 +16,307 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2021-06-27 14:32+0000\n"
 "X-Generator: Launchpad (build 40cc6dba4163ba9ca785b26ad91f43c87d70ba4d)\n"
+"X-Launchpad-Export-Date: 2021-06-27 14:32+0000\n"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/palemoon.xml
-#: ../cleaners/elinks.xml ../cleaners/epiphany.xml ../cleaners/links2.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/safari.xml ../cleaners/konqueror.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
-msgid "Web browser"
-msgstr "ওয়েব ব্রাউজার"
+#: ../cleaners/adobe_reader.xml
+msgid "Document viewer"
+msgstr "ডকুমেন্ট ভিউয়ার"
 
-#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/tremulous.xml
-#: ../cleaners/flash.xml ../cleaners/google_chrome.xml ../cleaners/slack.xml
-#: ../cleaners/waterfox.xml ../cleaners/seamonkey.xml ../cleaners/emesene.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
-#: ../cleaners/epiphany.xml ../cleaners/microsoft_edge.xml ../cleaners/gftp.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/vuze.xml
-#: ../cleaners/evolution.xml ../cleaners/rhythmbox.xml ../cleaners/miro.xml
-#: ../cleaners/java.xml ../cleaners/discord.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/pidgin.xml
-#: ../cleaners/safari.xml ../cleaners/audacious.xml ../cleaners/smartftp.xml
-#: ../cleaners/exaile.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/thumbnails.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/zoom.xml ../cleaners/amsn.xml ../cleaners/liferea.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
-#: ../cleaners/beagle.xml ../cleaners/xine.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/kde.xml
-#: ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:191
-#: ../bleachbit/Cleaner.py:276
+#: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/discord.xml ../cleaners/firefox.xml ../cleaners/flash.xml
+#: ../cleaners/google_chrome.xml ../cleaners/gpodder.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/java.xml ../cleaners/microsoft_edge.xml ../cleaners/miro.xml
+#: ../cleaners/openoffice.xml ../cleaners/opera.xml ../cleaners/palemoon.xml
+#: ../cleaners/pidgin.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/slack.xml
+#: ../cleaners/smartftp.xml ../cleaners/supermium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/zoom.xml ../bleachbit/Cleaner.py
 msgid "Cache"
 msgstr "ক্যাশে (Cache)"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/slack.xml
-#: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
-#: ../cleaners/epiphany.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/brave.xml ../cleaners/safari.xml ../cleaners/opera.xml
-msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr "ওয়েব ক্যাশে মুছে ফেলুন, যার ফলে পৃষ্ঠাগুলো পুনরায় প্রদর্শন হতে অল্প সময় লাগবে"
+#: ../cleaners/adobe_reader.xml ../cleaners/firefox.xml ../cleaners/flash.xml
+#: ../cleaners/gpodder.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/java.xml ../cleaners/miro.xml
+#: ../cleaners/openoffice.xml ../cleaners/palemoon.xml ../cleaners/pidgin.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/smartftp.xml
+#: ../cleaners/vuze.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml
+#: ../bleachbit/Cleaner.py
+msgid "Delete the cache"
+msgstr "ক্যাশ পরিস্কার করো"
 
-#: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
-#: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml
-#: ../cleaners/realplayer.xml ../cleaners/brave.xml ../cleaners/discord.xml
-#: ../cleaners/safari.xml ../cleaners/konqueror.xml ../cleaners/liferea.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/filezilla.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/openoffice.xml
+#: ../cleaners/paint.xml ../cleaners/smartftp.xml ../cleaners/teamviewer.xml
+#: ../cleaners/vlc.xml ../cleaners/winamp.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/winzip.xml
+#: ../cleaners/wordpad.xml ../bleachbit/Cleaner.py
+msgid "Most recently used"
+msgstr "সম্প্রতি ব্যবহৃত"
+
+#: ../cleaners/adobe_reader.xml ../cleaners/openoffice.xml
+#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py
+msgid "Delete the list of recently used documents"
+msgstr "সাম্প্রতিক ব্যবহৃত কাগজপত্রগুলো মুছে ফেলুন"
+
+#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/deepscan.xml
+#: ../cleaners/gimp.xml ../cleaners/google_earth.xml
+#: ../cleaners/silverlight.xml ../cleaners/vuze.xml
+#: ../cleaners/windows_defender.xml ../cleaners/winrar.xml
+#: ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr "অস্থায়ী নথিসমুহ"
+
+#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/deepscan.xml
+#: ../cleaners/gimp.xml ../cleaners/google_earth.xml
+#: ../cleaners/silverlight.xml ../cleaners/vuze.xml
+#: ../cleaners/windows_defender.xml ../cleaners/winrar.xml
+#: ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr "অস্থায়ী ফাইল মুছে ফেলুন"
+
+#: ../cleaners/amule.xml ../cleaners/filezilla.xml ../cleaners/smartftp.xml
+#: ../cleaners/vuze.xml
+msgid "File transfer client"
+msgstr "নথি হস্তান্তরকারক"
+
+#: ../cleaners/amule.xml ../cleaners/gpodder.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/miro.xml ../cleaners/realplayer.xml ../cleaners/screenlets.xml
+#: ../cleaners/smartftp.xml ../cleaners/teamviewer.xml ../cleaners/vuze.xml
+#: ../cleaners/warzone2100.xml ../cleaners/windows_defender.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml
+#: ../bleachbit/Cleaner.py
+msgid "Logs"
+msgstr "লগ"
+
+#: ../cleaners/amule.xml ../cleaners/gpodder.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/miro.xml ../cleaners/realplayer.xml ../cleaners/screenlets.xml
+#: ../cleaners/smartftp.xml ../cleaners/teamviewer.xml ../cleaners/vuze.xml
+#: ../cleaners/warzone2100.xml ../cleaners/windows_defender.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml
+#: ../bleachbit/Cleaner.py
+msgid "Delete the logs"
+msgstr "লগ পরিস্কার করুন"
+
+#: ../cleaners/amule.xml
+msgid "Known files history"
+msgstr "পরিচিত ফাইল সমূহের একটি হিস্ট্রি"
+
+#: ../cleaners/amule.xml ../cleaners/filezilla.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
+#: ../cleaners/mc.xml ../cleaners/realplayer.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/windows_defender.xml ../cleaners/winrar.xml
+#: ../bleachbit/Cleaner.py
+msgid "Delete the usage history"
+msgstr "ব্যবহৃত ইতিবৃত্ত মুছে ফেলুন"
+
+#. http://wiki.amule.org/wiki/Friend
+#: ../cleaners/amule.xml
+msgid "Known clients and friends"
+msgstr "পরিচিত ক্লায়েন্ট এবং বন্ধুরা"
+
+#: ../cleaners/amule.xml ../cleaners/deepscan.xml ../cleaners/firefox.xml
+#: ../cleaners/palemoon.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_defender.xml
+msgid "Backup files"
+msgstr "নথিসমূহ সংরক্ষণ করুন"
+
+#: ../cleaners/amule.xml ../cleaners/deepscan.xml ../cleaners/firefox.xml
+#: ../cleaners/palemoon.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_defender.xml
+msgid "Delete the backup files"
+msgstr "সংরক্ষণকৃত নথিসমূহ মুছে ফেলুন"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/supermium.xml ../cleaners/waterfox.xml
+msgid "Web browser"
+msgstr "ওয়েব ব্রাউজার"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/slack.xml ../cleaners/supermium.xml ../cleaners/thunderbird.xml
+msgid "Delete the web cache, which reduces time to display revisited pages"
+msgstr ""
+"ওয়েব ক্যাশে মুছে ফেলুন, যার ফলে পৃষ্ঠাগুলো পুনরায় প্রদর্শন হতে অল্প সময় "
+"লাগবে"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/firefox.xml ../cleaners/flash.xml ../cleaners/google_chrome.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/realplayer.xml
+#: ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/silverlight.xml ../cleaners/slack.xml ../cleaners/supermium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/waterfox.xml
 msgid "Cookies"
 msgstr "কুকিজ"
 
-#: ../cleaners/chromium.xml ../cleaners/silverlight.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
-#: ../cleaners/seamonkey.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml
-#: ../cleaners/realplayer.xml ../cleaners/brave.xml ../cleaners/discord.xml
-#: ../cleaners/safari.xml ../cleaners/konqueror.xml ../cleaners/liferea.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/firefox.xml ../cleaners/flash.xml ../cleaners/google_chrome.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/realplayer.xml
+#: ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/silverlight.xml ../cleaners/slack.xml ../cleaners/supermium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/waterfox.xml
 msgid ""
-"Delete cookies, which contain information such as web site preferences, "
-"authentication, and tracking identification"
+"Delete cookies, which store login information, website preferences, and "
+"tracking identifiers"
 msgstr ""
-"কুকিগুলো ডিলিট করুন, যাতে আছে ওয়েব সাইট বিষয়ক পছন্দসমূহ, অথেনটিকেশন এবং ট্র্যাকিং "
-"আইডেন্টিফিকেশন তথ্য"
+"কুকিগুলো ডিলিট করুন, যাতে আছে ওয়েব সাইট বিষয়ক পছন্দসমূহ, অথেনটিকেশন এবং "
+"ট্র্যাকিং আইডেন্টিফিকেশন তথ্য"
 
-#. DOM=Document Object Model
-#. DOM=Document Object Model
-#. DOM=Document Object Model
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/epiphany.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/opera.xml
-msgid "DOM Storage"
-msgstr "ডিওএম সংরক্ষণাগার"
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/supermium.xml
+#: ../cleaners/waterfox.xml
+msgid "Crash reports"
+msgstr "ক্র্যাশ রিপোর্টস"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/epiphany.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/opera.xml
-msgid "Delete HTML5 cookies"
-msgstr "HTML5 কুকি মুছে ফেলুন"
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/deepscan.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/supermium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_defender.xml
+msgid "Delete the files"
+msgstr "নথিসমূহ মুছুন"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/supermium.xml ../cleaners/waterfox.xml
 msgid "Form history"
 msgstr "ইতিহাস হতে"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
-msgid "A history of forms entered in web sites"
+#: ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/supermium.xml
+msgid "A history of forms entered in websites"
 msgstr "প্রবেশকৃত একটি ওয়েব সাইটের ইতিহাস"
 
-#: ../cleaners/chromium.xml ../cleaners/winrar.xml
-#: ../cleaners/windows_defender.xml ../cleaners/sqlite3.xml
-#: ../cleaners/bash.xml ../cleaners/nautilus.xml ../cleaners/octave.xml
-#: ../cleaners/tortoisesvn.xml ../cleaners/google_chrome.xml
-#: ../cleaners/slack.xml ../cleaners/seamonkey.xml ../cleaners/elinks.xml
-#: ../cleaners/links2.xml ../cleaners/libreoffice.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/realplayer.xml
-#: ../cleaners/brave.xml ../cleaners/discord.xml ../cleaners/vim.xml
-#: ../cleaners/d4x.xml ../cleaners/safari.xml ../cleaners/mc.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/opera.xml
-#: ../cleaners/easytag.xml
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/libreoffice.xml ../cleaners/mc.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/octave.xml ../cleaners/opera.xml
+#: ../cleaners/realplayer.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/slack.xml ../cleaners/supermium.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/vim.xml ../cleaners/windows_defender.xml ../cleaners/winrar.xml
 msgid "History"
 msgstr "পূর্ববর্তী তথ্য"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml ../cleaners/slack.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/discord.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/slack.xml ../cleaners/supermium.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr "ইতিহাস মুছে ফেলুন যার মধ্যে রয়েছে প্রদর্শিত সাইটসমূহ, ডাউনলোডসমূহ, এবং ছোটগুলো"
+msgstr ""
+"ইতিহাস মুছে ফেলুন যার মধ্যে রয়েছে প্রদর্শিত সাইটসমূহ, ডাউনলোডসমূহ, এবং "
+"ছোটগুলো"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
+#: ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/supermium.xml
 msgid "Search engines"
 msgstr "সার্চ ইঞ্জিনসমূহ"
 
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
+#. 'Factory' means a search engine that is installed by default 'from the
+#. factory,' but this is different than a 'default search engine'
+#. https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the
+#. factory,' but this is different than a 'default search engine'
+#. https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the
+#. factory,' but this is different than a 'default search engine'
+#. https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the
+#. factory,' but this is different than a 'default search engine'
+#. https://lists.launchpad.net/launchpad-translators/msg00283.html
+#: ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/supermium.xml
 msgid ""
-"Reset the search engine usage history and delete non-factory search engines, "
-"some of which are added automatically"
+"Reset the search engine usage history and delete non-factory search engines,"
+" some of which are added automatically"
 msgstr ""
-"অনুসন্ধান ইঞ্জিন ব্যবহারের ইতিহাসটি পুনরায় সেট করুন এবং অ-কারখানা অনুসন্ধান ইঞ্জিনগুলি "
-"মুছুন, যার মধ্যে কয়েকটি স্বয়ংক্রিয়ভাবে যুক্ত হয়ে গেছে"
+"অনুসন্ধান ইঞ্জিন ব্যবহারের ইতিহাসটি পুনরায় সেট করুন এবং অ-কারখানা অনুসন্ধান"
+" ইঞ্জিনগুলি মুছুন, যার মধ্যে কয়েকটি স্বয়ংক্রিয়ভাবে যুক্ত হয়ে গেছে"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/supermium.xml
+#: ../cleaners/waterfox.xml
 msgid "Session"
 msgstr "বৈঠক"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml ../cleaners/opera.xml
-msgid "Delete the current and last sessions"
-msgstr "বর্তমান এবং শেষ সেশন মুছে ফেলুন"
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/supermium.xml
+#: ../cleaners/waterfox.xml
+msgid "Previously open tabs and windows"
+msgstr ""
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
+#. Label for cleaning option to delete site data such as LocalStorage and
+#. IndexedDB
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/supermium.xml
+#: ../cleaners/waterfox.xml
+msgid "Site data"
+msgstr ""
+
+#. Description for cleaning option. LocalStorage and IndexedDB are proper
+#. nouns: do not translate
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/supermium.xml
+#: ../cleaners/waterfox.xml
+msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
+msgstr ""
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/supermium.xml
 msgid "Sync"
 msgstr "হালনাগাদ"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/brave.xml
-msgid "Delete the sync data and sign out of the browser"
+#: ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/supermium.xml
+msgid "Delete the sync data (including web apps) and sign out of the browser"
 msgstr "হালনাগাদকৃত তথ্য মুছুন এবং ব্রাউজার থেকে প্রস্থান করুন"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/supermium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/waterfox.xml
 msgid "Passwords"
 msgstr "পাসওয়ার্ড"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/supermium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/waterfox.xml
 msgid ""
-"A database of usernames and passwords as well as a list of sites that should "
-"not store passwords"
+"A database of usernames and passwords as well as a list of sites that should"
+" not store passwords"
 msgstr ""
-"ব্যবহারকারীর নাম এবং পাসওয়ার্ডগুলির একটি ডেটাবেস পাশাপাশি সেই সাইটের তালিকা যা "
-"স্যুইড নোট স্টোরটিতে পাসওয়ার্ড দেয়।"
+"ব্যবহারকারীর নাম এবং পাসওয়ার্ডগুলির একটি ডেটাবেস পাশাপাশি সেই সাইটের তালিকা"
+" যা স্যুইড নোট স্টোরটিতে পাসওয়ার্ড দেয়।"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/epiphany.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/supermium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/waterfox.xml
 msgid "This option will delete your saved passwords."
 msgstr "এই অপশনটি আপনার সঞ্চয়কৃত[saved] পাসওয়ার্ড মুছে দিবে।"
 
@@ -202,448 +324,41 @@ msgstr "এই অপশনটি আপনার সঞ্চয়কৃত[saved
 #. from the SQLite database.  Microsoft Access uses
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
-#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/yum.xml
-#: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/discord.xml ../cleaners/safari.xml ../cleaners/liferea.xml
-#: ../cleaners/opera.xml ../bleachbit/Action.py:588
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/gpodder.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/safari.xml
+#: ../cleaners/slack.xml ../cleaners/supermium.xml ../cleaners/thunderbird.xml
+#: ../cleaners/waterfox.xml ../bleachbit/Action.py
 msgid "Vacuum"
 msgstr "শূন্যস্থান"
 
-#: ../cleaners/chromium.xml ../cleaners/gpodder.xml ../cleaners/yum.xml
-#: ../cleaners/google_chrome.xml ../cleaners/slack.xml ../cleaners/waterfox.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/discord.xml ../cleaners/safari.xml ../cleaners/liferea.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/gpodder.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/safari.xml
+#: ../cleaners/slack.xml ../cleaners/supermium.xml ../cleaners/thunderbird.xml
+#: ../cleaners/waterfox.xml
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
 msgstr ""
-"কোনও ডেটা অপসারণ না করে স্থান হ্রাস করতে এবং গতির উন্নতি করতে ডাটাবেস খণ্ডগুলি "
-"পরিষ্কার করুন"
+"কোনও ডেটা অপসারণ না করে স্থান হ্রাস করতে এবং গতির উন্নতি করতে ডাটাবেস "
+"খণ্ডগুলি পরিষ্কার করুন"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/supermium.xml
+#: ../cleaners/waterfox.xml
 msgid "Site preferences"
 msgstr "সাইট বিষয়ক পছন্দ সমূহ"
 
-#: ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/supermium.xml
+#: ../cleaners/waterfox.xml
 msgid "Settings for individual sites"
 msgstr "পৃথক পৃথক সাইটের জন্য সেটিংস"
-
-#: ../cleaners/winrar.xml
-msgid "File archiver"
-msgstr "নথি সংরক্ষণাগার"
-
-#: ../cleaners/winrar.xml ../cleaners/filezilla.xml
-#: ../cleaners/windows_defender.xml ../cleaners/nautilus.xml
-#: ../cleaners/tortoisesvn.xml ../cleaners/gnome.xml ../cleaners/links2.xml
-#: ../cleaners/libreoffice.xml ../cleaners/amule.xml ../cleaners/realplayer.xml
-#: ../cleaners/d4x.xml ../cleaners/mc.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:244
-#: ../bleachbit/Cleaner.py:253
-msgid "Delete the usage history"
-msgstr "ব্যবহৃত ইতিবৃত্ত মুছে ফেলুন"
-
-#: ../cleaners/winrar.xml ../cleaners/silverlight.xml
-#: ../cleaners/windows_defender.xml ../cleaners/winetricks.xml
-#: ../cleaners/amule.xml ../cleaners/google_earth.xml ../cleaners/vuze.xml
-#: ../cleaners/wine.xml ../cleaners/deepscan.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/kde.xml ../cleaners/gimp.xml ../bleachbit/Cleaner.py:341
-msgid "Temporary files"
-msgstr "অস্থায়ী নথিসমুহ"
-
-#: ../cleaners/winrar.xml ../cleaners/silverlight.xml
-#: ../cleaners/windows_defender.xml ../cleaners/winetricks.xml
-#: ../cleaners/amule.xml ../cleaners/google_earth.xml ../cleaners/vuze.xml
-#: ../cleaners/wine.xml ../cleaners/deepscan.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/kde.xml ../cleaners/gimp.xml ../bleachbit/Cleaner.py:341
-msgid "Delete the temporary files"
-msgstr "অস্থায়ী ফাইল মুছে ফেলুন"
-
-#: ../cleaners/silverlight.xml ../cleaners/flash.xml ../cleaners/miro.xml
-#: ../cleaners/xine.xml
-msgid "Multimedia viewer"
-msgstr "মাল্টিমিডিয়া প্রদর্শক"
-
-#: ../cleaners/filezilla.xml ../cleaners/transmission.xml ../cleaners/amule.xml
-#: ../cleaners/gftp.xml ../cleaners/vuze.xml ../cleaners/smartftp.xml
-msgid "File transfer client"
-msgstr "নথি হস্তান্তরকারক"
-
-#: ../cleaners/filezilla.xml ../cleaners/paint.xml ../cleaners/winamp.xml
-#: ../cleaners/vlc.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/audacious.xml ../cleaners/winzip.xml ../cleaners/smartftp.xml
-#: ../cleaners/wordpad.xml ../cleaners/teamviewer.xml
-#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py:192
-msgid "Most recently used"
-msgstr "সম্প্রতি ব্যবহৃত"
-
-#: ../cleaners/windows_defender.xml
-msgid "Anti-virus"
-msgstr "এন্টিভাইরাস"
-
-#: ../cleaners/windows_defender.xml
-msgid "Quarantine"
-msgstr "সঙ্গরোধ"
-
-#: ../cleaners/windows_defender.xml ../cleaners/transmission.xml
-#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/vuze.xml
-#: ../cleaners/deepscan.xml ../cleaners/beagle.xml
-msgid "Delete the files"
-msgstr "নথিসমূহ মুছুন"
-
-#: ../cleaners/windows_defender.xml ../cleaners/waterfox.xml
-#: ../cleaners/palemoon.xml ../cleaners/amule.xml ../cleaners/firefox.xml
-#: ../cleaners/vuze.xml ../cleaners/deepscan.xml
-msgid "Backup files"
-msgstr "নথিসমূহ সংরক্ষণ করুন"
-
-#: ../cleaners/windows_defender.xml ../cleaners/waterfox.xml
-#: ../cleaners/palemoon.xml ../cleaners/amule.xml ../cleaners/firefox.xml
-#: ../cleaners/vuze.xml ../cleaners/deepscan.xml
-msgid "Delete the backup files"
-msgstr "সংরক্ষণকৃত নথিসমূহ মুছে ফেলুন"
-
-#: ../cleaners/windows_defender.xml ../cleaners/gpodder.xml
-#: ../cleaners/screenlets.xml ../cleaners/amule.xml ../cleaners/gftp.xml
-#: ../cleaners/realplayer.xml ../cleaners/warzone2100.xml ../cleaners/vuze.xml
-#: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/smartftp.xml
-#: ../cleaners/exaile.xml ../cleaners/teamviewer.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/easytag.xml ../bleachbit/Cleaner.py:307
-msgid "Logs"
-msgstr "লগ"
-
-#: ../cleaners/windows_defender.xml ../cleaners/gpodder.xml
-#: ../cleaners/screenlets.xml ../cleaners/amule.xml ../cleaners/gftp.xml
-#: ../cleaners/realplayer.xml ../cleaners/warzone2100.xml ../cleaners/vuze.xml
-#: ../cleaners/miro.xml ../cleaners/audacious.xml ../cleaners/smartftp.xml
-#: ../cleaners/exaile.xml ../cleaners/teamviewer.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../bleachbit/Cleaner.py:307
-msgid "Delete the logs"
-msgstr "লগ পরিস্কার করুন"
-
-#: ../cleaners/gpodder.xml ../cleaners/yum.xml ../cleaners/flash.xml
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/gftp.xml
-#: ../cleaners/firefox.xml ../cleaners/vuze.xml ../cleaners/evolution.xml
-#: ../cleaners/rhythmbox.xml ../cleaners/miro.xml ../cleaners/java.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/pidgin.xml ../cleaners/apt.xml ../cleaners/audacious.xml
-#: ../cleaners/smartftp.xml ../cleaners/exaile.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/thumbnails.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/zoom.xml ../cleaners/amsn.xml
-#: ../cleaners/liferea.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/dnf.xml ../cleaners/beagle.xml
-#: ../cleaners/xine.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/kde.xml ../cleaners/nexuiz.xml ../bleachbit/Cleaner.py:191
-#: ../bleachbit/Cleaner.py:276 ../bleachbit/Cleaner.py:310
-#: ../bleachbit/Cleaner.py:312
-msgid "Delete the cache"
-msgstr "ক্যাশ পরিস্কার করো"
-
-#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
-msgid "Downloaded podcasts"
-msgstr "ডাউনলোডকৃত পডকাস্টসমূহ"
-
-#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
-msgid "Delete downloaded podcasts"
-msgstr "ডাউনলোডকৃত পডকাস্টসমূহ মুছে ফেলুন"
-
-#: ../cleaners/sqlite3.xml ../cleaners/bash.xml ../cleaners/octave.xml
-msgid "Delete the command history"
-msgstr "অনুশাসনের ইতিহাস মুছে ফেলুন"
-
-#: ../cleaners/tremulous.xml ../cleaners/warzone2100.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/nexuiz.xml
-msgid "Game"
-msgstr "খেলা"
-
-#: ../cleaners/tremulous.xml
-msgid "Delete the list of game servers"
-msgstr "সার্ভার হতে খেলার তালিমু অপসারণ করো"
-
-#: ../cleaners/yum.xml ../cleaners/apt.xml ../cleaners/dnf.xml
-msgid "Package manager"
-msgstr "প্যাকেজ পরিচালক"
-
-#: ../cleaners/gedit.xml ../cleaners/vim.xml
-msgid "Editor"
-msgstr "সম্পাদক"
-
-#: ../cleaners/gedit.xml ../cleaners/gwenview.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/kde.xml
-#: ../bleachbit/Cleaner.py:289 ../bleachbit/Cleaner.py:484
-msgid "Recent documents list"
-msgstr "সাম্প্রতিক কাগজপত্রগুলোর তালিকা"
-
-#: ../cleaners/gedit.xml ../cleaners/adobe_reader.xml ../cleaners/audacious.xml
-#: ../cleaners/gwenview.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/kde.xml ../bleachbit/Cleaner.py:193 ../bleachbit/Cleaner.py:290
-msgid "Delete the list of recently used documents"
-msgstr "সাম্প্রতিক ব্যবহৃত কাগজপত্রগুলো মুছে ফেলুন"
-
-#: ../cleaners/bash.xml
-msgid "Shell"
-msgstr "শেল"
-
-#: ../cleaners/skype.xml ../cleaners/slack.xml ../cleaners/emesene.xml
-#: ../cleaners/discord.xml ../cleaners/pidgin.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../cleaners/amsn.xml
-msgid "Chat client"
-msgstr "চ্যাট মাধ্যম"
-
-#: ../cleaners/skype.xml ../cleaners/seamonkey.xml ../cleaners/emesene.xml
-#: ../cleaners/pidgin.xml ../cleaners/yahoo_messenger.xml ../cleaners/amsn.xml
-#: ../cleaners/hexchat.xml
-msgid "Chat logs"
-msgstr "খোশগল্পের কুঁদাসমূহ"
-
-#: ../cleaners/skype.xml ../cleaners/seamonkey.xml ../cleaners/emesene.xml
-#: ../cleaners/pidgin.xml ../cleaners/yahoo_messenger.xml ../cleaners/amsn.xml
-#: ../cleaners/hexchat.xml
-msgid "Delete the chat logs"
-msgstr "খোশগল্পের কুঁদাসমূহ মুছে ফেলুন"
-
-#: ../cleaners/skype.xml
-msgid "Installers"
-msgstr "ইন্সটলার"
-
-#: ../cleaners/skype.xml
-msgid "Delete cached patches and installers"
-msgstr "ক্যাশের কাটছাঁটসমূহ এবং ইন্সটলার মুছে ফেলুন"
-
-#: ../cleaners/x11.xml
-msgid "Windowing system"
-msgstr "উইন্ডোয়ার্ড সিস্টেম"
-
-#: ../cleaners/x11.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
-#: ../cleaners/beagle.xml
-msgid "Debug logs"
-msgstr "ডিবাগ লগসমূহ"
-
-#: ../cleaners/x11.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/gl-117.xml
-#: ../cleaners/beagle.xml ../cleaners/easytag.xml
-msgid "Delete the debug logs"
-msgstr "ডিবাগ লগসমূহ মুছে ফেলুন"
-
-#: ../cleaners/nautilus.xml ../cleaners/mc.xml ../cleaners/windows_explorer.xml
-msgid "File manager"
-msgstr "ফাইল পরিচালক"
-
-#: ../cleaners/nautilus.xml
-msgid "Custom folders will be reset."
-msgstr "কাস্টম ফোল্ডারগুলি পুনরায় সেট করা হবে।"
-
-#. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
-#: ../cleaners/transmission.xml
-msgid "Blocklists"
-msgstr "আটককৃতদের তালিকাসমূহ"
-
-#: ../cleaners/transmission.xml
-msgid "Blocklists will need update to work."
-msgstr "ব্লকলিস্টগুলিতে কাজ করার জন্য আপডেটের প্রয়োজন হবে।"
-
-#: ../cleaners/transmission.xml
-msgid "Torrents"
-msgstr "টরেন্ট"
-
-#: ../cleaners/transmission.xml
-msgid "Delete the torrents (just the metadata but not the files described)"
-msgstr "টরেন্টস মুছুন (কেবলমাত্র মেটাডেটা তবে বর্ণিত ফাইলগুলি নয়)"
-
-#: ../cleaners/transmission.xml ../cleaners/vuze.xml
-msgid "Statistics"
-msgstr "পরিসংখ্যান"
-
-#: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py:309
-msgid "Delete the file"
-msgstr "নথি মুছে ফেলুন"
-
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-msgid "Crash reports"
-msgstr "ক্র্যাশ রিপোর্টস"
-
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/internet_explorer.xml
-msgid "A history of forms entered in web sites and in the Search bar"
-msgstr "ওয়েবসাইটগুলোয় এবং সার্চ বারে বিভিন্ন ফর্মের একটি হিস্ট্রি প্রবেশ করানো হয়েছে"
-
-#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
-msgid "Session restore"
-msgstr "সেশন পূনঃরুদ্ধার করুন"
-
-#: ../cleaners/waterfox.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
-msgid "Loads the initial session after the browser closes or crashes"
-msgstr "ব্রাউজার ক্লোজ কিংবা ক্র্যাশ করার পরে প্রাথমিক সেশনটি লোড করে"
-
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/konqueror.xml
-msgid "URL history"
-msgstr "URL ইতিবৃত্ত"
-
-#: ../cleaners/waterfox.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/safari.xml ../cleaners/konqueror.xml
-#: ../cleaners/internet_explorer.xml
-msgid "List of visited web pages"
-msgstr "পরিদর্শনকৃত ওয়েব পৃষ্ঠাগুলোর তালিকা"
-
-#: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
-msgid "Download history"
-msgstr "ডাউনলোডের ইতিহাস"
-
-#: ../cleaners/seamonkey.xml
-msgid "List of files downloaded"
-msgstr "ডউনলোডকৃত নথিসমূহের তালিকা"
-
-#: ../cleaners/seamonkey.xml
-msgid "Delete the list of visited web pages"
-msgstr "পরিদর্শনকৃত ওয়েব পৃষ্ঠাগুলোর তালিকা মুছে ফেলুন"
-
-#: ../cleaners/emesene.xml
-msgid "Delete the avatars and emoticons cache"
-msgstr "এভাটার এবং ইমোটিকনস ক্যাচ ডিলিট করুন"
-
-#: ../cleaners/thunderbird.xml ../cleaners/evolution.xml
-msgid "Email client"
-msgstr "ইমেইল আশ্রিতা"
-
-#: ../cleaners/thunderbird.xml ../cleaners/recoll.xml ../cleaners/beagle.xml
-msgid "Index"
-msgstr "সূচিপত্র"
-
-#: ../cleaners/thunderbird.xml
-msgid ""
-"Deleting the index will reset the configuration of columns in the message "
-"list."
-msgstr "ইনডেক্স ডিলিট করলে মেসেজ লিস্টের কলামগুলোর কনফিগারেশন রিসেট হয়ে যাবে।"
-
-#: ../cleaners/screenlets.xml
-msgid "Widgets for the desktop"
-msgstr "ডেস্কটপের জন্য উইজেটস"
-
-#: ../cleaners/elinks.xml
-msgid "Delete the cookies, visited URLs, and search history"
-msgstr "কুকিসমূহ, প্রদর্শিত URL'সমূহ, এবং খোঁজার ইতিহাস মুছে ফেলুন"
-
-#: ../cleaners/paint.xml ../cleaners/winamp.xml ../cleaners/vlc.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winzip.xml ../cleaners/smartftp.xml ../cleaners/wordpad.xml
-#: ../cleaners/teamviewer.xml ../cleaners/windows_explorer.xml
-msgid "Delete the most recently used list"
-msgstr "সবচেয়ে সাম্প্রতিক সময়ে ব্যবহৃত লিস্টটি ডিলিট করুন"
-
-#: ../cleaners/gnome.xml ../cleaners/kde.xml
-msgid "Desktop environment"
-msgstr "ডেস্কটপের পরিবেশ"
-
-#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
-#. In Windows 'Run' is the dialog in the Start menu
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-msgid "Run"
-msgstr "চালু করুন"
-
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/google_toolbar.xml
-msgid "Search history"
-msgstr "ইতিহাস অনুসন্ধান"
-
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/google_toolbar.xml
-msgid "Delete the search history"
-msgstr "ইতিহাস অনুসন্ধানের তথ্য মুছে ফেলুন"
-
-#: ../cleaners/epiphany.xml
-msgid "Places"
-msgstr "অবস্থান"
-
-#: ../cleaners/epiphany.xml
-msgid ""
-"A database of URLs including bookmarks, favicons, and a history of visited "
-"web sites"
-msgstr ""
-"বুকমার্ক, ফ্যাভিকনস এবং ভিজিট করা ওয়েবসাইট সমূহের একটি হিস্ট্রি সহকারে বিভিন্ন URL "
-"একটি ডাটাবেজ"
-
-#: ../cleaners/epiphany.xml
-msgid "This option deletes all bookmarks."
-msgstr "এই অপশনটি সকল বুকমার্ক ডিলিট করে দেয়।"
-
-#: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
-#: ../bleachbit/Cleaner.py:196
-msgid "Office suite"
-msgstr "অফিস স্যুট"
-
-#: ../cleaners/amule.xml
-msgid "Known files history"
-msgstr "পরিচিত ফাইল সমূহের একটি হিস্ট্রি"
-
-#. http://wiki.amule.org/wiki/Friend
-#: ../cleaners/amule.xml
-msgid "Known clients and friends"
-msgstr "পরিচিত ক্লায়েন্ট এবং বন্ধুরা"
-
-#: ../cleaners/winamp.xml ../cleaners/realplayer.xml ../cleaners/vlc.xml
-#: ../cleaners/windows_media_player.xml
-msgid "Media player"
-msgstr "মিডিয়া প্লেয়ার"
-
-#: ../cleaners/journald.xml
-msgid "System journals"
-msgstr "সিস্টেম জার্নালস"
-
-#: ../cleaners/journald.xml
-msgid "Clean old system journals"
-msgstr "পুরাতন সিস্টেম জার্নালস ক্লিন করুন"
-
-#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py:309
-msgid "Memory dump"
-msgstr "মেমরি ডাম্প"
-
-#: ../cleaners/rhythmbox.xml
-msgid "Database"
-msgstr "ডাটাবেজ"
-
-#: ../cleaners/rhythmbox.xml
-msgid ""
-"Delete the database, which contains information such as play count and last "
-"played"
-msgstr ""
-"প্লে কাউন্ট এবং লাস্ট প্লেয়েড বিষয়ের মতো অন্যান্য তথ্য সম্বলিত ডাটাবেজটি ডিলিট করুন"
-
-#: ../cleaners/wine.xml
-msgid "Compatibility layer for Windows software"
-msgstr "উইন্ডোজ সফটওয়ারের জন্য কমপ্যাটিবিলিটি লেয়ার"
-
-#: ../cleaners/discord.xml
-#, fuzzy
-#| msgid "Delete the web cache, which reduces time to display revisited pages"
-msgid ""
-"Delete the web cache, which reduces time to display revisited pages. This "
-"also clears favorited GIFs."
-msgstr "ওয়েব ক্যাশে মুছে ফেলুন, যার ফলে পৃষ্ঠাগুলো পুনরায় প্রদর্শন হতে অল্প সময় লাগবে"
-
-#: ../cleaners/vim.xml
-msgid ""
-"Delete ~/.viminfo which includes file history, command history, and buffers"
-msgstr "~/.viminfo ডিলিট করুন, যাতে ফাইল হিস্ট্রি, কমান্ড হিস্ট্রি এবং বাফারস আছে"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -654,12 +369,12 @@ msgid "Clean files widely scattered across the disk"
 msgstr "ডিস্ক জুড়ে ছড়িয়ে ছিটিয়ে থাকা ফাইল সমূহ ক্লিন করুন"
 
 #: ../cleaners/deepscan.xml
-msgid "Inspect the preview for any files you want to keep."
-msgstr "আপনি রাখতে চান এমন যেকোন ফাইলের জন্য প্রিভিউ দেখুন"
-
-#: ../cleaners/deepscan.xml
 msgid "This option is slow."
 msgstr "এই অপশনটি ধীর গতির।"
+
+#: ../cleaners/deepscan.xml
+msgid "Inspect the preview for any files you want to keep."
+msgstr "আপনি রাখতে চান এমন যেকোন ফাইলের জন্য প্রিভিউ দেখুন"
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
@@ -669,45 +384,240 @@ msgstr "VIM ইউজার প্রোফাইলের অধীনে থ�
 msgid "VIM swap files across system"
 msgstr "VIM সিস্টেম থেকে সিস্টেমে ফাইলগুলোকে অদলবদল করে"
 
-#: ../cleaners/adobe_reader.xml
-msgid "Document viewer"
-msgstr "ডকুমেন্ট ভিউয়ার"
+#: ../cleaners/discord.xml ../cleaners/hexchat.xml ../cleaners/pidgin.xml
+#: ../cleaners/skype.xml ../cleaners/slack.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/zoom.xml
+msgid "Chat client"
+msgstr "চ্যাট মাধ্যম"
 
-#: ../cleaners/apt.xml
-msgid "Delete obsolete files"
-msgstr "অচল ফাইলগুলোকে ডিলিট করুন"
+#: ../cleaners/discord.xml
+msgid ""
+"Delete the web cache, which reduces time to display revisited pages. This "
+"also clears favorited GIFs."
+msgstr ""
+"ওয়েব ক্যাশ মুছে ফেলুন, এতে আগে দেখা পেজ দ্রুত খুলবে। এতে ফেভারিট GIF-ও মুছে"
+" যাবে।﻿"
 
-#: ../cleaners/apt.xml
-msgid "Package lists"
-msgstr "প্যাকেজ লিস্টস"
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml
+msgid "Saved form entries and search bar history"
+msgstr "ইতিহাস অনুসন্ধানের তথ্য মুছে ফেলুন"
 
-#: ../cleaners/audacious.xml
-msgid "Audio player"
-msgstr "অডিও প্লেয়ার"
+#: ../cleaners/firefox.xml ../cleaners/palemoon.xml ../cleaners/waterfox.xml
+msgid "URL history"
+msgstr "URL ইতিবৃত্ত"
 
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
+msgid "List of visited web pages"
+msgstr "পরিদর্শনকৃত ওয়েব পৃষ্ঠাগুলোর তালিকা"
+
+#: ../cleaners/flash.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
+msgid "Multimedia viewer"
+msgstr "মাল্টিমিডিয়া প্রদর্শক"
+
+#: ../cleaners/gimp.xml
+msgid "Graphics editor"
+msgstr "গ্রাফিক্স এডিটর"
+
+#. Cleaning option that deletes AI models in a web browser
+#: ../cleaners/google_chrome.xml
+msgid "AI"
+msgstr ""
+
+#: ../cleaners/google_chrome.xml
+msgid "Delete the AI models"
+msgstr "লগ পরিস্কার করুন"
+
+#: ../cleaners/google_toolbar.xml ../cleaners/windows_explorer.xml
+msgid "Search history"
+msgstr "ইতিহাস অনুসন্ধান"
+
+#: ../cleaners/google_toolbar.xml ../cleaners/windows_explorer.xml
+msgid "Delete the search history"
+msgstr "ইতিহাস অনুসন্ধানের তথ্য মুছে ফেলুন"
+
+#: ../cleaners/gpodder.xml
+msgid "Downloaded podcasts"
+msgstr "ডাউনলোডকৃত পডকাস্টসমূহ"
+
+#: ../cleaners/gpodder.xml
+msgid "Delete downloaded podcasts"
+msgstr "ডাউনলোডকৃত পডকাস্টসমূহ মুছে ফেলুন"
+
+#: ../cleaners/hexchat.xml ../cleaners/pidgin.xml ../cleaners/seamonkey.xml
+#: ../cleaners/skype.xml ../cleaners/yahoo_messenger.xml
+msgid "Chat logs"
+msgstr "খোশগল্পের কুঁদাসমূহ"
+
+#: ../cleaners/hexchat.xml ../cleaners/pidgin.xml ../cleaners/seamonkey.xml
+#: ../cleaners/skype.xml ../cleaners/yahoo_messenger.xml
+msgid "Delete the chat logs"
+msgstr "খোশগল্পের কুঁদাসমূহ মুছে ফেলুন"
+
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/warzone2100.xml
+msgid "Game"
+msgstr "খেলা"
+
+#: ../cleaners/internet_explorer.xml ../cleaners/seamonkey.xml
+msgid "Download history"
+msgstr "ডাউনলোডের ইতিহাস"
+
+#: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/openoffice.xml ../bleachbit/Cleaner.py
+msgid "Office suite"
+msgstr "অফিস স্যুট"
+
+#: ../cleaners/mc.xml ../cleaners/windows_explorer.xml
+msgid "File manager"
+msgstr "ফাইল পরিচালক"
+
+#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
+msgid "Debug logs"
+msgstr "ডিবাগ লগসমূহ"
+
+#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
+msgid "Delete the debug logs"
+msgstr "ডিবাগ লগসমূহ মুছে ফেলুন"
+
+#: ../cleaners/microsoft_office.xml ../cleaners/paint.xml
+#: ../cleaners/smartftp.xml ../cleaners/teamviewer.xml ../cleaners/vlc.xml
+#: ../cleaners/winamp.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/winzip.xml
 #: ../cleaners/wordpad.xml
-msgid "Word processor"
-msgstr "ওয়ার্ড প্রসেসর"
+msgid "Delete the most recently used list"
+msgstr "সবচেয়ে সাম্প্রতিক সময়ে ব্যবহৃত লিস্টটি ডিলিট করুন"
 
-#: ../cleaners/konqueror.xml
-msgid "Current session"
-msgstr "বর্তমান সেশন"
+#: ../cleaners/octave.xml
+msgid "Delete the command history"
+msgstr "অনুশাসনের ইতিহাস মুছে ফেলুন"
 
-#: ../cleaners/konqueror.xml
-msgid "Delete the current session"
-msgstr "বর্তমান অধিবেশনটি মুছে ফেলুন"
+#: ../cleaners/realplayer.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
+#: ../cleaners/windows_media_player.xml
+msgid "Media player"
+msgstr "মিডিয়া প্লেয়ার"
+
+#: ../cleaners/screenlets.xml
+msgid "Desktop widgets"
+msgstr "ডেস্কটপের উইজেট"
+
+#: ../cleaners/seamonkey.xml
+msgid "List of files downloaded"
+msgstr "ডউনলোডকৃত নথিসমূহের তালিকা"
+
+#: ../cleaners/seamonkey.xml
+msgid "Delete the list of visited web pages"
+msgstr "পরিদর্শনকৃত ওয়েব পৃষ্ঠাগুলোর তালিকা মুছে ফেলুন"
+
+#: ../cleaners/skype.xml
+msgid "Installers"
+msgstr "ইন্সটলার"
+
+#: ../cleaners/skype.xml
+msgid "Delete cached patches and installers"
+msgstr "ক্যাশের কাটছাঁটসমূহ এবং ইন্সটলার মুছে ফেলুন"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
 msgstr "রিমোট কনট্রোল সফটওয়্যার"
 
-#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/thunderbird.xml
+msgid "Email client"
+msgstr "ইমেইল আশ্রিতা"
+
+#: ../cleaners/thunderbird.xml
+msgid "Index"
+msgstr "সূচিপত্র"
+
+#: ../cleaners/thunderbird.xml
+msgid ""
+"Deleting the index will reset the configuration of columns in the message "
+"list."
+msgstr "ইনডেক্স ডিলিট করলে মেসেজ লিস্টের কলামগুলোর কনফিগারেশন রিসেট হয়ে যাবে।"
+
+#: ../cleaners/thunderbird.xml
+msgid "Session restore"
+msgstr "সেশন পূনঃরুদ্ধার করুন"
+
+#: ../cleaners/thunderbird.xml
+msgid "Restores the previous session when the browser next starts"
+msgstr ""
+
+#: ../cleaners/vim.xml
+msgid "Editor"
+msgstr "সম্পাদক"
+
+#: ../cleaners/vim.xml
+msgid ""
+"Delete ~/.viminfo which includes file history, command history, and buffers"
+msgstr ""
+"~/.viminfo ডিলিট করুন, যাতে ফাইল হিস্ট্রি, কমান্ড হিস্ট্রি এবং বাফারস আছে"
+
+#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
+msgid "Memory dump"
+msgstr "মেমরি ডাম্প"
+
+#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
+msgid "Delete the file"
+msgstr "নথি মুছে ফেলুন"
+
+#: ../cleaners/vuze.xml
+msgid "Statistics"
+msgstr "পরিসংখ্যান"
+
+#: ../cleaners/windows_defender.xml
+msgid "Anti-virus"
+msgstr "এন্টিভাইরাস"
+
+#: ../cleaners/windows_defender.xml
+msgid "Quarantine"
+msgstr "সঙ্গরোধ"
+
+#: ../cleaners/windows_explorer.xml
+msgid "Recent documents list"
+msgstr "সাম্প্রতিক কাগজপত্রগুলোর তালিকা"
+
+#: ../cleaners/windows_explorer.xml
+msgid ""
+"This option will reset pinned locations in Quick Access to their defaults."
+msgstr ""
+"কুইক এক্সেসে থাকা পিন করা লোকেশন সমূহকে এই অপশনটি রিসেট করে তাদের ডিফল্ট "
+"অবস্থায় নিয়ে যাবে।"
+
+#. In Windows 'Run' is the dialog in the Start menu
+#: ../cleaners/windows_explorer.xml
+msgid "Run"
+msgstr "চালু করুন"
+
+#: ../cleaners/windows_explorer.xml
+msgid "Shellbags"
+msgstr "শেলব্যাগস"
+
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the usage date, window position, and other data for folders"
+msgstr ""
+"ফোল্ডার সমূহের জন্য ইউজেস ডেট, উইন্ডো পজিশন এবং অন্যান্য তথ্য ডিলিট করুন"
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will reset the position of desktop icons."
+msgstr "এটি ডেস্কটপের আইকন সমূহের পজিশন রিসেট করে দিবে।"
+
+#: ../cleaners/windows_explorer.xml
 msgid "Thumbnails"
 msgstr "থাম্বনেইল"
 
-#: ../cleaners/thumbnails.xml
-msgid "Icons for files on the system"
-msgstr "সিস্টেমে থাকা ফাইলগুলোর জন্য আইকন সমূহ"
+#: ../cleaners/windows_explorer.xml
+msgid "This will restart Windows Explorer."
+msgstr "এটি উইন্ডোজ এক্সপ্লোরার রিস্টার্ট করবে।"
+
+#: ../cleaners/winrar.xml
+msgid "File archiver"
+msgstr "নথি সংরক্ষণাগার"
+
+#: ../cleaners/wordpad.xml
+msgid "Word processor"
+msgstr "ওয়ার্ড প্রসেসর"
 
 #: ../cleaners/zoom.xml
 msgid "Recordings"
@@ -717,75 +627,13 @@ msgstr "রেকর্ডিংস"
 msgid "Delete the audio and video recordings"
 msgstr "অডিও এবং ভিডিও রেকর্ডিং সমূহ ডিলিট করুন"
 
-#: ../cleaners/windows_explorer.xml
-msgid ""
-"This option will reset pinned locations in Quick Access to their defaults."
-msgstr ""
-"কুইক এক্সেসে থাকা পিন করা লোকেশন সমূহকে এই অপশনটি রিসেট করে তাদের ডিফল্ট অবস্থায় "
-"নিয়ে যাবে।"
-
-#: ../cleaners/windows_explorer.xml
-msgid "Shellbags"
-msgstr "শেলব্যাগস"
-
-#: ../cleaners/windows_explorer.xml
-msgid "Delete the usage date, window position, and other data for folders"
-msgstr "ফোল্ডার সমূহের জন্য ইউজেস ডেট, উইন্ডো পজিশন এবং অন্যান্য তথ্য ডিলিট করুন"
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will reset the position of desktop icons."
-msgstr "এটি ডেস্কটপের আইকন সমূহের পজিশন রিসেট করে দিবে।"
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will restart Windows Explorer."
-msgstr "এটি উইন্ডোজ এক্সপ্লোরার রিস্টার্ট করবে।"
-
-#: ../cleaners/dnf.xml
-msgid "Remove packages that were formerly dependencies"
-msgstr "পূর্বে ডিপেনডেন্সি হিসেবে ছিল এমন প্যাকেজগুলোকে রিমুভ করুন"
-
-#: ../cleaners/dnf.xml
-msgid ""
-"Carefully review the list of packages that will be removed by running \"dnf "
-"list autoremove\"."
-msgstr ""
-"\"dnf list autoremove\" রান করার মাধ্যমে প্যাকেজ সমূহের যে লিস্টটি রিমুভ হয়ে "
-"যাবে, সেটি সাবধানতার সাথে রিভিউ করুন।"
-
-#: ../cleaners/recoll.xml ../cleaners/beagle.xml
-msgid "Search tool"
-msgstr "সার্চ টুল"
-
-#: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
-msgstr ""
-"সার্চ ইনডেক্স, বিভিন্ন শব্দের একটি ডাটাবেজ এবং এগুলোতে থাকা ফাইলগুলো ডিলিট করুন"
-
-#: ../cleaners/gimp.xml
-msgid "Graphics editor"
-msgstr "গ্রাফিক্স এডিটর"
-
-#. This software edits metadata tags, such as title and artist, in audio files
-#: ../cleaners/easytag.xml
-msgid "Audio files tagger"
-msgstr "অডিও ফাইলস ট্যাগার"
-
-#: ../cleaners/hexchat.xml
-msgid "IRC client formerly known as XChat"
-msgstr "IRC ক্লায়েন্ট যা পূর্বে XChat নামে পরিচিত ছিল"
-
-#: ../org.bleachbit.BleachBit.desktop
-msgid "Unnecessary file cleaner"
-msgstr "অপ্রয়োজনীয় ফাইল ক্লিনার"
-
-#: ../org.bleachbit.BleachBit.desktop
-msgid "Free space and maintain privacy"
-msgstr "স্পেস খালি করুন এবং গোপনীয়তা রক্ষা করুন"
-
-#. TRANSLATORS: Multi-value variables are explained in the online documentation.
-#. Basically, they are like an environment variable, but each multi-value variable
-#. can have multiple values. They're a way to make CleanerML files more concise.
-#: ../bleachbit/Action.py:150
+#. TRANSLATORS: Multi-value variables are explained in the online
+#. documentation.
+#. Basically, they are like an environment variable, but each multi-value
+#. variable
+#. can have multiple values. They're a way to make CleanerML files more
+#. concise.
+#: ../bleachbit/Action.py
 msgid "Deep scan does not support multi-value variable."
 msgstr "ডিপ স্ক্যান মাল্টি-ভ্যালু ভ্যারিয়েবল সাপোর্ট করেনা।"
 
@@ -793,7 +641,7 @@ msgstr "ডিপ স্ক্যান মাল্টি-ভ্যালু �
 #. mild mistake in the CleanerML file because walk.all is expected to
 #. be used with directories instead of with files. Do not translate
 #. search="walk.all" and path="%s"
-#: ../bleachbit/Action.py:252
+#: ../bleachbit/Action.py
 #, python-format
 msgid "search=\"walk.all\" used with regular file path=\"%s\""
 msgstr "search=\"walk.all\" ব্যবহার করা হয়েছে নিয়মিত ফাইল পাথ=\"%s\" এর সাথে"
@@ -803,17 +651,13 @@ msgstr "search=\"walk.all\" ব্যবহার করা হয়েছে ন�
 #. wildcard patterns. Therefore, maybe the developer either missed
 #. the wildcard or should search using path="file" which does not
 #. expect or support wildcards in the path.
-#: ../bleachbit/Action.py:291
+#: ../bleachbit/Action.py
 #, python-format
 msgid "path=\"%s\" is not a glob pattern"
 msgstr "path=\"%s\" কোন গ্লব প্যাটার্ন নয়"
 
 #. TRANSLATORS: Parts of this file will be deleted
-#: ../bleachbit/Action.py:383 ../bleachbit/Action.py:396
-#: ../bleachbit/Action.py:409 ../bleachbit/Action.py:422
-#: ../bleachbit/Action.py:435 ../bleachbit/Action.py:500
-#: ../bleachbit/Action.py:512 ../bleachbit/Command.py:208
-#: ../bleachbit/Command.py:242
+#: ../bleachbit/Action.py ../bleachbit/Command.py
 msgid "Clean file"
 msgstr "ফাইল ক্লিন করুন"
 
@@ -821,192 +665,16 @@ msgstr "ফাইল ক্লিন করুন"
 #. TRANSLATORS: This is the clean button on the main window.
 #. It makes permanent changes: usually deleting files, sometimes
 #. altering them.
-#: ../bleachbit/Action.py:525 ../bleachbit/GUI.py:941 ../bleachbit/GUI.py:1048
+#: ../bleachbit/Action.py ../bleachbit/GUI.py
 msgid "Clean"
 msgstr "ক্লিন করুন"
 
-#: ../bleachbit/Action.py:561
+#: ../bleachbit/Action.py
 #, python-format
 msgid "Run external command: %s"
 msgstr "এক্সটার্নাল কমান্ড রান করুন: %s"
 
-#: ../bleachbit/Chaff.py:225
-#, fuzzy, python-format
-#| msgid "Downloading url failed: %s"
-msgid "Downloading URL failed: %s"
-msgstr "url ডাউনলোড করা ব্যর্থ হয়েছে: %s"
-
-#: ../bleachbit/CleanerML.py:134
-#, python-brace-format
-msgid ""
-"Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
-"XML={option_xml}"
-msgstr ""
-"cleaner id = {cleaner_id}, option XML={option_xml} এর জন্য "
-"handle_cleaner_option() এ ইরোর দেখা দিয়েছে"
-
-#: ../bleachbit/CleanerML.py:275
-#, python-format
-msgid "Ignoring cleaner because it is world writable: %s"
-msgstr "ক্লিনার ইগনোর করা হচ্ছে, কেননা এটি বৈশ্বিকভাবে লিখনযোগ্য: %s"
-
-#: ../bleachbit/CleanerML.py:294 ../bleachbit/CleanerML.py:339
-#, python-format
-msgid "Error reading cleaner: %s"
-msgstr "ক্লিনার রিড করতে ইরোর দেখা দিয়েছে: %s"
-
-#. TRANSLATORS: An action is something like cleaning a specific file.
-#. "Not usable" means the whole cleaner will be ignored.
-#. The substituted variable is a pathname.
-#: ../bleachbit/CleanerML.py:304
-#, python-format
-msgid "Cleaner is not usable on this OS because it has no actions: %s"
-msgstr "এই OS এ ক্লিনার ব্যবহারযোগ্য নয়, কেননা এটির কোন কাজ নেই: %s"
-
-#. TRANSLATORS: desktop entries are .desktop files in Linux that
-#. make up the application menu (the menu that shows BleachBit,
-#. Firefox, and others.  The .desktop files also associate file
-#. types, so clicking on an .html file in Nautilus brings up
-#. Firefox.
-#. More information:
-#. http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-#: ../bleachbit/Cleaner.py:274
-msgid "Broken desktop files"
-msgstr "ডেস্কটপের ব্রোকেন ফাইল সমূহ"
-
-#: ../bleachbit/Cleaner.py:275
-msgid "Delete broken application menu entries and file associations"
-msgstr "ব্রোকেন এপ্লিকেশন মেন্যুর এন্ট্রি সমূহ এবং ফাইল এ্যাসোসিয়েশন সমূহ ডিলিট করুন"
-
-#. TRANSLATORS: Localizations are files supporting specific
-#. languages, so applications appear in Spanish, etc.
-#: ../bleachbit/Cleaner.py:279
-msgid "Localizations"
-msgstr "লোকালাইজেশনস"
-
-#: ../bleachbit/Cleaner.py:280
-msgid "Delete files for unwanted languages"
-msgstr "অনাকাঙ্খিত ভাষার ফাইল সমূহ ডিলিট করুন"
-
-#: ../bleachbit/Cleaner.py:282
-msgid "Configure this option in the preferences."
-msgstr "প্রিফারেন্সেসে এই অপশনটি কনফিগার করুন।"
-
-#: ../bleachbit/Cleaner.py:288
-msgid "Rotated logs"
-msgstr "রোটেটেড লগস"
-
-#: ../bleachbit/Cleaner.py:288
-msgid "Delete old system logs"
-msgstr "পুরাতন সিস্টেম লগসগুলো ডিলিট করুন"
-
-#: ../bleachbit/Cleaner.py:291
-msgid "Trash"
-msgstr "ট্র্যাশ"
-
-#: ../bleachbit/Cleaner.py:291
-msgid "Empty the trash"
-msgstr "ট্র্যাশ খালি করুন"
-
-#: ../bleachbit/Cleaner.py:297 ../bleachbit/Cleaner.py:442
-#: ../bleachbit/Worker.py:199
-msgid "Memory"
-msgstr "মেমরি"
-
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:299
-msgid "Wipe the swap and free memory"
-msgstr "সোয়াপ পরিষ্কার করুন এবং মেমরি খালি করুন"
-
-#: ../bleachbit/Cleaner.py:301
-msgid "This option is experimental and may cause system problems."
-msgstr "এই অপশনটি এখনো পরীক্ষামূলক এবং সিস্টেমের সমস্যা তৈরি করতে পারে।"
-
-#. TRANSLATORS: Prefetch is Microsoft Windows jargon.
-#: ../bleachbit/Cleaner.py:312
-msgid "Prefetch"
-msgstr "প্রিফেচ"
-
-#: ../bleachbit/Cleaner.py:314
-msgid "Recycle bin"
-msgstr "রিসাইকেল বিন"
-
-#: ../bleachbit/Cleaner.py:314 ../bleachbit/Cleaner.py:599
-msgid "Empty the recycle bin"
-msgstr "রিসাইকেল বিন খালি করুন"
-
-#. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to delete
-#. the uninstallers for software updates.
-#: ../bleachbit/Cleaner.py:317
-msgid "Update uninstallers"
-msgstr "আনইন্সটলার সমূহ আপডেট করুন"
-
-#: ../bleachbit/Cleaner.py:318
-msgid ""
-"Delete uninstallers for Microsoft updates including hotfixes, service packs, "
-"and Internet Explorer updates"
-msgstr ""
-"হটফিক্সেস, সার্ভিস প্যাকস এবং ইন্টারনেট এক্সপ্লোরারের আপডেট সহ মাইক্রোসফটের অন্যান্য "
-"আপডেট সমূহের আনইন্সটলার ডিলিট করুন"
-
-#: ../bleachbit/Cleaner.py:325 ../bleachbit/Cleaner.py:544
-msgid "Clipboard"
-msgstr "ক্লিপবোর্ড"
-
-#: ../bleachbit/Cleaner.py:326
-msgid "The desktop environment's clipboard used for copy and paste operations"
-msgstr ""
-"ডেস্কটপ এনভায়রনমেন্টের ক্লিপবোর্ড কপি এবং পেস্ট বিষয়ক অপারেশন সমূহের জন্য ব্যবহৃত "
-"হয়েছে"
-
-#. TRANSLATORS: "Custom" is an option allowing the user to specify which
-#. files and folders will be erased.
-#: ../bleachbit/Cleaner.py:333 ../bleachbit/GuiPreferences.py:63
-msgid "Custom"
-msgstr "পছন্দ অনুসারে"
-
-#: ../bleachbit/Cleaner.py:334
-msgid "Delete user-specified files and folders"
-msgstr "ইউজার-স্পেসিফাইড ফাইল এবং ফোল্ডারগুলো ডিলিট করুন"
-
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:336
-msgid "Free disk space"
-msgstr "ডিস্ক স্পেস খালি করুন"
-
-#. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Cleaner.py:338
-msgid "Overwrite free disk space to hide deleted files"
-msgstr "ডিলিটেড ফাইল লুকিয়ে রাখতে খালি ডিস্ক স্পেস ওভাররাইট করুন"
-
-#: ../bleachbit/Cleaner.py:339
-msgid "This option is very slow."
-msgstr "এই অপশনটি খুবই ধীর গতির।"
-
-#: ../bleachbit/Cleaner.py:343
-msgid "The system in general"
-msgstr "সংক্ষিপ্তভাবে সিস্টেমের বিবরণ"
-
-#: ../bleachbit/Cleaner.py:345 ../bleachbit/Cleaner.py:687
-msgid "System"
-msgstr "সিস্টেম"
-
-#. TRANSLATORS: 'Free' means 'unallocated.'
-#. %s expands to a path such as C:\ or /tmp/
-#: ../bleachbit/Cleaner.py:552 ../bleachbit/Cleaner.py:718
-#, python-format
-msgid "Overwrite free disk space %s"
-msgstr "খালি ডিস্ক স্পেস %s ওভাররাইট করুন"
-
-#: ../bleachbit/Cleaner.py:669
-msgid "Loading native cleaners."
-msgstr "ন্যাটিভ ক্লিনারস লোড হচ্ছে।"
-
-#: ../bleachbit/Cleaner.py:674
-msgid "Importing cleaners from Winapp2.ini."
-msgstr "Winapp2.ini থেকে ক্লিনারস ইমপোর্ট করা হচ্ছে।"
-
-#: ../bleachbit/CLI.py:114
+#: ../bleachbit/CLI.py
 #, python-format
 msgid "not a valid cleaner: %s"
 msgstr "ভ্যালিড কোন ক্লিনার নয়: %s"
@@ -1016,533 +684,347 @@ msgstr "ভ্যালিড কোন ক্লিনার নয়: %s"
 #. Don't translate and add "usage:" - it gets added by Python.
 #. More information about the command line is here
 #. https://www.bleachbit.org/documentation/command-line
-#: ../bleachbit/CLI.py:144
+#: ../bleachbit/CLI.py
 msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgstr "ইউজেস: %prog [options] cleaner.option1 cleaner.option2"
 
-#: ../bleachbit/CLI.py:147
+#: ../bleachbit/CLI.py
 msgid "list cleaners"
 msgstr "লিস্ট ক্লিনারস"
 
-#: ../bleachbit/CLI.py:149
+#: ../bleachbit/CLI.py
 msgid "preview files to be deleted and other changes"
 msgstr "ডিলিট করা কিংবা অন্যান্য পরিবর্তনের জন্য ফাইলগুলো প্রিভিউ করুন"
 
-#. TRANSLATORS: predefined cleaners are for applications, such as Firefox and Flash.
+#. TRANSLATORS: predefined cleaners are for applications, such as Firefox and
+#. Flash.
 #. This is different than cleaning an arbitrary file, such as a
 #. spreadsheet on the desktop.
-#: ../bleachbit/CLI.py:154
+#: ../bleachbit/CLI.py
 msgid "run cleaners to delete files and make other permanent changes"
 msgstr "ফাইল ডিলিট করা এবং অন্যান্য স্থায়ী পরিবর্তনের জন্য ক্লিনার রান করুন"
 
-#: ../bleachbit/CLI.py:156
+#: ../bleachbit/CLI.py
 msgid "shred specific files or folders"
 msgstr "নির্দিষ্ট ফাইল অথবা ফোল্ডার সমূহ শ্রেড করুন"
 
-#: ../bleachbit/CLI.py:158
+#: ../bleachbit/CLI.py
 msgid "wipe free space in the given paths"
 msgstr "প্রদত্ত পাথগুলোয় ফাঁকা স্পেস পরিষ্কার করুন"
 
-#: ../bleachbit/CLI.py:160
+#: ../bleachbit/CLI.py
 msgid "overwrite files to hide contents"
 msgstr "কনটেন্ট গোপন রাখার জন্য ফাইলগুলো ওভাররাইট করুন"
 
-#: ../bleachbit/CLI.py:162
+#: ../bleachbit/CLI.py
 msgid "launch the graphical interface"
 msgstr "গ্রাফিক্যাল ইন্টারফেস লঞ্চ করুন"
 
-#: ../bleachbit/CLI.py:164
+#: ../bleachbit/CLI.py
 msgid "use options set in the graphical interface"
 msgstr "গ্রাফিক্যাল ইন্টারফেসে সেট করা অপশনগুলো ব্যবহার করুন"
 
-#: ../bleachbit/CLI.py:166
+#: ../bleachbit/CLI.py
 msgid "enable all options that do not have a warning"
 msgstr "ওয়ার্নিং নেই এমন সবগুলো অপশন সক্রিয় রাখুন"
 
-#: ../bleachbit/CLI.py:168
+#: ../bleachbit/CLI.py
 msgid "set log level to verbose"
 msgstr "লগ লেভেল ভার্বোজে সেট করুন"
 
-#: ../bleachbit/CLI.py:169
+#: ../bleachbit/CLI.py
 msgid "log debug messages to file"
 msgstr "ফাইলে লগ ডিবাগ মেসেজ"
 
-#: ../bleachbit/CLI.py:171
+#: ../bleachbit/CLI.py
 msgid "show system information"
 msgstr "সিস্টেম ইনফরমেশন প্রদর্শন করুন"
 
-#: ../bleachbit/CLI.py:173
+#: ../bleachbit/CLI.py
 msgid "output version information and exit"
 msgstr "ভার্সন বিষয়ক তথ্যের আউটপুট দিন এবং এক্সিট করুন"
 
-#: ../bleachbit/CLI.py:176
+#: ../bleachbit/CLI.py
 msgid "do not prompt for administrator privileges"
 msgstr "এডমিনিস্ট্রেটর প্রিভিলেজের জন্য প্রম্পট করবেন না"
 
-#: ../bleachbit/CLI.py:184
+#: ../bleachbit/CLI.py
 msgid "update winapp2.ini, if a new version is available"
 msgstr "যদি কোন নতুন ভার্সন থাকে, তাহলে winapp2.ini আপডেট করুন"
 
-#: ../bleachbit/CLI.py:206
+#: ../bleachbit/CLI.py
 msgid ""
-"Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
-"preview, --clean"
-msgstr ""
-"এই কমান্ডগুলো থেকে কেবল একটিকে বাছাই করুন: --list-cleaners, --wipe-free-space, "
+"Specify only one of these commands: --list-cleaners, --wipe-free-space, "
 "--preview, --clean"
+msgstr ""
+"এই কমান্ডগুলো থেকে কেবল একটিকে বাছাই করুন: --list-cleaners, --wipe-free-"
+"space, --preview, --clean"
 
-#: ../bleachbit/CLI.py:236
+#: ../bleachbit/CLI.py
 msgid "Checking online for updates to winapp2.ini"
 msgstr "winapp2.ini এর আপডেটের জন্য অনলাইনে চেক করা হচ্ছে"
 
-#: ../bleachbit/CLI.py:251
+#: ../bleachbit/CLI.py
 msgid "No directories given for --wipe-free-space"
 msgstr "--wipe-free-space এর জন্য কোন ডিরেক্টরি দেয়া হয়নি"
 
-#: ../bleachbit/CLI.py:253
+#: ../bleachbit/CLI.py
 msgid "Wiping free space can take a long time."
 msgstr "ফাঁকা স্পেস ওয়াইপ করতে অনেক সময় লাগতে পারে।"
 
-#: ../bleachbit/CLI.py:264
+#: ../bleachbit/CLI.py
 msgid "No work to do. Specify options."
 msgstr "কোন কাজ নেই। অপশন বাছাই করুন।"
 
-#: ../bleachbit/CLI.py:272
+#: ../bleachbit/CLI.py
 msgid "--overwrite is intended only for use with --clean"
 msgstr "--overwrite শুধুমাত্র --clean এর সাথে ব্যবহারের জন্য রাখা হয়েছে"
 
+#. TRANSLATORS: Prefetch is Microsoft Windows jargon.
+#: ../bleachbit/Cleaner.py
+msgid "Prefetch"
+msgstr "প্রিফেচ"
+
+#: ../bleachbit/Cleaner.py
+msgid "Recycle bin"
+msgstr "রিসাইকেল বিন"
+
+#: ../bleachbit/Cleaner.py
+msgid "Empty the recycle bin"
+msgstr "রিসাইকেল বিন খালি করুন"
+
+#. TRANSLATORS: 'Update' is a noun, and 'Update uninstallers' is an option to
+#. delete
+#. the uninstallers for software updates.
+#: ../bleachbit/Cleaner.py
+msgid "Update uninstallers"
+msgstr "আনইন্সটলার সমূহ আপডেট করুন"
+
+#: ../bleachbit/Cleaner.py
+msgid ""
+"Delete uninstallers for Microsoft updates including hotfixes, service packs,"
+" and Internet Explorer updates"
+msgstr ""
+"হটফিক্সেস, সার্ভিস প্যাকস এবং ইন্টারনেট এক্সপ্লোরারের আপডেট সহ মাইক্রোসফটের "
+"অন্যান্য আপডেট সমূহের আনইন্সটলার ডিলিট করুন"
+
+#: ../bleachbit/Cleaner.py
+msgid "Clipboard"
+msgstr "ক্লিপবোর্ড"
+
+#: ../bleachbit/Cleaner.py
+msgid "The desktop environment's clipboard used for copy and paste operations"
+msgstr ""
+"ডেস্কটপ এনভায়রনমেন্টের ক্লিপবোর্ড কপি এবং পেস্ট বিষয়ক অপারেশন সমূহের জন্য "
+"ব্যবহৃত হয়েছে"
+
+#. TRANSLATORS: "Custom" is an option allowing the user to specify which
+#. files and folders will be erased.
+#: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
+msgid "Custom"
+msgstr "পছন্দ অনুসারে"
+
+#: ../bleachbit/Cleaner.py
+msgid "Delete user-specified files and folders"
+msgstr "ইউজার-স্পেসিফাইড ফাইল এবং ফোল্ডারগুলো ডিলিট করুন"
+
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Cleaner.py
+msgid "Free disk space"
+msgstr "ডিস্ক স্পেস খালি করুন"
+
+#. TRANSLATORS: 'free' means 'unallocated'
+#: ../bleachbit/Cleaner.py
+msgid "Overwrite free disk space to hide deleted files"
+msgstr "ডিলিটেড ফাইল লুকিয়ে রাখতে খালি ডিস্ক স্পেস ওভাররাইট করুন"
+
+#: ../bleachbit/Cleaner.py
+msgid "This option is very slow."
+msgstr "এই অপশনটি খুবই ধীর গতির।"
+
+#: ../bleachbit/Cleaner.py
+msgid "The system in general"
+msgstr "সংক্ষিপ্তভাবে সিস্টেমের বিবরণ"
+
+#: ../bleachbit/Cleaner.py
+msgid "System"
+msgstr "সিস্টেম"
+
+#. TRANSLATORS: 'Free' means 'unallocated.'
+#. %s expands to a path such as C:\ or /tmp/
+#: ../bleachbit/Cleaner.py
+#, python-format
+msgid "Overwrite free disk space %s"
+msgstr "খালি ডিস্ক স্পেস %s ওভাররাইট করুন"
+
+#: ../bleachbit/Cleaner.py
+msgid "Loading native cleaners."
+msgstr "ন্যাটিভ ক্লিনারস লোড হচ্ছে।"
+
+#: ../bleachbit/Cleaner.py
+msgid "Importing cleaners from Winapp2.ini."
+msgstr "Winapp2.ini থেকে ক্লিনারস ইমপোর্ট করা হচ্ছে।"
+
+#: ../bleachbit/CleanerML.py
+#, python-brace-format
+msgid ""
+"Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
+"XML={option_xml}"
+msgstr ""
+"cleaner id = {cleaner_id}, option XML={option_xml} এর জন্য "
+"handle_cleaner_option() এ ইরোর দেখা দিয়েছে"
+
+#: ../bleachbit/CleanerML.py
+#, python-format
+msgid "Error reading cleaner: %s"
+msgstr "ক্লিনার রিড করতে ইরোর দেখা দিয়েছে: %s"
+
+#. TRANSLATORS: An action is something like cleaning a specific file.
+#. "Not usable" means the whole cleaner will be ignored.
+#. The substituted variable is a pathname.
+#: ../bleachbit/CleanerML.py
+#, python-format
+msgid "Cleaner is not usable on this OS because it has no actions: %s"
+msgstr "এই OS এ ক্লিনার ব্যবহারযোগ্য নয়, কেননা এটির কোন কাজ নেই: %s"
+
 #. TRANSLATORS: This is the label in the log indicating was
 #. skipped because it matches the whitelist
-#: ../bleachbit/Command.py:49
+#: ../bleachbit/Command.py
 msgid "Skip"
 msgstr "এড়িয়ে যান"
 
 #. TRANSLATORS: This is the label in the log indicating will be
 #. deleted (for previews) or was actually deleted
-#: ../bleachbit/Command.py:79
+#: ../bleachbit/Command.py
 msgid "Delete"
 msgstr "ডিলিট করুন"
 
-#: ../bleachbit/Command.py:101
+#: ../bleachbit/Command.py
+#, python-format
+msgid "Cannot delete locked file: %s"
+msgstr ""
+
+#: ../bleachbit/Command.py
+#, python-format
+msgid "Permission denied: %s"
+msgstr ""
+
+#: ../bleachbit/Command.py
 msgid ""
 "At least one file was locked by another process, so its contents could not "
 "be overwritten. It will be marked for deletion upon system reboot."
 msgstr ""
-"অন্তত একটি ফাইল অন্য একটি প্রসেসের মাধ্যমে লক করা আছে, যার কারণে এর কনটেন্টগুলো "
-"ওভাররাইট করা যায়নি। সিস্টেম রিবুট করার সময় এটি ডিলিট করার জন্য চিহ্নিত করে দেয়া "
-"হবে।"
+"অন্তত একটি ফাইল অন্য একটি প্রসেসের মাধ্যমে লক করা আছে, যার কারণে এর "
+"কনটেন্টগুলো ওভাররাইট করা যায়নি। সিস্টেম রিবুট করার সময় এটি ডিলিট করার জন্য "
+"চিহ্নিত করে দেয়া হবে।"
 
 #. TRANSLATORS: The file will be deleted when the
 #. system reboots
-#: ../bleachbit/Command.py:104
+#: ../bleachbit/Command.py
 msgid "Mark for deletion"
 msgstr "ডিলিট করার জন্য মার্ক করুন"
 
 #. TRANSLATORS: The file will be truncated to 0 bytes in length
-#: ../bleachbit/Command.py:284
+#: ../bleachbit/Command.py
 msgid "Truncate"
 msgstr "ট্রাঙ্কেট"
 
-#: ../bleachbit/Command.py:327
+#: ../bleachbit/Command.py
 msgid "Delete registry key"
 msgstr "রেজিস্ট্রি কী ডিলিট করুন"
 
-#: ../bleachbit/FileUtilities.py:358 ../bleachbit/FileUtilities.py:367
-#: ../bleachbit/FileUtilities.py:381
+#: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Directory is not empty: %s"
 msgstr "ডিরেক্টরি খালি নয়: %s"
 
-#: ../bleachbit/FileUtilities.py:370
-#, python-format
-msgid "Skipping mount point: %s"
-msgstr "মাউন্ট পয়েন্ট স্কিপ করুন: %s"
-
-#: ../bleachbit/FileUtilities.py:372
+#: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Device or resource is busy: %s"
 msgstr "ডিভাইস কিংবা রিসোর্স ব্যস্ত আছে: %s"
 
-#: ../bleachbit/FileUtilities.py:408
+#: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Special file type cannot be deleted: %s"
 msgstr "নির্দিষ্ট ধরনের ফাইল ডিলিট করা যাবেনা: %s"
 
-#: ../bleachbit/FileUtilities.py:600
+#: ../bleachbit/FileUtilities.py
 #, python-format
 msgid ""
 "The environment variable TMP refers to a directory that does not exist: %s"
 msgstr ""
-"এনভায়রনমেন্ট ভ্যারিয়েবল TMP এমন একটি ডিরেক্টরিকে নির্দেশ করে যার কোন অস্তিত্ব নেই: "
-"%s"
+"এনভায়রনমেন্ট ভ্যারিয়েবল TMP এমন একটি ডিরেক্টরিকে নির্দেশ করে যার কোন "
+"অস্তিত্ব নেই: %s"
 
-#: ../bleachbit/FileUtilities.py:840
+#: ../bleachbit/FileUtilities.py
 msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
 msgstr ""
-"একটি ফাইল সিস্টেমে অন্তত একটি ফাইল আছে যা এডভান্সড ওভাররাইটিংকে সাপোর্ট করেনা।"
+"একটি ফাইল সিস্টেমে অন্তত একটি ফাইল আছে যা এডভান্সড ওভাররাইটিংকে সাপোর্ট "
+"করেনা।"
 
-#: ../bleachbit/FileUtilities.py:936
+#: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Wiping path: %s"
 msgstr "ওয়াইপিং পাথ: %s"
 
-#: ../bleachbit/FileUtilities.py:938
+#: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
-msgstr "ওয়াইপ করার জন্য পাথটিকে অবশ্যই অস্তিত্ব আছে এমন একটি ডিরেক্টরি হতে হবে: %s"
+msgstr ""
+"ওয়াইপ করার জন্য পাথটিকে অবশ্যই অস্তিত্ব আছে এমন একটি ডিরেক্টরি হতে হবে: %s"
 
-#: ../bleachbit/FileUtilities.py:949
+#: ../bleachbit/FileUtilities.py
 msgid "Creating new, temporary file for wiping free space."
 msgstr "ফাঁকা স্পেস ওয়াইপ করার জন্য নতুন টেম্পোরারি ফাইল তৈরি করা হচ্ছে।"
 
-#: ../bleachbit/FileUtilities.py:1005
+#: ../bleachbit/FileUtilities.py
 #, python-format
 msgid "Error #%d when flushing the file buffer."
 msgstr "ফাইল বাফার ফ্লাশ করার সময় ইরোর #%d দেখা দিয়েছে।"
 
-#: ../bleachbit/FileUtilities.py:1021
+#: ../bleachbit/FileUtilities.py
 msgid ""
 "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
 "{rate:.2f} MB/s"
 msgstr ""
-"লিখেছে {files:,} ফাইলস এবং {bytes:,} বাইটস {seconds:,} সেকেন্ডে {rate:.2f} MB/"
-"s গতিতে"
+"লিখেছে {files:,} ফাইলস এবং {bytes:,} বাইটস {seconds:,} সেকেন্ডে {rate:.2f} "
+"MB/s গতিতে"
 
-#: ../bleachbit/FileUtilities.py:1026
-msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
-msgstr "{bytes:,} বাইটস এবং {inodes:,} ইনোডস নন-সুপার-ইউজারের জন্য এভেইলেবল আছে"
-
-#: ../bleachbit/FileUtilities.py:1028
-msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
-msgstr "{bytes:,} বাইটস এবং {inodes:,} ইনোডস সুপার-ইউজারের জন্য এভেইলেবল আছে"
-
-#: ../bleachbit/FileUtilities.py:1044
+#: ../bleachbit/FileUtilities.py
 msgid "Handled unknown error #0 while truncating file."
 msgstr "ফাইল ট্রাঙ্কেট করার সময় অজানা ইরোর error #0 এর সম্মুখীন হতে হয়েছে।"
 
-#: ../bleachbit/GuiBasic.py:54 ../bleachbit/GuiBasic.py:81
-#: ../bleachbit/GuiBasic.py:105 ../bleachbit/GuiBasic.py:151
-msgid "_Cancel"
-msgstr "_বাতিল করুন"
-
-#: ../bleachbit/GuiBasic.py:82
-msgid "_Open"
-msgstr "_খুলুন"
-
-#: ../bleachbit/GuiBasic.py:106 ../bleachbit/GuiBasic.py:150
-#: ../bleachbit/GUI.py:221
-msgid "_Delete"
-msgstr "_ডিলিট করুন"
-
-#: ../bleachbit/GuiBasic.py:123
-msgid "Delete confirmation"
-msgstr "ডিলিট করা নিশ্চিত করুন"
-
-#: ../bleachbit/GuiBasic.py:132
-msgid ""
-"This function deletes all BleachBit settings and then quits the application. "
-"Use this to hide your use of BleachBit or to reset its settings. The next "
-"time you start BleachBit, the settings will initialize to default values."
-msgstr ""
-"এই ফাংশনটি সকল BleachBit সেটিংস ডিলিট করে দেয় এবং এরপর এপ্লিকেশনটিকে বন্ধ করে "
-"দেয়। আপনার BleachBit এর ব্যবহার গোপন রাখতে কিংবা এর সেটিংস রিসেট করতে এটি "
-"ব্যবহার করুন। এরপরে আপনি যখন BleachBit চালু করবেন, সেটিংসগুলো তখন ডিফল্ট ভ্যালু "
-"নিয়ে কাজ শুরু করবে।"
-
-#: ../bleachbit/GuiBasic.py:139
-msgid ""
-"Are you sure you want to permanently delete files according to the selected "
-"operations?  The actual files that will be deleted may have changed since "
-"you ran the preview."
-msgstr ""
-"আপনি কি নিশ্চিত যে, বাছাই করা অপারেশনগুলো অনুসারে আপনি স্থায়ীভাবে ফাইলগুলো ডিলিট "
-"করতে চান? আসলে যে ফাইলগুলো ডিলিট করা হবে, সেগুলো আপনি প্রিভিউ রান করার পরে "
-"পরিবর্তিত হয়ে থাকতে পারে।"
-
-#: ../bleachbit/GuiBasic.py:142
-msgid "Are you sure you want to permanently delete these files?"
-msgstr "আপনি কি নিশ্চিত যে আপনি এই ফাইলগুলো স্থায়ীভাবে ডিলিট করতে চান?"
-
-#: ../bleachbit/GuiBasic.py:182
-#, python-format
-msgid ""
-"Because you are running as root, please manually open this link in a web "
-"browser:\n"
-"%s"
-msgstr ""
-"যেহেতু আপনি রুট হিসেবে রান করছেন, অনুগ্রহ করে এই লিংকটি ওয়েব ব্রাউজারে ম্যানুয়ালি "
-"ওপেন করুন:\n"
-"%s"
-
-#. TRANSLATORS: %s expands to www.bleachbit.org or similar
-#: ../bleachbit/GuiBasic.py:194
-#, python-format
-msgid "Open web browser to %s?"
-msgstr "%s এর জন্য ওয়েব ব্রাউজার ওপেন করবেন?"
-
-#: ../bleachbit/GuiBasic.py:199 ../bleachbit/GUI.py:528
-msgid "Confirm"
-msgstr ""
-
-#: ../bleachbit/GuiChaff.py:46
-msgid "Deleting files"
-msgstr "ফাইল সমূহ ডিলিট করা হচ্ছে"
-
-#. TRANSLATORS: BleachBit creates digital chaff like that is like the
-#. physical chaff airplanes use to protect themselves from radar-guided
-#. missiles. For more explanation, see the online documentation.
-#: ../bleachbit/GuiChaff.py:65
-msgid "Make chaff"
-msgstr "শাফ তৈরি করুন"
-
-#: ../bleachbit/GuiChaff.py:71
-msgid "Make randomly-generated messages inspired by documents."
-msgstr "ডকুমেন্ট অনুসারে র‍্যান্ডমলি বানানো মেসেজ তৈরি করুন।"
-
-#. TRANSLATORS: Inspiration is a choice of documents from which random
-#. text will be generated.
-#: ../bleachbit/GuiChaff.py:78
-msgid "Inspiration"
-msgstr "অনুপ্রেরণা"
-
-#: ../bleachbit/GuiChaff.py:81
-msgid "2600 Magazine"
-msgstr "২৬০০ ম্যাগাজিন"
-
-#: ../bleachbit/GuiChaff.py:81
-msgid "Hillary Clinton's emails"
-msgstr "হিলারি ক্লিনটনের ইমেইল সমূহ"
-
-#: ../bleachbit/GuiChaff.py:89
-msgid "Number of files"
-msgstr "ফাইলের সংখ্যা"
-
-#: ../bleachbit/GuiChaff.py:96 ../bleachbit/GuiChaff.py:156
-msgid "Select destination folder"
-msgstr "ডেসটিনেশন ফোল্ডার বাছাই করুন"
-
-#: ../bleachbit/GuiChaff.py:106
-msgid "When finished"
-msgstr "যখন শেষ হবে"
-
-#: ../bleachbit/GuiChaff.py:109
-msgid "Delete without shredding"
-msgstr "শ্রেডিং না করেই ডিলিট করুন"
-
-#: ../bleachbit/GuiChaff.py:109
-msgid "Do not delete"
-msgstr "ডিলিট করবেন না"
-
-#: ../bleachbit/GuiChaff.py:120
-msgid "Make files"
-msgstr "ফাইল তৈরি করুন"
-
-#: ../bleachbit/GuiChaff.py:137
-msgid "Download data needed for chaff generator?"
-msgstr "শাফ জেনারেটরের জন্য প্রয়োজনীয় ডাটা ডাউনলোড করতে চান?"
-
-#: ../bleachbit/GuiChaff.py:179
-msgid "Generating files"
-msgstr "ফাইল সমূহ জেনারেট করা হচ্ছে"
-
-#: ../bleachbit/GuiPreferences.py:53 ../data/app-menu.ui:32
-msgid "Preferences"
-msgstr "পছন্দসমূহ"
-
-#: ../bleachbit/GuiPreferences.py:61
-msgid "General"
-msgstr "সাধারন"
-
-#: ../bleachbit/GuiPreferences.py:65
-msgid "Drives"
-msgstr "ড্রাইভস"
-
-#: ../bleachbit/GuiPreferences.py:68
-msgid "Languages"
-msgstr "ভাষাসমূহ"
-
-#: ../bleachbit/GuiPreferences.py:70
-msgid "Whitelist"
-msgstr "হোয়াইটলিস্ট"
-
-#: ../bleachbit/GuiPreferences.py:115
-msgid "Check periodically for software updates via the Internet"
-msgstr "ইন্টারনেটের মাধ্যমে নিয়মিত বিরতিতে সফটওয়্যার আপডেট চেক করুন"
-
-#: ../bleachbit/GuiPreferences.py:120
-msgid ""
-"If an update is found, you will be given the option to view information "
-"about it.  Then, you may manually download and install the update."
-msgstr ""
-"যদি কোন আপডেট পাওয়া যায়, তাহলে সে বিষয়ে তথ্য দেখার জন্য আপনাকে অপশন দেয়া হবে। "
-"তারপরে আপনি আপডেটটি ম্যানুয়ালি ডাউনলোড এবং ইন্সটল করতে পারবেন।"
-
-#: ../bleachbit/GuiPreferences.py:127
-msgid "Check for new beta releases"
-msgstr "নতুন বেটা রিলিজ সমূহের জন্য চেক করুন"
-
-#: ../bleachbit/GuiPreferences.py:136
-msgid "Download and update cleaners from community (winapp2.ini)"
-msgstr "কমিউনিটি থেকে ক্লিনার ডাউনলোড এবং আপডেট করুন (winapp2.ini)"
-
-#: ../bleachbit/GuiPreferences.py:150
-msgid "Hide irrelevant cleaners"
-msgstr "অপ্রাসঙ্গিক ক্লিনার আড়াল করে রাখুন"
-
-#: ../bleachbit/GuiPreferences.py:159
-msgid "Overwrite contents of files to prevent recovery"
-msgstr "রিকভারি প্রতিরোধের জন্য ফাইল সমূহের কনটেন্টগুলো ওভাররাইট করুন"
-
-#: ../bleachbit/GuiPreferences.py:163
-msgid ""
-"Overwriting is ineffective on some file systems and with certain BleachBit "
-"operations.  Overwriting is significantly slower."
-msgstr ""
-"কিছু ফাইল সিস্টেমে এবং নির্দিষ্ট কিছু  BleachBit অপারেশনে ওভাররাইটিং করা কার্যকরী "
-"নয়। ওভাররাইটিং অত্যন্ত ধীর গতির।"
-
-#: ../bleachbit/GuiPreferences.py:168
-msgid "Exit after cleaning"
-msgstr "ক্লিন করার পরে এক্সিট করুন"
-
-#: ../bleachbit/GuiPreferences.py:174
-msgid "Confirm before delete"
-msgstr "ডিলিট করার পূর্বে নিশ্চিত করুন"
-
-#: ../bleachbit/GuiPreferences.py:182
-msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
-msgstr ""
-"SI (1 kB = 1000 bytes) এর পরিবর্তে IEC সাইজ (1 KiB = 1024 bytes) ব্যবহার করুন"
-
-#: ../bleachbit/GuiPreferences.py:189
-msgid "Windows 10 theme"
-msgstr "উইন্ডোজ ১০ থিম"
-
-#: ../bleachbit/GuiPreferences.py:196
-msgid "Dark mode"
-msgstr "ডার্ক মোড"
-
-#: ../bleachbit/GuiPreferences.py:202
-msgid "Remember window geometry"
-msgstr "উইন্ডো জিওমেট্রি মনে রাখুন"
-
-#: ../bleachbit/GuiPreferences.py:208
-msgid "Show debug messages"
-msgstr "ডিবাগ মেসেজ দেখুন"
-
-#: ../bleachbit/GuiPreferences.py:215
-msgid "Add the shred context menu to KDE Plasma"
-msgstr ""
-
-#: ../bleachbit/GuiPreferences.py:227 ../bleachbit/GuiPreferences.py:357
-#: ../bleachbit/GuiPreferences.py:400 ../bleachbit/GUI.py:281
-msgid "Choose a folder"
-msgstr "একটি ফোল্ডার নির্বাচন করুন"
-
-#: ../bleachbit/GuiPreferences.py:251
-msgid ""
-"Choose a writable folder for each drive for which to overwrite free space."
-msgstr ""
-"প্রতিটি ড্রাইভের জন্য একটি রাইট করা যায় এমন ফোল্ডার নির্বাচন করুন যাতে করে ফাঁকা "
-"স্পেস ওভাররাইট করা যায়।"
-
-#. TRANSLATORS: In the preferences dialog, this button adds a path to
-#. the list of paths
-#: ../bleachbit/GuiPreferences.py:273
-msgctxt "button"
-msgid "Add"
-msgstr "যোগ করুন"
-
-#. TRANSLATORS: In the preferences dialog, this button removes a path
-#. from the list of paths
-#: ../bleachbit/GuiPreferences.py:277 ../bleachbit/GuiPreferences.py:496
-msgctxt "button"
-msgid "Remove"
-msgstr "রিমুভ করুন"
-
-#: ../bleachbit/GuiPreferences.py:301
-msgid "All languages will be deleted except those checked."
-msgstr "বাছাই করা ভাষাগুলো ছাড়া অন্য সকল ভাষা ডিলিট করে দেয়া হবে।"
-
-#: ../bleachbit/GuiPreferences.py:317
-msgid "Preserve"
-msgstr "সংরক্ষণ করুন"
-
-#: ../bleachbit/GuiPreferences.py:321
-msgid "Code"
-msgstr "কোড"
-
-#: ../bleachbit/GuiPreferences.py:325 ../bleachbit/GUI.py:473
-msgid "Name"
-msgstr "নাম"
-
-#: ../bleachbit/GuiPreferences.py:343 ../bleachbit/GuiPreferences.py:386
-msgid "Choose a file"
-msgstr "একটি ফাইল নির্বাচন করুন"
-
-#: ../bleachbit/GuiPreferences.py:351 ../bleachbit/GuiPreferences.py:394
-#: ../bleachbit/GuiPreferences.py:439
-msgid "File"
-msgstr "ফাইল"
-
-#: ../bleachbit/GuiPreferences.py:366 ../bleachbit/GuiPreferences.py:409
-#: ../bleachbit/GuiPreferences.py:441
-msgid "Folder"
-msgstr "ফোল্ডার"
-
-#: ../bleachbit/GuiPreferences.py:451
-#, fuzzy
-#| msgid "Theses paths will not be deleted or modified."
-msgid "These paths will not be deleted or modified."
-msgstr "এই পাঠগুলো ডিলিট করা অথবা পরিবর্তন করা হবেনা।"
-
-#: ../bleachbit/GuiPreferences.py:454
-msgid "These locations can be selected for deletion."
-msgstr "ডিলিট করার জন্য এই লোকেশনগুলো বাছাই করা যাবে।"
-
-#: ../bleachbit/GuiPreferences.py:462
-msgid "Type"
-msgstr "প্রকার"
-
-#. TRANSLATORS: In the tree view "Path" is used generically to refer to a
-#. file, a folder, or a pattern describing either
-#: ../bleachbit/GuiPreferences.py:468
-msgid "Path"
-msgstr "পাথ"
-
-#: ../bleachbit/GuiPreferences.py:483
-msgctxt "button"
-msgid "Add file"
-msgstr "ফাইল যোগ করুন"
-
-#: ../bleachbit/GuiPreferences.py:490
-msgctxt "button"
-msgid "Add folder"
-msgstr "ফোল্ডার যোগ করুন"
-
-#: ../bleachbit/GUI.py:210
+#: ../bleachbit/GUI.py
 msgid "Choose files to shred"
 msgstr "শ্রেড করার জন্য ফাইল বাছাই করুন"
 
-#: ../bleachbit/GUI.py:219
+#: ../bleachbit/GUI.py
 msgid "Choose folder to shred"
 msgstr "শ্রেড করার জন্য ফোল্ডার বাছাই করুন"
 
-#: ../bleachbit/GUI.py:246
+#: ../bleachbit/GUI.py ../bleachbit/GuiBasic.py
+msgid "_Delete"
+msgstr "_ডিলিট করুন"
+
+#: ../bleachbit/GUI.py
 msgid "No paths found in clipboard."
 msgstr "ক্লিপবোর্ডে কোন পাথ পাওয়া যাচ্ছেনা।"
 
-#: ../bleachbit/GUI.py:282
+#: ../bleachbit/GUI.py ../bleachbit/GuiPreferences.py
+msgid "Choose a folder"
+msgstr "একটি ফোল্ডার নির্বাচন করুন"
+
+#: ../bleachbit/GUI.py
 msgid "_OK"
 msgstr "_ওকে"
 
-#: ../bleachbit/GUI.py:305
+#: ../bleachbit/GUI.py
 msgid "Program to clean unnecessary files"
-msgstr ""
+msgstr "অপ্রয়োজনীয় ফাইলগুলো পরিষ্কার করার প্রোগ্রাম﻿"
 
-#: ../bleachbit/GUI.py:316
+#: ../bleachbit/GUI.py
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
@@ -1554,7 +1036,7 @@ msgstr ""
 #. Launchpad does this automatically for translations
 #. typed in Launchpad. This is a special string shown
 #. in the 'About' box.
-#: ../bleachbit/GUI.py:322
+#: ../bleachbit/GUI.py
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -1564,24 +1046,34 @@ msgstr ""
 "  Omar Faruque https://launchpad.net/~omarmear\n"
 "  রিমন https://launchpad.net/~remonshai"
 
-#: ../bleachbit/GUI.py:346
+#: ../bleachbit/GUI.py
 msgid "System information"
 msgstr "সিস্টেম ইনফরমেশন"
 
-#: ../bleachbit/GUI.py:481
+#: ../bleachbit/GUI.py
+msgid ""
+"This version of BleachBit is intended for old versions of Windows. For "
+"Windows 8 or newer, please update to BleachBit 5.x or newer."
+msgstr ""
+
+#: ../bleachbit/GUI.py
+msgid "Name"
+msgstr "নাম"
+
+#: ../bleachbit/GUI.py
 msgid "Active"
 msgstr "সক্রিয়"
 
 #. TRANSLATORS: Size is the label for the column that shows how
 #. much space an option would clean or did clean
-#: ../bleachbit/GUI.py:490
+#: ../bleachbit/GUI.py
 msgid "Size"
 msgstr "আকার"
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #. %(warning) may be 'This option is really slow'
-#: ../bleachbit/GUI.py:519
+#: ../bleachbit/GUI.py
 #, python-format
 msgid ""
 "Warning regarding %(cleaner)s - %(option)s:\n"
@@ -1592,301 +1084,459 @@ msgstr ""
 "\n"
 "%(warning)s"
 
-#: ../bleachbit/GUI.py:597
+#: ../bleachbit/GUI.py ../bleachbit/GuiBasic.py
+msgid "Confirm"
+msgstr "কনফার্ম"
+
+#: ../bleachbit/GUI.py
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
 msgstr "কনফিগারেশন ফাইল রিসেট করা হচ্ছে, কেননা এটি করাপ্ট: %s"
 
-#: ../bleachbit/GUI.py:769
+#: ../bleachbit/GUI.py
 msgid "You must select an operation"
 msgstr "আপনাকে অবশ্যই একটি অপারেশন বাছাই করতে হবে"
 
-#: ../bleachbit/GUI.py:772
+#: ../bleachbit/GUI.py
 #, fuzzy
-#| msgid "Errors: %d"
 msgid "Error"
 msgstr "ইরোর সমূহ: %d"
 
-#: ../bleachbit/GUI.py:790 ../bleachbit/GUI.py:806
+#: ../bleachbit/GUI.py
 msgid "Done."
 msgstr "শেষ।"
 
-#: ../bleachbit/GUI.py:861
-msgid ""
-"Access the application menu by clicking the hamburger icon on the title bar."
-msgstr "টাইটেল বারের হ্যামবার্গার লোগোতে ক্লিক করে এপ্লিকেশন মেনুতে প্রবেশ করুন।"
-
-#: ../bleachbit/GUI.py:866
+#: ../bleachbit/GUI.py
 msgid "Access the application menu by clicking the logo on the title bar."
 msgstr "টাইটেল বারের লোগোতে ক্লিক করে এপ্লিকেশন মেনুতে প্রবেশ করুন।"
 
-#: ../bleachbit/GUI.py:877
+#: ../bleachbit/GUI.py
 msgid ""
 "Error loading the SQLite module: the antivirus software may be blocking it."
 msgstr ""
-"SQLite মডিউল লোড করতে ইরোর দেখা দিয়েছে: সম্ভবত এন্টিভাইরাস সফটওয়্যার এটিকে ব্লক "
-"করে দিচ্ছে।"
+"SQLite মডিউল লোড করতে ইরোর দেখা দিয়েছে: সম্ভবত এন্টিভাইরাস সফটওয়্যার এটিকে "
+"ব্লক করে দিচ্ছে।"
 
-#: ../bleachbit/GUI.py:882
-msgid ""
-"You are running BleachBit with administrative privileges for cleaning shared "
-"parts of the system, and references to the user profile folder will clean "
-"only the root account."
-msgstr ""
-"আপনি সিস্টেমের শেয়ার করা অংশগুলো ক্লিন করার এডমিনিস্ট্রেটিভ প্রিভিলেজ নিয়ে "
-"BleachBit রান করছেন এবং ইউজার প্রোফাইল ফোল্ডারের রেফারেন্স শুধু রুট একাউন্টকে ক্লিন "
-"করবে।"
-
-#: ../bleachbit/GUI.py:887
+#: ../bleachbit/GUI.py
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
 msgstr ""
-"ফাইলগুলোর কনটেন্ট ওভাররাইট করার একুরেসি ভালো করার জন্য এডমিনিস্ট্রেটর প্রিভিলেজ "
-"সহকারে BleachBit রান করুন।"
+"ফাইলগুলোর কনটেন্ট ওভাররাইট করার একুরেসি ভালো করার জন্য এডমিনিস্ট্রেটর "
+"প্রিভিলেজ সহকারে BleachBit রান করুন।"
 
-#: ../bleachbit/GUI.py:892
+#: ../bleachbit/GUI.py
 msgid ""
 "There is no official version of BleachBit on the Microsoft Store. Get the "
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
 msgstr ""
+"মাইক্রোসফট স্টোরে ব্লিচবিটের অফিসিয়াল ভার্সন নেই। আসল ভার্সনটি পেতে গেলে "
+"https://www.bleachbit.org থেকে ডাউনলোড করুন, এখানে এটি সবসময় বিনামূল্যে "
+"পাওয়া যায়।"
 
 #. TRANSLATORS: this is the context menu
 #. TRANSLATORS: This is the preview button on the main window.  It
 #. previews changes.
-#: ../bleachbit/GUI.py:936 ../bleachbit/GUI.py:1038
+#: ../bleachbit/GUI.py
 msgid "Preview"
 msgstr "প্রিভিউ"
 
-#: ../bleachbit/GUI.py:1035
+#: ../bleachbit/GUI.py
 msgid "Preview files in the selected operations (without deleting any files)"
 msgstr "বাছাই করা অপারেশনগুলোর ফাইল সমূহ প্রিভিউ করুন (কোন ফাইল ডিলিট না করে)"
 
-#: ../bleachbit/GUI.py:1050
+#: ../bleachbit/GUI.py
 msgid "Clean files in the selected operations"
 msgstr "বাছাই করা অপারেশনগুলোর ফাইল সমূহ ক্লিন করুন"
 
-#: ../bleachbit/GUI.py:1058
+#: ../bleachbit/GUI.py
 msgid "Abort"
 msgstr "বাতিল করুন"
 
-#: ../bleachbit/GUI.py:1060
+#: ../bleachbit/GUI.py
 msgid "Abort the preview or cleaning process"
 msgstr "প্রিভিউ অথবা ক্লিনিং প্রসেস বাতিল করুন"
 
-#: ../bleachbit/GUI.py:1267
+#: ../bleachbit/GUI.py
+msgid "Press F11 to exit fullscreen mode."
+msgstr "ফুলস্ক্রিন মোড থেকে বের হতে F11 চাপুন।"
+
+#: ../bleachbit/GUI.py
 msgid "Error when checking for updates: "
 msgstr "আপডেটের জন্য চেক করার সময় ইরোর দেখা দিয়েছে: "
 
-#: ../bleachbit/Memory.py:58
+#: ../bleachbit/GuiBasic.py
+msgid "_Cancel"
+msgstr "_বাতিল করুন"
+
+#: ../bleachbit/GuiBasic.py
+msgid "_Open"
+msgstr "_খুলুন"
+
+#: ../bleachbit/GuiBasic.py
+msgid "Delete confirmation"
+msgstr "ডিলিট করা নিশ্চিত করুন"
+
+#: ../bleachbit/GuiBasic.py
 msgid ""
-"The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
-"information."
+"This function deletes all BleachBit settings and then quits the application."
+" Use this to hide your use of BleachBit or to reset its settings. The next "
+"time you start BleachBit, the settings will initialize to default values."
 msgstr ""
-"'swapoff -s' এর কমান্ড ফেইল করেছে, তাই সোয়াপ বিষয়ক তথ্যের জন্য /proc/swaps এ "
-"ফিরে যাওয়া হচ্ছে।"
+"এই ফাংশনটি সকল BleachBit সেটিংস ডিলিট করে দেয় এবং এরপর এপ্লিকেশনটিকে বন্ধ "
+"করে দেয়। আপনার BleachBit এর ব্যবহার গোপন রাখতে কিংবা এর সেটিংস রিসেট করতে "
+"এটি ব্যবহার করুন। এরপরে আপনি যখন BleachBit চালু করবেন, সেটিংসগুলো তখন ডিফল্ট"
+" ভ্যালু নিয়ে কাজ শুরু করবে।"
 
-#: ../bleachbit/Memory.py:78
-msgid "Disabling swap."
-msgstr "সোয়াপ বিকল করা হচ্ছে।"
-
-#: ../bleachbit/Memory.py:98
-msgid "Re-enabling swap."
-msgstr "সোয়াপ পুনরায় সক্ষম করা হচ্ছে।"
-
-#: ../bleachbit/Memory.py:120
-#, python-format
-msgid "Setting nice value %d for this process."
-msgstr "এই প্রসেসের জন্য নাইস ভ্যালু %d সেট করা হচ্ছে।"
-
-#: ../bleachbit/Memory.py:126
-#, python-brace-format
-msgid "Dropping privileges of process ID {pid} to user ID {uid}."
-msgstr "প্রসেস আইডি {pid} থেকে ইউজার আইডিতে {uid} প্রিভিলেজ নিয়ে যাওয়া হচ্ছে।"
-
-#. TRANSLATORS: The variable is a quantity like 5kB
-#: ../bleachbit/Memory.py:140
-#, python-format
-msgid "Allocating and wiping %s of memory."
-msgstr "মেমরির %s বরাদ্দ করা হচ্ছে এবং পরিষ্কার করা হচ্ছে।"
-
-#. TRANSLATORS: The variable is a quantity like 5kB
-#: ../bleachbit/Memory.py:149
-#, python-format
-msgid "Freeing %s of memory."
-msgstr "মেমরির %s ফাঁকা করা হচ্ছে।"
-
-#: ../bleachbit/Memory.py:179
-#, python-brace-format
-msgid "Found UUID for swap file {device} is {uuid}."
-msgstr "সোয়াপ ফাইলের জন্য পাওয়া UUID {device} হচ্ছে {uuid}।"
-
-#. TRANSLATORS: The variable is a quantity like 5kB
-#: ../bleachbit/Memory.py:265
-#, python-format
-msgid "Physical free memory is %s."
-msgstr "ফিজিক্যাল ফাঁকা মেমরি হচ্ছে %s।"
-
-#. TRANSLATORS: The variable is a device like /dev/sda2
-#: ../bleachbit/Memory.py:280
-#, python-format
-msgid "Wiping the swap device %s."
-msgstr "সোয়াপ ডিভাইস %s পরিষ্কার করা হচ্ছে।"
-
-#. TRANSLATORS: The variable is a device like /dev/sda2
-#: ../bleachbit/Memory.py:292
-#, python-format
-msgid "Reinitializing the swap device %s."
-msgstr "সোয়াপ ডিভাইস %s নতুনভাবে চালু করা হচ্ছে।"
-
-#. TRANSLATORS: The variable is a device like /dev/sda2
-#: ../bleachbit/Memory.py:309
-#, python-format
-msgid "Detected these swap devices: %s"
-msgstr "এই সোয়াপ ডিভাইসগুলো পাওয়া গেছে: %s"
-
-#. TRANSLATORS: This is a debugging message that the parent process is waiting for the child process.
-#: ../bleachbit/Memory.py:319
-#, python-brace-format
+#: ../bleachbit/GuiBasic.py
 msgid ""
-"The function wipe_memory() with process ID {pid} is waiting for child "
-"process ID {cid}."
+"Are you sure you want to permanently delete files according to the selected "
+"operations?  The actual files that will be deleted may have changed since "
+"you ran the preview."
 msgstr ""
-"ফাংশন wipe_memory() সাথে প্রসেস আইডি {pid} চাইল্ড প্রসেস আইডি {cid} এর জন্য "
-"অপেক্ষা করছে।"
+"আপনি কি নিশ্চিত যে, বাছাই করা অপারেশনগুলো অনুসারে আপনি স্থায়ীভাবে ফাইলগুলো "
+"ডিলিট করতে চান? আসলে যে ফাইলগুলো ডিলিট করা হবে, সেগুলো আপনি প্রিভিউ রান করার"
+" পরে পরিবর্তিত হয়ে থাকতে পারে।"
 
-#: ../bleachbit/Memory.py:324
+#: ../bleachbit/GuiBasic.py
+msgid "Are you sure you want to permanently delete these files?"
+msgstr "আপনি কি নিশ্চিত যে আপনি এই ফাইলগুলো স্থায়ীভাবে ডিলিট করতে চান?"
+
+#. TRANSLATORS: %s expands to www.bleachbit.org or similar
+#: ../bleachbit/GuiBasic.py
 #, python-format
-msgid "The child memory-wiping process returned code %d."
-msgstr "চাইল্ড মেমরি-ওয়াইপিং প্রসেস কোড %d দেখাচ্ছে।"
+msgid "Open web browser to %s?"
+msgstr "%s এর জন্য ওয়েব ব্রাউজার ওপেন করবেন?"
 
-#: ../bleachbit/Options.py:113
+#: ../bleachbit/GuiChaff.py
+msgid "Deleting files"
+msgstr "ফাইল সমূহ ডিলিট করা হচ্ছে"
+
+#. TRANSLATORS: BleachBit creates digital chaff like that is like the
+#. physical chaff airplanes use to protect themselves from radar-guided
+#. missiles. For more explanation, see the online documentation.
+#: ../bleachbit/GuiChaff.py
+msgid "Make chaff"
+msgstr "শাফ তৈরি করুন"
+
+#: ../bleachbit/GuiChaff.py
+msgid "Make randomly-generated messages inspired by documents."
+msgstr "ডকুমেন্ট অনুসারে র‍্যান্ডমলি বানানো মেসেজ তৈরি করুন।"
+
+#. TRANSLATORS: Inspiration is a choice of documents from which random
+#. text will be generated.
+#: ../bleachbit/GuiChaff.py
+msgid "Inspiration"
+msgstr "অনুপ্রেরণা"
+
+#: ../bleachbit/GuiChaff.py
+msgid "2600 Magazine"
+msgstr "২৬০০ ম্যাগাজিন"
+
+#: ../bleachbit/GuiChaff.py
+msgid "Hillary Clinton's emails"
+msgstr "হিলারি ক্লিনটনের ইমেইল সমূহ"
+
+#: ../bleachbit/GuiChaff.py
+msgid "Number of files"
+msgstr "ফাইলের সংখ্যা"
+
+#: ../bleachbit/GuiChaff.py
+msgid "Select destination folder"
+msgstr "ডেসটিনেশন ফোল্ডার বাছাই করুন"
+
+#: ../bleachbit/GuiChaff.py
+msgid "When finished"
+msgstr "যখন শেষ হবে"
+
+#: ../bleachbit/GuiChaff.py
+msgid "Delete without shredding"
+msgstr "শ্রেডিং না করেই ডিলিট করুন"
+
+#: ../bleachbit/GuiChaff.py
+msgid "Do not delete"
+msgstr "ডিলিট করবেন না"
+
+#: ../bleachbit/GuiChaff.py
+msgid "Make files"
+msgstr "ফাইল তৈরি করুন"
+
+#: ../bleachbit/GuiChaff.py
+msgid "Download data needed for chaff generator?"
+msgstr "শাফ জেনারেটরের জন্য প্রয়োজনীয় ডাটা ডাউনলোড করতে চান?"
+
+#: ../bleachbit/GuiChaff.py
+msgid "Generating files"
+msgstr "ফাইল সমূহ জেনারেট করা হচ্ছে"
+
+#: ../bleachbit/GuiPreferences.py ../data/app-menu.ui
+msgid "Preferences"
+msgstr "পছন্দসমূহ"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "General"
+msgstr "সাধারন"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Drives"
+msgstr "ড্রাইভস"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Whitelist"
+msgstr "হোয়াইটলিস্ট"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Check periodically for software updates via the Internet"
+msgstr "ইন্টারনেটের মাধ্যমে নিয়মিত বিরতিতে সফটওয়্যার আপডেট চেক করুন"
+
+#: ../bleachbit/GuiPreferences.py
+msgid ""
+"If an update is found, you will be given the option to view information "
+"about it.  Then, you may manually download and install the update."
+msgstr ""
+"যদি কোন আপডেট পাওয়া যায়, তাহলে সে বিষয়ে তথ্য দেখার জন্য আপনাকে অপশন দেয়া "
+"হবে। তারপরে আপনি আপডেটটি ম্যানুয়ালি ডাউনলোড এবং ইন্সটল করতে পারবেন।"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Check for new beta releases"
+msgstr "নতুন বেটা রিলিজ সমূহের জন্য চেক করুন"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Download and update cleaners from community (winapp2.ini)"
+msgstr "কমিউনিটি থেকে ক্লিনার ডাউনলোড এবং আপডেট করুন (winapp2.ini)"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Hide irrelevant cleaners"
+msgstr "অপ্রাসঙ্গিক ক্লিনার আড়াল করে রাখুন"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Overwrite contents of files to prevent recovery"
+msgstr "রিকভারি প্রতিরোধের জন্য ফাইল সমূহের কনটেন্টগুলো ওভাররাইট করুন"
+
+#: ../bleachbit/GuiPreferences.py
+msgid ""
+"Overwriting is ineffective on some file systems and with certain BleachBit "
+"operations.  Overwriting is significantly slower."
+msgstr ""
+"কিছু ফাইল সিস্টেমে এবং নির্দিষ্ট কিছু  BleachBit অপারেশনে ওভাররাইটিং করা "
+"কার্যকরী নয়। ওভাররাইটিং অত্যন্ত ধীর গতির।"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Exit after cleaning"
+msgstr "ক্লিন করার পরে এক্সিট করুন"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Confirm before delete"
+msgstr "ডিলিট করার পূর্বে নিশ্চিত করুন"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
+msgstr ""
+"SI (1 kB = 1000 bytes) এর পরিবর্তে IEC সাইজ (1 KiB = 1024 bytes) ব্যবহার "
+"করুন"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Windows 10 theme"
+msgstr "উইন্ডোজ ১০ থিম"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Dark mode"
+msgstr "ডার্ক মোড"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Remember window geometry"
+msgstr "উইন্ডো জিওমেট্রি মনে রাখুন"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Show debug messages"
+msgstr "ডিবাগ মেসেজ দেখুন"
+
+#: ../bleachbit/GuiPreferences.py
+msgid ""
+"Choose a writable folder for each drive for which to overwrite free space."
+msgstr ""
+"প্রতিটি ড্রাইভের জন্য একটি রাইট করা যায় এমন ফোল্ডার নির্বাচন করুন যাতে করে "
+"ফাঁকা স্পেস ওভাররাইট করা যায়।"
+
+#. TRANSLATORS: In the preferences dialog, this button adds a path to
+#. the list of paths
+#: ../bleachbit/GuiPreferences.py
+msgctxt "button"
+msgid "Add"
+msgstr "যোগ করুন"
+
+#. TRANSLATORS: In the preferences dialog, this button removes a path
+#. from the list of paths
+#: ../bleachbit/GuiPreferences.py
+msgctxt "button"
+msgid "Remove"
+msgstr "রিমুভ করুন"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Choose a file"
+msgstr "একটি ফাইল নির্বাচন করুন"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "File"
+msgstr "ফাইল"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Folder"
+msgstr "ফোল্ডার"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "These paths will not be deleted or modified."
+msgstr "এই পাথগুলো মুছে ফেলা বা পরিবর্তন করা হবে না﻿"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "These locations can be selected for deletion."
+msgstr "ডিলিট করার জন্য এই লোকেশনগুলো বাছাই করা যাবে।"
+
+#: ../bleachbit/GuiPreferences.py
+msgid "Type"
+msgstr "প্রকার"
+
+#. TRANSLATORS: In the tree view "Path" is used generically to refer to a
+#. file, a folder, or a pattern describing either
+#: ../bleachbit/GuiPreferences.py
+msgid "Path"
+msgstr "পাথ"
+
+#: ../bleachbit/GuiPreferences.py
+msgctxt "button"
+msgid "Add file"
+msgstr "ফাইল যোগ করুন"
+
+#: ../bleachbit/GuiPreferences.py
+msgctxt "button"
+msgid "Add folder"
+msgstr "ফোল্ডার যোগ করুন"
+
+#: ../bleachbit/Network.py
+#, python-format
+msgid "Downloading URL failed: %s"
+msgstr "URL ডাউনলোড করতে ব্যর্থ: %s﻿"
+
+#: ../bleachbit/Options.py
 #, python-format
 msgid "Disk was full when writing configuration to file %s"
 msgstr "ফাইল %s তে কনফিগারেশন রাইট করার সময় ডিস্ক ফুল ছিল"
 
-#: ../bleachbit/Options.py:137
+#: ../bleachbit/Options.py
 #, python-format
 msgid "Error checking whether path exists: %s"
 msgstr "পাথ আছে কিনা সেটি দেখতে ইরোর চেক করা হচ্ছে: %s"
 
-#: ../bleachbit/Options.py:268
+#: ../bleachbit/Options.py
 msgid "Error when setting the default drives to shred."
 msgstr "ডিফল্ট ড্রাইভগুলো শ্রেড করার জন্য সেটিং দেয়ার সময় ইরোর দেখা দিয়েছে।"
 
-#: ../bleachbit/Options.py:294
+#: ../bleachbit/Options.py
 #, python-format
 msgid "Automatically preserving language %s."
 msgstr "ভাষা %s স্বয়ংক্রিয়ভাবে সংরক্ষণ করা হচ্ছে।"
 
-#: ../bleachbit/RecognizeCleanerML.py:56
+#: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
 msgstr "নিরাপত্তা বিষয়ক সতর্কতা"
 
-#: ../bleachbit/RecognizeCleanerML.py:70
+#: ../bleachbit/RecognizeCleanerML.py
 msgid ""
-"These cleaner definitions are new or have changed. Malicious definitions can "
-"damage your system. If you do not trust these changes, delete the files or "
+"These cleaner definitions are new or have changed. Malicious definitions can"
+" damage your system. If you do not trust these changes, delete the files or "
 "quit."
 msgstr ""
-"এই ক্লিনার ডেফিনিশনগুলো নতুন অথবা পরিবর্তিত। ম্যালিশাস ডেফিনিশন আপনার সিস্টেমের "
-"ক্ষতি করতে পারে। যদি আপনি এই পরিবর্তনগুলোকে বিশ্বাস না করেন, তাহলে ফাইলগুলো ডিলিট "
-"করুন অথবা কুইট করুন।"
+"এই ক্লিনার ডেফিনিশনগুলো নতুন অথবা পরিবর্তিত। ম্যালিশাস ডেফিনিশন আপনার "
+"সিস্টেমের ক্ষতি করতে পারে। যদি আপনি এই পরিবর্তনগুলোকে বিশ্বাস না করেন, তাহলে"
+" ফাইলগুলো ডিলিট করুন অথবা কুইট করুন।"
 
-#: ../bleachbit/RecognizeCleanerML.py:85
+#: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
 msgid "Delete"
 msgstr "ডিলিট করুন"
 
-#: ../bleachbit/RecognizeCleanerML.py:90
+#: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
 msgid "Filename"
 msgstr "ফাইলের নাম"
 
-#: ../bleachbit/Unix.py:585
-#, python-format
-msgid "Executable not found: %s"
-msgstr "এক্সিকিউটেবল কিছু পাওয়া যায়নি: %s"
-
-#. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
-#: ../bleachbit/Unix.py:669 ../bleachbit/Unix.py:684 ../bleachbit/Unix.py:709
-#: ../bleachbit/Worker.py:146
-#, python-format
-msgid ""
-"%s cannot be cleaned because it is currently running.  Close it, and try "
-"again."
-msgstr ""
-"%s ক্লিন করা যায়নি কেননা এটি বর্তমানে রান করছে। এটি বন্ধ করুন এবং আবার চেষ্টা করুন।"
-
-#: ../bleachbit/Update.py:92
+#: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
 msgstr "নতুন winapp2.ini ডাউনলোড করা হয়েছিল।"
 
-#: ../bleachbit/Update.py:137
+#: ../bleachbit/Update.py
 msgid "Update BleachBit"
 msgstr "BleachBit আপডেট করুন"
 
-#: ../bleachbit/Update.py:143
+#: ../bleachbit/Update.py
 msgid "A new version is available."
 msgstr "একটি নতুন ভার্সন পাওয়া গেছে।"
 
 #. TRANSLATORS: %s expands to version such as '0.8.4' or '0.8.5beta' or
 #. similar
-#: ../bleachbit/Update.py:152
+#: ../bleachbit/Update.py
 #, python-format
 msgid "Update to version %s"
 msgstr "%s ভার্সনে আপডেট করুন"
 
-#: ../bleachbit/Update.py:197
+#: ../bleachbit/Update.py
 msgid ""
 "Error when opening a network connection to check for updates. Please verify "
-"the network is working and that a firewall is not blocking this application. "
-"Error message: {}"
+"the network is working and that a firewall is not blocking this application."
+" Error message: {}"
 msgstr ""
-"আপডেট চেক করার জন্য নেটওয়ার্ক কানেকশন খোলার সময় ইরোর দেখা দিয়েছে। অনুগ্রহ করে "
-"যাচাই করে দেখুন যে নেটওয়ার্ক চলছে কিনা এবং কোন ফায়ারওয়াল এই এপ্লিকেশনটিকে ব্লক "
-"করছেনা। ইরোর মেসেজ: {}"
+"আপডেট চেক করার জন্য নেটওয়ার্ক কানেকশন খোলার সময় ইরোর দেখা দিয়েছে। অনুগ্রহ "
+"করে যাচাই করে দেখুন যে নেটওয়ার্ক চলছে কিনা এবং কোন ফায়ারওয়াল এই "
+"এপ্লিকেশনটিকে ব্লক করছেনা। ইরোর মেসেজ: {}"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:46
+#: ../bleachbit/Winapp.py
 msgid "Applications"
 msgstr "অ্যাপ্লিকেশন সমূহ"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:48
+#: ../bleachbit/Winapp.py
 msgid "Internet"
 msgstr "ইন্টারনেট"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:50
+#: ../bleachbit/Winapp.py
 msgid "Multimedia"
 msgstr "মাল্টিমিডিয়া"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
-#: ../bleachbit/Winapp.py:52
+#: ../bleachbit/Winapp.py
 msgid "Utilities"
 msgstr "ইউটিলিটিস"
 
-#: ../bleachbit/Winapp.py:63
+#: ../bleachbit/Winapp.py
 msgid "Games"
 msgstr "গেমস"
 
-#: ../bleachbit/Winapp.py:183
+#: ../bleachbit/Winapp.py
 msgid "Imported from winapp2.ini"
 msgstr "winapp2.ini থেকে ইমপোর্ট করা হয়েছে"
 
-#: ../bleachbit/Windows.py:141
+#: ../bleachbit/Windows.py
 msgid ""
 "The file python3.dll was found in c:\\ or c:\\dlls, which indicates a "
 "possible attempt at DLL search-order hijacking."
 msgstr ""
 
-#: ../bleachbit/Windows.py:151
+#: ../bleachbit/Windows.py
 msgid "Warning"
 msgstr ""
 
-#: ../bleachbit/Windows.py:855
+#: ../bleachbit/Windows.py
+msgid "stop Windows service {}"
+msgstr ""
+
+#: ../bleachbit/Windows.py
+msgid "start Windows service {}"
+msgstr ""
+
+#: ../bleachbit/Windows.py
 msgid "BleachBit is starting...\n"
 msgstr ""
 
@@ -1894,36 +1544,50 @@ msgstr ""
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
 #. some other cleaner ID.  The special keyword %(msg)s will be
 #. replaced by a message such as 'Permission denied.'
-#: ../bleachbit/Worker.py:78
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Exception while running operation '%(operation)s': '%(msg)s'"
 msgstr "অপারেশন রান করার সময় এক্সেপশন '%(operation)s': '%(msg)s'"
 
-#: ../bleachbit/Worker.py:107
+#: ../bleachbit/Worker.py
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
 msgstr "ইরোর: {operation_option}: {command}"
 
+#. TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
+#: ../bleachbit/Worker.py
+#, python-format
+msgid ""
+"%s cannot be cleaned because it is currently running.  Close it, and try "
+"again."
+msgstr ""
+"%s ক্লিন করা যায়নি কেননা এটি বর্তমানে রান করছে। এটি বন্ধ করুন এবং আবার "
+"চেষ্টা করুন।"
+
 #. TRANSLATORS: 'free' means 'unallocated'
-#: ../bleachbit/Worker.py:194
+#: ../bleachbit/Worker.py
 msgid "Please wait.  Wiping free disk space."
 msgstr "অনুগ্রহ করে অপেক্ষা করুন। ফাঁকা ডিস্ক স্পেস পরিষ্কার করা হচ্ছে।"
 
-#: ../bleachbit/Worker.py:196
+#: ../bleachbit/Worker.py
 msgid ""
 "Wiping free disk space erases remnants of files that were deleted without "
 "shredding. It does not free up space."
 msgstr ""
-"ফাঁকা ডিস্ক স্পেস পরিষ্কার করতে গেলে যেসব ফাইল শ্রেডিং না করেই ডিলিট করা হয়েছিল "
-"সেগুলোর অবশিষ্টাংশ মুছে যায়। এটি কোন স্পেস ফাঁকা করেনা।"
+"ফাঁকা ডিস্ক স্পেস পরিষ্কার করতে গেলে যেসব ফাইল শ্রেডিং না করেই ডিলিট করা "
+"হয়েছিল সেগুলোর অবশিষ্টাংশ মুছে যায়। এটি কোন স্পেস ফাঁকা করেনা।"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:199 ../bleachbit/Worker.py:338
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Please wait.  Cleaning %s."
 msgstr "অনুগ্রহ করে অপেক্ষা করুন। %s ক্লিন করা হচ্ছে।"
 
-#: ../bleachbit/Worker.py:217
+#: ../bleachbit/Worker.py
+msgid "Memory"
+msgstr "মেমরি"
+
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
@@ -1932,38 +1596,38 @@ msgstr[1] "প্রায় %d মিনিট বাকি আছে।"
 
 #. TRANSLATORS: This refers to disk space that was
 #. really recovered (in other words, not a preview)
-#: ../bleachbit/Worker.py:285
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Disk space recovered: %s"
 msgstr "রিকভার করা ডিস্ক স্পেস: %s"
 
 #. TRANSLATORS: This refers to a preview (no real
 #. changes were made yet)
-#: ../bleachbit/Worker.py:289
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Disk space to be recovered: %s"
 msgstr "রিকভার করতে হবে এমন ডিস্ক স্পেস: %s"
 
 #. TRANSLATORS: This refers to the number of files really
 #. deleted (in other words, not a preview).
-#: ../bleachbit/Worker.py:294
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Files deleted: %d"
 msgstr "ডিলিট করা ফাইল সমূহ: %d"
 
 #. TRANSLATORS: This refers to the number of files that
 #. would be deleted (in other words, simply a preview).
-#: ../bleachbit/Worker.py:298
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Files to be deleted: %d"
 msgstr "ডিলিট করতে হবে এমন ফাইল সমূহ: %d"
 
-#: ../bleachbit/Worker.py:301
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Special operations: %d"
 msgstr "স্পেশাল অপারেশন্স: %d"
 
-#: ../bleachbit/Worker.py:304
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Errors: %d"
 msgstr "ইরোর সমূহ: %d"
@@ -1971,53 +1635,349 @@ msgstr "ইরোর সমূহ: %d"
 #. TRANSLATORS: The "deep scan" feature searches over broad
 #. areas of the file system such as the user's whole home directory
 #. or all the system executables.
-#: ../bleachbit/Worker.py:320
+#: ../bleachbit/Worker.py
 msgid "Please wait.  Running deep scan."
 msgstr "অনুগ্রহ করে অপেক্ষা করুন। ডিপ স্ক্যান রান চলছে।"
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
-#: ../bleachbit/Worker.py:341
+#: ../bleachbit/Worker.py
 #, python-format
 msgid "Please wait.  Previewing %s."
 msgstr "অনুগ্রহ করে অপেক্ষা করুন। %s প্রিভিউ করা হচ্ছে।"
 
-#: ../data/app-menu.ui:5
+#: ../data/app-menu.ui
 msgid "_Shred Files"
 msgstr "_শ্রেড ফাইল সমূহ"
 
-#: ../data/app-menu.ui:9
+#: ../data/app-menu.ui
 msgid "Sh_red Folders"
 msgstr "শ্রে_ড ফোল্ডার সমূহ"
 
-#: ../data/app-menu.ui:13
+#: ../data/app-menu.ui
 msgid "Shred Paths from Clipboard"
 msgstr "ক্লিপবোর্ড থেকে শ্রেড পাথ সমূহ"
 
-#: ../data/app-menu.ui:18
+#: ../data/app-menu.ui
 msgid "_Wipe Free Space"
 msgstr "_ফাঁকা স্পেস পরিষ্কার করুন"
 
-#: ../data/app-menu.ui:22
+#: ../data/app-menu.ui
 msgid "_Make Chaff"
 msgstr "_শাফ তৈরি করুন"
 
-#: ../data/app-menu.ui:26
+#: ../data/app-menu.ui
 msgid "S_hred Settings and Quit"
 msgstr "শ্রে_ড সেটিংস এবং কুইট করুন"
 
-#: ../data/app-menu.ui:37
+#: ../data/app-menu.ui
 #, fuzzy
-#| msgid "System information"
 msgid "S_ystem Information"
 msgstr "সিস্টেম ইনফরমেশন"
 
-#: ../data/app-menu.ui:41
+#: ../data/app-menu.ui
 msgid "_Help"
 msgstr "_সাহায্য"
 
-#: ../data/app-menu.ui:47
+#: ../data/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_BleachBit সম্পর্কে"
+
+#~ msgid ""
+#~ "Delete cookies, which contain information such as web site preferences, "
+#~ "authentication, and tracking identification"
+#~ msgstr ""
+#~ "কুকিগুলো ডিলিট করুন, যাতে আছে ওয়েব সাইট বিষয়ক পছন্দসমূহ, অথেনটিকেশন এবং "
+#~ "ট্র্যাকিং আইডেন্টিফিকেশন তথ্য"
+
+#~ msgid "DOM Storage"
+#~ msgstr "ডিওএম সংরক্ষণাগার"
+
+#~ msgid "Delete HTML5 cookies"
+#~ msgstr "HTML5 কুকি মুছে ফেলুন"
+
+#~ msgid "A history of forms entered in web sites"
+#~ msgstr "প্রবেশকৃত একটি ওয়েব সাইটের ইতিহাস"
+
+#~ msgid "Delete the current and last sessions"
+#~ msgstr "বর্তমান এবং শেষ সেশন মুছে ফেলুন"
+
+#~ msgid "Delete the sync data and sign out of the browser"
+#~ msgstr "হালনাগাদকৃত তথ্য মুছুন এবং ব্রাউজার থেকে প্রস্থান করুন"
+
+#~ msgid "Delete the list of game servers"
+#~ msgstr "সার্ভার হতে খেলার তালিমু অপসারণ করো"
+
+#~ msgid "Package manager"
+#~ msgstr "প্যাকেজ পরিচালক"
+
+#~ msgid "Shell"
+#~ msgstr "শেল"
+
+#~ msgid "Windowing system"
+#~ msgstr "উইন্ডোয়ার্ড সিস্টেম"
+
+#~ msgid "Custom folders will be reset."
+#~ msgstr "কাস্টম ফোল্ডারগুলি পুনরায় সেট করা হবে।"
+
+#~ msgid "Blocklists"
+#~ msgstr "আটককৃতদের তালিকাসমূহ"
+
+#~ msgid "Blocklists will need update to work."
+#~ msgstr "ব্লকলিস্টগুলিতে কাজ করার জন্য আপডেটের প্রয়োজন হবে।"
+
+#~ msgid "Torrents"
+#~ msgstr "টরেন্ট"
+
+#~ msgid "Delete the torrents (just the metadata but not the files described)"
+#~ msgstr "টরেন্টস মুছুন (কেবলমাত্র মেটাডেটা তবে বর্ণিত ফাইলগুলি নয়)"
+
+#~ msgid "A history of forms entered in web sites and in the Search bar"
+#~ msgstr ""
+#~ "ওয়েবসাইটগুলোয় এবং সার্চ বারে বিভিন্ন ফর্মের একটি হিস্ট্রি প্রবেশ করানো হয়েছে"
+
+#~ msgid "Loads the initial session after the browser closes or crashes"
+#~ msgstr "ব্রাউজার ক্লোজ কিংবা ক্র্যাশ করার পরে প্রাথমিক সেশনটি লোড করে"
+
+#~ msgid "Delete the avatars and emoticons cache"
+#~ msgstr "এভাটার এবং ইমোটিকনস ক্যাচ ডিলিট করুন"
+
+#~ msgid "Widgets for the desktop"
+#~ msgstr "ডেস্কটপের জন্য উইজেটস"
+
+#~ msgid "Delete the cookies, visited URLs, and search history"
+#~ msgstr "কুকিসমূহ, প্রদর্শিত URL'সমূহ, এবং খোঁজার ইতিহাস মুছে ফেলুন"
+
+#~ msgid "Desktop environment"
+#~ msgstr "ডেস্কটপের পরিবেশ"
+
+#~ msgid "Places"
+#~ msgstr "অবস্থান"
+
+#~ msgid ""
+#~ "A database of URLs including bookmarks, favicons, and a history of visited "
+#~ "web sites"
+#~ msgstr ""
+#~ "বুকমার্ক, ফ্যাভিকনস এবং ভিজিট করা ওয়েবসাইট সমূহের একটি হিস্ট্রি সহকারে "
+#~ "বিভিন্ন URL একটি ডাটাবেজ"
+
+#~ msgid "This option deletes all bookmarks."
+#~ msgstr "এই অপশনটি সকল বুকমার্ক ডিলিট করে দেয়।"
+
+#~ msgid "System journals"
+#~ msgstr "সিস্টেম জার্নালস"
+
+#~ msgid "Clean old system journals"
+#~ msgstr "পুরাতন সিস্টেম জার্নালস ক্লিন করুন"
+
+#~ msgid "Database"
+#~ msgstr "ডাটাবেজ"
+
+#~ msgid ""
+#~ "Delete the database, which contains information such as play count and last "
+#~ "played"
+#~ msgstr ""
+#~ "প্লে কাউন্ট এবং লাস্ট প্লেয়েড বিষয়ের মতো অন্যান্য তথ্য সম্বলিত ডাটাবেজটি "
+#~ "ডিলিট করুন"
+
+#~ msgid "Compatibility layer for Windows software"
+#~ msgstr "উইন্ডোজ সফটওয়ারের জন্য কমপ্যাটিবিলিটি লেয়ার"
+
+#~ msgid "Delete obsolete files"
+#~ msgstr "অচল ফাইলগুলোকে ডিলিট করুন"
+
+#~ msgid "Package lists"
+#~ msgstr "প্যাকেজ লিস্টস"
+
+#~ msgid "Audio player"
+#~ msgstr "অডিও প্লেয়ার"
+
+#~ msgid "Current session"
+#~ msgstr "বর্তমান সেশন"
+
+#~ msgid "Delete the current session"
+#~ msgstr "বর্তমান অধিবেশনটি মুছে ফেলুন"
+
+#~ msgid "Icons for files on the system"
+#~ msgstr "সিস্টেমে থাকা ফাইলগুলোর জন্য আইকন সমূহ"
+
+#~ msgid "Remove packages that were formerly dependencies"
+#~ msgstr "পূর্বে ডিপেনডেন্সি হিসেবে ছিল এমন প্যাকেজগুলোকে রিমুভ করুন"
+
+#~ msgid ""
+#~ "Carefully review the list of packages that will be removed by running \"dnf "
+#~ "list autoremove\"."
+#~ msgstr ""
+#~ "\"dnf list autoremove\" রান করার মাধ্যমে প্যাকেজ সমূহের যে লিস্টটি রিমুভ হয়ে"
+#~ " যাবে, সেটি সাবধানতার সাথে রিভিউ করুন।"
+
+#~ msgid "Search tool"
+#~ msgstr "সার্চ টুল"
+
+#~ msgid ""
+#~ "Delete the search index, a database of words and the files they contain"
+#~ msgstr ""
+#~ "সার্চ ইনডেক্স, বিভিন্ন শব্দের একটি ডাটাবেজ এবং এগুলোতে থাকা ফাইলগুলো ডিলিট "
+#~ "করুন"
+
+#~ msgid "Audio files tagger"
+#~ msgstr "অডিও ফাইলস ট্যাগার"
+
+#~ msgid "IRC client formerly known as XChat"
+#~ msgstr "IRC ক্লায়েন্ট যা পূর্বে XChat নামে পরিচিত ছিল"
+
+#~ msgid "Unnecessary file cleaner"
+#~ msgstr "অপ্রয়োজনীয় ফাইল ক্লিনার"
+
+#~ msgid "Free space and maintain privacy"
+#~ msgstr "স্পেস খালি করুন এবং গোপনীয়তা রক্ষা করুন"
+
+#, python-format
+#~ msgid "Ignoring cleaner because it is world writable: %s"
+#~ msgstr "ক্লিনার ইগনোর করা হচ্ছে, কেননা এটি বৈশ্বিকভাবে লিখনযোগ্য: %s"
+
+#~ msgid "Broken desktop files"
+#~ msgstr "ডেস্কটপের ব্রোকেন ফাইল সমূহ"
+
+#~ msgid "Delete broken application menu entries and file associations"
+#~ msgstr ""
+#~ "ব্রোকেন এপ্লিকেশন মেন্যুর এন্ট্রি সমূহ এবং ফাইল এ্যাসোসিয়েশন সমূহ ডিলিট করুন"
+
+#~ msgid "Localizations"
+#~ msgstr "লোকালাইজেশনস"
+
+#~ msgid "Delete files for unwanted languages"
+#~ msgstr "অনাকাঙ্খিত ভাষার ফাইল সমূহ ডিলিট করুন"
+
+#~ msgid "Configure this option in the preferences."
+#~ msgstr "প্রিফারেন্সেসে এই অপশনটি কনফিগার করুন।"
+
+#~ msgid "Rotated logs"
+#~ msgstr "রোটেটেড লগস"
+
+#~ msgid "Delete old system logs"
+#~ msgstr "পুরাতন সিস্টেম লগসগুলো ডিলিট করুন"
+
+#~ msgid "Trash"
+#~ msgstr "ট্র্যাশ"
+
+#~ msgid "Empty the trash"
+#~ msgstr "ট্র্যাশ খালি করুন"
+
+#~ msgid "Wipe the swap and free memory"
+#~ msgstr "সোয়াপ পরিষ্কার করুন এবং মেমরি খালি করুন"
+
+#~ msgid "This option is experimental and may cause system problems."
+#~ msgstr "এই অপশনটি এখনো পরীক্ষামূলক এবং সিস্টেমের সমস্যা তৈরি করতে পারে।"
+
+#, python-format
+#~ msgid "Skipping mount point: %s"
+#~ msgstr "মাউন্ট পয়েন্ট স্কিপ করুন: %s"
+
+#~ msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
+#~ msgstr ""
+#~ "{bytes:,} বাইটস এবং {inodes:,} ইনোডস নন-সুপার-ইউজারের জন্য এভেইলেবল আছে"
+
+#~ msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
+#~ msgstr "{bytes:,} বাইটস এবং {inodes:,} ইনোডস সুপার-ইউজারের জন্য এভেইলেবল আছে"
+
+#, python-format
+#~ msgid ""
+#~ "Because you are running as root, please manually open this link in a web browser:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "যেহেতু আপনি রুট হিসেবে রান করছেন, অনুগ্রহ করে এই লিংকটি ওয়েব ব্রাউজারে ম্যানুয়ালি ওপেন করুন:\n"
+#~ "%s"
+
+#~ msgid "Languages"
+#~ msgstr "ভাষাসমূহ"
+
+#~ msgid "All languages will be deleted except those checked."
+#~ msgstr "বাছাই করা ভাষাগুলো ছাড়া অন্য সকল ভাষা ডিলিট করে দেয়া হবে।"
+
+#~ msgid "Preserve"
+#~ msgstr "সংরক্ষণ করুন"
+
+#~ msgid "Code"
+#~ msgstr "কোড"
+
+#~ msgid ""
+#~ "Access the application menu by clicking the hamburger icon on the title bar."
+#~ msgstr ""
+#~ "টাইটেল বারের হ্যামবার্গার লোগোতে ক্লিক করে এপ্লিকেশন মেনুতে প্রবেশ করুন।"
+
+#~ msgid ""
+#~ "You are running BleachBit with administrative privileges for cleaning shared"
+#~ " parts of the system, and references to the user profile folder will clean "
+#~ "only the root account."
+#~ msgstr ""
+#~ "আপনি সিস্টেমের শেয়ার করা অংশগুলো ক্লিন করার এডমিনিস্ট্রেটিভ প্রিভিলেজ নিয়ে "
+#~ "BleachBit রান করছেন এবং ইউজার প্রোফাইল ফোল্ডারের রেফারেন্স শুধু রুট "
+#~ "একাউন্টকে ক্লিন করবে।"
+
+#~ msgid ""
+#~ "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
+#~ "information."
+#~ msgstr ""
+#~ "'swapoff -s' এর কমান্ড ফেইল করেছে, তাই সোয়াপ বিষয়ক তথ্যের জন্য /proc/swaps এ"
+#~ " ফিরে যাওয়া হচ্ছে।"
+
+#~ msgid "Disabling swap."
+#~ msgstr "সোয়াপ বিকল করা হচ্ছে।"
+
+#~ msgid "Re-enabling swap."
+#~ msgstr "সোয়াপ পুনরায় সক্ষম করা হচ্ছে।"
+
+#, python-format
+#~ msgid "Setting nice value %d for this process."
+#~ msgstr "এই প্রসেসের জন্য নাইস ভ্যালু %d সেট করা হচ্ছে।"
+
+#, python-brace-format
+#~ msgid "Dropping privileges of process ID {pid} to user ID {uid}."
+#~ msgstr "প্রসেস আইডি {pid} থেকে ইউজার আইডিতে {uid} প্রিভিলেজ নিয়ে যাওয়া হচ্ছে।"
+
+#, python-format
+#~ msgid "Allocating and wiping %s of memory."
+#~ msgstr "মেমরির %s বরাদ্দ করা হচ্ছে এবং পরিষ্কার করা হচ্ছে।"
+
+#, python-format
+#~ msgid "Freeing %s of memory."
+#~ msgstr "মেমরির %s ফাঁকা করা হচ্ছে।"
+
+#, python-brace-format
+#~ msgid "Found UUID for swap file {device} is {uuid}."
+#~ msgstr "সোয়াপ ফাইলের জন্য পাওয়া UUID {device} হচ্ছে {uuid}।"
+
+#, python-format
+#~ msgid "Physical free memory is %s."
+#~ msgstr "ফিজিক্যাল ফাঁকা মেমরি হচ্ছে %s।"
+
+#, python-format
+#~ msgid "Wiping the swap device %s."
+#~ msgstr "সোয়াপ ডিভাইস %s পরিষ্কার করা হচ্ছে।"
+
+#, python-format
+#~ msgid "Reinitializing the swap device %s."
+#~ msgstr "সোয়াপ ডিভাইস %s নতুনভাবে চালু করা হচ্ছে।"
+
+#, python-format
+#~ msgid "Detected these swap devices: %s"
+#~ msgstr "এই সোয়াপ ডিভাইসগুলো পাওয়া গেছে: %s"
+
+#, python-brace-format
+#~ msgid ""
+#~ "The function wipe_memory() with process ID {pid} is waiting for child "
+#~ "process ID {cid}."
+#~ msgstr ""
+#~ "ফাংশন wipe_memory() সাথে প্রসেস আইডি {pid} চাইল্ড প্রসেস আইডি {cid} এর জন্য "
+#~ "অপেক্ষা করছে।"
+
+#, python-format
+#~ msgid "The child memory-wiping process returned code %d."
+#~ msgstr "চাইল্ড মেমরি-ওয়াইপিং প্রসেস কোড %d দেখাচ্ছে।"
+
+#, python-format
+#~ msgid "Executable not found: %s"
+#~ msgstr "এক্সিকিউটেবল কিছু পাওয়া যায়নি: %s"
 
 #~ msgid "_Diagnostics"
 #~ msgstr "_ডায়গনস্টিকস"
