@@ -17,11 +17,15 @@ bleachbit.egg-info/
 build/
 dist/
 upx/
+bleachbit/Revision.py
 BleachBit-Portable/
 BleachBit-*-portable.zip
 windows/BleachBit*.exe
 windows/BleachBit*.zip
-bleachbit/Revision.py
+windows/NsisInclude/FilesToInstall.nsh
+windows/NsisInclude/FilesToUninstall.nsh
+windows/NsisInclude/LocaleToInstall.nsh
+windows/NsisInclude/LocaleToUninstall.nsh
 
 # editor backups and temporary files
 *~
