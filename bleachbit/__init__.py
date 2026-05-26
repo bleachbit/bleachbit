@@ -13,20 +13,26 @@ Code that is commonly shared throughout BleachBit
 import gettext
 import locale
 import os
-import re
 import sys
 import warnings
 
 from bleachbit import Log
+from bleachbit.Constant import (
+    APP_NAME,
+    APP_URL,
+    APP_VERSION,
+    BASE_URL as base_url,
+    FS_SCAN_RE_FLAGS as fs_scan_re_flags,
+    GETTEXT_CONTEXT_GLUE,
+    HELP_CONTENTS_URL as help_contents_url,
+    ONLINE_UPDATE_NOTIFICATION_ENABLED as online_update_notification_enabled,
+    RELEASE_NOTES_URL as release_notes_url,
+    SOCKET_TIMEOUT as socket_timeout,
+    UPDATE_CHECK_URL as update_check_url,
+)
 from configparser import RawConfigParser, NoOptionError # used in other files
 
 import win_unicode_console
-
-APP_VERSION = "4.7.0"
-APP_NAME = "BleachBit"
-APP_URL = "https://www.bleachbit.org"
-
-socket_timeout = 10
 
 if sys.version_info < (3, 4, 4):
     print('This version requires Python 3.4.4.')
@@ -45,10 +51,6 @@ else:
         win_unicode_console.enable()
 
 logger = Log.init_log()
-
-# Setting below value to false disables update notification (useful
-# for packages in repositories).
-online_update_notification_enabled = True
 
 #
 # Paths
@@ -222,11 +224,6 @@ except:
 # See http://www.gnu.org/software/gettext/manual/gettext.html#Ambiguities for
 # more information about pgettext.
 
-# The separator between message context and message id.This value is the same as
-# the one used in gettext.h, so PO files should be still valid when Python gettext
-# module will include pgettext() function.
-GETTEXT_CONTEXT_GLUE = "\004"
-
 
 def pgettext(msgctxt, msgid):
     """A custom implementation of GNU pgettext().
@@ -243,23 +240,9 @@ def pgettext(msgctxt, msgid):
 # Map our pgettext() custom function to _p()
 _p = pgettext
 
-
-#
-# URLs
-#
-base_url = "https://update.bleachbit.org"
-help_contents_url = "%s/help/%s" \
-    % (base_url, APP_VERSION)
-release_notes_url = "%s/release-notes/%s" \
-    % (base_url, APP_VERSION)
-update_check_url = "%s/update/%s" % (base_url, APP_VERSION)
-
 # set up environment variables
 from bleachbit import Windows
 Windows.setup_environment()
-
-# Windows-only: case-insensitive file system
-fs_scan_re_flags = re.IGNORECASE
 
 #
 # Exceptions
