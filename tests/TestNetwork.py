@@ -128,7 +128,7 @@ class NetworkTestCase(common.BleachbitTestCase):
 
     def test_get_ip_for_url(self):
         """Unit test for get_ip_for_url()"""
-        for good_url in ('https://www.example.com', bleachbit.update_check_url):
+        for good_url in ('https://www.example.com', bleachbit.UPDATE_CHECK_URL):
             ip_str = get_ip_for_url(good_url)
             ipaddress.ip_address(ip_str)
         for bad_url in (None, '', 'https://test.invalid'):

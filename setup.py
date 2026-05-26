@@ -1,22 +1,9 @@
-#!/usr/bin/env python
-# vim: ts=4:sw=4:expandtab
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
+#
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
-# BleachBit
-# Copyright (C) 2008-2024 Andrew Ziem
-# https://www.bleachbit.org
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 Build BleachBit tarballs and exe
@@ -27,6 +14,8 @@ import os
 import sys
 import tempfile
 from setuptools import setup
+
+from bleachbit.Constant import APP_VERSION, APP_URL
 
 if sys.platform == 'win32':
     # workaround for
@@ -41,10 +30,6 @@ if sys.platform == 'win32':
         import py2exe
     except ImportError:
         print('warning: py2exe not available')
-
-import bleachbit
-import bleachbit.General
-import bleachbit.FileUtilities
 
 APP_NAME = 'BleachBit'
 APP_DESCRIPTION = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had."
@@ -105,14 +90,14 @@ if 'py2exe' in sys.argv:
         'script': 'bleachbit.py',
         'product_name': APP_NAME,
         'description': APP_DESCRIPTION,
-        'version': bleachbit.APP_VERSION,
+        'version': APP_VERSION,
         'icon_resources': [(1, 'windows/bleachbit.ico')]
     }]
     args['console'] = [{
         'script': 'bleachbit_console.py',
         'product_name': APP_NAME,
         'description': APP_DESCRIPTION,
-        'version': bleachbit.APP_VERSION,
+        'version': APP_VERSION,
         'icon_resources': [(1, 'windows/bleachbit.ico')]
     }]
     args['options'] = {
@@ -195,6 +180,8 @@ if 'py2exe' in sys.argv:
 
 def recompile_mo(langdir, app, langid, dst):
     """Recompile gettext .mo file"""
+    import bleachbit.FileUtilities
+    import bleachbit.General
 
     if not bleachbit.FileUtilities.exe_exists('msgunfmt') and not bleachbit.FileUtilities.exe_exists('msgunfmt.exe'):
         print('warning: msgunfmt missing: skipping recompile')
@@ -264,12 +251,12 @@ def clean_dist_locale():
 
 def run_setup():
     setup(name='bleachbit',
-          version=bleachbit.APP_VERSION,
+          version=APP_VERSION,
           description=APP_NAME,
           long_description=APP_DESCRIPTION,
           author="Andrew Ziem",
           author_email="andrew@bleachbit.org",
-          url=bleachbit.APP_URL,
+          url=APP_URL,
           download_url="https://www.bleachbit.org/download",
           classifiers=[
               'Development Status :: 5 - Production/Stable',

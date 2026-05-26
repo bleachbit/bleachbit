@@ -13,8 +13,8 @@ import random
 import tempfile
 from datetime import datetime
 
-from bleachbit import _, bleachbit_exe_path
-from bleachbit import options_dir
+from bleachbit import _, BLEACHBIT_EXE_PATH
+from bleachbit import OPTIONS_DIR
 
 from . import markovify
 
@@ -112,7 +112,7 @@ MODEL_BASENAMES = (
 URL_TEMPLATES = (
     'https://sourceforge.net/projects/bleachbit/files/chaff/%s/download',
     'https://download.bleachbit.org/chaff/%s')
-DEFAULT_MODELS_DIR = options_dir
+DEFAULT_MODELS_DIR = OPTIONS_DIR
 
 
 def _load_model(model_path):

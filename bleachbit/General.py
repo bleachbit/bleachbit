@@ -73,7 +73,7 @@ def run_external(args, stdout=None, env=None, clean_env=None):
     if stdout is None:
         stdout = subprocess.PIPE
     kwargs = {}
-    encoding = bleachbit.stdout_encoding
+    encoding = bleachbit.STDOUT_ENCODING
     # hide the 'DOS box' window
     stui = subprocess.STARTUPINFO()
     stui.dwFlags = win32process.STARTF_USESHOWWINDOW

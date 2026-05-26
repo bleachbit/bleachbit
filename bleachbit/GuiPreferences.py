@@ -24,7 +24,7 @@
 Preferences dialog
 """
 
-from bleachbit import _, _p, online_update_notification_enabled
+from bleachbit import _, _p
 from bleachbit.Options import options
 from bleachbit import GuiBasic
 
@@ -77,10 +77,9 @@ class PreferencesDialog:
     def __toggle_callback(self, cell, path):
         """Callback function to toggle option"""
         options.toggle(path)
-        if online_update_notification_enabled:
-            self.cb_beta.set_sensitive(options.get('check_online_updates'))
-            self.cb_winapp2.set_sensitive(
-                options.get('check_online_updates'))
+        self.cb_beta.set_sensitive(options.get('check_online_updates'))
+        self.cb_winapp2.set_sensitive(
+            options.get('check_online_updates'))
         if 'auto_hide' == path:
             self.refresh_operations = True
         if 'dark_mode' == path:
@@ -99,36 +98,35 @@ class PreferencesDialog:
 
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
-        if online_update_notification_enabled:
-            cb_updates = Gtk.CheckButton.new_with_label(
+        cb_updates = Gtk.CheckButton.new_with_label(
                 _("Check periodically for software updates via the Internet"))
-            cb_updates.set_active(options.get('check_online_updates'))
-            cb_updates.connect(
-                'toggled', self.__toggle_callback, 'check_online_updates')
-            cb_updates.set_tooltip_text(
-                _("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
-            vbox.pack_start(cb_updates, False, True, 0)
+        cb_updates.set_active(options.get('check_online_updates'))
+        cb_updates.connect(
+            'toggled', self.__toggle_callback, 'check_online_updates')
+        cb_updates.set_tooltip_text(
+            _("If an update is found, you will be given the option to view information about it.  Then, you may manually download and install the update."))
+        vbox.pack_start(cb_updates, False, True, 0)
 
-            updates_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-            updates_box.set_border_width(10)
+        updates_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        updates_box.set_border_width(10)
 
-            self.cb_beta = Gtk.CheckButton.new_with_label(
-                label=_("Check for new beta releases"))
-            self.cb_beta.set_active(options.get('check_beta'))
-            self.cb_beta.set_sensitive(options.get('check_online_updates'))
-            self.cb_beta.connect(
-                'toggled', self.__toggle_callback, 'check_beta')
-            updates_box.pack_start(self.cb_beta, False, True, 0)
+        self.cb_beta = Gtk.CheckButton.new_with_label(
+            label=_("Check for new beta releases"))
+        self.cb_beta.set_active(options.get('check_beta'))
+        self.cb_beta.set_sensitive(options.get('check_online_updates'))
+        self.cb_beta.connect(
+            'toggled', self.__toggle_callback, 'check_beta')
+        updates_box.pack_start(self.cb_beta, False, True, 0)
 
-            self.cb_winapp2 = Gtk.CheckButton.new_with_label(
-                _("Download and update cleaners from community (winapp2.ini)"))
-            self.cb_winapp2.set_active(options.get('update_winapp2'))
-            self.cb_winapp2.set_sensitive(
-                options.get('check_online_updates'))
-            self.cb_winapp2.connect(
-                'toggled', self.__toggle_callback, 'update_winapp2')
-            updates_box.pack_start(self.cb_winapp2, False, True, 0)
-            vbox.pack_start(updates_box, False, True, 0)
+        self.cb_winapp2 = Gtk.CheckButton.new_with_label(
+            _("Download and update cleaners from community (winapp2.ini)"))
+        self.cb_winapp2.set_active(options.get('update_winapp2'))
+        self.cb_winapp2.set_sensitive(
+            options.get('check_online_updates'))
+        self.cb_winapp2.connect(
+            'toggled', self.__toggle_callback, 'update_winapp2')
+        updates_box.pack_start(self.cb_winapp2, False, True, 0)
+        vbox.pack_start(updates_box, False, True, 0)
 
         # TRANSLATORS: This means to hide cleaners which would do
         # nothing.  For example, if Firefox were never used on

@@ -70,21 +70,22 @@ class UpdateTestCase(common.BleachbitTestCase):
     def test_UpdateCheck_real(self):
         """Unit test for class UpdateCheck with bad network address"""
         # expect connection failure
-        preserve_url = bleachbit.update_check_url
+        preserve_url = bleachbit.UPDATE_CHECK_URL
         for url in ('http://localhost/doesnotexist',):
-            bleachbit.update_check_url = url
+            bleachbit.UPDATE_CHECK_URL = url
             self.assertEqual(
                 check_updates(True, False, None, None),
                 ())
-        bleachbit.update_check_url = preserve_url
+        bleachbit.UPDATE_CHECK_URL = preserve_url
 
     def test_update_url(self):
         """Check connection to the update URL"""
         from bleachbit.Network import fetch_url
         try:
-            response = fetch_url(bleachbit.update_check_url)
+            response = fetch_url(bleachbit.UPDATE_CHECK_URL)
         except requests.RequestException as e:
-            logger.exception('Request error, url: %s', bleachbit.update_check_url)
+            logger.exception('Request error, url: %s',
+                             bleachbit.UPDATE_CHECK_URL)
             raise e
         import xml.dom.minidom
         xml.dom.minidom.parseString(response.text)
@@ -108,7 +109,7 @@ class UpdateTestCase(common.BleachbitTestCase):
         import queue
 
     def test_update_winapp2(self):
-        fn = os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini')
+        fn = os.path.join(bleachbit.PERSONAL_CLEANERS_DIR, 'winapp2.ini')
         if os.path.exists(fn):
             logger.info('deleting %s', fn)
             os.unlink(fn)

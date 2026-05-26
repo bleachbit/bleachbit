@@ -38,9 +38,10 @@ class BleachbitTestCase(unittest.TestCase):
 
     @classmethod
     def _patch_options_paths(cls):
-        to_patch = [('bleachbit.options_dir', cls.tempdir),
-                    ('bleachbit.options_file', os.path.join(cls.tempdir, "bleachbit.ini")),
-                    ('bleachbit.personal_cleaners_dir', os.path.join(cls.tempdir, "cleaners"))]
+        to_patch = [('bleachbit.OPTIONS_DIR', cls.tempdir),
+                    ('bleachbit.OPTIONS_FILE', os.path.join(
+                        cls.tempdir, "bleachbit.ini")),
+                    ('bleachbit.PERSONAL_CLEANERS_DIR', os.path.join(cls.tempdir, "cleaners"))]
         for target, source in to_patch:
             patcher = mock.patch(target, source)
             patcher.start()

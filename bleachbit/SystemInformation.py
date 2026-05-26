@@ -50,11 +50,11 @@ def get_system_information():
     s += f"\nSQLite version {sqlite3.sqlite_version}"
 
     # this section is for variables defined in __init__.py
-    s += f"\nlocal_cleaners_dir = {bleachbit.local_cleaners_dir}"
-    s += f"\nlocale_dir = {bleachbit.locale_dir}"
-    s += f"\noptions_dir = {bleachbit.options_dir}"
-    s += f"\npersonal_cleaners_dir = {bleachbit.personal_cleaners_dir}"
-    s += f"\nsystem_cleaners_dir = {bleachbit.system_cleaners_dir}"
+    s += f"\nlocal_cleaners_dir = {bleachbit.LOCAL_CLEANERS_DIR}"
+    s += f"\nlocale_dir = {bleachbit.LOCALE_DIR}"
+    s += f"\noptions_dir = {bleachbit.OPTIONS_DIR}"
+    s += f"\npersonal_cleaners_dir = {bleachbit.PERSONAL_CLEANERS_DIR}"
+    s += f"\nsystem_cleaners_dir = {bleachbit.SYSTEM_CLEANERS_DIR}"
 
     # this section is for information about the system environment
     s += f"\nlocale.getdefaultlocale = {str(locale.getdefaultlocale())}"

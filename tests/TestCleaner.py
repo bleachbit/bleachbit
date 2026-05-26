@@ -54,12 +54,12 @@ def register_all_cleaners():
     _patch_options_paths() changes the options directory during testing
     to a clean directory, so by default it will not have Winapp2.ini.
     """
-    os.makedirs(bleachbit.personal_cleaners_dir, exist_ok=True)
-    print(f"personal_cleaners_dir: {bleachbit.personal_cleaners_dir}")
+    os.makedirs(bleachbit.PERSONAL_CLEANERS_DIR, exist_ok=True)
+    print(f"personal_cleaners_dir: {bleachbit.PERSONAL_CLEANERS_DIR}")
     shutil.copyfile(
         get_winapp2(),
-            os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini'),
-        )
+        os.path.join(bleachbit.PERSONAL_CLEANERS_DIR, 'winapp2.ini'),
+    )
     if not backends:
         list(register_cleaners())
     assert len(backends) > 1

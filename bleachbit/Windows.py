@@ -50,7 +50,7 @@ import win32serviceutil
 from win32com.shell import shell, shellcon
 
 import bleachbit
-from bleachbit import _, Command, FileUtilities
+from bleachbit import _
 
 psapi = windll.psapi
 kernel = windll.kernel32
@@ -143,6 +143,7 @@ def check_dll_hijacking(window=None, show_modal=False):
 
 def cleanup_nonce():
     """On exit, clean up GTK junk files"""
+    from bleachbit import FileUtilities
     for fn in glob.glob(os.path.expandvars(r'%TEMP%\gdbus-nonce-file-*')):
         logger.debug('cleaning GTK nonce file: %s', fn)
         FileUtilities.delete(fn)
@@ -252,6 +253,8 @@ def delete_registry_key(parent_key, really_delete, excludekeys=None):
 
 def delete_updates():
     """Returns commands for deleting Windows Updates files"""
+    # Avoid a circular import.
+    from bleachbit import Command, FileUtilities
     if not shell.IsUserAnAdmin():
         logger.info('delete_updates: not an admin, skipping')
         return
@@ -417,7 +420,7 @@ def elevate_privileges(uac):
         exe = sys.executable
         parameters = "--gui --no-uac"
     else:
-        pyfile = os.path.join(bleachbit.bleachbit_exe_path, 'bleachbit.py')
+        pyfile = os.path.join(bleachbit.BLEACHBIT_EXE_PATH, 'bleachbit.py')
         # If the Python file is on a network drive, do not offer the UAC because
         # the administrator may not have privileges and user will not be
         # prompted.
@@ -570,6 +573,8 @@ def get_known_folder_path(folder_name):
 
 def get_recycle_bin():
     """Yield a list of files in the recycle bin"""
+    # Avoid a circular import.
+    from bleachbit import FileUtilities
     pidl = shell.SHGetSpecialFolderLocation(0, shellcon.CSIDL_BITBUCKET)
     desktop = shell.SHGetDesktopFolder()
     h = desktop.BindToObject(pidl, None, shell.IID_IShellFolder)
@@ -799,7 +804,7 @@ def get_font_conf_file():
     """Return the full path to fonts.conf"""
     if hasattr(sys, 'frozen'):
         # running inside py2exe
-        return os.path.join(bleachbit.bleachbit_exe_path, 'etc', 'fonts', 'fonts.conf')
+        return os.path.join(bleachbit.BLEACHBIT_EXE_PATH, 'etc', 'fonts', 'fonts.conf')
 
     import gi
     gnome_dir = os.path.join(os.path.dirname(os.path.dirname(gi.__file__)), 'gnome')

@@ -14,9 +14,6 @@ APP_URL = "https://www.bleachbit.org"
 
 SOCKET_TIMEOUT = 10
 
-# Setting below value to false disables update notification (useful
-# for packages in repositories).
-ONLINE_UPDATE_NOTIFICATION_ENABLED = True
 
 # The separator between message context and message id. This value is the same as
 # the one used in gettext.h, so PO files should be still valid when Python gettext

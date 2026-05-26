@@ -29,7 +29,7 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
     """Download latest winapp2.ini file.  Hash is sha512 or None to disable checks"""
     # first, determine whether an update is necessary
 
-    fn = os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini')
+    fn = os.path.join(bleachbit.PERSONAL_CLEANERS_DIR, 'winapp2.ini')
     if os.path.exists(fn):
         with open(fn, 'rb') as f:
             hash_current = hashlib.sha512(f.read()).hexdigest()
@@ -94,7 +94,7 @@ def update_dialog(parent, updates):
 
 def check_updates(check_beta, check_winapp2, append_text, cb_success):
     """Check for updates via the Internet"""
-    url = bleachbit.update_check_url
+    url = bleachbit.UPDATE_CHECK_URL
     if 'windowsapp' in sys.executable.lower():
         url += '?windowsapp=1'
     # https://github.com/bleachbit/bleachbit/issues/2095

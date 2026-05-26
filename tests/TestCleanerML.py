@@ -96,15 +96,15 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         list(load_cleaners())
 
         # should catch exception with invalid XML
-        pcd = bleachbit.personal_cleaners_dir
-        bleachbit.personal_cleaners_dir = self.mkdtemp(
+        pcd = bleachbit.PERSONAL_CLEANERS_DIR
+        bleachbit.PERSONAL_CLEANERS_DIR = self.mkdtemp(
             prefix='bleachbit-cleanerml-load')
-        self.write_file(os.path.join(bleachbit.personal_cleaners_dir, 'invalid.xml'),
+        self.write_file(os.path.join(bleachbit.PERSONAL_CLEANERS_DIR, 'invalid.xml'),
                         contents=b'<xml><broken>')
         list(load_cleaners())
         import shutil
-        shutil.rmtree(bleachbit.personal_cleaners_dir)
-        bleachbit.personal_cleaners_dir = pcd
+        shutil.rmtree(bleachbit.PERSONAL_CLEANERS_DIR)
+        bleachbit.PERSONAL_CLEANERS_DIR = pcd
 
     def test_os_match(self):
         """Unit test for os_match"""

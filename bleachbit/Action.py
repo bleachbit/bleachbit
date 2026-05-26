@@ -18,7 +18,7 @@ from itertools import product
 from subprocess import Popen
 
 from bleachbit import Command, FileUtilities, General, Special, DeepScan, Windows
-from bleachbit import _, fs_scan_re_flags
+from bleachbit import _, FS_SCAN_RE_FLAGS
 
 
 logger = logging.getLogger(__name__)
@@ -170,23 +170,24 @@ class FileActionProvider(ActionProvider):
         basename = os.path.basename
         object_type = self.object_type
         if self.regex:
-            regex_c_search = re.compile(self.regex, fs_scan_re_flags).search
+            regex_c_search = re.compile(self.regex, FS_SCAN_RE_FLAGS).search
         else:
             regex_c_search = None
 
         if self.nregex:
-            nregex_c_search = re.compile(self.nregex, fs_scan_re_flags).search
+            nregex_c_search = re.compile(self.nregex, FS_SCAN_RE_FLAGS).search
         else:
             nregex_c_search = None
 
         if self.wholeregex:
-            wholeregex_c_search = re.compile(self.wholeregex, fs_scan_re_flags).search
+            wholeregex_c_search = re.compile(
+                self.wholeregex, FS_SCAN_RE_FLAGS).search
         else:
             wholeregex_c_search = None
 
         if self.nwholeregex:
             nwholeregex_c_search = re.compile(
-                self.nwholeregex, fs_scan_re_flags).search
+                self.nwholeregex, FS_SCAN_RE_FLAGS).search
         else:
             nwholeregex_c_search = None
 

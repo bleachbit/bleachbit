@@ -37,7 +37,6 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
 
     @classmethod
     def setUpClass(cls):
-        bleachbit.online_update_notification_enabled = False
         cls.old_language = common.get_env('LANGUAGE')
         common.put_env('LANGUAGE', 'en')
         super(ExternalCommandTestCase, ExternalCommandTestCase).setUpClass()

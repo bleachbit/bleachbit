@@ -90,16 +90,16 @@ class OptionsTestCase(common.BleachbitTestCase):
 
     def test_init_configuration(self):
         """Test for init_configuration()"""
-        if os.path.exists(bleachbit.options_file):
-            os.remove(bleachbit.options_file)
-        self.assertNotExists(bleachbit.options_file)
+        if os.path.exists(bleachbit.OPTIONS_FILE):
+            os.remove(bleachbit.OPTIONS_FILE)
+        self.assertNotExists(bleachbit.OPTIONS_FILE)
         bleachbit.Options.init_configuration()
-        self.assertExists(bleachbit.options_file)
+        self.assertExists(bleachbit.OPTIONS_FILE)
 
     def test_is_corrupt(self):
         """Test is_corrupt()"""
         def _test_is_corrupt(contents, expect_is_corrupt):
-            with open(bleachbit.options_file, 'w') as f:
+            with open(bleachbit.OPTIONS_FILE, 'w') as f:
                 f.write(contents)
             o = bleachbit.Options.Options()
             self.assertEqual(o.is_corrupt(), expect_is_corrupt)
@@ -114,7 +114,7 @@ class OptionsTestCase(common.BleachbitTestCase):
         # test invalid boolean
         # https://github.com/bleachbit/bleachbit/issues/560#issuecomment-497361700
         _test_is_corrupt("[bleachbit]\nshred=['True']\n", True)
-        os.remove(bleachbit.options_file)
+        os.remove(bleachbit.OPTIONS_FILE)
 
     def test_purge(self):
         """Test purging"""

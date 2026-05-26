@@ -12,7 +12,7 @@ GTK graphical user interface
 
 from bleachbit import GuiBasic
 from bleachbit import Cleaner, FileUtilities
-from bleachbit import _, APP_NAME, appicon_path, portable_mode, windows10_theme_path
+from bleachbit import _, APP_NAME, APPICON_PATH, PORTABLE_MODE, WINDOWS10_THEME_PATH
 from bleachbit.Options import options
 
 # Now that the configuration is loaded, honor the debug preference there.
@@ -51,13 +51,13 @@ def threaded(func):
 
 def notify(msg):
     """Show a popup-notification"""
-    from bleachbit import bleachbit_exe_path
+    from bleachbit import BLEACHBIT_EXE_PATH
 
     # On Windows 10, PNG does not work.
     __icon_fns = (
-        os.path.normpath(os.path.join(bleachbit_exe_path,
+        os.path.normpath(os.path.join(BLEACHBIT_EXE_PATH,
                                       'share\\bleachbit.ico')),
-        os.path.normpath(os.path.join(bleachbit_exe_path,
+        os.path.normpath(os.path.join(BLEACHBIT_EXE_PATH,
                                       'windows\\bleachbit.ico')))
 
     icon_fn = None
@@ -129,7 +129,7 @@ class Bleachbit(Gtk.Application):
         """
 
         builder = Gtk.Builder()
-        builder.add_from_file(bleachbit.app_menu_filename)
+        builder.add_from_file(bleachbit.APP_MENU_FILENAME)
         menu = builder.get_object('app-menu')
         self.set_app_menu(menu)
 
@@ -152,7 +152,7 @@ class Bleachbit(Gtk.Application):
 
     def cb_help(self, action, param):
         """Callback for help"""
-        GuiBasic.open_url(bleachbit.help_contents_url, self._window)
+        GuiBasic.open_url(bleachbit.HELP_CONTENTS_URL, self._window)
 
     def cb_make_chaff(self, action, param):
         """Callback to make chaff"""
@@ -206,16 +206,16 @@ class Bleachbit(Gtk.Application):
         """Shred settings (for privacy reasons) and quit"""
         # build a list of paths to delete
         paths = []
-        if portable_mode:
+        if PORTABLE_MODE:
             # in portable mode on Windows, the options directory includes
             # executables
-            paths.append(bleachbit.options_file)
-            if os.path.isdir(bleachbit.personal_cleaners_dir):
-                paths.append(bleachbit.personal_cleaners_dir)
-            for f in glob.glob(os.path.join(bleachbit.options_dir, "*.bz2")):
+            paths.append(bleachbit.OPTIONS_FILE)
+            if os.path.isdir(bleachbit.PERSONAL_CLEANERS_DIR):
+                paths.append(bleachbit.PERSONAL_CLEANERS_DIR)
+            for f in glob.glob(os.path.join(bleachbit.OPTIONS_DIR, "*.bz2")):
                 paths.append(f)
         else:
-            paths.append(bleachbit.options_dir)
+            paths.append(bleachbit.OPTIONS_DIR)
 
         # prompt the user to confirm
         if not GUI.shred_paths(self._window, paths, shred_settings=True):
@@ -265,20 +265,23 @@ class Bleachbit(Gtk.Application):
                                  version=bleachbit.APP_VERSION,
                                  website=bleachbit.APP_URL,
                                  transient_for=self._window)
-        try:
-            with open(bleachbit.license_filename) as f_license:
-                dialog.set_license(f_license.read())
-        except (IOError, TypeError):
-            dialog.set_license(
-                _("GNU General Public License version 3 or later.\nSee https://www.gnu.org/licenses/gpl-3.0.txt"))
+
+        license_txt = _("GNU General Public License version 3 or later.\nSee https://www.gnu.org/licenses/gpl-3.0.txt")
+        if os.path.exists(bleachbit.LICENSE_FILENAME):
+            try:
+                with open(bleachbit.LICENSE_FILENAME, encoding='utf-8') as f_license:
+                    license_txt = f_license.read()
+            except (IOError, TypeError) as e:
+                logger.error(f'Error opening license file {bleachbit.LICENSE_FILENAME}: {e}')
+        dialog.set_license(license_txt)
         # dialog.set_name(APP_NAME)
         # TRANSLATORS: Maintain the names of translators here.
         # Launchpad does this automatically for translations
         # typed in Launchpad. This is a special string shown
         # in the 'About' box.
         dialog.set_translator_credits(_("translator-credits"))
-        if appicon_path and os.path.exists(appicon_path):
-            icon = Gtk.Image.new_from_file(appicon_path)
+        if APPICON_PATH and os.path.exists(APPICON_PATH):
+            icon = Gtk.Image.new_from_file(APPICON_PATH)
             dialog.set_logo(icon.get_pixbuf())
 
         return dialog
@@ -575,7 +578,7 @@ class GUI(Gtk.ApplicationWindow):
 
         if options.is_corrupt():
             logger.error(
-                _('Resetting the configuration file because it is corrupt: %s') % bleachbit.options_file)
+                _('Resetting the configuration file because it is corrupt: %s') % bleachbit.OPTIONS_FILE)
             bleachbit.Options.init_configuration()
 
         GLib.idle_add(self.cb_refresh_operations)
@@ -826,7 +829,6 @@ class GUI(Gtk.ApplicationWindow):
 
         # Check for online updates.
         if self._interactive and \
-            bleachbit.online_update_notification_enabled and \
             options.get("check_online_updates") and \
                 not hasattr(self, 'checked_for_updates'):
             self.checked_for_updates = True
@@ -1138,11 +1140,11 @@ class GUI(Gtk.ApplicationWindow):
         if not self._style_provider_regular:
             self._style_provider_regular = Gtk.CssProvider()
             self._style_provider_regular.load_from_path(
-                os.path.join(windows10_theme_path, 'gtk.css'))
+                os.path.join(WINDOWS10_THEME_PATH, 'gtk.css'))
         if not self._style_provider_dark:
             self._style_provider_dark = Gtk.CssProvider()
             self._style_provider_dark.load_from_path(
-                os.path.join(windows10_theme_path, 'gtk-dark.css'))
+                os.path.join(WINDOWS10_THEME_PATH, 'gtk-dark.css'))
 
         screen = Gdk.Display.get_default_screen(Gdk.Display.get_default())
         if self._style_provider is not None:
@@ -1170,8 +1172,8 @@ class GUI(Gtk.ApplicationWindow):
         self.connect("show", self.on_show)
         self.connect("key-press-event", self.on_key_press_event)
 
-        if appicon_path and os.path.exists(appicon_path):
-            self.set_icon_from_file(appicon_path)
+        if APPICON_PATH and os.path.exists(APPICON_PATH):
+            self.set_icon_from_file(APPICON_PATH)
 
         # add headerbar
         self.headerbar = self.create_headerbar()

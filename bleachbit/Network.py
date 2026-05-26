@@ -27,7 +27,7 @@ except ImportError:
 import requests
 
 # local imports
-from bleachbit import bleachbit_exe_path, APP_VERSION
+from bleachbit import BLEACHBIT_EXE_PATH, APP_VERSION
 from bleachbit import _
 from bleachbit.FileUtilities import delete
 
@@ -145,7 +145,7 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
     assert timeout > 0
     if hasattr(sys, 'frozen'):
         # when frozen by py2exe, certificates are in alternate location
-        ca_bundle = os.path.join(bleachbit_exe_path, 'cacert.pem')
+        ca_bundle = os.path.join(BLEACHBIT_EXE_PATH, 'cacert.pem')
         if os.path.exists(ca_bundle):
             requests.utils.DEFAULT_CA_BUNDLE_PATH = ca_bundle
             requests.adapters.DEFAULT_CA_BUNDLE_PATH = ca_bundle

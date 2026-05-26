@@ -57,14 +57,14 @@ def path_to_option(pathname):
 
 def init_configuration():
     """Initialize an empty configuration, if necessary"""
-    if not os.path.exists(bleachbit.options_dir):
-        General.makedirs(bleachbit.options_dir)
-    if os.path.lexists(bleachbit.options_file):
-        logger.debug('Deleting configuration: %s ' % bleachbit.options_file)
-        os.remove(bleachbit.options_file)
-    with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as f_ini:
+    if not os.path.exists(bleachbit.OPTIONS_DIR):
+        General.makedirs(bleachbit.OPTIONS_DIR)
+    if os.path.lexists(bleachbit.OPTIONS_FILE):
+        logger.debug('Deleting configuration: %s ' % bleachbit.OPTIONS_FILE)
+        os.remove(bleachbit.OPTIONS_FILE)
+    with open(bleachbit.OPTIONS_FILE, 'w', encoding='utf-8-sig') as f_ini:
         f_ini.write('[bleachbit]\n')
-        if bleachbit.portable_mode:
+        if bleachbit.PORTABLE_MODE:
             f_ini.write('[Portable]\n')
     for section in options.config.sections():
         options.config.remove_section(section)
@@ -87,16 +87,16 @@ class Options:
         """Write information to disk"""
         if not self.purged:
             self.__purge()
-        if not os.path.exists(bleachbit.options_dir):
-            General.makedirs(bleachbit.options_dir)
-        with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as _file:
+        if not os.path.exists(bleachbit.OPTIONS_DIR):
+            General.makedirs(bleachbit.OPTIONS_DIR)
+        with open(bleachbit.OPTIONS_FILE, 'w', encoding='utf-8-sig') as _file:
             try:
                 self.config.write(_file)
             except IOError as e:
                 from errno import ENOSPC
                 if e.errno == ENOSPC:
                     logger.error(
-                        _("Disk was full when writing configuration to file %s"), bleachbit.options_file)
+                        _("Disk was full when writing configuration to file %s"), bleachbit.OPTIONS_FILE)
                 else:
                     raise
 
@@ -235,7 +235,7 @@ class Options:
     def restore(self):
         """Restore saved options from disk"""
         try:
-            self.config.read(bleachbit.options_file, encoding='utf-8-sig')
+            self.config.read(bleachbit.OPTIONS_FILE, encoding='utf-8-sig')
         except:
             logger.exception("Error reading application's configuration")
         if not self.config.has_section("bleachbit"):
@@ -269,7 +269,7 @@ class Options:
         self.__set_default("win10_theme", False)
 
         if not self.config.has_section('preserve_languages'):
-            lang = bleachbit.user_locale
+            lang = bleachbit.USER_LOCALE
             pos = lang.find('_')
             if -1 != pos:
                 lang = lang[0: pos]

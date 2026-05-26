@@ -44,9 +44,6 @@ from bleachbit.Options import options
 
 from tests import common
 
-bleachbit.online_update_notification_enabled = False
-
-
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
 class GUITestCase(common.BleachbitTestCase):
     app = Bleachbit(auto_exit=False, uac=False, interactive=False)

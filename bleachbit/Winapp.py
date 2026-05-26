@@ -450,7 +450,7 @@ class Winapp:
 
 def list_winapp_files():
     """List winapp2.ini files"""
-    for dirname in (bleachbit.personal_cleaners_dir, bleachbit.system_cleaners_dir):
+    for dirname in (bleachbit.PERSONAL_CLEANERS_DIR, bleachbit.SYSTEM_CLEANERS_DIR):
         fname = os.path.join(dirname, 'winapp2.ini')
         if os.path.exists(fname):
             yield fname

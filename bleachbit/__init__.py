@@ -9,46 +9,35 @@
 Code that is commonly shared throughout BleachBit
 """
 
-
 import gettext
 import locale
 import os
 import sys
-import warnings
+from configparser import RawConfigParser, NoOptionError # used in other files
 
-from bleachbit import Log
 from bleachbit.Constant import (
     APP_NAME,
     APP_URL,
     APP_VERSION,
-    BASE_URL as base_url,
-    FS_SCAN_RE_FLAGS as fs_scan_re_flags,
+    BASE_URL,
+    FS_SCAN_RE_FLAGS,
     GETTEXT_CONTEXT_GLUE,
-    HELP_CONTENTS_URL as help_contents_url,
-    ONLINE_UPDATE_NOTIFICATION_ENABLED as online_update_notification_enabled,
-    RELEASE_NOTES_URL as release_notes_url,
-    SOCKET_TIMEOUT as socket_timeout,
-    UPDATE_CHECK_URL as update_check_url,
+    HELP_CONTENTS_URL,
+    RELEASE_NOTES_URL,
+    SOCKET_TIMEOUT,
+    UPDATE_CHECK_URL,
 )
-from configparser import RawConfigParser, NoOptionError # used in other files
 
-import win_unicode_console
 
-if sys.version_info < (3, 4, 4):
-    print('This version requires Python 3.4.4.')
-    sys.exit(1)
+from bleachbit import Log
 
-if not os.name == 'nt':
-    print('This version requires Windows.')
-    sys.exit(1)
 
 if hasattr(sys, 'frozen') and sys.frozen == 'windows_exe':
-    stdout_encoding = 'utf-8'
+    STDOUT_ENCODING = 'utf-8'
 else:
-    stdout_encoding = sys.stdout.encoding
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", RuntimeWarning)
-        win_unicode_console.enable()
+    STDOUT_ENCODING = sys.stdout.encoding
+    # win_unicode_console is enabled in bootstrap() in bleachbit.py.
+
 
 logger = Log.init_log()
 
@@ -57,123 +46,115 @@ logger = Log.init_log()
 #
 
 # Windows
-bleachbit_exe_path = None
+BLEACHBIT_EXE_PATH = None
 if hasattr(sys, 'frozen'):
     # running frozen in py2exe
-    bleachbit_exe_path = os.path.dirname(sys.executable)
+    BLEACHBIT_EXE_PATH = os.path.dirname(sys.executable)
 else:
     # __file__ is absolute path to __init__.py
-    bleachbit_exe_path = os.path.dirname(os.path.dirname(__file__))
+    BLEACHBIT_EXE_PATH = os.path.dirname(os.path.dirname(__file__))
 
 # license
-license_filename = None
-license_filenames = (
-    os.path.join(bleachbit_exe_path, 'COPYING'),
-)
-for lf in license_filenames:
-    if os.path.exists(lf):
-        license_filename = lf
-        break
+LICENSE_FILENAME = os.path.join(BLEACHBIT_EXE_PATH, 'COPYING')
 
 # configuration
-portable_mode = False
-options_dir = None
-os.environ.pop('FONTCONFIG_FILE', None)
-if os.path.exists(os.path.join(bleachbit_exe_path, 'bleachbit.ini')):
+PORTABLE_MODE = False
+OPTIONS_DIR = None
+if os.path.exists(os.path.join(BLEACHBIT_EXE_PATH, 'bleachbit.ini')):
     # portable mode
-    portable_mode = True
-    options_dir = bleachbit_exe_path
+    PORTABLE_MODE = True
+    OPTIONS_DIR = BLEACHBIT_EXE_PATH
 else:
     # installed mode
-    options_dir = os.path.expandvars(r"${APPDATA}\BleachBit")
+    OPTIONS_DIR = os.path.expandvars(r"${APPDATA}\BleachBit")
 
 try:
-    options_dir = os.environ['BLEACHBIT_TEST_OPTIONS_DIR']
+    OPTIONS_DIR = os.environ['BLEACHBIT_TEST_OPTIONS_DIR']
 except KeyError:
     pass
 
-options_file = os.path.join(options_dir, "bleachbit.ini")
+OPTIONS_FILE = os.path.join(OPTIONS_DIR, "bleachbit.ini")
 
 # check whether the application is running from the source tree
-if not portable_mode:
+if not PORTABLE_MODE:
     paths = (
         '../cleaners',
         '../Makefile',
         '../COPYING')
     existing = (
-        os.path.exists(os.path.join(bleachbit_exe_path, path))
+        os.path.exists(os.path.join(BLEACHBIT_EXE_PATH, path))
         for path in paths)
-    portable_mode = all(existing)
+    PORTABLE_MODE = all(existing)
 
 # personal cleaners
-personal_cleaners_dir = os.path.join(options_dir, "cleaners")
+PERSONAL_CLEANERS_DIR = os.path.join(OPTIONS_DIR, "cleaners")
 
 # system cleaners
-# On Windows in portable mode, the bleachbit_exe_path is equal to
+# On Windows in portable mode, the BLEACHBIT_EXE_PATH is equal to
 # options_dir, so be careful that system_cleaner_dir is not set to
 # personal_cleaners_dir.
-if os.path.isdir(os.path.join(bleachbit_exe_path, 'cleaners')) and not portable_mode:
-    system_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
+if os.path.isdir(os.path.join(BLEACHBIT_EXE_PATH, 'cleaners')) and not PORTABLE_MODE:
+    SYSTEM_CLEANERS_DIR = os.path.join(BLEACHBIT_EXE_PATH, 'cleaners')
 else:
-    system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
+    SYSTEM_CLEANERS_DIR = os.path.join(BLEACHBIT_EXE_PATH, 'share\\cleaners\\')
 
 # local cleaners directory for running without installation
-local_cleaners_dir = None
-if portable_mode:
-    local_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
+LOCAL_CLEANERS_DIR = None
+if PORTABLE_MODE:
+    LOCAL_CLEANERS_DIR = os.path.join(BLEACHBIT_EXE_PATH, 'cleaners')
 
 # windows10 theme
-windows10_theme_path = os.path.normpath(os.path.join(bleachbit_exe_path, 'themes/windows10'))
+WINDOWS10_THEME_PATH = os.path.normpath(
+    os.path.join(BLEACHBIT_EXE_PATH, 'themes/windows10'))
 
 # application icon
 __icons = (
-    os.path.normpath(os.path.join(bleachbit_exe_path,
+    os.path.normpath(os.path.join(BLEACHBIT_EXE_PATH,
                                   'share\\bleachbit.png')),
     # When running from source (i.e., not installed).
-    os.path.normpath(os.path.join(bleachbit_exe_path, 'bleachbit.png')),
+    os.path.normpath(os.path.join(BLEACHBIT_EXE_PATH, 'bleachbit.png')),
 )
-appicon_path = None
+APPICON_PATH = None
 for __icon in __icons:
     if os.path.exists(__icon):
-        appicon_path = __icon
+        APPICON_PATH = __icon
 
 # menu
 # This path works when running from source (cross platform) or when
 # installed on Windows.
-app_menu_filename = os.path.join(bleachbit_exe_path, 'data', 'app-menu.ui')
-if not os.path.exists(app_menu_filename):
+APP_MENU_FILENAME = os.path.join(BLEACHBIT_EXE_PATH, 'data', 'app-menu.ui')
+if not os.path.exists(APP_MENU_FILENAME):
     logger.error('unknown location for app-menu.ui')
 
 # locale directory
 if os.path.exists("./locale/"):
     # local locale (personal)
-    locale_dir = os.path.abspath("./locale/")
+    LOCALE_DIR = os.path.abspath("./locale/")
 else:
-    locale_dir = os.path.join(bleachbit_exe_path, "share\\locale\\")
-
+    LOCALE_DIR = os.path.join(BLEACHBIT_EXE_PATH, "share\\locale\\")
 
 
 #
 # gettext
 #
 try:
-    (user_locale, encoding) = locale.getdefaultlocale()
+    (USER_LOCALE, encoding) = locale.getdefaultlocale()
 except:
     logger.exception('error getting locale')
-    user_locale = None
+    USER_LOCALE = None
     encoding = None
 
-if user_locale is None:
-    user_locale = 'C'
-    logger.warning("no default locale found.  Assuming '%s'", user_locale)
+if USER_LOCALE is None:
+    USER_LOCALE = 'C'
+    logger.warning("no default locale found.  Assuming '%s'", USER_LOCALE)
 
 # Windows-only
-os.environ['LANG'] = user_locale
+os.environ['LANG'] = USER_LOCALE
 
 try:
-    if not os.path.exists(locale_dir):
+    if not os.path.exists(LOCALE_DIR):
         raise RuntimeError('translations not installed')
-    t = gettext.translation('bleachbit', locale_dir)
+    t = gettext.translation('bleachbit', LOCALE_DIR)
     _ = t.gettext
 except:
     def _(msg):
@@ -181,7 +162,7 @@ except:
         return msg
 
 try:
-    locale.bindtextdomain('bleachbit', locale_dir)
+    locale.bindtextdomain('bleachbit', LOCALE_DIR)
 except AttributeError:
     try:
         # We're on Windows; try and use libintl-8.dll instead
@@ -192,7 +173,7 @@ except AttributeError:
         pass
     else:
         # bindtextdomain can not handle Unicode
-        libintl.bindtextdomain(b'bleachbit', locale_dir.encode('utf-8'))
+        libintl.bindtextdomain(b'bleachbit', LOCALE_DIR.encode('utf-8'))
         libintl.bind_textdomain_codeset(b'bleachbit', b'UTF-8')
 except:
     logger.exception('error binding text domain')
@@ -239,10 +220,6 @@ def pgettext(msgctxt, msgid):
 
 # Map our pgettext() custom function to _p()
 _p = pgettext
-
-# set up environment variables
-from bleachbit import Windows
-Windows.setup_environment()
 
 #
 # Exceptions
