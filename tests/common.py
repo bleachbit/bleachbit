@@ -21,7 +21,7 @@ import win32gui
 import bleachbit
 import bleachbit.Options
 from bleachbit.FileUtilities import extended_path, is_normal_directory
-from bleachbit.Windows import is_junction
+from bleachbit.Windows import is_junction, setup_environment
 
 
 class BleachbitTestCase(unittest.TestCase):
@@ -33,6 +33,7 @@ class BleachbitTestCase(unittest.TestCase):
         """Create a temporary directory for the testcase"""
         cls.tempdir = tempfile.mkdtemp(prefix=cls.__name__)
         print(cls.tempdir)
+        setup_environment()
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             cls._patch_options_paths()
 
@@ -158,7 +159,7 @@ class BleachbitTestCase(unittest.TestCase):
 
 
 def getTestPath(path):
-    return extended_path(os.path.normpath(path))
+    return extended_path(os.path.abspath(os.path.normpath(path)))
 
 
 def get_env(key):
