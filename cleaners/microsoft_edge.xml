@@ -20,8 +20,11 @@ later.  See the COPYING file in the top-level directory.
   </var>
   <var name="profile">
     <value os="windows">%LocalAppData%\Microsoft\Edge\User Data\Default</value>
+    <value search="glob" os="windows">%LocalAppData%\Microsoft\Edge\User Data\Profile *</value>
     <value os="linux">$XDG_CONFIG_HOME/microsoft-edge-beta/Default</value>
+    <value search="glob" os="linux">$XDG_CONFIG_HOME/microsoft-edge-beta/Profile *</value>
     <value os="linux">$XDG_CONFIG_HOME/microsoft-edge/Default</value>
+    <value search="glob" os="linux">$XDG_CONFIG_HOME/microsoft-edge/Profile *</value>
   </var>
   <option id="cache">
     <label>Cache</label>

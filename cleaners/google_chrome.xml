@@ -21,11 +21,17 @@ later.  See the COPYING file in the top-level directory.
   </var>
   <var name="profile">
     <value os="windows">%LocalAppData%\Google\Chrome\User Data\Default</value>
+    <value search="glob" os="windows">%LocalAppData%\Google\Chrome\User Data\Profile *</value>
     <value os="linux">$XDG_CONFIG_HOME/google-chrome/Default</value>
+    <value search="glob" os="linux">$XDG_CONFIG_HOME/google-chrome/Profile *</value>
     <value os="linux">$XDG_CONFIG_HOME/google-chrome-beta/Default</value>
+    <value search="glob" os="linux">$XDG_CONFIG_HOME/google-chrome-beta/Profile *</value>
     <value os="linux">$XDG_CONFIG_HOME/google-chrome-unstable/Default</value>
+    <value search="glob" os="linux">$XDG_CONFIG_HOME/google-chrome-unstable/Profile *</value>
     <value os="linux">~/.var/app/com.google.Chrome/config/google-chrome/Default</value>
+    <value search="glob" os="linux">~/.var/app/com.google.Chrome/config/google-chrome/Profile *</value>
     <value os="linux">~/.var/app/com.google.ChromeDev/config/google-chrome/Default</value>
+    <value search="glob" os="linux">~/.var/app/com.google.ChromeDev/config/google-chrome/Profile *</value>
   </var>
   <option id="ai">
     <label translators="Cleaning option that deletes AI models in a web browser">AI</label>
