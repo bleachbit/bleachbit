@@ -155,17 +155,48 @@ def bytes_to_human(bytes_i):
 
 
 def children_in_directory(top, list_directories=False):
-    """Iterate files and, optionally, subdirectories in directory"""
+    """Iterate files and, optionally, subdirectories in directory
+
+    Directories are returned after children to avoid trying to delete
+    a non-empty directory.
+    """
     if type(top) is tuple:
         for top_ in top:
             yield from children_in_directory(top_, list_directories)
         return
-    for (dirpath, dirnames, filenames) in walk(top, topdown=False):
+
+    def _normalized_prefix(path):
+        norm_path = os.path.normpath(path).lower()
+        if not norm_path.endswith(os.sep):
+            norm_path += os.sep
+        return norm_path
+
+    pending_dirs = [] if list_directories else None
+
+    for (dirpath, dirnames, filenames) in walk(top, topdown=True, followlinks=False):
         if list_directories:
-            for dirname in dirnames:
-                yield os.path.join(dirpath, dirname)
+            current_prefix = _normalized_prefix(dirpath)
+            while pending_dirs and not current_prefix.startswith(pending_dirs[-1][1]):
+                yield pending_dirs.pop()[0]
+
+        if dirnames:
+            # Avoid traversing Windows symlinks or junctions.
+            link_dirnames = []
+            for dirname in list(dirnames):
+                if os.path.islink(os.path.join(dirpath, dirname)):
+                    link_dirnames.append(dirname)
+                    dirnames.remove(dirname)
+            if list_directories:
+                for dirname in link_dirnames:
+                    yield os.path.join(dirpath, dirname)
+        if list_directories and dirpath != top:
+            pending_dirs.append((dirpath, _normalized_prefix(dirpath)))
         for filename in filenames:
             yield os.path.join(dirpath, filename)
+
+    if list_directories:
+        while pending_dirs:
+            yield pending_dirs.pop()[0]
 
 
 def clean_ini(path, section, parameter):
@@ -360,6 +391,13 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         if ignore_missing:
             return False
         raise OSError(2, 'No such file or directory', path)
+    # Windows junctions are directories but must be removed as links.
+    if os.path.islink(path):
+        if os.path.isdir(path):
+            os.rmdir(path)
+        else:
+            os.remove(path)
+        return True
     if os.path.isdir(path):
         delpath = path
         if do_shred:
@@ -400,9 +438,6 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         return True
     elif os.path.isfile(path):
         delete_file(path, do_shred)
-        return True
-    elif os.path.islink(path):
-        os.remove(path)
         return True
     else:
         logger.info(_("Special file type cannot be deleted: %s"), path)

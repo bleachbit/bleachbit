@@ -87,7 +87,123 @@ class WindowsTestCase(common.BleachbitTestCase):
     def test_get_recycle_bin(self):
         """Unit test for get_recycle_bin"""
         for f in get_recycle_bin():
-            self.assertExists(extended_path(f))
+            self.assertLExists(extended_path(f))
+
+    def _create_win_dir_link(self, mklink_option, target_dir, link_pathname):
+        """Create a directory junction or symlink."""
+        args = ('cmd', '/c', 'mklink', mklink_option,
+                link_pathname, target_dir)
+        (rc, _stdout, stderr) = run_external(args)
+        self.assertEqual(rc, 0, stderr)
+        self.assertTrue(is_junction(link_pathname))
+        self.assertFalse(is_normal_directory(link_pathname))
+
+    def _test_broken_link_in_recycle_bin(self, mklink_option, recycle_container,
+                                         break_before_recycle):
+        """Test broken directory junctions and symlinks in the recycle bin.
+
+        When a broken link (target deleted) is in the recycle bin, deleting it
+        should delete the link itself, not attempt to follow or restore the
+        target.
+
+        Args:
+            mklink_option: Link type to create. '/j' for directory junction,
+                '/d' for directory symbolic link.
+            recycle_container: If True, move the container directory to the
+                recycle bin. If False, move only the link itself.
+            break_before_recycle: If True, delete the target before moving
+                the link to the recycle bin. If False, recycle first and then
+                delete the target.
+        """
+        assert mklink_option in ('/j', '/d')
+        if mklink_option == '/d':
+            self.skipUnlessAdmin()
+
+        before = set(get_recycle_bin())
+        target_dir = self.mkdir('target_dir')
+        canary_fn = os.path.join(
+            target_dir, 'canary%d' % random.randint(10000, 9999999))
+        common.touch_file(canary_fn)
+
+        container_dir = self.mkdir('container_dir')
+        link_pathname = os.path.join(container_dir, 'link')
+        self._create_win_dir_link(mklink_option, target_dir, link_pathname)
+        self.assertTrue(os.path.lexists(link_pathname))
+        self.assertExists(canary_fn)
+
+        if break_before_recycle:
+            shutil.rmtree(target_dir, True)
+            self.assertTrue(os.path.lexists(link_pathname))
+            self.assertFalse(os.path.exists(extended_path(link_pathname)))
+
+        move_to_recycle_bin(
+            container_dir if recycle_container else link_pathname)
+
+        if not break_before_recycle:
+            shutil.rmtree(target_dir, True)
+            if not recycle_container:
+                shutil.rmtree(container_dir, True)
+
+        try:
+            added = [p for p in get_recycle_bin() if p not in before]
+            self.assertTrue(
+                added, 'recycle bin should contain recycled link')
+
+            broken = []
+            for f in added:
+                ep = extended_path(f)
+                self.assertLExists(ep)
+                if os.path.islink(f) and not os.path.exists(ep):
+                    broken.append(f)
+            self.assertTrue(
+                broken, 'expected broken link (lexists, not exists)')
+
+            for f in added:
+                FileUtilities.delete(f, shred=False)
+
+            self.assertFalse(os.path.lexists(link_pathname))
+            self.assertFalse(os.path.lexists(target_dir))
+            if recycle_container or not break_before_recycle:
+                self.assertFalse(os.path.lexists(container_dir))
+            else:
+                self.assertTrue(os.path.lexists(container_dir))
+        finally:
+            empty_recycle_bin(None, True)
+            if os.path.lexists(container_dir):
+                shutil.rmtree(container_dir, True)
+            if os.path.lexists(target_dir):
+                shutil.rmtree(target_dir, True)
+
+    def _test_broken_link_delete(self, mklink_option):
+        """Test FileUtilities.delete() on a broken link outside the recycle bin."""
+        assert mklink_option in ('/j', '/d')
+        if mklink_option == '/d':
+            self.skipUnlessAdmin()
+
+        target_dir = self.mkdir('broken_link_delete_target')
+        container_dir = self.mkdir('broken_link_delete_container')
+        link_pathname = os.path.join(container_dir, 'link')
+        self._create_win_dir_link(mklink_option, target_dir, link_pathname)
+        shutil.rmtree(target_dir, True)
+        self.assertLExists(link_pathname)
+        self.assertFalse(os.path.exists(extended_path(link_pathname)))
+        self.assertTrue(FileUtilities.delete(link_pathname, shred=False))
+        self.assertNotLExists(link_pathname)
+        shutil.rmtree(container_dir, True)
+
+    def test_broken_link_in_recycle_bin(self):
+        """Unit test for broken directory junctions and symlinks in recycle bin"""
+        for mklink_option, recycle_container, break_before_recycle in itertools.product(
+            ('/j', '/d'), (False, True), (False, True)
+        ):
+            with self.subTest(mklink_option=mklink_option,
+                              recycle_container=recycle_container,
+                              break_before_recycle=break_before_recycle):
+                self._test_broken_link_in_recycle_bin(
+                    mklink_option, recycle_container, break_before_recycle)
+        for mklink_option in ('/j', '/d'):
+            with self.subTest(mklink_option=mklink_option, outside_bin=True):
+                self._test_broken_link_delete(mklink_option)
 
     @common.skipUnlessDestructive
     def test_get_recycle_bin_destructive(self):
@@ -159,10 +275,7 @@ class WindowsTestCase(common.BleachbitTestCase):
             return
 
         # clear the recycle bin
-        for f in get_recycle_bin():
-            if canary_base in f:
-                logger.error('get_recycle_bin() returned canary: %s', f)
-            FileUtilities.delete(f, shred=False)
+        empty_recycle_bin(None, True)
 
         # verify the canary is still there
         self.assertExists(canary_fn)

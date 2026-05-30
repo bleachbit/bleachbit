@@ -254,9 +254,45 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         for filename in children_in_directory(dirname, False):
             raise AssertionError(
                 'Found a file that shouldn\'t have been found: ' + filename)
-        os.rmdir(subdirname)
 
-        os.rmdir(dirname)
+    def test_children_in_directory_yield_order(self):
+        """Verify children_in_directory yields files before their parent directories.
+
+        With sibling directories, a dir could appear in the
+        output before files contained inside it, causing rmdir to fail on a
+        non-empty directory.
+        """
+        dirname = self.tempdir
+        # test yield order of nested subdirectories
+        dir1 = self.mkdir(os.path.join(dirname, "dir1"))
+        dir1_1 = self.mkdir(os.path.join(dir1, "dir1_1"))
+        dir2 = self.mkdir(os.path.join(dirname, "dir2"))
+        file1 = os.path.join(dir1, "file1.txt")
+        common.touch_file(file1)
+        file1_1 = os.path.join(dir1_1, "file1_1.txt")
+        common.touch_file(file1_1)
+        file2 = os.path.join(dir2, "file2.txt")
+        common.touch_file(file2)
+        common.touch_file(os.path.join(dirname, "file0.txt"))
+
+        yielded = list(children_in_directory(dirname, True))
+
+        # Verify children are yielded before their parents
+        self.assertLess(yielded.index(file1_1), yielded.index(dir1_1))
+        self.assertLess(yielded.index(dir1_1), yielded.index(dir1))
+        self.assertLess(yielded.index(file1), yielded.index(dir1))
+        self.assertLess(yielded.index(file2), yielded.index(dir2))
+
+        # Verify that iterating through yielded paths and deleting them
+        # never attempts to delete a non-empty directory
+        for path in yielded:
+            if os.path.isdir(path):
+                # If this is a directory, it should be empty at this point
+                self.assertTrue(is_dir_empty(path),
+                    f'Directory {path} is not empty when yielded')
+                os.rmdir(path)
+            if os.path.isfile(path):
+                os.remove(path)
 
     def test_clean_ini(self):
         """Unit test for clean_ini()"""
