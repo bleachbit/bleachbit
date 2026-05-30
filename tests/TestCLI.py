@@ -136,7 +136,7 @@ class CLITestCase(common.BleachbitTestCase):
 
             def dummy_delete(path, shred=False):
                 try:
-                    self.assertExists(path)
+                    self.assertLExists(path)
                 except:
                     crash[0] = True
 
