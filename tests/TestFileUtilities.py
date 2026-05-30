@@ -346,29 +346,43 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             file_root.txt
             sub1/
               file1.txt
+              nested/
+                file_nested.txt
             sub2/
               file2.txt
         """
         root = self.mkdir('directory-order-root')  # relative to self.tempdir
         sub1 = self.mkdir(os.path.join(root, 'sub1'))
+        nested = self.mkdir(os.path.join(sub1, 'nested'))
         sub2 = self.mkdir(os.path.join(root, 'sub2'))
 
         file_root = self.mkstemp(prefix='file_root', dir=root)
         file1 = self.mkstemp(prefix='file1', dir=sub1)
+        file_nested = self.mkstemp(prefix='file_nested', dir=nested)
         file2 = self.mkstemp(prefix='file2', dir=sub2)
 
         children = list(children_in_directory(root, list_directories=True))
+        expected = [file_root, file1, file_nested, file2, sub1, nested, sub2]
+        self.assertCountEqual(children, expected)
 
         idx = {p: children.index(p)
-               for p in [file_root, file1, file2, sub1, sub2]}
+               for p in expected}
 
         self.assertLess(idx[file1], idx[sub1],
                         'file1 must appear before sub1')
+        self.assertLess(idx[file_nested], idx[nested],
+                        'file_nested must appear before nested')
+        self.assertLess(idx[nested], idx[sub1],
+                        'nested must appear before sub1')
         self.assertLess(idx[file2], idx[sub2],
                         'file2 must appear before sub2')
         for child in children:
+            if os.path.isdir(child):
+                self.assertTrue(is_dir_empty(child),
+                                f'{child} must be empty before deletion')
             self.assertTrue(delete(child))
-        self.assertNotExists(sub1)
+        self.assertTrue(delete(root))
+        self.assertNotExists(root)
 
     @common.skipIfWindows
     def test_children_in_directory_posix_symlink(self):
