@@ -1,3 +1,4 @@
+# -*- coding: future_fstrings -*-
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (c) 2008-2026 Andrew Ziem.
 #
@@ -134,10 +135,11 @@ class CLITestCase(common.BleachbitTestCase):
                 deleted_paths = []
                 crash = [False]
 
-                def dummy_delete(path, shred=False):
+                def dummy_delete(path, shred=False, crash=crash,
+                                   deleted_paths=deleted_paths):
                     try:
                         self.assertLExists(path)
-                    except:
+                    except AssertionError:
                         crash[0] = True
                     deleted_paths.append(os.path.normcase(path))
 
@@ -150,7 +152,7 @@ class CLITestCase(common.BleachbitTestCase):
                     preview_or_clean(operations, True, quiet=True)
 
                 self.assertIn(filename, deleted_paths,
-                              "%s not found deleted" % filename)
+                              f"{filename} not found deleted")
                 os.remove(filename)
                 self.assertNotExists(filename)
                 self.assertFalse(crash[0], "Crash detected during deletion")
