@@ -1,23 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test case for module Windows
@@ -359,6 +344,144 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                               clear_recycle_bin=clear_recycle_bin):
                 self._test_link_helper(
                     mklink_option, recycle_container, clear_recycle_bin)
+
+    def _test_broken_link_in_recycle_bin(self, mklink_option, recycle_container,
+                                         break_before_recycle):
+        """Helpful function to test broken directory junctions and symlinks
+        in the recycle bin.
+
+        When a broken link (target deleted) is in the recycle bin, deleting it
+        should delete the link itself, not attempt to follow or restore the
+        target.
+
+        Args:
+            mklink_option: Link type to create. '/j' for directory junction,
+                '/d' for directory symbolic link.
+            recycle_container: If True, move the container directory to the
+                recycle bin. If False, move only the link itself.
+            break_before_recycle: If True, delete the target before moving
+                the link to the recycle bin. If False, recycle first and then
+                delete the target.
+        """
+        assert mklink_option in ('/j', '/d')
+        if mklink_option == '/d':
+            self.skipUnlessAdmin()
+
+        before = set(get_recycle_bin())
+        target_dir = self.mkdir('target_dir')
+        canary_fn = os.path.join(
+            target_dir, f'canary{randint(10000, 9999999)}')
+        common.touch_file(canary_fn)
+
+        container_dir = self.mkdir('container_dir')
+        link_pathname = os.path.join(container_dir, 'link')
+        if mklink_option == '/j':
+            self._create_win_junction(target_dir, link_pathname)
+        else:
+            self._create_win_dir_symlink(target_dir, link_pathname)
+
+        self.assertTrue(os.path.lexists(link_pathname))
+        self.assertExists(canary_fn)
+
+        if break_before_recycle:
+            shutil.rmtree(target_dir)
+            self.assertTrue(os.path.lexists(link_pathname))
+            self.assertFalse(os.path.exists(link_pathname))
+
+        move_to_recycle_bin(
+            container_dir if recycle_container else link_pathname)
+
+        if not break_before_recycle:
+            shutil.rmtree(target_dir)
+            if not recycle_container:
+                shutil.rmtree(container_dir)
+
+        try:
+            added = [p for p in get_recycle_bin() if p not in before]
+            self.assertTrue(
+                added, 'recycle bin should contain recycled link')
+
+            broken = []
+            for f in added:
+                ep = extended_path(f)
+                self.assertLExists(ep)
+                if ((os.path.islink(ep) or is_junction(ep)) and
+                        not os.path.exists(ep)):
+                    broken.append(f)
+            self.assertTrue(
+                broken, 'expected broken link (lexists, not exists)')
+
+            for f in added:
+                ep = extended_path(f)
+                self.assertTrue(FileUtilities.delete(ep, shred=False))
+                self.assertNotLExists(ep)
+
+            self.assertFalse(os.path.lexists(link_pathname))
+            self.assertFalse(os.path.lexists(target_dir))
+            if recycle_container or not break_before_recycle:
+                self.assertFalse(os.path.lexists(container_dir))
+            else:
+                self.assertTrue(os.path.lexists(container_dir))
+        finally:
+            empty_recycle_bin(None, True)
+            if os.path.lexists(container_dir):
+                shutil.rmtree(container_dir, True)
+            if os.path.lexists(target_dir):
+                shutil.rmtree(target_dir, True)
+
+    def _test_broken_link_delete(self, mklink_option, shred):
+        """Helper function to test FileUtilities.delete() on a broken
+        link outside the recycle bin.
+
+        - Tests both junctions and directory symlinks.
+        - Test is Windows only.
+        - Target is a directory (not a file).
+        - Target is broken (does not exist).
+        - Tests both shredding and unlink.
+        - Does not invoke the recycle bin.
+        """
+        assert mklink_option in ('/j', '/d')
+        if mklink_option == '/d':
+            self.skipUnlessAdmin()
+
+        target_dir = self.mkdir('broken_link_delete_target')
+        container_dir = self.mkdir('broken_link_delete_container')
+        link_pathname = os.path.join(container_dir, 'link')
+        if mklink_option == '/j':
+            self._create_win_junction(target_dir, link_pathname)
+        else:
+            self._create_win_dir_symlink(target_dir, link_pathname)
+        shutil.rmtree(target_dir)
+        self.assertLExists(link_pathname)
+        self.assertFalse(os.path.exists(link_pathname))
+        self.assertTrue(FileUtilities.delete(link_pathname, shred=shred))
+        self.assertNotLExists(link_pathname)
+        shutil.rmtree(container_dir, True)
+
+    def test_broken_link_in_recycle_bin(self):
+        """Unit test for broken directory junctions and symlinks in recycle bin
+
+        - Tests both junctions and directory symlinks.
+        - Target is a directory (not a file).
+        - Target is broken (does not exist).
+        - Tests both container in recycle bin and outside recycle bin.
+        - Tests both break target before and after recycling.
+        - Test is Windows only (of course).
+        """
+        for mklink_option, recycle_container, break_before_recycle in itertools.product(
+            ('/j', '/d'), (False, True), (False, True)
+        ):
+            with self.subTest(mklink_option=mklink_option,
+                              recycle_container=recycle_container,
+                              break_before_recycle=break_before_recycle):
+                self._test_broken_link_in_recycle_bin(
+                    mklink_option, recycle_container, break_before_recycle)
+        for mklink_option, shred in itertools.product(
+            ('/j', '/d'), (False, True)
+        ):
+            with self.subTest(mklink_option=mklink_option, shred=shred,
+                              outside_bin=True):
+                self._test_broken_link_delete(mklink_option, shred)
 
     def test_delete_locked_file(self):
         """Unit test for delete_locked_file"""

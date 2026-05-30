@@ -873,7 +873,12 @@ State=AAAA/wA...
                 self.assertDirectoryCount(tmp_dir, 0)
 
     def test_delete_hard_link(self):
-        """Unit test for delete() with hard link"""
+        """Unit test for delete() with hard link
+
+        - Tests both shredding and unlink.
+        - Target is a file (not a directory).
+        - Test is cross platform.
+        """
         for shred in (False, True):
             with self.subTest(shred=shred):
                 tmp_dir = self.mkdtemp(prefix=f'delete_hard_{shred}')
@@ -907,7 +912,14 @@ State=AAAA/wA...
 
     @common.skipUnlessWindows
     def test_delete_junction(self):
-        """Unit test for delete() with Windows junction"""
+        """Unit test for delete() with Windows junction
+
+        - Tests both shredding and unlink.
+        - Tests junction (not directory symlink).
+        - Target is a directory (not a file).
+        - Target exists (not broken).
+        - Test is Windows only.
+        """
         for shred in (False, True):
             with self.subTest(shred=shred):
                 tmp_dir = self.mkdtemp(prefix=f'delete_junction_{shred}')
@@ -935,7 +947,11 @@ State=AAAA/wA...
 
     @common.skipUnlessWindows
     def test_delete_read_only_directory(self):
-        """Unit test for delete() with read-only directory on Windows"""
+        """Unit test for delete() with read-only directory on Windows
+
+        - Expects directory to be removed.
+        - Tets both shred=True and False.
+        """
         kernel32 = ctypes.windll.kernel32
         FILE_ATTRIBUTE_READONLY = 0x1
         for shred in (False, True):
