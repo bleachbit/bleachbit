@@ -21,6 +21,7 @@ import copy
 import os
 import sys
 import tempfile
+from unittest.mock import patch
 
 
 class CLITestCase(common.BleachbitTestCase):
@@ -125,34 +126,34 @@ class CLITestCase(common.BleachbitTestCase):
             'bleachbit-test-cli-delete',
             '\x8b\x8b-bad-encoding'
         ]
-        for i in range(len(prefixes)):
-            filename = self.mkstemp(prefix=prefixes[i])
-            filename = os.path.normcase(filename)
-            # replace delete function for testing
-            save_delete = FileUtilities.delete
+        for prefix in prefixes:
+            with self.subTest(prefix=prefix):
+                filename = self.mkstemp(prefix=prefix)
+                filename = os.path.normcase(filename)
 
-            deleted_paths = []
-            crash = [False]
+                deleted_paths = []
+                crash = [False]
 
-            def dummy_delete(path, shred=False):
-                try:
-                    self.assertLExists(path)
-                except:
-                    crash[0] = True
+                def dummy_delete(path, shred=False):
+                    try:
+                        self.assertLExists(path)
+                    except:
+                        crash[0] = True
+                    deleted_paths.append(os.path.normcase(path))
 
-                deleted_paths.append(os.path.normcase(path))
+                with patch.object(FileUtilities, 'delete', side_effect=dummy_delete):
+                    FileUtilities.delete(filename)
+                    # File exists because delete() is mocked, so real
+                    # delete() was not called.
+                    self.assertExists(filename)
+                    operations = args_to_operations(['system.tmp'], False, False)
+                    preview_or_clean(operations, True, quiet=True)
 
-            FileUtilities.delete = dummy_delete
-            FileUtilities.delete(filename)
-            self.assertExists(filename)
-            operations = args_to_operations(['system.tmp'], False, False)
-            preview_or_clean(operations, True, quiet=True)
-            FileUtilities.delete = save_delete
-            self.assertIn(filename, deleted_paths,
-                          "%s not found deleted" % filename)
-            os.remove(filename)
-            self.assertNotExists(filename)
-            self.assertFalse(crash[0])
+                self.assertIn(filename, deleted_paths,
+                              "%s not found deleted" % filename)
+                os.remove(filename)
+                self.assertNotExists(filename)
+                self.assertFalse(crash[0], "Crash detected during deletion")
 
     def test_shred(self):
         """Unit test for --shred"""
