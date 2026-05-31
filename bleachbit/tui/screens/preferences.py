@@ -13,17 +13,18 @@ from textual.widgets import Static, Switch, Label, Button
 from textual.binding import Binding
 
 from bleachbit.Options import options, OPTION_DEFAULTS
+from bleachbit.Language import get_text as _
 
 
 # Preferences exposed to the user (key → display label)
 VISIBLE_PREFS = [
-    ("auto_hide", "Auto-hide unusable cleaners"),
-    ("check_online_updates", "Check for online updates"),
-    ("dark_mode", "Dark mode"),
-    ("debug", "Debug mode"),
-    ("delete_confirmation", "Delete confirmation dialog"),
-    ("shred", "Shred (overwrite) files"),
-    ("units_iec", "Use IEC units (MiB vs MB)"),
+    ("auto_hide", _("Auto-hide unusable cleaners")),
+    ("check_online_updates", _("Check for online updates")),
+    ("dark_mode", _("Dark mode")),
+    ("debug", _("Debug mode")),
+    ("delete_confirmation", _("Delete confirmation dialog")),
+    ("shred", _("Shred (overwrite) files")),
+    ("units_iec", _("Use IEC units (MiB vs MB)")),
 ]
 
 
@@ -31,8 +32,8 @@ class PreferencesScreen(ModalScreen):
     """Modal screen for editing BleachBit preferences."""
 
     BINDINGS = [
-        Binding("escape", "dismiss", "Close"),
-        Binding("q", "dismiss", "Close"),
+        Binding("escape", "dismiss", _("Close")),
+        Binding("q", "dismiss", _("Close")),
     ]
 
     CSS = """
@@ -80,14 +81,14 @@ class PreferencesScreen(ModalScreen):
 
     def compose(self) -> ComposeResult:
         with Container(id="prefs-dialog"):
-            yield Static("Preferences", id="prefs-title")
+            yield Static(_("Preferences"), id="prefs-title")
             with VerticalScroll():
                 for key, label in VISIBLE_PREFS:
                     current = bool(options.get(key))
                     with Horizontal(classes="pref-row"):
                         yield Label(label)
                         yield Switch(value=current, id=f"pref-{key}", animate=False)
-            yield Static("[dim]Changes are saved immediately[/dim]", id="prefs-footer")
+            yield Static(f"[dim]{_('Changes are saved immediately')}[/dim]", id="prefs-footer")
 
     def on_switch_changed(self, event: Switch.Changed):
         """Save preference immediately when toggled."""

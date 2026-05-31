@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-05 14:48-0600\n"
+"POT-Creation-Date: 2026-05-30 23:31-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1483,7 +1483,7 @@ msgstr ""
 
 #. TRANSLATORS: Label in the log indicating a path will be deleted
 #. (for previews) or was actually deleted (clean mode).
-#: ../bleachbit/Command.py
+#: ../bleachbit/Command.py ../bleachbit/tui/app.py
 msgid "Delete"
 msgstr ""
 
@@ -1791,12 +1791,26 @@ msgstr ""
 msgid "Select destination folder"
 msgstr ""
 
+#. TRANSLATORS: Error message shown when chaff file generation fails.
+#. The placeholder is for the technical error details.
+#: ../bleachbit/GuiChaff.py
+#, python-brace-format
+msgid "Error generating chaff: {error}"
+msgstr ""
+
 #. TRANSLATORS: Progress message shown while deleting chaff files.
 #. 'Deleting files' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
 msgid "Deleting files…"
+msgstr ""
+
+#. TRANSLATORS: Error message shown when deleting chaff files fails.
+#. The placeholder is for the technical error details.
+#: ../bleachbit/GuiChaff.py
+#, python-brace-format
+msgid "Error deleting chaff files: {error}"
 msgstr ""
 
 #. TRANSLATORS: Title for dialog window.
@@ -1975,7 +1989,8 @@ msgid "Restart BleachBit for full effect."
 msgstr ""
 
 #. TRANSLATORS: Title for the preferences dialog
-#: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
+#: ../bleachbit/GuiPreferences.py ../bleachbit/tui/app.py
+#: ../bleachbit/tui/screens/preferences.py ../share/app-menu.ui
 msgid "Preferences"
 msgstr ""
 
@@ -2111,7 +2126,7 @@ msgid "Remember window geometry"
 msgstr ""
 
 #. TRANSLATORS: Checkbox label to enable dark mode in the UI.
-#: ../bleachbit/GuiPreferences.py
+#: ../bleachbit/GuiPreferences.py ../bleachbit/tui/screens/preferences.py
 msgid "Dark mode"
 msgstr ""
 
@@ -2375,7 +2390,7 @@ msgstr ""
 #. TRANSLATORS: Button label on the headerbar and context menu item
 #. in the treeview.
 #. 'Preview' is a verb.
-#: ../bleachbit/GuiWindow.py
+#: ../bleachbit/GuiWindow.py ../bleachbit/tui/app.py
 msgid "Preview"
 msgstr ""
 
@@ -2890,6 +2905,445 @@ msgstr ""
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Please wait.  Previewing %s."
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "BleachBit TUI"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Phase 2 MVP"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Preview focused"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Delete focused"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Overwrite"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "File mode"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Filter"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Help"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Quit"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Back"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "This is alpha-level software. Please use caution."
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Status: idle"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Filter cleaners/options..."
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Error loading cleaners. Check the log."
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "ON"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "OFF"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+#, python-format
+msgid "Ready. Press ? for help.  Overwrite: %s"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Status"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+#, python-format
+msgid "Progress: %d%%"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+#, python-format
+msgid "Deleted %(total_deleted)d file (%(size)s).  Errors: %(total_errors)d."
+msgid_plural ""
+"Deleted %(total_deleted)d files (%(size)s).  Errors: %(total_errors)d."
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../bleachbit/tui/app.py
+#, python-format
+msgid "Delete complete: %(total_deleted)d file, %(size)s"
+msgid_plural "Delete complete: %(total_deleted)d files, %(size)s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../bleachbit/tui/app.py
+#, python-format
+msgid ""
+"Would delete %(total_deleted)d file (%(size)s).  Errors: %(total_errors)d."
+msgid_plural ""
+"Would delete %(total_deleted)d files (%(size)s).  Errors: %(total_errors)d."
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../bleachbit/tui/app.py
+#, python-format
+msgid "Preview complete: %(total_deleted)d file, %(size)s"
+msgid_plural "Preview complete: %(total_deleted)d files, %(size)s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../bleachbit/tui/app.py
+msgid "Operation complete"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Already working..."
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Focus an option first."
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "No options enabled. Enable some first."
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Deleting..."
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Previewing..."
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Starting..."
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+#, python-format
+msgid "Overwrite: %s"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "File list mode: inline"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "File list mode: overlay"
+msgstr ""
+
+#: ../bleachbit/tui/app.py
+msgid "Aborting..."
+msgstr ""
+
+#: ../bleachbit/tui/cleaner_tree.py
+msgid "Toggle enable/disable"
+msgstr ""
+
+#: ../bleachbit/tui/cleaner_tree.py
+msgid "Show file list"
+msgstr ""
+
+#: ../bleachbit/tui/cleaner_tree.py
+msgid "Expand"
+msgstr ""
+
+#: ../bleachbit/tui/cleaner_tree.py
+msgid "Collapse"
+msgstr ""
+
+#: ../bleachbit/tui/cleaner_tree.py
+msgid "Jump to top"
+msgstr ""
+
+#: ../bleachbit/tui/cleaner_tree.py
+msgid "Jump to bottom"
+msgstr ""
+
+#: ../bleachbit/tui/cleaner_tree.py
+msgid "BleachBit Cleaners"
+msgstr ""
+
+#: ../bleachbit/tui/cleaner_tree.py
+msgid "Total:"
+msgstr ""
+
+#: ../bleachbit/tui/cleaner_tree.py
+#, python-format
+msgid "%d file"
+msgid_plural "%d files"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../bleachbit/tui/screens/confirm.py
+msgid "Yes"
+msgstr ""
+
+#: ../bleachbit/tui/screens/confirm.py
+msgid "No"
+msgstr ""
+
+#: ../bleachbit/tui/screens/confirm.py
+msgid "Cancel"
+msgstr ""
+
+#: ../bleachbit/tui/screens/confirm.py
+msgid "[!] Confirm Delete"
+msgstr ""
+
+#: ../bleachbit/tui/screens/confirm.py
+#, python-format
+msgid ""
+"Delete %(total_files)d files (%(size)s) across %(cleaner_count)d cleaners "
+"(%(option_count)d options)?"
+msgstr ""
+
+#: ../bleachbit/tui/screens/confirm.py
+msgid "[Y] Yes"
+msgstr ""
+
+#: ../bleachbit/tui/screens/confirm.py
+msgid "[N] No"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_context_menu.py
+msgid "Add to keep list"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_context_menu.py
+msgid "Add to clean list"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_context_menu.py
+#: ../bleachbit/tui/screens/file_list.py
+msgid "Copy to clipboard"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_context_menu.py
+msgid "Open directory"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_context_menu.py
+#: ../bleachbit/tui/screens/file_list.py
+#: ../bleachbit/tui/screens/help_screen.py
+#: ../bleachbit/tui/screens/preferences.py
+msgid "Close"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_context_menu.py
+#, python-format
+msgid " ... and %d more"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_context_menu.py
+#, python-format
+msgid "%d file selected"
+msgid_plural "%d files selected"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../bleachbit/tui/screens/file_context_menu.py
+msgid ""
+"[bold]w[/bold]=Add to keep list  [bold]c[/bold]=Add to clean list  [bold]y[/"
+"bold]=Copy  [bold]o[/bold]=Open dir"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_context_menu.py
+#, python-format
+msgid "Added %d path to keep list"
+msgid_plural "Added %d paths to keep list"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../bleachbit/tui/screens/file_context_menu.py
+msgid "All paths already in keep list"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_context_menu.py
+#, python-format
+msgid "Added %d path to clean list"
+msgid_plural "Added %d paths to clean list"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../bleachbit/tui/screens/file_context_menu.py
+msgid "All paths already in clean list"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_context_menu.py
+#, python-format
+msgid "Copied %d path to clipboard"
+msgid_plural "Copied %d paths to clipboard"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../bleachbit/tui/screens/file_context_menu.py
+#, python-format
+msgid ""
+"\n"
+"... and %d more directories"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_context_menu.py
+#, python-format
+msgid "Copied %d directory to clipboard"
+msgid_plural "Copied %d directories to clipboard"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../bleachbit/tui/screens/file_list.py
+msgid "Export to file"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_list.py
+msgid "Next page"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_list.py
+msgid "Previous page"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_list.py
+msgid "Context menu"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_list.py
+msgid "Select all"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_list.py
+msgid "[dim]No files found for this option.[/dim]"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_list.py
+#, python-format
+msgid " | %d selected"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_list.py
+#, python-format
+msgid "[bold]Files for %(cleaner)s -> %(option)s[/bold]"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_list.py
+#, python-format
+msgid ""
+"[dim]%(count)d files, %(size)s | Page %(page)d/%(total_pages)d (%(start)d-"
+"%(end)d)%(sel_info)s[/dim]"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_list.py
+msgid "[dim]a=select all  m=menu  n/p=page  c=copy  e=export  esc=close[/dim]"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_list.py
+#, python-format
+msgid "Copied %d file paths to clipboard"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_list.py
+msgid "No file data available"
+msgstr ""
+
+#: ../bleachbit/tui/screens/file_list.py
+#, python-format
+msgid "Exported to %s"
+msgstr ""
+
+#: ../bleachbit/tui/screens/help_screen.py
+msgid ""
+"[bold]BleachBit TUI — Key Bindings[/bold]\n"
+"\n"
+"  [bold]Navigation[/bold]\n"
+"    up / down  Move within current depth\n"
+"    right      Expand / enter cleaner group\n"
+"    left       Collapse / go up to parent\n"
+"    g / Home   Jump to top\n"
+"    G / End    Jump to bottom\n"
+"    /          Search/filter cleaners\n"
+"\n"
+"  [bold]Actions[/bold]\n"
+"    Space      Toggle enable/disable on focused item\n"
+"    Enter      Show file list for focused option\n"
+"    p          Run preview (all checked options)\n"
+"    P          Preview focused option only\n"
+"    d          Run delete (all checked, with confirmation)\n"
+"    D          Delete focused option only (with confirmation)\n"
+"    o          Toggle overwrite preference\n"
+"    i          Toggle file list mode (inline/overlay)\n"
+"\n"
+"  [bold]File List[/bold]\n"
+"    Page Up    Scroll up\n"
+"    Page Down  Scroll down\n"
+"    n          Next page of files\n"
+"    p          Previous page of files\n"
+"    a          Select/deselect all on page\n"
+"    m          Context menu (whitelist/clean list/copy)\n"
+"    c          Copy file list to clipboard\n"
+"    e          Export file list to /tmp/\n"
+"    Escape     Close inline file list / clear filter\n"
+"\n"
+"  [bold]General[/bold]\n"
+"    ?          This help\n"
+"    Ctrl+P     Preferences\n"
+"    q          Quit"
+msgstr ""
+
+#: ../bleachbit/tui/screens/help_screen.py
+msgid "\\[?] Help"
+msgstr ""
+
+#: ../bleachbit/tui/screens/preferences.py
+msgid "Auto-hide unusable cleaners"
+msgstr ""
+
+#: ../bleachbit/tui/screens/preferences.py
+msgid "Check for online updates"
+msgstr ""
+
+#: ../bleachbit/tui/screens/preferences.py
+msgid "Debug mode"
+msgstr ""
+
+#: ../bleachbit/tui/screens/preferences.py
+msgid "Delete confirmation dialog"
+msgstr ""
+
+#: ../bleachbit/tui/screens/preferences.py
+msgid "Shred (overwrite) files"
+msgstr ""
+
+#: ../bleachbit/tui/screens/preferences.py
+msgid "Use IEC units (MiB vs MB)"
+msgstr ""
+
+#: ../bleachbit/tui/screens/preferences.py
+msgid "Changes are saved immediately"
 msgstr ""
 
 #: ../share/app-menu.ui

@@ -17,19 +17,20 @@ from textual.widgets import Static, Header, Footer
 from textual.binding import Binding
 
 from bleachbit.FileUtilities import bytes_to_human
+from bleachbit.Language import get_text as _
 
 
 class FileListWidget(VerticalScroll):
     """Scrollable file list widget — reusable for both inline and overlay modes."""
 
     BINDINGS = [
-        Binding("escape", "dismiss_inline", "Close", show=False),
-        Binding("c", "copy_clipboard", "Copy to clipboard", show=False),
-        Binding("e", "export_file", "Export to file", show=False),
-        Binding("n", "next_page", "Next page", show=False),
-        Binding("p", "prev_page", "Previous page", show=False),
-        Binding("m", "context_menu", "Context menu", show=False),
-        Binding("a", "select_all", "Select all", show=False),
+        Binding("escape", "dismiss_inline", _("Close"), show=False),
+        Binding("c", "copy_clipboard", _("Copy to clipboard"), show=False),
+        Binding("e", "export_file", _("Export to file"), show=False),
+        Binding("n", "next_page", _("Next page"), show=False),
+        Binding("p", "prev_page", _("Previous page"), show=False),
+        Binding("m", "context_menu", _("Context menu"), show=False),
+        Binding("a", "select_all", _("Select all"), show=False),
     ]
 
     PAGE_SIZE = 500
@@ -61,7 +62,7 @@ class FileListWidget(VerticalScroll):
         self.query("*").remove()
 
         if not self._files:
-            self.mount(Static("[dim]No files found for this option.[/dim]"))
+            self.mount(Static(_("[dim]No files found for this option.[/dim]")))
             return
 
         total_human = bytes_to_human(self._total_size)
@@ -71,13 +72,22 @@ class FileListWidget(VerticalScroll):
         page_files = self._files[start:end]
 
         selected_count = len(self._selected)
-        sel_info = f" | {selected_count} selected" if selected_count else ""
+        sel_info = _(" | %d selected") % selected_count if selected_count else ""
 
         lines = [
-            f"[bold]Files for {self.cleaner_name} -> {self.option_name}[/bold]",
-            f"[dim]{len(self._files)} files, {total_human}  "
-            f"| Page {self._current_page + 1}/{total_pages} "
-            f"({start + 1}-{end}){sel_info}[/dim]",
+            _("[bold]Files for %(cleaner)s -> %(option)s[/bold]") % {
+                "cleaner": self.cleaner_name,
+                "option": self.option_name
+            },
+            _("[dim]%(count)d files, %(size)s | Page %(page)d/%(total_pages)d (%(start)d-%(end)d)%(sel_info)s[/dim]") % {
+                "count": len(self._files),
+                "size": total_human,
+                "page": self._current_page + 1,
+                "total_pages": total_pages,
+                "start": start + 1,
+                "end": end,
+                "sel_info": sel_info
+            },
             "",
         ]
         for i, (path, size) in enumerate(page_files):
@@ -88,7 +98,7 @@ class FileListWidget(VerticalScroll):
 
         if total_pages > 1:
             lines.append("")
-            lines.append("[dim]a=select all  m=menu  n/p=page  c=copy  e=export  esc=close[/dim]")
+            lines.append(_("[dim]a=select all  m=menu  n/p=page  c=copy  e=export  esc=close[/dim]"))
 
         self.mount(Static("\n".join(lines), markup=True))
 
@@ -153,15 +163,15 @@ class FileListWidget(VerticalScroll):
         text = self.get_all_text()
         if text:
             self.app.copy_to_clipboard(text)
-            self.notify(f"Copied {len(text.splitlines())} file paths to clipboard")
+            self.notify(_("Copied %d file paths to clipboard") % len(text.splitlines()))
         else:
-            self.notify("No file data available", severity="warning")
+            self.notify(_("No file data available"), severity="warning")
 
     def action_export_file(self):
         """Export file list to /tmp/."""
         text = self.get_all_text()
         if not text:
-            self.notify("No file data available", severity="warning")
+            self.notify(_("No file data available"), severity="warning")
             return
         path = (
             f"/tmp/bleachbit-filelist-{self.cleaner_name}-"
@@ -169,7 +179,7 @@ class FileListWidget(VerticalScroll):
         )
         with open(path, "w", encoding="utf-8") as f:
             f.write(text)
-        self.notify(f"Exported to {path}")
+        self.notify(_("Exported to %s") % path)
 
     def action_dismiss_inline(self):
         """Dismiss inline file list and return focus to tree."""
@@ -181,13 +191,13 @@ class FileListOverlay(ModalScreen):
     """Prototype B: Full-screen overlay file list."""
 
     BINDINGS = [
-        Binding("escape", "dismiss", "Close"),
-        Binding("c", "copy_clipboard", "Copy to clipboard"),
-        Binding("e", "export_file", "Export to file"),
-        Binding("n", "next_page", "Next page"),
-        Binding("p", "prev_page", "Previous page"),
-        Binding("m", "context_menu", "Context menu"),
-        Binding("a", "select_all", "Select all"),
+        Binding("escape", "dismiss", _("Close")),
+        Binding("c", "copy_clipboard", _("Copy to clipboard")),
+        Binding("e", "export_file", _("Export to file")),
+        Binding("n", "next_page", _("Next page")),
+        Binding("p", "prev_page", _("Previous page")),
+        Binding("m", "context_menu", _("Context menu")),
+        Binding("a", "select_all", _("Select all")),
     ]
 
     def __init__(self, cleaner_name: str, option_name: str):
@@ -208,15 +218,15 @@ class FileListOverlay(ModalScreen):
         text = widget.get_all_text()
         if text:
             self.app.copy_to_clipboard(text)
-            self.notify(f"Copied {len(text.splitlines())} file paths to clipboard")
+            self.notify(_("Copied %d file paths to clipboard") % len(text.splitlines()))
         else:
-            self.notify("No file data available", severity="warning")
+            self.notify(_("No file data available"), severity="warning")
 
     def action_export_file(self):
         widget = self.query_one(FileListWidget)
         text = widget.get_all_text()
         if not text:
-            self.notify("No file data available", severity="warning")
+            self.notify(_("No file data available"), severity="warning")
             return
         path = (
             f"/tmp/bleachbit-filelist-{self.cleaner_name}-"
@@ -224,7 +234,7 @@ class FileListOverlay(ModalScreen):
         )
         with open(path, "w", encoding="utf-8") as f:
             f.write(text)
-        self.notify(f"Exported to {path}")
+        self.notify(_("Exported to %s") % path)
 
     async def action_dismiss(self, result=None):
         self.dismiss(result)

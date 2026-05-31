@@ -15,18 +15,19 @@ from textual.widgets import Static
 from textual.binding import Binding
 
 from bleachbit.Options import options
+from bleachbit.Language import get_text as _, nget_text as ngettext
 
 
 class FileContextMenu(ModalScreen):
     """Context menu for file list — whitelist, clean list, clipboard, open dir."""
 
     BINDINGS = [
-        Binding("w", "add_whitelist", "Add to keep list"),
-        Binding("c", "add_cleanlist", "Add to clean list"),
-        Binding("y", "copy_paths", "Copy to clipboard"),
-        Binding("o", "open_dir", "Open directory"),
-        Binding("escape", "dismiss", "Close"),
-        Binding("q", "dismiss", "Close"),
+        Binding("w", "add_whitelist", _("Add to keep list")),
+        Binding("c", "add_cleanlist", _("Add to clean list")),
+        Binding("y", "copy_paths", _("Copy to clipboard")),
+        Binding("o", "open_dir", _("Open directory")),
+        Binding("escape", "dismiss", _("Close")),
+        Binding("q", "dismiss", _("Close")),
     ]
 
     CSS = """
@@ -65,16 +66,16 @@ class FileContextMenu(ModalScreen):
         count = len(self._paths)
         preview = ", ".join(self._paths[:3])
         if count > 3:
-            preview += f" ... and {count - 3} more"
+            preview += _(" ... and %d more") % (count - 3)
 
         with Container(id="ctx-dialog"):
-            yield Static(f"{count} file(s) selected", id="ctx-title")
+            yield Static(ngettext("%d file selected", "%d files selected", count) % count, id="ctx-title")
             yield Static(preview, id="ctx-body")
             yield Static(
-                "[bold]w[/bold]=Add to keep list  "
+                _("[bold]w[/bold]=Add to keep list  "
                 "[bold]c[/bold]=Add to clean list  "
                 "[bold]y[/bold]=Copy  "
-                "[bold]o[/bold]=Open dir",
+                "[bold]o[/bold]=Open dir"),
                 id="ctx-actions",
             )
 
@@ -89,9 +90,10 @@ class FileContextMenu(ModalScreen):
                 new_entries.append((p_type, path))
         if new_entries:
             options.set_whitelist_paths(existing + new_entries)
-            self.notify(f"Added {len(new_entries)} path(s) to keep list")
+            msg = ngettext("Added %d path to keep list", "Added %d paths to keep list", len(new_entries)) % len(new_entries)
+            self.notify(msg)
         else:
-            self.notify("All paths already in keep list")
+            self.notify(_("All paths already in keep list"))
         self.dismiss()
 
     def action_add_cleanlist(self):
@@ -105,16 +107,18 @@ class FileContextMenu(ModalScreen):
                 new_entries.append((p_type, path))
         if new_entries:
             options.set_custom_paths(existing + new_entries)
-            self.notify(f"Added {len(new_entries)} path(s) to clean list")
+            msg = ngettext("Added %d path to clean list", "Added %d paths to clean list", len(new_entries)) % len(new_entries)
+            self.notify(msg)
         else:
-            self.notify("All paths already in clean list")
+            self.notify(_("All paths already in clean list"))
         self.dismiss()
 
     def action_copy_paths(self):
         """Copy selected paths to clipboard."""
         text = "\n".join(self._paths)
         self.app.copy_to_clipboard(text)
-        self.notify(f"Copied {len(self._paths)} path(s) to clipboard")
+        msg = ngettext("Copied %d path to clipboard", "Copied %d paths to clipboard", len(self._paths)) % len(self._paths)
+        self.notify(msg)
         self.dismiss()
 
     def action_open_dir(self):
@@ -122,11 +126,10 @@ class FileContextMenu(ModalScreen):
         dirs = sorted(set(os.path.dirname(p) for p in self._paths))
         preview = "\n".join(dirs[:5])
         if len(dirs) > 5:
-            preview += f"\n... and {len(dirs) - 5} more directories"
+            preview += _("\n... and %d more directories") % (len(dirs) - 5)
         self.app.copy_to_clipboard(preview)
-        self.notify(
-            f"Copied {len(dirs)} director{'y' if len(dirs) == 1 else 'ies'} to clipboard"
-        )
+        msg = ngettext("Copied %d directory to clipboard", "Copied %d directories to clipboard", len(dirs)) % len(dirs)
+        self.notify(msg)
         self.dismiss()
 
     async def action_dismiss(self, result=None):

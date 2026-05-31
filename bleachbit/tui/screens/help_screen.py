@@ -13,13 +13,16 @@ from textual.widgets import Static
 from textual.binding import Binding
 
 
+from bleachbit.Language import get_text as _
+
+
 class HelpScreen(ModalScreen):
     """Help overlay showing all key bindings."""
 
     BINDINGS = [
-        Binding("escape", "dismiss", "Close"),
-        Binding("q", "dismiss", "Close"),
-        Binding("question_mark", "dismiss", "Close"),
+        Binding("escape", "dismiss", _("Close")),
+        Binding("q", "dismiss", _("Close")),
+        Binding("question_mark", "dismiss", _("Close")),
     ]
 
     CSS = """
@@ -42,8 +45,7 @@ class HelpScreen(ModalScreen):
     }
     """
 
-    HELP_TEXT = """\
-[bold]BleachBit TUI — Key Bindings[/bold]
+    HELP_TEXT = _("""[bold]BleachBit TUI — Key Bindings[/bold]
 
   [bold]Navigation[/bold]
     up / down  Move within current depth
@@ -77,11 +79,11 @@ class HelpScreen(ModalScreen):
   [bold]General[/bold]
     ?          This help
     Ctrl+P     Preferences
-    q          Quit"""
+    q          Quit""")
 
     def compose(self) -> ComposeResult:
         with Container(id="help-dialog"):
-            yield Static(r"\[?] Help", id="help-title")
+            yield Static(_(r"\[?] Help"), id="help-title")
             yield Static(self.HELP_TEXT)
 
     async def action_dismiss(self, result=None):

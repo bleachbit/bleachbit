@@ -15,15 +15,16 @@ from textual.binding import Binding
 from rich.text import Text
 
 from bleachbit.FileUtilities import bytes_to_human
+from bleachbit.Language import get_text as _
 
 
 class ConfirmScreen(ModalScreen[bool]):
     """Y/N confirmation dialog for delete operation."""
 
     BINDINGS = [
-        Binding("y", "confirm_yes", "Yes"),
-        Binding("n", "confirm_no", "No"),
-        Binding("escape", "confirm_no", "Cancel"),
+        Binding("y", "confirm_yes", _("Yes")),
+        Binding("n", "confirm_no", _("No")),
+        Binding("escape", "confirm_no", _("Cancel")),
     ]
 
     CSS = """
@@ -66,17 +67,19 @@ class ConfirmScreen(ModalScreen[bool]):
 
     def compose(self) -> ComposeResult:
         with Container(id="confirm-dialog"):
-            yield Static("[!] Confirm Delete", id="confirm-title", markup=False)
+            yield Static(_("[!] Confirm Delete"), id="confirm-title", markup=False)
             yield Static(
-                f"Delete {self.total_files} files "
-                f"({bytes_to_human(self.total_size)}) "
-                f"across {self.cleaner_count} cleaners "
-                f"({self.option_count} options)?",
+                _("Delete %(total_files)d files (%(size)s) across %(cleaner_count)d cleaners (%(option_count)d options)?") % {
+                    "total_files": self.total_files,
+                    "size": bytes_to_human(self.total_size),
+                    "cleaner_count": self.cleaner_count,
+                    "option_count": self.option_count
+                },
                 id="confirm-body",
             )
             with Center(id="confirm-buttons"):
-                yield Button(Text("[Y] Yes"), variant="error", id="btn-yes")
-                yield Button(Text("[N] No"), variant="primary", id="btn-no")
+                yield Button(Text(_("[Y] Yes")), variant="error", id="btn-yes")
+                yield Button(Text(_("[N] No")), variant="primary", id="btn-no")
 
     def on_button_pressed(self, event: Button.Pressed):
         if event.button.id == "btn-yes":

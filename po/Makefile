@@ -1,7 +1,9 @@
 APP = bleachbit
 POFILES = $(wildcard *.po)
 MOFILES = $(patsubst %.po,%.mo,$(POFILES))
-SRC = $(wildcard ../bleachbit/*.py) ../share/app-menu.ui
+PY_SRC = $(wildcard ../bleachbit/*.py) $(wildcard ../bleachbit/tui/*.py) $(wildcard ../bleachbit/tui/screens/*.py)
+UI_SRC = ../share/app-menu.ui
+SRC = $(PY_SRC) $(UI_SRC)
 POTFILE = $(APP).pot
 ITS ?= /usr/share/gettext/its/metainfo.its
 PYTHON ?= python3
@@ -65,7 +67,14 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot metainfo.pot nsis.pot require-gette
 		--keyword="_p:1c,2" \
 		--default-domain=$(APP) \
 		--add-location=file \
-		$(SRC)
+		$(PY_SRC)
+	xgettext -o $(POTFILE) \
+		--join-existing \
+		--language=Glade \
+		--add-comments=TRANSLATORS \
+		--default-domain=$(APP) \
+		--add-location=file \
+		$(UI_SRC)
 	sed -i 's/charset=CHARSET/charset=utf-8/g' $(POTFILE)
 	echo " Words after update: " \
 		`tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq | wc --words`

@@ -36,13 +36,14 @@ from bleachbit.tui.backend import (
 )
 from bleachbit.FileUtilities import bytes_to_human
 from bleachbit.Options import options
+from bleachbit.Language import get_text as _, nget_text as ngettext
 
 
 class BleachBitTUI(App):
     """BleachBit Terminal UI — keyboard-driven system cleaner."""
 
-    TITLE = "BleachBit TUI"
-    SUB_TITLE = "Phase 2 MVP"
+    TITLE = _("BleachBit TUI")
+    SUB_TITLE = _("Phase 2 MVP")
 
     CSS = """
     #alpha-banner {
@@ -130,17 +131,17 @@ class BleachBitTUI(App):
     """
 
     BINDINGS = [
-        Binding("p", "preview", "Preview", show=True),
-        Binding("d", "delete", "Delete", show=True),
-        Binding("P", "preview_focused", "Preview focused", show=True),
-        Binding("D", "delete_focused", "Delete focused", show=True),
-        Binding("o", "toggle_overwrite", "Overwrite", show=True),
-        Binding("i", "toggle_file_mode", "File mode", show=True),
-        Binding("slash", "start_filter", "Filter", show=True),
-        Binding("ctrl_p", "show_preferences", "Preferences", show=True),
-        Binding("question_mark", "show_help", "Help", show=True),
-        Binding("q", "quit", "Quit", show=True),
-        Binding("escape", "handle_escape", "Back", show=False),
+        Binding("p", "preview", _("Preview"), show=True),
+        Binding("d", "delete", _("Delete"), show=True),
+        Binding("P", "preview_focused", _("Preview focused"), show=True),
+        Binding("D", "delete_focused", _("Delete focused"), show=True),
+        Binding("o", "toggle_overwrite", _("Overwrite"), show=True),
+        Binding("i", "toggle_file_mode", _("File mode"), show=True),
+        Binding("slash", "start_filter", _("Filter"), show=True),
+        Binding("ctrl_p", "show_preferences", _("Preferences"), show=True),
+        Binding("question_mark", "show_help", _("Help"), show=True),
+        Binding("q", "quit", _("Quit"), show=True),
+        Binding("escape", "handle_escape", _("Back"), show=False),
     ]
 
     def __init__(self):
@@ -153,9 +154,9 @@ class BleachBitTUI(App):
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
-        yield Static("This is alpha-level software. Please use caution.", id="alpha-banner")
-        yield Static("Status: idle", id="status-bar")
-        yield Input(placeholder="Filter cleaners/options...", id="filter-input")
+        yield Static(_("This is alpha-level software. Please use caution."), id="alpha-banner")
+        yield Static(_("Status: idle"), id="status-bar")
+        yield Input(placeholder=_("Filter cleaners/options..."), id="filter-input")
         with Container(id="progress-container"):
             yield ProgressBar(total=1.0, show_eta=False, id="progress-bar", classes="hidden")
             yield Static("", id="progress-label")
@@ -166,6 +167,8 @@ class BleachBitTUI(App):
 
     def on_mount(self):
         """Load real cleaner data and set up."""
+        from bleachbit.Language import setup_translation
+        setup_translation()
         try:
             load_cleaners()
             tree = self.query_one(CleanerTree)
@@ -174,26 +177,26 @@ class BleachBitTUI(App):
         except Exception:
             import logging
             logging.getLogger(__name__).exception("Failed to load cleaners on mount")
-            self.notify("Error loading cleaners. Check the log.", severity="error")
+            self.notify(_("Error loading cleaners. Check the log."), severity="error")
             # Still set up the tree with empty data so the UI is functional
             tree = self.query_one(CleanerTree)
             tree.populate_tree([])
             tree.focus()
 
         overwrite = get_overwrite()
-        overwrite_status = 'ON' if overwrite else 'OFF'
-        self._update_status("idle", f"Ready. Press ? for help.  Overwrite: {overwrite_status}")
+        overwrite_status = _("ON") if overwrite else _("OFF")
+        self._update_status("idle", _("Ready. Press ? for help.  Overwrite: %s") % overwrite_status)
 
     # --- Status bar helpers ---
 
     def _update_status(self, state: str, message: str = ""):
         status_bar = self.query_one("#status-bar", Static)
         if state == "working":
-            status_bar.update(f"[working]Status: {message}[/working]")
+            status_bar.update(f"[working]{_('Status')}: {message}[/working]")
         elif state == "done":
-            status_bar.update(f"[done]Status: {message}[/done]")
+            status_bar.update(f"[done]{_('Status')}: {message}[/done]")
         else:
-            status_bar.update(f"[idle]Status: {message}[/idle]")
+            status_bar.update(f"[idle]{_('Status')}: {message}[/idle]")
 
     # --- Output log ---
 
@@ -223,7 +226,7 @@ class BleachBitTUI(App):
             bar.update(total=1.0)
             bar.remove_class("hidden")
             pct = int(fraction * 100)
-            label.update(f"Progress: {pct}%")
+            label.update(_("Progress: %d%%") % pct)
         elif isinstance(status, str):
             bar.update(total=None, progress=None)  # indeterminate
             bar.remove_class("hidden")
@@ -254,17 +257,45 @@ class BleachBitTUI(App):
 
         tree.update_root_total_full(message.total_deleted, message.total_bytes)
 
-        action_word = "Deleted" if message.really_delete else "Would delete"
+        if message.really_delete:
+            done_message = ngettext(
+                "Deleted %(total_deleted)d file (%(size)s).  Errors: %(total_errors)d.",
+                "Deleted %(total_deleted)d files (%(size)s).  Errors: %(total_errors)d.",
+                message.total_deleted) % {
+                    "total_deleted": message.total_deleted,
+                    "size": bytes_to_human(message.total_bytes),
+                    "total_errors": message.total_errors
+                }
+            notification = ngettext(
+                "Delete complete: %(total_deleted)d file, %(size)s",
+                "Delete complete: %(total_deleted)d files, %(size)s",
+                message.total_deleted) % {
+                    "total_deleted": message.total_deleted,
+                    "size": bytes_to_human(message.total_bytes)
+                }
+        else:
+            done_message = ngettext(
+                "Would delete %(total_deleted)d file (%(size)s).  Errors: %(total_errors)d.",
+                "Would delete %(total_deleted)d files (%(size)s).  Errors: %(total_errors)d.",
+                message.total_deleted) % {
+                    "total_deleted": message.total_deleted,
+                    "size": bytes_to_human(message.total_bytes),
+                    "total_errors": message.total_errors
+                }
+            notification = ngettext(
+                "Preview complete: %(total_deleted)d file, %(size)s",
+                "Preview complete: %(total_deleted)d files, %(size)s",
+                message.total_deleted) % {
+                    "total_deleted": message.total_deleted,
+                    "size": bytes_to_human(message.total_bytes)
+                }
         self._update_status(
             "done",
-            f"{action_word} {message.total_deleted} files "
-            f"({bytes_to_human(message.total_bytes)}).  "
-            f"Errors: {message.total_errors}.",
+            done_message
         )
         self.notify(
-            f"{'Delete' if message.really_delete else 'Preview'} complete: "
-            f"{message.total_deleted} files, {bytes_to_human(message.total_bytes)}",
-            title="Operation complete",
+            notification,
+            title=_("Operation complete"),
         )
 
     # --- Actions ---
@@ -272,38 +303,38 @@ class BleachBitTUI(App):
     def action_preview(self):
         """Run preview (dry-run) operation."""
         if self._is_working:
-            self.notify("Already working...", severity="warning")
+            self.notify(_("Already working..."), severity="warning")
             return
         self._run_operation(delete=False)
 
     def action_delete(self):
         """Run delete operation with confirmation."""
         if self._is_working:
-            self.notify("Already working...", severity="warning")
+            self.notify(_("Already working..."), severity="warning")
             return
         self._confirm_and_delete()
 
     def action_preview_focused(self):
         """Preview only the currently focused option (shift-P)."""
         if self._is_working:
-            self.notify("Already working...", severity="warning")
+            self.notify(_("Already working..."), severity="warning")
             return
         tree = self.query_one(CleanerTree)
         focused = tree.get_focused_option()
         if focused is None:
-            self.notify("Focus an option first.", severity="warning")
+            self.notify(_("Focus an option first."), severity="warning")
             return
         self._run_operation(delete=False, enabled=[focused])
 
     def action_delete_focused(self):
         """Delete only the currently focused option with confirmation (shift-D)."""
         if self._is_working:
-            self.notify("Already working...", severity="warning")
+            self.notify(_("Already working..."), severity="warning")
             return
         tree = self.query_one(CleanerTree)
         focused = tree.get_focused_option()
         if focused is None:
-            self.notify("Focus an option first.", severity="warning")
+            self.notify(_("Focus an option first."), severity="warning")
             return
         self._confirm_and_delete_focused(focused)
 
@@ -328,7 +359,7 @@ class BleachBitTUI(App):
         enabled = tree.get_enabled_options()
 
         if not enabled:
-            self.notify("No options enabled. Enable some first.", severity="warning")
+            self.notify(_("No options enabled. Enable some first."), severity="warning")
             return
 
         cleaner_count = tree.get_enabled_cleaner_count()
@@ -362,15 +393,15 @@ class BleachBitTUI(App):
             enabled = tree.get_enabled_options()
 
         if not enabled:
-            self.notify("No options enabled. Enable some first.", severity="warning")
+            self.notify(_("No options enabled. Enable some first."), severity="warning")
             self._is_working = False
             bar = self.query_one("#progress-bar", ProgressBar)
             bar.add_class("hidden")
             self.query_one("#progress-label", Static).update("")
             return
 
-        op_name = "Deleting" if delete else "Previewing"
-        self._update_status("working", f"{op_name}...")
+        status = _("Deleting...") if delete else _("Previewing...")
+        self._update_status("working", status)
         self._log_lines = []
         for output in self.query("#output-text").results(Static):
             output.update("")
@@ -381,7 +412,7 @@ class BleachBitTUI(App):
         bar.update(progress=0.0)
         bar.update(total=1.0)
         bar.remove_class("hidden")
-        self.query_one("#progress-label", Static).update("Starting...")
+        self.query_one("#progress-label", Static).update(_("Starting..."))
 
         operations = build_operations(enabled)
         # Propagate overwrite preference via bleachbit Options
@@ -400,22 +431,22 @@ class BleachBitTUI(App):
         """Toggle overwrite preference via BleachBit config."""
         current = get_overwrite()
         set_overwrite(not current)
-        state = "ON" if not current else "OFF"
-        self.notify(f"Overwrite: {state}")
+        state = _("ON") if not current else _("OFF")
+        self.notify(_("Overwrite: %s") % state)
         self._update_status(
             "idle",
-            f"Ready. Press ? for help.  Overwrite: {state}",
+            _("Ready. Press ? for help.  Overwrite: %s") % state,
         )
 
     def action_toggle_file_mode(self):
         """Toggle between inline and overlay file list display."""
         if self._file_list_mode == "overlay":
             self._file_list_mode = "inline"
-            self.notify("File list mode: inline")
+            self.notify(_("File list mode: inline"))
         else:
             self._file_list_mode = "overlay"
             self._dismiss_inline_file_list()
-            self.notify("File list mode: overlay")
+            self.notify(_("File list mode: overlay"))
 
     def _dismiss_inline_file_list(self):
         """Remove inline file list and return focus to tree."""
@@ -472,7 +503,7 @@ class BleachBitTUI(App):
         if self._is_working:
             if self._current_worker is not None:
                 self._current_worker.abort()
-            self.notify("Aborting...")
+            self.notify(_("Aborting..."))
         else:
             self.exit()
 

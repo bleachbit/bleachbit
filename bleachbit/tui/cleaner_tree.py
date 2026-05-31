@@ -20,6 +20,7 @@ from rich.text import Text
 
 from bleachbit.FileUtilities import bytes_to_human
 from bleachbit.Options import options
+from bleachbit.Language import get_text as _, nget_text as ngettext
 
 
 class CleanerTree(Tree):
@@ -37,14 +38,14 @@ class CleanerTree(Tree):
     """
 
     BINDINGS = [
-        Binding("space", "toggle_enabled", "Toggle enable/disable", show=True),
-        Binding("enter", "show_file_list", "Show file list", show=True),
-        Binding("right", "expand_node", "Expand", show=False),
-        Binding("left", "collapse_node", "Collapse", show=False),
-        Binding("g", "jump_to_top", "Jump to top", show=False),
-        Binding("G", "jump_to_bottom", "Jump to bottom", show=False),
-        Binding("home", "jump_to_top", "Jump to top", show=False),
-        Binding("end", "jump_to_bottom", "Jump to bottom", show=False),
+        Binding("space", "toggle_enabled", _("Toggle enable/disable"), show=True),
+        Binding("enter", "show_file_list", _("Show file list"), show=True),
+        Binding("right", "expand_node", _("Expand"), show=False),
+        Binding("left", "collapse_node", _("Collapse"), show=False),
+        Binding("g", "jump_to_top", _("Jump to top"), show=False),
+        Binding("G", "jump_to_bottom", _("Jump to bottom"), show=False),
+        Binding("home", "jump_to_top", _("Jump to top"), show=False),
+        Binding("end", "jump_to_bottom", _("Jump to bottom"), show=False),
     ]
 
     class OptionSelected(Message):
@@ -55,7 +56,7 @@ class CleanerTree(Tree):
             self.option_name = option_name
 
     def __init__(self):
-        super().__init__("BleachBit Cleaners")
+        super().__init__(_("BleachBit Cleaners"))
         self.root.allow_expand = False
         self._enabled: dict[tuple, bool] = {}  # (cleaner_id, option_id) -> bool
         self._cleaner_nodes: dict[str, TreeNode] = {}  # cleaner_id -> TreeNode
@@ -92,7 +93,7 @@ class CleanerTree(Tree):
         self._option_sizes.clear()
 
         self.root.label = Text.from_markup(
-            "[bold]Total:[/bold] 0 files, 0 KB"
+            f"[bold]{_('Total:')}[/bold] 0 files, 0 KB"
         )
 
         for c_id, c_name, opts in cleaner_data:
@@ -281,14 +282,17 @@ class CleanerTree(Tree):
 
     def update_root_total(self, total_bytes: int):
         """Update root node with running total from worker."""
+        total_word = _("Total:")
         self.root.label = Text.from_markup(
-            f"[bold]Total:[/bold] {bytes_to_human(total_bytes)}"
+            f"[bold]{total_word}[/bold] {bytes_to_human(total_bytes)}"
         )
 
     def update_root_total_full(self, total_files: int, total_bytes: int):
         """Update root node with final file count and byte total."""
+        total_word = _("Total:")
+        files_word = ngettext("%d file", "%d files", total_files) % total_files
         self.root.label = Text.from_markup(
-            f"[bold]Total:[/bold] {total_files} files, {bytes_to_human(total_bytes)}"
+            f"[bold]{total_word}[/bold] {files_word}, {bytes_to_human(total_bytes)}"
         )
 
     def update_option_size(self, operation: str, option_id: str, size: int):
