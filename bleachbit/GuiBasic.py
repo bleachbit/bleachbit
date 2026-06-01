@@ -199,6 +199,7 @@ def warning_confirm_dialog(parent, option_name, warning_text, show_checkbox=True
 
     warning_label = Gtk.Label(label=warning_text)
     warning_label.set_line_wrap(True)
+    warning_label.set_max_width_chars(80)
     warning_label.set_xalign(0.0)
     content.pack_start(warning_label, False, False, 0)
 
