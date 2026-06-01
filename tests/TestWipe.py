@@ -225,6 +225,28 @@ class WipeTestCase(common.BleachbitTestCase):
         self.assertNotExists(filename)
         self.assertExists(newname)
 
+    def test_wipe_name_non_retryable_error(self):
+        """Give up early when rename() fails with non-retryable error"""
+        for errnum in (errno.EACCES, errno.EPERM, errno.EROFS):
+            with self.subTest(errnum=errnum):
+                filename = self.write_file(f'orig{errnum}')
+                expected = os.path.join(self.tempdir, f'fail{errnum}')
+                rename_error = OSError(errnum, os.strerror(errnum))
+
+                self.assertNotExists(expected)
+                with mock.patch.object(
+                        Wipe, '__random_string',
+                        return_value=f'fail{errnum}'), \
+                        mock.patch.object(
+                            Wipe.os, 'rename',
+                            side_effect=rename_error) as rename_mock:
+                    newname = wipe_name(filename)
+
+                self.assertEqual(filename, newname)
+                self.assertExists(filename)
+                self.assertNotExists(expected)
+                self.assertEqual(1, rename_mock.call_count)
+
     @unittest.skipUnless(os.getenv('ALLTESTS') is not None,
                          'warning: skipping long test test_wipe_path() because'
                          ' environment variable ALLTESTS not set')

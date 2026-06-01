@@ -289,7 +289,10 @@ def wipe_name(pathname1):
         try:
             os.rename(pathname1, pathname2)
             break
-        except OSError:
+        except OSError as e:
+            if e.errno in (errno.EACCES, errno.EPERM, errno.EROFS):
+                pathname2 = pathname1
+                break
             continue
 
     return pathname2
