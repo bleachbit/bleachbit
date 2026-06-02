@@ -250,7 +250,6 @@ def clean_ini(path, section, parameter):
     # write file
     if changed:
         from bleachbit.Options import options
-        fp.close()
         if options.get('shred'):
             delete(path, True)
         with open(path, 'w', encoding=encoding, newline='') as fp:
