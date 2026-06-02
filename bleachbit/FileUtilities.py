@@ -39,6 +39,21 @@ from bleachbit import _
 
 logger = logging.getLogger(__name__)
 
+FILENAME_CHARS = string.ascii_lowercase + string.digits + '_.-+~!@#$%^&()=[]{},'
+
+WINDOWS_RESERVED_FILENAMES = {
+    'CON',
+    'PRN',
+    'AUX',
+    'NUL',
+    'CONIN$',
+    'CONOUT$',
+}
+WINDOWS_RESERVED_FILENAMES.update(
+    {'COM%d' % number for number in range(1, 10)})
+WINDOWS_RESERVED_FILENAMES.update(
+    {'LPT%d' % number for number in range(1, 10)})
+
 os_path_islink = os.path.islink
 os.path.islink = lambda path: os_path_islink(
     path) or bleachbit.Windows.is_junction(path)
@@ -113,8 +128,32 @@ def get_filesystem_type(path):
 
 def __random_string(length):
     """Return random alphanumeric characters of given length"""
-    return ''.join(random.choice(string.ascii_letters + '0123456789_.-')
+    return ''.join(random.choice(FILENAME_CHARS)
                    for i in range(length))
+
+
+def __valid_random_filename(filename):
+    """Check if a filename is valid for use as a temporary file.
+
+    This function is intended for limited scope for use with
+    __random_string(), so this function assumes
+
+        - Input characters are limited to FILENAME_CHARS.
+        - No null bytes, path separators, or low ASCII characters.
+        - The argument is a filename (not a path).
+
+    This checks for invalid characters, reserved names, and other
+    restrictions.
+    """
+    if not filename:
+        return False
+    if filename in ('.', '..'):
+        return False
+    if filename.endswith((' ', '.')):
+        return False
+    if filename.rstrip(' .').split('.', 1)[0].upper() in WINDOWS_RESERVED_FILENAMES:
+        return False
+    return True
 
 
 def bytes_to_human(bytes_i):
@@ -851,39 +890,37 @@ def wipe_contents(path, truncate=True):
 
 
 def wipe_name(pathname1):
-    """Wipe the original filename and return the new pathname"""
-    (head, _tail) = os.path.split(pathname1)
-    # reference http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
-    maxlen = 226
-    # first, rename to a long name
-    i = 0
+    """Wipe the original filename and return the new pathname
+
+    File systems vary in how they store a pathname and how they respond
+    to renaming. In general, renaming to a longer name can cause more
+    data remnance.
+
+    This function tries to rename the file a single time to a random
+    name with the identical length.
+
+    """
+    (head, tail) = os.path.split(pathname1)
+    target_length = len(tail)
+    attempt_count = 0
     while True:
+        attempt_count += 1
+        if attempt_count > 100:
+            logger.info('exhausted same-length rename: %s', pathname1)
+            pathname2 = pathname1
+            break
+        new_tail = __random_string(target_length)
+        if not __valid_random_filename(new_tail):
+            continue
+        pathname2 = os.path.join(head, new_tail)
+        if os.path.lexists(pathname2):
+            continue
         try:
-            pathname2 = os.path.join(head, __random_string(maxlen))
-            os.rename(pathname1,  pathname2)
+            os.rename(pathname1, pathname2)
             break
         except OSError:
-            if maxlen > 10:
-                maxlen -= 10
-            i += 1
-            if i > 100:
-                logger.info('exhausted long rename: %s', pathname1)
-                pathname2 = pathname1
-                break
-    # finally, rename to a short name
-    i = 0
-    while True:
-        try:
-            pathname3 = os.path.join(head, __random_string(i + 1))
-            os.rename(pathname2, pathname3)
-            break
-        except OSError:
-            i += 1
-            if i > 100:
-                logger.info('exhausted short rename: %s', pathname2)
-                pathname3 = pathname2
-                break
-    return pathname3
+            continue
+    return pathname2
 
 
 def wipe_path(pathname, idle=False):

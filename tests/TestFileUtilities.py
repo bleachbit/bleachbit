@@ -67,6 +67,8 @@ from bleachbit.FileUtilities import (
 from bleachbit.General import run_external
 from bleachbit.Options import options
 from bleachbit.Windows import get_fixed_drives, is_junction
+
+import bleachbit.FileUtilities as FileUtilitiesModule
 from tests import common
 
 
@@ -956,7 +958,9 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         # test
         newname = wipe_name(filename)
-        self.assertGreater(len(filename), len(newname))
+        self.assertEqual(len(filename), len(newname))
+        self.assertNotEqual(filename, newname)
+        self.assertNotEqual(filename.lower(), newname.lower())
         self.assertNotExists(filename)
         self.assertExists(newname)
 
@@ -991,7 +995,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
 
         # wipe a directory name
         dir1new = wipe_name(dir1)
-        self.assertGreater(len(dir1), len(dir1new))
+        self.assertEqual(len(dir1), len(dir1new))
         self.assertNotExists(dir1)
         self.assertExists(dir1new)
         os.rmdir(dir1new)
@@ -999,6 +1003,48 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         # wipe the directory
         os.rmdir(dir0)
         self.assertNotExists(dir0)
+
+    def test_wipe_name_when_basic_characters_exist(self):
+        """Unit test for wipe_name() when basic characters exist"""
+        testdir = self.mkdtemp()
+        filenames = []
+        # This tests that FILENAME_CHARS characters are valid for filenames.
+        for char in FileUtilitiesModule.FILENAME_CHARS:
+            if char == '.':
+                continue
+            filename = os.path.join(testdir, char)
+            self.write_file(filename)
+            self.assertExists(filename)
+            filenames.append(filename)
+
+        # Verify that all test filenames are unique (case-insensitively)
+        # to avoid collisions.
+        basenames = [os.path.basename(filename) for filename in filenames]
+        self.assertEqual(len(basenames), len(
+            set(name.lower() for name in basenames)))
+
+        filename = filenames[0]
+        newname = wipe_name(filename)
+        self.assertEqual(filename, newname)
+        self.assertExists(newname)
+
+    def test_wipe_name_rejects_windows_invalid_names(self):
+        """Unit test for wipe_name() with Windows-invalid names"""
+        filename = self.write_file('orig')
+        expected = os.path.join(self.tempdir, 'good')
+
+        bad_list = ['bad.', 'bad ', 'COM1', 'bad?']
+        with mock.patch.object(
+                FileUtilitiesModule,
+                '__random_string',
+                side_effect=bad_list + ['good']):
+            newname = wipe_name(filename)
+
+        self.assertEqual(expected, newname)
+        self.assertNotExists(filename)
+        for bad_item in bad_list:
+            self.assertNotExists(os.path.join(self.tempdir, bad_item))
+        self.assertExists(newname)
 
     @unittest.skipUnless(os.getenv('ALLTESTS') is not None,
                          'warning: skipping long test test_wipe_path() because environment variable ALLTESTS not set')
