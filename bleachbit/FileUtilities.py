@@ -877,7 +877,7 @@ def wipe_name(pathname1):
             pathname3 = os.path.join(head, __random_string(i + 1))
             os.rename(pathname2, pathname3)
             break
-        except:
+        except OSError:
             i += 1
             if i > 100:
                 logger.info('exhausted short rename: %s', pathname2)
