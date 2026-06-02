@@ -188,12 +188,7 @@ class Bleachbit(Gtk.Application):
     def cb_clipboard_uri_received(self, clipboard, targets, data):
         """Callback for when URIs are received from clipboard"""
         shred_paths = None
-        if Gdk.atom_intern_static_string('text/uri-list') in targets:
-            # Linux
-            shred_uris = clipboard.wait_for_contents(
-                Gdk.atom_intern_static_string('text/uri-list')).get_uris()
-            shred_paths = FileUtilities.uris_to_paths(shred_uris)
-        elif Gdk.atom_intern_static_string('FileNameW') in targets:
+        if Gdk.atom_intern_static_string('FileNameW') in targets:
             # Windows
             # Use non-GTK+ functions because because GTK+ 2 does not work.
             shred_paths = Windows.get_clipboard_paths()

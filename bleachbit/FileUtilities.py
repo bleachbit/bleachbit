@@ -767,28 +767,6 @@ def truncate_f(f):
             raise
 
 
-def uris_to_paths(file_uris):
-    """Return a list of paths from text/uri-list"""
-    import urllib.parse
-    import urllib.request
-    assert isinstance(file_uris, (tuple, list))
-    file_paths = []
-    for file_uri in file_uris:
-        if not file_uri:
-            # ignore blank
-            continue
-        parsed_uri = urllib.parse.urlparse(file_uri)
-        if parsed_uri.scheme == 'file':
-            file_path = urllib.request.url2pathname(parsed_uri.path)
-            if file_path[2] == ':':
-                # remove front slash for Windows-style path
-                file_path = file_path[1:]
-            file_paths.append(file_path)
-        else:
-            logger.warning('Unsupported scheme: %s', file_uri)
-    return file_paths
-
-
 def whitelisted(path):
     """Check whether this Windows path is whitelisted"""
     from bleachbit.Options import options

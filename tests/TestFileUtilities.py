@@ -58,7 +58,6 @@ from bleachbit.FileUtilities import (
     is_normal_directory,
     listdir,
     same_partition,
-    uris_to_paths,
     vacuum_sqlite3,
     whitelisted,
     wipe_contents,
@@ -824,22 +823,6 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
             this_drive = os.path.splitdrive(drive)[0]
             self.assertEqual(same_partition(home, drive),
                              home_drive == this_drive)
-
-    def test_uris_to_paths(self):
-        """Unit test for uris_to_paths()"""
-        self.assertEqual(uris_to_paths(['']), [])
-
-        # Windows
-        uri_w = [r'file:///C:/program%20files/bleachbit.exe']
-        path_w = [os.path.normpath(r'C:/program files/bleachbit.exe'), ]
-        self.assertEqual(uris_to_paths(uri_w), path_w)
-
-        # Multiple
-        self.assertEqual(uris_to_paths(uri_w + uri_w), path_w + path_w)
-
-        # Unsupported scheme
-        uri_s = ['foo://bar']
-        self.assertEqual(uris_to_paths(uri_w + uri_s), path_w)
 
     def test_whitelisted(self):
         """Unit test for whitelisted()"""
