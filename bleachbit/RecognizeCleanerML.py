@@ -141,18 +141,27 @@ class RecognizeCleanerML:
 
     def __init__(self, parent_window=None):
         self.parent_window = parent_window
+        self.salt = None
         try:
             self.salt = options.get('hashsalt')
         except bleachbit.NoOptionError:
+            pass
+        if not self.salt:
             self.salt = hashdigest(os.urandom(512))
             options.set('hashsalt', self.salt)
         self.__scan()
 
     def __recognized(self, pathname):
         """Is pathname recognized?"""
-        with open(pathname) as f:
-            body = f.read()
-        new_hash = hashdigest(self.salt + body)
+        # __init__ should set the salt.
+        if not self.salt:
+            raise RuntimeError('salt is not set')
+        try:
+            with open(pathname, 'rb') as f:
+                body = f.read()
+        except OSError:  # The file is locked, what to do next?
+            return NEW, hashdigest(b"")
+        new_hash = hashdigest(str.encode(self.salt, encoding='utf-8') + body)
         try:
             known_hash = options.get_hashpath(pathname)
         except bleachbit.NoOptionError:
