@@ -114,7 +114,7 @@ def get_filesystem_type(path):
         return partitions[path]
 
     splitpath = path.split(os.sep)
-    for i in range(0, len(splitpath)-1):
+    for i in range(0, len(splitpath)):
         path = os.sep.join(splitpath[:i]) + os.sep
         if path in partitions:
             return partitions[path]

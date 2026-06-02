@@ -58,6 +58,7 @@ from bleachbit.FileUtilities import (
     is_normal_directory,
     listdir,
     same_partition,
+    get_filesystem_type,
     vacuum_sqlite3,
     whitelisted,
     wipe_contents,
@@ -1085,6 +1086,17 @@ class FileUtilitiesTestCase(common.BleachbitTestCase):
         self.assertEqual(empty_size, getsize(path))
 
         delete(path)
+
+    def test_get_filesystem_type_unc_deep_path(self):
+        """Unit test for get_filesystem_type() with deep UNC path"""
+        mock_psutil = mock.Mock()
+        mock_psutil.disk_partitions.return_value = [
+            mock.Mock(mountpoint=r'\\server\share', fstype='ntfs',
+                      device=r'\\server\share')
+        ]
+        with mock.patch.dict('sys.modules', {'psutil': mock_psutil}):
+            result = get_filesystem_type(r'\\server\share\dir')
+        self.assertEqual(result, ('ntfs', '\\\\server\\share'))
 
     def test_is_normal_directory_real(self):
         """Unit test for is_normal_directory() with real files"""
