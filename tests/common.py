@@ -95,14 +95,25 @@ class BleachbitTestCase(unittest.TestCase):
     #
     # file asserts
     #
+    @staticmethod
+    def _assert_path(path):
+        """Normalize a path for existence checks in unit tests."""
+        # TestMakefile.py uses relative path without an environment variable.
+        # TestWinapp.py uses variable "$bbtestdir"
+        # However, do not expand paths that are already absolute.
+        if not os.path.isabs(path):
+            path = os.path.expandvars(path)
+        return path
+
     def assertExists(self, path, msg='', func=os.stat):
         """File, directory, or any path exists"""
-        path = os.path.expandvars(path)
+        path = self._assert_path(path)
         if not self.check_exists(func, getTestPath(path)):
             raise AssertionError(
                 'The file %s should exist, but it does not. %s' % (path, msg))
 
     def assertNotExists(self, path, msg='', func=os.stat):
+        path = self._assert_path(path)
         if self.check_exists(func, getTestPath(path)):
             raise AssertionError(
                 'The file %s should not exist, but it does. %s' % (path, msg))
