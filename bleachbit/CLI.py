@@ -16,6 +16,7 @@ import sys
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
 from bleachbit import APP_VERSION, stdout_encoding
 from bleachbit import SystemInformation, Options, Worker
+from bleachbit.Bootstrap import bootstrap
 from bleachbit.Language import get_text as _
 from bleachbit.Log import set_root_log_level
 
@@ -401,6 +402,9 @@ There is NO WARRANTY, to the extent permitted by law.
         preview_or_clean(operations, options.clean)
         sys.exit(0)
     if options.gui:
+        from bleachbit.Bootstrap import check_wayland_and_root
+        if check_wayland_and_root():
+            sys.exit(1)
         import bleachbit.GuiApplication
         enable_uac = os.name == 'nt' and not options.no_uac
         app = bleachbit.GuiApplication.Bleachbit(
@@ -422,4 +426,5 @@ There is NO WARRANTY, to the extent permitted by law.
 
 
 if __name__ == '__main__':
+    bootstrap()
     process_cmd_line()

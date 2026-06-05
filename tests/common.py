@@ -28,6 +28,7 @@ if 'win32' == sys.platform:
 
 import bleachbit
 import bleachbit.Options
+from bleachbit.Bootstrap import bootstrap
 from bleachbit.FileUtilities import (
     children_in_directory,
     extended_path,
@@ -127,6 +128,7 @@ class BleachbitTestCase(unittest.TestCase):
         `appveyor.yml`.
         * Patch options paths.
         """
+        bootstrap()
         warnings.simplefilter("error")
         cls.tempdir = tempfile.mkdtemp(prefix=cls.__name__)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:

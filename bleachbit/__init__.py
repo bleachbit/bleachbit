@@ -8,7 +8,6 @@
 Code that is commonly shared throughout BleachBit
 """
 
-import getpass
 import os
 import re
 import sys
@@ -86,21 +85,25 @@ for lf in license_filenames:
         license_filename = lf
         break
 
+
+def _home_dir():
+    """Return home directory with fallback for missing HOME and passwd entry."""
+    home = os.getenv('HOME')
+    if home:
+        return home
+    # expanduser() falls back to a lookup in passwd database.
+    home = os.path.expanduser('~')
+    if home != '~':
+        return home
+    return '/tmp'
+
+
 # configuration
 portable_mode = False
 options_dir = None
 if IS_POSIX:
-    # os.path.expanduser('~') returns '~' unchanged when HOME is unset
-    # and the user has no passwd entry (e.g., Docker containers).
-    if not os.getenv('HOME'):
-        _home = os.path.expanduser('~')
-        if _home == '~':
-            _home = '/tmp'
-            logger.warning('HOME not set and no passwd entry; using %s', _home)
-        os.environ['HOME'] = _home
-    options_dir = os.path.expanduser("~/.config/bleachbit")
+    options_dir = os.path.join(_home_dir(), ".config/bleachbit")
 elif IS_WINDOWS:
-    os.environ.pop('FONTCONFIG_FILE', None)
     if os.path.exists(os.path.join(bleachbit_exe_path, 'bleachbit.ini')):
         # portable mode
         portable_mode = True
@@ -252,36 +255,3 @@ elif sys.platform.startswith("openbsd") or sys.platform.startswith("freebsd"):
 base_url = "https://update.bleachbit.org"
 help_contents_url = "https://www.bleachbit.org/help"
 update_check_url = f"{base_url}/update/{APP_VERSION}"
-
-# set up environment variables
-if IS_WINDOWS:
-    from bleachbit import Windows
-    Windows.setup_environment()
-
-if IS_POSIX:
-    # Set fallbacks for environment variables.
-    envs = {
-        'PATH': '/usr/bin:/bin:/usr/sbin:/sbin',
-        'XDG_CACHE_HOME': os.path.expanduser('~/.cache'),
-        'XDG_CONFIG_HOME': os.path.expanduser('~/.config'),
-        'XDG_DATA_HOME': os.path.expanduser('~/.local/share')
-    }
-    if not os.getenv('USER'):
-        try:
-            envs['USER'] = getpass.getuser()
-        except (OSError, KeyError):
-            pass
-    for varname, value in envs.items():
-        if not os.getenv(varname):
-            os.environ[varname] = value
-
-
-if IS_WINDOWS:
-    import win32process
-
-    for process in win32process.EnumProcessModules(-1):
-        name = win32process.GetModuleFileNameEx(-1, process)
-        if re.search(r'python\d+.dll$', name, re.IGNORECASE):
-            bindir = os.path.dirname(name)
-            os.environ['GDK_PIXBUF_MODULE_FILE'] = os.path.join(
-                bindir, 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache')
