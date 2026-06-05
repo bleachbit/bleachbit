@@ -9,6 +9,8 @@ later.  See the COPYING file in the top-level directory.
 <cleaner id="claude">
   <label>Claude</label>
   <description translators="Label for Claude coding assistant">AI assistant</description>
+  <running type="exe" os="windows">Claude.exe</running>
+  <running type="exe" os="linux">claude</running>
   <option id="backup">
     <label>Backup files</label>
     <description>Delete the backup files</description>
@@ -18,18 +20,32 @@ later.  See the COPYING file in the top-level directory.
     <label>Cache</label>
     <description>Delete the cache</description>
     <action command="delete" search="walk.all" path="~/.claude/cache/"/>
+    <action command="delete" search="walk.all" path="~/.claude/plugins/cache/"/>
+  </option>
+  <option id="file_history">
+    <label>File history</label>
+    <description>Delete the file history used for /restore</description>
+    <action command="delete" search="walk.all" path="~/.claude/file-history/"/>
   </option>
   <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
     <action command="delete" search="walk.files" path="~/.claude/debug/"/>
     <action command="delete" search="walk.files" path="~/.claude/logs/"/>
+    <action command="delete" search="file" path="~/.claude/" regex="\.log$"/>
   </option>
   <option id="session">
     <label>Session</label>
     <description translators="Description for deleting Claude Code sessions">Delete the conversation history</description>
     <warning>You would lose resume, continue, and rewind for past sessions</warning>
-    <action command="delete" search="walk.files" path="~/.claude/projects/"/>
+    <action command="delete" search="walk.all" path="~/.claude/projects/"/>
+    <action command="delete" search="walk.all" path="~/.claude/sessions/"/>
+    <action command="delete" search="walk.all" path="~/.claude/session-env/"/>
+  </option>
+  <option id="shell_snapshots">
+    <label>Shell snapshots</label>
+    <description>Delete saved shell output snapshots</description>
+    <action command="delete" search="walk.all" path="~/.claude/shell-snapshots/"/>
   </option>
   <option id="tmp">
     <label>Temporary files</label>
