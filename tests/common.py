@@ -237,26 +237,45 @@ class BleachbitTestCase(unittest.TestCase):
     #
     # file asserts
     #
-    def assertExists(self, path, msg='', func=os.stat):
-        """File, directory, or any path exists"""
+    @staticmethod
+    def _assert_path(path):
+        """Normalize a path for existence checks in unit tests."""
+        # TestMakefile.py uses relative path without an environment variable.
+        # TestWinapp.py uses variable "$bbtestdir"
+        # However, do not expand paths that are already absolute or Path objects.
         if isinstance(path, Path):
-            path = str(path)
+            return str(path)
         assert isinstance(
-            path, str), f'path must be a string, not {type(path)}'
-        path = os.path.expandvars(path)
+            path, str), f'path must be a string or Path, not {type(path)}'
+        if not os.path.isabs(path):
+            path = os.path.expandvars(path)
+        return path
+
+    # Our assertion method names follow the convention in Python's unittest
+    # pylint: disable-next=invalid-name
+    def assertExists(self, path, msg='', func=os.stat):
+        """Check that a file, directory, or any path exists"""
+        path = self._assert_path(path)
         if not self.check_exists(func, getTestPath(path)):
             raise AssertionError(
                 'The file %s should exist, but it does not. %s' % (path, msg))
 
+    # pylint: disable-next=invalid-name
     def assertNotExists(self, path, msg='', func=os.stat):
+        """Check that a file, directory, or any path does not exist"""
+        path = self._assert_path(path)
         if self.check_exists(func, getTestPath(path)):
             raise AssertionError(
                 'The file %s should not exist, but it does. %s' % (path, msg))
 
+    # pylint: disable-next=invalid-name
     def assertLExists(self, path, msg=''):
+        """Check that a file, directory, or any path exists using lstat"""
         self.assertExists(path, msg, os.lstat)
 
+    # pylint: disable-next=invalid-name
     def assertNotLExists(self, path, msg=''):
+        """Check that a file, directory, or any path does not exist using lstat"""
         self.assertNotExists(path, msg, os.lstat)
 
     def assertCondExists(self, cond, path, msg=''):
