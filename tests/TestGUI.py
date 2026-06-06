@@ -352,6 +352,23 @@ class GUITestCase(common.BleachbitTestCase):
         for obj in test_files_dirs:
             self.assertNotExists(obj)
 
+    def test_shred_paths_clears_clipboard(self):
+        """Test that shred_paths with clear_clipboard=True clears the clipboard"""
+        test_file = self.write_file('shred-me-via-clipboard')
+        gui = self.app._window
+        self.refresh_gui()
+
+        mock_clipboard = mock.Mock()
+        with mock.patch('bleachbit.GuiWindow.Gtk.Clipboard.get', return_value=mock_clipboard):
+            with mock.patch.object(gui, '_confirm_delete', return_value=True):
+                gui.shred_paths([test_file], clear_clipboard=True)
+
+        self.refresh_gui()
+
+        mock_clipboard.set_text.assert_called_once_with(' ', 1)
+        mock_clipboard.clear.assert_called_once()
+        self.assertNotExists(test_file)
+
     @mock.patch('bleachbit.CleanerML.list_cleanerml_files')
     @mock.patch('bleachbit.RecognizeCleanerML.cleaner_change_dialog')
     def _setup_new_cleaner(self, gui, mock_cleaner_change_dialog, mock_list_cleanerml_files):

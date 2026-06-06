@@ -492,7 +492,7 @@ class GUI(Gtk.ApplicationWindow):
             self.cb_refresh_operations()
         self.update_log_level()
 
-    def shred_paths(self, paths, shred_settings=False):
+    def shred_paths(self, paths, shred_settings=False, clear_clipboard=False):
         """Shred file or folders
 
         This function has several uses:
@@ -519,6 +519,11 @@ class GUI(Gtk.ApplicationWindow):
             if not self._confirm_delete(False, shred_settings):
                 # User dis-confirmed the deletion.
                 return False
+
+        if clear_clipboard:
+            clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+            clipboard.set_text(' ', 1)
+            clipboard.clear()
 
         # Either confirmation was not required or user approved, so
         # continue with deletion.

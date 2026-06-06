@@ -194,7 +194,7 @@ class Bleachbit(Gtk.Application):
                                for p in text.splitlines() if p.strip()]
 
         if shred_paths:
-            GUI.shred_paths(self._window, shred_paths)
+            GUI.shred_paths(self._window, shred_paths, clear_clipboard=True)
         else:
             logger.warning(not_found_msg)
 
