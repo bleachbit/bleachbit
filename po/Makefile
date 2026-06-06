@@ -70,6 +70,7 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot metainfo.pot nsis.pot require-gette
 		$(PY_SRC)
 	xgettext -o $(POTFILE) \
 		--join-existing \
+		--add-comments=TRANSLATORS \
 		--default-domain=$(APP) \
 		--add-location=file \
 		--language=Glade \
