@@ -24,7 +24,7 @@ from bleachbit.Options import options
 from tests import common
 
 if HAVE_GTK:
-    from bleachbit.GtkShim import Gtk, GLib, Gio, GObject
+    from bleachbit.GtkShim import Gtk, GLib, Gio, GObject, Gdk
     from bleachbit.GuiApplication import Bleachbit
     from bleachbit.GuiUtil import get_font_size_from_name, get_window_info
     from bleachbit.GuiTreeModels import TreeDisplayModel
@@ -140,6 +140,25 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertIsNotNone(b)
         b.clicked()
         self.refresh_gui()
+
+    def wait_until(self, condition, timeout=5):
+        """
+        Wait until a condition is met or timeout is reached.
+
+        Args:
+            condition: A callable that returns a boolean
+            timeout: Maximum time to wait in seconds
+
+        Returns:
+            True if condition is met, False if timeout is reached
+        """
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            self.refresh_gui(0.05)
+            if condition():
+                return True
+        self.refresh_gui()
+        return condition()
 
     def test_append_text(self):
         """Test append_text handles special strings"""
@@ -352,21 +371,38 @@ class GUITestCase(common.BleachbitTestCase):
         for obj in test_files_dirs:
             self.assertNotExists(obj)
 
-    def test_shred_paths_clears_clipboard(self):
-        """Test that shred_paths with clear_clipboard=True clears the clipboard"""
+    def test_shred_paths_clears_clipboard_mock(self):
+        """Test that shred_paths with should_clear_clipboard=True clears the clipboard"""
         test_file = self.write_file('shred-me-via-clipboard')
         gui = self.app._window
         self.refresh_gui()
 
-        mock_clipboard = mock.Mock()
-        with mock.patch('bleachbit.GuiWindow.Gtk.Clipboard.get', return_value=mock_clipboard):
+        with mock.patch('bleachbit.GuiWindow.clear_clipboard') as mock_clear_clipboard:
             with mock.patch.object(gui, '_confirm_delete', return_value=True):
-                gui.shred_paths([test_file], clear_clipboard=True)
+                gui.shred_paths([test_file], should_clear_clipboard=True)
 
         self.refresh_gui()
 
-        mock_clipboard.set_text.assert_called_once_with(' ', 1)
-        mock_clipboard.clear.assert_called_once()
+        mock_clear_clipboard.assert_called_once()
+        self.assertNotExists(test_file)
+
+    def test_shred_paths_from_clipboard_menu_integration(self):
+        """Shred a path copied to the real clipboard"""
+        test_file = self.write_file('shred-me-via-real-clipboard')
+        self.refresh_gui()
+
+        options.set('expert_mode', True)
+        options.set('delete_confirmation', False)
+
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clipboard.set_text(test_file, -1)
+        self.refresh_gui()
+        self.assertTrue(self.wait_until(
+            lambda: test_file == clipboard.wait_for_text()))
+
+        targets = [Gdk.atom_intern_static_string('text/plain')]
+        self.app.cb_clipboard_uri_received(clipboard, targets, None)
+        self.assertTrue(self.wait_until(lambda: not os.path.exists(test_file)))
         self.assertNotExists(test_file)
 
     @mock.patch('bleachbit.CleanerML.list_cleanerml_files')

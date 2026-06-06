@@ -446,12 +446,12 @@ class System(Cleaner):
 
         # clipboard
         if HAVE_GTK and 'clipboard' == option_id:
-            def clear_clipboard():
-                clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-                clipboard.set_text(' ', 1)
-                clipboard.clear()
+            def func_clear_clipboard():
+                """Command function to clear clipboard"""
+                import bleachbit.GuiUtil
+                bleachbit.GuiUtil.clear_clipboard()
                 return 0
-            yield Command.Function(None, clear_clipboard, _('Clipboard'))
+            yield Command.Function(None, func_clear_clipboard, _('Clipboard'))
 
         # wipe empty space
         shred_drives = options.get_list('shred_drives')

@@ -18,7 +18,7 @@ from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.GuiStartup import get_startup_messages
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
-from bleachbit.GuiUtil import (detect_dark_background, get_font_size_from_name,
+from bleachbit.GuiUtil import (clear_clipboard, detect_dark_background, get_font_size_from_name,
                                get_window_info, notify, threaded)
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
@@ -492,7 +492,7 @@ class GUI(Gtk.ApplicationWindow):
             self.cb_refresh_operations()
         self.update_log_level()
 
-    def shred_paths(self, paths, shred_settings=False, clear_clipboard=False):
+    def shred_paths(self, paths, shred_settings=False, should_clear_clipboard=False):
         """Shred file or folders
 
         This function has several uses:
@@ -520,10 +520,8 @@ class GUI(Gtk.ApplicationWindow):
                 # User dis-confirmed the deletion.
                 return False
 
-        if clear_clipboard:
-            clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-            clipboard.set_text(' ', 1)
-            clipboard.clear()
+        if should_clear_clipboard:
+            clear_clipboard()
 
         # Either confirmation was not required or user approved, so
         # continue with deletion.

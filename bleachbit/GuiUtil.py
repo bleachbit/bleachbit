@@ -9,7 +9,7 @@ import threading
 from enum import Enum
 from typing import Optional
 
-from bleachbit import APP_NAME
+from bleachbit import APP_NAME, FileUtilities, IS_WINDOWS
 from bleachbit.GUI import logger
 from bleachbit.GtkShim import GLib, Gdk, Gtk, gi
 
@@ -25,6 +25,42 @@ class WindowInfo:
 
     def __str__(self):
         return f"WindowInfo(x={self.x}, y={self.y}, width={self.width}, height={self.height}, monitor_model={self.monitor_model})"
+
+
+def clear_clipboard():
+    """Clear the clipboard buffer"""
+    clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+    clipboard.set_text(' ', 1)
+    clipboard.clear()
+    while Gtk.events_pending():
+        Gtk.main_iteration_do(False)
+
+
+def get_clipboard_paths(clipboard, targets):
+    """Returns paths from clipboard as a list"""
+    shred_paths = []
+    if IS_WINDOWS and Gdk.atom_intern_static_string('FileNameW') in targets:
+        # Windows
+        # Use non-GTK+ functions because because GTK+ 2 does not work.
+        import bleachbit.Windows
+        shred_paths = bleachbit.Windows.get_clipboard_paths()
+    elif Gdk.atom_intern_static_string('text/uri-list') in targets:
+        # Linux
+        shred_uri_contents = clipboard.wait_for_contents(
+            Gdk.atom_intern_static_string('text/uri-list'))
+        if shred_uri_contents:
+            shred_paths = FileUtilities.uris_to_paths(
+                shred_uri_contents.get_uris())
+
+    if not shred_paths and (
+            Gdk.atom_intern_static_string('text/plain') in targets or
+            Gdk.atom_intern_static_string('UTF8_STRING') in targets):
+        # Plain text pasted from a text editor
+        text = clipboard.wait_for_text()
+        if text:
+            shred_paths = [p.strip()
+                           for p in text.splitlines() if p.strip()]
+    return shred_paths
 
 
 def get_font_size_from_name(font_name):
