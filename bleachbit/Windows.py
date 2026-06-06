@@ -58,6 +58,7 @@ if 'win32' == sys.platform:
     import winreg
     import pywintypes
     import win32api
+    import win32clipboard
     import win32con
     import win32file
     import win32gui
@@ -868,10 +869,20 @@ def flush_dns():
     return 0
 
 
+def clear_clipboard():
+    """Clear the clipboard"""
+    _open_clipboard()
+    try:
+        win32clipboard.EmptyClipboard()
+    except Exception:
+        logger.exception('error clearing clipboard')
+    finally:
+        win32clipboard.CloseClipboard()
+
+
 def get_clipboard_paths():
     """Return a tuple of Unicode pathnames from the clipboard"""
-    import win32clipboard
-    win32clipboard.OpenClipboard()
+    _open_clipboard()
     path_list = ()
     try:
         path_list = win32clipboard.GetClipboardData(win32clipboard.CF_HDROP)
@@ -880,6 +891,19 @@ def get_clipboard_paths():
     finally:
         win32clipboard.CloseClipboard()
     return path_list
+
+
+def _open_clipboard(timeout=1.0):
+    """Open the clipboard with retry logic"""
+    deadline = time.time() + timeout
+    while True:
+        try:
+            return win32clipboard.OpenClipboard()
+        except pywintypes.error as e:
+            winerror = getattr(e, 'winerror', e.args[0] if e.args else None)
+            if winerror != 5 or time.time() >= deadline:
+                raise
+            time.sleep(0.05)
 
 
 def get_fixed_drives():

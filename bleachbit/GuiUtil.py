@@ -4,6 +4,10 @@
 # This work is licensed under the terms of the GNU GPL, version 3 or
 # later.  See the COPYING file in the top-level directory.
 
+"""
+WindowInfo class and utility functions for GUI
+"""
+
 import os
 import threading
 from enum import Enum
@@ -29,19 +33,30 @@ class WindowInfo:
 
 def clear_clipboard():
     """Clear the clipboard buffer"""
-    clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-    clipboard.set_text(' ', 1)
-    clipboard.clear()
-    flush_gtk_events()
+    if IS_WINDOWS:
+        import bleachbit.Windows  # pylint: disable=import-outside-toplevel
+        bleachbit.Windows.clear_clipboard()
+    else:
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clipboard.set_text(' ', 1)
+        clipboard.clear()
+        flush_gtk_events()
 
 
-def get_clipboard_paths(clipboard, targets):
+def get_clipboard_paths(clipboard=None, targets=None):
     """Returns paths from clipboard as a list"""
+    if clipboard is None:
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+    if targets is None:
+        has_targets, targets = clipboard.wait_for_targets()
+        if not has_targets:
+            targets = []
+
     shred_paths = []
     if IS_WINDOWS and Gdk.atom_intern_static_string('FileNameW') in targets:
         # Windows
         # Use non-GTK+ functions because because GTK+ 2 does not work.
-        import bleachbit.Windows
+        import bleachbit.Windows  # pylint: disable=import-outside-toplevel
         shred_paths = bleachbit.Windows.get_clipboard_paths()
     elif Gdk.atom_intern_static_string('text/uri-list') in targets:
         # Linux
