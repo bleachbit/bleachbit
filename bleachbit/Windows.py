@@ -845,14 +845,23 @@ def empty_recycle_bin(path, really_delete):
     Keyword arguments:
     path          -- A drive, folder or None.  None refers to all recycle bins.
     really_delete -- If True, then delete.  If False, then just preview.
+
+    Returns:
+    The number of bytes that were freed or would be freed.
     """
-    (bytes_used, num_files) = shell.SHQueryRecycleBin(path)
+    (recycle_bin_size, num_files) = shell.SHQueryRecycleBin(path)
     if really_delete and num_files > 0:
         # Trying to delete an empty Recycle Bin on Vista/7 causes a
         # 'catastrophic failure'
         flags = shellcon.SHERB_NOSOUND | shellcon.SHERB_NOCONFIRMATION | shellcon.SHERB_NOPROGRESSUI
-        shell.SHEmptyRecycleBin(None, path, flags)
-    return bytes_used
+        try:
+            shell.SHEmptyRecycleBin(None, path, flags)
+        except Exception:
+            logger.exception(
+                'error in SHEmptyRecycleBin(): recycle_bin_size=%s, num_files=%r, path=%r',
+                FileUtilities.bytes_to_human(recycle_bin_size), num_files, path)
+            raise
+    return recycle_bin_size
 
 
 def flush_dns():
