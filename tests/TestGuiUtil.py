@@ -15,11 +15,13 @@ import unittest
 from pathlib import Path
 
 from bleachbit.GtkShim import HAVE_GTK
+
 from tests import common
 
 if HAVE_GTK:
     from bleachbit.GtkShim import Gdk, Gtk  # pylint: disable=ungrouped-imports
-    from bleachbit.GuiUtil import clear_clipboard, flush_gtk_events, get_clipboard_paths
+    from bleachbit.GuiUtil import (clear_clipboard, flush_gtk_events,
+                                   get_clipboard_paths, get_font_size_from_name)
 
 
 
@@ -120,3 +122,34 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
         get2 = list(get_clipboard_paths(clipboard, targets))
         self.assertEqual(get1, get2)
         self.assertEqual(sorted(self.paths), sorted(get1))
+
+@unittest.skipUnless(HAVE_GTK, 'requires GTK+ module and a display environment')
+class GUIUtilFontTestCase(common.BleachbitTestCase):
+    """Test case for font size utility"""
+
+    def test_get_font_size_from_name_valid(self):
+        """Extract font size from valid font names."""
+        tests = (
+            ('Sans 12', 12),
+            ('Monospace Bold 14', 14),
+            ('12', 12),
+            ('Arial 10.5', 10),
+        )
+        for font_name, expected in tests:
+            self.assertEqual(get_font_size_from_name(font_name), expected,
+                             f"Font name '{font_name}' should return {expected}")
+
+    def test_get_font_size_from_name_invalid(self):
+        """Return None for invalid inputs."""
+        tests = (
+            None,
+            123,
+            '',
+            'Sans',
+            'Sans abc',
+            'Sans 0',
+            'Sans -1',
+        )
+        for font_name in tests:
+            self.assertIsNone(get_font_size_from_name(font_name),
+                              f"Font name '{font_name}' should return None")
