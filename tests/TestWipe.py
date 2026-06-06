@@ -132,7 +132,7 @@ class WipeTestCase(common.BleachbitTestCase):
         self.wipe_name_helper(filename)
 
         # create file with short name in temporary directory with long name
-        if 'nt' == os.name:
+        if bleachbit.IS_WINDOWS:
             # In Windows, the maximum path length is 260 characters
             # http://msdn.microsoft.com/en-us/library/aa365247%28VS.85%29.aspx#maxpath
             dir0len = 100

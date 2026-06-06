@@ -27,6 +27,7 @@ from random import randint
 # first party imports
 from tests import common
 
+import bleachbit
 from bleachbit import FileUtilities, General
 from bleachbit.Command import Delete, Function
 from bleachbit.FileUtilities import extended_path, extended_path_undo
@@ -126,7 +127,7 @@ class WindowsSystemPathsTestCase(common.BleachbitTestCase):
             paths)
 
 
-if 'win32' == sys.platform:
+if bleachbit.IS_WINDOWS:
     import pywintypes
     import win32api
     import win32service

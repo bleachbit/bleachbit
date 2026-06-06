@@ -28,7 +28,7 @@ from bleachbit.CLI import (
     preview_or_clean)
 from bleachbit.General import get_executable, run_external
 from bleachbit.GtkShim import HAVE_GTK
-from bleachbit import FileUtilities
+from bleachbit import FileUtilities, IS_WINDOWS, IS_POSIX
 from tests import common
 
 RUN_EXTERNAL_TIMEOUT = 30
@@ -73,7 +73,7 @@ class CLITestCase(common.BleachbitTestCase):
         self.assertIsInstance(o, list)
         self.assertTrue('google_chrome.cache' in o)
         self.assertTrue('system.tmp' in o)
-        gui_available = os.name == 'nt' or HAVE_GTK
+        gui_available = IS_WINDOWS or HAVE_GTK
         self.assertEqual(gui_available, 'system.clipboard' in o)
         self.assertFalse('system.empty_space' in o)
         self.assertFalse('system.memory' in o)
@@ -295,7 +295,7 @@ class CLITestCase(common.BleachbitTestCase):
             [['--version'], 'BleachBit version', True, None],
             [['--sysinfo'], 'sys.version', False, None]
         ]
-        if os.name == 'posix':
+        if IS_POSIX:
             # GUI is not available with clean environment on POSIX.
             tests.append([['--help'], 'Usage: ', True, None])
             # Force detection of Wayland
@@ -343,7 +343,7 @@ class CLITestCase(common.BleachbitTestCase):
         By not using `-m bleachbit.CLI`, this exercises `./bleachbit.py`.
         """
         env_configs = [[]]
-        if os.name != 'nt':
+        if not IS_WINDOWS:
             env_configs.extend([
                 ['env', '-i'],  # No environment variables
                 ['env', '-i', 'XDG_SESSION_TYPE=wayland']  # Mimic Wayland
@@ -351,7 +351,7 @@ class CLITestCase(common.BleachbitTestCase):
         for env_prefix in env_configs:
             args = env_prefix + [get_executable(), 'bleachbit.py', '--sysinfo']
             output = run_external(args, timeout=RUN_EXTERNAL_TIMEOUT)
-            if os.name == 'posix' and os.environ.get('USER') == 'root' and \
+            if IS_POSIX and os.environ.get('USER') == 'root' and \
                     output[0] == 1:
                 continue
             self.assertEqual(output[0], 0, output)

@@ -1,24 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# coding=utf-8
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-
-
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -41,7 +25,7 @@ from xml.sax.saxutils import quoteattr
 
 # first party imports
 import bleachbit.FileUtilities
-from bleachbit import logger
+from bleachbit import IS_WINDOWS, IS_POSIX, logger
 from bleachbit.Action import ActionProvider, Command, Delete, has_glob, expand_multi_var
 from bleachbit.CleanerML import CleanerML
 from tests import common
@@ -105,7 +89,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
     """Test cases for Action"""
 
-    _TEST_PROCESS_CMDS = {'nt': 'cmd.exe /c dir', 'posix': 'dir'}
+    _TEST_PROCESS_CMD = 'cmd.exe /c dir' if IS_WINDOWS else 'dir'
     _TEST_PROCESS_SIMPLE = '<action command="process" cmd={cmd} />'
 
     def _test_action_str(self, action_str, expect_exists=True):
@@ -155,13 +139,13 @@ class ActionTestCase(common.BleachbitTestCase):
     def test_delete(self):
         """Unit test for class Delete"""
         paths = ['~']
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             # Python 2.6 and later supports %foo%
             paths.append('%USERPROFILE%')
             # Python 2.5 and later supports $foo
             paths.append('${USERPROFILE}')
             paths.append('$USERPROFILE')
-        elif 'posix' == os.name:
+        elif IS_POSIX:
             paths.append('$HOME')
         for path in paths:
             for mode in ('delete', 'truncate', 'delete_forward'):
@@ -171,7 +155,7 @@ class ActionTestCase(common.BleachbitTestCase):
                 command = mode
                 if 'delete_forward' == mode:
                     # forward slash needs to be normalized on Windows
-                    if 'nt' == os.name:
+                    if IS_WINDOWS:
                         command = 'delete'
                         filename = filename.replace('\\', '/')
                     else:
@@ -292,7 +276,7 @@ class ActionTestCase(common.BleachbitTestCase):
                  '<action command="process" cmd={cmd} wait="{wait}" />',
                  ]
 
-        if os.name == 'nt':
+        if IS_WINDOWS:
             cmds = [
                 'ping /?',
                 '%windir%\\System32\\ping.exe /?',
@@ -310,7 +294,7 @@ class ActionTestCase(common.BleachbitTestCase):
         """Test process action with space in command"""
         # This is a regression test for a bug where spaces in commands were not handled correctly
         delete_me = self.write_file('delete me.txt')
-        if os.name == 'nt':
+        if IS_WINDOWS:
             cmd = f'cmd /c del "{delete_me}"'
         else:
             delete_me_escaped = delete_me.replace(" ", "\\ ")
@@ -327,7 +311,7 @@ class ActionTestCase(common.BleachbitTestCase):
         """
         fn = os.path.join(self.tempdir, 'file with space.txt')
         common.touch_file(fn)
-        if os.name == 'nt':
+        if IS_WINDOWS:
             cmd = f'cmd /c del &quot;{fn}&quot;'
         else:
             fn_for_cmd = fn.replace(" ", "\\ ")
@@ -349,7 +333,7 @@ class ActionTestCase(common.BleachbitTestCase):
                     # When GtkLoggerHandler is used the exceptions are raised directly
                     # and handleError is not called
                     self._test_action_str(
-                        ActionTestCase._TEST_PROCESS_SIMPLE.format(cmd=quoteattr(ActionTestCase._TEST_PROCESS_CMDS[os.name])))
+                        ActionTestCase._TEST_PROCESS_SIMPLE.format(cmd=quoteattr(ActionTestCase._TEST_PROCESS_CMD)))
                 except UnicodeDecodeError:
                     self.fail(
                         "test_process_unicode_stderr() raised UnicodeDecodeError unexpectedly!")
@@ -377,7 +361,7 @@ class ActionTestCase(common.BleachbitTestCase):
         # On Windows should be case insensitive
         action_str = '<action command="delete" search="glob" path="/tmp/foo*" regex="^FOO2$"/>'
         results = _action_str_to_results(action_str)
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             self.assertEqual(len(results), 1)
             self.assertEqual(results[0]['path'], '/tmp/foo2')
         else:
@@ -552,9 +536,9 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_walk_files(self):
         """Unit test for walk.files"""
-        paths = {'posix': '/var', 'nt': r'$WINDIR\system32'}
+        path = r'$WINDIR\system32' if IS_WINDOWS else '/var'
 
-        action_str = f'<action command="delete" search="walk.files" path="{paths[os.name]}" />'
+        action_str = f'<action command="delete" search="walk.files" path="{path}" />'
         results = 0
         for cmd in _action_str_to_commands(action_str):
             result = next(cmd.execute(False))
@@ -576,7 +560,7 @@ class ActionTestCase(common.BleachbitTestCase):
                     cleaner = CleanerML(
                         f'cleaners/{cleaner_name}.xml').get_cleaner()
                     # Cleaner remains usable because the action is registered, but it should auto-hide.
-                    self.assertEqual(os.name == 'posix', cleaner.is_usable())
+                    self.assertEqual(IS_POSIX, cleaner.is_usable())
                     self.assertTrue(cleaner.auto_hide())
                     mock_run_external.assert_not_called()
 

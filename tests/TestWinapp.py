@@ -20,14 +20,14 @@ from unittest import mock
 from tests import common
 from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
 from bleachbit.Windows import detect_registry_key, parse_windows_build
-from bleachbit import logger
+from bleachbit import IS_POSIX, IS_WINDOWS, logger
 
-if os.name == 'nt':
+if IS_WINDOWS:
     import winreg
 
 def _create_registry_keys(*key_paths):
     """Create registry keys, ignoring errors if they already exist"""
-    if os.name != 'nt':
+    if not IS_WINDOWS:
         return
     for key_path in key_paths:
         try:
@@ -38,7 +38,7 @@ def _create_registry_keys(*key_paths):
 
 def _delete_registry_keys(*key_paths):
     """Delete registry keys, ignoring errors if they don't exist"""
-    if os.name != 'nt':
+    if not IS_WINDOWS:
         return
     for key_path in key_paths:
         try:
@@ -54,9 +54,9 @@ def get_winapp2():
     url = ("https://raw.githubusercontent.com/bleachbit/winapp2.ini"
             "/refs/heads/master/Winapp2-BleachBit.ini")
     tmpdir = None
-    if os.name == 'posix':
+    if IS_POSIX:
         tmpdir = '/tmp'
-    if os.name == 'nt':
+    if IS_WINDOWS:
         tmpdir = os.getenv('TMP')
     if not tmpdir:
         tmpdir = tempfile.gettempdir()

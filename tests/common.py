@@ -21,12 +21,12 @@ import warnings
 from pathlib import Path
 from unittest import mock
 
-if 'win32' == sys.platform:
+import bleachbit
+
+if bleachbit.IS_WINDOWS:
     import winreg
     import win32gui
     from bleachbit import Windows
-
-import bleachbit
 import bleachbit.Options
 from bleachbit.Bootstrap import bootstrap
 from bleachbit.FileUtilities import (
@@ -334,7 +334,7 @@ class BleachbitTestCase(unittest.TestCase):
         self.assertFalse(is_hard_link(ext_dirname))
         self.assertTrue(is_normal_directory(ext_dirname))
         self.assertFalse(os.path.isfile(ext_dirname))
-        if os.name == 'nt':
+        if bleachbit.IS_WINDOWS:
             self.assertFalse(Windows.is_junction(ext_dirname))
         return dirname
 
@@ -356,7 +356,7 @@ class BleachbitTestCase(unittest.TestCase):
 
 
 def getTestPath(path):
-    if 'nt' == os.name:
+    if bleachbit.IS_WINDOWS:
         return extended_path(os.path.normpath(path))
     return path
 
@@ -387,7 +387,7 @@ def put_env(key, val):
 
 def skipIfWindows(f):
     """Skip unit test if running on Windows"""
-    return unittest.skipIf('win32' == sys.platform, 'running on Windows')(f)
+    return unittest.skipIf(bleachbit.IS_WINDOWS, 'running on Windows')(f)
 
 
 def skipUnlessDestructive(f):
@@ -397,7 +397,7 @@ def skipUnlessDestructive(f):
 
 def skipUnlessWindows(f):
     """Skip unit test unless running on Windows"""
-    return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')(f)
+    return unittest.skipUnless(bleachbit.IS_WINDOWS, 'not running on Windows')(f)
 
 
 def also_with_sudo(test_func):

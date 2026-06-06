@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test case for module ProtectedPath
@@ -41,6 +27,7 @@ from bleachbit.ProtectedPath import (
     load_protected_paths)
 from bleachbit import ProtectedPath as protected_path_module
 from bleachbit import get_share_path
+from bleachbit import IS_WINDOWS, IS_POSIX
 from bleachbit.Cleaner import backends
 from tests.TestCleaner import register_all_cleaners
 
@@ -90,7 +77,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
 
         # Test environment variable expansion
         with common.set_temporary_env('TEST_PROTECTED_PATH_VAR', '/test/path'):
-            if os.name == 'nt':
+            if IS_WINDOWS:
                 result = _expand_path('%TEST_PROTECTED_PATH_VAR%')
             else:
                 result = _expand_path('$TEST_PROTECTED_PATH_VAR')
@@ -223,9 +210,9 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
             result = check_protected_path(tmpdir)
             self.assertIsNone(result)
         # Check .git (which is protected) under an exempt directory
-        if os.name == 'posix':
+        if IS_POSIX:
             exempt_dir_raw = '~/.cache'
-        elif os.name == 'nt':
+        elif IS_WINDOWS:
             exempt_dir_raw = '%temp%'
         else:
             self.skipTest("Unsupported OS")

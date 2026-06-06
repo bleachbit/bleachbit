@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -29,6 +15,7 @@ from unittest import mock
 
 
 from tests import common
+from bleachbit import IS_POSIX, FS_SCAN_RE_FLAGS
 from bleachbit.SystemInformation import _get_home_dirs_to_anonymize, get_system_information, get_version, anonymize_system_information
 
 
@@ -110,7 +97,7 @@ os.getenv(LocalAppData) = {home_dir}\\AppData\\Local"""
         self.assertIn(
             'os.getenv(LocalAppData) = %userprofile%\\AppData\\Local', result)
         self.assertIsNone(re.search(re.escape(home_dir),
-                          result, flags=re.IGNORECASE))
+                          result, flags=FS_SCAN_RE_FLAGS))
 
     @common.skipUnlessWindows
     def test_anonymize_system_information_windows_short_path(self):
@@ -176,7 +163,7 @@ os.path.expanduser(~") = /root"""
         test_input = """personal_cleaners_dir = /root/.config/bleachbit/cleaners
 system_cleaners_dir = /home/regularuser/software/bleachbit/cleaners
 __file__ = /home/regularuser/software/bleachbit/bleachbit/SystemInformation.py"""
-        home_token = '~' if os.name == 'posix' else '%userprofile%'
+        home_token = '~' if IS_POSIX else '%userprofile%'
 
         with mock.patch('bleachbit.SystemInformation._get_home_dirs_to_anonymize',
                         return_value=['/home/regularuser']):
