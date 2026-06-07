@@ -11,7 +11,11 @@ import sys
 import bleachbit
 from bleachbit import APP_NAME, Cleaner, GuiBasic, appicon_path, portable_mode
 from bleachbit.Cleaner import backends
-from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
+from bleachbit.GtkShim import (
+    GLib, Gdk, Gio, Gtk,
+    require_gtk,
+    suppress_pygobject_asyncio_warnings,
+)
 from bleachbit.GUI import logger
 from bleachbit.GuiUtil import get_clipboard_paths
 from bleachbit.GuiWindow import GUI
@@ -67,6 +71,11 @@ class Bleachbit(Gtk.Application):
             # clean up nonce files https://github.com/bleachbit/bleachbit/issues/858
             import atexit
             atexit.register(Windows.cleanup_nonce)
+
+    def run(self, *args, **kwargs):
+        """Run the GTK application."""
+        with suppress_pygobject_asyncio_warnings():
+            return Gtk.Application.run(self, *args, **kwargs)
 
     def _init_windows_misc(self, auto_exit, shred_paths, uac):
         application_id_suffix = ''
