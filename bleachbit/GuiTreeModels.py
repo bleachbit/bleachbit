@@ -195,6 +195,14 @@ class TreeInfoModel:
                 None, (c_name, c_value, c_id, "", ""))
             for (o_id, o_name) in backends[key].get_options():
                 o_value = options.get_tree(c_id, o_id)
+                if not isinstance(o_name, str):
+                    logger.error("Invalid option name type for %s.%s: expected str, got %s: %s",
+                                 c_id, o_id, type(o_name).__name__, o_name)
+                    continue
+                if not isinstance(o_id, str):
+                    logger.error("Invalid option id type for %s: expected str, got %s: %s",
+                                 c_id, type(o_id).__name__, o_id)
+                    continue
                 self.tree_store.append(parent, (o_name, o_value, o_id, "", ""))
         if hidden_cleaners:
             logger.debug("automatically hid %d cleaners: %s", len(
