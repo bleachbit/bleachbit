@@ -1039,18 +1039,33 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.assertIsInteger(ret)
 
     @common.skipUnlessDestructive
-    def test_empty_recycle_bin_destructive(self):
-        """Unit test the destructive part of empty_recycle_bin()"""
-        # check it deletes files for fixed drives
+    def test_empty_recycle_bin_per_drive_destructive(self):
+        """Empty recycle bin in each drive individually"""
         put_objects_into_recycle_bin()
         for drive in get_fixed_drives():
-            ret = empty_recycle_bin(drive, really_delete=True)
-            self.assertIsInteger(ret)
-        # check it deletes files for all drives
+            with self.subTest(drive=drive):
+                try:
+                    ret = empty_recycle_bin(drive, really_delete=True)
+                except pywintypes.com_error as e:
+                    if e.args[0] == -2147024893 and 'APPVEYOR' in os.environ:
+                        self.skipTest(
+                            'reproducible only under AppVeyor and does not '
+                            'test a scenario used outside the tests')
+                    raise
+                self.assertIsInteger(ret)
+
+    @common.skipUnlessDestructive
+    def test_empty_recycle_bin_all_drives_destructive(self):
+        """Empty recycle bin in all drives at once"""
         put_objects_into_recycle_bin()
         ret = empty_recycle_bin(None, really_delete=True)
         self.assertIsInteger(ret)
-        # Repeat two for reasons.
+
+        # Verify that there are no objects in the bin.
+        for _f in get_recycle_bin():
+            self.fail('recycle bin should be empty, but it is not')
+
+        # Repeat the call to empty for two reasons.
         # 1. Trying to empty an empty recycling bin can cause
         #    a 'catastrophic failure' error (handled in the function)
         # 2. It should show zero bytes were deleted
