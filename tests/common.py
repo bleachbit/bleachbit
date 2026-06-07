@@ -184,7 +184,10 @@ class BleachbitTestCase(unittest.TestCase):
         duration = time.perf_counter() - start
         threshold = os.getenv('BLEACHBIT_SLOW_TEST_THRESHOLD')  # in seconds
         if threshold:
-            threshold = float(threshold)
+            try:
+                threshold = float(threshold)
+            except ValueError:
+                threshold = 30.0
         if not threshold or threshold < 0:
             threshold = 30.0
         if duration >= threshold:

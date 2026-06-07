@@ -163,6 +163,16 @@ class CommonTestCase(common.BleachbitTestCase):
         self.assertEqual('original_value', os.environ.get('TEST_VAR_EXISTING'))
         del os.environ['TEST_VAR_EXISTING']
 
+    def test_run_with_invalid_slow_test_threshold(self):
+        """Test that an invalid BLEACHBIT_SLOW_TEST_THRESHOLD does not crash the runner"""
+        with common.set_temporary_env('BLEACHBIT_SLOW_TEST_THRESHOLD', 'not_a_number'):
+            class DummyTestCase(common.BleachbitTestCase):
+                def test_pass(self):
+                    pass
+            dummy = DummyTestCase('test_pass')
+            result = dummy.run()
+            self.assertTrue(result.wasSuccessful())
+
     def test_touch_file(self):
         """Unit test for touch_file"""
         fn = os.path.join(self.tempdir, 'test_touch_file')
