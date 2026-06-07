@@ -1073,6 +1073,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_RUN_AS_ADMIN ${LANG_GREEK} "Πρέπει να εκτελέσετε αυτό το πρόγραμμα ως διαχειριστής."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_GREEK} "Το $(^NameDA) είναι εγκατεστημένο τόσο για όλους τους χρήστες όσο και για τον τρέχοντα χρήστη.$\r$\nΕπιλέξτε ποια εγκατάσταση θα καταργηθεί."
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_GREEK} "Επιλέξτε για ποιους χρήστες θα καταργηθεί το $(^NameDA)."
+	LangString OLD_WINDOWS_WARNING ${LANG_GREEK} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_GREEK} "Αυτά είναι τα βασικά αρχεία που απαιτούνται για τη λειτουργία του ${prodname} (υποχρεωτικά)."
 	LangString SECTION_CORE_NAME ${LANG_GREEK} "Βασικά αρχεία (υποχρεωτικά)"
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_GREEK} "Δημιουργία συντόμευσης στην επιφάνεια εργασίας."
