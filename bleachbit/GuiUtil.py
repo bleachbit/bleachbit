@@ -32,8 +32,7 @@ def clear_clipboard():
     clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
     clipboard.set_text(' ', 1)
     clipboard.clear()
-    while Gtk.events_pending():
-        Gtk.main_iteration_do(False)
+    flush_gtk_events()
 
 
 def get_clipboard_paths(clipboard, targets):

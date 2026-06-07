@@ -13,8 +13,8 @@ from bleachbit.GtkShim import HAVE_GTK
 from tests import common
 
 if HAVE_GTK:
-    from bleachbit.GtkShim import Gdk, Gtk
-    from bleachbit.GuiUtil import clear_clipboard, get_clipboard_paths
+    from bleachbit.GtkShim import Gdk, Gtk  # pylint: disable=ungrouped-imports
+    from bleachbit.GuiUtil import clear_clipboard, flush_gtk_events, get_clipboard_paths
 
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module and a display environment')
@@ -25,8 +25,7 @@ class GUIUtilTestCase(common.BleachbitTestCase):
         """Wait for GTK to publish clipboard text."""
         deadline = time.time() + 5
         while time.time() < deadline:
-            while Gtk.events_pending():
-                Gtk.main_iteration_do(False)
+            flush_gtk_events()
             if clipboard.wait_for_text() == text:
                 return True
             time.sleep(0.05)
