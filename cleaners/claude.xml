@@ -23,8 +23,8 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="~/.claude/plugins/cache/"/>
   </option>
   <option id="file_history">
-    <label>File history</label>
-    <description>Delete the file history used for /restore</description>
+    <label translators="Pre-edit snapshots of files Claude Code changed, used for checkpoint restore">File history</label>
+    <description translators="Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.">Delete the file history used for /restore</description>
     <action command="delete" search="walk.all" path="~/.claude/file-history/"/>
   </option>
   <option id="logs">
@@ -43,8 +43,8 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="~/.claude/session-env/"/>
   </option>
   <option id="shell_snapshots">
-    <label>Shell snapshots</label>
-    <description>Delete saved shell output snapshots</description>
+    <label translators="In Claude Code: captured shell environment used by the Bash tool">Shell snapshots</label>
+    <description>Delete the files</description>
     <action command="delete" search="walk.all" path="~/.claude/shell-snapshots/"/>
   </option>
   <option id="tmp">

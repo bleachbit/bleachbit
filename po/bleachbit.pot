@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-06 23:33-0600\n"
+"POT-Creation-Date: 2026-06-07 11:17-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -231,9 +231,10 @@ msgstr ""
 #: ../cleaners/waterfox.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/chromium.xml ../cleaners/windows_defender.xml
 #: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/deepscan.xml ../cleaners/google_chrome.xml
-#: ../cleaners/transmission.xml ../cleaners/profanity.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/vuze.xml ../cleaners/opera.xml
+#: ../cleaners/brave.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
+#: ../cleaners/google_chrome.xml ../cleaners/transmission.xml
+#: ../cleaners/profanity.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/vuze.xml ../cleaners/opera.xml
 msgid "Delete the files"
 msgstr ""
 
@@ -684,6 +685,16 @@ msgstr ""
 msgid "AI assistant"
 msgstr ""
 
+#. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
+#: ../cleaners/claude.xml
+msgid "File history"
+msgstr ""
+
+#. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
+#: ../cleaners/claude.xml
+msgid "Delete the file history used for /restore"
+msgstr ""
+
 #. Description for deleting Claude Code sessions
 #: ../cleaners/claude.xml
 msgid "Delete the conversation history"
@@ -691,6 +702,11 @@ msgstr ""
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
+msgstr ""
+
+#. In Claude Code: captured shell environment used by the Bash tool
+#: ../cleaners/claude.xml
+msgid "Shell snapshots"
 msgstr ""
 
 #: ../cleaners/deepscan.xml
