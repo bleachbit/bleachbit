@@ -137,19 +137,26 @@ if bleachbit.IS_WINDOWS:
     from bleachbit import Windows
 
 
-def put_files_into_recycle_bin():
+def put_objects_into_recycle_bin():
     """Put a file and a folder into the recycle bin"""
+    count = 0
     # make a file and move it to the recycle bin
-    tests = ('regular', 'unicode-emdash-u\u2014', 'long' + 'x' * 100)
+    tests = ['regular', 'unicode-emdash-u\u2014',
+             'long' + 'x' * 100] + common.SPECIAL_TEST_STRINGS
     for test in tests:
-        (fd, filename) = tempfile.mkstemp(
-            prefix='bleachbit-recycle-file', suffix=test)
-        os.close(fd)
+        with tempfile.NamedTemporaryFile(
+                prefix='bleachbit-recycle-file', suffix=test, delete=False) as f:
+            filename = f.name
+            # Write enough data to exceed the MFT resident threshold.
+            f.write(b'x' * (1024 * 32))
         move_to_recycle_bin(filename)
+        count += 1
     # make a folder and move it to the recycle bin
     dirname = tempfile.mkdtemp(prefix='bleachbit-recycle-folder')
     common.touch_file(os.path.join(dirname, 'file'))
     move_to_recycle_bin(dirname)
+    count += 1
+    return count
 
 
 class WindowsLinksMixIn():
@@ -260,13 +267,13 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     @common.skipUnlessDestructive
     def test_get_recycle_bin_destructive(self):
         """Unit test the destructive part of get_recycle_bin"""
-        put_files_into_recycle_bin()
+        added_count = put_objects_into_recycle_bin()
         # clear recycle bin
         counter = 0
         for f in get_recycle_bin():
             counter += 1
             FileUtilities.delete(f)
-        self.assertGreaterEqual(counter, 3, 'deleted %d' % counter)
+        self.assertGreaterEqual(counter, added_count, 'deleted %d' % counter)
         # now it should be empty
         for _f in get_recycle_bin():
             self.fail('recycle bin should be empty, but it is not')
@@ -1035,12 +1042,12 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_empty_recycle_bin_destructive(self):
         """Unit test the destructive part of empty_recycle_bin()"""
         # check it deletes files for fixed drives
-        put_files_into_recycle_bin()
+        put_objects_into_recycle_bin()
         for drive in get_fixed_drives():
             ret = empty_recycle_bin(drive, really_delete=True)
             self.assertIsInteger(ret)
         # check it deletes files for all drives
-        put_files_into_recycle_bin()
+        put_objects_into_recycle_bin()
         ret = empty_recycle_bin(None, really_delete=True)
         self.assertIsInteger(ret)
         # Repeat two for reasons.
