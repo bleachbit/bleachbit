@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-06-07 11:17-0600\n"
-"PO-Revision-Date: 2026-05-18 05:11+0000\n"
+"PO-Revision-Date: 2026-06-08 18:01+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/bleachbit/main/"
 "et/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.6\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -710,17 +710,13 @@ msgstr "Tehisaru abiline"
 
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Form history"
 msgid "File history"
-msgstr "Tekstiväljade ajalugu"
+msgstr "Failide ajalugu"
 
 #. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the list of recently used documents"
 msgid "Delete the file history used for /restore"
-msgstr "Kustuta hiljuti kasutatud dokumentide nimekiri"
+msgstr "Kustuta failide ajalugu, mis on kasutusel /restore jaoks"
 
 #. Description for deleting Claude Code sessions
 #: ../cleaners/claude.xml
@@ -734,7 +730,7 @@ msgstr "Sa kaotad võimaluse varasemaid sessioone jätkata ja tagasi kerida"
 #. In Claude Code: captured shell environment used by the Bash tool
 #: ../cleaners/claude.xml
 msgid "Shell snapshots"
-msgstr ""
+msgstr "Kesta hetktõmmised"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -1114,6 +1110,9 @@ msgid ""
 "compatible version for your system, click OK. To exit the installer, click "
 "Cancel."
 msgstr ""
+"See BleachBiti versioon eeldab Windows 10 või hilisema kasutamist. Laadimaks "
+"alla sinu arvutiga ühilduvat versiooni klõpsa Sobib-nuppu. Paigaldajast "
+"väljumiseks klõpsa Katkesta."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
@@ -1288,6 +1287,11 @@ msgid ""
 "See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-"
 "questions.html"
 msgstr ""
+"Käivitamaks graafilise kasutajaliidesega rakendust juurkasutaja õigustes "
+"Waylandi protokolliga, saad lubada ligipääsu järgneva käsuga:\n"
+"xhost si:localuser:root\n"
+"Lisateave xhosti kohta - https://docs.bleachbit.org/doc/frequently-asked-"
+"questions.html"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1373,7 +1377,7 @@ msgstr "See valik on katsetamisel ja võib põhjustada süsteemis probleeme."
 #. TRANSLATORS: This is a label for the option to clear the system DNS cache.
 #: ../bleachbit/Cleaner.py
 msgid "DNS cache"
-msgstr ""
+msgstr "Nimelahenduse puhverdatud andmed"
 
 #. TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py
@@ -2982,14 +2986,14 @@ msgstr "Windowsi uuenduste eemaldamiseks on vajalikud administraatori õigused"
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "stop Windows service %(service)s"
-msgstr ""
+msgstr "Windowsi teenuse peatamine: %(service)s"
 
 #. TRANSLATORS: Message in log file when starting a Windows service.
 #. The placeholder is the code name of the service.
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "start Windows service %(service)s"
-msgstr ""
+msgstr "Windowsi teenuse käivitamine: %(service)s"
 
 #: ../bleachbit/Wipe.py
 msgid ""
