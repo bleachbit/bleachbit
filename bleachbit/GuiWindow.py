@@ -18,7 +18,7 @@ from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.GuiStartup import get_startup_messages
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
-from bleachbit.GuiUtil import (detect_dark_background, get_font_size_from_name,
+from bleachbit.GuiUtil import (clear_clipboard, detect_dark_background, get_font_size_from_name,
                                get_window_info, notify, threaded)
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
@@ -54,6 +54,7 @@ class GUI(Gtk.ApplicationWindow):
     _style_provider_dark = None
     _error_tag_color = None
     _showed_startup_messages = False
+    recognized_cleanerml = False
 
     def __init__(self, auto_exit, *args, **kwargs):
         super(GUI, self).__init__(*args, **kwargs)
@@ -491,7 +492,7 @@ class GUI(Gtk.ApplicationWindow):
             self.cb_refresh_operations()
         self.update_log_level()
 
-    def shred_paths(self, paths, shred_settings=False):
+    def shred_paths(self, paths, shred_settings=False, should_clear_clipboard=False):
         """Shred file or folders
 
         This function has several uses:
@@ -518,6 +519,9 @@ class GUI(Gtk.ApplicationWindow):
             if not self._confirm_delete(False, shred_settings):
                 # User dis-confirmed the deletion.
                 return False
+
+        if should_clear_clipboard:
+            clear_clipboard()
 
         # Either confirmation was not required or user approved, so
         # continue with deletion.
@@ -761,15 +765,23 @@ class GUI(Gtk.ApplicationWindow):
         # In case language changed, update the header bar labels.
         self.update_headerbar_labels()
         # Is this the first time in this session?
-        if not hasattr(self, 'recognized_cleanerml') and not self._auto_exit:
+        allow_local = True
+        if not self.recognized_cleanerml and not self._auto_exit:
             from bleachbit import RecognizeCleanerML
-            RecognizeCleanerML.RecognizeCleanerML()
-            self.recognized_cleanerml = True
+            try:
+                RecognizeCleanerML.RecognizeCleanerML(self)
+            except Exception:
+                logger.exception(
+                    'Error recognizing CleanerML files, so they will not be loaded')
+                allow_local = False
+            else:
+                self.recognized_cleanerml = True
         # reload cleaners from disk
         self.view.expand_all()
         self.progressbar.show()
         rc = register_cleaners(self.update_progress_bar,
-                               self.cb_register_cleaners_done)
+                               self.cb_register_cleaners_done,
+                               allow_local=allow_local)
         GLib.idle_add(rc.__next__)
         return False
 

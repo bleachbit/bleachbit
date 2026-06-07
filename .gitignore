@@ -35,6 +35,11 @@ windows/NsisInclude/FilesToUninstall.nsh
 windows/NsisInclude/LocaleToInstall.nsh
 windows/NsisInclude/LocaleToUninstall.nsh
 
+# AppImage
+appimage-build/
+*.AppImage
+linuxdeploy-plugin-gtk.sh
+
 # editor backups and temporary files
 *~
 *.bak

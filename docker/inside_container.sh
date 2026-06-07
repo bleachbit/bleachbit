@@ -76,6 +76,14 @@ case "$DISTRO_NAME" in
             cp -a "$artifact" /artifacts/
         done
         ;;
+    appimage)
+        #run_optional_tests
+        make appimage
+        shopt -s nullglob
+        for artifact in BleachBit-*.AppImage; do
+            cp -a "$artifact" /artifacts/
+        done
+        ;;
     py314-pytest)
         if [[ -n "${SKIP_TESTS:-}" ]]; then
             echo "SKIP_TESTS is set, so skipping pytest." >&2

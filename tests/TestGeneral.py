@@ -20,7 +20,7 @@ import warnings
 from unittest import mock
 
 # local
-from bleachbit import logger
+from bleachbit import IS_POSIX, IS_WINDOWS, logger
 from bleachbit.FileUtilities import exe_exists, exists_in_path
 from bleachbit.General import (
     boolstr_to_bool,
@@ -222,7 +222,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
             output_file = os.path.join(self.tempdir, 'run_external_nowait.txt')
 
-            if os.name == 'posix':
+            if IS_POSIX:
                 script = self.write_file(
                     'run_external_nowait.sh',
                     contents='#!/bin/sh\nsleep 2\ntouch "$1"\n',
@@ -266,7 +266,7 @@ class GeneralTestCase(common.BleachbitTestCase):
             with tempfile.TemporaryDirectory() as temp_dir:
                 test_file = os.path.join(temp_dir, 'test_file.txt')
 
-                if os.name == 'posix':
+                if IS_POSIX:
                     cmd = ['touch', test_file]
                     expected_stdout = ''
                 else:
@@ -299,7 +299,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external_with_timeout_failure(self):
         """Test run_external() with timeout value that is too short"""
-        if os.name == 'posix':
+        if IS_POSIX:
             args = ['sleep', '5']
         else:
             args = ['ping', '-n', '10', '127.0.0.1']
@@ -308,7 +308,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external_stdout(self):
         """Test that run_external properly captures stdout"""
-        if os.name == 'posix':
+        if IS_POSIX:
             args = ['echo', 'test output']
         else:
             args = ['cmd.exe', '/c', 'echo test output']
@@ -319,7 +319,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external_stderr(self):
         """Test that run_external properly captures stderr"""
-        if os.name == 'posix':
+        if IS_POSIX:
             args = ['sh', '-c', 'echo "error message" >&2']
         else:
             args = ['cmd.exe', '/c', 'echo error message 1>&2']
@@ -330,7 +330,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external_return_codes(self):
         """Test that run_external() properly returns non-zero exit codes"""
-        if os.name == 'posix':
+        if IS_POSIX:
             args = ['false']
         else:
             args = ['cmd.exe', '/c', 'exit 1']
@@ -401,9 +401,9 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external_timeout(self):
         """Unit test for run_external() with timeout"""
-        if os.name == 'posix':
+        if IS_POSIX:
             args = ['sleep', '10']
-        if os.name == 'nt':
+        if IS_WINDOWS:
             args = ['ping', '-n', '10', '127.0.0.1']
         start_time = time.time()
         with self.assertRaises(subprocess.TimeoutExpired):
@@ -435,12 +435,12 @@ class GeneralTestCase(common.BleachbitTestCase):
                  ('a', ['a']),
                  ('a b', ['a', 'b'])
                  ]
-        if os.name == 'nt':
+        if IS_WINDOWS:
             tests.append(('"a b"', ['a b']))
             tests.append(('"a b" c', ['a b', 'c']))
             tests.append(("echo 'a b'", ['echo', "'a b'"]))
             tests.append(('echo a\\ b', ['echo', 'a\\', 'b']))
-        elif os.name == 'posix':
+        elif IS_POSIX:
             tests.append(("echo 'a b'", ['echo', 'a b']))
             tests.append(("echo 'a b' c", ['echo', 'a b', 'c']))
             tests.append(('echo a\\ b', ['echo', 'a b']))

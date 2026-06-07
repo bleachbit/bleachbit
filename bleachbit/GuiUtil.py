@@ -4,12 +4,16 @@
 # This work is licensed under the terms of the GNU GPL, version 3 or
 # later.  See the COPYING file in the top-level directory.
 
+"""
+WindowInfo class and utility functions for GUI
+"""
+
 import os
 import threading
 from enum import Enum
 from typing import Optional
 
-from bleachbit import APP_NAME
+from bleachbit import APP_NAME, FileUtilities, IS_WINDOWS
 from bleachbit.GUI import logger
 from bleachbit.GtkShim import GLib, Gdk, Gtk, gi
 
@@ -25,6 +29,52 @@ class WindowInfo:
 
     def __str__(self):
         return f"WindowInfo(x={self.x}, y={self.y}, width={self.width}, height={self.height}, monitor_model={self.monitor_model})"
+
+
+def clear_clipboard():
+    """Clear the clipboard buffer"""
+    if IS_WINDOWS:
+        import bleachbit.Windows  # pylint: disable=import-outside-toplevel
+        bleachbit.Windows.clear_clipboard()
+    else:
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clipboard.set_text(' ', 1)
+        clipboard.clear()
+        flush_gtk_events()
+
+
+def get_clipboard_paths(clipboard=None, targets=None):
+    """Returns paths from clipboard as a list"""
+    if clipboard is None:
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+    if targets is None:
+        has_targets, targets = clipboard.wait_for_targets()
+        if not has_targets:
+            targets = []
+
+    shred_paths = []
+    if IS_WINDOWS and Gdk.atom_intern_static_string('FileNameW') in targets:
+        # Windows
+        # Use non-GTK+ functions because because GTK+ 2 does not work.
+        import bleachbit.Windows  # pylint: disable=import-outside-toplevel
+        shred_paths = bleachbit.Windows.get_clipboard_paths()
+    elif Gdk.atom_intern_static_string('text/uri-list') in targets:
+        # Linux
+        shred_uri_contents = clipboard.wait_for_contents(
+            Gdk.atom_intern_static_string('text/uri-list'))
+        if shred_uri_contents:
+            shred_paths = FileUtilities.uris_to_paths(
+                shred_uri_contents.get_uris())
+
+    if not shred_paths and (
+            Gdk.atom_intern_static_string('text/plain') in targets or
+            Gdk.atom_intern_static_string('UTF8_STRING') in targets):
+        # Plain text pasted from a text editor
+        text = clipboard.wait_for_text()
+        if text:
+            shred_paths = [p.strip()
+                           for p in text.splitlines() if p.strip()]
+    return shred_paths
 
 
 def get_font_size_from_name(font_name):

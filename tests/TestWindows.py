@@ -1,23 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test case for module Windows
@@ -42,6 +27,7 @@ from random import randint
 # first party imports
 from tests import common
 
+import bleachbit
 from bleachbit import FileUtilities, General
 from bleachbit.Command import Delete, Function
 from bleachbit.FileUtilities import extended_path, extended_path_undo
@@ -141,7 +127,7 @@ class WindowsSystemPathsTestCase(common.BleachbitTestCase):
             paths)
 
 
-if 'win32' == sys.platform:
+if bleachbit.IS_WINDOWS:
     import pywintypes
     import win32api
     import win32service
@@ -151,19 +137,26 @@ if 'win32' == sys.platform:
     from bleachbit import Windows
 
 
-def put_files_into_recycle_bin():
+def put_objects_into_recycle_bin():
     """Put a file and a folder into the recycle bin"""
+    count = 0
     # make a file and move it to the recycle bin
-    tests = ('regular', 'unicode-emdash-u\u2014', 'long' + 'x' * 100)
+    tests = ['regular', 'unicode-emdash-u\u2014',
+             'long' + 'x' * 100] + common.SPECIAL_TEST_STRINGS
     for test in tests:
-        (fd, filename) = tempfile.mkstemp(
-            prefix='bleachbit-recycle-file', suffix=test)
-        os.close(fd)
+        with tempfile.NamedTemporaryFile(
+                prefix='bleachbit-recycle-file', suffix=test, delete=False) as f:
+            filename = f.name
+            # Write enough data to exceed the MFT resident threshold.
+            f.write(b'x' * (1024 * 32))
         move_to_recycle_bin(filename)
+        count += 1
     # make a folder and move it to the recycle bin
     dirname = tempfile.mkdtemp(prefix='bleachbit-recycle-folder')
     common.touch_file(os.path.join(dirname, 'file'))
     move_to_recycle_bin(dirname)
+    count += 1
+    return count
 
 
 class WindowsLinksMixIn():
@@ -274,13 +267,13 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     @common.skipUnlessDestructive
     def test_get_recycle_bin_destructive(self):
         """Unit test the destructive part of get_recycle_bin"""
-        put_files_into_recycle_bin()
+        added_count = put_objects_into_recycle_bin()
         # clear recycle bin
         counter = 0
         for f in get_recycle_bin():
             counter += 1
             FileUtilities.delete(f)
-        self.assertGreaterEqual(counter, 3, 'deleted %d' % counter)
+        self.assertGreaterEqual(counter, added_count, 'deleted %d' % counter)
         # now it should be empty
         for _f in get_recycle_bin():
             self.fail('recycle bin should be empty, but it is not')
@@ -359,6 +352,144 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                               clear_recycle_bin=clear_recycle_bin):
                 self._test_link_helper(
                     mklink_option, recycle_container, clear_recycle_bin)
+
+    def _test_broken_link_in_recycle_bin(self, mklink_option, recycle_container,
+                                         break_before_recycle):
+        """Helpful function to test broken directory junctions and symlinks
+        in the recycle bin.
+
+        When a broken link (target deleted) is in the recycle bin, deleting it
+        should delete the link itself, not attempt to follow or restore the
+        target.
+
+        Args:
+            mklink_option: Link type to create. '/j' for directory junction,
+                '/d' for directory symbolic link.
+            recycle_container: If True, move the container directory to the
+                recycle bin. If False, move only the link itself.
+            break_before_recycle: If True, delete the target before moving
+                the link to the recycle bin. If False, recycle first and then
+                delete the target.
+        """
+        assert mklink_option in ('/j', '/d')
+        if mklink_option == '/d':
+            self.skipUnlessAdmin()
+
+        before = set(get_recycle_bin())
+        target_dir = self.mkdir('target_dir')
+        canary_fn = os.path.join(
+            target_dir, f'canary{randint(10000, 9999999)}')
+        common.touch_file(canary_fn)
+
+        container_dir = self.mkdir('container_dir')
+        link_pathname = os.path.join(container_dir, 'link')
+        if mklink_option == '/j':
+            self._create_win_junction(target_dir, link_pathname)
+        else:
+            self._create_win_dir_symlink(target_dir, link_pathname)
+
+        self.assertTrue(os.path.lexists(link_pathname))
+        self.assertExists(canary_fn)
+
+        if break_before_recycle:
+            shutil.rmtree(target_dir)
+            self.assertTrue(os.path.lexists(link_pathname))
+            self.assertFalse(os.path.exists(link_pathname))
+
+        move_to_recycle_bin(
+            container_dir if recycle_container else link_pathname)
+
+        if not break_before_recycle:
+            shutil.rmtree(target_dir)
+            if not recycle_container:
+                shutil.rmtree(container_dir)
+
+        try:
+            added = [p for p in get_recycle_bin() if p not in before]
+            self.assertTrue(
+                added, 'recycle bin should contain recycled link')
+
+            broken = []
+            for f in added:
+                ep = extended_path(f)
+                self.assertLExists(ep)
+                if ((os.path.islink(ep) or is_junction(ep)) and
+                        not os.path.exists(ep)):
+                    broken.append(f)
+            self.assertTrue(
+                broken, 'expected broken link (lexists, not exists)')
+
+            for f in added:
+                ep = extended_path(f)
+                self.assertTrue(FileUtilities.delete(ep, shred=False))
+                self.assertNotLExists(ep)
+
+            self.assertFalse(os.path.lexists(link_pathname))
+            self.assertFalse(os.path.lexists(target_dir))
+            if recycle_container or not break_before_recycle:
+                self.assertFalse(os.path.lexists(container_dir))
+            else:
+                self.assertTrue(os.path.lexists(container_dir))
+        finally:
+            empty_recycle_bin(None, True)
+            if os.path.lexists(container_dir):
+                shutil.rmtree(container_dir, True)
+            if os.path.lexists(target_dir):
+                shutil.rmtree(target_dir, True)
+
+    def _test_broken_link_delete(self, mklink_option, shred):
+        """Helper function to test FileUtilities.delete() on a broken
+        link outside the recycle bin.
+
+        - Tests both junctions and directory symlinks.
+        - Test is Windows only.
+        - Target is a directory (not a file).
+        - Target is broken (does not exist).
+        - Tests both shredding and unlink.
+        - Does not invoke the recycle bin.
+        """
+        assert mklink_option in ('/j', '/d')
+        if mklink_option == '/d':
+            self.skipUnlessAdmin()
+
+        target_dir = self.mkdir('broken_link_delete_target')
+        container_dir = self.mkdir('broken_link_delete_container')
+        link_pathname = os.path.join(container_dir, 'link')
+        if mklink_option == '/j':
+            self._create_win_junction(target_dir, link_pathname)
+        else:
+            self._create_win_dir_symlink(target_dir, link_pathname)
+        shutil.rmtree(target_dir)
+        self.assertLExists(link_pathname)
+        self.assertFalse(os.path.exists(link_pathname))
+        self.assertTrue(FileUtilities.delete(link_pathname, shred=shred))
+        self.assertNotLExists(link_pathname)
+        shutil.rmtree(container_dir, True)
+
+    def test_broken_link_in_recycle_bin(self):
+        """Unit test for broken directory junctions and symlinks in recycle bin
+
+        - Tests both junctions and directory symlinks.
+        - Target is a directory (not a file).
+        - Target is broken (does not exist).
+        - Tests both container in recycle bin and outside recycle bin.
+        - Tests both break target before and after recycling.
+        - Test is Windows only (of course).
+        """
+        for mklink_option, recycle_container, break_before_recycle in itertools.product(
+            ('/j', '/d'), (False, True), (False, True)
+        ):
+            with self.subTest(mklink_option=mklink_option,
+                              recycle_container=recycle_container,
+                              break_before_recycle=break_before_recycle):
+                self._test_broken_link_in_recycle_bin(
+                    mklink_option, recycle_container, break_before_recycle)
+        for mklink_option, shred in itertools.product(
+            ('/j', '/d'), (False, True)
+        ):
+            with self.subTest(mklink_option=mklink_option, shred=shred,
+                              outside_bin=True):
+                self._test_broken_link_delete(mklink_option, shred)
 
     def test_delete_locked_file(self):
         """Unit test for delete_locked_file"""
@@ -583,12 +714,11 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         mock_get_class_info.assert_called_once_with(
             wnd_class.hInstance, wnd_class.lpszClassName)
 
-    def test_splash_thread_propagates_startup_error(self):
-        """start() raises if splash initialization fails."""
+    def test_splash_thread_suppresses_startup_error(self):
+        """start() does not fail the GUI if splash initialization fails."""
         splash = SplashThread()
         with mock.patch.object(splash, '_show_splash_screen', side_effect=RuntimeError('boom')):
-            with self.assertRaises(RuntimeError):
-                splash.start()
+            splash.start()
         self.assertIsNotNone(splash._startup_error)
 
     def test_splash_thread_join_handles_missing_window(self):
@@ -599,6 +729,42 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         splash.start = lambda: None  # prevent thread start
         # Directly call join; should not raise even though handle is None
         splash.join(timeout=0)
+
+    def test_splash_thread_join_uses_send_message_timeout(self):
+        """join() closes the splash synchronously with a timeout."""
+        splash = SplashThread()
+        splash._splash_screen_handle = 1234
+        with mock.patch.object(splash, 'is_alive', return_value=True), \
+                mock.patch.object(splash, '_hide_window') as mock_hide, \
+                mock.patch('bleachbit.Windows.win32gui.IsWindow', return_value=True), \
+                mock.patch(
+                    'bleachbit.Windows.ctypes.windll.user32.SendMessageTimeoutW',
+                    return_value=1) as mock_send, \
+                mock.patch('bleachbit.Windows.win32gui.PostMessage') as mock_post, \
+                mock.patch('bleachbit.Windows.Thread.join') as mock_thread_join:
+            splash.join(timeout=0)
+
+        mock_send.assert_called_once()
+        mock_hide.assert_called_once_with(1234)
+        mock_post.assert_not_called()
+        mock_thread_join.assert_called_once_with(splash, timeout=0)
+
+    def test_splash_thread_join_falls_back_after_send_failure(self):
+        """join() falls back to PostMessage if synchronous close fails."""
+        splash = SplashThread()
+        splash._splash_screen_handle = 1234
+        with mock.patch.object(splash, 'is_alive', return_value=True), \
+                mock.patch.object(splash, '_hide_window'), \
+                mock.patch('bleachbit.Windows.win32gui.IsWindow', return_value=True), \
+                mock.patch(
+                    'bleachbit.Windows.ctypes.windll.user32.SendMessageTimeoutW',
+                    side_effect=RuntimeError('boom')), \
+                mock.patch('bleachbit.Windows.win32gui.PostMessage') as mock_post, \
+                mock.patch('bleachbit.Windows.Thread.join'):
+            splash.join(timeout=0)
+
+        mock_post.assert_called_once_with(
+            1234, Windows.win32con.WM_CLOSE, 0, 0)
 
     def test_get_splash_screen_delay_seconds_default(self):
         with mock.patch.dict(os.environ, {}, clear=False):
@@ -873,18 +1039,33 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.assertIsInteger(ret)
 
     @common.skipUnlessDestructive
-    def test_empty_recycle_bin_destructive(self):
-        """Unit test the destructive part of empty_recycle_bin()"""
-        # check it deletes files for fixed drives
-        put_files_into_recycle_bin()
+    def test_empty_recycle_bin_per_drive_destructive(self):
+        """Empty recycle bin in each drive individually"""
+        put_objects_into_recycle_bin()
         for drive in get_fixed_drives():
-            ret = empty_recycle_bin(drive, really_delete=True)
-            self.assertIsInteger(ret)
-        # check it deletes files for all drives
-        put_files_into_recycle_bin()
+            with self.subTest(drive=drive):
+                try:
+                    ret = empty_recycle_bin(drive, really_delete=True)
+                except pywintypes.com_error as e:
+                    if e.args[0] == -2147024893 and 'APPVEYOR' in os.environ:
+                        self.skipTest(
+                            'reproducible only under AppVeyor and does not '
+                            'test a scenario used outside the tests')
+                    raise
+                self.assertIsInteger(ret)
+
+    @common.skipUnlessDestructive
+    def test_empty_recycle_bin_all_drives_destructive(self):
+        """Empty recycle bin in all drives at once"""
+        put_objects_into_recycle_bin()
         ret = empty_recycle_bin(None, really_delete=True)
         self.assertIsInteger(ret)
-        # Repeat two for reasons.
+
+        # Verify that there are no objects in the bin.
+        for _f in get_recycle_bin():
+            self.fail('recycle bin should be empty, but it is not')
+
+        # Repeat the call to empty for two reasons.
         # 1. Trying to empty an empty recycling bin can cause
         #    a 'catastrophic failure' error (handled in the function)
         # 2. It should show zero bytes were deleted

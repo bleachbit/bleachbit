@@ -24,6 +24,7 @@ from bleachbit.Unix import (
     _is_broken_xdg_desktop_application,
     apt_autoclean,
     apt_autoremove,
+    clear_snapd_cache,
     dnf_autoremove,
     dnf_clean,
     find_available_locales,
@@ -43,6 +44,7 @@ from bleachbit.Unix import (
     Locales,
     pacman_cache,
     root_is_not_allowed_to_X_session,
+    snapd_is_active,
     snap_disabled_clean,
     snap_disabled_preview,
     snap_parse_list,
@@ -71,6 +73,7 @@ class UnixTestCase(common.BleachbitTestCase):
     def setUp(self):
         """Initialize unit tests"""
         self.locales = Locales()
+        clear_snapd_cache()
         super(UnixTestCase, self).setUp()
 
     @common.skipIfWindows
@@ -748,6 +751,36 @@ PrefersNonDefaultGPU=false""")
 
         mock_run.assert_called_once_with(['paccache', '-rk0'])
 
+    def test_snapd_is_active_no_snap(self):
+        """Unit test for snapd_is_active() when snap is not installed"""
+        with mock.patch('bleachbit.Unix.exe_exists', return_value=False):
+            self.assertFalse(snapd_is_active())
+
+    def test_snapd_is_active_no_systemctl(self):
+        """Unit test for snapd_is_active() when systemctl is not installed"""
+        with mock.patch('bleachbit.Unix.exe_exists', side_effect=lambda x: x == 'snap'):
+            self.assertFalse(snapd_is_active())
+
+    def test_snapd_is_active_inactive(self):
+        """Unit test for snapd_is_active() when snapd.socket is inactive"""
+        with mock.patch('bleachbit.Unix.exe_exists', return_value=True), \
+                mock.patch('bleachbit.General.run_external', return_value=(1, '', '')):
+            self.assertFalse(snapd_is_active())
+
+    def test_snapd_is_active_active(self):
+        """Unit test for snapd_is_active() when snapd.socket is active"""
+        with mock.patch('bleachbit.Unix.exe_exists', return_value=True), \
+                mock.patch('bleachbit.General.run_external', return_value=(0, '', '')):
+            self.assertTrue(snapd_is_active())
+
+    def test_snapd_is_active_timeout(self):
+        """Unit test for snapd_is_active() timeout handling"""
+        with mock.patch('bleachbit.Unix.exe_exists', return_value=True), \
+                mock.patch('bleachbit.General.run_external') as mock_run:
+            mock_run.side_effect = subprocess.TimeoutExpired(
+                ['systemctl', 'is-active', '--quiet', 'snapd.socket'], 5)
+            self.assertFalse(snapd_is_active())
+
     @common.skipIfWindows
     @common.skipUnlessDestructive
     def test_snap_disabled_clean(self):
@@ -768,6 +801,18 @@ PrefersNonDefaultGPU=false""")
             bytes_freed = snap_disabled_preview()
             self.assertIsInstance(bytes_freed, int)
             logger.debug('snap disabled bytes freed %d', bytes_freed)
+
+    @common.skipIfWindows
+    def test_snap_timeout(self):
+        """Unit test for snap_disabled_full() timeout handling"""
+        with mock.patch('bleachbit.Unix.snapd_is_active', return_value=True), \
+                mock.patch('bleachbit.General.run_external') as mock_run:
+            # Simulate snap list --all hanging
+            mock_run.side_effect = subprocess.TimeoutExpired(
+                ['snap', 'list', '--all'], 10)
+            with self.assertRaises(RuntimeError) as cm:
+                snap_disabled_preview()
+            self.assertIn('timed out', str(cm.exception))
 
     def test_snap_parse_list_real_data(self):
         """Unit test for snap_parse_list() with real 'snap list --all' output"""

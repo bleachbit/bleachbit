@@ -20,8 +20,8 @@ from bleachbit.Language import get_text as _
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
 from bleachbit.Process import is_process_running
-from bleachbit import Action, CleanerML, Command, FileUtilities, Memory, Special
-from bleachbit import IS_POSIX
+from bleachbit import Action, CleanerML, Command, FileUtilities, Memory
+from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
 from bleachbit.GtkShim import Gtk, Gdk, HAVE_GTK
 from bleachbit.Wipe import wipe_path
 
@@ -162,84 +162,6 @@ class Cleaner:
         self.warnings[option_id] = description
 
 
-class OpenOfficeOrg(Cleaner):
-
-    """Delete OpenOffice.org cache"""
-
-    def __init__(self):
-        Cleaner.__init__(self)
-        self.options = {}
-        self.add_option('cache', _('Cache'), DELETE_CACHE_DESCRIPTION)
-        self.add_option('recent_documents', _('Most recently used'), _(
-            "Delete the list of recently used documents"))
-        self.id = 'openofficeorg'
-        self.name = 'OpenOffice.org'
-        # TRANSLATORS: The description of a cleaner.
-        self.description = _("Office suite")
-
-        # reference: http://katana.oooninja.com/w/editions_of_openoffice.org
-        if 'posix' == os.name:
-            self.prefixes = ["~/.ooo-2.0",
-                             "~/.openoffice.org2",
-                             "~/.openoffice.org2.0",
-                             "~/.openoffice.org/3",
-                             "~/.ooo-dev3",
-                             "~/.config/libreoffice/4"]
-        if 'nt' == os.name:
-            self.prefixes = [
-                "$APPDATA\\OpenOffice.org\\3", "$APPDATA\\OpenOffice.org2"]
-
-    def get_commands(self, option_id):
-        # paths for which to run expand_glob_join
-        egj = []
-        if 'recent_documents' == option_id:
-            egj.append(
-                "user/registry/data/org/openoffice/Office/Histories.xcu")
-            egj.append(
-                "user/registry/cache/org.openoffice.Office.Histories.dat")
-
-        if 'recent_documents' == option_id and not 'cache' == option_id:
-            egj.append("user/registry/cache/org.openoffice.Office.Common.dat")
-
-        for egj_ in egj:
-            for prefix in self.prefixes:
-                for path in FileUtilities.expand_glob_join(prefix, egj_):
-                    if 'nt' == os.name:
-                        path = os.path.normpath(path)
-                    if os.path.lexists(path):
-                        yield Command.Delete(path)
-
-        if 'cache' == option_id:
-            dirs = []
-            for prefix in self.prefixes:
-                dirs += FileUtilities.expand_glob_join(
-                    prefix, "user/registry/cache/")
-            for dirname in dirs:
-                if 'nt' == os.name:
-                    dirname = os.path.normpath(dirname)
-                for filename in children_in_directory(dirname, False):
-                    yield Command.Delete(filename)
-
-        if 'recent_documents' == option_id:
-            for prefix in self.prefixes:
-                for path in FileUtilities.expand_glob_join(prefix,
-                                                           "user/registry/data/org/openoffice/Office/Common.xcu"):
-                    if os.path.lexists(path):
-                        yield Command.Function(path,
-                                               Special.delete_ooo_history,
-                                               _('Delete the usage history'))
-                # ~/.openoffice.org/3/user/registrymodifications.xcu
-                #       Apache OpenOffice.org 3.4.1 from openoffice.org on Ubuntu 13.04
-                # %AppData%\OpenOffice.org\3\user\registrymodifications.xcu
-                # Apache OpenOffice.org 3.4.1 from openoffice.org on Windows XP
-                for path in FileUtilities.expand_glob_join(prefix,
-                                                           "user/registrymodifications.xcu"):
-                    if os.path.lexists(path):
-                        yield Command.Function(path,
-                                               Special.delete_office_registrymodifications,
-                                               _('Delete the usage history'))
-
-
 class System(Cleaner):
 
     """Clean the system in general"""
@@ -290,6 +212,12 @@ class System(Cleaner):
         #
         # options just for Microsoft Windows
         #
+        if IS_WINDOWS or (IS_LINUX and (FileUtilities.exe_exists('resolvectl') or FileUtilities.exe_exists('systemd-resolve'))):
+            # TRANSLATORS: This is a label for the option to clear the system DNS cache.
+            dns_cache_label =  _('DNS cache'),
+            self.add_option('dns_cache', dns_cache_label,
+                            _('Delete the cache'))
+
         if 'nt' == os.name:
             self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option(
@@ -518,12 +446,12 @@ class System(Cleaner):
 
         # clipboard
         if HAVE_GTK and 'clipboard' == option_id:
-            def clear_clipboard():
-                clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-                clipboard.set_text(' ', 1)
-                clipboard.clear()
+            def func_clear_clipboard():
+                """Command function to clear clipboard"""
+                import bleachbit.GuiUtil
+                bleachbit.GuiUtil.clear_clipboard()
                 return 0
-            yield Command.Function(None, clear_clipboard, _('Clipboard'))
+            yield Command.Function(None, func_clear_clipboard, _('Clipboard'))
 
         # wipe empty space
         shred_drives = options.get_list('shred_drives')
@@ -579,6 +507,13 @@ class System(Cleaner):
             # when in preview mode.
             if recycled_any:
                 yield Command.Function(None, empty_recycle_bin_func, _('Empty the recycle bin'))
+
+        # DNS cache
+        if 'dns_cache' == option_id:
+            if IS_WINDOWS:
+                yield Command.Function(None, Windows.flush_dns, _('DNS cache'))
+            elif sys.platform == 'linux':
+                yield Command.Function(None, Unix.flush_dns, _('DNS cache'))
 
         # Windows Updates
         if 'nt' == os.name and 'updates' == option_id:
@@ -651,7 +586,7 @@ class System(Cleaner):
         return False
 
 
-def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
+def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None, allow_local=True):
     """Register all known cleaners: system, CleanerML, and Winapp2"""
     # pylint: disable=global-variable-not-assigned
     global backends
@@ -661,7 +596,6 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
     backends.clear()
 
     # initialize "hard coded" (non-CleanerML) backends
-    backends["openofficeorg"] = OpenOfficeOrg()
     backends["system"] = System()
 
     if not options.get("load_cleaners"):
@@ -677,7 +611,7 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None):
     # To indicate an ongoing operation, include the ellipsis as literal
     # Unicode (…) or as Unicode escape (\u2026).
     cb_progress(_('Loading native cleaners\u2026'))
-    yield from CleanerML.load_cleaners(cb_progress)
+    yield from CleanerML.load_cleaners(cb_progress, allow_local=allow_local)
 
     # register Winapp2.ini cleaners
     if 'nt' == os.name:

@@ -783,8 +783,8 @@ class SnapDisabled(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        # If snap is not installed, then enable fast auto-hide.
-        if not FileUtilities.exe_exists('snap'):
+        # If snap is not installed or snapd is not active, enable fast auto-hide.
+        if not Unix.snapd_is_active():
             return
         yield Command.Function(
             None,

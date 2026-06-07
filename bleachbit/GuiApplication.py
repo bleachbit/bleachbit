@@ -9,10 +9,11 @@ import os
 import sys
 
 import bleachbit
-from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, portable_mode
+from bleachbit import APP_NAME, Cleaner, GuiBasic, appicon_path, portable_mode
 from bleachbit.Cleaner import backends
-from bleachbit.GUI import logger
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
+from bleachbit.GUI import logger
+from bleachbit.GuiUtil import get_clipboard_paths
 from bleachbit.GuiWindow import GUI
 from bleachbit.Language import get_text as _, get_active_language_code
 from bleachbit.Options import options
@@ -173,28 +174,12 @@ class Bleachbit(Gtk.Application):
         but there is with GTK 3.24.34. However, Windows does not have
         get_uris().
         """
-        shred_paths = None
+        shred_paths = get_clipboard_paths(clipboard, targets)
         # TRANSLATORS: Warning log message when attempting to paste files/folders to shred.
         not_found_msg = _('No paths found in clipboard.')
-        if 'nt' == os.name and Gdk.atom_intern_static_string('FileNameW') in targets:
-            # Windows
-            # Use non-GTK+ functions because because GTK+ 2 does not work.
-            shred_paths = Windows.get_clipboard_paths()
-        elif Gdk.atom_intern_static_string('text/uri-list') in targets:
-            # Linux
-            shred_uris = clipboard.wait_for_contents(
-                Gdk.atom_intern_static_string('text/uri-list')).get_uris()
-            shred_paths = FileUtilities.uris_to_paths(shred_uris)
-        elif Gdk.atom_intern_static_string('text/plain') in targets or \
-                Gdk.atom_intern_static_string('UTF8_STRING') in targets:
-            # Plain text pasted from a text editor
-            text = clipboard.wait_for_text()
-            if text:
-                shred_paths = [p.strip()
-                               for p in text.splitlines() if p.strip()]
-
         if shred_paths:
-            GUI.shred_paths(self._window, shred_paths)
+            GUI.shred_paths(self._window, shred_paths,
+                            should_clear_clipboard=True)
         else:
             logger.warning(not_found_msg)
 

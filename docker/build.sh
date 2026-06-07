@@ -10,6 +10,7 @@ This script tests BleachBit and builds packages insider a container.
 Run this script from the host, not inside a container.
 
 Supported distributions:
+  appimage  - build an AppImage package on Debian
   debian    - run `make tests` and build .deb packages on Debian
   fedora    - run `make tests` and build RPM/SRPM packages on Fedora
   opensuse  - run `make tests` and build RPM/SRPM packages on openSUSE
@@ -70,6 +71,13 @@ case "$DISTRO" in
         DOCKERFILE="$DOCKER_DIR/Dockerfile.opensuse"
         SUSE_VERSION=${SUSE_VERSION:-1699}
         RUN_ENV+=(--env SUSE_VERSION="$SUSE_VERSION")
+        ;;
+    appimage)
+        IMAGE=bleachbit-build:appimage
+        DOCKERFILE="$DOCKER_DIR/Dockerfile.appimage"
+        RUN_ENV+=(--env APPIMAGE_EXTRACT_AND_RUN=1)
+        RUN_ENV+=(--env NO_STRIP=1)
+        RUN_ENV+=(--env SKIP_APPIMAGE_TEST=1)
         ;;
     py314-pytest)
         IMAGE=bleachbit-test:py314-pytest

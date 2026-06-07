@@ -12,7 +12,6 @@ Test case for module DeepScan
 # standard imports
 import os
 import shutil
-import sys
 import unittest
 from unittest import mock
 
@@ -20,6 +19,7 @@ from unittest import mock
 from tests import common
 from tests import TestCleaner
 from tests.common import SPECIAL_TEST_STRINGS
+from bleachbit import IS_MAC, IS_POSIX
 from bleachbit.Options import options
 from bleachbit.DeepScan import DeepScan, Search, normalized_walk
 
@@ -134,7 +134,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
         self.assertExists(f_del)
         self.assertExists(f_keep)
         self.assertFalse(os.path.exists(f_del2))
-        if 'posix' == os.name:
+        if IS_POSIX:
             self.assertExists(f_del3)
         else:
             self.assertFalse(os.path.exists(f_del3))
@@ -146,7 +146,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
 
         # cleanup
         os.unlink(f_keep)
-        if 'posix' == os.name:
+        if IS_POSIX:
             os.unlink(f_del3)
         os.rmdir(subdir)
 
@@ -156,7 +156,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
     def test_shred(self):
         self._test_delete('shred')
 
-    @unittest.skipUnless('darwin' == sys.platform, 'Not on Darwin')
+    @unittest.skipUnless(IS_MAC, 'Not on Darwin')
     def test_normalized_walk_darwin(self):
 
         with mock.patch('os.walk') as mock_walk:

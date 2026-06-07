@@ -431,8 +431,8 @@ SectionEnd
 
 Function .onInit
 
-  ${If} ${AtMostWin7}
-    MessageBox MB_OK|MB_ICONEXCLAMATION "This version of Windows is not compatible with this version of BleachBit. Please see https://www.bleachbit.org/bleachbit-windows-7 to download a compatible version." /SD IDOK
+  ${If} ${AtMostWin8.1}
+    MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(OLD_WINDOWS_WARNING)" /SD IDOK IDOK open_old_windows_page
     Abort
   ${EndIf}
 
@@ -464,7 +464,13 @@ Function .onInit
   ExecWait $uninstaller_cmd ; Actually run the uninstaller
 
   new_install:
+  Return
 
+  ; On old version of Windows after user agrees to open the link.
+  open_old_windows_page:
+    ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\Windows NT\CurrentVersion" "CurrentVersion"
+    ExecShell "open" "https://www.bleachbit.org/goto/old-windows?ver=${VERSION}&os=$R0&lang=$LANGUAGE"
+    Abort
 
 FunctionEnd
 

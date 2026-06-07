@@ -16,6 +16,7 @@ import locale
 import os
 import random
 import tempfile
+from unittest.mock import patch
 
 # first party imports
 from bleachbit.CLI import (
@@ -27,7 +28,7 @@ from bleachbit.CLI import (
     preview_or_clean)
 from bleachbit.General import get_executable, run_external
 from bleachbit.GtkShim import HAVE_GTK
-from bleachbit import FileUtilities
+from bleachbit import FileUtilities, IS_WINDOWS, IS_POSIX
 from tests import common
 
 RUN_EXTERNAL_TIMEOUT = 30
@@ -72,7 +73,7 @@ class CLITestCase(common.BleachbitTestCase):
         self.assertIsInstance(o, list)
         self.assertTrue('google_chrome.cache' in o)
         self.assertTrue('system.tmp' in o)
-        gui_available = os.name == 'nt' or HAVE_GTK
+        gui_available = IS_WINDOWS or HAVE_GTK
         self.assertEqual(gui_available, 'system.clipboard' in o)
         self.assertFalse('system.empty_space' in o)
         self.assertFalse('system.memory' in o)
@@ -244,36 +245,35 @@ class CLITestCase(common.BleachbitTestCase):
             'bleachbit-test-cli-delete',
             '\x8b\x8b-bad-encoding'
         ]
-        for i in range(len(prefixes)):
-
-            filename = self.mkstemp(prefix=prefixes[i])
-            if 'nt' == os.name:
+        for prefix in prefixes:
+            with self.subTest(prefix=prefix):
+                filename = self.mkstemp(prefix=prefix)
                 filename = os.path.normcase(filename)
-            # replace delete function for testing
-            save_delete = FileUtilities.delete
 
-            deleted_paths = []
-            crash = [False]
+                deleted_paths = []
+                crash = [False]
 
-            def dummy_delete(path, _shred=False):
-                try:
-                    self.assertExists(path)
-                except:
-                    crash[0] = True
+                def dummy_delete(path, shred=False, crash=crash,
+                                   deleted_paths=deleted_paths):
+                    try:
+                        self.assertLExists(path)
+                    except AssertionError:
+                        crash[0] = True
+                    deleted_paths.append(os.path.normcase(path))
 
-                deleted_paths.append(os.path.normcase(path))
+                with patch.object(FileUtilities, 'delete', side_effect=dummy_delete):
+                    FileUtilities.delete(filename)
+                    # File exists because delete() is mocked, so real
+                    # delete() was not called.
+                    self.assertExists(filename)
+                    operations = args_to_operations(['system.tmp'], False, False)
+                    preview_or_clean(operations, True, quiet=True)
 
-            FileUtilities.delete = dummy_delete
-            FileUtilities.delete(filename)
-            self.assertExists(filename)
-            operations = args_to_operations(['system.tmp'], False, False)
-            preview_or_clean(operations, True, quiet=True)
-            FileUtilities.delete = save_delete
-            self.assertIn(filename, deleted_paths,
-                          "%s not found deleted" % filename)
-            os.remove(filename)
-            self.assertNotExists(filename)
-            self.assertFalse(crash[0])
+                self.assertIn(filename, deleted_paths,
+                              f"{filename} not found deleted")
+                os.remove(filename)
+                self.assertNotExists(filename)
+                self.assertFalse(crash[0], "Crash detected during deletion")
 
     def test_append_text(self):
         """Unit test for CliCallback.append_text() with special strings"""
@@ -295,7 +295,7 @@ class CLITestCase(common.BleachbitTestCase):
             [['--version'], 'BleachBit version', True, None],
             [['--sysinfo'], 'sys.version', False, None]
         ]
-        if os.name == 'posix':
+        if IS_POSIX:
             # GUI is not available with clean environment on POSIX.
             tests.append([['--help'], 'Usage: ', True, None])
             # Force detection of Wayland
@@ -343,7 +343,7 @@ class CLITestCase(common.BleachbitTestCase):
         By not using `-m bleachbit.CLI`, this exercises `./bleachbit.py`.
         """
         env_configs = [[]]
-        if os.name != 'nt':
+        if not IS_WINDOWS:
             env_configs.extend([
                 ['env', '-i'],  # No environment variables
                 ['env', '-i', 'XDG_SESSION_TYPE=wayland']  # Mimic Wayland
@@ -351,7 +351,7 @@ class CLITestCase(common.BleachbitTestCase):
         for env_prefix in env_configs:
             args = env_prefix + [get_executable(), 'bleachbit.py', '--sysinfo']
             output = run_external(args, timeout=RUN_EXTERNAL_TIMEOUT)
-            if os.name == 'posix' and os.environ.get('USER') == 'root' and \
+            if IS_POSIX and os.environ.get('USER') == 'root' and \
                     output[0] == 1:
                 continue
             self.assertEqual(output[0], 0, output)

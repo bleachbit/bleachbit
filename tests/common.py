@@ -21,13 +21,14 @@ import warnings
 from pathlib import Path
 from unittest import mock
 
-if 'win32' == sys.platform:
+import bleachbit
+
+if bleachbit.IS_WINDOWS:
     import winreg
     import win32gui
     from bleachbit import Windows
-
-import bleachbit
 import bleachbit.Options
+from bleachbit.Bootstrap import bootstrap
 from bleachbit.FileUtilities import (
     children_in_directory,
     extended_path,
@@ -127,6 +128,7 @@ class BleachbitTestCase(unittest.TestCase):
         `appveyor.yml`.
         * Patch options paths.
         """
+        bootstrap()
         warnings.simplefilter("error")
         cls.tempdir = tempfile.mkdtemp(prefix=cls.__name__)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
@@ -235,26 +237,45 @@ class BleachbitTestCase(unittest.TestCase):
     #
     # file asserts
     #
-    def assertExists(self, path, msg='', func=os.stat):
-        """File, directory, or any path exists"""
+    @staticmethod
+    def _assert_path(path):
+        """Normalize a path for existence checks in unit tests."""
+        # TestMakefile.py uses relative path without an environment variable.
+        # TestWinapp.py uses variable "$bbtestdir"
+        # However, do not expand paths that are already absolute or Path objects.
         if isinstance(path, Path):
-            path = str(path)
+            return str(path)
         assert isinstance(
-            path, str), f'path must be a string, not {type(path)}'
-        path = os.path.expandvars(path)
+            path, str), f'path must be a string or Path, not {type(path)}'
+        if not os.path.isabs(path):
+            path = os.path.expandvars(path)
+        return path
+
+    # Our assertion method names follow the convention in Python's unittest
+    # pylint: disable-next=invalid-name
+    def assertExists(self, path, msg='', func=os.stat):
+        """Check that a file, directory, or any path exists"""
+        path = self._assert_path(path)
         if not self.check_exists(func, getTestPath(path)):
             raise AssertionError(
                 'The file %s should exist, but it does not. %s' % (path, msg))
 
+    # pylint: disable-next=invalid-name
     def assertNotExists(self, path, msg='', func=os.stat):
+        """Check that a file, directory, or any path does not exist"""
+        path = self._assert_path(path)
         if self.check_exists(func, getTestPath(path)):
             raise AssertionError(
                 'The file %s should not exist, but it does. %s' % (path, msg))
 
+    # pylint: disable-next=invalid-name
     def assertLExists(self, path, msg=''):
+        """Check that a file, directory, or any path exists using lstat"""
         self.assertExists(path, msg, os.lstat)
 
+    # pylint: disable-next=invalid-name
     def assertNotLExists(self, path, msg=''):
+        """Check that a file, directory, or any path does not exist using lstat"""
         self.assertNotExists(path, msg, os.lstat)
 
     def assertCondExists(self, cond, path, msg=''):
@@ -313,7 +334,7 @@ class BleachbitTestCase(unittest.TestCase):
         self.assertFalse(is_hard_link(ext_dirname))
         self.assertTrue(is_normal_directory(ext_dirname))
         self.assertFalse(os.path.isfile(ext_dirname))
-        if os.name == 'nt':
+        if bleachbit.IS_WINDOWS:
             self.assertFalse(Windows.is_junction(ext_dirname))
         return dirname
 
@@ -335,7 +356,7 @@ class BleachbitTestCase(unittest.TestCase):
 
 
 def getTestPath(path):
-    if 'nt' == os.name:
+    if bleachbit.IS_WINDOWS:
         return extended_path(os.path.normpath(path))
     return path
 
@@ -366,7 +387,7 @@ def put_env(key, val):
 
 def skipIfWindows(f):
     """Skip unit test if running on Windows"""
-    return unittest.skipIf('win32' == sys.platform, 'running on Windows')(f)
+    return unittest.skipIf(bleachbit.IS_WINDOWS, 'running on Windows')(f)
 
 
 def skipUnlessDestructive(f):
@@ -376,7 +397,7 @@ def skipUnlessDestructive(f):
 
 def skipUnlessWindows(f):
     """Skip unit test unless running on Windows"""
-    return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')(f)
+    return unittest.skipUnless(bleachbit.IS_WINDOWS, 'not running on Windows')(f)
 
 
 def also_with_sudo(test_func):

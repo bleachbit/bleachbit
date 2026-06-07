@@ -24,6 +24,9 @@ from bleachbit.Language import get_text as _, native_locale_names
 
 logger = logging.getLogger(__name__)
 
+# Cache for snapd_is_active() to avoid repeated systemctl calls.
+_snapd_is_active_cache = None
+
 try:
     Pattern = re.Pattern
 except AttributeError:
@@ -745,15 +748,60 @@ def snap_parse_list(stdout):
     return disabled_snaps
 
 
+def snapd_is_active():
+    """Return True if snap is installed and snapd is active.
+
+    The result is cached in a module-level variable to avoid repeated
+    systemctl calls during a single BleachBit run.
+    """
+    global _snapd_is_active_cache  # pylint: disable=global-statement
+    if _snapd_is_active_cache is not None:
+        return _snapd_is_active_cache
+    if not exe_exists('snap'):
+        _snapd_is_active_cache = False
+        return False
+    if not exe_exists('systemctl'):
+        _snapd_is_active_cache = False
+        return False
+    # When snap is installed but snapd is inactive, then `snap list --all`
+    # or `snap version` may have a long delay, so we check the service status first.
+    try:
+        (rc, _stdout, _stderr) = General.run_external(
+            ['systemctl', 'is-active', '--quiet', 'snapd.socket'],
+            timeout=5)
+    except subprocess.TimeoutExpired:
+        logger.warning(
+            'systemctl is-active snapd.socket timed out: it seems snap is installed but snapd is inactive')
+        _snapd_is_active_cache = False
+        return False
+    except (FileNotFoundError, OSError) as exc:
+        logger.warning('systemctl is-active snapd.socket failed: %s', exc)
+        _snapd_is_active_cache = False
+        return False
+    _snapd_is_active_cache = rc == 0
+    return _snapd_is_active_cache
+
+
+def clear_snapd_cache():
+    """Clear the snapd_is_active() cache."""
+    global _snapd_is_active_cache  # pylint: disable=global-statement
+    _snapd_is_active_cache = None
+
+
 def snap_disabled_full(really_delete):
     """Remove disabled snaps"""
     assert isinstance(really_delete, bool)
-    if not exe_exists('snap'):
-        raise RuntimeError('snap not found')
+    if not snapd_is_active():
+        raise RuntimeError('snap not found or snapd is not active')
 
     # Get list of all snaps.
     cmd = ['snap', 'list', '--all']
-    (rc, stdout, stderr) = General.run_external(cmd, clean_env=True)
+    try:
+        (rc, stdout, stderr) = General.run_external(
+            cmd, clean_env=True, timeout=15)
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError(
+            'snap list --all timed out after 15 seconds; is snapd running?') from exc
     if rc > 0:
         raise RuntimeError(f'snap list raised error {rc}: {stderr}')
 
@@ -778,17 +826,22 @@ def snap_disabled_full(really_delete):
 
         # Remove the snap revision
         if really_delete:
+            # Consider there may be a slow system with a large snap.
             remove_cmd = ['snap', 'remove', snapname, f'--revision={revision}']
-            (rc, _, remove_stderr) = General.run_external(
-                remove_cmd, clean_env=True)
+            try:
+                (rc, _, remove_stderr) = General.run_external(
+                    remove_cmd, clean_env=True, timeout=60)
+            except subprocess.TimeoutExpired:
+                logger.error(
+                    'Timeout removing snap %s revision %s', snapname, revision)
+                break
             if rc > 0:
-                logger.warning(
+                logger.error(
                     'Failed to remove snap %s revision %s: %s', snapname, revision, remove_stderr)
                 break
-            else:
-                total_freed += snap_size
-                logger.debug(
-                    'Removed snap %s revision %s, freed %s bytes', snapname, revision, snap_size)
+            total_freed += snap_size
+            logger.debug(
+                'Removed snap %s revision %s, freed %s bytes', snapname, revision, snap_size)
         else:
             total_freed += snap_size
 
@@ -869,6 +922,29 @@ def is_display_protocol_wayland_and_root_not_allowed():
         os.environ.get('USER') == 'root' and
         bleachbit.Unix.root_is_not_allowed_to_X_session()
     )
+
+
+def flush_dns():
+    """Flush the DNS resolver cache
+
+    Returns 0 on success.
+    Raises RuntimeError on failure.
+    """
+    if exe_exists('resolvectl'):
+        args = ['resolvectl', 'flush-caches']
+    elif exe_exists('systemd-resolve'):
+        args = ['systemd-resolve', '--flush-caches']
+    else:
+        raise RuntimeError('Neither resolvectl nor systemd-resolve found')
+    (rc, stdout, stderr) = General.run_external(args)
+    if 0 != rc:
+        # If service is not found, then there may be nothing to flush.
+        if 'Unit dbus-org.freedesktop.resolve1.service not found' in stderr:
+            logger.warning(stderr)
+            return 0
+        raise RuntimeError(
+            f'Command: {args}\nReturn code: {rc}\nStdout: {stdout}\nStderr: {stderr}')
+    return 0
 
 
 locales = Locales()
