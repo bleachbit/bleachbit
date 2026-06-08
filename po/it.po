@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-06-07 11:17-0600\n"
-"PO-Revision-Date: 2026-05-18 05:11+0000\n"
-"Last-Translator: Pierfrancesco Passerini <p.passerini@gmail.com>\n"
+"PO-Revision-Date: 2026-06-08 18:01+0000\n"
+"Last-Translator: Marino de Stena <marino.destena@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bleachbit/main/"
 "it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.6\n"
 "X-Launchpad-Export-Date: 2021-06-15 14:24+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -52,8 +52,8 @@ msgid ""
 "Delete cookies, which store login information, website preferences, and "
 "tracking identifiers"
 msgstr ""
-"Elimina i cookie che contengono informazioni come preferenze siti web, "
-"credenziali d'accesso e identificazione"
+"Elimina i cookie che contengono informazioni come preferenze siti web e "
+"tracciatori di identificazione"
 
 #: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
 #: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
@@ -75,7 +75,7 @@ msgstr "Cronologia"
 #: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
 #: ../cleaners/amule.xml
 msgid "Delete the usage history"
-msgstr "Elimina cronologia uso"
+msgstr "Elimina cronologia"
 
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
@@ -712,17 +712,13 @@ msgstr "Assistente IA"
 
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Form history"
 msgid "File history"
-msgstr "Cronologia moduli"
+msgstr "Cronologia file"
 
 #. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the list of recently used documents"
 msgid "Delete the file history used for /restore"
-msgstr "Elimina elenco documenti recenti"
+msgstr "Elimina elenco file recenti /restore"
 
 #. Description for deleting Claude Code sessions
 #: ../cleaners/claude.xml
@@ -738,7 +734,7 @@ msgstr ""
 #. In Claude Code: captured shell environment used by the Bash tool
 #: ../cleaners/claude.xml
 msgid "Shell snapshots"
-msgstr ""
+msgstr "Istantanee della Shell"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -1122,6 +1118,9 @@ msgid ""
 "compatible version for your system, click OK. To exit the installer, click "
 "Cancel."
 msgstr ""
+"Questa versione di BleachBit richiede Windows 10 o successivi. Per scaricare "
+"una versione compatibile col tuo sistema, fai click su OK. Per uscire dal "
+"programma di installazione, premi Annulla."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
