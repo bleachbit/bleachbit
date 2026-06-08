@@ -36,14 +36,23 @@ class WindowInfo:
 
 def clear_clipboard():
     """Clear the clipboard buffer"""
+    clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+    clipboard.set_text(' ', 1)
+    clipboard.clear()
+    flush_gtk_events()
+    # GTK may leave the clipboard locked, so the win32api may
+    # get an "access denied" error.
     if IS_WINDOWS:
         import bleachbit.Windows  # pylint: disable=import-outside-toplevel
-        bleachbit.Windows.clear_clipboard()
-    else:
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(' ', 1)
-        clipboard.clear()
-        flush_gtk_events()
+        try:
+            bleachbit.Windows.clear_clipboard()
+        except bleachbit.Windows.pywintypes.error as e:
+            winerror = getattr(e, 'winerror', e.args[0] if e.args else None)
+            if winerror != 5:
+                raise
+            logger.debug(
+                'Failed to clear Windows clipboard using win32 API',
+                exc_info=True)
 
 
 def get_clipboard_paths(clipboard=None, targets=None):
