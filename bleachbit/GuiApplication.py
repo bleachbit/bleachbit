@@ -174,7 +174,12 @@ class Bleachbit(Gtk.Application):
     def cb_shred_clipboard(self, action, param):
         """Callback for menu option: shred paths from clipboard"""
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.request_targets(self.cb_clipboard_uri_received)
+        # wait_for_targets() avoids GLib warnings from request_targets() when
+        # the clipboard is empty.
+        has_targets, targets = clipboard.wait_for_targets()
+        if not has_targets:
+            targets = []
+        self.cb_clipboard_uri_received(clipboard, targets, None)
 
     def cb_clipboard_uri_received(self, clipboard, targets, _data):
         """Callback for when URIs are received from clipboard
