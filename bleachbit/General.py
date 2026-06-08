@@ -30,6 +30,7 @@ import subprocess
 import sys
 
 import bleachbit
+from bleachbit import IS_WINDOWS
 
 logger = logging.getLogger(__name__)
 
@@ -252,53 +253,33 @@ def run_external_nowait(args, env=None, kwargs=None):
     """
     if kwargs is None:
         kwargs = {}
+    else:
+        kwargs = dict(kwargs)
     try:
-        if sys.platform == 'win32':
-            kwargs['creationflags'] = subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP
-            # Set close_fds to True to prevent Python from tracking the process
-            # Also prevents ResourceWarnings
-            kwargs['close_fds'] = True
-            try:
-                # Start the process with explicit None for stdio to prevent handle inheritance
-                process = subprocess.Popen(args,
-                                           stdin=None,
-                                           stdout=None,
-                                           stderr=None,
-                                           env=env, **kwargs)
-                # Close the process handle to prevent ResourceWarning
-                process.returncode = 0
-                # This prevents the ResourceWarning in __del__
+        if IS_WINDOWS:
+            creationflags = kwargs.get('creationflags', 0)
+            kwargs['creationflags'] = (
+                creationflags |
+                subprocess.DETACHED_PROCESS |
+                subprocess.CREATE_NEW_PROCESS_GROUP)
+        else:
+            # Unix/Linux
+            kwargs['start_new_session'] = True
+        kwargs['close_fds'] = True
+        try:
+            process = subprocess.Popen(args,
+                                       stdin=subprocess.DEVNULL,
+                                       stdout=subprocess.DEVNULL,
+                                       stderr=subprocess.DEVNULL,
+                                       env=env, **kwargs)
+            process.returncode = 0
+            if sys.platform == 'win32':
                 process._handle.Close()
                 process._handle = None
-                return True
-            except Exception as e:
-                logger.warning('Failed to start process %s: %s', args, e)
-                return False
-
-        # Unix/Linux
-        pid = os.fork()
-        if pid == 0:
-            # Child process
-            try:
-                # Detach from parent session
-                os.setsid()
-                # Redirect standard streams to devnull using raw fd numbers
-                # (0=stdin, 1=stdout, 2=stderr) to avoid issues with pytest
-                # or other frameworks that replace sys.stdout/stderr objects.
-                devnull_fd = os.open(os.devnull, os.O_RDWR)
-                os.dup2(devnull_fd, 0)  # stdin
-                os.dup2(devnull_fd, 1)  # stdout
-                os.dup2(devnull_fd, 2)  # stderr
-                os.close(devnull_fd)
-                # Set environment if needed
-                if env:
-                    os.environ.clear()
-                    os.environ.update(env)
-                os.execvp(args[0], args)
-            except Exception:
-                os._exit(1)
-        else:
             return True
+        except Exception as e:
+            logger.warning('Failed to start process %s: %s', args, e)
+            return False
     except subprocess.TimeoutExpired:
         # This is good on Windows.
         return True
@@ -356,7 +337,22 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
         if run_external_nowait(args, env=env, kwargs=kwargs):
             return (0, '', '')
         # Use fallback method.
-        kwargs['start_new_session'] = True
+        if IS_WINDOWS:
+            creationflags = kwargs.get('creationflags', 0)
+            kwargs['creationflags'] = (
+                creationflags |
+                subprocess.DETACHED_PROCESS |
+                subprocess.CREATE_NEW_PROCESS_GROUP)
+        else:
+            kwargs['start_new_session'] = True
+        kwargs['close_fds'] = True
+        process = subprocess.Popen(args,
+                                   stdout=subprocess.DEVNULL,
+                                   stderr=subprocess.DEVNULL,
+                                   stdin=subprocess.DEVNULL,
+                                   env=env, **kwargs)
+        process.returncode = 0
+        return (0, '', '')
 
     with subprocess.Popen(args, stdout=stdout,
                           stderr=subprocess.PIPE, env=env, **kwargs) as process:
@@ -371,9 +367,6 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
             print(out[0])
             print(out[1])
             raise
-
-        if not wait:
-            return (0, '', '')
 
         return (process.returncode,
                 str(out[0], encoding=encoding) if out[0] else '',
