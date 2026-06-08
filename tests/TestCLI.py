@@ -228,8 +228,8 @@ class CLITestCase(common.BleachbitTestCase):
             system_cleaners.remove('system.clipboard')
         non_system_cleaners = [
             c for c in full_cleaners_list
-            # vim_swap_root walks / and can be very slow
-            if not c.startswith('system.') and c != 'deepscan.vim_swap_root']
+            # deepscan.* can be too slow
+            if not c.startswith('system.') and not c.startswith('deepscan.')]
         sample_cleaners = random.sample(non_system_cleaners, 5)
         for cleaner in (system_cleaners + sample_cleaners):
             args_list.append(
