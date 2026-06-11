@@ -2315,7 +2315,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_RUN_AS_ADMIN ${LANG_SWEDISH} "Du måste köra det här programmet som administratör."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_SWEDISH} "$(^NameDA) är installerat både för alla användare och för den aktuella användaren.$\r$\nVälj vilken installation som ska tas bort."
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_SWEDISH} "Välj för vilka användare $(^NameDA) ska tas bort."
-	LangString OLD_WINDOWS_WARNING ${LANG_SWEDISH} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
+	LangString OLD_WINDOWS_WARNING ${LANG_SWEDISH} "Den här versionen av BleachBit kräver Windows 10 eller senare. För att ladda ner en kompatibel version för ditt system klickar du på OK. För att avsluta installationsprogrammet klickar du på Avbryt."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_SWEDISH} "Det här är de grundläggande filerna som behövs för att ${prodname} ska fungera (obligatoriskt)."
 	LangString SECTION_CORE_NAME ${LANG_SWEDISH} "Kärnfiler (obligatoriskt)"
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SWEDISH} "Skapa en genväg på skrivbordet."
