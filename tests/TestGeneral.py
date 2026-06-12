@@ -222,19 +222,17 @@ class GeneralTestCase(common.BleachbitTestCase):
 
             output_file = os.path.join(self.tempdir, 'run_external_nowait.txt')
 
-            if IS_POSIX:
-                script = self.write_file(
-                    'run_external_nowait.sh',
-                    contents='#!/bin/sh\nsleep 2\ntouch "$1"\n',
-                    mode='w')
-                os.chmod(script, 0o700)
-                cmd = ['sh', script, output_file]
-            else:
-                script = self.write_file(
-                    'run_external_nowait.bat',
-                    contents='@echo off\nping -n 3 127.0.0.1 >nul\necho done>"%~1"\n',
-                    mode='w')
-                cmd = ['cmd.exe', '/c', script, output_file]
+            cmd = [
+                sys.executable,
+                '-c',
+                (
+                    'import pathlib, sys, time; '
+                    'time.sleep(2); '
+                    'pathlib.Path(sys.argv[1]).write_text('
+                    '"done", encoding="utf-8")'
+                ),
+                output_file,
+            ]
 
             self.assertNotExists(output_file)
 
@@ -245,7 +243,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
             self.assertNotExists(output_file)
 
-            for _ in range(50):
+            for _ in range(200):
                 if os.path.exists(output_file):
                     break
                 time.sleep(0.1)

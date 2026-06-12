@@ -26,7 +26,8 @@ from tests import common
 if HAVE_GTK:
     from bleachbit.GtkShim import Gtk, GLib, Gio, GObject, Gdk
     from bleachbit.GuiApplication import Bleachbit
-    from bleachbit.GuiUtil import get_font_size_from_name, get_window_info
+    from bleachbit.GuiUtil import (clear_clipboard, get_font_size_from_name,
+                                   get_window_info)
     from bleachbit.GuiTreeModels import TreeDisplayModel
 
 bleachbit.online_update_notification_enabled = False
@@ -404,6 +405,22 @@ class GUITestCase(common.BleachbitTestCase):
         self.app.cb_clipboard_uri_received(clipboard, targets, None)
         self.assertTrue(self.wait_until(lambda: not os.path.exists(test_file)))
         self.assertNotExists(test_file)
+
+    def test_shred_clipboard_empty_no_glib_warnings(self):
+        """Empty clipboard must not trigger GLib g_array warnings."""
+        clear_clipboard()
+        self.refresh_gui()
+
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter('always')
+            self.app.cb_shred_clipboard(None, None)
+            self.refresh_gui()
+            glib_warnings = [
+                warning for warning in caught
+                if 'g_array' in str(warning.message)
+            ]
+
+        self.assertEqual([], glib_warnings)
 
     @mock.patch('bleachbit.CleanerML.list_cleanerml_files')
     @mock.patch('bleachbit.RecognizeCleanerML.cleaner_change_dialog')

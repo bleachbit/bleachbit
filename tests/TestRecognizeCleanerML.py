@@ -34,14 +34,18 @@ class RecognizeCleanerMLTestCase(common.BleachbitTestCase):
         cleaner_dir = bleachbit.personal_cleaners_dir
         os.makedirs(cleaner_dir, exist_ok=True)
         cleaner_file = os.path.join(cleaner_dir, 'test_recognize.xml')
-        with open(cleaner_file, 'w', encoding='utf-8') as f:
-            f.write(
-                '<?xml version="1.0"?><cleaner id="test"><label>Test</label></cleaner>')
-        with mock.patch('bleachbit.RecognizeCleanerML.cleaner_change_dialog'):
-            rcm = RecognizeCleanerML(parent_window=None)
-        self.assertIsNotNone(rcm.salt)
-        self.assertIsInstance(rcm.salt, str)
-        self.assertEqual(len(rcm.salt), 128)
-        # Verify __recognized() was exercised by checking the hash was stored.
-        self.assertTrue(options.has_option(
-            path_to_option(cleaner_file), 'hashpath'))
+        try:
+            with open(cleaner_file, 'w', encoding='utf-8') as f:
+                f.write(
+                    '<?xml version="1.0"?><cleaner id="test"><label>Test</label></cleaner>')
+            with mock.patch('bleachbit.RecognizeCleanerML.cleaner_change_dialog'):
+                rcm = RecognizeCleanerML(parent_window=None)
+            self.assertIsNotNone(rcm.salt)
+            self.assertIsInstance(rcm.salt, str)
+            self.assertEqual(len(rcm.salt), 128)
+            # Verify __recognized() was exercised by checking the hash was stored.
+            self.assertTrue(options.has_option(
+                path_to_option(cleaner_file), 'hashpath'))
+        finally:
+            if os.path.exists(cleaner_file):
+                os.remove(cleaner_file)

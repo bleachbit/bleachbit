@@ -335,5 +335,23 @@ def require_gtk():
         raise RuntimeError(f'GTK is required but not available: {reason}')
 
 
+@contextmanager
+def suppress_pygobject_asyncio_warnings():
+    """Suppress known PyGObject asyncio warnings under Python 3.14+."""
+    if sys.version_info < (3, 14):
+        yield
+        return
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore",
+            message=".*asyncio.AbstractEventLoopPolicy.*",
+            category=DeprecationWarning)
+        warnings.filterwarnings(
+            "ignore",
+            message=".*asyncio.get_event_loop_policy.*",
+            category=DeprecationWarning)
+        yield
+
+
 # Perform initialization at module load
 _init_gtk()

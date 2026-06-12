@@ -11,7 +11,11 @@ import sys
 import bleachbit
 from bleachbit import APP_NAME, Cleaner, GuiBasic, appicon_path, portable_mode
 from bleachbit.Cleaner import backends
-from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
+from bleachbit.GtkShim import (
+    GLib, Gdk, Gio, Gtk,
+    require_gtk,
+    suppress_pygobject_asyncio_warnings,
+)
 from bleachbit.GUI import logger
 from bleachbit.GuiUtil import get_clipboard_paths
 from bleachbit.GuiWindow import GUI
@@ -67,6 +71,11 @@ class Bleachbit(Gtk.Application):
             # clean up nonce files https://github.com/bleachbit/bleachbit/issues/858
             import atexit
             atexit.register(Windows.cleanup_nonce)
+
+    def run(self, *args, **kwargs):
+        """Run the GTK application."""
+        with suppress_pygobject_asyncio_warnings():
+            return Gtk.Application.run(self, *args, **kwargs)
 
     def _init_windows_misc(self, auto_exit, shred_paths, uac):
         application_id_suffix = ''
@@ -165,7 +174,12 @@ class Bleachbit(Gtk.Application):
     def cb_shred_clipboard(self, action, param):
         """Callback for menu option: shred paths from clipboard"""
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.request_targets(self.cb_clipboard_uri_received)
+        # wait_for_targets() avoids GLib warnings from request_targets() when
+        # the clipboard is empty.
+        has_targets, targets = clipboard.wait_for_targets()
+        if not has_targets:
+            targets = []
+        self.cb_clipboard_uri_received(clipboard, targets, None)
 
     def cb_clipboard_uri_received(self, clipboard, targets, _data):
         """Callback for when URIs are received from clipboard

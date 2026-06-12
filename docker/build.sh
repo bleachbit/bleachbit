@@ -63,7 +63,7 @@ case "$DISTRO" in
     fedora)
         IMAGE=bleachbit-build:fedora
         DOCKERFILE="$DOCKER_DIR/Dockerfile.fedora"
-        FEDORA_VERSION=${FEDORA_VERSION:-43}
+        FEDORA_VERSION=${FEDORA_VERSION:-44}
         RUN_ENV+=(--env FEDORA_VERSION="$FEDORA_VERSION")
         ;;
     opensuse)

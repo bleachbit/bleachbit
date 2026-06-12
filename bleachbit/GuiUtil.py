@@ -15,7 +15,10 @@ from typing import Optional
 
 from bleachbit import APP_NAME, FileUtilities, IS_WINDOWS
 from bleachbit.GUI import logger
-from bleachbit.GtkShim import GLib, Gdk, Gtk, gi
+from bleachbit.GtkShim import (
+    GLib, Gdk, Gtk, gi,
+    suppress_pygobject_asyncio_warnings,
+)
 
 
 class WindowInfo:
@@ -33,14 +36,23 @@ class WindowInfo:
 
 def clear_clipboard():
     """Clear the clipboard buffer"""
+    clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+    clipboard.set_text(' ', 1)
+    clipboard.clear()
+    flush_gtk_events()
+    # GTK may leave the clipboard locked, so the win32api may
+    # get an "access denied" error.
     if IS_WINDOWS:
         import bleachbit.Windows  # pylint: disable=import-outside-toplevel
-        bleachbit.Windows.clear_clipboard()
-    else:
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(' ', 1)
-        clipboard.clear()
-        flush_gtk_events()
+        try:
+            bleachbit.Windows.clear_clipboard()
+        except bleachbit.Windows.pywintypes.error as e:
+            winerror = getattr(e, 'winerror', e.args[0] if e.args else None)
+            if winerror != 5:
+                raise
+            logger.debug(
+                'Failed to clear Windows clipboard using win32 API',
+                exc_info=True)
 
 
 def get_clipboard_paths(clipboard=None, targets=None):
@@ -191,7 +203,10 @@ def flush_gtk_events(max_iterations: int = 5):
     """Process pending GTK events to allow style updates to land."""
     iterations = 0
     while Gtk.events_pending() and (max_iterations is None or iterations < max_iterations):
-        Gtk.main_iteration_do(False)
+        # PyGObject 3.56.2 calls deprecated asyncio APIs, which breaks tests
+        # run with PYTHONWARNINGS=error.
+        with suppress_pygobject_asyncio_warnings():
+            Gtk.main_iteration_do(False)
         iterations += 1
 
 
