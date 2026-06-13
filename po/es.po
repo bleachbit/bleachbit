@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-06-07 11:17-0600\n"
-"PO-Revision-Date: 2026-05-13 14:20+0000\n"
-"Last-Translator: keko sanjuan <edukeko@outlook.com>\n"
+"PO-Revision-Date: 2026-06-13 09:01+0000\n"
+"Last-Translator: Libre <6n0n1m0s@proton.me>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/bleachbit/main/"
 "es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.5.dev0\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Launchpad-Export-Date: 2021-12-14 04:36+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -713,41 +713,37 @@ msgstr "Se restablecerán las carpetas personalizadas."
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
 msgid "AI assistant"
-msgstr ""
+msgstr "Asistente de IA"
 
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Form history"
 msgid "File history"
-msgstr "Historial de los formularios"
+msgstr "Historial de archivo"
 
 #. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the list of recently used documents"
 msgid "Delete the file history used for /restore"
-msgstr "Eliminar la lista de documentos usados recientemente"
+msgstr "Eliminar el archivo del historial utilizado para /restore"
 
 #. Description for deleting Claude Code sessions
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the command history"
 msgid "Delete the conversation history"
-msgstr "Eliminar el historial de órdenes"
+msgstr "Eliminar el historial de conversación"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
 msgstr ""
+"Perderás las funciones de reanudar, continuar y retroceder para las sesiones "
+"pasadas"
 
 #. In Claude Code: captured shell environment used by the Bash tool
 #: ../cleaners/claude.xml
 msgid "Shell snapshots"
-msgstr ""
+msgstr "Instantáneas de consola"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
-msgstr "Exploración en profundidad"
+msgstr "Escaneo profundo"
 
 #: ../cleaners/deepscan.xml
 msgid "Clean files widely scattered across the disk"
@@ -803,13 +799,11 @@ msgstr "Eliminar la lista de páginas web visitadas"
 #. Cleaning option that deletes AI models in a web browser
 #: ../cleaners/google_chrome.xml
 msgid "AI"
-msgstr ""
+msgstr "IA"
 
 #: ../cleaners/google_chrome.xml
-#, fuzzy
-#| msgid "Delete the logs"
 msgid "Delete the AI models"
-msgstr "Elimina la bitácora"
+msgstr "Eliminar los modelos de IA"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -842,10 +836,8 @@ msgid "Delete the list of game servers"
 msgstr "Eliminar la lista de servidores de juego"
 
 #: ../cleaners/profanity.xml
-#, fuzzy
-#| msgid "Download failed"
 msgid "Downloaded files"
-msgstr "Descarga incorrecta"
+msgstr "Archivos descargados"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
@@ -1130,6 +1122,9 @@ msgid ""
 "compatible version for your system, click OK. To exit the installer, click "
 "Cancel."
 msgstr ""
+"Esta versión de BleachBit requiere Windows 10 o posterior. Para descargar "
+"una versión compatible para su sistema, pulse Aceptar. Para salir del "
+"instalador, pulse Cancelar."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
@@ -1307,6 +1302,11 @@ msgid ""
 "See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-"
 "questions.html"
 msgstr ""
+"Para ejecutar una aplicación IGU en Wayland con root, conceda acceso con "
+"este comando:\n"
+"xhost si:localuser:root\n"
+"Consulte más sobre xhost en https://docs.bleachbit.org/doc/frequently-asked-"
+"questions.html"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1394,7 +1394,7 @@ msgstr "Esta opción es experimental y puede causar problemas en el sistema."
 #. TRANSLATORS: This is a label for the option to clear the system DNS cache.
 #: ../bleachbit/Cleaner.py
 msgid "DNS cache"
-msgstr ""
+msgstr "Caché de DNS"
 
 #. TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py
@@ -2027,7 +2027,7 @@ msgstr "Seleccione la carpeta de destino"
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error generating chaff: {error}"
-msgstr ""
+msgstr "Error al generar paja: {error}"
 
 #. TRANSLATORS: Progress message shown while deleting chaff files.
 #. 'Deleting files' is a present participle.
@@ -2042,7 +2042,7 @@ msgstr "Eliminando archivos…"
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error deleting chaff files: {error}"
-msgstr ""
+msgstr "Error al borrar archivos de paja: {error}"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves
@@ -2558,16 +2558,12 @@ msgstr "Añadir Carpeta"
 #. in the preferences dialog. This message appears when cleaning options
 #. with warnings are selected but expert mode is disabled.
 #: ../bleachbit/GuiStartup.py
-#, fuzzy
-#| msgid ""
-#| "Cleaning options with warnings now require expert mode. Enable it in "
-#| "preferences to clean them."
 msgid ""
 "One or more selected cleaning options have warnings and require Expert Mode "
 "to clean. Enable it in preferences."
 msgstr ""
-"Las opciones de limpieza con avisos ahora requiere modo experto. Habilítelo "
-"en las preferencias para limpiarlos."
+"Una o más opciones de limpieza seleccionadas tienen avisos y requieren el "
+"Modo Experto para limpiar. Habilítelo en las preferencias."
 
 #. TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
 #. Preferences. Keep it consistent with the translation of "Expert Mode"
@@ -2578,6 +2574,9 @@ msgid ""
 "Delete confirmation is disabled but expert mode is not enabled. Enable "
 "Expert Mode in preferences to skip delete confirmations."
 msgstr ""
+"La confirmación de borrado esta inhabilitada pero el Modo Experto no esta "
+"habilitado. Habilita el Modo Experto en las preferencias para omitir "
+"confirmaciones de borrado."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
@@ -3050,14 +3049,14 @@ msgstr ""
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "stop Windows service %(service)s"
-msgstr ""
+msgstr "detener servicio Windows %(service)s"
 
 #. TRANSLATORS: Message in log file when starting a Windows service.
 #. The placeholder is the code name of the service.
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "start Windows service %(service)s"
-msgstr ""
+msgstr "iniciar servicio de Windows %(service)s"
 
 #: ../bleachbit/Wipe.py
 msgid ""
