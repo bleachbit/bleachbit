@@ -114,6 +114,9 @@ A filter bar above the notebook applies to both tabs:
 - `File → Preferences…` opens a minimal `PreferencesDialog` with
   checkboxes for the options most users actually change in the GTK UI:
   `delete_confirmation`, `shred`, `check_online_updates`, `debug`.
+- The preferences dialog also includes **Keep list** and **Custom**
+  pages.  These edit `Options.whitelist_paths` and
+  `Options.custom_paths`, respectively, and save changes immediately.
 
 ## Shredding arbitrary files or folders
 
@@ -144,11 +147,14 @@ as a safety net even if the process is killed outright.
 
 - No expert mode / warning confirmation flow yet (warnings are just
   marked with `⚠` in the tree).
-- Preferences dialog is intentionally minimal: no whitelist editor,
-  languages tab, drives selector, or per-cleaner options yet.
+- Preferences dialog is intentionally minimal: it has General, Keep
+  list and Custom pages, but no languages tab, drives selector,
+  expert-mode control, warning preferences, or per-cleaner options yet.
 - Chaff generator is not wired up.
-- Not translated through the wx machinery yet (strings go through
-  `bleachbit.Language.get_text`, but accelerators are missing).
+- Not translated through the wx machinery yet; user-visible strings go
+  through `bleachbit.Language.get_text`, while keyboard shortcuts are
+  currently defined explicitly with `wx.AcceleratorTable` and menu
+  labels.
 
 ## Accessibility
 
