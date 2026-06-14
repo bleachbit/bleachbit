@@ -59,18 +59,31 @@ def get_clipboard_paths(clipboard=None, targets=None):
     """Returns paths from clipboard as a list"""
     if clipboard is None:
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+
+    if IS_WINDOWS:
+        # Prefer native CF_HDROP data when available. Query Win32 before
+        # wait_for_targets() because GTK target queries can race with CF_HDROP.
+        import bleachbit.Windows  # pylint: disable=import-outside-toplevel
+        win32_paths = ()
+        try:
+            win32_paths = bleachbit.Windows.get_clipboard_paths()
+            if not win32_paths:
+                flush_gtk_events()
+                win32_paths = bleachbit.Windows.get_clipboard_paths()
+        except bleachbit.Windows.pywintypes.error as e:
+            winerror = getattr(e, 'winerror', e.args[0] if e.args else None)
+            if winerror != 5:
+                raise
+        if win32_paths:
+            return list(win32_paths)
+
     if targets is None:
         has_targets, targets = clipboard.wait_for_targets()
         if not has_targets:
             targets = []
 
     shred_paths = []
-    if IS_WINDOWS and Gdk.atom_intern_static_string('FileNameW') in targets:
-        # Windows
-        # Use non-GTK+ functions because because GTK+ 2 does not work.
-        import bleachbit.Windows  # pylint: disable=import-outside-toplevel
-        shred_paths = bleachbit.Windows.get_clipboard_paths()
-    elif Gdk.atom_intern_static_string('text/uri-list') in targets:
+    if Gdk.atom_intern_static_string('text/uri-list') in targets:
         # Linux
         shred_uri_contents = clipboard.wait_for_contents(
             Gdk.atom_intern_static_string('text/uri-list'))
