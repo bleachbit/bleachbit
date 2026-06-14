@@ -1883,7 +1883,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_RUN_AS_ADMIN ${LANG_PORTUGUESEBR} "Você precisa executar este programa como administrador."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_PORTUGUESEBR} "$(^NameDA) está instalado para todos os usuários e também para o usuário atual.$\r$\nSelecione qual instalação deseja remover."
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_PORTUGUESEBR} "Escolha para quais usuários remover $(^NameDA)."
-	LangString OLD_WINDOWS_WARNING ${LANG_PORTUGUESEBR} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
+	LangString OLD_WINDOWS_WARNING ${LANG_PORTUGUESEBR} "Esta versão de BleachBit requer Windows 10 ou mais recente. Para baixar uma versão compilável para seus sistema, clique em OK. Para sair do instalador, clique em Cancelar."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_PORTUGUESEBR} "Estes são os arquivos básicos necessários para que ${prodname} funcione (obrigatório)."
 	LangString SECTION_CORE_NAME ${LANG_PORTUGUESEBR} "Arquivos principais (obrigatório)"
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_PORTUGUESEBR} "Criar atalho na área de trabalho."
