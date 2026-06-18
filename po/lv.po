@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-06-07 11:17-0600\n"
-"PO-Revision-Date: 2026-06-11 07:01+0000\n"
+"PO-Revision-Date: 2026-06-19 16:01+0000\n"
 "Last-Translator: \"ℂ𝕠𝕠𝕠𝕝 (𝕘𝕚𝕥𝕙𝕦𝕓.𝕔𝕠𝕞/ℂ𝕠𝕠𝕠𝕝)\" <coool@mail.lv>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/bleachbit/main/"
 "lv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Launchpad-Export-Date: 2014-08-23 04:48+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -1304,7 +1304,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py
 msgid "Trash"
-msgstr ""
+msgstr "Atkritne"
 
 #: ../bleachbit/Cleaner.py
 msgid "Empty the trash"
@@ -1312,7 +1312,7 @@ msgstr ""
 
 #: ../bleachbit/Cleaner.py ../bleachbit/Worker.py
 msgid "Memory"
-msgstr ""
+msgstr "Atmiņa"
 
 #. TRANSLATORS: 'free' means 'unallocated'
 #: ../bleachbit/Cleaner.py
@@ -1575,13 +1575,13 @@ msgstr ""
 #. was skipped because it matches the keep list
 #: ../bleachbit/Command.py
 msgid "Skip"
-msgstr ""
+msgstr "Izlaist"
 
 #. TRANSLATORS: Label in the log indicating a path will be deleted
 #. (for previews) or was actually deleted (clean mode).
 #: ../bleachbit/Command.py
 msgid "Delete"
-msgstr ""
+msgstr "Dzēst"
 
 #. TRANSLATORS: Warning message shown in the progress log.
 #: ../bleachbit/Command.py
@@ -2029,10 +2029,8 @@ msgstr ""
 
 #. TRANSLATORS: Label for the search entry in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Search tool"
 msgid "Search:"
-msgstr "Meklēšanas rīks"
+msgstr "Meklēt:"
 
 #. TRANSLATORS: Placeholder text in the search entry in the manage cookies dialog.
 #. 'Filter' is a verb meaning to narrow down the list by typing.
@@ -2116,7 +2114,7 @@ msgstr ""
 #. TRANSLATORS: Sidebar label for the "Languages" page in the Preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Languages"
-msgstr ""
+msgstr "Valodas"
 
 #. TRANSLATORS: Sidebar label for the "keep list" (whitelist) page of
 #. the preferences dialog. This page lists paths that will be preserved
@@ -2128,7 +2126,7 @@ msgstr ""
 #. TRANSLATORS: Sidebar label for the drives page of the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Drives"
-msgstr ""
+msgstr "Diski"
 
 #. TRANSLATORS: Notice shown in an infobar when toggling
 #. dark mode on Linux.
@@ -2293,14 +2291,14 @@ msgstr ""
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add"
-msgstr ""
+msgstr "Pievienot"
 
 #. TRANSLATORS: In the preferences dialog, this button removes a path
 #. from the list of paths
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Remove"
-msgstr ""
+msgstr "Noņemt"
 
 #. TRANSLATORS: Section title on the preferences languages page.
 #: ../bleachbit/GuiPreferences.py
@@ -2398,7 +2396,7 @@ msgstr ""
 #. file, a folder, or a pattern describing either
 #: ../bleachbit/GuiPreferences.py
 msgid "Path"
-msgstr ""
+msgstr "Ceļš"
 
 #. TRANSLATORS: Title of a file chooser dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2775,12 +2773,12 @@ msgstr ""
 #: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
 msgid "Delete"
-msgstr ""
+msgstr "Dzēst"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
 msgid "Filename"
-msgstr ""
+msgstr "Datnes nosaukums"
 
 #: ../bleachbit/Unix.py
 #, python-format
@@ -2842,7 +2840,7 @@ msgstr ""
 
 #: ../bleachbit/Winapp.py
 msgid "Games"
-msgstr ""
+msgstr "Spēles"
 
 #: ../bleachbit/Winapp.py
 msgid "Imported from winapp2.ini"
