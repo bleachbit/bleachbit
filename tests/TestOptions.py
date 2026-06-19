@@ -398,7 +398,7 @@ check_online_updates=True
                         o.set('shred', True)
                         o.set_list('list_test', ['a', 'b'])
                         o.set_whitelist_paths([('file', '/tmp/a')])
-                        o.set_custom_paths([('folder', '/tmp/b')])
+                        o.set_custom_paths([('folder_contents', '/tmp/b')])
                         o.set_language('zz', True)
                         o.set_tree('system', 'cache', True)
                         o.remember_warning_preference('warn_key')
@@ -423,7 +423,7 @@ check_online_updates=True
                     self.assertEqual(['a', 'b'], o3.get_list('list_test'))
                     self.assertEqual([('file', '/tmp/a')],
                                      o3.get_whitelist_paths())
-                    self.assertEqual([('folder', '/tmp/b')],
+                    self.assertEqual([('folder_contents', '/tmp/b')],
                                      o3.get_custom_paths())
                     self.assertTrue(o3.get_language('zz'))
                     self.assertTrue(o3.get_tree('system', 'cache'))
