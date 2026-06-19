@@ -13,6 +13,7 @@ import glob
 import logging
 import os
 import platform
+import posixpath
 import re
 import shlex
 import subprocess
@@ -21,6 +22,7 @@ import bleachbit
 from bleachbit import FileUtilities, General
 from bleachbit.FileUtilities import children_in_directory, exe_exists
 from bleachbit.Language import get_text as _, native_locale_names
+from bleachbit.VFS import RealVFS
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +37,8 @@ except AttributeError:
 
 JOURNALD_REGEX = r'^Vacuuming done, freed ([\d.]+[BKMGT]?) of archived journals (on disk|from [\w/]+).$'
 
+_real_vfs = RealVFS()
+
 
 class LocaleCleanerPath:
     """This represents a path with either a specific folder name or a folder name pattern.
@@ -42,14 +46,20 @@ class LocaleCleanerPath:
     and additional LocaleCleanerPaths that get traversed when asked to supply a list of localization
     items"""
 
-    def __init__(self, location):
+    def __init__(self, location, vfs=None):
         if location is None:
             raise RuntimeError("location is none")
         self.pattern = location
         self.children = []
+        self._vfs = vfs
+
+    def _get_vfs(self):
+        return self._vfs if self._vfs is not None else _real_vfs
 
     def add_child(self, child):
         """Adds a child LocaleCleanerPath"""
+        if isinstance(child, LocaleCleanerPath) and child._vfs is None:
+            child._vfs = self._vfs
         self.children.append(child)
         return child
 
@@ -66,25 +76,28 @@ class LocaleCleanerPath:
     def get_subpaths(self, basepath):
         """Returns direct subpaths for this object, i.e. either the named subfolder or all
         subfolders matching the pattern"""
+        vfs = self._get_vfs()
         if isinstance(self.pattern, Pattern):
-            return (os.path.join(basepath, p) for p in os.listdir(basepath)
-                    if self.pattern.match(p) and os.path.isdir(os.path.join(basepath, p)))
-        path = os.path.join(basepath, self.pattern)
-        return [path] if os.path.isdir(path) else []
+            # posixpath is easy way to test also from Windows.
+            return (posixpath.join(basepath, p) for p in vfs.listdir(basepath)
+                    if self.pattern.match(p) and vfs.isdir(posixpath.join(basepath, p)))
+        path = posixpath.join(basepath, self.pattern)
+        return [path] if vfs.isdir(path) else []
 
     def get_localizations(self, basepath):
         """Returns all localization items for this object and all descendant objects"""
+        vfs = self._get_vfs()
         for path in self.get_subpaths(basepath):
             for child in self.children:
                 if isinstance(child, LocaleCleanerPath):
                     yield from child.get_localizations(path)
                 elif isinstance(child, Pattern):
-                    for element in os.listdir(path):
+                    for element in vfs.listdir(path):
                         match = child.match(element)
                         if match is not None:
                             yield (match.group('locale'),
                                    match.group('specifier'),
-                                   os.path.join(path, element))
+                                   posixpath.join(path, element))
 
 
 class Locales:
@@ -100,8 +113,8 @@ class Locales:
         r'(?P<specifier>[_-][A-Z]{2,4})?(?:\.[\w]+[\d-]+|@\w+)?' \
         r'(?P<encoding>[.-_](?:(?:ISO|iso|UTF|utf|us-ascii)[\d-]+|(?:euc|EUC)[A-Z]+))?'
 
-    def __init__(self):
-        self._paths = LocaleCleanerPath(location='/')
+    def __init__(self, vfs=None):
+        self._paths = LocaleCleanerPath(location='/', vfs=vfs)
 
     def add_xml(self, xml_node, parent=None):
         """Parses the xml data and adds nodes to the LocaleCleanerPath-tree"""
