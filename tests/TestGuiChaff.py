@@ -60,6 +60,17 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         cls.refresh_gui()
 
     @classmethod
+    def tearDownClass(cls):
+        super(GuiChaffTestCase, cls).tearDownClass()
+        # Destroy the visible window on whichever application holds it.
+        # When running after TestGUI, the default application is TestGUI's
+        # instance and cls.app is an unregistered duplicate, so check both.
+        for app in (cls.app, Gio.Application.get_default()):
+            if app and getattr(app, '_window', None):
+                app._window.destroy()
+                app._window = None
+
+    @classmethod
     def refresh_gui(cls, delay=0):
         while Gtk.events_pending():
             if sys.version_info >= (3, 14):

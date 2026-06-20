@@ -65,6 +65,9 @@ class GUITestCase(common.BleachbitTestCase):
         super(GUITestCase, GUITestCase).tearDownClass()
         options.get_tree = cls.options_get_tree
         cls._lang_env.__exit__(None, None, None)
+        if cls.app and cls.app._window:
+            cls.app._window.destroy()
+            cls.app._window = None
 
     @classmethod
     def refresh_gui(cls, delay=0):
