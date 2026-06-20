@@ -92,6 +92,32 @@ def mock_missing_package(*package_names, clear_prefixes=()):
 
 
 @contextlib.contextmanager
+def capture_glib_exceptions():
+    """Capture exceptions swallowed by GLib virtual method/signal handlers.
+
+    PyGObject catches exceptions raised inside GObject virtual method
+    overrides (e.g. ``do_activate``) and signal callbacks, then logs them
+    via ``sys.excepthook`` without propagating to the Python caller.  This
+    context manager installs a custom ``sys.excepthook`` that collects such
+    exceptions so they can be re-raised after GTK event processing.
+
+    Yields a list of ``(exc_type, exc_value, exc_tb)`` tuples.
+    """
+    captured = []
+    original_excepthook = sys.excepthook
+
+    def _capturing_excepthook(exc_type, exc_value, exc_tb):
+        captured.append((exc_type, exc_value, exc_tb))
+        original_excepthook(exc_type, exc_value, exc_tb)
+
+    sys.excepthook = _capturing_excepthook
+    try:
+        yield captured
+    finally:
+        sys.excepthook = original_excepthook
+
+
+@contextlib.contextmanager
 def set_temporary_env(env_var, env_value):
     """
     Temporarily overrides an environment variable.

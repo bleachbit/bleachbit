@@ -44,10 +44,14 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         options.set('font_check_completed', True)
 
         # Try to register the application, catch the error if already registered
+        glib_errors = []
         try:
             cls.app.register()
             cls.app.hold()  # Keep application alive during tests
-            cls.app.activate()
+            with common.capture_glib_exceptions() as errs:
+                cls.app.activate()
+                cls.refresh_gui()
+            glib_errors.extend(errs)
         except GLib.GError as e:
             if not "already exported" in str(e):
                 raise
@@ -56,11 +60,18 @@ class GuiChaffTestCase(common.BleachbitTestCase):
             # Try to get the default application and activate it
             default_app = Gio.Application.get_default()
             if default_app:
-                default_app.activate()
+                with common.capture_glib_exceptions() as errs:
+                    default_app.activate()
+                    cls.refresh_gui()
+                glib_errors.extend(errs)
+        if glib_errors:
+            _exc_type, exc_value, exc_tb = glib_errors[0]
+            raise exc_value.with_traceback(exc_tb)
         cls.refresh_gui()
 
     @classmethod
     def tearDownClass(cls):
+        """Close the GUI"""
         super(GuiChaffTestCase, cls).tearDownClass()
         # Destroy the visible window on whichever application holds it.
         # When running after TestGUI, the default application is TestGUI's
@@ -92,11 +103,13 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         time.sleep(delay)
 
     def setUp(self):
+        """Set up test fixtures before each test method."""
         from bleachbit.GuiChaff import ChaffDialog
         # Pass the GtkWindow object
         self.dialog = ChaffDialog(parent=self.app._window)
 
     def tearDown(self):
+        """Clean up test fixtures after each test method."""
         self.dialog.destroy()
 
     def test_dialog_creation(self):
