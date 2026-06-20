@@ -98,7 +98,7 @@ def enable_swap_linux():
     """Enable Linux swap"""
     logger.debug(_("Re-enabling swap."))
     args = ["swapon", "-a"]
-    p = subprocess.Popen(args, stderr=subprocess.PIPE)
+    p = subprocess.Popen(args, stderr=subprocess.PIPE, text=True)
     p.wait()
     outputs = p.communicate()
     if 0 != p.returncode:

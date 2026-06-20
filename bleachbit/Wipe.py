@@ -385,7 +385,8 @@ def wipe_path(pathname, idle=False):
             except OSError as e:
                 # Linux gives errno 24
                 # Windows gives errno 28 No space left on device
-                if e.errno in (errno.EMFILE, errno.ENOSPC):
+                # Linux gives errno 122 Disk quota exceeded (EDQUOT)
+                if e.errno in (errno.EMFILE, errno.ENOSPC, errno.EDQUOT):
                     break
                 else:
                     raise
@@ -412,7 +413,7 @@ def wipe_path(pathname, idle=False):
                         break
 
                 except IOError as e:
-                    if e.errno == errno.ENOSPC:
+                    if e.errno in (errno.ENOSPC, errno.EDQUOT):
                         if len(blanks) > 1:
                             # Try writing smaller blocks
                             blanks = blanks[0:len(blanks) // 2]
@@ -434,7 +435,9 @@ def wipe_path(pathname, idle=False):
                 # IOError: [Errno 28] No space left on device
                 # seen on Microsoft Windows XP SP3 with ~30GB free space but
                 # not on another XP SP3 with 64MB free space
-                if e.errno != errno.ENOSPC:
+                # [Errno 122] Disk quota exceeded (EDQUOT) is treated the same
+                # way because the file is as full as the quota allows.
+                if e.errno not in (errno.ENOSPC, errno.EDQUOT):
                     logger.error(
                         _("Error #%d when flushing the file buffer."), e.errno)
 
@@ -445,7 +448,8 @@ def wipe_path(pathname, idle=False):
             sync()
             # statistics
             elapsed_sec = time.time() - start_time
-            rate_mbs = (total_bytes / (1000 * 1000)) / elapsed_sec
+            rate_mbs = (total_bytes / (1000 * 1000)) / \
+                elapsed_sec if elapsed_sec else 0
             # TRANSLATORS: Debug message summarizing a write operation. All placeholders
             # are numeric: %(file_count)d = integer number of files written;
             # %(total_bytes)d = integer total bytes written; %(elapsed_sec)d = integer

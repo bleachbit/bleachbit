@@ -57,14 +57,21 @@ class GUITestCase(common.BleachbitTestCase):
                 cls.app = Gio.Application.get_default()
             else:
                 raise
-        cls.app.activate()
-        cls.refresh_gui()
+        with common.capture_glib_exceptions() as glib_errors:
+            cls.app.activate()
+            cls.refresh_gui()
+        if glib_errors:
+            _exc_type, exc_value, exc_tb = glib_errors[0]
+            raise exc_value.with_traceback(exc_tb)
 
     @classmethod
     def tearDownClass(cls):
         super(GUITestCase, GUITestCase).tearDownClass()
         options.get_tree = cls.options_get_tree
         cls._lang_env.__exit__(None, None, None)
+        if cls.app and cls.app._window:
+            cls.app._window.destroy()
+            cls.app._window = None
 
     @classmethod
     def refresh_gui(cls, delay=0):

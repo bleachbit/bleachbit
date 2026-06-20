@@ -1,0 +1,82 @@
+# Positive test cases for localization path matching.
+# These paths should be recognized as localizations by localizations.xml.
+# Paths are real examples from /var/lib/flatpak/runtime/ on a Linux system.
+# Try this command to find more:
+# `find /usr /var |grep -P "(\blocale\b|fr_FR|\/zh|translations?|LC_MESSAGES|\.(mo|qm)$)"`
+
+# lib/locale trees (system locale data)
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/es_HN
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/fr_CH
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/nl_NL.utf8
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/es_BO.utf8
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/de_DE@euro
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/zh_TW.utf8
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/en_AU
+/var/lib/flatpak/runtime/org.gnome.Platform/x86_64/49/a884b7f190110b6de93bb7988d755ac21ba9248d7aeceab18f26795848ac7b12/files/lib/locale/ru_UA.utf8
+/var/lib/flatpak/runtime/org.gnome.Platform/x86_64/49/a884b7f190110b6de93bb7988d755ac21ba9248d7aeceab18f26795848ac7b12/files/lib/locale/nl_BE@euro
+
+# LC_* category files inside lib/locale
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/en_AU/LC_MESSAGES
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/en_AU/LC_MESSAGES/SYS_LC_MESSAGES
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/en_AU/LC_CTYPE
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/en_AU/LC_TIME
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/en_AU/LC_NUMERIC
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/en_AU/LC_MONETARY
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/en_AU/LC_NAME
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/en_AU/LC_ADDRESS
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/en_AU/LC_TELEPHONE
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/en_AU/LC_MEASUREMENT
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/en_AU/LC_IDENTIFICATION
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/en_AU/LC_PAPER
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/en_AU/LC_COLLATE
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale/en_NZ/LC_MESSAGES/SYS_LC_MESSAGES
+
+# share/locale directories and .mo files (application translations)
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/share/locale/en_AU/LC_MESSAGES/libexif-12.mo
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/share/locale/en@boldquot/LC_MESSAGES/attr.mo
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/share/locale/en@shaw/LC_MESSAGES/glib20.mo
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/share/locale/en_CA/LC_MESSAGES/glib20.mo
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/share/locale/en/LC_MESSAGES/gtk30.mo
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/share/locale/en/LC_MESSAGES/iso_3166-2.mo
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/share/locale/en_GB/LC_MESSAGES/gst-plugins-good-1.0.mo
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/share/locale/en_US/LC_MESSAGES/gsettings-desktop-schemas.mo
+
+# /usr/share/locale .mo files (system application translations)
+/usr/share/locale/zh_HK/LC_MESSAGES/gtksourceview-4.mo
+/usr/share/locale/bn/LC_MESSAGES/iso_3166.mo
+/usr/share/locale/sk/LC_MESSAGES/gegl-0.4.mo
+/usr/share/locale/sq/LC_MESSAGES/libmypaint.mo
+/usr/share/locale/pt_BR/LC_MESSAGES/znc-crypt.mo
+/usr/share/locale/ru_RU/LC_MESSAGES/znc-cyrusauth.mo
+/usr/share/locale/he/LC_MESSAGES/iso_639-3.mo
+
+# /usr/share/help localized documentation
+/usr/share/help/fa/gnome-help/prefs-language-install.page
+/usr/share/help/sv/zenity/entry.page
+/usr/share/help/fa/papers/figures/emblem-system-symbolic.svg
+/usr/share/help/pt/baobab/problem-permissions.page
+/usr/share/help/tr/papers/singlesided-13-16pages.page
+/usr/share/help/sr@latin/gpl
+/usr/share/help/sv/loupe/figures/edit-copy-symbolic.svg
+/usr/share/help/zh_CN/loupe/trashing-images.page
+/usr/share/help/hr/gnome-help/about-this-guide.page
+/usr/share/help/gl/papers/duplex-3pages.page
+/usr/share/help/de/gnome-calculator/conv-weight.page
+/usr/share/help/cs/gnome-clocks/alarm-add.page
+/usr/share/help/sv/meld/vc-mode.page
+/usr/share/help/cs/papers/annotations.page
+/usr/share/help/de/loupe/index.page
+/usr/share/help/sl/papers/translate.page
+/usr/share/help/it/simple-scan/crop.page
+/usr/share/help/el/loupe/opening-images.page
+/usr/share/help/id/gnome-help/app-cheese.page
+/usr/share/help/es/papers/commandline.page
+
+# /usr/share/man localized man pages
+/usr/share/man/nl/man8/delgroup.8.gz
+
+# /usr/share/X11/locale locale data
+/usr/share/X11/locale/./zh_TW/XLC_LOCALE
+
+# /usr/share/*/locale via directoryregex pattern
+/usr/share/speech-dispatcher/locale/./he/symbols.dic

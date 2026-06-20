@@ -434,8 +434,9 @@ class Options:
             with open(bleachbit.options_file, 'r', encoding='utf-8-sig', errors='surrogateescape') as _file:
                 self.config.read_file(_file, bleachbit.options_file)
         except FileNotFoundError:
-            logger.debug("Configuration file does not exist yet: %s",
-                         bleachbit.options_file)
+            if not bleachbit.options_file.startswith('/tmp'):
+                logger.debug("Configuration file does not exist yet: %s",
+                             bleachbit.options_file)
         except Exception:
             logger.exception("Error reading application's configuration")
         if not self.config.has_section("bleachbit"):

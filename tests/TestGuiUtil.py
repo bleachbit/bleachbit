@@ -9,11 +9,12 @@ Test cases for GuiUtil module.
 """
 
 
-import struct
+import os
 import time
 import unittest
 from pathlib import Path
 
+from bleachbit import General, logger
 from bleachbit.GtkShim import HAVE_GTK
 
 from tests import common
@@ -23,21 +24,9 @@ if HAVE_GTK:
     from bleachbit.GuiUtil import (clear_clipboard, flush_gtk_events,
                                    get_clipboard_paths, get_font_size_from_name)
 
+CLIPBOARD_TIMEOUT_SECONDS = 5
+CLIPBOARD_SLEEP_SECONDS = 0.05
 
-
-def _set_windows_clipboard_paths(paths):
-    """Set the Windows clipboard with file paths."""
-    import bleachbit.Windows  # pylint: disable=import-outside-toplevel
-    import win32clipboard
-    dropfiles = struct.pack('<IiiII', 20, 0, 0, 0, 1)
-    file_list = ''.join(f'{path}\0' for path in paths) + '\0'
-    bleachbit.Windows._open_clipboard()
-    try:
-        win32clipboard.EmptyClipboard()
-        win32clipboard.SetClipboardData(
-            win32clipboard.CF_HDROP, dropfiles + file_list.encode('utf-16le'))
-    finally:
-        win32clipboard.CloseClipboard()
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module and a display environment')
 class GUIUtilClipboardTestCase(common.BleachbitTestCase):
@@ -60,13 +49,54 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
 
     def _wait_for_clipboard_text(self, clipboard, text):
         """Wait for GTK to publish clipboard text."""
-        deadline = time.time() + 5
+        start_time = time.time()
+        deadline = start_time + CLIPBOARD_TIMEOUT_SECONDS
+        if clipboard.wait_for_text() == text:
+            logger.debug(
+                'clipboard text available after first wait attempt at %.1fs', time.time() - start_time)
+            return True
         while time.time() < deadline:
             flush_gtk_events()
             if clipboard.wait_for_text() == text:
+                elapsed = time.time() - start_time
+                logger.info(
+                    "clipboard text became available after %.1fs", elapsed)
                 return True
-            time.sleep(0.05)
+            time.sleep(CLIPBOARD_SLEEP_SECONDS)
+        elapsed = time.time() - start_time
+        logger.warning(
+            "clipboard text was still not available after %.1fs", elapsed)
         return False
+
+    def _copy_paths_to_windows_clipboard(self):
+        """Copy test paths using the shell clipboard, like Explorer."""
+        pattern = os.path.join(self.tempdir, 'clipboard-path-*')
+        args = ('powershell.exe', 'Set-Clipboard', '-Path', pattern)
+        rc, _stdout, stderr = General.run_external(args)
+        self.assertEqual(0, rc, stderr)
+
+    def _wait_for_windows_clipboard_paths(self, clipboard, paths):
+        """Wait for the production clipboard path to return file paths."""
+        expected = sorted(paths)
+        start_time = time.time()
+        deadline = start_time + CLIPBOARD_TIMEOUT_SECONDS
+        while time.time() < deadline:
+            flush_gtk_events()
+            got = sorted(get_clipboard_paths())
+            if got == expected:
+                elapsed = time.time() - start_time
+                logger.info(
+                    "clipboard paths became available after %.1fs", elapsed)
+                return
+            time.sleep(CLIPBOARD_SLEEP_SECONDS)
+        got = sorted(get_clipboard_paths())
+        _has_targets, targets = clipboard.wait_for_targets()
+        target_names = [target.name() for target in targets] if targets else []
+        elapsed = time.time() - start_time
+        self.fail(
+            'clipboard file paths were still not available after '
+            f'{elapsed:.1f}s: expected {expected}, got {got}, '
+            f'targets={target_names}')
 
     def test_get_clipboard_paths_text_plain(self):
         """Get text/plain paths from the real clipboard."""
@@ -78,8 +108,10 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
             self.skipTest('clipboard text is unavailable')
 
         # Getting should not affect the clipboard state.
-        get1 = list(get_clipboard_paths())
-        get2 = list(get_clipboard_paths())
+        get1 = get_clipboard_paths()
+        get2 = get_clipboard_paths()
+        self.assertIsInstance(get1, list)
+        self.assertIsInstance(get2, list)
         self.assertEqual(get1, get2)
         self.assertEqual(self.paths, get1)
 
@@ -104,24 +136,28 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
 
         targets = [Gdk.atom_intern_static_string('text/uri-list')]
 
-        get1 = list(get_clipboard_paths(Clipboard(), targets))
-        get2 = list(get_clipboard_paths(Clipboard(), targets))
+        get1 = get_clipboard_paths(Clipboard(), targets)
+        get2 = get_clipboard_paths(Clipboard(), targets)
+        self.assertIsInstance(get1, list)
+        self.assertIsInstance(get2, list)
         self.assertEqual(get1, get2)
         self.assertEqual(self.paths, get1)
 
     @common.skipUnlessWindows
     def test_get_clipboard_paths_windows(self):
-        """Get FileNameW paths from the clipboard on Windows."""
-        _set_windows_clipboard_paths(self.paths)
-
+        """Get file paths from the clipboard on Windows."""
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        targets = [Gdk.atom_intern_static_string('FileNameW')]
+        self._copy_paths_to_windows_clipboard()
+        self._wait_for_windows_clipboard_paths(clipboard, self.paths)
 
         # Getting should not affect the clipboard state.
-        get1 = list(get_clipboard_paths(clipboard, targets))
-        get2 = list(get_clipboard_paths(clipboard, targets))
+        get1 = get_clipboard_paths()
+        get2 = get_clipboard_paths()
+        self.assertIsInstance(get1, list)
+        self.assertIsInstance(get2, list)
         self.assertEqual(get1, get2)
         self.assertEqual(sorted(self.paths), sorted(get1))
+
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module and a display environment')
 class GUIUtilFontTestCase(common.BleachbitTestCase):

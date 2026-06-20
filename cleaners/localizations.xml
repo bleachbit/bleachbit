@@ -60,5 +60,19 @@
       <path location="vim/vim74/lang" filter="menu_*.vim"/>
       <path location="vim/vim74/lang" filter="*"/>
     </path>
+    <path location="/var/lib/flatpak/runtime">
+      <path directoryregex="^.*$">
+        <path directoryregex="^.*$">
+          <path directoryregex="^.*$">
+            <path directoryregex="^[a-f0-9]{64}$">
+              <path location="files">
+                <path location="lib/locale" filter="*"/>
+                <path location="share/locale" filter="*"/>
+              </path>
+            </path>
+          </path>
+        </path>
+      </path>
+    </path>
   </localizations>
 </cleaner>

@@ -20,6 +20,7 @@ from xml.dom.minidom import parseString
 from tests import common
 from bleachbit import logger
 from bleachbit.FileUtilities import children_in_directory, exe_exists
+from bleachbit.VFS import ListVFS
 from bleachbit.Unix import (
     _is_broken_xdg_desktop_application,
     apt_autoclean,
@@ -937,3 +938,99 @@ PrefersNonDefaultGPU=false""")
                 self.tempdir, 'snap', 'app', 'current', '.local', 'share',
                 'Trash', 'files', 'test.txt')
             self.assertNotIn(symlink_path, paths)
+
+
+class LocalizationsTestCase(common.BleachbitTestCase):
+
+    """Test case for localizations in Unix module"""
+
+    @staticmethod
+    def _get_recognized_paths(vfs):
+        """Load localizations.xml and return paths recognized by it using the given VFS."""
+        xml_path = os.path.join(os.path.dirname(
+            os.path.dirname(__file__)), 'cleaners', 'localizations.xml')
+        with open(xml_path, 'r', encoding='utf-8') as f:
+            xml_doc = parseString(f.read())
+
+        localizations_node = None
+        for child in xml_doc.firstChild.childNodes:
+            if child.nodeType == child.ELEMENT_NODE and child.nodeName == 'localizations':
+                localizations_node = child
+                break
+        assert localizations_node is not None, 'localizations.xml must contain a <localizations> element'
+
+        locales = Locales(vfs=vfs)
+        for child in localizations_node.childNodes:
+            if child.nodeType == child.ELEMENT_NODE:
+                locales.add_xml(child)
+
+        recognized = set()
+        for (locale, specifier, path) in locales._paths.get_localizations('/'):
+            recognized.add(path)
+        return recognized
+
+    @staticmethod
+    def _path_matches_recognized(test_path, recognized):
+        """Return True if test_path is in recognized or is a child/descendant of one."""
+        if test_path in recognized:
+            return True
+        for rec_path in recognized:
+            if test_path.startswith(rec_path + '/'):
+                return True
+        return False
+
+    def test_localization_paths_positive(self):
+        """Verify each path in localization_paths_positive.txt is matched by localizations.xml
+
+        Uses a virtual filesystem so the test verifies actual XML rule matching
+        without requiring a real /var/lib/flatpak tree.
+        """
+        data_file = os.path.join(os.path.dirname(
+            __file__), 'localization_paths_positive.txt')
+        self.assertExists(data_file)
+
+        with open(data_file, 'r', encoding='utf-8') as f:
+            test_paths = [line.strip() for line in f if line.strip()
+                          and not line.strip().startswith('#')]
+        self.assertGreater(len(test_paths), 0,
+                           'Test data file should contain at least one path')
+
+        vfs = ListVFS(test_paths)
+        recognized = self._get_recognized_paths(vfs)
+
+        for test_path in test_paths:
+            self.assertTrue(
+                self._path_matches_recognized(test_path, recognized),
+                f'Path not matched by localizations.xml: {test_path}'
+            )
+
+    def test_localization_paths_negative(self):
+        """Verify non-localization paths in flatpak are NOT matched
+
+        Uses a virtual filesystem so the test verifies that paths
+        that look similar to localizations are correctly rejected.
+        """
+        data_file = os.path.join(os.path.dirname(
+            __file__), 'localization_paths_negative.txt')
+        self.assertExists(data_file)
+
+        with open(data_file, 'r', encoding='utf-8') as f:
+            negative_paths = [line.strip() for line in f if line.strip(
+            ) and not line.strip().startswith('#')]
+        self.assertGreater(len(negative_paths), 0,
+                           'Test data file should contain at least one path')
+
+        positive_file = os.path.join(os.path.dirname(
+            __file__), 'localization_paths_positive.txt')
+        with open(positive_file, 'r', encoding='utf-8') as f:
+            positive_paths = [line.strip() for line in f if line.strip(
+            ) and not line.strip().startswith('#')]
+
+        vfs = ListVFS(positive_paths + negative_paths)
+        recognized = self._get_recognized_paths(vfs)
+
+        for neg_path in negative_paths:
+            self.assertFalse(
+                self._path_matches_recognized(neg_path, recognized),
+                f'Path should NOT be matched by localizations.xml: {neg_path}'
+            )

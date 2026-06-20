@@ -49,7 +49,7 @@ jobs:
     runs-on: ${{ matrix.ubuntu-version }}
 
     env:
-      COVERAGE: "coverage run --include='bleachbit/*'"
+      COVERAGE: "coverage run"
 
     steps:
     - uses: actions/checkout@v3

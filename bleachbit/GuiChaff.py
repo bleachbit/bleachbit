@@ -327,6 +327,17 @@ class ChaffDialog(Gtk.Dialog):
         self.when_finished_combo.set_active(0)  # Set default
         grid.attach(self.when_finished_combo, 1, 4, 1, 1)
 
+        # Do not include choose_folder_button: set_sensitive() on
+        # Gtk.FileChooserButton can crash on Windows when GSettings is not
+        # fully configured. The destination is read once at start anyway.
+        # https://github.com/bleachbit/bleachbit/issues/1780
+        self._option_widgets = (
+            self.inspiration_combo,
+            self.stop_mode_combo,
+            self.stop_value_spin,
+            self.when_finished_combo,
+        )
+
         # Loading indicator for download (hidden by default)
         self._download_spinner_box = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
@@ -502,6 +513,8 @@ class ChaffDialog(Gtk.Dialog):
                 self.progressbar.hide()
                 self.abort_button.set_sensitive(False)
                 self.make_button.set_sensitive(True)
+                for widget in self._option_widgets:
+                    widget.set_sensitive(True)
                 if error:
                     self.show_infobar(error, Gtk.MessageType.ERROR)
                 elif self._abort_event and self._abort_event.is_set():
@@ -532,6 +545,8 @@ class ChaffDialog(Gtk.Dialog):
         self.progressbar.set_fraction(0.0)
         self.make_button.set_sensitive(False)
         self.abort_button.set_sensitive(True)
+        for widget in self._option_widgets:
+            widget.set_sensitive(False)
         args = (stop_mode, stop_value, inspiration, output_dir,
                 delete_when_finished, on_progress, self._abort_event)
         self.thread = threading.Thread(target=make_files_thread, args=args)
