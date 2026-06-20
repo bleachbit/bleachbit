@@ -297,7 +297,9 @@ class WipeTestCase(common.BleachbitTestCase):
         stack.enter_context(mock.patch(
             'bleachbit.FileUtilities.free_space', return_value=0))
         stack.enter_context(mock.patch('bleachbit.Wipe.sync'))
-        stack.enter_context(mock.patch('bleachbit.Wipe.os.statvfs'))
+        # There is no statvfs on Windows, so create it.
+        stack.enter_context(mock.patch(
+            'bleachbit.Wipe.os.statvfs', create=True))
         stack.enter_context(mock.patch('bleachbit.Wipe.os.fsync'))
         stack.delete_mock = stack.enter_context(
             mock.patch('bleachbit.FileUtilities.delete'))
@@ -410,12 +412,18 @@ class WipeTestCase(common.BleachbitTestCase):
                 return len(data)
             raise IOError(errno.EFBIG, 'File too large')
         mock_file.write.side_effect = write_side_effect
-        time_values = [0.0, 0.0, 3.0, 3.0, 3.0, 4.0]
+
+        def time_side_effect():
+            if write_call_count == 0:
+                return 0.0
+            if write_call_count == 1:
+                return 3.0
+            return 4.0
         with self._wipe_path_common_mocks() as stack:
             stack.enter_context(mock.patch(
                 'bleachbit.Wipe.tempfile.NamedTemporaryFile', return_value=mock_file))
             stack.enter_context(mock.patch(
-                'bleachbit.Wipe.time.time', side_effect=time_values))
+                'bleachbit.Wipe.time.time', side_effect=time_side_effect))
             results = list(wipe_path(self.tempdir, idle=True))
         self.assertGreater(len(results), 0)
         for result in results:

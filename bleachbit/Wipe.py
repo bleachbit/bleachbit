@@ -448,7 +448,8 @@ def wipe_path(pathname, idle=False):
             sync()
             # statistics
             elapsed_sec = time.time() - start_time
-            rate_mbs = (total_bytes / (1000 * 1000)) / elapsed_sec
+            rate_mbs = (total_bytes / (1000 * 1000)) / \
+                elapsed_sec if elapsed_sec else 0
             # TRANSLATORS: Debug message summarizing a write operation. All placeholders
             # are numeric: %(file_count)d = integer number of files written;
             # %(total_bytes)d = integer total bytes written; %(elapsed_sec)d = integer
