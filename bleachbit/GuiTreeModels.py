@@ -189,6 +189,9 @@ class TreeInfoModel:
             c_id = backends[key].get_id()
             c_value = options.get_tree(c_id, None)
             if not c_value and options.get('auto_hide') and backends[key].auto_hide():
+                if not c_id:
+                    logger.error("backends[%s].c_id is missing", key)
+                    continue
                 hidden_cleaners.append(c_id)
                 continue
             parent = self.tree_store.append(

@@ -713,6 +713,10 @@ class GUI(Gtk.ApplicationWindow):
 
     def worker_done(self, worker, really_delete):
         """Callback for when Worker is done"""
+        # Remove the temporary _gui cleaner used for shred-paths and
+        # wipe-empty-space operations, so it does not leak into the tree
+        # view on the next refresh.
+        backends.pop('_gui', None)
         # TRANSLATORS: Status message shown on the progress bar and in a popup
         # notification.
         done_msg = _("Done.")
