@@ -12,23 +12,26 @@ Test case for module CLI
 # standard imports
 import copy
 import datetime
+import io
 import locale
 import os
 import random
 import tempfile
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 # first party imports
+import bleachbit
 from bleachbit.CLI import (
     CliCallback,
     args_to_operations,
     args_to_operations_list,
     cleaners_list,
     parse_cmd_line,
-    preview_or_clean)
+    preview_or_clean,
+    process_cmd_line)
 from bleachbit.General import get_executable, run_external
 from bleachbit.GtkShim import HAVE_GTK
-from bleachbit import FileUtilities, IS_WINDOWS, IS_POSIX
+from bleachbit import FileUtilities, Options, IS_WINDOWS, IS_POSIX
 from tests import common
 
 RUN_EXTERNAL_TIMEOUT = 30
@@ -39,6 +42,8 @@ class CLITestCase(common.BleachbitTestCase):
 
     def setUp(self):
         super(CLITestCase, self).setUp()
+        Options.options.reset_overrides()
+        Options.options.set_override("first_start", False)
 
     def _test_preview(self, args, redirect_stdout=True, env=None):
         """Helper to test preview"""
@@ -60,11 +65,10 @@ class CLITestCase(common.BleachbitTestCase):
     def test_args_to_operations_list(self):
         """Unit test for args_to_operations_list()"""
         # --preset
-        import bleachbit.Options
-        bleachbit.Options.init_configuration()
+        Options.init_configuration()
         o = args_to_operations_list(True, False)
         self.assertEqual(o, [])
-        bleachbit.Options.options.set_tree('system', 'tmp', True)
+        Options.options.set_tree('system', 'tmp', True)
         o = args_to_operations_list(True, False)
         self.assertEqual(o, ['system.tmp'])
 
@@ -316,6 +320,168 @@ class CLITestCase(common.BleachbitTestCase):
                 launcher_output[i] = [line for line in modified_output_str.split(
                     '\n') if not line.startswith("sys.argv")]
             self.assertEqual(launcher_output[0], launcher_output[1])
+
+    def test_process_cmd_line_mutually_exclusive(self):
+        """Unit test for process_cmd_line() with mutually exclusive commands"""
+        with patch('sys.argv', ['bleachbit', '--preview', '--clean']):
+            with self.assertRaises(SystemExit) as cm:
+                process_cmd_line()
+            self.assertEqual(cm.exception.code, 1)
+
+    def test_process_cmd_line_version(self):
+        """Unit test for process_cmd_line() with --version"""
+        with patch('sys.argv', ['bleachbit', '--version']):
+            with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+                with self.assertRaises(SystemExit) as cm:
+                    process_cmd_line()
+                self.assertEqual(cm.exception.code, 0)
+            self.assertIn('BleachBit version', mock_stdout.getvalue())
+
+    def test_process_cmd_line_list_cleaners(self):
+        """Unit test for process_cmd_line() with --list-cleaners"""
+        with patch('bleachbit.CLI.list_cleaners') as mock_list:
+            with patch('sys.argv', ['bleachbit', '--list-cleaners']):
+                with self.assertRaises(SystemExit) as cm:
+                    process_cmd_line()
+                self.assertEqual(cm.exception.code, 0)
+            mock_list.assert_called_once()
+
+    def test_process_cmd_line_pot(self):
+        """Unit test for process_cmd_line() with --pot"""
+        with patch('bleachbit.CleanerML.create_pot') as mock_create_pot:
+            with patch('sys.argv', ['bleachbit', '--pot']):
+                with self.assertRaises(SystemExit) as cm:
+                    process_cmd_line()
+                self.assertEqual(cm.exception.code, 0)
+            mock_create_pot.assert_called_once()
+
+    def test_process_cmd_line_wipe_empty_space_no_args(self):
+        """Unit test for process_cmd_line() --wipe-empty-space with no args"""
+        with patch('sys.argv', ['bleachbit', '--wipe-empty-space']):
+            with self.assertRaises(SystemExit) as cm:
+                process_cmd_line()
+            self.assertEqual(cm.exception.code, 1)
+
+    def test_process_cmd_line_preview_no_operations(self):
+        """Unit test for process_cmd_line() --preview with no operations"""
+        with patch('sys.argv', ['bleachbit', '--preview']):
+            with self.assertRaises(SystemExit) as cm:
+                process_cmd_line()
+            self.assertEqual(cm.exception.code, 1)
+
+    def test_process_cmd_line_overwrite_warning(self):
+        """Unit test for process_cmd_line() --overwrite warning with --preview"""
+        with patch('bleachbit.CLI.preview_or_clean'):
+            with patch('bleachbit.CLI.logger.warning') as mock_warning:
+                with patch('sys.argv', ['bleachbit', '--preview', 'system.tmp', '--overwrite']):
+                    with self.assertRaises(SystemExit) as cm:
+                        process_cmd_line()
+                    self.assertEqual(cm.exception.code, 0)
+                mock_warning.assert_called_once()
+
+    def test_process_cmd_line_overwrite_no_warning_with_clean(self):
+        """Unit test for process_cmd_line() --overwrite without warning when used with --clean"""
+        with patch('bleachbit.CLI.preview_or_clean'):
+            with patch('bleachbit.CLI.logger.warning') as mock_warning:
+                with patch('sys.argv', ['bleachbit', '--clean', 'system.tmp', '--overwrite']):
+                    with self.assertRaises(SystemExit) as cm:
+                        process_cmd_line()
+                    self.assertEqual(cm.exception.code, 0)
+                mock_warning.assert_not_called()
+
+    def test_process_cmd_line_sysinfo(self):
+        """Unit test for process_cmd_line() with --sysinfo"""
+        with patch('bleachbit.CLI.SystemInformation.get_system_information',
+                   return_value='test sysinfo'):
+            with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+                with patch('sys.argv', ['bleachbit', '--sysinfo']):
+                    with self.assertRaises(SystemExit) as cm:
+                        process_cmd_line()
+                    self.assertEqual(cm.exception.code, 0)
+            self.assertIn('test sysinfo', mock_stdout.getvalue())
+
+    def test_process_cmd_line_shred(self):
+        """Unit test for process_cmd_line() with --shred"""
+        with patch.dict('bleachbit.CLI.backends', clear=True):
+            with patch('bleachbit.CLI.create_simple_cleaner', return_value=MagicMock()):
+                with patch('bleachbit.CLI.preview_or_clean') as mock_preview:
+                    with patch('sys.argv', ['bleachbit', '--shred', '/tmp/test-shred']):
+                        with self.assertRaises(SystemExit) as cm:
+                            process_cmd_line()
+                        self.assertEqual(cm.exception.code, 0)
+                    mock_preview.assert_called_once()
+
+    def test_process_cmd_line_gui(self):
+        """Unit test for process_cmd_line() with --gui"""
+        mock_gui_module = MagicMock()
+        mock_app = MagicMock()
+        mock_app.run.return_value = 0
+        mock_gui_module.Bleachbit.return_value = mock_app
+        with patch.dict('sys.modules', {'bleachbit.GuiApplication': mock_gui_module}):
+            with patch.object(bleachbit, 'GuiApplication', mock_gui_module, create=True):
+                with patch('bleachbit.Bootstrap.check_wayland_and_root', return_value=False):
+                    with patch('os.name', 'posix'):
+                        with patch('sys.argv', ['bleachbit', '--gui']):
+                            with self.assertRaises(SystemExit) as cm:
+                                process_cmd_line()
+                            self.assertEqual(cm.exception.code, 0)
+        mock_gui_module.Bleachbit.assert_called_once_with(
+            uac=False, shred_paths=[], auto_exit=None)
+        mock_app.run.assert_called_once()
+
+    def test_process_cmd_line_no_command(self):
+        """Unit test for process_cmd_line() with no command"""
+        # Reminder: When GUI is available and there are no arguments, then
+        # process_cmd_line is not called.
+        # process_cmd_line() is called when either GUI is not available or
+        # there are arguments.
+        with patch('sys.argv', ['bleachbit']):
+            with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+                process_cmd_line()
+            self.assertIn('bleachbit', mock_stdout.getvalue())
+
+    def test_process_cmd_line_debug(self):
+        """Unit test for process_cmd_line() with --debug"""
+        with patch('bleachbit.CLI.preview_or_clean'):
+            with patch('sys.argv', ['bleachbit', '--debug', '--preview', 'system.tmp']):
+                with self.assertRaises(SystemExit) as cm:
+                    process_cmd_line()
+                self.assertEqual(cm.exception.code, 0)
+            self.assertTrue(Options.options.has_override('debug'))
+
+    def test_process_cmd_line_preset(self):
+        """Unit test for process_cmd_line() with --preset"""
+        # Preset branch only calls set_root_log_level when debug is enabled.
+        Options.options.set_override('debug', True)
+        with patch('bleachbit.CLI.preview_or_clean'):
+            with patch('bleachbit.CLI.set_root_log_level') as mock_set_level:
+                with patch('sys.argv', ['bleachbit', '--preview', '--preset', 'system.tmp']):
+                    with self.assertRaises(SystemExit) as cm:
+                        process_cmd_line()
+                    self.assertEqual(cm.exception.code, 0)
+                mock_set_level.assert_called_once()
+
+    def test_process_cmd_line_debug_log(self):
+        """Unit test for process_cmd_line() with --debug-log"""
+        with patch('bleachbit.CLI.preview_or_clean'):
+            with patch('bleachbit.CLI.SystemInformation.get_system_information',
+                       return_value='test sysinfo'):
+                with patch('bleachbit.CLI.logger.info') as mock_log_info:
+                    with patch('sys.argv', ['bleachbit', '--debug-log', '/tmp/test.log',
+                                            '--preview', 'system.tmp']):
+                        with self.assertRaises(SystemExit) as cm:
+                            process_cmd_line()
+                        self.assertEqual(cm.exception.code, 0)
+                    mock_log_info.assert_any_call('test sysinfo')
+
+    def test_process_cmd_line_option_overrides(self):
+        """Unit test for process_cmd_line() option overrides"""
+        with patch('sys.argv', ['bleachbit', '--no-load-cleaners',
+                                '--no-delete-confirmation']):
+            with patch('sys.stdout', new_callable=io.StringIO):
+                process_cmd_line()
+            self.assertFalse(Options.options.get('load_cleaners'))
+            self.assertFalse(Options.options.get('delete_confirmation'))
 
     def test_shred(self):
         """Unit test for --shred"""
