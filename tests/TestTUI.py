@@ -562,6 +562,55 @@ class ConfirmScreenTestCase(common.BleachbitTestCase):
         self.assertEqual(screen.total_files, 100)
         self.assertEqual(screen.total_size, 2048000)
 
+    def test_confirm_screen_default_focus_is_no(self):
+        """ConfirmScreen focuses the No button on mount."""
+        from textual.app import App
+        from textual.widgets import Button
+        from bleachbit.tui.screens.confirm import ConfirmScreen
+
+        async def run():
+            app = App()
+            async with app.run_test() as pilot:
+                app.push_screen(ConfirmScreen(1, 1, 10, 1024))
+                await pilot.pause()
+                self.assertTrue(app.screen.query_one("#btn-no", Button).has_focus)
+
+        asyncio.run(run())
+
+    def test_confirm_screen_yes_dismisses_true(self):
+        """Pressing y dismisses ConfirmScreen with True."""
+        from textual.app import App
+        from bleachbit.tui.screens.confirm import ConfirmScreen
+
+        async def run():
+            dismissed = []
+            app = App()
+            async with app.run_test() as pilot:
+                app.push_screen(ConfirmScreen(
+                    1, 1, 10, 1024), dismissed.append)
+                await pilot.press("y")
+                await pilot.pause()
+            self.assertEqual(dismissed, [True])
+
+        asyncio.run(run())
+
+    def test_confirm_screen_no_dismisses_false(self):
+        """Pressing n dismisses ConfirmScreen with False."""
+        from textual.app import App
+        from bleachbit.tui.screens.confirm import ConfirmScreen
+
+        async def run():
+            dismissed = []
+            app = App()
+            async with app.run_test() as pilot:
+                app.push_screen(ConfirmScreen(
+                    1, 1, 10, 1024), dismissed.append)
+                await pilot.press("n")
+                await pilot.pause()
+            self.assertEqual(dismissed, [False])
+
+        asyncio.run(run())
+
 
 class IntegrationTestCase(common.BleachbitTestCase):
     """Integration tests that verify end-to-end flows via Textual pilot."""
