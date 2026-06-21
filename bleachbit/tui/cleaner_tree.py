@@ -191,7 +191,7 @@ class CleanerTree(Tree):
         enabled = self._enabled.get((c_id, o_id), False)
         toggle = "[green][X][/green]" if enabled else "[red][ ][/red]"
         errors = self._option_errors.get((c_id, o_id), 0)
-        error_badge = f" [yellow]:warning: {errors}[/yellow]" if errors else ""
+        error_badge = f" [yellow]:warning: {errors:n}[/yellow]" if errors else ""
         size = self._option_sizes.get((c_id, o_id), 0)
         size_str = f" — {bytes_to_human(size)}" if size else ""
         node.label = Text.from_markup(
@@ -292,7 +292,7 @@ class CleanerTree(Tree):
     def update_root_total_full(self, total_files: int, total_bytes: int):
         """Update root node with final file count and byte total."""
         total_word = _("Total:")
-        files_word = ngettext("%d file", "%d files", total_files) % total_files
+        files_word = ngettext("%s file", "%s files", total_files) % f"{total_files:n}"
         self.root.label = Text.from_markup(
             f"[bold]{total_word}[/bold] {files_word}, {bytes_to_human(total_bytes)}"
         )
@@ -311,7 +311,7 @@ class CleanerTree(Tree):
         if total_errors > 0:
             current = self.root.label.plain
             self.root.label = Text.from_markup(
-                f"[bold]{current}[/bold] [yellow]:warning: {total_errors}[/yellow]"
+                f"[bold]{current}[/bold] [yellow]:warning: {total_errors:n}[/yellow]"
             )
 
     # --- Node resolution ---

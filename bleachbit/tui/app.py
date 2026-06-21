@@ -261,34 +261,34 @@ class BleachBitTUI(App):
 
         if message.really_delete:
             done_message = ngettext(
-                "Deleted %(total_deleted)d file (%(size)s).  Errors: %(total_errors)d.",
-                "Deleted %(total_deleted)d files (%(size)s).  Errors: %(total_errors)d.",
+                "Deleted %(total_deleted)s file (%(size)s).  Errors: %(total_errors)s.",
+                "Deleted %(total_deleted)s files (%(size)s).  Errors: %(total_errors)s.",
                 message.total_deleted) % {
-                    "total_deleted": message.total_deleted,
+                    "total_deleted": f"{message.total_deleted:n}",
                     "size": bytes_to_human(message.total_bytes),
-                    "total_errors": message.total_errors
+                    "total_errors": f"{message.total_errors:n}"
                 }
             notification = ngettext(
-                "Delete complete: %(total_deleted)d file, %(size)s",
-                "Delete complete: %(total_deleted)d files, %(size)s",
+                "Delete complete: %(total_deleted)s file, %(size)s",
+                "Delete complete: %(total_deleted)s files, %(size)s",
                 message.total_deleted) % {
-                    "total_deleted": message.total_deleted,
+                    "total_deleted": f"{message.total_deleted:n}",
                     "size": bytes_to_human(message.total_bytes)
                 }
         else:
             done_message = ngettext(
-                "Would delete %(total_deleted)d file (%(size)s).  Errors: %(total_errors)d.",
-                "Would delete %(total_deleted)d files (%(size)s).  Errors: %(total_errors)d.",
+                "Would delete %(total_deleted)s file (%(size)s).  Errors: %(total_errors)s.",
+                "Would delete %(total_deleted)s files (%(size)s).  Errors: %(total_errors)s.",
                 message.total_deleted) % {
-                    "total_deleted": message.total_deleted,
+                    "total_deleted": f"{message.total_deleted:n}",
                     "size": bytes_to_human(message.total_bytes),
-                    "total_errors": message.total_errors
+                    "total_errors": f"{message.total_errors:n}"
                 }
             notification = ngettext(
-                "Preview complete: %(total_deleted)d file, %(size)s",
-                "Preview complete: %(total_deleted)d files, %(size)s",
+                "Preview complete: %(total_deleted)s file, %(size)s",
+                "Preview complete: %(total_deleted)s files, %(size)s",
                 message.total_deleted) % {
-                    "total_deleted": message.total_deleted,
+                    "total_deleted": f"{message.total_deleted:n}",
                     "size": bytes_to_human(message.total_bytes)
                 }
         self._update_status(

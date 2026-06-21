@@ -74,20 +74,20 @@ class FileListWidget(VerticalScroll):
         page_files = self._files[start:end]
 
         selected_count = len(self._selected)
-        sel_info = _(" | %d selected") % selected_count if selected_count else ""
+        sel_info = _(" | %s selected") % f"{selected_count:n}" if selected_count else ""
 
         lines = [
             _("[bold]Files for %(cleaner)s -> %(option)s[/bold]") % {
                 "cleaner": self.cleaner_name,
                 "option": self.option_name
             },
-            _("[dim]%(count)d files, %(size)s | Page %(page)d/%(total_pages)d (%(start)d-%(end)d)%(sel_info)s[/dim]") % {
-                "count": len(self._files),
+            _("[dim]%(count)s files, %(size)s | Page %(page)d/%(total_pages)d (%(start)s-%(end)s)%(sel_info)s[/dim]") % {
+                "count": f"{len(self._files):n}",
                 "size": total_human,
                 "page": self._current_page + 1,
                 "total_pages": total_pages,
-                "start": start + 1,
-                "end": end,
+                "start": f"{start + 1:n}",
+                "end": f"{end:n}",
                 "sel_info": sel_info
             },
             "",
@@ -165,7 +165,7 @@ class FileListWidget(VerticalScroll):
         text = self.get_all_text()
         if text:
             self.app.copy_to_clipboard(text)
-            self.notify(_("Copied %d file paths to clipboard") % len(text.splitlines()))
+            self.notify(_("Copied %s file paths to clipboard") % f"{len(text.splitlines()):n}")
         else:
             self.notify(_("No file data available"), severity="warning")
 
@@ -232,7 +232,7 @@ class FileListOverlay(ModalScreen):
         text = widget.get_all_text()
         if text:
             self.app.copy_to_clipboard(text)
-            self.notify(_("Copied %d file paths to clipboard") % len(text.splitlines()))
+            self.notify(_("Copied %s file paths to clipboard") % f"{len(text.splitlines()):n}")
         else:
             self.notify(_("No file data available"), severity="warning")
 

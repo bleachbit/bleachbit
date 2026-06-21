@@ -68,10 +68,10 @@ class FileContextMenu(ModalScreen):
         count = len(self._paths)
         preview = ", ".join(self._paths[:3])
         if count > 3:
-            preview += _(" ... and %d more") % (count - 3)
+            preview += _(" ... and %s more") % f"{count - 3:n}"
 
         with Container(id="ctx-dialog"):
-            yield Static(ngettext("%d file selected", "%d files selected", count) % count, id="ctx-title")
+            yield Static(ngettext("%s file selected", "%s files selected", count) % f"{count:n}", id="ctx-title")
             yield Static(preview, id="ctx-body")
             yield Static(
                 _("[bold]w[/bold]=Add to keep list  "
@@ -92,7 +92,7 @@ class FileContextMenu(ModalScreen):
                 new_entries.append((p_type, path))
         if new_entries:
             options.set_whitelist_paths(existing + new_entries)
-            msg = ngettext("Added %d path to keep list", "Added %d paths to keep list", len(new_entries)) % len(new_entries)
+            msg = ngettext("Added %s path to keep list", "Added %s paths to keep list", len(new_entries)) % f"{len(new_entries):n}"
             self.notify(msg)
         else:
             self.notify(_("All paths already in keep list"))
@@ -109,7 +109,7 @@ class FileContextMenu(ModalScreen):
                 new_entries.append((p_type, path))
         if new_entries:
             options.set_custom_paths(existing + new_entries)
-            msg = ngettext("Added %d path to clean list", "Added %d paths to clean list", len(new_entries)) % len(new_entries)
+            msg = ngettext("Added %s path to clean list", "Added %s paths to clean list", len(new_entries)) % f"{len(new_entries):n}"
             self.notify(msg)
         else:
             self.notify(_("All paths already in clean list"))
@@ -119,7 +119,7 @@ class FileContextMenu(ModalScreen):
         """Copy selected paths to clipboard."""
         text = "\n".join(self._paths)
         self.app.copy_to_clipboard(text)
-        msg = ngettext("Copied %d path to clipboard", "Copied %d paths to clipboard", len(self._paths)) % len(self._paths)
+        msg = ngettext("Copied %s path to clipboard", "Copied %s paths to clipboard", len(self._paths)) % f"{len(self._paths):n}"
         self.notify(msg)
         self.dismiss()
 
@@ -128,9 +128,9 @@ class FileContextMenu(ModalScreen):
         dirs = sorted(set(os.path.dirname(p) for p in self._paths))
         preview = "\n".join(dirs[:5])
         if len(dirs) > 5:
-            preview += _("\n... and %d more directories") % (len(dirs) - 5)
+            preview += _("\n... and %s more directories") % f"{len(dirs) - 5:n}"
         self.app.copy_to_clipboard(preview)
-        msg = ngettext("Copied %d directory to clipboard", "Copied %d directories to clipboard", len(dirs)) % len(dirs)
+        msg = ngettext("Copied %s directory to clipboard", "Copied %s directories to clipboard", len(dirs)) % f"{len(dirs):n}"
         self.notify(msg)
         self.dismiss()
 

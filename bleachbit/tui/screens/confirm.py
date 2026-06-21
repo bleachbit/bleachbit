@@ -69,11 +69,11 @@ class ConfirmScreen(ModalScreen[bool]):
         with Container(id="confirm-dialog"):
             yield Static(_("[!] Confirm Delete"), id="confirm-title", markup=False)
             yield Static(
-                _("Delete %(total_files)d files (%(size)s) across %(cleaner_count)d cleaners (%(option_count)d options)?") % {
-                    "total_files": self.total_files,
+                _("Delete %(total_files)s files (%(size)s) across %(cleaner_count)s cleaners (%(option_count)s options)?") % {
+                    "total_files": f"{self.total_files:n}",
                     "size": bytes_to_human(self.total_size),
-                    "cleaner_count": self.cleaner_count,
-                    "option_count": self.option_count
+                    "cleaner_count": f"{self.cleaner_count:n}",
+                    "option_count": f"{self.option_count:n}"
                 },
                 id="confirm-body",
             )
