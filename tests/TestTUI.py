@@ -12,11 +12,12 @@ Test case for BleachBit TUI module
 import asyncio
 import unittest
 
+from tests import common
 from bleachbit.tui.cleaner_tree import CleanerTree
 from bleachbit.FileUtilities import bytes_to_human
 
 
-class CleanerTreeNodeDataTestCase(unittest.TestCase):
+class CleanerTreeNodeDataTestCase(common.BleachbitTestCase):
     """Test that CleanerTree node.data stores human-readable names."""
 
     def test_populate_real_stores_names(self):
@@ -62,7 +63,7 @@ class CleanerTreeNodeDataTestCase(unittest.TestCase):
         self.assertIsNone(tree.get_focused_option())
 
 
-class CleanerTreeLabelTestCase(unittest.TestCase):
+class CleanerTreeLabelTestCase(common.BleachbitTestCase):
     """Test label formatting for cleaner and option nodes."""
 
     def test_cleaner_label_contains_name_not_id(self):
@@ -101,7 +102,7 @@ class CleanerTreeLabelTestCase(unittest.TestCase):
         self.assertNotIn("  cache", label_text)
 
 
-class CleanerTreeNavigationTestCase(unittest.TestCase):
+class CleanerTreeNavigationTestCase(common.BleachbitTestCase):
     """Test jump-to-top and jump-to-bottom navigation logic.
 
     Note: action_jump_to_top and action_jump_to_bottom require a mounted
@@ -261,7 +262,7 @@ class CleanerTreeNavigationTestCase(unittest.TestCase):
                       "select_node should be called with cleaner parent")
 
 
-class TogglePersistenceTestCase(unittest.TestCase):
+class TogglePersistenceTestCase(common.BleachbitTestCase):
     """Test that toggle state tracking works correctly."""
 
     def test_enabled_tracks_state(self):
@@ -300,11 +301,12 @@ class TogglePersistenceTestCase(unittest.TestCase):
         self.assertNotIn(("test", "opt2"), enabled)
 
 
-class CleanerTreeParentTogglePersistenceTestCase(unittest.TestCase):
+class CleanerTreeParentTogglePersistenceTestCase(common.BleachbitTestCase):
     """Test that parent toggle state persists correctly across close/reopen."""
 
     def setUp(self):
         """Remove any existing tree config before each test."""
+        super().setUp()
         from bleachbit.Options import options
         if options.config.has_section("tree"):
             options.config.remove_section("tree")
@@ -397,7 +399,7 @@ class CleanerTreeParentTogglePersistenceTestCase(unittest.TestCase):
         )
 
 
-class CleanerTreeFilterTestCase(unittest.TestCase):
+class CleanerTreeFilterTestCase(common.BleachbitTestCase):
     """Test filter/search functionality on the cleaner tree."""
 
     def _make_data(self):
@@ -474,11 +476,12 @@ class CleanerTreeFilterTestCase(unittest.TestCase):
         self.assertTrue(tree._enabled.get(("firefox", "cache"), False))
 
 
-class BackendTestCase(unittest.TestCase):
+class BackendTestCase(common.BleachbitTestCase):
     """Test backend functions: build_operations, get_cleaner_tree_data, get_files_for_option."""
 
     @classmethod
     def setUpClass(cls):
+        super().setUpClass()
         from bleachbit.tui.backend import load_cleaners
         load_cleaners()
 
@@ -539,7 +542,7 @@ class BackendTestCase(unittest.TestCase):
             self.assertIsInstance(item[1], int)
 
 
-class ConfirmScreenTestCase(unittest.TestCase):
+class ConfirmScreenTestCase(common.BleachbitTestCase):
     """Test ConfirmScreen dismiss logic."""
 
     def test_confirm_screen_y_dismisses_true(self):
@@ -560,7 +563,7 @@ class ConfirmScreenTestCase(unittest.TestCase):
         self.assertEqual(screen.total_size, 2048000)
 
 
-class IntegrationTestCase(unittest.TestCase):
+class IntegrationTestCase(common.BleachbitTestCase):
     """Integration tests that verify end-to-end flows via Textual pilot."""
 
     def test_app_mounts_with_tree(self):
