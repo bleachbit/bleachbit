@@ -665,3 +665,28 @@ class IntegrationTestCase(common.BleachbitTestCase):
                 self.assertFalse(isinstance(app.screen, HelpScreen))
 
         asyncio.run(run())
+
+    def test_file_list_overlay_escape_dismisses(self):
+        """Pressing Escape in the FileListOverlay should dismiss it.
+
+        Regression test: the focused FileListWidget intercepts the escape
+        key with its own binding, so without forwarding to the enclosing
+        overlay screen the user gets stuck and cannot exit.
+        """
+        from bleachbit.tui.app import BleachBitTUI
+        from bleachbit.tui.screens.file_list import FileListOverlay
+
+        async def run():
+            app = BleachBitTUI()
+            async with app.run_test() as pilot:
+                await pilot.pause()
+                # Push the overlay directly to test its dismiss path.
+                app.push_screen(FileListOverlay("system", "tmp"))
+                await pilot.pause()
+                self.assertTrue(isinstance(app.screen, FileListOverlay))
+                # Escape should dismiss the overlay.
+                await pilot.press("escape")
+                await pilot.pause()
+                self.assertFalse(isinstance(app.screen, FileListOverlay))
+
+        asyncio.run(run())

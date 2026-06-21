@@ -184,9 +184,21 @@ class FileListWidget(VerticalScroll):
         self.notify(_("Exported to %s") % path)
 
     def action_dismiss_inline(self):
-        """Dismiss inline file list and return focus to tree."""
+        """Dismiss the file list view.
+
+        Handles both inline mode (widget mounted in the main app) and
+        overlay mode (widget mounted inside a FileListOverlay screen).
+        The widget intercepts the escape key in both modes because it is
+        focused, so without this the overlay's own escape binding never
+        fires and the user gets stuck.
+        """
         if self.app._inline_file_list is self:
             self.app._dismiss_inline_file_list()
+            return
+        # Overlay mode: dismiss the enclosing FileListOverlay screen.
+        screen = self.screen
+        if isinstance(screen, FileListOverlay):
+            screen.dismiss(None)
 
 
 class FileListOverlay(ModalScreen):
