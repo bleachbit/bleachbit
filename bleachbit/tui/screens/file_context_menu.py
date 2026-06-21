@@ -6,6 +6,8 @@
 
 """File context menu — actions on selected files."""
 
+from __future__ import annotations
+
 import os
 
 from textual.app import ComposeResult

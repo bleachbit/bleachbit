@@ -13,6 +13,8 @@ The Worker runs in a thread.  Its ui callback posts Textual Messages
 into the app so the tree, status bar, and log update live.
 """
 
+from __future__ import annotations
+
 import logging
 
 from textual.message import Message

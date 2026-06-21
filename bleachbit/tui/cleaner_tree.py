@@ -12,6 +12,8 @@ enable/disable toggles (Space), file list display (Enter), and live counters.
 Toggle states are persisted via Options.options.get_tree/set_tree.
 """
 
+from __future__ import annotations
+
 from textual.widgets import Tree
 from textual.widgets.tree import TreeNode
 from textual.binding import Binding

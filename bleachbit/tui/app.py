@@ -9,6 +9,8 @@
 Phase 2: Connected to real BleachBit backend.
 """
 
+from __future__ import annotations
+
 from textual.app import App, ComposeResult
 from textual.containers import Container, VerticalScroll
 from textual.widgets import Header, Footer, Static, ProgressBar, Input

@@ -10,6 +10,8 @@ Prototype A: Inline-expand — file list appears below the option node in the tr
 Prototype B: Full-screen overlay — file list takes the whole screen.
 """
 
+from __future__ import annotations
+
 from textual.app import ComposeResult
 from textual.containers import Container, VerticalScroll
 from textual.screen import ModalScreen
