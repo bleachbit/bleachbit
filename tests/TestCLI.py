@@ -262,7 +262,11 @@ class CLITestCase(common.BleachbitTestCase):
                     try:
                         self.assertLExists(path)
                     except AssertionError:
-                        crash[0] = True
+                        # On busy systems, other temp files may disappear
+                        # between scan and delete, so flag a crash only for the
+                        # test file itself.
+                        if os.path.normcase(path) == os.path.normcase(filename):
+                            crash[0] = True
                     deleted_paths.append(os.path.normcase(path))
 
                 with patch.object(FileUtilities, 'delete', side_effect=dummy_delete):
