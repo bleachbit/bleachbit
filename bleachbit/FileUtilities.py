@@ -960,10 +960,29 @@ def whitelisted_posix(path, check_realpath=True, _followed_link=False):
     return False
 
 
+def _windows_preserved_temp_dir(path):
+    """Return whether this Windows path is a temp directory root to keep."""
+    path = extended_path_undo(os.path.normpath(path)).lower()
+    parts = path.split(os.sep)
+
+    if path == os.path.expandvars(r'%windir%\temp').lower():
+        return True
+
+    if len(parts) >= 3 and parts[-3:] == ['appdata', 'local', 'temp']:
+        return True
+
+    if len(parts) >= 2 and parts[-2:] == ['local settings', 'temp']:
+        return True
+
+    return False
+
+
 def whitelisted_windows(path):
     """Check whether this Windows path is whitelisted"""
     if not isinstance(path, str):
         raise TypeError(f"Expected str, got {type(path)}")
+    if _windows_preserved_temp_dir(path):
+        return True
     from bleachbit.Options import options
     for pathname in options.get_whitelist_paths():
         # Windows is case insensitive
