@@ -260,7 +260,11 @@ class CLITestCase(common.BleachbitTestCase):
                 try:
                     self.assertExists(path)
                 except:
-                    crash[0] = True
+                    # On busy CI servers, other temp files in %TEMP% may
+                    # disappear between scan and delete.  Only flag a crash
+                    # for the test file itself.
+                    if os.path.normcase(path) == os.path.normcase(filename):
+                        crash[0] = True
 
                 deleted_paths.append(os.path.normcase(path))
 
