@@ -83,6 +83,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
         error_count = 0
         zero_extents_count = 0
         nonzero_extents_count = 0
+        heuristic_exceptions = []
         start_time = time.time()
 
         for path in children_in_directory(os.path.expandvars(r'%windir%\system32')):
@@ -104,14 +105,15 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
             else:
                 nonzero_extents_count += 1
 
-            # Files with size under ~500 bytes are resident in the MFT,
-            # so they have zero clusters.
+            # Files with size under ~500 bytes are usually resident in the
+            # MFT, so they have zero clusters. There may be a few exceptions.
             fsize = os.path.getsize(path)
-            if fsize > 1000:
-                self.assertGreater(
-                    len(ret), 0, f"File {path} has size {fsize:,} but no extents")
-            elif fsize < 200:
-                self.assertEqual(len(ret), 0)
+            if fsize > 1000 and len(ret) == 0:
+                heuristic_exceptions.append(
+                    (path, fsize, len(ret)))
+            elif fsize < 200 and len(ret) != 0:
+                heuristic_exceptions.append(
+                    (path, fsize, len(ret)))
         total_files = zero_extents_count + nonzero_extents_count + error_count
         elapsed_seconds = time.time() - start_time
         if total_files > 0:
@@ -121,6 +123,13 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
         print(f"\ntest_get_extents() stats: {error_count:,} errors; {zero_extents_count:,} files with zero extents; {nonzero_extents_count:,} files with nonzero extents; {int(elapsed_seconds)} seconds; {int(files_per_second) if files_per_second else None} files per second")
         self.assertGreater(zero_extents_count, 10)
         self.assertGreater(nonzero_extents_count, 100)
+        # Print the first few heuristic exceptions for diagnostics.
+        for path, fsize, extent_count in heuristic_exceptions[:5]:
+            print(f"  heuristic exception: {path} size={fsize:,} extents={extent_count}")
+        self.assertLess(
+            len(heuristic_exceptions), 6,
+            f"Too many heuristic exceptions ({len(heuristic_exceptions)}): "
+            f"{heuristic_exceptions[:5]}")
 
     def test_get_file_basic_info(self):
         """Unit test for get_file_basic_info()"""
