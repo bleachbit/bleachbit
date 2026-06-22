@@ -545,6 +545,12 @@ class BackendTestCase(common.BleachbitTestCase):
 class ConfirmScreenTestCase(common.BleachbitTestCase):
     """Test ConfirmScreen dismiss logic."""
 
+    def setUp(self):
+        super().setUp()
+        # Python 3.9 requires an active event loop for asyncio.Lock() which
+        # Textual's widget __init__ creates.  Python 3.10+ defers this lazily.
+        asyncio.set_event_loop(asyncio.new_event_loop())
+
     def test_confirm_screen_y_dismisses_true(self):
         """Pressing y should dismiss with True."""
         from bleachbit.tui.screens.confirm import ConfirmScreen
