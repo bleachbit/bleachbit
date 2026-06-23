@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-06-07 11:17-0600\n"
-"PO-Revision-Date: 2024-12-16 20:09+0000\n"
-"Last-Translator: Distant Prince <distantprinceca@gmail.com>\n"
+"PO-Revision-Date: 2026-06-24 21:01+0000\n"
+"Last-Translator: dollar sign <buro6969420@gmail.com>\n"
 "Language-Team: English (Canada) <https://hosted.weblate.org/projects/"
 "bleachbit/main/en_CA/>\n"
 "Language: en_CA\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -845,10 +845,8 @@ msgid "Delete the list of game servers"
 msgstr "Delete the list of game servers"
 
 #: ../cleaners/profanity.xml
-#, fuzzy
-#| msgid "Downloading URL failed: %s"
 msgid "Downloaded files"
-msgstr "Downloading URL failed: %s"
+msgstr "Downloaded files"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
@@ -1131,7 +1129,7 @@ msgstr "Choose files to shred"
 #| msgid "Widgets for the desktop"
 msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
 msgid "Create a shortcut on the desktop."
-msgstr "Widgets for the desktop"
+msgstr "Create a shortcut on the desktop."
 
 #. TRANSLATORS: Name of the desktop section in the Windows installer: user selects which desktop items to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1467,7 +1465,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Loading native cleaners."
 msgid "Loading native cleaners…"
-msgstr "Loading native cleaners."
+msgstr "Loading native cleaners…"
 
 #. TRANSLATORS: Progress message shown typically on startup.
 #. 'Importing' is a present participle.
@@ -1477,13 +1475,13 @@ msgstr "Loading native cleaners."
 #, fuzzy
 #| msgid "Importing cleaners from Winapp2.ini."
 msgid "Importing cleaners from Winapp2.ini…"
-msgstr "Importing cleaners from Winapp2.ini."
+msgstr "Importing cleaners from Winapp2.ini…"
 
 #: ../bleachbit/Cleaner.py
 #, fuzzy, python-format
 #| msgid "_Wipe Free Space"
 msgid "Wipe empty space %s"
-msgstr "_Wipe Free Space"
+msgstr "Wipe empty space %s"
 
 #. TRANSLATORS: Error shown on CLI, and %s is the name of a cleaning action
 #: ../bleachbit/CLI.py
@@ -1997,7 +1995,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Deleting files"
 msgid "Deleting files…"
-msgstr "Deleting files"
+msgstr "Deleting files…"
 
 #. TRANSLATORS: Error message shown when deleting chaff files fails.
 #. The placeholder is for the technical error details.
@@ -2078,7 +2076,7 @@ msgstr "Make files"
 #, fuzzy
 #| msgid "Downloading URL failed: %s"
 msgid "Download failed"
-msgstr "Downloading URL failed: %s"
+msgstr "Download failed"
 
 #. TRANSLATORS: Notification shown in an infobar when
 #. chaff file generation is aborted by the user.
@@ -2100,7 +2098,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Generating files"
 msgid "Generating files…"
-msgstr "Generating files"
+msgstr "Generating files…"
 
 #. TRANSLATORS: Instruction label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
@@ -2123,7 +2121,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Search tool"
 msgid "Search:"
-msgstr "Search tool"
+msgstr "Search:"
 
 #. TRANSLATORS: Placeholder text in the search entry in the manage cookies dialog.
 #. 'Filter' is a verb meaning to narrow down the list by typing.
@@ -2168,7 +2166,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Cookies"
 msgid "Loading cookies…"
-msgstr "Cookies"
+msgstr "Loading cookies…"
 
 #: ../bleachbit/GuiPreferences.py
 msgid ""
@@ -2272,14 +2270,14 @@ msgstr ""
 #, fuzzy
 #| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "Automatically preserving language %s."
+msgstr "Automatically detect the system language"
 
 #. TRANSLATORS: Label for the language selection dropdown.
 #: ../bleachbit/GuiPreferences.py
 #, fuzzy
 #| msgid "Languages"
 msgid "Language:"
-msgstr "Languages"
+msgstr "Language:"
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2488,7 +2486,7 @@ msgstr ""
 #| msgctxt "button"
 #| msgid "Remove"
 msgid "Removed: %s"
-msgstr "Remove"
+msgstr "Removed: %s"
 
 #. TRANSLATORS: Notice label at the top of the keeplist (whitelist)
 #. page in the preferences dialog.
@@ -2630,16 +2628,9 @@ msgstr ""
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #: ../bleachbit/GuiTreeModels.py
-#, fuzzy, python-format
-#| msgid ""
-#| "Warning regarding %(cleaner)s - %(option)s:\n"
-#| "\n"
-#| "%(warning)s"
+#, python-format
 msgid "%(cleaner)s - %(option)s"
-msgstr ""
-"Warning regarding %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
+msgstr "%(cleaner)s - %(option)s"
 
 #. TRANSLATORS: Button label on the headerbar and context menu item
 #. in the treeview.
@@ -2662,7 +2653,7 @@ msgstr "Clean"
 #, fuzzy
 #| msgid "Cookies"
 msgid "Manage cookies to keep…"
-msgstr "Cookies"
+msgstr "Manage cookies to keep…"
 
 #. TRANSLATORS: Error message shown in the log on the main window.
 #. %s is the file path.
@@ -2749,7 +2740,7 @@ msgstr ""
 #, fuzzy, python-format
 #| msgid "Error when checking for updates: "
 msgid "Error when checking for updates: %s"
-msgstr "Error when checking for updates: "
+msgstr "Error when checking for updates: %s"
 
 #: ../bleachbit/Memory.py
 msgid ""
@@ -2778,7 +2769,7 @@ msgstr "Setting nice value %d for this process."
 #, fuzzy, python-format
 #| msgid "Dropping privileges of process ID {pid} to user ID {uid}."
 msgid "Dropping privileges of process ID %(pid)d to user ID %(uid)d."
-msgstr "Dropping privileges of process ID {pid} to user ID {uid}."
+msgstr "Dropping privileges of process ID %(pid)d to user ID %(uid)d."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2800,7 +2791,7 @@ msgstr "Freeing %s of memory."
 #, fuzzy, python-format
 #| msgid "Found UUID for swap file {device} is {uuid}."
 msgid "Found UUID for swap device %(device)s is %(uuid)s."
-msgstr "Found UUID for swap file {device} is {uuid}."
+msgstr "Found UUID for swap device %(device)s is %(uuid)s."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2838,8 +2829,8 @@ msgid ""
 "The function wipe_memory() with process ID %(parent_pid)d is waiting for "
 "child process ID %(child_pid)d."
 msgstr ""
-"The function wipe_memory() with process ID {pid} is waiting for child "
-"process ID {cid}."
+"The function wipe_memory() with process ID %(parent_pid)d is waiting for "
+"child process ID %(child_pid)d."
 
 #: ../bleachbit/Memory.py
 #, python-format
@@ -3062,8 +3053,8 @@ msgid ""
 "Wrote %(file_count)d files and %(total_bytes)d bytes in %(elapsed_sec)d "
 "seconds at %(rate_mbs).2f MB/s"
 msgstr ""
-"Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
-"{rate:.2f} MB/s"
+"Wrote %(file_count)d files and %(total_bytes)d bytes in %(elapsed_sec)d "
+"seconds at %(rate_mbs).2f MB/s"
 
 #. TRANSLATORS: Debug message showing disk space available to regular (non-root) users.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
@@ -3072,7 +3063,7 @@ msgstr ""
 #, fuzzy, python-format
 #| msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
 msgid "%(bytes)d bytes and %(inodes)d inodes available to non-super-user"
-msgstr "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
+msgstr "%(bytes)d bytes and %(inodes)d inodes available to non-super-user"
 
 #. TRANSLATORS: Debug message showing disk space available to the root (admin) user.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
@@ -3134,7 +3125,7 @@ msgstr "Error: {operation_option}: {command}"
 #, fuzzy
 #| msgid "Please wait.  Wiping free disk space."
 msgid "Please wait. Wiping empty space."
-msgstr "Please wait.  Wiping free disk space."
+msgstr "Please wait. Wiping empty space."
 
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
