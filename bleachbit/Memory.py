@@ -98,11 +98,9 @@ def enable_swap_linux():
     """Enable Linux swap"""
     logger.debug(_("Re-enabling swap."))
     args = ["swapon", "-a"]
-    p = subprocess.Popen(args, stderr=subprocess.PIPE, text=True)
-    p.wait()
-    outputs = p.communicate()
-    if 0 != p.returncode:
-        raise RuntimeError(outputs[1].replace("\n", ""))
+    (rc, _stdout, stderr) = General.run_external(args)
+    if 0 != rc:
+        raise RuntimeError(stderr.replace("\n", ""))
 
 
 def make_self_oom_target_linux():
