@@ -38,6 +38,7 @@ class CommonTestCase(common.BleachbitTestCase):
             'POSIX',
             'ru_RU.KOI8-R',
             'zh_Hant',
+            'be_BY.utf8@latin'
         ]
 
         invalid_codes = ['e', 'en_', 'english', 'en_US_', '123',
@@ -48,6 +49,8 @@ class CommonTestCase(common.BleachbitTestCase):
                          'UTF-8',
                          '.utf8',
                          '.UTF-8',
+                         'en@boldquot.header',
+                         'tor@default.service',
                          '',
                          [],
                          0,
