@@ -274,6 +274,51 @@ check_online_updates=True
         self.assertTrue(o.get_warning_preference('test_key'))
         o.close()
 
+    def test_warning_keys_with_colons(self):
+        """Test restoring warning preferences with colons in keys"""
+        with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as handle:
+            handle.write('''[bleachbit]
+[warnings]
+cleaner:google_chrome:passwords = True
+cleaner:microsoft_edge:passwords = True
+''')
+        o = None
+        try:
+            with self.assertNoLogs('bleachbit.Options', level='ERROR'):
+                o = bleachbit.Options.Options()
+            self.assertTrue(o.get_warning_preference(
+                'cleaner:google_chrome:passwords'))
+            self.assertTrue(o.get_warning_preference(
+                'cleaner:microsoft_edge:passwords'))
+        finally:
+            if o is not None:
+                o.close()
+
+    def test_corrupt_warning_preferences_are_migrated(self):
+        """Test migration of warning preferences corrupted by colon parsing"""
+        with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as handle:
+            handle.write('''[bleachbit]
+[warnings]
+cleaner = google_chrome:passwords = True
+protected_path = /tmp = True
+''')
+        o = bleachbit.Options.Options()
+        try:
+            self.assertTrue(o.get_warning_preference(
+                'cleaner:google_chrome:passwords'))
+            self.assertTrue(o.get_warning_preference('protected_path:/tmp'))
+            self.assertFalse(o.config.has_option('warnings', 'cleaner'))
+            self.assertFalse(o.config.has_option('warnings', 'protected_path'))
+            o.commit()
+        finally:
+            o.close()
+        with open(bleachbit.options_file, 'r', encoding='utf-8-sig') as handle:
+            contents = handle.read()
+        self.assertIn('cleaner:google_chrome:passwords = True', contents)
+        self.assertIn('protected_path:/tmp = True', contents)
+        self.assertNotIn('cleaner = google_chrome:passwords = True', contents)
+        self.assertNotIn('protected_path = /tmp = True', contents)
+
     def test_overrides(self):
         """Test CLI override functionality"""
         o = bleachbit.Options.options
