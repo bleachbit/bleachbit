@@ -99,6 +99,70 @@ class DeepScanTestCase(common.BleachbitTestCase):
         self.assertNotIn(keep_file, paths)
         self.assertIn(search_file, paths)
 
+    def _get_node_modules_compiled_search(self):
+        """Return the CompiledSearch for the node_modules deepscan option."""
+        import xml.etree.ElementTree as ET
+        from bleachbit.DeepScan import CompiledSearch
+
+        xml_path = os.path.join(
+            os.path.dirname(__file__), '..', 'cleaners', 'deepscan.xml')
+        root = ET.parse(xml_path).getroot()
+        wholeregex = None
+        nwholeregex = None
+        for action in root.iter('action'):
+            if action.get('wholeregex') and 'node_modules' in action.get('wholeregex'):
+                wholeregex = action.get('wholeregex')
+                nwholeregex = action.get('nwholeregex')
+                break
+        self.assertIsNotNone(wholeregex)
+        self.assertIsNotNone(nwholeregex)
+        return CompiledSearch(Search(command='delete', wholeregex=wholeregex, nwholeregex=nwholeregex))
+
+    def test_node_modules_excludes_dot_dirs(self):
+        """node_modules option should exclude system/cache/editor directories."""
+        cs = self._get_node_modules_compiled_search()
+        excluded = [
+            ('/home/neo/.nvm/versions/node/v22.22.3/lib/node_modules/corepack', 'README.md'),
+            ('/home/trinity/.vscode/extensions/ms-python.python-2026.4.0-linux-x64/out/client/node_modules', 'sudo-prompt.js'),
+            ('/home/morpheus/.npm/_npx/15b07286cbcc3329/node_modules',
+             '.package-lock.json'),
+            ('/home/smith/.cache/typescript/5.9/node_modules', '.package-lock.json'),
+            (r'C:\Users\glados\.windsurf\extensions\ms-python.python-2026.4.0-universal\out\client\node_modules', 'unicode.js'),
+            (r'C:\Users\glados\.cursor\projects\empty-window\canvases\node_modules', 'cursor.js'),
+            (r'C:\Users\glados\AppData\Local\Programs\myapp\node_modules', 'file.js'),
+            (r'C:\Users\glados\AppData\Local\ApertureScience\MainframeCore\node_modules\central-processing', 'index.js'),
+            (r'C:\Users\Alice\AppData\Local\Programs\BeeperTexts\resources\app.asar.unpacked\node_modules\@beeper',
+             'beeper_client_sdk_napi_binding.node'),
+            (r'C:\Users\bob\AppData\Local\Programs\Microsoft VS Code\7e7950df89\resources\app',
+             'node_modules.asar'),
+            (r'C:\Users\mallory\AppData\Local\Programs\Microsoft VS Code\fcf604774b\resources\app',
+             'node_modules.asar'),
+            ('/home/trent/projects/important/node_modules_backup', 'README.md'),
+            ('/home/trent/projects/important', 'node_modules.asar'),
+            (r'C:\Users\charlie\Documents\important', 'node_modules.asar'),
+            (r'C:\Users\charlie\Documents\important\node_modules_backup', 'aes.js'),
+        ]
+        for dirpath, filename in excluded:
+            with self.subTest(dirpath=dirpath, filename=filename):
+                self.assertIsNone(
+                    cs.match(dirpath, filename),
+                    f"Should exclude {dirpath}/{filename}")
+
+    def test_node_modules_matches_ordinary_dirs(self):
+        """node_modules option should match ordinary user project directories."""
+        cs = self._get_node_modules_compiled_search()
+        matched = [
+            ('/home/sfalken/games/wopr/node_modules/joshua/ai', 'core.js'),
+            (r'C:\Users\esnowden\Documents\nsa\prism\node_modules\crypto-js', 'aes.js'),
+            (r'C:\Users\chunkylover53\Documents\work-from-home\node_modules\click-button-automator\node_modules\is-buffer', 'index.js'),
+            ('/home/chunkylover53/Downloads/donut-radar/node_modules/react-dom', 'bar.js'),
+        ]
+        for dirpath, filename in matched:
+            with self.subTest(dirpath=dirpath, filename=filename):
+                self.assertIsNotNone(
+                    cs.match(dirpath, filename),
+                    f"Should match {dirpath}/{filename}")
+
     def _test_delete(self, command):
         """Delete files in a test environment"""
 
