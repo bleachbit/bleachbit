@@ -132,7 +132,7 @@ class Options:
 
     def __init__(self):
         self.purged = False
-        self.config = bleachbit.RawConfigParser()
+        self.config = bleachbit.RawConfigParser(delimiters='=')
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
         self.config.BOOLEAN_STATES['t'] = True
         self.config.BOOLEAN_STATES['f'] = False
@@ -241,6 +241,36 @@ class Options:
             if not exists:
                 # the file does not on exist, so forget it
                 self.config.remove_option('hashpath', option)
+
+    def __migrate_warning_preferences(self):
+        """Recover warning preferences corrupted by legacy colon parsing.
+
+        This fixes an issue introduced in version 6.0.0 and fixed for 6.0.2.
+        See https://github.com/bleachbit/bleachbit/issues/2110
+        """
+        section = 'warnings'
+        if not self.config.has_section(section):
+            return
+        migrated = False
+        for option in tuple(self.config.options(section)):
+            if option not in ('cleaner', 'protected_path'):
+                continue
+            value = self.config.get(section, option)
+            if '=' not in value:
+                continue
+            suffix, warning_value = value.rsplit('=', 1)
+            suffix = suffix.strip()
+            warning_value = warning_value.strip()
+            if not suffix or \
+                    warning_value.lower() not in self.config.BOOLEAN_STATES:
+                continue
+            migrated_option = f'{option}:{suffix}'
+            if not self.config.has_option(section, migrated_option):
+                self.config.set(section, migrated_option, warning_value)
+            self.config.remove_option(section, option)
+            migrated = True
+        if migrated:
+            self.__schedule_flush()
 
     def __auto_preserve_languages(self):
         """Automatically preserve the active language"""
@@ -443,6 +473,7 @@ class Options:
             self.config.add_section("bleachbit")
         if not self.config.has_section("hashpath"):
             self.config.add_section("hashpath")
+        self.__migrate_warning_preferences()
         if not self.config.has_section("list/shred_drives"):
             from bleachbit.FileUtilities import guess_overwrite_paths
             try:
