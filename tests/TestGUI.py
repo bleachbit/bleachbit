@@ -18,14 +18,13 @@ import warnings
 from unittest import mock
 
 import bleachbit
-from bleachbit.GtkShim import HAVE_GTK
+from bleachbit.Cleaner import backends
+from bleachbit.GtkShim import HAVE_GTK, Gdk, Gio, GLib, GObject, Gtk
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 from tests import common
 
 if HAVE_GTK:
-    from bleachbit.GtkShim import Gtk, GLib, Gio, GObject, Gdk
-    from bleachbit.GuiApplication import Bleachbit
     from bleachbit.GuiUtil import (clear_clipboard, get_font_size_from_name,
                                    get_window_info)
     from bleachbit.GuiTreeModels import TreeDisplayModel
@@ -35,13 +34,15 @@ bleachbit.online_update_notification_enabled = False
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module and a display environment')
 class GUITestCase(common.BleachbitTestCase):
-    app = Bleachbit(auto_exit=False, uac=False) if HAVE_GTK else None
+    app = None
     options_get_tree = options.get_tree
     _NEW_CLEANER_ID, _NEW_OPTION_ID = 'test_run_operations', 'test1'
 
     """Test case for module GUI"""
     @classmethod
     def setUpClass(cls):
+        from bleachbit.GuiApplication import Bleachbit
+        cls.app = Bleachbit(auto_exit=False, uac=False)
         cls._lang_env = common.set_temporary_env('LANGUAGE', 'en')
         cls._lang_env.__enter__()
         # reminder: the set up in the parent class creates a clean
@@ -69,9 +70,19 @@ class GUITestCase(common.BleachbitTestCase):
         super(GUITestCase, GUITestCase).tearDownClass()
         options.get_tree = cls.options_get_tree
         cls._lang_env.__exit__(None, None, None)
-        if cls.app and cls.app._window:
-            cls.app._window.destroy()
-            cls.app._window = None
+        window = cls.get_window()
+        if window:
+            window.destroy()
+            cls.clear_window()
+
+    @classmethod
+    def get_window(cls):
+        return getattr(cls.app, '_window', None)
+
+    @classmethod
+    def clear_window(cls):
+        if cls.app:
+            setattr(cls.app, '_window', None)
 
     @classmethod
     def refresh_gui(cls, delay=0):
@@ -99,7 +110,7 @@ class GUITestCase(common.BleachbitTestCase):
         print('{}{}'.format(' ' * indent, widget))
         if isinstance(widget, Gtk.Container):
             for c in widget.get_children():
-                cls.print_children(c, indent + 2)
+                cls.print_widget(c, indent + 2)
 
     @classmethod
     def find_widget(cls, widget, widget_class, widget_label=None):
@@ -170,7 +181,7 @@ class GUITestCase(common.BleachbitTestCase):
 
     def test_append_text(self):
         """Test append_text handles special strings"""
-        gui = self.app._window
+        gui = self.get_window()
         for test_str in common.SPECIAL_TEST_STRINGS:
             gui.append_text(test_str + "\n")
             gui.append_text(f"prefix{test_str}suffix\n")
@@ -180,7 +191,7 @@ class GUITestCase(common.BleachbitTestCase):
 
     def test_get_window_info(self):
         """Test get_window_info"""
-        gui = self.app._window
+        gui = self.get_window()
         geo = get_window_info(gui)
         self.assertGreaterEqual(geo.x, 0)
         self.assertGreaterEqual(geo.y, 0)
@@ -195,7 +206,7 @@ class GUITestCase(common.BleachbitTestCase):
         # there should be no crashes
         # app.do_startup()
         # pp.do_activate()                            Build a unit test that that does this
-        gui = self.app._window
+        gui = self.get_window()
         gui.update_progress_bar(0.0)
         gui.update_progress_bar(1.0)
         gui.update_progress_bar("status")
@@ -264,13 +275,12 @@ class GUITestCase(common.BleachbitTestCase):
 
     def test_chaff(self):
         """Minimal test of the chaff dialog"""
-        import bleachbit.GuiChaff
-        import bleachbit.Chaff
+        from bleachbit import Chaff, GuiChaff
         # common.py patches the download directory, so have_models() will return False.
-        if not bleachbit.Chaff.download_models():
+        if not Chaff.download_models():
             self.skipTest('Unable to download chaff models for GUI test')
-        gui = self.app._window
-        cd = bleachbit.GuiChaff.ChaffDialog(gui)
+        gui = self.get_window()
+        cd = GuiChaff.ChaffDialog(gui)
         cd.show_all()
         # Trigger missing-folder branch (no destination chosen)
         cd.choose_folder_button.unselect_all()
@@ -293,7 +303,7 @@ class GUITestCase(common.BleachbitTestCase):
 
     def test_cookie_manager_bulk_actions_wait_for_loading(self):
         """Bulk cookie actions should not save until loading finishes"""
-        import bleachbit.GuiCookie
+        from bleachbit import GuiCookie
 
         class FakeThread:
             def __init__(self, target=None, daemon=None):
@@ -304,7 +314,7 @@ class GUITestCase(common.BleachbitTestCase):
                 return None
 
         with mock.patch('bleachbit.GuiCookie.threading.Thread', FakeThread):
-            pane = bleachbit.GuiCookie.CookieManagerPane()
+            pane = GuiCookie.CookieManagerPane()
 
         self.assertTrue(pane._is_loading)
         self.assertFalse(pane.select_all_btn.get_sensitive())
@@ -330,7 +340,7 @@ class GUITestCase(common.BleachbitTestCase):
 
     def test_preview(self):
         """Select cleaner option and clicks preview button"""
-        gui = self.app._window
+        gui = self.get_window()
         self.refresh_gui()
         self._put_checkmark_on_cleaner(gui, 'system', 'tmp')
         self.refresh_gui()
@@ -345,7 +355,7 @@ class GUITestCase(common.BleachbitTestCase):
 
     @mock.patch('bleachbit.GuiBasic.delete_confirmation_dialog')
     def test_confirm_delete(self, mock_delete_confirmation_dialog):
-        gui = self.app._window
+        gui = self.get_window()
         options.set('expert_mode', True)
         for new_delete_confirmation in [True, False]:
             options.set('delete_confirmation',
@@ -367,7 +377,7 @@ class GUITestCase(common.BleachbitTestCase):
         for obj in test_files_dirs:
             self.assertExists(obj)
 
-        gui = self.app._window
+        gui = self.get_window()
         self.refresh_gui()
 
         with mock.patch('bleachbit.GuiWindow.GUI._confirm_delete', return_value=True):
@@ -382,7 +392,7 @@ class GUITestCase(common.BleachbitTestCase):
     def test_shred_paths_clears_clipboard_mock(self):
         """Test that shred_paths with should_clear_clipboard=True clears the clipboard"""
         test_file = self.write_file('shred-me-via-clipboard')
-        gui = self.app._window
+        gui = self.get_window()
         self.refresh_gui()
 
         with mock.patch('bleachbit.GuiWindow.clear_clipboard') as mock_clear_clipboard:
@@ -429,9 +439,7 @@ class GUITestCase(common.BleachbitTestCase):
 
         self.assertEqual([], glib_warnings)
 
-    @mock.patch('bleachbit.CleanerML.list_cleanerml_files')
-    @mock.patch('bleachbit.RecognizeCleanerML.cleaner_change_dialog')
-    def _setup_new_cleaner(self, gui, mock_cleaner_change_dialog, mock_list_cleanerml_files):
+    def _setup_new_cleaner(self, gui):
         def _create_cleaner_file_in_directory(dirname):
             cleaner_content = ('<?xml version="1.0" encoding="UTF-8"?>'
                                '<cleaner id="{}">'
@@ -447,10 +455,6 @@ class GUITestCase(common.BleachbitTestCase):
             self.write_file(cleaner_filename, cleaner_content, 'w')
             return cleaner_filename
 
-        def _set_mocks_return_values(cleaner_filename, mock_cleaner_change_dialog, mock_list_cleanerml_files):
-            mock_list_cleanerml_files.return_value = [cleaner_filename]
-            mock_cleaner_change_dialog.return_value = None
-
         def _load_new_cleaner_in_gui(gui):
             # to load the new test cleaner with id 'test_run_operations'
             gui.cb_refresh_operations()
@@ -459,15 +463,17 @@ class GUITestCase(common.BleachbitTestCase):
         dirname = self.mkdtemp(prefix='bleachbit-test-run_operations')
         cleaner_filename = _create_cleaner_file_in_directory(dirname)
         self.assertExists(cleaner_filename)
-        _set_mocks_return_values(
-            cleaner_filename, mock_cleaner_change_dialog, mock_list_cleanerml_files)
-        _load_new_cleaner_in_gui(gui)
+        with mock.patch('bleachbit.CleanerML.list_cleanerml_files') as mock_list_cleanerml_files:
+            with mock.patch('bleachbit.RecognizeCleanerML.cleaner_change_dialog') as mock_cleaner_change_dialog:
+                mock_list_cleanerml_files.return_value = [cleaner_filename]
+                mock_cleaner_change_dialog.return_value = None
+                _load_new_cleaner_in_gui(gui)
         file_to_clean = self.mkstemp(prefix="somefile", dir=dirname)
         self.assertExists(file_to_clean)
         return file_to_clean
 
     def test_run_operations(self):
-        gui = self.app._window
+        gui = self.get_window()
         file_to_clean = self._setup_new_cleaner(gui)
         self._put_checkmark_on_cleaner(
             gui, self._NEW_CLEANER_ID, self._NEW_OPTION_ID)
@@ -481,7 +487,7 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertNotExists(file_to_clean)
 
     def test_cb_run_option(self):
-        gui = self.app._window
+        gui = self.get_window()
         file_to_clean = self._setup_new_cleaner(gui)
 
         for really_delete, assert_method in [(False, self.assertExists), (True, self.assertNotExists)]:
@@ -496,8 +502,7 @@ class GUITestCase(common.BleachbitTestCase):
 
     def test_context_menu_cookie_manager(self):
         """Test cookie manager helper returns correct value for options"""
-        gui = self.app._window
-        from bleachbit.Cleaner import backends
+        gui = self.get_window()
 
         class _DummyAction:
             def __init__(self, action_key):
