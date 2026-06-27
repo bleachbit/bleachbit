@@ -927,11 +927,17 @@ class GUI(Gtk.ApplicationWindow):
         return True
 
     def setup_drag_n_drop(self):
-        def cb_drag_data_received(_widget, _context, _x, _y, data, info, _time):
+        def cb_drag_data_received(widget, _context, _x, _y, data, info, _time):
             if info == 80:
                 uris = data.get_uris()
                 paths = FileUtilities.uris_to_paths(uris)
                 self.shred_paths(paths)
+            # GtkTextView installs its own ::drag-data-received handler that
+            # calls gtk_drag_finish(FALSE) when the view is not editable. On
+            # Wayland that tears down the data offer in addition to the
+            # GTK_DEST_DEFAULT_DROP handler, so stop emission and let the
+            # default DROP handler finalize the drag exactly once.
+            widget.stop_emission('drag-data-received')
 
         def setup_widget(widget):
             widget.drag_dest_set(Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
@@ -940,7 +946,14 @@ class GUI(Gtk.ApplicationWindow):
 
         setup_widget(self)
         setup_widget(self.textview)
+        # The text view is not editable, so GtkTextView's own ::drag-motion
+        # and ::drag-drop handlers reject drops (calling gtk_drag_finish(FALSE))
+        # and, on Wayland, cancel the in-flight selection read with
+        # "error reading selection buffer: Operation was cancelled". Returning
+        # True stops those handlers via the boolean accumulator; the
+        # GTK_DEST_DEFAULT_DROP handling then drives the data transfer.
         self.textview.connect('drag_motion', lambda *_: True)
+        self.textview.connect('drag_drop', lambda *_: True)
 
     def update_progress_bar(self, status):
         """Callback to update the progress bar with number or text"""
