@@ -31,7 +31,7 @@ later.  See the COPYING file in the top-level directory.
   <option id="node_modules">
     <label translate="false">node_modules</label>
     <description>Delete the files</description>
-    <warning>This option is slow and may delete files needed by applications, editors, or Node.js. Inspect the preview for any files you want to keep.</warning>
+    <warning>This option is slow. Inspect the preview for files you want to keep, like those bundled with applications.</warning>
     <action command="delete" search="deep" wholeregex="[/\\]node_modules[/\\]" nwholeregex="[\\/]AppData[\\/]|[\\/]home[\\/][^\\/]+[\\/]\.[^\\/]+[\\/]|[\\/]Users[\\/][^\\/]+[\\/]\.[^\\/]+[\\/]"/>
   </option>
   <option id="venv">
