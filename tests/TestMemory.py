@@ -169,20 +169,14 @@ Swapouts:                              20258188.
     def test_enable_swap_linux(self):
         """Test for enable_swap_linux() with mocks"""
         # Success
-        mock_proc = mock.Mock()
-        mock_proc.returncode = 0
-        mock_proc.communicate.return_value = ('', '')
         with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
-            with mock.patch('bleachbit.Memory.subprocess.Popen', return_value=mock_proc) as mock_popen:
+            with mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')) as mock_run:
                 enable_swap_linux()
-                self.assertTrue(mock_popen.call_args.kwargs['text'])
+                self.assertEqual(mock_run.call_args.args[0], ['swapon', '-a'])
 
         # Failure
-        mock_proc = mock.Mock()
-        mock_proc.returncode = 1
-        mock_proc.communicate.return_value = ('', 'swapon failed')
         with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
-            with mock.patch('bleachbit.Memory.subprocess.Popen', return_value=mock_proc):
+            with mock.patch('bleachbit.Memory.General.run_external', return_value=(1, '', 'swapon failed')):
                 self.assertRaisesRegex(
                     RuntimeError, 'swapon failed', enable_swap_linux)
 
