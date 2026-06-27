@@ -389,6 +389,57 @@ class GUITestCase(common.BleachbitTestCase):
         for obj in test_files_dirs:
             self.assertNotExists(obj)
 
+    def test_shred_paths_cancel_cleans_temporary_backend(self):
+        """Test that shred_paths with cancel cleans up the temporary backend"""
+        test_file = self.write_file('shred-cancel')
+        gui = self.get_window()
+        options.set('delete_confirmation', True)
+        self.refresh_gui()
+
+        try:
+            with mock.patch.object(gui, '_confirm_delete', return_value=False):
+                gui.shred_paths([test_file])
+
+            self.assertTrue(self.wait_until(lambda: '_gui' not in backends))
+            self.assertExists(test_file)
+        finally:
+            options.set('delete_confirmation', False)
+            backends.pop('_gui', None)
+
+    def test_shred_paths_cancel_after_preview_cleans_temporary_backend(self):
+        """Test cancel cleans up _gui even when the preview finishes during the dialog.
+
+        In real usage the confirmation dialog runs a nested GTK main loop, so
+        the preview worker can finish and call worker_done() before the user
+        clicks Cancel.  This test simulates that by processing GUI events
+        inside the mocked _confirm_delete before returning False.
+        """
+        test_file = self.write_file('shred-cancel-after-preview')
+        gui = self.get_window()
+        options.set('delete_confirmation', True)
+        self.refresh_gui()
+
+        def fake_confirm_delete(*_args, **_kwargs):
+            # Simulate the dialog processing idle events, allowing the
+            # preview worker to finish before the user cancels.
+            self.wait_until(lambda: '_gui' not in backends
+                            or gui._gui_cleaner_cleanup_pending is None)
+            self.refresh_gui()
+            return False
+
+        try:
+            with mock.patch.object(gui, '_confirm_delete',
+                                   side_effect=fake_confirm_delete):
+                gui.shred_paths([test_file])
+
+            # _gui must be gone even though the preview finished during the
+            # dialog (before _confirm_delete returned).
+            self.assertNotIn('_gui', backends)
+            self.assertExists(test_file)
+        finally:
+            options.set('delete_confirmation', False)
+            backends.pop('_gui', None)
+
     def test_shred_paths_clears_clipboard_mock(self):
         """Test that shred_paths with should_clear_clipboard=True clears the clipboard"""
         test_file = self.write_file('shred-me-via-clipboard')
