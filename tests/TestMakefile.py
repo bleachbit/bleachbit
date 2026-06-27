@@ -25,7 +25,7 @@ Test case for Makefile
 import os
 
 from tests import common
-from bleachbit import APP_VERSION
+from bleachbit import APP_VERSION, IS_WINDOWS
 from bleachbit.FileUtilities import exe_exists
 from bleachbit.General import get_executable, run_external
 
@@ -33,27 +33,56 @@ from bleachbit.General import get_executable, run_external
 class MakefileTestCase(common.BleachbitTestCase):
     """Test case for Makefile"""
 
-    def test_make_source(self):
-        """Test Makefile for source distribution"""
+    def setUp(self):
+        """Locate xgettext, make, and tar before running the test"""
+        super().setUp()
         src_base_dir = os.path.abspath(
             os.path.join(os.path.dirname(__file__), '..'))
-        os.chdir(src_base_dir)
+        self.src_base_dir = src_base_dir
+
+        self.xgettext_exe = 'xgettext' if exe_exists('xgettext') else None
+
         # appveyor.yml defines %make%
-        make_exe = None
+        self.make_exe = None
         for exe in ('make', os.getenv('make')):
             if exe and exe_exists(exe):
-                make_exe = exe
+                self.make_exe = exe
                 break
-        if not make_exe:
-            self.skipTest('make not found in PATH or in $make')
-        tar_in_make_dir = os.path.join(src_base_dir, 'tar')
-        tar_exe = None
+
+        # check for tar in path or in the same directory as make
+        # (e.g. MSYS2 bin on Windows CI where %make% points to make.exe)
+        tar_in_make_dir = None
+        if self.make_exe:
+            tar_in_make_dir = os.path.join(
+                os.path.dirname(os.path.abspath(self.make_exe)), 'tar')
+        self.tar_exe = None
         for exe in ('tar', tar_in_make_dir):
             if exe and exe_exists(exe):
-                tar_exe = exe
+                self.tar_exe = exe
                 break
-        if not tar_exe:
-            self.skipTest('tar not found in PATH or in directory of make')
+
+        missing = []
+        if not self.xgettext_exe:
+            missing.append(
+                'xgettext (run `apt install gettext` or equivalent)')
+        if not self.make_exe:
+            missing.append('make (not found in PATH or in $make)')
+        if not self.tar_exe:
+            missing.append('tar (not found in PATH or in directory of make)')
+
+        if missing:
+            if 'CI' in os.environ or not IS_WINDOWS:
+                raise RuntimeError(
+                    'Missing required build tools: ' + '; '.join(missing))
+            self.skipTest(
+                'Missing required build tools: ' + '; '.join(missing))
+
+    def test_make_source(self):
+        """Test Makefile for source distribution"""
+        src_base_dir = self.src_base_dir
+        os.chdir(src_base_dir)
+        make_exe = self.make_exe
+        tar_exe = self.tar_exe
 
         ver_name = 'bleachbit-' + APP_VERSION
 
@@ -95,7 +124,7 @@ class MakefileTestCase(common.BleachbitTestCase):
                            'install', 'DESTDIR=' + install_tgt_dir]
         os.chdir(extract_subdir)
         (rc, _, stderr) = run_external(install_command)
-        self.assertEqual(rc, 0, stderr)
+        self.assertEqual(rc, 0, f"make install failed with rc={rc}, stderr={stderr}")
         self.assertTrue(os.path.isdir(install_tgt_dir))
         self.assertExists(os.path.join(
             install_tgt_dir, 'usr/local/share/bleachbit/cleaners/chromium.xml'))
