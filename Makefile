@@ -140,17 +140,20 @@ tests-with-sudo:
 
 pretty:
 	@if command -v autopep8 >/dev/null 2>&1; then \
+		echo "Running autopep* on .py files"; \
 		autopep8 -i {.,bleachbit,tests}/*py; \
 	else \
 		echo "WARNING: Missing autopep8. APT users, try: sudo apt install python3-autopep8"; \
 	fi
 	@if command -v dos2unix >/dev/null 2>&1; then \
+		echo "Running dos2unix on .py files"; \
 		dos2unix {.,bleachbit,tests}/*py; \
 	else \
 		echo "WARNING: Missing dos2unix. APT users, try: sudo apt install dos2unix"; \
 	fi
 	$(MAKE) -C cleaners pretty
-	if command -v xmllint >/dev/null 2>&1; then \
+	@if command -v xmllint >/dev/null 2>&1; then \
+		echo "Running xmllint on .xsd file"; \
 		xmllint --format doc/cleaner_markup_language.xsd > doc/cleaner_markup_language.xsd.tmp; \
 		mv doc/cleaner_markup_language.xsd.tmp doc/cleaner_markup_language.xsd; \
 	else \
