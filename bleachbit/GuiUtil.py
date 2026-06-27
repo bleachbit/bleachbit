@@ -18,6 +18,7 @@ from bleachbit.GUI import logger
 from bleachbit.GtkShim import (
     GLib, Gdk, Gtk, gi,
     suppress_pygobject_asyncio_warnings,
+    suppress_pygobject_import_warnings,
 )
 
 
@@ -244,7 +245,10 @@ def notify_gi(msg):
     except ValueError as e:
         logger.debug('gi.require_version("Notify", "0.7") failed: %s', e)
         return
-    from gi.repository import Notify
+    # On Ubuntu 22.10 with Python 3.10.7, this import throws warning
+    # ImportWarning: DynamicImporter.exec_module() not found; falling back to load_module()
+    with suppress_pygobject_import_warnings():
+        from gi.repository import Notify
     if Notify.init(APP_NAME):
         notification_obj = Notify.Notification.new(
             'BleachBit', msg, 'bleachbit')
