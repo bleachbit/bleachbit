@@ -224,7 +224,7 @@ class BleachbitTestCase(unittest.TestCase):
             print(f"{prefix}SLOW TEST: {test_id} ({duration:.1f}s)", flush=True)
         return outcome
 
-    def setUp(cls):
+    def setUp(self):
         """Call before each test method"""
         basedir = os.path.join(os.path.dirname(__file__), '..')
         os.chdir(basedir)
