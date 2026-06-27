@@ -48,6 +48,8 @@ jobs:
 
     runs-on: ${{ matrix.ubuntu-version }}
 
+    # https://docs.github.com/en/actions/reference/workflows-and-actions/variables
+    # GHA by default sets CI=true
     env:
       COVERAGE: "coverage run"
 

@@ -374,6 +374,9 @@ class WipeTestCase(common.BleachbitTestCase):
     @common.also_with_sudo
     def test_wipe(self):
         """Test wiping on several kinds of file systems"""
+        if not exe_exists('strings'):
+            raise RuntimeError(
+                'strings not found: run `sudo apt install binutils` or equivalent')
         requested_fs = FS_TYPES
         # Optional filter example: sudo BB_FS=ext3 python3 -m unittest tests.TestWipePath
         env_fs = os.environ.get('BB_FS') or os.environ.get('bb_fs')
