@@ -509,6 +509,17 @@ class Options:
             self.__cancel_flush_timer()
             self.__flush(force=True)
 
+    def cancel_pending_flush(self):
+        """Cancel any pending delayed flush and clear the dirty flag.
+
+        Unlike close(), this does not mark the options object as closed,
+        so it can be called repeatedly (e.g. between test classes that
+        share a single Options singleton).
+        """
+        with self._flush_lock:
+            self.__cancel_flush_timer()
+            self._dirty = False
+
     def close(self):
         """Cancel times and write changes"""
         with self._flush_lock:

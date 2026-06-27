@@ -184,7 +184,10 @@ class BleachbitTestCase(unittest.TestCase):
         * Restore options paths.
         """
         bleachbit.Options.options.reset_overrides()
-        bleachbit.Options.options._dirty = False
+        # Cancel any pending deferred flush (Options.__schedule_flush)
+        # so its background timer does not recreate bleachbit.ini inside
+        # tempdir while rmtree is mid-way through deleting it.
+        bleachbit.Options.options.cancel_pending_flush()
         gc_collect()
         # On Windows, a file may be temporarily locked, so retry.
         for attempt in range(5):
