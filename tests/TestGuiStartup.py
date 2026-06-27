@@ -112,8 +112,9 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         self.assertNotExists(bleachbit.options_file)
         self.assertFalse(issues)
 
+    @common.also_with_sudo
     def test_permission_issues_normal_file(self):
-        """Test  ownership check on a normal file owned by the user."""
+        """Test ownership check on a normal file owned by the user."""
         path = self.write_file('check_me')
         fstat = os.stat(path)
         if IS_WINDOWS:
