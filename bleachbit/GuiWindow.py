@@ -63,6 +63,7 @@ class GUI(Gtk.ApplicationWindow):
 
         self._auto_exit = auto_exit
         self._infobar_timeout_id = None
+        self._gui_cleaner_cleanup_pending = None
 
         self.set_property('name', APP_NAME)
         self.set_property('role', APP_NAME)
@@ -516,9 +517,21 @@ class GUI(Gtk.ApplicationWindow):
         # If no confirmation is requested, skip the preview.
         if options.get("delete_confirmation"):
             self.preview_or_run_operations(False, operations)
+            # Set the pending flag before the confirmation dialog because
+            # the dialog runs a nested GTK main loop in which the preview
+            # worker may finish and call worker_done().  If the flag is set
+            # by then, worker_done() removes _gui from backends.  Otherwise
+            # it is removed here or when the preview finishes.
+            self._gui_cleaner_cleanup_pending = self.worker
             if not self._confirm_delete(False, shred_settings):
                 # User dis-confirmed the deletion.
                 return False
+            # User confirmed.  If the preview already finished during the
+            # confirmation dialog, worker_done() removed _gui from backends.
+            # Re-create it so the real delete worker can use it.
+            self._gui_cleaner_cleanup_pending = None
+            if '_gui' not in backends:
+                backends['_gui'] = Cleaner.create_simple_cleaner(paths)
 
         if should_clear_clipboard:
             clear_clipboard()
@@ -715,8 +728,12 @@ class GUI(Gtk.ApplicationWindow):
         """Callback for when Worker is done"""
         # Remove the temporary _gui cleaner used for shred-paths and
         # wipe-empty-space operations, so it does not leak into the tree
-        # view on the next refresh.
-        backends.pop('_gui', None)
+        # view on the next refresh. For confirmed deletes, keep it through
+        # the preview so the real delete worker can use it. If confirmation
+        # is canceled, remove it when that preview worker finishes.
+        if really_delete or worker is self._gui_cleaner_cleanup_pending:
+            backends.pop('_gui', None)
+            self._gui_cleaner_cleanup_pending = None
         # TRANSLATORS: Status message shown on the progress bar and in a popup
         # notification.
         done_msg = _("Done.")
