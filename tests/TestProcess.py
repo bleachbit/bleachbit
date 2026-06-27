@@ -16,7 +16,7 @@ from unittest import mock
 import psutil
 
 from bleachbit import IS_WINDOWS
-from bleachbit.General import get_real_username
+from bleachbit.General import get_real_username, sudo_mode
 from bleachbit.Process import (
     _enumerate_ps_aux,
     enumerate_processes,
@@ -84,6 +84,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         with self.assertRaises(RuntimeError):
             list(_enumerate_ps_aux())
 
+    @common.also_with_sudo
     def test_is_process_running_self(self):
         """Test that this process is running"""
         exe_names = [psutil.Process().name()]
@@ -94,9 +95,17 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         if IS_WINDOWS:
             exe_names.extend([e.swapcase() for e in exe_names])
 
+        # Under sudo the test process (and its parent) run as root, while
+        # 'same_user' intentionally compares against the real (non-root)
+        # user, so the current process is not considered 'same_user'.
+        # The require_same_user=True assertion is only valid when the
+        # current process actually runs as the real user.
+        check_same_user = not sudo_mode()
+
         for exe_name in exe_names:
             self.assertTrue(is_process_running(exe_name, False))
-            self.assertTrue(is_process_running(exe_name, True))
+            if check_same_user:
+                self.assertTrue(is_process_running(exe_name, True))
 
     @common.also_with_sudo
     def test_is_process_running_does_not_exist(self):
