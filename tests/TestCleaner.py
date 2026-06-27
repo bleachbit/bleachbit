@@ -342,7 +342,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         test_pathname = os.path.join(self.tempdir, 'foo')
 
         # Check that custom cleaner doesn't iterate non-existent object
-        for obj_type in ('folder', 'file'):
+        for obj_type in ('folder', 'folder_contents', 'file'):
             options.set_custom_paths([(obj_type, test_pathname)])
             for cmd in backends['system'].get_commands('custom'):
                 results = list(cmd.execute(really_delete=False))
@@ -369,6 +369,34 @@ class CleanerTestCase(common.BleachbitTestCase):
             results = list(cmd.execute(really_delete=False))
             self.assertEqual(len(results), 1)
             self.assertEqual(results[0]['path'], test_dirname)
+
+        # Check folder_contents deletes children but leaves the folder.
+        contents_dirname = os.path.join(self.tempdir, 'contents')
+        os.makedirs(contents_dirname)
+        contents_subdir = os.path.join(contents_dirname, 'subdir')
+        os.makedirs(contents_subdir)
+        contents_file = os.path.join(contents_dirname, 'file.txt')
+        contents_subfile = os.path.join(contents_subdir, 'subfile.txt')
+        common.touch_file(contents_file)
+        common.touch_file(contents_subfile)
+        options.set_custom_paths([('folder_contents', contents_dirname)])
+
+        commands = list(backends['system'].get_commands('custom'))
+        previewed = []
+        for cmd in commands:
+            previewed.extend(list(cmd.execute(really_delete=False)))
+        self.assertEqual(
+            {result['path'] for result in previewed},
+            {contents_file, contents_subfile, contents_subdir})
+        self.assertNotIn(contents_dirname, {result['path']
+                                            for result in previewed})
+
+        for cmd in commands:
+            list(cmd.execute(really_delete=True))
+        self.assertExists(contents_dirname)
+        self.assertNotExists(contents_file)
+        self.assertNotExists(contents_subfile)
+        self.assertNotExists(contents_subdir)
 
         # Restore the original settings.
         options.set_custom_paths(original_custom_paths)

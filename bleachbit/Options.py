@@ -42,6 +42,7 @@ from bleachbit.Language import get_text as _
 logger = logging.getLogger(__name__)
 
 FLUSH_DELAY_SECS = 15.0  # decimal seconds
+CUSTOM_PATH_TYPES = ('file', 'folder', 'folder_contents')
 
 OPTION_DEFAULTS = {
     'auto_hide': {'value': True},
@@ -341,7 +342,8 @@ class Options:
     def get_custom_paths(self):
         """Return list of custom paths
 
-        Returns a list of tuples (type, path) where type is 'file' or 'folder'
+        Returns a list of tuples (type, path) where type is one of
+        CUSTOM_PATH_TYPES.
         """
         return self.get_paths("custom/paths")
 
@@ -522,7 +524,7 @@ class Options:
         """Save the custom paths
 
         @param values: list of tuples containing (path_type, path)
-            where path_type is either 'file' or 'folder'
+            where path_type is one of CUSTOM_PATH_TYPES
         """
         section = "custom/paths"
         # Remove existing section first to clear old values
@@ -532,7 +534,7 @@ class Options:
         self.config.add_section(section)
         for counter, value in enumerate(values):
             path_type, path = value
-            assert path_type in ('file', 'folder')
+            assert path_type in CUSTOM_PATH_TYPES
             self.config.set(section, str(counter) + '_type', path_type)
             self.config.set(section, str(counter) + '_path', path)
         self.__schedule_flush()
