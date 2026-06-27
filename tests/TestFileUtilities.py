@@ -800,13 +800,17 @@ State=AAAA/wA...
         (rc, _, stderr) = run_external(args)
         self.assertEqual(
             rc, 0, f'error calling mount\nargs={args}\nstderr={stderr}')
-        self.assertTrue(os.path.isdir(to_dir))
-        to_file = os.path.join(to_dir, 'normal-file')
-        all_objs = (to_file, from_file, to_dir, from_dir)
-        for func in (os.path.islink, os.path.isjunction, os.path.ismount, is_hard_link):
-            for pathname in all_objs:
-                self.assertFalse(func(pathname))
         try:
+            self.assertTrue(os.path.isdir(to_dir))
+            to_file = os.path.join(to_dir, 'normal-file')
+            all_objs = (to_file, from_file, to_dir, from_dir)
+            # os.path.isjunction() was added in Python 3.12, but BleachBit
+            # supports older versions. Junctions are a Windows-only concept,
+            # so on Linux the fallback always returns False.
+            isjunction = getattr(os.path, 'isjunction', lambda _p: False)
+            for func in (os.path.islink, isjunction, os.path.ismount, is_hard_link):
+                for pathname in all_objs:
+                    self.assertFalse(func(pathname))
             # delete() should return False for a busy mount point
             ret = delete(to_dir)
             self.assertFalse(ret)
