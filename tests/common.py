@@ -328,8 +328,21 @@ class BleachbitTestCase(unittest.TestCase):
     #
     # file creation functions
     #
-    def write_file(self, filename, contents=b'', mode='wb', encoding=None):
-        """Create a temporary file, optionally writing contents to it"""
+    def write_file(self, filename, contents=b'', mode='wb', encoding=None, text=None):
+        """Create a temporary file, optionally writing contents to it
+
+        If `text` is given, it is written in text mode with utf-8 encoding,
+        and `mode`/`encoding` are set automatically. `text` is mutually
+        exclusive with `contents`.
+
+        The temporary file is automatically deleted after testing.
+        """
+        if text is not None:
+            if contents != b'':
+                raise ValueError("write_file: `text` is exclusive to `contents`")
+            contents = text
+            mode = 'w'
+            encoding = 'utf-8'
         if not encoding and mode == 'w':
             encoding = 'utf-8'
         if not os.path.isabs(filename):
@@ -368,8 +381,17 @@ class BleachbitTestCase(unittest.TestCase):
         return dirname
 
     def mkstemp(self, **kwargs):
+        """Create a temporary file
+
+        If dir is not specified, it will be created in self.tempdir, and tempdir
+        will be automatically deleted after testing.
+
+        If prefix is not specified, it's defined by the test method name.
+        """
         if 'dir' not in kwargs:
             kwargs['dir'] = self.tempdir
+        if 'prefix' not in kwargs:
+            kwargs['prefix'] = f"{self.__class__.__name__}-{self._testMethodName}-"
         (fd, filename) = tempfile.mkstemp(**kwargs)
         os.close(fd)
         return filename
@@ -377,10 +399,15 @@ class BleachbitTestCase(unittest.TestCase):
     def mkdtemp(self, **kwargs):
         """Create a temporary directory
 
-        Objects under self.tempdir are automatically removed after testing.
+        If dir is not specified, it will be created in self.tempdir, and tempdir
+        will be automatically deleted after testing.
+
+        If prefix is not specified, it's defined by the test method name.
         """
         if 'dir' not in kwargs:
             kwargs['dir'] = self.tempdir
+        if 'prefix' not in kwargs:
+            kwargs['prefix'] = f"{self.__class__.__name__}-{self._testMethodName}-"
         return tempfile.mkdtemp(**kwargs)
 
 

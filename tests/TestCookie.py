@@ -12,7 +12,6 @@ import hashlib
 import json
 import os
 import sqlite3
-import tempfile
 import unittest
 import shutil
 from unittest import mock
@@ -68,15 +67,9 @@ class CookieTestCase(common.BleachbitTestCase):
     def setUp(self):
         """Set up test fixtures"""
         super().setUp()
-        self.temp_dir = tempfile.mkdtemp()
-        self._original_shred = options.get('shred')
+        # Reminder: each test case has its own, temporary bleachbit.ini config,
+        # so no need to save/restore options.
         options.set('shred', True)
-
-    def tearDown(self):
-        """Clean up test fixtures"""
-        options.set('shred', self._original_shred)
-        shutil.rmtree(self.temp_dir, ignore_errors=True)
-        super().tearDown()
 
     def _get_file_hash(self, filepath):
         """Calculate SHA-256 hash of a file"""
@@ -106,7 +99,7 @@ class CookieTestCase(common.BleachbitTestCase):
         if cookies is None:
             cookies = self._sample_cookies()
 
-        path = os.path.join(self.temp_dir, 'chrome_cookies.db')
+        path = os.path.join(self.tempdir, 'chrome_cookies.db')
         if os.path.exists(path):
             os.unlink(path)
         sql = '''
@@ -165,7 +158,7 @@ class CookieTestCase(common.BleachbitTestCase):
         if cookies is None:
             cookies = self._sample_cookies(dotted=True)
 
-        path = os.path.join(self.temp_dir, 'firefox_cookies.db')
+        path = os.path.join(self.tempdir, 'firefox_cookies.db')
         if os.path.exists(path):
             os.unlink(path)
         sql = '''
@@ -227,12 +220,10 @@ class CookieTestCase(common.BleachbitTestCase):
 
     def test_delete_cookie_bad_file(self):
         """Empty keep list should raise ValueError (API requires non-empty set)"""
-        path_missing = os.path.join(self.temp_dir, 'nonexistent.db')
-        path_non_sqlite = os.path.join(self.temp_dir, 'not_sqlite.txt')
-        path_wrong_sqlite = os.path.join(self.temp_dir, 'wrong_sqlite.db')
-
-        with open(path_non_sqlite, 'w', encoding='utf-8') as f:
-            f.write('not a database')
+        path_missing = os.path.join(self.tempdir, 'nonexistent.db')
+        path_non_sqlite = self.write_file(
+            'experiment_626.dna', text='not sqlite3')
+        path_wrong_sqlite = os.path.join(self.tempdir, 'wrong_sqlite.db')
 
         execute_sqlite3(
             path_wrong_sqlite, "CREATE TABLE not_browser_related (id INTEGER PRIMARY KEY)")
@@ -282,7 +273,7 @@ class CookieTestCase(common.BleachbitTestCase):
         path = self._create_chrome_cookies_db()
         # Now remove it and create a non-sqlite file
         os.unlink(path)
-        path = os.path.join(self.temp_dir, 'not_sqlite.txt')
+        path = os.path.join(self.tempdir, 'not_sqlite.txt')
         with open(path, 'w', encoding='utf-8') as f:
             f.write('not a database')
 
@@ -293,7 +284,7 @@ class CookieTestCase(common.BleachbitTestCase):
 
     def test_sqlite_unknown_table_with_keeplist_raises(self):
         """SQLite DB without known cookies table should raise ValueError"""
-        path = os.path.join(self.temp_dir, 'unknown_table.db')
+        path = os.path.join(self.tempdir, 'unknown_table.db')
         conn = sqlite3.connect(path)
         cur = conn.cursor()
         cur.execute(
@@ -362,7 +353,7 @@ class CookieTestCase(common.BleachbitTestCase):
             """Helper to test a cookie deletion scenario"""
             self.assertGreaterEqual(random_count, 0)
             temp_db = os.path.join(
-                self.temp_dir, f'firefox_live_copy{random_count}.sqlite')
+                self.tempdir, f'firefox_live_copy{random_count}.sqlite')
             shutil.copy2(live_path, temp_db)
 
             # Copy WAL/SHM files if present to keep the database consistent
@@ -470,7 +461,7 @@ class CookieTestCase(common.BleachbitTestCase):
 
     def test_nonexistent_file(self):
         """Test handling of nonexistent cookie files"""
-        path = os.path.join(self.temp_dir, 'nonexistent.db')
+        path = os.path.join(self.tempdir, 'nonexistent.db')
 
         # Both deletion and preview should raise ValueError for nonexistent files
         with self.assertRaises(ValueError):
@@ -512,7 +503,7 @@ class CookieTestCase(common.BleachbitTestCase):
         elem.getAttribute.side_effect = lambda name: {
             'command': 'cookie',
             'search': 'file',
-            'path': os.path.join(self.temp_dir, 'nonexistent'),
+            'path': os.path.join(self.tempdir, 'nonexistent'),
         }.get(name, '')
         return CookieAction(elem)
 

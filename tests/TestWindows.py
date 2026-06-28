@@ -495,11 +495,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         """Unit test for delete_locked_file"""
         tests = ('regular', 'unicode-emdash-u\u2014', 'long' + 'x' * 100)
         for test in tests:
-            f = tempfile.NamedTemporaryFile(
-                prefix='bleachbit-delete-locked-file', suffix=test,
-                delete=False)
-            pathname = f.name
-            f.close()
+            pathname = self.mkstemp(suffix=test)
             time.sleep(5)  # avoid race condition
             self.assertExists(pathname)
             logger.debug('delete_locked_file(%s) ' % pathname)
@@ -1083,7 +1079,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         from bleachbit.Windows import elevate_privileges
         from win32con import GENERIC_WRITE, WRITE_DAC
 
-        dirname = tempfile.mkdtemp(prefix='bleachbit-file-wipe')
+        dirname = self.mkdtemp()
 
         filenames = ('short', 'long' + 'x' * 250, 'utf8-ɡælɪk')
         for filename in filenames:

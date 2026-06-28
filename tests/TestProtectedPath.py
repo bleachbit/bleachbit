@@ -324,7 +324,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
 
     def test_calculate_impact_file(self):
         """Test calculate_impact with a file"""
-        with tempfile.NamedTemporaryFile(delete=False) as f:
+        with tempfile.NamedTemporaryFile(delete=False, dir=self.tempdir) as f:
             f.write(b'x' * 1000)
             temp_path = f.name
 
