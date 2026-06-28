@@ -83,7 +83,7 @@ class MakefileTestCase(common.BleachbitTestCase):
         self.assertNotExists(pkg_fn)
 
         # build source distribution
-        sdist_cmd = [get_executable(), 'setup.py', 'sdist']
+        sdist_cmd = [get_executable(), 'setup.py', 'sdist', '--formats=gztar']
         (rc, _, stderr) = run_external(sdist_cmd)
         self.assertEqual(rc, 0, stderr)
         pkg_fn = os.path.join('dist', ver_name + '.tar.gz')
