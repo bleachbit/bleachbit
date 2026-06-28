@@ -180,6 +180,11 @@ def _get_config_permission_issues():
     try:
         with open(_options_file, 'rb') as f:
             f.read(1)
+    except FileNotFoundError:
+        # A missing configuration file is normal on first start and is
+        # not a permission issue. The append test below verifies that
+        # the file can be created/written.
+        pass
     except (IOError, OSError, PermissionError) as e:
         has_error = True
         lines.append(f"Read error: {type(e).__name__}: {e}")
