@@ -40,13 +40,23 @@ class MakefileTestCase(common.BleachbitTestCase):
             os.path.join(os.path.dirname(__file__), '..'))
         self.src_base_dir = src_base_dir
 
-        self.xgettext_exe = 'xgettext' if exe_exists('xgettext') else None
-
         # appveyor.yml defines %make%
         self.make_exe = None
         for exe in ('make', os.getenv('make')):
             if exe and exe_exists(exe):
                 self.make_exe = exe
+                break
+
+        # check for xgettext in path or in the same directory as make
+        # (e.g. MSYS2 bin on Windows CI where %make% points to make.exe)
+        xgettext_in_make_dir = None
+        if self.make_exe:
+            xgettext_in_make_dir = os.path.join(
+                os.path.dirname(os.path.abspath(self.make_exe)), 'xgettext')
+        self.xgettext_exe = None
+        for exe in ('xgettext', xgettext_in_make_dir):
+            if exe and exe_exists(exe):
+                self.xgettext_exe = exe
                 break
 
         # check for tar in path or in the same directory as make
