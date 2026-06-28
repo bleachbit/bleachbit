@@ -719,10 +719,7 @@ State=AAAA/wA...
         """Unit test for delete() with locked file"""
         # set up
         def test_delete_locked_setup(share_mode):
-            (fd, filename) = tempfile.mkstemp(
-                prefix='bleachbit-test-fileutilities')
-            os.write(fd, b'123')
-            os.close(fd)
+            filename = self.write_file('locked.txt', text='123')
             self.assertExists(filename)
             self.assertEqual(3, getsize(filename))
             handle = _open_blocking_handle(filename, share_mode)
@@ -1017,6 +1014,7 @@ State=AAAA/wA...
                 write_encoding = expected_encodings[0]
 
                 with tempfile.NamedTemporaryFile(mode='w', delete=False,
+                                                 dir=self.tempdir,
                                                  encoding=write_encoding) as temp:
                     temp.write(file_contents)
                     temp.flush()
@@ -1030,6 +1028,7 @@ State=AAAA/wA...
         """detect_encoding should log a warning when chardet is missing."""
         with common.mock_missing_package('chardet'):
             with tempfile.NamedTemporaryFile(mode='w', delete=False,
+                                             dir=self.tempdir,
                                              encoding='utf-8') as temp:
                 temp.write('hello world')
                 temp.flush()
@@ -1046,7 +1045,7 @@ State=AAAA/wA...
 
     def test_execute_sqlite3(self):
         """Unit test for execute_sqlite3()"""
-        db_path = self.mkstemp(prefix='bleachbit-test-file', suffix='.sqlite')
+        db_path = self.mkstemp(suffix='.sqlite')
 
         cmds = ['CREATE TABLE test (id INTEGER PRIMARY KEY, name TEXT)',
                 "INSERT INTO test (name) VALUES ('A'), ('B')",
@@ -1215,7 +1214,7 @@ State=AAAA/wA...
 
     def test_free_space_sub_dir(self):
         """Unit test for free_space() with subdirectories"""
-        subdir = self.mkdtemp(prefix='free_space')
+        subdir = self.mkdtemp()
         passed = False
         for _ in range(5):
             diff = abs(free_space(subdir) - free_space(self.tempdir))
@@ -1336,16 +1335,15 @@ State=AAAA/wA...
                         f"Symlink size is {getsize(filename)}")
         delete(filename)
 
-        if 'darwin' == sys.platform:
-            # MacOS's HFS+ filesystem doesn't support sparse files
-            return
-
-        # create sparse file
-        (handle, filename) = tempfile.mkstemp(prefix="bleachbit-test-sparse")
+    @common.skipIfWindows
+    def test_getsize_sparse(self):
+        """Test getsize() with a sparse file"""
+        # macOS HFS+ did not support sparse files, but APFS does.
+        (handle, filename) = tempfile.mkstemp(
+            prefix="bleachbit-test-sparse-", dir=self.tempdir)
         os.ftruncate(handle, 1000 ** 2)
         os.close(handle)
         self.assertEqual(getsize(filename), 0)
-        delete(filename)
 
     def test_getsizedir(self):
         """Unit test for getsizedir()"""

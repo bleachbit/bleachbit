@@ -12,7 +12,6 @@ Test case for module WindowsWipe
 # standard library
 import os
 import sys
-import tempfile
 import time
 import unittest
 
@@ -133,9 +132,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
 
     def test_get_file_basic_info(self):
         """Unit test for get_file_basic_info()"""
-        fd, path = tempfile.mkstemp(prefix='bleachbit-test-windows-wipe')
-        os.write(fd, b'test data')
-        os.close(fd)
+        path = self.write_file(filename='test.txt', text='test data')
 
         file_handle = open_file(path)
         file_size, is_special = get_file_basic_info(path, file_handle)
