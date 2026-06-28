@@ -381,5 +381,9 @@ class Worker:
             try:
                 for _dummy in self.clean_operation(operation):
                     yield True
+            except BrokenPipeError:
+                # Propagate to the top-level handler (e.g., when the
+                # downstream pipe consumer like `less` closes early).
+                raise
             except:
                 self.print_exception(operation)
