@@ -4,11 +4,15 @@ BleachBit cleans files to free disk space and to maintain privacy.
 
 ## Running from source
 
-To run BleachBit without installation, unpack the tarball and then run these
-commands:
+To run BleachBit without installation, first install the system dependencies,
+then build the translations and run it:
 
-    make -C po local # build translations
+    make install-deps       # runtime deps (auto-detects Debian/Fedora/openSUSE/Arch)
+    make -C po local        # build translations
     python3 bleachbit.py
+
+Many Linux systems have the basic dependencies: you may skip installation,
+but in case of any issues, please check for missing dependencies.
 
 Then, review the preferences.
 
@@ -41,6 +45,20 @@ BleachBit itself, including source code and cleaner definitions, is licensed und
 markovify is licensed under the [MIT License](https://github.com/jsvine/markovify/blob/master/LICENSE.txt).
 
 ## Development
+
+To develop, run the test suite, or build packages, install the
+extra build/test/lint/packaging tools too:
+
+    make install-deps-dev
+
+Common commands include:
+
+    make tests   # run tests
+    make lint    # check .py and .sh files for issues
+    make pretty  # format .py and .xml files
+
+More resources:
+
 * [BleachBit on AppVeyor](https://ci.appveyor.com/project/az0/bleachbit)  ![Build status](https://ci.appveyor.com/api/projects/status/7p8amofd7rv7n268?svg=true)
 * [CleanerML Repository](https://github.com/bleachbit/cleanerml)
 * [BleachBit Miscellaneous Repository](https://github.com/bleachbit/bleachbit-misc)

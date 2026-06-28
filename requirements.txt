@@ -1,9 +1,9 @@
 # These are universal dependencies.
 # requests 2.32.5 throws warning with chardet >= 6.0.0
 # https://github.com/psf/requests/issues/7219#issuecomment-3956177087
-chardet==5.2.0
-psutil
-requests>=2.32.5
+chardet==5.2.0 # for cleaning .ini files
+psutil # avoid cleaning application that is running
+requests>=2.32.5 # check for application updates and download winapp2.ini
 setuptools
 # Installation methods for PyGObject vary by system.
 # Development dependencies vary by system.
