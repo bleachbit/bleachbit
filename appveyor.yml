@@ -85,7 +85,7 @@ cache:
 
 test_script:
 # coveralls.io
-  - '%PYTHON_HOME%\Scripts\pip3.exe install python-coveralls requests[security]'
+  - '%PYTHON_HOME%\Scripts\pip3.exe install python-coveralls requests[security] pytest pytest-xdist pytest-cov'
 # shorten very long path because of error https://github.com/az0/bleachbit/issues/166
   - 'set PATH=C:\ProgramData\chocolatey\bin;c:\windows\system32;c:\windows;c:\windows\system32\wbem;c:\windows\SysWOW64\WindowsPowerShell\v1.0\'
   - 'SET DESTRUCTIVE_TESTS=T'
@@ -93,7 +93,10 @@ test_script:
   - 'SET PYTHONWARNINGS=error'
   - ps: Write-Host ("`n=== {0:HH:mm:ss} ADMIN TESTS ===`n" -f (Get-Date)) -ForegroundColor Cyan
   - 'SET COVERAGE_FILE=.coverage.admin'
-  - '%PYTHON_EXE% -m coverage run -m tests.TestAll'
+  # Non-GUI tests in parallel with pytest-xdist
+  - '%PYTHON_EXE% -m pytest -n auto -v tests --ignore=tests/TestGUI.py --ignore=tests/TestGuiChaff.py --ignore=tests/TestGuiUtil.py --ignore=tests/TestExternalCommand.py --cov=bleachbit --cov-append --cov-report='
+  # GUI tests serially (GTK is not safe across xdist workers)
+  - '%PYTHON_EXE% -m pytest -v tests/TestGUI.py tests/TestGuiChaff.py tests/TestGuiUtil.py tests/TestExternalCommand.py --cov=bleachbit --cov-append --cov-report='
 
   # Medium Integrity non-admin user: registry, recycle bin, and related tests
   - ps: Write-Host ("`n=== {0:HH:mm:ss} NON-ADMIN TESTS ===`n" -f (Get-Date)) -ForegroundColor Cyan
