@@ -386,7 +386,7 @@ class BleachbitTestCase(unittest.TestCase):
         If dir is not specified, it will be created in self.tempdir, and tempdir
         will be automatically deleted after testing.
 
-        If prefix is not specified, its defined by the test method name.
+        If prefix is not specified, it's defined by the test method name.
         """
         if 'dir' not in kwargs:
             kwargs['dir'] = self.tempdir
@@ -402,7 +402,7 @@ class BleachbitTestCase(unittest.TestCase):
         If dir is not specified, it will be created in self.tempdir, and tempdir
         will be automatically deleted after testing.
 
-        If prefix is not specified, its defined by the test method name.
+        If prefix is not specified, it's defined by the test method name.
         """
         if 'dir' not in kwargs:
             kwargs['dir'] = self.tempdir
