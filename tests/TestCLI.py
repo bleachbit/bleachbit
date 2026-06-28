@@ -60,7 +60,8 @@ class CLITestCase(common.BleachbitTestCase):
         if pos > -1:
             print("Saw the following error when using args '%s':\n %s" %
                   (args, output[2]))
-        self.assertEqual(pos, -1)
+        self.assertEqual(
+            pos, -1, f"Traceback found in stderr when using args {args}:\n{output[2][pos:]}")
 
     def test_args_to_operations_list(self):
         """Unit test for args_to_operations_list()"""
