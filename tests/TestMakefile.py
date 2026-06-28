@@ -40,45 +40,25 @@ class MakefileTestCase(common.BleachbitTestCase):
             os.path.join(os.path.dirname(__file__), '..'))
         self.src_base_dir = src_base_dir
 
-        # appveyor.yml defines %make%
-        self.make_exe = None
-        for exe in ('make', os.getenv('make')):
-            if exe and exe_exists(exe):
-                self.make_exe = exe
-                break
+        # appveyor.yml adds the MSYS2 bin directory to PATH before tests,
+        # so the tools are found via exe_exists() (which searches PATH).
+        # On Windows, exists_in_path() does not append .exe, so do it here.
+        exe_suffix = '.exe' if IS_WINDOWS else ''
 
-        # check for xgettext in path or in the same directory as make
-        # (e.g. MSYS2 bin on Windows CI where %make% points to make.exe)
-        xgettext_in_make_dir = None
-        if self.make_exe:
-            xgettext_in_make_dir = os.path.join(
-                os.path.dirname(os.path.abspath(self.make_exe)), 'xgettext')
-        self.xgettext_exe = None
-        for exe in ('xgettext', xgettext_in_make_dir):
-            if exe and exe_exists(exe):
-                self.xgettext_exe = exe
-                break
-
-        # check for tar in path or in the same directory as make
-        # (e.g. MSYS2 bin on Windows CI where %make% points to make.exe)
-        tar_in_make_dir = None
-        if self.make_exe:
-            tar_in_make_dir = os.path.join(
-                os.path.dirname(os.path.abspath(self.make_exe)), 'tar')
-        self.tar_exe = None
-        for exe in ('tar', tar_in_make_dir):
-            if exe and exe_exists(exe):
-                self.tar_exe = exe
-                break
+        tools = {
+            'make_exe': ('make', 'make (not found in PATH)'),
+            'xgettext_exe': ('xgettext', 'xgettext (run `apt install gettext` or equivalent)'),
+            'tar_exe': ('tar', 'tar (not found in PATH)'),
+        }
 
         missing = []
-        if not self.xgettext_exe:
-            missing.append(
-                'xgettext (run `apt install gettext` or equivalent)')
-        if not self.make_exe:
-            missing.append('make (not found in PATH or in $make)')
-        if not self.tar_exe:
-            missing.append('tar (not found in PATH or in directory of make)')
+        for attr, (tool_name, error_msg) in tools.items():
+            exe_name = tool_name + exe_suffix
+            if exe_exists(exe_name):
+                setattr(self, attr, exe_name)
+            else:
+                setattr(self, attr, None)
+                missing.append(error_msg)
 
         if missing:
             if 'CI' in os.environ or not IS_WINDOWS:
