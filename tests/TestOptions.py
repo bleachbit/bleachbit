@@ -13,6 +13,7 @@ import errno
 import os
 import stat
 import subprocess
+import sys
 from unittest import mock
 
 from tests import common
