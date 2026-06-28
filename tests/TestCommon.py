@@ -26,9 +26,10 @@ class CommonTestCase(common.BleachbitTestCase):
         'C',
         'de_DE.iso88591',
         'de-CH',  # seen in Fedora in Docker
-        'en-US',
         'en_US',
+        'en-US',
         'en',
+        'es_419',
         'fr_FR.utf8',
         'ja_JP.SJIS',
         'ko_KR.eucKR',
@@ -36,7 +37,8 @@ class CommonTestCase(common.BleachbitTestCase):
         'POSIX',
         'ru_RU.KOI8-R',
         'zh_Hant',
-        'be_BY.utf8@latin'
+        'be_BY.utf8@latin',
+
     ]
 
     _invalid_language_codes = ['e', 'en_', 'english', 'en_US_', '123',
