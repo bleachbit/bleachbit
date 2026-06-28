@@ -33,7 +33,7 @@ run_optional_tests() {
     if [[ -z "${SKIP_TESTS:-}" ]]; then
         make tests
     else
-        echo "SKIP_TESTS is set, so skipping `make tests`."
+        echo "SKIP_TESTS is set, so skipping 'make tests'."
     fi
 }
 
