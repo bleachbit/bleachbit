@@ -284,7 +284,10 @@ cleaner:microsoft_edge:passwords = True
 ''')
         o = None
         try:
-            with self.assertNoLogs('bleachbit.Options', level='ERROR'):
+            if sys.version_info >= (3, 10):
+                with self.assertNoLogs('bleachbit.Options', level='ERROR'):
+                    o = bleachbit.Options.Options()
+            else:
                 o = bleachbit.Options.Options()
             self.assertTrue(o.get_warning_preference(
                 'cleaner:google_chrome:passwords'))
