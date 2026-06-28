@@ -80,7 +80,16 @@ class MakefileTestCase(common.BleachbitTestCase):
             sdist_cmd, env=sdist_env, clean_env=False)
         self.assertEqual(rc, 0, stderr + stdout)
         pkg_fn = os.path.join('dist', ver_name + '.tar.gz')
-        self.assertExists(pkg_fn)
+        if not os.path.exists(pkg_fn):
+            dist_dir = os.path.join(src_base_dir, 'dist')
+            if os.path.isdir(dist_dir):
+                dist_listing = os.listdir(dist_dir)
+            else:
+                dist_listing = 'dist/ directory does not exist'
+            self.fail(
+                f'sdist returned rc=0 but did not create {pkg_fn}. '
+                f'stdout: {stdout!r}, stderr: {stderr!r}, '
+                f'dist/ contents: {dist_listing}')
 
         # extract source distribution
         extract_dir = os.path.join(self.tempdir, 'extract')
