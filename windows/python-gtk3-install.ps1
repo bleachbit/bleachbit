@@ -184,6 +184,10 @@ if (-not (Test-Path $PYGOBJECT_FN)) {
 
 Write-Host "pip install $PYGOBJECT_FN..."
 & "$python_home\Scripts\pip3.exe" install $PYGOBJECT_FN
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Failed to install PyGObject: exit code $LASTEXITCODE"
+    exit $LASTEXITCODE
+}
 
 # By default, pygobject installs to `x86-windows\lib\girepository-1.0`.
 # Copy it to `x86-windows\tools\python3\lib\girepository-1.0`.
