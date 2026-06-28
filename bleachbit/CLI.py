@@ -85,6 +85,10 @@ def preview_or_clean(operations, really_clean, quiet=False):
             pass
     except StopIteration:
         pass
+    except BrokenPipeError:
+        # Propagate to the top-level handler (e.g., when the downstream
+        # pipe consumer like `less` or `head` closes early).
+        raise
     except Exception:
         logger.exception('Failed to clean')
 

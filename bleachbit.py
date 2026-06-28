@@ -63,7 +63,17 @@ def main():
     # If no args and defaulting to CLI, print usage information
     if 1 == len(sys.argv) and not have_gui:
         sys.argv.append('--help')
-    bleachbit.CLI.process_cmd_line()
+    try:
+        bleachbit.CLI.process_cmd_line()
+    except BrokenPipeError:
+        # The downstream pipe consumer (e.g., `less`) closed before we
+        # finished writing.  Redirect stdout to devnull to suppress the
+        # secondary BrokenPipeError raised by the interpreter while
+        # flushing stdout at shutdown, then exit with the conventional
+        # SIGPIPE status (128 + 13).
+        devnull = os.open(os.devnull, os.O_WRONLY)
+        os.dup2(devnull, sys.stdout.fileno())
+        sys.exit(141)
 
 
 if __name__ == '__main__':
