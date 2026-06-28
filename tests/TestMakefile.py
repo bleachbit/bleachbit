@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -83,9 +70,15 @@ class MakefileTestCase(common.BleachbitTestCase):
         self.assertNotExists(pkg_fn)
 
         # build source distribution
+        # Override PYTHONWARNINGS because the CI environment sets it to 'error',
+        # which can cause sdist to fail silently on Windows (rc=0 but no archive).
+        sdist_env = dict(os.environ)
+        if IS_WINDOWS:
+            sdist_env['PYTHONWARNINGS'] = 'default'
         sdist_cmd = [get_executable(), 'setup.py', 'sdist', '--formats=gztar']
-        (rc, _, stderr) = run_external(sdist_cmd)
-        self.assertEqual(rc, 0, stderr)
+        (rc, stdout, stderr) = run_external(
+            sdist_cmd, env=sdist_env, clean_env=False)
+        self.assertEqual(rc, 0, stderr + stdout)
         pkg_fn = os.path.join('dist', ver_name + '.tar.gz')
         self.assertExists(pkg_fn)
 
