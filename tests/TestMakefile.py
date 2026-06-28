@@ -80,16 +80,7 @@ class MakefileTestCase(common.BleachbitTestCase):
             sdist_cmd, env=sdist_env, clean_env=False)
         self.assertEqual(rc, 0, stderr + stdout)
         pkg_fn = os.path.join('dist', ver_name + '.tar.gz')
-        if not os.path.exists(pkg_fn):
-            dist_dir = os.path.join(src_base_dir, 'dist')
-            if os.path.isdir(dist_dir):
-                dist_listing = os.listdir(dist_dir)
-            else:
-                dist_listing = 'dist/ directory does not exist'
-            self.fail(
-                f'sdist returned rc=0 but did not create {pkg_fn}. '
-                f'stdout: {stdout!r}, stderr: {stderr!r}, '
-                f'dist/ contents: {dist_listing}')
+        self.assertExists(pkg_fn)
 
         # extract source distribution
         extract_dir = os.path.join(self.tempdir, 'extract')
@@ -99,6 +90,16 @@ class MakefileTestCase(common.BleachbitTestCase):
         self.assertEqual(rc, 0, stderr)
         extract_subdir = os.path.join(extract_dir, ver_name)
         self.assertExists(os.path.join(extract_subdir, 'Makefile'))
+
+        # Verify a cleaner is present in the source distribution
+        self.assertExists(os.path.join(
+            extract_subdir, 'cleaners', 'chromium.xml'))
+
+        if IS_WINDOWS:
+            # The make targets `delete_windows_files` and `install` do not
+            # work under MSYS2 because bash strips backslashes from the
+            # Windows make path, and Windows does not use make for installation.
+            return
 
         # delete Windows files using make
         canary_fn = os.path.join(
