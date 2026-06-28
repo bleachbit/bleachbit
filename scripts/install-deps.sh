@@ -21,6 +21,9 @@
 #   - bleachbit.spec
 #   - debian/debian.control
 #   - docker/Dockerfile.*
+#   - requirements.txt
+#
+# This Bash script installs optional dependencies.
 
 set -euo pipefail
 
@@ -76,6 +79,7 @@ install_debian() {
         libgtk-3-0
         python3
         python3-chardet
+        python3-distro
         python3-gi
         python3-psutil
         python3-requests
@@ -97,6 +101,8 @@ install_debian() {
         python3-autopep8
         python3-pip
         python3-pyflakes
+        python3-pytest
+        python3-pytest-xdist
         pylint
         shellcheck
         appstream
@@ -119,6 +125,7 @@ install_fedora() {
         libnotify
         python3
         python3-chardet
+        python3-distro
         python3-gobject
         python3-psutil
         python3-requests
@@ -138,6 +145,8 @@ install_fedora() {
         python3-autopep8
         python3-pip
         python3-pyflakes
+        python3-pytest
+        python3-pytest-xdist
         pylint
         ShellCheck
         appstream
@@ -204,6 +213,8 @@ install_opensuse() {
         libxml2-tools
         make
         "${py}-pip"
+        "${py}-pytest"
+        "${py}-pytest-xdist"
         "${py}-sqlite-utils"
         "${py}-xml"
         python-rpm-macros
@@ -238,6 +249,7 @@ install_arch() {
         libnotify
         python
         python-chardet
+        python-distro
         python-gobject
         python-psutil
         python-requests
@@ -254,6 +266,8 @@ install_arch() {
         python-autopep8
         python-pip
         python-pyflakes
+        python-pytest
+        python-pytest-xdist
         pylint
         shellcheck
     )
