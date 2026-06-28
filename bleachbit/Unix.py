@@ -292,7 +292,9 @@ def get_distribution_name_version_platform_freedesktop():
         except FileNotFoundError:
             return None
         dist_id = release.get('ID')
-        dist_version_id = release.get('VERSION_ID')
+        # Arch Linux omits VERSION_ID, so fall back to BUILD_ID.
+        # Ubuntu has VERSION_ID but not BUILD_ID.
+        dist_version_id = release.get('VERSION_ID') or release.get('BUILD_ID')
         if dist_id and dist_version_id:
             return f"{dist_id} {dist_version_id}"
     return None
@@ -311,9 +313,13 @@ def get_distribution_name_version_distro():
         # Import here in case of ImportError.
         import distro  # pylint: disable=import-outside-toplevel
         # example 'ubuntu 24.10'
-        return distro.id() + ' ' + distro.version()
+        # Arch Linux returns id='arch' and version=''.
+        dist_version = distro.version()
+        if dist_version:
+            return distro.id() + ' ' + dist_version
     except ImportError:
         return None
+    return None
 
 
 def get_distribution_name_version_os_release():
@@ -333,9 +339,13 @@ def get_distribution_name_version_os_release():
     except Exception as e:
         logger.debug("Error reading /etc/os-release: %s", e)
         return None
-    if 'ID' in os_release and 'VERSION_ID' in os_release:
+    if 'ID' in os_release:
         dist_name = os_release['ID']
-        return f"{dist_name} {os_release['VERSION_ID']}"
+        # ArchLinux has BUILD_ID='rolling' but not VERSION_ID.
+        # Ubuntu has VERSION_ID like '26.04' but does not have BUILD_ID.
+        dist_version = os_release.get('VERSION_ID') or os_release.get('BUILD_ID')
+        if dist_version:
+            return f"{dist_name} {dist_version}"
     return None
 
 
