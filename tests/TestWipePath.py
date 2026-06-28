@@ -269,11 +269,20 @@ def wipe_helper(fs_type, n_bytes=None, device_path=None, passes=MAX_WIPES, sleep
             raise RuntimeError(f'{exe} not found')
 
     # format filesystem
-    format_filesystem(filename, fs_type)
+    mountpoint = None
+    try:
+        format_filesystem(filename, fs_type)
 
-    # mount
-    mountpoint = tempfile.mkdtemp(prefix='bleachbit-wipe-mountpoint')
-    mount_filesystem(filename, mountpoint)
+        # mount
+        mountpoint = tempfile.mkdtemp(prefix='bleachbit-wipe-mountpoint')
+        mount_filesystem(filename, mountpoint)
+    except Exception:
+        # The exception is normal for non-root.
+        if mountpoint and os.path.exists(mountpoint):
+            delete(mountpoint)
+        if not is_device:
+            delete(filename)
+        raise
 
     # baseline free disk space
     logger.debug('df for clean filesystem %s', mountpoint)
