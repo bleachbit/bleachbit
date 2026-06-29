@@ -476,7 +476,7 @@ def also_with_sudo(test_func):
 def touch_file(filename):
     """Create an empty file"""
     dname = os.path.dirname(filename)
-    if not os.path.exists(dname):
+    if dname and not os.path.exists(dname):
         # Make the directory, if it does not exist.
         os.makedirs(dname)
     Path(filename).touch()
