@@ -285,7 +285,7 @@ class BleachbitTestCase(unittest.TestCase):
     def assertExists(self, path, msg='', func=os.stat):
         """Check that a file, directory, or any path exists"""
         path = self._assert_path(path)
-        if not self.check_exists(func, getTestPath(path)):
+        if not self.check_exists(func, get_test_path(path)):
             raise AssertionError(
                 'The file %s should exist, but it does not. %s' % (path, msg))
 
@@ -293,7 +293,7 @@ class BleachbitTestCase(unittest.TestCase):
     def assertNotExists(self, path, msg='', func=os.stat):
         """Check that a file, directory, or any path does not exist"""
         path = self._assert_path(path)
-        if self.check_exists(func, getTestPath(path)):
+        if self.check_exists(func, get_test_path(path)):
             raise AssertionError(
                 'The file %s should not exist, but it does. %s' % (path, msg))
 
@@ -411,10 +411,17 @@ class BleachbitTestCase(unittest.TestCase):
         return tempfile.mkdtemp(**kwargs)
 
 
-def getTestPath(path):
-    if bleachbit.IS_WINDOWS:
-        return extended_path(os.path.normpath(path))
-    return path
+def get_test_path(path):
+    """Normalize test paths for Windows"""
+    if not bleachbit.IS_WINDOWS:
+        return path
+    path = os.path.normpath(path)
+    # The \\?\ extended-length prefix applied by extended_path() requires
+    # an absolute path: Windows treats "\\?\<relative>" as invalid and
+    # reports it as non-existent.
+    if not os.path.isabs(path):
+        path = os.path.abspath(path)
+    return extended_path(path)
 
 
 def get_env(key):
@@ -469,7 +476,7 @@ def also_with_sudo(test_func):
 def touch_file(filename):
     """Create an empty file"""
     dname = os.path.dirname(filename)
-    if not os.path.exists(dname):
+    if dname and not os.path.exists(dname):
         # Make the directory, if it does not exist.
         os.makedirs(dname)
     Path(filename).touch()

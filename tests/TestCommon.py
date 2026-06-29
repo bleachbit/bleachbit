@@ -194,3 +194,14 @@ class CommonTestCase(common.BleachbitTestCase):
         common.touch_file(fn)
         self.assertExists(fn)
         self.assertEqual(fsize, getsize(fn))
+
+    def test_assertExists_relative_path(self):
+        """Unit test for assertExists with relative path"""
+        # Create a file in the current directory
+        os.chdir(self.tempdir)
+        relative_fn = 'test_relative_file.txt'
+        common.touch_file(relative_fn)
+        self.assertExists(relative_fn)
+        os.remove(relative_fn)
+        self.assertNotExists(relative_fn)
+        self.assertNotExists('this-does-not-exist')
