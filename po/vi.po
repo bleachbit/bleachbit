@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-06-07 11:17-0600\n"
-"PO-Revision-Date: 2026-05-22 04:11+0000\n"
-"Last-Translator: 7E2 Lớp <lop7e2nk@gmail.com>\n"
+"PO-Revision-Date: 2026-06-30 09:01+0000\n"
+"Last-Translator: Henry Ngo <huy.ngo.tech@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/bleachbit/"
 "main/vi/>\n"
 "Language: vi\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Launchpad-Export-Date: 2021-12-02 04:08+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -258,7 +258,7 @@ msgstr "Lịch sử biểu mẫu"
 #, fuzzy
 #| msgid "Delete the search history"
 msgid "Saved form entries and search bar history"
-msgstr "Xóa lịch sử tìm kiếm"
+msgstr "Dữ liệu biểu mẫu đã lưu và lịch sử thanh tìm kiếm"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
 #: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
@@ -531,8 +531,8 @@ msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "websites"
 msgstr ""
-"Một cơ sở dữ liệu của các URL bao gồm các đánh dấu, các favicon, và lịch sử "
-"các trang web đã ghé thăm"
+"Cơ sở dữ liệu URL bao gồm bookmarks, favicons và lịch sử các trang web đã "
+"truy cập"
 
 #: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
@@ -722,44 +722,51 @@ msgstr "Trợ lý AI"
 #, fuzzy
 #| msgid "Form history"
 msgid "File history"
-msgstr "Lịch sử biểu mẫu"
+msgstr "Lịch sử tập tin"
 
 #. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
 #: ../cleaners/claude.xml
 #, fuzzy
 #| msgid "Delete the list of recently used documents"
 msgid "Delete the file history used for /restore"
-msgstr "Xóa danh sách các tài liệu được sử dụng gần đây nhất"
+msgstr "Xóa lịch sử tệp được sử dụng cho /restore"
 
 #. Description for deleting Claude Code sessions
 #: ../cleaners/claude.xml
+#, fuzzy
 msgid "Delete the conversation history"
-msgstr "Xóa lịch sử tin nhắn"
+msgstr "Xóa lịch sử cuộc trò chuyện"
 
 #: ../cleaners/claude.xml
+#, fuzzy
 msgid "You would lose resume, continue, and rewind for past sessions"
-msgstr "Bạn sẽ mất khả năng tiếp tục cho phiên làm việc trước đó"
+msgstr "Bạn sẽ mất khả năng tiếp tục, khôi phục và quay lại các phiên trước"
 
 #. In Claude Code: captured shell environment used by the Bash tool
 #: ../cleaners/claude.xml
+#, fuzzy
 msgid "Shell snapshots"
-msgstr ""
+msgstr "Ảnh chụp shell"
 
 #: ../cleaners/deepscan.xml
+#, fuzzy
 msgid "Deep scan"
-msgstr "Quét sâu"
+msgstr "Quét chuyên sâu"
 
 #: ../cleaners/deepscan.xml
+#, fuzzy
 msgid "Clean files widely scattered across the disk"
-msgstr "Dọn các tệp rải rác khắp nơi ngang qua đĩa"
+msgstr "Dọn dẹp các tệp nằm rải rác trên ổ đĩa"
 
 #: ../cleaners/deepscan.xml
+#, fuzzy
 msgid "Inspect the preview for any files you want to keep."
-msgstr "Kiểm tra trước bất kì tập tin nào bạn muốn giữ lại."
+msgstr "Hãy xem trước danh sách để đảm bảo không có tệp nào bạn muốn giữ lại."
 
 #: ../cleaners/deepscan.xml
+#, fuzzy
 msgid "VIM swap files under user profile"
-msgstr "Tệp swap VIM của hồ sơ người dùng"
+msgstr "Tệp hoán đổi của Vim trong hồ sơ người dùng"
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files across system"
