@@ -84,7 +84,6 @@ native_locale_names = \
      'en_US': 'United States English',
      'eo': 'Esperanto',
      'es': 'Español',
-     'es_419': 'Latin American Spanish',
      'et': 'eesti',
      'eu': 'euskara',
      'fa': 'فارسی',
