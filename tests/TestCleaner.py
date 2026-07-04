@@ -254,14 +254,18 @@ class CleanerTestCase(common.BleachbitTestCase):
     @common.skipUnlessDestructive
     def test_system_recent_documents(self):
         """Clean recent documents in GTK"""
-        from bleachbit.GtkShim import Gtk, Gio, GLib
+        from bleachbit.GtkShim import (
+            Gtk, Gio, GLib, suppress_pygobject_asyncio_warnings)
         mgr = Gtk.RecentManager().get_default()
         fn = self.mkstemp(suffix='.txt')
         self.assertExists(fn)
         uri = Gio.File.new_for_path(fn).get_uri()
         self.assertTrue(mgr.add_item(uri))
         GLib.idle_add(Gtk.main_quit)
-        Gtk.main()  # process the addition
+        # PyGObject 3.56.2 calls deprecated asyncio APIs in Gtk.main(),
+        # which breaks tests run with warnings as errors.
+        with suppress_pygobject_asyncio_warnings():
+            Gtk.main()  # process the addition
         GLib.idle_add(Gtk.main_quit)
         self.assertGreater(len(mgr.get_items()), 0)
         self.assertTrue(mgr.has_item(uri))

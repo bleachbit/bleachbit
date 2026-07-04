@@ -31,14 +31,14 @@ later.  See the COPYING file in the top-level directory.
   <option id="node_modules">
     <label translate="false">node_modules</label>
     <description>Delete the files</description>
-    <warning>This option is slow.</warning>
-    <action command="delete" search="deep" wholeregex="[/\\]node_modules"/>
+    <warning>This option is slow. Inspect the preview for files you want to keep, like those bundled with applications.</warning>
+    <action command="delete" search="deep" wholeregex="[/\\]node_modules[/\\]" nwholeregex="[\\/]AppData[\\/]|[\\/]home[\\/][^\\/]+[\\/]\.[^\\/]+[\\/]|[\\/]Users[\\/][^\\/]+[\\/]\.[^\\/]+[\\/]"/>
   </option>
   <option id="venv">
     <label translate="false">venv</label>
     <description>Delete the files</description>
     <warning>This option is slow.</warning>
-    <action command="delete" search="deep" wholeregex="[/\\].?venv"/>
+    <action command="delete" search="deep" wholeregex="[/\\]\.?venv[/\\]" nwholeregex="[\\/]AppData[\\/]|[\\/]home[\\/][^\\/]+[\\/]\.[^\\/]+[\\/]|[\\/]Users[\\/][^\\/]+[\\/]\.[^\\/]+[\\/]|[\\/]pipx[\\/]venvs[\\/]"/>
   </option>
   <option id="pycache">
     <label translate="false">__pycache__</label>

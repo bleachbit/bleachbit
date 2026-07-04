@@ -19,7 +19,7 @@ from unittest import mock
 from tests import common
 from tests import TestCleaner
 from tests.common import SPECIAL_TEST_STRINGS
-from bleachbit import IS_MAC, IS_POSIX
+from bleachbit import IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.Options import options
 from bleachbit.DeepScan import DeepScan, Search, normalized_walk
 
@@ -98,6 +98,137 @@ class DeepScanTestCase(common.BleachbitTestCase):
         ]
         self.assertNotIn(keep_file, paths)
         self.assertIn(search_file, paths)
+
+    def _get_compiled_search(self, wholeregex_substr):
+        """Return the CompiledSearch for the deepscan action whose
+        wholeregex contains the given substring (e.g. 'node_modules',
+        'venv')."""
+        import xml.etree.ElementTree as ET
+        from bleachbit.DeepScan import CompiledSearch
+
+        xml_path = os.path.join(
+            os.path.dirname(__file__), '..', 'cleaners', 'deepscan.xml')
+        root = ET.parse(xml_path).getroot()
+        wholeregex = None
+        nwholeregex = None
+        for action in root.iter('action'):
+            if action.get('wholeregex') and wholeregex_substr in action.get('wholeregex'):
+                wholeregex = action.get('wholeregex')
+                nwholeregex = action.get('nwholeregex')
+                break
+        self.assertIsNotNone(wholeregex)
+        self.assertIsNotNone(nwholeregex)
+        return CompiledSearch(Search(command='delete', wholeregex=wholeregex, nwholeregex=nwholeregex))
+
+    def test_node_modules_excludes_dot_dirs(self):
+        """node_modules option should exclude system/cache/editor directories."""
+        cs = self._get_compiled_search('node_modules')
+        excluded = [
+            ('/home/neo/.nvm/versions/node/v22.22.3/lib/node_modules/corepack', 'README.md'),
+            ('/home/trinity/.vscode/extensions/ms-python.python-2026.4.0-linux-x64/out/client/node_modules', 'sudo-prompt.js'),
+            ('/home/morpheus/.npm/_npx/15b07286cbcc3329/node_modules',
+             '.package-lock.json'),
+            ('/home/smith/.cache/typescript/5.9/node_modules', '.package-lock.json'),
+            (r'C:\Users\glados\.windsurf\extensions\ms-python.python-2026.4.0-universal\out\client\node_modules', 'unicode.js'),
+            (r'C:\Users\glados\.cursor\projects\empty-window\canvases\node_modules', 'cursor.js'),
+            (r'C:\Users\glados\AppData\Local\Programs\myapp\node_modules', 'file.js'),
+            (r'C:\Users\glados\AppData\Local\ApertureScience\MainframeCore\node_modules\central-processing', 'index.js'),
+            (r'C:\Users\Alice\AppData\Local\Programs\BeeperTexts\resources\app.asar.unpacked\node_modules\@beeper',
+             'beeper_client_sdk_napi_binding.node'),
+            (r'C:\Users\bob\AppData\Local\Programs\Microsoft VS Code\7e7950df89\resources\app',
+             'node_modules.asar'),
+            (r'C:\Users\mallory\AppData\Local\Programs\Microsoft VS Code\fcf604774b\resources\app',
+             'node_modules.asar'),
+            ('/home/trent/projects/important/node_modules_backup', 'README.md'),
+            ('/home/trent/projects/important', 'node_modules.asar'),
+            (r'C:\Users\charlie\Documents\important', 'node_modules.asar'),
+            (r'C:\Users\charlie\Documents\important\node_modules_backup', 'aes.js'),
+        ]
+        for dirpath, filename in excluded:
+            with self.subTest(dirpath=dirpath, filename=filename):
+                self.assertIsNone(
+                    cs.match(dirpath, filename),
+                    f"Should exclude {dirpath}/{filename}")
+
+    def test_node_modules_matches_ordinary_dirs(self):
+        """node_modules option should match ordinary user project directories."""
+        cs = self._get_compiled_search('node_modules')
+        matched = [
+            ('/home/sfalken/games/wopr/node_modules/joshua/ai', 'core.js'),
+            (r'C:\Users\esnowden\Documents\nsa\prism\node_modules\crypto-js', 'aes.js'),
+            (r'C:\Users\chunkylover53\Documents\work-from-home\node_modules\click-button-automator\node_modules\is-buffer', 'index.js'),
+            ('/home/chunkylover53/Downloads/donut-radar/node_modules/react-dom', 'bar.js'),
+        ]
+        for dirpath, filename in matched:
+            with self.subTest(dirpath=dirpath, filename=filename):
+                self.assertIsNotNone(
+                    cs.match(dirpath, filename),
+                    f"Should match {dirpath}/{filename}")
+
+    def test_venv_excludes_system_and_editor_dirs(self):
+        """venv option should exclude system/cache/editor directories and non-venv paths."""
+        cs = self._get_compiled_search('venv')
+        excluded = [
+            # venv cannot be directly under home
+            ('/home/username/.venv', 'pyvenv.cfg'),
+            # Python standard library venv module (not a virtual environment)
+            ('/home/username/.local/share/uv/python/cpython-3.12.11-linux-x86_64-gnu/lib/python3.12/venv',
+             '__init__.py'),
+            ('/home/username/.pyenv/versions/3.12.7/lib/python3.12/venv', '__init__.py'),
+            # pipx-managed venvs (managed by pipx, like npm cache)
+            ('/home/username/.local/share/pipx/venvs/duplicity', 'pyvenv.cfg'),
+            # typeshed stubs bundled with editor extensions
+            ('/home/username/.vscode/extensions/ms-python.python-2026.4.0-linux-x64/python_files/lib/jedilsp/jedi/third_party/typeshed/stdlib/3/venv',
+             '__init__.pyi'),
+            # pyenv build patches
+            ('/home/username/.pyenv/plugins/python-build/share/python-build/patches/3.5.2/Python-3.5.2',
+             'venv.patch'),
+            # Windows: editor extensions and AppData
+            (r'C:\Users\glados\.vscode\extensions\ms-python.python-2026.4.0-universal\python_files\lib\jedilsp\jedi\third_party\typeshed\stdlib\3\venv',
+             '__init__.pyi'),
+            (r'C:\Users\glados\AppData\Local\ApertureScience\MainframeCore\venv', 'pyvenv.cfg'),
+            # Files/directories that contain venv (but not a venv directory)
+            ('/home/aturing/npl/ace_project/tools/', 'bootstrap_ace_venv.sh'),
+            ('/home/vonneumann/edvac/logs/', 'venv_build.log'),
+            ('/home/aturing/npl/ace_project/venv_tools/',
+             'requirements_numerics.txt'),
+            (r'C:\Users\charlie\Documents\important\venv_backup', 'pyvenv.cfg'),
+            # .venv bundled inside an AppData\Local application directory
+            (r'C:\Users\charlie\AppData\Local\AnkiProgramFiles\.venv\Lib\site-packages\PyQt6',
+             'QtCore.pyd'),
+            # Python standard library venv module under uv-managed Python (Windows)
+            (r'C:\Users\charlie\AppData\Roaming\uv\python\cpython-3.13.5-windows-x86_64-none\Lib\venv',
+             '__main__.py'),
+        ]
+        if IS_WINDOWS:
+            # Windows is case insensitive
+            # venv cannot be directly under home
+            excluded.append((r'c:\users\username\.VENV', 'pyvenv.cfg'))
+        for dirpath, filename in excluded:
+            with self.subTest(dirpath=dirpath, filename=filename):
+                self.assertIsNone(
+                    cs.match(dirpath, filename),
+                    f"Should exclude {dirpath}/{filename}")
+
+    def test_venv_matches_ordinary_dirs(self):
+        """venv option should match ordinary user project virtual environments."""
+        cs = self._get_compiled_search('venv')
+        matched = [
+            ('/home/genisys/t800/.venv/yolo-v666', 'pyvenv.cfg'),
+            ('/home/stark/jarvis/venv/yolo14', 'pyvenv.cfg'),
+            (r'C:\Users\esnowden\Documents\nsa\prism\venv', 'pyvenv.cfg'),
+        ]
+        if IS_WINDOWS:
+            # case insensitive
+            matched.append(
+                (r'C:\USERS\esnowden\Documents\nsa\prism\.VENV', 'pyvenv.cfg'))
+            matched.append(
+                (r'c:\USERS\pinky\world_domination\VENV\site-packages\hypnosisis', '__init__.py'))
+        for dirpath, filename in matched:
+            with self.subTest(dirpath=dirpath, filename=filename):
+                self.assertIsNotNone(
+                    cs.match(dirpath, filename),
+                    f"Should match {dirpath}/{filename}")
 
     def _test_delete(self, command):
         """Delete files in a test environment"""

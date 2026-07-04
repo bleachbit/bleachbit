@@ -9,10 +9,9 @@ Test case for module GuiStartup
 """
 
 import os
+import shutil
 import stat
-import sys
-import unittest
-import tempfile
+import subprocess
 from unittest import mock
 
 from bleachbit import IS_WINDOWS
@@ -91,11 +90,23 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         """Test read-only configuration file"""
         o = bleachbit.Options.Options()
         o.close()
-        os.chmod(bleachbit.options_file, stat.S_IRUSR |
-                 stat.S_IRGRP | stat.S_IROTH)
         self.assertExists(bleachbit.options_file)
-        issues = GuiStartup._get_config_permission_issues()
-        os.unlink(bleachbit.options_file)
+
+        if common.have_root():
+            # root bypasses file permission checks, so use chattr +i
+            subprocess.run(
+                ['chattr', '+i', bleachbit.options_file], check=True)
+        else:
+            os.chmod(bleachbit.options_file, stat.S_IRUSR |
+                     stat.S_IRGRP | stat.S_IROTH)
+        try:
+            issues = GuiStartup._get_config_permission_issues()
+        finally:
+            if common.have_root():
+                subprocess.run(
+                    ['chattr', '-i', bleachbit.options_file], check=True)
+            os.unlink(bleachbit.options_file)
+
         self.assertNotExists(bleachbit.options_file)
         self.assertIsInstance(issues, list)
         self.assertGreater(len(issues), 0)
@@ -112,8 +123,48 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         self.assertNotExists(bleachbit.options_file)
         self.assertFalse(issues)
 
+    def test_config_permission_nonissue_missing_file(self):
+        """A missing config file must not be reported as an error.
+
+        Unlike another test, this scenario has an options directory
+        that allows creating the missing config file.
+        """
+        if os.path.exists(bleachbit.options_file):
+            os.unlink(bleachbit.options_file)
+        self.assertNotExists(bleachbit.options_file)
+        issues = GuiStartup._get_config_permission_issues()
+        self.assertFalse(issues)
+
+    @common.skipIfWindows
+    def test_config_permission_issue_non_writeable_options_dir(self):
+        """Config does not exist and options dir is not writeable"""
+        non_writable_dir = self.mkdir('not_writeable_options')
+        non_writable_file = os.path.join(non_writable_dir, 'bleachbit.ini')
+        use_chattr = common.have_root()
+        try:
+            if use_chattr:
+                # Root bypasses chmod, so use chattr +i instead
+                subprocess.run(['chattr', '+i', non_writable_dir], check=True)
+            else:
+                os.chmod(non_writable_dir, stat.S_IRUSR | stat.S_IXUSR)
+            self.assertNotExists(non_writable_file)
+            with mock.patch('bleachbit.options_dir', non_writable_dir), \
+                    mock.patch('bleachbit.options_file', non_writable_file):
+                issues = GuiStartup._get_config_permission_issues()
+        finally:
+            if use_chattr:
+                subprocess.run(['chattr', '-i', non_writable_dir], check=True)
+            else:
+                os.chmod(non_writable_dir, stat.S_IRWXU)
+            shutil.rmtree(non_writable_dir)
+        self.assertIsInstance(issues, list)
+        self.assertGreater(len(issues), 0)
+        self.assertTrue(any('Write error' in issue for issue in issues),
+                        f"Expected 'Write error' in issues: {issues}")
+
+    @common.also_with_sudo
     def test_permission_issues_normal_file(self):
-        """Test  ownership check on a normal file owned by the user."""
+        """Test ownership check on a normal file owned by the user."""
         path = self.write_file('check_me')
         fstat = os.stat(path)
         if IS_WINDOWS:

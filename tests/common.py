@@ -184,7 +184,10 @@ class BleachbitTestCase(unittest.TestCase):
         * Restore options paths.
         """
         bleachbit.Options.options.reset_overrides()
-        bleachbit.Options.options._dirty = False
+        # Cancel any pending deferred flush (Options.__schedule_flush)
+        # so its background timer does not recreate bleachbit.ini inside
+        # tempdir while rmtree is mid-way through deleting it.
+        bleachbit.Options.options.cancel_pending_flush()
         gc_collect()
         # On Windows, a file may be temporarily locked, so retry.
         for attempt in range(5):
@@ -221,7 +224,7 @@ class BleachbitTestCase(unittest.TestCase):
             print(f"{prefix}SLOW TEST: {test_id} ({duration:.1f}s)", flush=True)
         return outcome
 
-    def setUp(cls):
+    def setUp(self):
         """Call before each test method"""
         basedir = os.path.join(os.path.dirname(__file__), '..')
         os.chdir(basedir)
@@ -244,7 +247,7 @@ class BleachbitTestCase(unittest.TestCase):
         if lang_id in ('C', 'C.UTF-8', 'C.utf8', 'POSIX'):
             return
         self.assertTrue(len(lang_id) >= 2)
-        pattern = r'^[a-z]{2,3}([_-][A-Z][A-Za-z]{1,3})?(\.[a-zA-Z][a-zA-Z0-9-]+)?(@\w+)?$'
+        pattern = r'^[a-z]{2,3}([_-]([A-Z][A-Za-z]{1,3}|[0-9]{3}))?(\.[a-zA-Z][a-zA-Z0-9-]+)?(@\w+)?$'
         self.assertTrue(re.match(pattern, lang_id),
                         f'Invalid language code format: {lang_id}')
 
@@ -282,7 +285,7 @@ class BleachbitTestCase(unittest.TestCase):
     def assertExists(self, path, msg='', func=os.stat):
         """Check that a file, directory, or any path exists"""
         path = self._assert_path(path)
-        if not self.check_exists(func, getTestPath(path)):
+        if not self.check_exists(func, get_test_path(path)):
             raise AssertionError(
                 'The file %s should exist, but it does not. %s' % (path, msg))
 
@@ -290,7 +293,7 @@ class BleachbitTestCase(unittest.TestCase):
     def assertNotExists(self, path, msg='', func=os.stat):
         """Check that a file, directory, or any path does not exist"""
         path = self._assert_path(path)
-        if self.check_exists(func, getTestPath(path)):
+        if self.check_exists(func, get_test_path(path)):
             raise AssertionError(
                 'The file %s should not exist, but it does. %s' % (path, msg))
 
@@ -325,8 +328,21 @@ class BleachbitTestCase(unittest.TestCase):
     #
     # file creation functions
     #
-    def write_file(self, filename, contents=b'', mode='wb', encoding=None):
-        """Create a temporary file, optionally writing contents to it"""
+    def write_file(self, filename, contents=b'', mode='wb', encoding=None, text=None):
+        """Create a temporary file, optionally writing contents to it
+
+        If `text` is given, it is written in text mode with utf-8 encoding,
+        and `mode`/`encoding` are set automatically. `text` is mutually
+        exclusive with `contents`.
+
+        The temporary file is automatically deleted after testing.
+        """
+        if text is not None:
+            if contents != b'':
+                raise ValueError("write_file: `text` is exclusive to `contents`")
+            contents = text
+            mode = 'w'
+            encoding = 'utf-8'
         if not encoding and mode == 'w':
             encoding = 'utf-8'
         if not os.path.isabs(filename):
@@ -365,8 +381,17 @@ class BleachbitTestCase(unittest.TestCase):
         return dirname
 
     def mkstemp(self, **kwargs):
+        """Create a temporary file
+
+        If dir is not specified, it will be created in self.tempdir, and tempdir
+        will be automatically deleted after testing.
+
+        If prefix is not specified, it's defined by the test method name.
+        """
         if 'dir' not in kwargs:
             kwargs['dir'] = self.tempdir
+        if 'prefix' not in kwargs:
+            kwargs['prefix'] = f"{self.__class__.__name__}-{self._testMethodName}-"
         (fd, filename) = tempfile.mkstemp(**kwargs)
         os.close(fd)
         return filename
@@ -374,17 +399,29 @@ class BleachbitTestCase(unittest.TestCase):
     def mkdtemp(self, **kwargs):
         """Create a temporary directory
 
-        Objects under self.tempdir are automatically removed after testing.
+        If dir is not specified, it will be created in self.tempdir, and tempdir
+        will be automatically deleted after testing.
+
+        If prefix is not specified, it's defined by the test method name.
         """
         if 'dir' not in kwargs:
             kwargs['dir'] = self.tempdir
+        if 'prefix' not in kwargs:
+            kwargs['prefix'] = f"{self.__class__.__name__}-{self._testMethodName}-"
         return tempfile.mkdtemp(**kwargs)
 
 
-def getTestPath(path):
-    if bleachbit.IS_WINDOWS:
-        return extended_path(os.path.normpath(path))
-    return path
+def get_test_path(path):
+    """Normalize test paths for Windows"""
+    if not bleachbit.IS_WINDOWS:
+        return path
+    path = os.path.normpath(path)
+    # The \\?\ extended-length prefix applied by extended_path() requires
+    # an absolute path: Windows treats "\\?\<relative>" as invalid and
+    # reports it as non-existent.
+    if not os.path.isabs(path):
+        path = os.path.abspath(path)
+    return extended_path(path)
 
 
 def get_env(key):
@@ -439,7 +476,7 @@ def also_with_sudo(test_func):
 def touch_file(filename):
     """Create an empty file"""
     dname = os.path.dirname(filename)
-    if not os.path.exists(dname):
+    if dname and not os.path.exists(dname):
         # Make the directory, if it does not exist.
         os.makedirs(dname)
     Path(filename).touch()

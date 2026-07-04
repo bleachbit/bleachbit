@@ -63,6 +63,7 @@ class GUI(Gtk.ApplicationWindow):
 
         self._auto_exit = auto_exit
         self._infobar_timeout_id = None
+        self._gui_cleaner_cleanup_pending = None
 
         self.set_property('name', APP_NAME)
         self.set_property('role', APP_NAME)
@@ -516,9 +517,21 @@ class GUI(Gtk.ApplicationWindow):
         # If no confirmation is requested, skip the preview.
         if options.get("delete_confirmation"):
             self.preview_or_run_operations(False, operations)
+            # Set the pending flag before the confirmation dialog because
+            # the dialog runs a nested GTK main loop in which the preview
+            # worker may finish and call worker_done().  If the flag is set
+            # by then, worker_done() removes _gui from backends.  Otherwise
+            # it is removed here or when the preview finishes.
+            self._gui_cleaner_cleanup_pending = self.worker
             if not self._confirm_delete(False, shred_settings):
                 # User dis-confirmed the deletion.
                 return False
+            # User confirmed.  If the preview already finished during the
+            # confirmation dialog, worker_done() removed _gui from backends.
+            # Re-create it so the real delete worker can use it.
+            self._gui_cleaner_cleanup_pending = None
+            if '_gui' not in backends:
+                backends['_gui'] = Cleaner.create_simple_cleaner(paths)
 
         if should_clear_clipboard:
             clear_clipboard()
@@ -715,8 +728,12 @@ class GUI(Gtk.ApplicationWindow):
         """Callback for when Worker is done"""
         # Remove the temporary _gui cleaner used for shred-paths and
         # wipe-empty-space operations, so it does not leak into the tree
-        # view on the next refresh.
-        backends.pop('_gui', None)
+        # view on the next refresh. For confirmed deletes, keep it through
+        # the preview so the real delete worker can use it. If confirmation
+        # is canceled, remove it when that preview worker finishes.
+        if really_delete or worker is self._gui_cleaner_cleanup_pending:
+            backends.pop('_gui', None)
+            self._gui_cleaner_cleanup_pending = None
         # TRANSLATORS: Status message shown on the progress bar and in a popup
         # notification.
         done_msg = _("Done.")
@@ -910,11 +927,17 @@ class GUI(Gtk.ApplicationWindow):
         return True
 
     def setup_drag_n_drop(self):
-        def cb_drag_data_received(_widget, _context, _x, _y, data, info, _time):
+        def cb_drag_data_received(widget, _context, _x, _y, data, info, _time):
             if info == 80:
                 uris = data.get_uris()
                 paths = FileUtilities.uris_to_paths(uris)
                 self.shred_paths(paths)
+            # GtkTextView installs its own ::drag-data-received handler that
+            # calls gtk_drag_finish(FALSE) when the view is not editable. On
+            # Wayland that tears down the data offer in addition to the
+            # GTK_DEST_DEFAULT_DROP handler, so stop emission and let the
+            # default DROP handler finalize the drag exactly once.
+            widget.stop_emission('drag-data-received')
 
         def setup_widget(widget):
             widget.drag_dest_set(Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
@@ -923,7 +946,14 @@ class GUI(Gtk.ApplicationWindow):
 
         setup_widget(self)
         setup_widget(self.textview)
+        # The text view is not editable, so GtkTextView's own ::drag-motion
+        # and ::drag-drop handlers reject drops (calling gtk_drag_finish(FALSE))
+        # and, on Wayland, cancel the in-flight selection read with
+        # "error reading selection buffer: Operation was cancelled". Returning
+        # True stops those handlers via the boolean accumulator; the
+        # GTK_DEST_DEFAULT_DROP handling then drives the data transfer.
         self.textview.connect('drag_motion', lambda *_: True)
+        self.textview.connect('drag_drop', lambda *_: True)
 
     def update_progress_bar(self, status):
         """Callback to update the progress bar with number or text"""

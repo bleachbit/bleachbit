@@ -353,5 +353,23 @@ def suppress_pygobject_asyncio_warnings():
         yield
 
 
+@contextmanager
+def suppress_pygobject_import_warnings():
+    """Suppress ImportWarning from old-style PyGObject import hooks.
+
+    Older PyGObject versions use a legacy importer for ``gi.repository``
+    that triggers ``ImportWarning: DynamicImporter.exec_module() not found;
+    falling back to load_module()`` under Python's modern import system.
+    This is harmless but breaks imports when warnings are errors (e.g.,
+    ``PYTHONWARNINGS=error`` in the test suite).
+    """
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore",
+            message=".*DynamicImporter.exec_module\\(\\) not found.*",
+            category=ImportWarning)
+        yield
+
+
 # Perform initialization at module load
 _init_gtk()

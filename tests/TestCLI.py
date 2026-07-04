@@ -60,7 +60,8 @@ class CLITestCase(common.BleachbitTestCase):
         if pos > -1:
             print("Saw the following error when using args '%s':\n %s" %
                   (args, output[2]))
-        self.assertEqual(pos, -1)
+        self.assertEqual(
+            pos, -1, f"Traceback found in stderr when using args {args}:\n{output[2][pos:]}")
 
     def test_args_to_operations_list(self):
         """Unit test for args_to_operations_list()"""
@@ -153,7 +154,7 @@ class CLITestCase(common.BleachbitTestCase):
 
         for delimiter in (' ', '='):
             # delete_on_close=False is helpful but requires Python 3.12.
-            with tempfile.NamedTemporaryFile(delete=False) as f:
+            with tempfile.NamedTemporaryFile(delete=False, dir=self.tempdir) as f:
                 f.close()
                 log_path = f.name
 
@@ -490,7 +491,7 @@ class CLITestCase(common.BleachbitTestCase):
     def test_shred(self):
         """Unit test for --shred"""
         suffixes = ['', '.', '.txt']
-        dirs = ['.', None]
+        dirs = ['.', self.tempdir]
         for dir_ in dirs:
             for suffix in suffixes:
                 (fd, filename) = tempfile.mkstemp(

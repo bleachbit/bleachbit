@@ -79,8 +79,12 @@ def _get_posix_permission_issues(fstat, options_file):
     lines.append(f'File owner: {file_owner} (uid {fstat.st_uid})')
     lines.append(f'Current user: {current_user} (uid {current_uid})')
     if fstat.st_uid != current_uid:
-        has_error = True
-        lines.append('File owner does not match current user')
+        if os.geteuid() == 0:
+            lines.append('File owner does not match current user '
+                         '(root can access regardless)')
+        else:
+            has_error = True
+            lines.append('File owner does not match current user')
     # os.access checks
     lines.append(f'os.access R_OK: {os.access(options_file, os.R_OK)}')
     lines.append(f'os.access W_OK: {os.access(options_file, os.W_OK)}')
@@ -176,6 +180,11 @@ def _get_config_permission_issues():
     try:
         with open(_options_file, 'rb') as f:
             f.read(1)
+    except FileNotFoundError:
+        # A missing configuration file is normal on first start and is
+        # not a permission issue. The append test below verifies that
+        # the file can be created/written.
+        pass
     except (IOError, OSError, PermissionError) as e:
         has_error = True
         lines.append(f"Read error: {type(e).__name__}: {e}")

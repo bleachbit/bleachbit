@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -25,7 +12,7 @@ Test case for Makefile
 import os
 
 from tests import common
-from bleachbit import APP_VERSION
+from bleachbit import APP_VERSION, IS_WINDOWS
 from bleachbit.FileUtilities import exe_exists
 from bleachbit.General import get_executable, run_external
 
@@ -33,27 +20,46 @@ from bleachbit.General import get_executable, run_external
 class MakefileTestCase(common.BleachbitTestCase):
     """Test case for Makefile"""
 
-    def test_make_source(self):
-        """Test Makefile for source distribution"""
+    def setUp(self):
+        """Locate xgettext, make, and tar before running the test"""
+        super().setUp()
         src_base_dir = os.path.abspath(
             os.path.join(os.path.dirname(__file__), '..'))
+        self.src_base_dir = src_base_dir
+
+        # appveyor.yml adds the MSYS2 bin directory to PATH before tests,
+        # so the tools are found via exe_exists() (which searches PATH).
+        # On Windows, exists_in_path() does not append .exe, so do it here.
+        exe_suffix = '.exe' if IS_WINDOWS else ''
+
+        tools = {
+            'make_exe': ('make', 'make (not found in PATH)'),
+            'xgettext_exe': ('xgettext', 'xgettext (run `apt install gettext` or equivalent)'),
+            'tar_exe': ('tar', 'tar (not found in PATH)'),
+        }
+
+        missing = []
+        for attr, (tool_name, error_msg) in tools.items():
+            exe_name = tool_name + exe_suffix
+            if exe_exists(exe_name):
+                setattr(self, attr, exe_name)
+            else:
+                setattr(self, attr, None)
+                missing.append(error_msg)
+
+        if missing:
+            if 'CI' in os.environ or not IS_WINDOWS:
+                raise RuntimeError(
+                    'Missing required build tools: ' + '; '.join(missing))
+            self.skipTest(
+                'Missing required build tools: ' + '; '.join(missing))
+
+    def test_make_source(self):
+        """Test Makefile for source distribution"""
+        src_base_dir = self.src_base_dir
         os.chdir(src_base_dir)
-        # appveyor.yml defines %make%
-        make_exe = None
-        for exe in ('make', os.getenv('make')):
-            if exe and exe_exists(exe):
-                make_exe = exe
-                break
-        if not make_exe:
-            self.skipTest('make not found in PATH or in $make')
-        tar_in_make_dir = os.path.join(src_base_dir, 'tar')
-        tar_exe = None
-        for exe in ('tar', tar_in_make_dir):
-            if exe and exe_exists(exe):
-                tar_exe = exe
-                break
-        if not tar_exe:
-            self.skipTest('tar not found in PATH or in directory of make')
+        make_exe = self.make_exe
+        tar_exe = self.tar_exe
 
         ver_name = 'bleachbit-' + APP_VERSION
 
@@ -64,9 +70,15 @@ class MakefileTestCase(common.BleachbitTestCase):
         self.assertNotExists(pkg_fn)
 
         # build source distribution
-        sdist_cmd = [get_executable(), 'setup.py', 'sdist']
-        (rc, _, stderr) = run_external(sdist_cmd)
-        self.assertEqual(rc, 0, stderr)
+        # Override PYTHONWARNINGS because the CI environment sets it to 'error',
+        # which can cause sdist to fail silently on Windows (rc=0 but no archive).
+        sdist_env = dict(os.environ)
+        if IS_WINDOWS:
+            sdist_env['PYTHONWARNINGS'] = 'default'
+        sdist_cmd = [get_executable(), 'setup.py', 'sdist', '--formats=gztar']
+        (rc, stdout, stderr) = run_external(
+            sdist_cmd, env=sdist_env, clean_env=False)
+        self.assertEqual(rc, 0, stderr + stdout)
         pkg_fn = os.path.join('dist', ver_name + '.tar.gz')
         self.assertExists(pkg_fn)
 
@@ -78,6 +90,16 @@ class MakefileTestCase(common.BleachbitTestCase):
         self.assertEqual(rc, 0, stderr)
         extract_subdir = os.path.join(extract_dir, ver_name)
         self.assertExists(os.path.join(extract_subdir, 'Makefile'))
+
+        # Verify a cleaner is present in the source distribution
+        self.assertExists(os.path.join(
+            extract_subdir, 'cleaners', 'chromium.xml'))
+
+        if IS_WINDOWS:
+            # The make targets `delete_windows_files` and `install` do not
+            # work under MSYS2 because bash strips backslashes from the
+            # Windows make path, and Windows does not use make for installation.
+            return
 
         # delete Windows files using make
         canary_fn = os.path.join(
@@ -95,7 +117,7 @@ class MakefileTestCase(common.BleachbitTestCase):
                            'install', 'DESTDIR=' + install_tgt_dir]
         os.chdir(extract_subdir)
         (rc, _, stderr) = run_external(install_command)
-        self.assertEqual(rc, 0, stderr)
+        self.assertEqual(rc, 0, f"make install failed with rc={rc}, stderr={stderr}")
         self.assertTrue(os.path.isdir(install_tgt_dir))
         self.assertExists(os.path.join(
             install_tgt_dir, 'usr/local/share/bleachbit/cleaners/chromium.xml'))
