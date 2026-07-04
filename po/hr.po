@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-07 11:17-0600\n"
+"POT-Creation-Date: 2026-07-04 09:57-0600\n"
 "PO-Revision-Date: 2026-06-26 22:05+0200\n"
 "Last-Translator: Brendigo <info@brendigo.com>\n"
 "Language-Team: Croatian <info@brendigo.com>\n"
@@ -17,7 +17,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Brendigo\n"
 "X-Translation-Author: Brendigo\n"
 "X-Translation-Author-Website: https://brendigo.com\n"
@@ -54,7 +55,9 @@ msgstr "Kolačići"
 msgid ""
 "Delete cookies, which store login information, website preferences, and "
 "tracking identifiers"
-msgstr "Izbriši kolačiće u kojima se spremaju podaci za prijavu, postavke web-mjesta i identifikatori za praćenje"
+msgstr ""
+"Izbriši kolačiće u kojima se spremaju podaci za prijavu, postavke web-mjesta "
+"i identifikatori za praćenje"
 
 #: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
 #: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
@@ -180,7 +183,9 @@ msgstr "Ukloni pakete koji su nekoć bili ovisnosti"
 msgid ""
 "Carefully review the list of packages that will be removed by running \"dnf "
 "list autoremove\"."
-msgstr "Pažljivo pregledajte popis paketa koji će se ukloniti pokretanjem naredbe \"dnf list autoremove\"."
+msgstr ""
+"Pažljivo pregledajte popis paketa koji će se ukloniti pokretanjem naredbe "
+"\"dnf list autoremove\"."
 
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
@@ -273,7 +278,9 @@ msgstr "Lozinke"
 msgid ""
 "A database of usernames and passwords as well as a list of sites that should "
 "not store passwords"
-msgstr "Baza korisničkih imena i lozinki te popis web-mjesta koja ne bi trebala spremati lozinke"
+msgstr ""
+"Baza korisničkih imena i lozinki te popis web-mjesta koja ne bi trebala "
+"spremati lozinke"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
 #: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
@@ -314,7 +321,8 @@ msgstr "Podaci web-mjesta"
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
-msgstr "Izbriši LocalStorage, IndexedDB i druge podatke koje web-mjesta spremaju"
+msgstr ""
+"Izbriši LocalStorage, IndexedDB i druge podatke koje web-mjesta spremaju"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -365,7 +373,9 @@ msgstr "Optimizacija baze podataka"
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
-msgstr "Očisti fragmentaciju baze podataka radi smanjenja zauzeća prostora i poboljšanja brzine, bez uklanjanja podataka"
+msgstr ""
+"Očisti fragmentaciju baze podataka radi smanjenja zauzeća prostora i "
+"poboljšanja brzine, bez uklanjanja podataka"
 
 #: ../cleaners/openoffice.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/libreoffice.xml
@@ -387,7 +397,9 @@ msgstr "Baza podataka"
 msgid ""
 "Delete the database, which contains information such as play count and last "
 "played"
-msgstr "Izbriši bazu podataka koja sadržava podatke kao što su broj reprodukcija i vrijeme posljednje reprodukcije"
+msgstr ""
+"Izbriši bazu podataka koja sadržava podatke kao što su broj reprodukcija i "
+"vrijeme posljednje reprodukcije"
 
 #: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
@@ -448,7 +460,9 @@ msgstr "Program za obradu teksta"
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr "Izbriši web-predmemoriju koja skraćuje vrijeme prikaza ponovno posjećenih stranica"
+msgstr ""
+"Izbriši web-predmemoriju koja skraćuje vrijeme prikaza ponovno posjećenih "
+"stranica"
 
 #: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
@@ -461,7 +475,8 @@ msgstr "Povijest obrazaca ispunjenih na web-mjestima"
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr "Izbriši povijest, uključujući posjećena web-mjesta, preuzimanja i minijature"
+msgstr ""
+"Izbriši povijest, uključujući posjećena web-mjesta, preuzimanja i minijature"
 
 #: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
@@ -471,7 +486,9 @@ msgstr "Sinkronizacija"
 #: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 msgid "Delete the sync data (including web apps) and sign out of the browser"
-msgstr "Izbriši podatke sinkronizacije (uključujući web-aplikacije) i odjavi se iz preglednika"
+msgstr ""
+"Izbriši podatke sinkronizacije (uključujući web-aplikacije) i odjavi se iz "
+"preglednika"
 
 #: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
 #: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
@@ -510,7 +527,9 @@ msgstr "Mjesta"
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "websites"
-msgstr "Baza podataka URL-ova koja uključuje knjižne oznake, favikone i povijest posjećenih web-mjesta"
+msgstr ""
+"Baza podataka URL-ova koja uključuje knjižne oznake, favikone i povijest "
+"posjećenih web-mjesta"
 
 #: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
@@ -594,7 +613,9 @@ msgstr "Tražilice"
 msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
 "some of which are added automatically"
-msgstr "Vrati povijest korištenja tražilica na zadane vrijednosti i izbriši tražilice koje nisu tvornički zadane; neke se dodaju automatski"
+msgstr ""
+"Vrati povijest korištenja tražilica na zadane vrijednosti i izbriši "
+"tražilice koje nisu tvornički zadane; neke se dodaju automatski"
 
 #: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
 msgid "File manager"
@@ -608,7 +629,9 @@ msgstr "Popis nedavnih dokumenata"
 #: ../cleaners/windows_explorer.xml
 msgid ""
 "This option will reset pinned locations in Quick Access to their defaults."
-msgstr "Ova će mogućnost vratiti prikvačene lokacije u Brzom pristupu na zadane vrijednosti."
+msgstr ""
+"Ova će mogućnost vratiti prikvačene lokacije u Brzom pristupu na zadane "
+"vrijednosti."
 
 #: ../cleaners/windows_explorer.xml
 msgid "Shellbags"
@@ -638,7 +661,8 @@ msgstr "Karantena"
 msgid ""
 "Deleting the index will reset the configuration of columns in the message "
 "list."
-msgstr "Brisanjem indeksa poništit će se konfiguracija stupaca na popisu poruka."
+msgstr ""
+"Brisanjem indeksa poništit će se konfiguracija stupaca na popisu poruka."
 
 #: ../cleaners/thunderbird.xml
 msgid "Session restore"
@@ -707,7 +731,9 @@ msgstr "Izbriši povijest razgovora"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
-msgstr "Izgubit ćete mogućnosti nastavka, nastavljanja i premotavanja prethodnih sesija"
+msgstr ""
+"Izgubit ćete mogućnosti nastavka, nastavljanja i premotavanja prethodnih "
+"sesija"
 
 #. In Claude Code: captured shell environment used by the Bash tool
 #: ../cleaners/claude.xml
@@ -724,7 +750,15 @@ msgstr "Očisti datoteke raspršene po disku"
 
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
-msgstr "Pregledajte pretpregled i provjerite postoje li datoteke koje želite zadržati."
+msgstr ""
+"Pregledajte pretpregled i provjerite postoje li datoteke koje želite "
+"zadržati."
+
+#: ../cleaners/deepscan.xml
+msgid ""
+"This option is slow. Inspect the preview for files you want to keep, like "
+"those bundled with applications."
+msgstr ""
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
@@ -744,7 +778,8 @@ msgstr "Izbriši audio i videosnimke"
 
 #: ../cleaners/recoll.xml
 msgid "Delete the search index, a database of words and the files they contain"
-msgstr "Izbriši indeks pretraživanja, bazu riječi i datoteka koje ih sadržavaju"
+msgstr ""
+"Izbriši indeks pretraživanja, bazu riječi i datoteka koje ih sadržavaju"
 
 #: ../cleaners/skype.xml
 msgid "Installers"
@@ -836,13 +871,17 @@ msgstr "Poznati klijenti i prijatelji"
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
-msgstr "Izbriši datoteku ~/.viminfo, koja uključuje povijest datoteka, povijest naredbi i međuspremnike"
+msgstr ""
+"Izbriši datoteku ~/.viminfo, koja uključuje povijest datoteka, povijest "
+"naredbi i međuspremnike"
 
 #: ../cleaners/discord.xml
 msgid ""
 "Delete the web cache, which reduces time to display revisited pages. This "
 "also clears favorited GIFs."
-msgstr "Izbriši web-predmemoriju koja skraćuje vrijeme prikaza ponovno posjećenih stranica. Time se brišu i omiljeni GIF-ovi."
+msgstr ""
+"Izbriši web-predmemoriju koja skraćuje vrijeme prikaza ponovno posjećenih "
+"stranica. Time se brišu i omiljeni GIF-ovi."
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
@@ -863,7 +902,12 @@ msgid ""
 "unnecessary files such as cache, cookies, browser history, temporary files, "
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
-msgstr "BleachBit oslobađa prostor na disku i čuva privatnost brzim uklanjanjem nepotrebnih datoteka kao što su predmemorija, kolačići, povijest preglednika, privremene datoteke i zapisi sustava. Može i nepovratno izbrisati datoteke te očistiti slobodan prostor na disku kako bi se spriječio oporavak podataka."
+msgstr ""
+"BleachBit oslobađa prostor na disku i čuva privatnost brzim uklanjanjem "
+"nepotrebnih datoteka kao što su predmemorija, kolačići, povijest "
+"preglednika, privremene datoteke i zapisi sustava. Može i nepovratno "
+"izbrisati datoteke te očistiti slobodan prostor na disku kako bi se "
+"spriječio oporavak podataka."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
@@ -877,7 +921,10 @@ msgid ""
 "${prodname} is already installed.\n"
 "Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' "
 "to abort the upgrade."
-msgstr "${prodname} je već instaliran.\nKliknite „U redu” za deinstalaciju stare verzije prije nadogradnje ili „Odustani” za prekid nadogradnje."
+msgstr ""
+"${prodname} je već instaliran.\n"
+"Kliknite „U redu” za deinstalaciju stare verzije prije nadogradnje ili "
+"„Odustani” za prekid nadogradnje."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
@@ -894,20 +941,24 @@ msgctxt "nsis:MULTIPRINT1"
 msgid ""
 "The next step is building the font cache, during which a black console "
 "window may appear."
-msgstr "Sljedeći je korak izrada predmemorije fontova; tijekom toga može se pojaviti crni prozor konzole."
+msgstr ""
+"Sljedeći je korak izrada predmemorije fontova; tijekom toga može se pojaviti "
+"crni prozor konzole."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT2"
 msgid ""
 "It usually finishes in one minute, but sometimes it takes up to ten minutes."
-msgstr "Obično završava za jednu minutu, ali ponekad može potrajati do deset minuta."
+msgstr ""
+"Obično završava za jednu minutu, ali ponekad može potrajati do deset minuta."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
 msgid ""
 "You need to log in with an account that is a member of the administrators "
 "group to continue."
-msgstr "Za nastavak se morate prijaviti računom koji je član grupe administratora."
+msgstr ""
+"Za nastavak se morate prijaviti računom koji je član grupe administratora."
 
 #. TRANSLATORS: Message shown on the installation mode page description when admin rights are needed.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -971,13 +1022,17 @@ msgstr "Verzija {VERSION} instalirana je za sve korisnike u mapi \"{FOLDER}\"."
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
-msgstr "Verzija {VERSION} instalirana je za trenutačnog korisnika u mapi \"{FOLDER}\"."
+msgstr ""
+"Verzija {VERSION} instalirana je za trenutačnog korisnika u mapi \"{FOLDER}"
+"\"."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
 msgid ""
 "Select whether to install $(^NameDA) for all users or for the current user."
-msgstr "Odaberite želite li instalirati $(^NameDA) za sve korisnike ili samo za trenutačnog korisnika."
+msgstr ""
+"Odaberite želite li instalirati $(^NameDA) za sve korisnike ili samo za "
+"trenutačnog korisnika."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_PAGE_SUBTITLE"
@@ -1019,14 +1074,18 @@ msgstr "Odabir korisnika"
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS"
 msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
-msgstr "Deinstaliraj verziju {OLD_VERSION} i instaliraj verziju {VERSION} za sve korisnike."
+msgstr ""
+"Deinstaliraj verziju {OLD_VERSION} i instaliraj verziju {VERSION} za sve "
+"korisnike."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
 msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for the "
 "current user."
-msgstr "Deinstaliraj verziju {OLD_VERSION} i instaliraj verziju {VERSION} za trenutačnog korisnika."
+msgstr ""
+"Deinstaliraj verziju {OLD_VERSION} i instaliraj verziju {VERSION} za "
+"trenutačnog korisnika."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS"
@@ -1048,7 +1107,9 @@ msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
 msgid ""
 "$(^NameDA) is installed both for all users and for the current user.\n"
 "Select which installation to remove."
-msgstr "$(^NameDA) je instaliran i za sve korisnike i za trenutačnog korisnika.\nOdaberite koju instalaciju želite ukloniti."
+msgstr ""
+"$(^NameDA) je instaliran i za sve korisnike i za trenutačnog korisnika.\n"
+"Odaberite koju instalaciju želite ukloniti."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_PAGE_SUBTITLE"
@@ -1062,13 +1123,17 @@ msgid ""
 "This version of BleachBit requires Windows 10 or later. To download a "
 "compatible version for your system, click OK. To exit the installer, click "
 "Cancel."
-msgstr "Ova verzija BleachBita zahtijeva Windows 10 ili noviji. Za preuzimanje verzije kompatibilne s vašim sustavom kliknite „U redu”. Za izlaz iz instalacijskog programa kliknite „Odustani”."
+msgstr ""
+"Ova verzija BleachBita zahtijeva Windows 10 ili noviji. Za preuzimanje "
+"verzije kompatibilne s vašim sustavom kliknite „U redu”. Za izlaz iz "
+"instalacijskog programa kliknite „Odustani”."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
 msgid ""
 "These are the basic files needed for ${prodname} to function (required)."
-msgstr "Ovo su osnovne datoteke potrebne za rad programa ${prodname} (obavezno)."
+msgstr ""
+"Ovo su osnovne datoteke potrebne za rad programa ${prodname} (obavezno)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_NAME"
@@ -1090,7 +1155,9 @@ msgstr "Radna površina"
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
 msgid ""
 "Add an option to delete files from the file context menu in Windows Explorer."
-msgstr "Dodaj mogućnost brisanja datoteka u kontekstni izbornik datoteka u Windows Exploreru."
+msgstr ""
+"Dodaj mogućnost brisanja datoteka u kontekstni izbornik datoteka u Windows "
+"Exploreru."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_NAME"
@@ -1134,7 +1201,9 @@ msgstr "Izbornik Start"
 msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
 msgid ""
 "Install language files to use ${prodname} in your preferred local language."
-msgstr "Instaliraj jezične datoteke kako biste ${prodname} mogli koristiti na željenom jeziku."
+msgstr ""
+"Instaliraj jezične datoteke kako biste ${prodname} mogli koristiti na "
+"željenom jeziku."
 
 #. TRANSLATORS: Name of the translations section in the Windows installer: user selects which translations to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1173,7 +1242,12 @@ msgid ""
 "WARNING: The uninstaller completely removes the installation directory, "
 "including any files (such as custom cleaners) that you may have added or "
 "changed."
-msgstr "${prodname} deinstalirat će se iz sljedeće mape.\nKliknite Deinstaliraj za početak deinstalacije.\nUPOZORENJE: Deinstalacijski program potpuno uklanja instalacijsku mapu, uključujući sve datoteke koje ste dodali ili promijenili, primjerice prilagođene čistače."
+msgstr ""
+"${prodname} deinstalirat će se iz sljedeće mape.\n"
+"Kliknite Deinstaliraj za početak deinstalacije.\n"
+"UPOZORENJE: Deinstalacijski program potpuno uklanja instalacijsku mapu, "
+"uključujući sve datoteke koje ste dodali ili promijenili, primjerice "
+"prilagođene čistače."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1227,14 +1301,21 @@ msgid ""
 "xhost si:localuser:root\n"
 "See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-"
 "questions.html"
-msgstr "Za pokretanje grafičke aplikacije na Waylandu s root ovlastima dopustite pristup ovom naredbom:\nxhost si:localuser:root\nViše o xhostu pročitajte na https://docs.bleachbit.org/doc/frequently-asked-questions.html"
+msgstr ""
+"Za pokretanje grafičke aplikacije na Waylandu s root ovlastima dopustite "
+"pristup ovom naredbom:\n"
+"xhost si:localuser:root\n"
+"Više o xhostu pročitajte na https://docs.bleachbit.org/doc/frequently-asked-"
+"questions.html"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
 msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
-msgstr "Pogreška u funkciji handle_cleaner_option() za ID čistača = {cleaner_id}, XML opcije={option_xml}"
+msgstr ""
+"Pogreška u funkciji handle_cleaner_option() za ID čistača = {cleaner_id}, "
+"XML opcije={option_xml}"
 
 #. TRANSLATORS: Warning printed to the log.
 #. %s expands to the path of the XML cleaner file that was skipped
@@ -1263,7 +1344,8 @@ msgstr "Neispravne .desktop datoteke"
 
 #: ../bleachbit/Cleaner.py
 msgid "Delete broken application menu entries and file associations"
-msgstr "Izbriši neispravne stavke izbornika aplikacija i pridruživanja datoteka"
+msgstr ""
+"Izbriši neispravne stavke izbornika aplikacija i pridruživanja datoteka"
 
 #. TRANSLATORS: Localizations are files supporting specific
 #. languages, so applications appear in Spanish, etc.
@@ -1337,7 +1419,9 @@ msgstr "Ažuriraj deinstalacijske programe"
 msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
-msgstr "Izbriši deinstalacijske programe za Microsoftova ažuriranja, uključujući hitne popravke, servisne pakete i ažuriranja Internet Explorera"
+msgstr ""
+"Izbriši deinstalacijske programe za Microsoftova ažuriranja, uključujući "
+"hitne popravke, servisne pakete i ažuriranja Internet Explorera"
 
 #. TRANSLATORS: Warning shown when selecting an option.
 #: ../bleachbit/Cleaner.py
@@ -1372,7 +1456,8 @@ msgstr "Slobodan prostor"
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Wipe empty space to hide deleted files"
-msgstr "Prebriši slobodan prostor kako bi se sakrili tragovi izbrisanih datoteka"
+msgstr ""
+"Prebriši slobodan prostor kako bi se sakrili tragovi izbrisanih datoteka"
 
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
@@ -1449,7 +1534,8 @@ msgstr "prikaži pretpregled datoteka za brisanje i drugih promjena"
 #. TRANSLATORS: Help for the --clean command on the CLI
 #: ../bleachbit/CLI.py
 msgid "run cleaners to delete files and make other permanent changes"
-msgstr "pokreni čistače za brisanje datoteka i izvršavanje drugih trajnih promjena"
+msgstr ""
+"pokreni čistače za brisanje datoteka i izvršavanje drugih trajnih promjena"
 
 #. TRANSLATORS: Help for the --shred command on the CLI,
 #. and 'shred' is a verb
@@ -1529,7 +1615,9 @@ msgstr "ažuriraj winapp2.ini ako je dostupna nova verzija"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean, --shred"
-msgstr "Navedite samo jednu od ovih naredbi: --list-cleaners, --wipe-empty-space, --preview, --clean, --shred"
+msgstr ""
+"Navedite samo jednu od ovih naredbi: --list-cleaners, --wipe-empty-space, --"
+"preview, --clean, --shred"
 
 #. TRANSLATORS: Log message on the CLI.
 #: ../bleachbit/CLI.py
@@ -1573,7 +1661,10 @@ msgstr "Izbriši"
 msgid ""
 "At least one file was locked by another process, so its contents could not "
 "be overwritten. It will be marked for deletion upon system reboot."
-msgstr "Najmanje jedna datoteka bila je zaključana drugim procesom, pa se njezin sadržaj nije mogao prebrisati. Bit će označena za brisanje pri ponovnom pokretanju sustava."
+msgstr ""
+"Najmanje jedna datoteka bila je zaključana drugim procesom, pa se njezin "
+"sadržaj nije mogao prebrisati. Bit će označena za brisanje pri ponovnom "
+"pokretanju sustava."
 
 #. TRANSLATORS: Label in the log when the file will be deleted
 #. when the system reboots. 'Mark' is a verb.
@@ -1615,7 +1706,13 @@ msgid ""
 "if your drive is protected with full-disk encryption. The method works best "
 "on traditional hard drives. On solid-state drives, it is less reliable, and "
 "frequent use contributes to wear."
-msgstr "Prebrisivanje slobodnog prostora uklanja tragove datoteka koje su izbrisane bez nepovratnog brisanja, ali neće osloboditi dodatni prostor na disku. Postupak može trajati vrlo dugo i privremeno usporiti računalo. Nije potreban ako je pogon zaštićen šifriranjem cijelog diska. Metoda najbolje radi na klasičnim tvrdim diskovima. Na SSD pogonima manje je pouzdana, a česta upotreba pridonosi trošenju."
+msgstr ""
+"Prebrisivanje slobodnog prostora uklanja tragove datoteka koje su izbrisane "
+"bez nepovratnog brisanja, ali neće osloboditi dodatni prostor na disku. "
+"Postupak može trajati vrlo dugo i privremeno usporiti računalo. Nije "
+"potreban ako je pogon zaštićen šifriranjem cijelog diska. Metoda najbolje "
+"radi na klasičnim tvrdim diskovima. Na SSD pogonima manje je pouzdana, a "
+"česta upotreba pridonosi trošenju."
 
 #. TRANSLATORS: Error message shown in the infobar or notice shown in a tooltip.
 #. Expert mode is an option in the preferences to relax guardrails.
@@ -1728,7 +1825,9 @@ msgstr "Program za čišćenje nepotrebnih datoteka"
 msgid ""
 "GNU General Public License version 3 or later.\n"
 "See https://www.gnu.org/licenses/gpl-3.0.txt"
-msgstr "GNU-ova Opća javna licencija, verzija 3 ili novija.\nPogledajte https://www.gnu.org/licenses/gpl-3.0.txt"
+msgstr ""
+"GNU-ova Opća javna licencija, verzija 3 ili novija.\n"
+"Pogledajte https://www.gnu.org/licenses/gpl-3.0.txt"
 
 #. TRANSLATORS: Maintain the names of translators here.
 #. Launchpad does this automatically for translations
@@ -1736,7 +1835,10 @@ msgstr "GNU-ova Opća javna licencija, verzija 3 ili novija.\nPogledajte https:/
 #. in the 'About' box.
 #: ../bleachbit/GuiApplication.py
 msgid "translator-credits"
-msgstr "Brendigo\nhttps://brendigo.com\ninfo@brendigo.com"
+msgstr ""
+"Brendigo\n"
+"https://brendigo.com\n"
+"info@brendigo.com"
 
 #. TRANSLATORS: Title of the system information dialog.
 #: ../bleachbit/GuiApplication.py
@@ -1773,7 +1875,11 @@ msgid ""
 "This function deletes all BleachBit settings and then quits the application. "
 "Use this to hide your use of BleachBit or to reset its settings. The next "
 "time you start BleachBit, the settings will initialize to default values."
-msgstr "Ova funkcija briše sve postavke BleachBita i zatim zatvara aplikaciju. Upotrijebite je za skrivanje korištenja BleachBita ili za vraćanje njegovih postavki. Pri sljedećem pokretanju BleachBita postavke će se vratiti na zadane vrijednosti."
+msgstr ""
+"Ova funkcija briše sve postavke BleachBita i zatim zatvara aplikaciju. "
+"Upotrijebite je za skrivanje korištenja BleachBita ili za vraćanje njegovih "
+"postavki. Pri sljedećem pokretanju BleachBita postavke će se vratiti na "
+"zadane vrijednosti."
 
 #. TRANSLATORS: This message appears in a dialog window when the user
 #. asks the user to confirm deleting files when a preview was run.
@@ -1782,7 +1888,10 @@ msgid ""
 "Are you sure you want to permanently delete files according to the selected "
 "operations?  The actual files that will be deleted may have changed since "
 "you ran the preview."
-msgstr "Jeste li sigurni da želite trajno izbrisati datoteke prema odabranim radnjama? Stvarne datoteke koje će se izbrisati možda su se promijenile nakon pokretanja pretpregleda."
+msgstr ""
+"Jeste li sigurni da želite trajno izbrisati datoteke prema odabranim "
+"radnjama? Stvarne datoteke koje će se izbrisati možda su se promijenile "
+"nakon pokretanja pretpregleda."
 
 #. TRANSLATORS: This message appears in a dialog window when the user
 #. asks the user to confirm deleting files when no preview was run.
@@ -1826,7 +1935,10 @@ msgid ""
 "Because you are running as root, please manually open this link in a web "
 "browser:\n"
 "%s"
-msgstr "Budući da program pokrećete kao korisnik root, ručno otvorite ovu poveznicu u web-pregledniku:\n%s"
+msgstr ""
+"Budući da program pokrećete kao korisnik root, ručno otvorite ovu poveznicu "
+"u web-pregledniku:\n"
+"%s"
 
 #. TRANSLATORS: The question appears in a confirmation dialog.
 #. %s expands to www.bleachbit.org or similar
@@ -1989,7 +2101,9 @@ msgstr "Izrada datoteka…"
 #. TRANSLATORS: Instruction label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
 msgid "Select the cookies to keep when cleaning cookies across browsers."
-msgstr "Odaberite kolačiće koje želite zadržati pri čišćenju kolačića u preglednicima."
+msgstr ""
+"Odaberite kolačiće koje želite zadržati pri čišćenju kolačića u "
+"preglednicima."
 
 #. TRANSLATORS: This is a notice in the cookie manager about supported
 #. cookie types. The hyperlink points to the documentation website.
@@ -2000,7 +2114,9 @@ msgstr "Odaberite kolačiće koje želite zadržati pri čišćenju kolačića u
 msgid ""
 "Only cookies are preserved. Site data is always deleted. <a "
 "href='{url}'>Learn more</a>"
-msgstr "Čuvaju se samo kolačići. Podaci web-mjesta uvijek se brišu. <a href='{url}'>Saznajte više</a>"
+msgstr ""
+"Čuvaju se samo kolačići. Podaci web-mjesta uvijek se brišu. <a "
+"href='{url}'>Saznajte više</a>"
 
 #. TRANSLATORS: Label for the search entry in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
@@ -2054,7 +2170,9 @@ msgstr "Učitavanje kolačića…"
 msgid ""
 "Expert mode enables advanced features and relaxes guardrails. Use extra "
 "caution in expert mode."
-msgstr "Stručni način rada omogućuje napredne značajke i ublažava zaštitne mjere. U stručnom načinu rada budite posebno oprezni."
+msgstr ""
+"Stručni način rada omogućuje napredne značajke i ublažava zaštitne mjere. U "
+"stručnom načinu rada budite posebno oprezni."
 
 #. TRANSLATORS: Used both as (1) a checkbox label in the preferences dialog
 #. to bypass some safety guardails for advanced users and (2) the title of
@@ -2067,7 +2185,8 @@ msgstr "Stručni način rada"
 #. that requires starting the application to be effective.
 #: ../bleachbit/GuiPreferences.py
 msgid "Restart BleachBit for full effect."
-msgstr "Ponovno pokrenite BleachBit kako bi promjene u potpunosti stupile na snagu."
+msgstr ""
+"Ponovno pokrenite BleachBit kako bi promjene u potpunosti stupile na snagu."
 
 #. TRANSLATORS: Title for the preferences dialog
 #. TRANSLATORS: This menu item opens a dialog where the user can
@@ -2117,14 +2236,17 @@ msgstr "Potvrde upozorenja su poništene."
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "Check periodically for software updates via the Internet"
-msgstr "Povremeno provjeravaj dostupnost softverskih ažuriranja putem interneta"
+msgstr ""
+"Povremeno provjeravaj dostupnost softverskih ažuriranja putem interneta"
 
 #. TRANSLATORS: Tooltip for the online updates checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid ""
 "If an update is found, you will be given the option to view information "
 "about it.  Then, you may manually download and install the update."
-msgstr "Ako se pronađe ažuriranje, moći ćete pregledati informacije o njemu. Zatim ga možete ručno preuzeti i instalirati."
+msgstr ""
+"Ako se pronađe ažuriranje, moći ćete pregledati informacije o njemu. Zatim "
+"ga možete ručno preuzeti i instalirati."
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2163,7 +2285,9 @@ msgstr "Prebriši sadržaj datoteka kako bi se spriječio oporavak"
 msgid ""
 "Overwriting is ineffective on some file systems and with certain BleachBit "
 "operations.  Overwriting is significantly slower."
-msgstr "Prebrisivanje nije učinkovito na nekim datotečnim sustavima i kod određenih BleachBit radnji. Prebrisivanje je znatno sporije."
+msgstr ""
+"Prebrisivanje nije učinkovito na nekim datotečnim sustavima i kod određenih "
+"BleachBit radnji. Prebrisivanje je znatno sporije."
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2182,7 +2306,9 @@ msgstr "Sakrij nerelevantne čistače"
 #. TRANSLATORS: Checkbox label in the preferences.
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
-msgstr "Koristi IEC jedinice (1 KiB = 1024 bajta) umjesto SI jedinica (1 kB = 1000 bajtova)"
+msgstr ""
+"Koristi IEC jedinice (1 KiB = 1024 bajta) umjesto SI jedinica (1 kB = 1000 "
+"bajtova)"
 
 #. TRANSLATORS: Section title on the preferences updates page.
 #: ../bleachbit/GuiPreferences.py
@@ -2228,7 +2354,8 @@ msgstr "Koristi Fontconfig pozadinski sustav za iscrtavanje teksta"
 #. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "May fix blurry or unreadable text. Requires restart."
-msgstr "Može popraviti zamućen ili nečitljiv tekst. Zahtijeva ponovno pokretanje."
+msgstr ""
+"Može popraviti zamućen ili nečitljiv tekst. Zahtijeva ponovno pokretanje."
 
 #. TRANSLATORS: Section title on the preferences general page,
 #. labelling options for OS integration and advanced/developer features.
@@ -2257,7 +2384,9 @@ msgstr "Prikaži poruke za otklanjanje grešaka"
 #. is a folder anywhere on C:.
 #: ../bleachbit/GuiPreferences.py
 msgid "Choose a writable folder for each drive for which to wipe empty space."
-msgstr "Odaberite zapisivu mapu za svaki pogon na kojem želite prebrisati slobodan prostor."
+msgstr ""
+"Odaberite zapisivu mapu za svaki pogon na kojem želite prebrisati slobodan "
+"prostor."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -2317,7 +2446,9 @@ msgstr "Ova putanja već postoji na prilagođenom popisu."
 #. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
 msgid "This path is protected. To bypass protection, enable expert mode."
-msgstr "Ova je putanja zaštićena. Za zaobilaženje zaštite omogućite stručni način rada."
+msgstr ""
+"Ova je putanja zaštićena. Za zaobilaženje zaštite omogućite stručni način "
+"rada."
 
 #. TRANSLATORS: Title of warning dialog shown when adding a protected path.
 #: ../bleachbit/GuiPreferences.py
@@ -2394,7 +2525,9 @@ msgstr "Dodaj mapu"
 msgid ""
 "One or more selected cleaning options have warnings and require Expert Mode "
 "to clean. Enable it in preferences."
-msgstr "Jedna ili više odabranih opcija čišćenja imaju upozorenja i za čišćenje zahtijevaju stručni način rada. Omogućite ga u postavkama."
+msgstr ""
+"Jedna ili više odabranih opcija čišćenja imaju upozorenja i za čišćenje "
+"zahtijevaju stručni način rada. Omogućite ga u postavkama."
 
 #. TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
 #. Preferences. Keep it consistent with the translation of "Expert Mode"
@@ -2404,14 +2537,18 @@ msgstr "Jedna ili više odabranih opcija čišćenja imaju upozorenja i za čiš
 msgid ""
 "Delete confirmation is disabled but expert mode is not enabled. Enable "
 "Expert Mode in preferences to skip delete confirmations."
-msgstr "Potvrda brisanja onemogućena je, ali stručni način rada nije omogućen. Omogućite stručni način rada u postavkama kako biste preskočili potvrde brisanja."
+msgstr ""
+"Potvrda brisanja onemogućena je, ali stručni način rada nije omogućen. "
+"Omogućite stručni način rada u postavkama kako biste preskočili potvrde "
+"brisanja."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
 #: ../bleachbit/GuiStartup.py
 msgid ""
 "Access the application menu by clicking the hamburger icon on the title bar."
-msgstr "Izborniku aplikacije pristupite klikom na ikonu izbornika u naslovnoj traci."
+msgstr ""
+"Izborniku aplikacije pristupite klikom na ikonu izbornika u naslovnoj traci."
 
 #. TRANSLATORS: First-start hint for Windows users shown in
 #. the log on the main screen.
@@ -2426,14 +2563,19 @@ msgid ""
 "You are running BleachBit with administrative privileges for cleaning shared "
 "parts of the system, and references to the user profile folder will clean "
 "only the root account."
-msgstr "Pokrenuli ste BleachBit s administratorskim ovlastima radi čišćenja zajedničkih dijelova sustava, a reference na mapu korisničkog profila očistit će samo račun root."
+msgstr ""
+"Pokrenuli ste BleachBit s administratorskim ovlastima radi čišćenja "
+"zajedničkih dijelova sustava, a reference na mapu korisničkog profila "
+"očistit će samo račun root."
 
 #. TRANSLATORS: Warning shown on startup on Windows.
 #: ../bleachbit/GuiStartup.py
 msgid ""
 "Run BleachBit with administrator privileges to improve the accuracy of "
 "overwriting the contents of files."
-msgstr "Pokrenite BleachBit s administratorskim ovlastima kako biste poboljšali točnost prebrisivanja sadržaja datoteka."
+msgstr ""
+"Pokrenite BleachBit s administratorskim ovlastima kako biste poboljšali "
+"točnost prebrisivanja sadržaja datoteka."
 
 #. TRANSLATORS: Warning shown on startup on Windows when elevated
 #. with different account. It means, for example, that cleaning a
@@ -2443,7 +2585,11 @@ msgid ""
 "You elevated privileges using a different account to clean shared parts of "
 "the system. User-specific paths will refer to the administrator account, so "
 "to clean your profile, run BleachBit again as a standard user."
-msgstr "Povisili ste ovlasti pomoću drugog računa radi čišćenja zajedničkih dijelova sustava. Putanje specifične za korisnika odnosit će se na administratorski račun, pa za čišćenje vlastitog profila ponovno pokrenite BleachBit kao standardni korisnik."
+msgstr ""
+"Povisili ste ovlasti pomoću drugog računa radi čišćenja zajedničkih dijelova "
+"sustava. Putanje specifične za korisnika odnosit će se na administratorski "
+"račun, pa za čišćenje vlastitog profila ponovno pokrenite BleachBit kao "
+"standardni korisnik."
 
 #. TRANSLATORS: Warning shown on startup on Windows when running
 #. unofficial Microsoft Store version. Advises user to get genuine
@@ -2453,7 +2599,9 @@ msgid ""
 "There is no official version of BleachBit on the Microsoft Store. Get the "
 "genuine version at https://www.bleachbit.org where it is always free of "
 "charge."
-msgstr "Ne postoji službena verzija BleachBita u Microsoft Storeu. Preuzmite autentičnu verziju na https://www.bleachbit.org, gdje je uvijek besplatna."
+msgstr ""
+"Ne postoji službena verzija BleachBita u Microsoft Storeu. Preuzmite "
+"autentičnu verziju na https://www.bleachbit.org, gdje je uvijek besplatna."
 
 #. TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
 #. Used in the tree view on the main screen.
@@ -2472,7 +2620,9 @@ msgstr "Veličina"
 #. TRANSLATORS: Warning shown in the infobar.
 #: ../bleachbit/GuiTreeModels.py
 msgid "This option is protected. To bypass protection, enable expert mode."
-msgstr "Ova je mogućnost zaštićena. Za zaobilaženje zaštite omogućite stručni način rada."
+msgstr ""
+"Ova je mogućnost zaštićena. Za zaobilaženje zaštite omogućite stručni način "
+"rada."
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
@@ -2507,7 +2657,8 @@ msgstr "Upravljaj kolačićima za zadržavanje…"
 #: ../bleachbit/GuiWindow.py
 #, python-format
 msgid "Resetting the configuration file because it is corrupt: %s"
-msgstr "Konfiguracijska datoteka vraća se na zadane vrijednosti jer je oštećena: %s"
+msgstr ""
+"Konfiguracijska datoteka vraća se na zadane vrijednosti jer je oštećena: %s"
 
 #. TRANSLATORS: Error message shown when a cleaner option
 #. cannot be used because expert mode is disabled.
@@ -2516,7 +2667,9 @@ msgstr "Konfiguracijska datoteka vraća se na zadane vrijednosti jer je ošteće
 #, python-format
 msgid ""
 "%(cleaner)s - %(option)s cannot be cleaned because expert mode is disabled."
-msgstr "%(cleaner)s - %(option)s ne može se očistiti jer je stručni način rada onemogućen."
+msgstr ""
+"%(cleaner)s - %(option)s ne može se očistiti jer je stručni način rada "
+"onemogućen."
 
 #. TRANSLATORS: Error message shown in the infobar when the user clicks
 #. the preview or clean button without selecting any cleaner options.
@@ -2541,7 +2694,8 @@ msgstr "Upravljaj prilagođenim putanjama…"
 #. the cleaning options (e.g., Firefox - Cache).
 #: ../bleachbit/GuiWindow.py
 msgid "Preview files in the selected operations (without deleting any files)"
-msgstr "Prikaži pretpregled datoteka u odabranim radnjama (bez brisanja datoteka)"
+msgstr ""
+"Prikaži pretpregled datoteka u odabranim radnjama (bez brisanja datoteka)"
 
 #. TRANSLATORS: Tooltip for the clean button on the headerbar.
 #. 'Clean' is a verb, and 'operations' are cleaning options (e.g.,
@@ -2579,7 +2733,9 @@ msgstr "Pritisnite F11 za izlaz iz prikaza preko cijelog zaslona."
 msgid ""
 "BleachBit detected leftover files from an interrupted disk wipe operation. "
 "Would you like to preview them with an option to delete them?"
-msgstr "BleachBit je otkrio preostale datoteke nakon prekinutog postupka prebrisivanja diska. Želite li ih pregledati uz mogućnost brisanja?"
+msgstr ""
+"BleachBit je otkrio preostale datoteke nakon prekinutog postupka "
+"prebrisivanja diska. Želite li ih pregledati uz mogućnost brisanja?"
 
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
@@ -2592,7 +2748,9 @@ msgstr "Pogreška pri provjeri ažuriranja: %s"
 msgid ""
 "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
 "information."
-msgstr "Naredba 'swapoff -s' nije uspjela, pa se za informacije o swap prostoru koristi /proc/swaps."
+msgstr ""
+"Naredba 'swapoff -s' nije uspjela, pa se za informacije o swap prostoru "
+"koristi /proc/swaps."
 
 #: ../bleachbit/Memory.py
 msgid "Disabling swap."
@@ -2667,7 +2825,9 @@ msgstr "Otkriveni su ovi swap uređaji: %s"
 msgid ""
 "The function wipe_memory() with process ID %(parent_pid)d is waiting for "
 "child process ID %(child_pid)d."
-msgstr "Funkcija wipe_memory() s ID-om procesa %(parent_pid)d čeka podređeni proces s ID-om %(child_pid)d."
+msgstr ""
+"Funkcija wipe_memory() s ID-om procesa %(parent_pid)d čeka podređeni proces "
+"s ID-om %(child_pid)d."
 
 #: ../bleachbit/Memory.py
 #, python-format
@@ -2716,7 +2876,12 @@ msgid ""
 "Impact: %(files)d file(s), %(size)s\n"
 "\n"
 "Are you sure you want to add this path?"
-msgstr "Upozorenje: '%(path)s' može sadržavati važne datoteke.\n\nObuhvaćeno: %(files)d datoteka, %(size)s\n\nJeste li sigurni da želite dodati ovu putanju?"
+msgstr ""
+"Upozorenje: '%(path)s' može sadržavati važne datoteke.\n"
+"\n"
+"Obuhvaćeno: %(files)d datoteka, %(size)s\n"
+"\n"
+"Jeste li sigurni da želite dodati ovu putanju?"
 
 #. TRANSLATORS: Warning shown when user tries to add a protected path (no files found).
 #. Do not translate the placeholder %(path)s.
@@ -2728,7 +2893,10 @@ msgid ""
 "Warning: '%(path)s' may contain important files.\n"
 "\n"
 "Are you sure you want to add this path?"
-msgstr "Upozorenje: '%(path)s' može sadržavati važne datoteke.\n\nJeste li sigurni da želite dodati ovu putanju?"
+msgstr ""
+"Upozorenje: '%(path)s' može sadržavati važne datoteke.\n"
+"\n"
+"Jeste li sigurni da želite dodati ovu putanju?"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
@@ -2739,7 +2907,10 @@ msgid ""
 "These cleaner definitions are new or have changed. Malicious definitions can "
 "damage your system. If you do not trust these changes, delete the files or "
 "quit."
-msgstr "Ove definicije čistača nove su ili su promijenjene. Zlonamjerne definicije mogu oštetiti sustav. Ako ne vjerujete ovim izmjenama, izbrišite datoteke ili izađite iz programa."
+msgstr ""
+"Ove definicije čistača nove su ili su promijenjene. Zlonamjerne definicije "
+"mogu oštetiti sustav. Ako ne vjerujete ovim izmjenama, izbrišite datoteke "
+"ili izađite iz programa."
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgctxt "column_label"
@@ -2762,7 +2933,9 @@ msgstr "Izvršna datoteka nije pronađena: %s"
 msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
-msgstr "%s se ne može očistiti jer je trenutačno pokrenut. Zatvorite ga i pokušajte ponovno."
+msgstr ""
+"%s se ne može očistiti jer je trenutačno pokrenut. Zatvorite ga i pokušajte "
+"ponovno."
 
 #: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
@@ -2787,7 +2960,9 @@ msgid ""
 "Error when opening a network connection to check for updates. Please verify "
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
-msgstr "Pogreška pri otvaranju mrežne veze za provjeru ažuriranja. Provjerite radi li mreža i ne blokira li vatrozid ovu aplikaciju. Poruka pogreške: {}"
+msgstr ""
+"Pogreška pri otvaranju mrežne veze za provjeru ažuriranja. Provjerite radi "
+"li mreža i ne blokira li vatrozid ovu aplikaciju. Poruka pogreške: {}"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
 #: ../bleachbit/Winapp.py
@@ -2819,7 +2994,8 @@ msgstr "Uvezeno iz winapp2.ini"
 
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
-msgstr "Za čišćenje ažuriranja sustava Windows potrebne su administratorske ovlasti"
+msgstr ""
+"Za čišćenje ažuriranja sustava Windows potrebne su administratorske ovlasti"
 
 #. TRANSLATORS: Message in log file when stopping a Windows service.
 #. The placeholder is the code name of the service.
@@ -2839,7 +3015,9 @@ msgstr "pokreni Windows servis %(service)s"
 msgid ""
 "There was at least one file on a file system that does not support advanced "
 "overwriting."
-msgstr "Pronađena je najmanje jedna datoteka na datotečnom sustavu koji ne podržava napredno prebrisivanje."
+msgstr ""
+"Pronađena je najmanje jedna datoteka na datotečnom sustavu koji ne podržava "
+"napredno prebrisivanje."
 
 #. TRANSLATORS: Debug log message shown during file wiping. 'Wiping' is a
 #. present participle (ongoing action) refering to secure overwrite.
@@ -2848,7 +3026,8 @@ msgstr "Pronađena je najmanje jedna datoteka na datotečnom sustavu koji ne pod
 #: ../bleachbit/Wipe.py
 #, python-format
 msgid "Wiping path %(pathname)s with file system type %(fstype)s"
-msgstr "Prebrisivanje putanje %(pathname)s na datotečnom sustavu vrste %(fstype)s"
+msgstr ""
+"Prebrisivanje putanje %(pathname)s na datotečnom sustavu vrste %(fstype)s"
 
 #: ../bleachbit/Wipe.py
 #, python-format
@@ -2874,7 +3053,9 @@ msgstr "Pogreška #%d pri pražnjenju međuspremnika datoteke."
 msgid ""
 "Wrote %(file_count)d files and %(total_bytes)d bytes in %(elapsed_sec)d "
 "seconds at %(rate_mbs).2f MB/s"
-msgstr "Zapisano je %(file_count)d datoteka i %(total_bytes)d bajtova u %(elapsed_sec)d sekundi brzinom %(rate_mbs).2f MB/s"
+msgstr ""
+"Zapisano je %(file_count)d datoteka i %(total_bytes)d bajtova u "
+"%(elapsed_sec)d sekundi brzinom %(rate_mbs).2f MB/s"
 
 #. TRANSLATORS: Debug message showing disk space available to regular (non-root) users.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
@@ -2882,7 +3063,9 @@ msgstr "Zapisano je %(file_count)d datoteka i %(total_bytes)d bajtova u %(elapse
 #: ../bleachbit/Wipe.py
 #, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to non-super-user"
-msgstr "Dostupno korisniku bez superkorisničkih ovlasti: %(bytes)d bajtova i %(inodes)d inodeova"
+msgstr ""
+"Dostupno korisniku bez superkorisničkih ovlasti: %(bytes)d bajtova i "
+"%(inodes)d inodeova"
 
 #. TRANSLATORS: Debug message showing disk space available to the root (admin) user.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
@@ -2942,14 +3125,19 @@ msgstr "Pričekajte. Prebrisuje se slobodan prostor."
 
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
-msgstr "Za zaustavljanje ovog postupka pritisnite gumb za prekid na alatnoj traci i pričekajte."
+msgstr ""
+"Za zaustavljanje ovog postupka pritisnite gumb za prekid na alatnoj traci i "
+"pričekajte."
 
 #: ../bleachbit/Worker.py
 msgid ""
 "If the application is force closed before the process is complete, large "
 "files may remain on the disk, and they may use all available space. To "
 "remove them, start BleachBit again."
-msgstr "Ako se aplikacija prisilno zatvori prije dovršetka postupka, velike datoteke mogu ostati na disku i zauzeti sav raspoloživ prostor. Da biste ih uklonili, ponovno pokrenite BleachBit."
+msgstr ""
+"Ako se aplikacija prisilno zatvori prije dovršetka postupka, velike datoteke "
+"mogu ostati na disku i zauzeti sav raspoloživ prostor. Da biste ih uklonili, "
+"ponovno pokrenite BleachBit."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py

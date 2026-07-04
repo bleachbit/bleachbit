@@ -6,13 +6,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-06-07 11:17-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-04 09:57-0600\n"
 "PO-Revision-Date: 2026-06-17 05:37+0000\n"
 "Last-Translator: Muhammed Al-Basha "
 "<mu7basha@users.noreply.hosted.weblate.org>\n"
-"Language-Team: Arabic <https://hosted.weblate.org/projects/bleachbit/main/"
-"ar/>\n"
+"Language-Team: Arabic <https://hosted.weblate.org/projects/bleachbit/main/ar/"
+">\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -481,7 +481,8 @@ msgstr "مزامنة"
 #: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 msgid "Delete the sync data (including web apps) and sign out of the browser"
-msgstr "حذف بيانات المزامنة (يتضمن تطبيقات الويب) وتسجيل الخروج من حساب المتصفح"
+msgstr ""
+"حذف بيانات المزامنة (يتضمن تطبيقات الويب) وتسجيل الخروج من حساب المتصفح"
 
 #: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
 #: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
@@ -742,6 +743,12 @@ msgid "Inspect the preview for any files you want to keep."
 msgstr "فحص لمعاينة الملفات التي تريد الاحتفاظ بها."
 
 #: ../cleaners/deepscan.xml
+msgid ""
+"This option is slow. Inspect the preview for files you want to keep, like "
+"those bundled with applications."
+msgstr ""
+
+#: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
 msgstr "ملفات مبادلة VIM ضمن ملف تعريف المستخدم"
 
@@ -906,8 +913,8 @@ msgid ""
 "to abort the upgrade."
 msgstr ""
 "${prodname} مثبّت بالفعل.\n"
-"انقر على 'موافق' لإلغاء تثبيت الإصدار القديم قبل التحديث، أو انقر على 'إلغاء' "
-"لإيقاف التحديث."
+"انقر على 'موافق' لإلغاء تثبيت الإصدار القديم قبل التحديث، أو انقر على "
+"'إلغاء' لإيقاف التحديث."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
@@ -1673,11 +1680,11 @@ msgid ""
 "on traditional hard drives. On solid-state drives, it is less reliable, and "
 "frequent use contributes to wear."
 msgstr ""
-"محو المساحة الفارغة يحذف أثار الملفات المحذوفة بلا تمزيق، لكنه لن يقوم بتفريغ "
-"أي مساحة إضافية على القرص. قد تستغرق العملية وقتًا طويلًا، وقد تبطئ من حاسوبك "
-"مؤقتًا. أنها ليست ضرورية إذا كان قرصك محميًا بتشفير كامل للقرص. يُفضل الاستخدام "
-"على أقراص صلبة تقليدية (HDD). على الأقراص ذات الحالة الثابتة (SSD)، تُعتبر غير "
-"فعّالة، وقد يؤدي الاستخدام الدوري لها إلى تلف للقرص."
+"محو المساحة الفارغة يحذف أثار الملفات المحذوفة بلا تمزيق، لكنه لن يقوم "
+"بتفريغ أي مساحة إضافية على القرص. قد تستغرق العملية وقتًا طويلًا، وقد تبطئ من "
+"حاسوبك مؤقتًا. أنها ليست ضرورية إذا كان قرصك محميًا بتشفير كامل للقرص. يُفضل "
+"الاستخدام على أقراص صلبة تقليدية (HDD). على الأقراص ذات الحالة الثابتة "
+"(SSD)، تُعتبر غير فعّالة، وقد يؤدي الاستخدام الدوري لها إلى تلف للقرص."
 
 #. TRANSLATORS: Error message shown in the infobar or notice shown in a tooltip.
 #. Expert mode is an option in the preferences to relax guardrails.
@@ -2350,8 +2357,7 @@ msgstr "عرض رسائل التنقيح"
 #. is a folder anywhere on C:.
 #: ../bleachbit/GuiPreferences.py
 msgid "Choose a writable folder for each drive for which to wipe empty space."
-msgstr ""
-"اختر مجلدًا قابلًا للكتابة في كل محرك أقراص مما تريد محو مساحته الفارغة."
+msgstr "اختر مجلدًا قابلًا للكتابة في كل محرك أقراص مما تريد محو مساحته الفارغة."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -3002,8 +3008,8 @@ msgid ""
 "Wrote %(file_count)d files and %(total_bytes)d bytes in %(elapsed_sec)d "
 "seconds at %(rate_mbs).2f MB/s"
 msgstr ""
-"تم كتابة %(file_count)d ملفًا و%(total_bytes)d بايت خلال %(elapsed_sec)d ثواني "
-"بمعدل %(rate_mbs).2f م.ب/ث"
+"تم كتابة %(file_count)d ملفًا و%(total_bytes)d بايت خلال %(elapsed_sec)d "
+"ثواني بمعدل %(rate_mbs).2f م.ب/ث"
 
 #. TRANSLATORS: Debug message showing disk space available to regular (non-root) users.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.

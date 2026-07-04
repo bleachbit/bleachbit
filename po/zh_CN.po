@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-06-07 11:17-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-04 09:57-0600\n"
 "PO-Revision-Date: 2026-06-08 18:01+0000\n"
 "Last-Translator: Hosted Weblate user 54392 "
 "<hamburger2048@users.noreply.hosted.weblate.org>\n"
@@ -723,6 +723,12 @@ msgstr "清理散布在磁盘各处的文件"
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
 msgstr "检查预览，确保您想保留的文件不被删除。"
+
+#: ../cleaners/deepscan.xml
+msgid ""
+"This option is slow. Inspect the preview for files you want to keep, like "
+"those bundled with applications."
+msgstr ""
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
