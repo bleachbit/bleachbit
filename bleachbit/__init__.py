@@ -15,7 +15,7 @@ from configparser import NoOptionError, RawConfigParser  # used in other files
 
 from bleachbit import Log
 
-APP_VERSION = "6.0.1"
+APP_VERSION = "6.0.2"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 APP_COPYRIGHT = "Copyright (C) 2008-2026 Andrew Ziem"

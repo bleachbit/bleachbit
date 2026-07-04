@@ -57,7 +57,7 @@
 %endif
 
 Name:           bleachbit
-Version:        6.0.1
+Version:        6.0.2
 Release:        1%{?dist}
 Summary:        Remove unnecessary files, free space, and maintain privacy
 License:        GPL-3.0-or-later
@@ -244,6 +244,6 @@ update-desktop-database &> /dev/null ||:
 
 %changelog
 
-* Tue Mar 18 2025 Andrew Ziem <andrew@bleachbit.org> - 6.0.1-1
-- Update to 6.0.1
+* Tue Mar 18 2025 Andrew Ziem <andrew@bleachbit.org> - 6.0.2-1
+- Update to 6.0.2
 - See https://www.bleachbit.org/news
