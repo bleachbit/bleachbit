@@ -490,7 +490,7 @@ def build():
     logger.info('Copying GTK helpers')
     for exe in glob.glob1(GTK_LIBDIR, 'gspawn-win*-helper*.exe'):
         copy_file(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
-    for exe in ('fc-cache.exe',):
+    for exe in ('fc-cache.exe', 'gdbus.exe'):
         copy_file(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
 
     logger.info('Copying GTK files and icon')
