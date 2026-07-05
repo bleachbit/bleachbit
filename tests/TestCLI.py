@@ -12,6 +12,7 @@ Test case for module CLI
 # standard imports
 import copy
 import datetime
+import errno
 import io
 import locale
 import os
@@ -294,6 +295,52 @@ class CLITestCase(common.BleachbitTestCase):
             cb.append_text(f"prefix{test_str}suffix\n")
             # Test tag parameter (ignored but should not crash)
             cb.append_text(test_str + "\n", _tag="test_tag")
+
+    def test_append_text_writes_stdout(self):
+        """Unit test for CliCallback.append_text() normal output"""
+        cb = CliCallback(quiet=False)
+        with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+            cb.append_text("hello\n")
+        self.assertEqual("hello\n", mock_stdout.getvalue())
+
+    def _assert_append_text_closes_output(self, exception):
+        """Verify append_text ignores interrupted stdout."""
+        class ClosedStdout:
+            def __init__(self, write_exception):
+                self.write_exception = write_exception
+                self.write_calls = 0
+
+            def write(self, _text):
+                self.write_calls += 1
+                raise self.write_exception
+
+            def flush(self):
+                return None
+
+        stdout = ClosedStdout(exception)
+        cb = CliCallback(quiet=False)
+        with patch('sys.stdout', stdout):
+            cb.append_text("hello\n")
+            cb.append_text("again\n")
+        self.assertEqual(1, stdout.write_calls)
+
+    def test_append_text_ignores_broken_pipe(self):
+        """Unit test for CliCallback.append_text() with a closed pipe"""
+        self._assert_append_text_closes_output(BrokenPipeError())
+
+    def test_append_text_ignores_windows_invalid_argument(self):
+        """Unit test for CliCallback.append_text() after more.com exits"""
+        self._assert_append_text_closes_output(
+            OSError(errno.EINVAL, "Invalid argument"))
+
+    def test_append_text_reraises_unrelated_oserror(self):
+        """Unit test for preserving unrelated stdout errors"""
+        cb = CliCallback(quiet=False)
+        with patch('sys.stdout') as mock_stdout:
+            mock_stdout.write.side_effect = OSError(errno.EIO, "I/O error")
+            with self.assertRaises(OSError) as cm:
+                cb.append_text("hello\n")
+        self.assertEqual(errno.EIO, cm.exception.errno)
 
     def test_return_text(self):
         """Check for correct text in output"""
