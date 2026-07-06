@@ -57,6 +57,10 @@ linuxdeploy-plugin-gtk.sh
 *.egg-info/
 *.egg
 
+# Python virtual environments
+.venv/
+venv/
+
 # Visual Studio Code
 .vscode/*
 !.vscode/settings.json
