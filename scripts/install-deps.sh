@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (c) 2008-2026 Andrew Ziem.
 #
-# Install BleachBit's Linux dependencies for running from source
+# Install BleachBit's Linux and macOS dependencies for running from source
 # and (optionally) for development, testing, and packaging.
 #
 # Usage:
@@ -14,15 +14,18 @@
 #
 # --venv creates a virtual environment (default ./.venv, override with
 # VENV_DIR=/path) and installs pure-Python dependencies into it via pip.
-# Native libraries (GTK, GObject introspection, etc.) are still installed
-# via the system package manager because PyGObject cannot be pip-installed
-# reliably.
+# On Linux, native libraries (GTK, GObject introspection, etc.) are still
+# installed via the system package manager because PyGObject cannot be
+# pip-installed reliably. On macOS, GTK/GObject is ignored and only the
+# venv is used.
 #
-# Distro is auto-detected from /etc/os-release. Supported families:
+# Distro is auto-detected from /etc/os-release; macOS is detected via uname.
+# Supported families:
 #   debian  (Debian, Ubuntu, Mint, etc.)          -> apt
 #   fedora  (Fedora, RHEL, Alma, CentOS, etc.)    -> dnf
 #   opensuse (Tumbleweed, Leap)                   -> zypper
 #   arch    (Arch, Manjaro, etc.)                 -> pacman
+#   macos   (macOS)                               -> pip in venv
 #
 # This Bash script works similarly to:
 #   - .github/workflows/test_ubuntu.yaml
@@ -48,12 +51,13 @@ Usage: ./scripts/install-deps.sh [--dev] [--venv] [--help]
   (no flag)   Install runtime dependencies (enough to run from source).
   --dev       Also install build, test, lint, and packaging tools.
   --venv      Create a Python virtualenv (.venv) and install pure-Python
-              deps into it with pip. Native libs are still installed via
-              the system package manager. Override the location with
-              VENV_DIR=/path/to/venv.
+              deps into it with pip. On Linux, native libs are still
+              installed via the system package manager. On macOS, GTK/
+              GObject is ignored and --venv is used. Override the location
+              with VENV_DIR=/path/to/venv.
   --help      Show this help.
 
-Distro is auto-detected from /etc/os-release.
+Distro is auto-detected from /etc/os-release; macOS is detected via uname.
 EOF
 }
 
@@ -66,11 +70,15 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Detect distribution family from /etc/os-release.
+# Detect distribution family from /etc/os-release, or macOS via uname.
 detect_distro() {
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        echo "macos"
+        return
+    fi
     if [[ ! -r /etc/os-release ]]; then
         echo "ERROR: /etc/os-release not found; cannot detect distribution." >&2
-        echo "       This script supports Debian, Fedora, openSUSE, and Arch families." >&2
+        echo "       This script supports Debian, Fedora, openSUSE, Arch, and macOS." >&2
         exit 1
     fi
     # shellcheck disable=SC1091
@@ -82,7 +90,7 @@ detect_distro() {
         arch:*|*:arch*|manjaro:*|endeavouros:*|garuda:*|cachyos:*) echo "arch" ;;
         *)
             echo "ERROR: unsupported distribution (ID='${ID:-}', ID_LIKE='${ID_LIKE:-}')." >&2
-            echo "       Supported: debian, fedora, opensuse, arch." >&2
+            echo "       Supported: debian, fedora, opensuse, arch, macos." >&2
             exit 1
             ;;
     esac
@@ -345,6 +353,23 @@ install_arch() {
     fi
 }
 
+# --- macOS (no native package manager; use pip in a venv) --------------------
+install_macos() {
+    echo "[macos] using pip in a venv (GTK/GObject is not installed on macOS)"
+    if ! command -v python3 >/dev/null 2>&1; then
+        echo "ERROR: python3 is required but not found." >&2
+        echo "       Install the Xcode Command Line Tools or Python from python.org." >&2
+        exit 1
+    fi
+    if ! python3 -m venv -h >/dev/null 2>&1; then
+        echo "ERROR: python3 venv module is required but not available." >&2
+        exit 1
+    fi
+    if [[ "$MODE" == "dev" ]]; then
+        echo "[macos] dev/test/lint Python deps will be installed via venv"
+    fi
+}
+
 setup_venv() {
     local req_file="$REPO_ROOT/requirements.txt"
     echo "[venv] creating virtual environment in $VENV_DIR"
@@ -367,6 +392,10 @@ setup_venv() {
 main() {
     local distro
     distro="$(detect_distro)"
+    if [[ "$distro" == "macos" && "$VENV" == 0 ]]; then
+        echo "[macos] defaulting to --venv"
+        VENV=1
+    fi
     echo "Detected distribution family: $distro"
     echo "Mode: $MODE"
     if [[ "$VENV" == 1 ]]; then
@@ -377,6 +406,7 @@ main() {
         fedora)   install_fedora   ;;
         opensuse) install_opensuse ;;
         arch)     install_arch     ;;
+        macos)    install_macos    ;;
         *) echo "ERROR: unsupported distro '$distro'" >&2; exit 1 ;;
     esac
     if [[ "$VENV" == 1 ]]; then
@@ -384,11 +414,16 @@ main() {
     fi
     echo
     echo "Done. You can now run BleachBit from source:"
-    echo "  make -C po local   # build translations"
+    if [[ "$distro" != "macos" ]]; then
+        echo "  make -C po local   # build translations"
+    fi
     if [[ "$VENV" == 1 ]]; then
         echo "  . '$VENV_DIR/bin/activate'"
     fi
     echo "  python3 bleachbit.py"
+    if [[ "$distro" == "macos" ]]; then
+        echo "  (macOS uses the command-line interface; GTK/GObject is not installed)"
+    fi
     if [[ "$MODE" == "dev" ]]; then
         echo
         echo "And run the test suite:"
