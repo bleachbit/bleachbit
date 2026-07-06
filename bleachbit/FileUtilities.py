@@ -157,8 +157,11 @@ def open_files_lsof(run_lsof=None):
     """Return iterator of open files using lsof"""
     if run_lsof is None:
         def run_lsof():
-            return subprocess.check_output(["lsof", "-Fn", "-n"])
-    for f in run_lsof().split("\n"):
+            return subprocess.check_output(["lsof", "-Fn", "-n"], text=True)
+    output = run_lsof()
+    if isinstance(output, bytes):
+        output = output.decode('utf-8', errors='replace')
+    for f in output.split("\n"):
         if f.startswith("n/"):
             yield f[1:]  # Drop lsof's "n"
 
@@ -933,6 +936,20 @@ def uris_to_paths(file_uris):
     return file_paths
 
 
+def _path_equal(path1, path2):
+    """Compare paths respecting the file system case sensitivity"""
+    if bleachbit.FS_CASE_SENSITIVE:
+        return path1 == path2
+    return path1.lower() == path2.lower()
+
+
+def _path_startswith(path, prefix):
+    """Check whether path starts with prefix directory respecting case sensitivity"""
+    if bleachbit.FS_CASE_SENSITIVE:
+        return path.startswith(prefix + os.sep)
+    return path.lower().startswith(prefix.lower() + os.sep)
+
+
 def whitelisted_posix(path, check_realpath=True, _followed_link=False):
     """Check whether this POSIX path is whitelisted"""
     from bleachbit.Options import options
@@ -944,18 +961,18 @@ def whitelisted_posix(path, check_realpath=True, _followed_link=False):
         return whitelisted_posix(os.path.realpath(path), False, _followed_link=True)
     for (keep_type, keep_path) in options.get_whitelist_paths():
         if keep_type == 'file':
-            if path == keep_path:
+            if _path_equal(path, keep_path):
                 return True
-            if _followed_link and path == os.path.realpath(keep_path):
+            if _followed_link and _path_equal(path, os.path.realpath(keep_path)):
                 return True
         if keep_type == 'folder':
-            if path == keep_path:
+            if _path_equal(path, keep_path):
                 return True
-            if path.startswith(keep_path + os.sep):
+            if _path_startswith(path, keep_path):
                 return True
             if _followed_link:
                 real_pathname = os.path.realpath(keep_path)
-                if path == real_pathname or path.startswith(real_pathname + os.sep):
+                if _path_equal(path, real_pathname) or _path_startswith(path, real_pathname):
                     return True
     return False
 
