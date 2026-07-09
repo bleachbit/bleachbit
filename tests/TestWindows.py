@@ -825,7 +825,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             finally:
                 win32service.CloseServiceHandle(scm)
 
-        is_ci = os.environ.get('APPVEYOR') == 'True'
+        is_ci = 'GITHUB_ACTIONS' in os.environ
         if is_ci:
             candidates = ('bits', 'wuauserv',
                           'AudioEndpointBuilder', 'spooler')
@@ -1042,9 +1042,9 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 try:
                     ret = empty_recycle_bin(drive, really_delete=True)
                 except pywintypes.com_error as e:
-                    if e.args[0] == -2147024893 and 'APPVEYOR' in os.environ:
+                    if e.args[0] == -2147024893 and 'GITHUB_ACTIONS' in os.environ:
                         self.skipTest(
-                            'reproducible only under AppVeyor and does not '
+                            'reproducible only in CI and does not '
                             'test a scenario used outside the tests')
                     raise
                 self.assertIsInteger(ret)
@@ -1173,7 +1173,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         for (input_key, input_value, expected_value) in tests:
             value = read_registry_key(input_key, input_value)
             if value != None:
-                value = value.lower()  # AppVeyor: image, Windows 11: Image
+                value = value.lower()  # casing varies by Windows version: image vs Image
             self.assertEqual(expected_value, value)
 
     def test_parse_windows_build(self):

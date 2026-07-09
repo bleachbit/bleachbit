@@ -59,7 +59,7 @@ Common commands include:
 
 More resources:
 
-* [BleachBit on AppVeyor](https://ci.appveyor.com/project/az0/bleachbit)  ![Build status](https://ci.appveyor.com/api/projects/status/7p8amofd7rv7n268?svg=true)
+* [![BleachBit on GitHub Actions](https://github.com/bleachbit/bleachbit/actions/workflows/tests.yaml/badge.svg?branch=master)](https://github.com/bleachbit/bleachbit/actions/workflows/tests.yaml)
 * [CleanerML Repository](https://github.com/bleachbit/cleanerml)
 * [BleachBit Miscellaneous Repository](https://github.com/bleachbit/bleachbit-misc)
 * [Winapp2.ini Repository](https://github.com/bleachbit/winapp2.ini)

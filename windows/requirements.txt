@@ -1,9 +1,9 @@
 # General dependencies
 -r ../requirements.txt
 # Windows specific dependencies
-certifi
-plyer
-py2exe
-pypiwin32
-winshell
+certifi==2026.6.17
+plyer==2.1.0
+py2exe==0.14.2.0
+pypiwin32==223
+winshell==0.6
 # python-gtk3-install.ps1 has special installation method for PyGObject.

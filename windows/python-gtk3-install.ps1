@@ -31,10 +31,17 @@ $themes_dir = Join-Path $python_home "share\themes"
 $script_dir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $base_download_url = "https://github.com/bleachbit/pygtkwin/releases/download/v2025-12-03/"
 
+function Assert-FileHash($Path, $Expected) {
+    $actual = (Get-FileHash -Path $Path -Algorithm SHA256).Hash
+    if ($actual -ne $Expected) {
+        throw "SHA256 mismatch for ${Path}: expected $Expected, got $actual"
+    }
+}
+
 # Visual C++ Redistributable 2015 x86
 $VC_REDIST_FN = "VC_redist.x86.exe"
 $VC_REDIST_URL = "https://aka.ms/vs/17/release/vc_redist.x86.exe"
-if ($env:APPVEYOR -ne $true) {
+if (-not $env:GITHUB_ACTIONS) {
     if (-not (Test-Path $VC_REDIST_FN)) {
         Write-Host "Downloading Visual C++ Redistributable..."
         Invoke-WebRequest -Uri $VC_REDIST_URL -OutFile $VC_REDIST_FN
@@ -54,7 +61,7 @@ if ($env:APPVEYOR -ne $true) {
         Write-Host "Visual C++ Redistributable is already installed."
     }
 } else {
-    Write-Host "Skipping Visual C++ Redistributable installation in AppVeyor environment."
+    Write-Host "Skipping Visual C++ Redistributable installation in CI."
 }
 
 # Python and GTK+
@@ -62,10 +69,10 @@ $GTK_ZIP_FN = "gtk3.24-x86-windows.zip"
 if (-not (Test-Path $GTK_ZIP_FN)) {
     Write-Host "Downloading Python and GTK+..."
     Invoke-WebRequest -Uri "$base_download_url/$GTK_ZIP_FN" -OutFile $GTK_ZIP_FN
-    Get-FileHash -Path $GTK_ZIP_FN -Algorithm SHA256 | Format-List
 } else {
     Write-Host "Python and GTK+ are already downloaded."
 }
+Assert-FileHash $GTK_ZIP_FN "3578518592813af187bd4244b5bf0ab4bb867f7654e993ff6e73466a222c74c8"
 
 if (-not (Test-Path $python_home\python.exe)) {
     Write-Host "Unpacking Python and GTK+..."
@@ -134,10 +141,10 @@ if (-not (Test-Path gtk-themes.zip)) {
     #Invoke-WebRequest -Uri "$base_download_url/gtk-themes.zip" -OutFile "gtk-themes.zip"
     #FIXME: use new themes
     Invoke-WebRequest -Uri "https://github.com/mkhon/vcpkg/releases/download/gtk3-introspection-v1/gtk-themes.zip" -OutFile "gtk-themes.zip"
-    Get-FileHash -Path gtk-themes.zip -Algorithm SHA256 | Format-List
 } else {
     Write-Host "GTK themes are already downloaded."
 }
+Assert-FileHash gtk-themes.zip "6BD572256773175C0139FCA9AD0D28A0EF23B4E087901D04198FF907FC096624"
 
 if (-not (Test-Path "$themes_dir")) {
     Write-Host "Unpacking GTK themes..."
@@ -177,10 +184,10 @@ $PYGOBJECT_FN = "pygobject-3.55.0-cp312-cp312-win32.whl"
 if (-not (Test-Path $PYGOBJECT_FN)) {
     Write-Host "Downloading PyGObject..."
     Invoke-WebRequest -Uri "$base_download_url/$PYGOBJECT_FN" -OutFile "$PYGOBJECT_FN"
-    Get-FileHash -Path $PYGOBJECT_FN -Algorithm SHA256 | Format-List
 } else {
     Write-Host "PyGObject is already downloaded."
 }
+Assert-FileHash $PYGOBJECT_FN "9d63c2b1cfafa5607f5c0b02e5298ac1fb9962448e394f9d4b7ee55aeae2b183"
 
 Write-Host "pip install $PYGOBJECT_FN..."
 & "$python_home\Scripts\pip3.exe" install $PYGOBJECT_FN

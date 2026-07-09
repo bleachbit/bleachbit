@@ -196,7 +196,7 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         self.assertIsNotNone(owner_name)
         self.assertIsInstance(owner_sid_str, str)
         self.assertIsInstance(owner_name, str)
-        if 'APPVEYOR' in os.environ:
+        if 'GITHUB_ACTIONS' in os.environ:
             expected_owner = 'Administrators'
         else:
             expected_owner = os.environ.get('USERNAME', '')

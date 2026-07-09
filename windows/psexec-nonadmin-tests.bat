@@ -8,7 +8,7 @@ set "REPO=%CD%"
 set "LOG=%REPO%\psexec_nonadmin_tests.log"
 set "DESTRUCTIVE_TESTS=T"
 set "PYTHONWARNINGS=error"
-set "APPVEYOR=True"
+set "GITHUB_ACTIONS=true"
 set "COVERAGE_FILE=%REPO%\.coverage.nonadmin"
 
 if not defined PYTHON_EXE (

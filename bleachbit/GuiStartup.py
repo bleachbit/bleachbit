@@ -152,8 +152,8 @@ def _get_windows_permission_issues(options_file):
         lines.append(f'Current user: {current_name}')
         # Administrators owns the directory, and the created file inherits
         # from the owner. This is not representative of a normal installation.
-        if 'APPVEYOR' in os.environ and file_owner_name == 'Administrators':
-            lines.append('Skipping file ownership check on AppVeyor')
+        if 'GITHUB_ACTIONS' in os.environ and file_owner_name == 'Administrators':
+            lines.append('Skipping file ownership check in CI')
             return False, lines
         if file_owner_sid_str != current_sid and file_owner_sid_str not in group_sids:
             has_error = True
