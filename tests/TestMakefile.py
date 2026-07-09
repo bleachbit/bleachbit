@@ -33,10 +33,15 @@ class MakefileTestCase(common.BleachbitTestCase):
         exe_suffix = '.exe' if IS_WINDOWS else ''
 
         tools = {
-            'make_exe': ('make', 'make (not found in PATH)'),
             'xgettext_exe': ('xgettext', 'xgettext (run `apt install gettext` or equivalent)'),
             'tar_exe': ('tar', 'tar (not found in PATH)'),
         }
+        # make is only used on non-Windows; the Windows path returns early
+        # before invoking it, so do not require it there.
+        if not IS_WINDOWS:
+            tools['make_exe'] = ('make', 'make (not found in PATH)')
+        else:
+            self.make_exe = None
 
         missing = []
         for attr, (tool_name, error_msg) in tools.items():
