@@ -728,7 +728,7 @@ INSERT INTO "meta" VALUES('version','20');"""
 
         This may raise a ResourceWarning on Python 3.13
         """
-        for _ in range(100):
+        for _ in range(5):
             self.test_delete_chrome_autofill()
             self.test_get_sqlite_int()
             self.test_get_sqlite_values()

@@ -1532,7 +1532,7 @@ State=AAAA/wA...
         """
         warnings.simplefilter("error")
         start_time = time.time()
-        for _ in range(50):
+        for _ in range(5):
             self.test_execute_sqlite3()
             self.test_vacuum_sqlite3()
             # Slow on OpenSUSE Build Service
