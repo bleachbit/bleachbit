@@ -12,7 +12,7 @@ import atexit
 import ctypes
 import errno
 import os
-import random
+import secrets
 import string
 import struct
 import tempfile
@@ -54,7 +54,7 @@ WINDOWS_RESERVED_FILENAMES.update(
 
 def __random_string(length):
     """Return random alphanumeric characters of given length"""
-    return ''.join(random.choice(FILENAME_CHARS)
+    return ''.join(secrets.choice(FILENAME_CHARS)
                    for i in range(length))
 
 
