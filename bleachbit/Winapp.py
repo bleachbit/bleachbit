@@ -402,6 +402,7 @@ class Winapp:
             else:
                 logger.warning(
                     'unknown file option %s in section %s', element, ini_section)
+        option_id = section2option(ini_section)
         for filename in filenames.split(';'):
             for dirname in dirnames:
                 # If dirname is a drive letter it needs a special treatment on Windows:
@@ -409,8 +410,7 @@ class Winapp:
                 if os.path.splitdrive(dirname)[0] == dirname:
                     dirname = f'{dirname}{os.path.sep}'
                 for provider in self.__make_file_provider(dirname, filename, recurse, removeself, excludekeys):
-                    self.cleaners[lid].add_action(
-                        section2option(ini_section), provider)
+                    self.cleaners[lid].add_action(option_id, provider)
 
     def handle_regkey(self, lid, ini_section, ini_option, reg_excludekeys):
         """Parse a RegKey# option"""
@@ -419,9 +419,9 @@ class Winapp:
         path = elements[0]
 
         # Check if this registry key is excluded (exact match or starts with exclusion)
+        normalized_path = path.upper().replace('\\', '\\\\')
         for exclude_path in reg_excludekeys:
             # Normalize paths for comparison
-            normalized_path = path.upper().replace('\\', '\\\\')
             normalized_exclude = exclude_path.upper().replace('\\', '\\\\')
             # Check if the path matches the exclusion (exact match or starts with exclusion)
             if normalized_path == normalized_exclude or \
