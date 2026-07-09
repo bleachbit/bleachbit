@@ -251,9 +251,12 @@ jobs:
 
       - name: Build executable and installers
         shell: cmd
+        # Skip UPX and installer compression except on master/tags, where we deploy to S3.
+        env:
+          BUILD_MODE: ${{ (github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))) && '' || 'fast' }}
         run: |
           set PATH=%MSYS_BIN%;%PATH%
-          "%PYTHON_EXE%" -m windows.setup
+          "%PYTHON_EXE%" -m windows.setup %BUILD_MODE%
           move windows\BleachBit*.exe .
           move windows\BleachBit*.zip .
 
