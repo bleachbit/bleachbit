@@ -13,7 +13,7 @@ later.  See the COPYING file in the top-level directory.
     <label translate="false">.angular</label>
     <description>Delete the files</description>
     <warning>This option is slow.</warning>
-    <action command="delete" search="deep" wholeregex="[/\\].angular"/>
+    <action command="delete" search="deep" wholeregex="[/\\]\.angular"/>
   </option>
   <option id="backup">
     <label>Backup files</label>
