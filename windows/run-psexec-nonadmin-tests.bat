@@ -1,5 +1,5 @@
 @echo off
-REM AppVeyor wrapper: create a non-admin user, run tests via PsExec, print log.
+REM CI wrapper: create a non-admin user, run tests via PsExec, print log.
 setlocal
 cd /d "%~dp0.."
 set "REPO=%CD%"
@@ -23,7 +23,7 @@ if errorlevel 1 (
 )
 
 if not defined PYTHON_EXE (
-    echo ERROR: PYTHON_EXE is not set in AppVeyor environment
+    echo ERROR: PYTHON_EXE is not set
     exit /b 1
 )
 
@@ -36,7 +36,7 @@ set "LAUNCH=%REPO%\windows\psexec-nonadmin-launch.bat"
     echo set "PYTHON_HOME=%PYTHON_HOME%"
     echo set "DESTRUCTIVE_TESTS=T"
     echo set "PYTHONWARNINGS=error"
-    echo set "APPVEYOR=True"
+    echo set "GITHUB_ACTIONS=true"
     echo call "%REPO%\windows\psexec-nonadmin-tests.bat"
 ) > "%LAUNCH%"
 

@@ -1,0 +1,357 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - '**'
+    paths-ignore:
+      - 'appveyor.yml'
+      - 'bleachbit.png'
+      - 'bleachbit.spec'
+      - 'COPYING'
+      - 'debian/**'
+      - 'doc/**'
+      - 'docker/**'
+      - 'MANIFEST.in'
+      - 'org.bleachbit.BleachBit.desktop'
+      - 'org.bleachbit.BleachBit.metainfo.xml'
+      - 'org.bleachbit.policy'
+      - 'po/*.po' # do not ignore Makefile
+      - 'README.md'
+  pull_request:
+    branches:
+      - '**'
+    paths-ignore:
+      - 'appveyor.yml'
+      - 'bleachbit.png'
+      - 'bleachbit.spec'
+      - 'COPYING'
+      - 'debian/**'
+      - 'doc/**'
+      - 'docker/**'
+      - 'MANIFEST.in'
+      - 'org.bleachbit.BleachBit.desktop'
+      - 'org.bleachbit.BleachBit.metainfo.xml'
+      - 'org.bleachbit.policy'
+      - 'po/*.po' # do not ignore Makefile
+      - 'README.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# 2025-05-01: ubuntu-latest is currently 24.04, and its native
+# python version is 3.12.
+# native python for 22.04 is 3.10.
+jobs:
+  test:
+    name: test (${{ matrix.python-version }})
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python-version: '3.9'
+            ubuntu-version: ubuntu-22.04
+            python-extra-dep: ''
+            pygobject-version: '<3.51.0'
+          - python-version: '3.13'
+            ubuntu-version: ubuntu-latest
+            python-extra-dep: 'libgirepository-2.0-dev'
+            pygobject-version: ''
+          - python-version: '3.14'
+            ubuntu-version: ubuntu-latest
+            python-extra-dep: 'libgirepository-2.0-dev'
+            pygobject-version: ''
+
+    runs-on: ${{ matrix.ubuntu-version }}
+
+    # https://docs.github.com/en/actions/reference/workflows-and-actions/variables
+    env:
+      COVERAGE: "coverage run"
+
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            appstream \
+            dbus \
+            dbus-x11 \
+            gettext \
+            gir1.2-gtk-3.0 \
+            gir1.2-notify-0.7 \
+            gnome-keyring \
+            libcairo2-dev \
+            libgirepository1.0-dev \
+            libnotify-bin \
+            libxml2-utils \
+            notification-daemon \
+            xvfb \
+            ${{ matrix.python-extra-dep }}
+          # for tests.TestLanguage
+          sudo locale-gen es_ES.UTF-8
+          sudo locale-gen pl_PL.UTF-8
+          sudo locale-gen en_AU.UTF-8
+          sudo update-locale
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-test.txt
+
+      - name: Update Python packages
+        run: |
+          pip list
+          python -m pip install --upgrade pip
+
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements.txt -r requirements-test.txt
+          if [[ "${{ matrix.pygobject-version }}" != "" ]]; then
+            pip install "PyGObject${{ matrix.pygobject-version }}"
+          fi
+
+      - name: Generate Revision.py
+        run: |
+          echo "revision = \"`git rev-parse --short HEAD`\"" > bleachbit/Revision.py
+          echo "build_number = \"${{ github.run_number }}\"" >> bleachbit/Revision.py
+
+      - name: Generate translations
+        run: make -C po local bleachbit.pot
+
+      - name: Run tests (regular and sudo)
+        timeout-minutes: 20
+        run: |
+          export DISPLAY=":1.0"
+          export $(dbus-launch)
+          sudo Xvfb :1 -screen 0 800x600x24 &
+          sleep 5
+          if [[ "${{ matrix.python-version }}" == "3.14" ]]; then
+            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "PYTHONPATH=. pytest -n auto"'
+          else
+            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make tests && make tests-with-sudo"'
+          fi
+
+      - name: Generate lcov coverage
+        if: matrix.python-version == '3.9' && github.repository == 'bleachbit/bleachbit'
+        run: |
+          coverage report
+          coverage lcov -o coverage.lcov
+
+      - name: Upload coverage to Coveralls
+        if: matrix.python-version == '3.9' && github.repository == 'bleachbit/bleachbit'
+        uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
+        with:
+          file: coverage.lcov
+          flag-name: linux
+          parallel: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  windows:
+    timeout-minutes: 60
+    runs-on: windows-latest
+
+    env:
+      PYTHON_HOME: ${{ github.workspace }}\vcpkg_installed\x86-windows\tools\python3
+      PYTHON_EXE: ${{ github.workspace }}\vcpkg_installed\x86-windows\tools\python3\python.exe
+      MSYS_BIN: C:\msys64\usr\bin
+      PIP_CACHE_DIR: ${{ github.workspace }}\.pip-cache
+
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Set up MSVC x86 environment
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $installPath = & $vswhere -latest -property installationPath
+          $vcvars = "$installPath\VC\Auxiliary\Build\vcvarsall.bat"
+          cmd /c "call `"$vcvars`" x86 && set" | ForEach-Object {
+            if ($_ -match '^(PATH|INCLUDE|LIB|LIBPATH)=(.*)$') {
+              "$($matches[1])=$($matches[2])" >> $env:GITHUB_ENV
+            }
+          }
+
+      - name: Cache downloaded dependencies
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            gtk*-x86-windows.zip
+            gtk-themes.zip
+            pygobject-*-win32.whl
+            upx.zip
+            nsis-*-setup.exe
+          key: win-deps-${{ hashFiles('.github/workflows/tests.yaml', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1') }}
+
+      - name: Cache pip packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ github.workspace }}\.pip-cache
+          key: pip-win-${{ hashFiles('requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
+
+      - name: Install Python and GTK
+        shell: pwsh
+        run: .\windows\python-gtk3-install.ps1
+
+      - name: Install UPX
+        shell: pwsh
+        run: |
+          if (-not (Test-Path upx.zip)) {
+            Invoke-WebRequest -Uri "https://github.com/upx/upx/releases/download/v5.1.1/upx-5.1.1-win64.zip" -OutFile upx.zip
+          }
+          $hash = (Get-FileHash upx.zip -Algorithm SHA256).Hash
+          if ($hash -ne 'fa5380bca4c2718547aaa0134bc0d8a7fa27e102f0ac6371573d60d1c21d64de') {
+            throw "SHA256 mismatch=$hash"
+          }
+          7z x upx.zip
+          Rename-Item upx-5.1.1-win64 upx
+          Get-ChildItem .\upx\
+
+      - name: Install NSIS
+        shell: pwsh
+        run: |
+          if (-not (Test-Path nsis-3.12-setup.exe)) {
+            # sourceforge.net/.../download serves an HTML interstitial; master.dl serves the raw file.
+            Invoke-WebRequest -Uri "https://master.dl.sourceforge.net/project/nsis/NSIS%203/3.12/nsis-3.12-setup.exe?viasf=1" -OutFile nsis-3.12-setup.exe -UserAgent 'Mozilla/5.0'
+          }
+          $hash = (Get-FileHash nsis-3.12-setup.exe -Algorithm SHA256).Hash
+          if ($hash -ne '3bc2b06253a7e4957111be152ac6a536e0c7478a706e19da814038db5d706495') {
+            throw "SHA256 mismatch=$hash"
+          }
+          Start-Process -FilePath .\nsis-3.12-setup.exe -ArgumentList '/S' -Wait
+
+      - name: Install PsExec
+        shell: pwsh
+        run: choco install psexec --version=2.43 -y
+
+      - name: Generate Revision.py
+        shell: pwsh
+        run: |
+          $rev = git rev-parse --short HEAD
+          Set-Content -Path bleachbit\Revision.py -Encoding utf8 -Value "revision = `"$rev`"`nbuild_number = `"$env:GITHUB_RUN_NUMBER`""
+          $version = & $env:PYTHON_EXE -c "from bleachbit.SystemInformation import get_version; print(get_version())"
+          "VERSION=$version" >> $env:GITHUB_ENV
+
+      - name: Generate translations
+        shell: cmd
+        run: |
+          set PATH=%MSYS_BIN%;%PATH%
+          make PYTHON="%PYTHON_EXE%" -C po local bleachbit.pot
+
+      - name: Build executable and installers
+        shell: cmd
+        run: |
+          set PATH=%MSYS_BIN%;%PATH%
+          "%PYTHON_EXE%" -m windows.setup
+          move windows\BleachBit*.exe .
+          move windows\BleachBit*.zip .
+
+      - name: Show artifact hashes
+        shell: pwsh
+        run: |
+          Get-ChildItem BleachBit-* -File | Get-FileHash | ForEach-Object {
+            "$($_.Hash)  $($_.Path | Split-Path -Leaf)"
+          }
+
+      - name: Install test dependencies
+        shell: cmd
+        run: '"%PYTHON_HOME%\Scripts\pip3.exe" install -r requirements-test.txt'
+
+      - name: Run admin tests
+        shell: cmd
+        env:
+          DESTRUCTIVE_TESTS: T
+          PYTHONWARNINGS: error
+          COVERAGE_FILE: .coverage.admin
+        run: |
+          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
+          "%PYTHON_EXE%" -m coverage run -m tests.TestAll
+
+      - name: Run non-admin tests
+        shell: cmd
+        run: |
+          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
+          call windows\run-psexec-nonadmin-tests.bat
+
+      - name: Run low-integrity tests
+        shell: cmd
+        run: |
+          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
+          call windows\run-psexec-low-integrity-tests.bat
+
+      - name: Collect low-integrity coverage
+        if: github.repository == 'bleachbit/bleachbit'
+        shell: cmd
+        run: copy /Y "%USERPROFILE%\AppData\LocalLow\.coverage.psexec" .coverage.psexec
+
+      - name: Combine coverage
+        if: github.repository == 'bleachbit/bleachbit'
+        shell: cmd
+        run: |
+          dir .coverage*
+          "%PYTHON_EXE%" -m coverage combine --data-file=.coverage .coverage.admin .coverage.nonadmin .coverage.psexec
+          "%PYTHON_EXE%" -m coverage report --data-file=.coverage
+
+      - name: Generate lcov coverage
+        if: github.repository == 'bleachbit/bleachbit'
+        shell: cmd
+        run: '"%PYTHON_EXE%" -m coverage lcov -o coverage.lcov --data-file=.coverage'
+
+      - name: Upload coverage to Coveralls
+        if: github.repository == 'bleachbit/bleachbit'
+        uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
+        with:
+          file: coverage.lcov
+          flag-name: windows
+          parallel: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: bleachbit-windows-${{ env.VERSION }}
+          if-no-files-found: error
+          path: |
+            BleachBit-*-setup.exe
+            BleachBit-*-setup-English.exe
+            BleachBit-*-portable.zip
+
+      - name: Configure AWS credentials
+        if: github.event_name == 'push' && github.repository == 'bleachbit/bleachbit'
+        uses: aws-actions/configure-aws-credentials@517a711dbcd0e402f90c77e7e2f81e849156e31d # v6.2.2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy to S3
+        if: github.event_name == 'push' && github.repository == 'bleachbit/bleachbit'
+        shell: pwsh
+        run: |
+          $dest = "s3://bleachbitci/dl/$env:VERSION-$($env:GITHUB_REF_NAME)/"
+          Write-Host "Deploying to $dest"
+          Get-ChildItem BleachBit-*-setup.exe, BleachBit-*-setup-English.exe, BleachBit-*-portable.zip |
+            ForEach-Object { aws s3 cp $_.FullName $dest }
+
+  coveralls-finish:
+    needs: [test, windows]
+    if: github.repository == 'bleachbit/bleachbit'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls finished
+        uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
+        with:
+          parallel-finished: true
+          carryforward: "linux,windows"
+          github-token: ${{ secrets.GITHUB_TOKEN }}

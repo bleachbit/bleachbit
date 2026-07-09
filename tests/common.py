@@ -152,7 +152,7 @@ class BleachbitTestCase(unittest.TestCase):
         * Create a temporary directory for the testcase.
         * Treat warnings as errors.
         This is also set by environment variable in `Makefile` and
-        `appveyor.yml`.
+        the CI workflow.
         * Patch options paths.
         """
         bootstrap()

@@ -28,7 +28,7 @@
 #   macos   (macOS)                               -> pip in venv
 #
 # This Bash script works similarly to:
-#   - .github/workflows/test_ubuntu.yaml
+#   - .github/workflows/tests.yaml
 #   - bleachbit.spec
 #   - debian/debian.control
 #   - docker/Dockerfile.*

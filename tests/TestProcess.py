@@ -228,9 +228,9 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
     def test_is_process_running_windows(self):
         """Test is_process_running() on Windows"""
         # winlogon.exe runs on Windows XP and Windows 7
-        # explorer.exe did not run Appveyor, but it does as of 2025-01-25.
+        # explorer.exe did not run in CI, but it does as of 2025-01-25.
         # svchost.exe runs both as system and current user on Windows 11
-        # svchost.exe does not run as same user on AppVeyor and Windows Server 2012.
+        # svchost.exe does not always run as the same user in CI.
         tests = ((True, 'winlogon.exe', False),
                  (True, 'WinLogOn.exe', False),
                  (False, 'doesnotexist.exe', False),

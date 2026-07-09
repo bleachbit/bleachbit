@@ -9,7 +9,7 @@ set "TEMP=%LOW_DIR%"
 set "TMP=%LOW_DIR%"
 set "DESTRUCTIVE_TESTS=T"
 set "PYTHONWARNINGS=error"
-set "APPVEYOR=True"
+set "GITHUB_ACTIONS=true"
 set "COVERAGE_FILE=%LOW_DIR%\.coverage.psexec"
 set "BLEACHBIT_TEST_OPTIONS_DIR=%LOW_DIR%\BleachBit"
 

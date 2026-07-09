@@ -154,7 +154,7 @@ def get_version(four_parts=False):
     If four_parts is True, always return a four-part version string.
     If False, return three or four parts, depending on available information.
     """
-    build_number_env = os.getenv('APPVEYOR_BUILD_NUMBER')
+    build_number_env = os.getenv('GITHUB_RUN_NUMBER')
     build_number_src = None
     try:
         # pylint: disable=import-outside-toplevel
