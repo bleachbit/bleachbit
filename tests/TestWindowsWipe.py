@@ -83,6 +83,8 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
         zero_extents_count = 0
         nonzero_extents_count = 0
         heuristic_exceptions = []
+        large_files_count = 0
+        large_files_zero_extents = []
         start_time = time.time()
 
         for path in children_in_directory(os.path.expandvars(r'%windir%\system32')):
@@ -107,9 +109,12 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
             # Files with size under ~500 bytes are usually resident in the
             # MFT, so they have zero clusters. There may be a few exceptions.
             fsize = os.path.getsize(path)
-            if fsize > 1000 and len(ret) == 0:
-                heuristic_exceptions.append(
-                    (path, fsize, len(ret)))
+            if fsize > 1000:
+                large_files_count += 1
+                if len(ret) == 0:
+                    # WOF-compressed (Compact OS) files report zero extents
+                    # without setting FILE_ATTRIBUTE_COMPRESSED.
+                    large_files_zero_extents.append((path, fsize, len(ret)))
             elif fsize < 200 and len(ret) != 0:
                 heuristic_exceptions.append(
                     (path, fsize, len(ret)))
@@ -119,7 +124,10 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
             files_per_second = total_files / elapsed_seconds
         else:
             files_per_second = None
+        zero_frac = (len(large_files_zero_extents) / large_files_count
+                     if large_files_count else 0)
         print(f"\ntest_get_extents() stats: {error_count:,} errors; {zero_extents_count:,} files with zero extents; {nonzero_extents_count:,} files with nonzero extents; {int(elapsed_seconds)} seconds; {int(files_per_second) if files_per_second else None} files per second")
+        print(f"large files: {large_files_count:,}; large files with zero extents: {len(large_files_zero_extents):,} ({zero_frac:.0%})")
         self.assertGreater(zero_extents_count, 10)
         self.assertGreater(nonzero_extents_count, 100)
         # Print the first few heuristic exceptions for diagnostics.
@@ -129,6 +137,17 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
             len(heuristic_exceptions), 6,
             f"Too many heuristic exceptions ({len(heuristic_exceptions)}): "
             f"{heuristic_exceptions[:5]}")
+        # On Compact OS images most of system32 is WOF-compressed and reports
+        # zero extents, so only check this when WOF isn't dominating.
+        for path, fsize, extent_count in large_files_zero_extents[:5]:
+            print(f"  large zero-extent file: {path} size={fsize:,}")
+        if zero_frac < 0.5:
+            self.assertLess(
+                len(large_files_zero_extents), 6,
+                f"Too many large files with zero extents "
+                f"({len(large_files_zero_extents)}): {large_files_zero_extents[:5]}")
+        else:
+            print("skipping large-file extent check: volume appears WOF-compressed (Compact OS)")
 
     def test_get_file_basic_info(self):
         """Unit test for get_file_basic_info()"""
