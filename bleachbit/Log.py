@@ -44,7 +44,7 @@ class DelayLog(object):
 
     def write(self, msg):
         self.msg += msg
-        if self.msg[-1] == '\n':
+        if self.msg and self.msg[-1] == '\n':
             self.queue.append(self.msg)
             self.msg = ''
 
@@ -138,7 +138,7 @@ class GtkLoggerHandler(logging.Handler):
 
     def write(self, msg):
         self.msg += msg
-        if self.msg[-1] == '\n':
+        if self.msg and self.msg[-1] == '\n':
             tag = None
-            self.append_text(msg, tag)
+            self.append_text(self.msg, tag)
             self.msg = ''
