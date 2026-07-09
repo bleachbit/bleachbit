@@ -28,6 +28,7 @@ import atexit
 import base64
 import ctypes
 import errno
+import functools
 import glob
 import hashlib
 import logging
@@ -996,6 +997,7 @@ def get_recycle_bin():
         yield path
 
 
+@functools.lru_cache(maxsize=None)
 def get_windows_version():
     """Get the Windows major and minor version in a decimal like 10.0"""
     v = win32api.GetVersionEx(0)
