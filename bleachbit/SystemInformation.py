@@ -165,11 +165,13 @@ def get_version(four_parts=False):
         pass
 
     build_number = build_number_src or build_number_env
+    if build_number and not str(build_number).isdigit():
+        logger.warning('ignoring non-numeric build number: %r', build_number)
+        build_number = None
     if not build_number:
         if not four_parts:
             return bleachbit.APP_VERSION
         return f'{bleachbit.APP_VERSION}.0'
-    assert build_number.isdigit()
     return f'{bleachbit.APP_VERSION}.{build_number}'
 
 

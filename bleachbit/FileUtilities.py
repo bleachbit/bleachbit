@@ -631,7 +631,9 @@ def execute_sqlite3(path, cmds):
         # https://www.sqlite.org/pragma.html#pragma_secure_delete
         if options.get('shred'):
             conn.execute('PRAGMA secure_delete=ON')
-            assert conn.execute('PRAGMA secure_delete').fetchone()[0] == 1
+            # Without this, shredding can leave freed content recoverable.
+            if conn.execute('PRAGMA secure_delete').fetchone()[0] != 1:
+                raise RuntimeError(f'could not enable secure_delete on {path}')
 
         for cmd in cmds.split(';'):
             try:

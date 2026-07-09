@@ -171,7 +171,8 @@ def delete_cookies(path, keep_list, really_delete=False):
     (table_name, host_column) = detect_browser(path)
 
     original_size = _get_db_disk_size(path)
-    assert original_size > 0
+    if original_size <= 0:
+        raise RuntimeError(f"cookies database is empty: {path}")
 
     # Set up connection
     uri = f'file:{path}'
