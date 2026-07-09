@@ -137,6 +137,9 @@ class Options:
         self.config.BOOLEAN_STATES['t'] = True
         self.config.BOOLEAN_STATES['f'] = False
         self.overrides = {}
+        # Cache of get_paths() results, keyed by section. The keep list is read
+        # once per file during a scan, so recomputing it every time is costly.
+        self._paths_cache = {}
         self.old_version = None  # Store previous version in memory
         self._dirty = False
         self._closed = False
@@ -348,6 +351,9 @@ class Options:
         """Abstracts get_whitelist_paths and get_custom_paths"""
         if not self.config.has_section(section):
             return []
+        cached = self._paths_cache.get(section)
+        if cached is not None:
+            return list(cached)
         myoptions = []
         for opt in sorted(self.config.options(section), key=_option_index):
             pos = opt.find('_')
@@ -359,7 +365,8 @@ class Options:
             p_type = self.config.get(section, opt + '_type')
             p_path = self.config.get(section, opt + '_path')
             values.append((p_type, p_path))
-        return values
+        self._paths_cache[section] = values
+        return list(values)
 
     def get_whitelist_paths(self):
         """Return the keep list (formerly whitelist) of paths
@@ -456,6 +463,7 @@ class Options:
         with self._flush_lock:
             self.__cancel_flush_timer()
             self._dirty = False
+            self._paths_cache.clear()
             # Reading configuration merges with existing data,
             # so clear it first.
             for section in self.config.sections():
@@ -558,6 +566,7 @@ class Options:
         for counter, value in enumerate(values):
             self.config.set(section, str(counter) + '_type', value[0])
             self.config.set(section, str(counter) + '_path', value[1])
+        self._paths_cache.pop(section, None)
         self.__schedule_flush()
 
     def set_custom_paths(self, values):
@@ -577,6 +586,7 @@ class Options:
             assert path_type in ('file', 'folder')
             self.config.set(section, str(counter) + '_type', path_type)
             self.config.set(section, str(counter) + '_path', path)
+        self._paths_cache.pop(section, None)
         self.__schedule_flush()
 
     def set_language(self, langid, value):
