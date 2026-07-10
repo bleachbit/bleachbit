@@ -27,6 +27,7 @@ from unittest import mock
 import os
 from tempfile import mkdtemp
 from shutil import rmtree
+from urllib.parse import urlparse
 
 from tests import common
 from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models, MODEL_BASENAMES, DEFAULT_MODELS_DIR
@@ -84,10 +85,10 @@ class ChaffTestCase(common.BleachbitTestCase):
 
         # Test when primary download mirror fails but secondary succeeds.
         def succeed_on_second(*args, **_kwargs):
-            url = args[0]
-            if 'sourceforge' in url:
+            host = urlparse(args[0]).hostname or ''
+            if host == 'sourceforge.net':
                 return False
-            if 'bleachbit.org' in url:
+            if host == 'download.bleachbit.org':
                 return True
         mock_download.side_effect = succeed_on_second
         ret = download_models(models_dir=tmp_dir)
