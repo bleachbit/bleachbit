@@ -604,7 +604,7 @@ PrefersNonDefaultGPU=false""")
             '/var/log/kern.log-20230601',
             '/var/log/messages-20090118.bz2',
             '/var/log/messages-20090118.gz',
-            '/var/log/messages-20090118.xz'
+            '/var/log/messages-20090118.xz',
             '/var/log/messages-20090118',
             '/var/log/messages.2.bz2',
             '/var/log/samba/log.smbd-20250126.gz',
