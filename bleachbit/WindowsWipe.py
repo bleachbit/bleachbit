@@ -1028,13 +1028,11 @@ def wipe_file_direct(file_handle, extents, cluster_size, file_size):
 
     if extents:
         # Use size on disk to determine how many clusters of zeros we write.
+        # Sum every extent so a fragmented file is fully overwritten, not just
+        # its last extent.
+        write_length = 0
         for lcn_start, lcn_end in extents:
-            # logger.debug("Wiping extent from %d to %d...",
-            #              lcn_start, lcn_end)
-            # Calculate write length based on the number of clusters in this extent.
-            # The file pointer is positioned at the start of the current extent.
-            # Each write operation will advance the file pointer automatically.
-            write_length = (lcn_end - lcn_start + 1) * cluster_size
+            write_length += (lcn_end - lcn_start + 1) * cluster_size
     else:
         # Special case - file so small it can be contained within the
         # directory entry in the MFT part of the disk.
@@ -1240,7 +1238,10 @@ def file_wipe(file_name):
         # Any extent within new_extents has now been wiped by above.
         # It can be subtracted from the orig_extents list, and now we will
         # just clean up anything not yet overwritten.
-        orig_extents = extents_a_minus_b(orig_extents, new_extents)
+        # Materialize the generator: it is iterated again below by
+        # poll_clusters_freed and the wipe loop, and a generator would be
+        # exhausted after the first pass, leaving clusters un-wiped.
+        orig_extents = list(extents_a_minus_b(orig_extents, new_extents))
     else:
         # File needs special treatment. We can't just do a basic overwrite.
         # First we will truncate it. Then chase down the freed clusters to
