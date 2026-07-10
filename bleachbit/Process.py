@@ -88,7 +88,11 @@ def _enumerate_proc_fs():
     target_uid = get_real_uid()
     for filename in glob.iglob("/proc/*/exe"):
         pid_dir = os.path.dirname(filename)
-        pid = int(os.path.basename(pid_dir))
+        base = os.path.basename(pid_dir)
+        if not base.isdigit():
+            # skip /proc/self and /proc/thread-self
+            continue
+        pid = int(base)
         name = None
         try:
             target = os.path.realpath(filename)
