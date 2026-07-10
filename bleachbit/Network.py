@@ -113,7 +113,8 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None,
         delete(fn, ignore_missing=True)  # delete any partial download
 
     try:
-        response = fetch_url(url)
+        response = fetch_url(url, max_retries=max_retries,
+                             backoff_factor=backoff_factor, timeout=timeout)
     except RequestException as exc:
         # For retryable errors (like 503), use a simplified error message
         if HAVE_REQUESTS and isinstance(exc, requests.exceptions.RetryError):
