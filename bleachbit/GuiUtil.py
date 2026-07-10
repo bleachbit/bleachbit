@@ -226,7 +226,7 @@ def flush_gtk_events(max_iterations: int = 5):
 
 def notify(msg):
     """Show a popup-notification"""
-    import importlib
+    import importlib.util
     if importlib.util.find_spec('plyer'):
         # On Windows, use Plyer.
         notify_plyer(msg)
