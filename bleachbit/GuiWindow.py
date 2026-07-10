@@ -7,6 +7,7 @@
 import logging
 import os
 import sys
+import threading
 import time
 
 import bleachbit
@@ -551,6 +552,11 @@ class GUI(Gtk.ApplicationWindow):
 
     def append_text(self, text, tag=None, __iter=None, scroll=True):
         """Add some text to the main log"""
+        if threading.current_thread() is not threading.main_thread():
+            # GTK isn't thread-safe, so push work from worker threads back
+            # onto the main loop instead of touching the buffer directly.
+            GLib.idle_add(self.append_text, text, tag, None, scroll)
+            return
         if self.textbuffer is None:
             # textbuffer was destroyed.
             return
