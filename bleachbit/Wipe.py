@@ -258,15 +258,17 @@ def wipe_contents(path, truncate=True):
                 _('There was at least one file on a file system that does not support advanced overwriting.'), UserWarning)
             f = wipe_write()
         else:
-            # The wipe succeed, so prepare to truncate.
-            f = open(path, 'wb')
+            # The wipe succeeded and already overwrote the file in place.
+            # Reopen only to truncate; opening 'wb' would zero the length.
+            f = open(path, 'wb') if truncate else None
     else:
         f = wipe_write()
     try:
         if truncate:
             truncate_f(f)
     finally:
-        f.close()
+        if f is not None:
+            f.close()
 
 
 def wipe_name(pathname1):
