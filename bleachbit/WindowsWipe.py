@@ -427,7 +427,8 @@ def check_extents_concurrency(extents, volume_bitmap,
             if check_mapped_bit(volume_bitmap, cluster):
                 count_allocated += 1
                 if allocated_extents is not None:
-                    allocated_extents.append(cluster)
+                    # extents use (start, end) format, like check_extents
+                    allocated_extents.append((cluster, cluster))
             else:
                 count_free += 1
 
