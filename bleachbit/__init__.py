@@ -29,7 +29,7 @@ if sys.version_info < (3, 8, 0):
 if hasattr(sys, 'frozen'):
     stdout_encoding = 'utf-8'
 else:
-    stdout_encoding = sys.stdout.encoding
+    stdout_encoding = getattr(sys.stdout, 'encoding', None) or 'utf-8'
 
 logger = Log.init_log()
 
@@ -247,6 +247,8 @@ elif sys.platform[:6] == "netbsd":
     locale_dir = "/usr/pkg/share/locale/"
 elif sys.platform.startswith("openbsd") or sys.platform.startswith("freebsd"):
     locale_dir = "/usr/local/share/locale/"
+else:
+    locale_dir = "/usr/share/locale/"
 
 
 #
