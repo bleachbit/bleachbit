@@ -31,6 +31,7 @@ import sys
 
 from bleachbit import FileUtilities
 from bleachbit import General
+from bleachbit import Log
 from bleachbit.Language import get_text as _
 from bleachbit.Wipe import wipe_contents
 
@@ -103,8 +104,13 @@ def enable_swap_linux():
         raise RuntimeError(stderr.replace("\n", ""))
 
 
-def make_self_oom_target_linux():
-    """Make the current process the primary target for Linux out-of-memory killer"""
+def make_self_oom_target_linux(uid=None):
+    """Make the current process the primary target for Linux out-of-memory killer
+
+    The optional ``uid`` avoids relying on environment variables such as
+    SUDO_UID, which systemd-run does not forward to transient units by
+    default. When ``uid`` is None, the real user ID is looked up as before.
+    """
     path = f'/proc/{os.getpid()}/oom_score_adj'
     if os.path.exists(path):
         with open(path, 'w', encoding='utf-8') as f:
@@ -113,7 +119,8 @@ def make_self_oom_target_linux():
     logger.debug(_("Setting nice value %d for this process."), os.nice(19))
     # OOM prefers non-privileged processes
     try:
-        uid = General.get_real_uid()
+        if uid is None:
+            uid = General.get_real_uid()
         if uid > 0:
             # TRANSLATORS: Debug message when a process gives up root/admin privileges.
             # %(pid)d is the integer process ID; %(uid)d is the integer user ID to switch to.
@@ -144,6 +151,134 @@ def fill_memory_linux():
         logger.debug(_("Freeing %s of memory."), bytes_str)
         del buf
     report_free()
+
+
+def _memory_child_script(real_uid):
+    """Return the Python source executed by the memory-wiping child process
+
+    The child makes itself the OOM target and fills memory. ``real_uid`` is
+    passed explicitly because systemd-run does not forward the caller's
+    environment (e.g. SUDO_UID) to transient units. When ``real_uid`` is
+    None the child re-derives it via ``General.get_real_uid()``, which
+    inside a systemd scope typically resolves to 0 (root) and skips the
+    privilege drop -- this is acceptable because the scope already runs
+    with the caller's credentials.
+    """
+    return (
+        "from bleachbit.Memory import make_self_oom_target_linux, "
+        "fill_memory_linux; "
+        f"make_self_oom_target_linux({real_uid!r}); "
+        "fill_memory_linux()"
+    )
+
+
+def _run_memory_child_systemd_scope():
+    """Run the memory-wiping child in its own transient systemd scope.
+
+    The child is isolated via a separate scope so that systemd's default
+    OOMPolicy=stop (see DefaultOOMPolicy in systemd-system.conf(5)) does
+    not kill the parent (and the rest of the parent's session unit) when
+    the kernel OOM-kills the child. Without this isolation the parent
+    dies before it can re-enable swap, leaving the system without swap.
+
+    Returns the child's exit status (0 on success, the signal number if
+    killed by a signal such as the OOM killer, or None if the child could
+    not be started this way -- in which case the caller should fall back
+    to ``_run_memory_child_fork``).
+    """
+    if not FileUtilities.exe_exists('systemd-run'):
+        return None
+    try:
+        real_uid = General.get_real_uid()
+    except Exception:
+        real_uid = None
+    # Make the bleachbit package importable when running from a source
+    # checkout. When installed, this is harmless (the directory is already
+    # on sys.path).
+    pkg_parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    env = os.environ.copy()
+    python_path = os.pathsep.join(
+        p for p in (pkg_parent, env.get('PYTHONPATH', '')) if p)
+    env['PYTHONPATH'] = python_path
+    # The child is launched via "python -c", so it cannot see --debug in
+    # sys.argv. Forward the parent's debug state via an environment variable
+    # so the child's logger (initialized on import) matches the parent's.
+    if Log.is_debugging_enabled_via_cli():
+        env['BLEACHBIT_DEBUG'] = '1'
+    # Include the PID so concurrent runs do not collide on a fixed unit
+    # name (systemd-run refuses to create a unit that already exists).
+    args = [
+        'systemd-run', '--scope', '--collect', '--quiet',
+        f'--unit=bleachbit-wipe-memory-{os.getpid()}',
+        '--property=OOMPolicy=kill',
+        '--', sys.executable, '-c', _memory_child_script(real_uid),
+    ]
+    def run_scope(scope_args):
+        logger.debug('Running command: %s', ' '.join(scope_args))
+        try:
+            return subprocess.run(
+                scope_args, env=env, capture_output=True, text=True)
+        except FileNotFoundError:
+            return None
+
+    proc = run_scope(args)
+    if proc is None:
+        return None
+    # Ubuntu 22.04 LTS (supported until April 2027) uses systemd 249, which
+    # does not support OOMPolicy= for scope units. A separate scope still
+    # isolates the child from the parent, so retry without that property.
+    if proc.returncode != 0 and 'OOMPolicy' in (proc.stderr or ''):
+        legacy_args = [
+            arg for arg in args if arg != '--property=OOMPolicy=kill']
+        proc = run_scope(legacy_args)
+        if proc is None:
+            return None
+    rc = proc.returncode
+    # subprocess.run reports -N when the child died from signal N (e.g. the
+    # OOM killer sends SIGKILL, reported as -9). Normalize to the signal
+    # number so the caller can recognize OOM death as 9.
+    if rc < 0:
+        return -rc
+    # A non-zero, non-signal exit code means systemd-run itself failed to
+    # create the scope (e.g. no systemd as PID 1, no D-Bus session, or a
+    # permission error) -- the child never ran. Fall back to fork so
+    # memory is still wiped in those environments.
+    if rc != 0:
+        err = (proc.stderr or '').strip()
+        if err:
+            logger.debug(
+                'systemd-run returned %d (%s); falling back to fork()',
+                rc, err)
+        else:
+            logger.debug(
+                'systemd-run returned %d; falling back to fork()', rc)
+        return None
+    return rc
+
+
+def _run_memory_child_fork():
+    """Run the memory-wiping child via os.fork() (fallback used when
+    systemd-run is unavailable). Returns the child's exit status."""
+    try:
+        real_uid = General.get_real_uid()
+    except Exception:
+        real_uid = None
+    child_pid = os.fork()
+    if 0 == child_pid:
+        make_self_oom_target_linux(real_uid)
+        fill_memory_linux()
+        os._exit(0)
+    else:
+        # TRANSLATORS: This is a debugging message that the parent process
+        # is waiting for the child process. %(parent_pid)d is the parent
+        # process ID; %(child_pid)d is the child process ID.
+        logger.debug(_("The function wipe_memory() with process ID %(parent_pid)d is "
+                       "waiting for child process ID %(child_pid)d."),
+                     {'parent_pid': os.getpid(), 'child_pid': child_pid})
+        status = os.waitpid(child_pid, 0)[1]
+        if os.WIFSIGNALED(status):
+            return os.WTERMSIG(status)
+        return os.WEXITSTATUS(status)
 
 
 def get_swap_size_linux(device, proc_swaps=None):
@@ -310,21 +445,14 @@ def wipe_memory():
     logger.debug(_("Detected these swap devices: %s"), str(devices))
     wipe_swap_linux(devices, proc_swaps)
     yield True
-    child_pid = os.fork()
-    if 0 == child_pid:
-        make_self_oom_target_linux()
-        fill_memory_linux()
-        os._exit(0)
-    else:
-        # TRANSLATORS: This is a debugging message that the parent process
-        # is waiting for the child process. %(parent_pid)d is the parent
-        # process ID; %(child_pid)d is the child process ID.
-        logger.debug(_("The function wipe_memory() with process ID %(parent_pid)d is "
-                       "waiting for child process ID %(child_pid)d."),
-                     {'parent_pid': os.getpid(), 'child_pid': child_pid})
-        rc = os.waitpid(child_pid, 0)[1]
-        if rc not in [0, 9]:
-            logger.warning(
-                _("The child memory-wiping process returned code %d."), rc)
+    # Prefer a separate systemd scope so that systemd's unit-level OOM
+    # policy cannot kill the parent when the child is OOM-killed. Fall back
+    # to a plain fork where systemd-run is unavailable.
+    rc = _run_memory_child_systemd_scope()
+    if rc is None:
+        rc = _run_memory_child_fork()
+    if rc not in (0, 9):
+        logger.warning(
+            _("The child memory-wiping process returned code %d."), rc)
     enable_swap_linux()
     yield 0  # how much disk space was recovered

@@ -10,12 +10,16 @@ Test case for module Memory
 
 import os
 import re
+from contextlib import contextmanager
 from unittest import mock
 
 from tests import common
 from bleachbit import logger
 from bleachbit.FileUtilities import exe_exists
 from bleachbit.Memory import (
+    _memory_child_script,
+    _run_memory_child_fork,
+    _run_memory_child_systemd_scope,
     count_swap_linux,
     disable_swap_linux,
     enable_swap_linux,
@@ -32,6 +36,61 @@ from bleachbit.Memory import (
 
 class MemoryTestCase(common.BleachbitTestCase):
     """Test case for module Memory"""
+
+    @staticmethod
+    @contextmanager
+    def _mock_systemd_scope_common():
+        """Common mocks for _run_memory_child_systemd_scope(): systemd-run
+        is present and the real UID is 1000."""
+        with mock.patch('bleachbit.FileUtilities.exe_exists',
+                        return_value=True):
+            with mock.patch('bleachbit.Memory.General.get_real_uid',
+                            return_value=1000):
+                yield
+
+    def _assert_fork_exit_status(self, waitpid_status, expected):
+        """Run _run_memory_child_fork() under the standard parent-path mocks
+        and assert it returns ``expected`` for the given waitpid status."""
+        # Mock _() to avoid lazy translation setup, which calls
+        # subprocess.Popen and would break under mocked os.fork/os.waitpid.
+        with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
+            with mock.patch('bleachbit.Memory.General.get_real_uid',
+                            return_value=1000):
+                with mock.patch('os.fork', return_value=1234):
+                    with mock.patch('os.waitpid',
+                                    return_value=(1234, waitpid_status)):
+                        self.assertEqual(_run_memory_child_fork(), expected)
+
+    def _assert_wipe_memory_happy_path(self, scope_return, fork_return,
+                                       fork_called):
+        """Exercise wipe_memory() through its mocked happy path and verify
+        the generator yields two progress values then 0, with swap
+        re-enabled. ``scope_return`` and ``fork_return`` select which child
+        runner is used; ``fork_called`` asserts whether the fork fallback
+        is expected to run."""
+        with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
+            with mock.patch('bleachbit.FileUtilities.exe_exists',
+                            return_value=True):
+                with mock.patch('bleachbit.Memory.get_proc_swaps',
+                                return_value=''):
+                    with mock.patch('bleachbit.Memory.disable_swap_linux',
+                                    return_value=['/dev/sda1']):
+                        with mock.patch('bleachbit.Memory.wipe_swap_linux'):
+                            with mock.patch(
+                                    'bleachbit.Memory._run_memory_child_systemd_scope',
+                                    return_value=scope_return):
+                                with mock.patch(
+                                        'bleachbit.Memory._run_memory_child_fork',
+                                        return_value=fork_return) as mock_fork:
+                                    with mock.patch(
+                                            'bleachbit.Memory.enable_swap_linux') as mock_enable:
+                                        gen = wipe_memory()
+                                        self.assertTrue(next(gen))
+                                        self.assertTrue(next(gen))
+                                        self.assertEqual(next(gen), 0)
+                                        self.assertTrue(mock_enable.called)
+                                        self.assertEqual(mock_fork.called,
+                                                         fork_called)
 
     @common.skipIfWindows
     def test_get_proc_swaps(self):
@@ -244,19 +303,159 @@ Swapouts:                              20258188.
             self.assertRaisesRegex(
                 RuntimeError, 'Command swapon not found', next, gen)
 
-        # Happy path
-        with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
-            with mock.patch('bleachbit.FileUtilities.exe_exists', return_value=True):
-                with mock.patch('bleachbit.Memory.get_proc_swaps', return_value=''):
-                    with mock.patch('bleachbit.Memory.disable_swap_linux', return_value=['/dev/sda1']):
-                        with mock.patch('bleachbit.Memory.wipe_swap_linux'):
-                            with mock.patch('os.fork', return_value=1):
-                                with mock.patch('os.waitpid', return_value=(1, 0)):
-                                    with mock.patch('bleachbit.Memory.enable_swap_linux'):
-                                        gen = wipe_memory()
-                                        self.assertTrue(next(gen))
-                                        self.assertTrue(next(gen))
-                                        self.assertEqual(next(gen), 0)
+        # Happy path via the fork fallback (systemd-run path disabled)
+        self._assert_wipe_memory_happy_path(
+            scope_return=None, fork_return=0, fork_called=True)
+
+        # Happy path via the systemd scope (fork fallback not used)
+        self._assert_wipe_memory_happy_path(
+            scope_return=0, fork_return=None, fork_called=False)
+
+    @common.skipIfWindows
+    def test_memory_child_script(self):
+        """Test for _memory_child_script()"""
+        script = _memory_child_script(1000)
+        self.assertIn('make_self_oom_target_linux(1000)', script)
+        self.assertIn('fill_memory_linux()', script)
+        # None uid renders as the literal None
+        script_none = _memory_child_script(None)
+        self.assertIn('make_self_oom_target_linux(None)', script_none)
+
+    @common.skipIfWindows
+    def test_run_memory_child_systemd_scope_missing(self):
+        """_run_memory_child_systemd_scope() returns None without systemd-run"""
+        with mock.patch('bleachbit.FileUtilities.exe_exists', return_value=False):
+            self.assertIsNone(_run_memory_child_systemd_scope())
+
+    @common.skipIfWindows
+    def test_run_memory_child_systemd_scope_unique_unit(self):
+        """_run_memory_child_systemd_scope() uses a PID-suffixed unit name"""
+        captured = {}
+
+        def fake_run(args, env=None, **kwargs):
+            captured['args'] = args
+            captured['kwargs'] = kwargs
+            proc = mock.Mock()
+            proc.returncode = 0
+            proc.stderr = ''
+            return proc
+
+        with self._mock_systemd_scope_common():
+            with mock.patch('bleachbit.Memory.subprocess.run', side_effect=fake_run):
+                _run_memory_child_systemd_scope()
+        unit_args = [a for a in captured['args'] if a.startswith('--unit=')]
+        self.assertEqual(len(unit_args), 1)
+        self.assertIn(f'bleachbit-wipe-memory-{os.getpid()}', unit_args[0])
+
+    @common.skipIfWindows
+    def test_run_memory_child_systemd_scope_signal(self):
+        """_run_memory_child_systemd_scope() normalizes signal exit codes"""
+        # subprocess.run reports -N when its direct child is killed by signal N.
+        # A shell instead exposes this as status 128+N (for SIGKILL, 137), so
+        # do not model a shell-observed 137 as subprocess signal termination.
+        mock_proc = mock.Mock()
+        mock_proc.returncode = -9
+        mock_proc.stderr = ''
+        with self._mock_systemd_scope_common():
+            with mock.patch('bleachbit.Memory.subprocess.run', return_value=mock_proc):
+                self.assertEqual(_run_memory_child_systemd_scope(), 9)
+        # Normal exit
+        mock_proc.returncode = 0
+        with self._mock_systemd_scope_common():
+            with mock.patch('bleachbit.Memory.subprocess.run', return_value=mock_proc):
+                self.assertEqual(_run_memory_child_systemd_scope(), 0)
+
+    @common.skipIfWindows
+    def test_run_memory_child_systemd_scope_without_oom_policy(self):
+        """Retry without OOMPolicy when scope units do not support it"""
+        unsupported_proc = mock.Mock()
+        unsupported_proc.returncode = 1
+        unsupported_proc.stderr = 'Unknown property OOMPolicy\n'
+        success_proc = mock.Mock()
+        success_proc.returncode = 0
+        success_proc.stderr = ''
+        with self._mock_systemd_scope_common():
+            with mock.patch(
+                    'bleachbit.Memory.subprocess.run',
+                    side_effect=(unsupported_proc, success_proc)) as mock_run:
+                self.assertEqual(_run_memory_child_systemd_scope(), 0)
+        self.assertEqual(mock_run.call_count, 2)
+        self.assertIn('--property=OOMPolicy=kill', mock_run.call_args_list[0].args[0])
+        self.assertNotIn('--property=OOMPolicy=kill', mock_run.call_args_list[1].args[0])
+
+    @common.skipIfWindows
+    def test_run_memory_child_systemd_scope_runtime_failure(self):
+        """_run_memory_child_systemd_scope() falls back when systemd-run fails
+
+        A non-zero, non-signal exit code means systemd-run itself failed
+        (e.g. no systemd as PID 1, no D-Bus session) and the child never
+        ran -- the function returns None so the caller can fall back to
+        fork().
+        """
+        mock_proc = mock.Mock()
+        mock_proc.returncode = 1
+        mock_proc.stderr = 'Failed to start transient scope unit: Access denied\n'
+        with self._mock_systemd_scope_common():
+            with mock.patch('bleachbit.Memory.subprocess.run', return_value=mock_proc) as mock_run:
+                with mock.patch('bleachbit.Memory.logger') as mock_logger:
+                    self.assertIsNone(_run_memory_child_systemd_scope())
+                    mock_run.assert_called_once()
+                    self.assertTrue(
+                        mock_run.call_args.kwargs.get('capture_output'))
+                    debug_msgs = [
+                        call.args[0] % call.args[1:]
+                        if call.args else ''
+                        for call in mock_logger.debug.call_args_list
+                    ]
+                    self.assertTrue(
+                        any('Access denied' in msg for msg in debug_msgs),
+                        debug_msgs)
+        # A high exit code (e.g. 137) is treated as a plain failure, not a
+        # signal, since subprocess.run already reports signals as -N.
+        mock_proc.returncode = 137
+        mock_proc.stderr = ''
+        with self._mock_systemd_scope_common():
+            with mock.patch('bleachbit.Memory.subprocess.run', return_value=mock_proc):
+                self.assertIsNone(_run_memory_child_systemd_scope())
+
+    @common.skipIfWindows
+    def test_run_memory_child_fork_child_path(self):
+        """_run_memory_child_fork() child path calls the right functions and exits"""
+        with mock.patch('bleachbit.Memory.General.get_real_uid', return_value=1000):
+            with mock.patch('bleachbit.Memory.make_self_oom_target_linux') as mock_oom:
+                with mock.patch('bleachbit.Memory.fill_memory_linux') as mock_fill:
+                    with mock.patch('os.fork', return_value=0):
+                        with mock.patch('os._exit') as mock_exit:
+                            _run_memory_child_fork()
+                            mock_oom.assert_called_once_with(1000)
+                            mock_fill.assert_called_once()
+                            mock_exit.assert_called_once_with(0)
+
+    @common.skipIfWindows
+    def test_run_memory_child_fork_normal_exit(self):
+        """_run_memory_child_fork() returns 0 when child exits normally"""
+        self._assert_fork_exit_status(0, 0)
+
+    @common.skipIfWindows
+    def test_run_memory_child_fork_signal(self):
+        """_run_memory_child_fork() returns signal number when child is killed"""
+        self._assert_fork_exit_status(9, 9)
+
+    @common.skipIfWindows
+    def test_run_memory_child_fork_nonzero_exit(self):
+        """_run_memory_child_fork() returns a non-zero exit code"""
+        self._assert_fork_exit_status(1 << 8, 1)
+
+    @common.skipIfWindows
+    def test_run_memory_child_fork_uid_exception(self):
+        """_run_memory_child_fork() falls back to None when get_real_uid fails"""
+        with mock.patch('bleachbit.Memory.General.get_real_uid', side_effect=Exception('boom')):
+            with mock.patch('bleachbit.Memory.make_self_oom_target_linux') as mock_oom:
+                with mock.patch('bleachbit.Memory.fill_memory_linux'):
+                    with mock.patch('os.fork', return_value=0):
+                        with mock.patch('os._exit'):
+                            _run_memory_child_fork()
+                            mock_oom.assert_called_once_with(None)
 
     @common.skipIfWindows
     def test_swap_off_swap_on(self):

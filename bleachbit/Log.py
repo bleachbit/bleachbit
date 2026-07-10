@@ -23,12 +23,19 @@ Logging
 """
 
 import logging
+import os
 import sys
 
 
 def is_debugging_enabled_via_cli():
     """Return boolean whether user required debugging on the command line"""
     if 'unittest' in sys.modules:
+        return True
+    if os.getenv('BLEACHBIT_DEBUG') in ('1', 'true', 'True'):
+        # Set by the parent process when launching a child (e.g. the
+        # memory-wiping child via systemd-run) so that the child inherits
+        # the parent's --debug state, which sys.argv alone would not
+        # reflect because the child is launched with python -c.
         return True
     return any(arg.startswith('--debug') for arg in sys.argv)
 
