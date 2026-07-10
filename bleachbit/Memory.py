@@ -206,7 +206,7 @@ def physical_free_linux():
     with open("/proc/meminfo") as f:
         for line in f:
             line = line.replace("\n", "")
-            ret = re.search(r'(MemFree|Cached):[ ]*([0-9]*) kB', line)
+            ret = re.search(r'^(MemFree|Cached):[ ]*([0-9]*) kB', line)
             if ret is not None:
                 kb = int(ret.group(2))
                 free_bytes += kb * 1024
