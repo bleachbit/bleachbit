@@ -385,7 +385,10 @@ def delete_mozilla_favicons(path):
     Bookmarks are not deleted."""
 
     def remove_path_from_url(url):
-        url = urlparse(url.lstrip('fake-favicon-uri:'))
+        prefix = 'fake-favicon-uri:'
+        if url.startswith(prefix):
+            url = url[len(prefix):]
+        url = urlparse(url)
         return urlunparse((url.scheme, url.netloc, '', '', '', ''))
 
     cmds = ""
@@ -411,6 +414,7 @@ def delete_mozilla_favicons(path):
     # db which collects icon ids that don't have a bookmark or have domain
     # level bookmark.
     FileUtilities.execute_sqlite3(path, cmds)
+    cmds = ""
 
     # Collect favicons that are not bookmarked with their full url,
     # which collects also domain level bookmarks.
@@ -452,11 +456,11 @@ def delete_mozilla_favicons(path):
                      ]
 
     # delete all not bookmarked icons
-    icons_where = f"where (id in ({str(ids_to_delete).replace('[', '').replace(']', '')}))"
-    cols = ('icon_url', 'data')
-    cmds += __shred_sqlite_char_columns('moz_icons', cols, icons_where, path)
-
-    FileUtilities.execute_sqlite3(path, cmds)
+    if ids_to_delete:
+        icons_where = f"where (id in ({str(ids_to_delete).replace('[', '').replace(']', '')}))"
+        cols = ('icon_url', 'data')
+        cmds += __shred_sqlite_char_columns('moz_icons', cols, icons_where, path)
+        FileUtilities.execute_sqlite3(path, cmds)
 
 
 def get_chrome_bookmark_ids(history_path):
