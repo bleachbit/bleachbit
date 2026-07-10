@@ -218,9 +218,11 @@ class Winapp:
             files = parts[2].split(';')
             if len(files) == 1:
                 # one file pattern like *.* or *.log
-                files_regex = fnmatch_translate(files[0])
-                if files_regex == '*.*':
+                if files[0] == '*.*':
+                    # exclude the whole folder, matching __make_file_provider
                     files = None
+                else:
+                    files_regex = fnmatch_translate(files[0])
             elif len(files) > 1:
                 # multiple file patterns like *.log;*.bak
                 files_regex = f"({'|'.join(fnmatch_translate(f) for f in files)})"
