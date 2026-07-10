@@ -306,7 +306,7 @@ class Worker:
         close_delete_parent_lock()
 
         # delayed operations
-        for op in sorted(self.delayed_ops):
+        for op in sorted(self.delayed_ops, key=lambda op: op[0]):
             operation = list(op[1].keys())[0]
             for option_id in list(op[1].values())[0]:
                 for _ret in self.run_delayed_op(operation, option_id):
