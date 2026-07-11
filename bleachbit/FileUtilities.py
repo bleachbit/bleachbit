@@ -569,7 +569,7 @@ def detect_encoding(fn):
 
     with open(fn, 'rb') as f:
         detector = chardet.universaldetector.UniversalDetector()
-        for line in f.readlines():
+        for line in f:
             detector.feed(line)
             if detector.done:
                 break
