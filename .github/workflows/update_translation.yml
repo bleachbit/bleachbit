@@ -7,16 +7,24 @@ on:
     paths:
       - 'po/*.po' # translation changed
 
+permissions:
+  contents: read
+
 jobs:
   update-desktop:
+    if: github.repository == 'bleachbit/bleachbit'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # commit and push localization files
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version: '3.12'
 
@@ -38,6 +46,8 @@ jobs:
         run: python3 windows/nsis_translations.py --generate
 
       - name: Commit if changed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
@@ -46,6 +56,5 @@ jobs:
               echo "No changes to commit."
           else
               git commit -m 'Update localization files' -m 'Automatically extracted from ./po/*.po'
-              git push
+              git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git" "HEAD:${{ github.ref_name }}"
           fi
-
