@@ -71,6 +71,7 @@ class TreeDisplayModel:
         assert isinstance(value, bool)
         assert isinstance(model, Gtk.TreeStore)
         cleaner_id = None
+        option_id = None
         i = path
         if isinstance(i, str):
             # type is either str or gtk.TreeIter

@@ -32,6 +32,7 @@ class InitTestCase(common.BleachbitTestCase):
         self.assertEqual(test_input, test_output)
 
         # should be expanded
+        test_inputs = ()
         if IS_WINDOWS:
             test_inputs = ('~', r'~\ntuser.dat')
         elif IS_POSIX:

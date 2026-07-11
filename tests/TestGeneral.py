@@ -399,6 +399,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external_timeout(self):
         """Unit test for run_external() with timeout"""
+        args = None
         if IS_POSIX:
             args = ['sleep', '10']
         if IS_WINDOWS:

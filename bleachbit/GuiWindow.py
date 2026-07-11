@@ -110,6 +110,7 @@ class GUI(Gtk.ApplicationWindow):
         accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
 
         # Enable the user to change font size with keyboard or mouse.
+        gtk_font_name = None
         try:
             gtk_font_name = Gtk.Settings.get_default().get_property('gtk-font-name')
         except TypeError as e:

@@ -403,6 +403,7 @@ There is NO WARRANTY, to the extent permitted by law.
             for _ret in bleachbit.Wipe.wipe_path(wipe_path):
                 pass
         sys.exit(0)
+    operations = {}
     if options.preview or options.clean:
         operations = args_to_operations(
             args, options.preset, options.all_but_warning, excludes)

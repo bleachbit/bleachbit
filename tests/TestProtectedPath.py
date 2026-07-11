@@ -224,6 +224,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
             result = check_protected_path(tmpdir)
             self.assertIsNone(result)
         # Check .git (which is protected) under an exempt directory
+        exempt_dir_raw = None
         if IS_POSIX:
             exempt_dir_raw = '~/.cache'
         elif IS_WINDOWS:
