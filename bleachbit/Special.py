@@ -380,17 +380,20 @@ def delete_mozilla_url_history(path):
     FileUtilities.execute_sqlite3(path, cmds)
 
 
+def _remove_path_from_url(url):
+    """Prepare URL for comparison in delete_mozilla_favicons()"""
+    prefix = 'fake-favicon-uri:'
+    if url.startswith(prefix):
+        url = url[len(prefix):]
+    url = urlparse(url)
+    if not url.netloc:
+        return url.geturl()
+    return urlunparse((url.scheme, url.netloc, '', '', '', ''))
+
 def delete_mozilla_favicons(path):
     """Delete favorites icons in Mozilla places.favicons
 
     Bookmarks are not deleted."""
-
-    def remove_path_from_url(url):
-        prefix = 'fake-favicon-uri:'
-        if url.startswith(prefix):
-            url = url[len(prefix):]
-        url = urlparse(url)
-        return urlunparse((url.scheme, url.netloc, '', '', '', ''))
 
     cmds = ""
 
@@ -443,17 +446,15 @@ def delete_mozilla_favicons(path):
                                              db='', filter=" and url NOT LIKE 'javascript:%'"),
                                          row_factory)
 
-    bookmarked_urls_domains = list(map(remove_path_from_url, bookmarked_urls))
+    bookmarked_urls_domains = list(map(_remove_path_from_url, bookmarked_urls))
+    # Delete orphaned favicons whose domain is not bookmarked.
+    # Favicons for bookmarked domains are kept regardless of URL path
+    # depth, because Firefox stores site favicons at deep paths (e.g.
+    # https://example.com/media/img/favicon.ico) and deleting them causes
+    # bookmark icons to revert to generic icons.
+    # https://github.com/bleachbit/bleachbit/issues/1537
     ids_to_delete = [id for id, url in id_and_url_pairs
-                     if (
-                         # Collect only favicons with not bookmarked
-                         # urls with same domain or their domain is a
-                         # part of a bookmarked url but the favicons are
-                         # not domain level. In other words, collect all
-                         # that are not bookmarked.
-                         remove_path_from_url(url) not in bookmarked_urls_domains or
-                         urlparse(url).path.count('/') > 1
-                     )
+                     if _remove_path_from_url(url) not in bookmarked_urls_domains
                      ]
 
     # delete all not bookmarked icons
