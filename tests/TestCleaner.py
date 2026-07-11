@@ -333,7 +333,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         for cmd in backends['system'].get_commands('cache'):
             for _ in cmd.execute(really_delete=False):
                 self.assertNotEqual(cmd.path, obexd_fn)
-                self.assertFalse('/.cache/obexd/' in cmd.path)
+                self.assertNotIn('/.cache/obexd/', cmd.path)
         from bleachbit.FileUtilities import delete
         delete(obexd_fn, ignore_missing=True)
 

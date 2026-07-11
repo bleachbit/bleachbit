@@ -173,7 +173,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
         """Test check_exempt() on Windows"""
         temp_dir = expand_path('%temp%')
         self.assertIsInstance(temp_dir, str)
-        self.assertTrue(len(temp_dir) > 0)
+        self.assertGreater(len(temp_dir), 0)
         for case_method in CASE_METHODS:
             cased_temp_dir = case_method(temp_dir)
             self.assertTrue(_check_exempt(cased_temp_dir),
@@ -235,7 +235,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
         self.assertIsInstance(exempt_dir, str)
         self.assertTrue(_check_exempt(exempt_dir))
         self.assertNotEqual(exempt_dir, exempt_dir_raw)
-        self.assertTrue(len(exempt_dir) > 0)
+        self.assertGreater(len(exempt_dir), 0)
         result = check_protected_path(exempt_dir)
         self.assertIsNone(result)
         subpath = os.path.join(exempt_dir, '.git')

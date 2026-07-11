@@ -34,7 +34,7 @@ class VFSTestCase(common.BleachbitTestCase):
         self.assertTrue(vfs.isdir('/'))
         root_children = vfs.listdir('/' if IS_POSIX else 'C:\\')
         self.assertIsInstance(root_children, list)
-        self.assertTrue(len(root_children) > 0)
+        self.assertGreater(len(root_children), 0)
         self.assertTrue(all(isinstance(child, str) for child in root_children))
         if IS_POSIX:
             self.assertIn('tmp', root_children)

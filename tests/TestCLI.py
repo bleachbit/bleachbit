@@ -77,12 +77,12 @@ class CLITestCase(common.BleachbitTestCase):
         # --all-but-warning
         o = args_to_operations_list(False, True)
         self.assertIsInstance(o, list)
-        self.assertTrue('google_chrome.cache' in o)
-        self.assertTrue('system.tmp' in o)
+        self.assertIn('google_chrome.cache', o)
+        self.assertIn('system.tmp', o)
         gui_available = IS_WINDOWS or HAVE_GTK
         self.assertEqual(gui_available, 'system.clipboard' in o)
-        self.assertFalse('system.empty_space' in o)
-        self.assertFalse('system.memory' in o)
+        self.assertNotIn('system.empty_space', o)
+        self.assertNotIn('system.memory', o)
 
     def test_args_to_operations(self):
         """Unit test for args_to_operations()"""
@@ -589,4 +589,4 @@ class CLITestCase(common.BleachbitTestCase):
         self.assertEqual(rc, 0)
         # Is the application still running?
         opened_windows_titles = common.get_opened_windows_titles()
-        self.assertFalse('BleachBit' in opened_windows_titles)
+        self.assertNotIn('BleachBit', opened_windows_titles)

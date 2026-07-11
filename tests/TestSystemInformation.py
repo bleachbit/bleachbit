@@ -192,4 +192,4 @@ __file__ = /home/regularuser/software/bleachbit/bleachbit/SystemInformation.py""
         # Both should be non-empty strings
         self.assertIsString(original)
         self.assertIsString(anonymized)
-        self.assertTrue(len(anonymized) > 0)
+        self.assertGreater(len(anonymized), 0)
