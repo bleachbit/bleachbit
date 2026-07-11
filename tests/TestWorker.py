@@ -30,6 +30,7 @@ class AccessDeniedActionAction(ActionProvider):
     action_key = 'access.denied'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -47,6 +48,7 @@ class DoesNotExistAction(ActionProvider):
     action_key = 'does.not.exist'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -64,6 +66,7 @@ class FunctionGeneratorAction(ActionProvider):
     action_key = 'function.generator'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -80,6 +83,7 @@ class FunctionPathAction(ActionProvider):
     action_key = 'function.path'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -97,6 +101,7 @@ class InvalidEncodingAction(ActionProvider):
     action_key = 'invalid.encoding'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -113,6 +118,7 @@ class FunctionPlainAction(ActionProvider):
     action_key = 'function.plain'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -130,6 +136,7 @@ class LockedAction(ActionProvider):
     action_key = 'locked'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -156,6 +163,7 @@ class RuntimeErrorAction(ActionProvider):
     action_key = 'runtime'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -173,6 +181,7 @@ class TruncateTestAction(ActionProvider):
     action_key = 'truncate.test'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
