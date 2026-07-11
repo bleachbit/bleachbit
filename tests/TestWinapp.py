@@ -9,6 +9,7 @@ Test cases for module Winapp
 """
 
 import os
+import re
 import shutil
 import stat
 import string
@@ -18,7 +19,7 @@ import time
 from unittest import mock
 
 from tests import common
-from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
+from bleachbit.Winapp import Winapp, detectos, detect_file, fnmatch_translate, section2option
 from bleachbit.Windows import detect_registry_key, parse_windows_build
 from bleachbit import IS_POSIX, IS_WINDOWS, logger
 
@@ -633,6 +634,31 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
                  ('A - B (C)', 'a_b_c'))
         for test in tests:
             self.assertEqual(section2option(test[0]), test[1])
+
+    def test_fnmatch_translate(self):
+        """Test that fnmatch_translate strips the end anchor and matches patterns"""
+        regex = fnmatch_translate('*.log')
+        self.assertFalse(regex.endswith(r'\z'))
+        self.assertFalse(regex.endswith(r'\Z'))
+        self.assertFalse(regex.endswith(r'\Z(?ms)'))
+        self.assertFalse(regex.endswith(r'$'))
+        self.assertNotEqual(regex, '*.log')
+
+        cases = (
+            ('*.log', 'deleteme.log', True),
+            ('*.log', 'deleteme.bak', False),
+            ('deleteme.*', 'deleteme.log', True),
+            ('deleteme.*', 'deleteme.bak', True),
+            ('deleteme.*', 'other.log', False),
+            (r'C:\dir', r'C:\dir\file.txt', True),
+            (r'C:\dir', r'C:\other\file.txt', False),
+        )
+        for pattern, string, expected in cases:
+            msg = f'pattern={pattern!r} string={string!r}'
+            self.assertEqual(
+                bool(re.search(fnmatch_translate(pattern), string)),
+                expected,
+                msg)
 
     def test_section_not_found(self):
         """Test a section that is found"""
