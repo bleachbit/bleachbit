@@ -7,6 +7,7 @@
 import logging
 import os
 import sys
+import threading
 import time
 
 import bleachbit
@@ -118,6 +119,8 @@ class GUI(Gtk.ApplicationWindow):
         self.textview.connect("scroll-event", self.on_scroll_event)
         self.connect("key-press-event", self.on_key_press_event)
         self._font_css_provider = None
+        if options.has_option("window_font_size"):
+            self.set_font_size(absolute_size=options.get("window_font_size"))
 
     def populate_window(self):
         """Create the main application window"""
@@ -344,6 +347,7 @@ class GUI(Gtk.ApplicationWindow):
             absolute_size = self.font_size + relative_size
         absolute_size = max(5, min(25, absolute_size))
         self.font_size = absolute_size
+        options.set("window_font_size", absolute_size)
         css = f"* {{ font-size: {absolute_size}pt; }}"
         provider = Gtk.CssProvider()
         provider.load_from_data(css.encode())
@@ -551,6 +555,11 @@ class GUI(Gtk.ApplicationWindow):
 
     def append_text(self, text, tag=None, __iter=None, scroll=True):
         """Add some text to the main log"""
+        if threading.current_thread() is not threading.main_thread():
+            # GTK isn't thread-safe, so push work from worker threads back
+            # onto the main loop instead of touching the buffer directly.
+            GLib.idle_add(self.append_text, text, tag, None, scroll)
+            return
         if self.textbuffer is None:
             # textbuffer was destroyed.
             return

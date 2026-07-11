@@ -84,7 +84,8 @@ boolean_keys = [
     key for key, meta in OPTION_DEFAULTS.items()
     if _platform_allows(meta)
 ]
-int_keys = ['window_x', 'window_y', 'window_width', 'window_height', ]
+int_keys = ['window_x', 'window_y', 'window_width', 'window_height',
+            'window_font_size', ]
 
 
 def _option_index(option_name):
