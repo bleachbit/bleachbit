@@ -331,7 +331,7 @@ class CleanerTestCase(common.BleachbitTestCase):
         obexd_fn = os.path.join(obexd_dir, 'bleachbit-test')
         common.touch_file(obexd_fn)
         for cmd in backends['system'].get_commands('cache'):
-            for _result in cmd.execute(really_delete=False):
+            for _ in cmd.execute(really_delete=False):
                 self.assertNotEqual(cmd.path, obexd_fn)
                 self.assertFalse('/.cache/obexd/' in cmd.path)
         from bleachbit.FileUtilities import delete
