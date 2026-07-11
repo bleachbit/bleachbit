@@ -18,6 +18,7 @@ from bleachbit import logger
 from bleachbit.FileUtilities import exe_exists
 from bleachbit.Memory import (
     _memory_child_script,
+    _parse_meminfo_free,
     _run_memory_child_fork,
     _run_memory_child_systemd_scope,
     count_swap_linux,
@@ -161,6 +162,29 @@ Swapouts:                              20258188.
             ret, 'physical_free() returns variable type %s' % type(ret))
         self.assertGreater(physical_free(), 0)
         report_free()
+
+    def test_parse_meminfo_free_swapcached_not_matched(self):
+        """SwapCached must not be counted as free
+
+        Regression test that is a follow up to edba5e55"""
+        meminfo = (
+            "MemFree:          1000 kB\n"
+            "SwapCached:        500 kB\n"
+            "Cached:           2000 kB\n"
+        )
+        free_bytes, num_matches = _parse_meminfo_free(meminfo)
+        self.assertEqual(num_matches, 2)
+        self.assertEqual(free_bytes, (1000 + 2000) * 1024)
+
+    @common.skipIfWindows
+    def test_parse_meminfo_free_real_proc(self):
+        """The real /proc/meminfo must match exactly MemFree and Cached and
+        nothing else, so future false positives (e.g. SwapCached) are caught."""
+        with open('/proc/meminfo', encoding='utf-8') as f:
+            contents = f.read()
+        free_bytes, num_matches = _parse_meminfo_free(contents)
+        self.assertEqual(num_matches, 2)
+        self.assertGreater(free_bytes, 0)
 
     @common.skipIfWindows
     def test_get_swap_size_linux(self):

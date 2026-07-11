@@ -335,16 +335,28 @@ def physical_free_darwin(run_vmstat=None):
     return vm_stat["Pages free"] * page_size
 
 
+def _parse_meminfo_free(meminfo_text):
+    """Parse the contents of /proc/meminfo and return the total free
+    bytes (MemFree + Cached) plus the number of matched lines.
+
+    Returns a tuple (free_bytes, num_matches).
+    """
+    free_bytes = 0
+    num_matches = 0
+    for line in meminfo_text.splitlines():
+        # Do not match "SwapCached"
+        ret = re.search(r'^(MemFree|Cached):[ ]*([0-9]*) kB', line)
+        if ret is not None:
+            kb = int(ret.group(2))
+            free_bytes += kb * 1024
+            num_matches += 1
+    return free_bytes, num_matches
+
+
 def physical_free_linux():
     """Return the physical free memory on Linux"""
-    free_bytes = 0
-    with open("/proc/meminfo") as f:
-        for line in f:
-            line = line.replace("\n", "")
-            ret = re.search(r'^(MemFree|Cached):[ ]*([0-9]*) kB', line)
-            if ret is not None:
-                kb = int(ret.group(2))
-                free_bytes += kb * 1024
+    with open("/proc/meminfo", encoding="utf-8") as f:
+        free_bytes, _ = _parse_meminfo_free(f.read())
     if free_bytes > 0:
         return free_bytes
     else:
