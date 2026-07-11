@@ -442,6 +442,34 @@ class WinappTestCase(common.BleachbitTestCase):
             # cleanup
             shutil.rmtree(dirname, True)
 
+    @common.skipUnlessWindows
+    def test_excludekey_star_dot_star_extensionless(self):
+        """Test ExcludeKey *.* on a file without an extension"""
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2')
+
+        def make_dir():
+            dirname = self.mkdtemp(prefix='bleachbit-test-winapp')
+            self.write_file(os.path.join(dirname, 'deleteme'), b'', 'wb')
+            self.write_file(os.path.join(dirname, 'deleteme.log'), b'', 'wb')
+            return dirname
+
+        # without the exclude, the FileKey deletes the extensionless file
+        dirname = make_dir()
+        cleaner = self.ini2cleaner(f'FileKey1={dirname}|deleteme*')
+        self.run_all(cleaner, True)
+        self.assertNotExists(rf'{dirname}\deleteme')
+        shutil.rmtree(dirname, True)
+
+        # *.* excludes the whole folder
+        dirname = make_dir()
+        body = (f'FileKey1={dirname}|deleteme*'
+                f'\nExcludeKey1=PATH|{dirname}|*.*')
+        cleaner = self.ini2cleaner(body)
+        self.run_all(cleaner, True)
+        self.assertExists(rf'{dirname}\deleteme')
+        self.assertExists(rf'{dirname}\deleteme.log')
+        shutil.rmtree(dirname, True)
+
     def _verify_keys_state(self, expected_state):
         """Verify registry keys match expected state (dict of key_path -> exists)"""
         for key_path, should_exist in expected_state.items():
