@@ -90,6 +90,7 @@ class ChaffTestCase(common.BleachbitTestCase):
                 return False
             if host == 'download.bleachbit.org':
                 return True
+            return None
         mock_download.side_effect = succeed_on_second
         ret = download_models(models_dir=tmp_dir)
         self.assertTrue(
