@@ -77,7 +77,7 @@ def parse_swapoff(swapoff):
 def disable_swap_linux():
     """Disable Linux swap and return list of devices"""
     if 0 == count_swap_linux():
-        return
+        return None
     logger.debug(_("Disabling swap."))
     args = ["swapoff", "-a", "-v"]
     (rc, stdout, stderr) = General.run_external(args)

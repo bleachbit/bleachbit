@@ -255,10 +255,10 @@ class GUI(Gtk.ApplicationWindow):
     def _get_windows10_theme_css(self):
         """Load the Windows 10 theme CSS files (if not already loaded)"""
         if not 'nt' == os.name:
-            return
+            return None
 
         if not options.get("win10_theme"):
-            return
+            return None
 
         # Load regular theme CSS
         dark_mode = options.get('dark_mode')
