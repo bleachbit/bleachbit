@@ -57,7 +57,7 @@ def get_proc_swaps():
     if 0 == rc:
         return stdout
     logger.debug(
-        _("The command 'swapoff -s' failed, so falling back to /proc/swaps for swap information."))
+        _("The command 'swapon -s' failed, so falling back to /proc/swaps for swap information."))
     return open("/proc/swaps").read()
 
 
