@@ -8,6 +8,7 @@
 Command line interface
 """
 
+import errno
 import logging
 import optparse
 import os
@@ -21,6 +22,8 @@ from bleachbit.Language import get_text as _
 from bleachbit.Log import set_root_log_level
 
 logger = logging.getLogger(__name__)
+
+_OUTPUT_CLOSED_ERRNOS = {errno.EINVAL, errno.EPIPE}
 
 
 def _write_update_output(value):
@@ -38,6 +41,7 @@ class CliCallback:
 
     def __init__(self, quiet=False):
         self.quiet = quiet
+        self._output_closed = False
 
     def append_text(self, msg, _tag=None):
         """Write text to the terminal"""
@@ -45,8 +49,17 @@ class CliCallback:
         # Surrogates (like \udcd6) can appear in filenames from the filesystem
         # and cause UnicodeEncodeError when GTK tries to insert them.
         msg = msg.encode('utf-8', errors='replace').decode('utf-8')
-        if not self.quiet:
+        if self.quiet or self._output_closed:
+            return
+        try:
             print(msg.strip('\n').encode(stdout_encoding, errors='replace').decode(stdout_encoding))
+        except BrokenPipeError:
+            self._output_closed = True
+        except OSError as e:
+            if e.errno in _OUTPUT_CLOSED_ERRNOS:
+                self._output_closed = True
+                return
+            raise
 
     def update_progress_bar(self, status):
         """Not used"""
