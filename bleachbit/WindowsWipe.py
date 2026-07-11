@@ -976,7 +976,6 @@ def write_zero_fill(file_handle, write_length_bytes):
     # There is no need to explicitly move the file pointer while
     # writing. We are writing contiguously.
     while write_length_bytes > 0:
-        assert write_length_bytes > 0
         if write_length_bytes >= WRITE_BUF_SIZE:
             write_string = ZERO_FILL_BUFFER
             write_length_bytes -= WRITE_BUF_SIZE
