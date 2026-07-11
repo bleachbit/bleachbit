@@ -114,7 +114,8 @@ def args_to_operations_list(preset, all_but_warning):
     args = []
     if not backends:
         list(register_cleaners())
-    assert len(backends) > 1
+    if len(backends) == 0:
+        raise RuntimeError('no cleaners registered')
     for key in sorted(backends):
         c_id = backends[key].get_id()
         for (o_id, _o_name) in backends[key].get_options():

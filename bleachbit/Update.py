@@ -118,14 +118,16 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
         return ()
 
     def parse_updates(element):
-        if element:
-            ver = element[0].getAttribute('ver')
-            url = element[0].firstChild.data
-            assert isinstance(ver, str)
-            assert isinstance(url, str)
-            assert url.startswith('http')
-            return ver, url
-        return ()
+        if not element:
+            return ()
+        ver = element[0].getAttribute('ver')
+        url = element[0].firstChild.data
+        if not (isinstance(ver, str) and isinstance(url, str)
+                and url.startswith('http')):
+            logger.warning('ignoring malformed update entry: ver=%r, url=%r',
+                           ver, url)
+            return ()
+        return ver, url
 
     stable = parse_updates(dom.getElementsByTagName("stable"))
     beta = parse_updates(dom.getElementsByTagName("beta"))

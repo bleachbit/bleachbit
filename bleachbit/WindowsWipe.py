@@ -185,7 +185,8 @@ def logical_ranges_to_extents(ranges, bridge_compressed=False):
             # Keep track of VCN inside this file.
             this_vcn_span = vcn - vcn_count
             vcn_count = vcn
-            assert this_vcn_span >= 0
+            if this_vcn_span < 0:
+                raise RuntimeError(f'negative VCN span: {this_vcn_span}')
 
             yield (lcn, lcn + this_vcn_span - 1)
 
@@ -223,7 +224,8 @@ def logical_ranges_to_extents(ranges, bridge_compressed=False):
                 index += 1
                 this_vcn_span = vcn - vcn_count
                 vcn_count = vcn
-                assert this_vcn_span >= 0
+                if this_vcn_span < 0:
+                    raise RuntimeError(f'negative VCN span: {this_vcn_span}')
                 yield (lcn, lcn + this_vcn_span - 1)
             else:
                 index = merge_index + 1
@@ -231,7 +233,8 @@ def logical_ranges_to_extents(ranges, bridge_compressed=False):
                                  ranges[merge_index - 1][0])
                 vcn = ranges[merge_index][0]
                 vcn_count = vcn
-                assert last_vcn_span >= 0
+                if last_vcn_span < 0:
+                    raise RuntimeError(f'negative VCN span: {last_vcn_span}')
                 yield (lcn, ranges[merge_index][1] + last_vcn_span - 1)
 
 
@@ -737,7 +740,8 @@ def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
 
     # If we make the GET_RETRIEVAL_POINTERS request with 0,
     # this should always come back 0.
-    assert starting_vcn == 0
+    if starting_vcn != 0:
+        raise RuntimeError(f'unexpected starting VCN: {starting_vcn}')
 
     # Populate the extents array with the ranges from rp structure.
     ranges = []
@@ -830,7 +834,8 @@ def get_volume_bitmap(volume_handle, total_clusters):
 
     # If we make the GET_VOLUME_BITMAP request with 0,
     # this should always come back 0.
-    assert starting_lcn == 0
+    if starting_lcn != 0:
+        raise RuntimeError(f'unexpected starting LCN: {starting_lcn}')
 
     # The remaining part of the structure is the actual bitmap.
     return volume_bitmap, bitmap_size
@@ -866,7 +871,9 @@ def get_ntfs_volume_data(volume_handle):
     mft_zone_end, vd_struct = unpack_element('q', vd_struct)     # 8 bytes
 
     # Quick sanity check that we got something reasonable for MFT zone.
-    assert mft_zone_start < mft_zone_end and mft_zone_start > 0 and mft_zone_end > 0
+    if not 0 < mft_zone_start < mft_zone_end:
+        raise RuntimeError(
+            f'invalid MFT zone bounds: {mft_zone_start}, {mft_zone_end}')
 
     logger.debug("MFT from %d to %d", mft_zone_start, mft_zone_end)
     return mft_zone_start, mft_zone_end
@@ -969,7 +976,6 @@ def write_zero_fill(file_handle, write_length_bytes):
     # There is no need to explicitly move the file pointer while
     # writing. We are writing contiguously.
     while write_length_bytes > 0:
-        assert write_length_bytes > 0
         if write_length_bytes >= WRITE_BUF_SIZE:
             write_string = ZERO_FILL_BUFFER
             write_length_bytes -= WRITE_BUF_SIZE
@@ -982,7 +988,10 @@ def write_zero_fill(file_handle, write_length_bytes):
         # by the number of bytes written (bytes_written).
         # logger.debug("Write %d bytes", len(write_string))
         _, bytes_written = WriteFile(file_handle, write_string)
-        assert bytes_written == len(write_string)
+        if bytes_written != len(write_string):
+            raise OSError(
+                f'incomplete wipe write: {bytes_written} of '
+                f'{len(write_string)} bytes')
 
     # Ensure all data is written to disk, not just cached in memory
     FlushFileBuffers(file_handle)
@@ -1009,7 +1018,8 @@ def wipe_file_direct(file_handle, extents, cluster_size, file_size):
     If the file had no extents (very small files stored in the MFT),
     we write zeros for the entire file size.
     """
-    assert cluster_size > 0
+    if cluster_size <= 0:
+        raise RuntimeError(f'invalid cluster size: {cluster_size}')
 
     # Remember that file_size measures full expanded content of the file,
     # which may not always match with size on disk (eg. if file compressed).
@@ -1059,7 +1069,8 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
     Returns:
         bool: True if wiping succeeded, False otherwise
     """
-    assert cluster_size > 0
+    if cluster_size <= 0:
+        raise RuntimeError(f'invalid cluster size: {cluster_size}')
     logger.debug("Examining extent from %d to %d for wipe...",
                  lcn_start, lcn_end)
     write_length = (lcn_end - lcn_start + 1) * cluster_size
