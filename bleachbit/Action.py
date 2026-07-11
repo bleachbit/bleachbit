@@ -19,7 +19,7 @@ from itertools import product
 from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod  # mod=module
 from bleachbit import FS_SCAN_RE_FLAGS
 from bleachbit.Constant import CLEAN_FILE_LABEL
-from bleachbit.Cookie import COOKIE_KEEP_LIST_FILENAME, load_keep_list
+from bleachbit.Cookie import load_keep_list
 from bleachbit.Language import get_text as _
 
 if os.name == 'posix':

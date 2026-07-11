@@ -27,21 +27,16 @@ These are the terms:
 import atexit
 import base64
 import ctypes
-import decimal
 import errno
 import glob
 import hashlib
 import logging
 import ntpath
 import os
-import pathlib
 import re
 import shutil
-import struct
 import sys
-import threading
 import time
-import uuid
 import xml.dom.minidom
 from ctypes import wintypes
 from decimal import Decimal

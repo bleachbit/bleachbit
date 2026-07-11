@@ -11,8 +11,6 @@ Test case for module Options
 
 import errno
 import os
-import stat
-import subprocess
 import sys
 from unittest import mock
 

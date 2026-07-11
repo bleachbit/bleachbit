@@ -9,7 +9,6 @@ Test case for module General
 """
 
 # standard library
-import copy
 import os
 import shutil
 import subprocess

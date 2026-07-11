@@ -25,7 +25,6 @@ from bleachbit.GtkShim import (
     _handle_gtk_import_error,
     _patched_argv,
     _show_windows_error_dialog,
-    _try_import_gtk,
     path_has_lib_or_bin,
 )
 

@@ -23,7 +23,7 @@ from bleachbit.PathUtils import path_equal
 from bleachbit.Process import is_process_running
 from bleachbit import Action, CleanerML, Command, FileUtilities, Memory
 from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
-from bleachbit.GtkShim import Gtk, Gdk, HAVE_GTK
+from bleachbit.GtkShim import Gtk, HAVE_GTK
 from bleachbit.Wipe import wipe_path
 
 if 'posix' == os.name:
