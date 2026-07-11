@@ -2477,7 +2477,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_RUN_AS_ADMIN ${LANG_TURKISH} "Bu programı yönetici olarak çalıştırmalısınız."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_TURKISH} "$(^NameDA) hem tüm kullanıcılar hem de geçerli kullanıcı için kurulmuş.$\r$\nHangi kurulumun kaldırılacağını seç."
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_TURKISH} "Hangi kullanıcılar için $(^NameDA) kaldırılacağını seç."
-	LangString OLD_WINDOWS_WARNING ${LANG_TURKISH} "Bu BleachBit sürümü için Windows 10 veya daha yeni bir sürüm gereklidir. Sisteminizle uyumlu bir sürümü indirmek için Tamam düğmesine tıklayın. Kurulumdan çıkmak için İptal düğmesine tıklayın."
+	LangString OLD_WINDOWS_WARNING ${LANG_TURKISH} "Bu BleachBit sürümü için Windows 10 ya da sonrası gereklidir. Sisteminizle uyumlu sürümü indirmek için Tamam düğmesine tıklayın. Kurulumdan çıkmak için İptal düğmesine tıklayın."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_TURKISH} "Bunlar, ${prodname} işlevi için gereksinilen temel dosyalardır (gerekli)."
 	LangString SECTION_CORE_NAME ${LANG_TURKISH} "Çekirdek dosyalar (gerekli)"
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_TURKISH} "Masaüstünde kısayol oluştur."
