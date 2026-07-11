@@ -1036,7 +1036,7 @@ State=AAAA/wA...
                 temp.write('hello world')
                 temp.flush()
             with self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
-                det = detect_encoding(temp.name)
+                detect_encoding(temp.name)
             self.assertIn('chardet module is not available', cm.output[0])
             os.unlink(temp.name)
 

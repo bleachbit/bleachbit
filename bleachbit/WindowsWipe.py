@@ -941,8 +941,7 @@ def move_file(volume_handle, file_handle, starting_vcn,
 
     input_struct = struct.pack('IIqqII', handle_lo, handle_hi, starting_vcn,
                                starting_lcn, cluster_count, 0)
-    _vb_struct = DeviceIoControl(volume_handle, FSCTL_MOVE_FILE,
-                                 input_struct, None)
+    DeviceIoControl(volume_handle, FSCTL_MOVE_FILE, input_struct, None)
 
 
 def write_zero_fill(file_handle, write_length_bytes):

@@ -74,7 +74,7 @@ class ChaffTestCase(common.BleachbitTestCase):
                 self.assertIn('Subject: ', contents)
                 self.assertNotIn('base64', contents)
 
-        generated_file_names = generate_2600(5, tmp_dir, models_dir)
+        generate_2600(5, tmp_dir, models_dir)
 
         rmtree(tmp_dir)
 
