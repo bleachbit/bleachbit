@@ -875,18 +875,9 @@ def package_installer(fast_build, nsi_path=r'windows\bleachbit.nsi'):
     # Now: Done in NSIS file!
     opts = '' if fast_build else '/V3 /Dpackhdr /DCompressor'
     nsis(opts, exe_name_multilang, nsi_path)
-
-    if fast_build:
-        sign_files((exe_name_multilang,))
-    else:
-        # Was:
-        # nsis('/DNoTranslations',
-        # Now: Compression gets now done in NSIS file!
-        # As of 2022-11-20, there is not a big size difference for
-        # the English-only build, and Google Search flags the Python 3.10
-        # version as malware.
-        nsis(opts + ' /DNoTranslations', exe_name_en, nsi_path)
-        sign_files((exe_name_multilang, exe_name_en))
+    # Cheap second pass, so build English-only even in fast mode.
+    nsis(opts + ' /DNoTranslations', exe_name_en, nsi_path)
+    sign_files((exe_name_multilang, exe_name_en))
 
     if os.path.exists(SZ_EXE):
         logger.info('Zipping installer')
