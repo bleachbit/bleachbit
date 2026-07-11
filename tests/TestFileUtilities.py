@@ -1630,6 +1630,25 @@ State=AAAA/wA...
         self.assertFalse(whitelisted('c:\\de\\strasse.txt'))
         self.assertFalse(whitelisted('c:\\de\\straSSe.txt'))
 
+    @common.skipUnlessWindows
+    def test_whitelisted_windows_temp_roots(self):
+        """Windows temp roots are preserved, but their contents are not."""
+        options.set_whitelist_paths([])
+        temp_roots = [
+            r'C:\Windows\Temp',
+            r'C:\WINDOWS\ServiceProfiles\MariaDB\AppData\Local\Temp',
+            r'C:\Windows\ServiceProfiles\LocalService\AppData\Local\Temp',
+            r'C:\Users\example\AppData\Local\Temp',
+            r'C:\Documents and Settings\example\Local Settings\Temp',
+        ]
+
+        for temp_root in temp_roots:
+            with self.subTest(temp_root=temp_root):
+                self.assert_is_whitelisted(temp_root)
+                self.assert_is_whitelisted(temp_root + '\\')
+                self.assertFalse(whitelisted(temp_root + r'\bleachbit.tmp'))
+                self.assertFalse(whitelisted(temp_root + r'\subdir'))
+
     @common.skipIfWindows
     def test_whitelisted_posix_symlink(self):
         """Symlink test for whitelisted_posix()"""
