@@ -137,7 +137,8 @@ def fnmatch_translate(pattern):
     ret = fnmatch.translate(pattern)
     if ret.endswith('$'):
         return ret[:-1]
-    return re.sub(r'\\Z(\(\?ms\))?$', '', ret)
+    # fnmatch.translate ends the regex with \Z before Python 3.14 and \z after
+    return re.sub(r'\\[Zz](\(\?ms\))?$', '', ret)
 
 
 class Winapp:
