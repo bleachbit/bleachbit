@@ -547,12 +547,9 @@ def rotated_logs():
     positive_re = re.compile(r'(\.(\d+|bz2|gz|xz|old)|\-\d{8}?)')
 
     for path in bleachbit.FileUtilities.children_in_directory('/var/log'):
-        keep_list_match = False
-        for keep_list in keep_lists:
-            if keep_list.search(path) or bleachbit.FileUtilities.whitelisted(path):
-                keep_list_match = True
-                break
-        if keep_list_match:
+        if bleachbit.FileUtilities.whitelisted(path):
+            continue
+        if any(keep_list.search(path) for keep_list in keep_lists):
             continue
         if positive_re.search(path):
             yield path
