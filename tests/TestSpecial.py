@@ -193,6 +193,8 @@ INSERT INTO moz_bookmarks VALUES(10,1,1047,5,3,'Base64 Image Encoder',NULL,NULL,
 INSERT INTO moz_bookmarks VALUES(11,1,1052,5,4,'Lebab Modernizing Javascript Code',NULL,NULL,1625678570164000,1625678570164000,'KnR8OLEDutKj',1,1);
 INSERT INTO moz_bookmarks VALUES(12,1,1055,5,5,'Epoch Times | Truth and Tradition',NULL,NULL,1634407905800000,1634407905800000,'xiNkiy3pRnRM',1,1);
 INSERT INTO moz_bookmarks VALUES(13,1,1074,5,3,'javascript_bookmark',NULL,NULL,1634541546301000,1634541578237000,'5zn7HFpTz9Zk',1,3);
+INSERT INTO moz_bookmarks VALUES(14,1,1062,5,6,'Local File Bookmark',NULL,NULL,1634541546301000,1634541578237000,'5zn7HFpTz9Zl',1,1);
+INSERT INTO moz_bookmarks VALUES(15,1,1063,5,7,'Deep Path Bookmark',NULL,NULL,1634541546301000,1634541578237000,'5zn7HFpTz9Zm',1,1);
 CREATE TABLE moz_places (id INTEGER PRIMARY KEY, url LONGVARCHAR, title LONGVARCHAR, rev_host LONGVARCHAR, visit_count INTEGER DEFAULT 0, hidden INTEGER DEFAULT 0 NOT NULL, typed INTEGER DEFAULT 0 NOT NULL, frecency INTEGER DEFAULT -1 NOT NULL, last_visit_date INTEGER , guid TEXT, foreign_count INTEGER DEFAULT 0 NOT NULL, url_hash INTEGER DEFAULT 0 NOT NULL , description TEXT, preview_image_url TEXT, origin_id INTEGER REFERENCES moz_origins(id));
 INSERT INTO moz_places VALUES(4,'https://www.mozilla.org/en-US/about/',NULL,'gro.allizom.www.',0,0,0,-1,NULL,'qku4XnVuwKXz',1,47358774953055,NULL,NULL,2);
 INSERT INTO moz_places VALUES(5,'https://www.mozilla.org/en-US/firefox/central/',NULL,'gro.allizom.www.',0,0,1,-1,NULL,'zEH44cXgEbiW',1,47356370932282,NULL,NULL,2);
@@ -208,6 +210,9 @@ INSERT INTO moz_places VALUES(1058,'https://duckduckgo.com/?t=ffab&q=duck&ia=web
 INSERT INTO moz_places VALUES(1059,'https://duckduckgo.com/',NULL,'moc.ogkcudkcud.',1,0,0,100,1634421168747000,'3_aU-W5GQtVY',0,47357557756924,NULL,NULL,61);
 INSERT INTO moz_places VALUES(1060,'https://www.reddit.com/r/bulgaria/?f=flair_name%3A%22IMAGE%22',NULL,'moc.tidder.www.',1,0,0,100,1634421202542000,'91A-gGXCdGJo',0,47358238683930,NULL,NULL,53);
 INSERT INTO moz_places VALUES(1074,'javascript:(function(d){d.PwnBkmkVer=3%3Bd.body.appendChild(d.createElement(''script'')).src=''https://deturl.com/ld.php?''+1*new Date%3B})(document)%3B',NULL,'.',0,0,0,140,NULL,'MHLDGrz54C06',1,61196492657957,NULL,NULL,69);
+INSERT INTO moz_places VALUES(1061,'file:///home/user/local-page.html',NULL,'',0,0,0,-1,NULL,'aB1cD2eF3gH4',0,47359988123456,NULL,NULL,70);
+INSERT INTO moz_places VALUES(1062,'file:///home/user/bookmarked-page.html',NULL,'',0,0,0,-1,NULL,'bC2dE3fG4hI5',1,47359988123457,NULL,NULL,70);
+INSERT INTO moz_places VALUES(1063,'https://deep.example.com/path/to/page',NULL,'moc.elpmaxe.peekd.',0,0,0,-1,NULL,'cD3eF4gH5iJ6',1,47359988123458,NULL,NULL,71);
 """
 
 
@@ -229,6 +234,9 @@ INSERT INTO moz_icons VALUES(29,'https://www.mozilla.org/media/img/favicons/fire
 INSERT INTO moz_icons VALUES(33,'https://www.youtube.com/s/desktop/89d6cbd0/img/favicon_144x144.png',2213531744,144,0,NULL,1635025873106,NULL);
 INSERT INTO moz_icons VALUES(34,'https://www.youtube.com/s/desktop/89d6cbd0/img/favicon.ico',2155043602,16,0,NULL,1635025873107,NULL);
 INSERT INTO moz_icons VALUES(42,'https://www.base64-image.de/favicon.ico',834103348,16,1,NULL,1635088213227,NULL);
+INSERT INTO moz_icons VALUES(43,'fake-favicon-uri:file:///home/user/local-page.html',1234567890,16,0,NULL,1635088213228,NULL);
+INSERT INTO moz_icons VALUES(44,'fake-favicon-uri:file:///home/user/bookmarked-page.html',1234567891,16,0,NULL,1635088213229,NULL);
+INSERT INTO moz_icons VALUES(45,'https://deep.example.com/media/img/favicon.ico',9876543210,16,0,NULL,1635088213230,NULL);
 CREATE TABLE moz_icons_to_pages ( page_id INTEGER NOT NULL, icon_id INTEGER NOT NULL, expire_ms INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (page_id, icon_id), FOREIGN KEY (page_id) REFERENCES moz_pages_w_icons ON DELETE CASCADE, FOREIGN KEY (icon_id) REFERENCES moz_icons ON DELETE CASCADE ) WITHOUT ROWID;
 INSERT INTO moz_icons_to_pages VALUES(1,1,1605286324005);
 INSERT INTO moz_icons_to_pages VALUES(2,2,1605286324005);
@@ -243,6 +251,9 @@ INSERT INTO moz_icons_to_pages VALUES(17,33,1635025873106);
 INSERT INTO moz_icons_to_pages VALUES(17,34,1635025873107);
 INSERT INTO moz_icons_to_pages VALUES(21,6,1635025978652);
 INSERT INTO moz_icons_to_pages VALUES(21,7,1635025978655);
+INSERT INTO moz_icons_to_pages VALUES(22,43,1635088213228);
+INSERT INTO moz_icons_to_pages VALUES(23,44,1635088213229);
+INSERT INTO moz_icons_to_pages VALUES(24,45,1635088213230);
 CREATE TABLE moz_pages_w_icons ( id INTEGER PRIMARY KEY, page_url TEXT NOT NULL, page_url_hash INTEGER NOT NULL );
 INSERT INTO moz_pages_w_icons VALUES(1,'https://support.mozilla.org/en-US/products/firefox',47357795150914);
 INSERT INTO moz_pages_w_icons VALUES(2,'https://support.mozilla.org/en-US/kb/customize-firefox-controls-buttons-and-toolbars?utm_source=firefox-browser&utm_medium=default-bookmarks&utm_campaign=customize',47359532431620);
@@ -254,6 +265,9 @@ INSERT INTO moz_pages_w_icons VALUES(14,'https://duckduckgo.com/?t=ffab&q=firefo
 INSERT INTO moz_pages_w_icons VALUES(16,'https://www.mozilla.org/en-US/firefox/78.0/releasenotes/',47357311834713);
 INSERT INTO moz_pages_w_icons VALUES(17,'https://www.youtube.com/',47360296250519);
 INSERT INTO moz_pages_w_icons VALUES(21,'https://www.reddit.com/r/bulgaria/?f=flair_name%3A%22IMAGE%22',47358238683930);
+INSERT INTO moz_pages_w_icons VALUES(22,'file:///home/user/local-page.html',47359988123456);
+INSERT INTO moz_pages_w_icons VALUES(23,'file:///home/user/other-page.html',47359988123457);
+INSERT INTO moz_pages_w_icons VALUES(24,'https://deep.example.com/path/to/page',47359988123458);
 """
 
 
@@ -481,8 +495,118 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
             cursor.close()
 
         # not removed ids from moz_icons table
-        expected_icon_ids = [4, 5, 6, 7, 13, 14, 42]
+        # Icons 3 and 29: on bookmarked domains with deep URL paths, kept
+        # regardless of path depth (fix for issue #1537).
+        # icon 44: bookmarked file:// page (exercises fake-favicon-uri: prefix
+        # stripping with a hostless scheme where lstrip would mangle the URL)
+        # icon 45: bookmarked page with deep-path favicon (exact URL match
+        # preserves the page mapping, so the icon survives)
+        expected_icon_ids = [3, 4, 5, 6, 7, 13, 14, 29, 42, 44, 45]
         assert sorted(expected_icon_ids) == sorted(icon_ids)
+
+    def test_delete_mozilla_favicons_all_bookmarked(self):
+        """Test delete_mozilla_favicons when all icons are bookmarked.
+
+        Exercises the `if ids_to_delete:` guard added in PR #2186:
+        when every icon is bookmarked, the deletable-id list is empty and
+        the guard skips emitting no-op UPDATE/DELETE statements. (`IN ()`
+        is valid SQL in modern SQLite and matches no rows, so the guard is
+        an optimization, not a crash fix.)
+        """
+
+        tempdir = self.mkdir('all-bookmarked')
+        places_path = os.path.join(tempdir, 'places.sqlite')
+        favicons_path = os.path.join(tempdir, 'favicons.sqlite')
+
+        places_sql = """
+CREATE TABLE moz_bookmarks (id INTEGER PRIMARY KEY, type INTEGER, fk INTEGER DEFAULT NULL, parent INTEGER, position INTEGER, title LONGVARCHAR, keyword_id INTEGER, folder_type TEXT, dateAdded INTEGER, lastModified INTEGER, guid TEXT, syncStatus INTEGER NOT NULL DEFAULT 0, syncChangeCounter INTEGER NOT NULL DEFAULT 1);
+INSERT INTO moz_bookmarks VALUES(1,1,1,2,0,'My Bookmark',NULL,NULL,1604681523951000,1604681523951000,'aaaaaaaaaaaa',0,1);
+CREATE TABLE moz_places (id INTEGER PRIMARY KEY, url LONGVARCHAR, title LONGVARCHAR, rev_host LONGVARCHAR, visit_count INTEGER DEFAULT 0, hidden INTEGER DEFAULT 0 NOT NULL, typed INTEGER DEFAULT 0 NOT NULL, frecency INTEGER DEFAULT -1 NOT NULL, last_visit_date INTEGER , guid TEXT, foreign_count INTEGER DEFAULT 0 NOT NULL, url_hash INTEGER DEFAULT 0 NOT NULL , description TEXT, preview_image_url TEXT, origin_id INTEGER REFERENCES moz_origins(id));
+INSERT INTO moz_places VALUES(1,'https://example.com/',NULL,'moc.elpmaxe.',0,0,0,-1,NULL,'bbbbbbbbbbbb',1,123456789,NULL,NULL,1);
+"""
+
+        favicons_sql = """
+CREATE TABLE moz_icons (id INTEGER PRIMARY KEY, icon_url TEXT NOT NULL, fixed_icon_url_hash INTEGER NOT NULL, width INTEGER NOT NULL DEFAULT 0, root INTEGER NOT NULL DEFAULT 0, color INTEGER, expire_ms INTEGER NOT NULL DEFAULT 0, data BLOB);
+INSERT INTO moz_icons VALUES(1,'https://example.com/favicon.ico',123456789,16,1,NULL,1635088213227,NULL);
+CREATE TABLE moz_icons_to_pages ( page_id INTEGER NOT NULL, icon_id INTEGER NOT NULL, expire_ms INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (page_id, icon_id), FOREIGN KEY (page_id) REFERENCES moz_pages_w_icons ON DELETE CASCADE, FOREIGN KEY (icon_id) REFERENCES moz_icons ON DELETE CASCADE ) WITHOUT ROWID;
+INSERT INTO moz_icons_to_pages VALUES(1,1,1635088213227);
+CREATE TABLE moz_pages_w_icons ( id INTEGER PRIMARY KEY, page_url TEXT NOT NULL, page_url_hash INTEGER NOT NULL );
+INSERT INTO moz_pages_w_icons VALUES(1,'https://example.com/',123456789);
+"""
+
+        FileUtilities.execute_sqlite3(places_path, places_sql)
+        FileUtilities.execute_sqlite3(favicons_path, favicons_sql)
+
+        options.set_override('shred', False)
+        Special.delete_mozilla_favicons(favicons_path)
+        options.set_override('shred', True)
+        Special.delete_mozilla_favicons(favicons_path)
+
+        with contextlib.closing(sqlite3.connect(favicons_path)) as conn:
+            icon_ids = [r[0] for r in conn.execute(
+                'SELECT id FROM moz_icons').fetchall()]
+
+        # The single bookmarked icon must survive.
+        assert icon_ids == [1]
+
+    def test_delete_mozilla_favicons_issue_1537(self):
+        """Regression test for issue #1537.
+
+        When a bookmarked domain has a favicon with a deep URL path
+        (more than one slash) and the page mapping doesn't exactly
+        match the bookmark URL, the icon must still be kept because
+        the domain is bookmarked.
+
+        https://github.com/bleachbit/bleachbit/issues/1537
+        """
+
+        tempdir = self.mkdir('issue-1537')
+        places_path = os.path.join(tempdir, 'places.sqlite')
+        favicons_path = os.path.join(tempdir, 'favicons.sqlite')
+
+        # Bookmark only the domain root; the page URL in
+        # moz_pages_w_icons is a sub-page that won't exactly match.
+        places_sql = """
+CREATE TABLE moz_bookmarks (id INTEGER PRIMARY KEY, type INTEGER, fk INTEGER DEFAULT NULL, parent INTEGER, position INTEGER, title LONGVARCHAR, keyword_id INTEGER, folder_type TEXT, dateAdded INTEGER, lastModified INTEGER, guid TEXT, syncStatus INTEGER NOT NULL DEFAULT 0, syncChangeCounter INTEGER NOT NULL DEFAULT 1);
+INSERT INTO moz_bookmarks VALUES(1,1,1,2,0,'Example',NULL,NULL,1604681523951000,1604681523951000,'aaaaaaaaaaaa',0,1);
+CREATE TABLE moz_places (id INTEGER PRIMARY KEY, url LONGVARCHAR, title LONGVARCHAR, rev_host LONGVARCHAR, visit_count INTEGER DEFAULT 0, hidden INTEGER DEFAULT 0 NOT NULL, typed INTEGER DEFAULT 0 NOT NULL, frecency INTEGER DEFAULT -1 NOT NULL, last_visit_date INTEGER , guid TEXT, foreign_count INTEGER DEFAULT 0 NOT NULL, url_hash INTEGER DEFAULT 0 NOT NULL , description TEXT, preview_image_url TEXT, origin_id INTEGER REFERENCES moz_origins(id));
+INSERT INTO moz_places VALUES(1,'https://example.com/',NULL,'moc.elpmaxe.',0,0,0,-1,NULL,'bbbbbbbbbbbb',1,123456789,NULL,NULL,1);
+"""
+
+        favicons_sql = """
+CREATE TABLE moz_icons (id INTEGER PRIMARY KEY, icon_url TEXT NOT NULL, fixed_icon_url_hash INTEGER NOT NULL, width INTEGER NOT NULL DEFAULT 0, root INTEGER NOT NULL DEFAULT 0, color INTEGER, expire_ms INTEGER NOT NULL DEFAULT 0, data BLOB);
+INSERT INTO moz_icons VALUES(1,'https://example.com/media/img/favicon.ico',123456789,16,0,NULL,1635088213227,NULL);
+CREATE TABLE moz_icons_to_pages ( page_id INTEGER NOT NULL, icon_id INTEGER NOT NULL, expire_ms INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (page_id, icon_id), FOREIGN KEY (page_id) REFERENCES moz_pages_w_icons ON DELETE CASCADE, FOREIGN KEY (icon_id) REFERENCES moz_icons ON DELETE CASCADE ) WITHOUT ROWID;
+INSERT INTO moz_icons_to_pages VALUES(1,1,1635088213227);
+CREATE TABLE moz_pages_w_icons ( id INTEGER PRIMARY KEY, page_url TEXT NOT NULL, page_url_hash INTEGER NOT NULL );
+INSERT INTO moz_pages_w_icons VALUES(1,'https://example.com/sub/page',123456789);
+"""
+
+        FileUtilities.execute_sqlite3(places_path, places_sql)
+        FileUtilities.execute_sqlite3(favicons_path, favicons_sql)
+
+        options.set_override('shred', False)
+        Special.delete_mozilla_favicons(favicons_path)
+
+        with contextlib.closing(sqlite3.connect(favicons_path)) as conn:
+            icon_ids = [r[0] for r in conn.execute(
+                'SELECT id FROM moz_icons').fetchall()]
+
+        # The domain https://example.com is bookmarked, so the icon
+        # must be kept even though its page URL doesn't exactly match
+        # the bookmark and its path has 3 slashes.
+        assert icon_ids == [1], \
+            "Icon on bookmarked domain must be kept"
+
+    def test_remove_path_from_url(self):
+        """Test the function _remove_path_from_url"""
+        for tests in (('fake-favicon-uri:https://support.mozilla.org/en-US/products/firefox', 'https://support.mozilla.org'),
+                      ('https://example.com/', 'https://example.com'),
+                      ('https://example.com/path', 'https://example.com'),
+                      ('https://example.com/path/', 'https://example.com'),
+                      ('https://example.com/path/sub', 'https://example.com'),
+                      ('file:///home/user/local-page.html', 'file:///home/user/local-page.html')):
+            self.assertEqual(Special._remove_path_from_url(tests[0]), tests[1])
 
     def test_get_chrome_bookmark_ids(self):
         """Unit test for get_chrome_bookmark_ids()"""
