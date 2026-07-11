@@ -192,7 +192,7 @@ class OpenFiles:
 
     def __init__(self):
         self.last_scan_time = None
-        self.files = []
+        self.files = set()
 
     def file_qualifies(self, filename):
         """Return boolean whether filename qualifies to enter cache (check \
@@ -203,10 +203,10 @@ class OpenFiles:
     def scan(self):
         """Update cache"""
         self.last_scan_time = time.time()
-        self.files = []
+        self.files = set()
         for filename in open_files():
             if self.file_qualifies(filename):
-                self.files.append(filename)
+                self.files.add(filename)
 
     def is_open(self, filename):
         """Return boolean whether filename is open by running process"""
