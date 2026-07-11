@@ -210,12 +210,16 @@ def wipe_contents(path, truncate=True):
                 f = open(path, 'wb')
             else:
                 raise
-        blanks = b'\0' * 4096
-        while size > 0:
-            f.write(blanks)
-            size -= 4096
-        f.flush()  # flush to OS buffer
-        os.fsync(f.fileno())  # force write to disk
+        try:
+            blanks = b'\0' * 4096
+            while size > 0:
+                f.write(blanks)
+                size -= 4096
+            f.flush()  # flush to OS buffer
+            os.fsync(f.fileno())  # force write to disk
+        except BaseException:
+            f.close()
+            raise
         return f
 
     # pylint: disable=possibly-used-before-assignment
@@ -254,9 +258,11 @@ def wipe_contents(path, truncate=True):
             f = open(path, 'wb')
     else:
         f = wipe_write()
-    if truncate:
-        truncate_f(f)
-    f.close()
+    try:
+        if truncate:
+            truncate_f(f)
+    finally:
+        f.close()
 
 
 def wipe_name(pathname1):
