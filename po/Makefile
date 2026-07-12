@@ -75,9 +75,10 @@ $(POTFILE): $(SRC) cleanerml.pot desktop.pot metainfo.pot nsis.pot require-gette
 		--add-location=file \
 		--language=Glade \
 		$(UI_SRC)
-	# While GNU sed requires no argument for -i, BSD sed requires a file extension.
-	# Both accept empty string with no space after -i.
-	sed -i'' 's/charset=CHARSET/charset=utf-8/g' $(POTFILE)
+	# GNU sed accepts -i with no argument, but BSD sed (macOS) requires an
+	# extension argument. Using -i.bak works on both, and we remove the backup.
+	sed -i.bak 's/charset=CHARSET/charset=utf-8/g' $(POTFILE)
+	rm -f $(POTFILE).bak
 	echo " Words after update: " \
 		`tail -n +20 $(POTFILE) | grep -v ^# | sed "s/\(msgstr\|msgid\)//g" | sort | uniq | wc -w`
 	if [ -f $(POTFILE).old ]; then \

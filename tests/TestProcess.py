@@ -131,7 +131,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                     self.assertFalse(is_process_running(exename, require_same_user),
                                      f'is_running({exename}, {require_same_user})')
 
-    @common.skipIfWindows
+    @common.skipUnlessLinux
     @common.also_with_sudo
     def test_is_process_running_linux(self):
         """Unit test for method is_process_running()"""
@@ -167,6 +167,54 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             with self.subTest(exename=exename, require_same_user=require_same_user):
                 self.assertEqual(is_process_running(exename, require_same_user), expected,
                                  f'is_running({exename}, {require_same_user})')
+
+    @common.skipUnlessMac
+    @common.also_with_sudo
+    def test_is_process_running_macos(self):
+        """Unit test for is_process_running() on macOS.
+
+        On macOS, psutil reports the process name as the app-bundle
+        executable name (truncated to 15 chars, like 'comm'), while
+        the 'exe' basename may give the full name.  Both are yielded by
+        _enumerate_psutil_posix, so is_process_running should find the
+        process by either name.
+        """
+        proc = psutil.Process()
+        psutil_name = proc.name() # 'Process'
+        exe = proc.exe() # '/Library/Developer/.../Python' (long string)
+        exe_basename = os.path.basename(exe) if exe else psutil_name
+        self.assertTrue(psutil_name, 'psutil did not return a process name')
+
+        # Names by which the current process should be detectable.
+        detectable_names = {psutil_name}
+        if exe_basename != psutil_name:
+            detectable_names.add(exe_basename)
+
+        check_same_user = not sudo_mode()
+        for name in detectable_names:
+            self.assertTrue(is_process_running(name, False),
+                            f'is_running({name}, False)')
+            if check_same_user:
+                self.assertTrue(is_process_running(name, True),
+                                f'is_running({name}, True)')
+
+        # macOS system daemons that run as root, so they should be
+        # running but not as the same (real) user.
+        non_user_exes = ('bluetoothd', 'logd', 'launchd')
+        for name in non_user_exes:
+            with self.subTest(exename=name, require_same_user=True):
+                self.assertTrue(is_process_running(name, False),
+                                f'expected {name} to be running on macOS')
+                self.assertFalse(is_process_running(name, True),
+                                 f'{name} should not be same_user')
+
+        # These do not exist.
+        for exename in ('sol.exe', 'systemd', 'kthreadd', ''):
+            for require_same_user in (False, True):
+                with self.subTest(exename=exename,
+                                  require_same_user=require_same_user):
+                    self.assertFalse(is_process_running(exename, require_same_user),
+                                     f'is_running({exename}, {require_same_user})')
 
     def test_missing_psutil(self):
         """Process should be importable without psutil and set _has_psutil=False."""

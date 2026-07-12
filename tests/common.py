@@ -458,6 +458,16 @@ def skipUnlessDestructive(f):
     return unittest.skipUnless(os.getenv('DESTRUCTIVE_TESTS') == 'T', 'environment variable DESTRUCTIVE_TESTS not set to T')(f)
 
 
+def skipUnlessLinux(f):
+    """Skip unit test unless running on Linux"""
+    return unittest.skipUnless(bleachbit.IS_LINUX, 'not running on Linux')(f)
+
+
+def skipUnlessMac(f):
+    """Skip unit test unless running on macOS"""
+    return unittest.skipUnless(bleachbit.IS_MAC, 'not running on macOS')(f)
+
+
 def skipUnlessWindows(f):
     """Skip unit test unless running on Windows"""
     return unittest.skipUnless(bleachbit.IS_WINDOWS, 'not running on Windows')(f)
@@ -540,7 +550,7 @@ def get_opened_windows_titles():
 
 # Common test strings for filename testing across different test modules
 # https://github.com/bleachbit/bleachbit/issues/1709
-SPECIAL_TEST_STRINGS = [
+_SPECIAL_TEST_STRINGS = [
     '.prefixandsuffix',  # simple
     "x".zfill(150),  # long
     ' begins_with_space',
@@ -563,6 +573,20 @@ SPECIAL_TEST_STRINGS = [
     "עִבְרִית.bak",
     'ɡælɪk.bak'
 ]
+
+
+def _has_surrogate(s):
+    """Return True if the string contains a lone UTF-16 surrogate."""
+    return any('\ud800' <= c <= '\udfff' for c in s)
+
+
+# macOS APFS/HFS+ rejects lone UTF-16 surrogates in filenames with
+# OSError "Illegal byte sequence", so exclude those strings on macOS.
+SPECIAL_TEST_STRINGS = [
+    s for s in _SPECIAL_TEST_STRINGS
+    if not (bleachbit.IS_MAC and _has_surrogate(s))
+]
+del _SPECIAL_TEST_STRINGS, _has_surrogate
 
 # Additional strings for POSIX systems.
 # Windows doesn't allow or requires special handling for these characters.

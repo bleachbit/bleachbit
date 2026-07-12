@@ -65,7 +65,7 @@ from bleachbit.FileUtilities import (
 )
 from bleachbit.General import gc_collect, run_external
 from bleachbit.Options import init_configuration, options
-from bleachbit import IS_MAC, logger, FS_CASE_SENSITIVE
+from bleachbit import logger, FS_CASE_SENSITIVE
 from tests import common
 
 
@@ -595,9 +595,6 @@ State=AAAA/wA...
             # Windows doesn't allow these characters but Unix systems do
             tests += common.POSIX_SPECIAL_TEST_STRINGS
         for test in tests:
-            # macOS APFS/HFS+ does not allow unpaired UTF-16 surrogates in filenames.
-            if IS_MAC and any(0xD800 <= ord(c) <= 0xDFFF for c in test):
-                continue
             # create the file
             filename = self.write_file(test, b"top secret")
             # delete the file

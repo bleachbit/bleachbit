@@ -12,7 +12,7 @@ Test case for Makefile
 import os
 
 from tests import common
-from bleachbit import APP_VERSION, IS_WINDOWS
+from bleachbit import APP_VERSION, IS_LINUX, IS_MAC, IS_WINDOWS
 from bleachbit.FileUtilities import exe_exists
 from bleachbit.General import get_executable, run_external
 
@@ -48,7 +48,9 @@ class MakefileTestCase(common.BleachbitTestCase):
                 missing.append(error_msg)
 
         if missing:
-            if 'CI' in os.environ or not IS_WINDOWS:
+            # Linux always requires the build tools. On macOS and Windows,
+            # they are optional locally but required in CI.
+            if IS_LINUX or ('CI' in os.environ and (IS_MAC or IS_WINDOWS)):
                 raise RuntimeError(
                     'Missing required build tools: ' + '; '.join(missing))
             self.skipTest(

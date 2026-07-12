@@ -11,7 +11,7 @@ Test cases for __init__
 
 import os
 
-from bleachbit import IS_POSIX, IS_WINDOWS, get_share_dirs, get_share_path
+from bleachbit import IS_MAC, IS_POSIX, IS_WINDOWS, get_share_dirs, get_share_path
 from tests import common
 
 
@@ -35,12 +35,18 @@ class InitTestCase(common.BleachbitTestCase):
         test_inputs = ()
         if IS_WINDOWS:
             test_inputs = ('~', r'~\ntuser.dat')
+        elif IS_MAC:
+            # macOS defaults to zsh
+            test_inputs = ('~', '~/.zshrc')
         elif IS_POSIX:
             test_inputs = ('~', '~/.profile')
         for test_input in test_inputs:
             test_output = os.path.expanduser(test_input)
             self.assertNotEqual(test_input, test_output)
-            self.assertExists(test_output)
+            msg = None
+            if not os.path.exists(test_output) and not test_input == '~':
+                msg = f"contents of home directory: {os.listdir(os.path.expanduser('~'))}"
+            self.assertExists(test_output, msg)
             if IS_POSIX:
                 self.assertTrue(os.path.samefile(
                     test_output, os.path.expanduser(test_input)))
