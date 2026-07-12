@@ -201,9 +201,11 @@ class PatchedArgvTestCase(unittest.TestCase):
     def test_restored_on_exception(self):
         """sys.argv must be restored even when exception occurs."""
         original = sys.argv[:]
-        with self.assertRaises(RuntimeError):
+
+        def boom():
             with _patched_argv(lambda a: 'x'):
                 raise RuntimeError('boom')
+        self.assertRaises(RuntimeError, boom)
         self.assertEqual(sys.argv, original)
 
     def test_restores_reference_identity(self):
