@@ -77,5 +77,6 @@ jobs:
       env:
         PYTHONWARNINGS: error
       run: |
+        touch ~/.zshrc # for test_expanduser
         .venv/bin/python -m unittest discover -p Test*.py -v
         .venv/bin/python windows/nsis_translations.py --unittest
