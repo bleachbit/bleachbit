@@ -11,7 +11,7 @@ Test cases for __init__
 
 import os
 
-from bleachbit import IS_POSIX, IS_WINDOWS, get_share_dirs, get_share_path
+from bleachbit import IS_MAC, IS_POSIX, IS_WINDOWS, get_share_dirs, get_share_path
 from tests import common
 
 
@@ -34,6 +34,9 @@ class InitTestCase(common.BleachbitTestCase):
         # should be expanded
         if IS_WINDOWS:
             test_inputs = ('~', r'~\ntuser.dat')
+        elif IS_MAC:
+            # macOS defaults to zsh, so ~/.profile may not exist
+            test_inputs = ('~', '~/.zshrc')
         elif IS_POSIX:
             test_inputs = ('~', '~/.profile')
         for test_input in test_inputs:

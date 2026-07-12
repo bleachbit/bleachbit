@@ -25,7 +25,7 @@ from xml.sax.saxutils import quoteattr
 
 # first party imports
 import bleachbit.FileUtilities
-from bleachbit import IS_WINDOWS, IS_POSIX, logger
+from bleachbit import IS_WINDOWS, IS_POSIX, IS_LINUX, FS_CASE_SENSITIVE, logger
 from bleachbit.Action import ActionProvider, Command, Delete, has_glob, expand_multi_var
 from bleachbit.CleanerML import CleanerML
 from tests import common
@@ -560,7 +560,7 @@ class ActionTestCase(common.BleachbitTestCase):
                     cleaner = CleanerML(
                         f'cleaners/{cleaner_name}.xml').get_cleaner()
                     # Cleaner remains usable because the action is registered, but it should auto-hide.
-                    self.assertEqual(IS_POSIX, cleaner.is_usable())
+                    self.assertEqual(IS_LINUX, cleaner.is_usable())
                     self.assertTrue(cleaner.auto_hide())
                     mock_run_external.assert_not_called()
 
