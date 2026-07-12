@@ -47,7 +47,7 @@ class GUITestCase(common.BleachbitTestCase):
         cls._lang_env.__enter__()
         # reminder: the set up in the parent class creates a clean
         # configuration file.
-        super(GUITestCase, GUITestCase).setUpClass()
+        super().setUpClass()
         options.get_tree = types.MethodType(
             lambda self, parent, child: False, options)
         options.set('font_check_completed', True)
@@ -67,7 +67,7 @@ class GUITestCase(common.BleachbitTestCase):
 
     @classmethod
     def tearDownClass(cls):
-        super(GUITestCase, GUITestCase).tearDownClass()
+        super().tearDownClass()
         options.get_tree = cls.options_get_tree
         cls._lang_env.__exit__(None, None, None)
         window = cls.get_window()

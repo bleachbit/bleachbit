@@ -40,7 +40,7 @@ class GuiChaffTestCase(common.BleachbitTestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(GuiChaffTestCase, cls).setUpClass()
+        super().setUpClass()
         options.set('font_check_completed', True)
 
         # Try to register the application, catch the error if already registered
@@ -72,7 +72,7 @@ class GuiChaffTestCase(common.BleachbitTestCase):
     @classmethod
     def tearDownClass(cls):
         """Close the GUI"""
-        super(GuiChaffTestCase, cls).tearDownClass()
+        super().tearDownClass()
         # Destroy the visible window on whichever application holds it.
         # When running after TestGUI, the default application is TestGUI's
         # instance and cls.app is an unregistered duplicate, so check both.

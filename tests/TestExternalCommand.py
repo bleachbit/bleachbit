@@ -300,7 +300,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         cls.old_language = common.get_env('LANGUAGE')
         cls._lang_env = common.set_temporary_env('LANGUAGE', 'en')
         cls._lang_env.__enter__()
-        super(ExternalCommandTestCase, ExternalCommandTestCase).setUpClass()
+        super().setUpClass()
         cls._test_options_env = None
         # This should not be needed because of using CLI arg --no-delete-confirmation.
         options.set('delete_confirmation', False)
@@ -317,7 +317,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         if cls._test_options_env:
             cls._test_options_env.__exit__(None, None, None)
         cls._lang_env.__exit__(None, None, None)
-        super(ExternalCommandTestCase, ExternalCommandTestCase).tearDownClass()
+        super().tearDownClass()
 
     def assertRunning(self, expect_running=True, check_window_title=True, timeout=START_TIMEOUT_SECONDS):
         """Assert whether BleachBit GUI processes are running or not

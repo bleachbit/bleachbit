@@ -75,7 +75,7 @@ class UnixTestCase(common.BleachbitTestCase):
         """Initialize unit tests"""
         self.locales = Locales()
         clear_snapd_cache()
-        super(UnixTestCase, self).setUp()
+        super().setUp()
 
     @common.skipIfWindows
     def test_apt(self):

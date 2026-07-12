@@ -42,7 +42,7 @@ class CLITestCase(common.BleachbitTestCase):
     """Test case for module CLI"""
 
     def setUp(self):
-        super(CLITestCase, self).setUp()
+        super().setUp()
         Options.options.reset_overrides()
         Options.options.set_override("first_start", False)
 
