@@ -60,6 +60,7 @@ class GUIwxTestCase(common.BleachbitTestCase):
     @classmethod
     def tearDownClass(cls):
         """Destroy the shared frame and clean up wx resources."""
+        app = getattr(cls, 'app', None)
         frame = getattr(cls, 'frame', None)
         if frame is not None:
             loader = getattr(frame, '_loader_thread', None)
@@ -71,7 +72,21 @@ class GUIwxTestCase(common.BleachbitTestCase):
                 frame._log_handler = None
             frame.Destroy()
             cls.frame = None
-        cls.app = None
+        if app is not None:
+            # Flush pending events so no stale callbacks access destroyed
+            # widgets during app teardown.
+            try:
+                app.ProcessPendingEvents()
+            except Exception:
+                pass
+            # Exit the app's main loop if it is still running (e.g. after
+            # the smoke test).  This releases internal wx threading state
+            # (mutexes) that would otherwise segfault on interpreter exit.
+            try:
+                app.ExitMainLoop()
+            except Exception:
+                pass
+            cls.app = None
         super().tearDownClass()
 
     def setUp(self):
@@ -97,6 +112,9 @@ class GUIwxTestCase(common.BleachbitTestCase):
         self.assertIsNotNone(self.frame)
         wx.CallLater(WX_SMOKE_EXIT_MS, self.app.ExitMainLoop)
         self.app.MainLoop()
+        # Drain any callbacks that were queued during the MainLoop but
+        # not yet dispatched (e.g. pending CallAfter from worker threads).
+        self.app.ProcessPendingEvents()
         loader = getattr(self.frame, '_loader_thread', None)
         if loader is not None:
             loader.join(timeout=5.0)

@@ -469,8 +469,10 @@ class GUI(Gtk.ApplicationWindow):
         return True
 
     def destroy(self, *_args):
-        """Prevent textbuffer usage during UI destruction"""
+        """Prevent widget usage during UI destruction"""
         self.textbuffer = None
+        self.progressbar = None
+        self.status_bar = None
         super(GUI, self).destroy()
 
     def get_preferences_dialog(self):
@@ -525,9 +527,11 @@ class GUI(Gtk.ApplicationWindow):
         if shred_settings:
             return True
 
-        if self._auto_exit:
-            GLib.idle_add(self.close,
-                          priority=GLib.PRIORITY_LOW)
+        # In auto_exit mode, worker_done() handles process exit after the
+        # background worker finishes.  Scheduling self.close here would race
+        # with the worker thread: the window could be destroyed before
+        # worker_done() runs, causing Gtk-CRITICAL warnings and leaving the
+        # process in a state that doesn't exit cleanly.
 
         # Return False to remove from idle queue.
         return False
@@ -740,6 +744,13 @@ class GUI(Gtk.ApplicationWindow):
         if really_delete:
             if options.get("exit_done"):
                 sys.exit()
+
+        # In auto_exit mode (used by the Windows Explorer context menu
+        # command and tests), exit the process now that the worker is done.
+        # This replaces the old self.close() scheduled from shred_paths(),
+        # which raced with the background worker thread.
+        if self._auto_exit:
+            sys.exit()
 
         # notification for long-running process
         elapsed = (time.time() - self.start_time)
