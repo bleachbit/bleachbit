@@ -18,8 +18,6 @@ Example invocation (from parent directory):
 python3 -m windows.setup
 """
 
-from __future__ import absolute_import, print_function
-
 # standard library
 import fnmatch
 import glob
