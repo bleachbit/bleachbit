@@ -6,11 +6,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-07-12 15:23-0600\n"
-"PO-Revision-Date: 2026-07-12 20:01+0000\n"
-"Last-Translator: 那個呆萌在山外 "
-"<5h1n38r16h7.d14m0nd@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-07-14 00:01+0000\n"
+"Last-Translator: Hosted Weblate user 54392 "
+"<hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/bleachbit/main/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -2657,14 +2657,10 @@ msgid "Error when checking for updates: %s"
 msgstr "检查更新时出错： %s"
 
 #: ../bleachbit/Memory.py
-#, fuzzy
-#| msgid ""
-#| "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
-#| "information."
 msgid ""
 "The command 'swapon -s' failed, so falling back to /proc/swaps for swap "
 "information."
-msgstr "命令 'swapoff -s' 执行失败，改从 /proc/swaps 获取交换空间信息。"
+msgstr "命令 'swapon-s' 执行失败，改从 /proc/swaps 获取交换空间信息。"
 
 #: ../bleachbit/Memory.py
 msgid "Disabling swap."
