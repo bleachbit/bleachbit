@@ -623,7 +623,7 @@ State=AAAA/wA...
 
             # make symlink
             self.assertExists(srcname)
-            linkname = tempfile.mktemp('bblink')
+            linkname = os.path.join(self.tempdir,'bblink')
             self.assertNotExists(linkname)
             link_fn(srcname, linkname)
             self.assertExists(linkname)
