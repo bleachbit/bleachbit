@@ -363,14 +363,15 @@ class GeneralTestCase(common.BleachbitTestCase):
         with common.set_temporary_env('LC_ALL', 'C'):
             (rc, _, stderr) = run_external(
                 ['ls', '/doesnotexist'], clean_env=False)
-            self.assertEqual(rc, 2)
+	    # GNU ls returns 2 for missing files, while BSD/macOS ls returns 1
+            self.assertIn(rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
             self.assertIn('No such file', stderr)
 
             # Set parent environment to Spanish.
             with common.set_temporary_env('LC_ALL', 'es_MX.UTF-8'):
                 (rc, _, stderr) = run_external(
                     ['ls', '/doesnotexist'], clean_env=False)
-                self.assertEqual(rc, 2)
+                self.assertIn(rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
                 if os.path.exists('/usr/share/locale-langpack/es/LC_MESSAGES/coreutils.mo'):
                     # Spanish language pack is installed.
                     self.assertIn('No existe el archivo', stderr)
@@ -379,7 +380,7 @@ class GeneralTestCase(common.BleachbitTestCase):
                 # should use English.
                 (rc, _, stderr) = run_external(
                     ['ls', '/doesnotexist'], clean_env=True)
-                self.assertEqual(rc, 2)
+                self.assertIn(rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
                 self.assertIn('No such file', stderr)
 
     def test_run_external_invalid(self):
