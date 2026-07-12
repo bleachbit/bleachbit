@@ -4,21 +4,25 @@ on:
   push:
     branches:
       - '**'
-    paths-ignore:
-      - 'bleachbit.spec'
-      - 'debian/**'
-      - 'doc/**'
-      - 'po/**'
-      - 'README.md'
-      - 'windows/**'
+    paths:
+      - '**'
+      - '!bleachbit.spec'
+      - '!debian/**'
+      - '!doc/**'
+      - '!po/**'
+      - 'po/Makefile'
+      - '!README.md'
+      - '!windows/**'
   pull_request:
-    paths-ignore:
-      - 'bleachbit.spec'
-      - 'debian/**'
-      - 'doc/**'
-      - 'po/**'
-      - 'README.md'
-      - 'windows/**'
+    paths:
+      - '**'
+      - '!bleachbit.spec'
+      - '!debian/**'
+      - '!doc/**'
+      - '!po/**'
+      - 'po/Makefile'
+      - '!README.md'
+      - '!windows/**'
 
 # Headless tests on macOS. GTK is not installed, so GUI tests
 # auto-skip via @unittest.skipUnless(HAVE_GTK, ...).
