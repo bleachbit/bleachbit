@@ -420,7 +420,7 @@ class WipeTestCase(common.BleachbitTestCase):
 
 def suite():
     """Return a test suite"""
-    return unittest.makeSuite(WipeTestCase)
+    return unittest.TestLoader().loadTestsFromTestCase(WipeTestCase)
 
 
 def _real_device_warning(target_desc, sleep_seconds):

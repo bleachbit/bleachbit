@@ -63,4 +63,5 @@ class InitTestCase(common.BleachbitTestCase):
 
 
 def suite():
-    return unittest.makeSuite(InitTestCase)
+    """Return a test suite"""
+    return unittest.TestLoader().loadTestsFromTestCase(InitTestCase)
