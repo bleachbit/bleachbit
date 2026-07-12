@@ -86,24 +86,6 @@ def wait_for_process_tree_windows(process, timeout=60, poll_interval=0.1):
             process.wait()
             raise subprocess.TimeoutExpired(process.args, timeout)
 
-        # Add absolute safety timeout to prevent hanging
-        if elapsed > timeout + 30:  # Extra 30 seconds safety margin
-            # Force kill everything and exit
-            try:
-                process.kill()
-                process.wait()
-                # Try to kill any remaining grandchildren
-                for pid in grandchild_pids:
-                    try:
-                        if psutil.pid_exists(pid):
-                            proc = psutil.Process(pid)
-                            proc.kill()
-                    except (psutil.NoSuchProcess, psutil.AccessDenied):
-                        pass
-            except:
-                pass
-            raise subprocess.TimeoutExpired(process.args, elapsed)
-
         if not child_exited:
             child_status = process.poll()
             if child_status is not None:
