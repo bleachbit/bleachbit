@@ -117,7 +117,7 @@ class MemoryTestCase(common.BleachbitTestCase):
         # restore
         os.seteuid(euid)
 
-    @common.skipIfWindows
+    @common.skipUnlessLinux
     def test_count_linux_swap(self):
         """Test for method count_linux_swap"""
         n_swaps = count_swap_linux()
@@ -176,10 +176,13 @@ Swapouts:                              20258188.
         self.assertEqual(num_matches, 2)
         self.assertEqual(free_bytes, (1000 + 2000) * 1024)
 
-    @common.skipIfWindows
+    @common.skipUnlessLinux
     def test_parse_meminfo_free_real_proc(self):
         """The real /proc/meminfo must match exactly MemFree and Cached and
-        nothing else, so future false positives (e.g. SwapCached) are caught."""
+        nothing else, so future false positives (e.g. SwapCached) are caught.
+
+        macOS does not have /proc.
+        """
         with open('/proc/meminfo', encoding='utf-8') as f:
             contents = f.read()
         free_bytes, num_matches = _parse_meminfo_free(contents)

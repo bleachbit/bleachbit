@@ -31,6 +31,7 @@ import sys
 
 from bleachbit import FileUtilities
 from bleachbit import General
+from bleachbit import IS_LINUX, IS_MAC, IS_WINDOWS
 from bleachbit import Log
 from bleachbit.Language import get_text as _
 from bleachbit.Wipe import wipe_contents
@@ -329,7 +330,7 @@ def physical_free_darwin(run_vmstat=None):
         return int(m.groups()[0])
     if run_vmstat is None:
         def run_vmstat():
-            return subprocess.check_output(["vm_stat"])
+            return subprocess.check_output(["vm_stat"], text=True)
     output = iter(run_vmstat().split("\n"))
     page_size = get_page_size(next(output))
     vm_stat = dict(parse_line(*l.split(":")) for l in output if l != "")
@@ -393,11 +394,11 @@ def physical_free_windows():
 
 
 def physical_free():
-    if sys.platform == 'linux':
+    if IS_LINUX:
         return physical_free_linux()
-    elif 'win32' == sys.platform:
+    elif IS_WINDOWS:
         return physical_free_windows()
-    elif 'darwin' == sys.platform:
+    elif IS_MAC:
         return physical_free_darwin()
     else:
         raise RuntimeError('unsupported platform for physical_free()')
