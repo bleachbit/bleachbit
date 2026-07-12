@@ -14,7 +14,13 @@ import logging
 import os
 import random
 import unittest
+import warnings
 from unittest.mock import MagicMock, Mock, patch
+
+# Suppress urllib3's NotOpenSSLWarning (raised when the ssl module is
+# not OpenSSL, e.g. macOS LibreSSL) before importing requests, which
+# would otherwise become an error under PYTHONWARNINGS=error.
+warnings.filterwarnings("ignore", message="urllib3 v2 only supports OpenSSL")
 
 # third party imports
 import requests

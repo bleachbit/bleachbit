@@ -30,7 +30,14 @@ import socket
 import struct
 import sys
 import platform
+import warnings
 from collections.abc import Callable
+
+# urllib3 v2 warns when the ssl module is not OpenSSL (e.g. macOS
+# LibreSSL).  The warning is informational and does not prevent
+# urllib3 from functioning, so suppress it before importing urllib3.
+warnings.filterwarnings("ignore", message="urllib3 v2 only supports OpenSSL")
+
 try:
     from urllib3.util.retry import Retry
     HAVE_URLLIB3 = True
