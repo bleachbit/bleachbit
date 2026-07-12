@@ -937,24 +937,6 @@ def uris_to_paths(file_uris):
     return file_paths
 
 
-def _path_equal(path1, path2):
-    """Compare paths respecting the file system case sensitivity.
-
-    Compatibility wrapper around bleachbit.PathUtils.path_equal.
-    Temporary: to be removed once all callers import path_equal directly
-    """
-    return path_equal(path1, path2)
-
-
-def _path_startswith(path, prefix):
-    """Check whether path starts with prefix directory respecting case sensitivity.
-
-    Compatibility wrapper around bleachbit.PathUtils.path_startswith.
-    Temporary: to be removed once all callers import path_startswith directly
-    """
-    return path_startswith(path, prefix)
-
-
 def whitelisted_posix(path, check_realpath=True, _followed_link=False):
     """Check whether this POSIX path is whitelisted"""
     from bleachbit.Options import options

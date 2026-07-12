@@ -43,10 +43,6 @@ from bleachbit.PathUtils import (
     path_startswith,
 )
 
-_expand_path = expand_path
-_expand_path_entries = expand_path_entries
-_normalize_for_comparison = normalize_path
-
 # Default: Windows is case-insensitive, others are case-sensitive.
 # Do not yet use bleachbit.FS_CASE_SENSITIVE here: macOS will be addressed
 # in a future change.
@@ -187,7 +183,8 @@ def check_protected_path(user_path):
         depth = ppath['depth']
         case_sensitive = ppath['case_sensitive']
         user_cmp = normalize_path(user_path, case_sensitive=case_sensitive)
-        protected_cmp = normalize_path(protected, case_sensitive=case_sensitive)
+        protected_cmp = normalize_path(
+            protected, case_sensitive=case_sensitive)
 
         protected_is_absolute = os.path.isabs(ppath['path'])
         if not protected_is_absolute:
