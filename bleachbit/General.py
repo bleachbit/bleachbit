@@ -143,9 +143,17 @@ def get_real_username():
         return sudo_user
 
     try:
-        return os.getlogin()
+        login = os.getlogin()
     except OSError:
-        pass
+        login = None
+
+    # On macOS (e.g., GitHub Actions), os.getlogin() may return 'root'
+    # because it reflects the owner of the controlling terminal rather
+    # than the effective user.  Don't trust it in that case; fall through
+    # to getpass.getuser(), which checks environment variables and pwd.
+    # This mirrors the 'root' != login guard in get_real_uid().
+    if login and 'root' != login:
+        return login
 
     try:
         return getpass.getuser()
