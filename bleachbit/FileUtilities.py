@@ -305,39 +305,11 @@ def clean_ini(path, section, parameter):
 
     Comments are not preserved.
     """
-
-    def write(parser, ini_file):
-        """
-        Reimplementation of the original RowConfigParser write function.
-
-        This function is 99% same as its origin. The only change is
-        removing a cast to str. This is needed to handle unicode chars.
-        """
-        if parser._defaults:
-            ini_file.write("[DEFAULT]\n")
-            for (key, value) in parser._defaults.items():
-                value_str = str(value).replace('\n', '\n\t')
-                ini_file.write(f"{key} = {value_str}\n")
-            ini_file.write("\n")
-        for section in parser._sections:
-            ini_file.write(f"[{section}]\n")
-            for (key, value) in parser._sections[section].items():
-                if key == "__name__":
-                    continue
-                if (value is not None) or (parser._optcre == parser.OPTCRE):
-                    # The line below is the only changed line of the original function.
-                    # This is the original line for reference:
-                    # key = " = ".join((key, str(value).replace('\n', '\n\t')))
-                    key = " = ".join((key, value.replace('\n', '\n\t')))
-                ini_file.write(f"{key}\n")
-            ini_file.write("\n")
-
     encoding = detect_encoding(path) or 'utf_8_sig'
 
     # read file to parser
     config = bleachbit.RawConfigParser(delimiters='=')
-    config.optionxform = lambda option: option
-    config.write = write
+    config.optionxform = str
     with open(path, 'r', encoding=encoding) as fp:
         config.read_file(fp)
 
@@ -351,14 +323,15 @@ def clean_ini(path, section, parameter):
             changed = True
             config.remove_option(section, parameter)
 
+    if not changed:
+        return
+
     # write file
-    if changed:
-        from bleachbit.Options import options
-        fp.close()
-        if options.get('shred'):
-            delete(path, True)
-        with open(path, 'w', encoding=encoding, newline='') as fp:
-            config.write(config, fp)
+    from bleachbit.Options import options
+    if options.get('shred'):
+        delete(path, True)
+    with open(path, 'w', encoding=encoding, newline='') as fp:
+        config.write(fp)
 
 
 def clean_json(path, target):
