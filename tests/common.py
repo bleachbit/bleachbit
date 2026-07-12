@@ -22,6 +22,7 @@ from pathlib import Path
 from unittest import mock
 
 import bleachbit
+from bleachbit import logger
 
 if bleachbit.IS_WINDOWS:
     import winreg
@@ -189,19 +190,33 @@ class BleachbitTestCase(unittest.TestCase):
         # tempdir while rmtree is mid-way through deleting it.
         bleachbit.Options.options.cancel_pending_flush()
         gc_collect()
+        # Stop patching the options paths before rmtree to avoid a
+        # potential flush into cls.tempdir while rmtree() is running
+        # to avoid OSError [Errno 66] Directory not empty.
+        if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
+            cls._stop_patch_options_paths()
         # On Windows, a file may be temporarily locked, so retry.
+        # On macOS/Linux, a deferred flush or filesystem race may briefly
+        # make the directory non-empty, so retry on OSError too.
         for attempt in range(5):
             try:
                 if os.path.exists(cls.tempdir):
                     shutil.rmtree(cls.tempdir)
                 break
-            except PermissionError:
+            except OSError:
+                # Log what is left so we can diagnose races.
+                try:
+                    remaining = os.listdir(cls.tempdir)
+                except OSError:
+                    remaining = ['<listdir failed>']
+                logger.warning(
+                    'tearDownClass: rmtree(%s) failed (attempt %d): %s; '
+                    'remaining entries: %r',
+                    cls.tempdir, attempt + 1, sys.exc_info()[1], remaining)
                 if attempt < 4:
                     time.sleep(1)
                 else:
                     raise
-        if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
-            cls._stop_patch_options_paths()
 
     @classmethod
     def _stop_patch_options_paths(cls):
