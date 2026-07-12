@@ -94,6 +94,25 @@ class PathUtilsTestCase(unittest.TestCase):
         self.assertTrue(path_has_relative_suffix(
             '/home/user/.GIT', '.git', case_sensitive=False))
 
+    @unittest.skipUnless(IS_WINDOWS, 'Windows treats backslash as separator')
+    def test_path_startswith_windows_separators(self):
+        """Verify path_startswith handles backslash and mixed separators."""
+        self.assertTrue(path_startswith(r'D:\folder\file', r'D:\folder'))
+        self.assertTrue(path_startswith(r'D:\folder/file', r'D:\folder'))
+        self.assertTrue(path_startswith('D:/folder/file', 'D:/folder'))
+        self.assertFalse(path_startswith(r'D:\folder2', r'D:\folder'))
+        self.assertFalse(path_startswith(r'D:\folder', r'D:\folder'))
+
+    @unittest.skipUnless(IS_WINDOWS, 'Windows treats backslash as separator')
+    def test_path_has_relative_suffix_windows_separators(self):
+        """Verify path_has_relative_suffix handles backslash separators."""
+        self.assertTrue(path_has_relative_suffix(r'D:\folder\.git', '.git'))
+        self.assertTrue(path_has_relative_suffix(r'D:\folder\.git', r'.git'))
+        self.assertFalse(path_has_relative_suffix(
+            r'D:\folder\not-git', '.git'))
+        self.assertFalse(path_has_relative_suffix(
+            r'D:\folder\.gitignore', '.git'))
+
     def test_whitelisted_windows_drive_root_matches_descendants(self):
         """Verify a whitelisted drive root protects its descendants."""
         with mock.patch(

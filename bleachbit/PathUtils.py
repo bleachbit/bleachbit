@@ -17,7 +17,12 @@ circular imports.
 import os
 import re
 
-from bleachbit import FS_CASE_SENSITIVE
+from bleachbit import FS_CASE_SENSITIVE, IS_WINDOWS
+
+# On Windows both backslash and forward slash are path separators.
+# On POSIX only os.sep is a separator (backslash is a legal filename
+# character), so we must not treat it as a boundary there.
+_PATH_SEPARATORS = ('\\', '/') if IS_WINDOWS else (os.sep,)
 
 
 _ENV_VAR_ONLY_PATTERN = re.compile(
@@ -60,9 +65,10 @@ def path_startswith(path, prefix, case_sensitive=None):
     """Check whether `path` is a child of `prefix`.
 
     Strict path-component-boundary check: `prefix` matches `path`
-    only when `path` is `prefix` followed by `os.sep` and at
+    only when `path` is `prefix` followed by a path separator and at
     least one more component. This means `/home/folder` does **not**
-    match `/home/folder2`.
+    match `/home/folder2`. On Windows both backslash and forward slash
+    are treated as separators.
 
     This is a raw string comparison; it does not normalize paths. The
     caller is responsible for normalization (see `normalize_path`).
@@ -75,9 +81,10 @@ def path_startswith(path, prefix, case_sensitive=None):
     """
     if case_sensitive is None:
         case_sensitive = FS_CASE_SENSITIVE
-    if case_sensitive:
-        return path.startswith(prefix + os.sep)
-    return path.lower().startswith(prefix.lower() + os.sep)
+    if not case_sensitive:
+        path = path.lower()
+        prefix = prefix.lower()
+    return any(path.startswith(prefix + sep) for sep in _PATH_SEPARATORS)
 
 
 def path_has_relative_suffix(path, suffix, case_sensitive=None):
@@ -90,10 +97,11 @@ def path_has_relative_suffix(path, suffix, case_sensitive=None):
         return True
     if case_sensitive is None:
         case_sensitive = FS_CASE_SENSITIVE
-    suffix = os.sep + suffix.lstrip(os.sep)
-    if case_sensitive:
-        return path.endswith(suffix)
-    return path.lower().endswith(suffix.lower())
+    if not case_sensitive:
+        path = path.lower()
+        suffix = suffix.lower()
+    suffix = suffix.lstrip(''.join(_PATH_SEPARATORS))
+    return any(path.endswith(sep + suffix) for sep in _PATH_SEPARATORS)
 
 
 def normalize_path(path, case_sensitive=None):
