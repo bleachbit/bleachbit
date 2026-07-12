@@ -28,88 +28,22 @@ accidentally delete important system or application files.
 
 import logging
 import os
-import re
 import xml.dom.minidom
 
 import bleachbit
 from bleachbit import FileUtilities
 from bleachbit.General import getText, os_match
 from bleachbit.Language import get_text as _
+from bleachbit.PathUtils import (
+    expand_path as _expand_path,
+    expand_path_entries as _expand_path_entries,
+    normalize_path as _normalize_for_comparison,
+)
 
 logger = logging.getLogger(__name__)
 
 # Cache for loaded protected paths
 _protected_paths_cache = None
-
-_ENV_VAR_ONLY_PATTERN = re.compile(
-    r"""
-    ^
-    (?:
-        \$(?P<unix>[A-Za-z_][A-Za-z0-9_]*)
-        |
-        \${(?P<brace>[A-Za-z_][A-Za-z0-9_]*)}
-        |
-        %(?P<windows>[A-Za-z_][A-Za-z0-9_]*)%
-    )
-    $
-    """,
-    re.VERBOSE,
-)
-
-
-def _expand_path(raw_path):
-    """Expand environment variables, user home, and normalize path.
-
-    Returns one string.
-    """
-    assert isinstance(raw_path, str)
-    # Expand user home (~)
-    path = os.path.expanduser(raw_path)
-    # Expand environment variables
-    path = os.path.expandvars(path)
-    # Normalize path separators
-    if path:
-        path = os.path.normpath(path)
-    return path
-
-
-def _expand_path_entries(raw_path):
-    """Expand a raw path into one or more normalized paths.
-
-    Handles environment variables whose values are lists separated by
-    os.pathsep (e.g., XDG_DATA_DIRS=/usr/share:/usr/local/share) by
-    returning a separate entry per value when the raw path consists of
-    the environment variable placeholder alone.
-    """
-
-    expanded = _expand_path(raw_path)
-    if not expanded:
-        return tuple()
-
-    if (_ENV_VAR_ONLY_PATTERN.match(raw_path)
-            and os.pathsep in expanded):
-        candidates = [segment.strip()
-                      for segment in expanded.split(os.pathsep)]
-        normalized = [os.path.normpath(segment)
-                      for segment in candidates if segment]
-        if normalized:
-            return tuple(normalized)
-
-    return (expanded,)
-
-
-# this function is used in GuiPreferences.py
-def _normalize_for_comparison(path, case_sensitive):
-    """Normalize a path for comparison.
-
-    Args:
-        path: The path to normalize
-        case_sensitive: If False, convert to lowercase for comparison
-    """
-    normalized = os.path.normpath(path)
-    if not case_sensitive:
-        normalized = normalized.lower()
-    return normalized
 
 
 def _get_protected_path_xml():

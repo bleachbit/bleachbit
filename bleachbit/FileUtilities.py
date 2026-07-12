@@ -937,17 +937,23 @@ def uris_to_paths(file_uris):
 
 
 def _path_equal(path1, path2):
-    """Compare paths respecting the file system case sensitivity"""
-    if bleachbit.FS_CASE_SENSITIVE:
-        return path1 == path2
-    return path1.lower() == path2.lower()
+    """Compare paths respecting the file system case sensitivity.
+
+    Compatibility wrapper around bleachbit.PathUtils.path_equal.
+    Temporary: to be removed once all callers import path_equal directly
+    """
+    from bleachbit.PathUtils import path_equal
+    return path_equal(path1, path2)
 
 
 def _path_startswith(path, prefix):
-    """Check whether path starts with prefix directory respecting case sensitivity"""
-    if bleachbit.FS_CASE_SENSITIVE:
-        return path.startswith(prefix + os.sep)
-    return path.lower().startswith(prefix.lower() + os.sep)
+    """Check whether path starts with prefix directory respecting case sensitivity.
+
+    Compatibility wrapper around bleachbit.PathUtils.path_startswith.
+    Temporary: to be removed once all callers import path_startswith directly
+    """
+    from bleachbit.PathUtils import path_startswith
+    return path_startswith(path, prefix)
 
 
 def whitelisted_posix(path, check_realpath=True, _followed_link=False):
