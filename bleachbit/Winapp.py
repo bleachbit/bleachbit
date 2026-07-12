@@ -268,13 +268,13 @@ class Winapp:
             if special_detect(sd_code):
                 return True
         for option in self.parser.options(section):
-            if re.match(self.re_detect, option):
+            if self.re_detect.match(option):
                 # Detect= checks for a registry key
                 any_detect_option = True
                 key = self.parser.get(section, option)
                 if Windows.detect_registry_key(key):
                     return True
-            elif re.match(self.re_detectfile, option):
+            elif self.re_detectfile.match(option):
                 # DetectFile= checks for a file
                 any_detect_option = True
                 key = self.parser.get(section, option)
@@ -293,7 +293,7 @@ class Winapp:
         file_excludekeys = []
         reg_excludekeys = []
         for option in self.parser.options(section):
-            if re.match(self.re_excludekey, option):
+            if self.re_excludekey.match(option):
                 excludekey_val = self.parser.get(section, option)
                 nwholeregex = self.excludekey_to_nwholeregex(excludekey_val)
                 if nwholeregex is None:
@@ -329,9 +329,9 @@ class Winapp:
                     "detectos",
                     "specialdetect",
                 }
-                or re.match(self.re_detect, option)
-                or re.match(self.re_detectfile, option)
-                or re.match(self.re_excludekey, option)
+                or self.re_detect.match(option)
+                or self.re_detectfile.match(option)
+                or self.re_excludekey.match(option)
             ):
                 continue
             if option.startswith('filekey'):
