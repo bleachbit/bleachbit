@@ -49,7 +49,7 @@ class ChaffTestCase(common.BleachbitTestCase):
         # ts = 2600 Magazine
         ts_path = os.path.join(models_dir, '2600_model.json.bz2')
 
-        for _i in ('download', 'already downloaded'):
+        for _ in ('download', 'already downloaded'):
             ret = download_models(models_dir=models_dir)
             self.assertIsInstance(ret, bool)
             self.assertTrue(
@@ -74,7 +74,7 @@ class ChaffTestCase(common.BleachbitTestCase):
                 self.assertIn('Subject: ', contents)
                 self.assertNotIn('base64', contents)
 
-        generated_file_names = generate_2600(5, tmp_dir, models_dir)
+        generate_2600(5, tmp_dir, models_dir)
 
         rmtree(tmp_dir)
 
@@ -90,6 +90,7 @@ class ChaffTestCase(common.BleachbitTestCase):
                 return False
             if host == 'download.bleachbit.org':
                 return True
+            return None
         mock_download.side_effect = succeed_on_second
         ret = download_models(models_dir=tmp_dir)
         self.assertTrue(

@@ -1036,7 +1036,7 @@ State=AAAA/wA...
                 temp.write('hello world')
                 temp.flush()
             with self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
-                det = detect_encoding(temp.name)
+                detect_encoding(temp.name)
             self.assertIn('chardet module is not available', cm.output[0])
             os.unlink(temp.name)
 
@@ -1403,8 +1403,8 @@ State=AAAA/wA...
         self.assertGreater(len(paths1), 4)
         self.assertGreater(len(paths2), 4)
         paths12 = set(listdir((dir1, dir2)))
-        self.assertTrue(paths1 < paths12)
-        self.assertTrue(paths2 < paths12)
+        self.assertLess(paths1, paths12)
+        self.assertLess(paths2, paths12)
         # The individual calls should be equivalent to a combined call.
         self.assertSetEqual(paths1.union(paths2), paths12)
         # The directories should not be empty.

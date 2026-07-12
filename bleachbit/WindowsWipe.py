@@ -210,8 +210,7 @@ def logical_ranges_to_extents(ranges, bridge_compressed=False):
             # clusters interspersed with -1 space-saver sections
             # that are arranged with gaps of 16 clusters or less.
             merge_index = index
-            while (lcn >= 0 and
-                   merge_index + 2 < last_record and
+            while (merge_index + 2 < last_record and
                    ranges[merge_index + 1][1] < 0 and
                    ranges[merge_index + 2][1] >= 0 and
                    ranges[merge_index + 2][1] - ranges[merge_index][1] <= 16 and
@@ -942,8 +941,7 @@ def move_file(volume_handle, file_handle, starting_vcn,
 
     input_struct = struct.pack('IIqqII', handle_lo, handle_hi, starting_vcn,
                                starting_lcn, cluster_count, 0)
-    _vb_struct = DeviceIoControl(volume_handle, FSCTL_MOVE_FILE,
-                                 input_struct, None)
+    DeviceIoControl(volume_handle, FSCTL_MOVE_FILE, input_struct, None)
 
 
 def write_zero_fill(file_handle, write_length_bytes):

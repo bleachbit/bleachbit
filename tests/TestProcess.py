@@ -139,6 +139,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
         # handles symlinks.
         # sys.executable may look like /usr/bin/python3
         # When running under `env -i`, then sys.executable is empty.
+        exe = None
         if sys.executable:
             exe = os.path.basename(os.path.realpath(sys.executable))
         else:

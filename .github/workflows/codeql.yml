@@ -3,7 +3,8 @@ name: CodeQL
 on:
   push:
     branches:
-      - master
+      - '**'
+      - '!dependabot/**'
     paths-ignore:
       - 'appveyor.yml'
       - 'bleachbit.png'
@@ -20,7 +21,8 @@ on:
       - 'README.md'
   pull_request:
     branches:
-      - master
+      - '**'
+      - '!dependabot/**'
     paths-ignore:
       - 'appveyor.yml'
       - 'bleachbit.png'
@@ -77,7 +79,13 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
-          # queries: +security-and-quality
+          config: |
+            queries:
+              - uses: security-and-quality
+            query-filters:
+              - exclude:
+                  problem.severity:
+                    - recommendation
 
       - name: Perform CodeQL analysis
         uses: github/codeql-action/analyze@99df26d4f13ea111d4ec1a7dddef6063f76b97e9 # v4.37.0

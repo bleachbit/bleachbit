@@ -106,6 +106,7 @@ os.getenv(LocalAppData) = {home_dir}\\AppData\\Local"""
         username = '我可以喝漂白剂而不伤及自身'
         unicode_dir = self.mkdir(username)
 
+        short_path = None
         try:
             import win32api
             short_path = win32api.GetShortPathName(unicode_dir)
@@ -191,4 +192,4 @@ __file__ = /home/regularuser/software/bleachbit/bleachbit/SystemInformation.py""
         # Both should be non-empty strings
         self.assertIsString(original)
         self.assertIsString(anonymized)
-        self.assertTrue(len(anonymized) > 0)
+        self.assertGreater(len(anonymized), 0)

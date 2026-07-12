@@ -11,8 +11,6 @@ Test case for module Options
 
 import errno
 import os
-import stat
-import subprocess
 import sys
 from unittest import mock
 
@@ -223,9 +221,6 @@ check_online_updates=True
         self.assertEqual(o.config.getboolean('test', 'test_f_upper'), False)
         self.assertEqual(o.config.getboolean('test', 'test_f_lower'), False)
 
-        # clean up
-        del o
-
     def test_percent(self):
         """Test that the percent sign can be used without quoting the string"""
         # https://github.com/bleachbit/bleachbit/issues/205
@@ -237,9 +232,6 @@ check_online_updates=True
 
         # read
         self.assertEqual(opt.get('test', 'filename'), '/var/log/samba/log.%m')
-
-        # clean up
-        del opt
 
     def test_error_disk_full(self):
         """Test graceful degradation when disk is full"""

@@ -27,21 +27,16 @@ These are the terms:
 import atexit
 import base64
 import ctypes
-import decimal
 import errno
 import glob
 import hashlib
 import logging
 import ntpath
 import os
-import pathlib
 import re
 import shutil
-import struct
 import sys
-import threading
 import time
-import uuid
 import xml.dom.minidom
 from ctypes import wintypes
 from decimal import Decimal
@@ -1060,12 +1055,12 @@ def load_i18n_dll():
     if not lib_path:
         logger.warning(
             'internationalization library was not found, so translations will not work.')
-        return
+        return None
     try:
         libintl = ctypes.cdll.LoadLibrary(lib_path)
     except Exception as e:
         logger.warning('error in LoadLibrary(%s): %s', lib_path, e)
-        return
+        return None
 
     # Configure DLL function prototypes
     libintl.bindtextdomain.argtypes = [ctypes.c_char_p, ctypes.c_char_p]

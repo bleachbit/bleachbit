@@ -110,6 +110,7 @@ class GUI(Gtk.ApplicationWindow):
         accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
 
         # Enable the user to change font size with keyboard or mouse.
+        gtk_font_name = None
         try:
             gtk_font_name = Gtk.Settings.get_default().get_property('gtk-font-name')
         except TypeError as e:
@@ -254,10 +255,10 @@ class GUI(Gtk.ApplicationWindow):
     def _get_windows10_theme_css(self):
         """Load the Windows 10 theme CSS files (if not already loaded)"""
         if not 'nt' == os.name:
-            return
+            return None
 
         if not options.get("win10_theme"):
-            return
+            return None
 
         # Load regular theme CSS
         dark_mode = options.get('dark_mode')

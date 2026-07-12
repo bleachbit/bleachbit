@@ -455,7 +455,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         """
         This tests covers elevate_privileges in the case where we pretend that we are not admin.
         """
-        self.assertTrue(os.name == 'nt')
+        self.assertEqual(os.name, 'nt')
         file_to_shred = self.mkstemp(prefix=fn_prefix)
         self.assertExists(file_to_shred)
 

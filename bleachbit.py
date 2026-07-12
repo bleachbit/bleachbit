@@ -73,6 +73,7 @@ def main():
         # SIGPIPE status (128 + 13).
         devnull = os.open(os.devnull, os.O_WRONLY)
         os.dup2(devnull, sys.stdout.fileno())
+        os.close(devnull)
         sys.exit(141)
 
 
