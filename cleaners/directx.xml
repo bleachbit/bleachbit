@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    BleachBit
+    Copyright (C) 2008-2019 Andrew Ziem
+    https://www.bleachbit.org
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    @app Microsoft DirectX
+    @url http://msdn.microsoft.com/de-de/directx/
+    @os Windows
+    @cleanerversion v1.0.0
+    @cleanerdate 2019-09-10
+    @cleanerby Tobias B. Besemer (2019-02-12 - 2019-09-10)
+    @tested ok v???, Windows 7
+    @testeddate 2019-03-10
+    @testedby https://github.com/Tobias-B-Besemer
+    @note 
+
+-->
+<cleaner id="directx" os="windows">
+  <label>DirectX</label>
+  <description>Application Programming Interfaces (APIs)</description>
+  <option id="mru">
+    <label>Most recently used</label>
+    <description>Delete the most recently used list</description>
+    <action command="winreg" path="HKLM\Software\Microsoft\Direct3D\MostRecentApplication" name="Name"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\Direct3D\MostRecentApplication" name="Name"/>
+    <action command="winreg" path="HKLM\Software\Microsoft\DirectDraw\MostRecentApplication"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\DirectInput\MostRecentApplication" name="Id"/>
+    <action command="winreg" path="HKCU\Software\Microsoft\DirectInput\MostRecentApplication" name="Name"/>
+  </option>
+</cleaner>
