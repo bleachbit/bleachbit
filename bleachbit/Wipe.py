@@ -21,7 +21,7 @@ import warnings
 import logging
 
 import bleachbit
-from bleachbit import IS_WINDOWS
+from bleachbit import IS_LINUX, IS_MAC, IS_WINDOWS
 from bleachbit.Language import get_text as _
 
 if 'nt' == os.name:
@@ -179,11 +179,15 @@ def fitrim(pathname):
 
 def sync():
     """Flush file system buffers. sync() is different than fsync()"""
-    if 'posix' == os.name:
+    if IS_LINUX:
         rc = ctypes.cdll.LoadLibrary('libc.so.6').sync()
         if 0 != rc:
             logger.error('sync() returned code %d', rc)
-    elif 'nt' == os.name:
+    elif IS_MAC:
+        # On macOS, sync() is in libSystem.B.dylib
+        libc = ctypes.cdll.LoadLibrary('libSystem.B.dylib')
+        libc.sync()
+    elif IS_WINDOWS:
         # pylint: disable=protected-access
         ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()
 
