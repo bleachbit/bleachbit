@@ -65,7 +65,7 @@ from bleachbit.FileUtilities import (
 )
 from bleachbit.General import gc_collect, run_external
 from bleachbit.Options import init_configuration, options
-from bleachbit import logger, FS_CASE_SENSITIVE
+from bleachbit import IS_MAC, logger, FS_CASE_SENSITIVE
 from tests import common
 
 
@@ -595,6 +595,9 @@ State=AAAA/wA...
             # Windows doesn't allow these characters but Unix systems do
             tests += common.POSIX_SPECIAL_TEST_STRINGS
         for test in tests:
+            # macOS APFS/HFS+ does not allow unpaired UTF-16 surrogates in filenames.
+            if IS_MAC and any(0xD800 <= ord(c) <= 0xDFFF for c in test):
+                continue
             # create the file
             filename = self.write_file(test, b"top secret")
             # delete the file
@@ -1258,7 +1261,7 @@ State=AAAA/wA...
         elif os.name == 'posix':
             for check_path in (home, '/'):
                 detected_fs = get_filesystem_type(check_path)[0]
-                self.assertIn(detected_fs, ['btrfs', 'ext4', 'ext3', 'squashfs', 'unknown'],
+                self.assertIn(detected_fs, ['apfs', 'btrfs', 'ext4', 'ext3', 'hfs', 'squashfs', 'unknown'],
                               f"Unexpected file system type for {check_path}: {detected_fs}")
 
     def test_get_filesystem_type_missing_psutil(self):

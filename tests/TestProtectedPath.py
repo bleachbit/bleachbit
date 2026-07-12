@@ -17,9 +17,7 @@ from functools import wraps
 from tests import common
 from bleachbit.ProtectedPath import (
     _check_exempt,
-    _expand_path,
     _get_protected_path_xml,
-    _normalize_for_comparison,
     calculate_impact,
     check_protected_path,
     clear_cache,
@@ -28,6 +26,11 @@ from bleachbit.ProtectedPath import (
 from bleachbit import ProtectedPath as protected_path_module
 from bleachbit import get_share_path
 from bleachbit import IS_WINDOWS, IS_POSIX
+from bleachbit.PathUtils import (
+    expand_path,
+    normalize_path,
+    path_has_relative_suffix,
+)
 from bleachbit.Cleaner import backends
 from tests.TestCleaner import register_all_cleaners
 
@@ -64,34 +67,45 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
         clear_cache()
 
     def test_expand_path(self):
-        """Test _expand_path function"""
+        """Test expand_path function"""
         # Test user home expansion
         home = os.path.expanduser('~')
-        result = _expand_path('~')
+        result = expand_path('~')
         self.assertEqual(result, home)
 
         # Test with subpath
-        result = _expand_path('~/Documents')
+        result = expand_path('~/Documents')
         expected = os.path.normpath(os.path.join(home, 'Documents'))
         self.assertEqual(result, expected)
 
         # Test environment variable expansion
         with common.set_temporary_env('TEST_PROTECTED_PATH_VAR', '/test/path'):
             if IS_WINDOWS:
-                result = _expand_path('%TEST_PROTECTED_PATH_VAR%')
+                result = expand_path('%TEST_PROTECTED_PATH_VAR%')
             else:
-                result = _expand_path('$TEST_PROTECTED_PATH_VAR')
+                result = expand_path('$TEST_PROTECTED_PATH_VAR')
         self.assertEqual(result, os.path.normpath('/test/path'))
 
-    def test_normalize_for_comparison(self):
-        """Test _normalize_for_comparison function"""
+    def test_normalize_path(self):
+        """Test normalize_path function"""
         # Case sensitive
-        result = _normalize_for_comparison('/Home/User', True)
+        result = normalize_path('/Home/User', True)
         self.assertIn('Home', result)
 
         # Case insensitive
-        result = _normalize_for_comparison('/Home/User', False)
+        result = normalize_path('/Home/User', False)
         self.assertEqual(result, result.lower())
+
+    def test_path_has_relative_suffix(self):
+        """Test path-component matching for relative protected paths"""
+        self.assertTrue(path_has_relative_suffix('/home/user/.git', '.git'))
+        self.assertTrue(path_has_relative_suffix('.git', '.git'))
+        self.assertFalse(path_has_relative_suffix(
+            '/home/user/not-git', '.git'))
+        self.assertFalse(path_has_relative_suffix(
+            '/home/user/.gitignore', '.git'))
+        self.assertTrue(path_has_relative_suffix(
+            '/home/user/.GIT', '.git', case_sensitive=False))
 
     def test_get_protected_path_xml(self):
         """Test that protected path XML file can be found"""
@@ -157,7 +171,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
     @common.skipUnlessWindows
     def test_check_exempt_windows(self):
         """Test check_exempt() on Windows"""
-        temp_dir = _expand_path('%temp%')
+        temp_dir = expand_path('%temp%')
         self.assertIsInstance(temp_dir, str)
         self.assertTrue(len(temp_dir) > 0)
         for case_method in CASE_METHODS:
@@ -185,7 +199,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
             '/tmp/',
             '/tmp/.git')
         for path in expect_exempt:
-            expanded_path = _expand_path(path)
+            expanded_path = expand_path(path)
             self.assertTrue(_check_exempt(expanded_path), expanded_path)
             self.assertFalse(_check_exempt(
                 expanded_path.upper()), expanded_path)
@@ -201,7 +215,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
             '/tmps/',
             '/tmps/.git')
         for path in expect_not_exempt:
-            self.assertFalse(_check_exempt(_expand_path(path)), path)
+            self.assertFalse(_check_exempt(expand_path(path)), path)
 
     def test_check_protected_path_no_match(self):
         """Test check_protected_path with non-protected path"""
@@ -216,7 +230,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
             exempt_dir_raw = '%temp%'
         else:
             self.skipTest("Unsupported OS")
-        exempt_dir = _expand_path(exempt_dir_raw)
+        exempt_dir = expand_path(exempt_dir_raw)
         self.assertIsInstance(exempt_dir, str)
         self.assertTrue(_check_exempt(exempt_dir))
         self.assertNotEqual(exempt_dir, exempt_dir_raw)
@@ -228,7 +242,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
         self.assertIsNone(result)
         # ~/Documents/Zoom/recording.mp4 is not protected
         zoom_path_raw = '~/Documents/Zoom/recording.mp4'
-        zoom_path = _expand_path(zoom_path_raw)
+        zoom_path = expand_path(zoom_path_raw)
         self.assertNotEqual(zoom_path, zoom_path_raw)
         result = check_protected_path(zoom_path)
         self.assertIsNone(result)
