@@ -458,6 +458,16 @@ def skipUnlessDestructive(f):
     return unittest.skipUnless(os.getenv('DESTRUCTIVE_TESTS') == 'T', 'environment variable DESTRUCTIVE_TESTS not set to T')(f)
 
 
+def skipUnlessLinux(f):
+    """Skip unit test unless running on Linux"""
+    return unittest.skipUnless(bleachbit.IS_LINUX, 'not running on Linux')(f)
+
+
+def skipUnlessMac(f):
+    """Skip unit test unless running on macOS"""
+    return unittest.skipUnless(bleachbit.IS_MAC, 'not running on macOS')(f)
+
+
 def skipUnlessWindows(f):
     """Skip unit test unless running on Windows"""
     return unittest.skipUnless(bleachbit.IS_WINDOWS, 'not running on Windows')(f)
