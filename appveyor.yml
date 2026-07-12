@@ -28,8 +28,6 @@ install:
   - '%make% -v'
   - '"c:\Program Files (x86)\NSIS\makensis.exe" /version'
 
-# Skipping test_script for MVP: testing is done on Linux.
-
 build_script:
   - ps: $env:REV8 = $env:APPVEYOR_REPO_COMMIT.Substring(0,8)
   - 'echo revision = "%REV8%" > bleachbit\Revision.py'
@@ -40,6 +38,13 @@ build_script:
   - 'move windows\BleachBit*.exe .'
   - 'move windows\BleachBit*.zip .'
   - ps: Get-FileHash BleachBit-*
+
+test_script:
+  - '%PYTHON_EXE% -c "import bleachbit.GUIwx.App; import bleachbit.GUIwx.MainFrame; import bleachbit.GUIwx.PreferencesDialog; import bleachbit.GUIwx.WorkerThread; print(''wx import smoke ok'')"'
+  - '%PYTHON_EXE% bleachbit-wx.py --sysinfo'
+  - '%PYTHON_EXE% -m unittest tests.TestGUIwx'
+  - 'dist\bleachbit_console_wx.exe --sysinfo'
+  - 'dist\bleachbit_console_wx.exe --sysinfo | findstr /C:"BleachBit version"'
 
 artifacts:
   - path: BleachBit-*-setup.exe
