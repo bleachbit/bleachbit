@@ -76,7 +76,7 @@ class _ETSimpleElementNode:
         nodes = []
         if self._element.text:
             nodes.append(_ETSimpleTextNode(self._element.text))
-        for child in list(self._element):
+        for child in self._element:
             nodes.append(_ETSimpleElementNode(child))
             if child.tail:
                 nodes.append(_ETSimpleTextNode(child.tail))
@@ -100,7 +100,7 @@ def _gettext_etree(element):
     if element is None:
         return ''
     rc = element.text or ''
-    for child in list(element):
+    for child in element:
         rc += child.tail or ''
     return rc
 
