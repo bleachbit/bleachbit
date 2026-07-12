@@ -245,6 +245,8 @@ class CleanerML:
 
     def handle_cleaner_option(self, option):
         """<option> element"""
+        if not self.os_match(option.attrib.get('os', '')):
+            return
         self.option_id = option.attrib.get('id', '')
         self.option_description = None
         self.option_name = None

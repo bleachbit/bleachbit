@@ -197,6 +197,57 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         with self.assertRaises(RuntimeError):
             xmlcleaner.os_match('linux', 'hal9000')
 
+    def test_option_os_filter(self):
+        """Unit test for <option os="..."> filtering
+
+        An option with an os attribute that does not match the current
+        platform should not be registered on the cleaner.
+        """
+        xml_str = f"""<?xml version="1.0" encoding="UTF-8"?>
+<cleaner id="test_option_os">
+    <label>Test</label>
+    <option id="always">
+        <label>Always</label>
+        <description>Delete the files</description>
+        <action search="file" command="delete" path="{self.tempdir}/always.log"/>
+    </option>
+    <option id="windows_only" os="windows">
+        <label>Windows only</label>
+        <description>Delete the files</description>
+        <action search="file" command="delete" path="{self.tempdir}/windows.log"/>
+    </option>
+    <option id="linux_only" os="linux">
+        <label>Linux only</label>
+        <description>Delete the files</description>
+        <action search="file" command="delete" path="{self.tempdir}/linux.log"/>
+    </option>
+    <option id="mac_only" os="darwin">
+        <label>macOS only</label>
+        <description>Delete the files</description>
+        <action search="file" command="delete" path="{self.tempdir}/mac.log"/>
+    </option>
+</cleaner>
+"""
+        cml_path = os.path.join(self.tempdir, 'test_option_os.xml')
+        self.write_file(cml_path, xml_str.encode(sys.getdefaultencoding()))
+
+        xmlc = CleanerML(cml_path)
+        # The unfiltered option is always present.
+        self.assertIn('always', xmlc.cleaner.options)
+        # The remaining options are conditionally available.
+        if bleachbit.IS_LINUX:
+            self.assertNotIn('mac_only', xmlc.cleaner.options)
+            self.assertNotIn('windows_only', xmlc.cleaner.options)
+            self.assertIn('linux_only', xmlc.cleaner.options)
+        elif bleachbit.IS_WINDOWS:
+            self.assertIn('windows_only', xmlc.cleaner.options)
+            self.assertNotIn('linux_only', xmlc.cleaner.options)
+            self.assertNotIn('mac_only', xmlc.cleaner.options)
+        elif bleachbit.IS_MAC:
+            self.assertNotIn('windows_only', xmlc.cleaner.options)
+            self.assertNotIn('linux_only', xmlc.cleaner.options)
+            self.assertIn('mac_only', xmlc.cleaner.options)
+
     def test_pot_fragment(self):
         """Unit test for pot_fragment()"""
         self.assertIsString(pot_fragment("Foo", 'bar.xml'))

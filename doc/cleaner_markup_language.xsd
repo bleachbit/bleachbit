@@ -191,6 +191,7 @@
               </xs:element>
             </xs:sequence>
             <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attributeGroup ref="operatingSystem"/>
           </xs:complexType>
         </xs:element>
         <xs:element name="localizations" minOccurs="0">
