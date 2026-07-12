@@ -56,20 +56,30 @@ class NetworkTestCase(common.BleachbitTestCase):
         status_generators = list(cls.status_generators)
         random.shuffle(status_generators)
         for generator in status_generators:
-            url = generator.format(200)
-            try:
-                response = fetch_url(url, timeout=5, max_retries=0)
-                if response.status_code == 200:
-                    cls.status_generator_url = generator
-                    logger.info('Using status generator: %s',
-                                cls.status_generator_url)
-                    return
-                else:
-                    logger.warning('Status generator %s returned %s',
-                                   generator, response.status_code)
-            except requests.exceptions.RequestException as e:
-                logger.warning('Status generator failed: %s (%s)',
-                               generator.format('...'), e)
+            # Verify the generator returns both 200 and 404 correctly.
+            # Some unreliable generators (e.g. httpbin.org) may return 200
+            # for /status/200 but 502 for /status/404, which breaks tests.
+            ok = True
+            for check_status in (200, 404):
+                url = generator.format(check_status)
+                try:
+                    response = fetch_url(url, timeout=5, max_retries=0)
+                    if response.status_code != check_status:
+                        logger.warning('Status generator %s returned %s for %s',
+                                       generator, response.status_code,
+                                       check_status)
+                        ok = False
+                        break
+                except requests.exceptions.RequestException as e:
+                    logger.warning('Status generator failed: %s (%s)',
+                                   generator.format('...'), e)
+                    ok = False
+                    break
+            if ok:
+                cls.status_generator_url = generator
+                logger.info('Using status generator: %s',
+                            cls.status_generator_url)
+                return
         if not cls.status_generator_url:
             raise RuntimeError('No working HTTP status code generator found.')
 
@@ -148,7 +158,15 @@ class NetworkTestCase(common.BleachbitTestCase):
         for status_code in status_codes:
             url = self.status_generator_url.format(status_code)
             with self.subTest(status_code=status_code):
-                response = fetch_url(url, max_retries=0, timeout=5)
+                try:
+                    response = fetch_url(url, max_retries=0, timeout=5)
+                except requests.exceptions.RetryError as exc:
+                    # The server returned a retryable status (e.g. 502)
+                    # instead of the expected status code, which is a
+                    # transient server-side issue, not a code bug.
+                    self.skipTest(
+                        f'Status generator returned retryable error '
+                        f'for {status_code}: {exc}')
                 error_msg = response_to_error_msg(response)
                 self.assertEqual(response.status_code, status_code,
                                  error_msg)
