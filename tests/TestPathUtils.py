@@ -10,7 +10,7 @@ import os
 import unittest
 from unittest import mock
 
-from bleachbit import IS_MAC, IS_WINDOWS
+from bleachbit import FS_CASE_SENSITIVE, IS_MAC, IS_WINDOWS
 from bleachbit.FileUtilities import whitelisted_windows
 from bleachbit.PathUtils import (
     expand_path,
@@ -124,16 +124,17 @@ class PathUtilsTestCase(unittest.TestCase):
             self.assertFalse(whitelisted_windows(r'E:\folder\file'))
 
     @unittest.skipUnless(IS_MAC, 'macOS-specific protected-path behavior')
-    def test_protected_path_matching_is_case_sensitive_on_macos(self):
-        """Verify protected-path matching is case-sensitive on macOS."""
+    def test_protected_path_matching_is_case_insensitive_on_macos(self):
+        """Verify protected-path matching is case-insensitive on macOS."""
         protected = '/PathUtilsProtected/CaseSensitive'
         definition = {
             'path': protected,
             'depth': 0,
-            'case_sensitive': not IS_WINDOWS,
+            'case_sensitive': FS_CASE_SENSITIVE,
         }
         with mock.patch(
                 'bleachbit.ProtectedPath.load_protected_paths',
                 return_value=[definition]):
             self.assertEqual(check_protected_path(protected), definition)
-            self.assertIsNone(check_protected_path(protected.swapcase()))
+            self.assertEqual(
+                check_protected_path(protected.swapcase()), definition)

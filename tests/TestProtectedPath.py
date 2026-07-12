@@ -25,7 +25,7 @@ from bleachbit.ProtectedPath import (
     load_protected_paths)
 from bleachbit import ProtectedPath as protected_path_module
 from bleachbit import get_share_path
-from bleachbit import IS_WINDOWS, IS_POSIX
+from bleachbit import IS_MAC, IS_WINDOWS, IS_POSIX
 from bleachbit.PathUtils import (
     expand_path,
     normalize_path,
@@ -201,8 +201,14 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
         for path in expect_exempt:
             expanded_path = expand_path(path)
             self.assertTrue(_check_exempt(expanded_path), expanded_path)
-            self.assertFalse(_check_exempt(
-                expanded_path.upper()), expanded_path)
+            # macOS is case-insensitive by default (FS_CASE_SENSITIVE is False
+            # on macOS), so an upper-cased exempt path is still exempt there.
+            # Linux is case-sensitive, so an upper-cased path is not exempt.
+            upper = expanded_path.upper()
+            if IS_MAC:
+                self.assertTrue(_check_exempt(upper), upper)
+            else:
+                self.assertFalse(_check_exempt(upper), expanded_path)
         expect_not_exempt = (
             '/',
             '/home',

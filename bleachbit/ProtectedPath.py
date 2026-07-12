@@ -31,7 +31,7 @@ import os
 import xml.dom.minidom
 
 import bleachbit
-from bleachbit import FileUtilities, IS_WINDOWS
+from bleachbit import FileUtilities, FS_CASE_SENSITIVE
 from bleachbit.General import getText, os_match
 from bleachbit.Language import get_text as _
 from bleachbit.PathUtils import (
@@ -42,11 +42,6 @@ from bleachbit.PathUtils import (
     path_has_relative_suffix,
     path_startswith,
 )
-
-# Default: Windows is case-insensitive, others are case-sensitive.
-# Do not yet use bleachbit.FS_CASE_SENSITIVE here: macOS will be addressed
-# in a future change.
-PP_CASE_SENSITIVE = not IS_WINDOWS
 
 logger = logging.getLogger(__name__)
 
@@ -113,7 +108,7 @@ def load_protected_paths(force_reload=False):
             elif case_attr == 'sensitive':
                 case_sensitive = True
             else:
-                case_sensitive = PP_CASE_SENSITIVE
+                case_sensitive = FS_CASE_SENSITIVE
 
             # Get the path text
             raw_path = getText(path_node.childNodes).strip()
@@ -140,22 +135,18 @@ def _check_exempt(user_path):
     """
     assert isinstance(user_path, str)
     exempt_paths = ('~/.cache', '%temp%', '%tmp%', '/tmp')
-    user_path_normalized = normalize_path(
-        user_path, case_sensitive=PP_CASE_SENSITIVE)
+    user_path_normalized = normalize_path(user_path)
     for path in exempt_paths:
         exempt_expanded = expand_path(path)
         if not exempt_expanded:
             continue
 
-        exempt_normalized = normalize_path(
-            exempt_expanded, case_sensitive=PP_CASE_SENSITIVE)
+        exempt_normalized = normalize_path(exempt_expanded)
 
-        if path_equal(user_path_normalized, exempt_normalized,
-                      case_sensitive=PP_CASE_SENSITIVE):
+        if path_equal(user_path_normalized, exempt_normalized):
             return True
 
-        if path_startswith(user_path_normalized, exempt_normalized,
-                           case_sensitive=PP_CASE_SENSITIVE):
+        if path_startswith(user_path_normalized, exempt_normalized):
             return True
     return False
 

@@ -4,7 +4,7 @@ These paths are not automatically put into a keep list (a.k.a. whitelist).
 Instead, if user adds any of these to the delete list, the application
 shows a warning.
 
-Windows is case-insensitive.
+Windows and macOS are case-insensitive.
 Linux is case-sensitive except where `case="insensitive"`.
 Omit trailing slashes.
 
@@ -113,7 +113,8 @@ here. Examples:
   </paths>
 <!--
 cross platform
-case sensitive
+case follows platform default (case-sensitive on Linux,
+case-insensitive on Windows and macOS)
 do not match child objects
 -->
   <paths depth="0">
@@ -124,7 +125,8 @@ do not match child objects
   </paths>
 <!--
 cross platform
-case sensitive
+case follows platform default (case-sensitive on Linux,
+case-insensitive on Windows and macOS)
 also matches any child objects
 -->
   <paths depth="any">
