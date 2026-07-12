@@ -19,7 +19,7 @@ from unittest import mock
 from tests import common
 from tests import TestCleaner
 from tests.common import SPECIAL_TEST_STRINGS
-from bleachbit import IS_MAC, IS_POSIX, IS_WINDOWS
+from bleachbit import IS_MAC, IS_WINDOWS, FS_CASE_SENSITIVE
 from bleachbit.Options import options
 from bleachbit.DeepScan import DeepScan, Search, normalized_walk
 
@@ -265,7 +265,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
         self.assertExists(f_del)
         self.assertExists(f_keep)
         self.assertFalse(os.path.exists(f_del2))
-        if IS_POSIX:
+        if FS_CASE_SENSITIVE:
             self.assertExists(f_del3)
         else:
             self.assertFalse(os.path.exists(f_del3))
@@ -277,7 +277,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
 
         # cleanup
         os.unlink(f_keep)
-        if IS_POSIX:
+        if FS_CASE_SENSITIVE:
             os.unlink(f_del3)
         os.rmdir(subdir)
 
@@ -292,13 +292,13 @@ class DeepScanTestCase(common.BleachbitTestCase):
 
         with mock.patch('os.walk') as mock_walk:
             mock_walk.return_value = [
-                ('/foo', ('bar',), ['ba\xcc\x80z']),
+                ('/foo', ('bar',), ['ba\u0300z']),
                 ('/foo/bar', (), ['spam', 'eggs']),
             ]
             with mock.patch('platform.system') as mock_platform_system:
                 mock_platform_system.return_value = 'Darwin'
                 self.assertEqual(list(normalized_walk('.')), [
-                    ('/foo', ('bar',), ['b\xc3\xa0z']),
+                    ('/foo', ('bar',), ['b\u00e0z']),
                     ('/foo/bar', (), ['spam', 'eggs']),
                 ])
 
