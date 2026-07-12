@@ -32,6 +32,7 @@ import xml.parsers.expat
 
 # local import
 import bleachbit
+from bleachbit import IS_WINDOWS
 from bleachbit.Action import ActionProvider
 from bleachbit.FileUtilities import expand_glob_join, listdir
 from bleachbit.General import boolstr_to_bool
@@ -366,11 +367,11 @@ def list_cleanerml_files(local_only=False, system_only=False):
             cleanerdirs += (bleachbit.local_cleaners_dir, )
     if not local_only and bleachbit.system_cleaners_dir:
         cleanerdirs += (bleachbit.system_cleaners_dir, )
+    check_world_writable = not IS_WINDOWS
     for pathname in listdir(cleanerdirs):
         if not pathname.lower().endswith('.xml'):
             continue
-        st = os.stat(pathname)
-        if sys.platform != 'win32' and stat.S_IMODE(st[stat.ST_MODE]) & 2:
+        if check_world_writable and stat.S_IMODE(os.stat(pathname)[stat.ST_MODE]) & 2:
             # TRANSLATORS: Warning printed to the log.
             # %s expands to the path of the XML cleaner file that was skipped
             warning_msg = _("Ignoring cleaner because it is "
