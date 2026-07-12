@@ -342,76 +342,70 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_regex(self):
         """Unit test for regex option"""
-        _iglob = glob.iglob
-        glob.iglob = lambda x: ['/tmp/foo1', '/tmp/foo2', '/tmp/bar1']
-        _getsize = bleachbit.FileUtilities.getsize
-        bleachbit.FileUtilities.getsize = lambda x: 1
+        with mock.patch('glob.iglob', lambda x: ['/tmp/foo1', '/tmp/foo2', '/tmp/bar1']), \
+                mock.patch('bleachbit.FileUtilities.getsize', lambda x: 1):
+            # should match three files using no regexes
+            action_str = '<action command="delete" search="glob" path="/tmp/foo*" />'
+            results = _action_str_to_results(action_str)
+            self.assertEqual(len(results), 3)
 
-        # should match three files using no regexes
-        action_str = '<action command="delete" search="glob" path="/tmp/foo*" />'
-        results = _action_str_to_results(action_str)
-        self.assertEqual(len(results), 3)
-
-        # should match second file using positive regex
-        action_str = '<action command="delete" search="glob" path="/tmp/foo*" regex="^foo2$"/>'
-        results = _action_str_to_results(action_str)
-        self.assertEqual(len(results), 1)
-        self.assertEqual(results[0]['path'], '/tmp/foo2')
-
-        # On Windows should be case insensitive
-        action_str = '<action command="delete" search="glob" path="/tmp/foo*" regex="^FOO2$"/>'
-        results = _action_str_to_results(action_str)
-        if IS_WINDOWS:
+            # should match second file using positive regex
+            action_str = '<action command="delete" search="glob" path="/tmp/foo*" regex="^foo2$"/>'
+            results = _action_str_to_results(action_str)
             self.assertEqual(len(results), 1)
             self.assertEqual(results[0]['path'], '/tmp/foo2')
-        else:
+
+            # On case-insensitive filesystems (Windows, macOS) the regex
+            # should match case-insensitively.
+            action_str = '<action command="delete" search="glob" path="/tmp/foo*" regex="^FOO2$"/>'
+            results = _action_str_to_results(action_str)
+            if FS_CASE_SENSITIVE:
+                self.assertEqual(len(results), 0)
+            else:
+                self.assertEqual(len(results), 1)
+                self.assertEqual(results[0]['path'], '/tmp/foo2')
+
+            # should match second file using negative regex
+            action_str = (
+                '<action command="delete" search="glob" '
+                'path="/tmp/foo*" nregex="^(foo1|bar1)$"/>'
+            )
+            results = _action_str_to_results(action_str)
+            self.assertEqual(len(results), 1)
+            self.assertEqual(results[0]['path'], '/tmp/foo2')
+
+            # should match second file using both regexes
+            action_str = (
+                '<action command="delete" search="glob" '
+                'path="/tmp/foo*" regex="^f" nregex="1$"/>'
+            )
+            results = _action_str_to_results(action_str)
+            self.assertEqual(len(results), 1)
+            self.assertEqual(results[0]['path'], '/tmp/foo2')
+
+            # should match nothing using positive regex
+            action_str = (
+                '<action command="delete" search="glob" '
+                'path="/tmp/foo*" regex="^bar$"/>'
+            )
+            results = _action_str_to_results(action_str)
             self.assertEqual(len(results), 0)
 
-        # should match second file using negative regex
-        action_str = (
-            '<action command="delete" search="glob" '
-            'path="/tmp/foo*" nregex="^(foo1|bar1)$"/>'
-        )
-        results = _action_str_to_results(action_str)
-        self.assertEqual(len(results), 1)
-        self.assertEqual(results[0]['path'], '/tmp/foo2')
+            # should match nothing using negative regex
+            action_str = (
+                '<action command="delete" search="glob" '
+                'path="/tmp/foo*" nregex="."/>'
+            )
+            results = _action_str_to_results(action_str)
+            self.assertEqual(len(results), 0)
 
-        # should match second file using both regexes
-        action_str = (
-            '<action command="delete" search="glob" '
-            'path="/tmp/foo*" regex="^f" nregex="1$"/>'
-        )
-        results = _action_str_to_results(action_str)
-        self.assertEqual(len(results), 1)
-        self.assertEqual(results[0]['path'], '/tmp/foo2')
-
-        # should match nothing using positive regex
-        action_str = (
-            '<action command="delete" search="glob" '
-            'path="/tmp/foo*" regex="^bar$"/>'
-        )
-        results = _action_str_to_results(action_str)
-        self.assertEqual(len(results), 0)
-
-        # should match nothing using negative regex
-        action_str = (
-            '<action command="delete" search="glob" '
-            'path="/tmp/foo*" nregex="."/>'
-        )
-        results = _action_str_to_results(action_str)
-        self.assertEqual(len(results), 0)
-
-        # should give an error
-        action_str = (
-            '<action command="delete" search="invalid" '
-            'path="/tmp/foo*" regex="^bar$"/>'
-        )
-        self.assertRaises(
-            RuntimeError, lambda: _action_str_to_results(action_str))
-
-        # clean up
-        glob.iglob = _iglob
-        bleachbit.FileUtilities.getsize = _getsize
+            # should give an error
+            action_str = (
+                '<action command="delete" search="invalid" '
+                'path="/tmp/foo*" regex="^bar$"/>'
+            )
+            self.assertRaises(
+                RuntimeError, lambda: _action_str_to_results(action_str))
 
     def test_search_glob(self):
         """Unit test for search=glob"""
@@ -438,40 +432,33 @@ class ActionTestCase(common.BleachbitTestCase):
 
     def test_wholeregex(self):
         """Unit test for wholeregex filter"""
-        _iglob = glob.iglob
-        glob.iglob = lambda x: ['/tmp/foo1', '/tmp/foo2', '/tmp/bar1']
-        _getsize = bleachbit.FileUtilities.getsize
-        bleachbit.FileUtilities.getsize = lambda x: 1
+        with mock.patch('glob.iglob', lambda x: ['/tmp/foo1', '/tmp/foo2', '/tmp/bar1']), \
+                mock.patch('bleachbit.FileUtilities.getsize', lambda x: 1):
+            # should match three files using no regexes
+            action_str = (
+                '<action command="delete" search="glob" '
+                'path="/tmp/foo*" />'
+            )
+            results = _action_str_to_results(action_str)
+            self.assertEqual(len(results), 3)
 
-        # should match three files using no regexes
-        action_str = (
-            '<action command="delete" search="glob" '
-            'path="/tmp/foo*" />'
-        )
-        results = _action_str_to_results(action_str)
-        self.assertEqual(len(results), 3)
+            # should match two files using wholeregex
+            action_str = (
+                '<action command="delete" search="glob" '
+                'path="/tmp/foo*" wholeregex="^/tmp/foo.*$"/>'
+            )
+            results = _action_str_to_results(action_str)
+            self.assertEqual(len(results), 2)
+            self.assertEqual(results[0]['path'], '/tmp/foo1')
 
-        # should match two files using wholeregex
-        action_str = (
-            '<action command="delete" search="glob" '
-            'path="/tmp/foo*" wholeregex="^/tmp/foo.*$"/>'
-        )
-        results = _action_str_to_results(action_str)
-        self.assertEqual(len(results), 2)
-        self.assertEqual(results[0]['path'], '/tmp/foo1')
-
-        # should match third file using nwholeregex
-        action_str = (
-            '<action command="delete" search="glob" '
-            'path="/tmp/foo*" nwholeregex="^/tmp/foo.*$"/>'
-        )
-        results = _action_str_to_results(action_str)
-        self.assertEqual(len(results), 1)
-        self.assertEqual(results[0]['path'], '/tmp/bar1')
-
-        # clean up
-        glob.iglob = _iglob
-        bleachbit.FileUtilities.getsize = _getsize
+            # should match third file using nwholeregex
+            action_str = (
+                '<action command="delete" search="glob" '
+                'path="/tmp/foo*" nwholeregex="^/tmp/foo.*$"/>'
+            )
+            results = _action_str_to_results(action_str)
+            self.assertEqual(len(results), 1)
+            self.assertEqual(results[0]['path'], '/tmp/bar1')
 
     def test_type(self):
         """Unit test for type attribute"""
