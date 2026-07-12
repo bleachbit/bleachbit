@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    BleachBit
-    Copyright (C) 2008-2021 Andrew Ziem
-    https://www.bleachbit.org
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+macOS Tahoe (26)
+zsh 5.9 (arm64-apple-darwin25.0)
+has ~/.zsh_history
+has ~/.zsh_sessions : macOS specific feature
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+Ubuntu Resolution Racoon (26.04 LTS)
+zsh 5.9 (x86_64-ubuntu-linux-gnu)
+has ~/.zsh_history
+does not have ~/.zsh_sessions
+
+The name (proper noun) is written usually "Zsh" and "Z shell,"
+"ZSH," and "Z SHELL." Even when not referring to the command, it may
+be lowercase "zsh.""
+https://www.zsh.org/
 
 -->
 <cleaner id="zsh" os="unix">
@@ -26,5 +30,10 @@
     <label>History</label>
     <description>Delete the command history</description>
     <action command="delete" search="file" path="~/.zsh_history"/>
+  </option>
+  <option id="session" os="darwin">
+    <label>Session</label>
+    <description>Delete the files</description>
+    <action command="delete" search="walk.all" path="~/.zsh_sessions/"/>
   </option>
 </cleaner>
