@@ -42,7 +42,6 @@ class NetworkTestCase(common.BleachbitTestCase):
     """Test case for module Network"""
     status_generators = [
         'https://browsergym.bleachbit.org/api/status/{}',
-        'https://httpbin.org/status/{}',
         'https://httpbingo.org/status/{}',
         'https://mock.httpstatus.io/{}',
         'https://postman-echo.com/status/{}',
