@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-04 09:57-0600\n"
+"POT-Creation-Date: 2026-07-12 15:23-0600\n"
 "PO-Revision-Date: 2026-03-14 12:09+0000\n"
 "Last-Translator: Arish <arishsamria008@gmail.com>\n"
 "Language-Team: Hindi <https://hosted.weblate.org/projects/bleachbit/main/hi/"
@@ -57,16 +57,17 @@ msgid ""
 "tracking identifiers"
 msgstr "उन कुकीज़ को हटाएँ जिनमें वेबसाइट प्रेफेरेंस, ऑथेंटिकेशन और ट्रैकिंग जानकारी होती हैं"
 
-#: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
-#: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
-#: ../cleaners/chromium.xml ../cleaners/sqlite3.xml
-#: ../cleaners/windows_defender.xml ../cleaners/slack.xml ../cleaners/brave.xml
-#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
-#: ../cleaners/libreoffice.xml ../cleaners/seamonkey.xml
-#: ../cleaners/google_chrome.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/vim.xml ../cleaners/opera.xml
-#: ../cleaners/discord.xml ../cleaners/octave.xml
+#: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
+#: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
+#: ../cleaners/safari.xml ../cleaners/fish.xml ../cleaners/chromium.xml
+#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
+#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
+#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
+#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/python.xml
+#: ../cleaners/vim.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/octave.xml
 msgid "History"
 msgstr "हिस्ट्री"
 
@@ -233,11 +234,12 @@ msgstr "बैकअप फाइलें हटाएँ"
 msgid "Crash reports"
 msgstr "क्रैश रिपोर्टें"
 
-#: ../cleaners/librewolf.xml ../cleaners/beagle.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/geary.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/windows_defender.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/geary.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/windows_defender.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml
 #: ../cleaners/google_chrome.xml ../cleaners/transmission.xml
 #: ../cleaners/profanity.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/vuze.xml ../cleaners/opera.xml
@@ -288,11 +290,11 @@ msgstr ""
 msgid "This option will delete your saved passwords."
 msgstr "इस ऑप्शन से आपके सेव किए पासवर्ड डिलीट हो जाएंगे।"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/claude.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Session"
 msgstr "सत्र"
 
@@ -372,6 +374,15 @@ msgid ""
 "removing any data"
 msgstr "डाटाबेस फ्रेग्मेंटेशन को साफ करें ताकि डाटा हटाए बिना कम जगह लगे और स्पीड बढ़ जाए"
 
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+msgid "Shell"
+msgstr "शैल"
+
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+#: ../cleaners/sqlite3.xml ../cleaners/python.xml ../cleaners/octave.xml
+msgid "Delete the command history"
+msgstr "कमांड हिस्ट्री डिलीट करें"
+
 #: ../cleaners/openoffice.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/libreoffice.xml
 msgid "Office suite"
@@ -404,14 +415,6 @@ msgstr "लॉग डीबग करें"
 #: ../cleaners/x11.xml ../cleaners/gl-117.xml
 msgid "Delete the debug logs"
 msgstr "डिबग लॉग्स डिलीट करें"
-
-#: ../cleaners/bash.xml
-msgid "Shell"
-msgstr "शैल"
-
-#: ../cleaners/bash.xml ../cleaners/sqlite3.xml ../cleaners/octave.xml
-msgid "Delete the command history"
-msgstr "कमांड हिस्ट्री डिलीट करें"
 
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
@@ -2751,8 +2754,12 @@ msgid "Error when checking for updates: %s"
 msgstr "अपडेट चेक करते समय त्रुटि: "
 
 #: ../bleachbit/Memory.py
+#, fuzzy
+#| msgid ""
+#| "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
+#| "information."
 msgid ""
-"The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
+"The command 'swapon -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
 "कमांड 'swapoff -s' असफल रही, इसलिए स्वैप इन्फॉर्मेशन के लिए /proc/swaps पर वापस जा "
@@ -2791,6 +2798,21 @@ msgstr "%s से मेमोरी एलोकेट और वाइप क�
 msgid "Freeing %s of memory."
 msgstr "%s से मेमोरी फ्री कर रहा है।"
 
+#. TRANSLATORS: This is a debugging message that the parent process
+#. is waiting for the child process. %(parent_pid)d is the parent
+#. process ID; %(child_pid)d is the child process ID.
+#: ../bleachbit/Memory.py
+#, fuzzy, python-format
+#| msgid ""
+#| "The function wipe_memory() with process ID {pid} is waiting for child "
+#| "process ID {cid}."
+msgid ""
+"The function wipe_memory() with process ID %(parent_pid)d is waiting for "
+"child process ID %(child_pid)d."
+msgstr ""
+"प्रोसेस आईडी {pid} वाला फंक्शन wipe_memory() चाइल्ड प्रोसेस आईडी {cid} का इंतज़ार कर "
+"रहा है।"
+
 #. TRANSLATORS: Debug message. 'Found' is a past tense verb (short for
 #. "Found [that] the UUID for swap device ..."). %(device)s is the device
 #. path (e.g., /dev/sda5); %(uuid)s is a UUID string
@@ -2824,21 +2846,6 @@ msgstr "स्वैप डिवाइस %s फिर से चालू क�
 #, python-format
 msgid "Detected these swap devices: %s"
 msgstr "ये स्वैप डिवाइस डिटेक्ट हुईं: %s"
-
-#. TRANSLATORS: This is a debugging message that the parent process
-#. is waiting for the child process. %(parent_pid)d is the parent
-#. process ID; %(child_pid)d is the child process ID.
-#: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The function wipe_memory() with process ID {pid} is waiting for child "
-#| "process ID {cid}."
-msgid ""
-"The function wipe_memory() with process ID %(parent_pid)d is waiting for "
-"child process ID %(child_pid)d."
-msgstr ""
-"प्रोसेस आईडी {pid} वाला फंक्शन wipe_memory() चाइल्ड प्रोसेस आईडी {cid} का इंतज़ार कर "
-"रहा है।"
 
 #: ../bleachbit/Memory.py
 #, python-format

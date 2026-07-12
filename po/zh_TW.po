@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-07-04 09:57-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-12 15:23-0600\n"
 "PO-Revision-Date: 2026-07-12 20:01+0000\n"
 "Last-Translator: 那個呆萌在山外 "
 "<5h1n38r16h7.d14m0nd@users.noreply.hosted.weblate.org>\n"
@@ -54,16 +54,17 @@ msgid ""
 "tracking identifiers"
 msgstr "刪除 Cookie 檔案，它們保存登入資訊、網站偏好和追蹤標識符"
 
-#: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
-#: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
-#: ../cleaners/chromium.xml ../cleaners/sqlite3.xml
-#: ../cleaners/windows_defender.xml ../cleaners/slack.xml ../cleaners/brave.xml
-#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
-#: ../cleaners/libreoffice.xml ../cleaners/seamonkey.xml
-#: ../cleaners/google_chrome.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/vim.xml ../cleaners/opera.xml
-#: ../cleaners/discord.xml ../cleaners/octave.xml
+#: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
+#: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
+#: ../cleaners/safari.xml ../cleaners/fish.xml ../cleaners/chromium.xml
+#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
+#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
+#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
+#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/python.xml
+#: ../cleaners/vim.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/octave.xml
 msgid "History"
 msgstr "歷史紀錄"
 
@@ -230,11 +231,12 @@ msgstr "刪除備份檔案"
 msgid "Crash reports"
 msgstr "崩潰報告"
 
-#: ../cleaners/librewolf.xml ../cleaners/beagle.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/geary.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/windows_defender.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/geary.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/windows_defender.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml
 #: ../cleaners/google_chrome.xml ../cleaners/transmission.xml
 #: ../cleaners/profanity.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/vuze.xml ../cleaners/opera.xml
@@ -281,11 +283,11 @@ msgstr "一個保存了使用者帳號、密碼和「不再儲存密碼」網站
 msgid "This option will delete your saved passwords."
 msgstr "這個選項將刪除您過去保存的密碼。"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/claude.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Session"
 msgstr "作業階段"
 
@@ -365,6 +367,15 @@ msgid ""
 "removing any data"
 msgstr "清理資料庫碎片，騰出空間並加快速度；不需刪除任何資料"
 
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+msgid "Shell"
+msgstr "Shell"
+
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+#: ../cleaners/sqlite3.xml ../cleaners/python.xml ../cleaners/octave.xml
+msgid "Delete the command history"
+msgstr "刪除指令紀錄"
+
 #: ../cleaners/openoffice.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/libreoffice.xml
 msgid "Office suite"
@@ -397,14 +408,6 @@ msgstr "除錯日誌"
 #: ../cleaners/x11.xml ../cleaners/gl-117.xml
 msgid "Delete the debug logs"
 msgstr "刪除 debug（除錯）日誌"
-
-#: ../cleaners/bash.xml
-msgid "Shell"
-msgstr "Shell"
-
-#: ../cleaners/bash.xml ../cleaners/sqlite3.xml ../cleaners/octave.xml
-msgid "Delete the command history"
-msgstr "刪除指令紀錄"
 
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
@@ -729,8 +732,8 @@ msgid ""
 "This option is slow. Inspect the preview for files you want to keep, like "
 "those bundled with applications."
 msgstr ""
-"此選項速度較慢。請檢查預覽中是否包含您想要保留的檔案，例如應用程式捆綁的檔案"
-"。"
+"此選項速度較慢。請檢查預覽中是否包含您想要保留的檔案，例如應用程式捆綁的檔"
+"案。"
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
@@ -2643,8 +2646,12 @@ msgid "Error when checking for updates: %s"
 msgstr "檢查更新時發生錯誤：%s"
 
 #: ../bleachbit/Memory.py
+#, fuzzy
+#| msgid ""
+#| "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
+#| "information."
 msgid ""
-"The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
+"The command 'swapon -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr "指令「swapoff -s」執行失敗，改從 /proc/swaps 獲取 swap 空間資訊。"
 
@@ -2680,6 +2687,18 @@ msgstr "分配並抹寫 %s 記憶體。"
 msgid "Freeing %s of memory."
 msgstr "釋放 %s 記憶體。"
 
+#. TRANSLATORS: This is a debugging message that the parent process
+#. is waiting for the child process. %(parent_pid)d is the parent
+#. process ID; %(child_pid)d is the child process ID.
+#: ../bleachbit/Memory.py
+#, python-format
+msgid ""
+"The function wipe_memory() with process ID %(parent_pid)d is waiting for "
+"child process ID %(child_pid)d."
+msgstr ""
+"程序 ID %(parent_pid)d 的函式 wipe_memory() 正在等待子程序 ID %(child_pid)d "
+"退出。"
+
 #. TRANSLATORS: Debug message. 'Found' is a past tense verb (short for
 #. "Found [that] the UUID for swap device ..."). %(device)s is the device
 #. path (e.g., /dev/sda5); %(uuid)s is a UUID string
@@ -2712,18 +2731,6 @@ msgstr "重新初始化 swap 交換裝置 %s。"
 #, python-format
 msgid "Detected these swap devices: %s"
 msgstr "偵測到以下 swap 交換裝置：%s"
-
-#. TRANSLATORS: This is a debugging message that the parent process
-#. is waiting for the child process. %(parent_pid)d is the parent
-#. process ID; %(child_pid)d is the child process ID.
-#: ../bleachbit/Memory.py
-#, python-format
-msgid ""
-"The function wipe_memory() with process ID %(parent_pid)d is waiting for "
-"child process ID %(child_pid)d."
-msgstr ""
-"程序 ID %(parent_pid)d 的函式 wipe_memory() 正在等待子程序 ID %(child_pid)d "
-"退出。"
 
 #: ../bleachbit/Memory.py
 #, python-format

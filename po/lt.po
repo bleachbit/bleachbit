@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-04 09:57-0600\n"
+"POT-Creation-Date: 2026-07-12 15:23-0600\n"
 "PO-Revision-Date: 2025-03-13 19:09+0000\n"
 "Last-Translator: J4mm3ris <dr.simonas@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/bleachbit/"
@@ -61,16 +61,17 @@ msgstr ""
 "Išvalyti slapukus, kuriuose gali būti saugoma tokia informacija kaip "
 "tinklalapio nustatymai, prisijungimo duomenys ir sekimo informacija"
 
-#: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
-#: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
-#: ../cleaners/chromium.xml ../cleaners/sqlite3.xml
-#: ../cleaners/windows_defender.xml ../cleaners/slack.xml ../cleaners/brave.xml
-#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
-#: ../cleaners/libreoffice.xml ../cleaners/seamonkey.xml
-#: ../cleaners/google_chrome.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/vim.xml ../cleaners/opera.xml
-#: ../cleaners/discord.xml ../cleaners/octave.xml
+#: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
+#: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
+#: ../cleaners/safari.xml ../cleaners/fish.xml ../cleaners/chromium.xml
+#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
+#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
+#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
+#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/python.xml
+#: ../cleaners/vim.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/octave.xml
 msgid "History"
 msgstr "Istorija"
 
@@ -239,11 +240,12 @@ msgstr "Ištrinti atsarginės kopijos failus"
 msgid "Crash reports"
 msgstr "Pranešimai apie lūžius"
 
-#: ../cleaners/librewolf.xml ../cleaners/beagle.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/geary.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/windows_defender.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/geary.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/windows_defender.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml
 #: ../cleaners/google_chrome.xml ../cleaners/transmission.xml
 #: ../cleaners/profanity.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/vuze.xml ../cleaners/opera.xml
@@ -294,11 +296,11 @@ msgstr ""
 msgid "This option will delete your saved passwords."
 msgstr "Ši parinktis ištrins jūsų įrašytus slaptažodžius."
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/claude.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Session"
 msgstr "Sesija"
 
@@ -380,6 +382,15 @@ msgstr ""
 "Defragmentuoti duomenų bazę, taip sumažinant jos užimamą vietą ir pagerinant "
 "greitaveiką, nepašalinant jokių duomenų"
 
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+msgid "Shell"
+msgstr "Apvalkalas"
+
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+#: ../cleaners/sqlite3.xml ../cleaners/python.xml ../cleaners/octave.xml
+msgid "Delete the command history"
+msgstr "Ištrinti komandų istoriją"
+
 #: ../cleaners/openoffice.xml ../cleaners/microsoft_office.xml
 #: ../cleaners/libreoffice.xml
 msgid "Office suite"
@@ -414,14 +425,6 @@ msgstr "Derinimo žurnalai"
 #: ../cleaners/x11.xml ../cleaners/gl-117.xml
 msgid "Delete the debug logs"
 msgstr "Ištrinti derinimo žurnalus"
-
-#: ../cleaners/bash.xml
-msgid "Shell"
-msgstr "Apvalkalas"
-
-#: ../cleaners/bash.xml ../cleaners/sqlite3.xml ../cleaners/octave.xml
-msgid "Delete the command history"
-msgstr "Ištrinti komandų istoriją"
 
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
@@ -2769,8 +2772,12 @@ msgid "Error when checking for updates: %s"
 msgstr "Klaida ieškant atnaujinimų: "
 
 #: ../bleachbit/Memory.py
+#, fuzzy
+#| msgid ""
+#| "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
+#| "information."
 msgid ""
-"The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
+"The command 'swapon -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
 "Komanda 'swapoff -s' nepavyko, todėl grįžtama prie /proc/swaps, kad būtų "
@@ -2809,6 +2816,20 @@ msgstr "Priskiriama ir išvaloma %s atminties."
 msgid "Freeing %s of memory."
 msgstr "Atlaisvinama %s atminties."
 
+#. TRANSLATORS: This is a debugging message that the parent process
+#. is waiting for the child process. %(parent_pid)d is the parent
+#. process ID; %(child_pid)d is the child process ID.
+#: ../bleachbit/Memory.py
+#, fuzzy, python-format
+#| msgid ""
+#| "The function wipe_memory() with process ID {pid} is waiting for child "
+#| "process ID {cid}."
+msgid ""
+"The function wipe_memory() with process ID %(parent_pid)d is waiting for "
+"child process ID %(child_pid)d."
+msgstr ""
+"Funkcija wipe_memory() su proceso ID {pid} laukia antrinio proceso ID {cid}."
+
 #. TRANSLATORS: Debug message. 'Found' is a past tense verb (short for
 #. "Found [that] the UUID for swap device ..."). %(device)s is the device
 #. path (e.g., /dev/sda5); %(uuid)s is a UUID string
@@ -2842,20 +2863,6 @@ msgstr "Iš naujo inicijuojamas sukeitimo įrenginys %s."
 #, python-format
 msgid "Detected these swap devices: %s"
 msgstr "Aptikti šie sukeitimo įrenginiai: %s"
-
-#. TRANSLATORS: This is a debugging message that the parent process
-#. is waiting for the child process. %(parent_pid)d is the parent
-#. process ID; %(child_pid)d is the child process ID.
-#: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The function wipe_memory() with process ID {pid} is waiting for child "
-#| "process ID {cid}."
-msgid ""
-"The function wipe_memory() with process ID %(parent_pid)d is waiting for "
-"child process ID %(child_pid)d."
-msgstr ""
-"Funkcija wipe_memory() su proceso ID {pid} laukia antrinio proceso ID {cid}."
 
 #: ../bleachbit/Memory.py
 #, python-format
