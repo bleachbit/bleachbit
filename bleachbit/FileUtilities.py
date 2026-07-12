@@ -31,6 +31,7 @@ from pathlib import Path
 # local imports
 import bleachbit
 from bleachbit.Language import get_text as _
+from bleachbit.PathUtils import path_equal, path_startswith
 from bleachbit.Wipe import wipe_contents, wipe_name
 
 
@@ -942,7 +943,6 @@ def _path_equal(path1, path2):
     Compatibility wrapper around bleachbit.PathUtils.path_equal.
     Temporary: to be removed once all callers import path_equal directly
     """
-    from bleachbit.PathUtils import path_equal
     return path_equal(path1, path2)
 
 
@@ -952,7 +952,6 @@ def _path_startswith(path, prefix):
     Compatibility wrapper around bleachbit.PathUtils.path_startswith.
     Temporary: to be removed once all callers import path_startswith directly
     """
-    from bleachbit.PathUtils import path_startswith
     return path_startswith(path, prefix)
 
 
@@ -967,18 +966,18 @@ def whitelisted_posix(path, check_realpath=True, _followed_link=False):
         return whitelisted_posix(os.path.realpath(path), False, _followed_link=True)
     for (keep_type, keep_path) in options.get_whitelist_paths():
         if keep_type == 'file':
-            if _path_equal(path, keep_path):
+            if path_equal(path, keep_path):
                 return True
-            if _followed_link and _path_equal(path, os.path.realpath(keep_path)):
+            if _followed_link and path_equal(path, os.path.realpath(keep_path)):
                 return True
         if keep_type == 'folder':
-            if _path_equal(path, keep_path):
+            if path_equal(path, keep_path):
                 return True
-            if _path_startswith(path, keep_path):
+            if path_startswith(path, keep_path):
                 return True
             if _followed_link:
                 real_pathname = os.path.realpath(keep_path)
-                if _path_equal(path, real_pathname) or _path_startswith(path, real_pathname):
+                if path_equal(path, real_pathname) or path_startswith(path, real_pathname):
                     return True
     return False
 
@@ -990,15 +989,17 @@ def whitelisted_windows(path):
     from bleachbit.Options import options
     for pathname in options.get_whitelist_paths():
         # Windows is case insensitive
-        if pathname[0] == 'file' and path.lower() == pathname[1].lower():
+        if (pathname[0] == 'file'
+                and path_equal(path, pathname[1], case_sensitive=False)):
             return True
         if pathname[0] == 'folder':
-            if path.lower() == pathname[1].lower():
+            if path_equal(path, pathname[1], case_sensitive=False):
                 return True
-            if path.lower().startswith(pathname[1].lower() + os.sep):
+            if path_startswith(path, pathname[1], case_sensitive=False):
                 return True
             # Simple drive letter like C:\ matches everything below
-            if len(pathname[1]) == 3 and path.lower().startswith(pathname[1].lower()):
+            if (len(pathname[1]) == 3
+                    and path.lower().startswith(pathname[1].lower())):
                 return True
     return False
 

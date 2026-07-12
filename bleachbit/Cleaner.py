@@ -19,6 +19,7 @@ from bleachbit.Constant import EMPTY_SPACE_WARNING
 from bleachbit.Language import get_text as _
 from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
+from bleachbit.PathUtils import path_equal
 from bleachbit.Process import is_process_running
 from bleachbit import Action, CleanerML, Command, FileUtilities, Memory
 from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
@@ -434,9 +435,9 @@ class System(Cleaner):
             # whitelist the folder %TEMP%\Low but not its contents
             # https://bugs.launchpad.net/bleachbit/+bug/1421726
             for dirname in dirnames:
-                low = os.path.join(dirname, 'low').lower()
+                low = os.path.join(dirname, 'low')
                 for filename in children_in_directory(dirname, True):
-                    if not low == filename.lower():
+                    if not path_equal(low, filename, case_sensitive=False):
                         yield Command.Delete(filename)
 
         # trash

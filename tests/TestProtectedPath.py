@@ -28,6 +28,7 @@ from bleachbit.ProtectedPath import (
 from bleachbit import ProtectedPath as protected_path_module
 from bleachbit import get_share_path
 from bleachbit import IS_WINDOWS, IS_POSIX
+from bleachbit.PathUtils import path_has_relative_suffix
 from bleachbit.Cleaner import backends
 from tests.TestCleaner import register_all_cleaners
 
@@ -92,6 +93,15 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
         # Case insensitive
         result = _normalize_for_comparison('/Home/User', False)
         self.assertEqual(result, result.lower())
+
+    def test_path_has_relative_suffix(self):
+        """Test path-component matching for relative protected paths"""
+        self.assertTrue(path_has_relative_suffix('/home/user/.git', '.git'))
+        self.assertTrue(path_has_relative_suffix('.git', '.git'))
+        self.assertFalse(path_has_relative_suffix('/home/user/not-git', '.git'))
+        self.assertFalse(path_has_relative_suffix('/home/user/.gitignore', '.git'))
+        self.assertTrue(path_has_relative_suffix(
+            '/home/user/.GIT', '.git', case_sensitive=False))
 
     def test_get_protected_path_xml(self):
         """Test that protected path XML file can be found"""

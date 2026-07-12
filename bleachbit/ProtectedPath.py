@@ -31,14 +31,26 @@ import os
 import xml.dom.minidom
 
 import bleachbit
-from bleachbit import FileUtilities
+from bleachbit import FileUtilities, IS_WINDOWS
 from bleachbit.General import getText, os_match
 from bleachbit.Language import get_text as _
 from bleachbit.PathUtils import (
-    expand_path as _expand_path,
-    expand_path_entries as _expand_path_entries,
-    normalize_path as _normalize_for_comparison,
+    expand_path,
+    expand_path_entries,
+    normalize_path,
+    path_equal,
+    path_has_relative_suffix,
+    path_startswith,
 )
+
+_expand_path = expand_path
+_expand_path_entries = expand_path_entries
+_normalize_for_comparison = normalize_path
+
+# Default: Windows is case-insensitive, others are case-sensitive.
+# Do not yet use bleachbit.FS_CASE_SENSITIVE here: macOS will be addressed
+# in a future change.
+PP_CASE_SENSITIVE = not IS_WINDOWS
 
 logger = logging.getLogger(__name__)
 
@@ -105,8 +117,7 @@ def load_protected_paths(force_reload=False):
             elif case_attr == 'sensitive':
                 case_sensitive = True
             else:
-                # Default: Windows is case-insensitive, others are case-sensitive
-                case_sensitive = os.name != 'nt'
+                case_sensitive = PP_CASE_SENSITIVE
 
             # Get the path text
             raw_path = getText(path_node.childNodes).strip()
@@ -114,7 +125,7 @@ def load_protected_paths(force_reload=False):
                 continue
 
             # Expand the path (possibly into multiple entries)
-            for expanded_path in _expand_path_entries(raw_path):
+            for expanded_path in expand_path_entries(raw_path):
                 protected_paths.append({
                     'path': expanded_path,
                     'depth': depth,
@@ -133,22 +144,22 @@ def _check_exempt(user_path):
     """
     assert isinstance(user_path, str)
     exempt_paths = ('~/.cache', '%temp%', '%tmp%', '/tmp')
-    case_sensitive = os.name != 'nt'
-    user_path_normalized = _normalize_for_comparison(
-        user_path, case_sensitive=case_sensitive)
+    user_path_normalized = normalize_path(
+        user_path, case_sensitive=PP_CASE_SENSITIVE)
     for path in exempt_paths:
-        exempt_expanded = _expand_path(path)
+        exempt_expanded = expand_path(path)
         if not exempt_expanded:
             continue
 
-        exempt_normalized = _normalize_for_comparison(
-            exempt_expanded, case_sensitive=case_sensitive)
+        exempt_normalized = normalize_path(
+            exempt_expanded, case_sensitive=PP_CASE_SENSITIVE)
 
-        if user_path_normalized == exempt_normalized:
+        if path_equal(user_path_normalized, exempt_normalized,
+                      case_sensitive=PP_CASE_SENSITIVE):
             return True
 
-        exempt_with_sep = exempt_normalized + os.sep
-        if user_path_normalized.startswith(exempt_with_sep):
+        if path_startswith(user_path_normalized, exempt_normalized,
+                           case_sensitive=PP_CASE_SENSITIVE):
             return True
     return False
 
@@ -171,48 +182,39 @@ def check_protected_path(user_path):
     if not protected_paths:
         return None
 
-    # Normalize the user path
-    user_path_norm = os.path.normpath(user_path)
-
     for ppath in protected_paths:
         protected = ppath['path']
         depth = ppath['depth']
         case_sensitive = ppath['case_sensitive']
-
-        # Normalize both paths for comparison
-        if case_sensitive:
-            user_cmp = user_path_norm
-            protected_cmp = protected
-        else:
-            user_cmp = user_path_norm.lower()
-            protected_cmp = protected.lower()
+        user_cmp = normalize_path(user_path, case_sensitive=case_sensitive)
+        protected_cmp = normalize_path(protected, case_sensitive=case_sensitive)
 
         protected_is_absolute = os.path.isabs(ppath['path'])
         if not protected_is_absolute:
             # Relative protected paths should match when user path ends with them
-            if user_cmp == protected_cmp:
-                return ppath
-            relative_suffix = os.sep + protected_cmp.lstrip(os.sep)
-            if user_cmp.endswith(relative_suffix):
+            if path_has_relative_suffix(user_cmp, protected_cmp,
+                                        case_sensitive=case_sensitive):
                 return ppath
             continue
 
         # Exact match
-        if user_cmp == protected_cmp:
+        if path_equal(user_cmp, protected_cmp, case_sensitive=case_sensitive):
             return ppath
 
         # Check if user path is a parent of protected path
         # (user wants to delete a folder that contains protected items)
-        protected_with_sep = protected_cmp + os.sep
-        user_with_sep = user_cmp + os.sep
-        if protected_cmp.startswith(user_with_sep):
+        if path_startswith(protected_cmp, user_cmp,
+                           case_sensitive=case_sensitive):
             return ppath
 
         # Check if user path is a child of protected path (within depth)
-        if (depth is None or depth > 0) and user_cmp.startswith(protected_with_sep):
+        if ((depth is None or depth > 0)
+                and path_startswith(user_cmp, protected_cmp,
+                                    case_sensitive=case_sensitive)):
             if depth is None:
                 return ppath
             # Calculate how many levels deep the user path is
+            protected_with_sep = protected_cmp + os.sep
             relative = user_cmp[len(protected_with_sep):]
             levels = relative.count(os.sep) + 1
             if levels <= depth:

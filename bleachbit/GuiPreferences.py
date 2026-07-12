@@ -28,9 +28,9 @@ import logging
 import os
 
 # first party imports
-from bleachbit import GuiBasic
+from bleachbit import GuiBasic, ProtectedPath
 from bleachbit import online_update_notification_enabled
-from bleachbit import ProtectedPath
+from bleachbit.PathUtils import normalize_path
 from bleachbit.Constant import EMPTY_SPACE_WARNING, REQUIRES_EXPERT_MODE
 from bleachbit.GtkShim import Gtk, GLib
 from bleachbit.GuiCookie import CookieManagerPane
@@ -786,8 +786,8 @@ class PreferencesDialog:
             return False
 
         # Check if user already confirmed this path
-        normalized = ProtectedPath._normalize_for_comparison(
-            pathname, match_info['case_sensitive'])
+        normalized = normalize_path(
+            pathname, case_sensitive=match_info['case_sensitive'])
         warning_key = 'protected_path:' + normalized
         if options.get_warning_preference(warning_key):
             return True

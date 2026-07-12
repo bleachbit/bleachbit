@@ -80,6 +80,22 @@ def path_startswith(path, prefix, case_sensitive=None):
     return path.lower().startswith(prefix.lower() + os.sep)
 
 
+def path_has_relative_suffix(path, suffix, case_sensitive=None):
+    """Check whether `path` exactly matches or ends with `suffix` at a boundary.
+
+    This is a raw string comparison; it does not normalize paths. A suffix
+    only matches when it begins at a path-component boundary.
+    """
+    if path_equal(path, suffix, case_sensitive=case_sensitive):
+        return True
+    if case_sensitive is None:
+        case_sensitive = FS_CASE_SENSITIVE
+    suffix = os.sep + suffix.lstrip(os.sep)
+    if case_sensitive:
+        return path.endswith(suffix)
+    return path.lower().endswith(suffix.lower())
+
+
 def normalize_path(path, case_sensitive=None):
     """Normalize a path for comparison.
 
