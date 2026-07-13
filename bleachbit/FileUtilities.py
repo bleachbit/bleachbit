@@ -939,12 +939,15 @@ def whitelisted_posix(path, check_realpath=True, _followed_link=False):
     return False
 
 
+_WINDIR_TEMP = os.path.expandvars(r'%windir%\temp').lower()
+
+
 def _windows_preserved_temp_dir(path):
     """Return whether this Windows path is a temp directory root to keep."""
     path = extended_path_undo(os.path.normpath(path)).lower()
     parts = path.split(os.sep)
 
-    if path == os.path.expandvars(r'%windir%\temp').lower():
+    if path == _WINDIR_TEMP:
         return True
 
     if len(parts) >= 3 and parts[-3:] == ['appdata', 'local', 'temp']:
