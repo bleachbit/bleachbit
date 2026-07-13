@@ -446,7 +446,7 @@ def delete_mozilla_favicons(path):
                                              db='', filter=" and url NOT LIKE 'javascript:%'"),
                                          row_factory)
 
-    bookmarked_urls_domains = list(map(_remove_path_from_url, bookmarked_urls))
+    bookmarked_urls_domains = set(map(_remove_path_from_url, bookmarked_urls))
     # Delete orphaned favicons whose domain is not bookmarked.
     # Favicons for bookmarked domains are kept regardless of URL path
     # depth, because Firefox stores site favicons at deep paths (e.g.
