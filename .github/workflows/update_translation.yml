@@ -13,7 +13,7 @@ permissions:
 jobs:
   update-desktop:
     if: github.repository == 'bleachbit/bleachbit'
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     permissions:
       contents: write # commit and push localization files
 
