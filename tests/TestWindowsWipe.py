@@ -55,7 +55,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
 
     def setUp(self):
         """Set up test environment"""
-        super(WindowsWipeTestCase, self).setUp()
+        super().setUp()
 
     def test_check_os(self):
         """Unit test for check_os()"""

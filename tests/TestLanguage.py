@@ -1,5 +1,4 @@
 # vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
 
 # BleachBit
 # Copyright (C) 2008-2025 Andrew Ziem
@@ -43,7 +42,7 @@ class LanguageTestCase(common.BleachbitTestCase):
     """Test case for module Language"""
 
     def setUp(self):
-        super(LanguageTestCase, self).setUp()
+        super().setUp()
         options.set('auto_detect_lang', False)
         options.set('forced_language', '')
 

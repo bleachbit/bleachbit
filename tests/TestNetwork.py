@@ -57,7 +57,7 @@ class NetworkTestCase(common.BleachbitTestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(NetworkTestCase, cls).setUpClass()
+        super().setUpClass()
         status_generators = list(cls.status_generators)
         random.shuffle(status_generators)
         for generator in status_generators:

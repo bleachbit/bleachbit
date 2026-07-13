@@ -64,7 +64,7 @@ class WindowsError(Exception):
 
     def __init__(self, winerror=None, *args, **kwargs):
         self.winerror = winerror
-        super(WindowsError, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __str__(self):
         return 'this is a dummy class for non-Windows systems'
