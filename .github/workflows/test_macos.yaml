@@ -23,12 +23,16 @@ on:
       - 'po/Makefile'
       - '!README.md'
       - '!windows/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 # Headless tests on macOS. GTK is not installed, so GUI tests
 # auto-skip via @unittest.skipUnless(HAVE_GTK, ...).
 jobs:
   test:
-    timeout-minutes: 25
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -38,45 +42,48 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
-    - name: Install gettext (Homebrew)
-      run: |
-        brew install gettext
-        echo "$(brew --prefix gettext)/bin" >> "$GITHUB_PATH"
+      - name: Install gettext (Homebrew)
+        run: |
+          brew install gettext
+          echo "$(brew --prefix gettext)/bin" >> "$GITHUB_PATH"
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements.txt
 
-    - name: Install dependencies
-      run: ./scripts/install-deps.sh --dev --venv
+      - name: Install dependencies
+        run: ./scripts/install-deps.sh --dev --venv
 
-    - name: Generate Revision.py
-      run: |
-        echo "revision = \"`git rev-parse --short HEAD`\"" > bleachbit/Revision.py
-        echo "build_number = \"${{ github.run_number }}\"" >> bleachbit/Revision.py
+      - name: Generate Revision.py
+        run: |
+          echo "revision = \"`git rev-parse --short HEAD`\"" > bleachbit/Revision.py
+          echo "build_number = \"${{ github.run_number }}\"" >> bleachbit/Revision.py
 
-    - name: Generate translations
-      run: make -C po local bleachbit.pot PYTHON="$GITHUB_WORKSPACE/.venv/bin/python"
+      - name: Generate translations
+        run: make -C po local bleachbit.pot PYTHON="$GITHUB_WORKSPACE/.venv/bin/python"
 
-    - name: Smoke test (CLI --version and --list)
-      run: |
-        .venv/bin/python bleachbit.py --version
-        .venv/bin/python bleachbit.py --list | head -n 20
+      - name: Smoke test (CLI --version and --list)
+        run: |
+          .venv/bin/python bleachbit.py --version
+          .venv/bin/python bleachbit.py --list | head -n 20
 
-    - name: Validate cleaner XML
-      run: |
-        for f in cleaners/*.xml; do
-          xmllint --noout --schema doc/cleaner_markup_language.xsd "$f"
-        done
+      - name: Validate cleaner XML
+        run: |
+          for f in cleaners/*.xml; do
+            xmllint --noout --schema doc/cleaner_markup_language.xsd "$f"
+          done
 
-    - name: Run tests
-      timeout-minutes: 20
-      env:
-        PYTHONWARNINGS: error
-      run: |
-        touch ~/.zshrc # for test_expanduser
-        .venv/bin/python -m unittest discover -p Test*.py -v
-        .venv/bin/python windows/nsis_translations.py --unittest
+      - name: Run tests
+        env:
+          PYTHONWARNINGS: error
+        run: |
+          touch ~/.zshrc # for test_expanduser
+          .venv/bin/python -m unittest discover -p Test*.py -v
+          .venv/bin/python windows/nsis_translations.py --unittest
