@@ -111,8 +111,11 @@ def _enumerate_proc_fs():
             try:
                 with open(os.path.join(pid_dir, 'stat'), 'r',
                           encoding='utf-8') as f:
-                    name = f.read().split()[1].strip('()')
-            except (OSError, IndexError):
+                    stat_content = f.read()
+                # comm is field 2, wrapped in parens, and may contain spaces
+                name = stat_content[stat_content.index('(') + 1:
+                                    stat_content.rindex(')')]
+            except (OSError, ValueError):
                 continue
         same_user = False
         try:
@@ -132,10 +135,11 @@ def _enumerate_ps_aux():
     if "USER" not in first_line or "COMMAND" not in first_line:
         raise RuntimeError("Unexpected ps header format")
     for line in ps_out.split("\n")[1:]:
-        parts = line.split()
+        # COMMAND is the last column and may contain spaces
+        parts = line.split(None, 10)
         if len(parts) < 11:
             continue
-        yield ProcessInfo(int(parts[1]), parts[10], parts[0] == current_user)
+        yield ProcessInfo(int(parts[1]), parts[10].strip(), parts[0] == current_user)
 
 
 def is_process_running(exename, require_same_user):

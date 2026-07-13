@@ -18,6 +18,7 @@ import psutil
 from bleachbit import IS_WINDOWS
 from bleachbit.General import get_real_username, sudo_mode
 from bleachbit.Process import (
+    _enumerate_proc_fs,
     _enumerate_ps_aux,
     enumerate_processes,
     is_process_running,
@@ -60,6 +61,7 @@ alocaluseraccount   572   0.0  0.0  2531184   3116   ??  S    20May16   0:02.93 
 {username}   561   0.0  0.0  2471492    584   ??  S    20May16   0:00.21 USBAgent
 alocaluseraccount   535   0.0  0.0  2496656    524   ??  S    20May16   0:00.33 storelegacy
 root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 suhelperd
+alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 Google Chrome Helper
 """
         mock_check_output.return_value = ps_out
 
@@ -77,12 +79,33 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             ProcessInfo(561, 'USBAgent', True),
             ProcessInfo(535, 'storelegacy', False),
             ProcessInfo(531, 'suhelperd', False),
+            ProcessInfo(530, 'Google Chrome Helper', False),
         ]
         self.assertEqual(result, expected)
 
         mock_check_output.return_value = 'invalid-input'
         with self.assertRaises(RuntimeError):
             list(_enumerate_ps_aux())
+
+    @common.skipUnlessLinux
+    def test_enumerate_proc_fs_comm_with_spaces(self):
+        """/proc fallback keeps a comm field with spaces intact"""
+        stat_line = "1234 (Web Content) S 1 1234 1234 0 -1 4194304 0 0 0 0"
+
+        def fake_open(path, *args, **kwargs):
+            if path == '/proc/1234/stat':
+                return mock.mock_open(read_data=stat_line)()
+            raise FileNotFoundError(path)
+
+        with mock.patch('glob.iglob', return_value=['/proc/1234/exe']), \
+                mock.patch('os.path.realpath', side_effect=PermissionError(13, 'denied')), \
+                mock.patch('builtins.open', side_effect=fake_open), \
+                mock.patch('os.stat') as mock_stat, \
+                mock.patch('bleachbit.General.get_real_uid', return_value=1000):
+            mock_stat.return_value.st_uid = 1000
+            result = list(_enumerate_proc_fs())
+
+        self.assertEqual(result, [ProcessInfo(1234, 'Web Content', True)])
 
     @common.also_with_sudo
     def test_is_process_running_self(self):
