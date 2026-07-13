@@ -252,13 +252,8 @@ def extents_a_minus_b(a, b):
     # Sort the lists of start/end points.
     a_sorted = sorted(a, key=itemgetter(0))
     b_sorted = sorted(b, key=itemgetter(0))
-    b_is_empty = not b
 
     for a_begin, a_end in a_sorted:
-        # If B is an empty list, each item of A will be unchanged.
-        if b_is_empty:
-            yield (a_begin, a_end)
-
         for b_begin, b_end in b_sorted:
             if b_begin > a_end:
                 # Already gone beyond current A range and no matches.
@@ -286,6 +281,10 @@ def extents_a_minus_b(a, b):
                     break
                 else:
                     a_begin = b_end + 1
+        else:
+            # Loop exhausted without a break: nothing in B covered the
+            # rest of this A range, so yield what's left of it.
+            yield (a_begin, a_end)
 
 
 def choose_if_bridged(volume_handle, total_clusters,
