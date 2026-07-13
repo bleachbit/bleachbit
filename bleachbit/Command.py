@@ -63,10 +63,10 @@ class Delete:
     """Delete a single file or directory.  Obey the user
     preference regarding shredding."""
 
-    def __init__(self, path):
+    def __init__(self, path, shred=False):
         """Create a Delete instance to delete 'path'"""
         self.path = path
-        self.shred = False
+        self.shred = shred
 
     def __str__(self):
         return f'Command to {"shred" if self.shred else "delete"} {self.path}'
@@ -296,8 +296,7 @@ class Shred(Delete):
 
     def __init__(self, path):
         """Create an instance to shred 'path'"""
-        Delete.__init__(self, path)
-        self.shred = True
+        Delete.__init__(self, path, shred=True)
 
     def __str__(self):
         return f'Command to shred {self.path}'

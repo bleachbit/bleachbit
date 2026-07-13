@@ -677,9 +677,9 @@ State=AAAA/wA...
 
         # below this point, only posix
 
-        # test file with mode 0444/-r--r--r--
-        filename = self.write_file('bleachbit-test-0444')
-        os.chmod(filename, 0o444)
+        # test file with mode 0400/-r--------
+        filename = self.write_file('bleachbit-test-0400')
+        os.chmod(filename, 0o400)
         self.assertTrue(delete(filename, shred))
         self.assertNotExists(filename)
 

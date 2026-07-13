@@ -89,26 +89,25 @@ class WipeTestCase(common.BleachbitTestCase):
         sync()
 
     def test_wipe_contents(self):
-        """Unit test for wipe_delete()"""
+        """Unit test for wipe_contents()"""
 
-        # create test file
-        filename = self.write_file(
-            'bleachbit-test-wipe', b'abcdefghij' * 12345)
+        original = b'abcdefghij' * 12345
 
-        # wipe it
-        wipe_contents(filename)
+        # truncate=False overwrites the contents in place with zeros, except
+        # the admin Windows path truncates regardless.
+        overwrite_truncates = bleachbit.IS_WINDOWS and Wipe.IsUserAnAdmin()
+        filename = self.write_file('wipe_contents_overwrite', original)
+        wipe_contents(filename, truncate=False)
+        with open(filename, 'rb') as f:
+            contents = f.read()
+        self.assertEqual(contents, b'\x00' * len(contents))
+        if not overwrite_truncates:
+            self.assertGreaterEqual(len(contents), len(original))
 
-        # check it
-        f = open(filename, 'rb')
-        while True:
-            byte = f.read(1)
-            if b"" == byte:
-                break
-            self.assertEqual(byte, 0)
-        f.close()
-
-        # clean up
-        os.remove(filename)
+        # the default truncates the file to zero bytes
+        filename2 = self.write_file('wipe_contents_truncate', original)
+        wipe_contents(filename2)
+        self.assertEqual(os.path.getsize(filename2), 0)
 
     def wipe_name_helper(self, filename):
         """Helper for test_wipe_name()"""
