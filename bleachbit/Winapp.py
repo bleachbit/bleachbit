@@ -344,7 +344,7 @@ class Winapp:
             else:
                 logger.warning(
                     'unknown option %s in section %s', option, section)
-                return
+                continue
 
     def __make_file_provider(self, dirname, filename, recurse, removeself, excludekeys):
         """Change parsed FileKey to action provider"""
