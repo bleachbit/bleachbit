@@ -751,19 +751,21 @@ class PreferencesDialog:
 
         # Check in whitelist
         for path in whitelist_paths:
-            if pathname == path[1]:
-                # TRANSLATORS: Error message shown in the infobar.
-                msg = _("This path already exists in the keep list.")
-                self.show_infobar(msg, Gtk.MessageType.ERROR)
-                return True
+            if pathname != path[1]:
+                continue
+            # TRANSLATORS: Error message shown in the infobar.
+            msg = _("This path already exists in the keep list.")
+            self.show_infobar(msg, Gtk.MessageType.ERROR)
+            return True
 
         # Check in custom
         for path in custom_paths:
-            if pathname == path[1]:
-                # TRANSLATORS: Error message shown in the infobar.
-                msg = _("This path already exists in the custom list.")
-                self.show_infobar(msg, Gtk.MessageType.ERROR)
-                return True
+            if pathname != path[1]:
+                continue
+            # TRANSLATORS: Error message shown in the infobar.
+            msg = _("This path already exists in the custom list.")
+            self.show_infobar(msg, Gtk.MessageType.ERROR)
+            return True
 
         return False
 

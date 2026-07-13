@@ -682,23 +682,23 @@ class GUI(Gtk.ApplicationWindow):
                 continue
             safe_options = []
             for option_id in option_ids:
-                if backends[cleaner_id].get_warning(option_id):
-                    cleaner_name = backends[cleaner_id].get_name()
-                    option_name = option_id
-                    # Find the friendly option_name for option_id
-                    for (oid, oname) in backends[cleaner_id].get_options():
-                        if oid == option_id:
-                            option_name = oname
-                            break
-                    self.append_text(
-                        # TRANSLATORS: Error message shown when a cleaner option
-                        # cannot be used because expert mode is disabled.
-                        # %(cleaner)s is the cleaner name, %(option)s is the option name.
-                        _("%(cleaner)s - %(option)s cannot be cleaned because expert mode is disabled.") % {
-                            'cleaner': cleaner_name, 'option': option_name} + "\n",
-                        'error')
-                else:
+                if not backends[cleaner_id].get_warning(option_id):
                     safe_options.append(option_id)
+                    continue
+                cleaner_name = backends[cleaner_id].get_name()
+                option_name = option_id
+                # Find the friendly option_name for option_id
+                for (oid, oname) in backends[cleaner_id].get_options():
+                    if oid == option_id:
+                        option_name = oname
+                        break
+                self.append_text(
+                    # TRANSLATORS: Error message shown when a cleaner option
+                    # cannot be used because expert mode is disabled.
+                    # %(cleaner)s is the cleaner name, %(option)s is the option name.
+                    _("%(cleaner)s - %(option)s cannot be cleaned because expert mode is disabled.") % {
+                        'cleaner': cleaner_name, 'option': option_name} + "\n",
+                    'error')
             if safe_options:
                 filtered[cleaner_id] = safe_options
         return filtered

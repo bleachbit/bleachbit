@@ -124,12 +124,13 @@ class DeepScan:
                     # fixme, don't match filename twice
                     for filename in filenames:
                         full_name = c.match(dirpath, filename)
-                        if full_name is not None:
-                            # fixme: support other commands
-                            if c.command == 'delete':
-                                yield Command.Delete(full_name)
-                            elif c.command == 'shred':
-                                yield Command.Shred(full_name)
+                        if full_name is None:
+                            continue
+                        # fixme: support other commands
+                        if c.command == 'delete':
+                            yield Command.Delete(full_name)
+                        elif c.command == 'shred':
+                            yield Command.Shred(full_name)
 
                 if time.time() - yield_time > 0.25:
                     # allow GTK+ to process the idle loop

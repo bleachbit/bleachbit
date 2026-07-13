@@ -62,11 +62,12 @@ def _get_db_disk_size(path):
     total = 0
     for suffix in ('', '-wal', '-shm'):
         candidate = f"{path}{suffix}"
-        if os.path.exists(candidate):
-            try:
-                total += FileUtilities.getsize(candidate)
-            except OSError as exc:
-                logger.debug('Failed to get size for %s: %s', candidate, exc)
+        if not os.path.exists(candidate):
+            continue
+        try:
+            total += FileUtilities.getsize(candidate)
+        except OSError as exc:
+            logger.debug('Failed to get size for %s: %s', candidate, exc)
     return total
 
 

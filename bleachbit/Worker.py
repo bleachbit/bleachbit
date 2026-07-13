@@ -270,10 +270,10 @@ class Worker:
         # prioritize
         self.delayed_ops = []
         for operation in self.operations:
+            if operation not in ('system', '_gui'):
+                continue
             delayables = ['empty_space', 'memory']
             for delayable in delayables:
-                if operation not in ('system', '_gui'):
-                    continue
                 if delayable in self.operations[operation]:
                     i = self.operations[operation].index(delayable)
                     del self.operations[operation][i]

@@ -468,18 +468,19 @@ if IS_WINDOWS:
 
 def delete_locked_file(pathname):
     """Delete a file that is currently in use"""
-    if os.path.exists(pathname):
-        MOVEFILE_DELAY_UNTIL_REBOOT = 4
-        if 0 == windll.kernel32.MoveFileExW(pathname, None, MOVEFILE_DELAY_UNTIL_REBOOT):
-            from ctypes import WinError
-            # WinError throws the right exception based on last error.
-            try:
-                raise WinError()
-            except PermissionError:
-                # OSError has special handling in Worker.py
-                # Use a special message for flagging files for later deletion
-                raise OSError(
-                    errno.EACCES, "Access denied in delete_locked_file()", pathname)
+    if not os.path.exists(pathname):
+        return
+    MOVEFILE_DELAY_UNTIL_REBOOT = 4
+    if 0 == windll.kernel32.MoveFileExW(pathname, None, MOVEFILE_DELAY_UNTIL_REBOOT):
+        from ctypes import WinError
+        # WinError throws the right exception based on last error.
+        try:
+            raise WinError()
+        except PermissionError:
+            # OSError has special handling in Worker.py
+            # Use a special message for flagging files for later deletion
+            raise OSError(
+                errno.EACCES, "Access denied in delete_locked_file()", pathname)
 
 
 def delete_registry_value(key, value_name, really_delete):
