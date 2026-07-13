@@ -1207,66 +1207,74 @@ def file_wipe(file_name):
     cluster_size = (volume_info.sectors_per_cluster *
                     volume_info.bytes_per_sector)
 
-    file_handle = open_file(file_name)
-    file_size, is_special = get_file_basic_info(file_name, file_handle)
-    orig_extents = get_extents(file_handle, True, file_name)
-    if is_special:
-        bridged_extents = list(logical_ranges_to_extents(
-            get_extents(file_handle, False, file_name), True))
-    CloseHandle(file_handle)
-    # logger.debug('Original extents: %s', orig_extents)
-
-    volume_handle = obtain_readwrite(volume)
-    attrs = GetFileAttributesW(file_name)
-    if attrs & FILE_ATTRIBUTE_READONLY:
-        # Remove read-only attribute to avoid "access denied" in CreateFileW().
-        SetFileAttributesW(file_name, attrs & ~FILE_ATTRIBUTE_READONLY)
-    file_handle = open_file(file_name, GENERIC_READ | GENERIC_WRITE)
-
-    if not is_special:
-        # Direct overwrite when it's a regular file.
-        # logger.info("Attempting direct file wipe.")
-        wipe_file_direct(file_handle, orig_extents, cluster_size, file_size)
-        new_extents = get_extents(file_handle, True, file_name)
+    # Track handles so an exception below still releases them; each is
+    # nulled out right after its own CloseHandle to avoid double-closing.
+    file_handle = None
+    volume_handle = None
+    tmp_file_path = None
+    try:
+        file_handle = open_file(file_name)
+        file_size, is_special = get_file_basic_info(file_name, file_handle)
+        orig_extents = get_extents(file_handle, True, file_name)
+        if is_special:
+            bridged_extents = list(logical_ranges_to_extents(
+                get_extents(file_handle, False, file_name), True))
         CloseHandle(file_handle)
-        # logger.debug('New extents: %s', new_extents)
-        if orig_extents == new_extents:
-            clean_up(None, volume_handle, None)
-            return
-        # Expectation was that extents should be identical and file is wiped.
-        # If OS didn't give that to us, continue below and use defrag wipe.
-        # Any extent within new_extents has now been wiped by above.
-        # It can be subtracted from the orig_extents list, and now we will
-        # just clean up anything not yet overwritten.
-        # Materialize the generator: it is iterated again below by
-        # poll_clusters_freed and the wipe loop, and a generator would be
-        # exhausted after the first pass, leaving clusters un-wiped.
-        orig_extents = list(extents_a_minus_b(orig_extents, new_extents))
-    else:
-        # File needs special treatment. We can't just do a basic overwrite.
-        # First we will truncate it. Then chase down the freed clusters to
-        # wipe them, now that they are no longer part of the file.
-        truncate_file(file_handle)
-        CloseHandle(file_handle)
+        file_handle = None
+        # logger.debug('Original extents: %s', orig_extents)
 
-    # Poll to confirm that our clusters were freed.
-    poll_clusters_freed(volume_handle, volume_info.total_clusters,
-                        orig_extents)
+        volume_handle = obtain_readwrite(volume)
+        attrs = GetFileAttributesW(file_name)
+        if attrs & FILE_ATTRIBUTE_READONLY:
+            # Remove read-only attribute to avoid "access denied" in CreateFileW().
+            SetFileAttributesW(file_name, attrs & ~FILE_ATTRIBUTE_READONLY)
+        file_handle = open_file(file_name, GENERIC_READ | GENERIC_WRITE)
 
-    # Chase down all the freed clusters we can, and wipe them.
-    # logger.debug("Attempting defrag file wipe.")
-    # Put the temp file in the same folder as the target wipe file.
-    # Should be able to write this path if user can write the wipe file.
-    tmp_file_path = os.path.dirname(file_name) + os.sep + TMP_FILE_NAME
-    if is_special:
-        orig_extents = choose_if_bridged(volume_handle,
-                                         volume_info.total_clusters,
-                                         orig_extents, bridged_extents)
-    for lcn_start, lcn_end in orig_extents:
-        wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end,
-                              cluster_size, volume_info.total_clusters,
-                              tmp_file_path)
+        if not is_special:
+            # Direct overwrite when it's a regular file.
+            # logger.info("Attempting direct file wipe.")
+            wipe_file_direct(file_handle, orig_extents, cluster_size, file_size)
+            new_extents = get_extents(file_handle, True, file_name)
+            CloseHandle(file_handle)
+            file_handle = None
+            # logger.debug('New extents: %s', new_extents)
+            if orig_extents == new_extents:
+                return
+            # Expectation was that extents should be identical and file is wiped.
+            # If OS didn't give that to us, continue below and use defrag wipe.
+            # Any extent within new_extents has now been wiped by above.
+            # It can be subtracted from the orig_extents list, and now we will
+            # just clean up anything not yet overwritten.
+            # Materialize the generator: it is iterated again below by
+            # poll_clusters_freed and the wipe loop, and a generator would be
+            # exhausted after the first pass, leaving clusters un-wiped.
+            orig_extents = list(extents_a_minus_b(orig_extents, new_extents))
+        else:
+            # File needs special treatment. We can't just do a basic overwrite.
+            # First we will truncate it. Then chase down the freed clusters to
+            # wipe them, now that they are no longer part of the file.
+            truncate_file(file_handle)
+            CloseHandle(file_handle)
+            file_handle = None
 
-    # Clean up.
-    clean_up(None, volume_handle, tmp_file_path)
-    return
+        # Poll to confirm that our clusters were freed.
+        poll_clusters_freed(volume_handle, volume_info.total_clusters,
+                            orig_extents)
+
+        # Chase down all the freed clusters we can, and wipe them.
+        # logger.debug("Attempting defrag file wipe.")
+        # Put the temp file in the same folder as the target wipe file.
+        # Should be able to write this path if user can write the wipe file.
+        tmp_file_path = os.path.dirname(file_name) + os.sep + TMP_FILE_NAME
+        if is_special:
+            orig_extents = choose_if_bridged(volume_handle,
+                                             volume_info.total_clusters,
+                                             orig_extents, bridged_extents)
+        for lcn_start, lcn_end in orig_extents:
+            wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end,
+                                  cluster_size, volume_info.total_clusters,
+                                  tmp_file_path)
+    finally:
+        # Closes whatever is still open; clean_up() swallows its own
+        # errors, so the original exception still propagates.
+        clean_up(file_handle, volume_handle, tmp_file_path)
