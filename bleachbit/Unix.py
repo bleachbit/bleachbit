@@ -692,7 +692,8 @@ def dnf_clean():
     return old_size - new_size
 
 
-units = {"B": 1, "k": 10**3, "M": 10**6, "G": 10**9}
+units = {"B": 1, "k": 10**3, "M": 10**6, "G": 10**9,
+         "KiB": 2**10, "MiB": 2**20, "GiB": 2**30, "TiB": 2**40}
 
 
 def parse_size(size):
@@ -739,7 +740,7 @@ def pacman_cache():
         raise RuntimeError(f'paccache raised error {rc}: {stderr}')
     # parse line like this: "==> finished: 3 packages removed (42.31 MiB freed)"
     cregex = re.compile(
-        r"==> finished: ([\d.]+) packages removed \(([\d.]+\s+[BkMG]) freed\)")
+        r"==> finished: ([\d.]+) packages removed \(([\d.]+\s+(?:[KMGT]iB|[BkMG])) freed\)")
     match = cregex.search(stdout)
     if match:
         return parse_size(match.group(2))
