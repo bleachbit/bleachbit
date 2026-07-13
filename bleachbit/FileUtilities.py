@@ -219,6 +219,10 @@ class OpenFiles:
         return os.path.realpath(filename) in self.files
 
 
+_SI_PREFIXES = ('', 'k', 'M', 'G', 'T', 'P')
+_IEC_PREFIXES = ('', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi')
+
+
 def bytes_to_human(bytes_i):
     # type: (int) -> str
     """Display a file size in human terms (megabytes, etc.) using preferred standard (SI or IEC)"""
@@ -228,10 +232,10 @@ def bytes_to_human(bytes_i):
 
     from bleachbit.Options import options
     if options.get('units_iec'):
-        prefixes = ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi']
+        prefixes = _IEC_PREFIXES
         base = 1024.0
     else:
-        prefixes = ['', 'k', 'M', 'G', 'T', 'P']
+        prefixes = _SI_PREFIXES
         base = 1000.0
 
     assert isinstance(bytes_i, int)
