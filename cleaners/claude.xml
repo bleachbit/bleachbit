@@ -32,7 +32,7 @@ later.  See the COPYING file in the top-level directory.
     <description>Delete the logs</description>
     <action command="delete" search="walk.files" path="~/.claude/debug/"/>
     <action command="delete" search="walk.files" path="~/.claude/logs/"/>
-    <action command="delete" search="file" path="~/.claude/" regex="\.log$"/>
+    <action command="delete" search="glob" path="~/.claude/*.log" type="f"/>
   </option>
   <option id="session">
     <label>Session</label>
