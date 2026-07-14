@@ -1,4 +1,4 @@
-name: Tests
+name: Build and Test
 
 on:
   push:
@@ -34,8 +34,8 @@ permissions:
 # python version is 3.12.
 # native python for 22.04 is 3.10.
 jobs:
-  test:
-    name: test (${{ matrix.python-version }})
+  linux:
+    name: linux (${{ matrix.python-version }})
     timeout-minutes: 25
     strategy:
       fail-fast: false
@@ -336,7 +336,7 @@ jobs:
             ForEach-Object { aws s3 cp $_.FullName $dest }
 
   coveralls-finish:
-    needs: [test, windows]
+    needs: [linux, windows]
     if: github.repository == 'bleachbit/bleachbit'
     runs-on: ubuntu-latest
     steps:
