@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - '**'
-    paths-ignore:
-      - 'appveyor.yml'
+    paths-ignore: &paths-ignore
+      - '.gitignore'
+      - '.gitattributes'
       - 'bleachbit.png'
       - 'bleachbit.spec'
       - 'COPYING'
@@ -16,25 +17,14 @@ on:
       - 'org.bleachbit.BleachBit.desktop'
       - 'org.bleachbit.BleachBit.metainfo.xml'
       - 'org.bleachbit.policy'
-      - 'po/*.po' # do not ignore Makefile
+      - 'po/*.po' # translation strings
+      - 'po/*.pot' # translation template
       - 'README.md'
+      - 'windows/NsisInclude/NsisMultiUserLang.nsh' # translation strings only
   pull_request:
     branches:
       - '**'
-    paths-ignore:
-      - 'appveyor.yml'
-      - 'bleachbit.png'
-      - 'bleachbit.spec'
-      - 'COPYING'
-      - 'debian/**'
-      - 'doc/**'
-      - 'docker/**'
-      - 'MANIFEST.in'
-      - 'org.bleachbit.BleachBit.desktop'
-      - 'org.bleachbit.BleachBit.metainfo.xml'
-      - 'org.bleachbit.policy'
-      - 'po/*.po' # do not ignore Makefile
-      - 'README.md'
+    paths-ignore: *paths-ignore
   workflow_dispatch:
 
 permissions:
