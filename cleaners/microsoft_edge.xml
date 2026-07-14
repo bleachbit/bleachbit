@@ -172,10 +172,6 @@ later.  See the COPYING file in the top-level directory.
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/?"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/??"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Sync Data/SyncData.sqlite3"/>
-    <!-- The three below were seen on Google Chrome on Windows before Chrome version 66 -->
-    <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Archived History"/>
-    <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Plugin Data\Google Gears\localserver.db"/>
-    <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Plugin Data\Google Gears\permissions.db"/>
   </option>
   <option id="site_preferences">
     <label>Site preferences</label>
