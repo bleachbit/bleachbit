@@ -6,11 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-07-12 15:23-0600\n"
-"PO-Revision-Date: 2026-06-24 21:01+0000\n"
-"Last-Translator: 439JBYL80IGQTF25UXNR0X1BG "
-"<439jbyl80igqtf25uxnr0x1bg@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-07-15 05:01+0000\n"
+"Last-Translator: Andrei Stepanov <adem4ik@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/bleachbit/main/"
 "ru/>\n"
 "Language: ru\n"
@@ -19,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -737,7 +736,7 @@ msgstr ""
 #. In Claude Code: captured shell environment used by the Bash tool
 #: ../cleaners/claude.xml
 msgid "Shell snapshots"
-msgstr ""
+msgstr "Снимки оболочки"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -757,6 +756,9 @@ msgid ""
 "This option is slow. Inspect the preview for files you want to keep, like "
 "those bundled with applications."
 msgstr ""
+"Этот параметр работает медленно. Проверьте в режиме предпросмотра, нет ли "
+"файлов, которые вы хотите сохранить, например, тех, которые поставляются в "
+"комплекте с приложениями."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
@@ -1124,6 +1126,9 @@ msgid ""
 "compatible version for your system, click OK. To exit the installer, click "
 "Cancel."
 msgstr ""
+"Для этой версии BleachBit требуется Windows 10 или более поздняя версия. "
+"Чтобы загрузить совместимую версию для вашей системы, нажмите «ОК». Чтобы "
+"выйти из программы установки, нажмите «Отмена»."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
@@ -1298,6 +1303,11 @@ msgid ""
 "See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-"
 "questions.html"
 msgstr ""
+"Чтобы запустить приложение с графическим интерфейсом в Wayland с правами "
+"root, разрешите доступ с помощью этой команды:\n"
+"xhost si:localuser:root\n"
+"Подробнее о xhost читайте на https://docs.bleachbit.org/doc/frequently-asked-"
+"questions.html"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -2744,16 +2754,12 @@ msgid "Error when checking for updates: %s"
 msgstr "Ошибка при проверке обновлений: %s"
 
 #: ../bleachbit/Memory.py
-#, fuzzy
-#| msgid ""
-#| "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
-#| "information."
 msgid ""
 "The command 'swapon -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"Ошибка команды 'swapoff -s', поэтому выполняется откат к /proc/swaps для "
-"информации о подкачке."
+"Команда «swapon -s» не сработала, поэтому возвращаемся к /proc/swaps для "
+"получения информации о подкачке."
 
 #: ../bleachbit/Memory.py
 msgid "Disabling swap."
