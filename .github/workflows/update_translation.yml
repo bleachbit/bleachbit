@@ -52,7 +52,7 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add org.bleachbit.BleachBit.desktop windows/NsisInclude/NsisMultiUserLang.nsh
-          if [ -z "$(git diff --cached --exit-code)" ]; then
+          if git diff --cached --quiet; then
               echo "No changes to commit."
           else
               git commit -m 'Update localization files' -m 'Automatically extracted from ./po/*.po'
