@@ -52,7 +52,7 @@
     -->
     <!-- Is now: (Tobias) -->
     <!-- Delete *.bak recursive: -->
-    <action command="delete" search="walk.files" path="$$Profile$$\" regex="\.[Bb][Aa][Kk]$"/>
+    <action command="delete" search="walk.files" path="$$Profile$$/" regex="\.[Bb][Aa][Kk]$"/>
     <!-- And: -->
     <action command="delete" search="walk.all" path="$$ProgramFiles$$\backup\"/>
     <action command="delete" search="walk.all" path="$$ProgramFiles$$\Vuze AzConfigBackup\"/>
@@ -60,19 +60,19 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <action command="delete" search="file" path="$$Profile$$\ipfilter.cache"/>
-    <action command="delete" search="walk.all" path="$$Profile$$\cache"/>
+    <action command="delete" search="file" path="$$Profile$$/ipfilter.cache"/>
+    <action command="delete" search="walk.all" path="$$Profile$$/cache"/>
     <!--<action command="delete" search="walk.all" path="$$Profile$$\shares\cache*\"/>-->
     <!--Seems that no normal caches and shouldn't be deleted!-->
   </option>
   <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
-    <action command="delete" search="walk.all" path="$$Profile$$\logs\"/>
-    <action command="delete" search="glob" path="$$Profile$$\plugins\*\*.log"/>
-    <action command="delete" search="glob" path="$$Profile$$\plugins\*\eventlog.txt"/>
-    <action command="delete" search="file" path="$$Profile$$\update.log"/>
-    <action command="delete" search="file" path="$$Profile$$\tracker.log"/>
+    <action command="delete" search="walk.all" path="$$Profile$$/logs/"/>
+    <action command="delete" search="glob" path="$$Profile$$/plugins/*/*.log"/>
+    <action command="delete" search="glob" path="$$Profile$$/plugins/*/eventlog.txt"/>
+    <action command="delete" search="file" path="$$Profile$$/update.log"/>
+    <action command="delete" search="file" path="$$Profile$$/tracker.log"/>
     <action command="delete" search="glob" path="$$ProgramFiles$$\*.log"/>
     <action command="delete" search="walk.files" path="$$ProgramFiles$$\log\"/>
     <action command="delete" search="glob" path="$$ProgramFiles$$\.install4j\*.log"/>
@@ -80,18 +80,18 @@
   <option id="stats">
     <label>Statistics</label>
     <description>Delete the files</description>
-    <action command="delete" search="walk.all" path="$$Profile$$\stats\"/>
+    <action command="delete" search="walk.all" path="$$Profile$$/stats/"/>
   </option>
   <option id="temp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action command="delete" search="walk.files" path="$$Profile$$\tmp\"/>
-    <action command="delete" search="glob" path="$$Profile$$\torrents\*.tmp"/>
-    <action command="delete" search="glob" path="$$Profile$$\subs\*.results.bad*"/>
-    <action command="delete" search="walk.files" path="$$Profile$$\subs\temp\"/>
-    <action command="delete" search="glob" path="$$Profile$$\torrents\*.tmp._az"/>
-    <action command="delete" search="glob" path="$$Profile$$\torrents\*.torrent._az.saving"/>
-    <action command="delete" search="walk.all" path="$$Profile$$\updates\"/>
+    <action command="delete" search="walk.files" path="$$Profile$$/tmp/"/>
+    <action command="delete" search="glob" path="$$Profile$$/torrents/*.tmp"/>
+    <action command="delete" search="glob" path="$$Profile$$/subs/*.results.bad*"/>
+    <action command="delete" search="walk.files" path="$$Profile$$/subs/temp/"/>
+    <action command="delete" search="glob" path="$$Profile$$/torrents/*.tmp._az"/>
+    <action command="delete" search="glob" path="$$Profile$$/torrents/*.torrent._az.saving"/>
+    <action command="delete" search="walk.all" path="$$Profile$$/updates/"/>
     <action command="delete" search="walk.all" path="%Temp%\AzureusInstall\"/>
     <action command="delete" search="file" path="%Temp%\AzureusInstall\"/>
     <action command="delete" search="glob" path="%Temp%\core_Azureus*"/>

@@ -40,30 +40,30 @@
   <option id="logs">
     <label>Logs</label>
     <description>Delete the logs</description>
-    <action command="delete" search="file" path="$$profile$$\logfile"/>
+    <action command="delete" search="file" path="$$profile$$/logfile"/>
   </option>
   <option id="temp">
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
-    <action command="delete" search="walk.files" path="$$profile$$\Temp\"/>
+    <action command="delete" search="walk.files" path="$$profile$$/Temp/"/>
   </option>
   <option id="known_files">
     <label>Known files history</label>
     <description>Delete the usage history</description>
-    <action command="delete" search="file" path="$$profile$$\known.met"/>
-    <action command="delete" search="file" path="$$profile$$\known2_64.met"/>
-    <action command="delete" search="file" path="$$profile$$\canceled.met"/>
+    <action command="delete" search="file" path="$$profile$$/known.met"/>
+    <action command="delete" search="file" path="$$profile$$/known2_64.met"/>
+    <action command="delete" search="file" path="$$profile$$/canceled.met"/>
   </option>
   <option id="known_clients">
     <label translators="http://wiki.amule.org/wiki/Friend">Known clients and friends</label>
     <description>Delete the usage history</description>
-    <action command="delete" search="file" path="$$profile$$\emfriends.met"/>
-    <action command="delete" search="file" path="$$profile$$\clients.met"/>
+    <action command="delete" search="file" path="$$profile$$/emfriends.met"/>
+    <action command="delete" search="file" path="$$profile$$/clients.met"/>
   </option>
   <option id="backup">
     <label>Backup files</label>
     <description>Delete the backup files</description>
-    <action command="delete" search="file" path="$$profile$$\logfile.bak"/>
-    <action command="delete" search="file" path="$$profile$$\clients.met.bak"/>
+    <action command="delete" search="file" path="$$profile$$/logfile.bak"/>
+    <action command="delete" search="file" path="$$profile$$/clients.met.bak"/>
   </option>
 </cleaner>
