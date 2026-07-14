@@ -112,8 +112,8 @@ class FileActionProvider(ActionProvider):
     """Base class for providers which work on individual files"""
     action_key = '_file'
     CACHEABLE_SEARCHERS = ('walk.files',)
-    # global cache <search_type, path, list_of_entries>
-    cache = ('nothing', '', tuple())
+    # global cache <search_type, path, list_of_entries, complete>
+    cache = ('nothing', '', tuple(), False)
 
     def __init__(self, action_element, path_vars=None):
         """Initialize file search"""
@@ -298,7 +298,8 @@ class FileActionProvider(ActionProvider):
                 logger.debug(_('path="%s" is not a glob pattern'), input_path)
 
             # use cache
-            if self.search in self.CACHEABLE_SEARCHERS and cache[0] == self.search and cache[1] == input_path:
+            if (self.search in self.CACHEABLE_SEARCHERS and cache[0] == self.search
+                    and cache[1] == input_path and cache[3]):
                 # logger.debug(_('using cached walk for path %s'), input_path)
                 for x in cache[2]:
                     yield x
@@ -306,16 +307,20 @@ class FileActionProvider(ActionProvider):
             # if self.search in self.CACHEABLE_SEARCHERS:
             #    logger.debug('not using cache because it has (%s,%s) and we want (%s,%s)',
             #                 cache[0], cache[1], self.search, input_path)
-            self.__class__.cache = ('cleared by', input_path, tuple())
+            self.__class__.cache = ('cleared by', input_path, tuple(), False)
 
             # build new cache
             # logger.debug('%s walking %s', id(self), input_path)
 
             if self.search in self.CACHEABLE_SEARCHERS:
-                cache = self.__class__.cache = (self.search, input_path, [])
+                entries = []
+                self.__class__.cache = (self.search, input_path, entries, False)
                 for path in func(input_path):
-                    cache[2].append(path)
+                    entries.append(path)
                     yield path
+                # Mark complete only once the walk finishes, so an
+                # early-abandoned generator doesn't poison the cache
+                self.__class__.cache = (self.search, input_path, entries, True)
             else:
                 for path in func(input_path):
                     yield path
