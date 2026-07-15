@@ -191,7 +191,14 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ github.workspace }}\.pip-cache
-          key: pip-win-${{ hashFiles('requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
+          # The build job installs only requirements.txt + windows/requirements.txt
+          # (test deps are installed in the test matrix), so the cache key excludes
+          # requirements-test.txt to avoid spurious misses when a test dep bumps.
+          key: pip-win-build-${{ hashFiles('requirements.txt', 'windows/requirements.txt') }}
+          # Fall back to the most recent pip cache when a requirements bump
+          # invalidates the exact key, so unchanged wheels are reused instead
+          # of being re-downloaded from PyPI.
+          restore-keys: pip-win-
 
       - name: Install Python and GTK
         shell: pwsh
@@ -301,7 +308,10 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ github.workspace }}\.pip-cache
-          key: pip-win-${{ hashFiles('requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
+          # The test matrix installs requirements.txt + windows/requirements.txt
+          # + requirements-test.txt, so the cache key includes all three.
+          key: pip-win-test-${{ hashFiles('requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
+          restore-keys: pip-win-
 
       - name: Install Python and GTK
         shell: pwsh
@@ -326,7 +336,7 @@ jobs:
 
       - name: Install test dependencies
         shell: cmd
-        run: '"%PYTHON_HOME%\Scripts\pip3.exe" install -r requirements-test.txt'
+        run: '"%PYTHON_HOME%\Scripts\pip3.exe" install --disable-pip-version-check -r requirements-test.txt'
 
       - name: Run admin tests
         if: matrix.suite == 'admin'

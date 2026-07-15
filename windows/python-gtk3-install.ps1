@@ -130,7 +130,7 @@ Write-Host "Checking pip version"
 & "$python_home\Scripts\pip3.exe" --version  # show pip version
 
 Write-Host "Updating pip..."
-& "$python_home\python.exe" -m pip install --upgrade pip
+& "$python_home\python.exe" -m pip install --disable-pip-version-check --upgrade pip
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Failed to update pip: exit code $LASTEXITCODE"
     exit $LASTEXITCODE
@@ -174,7 +174,7 @@ Get-ChildItem -Path $pylibdest | Format-List -Property Name, Length
 
 # Install pip packages
 Write-Host "pip install -r requirements.txt..."
-& "$python_home\Scripts\pip3.exe" install -r "$script_dir\requirements.txt"
+& "$python_home\Scripts\pip3.exe" install --disable-pip-version-check -r "$script_dir\requirements.txt"
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Failed to update pip: exit code $LASTEXITCODE"
     exit $LASTEXITCODE
@@ -190,7 +190,7 @@ if (-not (Test-Path $PYGOBJECT_FN)) {
 Assert-FileHash $PYGOBJECT_FN "9d63c2b1cfafa5607f5c0b02e5298ac1fb9962448e394f9d4b7ee55aeae2b183"
 
 Write-Host "pip install $PYGOBJECT_FN..."
-& "$python_home\Scripts\pip3.exe" install $PYGOBJECT_FN
+& "$python_home\Scripts\pip3.exe" install --disable-pip-version-check $PYGOBJECT_FN
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Failed to install PyGObject: exit code $LASTEXITCODE"
     exit $LASTEXITCODE
