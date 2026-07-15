@@ -280,6 +280,7 @@ jobs:
       matrix:
         suite:
           - admin
+          - pytest
           - nonadmin
           - low-integrity
     runs-on: windows-latest
@@ -318,7 +319,7 @@ jobs:
         run: .\windows\python-gtk3-install.ps1
 
       - name: Install PsExec
-        if: matrix.suite != 'admin'
+        if: matrix.suite != 'admin' && matrix.suite != 'pytest'
         shell: pwsh
         run: choco install psexec --version=2.43 -y
 
@@ -348,6 +349,16 @@ jobs:
         run: |
           set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
           "%PYTHON_EXE%" -m coverage run -m tests.TestAll
+
+      - name: Run pytest (admin, no coverage)
+        if: matrix.suite == 'pytest'
+        shell: cmd
+        env:
+          DESTRUCTIVE_TESTS: T
+          PYTHONWARNINGS: error
+        run: |
+          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
+          "%PYTHON_EXE%" -m pytest -n 4 tests/
 
       - name: Run non-admin tests
         if: matrix.suite == 'nonadmin'
