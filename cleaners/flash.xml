@@ -57,8 +57,8 @@
     <action command="delete" search="walk.all" path="$$adobe$$/APSPrivateData2/"/>
     <action command="delete" search="walk.all" path="$$adobe$$/NativeCache/"/>
     <!-- Reference: "Reverse Engineering" by Tobias ;-) -->
-    <action command="delete" search="walk.all" path="$$adobe$$\AFCache\"/>
-    <action command="delete" search="walk.all" path="$$adobe$$\Icon Cache\"/>
+    <action command="delete" search="walk.all" path="$$adobe$$/AFCache/"/>
+    <action command="delete" search="walk.all" path="$$adobe$$/Icon Cache/"/>
   </option>
   <option id="cookies">
     <label>Cookies</label>
