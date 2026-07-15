@@ -364,6 +364,7 @@ jobs:
         with:
           name: coverage-${{ matrix.suite }}
           path: .coverage.*
+          include-hidden-files: true
           if-no-files-found: warn
           retention-days: 1
 
@@ -377,6 +378,12 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
+
+      - name: Generate Revision.py
+        shell: pwsh
+        run: |
+          $rev = $env:GITHUB_SHA.Substring(0, 8)
+          Set-Content -Path bleachbit\Revision.py -Encoding utf8 -Value "revision = `"$rev`"`nbuild_number = `"$env:GITHUB_RUN_NUMBER`""
 
       - name: Download coverage artifacts
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
@@ -398,7 +405,7 @@ jobs:
       - name: Combine coverage
         shell: pwsh
         run: |
-          Get-ChildItem .coverage* -ErrorAction SilentlyContinue | Format-Table Name, Length
+          Get-ChildItem .coverage* -Force -ErrorAction SilentlyContinue | Format-Table Name, Length
           $files = @('.coverage.admin', '.coverage.nonadmin', '.coverage.psexec') |
             Where-Object { Test-Path $_ }
           if ($files.Count -eq 0) {
