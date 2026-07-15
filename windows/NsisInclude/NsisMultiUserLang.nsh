@@ -1991,7 +1991,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_RUN_AS_ADMIN ${LANG_RUSSIAN} "Вам необходимо запустить эту программу от имени администратора."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_RUSSIAN} "$(^NameDA) установлен как для всех пользователей, так и для текущего пользователя.$\r$\nВыберите, какую установку удалить."
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_RUSSIAN} "Выберите, для каких пользователей удалить $(^NameDA)."
-	LangString OLD_WINDOWS_WARNING ${LANG_RUSSIAN} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
+	LangString OLD_WINDOWS_WARNING ${LANG_RUSSIAN} "Для этой версии BleachBit требуется Windows 10 или более поздняя версия. Чтобы загрузить совместимую версию для вашей системы, нажмите «ОК». Чтобы выйти из программы установки, нажмите «Отмена»."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_RUSSIAN} "Это основные файлы, необходимые для работы ${prodname} (обязательно)."
 	LangString SECTION_CORE_NAME ${LANG_RUSSIAN} "Основные файлы (обязательные)"
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_RUSSIAN} "Создать ярлык на рабочем столе."
