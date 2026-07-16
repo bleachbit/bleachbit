@@ -457,7 +457,7 @@ jobs:
     # - No pull requests, whether from a fork or the same repository
     if: github.repository == 'bleachbit/bleachbit' && github.event_name != 'pull_request'
     runs-on: windows-latest
-    timeout-minutes: 15
+    timeout-minutes: 5
     env:
       VERSION: ${{ needs.windows-build.outputs.version }}
 
@@ -480,11 +480,23 @@ jobs:
           $ref = ($env:GITHUB_REF_NAME -replace '[^A-Za-z0-9._/-]','_')
           $ver = ($env:VERSION        -replace '[^A-Za-z0-9._-]','_')
           $run = $env:GITHUB_RUN_NUMBER
+          $attempt = $env:GITHUB_RUN_ATTEMPT
           $sha = $env:GITHUB_SHA.Substring(0,8)
+          # Three-part version (APP_VERSION without the run number suffix)
+          $ver3 = (($ver -split '\.')[0..2] -join '.')
+          $branch = ''
+          $tag = ''
+          if ($env:GITHUB_REF_TYPE -eq 'tag') { $tag = $ref } else { $branch = $ref }
           $dest = "s3://${{ secrets.AWS_BUCKET_NAME }}/$run/$ref/$ver/"
-          $meta = "ref=$ref,run=$run,version=$ver,commit=$sha"
           Get-ChildItem BleachBit-*-setup.exe, BleachBit-*-setup-English.exe, BleachBit-*-portable.zip -File |
-            ForEach-Object { aws s3 cp $_.FullName "$dest" --metadata "$meta" }
+            ForEach-Object {
+              $file = $_.FullName
+              $sha256 = (Get-FileHash -Algorithm SHA256 $file).Hash.ToLower()
+              $sha1   = (Get-FileHash -Algorithm SHA1   $file).Hash.ToLower()
+              $md5    = (Get-FileHash -Algorithm MD5    $file).Hash.ToLower()
+              $meta = "ref=$ref,run=$run,attempt=$attempt,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5"
+              aws s3 cp $file "$dest" --metadata "$meta"
+            }
 
   coveralls-finish:
     needs: [linux, windows-coverage]
