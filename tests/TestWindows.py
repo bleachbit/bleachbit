@@ -23,6 +23,8 @@ from pathlib import Path
 from unittest import mock
 from random import randint
 
+import pytest
+
 # first party imports
 from tests import common
 
@@ -258,11 +260,13 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         if not shell.IsUserAnAdmin():
             self.skipTest('requires administrator privileges')
 
+    @pytest.mark.xdist_group('recycle-bin')
     def test_get_recycle_bin(self):
         """Unit test for get_recycle_bin"""
         for f in get_recycle_bin():
             self.assertLExists(extended_path(f))
 
+    @pytest.mark.xdist_group('recycle-bin')
     @common.skipUnlessDestructive
     def test_get_recycle_bin_destructive(self):
         """Unit test the destructive part of get_recycle_bin"""
@@ -341,6 +345,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         # clean up
         cleanup_dirs()
 
+    @pytest.mark.xdist_group('recycle-bin')
     def test_link_types(self):
         """Unit test for directory junctions and symlinks with recycle bin"""
         for mklink_option, recycle_container, clear_recycle_bin in itertools.product(
@@ -465,6 +470,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertNotLExists(link_pathname)
         shutil.rmtree(container_dir, True)
 
+    @pytest.mark.xdist_group('recycle-bin')
     def test_broken_link_in_recycle_bin(self):
         """Unit test for broken directory junctions and symlinks in recycle bin
 
@@ -1026,6 +1032,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertGreater(v, 5)
         self.assertIsInstance(v, Decimal)
 
+    @pytest.mark.xdist_group('recycle-bin')
     def test_empty_recycle_bin(self):
         """Unit test for empty_recycle_bin"""
         # check the function basically works
@@ -1033,6 +1040,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             ret = empty_recycle_bin(drive, really_delete=False)
             self.assertIsInteger(ret)
 
+    @pytest.mark.xdist_group('recycle-bin')
     @common.skipUnlessDestructive
     def test_empty_recycle_bin_per_drive_destructive(self):
         """Empty recycle bin in each drive individually"""
@@ -1049,6 +1057,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                     raise
                 self.assertIsInteger(ret)
 
+    @pytest.mark.xdist_group('recycle-bin')
     @common.skipUnlessDestructive
     def test_empty_recycle_bin_all_drives_destructive(self):
         """Empty recycle bin in all drives at once"""

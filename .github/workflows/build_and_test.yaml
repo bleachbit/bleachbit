@@ -358,7 +358,7 @@ jobs:
           PYTHONWARNINGS: error
         run: |
           set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
-          "%PYTHON_EXE%" -m pytest -n 4 tests/
+          "%PYTHON_EXE%" -m pytest -n 4 --dist=loadgroup tests/
 
       - name: Run non-admin tests
         if: matrix.suite == 'nonadmin'
