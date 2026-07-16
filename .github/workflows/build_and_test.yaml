@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - '**'
+      - '!dependabot/**' # avoid duplicate runs; the pull_request event handles dependabot PRs
     paths-ignore: &paths-ignore
       - '.gitignore'
       - '.gitattributes'
