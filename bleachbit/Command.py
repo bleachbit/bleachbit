@@ -185,7 +185,7 @@ class Function:
                 func_ret = self.func()
                 if isinstance(func_ret, types.GeneratorType):
                     # function returned generator
-                    for func_ret in self.func():
+                    for func_ret in func_ret:
                         if True == func_ret or isinstance(func_ret, tuple):
                             # Return control to GTK idle loop.
                             # If tuple, then display progress.
