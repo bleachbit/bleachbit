@@ -484,6 +484,8 @@ jobs:
           $dest = "s3://bleachbitci/$run/$ref/$ver/"
           Write-Host "Deploying to $dest"
           $meta = "ref=$ref,run=$run,version=$ver,commit=$sha"
+          # CreateMultipartUpload is rejected, so force a single-part upload.
+          aws configure set default.s3.multipart_threshold 1GB
           Get-ChildItem BleachBit-*-setup.exe, BleachBit-*-setup-English.exe, BleachBit-*-portable.zip -File |
             ForEach-Object { aws s3 cp $_.FullName "$dest" --metadata "$meta" }
 
