@@ -484,7 +484,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
 
     def test_is_bleachbit_running_process(self):
         """Test process-matching helper without depending on live processes."""
-        # Path as seen on AppVeyor
+        # Path as seen in CI
         py_dir = r'C:\\projects\\bleachbit\\vcpkg_installed\\x86-windows\\tools\\python3\\'
         py_exe = os.path.join(py_dir, 'python.exe')
         tests = (
@@ -515,12 +515,12 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
                     '--context-menu'  # followed by a pathname to delete
                 ]
              ),
-            # This is the cleaning process as seen on AppVeyor with shell=True where arguments are grouped.
+            # This is the cleaning process as seen in CI with shell=True where arguments are grouped.
             (True, 'cmd.exe',
                 [
                     'C:\\Windows\\system32\\cmd.exe',
                     '/c',
-                    f'{py_exe} bleachbit.py --no-delete-confirmation --no-first-start --context-menu C:\\Users\\appveyor\\AppData'
+                    f'{py_exe} bleachbit.py --no-delete-confirmation --no-first-start --context-menu C:\\Users\\runneradmin\\AppData'
                 ]
              ),
             # This is the idle process.

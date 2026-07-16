@@ -163,7 +163,7 @@ VIFileVersion ${File_VERSION}
 ; https://nsis.sourceforge.io/Docs/Chapter4.html#flags
 
 ; Set default compressor:
-; https://ci.appveyor.com/ do already "SetCompressor /FINAL zlib"
+; CI already does "SetCompressor /FINAL zlib"
 ; Best compression: https://nsis.sourceforge.io/Docs/Chapter1.html#intro-features
 !ifdef Compressor
   SetCompressor /SOLID lzma

@@ -27,16 +27,21 @@ class MakefileTestCase(common.BleachbitTestCase):
             os.path.join(os.path.dirname(__file__), '..'))
         self.src_base_dir = src_base_dir
 
-        # appveyor.yml adds the MSYS2 bin directory to PATH before tests,
+        # the CI workflow adds the MSYS2 bin directory to PATH before tests,
         # so the tools are found via exe_exists() (which searches PATH).
         # On Windows, exists_in_path() does not append .exe, so do it here.
         exe_suffix = '.exe' if IS_WINDOWS else ''
 
         tools = {
-            'make_exe': ('make', 'make (not found in PATH)'),
             'xgettext_exe': ('xgettext', 'xgettext (run `apt install gettext` or equivalent)'),
             'tar_exe': ('tar', 'tar (not found in PATH)'),
         }
+        # make is only used on non-Windows; the Windows path returns early
+        # before invoking it, so do not require it there.
+        if not IS_WINDOWS:
+            tools['make_exe'] = ('make', 'make (not found in PATH)')
+        else:
+            self.make_exe = None
 
         missing = []
         for attr, (tool_name, error_msg) in tools.items():

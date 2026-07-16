@@ -1,5 +1,5 @@
 @echo off
-REM AppVeyor wrapper: run low-integrity test subset via PsExec and print the log.
+REM CI wrapper: run low-integrity test subset via PsExec and print the log.
 REM PsExec -l = Low Mandatory Integrity (stricter than a normal user). See
 REM psexec-low-integrity-tests.bat for the curated unittest list.
 setlocal
