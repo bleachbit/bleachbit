@@ -446,7 +446,7 @@ def delete_mozilla_favicons(path):
                                              db='', filter=" and url NOT LIKE 'javascript:%'"),
                                          row_factory)
 
-    bookmarked_urls_domains = list(map(_remove_path_from_url, bookmarked_urls))
+    bookmarked_urls_domains = set(map(_remove_path_from_url, bookmarked_urls))
     # Delete orphaned favicons whose domain is not bookmarked.
     # Favicons for bookmarked domains are kept regardless of URL path
     # depth, because Firefox stores site favicons at deep paths (e.g.
@@ -473,9 +473,16 @@ def get_chrome_bookmark_ids(history_path):
         return []
     urls = get_chrome_bookmark_urls(bookmark_path)
     ids = []
-    for url in urls:
+    # Look up ids in batches. SQLite caps host parameters (default 999), so
+    # chunk the URLs instead of opening a connection per bookmark.
+    chunk_size = 500
+    for i in range(0, len(urls), chunk_size):
+        chunk = urls[i:i + chunk_size]
+        placeholders = ','.join('?' * len(chunk))
         ids += get_sqlite_int(
-            history_path, 'select id from urls where url=?', (url,))
+            history_path,
+            f'select id from urls where url in ({placeholders})',
+            tuple(chunk))
     return ids
 
 

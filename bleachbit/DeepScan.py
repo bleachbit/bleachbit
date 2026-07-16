@@ -75,13 +75,13 @@ class CompiledSearch:
         self.nwholeregex = re_compile(search.nwholeregex)
 
     def match(self, dirpath, filename):
-        full_path = os.path.join(dirpath, filename)
-
         if self.regex and not self.regex.search(filename):
             return None
 
         if self.nregex and self.nregex.search(filename):
             return None
+
+        full_path = os.path.join(dirpath, filename)
 
         if self.wholeregex and not self.wholeregex.search(full_path):
             return None

@@ -268,13 +268,13 @@ class Winapp:
             if special_detect(sd_code):
                 return True
         for option in self.parser.options(section):
-            if re.match(self.re_detect, option):
+            if self.re_detect.match(option):
                 # Detect= checks for a registry key
                 any_detect_option = True
                 key = self.parser.get(section, option)
                 if Windows.detect_registry_key(key):
                     return True
-            elif re.match(self.re_detectfile, option):
+            elif self.re_detectfile.match(option):
                 # DetectFile= checks for a file
                 any_detect_option = True
                 key = self.parser.get(section, option)
@@ -293,7 +293,7 @@ class Winapp:
         file_excludekeys = []
         reg_excludekeys = []
         for option in self.parser.options(section):
-            if re.match(self.re_excludekey, option):
+            if self.re_excludekey.match(option):
                 excludekey_val = self.parser.get(section, option)
                 nwholeregex = self.excludekey_to_nwholeregex(excludekey_val)
                 if nwholeregex is None:
@@ -329,9 +329,9 @@ class Winapp:
                     "detectos",
                     "specialdetect",
                 }
-                or re.match(self.re_detect, option)
-                or re.match(self.re_detectfile, option)
-                or re.match(self.re_excludekey, option)
+                or self.re_detect.match(option)
+                or self.re_detectfile.match(option)
+                or self.re_excludekey.match(option)
             ):
                 continue
             if option.startswith('filekey'):
@@ -402,6 +402,7 @@ class Winapp:
             else:
                 logger.warning(
                     'unknown file option %s in section %s', element, ini_section)
+        option_id = section2option(ini_section)
         for filename in filenames.split(';'):
             for dirname in dirnames:
                 # If dirname is a drive letter it needs a special treatment on Windows:
@@ -409,8 +410,7 @@ class Winapp:
                 if os.path.splitdrive(dirname)[0] == dirname:
                     dirname = f'{dirname}{os.path.sep}'
                 for provider in self.__make_file_provider(dirname, filename, recurse, removeself, excludekeys):
-                    self.cleaners[lid].add_action(
-                        section2option(ini_section), provider)
+                    self.cleaners[lid].add_action(option_id, provider)
 
     def handle_regkey(self, lid, ini_section, ini_option, reg_excludekeys):
         """Parse a RegKey# option"""
@@ -419,9 +419,9 @@ class Winapp:
         path = elements[0]
 
         # Check if this registry key is excluded (exact match or starts with exclusion)
+        normalized_path = path.upper().replace('\\', '\\\\')
         for exclude_path in reg_excludekeys:
             # Normalize paths for comparison
-            normalized_path = path.upper().replace('\\', '\\\\')
             normalized_exclude = exclude_path.upper().replace('\\', '\\\\')
             # Check if the path matches the exclusion (exact match or starts with exclusion)
             if normalized_path == normalized_exclude or \
