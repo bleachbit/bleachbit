@@ -471,21 +471,18 @@ jobs:
       - name: Deploy Windows build
         shell: pwsh
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: auto
-          AWS_ENDPOINT_URL: ${{ secrets.R2_ENDPOINT_URL }}
+          AWS_ENDPOINT_URL: ${{ secrets.AWS_ENDPOINT_URL }}
         run: |
           # Sanitize
           $ref = ($env:GITHUB_REF_NAME -replace '[^A-Za-z0-9._/-]','_')
           $ver = ($env:VERSION        -replace '[^A-Za-z0-9._-]','_')
           $run = $env:GITHUB_RUN_NUMBER
           $sha = $env:GITHUB_SHA.Substring(0,8)
-          $dest = "s3://bleachbitci/$run/$ref/$ver/"
-          Write-Host "Deploying to $dest"
+          $dest = "s3://${{ secrets.AWS_BUCKET_NAME }}/$run/$ref/$ver/"
           $meta = "ref=$ref,run=$run,version=$ver,commit=$sha"
-          # CreateMultipartUpload is rejected, so force a single-part upload.
-          aws configure set default.s3.multipart_threshold 1GB
           Get-ChildItem BleachBit-*-setup.exe, BleachBit-*-setup-English.exe, BleachBit-*-portable.zip -File |
             ForEach-Object { aws s3 cp $_.FullName "$dest" --metadata "$meta" }
 
