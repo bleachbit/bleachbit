@@ -86,7 +86,7 @@ def _bootstrap_posix():
 
 def _bootstrap_windows():
     """Bootstrap for Windows"""
-    from bleachbit import Windows
+    from bleachbit import Windows, logger
     Windows.setup_environment()
 
     # Use our `font.conf` (see commit 3385952b37d78).
@@ -102,13 +102,33 @@ def _bootstrap_windows():
     # Set GDK_PIXBUF_MODULE_FILE based on the Python DLL location.
     # This ensures GTK can find the pixbuf loaders when running from
     # a bundled/frozen environment where the standard paths may not apply.
+
+    # EnumProcessModules already gives us the HMODULE, so use
+    # win32api.GetModuleFileName(module) directly instead of
+    # win32process.GetModuleFileNameEx(-1, module): the latter re-opens
+    # the current-process pseudo-handle through PSAPI, which has been
+    # observed to fail with ERROR_INVALID_HANDLE (6) on the GitHub
+    # Actions windows-latest image under PsExec -l (low integrity).
+    # This may have been an intermittant error.
+    # The enumeration and per-module lookup are wrapped defensively so a
+    # future environment quirk does not abort bootstrap(), which would
+    # otherwise take down every test's setUpClass.
     import win32process
-    for process in win32process.EnumProcessModules(-1):
-        name = win32process.GetModuleFileNameEx(-1, process)
+    try:
+        modules = win32process.EnumProcessModules(-1)
+    except Exception:
+        logger.exception('EnumProcessModules failed; skipping GDK_PIXBUF_MODULE_FILE')
+        modules = []
+    for module in modules:
+        try:
+            name = win32api.GetModuleFileName(module)
+        except Exception:
+            continue
         if re.search(r'python\d+.dll$', name, re.IGNORECASE):
             bindir = os.path.dirname(name)
             os.environ['GDK_PIXBUF_MODULE_FILE'] = os.path.join(
                 bindir, 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache')
+            break
 
 
 def bootstrap():
