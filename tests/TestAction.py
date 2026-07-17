@@ -536,6 +536,25 @@ class ActionTestCase(common.BleachbitTestCase):
             results += 1
         self.assertGreater(results, 0)
 
+    def test_walk_files_cache_survives_early_abandon(self):
+        """An abandoned walk.files generator must not poison the cache"""
+        dirname = self.mkdtemp(prefix='bleachbit-walk-cache')
+        filenames = [os.path.join(dirname, f'file{i}') for i in range(3)]
+        for filename in filenames:
+            common.touch_file(filename)
+
+        action_str = f'<action command="delete" search="walk.files" path="{dirname}" />'
+
+        # Abandon after the first result, like Cleaner.auto_hide() does
+        commands = _action_str_to_commands(action_str)
+        next(commands)
+        del commands
+
+        # A fresh walk of the same path must still see every file
+        results = [next(cmd.execute(False))['path']
+                  for cmd in _action_str_to_commands(action_str)]
+        self.assertEqual(sorted(results), sorted(filenames))
+
     def test_package_manager_missing(self):
         """Unit test for when package manager is not installed"""
         with mock.patch('bleachbit.Language.setup_translation', return_value=None), \

@@ -111,7 +111,7 @@ class Locales:
     localepattern =\
         r'(?P<locale>[a-z]{2,3})' \
         r'(?P<specifier>[_-][A-Z]{2,4})?(?:\.[\w]+[\d-]+|@\w+)?' \
-        r'(?P<encoding>[.-_](?:(?:ISO|iso|UTF|utf|us-ascii)[\d-]+|(?:euc|EUC)[A-Z]+))?'
+        r'(?P<encoding>[-._](?:(?:ISO|iso|UTF|utf|us-ascii)[\d-]+|(?:euc|EUC)[A-Z]+))?'
 
     def __init__(self, vfs=None):
         self._paths = LocaleCleanerPath(location='/', vfs=vfs)
@@ -617,7 +617,7 @@ def apt_autoremove():
 def apt_autoclean():
     """Run 'apt-get autoclean' and return the size (un-rounded, in bytes) of freed space"""
     try:
-        return run_cleaner_cmd('apt-get', ['autoclean'], r'^Del .*\[([\d.]+[a-zA-Z]{2})}]', ['^E: '])
+        return run_cleaner_cmd('apt-get', ['autoclean'], r'^Del .*\[([\d.]+ ?[a-zA-Z]{2})\]', ['^E: '])
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e

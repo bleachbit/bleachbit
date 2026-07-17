@@ -91,6 +91,24 @@ class UnixTestCase(common.BleachbitTestCase):
             self.assertIsInteger(bytes_freed)
             logger.debug('apt bytes cleaned %d', bytes_freed)
 
+    def test_apt_autoclean_mock(self):
+        """Unit test for apt_autoclean() parsing of 'Del' lines"""
+        # apt >= 3.2 (Ubuntu 26.04) prints a space between the size and units
+        output = '\n'.join((
+            'Del libcurl3t64-gnutls 8.18.0-1ubuntu2.2 [417 kB]',
+            'Del libcurl4t64 8.18.0-1ubuntu2.2 [426 kB]',
+            'Del curl 8.18.0-1ubuntu2.2 [272 kB]',
+        ))
+        with mock.patch('bleachbit.Unix.FileUtilities.exe_exists', return_value=True), \
+                mock.patch('bleachbit.Unix.subprocess.check_output', return_value=output):
+            self.assertEqual(apt_autoclean(), 417000 + 426000 + 272000)
+
+        # older apt printed the size without a space
+        output = 'Del curl 8.18.0-1ubuntu2.2 [272kB]'
+        with mock.patch('bleachbit.Unix.FileUtilities.exe_exists', return_value=True), \
+                mock.patch('bleachbit.Unix.subprocess.check_output', return_value=output):
+            self.assertEqual(apt_autoclean(), 272000)
+
     @common.skipIfWindows
     def test_find_available_locales(self):
         """Unit test for method find_available_locales()"""

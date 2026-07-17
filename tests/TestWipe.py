@@ -22,7 +22,8 @@ from bleachbit.Wipe import (
     sync,
     wipe_contents,
     wipe_path,
-    wipe_name
+    wipe_name,
+    wipe_write
 )
 from tests import common
 
@@ -88,26 +89,28 @@ class WipeTestCase(common.BleachbitTestCase):
         """Unit test for sync()"""
         sync()
 
+    def test_wipe_write(self):
+        """Unit test for wipe_write()"""
+
+        original = b'abcdefghij' * 12345
+
+        # overwrites the contents with zeros without truncating
+        filename = self.write_file('wipe_write', original)
+        wipe_write(filename).close()
+        with open(filename, 'rb') as f:
+            contents = f.read()
+        self.assertEqual(contents, b'\x00' * len(contents))
+        self.assertGreaterEqual(len(contents), len(original))
+
     def test_wipe_contents(self):
         """Unit test for wipe_contents()"""
 
         original = b'abcdefghij' * 12345
 
-        # truncate=False overwrites the contents in place with zeros, except
-        # the admin Windows path truncates regardless.
-        overwrite_truncates = bleachbit.IS_WINDOWS and Wipe.IsUserAnAdmin()
-        filename = self.write_file('wipe_contents_overwrite', original)
-        wipe_contents(filename, truncate=False)
-        with open(filename, 'rb') as f:
-            contents = f.read()
-        self.assertEqual(contents, b'\x00' * len(contents))
-        if not overwrite_truncates:
-            self.assertGreaterEqual(len(contents), len(original))
-
-        # the default truncates the file to zero bytes
-        filename2 = self.write_file('wipe_contents_truncate', original)
-        wipe_contents(filename2)
-        self.assertEqual(os.path.getsize(filename2), 0)
+        # truncates the file to zero bytes
+        filename = self.write_file('wipe_contents_truncate', original)
+        wipe_contents(filename)
+        self.assertEqual(os.path.getsize(filename), 0)
 
     def wipe_name_helper(self, filename):
         """Helper for test_wipe_name()"""

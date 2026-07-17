@@ -192,39 +192,44 @@ def sync():
         ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()
 
 
-def wipe_contents(path, truncate=True):
+def wipe_write(path):
+    """Overwrite a file's contents with zeros without truncating it.
+
+    Return the open file handle; the caller must close it."""
+    # pylint: disable=import-outside-toplevel
+    from bleachbit.FileUtilities import getsize
+    size = getsize(path)
+    try:
+        f = open(path, 'wb')
+    except IOError as e:
+        if e.errno == errno.EACCES:  # permission denied
+            os.chmod(path, 0o200)  # user write only
+            f = open(path, 'wb')
+        else:
+            raise
+    try:
+        blanks = b'\0' * 4096
+        while size > 0:
+            f.write(blanks)
+            size -= 4096
+        f.flush()  # flush to OS buffer
+        os.fsync(f.fileno())  # force write to disk
+    except BaseException:
+        f.close()
+        raise
+    return f
+
+
+def wipe_contents(path):
     """Wipe files contents
 
-    http://en.wikipedia.org/wiki/Data_remanence
+    https://en.wikipedia.org/wiki/Data_remanence
     2006 NIST Special Publication 800-88 (p. 7): "Studies have
     shown that most of today's media can be effectively cleared
     by one overwrite"
     """
     # pylint: disable=import-outside-toplevel
     from bleachbit.FileUtilities import truncate_f
-
-    def wipe_write():
-        from bleachbit.FileUtilities import getsize as _getsize
-        size = _getsize(path)
-        try:
-            f = open(path, 'wb')
-        except IOError as e:
-            if e.errno == errno.EACCES:  # permission denied
-                os.chmod(path, 0o200)  # user write only
-                f = open(path, 'wb')
-            else:
-                raise
-        try:
-            blanks = b'\0' * 4096
-            while size > 0:
-                f.write(blanks)
-                size -= 4096
-            f.flush()  # flush to OS buffer
-            os.fsync(f.fileno())  # force write to disk
-        except BaseException:
-            f.close()
-            raise
-        return f
 
     # pylint: disable=possibly-used-before-assignment
     if 'nt' == os.name and IsUserAnAdmin():
@@ -256,15 +261,15 @@ def wipe_contents(path, truncate=True):
         except UnsupportedFileSystemError:
             warnings.warn(
                 _('There was at least one file on a file system that does not support advanced overwriting.'), UserWarning)
-            f = wipe_write()
+            f = wipe_write(path)
         else:
-            # The wipe succeed, so prepare to truncate.
+            # The wipe succeeded and already overwrote the file in place.
+            # Reopen with 'wb' to truncate it to zero
             f = open(path, 'wb')
     else:
-        f = wipe_write()
+        f = wipe_write(path)
     try:
-        if truncate:
-            truncate_f(f)
+        truncate_f(f)
     finally:
         f.close()
 

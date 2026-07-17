@@ -30,6 +30,7 @@ from pathlib import Path
 
 # local imports
 import bleachbit
+from bleachbit import IS_WINDOWS
 from bleachbit.Language import get_text as _
 from bleachbit.PathUtils import path_equal, path_startswith
 from bleachbit.Wipe import wipe_contents, wipe_name
@@ -477,6 +478,15 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         # may return Access Denied
         mode = os.lstat(path)[stat.ST_MODE]
         is_special = stat.S_ISFIFO(mode) or stat.S_ISLNK(mode)
+    elif IS_WINDOWS:
+        try:
+            # A junction/symlink's contents belong to the target, not
+            # this path; isdir() would follow it and judge the target's
+            # emptiness instead of removing the reparse point itself.
+            is_special = bool(
+                os.lstat(path).st_file_attributes & stat.FILE_ATTRIBUTE_REPARSE_POINT)
+        except OSError:
+            pass
     if is_special:
         _delete_path(path, os.remove)
         return True

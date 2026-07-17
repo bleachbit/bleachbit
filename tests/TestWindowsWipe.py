@@ -41,6 +41,7 @@ if bleachbit.IS_WINDOWS:
         write_zero_fill,
         file_wipe,
         wipe_file_direct,
+        extents_a_minus_b,
         GENERIC_READ,
         GENERIC_WRITE,
         SetFilePointer,
@@ -412,6 +413,40 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
         """Notify users there are more tests"""
         self.skipTest(
             "More wiping tests available at https://github.com/bleachbit/windows-wipe/blob/master/testwipe.py")
+
+    def test_extents_a_minus_b(self):
+        """Unit test for extents_a_minus_b()"""
+        def a_minus_b_as_set(a, b):
+            result = set()
+            for start, end in extents_a_minus_b(a, b):
+                self.assertLessEqual(start, end)
+                result.update(range(start, end + 1))
+            return result
+
+        def as_set(extents):
+            result = set()
+            for start, end in extents:
+                result.update(range(start, end + 1))
+            return result
+
+        cases = [
+            # (a, b)
+            ([(0, 100)], [(0, 50)]),  # tail of A past the last B range
+            ([(500, 600)], [(0, 100)]),  # B entirely before A, no overlap
+            ([(0, 100)], [(150, 200)]),  # B entirely after A, no overlap
+            ([(0, 100)], []),  # B empty
+            ([], [(0, 100)]),  # A empty
+            ([(0, 100)], [(0, 100)]),  # fully covered
+            ([(0, 100)], [(40, 60)]),  # B in the middle of A
+            ([(0, 100)], [(0, 30), (40, 100)]),  # multiple B ranges
+            ([(0, 10), (20, 30), (40, 50)], [(5, 25), (45, 60)]),  # multiple A and B
+            ([(10, 20), (30, 40)], [(50, 60)]),  # B after all of A
+        ]
+        for a, b in cases:
+            with self.subTest(a=a, b=b):
+                got = a_minus_b_as_set(a, b)
+                expected = as_set(a) - as_set(b)
+                self.assertEqual(got, expected)
 
 
 if __name__ == '__main__':

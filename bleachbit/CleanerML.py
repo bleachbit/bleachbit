@@ -241,7 +241,8 @@ class CleanerML:
                 continue
             detection_type = running.attrib.get('type', '')
             value = _gettext_etree(running)
-            same_user = running.attrib.get('same_user') or False
+            same_user_attr = running.attrib.get('same_user')
+            same_user = boolstr_to_bool(same_user_attr) if same_user_attr else False
             self.cleaner.add_running(detection_type, value, same_user)
 
     def handle_cleaner_option(self, option):

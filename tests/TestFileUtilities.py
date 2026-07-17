@@ -947,6 +947,33 @@ State=AAAA/wA...
                 self.assertDirectoryCount(tmp_dir, 0)
 
     @common.skipUnlessWindows
+    def test_delete_junction_nonempty_target(self):
+        """Unit test for delete() with a junction whose target is not empty
+
+        Unlike test_delete_junction, the target here is non-empty. The
+        junction itself should still be removed regardless.
+        """
+        for shred in (False, True):
+            with self.subTest(shred=shred):
+                tmp_dir = self.mkdtemp(prefix=f'delete_junction_ne_{shred}')
+                target_dir = self.mkdtemp(
+                    prefix=f'junction-target-ne-{shred}', dir=tmp_dir)
+                target_file = self.mkstemp(
+                    prefix='keep-me-', dir=target_dir)
+
+                junction = os.path.join(tmp_dir, f'junction-ne-{shred}')
+                self._create_win_junction(target_dir, junction)
+                self.assertExists(junction)
+                self.assertTrue(Windows.is_junction(junction))
+
+                self.assertTrue(delete(junction, shred=shred))
+                self.assertNotExists(junction)
+                # The junction is gone, but its target and target's
+                # contents must be completely untouched.
+                self.assertExists(target_dir)
+                self.assertExists(target_file)
+
+    @common.skipUnlessWindows
     def test_delete_read_only_directory(self):
         """Unit test for delete() with read-only directory on Windows
 
