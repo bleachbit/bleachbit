@@ -41,6 +41,7 @@ from bleachbit.Windows import (
     run_net_service_command,
     detect_registry_key,
     empty_recycle_bin,
+    flush_dns,
     get_clipboard_paths,
     get_fixed_drives,
     get_font_conf_file,
@@ -259,6 +260,16 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def skipUnlessAdmin(self):
         if not shell.IsUserAnAdmin():
             self.skipTest('requires administrator privileges')
+
+    def test_flush_dns_uses_absolute_path(self):
+        """flush_dns runs an absolute ipconfig path, not a bare name"""
+        with mock.patch('bleachbit.General.run_external',
+                        return_value=(0, '', '')) as mock_run:
+            flush_dns()
+        args = mock_run.call_args[0][0]
+        self.assertTrue(os.path.isabs(args[0]), args[0])
+        self.assertTrue(args[0].lower().endswith('ipconfig.exe'), args[0])
+        self.assertEqual(args[1], '/flushdns')
 
     @pytest.mark.xdist_group('recycle-bin')
     def test_get_recycle_bin(self):

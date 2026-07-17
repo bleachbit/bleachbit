@@ -867,7 +867,8 @@ def flush_dns():
     Returns 0 on success.
     Raises RuntimeError on failure.
     """
-    args = ['ipconfig', '/flushdns']
+    ipconfig = os.path.join(get_windows_system_paths()[0], 'ipconfig.exe')
+    args = [ipconfig, '/flushdns']
     (rc, stdout, stderr) = General.run_external(args)
     if 0 != rc:
         raise RuntimeError(
