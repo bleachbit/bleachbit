@@ -9,7 +9,7 @@ import os
 import sys
 
 import bleachbit
-from bleachbit import APP_NAME, Cleaner, GuiBasic, appicon_path, portable_mode
+from bleachbit import APP_NAME, Cleaner, GuiBasic, appicon_path, portable_mode, IS_WINDOWS
 from bleachbit.Cleaner import backends
 from bleachbit.GtkShim import (
     GLib, Gdk, Gio, Gtk,
@@ -29,7 +29,7 @@ require_gtk()
 RESPONSE_ANONYMIZE = 101
 RESPONSE_COPY = 100
 
-if os.name == 'nt':
+if IS_WINDOWS:
     from bleachbit import Windows
     from bleachbit.FontCheckDialog import (
         create_font_check_dialog,
@@ -67,7 +67,7 @@ class Bleachbit(Gtk.Application):
         if shred_paths:
             self._shred_paths = shred_paths
 
-        if os.name == 'nt':
+        if IS_WINDOWS:
             # clean up nonce files https://github.com/bleachbit/bleachbit/issues/858
             import atexit
             atexit.register(Windows.cleanup_nonce)
@@ -80,7 +80,7 @@ class Bleachbit(Gtk.Application):
     def _init_windows_misc(self, auto_exit, shred_paths, uac):
         application_id_suffix = ''
         is_context_menu_executed = auto_exit and shred_paths
-        if not os.name == 'nt':
+        if not IS_WINDOWS:
             return ''
         env_suffix = os.environ.pop('BLEACHBIT_APP_INSTANCE_SUFFIX', '')
         if env_suffix:
@@ -201,7 +201,7 @@ class Bleachbit(Gtk.Application):
         """Shred settings (for privacy reasons) and quit"""
         # build a list of paths to delete
         paths = []
-        if os.name == 'nt' and portable_mode:
+        if IS_WINDOWS and portable_mode:
             # in portable mode on Windows, the options directory includes
             # executables
             paths.append(bleachbit.options_file)
@@ -369,7 +369,7 @@ class Bleachbit(Gtk.Application):
 
     def _should_show_font_check_dialog(self):
         """Determine whether to show the font check dialog on Windows."""
-        if os.name != 'nt':
+        if not IS_WINDOWS:
             return False
         if self._auto_exit:
             return False
@@ -402,7 +402,7 @@ class Bleachbit(Gtk.Application):
 
     def _show_font_check_dialog(self):
         """Show the font check dialog and handle the response."""
-        if os.name != 'nt':
+        if not IS_WINDOWS:
             return False
         if not self._window:
             return False

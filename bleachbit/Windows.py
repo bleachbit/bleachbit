@@ -50,7 +50,7 @@ import bleachbit
 from bleachbit import FileUtilities, General, ARCH_BITS, IS_WINDOWS
 from bleachbit.Language import get_text as _
 
-if 'win32' == sys.platform:
+if IS_WINDOWS:
     import winreg
     import pywintypes
     import win32api
@@ -314,7 +314,7 @@ def _delete_parent_lock_needed(pathname):
     This is only needed on Windows for administrator users
     when the path is not in the user's profile directory.
     """
-    if os.name != 'nt':
+    if not IS_WINDOWS:
         return False
     global _delete_parent_lock_admin
     if _delete_parent_lock_admin is None:
@@ -743,7 +743,7 @@ def get_sid_token_48():
 
 def is_ots_elevation():
     """Return True if UAC changed credentials"""
-    if os.name != 'nt':
+    if not IS_WINDOWS:
         return False
     argv = sys.argv
     for i, arg in enumerate(argv):
@@ -1011,7 +1011,7 @@ def is_junction(path):
     Python 3.12 added os.is_junction()
     https://docs.python.org/3/library/os.html#os.DirEntry.is_junction
     """
-    if sys.platform != 'win32':
+    if not IS_WINDOWS:
         return False
     if hasattr(os, 'is_junction'):
         return os.is_junction(path)
@@ -1119,7 +1119,7 @@ def set_environ(varname, path):
         return
     if varname in os.environ:
         # logger.debug('set_environ(%s, %s): skipping because environment variable is already defined', varname, path)
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             os.environ[varname] = os.path.expandvars('%%%s%%' % varname)
         # Do not redefine the environment variable when it already exists
         # But re-encode them with utf-8 instead of mbcs

@@ -41,7 +41,7 @@ from pathlib import PureWindowsPath
 from html import escape as esc
 from traceback import format_exc
 
-from bleachbit import bleachbit_exe_path
+from bleachbit import bleachbit_exe_path, IS_POSIX, IS_WINDOWS
 
 HELP_URL = 'https://link.bleachbit.org/get-help'
 PYGOBJECT_URL = 'https://link.bleachbit.org/pygobject-lib-bin-error'
@@ -181,7 +181,7 @@ def _show_windows_error_dialog(title, html_content):
     Prompts the user with Yes/No: if Yes, writes an HTML file to %TEMP% and
     opens it in the default browser.  If No, closes silently.
     """
-    assert os.name == 'nt'
+    assert IS_WINDOWS
     prompt = (
         "BleachBit failed to load the graphical interface.\n\n"
         "This may be a bug or a broken installation."
@@ -205,7 +205,7 @@ def _show_windows_error_dialog(title, html_content):
 
 def _handle_gtk_import_error(error):
     """On Windows, show a helpful error dialog when GTK import fails."""
-    if os.name != 'nt':
+    if not IS_WINDOWS:
         return
 
     logger.error('GTK not available: %s\n%s', error, format_exc())
@@ -220,7 +220,7 @@ def _check_display_available():
     Returns:
         tuple: (is_available: bool, reason: str or None)
     """
-    if os.name == 'nt':
+    if IS_WINDOWS:
         # Windows always has a display
         return True, None
 
@@ -298,7 +298,7 @@ def _try_import_gtk():
             return False, f'Failed to import GTK libraries: {e}'
 
         # On POSIX, verify we can actually get a display
-        if os.name == 'posix':
+        if IS_POSIX:
             try:
                 if Gdk.get_default_root_window() is None:
                     return False, 'No default root window (display not accessible)'

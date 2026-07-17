@@ -47,6 +47,7 @@ IS_POSIX = os.name == 'posix'
 IS_LINUX = sys.platform.startswith('linux')
 IS_MAC = sys.platform == 'darwin'
 IS_BSD = sys.platform.startswith(('freebsd', 'openbsd', 'netbsd'))
+IS_FREEBSD = sys.platform.startswith('freebsd')
 IS_NETBSD = sys.platform[:6] == 'netbsd'
 ARCH_BITS = 64 if sys.maxsize > 2**32 else 32
 
@@ -239,13 +240,13 @@ elif os.path.exists(_exe_locale_dir):
     # AppImage
     locale_dir = _exe_locale_dir
 # system-wide installed locale
-elif sys.platform in ('linux', 'darwin'):
+elif IS_LINUX or IS_MAC:
     locale_dir = "/usr/share/locale/"
-elif sys.platform == "win32":
+elif IS_WINDOWS:
     locale_dir = os.path.join(bleachbit_exe_path, "share\\locale\\")
-elif sys.platform[:6] == "netbsd":
+elif IS_NETBSD:
     locale_dir = "/usr/pkg/share/locale/"
-elif sys.platform.startswith("openbsd") or sys.platform.startswith("freebsd"):
+elif IS_BSD:
     locale_dir = "/usr/local/share/locale/"
 
 

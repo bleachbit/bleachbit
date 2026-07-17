@@ -33,7 +33,7 @@ from urllib.parse import quote, urlparse, urlunparse
 
 
 # local application imports
-from bleachbit import FileUtilities
+from bleachbit import FileUtilities, IS_WINDOWS
 from bleachbit.Options import options
 
 logger = logging.getLogger(__name__)
@@ -55,7 +55,7 @@ def _sqlite_readonly_uri(pathname):
     """Return a proper SQLite URI for read-only access to pathname"""
     assert isinstance(pathname, str)
     abs_path = os.path.abspath(pathname)
-    if os.name == 'nt':
+    if IS_WINDOWS:
         abs_path = abs_path.replace('\\', '/')
     quoted = quote(abs_path, safe='/:')
     return f'file:{quoted}?mode=ro'

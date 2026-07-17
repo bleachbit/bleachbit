@@ -13,7 +13,6 @@ Build BleachBit tarballs
 # standard library
 import glob
 import os
-import sys
 
 # local import
 import bleachbit
@@ -22,15 +21,15 @@ import bleachbit
 APP_DESCRIPTION = "BleachBit frees space and maintains privacy by quickly wiping files you don't need and didn't know you had."
 
 data_files = []
-if sys.platform == 'linux':
+if bleachbit.IS_LINUX:
     data_files.append(('/usr/share/applications',
                       ['./org.bleachbit.BleachBit.desktop']))
     data_files.append(('/usr/share/pixmaps/', ['./bleachbit.png']))
-elif sys.platform[:6] == 'netbsd':
+elif bleachbit.IS_NETBSD:
     data_files.append(('/usr/pkg/share/applications',
                       ['./org.bleachbit.BleachBit.desktop']))
     data_files.append(('/usr/pkg/share/pixmaps/', ['./bleachbit.png']))
-elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
+elif bleachbit.IS_BSD:
     data_files.append(
         ('/usr/local/share/applications', ['./org.bleachbit.BleachBit.desktop']))
     data_files.append(('/usr/local/share/pixmaps/', ['./bleachbit.png']))

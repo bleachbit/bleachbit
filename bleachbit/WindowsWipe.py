@@ -124,6 +124,7 @@ from win32con import (FILE_ATTRIBUTE_ENCRYPTED,
                       COMPRESSION_FORMAT_DEFAULT)
 
 # local import
+from bleachbit import IS_WINDOWS
 from bleachbit.FileUtilities import extended_path, extended_path_undo
 
 # Constants.
@@ -493,7 +494,7 @@ def check_os():
     Raises:
         RuntimeError: If not running on Windows NT or later
     """
-    if os.name.lower() != "nt":
+    if not IS_WINDOWS:
         raise RuntimeError("This function requires Windows NT or later")
 
 

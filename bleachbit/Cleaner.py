@@ -12,7 +12,6 @@ import glob
 import logging
 import os.path
 import re
-import sys
 import tempfile
 
 from bleachbit.Constant import EMPTY_SPACE_WARNING
@@ -26,11 +25,11 @@ from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
 from bleachbit.GtkShim import Gtk, HAVE_GTK
 from bleachbit.Wipe import wipe_path
 
-if 'posix' == os.name:
+if IS_POSIX:
     from bleachbit import Unix
-elif 'nt' == os.name:
+elif IS_WINDOWS:
     from bleachbit import Windows
-elif os.name not in ('posix', 'nt'):
+elif not (IS_POSIX or IS_WINDOWS):
     raise RuntimeError(f"Unknown OS '{os.name}'")
 
 
@@ -173,7 +172,7 @@ class System(Cleaner):
         #
         # options for Linux and BSD
         #
-        if 'posix' == os.name:
+        if IS_POSIX:
             # TRANSLATORS: desktop entries are .desktop files in Linux that
             # make up the application menu (the menu that shows BleachBit,
             # Firefox, and others.  The .desktop files also associate file
@@ -203,7 +202,7 @@ class System(Cleaner):
         #
         # options just for Linux
         #
-        if sys.platform == 'linux':
+        if IS_LINUX:
             self.add_option('memory', _('Memory'),
                             # TRANSLATORS: 'free' means 'unallocated'
                             _('Wipe the swap and free memory'))
@@ -219,7 +218,7 @@ class System(Cleaner):
             self.add_option('dns_cache', dns_cache_label,
                             _('Delete the cache'))
 
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option(
                 'memory_dump', _('Memory dump'), _('Delete the file'))
@@ -270,7 +269,7 @@ class System(Cleaner):
 
     def get_commands(self, option_id):
         # cache
-        if 'posix' == os.name and 'cache' == option_id:
+        if IS_POSIX and 'cache' == option_id:
             dirname = os.path.expanduser("~/.cache/")
             for filename in children_in_directory(dirname, True):
                 if not self.whitelisted(filename):
@@ -303,7 +302,7 @@ class System(Cleaner):
                      '~/.kde2/share/mimelnk/application/',
                      '~/.kde2/share/applnk']
 
-        if 'posix' == os.name and 'desktop_entry' == option_id:
+        if IS_POSIX and 'desktop_entry' == option_id:
             for path in menu_dirs:
                 dirname = os.path.expanduser(path)
                 for filename in children_in_directory(dirname, False):
@@ -312,7 +311,7 @@ class System(Cleaner):
                         yield Command.Delete(filename)
 
         # unwanted locales
-        if 'posix' == os.name and 'localizations' == option_id:
+        if IS_POSIX and 'localizations' == option_id:
             for path in Unix.locales.localization_paths(locales_to_keep=options.get_languages()):
                 if os.path.isdir(path):
                     for f in FileUtilities.children_in_directory(path, True):
@@ -320,7 +319,7 @@ class System(Cleaner):
                 yield Command.Delete(path)
 
         # Windows logs
-        if 'nt' == os.name and 'logs' == option_id:
+        if IS_WINDOWS and 'logs' == option_id:
             paths = (
                 '$ALLUSERSPROFILE\\Application Data\\Microsoft\\Dr Watson\\*.log',
                 '$ALLUSERSPROFILE\\Application Data\\Microsoft\\Dr Watson\\user.dmp',
@@ -366,13 +365,13 @@ class System(Cleaner):
                         yield Command.Delete(globbed)
 
         # memory
-        if sys.platform == 'linux' and 'memory' == option_id:
+        if IS_LINUX and 'memory' == option_id:
             yield Command.Function(None, Memory.wipe_memory, _('Memory'))
 
         # memory dump
         # how to manually create this file
         # http://www.pctools.com/guides/registry/detail/856/
-        if 'nt' == os.name and 'memory_dump' == option_id:
+        if IS_WINDOWS and 'memory_dump' == option_id:
             fname = os.path.expandvars('$windir\\memory.dmp')
             if os.path.exists(fname):
                 yield Command.Delete(fname)
@@ -380,7 +379,7 @@ class System(Cleaner):
                 yield Command.Delete(fname)
 
         # most recently used documents list
-        if 'posix' == os.name and 'recent_documents' == option_id:
+        if IS_POSIX and 'recent_documents' == option_id:
             ru_fn = os.path.expanduser("~/.recently-used")
             if os.path.lexists(ru_fn):
                 yield Command.Delete(ru_fn)
@@ -411,12 +410,12 @@ class System(Cleaner):
                 # Use the Function to skip when in preview mode
                 yield Command.Function(None, gtk_purge_items, _('Recent documents list'))
 
-        if 'posix' == os.name and 'rotated_logs' == option_id:
+        if IS_POSIX and 'rotated_logs' == option_id:
             for path in Unix.rotated_logs():
                 yield Command.Delete(path)
 
         # temporary files
-        if 'posix' == os.name and 'tmp' == option_id:
+        if IS_POSIX and 'tmp' == option_id:
             dirnames = ['/tmp', '/var/tmp']
             for dirname in dirnames:
                 for path in children_in_directory(dirname, True):
@@ -429,7 +428,7 @@ class System(Cleaner):
                         yield Command.Delete(path)
 
         # temporary files
-        if 'nt' == os.name and 'tmp' == option_id:
+        if IS_WINDOWS and 'tmp' == option_id:
             dirnames = [os.path.expandvars(
                 r'%temp%'), os.path.expandvars("%windir%\\temp\\")]
             # whitelist the folder %TEMP%\Low but not its contents
@@ -470,7 +469,7 @@ class System(Cleaner):
                 yield Command.Function(None, wipe_path_func, display)
 
         # MUICache
-        if 'nt' == os.name and 'muicache' == option_id:
+        if IS_WINDOWS and 'muicache' == option_id:
             keys = (
                 'HKCU\\Software\\Microsoft\\Windows\\ShellNoRoam\\MUICache',
                 'HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache')
@@ -478,12 +477,12 @@ class System(Cleaner):
                 yield Command.Winreg(key, None)
 
         # prefetch
-        if 'nt' == os.name and 'prefetch' == option_id:
+        if IS_WINDOWS and 'prefetch' == option_id:
             for path in glob.iglob(os.path.expandvars('$windir\\Prefetch\\*.pf')):
                 yield Command.Delete(path)
 
         # recycle bin
-        if 'nt' == os.name and 'recycle_bin' == option_id:
+        if IS_WINDOWS and 'recycle_bin' == option_id:
             # This method allows shredding
             recycled_any = False
             # pylint: disable=possibly-used-before-assignment
@@ -513,11 +512,11 @@ class System(Cleaner):
         if 'dns_cache' == option_id:
             if IS_WINDOWS:
                 yield Command.Function(None, Windows.flush_dns, _('DNS cache'))
-            elif sys.platform == 'linux':
+            elif IS_LINUX:
                 yield Command.Function(None, Unix.flush_dns, _('DNS cache'))
 
         # Windows Updates
-        if 'nt' == os.name and 'updates' == option_id:
+        if IS_WINDOWS and 'updates' == option_id:
             for wu in Windows.delete_updates():
                 yield wu
 
@@ -576,7 +575,7 @@ class System(Cleaner):
 
     def whitelisted(self, pathname):
         """Return boolean whether file is keep listed (formerly whitelisted)"""
-        if os.name == 'nt':
+        if IS_WINDOWS:
             # Whitelist is specific to POSIX
             return False
         if not self.regexes_compiled:
@@ -615,7 +614,7 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None, allow_lo
     yield from CleanerML.load_cleaners(cb_progress, allow_local=allow_local)
 
     # register Winapp2.ini cleaners
-    if 'nt' == os.name:
+    if IS_WINDOWS:
         # TRANSLATORS: Progress message shown typically on startup.
         # 'Importing' is a present participle.
         # To indicate an ongoing operation, include the ellipsis as literal

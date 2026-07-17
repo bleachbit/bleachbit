@@ -33,11 +33,11 @@ import sqlite3
 import types
 import warnings
 
-from bleachbit import FileUtilities
+from bleachbit import FileUtilities, IS_WINDOWS
 from bleachbit.Constant import CLEAN_FILE_LABEL
 from bleachbit.Language import get_text as _
 
-if 'nt' == os.name:
+if IS_WINDOWS:
     import bleachbit.Windows
 else:
     from bleachbit.General import WindowsError
@@ -344,7 +344,7 @@ class Winreg:
 
     def execute(self, really_delete):
         """Execute the Windows registry cleaner"""
-        if 'nt' != os.name:
+        if not IS_WINDOWS:
             return
         _str = None  # string representation
         ret = None  # return value meaning 'deleted' or 'delete-able'

@@ -16,7 +16,7 @@ from bleachbit.Language import get_text as _
 from bleachbit.Network import unset_sslkeylogfile
 from bleachbit.Options import options
 
-if os.name == 'nt':
+if IS_WINDOWS:
     from bleachbit import Windows
 
 logger = logging.getLogger(__name__)
@@ -45,7 +45,7 @@ def _get_missing_dependencies():
     Returns: list of missing dependency names
     """
     deps = ['chardet', 'psutil', 'requests', 'urllib3']
-    if os.name == 'nt':
+    if IS_WINDOWS:
         deps.append('plyer')
 
     missing = []
@@ -305,12 +305,12 @@ def get_startup_messages(auto_exit):
     # Show information for first start.
     # (The first start flag is set also for each new version.)
     if options.get("first_start") and not auto_exit:
-        if os.name == 'posix':
+        if IS_POSIX:
             ret_msgs.append((
                 # TRANSLATORS: First-start hint for Linux users shown in
                 # the log on the main screen.
                 _('Access the application menu by clicking the hamburger icon on the title bar.'), False))
-        elif os.name == 'nt':
+        elif IS_WINDOWS:
             ret_msgs.append((
                 # TRANSLATORS: First-start hint for Windows users shown in
                 # the log on the main screen.
@@ -318,14 +318,14 @@ def get_startup_messages(auto_exit):
         options.set('first_start', False)
 
     # Show notice about admin privileges.
-    if os.name == 'posix' and os.path.expanduser('~') == '/root':
+    if IS_POSIX and os.path.expanduser('~') == '/root':
         ret_msgs.append((
             # TRANSLATORS: Warning shown on startup when running BleachBit as root on Linux.
             # It means, for example, that cleaning a browser will clean root's browser data.
             _('You are running BleachBit with administrative privileges for cleaning '
               'shared parts of the system, and references to the user profile folder '
               'will clean only the root account.'), False))
-    if os.name == 'nt':
+    if IS_WINDOWS:
         from win32com.shell.shell import IsUserAnAdmin
         if options.get('shred') and not IsUserAnAdmin():
             ret_msgs.append((

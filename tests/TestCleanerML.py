@@ -97,7 +97,7 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             'ProgramFiles': r'C:\Program Files (x86)',
             'ProgramW6432': r'C:\Program Files',
         }
-        with mock.patch('bleachbit.CleanerML.os.name', 'nt'), \
+        with mock.patch('bleachbit.CleanerML.IS_WINDOWS', True), \
                 mock.patch.dict(os.environ, env, clear=True), \
                 mock.patch('bleachbit.Windows.ARCH_BITS', 32):
             variables = default_vars()

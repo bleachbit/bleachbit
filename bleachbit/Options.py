@@ -30,14 +30,14 @@ import os
 import re
 import threading
 
-# third-party imports
-if 'nt' == os.name:
-    from win32file import GetLongPathName
-
 # local application imports
 import bleachbit
-from bleachbit import General
+from bleachbit import General, IS_WINDOWS
 from bleachbit.Language import get_text as _
+
+# third-party imports
+if IS_WINDOWS:
+    from win32file import GetLongPathName
 
 logger = logging.getLogger(__name__)
 
@@ -102,7 +102,7 @@ def path_to_option(pathname):
     # On Windows change to lowercase and use backwards slashes.
     pathname = os.path.normcase(pathname)
     # On Windows expand DOS-8.3-style pathnames.
-    if 'nt' == os.name and os.path.exists(pathname):
+    if IS_WINDOWS and os.path.exists(pathname):
         pathname = GetLongPathName(pathname)
     if len(pathname) > 1 and ':' == pathname[1]:
         # ConfigParser treats colons in a special way
@@ -120,7 +120,7 @@ def init_configuration(*, log=True):
         os.remove(bleachbit.options_file)
     with open(bleachbit.options_file, 'w', encoding='utf-8-sig', errors='surrogateescape') as f_ini:
         f_ini.write('[bleachbit]\n')
-        if os.name == 'nt' and bleachbit.portable_mode:
+        if IS_WINDOWS and bleachbit.portable_mode:
             f_ini.write('[Portable]\n')
     for section in options.config.sections():
         options.config.remove_section(section)
@@ -230,7 +230,7 @@ class Options:
             return
         for option in self.config.options('hashpath'):
             pathname = option
-            if 'nt' == os.name and re.search(r'^[a-z]\\', option):
+            if IS_WINDOWS and re.search(r'^[a-z]\\', option):
                 # restore colon lost because ConfigParser treats colon special
                 # in keys
                 pathname = pathname[0] + ':' + pathname[1:]
@@ -293,7 +293,7 @@ class Options:
 
     def get(self, option, section='bleachbit'):
         """Retrieve a general option"""
-        if not 'nt' == os.name and 'update_winapp2' == option:
+        if not IS_WINDOWS and 'update_winapp2' == option:
             return False
         if section == 'bleachbit' and option == 'debug':
             from bleachbit.Log import is_debugging_enabled_via_cli

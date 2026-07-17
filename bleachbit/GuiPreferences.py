@@ -24,10 +24,9 @@ Preferences dialog
 
 # standard imports
 import logging
-import os
 
 # first party imports
-from bleachbit import GuiBasic, ProtectedPath
+from bleachbit import GuiBasic, ProtectedPath, IS_POSIX, IS_WINDOWS
 from bleachbit import online_update_notification_enabled
 from bleachbit.PathUtils import normalize_path
 from bleachbit.Constant import EMPTY_SPACE_WARNING, REQUIRES_EXPERT_MODE
@@ -249,7 +248,7 @@ class PreferencesDialog:
         options.toggle(path)
         if online_update_notification_enabled:
             self.cb_beta.set_sensitive(options.get('check_online_updates'))
-            if 'nt' == os.name:
+            if IS_WINDOWS:
                 self.cb_winapp2.set_sensitive(
                     options.get('check_online_updates'))
         if 'auto_hide' == path:
@@ -258,7 +257,7 @@ class PreferencesDialog:
             logger.debug("Toggling dark mode to %s", options.get('dark_mode'))
             theme_widget = self.parent or self.dialog
             before_dark = detect_dark_background(theme_widget)
-            if 'nt' == os.name and options.get('win10_theme'):
+            if IS_WINDOWS and options.get('win10_theme'):
                 self.cb_set_windows10_theme()
 
             settings = self.dialog.get_settings()
@@ -271,7 +270,7 @@ class PreferencesDialog:
             flush_gtk_events()
             after_dark = detect_dark_background(theme_widget)
 
-            if not os.name == 'nt' and should_show_dark_mode_warning(before_dark, after_dark):
+            if not IS_WINDOWS and should_show_dark_mode_warning(before_dark, after_dark):
                 self.show_infobar(
                     # TRANSLATORS: Notice shown in an infobar when toggling
                     # dark mode on Linux.
@@ -319,7 +318,7 @@ class PreferencesDialog:
             requires_option='check_online_updates',
             store_as_attr='cb_beta')
 
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             self._create_checkbox(
                 # TRANSLATORS: Checkbox label in the preferences dialog.
                 # Winapp2.ini is a set of cleaning rules from this project:
@@ -540,7 +539,7 @@ class PreferencesDialog:
             'dark_mode',
             vbox=interface_box)
 
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             self._create_checkbox(
                 # TRANSLATORS: Checkbox label to use the Windows 10-style visual theme
                 # for the application interface.
@@ -563,7 +562,7 @@ class PreferencesDialog:
             # labelling options for OS integration and advanced/developer features.
             page, _("Integration and advanced"))
 
-        if 'nt' != os.name:
+        if not IS_WINDOWS:
             self._create_checkbox(
                 # TRANSLATORS: Checkbox label in the preferences dialog.
                 # 'Shred' means securely delete a file to prevent data recovery.
@@ -695,7 +694,7 @@ class PreferencesDialog:
         self.__create_language_widgets(ui_language_box)
 
         # Windows does not have locale cleaner.
-        if 'posix' != os.name:
+        if not IS_POSIX:
             return vbox
 
         cleanup_box = self.__create_section(

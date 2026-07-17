@@ -226,7 +226,7 @@ class ActionTestCase(common.BleachbitTestCase):
         action_node = parseString(action_xml).childNodes[0]
         expanded = [r'C:\Windows\Sysnative\foo.log',
                     r'C:\Windows\SysWOW64\foo.log']
-        with mock.patch('bleachbit.Action.os.name', 'nt'), \
+        with mock.patch('bleachbit.Action.IS_WINDOWS', True), \
                 mock.patch('bleachbit.Action.Windows', create=True) as mock_windows:
             mock_windows.expand_windows_system_vars.return_value = expanded
             action = Delete(action_node)

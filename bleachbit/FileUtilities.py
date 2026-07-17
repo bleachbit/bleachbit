@@ -21,7 +21,6 @@ import re
 import sqlite3
 import stat
 import subprocess
-import sys
 import time
 import urllib.parse
 import urllib.request
@@ -30,7 +29,7 @@ from pathlib import Path
 
 # local imports
 import bleachbit
-from bleachbit import IS_WINDOWS
+from bleachbit import IS_FREEBSD, IS_LINUX, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.Language import get_text as _
 from bleachbit.PathUtils import path_equal, path_startswith
 from bleachbit.Wipe import wipe_contents, wipe_name
@@ -38,7 +37,7 @@ from bleachbit.Wipe import wipe_contents, wipe_name
 
 logger = logging.getLogger(__name__)
 
-if 'nt' == os.name:
+if IS_WINDOWS:
     # pylint: disable=import-error, no-name-in-module
     from pywintypes import error as pywinerror
     import win32file
@@ -51,7 +50,7 @@ if 'nt' == os.name:
     os.path.islink = lambda path: os_path_islink(
         path) or bleachbit.Windows.is_junction(path)
 
-if 'posix' == os.name:
+if IS_POSIX:
     # pylint: disable=redefined-builtin
     from bleachbit.General import WindowsError
     # pylint: disable=invalid-name
@@ -63,7 +62,7 @@ def _remove_windows_readonly(path):
 
     Returns True if file was read-only and was cleared. Otherwise, False.
     """
-    if os.name != 'nt':
+    if not IS_WINDOWS:
         return False
     try:
         attrs = GetFileAttributesW(path)
@@ -79,7 +78,7 @@ def _delete_path(path, delete_func):
     """
     Delete a path with parent lock if on Windows.
     """
-    if os.name == 'nt':
+    if IS_WINDOWS:
         return bleachbit.Windows.with_parent_lock(path, delete_func, path)
     return delete_func(path)
 
@@ -90,14 +89,14 @@ def _run_with_delete_lock(path, func):
     This prevents race conditions where the parent directory is deleted
     while the function is running.
     """
-    if os.name == 'nt':
+    if IS_WINDOWS:
         return bleachbit.Windows.with_parent_lock(path, func)
     return func()
 
 
 def close_delete_parent_lock():
     """Close the delete parent lock if on Windows."""
-    if os.name == 'nt':
+    if IS_WINDOWS:
         bleachbit.Windows._close_delete_parent_lock()
 
 
@@ -129,7 +128,7 @@ def get_filesystem_type(path):
         return ("unknown", "none")
 
     path_obj = Path(path)
-    if os.name == 'nt':
+    if IS_WINDOWS:
         if len(path) == 2 and path[1] == ':':
             path_obj = Path(path + '\\')
 
@@ -170,9 +169,9 @@ def open_files_lsof(run_lsof=None):
 
 def open_files():
     """Return iterator of open files"""
-    if sys.platform == 'linux':
+    if IS_LINUX:
         files = open_files_linux()
-    elif 'darwin' == sys.platform or sys.platform.startswith('freebsd'):
+    elif IS_MAC or IS_FREEBSD:
         files = open_files_lsof()
     else:
         raise RuntimeError('unsupported platform for open_files()')
@@ -273,7 +272,7 @@ def children_in_directory(top, list_directories=False):
 
     def _normalized_prefix(path):
         norm_path = os.path.normpath(path)
-        if os.name == 'nt':
+        if IS_WINDOWS:
             norm_path = norm_path.lower()
         if not norm_path.endswith(os.sep):
             norm_path += os.sep
@@ -282,7 +281,7 @@ def children_in_directory(top, list_directories=False):
     pending_dirs = [] if list_directories else None
 
     for (dirpath, dirnames, filenames) in walk(top, topdown=True, followlinks=False):
-        if 'nt' == os.name and dirnames:
+        if IS_WINDOWS and dirnames:
             # Avoid traversing Windows symlinks or junctions.
             link_dirnames = []
             for dirname in list(dirnames):
@@ -424,7 +423,7 @@ def _delete_file_impl(path, shred):
     try:
         os.remove(path)
     except PermissionError as e:
-        if os.name == 'nt' and hasattr(e, 'winerror'):
+        if IS_WINDOWS and hasattr(e, 'winerror'):
             if e.winerror == 32:
                 # File is locked, try to truncate it first
                 _truncate_locked_file(path)
@@ -473,7 +472,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         if ignore_missing:
             return False
         raise OSError(2, 'No such file or directory', path)
-    if 'posix' == os.name:
+    if IS_POSIX:
         # With certain (relatively rare) files on Windows os.lstat()
         # may return Access Denied
         mode = os.lstat(path)[stat.ST_MODE]
@@ -510,14 +509,14 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
                 logger.info(not_empty_msg, path)
                 return False
             elif errno.EBUSY == e.errno:
-                if os.name == 'posix' and os.path.ismount(path):
+                if IS_POSIX and os.path.ismount(path):
                     # TRANSLATORS: Log message where %s is the pathname.
                     logger.info(_("Skipping mount point: %s"), path)
                 else:
                     # TRANSLATORS: Log message where %s is the pathname.
                     logger.info(_("Device or resource is busy: %s"), path)
                 return False
-            elif os.name == 'nt' and errno.EACCES == e.errno:
+            elif IS_WINDOWS and errno.EACCES == e.errno:
                 # On Windows, read-only directories cause Access Denied
                 if _remove_windows_readonly(delpath):
                     _delete_path(delpath, os.rmdir)
@@ -572,7 +571,7 @@ def ego_owner(filename):
     """Return whether current user owns the file
 
     POSIX only"""
-    assert 'posix' == os.name
+    assert IS_POSIX
     # pylint: disable=no-member
     return os.lstat(filename).st_uid == os.getuid()
 
@@ -580,7 +579,7 @@ def ego_owner(filename):
 def exists_in_path(filename):
     """Returns boolean whether the filename exists in the path"""
     delimiter = ':'
-    if 'nt' == os.name:
+    if IS_WINDOWS:
         delimiter = ';'
     path_env = os.getenv('PATH')
     if not path_env:
@@ -665,7 +664,7 @@ def extended_path(path):
     # Do not extend the Sysnative paths because on some systems there are
     # problems with path resolution. For example:
     # https://github.com/bleachbit/bleachbit/issues/1574.
-    if 'nt' == os.name and 'Sysnative' not in path.split(os.sep):
+    if IS_WINDOWS and 'Sysnative' not in path.split(os.sep):
         if path.startswith(r'\\?'):
             return path
         if path.startswith(r'\\'):
@@ -679,7 +678,7 @@ def extended_path_undo(path):
 
     For example: \\c:\foo\bar.txt -> c:\foo\bar.txt
     """
-    if 'nt' == os.name:
+    if IS_WINDOWS:
         if path.startswith(r'\\?\unc'):
             return '\\' + path[7:]
         if path.startswith(r'\\?'):
@@ -696,11 +695,11 @@ def free_space(pathname):
     returns the amount available to the current user for accurate
     estimation of completion time in wipe_path().
     """
-    if 'nt' == os.name:
+    if IS_WINDOWS:
         # pylint: disable=import-error,import-outside-toplevel
         import psutil
         return psutil.disk_usage(pathname).free
-    assert 'posix' == os.name
+    assert IS_POSIX
     # pylint: disable=no-member
     mystat = os.statvfs(pathname)
     if os.getuid() == 0:
@@ -713,7 +712,7 @@ def free_space(pathname):
 def getsize(path):
     """Return the actual file size considering spare files
        and symlinks"""
-    if 'posix' == os.name:
+    if IS_POSIX:
         try:
             __stat = os.lstat(path)
         except OSError as e:
@@ -724,7 +723,7 @@ def getsize(path):
                 return 0
             raise
         return __stat.st_blocks * 512
-    if 'nt' == os.name:
+    if IS_WINDOWS:
         # On rare files os.path.getsize() returns access denied, so first
         # try FindFilesW.
         # Also, apply prefix to use extended-length paths to support longer
@@ -771,7 +770,7 @@ def guess_overwrite_paths():
     # In case overwriting leaves large files, placing them in
     # ~/.config makes it easy to find them and clean them.
     ret = []
-    if 'posix' == os.name:
+    if IS_POSIX:
         home = os.path.expanduser('~/.cache')
         if not os.path.exists(home):
             home = os.path.expanduser("~")
@@ -780,7 +779,7 @@ def guess_overwrite_paths():
         if os.path.exists('/tmp'):
             if not same_partition(home, '/tmp/'):
                 ret.append('/tmp')
-    elif 'nt' == os.name:
+    elif IS_WINDOWS:
         localtmp = os.path.expandvars('$TMP')
         if not os.path.exists(localtmp):
             logger.warning(
@@ -875,7 +874,7 @@ def listdir(directory):
 
 def same_partition(dir1, dir2):
     """Are both directories on the same partition?"""
-    if 'nt' == os.name:
+    if IS_WINDOWS:
         try:
             return free_space(dir1) == free_space(dir2)
         except OSError as e:
@@ -997,7 +996,7 @@ def whitelisted_windows(path):
     return False
 
 
-if 'nt' == os.name:
+if IS_WINDOWS:
     whitelisted = whitelisted_windows
 else:
     whitelisted = whitelisted_posix

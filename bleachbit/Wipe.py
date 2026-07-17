@@ -21,14 +21,14 @@ import warnings
 import logging
 
 import bleachbit
-from bleachbit import IS_LINUX, IS_MAC, IS_WINDOWS
+from bleachbit import IS_LINUX, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.Language import get_text as _
 
-if 'nt' == os.name:
+if IS_WINDOWS:
     # pylint: disable=import-error
     from win32com.shell.shell import IsUserAnAdmin
 
-if 'posix' == os.name:
+if IS_POSIX:
     import fcntl
 
 logger = logging.getLogger(__name__)
@@ -143,7 +143,7 @@ def fitrim(pathname):
 
     pathname: path to directory
     """
-    if os.name != 'posix':
+    if not IS_POSIX:
         return False
 
     fitrim_id = 0xC0185879
@@ -232,7 +232,7 @@ def wipe_contents(path):
     from bleachbit.FileUtilities import truncate_f
 
     # pylint: disable=possibly-used-before-assignment
-    if 'nt' == os.name and IsUserAnAdmin():
+    if IS_WINDOWS and IsUserAnAdmin():
         # The import placement here avoids a circular import.
         # pylint: disable=import-outside-toplevel
         from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
@@ -475,7 +475,7 @@ def wipe_path(pathname, idle=False):
                          {"file_count": len(files), "total_bytes": total_bytes,
                          "elapsed_sec": int(elapsed_sec), "rate_mbs": rate_mbs})
             # how much free space is left (should be near zero)
-            if 'posix' == os.name:
+            if IS_POSIX:
                 # pylint: disable=no-member
                 stats = os.statvfs(pathname)
                 # TRANSLATORS: Debug message showing disk space available to regular (non-root) users.

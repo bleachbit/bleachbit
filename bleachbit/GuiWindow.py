@@ -11,7 +11,7 @@ import threading
 import time
 
 import bleachbit
-from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path
+from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path, IS_WINDOWS
 from bleachbit.Cleaner import backends, register_cleaners
 from bleachbit.Constant import ABORT_BUTTON_LABEL, REQUIRES_EXPERT_MODE
 from bleachbit.GUI import logger
@@ -25,7 +25,7 @@ from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 from bleachbit.Wipe import detect_orphaned_wipe_files
 
-if os.name == 'nt':
+if IS_WINDOWS:
     from bleachbit import Windows
 
 
@@ -254,7 +254,7 @@ class GUI(Gtk.ApplicationWindow):
 
     def _get_windows10_theme_css(self):
         """Load the Windows 10 theme CSS files (if not already loaded)"""
-        if not 'nt' == os.name:
+        if not IS_WINDOWS:
             return None
 
         if not options.get("win10_theme"):
@@ -292,7 +292,7 @@ class GUI(Gtk.ApplicationWindow):
 
     def set_windows10_theme(self):
         """Apply or remove the Windows 10 theme based on current settings"""
-        if not 'nt' == os.name:
+        if not IS_WINDOWS:
             return
 
         # Get the screen - if not available yet (e.g., during __init__), return early
@@ -323,7 +323,7 @@ class GUI(Gtk.ApplicationWindow):
 
     def _show_splash_screen(self):
         """Show the splash screen on Windows because startup may be slow"""
-        if os.name != 'nt':
+        if not IS_WINDOWS:
             return
 
         # Check if splash screen is forced via environment variable
@@ -1104,7 +1104,7 @@ class GUI(Gtk.ApplicationWindow):
         box = Gtk.Box()
         Gtk.StyleContext.add_class(box.get_style_context(), "linked")
 
-        if os.name == 'nt':
+        if IS_WINDOWS:
             icon_size = Gtk.IconSize.BUTTON
         else:
             icon_size = Gtk.IconSize.LARGE_TOOLBAR
@@ -1137,7 +1137,7 @@ class GUI(Gtk.ApplicationWindow):
         # Add hamburger menu on the right.
         # This is not needed for Microsoft Windows because other code places its
         # menu on the left side.
-        if os.name == 'nt':
+        if IS_WINDOWS:
             return hbar
         menu_button = Gtk.MenuButton()
         icon = Gio.ThemedIcon(name="open-menu-symbolic")
@@ -1162,7 +1162,7 @@ class GUI(Gtk.ApplicationWindow):
 
         # fixup maximized window position:
         # on Windows if a window is maximized on a secondary monitor it is moved off the screen
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             window = self.get_window()
             if window.get_state() & Gdk.WindowState.MAXIMIZED != 0:
                 g = get_window_info(self)
@@ -1201,7 +1201,7 @@ class GUI(Gtk.ApplicationWindow):
         options.set("window_fullscreen", fullscreen)
         maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
         options.set("window_maximized", maximized)
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             logger.debug(
                 'window state = %s, full screen = %s, maximized = %s', event.new_window_state, fullscreen, maximized)
         return False
@@ -1217,7 +1217,7 @@ class GUI(Gtk.ApplicationWindow):
         The event is triggered when the window is first shown.
         It is not emitted when the window is moved or unminimized.
         """
-        if 'nt' == os.name and Windows.splash_thread.is_alive():
+        if IS_WINDOWS and Windows.splash_thread.is_alive():
             Windows.splash_thread.join(0)
 
         # restore window position, size and state
@@ -1249,7 +1249,7 @@ class GUI(Gtk.ApplicationWindow):
             self.maximize()
 
         # Apply Windows 10 theme if on Windows and enabled
-        if os.name == 'nt':
+        if IS_WINDOWS:
             self.set_windows10_theme()
 
     def check_orphaned_wipe_files(self):

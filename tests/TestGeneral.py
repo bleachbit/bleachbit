@@ -61,7 +61,7 @@ class GeneralTestCase(common.BleachbitTestCase):
     @also_with_sudo
     def test_get_real_uid(self):
         """Test for get_real_uid()"""
-        if 'posix' != os.name:
+        if not IS_POSIX:
             self.assertRaises(RuntimeError, get_real_uid)
             return
 
@@ -123,7 +123,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_get_real_uid_numeric_login_without_passwd_entry(self):
         """Docker containers may advertise UID as username without /etc/passwd."""
-        if 'posix' != os.name:
+        if not IS_POSIX:
             self.skipTest('POSIX-only behavior')
 
         # Ensure the code path executes past the SUDO_UID shortcut.
@@ -137,7 +137,7 @@ class GeneralTestCase(common.BleachbitTestCase):
     @also_with_sudo
     def test_get_real_username(self):
         """Test for get_real_username()"""
-        if 'posix' != os.name:
+        if not IS_POSIX:
             self.assertRaises(RuntimeError, get_real_username)
             return
         username = get_real_username()
@@ -148,7 +148,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_get_real_username_container_env_fallback(self):
         """Ensure container fallback uses LOGNAME when getpass fails."""
-        if 'posix' != os.name:
+        if not IS_POSIX:
             self.skipTest('POSIX-only behavior')
 
         env = {'LOGNAME': 'containeruser'}
@@ -160,7 +160,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_get_real_username_container_uid_fallback(self):
         """Ensure fallback returns UID string when everything else fails."""
-        if 'posix' != os.name:
+        if not IS_POSIX:
             self.skipTest('POSIX-only behavior')
 
         env = {}

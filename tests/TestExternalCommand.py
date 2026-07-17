@@ -19,6 +19,7 @@ from unittest import mock
 import psutil
 
 import bleachbit
+from bleachbit import IS_WINDOWS
 from bleachbit.GtkShim import HAVE_GTK
 from bleachbit.Options import options
 from tests import common
@@ -160,7 +161,7 @@ class ApplicationRunningTracker:
                 pass
 
         # Check window titles on Windows
-        if os.name == 'nt' and self.check_window_title:
+        if IS_WINDOWS and self.check_window_title:
             opened_windows_titles = common.get_opened_windows_titles()
             window_open = any(
                 'BleachBit' == window_title for window_title in opened_windows_titles)
@@ -175,7 +176,7 @@ class ApplicationRunningTracker:
 
     def _is_running_based_on_checks(self, is_process_running, window_open):
         """Determine if application is running based on check_window_title setting."""
-        if self.check_window_title and os.name == 'nt':
+        if self.check_window_title and IS_WINDOWS:
             return is_process_running and window_open
         return is_process_running or window_open
 
@@ -219,7 +220,7 @@ class ApplicationRunningTracker:
         - time elapsed waiting
         """
         window_title_str = ""
-        if os.name == 'nt' and self.check_window_title:
+        if IS_WINDOWS and self.check_window_title:
             opened_window_titles = common.get_opened_windows_titles()
             window_title_count = len(opened_window_titles)
             interesting_window_titles = []
@@ -437,7 +438,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         """
         This tests covers elevate_privileges in the case where we pretend that we are not admin.
         """
-        self.assertEqual(os.name, 'nt')
+        self.assertTrue(IS_WINDOWS)
         file_to_shred = self.mkstemp(prefix=fn_prefix)
         self.assertExists(file_to_shred)
 

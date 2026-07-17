@@ -15,14 +15,15 @@ import sys
 import time
 import unittest
 
+import bleachbit
+
 # third party
-if os.name == 'nt': # not IS_WINDOWS because it would require mis-ordering imports
+if bleachbit.IS_WINDOWS:
     import win32file
     import pywintypes
     from win32com.shell import shell
 
 # local
-import bleachbit
 from tests import common
 from bleachbit.FileUtilities import children_in_directory
 
