@@ -31,12 +31,17 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 # 2025-05-01: ubuntu-latest is currently 24.04, and its native
 # python version is 3.12.
 # native python for 22.04 is 3.10.
 jobs:
   linux:
     name: linux (${{ matrix.python-version }})
+    runs-on: ${{ matrix.ubuntu-version }}
     timeout-minutes: 25
     strategy:
       fail-fast: false
@@ -55,9 +60,6 @@ jobs:
             python-extra-dep: 'libgirepository-2.0-dev'
             pygobject-version: ''
 
-    runs-on: ${{ matrix.ubuntu-version }}
-
-    # https://docs.github.com/en/actions/reference/workflows-and-actions/variables
     env:
       COVERAGE: "coverage run"
 
