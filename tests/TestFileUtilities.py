@@ -34,6 +34,7 @@ from tests.common import pytest
 # local import
 from bleachbit.FileUtilities import (
     _remove_windows_readonly,
+    _truncate_locked_file,
     bytes_to_human,
     children_in_directory,
     clean_ini,
@@ -62,6 +63,7 @@ from bleachbit.FileUtilities import (
     open_files_lsof,
     OpenFiles,
     same_partition,
+    truncate_file,
     uris_to_paths,
     vacuum_sqlite3,
     whitelisted
@@ -1026,6 +1028,34 @@ State=AAAA/wA...
 
                 delete(target, shred=False)
                 self.assertDirectoryCount(tmp_dir, 0)
+
+    @common.skipUnlessWindows
+    def test_truncate_file_refuses_reparse_point(self):
+        """truncate_file() refuses a junction or symlink target"""
+        target_dir = self.mkdtemp(prefix='truncate-target')
+        junction = os.path.join(self.mkdtemp(prefix='truncate'), 'link')
+        self._create_win_junction(target_dir, junction)
+        with self.assertRaises(OSError):
+            truncate_file(junction)
+
+    @common.skipIfWindows
+    def test_truncate_file_refuses_symlink(self):
+        """truncate_file() must not truncate a symlink's target"""
+        target = self.write_file('truncate_target', b'keepme')
+        link = os.path.join(self.tempdir, 'truncate_link')
+        os.symlink(target, link)
+        with self.assertRaises(OSError):
+            truncate_file(link)
+        self.assertEqual(os.path.getsize(target), len(b'keepme'))
+
+    @common.skipIfWindows
+    def test_truncate_locked_file_refuses_symlink(self):
+        """_truncate_locked_file() must not truncate a symlink's target"""
+        target = self.write_file('locked_truncate_target', b'keepme')
+        link = os.path.join(self.tempdir, 'locked_truncate_link')
+        os.symlink(target, link)
+        self.assertFalse(_truncate_locked_file(link))
+        self.assertEqual(os.path.getsize(target), len(b'keepme'))
 
     @common.skipUnlessWindows
     def test_delete_junction(self):

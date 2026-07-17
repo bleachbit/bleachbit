@@ -28,7 +28,7 @@ from unittest import mock
 
 from tests import common
 from bleachbit import FileUtilities
-from bleachbit.Command import Delete, Function, Shred
+from bleachbit.Command import Delete, Function, Shred, Truncate
 
 
 class CommandTestCase(common.BleachbitTestCase):
@@ -119,3 +119,19 @@ class CommandTestCase(common.BleachbitTestCase):
     def test_Shred(self):
         """Unit test for Shred"""
         self.test_Delete(Shred)
+
+    def test_Truncate(self):
+        """Unit test for Truncate"""
+        path = self.write_file('test_Truncate', b'foo')
+        cmd = Truncate(path)
+
+        # preview leaves the file intact
+        ret = next(cmd.execute(really_delete=False))
+        self.assertEqual(ret['path'], path)
+        self.assertGreater(os.path.getsize(path), 0)
+
+        # truncate empties the file but keeps it
+        ret = next(cmd.execute(really_delete=True))
+        self.assertEqual(ret['path'], path)
+        self.assertExists(path)
+        self.assertEqual(os.path.getsize(path), 0)

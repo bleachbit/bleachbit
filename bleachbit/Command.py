@@ -327,8 +327,7 @@ class Truncate(Delete):
             'path': self.path,
             'size': FileUtilities.getsize(self.path)}
         if really_delete:
-            with open(self.path, 'w', encoding='ascii') as f:
-                f.truncate(0)
+            FileUtilities.truncate_file(self.path)
         yield ret
 
 

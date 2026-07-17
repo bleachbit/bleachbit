@@ -418,11 +418,14 @@ def clean_json(path, target):
 
 
 def _truncate_locked_file(path):
-    """Best-effort truncate of a locked file (Windows).
+    """Best-effort truncate of a file, used on Windows when a lock prevents deletion.
 
     Returns True if truncation succeeded, False otherwise.
     Shared locks allow truncation, exclusive locks prevent it.
     """
+    if os.path.islink(path):
+        logger.debug("refusing to truncate a link: %s", path)
+        return False
     try:
         with open(path, 'r+b') as handle:
             handle.truncate(0)
@@ -488,6 +491,30 @@ def _delete_file_impl(path, shred):
 def delete_file(path, shred):
     return _run_with_delete_lock(
         path, lambda: _delete_file_impl(path, shred))
+
+
+def truncate_file(path):
+    """Truncate a file to zero length.
+
+    Runs under the same parent lock as delete() and refuses a symlink
+    (or Windows reparse point) so the truncation is not redirected
+    through a link to another file.
+    """
+    if os.path.islink(path):
+        raise OSError(errno.EACCES,
+                      'refusing to truncate a link', path)
+
+    def _truncate():
+        if hasattr(os, 'O_NOFOLLOW'):
+            # POSIX: also refuse a symlink raced in after the check above
+            fd = os.open(path, os.O_WRONLY | os.O_CREAT |
+                         os.O_TRUNC | os.O_NOFOLLOW, 0o600)
+            os.close(fd)
+        else:
+            with open(path, 'w', encoding='ascii') as f:
+                f.truncate(0)
+
+    _run_with_delete_lock(path, _truncate)
 
 
 def delete(path, shred=False, ignore_missing=False, allow_shred=True):
