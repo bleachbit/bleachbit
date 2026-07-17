@@ -140,6 +140,14 @@ def bootstrap():
     if _bootstrapped:
         return
     _bootstrapped = True
+    if IS_WINDOWS:
+        # Do this before anything loads a DLL (e.g. bleachbit.Windows).
+        import bleachbit  # pylint: disable=import-outside-toplevel
+        try:
+            bleachbit._harden_dll_search_path()
+        except Exception:
+            bleachbit.logger.warning(
+                'could not harden the DLL search path', exc_info=True)
     _apply_fontconfig_backend_preference()
     _suppress_pygobject_asyncio_deprecations()
     if IS_WINDOWS:

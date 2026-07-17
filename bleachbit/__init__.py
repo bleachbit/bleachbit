@@ -51,6 +51,42 @@ IS_FREEBSD = sys.platform.startswith('freebsd')
 IS_NETBSD = sys.platform[:6] == 'netbsd'
 ARCH_BITS = 64 if sys.maxsize > 2**32 else 32
 
+
+def _harden_dll_search_path():
+    """Drop the current directory (and PATH when frozen) from the DLL search path.
+
+    Blocks DLL-preloading privilege escalation. bootstrap() calls it before
+    the first DLL loads, not at import, so build tooling that imports the
+    package does not disturb the search path.
+    """
+    import ctypes
+    from ctypes import wintypes
+    kernel32 = ctypes.WinDLL('kernel32', use_last_error=True)
+
+    # Frozen builds bundle every dependency next to the exe, so restrict to
+    # app dir + System32 + add_dll_directory() dirs (also drops PATH).
+    # SetDefaultDllDirectories needs Win8+ (or 7 with KB2533623)
+    if hasattr(sys, 'frozen'):
+        LOAD_LIBRARY_SEARCH_DEFAULT_DIRS = 0x00001000
+        try:
+            set_default = kernel32.SetDefaultDllDirectories
+            set_default.argtypes = [wintypes.DWORD]
+            set_default.restype = wintypes.BOOL
+            if set_default(LOAD_LIBRARY_SEARCH_DEFAULT_DIRS):
+                return
+        except (AttributeError, OSError):
+            pass
+
+    # drops the current directory but keeps PATH; NULL would restore the default
+    try:
+        set_dir = kernel32.SetDllDirectoryW
+        set_dir.argtypes = [wintypes.LPCWSTR]
+        set_dir.restype = wintypes.BOOL
+        set_dir("")
+    except (AttributeError, OSError):
+        pass
+
+
 # file system attributes
 FS_CASE_SENSITIVE = not (IS_WINDOWS or IS_MAC)
 FS_SCAN_RE_FLAGS = 0 if FS_CASE_SENSITIVE else re.IGNORECASE

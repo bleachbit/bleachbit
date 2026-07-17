@@ -10,7 +10,11 @@ Test cases for __init__
 """
 
 import os
+import shutil
+import tempfile
+import unittest
 
+import bleachbit
 from bleachbit import IS_MAC, IS_POSIX, IS_WINDOWS, get_share_dirs, get_share_path
 from tests import common
 
@@ -66,6 +70,46 @@ class InitTestCase(common.BleachbitTestCase):
         for fn in ('app-menu.ui', 'protected_path.xml'):
             self.assertExists(get_share_path(fn))
         self.assertIsNone(get_share_path('nonexistent'))
+
+    @common.skipUnlessWindows
+    def test_harden_dll_search_path(self):
+        """The current directory is not on the DLL search path"""
+        import ctypes
+        from ctypes import wintypes
+        ERROR_MOD_NOT_FOUND = 126
+
+        src = os.path.join(os.environ['SystemRoot'], 'System32', 'version.dll')
+        tmpdir = tempfile.mkdtemp()
+        planted = os.path.join(tmpdir, 'bb_dll_preload_test.dll')
+        shutil.copy(src, planted)
+
+        kernel32 = ctypes.WinDLL('kernel32', use_last_error=True)
+        load = kernel32.LoadLibraryW
+        load.argtypes = [wintypes.LPCWSTR]
+        load.restype = wintypes.HMODULE
+        free = kernel32.FreeLibrary
+        free.argtypes = [wintypes.HMODULE]
+
+        orig_cwd = os.getcwd()
+        try:
+            os.chdir(tmpdir)
+            bleachbit._harden_dll_search_path()
+
+            # By bare name the DLL must not be found in the current directory
+            ctypes.set_last_error(0)
+            handle = load('bb_dll_preload_test.dll')
+            if handle:
+                free(handle)
+            self.assertFalse(handle, 'current directory still on DLL search path')
+            self.assertEqual(ctypes.get_last_error(), ERROR_MOD_NOT_FOUND)
+
+            # A full path still loads
+            handle = load(planted)
+            self.assertTrue(handle)
+            free(handle)
+        finally:
+            os.chdir(orig_cwd)
+            shutil.rmtree(tmpdir, ignore_errors=True)
 
 
 def suite():
