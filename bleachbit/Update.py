@@ -43,6 +43,9 @@ logger = logging.getLogger(__name__)
 
 def update_winapp2(url, hash_expected, append_text, cb_success):
     """Download latest winapp2.ini file.  Hash is sha512 or None to disable checks"""
+    if not url.lower().startswith('https://'):
+        logger.warning('refusing insecure winapp2 URL: %s', url)
+        return
     # first, determine whether an update is necessary
 
     fn = os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini')
@@ -126,7 +129,7 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
         child = element[0].firstChild
         url = child.data.strip() if child is not None and hasattr(child, 'data') else ''
         if not (isinstance(ver, str) and isinstance(url, str)
-                and url.startswith('http')):
+                and url.lower().startswith('https://')):
             logger.warning('ignoring malformed update entry: ver=%r, url=%r',
                            ver, url)
             return ()
