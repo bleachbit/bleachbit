@@ -10,7 +10,6 @@ Test cases for module Action
 """
 
 # standard imports
-import glob
 import logging
 import os
 import shutil
@@ -24,8 +23,7 @@ from xml.dom.minidom import parseString
 from xml.sax.saxutils import quoteattr
 
 # first party imports
-import bleachbit.FileUtilities
-from bleachbit import IS_WINDOWS, IS_POSIX, IS_LINUX, IS_MAC, FS_CASE_SENSITIVE, logger
+from bleachbit import IS_WINDOWS, IS_POSIX, IS_LINUX, FS_CASE_SENSITIVE, logger
 from bleachbit.Action import ActionProvider, Command, Delete, has_glob, expand_multi_var
 from bleachbit.CleanerML import CleanerML
 from tests import common

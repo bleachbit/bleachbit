@@ -16,7 +16,7 @@ from unittest import mock
 
 from tests import common
 from bleachbit import IS_POSIX, FS_SCAN_RE_FLAGS
-from bleachbit.SystemInformation import _get_home_dirs_to_anonymize, get_system_information, get_version, anonymize_system_information
+from bleachbit.SystemInformation import get_system_information, get_version, anonymize_system_information
 
 
 class SystemInformationTestCase(common.BleachbitTestCase):
