@@ -33,7 +33,7 @@ from bleachbit import General
 from bleachbit import IS_LINUX, IS_MAC, IS_WINDOWS
 from bleachbit import Log
 from bleachbit.Language import get_text as _
-from bleachbit.Wipe import wipe_contents
+from bleachbit.Wipe import wipe_write
 
 logger = logging.getLogger(__name__)
 
@@ -431,8 +431,8 @@ def wipe_swap_linux(devices, proc_swaps):
                 f'swap device {device} is larger ({actual_size_bytes})'
                 f' than expected ({safety_limit_bytes})')
         uuid = get_swap_uuid(device)
-        # wipe
-        wipe_contents(device, truncate=False)
+        # overwrite with zeros without truncating the device
+        wipe_write(device).close()
         # reinitialize
         # TRANSLATORS: The variable is a device like /dev/sda2
         logger.debug(_("Reinitializing the swap device %s."), device)

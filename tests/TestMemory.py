@@ -304,7 +304,7 @@ Swapouts:                              20258188.
         with mock.patch('bleachbit.Memory.count_swap_linux', return_value=0):
             with mock.patch('bleachbit.Memory.get_swap_size_linux', return_value=1024 ** 2):
                 with mock.patch('bleachbit.Memory.get_swap_uuid', return_value='abc-123'):
-                    with mock.patch('bleachbit.Memory.wipe_contents'):
+                    with mock.patch('bleachbit.Memory.wipe_write'):
                         with mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')) as mock_run:
                             wipe_swap_linux(['/dev/sda1'], '')
                             args = mock_run.call_args[0][0]
@@ -315,7 +315,7 @@ Swapouts:                              20258188.
         with mock.patch('bleachbit.Memory.count_swap_linux', return_value=0):
             with mock.patch('bleachbit.Memory.get_swap_size_linux', return_value=1024 ** 2):
                 with mock.patch('bleachbit.Memory.get_swap_uuid', return_value=None):
-                    with mock.patch('bleachbit.Memory.wipe_contents'):
+                    with mock.patch('bleachbit.Memory.wipe_write'):
                         with mock.patch('bleachbit.Memory.General.run_external', return_value=(1, '', 'mkswap failed')):
                             self.assertRaisesRegex(
                                 RuntimeError, 'mkswap failed',
