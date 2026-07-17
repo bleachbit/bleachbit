@@ -25,8 +25,13 @@ from bleachbit import IS_MAC, IS_WINDOWS, FS_CASE_SENSITIVE
 from bleachbit.Options import options
 from bleachbit.DeepScan import DeepScan, Search, normalized_walk
 
+if IS_WINDOWS:
+    from tests.TestWindows import WindowsLinksMixIn
+else:
+    WindowsLinksMixIn = object
 
-class DeepScanTestCase(common.BleachbitTestCase):
+
+class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     """Test Case for module DeepScan"""
 
     def _test_encoding(self, fn):
@@ -101,6 +106,18 @@ class DeepScanTestCase(common.BleachbitTestCase):
         ]
         self.assertNotIn(keep_file, paths)
         self.assertIn(search_file, paths)
+
+    @common.skipUnlessWindows
+    def test_scan_does_not_follow_junction(self):
+        """DeepScan must not descend into a junction"""
+        scan_root = self.mkdir('scanroot')
+        victim = self.mkdir('victim')
+        self.write_file(os.path.join(victim, 'target.bbtestbak'))
+        self._create_win_junction(victim, os.path.join(scan_root, 'link'))
+
+        searches = {scan_root: [Search(command='delete', regex=r'\.bbtestbak$')]}
+        paths = [cmd.path for cmd in DeepScan(searches).scan() if cmd is not True]
+        self.assertEqual(paths, [], 'DeepScan followed a junction: %s' % paths)
 
     def _get_compiled_search(self, wholeregex_substr):
         """Return the CompiledSearch for the deepscan action whose

@@ -30,7 +30,7 @@ import unicodedata
 from collections import namedtuple
 from bleachbit import FS_SCAN_RE_FLAGS, IS_MAC
 from . import Command
-from .FileUtilities import whitelisted
+from .FileUtilities import is_normal_directory, whitelisted
 
 
 def normalized_walk(top, **kwargs):
@@ -112,12 +112,14 @@ class DeepScan:
                 continue
             compiled_searches = [CompiledSearch(s) for s in searches]
             for (dirpath, dirnames, filenames) in normalized_walk(top):
-                # This filters out subdirectories that are in the keep list
-                # to reduce unnecessary work.
+                # Prune keep-list dirs, symlinks, and reparse points:
+                # os.walk's followlinks=False skips POSIX links but not
+                # junctions, which would otherwise redirect the scan.
                 dirnames[:] = [
                     dirname
                     for dirname in dirnames
                     if not whitelisted(os.path.join(dirpath, dirname))
+                    and is_normal_directory(os.path.join(dirpath, dirname))
                 ]
                 for c in compiled_searches:
                     # fixme, don't match filename twice
