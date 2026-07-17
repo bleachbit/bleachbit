@@ -28,6 +28,9 @@ from bleachbit.Wipe import (
 )
 from tests import common
 
+if bleachbit.IS_WINDOWS:
+    import pywintypes
+
 
 class WipeTestCase(common.BleachbitTestCase):
 
@@ -103,6 +106,17 @@ class WipeTestCase(common.BleachbitTestCase):
         self.assertEqual(contents, b'\x00' * len(contents))
         self.assertGreaterEqual(len(contents), len(original))
 
+    @common.skipIfWindows
+    def test_wipe_write_refuses_symlink(self):
+        """wipe_write() must not follow a symlink to overwrite its target"""
+        target = self.write_file('wipe_target', b'keepme' * 100)
+        link = os.path.join(self.tempdir, 'wipe_link')
+        os.symlink(target, link)
+        with self.assertRaises(OSError):
+            wipe_write(link)
+        with open(target, 'rb') as f:
+            self.assertEqual(f.read(), b'keepme' * 100)
+
     def test_wipe_contents(self):
         """Unit test for wipe_contents()"""
 
@@ -111,6 +125,54 @@ class WipeTestCase(common.BleachbitTestCase):
         # truncates the file to zero bytes
         filename = self.write_file('wipe_contents_truncate', original)
         wipe_contents(filename)
+        self.assertEqual(os.path.getsize(filename), 0)
+
+    @common.skipUnlessWindows
+    def test_wipe_contents_windows_admin_reopen_refuses_symlink(self):
+        """wipe_contents() must not reopen a symlink after a successful wipe
+
+        On Windows when running as admin, a successful WindowsWipe.file_wipe()
+        is followed by a plain reopen to truncate the file to zero. That
+        reopen must not follow a symlink planted at the path in the meantime.
+        """
+        filename = self.write_file('wipe_contents_reopen', b'abc')
+        with mock.patch('bleachbit.Wipe.IsUserAnAdmin', return_value=True), \
+                mock.patch('bleachbit.WindowsWipe.file_wipe'), \
+                mock.patch('bleachbit.Wipe.os.path.islink',
+                          side_effect=lambda p: p == filename):
+            with self.assertRaises(OSError):
+                wipe_contents(filename)
+
+    @common.skipUnlessWindows
+    def test_wipe_contents_windows_admin_locked_fallback_refuses_symlink(self):
+        """wipe_contents() must not truncate through a symlink in the locked-file fallback
+
+        When file_wipe() fails because the file is locked (winerror 32/33),
+        wipe_contents() falls back to a plain truncate. That fallback must
+        not follow a symlink planted at the path in the meantime.
+        """
+        filename = self.write_file('wipe_contents_locked_fallback', b'abc')
+        locked_error = pywintypes.error(32, 'CreateFile', 'locked')
+        with mock.patch('bleachbit.Wipe.IsUserAnAdmin', return_value=True), \
+                mock.patch('bleachbit.WindowsWipe.file_wipe',
+                          side_effect=locked_error), \
+                mock.patch('bleachbit.Wipe.os.path.islink',
+                          side_effect=lambda p: p == filename), \
+                mock.patch('bleachbit.FileUtilities.truncate_f') as mock_truncate_f:
+            with self.assertRaises(WindowsError):
+                wipe_contents(filename)
+        mock_truncate_f.assert_not_called()
+
+    @common.skipUnlessWindows
+    def test_wipe_contents_windows_admin_locked_fallback_still_works(self):
+        """The locked-file fallback still truncates a normal (non-symlink) file"""
+        filename = self.write_file('wipe_contents_locked_fallback_ok', b'abc')
+        locked_error = pywintypes.error(32, 'CreateFile', 'locked')
+        with mock.patch('bleachbit.Wipe.IsUserAnAdmin', return_value=True), \
+                mock.patch('bleachbit.WindowsWipe.file_wipe',
+                          side_effect=locked_error):
+            with self.assertRaises(WindowsError):
+                wipe_contents(filename)
         self.assertEqual(os.path.getsize(filename), 0)
 
     def wipe_name_helper(self, filename):

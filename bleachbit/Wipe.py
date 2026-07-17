@@ -199,14 +199,29 @@ def wipe_write(path):
     # pylint: disable=import-outside-toplevel
     from bleachbit.FileUtilities import getsize
     size = getsize(path)
-    try:
-        f = open(path, 'wb')
-    except IOError as e:
-        if e.errno == errno.EACCES:  # permission denied
-            os.chmod(path, 0o200)  # user write only
+    if hasattr(os, 'O_NOFOLLOW'):
+        # POSIX: delete() checks for a symlink before we get here, but that
+        # check and this open are not atomic. O_NOFOLLOW refuses a symlink
+        # raced in at this path instead of overwriting its target
+        flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW
+        try:
+            fd = os.open(path, flags, 0o600)
+        except OSError as e:
+            if e.errno == errno.EACCES:  # permission denied
+                os.chmod(path, 0o200)  # user write only
+                fd = os.open(path, flags, 0o600)
+            else:
+                raise
+        f = os.fdopen(fd, 'wb')
+    else:
+        try:
             f = open(path, 'wb')
-        else:
-            raise
+        except IOError as e:
+            if e.errno == errno.EACCES:  # permission denied
+                os.chmod(path, 0o200)  # user write only
+                f = open(path, 'wb')
+            else:
+                raise
     try:
         blanks = b'\0' * 4096
         while size > 0:
@@ -248,14 +263,17 @@ def wipe_contents(path):
                 raise
             # Try to truncate the file. This makes the behavior consistent
             # with Linux and with Windows when IsUserAdmin=False.
-            try:
-                with open(path, 'wb') as f:
-                    truncate_f(f)
-            except IOError as e2:
-                if errno.EACCES == e2.errno:
-                    # Common when the file is locked
-                    # Errno 13 Permission Denied
-                    pass
+            if os.path.islink(path):
+                logger.debug('refusing to truncate a link: %s', path)
+            else:
+                try:
+                    with open(path, 'wb') as f:
+                        truncate_f(f)
+                except IOError as e2:
+                    if errno.EACCES == e2.errno:
+                        # Common when the file is locked
+                        # Errno 13 Permission Denied
+                        pass
             # translate exception to mark file to deletion in Command.py
             raise WindowsError(e.winerror, e.strerror)
         except UnsupportedFileSystemError:
@@ -264,7 +282,11 @@ def wipe_contents(path):
             f = wipe_write(path)
         else:
             # The wipe succeeded and already overwrote the file in place.
-            # Reopen with 'wb' to truncate it to zero
+            # Reopen with 'wb' to truncate it to zero. Re-check for a link:
+            # file_wipe() checked before the wipe, so one could have been
+            # planted since.
+            if os.path.islink(path):
+                raise OSError(errno.EACCES, 'refusing to truncate a link', path)
             f = open(path, 'wb')
     else:
         f = wipe_write(path)
