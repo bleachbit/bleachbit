@@ -633,7 +633,7 @@ def execute_sqlite3(path, cmds):
                 if str(exc).find('no such function: ') >= 0:
                     # fixme: determine why randomblob and zeroblob are not
                     # available
-                    logger.exception(exc.message)
+                    logger.exception(str(exc))
                 else:
                     raise sqlite3.OperationalError(f'{exc}: {path}')
             except sqlite3.DatabaseError as exc:
@@ -917,7 +917,7 @@ def uris_to_paths(file_uris):
         parsed_uri = urllib.parse.urlparse(file_uri)
         if parsed_uri.scheme == 'file':
             file_path = urllib.request.url2pathname(parsed_uri.path)
-            if file_path[2] == ':':
+            if len(file_path) > 2 and file_path[2] == ':':
                 # remove front slash for Windows-style path
                 file_path = file_path[1:]
             file_paths.append(file_path)

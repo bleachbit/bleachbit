@@ -212,19 +212,20 @@ def _is_broken_xdg_desktop_application(config, desktop_pathname):
         execs = list(exec_parts)
         wineprefix = None
         del execs[0]
-        while True:
-            if execs[0].find("=") < 0:
-                break
-            (name, value) = execs[0].split("=")
+        while execs and execs[0].find("=") >= 0:
+            (name, value) = execs[0].split("=", 1)
             if name == 'WINEPREFIX':
                 wineprefix = value
             del execs[0]
+        if not execs:
+            # env with only assignments, no command; keep the launcher
+            return False
         if not FileUtilities.exe_exists(execs[0]):
             logger.info(
                 "is_broken_xdg_menu: executable '%s' does not exist in '%s'", execs[0], desktop_pathname)
             return True
         # check the Windows executable exists
-        if wineprefix:
+        if wineprefix and len(execs) > 1:
             windows_exe = wine_to_linux_path(wineprefix, execs[1])
             if not os.path.exists(windows_exe):
                 logger.info("is_broken_xdg_menu: Windows executable '%s' does not exist in '%s'",
@@ -258,7 +259,8 @@ def find_best_locale(user_locale):
     import locale  # pylint: disable=import-outside-toplevel
     current_locale = locale.getlocale()[0]
     if current_locale and current_locale.startswith(user_locale.split('.')[0]):
-        return '.'.join(locale.getlocale())
+        # getlocale() may return (language, None) when the encoding is unknown.
+        return '.'.join(p for p in locale.getlocale() if p)
 
     # Check for exact match.
     if user_locale in available_locales:
@@ -690,7 +692,8 @@ def dnf_clean():
     return old_size - new_size
 
 
-units = {"B": 1, "k": 10**3, "M": 10**6, "G": 10**9}
+units = {"B": 1, "k": 10**3, "M": 10**6, "G": 10**9,
+         "KiB": 2**10, "MiB": 2**20, "GiB": 2**30, "TiB": 2**40}
 
 
 def parse_size(size):
@@ -737,7 +740,7 @@ def pacman_cache():
         raise RuntimeError(f'paccache raised error {rc}: {stderr}')
     # parse line like this: "==> finished: 3 packages removed (42.31 MiB freed)"
     cregex = re.compile(
-        r"==> finished: ([\d.]+) packages removed \(([\d.]+\s+[BkMG]) freed\)")
+        r"==> finished: ([\d.]+) packages removed \(([\d.]+\s+(?:[KMGT]iB|[BkMG])) freed\)")
     match = cregex.search(stdout)
     if match:
         return parse_size(match.group(2))

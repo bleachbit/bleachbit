@@ -770,6 +770,15 @@ PrefersNonDefaultGPU=false""")
 
         mock_run.assert_called_once_with(['paccache', '-rk0'])
 
+        # real paccache reports binary units (MiB), not decimal (M)
+        mock_run.return_value = (
+            0,
+            "==> finished: 3 packages removed (42.31 MiB freed)\n",
+            ''
+        )
+        bytes_freed = pacman_cache()
+        self.assertEqual(bytes_freed, 44365250)
+
     def test_snapd_is_active_no_snap(self):
         """Unit test for snapd_is_active() when snap is not installed"""
         with mock.patch('bleachbit.Unix.exe_exists', return_value=False):

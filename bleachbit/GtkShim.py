@@ -263,7 +263,7 @@ def _try_import_gtk():
             # when application is run from directory with foldername lib or bin.
             typelib_dir = os.path.join(
                 bleachbit_exe_path, 'lib', 'girepository-1.0')
-            if typelib_dir:
+            if os.path.isdir(typelib_dir):
                 logger.debug('Setting typelib search path to: %s', typelib_dir)
                 gi._gi.Repository.get_default().prepend_search_path(typelib_dir)
             else:
