@@ -18,6 +18,8 @@ from bleachbit import IS_POSIX, IS_WINDOWS
 # pylint: disable=invalid-name
 _bootstrapped = False
 
+_PYTHON_DLL_RE = re.compile(r'python\d+\.dll$', re.IGNORECASE)
+
 
 def _apply_fontconfig_backend_preference():
     """On Windows, set PANGOCAIRO_BACKEND=fc if the user chose fontconfig.
@@ -124,7 +126,7 @@ def _bootstrap_windows():
             name = win32api.GetModuleFileName(module)
         except Exception:
             continue
-        if re.search(r'python\d+\.dll$', name, re.IGNORECASE):
+        if _PYTHON_DLL_RE.search(name):
             bindir = os.path.dirname(name)
             os.environ['GDK_PIXBUF_MODULE_FILE'] = os.path.join(
                 bindir, 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache')

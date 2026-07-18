@@ -49,6 +49,18 @@ langsecref_map = {
     'Games': ('winapp2_games', _('Games'))}
 
 
+# Compiled once; these run for every section/filekey when importing winapp2.ini
+_S2O_NONALNUM = re.compile(r'[^a-z0-9]')
+_S2O_UNDERSCORES = re.compile(r'_+')
+_S2O_EDGE_UNDERSCORE = re.compile(r'(^_|_$)')
+_FNMATCH_END = re.compile(r'\\[Zz](\(\?ms\))?$')
+_EXCLUDEKEY_TRAILING_SEP = re.compile(r'\\\\((?:\))?)$')
+_WINAPP_VAR_SUBS = (
+    (re.compile('%ProgramFiles%', re.IGNORECASE), '%ProgramW6432%'),
+    (re.compile('%CommonProgramFiles%', re.IGNORECASE), '%CommonProgramW6432%'),
+)
+
+
 def xml_escape(s):
     """Lightweight way to escape XML entities"""
     return s.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;').replace('>', '&gt;')
@@ -56,9 +68,9 @@ def xml_escape(s):
 
 def section2option(s):
     """Normalize section name to appropriate option name"""
-    ret = re.sub(r'[^a-z0-9]', '_', s.lower())
-    ret = re.sub(r'_+', '_', ret)
-    ret = re.sub(r'(^_|_$)', '', ret)
+    ret = _S2O_NONALNUM.sub('_', s.lower())
+    ret = _S2O_UNDERSCORES.sub('_', ret)
+    ret = _S2O_EDGE_UNDERSCORE.sub('', ret)
     return ret
 
 
@@ -98,12 +110,9 @@ def winapp_expand_vars(pathname):
     # This is the regular expansion
     expand1 = os.path.expandvars(pathname)
     # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%, etc.
-    subs = (('ProgramFiles', 'ProgramW6432'),
-            ('CommonProgramFiles', 'CommonProgramW6432'))
-    for (sub_orig, sub_repl) in subs:
-        pattern = re.compile(f'%{sub_orig}%', flags=re.IGNORECASE)
+    for pattern, sub_repl in _WINAPP_VAR_SUBS:
         if pattern.match(pathname):
-            expand2 = pattern.sub(f'%{sub_repl}%', pathname)
+            expand2 = pattern.sub(sub_repl, pathname)
             return expand1, os.path.expandvars(expand2)
     return expand1,
 
@@ -138,7 +147,7 @@ def fnmatch_translate(pattern):
     if ret.endswith('$'):
         return ret[:-1]
     # fnmatch.translate ends the regex with \Z before Python 3.14 and \z after
-    return re.sub(r'\\[Zz](\(\?ms\))?$', '', ret)
+    return _FNMATCH_END.sub('', ret)
 
 
 class Winapp:
@@ -240,7 +249,7 @@ class Winapp:
                 # match one or more file types, directly in this tree or in any
                 # sub folder
                 regex = r'%s\\%s' % (
-                    re.sub(r'\\\\((?:\))?)$', r'\1', fnmatch_translate(expanded)), files_regex)
+                    _EXCLUDEKEY_TRAILING_SEP.sub(r'\1', fnmatch_translate(expanded)), files_regex)
             regexes.append(regex)
 
         if len(regexes) == 1:
