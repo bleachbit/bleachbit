@@ -166,6 +166,9 @@ def args_to_operations(args, preset, all_but_warning, excludes=None):
         (cleaner_id, option_id) = arg.split('.')
         # enable all options (for example, firefox.*)
         if '*' == option_id:
+            if cleaner_id not in backends:
+                logger.warning(not_valid_cleaner_msg, arg)
+                continue
             if cleaner_id in operations:
                 del operations[cleaner_id]
             operations[cleaner_id] = [

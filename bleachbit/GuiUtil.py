@@ -182,8 +182,12 @@ def detect_dark_background(widget: Optional[Gtk.Widget]) -> Optional[bool]:
         rgba = None
         if style_context is not None and hasattr(style_context, 'lookup_color'):
             lookup = style_context.lookup_color('theme_bg_color')
-            if lookup:
-                rgba = lookup[-1] if isinstance(lookup, tuple) else lookup
+            if isinstance(lookup, tuple):
+                # lookup_color returns (found, rgba); honor the found flag
+                if lookup[0]:
+                    rgba = lookup[-1]
+            elif lookup:
+                rgba = lookup
 
         if rgba is None:
             return None

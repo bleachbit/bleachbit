@@ -121,7 +121,8 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
         if not element:
             return ()
         ver = element[0].getAttribute('ver')
-        url = element[0].firstChild.data
+        child = element[0].firstChild
+        url = child.data.strip() if child is not None and hasattr(child, 'data') else ''
         if not (isinstance(ver, str) and isinstance(url, str)
                 and url.startswith('http')):
             logger.warning('ignoring malformed update entry: ver=%r, url=%r',
