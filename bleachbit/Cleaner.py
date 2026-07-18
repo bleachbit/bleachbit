@@ -46,11 +46,11 @@ class Cleaner:
 
     """Base class for a cleaner"""
 
-    def __init__(self):
+    def __init__(self, id_=None, name=None, description=None):
         self.actions = []
-        self.id = None
-        self.description = None
-        self.name = None
+        self.id = id_
+        self.description = description
+        self.name = name
         self.options = {}
         self.running = []
         self.warnings = {}
@@ -168,7 +168,8 @@ class System(Cleaner):
     """Clean the system in general"""
 
     def __init__(self):
-        Cleaner.__init__(self)
+        Cleaner.__init__(self, id_='system', name=_("System"),
+                         description=_("The system in general"))
 
         #
         # options for Linux and BSD
@@ -263,10 +264,6 @@ class System(Cleaner):
         self.set_warning('empty_space', EMPTY_SPACE_WARNING)
         self.add_option(
             'tmp', _('Temporary files'), _('Delete the temporary files'))
-
-        self.description = _("The system in general")
-        self.id = 'system'
-        self.name = _("System")
 
     def get_commands(self, option_id):
         # cache
