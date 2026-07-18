@@ -706,6 +706,62 @@ PrefersNonDefaultGPU=false""")
             logger.debug('dnf bytes cleaned %d', bytes_freed)
 
     @common.skipIfWindows
+    @mock.patch('bleachbit.Language.setup_translation')
+    @mock.patch('bleachbit.Unix.FileUtilities.exe_exists')
+    @mock.patch('bleachbit.Unix.General.run_external')
+    @mock.patch('bleachbit.Unix.FileUtilities.getsizedir')
+    @mock.patch('bleachbit.Unix.os.path')
+    def test_dnf_clean_mock(self, mock_path, mock_getsizedir, mock_run,
+                            mock_exe, mock_setup):
+        """Unit test for dnf_clean() with mock for DNF4 and DNF5"""
+        # Don't call setup_translation() for real because it uses
+        # os.path.exists(), which is mocked here.
+        mock_setup.return_value = None
+        mock_exe.return_value = True
+        mock_path.exists.return_value = True
+        # dnf.pid present -> RuntimeError
+        self.assertRaises(RuntimeError, dnf_clean)
+
+        mock_path.exists.return_value = False
+
+        # DNF5 reports freed space directly in its summary line, so the
+        # getsizedir fallback (post-run measurement) must not be used.
+        # The pre-run measurement still happens once for the DNF4 fallback.
+        mock_run.return_value = (
+            0, 'Removed 12 files, 3 directories '
+            '(total of 25 MiB). 0 errors occurred.\n', '')
+        mock_getsizedir.reset_mock()
+        self.assertEqual(dnf_clean(), 25 * 1024 ** 2)
+        self.assertEqual(mock_getsizedir.call_count, 1)
+
+        # DNF5 "nothing to clean" still parses to 0 bytes.
+        mock_run.return_value = (
+            0, 'Removed 0 files, 0 directories '
+            '(total of 0 B). 0 errors occurred.\n', '')
+        self.assertEqual(dnf_clean(), 0)
+
+        # DNF4 does not report freed space, so fall back to the cache
+        # directory size difference (old - new).
+        mock_run.return_value = (0, 'Cleaning repos: ', '')
+        mock_getsizedir.side_effect = [1000, 250]
+        self.assertEqual(dnf_clean(), 750)
+
+        # DNF4 invalid output line raises RuntimeError.
+        mock_run.return_value = (
+            0, 'You need to be root to perform this command.\n', '')
+        mock_getsizedir.side_effect = None
+        mock_getsizedir.return_value = 1000
+        self.assertRaises(RuntimeError, dnf_clean)
+
+        # DNF4 non-zero exit code raises RuntimeError.
+        mock_run.return_value = (1, '', 'some error')
+        self.assertRaises(RuntimeError, dnf_clean)
+
+        # dnf not installed -> RuntimeError.
+        mock_exe.return_value = False
+        self.assertRaises(RuntimeError, dnf_clean)
+
+    @common.skipIfWindows
     def test_dnf_autoremove_real(self):
         """Unit test for dnf_autoremove() with real dnf"""
         if 0 != os.geteuid() or os.path.exists('/var/run/dnf.pid') \
@@ -743,10 +799,18 @@ PrefersNonDefaultGPU=false""")
         # means 299 * 1024**2, not 299 * 1000**2.
         self.assertEqual(bytes_freed, 299 * 1024 ** 2)
 
+        # DNF5 autoremove reports the net freed size in its summary line.
+        mock_run.return_value = (
+            0, 'After this operation, 299 MiB will be freed '
+            '(install 0 B, remove 299 MiB).\n', 'stderr')
+        bytes_freed = dnf_autoremove()
+        self.assertEqual(bytes_freed, 299 * 1024 ** 2)
+
     @common.skipIfWindows
     def test_parse_dnf_freed_space(self):
         """Directly test parse_dnf_freed_space()"""
-        cases = [
+        # DNF4 autoremove: "Freed space: <n> <unit>"
+        dnf4_cases = [
             ('Freed space: 0  \n', 0),
             ('Freed space: 500  \n', 500),
             ('Freed space: 999  \n', 999),
@@ -759,7 +823,59 @@ PrefersNonDefaultGPU=false""")
             ('Nothing to do.\n', None),
             ('', None),
         ]
-        for output, expected in cases:
+        # DNF5 autoremove: "After this operation, <n> <unit> will be freed
+        # (install <n> <unit>, remove <n> <unit>)."
+        dnf5_autoremove_cases = [
+            ('After this operation, 0 B will be freed '
+             '(install 0 B, remove 0 B).\n', 0),
+            ('After this operation, 500 B will be freed '
+             '(install 0 B, remove 500 B).\n', 500),
+            ('After this operation, 1 KiB will be freed '
+             '(install 0 B, remove 1 KiB).\n', 1024),
+            ('After this operation, 10 KiB will be freed '
+             '(install 0 B, remove 10 KiB).\n', 10 * 1024),
+            ('After this operation, 5 MiB will be freed '
+             '(install 0 B, remove 5 MiB).\n', 5 * 1024 ** 2),
+            ('After this operation, 299 MiB will be freed '
+             '(install 0 B, remove 299 MiB).\n', 299 * 1024 ** 2),
+            ('After this operation, 1 GiB will be freed '
+             '(install 0 B, remove 1 GiB).\n', 1024 ** 3),
+            ('After this operation, 2 TiB will be freed '
+             '(install 0 B, remove 2 TiB).\n', 2 * 1024 ** 4),
+            ('After this operation, 1.5 MiB will be freed '
+             '(install 0 B, remove 1.5 MiB).\n', int(1.5 * 1024 ** 2)),
+            ('Nothing to do.\n', None),
+            ('', None),
+        ]
+        # DNF5 "clean all": "Removed <f> files, <d> directories (total of
+        # <n> <unit>). <n> errors occurred."
+        dnf5_clean_cases = [
+            ('Removed 0 files, 0 directories (total of 0 B). '
+             '0 errors occurred.\n', 0),
+            ('Removed 1 files, 0 directories (total of 500 B). '
+             '0 errors occurred.\n', 500),
+            ('Removed 1 files, 0 directories (total of 999 B). '
+             '0 errors occurred.\n', 999),
+            ('Removed 1 files, 0 directories (total of 1 KiB). '
+             '0 errors occurred.\n', 1024),
+            ('Removed 5 files, 1 directories (total of 10 KiB). '
+             '0 errors occurred.\n', 10 * 1024),
+            ('Removed 5 files, 1 directories (total of 5 MiB). '
+             '0 errors occurred.\n', 5 * 1024 ** 2),
+            ('Removed 5 files, 1 directories (total of 299 MiB). '
+             '0 errors occurred.\n', 299 * 1024 ** 2),
+            ('Removed 5 files, 1 directories (total of 1 GiB). '
+             '0 errors occurred.\n', 1024 ** 3),
+            ('Removed 5 files, 1 directories (total of 2 TiB). '
+             '0 errors occurred.\n', 2 * 1024 ** 4),
+            ('Removed 12 files, 3 directories (total of 25 MiB). '
+             '0 errors occurred.\n', 25 * 1024 ** 2),
+            ('Cache directory "/var/cache/libdnf5" does not exist. '
+             'Nothing to clean.\n', None),
+            ('', None),
+        ]
+        for output, expected in dnf4_cases + dnf5_autoremove_cases \
+                + dnf5_clean_cases:
             with self.subTest(output=output.strip()):
                 self.assertEqual(parse_dnf_freed_space(output), expected)
 
