@@ -520,52 +520,52 @@ class System(Cleaner):
     def init_whitelist(self):
         """Initialize the keep list (formerly whitelist) only once for performance"""
         regexes = [
-            '^/tmp/.X0-lock$',
-            '^/tmp/.truecrypt_aux_mnt.*/(control|volume)$',
-            '^/tmp/.vbox-[^/]+-ipc/lock$',
-            '^/tmp/.wine-[0-9]+/server-.*/lock$',
+            r'^/tmp/\.X0-lock$',
+            r'^/tmp/\.truecrypt_aux_mnt.*/(control|volume)$',
+            r'^/tmp/\.vbox-[^/]+-ipc/lock$',
+            r'^/tmp/\.wine-[0-9]+/server-.*/lock$',
             '^/tmp/fsa/',  # fsarchiver
             '^/tmp/gconfd-[^/]+/lock/ior$',
             '^/tmp/kde-',
             '^/tmp/kdesudo-',
             '^/tmp/ksocket-',
-            '^/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*.lock$',
+            r'^/tmp/orbit-[^/]+/bonobo-activation-register[a-z0-9-]*\.lock$',
             '^/tmp/orbit-[^/]+/bonobo-activation-server-[a-z0-9-]*ior$',
             '^/tmp/pulse-[^/]+/pid$',
             '^/tmp/xauth',
             '^/var/tmp/kdecache-',
-            '^' + os.path.expanduser('~/.cache/wallpaper/'),
+            '^' + os.path.expanduser(r'~/\.cache/wallpaper/'),
             # Flatpak mount point
-            '^' + os.path.expanduser('~/.cache/doc($|/)'),
+            '^' + os.path.expanduser(r'~/\.cache/doc($|/)'),
             # Clean Firefox cache from Firefox cleaner (LP#1295826)
-            '^' + os.path.expanduser('~/.cache/mozilla/'),
+            '^' + os.path.expanduser(r'~/\.cache/mozilla/'),
             # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
-            '^' + os.path.expanduser('~/.cache/google-chrome/'),
-            '^' + os.path.expanduser('~/.cache/gnome-control-center/'),
+            '^' + os.path.expanduser(r'~/\.cache/google-chrome/'),
+            '^' + os.path.expanduser(r'~/\.cache/gnome-control-center/'),
             # Clean Evolution cache from Evolution cleaner (GitHub #249)
-            '^' + os.path.expanduser('~/.cache/evolution/'),
+            '^' + os.path.expanduser(r'~/\.cache/evolution/'),
             # iBus Pinyin
             # https://bugs.launchpad.net/bleachbit/+bug/1538919
-            '^' + os.path.expanduser('~/.cache/ibus/'),
+            '^' + os.path.expanduser(r'~/\.cache/ibus/'),
             # Linux Bluetooth daemon obexd directory is typically empty, so be careful
             # not to delete the empty directory.
-            '^' + os.path.expanduser('~/.cache/obexd($|/)'),
+            '^' + os.path.expanduser(r'~/\.cache/obexd($|/)'),
             # KDE/Plasma cache files
             # https://github.com/bleachbit/bleachbit/issues/1853
-            '^' + os.path.expanduser('~/.cache/kwin($|/)'),  # folder
+            '^' + os.path.expanduser(r'~/\.cache/kwin($|/)'),  # folder
             # folder
-            '^' + os.path.expanduser('~/.cache/mesa_shader_cache($|/)'),
-            '^' + os.path.expanduser('~/.cache/plasmashell($|/)'),  # folder
-            '^' + os.path.expanduser('~/.cache/icon-cache.kcache$'),  # file
+            '^' + os.path.expanduser(r'~/\.cache/mesa_shader_cache($|/)'),
+            '^' + os.path.expanduser(r'~/\.cache/plasmashell($|/)'),  # folder
+            '^' + os.path.expanduser(r'~/\.cache/icon-cache\.kcache$'),  # file
             # file
-            r'^' + os.path.expanduser(r'~/.cache/plasma_theme_.*\.kcache$'),
-            '^' + os.path.expanduser('~/.cache/drkonqi($|/)'),  # folder
+            r'^' + os.path.expanduser(r'~/\.cache/plasma_theme_.*\.kcache$'),
+            '^' + os.path.expanduser(r'~/\.cache/drkonqi($|/)'),  # folder
             # folder
-            '^' + os.path.expanduser('~/.cache/mesa_shader_cache_db($|/)'),
+            '^' + os.path.expanduser(r'~/\.cache/mesa_shader_cache_db($|/)'),
             # folder
-            '^' + os.path.expanduser('~/.cache/qtshadercache-[^/]+($|/)'),
+            '^' + os.path.expanduser(r'~/\.cache/qtshadercache-[^/]+($|/)'),
             # file
-            '^' + os.path.expanduser('~/.cache/plasma_theme_default.kcache$')]
+            '^' + os.path.expanduser(r'~/\.cache/plasma_theme_default\.kcache$')]
 
         for regex in regexes:
             self.regexes_compiled.append(re.compile(regex))
