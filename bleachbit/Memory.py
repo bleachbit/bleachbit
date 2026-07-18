@@ -196,14 +196,13 @@ def _run_memory_child_systemd_scope():
         real_uid = General.get_real_uid()
     except Exception:
         real_uid = None
-    # Make the bleachbit package importable when running from a source
-    # checkout. When installed, this is harmless (the directory is already
-    # on sys.path).
+    # This child runs Python as root, so keep an inherited PATH/LD_*/PYTHONPATH
+    # from redirecting it. sanitize_root_env drops LD_* and unsafe PATH entries;
+    # PYTHONPATH is set to only our package's parent (enough to import
+    # bleachbit) rather than appending the inherited value.
     pkg_parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    env = os.environ.copy()
-    python_path = os.pathsep.join(
-        p for p in (pkg_parent, env.get('PYTHONPATH', '')) if p)
-    env['PYTHONPATH'] = python_path
+    env = General.sanitize_root_env(os.environ.copy())
+    env['PYTHONPATH'] = pkg_parent
     # The child is launched via "python -c", so it cannot see --debug in
     # sys.argv. Forward the parent's debug state via an environment variable
     # so the child's logger (initialized on import) matches the parent's.
@@ -220,8 +219,11 @@ def _run_memory_child_systemd_scope():
     def run_scope(scope_args):
         logger.debug('Running command: %s', ' '.join(scope_args))
         try:
+            # cwd=pkg_parent so "python -c"'s implicit '' sys.path entry
+            # resolves there, not an attacker-controlled working directory.
             return subprocess.run(
-                scope_args, env=env, capture_output=True, text=True)
+                scope_args, env=env, cwd=pkg_parent,
+                capture_output=True, text=True)
         except FileNotFoundError:
             return None
 
@@ -334,7 +336,11 @@ def physical_free_darwin(run_vmstat=None):
         return int(m.groups()[0])
     if run_vmstat is None:
         def run_vmstat():
-            return subprocess.check_output(["/usr/bin/vm_stat"], text=True)
+            # sanitize the env so a hostile inherited LD_*/DYLD_* cannot
+            # redirect this child when BleachBit runs as root
+            return subprocess.check_output(
+                ["/usr/bin/vm_stat"], text=True,
+                env=General.sanitize_root_env(dict(os.environ)))
     output = iter(run_vmstat().split("\n"))
     page_size = get_page_size(next(output))
     vm_stat = dict(parse_line(*l.split(":")) for l in output if l != "")

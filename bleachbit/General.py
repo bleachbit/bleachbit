@@ -26,6 +26,7 @@ import logging
 import os
 import shlex
 import shutil
+import stat
 import subprocess
 import sys
 import xml.parsers.expat
@@ -35,6 +36,55 @@ from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
 from bleachbit.PathUtils import path_startswith
 
 logger = logging.getLogger(__name__)
+
+
+def _path_dir_is_root_safe(dirpath):
+    """Return True if dirpath is absolute, root-owned, and not writable by others."""
+    if not os.path.isabs(dirpath):
+        return False
+    try:
+        st = os.stat(dirpath)
+    except OSError:
+        return False
+    if st.st_uid != 0:
+        return False
+    if st.st_mode & stat.S_IWOTH:
+        return False
+    if (st.st_mode & stat.S_IWGRP) and st.st_gid != 0:
+        return False
+    return True
+
+
+# Environment variables that make a child load code from a location the
+# caller chose: the dynamic linker (LD_*, DYLD_*), glibc's loadable modules
+# (honored because a sudo'd root process is not AT_SECURE), and the
+# interpreters we may exec (dnf and yum are Python, paccache is a shell
+# script).
+_UNSAFE_ROOT_ENV_PREFIXES = ('LD_', 'DYLD_')
+_UNSAFE_ROOT_ENV_VARS = (
+    'GCONV_PATH', 'LOCPATH', 'NLSPATH', 'HOSTALIASES',
+    'PYTHONPATH', 'PYTHONHOME', 'PYTHONSTARTUP', 'PYTHONEXECUTABLE',
+    'BASH_ENV', 'ENV', 'SHELLOPTS', 'BASHOPTS', 'IFS',
+    'PERL5LIB', 'PERL5OPT', 'RUBYLIB', 'RUBYOPT', 'NODE_OPTIONS')
+
+
+def sanitize_root_env(env):
+    """Harden a child process's environment when running as root.
+
+    Drop the code-loading variables listed above and PATH entries a non-root
+    user could write, so an inherited hostile environment cannot redirect a
+    privileged child. No-op unless euid 0.
+    """
+    if not hasattr(os, 'geteuid') or 0 != os.geteuid():
+        return env
+    env = {key: value for key, value in env.items()
+           if key not in _UNSAFE_ROOT_ENV_VARS
+           and not key.startswith(_UNSAFE_ROOT_ENV_PREFIXES)}
+    path = env.get('PATH')
+    if path:
+        env['PATH'] = os.pathsep.join(
+            d for d in path.split(os.pathsep) if _path_dir_is_root_safe(d))
+    return env
 
 
 #
@@ -288,6 +338,10 @@ def run_external_nowait(args, env=None, kwargs=None):
         kwargs = {}
     else:
         kwargs = dict(kwargs)
+    if IS_POSIX:
+        # Sanitized here too (not just in run_external()) since this
+        # function is also called directly, bypassing that sanitization.
+        env = sanitize_root_env(dict(os.environ) if env is None else env)
     try:
         if IS_WINDOWS:
             creationflags = kwargs.get('creationflags', 0)
@@ -365,6 +419,10 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
                if key in keep_env}
         env['LANG'] = 'C'
         env['LC_ALL'] = 'C'
+
+    if IS_POSIX:
+        # When root, do not let an inherited PATH/LD_* redirect the child
+        env = sanitize_root_env(dict(os.environ) if env is None else env)
 
     if not wait:
         if run_external_nowait(args, env=env, kwargs=kwargs):

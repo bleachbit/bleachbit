@@ -166,9 +166,14 @@ def open_files_lsof(run_lsof=None):
         # macOS 26 (Tahoe) has /usr/sbin/lsof
         # FreeBSD has /usr/local/sbin/lsof
         lsof_path = '/usr/sbin/lsof' if IS_MAC else '/usr/local/sbin/lsof'
+        from bleachbit.General import sanitize_root_env
 
         def run_lsof():
-            return subprocess.check_output([lsof_path, "-Fn", "-n"], text=True)
+            # sanitize the env so a hostile inherited LD_*/DYLD_* cannot
+            # redirect this child when BleachBit runs as root
+            return subprocess.check_output(
+                [lsof_path, "-Fn", "-n"], text=True,
+                env=sanitize_root_env(dict(os.environ)))
     output = run_lsof()
     if isinstance(output, bytes):
         output = output.decode('utf-8', errors='replace')

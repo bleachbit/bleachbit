@@ -162,7 +162,12 @@ Swapouts:                              20258188.
         with mock.patch('bleachbit.Memory.subprocess.check_output',
                         return_value=sample) as mock_check_output:
             physical_free_darwin()
-        mock_check_output.assert_called_once_with(['/usr/bin/vm_stat'], text=True)
+        mock_check_output.assert_called_once()
+        call = mock_check_output.call_args
+        self.assertEqual(call.args[0], ['/usr/bin/vm_stat'])
+        self.assertTrue(call.kwargs.get('text'))
+        # the child's env is sanitized (LD_*/DYLD_* dropped when root)
+        self.assertIn('env', call.kwargs)
 
     @common.skipUnlessLinux
     def test_physical_free(self):
@@ -383,6 +388,32 @@ Swapouts:                              20258188.
         unit_args = [a for a in captured['args'] if a.startswith('--unit=')]
         self.assertEqual(len(unit_args), 1)
         self.assertIn(f'bleachbit-wipe-memory-{os.getpid()}', unit_args[0])
+
+    @common.skipIfWindows
+    def test_run_memory_child_systemd_scope_sanitizes_env(self):
+        """The root child gets a fixed PYTHONPATH and a safe cwd, not the inherited env"""
+        import bleachbit.Memory as Memory_mod
+        pkg_parent = os.path.dirname(
+            os.path.dirname(os.path.abspath(Memory_mod.__file__)))
+        captured = {}
+
+        def fake_run(args, env=None, **kwargs):
+            captured['env'] = env
+            captured['kwargs'] = kwargs
+            proc = mock.Mock()
+            proc.returncode = 0
+            proc.stderr = ''
+            return proc
+
+        with self._mock_systemd_scope_common():
+            with mock.patch.dict(os.environ,
+                                 {'PYTHONPATH': '/tmp/attacker'}):
+                with mock.patch('bleachbit.Memory.subprocess.run',
+                                side_effect=fake_run):
+                    _run_memory_child_systemd_scope()
+        self.assertEqual(captured['env']['PYTHONPATH'], pkg_parent)
+        self.assertNotIn('/tmp/attacker', captured['env']['PYTHONPATH'])
+        self.assertEqual(captured['kwargs'].get('cwd'), pkg_parent)
 
     @common.skipIfWindows
     def test_run_memory_child_systemd_scope_signal(self):

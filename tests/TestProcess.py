@@ -82,8 +82,12 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
             ProcessInfo(530, 'Google Chrome Helper', False),
         ]
         self.assertEqual(result, expected)
-        mock_check_output.assert_called_once_with(
-            ['/bin/ps', 'aux', '-c'], universal_newlines=True)
+        mock_check_output.assert_called_once()
+        call = mock_check_output.call_args
+        self.assertEqual(call.args[0], ['/bin/ps', 'aux', '-c'])
+        self.assertTrue(call.kwargs.get('universal_newlines'))
+        # the child's env is sanitized (LD_*/DYLD_* dropped when root)
+        self.assertIn('env', call.kwargs)
 
         mock_check_output.return_value = 'invalid-input'
         with self.assertRaises(RuntimeError):

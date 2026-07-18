@@ -30,6 +30,7 @@ from bleachbit.General import (
     makedirs,
     run_external,
     run_external_nowait,
+    sanitize_root_env,
     shell_split,
     sudo_mode)
 from tests import common
@@ -134,6 +135,61 @@ class GeneralTestCase(common.BleachbitTestCase):
                 with mock.patch('pwd.getpwnam', side_effect=KeyError):
                     uid = get_real_uid()
         self.assertEqual(uid, 1000)
+
+    def test_sanitize_root_env_non_root(self):
+        """Not running as root: environment is returned unchanged."""
+        env = {'PATH': '/tmp/evil', 'LD_PRELOAD': 'evil.so'}
+        with mock.patch('os.geteuid', return_value=1000, create=True):
+            self.assertEqual(sanitize_root_env(env), env)
+
+    def test_sanitize_root_env_root(self):
+        """As root: drop code-loading vars and PATH entries a non-root user could write."""
+        dropped_vars = ('LD_PRELOAD', 'LD_LIBRARY_PATH', 'LD_AUDIT',
+                        'DYLD_INSERT_LIBRARIES', 'DYLD_LIBRARY_PATH',
+                        'DYLD_FRAMEWORK_PATH',
+                        'GCONV_PATH', 'LOCPATH', 'NLSPATH', 'HOSTALIASES',
+                        'PYTHONPATH', 'PYTHONHOME', 'PYTHONSTARTUP',
+                        'PYTHONEXECUTABLE',
+                        'BASH_ENV', 'ENV', 'SHELLOPTS', 'BASHOPTS', 'IFS',
+                        'PERL5LIB', 'PERL5OPT', 'RUBYLIB', 'RUBYOPT',
+                        'NODE_OPTIONS')
+        env = {var: '/tmp/evil' for var in dropped_vars}
+        env['PATH'] = '/usr/bin' + os.pathsep + '/tmp/evil'
+        env['HOME'] = '/root'
+        with mock.patch('os.geteuid', return_value=0, create=True), \
+                mock.patch('bleachbit.General._path_dir_is_root_safe',
+                           side_effect=lambda d: d == '/usr/bin'):
+            result = sanitize_root_env(env)
+        self.assertEqual(result['PATH'], '/usr/bin')
+        for dropped in dropped_vars:
+            self.assertNotIn(dropped, result)
+        self.assertEqual(result['HOME'], '/root')
+
+    @common.skipIfWindows
+    def test_run_external_nowait_sanitizes_env_when_called_directly(self):
+        """run_external_nowait() must sanitize env even when not called via run_external()
+
+        Some callers (e.g. GuiApplication's self-restart) call this directly,
+        bypassing run_external()'s own sanitize_root_env() call.
+        """
+        hostile_env = {'PATH': '/usr/bin' + os.pathsep + '/tmp/evil',
+                       'LD_PRELOAD': '/tmp/evil.so'}
+        captured = {}
+
+        def fake_popen(args, **kwargs):
+            captured['env'] = kwargs.get('env')
+            proc = mock.Mock()
+            return proc
+
+        with mock.patch('os.geteuid', return_value=0, create=True), \
+                mock.patch('bleachbit.General._path_dir_is_root_safe',
+                           side_effect=lambda d: d == '/usr/bin'), \
+                mock.patch('bleachbit.General.subprocess.Popen', side_effect=fake_popen):
+            run_external_nowait(['/bin/true'], env=hostile_env)
+        self.assertNotIn('LD_PRELOAD', captured['env'])
+        self.assertEqual(captured['env']['PATH'], '/usr/bin')
+        # the caller's own dict must not be mutated in place
+        self.assertIn('LD_PRELOAD', hostile_env)
 
     def test_get_real_uid_non_numeric_sudo_uid(self):
         """A bogus SUDO_UID must not crash; fall through instead."""
