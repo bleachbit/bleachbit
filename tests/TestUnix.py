@@ -28,6 +28,7 @@ from bleachbit.Unix import (
     clear_snapd_cache,
     dnf_autoremove,
     dnf_clean,
+    parse_dnf_freed_space,
     find_available_locales,
     find_best_locale,
     get_apt_size,
@@ -738,7 +739,29 @@ PrefersNonDefaultGPU=false""")
         mock_run.return_value = (
             0, 'Remove  112 Packages\nFreed space: 299 M\n', 'stderr')
         bytes_freed = dnf_autoremove()
-        self.assertEqual(bytes_freed, 299000000)
+        # dnf's format_number() uses 1024-based binary units, so 299 M
+        # means 299 * 1024**2, not 299 * 1000**2.
+        self.assertEqual(bytes_freed, 299 * 1024 ** 2)
+
+    @common.skipIfWindows
+    def test_parse_dnf_freed_space(self):
+        """Directly test parse_dnf_freed_space()"""
+        cases = [
+            ('Freed space: 0  \n', 0),
+            ('Freed space: 500  \n', 500),
+            ('Freed space: 999  \n', 999),
+            ('Freed space: 1.5 k\n', int(1.5 * 1024)),
+            ('Freed space: 10 k\n', 10 * 1024),
+            ('Freed space: 5.0 M\n', int(5.0 * 1024 ** 2)),
+            ('Freed space: 299 M\n', 299 * 1024 ** 2),
+            ('Freed space: 1.0 G\n', int(1.0 * 1024 ** 3)),
+            ('Freed space: 1.5 T\n', int(1.5 * 1024 ** 4)),
+            ('Nothing to do.\n', None),
+            ('', None),
+        ]
+        for output, expected in cases:
+            with self.subTest(output=output.strip()):
+                self.assertEqual(parse_dnf_freed_space(output), expected)
 
     @common.skipIfWindows
     def test_pacman_cache(self):

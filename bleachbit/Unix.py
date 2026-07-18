@@ -695,9 +695,15 @@ def dnf_clean():
 units = {"B": 1, "k": 10**3, "M": 10**6, "G": 10**9,
          "KiB": 2**10, "MiB": 2**20, "GiB": 2**30, "TiB": 2**40}
 
+_DNF_UNITS = {
+    ' ': 1, 'k': 1024, 'M': 1024**2, 'G': 1024**3,
+    'T': 1024**4, 'P': 1024**5, 'E': 1024**6,
+    'Z': 1024**7, 'Y': 1024**8,
+}
+
 
 def parse_size(size):
-    """Parse the size returned by dnf"""
+    """Parse the size returned when cleaning pacman cache"""
     number, unit = [string.strip() for string in size.split()]
     return int(float(number) * units[unit])
 
@@ -717,13 +723,28 @@ def dnf_autoremove():
     if rc > 0:
         raise RuntimeError(f'dnf autoremove raised error {rc}: {stderr}')
 
-    cregex = re.compile(r"Freed space: ([\d.]+[\s]+[BkMG])")
-    match = cregex.search(allout)
-    if match:
-        freed_bytes = parse_size(match.group(1))
+    freed_bytes = parse_dnf_freed_space(allout) or 0
     logger.debug(
         'dnf_autoremove >> total freed bytes: %s', freed_bytes)
     return freed_bytes
+
+
+def parse_dnf_freed_space(output):
+    """Parse dnf output for the 'Freed space' line and return bytes freed.
+
+    dnf's format_number():
+    - divides by 1024
+    - uses unit symbols ' ' (bytes), k, M, G, T, P, E, Z, Y.
+    - byte tier uses a literal space as the symbol, so byte
+      values print with two trailing spaces.
+
+    Returns None when no freed-spaceline is found.
+    """
+    cregex = re.compile(r"Freed space: (\d+(?:\.\d+)?) ([ kMGTPEZY])")
+    match = cregex.search(output)
+    if not match:
+        return None
+    return int(float(match.group(1)) * _DNF_UNITS[match.group(2)])
 
 
 def pacman_cache():
