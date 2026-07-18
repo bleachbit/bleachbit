@@ -189,8 +189,11 @@ def get_real_uid():
     if not IS_POSIX:
         raise RuntimeError('get_real_uid() requires POSIX')
 
-    if os.getenv('SUDO_UID'):
-        return int(os.getenv('SUDO_UID'))
+    sudo_uid = os.getenv('SUDO_UID')
+    if sudo_uid:
+        if sudo_uid.isdecimal():
+            return int(sudo_uid)
+        logger.warning('ignoring non-numeric SUDO_UID: %r', sudo_uid)
 
     try:
         login = os.getlogin()

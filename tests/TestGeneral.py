@@ -134,6 +134,17 @@ class GeneralTestCase(common.BleachbitTestCase):
                     uid = get_real_uid()
         self.assertEqual(uid, 1000)
 
+    def test_get_real_uid_non_numeric_sudo_uid(self):
+        """A bogus SUDO_UID must not crash; fall through instead."""
+        if not IS_POSIX:
+            self.skipTest('POSIX-only behavior')
+
+        with mock.patch.dict(os.environ, {'SUDO_UID': 'not-a-number'}, clear=False):
+            with mock.patch('os.getlogin', return_value='root'):
+                uid = get_real_uid()
+        self.assertIsInstance(uid, int)
+        self.assertGreaterEqual(uid, 0)
+
     @also_with_sudo
     def test_get_real_username(self):
         """Test for get_real_username()"""
