@@ -269,14 +269,6 @@ def children_in_directory(top, list_directories=False):
             yield from children_in_directory(top_, list_directories)
         return
 
-    def _normalized_prefix(path):
-        norm_path = os.path.normpath(path)
-        if IS_WINDOWS:
-            norm_path = norm_path.lower()
-        if not norm_path.endswith(os.sep):
-            norm_path += os.sep
-        return norm_path
-
     pending_dirs = [] if list_directories else None
 
     for (dirpath, dirnames, filenames) in walk(top, topdown=True, followlinks=False):
@@ -292,15 +284,14 @@ def children_in_directory(top, list_directories=False):
                     yield os.path.join(dirpath, dirname)
         if list_directories:
             for dirname in dirnames:
-                full_path = os.path.join(dirpath, dirname)
-                pending_dirs.append((full_path, _normalized_prefix(full_path)))
+                pending_dirs.append(os.path.join(dirpath, dirname))
         for filename in filenames:
             yield os.path.join(dirpath, filename)
 
     if list_directories:
-        pending_dirs.sort(key=lambda x: len(x[1]))
+        pending_dirs.sort(key=len)
         while pending_dirs:
-            yield pending_dirs.pop()[0]
+            yield pending_dirs.pop()
 
 
 def clean_ini(path, section, parameter):
