@@ -11,11 +11,10 @@ Command line interface
 import errno
 import logging
 import optparse
-import os
 import sys
 
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
-from bleachbit import APP_VERSION, stdout_encoding
+from bleachbit import APP_VERSION, stdout_encoding, IS_WINDOWS
 from bleachbit import SystemInformation, Options, Worker
 from bleachbit.Bootstrap import bootstrap
 from bleachbit.Language import get_text as _
@@ -297,7 +296,7 @@ def parse_cmd_line(argv=None):
                       dest="first_start",
                       help=optparse.SUPPRESS_HELP)
 
-    if 'nt' == os.name:
+    if IS_WINDOWS:
         # TRANSLATORS: Help for --no-uac option on the CLI.
         uac_help = _("do not prompt for administrator privileges")
         parser.add_option("--no-uac", action="store_true", help=uac_help)
@@ -375,7 +374,7 @@ There is NO WARRANTY, to the extent permitted by law.
 """
         print(version_message)
         sys.exit(0)
-    if 'nt' == os.name and options.update_winapp2:
+    if IS_WINDOWS and options.update_winapp2:
         from bleachbit import Update
         # TRANSLATORS: Log message on the CLI.
         logger.info(_("Checking online for updates to winapp2.ini"))
@@ -425,7 +424,7 @@ There is NO WARRANTY, to the extent permitted by law.
         if check_wayland_and_root():
             sys.exit(1)
         import bleachbit.GuiApplication
-        enable_uac = os.name == 'nt' and not options.no_uac
+        enable_uac = IS_WINDOWS and not options.no_uac
         app = bleachbit.GuiApplication.Bleachbit(
             uac=enable_uac, shred_paths=args, auto_exit=options.exit)
         sys.exit(app.run())

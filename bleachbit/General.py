@@ -30,7 +30,7 @@ import subprocess
 import sys
 
 import bleachbit
-from bleachbit import IS_WINDOWS
+from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +74,7 @@ def chownself(path):
     """Set path owner to real self when running in sudo.
     If sudo creates a path and the owner isn't changed, the
     owner may not be able to access the path."""
-    if 'posix' != os.name:
+    if not IS_POSIX:
         return
     uid = get_real_uid()
     logger.debug('chown(%s, uid=%s)', path, uid)
@@ -95,7 +95,7 @@ def gc_collect():
     PermissionError: [WinError 32] The process cannot access the file because it is being used
     by another process: '[...].sqlite'
     """
-    if not os.name == 'nt':
+    if not IS_WINDOWS:
         return
 
     import gc
@@ -136,7 +136,7 @@ def get_real_username():
 
     In Docker containers, getpass.getuser() may fail with KeyError.
     """
-    if 'posix' != os.name:
+    if not IS_POSIX:
         raise RuntimeError('get_real_username() requires POSIX')
     sudo_user = os.getenv('SUDO_USER')
     if sudo_user:
@@ -173,7 +173,7 @@ def get_real_username():
 def get_real_uid():
     """Get the real user ID when running in sudo mode"""
 
-    if 'posix' != os.name:
+    if not IS_POSIX:
         raise RuntimeError('get_real_uid() requires POSIX')
 
     if os.getenv('SUDO_UID'):
@@ -281,7 +281,7 @@ def run_external_nowait(args, env=None, kwargs=None):
                                        stderr=subprocess.DEVNULL,
                                        env=env, **kwargs)
             process.returncode = 0
-            if sys.platform == 'win32':
+            if IS_WINDOWS:
                 process._handle.Close()
                 process._handle = None
             return True
@@ -322,11 +322,11 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
         stdout = subprocess.PIPE
     kwargs = {}
     encoding = bleachbit.stdout_encoding
-    if sys.platform == 'win32':
+    if IS_WINDOWS:
         # hide the 'DOS box' window
         kwargs['creationflags'] = subprocess.CREATE_NO_WINDOW
         encoding = 'mbcs'
-    if clean_env and 'posix' == os.name:
+    if clean_env and IS_POSIX:
         # Clean environment variables so that that subprocesses use English
         # instead of translated text. This helps when checking for certain
         # strings in the output.
@@ -383,10 +383,10 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
 
 def shell_split(cmd):
     """Split a shell command into a list of arguments"""
-    args0 = shlex.split(cmd, posix=os.name == 'posix')
+    args0 = shlex.split(cmd, posix=IS_POSIX)
     args = []
     for arg in args0:
-        if os.name == 'nt' and arg.startswith('"') and arg.endswith('"'):
+        if IS_WINDOWS and arg.startswith('"') and arg.endswith('"'):
             arg = arg[1:-1]
         args.append(arg)
     return args
@@ -394,7 +394,7 @@ def shell_split(cmd):
 
 def sudo_mode():
     """Return whether running in sudo mode"""
-    if not sys.platform == 'linux':
+    if not IS_LINUX:
         return False
 
     # if 'root' == os.getenv('USER'):

@@ -34,6 +34,7 @@ from collections import OrderedDict
 
 # local
 import bleachbit
+from bleachbit import IS_LINUX, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.General import get_executable, get_real_uid
 
 logger = logging.getLogger(__name__)
@@ -78,7 +79,7 @@ def _get_home_dirs_to_anonymize():
     home_dir = os.path.expanduser('~') or ''
     home_dirs.append(home_dir)
 
-    if os.name == 'posix':
+    if IS_POSIX:
         real_home_dir = ''
         try:
             # reminder: pwd is not available on Windows
@@ -88,7 +89,7 @@ def _get_home_dirs_to_anonymize():
             pass
         home_dirs.append(real_home_dir)
 
-    if os.name == 'nt':
+    if IS_WINDOWS:
         # Windows may return short (8.3) paths for environment variables
         # like TMP when the username contains Unicode characters.
         # Include the short path form of the home directory to ensure
@@ -120,7 +121,7 @@ def anonymize_system_information(text):
     root is not anonymized.
     """
     home_dirs = _get_home_dirs_to_anonymize()
-    home_token = '~' if os.name == 'posix' else '%userprofile%'
+    home_token = '~' if IS_POSIX else '%userprofile%'
 
     def mask_user_line(line):
         """Mask username for environment variables"""
@@ -135,7 +136,7 @@ def anonymize_system_information(text):
     anonymized_lines = []
     for line in text.split('\n'):
         for home_dir in home_dirs:
-            if os.name == 'nt':
+            if IS_WINDOWS:
                 # Windows paths are case-insensitive
                 line = re.sub(re.escape(home_dir), home_token,
                               line, flags=re.IGNORECASE)
@@ -206,9 +207,9 @@ def get_system_information():
     info['locale.getlocale'] = str(locale.getlocale())
 
     # Environment variables
-    if 'posix' == os.name:
+    if IS_POSIX:
         envs = ('DESKTOP_SESSION', 'LOGNAME', 'USER', 'SUDO_UID')
-    elif 'nt' == os.name:
+    elif IS_WINDOWS:
         envs = ('APPDATA', 'cd', 'LocalAppData', 'LocalAppDataLow', 'Music',
                 'USERPROFILE', 'ProgramFiles', 'ProgramW6432', 'TMP')
     else:
@@ -223,10 +224,10 @@ def get_system_information():
     macosx_dict = {'5': 'Leopard', '6': 'Snow Leopard', '7': 'Lion', '8': 'Mountain Lion',
                    '9': 'Mavericks', '10': 'Yosemite', '11': 'El Capitan', '12': 'Sierra'}
 
-    if sys.platform == 'linux':
+    if IS_LINUX:
         from bleachbit.Unix import get_distribution_name_version
         info['get_distribution_name_version()'] = get_distribution_name_version()
-    elif sys.platform.startswith('darwin'):
+    elif IS_MAC:
         if hasattr(platform, 'mac_ver'):
             mac_version = platform.mac_ver()[0]
             version_minor = mac_version.split('.')[1]
@@ -239,7 +240,7 @@ def get_system_information():
     info['sys.argv'] = sys.argv
     info['sys.executable'] = get_executable()
     info['sys.version'] = sys.version
-    if 'nt' == os.name:
+    if IS_WINDOWS:
         from win32com.shell import shell
         info['IsUserAnAdmin()'] = shell.IsUserAnAdmin()
     info['__file__'] = __file__

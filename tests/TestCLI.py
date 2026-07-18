@@ -472,7 +472,7 @@ class CLITestCase(common.BleachbitTestCase):
         with patch.dict('sys.modules', {'bleachbit.GuiApplication': mock_gui_module}):
             with patch.object(bleachbit, 'GuiApplication', mock_gui_module, create=True):
                 with patch('bleachbit.Bootstrap.check_wayland_and_root', return_value=False):
-                    with patch('os.name', 'posix'):
+                    with patch('bleachbit.CLI.IS_WINDOWS', False):
                         with patch('sys.argv', ['bleachbit', '--gui']):
                             with self.assertRaises(SystemExit) as cm:
                                 process_cmd_line()

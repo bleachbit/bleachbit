@@ -17,15 +17,15 @@ from itertools import product
 
 # first party imports
 from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod  # mod=module
-from bleachbit import FS_SCAN_RE_FLAGS
+from bleachbit import FS_SCAN_RE_FLAGS, IS_POSIX, IS_WINDOWS
 from bleachbit.Constant import CLEAN_FILE_LABEL
 from bleachbit.Cookie import load_keep_list
 from bleachbit.Language import get_text as _
 
-if os.name == 'posix':
+if IS_POSIX:
     from bleachbit import Unix
 
-if os.name == 'nt':
+if IS_WINDOWS:
     from bleachbit import Windows
 
 logger = logging.getLogger(__name__)
@@ -152,13 +152,13 @@ class FileActionProvider(ActionProvider):
         self.paths = []
         # expand special $$foo$$ which may give multiple values
         for path2 in expand_multi_var(raw_path, path_vars):
-            if os.name == 'nt':
+            if IS_WINDOWS:
                 paths = Windows.expand_windows_system_vars(path2)
             else:
                 paths = (path2, )
             for path3 in paths:
                 path3 = os.path.expanduser(os.path.expandvars(path3))
-                if os.name == 'nt' and path3:
+                if IS_WINDOWS and path3:
                     # convert forward slash to backslash for compatibility with getsize()
                     # and for display.  Do not convert an empty path, or it will become
                     # the current directory (.).
@@ -343,7 +343,7 @@ class AptAutoclean(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        assert os.name == 'posix'
+        assert IS_POSIX
         # If apt-get is not installed, then enable fast auto-hide.
         # The exe_exists() function is fast.
         if not FileUtilities.exe_exists('apt-get'):
@@ -679,7 +679,7 @@ class WinShellChangeNotify(ActionProvider):
     action_key = 'win.shell.change.notify'
 
     def get_commands(self):
-        assert os.name == 'nt'
+        assert IS_WINDOWS
         yield Command.Function(
             None,
             # pylint: disable=possibly-used-before-assignment
@@ -700,7 +700,7 @@ class Winreg(ActionProvider):
         self.excludekeys = []
 
     def get_commands(self):
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             yield Command.Winreg(self.keyname, self.name, self.excludekeys)
 
 

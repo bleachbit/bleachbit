@@ -144,7 +144,7 @@ def _enumerate_ps_aux():
 
 def is_process_running(exename, require_same_user):
     """Check whether exename is running"""
-    ci = os.name == 'nt'  # case-insensitive on Windows
+    ci = IS_WINDOWS  # case-insensitive on Windows
     if ci:
         exename = exename.lower()
     for proc in enumerate_processes():
@@ -156,7 +156,7 @@ def is_process_running(exename, require_same_user):
 
 def terminate_process(exename, require_same_user):
     """Terminate processes matching exename. Returns list of affected PIDs."""
-    ci = os.name == 'nt'
+    ci = IS_WINDOWS
     if ci:
         exename = exename.lower()
     terminated = []

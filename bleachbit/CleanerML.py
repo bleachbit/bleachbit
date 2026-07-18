@@ -32,14 +32,14 @@ import xml.parsers.expat
 
 # local import
 import bleachbit
-from bleachbit import IS_WINDOWS
+from bleachbit import IS_POSIX, IS_WINDOWS
 from bleachbit.Action import ActionProvider
 from bleachbit.FileUtilities import expand_glob_join, listdir
 from bleachbit.General import boolstr_to_bool
 from bleachbit.General import os_match as general_os_match
 from bleachbit.Language import get_text as _
 from bleachbit import Cleaner
-if 'win32' == sys.platform:
+if IS_WINDOWS:
     from bleachbit.Windows import read_registry_key
 
 logger = logging.getLogger(__name__)
@@ -112,7 +112,7 @@ def _toxml_etree(element):
 def default_vars():
     """Return default multi-value variables"""
     ret = {}
-    if not os.name == 'nt':
+    if not IS_WINDOWS:
         return ret
     from bleachbit.Windows import get_windows_system_paths
     # Expand ProgramFiles to also be ProgramW6432, etc.
@@ -310,7 +310,7 @@ class CleanerML:
 
     def handle_localizations(self, localization_nodes):
         """<localizations> element under <cleaner>"""
-        if not 'posix' == os.name:
+        if not IS_POSIX:
             return
         # pylint: disable=import-outside-toplevel
         from bleachbit import Unix
@@ -341,7 +341,7 @@ class CleanerML:
             if search_type == 'glob':
                 value_list = expand_glob_join(value_str, '')
             elif search_type == 'winreg':
-                if 'win32' != sys.platform:
+                if not IS_WINDOWS:
                     continue
                 value_list = read_registry_key(value_element.attrib.get(
                     'path', ''), value_element.attrib.get('name', ''))

@@ -27,6 +27,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import common test utilities
 from tests import common
+from bleachbit import IS_POSIX
 
 
 def discover_sudo_tests():
@@ -93,7 +94,7 @@ def run_sudo_tests(test_list):
 
     base_cmd, coverage_file = _build_test_command(test_list)
 
-    if os.name == 'posix' and os.geteuid() == 0:
+    if IS_POSIX and os.geteuid() == 0:
         sudo_uid = os.getenv('SUDO_UID')
         if sudo_uid and sudo_uid != '0':
             print("\nDetected EUID=0 with SUDO_UID preserved; skipping nested sudo.")

@@ -19,7 +19,7 @@ import shlex
 import subprocess
 
 import bleachbit
-from bleachbit import FileUtilities, General
+from bleachbit import FileUtilities, General, IS_POSIX
 from bleachbit.FileUtilities import children_in_directory, exe_exists
 from bleachbit.Language import get_text as _, native_locale_names
 from bleachbit.VFS import RealVFS
@@ -883,7 +883,7 @@ def snap_disabled_preview():
 
 def is_unix_display_protocol_wayland():
     """Return True if the display protocol is Wayland."""
-    assert os.name == 'posix'
+    assert IS_POSIX
     if 'XDG_SESSION_TYPE' in os.environ:
         if os.environ['XDG_SESSION_TYPE'] == 'wayland':
             return True
@@ -922,7 +922,7 @@ def root_is_not_allowed_to_X_session():
 
     This function is called only with root on Wayland.
     """
-    assert os.name == 'posix'
+    assert IS_POSIX
     try:
         result = General.run_external(['xhost'], clean_env=False)
         xhost_returned_error = result[0] == 1

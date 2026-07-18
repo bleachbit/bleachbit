@@ -25,10 +25,11 @@ Basic GUI code
 import os
 
 # local import
+from bleachbit import IS_POSIX, IS_WINDOWS
 from bleachbit.GtkShim import Gtk, Gdk, GLib, require_gtk
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
-if os.name == 'nt':
+if IS_WINDOWS:
     from bleachbit import Windows
 
 # Ensure GTK is available for this GUI module
@@ -47,7 +48,7 @@ DELETE_BUTTON_LABEL = _("_Delete")
 def browse_folder(parent, title, multiple, stock_button):
     """Ask the user to select a folder.  Return the full path or None."""
 
-    if os.name == 'nt' and not os.getenv('BB_NATIVE'):
+    if IS_WINDOWS and not os.getenv('BB_NATIVE'):
         ret = Windows.browse_folder(parent, title)
         return [ret] if multiple and not ret is None else ret
 
@@ -76,7 +77,7 @@ def browse_folder(parent, title, multiple, stock_button):
 def browse_file(parent, title):
     """Prompt user to select a single file"""
 
-    if os.name == 'nt' and not os.getenv('BB_NATIVE'):
+    if IS_WINDOWS and not os.getenv('BB_NATIVE'):
         return Windows.browse_file(parent, title)
 
     chooser = Gtk.FileChooserDialog(title=title,
@@ -101,7 +102,7 @@ def browse_file(parent, title):
 def browse_files(parent, title):
     """Prompt user to select multiple files to delete"""
 
-    if os.name == 'nt' and not os.getenv('BB_NATIVE'):
+    if IS_WINDOWS and not os.getenv('BB_NATIVE'):
         return Windows.browse_files(parent, title)
 
     chooser = Gtk.FileChooserDialog(title=title,
@@ -257,7 +258,7 @@ def message_dialog(parent, msg, mtype=Gtk.MessageType.ERROR, buttons=Gtk.Buttons
 def open_url(url, parent_window=None, prompt=True):
     """Open an HTTP URL.  Try to run as non-root."""
     # drop privileges so the web browser is running as a normal process
-    if os.name == 'posix' and os.getuid() == 0:
+    if IS_POSIX and os.getuid() == 0:
         # TRANSLATORS: This is an error message shown to root users.
         # %s expands to a web URL.
         msg = _("Because you are running as root, please manually open "
@@ -284,7 +285,7 @@ def open_url(url, parent_window=None, prompt=True):
         if Gtk.ResponseType.OK != resp:
             return
     # open web browser
-    if os.name == 'nt':
+    if IS_WINDOWS:
         # in Gtk.show_uri() avoid 'glib.GError: No application is registered as
         # handling this file'
         import webbrowser

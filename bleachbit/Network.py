@@ -58,7 +58,7 @@ else:
         pass
 
 # local imports
-from bleachbit import bleachbit_exe_path, APP_VERSION
+from bleachbit import bleachbit_exe_path, APP_VERSION, IS_LINUX, IS_NETBSD, IS_WINDOWS
 from bleachbit.FileUtilities import delete
 from bleachbit.Language import get_active_language_code, get_text as _
 
@@ -73,7 +73,7 @@ def unset_sslkeylogfile(use_logger):
 
     Returns True if unset
     """
-    if not os.name == 'nt':
+    if not IS_WINDOWS:
         return False
     if not os.environ.get('SSLKEYLOGFILE'):
         return False
@@ -217,11 +217,11 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
 def _get_os_name_version():
     """Return (os_name, os_version) tuple for network requests."""
     os_name = platform.system()  # 'Linux', 'Windows', etc.
-    if sys.platform == 'linux':
+    if IS_LINUX:
         # pylint: disable=import-outside-toplevel
         from bleachbit.Unix import get_distribution_name_version
         os_version = get_distribution_name_version()
-    elif sys.platform[:6] == 'netbsd':
+    elif IS_NETBSD:
         os_version = os_name + '/' + platform.machine() + ' ' + platform.release()
     else:
         os_version = platform.uname().version
@@ -242,7 +242,7 @@ def get_update_request_headers():
     if (gtk_version := get_gtk_version()):
         headers['X-GTK-Version'] = gtk_version
 
-    if os.name == 'nt':
+    if IS_WINDOWS:
         headers['X-Python-Version'] = platform.python_version()
         headers['X-Pointer-Bits'] = str(8 * struct.calcsize('P'))
 

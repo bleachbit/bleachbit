@@ -65,11 +65,11 @@ from bleachbit.FileUtilities import (
 )
 from bleachbit.General import gc_collect, run_external
 from bleachbit.Options import init_configuration, options
-from bleachbit import logger, FS_CASE_SENSITIVE
+from bleachbit import logger, FS_CASE_SENSITIVE, IS_POSIX, IS_WINDOWS
 from tests import common
 
 
-if 'nt' == os.name:
+if IS_WINDOWS:
     # pylint: disable=import-error
     import win32api
     import win32com.shell
@@ -91,7 +91,7 @@ def ini_helper(self, execute):
             extra_size = 0
             if 'utf-8-sig' == encoding:
                 extra_size = 3
-            if 'nt' == os.name:
+            if IS_WINDOWS:
                 extra_size += teststr.count('\n')
 
             # create test file
@@ -579,7 +579,7 @@ State=AAAA/wA...
         """delete() raises PermissionError on access denied"""
         path = self.write_file('test_delete_access_denied', b'secret')
         e = PermissionError(13, 'Access is denied', path)
-        if os.name == 'nt':
+        if IS_WINDOWS:
             e.winerror = 5
         with unittest.mock.patch('os.remove', side_effect=e):
             with self.assertRaises(PermissionError):
@@ -591,7 +591,7 @@ State=AAAA/wA...
 
         # test deleting with various kinds of filenames
         tests = common.SPECIAL_TEST_STRINGS.copy()
-        if 'posix' == os.name:
+        if IS_POSIX:
             # Windows doesn't allow these characters but Unix systems do
             tests += common.POSIX_SPECIAL_TEST_STRINGS
         for test in tests:
@@ -609,7 +609,7 @@ State=AAAA/wA...
             self.assertNotExists(dirname)
 
         def symlink_helper(link_fn):
-            if 'nt' == os.name:
+            if IS_WINDOWS:
                 # pylint: disable=no-member
                 if not win32com.shell.shell.IsUserAnAdmin():
                     self.skipTest(
@@ -654,7 +654,7 @@ State=AAAA/wA...
             self.assertNotExists(linkname)
             self.assertNotLExists(linkname)
 
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             logger.debug('testing symbolic link')
             kern = ctypes.windll.LoadLibrary("kernel32.dll")
 
@@ -894,7 +894,7 @@ State=AAAA/wA...
                 self.assertExists(link)
                 self.assertFalse(os.path.islink(link))
                 self.assertTrue(os.path.isfile(link))
-                if os.name == 'nt':
+                if IS_WINDOWS:
                     self.assertFalse(Windows.is_junction(link))
                 self.assertDirectoryCount(tmp_dir, 2)
                 self.assertTrue(is_hard_link(link))
@@ -1098,14 +1098,14 @@ State=AAAA/wA...
                  ("sh", True),
                  ("doesnotexist", False),
                  ("/bin/doesnotexist", False)]
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             tests = [('c:\\windows\\system32\\cmd.exe', True),
                      ('cmd.exe', True),
                      ('doesnotexist', False),
                      ('c:\\windows\\doesnotexist.exe', False)]
         for exe, expected in tests:
             with self.subTest(exe=exe, expected=expected):
-                if os.name == 'posix' and not os.getenv('PATH') and not os.path.isabs(exe):
+                if IS_POSIX and not os.getenv('PATH') and not os.path.isabs(exe):
                     self.skipTest('PATH not set')
                 self.assertEqual(exe_exists(exe), expected,
                                  f"{exe} -> {expected}")
@@ -1113,25 +1113,25 @@ State=AAAA/wA...
     def test_exists_in_path(self):
         """Unit test for exists_in_path()"""
         filename = 'ls'
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             filename = 'cmd.exe'
-        if 'posix' == os.name and not os.getenv('PATH'):
+        if IS_POSIX and not os.getenv('PATH'):
             self.assertFalse(exists_in_path(filename))
         else:
             self.assertTrue(exists_in_path(filename))
         self.assertFalse(exists_in_path('doesnotexist'))
-        if 'posix' == os.name:
+        if IS_POSIX:
             with self.assertRaises(AssertionError):
                 exists_in_path('/usr/bin/doesnotexist')
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             with self.assertRaises(AssertionError):
                 exists_in_path('c:\\does\\not\\exist.exe')
 
     def test_expand_glob_join(self):
         """Unit test for expand_glob_join()"""
-        if 'posix' == os.name:
+        if IS_POSIX:
             expand_glob_join('/bin', '*sh')
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             expand_glob_join(r'c:\windows', '*.exe')
 
     def test_expand_vars_user(self):
@@ -1141,7 +1141,7 @@ State=AAAA/wA...
         until commit 3a3913 that switched to Python 3.
         """
 
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             home_vars = ('%USERPROFILE%', '$userprofile', '${USERprofile}')
         else:
             home_vars = ['$HOME', '${HOME}']
@@ -1176,7 +1176,7 @@ State=AAAA/wA...
 
     def test_extended_path(self):
         """Unit test for extended_path() and extended_path_undo()"""
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             tests = [
                 (r'c:\windows\notepad.exe', r'\\?\c:\windows\notepad.exe'),
                 (r'\\server\share\windows\notepad.exe',
@@ -1199,11 +1199,11 @@ State=AAAA/wA...
 
         partitions = []
         os_paths = []
-        if os.name == 'nt':
+        if IS_WINDOWS:
             # Allow CD-ROM, network drive, etc.
             partitions = psutil.disk_partitions(all=True)
             os_paths = (r'%windir%', r'%userprofile%', r'%temp%')
-        elif os.name == 'posix':
+        elif IS_POSIX:
             # Do not allow proc, sysfs, udev, etc.
             partitions_original = psutil.disk_partitions(all=False)
             # Allow ext4, vfat, etc. but not squashfs
@@ -1224,7 +1224,7 @@ State=AAAA/wA...
 
         for path in test_paths:
             with self.subTest(path=path):
-                if os.name == 'nt' and not os.path.exists(path):
+                if IS_WINDOWS and not os.path.exists(path):
                     # e.g., disconnected network drive or empty CD-ROM
                     continue
                 test_counter += 1
@@ -1261,7 +1261,7 @@ State=AAAA/wA...
     def test_get_filesystem_type(self):
         """Unit test for get_filesystem_type()"""
         home = os.path.expanduser('~')
-        if os.name == 'nt':
+        if IS_WINDOWS:
             path = self.tempdir
             fs_type = get_filesystem_type(path)[0]
             while path:
@@ -1282,7 +1282,7 @@ State=AAAA/wA...
                     check_path.lower())[0], 'NTFS')
                 self.assertEqual(get_filesystem_type(
                     check_path.upper())[0], 'NTFS')
-        elif os.name == 'posix':
+        elif IS_POSIX:
             for check_path in (home, '/'):
                 detected_fs = get_filesystem_type(check_path)[0]
                 self.assertIn(detected_fs, ['apfs', 'btrfs', 'ext4', 'ext3', 'hfs', 'squashfs', 'unknown'],
@@ -1304,7 +1304,7 @@ State=AAAA/wA...
             filename = self.write_file(os.path.join(
                 dirname, fname), b"abcdefghij" * 12345)
 
-            if 'nt' == os.name:
+            if IS_WINDOWS:
                 self.assertEqual(getsize(filename), 10 * 12345)
                 # Expand the directory names, which are in the short format,
                 # to test the case where the full path (including the directory)
@@ -1318,7 +1318,7 @@ State=AAAA/wA...
                     self.assertEqual(getsize(child), 10 * 12345)
                     counter += 1
                 self.assertEqual(counter, 1)
-            if 'posix' == os.name:
+            if IS_POSIX:
                 encoding = sys.getdefaultencoding()
                 output = str(subprocess.Popen(
                     ["du", "-h", filename],
@@ -1347,7 +1347,7 @@ State=AAAA/wA...
         # delete the empty directory
         delete(dirname)
 
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             # the following tests do not apply to Windows
             return
 
@@ -1375,7 +1375,7 @@ State=AAAA/wA...
     def test_getsizedir(self):
         """Unit test for getsizedir()"""
         path = '/bin'
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             path = 'c:\\windows\\system32'
         self.assertGreater(getsizedir(path), 0)
 
@@ -1410,10 +1410,10 @@ State=AAAA/wA...
 
     def test_listdir(self):
         """Unit test for listdir()"""
-        if 'posix' == os.name:
+        if IS_POSIX:
             dir1 = '/bin'
             dir2 = os.path.expanduser('/sbin')
-        elif 'nt' == os.name:
+        elif IS_WINDOWS:
             dir1 = os.path.expandvars(r'%windir%\fonts')
             dir2 = os.path.expandvars(r'%windir%\logs')
         else:
@@ -1451,7 +1451,7 @@ State=AAAA/wA...
             os.path.join(self.tempdir, 'doesnotexist')))
 
         # Check common junctions on Windows
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             user_docs = os.path.expandvars(r'%userprofile%\My Documents')
             prog_docs = os.path.expandvars(r'%ProgramData%\Documents')
             for junction_path in (user_docs, prog_docs):
@@ -1494,9 +1494,9 @@ State=AAAA/wA...
         """Unit test for same_partition()"""
         home = os.path.expanduser('~')
         self.assertTrue(same_partition(home, home))
-        if 'posix' == os.name:
+        if IS_POSIX:
             self.assertFalse(same_partition(home, '/dev'))
-        elif 'nt' == os.name:
+        elif IS_WINDOWS:
             home_drive = os.path.splitdrive(home)[0]
             # pylint: disable=import-outside-toplevel
             from bleachbit.Windows import get_fixed_drives
@@ -1598,7 +1598,7 @@ State=AAAA/wA...
         # Verbatim of whitelisted.
         self.assert_is_whitelisted('/home/foo')
         self.assert_is_whitelisted('/home/folder')
-        if 'posix' == os.name:
+        if IS_POSIX:
             # Whitelisted + path separator.
             self.assert_is_whitelisted('/home/folder/')
             # File under whitelisted directory.
@@ -1720,7 +1720,7 @@ State=AAAA/wA...
         It is called frequently, so the speed is important."""
         d = '/usr/bin'
         keep_list = [('file', '/home/foo'), ('folder', '/home/folder')]
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             d = os.path.expandvars(r'%windir%\system32')
             keep_list = [('file', r'c:\filename'), ('folder', r'c:\\folder')]
         reps = 20

@@ -29,7 +29,7 @@ import os
 import sys
 
 # first party imports
-from bleachbit import DeepScan, FileUtilities
+from bleachbit import DeepScan, FileUtilities, IS_WINDOWS
 from bleachbit.Cleaner import backends
 from bleachbit.Constant import EMPTY_SPACE_WARNING
 from bleachbit.Language import get_text as _, nget_text as ngettext
@@ -107,7 +107,7 @@ class Worker:
                 # so the user sees the canonical form and tests avoid
                 # double-backslash sequences.
                 filename = e.filename
-                if os.name == 'nt' and filename:
+                if IS_WINDOWS and filename:
                     filename = FileUtilities.extended_path_undo(filename)
                 # Do not show traceback.
                 logger.error(_("File not found: %s"), filename)
