@@ -23,7 +23,6 @@ import subprocess
 import time
 import urllib.parse
 import urllib.request
-from os import walk
 from pathlib import Path
 
 # local imports
@@ -54,6 +53,12 @@ if IS_POSIX:
     from bleachbit.General import WindowsError
     # pylint: disable=invalid-name
     pywinerror = WindowsError
+
+# DirEntry.is_junction() was added in Python 3.12. Below that, fall back to
+# bleachbit.Windows.is_junction(), which stats the path itself instead of
+# reusing the DirEntry's cached data.
+# TODO: drop this fallback once the minimum Python version is 3.12+
+_DIRENTRY_HAS_IS_JUNCTION = hasattr(os.DirEntry, 'is_junction')
 
 
 def _remove_windows_readonly(path):
@@ -258,11 +263,60 @@ def bytes_to_human(bytes_i):
     return 'A lot.'
 
 
+def _is_junction_entry(entry):
+    """Check whether a scandir entry is a Windows junction (mount point)"""
+    if _DIRENTRY_HAS_IS_JUNCTION:
+        return entry.is_junction()
+    return bleachbit.Windows.is_junction(entry.path)
+
+
+def _scan_children(top, list_directories, pending_dirs):
+    """Yield files under `top`, recursing into real subdirectories.
+
+    Symlinks and, on Windows, junctions are not descended into. When
+    list_directories is set, every directory found (including those links)
+    is collected into pending_dirs to be emitted after its contents.
+
+    Using os.scandir directly lets us reuse each entry's cached type instead
+    of re-stat'ing every subdirectory to test for links, as os.walk required.
+    """
+    try:
+        scandir_it = os.scandir(top)
+    except OSError:
+        return
+    subdirs = []
+    with scandir_it:
+        for entry in scandir_it:
+            try:
+                is_dir = entry.is_dir()
+            except OSError:
+                # e.g. permission denied; os.walk also treats this as a file
+                is_dir = False
+            if not is_dir:
+                # regular file, symlink to a file, or broken link
+                yield entry.path
+                continue
+            try:
+                # is_junction_entry() is Windows-only and never reached on
+                # POSIX thanks to short-circuit evaluation.
+                is_link = entry.is_symlink() or (
+                    IS_WINDOWS and _is_junction_entry(entry))
+            except OSError:
+                is_link = False
+            if list_directories:
+                pending_dirs.append(entry.path)
+            if not is_link:
+                subdirs.append(entry.path)
+    for subdir in subdirs:
+        yield from _scan_children(subdir, list_directories, pending_dirs)
+
+
 def children_in_directory(top, list_directories=False):
     """Iterate files and, optionally, subdirectories in directory
 
     Directories are returned after children to avoid trying to delete
-    a non-empty directory.
+    a non-empty directory. Symlinks and Windows junctions are never
+    traversed.
     """
     if isinstance(top, tuple):
         for top_ in top:
@@ -270,23 +324,7 @@ def children_in_directory(top, list_directories=False):
         return
 
     pending_dirs = [] if list_directories else None
-
-    for (dirpath, dirnames, filenames) in walk(top, topdown=True, followlinks=False):
-        if IS_WINDOWS and dirnames:
-            # Avoid traversing Windows symlinks or junctions.
-            link_dirnames = []
-            for dirname in list(dirnames):
-                if os.path.islink(os.path.join(dirpath, dirname)):
-                    link_dirnames.append(dirname)
-                    dirnames.remove(dirname)
-            if list_directories:
-                for dirname in link_dirnames:
-                    yield os.path.join(dirpath, dirname)
-        if list_directories:
-            for dirname in dirnames:
-                pending_dirs.append(os.path.join(dirpath, dirname))
-        for filename in filenames:
-            yield os.path.join(dirpath, filename)
+    yield from _scan_children(top, list_directories, pending_dirs)
 
     if list_directories:
         pending_dirs.sort(key=len)

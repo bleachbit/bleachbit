@@ -310,7 +310,20 @@ class CleanerTestCase(common.BleachbitTestCase):
         _lexists = os.path.lexists
         _listdir = os.listdir
         _oswalk = os.walk
-        _fu_walk = bleachbit.FileUtilities.walk
+        _scandir = os.scandir
+
+        class _EmptyScandir:
+            """Mimic os.scandir returning no entries (and a no-op context)."""
+
+            def __iter__(self):
+                return iter(())
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
         try:
             glob.iglob = lambda path, *args, **kwargs: []
             os.path.exists = lambda path: False
@@ -318,7 +331,7 @@ class CleanerTestCase(common.BleachbitTestCase):
             os.path.lexists = lambda path: False
             os.listdir = lambda path: []
             os.walk = lambda top, topdown=True, onerror=None, followlinks=False: []
-            bleachbit.FileUtilities.walk = lambda top, topdown=True, onerror=None, followlinks=False: []
+            os.scandir = lambda path='.', *args, **kwargs: _EmptyScandir()
             for key in sorted(backends):
                 for (option_id, __name) in backends[key].get_options():
                     for cmd in backends[key].get_commands(option_id):
@@ -336,7 +349,7 @@ class CleanerTestCase(common.BleachbitTestCase):
             os.path.lexists = _lexists
             os.listdir = _listdir
             os.walk = _oswalk
-            bleachbit.FileUtilities.walk = _fu_walk
+            os.scandir = _scandir
 
     def test_register_cleaners(self):
         """Unit test for register_cleaners"""
