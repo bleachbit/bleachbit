@@ -936,13 +936,16 @@ def uris_to_paths(file_uris):
 def whitelisted_posix(path, check_realpath=True, _followed_link=False):
     """Check whether this POSIX path is whitelisted"""
     from bleachbit.Options import options
+    keep_paths = options.get_whitelist_paths()
+    if not keep_paths:
+        return False
     if check_realpath and os.path.islink(path):
         # also check the link name
         if whitelisted_posix(path, False):
             return True
         # resolve symlink
         return whitelisted_posix(os.path.realpath(path), False, _followed_link=True)
-    for (keep_type, keep_path) in options.get_whitelist_paths():
+    for (keep_type, keep_path) in keep_paths:
         if keep_type == 'file':
             if path_equal(path, keep_path):
                 return True
