@@ -112,6 +112,42 @@ class CleanerTestCase(common.BleachbitTestCase):
         self.assertRaises(
             RuntimeError, cleaner.get_commands('option3').__next__)
 
+    def test_multiple_actions_per_option(self):
+        """Multiple actions under one option run in registration order, and
+        actions added after get_commands()/get_deep_scan() are reflected."""
+
+        class _StubAction:
+            """Minimal action provider yielding sentinel values."""
+
+            def __init__(self, token):
+                self.token = token
+
+            def get_commands(self):
+                yield self.token
+
+            def get_deep_scan(self):
+                yield ('deep', self.token)
+
+        cleaner = Cleaner()
+        cleaner.add_option('opt', 'name', 'description')
+        cleaner.add_action('opt', _StubAction('a'))
+        cleaner.add_action('opt', _StubAction('b'))
+
+        # Both actions run, in registration order
+        self.assertEqual(list(cleaner.get_commands('opt')), ['a', 'b'])
+        self.assertEqual(list(cleaner.get_deep_scan('opt')),
+                         [('deep', 'a'), ('deep', 'b')])
+
+        # Adding an action after the index is built must be reflected
+        cleaner.add_action('opt', _StubAction('c'))
+        self.assertEqual(list(cleaner.get_commands('opt')), ['a', 'b', 'c'])
+        self.assertEqual(list(cleaner.get_deep_scan('opt')),
+                         [('deep', 'a'), ('deep', 'b'), ('deep', 'c')])
+
+        # A registered option with no actions yields nothing without raising
+        cleaner.add_option('empty', 'name2', 'description2')
+        self.assertEqual(list(cleaner.get_commands('empty')), [])
+
     def test_auto_hide(self):
         for key in sorted(backends):
             self.assertIsInstance(backends[key].auto_hide(), bool)
