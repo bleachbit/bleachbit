@@ -124,7 +124,7 @@ def _bootstrap_windows():
             name = win32api.GetModuleFileName(module)
         except Exception:
             continue
-        if re.search(r'python\d+.dll$', name, re.IGNORECASE):
+        if re.search(r'python\d+\.dll$', name, re.IGNORECASE):
             bindir = os.path.dirname(name)
             os.environ['GDK_PIXBUF_MODULE_FILE'] = os.path.join(
                 bindir, 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache')
