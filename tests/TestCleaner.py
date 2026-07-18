@@ -9,6 +9,7 @@
 Test case for module Cleaner
 """
 
+import contextlib
 import glob
 import logging
 import os
@@ -18,7 +19,7 @@ from xml.dom.minidom import parseString
 import bleachbit
 from bleachbit import IS_WINDOWS, IS_POSIX
 from bleachbit.Action import ActionProvider, Command
-from bleachbit.Cleaner import Cleaner, backends, create_simple_cleaner, register_cleaners
+from bleachbit.Cleaner import Cleaner, backends, create_simple_cleaner, simpler_cleaner_process_path, register_cleaners
 import bleachbit.FileUtilities
 
 from tests import common
@@ -157,6 +158,54 @@ class CleanerTestCase(common.BleachbitTestCase):
 
         for dirname in dirnames:
             self.assertNotExists(dirname)
+
+    def test_create_simple_cleaner_refuses_cwd(self):
+        """create_simple_cleaner must refuse to shred CWD or its parent."""
+        cwd = os.getcwd()
+        cwd_parent = os.path.dirname(cwd)
+        # Every spelling of "the working directory" or its parent.
+        bad_inputs = ('', ' ', '.', '..', './', './.',
+                      'foo/..', cwd, cwd_parent)
+        for bad in bad_inputs:
+            cleaner = create_simple_cleaner([bad])
+            cmds = list(cleaner.get_commands('files'))
+            self.assertEqual(cmds, [], f'expected no commands for {bad!r}')
+
+    def test_simpler_cleaner_process_path(self):
+        """Unit test for simpler_cleaner_process_path()."""
+        cwd = os.getcwd()
+        cwd_parent = os.path.dirname(cwd)
+
+        # Refused inputs return None.
+        for bad in ('', ' ', '.', '..', './', './.', 'foo/..', cwd, cwd_parent):
+            self.assertIsNone(simpler_cleaner_process_path(bad),
+                              f'expected None for {bad!r}')
+
+        # Non-string raises.
+        for bad in (123, None, [], {}, set()):
+            with self.assertRaises(RuntimeError):
+                simpler_cleaner_process_path(bad)
+
+        # An absolute path is returned unchanged.
+        # It does not need to exist.
+        if IS_WINDOWS:
+            missing_abs_path = r'c:\nonexistent\path'
+        else:
+            missing_abs_path = '/nonexistent/path'
+        self.assertEqual(simpler_cleaner_process_path(
+            missing_abs_path), missing_abs_path)
+
+        # A relative path is returned as an absolute path.
+        # It does not need to exist.
+        # A genuinely relative path (a bare filename relative to CWD)
+        # is normalized to an absolute one and must not collapse to CWD.
+        # chdir into the tempdir so a bare filename resolves there; the
+        # context manager restores CWD even on assertion failure.
+        rel_target = os.path.join(self.tempdir, 'rel-target')
+        with contextlib.chdir(self.tempdir):
+            processed = simpler_cleaner_process_path('rel-target')
+        self.assertEqual(processed, rel_target)
+        self.assertNotEqual(processed, self.tempdir)
 
     def test_get_name(self):
         for key in sorted(backends):

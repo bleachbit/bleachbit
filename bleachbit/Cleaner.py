@@ -626,6 +626,36 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None, allow_lo
     yield False  # end the iteration
 
 
+def simpler_cleaner_process_path(path):
+    """Process a path for create_simple_cleaner
+
+    Returns the absolute path to shred or None if invalid.
+
+    Invalid:
+        - not a string
+        - empty string
+        - path resolves to CWD or its parent
+
+    Not checked: path existence or type of path
+    """
+    if not isinstance(path, (str)):
+        raise RuntimeError(
+            f'expected path as string but got {str(path)}')
+    if not path.strip():
+        logging.getLogger(__name__).warning(
+            'Refusing to clean an empty path')
+        return None
+    if not os.path.isabs(path):
+        path = os.path.abspath(path)
+    cwd = os.getcwd()
+    cwd_parent = os.path.dirname(cwd)
+    if path in (cwd, cwd_parent):
+        logging.getLogger(__name__).warning(
+            'Refusing to shred working directory or its parent: %s', path)
+        return None
+    return path
+
+
 def create_simple_cleaner(paths):
     """Shred arbitrary files (used in CLI and GUI)"""
     cleaner = Cleaner()
@@ -638,11 +668,9 @@ def create_simple_cleaner(paths):
 
         def get_commands(self):
             for path in paths:
-                if not isinstance(path, (str)):
-                    raise RuntimeError(
-                        f'expected path as string but got {str(path)}')
-                if not os.path.isabs(path):
-                    path = os.path.abspath(path)
+                path = simpler_cleaner_process_path(path)
+                if not path:
+                    continue
                 if os.path.isdir(path):
                     for child in children_in_directory(path, True):
                         yield Command.Shred(child)
