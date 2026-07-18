@@ -1278,8 +1278,7 @@ def get_font_conf_file():
 class SplashThread(Thread):
     _class_atom = None
 
-    def __init__(self, group=None, target=None, name=None,
-                 args=(), kwargs=None, Verbose=None):
+    def __init__(self, group=None, name=None, args=(), kwargs=None):
         super().__init__(group, self._show_splash_screen, name, args, kwargs)
         self.daemon = True
         self._splash_screen_started = Event()
