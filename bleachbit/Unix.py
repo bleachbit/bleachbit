@@ -694,6 +694,9 @@ def dnf_clean():
                 raise RuntimeError(f'Invalid output from dnf: {line}')
     if rc > 0:
         raise RuntimeError(f'dnf clean raised error {rc}: {stderr}')
+    match = DNF5_CLEAN_ERRORS_RE.search(allout)
+    if match:
+        raise RuntimeError(f'dnf clean reported {match.group(1)} errors')
 
     # DNF5 reports the freed space directly in its summary line.
     freed_bytes = parse_dnf_freed_space(allout)
@@ -746,6 +749,12 @@ DNF5_CLEAN_RE = re.compile(
     r'Removed \d+ files, \d+ directories '
     r'\(total of ([0-9]+(?:\.[0-9]+)?) '
     r'(' + _DNF5_UNIT_NAMES + r')\)')
+
+DNF5_CLEAN_ERRORS_RE = re.compile(
+    r'Removed \d+ files, \d+ directories '
+    r'\(total of [0-9]+(?:\.[0-9]+)? '
+    r'(?:' + _DNF5_UNIT_NAMES + r')\)\. '
+    r'([1-9]\d*) errors occurred\.')
 
 
 def parse_size(size):

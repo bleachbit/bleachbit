@@ -734,6 +734,11 @@ PrefersNonDefaultGPU=false""")
         self.assertEqual(dnf_clean(), 25 * 1024 ** 2)
         self.assertEqual(mock_getsizedir.call_count, 1)
 
+        mock_run.return_value = (
+            0, 'Removed 12 files, 3 directories '
+            '(total of 25 MiB). 1 errors occurred.\n', '')
+        self.assertRaises(RuntimeError, dnf_clean)
+
         # DNF5 "nothing to clean" still parses to 0 bytes.
         mock_run.return_value = (
             0, 'Removed 0 files, 0 directories '
