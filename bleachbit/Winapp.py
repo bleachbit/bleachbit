@@ -301,7 +301,8 @@ class Winapp:
         # REG exclusions are handled separately as registry key patterns
         file_excludekeys = []
         reg_excludekeys = []
-        for option in self.parser.options(section):
+        section_options = self.parser.options(section)
+        for option in section_options:
             if self.re_excludekey.match(option):
                 excludekey_val = self.parser.get(section, option)
                 nwholeregex = self.excludekey_to_nwholeregex(excludekey_val)
@@ -328,7 +329,7 @@ class Winapp:
         option_name = section.replace('*', '').strip()
         self.cleaners[lid].add_option(
             section2option(section), option_name, '')
-        for option in self.parser.options(section):
+        for option in section_options:
             if (
                 option
                 in {
