@@ -9,7 +9,6 @@
 Test case for module Cleaner
 """
 
-import contextlib
 import glob
 import logging
 import os
@@ -164,8 +163,10 @@ class CleanerTestCase(common.BleachbitTestCase):
         cwd = os.getcwd()
         cwd_parent = os.path.dirname(cwd)
         # Every spelling of "the working directory" or its parent.
-        bad_inputs = ('', ' ', '.', '..', './', './.',
-                      'foo/..', cwd, cwd_parent)
+        bad_inputs = ('', ' ', '.', '..', './', './.', 'foo/..',
+                      cwd, cwd_parent,
+                      cwd + os.sep, os.path.join(cwd, '.'),
+                      cwd_parent + os.sep, os.path.join(cwd_parent, '.'))
         for bad in bad_inputs:
             cleaner = create_simple_cleaner([bad])
             cmds = list(cleaner.get_commands('files'))
@@ -201,10 +202,19 @@ class CleanerTestCase(common.BleachbitTestCase):
         # is normalized to an absolute one and must not collapse to CWD.
         # chdir into the tempdir so a bare filename resolves there; the
         # context manager restores CWD even on assertion failure.
-        rel_target = os.path.join(self.tempdir, 'rel-target')
-        with contextlib.chdir(self.tempdir):
+        # macOS needs realpath because path uses symlink.
+        rel_target = os.path.join(os.path.realpath(self.tempdir), 'rel-target')
+        # After dropping support for Python 3.9, this can be simplified to:
+        # `with contextlib.chdir(self.tempdir):`
+        orig_cwd = os.getcwd()
+        try:
+            os.chdir(self.tempdir)
             processed = simpler_cleaner_process_path('rel-target')
-        self.assertEqual(processed, rel_target)
+        finally:
+            os.chdir(orig_cwd)
+        # On Windows, `processed` may be a 8.3 short name, so expand to
+        # long path before comparison.
+        self.assertEqual(os.path.realpath(processed), rel_target)
         self.assertNotEqual(processed, self.tempdir)
 
     def test_get_name(self):

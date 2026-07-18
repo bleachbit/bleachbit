@@ -647,6 +647,8 @@ def simpler_cleaner_process_path(path):
         return None
     if not os.path.isabs(path):
         path = os.path.abspath(path)
+    else:
+        path = os.path.normpath(path)
     cwd = os.getcwd()
     cwd_parent = os.path.dirname(cwd)
     if path in (cwd, cwd_parent):
