@@ -59,6 +59,7 @@ class Cleaner:
         # whole list per option (get_commands/get_deep_scan) is quadratic.
         self._actions_index = None
         self._actions_index_src = None
+        self._sorted_option_keys = None
 
     def add_action(self, option_id, action):
         """Register 'action' (instance of class Action) to be executed
@@ -82,6 +83,7 @@ class Cleaner:
     def add_option(self, option_id, name, description):
         """Register option (such as 'cache')"""
         self.options[option_id] = (name, description)
+        self._sorted_option_keys = None
 
     def add_running(self, detection_type, pathname, same_user=False):
         """Add a way to detect this program is currently running"""
@@ -132,17 +134,21 @@ class Cleaner:
         """Return the human name of this cleaner"""
         return self.name
 
+    def _get_sorted_option_keys(self):
+        """Return option keys sorted once and cached until options change."""
+        if self._sorted_option_keys is None:
+            self._sorted_option_keys = sorted(self.options.keys())
+        return self._sorted_option_keys
+
     def get_option_descriptions(self):
         """Yield the names and descriptions of each option in a 2-tuple"""
-        if self.options:
-            for key in sorted(self.options.keys()):
-                yield (self.options[key][0], self.options[key][1])
+        for key in self._get_sorted_option_keys():
+            yield (self.options[key][0], self.options[key][1])
 
     def get_options(self):
         """Return user-configurable options in 2-tuple (id, name)"""
-        if self.options:
-            for key in sorted(self.options.keys()):
-                yield (key, self.options[key][0])
+        for key in self._get_sorted_option_keys():
+            yield (key, self.options[key][0])
 
     def get_warning(self, option_id):
         """Return a warning as string."""
