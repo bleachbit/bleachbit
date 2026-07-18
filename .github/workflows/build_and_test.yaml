@@ -31,12 +31,17 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 # 2025-05-01: ubuntu-latest is currently 24.04, and its native
 # python version is 3.12.
 # native python for 22.04 is 3.10.
 jobs:
   linux:
     name: linux (${{ matrix.python-version }})
+    runs-on: ${{ matrix.ubuntu-version }}
     timeout-minutes: 25
     strategy:
       fail-fast: false
@@ -55,9 +60,6 @@ jobs:
             python-extra-dep: 'libgirepository-2.0-dev'
             pygobject-version: ''
 
-    runs-on: ${{ matrix.ubuntu-version }}
-
-    # https://docs.github.com/en/actions/reference/workflows-and-actions/variables
     env:
       COVERAGE: "coverage run"
 
@@ -242,13 +244,13 @@ jobs:
           "version=$version" >> $env:GITHUB_OUTPUT
 
       - name: Generate translations
-        shell: cmd
+        shell: cmd # zizmor: ignore[misfeature] cmd is required for MSYS make, psexec, and .bat wrappers
         run: |
           set PATH=%MSYS_BIN%;%PATH%
           make PYTHON="%PYTHON_EXE%" -C po local bleachbit.pot
 
       - name: Build executable and installers
-        shell: cmd
+        shell: cmd # zizmor: ignore[misfeature] cmd is required for MSYS make, psexec, and .bat wrappers
         run: |
           set PATH=%MSYS_BIN%;%PATH%
           "%PYTHON_EXE%" -m windows.setup
@@ -330,18 +332,18 @@ jobs:
           Set-Content -Path bleachbit\Revision.py -Encoding utf8 -Value "revision = `"$rev`"`nbuild_number = `"$env:GITHUB_RUN_NUMBER`""
 
       - name: Generate translations
-        shell: cmd
+        shell: cmd # zizmor: ignore[misfeature] cmd is required for MSYS make, psexec, and .bat wrappers
         run: |
           set PATH=%MSYS_BIN%;%PATH%
           make PYTHON="%PYTHON_EXE%" -C po local bleachbit.pot
 
       - name: Install test dependencies
-        shell: cmd
+        shell: cmd # zizmor: ignore[misfeature] cmd is required for MSYS make, psexec, and .bat wrappers
         run: '"%PYTHON_HOME%\Scripts\pip3.exe" install --disable-pip-version-check -r requirements-test.txt'
 
       - name: Run admin tests
         if: matrix.suite == 'admin'
-        shell: cmd
+        shell: cmd # zizmor: ignore[misfeature] cmd is required for MSYS make, psexec, and .bat wrappers
         env:
           DESTRUCTIVE_TESTS: T
           PYTHONWARNINGS: error
@@ -352,21 +354,21 @@ jobs:
 
       - name: Run non-admin tests
         if: matrix.suite == 'nonadmin'
-        shell: cmd
+        shell: cmd # zizmor: ignore[misfeature] cmd is required for MSYS make, psexec, and .bat wrappers
         run: |
           set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
           call windows\run-psexec-nonadmin-tests.bat
 
       - name: Run low-integrity tests
         if: matrix.suite == 'low-integrity'
-        shell: cmd
+        shell: cmd # zizmor: ignore[misfeature] cmd is required for MSYS make, psexec, and .bat wrappers
         run: |
           set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
           call windows\run-psexec-low-integrity-tests.bat
 
       - name: Collect low-integrity coverage
         if: matrix.suite == 'low-integrity' && github.repository == 'bleachbit/bleachbit'
-        shell: cmd
+        shell: cmd # zizmor: ignore[misfeature] cmd is required for MSYS make, psexec, and .bat wrappers
         run: copy /Y "%USERPROFILE%\AppData\LocalLow\.coverage.psexec" .coverage.psexec
 
       - name: Upload coverage artifact

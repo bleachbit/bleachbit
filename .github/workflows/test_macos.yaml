@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - '**'
+      - '!dependabot/**' # avoid duplicate runs; the pull_request event handles dependabot PRs
     paths:
       - '**'
       - '!bleachbit.spec'
@@ -28,18 +29,21 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 # Headless tests on macOS. GTK is not installed, so GUI tests
 # auto-skip via @unittest.skipUnless(HAVE_GTK, ...).
 jobs:
   test:
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
         os: [macos-15-intel, macos-latest]
         python-version: ['3.12']
-
-    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
