@@ -82,7 +82,7 @@ class UnixTestCase(common.BleachbitTestCase):
     @common.skipIfWindows
     def test_apt(self):
         """Unit test for method apt_autoclean() and apt_autoremove()"""
-        if 0 != os.geteuid() or not exe_exists('apt-get'):
+        if 0 != os.geteuid() or not exe_exists('/usr/bin/apt-get'):
             self.assertRaises(RuntimeError, apt_autoclean)
             self.assertRaises(RuntimeError, apt_autoremove)
         else:
@@ -128,7 +128,7 @@ class UnixTestCase(common.BleachbitTestCase):
                 0, "\n".join(mock_locales) + "\n", "")
             locales = find_available_locales()
             self.assertEqual(locales, mock_locales)
-            mock_run_external.assert_called_once_with(['locale', '-a'])
+            mock_run_external.assert_called_once_with(['/usr/bin/locale', '-a'])
 
     @mock.patch('locale.getlocale')
     @mock.patch('bleachbit.Unix.find_available_locales')
@@ -185,7 +185,7 @@ class UnixTestCase(common.BleachbitTestCase):
         self.assertRaises(AssertionError, find_best_locale, None)
         self.assertRaises(AssertionError, find_best_locale, [])
 
-    @unittest.skipUnless(exe_exists('apt-get'),
+    @unittest.skipUnless(exe_exists('/usr/bin/apt-get'),
                          'skipping tests for unavailable apt-get')
     def test_get_apt_size(self):
         """Unit test for method get_apt_size()"""
@@ -491,7 +491,7 @@ PrefersNonDefaultGPU=false""")
 
     @common.skipIfWindows
     def test_journald_clean(self):
-        if not exe_exists('journalctl'):
+        if not exe_exists('/usr/bin/journalctl'):
             self.assertRaises(RuntimeError, journald_clean)
         else:
             try:
@@ -707,7 +707,7 @@ PrefersNonDefaultGPU=false""")
     def test_yum_clean(self):
         """Unit test for yum_clean()"""
         if 0 != os.geteuid() or os.path.exists('/var/run/yum.pid') \
-                or not exe_exists('yum'):
+                or not exe_exists('/usr/bin/yum'):
             self.assertRaises(RuntimeError, yum_clean)
         else:
             bytes_freed = yum_clean()
@@ -718,7 +718,7 @@ PrefersNonDefaultGPU=false""")
     def test_dnf_clean(self):
         """Unit test for dnf_clean()"""
         if 0 != os.geteuid() or os.path.exists('/var/run/dnf.pid') \
-                or not exe_exists('dnf'):
+                or not exe_exists('/usr/bin/dnf'):
             self.assertRaises(RuntimeError, dnf_clean)
         else:
             bytes_freed = dnf_clean()
@@ -800,7 +800,7 @@ PrefersNonDefaultGPU=false""")
     def test_dnf_autoremove_real(self):
         """Unit test for dnf_autoremove() with real dnf"""
         if 0 != os.geteuid() or os.path.exists('/var/run/dnf.pid') \
-                or not exe_exists('dnf'):
+                or not exe_exists('/usr/bin/dnf'):
             self.assertRaises(RuntimeError, dnf_autoremove)
         else:
             bytes_freed = dnf_autoremove()
@@ -927,7 +927,7 @@ PrefersNonDefaultGPU=false""")
     def test_pacman_cache(self):
         """Unit test for pacman_cache()"""
         if 0 != os.geteuid() or os.path.exists('/var/lib/pacman/db.lck') \
-                or not exe_exists('paccache'):
+                or not exe_exists('/usr/bin/paccache'):
             self.assertRaises(RuntimeError, pacman_cache)
         else:
             bytes_freed = pacman_cache()
@@ -951,7 +951,7 @@ PrefersNonDefaultGPU=false""")
         bytes_freed = pacman_cache()
         self.assertEqual(bytes_freed, 42310000)
 
-        mock_run.assert_called_once_with(['paccache', '-rk0'])
+        mock_run.assert_called_once_with(['/usr/bin/paccache', '-rk0'])
 
         # real paccache reports binary units (MiB), not decimal (M)
         mock_run.return_value = (
@@ -996,7 +996,7 @@ PrefersNonDefaultGPU=false""")
     @common.skipUnlessDestructive
     def test_snap_disabled_clean(self):
         """Unit test for snap_disabled_clean()"""
-        if not exe_exists('snap'):
+        if not exe_exists('/usr/bin/snap'):
             self.assertRaises(RuntimeError, snap_disabled_clean)
         else:
             bytes_freed = snap_disabled_clean()
@@ -1006,7 +1006,7 @@ PrefersNonDefaultGPU=false""")
     @common.skipIfWindows
     def test_snap_disabled_preview(self):
         """Unit test for snap_disabled_preview()"""
-        if not exe_exists('snap'):
+        if not exe_exists('/usr/bin/snap'):
             self.assertRaises(RuntimeError, snap_disabled_preview)
         else:
             bytes_freed = snap_disabled_preview()
@@ -1112,7 +1112,7 @@ PrefersNonDefaultGPU=false""")
         error_code = None
 
         def side_effect_func(*args, **_kwargs):
-            self.assertEqual(args[0][0], 'xhost')
+            self.assertEqual(args[0][0], '/usr/bin/xhost')
             return (error_code,
                     '',
                     '')

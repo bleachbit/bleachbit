@@ -160,9 +160,15 @@ def get_filesystem_type(path):
 
 def open_files_lsof(run_lsof=None):
     """Return iterator of open files using lsof"""
+    if IS_LINUX and run_lsof is None:
+        raise RuntimeError("open_files_lsof() should not be called on Linux")
     if run_lsof is None:
+        # macOS 26 (Tahoe) has /usr/sbin/lsof
+        # FreeBSD has /usr/local/sbin/lsof
+        lsof_path = '/usr/sbin/lsof' if IS_MAC else '/usr/local/sbin/lsof'
+
         def run_lsof():
-            return subprocess.check_output(["lsof", "-Fn", "-n"], text=True)
+            return subprocess.check_output([lsof_path, "-Fn", "-n"], text=True)
     output = run_lsof()
     if isinstance(output, bytes):
         output = output.decode('utf-8', errors='replace')

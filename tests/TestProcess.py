@@ -82,6 +82,8 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
             ProcessInfo(530, 'Google Chrome Helper', False),
         ]
         self.assertEqual(result, expected)
+        mock_check_output.assert_called_once_with(
+            ['/bin/ps', 'aux', '-c'], universal_newlines=True)
 
         mock_check_output.return_value = 'invalid-input'
         with self.assertRaises(RuntimeError):

@@ -129,8 +129,9 @@ def _enumerate_ps_aux():
     """ps aux strategy (BSD/macOS)"""
     from bleachbit.General import get_real_username
     current_user = get_real_username()
+    # macOS 26 (Tahoe) has /bin/ps
     ps_out = subprocess.check_output(
-        ["ps", "aux", "-c"], universal_newlines=True)
+        ["/bin/ps", "aux", "-c"], universal_newlines=True)
     first_line = ps_out.split('\n', maxsplit=1)[0].strip()
     if "USER" not in first_line or "COMMAND" not in first_line:
         raise RuntimeError("Unexpected ps header format")

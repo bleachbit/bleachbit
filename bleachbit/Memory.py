@@ -56,7 +56,7 @@ def get_proc_swaps():
     # Usually 'swapon -s' is identical to '/proc/swaps'
     # Here is one exception:
     # https://bugs.launchpad.net/ubuntu/+source/bleachbit/+bug/1092792
-    (rc, stdout, _stderr) = General.run_external(['swapon', '-s'])
+    (rc, stdout, _stderr) = General.run_external(['/usr/sbin/swapon', '-s'])
     if 0 == rc:
         return stdout
     logger.debug(
@@ -82,7 +82,7 @@ def disable_swap_linux():
     if 0 == count_swap_linux():
         return None
     logger.debug(_("Disabling swap."))
-    args = ["swapoff", "-a", "-v"]
+    args = ["/usr/sbin/swapoff", "-a", "-v"]
     (rc, stdout, stderr) = General.run_external(args)
     if 0 != rc:
         raise RuntimeError(stderr.replace("\n", ""))
@@ -102,7 +102,7 @@ def disable_swap_linux():
 def enable_swap_linux():
     """Enable Linux swap"""
     logger.debug(_("Re-enabling swap."))
-    args = ["swapon", "-a"]
+    args = ["/usr/sbin/swapon", "-a"]
     (rc, _stdout, stderr) = General.run_external(args)
     if 0 != rc:
         raise RuntimeError(stderr.replace("\n", ""))
@@ -190,7 +190,7 @@ def _run_memory_child_systemd_scope():
     not be started this way -- in which case the caller should fall back
     to ``_run_memory_child_fork``).
     """
-    if not FileUtilities.exe_exists('systemd-run'):
+    if not FileUtilities.exe_exists('/usr/bin/systemd-run'):
         return None
     try:
         real_uid = General.get_real_uid()
@@ -212,7 +212,7 @@ def _run_memory_child_systemd_scope():
     # Include the PID so concurrent runs do not collide on a fixed unit
     # name (systemd-run refuses to create a unit that already exists).
     args = [
-        'systemd-run', '--scope', '--collect', '--quiet',
+        '/usr/bin/systemd-run', '--scope', '--collect', '--quiet',
         f'--unit=bleachbit-wipe-memory-{os.getpid()}',
         '--property=OOMPolicy=kill',
         '--', sys.executable, '-c', _memory_child_script(real_uid),
@@ -304,7 +304,7 @@ def get_swap_size_linux(device, proc_swaps=None):
 def get_swap_uuid(device):
     """Find the UUID for the swap device"""
     uuid = None
-    args = ['blkid', device, '-s', 'UUID']
+    args = ['/usr/sbin/blkid', device, '-s', 'UUID']
     (_rc, stdout, _stderr) = General.run_external(args)
     uuid_re = re.compile(r"^%s: UUID=\"([a-z0-9-]+)\"" % device)
     for line in stdout.split('\n'):
@@ -440,7 +440,7 @@ def wipe_swap_linux(devices, proc_swaps):
         # reinitialize
         # TRANSLATORS: The variable is a device like /dev/sda2
         logger.debug(_("Reinitializing the swap device %s."), device)
-        args = ['mkswap', device]
+        args = ['/usr/sbin/mkswap', device]
         if uuid:
             args.append("-U")
             args.append(uuid)
@@ -454,7 +454,7 @@ def wipe_memory():
     if not IS_LINUX:
         raise RuntimeError(
             'wipe_memory() requires Linux')
-    for cmd in ('swapon', 'swapoff', 'blkid'):
+    for cmd in ('/usr/sbin/swapon', '/usr/sbin/swapoff', '/usr/sbin/blkid'):
         if not FileUtilities.exe_exists(cmd):
             raise RuntimeError(f"wipe_memory: Command {cmd} not found")
     # cache the file because 'swapoff' changes it

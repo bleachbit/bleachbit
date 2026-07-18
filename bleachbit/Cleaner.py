@@ -237,7 +237,11 @@ class System(Cleaner):
         #
         # options just for Microsoft Windows
         #
-        if IS_WINDOWS or (IS_LINUX and (FileUtilities.exe_exists('resolvectl') or FileUtilities.exe_exists('systemd-resolve'))):
+        has_dns_flush = IS_WINDOWS or (
+            IS_LINUX and (
+                FileUtilities.exe_exists('/usr/bin/resolvectl') or
+                FileUtilities.exe_exists('/usr/bin/systemd-resolve')))
+        if has_dns_flush:
             # TRANSLATORS: This is a label for the option to clear the system DNS cache.
             dns_cache_label = _('DNS cache')
             self.add_option('dns_cache', dns_cache_label,
