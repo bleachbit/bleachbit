@@ -919,6 +919,12 @@ def uris_to_paths(file_uris):
             if len(file_path) > 2 and file_path[2] == ':':
                 # remove front slash for Windows-style path
                 file_path = file_path[1:]
+            if not file_path:
+                # An empty path (e.g. from "file://") would resolve to the
+                # current working directory downstream via os.path.abspath('')
+                # in create_simple_cleaner.
+                logger.warning('Skipping malformed file URI: %s', file_uri)
+                continue
             file_paths.append(file_path)
         else:
             logger.warning('Unsupported scheme: %s', file_uri)

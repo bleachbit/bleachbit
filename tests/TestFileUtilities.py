@@ -1526,6 +1526,12 @@ State=AAAA/wA...
         uri_s = ['foo://bar']
         self.assertEqual(uris_to_paths(uri_u + uri_w + uri_s), path_u + path_w)
 
+        # Malformed file URIs must not yield an empty path, which previously
+        # resolved to CWD in create_simple_cleaner.
+        self.assertEqual(uris_to_paths(['file:']), [])
+        self.assertEqual(uris_to_paths(['file://']), [])
+        self.assertEqual(uris_to_paths(['file:///']), [os.path.normpath('/')])
+
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""
         path = os.path.join(self.tempdir, 'bleachbit.tmp.sqlite3')
