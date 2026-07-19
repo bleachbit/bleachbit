@@ -418,8 +418,8 @@ class GeneralTestCase(common.BleachbitTestCase):
         if sudo_mode():
             self.skipTest('dconf not supported in sudo mode')
         # pylint: disable=import-outside-toplevel
-        from bleachbit.GtkShim import HAVE_GTK
-        if not HAVE_GTK:
+        from bleachbit.GtkShim import is_gtk_available
+        if not is_gtk_available():
             self.skipTest('dconf not supported without GUI')
         args = ['dconf', 'write',
                 '/apps/bleachbit/test', 'true']

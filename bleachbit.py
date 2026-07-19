@@ -42,8 +42,8 @@ def main():
     # Check for GUI only when needed: this avoids a Gtk warning when
     # a display is not available.
     if len(sys.argv) == 1 or '--gui' in sys.argv:
-        from bleachbit.GtkShim import HAVE_GTK
-        have_gui = HAVE_GTK
+        from bleachbit.GtkShim import is_gtk_available
+        have_gui = is_gtk_available()
     else:
         have_gui = False
 
