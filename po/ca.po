@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-07-12 15:23-0600\n"
-"PO-Revision-Date: 2025-03-16 06:50+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"PO-Revision-Date: 2026-07-19 11:01+0000\n"
+"Last-Translator: Jaime Muñoz Martín <jmmartin_5@outlook.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/bleachbit/main/"
 "ca/>\n"
 "Language: ca\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Launchpad-Export-Date: 2022-01-23 20:20+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -48,16 +48,12 @@ msgstr "Galetes"
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#, fuzzy
-#| msgid ""
-#| "Delete cookies, which contain information such as web site preferences, "
-#| "authentication, and tracking identification"
 msgid ""
 "Delete cookies, which store login information, website preferences, and "
 "tracking identifiers"
 msgstr ""
-"Suprimeix les galetes, que contenen informació com les preferències dels "
-"llocs web, l’autenticació i la identificació de seguiment"
+"Suprimeix les galetes, que emmagatzemen informació d'inici de sessió, "
+"preferències del lloc web i identificadors de seguiment"
 
 #: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
 #: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
@@ -261,10 +257,8 @@ msgstr "Historial dels formularis"
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
-#, fuzzy
-#| msgid "Delete the search history"
 msgid "Saved form entries and search bar history"
-msgstr "Suprimeix l'historial de cerca"
+msgstr "Historial d'entrades de formulari desades i de la barra de cerca"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
 #: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
@@ -307,7 +301,7 @@ msgstr "Sessió"
 #: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Previously open tabs and windows"
-msgstr ""
+msgstr "Pestanyes i finestres obertes anteriorment"
 
 #. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
@@ -316,7 +310,7 @@ msgstr ""
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
 msgid "Site data"
-msgstr ""
+msgstr "Dades del lloc"
 
 #. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
@@ -326,6 +320,8 @@ msgstr ""
 #: ../cleaners/opera.xml
 msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
 msgstr ""
+"Suprimeix LocalStorage, IndexedDB i altres dades emmagatzemades pels llocs "
+"web"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
@@ -471,10 +467,8 @@ msgstr ""
 #: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
-#, fuzzy
-#| msgid "A history of forms entered in web sites"
 msgid "A history of forms entered in websites"
-msgstr "Historial dels formularis emplenats als llocs web"
+msgstr "Historial de formularis introduïts a llocs web"
 
 #: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/slack.xml
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
@@ -492,10 +486,10 @@ msgstr "Sincronització"
 
 #: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#, fuzzy
-#| msgid "Delete the sync data and sign out of the browser"
 msgid "Delete the sync data (including web apps) and sign out of the browser"
-msgstr "Suprimeix les dades de sincronització i tanca la sessió del navegador"
+msgstr ""
+"Suprimeix les dades de sincronització (incloses les aplicacions web) i tanca "
+"la sessió del navegador"
 
 #: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
 #: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
@@ -531,16 +525,12 @@ msgid "Places"
 msgstr "Llocs"
 
 #: ../cleaners/epiphany.xml
-#, fuzzy
-#| msgid ""
-#| "A database of URLs including bookmarks, favicons, and a history of "
-#| "visited web sites"
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "websites"
 msgstr ""
-"Base de dades d'URL, que inclou adreces d'interès, icones i l'historial dels "
-"llocs web visitats"
+"Base de dades d'URL que inclou marcadors, icones de preferits i l'historial "
+"de llocs web visitats"
 
 #: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
@@ -682,7 +672,7 @@ msgstr "Restaura la sessió"
 
 #: ../cleaners/thunderbird.xml
 msgid "Restores the previous session when the browser next starts"
-msgstr ""
+msgstr "Restaura la sessió anterior quan el navegador es torna a iniciar"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -707,11 +697,11 @@ msgstr "Editor de gràfics"
 
 #: ../cleaners/snap.xml
 msgid "Disabled"
-msgstr ""
+msgstr "Desactivat"
 
 #: ../cleaners/snap.xml
 msgid "Remove disabled packages"
-msgstr ""
+msgstr "Elimina els paquets desactivats"
 
 #: ../cleaners/adobe_reader.xml
 msgid "Document viewer"
@@ -724,37 +714,32 @@ msgstr "Es reinicialitzaran les carpetes personalitzades."
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
 msgid "AI assistant"
-msgstr ""
+msgstr "Etiqueta per a l'assistent de codificació Claude"
 
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Form history"
 msgid "File history"
-msgstr "Historial dels formularis"
+msgstr "Historial de fitxers"
 
 #. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the list of recently used documents"
 msgid "Delete the file history used for /restore"
-msgstr "Suprimeix la llista de documents usats recentment"
+msgstr "Suprimeix l'historial de fitxers utilitzat per a /restore"
 
 #. Description for deleting Claude Code sessions
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the command history"
 msgid "Delete the conversation history"
-msgstr "Suprimeix l'historial d'ordres"
+msgstr "Suprimeix l'historial de converses"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
 msgstr ""
+"Perdreu les opcions de reprendre, continuar i rebobinar sessions anteriors"
 
 #. In Claude Code: captured shell environment used by the Bash tool
 #: ../cleaners/claude.xml
 msgid "Shell snapshots"
-msgstr ""
+msgstr "En Claude Code: entorn de shell capturat utilitzat per l'eina Bash"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -773,6 +758,8 @@ msgid ""
 "This option is slow. Inspect the preview for files you want to keep, like "
 "those bundled with applications."
 msgstr ""
+"Aquesta opció és lenta. Inspeccioneu la vista prèvia per veure si hi ha "
+"fitxers que voleu conservar, com ara els que s'inclouen amb les aplicacions."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
@@ -819,13 +806,11 @@ msgstr "Suprimeix la llista de pàgines web visitades"
 #. Cleaning option that deletes AI models in a web browser
 #: ../cleaners/google_chrome.xml
 msgid "AI"
-msgstr ""
+msgstr "Opció de neteja que elimina els models d'IA en un navegador web"
 
 #: ../cleaners/google_chrome.xml
-#, fuzzy
-#| msgid "Delete the logs"
 msgid "Delete the AI models"
-msgstr "Suprimeix els registres"
+msgstr "Suprimeix els models d'IA"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -833,10 +818,8 @@ msgid "Blocklists"
 msgstr "Llistes de bloqueig"
 
 #: ../cleaners/transmission.xml
-#, fuzzy
-#| msgid "Blocklists will need update to work."
 msgid "Blocklists will need to be updated to work."
-msgstr "S'han d'actualitzar les llistes de bloqueig perquè funcionin."
+msgstr "Caldrà actualitzar les llistes de bloqueig perquè funcionin."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -859,10 +842,8 @@ msgid "Delete the list of game servers"
 msgstr "Suprimeix la llista de servidors de joc"
 
 #: ../cleaners/profanity.xml
-#, fuzzy
-#| msgid "Downloading URL failed: %s"
 msgid "Downloaded files"
-msgstr "Ha fallat la descàrrega de l'URL: %s"
+msgstr "Fitxers baixats"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
@@ -915,7 +896,7 @@ msgstr "Allibereu espai i mantingueu la privacitat"
 #. TRANSLATORS: Name of the developers
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Andrew Ziem and contributors"
-msgstr ""
+msgstr "Andrew Ziem i col·laboradors"
 
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid ""
@@ -924,11 +905,16 @@ msgid ""
 "and system logs. It can also shred files and clean free disk space to "
 "prevent data recovery."
 msgstr ""
+"El BleachBit allibera espai al disc i manté la privadesa eliminant "
+"ràpidament fitxers innecessaris com ara la memòria cau, les galetes, "
+"l'historial del navegador, els fitxers temporals i els registres del "
+"sistema. També pot esborrar fitxers i netejar l'espai lliure del disc per "
+"evitar la recuperació de dades."
 
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr ""
+msgstr "Mode fosc per defecte, es mostren els fitxers brossa trobats"
 
 #. TRANSLATORS: Dialog shown when an older version is detected. {prodname} is replaced with the product name. Do not translate placeholder.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -938,16 +924,19 @@ msgid ""
 "Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' "
 "to abort the upgrade."
 msgstr ""
+"El ${prodname} ja està instal·lat.\n"
+"Feu clic a «D'acord» per desinstal·lar la versió antiga abans d'actualitzar "
+"o feu clic a «Cancel·la» per cancel·lar l'actualització."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
 msgid "Visit the ${prodname} website"
-msgstr ""
+msgstr "Visita el lloc web del ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:INSTALLER_CAPTION"
 msgid "${prodname} ${VERSION} Setup"
-msgstr ""
+msgstr "Instal·lació del ${prodname} ${VERSION}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT1"
@@ -955,12 +944,14 @@ msgid ""
 "The next step is building the font cache, during which a black console "
 "window may appear."
 msgstr ""
+"El següent pas és construir la memòria cau de fonts, durant la qual pot "
+"aparèixer una finestra de consola."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT2"
 msgid ""
 "It usually finishes in one minute, but sometimes it takes up to ten minutes."
-msgstr ""
+msgstr "Normalment acaba en un minut, però de vegades triga fins a deu minuts."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED"
@@ -968,18 +959,20 @@ msgid ""
 "You need to log in with an account that is a member of the administrators "
 "group to continue."
 msgstr ""
+"Cal iniciar sessió amb un compte que sigui membre del grup d'administradors "
+"per continuar."
 
 #. TRANSLATORS: Message shown on the installation mode page description when admin rights are needed.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required."
-msgstr ""
+msgstr "Calen credencials d'administrador."
 
 #. TRANSLATORS: Message shown on the installation mode page description when admin rights are needed to uninstall.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ADMIN_UNINSTALL_CREDENTIALS_REQUIRED"
 msgid "Administrator credentials required to uninstall."
-msgstr ""
+msgstr "Calen credencials d'administrador per desinstal·lar."
 
 #. TRANSLATORS: Radio button label. The & sets the keyboard accelerator (hotkey). Place & before the letter that should be the shortcut key.
 #. TRANSLATORS: The character '&' positions the keyboard accelerator key.
@@ -988,12 +981,14 @@ msgstr ""
 msgctxt "nsis:MULTIUSER_ALL_USERS"
 msgid "For &anyone who uses this computer (all users)"
 msgstr ""
+"Per a &qualsevol persona que utilitzi aquest ordinador (tots els usuaris)"
 
 #. TRANSLATORS: Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_ALL_USERS but without the & accelerator.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS_UMUI"
 msgid "For anyone who uses this computer (all users)"
 msgstr ""
+"Per a qualsevol persona que utilitzi aquest ordinador (tots els usuaris)"
 
 #. TRANSLATORS: Radio button label. The & sets the keyboard accelerator (hotkey). Place & before the letter that should be the shortcut key. {USER} is a placeholder that will be replaced with the Windows username.
 #. TRANSLATORS: The character '&' positions the keyboard accelerator key.
@@ -1001,87 +996,92 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER"
 msgid "For &me ({USER})"
-msgstr ""
+msgstr "Per a &mi ({USER})"
 
 #. TRANSLATORS: Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_CURRENT_USER but without the & accelerator. {USER} is a placeholder that will be replaced with the Windows username.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_CURRENT_USER_UMUI"
 msgid "For me ({USER})"
-msgstr ""
+msgstr "Per a mi ({USER})"
 
 #. TRANSLATORS: Error message shown in dialog box during installation on Windows. {ERROR} is a placeholder that will be replaced with the error details.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
 msgid "Unable to elevate, error {ERROR}."
-msgstr ""
+msgstr "No s'ha pogut elevar, error {ERROR}."
 
 #. TRANSLATORS: Error message shown in a dialog box when Windows does not support elevation.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_NOT_SUPPORTED"
 msgid "The operating system doesn't support elevation."
-msgstr ""
+msgstr "El sistema operatiu no admet l'elevació."
 
 #. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_ALL_USERS"
 msgid "Version {VERSION} is installed for all users in \"{FOLDER}\"."
 msgstr ""
+"La versió {VERSION} està instal·lada per a tots els usuaris a «{FOLDER}»."
 
 #. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALLED_CURRENT_USER"
 msgid "Version {VERSION} is installed for the current user in \"{FOLDER}\"."
 msgstr ""
+"La versió {VERSION} està instal·lada per a l'usuari actual a «{FOLDER}»."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_HEADER"
 msgid ""
 "Select whether to install $(^NameDA) for all users or for the current user."
 msgstr ""
+"Seleccioneu si voleu instal·lar $(^NameDA) per a tots els usuaris o per a "
+"l'usuari actual."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to install $(^NameDA)."
-msgstr ""
+msgstr "Trieu per a quins usuaris voleu instal·lar $(^NameDA)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_INVALID_PARAMS"
 msgid "Invalid combination of parameters."
-msgstr ""
+msgstr "Combinació de paràmetres no vàlida."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_LOGON_SERVICE_NOT_RUNNING"
 msgid "Unable to elevate, Secondary Logon service not running."
 msgstr ""
+"No es pot elevar, el servei d'inici de sessió secundari no s'està executant."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
 msgid "Fresh installation for all users."
-msgstr ""
+msgstr "Nova instal·lació per a tots els usuaris."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_CURRENT_USER"
 msgid "Fresh installation for the current user."
-msgstr ""
+msgstr "Instal·lació nova per a l'usuari actual."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NOT_INSTALLED"
 msgid "There is no installation of $(^NameDA)."
-msgstr ""
+msgstr "No hi ha cap instal·lació de $(^NameDA)."
 
 #. TRANSLATORS: Title of the installation mode page in the Windows installer. User selects whether to install for all users or the current user.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Choose a folder"
 msgctxt "nsis:MULTIUSER_PAGE_TITLE"
 msgid "Choose Users"
-msgstr "Trieu una carpeta"
+msgstr "Trieu els usuaris"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS"
 msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for all users."
 msgstr ""
+"Desinstal·la la versió {OLD_VERSION} i instal·la la versió {VERSION} per a "
+"tots els usuaris."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_CURRENT_USER"
@@ -1089,21 +1089,23 @@ msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for the "
 "current user."
 msgstr ""
+"Desinstal·la la versió {OLD_VERSION} i instal·la la versió {VERSION} per a "
+"l'usuari actual."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS"
 msgid "Reinstall version {VERSION} for all users."
-msgstr ""
+msgstr "Reinstal·la la versió {VERSION} per a tots els usuaris."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
 msgid "Reinstall version {VERSION} for the current user."
-msgstr ""
+msgstr "Reinstal·la la versió {VERSION} per a l'usuari actual."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_RUN_AS_ADMIN"
 msgid "You need to run this program as an administrator."
-msgstr ""
+msgstr "Heu d'executar aquest programa com a administrador."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_HEADER"
@@ -1111,11 +1113,14 @@ msgid ""
 "$(^NameDA) is installed both for all users and for the current user.\n"
 "Select which installation to remove."
 msgstr ""
+"$(^NameDA) està instal·lat tant per a tots els usuaris com per a l'usuari "
+"actual.\n"
+"Seleccioneu quina instal·lació voleu eliminar."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_UNINSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to remove $(^NameDA)."
-msgstr ""
+msgstr "Trieu per a quins usuaris voleu eliminar $(^NameDA)."
 
 #. TRANSLATORS: Dialog shown when the installer detects an old version of Windows. Instructs the user to click OK to download a compatible version or Cancel to exit.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1125,115 +1130,116 @@ msgid ""
 "compatible version for your system, click OK. To exit the installer, click "
 "Cancel."
 msgstr ""
+"Aquesta versió del BleachBit requereix Windows 10 o posterior. Per baixar "
+"una versió compatible amb el vostre sistema, feu clic a D'acord. Per sortir "
+"de l'instal·lador, feu clic a Cancel·la."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
 msgid ""
 "These are the basic files needed for ${prodname} to function (required)."
 msgstr ""
+"Aquests són els fitxers bàsics necessaris perquè ${prodname} funcioni "
+"(obligatori)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Choose files to shred"
 msgctxt "nsis:SECTION_CORE_NAME"
 msgid "Core files (required)"
-msgstr "Trieu els fitxers per triturar"
+msgstr "Fitxers principals (obligatori)"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Widgets for the desktop"
 msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
 msgid "Create a shortcut on the desktop."
-msgstr "Ginys per a l'escriptori"
+msgstr "Crea una drecera a l'escriptori."
 
 #. TRANSLATORS: Name of the desktop section in the Windows installer: user selects which desktop items to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Desktop widgets"
 msgctxt "nsis:SECTION_DESKTOP_NAME"
 msgid "Desktop"
-msgstr "Ginys d'escriptori"
+msgstr "Escriptori"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
 msgid ""
 "Add an option to delete files from the file context menu in Windows Explorer."
 msgstr ""
+"Afegeix una opció per suprimir fitxers des del menú contextual de fitxers a "
+"l'Explorador del Windows."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_NAME"
 msgid "Integrate Shred"
-msgstr ""
+msgstr "Integra destrueix"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
 msgid "Create a shortcut on the Quick Launch bar."
-msgstr ""
+msgstr "Crea una drecera a la barra d'inici ràpid."
 
 #. TRANSLATORS: Name of the quick launch section in the Windows installer: quick launch is a toolbar in the Windows taskbar that allows users to quickly access frequently used programs.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_NAME"
 msgid "Quick Launch"
-msgstr ""
+msgstr "Inici ràpid"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_DESCRIPTION"
 msgid "Create shortcuts to ${prodname}"
-msgstr ""
+msgstr "Crea dreceres al ${prodname}"
 
 #. TRANSLATORS: Name of the shortcuts section in the Windows installer: user selects which shortcuts to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_SHORTCUTS_NAME"
 msgid "Shortcuts"
-msgstr ""
+msgstr "Dreceres"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_DESCRIPTION"
 msgid "Create a shortcut in the Start menu."
-msgstr ""
+msgstr "Crea una drecera al menú Inici."
 
 #. TRANSLATORS: Name of the start menu section in the Windows installer: user selects which start menu items to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_START_MENU_NAME"
 msgid "Start menu"
-msgstr ""
+msgstr "Menú d'inici"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_TRANSLATIONS_DESCRIPTION"
 msgid ""
 "Install language files to use ${prodname} in your preferred local language."
 msgstr ""
+"Instal·leu els fitxers d'idioma per utilitzar el ${prodname} en el vostre "
+"idioma local preferit."
 
 #. TRANSLATORS: Name of the translations section in the Windows installer: user selects which translations to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Localizations"
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
 msgid "Translations"
-msgstr "Fitxers d'idioma"
+msgstr "Traduccions"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
 msgid "Add an uninstall program."
-msgstr ""
+msgstr "Afegeix un programa de desinstal·lació."
 
 #. TRANSLATORS: Shortcut name for a desktop shortcut that opens a debugging terminal.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_DEBUGGING_TERMINAL"
 msgid "${prodname} Debugging Terminal"
-msgstr ""
+msgstr "Terminal de depuració del ${prodname}"
 
 #. TRANSLATORS: Shortcut name for a desktop shortcut that runs without UAC elevation (admin privileges).
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_NO_UAC"
 msgid "${prodname} (No UAC)."
-msgstr ""
+msgstr "${prodname} (Sense UAC)."
 
 #. TRANSLATORS: Context menu item in Windows Explorer for securely shredding files.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHRED_SHELL_MENU"
 msgid "Shred with ${prodname}"
-msgstr ""
+msgstr "Destrueix amb ${prodname}"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:UNINSTALL_TEXT"
@@ -1244,6 +1250,11 @@ msgid ""
 "including any files (such as custom cleaners) that you may have added or "
 "changed."
 msgstr ""
+"El ${prodname} es desinstal·larà de la carpeta següent.\n"
+"Feu clic a Desinstal·la per iniciar la desinstal·lació.\n"
+"AVÍS: El desinstal·lador elimina completament el directori d'instal·lació, "
+"inclosos els fitxers (com ara els netejadors personalitzats) que hàgiu "
+"afegit o modificat."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1251,10 +1262,8 @@ msgstr ""
 #. can have multiple values. They're a way to make CleanerML
 #. files more concise.
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Deep scan does not support multi-value variable."
 msgid "Deep scan does not support multi-value variables."
-msgstr "L'anàlisi en profunditat no admet una variable amb múltiples valors."
+msgstr "L'anàlisi en profunditat no admet variables de diversos valors."
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
@@ -1278,10 +1287,8 @@ msgstr "path=\"%s\" no és un patró global"
 #. TRANSLATORS: This is the name of a cleaning action. 'Clean' is a verb.
 #. It shows in the log of actions performed.
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Clean cookies"
-msgstr "Galetes"
+msgstr "Neteja les galetes"
 
 #. TRANSLATORS: %s is the command line to be executed
 #: ../bleachbit/Action.py
@@ -1292,7 +1299,7 @@ msgstr "Executa l'ordre externa: %s"
 #. TRANSLATORS: This is the name of an action. 'Refresh' is a verb.
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr ""
+msgstr "Actualitza el shell de Windows"
 
 #: ../bleachbit/Bootstrap.py
 msgid ""
@@ -1302,6 +1309,11 @@ msgid ""
 "See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-"
 "questions.html"
 msgstr ""
+"Per executar una aplicació GUI al Wayland amb root, permeteu l'accés amb "
+"aquesta ordre:\n"
+"xhost si:localuser:root\n"
+"Més informació quant al xhost a https://docs.bleachbit.org/doc/frequently-"
+"asked-questions.html"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1388,7 +1400,7 @@ msgstr "Aquesta opció és experimental i pot causar problemes al sistema."
 #. TRANSLATORS: This is a label for the option to clear the system DNS cache.
 #: ../bleachbit/Cleaner.py
 msgid "DNS cache"
-msgstr ""
+msgstr "Memòria cau DNS"
 
 #. TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py
@@ -1422,7 +1434,7 @@ msgstr ""
 #. TRANSLATORS: Warning shown when selecting an option.
 #: ../bleachbit/Cleaner.py
 msgid "This option may prevent uninstalling some updates."
-msgstr ""
+msgstr "Aquesta opció pot impedir la desinstal·lació d'algunes actualitzacions."
 
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
@@ -1449,14 +1461,12 @@ msgstr "Suprimeix fitxers i carpetes especificats per l'usuari"
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
 msgid "Empty space"
-msgstr ""
+msgstr "Espai buit"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Overwrite free disk space to hide deleted files"
 msgid "Wipe empty space to hide deleted files"
-msgstr "Sobreescriu l'espai de disc lliure per amagar els fitxers suprimits"
+msgstr "Esborra l'espai buit per ocultar els fitxers suprimits"
 
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
@@ -1472,7 +1482,7 @@ msgstr "Sistema"
 #: ../bleachbit/Cleaner.py ../bleachbit/CLI.py
 #, python-format
 msgid "Wipe empty space in %s"
-msgstr ""
+msgstr "Esborra l'espai buit a %s"
 
 #. TRANSLATORS: Progress message shown typically on startup.
 #. 'Native' refers to the .xml cleaners designed for this application,
@@ -1481,26 +1491,21 @@ msgstr ""
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Loading native cleaners."
 msgid "Loading native cleaners…"
-msgstr "S'estan carregant els netejadors natius."
+msgstr "S'estan carregant els netejadors nadius…"
 
 #. TRANSLATORS: Progress message shown typically on startup.
 #. 'Importing' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Importing cleaners from Winapp2.ini."
 msgid "Importing cleaners from Winapp2.ini…"
-msgstr "S'estan important netejadors des de Winapp2.ini."
+msgstr "S'estan important netejadors des de Winapp2.ini…"
 
 #: ../bleachbit/Cleaner.py
-#, fuzzy, python-format
-#| msgid "_Wipe Free Space"
+#, python-format
 msgid "Wipe empty space %s"
-msgstr "_Neteja l'espai lliure"
+msgstr "Esborra l'espai buit %s"
 
 #. TRANSLATORS: Error shown on CLI, and %s is the name of a cleaning action
 #: ../bleachbit/CLI.py
@@ -1512,7 +1517,7 @@ msgstr "no és un netejador vàlid: %s"
 #: ../bleachbit/CLI.py
 #, python-format
 msgid "Wildcard characters are not allowed in --except: %s"
-msgstr ""
+msgstr "No es permeten caràcters comodí a --excepte: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1520,10 +1525,8 @@ msgstr ""
 #. More information about the command line is here
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
-msgstr "%prog [opcions] netejador.opció1 netejador.opció2"
+msgstr "ús: %prog [opcions] netejador.opció1 [netejador.opció2...]"
 
 #. TRANSLATORS: Help for the --list-cleaners command on the CLI,
 #. and 'list' is a verb
@@ -1552,10 +1555,8 @@ msgstr "tritura fitxers o carpetes específiques"
 #. TRANSLATORS: Help for the --wipe-empty-space
 #. command on the CLI, and 'wipe' is a verb
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "wipe free space in the given paths"
 msgid "wipe empty space in the given paths"
-msgstr "neteja l'espai lliure als camins donats"
+msgstr "esborra l'espai buit de les rutes donades"
 
 #. TRANSLATORS: Help for the --overwrite option on the CLI,
 #. and 'overwrite' is a verb
@@ -1585,7 +1586,7 @@ msgstr "activa totes les opcions que no tinguin una advertència"
 #. and 'exclude' is a verb.
 #: ../bleachbit/CLI.py
 msgid "exclude cleaner options (can be repeated, comma-separated)"
-msgstr ""
+msgstr "exclou opcions de neteja (es poden repetir, separades per comes)"
 
 #. TRANSLATORS: Help for the --debug option on the CLI,
 #. and 'set' is a verb.
@@ -1620,16 +1621,12 @@ msgstr "actualitza winapp2.ini si hi ha una versió nova disponible"
 
 #. TRANSLATORS: Error message shown on CLI.
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid ""
-#| "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
-#| "preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean, --shred"
 msgstr ""
-"Especifiqueu només una d'aquestes ordres: --list-cleaners, --wipe-free-"
-"space, --preview, --clean"
+"Especifiqueu només una d'aquestes ordres: --list-cleaners, --wipe-empty-"
+"space, --preview, --clean, --shred"
 
 #. TRANSLATORS: Log message on the CLI.
 #: ../bleachbit/CLI.py
@@ -1638,24 +1635,18 @@ msgstr "S'estan comprovant les actualitzacions en línia per a winapp2.ini"
 
 #. TRANSLATORS: Error message on the CLI.
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "No directories given for --wipe-free-space"
 msgid "No directories given for --wipe-empty-space"
-msgstr "No s'han indicat carpetes per a --wipe-free-space"
+msgstr "No s'han indicat carpetes per a --wipe-empty-space"
 
 #. TRANSLATORS: Log message on the CLI.
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "Wiping free space can take a long time."
 msgid "Wiping empty space can take a long time."
-msgstr "La neteja de l'espai lliure pot tardar molt."
+msgstr "Esborrar un espai buit pot trigar molt de temps."
 
 #. TRANSLATORS: Error message on the CLI.
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "No work to do. Specify options."
 msgid "No operations selected. Specify cleaner options."
-msgstr "No cal fer res. Especifiqueu les opcions."
+msgstr "No s'ha seleccionat cap operació. Especifiqueu les opcions de neteja."
 
 #. TRANSLATORS: '--overwrite' and '--clean' are command line options
 #: ../bleachbit/CLI.py
@@ -1724,12 +1715,18 @@ msgid ""
 "on traditional hard drives. On solid-state drives, it is less reliable, and "
 "frequent use contributes to wear."
 msgstr ""
+"Esborrar l'espai buit elimina els rastres dels fitxers que s'han suprimit "
+"sense triturar-los, però no alliberarà espai addicional al disc. El procés "
+"pot trigar molt de temps i pot alentir temporalment l'ordinador. No és "
+"necessari si la unitat està protegida amb xifratge de disc complet. El "
+"mètode funciona millor en els discs durs tradicionals. En les unitats "
+"d'estat sòlid, és menys fiable i l'ús freqüent contribueix al desgast."
 
 #. TRANSLATORS: Error message shown in the infobar or notice shown in a tooltip.
 #. Expert mode is an option in the preferences to relax guardrails.
 #: ../bleachbit/Constant.py
 msgid "This option requires expert mode. Enable it in Preferences."
-msgstr ""
+msgstr "Aquesta opció requereix el mode expert. Activeu-lo a les Preferències."
 
 #. TRANSLATORS: Log message where %s is the pathname.
 #: ../bleachbit/FileUtilities.py
@@ -1765,33 +1762,33 @@ msgstr "La variable d'entorn TMP es refereix a una carpeta que no existeix: %s"
 #. TRANSLATORS: Title of the font check dialog
 #: ../bleachbit/FontCheckDialog.py
 msgid "Font check"
-msgstr ""
+msgstr "Comprovació de les fonts"
 
 #. TRANSLATORS: Button label in the font check dialog
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is okay"
-msgstr ""
+msgstr "El text està bé"
 
 #. TRANSLATORS: Button label in the font check dialog. This is one of
 #. three buttons the user can click to report how the text appears.
 #. The user clicks this if the text is readable but appears fuzzy.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is blurry"
-msgstr ""
+msgstr "El text és borrós"
 
 #. TRANSLATORS: Button label in the font check dialog in case the font
 #. looks like an alien language. This is one of three buttons the user
 #. can click to report how the text appears.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Text is unrecognizable"
-msgstr ""
+msgstr "El text és irreconeixible"
 
 #. TRANSLATORS: Question shown in the font check dialog displayed
 #. on startup on Windows. There are bugs that for some users the
 #. font is blurry or resembles an alien language.
 #: ../bleachbit/FontCheckDialog.py
 msgid "Does all the text in this window look okay?"
-msgstr ""
+msgstr "Tot el text d'aquesta finestra es veu bé?"
 
 #. TRANSLATORS: Title of a file chooser dialog.
 #: ../bleachbit/GuiApplication.py
@@ -1868,7 +1865,7 @@ msgstr "Informació del sistema"
 #. replace the username with a placeholder.
 #: ../bleachbit/GuiApplication.py
 msgid "Anonymize"
-msgstr ""
+msgstr "Anonimitza"
 
 #. TRANSLATORS: Label for the Cancel button in several dialog windows:
 #. file chooser, folder choose, delete confirmation, and warning dialogs.
@@ -1931,20 +1928,20 @@ msgstr "Confirma abans de suprimir"
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Enable %(option)s"
-msgstr ""
+msgstr "Activa %(option)s"
 
 #. TRANSLATORS: Check button label. %(option)s is the name of
 #. the option being enabled (e.g. "shred files").
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Remember my choice for %(option)s"
-msgstr ""
+msgstr "Recorda la meva elecció per a %(option)s"
 
 #. TRANSLATORS: Button label in a warning dialog to confirm enabling an option.
 #. The underscore is the accelerator key.
 #: ../bleachbit/GuiBasic.py
 msgid "_Enable anyway"
-msgstr ""
+msgstr "_Activa-ho igualment"
 
 #. TRANSLATORS: This is an error message shown to root users.
 #. %s expands to a web URL.
@@ -1985,20 +1982,16 @@ msgstr "Nombre de fitxers"
 #. has an official abbreviation (e.g., "Mo" in French); otherwise keep
 #. "MB".
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Size"
 msgid "Size (MB)"
-msgstr "Mida"
+msgstr "Mida (MB)"
 
 #. TRANSLATORS: Option in combo box to choose to stop when free space
 #. reaches a certain percentage.
 #. The percentage symbol (%) is a literal character, not a format
 #. placeholder.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Free disk space"
 msgid "Free space (%)"
-msgstr "Espai de disc lliure"
+msgstr "Espai lliure (%)"
 
 #. TRANSLATORS: Used for (1) label for folder chooser button and
 #. (2) error message shown in the infobar when the folder has not
@@ -2012,24 +2005,22 @@ msgstr "Seleccioneu la carpeta de destinació"
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error generating chaff: {error}"
-msgstr ""
+msgstr "Error en generar la brossa: {error}"
 
 #. TRANSLATORS: Progress message shown while deleting chaff files.
 #. 'Deleting files' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Deleting files"
 msgid "Deleting files…"
-msgstr "S'estan eliminant els fitxers"
+msgstr "S'estan eliminant els fitxers…"
 
 #. TRANSLATORS: Error message shown when deleting chaff files fails.
 #. The placeholder is for the technical error details.
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error deleting chaff files: {error}"
-msgstr ""
+msgstr "Error en suprimir els fitxers brossa: {error}"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves
@@ -2061,7 +2052,7 @@ msgstr "Correus electrònics de Hillary Clinton"
 #. generating chaff files.
 #: ../bleachbit/GuiChaff.py
 msgid "Stop after"
-msgstr ""
+msgstr "Atura després"
 
 #. TRANSLATORS: Label for the combo box that selects what to do
 #. when chaff generation is finished.
@@ -2089,7 +2080,7 @@ msgstr "No suprimeixis"
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
 msgid "Downloading inspiration content…"
-msgstr ""
+msgstr "S'està baixant contingut d'inspiració…"
 
 #. TRANSLATORS: Button label in a dialog window to start making
 #. chaff files.
@@ -2100,37 +2091,35 @@ msgstr "Crea els fitxers"
 #. TRANSLATORS: Error message shown when downloading
 #. chaff models failed.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Downloading URL failed: %s"
 msgid "Download failed"
-msgstr "Ha fallat la descàrrega de l'URL: %s"
+msgstr "Ha fallat la baixada"
 
 #. TRANSLATORS: Notification shown in an infobar when
 #. chaff file generation is aborted by the user.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation aborted"
-msgstr ""
+msgstr "S'ha cancel·lat la generació de fitxers brossa"
 
 #. TRANSLATORS: Notification shown in an infobar when chaff file generation
 #. is complete.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation complete"
-msgstr ""
+msgstr "S'ha completat la generació de fitxers brossa"
 
 #. TRANSLATORS: Progress message shown while generating chaff files.
 #. 'Generating' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Generating files"
 msgid "Generating files…"
-msgstr "S'estan generant els fitxers"
+msgstr "S'estan generant els fitxers…"
 
 #. TRANSLATORS: Instruction label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
 msgid "Select the cookies to keep when cleaning cookies across browsers."
 msgstr ""
+"Seleccioneu les galetes que voleu conservar en netejar les galetes dels "
+"navegadors."
 
 #. TRANSLATORS: This is a notice in the cookie manager about supported
 #. cookie types. The hyperlink points to the documentation website.
@@ -2142,47 +2131,47 @@ msgid ""
 "Only cookies are preserved. Site data is always deleted. <a "
 "href='{url}'>Learn more</a>"
 msgstr ""
+"Només es conserven les galetes. Les dades del lloc sempre s'eliminen. <a "
+"href='{url}'>Més informació</a>"
 
 #. TRANSLATORS: Label for the search entry in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Search tool"
 msgid "Search:"
-msgstr "Eina de cerca"
+msgstr "Cerca:"
 
 #. TRANSLATORS: Placeholder text in the search entry in the manage cookies dialog.
 #. 'Filter' is a verb meaning to narrow down the list by typing.
 #: ../bleachbit/GuiCookie.py
 msgid "Filter cookies..."
-msgstr ""
+msgstr "Filtra les galetes..."
 
 #. TRANSLATORS: Toggle button label in the manage cookies dialog.
 #. "Show" is a command (imperative).
 #. 'Selected' refers to selected cookies (the noun "cookies" is implied).
 #: ../bleachbit/GuiCookie.py
 msgid "Show Selected"
-msgstr ""
+msgstr "Mostra la selecció"
 
 #. TRANSLATORS: Tooltip for the "Show Selected" toggle button.
 #: ../bleachbit/GuiCookie.py
 msgid "Only show cookies that are currently selected"
-msgstr ""
+msgstr "Mostra només les galetes que estan seleccionades actualment"
 
 #. TRANSLATORS: Column header in the manage cookies dialog.
 #. 'Host' is a noun meaning the website hostname (domain name) of the cookie.
 #: ../bleachbit/GuiCookie.py
 msgid "Host"
-msgstr ""
+msgstr "Amfitrió"
 
 #. TRANSLATORS: Button label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
 msgid "Select All"
-msgstr ""
+msgstr "Selecciona-ho tot"
 
 #. TRANSLATORS: Button label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
 msgid "Deselect All"
-msgstr ""
+msgstr "Anul·la la selecció de tot"
 
 #. TRANSLATORS: Status message shown while the cookie list is loading
 #. in the cookie manager dialog window.
@@ -2190,31 +2179,29 @@ msgstr ""
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Loading cookies…"
-msgstr "Galetes"
+msgstr "S'estan carregant les galetes…"
 
 #: ../bleachbit/GuiPreferences.py
 msgid ""
 "Expert mode enables advanced features and relaxes guardrails. Use extra "
 "caution in expert mode."
 msgstr ""
+"El mode expert habilita funcions avançades i redueix les restriccions. "
+"Tingueu molta precaució en el mode expert."
 
 #. TRANSLATORS: Used both as (1) a checkbox label in the preferences dialog
 #. to bypass some safety guardails for advanced users and (2) the title of
 #. dialog asking to confirm this choice.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Dark mode"
 msgid "Expert mode"
-msgstr "Mode fosc"
+msgstr "Mode expert"
 
 #. TRANSLATORS: Notice shown in an infobar after changing a preference
 #. that requires starting the application to be effective.
 #: ../bleachbit/GuiPreferences.py
 msgid "Restart BleachBit for full effect."
-msgstr ""
+msgstr "Reinicia el BleachBit per obtenir l'efecte complet."
 
 #. TRANSLATORS: Title for the preferences dialog
 #. TRANSLATORS: This menu item opens a dialog where the user can
@@ -2230,10 +2217,8 @@ msgstr "Generals"
 
 #. TRANSLATORS: Sidebar label for the software updates page of the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Update"
 msgid "Updates"
-msgstr "Actualitza"
+msgstr "Actualitzacions"
 
 #. TRANSLATORS: Sidebar label for the "Languages" page in the Preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2245,7 +2230,7 @@ msgstr "Idiomes"
 #. (not deleted) during cleaning.
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
-msgstr ""
+msgstr "Mantén la llista"
 
 #. TRANSLATORS: Sidebar label for the drives page of the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2257,11 +2242,12 @@ msgstr "Unitats"
 #: ../bleachbit/GuiPreferences.py
 msgid "Some GTK themes do not support both light and dark modes."
 msgstr ""
+"Alguns temes GTK no són compatibles amb els modes clar i fosc simultàniament."
 
 #. TRANSLATORS: Success message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
 msgid "Warning confirmations reset."
-msgstr ""
+msgstr "S'han reiniciat les confirmacions d'advertència."
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2297,10 +2283,8 @@ msgstr "Detecta la llengua automàticament"
 
 #. TRANSLATORS: Tooltip explaining the auto-detect language option.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Automatically preserving language %s."
 msgid "Automatically detect the system language"
-msgstr "Preservació automàtica de l’idioma %s."
+msgstr "Detecta automàticament l'idioma del sistema"
 
 #. TRANSLATORS: Label for the language selection dropdown.
 #: ../bleachbit/GuiPreferences.py
@@ -2328,10 +2312,8 @@ msgstr "Surt després de netejar"
 
 #. TRANSLATORS: Button label in the preferences. 'Reset' is a verb.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Delete confirmation"
 msgid "Reset warning confirmations"
-msgstr "Confirmació de la supressió"
+msgstr "Restableix les confirmacions d'avís"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -2345,26 +2327,20 @@ msgstr ""
 
 #. TRANSLATORS: Section title on the preferences updates page.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Update to version %s"
 msgid "Update notifications"
-msgstr "Actualitza a la versió %s"
+msgstr "Notificacions d'actualitzacions"
 
 #. TRANSLATORS: Section title (noun) on the Preferences - General page
 #. for options related to cleaning stored data.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Clean"
 msgid "Cleaning"
 msgstr "Neteja"
 
 #. TRANSLATORS: Section title in Preferences for user interface options
 #. such as dark mode and window behavior.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Internet"
 msgid "Interface"
-msgstr "Internet"
+msgstr "Interfície"
 
 #. TRANSLATORS: Checkbox label to remember the window size and position
 #. between application launches.
@@ -2388,18 +2364,18 @@ msgstr "Tema de Windows 10"
 #. Fontconfig, which is software, is a proper noun.
 #: ../bleachbit/GuiPreferences.py
 msgid "Use Fontconfig text rendering backend"
-msgstr ""
+msgstr "Utilitza el motor de renderització de text del Fontconfig"
 
 #. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "May fix blurry or unreadable text. Requires restart."
-msgstr ""
+msgstr "Pot corregir text borrós o il·legible. Cal reiniciar."
 
 #. TRANSLATORS: Section title on the preferences general page,
 #. labelling options for OS integration and advanced/developer features.
 #: ../bleachbit/GuiPreferences.py
 msgid "Integration and advanced"
-msgstr ""
+msgstr "Integració i avançat"
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #. 'Shred' means securely delete a file to prevent data recovery.
@@ -2421,13 +2397,10 @@ msgstr "Mostra els missatges de depuració"
 #. For example, to wipe C:\, the user may choose %TEMP% which
 #. is a folder anywhere on C:.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid ""
-#| "Choose a writable folder for each drive for which to overwrite free space."
 msgid "Choose a writable folder for each drive for which to wipe empty space."
 msgstr ""
-"Trieu una carpeta amb permisos d'escriptura per a cada unitat per "
-"sobreescriure l'espai lliure."
+"Trieu una carpeta amb capacitat d'escriptura per a cada unitat de la qual "
+"voleu esborrar l'espai buit."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -2446,18 +2419,18 @@ msgstr "Suprimeix"
 #. TRANSLATORS: Section title on the preferences languages page.
 #: ../bleachbit/GuiPreferences.py
 msgid "BleachBit interface language"
-msgstr ""
+msgstr "Idioma de la interfície del BleachBit"
 
 #. TRANSLATORS: Section title on the preferences languages page.
 #: ../bleachbit/GuiPreferences.py
 msgid "Language files to keep when cleaning applications"
-msgstr ""
+msgstr "Fitxers d'idioma que cal conservar en netejar aplicacions"
 
 #. TRANSLATORS: Column header in the languages treeview.
 #. This column controls whether to keep the language.
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep"
-msgstr ""
+msgstr "Mantén"
 
 #. TRANSLATORS: Column header in the languages treeview showing the
 #. language code (e.g., 'en_US').
@@ -2477,22 +2450,23 @@ msgstr "Nom"
 #. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the keep list."
-msgstr ""
+msgstr "Aquesta ruta ja existeix a la llista de conservació."
 
 #. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the custom list."
-msgstr ""
+msgstr "Aquesta ruta ja existeix a la llista personalitzada."
 
 #. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
 msgid "This path is protected. To bypass protection, enable expert mode."
 msgstr ""
+"Aquesta ruta està protegida. Per evitar la protecció, activeu el mode expert."
 
 #. TRANSLATORS: Title of warning dialog shown when adding a protected path.
 #: ../bleachbit/GuiPreferences.py
 msgid "Protected Path"
-msgstr ""
+msgstr "Ruta protegida"
 
 #. TRANSLATORS: Noun used as a column header in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2508,15 +2482,13 @@ msgstr "Carpeta"
 #: ../bleachbit/GuiPreferences.py
 #, python-format
 msgid "Added: %s"
-msgstr ""
+msgstr "Afegit: %s"
 
 #. TRANSLATORS: %s is a file or folder path that was just removed
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy, python-format
-#| msgctxt "button"
-#| msgid "Remove"
+#, python-format
 msgid "Removed: %s"
-msgstr "Suprimeix"
+msgstr "Eliminat: %s"
 
 #. TRANSLATORS: Notice label at the top of the keeplist (whitelist)
 #. page in the preferences dialog.
@@ -2567,6 +2539,8 @@ msgid ""
 "One or more selected cleaning options have warnings and require Expert Mode "
 "to clean. Enable it in preferences."
 msgstr ""
+"Una o més opcions de neteja seleccionades tenen avisos i requereixen el mode "
+"expert per netejar. Activeu-lo a les preferències."
 
 #. TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
 #. Preferences. Keep it consistent with the translation of "Expert Mode"
@@ -2577,6 +2551,9 @@ msgid ""
 "Delete confirmation is disabled but expert mode is not enabled. Enable "
 "Expert Mode in preferences to skip delete confirmations."
 msgstr ""
+"La confirmació d'eliminació està desactivada, però el mode expert no està "
+"habilitat. Activeu el mode expert a les preferències per ometre les "
+"confirmacions d'eliminació."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
@@ -2624,6 +2601,10 @@ msgid ""
 "the system. User-specific paths will refer to the administrator account, so "
 "to clean your profile, run BleachBit again as a standard user."
 msgstr ""
+"Heu elevat privilegis utilitzant un compte diferent per netejar parts "
+"compartides del sistema. Les rutes específiques de l'usuari faran referència "
+"al compte de l'administrador, així que per netejar el vostre perfil, torneu "
+"a executar el BleachBit com a usuari estàndard."
 
 #. TRANSLATORS: Warning shown on startup on Windows when running
 #. unofficial Microsoft Store version. Advises user to get genuine
@@ -2655,20 +2636,15 @@ msgstr "Mida"
 #: ../bleachbit/GuiTreeModels.py
 msgid "This option is protected. To bypass protection, enable expert mode."
 msgstr ""
+"Aquesta opció està protegida. Per desactivar la protecció, activeu el mode "
+"expert."
 
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #: ../bleachbit/GuiTreeModels.py
-#, fuzzy, python-format
-#| msgid ""
-#| "Warning regarding %(cleaner)s - %(option)s:\n"
-#| "\n"
-#| "%(warning)s"
+#, python-format
 msgid "%(cleaner)s - %(option)s"
-msgstr ""
-"Advertència sobre l'opció «%(option)s» del netejador «%(cleaner)s»:\n"
-"\n"
-"%(warning)s"
+msgstr "%(cleaner)s: %(option)s"
 
 #. TRANSLATORS: Button label on the headerbar and context menu item
 #. in the treeview.
@@ -2688,10 +2664,8 @@ msgstr "Neteja"
 #. manager.
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
-#, fuzzy
-#| msgid "Cookies"
 msgid "Manage cookies to keep…"
-msgstr "Galetes"
+msgstr "Gestioneu les galetes per mantenir…"
 
 #. TRANSLATORS: Error message shown in the log on the main window.
 #. %s is the file path.
@@ -2708,6 +2682,8 @@ msgstr "S'està restablint el fitxer de configuració perquè està danyat: %s"
 msgid ""
 "%(cleaner)s - %(option)s cannot be cleaned because expert mode is disabled."
 msgstr ""
+"%(cleaner)s: no es pot netejar %(option)s perquè el mode expert està "
+"desactivat."
 
 #. TRANSLATORS: Error message shown in the infobar when the user clicks
 #. the preview or clean button without selecting any cleaner options.
@@ -2725,7 +2701,7 @@ msgstr "Fet."
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
 msgid "Manage custom paths…"
-msgstr ""
+msgstr "Gestiona les rutes personalitzades…"
 
 #. TRANSLATORS: Tooltip for the preview button on the headerbar.
 #. 'Preview' is a verb, and 'selected operations' refers to
@@ -2764,7 +2740,7 @@ msgstr "Actualitzeu el BleachBit a la versió més recent"
 #. TRANSLATORS: Hint shown when starting in fullscreen mode.
 #: ../bleachbit/GuiWindow.py
 msgid "Press F11 to exit fullscreen mode."
-msgstr ""
+msgstr "Premeu F11 per sortir del mode de pantalla completa."
 
 #. TRANSLATORS: This message is shown when orphaned temporary files
 #. from an interrupted disk wipe operation are detected.
@@ -2773,26 +2749,23 @@ msgid ""
 "BleachBit detected leftover files from an interrupted disk wipe operation. "
 "Would you like to preview them with an option to delete them?"
 msgstr ""
+"El BleachBit ha detectat fitxers residuals d'una operació d'esborrat de disc "
+"interrompuda. Voleu previsualitzar-los amb la opció per suprimir-los?"
 
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
 #: ../bleachbit/GuiWindow.py
-#, fuzzy, python-format
-#| msgid "Error when checking for updates: "
+#, python-format
 msgid "Error when checking for updates: %s"
-msgstr "Error en comprovar les actualitzacions: "
+msgstr "Error en comprovar si hi ha actualitzacions: %s"
 
 #: ../bleachbit/Memory.py
-#, fuzzy
-#| msgid ""
-#| "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
-#| "information."
 msgid ""
 "The command 'swapon -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"Ha fallat l'ordre «swapoff -s», per la qual cosa es fa servir /proc/swaps "
-"per obtenir informació de l'espai d'intercanvi."
+"Ha fallat l'ordre «swapon -s», per la qual cosa es fa servir /proc/swaps per "
+"obtenir informació de l'espai d'intercanvi."
 
 #: ../bleachbit/Memory.py
 msgid "Disabling swap."
@@ -2810,12 +2783,11 @@ msgstr "S'està configurant el valor de prioritat %d per a aquest procés."
 #. TRANSLATORS: Debug message when a process gives up root/admin privileges.
 #. %(pid)d is the integer process ID; %(uid)d is the integer user ID to switch to.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid "Dropping privileges of process ID {pid} to user ID {uid}."
+#, python-format
 msgid "Dropping privileges of process ID %(pid)d to user ID %(uid)d."
 msgstr ""
-"S'estan suprimint els privilegis del procés amb l'ID {pid} per a l'usuari "
-"amb l'ID {uid}."
+"S'estan suprimint els privilegis del procés amb l'ID %(pid)d per a l'usuari "
+"amb l'ID %(uid)d."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2833,26 +2805,22 @@ msgstr "S'estan alliberant %s de memòria."
 #. is waiting for the child process. %(parent_pid)d is the parent
 #. process ID; %(child_pid)d is the child process ID.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The function wipe_memory() with process ID {pid} is waiting for child "
-#| "process ID {cid}."
+#, python-format
 msgid ""
 "The function wipe_memory() with process ID %(parent_pid)d is waiting for "
 "child process ID %(child_pid)d."
 msgstr ""
-"La funció wipe_memory() amb l'ID de procés {pid} està esperant al procés "
-"secundari amb l'ID {cid}."
+"La funció wipe_memory() amb l'ID de procés %(parent_pid)d està esperant al "
+"procés secundari amb l'ID %(child_pid)d."
 
 #. TRANSLATORS: Debug message. 'Found' is a past tense verb (short for
 #. "Found [that] the UUID for swap device ..."). %(device)s is the device
 #. path (e.g., /dev/sda5); %(uuid)s is a UUID string
 #. (e.g., ee0e85f6-6e5c-42b9-902f-776531938bbf). Do not translate variables.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid "Found UUID for swap file {device} is {uuid}."
+#, python-format
 msgid "Found UUID for swap device %(device)s is %(uuid)s."
-msgstr "L'UUID trobat per al fitxer d'intercanvi {device} és {uuid}."
+msgstr "L'UUID trobat per al fitxer d'intercanvi %(device)s és %(uuid)s."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2889,16 +2857,14 @@ msgid "Downloading URL failed: %s"
 msgstr "Ha fallat la descàrrega de l'URL: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Disk was full when writing configuration to file: %s"
-msgstr "S'ha omplert el disc en escriure la configuració al fitxer %s"
+msgstr "El disc estava ple en escriure la configuració al fitxer: %s"
 
 #: ../bleachbit/Options.py
-#, fuzzy, python-format
-#| msgid "Disk was full when writing configuration to file %s"
+#, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "S'ha omplert el disc en escriure la configuració al fitxer %s"
+msgstr "Permís denegat en escriure la configuració al fitxer: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
@@ -2928,6 +2894,11 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"Avís: «%(path)s» pot contenir fitxers importants.\n"
+"\n"
+"Impacta: %(files)d fitxer(s), %(size)s\n"
+"\n"
+"Esteu segur que voleu afegir aquesta ruta?"
 
 #. TRANSLATORS: Warning shown when user tries to add a protected path (no files found).
 #. Do not translate the placeholder %(path)s.
@@ -2940,6 +2911,9 @@ msgid ""
 "\n"
 "Are you sure you want to add this path?"
 msgstr ""
+"Avís: «%(path)s» pot contenir fitxers importants.\n"
+"\n"
+"Esteu segur que voleu afegir aquesta ruta?"
 
 #: ../bleachbit/RecognizeCleanerML.py
 msgid "Security warning"
@@ -3039,20 +3013,21 @@ msgstr "Importats des del winapp2.ini"
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr ""
+"Calen privilegis d'administrador per netejar les actualitzacions del Windows"
 
 #. TRANSLATORS: Message in log file when stopping a Windows service.
 #. The placeholder is the code name of the service.
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "stop Windows service %(service)s"
-msgstr ""
+msgstr "atura el servei %(service)s del Windows"
 
 #. TRANSLATORS: Message in log file when starting a Windows service.
 #. The placeholder is the code name of the service.
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "start Windows service %(service)s"
-msgstr ""
+msgstr "inicia el servei %(service)s del Windows"
 
 #: ../bleachbit/Wipe.py
 msgid ""
@@ -3069,6 +3044,8 @@ msgstr ""
 #, python-format
 msgid "Wiping path %(pathname)s with file system type %(fstype)s"
 msgstr ""
+"S'està esborrant la ruta %(pathname)s amb el tipus de sistema de fitxers %"
+"(fstype)s"
 
 #: ../bleachbit/Wipe.py
 #, python-format
@@ -3090,42 +3067,33 @@ msgstr "Error núm. %d en netejar la memòria intermèdia del fitxer."
 #. elapsed seconds; %(rate_mbs).2f = decimal megabytes per second (e.g., 3.14).
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid ""
-#| "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
-#| "{rate:.2f} MB/s"
+#, python-format
 msgid ""
 "Wrote %(file_count)d files and %(total_bytes)d bytes in %(elapsed_sec)d "
 "seconds at %(rate_mbs).2f MB/s"
 msgstr ""
-"S'han escrit {files:,} fitxers i {bytes:,} bytes en {seconds:,} segons a "
-"{rate:.2f} MB/s"
+"S'han escrit %(file_count)d fitxers i %(total_bytes)d bytes en %(elapsed_sec)"
+"d segons a %(rate_mbs).2f MB/s"
 
 #. TRANSLATORS: Debug message showing disk space available to regular (non-root) users.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
+#, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to non-super-user"
-msgstr ""
-"{bytes:,} bytes i {inodes:,} nodes índex disponibles per als usuaris normals"
+msgstr "%(bytes)d bytes i %(inodes)d inodes disponibles per a usuaris normals"
 
 #. TRANSLATORS: Debug message showing disk space available to the root (admin) user.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
+#, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to super-user"
-msgstr ""
-"{bytes:,} bytes i {inodes:,} nodes índex disponibles per al superusuari"
+msgstr "%(bytes)d bytes i %(inodes)d inodes disponibles per al superusuari"
 
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Handled unknown error #0 while truncating file."
 msgid "Encountered unknown error #0 while truncating file."
-msgstr "S'ha gestionat l'error desconegut núm. 0 en truncar el fitxer."
+msgstr "S'ha trobat l'error desconegut número 0 en truncar el fitxer."
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -3144,22 +3112,22 @@ msgstr "No s'ha trobat el fitxer: %s"
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when flagging file for later delete: %s"
-msgstr ""
+msgstr "Accés denegat en marcar el fitxer per a la posterior eliminació: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry value: %s"
-msgstr ""
+msgstr "Accés denegat en suprimir el valor del registre: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied when deleting registry key: %s"
-msgstr ""
+msgstr "Accés denegat en suprimir la clau del registre: %s"
 
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Access denied: %s"
-msgstr ""
+msgstr "Accés denegat: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
@@ -3168,14 +3136,13 @@ msgstr "Error: {operation_option}: {command}"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Worker.py
-#, fuzzy
-#| msgid "Please wait.  Wiping free disk space."
 msgid "Please wait. Wiping empty space."
-msgstr "Espereu. S'està netejant l'espai lliure del disc."
+msgstr "Espereu. S'està esborrant l'espai buit."
 
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
+"Per aturar aquest procés, premeu el botó Avorta a la barra d'eines i espereu."
 
 #: ../bleachbit/Worker.py
 msgid ""
@@ -3183,6 +3150,9 @@ msgid ""
 "files may remain on the disk, and they may use all available space. To "
 "remove them, start BleachBit again."
 msgstr ""
+"Si l'aplicació es tanca a la força abans que el procés s'hagi completat, és "
+"possible que quedin fitxers grans al disc i que ocupin tot l'espai "
+"disponible. Per eliminar-los, reinicieu el BleachBit."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py
@@ -3277,10 +3247,8 @@ msgstr "Tritura els camins del porta-retalls"
 #. recoverable traces of previously deleted files. "Empty space" refers
 #. to unallocated disk space where deleted file data may still exist.
 #: ../share/app-menu.ui
-#, fuzzy
-#| msgid "_Wipe Free Space"
 msgid "_Wipe Empty Space"
-msgstr "_Neteja l'espai lliure"
+msgstr "_Esborra l'espai buit"
 
 #. TRANSLATORS: This menu item creates decoy files filled with random
 #. data to mislead anyone searching for sensitive information. "Chaff" refers
