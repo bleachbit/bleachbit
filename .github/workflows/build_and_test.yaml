@@ -472,7 +472,9 @@ jobs:
     # - Tags
     # - workflow_dispatch
     # - No pull requests, whether from a fork or the same repository
-    if: github.repository == 'bleachbit/bleachbit' && github.event_name != 'pull_request'
+    # - No Dependabot branches: GitHub Actions withholds repository secrets
+    #   from workflows triggered by Dependabot, so the S3 upload would fail.
+    if: github.repository == 'bleachbit/bleachbit' && github.event_name != 'pull_request' && !startsWith(github.ref_name, 'dependabot/')
     runs-on: windows-latest
     timeout-minutes: 5
     env:
