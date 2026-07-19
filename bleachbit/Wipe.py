@@ -12,7 +12,7 @@ import atexit
 import ctypes
 import errno
 import os
-import random
+import secrets
 import string
 import struct
 import tempfile
@@ -20,22 +20,71 @@ import time
 import warnings
 import logging
 
+import bleachbit
+from bleachbit import IS_LINUX, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.Language import get_text as _
 
-if 'nt' == os.name:
+if IS_WINDOWS:
     # pylint: disable=import-error
     from win32com.shell.shell import IsUserAnAdmin
 
-if 'posix' == os.name:
+if IS_POSIX:
     import fcntl
 
 logger = logging.getLogger(__name__)
 
+FILENAME_CHARS = string.ascii_lowercase + \
+    string.digits + '_.-+~!@#$%^&()=[]{},'
+if bleachbit.FS_CASE_SENSITIVE:
+    FILENAME_CHARS += string.ascii_uppercase
+
+WINDOWS_RESERVED_FILENAMES = {
+    'CON',
+    'PRN',
+    'AUX',
+    'NUL',
+    'CONIN$',
+    'CONOUT$',
+}
+WINDOWS_RESERVED_FILENAMES.update(
+    {'COM%d' % number for number in range(1, 10)})
+WINDOWS_RESERVED_FILENAMES.update(
+    {'LPT%d' % number for number in range(1, 10)})
+
 
 def __random_string(length):
     """Return random alphanumeric characters of given length"""
-    return ''.join(random.choice(string.ascii_letters + '0123456789_.-')
+    return ''.join(secrets.choice(FILENAME_CHARS)
                    for i in range(length))
+
+
+def __valid_random_filename(filename):
+    """Check if a filename is valid for use as a temporary file.
+
+    This function is intended for limited scope for use with
+    __random_string(), so this function assumes
+
+        - Input characters are limited to FILENAME_CHARS.
+        - No null bytes, path separators, or low ASCII characters.
+        - The argument is a filename (not a path).
+
+    On Windows, this checks for invalid characters, reserved names, and other
+    restrictions.
+    """
+    if not filename:
+        return False
+    if filename in ('.', '..'):
+        return False
+    if not IS_WINDOWS:
+        return True
+    if filename.endswith((' ', '.')):
+        return False
+    # After updating to Python 3.13, use os.path.isreserved() here.
+    if filename.rstrip(' .').split('.', 1)[0].upper() in WINDOWS_RESERVED_FILENAMES:
+        return False
+    if set(filename) & set('<>:"/\\|?*'):
+        return False
+    return True
 
 
 def detect_orphaned_wipe_files():
@@ -94,7 +143,7 @@ def fitrim(pathname):
 
     pathname: path to directory
     """
-    if os.name != 'posix':
+    if not IS_POSIX:
         return False
 
     fitrim_id = 0xC0185879
@@ -130,19 +179,51 @@ def fitrim(pathname):
 
 def sync():
     """Flush file system buffers. sync() is different than fsync()"""
-    if 'posix' == os.name:
+    if IS_LINUX:
         rc = ctypes.cdll.LoadLibrary('libc.so.6').sync()
         if 0 != rc:
             logger.error('sync() returned code %d', rc)
-    elif 'nt' == os.name:
+    elif IS_MAC:
+        # On macOS, sync() is in libSystem.B.dylib
+        libc = ctypes.cdll.LoadLibrary('libSystem.B.dylib')
+        libc.sync()
+    elif IS_WINDOWS:
         # pylint: disable=protected-access
         ctypes.cdll.LoadLibrary('msvcrt.dll')._flushall()
 
 
-def wipe_contents(path, truncate=True):
+def wipe_write(path):
+    """Overwrite a file's contents with zeros without truncating it.
+
+    Return the open file handle; the caller must close it."""
+    # pylint: disable=import-outside-toplevel
+    from bleachbit.FileUtilities import getsize
+    size = getsize(path)
+    try:
+        f = open(path, 'wb')
+    except IOError as e:
+        if e.errno == errno.EACCES:  # permission denied
+            os.chmod(path, 0o200)  # user write only
+            f = open(path, 'wb')
+        else:
+            raise
+    try:
+        blanks = b'\0' * 4096
+        while size > 0:
+            f.write(blanks)
+            size -= 4096
+        f.flush()  # flush to OS buffer
+        os.fsync(f.fileno())  # force write to disk
+    except BaseException:
+        f.close()
+        raise
+    return f
+
+
+def wipe_contents(path):
     """Wipe files contents
 
-    http://en.wikipedia.org/wiki/Data_remanence
+    https://en.wikipedia.org/wiki/Data_remanence
     2006 NIST Special Publication 800-88 (p. 7): "Studies have
     shown that most of today's media can be effectively cleared
     by one overwrite"
@@ -150,27 +231,8 @@ def wipe_contents(path, truncate=True):
     # pylint: disable=import-outside-toplevel
     from bleachbit.FileUtilities import truncate_f
 
-    def wipe_write():
-        from bleachbit.FileUtilities import getsize as _getsize
-        size = _getsize(path)
-        try:
-            f = open(path, 'wb')
-        except IOError as e:
-            if e.errno == errno.EACCES:  # permission denied
-                os.chmod(path, 0o200)  # user write only
-                f = open(path, 'wb')
-            else:
-                raise
-        blanks = b'\0' * 4096
-        while size > 0:
-            f.write(blanks)
-            size -= 4096
-        f.flush()  # flush to OS buffer
-        os.fsync(f.fileno())  # force write to disk
-        return f
-
     # pylint: disable=possibly-used-before-assignment
-    if 'nt' == os.name and IsUserAnAdmin():
+    if IS_WINDOWS and IsUserAnAdmin():
         # The import placement here avoids a circular import.
         # pylint: disable=import-outside-toplevel
         from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
@@ -199,51 +261,56 @@ def wipe_contents(path, truncate=True):
         except UnsupportedFileSystemError:
             warnings.warn(
                 _('There was at least one file on a file system that does not support advanced overwriting.'), UserWarning)
-            f = wipe_write()
+            f = wipe_write(path)
         else:
-            # The wipe succeed, so prepare to truncate.
+            # The wipe succeeded and already overwrote the file in place.
+            # Reopen with 'wb' to truncate it to zero
             f = open(path, 'wb')
     else:
-        f = wipe_write()
-    if truncate:
+        f = wipe_write(path)
+    try:
         truncate_f(f)
-    f.close()
+    finally:
+        f.close()
 
 
 def wipe_name(pathname1):
-    """Wipe the original filename and return the new pathname"""
-    (head, _tail) = os.path.split(pathname1)
-    # reference http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
-    maxlen = 226
-    # first, rename to a long name
-    i = 0
+    """Wipe the original filename and return the new pathname
+
+    File systems vary in how they store a pathname and how they respond
+    to renaming. In general, renaming to a longer name can cause more
+    data remnance.
+
+    This function tries to rename the file a single time to a random
+    name with the identical length.
+
+
+    """
+    (head, tail) = os.path.split(pathname1)
+    target_length = len(tail)
+    attempt_count = 0
     while True:
+        attempt_count += 1
+        if attempt_count > 100:
+            logger.info('exhausted same-length rename: %s', pathname1)
+            pathname2 = pathname1
+            break
+        new_tail = __random_string(target_length)
+        if not __valid_random_filename(new_tail):
+            continue
+        pathname2 = os.path.join(head, new_tail)
+        if os.path.lexists(pathname2):
+            continue
         try:
-            pathname2 = os.path.join(head, __random_string(maxlen))
             os.rename(pathname1, pathname2)
             break
-        except OSError:
-            if maxlen > 10:
-                maxlen -= 10
-            i += 1
-            if i > 100:
-                logger.info('exhausted long rename: %s', pathname1)
+        except OSError as e:
+            if e.errno in (errno.EACCES, errno.EPERM, errno.EROFS):
                 pathname2 = pathname1
                 break
-    # finally, rename to a short name
-    i = 0
-    while True:
-        try:
-            pathname3 = os.path.join(head, __random_string(i + 1))
-            os.rename(pathname2, pathname3)
-            break
-        except:
-            i += 1
-            if i > 100:
-                logger.info('exhausted short rename: %s', pathname2)
-                pathname3 = pathname2
-                break
-    return pathname3
+            continue
+
+    return pathname2
 
 
 def wipe_path(pathname, idle=False):
@@ -333,7 +400,8 @@ def wipe_path(pathname, idle=False):
             except OSError as e:
                 # Linux gives errno 24
                 # Windows gives errno 28 No space left on device
-                if e.errno in (errno.EMFILE, errno.ENOSPC):
+                # Linux gives errno 122 Disk quota exceeded (EDQUOT)
+                if e.errno in (errno.EMFILE, errno.ENOSPC, errno.EDQUOT):
                     break
                 else:
                     raise
@@ -360,7 +428,7 @@ def wipe_path(pathname, idle=False):
                         break
 
                 except IOError as e:
-                    if e.errno == errno.ENOSPC:
+                    if e.errno in (errno.ENOSPC, errno.EDQUOT):
                         if len(blanks) > 1:
                             # Try writing smaller blocks
                             blanks = blanks[0:len(blanks) // 2]
@@ -382,7 +450,9 @@ def wipe_path(pathname, idle=False):
                 # IOError: [Errno 28] No space left on device
                 # seen on Microsoft Windows XP SP3 with ~30GB free space but
                 # not on another XP SP3 with 64MB free space
-                if e.errno != errno.ENOSPC:
+                # [Errno 122] Disk quota exceeded (EDQUOT) is treated the same
+                # way because the file is as full as the quota allows.
+                if e.errno not in (errno.ENOSPC, errno.EDQUOT):
                     logger.error(
                         _("Error #%d when flushing the file buffer."), e.errno)
 
@@ -393,7 +463,8 @@ def wipe_path(pathname, idle=False):
             sync()
             # statistics
             elapsed_sec = time.time() - start_time
-            rate_mbs = (total_bytes / (1000 * 1000)) / elapsed_sec
+            rate_mbs = (total_bytes / (1000 * 1000)) / \
+                elapsed_sec if elapsed_sec else 0
             # TRANSLATORS: Debug message summarizing a write operation. All placeholders
             # are numeric: %(file_count)d = integer number of files written;
             # %(total_bytes)d = integer total bytes written; %(elapsed_sec)d = integer
@@ -404,7 +475,7 @@ def wipe_path(pathname, idle=False):
                          {"file_count": len(files), "total_bytes": total_bytes,
                          "elapsed_sec": int(elapsed_sec), "rate_mbs": rate_mbs})
             # how much free space is left (should be near zero)
-            if 'posix' == os.name:
+            if IS_POSIX:
                 # pylint: disable=no-member
                 stats = os.statvfs(pathname)
                 # TRANSLATORS: Debug message showing disk space available to regular (non-root) users.

@@ -1,23 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Actions that perform cleaning
@@ -25,24 +10,22 @@ Actions that perform cleaning
 
 # standard imports
 import glob
-import json
 import logging
 import os
 import re
 from itertools import product
 
 # first party imports
-import bleachbit
 from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod  # mod=module
-from bleachbit import fs_scan_re_flags
+from bleachbit import FS_SCAN_RE_FLAGS, IS_POSIX, IS_WINDOWS
 from bleachbit.Constant import CLEAN_FILE_LABEL
-from bleachbit.Cookie import COOKIE_KEEP_LIST_FILENAME
+from bleachbit.Cookie import load_keep_list
 from bleachbit.Language import get_text as _
 
-if os.name == 'posix':
+if IS_POSIX:
     from bleachbit import Unix
 
-if os.name == 'nt':
+if IS_WINDOWS:
     from bleachbit import Windows
 
 logger = logging.getLogger(__name__)
@@ -129,8 +112,8 @@ class FileActionProvider(ActionProvider):
     """Base class for providers which work on individual files"""
     action_key = '_file'
     CACHEABLE_SEARCHERS = ('walk.files',)
-    # global cache <search_type, path, list_of_entries>
-    cache = ('nothing', '', tuple())
+    # global cache <search_type, path, list_of_entries, complete>
+    cache = ('nothing', '', tuple(), False)
 
     def __init__(self, action_element, path_vars=None):
         """Initialize file search"""
@@ -169,13 +152,18 @@ class FileActionProvider(ActionProvider):
         self.paths = []
         # expand special $$foo$$ which may give multiple values
         for path2 in expand_multi_var(raw_path, path_vars):
-            path3 = os.path.expanduser(os.path.expandvars(path2))
-            if os.name == 'nt' and path3:
-                # convert forward slash to backslash for compatibility with getsize()
-                # and for display.  Do not convert an empty path, or it will become
-                # the current directory (.).
-                path3 = os.path.normpath(path3)
-            self.paths.append(path3)
+            if IS_WINDOWS:
+                paths = Windows.expand_windows_system_vars(path2)
+            else:
+                paths = (path2, )
+            for path3 in paths:
+                path3 = os.path.expanduser(os.path.expandvars(path3))
+                if IS_WINDOWS and path3:
+                    # convert forward slash to backslash for compatibility with getsize()
+                    # and for display.  Do not convert an empty path, or it will become
+                    # the current directory (.).
+                    path3 = os.path.normpath(path3)
+                self.paths.append(path3)
 
     def get_deep_scan(self):
         if self.ds is None:
@@ -203,24 +191,24 @@ class FileActionProvider(ActionProvider):
         basename = os.path.basename
         object_type = self.object_type
         if self.regex:
-            regex_c_search = re.compile(self.regex, fs_scan_re_flags).search
+            regex_c_search = re.compile(self.regex, FS_SCAN_RE_FLAGS).search
         else:
             regex_c_search = None
 
         if self.nregex:
-            nregex_c_search = re.compile(self.nregex, fs_scan_re_flags).search
+            nregex_c_search = re.compile(self.nregex, FS_SCAN_RE_FLAGS).search
         else:
             nregex_c_search = None
 
         if self.wholeregex:
             wholeregex_c_search = re.compile(
-                self.wholeregex, fs_scan_re_flags).search
+                self.wholeregex, FS_SCAN_RE_FLAGS).search
         else:
             wholeregex_c_search = None
 
         if self.nwholeregex:
             nwholeregex_c_search = re.compile(
-                self.nwholeregex, fs_scan_re_flags).search
+                self.nwholeregex, FS_SCAN_RE_FLAGS).search
         else:
             nwholeregex_c_search = None
 
@@ -310,7 +298,8 @@ class FileActionProvider(ActionProvider):
                 logger.debug(_('path="%s" is not a glob pattern'), input_path)
 
             # use cache
-            if self.search in self.CACHEABLE_SEARCHERS and cache[0] == self.search and cache[1] == input_path:
+            if (self.search in self.CACHEABLE_SEARCHERS and cache[0] == self.search
+                    and cache[1] == input_path and cache[3]):
                 # logger.debug(_('using cached walk for path %s'), input_path)
                 for x in cache[2]:
                     yield x
@@ -318,16 +307,20 @@ class FileActionProvider(ActionProvider):
             # if self.search in self.CACHEABLE_SEARCHERS:
             #    logger.debug('not using cache because it has (%s,%s) and we want (%s,%s)',
             #                 cache[0], cache[1], self.search, input_path)
-            self.__class__.cache = ('cleared by', input_path, tuple())
+            self.__class__.cache = ('cleared by', input_path, tuple(), False)
 
             # build new cache
             # logger.debug('%s walking %s', id(self), input_path)
 
             if self.search in self.CACHEABLE_SEARCHERS:
-                cache = self.__class__.cache = (self.search, input_path, [])
+                entries = []
+                self.__class__.cache = (self.search, input_path, entries, False)
                 for path in func(input_path):
-                    cache[2].append(path)
+                    entries.append(path)
                     yield path
+                # Mark complete only once the walk finishes, so an
+                # early-abandoned generator doesn't poison the cache
+                self.__class__.cache = (self.search, input_path, entries, True)
             else:
                 for path in func(input_path):
                     yield path
@@ -350,7 +343,7 @@ class AptAutoclean(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        assert os.name == 'posix'
+        assert IS_POSIX
         # If apt-get is not installed, then enable fast auto-hide.
         # The exe_exists() function is fast.
         if not FileUtilities.exe_exists('apt-get'):
@@ -464,7 +457,7 @@ class Cookie(FileActionProvider):
     action_key = 'cookie'
 
     def get_commands(self):
-        keep_list = self._load_keep_list()
+        keep_list = load_keep_list()
 
         if not keep_list:
             # If nothing is being kept, use regular delete for better performance
@@ -501,34 +494,9 @@ class Cookie(FileActionProvider):
                 _('Clean cookies'),
                 preview_func)
 
-    def _load_keep_list(self):
-        """Load cookie domains to keep from options directory.
-
-        Supports either a list of strings (domains) or a list of objects
-        with a 'domain' key (cookie name field is ignored in v1).
-        """
-        path = os.path.join(bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
-        domains = set()
-        try:
-            with open(path, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-            if isinstance(data, list):
-                for item in data:
-                    if isinstance(item, str):
-                        d = item
-                    elif isinstance(item, dict):
-                        d = item.get('domain')
-                    else:
-                        d = None
-                    if isinstance(d, str) and d:
-                        domains.add(d.lstrip('.').lower())
-        except (FileNotFoundError, json.JSONDecodeError, OSError):
-            pass
-        return domains
-
     def _delete_cookies_with_keep_list(self, path):
         """Delete cookies while honoring the keep list"""
-        keep_list = self._load_keep_list()
+        keep_list = load_keep_list()
         if not keep_list:
             return 0
         result = CookieMod.delete_cookies(path, keep_list, really_delete=True)
@@ -536,7 +504,7 @@ class Cookie(FileActionProvider):
 
     def _preview_cookies_deletion(self, path):
         """Preview cookies deletion, honoring the keep list"""
-        keep_list = self._load_keep_list()
+        keep_list = load_keep_list()
         if not keep_list:
             return 0
         result = CookieMod.delete_cookies(path, keep_list, really_delete=False)
@@ -711,7 +679,7 @@ class WinShellChangeNotify(ActionProvider):
     action_key = 'win.shell.change.notify'
 
     def get_commands(self):
-        assert os.name == 'nt'
+        assert IS_WINDOWS
         yield Command.Function(
             None,
             # pylint: disable=possibly-used-before-assignment
@@ -732,7 +700,7 @@ class Winreg(ActionProvider):
         self.excludekeys = []
 
     def get_commands(self):
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             yield Command.Winreg(self.keyname, self.name, self.excludekeys)
 
 
@@ -820,8 +788,8 @@ class SnapDisabled(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        # If snap is not installed, then enable fast auto-hide.
-        if not FileUtilities.exe_exists('snap'):
+        # If snap is not installed or snapd is not active, enable fast auto-hide.
+        if not Unix.snapd_is_active():
             return
         yield Command.Function(
             None,

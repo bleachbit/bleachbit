@@ -1,23 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test case for module Unix
@@ -28,20 +13,19 @@ import os
 import random
 import re
 import subprocess
-import sys
 import tempfile
 import unittest
 from xml.dom.minidom import parseString
 
 from tests import common
-from tests.common import also_with_sudo
 from bleachbit import logger
 from bleachbit.FileUtilities import children_in_directory, exe_exists
-from bleachbit.General import get_real_username
+from bleachbit.VFS import ListVFS
 from bleachbit.Unix import (
     _is_broken_xdg_desktop_application,
     apt_autoclean,
     apt_autoremove,
+    clear_snapd_cache,
     dnf_autoremove,
     dnf_clean,
     find_available_locales,
@@ -52,9 +36,8 @@ from bleachbit.Unix import (
     get_distribution_name_version_platform_freedesktop,
     get_distribution_name_version,
     get_purgeable_locales,
+    get_trash_paths,
     is_broken_xdg_desktop,
-    is_process_running_ps_aux,
-    is_process_running,
     is_unix_display_protocol_wayland,
     journald_clean,
     JOURNALD_REGEX,
@@ -62,6 +45,7 @@ from bleachbit.Unix import (
     Locales,
     pacman_cache,
     root_is_not_allowed_to_X_session,
+    snapd_is_active,
     snap_disabled_clean,
     snap_disabled_preview,
     snap_parse_list,
@@ -90,7 +74,8 @@ class UnixTestCase(common.BleachbitTestCase):
     def setUp(self):
         """Initialize unit tests"""
         self.locales = Locales()
-        super(UnixTestCase, self).setUp()
+        clear_snapd_cache()
+        super().setUp()
 
     @common.skipIfWindows
     def test_apt(self):
@@ -105,6 +90,24 @@ class UnixTestCase(common.BleachbitTestCase):
             bytes_freed = apt_autoremove()
             self.assertIsInteger(bytes_freed)
             logger.debug('apt bytes cleaned %d', bytes_freed)
+
+    def test_apt_autoclean_mock(self):
+        """Unit test for apt_autoclean() parsing of 'Del' lines"""
+        # apt >= 3.2 (Ubuntu 26.04) prints a space between the size and units
+        output = '\n'.join((
+            'Del libcurl3t64-gnutls 8.18.0-1ubuntu2.2 [417 kB]',
+            'Del libcurl4t64 8.18.0-1ubuntu2.2 [426 kB]',
+            'Del curl 8.18.0-1ubuntu2.2 [272 kB]',
+        ))
+        with mock.patch('bleachbit.Unix.FileUtilities.exe_exists', return_value=True), \
+                mock.patch('bleachbit.Unix.subprocess.check_output', return_value=output):
+            self.assertEqual(apt_autoclean(), 417000 + 426000 + 272000)
+
+        # older apt printed the size without a space
+        output = 'Del curl 8.18.0-1ubuntu2.2 [272kB]'
+        with mock.patch('bleachbit.Unix.FileUtilities.exe_exists', return_value=True), \
+                mock.patch('bleachbit.Unix.subprocess.check_output', return_value=output):
+            self.assertEqual(apt_autoclean(), 272000)
 
     @common.skipIfWindows
     def test_find_available_locales(self):
@@ -328,6 +331,17 @@ PrefersNonDefaultGPU=false""")
             tmp.flush()
             self.assertFalse(is_broken_xdg_desktop(tmp.name))
 
+
+    @common.skipIfWindows
+    def test_get_trash_paths(self):
+        """Unit test for get_trash_paths()"""
+        seen = []
+        for p in get_trash_paths():
+            seen.append(p)
+            self.assertExists(p.path)
+        self.assertEqual(len(seen), len(set(p.path for p in seen)), "Duplicate trash paths found")
+
+
     @common.skipIfWindows
     def test_desktop_valid_exe(self):
         """Unit test for .desktop file with valid Unix exe (not env)"""
@@ -340,18 +354,54 @@ PrefersNonDefaultGPU=false""")
             with self.assertRaises(RuntimeError):
                 _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
 
-    @common.skipIfWindows
-    def test_desktop_env_shlex_failure(self):
-        """Unit test for .desktop file with shlex exception"""
+    def test_desktop_shlex_failure(self):
+        """Unit test for .desktop file with shlex exception
+
+        Malformed Exec values (unbalanced quotes) are undefined behavior per
+        the XDG spec. The function returns False so the file is preserved
+        rather than risking deletion of a working launcher.
+        """
         fake_config = FakeConfig(
             {"Desktop Entry": {"Exec": "env ENVVAR=bar ls \"notepad.exe"}})
-        if os.getenv('PATH'):
-            result = _is_broken_xdg_desktop_application(
-                fake_config, "foo.desktop")
-            self.assertTrue(result)
-        else:
-            with self.assertRaises(RuntimeError):
-                _is_broken_xdg_desktop_application(fake_config, "foo.desktop")
+        result = _is_broken_xdg_desktop_application(
+            fake_config, "foo.desktop")
+        self.assertFalse(result)
+
+    @mock.patch('bleachbit.FileUtilities.exe_exists')
+    def test_desktop_quoted_exe_with_spaces(self, mock_exe_exists):
+        """Regression test for #2118: AppImage .desktop with quoted Exec path
+
+        Before the fix, the naive ``split(" ")[0]`` returned the executable
+        path with its surrounding double-quotes still attached, so
+        ``exe_exists`` reported it missing and the .desktop file was flagged
+        for deletion.
+        """
+        mock_exe_exists.return_value = True
+        fake_config = FakeConfig({"Desktop Entry": {
+            "Exec": '"/home/user/Applications/AppManager" %u'}})
+        result = _is_broken_xdg_desktop_application(
+            fake_config, "com.github.AppManager.desktop")
+        self.assertFalse(result)
+        mock_exe_exists.assert_called_with('/home/user/Applications/AppManager')
+
+    @mock.patch('bleachbit.FileUtilities.exe_exists')
+    def test_desktop_quoted_exe_path_containing_spaces(self, mock_exe_exists):
+        """Quoted Exec path that itself contains spaces must round-trip."""
+        mock_exe_exists.return_value = True
+        fake_config = FakeConfig({"Desktop Entry": {
+            "Exec": '"/home/user/Applications/Converter NOW" %f'}})
+        result = _is_broken_xdg_desktop_application(
+            fake_config, "converter.desktop")
+        self.assertFalse(result)
+        mock_exe_exists.assert_called_with(
+            '/home/user/Applications/Converter NOW')
+
+    def test_desktop_empty_exec(self):
+        """Whitespace-only Exec is treated as broken."""
+        fake_config = FakeConfig({"Desktop Entry": {"Exec": "   "}})
+        result = _is_broken_xdg_desktop_application(
+            fake_config, "foo.desktop")
+        self.assertTrue(result)
 
     @common.skipIfWindows
     def test_desktop_env_valid(self):
@@ -417,81 +467,6 @@ PrefersNonDefaultGPU=false""")
                 result = is_broken_xdg_desktop(tf.name)
                 self.assertTrue(result, f"Failed case: {description}")
             os.unlink(tf.name)
-
-    @mock.patch('subprocess.check_output')
-    @common.skipIfWindows
-    @also_with_sudo
-    def test_is_process_running_ps_aux(self, mock_check_output):
-        username = get_real_username()
-        ps_out = f"""USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
-root               703   0.0  0.0  2471428   2792   ??  Ss   20May16   0:01.30 SubmitDiagInfo
-alocaluseraccount   681   0.0  0.0  2471568    856   ??  S    20May16   0:00.81 DiskUnmountWatcher
-alocaluseraccount   666   0.0  0.0  2507092   3488   ??  S    20May16   0:17.47 SpotlightNetHelper
-root               665   0.0  0.0  2497508    512   ??  Ss   20May16   0:11.30 check_afp
-alocaluseraccount   646   0.0  0.1  2502484   5656   ??  S    20May16   0:03.62 DataDetectorsDynamicData
-alocaluseraccount   632   0.0  0.0  2471288    320   ??  S    20May16   0:02.79 mdflagwriter
-alocaluseraccount   616   0.0  0.0  2497596    520   ??  S    20May16   0:00.41 familycircled
-alocaluseraccount   573   0.0  0.0  3602328   2440   ??  S    20May16   0:39.64 storedownloadd
-alocaluseraccount   572   0.0  0.0  2531184   3116   ??  S    20May16   0:02.93 LaterAgent
-{username}   561   0.0  0.0  2471492    584   ??  S    20May16   0:00.21 USBAgent
-alocaluseraccount   535   0.0  0.0  2496656    524   ??  S    20May16   0:00.33 storelegacy
-root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 suhelperd
-"""
-        mock_check_output.return_value = ps_out
-
-        tests = [
-            (True, 'USBAgent', False),
-            (True, 'USBAgent', True),
-            (False, 'does-not-exist', False),
-            (False, 'does-not-exist', True)
-        ]
-
-        for expected, exename, require_same_user in tests:
-            with self.subTest(exename=exename, require_same_user=require_same_user):
-                result = is_process_running_ps_aux(exename, require_same_user)
-                self.assertEqual(
-                    expected, result, f'is_process_running_ps_aux(exename={exename}, require_same_user={require_same_user})')
-
-        mock_check_output.return_value = 'invalid-input'
-        self.assertRaises(
-            RuntimeError, is_process_running_ps_aux, 'foo', False)
-        self.assertRaises(RuntimeError, is_process_running_ps_aux, 'foo', True)
-
-    @common.skipIfWindows
-    @common.also_with_sudo
-    def test_is_process_running(self):
-        """Unit test for method is_process_running()"""
-        # Do not use get_executable() here because of how it
-        # handles symlinks.
-        # sys.executable may look like /usr/bin/python3
-        # When running under `env -i`, then sys.executable is empty.
-        if sys.executable:
-            exe = os.path.basename(os.path.realpath(sys.executable))
-        else:
-            try:
-                with open('/proc/self/stat', 'r', encoding='utf-8') as f:
-                    exe = f.read().split()[1].strip('()')
-            except (IOError, IndexError):
-                self.skipTest(
-                    "Could not determine current process name from /proc/self/stat")
-        tests = [
-            # (expected, exe, require_same_user)
-            (True, exe, False),  # Check the actual process name
-            (True, exe, True),  # Check the actual process name
-        ]
-        # These processes may be running but not by the current user.
-        non_user_exes = ('polkitd', 'bluetoothd', 'NetworkManager',
-                         'gdm3', 'snapd', 'systemd-journald')
-        tests += [(False, name, True) for name in non_user_exes]
-        # These do not exist.
-        tests += [
-            (False, 'does-not-exist', True),
-            (False, 'does-not-exist', False),
-        ]
-        for expected, exename, require_same_user in tests:
-            with self.subTest(exename=exename, require_same_user=require_same_user):
-                self.assertEqual(is_process_running(exename, require_same_user), expected,
-                                 f'is_running({exename}, {require_same_user})')
 
     @common.skipIfWindows
     def test_journald_clean(self):
@@ -647,7 +622,7 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             '/var/log/kern.log-20230601',
             '/var/log/messages-20090118.bz2',
             '/var/log/messages-20090118.gz',
-            '/var/log/messages-20090118.xz'
+            '/var/log/messages-20090118.xz',
             '/var/log/messages-20090118',
             '/var/log/messages.2.bz2',
             '/var/log/samba/log.smbd-20250126.gz',
@@ -795,6 +770,45 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
 
         mock_run.assert_called_once_with(['paccache', '-rk0'])
 
+        # real paccache reports binary units (MiB), not decimal (M)
+        mock_run.return_value = (
+            0,
+            "==> finished: 3 packages removed (42.31 MiB freed)\n",
+            ''
+        )
+        bytes_freed = pacman_cache()
+        self.assertEqual(bytes_freed, 44365250)
+
+    def test_snapd_is_active_no_snap(self):
+        """Unit test for snapd_is_active() when snap is not installed"""
+        with mock.patch('bleachbit.Unix.exe_exists', return_value=False):
+            self.assertFalse(snapd_is_active())
+
+    def test_snapd_is_active_no_systemctl(self):
+        """Unit test for snapd_is_active() when systemctl is not installed"""
+        with mock.patch('bleachbit.Unix.exe_exists', side_effect=lambda x: x == 'snap'):
+            self.assertFalse(snapd_is_active())
+
+    def test_snapd_is_active_inactive(self):
+        """Unit test for snapd_is_active() when snapd.socket is inactive"""
+        with mock.patch('bleachbit.Unix.exe_exists', return_value=True), \
+                mock.patch('bleachbit.General.run_external', return_value=(1, '', '')):
+            self.assertFalse(snapd_is_active())
+
+    def test_snapd_is_active_active(self):
+        """Unit test for snapd_is_active() when snapd.socket is active"""
+        with mock.patch('bleachbit.Unix.exe_exists', return_value=True), \
+                mock.patch('bleachbit.General.run_external', return_value=(0, '', '')):
+            self.assertTrue(snapd_is_active())
+
+    def test_snapd_is_active_timeout(self):
+        """Unit test for snapd_is_active() timeout handling"""
+        with mock.patch('bleachbit.Unix.exe_exists', return_value=True), \
+                mock.patch('bleachbit.General.run_external') as mock_run:
+            mock_run.side_effect = subprocess.TimeoutExpired(
+                ['systemctl', 'is-active', '--quiet', 'snapd.socket'], 5)
+            self.assertFalse(snapd_is_active())
+
     @common.skipIfWindows
     @common.skipUnlessDestructive
     def test_snap_disabled_clean(self):
@@ -815,6 +829,18 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
             bytes_freed = snap_disabled_preview()
             self.assertIsInstance(bytes_freed, int)
             logger.debug('snap disabled bytes freed %d', bytes_freed)
+
+    @common.skipIfWindows
+    def test_snap_timeout(self):
+        """Unit test for snap_disabled_full() timeout handling"""
+        with mock.patch('bleachbit.Unix.snapd_is_active', return_value=True), \
+                mock.patch('bleachbit.General.run_external') as mock_run:
+            # Simulate snap list --all hanging
+            mock_run.side_effect = subprocess.TimeoutExpired(
+                ['snap', 'list', '--all'], 10)
+            with self.assertRaises(RuntimeError) as cm:
+                snap_disabled_preview()
+            self.assertIn('timed out', str(cm.exception))
 
     def test_snap_parse_list_real_data(self):
         """Unit test for snap_parse_list() with real 'snap list --all' output"""
@@ -914,3 +940,124 @@ root               531   0.0  0.0  2501712    588   ??  Ss   20May16   0:02.40 s
                 root_autorized = root_is_not_allowed_to_X_session()
             self.assertIsInstance(root_autorized, bool)
             self.assertEqual(expected_root_autorized, root_autorized)
+
+    @common.skipIfWindows
+    def test_get_trash_paths_snap_symlink(self):
+        """Do not follow symlinks in ~/snap when finding trash"""
+        with common.set_temporary_env('HOME', self.tempdir):
+            # Create snap structure: snap/app/238/.local/share/Trash/files/
+            real_rev = os.path.join(self.tempdir, 'snap', 'app', '238')
+            trash_files = os.path.join(
+                real_rev, '.local', 'share', 'Trash', 'files')
+            os.makedirs(trash_files)
+            test_file = os.path.join(trash_files, 'test.txt')
+            with open(test_file, 'w') as f:
+                f.write('test')
+            # Create symlink current -> 238
+            current_dir = os.path.join(self.tempdir, 'snap', 'app', 'current')
+            os.symlink('238', current_dir)
+
+            paths = [cmd.path for cmd in get_trash_paths()]
+            # Should find the test file through the real path
+            self.assertIn(test_file, paths)
+            # Should NOT find it through the symlink
+            symlink_path = os.path.join(
+                self.tempdir, 'snap', 'app', 'current', '.local', 'share',
+                'Trash', 'files', 'test.txt')
+            self.assertNotIn(symlink_path, paths)
+
+
+class LocalizationsTestCase(common.BleachbitTestCase):
+
+    """Test case for localizations in Unix module"""
+
+    @staticmethod
+    def _get_recognized_paths(vfs):
+        """Load localizations.xml and return paths recognized by it using the given VFS."""
+        xml_path = os.path.join(os.path.dirname(
+            os.path.dirname(__file__)), 'cleaners', 'localizations.xml')
+        with open(xml_path, 'r', encoding='utf-8') as f:
+            xml_doc = parseString(f.read())
+
+        localizations_node = None
+        for child in xml_doc.firstChild.childNodes:
+            if child.nodeType == child.ELEMENT_NODE and child.nodeName == 'localizations':
+                localizations_node = child
+                break
+        assert localizations_node is not None, 'localizations.xml must contain a <localizations> element'
+
+        locales = Locales(vfs=vfs)
+        for child in localizations_node.childNodes:
+            if child.nodeType == child.ELEMENT_NODE:
+                locales.add_xml(child)
+
+        recognized = set()
+        for (locale, specifier, path) in locales._paths.get_localizations('/'):
+            recognized.add(path)
+        return recognized
+
+    @staticmethod
+    def _path_matches_recognized(test_path, recognized):
+        """Return True if test_path is in recognized or is a child/descendant of one."""
+        if test_path in recognized:
+            return True
+        for rec_path in recognized:
+            if test_path.startswith(rec_path + '/'):
+                return True
+        return False
+
+    def test_localization_paths_positive(self):
+        """Verify each path in localization_paths_positive.txt is matched by localizations.xml
+
+        Uses a virtual filesystem so the test verifies actual XML rule matching
+        without requiring a real /var/lib/flatpak tree.
+        """
+        data_file = os.path.join(os.path.dirname(
+            __file__), 'localization_paths_positive.txt')
+        self.assertExists(data_file)
+
+        with open(data_file, 'r', encoding='utf-8') as f:
+            test_paths = [line.strip() for line in f if line.strip()
+                          and not line.strip().startswith('#')]
+        self.assertGreater(len(test_paths), 0,
+                           'Test data file should contain at least one path')
+
+        vfs = ListVFS(test_paths)
+        recognized = self._get_recognized_paths(vfs)
+
+        for test_path in test_paths:
+            self.assertTrue(
+                self._path_matches_recognized(test_path, recognized),
+                f'Path not matched by localizations.xml: {test_path}'
+            )
+
+    def test_localization_paths_negative(self):
+        """Verify non-localization paths in flatpak are NOT matched
+
+        Uses a virtual filesystem so the test verifies that paths
+        that look similar to localizations are correctly rejected.
+        """
+        data_file = os.path.join(os.path.dirname(
+            __file__), 'localization_paths_negative.txt')
+        self.assertExists(data_file)
+
+        with open(data_file, 'r', encoding='utf-8') as f:
+            negative_paths = [line.strip() for line in f if line.strip(
+            ) and not line.strip().startswith('#')]
+        self.assertGreater(len(negative_paths), 0,
+                           'Test data file should contain at least one path')
+
+        positive_file = os.path.join(os.path.dirname(
+            __file__), 'localization_paths_positive.txt')
+        with open(positive_file, 'r', encoding='utf-8') as f:
+            positive_paths = [line.strip() for line in f if line.strip(
+            ) and not line.strip().startswith('#')]
+
+        vfs = ListVFS(positive_paths + negative_paths)
+        recognized = self._get_recognized_paths(vfs)
+
+        for neg_path in negative_paths:
+            self.assertFalse(
+                self._path_matches_recognized(neg_path, recognized),
+                f'Path should NOT be matched by localizations.xml: {neg_path}'
+            )

@@ -14,39 +14,20 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-#    @file .gitattributes
-#    @repo bleachbit/bleachbit, az0/cleanerml
-#    @version v0.1.0
-#    @date 2019-11-12
-#    @by https://github.com/Tobias-B-Besemer
-#    @note One .gitattributes file for both repos! Make updates easier!
-#    @note This file should help at least by linting!
 
-# Doc is here: https://help.github.com/en/github/using-git/configuring-git-to-handle-line-endings
+# Doc is here: https://docs.github.com/en/get-started/git-basics/configuring-git-to-handle-line-endings
 
-# Set the default behavior, in case people don't have core.autocrlf set.
-* text=auto
+# Enforce Unix newlines
+* text=auto eol=lf
 
-# Explicitly declare text files you want to always be normalized and converted
-# to native line endings on checkout.
-*.c text
-*.h text
-
-# Declare files that will always have CRLF line endings on checkout.
+# Declare files that will always have CRLF line endings on checkout
 *.sln text eol=crlf
 *.bat text eol=crlf
 *.nsi text eol=crlf
 *.nsh text eol=crlf
 *.ini text eol=crlf
 
-# Declare files that will always have LF line endings on checkout.
-*.xml text eol=lf
-*.xsd text eol=lf
-*.md text eol=lf
-*.py text eol=lf
-
-# Denote all files that are truly binary and should not be modified.
+# Denote all files that are truly binary and should not be modified
 *.png binary
 *.jpg binary
 *.bmp binary

@@ -28,7 +28,7 @@ tests: require-xmllint
 	for f in *.xml; \
 	do \
 		xmllint --noout --schema ../doc/cleaner_markup_language.xsd "$$f"; \
-		# In case of an error, delay exit, so we can see all errors. \
+		: 'In case of an error, delay exit, so we can see all errors.'; \
 		lintrc=$$(($$lintrc + $$?)); \
 	done; \
 	exit $$lintrc

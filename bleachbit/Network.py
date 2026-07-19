@@ -30,7 +30,14 @@ import socket
 import struct
 import sys
 import platform
+import warnings
 from collections.abc import Callable
+
+# urllib3 v2 warns when the ssl module is not OpenSSL (e.g. macOS
+# LibreSSL).  The warning is informational and does not prevent
+# urllib3 from functioning, so suppress it before importing urllib3.
+warnings.filterwarnings("ignore", message="urllib3 v2 only supports OpenSSL")
+
 try:
     from urllib3.util.retry import Retry
     HAVE_URLLIB3 = True
@@ -38,10 +45,20 @@ except ImportError:
     HAVE_URLLIB3 = False
 
 # third party
-import requests
+try:
+    import requests
+    HAVE_REQUESTS = True
+except ImportError:
+    HAVE_REQUESTS = False
+
+if HAVE_REQUESTS:
+    RequestException = requests.exceptions.RequestException
+else:
+    class RequestException(Exception):
+        pass
 
 # local imports
-from bleachbit import bleachbit_exe_path, APP_VERSION
+from bleachbit import bleachbit_exe_path, APP_VERSION, IS_LINUX, IS_NETBSD, IS_WINDOWS
 from bleachbit.FileUtilities import delete
 from bleachbit.Language import get_active_language_code, get_text as _
 
@@ -56,7 +73,7 @@ def unset_sslkeylogfile(use_logger):
 
     Returns True if unset
     """
-    if not os.name == 'nt':
+    if not IS_WINDOWS:
         return False
     if not os.environ.get('SSLKEYLOGFILE'):
         return False
@@ -103,10 +120,11 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None,
         delete(fn, ignore_missing=True)  # delete any partial download
 
     try:
-        response = fetch_url(url)
-    except requests.exceptions.RequestException as exc:
+        response = fetch_url(url, max_retries=max_retries,
+                             backoff_factor=backoff_factor, timeout=timeout)
+    except RequestException as exc:
         # For retryable errors (like 503), use a simplified error message
-        if isinstance(exc, requests.exceptions.RetryError):
+        if HAVE_REQUESTS and isinstance(exc, requests.exceptions.RetryError):
             msg2 = 'Server temporarily unavailable (retries exceeded)'
             logger.warning("%s: %s", msg, type(exc).__name__)
         else:
@@ -151,7 +169,8 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
         requests.RequestException: If there is an error fetching the URL
     """
     assert isinstance(url, str)
-    assert url.startswith('http'), f"URL must start with http, got {url}"
+    if not url.startswith('http'):
+        raise ValueError(f'URL must start with http, got {url}')
     assert isinstance(max_retries, int)
     assert max_retries >= 0
     assert isinstance(backoff_factor, float)
@@ -167,6 +186,9 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
         else:
             logger.error(
                 'Application is frozen but certificate file not found: %s', ca_bundle)
+    if not HAVE_REQUESTS:
+        raise RequestException(
+            'The requests package is not installed: network features are disabled.')
     assert headers is None or isinstance(headers, dict)
     request_headers = {'User-Agent': get_user_agent()}
     if headers:
@@ -195,11 +217,11 @@ def fetch_url(url, max_retries=3, backoff_factor=0.5, timeout=60,
 def _get_os_name_version():
     """Return (os_name, os_version) tuple for network requests."""
     os_name = platform.system()  # 'Linux', 'Windows', etc.
-    if sys.platform == 'linux':
+    if IS_LINUX:
         # pylint: disable=import-outside-toplevel
         from bleachbit.Unix import get_distribution_name_version
         os_version = get_distribution_name_version()
-    elif sys.platform[:6] == 'netbsd':
+    elif IS_NETBSD:
         os_version = os_name + '/' + platform.machine() + ' ' + platform.release()
     else:
         os_version = platform.uname().version
@@ -220,7 +242,7 @@ def get_update_request_headers():
     if (gtk_version := get_gtk_version()):
         headers['X-GTK-Version'] = gtk_version
 
-    if os.name == 'nt':
+    if IS_WINDOWS:
         headers['X-Python-Version'] = platform.python_version()
         headers['X-Pointer-Bits'] = str(8 * struct.calcsize('P'))
 

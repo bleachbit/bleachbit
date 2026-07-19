@@ -21,13 +21,16 @@ from unittest.mock import patch
 from tests import common
 
 from bleachbit.GtkShim import HAVE_GTK, Gtk, GLib, Gio
+from bleachbit.Options import options
 
 if HAVE_GTK:
     from bleachbit.GuiApplication import Bleachbit
     from bleachbit.GuiChaff import (STOP_MODE_FILE_COUNT,
                                     STOP_MODE_TOTAL_SIZE,
                                     STOP_MODE_FREE_SPACE,
-                                    MAX_FILE_COUNT)
+                                    MAX_FILE_COUNT,
+                                    _make_should_stop,
+                                    _make_progress_cb)
 
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
@@ -37,13 +40,18 @@ class GuiChaffTestCase(common.BleachbitTestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(GuiChaffTestCase, cls).setUpClass()
+        super().setUpClass()
+        options.set('font_check_completed', True)
 
         # Try to register the application, catch the error if already registered
+        glib_errors = []
         try:
             cls.app.register()
             cls.app.hold()  # Keep application alive during tests
-            cls.app.activate()
+            with common.capture_glib_exceptions() as errs:
+                cls.app.activate()
+                cls.refresh_gui()
+            glib_errors.extend(errs)
         except GLib.GError as e:
             if not "already exported" in str(e):
                 raise
@@ -52,8 +60,26 @@ class GuiChaffTestCase(common.BleachbitTestCase):
             # Try to get the default application and activate it
             default_app = Gio.Application.get_default()
             if default_app:
-                default_app.activate()
+                with common.capture_glib_exceptions() as errs:
+                    default_app.activate()
+                    cls.refresh_gui()
+                glib_errors.extend(errs)
+        if glib_errors:
+            _exc_type, exc_value, exc_tb = glib_errors[0]
+            raise exc_value.with_traceback(exc_tb)
         cls.refresh_gui()
+
+    @classmethod
+    def tearDownClass(cls):
+        """Close the GUI"""
+        super().tearDownClass()
+        # Destroy the visible window on whichever application holds it.
+        # When running after TestGUI, the default application is TestGUI's
+        # instance and cls.app is an unregistered duplicate, so check both.
+        for app in (cls.app, Gio.Application.get_default()):
+            if app and getattr(app, '_window', None):
+                app._window.destroy()
+                app._window = None
 
     @classmethod
     def refresh_gui(cls, delay=0):
@@ -77,11 +103,13 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         time.sleep(delay)
 
     def setUp(self):
+        """Set up test fixtures before each test method."""
         from bleachbit.GuiChaff import ChaffDialog
         # Pass the GtkWindow object
         self.dialog = ChaffDialog(parent=self.app._window)
 
     def tearDown(self):
+        """Clean up test fixtures after each test method."""
         self.dialog.destroy()
 
     def test_dialog_creation(self):
@@ -239,6 +267,42 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         self.assertEqual(args[3], self.tempdir)  # output_folder
         self.assertIsInstance(args[6], threading.Event)  # abort_event
 
+    def test_progress_cb_keyword_args(self):
+        """Regression test: _make_progress_cb must accept keyword args from Chaff.py
+
+        Chaff.py calls on_progress(fraction, generated_file_names=..., cumulative_size=...)
+        so the callbacks must accept those keyword names.
+        """
+
+        collected = []
+
+        def on_progress(fraction):
+            collected.append(fraction)
+
+        for stop_mode in (STOP_MODE_FILE_COUNT, STOP_MODE_TOTAL_SIZE, STOP_MODE_FREE_SPACE):
+            cb = _make_progress_cb(stop_mode, 100, self.tempdir, on_progress)
+            # Must accept keyword arguments as Chaff.py passes them
+            cb(0.5, generated_file_names=['/tmp/fake'], cumulative_size=12345)
+            self.assertEqual(len(collected), 1, f'stop_mode={stop_mode}')
+            collected.clear()
+
+    def test_should_stop_keyword_args(self):
+        """Regression test: _make_should_stop must accept keyword args from Chaff.py
+
+        Chaff.py calls should_stop(generated_file_names, cumulative_size=...)
+        so the callbacks must accept those parameter names.
+        """
+
+
+        abort_event = threading.Event()
+
+        for stop_mode in (STOP_MODE_FILE_COUNT, STOP_MODE_TOTAL_SIZE, STOP_MODE_FREE_SPACE):
+            should_stop, _file_count = _make_should_stop(
+                stop_mode, 100, self.tempdir, abort_event)
+            # Must accept keyword argument as Chaff.py passes it
+            result = should_stop(['/tmp/fake'], cumulative_size=12345)
+            self.assertIsInstance(result, bool)
+
     @patch('bleachbit.GuiChaff.make_files_thread')
     @patch('bleachbit.Chaff.have_models')
     def test_abort_button(self, mock_have_models, mock_make_files):
@@ -267,3 +331,29 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         abort_event = mock_make_files.call_args[0][6]
         self.assertIsInstance(abort_event, threading.Event)
         self.assertTrue(abort_event.is_set())
+
+    @patch('bleachbit.GuiChaff.make_files_thread')
+    @patch('bleachbit.Chaff.have_models')
+    def test_make_files_error(self, mock_have_models, mock_make_files):
+        """Test that error from make_files_thread shows in infobar"""
+        mock_have_models.return_value = True
+
+        self.dialog.choose_folder_button.set_filename(self.tempdir)
+        self.dialog.stop_value_spin.set_value(10)
+        self.dialog.inspiration_combo.set_active(0)
+
+        self.dialog.make_button.clicked()
+        self.refresh_gui(0.1)
+
+        # Get the on_progress callback passed to the thread
+        on_progress = mock_make_files.call_args[0][5]
+        on_progress(1.0, msg=None, is_done=True, error='Test error')
+        self.refresh_gui(0.1)
+
+        self.assertTrue(self.dialog.infobar.get_visible())
+        self.assertIn('Test error', self.dialog.infobar_label.get_text())
+        self.assertEqual(
+            self.dialog.infobar.get_message_type(), Gtk.MessageType.ERROR)
+        self.assertFalse(self.dialog.progressbar.get_visible())
+        self.assertFalse(self.dialog.abort_button.get_sensitive())
+        self.assertTrue(self.dialog.make_button.get_sensitive())

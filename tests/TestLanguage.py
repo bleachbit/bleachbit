@@ -1,5 +1,4 @@
 # vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
 
 # BleachBit
 # Copyright (C) 2008-2025 Andrew Ziem
@@ -43,7 +42,7 @@ class LanguageTestCase(common.BleachbitTestCase):
     """Test case for module Language"""
 
     def setUp(self):
-        super(LanguageTestCase, self).setUp()
+        super().setUp()
         options.set('auto_detect_lang', False)
         options.set('forced_language', '')
 
@@ -61,15 +60,15 @@ class LanguageTestCase(common.BleachbitTestCase):
         """Test get_supported_language_codes()"""
         slangs = get_supported_language_codes()
         self.assertTrue(isinstance(slangs, list))
-        self.assertTrue(len(slangs) > 1)
+        self.assertGreater(len(slangs), 1)
         for slang in slangs:
             if slang in common.SKIP_ALIAS_CODES:
                 continue
             self.assertIsLanguageCode(slang)
-        self.assertTrue('en_US' in slangs)
+        self.assertIn('en_US', slangs)
         if len(get_supported_language_codes()) < 3:
             self.skipTest('missing translations')
-        self.assertTrue('es' in slangs)
+        self.assertIn('es', slangs)
 
     def test_get_supported_language_code_name_dict_unknown_code(self):
         with mock.patch('bleachbit.Language.get_supported_language_codes', return_value=['en', 'es', 'foo@bar']):
@@ -106,7 +105,7 @@ class LanguageTestCase(common.BleachbitTestCase):
             setup_translation()
             text = get_text('Preview')
             self.assertIsInstance(text, str)
-            self.assertTrue(len(text) > 0)
+            self.assertGreater(len(text), 0)
 
     @skipIfMissingPo
     def test_get_text_au(self):

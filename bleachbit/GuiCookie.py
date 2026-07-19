@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 # standard library
 import json
@@ -31,7 +17,7 @@ from bleachbit.GtkShim import GLib, Gtk
 # local import
 import bleachbit
 from bleachbit.Constant import URL_COOKIE_MGR
-from bleachbit.Cookie import list_unique_cookies, COOKIE_KEEP_LIST_FILENAME
+from bleachbit.Cookie import list_unique_cookies, load_keep_list, COOKIE_KEEP_LIST_FILENAME
 from bleachbit.GuiBasic import open_url
 from bleachbit.Language import get_text as _, nget_text as _n
 
@@ -112,7 +98,7 @@ class CookieManagerPane(Gtk.Box):
 
         self.keep_list_path = os.path.join(
             bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
-        self.saved_domains = self._load_saved_domains()
+        self.saved_domains = load_keep_list()
         self._is_loading = False
 
         # Create cookie list store: checkbox, domain
@@ -346,28 +332,3 @@ class CookieManagerPane(Gtk.Box):
         for row in self.cookie_store:
             if row[0]:
                 yield row[1]
-
-    def _load_saved_domains(self):
-        """Load saved cookie hostnames from disk."""
-        try:
-            with open(self.keep_list_path, "r", encoding="utf-8") as f:
-                data = json.load(f)
-        except FileNotFoundError:
-            return set()
-        except (json.JSONDecodeError, OSError) as exc:
-            logger.warning("Failed to read cookie keep list %s: %s",
-                           self.keep_list_path, exc)
-            return set()
-
-        domains = set()
-        if isinstance(data, list):
-            for item in data:
-                if isinstance(item, str):
-                    candidate = item
-                elif isinstance(item, dict):
-                    candidate = item.get("domain")
-                else:
-                    candidate = None
-                if isinstance(candidate, str) and candidate:
-                    domains.add(candidate.strip())
-        return domains

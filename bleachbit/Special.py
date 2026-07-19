@@ -33,7 +33,7 @@ from urllib.parse import quote, urlparse, urlunparse
 
 
 # local application imports
-from bleachbit import FileUtilities
+from bleachbit import FileUtilities, IS_WINDOWS
 from bleachbit.Options import options
 
 logger = logging.getLogger(__name__)
@@ -46,7 +46,8 @@ def __get_chrome_history(path, fn='History'):
     path_history = os.path.join(os.path.dirname(path), fn)
     ver = get_sqlite_int(
         path_history, 'select value from meta where key="version"')[0]
-    assert ver > 1
+    if ver <= 1:
+        raise RuntimeError(f'unexpected Chrome history version: {ver}')
     return ver
 
 
@@ -54,7 +55,7 @@ def _sqlite_readonly_uri(pathname):
     """Return a proper SQLite URI for read-only access to pathname"""
     assert isinstance(pathname, str)
     abs_path = os.path.abspath(pathname)
-    if os.name == 'nt':
+    if IS_WINDOWS:
         abs_path = abs_path.replace('\\', '/')
     quoted = quote(abs_path, safe='/:')
     return f'file:{quoted}?mode=ro'
@@ -379,14 +380,20 @@ def delete_mozilla_url_history(path):
     FileUtilities.execute_sqlite3(path, cmds)
 
 
+def _remove_path_from_url(url):
+    """Prepare URL for comparison in delete_mozilla_favicons()"""
+    prefix = 'fake-favicon-uri:'
+    if url.startswith(prefix):
+        url = url[len(prefix):]
+    url = urlparse(url)
+    if not url.netloc:
+        return url.geturl()
+    return urlunparse((url.scheme, url.netloc, '', '', '', ''))
+
 def delete_mozilla_favicons(path):
     """Delete favorites icons in Mozilla places.favicons
 
     Bookmarks are not deleted."""
-
-    def remove_path_from_url(url):
-        url = urlparse(url.lstrip('fake-favicon-uri:'))
-        return urlunparse((url.scheme, url.netloc, '', '', '', ''))
 
     cmds = ""
 
@@ -411,6 +418,7 @@ def delete_mozilla_favicons(path):
     # db which collects icon ids that don't have a bookmark or have domain
     # level bookmark.
     FileUtilities.execute_sqlite3(path, cmds)
+    cmds = ""
 
     # Collect favicons that are not bookmarked with their full url,
     # which collects also domain level bookmarks.
@@ -438,40 +446,23 @@ def delete_mozilla_favicons(path):
                                              db='', filter=" and url NOT LIKE 'javascript:%'"),
                                          row_factory)
 
-    bookmarked_urls_domains = list(map(remove_path_from_url, bookmarked_urls))
+    bookmarked_urls_domains = set(map(_remove_path_from_url, bookmarked_urls))
+    # Delete orphaned favicons whose domain is not bookmarked.
+    # Favicons for bookmarked domains are kept regardless of URL path
+    # depth, because Firefox stores site favicons at deep paths (e.g.
+    # https://example.com/media/img/favicon.ico) and deleting them causes
+    # bookmark icons to revert to generic icons.
+    # https://github.com/bleachbit/bleachbit/issues/1537
     ids_to_delete = [id for id, url in id_and_url_pairs
-                     if (
-                         # Collect only favicons with not bookmarked
-                         # urls with same domain or their domain is a
-                         # part of a bookmarked url but the favicons are
-                         # not domain level. In other words, collect all
-                         # that are not bookmarked.
-                         remove_path_from_url(url) not in bookmarked_urls_domains or
-                         urlparse(url).path.count('/') > 1
-                     )
+                     if _remove_path_from_url(url) not in bookmarked_urls_domains
                      ]
 
     # delete all not bookmarked icons
-    icons_where = f"where (id in ({str(ids_to_delete).replace('[', '').replace(']', '')}))"
-    cols = ('icon_url', 'data')
-    cmds += __shred_sqlite_char_columns('moz_icons', cols, icons_where, path)
-
-    FileUtilities.execute_sqlite3(path, cmds)
-
-
-def delete_ooo_history(path):
-    """Erase the OpenOffice.org MRU in Common.xcu.  No longer valid in Apache OpenOffice.org 3.4."""
-    dom1 = xml.dom.minidom.parse(path)
-    changed = False
-    for node in dom1.getElementsByTagName("node"):
-        if node.hasAttribute("oor:name"):
-            if "History" == node.getAttribute("oor:name"):
-                node.parentNode.removeChild(node)
-                node.unlink()
-                changed = True
-                break
-    if changed:
-        dom1.writexml(open(path, "w", encoding='utf-8'))
+    if ids_to_delete:
+        icons_where = f"where (id in ({str(ids_to_delete).replace('[', '').replace(']', '')}))"
+        cols = ('icon_url', 'data')
+        cmds += __shred_sqlite_char_columns('moz_icons', cols, icons_where, path)
+        FileUtilities.execute_sqlite3(path, cmds)
 
 
 def get_chrome_bookmark_ids(history_path):
@@ -482,9 +473,16 @@ def get_chrome_bookmark_ids(history_path):
         return []
     urls = get_chrome_bookmark_urls(bookmark_path)
     ids = []
-    for url in urls:
+    # Look up ids in batches. SQLite caps host parameters (default 999), so
+    # chunk the URLs instead of opening a connection per bookmark.
+    chunk_size = 500
+    for i in range(0, len(urls), chunk_size):
+        chunk = urls[i:i + chunk_size]
+        placeholders = ','.join('?' * len(chunk))
         ids += get_sqlite_int(
-            history_path, 'select id from urls where url=?', (url,))
+            history_path,
+            f'select id from urls where url in ({placeholders})',
+            tuple(chunk))
     return ids
 
 

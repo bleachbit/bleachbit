@@ -30,6 +30,7 @@ import subprocess
 import sys
 
 import bleachbit
+from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +64,7 @@ class WindowsError(Exception):
 
     def __init__(self, winerror=None, *args, **kwargs):
         self.winerror = winerror
-        super(WindowsError, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __str__(self):
         return 'this is a dummy class for non-Windows systems'
@@ -73,7 +74,7 @@ def chownself(path):
     """Set path owner to real self when running in sudo.
     If sudo creates a path and the owner isn't changed, the
     owner may not be able to access the path."""
-    if 'posix' != os.name:
+    if not IS_POSIX:
         return
     uid = get_real_uid()
     logger.debug('chown(%s, uid=%s)', path, uid)
@@ -94,7 +95,7 @@ def gc_collect():
     PermissionError: [WinError 32] The process cannot access the file because it is being used
     by another process: '[...].sqlite'
     """
-    if not os.name == 'nt':
+    if not IS_WINDOWS:
         return
 
     import gc
@@ -135,16 +136,24 @@ def get_real_username():
 
     In Docker containers, getpass.getuser() may fail with KeyError.
     """
-    if 'posix' != os.name:
+    if not IS_POSIX:
         raise RuntimeError('get_real_username() requires POSIX')
     sudo_user = os.getenv('SUDO_USER')
     if sudo_user:
         return sudo_user
 
     try:
-        return os.getlogin()
+        login = os.getlogin()
     except OSError:
-        pass
+        login = None
+
+    # On macOS (e.g., GitHub Actions), os.getlogin() may return 'root'
+    # because it reflects the owner of the controlling terminal rather
+    # than the effective user.  Don't trust it in that case; fall through
+    # to getpass.getuser(), which checks environment variables and pwd.
+    # This mirrors the 'root' != login guard in get_real_uid().
+    if login and 'root' != login:
+        return login
 
     try:
         return getpass.getuser()
@@ -164,7 +173,7 @@ def get_real_username():
 def get_real_uid():
     """Get the real user ID when running in sudo mode"""
 
-    if 'posix' != os.name:
+    if not IS_POSIX:
         raise RuntimeError('get_real_uid() requires POSIX')
 
     if os.getenv('SUDO_UID'):
@@ -252,53 +261,33 @@ def run_external_nowait(args, env=None, kwargs=None):
     """
     if kwargs is None:
         kwargs = {}
+    else:
+        kwargs = dict(kwargs)
     try:
-        if sys.platform == 'win32':
-            kwargs['creationflags'] = subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP
-            # Set close_fds to True to prevent Python from tracking the process
-            # Also prevents ResourceWarnings
-            kwargs['close_fds'] = True
-            try:
-                # Start the process with explicit None for stdio to prevent handle inheritance
-                process = subprocess.Popen(args,
-                                           stdin=None,
-                                           stdout=None,
-                                           stderr=None,
-                                           env=env, **kwargs)
-                # Close the process handle to prevent ResourceWarning
-                process.returncode = 0
-                # This prevents the ResourceWarning in __del__
+        if IS_WINDOWS:
+            creationflags = kwargs.get('creationflags', 0)
+            kwargs['creationflags'] = (
+                creationflags |
+                subprocess.DETACHED_PROCESS |
+                subprocess.CREATE_NEW_PROCESS_GROUP)
+        else:
+            # Unix/Linux
+            kwargs['start_new_session'] = True
+        kwargs['close_fds'] = True
+        try:
+            process = subprocess.Popen(args,
+                                       stdin=subprocess.DEVNULL,
+                                       stdout=subprocess.DEVNULL,
+                                       stderr=subprocess.DEVNULL,
+                                       env=env, **kwargs)
+            process.returncode = 0
+            if IS_WINDOWS:
                 process._handle.Close()
                 process._handle = None
-                return True
-            except Exception as e:
-                logger.warning('Failed to start process %s: %s', args, e)
-                return False
-
-        # Unix/Linux
-        pid = os.fork()
-        if pid == 0:
-            # Child process
-            try:
-                # Detach from parent session
-                os.setsid()
-                # Redirect standard streams to devnull using raw fd numbers
-                # (0=stdin, 1=stdout, 2=stderr) to avoid issues with pytest
-                # or other frameworks that replace sys.stdout/stderr objects.
-                devnull_fd = os.open(os.devnull, os.O_RDWR)
-                os.dup2(devnull_fd, 0)  # stdin
-                os.dup2(devnull_fd, 1)  # stdout
-                os.dup2(devnull_fd, 2)  # stderr
-                os.close(devnull_fd)
-                # Set environment if needed
-                if env:
-                    os.environ.clear()
-                    os.environ.update(env)
-                os.execvp(args[0], args)
-            except Exception:
-                os._exit(1)
-        else:
             return True
+        except Exception as e:
+            logger.warning('Failed to start process %s: %s', args, e)
+            return False
     except subprocess.TimeoutExpired:
         # This is good on Windows.
         return True
@@ -333,11 +322,11 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
         stdout = subprocess.PIPE
     kwargs = {}
     encoding = bleachbit.stdout_encoding
-    if sys.platform == 'win32':
+    if IS_WINDOWS:
         # hide the 'DOS box' window
         kwargs['creationflags'] = subprocess.CREATE_NO_WINDOW
         encoding = 'mbcs'
-    if clean_env and 'posix' == os.name:
+    if clean_env and IS_POSIX:
         # Clean environment variables so that that subprocesses use English
         # instead of translated text. This helps when checking for certain
         # strings in the output.
@@ -356,7 +345,22 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
         if run_external_nowait(args, env=env, kwargs=kwargs):
             return (0, '', '')
         # Use fallback method.
-        kwargs['start_new_session'] = True
+        if IS_WINDOWS:
+            creationflags = kwargs.get('creationflags', 0)
+            kwargs['creationflags'] = (
+                creationflags |
+                subprocess.DETACHED_PROCESS |
+                subprocess.CREATE_NEW_PROCESS_GROUP)
+        else:
+            kwargs['start_new_session'] = True
+        kwargs['close_fds'] = True
+        process = subprocess.Popen(args,
+                                   stdout=subprocess.DEVNULL,
+                                   stderr=subprocess.DEVNULL,
+                                   stdin=subprocess.DEVNULL,
+                                   env=env, **kwargs)
+        process.returncode = 0
+        return (0, '', '')
 
     with subprocess.Popen(args, stdout=stdout,
                           stderr=subprocess.PIPE, env=env, **kwargs) as process:
@@ -372,9 +376,6 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
             print(out[1])
             raise
 
-        if not wait:
-            return (0, '', '')
-
         return (process.returncode,
                 str(out[0], encoding=encoding) if out[0] else '',
                 str(out[1], encoding=encoding) if out[1] else '')
@@ -382,10 +383,10 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
 
 def shell_split(cmd):
     """Split a shell command into a list of arguments"""
-    args0 = shlex.split(cmd, posix=os.name == 'posix')
+    args0 = shlex.split(cmd, posix=IS_POSIX)
     args = []
     for arg in args0:
-        if os.name == 'nt' and arg.startswith('"') and arg.endswith('"'):
+        if IS_WINDOWS and arg.startswith('"') and arg.endswith('"'):
             arg = arg[1:-1]
         args.append(arg)
     return args
@@ -393,7 +394,7 @@ def shell_split(cmd):
 
 def sudo_mode():
     """Return whether running in sudo mode"""
-    if not sys.platform == 'linux':
+    if not IS_LINUX:
         return False
 
     # if 'root' == os.getenv('USER'):

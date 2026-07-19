@@ -9,6 +9,7 @@ Test cases for module Winapp
 """
 
 import os
+import re
 import shutil
 import stat
 import string
@@ -18,16 +19,16 @@ import time
 from unittest import mock
 
 from tests import common
-from bleachbit.Winapp import Winapp, detectos, detect_file, section2option
+from bleachbit.Winapp import Winapp, detectos, detect_file, fnmatch_translate, section2option
 from bleachbit.Windows import detect_registry_key, parse_windows_build
-from bleachbit import logger
+from bleachbit import IS_POSIX, IS_WINDOWS, logger
 
-if os.name == 'nt':
+if IS_WINDOWS:
     import winreg
 
 def _create_registry_keys(*key_paths):
     """Create registry keys, ignoring errors if they already exist"""
-    if os.name != 'nt':
+    if not IS_WINDOWS:
         return
     for key_path in key_paths:
         try:
@@ -38,7 +39,7 @@ def _create_registry_keys(*key_paths):
 
 def _delete_registry_keys(*key_paths):
     """Delete registry keys, ignoring errors if they don't exist"""
-    if os.name != 'nt':
+    if not IS_WINDOWS:
         return
     for key_path in key_paths:
         try:
@@ -54,9 +55,9 @@ def get_winapp2():
     url = ("https://raw.githubusercontent.com/bleachbit/winapp2.ini"
             "/refs/heads/master/Winapp2-BleachBit.ini")
     tmpdir = None
-    if os.name == 'posix':
+    if IS_POSIX:
         tmpdir = '/tmp'
-    if os.name == 'nt':
+    if IS_WINDOWS:
         tmpdir = os.getenv('TMP')
     if not tmpdir:
         tmpdir = tempfile.gettempdir()
@@ -428,19 +429,47 @@ class WinappTestCase(common.BleachbitTestCase):
             self.assertExists(rf'{dirname}\deleteme.bak', msg)
             self.assertExists(rf'{dirname}\sub\deleteme.log', msg)
             # set environment variable for testing
-            os.environ['bbtestdir'] = dirname
-            self.assertExists(r'$bbtestdir\deleteme.log', msg)
-            # delete files
-            cleaner = self.ini2cleaner(test[0] % {'d': dirname})
-            self.run_all(cleaner, True)
-            # test
-            self.assertCondExists(test[1], rf'{dirname}\deleteme.log', msg)
-            self.assertCondExists(test[2], rf'{dirname}\deleteme.bak', msg)
-            self.assertCondExists(
-                test[3], rf'{dirname}\sub\deleteme.log', msg)
+            with common.set_temporary_env('bbtestdir', dirname):
+                self.assertExists(r'$bbtestdir\deleteme.log', msg)
+                # delete files
+                cleaner = self.ini2cleaner(test[0] % {'d': dirname})
+                self.run_all(cleaner, True)
+                # test
+                self.assertCondExists(test[1], rf'{dirname}\deleteme.log', msg)
+                self.assertCondExists(test[2], rf'{dirname}\deleteme.bak', msg)
+                self.assertCondExists(
+                    test[3], rf'{dirname}\sub\deleteme.log', msg)
 
             # cleanup
             shutil.rmtree(dirname, True)
+
+    @common.skipUnlessWindows
+    def test_excludekey_star_dot_star_extensionless(self):
+        """Test ExcludeKey *.* on a file without an extension"""
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2')
+
+        def make_dir():
+            dirname = self.mkdtemp(prefix='bleachbit-test-winapp')
+            self.write_file(os.path.join(dirname, 'deleteme'), b'', 'wb')
+            self.write_file(os.path.join(dirname, 'deleteme.log'), b'', 'wb')
+            return dirname
+
+        # without the exclude, the FileKey deletes the extensionless file
+        dirname = make_dir()
+        cleaner = self.ini2cleaner(f'FileKey1={dirname}|deleteme*')
+        self.run_all(cleaner, True)
+        self.assertNotExists(rf'{dirname}\deleteme')
+        shutil.rmtree(dirname, True)
+
+        # *.* excludes the whole folder
+        dirname = make_dir()
+        body = (f'FileKey1={dirname}|deleteme*'
+                f'\nExcludeKey1=PATH|{dirname}|*.*')
+        cleaner = self.ini2cleaner(body)
+        self.run_all(cleaner, True)
+        self.assertExists(rf'{dirname}\deleteme')
+        self.assertExists(rf'{dirname}\deleteme.log')
+        shutil.rmtree(dirname, True)
 
     def _verify_keys_state(self, expected_state):
         """Verify registry keys match expected state (dict of key_path -> exists)"""
@@ -605,6 +634,31 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
                  ('A - B (C)', 'a_b_c'))
         for test in tests:
             self.assertEqual(section2option(test[0]), test[1])
+
+    def test_fnmatch_translate(self):
+        """Test that fnmatch_translate strips the end anchor and matches patterns"""
+        regex = fnmatch_translate('*.log')
+        self.assertFalse(regex.endswith(r'\z'))
+        self.assertFalse(regex.endswith(r'\Z'))
+        self.assertFalse(regex.endswith(r'\Z(?ms)'))
+        self.assertFalse(regex.endswith(r'$'))
+        self.assertNotEqual(regex, '*.log')
+
+        cases = (
+            ('*.log', 'deleteme.log', True),
+            ('*.log', 'deleteme.bak', False),
+            ('deleteme.*', 'deleteme.log', True),
+            ('deleteme.*', 'deleteme.bak', True),
+            ('deleteme.*', 'other.log', False),
+            (r'C:\dir', r'C:\dir\file.txt', True),
+            (r'C:\dir', r'C:\other\file.txt', False),
+        )
+        for pattern, string, expected in cases:
+            msg = f'pattern={pattern!r} string={string!r}'
+            self.assertEqual(
+                bool(re.search(fnmatch_translate(pattern), string)),
+                expected,
+                msg)
 
     def test_section_not_found(self):
         """Test a section that is found"""

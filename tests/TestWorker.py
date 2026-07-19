@@ -15,12 +15,13 @@ import tempfile
 
 from tests import TestCleaner, common
 from tests.TestFileUtilities import _open_blocking_handle
+import bleachbit
 from bleachbit import CLI, Command
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import backends
 from bleachbit.Worker import Worker
 
-if os.name == 'nt':
+if bleachbit.IS_WINDOWS:
     import win32con
     import win32file
 
@@ -29,6 +30,7 @@ class AccessDeniedActionAction(ActionProvider):
     action_key = 'access.denied'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -46,11 +48,12 @@ class DoesNotExistAction(ActionProvider):
     action_key = 'does.not.exist'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
         # non-existent file, should fail and continue
-        if os.name == 'nt':
+        if bleachbit.IS_WINDOWS:
             yield Command.Delete(r"c:\does\not\exist")
         else:
             yield Command.Delete("/does/not/exist")
@@ -63,6 +66,7 @@ class FunctionGeneratorAction(ActionProvider):
     action_key = 'function.generator'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -79,6 +83,7 @@ class FunctionPathAction(ActionProvider):
     action_key = 'function.path'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -96,6 +101,7 @@ class InvalidEncodingAction(ActionProvider):
     action_key = 'invalid.encoding'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -112,6 +118,7 @@ class FunctionPlainAction(ActionProvider):
     action_key = 'function.plain'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -129,6 +136,7 @@ class LockedAction(ActionProvider):
     action_key = 'locked'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -155,6 +163,7 @@ class RuntimeErrorAction(ActionProvider):
     action_key = 'runtime'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -172,6 +181,7 @@ class TruncateTestAction(ActionProvider):
     action_key = 'truncate.test'
 
     def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
         self.pathname = action_element.getAttribute('path')
 
     def get_commands(self):
@@ -211,10 +221,10 @@ class WorkerTestCase(common.BleachbitTestCase):
         self.assertEqual(worker.total_errors, errors_expected,
                          'For command %s expecting %d errors but observed %d'
                          % (command, errors_expected, worker.total_errors))
-        if 'posix' == os.name:
+        if bleachbit.IS_POSIX:
             self.assertEqual(worker.total_bytes, bytes_expected_posix)
             self.assertEqual(worker.total_deleted, count_deleted_posix)
-        elif 'nt' == os.name:
+        elif bleachbit.IS_WINDOWS:
             self.assertEqual(worker.total_bytes, bytes_expected_nt)
             self.assertEqual(worker.total_deleted, count_deleted_nt)
 
@@ -222,7 +232,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         """Test Worker using Action.AccessDeniedAction"""
         with self.assertLogs(level='ERROR') as log_context:
             self.action_test_helper('access.denied', 0, 1, 4096, 1, 3, 1)
-            if os.name == 'nt':
+            if bleachbit.IS_WINDOWS:
                 self.assertIn('Access denied: c:\\access\\denied',
                               log_context.output[0])
                 self.assertNotIn('\\\\', log_context.output[0])
@@ -231,7 +241,7 @@ class WorkerTestCase(common.BleachbitTestCase):
         """Test Worker using Action.DoesNotExistAction"""
         with self.assertLogs(level='ERROR') as log_context:
             self.action_test_helper('does.not.exist', 0, 1, 4096, 1, 3, 1)
-            if os.name == 'nt':
+            if bleachbit.IS_WINDOWS:
                 # Make sure there is a simple messages without double backslashes.
                 self.assertIn(
                     'File not found: c:\\does\\not\\exist', log_context.output[0])

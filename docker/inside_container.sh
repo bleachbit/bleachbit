@@ -33,7 +33,7 @@ run_optional_tests() {
     if [[ -z "${SKIP_TESTS:-}" ]]; then
         make tests
     else
-        echo "SKIP_TESTS is set, so skipping `make tests`."
+        echo "SKIP_TESTS is set, so skipping 'make tests'."
     fi
 }
 
@@ -73,6 +73,14 @@ case "$DISTRO_NAME" in
         cd /tmp
         shopt -s nullglob
         for artifact in bleachbit_*; do
+            cp -a "$artifact" /artifacts/
+        done
+        ;;
+    appimage)
+        #run_optional_tests
+        make appimage
+        shopt -s nullglob
+        for artifact in BleachBit-*.AppImage; do
             cp -a "$artifact" /artifacts/
         done
         ;;

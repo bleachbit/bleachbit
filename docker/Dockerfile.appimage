@@ -1,0 +1,42 @@
+# syntax=docker/dockerfile:1.7
+
+FROM debian:trixie
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        binutils \
+        ca-certificates \
+        desktop-file-utils \
+        file \
+        gettext \
+        gir1.2-gtk-3.0 \
+        gobject-introspection \
+        libfuse2 \
+        libgtk-3-0 \
+        libxml2-utils \
+        locales \
+        pkg-config \
+        python3 \
+        python3-chardet \
+        python3-gi \
+        python3-psutil \
+        python3-requests \
+        python3-setuptools \
+        wget \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN sed -i 's/# \(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
+    && locale-gen
+
+ARG HOME_IN_CONTAINER=/home/user
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+RUN mkdir -p "$HOME_IN_CONTAINER" && chown "$USER_ID:$GROUP_ID" "$HOME_IN_CONTAINER"
+
+WORKDIR /work
+
+CMD ["/bin/bash"]

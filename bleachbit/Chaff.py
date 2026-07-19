@@ -150,7 +150,10 @@ def _get_random_datetime(min_year=2011, max_year=2012):
 def _get_random_content(content_model, number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_CLINTON):
     content = []
     for _i in range(number_of_sentences):
-        content.append(content_model.make_sentence())
+        sentence = content_model.make_sentence()
+        if sentence is None:
+            sentence = ''
+        content.append(sentence)
         content.append(random.choice([' ', ' ', '\n\n']))
     try:
         return MIMEText(''.join(content), _charset='iso-8859-1')
@@ -162,7 +165,8 @@ def _generate_email(subject_model, content_model, number_of_sentences=DEFAULT_NU
     message = _get_random_content(
         content_model, number_of_sentences=number_of_sentences)
 
-    message['Subject'] = subject_model.make_short_sentence(subject_length)
+    subject = subject_model.make_short_sentence(subject_length)
+    message['Subject'] = subject if subject is not None else ''
     message['To'] = _get_random_recipient()
     message['From'] = _get_random_recipient()
     message['Sent'] = _get_random_datetime()
@@ -232,7 +236,10 @@ def generate_emails(number_of_emails,
 def _generate_2600_file(model, number_of_sentences=DEFAULT_NUMBER_OF_SENTENCES_2600):
     content = []
     for _i in range(number_of_sentences):
-        content.append(model.make_sentence())
+        sentence = model.make_sentence()
+        if sentence is None:
+            sentence = ''
+        content.append(sentence)
         # The space is repeated to make paragraphs longer.
         content.append(random.choice([' ', ' ', '\n\n']))
     return ''.join(content)

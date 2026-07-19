@@ -18,8 +18,6 @@ Example invocation (from parent directory):
 python3 -m windows.setup
 """
 
-from __future__ import absolute_import, print_function
-
 # standard library
 import fnmatch
 import glob
@@ -140,9 +138,21 @@ def assert_module(module):
         sys.exit(1)
 
 
-def assert_execute(args, expected_output):
-    """Run a command and check it returns the expected output"""
-    actual_output = subprocess.check_output(args).decode(SetupEncoding)
+def assert_execute(args, expected_output, timeout=120):
+    """Run a command and check it returns the expected output.
+
+    A timeout guards against hangs (e.g., GTK main loop not quitting).
+    On timeout, the child is killed and any captured output is logged
+    to aid troubleshooting.
+    """
+    try:
+        actual_output = subprocess.check_output(
+            args, stderr=subprocess.STDOUT, timeout=timeout).decode(SetupEncoding)
+    except subprocess.TimeoutExpired as e:
+        partial = (e.output or b'').decode(SetupEncoding, errors='replace')
+        logger.error('Command %s timed out after %ss. Partial output:\n%s',
+                     args, timeout, partial)
+        raise RuntimeError(f'Timeout running {args} after {timeout}s') from e
     if -1 == actual_output.find(expected_output):
         raise RuntimeError(
             f'When running command {args} expected output {expected_output} but got {actual_output}')
@@ -311,7 +321,9 @@ def build_py2exe():
         'includes': ['gi'],
         'packages': ['chardet', 'encodings', 'gi', 'gi.overrides', 'plyer'],
         'excludes': ['pyreadline', 'difflib', 'doctest',
-                     'pickle', 'ftplib', 'bleachbit.Unix', 'charset_normalizer'],
+                     'pickle', 'ftplib', 'bleachbit.Unix', 'charset_normalizer',
+                     'setuptools', 'tomli', 'wheel', 'backports',
+                     'importlib_metadata', 'zipp', 'packaging', 'distutils'],
         'dll_excludes': [
             'libgstreamer-1.0-0.dll',
             'CRYPT32.DLL',  # required by ssl
@@ -476,7 +488,7 @@ def build():
     logger.info('Copying GTK helpers')
     for exe in glob.glob1(GTK_LIBDIR, 'gspawn-win*-helper*.exe'):
         copy_file(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
-    for exe in ('fc-cache.exe',):
+    for exe in ('fc-cache.exe', 'gdbus.exe'):
         copy_file(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
 
     logger.info('Copying GTK files and icon')
@@ -775,12 +787,20 @@ def recompress_library(fast_build):
     os.remove('dist\\library.zip')
 
     # clean unused modules from library.zip
-    delete_paths = ['distutils', 'plyer\\platforms\\android',
+    delete_paths = ['plyer\\platforms\\android',
                     'plyer\\platforms\\ios', 'plyer\\platforms\\linux', 'plyer\\platforms\\macosx']
     for p in delete_paths:
         path = os.path.join('dist', 'library', p)
         if os.path.exists(path):
             shutil.rmtree(path)
+
+    # remove .dist-info metadata directories
+    for dist_info_dir in glob.glob(os.path.join('dist', 'library', '*.dist-info')):
+        logger.info('Removing .dist-info directory: %s', dist_info_dir)
+        shutil.rmtree(dist_info_dir)
+
+    # remove empty directories
+    remove_empty_dirs('dist\\library')
 
     # recompress library.zip
     os.chdir('dist\\library')
@@ -801,10 +821,7 @@ def shrink(fast_build):
     clean_translations()
     remove_empty_dirs('dist')
     strip()
-    if False:
-        upx(fast_build)
-    else:
-        logger.warning('upx disabled because it breaks startup')
+    upx(fast_build)
     clean_dist_locale()
 
     delete_linux_only()

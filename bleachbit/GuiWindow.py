@@ -7,10 +7,11 @@
 import logging
 import os
 import sys
+import threading
 import time
 
 import bleachbit
-from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path
+from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path, IS_WINDOWS
 from bleachbit.Cleaner import backends, register_cleaners
 from bleachbit.Constant import ABORT_BUTTON_LABEL, REQUIRES_EXPERT_MODE
 from bleachbit.GUI import logger
@@ -18,13 +19,13 @@ from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.GuiStartup import get_startup_messages
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
-from bleachbit.GuiUtil import (detect_dark_background, get_font_size_from_name,
+from bleachbit.GuiUtil import (clear_clipboard, detect_dark_background, get_font_size_from_name,
                                get_window_info, notify, threaded)
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 from bleachbit.Wipe import detect_orphaned_wipe_files
 
-if os.name == 'nt':
+if IS_WINDOWS:
     from bleachbit import Windows
 
 
@@ -54,14 +55,16 @@ class GUI(Gtk.ApplicationWindow):
     _style_provider_dark = None
     _error_tag_color = None
     _showed_startup_messages = False
+    recognized_cleanerml = False
 
     def __init__(self, auto_exit, *args, **kwargs):
-        super(GUI, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self._show_splash_screen()
 
         self._auto_exit = auto_exit
         self._infobar_timeout_id = None
+        self._gui_cleaner_cleanup_pending = None
 
         self.set_property('name', APP_NAME)
         self.set_property('role', APP_NAME)
@@ -107,6 +110,7 @@ class GUI(Gtk.ApplicationWindow):
         accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
 
         # Enable the user to change font size with keyboard or mouse.
+        gtk_font_name = None
         try:
             gtk_font_name = Gtk.Settings.get_default().get_property('gtk-font-name')
         except TypeError as e:
@@ -116,6 +120,8 @@ class GUI(Gtk.ApplicationWindow):
         self.textview.connect("scroll-event", self.on_scroll_event)
         self.connect("key-press-event", self.on_key_press_event)
         self._font_css_provider = None
+        if options.has_option("window_font_size"):
+            self.set_font_size(absolute_size=options.get("window_font_size"))
 
     def populate_window(self):
         """Create the main application window"""
@@ -248,11 +254,11 @@ class GUI(Gtk.ApplicationWindow):
 
     def _get_windows10_theme_css(self):
         """Load the Windows 10 theme CSS files (if not already loaded)"""
-        if not 'nt' == os.name:
-            return
+        if not IS_WINDOWS:
+            return None
 
         if not options.get("win10_theme"):
-            return
+            return None
 
         # Load regular theme CSS
         dark_mode = options.get('dark_mode')
@@ -286,7 +292,7 @@ class GUI(Gtk.ApplicationWindow):
 
     def set_windows10_theme(self):
         """Apply or remove the Windows 10 theme based on current settings"""
-        if not 'nt' == os.name:
+        if not IS_WINDOWS:
             return
 
         # Get the screen - if not available yet (e.g., during __init__), return early
@@ -317,7 +323,7 @@ class GUI(Gtk.ApplicationWindow):
 
     def _show_splash_screen(self):
         """Show the splash screen on Windows because startup may be slow"""
-        if os.name != 'nt':
+        if not IS_WINDOWS:
             return
 
         # Check if splash screen is forced via environment variable
@@ -342,6 +348,7 @@ class GUI(Gtk.ApplicationWindow):
             absolute_size = self.font_size + relative_size
         absolute_size = max(5, min(25, absolute_size))
         self.font_size = absolute_size
+        options.set("window_font_size", absolute_size)
         css = f"* {{ font-size: {absolute_size}pt; }}"
         provider = Gtk.CssProvider()
         provider.load_from_data(css.encode())
@@ -370,7 +377,7 @@ class GUI(Gtk.ApplicationWindow):
                 self.unfullscreen()
             else:
                 self.fullscreen()
-            options.set("window_fullscreen", is_fullscreen)
+            options.set("window_fullscreen", not is_fullscreen)
             return True
         if not ctrl:
             return False
@@ -473,7 +480,7 @@ class GUI(Gtk.ApplicationWindow):
         self.textbuffer = None
         self.progressbar = None
         self.status_bar = None
-        super(GUI, self).destroy()
+        super().destroy()
 
     def get_preferences_dialog(self):
         return PreferencesDialog(
@@ -493,7 +500,7 @@ class GUI(Gtk.ApplicationWindow):
             self.cb_refresh_operations()
         self.update_log_level()
 
-    def shred_paths(self, paths, shred_settings=False):
+    def shred_paths(self, paths, shred_settings=False, should_clear_clipboard=False):
         """Shred file or folders
 
         This function has several uses:
@@ -517,9 +524,24 @@ class GUI(Gtk.ApplicationWindow):
         # If no confirmation is requested, skip the preview.
         if options.get("delete_confirmation"):
             self.preview_or_run_operations(False, operations)
+            # Set the pending flag before the confirmation dialog because
+            # the dialog runs a nested GTK main loop in which the preview
+            # worker may finish and call worker_done().  If the flag is set
+            # by then, worker_done() removes _gui from backends.  Otherwise
+            # it is removed here or when the preview finishes.
+            self._gui_cleaner_cleanup_pending = self.worker
             if not self._confirm_delete(False, shred_settings):
                 # User dis-confirmed the deletion.
                 return False
+            # User confirmed.  If the preview already finished during the
+            # confirmation dialog, worker_done() removed _gui from backends.
+            # Re-create it so the real delete worker can use it.
+            self._gui_cleaner_cleanup_pending = None
+            if '_gui' not in backends:
+                backends['_gui'] = Cleaner.create_simple_cleaner(paths)
+
+        if should_clear_clipboard:
+            clear_clipboard()
 
         # Either confirmation was not required or user approved, so
         # continue with deletion.
@@ -538,6 +560,11 @@ class GUI(Gtk.ApplicationWindow):
 
     def append_text(self, text, tag=None, __iter=None, scroll=True):
         """Add some text to the main log"""
+        if threading.current_thread() is not threading.main_thread():
+            # GTK isn't thread-safe, so push work from worker threads back
+            # onto the main loop instead of touching the buffer directly.
+            GLib.idle_add(self.append_text, text, tag, None, scroll)
+            return
         if self.textbuffer is None:
             # textbuffer was destroyed.
             return
@@ -593,7 +620,10 @@ class GUI(Gtk.ApplicationWindow):
         ret = []
         model = self.tree_store.get_model()
         path = Gtk.TreePath(0)
-        __iter = model.get_iter(path)
+        try:
+            __iter = model.get_iter(path)
+        except ValueError:
+            return ret
         while __iter:
             if model[__iter][1]:
                 ret.append(model[__iter][2])
@@ -605,7 +635,10 @@ class GUI(Gtk.ApplicationWindow):
         ret = []
         model = self.tree_store.get_model()
         path = Gtk.TreePath(0)
-        __iter = model.get_iter(path)
+        try:
+            __iter = model.get_iter(path)
+        except ValueError:
+            return ret
         while __iter:
             if operation == model[__iter][2]:
                 iterc = model.iter_children(__iter)
@@ -653,23 +686,23 @@ class GUI(Gtk.ApplicationWindow):
                 continue
             safe_options = []
             for option_id in option_ids:
-                if backends[cleaner_id].get_warning(option_id):
-                    cleaner_name = backends[cleaner_id].get_name()
-                    option_name = option_id
-                    # Find the friendly option_name for option_id
-                    for (oid, oname) in backends[cleaner_id].get_options():
-                        if oid == option_id:
-                            option_name = oname
-                            break
-                    self.append_text(
-                        # TRANSLATORS: Error message shown when a cleaner option
-                        # cannot be used because expert mode is disabled.
-                        # %(cleaner)s is the cleaner name, %(option)s is the option name.
-                        _("%(cleaner)s - %(option)s cannot be cleaned because expert mode is disabled.") % {
-                            'cleaner': cleaner_name, 'option': option_name} + "\n",
-                        'error')
-                else:
+                if not backends[cleaner_id].get_warning(option_id):
                     safe_options.append(option_id)
+                    continue
+                cleaner_name = backends[cleaner_id].get_name()
+                option_name = option_id
+                # Find the friendly option_name for option_id
+                for (oid, oname) in backends[cleaner_id].get_options():
+                    if oid == option_id:
+                        option_name = oname
+                        break
+                self.append_text(
+                    # TRANSLATORS: Error message shown when a cleaner option
+                    # cannot be used because expert mode is disabled.
+                    # %(cleaner)s is the cleaner name, %(option)s is the option name.
+                    _("%(cleaner)s - %(option)s cannot be cleaned because expert mode is disabled.") % {
+                        'cleaner': cleaner_name, 'option': option_name} + "\n",
+                    'error')
             if safe_options:
                 filtered[cleaner_id] = safe_options
         return filtered
@@ -716,6 +749,19 @@ class GUI(Gtk.ApplicationWindow):
 
     def worker_done(self, worker, really_delete):
         """Callback for when Worker is done"""
+        # Remove the temporary _gui cleaner used for shred-paths and
+        # wipe-empty-space operations, so it does not leak into the tree
+        # view on the next refresh. For confirmed deletes, keep it through
+        # the preview so the real delete worker can use it. If confirmation
+        # is canceled, remove it when that preview worker finishes.
+        # On the wx branch self.worker is a GtkWorkerThread that wraps the
+        # Worker internally, so we cannot compare object identity with the
+        # Worker instance passed here.  Instead, rely on the pending flag:
+        # it is set only by shred_paths before the confirmation dialog and
+        # cleared when the user confirms or when this branch removes _gui.
+        if really_delete or self._gui_cleaner_cleanup_pending is not None:
+            backends.pop('_gui', None)
+            self._gui_cleaner_cleanup_pending = None
         # TRANSLATORS: Status message shown on the progress bar and in a popup
         # notification.
         done_msg = _("Done.")
@@ -753,6 +799,8 @@ class GUI(Gtk.ApplicationWindow):
             sys.exit()
 
         # notification for long-running process
+        if self.start_time is None:
+            return
         elapsed = (time.time() - self.start_time)
         logger.debug('elapsed time: %d seconds', elapsed)
         if elapsed < 10 or self.is_active():
@@ -783,15 +831,23 @@ class GUI(Gtk.ApplicationWindow):
         # In case language changed, update the header bar labels.
         self.update_headerbar_labels()
         # Is this the first time in this session?
-        if not hasattr(self, 'recognized_cleanerml') and not self._auto_exit:
+        allow_local = True
+        if not self.recognized_cleanerml and not self._auto_exit:
             from bleachbit import RecognizeCleanerML
-            RecognizeCleanerML.RecognizeCleanerML()
-            self.recognized_cleanerml = True
+            try:
+                RecognizeCleanerML.RecognizeCleanerML(self)
+            except Exception:
+                logger.exception(
+                    'Error recognizing CleanerML files, so they will not be loaded')
+                allow_local = False
+            else:
+                self.recognized_cleanerml = True
         # reload cleaners from disk
         self.view.expand_all()
         self.progressbar.show()
         rc = register_cleaners(self.update_progress_bar,
-                               self.cb_register_cleaners_done)
+                               self.cb_register_cleaners_done,
+                               allow_local=allow_local)
         GLib.idle_add(rc.__next__)
         return False
 
@@ -916,11 +972,17 @@ class GUI(Gtk.ApplicationWindow):
         return True
 
     def setup_drag_n_drop(self):
-        def cb_drag_data_received(_widget, _context, _x, _y, data, info, _time):
+        def cb_drag_data_received(widget, _context, _x, _y, data, info, _time):
             if info == 80:
                 uris = data.get_uris()
                 paths = FileUtilities.uris_to_paths(uris)
                 self.shred_paths(paths)
+            # GtkTextView installs its own ::drag-data-received handler that
+            # calls gtk_drag_finish(FALSE) when the view is not editable. On
+            # Wayland that tears down the data offer in addition to the
+            # GTK_DEST_DEFAULT_DROP handler, so stop emission and let the
+            # default DROP handler finalize the drag exactly once.
+            widget.stop_emission('drag-data-received')
 
         def setup_widget(widget):
             widget.drag_dest_set(Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
@@ -929,7 +991,14 @@ class GUI(Gtk.ApplicationWindow):
 
         setup_widget(self)
         setup_widget(self.textview)
+        # The text view is not editable, so GtkTextView's own ::drag-motion
+        # and ::drag-drop handlers reject drops (calling gtk_drag_finish(FALSE))
+        # and, on Wayland, cancel the in-flight selection read with
+        # "error reading selection buffer: Operation was cancelled". Returning
+        # True stops those handlers via the boolean accumulator; the
+        # GTK_DEST_DEFAULT_DROP handling then drives the data transfer.
         self.textview.connect('drag_motion', lambda *_: True)
+        self.textview.connect('drag_drop', lambda *_: True)
 
     def update_progress_bar(self, status):
         """Callback to update the progress bar with number or text"""
@@ -1070,7 +1139,7 @@ class GUI(Gtk.ApplicationWindow):
         box = Gtk.Box()
         Gtk.StyleContext.add_class(box.get_style_context(), "linked")
 
-        if os.name == 'nt':
+        if IS_WINDOWS:
             icon_size = Gtk.IconSize.BUTTON
         else:
             icon_size = Gtk.IconSize.LARGE_TOOLBAR
@@ -1103,7 +1172,7 @@ class GUI(Gtk.ApplicationWindow):
         # Add hamburger menu on the right.
         # This is not needed for Microsoft Windows because other code places its
         # menu on the left side.
-        if os.name == 'nt':
+        if IS_WINDOWS:
             return hbar
         menu_button = Gtk.MenuButton()
         icon = Gio.ThemedIcon(name="open-menu-symbolic")
@@ -1128,7 +1197,7 @@ class GUI(Gtk.ApplicationWindow):
 
         # fixup maximized window position:
         # on Windows if a window is maximized on a secondary monitor it is moved off the screen
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             window = self.get_window()
             if window.get_state() & Gdk.WindowState.MAXIMIZED != 0:
                 g = get_window_info(self)
@@ -1167,7 +1236,7 @@ class GUI(Gtk.ApplicationWindow):
         options.set("window_fullscreen", fullscreen)
         maximized = event.new_window_state & Gdk.WindowState.MAXIMIZED != 0
         options.set("window_maximized", maximized)
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             logger.debug(
                 'window state = %s, full screen = %s, maximized = %s', event.new_window_state, fullscreen, maximized)
         return False
@@ -1183,7 +1252,7 @@ class GUI(Gtk.ApplicationWindow):
         The event is triggered when the window is first shown.
         It is not emitted when the window is moved or unminimized.
         """
-        if 'nt' == os.name and Windows.splash_thread.is_alive():
+        if IS_WINDOWS and Windows.splash_thread.is_alive():
             Windows.splash_thread.join(0)
 
         # restore window position, size and state
@@ -1215,7 +1284,7 @@ class GUI(Gtk.ApplicationWindow):
             self.maximize()
 
         # Apply Windows 10 theme if on Windows and enabled
-        if os.name == 'nt':
+        if IS_WINDOWS:
             self.set_windows10_theme()
 
     def check_orphaned_wipe_files(self):

@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -26,12 +12,13 @@ Test case for module WindowsWipe
 # standard library
 import os
 import sys
-import tempfile
 import time
 import unittest
 
+import bleachbit
+
 # third party
-if os.name == 'nt':
+if bleachbit.IS_WINDOWS:
     import win32file
     import pywintypes
     from win32com.shell import shell
@@ -40,7 +27,7 @@ if os.name == 'nt':
 from tests import common
 from bleachbit.FileUtilities import children_in_directory
 
-if os.name == 'nt':
+if bleachbit.IS_WINDOWS:
     # importing WindowsWipe fails on non-Windows
     from bleachbit.WindowsWipe import (
         check_os,
@@ -55,6 +42,7 @@ if os.name == 'nt':
         write_zero_fill,
         file_wipe,
         wipe_file_direct,
+        extents_a_minus_b,
         GENERIC_READ,
         GENERIC_WRITE,
         SetFilePointer,
@@ -69,7 +57,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
 
     def setUp(self):
         """Set up test environment"""
-        super(WindowsWipeTestCase, self).setUp()
+        super().setUp()
 
     def test_check_os(self):
         """Unit test for check_os()"""
@@ -96,6 +84,9 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
         error_count = 0
         zero_extents_count = 0
         nonzero_extents_count = 0
+        heuristic_exceptions = []
+        large_files_count = 0
+        large_files_zero_extents = []
         start_time = time.time()
 
         for path in children_in_directory(os.path.expandvars(r'%windir%\system32')):
@@ -117,29 +108,52 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
             else:
                 nonzero_extents_count += 1
 
-            # Files with size under ~500 bytes are resident in the MFT,
-            # so they have zero clusters.
+            # Files with size under ~500 bytes are usually resident in the
+            # MFT, so they have zero clusters. There may be a few exceptions.
             fsize = os.path.getsize(path)
             if fsize > 1000:
-                self.assertGreater(
-                    len(ret), 0, f"File {path} has size {fsize:,} but no extents")
-            elif fsize < 200:
-                self.assertEqual(len(ret), 0)
+                large_files_count += 1
+                if len(ret) == 0:
+                    # WOF-compressed (Compact OS) files report zero extents
+                    # without setting FILE_ATTRIBUTE_COMPRESSED.
+                    large_files_zero_extents.append((path, fsize, len(ret)))
+            elif fsize < 200 and len(ret) != 0:
+                heuristic_exceptions.append(
+                    (path, fsize, len(ret)))
         total_files = zero_extents_count + nonzero_extents_count + error_count
         elapsed_seconds = time.time() - start_time
         if total_files > 0:
             files_per_second = total_files / elapsed_seconds
         else:
             files_per_second = None
+        zero_frac = (len(large_files_zero_extents) / large_files_count
+                     if large_files_count else 0)
         print(f"\ntest_get_extents() stats: {error_count:,} errors; {zero_extents_count:,} files with zero extents; {nonzero_extents_count:,} files with nonzero extents; {int(elapsed_seconds)} seconds; {int(files_per_second) if files_per_second else None} files per second")
+        print(f"large files: {large_files_count:,}; large files with zero extents: {len(large_files_zero_extents):,} ({zero_frac:.0%})")
         self.assertGreater(zero_extents_count, 10)
         self.assertGreater(nonzero_extents_count, 100)
+        # Print the first few heuristic exceptions for diagnostics.
+        for path, fsize, extent_count in heuristic_exceptions[:5]:
+            print(f"  heuristic exception: {path} size={fsize:,} extents={extent_count}")
+        self.assertLess(
+            len(heuristic_exceptions), 6,
+            f"Too many heuristic exceptions ({len(heuristic_exceptions)}): "
+            f"{heuristic_exceptions[:5]}")
+        # On Compact OS images most of system32 is WOF-compressed and reports
+        # zero extents, so only check this when WOF isn't dominating.
+        for path, fsize, extent_count in large_files_zero_extents[:5]:
+            print(f"  large zero-extent file: {path} size={fsize:,}")
+        if zero_frac < 0.5:
+            self.assertLess(
+                len(large_files_zero_extents), 6,
+                f"Too many large files with zero extents "
+                f"({len(large_files_zero_extents)}): {large_files_zero_extents[:5]}")
+        else:
+            print("skipping large-file extent check: volume appears WOF-compressed (Compact OS)")
 
     def test_get_file_basic_info(self):
         """Unit test for get_file_basic_info()"""
-        fd, path = tempfile.mkstemp(prefix='bleachbit-test-windows-wipe')
-        os.write(fd, b'test data')
-        os.close(fd)
+        path = self.write_file(filename='test.txt', text='test data')
 
         file_handle = open_file(path)
         file_size, is_special = get_file_basic_info(path, file_handle)
@@ -400,6 +414,40 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
         """Notify users there are more tests"""
         self.skipTest(
             "More wiping tests available at https://github.com/bleachbit/windows-wipe/blob/master/testwipe.py")
+
+    def test_extents_a_minus_b(self):
+        """Unit test for extents_a_minus_b()"""
+        def a_minus_b_as_set(a, b):
+            result = set()
+            for start, end in extents_a_minus_b(a, b):
+                self.assertLessEqual(start, end)
+                result.update(range(start, end + 1))
+            return result
+
+        def as_set(extents):
+            result = set()
+            for start, end in extents:
+                result.update(range(start, end + 1))
+            return result
+
+        cases = [
+            # (a, b)
+            ([(0, 100)], [(0, 50)]),  # tail of A past the last B range
+            ([(500, 600)], [(0, 100)]),  # B entirely before A, no overlap
+            ([(0, 100)], [(150, 200)]),  # B entirely after A, no overlap
+            ([(0, 100)], []),  # B empty
+            ([], [(0, 100)]),  # A empty
+            ([(0, 100)], [(0, 100)]),  # fully covered
+            ([(0, 100)], [(40, 60)]),  # B in the middle of A
+            ([(0, 100)], [(0, 30), (40, 100)]),  # multiple B ranges
+            ([(0, 10), (20, 30), (40, 50)], [(5, 25), (45, 60)]),  # multiple A and B
+            ([(10, 20), (30, 40)], [(50, 60)]),  # B after all of A
+        ]
+        for a, b in cases:
+            with self.subTest(a=a, b=b):
+                got = a_minus_b_as_set(a, b)
+                expected = as_set(a) - as_set(b)
+                self.assertEqual(got, expected)
 
 
 if __name__ == '__main__':

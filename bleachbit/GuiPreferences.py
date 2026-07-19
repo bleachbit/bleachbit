@@ -1,5 +1,4 @@
 # vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
 
 # BleachBit
 # Copyright (C) 2008-2025 Andrew Ziem
@@ -25,12 +24,11 @@ Preferences dialog
 
 # standard imports
 import logging
-import os
 
 # first party imports
-from bleachbit import GuiBasic
+from bleachbit import GuiBasic, ProtectedPath, IS_POSIX, IS_WINDOWS
 from bleachbit import online_update_notification_enabled
-from bleachbit import ProtectedPath
+from bleachbit.PathUtils import normalize_path
 from bleachbit.Constant import EMPTY_SPACE_WARNING, REQUIRES_EXPERT_MODE
 from bleachbit.GtkShim import Gtk, GLib
 from bleachbit.GuiCookie import CookieManagerPane
@@ -250,7 +248,7 @@ class PreferencesDialog:
         options.toggle(path)
         if online_update_notification_enabled:
             self.cb_beta.set_sensitive(options.get('check_online_updates'))
-            if 'nt' == os.name:
+            if IS_WINDOWS:
                 self.cb_winapp2.set_sensitive(
                     options.get('check_online_updates'))
         if 'auto_hide' == path:
@@ -259,7 +257,7 @@ class PreferencesDialog:
             logger.debug("Toggling dark mode to %s", options.get('dark_mode'))
             theme_widget = self.parent or self.dialog
             before_dark = detect_dark_background(theme_widget)
-            if 'nt' == os.name and options.get('win10_theme'):
+            if IS_WINDOWS and options.get('win10_theme'):
                 self.cb_set_windows10_theme()
 
             settings = self.dialog.get_settings()
@@ -272,7 +270,7 @@ class PreferencesDialog:
             flush_gtk_events()
             after_dark = detect_dark_background(theme_widget)
 
-            if not os.name == 'nt' and should_show_dark_mode_warning(before_dark, after_dark):
+            if not IS_WINDOWS and should_show_dark_mode_warning(before_dark, after_dark):
                 self.show_infobar(
                     # TRANSLATORS: Notice shown in an infobar when toggling
                     # dark mode on Linux.
@@ -320,7 +318,7 @@ class PreferencesDialog:
             requires_option='check_online_updates',
             store_as_attr='cb_beta')
 
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             self._create_checkbox(
                 # TRANSLATORS: Checkbox label in the preferences dialog.
                 # Winapp2.ini is a set of cleaning rules from this project:
@@ -541,7 +539,7 @@ class PreferencesDialog:
             'dark_mode',
             vbox=interface_box)
 
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             self._create_checkbox(
                 # TRANSLATORS: Checkbox label to use the Windows 10-style visual theme
                 # for the application interface.
@@ -564,7 +562,7 @@ class PreferencesDialog:
             # labelling options for OS integration and advanced/developer features.
             page, _("Integration and advanced"))
 
-        if 'nt' != os.name:
+        if not IS_WINDOWS:
             self._create_checkbox(
                 # TRANSLATORS: Checkbox label in the preferences dialog.
                 # 'Shred' means securely delete a file to prevent data recovery.
@@ -696,7 +694,7 @@ class PreferencesDialog:
         self.__create_language_widgets(ui_language_box)
 
         # Windows does not have locale cleaner.
-        if 'posix' != os.name:
+        if not IS_POSIX:
             return vbox
 
         cleanup_box = self.__create_section(
@@ -752,19 +750,21 @@ class PreferencesDialog:
 
         # Check in whitelist
         for path in whitelist_paths:
-            if pathname == path[1]:
-                # TRANSLATORS: Error message shown in the infobar.
-                msg = _("This path already exists in the keep list.")
-                self.show_infobar(msg, Gtk.MessageType.ERROR)
-                return True
+            if pathname != path[1]:
+                continue
+            # TRANSLATORS: Error message shown in the infobar.
+            msg = _("This path already exists in the keep list.")
+            self.show_infobar(msg, Gtk.MessageType.ERROR)
+            return True
 
         # Check in custom
         for path in custom_paths:
-            if pathname == path[1]:
-                # TRANSLATORS: Error message shown in the infobar.
-                msg = _("This path already exists in the custom list.")
-                self.show_infobar(msg, Gtk.MessageType.ERROR)
-                return True
+            if pathname != path[1]:
+                continue
+            # TRANSLATORS: Error message shown in the infobar.
+            msg = _("This path already exists in the custom list.")
+            self.show_infobar(msg, Gtk.MessageType.ERROR)
+            return True
 
         return False
 
@@ -786,8 +786,8 @@ class PreferencesDialog:
             return False
 
         # Check if user already confirmed this path
-        normalized = ProtectedPath._normalize_for_comparison(
-            pathname, match_info['case_sensitive'])
+        normalized = normalize_path(
+            pathname, case_sensitive=match_info['case_sensitive'])
         warning_key = 'protected_path:' + normalized
         if options.get_warning_preference(warning_key):
             return True
@@ -828,7 +828,8 @@ class PreferencesDialog:
         # TRANSLATORS: Noun used as a column header in the preferences dialog.
         type_str_folder = _('Folder')
         type_str = type_str_file if path_type == 'file' else type_str_folder
-        liststore.append([type_str, pathname])
+        display_path = pathname.encode('utf-8', errors='replace').decode('utf-8')
+        liststore.append([type_str, display_path])
         pathnames.append([path_type, pathname])
 
         if page_type == LOCATIONS_WHITELIST:
@@ -837,7 +838,7 @@ class PreferencesDialog:
             options.set_custom_paths(pathnames)
 
         # TRANSLATORS: %s is a file or folder path that was just added
-        self.show_infobar(_("Added: %s") % pathname,
+        self.show_infobar(_("Added: %s") % display_path,
                           Gtk.MessageType.INFO)
 
     def _remove_path(self, treeview, liststore, pathnames, page_type):
@@ -846,19 +847,18 @@ class PreferencesDialog:
         (model, _iter) = treeselection.get_selected()
         if None == _iter:
             return
-        pathname = model[_iter][1]
+        tree_path = model.get_path(_iter)
+        row_index = tree_path.get_indices()[0]
+        display_path = model[_iter][1]
         liststore.remove(_iter)
-        for this_pathname in pathnames:
-            if this_pathname[1] == pathname:
-                pathnames.remove(this_pathname)
-                if page_type == LOCATIONS_WHITELIST:
-                    options.set_whitelist_paths(pathnames)
-                else:
-                    options.set_custom_paths(pathnames)
-                # TRANSLATORS: %s is a file or folder path that was just removed
-                self.show_infobar(_("Removed: %s") % pathname,
-                                  Gtk.MessageType.INFO)
-                break
+        pathnames.pop(row_index)
+        if page_type == LOCATIONS_WHITELIST:
+            options.set_whitelist_paths(pathnames)
+        else:
+            options.set_custom_paths(pathnames)
+        # TRANSLATORS: %s is a file or folder path that was just removed
+        self.show_infobar(_("Removed: %s") % display_path,
+                          Gtk.MessageType.INFO)
 
     def __locations_page(self, page_type):
         """Return a widget containing a list of files and folders"""
@@ -885,7 +885,8 @@ class PreferencesDialog:
             else:
                 raise RuntimeError("Invalid type code: '%s'" % type_code)
             path = paths[1]
-            liststore.append([type_str, path])
+            display_path = path.encode('utf-8', errors='replace').decode('utf-8')
+            liststore.append([type_str, display_path])
 
         if not self._locations_notice_css_provider:
             self._locations_notice_css_provider = Gtk.CssProvider()

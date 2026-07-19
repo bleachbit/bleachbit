@@ -75,7 +75,7 @@ def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
     if stop_mode == STOP_MODE_TOTAL_SIZE:
         target_bytes = stop_value * 1024 * 1024  # MB to bytes
 
-        def should_stop(_generated_file_names, cumulative_size=0):
+        def should_stop(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
             if abort_event.is_set():
                 return True
             return cumulative_size >= target_bytes
@@ -85,10 +85,13 @@ def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
     if stop_mode == STOP_MODE_FREE_SPACE:
         target_free_pct = stop_value
 
-        def should_stop(_generated_file_names, _cumulative_size=0):  # pylint: disable=unused-argument
+        def should_stop(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
             if abort_event.is_set():
                 return True
-            usage = shutil.disk_usage(output_folder)
+            try:
+                usage = shutil.disk_usage(output_folder)
+            except FileNotFoundError:
+                return False
             free_pct = 100.0 * usage.free / usage.total
             return free_pct <= target_free_pct
 
@@ -123,15 +126,20 @@ def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
 
     if stop_mode == STOP_MODE_FREE_SPACE:
         target_free_pct = stop_value
-        initial_usage = shutil.disk_usage(output_folder)
-        initial_free_pct = 100.0 * initial_usage.free / initial_usage.total
+        initial_free_pct = [None]  # Use list to allow mutation in nested function
 
         def progress_cb(_fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
-            usage = shutil.disk_usage(output_folder)
+            try:
+                usage = shutil.disk_usage(output_folder)
+            except FileNotFoundError:
+                on_progress(0.0)
+                return
             current_free_pct = 100.0 * usage.free / usage.total
-            if initial_free_pct > target_free_pct:
-                frac = (initial_free_pct - current_free_pct) / \
-                    (initial_free_pct - target_free_pct)
+            if initial_free_pct[0] is None:
+                initial_free_pct[0] = current_free_pct
+            if initial_free_pct[0] > target_free_pct:
+                frac = (initial_free_pct[0] - current_free_pct) / \
+                    (initial_free_pct[0] - target_free_pct)
                 frac = min(1.0, max(0.0, frac))
             else:
                 frac = 1.0
@@ -150,31 +158,44 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
     progress_cb = _make_progress_cb(
         stop_mode, stop_value, output_folder, on_progress)
 
-    if inspiration == 0:
-
-        generated_file_names = generate_2600(
-            file_count, output_folder, on_progress=progress_cb,
-            should_stop=should_stop)
-    elif inspiration == 1:
-
-        generated_file_names = generate_emails(
-            file_count, output_folder, on_progress=progress_cb,
-            should_stop=should_stop)
-    else:
-        raise ValueError(f'Invalid inspiration {inspiration}')
-
-    if delete_when_finished and not abort_event.is_set():
-        # TRANSLATORS: Progress message shown while deleting chaff files.
-        # 'Deleting files' is a present participle.
-        # To indicate an ongoing operation, include the ellipsis as literal
-        # Unicode (…) or as Unicode escape (\u2026).
-        on_progress(0, msg=_('Deleting files\u2026'))
-        count = len(generated_file_names)
-        for i, fn in enumerate(generated_file_names):
-            if abort_event.is_set():
-                break
-            os.unlink(fn)
-            on_progress(1.0 * (i + 1) / count)
+    try:
+        if inspiration == 0:
+            generated_file_names = generate_2600(
+                file_count, output_folder, on_progress=progress_cb,
+                should_stop=should_stop)
+        elif inspiration == 1:
+            generated_file_names = generate_emails(
+                file_count, output_folder, on_progress=progress_cb,
+                should_stop=should_stop)
+        else:
+            raise ValueError(f'Invalid inspiration {inspiration}')
+    except Exception as exc:
+        logger.exception('Error generating chaff')
+        # TRANSLATORS: Error message shown when chaff file generation fails.
+        # The placeholder is for the technical error details.
+        error_msg = _("Error generating chaff: {error}").format(error=str(exc))
+        on_progress(1.0, is_done=True, error=error_msg)
+        return
+    try:
+        if delete_when_finished and not abort_event.is_set():
+            # TRANSLATORS: Progress message shown while deleting chaff files.
+            # 'Deleting files' is a present participle.
+            # To indicate an ongoing operation, include the ellipsis as literal
+            # Unicode (…) or as Unicode escape (\u2026).
+            on_progress(0, msg=_('Deleting files\u2026'))
+            count = len(generated_file_names)
+            for i, fn in enumerate(generated_file_names):
+                if abort_event.is_set():
+                    break
+                os.unlink(fn)
+                on_progress(1.0 * (i + 1) / count)
+    except Exception as exc:
+        logger.exception('Error deleting chaff files')
+        # TRANSLATORS: Error message shown when deleting chaff files fails.
+        # The placeholder is for the technical error details.
+        error_msg = _("Error deleting chaff files: {error}").format(error=str(exc))
+        on_progress(1.0, is_done=True, error=error_msg)
+        return
     on_progress(1.0, is_done=True)
 
 
@@ -305,6 +326,17 @@ class ChaffDialog(Gtk.Dialog):
             self.when_finished_combo.append_text(combo_option)
         self.when_finished_combo.set_active(0)  # Set default
         grid.attach(self.when_finished_combo, 1, 4, 1, 1)
+
+        # Do not include choose_folder_button: set_sensitive() on
+        # Gtk.FileChooserButton can crash on Windows when GSettings is not
+        # fully configured. The destination is read once at start anyway.
+        # https://github.com/bleachbit/bleachbit/issues/1780
+        self._option_widgets = (
+            self.inspiration_combo,
+            self.stop_mode_combo,
+            self.stop_value_spin,
+            self.when_finished_combo,
+        )
 
         # Loading indicator for download (hidden by default)
         self._download_spinner_box = Gtk.Box(
@@ -439,6 +471,7 @@ class ChaffDialog(Gtk.Dialog):
 
     def on_make_files(self, _widget):
         """Callback for make files button"""
+        self.infobar.hide()
         stop_mode = self.stop_mode_combo.get_active()
         stop_value = self.stop_value_spin.get_value_as_int()
         output_dir = self.choose_folder_button.get_filename()
@@ -471,7 +504,7 @@ class ChaffDialog(Gtk.Dialog):
         """Start generating files after download is complete."""
         self._abort_event = threading.Event()
 
-        def _on_progress(fraction, msg, is_done):
+        def _on_progress(fraction, msg, is_done, error=None):
             """Update progress bar from GLib main loop"""
             if msg:
                 self.progressbar.set_text(msg)
@@ -480,7 +513,11 @@ class ChaffDialog(Gtk.Dialog):
                 self.progressbar.hide()
                 self.abort_button.set_sensitive(False)
                 self.make_button.set_sensitive(True)
-                if self._abort_event and self._abort_event.is_set():
+                for widget in self._option_widgets:
+                    widget.set_sensitive(True)
+                if error:
+                    self.show_infobar(error, Gtk.MessageType.ERROR)
+                elif self._abort_event and self._abort_event.is_set():
                     # TRANSLATORS: Notification shown in an infobar when
                     # chaff file generation is aborted by the user.
                     self.show_infobar(_("Chaff generation aborted"),
@@ -491,10 +528,10 @@ class ChaffDialog(Gtk.Dialog):
                     self.show_infobar(_("Chaff generation complete"),
                                       Gtk.MessageType.INFO)
 
-        def on_progress(fraction, msg=None, is_done=False):
+        def on_progress(fraction, msg=None, is_done=False, error=None):
             """Callback for progress bar"""
             # Use idle_add() because threads cannot make GDK calls.
-            GLib.idle_add(_on_progress, fraction, msg, is_done)
+            GLib.idle_add(_on_progress, fraction, msg, is_done, error)
 
         # TRANSLATORS: Progress message shown while generating chaff files.
         # 'Generating' is a present participle.
@@ -508,6 +545,8 @@ class ChaffDialog(Gtk.Dialog):
         self.progressbar.set_fraction(0.0)
         self.make_button.set_sensitive(False)
         self.abort_button.set_sensitive(True)
+        for widget in self._option_widgets:
+            widget.set_sensitive(False)
         args = (stop_mode, stop_value, inspiration, output_dir,
                 delete_when_finished, on_progress, self._abort_event)
         self.thread = threading.Thread(target=make_files_thread, args=args)

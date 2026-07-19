@@ -19,6 +19,7 @@ from unittest import mock
 import psutil
 
 import bleachbit
+from bleachbit import IS_WINDOWS
 from bleachbit.GtkShim import HAVE_GTK
 from bleachbit.Options import options
 from tests import common
@@ -85,24 +86,6 @@ def wait_for_process_tree_windows(process, timeout=60, poll_interval=0.1):
             process.kill()
             process.wait()
             raise subprocess.TimeoutExpired(process.args, timeout)
-
-        # Add absolute safety timeout to prevent hanging
-        if elapsed > timeout + 30:  # Extra 30 seconds safety margin
-            # Force kill everything and exit
-            try:
-                process.kill()
-                process.wait()
-                # Try to kill any remaining grandchildren
-                for pid in grandchild_pids:
-                    try:
-                        if psutil.pid_exists(pid):
-                            proc = psutil.Process(pid)
-                            proc.kill()
-                    except (psutil.NoSuchProcess, psutil.AccessDenied):
-                        pass
-            except:
-                pass
-            raise subprocess.TimeoutExpired(process.args, elapsed)
 
         if not child_exited:
             child_status = process.poll()
@@ -178,7 +161,7 @@ class ApplicationRunningTracker:
                 pass
 
         # Check window titles on Windows
-        if os.name == 'nt' and self.check_window_title:
+        if IS_WINDOWS and self.check_window_title:
             opened_windows_titles = common.get_opened_windows_titles()
             window_open = any(
                 'BleachBit' == window_title for window_title in opened_windows_titles)
@@ -193,7 +176,7 @@ class ApplicationRunningTracker:
 
     def _is_running_based_on_checks(self, is_process_running, window_open):
         """Determine if application is running based on check_window_title setting."""
-        if self.check_window_title and os.name == 'nt':
+        if self.check_window_title and IS_WINDOWS:
             return is_process_running and window_open
         return is_process_running or window_open
 
@@ -237,7 +220,7 @@ class ApplicationRunningTracker:
         - time elapsed waiting
         """
         window_title_str = ""
-        if os.name == 'nt' and self.check_window_title:
+        if IS_WINDOWS and self.check_window_title:
             opened_window_titles = common.get_opened_windows_titles()
             window_title_count = len(opened_window_titles)
             interesting_window_titles = []
@@ -298,25 +281,26 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
     def setUpClass(cls):
         """Set up the test case"""
         cls.old_language = common.get_env('LANGUAGE')
-        common.put_env('LANGUAGE', 'en')
-        super(ExternalCommandTestCase, ExternalCommandTestCase).setUpClass()
-        cls.environment_changed = False
+        cls._lang_env = common.set_temporary_env('LANGUAGE', 'en')
+        cls._lang_env.__enter__()
+        super().setUpClass()
+        cls._test_options_env = None
         # This should not be needed because of using CLI arg --no-delete-confirmation.
         options.set('delete_confirmation', False)
         options.commit()
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             # Set environment variable for child process.
-            common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', cls.tempdir)
-            cls.environment_changed = True
+            cls._test_options_env = common.set_temporary_env(
+                'BLEACHBIT_TEST_OPTIONS_DIR', cls.tempdir)
+            cls._test_options_env.__enter__()
 
     @classmethod
     def tearDownClass(cls):
         """Tear down the test case"""
-        common.put_env('LANGUAGE', cls.old_language)
-        if cls.environment_changed:
-            # We don't want to affect other tests, executed after this one.
-            common.put_env('BLEACHBIT_TEST_OPTIONS_DIR', None)
-        super(ExternalCommandTestCase, ExternalCommandTestCase).tearDownClass()
+        if cls._test_options_env:
+            cls._test_options_env.__exit__(None, None, None)
+        cls._lang_env.__exit__(None, None, None)
+        super().tearDownClass()
 
     def assertRunning(self, expect_running=True, check_window_title=True, timeout=START_TIMEOUT_SECONDS):
         """Assert whether BleachBit GUI processes are running or not
@@ -454,7 +438,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         """
         This tests covers elevate_privileges in the case where we pretend that we are not admin.
         """
-        self.assertTrue(os.name == 'nt')
+        self.assertTrue(IS_WINDOWS)
         file_to_shred = self.mkstemp(prefix=fn_prefix)
         self.assertExists(file_to_shred)
 
@@ -501,7 +485,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
 
     def test_is_bleachbit_running_process(self):
         """Test process-matching helper without depending on live processes."""
-        # Path as seen on AppVeyor
+        # Path as seen in CI
         py_dir = r'C:\\projects\\bleachbit\\vcpkg_installed\\x86-windows\\tools\\python3\\'
         py_exe = os.path.join(py_dir, 'python.exe')
         tests = (
@@ -512,7 +496,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
                     os.path.join(py_dir, 'coverage.exe'),
                     'run',
                     '--include=bleachbit/*',
-                    'tests/TestAll.py',
+                    '-m',
+                    'tests.TestAll',
                 ]
              ),
             # D-Bus session bus.
@@ -531,12 +516,12 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
                     '--context-menu'  # followed by a pathname to delete
                 ]
              ),
-            # This is the cleaning process as seen on AppVeyor with shell=True where arguments are grouped.
+            # This is the cleaning process as seen in CI with shell=True where arguments are grouped.
             (True, 'cmd.exe',
                 [
                     'C:\\Windows\\system32\\cmd.exe',
                     '/c',
-                    f'{py_exe} bleachbit.py --no-delete-confirmation --no-first-start --context-menu C:\\Users\\appveyor\\AppData'
+                    f'{py_exe} bleachbit.py --no-delete-confirmation --no-first-start --context-menu C:\\Users\\runneradmin\\AppData'
                 ]
              ),
             # This is the idle process.

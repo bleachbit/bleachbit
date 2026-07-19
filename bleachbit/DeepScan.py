@@ -1,5 +1,4 @@
 # vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
 
 # BleachBit
 # Copyright (C) 2008-2025 Andrew Ziem
@@ -25,13 +24,13 @@ Scan directory tree for files to delete
 
 import logging
 import os
-import platform
 import re
 import time
 import unicodedata
 from collections import namedtuple
-from bleachbit import fs_scan_re_flags
+from bleachbit import FS_SCAN_RE_FLAGS, IS_MAC
 from . import Command
+from .FileUtilities import whitelisted
 
 
 def normalized_walk(top, **kwargs):
@@ -45,7 +44,7 @@ def normalized_walk(top, **kwargs):
     except:
         # there is a warning in FileUtilities, so don't warn again here
         from os import walk
-    if 'Darwin' == platform.system():
+    if IS_MAC:
         for dirpath, dirnames, filenames in walk(top, **kwargs):
             yield dirpath, dirnames, [
                 unicodedata.normalize('NFC', fn)
@@ -67,7 +66,7 @@ class CompiledSearch:
         self.command = search.command
 
         def re_compile(regex):
-            return re.compile(regex, fs_scan_re_flags) if regex else None
+            return re.compile(regex, FS_SCAN_RE_FLAGS) if regex else None
 
         self.regex = re_compile(search.regex)
         self.nregex = re_compile(search.nregex)
@@ -75,13 +74,13 @@ class CompiledSearch:
         self.nwholeregex = re_compile(search.nwholeregex)
 
     def match(self, dirpath, filename):
-        full_path = os.path.join(dirpath, filename)
-
         if self.regex and not self.regex.search(filename):
             return None
 
         if self.nregex and self.nregex.search(filename):
             return None
+
+        full_path = os.path.join(dirpath, filename)
 
         if self.wholeregex and not self.wholeregex.search(full_path):
             return None
@@ -107,18 +106,30 @@ class DeepScan:
         yield_time = time.time()
 
         for (top, searches) in self.searches.items():
+            # This skips top-level directories that are in the keep list
+            # to reduce unnecessary work.
+            if whitelisted(top):
+                continue
             compiled_searches = [CompiledSearch(s) for s in searches]
-            for (dirpath, _dirnames, filenames) in normalized_walk(top):
+            for (dirpath, dirnames, filenames) in normalized_walk(top):
+                # This filters out subdirectories that are in the keep list
+                # to reduce unnecessary work.
+                dirnames[:] = [
+                    dirname
+                    for dirname in dirnames
+                    if not whitelisted(os.path.join(dirpath, dirname))
+                ]
                 for c in compiled_searches:
                     # fixme, don't match filename twice
                     for filename in filenames:
                         full_name = c.match(dirpath, filename)
-                        if full_name is not None:
-                            # fixme: support other commands
-                            if c.command == 'delete':
-                                yield Command.Delete(full_name)
-                            elif c.command == 'shred':
-                                yield Command.Shred(full_name)
+                        if full_name is None:
+                            continue
+                        # fixme: support other commands
+                        if c.command == 'delete':
+                            yield Command.Delete(full_name)
+                        elif c.command == 'shred':
+                            yield Command.Shred(full_name)
 
                 if time.time() - yield_time > 0.25:
                     # allow GTK+ to process the idle loop

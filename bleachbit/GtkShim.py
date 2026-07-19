@@ -36,11 +36,12 @@ import sys
 import tempfile
 import warnings
 import webbrowser
+from contextlib import contextmanager
 from pathlib import PureWindowsPath
 from html import escape as esc
 from traceback import format_exc
 
-from bleachbit import bleachbit_exe_path
+from bleachbit import bleachbit_exe_path, IS_POSIX, IS_WINDOWS
 
 HELP_URL = 'https://link.bleachbit.org/get-help'
 PYGOBJECT_URL = 'https://link.bleachbit.org/pygobject-lib-bin-error'
@@ -58,6 +59,30 @@ Gio = None
 
 # Reason that GTK is unavailable
 _gtk_unavailable_reason = None
+
+
+def _fix_arg(arg):
+    """Replace unpaired surrogates in an argument with the replacement char.
+
+    Gdk.init_check() inside gi.overrides.Gdk reads sys.argv during import
+    and fails with UnicodeEncodeError if arguments contain unpaired
+    surrogates (e.g., Windows filenames). This sanitizes each argument.
+    """
+    return arg.encode('utf-8', 'surrogatepass').decode('utf-8', 'replace')
+
+
+@contextmanager
+def _patched_argv(transform):
+    """Temporarily replace sys.argv with a transformed copy.
+
+    Guarantees restoration even on exceptions.
+    """
+    original = sys.argv
+    sys.argv = [transform(arg) for arg in sys.argv]
+    try:
+        yield
+    finally:
+        sys.argv = original
 
 
 def path_has_lib_or_bin(path):
@@ -156,7 +181,7 @@ def _show_windows_error_dialog(title, html_content):
     Prompts the user with Yes/No: if Yes, writes an HTML file to %TEMP% and
     opens it in the default browser.  If No, closes silently.
     """
-    assert os.name == 'nt'
+    assert IS_WINDOWS
     prompt = (
         "BleachBit failed to load the graphical interface.\n\n"
         "This may be a bug or a broken installation."
@@ -180,7 +205,7 @@ def _show_windows_error_dialog(title, html_content):
 
 def _handle_gtk_import_error(error):
     """On Windows, show a helpful error dialog when GTK import fails."""
-    if os.name != 'nt':
+    if not IS_WINDOWS:
         return
 
     logger.error('GTK not available: %s\n%s', error, format_exc())
@@ -195,7 +220,7 @@ def _check_display_available():
     Returns:
         tuple: (is_available: bool, reason: str or None)
     """
-    if os.name == 'nt':
+    if IS_WINDOWS:
         # Windows always has a display
         return True, None
 
@@ -238,7 +263,7 @@ def _try_import_gtk():
             # when application is run from directory with foldername lib or bin.
             typelib_dir = os.path.join(
                 bleachbit_exe_path, 'lib', 'girepository-1.0')
-            if typelib_dir:
+            if os.path.isdir(typelib_dir):
                 logger.debug('Setting typelib search path to: %s', typelib_dir)
                 gi._gi.Repository.get_default().prepend_search_path(typelib_dir)
             else:
@@ -250,25 +275,30 @@ def _try_import_gtk():
             _handle_gtk_import_error(e)
             return False, f'GTK 3.0 not available: {e}'
 
+        # Gdk.init_check() inside gi.overrides.Gdk reads sys.argv during
+        # import and fails with UnicodeEncodeError if arguments contain
+        # unpaired surrogates (e.g., Windows filenames). Sanitize argv
+        # temporarily, so the import can proceed.
         try:
-            from gi.repository import Gtk as _Gtk
-            from gi.repository import Gdk as _Gdk
-            from gi.repository import GObject as _GObject
-            from gi.repository import GLib as _GLib
-            from gi.repository import Gio as _Gio
+            with _patched_argv(_fix_arg):
+                from gi.repository import Gtk as _Gtk
+                from gi.repository import Gdk as _Gdk
+                from gi.repository import GObject as _GObject
+                from gi.repository import GLib as _GLib
+                from gi.repository import Gio as _Gio
 
-            Gtk = _Gtk
-            Gdk = _Gdk
-            GObject = _GObject
-            GLib = _GLib
-            Gio = _Gio
+                Gtk = _Gtk
+                Gdk = _Gdk
+                GObject = _GObject
+                GLib = _GLib
+                Gio = _Gio
 
         except (ImportError, RuntimeError, ValueError) as e:
             _handle_gtk_import_error(e)
             return False, f'Failed to import GTK libraries: {e}'
 
         # On POSIX, verify we can actually get a display
-        if os.name == 'posix':
+        if IS_POSIX:
             try:
                 if Gdk.get_default_root_window() is None:
                     return False, 'No default root window (display not accessible)'
@@ -303,6 +333,42 @@ def require_gtk():
     if not HAVE_GTK:
         reason = _gtk_unavailable_reason or 'unknown reason'
         raise RuntimeError(f'GTK is required but not available: {reason}')
+
+
+@contextmanager
+def suppress_pygobject_asyncio_warnings():
+    """Suppress known PyGObject asyncio warnings under Python 3.14+."""
+    if sys.version_info < (3, 14):
+        yield
+        return
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore",
+            message=".*asyncio.AbstractEventLoopPolicy.*",
+            category=DeprecationWarning)
+        warnings.filterwarnings(
+            "ignore",
+            message=".*asyncio.get_event_loop_policy.*",
+            category=DeprecationWarning)
+        yield
+
+
+@contextmanager
+def suppress_pygobject_import_warnings():
+    """Suppress ImportWarning from old-style PyGObject import hooks.
+
+    Older PyGObject versions use a legacy importer for ``gi.repository``
+    that triggers ``ImportWarning: DynamicImporter.exec_module() not found;
+    falling back to load_module()`` under Python's modern import system.
+    This is harmless but breaks imports when warnings are errors (e.g.,
+    ``PYTHONWARNINGS=error`` in the test suite).
+    """
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore",
+            message=".*DynamicImporter.exec_module\\(\\) not found.*",
+            category=ImportWarning)
+        yield
 
 
 # Perform initialization at module load

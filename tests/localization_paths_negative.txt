@@ -1,0 +1,31 @@
+# Negative test cases for localization path matching.
+# These paths exist in flatpak runtimes but should NOT be matched
+# by localizations.xml because they are not localization data.
+
+# Under lib/ but not lib/locale/
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/tcl8.6/encoding/cp865.enc
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/tcl8.6/tzdata/Asia/Nicosia
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/python3.12/encodings/quopri_codec.py
+
+# Under share/ but not share/locale/
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/share/terminfo/n/nsterm-m
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/share/mime/application/x-cpio.xml
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/share/i18n/charmaps/CP1258.gz
+
+# Locale-like names but in the wrong directories
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/share/i18n/locales/es_HN
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/share/runtime/locale
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/python3.12/locale.py
+
+# Completely unrelated system paths inside the same flatpak
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/etc/pki/ca-trust/extracted/pem/directory-hash/b66938e9.0
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/bin/gencfu
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/share/licenses/freedesktop-sdk/wget2/gnulib/doc/COPYING.LESSERv2
+
+# Parent of matched directory
+/usr/share/help
+/usr/share/locale
+/usr/share/speech-dispatcher/locale
+/usr/share/X11/locale
+/var/lib/flatpak/runtime/org.freedesktop.Platform/x86_64/24.08/05aa33f18efa68ba3e24757e8353fedd204e023ec567bbf3b6e29ea6283ee241/files/lib/locale
+

@@ -35,27 +35,21 @@ class Text(object):
         self.state_size = state_size
 
         if self.retain_original:
-            # not used in BleachBit
-            pass
+            raise NotImplementedError("retain_original=True is not used in BleachBit")
         else:
-            if not chain:
-                # not used in BleachBit
-                pass
-            self.chain = chain or Chain(parsed, state_size)
+            self.chain = chain
 
     def to_dict(self):
         """
         Returns the underlying data as a Python dict.
         """
-        # not used in BleachBit
-        pass
+        raise NotImplementedError("to_dict is not used in BleachBit")
 
     def to_json(self):
         """
         Returns the underlying data as a JSON string.
         """
-        # not used in BleachBit
-        pass
+        raise NotImplementedError("to_json is not used in BleachBit")
 
     @classmethod
     def from_dict(cls, obj, **kwargs):
@@ -68,8 +62,7 @@ class Text(object):
 
     @classmethod
     def from_json(cls, json_str):
-        # not used in BleachBit
-        pass
+        raise NotImplementedError("from_json is not used in BleachBit")
 
     def sentence_split(self, text):
         """
@@ -102,8 +95,7 @@ class Text(object):
         the type of punctuation that would look strange on its own
         in a randomly-generated sentence.
         """
-        # not used in BleachBit
-        pass
+        raise NotImplementedError("test_sentence_input is not used in BleachBit")
 
     def generate_corpus(self, text):
         """
@@ -111,8 +103,7 @@ class Text(object):
         "sentences," each of which is a list of words. Before splitting into
         words, the sentences are filtered through `self.test_sentence_input`
         """
-        # not used in BleachBit
-        pass
+        raise NotImplementedError("generate_corpus is not used in BleachBit")
 
     def test_sentence_output(self, words, max_overlap_ratio, max_overlap_total):
         """
@@ -122,8 +113,7 @@ class Text(object):
         smaller number of (a) `max_overlap_ratio` (default: 0.7) of the total
         number of words, and (b) `max_overlap_total` (default: 15).
         """
-        # not used in BleachBit
-        pass
+        raise NotImplementedError("test_sentence_output is not used in BleachBit")
 
 
     def make_sentence(self, init_state=None, **kwargs):
@@ -188,7 +178,7 @@ class Text(object):
         Tries making a sentence that begins with `beginning` string,
         which should be a string of one to `self.state` words known
         to exist in the corpus.
-        
+
         If strict == True, then markovify will draw its initial inspiration
         only from sentences that start with the specified word/phrase.
 

@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -29,6 +15,7 @@ from unittest import mock
 
 
 from tests import common
+from bleachbit import IS_POSIX, FS_SCAN_RE_FLAGS
 from bleachbit.SystemInformation import get_system_information, get_version, anonymize_system_information
 
 
@@ -40,6 +27,22 @@ class SystemInformationTestCase(common.BleachbitTestCase):
         # at least it does not crash
         ret = get_system_information()
         self.assertIsString(ret)
+
+    @common.skipUnlessWindows
+    def test_get_system_information_invalid_unicode_userprofile(self):
+        invalid_userprofile = 'C:\\Users\\invalid\ud803'
+        original_getenv = os.getenv
+
+        def getenv(name, default=None):
+            if name == 'USERPROFILE':
+                return invalid_userprofile
+            return original_getenv(name, default)
+
+        with mock.patch('bleachbit.SystemInformation.os.getenv', side_effect=getenv):
+            ret = get_system_information()
+
+        encoded = ret.encode('utf-8')
+        self.assertIn(b'C:\\Users\\invalid\\ud803', encoded)
 
     def test_get_version(self):
         """Test get_version"""
@@ -94,7 +97,43 @@ os.getenv(LocalAppData) = {home_dir}\\AppData\\Local"""
         self.assertIn(
             'os.getenv(LocalAppData) = %userprofile%\\AppData\\Local', result)
         self.assertIsNone(re.search(re.escape(home_dir),
-                          result, flags=re.IGNORECASE))
+                          result, flags=FS_SCAN_RE_FLAGS))
+
+    @common.skipUnlessWindows
+    def test_anonymize_system_information_windows_short_path(self):
+        """Test anonymization handles Windows short (8.3) paths."""
+        # Create a directory with Unicode characters that will have a short path
+        username = '我可以喝漂白剂而不伤及自身'
+        unicode_dir = self.mkdir(username)
+
+        short_path = None
+        try:
+            import win32api
+            short_path = win32api.GetShortPathName(unicode_dir)
+        except (ImportError, OSError):
+            self.skipTest('win32api not available or short path not supported')
+
+        if short_path == unicode_dir:
+            self.skipTest('Short path generation not enabled on this system')
+
+        self.assertTrue(os.path.samefile(unicode_dir, short_path))
+
+        with mock.patch('bleachbit.SystemInformation.os.path.expanduser', return_value=unicode_dir):
+            from bleachbit.SystemInformation import _get_home_dirs_to_anonymize
+            home_dirs = _get_home_dirs_to_anonymize()
+
+        self.assertIn(short_path, home_dirs)
+        self.assertTrue(os.path.samefile(home_dirs[0], home_dirs[1]))
+
+        test_input = f"os.getenv(TMP) = {short_path}\\AppData\\Local\\Temp"
+        with mock.patch('bleachbit.SystemInformation._get_home_dirs_to_anonymize',
+                        return_value=[unicode_dir, short_path]):
+            anonymized = anonymize_system_information(test_input)
+
+        self.assertIn('%userprofile%', anonymized)
+        self.assertNotIn(username, anonymized)
+        self.assertNotIn(short_path, anonymized)
+        self.assertNotIn(unicode_dir, anonymized)
 
     def test_anonymize_system_information_preserves_non_sensitive_data(self):
         """Test that non-sensitive data remains unchanged during anonymization."""
@@ -125,7 +164,7 @@ os.path.expanduser(~") = /root"""
         test_input = """personal_cleaners_dir = /root/.config/bleachbit/cleaners
 system_cleaners_dir = /home/regularuser/software/bleachbit/cleaners
 __file__ = /home/regularuser/software/bleachbit/bleachbit/SystemInformation.py"""
-        home_token = '~' if os.name == 'posix' else '%userprofile%'
+        home_token = '~' if IS_POSIX else '%userprofile%'
 
         with mock.patch('bleachbit.SystemInformation._get_home_dirs_to_anonymize',
                         return_value=['/home/regularuser']):
@@ -153,4 +192,4 @@ __file__ = /home/regularuser/software/bleachbit/bleachbit/SystemInformation.py""
         # Both should be non-empty strings
         self.assertIsString(original)
         self.assertIsString(anonymized)
-        self.assertTrue(len(anonymized) > 0)
+        self.assertGreater(len(anonymized), 0)

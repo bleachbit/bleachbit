@@ -74,7 +74,7 @@ class CommandTestCase(common.BleachbitTestCase):
         self.assertGreater(os.path.getsize(path), 0)
 
         # preview
-        ret = next(cmd.execute(False))
+        next(cmd.execute(False))
         self.assertExists(path)
         self.assertGreater(os.path.getsize(path), 0)
 

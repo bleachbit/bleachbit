@@ -9,7 +9,7 @@
 # On some systems if not explicitly given, make uses /bin/sh
 SHELL := /bin/bash
 
-.PHONY: clean install tests build tests-with-sudo lint delete_windows_files pretty
+.PHONY: clean install tests build tests-with-sudo lint delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
 
 prefix ?= /usr/local
 bindir ?= $(prefix)/bin
@@ -34,6 +34,12 @@ endif
 build:
 	echo Nothing to build
 
+install-deps:
+	@./scripts/install-deps.sh
+
+install-deps-dev:
+	@./scripts/install-deps.sh --dev
+
 clean:
 	@rm -vf {.,bleachbit,tests,windows,bleachbit/markovify}/*{pyc,pyo,~} # files
 	@rm -vrf {.,bleachbit,tests,windows,bleachbit/markovify}/__pycache__ # directories
@@ -43,11 +49,14 @@ clean:
 	@rm -vf MANIFEST # created by setup.py
 	$(MAKE) -C po clean
 	@rm -vrf locale
-	@rm -vrf {*/,./}*.{pylint,pyflakes}.log
+	@rm -vrf {*/,./}*.{pylint,pyflakes,shellcheck}.log
 	@rm -vrf windows/BleachBit-*-setup*.{exe,zip}
 	@rm -vrf htmlcov .coverage # code coverage reports
 	@rm -vrf *.egg-info # Python package metadata
 	@rm -vrf docker-artifacts # Docker build outputs
+	@rm -rf "$(APPIMAGE_APPDIR)"
+	@rm -f $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
+	@rm -f BleachBit-*.AppImage
 
 install:
 	# "binary"
@@ -94,6 +103,21 @@ install:
 lint:
 	command -v pyflakes3 >/dev/null 2>&1 || echo "WARNING: Missing pyflakes3. APT users, try: sudo apt install pyflakes3"
 	command -v pylint >/dev/null 2>&1 || echo "WARNING: Missing pylint. APT users, try: sudo apt install pylint"
+	@if command -v appstreamcli >/dev/null 2>&1; then \
+		appstreamcli validate org.bleachbit.BleachBit.metainfo.xml; \
+	else \
+		echo "WARNING: Missing appstreamcli. APT users, try: sudo apt install appstream"; \
+	fi
+	@if command -v shellcheck >/dev/null 2>&1; then \
+		echo "Running shellcheck on .sh files"; \
+		for f in scripts/*.sh docker/*.sh; do \
+			[ -e "$$f" ] || continue; \
+			echo "$$f"; \
+			( shellcheck "$$f" > "$$f".shellcheck.log ); \
+		done; \
+	else \
+		echo "WARNING: Missing shellcheck. APT users, try: sudo apt install shellcheck"; \
+	fi
 	for f in *py */*py; \
 	do \
 		echo "$$f"; \
@@ -132,19 +156,87 @@ tests-with-sudo:
 
 pretty:
 	@if command -v autopep8 >/dev/null 2>&1; then \
+		echo "Running autopep* on .py files"; \
 		autopep8 -i {.,bleachbit,tests}/*py; \
 	else \
 		echo "WARNING: Missing autopep8. APT users, try: sudo apt install python3-autopep8"; \
 	fi
 	@if command -v dos2unix >/dev/null 2>&1; then \
+		echo "Running dos2unix on .py files"; \
 		dos2unix {.,bleachbit,tests}/*py; \
 	else \
 		echo "WARNING: Missing dos2unix. APT users, try: sudo apt install dos2unix"; \
 	fi
 	$(MAKE) -C cleaners pretty
-	if command -v xmllint >/dev/null 2>&1; then \
+	@if command -v xmllint >/dev/null 2>&1; then \
+		echo "Running xmllint on .xsd file"; \
 		xmllint --format doc/cleaner_markup_language.xsd > doc/cleaner_markup_language.xsd.tmp; \
 		mv doc/cleaner_markup_language.xsd.tmp doc/cleaner_markup_language.xsd; \
 	else \
 		echo "WARNING: Missing xmllint. APT users, try: sudo apt install libxml2-utils"; \
 	fi
+
+# AppImage build
+APPIMAGE_BUILD_DIR ?= appimage-build
+APPIMAGE_APPDIR := $(abspath $(APPIMAGE_BUILD_DIR))
+APPIMAGE_OUTPUT ?= BleachBit-$(shell $(PYTHON) -c "import sys; sys.path.insert(0,'.'); from bleachbit import APP_VERSION; print(APP_VERSION)" 2>/dev/null || echo "latest")-x86_64.AppImage
+APPIMAGE_OUTPUT_PATH := $(abspath $(APPIMAGE_OUTPUT))
+LINUXDEPLOY ?= linuxdeploy-x86_64.AppImage
+LINUXDEPLOY_GTK_PLUGIN ?= linuxdeploy-plugin-gtk.sh
+LINUXDEPLOY_URL ?= https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+LINUXDEPLOY_GTK_PLUGIN_URL ?= https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-gtk/master/linuxdeploy-plugin-gtk.sh
+
+$(LINUXDEPLOY):
+	@echo "* Downloading linuxdeploy"
+	wget -c "$(LINUXDEPLOY_URL)" -O $(LINUXDEPLOY)
+	chmod +x $(LINUXDEPLOY)
+
+$(LINUXDEPLOY_GTK_PLUGIN):
+	@echo "* Downloading linuxdeploy-plugin-gtk"
+	wget -c "$(LINUXDEPLOY_GTK_PLUGIN_URL)" -O $(LINUXDEPLOY_GTK_PLUGIN)
+	chmod +x $(LINUXDEPLOY_GTK_PLUGIN)
+
+appimage: $(LINUXDEPLOY) $(LINUXDEPLOY_GTK_PLUGIN)
+	@echo "* Building AppImage: $(APPIMAGE_OUTPUT)"
+	# Clean previous build
+	rm -rf "$(APPIMAGE_APPDIR)"
+	# Build translations (.mo files)
+	$(MAKE) -C po
+	# Install application into AppDir with prefix=/usr
+	$(MAKE) install DESTDIR="$(APPIMAGE_APPDIR)" prefix=/usr
+	# Copy icon to hicolor theme so linuxdeploy can find it
+	mkdir -p "$(APPIMAGE_APPDIR)/usr/share/icons/hicolor/256x256/apps"
+	cp bleachbit.png "$(APPIMAGE_APPDIR)/usr/share/icons/hicolor/256x256/apps/bleachbit.png"
+	# Run GTK plugin first to set up AppDir (hooks, schemas, loaders, etc.)
+	# DEPLOY_GTK_VERSION must be set because bleachbit is a Python script,
+	# not a compiled binary, so auto-detection of GTK version fails.
+	DEPLOY_GTK_VERSION=3 ./$(LINUXDEPLOY) \
+		--appdir "$(APPIMAGE_APPDIR)" \
+		--plugin gtk
+	# Patch the hook file before packaging:
+	# 1. Prepend bundled libraries to LD_LIBRARY_PATH so the AppImage's
+	#    GTK/gdk-pixbuf libraries are used instead of the host system's.
+	#    Without this, the host's gdk-pixbuf ignores GDK_PIXBUF_MODULEDIR
+	#    and cannot find the bundled pixbuf loaders.
+	# 2. Export GDK_PIXBUF_MODULEDIR so gdk-pixbuf can resolve the
+	#    relative loader paths in loaders.cache.
+	sed -i '1s|^|export LD_LIBRARY_PATH="$$APPDIR/usr/lib:$$LD_LIBRARY_PATH"\n|' \
+		"$(APPIMAGE_APPDIR)/apprun-hooks/linuxdeploy-plugin-gtk.sh"
+	echo 'export GDK_PIXBUF_MODULEDIR="$$APPDIR/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders"' \
+		>> "$(APPIMAGE_APPDIR)/apprun-hooks/linuxdeploy-plugin-gtk.sh"
+	# Package the AppDir into an AppImage
+	./$(LINUXDEPLOY) \
+		--appdir "$(APPIMAGE_APPDIR)" \
+		--output appimage
+	# linuxdeploy names output after the desktop file; rename to our convention
+	@if [ -f BleachBit-x86_64.AppImage ] && [ "$(abspath BleachBit-x86_64.AppImage)" != "$(APPIMAGE_OUTPUT_PATH)" ]; then \
+		mv BleachBit-x86_64.AppImage "$(APPIMAGE_OUTPUT_PATH)"; \
+	fi
+	# Test the AppImage to check it doesn't crash
+	@if [ -n "$${SKIP_APPIMAGE_TEST:-}" ]; then \
+		echo "SKIP_APPIMAGE_TEST is set, skipping AppImage test."; \
+	else \
+		"$(APPIMAGE_OUTPUT_PATH)" --sysinfo; \
+	fi
+
+	@echo "* AppImage created: $(APPIMAGE_OUTPUT_PATH)"

@@ -1,35 +1,25 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test case for module Cookie
 """
 
 import hashlib
+import json
 import os
 import sqlite3
-import tempfile
 import unittest
 import shutil
+from unittest import mock
 
+import bleachbit
 from bleachbit import Cookie
+from bleachbit.Action import Cookie as CookieAction
+from bleachbit.Cookie import COOKIE_KEEP_LIST_FILENAME, load_keep_list
 from bleachbit.Options import options
 from bleachbit.FileUtilities import execute_sqlite3
 from tests import common
@@ -77,15 +67,9 @@ class CookieTestCase(common.BleachbitTestCase):
     def setUp(self):
         """Set up test fixtures"""
         super().setUp()
-        self.temp_dir = tempfile.mkdtemp()
-        self._original_shred = options.get('shred')
+        # Reminder: each test case has its own, temporary bleachbit.ini config,
+        # so no need to save/restore options.
         options.set('shred', True)
-
-    def tearDown(self):
-        """Clean up test fixtures"""
-        options.set('shred', self._original_shred)
-        shutil.rmtree(self.temp_dir, ignore_errors=True)
-        super().tearDown()
 
     def _get_file_hash(self, filepath):
         """Calculate SHA-256 hash of a file"""
@@ -115,7 +99,7 @@ class CookieTestCase(common.BleachbitTestCase):
         if cookies is None:
             cookies = self._sample_cookies()
 
-        path = os.path.join(self.temp_dir, 'chrome_cookies.db')
+        path = os.path.join(self.tempdir, 'chrome_cookies.db')
         if os.path.exists(path):
             os.unlink(path)
         sql = '''
@@ -174,7 +158,7 @@ class CookieTestCase(common.BleachbitTestCase):
         if cookies is None:
             cookies = self._sample_cookies(dotted=True)
 
-        path = os.path.join(self.temp_dir, 'firefox_cookies.db')
+        path = os.path.join(self.tempdir, 'firefox_cookies.db')
         if os.path.exists(path):
             os.unlink(path)
         sql = '''
@@ -236,12 +220,10 @@ class CookieTestCase(common.BleachbitTestCase):
 
     def test_delete_cookie_bad_file(self):
         """Empty keep list should raise ValueError (API requires non-empty set)"""
-        path_missing = os.path.join(self.temp_dir, 'nonexistent.db')
-        path_non_sqlite = os.path.join(self.temp_dir, 'not_sqlite.txt')
-        path_wrong_sqlite = os.path.join(self.temp_dir, 'wrong_sqlite.db')
-
-        with open(path_non_sqlite, 'w', encoding='utf-8') as f:
-            f.write('not a database')
+        path_missing = os.path.join(self.tempdir, 'nonexistent.db')
+        path_non_sqlite = self.write_file(
+            'experiment_626.dna', text='not sqlite3')
+        path_wrong_sqlite = os.path.join(self.tempdir, 'wrong_sqlite.db')
 
         execute_sqlite3(
             path_wrong_sqlite, "CREATE TABLE not_browser_related (id INTEGER PRIMARY KEY)")
@@ -291,7 +273,7 @@ class CookieTestCase(common.BleachbitTestCase):
         path = self._create_chrome_cookies_db()
         # Now remove it and create a non-sqlite file
         os.unlink(path)
-        path = os.path.join(self.temp_dir, 'not_sqlite.txt')
+        path = os.path.join(self.tempdir, 'not_sqlite.txt')
         with open(path, 'w', encoding='utf-8') as f:
             f.write('not a database')
 
@@ -302,7 +284,7 @@ class CookieTestCase(common.BleachbitTestCase):
 
     def test_sqlite_unknown_table_with_keeplist_raises(self):
         """SQLite DB without known cookies table should raise ValueError"""
-        path = os.path.join(self.temp_dir, 'unknown_table.db')
+        path = os.path.join(self.tempdir, 'unknown_table.db')
         conn = sqlite3.connect(path)
         cur = conn.cursor()
         cur.execute(
@@ -371,7 +353,7 @@ class CookieTestCase(common.BleachbitTestCase):
             """Helper to test a cookie deletion scenario"""
             self.assertGreaterEqual(random_count, 0)
             temp_db = os.path.join(
-                self.temp_dir, f'firefox_live_copy{random_count}.sqlite')
+                self.tempdir, f'firefox_live_copy{random_count}.sqlite')
             shutil.copy2(live_path, temp_db)
 
             # Copy WAL/SHM files if present to keep the database consistent
@@ -479,7 +461,7 @@ class CookieTestCase(common.BleachbitTestCase):
 
     def test_nonexistent_file(self):
         """Test handling of nonexistent cookie files"""
-        path = os.path.join(self.temp_dir, 'nonexistent.db')
+        path = os.path.join(self.tempdir, 'nonexistent.db')
 
         # Both deletion and preview should raise ValueError for nonexistent files
         with self.assertRaises(ValueError):
@@ -513,6 +495,99 @@ class CookieTestCase(common.BleachbitTestCase):
         self.assertFalse(result['skipped'])
         self.assertFalse(result['whole_file_deleted'])
         self.assertGreaterEqual(result['file_size_reduction'], 0)
+
+    def _make_cookie_action(self):
+        """Create a Cookie action instance with a mock XML element."""
+        elem = mock.MagicMock()
+        elem.getAttribute.return_value = ''
+        elem.getAttribute.side_effect = lambda name: {
+            'command': 'cookie',
+            'search': 'file',
+            'path': os.path.join(self.tempdir, 'nonexistent'),
+        }.get(name, '')
+        return CookieAction(elem)
+
+    def test_load_keep_list_file_not_found(self):
+        """FileNotFoundError should return empty set (no keep list configured)"""
+        # Ensure the file doesn't exist
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        if os.path.exists(keep_path):
+            os.remove(keep_path)
+        result = load_keep_list()
+        self.assertEqual(result, set())
+
+    def test_load_keep_list_valid_json(self):
+        """Valid JSON keep list should return the expected domains"""
+        keep_data = ["example.com", "example.org"]
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        with open(keep_path, 'w', encoding='utf-8') as f:
+            json.dump(keep_data, f)
+        result = load_keep_list()
+        self.assertEqual(result, {'example.com', 'example.org'})
+
+    def test_load_keep_list_json_decode_error(self):
+        """Corrupted JSON should raise JSONDecodeError, not return empty set"""
+        action = self._make_cookie_action()
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        self.write_file(keep_path, '{invalid json', mode='w')
+        with self.assertRaises(json.JSONDecodeError):
+            load_keep_list()
+        with self.assertRaises(json.JSONDecodeError):
+            list(action.get_commands())
+
+    def test_load_keep_list_unicode_decode_error(self):
+        """UnicodeDecodeError should propagate, not return empty set"""
+        action = self._make_cookie_action()
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        # Write invalid UTF-8 bytes
+        with open(keep_path, 'wb') as f:
+            f.write(b'\x80\x81\x82')
+        with self.assertRaises(UnicodeDecodeError):
+            load_keep_list()
+        with self.assertRaises(UnicodeDecodeError):
+            list(action.get_commands())
+
+    def test_load_keep_list_permission_error(self):
+        """PermissionError (a subtype of OSError) should propagate"""
+        action = self._make_cookie_action()
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        self.write_file(keep_path, json.dumps(["example.com"]), mode='w')
+        real_open = open
+
+        def _mock_open(*args, **kwargs):
+            if len(args) >= 1 and args[0] == keep_path:
+                raise PermissionError('mock permission denied')
+            return real_open(*args, **kwargs)
+        with mock.patch('builtins.open', _mock_open):
+            with self.assertRaises(PermissionError):
+                load_keep_list()
+            with self.assertRaises(PermissionError):
+                list(action.get_commands())
+
+    @common.skipIfWindows
+    def test_load_keep_list_chmod(self):
+        """Test that chmod affects file access"""
+        action = self._make_cookie_action()
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        self.write_file(keep_path, json.dumps(["example.com"]), mode='w')
+        # Remove read permission
+        os.chmod(keep_path, 0o200)  # write-only
+        with self.assertRaises(PermissionError):
+            load_keep_list()
+        with self.assertRaises(PermissionError):
+            list(action.get_commands())
+        os.chmod(keep_path, 0o600)  # restore read permission
 
 
 if __name__ == '__main__':
