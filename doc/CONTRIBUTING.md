@@ -49,11 +49,11 @@ Following this process will help your changes get merged sooner. If you plan to 
 * Test your changes. Consider adding or expanding a unit test.
 * Run the unit tests by running
 ````
-python tests/TestAll.py
+PYTHONWARNINGS=error python3 -m tests.TestAll
 ````
 * Make commits in small, logical units to make them easier to review.
 * Submit the pull request.
-* Check that it passes the tests by GitHub Actions and AppVeyor.
+* Check that it passes the tests by GitHub Actions.
 
 If you have multiple commits around multiple themes (such as adding two, unrelated features), please consider breaking them up into multiple pull requests by using multiple branches. Smaller pull requests are easier to review and commit.
 

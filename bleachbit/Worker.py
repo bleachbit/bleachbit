@@ -29,10 +29,11 @@ import os
 import sys
 
 # first party imports
-from bleachbit import DeepScan, FileUtilities
+from bleachbit import DeepScan, FileUtilities, IS_WINDOWS
 from bleachbit.Cleaner import backends
 from bleachbit.Constant import EMPTY_SPACE_WARNING
 from bleachbit.Language import get_text as _, nget_text as ngettext
+from bleachbit.FileUtilities import close_delete_parent_lock
 
 logger = logging.getLogger(__name__)
 
@@ -106,7 +107,7 @@ class Worker:
                 # so the user sees the canonical form and tests avoid
                 # double-backslash sequences.
                 filename = e.filename
-                if os.name == 'nt' and filename:
+                if IS_WINDOWS and filename:
                     filename = FileUtilities.extended_path_undo(filename)
                 # Do not show traceback.
                 logger.error(_("File not found: %s"), filename)
@@ -269,10 +270,10 @@ class Worker:
         # prioritize
         self.delayed_ops = []
         for operation in self.operations:
+            if operation not in ('system', '_gui'):
+                continue
             delayables = ['empty_space', 'memory']
             for delayable in delayables:
-                if operation not in ('system', '_gui'):
-                    continue
                 if delayable in self.operations[operation]:
                     i = self.operations[operation].index(delayable)
                     del self.operations[operation][i]
@@ -300,8 +301,12 @@ class Worker:
         if self.deepscans:
             yield from self.run_deep_scan()
 
+        # After standard operations and deep scan, close the lock
+        # of the parent directory.
+        close_delete_parent_lock()
+
         # delayed operations
-        for op in sorted(self.delayed_ops):
+        for op in sorted(self.delayed_ops, key=lambda op: op[0]):
             operation = list(op[1].keys())[0]
             for option_id in list(op[1].values())[0]:
                 for _ret in self.run_delayed_op(operation, option_id):
@@ -375,5 +380,9 @@ class Worker:
             try:
                 for _dummy in self.clean_operation(operation):
                     yield True
+            except BrokenPipeError:
+                # Propagate to the top-level handler (e.g., when the
+                # downstream pipe consumer like `less` closes early).
+                raise
             except:
                 self.print_exception(operation)

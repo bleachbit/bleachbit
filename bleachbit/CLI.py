@@ -8,18 +8,21 @@
 Command line interface
 """
 
+import errno
 import logging
 import optparse
-import os
 import sys
 
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
-from bleachbit import APP_VERSION, stdout_encoding
+from bleachbit import APP_VERSION, stdout_encoding, IS_WINDOWS
 from bleachbit import SystemInformation, Options, Worker
+from bleachbit.Bootstrap import bootstrap
 from bleachbit.Language import get_text as _
 from bleachbit.Log import set_root_log_level
 
 logger = logging.getLogger(__name__)
+
+_OUTPUT_CLOSED_ERRNOS = {errno.EINVAL, errno.EPIPE}
 
 
 def _write_update_output(value):
@@ -37,6 +40,7 @@ class CliCallback:
 
     def __init__(self, quiet=False):
         self.quiet = quiet
+        self._output_closed = False
 
     def append_text(self, msg, _tag=None):
         """Write text to the terminal"""
@@ -44,8 +48,17 @@ class CliCallback:
         # Surrogates (like \udcd6) can appear in filenames from the filesystem
         # and cause UnicodeEncodeError when GTK tries to insert them.
         msg = msg.encode('utf-8', errors='replace').decode('utf-8')
-        if not self.quiet:
+        if self.quiet or self._output_closed:
+            return
+        try:
             print(msg.strip('\n').encode(stdout_encoding, errors='replace').decode(stdout_encoding))
+        except BrokenPipeError:
+            self._output_closed = True
+        except OSError as e:
+            if e.errno in _OUTPUT_CLOSED_ERRNOS:
+                self._output_closed = True
+                return
+            raise
 
     def update_progress_bar(self, status):
         """Not used"""
@@ -84,6 +97,10 @@ def preview_or_clean(operations, really_clean, quiet=False):
             pass
     except StopIteration:
         pass
+    except BrokenPipeError:
+        # Propagate to the top-level handler (e.g., when the downstream
+        # pipe consumer like `less` or `head` closes early).
+        raise
     except Exception:
         logger.exception('Failed to clean')
 
@@ -96,7 +113,8 @@ def args_to_operations_list(preset, all_but_warning):
     args = []
     if not backends:
         list(register_cleaners())
-    assert len(backends) > 1
+    if len(backends) == 0:
+        raise RuntimeError('no cleaners registered')
     for key in sorted(backends):
         c_id = backends[key].get_id()
         for (o_id, _o_name) in backends[key].get_options():
@@ -148,6 +166,9 @@ def args_to_operations(args, preset, all_but_warning, excludes=None):
         (cleaner_id, option_id) = arg.split('.')
         # enable all options (for example, firefox.*)
         if '*' == option_id:
+            if cleaner_id not in backends:
+                logger.warning(not_valid_cleaner_msg, arg)
+                continue
             if cleaner_id in operations:
                 del operations[cleaner_id]
             operations[cleaner_id] = [
@@ -278,7 +299,7 @@ def parse_cmd_line(argv=None):
                       dest="first_start",
                       help=optparse.SUPPRESS_HELP)
 
-    if 'nt' == os.name:
+    if IS_WINDOWS:
         # TRANSLATORS: Help for --no-uac option on the CLI.
         uac_help = _("do not prompt for administrator privileges")
         parser.add_option("--no-uac", action="store_true", help=uac_help)
@@ -356,7 +377,7 @@ There is NO WARRANTY, to the extent permitted by law.
 """
         print(version_message)
         sys.exit(0)
-    if 'nt' == os.name and options.update_winapp2:
+    if IS_WINDOWS and options.update_winapp2:
         from bleachbit import Update
         # TRANSLATORS: Log message on the CLI.
         logger.info(_("Checking online for updates to winapp2.ini"))
@@ -384,6 +405,7 @@ There is NO WARRANTY, to the extent permitted by law.
             for _ret in bleachbit.Wipe.wipe_path(wipe_path):
                 pass
         sys.exit(0)
+    operations = {}
     if options.preview or options.clean:
         operations = args_to_operations(
             args, options.preset, options.all_but_warning, excludes)
@@ -401,8 +423,11 @@ There is NO WARRANTY, to the extent permitted by law.
         preview_or_clean(operations, options.clean)
         sys.exit(0)
     if options.gui:
+        from bleachbit.Bootstrap import check_wayland_and_root
+        if check_wayland_and_root():
+            sys.exit(1)
         import bleachbit.GuiApplication
-        enable_uac = os.name == 'nt' and not options.no_uac
+        enable_uac = IS_WINDOWS and not options.no_uac
         app = bleachbit.GuiApplication.Bleachbit(
             uac=enable_uac, shred_paths=args, auto_exit=options.exit)
         sys.exit(app.run())
@@ -422,4 +447,5 @@ There is NO WARRANTY, to the extent permitted by law.
 
 
 if __name__ == '__main__':
+    bootstrap()
     process_cmd_line()

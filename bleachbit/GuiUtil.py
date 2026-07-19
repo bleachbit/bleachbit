@@ -4,14 +4,22 @@
 # This work is licensed under the terms of the GNU GPL, version 3 or
 # later.  See the COPYING file in the top-level directory.
 
+"""
+WindowInfo class and utility functions for GUI
+"""
+
 import os
 import threading
 from enum import Enum
 from typing import Optional
 
-from bleachbit import APP_NAME
+from bleachbit import APP_NAME, FileUtilities, IS_WINDOWS
 from bleachbit.GUI import logger
-from bleachbit.GtkShim import GLib, Gdk, Gtk, gi
+from bleachbit.GtkShim import (
+    GLib, Gdk, Gtk, gi,
+    suppress_pygobject_asyncio_warnings,
+    suppress_pygobject_import_warnings,
+)
 
 
 class WindowInfo:
@@ -25,6 +33,74 @@ class WindowInfo:
 
     def __str__(self):
         return f"WindowInfo(x={self.x}, y={self.y}, width={self.width}, height={self.height}, monitor_model={self.monitor_model})"
+
+
+def clear_clipboard():
+    """Clear the clipboard buffer"""
+    clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+    clipboard.set_text(' ', 1)
+    clipboard.clear()
+    flush_gtk_events()
+    # GTK may leave the clipboard locked, so the win32api may
+    # get an "access denied" error.
+    if IS_WINDOWS:
+        import bleachbit.Windows  # pylint: disable=import-outside-toplevel
+        try:
+            bleachbit.Windows.clear_clipboard()
+        except bleachbit.Windows.pywintypes.error as e:
+            winerror = getattr(e, 'winerror', e.args[0] if e.args else None)
+            if winerror != 5:
+                raise
+            logger.debug(
+                'Failed to clear Windows clipboard using win32 API',
+                exc_info=True)
+
+
+def get_clipboard_paths(clipboard=None, targets=None):
+    """Returns paths from clipboard as a list"""
+    if clipboard is None:
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+
+    if IS_WINDOWS:
+        # Prefer native CF_HDROP data when available. Query Win32 before
+        # wait_for_targets() because GTK target queries can race with CF_HDROP.
+        import bleachbit.Windows  # pylint: disable=import-outside-toplevel
+        win32_paths = ()
+        try:
+            win32_paths = bleachbit.Windows.get_clipboard_paths()
+            if not win32_paths:
+                flush_gtk_events()
+                win32_paths = bleachbit.Windows.get_clipboard_paths()
+        except bleachbit.Windows.pywintypes.error as e:
+            winerror = getattr(e, 'winerror', e.args[0] if e.args else None)
+            if winerror != 5:
+                raise
+        if win32_paths:
+            return list(win32_paths)
+
+    if targets is None:
+        has_targets, targets = clipboard.wait_for_targets()
+        if not has_targets:
+            targets = []
+
+    shred_paths = []
+    if Gdk.atom_intern_static_string('text/uri-list') in targets:
+        # Linux
+        shred_uri_contents = clipboard.wait_for_contents(
+            Gdk.atom_intern_static_string('text/uri-list'))
+        if shred_uri_contents:
+            shred_paths = FileUtilities.uris_to_paths(
+                shred_uri_contents.get_uris())
+
+    if not shred_paths and (
+            Gdk.atom_intern_static_string('text/plain') in targets or
+            Gdk.atom_intern_static_string('UTF8_STRING') in targets):
+        # Plain text pasted from a text editor
+        text = clipboard.wait_for_text()
+        if text:
+            shred_paths = [p.strip()
+                           for p in text.splitlines() if p.strip()]
+    return shred_paths
 
 
 def get_font_size_from_name(font_name):
@@ -106,8 +182,12 @@ def detect_dark_background(widget: Optional[Gtk.Widget]) -> Optional[bool]:
         rgba = None
         if style_context is not None and hasattr(style_context, 'lookup_color'):
             lookup = style_context.lookup_color('theme_bg_color')
-            if lookup:
-                rgba = lookup[-1] if isinstance(lookup, tuple) else lookup
+            if isinstance(lookup, tuple):
+                # lookup_color returns (found, rgba); honor the found flag
+                if lookup[0]:
+                    rgba = lookup[-1]
+            elif lookup:
+                rgba = lookup
 
         if rgba is None:
             return None
@@ -141,13 +221,16 @@ def flush_gtk_events(max_iterations: int = 5):
     """Process pending GTK events to allow style updates to land."""
     iterations = 0
     while Gtk.events_pending() and (max_iterations is None or iterations < max_iterations):
-        Gtk.main_iteration_do(False)
+        # PyGObject 3.56.2 calls deprecated asyncio APIs, which breaks tests
+        # run with PYTHONWARNINGS=error.
+        with suppress_pygobject_asyncio_warnings():
+            Gtk.main_iteration_do(False)
         iterations += 1
 
 
 def notify(msg):
     """Show a popup-notification"""
-    import importlib
+    import importlib.util
     if importlib.util.find_spec('plyer'):
         # On Windows, use Plyer.
         notify_plyer(msg)
@@ -166,7 +249,10 @@ def notify_gi(msg):
     except ValueError as e:
         logger.debug('gi.require_version("Notify", "0.7") failed: %s', e)
         return
-    from gi.repository import Notify
+    # On Ubuntu 22.10 with Python 3.10.7, this import throws warning
+    # ImportWarning: DynamicImporter.exec_module() not found; falling back to load_module()
+    with suppress_pygobject_import_warnings():
+        from gi.repository import Notify
     if Notify.init(APP_NAME):
         notification_obj = Notify.Notification.new(
             'BleachBit', msg, 'bleachbit')
@@ -185,7 +271,7 @@ def notify_plyer(msg):
 
     Linux distributions do not include plyer, so this is just for Windows.
     """
-    if not os.name == 'nt':
+    if not IS_WINDOWS:
         raise RuntimeError("notify_plyer() is only for Windows")
     from bleachbit import bleachbit_exe_path
 

@@ -33,11 +33,11 @@ import sqlite3
 import types
 import warnings
 
-from bleachbit import FileUtilities
+from bleachbit import FileUtilities, IS_WINDOWS
 from bleachbit.Constant import CLEAN_FILE_LABEL
 from bleachbit.Language import get_text as _
 
-if 'nt' == os.name:
+if IS_WINDOWS:
     import bleachbit.Windows
 else:
     from bleachbit.General import WindowsError
@@ -63,10 +63,10 @@ class Delete:
     """Delete a single file or directory.  Obey the user
     preference regarding shredding."""
 
-    def __init__(self, path):
+    def __init__(self, path, shred=False):
         """Create a Delete instance to delete 'path'"""
         self.path = path
-        self.shred = False
+        self.shred = shred
 
     def __str__(self):
         return f'Command to {"shred" if self.shred else "delete"} {self.path}'
@@ -185,7 +185,7 @@ class Function:
                 func_ret = self.func()
                 if isinstance(func_ret, types.GeneratorType):
                     # function returned generator
-                    for func_ret in self.func():
+                    for func_ret in func_ret:
                         if True == func_ret or isinstance(func_ret, tuple):
                             # Return control to GTK idle loop.
                             # If tuple, then display progress.
@@ -296,8 +296,7 @@ class Shred(Delete):
 
     def __init__(self, path):
         """Create an instance to shred 'path'"""
-        Delete.__init__(self, path)
-        self.shred = True
+        Delete.__init__(self, path, shred=True)
 
     def __str__(self):
         return f'Command to shred {self.path}'
@@ -345,7 +344,7 @@ class Winreg:
 
     def execute(self, really_delete):
         """Execute the Windows registry cleaner"""
-        if 'nt' != os.name:
+        if not IS_WINDOWS:
             return
         _str = None  # string representation
         ret = None  # return value meaning 'deleted' or 'delete-able'

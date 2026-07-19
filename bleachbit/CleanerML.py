@@ -32,13 +32,14 @@ import xml.parsers.expat
 
 # local import
 import bleachbit
+from bleachbit import IS_POSIX, IS_WINDOWS
 from bleachbit.Action import ActionProvider
 from bleachbit.FileUtilities import expand_glob_join, listdir
 from bleachbit.General import boolstr_to_bool
 from bleachbit.General import os_match as general_os_match
 from bleachbit.Language import get_text as _
 from bleachbit import Cleaner
-if 'win32' == sys.platform:
+if IS_WINDOWS:
     from bleachbit.Windows import read_registry_key
 
 logger = logging.getLogger(__name__)
@@ -75,7 +76,7 @@ class _ETSimpleElementNode:
         nodes = []
         if self._element.text:
             nodes.append(_ETSimpleTextNode(self._element.text))
-        for child in list(self._element):
+        for child in self._element:
             nodes.append(_ETSimpleElementNode(child))
             if child.tail:
                 nodes.append(_ETSimpleTextNode(child.tail))
@@ -99,7 +100,7 @@ def _gettext_etree(element):
     if element is None:
         return ''
     rc = element.text or ''
-    for child in list(element):
+    for child in element:
         rc += child.tail or ''
     return rc
 
@@ -111,8 +112,9 @@ def _toxml_etree(element):
 def default_vars():
     """Return default multi-value variables"""
     ret = {}
-    if not os.name == 'nt':
+    if not IS_WINDOWS:
         return ret
+    from bleachbit.Windows import get_windows_system_paths
     # Expand ProgramFiles to also be ProgramW6432, etc.
     wowvars = (('ProgramFiles', 'ProgramW6432'),
                ('CommonProgramFiles', 'CommonProgramW6432'))
@@ -121,6 +123,7 @@ def default_vars():
         # Make list unique.
         mylist = list({x for x in (os.getenv(v1), os.getenv(v2)) if x})
         ret[v1] = mylist
+    ret['WindowsSystem'] = get_windows_system_paths()
     return ret
 
 
@@ -238,11 +241,14 @@ class CleanerML:
                 continue
             detection_type = running.attrib.get('type', '')
             value = _gettext_etree(running)
-            same_user = running.attrib.get('same_user') or False
+            same_user_attr = running.attrib.get('same_user')
+            same_user = boolstr_to_bool(same_user_attr) if same_user_attr else False
             self.cleaner.add_running(detection_type, value, same_user)
 
     def handle_cleaner_option(self, option):
         """<option> element"""
+        if not self.os_match(option.attrib.get('os', '')):
+            return
         self.option_id = option.attrib.get('id', '')
         self.option_description = None
         self.option_name = None
@@ -304,7 +310,7 @@ class CleanerML:
 
     def handle_localizations(self, localization_nodes):
         """<localizations> element under <cleaner>"""
-        if not 'posix' == os.name:
+        if not IS_POSIX:
             return
         # pylint: disable=import-outside-toplevel
         from bleachbit import Unix
@@ -335,7 +341,7 @@ class CleanerML:
             if search_type == 'glob':
                 value_list = expand_glob_join(value_str, '')
             elif search_type == 'winreg':
-                if 'win32' != sys.platform:
+                if not IS_WINDOWS:
                     continue
                 value_list = read_registry_key(value_element.attrib.get(
                     'path', ''), value_element.attrib.get('name', ''))
@@ -352,21 +358,23 @@ class CleanerML:
                 self.vars[var_name] = value_list
 
 
-def list_cleanerml_files(local_only=False):
+def list_cleanerml_files(local_only=False, system_only=False):
     """List CleanerML files"""
-    cleanerdirs = (bleachbit.personal_cleaners_dir, )
-    if bleachbit.local_cleaners_dir:
-        # If the application is installed, locale_cleaners_dir is None.
-        # If portable mode, local_cleaners_dir is under the directory of
-        # `bleachbit.py`.
-        cleanerdirs += (bleachbit.local_cleaners_dir, )
+    cleanerdirs = ()
+    if not system_only:
+        cleanerdirs += (bleachbit.personal_cleaners_dir, )
+        if bleachbit.local_cleaners_dir:
+            # If the application is installed, locale_cleaners_dir is None.
+            # If portable mode, local_cleaners_dir is under the directory of
+            # `bleachbit.py`.
+            cleanerdirs += (bleachbit.local_cleaners_dir, )
     if not local_only and bleachbit.system_cleaners_dir:
         cleanerdirs += (bleachbit.system_cleaners_dir, )
+    check_world_writable = not IS_WINDOWS
     for pathname in listdir(cleanerdirs):
         if not pathname.lower().endswith('.xml'):
             continue
-        st = os.stat(pathname)
-        if sys.platform != 'win32' and stat.S_IMODE(st[stat.ST_MODE]) & 2:
+        if check_world_writable and stat.S_IMODE(os.stat(pathname)[stat.ST_MODE]) & 2:
             # TRANSLATORS: Warning printed to the log.
             # %s expands to the path of the XML cleaner file that was skipped
             warning_msg = _("Ignoring cleaner because it is "
@@ -376,9 +384,9 @@ def list_cleanerml_files(local_only=False):
         yield pathname
 
 
-def load_cleaners(cb_progress=lambda x: None):
+def load_cleaners(cb_progress=lambda x: None, allow_local=True):
     """Scan for CleanerML and load them"""
-    cleanerml_files = list(list_cleanerml_files())
+    cleanerml_files = list(list_cleanerml_files(system_only=not allow_local))
     cleanerml_files.sort()
     if not cleanerml_files:
         logger.debug('No CleanerML files to load.')

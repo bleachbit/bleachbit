@@ -9,6 +9,7 @@
 Common code for unit tests
 """
 
+import contextlib
 import os
 import re
 import shutil
@@ -20,13 +21,15 @@ import warnings
 from pathlib import Path
 from unittest import mock
 
-if 'win32' == sys.platform:
+import bleachbit
+from bleachbit import logger
+
+if bleachbit.IS_WINDOWS:
     import winreg
     import win32gui
     from bleachbit import Windows
-
-import bleachbit
 import bleachbit.Options
+from bleachbit.Bootstrap import bootstrap
 from bleachbit.FileUtilities import (
     children_in_directory,
     extended_path,
@@ -54,6 +57,90 @@ def _supports_stdout_char(char: str) -> bool:
     return True
 
 
+@contextlib.contextmanager
+def mock_missing_package(*package_names, clear_prefixes=()):
+    """Context manager that simulates missing optional packages.
+
+    Saves and restores sys.modules around the block.  Removes all
+    modules matching any of *package_names* or *clear_prefixes* from
+    sys.modules, then patches each package_name as None to prevent
+    re-import.
+
+    Args:
+        *package_names: Package names to make unavailable
+            (e.g. 'requests', 'psutil').  These are both evicted from
+            sys.modules and patched as None.
+        clear_prefixes: Additional module prefixes to evict from
+            sys.modules (e.g. 'bleachbit.Network') so they are
+            re-imported inside the block.  Not patched as None.
+    """
+    saved_modules = dict(sys.modules)
+    all_prefixes = list(package_names) + list(clear_prefixes)
+    for mod in list(sys.modules.keys()):
+        if any(mod.startswith(p) for p in all_prefixes):
+            del sys.modules[mod]
+    try:
+        patch_dict = {name: None for name in package_names}
+        with mock.patch.dict('sys.modules', patch_dict):
+            yield
+    finally:
+        for mod in list(sys.modules.keys()):
+            if mod not in saved_modules:
+                del sys.modules[mod]
+        for mod, mod_obj in saved_modules.items():
+            if mod not in sys.modules:
+                sys.modules[mod] = mod_obj
+
+
+@contextlib.contextmanager
+def capture_glib_exceptions():
+    """Capture exceptions swallowed by GLib virtual method/signal handlers.
+
+    PyGObject catches exceptions raised inside GObject virtual method
+    overrides (e.g. ``do_activate``) and signal callbacks, then logs them
+    via ``sys.excepthook`` without propagating to the Python caller.  This
+    context manager installs a custom ``sys.excepthook`` that collects such
+    exceptions so they can be re-raised after GTK event processing.
+
+    Yields a list of ``(exc_type, exc_value, exc_tb)`` tuples.
+    """
+    captured = []
+    original_excepthook = sys.excepthook
+
+    def _capturing_excepthook(exc_type, exc_value, exc_tb):
+        captured.append((exc_type, exc_value, exc_tb))
+        original_excepthook(exc_type, exc_value, exc_tb)
+
+    sys.excepthook = _capturing_excepthook
+    try:
+        yield captured
+    finally:
+        sys.excepthook = original_excepthook
+
+
+@contextlib.contextmanager
+def set_temporary_env(env_var, env_value):
+    """
+    Temporarily overrides an environment variable.
+    """
+    # Save the original value so we can restore it later
+    original_value = os.environ.get(env_var)
+
+    if env_value is None:
+        os.environ.pop(env_var, None)
+    else:
+        os.environ[env_var] = str(env_value)
+    try:
+        yield
+    finally:
+        # Restore the original state
+        if original_value is None:
+            # If the environment variable wasn't set originally, remove it
+            os.environ.pop(env_var, None)
+        else:
+            os.environ[env_var] = original_value
+
+
 class BleachbitTestCase(unittest.TestCase):
     """TestCase class with several convenience methods and asserts"""
     _patchers = []
@@ -65,9 +152,10 @@ class BleachbitTestCase(unittest.TestCase):
         * Create a temporary directory for the testcase.
         * Treat warnings as errors.
         This is also set by environment variable in `Makefile` and
-        `appveyor.yml`.
+        the CI workflow.
         * Patch options paths.
         """
+        bootstrap()
         warnings.simplefilter("error")
         cls.tempdir = tempfile.mkdtemp(prefix=cls.__name__)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
@@ -97,21 +185,38 @@ class BleachbitTestCase(unittest.TestCase):
         * Restore options paths.
         """
         bleachbit.Options.options.reset_overrides()
-        bleachbit.Options.options._dirty = False
+        # Cancel any pending deferred flush (Options.__schedule_flush)
+        # so its background timer does not recreate bleachbit.ini inside
+        # tempdir while rmtree is mid-way through deleting it.
+        bleachbit.Options.options.cancel_pending_flush()
         gc_collect()
+        # Stop patching the options paths before rmtree to avoid a
+        # potential flush into cls.tempdir while rmtree() is running
+        # to avoid OSError [Errno 66] Directory not empty.
+        if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
+            cls._stop_patch_options_paths()
         # On Windows, a file may be temporarily locked, so retry.
+        # On macOS/Linux, a deferred flush or filesystem race may briefly
+        # make the directory non-empty, so retry on OSError too.
         for attempt in range(5):
             try:
                 if os.path.exists(cls.tempdir):
                     shutil.rmtree(cls.tempdir)
                 break
-            except PermissionError:
+            except OSError:
+                # Log what is left so we can diagnose races.
+                try:
+                    remaining = os.listdir(cls.tempdir)
+                except OSError:
+                    remaining = ['<listdir failed>']
+                logger.warning(
+                    'tearDownClass: rmtree(%s) failed (attempt %d): %s; '
+                    'remaining entries: %r',
+                    cls.tempdir, attempt + 1, sys.exc_info()[1], remaining)
                 if attempt < 4:
                     time.sleep(1)
                 else:
                     raise
-        if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
-            cls._stop_patch_options_paths()
 
     @classmethod
     def _stop_patch_options_paths(cls):
@@ -134,7 +239,7 @@ class BleachbitTestCase(unittest.TestCase):
             print(f"{prefix}SLOW TEST: {test_id} ({duration:.1f}s)", flush=True)
         return outcome
 
-    def setUp(cls):
+    def setUp(self):
         """Call before each test method"""
         basedir = os.path.join(os.path.dirname(__file__), '..')
         os.chdir(basedir)
@@ -156,8 +261,8 @@ class BleachbitTestCase(unittest.TestCase):
         self.assertIsInstance(lang_id, str)
         if lang_id in ('C', 'C.UTF-8', 'C.utf8', 'POSIX'):
             return
-        self.assertTrue(len(lang_id) >= 2)
-        pattern = r'^[a-z]{2,3}([_-][A-Z][A-Za-z]{1,3})?(@\w+)?(\.[a-zA-Z][a-zA-Z0-9-]+)?$'
+        self.assertGreaterEqual(len(lang_id), 2)
+        pattern = r'^[a-z]{2,3}([_-]([A-Z][A-Za-z]{1,3}|[0-9]{3}))?(\.[a-zA-Z][a-zA-Z0-9-]+)?(@\w+)?$'
         self.assertTrue(re.match(pattern, lang_id),
                         f'Invalid language code format: {lang_id}')
 
@@ -176,26 +281,45 @@ class BleachbitTestCase(unittest.TestCase):
     #
     # file asserts
     #
-    def assertExists(self, path, msg='', func=os.stat):
-        """File, directory, or any path exists"""
+    @staticmethod
+    def _assert_path(path):
+        """Normalize a path for existence checks in unit tests."""
+        # TestMakefile.py uses relative path without an environment variable.
+        # TestWinapp.py uses variable "$bbtestdir"
+        # However, do not expand paths that are already absolute or Path objects.
         if isinstance(path, Path):
-            path = str(path)
+            return str(path)
         assert isinstance(
-            path, str), f'path must be a string, not {type(path)}'
-        path = os.path.expandvars(path)
-        if not self.check_exists(func, getTestPath(path)):
+            path, str), f'path must be a string or Path, not {type(path)}'
+        if not os.path.isabs(path):
+            path = os.path.expandvars(path)
+        return path
+
+    # Our assertion method names follow the convention in Python's unittest
+    # pylint: disable-next=invalid-name
+    def assertExists(self, path, msg='', func=os.stat):
+        """Check that a file, directory, or any path exists"""
+        path = self._assert_path(path)
+        if not self.check_exists(func, get_test_path(path)):
             raise AssertionError(
                 'The file %s should exist, but it does not. %s' % (path, msg))
 
+    # pylint: disable-next=invalid-name
     def assertNotExists(self, path, msg='', func=os.stat):
-        if self.check_exists(func, getTestPath(path)):
+        """Check that a file, directory, or any path does not exist"""
+        path = self._assert_path(path)
+        if self.check_exists(func, get_test_path(path)):
             raise AssertionError(
                 'The file %s should not exist, but it does. %s' % (path, msg))
 
+    # pylint: disable-next=invalid-name
     def assertLExists(self, path, msg=''):
+        """Check that a file, directory, or any path exists using lstat"""
         self.assertExists(path, msg, os.lstat)
 
+    # pylint: disable-next=invalid-name
     def assertNotLExists(self, path, msg=''):
+        """Check that a file, directory, or any path does not exist using lstat"""
         self.assertNotExists(path, msg, os.lstat)
 
     def assertCondExists(self, cond, path, msg=''):
@@ -219,8 +343,21 @@ class BleachbitTestCase(unittest.TestCase):
     #
     # file creation functions
     #
-    def write_file(self, filename, contents=b'', mode='wb', encoding=None):
-        """Create a temporary file, optionally writing contents to it"""
+    def write_file(self, filename, contents=b'', mode='wb', encoding=None, text=None):
+        """Create a temporary file, optionally writing contents to it
+
+        If `text` is given, it is written in text mode with utf-8 encoding,
+        and `mode`/`encoding` are set automatically. `text` is mutually
+        exclusive with `contents`.
+
+        The temporary file is automatically deleted after testing.
+        """
+        if text is not None:
+            if contents != b'':
+                raise ValueError("write_file: `text` is exclusive to `contents`")
+            contents = text
+            mode = 'w'
+            encoding = 'utf-8'
         if not encoding and mode == 'w':
             encoding = 'utf-8'
         if not os.path.isabs(filename):
@@ -254,13 +391,22 @@ class BleachbitTestCase(unittest.TestCase):
         self.assertFalse(is_hard_link(ext_dirname))
         self.assertTrue(is_normal_directory(ext_dirname))
         self.assertFalse(os.path.isfile(ext_dirname))
-        if os.name == 'nt':
+        if bleachbit.IS_WINDOWS:
             self.assertFalse(Windows.is_junction(ext_dirname))
         return dirname
 
     def mkstemp(self, **kwargs):
+        """Create a temporary file
+
+        If dir is not specified, it will be created in self.tempdir, and tempdir
+        will be automatically deleted after testing.
+
+        If prefix is not specified, it's defined by the test method name.
+        """
         if 'dir' not in kwargs:
             kwargs['dir'] = self.tempdir
+        if 'prefix' not in kwargs:
+            kwargs['prefix'] = f"{self.__class__.__name__}-{self._testMethodName}-"
         (fd, filename) = tempfile.mkstemp(**kwargs)
         os.close(fd)
         return filename
@@ -268,17 +414,29 @@ class BleachbitTestCase(unittest.TestCase):
     def mkdtemp(self, **kwargs):
         """Create a temporary directory
 
-        Objects under self.tempdir are automatically removed after testing.
+        If dir is not specified, it will be created in self.tempdir, and tempdir
+        will be automatically deleted after testing.
+
+        If prefix is not specified, it's defined by the test method name.
         """
         if 'dir' not in kwargs:
             kwargs['dir'] = self.tempdir
+        if 'prefix' not in kwargs:
+            kwargs['prefix'] = f"{self.__class__.__name__}-{self._testMethodName}-"
         return tempfile.mkdtemp(**kwargs)
 
 
-def getTestPath(path):
-    if 'nt' == os.name:
-        return extended_path(os.path.normpath(path))
-    return path
+def get_test_path(path):
+    """Normalize test paths for Windows"""
+    if not bleachbit.IS_WINDOWS:
+        return path
+    path = os.path.normpath(path)
+    # The \\?\ extended-length prefix applied by extended_path() requires
+    # an absolute path: Windows treats "\\?\<relative>" as invalid and
+    # reports it as non-existent.
+    if not os.path.isabs(path):
+        path = os.path.abspath(path)
+    return extended_path(path)
 
 
 def get_env(key):
@@ -307,7 +465,7 @@ def put_env(key, val):
 
 def skipIfWindows(f):
     """Skip unit test if running on Windows"""
-    return unittest.skipIf('win32' == sys.platform, 'running on Windows')(f)
+    return unittest.skipIf(bleachbit.IS_WINDOWS, 'running on Windows')(f)
 
 
 def skipUnlessDestructive(f):
@@ -315,9 +473,19 @@ def skipUnlessDestructive(f):
     return unittest.skipUnless(os.getenv('DESTRUCTIVE_TESTS') == 'T', 'environment variable DESTRUCTIVE_TESTS not set to T')(f)
 
 
+def skipUnlessLinux(f):
+    """Skip unit test unless running on Linux"""
+    return unittest.skipUnless(bleachbit.IS_LINUX, 'not running on Linux')(f)
+
+
+def skipUnlessMac(f):
+    """Skip unit test unless running on macOS"""
+    return unittest.skipUnless(bleachbit.IS_MAC, 'not running on macOS')(f)
+
+
 def skipUnlessWindows(f):
     """Skip unit test unless running on Windows"""
-    return unittest.skipUnless('win32' == sys.platform, 'not running on Windows')(f)
+    return unittest.skipUnless(bleachbit.IS_WINDOWS, 'not running on Windows')(f)
 
 
 def skipIfGtkUnavailable(f):
@@ -346,7 +514,7 @@ def also_with_sudo(test_func):
 def touch_file(filename):
     """Create an empty file"""
     dname = os.path.dirname(filename)
-    if not os.path.exists(dname):
+    if dname and not os.path.exists(dname):
         # Make the directory, if it does not exist.
         os.makedirs(dname)
     Path(filename).touch()
@@ -410,7 +578,7 @@ def get_opened_windows_titles():
 
 # Common test strings for filename testing across different test modules
 # https://github.com/bleachbit/bleachbit/issues/1709
-SPECIAL_TEST_STRINGS = [
+_SPECIAL_TEST_STRINGS = [
     '.prefixandsuffix',  # simple
     "x".zfill(150),  # long
     ' begins_with_space',
@@ -433,6 +601,20 @@ SPECIAL_TEST_STRINGS = [
     "עִבְרִית.bak",
     'ɡælɪk.bak'
 ]
+
+
+def _has_surrogate(s):
+    """Return True if the string contains a lone UTF-16 surrogate."""
+    return any('\ud800' <= c <= '\udfff' for c in s)
+
+
+# macOS APFS/HFS+ rejects lone UTF-16 surrogates in filenames with
+# OSError "Illegal byte sequence", so exclude those strings on macOS.
+SPECIAL_TEST_STRINGS = [
+    s for s in _SPECIAL_TEST_STRINGS
+    if not (bleachbit.IS_MAC and _has_surrogate(s))
+]
+del _SPECIAL_TEST_STRINGS, _has_surrogate
 
 # Additional strings for POSIX systems.
 # Windows doesn't allow or requires special handling for these characters.

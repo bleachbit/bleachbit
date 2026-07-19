@@ -8,7 +8,6 @@
 Code that is commonly shared throughout BleachBit
 """
 
-import getpass
 import os
 import re
 import sys
@@ -16,7 +15,7 @@ from configparser import NoOptionError, RawConfigParser  # used in other files
 
 from bleachbit import Log
 
-APP_VERSION = "6.0.0"
+APP_VERSION = "6.0.2"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 APP_COPYRIGHT = "Copyright (C) 2008-2026 Andrew Ziem"
@@ -30,13 +29,32 @@ if sys.version_info < (3, 8, 0):
 if hasattr(sys, 'frozen'):
     stdout_encoding = 'utf-8'
 else:
-    stdout_encoding = sys.stdout.encoding
+    stdout_encoding = getattr(sys.stdout, 'encoding', None) or 'utf-8'
 
 logger = Log.init_log()
 
 # Setting below value to false disables update notification (useful
 # for packages in repositories).
 online_update_notification_enabled = True
+
+#
+# Platform
+#
+
+# platform
+IS_WINDOWS = os.name == 'nt'
+IS_POSIX = os.name == 'posix'
+IS_LINUX = sys.platform.startswith('linux')
+IS_MAC = sys.platform == 'darwin'
+IS_BSD = sys.platform.startswith(('freebsd', 'openbsd', 'netbsd'))
+IS_FREEBSD = sys.platform.startswith('freebsd')
+IS_NETBSD = sys.platform[:6] == 'netbsd'
+ARCH_BITS = 64 if sys.maxsize > 2**32 else 32
+
+# file system attributes
+FS_CASE_SENSITIVE = not (IS_WINDOWS or IS_MAC)
+FS_SCAN_RE_FLAGS = 0 if FS_CASE_SENSITIVE else re.IGNORECASE
+
 
 #
 # Paths
@@ -47,9 +65,11 @@ bleachbit_exe_path = None
 if hasattr(sys, 'frozen'):
     # running frozen in py2exe
     bleachbit_exe_path = os.path.dirname(sys.executable)
+    bleachbit_package_path = bleachbit_exe_path
 else:
     # __file__ is absolute path to __init__.py
-    bleachbit_exe_path = os.path.dirname(os.path.dirname(__file__))
+    bleachbit_package_path = os.path.dirname(__file__)
+    bleachbit_exe_path = os.path.dirname(bleachbit_package_path)
 
 # license
 license_filename = None
@@ -66,21 +86,25 @@ for lf in license_filenames:
         license_filename = lf
         break
 
+
+def _home_dir():
+    """Return home directory with fallback for missing HOME and passwd entry."""
+    home = os.getenv('HOME')
+    if home:
+        return home
+    # expanduser() falls back to a lookup in passwd database.
+    home = os.path.expanduser('~')
+    if home != '~':
+        return home
+    return '/tmp'
+
+
 # configuration
 portable_mode = False
 options_dir = None
-if 'posix' == os.name:
-    # os.path.expanduser('~') returns '~' unchanged when HOME is unset
-    # and the user has no passwd entry (e.g., Docker containers).
-    if not os.getenv('HOME'):
-        _home = os.path.expanduser('~')
-        if _home == '~':
-            _home = '/tmp'
-            logger.warning('HOME not set and no passwd entry; using %s', _home)
-        os.environ['HOME'] = _home
-    options_dir = os.path.expanduser("~/.config/bleachbit")
-elif 'nt' == os.name:
-    os.environ.pop('FONTCONFIG_FILE', None)
+if IS_POSIX:
+    options_dir = os.path.join(_home_dir(), ".config/bleachbit")
+elif IS_WINDOWS:
     if os.path.exists(os.path.join(bleachbit_exe_path, 'bleachbit.ini')):
         # portable mode
         portable_mode = True
@@ -114,15 +138,20 @@ personal_cleaners_dir = os.path.join(options_dir, "cleaners")
 # On Windows in portable mode, the bleachbit_exe_path is equal to
 # options_dir, so be careful that system_cleaner_dir is not set to
 # personal_cleaners_dir.
-if os.path.isdir(os.path.join(bleachbit_exe_path, 'cleaners')) and not portable_mode:
-    system_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
-elif sys.platform in ('linux', 'darwin'):
+_exe_cleaners_dir = os.path.join(bleachbit_exe_path, 'cleaners')
+_package_cleaners_dir = os.path.join(bleachbit_package_path, 'cleaners')
+if os.path.isdir(_exe_cleaners_dir) and not portable_mode:
+    system_cleaners_dir = _exe_cleaners_dir
+elif os.path.isdir(_package_cleaners_dir) and not portable_mode:
+    # AppImage
+    system_cleaners_dir = _package_cleaners_dir
+elif IS_LINUX or IS_MAC:
     system_cleaners_dir = '/usr/share/bleachbit/cleaners'
-elif sys.platform == 'win32':
+elif IS_WINDOWS:
     system_cleaners_dir = os.path.join(bleachbit_exe_path, 'share\\cleaners\\')
-elif sys.platform[:6] == 'netbsd':
+elif IS_NETBSD:
     system_cleaners_dir = '/usr/pkg/share/bleachbit/cleaners'
-elif sys.platform.startswith('openbsd') or sys.platform.startswith('freebsd'):
+elif IS_BSD:
     system_cleaners_dir = '/usr/local/share/bleachbit/cleaners'
 else:
     system_cleaners_dir = None
@@ -146,7 +175,7 @@ def get_share_dirs():
     else:
         # installed .deb or .rpm has `__file__` = "/usr/share/bleachbit/__init__.py",
         # so that dirname() is "/usr/share/bleachbit"
-        package_dir = os.path.dirname(__file__)
+        package_dir = bleachbit_package_path
         # When running from source, share directory is `../share/` from `__init__.py`.
         repo_root = os.path.normpath(os.path.join(package_dir, '..'))
         base_dirs = [
@@ -184,9 +213,14 @@ windows10_theme_path = os.path.normpath(
 
 # application icon
 __icons = (
-    '/usr/share/pixmaps/bleachbit.png',  # Linux
-    '/usr/pkg/share/pixmaps/bleachbit.png',  # NetBSD
-    '/usr/local/share/pixmaps/bleachbit.png',  # FreeBSD and OpenBSD
+    # AppImage
+    os.path.normpath(os.path.join(bleachbit_exe_path,
+                                  'pixmaps/bleachbit.png')),
+    # Linux
+    '/usr/share/pixmaps/bleachbit.png',
+    # NetBSD
+    '/usr/pkg/share/pixmaps/bleachbit.png',
+    # FreeBSD and OpenBSD
     os.path.normpath(os.path.join(bleachbit_exe_path,
                                   'share\\bleachbit.png')),  # Windows
     # When running from source (i.e., not installed).
@@ -198,18 +232,24 @@ for __icon in __icons:
         appicon_path = __icon
 
 # locale directory
+_exe_locale_dir = os.path.join(bleachbit_exe_path, 'locale')
 if os.path.exists("./locale/"):
     # local locale (personal)
     locale_dir = os.path.abspath("./locale/")
+elif os.path.exists(_exe_locale_dir):
+    # AppImage
+    locale_dir = _exe_locale_dir
 # system-wide installed locale
-elif sys.platform in ('linux', 'darwin'):
+elif IS_LINUX or IS_MAC:
     locale_dir = "/usr/share/locale/"
-elif sys.platform == "win32":
+elif IS_WINDOWS:
     locale_dir = os.path.join(bleachbit_exe_path, "share\\locale\\")
-elif sys.platform[:6] == "netbsd":
+elif IS_NETBSD:
     locale_dir = "/usr/pkg/share/locale/"
-elif sys.platform.startswith("openbsd") or sys.platform.startswith("freebsd"):
+elif IS_BSD:
     locale_dir = "/usr/local/share/locale/"
+else:
+    locale_dir = "/usr/share/locale/"
 
 
 #
@@ -218,38 +258,3 @@ elif sys.platform.startswith("openbsd") or sys.platform.startswith("freebsd"):
 base_url = "https://update.bleachbit.org"
 help_contents_url = "https://www.bleachbit.org/help"
 update_check_url = f"{base_url}/update/{APP_VERSION}"
-
-# set up environment variables
-if 'nt' == os.name:
-    from bleachbit import Windows
-    Windows.setup_environment()
-
-if 'posix' == os.name:
-    # Set fallbacks for environment variables.
-    envs = {
-        'PATH': '/usr/bin:/bin:/usr/sbin:/sbin',
-        'XDG_CACHE_HOME': os.path.expanduser('~/.cache'),
-        'XDG_CONFIG_HOME': os.path.expanduser('~/.config'),
-        'XDG_DATA_HOME': os.path.expanduser('~/.local/share')
-    }
-    if not os.getenv('USER'):
-        try:
-            envs['USER'] = getpass.getuser()
-        except (OSError, KeyError):
-            pass
-    for varname, value in envs.items():
-        if not os.getenv(varname):
-            os.environ[varname] = value
-
-# should be re.IGNORECASE on macOS
-fs_scan_re_flags = 0 if os.name == 'posix' else re.IGNORECASE
-
-if 'win32' == sys.platform:
-    import win32process
-
-    for process in win32process.EnumProcessModules(-1):
-        name = win32process.GetModuleFileNameEx(-1, process)
-        if re.search(r'python\d+.dll$', name, re.IGNORECASE):
-            bindir = os.path.dirname(name)
-            os.environ['GDK_PIXBUF_MODULE_FILE'] = os.path.join(
-                bindir, 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache')

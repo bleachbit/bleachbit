@@ -9,10 +9,15 @@ import os
 import sys
 
 import bleachbit
-from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, portable_mode
+from bleachbit import APP_NAME, Cleaner, GuiBasic, appicon_path, portable_mode, IS_WINDOWS
 from bleachbit.Cleaner import backends
+from bleachbit.GtkShim import (
+    GLib, Gdk, Gio, Gtk,
+    require_gtk,
+    suppress_pygobject_asyncio_warnings,
+)
 from bleachbit.GUI import logger
-from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
+from bleachbit.GuiUtil import get_clipboard_paths
 from bleachbit.GuiWindow import GUI
 from bleachbit.Language import get_text as _, get_active_language_code
 from bleachbit.Options import options
@@ -24,7 +29,7 @@ require_gtk()
 RESPONSE_ANONYMIZE = 101
 RESPONSE_COPY = 100
 
-if os.name == 'nt':
+if IS_WINDOWS:
     from bleachbit import Windows
     from bleachbit.FontCheckDialog import (
         create_font_check_dialog,
@@ -62,15 +67,20 @@ class Bleachbit(Gtk.Application):
         if shred_paths:
             self._shred_paths = shred_paths
 
-        if os.name == 'nt':
+        if IS_WINDOWS:
             # clean up nonce files https://github.com/bleachbit/bleachbit/issues/858
             import atexit
             atexit.register(Windows.cleanup_nonce)
 
+    def run(self, *args, **kwargs):
+        """Run the GTK application."""
+        with suppress_pygobject_asyncio_warnings():
+            return Gtk.Application.run(self, *args, **kwargs)
+
     def _init_windows_misc(self, auto_exit, shred_paths, uac):
         application_id_suffix = ''
         is_context_menu_executed = auto_exit and shred_paths
-        if not os.name == 'nt':
+        if not IS_WINDOWS:
             return ''
         env_suffix = os.environ.pop('BLEACHBIT_APP_INSTANCE_SUFFIX', '')
         if env_suffix:
@@ -164,7 +174,12 @@ class Bleachbit(Gtk.Application):
     def cb_shred_clipboard(self, action, param):
         """Callback for menu option: shred paths from clipboard"""
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.request_targets(self.cb_clipboard_uri_received)
+        # wait_for_targets() avoids GLib warnings from request_targets() when
+        # the clipboard is empty.
+        has_targets, targets = clipboard.wait_for_targets()
+        if not has_targets:
+            targets = []
+        self.cb_clipboard_uri_received(clipboard, targets, None)
 
     def cb_clipboard_uri_received(self, clipboard, targets, _data):
         """Callback for when URIs are received from clipboard
@@ -173,28 +188,12 @@ class Bleachbit(Gtk.Application):
         but there is with GTK 3.24.34. However, Windows does not have
         get_uris().
         """
-        shred_paths = None
+        shred_paths = get_clipboard_paths(clipboard, targets)
         # TRANSLATORS: Warning log message when attempting to paste files/folders to shred.
         not_found_msg = _('No paths found in clipboard.')
-        if 'nt' == os.name and Gdk.atom_intern_static_string('FileNameW') in targets:
-            # Windows
-            # Use non-GTK+ functions because because GTK+ 2 does not work.
-            shred_paths = Windows.get_clipboard_paths()
-        elif Gdk.atom_intern_static_string('text/uri-list') in targets:
-            # Linux
-            shred_uris = clipboard.wait_for_contents(
-                Gdk.atom_intern_static_string('text/uri-list')).get_uris()
-            shred_paths = FileUtilities.uris_to_paths(shred_uris)
-        elif Gdk.atom_intern_static_string('text/plain') in targets or \
-                Gdk.atom_intern_static_string('UTF8_STRING') in targets:
-            # Plain text pasted from a text editor
-            text = clipboard.wait_for_text()
-            if text:
-                shred_paths = [p.strip()
-                               for p in text.splitlines() if p.strip()]
-
         if shred_paths:
-            GUI.shred_paths(self._window, shred_paths)
+            GUI.shred_paths(self._window, shred_paths,
+                            should_clear_clipboard=True)
         else:
             logger.warning(not_found_msg)
 
@@ -202,7 +201,7 @@ class Bleachbit(Gtk.Application):
         """Shred settings (for privacy reasons) and quit"""
         # build a list of paths to delete
         paths = []
-        if os.name == 'nt' and portable_mode:
+        if IS_WINDOWS and portable_mode:
             # in portable mode on Windows, the options directory includes
             # executables
             paths.append(bleachbit.options_file)
@@ -370,7 +369,7 @@ class Bleachbit(Gtk.Application):
 
     def _should_show_font_check_dialog(self):
         """Determine whether to show the font check dialog on Windows."""
-        if os.name != 'nt':
+        if not IS_WINDOWS:
             return False
         if self._auto_exit:
             return False
@@ -403,7 +402,7 @@ class Bleachbit(Gtk.Application):
 
     def _show_font_check_dialog(self):
         """Show the font check dialog and handle the response."""
-        if os.name != 'nt':
+        if not IS_WINDOWS:
             return False
         if not self._window:
             return False

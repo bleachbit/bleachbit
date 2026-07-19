@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-# coding=utf-8
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -30,6 +16,7 @@ import shutil
 from xml.dom.minidom import parseString
 
 import bleachbit
+from bleachbit import IS_WINDOWS, IS_POSIX
 from bleachbit.Action import ActionProvider, Command
 from bleachbit.Cleaner import Cleaner, backends, create_simple_cleaner, register_cleaners
 import bleachbit.FileUtilities
@@ -68,7 +55,7 @@ def register_all_cleaners():
     _patch_options_paths() changes the options directory during testing
     to a clean directory, so by default it will not have Winapp2.ini.
     """
-    if os.name == 'nt':
+    if IS_WINDOWS:
         from tests.TestWinapp import get_winapp2  # pylint: disable=import-outside-toplevel
 
         os.makedirs(bleachbit.personal_cleaners_dir, exist_ok=True)
@@ -87,13 +74,13 @@ class CleanerTestCase(common.BleachbitTestCase):
     def test_add_action(self):
         """Unit test for Cleaner.add_action()"""
         self.actions = []
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             self.actions += [
                 '<action command="delete" search="file" path="$WINDIR\\explorer.exe"/>',
                 '<action command="delete" search="glob" path="$WINDIR\\system32\\*.dll"/>',
                 '<action command="delete" search="walk.files" path="$WINDIR\\system32\\"/>',
                 '<action command="delete" search="walk.all" path="$WINDIR\\system32\\"/>']
-        elif 'posix' == os.name:
+        elif IS_POSIX:
             print(__file__)
             self.actions += [
                 f'<action command="delete" search="file" path="{__file__}"/>',
@@ -201,7 +188,7 @@ class CleanerTestCase(common.BleachbitTestCase):
                             break
                         common.validate_result(self, result)
         # make sure trash and tmp don't return the same results
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             return
 
         def get_files(option_id):
@@ -267,14 +254,18 @@ class CleanerTestCase(common.BleachbitTestCase):
     @common.skipUnlessDestructive
     def test_system_recent_documents(self):
         """Clean recent documents in GTK"""
-        from bleachbit.GtkShim import Gtk, Gio, GLib
+        from bleachbit.GtkShim import (
+            Gtk, Gio, GLib, suppress_pygobject_asyncio_warnings)
         mgr = Gtk.RecentManager().get_default()
         fn = self.mkstemp(suffix='.txt')
         self.assertExists(fn)
         uri = Gio.File.new_for_path(fn).get_uri()
         self.assertTrue(mgr.add_item(uri))
         GLib.idle_add(Gtk.main_quit)
-        Gtk.main()  # process the addition
+        # PyGObject 3.56.2 calls deprecated asyncio APIs in Gtk.main(),
+        # which breaks tests run with warnings as errors.
+        with suppress_pygobject_asyncio_warnings():
+            Gtk.main()  # process the addition
         GLib.idle_add(Gtk.main_quit)
         self.assertGreater(len(mgr.get_items()), 0)
         self.assertTrue(mgr.has_item(uri))
@@ -340,9 +331,9 @@ class CleanerTestCase(common.BleachbitTestCase):
         obexd_fn = os.path.join(obexd_dir, 'bleachbit-test')
         common.touch_file(obexd_fn)
         for cmd in backends['system'].get_commands('cache'):
-            for _result in cmd.execute(really_delete=False):
+            for _ in cmd.execute(really_delete=False):
                 self.assertNotEqual(cmd.path, obexd_fn)
-                self.assertFalse('/.cache/obexd/' in cmd.path)
+                self.assertNotIn('/.cache/obexd/', cmd.path)
         from bleachbit.FileUtilities import delete
         delete(obexd_fn, ignore_missing=True)
 

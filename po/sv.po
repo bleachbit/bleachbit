@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-04-05 14:48-0600\n"
-"PO-Revision-Date: 2026-04-19 15:05+0000\n"
-"Last-Translator: Mona Lisa <nickwick@users.noreply.hosted.weblate.org>\n"
+"POT-Creation-Date: 2026-07-12 15:23-0600\n"
+"PO-Revision-Date: 2026-07-15 05:01+0000\n"
+"Last-Translator: Mona Lisa <monalisa@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/bleachbit/main/"
 "sv/>\n"
 "Language: sv\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Launchpad-Export-Date: 2022-01-23 20:20+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -56,16 +56,17 @@ msgstr ""
 "Ta bort kakor som lagrar inloggningsinformation, webbplatsinställningar och "
 "spårningsidentifierare"
 
-#: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
-#: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
-#: ../cleaners/chromium.xml ../cleaners/sqlite3.xml
-#: ../cleaners/windows_defender.xml ../cleaners/slack.xml ../cleaners/brave.xml
-#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
-#: ../cleaners/libreoffice.xml ../cleaners/seamonkey.xml
-#: ../cleaners/google_chrome.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/vim.xml ../cleaners/opera.xml
-#: ../cleaners/discord.xml ../cleaners/octave.xml
+#: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
+#: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
+#: ../cleaners/safari.xml ../cleaners/fish.xml ../cleaners/chromium.xml
+#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
+#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
+#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
+#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/python.xml
+#: ../cleaners/vim.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/octave.xml
 msgid "History"
 msgstr "Historik"
 
@@ -74,7 +75,7 @@ msgstr "Historik"
 #: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
 #: ../cleaners/libreoffice.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
-#: ../cleaners/amule.xml ../bleachbit/Cleaner.py
+#: ../cleaners/amule.xml
 msgid "Delete the usage history"
 msgstr "Ta bort användningshistoriken"
 
@@ -82,7 +83,8 @@ msgstr "Ta bort användningshistoriken"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/zoom.xml
+#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
 #: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
 #: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
@@ -93,7 +95,8 @@ msgstr "Loggar"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/zoom.xml
+#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
 #: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
 #: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
@@ -106,7 +109,8 @@ msgid "Multimedia viewer"
 msgstr "Multimediaspelare"
 
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
-#: ../cleaners/librewolf.xml ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
+#: ../cleaners/librewolf.xml ../cleaners/openoffice.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/vivaldi.xml ../cleaners/yahoo_messenger.xml
 #: ../cleaners/pidgin.xml ../cleaners/secondlife_viewer.xml
@@ -116,20 +120,21 @@ msgstr "Multimediaspelare"
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml ../cleaners/chromium.xml
 #: ../cleaners/slack.xml ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/brave.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/seamonkey.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/tremulous.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/gftp.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Cleaner.py
+#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/seamonkey.xml
+#: ../cleaners/flash.xml ../cleaners/google_chrome.xml
+#: ../cleaners/tremulous.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../bleachbit/Cleaner.py
 msgid "Cache"
 msgstr "Cache"
 
 #. TRANSLATORS: The description of what certain cleaning options do.
 #: ../cleaners/xine.xml ../cleaners/dnf.xml ../cleaners/miro.xml
-#: ../cleaners/amsn.xml ../cleaners/librewolf.xml ../cleaners/rhythmbox.xml
-#: ../cleaners/beagle.xml ../cleaners/yum.xml
+#: ../cleaners/amsn.xml ../cleaners/librewolf.xml ../cleaners/openoffice.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml ../cleaners/yum.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
@@ -138,19 +143,20 @@ msgstr "Cache"
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
 #: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
+#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
 #: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "Ta bort cachen"
 
-#: ../cleaners/paint.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/wordpad.xml
-#: ../cleaners/audacious.xml ../cleaners/filezilla.xml
+#: ../cleaners/paint.xml ../cleaners/openoffice.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/wordpad.xml ../cleaners/audacious.xml ../cleaners/filezilla.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
 #: ../cleaners/winamp.xml ../cleaners/adobe_reader.xml ../cleaners/winzip.xml
-#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
+#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml
 msgid "Most recently used"
 msgstr "Senast använda"
 
@@ -181,7 +187,8 @@ msgstr ""
 
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
-#: ../cleaners/zoom.xml ../cleaners/skype.xml ../cleaners/discord.xml
+#: ../cleaners/zoom.xml ../cleaners/skype.xml ../cleaners/profanity.xml
+#: ../cleaners/discord.xml
 msgid "Chat client"
 msgstr "Chattklient"
 
@@ -209,15 +216,15 @@ msgstr "Webbläsare"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/deepscan.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml
+#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
+#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
 msgid "Backup files"
 msgstr "Säkerhetskopior"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/deepscan.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml
+#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
+#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
 msgid "Delete the backup files"
 msgstr "Ta bort säkerhetskopiorna"
 
@@ -228,12 +235,14 @@ msgstr "Ta bort säkerhetskopiorna"
 msgid "Crash reports"
 msgstr "Kraschrapporter"
 
-#: ../cleaners/librewolf.xml ../cleaners/beagle.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/geary.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/windows_defender.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/deepscan.xml ../cleaners/google_chrome.xml
-#: ../cleaners/transmission.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/geary.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/windows_defender.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml
+#: ../cleaners/google_chrome.xml ../cleaners/transmission.xml
+#: ../cleaners/profanity.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/vuze.xml ../cleaners/opera.xml
 msgid "Delete the files"
 msgstr "Ta bort filerna"
@@ -280,9 +289,10 @@ msgstr ""
 msgid "This option will delete your saved passwords."
 msgstr "Det här alternativet tar bort dina sparade lösenord."
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Session"
 msgstr "Session"
@@ -366,6 +376,27 @@ msgstr ""
 "Städa databasfragmentering för att minska utrymmesanvändning och öka "
 "hastigheten utan att ta bort några data"
 
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+msgid "Shell"
+msgstr "Skal"
+
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+#: ../cleaners/sqlite3.xml ../cleaners/python.xml ../cleaners/octave.xml
+msgid "Delete the command history"
+msgstr "Ta bort kommandohistoriken"
+
+#: ../cleaners/openoffice.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/libreoffice.xml
+msgid "Office suite"
+msgstr "Kontorspaket"
+
+#: ../cleaners/openoffice.xml ../cleaners/audacious.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/gedit.xml ../cleaners/kde.xml
+#: ../bleachbit/Cleaner.py
+msgid "Delete the list of recently used documents"
+msgstr "Ta bort listan med nyligen använda dokument"
+
 #: ../cleaners/rhythmbox.xml
 msgid "Database"
 msgstr "Databas"
@@ -378,12 +409,6 @@ msgstr ""
 "Ta bort databasen, som innehåller information som antal spelningar och "
 "senast spelade"
 
-#. TRANSLATORS: The description of a cleaner.
-#: ../cleaners/microsoft_office.xml ../cleaners/libreoffice.xml
-#: ../bleachbit/Cleaner.py
-msgid "Office suite"
-msgstr "Kontorspaket"
-
 #: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
 msgid "Debug logs"
@@ -395,27 +420,21 @@ msgstr "Felsökningsloggar"
 msgid "Delete the debug logs"
 msgstr "Ta bort felsökningsloggarna"
 
-#: ../cleaners/bash.xml
-msgid "Shell"
-msgstr "Skal"
-
-#: ../cleaners/bash.xml ../cleaners/sqlite3.xml ../cleaners/octave.xml
-msgid "Delete the command history"
-msgstr "Ta bort kommandohistoriken"
-
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
+#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Temporary files"
 msgstr "Temporära filer"
 
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
+#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Delete the temporary files"
 msgstr "Ta bort temporära filer"
 
@@ -434,12 +453,6 @@ msgstr "Ta bort kakor, besökta webbadresser och sökhistorik"
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "Ordbehandlare"
-
-#: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
-#: ../cleaners/kde.xml ../bleachbit/Cleaner.py
-msgid "Delete the list of recently used documents"
-msgstr "Ta bort listan med nyligen använda dokument"
 
 #: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/epiphany.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
@@ -667,6 +680,11 @@ msgstr "Ta bort föråldrade filer"
 msgid "Package lists"
 msgstr "Paketlistor"
 
+#. Cleaner description for vim, VS Code, etc.
+#: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
+msgid "Editor"
+msgstr "Redigerare"
+
 #: ../cleaners/x11.xml
 msgid "Windowing system"
 msgstr "Fönstersystem"
@@ -691,6 +709,37 @@ msgstr "Dokumentvisare"
 msgid "Custom folders will be reset."
 msgstr "Anpassade mappar återställs."
 
+#. Label for Claude coding assistant
+#: ../cleaners/claude.xml
+msgid "AI assistant"
+msgstr "AI-assistent"
+
+#. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
+#: ../cleaners/claude.xml
+msgid "File history"
+msgstr "Filhistorik"
+
+#. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
+#: ../cleaners/claude.xml
+msgid "Delete the file history used for /restore"
+msgstr "Ta bort filhistoriken som används för /restore"
+
+#. Description for deleting Claude Code sessions
+#: ../cleaners/claude.xml
+msgid "Delete the conversation history"
+msgstr "Ta bort konversationshistoriken"
+
+#: ../cleaners/claude.xml
+msgid "You would lose resume, continue, and rewind for past sessions"
+msgstr ""
+"Du förlorar möjligheten att återuppta, fortsätta och spola tillbaka tidigare "
+"sessioner"
+
+#. In Claude Code: captured shell environment used by the Bash tool
+#: ../cleaners/claude.xml
+msgid "Shell snapshots"
+msgstr "Shell-ögonblicksbilder"
+
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
 msgstr "Djupskanning"
@@ -704,16 +753,20 @@ msgid "Inspect the preview for any files you want to keep."
 msgstr "Granska förhandsvisningen för filer du vill behålla."
 
 #: ../cleaners/deepscan.xml
+msgid ""
+"This option is slow. Inspect the preview for files you want to keep, like "
+"those bundled with applications."
+msgstr ""
+"Det här alternativet är långsamt. Kontrollera förhandsgranskningen för filer "
+"du vill behålla, som de som medföljer program."
+
+#: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
-msgstr "VIM växlingsutrymmets filer under användarprofil"
+msgstr "VIM-swapfiler under användarprofilen"
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files across system"
-msgstr "VIM växlingsutrymmets filer över system"
-
-#: ../cleaners/gedit.xml ../cleaners/vim.xml
-msgid "Editor"
-msgstr "Redigerare"
+msgstr "VIM-swapfiler i hela systemet"
 
 #: ../cleaners/zoom.xml
 msgid "Recordings"
@@ -747,6 +800,15 @@ msgstr "Lista över hämtade filer"
 msgid "Delete the list of visited web pages"
 msgstr "Ta bort listan över besökta webbplatser"
 
+#. Cleaning option that deletes AI models in a web browser
+#: ../cleaners/google_chrome.xml
+msgid "AI"
+msgstr "AI"
+
+#: ../cleaners/google_chrome.xml
+msgid "Delete the AI models"
+msgstr "Ta bort AI-modellerna"
+
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
 msgid "Blocklists"
@@ -775,6 +837,10 @@ msgstr "Ta bort filen"
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
 msgstr "Ta bort listan över spelservrar"
+
+#: ../cleaners/profanity.xml
+msgid "Downloaded files"
+msgstr "Hämtade filer"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
@@ -813,7 +879,7 @@ msgid ""
 "also clears favorited GIFs."
 msgstr ""
 "Ta bort webbcachen, vilket minskar tiden för att visa återbesökta sidor. "
-"Detta rensar också favoriserade GIF-bilder."
+"Detta rensar också favoritmarkerade GIF-bilder."
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
@@ -843,7 +909,7 @@ msgstr ""
 #. TRANSLATORS: Caption for screenshot
 #: ../org.bleachbit.BleachBit.metainfo.xml
 msgid "Default dark mode, showing found junk files"
-msgstr "Standard mörkt läge, visar hittade skräpfiler"
+msgstr "Standardvy i mörkt läge, visar hittade skräpfiler"
 
 #. TRANSLATORS: Dialog shown when an older version is detected. {prodname} is replaced with the product name. Do not translate placeholder.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -935,13 +1001,13 @@ msgstr "För mig ({USER})"
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
 msgid "Unable to elevate, error {ERROR}."
-msgstr "Det gick inte att höja, fel {ERROR}."
+msgstr "Det gick inte att höja behörigheten, fel {ERROR}."
 
 #. TRANSLATORS: Error message shown in a dialog box when Windows does not support elevation.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_NOT_SUPPORTED"
 msgid "The operating system doesn't support elevation."
-msgstr "Operativsystemet stöder inte höjning."
+msgstr "Operativsystemet stöder inte behörighetshöjning."
 
 #. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1049,6 +1115,18 @@ msgctxt "nsis:MULTIUSER_UNINSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to remove $(^NameDA)."
 msgstr "Välj för vilka användare $(^NameDA) ska tas bort."
 
+#. TRANSLATORS: Dialog shown when the installer detects an old version of Windows. Instructs the user to click OK to download a compatible version or Cancel to exit.
+#: windows/NsisInclude/NsisMultiUserLang.nsh
+msgctxt "nsis:OLD_WINDOWS_WARNING"
+msgid ""
+"This version of BleachBit requires Windows 10 or later. To download a "
+"compatible version for your system, click OK. To exit the installer, click "
+"Cancel."
+msgstr ""
+"Den här versionen av BleachBit kräver Windows 10 eller senare. För att ladda "
+"ner en kompatibel version för ditt system klickar du på OK. För att avsluta "
+"installationsprogrammet klickar du på Avbryt."
+
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
 msgid ""
@@ -1078,13 +1156,13 @@ msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
 msgid ""
 "Add an option to delete files from the file context menu in Windows Explorer."
 msgstr ""
-"Lägg till ett alternativ för att ta bort filer från filmenyn i Windows "
-"Utforskaren."
+"Lägg till ett alternativ för att ta bort filer i filernas snabbmeny i "
+"Windows Utforskaren."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_NAME"
 msgid "Integrate Shred"
-msgstr "Integrera säkerhetsradera"
+msgstr "Integrera säkerhetsradering"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
@@ -1148,7 +1226,7 @@ msgstr "${prodname} felsökningsterminal"
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_NO_UAC"
 msgid "${prodname} (No UAC)."
-msgstr "${prodname} (inget användargränssnitt)."
+msgstr "${prodname} (utan UAC)."
 
 #. TRANSLATORS: Context menu item in Windows Explorer for securely shredding files.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1214,7 +1292,21 @@ msgstr "Kör externt kommando: %s"
 #. TRANSLATORS: This is the name of an action. 'Refresh' is a verb.
 #: ../bleachbit/Action.py
 msgid "Refresh Windows shell"
-msgstr "Uppdatera Windows shell"
+msgstr "Uppdatera Windows-skalet"
+
+#: ../bleachbit/Bootstrap.py
+msgid ""
+"To run a GUI application on Wayland with root, allow access with this "
+"command:\n"
+"xhost si:localuser:root\n"
+"See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-"
+"questions.html"
+msgstr ""
+"För att köra ett grafiskt gränssnitt på Wayland med root, tillåt åtkomst med "
+"följande kommando:\n"
+"xhost si:localuser:root\n"
+"Se mer om xhost på https://docs.bleachbit.org/doc/frequently-asked-"
+"questions.html"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1222,7 +1314,7 @@ msgid ""
 "Error in handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 msgstr ""
-"Fel i handle_cleaner_option() för städar-id = {cleaner_id}, alternativ "
+"Fel i handle_cleaner_option() för cleaner-ID = {cleaner_id}, alternativ-"
 "XML={option_xml}"
 
 #. TRANSLATORS: Warning printed to the log.
@@ -1297,6 +1389,11 @@ msgstr "Rensa växlingsutrymmet och ledigt minne"
 msgid "This option is experimental and may cause system problems."
 msgstr "Det här alternativet är experimentellt och kan orsaka systemproblem."
 
+#. TRANSLATORS: This is a label for the option to clear the system DNS cache.
+#: ../bleachbit/Cleaner.py
+msgid "DNS cache"
+msgstr "DNS-cache"
+
 #. TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py
 msgid "Prefetch"
@@ -1337,7 +1434,9 @@ msgstr "Urklipp"
 
 #: ../bleachbit/Cleaner.py
 msgid "The desktop environment's clipboard used for copy and paste operations"
-msgstr "Skrivbordsmiljöns urklipp används för kopiera och klistra in åtgärder"
+msgstr ""
+"Skrivbordsmiljöns urklipp som används för kopierings- och "
+"inklistringsåtgärder"
 
 #. TRANSLATORS: "Custom" is an option allowing the user to specify which
 #. files and folders will be erased.
@@ -1485,7 +1584,7 @@ msgstr "exkludera städningsflaggor (kan upprepas, kommasepareras)"
 #. and 'set' is a verb.
 #: ../bleachbit/CLI.py
 msgid "set log level to verbose"
-msgstr "ställ in loggnivå till verbose"
+msgstr "ställ in loggnivån på utförlig"
 
 #. TRANSLATORS: Help for --debug-log option on the CLI.
 #: ../bleachbit/CLI.py
@@ -1539,7 +1638,7 @@ msgstr "Städning av ledigt utrymme kan ta lång tid."
 #. TRANSLATORS: Error message on the CLI.
 #: ../bleachbit/CLI.py
 msgid "No operations selected. Specify cleaner options."
-msgstr "Inga valda operationer. Ange städningsalternativ."
+msgstr "Inga åtgärder har markerats. Ange städningsalternativ."
 
 #. TRANSLATORS: '--overwrite' and '--clean' are command line options
 #: ../bleachbit/CLI.py
@@ -1848,7 +1947,7 @@ msgid ""
 "browser:\n"
 "%s"
 msgstr ""
-"Eftersom du kör som root, vänligen öppna den här länken manuellt i en "
+"Eftersom du kör som root måste du öppna den här länken manuellt i en "
 "webbläsare:\n"
 "%s"
 
@@ -1879,7 +1978,7 @@ msgstr "Antal filer"
 #. "MB".
 #: ../bleachbit/GuiChaff.py
 msgid "Size (MB)"
-msgstr "Storlek(MB)"
+msgstr "Storlek (MB)"
 
 #. TRANSLATORS: Option in combo box to choose to stop when free space
 #. reaches a certain percentage.
@@ -1896,6 +1995,13 @@ msgstr "Ledigt utrymme (%)"
 msgid "Select destination folder"
 msgstr "Välj destinationsmapp"
 
+#. TRANSLATORS: Error message shown when chaff file generation fails.
+#. The placeholder is for the technical error details.
+#: ../bleachbit/GuiChaff.py
+#, python-brace-format
+msgid "Error generating chaff: {error}"
+msgstr "Fel vid generering av chaff: {error}"
+
 #. TRANSLATORS: Progress message shown while deleting chaff files.
 #. 'Deleting files' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
@@ -1903,6 +2009,13 @@ msgstr "Välj destinationsmapp"
 #: ../bleachbit/GuiChaff.py
 msgid "Deleting files…"
 msgstr "Tar bort filer…"
+
+#. TRANSLATORS: Error message shown when deleting chaff files fails.
+#. The placeholder is for the technical error details.
+#: ../bleachbit/GuiChaff.py
+#, python-brace-format
+msgid "Error deleting chaff files: {error}"
+msgstr "Fel vid borttagning av chaff-filer: {error}"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves
@@ -1999,7 +2112,7 @@ msgstr "Genererar filer…"
 #. TRANSLATORS: Instruction label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
 msgid "Select the cookies to keep when cleaning cookies across browsers."
-msgstr "Välj de kakor som ska sparas när kakor rensas i olika webbläsare."
+msgstr "Markera de kakor som ska sparas när kakor rensas i olika webbläsare."
 
 #. TRANSLATORS: This is a notice in the cookie manager about supported
 #. cookie types. The hyperlink points to the documentation website.
@@ -2030,12 +2143,12 @@ msgstr "Filtrera kakor..."
 #. 'Selected' refers to selected cookies (the noun "cookies" is implied).
 #: ../bleachbit/GuiCookie.py
 msgid "Show Selected"
-msgstr "Visa valda"
+msgstr "Visa markerade"
 
 #. TRANSLATORS: Tooltip for the "Show Selected" toggle button.
 #: ../bleachbit/GuiCookie.py
 msgid "Only show cookies that are currently selected"
-msgstr "Visa enbart kakor som för nuvarande är valda"
+msgstr "Visa bara kakor som är markerade just nu"
 
 #. TRANSLATORS: Column header in the manage cookies dialog.
 #. 'Host' is a noun meaning the website hostname (domain name) of the cookie.
@@ -2046,7 +2159,7 @@ msgstr "Värd"
 #. TRANSLATORS: Button label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
 msgid "Select All"
-msgstr "Välj alla"
+msgstr "Markera alla"
 
 #. TRANSLATORS: Button label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
@@ -2067,8 +2180,8 @@ msgid ""
 "Expert mode enables advanced features and relaxes guardrails. Use extra "
 "caution in expert mode."
 msgstr ""
-"Expertläget aktiverar avancerade funktioner och lättar på skyddsräcken. Var "
-"extra försiktig i expertläget."
+"Expertläget aktiverar avancerade funktioner och mildrar säkerhetsspärrarna. "
+"Var extra försiktig i expertläget."
 
 #. TRANSLATORS: Used both as (1) a checkbox label in the preferences dialog
 #. to bypass some safety guardails for advanced users and (2) the title of
@@ -2084,6 +2197,8 @@ msgid "Restart BleachBit for full effect."
 msgstr "Starta om BleachBit för full effekt."
 
 #. TRANSLATORS: Title for the preferences dialog
+#. TRANSLATORS: This menu item opens a dialog where the user can
+#. configure application settings.
 #: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
 msgid "Preferences"
 msgstr "Inställningar"
@@ -2108,7 +2223,7 @@ msgstr "Språk"
 #. (not deleted) during cleaning.
 #: ../bleachbit/GuiPreferences.py
 msgid "Keep list"
-msgstr "Behåll lista"
+msgstr "Lista över objekt att behålla"
 
 #. TRANSLATORS: Sidebar label for the drives page of the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2199,7 +2314,7 @@ msgstr "Dölj irrelevanta städare"
 #: ../bleachbit/GuiPreferences.py
 msgid "Use IEC sizes (1 KiB = 1024 bytes) instead of SI (1 kB = 1000 bytes)"
 msgstr ""
-"Använd IEC-storlekar (1 KiB = 1024 byte) istället för SI (1 kB = 1000 byte)"
+"Använd IEC-storlekar (1 KiB = 1024 byte) i stället för SI (1 kB = 1000 byte)"
 
 #. TRANSLATORS: Section title on the preferences updates page.
 #: ../bleachbit/GuiPreferences.py
@@ -2324,7 +2439,7 @@ msgstr "Namn"
 #. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
 msgid "This path already exists in the keep list."
-msgstr "Den här sökvägen finns redan i vitlistan."
+msgstr "Den här sökvägen finns redan i listan över objekt att behålla."
 
 #. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
@@ -2404,15 +2519,29 @@ msgctxt "button"
 msgid "Add folder"
 msgstr "Lägg till mapp"
 
-#. TRANSLATORS: Update notification for users upgrading from versions
-#. older than 5.1.0.
+#. TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
+#. Preferences. Keep it consistent with the translation of "Expert Mode"
+#. in the preferences dialog. This message appears when cleaning options
+#. with warnings are selected but expert mode is disabled.
 #: ../bleachbit/GuiStartup.py
 msgid ""
-"Cleaning options with warnings now require expert mode. Enable it in "
-"preferences to clean them."
+"One or more selected cleaning options have warnings and require Expert Mode "
+"to clean. Enable it in preferences."
 msgstr ""
-"Städningsalternativ med varningar kräver nu expertläge. Aktivera det i "
-"inställningarna för att städa dem."
+"Ett eller flera markerade städningsalternativ har varningar och kräver "
+"expertläge för att städas. Aktivera expertläge i inställningarna."
+
+#. TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
+#. Preferences. Keep it consistent with the translation of "Expert Mode"
+#. in the preferences dialog. This message appears when the user tries to
+#. skip a delete confirmation without enabling Expert Mode.
+#: ../bleachbit/GuiStartup.py
+msgid ""
+"Delete confirmation is disabled but expert mode is not enabled. Enable "
+"Expert Mode in preferences to skip delete confirmations."
+msgstr ""
+"Borttagningsbekräftelse är inaktiverad, men expertläge är inte aktiverat. "
+"Aktivera expertläge i inställningarna för att fortsätta."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
@@ -2457,10 +2586,10 @@ msgid ""
 "the system. User-specific paths will refer to the administrator account, so "
 "to clean your profile, run BleachBit again as a standard user."
 msgstr ""
-"Du höjde dina användarrättigheter igenom att använda ett annat konto för att "
-"rensa delade delar av systemet. Användarspecifika sökvägar kommer hänvisas "
-"till administratörskontot, så för att rensa din profil: kör BleachBit på "
-"nytt som standardanvändare."
+"Du höjde behörigheten med ett annat konto för att rensa delade delar av "
+"systemet. Användarspecifika sökvägar kommer hänvisas till "
+"administratörskontot, så för att rensa din profil: kör BleachBit på nytt som "
+"standardanvändare."
 
 #. TRANSLATORS: Warning shown on startup on Windows when running
 #. unofficial Microsoft Store version. Advises user to get genuine
@@ -2537,8 +2666,7 @@ msgstr "Återställer konfigurationsfilen eftersom den är skadad: %s"
 msgid ""
 "%(cleaner)s - %(option)s cannot be cleaned because expert mode is disabled."
 msgstr ""
-"%(cleaner)s - %(option)s kan inte rengöras eftersom expertläget är "
-"inaktiverat."
+"%(cleaner)s - %(option)s kan inte städas eftersom expertläget är inaktiverat."
 
 #. TRANSLATORS: Error message shown in the infobar when the user clicks
 #. the preview or clean button without selecting any cleaner options.
@@ -2603,9 +2731,8 @@ msgid ""
 "BleachBit detected leftover files from an interrupted disk wipe operation. "
 "Would you like to preview them with an option to delete them?"
 msgstr ""
-"BleachBit upptäckte kvarvarande filer från en avbruten "
-"diskstädningsoperation. Vill du förhandsgranska dessa med möjligheten att ta "
-"bort dem?"
+"BleachBit upptäckte kvarvarande filer från en avbruten diskrensning. Vill du "
+"förhandsgranska dem och få möjlighet att ta bort dem?"
 
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
@@ -2615,12 +2742,16 @@ msgid "Error when checking for updates: %s"
 msgstr "Fel vid uppdateringssökning: %s"
 
 #: ../bleachbit/Memory.py
+#, fuzzy
+#| msgid ""
+#| "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
+#| "information."
 msgid ""
-"The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
+"The command 'swapon -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"Kommandot \"swapoff -s\" misslyckades, så faller tillbaka till /proc/swaps "
-"för växlingsutrymmets information."
+"Kommandot \"swapoff -s\" misslyckades, så /proc/swaps används i stället för "
+"växlingsinformation."
 
 #: ../bleachbit/Memory.py
 msgid "Disabling swap."
@@ -2640,19 +2771,31 @@ msgstr "Ställer in nice-värde %d för den här processen."
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Dropping privileges of process ID %(pid)d to user ID %(uid)d."
-msgstr "Ta bort privilegier för process-ID %(pid)d för användar-ID %(uid)d."
+msgstr "Sänker behörigheterna för process-ID %(pid)d till användar-ID %(uid)d."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Allocating and wiping %s of memory."
-msgstr "Fördelar och städar %s av minnet."
+msgstr "Allokerar och rensar %s minne."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Freeing %s of memory."
 msgstr "Frigör %s minne."
+
+#. TRANSLATORS: This is a debugging message that the parent process
+#. is waiting for the child process. %(parent_pid)d is the parent
+#. process ID; %(child_pid)d is the child process ID.
+#: ../bleachbit/Memory.py
+#, python-format
+msgid ""
+"The function wipe_memory() with process ID %(parent_pid)d is waiting for "
+"child process ID %(child_pid)d."
+msgstr ""
+"Funktionen wipe_memory() med process-ID %(parent_pid)d väntar på "
+"underprocess-ID %(child_pid)d."
 
 #. TRANSLATORS: Debug message. 'Found' is a past tense verb (short for
 #. "Found [that] the UUID for swap device ..."). %(device)s is the device
@@ -2661,7 +2804,7 @@ msgstr "Frigör %s minne."
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "Found UUID for swap device %(device)s is %(uuid)s."
-msgstr "Hittat UUID för växlingsutrymmesenheten %(device)s är %(uuid)s."
+msgstr "UUID för växlingsenheten %(device)s är %(uuid)s."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2687,22 +2830,10 @@ msgstr "Återinitierar växlingsutrymmesenheten %s."
 msgid "Detected these swap devices: %s"
 msgstr "Detekterade de här växlingsutrymmesenheterna: %s"
 
-#. TRANSLATORS: This is a debugging message that the parent process
-#. is waiting for the child process. %(parent_pid)d is the parent
-#. process ID; %(child_pid)d is the child process ID.
-#: ../bleachbit/Memory.py
-#, python-format
-msgid ""
-"The function wipe_memory() with process ID %(parent_pid)d is waiting for "
-"child process ID %(child_pid)d."
-msgstr ""
-"Funktionen wipe_memory() med process-ID %(parent_pid)d väntar på "
-"underprocess-ID %(child_pid)d."
-
 #: ../bleachbit/Memory.py
 #, python-format
 msgid "The child memory-wiping process returned code %d."
-msgstr "Processen för att städa underminnet returnerade koden %d."
+msgstr "Underprocessen för minnesrensning returnerade koden %d."
 
 #: ../bleachbit/Network.py
 #, python-format
@@ -2717,21 +2848,21 @@ msgstr "Disken var full när konfigurationen skrevs till filen: %s"
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Permission denied when writing configuration to file: %s"
-msgstr "Tillstånd nekad vid skrivning av konfiguration till filen: %s"
+msgstr "Åtkomst nekades när konfigurationen skulle skrivas till filen: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Error checking whether path exists: %s"
-msgstr "Felkontroll av om sökvägen finns: %s"
+msgstr "Fel när det kontrollerades om sökvägen finns: %s"
 
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Automatically preserving language %s."
-msgstr "Bevara automatiskt språk %s."
+msgstr "Bevarar automatiskt språket %s."
 
 #: ../bleachbit/Options.py
 msgid "Error when setting the default drives to shred."
-msgstr "Fel när standardenheter att säkerhetsradera skulle anges."
+msgstr "Fel när standardenheterna för säkerhetsradering skulle anges."
 
 #. TRANSLATORS: Warning shown when user tries to add a protected path.
 #. %(path)s is the path, %(files)d is number of files, %(size)s is human-readable size
@@ -2804,8 +2935,7 @@ msgid ""
 "%s cannot be cleaned because it is currently running.  Close it, and try "
 "again."
 msgstr ""
-"%s kan inte städas eftersom den körs för närvarande. Stäng den och försök "
-"igen."
+"%s kan inte städas eftersom programmet körs. Stäng det och försök igen."
 
 #: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
@@ -2831,8 +2961,8 @@ msgid ""
 "the network is working and that a firewall is not blocking this application. "
 "Error message: {}"
 msgstr ""
-"Fel vid öppning av en nätverksanslutning för att söka efter uppdateringar. "
-"Vänligen kontrollera att nätverket fungerar och att en brandvägg inte "
+"Fel när en nätverksanslutning skulle öppnas för att söka efter "
+"uppdateringar. Kontrollera att nätverket fungerar och att en brandvägg inte "
 "blockerar det här programmet. Felmeddelande: {}"
 
 #. TRANSLATORS: This is cleaner name for cleaners imported from winapp2.ini
@@ -2867,6 +2997,20 @@ msgstr "Importerat från winapp2.ini"
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr "Administratörsbehörighet krävs för att rensa Windows-uppdateringar"
 
+#. TRANSLATORS: Message in log file when stopping a Windows service.
+#. The placeholder is the code name of the service.
+#: ../bleachbit/Windows.py
+#, python-format
+msgid "stop Windows service %(service)s"
+msgstr "stoppa Windows-tjänsten %(service)s"
+
+#. TRANSLATORS: Message in log file when starting a Windows service.
+#. The placeholder is the code name of the service.
+#: ../bleachbit/Windows.py
+#, python-format
+msgid "start Windows service %(service)s"
+msgstr "starta Windows-tjänsten %(service)s"
+
 #: ../bleachbit/Wipe.py
 msgid ""
 "There was at least one file on a file system that does not support advanced "
@@ -2896,7 +3040,7 @@ msgstr "Skapar ny, tillfällig fil för att städa ledigt utrymme."
 #: ../bleachbit/Wipe.py
 #, python-format
 msgid "Error #%d when flushing the file buffer."
-msgstr "Fel #%d vid städning av filbufferten."
+msgstr "Fel #%d när filbufferten skulle tömmas."
 
 #. TRANSLATORS: Debug message summarizing a write operation. All placeholders
 #. are numeric: %(file_count)d = integer number of files written;
@@ -2980,8 +3124,7 @@ msgstr "Vänta. Städar ledigt diskutrymme."
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
-"För att avbryta den här processen, tryck på avbrytknappen på verktygsfältet "
-"och vänta."
+"Tryck på knappen Avbryt i verktygsfältet och vänta för att stoppa processen."
 
 #: ../bleachbit/Worker.py
 msgid ""
@@ -3057,38 +3200,68 @@ msgstr "Vänta. Djupskanning körs."
 msgid "Please wait.  Previewing %s."
 msgstr "Vänta.  Förhandsgranskar %s."
 
+#. TRANSLATORS: This menu item opens a file picker dialog where the
+#. user can select one or more files. The selected files are then
+#. securely deleted by overwriting their data before removal, making
+#. recovery impossible. "Shredding" refers to this secure deletion process.
 #: ../share/app-menu.ui
 msgid "_Shred Files"
 msgstr "_Säkerhetsradera filer"
 
+#. TRANSLATORS: This menu item prompts the user to select one or
+#. more folders using a folder picker dialog. Then, it securely deletes
+#. the selected folder(s) and all their contents. "Shredding" means
+#. overwriting data before deletion to prevent recovery.
 #: ../share/app-menu.ui
 msgid "Sh_red Folders"
-msgstr "F_örstör mappar"
+msgstr "Sä_kerhetsradera mappar"
 
+#. TRANSLATORS: This menu item reads file or folder paths from the
+#. clipboard, then securely deletes them. "Shredding" means overwriting
+#. data before deletion to prevent recovery. The clipboard is cleared
+#. after the operation.
 #: ../share/app-menu.ui
 msgid "Shred Paths from Clipboard"
 msgstr "Säkerhetsradera sökvägar från urklipp"
 
+#. TRANSLATORS: This menu item prompts the user to select a folder.
+#. It then fills the partition with data until full, overwriting any
+#. recoverable traces of previously deleted files. "Empty space" refers
+#. to unallocated disk space where deleted file data may still exist.
 #: ../share/app-menu.ui
 msgid "_Wipe Empty Space"
 msgstr "_Städa ledigt utrymme"
 
+#. TRANSLATORS: This menu item creates decoy files filled with random
+#. data to mislead anyone searching for sensitive information. "Chaff" refers
+#. to material used as a distraction or decoy.
 #: ../share/app-menu.ui
 msgid "_Make Chaff"
 msgstr "_Skapa chaff"
 
+#. TRANSLATORS: This menu item securely deletes the application's
+#. configuration files (resetting all settings to defaults) and then
+#. closes the application. "Shredding" means overwriting data before
+#. deletion to prevent recovery.
 #: ../share/app-menu.ui
 msgid "S_hred Settings and Quit"
-msgstr "För_stör inställningar och avsluta"
+msgstr "Sä_kerhetsradera inställningar och avsluta"
 
+#. TRANSLATORS: This menu item displays technical details about
+#. the system, sometimes useful for troubleshooting issues.
 #: ../share/app-menu.ui
 msgid "S_ystem Information"
 msgstr "S_ysteminformation"
 
+#. TRANSLATORS: This menu item opens a web browser to a page
+#. with links to documentation and the bug tracker.
 #: ../share/app-menu.ui
 msgid "_Help"
 msgstr "_Hjälp"
 
+#. TRANSLATORS: This menu item opens a dialog with general information
+#. about the application, including its name, version, description,
+#. copyright, license, and website link.
 #: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_Om BleachBit"

@@ -71,6 +71,7 @@ class TreeDisplayModel:
         assert isinstance(value, bool)
         assert isinstance(model, Gtk.TreeStore)
         cleaner_id = None
+        option_id = None
         i = path
         if isinstance(i, str):
             # type is either str or gtk.TreeIter
@@ -180,21 +181,35 @@ class TreeInfoModel:
             self.tree_store.disconnect(self.row_changed_handler_id)
         self.tree_store.clear()
         hidden_cleaners = []
+        auto_hide_enabled = options.get('auto_hide')
         for key in sorted(backends):
-            if not any(backends[key].get_options()):
+            backend = backends[key]
+            cleaner_options = list(backend.get_options())
+            if not cleaner_options:
                 # localizations has no options, so it should be hidden
                 # https://github.com/az0/bleachbit/issues/110
                 continue
-            c_name = backends[key].get_name()
-            c_id = backends[key].get_id()
+            c_name = backend.get_name()
+            c_id = backend.get_id()
             c_value = options.get_tree(c_id, None)
-            if not c_value and options.get('auto_hide') and backends[key].auto_hide():
+            if not c_value and auto_hide_enabled and backend.auto_hide():
+                if not c_id:
+                    logger.error("backends[%s].c_id is missing", key)
+                    continue
                 hidden_cleaners.append(c_id)
                 continue
             parent = self.tree_store.append(
                 None, (c_name, c_value, c_id, "", ""))
-            for (o_id, o_name) in backends[key].get_options():
+            for (o_id, o_name) in cleaner_options:
                 o_value = options.get_tree(c_id, o_id)
+                if not isinstance(o_name, str):
+                    logger.error("Invalid option name type for %s.%s: expected str, got %s: %s",
+                                 c_id, o_id, type(o_name).__name__, o_name)
+                    continue
+                if not isinstance(o_id, str):
+                    logger.error("Invalid option id type for %s: expected str, got %s: %s",
+                                 c_id, type(o_id).__name__, o_id)
+                    continue
                 self.tree_store.append(parent, (o_name, o_value, o_id, "", ""))
         if hidden_cleaners:
             logger.debug("automatically hid %d cleaners: %s", len(

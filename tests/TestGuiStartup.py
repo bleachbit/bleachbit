@@ -1,10 +1,26 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
+#
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
-import unittest
+"""
+Test case for module GuiStartup
+"""
+
+import os
+import shutil
+import stat
+import subprocess
 from unittest import mock
 
+from bleachbit import IS_WINDOWS
+import bleachbit
 from bleachbit import GuiStartup
-from bleachbit.GuiStartup import _is_version_upgrade
+from bleachbit.Cleaner import register_cleaners
+from bleachbit.GuiStartup import _has_selected_warning_option, _get_posix_permission_issues, _get_windows_permission_issues
+from bleachbit.Options import options
+from tests import common
 
 
 class StubOptions:
@@ -23,37 +39,13 @@ class StubOptions:
         """Set a option value."""
         self.values[key] = value
 
-    def get_old_version(self):
-        """Return old version to check for upgrades."""
-        return self._old_version
+    def get_tree(self, parent, child):
+        """Return whether a tree option is selected."""
+        return False
 
 
-class GuiStartupTestCase(unittest.TestCase):
+class GuiStartupTestCase(common.BleachbitTestCase):
     """Tests for GuiStartup helper logic."""
-
-    def test_is_version_upgrade(self):
-        """Test version comparison logic."""
-        # (old_version, target_version, expected_result)
-        cases = [
-            # Upgrades that should be detected
-            ("5.0.0", "5.1.0", True),
-            ("5.0.2", "5.1.0", True),
-            ("4.9.9", "5.0.0", True),
-            ("5.0", "5.1.0", True),
-            # Not upgrades (same or newer version)
-            ("5.1.0", "5.1.0", False),
-            ("5.2.0", "5.1.0", False),
-            ("6.0.0", "5.1.0", False),
-            # Invalid inputs should return False
-            (None, "5.1.0", False),
-            ("", "5.1.0", False),
-            ("invalid", "5.1.0", False),
-            ("5.0.0", None, False),
-            ("", None, False),
-        ]
-        for old, target, expected in cases:
-            with self.subTest(old=old, target=target):
-                self.assertEqual(_is_version_upgrade(old, target), expected)
 
     def test_first_start_message_clears_flag(self):
         """Ensure first-start hint is emitted and flag gets cleared."""
@@ -67,13 +59,145 @@ class GuiStartupTestCase(unittest.TestCase):
             any('Access the application menu' in msg for msg, _ in messages))
         self.assertFalse(stub_options.get('first_start'))
 
-    def test_upgrade_message_shown_for_pre_510(self):
-        """Users upgrading from <5.1.0 should see expert-mode reminder."""
-        stub_options = StubOptions(first_start=False, old_version="5.0.2")
+    def test_has_selected_warning_option(self):
+        """Test the function _has_selected_warning_option()"""
+        # Register cleaners to populate backends
+        list(register_cleaners())
+        # Each test case starts with fresh options, so with
+        # nothing selected, it should return False.
+        self.assertFalse(_has_selected_warning_option())
+        # Enable a safe option.
+        options.set_tree('system', 'tmp', True)
+        self.assertFalse(_has_selected_warning_option())
+        # Enable an option with a warning.
+        options.set_tree('system', 'empty_space', True)
+        self.assertTrue(_has_selected_warning_option())
+        # Clean up
+        options.set_tree('system', 'tmp', False)
+        options.set_tree('system', 'empty_space', False)
 
-        with mock.patch.object(GuiStartup, 'options', stub_options), \
-                mock.patch.object(GuiStartup, 'unset_sslkeylogfile', return_value=False):
-            messages = GuiStartup.get_startup_messages(auto_exit=False)
+    def test_missing_requests(self):
+        """Missing requests should be reported but not crash GuiStartup."""
+        with common.mock_missing_package(
+                'requests',
+                clear_prefixes=('bleachbit.Network', 'bleachbit.Update', 'bleachbit.GuiStartup')):
+            import bleachbit.GuiStartup as GuiStartup
+            missing = GuiStartup._get_missing_dependencies()
+            self.assertIn('requests', missing)
 
-        self.assertTrue(any('require expert mode' in msg
-                            for msg, _ in messages))
+    @common.skipIfWindows
+    def test_is_config_writable(self):
+        """Test read-only configuration file"""
+        o = bleachbit.Options.Options()
+        o.close()
+        self.assertExists(bleachbit.options_file)
+
+        if common.have_root():
+            # root bypasses file permission checks, so use chattr +i
+            subprocess.run(
+                ['chattr', '+i', bleachbit.options_file], check=True)
+        else:
+            os.chmod(bleachbit.options_file, stat.S_IRUSR |
+                     stat.S_IRGRP | stat.S_IROTH)
+        try:
+            issues = GuiStartup._get_config_permission_issues()
+        finally:
+            if common.have_root():
+                subprocess.run(
+                    ['chattr', '-i', bleachbit.options_file], check=True)
+            os.unlink(bleachbit.options_file)
+
+        self.assertNotExists(bleachbit.options_file)
+        self.assertIsInstance(issues, list)
+        self.assertGreater(len(issues), 0)
+        self.assertTrue(any('Write error' in issue for issue in issues),
+                        f"Expected 'Write error' in issues: {issues}")
+
+    def test_config_permission_issues_normal(self):
+        """Test that a normal writable config file reports no issues."""
+        o = bleachbit.Options.Options()
+        o.close()
+        self.assertExists(bleachbit.options_file)
+        issues = GuiStartup._get_config_permission_issues()
+        os.unlink(bleachbit.options_file)
+        self.assertNotExists(bleachbit.options_file)
+        self.assertFalse(issues)
+
+    def test_config_permission_nonissue_missing_file(self):
+        """A missing config file must not be reported as an error.
+
+        Unlike another test, this scenario has an options directory
+        that allows creating the missing config file.
+        """
+        if os.path.exists(bleachbit.options_file):
+            os.unlink(bleachbit.options_file)
+        self.assertNotExists(bleachbit.options_file)
+        issues = GuiStartup._get_config_permission_issues()
+        self.assertFalse(issues)
+
+    @common.skipIfWindows
+    def test_config_permission_issue_non_writeable_options_dir(self):
+        """Config does not exist and options dir is not writeable"""
+        non_writable_dir = self.mkdir('not_writeable_options')
+        non_writable_file = os.path.join(non_writable_dir, 'bleachbit.ini')
+        use_chattr = common.have_root()
+        try:
+            if use_chattr:
+                # Root bypasses chmod, so use chattr +i instead
+                subprocess.run(['chattr', '+i', non_writable_dir], check=True)
+            else:
+                os.chmod(non_writable_dir, stat.S_IRUSR | stat.S_IXUSR)
+            self.assertNotExists(non_writable_file)
+            with mock.patch('bleachbit.options_dir', non_writable_dir), \
+                    mock.patch('bleachbit.options_file', non_writable_file):
+                issues = GuiStartup._get_config_permission_issues()
+        finally:
+            if use_chattr:
+                subprocess.run(['chattr', '-i', non_writable_dir], check=True)
+            else:
+                os.chmod(non_writable_dir, stat.S_IRWXU)
+            shutil.rmtree(non_writable_dir)
+        self.assertIsInstance(issues, list)
+        self.assertGreater(len(issues), 0)
+        self.assertTrue(any('Write error' in issue for issue in issues),
+                        f"Expected 'Write error' in issues: {issues}")
+
+    @common.also_with_sudo
+    def test_permission_issues_normal_file(self):
+        """Test ownership check on a normal file owned by the user."""
+        path = self.write_file('check_me')
+        fstat = os.stat(path)
+        if IS_WINDOWS:
+            has_error, lines = _get_windows_permission_issues(path)
+        else:
+            has_error, lines = _get_posix_permission_issues(fstat, path)
+        self.assertFalse(has_error)
+        self.assertTrue(any('File owner:' in line for line in lines))
+        self.assertTrue(any('Current user:' in line for line in lines))
+
+    @common.skipUnlessWindows
+    def test_get_windows_user_info(self):
+        """Test _get_windows_user_info function."""
+        current_sid, current_name, group_sids = GuiStartup._get_windows_user_info()
+        self.assertIsNotNone(current_sid)
+        self.assertIsNotNone(current_name)
+        self.assertIsNotNone(group_sids)
+        self.assertIsInstance(current_sid, str)
+        self.assertIsInstance(current_name, str)
+        self.assertIsInstance(group_sids, set)
+        self.assertEqual(current_name, os.environ.get('USERNAME', ''))
+
+    @common.skipUnlessWindows
+    def test_get_windows_file_owner(self):
+        """Test _get_windows_file_owner function."""
+        owner_sid_str, owner_name = GuiStartup._get_windows_file_owner(
+            self.tempdir)
+        self.assertIsNotNone(owner_sid_str)
+        self.assertIsNotNone(owner_name)
+        self.assertIsInstance(owner_sid_str, str)
+        self.assertIsInstance(owner_name, str)
+        if 'GITHUB_ACTIONS' in os.environ:
+            expected_owner = 'Administrators'
+        else:
+            expected_owner = os.environ.get('USERNAME', '')
+        self.assertEqual(owner_name, expected_owner)

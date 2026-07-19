@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test case for module Network
@@ -27,7 +13,14 @@ import ipaddress
 import logging
 import os
 import random
+import unittest
+import warnings
 from unittest.mock import MagicMock, Mock, patch
+
+# Suppress urllib3's NotOpenSSLWarning (raised when the ssl module is
+# not OpenSSL, e.g. macOS LibreSSL) before importing requests, which
+# would otherwise become an error under PYTHONWARNINGS=error.
+warnings.filterwarnings("ignore", message="urllib3 v2 only supports OpenSSL")
 
 # third party imports
 import requests
@@ -35,6 +28,7 @@ import requests
 # first party imports
 import bleachbit
 from tests import common
+from bleachbit import IS_WINDOWS
 from bleachbit.FileUtilities import delete
 from bleachbit.Network import (download_url_to_fn, fetch_url, get_gtk_version,
                                get_ip_for_url, get_user_agent, unset_sslkeylogfile)
@@ -53,7 +47,7 @@ def response_to_error_msg(response):
 class NetworkTestCase(common.BleachbitTestCase):
     """Test case for module Network"""
     status_generators = [
-        'https://httpbin.org/status/{}',
+        'https://browsergym.bleachbit.org/api/status/{}',
         'https://httpbingo.org/status/{}',
         'https://mock.httpstatus.io/{}',
         'https://postman-echo.com/status/{}',
@@ -63,37 +57,46 @@ class NetworkTestCase(common.BleachbitTestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(NetworkTestCase, cls).setUpClass()
+        super().setUpClass()
         status_generators = list(cls.status_generators)
         random.shuffle(status_generators)
         for generator in status_generators:
-            url = generator.format(200)
-            try:
-                response = fetch_url(url, timeout=5, max_retries=0)
-                if response.status_code == 200:
-                    cls.status_generator_url = generator
-                    logger.info('Using status generator: %s',
-                                cls.status_generator_url)
-                    return
-                else:
-                    logger.warning('Status generator %s returned %s',
-                                   generator, response.status_code)
-            except requests.exceptions.RequestException as e:
-                logger.warning('Status generator failed: %s (%s)',
-                               generator.format('...'), e)
+            # Verify the generator returns both 200 and 404 correctly.
+            # Some unreliable generators (e.g. httpbin.org) may return 200
+            # for /status/200 but 502 for /status/404, which breaks tests.
+            ok = True
+            for check_status in (200, 404):
+                url = generator.format(check_status)
+                try:
+                    response = fetch_url(url, timeout=5, max_retries=0)
+                    if response.status_code != check_status:
+                        logger.warning('Status generator %s returned %s for %s',
+                                       generator, response.status_code,
+                                       check_status)
+                        ok = False
+                        break
+                except requests.exceptions.RequestException as e:
+                    logger.warning('Status generator failed: %s (%s)',
+                                   generator.format('...'), e)
+                    ok = False
+                    break
+            if ok:
+                cls.status_generator_url = generator
+                logger.info('Using status generator: %s',
+                            cls.status_generator_url)
+                return
         if not cls.status_generator_url:
             raise RuntimeError('No working HTTP status code generator found.')
 
     def setUp(self):
         """Set up the test environment before each test method."""
         super().setUp()
-        os.environ['SSLKEYLOGFILE'] = 'ssl.log'
 
     def test_unset_sslkeylogfile(self):
         """Test the function unset_sslkeylogfile()."""
-        # SSLKEYLOGFILE is set in setUp().
-        self.assertEqual(unset_sslkeylogfile(True), os.name == 'nt')
-        self.assertFalse(unset_sslkeylogfile(True))
+        with common.set_temporary_env('SSLKEYLOGFILE', 'ssl.log'):
+            self.assertEqual(unset_sslkeylogfile(True), IS_WINDOWS)
+            self.assertFalse(unset_sslkeylogfile(True))
 
     def test_download_url_to_fn(self):
         """Unit test for function download_url_to_fn()"""
@@ -160,7 +163,15 @@ class NetworkTestCase(common.BleachbitTestCase):
         for status_code in status_codes:
             url = self.status_generator_url.format(status_code)
             with self.subTest(status_code=status_code):
-                response = fetch_url(url, max_retries=0, timeout=5)
+                try:
+                    response = fetch_url(url, max_retries=0, timeout=5)
+                except requests.exceptions.RetryError as exc:
+                    # The server returned a retryable status (e.g. 502)
+                    # instead of the expected status code, which is a
+                    # transient server-side issue, not a code bug.
+                    self.skipTest(
+                        f'Status generator returned retryable error '
+                        f'for {status_code}: {exc}')
                 error_msg = response_to_error_msg(response)
                 self.assertEqual(response.status_code, status_code,
                                  error_msg)
@@ -213,3 +224,25 @@ class NetworkTestCase(common.BleachbitTestCase):
         url = 'https://test.invalid'
         with self.assertRaises(requests.exceptions.RequestException):
             fetch_url(url)
+
+
+class MissingPackagesTestCase(unittest.TestCase):
+    """Test behavior when optional third-party packages are missing."""
+
+    def test_missing_requests(self):
+        """Network should be importable without requests."""
+        with common.mock_missing_package(
+                'requests', 'urllib3',
+                clear_prefixes=('bleachbit.Network', 'bleachbit.Update')):
+            import bleachbit.Network as Network
+            self.assertFalse(Network.HAVE_REQUESTS)
+            with self.assertRaises(Network.RequestException):
+                Network.fetch_url('https://example.com')
+
+    def test_missing_urllib3(self):
+        """Missing urllib3 should set HAVE_URLLIB3 to False."""
+        with common.mock_missing_package(
+                'urllib3',
+                clear_prefixes=('bleachbit.Network',)):
+            import bleachbit.Network as Network
+            self.assertFalse(Network.HAVE_URLLIB3)

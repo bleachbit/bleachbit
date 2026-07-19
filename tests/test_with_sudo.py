@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
+#
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
+
 """
 Utility script to discover and run tests marked for sudo execution.
 Tests are marked with the @also_with_sudo decorator.
@@ -18,6 +24,10 @@ from importlib import import_module
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Import common test utilities
+from tests import common
+from bleachbit import IS_POSIX
 
 
 def discover_sudo_tests():
@@ -56,9 +66,6 @@ def _build_test_command(test_list):
     coverage_runner = os.environ.get('BLEACHBIT_COVERAGE_RUNNER') or ''
     coverage_file = os.environ.get('BLEACHBIT_COVERAGE_FILE') or ''
 
-    if coverage_file:
-        os.environ['COVERAGE_FILE'] = coverage_file
-
     if coverage_runner.strip():
         runner_parts = shlex.split(coverage_runner)
         if runner_parts and not os.path.isabs(runner_parts[0]):
@@ -68,7 +75,7 @@ def _build_test_command(test_list):
     else:
         runner_parts = [sys.executable]
 
-    return runner_parts + ['-m', 'unittest'] + test_list + ['-v']
+    return runner_parts + ['-m', 'unittest'] + test_list + ['-v'], coverage_file
 
 
 def run_sudo_tests(test_list):
@@ -85,9 +92,9 @@ def run_sudo_tests(test_list):
     print("Running sudo tests...")
     print('=' * 60)
 
-    base_cmd = _build_test_command(test_list)
+    base_cmd, coverage_file = _build_test_command(test_list)
 
-    if os.name == 'posix' and os.geteuid() == 0:
+    if IS_POSIX and os.geteuid() == 0:
         sudo_uid = os.getenv('SUDO_UID')
         if sudo_uid and sudo_uid != '0':
             print("\nDetected EUID=0 with SUDO_UID preserved; skipping nested sudo.")
@@ -101,8 +108,9 @@ def run_sudo_tests(test_list):
         cmd = ['sudo', '-E'] + base_cmd
 
     try:
-        result = subprocess.run(cmd, check=False)
-        return result.returncode == 0
+        with common.set_temporary_env('COVERAGE_FILE', coverage_file or None):
+            result = subprocess.run(cmd, check=False)
+            return result.returncode == 0
     except Exception as e:
         print(f"Error running sudo tests: {e}")
         return False

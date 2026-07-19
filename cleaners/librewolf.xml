@@ -5,6 +5,11 @@ Copyright (c) 2008-2026 Andrew Ziem.
 
 This work is licensed under the terms of the GNU GPL, version 3 or
 later.  See the COPYING file in the top-level directory.
+
+Mozilla LibreWolf 150.0.1-1 installed by .deb from the browser's
+official repository has pathnames like this with "~/.config/librewolf/librewolf".
+/home/username/.config/librewolf/librewolf/z52q68c1.default-default/cookies.sqlite
+
 -->
 <cleaner id="librewolf">
   <label>LibreWolf</label>
@@ -20,6 +25,7 @@ later.  See the COPYING file in the top-level directory.
   <var name="profile">
     <value search="glob" os="windows">%AppData%\librewolf\Profiles\*</value>
     <value search="glob" os="unix">~/.librewolf/*</value>
+    <value search="glob" os="unix">~/.config/librewolf/librewolf/*</value>
     <value search="glob" os="linux">~/.var/app/io.gitlab.librewolf-community/.librewolf/*</value>
   </var>
   <option id="backup">

@@ -20,12 +20,14 @@ later.  See the COPYING file in the top-level directory.
   <var name="base">
     <value os="windows">%AppData%\Mozilla\Firefox</value>
     <value os="unix">~/.mozilla/firefox</value>
+    <value os="unix">~/.config/mozilla/firefox</value>
     <value os="linux">~/snap/firefox/common/.mozilla/firefox</value>
     <value os="linux">~/.var/app/org.mozilla.firefox/.mozilla/firefox</value>
   </var>
   <var name="profile">
     <value search="glob" os="windows">%AppData%\Mozilla\Firefox\Profiles\*</value>
     <value search="glob" os="unix">~/.mozilla/firefox/*</value>
+    <value search="glob" os="unix">~/.config/mozilla/firefox/*</value>
     <value search="glob" os="linux">~/snap/firefox/common/.mozilla/firefox/*</value>
     <value search="glob" os="linux">~/.var/app/org.mozilla.firefox/.mozilla/firefox/*</value>
   </var>

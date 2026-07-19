@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -24,10 +11,12 @@ Test case for module Options
 
 import errno
 import os
+import sys
 from unittest import mock
 
 from tests import common
 import bleachbit.Options
+from bleachbit import IS_WINDOWS
 from bleachbit.Options import _option_index
 from bleachbit.Log import is_debugging_enabled_via_cli
 
@@ -189,7 +178,7 @@ check_online_updates=True
         o1.set_hashpath(pathname, myhash)
         o1.close()
         self.assertEqual(myhash, o1.get_hashpath(pathname))
-        if 'nt' == os.name:
+        if IS_WINDOWS:
             # check case sensitivity
             self.assertEqual(myhash, o1.get_hashpath(pathname.upper()))
 
@@ -232,9 +221,6 @@ check_online_updates=True
         self.assertEqual(o.config.getboolean('test', 'test_f_upper'), False)
         self.assertEqual(o.config.getboolean('test', 'test_f_lower'), False)
 
-        # clean up
-        del o
-
     def test_percent(self):
         """Test that the percent sign can be used without quoting the string"""
         # https://github.com/bleachbit/bleachbit/issues/205
@@ -246,9 +232,6 @@ check_online_updates=True
 
         # read
         self.assertEqual(opt.get('test', 'filename'), '/var/log/samba/log.%m')
-
-        # clean up
-        del opt
 
     def test_error_disk_full(self):
         """Test graceful degradation when disk is full"""
@@ -283,6 +266,54 @@ check_online_updates=True
         o.remember_warning_preference('test_key')
         self.assertTrue(o.get_warning_preference('test_key'))
         o.close()
+
+    def test_warning_keys_with_colons(self):
+        """Test restoring warning preferences with colons in keys"""
+        with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as handle:
+            handle.write('''[bleachbit]
+[warnings]
+cleaner:google_chrome:passwords = True
+cleaner:microsoft_edge:passwords = True
+''')
+        o = None
+        try:
+            if sys.version_info >= (3, 10):
+                with self.assertNoLogs('bleachbit.Options', level='ERROR'):
+                    o = bleachbit.Options.Options()
+            else:
+                o = bleachbit.Options.Options()
+            self.assertTrue(o.get_warning_preference(
+                'cleaner:google_chrome:passwords'))
+            self.assertTrue(o.get_warning_preference(
+                'cleaner:microsoft_edge:passwords'))
+        finally:
+            if o is not None:
+                o.close()
+
+    def test_corrupt_warning_preferences_are_migrated(self):
+        """Test migration of warning preferences corrupted by colon parsing"""
+        with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as handle:
+            handle.write('''[bleachbit]
+[warnings]
+cleaner = google_chrome:passwords = True
+protected_path = /tmp = True
+''')
+        o = bleachbit.Options.Options()
+        try:
+            self.assertTrue(o.get_warning_preference(
+                'cleaner:google_chrome:passwords'))
+            self.assertTrue(o.get_warning_preference('protected_path:/tmp'))
+            self.assertFalse(o.config.has_option('warnings', 'cleaner'))
+            self.assertFalse(o.config.has_option('warnings', 'protected_path'))
+            o.commit()
+        finally:
+            o.close()
+        with open(bleachbit.options_file, 'r', encoding='utf-8-sig') as handle:
+            contents = handle.read()
+        self.assertIn('cleaner:google_chrome:passwords = True', contents)
+        self.assertIn('protected_path:/tmp = True', contents)
+        self.assertNotIn('cleaner = google_chrome:passwords = True', contents)
+        self.assertNotIn('protected_path = /tmp = True', contents)
 
     def test_overrides(self):
         """Test CLI override functionality"""
@@ -446,3 +477,47 @@ check_online_updates=True
 
             mock_flush.assert_called_once_with(force=False)
             mock_unregister.assert_called_once()
+
+    def test_unicode_paths(self):
+        """Test that paths with various Unicode characters"""
+        # On Linux, os.listdir() may return filenames with surrogate-escaped
+        # bytes (e.g. invalid UTF-8 byte sequences decoded with
+        # 'surrogateescape').  These contain unpaired surrogates (U+D800 to
+        # U+DFFF) which cannot be encoded as UTF-8, causing UnicodeEncodeError
+        # when ConfigParser writes the .ini file.
+        # https://github.com/bleachbit/bleachbit/issues/2082
+
+        test_cases = [
+            ('surrogate', '/tmp/invalid_unicode_surrogate_\udce9'),
+            ('cjk', '/tmp/中文日本語한국어'),
+            ('european', '/tmp/àéïöüñçß'),
+            ('cyrillic', '/tmp/кодирование'),
+            ('arabic', '/tmp/العربية'),
+            ('emoji', '/tmp/🎉🚀💻'),
+            ('mixed', '/tmp/mixed_中文_àéï_\udce9'),
+        ]
+
+        def verify_paths(o, keep_list, custom_list):
+            """Helper to verify whitelist and custom paths"""
+            o.set_whitelist_paths(keep_list)
+            o.commit()
+            self.assertEqual(keep_list, o.get_whitelist_paths())
+
+            o.set_custom_paths(custom_list)
+            o.commit()
+            self.assertEqual(custom_list, o.get_custom_paths())
+
+            # Verify round-trip: new instance reads from disk
+            o2 = bleachbit.Options.Options()
+            self.assertEqual(keep_list, o2.get_whitelist_paths())
+            self.assertEqual(custom_list, o2.get_custom_paths())
+            o2.close()
+
+        o = bleachbit.Options.options
+        for name, path in test_cases:
+            with self.subTest(unicode_type=name):
+                keep_list = [('file', path)]
+                custom_list = [('folder', path)]
+                verify_paths(o, keep_list, custom_list)
+
+        o.close()

@@ -1,29 +1,14 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test case for module General
 """
 
 # standard library
-import copy
 import os
 import shutil
 import subprocess
@@ -34,7 +19,7 @@ import warnings
 from unittest import mock
 
 # local
-from bleachbit import logger
+from bleachbit import IS_POSIX, IS_WINDOWS, logger
 from bleachbit.FileUtilities import exe_exists, exists_in_path
 from bleachbit.General import (
     boolstr_to_bool,
@@ -76,7 +61,7 @@ class GeneralTestCase(common.BleachbitTestCase):
     @also_with_sudo
     def test_get_real_uid(self):
         """Test for get_real_uid()"""
-        if 'posix' != os.name:
+        if not IS_POSIX:
             self.assertRaises(RuntimeError, get_real_uid)
             return
 
@@ -113,20 +98,11 @@ class GeneralTestCase(common.BleachbitTestCase):
             self.assertEqual(uid, int(sudo_uid_env))
 
         # Test with empty LOGNAME (if not in sudo mode)
-        original_logname = os.getenv('LOGNAME')
         if not sudo_mode():
-            try:
-                if 'LOGNAME' in os.environ:
-                    del os.environ['LOGNAME']
+            with common.set_temporary_env('LOGNAME', None):
                 uid_no_logname = get_real_uid()
                 self.assertIsInstance(uid_no_logname, int)
                 self.assertTrue(0 <= uid_no_logname <= 65535)
-            finally:
-                # Restore original environment
-                if original_logname is not None:
-                    os.environ['LOGNAME'] = original_logname
-                elif 'LOGNAME' in os.environ:
-                    del os.environ['LOGNAME']
 
         # Debug logging for troubleshooting
         logger.debug("os.getenv('LOGNAME') = %s", os.getenv('LOGNAME'))
@@ -147,7 +123,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_get_real_uid_numeric_login_without_passwd_entry(self):
         """Docker containers may advertise UID as username without /etc/passwd."""
-        if 'posix' != os.name:
+        if not IS_POSIX:
             self.skipTest('POSIX-only behavior')
 
         # Ensure the code path executes past the SUDO_UID shortcut.
@@ -161,7 +137,7 @@ class GeneralTestCase(common.BleachbitTestCase):
     @also_with_sudo
     def test_get_real_username(self):
         """Test for get_real_username()"""
-        if 'posix' != os.name:
+        if not IS_POSIX:
             self.assertRaises(RuntimeError, get_real_username)
             return
         username = get_real_username()
@@ -172,7 +148,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_get_real_username_container_env_fallback(self):
         """Ensure container fallback uses LOGNAME when getpass fails."""
-        if 'posix' != os.name:
+        if not IS_POSIX:
             self.skipTest('POSIX-only behavior')
 
         env = {'LOGNAME': 'containeruser'}
@@ -184,7 +160,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_get_real_username_container_uid_fallback(self):
         """Ensure fallback returns UID string when everything else fails."""
-        if 'posix' != os.name:
+        if not IS_POSIX:
             self.skipTest('POSIX-only behavior')
 
         env = {}
@@ -245,19 +221,17 @@ class GeneralTestCase(common.BleachbitTestCase):
 
             output_file = os.path.join(self.tempdir, 'run_external_nowait.txt')
 
-            if os.name == 'posix':
-                script = self.write_file(
-                    'run_external_nowait.sh',
-                    contents='#!/bin/sh\nsleep 2\ntouch "$1"\n',
-                    mode='w')
-                os.chmod(script, 0o700)
-                cmd = ['sh', script, output_file]
-            else:
-                script = self.write_file(
-                    'run_external_nowait.bat',
-                    contents='@echo off\nping -n 3 127.0.0.1 >nul\necho done>"%~1"\n',
-                    mode='w')
-                cmd = ['cmd.exe', '/c', script, output_file]
+            cmd = [
+                sys.executable,
+                '-c',
+                (
+                    'import pathlib, sys, time; '
+                    'time.sleep(2); '
+                    'pathlib.Path(sys.argv[1]).write_text('
+                    '"done", encoding="utf-8")'
+                ),
+                output_file,
+            ]
 
             self.assertNotExists(output_file)
 
@@ -268,7 +242,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
             self.assertNotExists(output_file)
 
-            for _ in range(50):
+            for _ in range(200):
                 if os.path.exists(output_file):
                     break
                 time.sleep(0.1)
@@ -289,7 +263,7 @@ class GeneralTestCase(common.BleachbitTestCase):
             with tempfile.TemporaryDirectory() as temp_dir:
                 test_file = os.path.join(temp_dir, 'test_file.txt')
 
-                if os.name == 'posix':
+                if IS_POSIX:
                     cmd = ['touch', test_file]
                     expected_stdout = ''
                 else:
@@ -322,7 +296,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external_with_timeout_failure(self):
         """Test run_external() with timeout value that is too short"""
-        if os.name == 'posix':
+        if IS_POSIX:
             args = ['sleep', '5']
         else:
             args = ['ping', '-n', '10', '127.0.0.1']
@@ -331,7 +305,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external_stdout(self):
         """Test that run_external properly captures stdout"""
-        if os.name == 'posix':
+        if IS_POSIX:
             args = ['echo', 'test output']
         else:
             args = ['cmd.exe', '/c', 'echo test output']
@@ -342,7 +316,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external_stderr(self):
         """Test that run_external properly captures stderr"""
-        if os.name == 'posix':
+        if IS_POSIX:
             args = ['sh', '-c', 'echo "error message" >&2']
         else:
             args = ['cmd.exe', '/c', 'echo error message 1>&2']
@@ -353,7 +327,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external_return_codes(self):
         """Test that run_external() properly returns non-zero exit codes"""
-        if os.name == 'posix':
+        if IS_POSIX:
             args = ['false']
         else:
             args = ['cmd.exe', '/c', 'exit 1']
@@ -385,38 +359,28 @@ class GeneralTestCase(common.BleachbitTestCase):
 
         # With parent environment set to English and parameter clean_env=False,
         # expect English
+        with common.set_temporary_env('LC_ALL', 'C'):
+            (rc, _, stderr) = run_external(
+                ['ls', '/doesnotexist'], clean_env=False)
+	    # GNU ls returns 2 for missing files, while BSD/macOS ls returns 1
+            self.assertIn(rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
+            self.assertIn('No such file', stderr)
 
-        old_environ = copy.deepcopy(os.environ)
+            # Set parent environment to Spanish.
+            with common.set_temporary_env('LC_ALL', 'es_MX.UTF-8'):
+                (rc, _, stderr) = run_external(
+                    ['ls', '/doesnotexist'], clean_env=False)
+                self.assertIn(rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
+                if os.path.exists('/usr/share/locale-langpack/es/LC_MESSAGES/coreutils.mo'):
+                    # Spanish language pack is installed.
+                    self.assertIn('No existe el archivo', stderr)
 
-        lc_all_old = common.get_env('LC_ALL')
-        lang_old = common.get_env('LANG')
-        common.put_env('LC_ALL', 'C')
-        (rc, _, stderr) = run_external(
-            ['ls', '/doesnotexist'], clean_env=False)
-        self.assertEqual(rc, 2)
-        self.assertIn('No such file', stderr)
-
-        # Set parent environment to Spanish.
-        common.put_env('LC_ALL', 'es_MX.UTF-8')
-        (rc, _, stderr) = run_external(
-            ['ls', '/doesnotexist'], clean_env=False)
-        self.assertEqual(rc, 2)
-        if os.path.exists('/usr/share/locale-langpack/es/LC_MESSAGES/coreutils.mo'):
-            # Spanish language pack is installed.
-            self.assertIn('No existe el archivo', stderr)
-
-        # Here the parent environment has Spanish, but the child process
-        # should use English.
-        (rc, _, stderr) = run_external(
-            ['ls', '/doesnotexist'], clean_env=True)
-        self.assertEqual(rc, 2)
-        self.assertIn('No such file', stderr)
-
-        # Reset environment
-        self.assertNotEqual(old_environ, copy.deepcopy(os.environ))
-        common.put_env('LC_ALL', lc_all_old)
-        common.put_env('LANG', lang_old)
-        self.assertEqual(old_environ, copy.deepcopy(os.environ))
+                # Here the parent environment has Spanish, but the child process
+                # should use English.
+                (rc, _, stderr) = run_external(
+                    ['ls', '/doesnotexist'], clean_env=True)
+                self.assertIn(rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
+                self.assertIn('No such file', stderr)
 
     def test_run_external_invalid(self):
         """Unit test for run_external() with invalid arguments"""
@@ -435,9 +399,10 @@ class GeneralTestCase(common.BleachbitTestCase):
 
     def test_run_external_timeout(self):
         """Unit test for run_external() with timeout"""
-        if os.name == 'posix':
+        args = None
+        if IS_POSIX:
             args = ['sleep', '10']
-        if os.name == 'nt':
+        if IS_WINDOWS:
             args = ['ping', '-n', '10', '127.0.0.1']
         start_time = time.time()
         with self.assertRaises(subprocess.TimeoutExpired):
@@ -469,12 +434,12 @@ class GeneralTestCase(common.BleachbitTestCase):
                  ('a', ['a']),
                  ('a b', ['a', 'b'])
                  ]
-        if os.name == 'nt':
+        if IS_WINDOWS:
             tests.append(('"a b"', ['a b']))
             tests.append(('"a b" c', ['a b', 'c']))
             tests.append(("echo 'a b'", ['echo', "'a b'"]))
             tests.append(('echo a\\ b', ['echo', 'a\\', 'b']))
-        elif os.name == 'posix':
+        elif IS_POSIX:
             tests.append(("echo 'a b'", ['echo', 'a b']))
             tests.append(("echo 'a b' c", ['echo', 'a b', 'c']))
             tests.append(('echo a\\ b', ['echo', 'a b']))

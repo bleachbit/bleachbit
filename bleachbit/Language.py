@@ -1,5 +1,4 @@
 # vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
 
 # BleachBit
 # Copyright (C) 2008-2025 Andrew Ziem
@@ -21,7 +20,8 @@
 import gettext
 import os
 import logging
-import sys
+
+from bleachbit import IS_POSIX, IS_WINDOWS
 
 logger = logging.getLogger(__name__)
 
@@ -84,7 +84,6 @@ native_locale_names = \
      'en_US': 'United States English',
      'eo': 'Esperanto',
      'es': 'Español',
-     'es_419': 'Latin American Spanish',
      'et': 'eesti',
      'eu': 'euskara',
      'fa': 'فارسی',
@@ -322,7 +321,7 @@ def get_active_language_code():
     # use getlocale() instead.
     # However, on Windows, getlocale() may return values like
     # 'English_United States' instead of RFC1766 codes.
-    if os.name == 'nt':
+    if IS_WINDOWS:
         import ctypes
         kernel32 = ctypes.windll.kernel32
         lcid = kernel32.GetUserDefaultLCID()
@@ -357,7 +356,7 @@ def setup_translation():
     logger.debug(f"user_locale: {user_locale}, locale_dir: {locale_dir}")
     assert isinstance(user_locale, str)
     assert isinstance(locale_dir, str), f"locale_dir: {locale_dir}"
-    if 'win32' == sys.platform and user_locale:
+    if IS_WINDOWS and user_locale:
         os.environ['LANG'] = user_locale
     text_domain = 'bleachbit'
     try:
@@ -372,7 +371,7 @@ def setup_translation():
     if hasattr(locale, 'bindtextdomain'):
         locale.bindtextdomain(text_domain, locale_dir)
         locale.textdomain(text_domain)
-    elif 'nt' == os.name:
+    elif IS_WINDOWS:
         from bleachbit.Windows import load_i18n_dll
         libintl = load_i18n_dll()
         if libintl:
@@ -400,7 +399,7 @@ def setup_translation():
     # available, so find the best matching locale. When set, Gtk.Builder is
     # translated.
     # On Windows, locale.setlocale() accepts any values without raising an exception.
-    if os.name == 'posix':
+    if IS_POSIX:
         from bleachbit.Unix import find_best_locale
         setlocale_local = find_best_locale(user_locale)
         if 'C' == setlocale_local and not user_locale == 'C':

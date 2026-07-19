@@ -1,0 +1,31 @@
+version: 2
+updates:
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    cooldown:
+      default-days: 7
+    schedule:
+      interval: 'monthly'
+    groups:
+      github-actions:
+        patterns:
+          - '*'
+        update-types:
+          - 'minor'
+          - 'patch'
+
+  - package-ecosystem: 'pip'
+    directories:
+      - '/'
+      - '/windows'
+    cooldown:
+      default-days: 7
+    schedule:
+      interval: 'monthly'
+    groups:
+      pip:
+        patterns:
+          - '*'
+        update-types:
+          - 'minor'
+          - 'patch'

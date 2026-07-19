@@ -323,7 +323,8 @@ def build_py2exe():
         'excludes': ['pyreadline', 'difflib', 'doctest',
                      'pickle', 'ftplib', 'bleachbit.Unix', 'charset_normalizer',
                      'setuptools', 'pydoc_data', 'unittest', 'test',
-                     'email', 'pygments'],
+                     'email', 'pygments', 'tomli', 'wheel', 'backports',
+                     'importlib_metadata', 'zipp', 'packaging', 'distutils'],
         'dll_excludes': [
             'libgstreamer-1.0-0.dll',
             'CRYPT32.DLL',  # required by ssl
@@ -488,7 +489,7 @@ def build():
     logger.info('Copying GTK helpers')
     for exe in glob.glob1(GTK_LIBDIR, 'gspawn-win*-helper*.exe'):
         copy_file(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
-    for exe in ('fc-cache.exe',):
+    for exe in ('fc-cache.exe', 'gdbus.exe'):
         copy_file(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
 
     logger.info('Copying GTK files and icon')
@@ -787,7 +788,7 @@ def recompress_library(fast_build):
     os.remove('dist\\library.zip')
 
     # clean unused modules from library.zip
-    delete_paths = ['distutils', 'plyer\\platforms\\android',
+    delete_paths = ['plyer\\platforms\\android',
                     'plyer\\platforms\\ios', 'plyer\\platforms\\linux', 'plyer\\platforms\\macosx']
     # TUI-only: strip modules the TUI doesn't need
     delete_paths += [
@@ -805,6 +806,14 @@ def recompress_library(fast_build):
             shutil.rmtree(path)
         else:
             os.remove(path)
+
+    # remove .dist-info metadata directories
+    for dist_info_dir in glob.glob(os.path.join('dist', 'library', '*.dist-info')):
+        logger.info('Removing .dist-info directory: %s', dist_info_dir)
+        shutil.rmtree(dist_info_dir)
+
+    # remove empty directories
+    remove_empty_dirs('dist\\library')
 
     # recompress library.zip
     os.chdir('dist\\library')
@@ -825,10 +834,7 @@ def shrink(fast_build):
     clean_translations()
     remove_empty_dirs('dist')
     strip()
-    if False:
-        upx(fast_build)
-    else:
-        logger.warning('upx disabled because it breaks startup')
+    upx(fast_build)
     clean_dist_locale()
 
     delete_linux_only()

@@ -124,6 +124,7 @@ from win32con import (FILE_ATTRIBUTE_ENCRYPTED,
                       COMPRESSION_FORMAT_DEFAULT)
 
 # local import
+from bleachbit import IS_WINDOWS
 from bleachbit.FileUtilities import extended_path, extended_path_undo
 
 # Constants.
@@ -185,7 +186,8 @@ def logical_ranges_to_extents(ranges, bridge_compressed=False):
             # Keep track of VCN inside this file.
             this_vcn_span = vcn - vcn_count
             vcn_count = vcn
-            assert this_vcn_span >= 0
+            if this_vcn_span < 0:
+                raise RuntimeError(f'negative VCN span: {this_vcn_span}')
 
             yield (lcn, lcn + this_vcn_span - 1)
 
@@ -209,8 +211,7 @@ def logical_ranges_to_extents(ranges, bridge_compressed=False):
             # clusters interspersed with -1 space-saver sections
             # that are arranged with gaps of 16 clusters or less.
             merge_index = index
-            while (lcn >= 0 and
-                   merge_index + 2 < last_record and
+            while (merge_index + 2 < last_record and
                    ranges[merge_index + 1][1] < 0 and
                    ranges[merge_index + 2][1] >= 0 and
                    ranges[merge_index + 2][1] - ranges[merge_index][1] <= 16 and
@@ -223,7 +224,8 @@ def logical_ranges_to_extents(ranges, bridge_compressed=False):
                 index += 1
                 this_vcn_span = vcn - vcn_count
                 vcn_count = vcn
-                assert this_vcn_span >= 0
+                if this_vcn_span < 0:
+                    raise RuntimeError(f'negative VCN span: {this_vcn_span}')
                 yield (lcn, lcn + this_vcn_span - 1)
             else:
                 index = merge_index + 1
@@ -231,7 +233,8 @@ def logical_ranges_to_extents(ranges, bridge_compressed=False):
                                  ranges[merge_index - 1][0])
                 vcn = ranges[merge_index][0]
                 vcn_count = vcn
-                assert last_vcn_span >= 0
+                if last_vcn_span < 0:
+                    raise RuntimeError(f'negative VCN span: {last_vcn_span}')
                 yield (lcn, ranges[merge_index][1] + last_vcn_span - 1)
 
 
@@ -250,13 +253,8 @@ def extents_a_minus_b(a, b):
     # Sort the lists of start/end points.
     a_sorted = sorted(a, key=itemgetter(0))
     b_sorted = sorted(b, key=itemgetter(0))
-    b_is_empty = not b
 
     for a_begin, a_end in a_sorted:
-        # If B is an empty list, each item of A will be unchanged.
-        if b_is_empty:
-            yield (a_begin, a_end)
-
         for b_begin, b_end in b_sorted:
             if b_begin > a_end:
                 # Already gone beyond current A range and no matches.
@@ -284,6 +282,10 @@ def extents_a_minus_b(a, b):
                     break
                 else:
                     a_begin = b_end + 1
+        else:
+            # Loop exhausted without a break: nothing in B covered the
+            # rest of this A range, so yield what's left of it.
+            yield (a_begin, a_end)
 
 
 def choose_if_bridged(volume_handle, total_clusters,
@@ -425,7 +427,8 @@ def check_extents_concurrency(extents, volume_bitmap,
             if check_mapped_bit(volume_bitmap, cluster):
                 count_allocated += 1
                 if allocated_extents is not None:
-                    allocated_extents.append(cluster)
+                    # extents use (start, end) format, like check_extents
+                    allocated_extents.append((cluster, cluster))
             else:
                 count_free += 1
 
@@ -491,7 +494,7 @@ def check_os():
     Raises:
         RuntimeError: If not running on Windows NT or later
     """
-    if os.name.lower() != "nt":
+    if not IS_WINDOWS:
         raise RuntimeError("This function requires Windows NT or later")
 
 
@@ -737,7 +740,8 @@ def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
 
     # If we make the GET_RETRIEVAL_POINTERS request with 0,
     # this should always come back 0.
-    assert starting_vcn == 0
+    if starting_vcn != 0:
+        raise RuntimeError(f'unexpected starting VCN: {starting_vcn}')
 
     # Populate the extents array with the ranges from rp structure.
     ranges = []
@@ -830,7 +834,8 @@ def get_volume_bitmap(volume_handle, total_clusters):
 
     # If we make the GET_VOLUME_BITMAP request with 0,
     # this should always come back 0.
-    assert starting_lcn == 0
+    if starting_lcn != 0:
+        raise RuntimeError(f'unexpected starting LCN: {starting_lcn}')
 
     # The remaining part of the structure is the actual bitmap.
     return volume_bitmap, bitmap_size
@@ -866,7 +871,9 @@ def get_ntfs_volume_data(volume_handle):
     mft_zone_end, vd_struct = unpack_element('q', vd_struct)     # 8 bytes
 
     # Quick sanity check that we got something reasonable for MFT zone.
-    assert mft_zone_start < mft_zone_end and mft_zone_start > 0 and mft_zone_end > 0
+    if not 0 < mft_zone_start < mft_zone_end:
+        raise RuntimeError(
+            f'invalid MFT zone bounds: {mft_zone_start}, {mft_zone_end}')
 
     logger.debug("MFT from %d to %d", mft_zone_start, mft_zone_end)
     return mft_zone_start, mft_zone_end
@@ -935,8 +942,7 @@ def move_file(volume_handle, file_handle, starting_vcn,
 
     input_struct = struct.pack('IIqqII', handle_lo, handle_hi, starting_vcn,
                                starting_lcn, cluster_count, 0)
-    _vb_struct = DeviceIoControl(volume_handle, FSCTL_MOVE_FILE,
-                                 input_struct, None)
+    DeviceIoControl(volume_handle, FSCTL_MOVE_FILE, input_struct, None)
 
 
 def write_zero_fill(file_handle, write_length_bytes):
@@ -969,7 +975,6 @@ def write_zero_fill(file_handle, write_length_bytes):
     # There is no need to explicitly move the file pointer while
     # writing. We are writing contiguously.
     while write_length_bytes > 0:
-        assert write_length_bytes > 0
         if write_length_bytes >= WRITE_BUF_SIZE:
             write_string = ZERO_FILL_BUFFER
             write_length_bytes -= WRITE_BUF_SIZE
@@ -982,7 +987,10 @@ def write_zero_fill(file_handle, write_length_bytes):
         # by the number of bytes written (bytes_written).
         # logger.debug("Write %d bytes", len(write_string))
         _, bytes_written = WriteFile(file_handle, write_string)
-        assert bytes_written == len(write_string)
+        if bytes_written != len(write_string):
+            raise OSError(
+                f'incomplete wipe write: {bytes_written} of '
+                f'{len(write_string)} bytes')
 
     # Ensure all data is written to disk, not just cached in memory
     FlushFileBuffers(file_handle)
@@ -1009,7 +1017,8 @@ def wipe_file_direct(file_handle, extents, cluster_size, file_size):
     If the file had no extents (very small files stored in the MFT),
     we write zeros for the entire file size.
     """
-    assert cluster_size > 0
+    if cluster_size <= 0:
+        raise RuntimeError(f'invalid cluster size: {cluster_size}')
 
     # Remember that file_size measures full expanded content of the file,
     # which may not always match with size on disk (eg. if file compressed).
@@ -1020,13 +1029,11 @@ def wipe_file_direct(file_handle, extents, cluster_size, file_size):
 
     if extents:
         # Use size on disk to determine how many clusters of zeros we write.
+        # Sum every extent so a fragmented file is fully overwritten, not just
+        # its last extent.
+        write_length = 0
         for lcn_start, lcn_end in extents:
-            # logger.debug("Wiping extent from %d to %d...",
-            #              lcn_start, lcn_end)
-            # Calculate write length based on the number of clusters in this extent.
-            # The file pointer is positioned at the start of the current extent.
-            # Each write operation will advance the file pointer automatically.
-            write_length = (lcn_end - lcn_start + 1) * cluster_size
+            write_length += (lcn_end - lcn_start + 1) * cluster_size
     else:
         # Special case - file so small it can be contained within the
         # directory entry in the MFT part of the disk.
@@ -1059,7 +1066,8 @@ def wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end, cluster_size,
     Returns:
         bool: True if wiping succeeded, False otherwise
     """
-    assert cluster_size > 0
+    if cluster_size <= 0:
+        raise RuntimeError(f'invalid cluster size: {cluster_size}')
     logger.debug("Examining extent from %d to %d for wipe...",
                  lcn_start, lcn_end)
     write_length = (lcn_end - lcn_start + 1) * cluster_size
@@ -1200,63 +1208,74 @@ def file_wipe(file_name):
     cluster_size = (volume_info.sectors_per_cluster *
                     volume_info.bytes_per_sector)
 
-    file_handle = open_file(file_name)
-    file_size, is_special = get_file_basic_info(file_name, file_handle)
-    orig_extents = get_extents(file_handle, True, file_name)
-    if is_special:
-        bridged_extents = list(logical_ranges_to_extents(
-            get_extents(file_handle, False, file_name), True))
-    CloseHandle(file_handle)
-    # logger.debug('Original extents: %s', orig_extents)
-
-    volume_handle = obtain_readwrite(volume)
-    attrs = GetFileAttributesW(file_name)
-    if attrs & FILE_ATTRIBUTE_READONLY:
-        # Remove read-only attribute to avoid "access denied" in CreateFileW().
-        SetFileAttributesW(file_name, attrs & ~FILE_ATTRIBUTE_READONLY)
-    file_handle = open_file(file_name, GENERIC_READ | GENERIC_WRITE)
-
-    if not is_special:
-        # Direct overwrite when it's a regular file.
-        # logger.info("Attempting direct file wipe.")
-        wipe_file_direct(file_handle, orig_extents, cluster_size, file_size)
-        new_extents = get_extents(file_handle, True, file_name)
+    # Track handles so an exception below still releases them; each is
+    # nulled out right after its own CloseHandle to avoid double-closing.
+    file_handle = None
+    volume_handle = None
+    tmp_file_path = None
+    try:
+        file_handle = open_file(file_name)
+        file_size, is_special = get_file_basic_info(file_name, file_handle)
+        orig_extents = get_extents(file_handle, True, file_name)
+        if is_special:
+            bridged_extents = list(logical_ranges_to_extents(
+                get_extents(file_handle, False, file_name), True))
         CloseHandle(file_handle)
-        # logger.debug('New extents: %s', new_extents)
-        if orig_extents == new_extents:
-            clean_up(None, volume_handle, None)
-            return
-        # Expectation was that extents should be identical and file is wiped.
-        # If OS didn't give that to us, continue below and use defrag wipe.
-        # Any extent within new_extents has now been wiped by above.
-        # It can be subtracted from the orig_extents list, and now we will
-        # just clean up anything not yet overwritten.
-        orig_extents = extents_a_minus_b(orig_extents, new_extents)
-    else:
-        # File needs special treatment. We can't just do a basic overwrite.
-        # First we will truncate it. Then chase down the freed clusters to
-        # wipe them, now that they are no longer part of the file.
-        truncate_file(file_handle)
-        CloseHandle(file_handle)
+        file_handle = None
+        # logger.debug('Original extents: %s', orig_extents)
 
-    # Poll to confirm that our clusters were freed.
-    poll_clusters_freed(volume_handle, volume_info.total_clusters,
-                        orig_extents)
+        volume_handle = obtain_readwrite(volume)
+        attrs = GetFileAttributesW(file_name)
+        if attrs & FILE_ATTRIBUTE_READONLY:
+            # Remove read-only attribute to avoid "access denied" in CreateFileW().
+            SetFileAttributesW(file_name, attrs & ~FILE_ATTRIBUTE_READONLY)
+        file_handle = open_file(file_name, GENERIC_READ | GENERIC_WRITE)
 
-    # Chase down all the freed clusters we can, and wipe them.
-    # logger.debug("Attempting defrag file wipe.")
-    # Put the temp file in the same folder as the target wipe file.
-    # Should be able to write this path if user can write the wipe file.
-    tmp_file_path = os.path.dirname(file_name) + os.sep + TMP_FILE_NAME
-    if is_special:
-        orig_extents = choose_if_bridged(volume_handle,
-                                         volume_info.total_clusters,
-                                         orig_extents, bridged_extents)
-    for lcn_start, lcn_end in orig_extents:
-        wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end,
-                              cluster_size, volume_info.total_clusters,
-                              tmp_file_path)
+        if not is_special:
+            # Direct overwrite when it's a regular file.
+            # logger.info("Attempting direct file wipe.")
+            wipe_file_direct(file_handle, orig_extents, cluster_size, file_size)
+            new_extents = get_extents(file_handle, True, file_name)
+            CloseHandle(file_handle)
+            file_handle = None
+            # logger.debug('New extents: %s', new_extents)
+            if orig_extents == new_extents:
+                return
+            # Expectation was that extents should be identical and file is wiped.
+            # If OS didn't give that to us, continue below and use defrag wipe.
+            # Any extent within new_extents has now been wiped by above.
+            # It can be subtracted from the orig_extents list, and now we will
+            # just clean up anything not yet overwritten.
+            # Materialize the generator: it is iterated again below by
+            # poll_clusters_freed and the wipe loop, and a generator would be
+            # exhausted after the first pass, leaving clusters un-wiped.
+            orig_extents = list(extents_a_minus_b(orig_extents, new_extents))
+        else:
+            # File needs special treatment. We can't just do a basic overwrite.
+            # First we will truncate it. Then chase down the freed clusters to
+            # wipe them, now that they are no longer part of the file.
+            truncate_file(file_handle)
+            CloseHandle(file_handle)
+            file_handle = None
 
-    # Clean up.
-    clean_up(None, volume_handle, tmp_file_path)
-    return
+        # Poll to confirm that our clusters were freed.
+        poll_clusters_freed(volume_handle, volume_info.total_clusters,
+                            orig_extents)
+
+        # Chase down all the freed clusters we can, and wipe them.
+        # logger.debug("Attempting defrag file wipe.")
+        # Put the temp file in the same folder as the target wipe file.
+        # Should be able to write this path if user can write the wipe file.
+        tmp_file_path = os.path.dirname(file_name) + os.sep + TMP_FILE_NAME
+        if is_special:
+            orig_extents = choose_if_bridged(volume_handle,
+                                             volume_info.total_clusters,
+                                             orig_extents, bridged_extents)
+        for lcn_start, lcn_end in orig_extents:
+            wipe_extent_by_defrag(volume_handle, lcn_start, lcn_end,
+                                  cluster_size, volume_info.total_clusters,
+                                  tmp_file_path)
+    finally:
+        # Closes whatever is still open; clean_up() swallows its own
+        # errors, so the original exception still propagates.
+        clean_up(file_handle, volume_handle, tmp_file_path)

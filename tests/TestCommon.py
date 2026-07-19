@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -32,48 +19,58 @@ from tests import common
 class CommonTestCase(common.BleachbitTestCase):
     """Test case for Common."""
 
-    def test_assertIsLanguageCode_hardcoded(self):
-        """Test assertIsLanguageCode() using hard-coded values"""
-        valid_codes = [
-            'be@latin',
-            'C.UTF-8',
-            'C.utf8',
-            'C',
-            'de_DE.iso88591',
-            'de-CH',  # seen in Fedora in Docker
-            'en-US',
-            'en_US',
-            'en',
-            'fr_FR.utf8',
-            'ja_JP.SJIS',
-            'ko_KR.eucKR',
-            'nb_NO.ISO-8859-1',
-            'POSIX',
-            'ru_RU.KOI8-R',
-            'zh_Hant',
-        ]
+    _valid_language_codes = [
+        'be@latin',
+        'C.UTF-8',
+        'C.utf8',
+        'C',
+        'de_DE.iso88591',
+        'de-CH',  # seen in Fedora in Docker
+        'en_US',
+        'en-US',
+        'en',
+        'es_419',
+        'fr_FR.utf8',
+        'ja_JP.SJIS',
+        'ko_KR.eucKR',
+        'nb_NO.ISO-8859-1',
+        'POSIX',
+        'ru_RU.KOI8-R',
+        'zh_Hant',
+        'be_BY.utf8@latin',
 
-        invalid_codes = ['e', 'en_', 'english', 'en_US_', '123',
-                         'en_us', 'en_US.',
-                         'en_us.utf8',
-                         'en_us.UTF-8',
-                         'utf8',
-                         'UTF-8',
-                         '.utf8',
-                         '.UTF-8',
-                         '',
-                         [],
-                         0,
-                         None]
-        invalid_codes.extend([code + ' ' for code in valid_codes])
-        invalid_codes.extend([' ' + code for code in valid_codes])
+    ]
 
-        for code in valid_codes:
-            self.assertIsLanguageCode(code)
+    _invalid_language_codes = ['e', 'en_', 'english', 'en_US_', '123',
+                               'en_us', 'en_US.',
+                               'en_us.utf8',
+                               'en_us.UTF-8',
+                               'utf8',
+                               'UTF-8',
+                               '.utf8',
+                               '.UTF-8',
+                               'en@boldquot.header',
+                               'tor@default.service',
+                               '',
+                               [],
+                               0,
+                               None]
 
-        for code in invalid_codes:
-            with self.assertRaises(AssertionError, msg=f'Expected exception for {code}'):
+    def test_assertIsLanguageCode_hardcoded_valid(self):
+        """Test assertIsLanguageCode() accepts hard-coded valid codes"""
+        for code in self._valid_language_codes:
+            with self.subTest(code=code):
                 self.assertIsLanguageCode(code)
+
+    def test_assertIsLanguageCode_hardcoded_invalid(self):
+        """Test assertIsLanguageCode() rejects hard-coded invalid codes"""
+        invalid_codes = list(self._invalid_language_codes)
+        invalid_codes.extend([code + ' ' for code in self._valid_language_codes])
+        invalid_codes.extend([' ' + code for code in self._valid_language_codes])
+        for code in invalid_codes:
+            with self.subTest(code=code):
+                with self.assertRaises(AssertionError, msg=f'Expected exception for {code}'):
+                    self.assertIsLanguageCode(code)
 
     def test_assertIsLanguageCode_live(self):
         """Test assertIsLanguageCode() using live data"""
@@ -81,7 +78,8 @@ class CommonTestCase(common.BleachbitTestCase):
         locale_dirs = list(set([locale_dir, '/usr/share/locale']))
         lang_codes = []
         # Skip directories that are not valid language codes
-        skip_dirs = {'l10n'}
+        # 'UTF-8' is a macOS-specific LC_CTYPE directory, not a locale.
+        skip_dirs = {'l10n', 'UTF-8'}
         for locale_dir in locale_dirs:
             if not os.path.isdir(locale_dir):
                 continue
@@ -144,6 +142,38 @@ class CommonTestCase(common.BleachbitTestCase):
             self.assertGreater(len(title.strip()), 0,
                                f"Window title should not be empty or whitespace-only: '{title}'")
 
+    def test_mock_missing_package(self):
+        """Test mock_missing_package context manager"""
+        # Inside the context, importing logging should raise an errorl.
+        with common.mock_missing_package('logging', clear_prefixes=('bleachbit.CLI',)):
+            with self.assertRaises(ImportError):
+                import logging  # pylint: disable=import-outside-toplevel
+            with self.assertRaises(ImportError):
+                import bleachbit.CLI  # pylint: disable=import-outside-toplevel
+            # Importing sys should be unaffected.
+            import sys  # pylint: disable=import-outside-toplevel
+        # Outside the context, importing should work.
+        import logging  # pylint: disable=import-outside-toplevel
+        import bleachbit.CLI  # pylint: disable=import-outside-toplevel
+
+    def test_set_temporary_env(self):
+        """Test set_temporary_env context manager"""
+        # Test with an environment variable that was not set before.
+        self.assertIsNone(os.environ.get('TEST_VAR_NEW'))
+        with common.set_temporary_env('TEST_VAR_NEW', 'test_value'):
+            self.assertEqual('test_value', os.environ.get('TEST_VAR_NEW'))
+        # Outside the context, the environment variable should be unset.
+        self.assertIsNone(os.environ.get('TEST_VAR_NEW'))
+
+        # Test with an environment variable that was set before.
+        os.environ['TEST_VAR_EXISTING'] = 'original_value'
+        with common.set_temporary_env('TEST_VAR_EXISTING', 'override_value'):
+            self.assertEqual('override_value',
+                             os.environ.get('TEST_VAR_EXISTING'))
+        # Outside the context, the environment variable should be restored.
+        self.assertEqual('original_value', os.environ.get('TEST_VAR_EXISTING'))
+        del os.environ['TEST_VAR_EXISTING']
+
     def test_touch_file(self):
         """Unit test for touch_file"""
         fn = os.path.join(self.tempdir, 'test_touch_file')
@@ -165,3 +195,14 @@ class CommonTestCase(common.BleachbitTestCase):
         common.touch_file(fn)
         self.assertExists(fn)
         self.assertEqual(fsize, getsize(fn))
+
+    def test_assertExists_relative_path(self):
+        """Unit test for assertExists with relative path"""
+        # Create a file in the current directory
+        os.chdir(self.tempdir)
+        relative_fn = 'test_relative_file.txt'
+        common.touch_file(relative_fn)
+        self.assertExists(relative_fn)
+        os.remove(relative_fn)
+        self.assertNotExists(relative_fn)
+        self.assertNotExists('this-does-not-exist')

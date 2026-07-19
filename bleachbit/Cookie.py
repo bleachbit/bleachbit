@@ -1,32 +1,20 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Cookie module for selective deletion of cookies
 """
 
 import contextlib
+import json
 import logging
 import os
 import sqlite3
 
+import bleachbit
 from bleachbit import FileUtilities
 from bleachbit.Special import sqlite_table_exists
 
@@ -74,11 +62,12 @@ def _get_db_disk_size(path):
     total = 0
     for suffix in ('', '-wal', '-shm'):
         candidate = f"{path}{suffix}"
-        if os.path.exists(candidate):
-            try:
-                total += FileUtilities.getsize(candidate)
-            except OSError as exc:
-                logger.debug('Failed to get size for %s: %s', candidate, exc)
+        if not os.path.exists(candidate):
+            continue
+        try:
+            total += FileUtilities.getsize(candidate)
+        except OSError as exc:
+            logger.debug('Failed to get size for %s: %s', candidate, exc)
     return total
 
 
@@ -139,6 +128,28 @@ def list_cookies(path):
         return cursor.fetchall()
 
 
+def load_keep_list():
+    """Load cookie domains to keep from options directory.
+
+    This does not swallow file permission error or JSON parsing errors:
+    when cleaning, these cases should not be treated equally to an empty
+    keep list.
+    """
+    path = os.path.join(bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+    domains = set()
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        return domains
+
+    if isinstance(data, list):
+        for item in data:
+            if isinstance(item, str) and item:
+                domains.add(item.lstrip('.').lower())
+    return domains
+
+
 def delete_cookies(path, keep_list, really_delete=False):
     """Process cookies with optional deletion based on keep list
 
@@ -161,7 +172,8 @@ def delete_cookies(path, keep_list, really_delete=False):
     (table_name, host_column) = detect_browser(path)
 
     original_size = _get_db_disk_size(path)
-    assert original_size > 0
+    if original_size <= 0:
+        raise RuntimeError(f"cookies database is empty: {path}")
 
     # Set up connection
     uri = f'file:{path}'

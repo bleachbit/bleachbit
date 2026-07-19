@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-04-05 14:48-0600\n"
-"PO-Revision-Date: 2026-04-28 15:09+0000\n"
+"POT-Creation-Date: 2026-07-12 15:23-0600\n"
+"PO-Revision-Date: 2026-07-15 05:01+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/bleachbit/main/nl/>"
 "\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -55,16 +55,17 @@ msgstr ""
 "Verwijder cookies, die inloggegevens, websitevoorkeuren en tracking-ID's "
 "opslaan"
 
-#: ../cleaners/realplayer.xml ../cleaners/bash.xml ../cleaners/elinks.xml
-#: ../cleaners/vivaldi.xml ../cleaners/easytag.xml ../cleaners/safari.xml
-#: ../cleaners/chromium.xml ../cleaners/sqlite3.xml
-#: ../cleaners/windows_defender.xml ../cleaners/slack.xml ../cleaners/brave.xml
-#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
-#: ../cleaners/libreoffice.xml ../cleaners/seamonkey.xml
-#: ../cleaners/google_chrome.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/vim.xml ../cleaners/opera.xml
-#: ../cleaners/discord.xml ../cleaners/octave.xml
+#: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
+#: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
+#: ../cleaners/safari.xml ../cleaners/fish.xml ../cleaners/chromium.xml
+#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
+#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
+#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
+#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/python.xml
+#: ../cleaners/vim.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/octave.xml
 msgid "History"
 msgstr "Geschiedenis"
 
@@ -73,15 +74,16 @@ msgstr "Geschiedenis"
 #: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
 #: ../cleaners/libreoffice.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
 #: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
-#: ../cleaners/amule.xml ../bleachbit/Cleaner.py
+#: ../cleaners/amule.xml
 msgid "Delete the usage history"
-msgstr "Verwijder de gebruiksgeschiedenis"
+msgstr "Verwijder de gebruikersgeschiedenis"
 
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/zoom.xml
+#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
 #: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
 #: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
@@ -92,7 +94,8 @@ msgstr "Logboeken"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/zoom.xml
+#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
 #: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
 #: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
@@ -105,7 +108,8 @@ msgid "Multimedia viewer"
 msgstr "Multimediaweergave"
 
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
-#: ../cleaners/librewolf.xml ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
+#: ../cleaners/librewolf.xml ../cleaners/openoffice.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/vivaldi.xml ../cleaners/yahoo_messenger.xml
 #: ../cleaners/pidgin.xml ../cleaners/secondlife_viewer.xml
@@ -115,20 +119,21 @@ msgstr "Multimediaweergave"
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml ../cleaners/chromium.xml
 #: ../cleaners/slack.xml ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/brave.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/seamonkey.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/tremulous.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/gftp.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Cleaner.py
+#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/seamonkey.xml
+#: ../cleaners/flash.xml ../cleaners/google_chrome.xml
+#: ../cleaners/tremulous.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../bleachbit/Cleaner.py
 msgid "Cache"
 msgstr "Cache"
 
 #. TRANSLATORS: The description of what certain cleaning options do.
 #: ../cleaners/xine.xml ../cleaners/dnf.xml ../cleaners/miro.xml
-#: ../cleaners/amsn.xml ../cleaners/librewolf.xml ../cleaners/rhythmbox.xml
-#: ../cleaners/beagle.xml ../cleaners/yum.xml
+#: ../cleaners/amsn.xml ../cleaners/librewolf.xml ../cleaners/openoffice.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml ../cleaners/yum.xml
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
@@ -137,19 +142,20 @@ msgstr "Cache"
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
 #: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
+#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
 #: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "Leeg de cache"
 
-#: ../cleaners/paint.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/wordpad.xml
-#: ../cleaners/audacious.xml ../cleaners/filezilla.xml
+#: ../cleaners/paint.xml ../cleaners/openoffice.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/wordpad.xml ../cleaners/audacious.xml ../cleaners/filezilla.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
 #: ../cleaners/winamp.xml ../cleaners/adobe_reader.xml ../cleaners/winzip.xml
-#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
+#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml
 msgid "Most recently used"
 msgstr "Onlangs gebruikt"
 
@@ -180,7 +186,8 @@ msgstr ""
 
 #: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
 #: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
-#: ../cleaners/zoom.xml ../cleaners/skype.xml ../cleaners/discord.xml
+#: ../cleaners/zoom.xml ../cleaners/skype.xml ../cleaners/profanity.xml
+#: ../cleaners/discord.xml
 msgid "Chat client"
 msgstr "Chatprogramma"
 
@@ -208,15 +215,15 @@ msgstr "Webbrowser"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/deepscan.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml
+#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
+#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
 msgid "Backup files"
 msgstr "Back-upbestanden"
 
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/deepscan.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml
+#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
+#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
 msgid "Delete the backup files"
 msgstr "Verwijder de back-upbestanden"
 
@@ -227,12 +234,14 @@ msgstr "Verwijder de back-upbestanden"
 msgid "Crash reports"
 msgstr "Crashrapportages"
 
-#: ../cleaners/librewolf.xml ../cleaners/beagle.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/geary.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/windows_defender.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/deepscan.xml ../cleaners/google_chrome.xml
-#: ../cleaners/transmission.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/geary.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/windows_defender.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml
+#: ../cleaners/google_chrome.xml ../cleaners/transmission.xml
+#: ../cleaners/profanity.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/vuze.xml ../cleaners/opera.xml
 msgid "Delete the files"
 msgstr "Verwijder de bestanden"
@@ -279,9 +288,10 @@ msgstr ""
 msgid "This option will delete your saved passwords."
 msgstr "Met deze optie verwijdert u uw opgeslagen wachtwoorden."
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Session"
 msgstr "Sessie"
@@ -366,6 +376,27 @@ msgstr ""
 "Defragmenteert de databank om ruimte te besparen en de snelheid te verhogen, "
 "zonder gegevens te verwijderen"
 
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+msgid "Shell"
+msgstr "Opdrachtregelshell"
+
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+#: ../cleaners/sqlite3.xml ../cleaners/python.xml ../cleaners/octave.xml
+msgid "Delete the command history"
+msgstr "Verwijder de opdrachtgeschiedenis"
+
+#: ../cleaners/openoffice.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/libreoffice.xml
+msgid "Office suite"
+msgstr "Kantoorpakket"
+
+#: ../cleaners/openoffice.xml ../cleaners/audacious.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/gedit.xml ../cleaners/kde.xml
+#: ../bleachbit/Cleaner.py
+msgid "Delete the list of recently used documents"
+msgstr "Verwijder de lijst met onlangs gebruikte documenten"
+
 #: ../cleaners/rhythmbox.xml
 msgid "Database"
 msgstr "Databank"
@@ -378,12 +409,6 @@ msgstr ""
 "Verwijder de databank, die informatie bevat zoals afspeeltelling en onlangs "
 "afgespeeld"
 
-#. TRANSLATORS: The description of a cleaner.
-#: ../cleaners/microsoft_office.xml ../cleaners/libreoffice.xml
-#: ../bleachbit/Cleaner.py
-msgid "Office suite"
-msgstr "Kantoorpakket"
-
 #: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
 #: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
 msgid "Debug logs"
@@ -395,27 +420,21 @@ msgstr "Foutmeldingslogboeken"
 msgid "Delete the debug logs"
 msgstr "Verwijder de foutmeldingslogboeken"
 
-#: ../cleaners/bash.xml
-msgid "Shell"
-msgstr "Opdrachtregelshell"
-
-#: ../cleaners/bash.xml ../cleaners/sqlite3.xml ../cleaners/octave.xml
-msgid "Delete the command history"
-msgstr "Verwijder de opdrachtgeschiedenis"
-
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
+#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Temporary files"
 msgstr "Tijdelijke bestanden"
 
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/deepscan.xml ../cleaners/winrar.xml ../cleaners/amule.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
+#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Delete the temporary files"
 msgstr "Verwijder de tijdelijke bestanden"
 
@@ -434,12 +453,6 @@ msgstr "Verwijder de cookies, bezochte url's en zoekgeschiedenis"
 #: ../cleaners/wordpad.xml
 msgid "Word processor"
 msgstr "Tekstverwerker"
-
-#: ../cleaners/audacious.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/gwenview.xml ../cleaners/adobe_reader.xml ../cleaners/gedit.xml
-#: ../cleaners/kde.xml ../bleachbit/Cleaner.py
-msgid "Delete the list of recently used documents"
-msgstr "Verwijder de lijst met onlangs gebruikte documenten"
 
 #: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/epiphany.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
@@ -666,6 +679,11 @@ msgstr "Verwijder verouderde bestanden"
 msgid "Package lists"
 msgstr "Pakketlijsten"
 
+#. Cleaner description for vim, VS Code, etc.
+#: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
+msgid "Editor"
+msgstr "Bewerker"
+
 #: ../cleaners/x11.xml
 msgid "Windowing system"
 msgstr "Venstersysteem"
@@ -690,6 +708,36 @@ msgstr "Documentweergave"
 msgid "Custom folders will be reset."
 msgstr "Aangepaste mappen worden teruggezet op de standaardwaarden."
 
+#. Label for Claude coding assistant
+#: ../cleaners/claude.xml
+msgid "AI assistant"
+msgstr "AI-assistent"
+
+#. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
+#: ../cleaners/claude.xml
+msgid "File history"
+msgstr "Bestandsgeschiedenis"
+
+#. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
+#: ../cleaners/claude.xml
+msgid "Delete the file history used for /restore"
+msgstr "Verwijder de bestandsgeschiedenis die is gebruikt voor /restore"
+
+#. Description for deleting Claude Code sessions
+#: ../cleaners/claude.xml
+msgid "Delete the conversation history"
+msgstr "Verwijder de gespreksgeschiedenis"
+
+#: ../cleaners/claude.xml
+msgid "You would lose resume, continue, and rewind for past sessions"
+msgstr ""
+"U zou het hervatten, doorgaan en terugspoelen voor eerdere sessies verliezen"
+
+#. In Claude Code: captured shell environment used by the Bash tool
+#: ../cleaners/claude.xml
+msgid "Shell snapshots"
+msgstr "Shell momentopnames"
+
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
 msgstr "Grondige scan"
@@ -703,16 +751,20 @@ msgid "Inspect the preview for any files you want to keep."
 msgstr "Kijk na of er bestanden zijn die u wilt behouden."
 
 #: ../cleaners/deepscan.xml
+msgid ""
+"This option is slow. Inspect the preview for files you want to keep, like "
+"those bundled with applications."
+msgstr ""
+"Deze optie is traag. Controleer het voorbeeld voor bestanden die u wilt "
+"bewaren, zoals die gebundeld met applicaties."
+
+#: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
 msgstr "VIM-wisselgeheugenbestanden van gebruikersprofiel"
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files across system"
 msgstr "VIM-wisselgeheugenbestanden op het gehele systeem"
-
-#: ../cleaners/gedit.xml ../cleaners/vim.xml
-msgid "Editor"
-msgstr "Bewerker"
 
 #: ../cleaners/zoom.xml
 msgid "Recordings"
@@ -746,6 +798,15 @@ msgstr "Lijst met gedownloade bestanden"
 msgid "Delete the list of visited web pages"
 msgstr "Verwijder de lijst met bezochte websites"
 
+#. Cleaning option that deletes AI models in a web browser
+#: ../cleaners/google_chrome.xml
+msgid "AI"
+msgstr "AI"
+
+#: ../cleaners/google_chrome.xml
+msgid "Delete the AI models"
+msgstr "Verwijder de AI-modellen"
+
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
 msgid "Blocklists"
@@ -775,6 +836,10 @@ msgstr "Verwijder het bestand"
 #: ../cleaners/tremulous.xml
 msgid "Delete the list of game servers"
 msgstr "Verwijder de lijst met gameservers"
+
+#: ../cleaners/profanity.xml
+msgid "Downloaded files"
+msgstr "Gedownloade bestanden"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
@@ -1052,6 +1117,18 @@ msgctxt "nsis:MULTIUSER_UNINSTALL_PAGE_SUBTITLE"
 msgid "Choose for which users to remove $(^NameDA)."
 msgstr "Kies voor welke gebruikers $(^NameDA) moet worden verwijderd."
 
+#. TRANSLATORS: Dialog shown when the installer detects an old version of Windows. Instructs the user to click OK to download a compatible version or Cancel to exit.
+#: windows/NsisInclude/NsisMultiUserLang.nsh
+msgctxt "nsis:OLD_WINDOWS_WARNING"
+msgid ""
+"This version of BleachBit requires Windows 10 or later. To download a "
+"compatible version for your system, click OK. To exit the installer, click "
+"Cancel."
+msgstr ""
+"Deze versie van BleachBit vereist Windows 10 of hoger. Klik OK om een "
+"compatibele versie voor uw systeem wilt downloaden. Klik Annuleren om het "
+"installatieprogramma te verlaten."
+
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
 msgid ""
@@ -1219,6 +1296,20 @@ msgstr "Voer de volgende externe opdracht uit: %s"
 msgid "Refresh Windows shell"
 msgstr "Vernieuw Windows shell"
 
+#: ../bleachbit/Bootstrap.py
+msgid ""
+"To run a GUI application on Wayland with root, allow access with this "
+"command:\n"
+"xhost si:localuser:root\n"
+"See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-"
+"questions.html"
+msgstr ""
+"Als u een GUI-applicatie op Wayland met root wilt uitvoeren, geeft u toegang "
+"met dit commando:\n"
+"xhost si:localuser:root\n"
+"Meer informatie over xhost op https://docs.bleachbit.org/doc/frequently-"
+"asked-questions.html"
+
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
 msgid ""
@@ -1300,6 +1391,11 @@ msgstr "Wisselgeheugen en vrije ramgeheugen wissen"
 #: ../bleachbit/Cleaner.py
 msgid "This option is experimental and may cause system problems."
 msgstr "Deze optie is experimenteel en kan systeemproblemen veroorzaken."
+
+#. TRANSLATORS: This is a label for the option to clear the system DNS cache.
+#: ../bleachbit/Cleaner.py
+msgid "DNS cache"
+msgstr "DNS-cache"
 
 #. TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py
@@ -1524,8 +1620,8 @@ msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean, --shred"
 msgstr ""
-"Geef slechts één van deze opdrachten op: --list-cleaners, --wipe-free-"
-"space, --preview, --clean, --shred"
+"Geef slechts één van deze opdrachten op: --list-cleaners, --wipe-free-space, "
+"--preview, --clean, --shred"
 
 #. TRANSLATORS: Log message on the CLI.
 #: ../bleachbit/CLI.py
@@ -1906,6 +2002,13 @@ msgstr "Vrije ruimte (%)"
 msgid "Select destination folder"
 msgstr "Kies de doelmap"
 
+#. TRANSLATORS: Error message shown when chaff file generation fails.
+#. The placeholder is for the technical error details.
+#: ../bleachbit/GuiChaff.py
+#, python-brace-format
+msgid "Error generating chaff: {error}"
+msgstr "Fout bij het genereren van kaf: {error}"
+
 #. TRANSLATORS: Progress message shown while deleting chaff files.
 #. 'Deleting files' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
@@ -1913,6 +2016,13 @@ msgstr "Kies de doelmap"
 #: ../bleachbit/GuiChaff.py
 msgid "Deleting files…"
 msgstr "Bestanden verwijderen…"
+
+#. TRANSLATORS: Error message shown when deleting chaff files fails.
+#. The placeholder is for the technical error details.
+#: ../bleachbit/GuiChaff.py
+#, python-brace-format
+msgid "Error deleting chaff files: {error}"
+msgstr "Fout bij het verwijderen van kaf: {error}"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves
@@ -2096,6 +2206,8 @@ msgid "Restart BleachBit for full effect."
 msgstr "Start BleachBit opnieuw op voor volledig effect."
 
 #. TRANSLATORS: Title for the preferences dialog
+#. TRANSLATORS: This menu item opens a dialog where the user can
+#. configure application settings.
 #: ../bleachbit/GuiPreferences.py ../share/app-menu.ui
 msgid "Preferences"
 msgstr "Instellingen"
@@ -2422,15 +2534,31 @@ msgctxt "button"
 msgid "Add folder"
 msgstr "Map toevoegen"
 
-#. TRANSLATORS: Update notification for users upgrading from versions
-#. older than 5.1.0.
+#. TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
+#. Preferences. Keep it consistent with the translation of "Expert Mode"
+#. in the preferences dialog. This message appears when cleaning options
+#. with warnings are selected but expert mode is disabled.
 #: ../bleachbit/GuiStartup.py
 msgid ""
-"Cleaning options with warnings now require expert mode. Enable it in "
-"preferences to clean them."
+"One or more selected cleaning options have warnings and require Expert Mode "
+"to clean. Enable it in preferences."
 msgstr ""
-"Schoonmaakopties met waarschuwingen vereisen nu de expertmodus. Schakel deze "
-"in Voorkeuren in om ze toe te passen."
+"Een of meer geselecteerde schoonmaakopties bevatten waarschuwingen en "
+"vereisen de Expertmodus om te kunnen schoonmaken. Schakel deze in bij de "
+"voorkeuren."
+
+#. TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
+#. Preferences. Keep it consistent with the translation of "Expert Mode"
+#. in the preferences dialog. This message appears when the user tries to
+#. skip a delete confirmation without enabling Expert Mode.
+#: ../bleachbit/GuiStartup.py
+msgid ""
+"Delete confirmation is disabled but expert mode is not enabled. Enable "
+"Expert Mode in preferences to skip delete confirmations."
+msgstr ""
+"Verwijzingsbevestiging is uitgeschakeld, maar de expertmodus is niet "
+"ingeschakeld. Schakel de expertmodus in de voorkeuren in om "
+"verwijzingsbevestigingen over te slaan."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
@@ -2640,10 +2768,10 @@ msgstr "Fout bij het controleren op updates: %s"
 
 #: ../bleachbit/Memory.py
 msgid ""
-"The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
+"The command 'swapon -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"De opdracht 'swapoff -s' is mislukt, dus wordt er teruggevallen op /proc/"
+"De opdracht 'swapon -s' is mislukt, dus wordt er teruggevallen op /proc/"
 "swaps voor wisselgeheugeninformatie."
 
 #: ../bleachbit/Memory.py
@@ -2665,8 +2793,8 @@ msgstr "Er wordt een mooie waarde (%d) ingesteld voor dit proces."
 #, python-format
 msgid "Dropping privileges of process ID %(pid)d to user ID %(uid)d."
 msgstr ""
-"De rechten van proces-ID %(pid)d worden overgeheveld naar de gebruikers-ID %"
-"(uid)d."
+"De rechten van proces-ID %(pid)d worden overgeheveld naar de gebruikers-ID "
+"%(uid)d."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2679,6 +2807,18 @@ msgstr "%s geheugen wordt toegekend en gewist."
 #, python-format
 msgid "Freeing %s of memory."
 msgstr "%s geheugen wordt vrijgemaakt."
+
+#. TRANSLATORS: This is a debugging message that the parent process
+#. is waiting for the child process. %(parent_pid)d is the parent
+#. process ID; %(child_pid)d is the child process ID.
+#: ../bleachbit/Memory.py
+#, python-format
+msgid ""
+"The function wipe_memory() with process ID %(parent_pid)d is waiting for "
+"child process ID %(child_pid)d."
+msgstr ""
+"De functie wipe_memory() met process-ID %(parent_pid)d wacht op onderliggend "
+"proces met ID %(child_pid)d."
 
 #. TRANSLATORS: Debug message. 'Found' is a past tense verb (short for
 #. "Found [that] the UUID for swap device ..."). %(device)s is the device
@@ -2712,18 +2852,6 @@ msgstr "Het wisselgeheugenapparaat '%s' wordt opnieuw geïnitialiseerd."
 #, python-format
 msgid "Detected these swap devices: %s"
 msgstr "De volgende wisselgeheugenapparaten zijn gedetecteerd: %s"
-
-#. TRANSLATORS: This is a debugging message that the parent process
-#. is waiting for the child process. %(parent_pid)d is the parent
-#. process ID; %(child_pid)d is the child process ID.
-#: ../bleachbit/Memory.py
-#, python-format
-msgid ""
-"The function wipe_memory() with process ID %(parent_pid)d is waiting for "
-"child process ID %(child_pid)d."
-msgstr ""
-"De functie wipe_memory() met process-ID %(parent_pid)d wacht op onderliggend "
-"proces met ID %(child_pid)d."
 
 #: ../bleachbit/Memory.py
 #, python-format
@@ -2894,6 +3022,20 @@ msgstr "Geïmporteerd uit winapp2.ini"
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr "Beheerdersreferenties zijn vereist om Windows Updates op te schonen"
 
+#. TRANSLATORS: Message in log file when stopping a Windows service.
+#. The placeholder is the code name of the service.
+#: ../bleachbit/Windows.py
+#, python-format
+msgid "stop Windows service %(service)s"
+msgstr "Windows-service %(service)s stoppen"
+
+#. TRANSLATORS: Message in log file when starting a Windows service.
+#. The placeholder is the code name of the service.
+#: ../bleachbit/Windows.py
+#, python-format
+msgid "start Windows service %(service)s"
+msgstr "Windows-service %(service)s starten"
+
 #: ../bleachbit/Wipe.py
 msgid ""
 "There was at least one file on a file system that does not support advanced "
@@ -2937,8 +3079,8 @@ msgid ""
 "Wrote %(file_count)d files and %(total_bytes)d bytes in %(elapsed_sec)d "
 "seconds at %(rate_mbs).2f MB/s"
 msgstr ""
-"Weggeschreven: %(file_count)d bestanden en %(total_bytes)d bytes in %"
-"(elapsed_sec)d seconden met %(rate_mbs).2f MB/s"
+"Weggeschreven: %(file_count)d bestanden en %(total_bytes)d bytes in "
+"%(elapsed_sec)d seconden met %(rate_mbs).2f MB/s"
 
 #. TRANSLATORS: Debug message showing disk space available to regular (non-root) users.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
@@ -3085,38 +3227,68 @@ msgstr "Bezig met uitvoeren van grondige scan…"
 msgid "Please wait.  Previewing %s."
 msgstr "Bezig met voorvertonen van %s…"
 
+#. TRANSLATORS: This menu item opens a file picker dialog where the
+#. user can select one or more files. The selected files are then
+#. securely deleted by overwriting their data before removal, making
+#. recovery impossible. "Shredding" refers to this secure deletion process.
 #: ../share/app-menu.ui
 msgid "_Shred Files"
 msgstr "Bestanden ver_snipperen"
 
+#. TRANSLATORS: This menu item prompts the user to select one or
+#. more folders using a folder picker dialog. Then, it securely deletes
+#. the selected folder(s) and all their contents. "Shredding" means
+#. overwriting data before deletion to prevent recovery.
 #: ../share/app-menu.ui
 msgid "Sh_red Folders"
 msgstr "Mappen ve_rnietigen"
 
+#. TRANSLATORS: This menu item reads file or folder paths from the
+#. clipboard, then securely deletes them. "Shredding" means overwriting
+#. data before deletion to prevent recovery. The clipboard is cleared
+#. after the operation.
 #: ../share/app-menu.ui
 msgid "Shred Paths from Clipboard"
 msgstr "Locaties van klembord versnipperen"
 
+#. TRANSLATORS: This menu item prompts the user to select a folder.
+#. It then fills the partition with data until full, overwriting any
+#. recoverable traces of previously deleted files. "Empty space" refers
+#. to unallocated disk space where deleted file data may still exist.
 #: ../share/app-menu.ui
 msgid "_Wipe Empty Space"
 msgstr "Lege ruimte _wissen"
 
+#. TRANSLATORS: This menu item creates decoy files filled with random
+#. data to mislead anyone searching for sensitive information. "Chaff" refers
+#. to material used as a distraction or decoy.
 #: ../share/app-menu.ui
 msgid "_Make Chaff"
 msgstr "Kaf _maken"
 
+#. TRANSLATORS: This menu item securely deletes the application's
+#. configuration files (resetting all settings to defaults) and then
+#. closes the application. "Shredding" means overwriting data before
+#. deletion to prevent recovery.
 #: ../share/app-menu.ui
 msgid "S_hred Settings and Quit"
 msgstr "Instellin_gen vernietigen en afsluiten"
 
+#. TRANSLATORS: This menu item displays technical details about
+#. the system, sometimes useful for troubleshooting issues.
 #: ../share/app-menu.ui
 msgid "S_ystem Information"
 msgstr "S_ysteem informatie"
 
+#. TRANSLATORS: This menu item opens a web browser to a page
+#. with links to documentation and the bug tracker.
 #: ../share/app-menu.ui
 msgid "_Help"
 msgstr "_Hulp"
 
+#. TRANSLATORS: This menu item opens a dialog with general information
+#. about the application, including its name, version, description,
+#. copyright, license, and website link.
 #: ../share/app-menu.ui
 msgid "_About BleachBit"
 msgstr "_Over BleachBit"

@@ -30,14 +30,14 @@ import os
 import re
 import threading
 
-# third-party imports
-if 'nt' == os.name:
-    from win32file import GetLongPathName
-
 # local application imports
 import bleachbit
-from bleachbit import General
+from bleachbit import General, IS_WINDOWS
 from bleachbit.Language import get_text as _
+
+# third-party imports
+if IS_WINDOWS:
+    from win32file import GetLongPathName
 
 logger = logging.getLogger(__name__)
 
@@ -80,11 +80,12 @@ def _get_default_value(option):
     return meta['value']
 
 
-boolean_keys = [
+boolean_keys = frozenset(
     key for key, meta in OPTION_DEFAULTS.items()
     if _platform_allows(meta)
-]
-int_keys = ['window_x', 'window_y', 'window_width', 'window_height', ]
+)
+int_keys = frozenset(('window_x', 'window_y', 'window_width', 'window_height',
+                      'window_font_size'))
 
 
 def _option_index(option_name):
@@ -101,7 +102,7 @@ def path_to_option(pathname):
     # On Windows change to lowercase and use backwards slashes.
     pathname = os.path.normcase(pathname)
     # On Windows expand DOS-8.3-style pathnames.
-    if 'nt' == os.name and os.path.exists(pathname):
+    if IS_WINDOWS and os.path.exists(pathname):
         pathname = GetLongPathName(pathname)
     if len(pathname) > 1 and ':' == pathname[1]:
         # ConfigParser treats colons in a special way
@@ -117,9 +118,9 @@ def init_configuration(*, log=True):
         if log:
             logger.debug('Deleting configuration: %s', bleachbit.options_file)
         os.remove(bleachbit.options_file)
-    with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as f_ini:
+    with open(bleachbit.options_file, 'w', encoding='utf-8-sig', errors='surrogateescape') as f_ini:
         f_ini.write('[bleachbit]\n')
-        if os.name == 'nt' and bleachbit.portable_mode:
+        if IS_WINDOWS and bleachbit.portable_mode:
             f_ini.write('[Portable]\n')
     for section in options.config.sections():
         options.config.remove_section(section)
@@ -132,11 +133,14 @@ class Options:
 
     def __init__(self):
         self.purged = False
-        self.config = bleachbit.RawConfigParser()
+        self.config = bleachbit.RawConfigParser(delimiters='=')
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
         self.config.BOOLEAN_STATES['t'] = True
         self.config.BOOLEAN_STATES['f'] = False
         self.overrides = {}
+        # Cache of get_paths() results, keyed by section. The keep list is read
+        # once per file during a scan, so recomputing it every time is costly.
+        self._paths_cache = {}
         self.old_version = None  # Store previous version in memory
         self._dirty = False
         self._closed = False
@@ -203,7 +207,7 @@ class Options:
             if not os.path.exists(bleachbit.options_dir):
                 General.makedirs(bleachbit.options_dir)
             mkfile = not os.path.exists(bleachbit.options_file)
-            with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as _file:
+            with open(bleachbit.options_file, 'w', encoding='utf-8-sig', errors='surrogateescape') as _file:
                 self.config.write(_file)
             if mkfile and General.sudo_mode():
                 General.chownself(bleachbit.options_file)
@@ -226,7 +230,7 @@ class Options:
             return
         for option in self.config.options('hashpath'):
             pathname = option
-            if 'nt' == os.name and re.search(r'^[a-z]\\', option):
+            if IS_WINDOWS and re.search(r'^[a-z]\\', option):
                 # restore colon lost because ConfigParser treats colon special
                 # in keys
                 pathname = pathname[0] + ':' + pathname[1:]
@@ -241,6 +245,36 @@ class Options:
             if not exists:
                 # the file does not on exist, so forget it
                 self.config.remove_option('hashpath', option)
+
+    def __migrate_warning_preferences(self):
+        """Recover warning preferences corrupted by legacy colon parsing.
+
+        This fixes an issue introduced in version 6.0.0 and fixed for 6.0.2.
+        See https://github.com/bleachbit/bleachbit/issues/2110
+        """
+        section = 'warnings'
+        if not self.config.has_section(section):
+            return
+        migrated = False
+        for option in tuple(self.config.options(section)):
+            if option not in ('cleaner', 'protected_path'):
+                continue
+            value = self.config.get(section, option)
+            if '=' not in value:
+                continue
+            suffix, warning_value = value.rsplit('=', 1)
+            suffix = suffix.strip()
+            warning_value = warning_value.strip()
+            if not suffix or \
+                    warning_value.lower() not in self.config.BOOLEAN_STATES:
+                continue
+            migrated_option = f'{option}:{suffix}'
+            if not self.config.has_option(section, migrated_option):
+                self.config.set(section, migrated_option, warning_value)
+            self.config.remove_option(section, option)
+            migrated = True
+        if migrated:
+            self.__schedule_flush()
 
     def __auto_preserve_languages(self):
         """Automatically preserve the active language"""
@@ -259,7 +293,7 @@ class Options:
 
     def get(self, option, section='bleachbit'):
         """Retrieve a general option"""
-        if not 'nt' == os.name and 'update_winapp2' == option:
+        if not IS_WINDOWS and 'update_winapp2' == option:
             return False
         if section == 'bleachbit' and option == 'debug':
             from bleachbit.Log import is_debugging_enabled_via_cli
@@ -318,6 +352,9 @@ class Options:
         """Abstracts get_whitelist_paths and get_custom_paths"""
         if not self.config.has_section(section):
             return []
+        cached = self._paths_cache.get(section)
+        if cached is not None:
+            return list(cached)
         myoptions = []
         for opt in sorted(self.config.options(section), key=_option_index):
             pos = opt.find('_')
@@ -329,14 +366,21 @@ class Options:
             p_type = self.config.get(section, opt + '_type')
             p_path = self.config.get(section, opt + '_path')
             values.append((p_type, p_path))
-        return values
+        self._paths_cache[section] = values
+        return list(values)
 
     def get_whitelist_paths(self):
-        """Return the keep list (formerly whitelist) of paths"""
+        """Return the keep list (formerly whitelist) of paths
+
+        Returns a list of tuples (type, path) where type is 'file' or 'folder'
+        """
         return self.get_paths("whitelist/paths")
 
     def get_custom_paths(self):
-        """Return list of custom paths"""
+        """Return list of custom paths
+
+        Returns a list of tuples (type, path) where type is 'file' or 'folder'
+        """
         return self.get_paths("custom/paths")
 
     def get_warning_preference(self, key):
@@ -420,18 +464,25 @@ class Options:
         with self._flush_lock:
             self.__cancel_flush_timer()
             self._dirty = False
+            self._paths_cache.clear()
             # Reading configuration merges with existing data,
             # so clear it first.
             for section in self.config.sections():
                 self.config.remove_section(section)
         try:
-            self.config.read(bleachbit.options_file, encoding='utf-8-sig')
-        except:
+            with open(bleachbit.options_file, 'r', encoding='utf-8-sig', errors='surrogateescape') as _file:
+                self.config.read_file(_file, bleachbit.options_file)
+        except FileNotFoundError:
+            if not bleachbit.options_file.startswith('/tmp'):
+                logger.debug("Configuration file does not exist yet: %s",
+                             bleachbit.options_file)
+        except Exception:
             logger.exception("Error reading application's configuration")
         if not self.config.has_section("bleachbit"):
             self.config.add_section("bleachbit")
         if not self.config.has_section("hashpath"):
             self.config.add_section("hashpath")
+        self.__migrate_warning_preferences()
         if not self.config.has_section("list/shred_drives"):
             from bleachbit.FileUtilities import guess_overwrite_paths
             try:
@@ -466,6 +517,17 @@ class Options:
         with self._flush_lock:
             self.__cancel_flush_timer()
             self.__flush(force=True)
+
+    def cancel_pending_flush(self):
+        """Cancel any pending delayed flush and clear the dirty flag.
+
+        Unlike close(), this does not mark the options object as closed,
+        so it can be called repeatedly (e.g. between test classes that
+        share a single Options singleton).
+        """
+        with self._flush_lock:
+            self.__cancel_flush_timer()
+            self._dirty = False
 
     def close(self):
         """Cancel times and write changes"""
@@ -505,6 +567,7 @@ class Options:
         for counter, value in enumerate(values):
             self.config.set(section, str(counter) + '_type', value[0])
             self.config.set(section, str(counter) + '_path', value[1])
+        self._paths_cache.pop(section, None)
         self.__schedule_flush()
 
     def set_custom_paths(self, values):
@@ -524,6 +587,7 @@ class Options:
             assert path_type in ('file', 'folder')
             self.config.set(section, str(counter) + '_type', path_type)
             self.config.set(section, str(counter) + '_path', path)
+        self._paths_cache.pop(section, None)
         self.__schedule_flush()
 
     def set_language(self, langid, value):
@@ -557,10 +621,6 @@ class Options:
         """Set a CLI override that will never be written to disk"""
         override_key = (section, key)
         self.overrides[override_key] = value
-
-    def get_old_version(self):
-        """Get the previous version before current upgrade"""
-        return self.old_version
 
 
 options = Options()

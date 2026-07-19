@@ -1,5 +1,4 @@
 # vim: ts=4:sw=4:expandtab
-# -*- coding: UTF-8 -*-
 
 # BleachBit
 # Copyright (C) 2008-2025 Andrew Ziem
@@ -27,6 +26,7 @@ from unittest import mock
 import os
 from tempfile import mkdtemp
 from shutil import rmtree
+from urllib.parse import urlparse
 
 from tests import common
 from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models, MODEL_BASENAMES, DEFAULT_MODELS_DIR
@@ -48,7 +48,7 @@ class ChaffTestCase(common.BleachbitTestCase):
         # ts = 2600 Magazine
         ts_path = os.path.join(models_dir, '2600_model.json.bz2')
 
-        for _i in ('download', 'already downloaded'):
+        for _ in ('download', 'already downloaded'):
             ret = download_models(models_dir=models_dir)
             self.assertIsInstance(ret, bool)
             self.assertTrue(
@@ -73,7 +73,7 @@ class ChaffTestCase(common.BleachbitTestCase):
                 self.assertIn('Subject: ', contents)
                 self.assertNotIn('base64', contents)
 
-        generated_file_names = generate_2600(5, tmp_dir, models_dir)
+        generate_2600(5, tmp_dir, models_dir)
 
         rmtree(tmp_dir)
 
@@ -84,11 +84,12 @@ class ChaffTestCase(common.BleachbitTestCase):
 
         # Test when primary download mirror fails but secondary succeeds.
         def succeed_on_second(*args, **_kwargs):
-            url = args[0]
-            if 'sourceforge' in url:
+            host = urlparse(args[0]).hostname or ''
+            if host == 'sourceforge.net':
                 return False
-            if 'bleachbit.org' in url:
+            if host == 'download.bleachbit.org':
                 return True
+            return None
         mock_download.side_effect = succeed_on_second
         ret = download_models(models_dir=tmp_dir)
         self.assertTrue(

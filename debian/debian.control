@@ -16,10 +16,10 @@ Depends:
  gir1.2-notify-0.7,
  libgtk-3-0,
  python3,
- python3-chardet,
  python3-gi,
- python3-psutil
-Recommends: python3-notify, python3-scandir
+ python3-psutil,
+ python3-requests
+Recommends: python3-notify, python3-chardet
 Description: Removes unnecessary files
  BleachBit frees disk space and maintains privacy by quickly removing
  unnecessary files such as cache, cookies, browser history,
