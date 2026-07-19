@@ -22,7 +22,7 @@ from bleachbit.PathUtils import path_equal
 from bleachbit.Process import is_process_running
 from bleachbit import Action, CleanerML, Command, FileUtilities, Memory
 from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
-from bleachbit.GtkShim import Gtk, HAVE_GTK
+from bleachbit.GtkShim import HAVE_GTK
 from bleachbit.Wipe import wipe_path
 
 if IS_POSIX:
@@ -392,6 +392,7 @@ class System(Cleaner):
 
             def gtk_purge_items():
                 """Purge GTK items"""
+                from bleachbit.GtkShim import Gtk  # pylint: disable=import-outside-toplevel
                 Gtk.RecentManager().get_default().purge_items()
                 yield 0
 
