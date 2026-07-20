@@ -16,8 +16,21 @@ circular imports.
 
 import os
 import re
+import stat
 
 from bleachbit import FS_CASE_SENSITIVE, IS_WINDOWS
+
+
+def is_world_writable(path):
+    """Return True if others (not the owner or group) can write to path.
+
+    Meaningless on Windows, where POSIX mode bits do not apply. Returns
+    False if the path cannot be stat'd rather than hiding the caller's file.
+    """
+    try:
+        return bool(stat.S_IMODE(os.stat(path).st_mode) & stat.S_IWOTH)
+    except OSError:
+        return False
 
 # On Windows both backslash and forward slash are path separators.
 # On POSIX only os.sep is a separator (backslash is a legal filename

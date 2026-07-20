@@ -16,10 +16,11 @@ import re
 from xml.dom.minidom import parseString
 
 import bleachbit
-from bleachbit import Cleaner, Windows
+from bleachbit import Cleaner, IS_WINDOWS, Windows
 from bleachbit.Action import Delete, Winreg
 from bleachbit.CleanerML import is_trusted_cleaner
 from bleachbit.Language import get_text as _
+from bleachbit.PathUtils import is_world_writable
 
 logger = logging.getLogger(__name__)
 
@@ -490,10 +491,21 @@ class Winapp:
 
 def list_winapp_files():
     """List winapp2.ini files"""
+    check_world_writable = not IS_WINDOWS
     for dirname in (bleachbit.personal_cleaners_dir, bleachbit.system_cleaners_dir):
         fname = os.path.join(dirname, 'winapp2.ini')
-        if os.path.exists(fname):
-            yield fname
+        if not os.path.exists(fname):
+            continue
+        if check_world_writable and is_world_writable(fname):
+            logger.warning(
+                _("Ignoring cleaner because it is world writable: %s"), fname)
+            continue
+        if check_world_writable and is_world_writable(dirname):
+            logger.warning(
+                _("Ignoring cleaner because its directory is world writable: %s"),
+                fname)
+            continue
+        yield fname
 
 
 def load_cleaners(cb_progress=_noop_progress):

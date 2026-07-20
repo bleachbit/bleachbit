@@ -21,7 +21,8 @@ from unittest import mock
 from tests.common import pytest
 
 from tests import common
-from bleachbit.Winapp import Winapp, detectos, detect_file, fnmatch_translate, section2option
+import bleachbit
+from bleachbit.Winapp import Winapp, detectos, detect_file, fnmatch_translate, list_winapp_files, section2option
 from bleachbit.Windows import detect_registry_key, parse_windows_build
 from bleachbit import IS_POSIX, IS_WINDOWS, logger
 
@@ -584,6 +585,40 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
                       'FileKey1=%Temp%|' + '*a' * 11 + '|RECURSE\n')
         winapp = Winapp(self.ini_fn)
         self.assertEqual(winapp.errors, 1)
+
+    @common.skipIfWindows
+    def test_list_winapp_files_skips_world_writable(self):
+        """A world-writable winapp2.ini is ignored, like CleanerML XML"""
+        pcd = bleachbit.personal_cleaners_dir
+        bleachbit.personal_cleaners_dir = self.mkdtemp(
+            prefix='bleachbit-winapp-worldwritable')
+        try:
+            fn = os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini')
+            self.write_file(fn, text='[test]\n')
+            os.chmod(fn, 0o666)
+            self.assertNotIn(fn, list(list_winapp_files()))
+            os.chmod(fn, 0o644)
+            self.assertIn(fn, list(list_winapp_files()))
+        finally:
+            bleachbit.personal_cleaners_dir = pcd
+
+    @common.skipIfWindows
+    def test_list_winapp_files_skips_world_writable_dir(self):
+        """A winapp2.ini in a world-writable directory is ignored"""
+        pcd = bleachbit.personal_cleaners_dir
+        wwdir = self.mkdtemp(prefix='bleachbit-winapp-wwdir')
+        bleachbit.personal_cleaners_dir = wwdir
+        try:
+            fn = os.path.join(wwdir, 'winapp2.ini')
+            self.write_file(fn, text='[test]\n')
+            os.chmod(fn, 0o644)
+            os.chmod(wwdir, 0o777)
+            self.assertNotIn(fn, list(list_winapp_files()))
+            os.chmod(wwdir, 0o755)
+            self.assertIn(fn, list(list_winapp_files()))
+        finally:
+            os.chmod(wwdir, 0o755)
+            bleachbit.personal_cleaners_dir = pcd
 
     @common.skipUnlessWindows
     def test_filekey_with_path_including_systemdrive(self):

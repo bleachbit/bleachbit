@@ -25,7 +25,6 @@ Create cleaners from CleanerML (markup language)
 # standard library
 import logging
 import os
-import stat
 import sys
 import xml.etree.ElementTree
 
@@ -38,7 +37,7 @@ from bleachbit.General import boolstr_to_bool
 from bleachbit.General import os_match as general_os_match
 from bleachbit.General import reject_xml_dtd
 from bleachbit.Language import get_text as _
-from bleachbit.PathUtils import path_startswith
+from bleachbit.PathUtils import is_world_writable, path_startswith
 from bleachbit import Cleaner
 if IS_WINDOWS:
     from bleachbit.Windows import read_registry_key
@@ -403,20 +402,26 @@ def list_cleanerml_files(local_only=False, system_only=False):
     for pathname in listdir(cleanerdirs):
         if not pathname.lower().endswith('.xml'):
             continue
-        try:
-            world_writable = check_world_writable and stat.S_IMODE(
-                os.stat(pathname)[stat.ST_MODE]) & 2
-        except OSError as e:
-            logger.warning('Could not read cleaner metadata %s: %s',
-                           pathname, e)
-            continue
-        if world_writable:
-            # TRANSLATORS: Warning printed to the log.
-            # %s expands to the path of the XML cleaner file that was skipped
-            warning_msg = _("Ignoring cleaner because it is "
-                            "world writable: %s")
-            logger.warning(warning_msg, pathname)
-            continue
+        if check_world_writable:
+            try:
+                os.stat(pathname)
+            except OSError as e:
+                logger.warning('Could not read cleaner metadata %s: %s',
+                               pathname, e)
+                continue
+            if is_world_writable(pathname):
+                # TRANSLATORS: Warning printed to the log. %s expands to the
+                # path of the XML cleaner file that was skipped
+                logger.warning(_("Ignoring cleaner because it is "
+                                 "world writable: %s"), pathname)
+                continue
+            if is_world_writable(os.path.dirname(pathname)):
+                # TRANSLATORS: Warning printed to the log. %s expands to the
+                # path of the XML cleaner file whose directory is world
+                # writable.
+                logger.warning(_("Ignoring cleaner because its directory is "
+                                 "world writable: %s"), pathname)
+                continue
         yield pathname
 
 
