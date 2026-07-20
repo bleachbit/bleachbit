@@ -200,6 +200,37 @@ class WindowsLinksMixIn():
         self.assertFalse(Windows.is_junction(linkname))
         self.assertFalse(FileUtilities.is_normal_directory(linkname))
 
+    def _create_win_file_symlink(self, target, linkname):
+        """Create a file symlink"""
+
+        self.assertFalse(os.path.lexists(linkname),
+                         f'Link must not exist: {linkname}')
+        self.assertTrue(os.path.isabs(target),
+                        f'Target must be absolute path: {target}')
+        self.assertTrue(os.path.isabs(linkname),
+                        f'Link must be absolute path: {linkname}')
+        self.assertExists(target)
+        target_path = Path(target)
+        self.assertTrue(target_path.is_file(),
+                        f'Target must be an existing file: {target}')
+
+        kernel32 = ctypes.windll.kernel32
+        kernel32.CreateSymbolicLinkW.argtypes = [
+            ctypes.c_wchar_p,
+            ctypes.c_wchar_p,
+            ctypes.c_uint32,
+        ]
+        kernel32.CreateSymbolicLinkW.restype = ctypes.c_ubyte
+        result = kernel32.CreateSymbolicLinkW(
+            linkname, target, 0)  # SYMBOLIC_LINK_FLAG_FILE
+        if result == 0:
+            err = ctypes.GetLastError()
+            raise OSError(err, ctypes.FormatError(err))
+        self.assertExists(linkname)
+        link_path = Path(linkname)
+        self.assertTrue(link_path.is_symlink())
+        self.assertTrue(link_path.is_file())
+
     def _create_win_hard_link(self, target, linkname):
         """Create a hard link to a file"""
 

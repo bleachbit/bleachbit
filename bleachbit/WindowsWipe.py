@@ -83,6 +83,7 @@
 # standard library
 import sys
 import os
+import errno
 import struct
 import logging
 from operator import itemgetter
@@ -522,6 +523,10 @@ def open_file(file_name, mode=GENERIC_READ):
 
     Uses CreateFileW for Unicode support.
 
+    Refuses a symlink so the wipe is not redirected through a link to
+    another file; CreateFileW would otherwise follow it transparently
+    since FILE_FLAG_OPEN_REPARSE_POINT is not passed.
+
     Args:
         file_name: Path to the file to open
         mode: Access mode (default: GENERIC_READ)
@@ -529,6 +534,8 @@ def open_file(file_name, mode=GENERIC_READ):
     Returns:
         Windows file handle
     """
+    if os.path.islink(file_name):
+        raise OSError(errno.EACCES, 'refusing to wipe a link', file_name)
     file_handle = CreateFileW(file_name, mode, 0, None,
                               OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, None)
     return file_handle

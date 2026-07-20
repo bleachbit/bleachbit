@@ -49,10 +49,13 @@ if bleachbit.IS_WINDOWS:
         FILE_BEGIN,
         FlushFileBuffers
     )
+    from tests.TestWindows import WindowsLinksMixIn
+else:
+    WindowsLinksMixIn = object
 
 
 @common.skipUnlessWindows
-class WindowsWipeTestCase(common.BleachbitTestCase):
+class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     """Test case for module WindowsWipe"""
 
     def setUp(self):
@@ -78,6 +81,14 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
         self.assertIsNotNone(file_handle)
         close_file(file_handle)
 
+    def test_open_file_refuses_symlink(self):
+        """open_file() must not follow a symlink to another file"""
+        target = self.write_file('open_file_target', b'keepme')
+        link = os.path.join(self.tempdir, 'open_file_link')
+        self._create_win_file_symlink(target, link)
+        with self.assertRaises(OSError):
+            open_file(link)
+
     def test_get_extents_system32(self):
         """Unit test for get_extents() with system32 files"""
 
@@ -102,6 +113,11 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
                     continue
                 print(f"Error opening {path}: {e}")
                 raise e
+            except PermissionError:
+                # open_file() refuses a symlink (e.g. Docker Desktop's
+                # docker.exe in system32), which is expected here.
+                error_count += 1
+                continue
 
             ret = get_extents(file_handle, filename=path)
             self.assertIsInstance(ret, list)
