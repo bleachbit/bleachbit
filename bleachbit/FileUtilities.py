@@ -18,7 +18,6 @@ import logging
 import os
 import os.path
 import re
-import sqlite3
 import stat
 import subprocess
 import time
@@ -614,6 +613,9 @@ def execute_sqlite3(path, cmds):
         None
     """
     from bleachbit.Options import options
+    # In FreeBSD, sqlite3 is a separate package
+    # pylint: disable=import-outside-toplevel
+    import sqlite3
     assert isinstance(path, str)
     assert isinstance(cmds, str)
     with contextlib.closing(sqlite3.connect(path)) as conn:

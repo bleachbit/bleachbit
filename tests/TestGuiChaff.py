@@ -20,9 +20,10 @@ from unittest.mock import patch
 
 from tests import common
 
-from bleachbit.GtkShim import HAVE_GTK, Gtk, GLib, Gio
+from bleachbit.GtkShim import Gtk, GLib, Gio, is_gtk_available
 from bleachbit.Options import options
 
+HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
     from bleachbit.GuiApplication import Bleachbit
     from bleachbit.GuiChaff import (STOP_MODE_FILE_COUNT,

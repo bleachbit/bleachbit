@@ -19,11 +19,12 @@ from unittest import mock
 
 import bleachbit
 from bleachbit.Cleaner import backends
-from bleachbit.GtkShim import HAVE_GTK, Gdk, Gio, GLib, GObject, Gtk
+from bleachbit.GtkShim import Gdk, Gio, GLib, GObject, Gtk, is_gtk_available
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 from tests import common
 
+HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
     from bleachbit.GuiUtil import (clear_clipboard, get_font_size_from_name,
                                    get_window_info)

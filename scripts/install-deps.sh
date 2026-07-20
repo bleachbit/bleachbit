@@ -1,9 +1,9 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (c) 2008-2026 Andrew Ziem.
 #
-# Install BleachBit's Linux and macOS dependencies for running from source
-# and (optionally) for development, testing, and packaging.
+# Install BleachBit's FreeBSD, Linux, and macOS dependencies for running
+# from source and optionally for development, testing, and packaging.
 #
 # Usage:
 #   ./scripts/install-deps.sh            # runtime deps only
@@ -19,12 +19,14 @@
 # pip-installed reliably. On macOS, GTK/GObject is ignored and only the
 # venv is used.
 #
-# Distro is auto-detected from /etc/os-release; macOS is detected via uname.
+# Distro is auto-detected from /etc/os-release; macOS is detected via uname;
+# FreeBSD is detected via uname -s.
 # Supported families:
 #   debian  (Debian, Ubuntu, Mint, etc.)          -> apt
 #   fedora  (Fedora, RHEL, Alma, CentOS, etc.)    -> dnf
 #   opensuse (Tumbleweed, Leap)                   -> zypper
 #   arch    (Arch, Manjaro, etc.)                 -> pacman
+#   freebsd (FreeBSD)                             -> pkg
 #   macos   (macOS)                               -> pip in venv
 #
 # This Bash script works similarly to:
@@ -35,6 +37,28 @@
 #   - requirements.txt
 #
 # This Bash script installs optional dependencies.
+
+# If this script was invoked with a POSIX shell, re-execute with Bash.
+if [ -z "${BASH_VERSION:-}" ]; then
+    if [ "$(uname -s)" = "FreeBSD" ]; then
+        if [ "$(id -u)" -ne 0 ]; then
+            echo "ERROR: FreeBSD dependency installation must be run as root." >&2
+            exit 1
+        fi
+        if ! command -v pkg >/dev/null 2>&1; then
+            # Install the package manager.
+            pkg bootstrap -y
+        fi
+        bash_path="$(command -v bash || true)"
+        if [ -z "$bash_path" ]; then
+            # Install Bash.
+            pkg install -y bash
+            bash_path=/usr/local/bin/bash
+        fi
+        exec "$bash_path" "$0" "$@"
+    fi
+    exec bash "$0" "$@"
+fi
 
 set -euo pipefail
 
@@ -57,7 +81,8 @@ Usage: ./scripts/install-deps.sh [--dev] [--venv] [--help]
               with VENV_DIR=/path/to/venv.
   --help      Show this help.
 
-Distro is auto-detected from /etc/os-release; macOS is detected via uname.
+Distro is auto-detected from /etc/os-release; macOS and FreeBSD are detected
+via uname. Supported: debian, fedora, opensuse, arch, freebsd, macos.
 EOF
 }
 
@@ -70,15 +95,17 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Detect distribution family from /etc/os-release, or macOS via uname.
+# Detect distribution family from /etc/os-release, or macOS/FreeBSD via uname.
 detect_distro() {
-    if [[ "$(uname -s)" == "Darwin" ]]; then
-        echo "macos"
-        return
-    fi
+    local os
+    os="$(uname -s)"
+    case "$os" in
+        Darwin)  echo "macos";  return ;;
+        FreeBSD) echo "freebsd"; return ;;
+    esac
     if [[ ! -r /etc/os-release ]]; then
         echo "ERROR: /etc/os-release not found; cannot detect distribution." >&2
-        echo "       This script supports Debian, Fedora, openSUSE, Arch, and macOS." >&2
+        echo "       This script supports Debian, Fedora, openSUSE, Arch, FreeBSD, and macOS." >&2
         exit 1
     fi
     # shellcheck disable=SC1091
@@ -90,7 +117,7 @@ detect_distro() {
         arch:*|*:arch*|manjaro:*|endeavouros:*|garuda:*|cachyos:*) echo "arch" ;;
         *)
             echo "ERROR: unsupported distribution (ID='${ID:-}', ID_LIKE='${ID_LIKE:-}')." >&2
-            echo "       Supported: debian, fedora, opensuse, arch, macos." >&2
+            echo "       Supported: debian, fedora, opensuse, arch, freebsd, macos." >&2
             exit 1
             ;;
     esac
@@ -353,6 +380,45 @@ install_arch() {
     fi
 }
 
+# --- FreeBSD (pkg) -----------------------------------------------------------
+# FreeBSD 15.x ships py3.12 as the default.
+# GTK/GObject is omitted for now.
+install_freebsd() {
+    local py="${FREEBSD_PY_PREFIX:-py312}"
+    if [[ $EUID -ne 0 ]]; then
+        echo "ERROR: FreeBSD dependency installation must be run as root." >&2
+        return 1
+    fi
+    export ASSUME_ALWAYS_YES=yes
+    if ! command -v pkg >/dev/null 2>&1; then
+        echo "[freebsd] bootstrapping pkg"
+        pkg bootstrap -y
+    fi
+    echo "[freebsd] pkg update"
+    pkg update -q
+    local runtime=(
+        lsof # for checking for open files
+        python3
+        "${py}-chardet"
+        "${py}-distro"
+        "${py}-psutil"
+        "${py}-requests"
+        "${py}-setuptools"
+        "${py}-sqlite3" # FreeBSD excludes it by default.
+    )
+    local dev=(
+        gmake # GNU Make for Makefiles
+        libxml2 # xmllint
+        gettext-tools # translations
+    )
+    echo "[freebsd] installing runtime deps"
+    pkg install -y "${runtime[@]}"
+    if [[ "$MODE" == "dev" ]]; then
+        echo "[freebsd] installing dev/test deps"
+        pkg install -y "${dev[@]}"
+    fi
+}
+
 # --- macOS (no native package manager; use pip in a venv) --------------------
 install_macos() {
     echo "[macos] using pip in a venv (GTK/GObject is not installed on macOS)"
@@ -406,6 +472,7 @@ main() {
         fedora)   install_fedora   ;;
         opensuse) install_opensuse ;;
         arch)     install_arch     ;;
+        freebsd)  install_freebsd  ;;
         macos)    install_macos    ;;
         *) echo "ERROR: unsupported distro '$distro'" >&2; exit 1 ;;
     esac
@@ -414,20 +481,26 @@ main() {
     fi
     echo
     echo "Done. You can now run BleachBit from source:"
-    if [[ "$distro" != "macos" ]]; then
+    if [[ "$distro" == "freebsd" ]]; then
+        echo "  gmake -C po local   # build translations"
+    elif [[ "$distro" != "macos" ]]; then
         echo "  make -C po local   # build translations"
     fi
     if [[ "$VENV" == 1 ]]; then
         echo "  . '$VENV_DIR/bin/activate'"
     fi
     echo "  python3 bleachbit.py"
-    if [[ "$distro" == "macos" ]]; then
-        echo "  (macOS uses the command-line interface; GTK/GObject is not installed)"
+    if [[ "$distro" == "macos" || "$distro" == "freebsd" ]]; then
+        echo "  (${distro} uses the command-line interface for now)"
     fi
     if [[ "$MODE" == "dev" ]]; then
         echo
         echo "And run the test suite:"
-        echo "  make tests"
+        if [[ "$distro" == "freebsd" ]]; then
+            echo "  gmake tests"
+        else
+            echo "  make tests"
+        fi
     fi
 }
 

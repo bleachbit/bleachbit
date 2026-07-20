@@ -23,7 +23,17 @@ from pathlib import Path
 from unittest import mock
 from random import randint
 
-import pytest
+try:
+    import pytest
+except ImportError:  # pytest is optional for unittest discovery
+    class _pytest_shim:
+        class mark:
+            @staticmethod
+            def xdist_group(_name):
+                def decorator(func):
+                    return func
+                return decorator
+    pytest = _pytest_shim()
 
 # first party imports
 from tests import common

@@ -255,8 +255,8 @@ def get_gtk_version():
     If GTK is not available, returns None.
     """
     # pylint: disable=import-outside-toplevel, import-error
-    from bleachbit.GtkShim import Gtk, HAVE_GTK
-    if not HAVE_GTK:
+    from bleachbit.GtkShim import Gtk, is_gtk_available
+    if not is_gtk_available():
         return None
     gtk_version = (Gtk.get_major_version(),
                    Gtk.get_minor_version(), Gtk.get_micro_version())

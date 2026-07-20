@@ -1,4 +1,4 @@
-# Copyright (C) 2008-2025 Andrew Ziem.  All rights reserved.
+# Copyright (C) 2008-2026 Andrew Ziem.  All rights reserved.
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 # This is free software: You are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
@@ -7,7 +7,7 @@
 # Done on 2019-03-13
 
 # On some systems if not explicitly given, make uses /bin/sh
-SHELL := /bin/bash
+SHELL != command -v bash || echo /bin/sh
 
 .PHONY: clean install tests build tests-with-sudo lint delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
 

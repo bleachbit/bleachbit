@@ -22,7 +22,7 @@ from bleachbit.PathUtils import path_equal
 from bleachbit.Process import is_process_running
 from bleachbit import Action, CleanerML, Command, FileUtilities, Memory
 from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
-from bleachbit.GtkShim import Gtk, HAVE_GTK
+from bleachbit.GtkShim import gtk_may_be_available
 from bleachbit.Wipe import wipe_path
 
 if IS_POSIX:
@@ -245,7 +245,7 @@ class System(Cleaner):
         # options for GTK+
         #
 
-        if HAVE_GTK:
+        if gtk_may_be_available():
             self.add_option('clipboard', _('Clipboard'), _(
                 'The desktop environment\'s clipboard used for copy and paste operations'))
 
@@ -392,6 +392,9 @@ class System(Cleaner):
 
             def gtk_purge_items():
                 """Purge GTK items"""
+                from bleachbit.GtkShim import require_gtk  # pylint: disable=import-outside-toplevel
+                require_gtk()
+                from bleachbit.GtkShim import Gtk  # pylint: disable=import-outside-toplevel
                 Gtk.RecentManager().get_default().purge_items()
                 yield 0
 
@@ -403,7 +406,7 @@ class System(Cleaner):
                 for path2 in glob.iglob(os.path.expanduser(path1)):
                     if os.path.lexists(path2):
                         yield Command.Shred(path2)
-            if HAVE_GTK:
+            if gtk_may_be_available():
                 # Use the Function to skip when in preview mode
                 yield Command.Function(None, gtk_purge_items, _('Recent documents list'))
 
@@ -442,9 +445,11 @@ class System(Cleaner):
                 yield p
 
         # clipboard
-        if HAVE_GTK and 'clipboard' == option_id:
+        if gtk_may_be_available() and 'clipboard' == option_id:
             def func_clear_clipboard():
                 """Command function to clear clipboard"""
+                from bleachbit.GtkShim import require_gtk  # pylint: disable=import-outside-toplevel
+                require_gtk()
                 import bleachbit.GuiUtil
                 bleachbit.GuiUtil.clear_clipboard()
                 return 0
