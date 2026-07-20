@@ -1,7 +1,7 @@
 # These are universal dependencies.
 # requests 2.32.5 throws warning with chardet >= 6.0.0
 # https://github.com/psf/requests/issues/7219#issuecomment-3956177087
-chardet==5.2.0 # for cleaning .ini files
+chardet==6.0.0.post1 # for cleaning .ini files
 # On Windows with 32-bit Python if you do not wish to build from source,
 # then use psutils==7.1.1.
 psutil==7.2.2 # avoid cleaning application that is running
