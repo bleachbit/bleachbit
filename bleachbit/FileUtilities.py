@@ -356,6 +356,26 @@ def children_in_directory(top, list_directories=False):
             yield pending_dirs.pop()
 
 
+def open_for_overwrite(path, mode='w', **kwargs):
+    """Open path for overwriting without following a final symlink.
+
+    Rejects a symlink (or Windows junction) at path, and on POSIX also
+    passes O_NOFOLLOW so a symlink raced in after the check is refused
+    instead of redirecting the write to its target.
+    """
+    if os.path.islink(path):
+        raise OSError(errno.EACCES, 'refusing to write to a link', path)
+    if hasattr(os, 'O_NOFOLLOW'):
+        flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW
+        fd = os.open(path, flags, 0o600)
+        try:
+            return open(fd, mode, **kwargs)
+        except Exception:
+            os.close(fd)
+            raise
+    return open(path, mode, **kwargs)
+
+
 def clean_ini(path, section, parameter):
     """Delete sections and parameters (aka option) in the file
 
@@ -386,7 +406,7 @@ def clean_ini(path, section, parameter):
     from bleachbit.Options import options
     if options.get('shred'):
         delete(path, True)
-    with open(path, 'w', encoding=encoding, newline='') as fp:
+    with open_for_overwrite(path, encoding=encoding, newline='') as fp:
         config.write(fp)
 
 
@@ -424,7 +444,7 @@ def clean_json(path, target):
         if options.get('shred'):
             delete(path, True)
         # write file
-        with open(path, 'w', encoding='utf-8') as f:
+        with open_for_overwrite(path, encoding='utf-8') as f:
             json.dump(js, f)
 
 

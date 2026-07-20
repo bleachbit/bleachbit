@@ -1,9 +1,13 @@
 """Helper utilities to install optional desktop service menus."""
 
+import logging
 import os
 from pathlib import Path
 
+from bleachbit.FileUtilities import open_for_overwrite
 from bleachbit.Options import options
+
+logger = logging.getLogger(__name__)
 
 
 def install_kde_service_menu_file():
@@ -23,9 +27,13 @@ def install_kde_service_menu_file():
             dir_path.mkdir(parents=True)
         if not service_file_path.exists():
             # Service file has dependency on `kdialog` which KDE installations may not provide by default.
-            with service_file_path.open('w') as service_file:
-                service_file_path.chmod(0o755)
-                service_file.write(r'''
+            try:
+                with open_for_overwrite(str(service_file_path)) as service_file:
+                    # fchmod on the fd, not .chmod() on the path, so a
+                    # symlink raced in after the exists() check above
+                    # can't redirect the permission change to its target.
+                    os.fchmod(service_file.fileno(), 0o755)
+                    service_file.write(r'''
 [Desktop Entry]
 Type=Service
 Name=Shred With Bleachbit
@@ -40,6 +48,10 @@ Name=Shred With Bleachbit
 Icon=bleachbit
 Exec=kdialog --yesno "This action will shred the following:\n\n$(echo %F | tr ' ' '\n')\n\nContinue?" && sh -c 'bleachbit --shred "$@"; echo Press enter/return to close; read' sh %F
 ''')
+            except OSError as exc:
+                logger.warning(
+                    'failed to create KDE service menu file %s: %s',
+                    service_file_path, exc)
     else:
         try:
             service_file_path.unlink()

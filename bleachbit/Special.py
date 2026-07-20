@@ -332,7 +332,7 @@ def delete_office_registrymodifications(path):
         node.unlink()
         modified = True
     if modified:
-        with open(path, 'w', encoding='utf-8') as xml_file:
+        with FileUtilities.open_for_overwrite(path, encoding='utf-8') as xml_file:
             dom1.writexml(xml_file)
 
 

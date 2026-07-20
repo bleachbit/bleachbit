@@ -33,6 +33,7 @@ import threading
 # local application imports
 import bleachbit
 from bleachbit import General, IS_WINDOWS
+from bleachbit.FileUtilities import open_for_overwrite
 from bleachbit.Language import get_text as _
 
 # third-party imports
@@ -114,23 +115,9 @@ def path_to_option(pathname):
 
 
 def _open_config_write(path):
-    """Open the config file for writing without following a final symlink.
-
-    Stops a planted symlink from redirecting a root-written config to
-    another file. POSIX only; O_NOFOLLOW does not exist on Windows.
-    """
-    kwargs = {'encoding': 'utf-8-sig', 'errors': 'surrogateescape'}
-    if hasattr(os, 'O_NOFOLLOW'):
-        flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW
-        fd = os.open(path, flags, 0o600)
-        try:
-            # open() on the fd, not os.fdopen(), so a mocked builtins.open
-            # still applies (the error-handling tests patch it).
-            return open(fd, 'w', **kwargs)
-        except Exception:
-            os.close(fd)
-            raise
-    return open(path, 'w', **kwargs)
+    """Open the config file for writing without following a final symlink."""
+    return open_for_overwrite(
+        path, encoding='utf-8-sig', errors='surrogateescape')
 
 
 def init_configuration(*, log=True):

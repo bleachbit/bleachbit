@@ -486,6 +486,27 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
         self.assertRaises(
             ValueError, Special.delete_office_registrymodifications, fn)
 
+    def test_delete_office_registrymodifications_refuses_symlink(self):
+        """delete_office_registrymodifications() must not write through a symlink"""
+        xml_str = (
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<oor:items xmlns:oor="http://openoffice.org/2001/registry">\n'
+            '  <item oor:path="/org.openoffice.Office.Histories/Histories/'
+            'PickList">\n'
+            '    <value>keep me out of it</value>\n'
+            '  </item>\n'
+            '</oor:items>\n')
+        fn = os.path.join(self.mkdtemp(prefix='bleachbit-office-xcu-link'),
+                          'registrymodifications.xcu')
+        self.write_file(fn, text=xml_str)
+        with mock.patch('bleachbit.Special.os.path.islink',
+                        side_effect=lambda p: p == fn):
+            with self.assertRaises(OSError):
+                Special.delete_office_registrymodifications(fn)
+        with open(fn, encoding='utf-8') as f:
+            contents = f.read()
+        self.assertIn('PickList', contents)
+
     def test_delete_mozilla_url_history(self):
         """Test for delete_mozilla_url_history"""
         self.sqlite_clean_helper(

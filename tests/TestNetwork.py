@@ -150,6 +150,20 @@ class NetworkTestCase(common.BleachbitTestCase):
             self.assertEqual(mode, 0o700,
                              f'{created_dir} has mode {oct(mode)}, expected 0o700')
 
+    def test_download_url_to_fn_refuses_symlink(self):
+        """download_url_to_fn() must not write the download through a symlink"""
+        filename = self.write_file('download_target', text='keepme')
+        fake_response = Mock()
+        fake_response.status_code = 200
+        fake_response.content = b'attacker payload'
+        with patch('bleachbit.Network.fetch_url', return_value=fake_response), \
+                patch('bleachbit.FileUtilities.os.path.islink',
+                      side_effect=lambda p: p == filename):
+            with self.assertRaises(OSError):
+                download_url_to_fn('https://example.invalid/x', filename)
+        with open(filename, encoding='utf-8') as f:
+            self.assertEqual(f.read(), 'keepme')
+
     def test_get_gtk_version(self):
         """Unit test for get_gtk_version()"""
         gtk_ver = get_gtk_version()

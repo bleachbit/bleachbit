@@ -680,6 +680,63 @@ State=AAAA/wA...
                 options.set('shred', shred)
                 json_helper(self, clean_json)
 
+    def test_clean_ini_refuses_symlink(self):
+        """clean_ini() must not write through a symlink to another file
+
+        With shred disabled, the original file is never deleted, so a
+        (simulated) symlink at its path must block the write and leave
+        the original content in place. With shred enabled, the original
+        is deleted first as usual, and the guard must then block the
+        symlinked path from being recreated.
+        """
+        content = '[Section]\nkey=value\n'
+
+        options.set('shred', False)
+        filename = self.write_file('clean_ini_target_noshred', text=content)
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities.os.path.islink',
+                side_effect=lambda p: p == filename):
+            with self.assertRaises(OSError):
+                clean_ini(filename, 'Section', None)
+        with open(filename, encoding='utf-8') as f:
+            self.assertEqual(f.read(), content)
+
+        options.set('shred', True)
+        filename = self.write_file('clean_ini_target_shred', text=content)
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities.os.path.islink',
+                side_effect=lambda p: p == filename):
+            with self.assertRaises(OSError):
+                clean_ini(filename, 'Section', None)
+        self.assertNotExists(filename)
+
+    def test_clean_json_refuses_symlink(self):
+        """clean_json() must not write through a symlink to another file
+
+        See test_clean_ini_refuses_symlink for why shred=True and
+        shred=False need different post-conditions.
+        """
+        content = '{"deleteme": 1, "keep": 2}'
+
+        options.set('shred', False)
+        filename = self.write_file('clean_json_target_noshred', text=content)
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities.os.path.islink',
+                side_effect=lambda p: p == filename):
+            with self.assertRaises(OSError):
+                clean_json(filename, 'deleteme')
+        with open(filename, encoding='utf-8') as f:
+            self.assertEqual(f.read(), content)
+
+        options.set('shred', True)
+        filename = self.write_file('clean_json_target_shred', text=content)
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities.os.path.islink',
+                side_effect=lambda p: p == filename):
+            with self.assertRaises(OSError):
+                clean_json(filename, 'deleteme')
+        self.assertNotExists(filename)
+
     @pytest.mark.no_xdist
     def test_delete(self):
         """Unit test for method delete()"""

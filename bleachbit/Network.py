@@ -59,7 +59,7 @@ else:
 
 # local imports
 from bleachbit import bleachbit_exe_path, APP_VERSION, General, IS_LINUX, IS_NETBSD, IS_WINDOWS
-from bleachbit.FileUtilities import delete
+from bleachbit.FileUtilities import delete, open_for_overwrite
 from bleachbit.Language import get_active_language_code, get_text as _
 
 logger = logging.getLogger(__name__)
@@ -144,7 +144,7 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None,
             do_error(msg2)
             return False
     General.makedirs(os.path.dirname(fn))
-    with open(fn, 'wb') as f:
+    with open_for_overwrite(fn, 'wb') as f:
         f.write(response.content)
     return True
 

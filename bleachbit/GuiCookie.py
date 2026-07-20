@@ -18,6 +18,7 @@ from bleachbit.GtkShim import GLib, Gtk
 import bleachbit
 from bleachbit.Constant import URL_COOKIE_MGR
 from bleachbit.Cookie import list_unique_cookies, load_keep_list, COOKIE_KEEP_LIST_FILENAME
+from bleachbit.FileUtilities import open_for_overwrite
 from bleachbit.GuiBasic import open_url
 from bleachbit.Language import get_text as _, nget_text as _n
 
@@ -160,7 +161,7 @@ class CookieManagerPane(Gtk.Box):
         keep_list = sorted(self._iter_selected_domains())
 
         try:
-            with open(self.keep_list_path, "w", encoding="utf-8") as f:
+            with open_for_overwrite(self.keep_list_path, encoding="utf-8") as f:
                 json.dump(keep_list, f, indent=2)
             self.saved_domains = set(keep_list)
             return True
