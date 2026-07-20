@@ -142,8 +142,23 @@ def special_detect(code):
     return False
 
 
+"""fnmatch.translate() only got atomic groups (avoiding catastrophic
+regex backtracking) in Python 3.11, but BleachBit supports 3.8+, so
+cap the wildcard count instead of trusting the stdlib on older versions.
+TODO: drop this once the minimum supported Python is 3.11+."""
+MAX_GLOB_WILDCARDS = 10
+
+
+def _check_wildcard_count(pattern):
+    """Raise if pattern has enough wildcards to risk a regex backtracking blowup"""
+    wildcard_count = pattern.count('*') + pattern.count('?')
+    if wildcard_count > MAX_GLOB_WILDCARDS:
+        raise ValueError(f'too many wildcards in pattern: {pattern!r}')
+
+
 def fnmatch_translate(pattern):
     """Same as the original without the end"""
+    _check_wildcard_count(pattern)
     ret = fnmatch.translate(pattern)
     if ret.endswith('$'):
         return ret[:-1]
@@ -378,7 +393,7 @@ class Winapp:
                 if removeself:
                     search = 'walk.all'
             else:
-                regex = f' regex="^{xml_escape(fnmatch.translate(filename))}$" '
+                regex = f' regex="^{xml_escape(fnmatch_translate(filename))}$" '
         else:
             search = 'glob'
             path = os.path.join(dirname, filename)

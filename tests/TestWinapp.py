@@ -576,6 +576,15 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
         self.assertEqual(len(cm.output), 1)
         self.assertIn('sections affected: 2', cm.output[0])
 
+    def test_filekey_recurse_rejects_excessive_wildcards(self):
+        """A FileKey RECURSE pattern with too many wildcards is rejected (ReDoS defense)"""
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-redos')
+        with open(self.ini_fn, 'w', encoding='utf-8') as ini:
+            ini.write('[someapp]\nLangSecRef=3021\n'
+                      'FileKey1=%Temp%|' + '*a' * 11 + '|RECURSE\n')
+        winapp = Winapp(self.ini_fn)
+        self.assertEqual(winapp.errors, 1)
+
     @common.skipUnlessWindows
     def test_filekey_with_path_including_systemdrive(self):
         """Test FileKey with path including SystemDrive"""
@@ -703,6 +712,12 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
                 bool(re.search(fnmatch_translate(pattern), string)),
                 expected,
                 msg)
+
+    def test_fnmatch_translate_rejects_excessive_wildcards(self):
+        """A pattern with too many wildcards is rejected (ReDoS defense)"""
+        fnmatch_translate('*a*a*a*a*a*a*a*a*a*a')  # 10 wildcards: allowed
+        self.assertRaises(
+            ValueError, fnmatch_translate, '*a*a*a*a*a*a*a*a*a*a*')  # 11: rejected
 
     def test_section_not_found(self):
         """Test a section that is found"""
