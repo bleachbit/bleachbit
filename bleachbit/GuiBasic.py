@@ -22,6 +22,7 @@ Basic GUI code
 """
 
 # standard library
+import logging
 import os
 
 # local import
@@ -34,6 +35,8 @@ if IS_WINDOWS:
 
 # Ensure GTK is available for this GUI module
 require_gtk()
+
+logger = logging.getLogger(__name__)
 
 
 # TRANSLATORS: Label for the Cancel button in several dialog windows:
@@ -257,6 +260,9 @@ def message_dialog(parent, msg, mtype=Gtk.MessageType.ERROR, buttons=Gtk.Buttons
 
 def open_url(url, parent_window=None, prompt=True):
     """Open an HTTP URL.  Try to run as non-root."""
+    if not url.lower().startswith(('http://', 'https://')):
+        logger.error('refusing to open URL with disallowed scheme: %s', url)
+        return
     # drop privileges so the web browser is running as a normal process
     if IS_POSIX and os.getuid() == 0:
         # TRANSLATORS: This is an error message shown to root users.
