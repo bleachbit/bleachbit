@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-07-12 15:23-0600\n"
-"PO-Revision-Date: 2026-01-16 13:01+0000\n"
+"PO-Revision-Date: 2026-07-21 06:01+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/bleachbit/main/"
 "ka/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
@@ -73,7 +73,7 @@ msgstr "ისტორია"
 #: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
 #: ../cleaners/amule.xml
 msgid "Delete the usage history"
-msgstr ""
+msgstr "გამოყენების ისტორიის წაშლა"
 
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
@@ -691,10 +691,8 @@ msgstr ""
 
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Form history"
 msgid "File history"
-msgstr "ფორმის ისტორია"
+msgstr "ფაილის ისტორია"
 
 #. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
 #: ../cleaners/claude.xml
@@ -703,10 +701,8 @@ msgstr ""
 
 #. Description for deleting Claude Code sessions
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete confirmation"
 msgid "Delete the conversation history"
-msgstr "წაშლის დადასტურება"
+msgstr "საუბარის ისტორიის წაშლა"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
@@ -781,10 +777,8 @@ msgid "AI"
 msgstr ""
 
 #: ../cleaners/google_chrome.xml
-#, fuzzy
-#| msgid "Delete the logs"
 msgid "Delete the AI models"
-msgstr "ჟურნალის წაშლა"
+msgstr "ხი მოდელების წაშლა"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -816,10 +810,8 @@ msgid "Delete the list of game servers"
 msgstr ""
 
 #: ../cleaners/profanity.xml
-#, fuzzy
-#| msgid "Downloaded podcasts"
 msgid "Downloaded files"
-msgstr "გადმოწერილი პოდკასტები"
+msgstr "გადმოწერილი ფაილები"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
@@ -1024,11 +1016,9 @@ msgstr ""
 
 #. TRANSLATORS: Title of the installation mode page in the Windows installer. User selects whether to install for all users or the current user.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Choose a folder"
 msgctxt "nsis:MULTIUSER_PAGE_TITLE"
 msgid "Choose Users"
-msgstr "აირჩიეთ საქაღალდე"
+msgstr "აირჩიეთ მომხმარებლები"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS"
@@ -1153,11 +1143,9 @@ msgstr ""
 
 #. TRANSLATORS: Name of the translations section in the Windows installer: user selects which translations to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Inspiration"
 msgctxt "nsis:SECTION_TRANSLATIONS_NAME"
 msgid "Translations"
-msgstr "ინსპირაცია"
+msgstr "თარგმანები"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
@@ -1871,10 +1859,8 @@ msgstr ""
 #. has an official abbreviation (e.g., "Mo" in French); otherwise keep
 #. "MB".
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Size"
 msgid "Size (MB)"
-msgstr "ზომა"
+msgstr "ზომა (მბ)"
 
 #. TRANSLATORS: Option in combo box to choose to stop when free space
 #. reaches a certain percentage.
@@ -1903,10 +1889,8 @@ msgstr ""
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Deleting files"
 msgid "Deleting files…"
-msgstr "ფაილების წაშლა"
+msgstr "ფაილების წაშლა…"
 
 #. TRANSLATORS: Error message shown when deleting chaff files fails.
 #. The placeholder is for the technical error details.
@@ -2004,10 +1988,8 @@ msgstr ""
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Deleting files"
 msgid "Generating files…"
-msgstr "ფაილების წაშლა"
+msgstr "ფაილების გენერაცია…"
 
 #. TRANSLATORS: Instruction label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
@@ -2070,10 +2052,8 @@ msgstr ""
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Clean cookies"
 msgid "Loading cookies…"
-msgstr "ქუქიების გასუფთავება"
+msgstr "ქუქიების ჩატვირთვა…"
 
 #: ../bleachbit/GuiPreferences.py
 msgid ""
@@ -2085,10 +2065,8 @@ msgstr ""
 #. to bypass some safety guardails for advanced users and (2) the title of
 #. dialog asking to confirm this choice.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Dark mode"
 msgid "Expert mode"
-msgstr "მუქი რეჟიმი"
+msgstr "ექსპერტის რეჟიმი"
 
 #. TRANSLATORS: Notice shown in an infobar after changing a preference
 #. that requires starting the application to be effective.
@@ -2199,10 +2177,8 @@ msgstr ""
 
 #. TRANSLATORS: Button label in the preferences. 'Reset' is a verb.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Delete confirmation"
 msgid "Reset warning confirmations"
-msgstr "წაშლის დადასტურება"
+msgstr "გაფრთხილების დადასტურებების ჩამოყრა"
 
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
@@ -2221,18 +2197,14 @@ msgstr ""
 #. TRANSLATORS: Section title (noun) on the Preferences - General page
 #. for options related to cleaning stored data.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Clean"
 msgid "Cleaning"
-msgstr "გასუფთავება"
+msgstr "სუფთავდება"
 
 #. TRANSLATORS: Section title in Preferences for user interface options
 #. such as dark mode and window behavior.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Internet"
 msgid "Interface"
-msgstr "ინტერნეტი"
+msgstr "ინტერფეისი"
 
 #. TRANSLATORS: Checkbox label to remember the window size and position
 #. between application launches.
@@ -2532,10 +2504,8 @@ msgstr "გასუფთავება"
 #. manager.
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
-#, fuzzy
-#| msgid "Manage Cookies"
 msgid "Manage cookies to keep…"
-msgstr "ქუქიების მართვა"
+msgstr "შესანარჩუნებელი ქუქიების მართვა…"
 
 #. TRANSLATORS: Error message shown in the log on the main window.
 #. %s is the file path.
