@@ -707,7 +707,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         with mock.patch('bleachbit.Windows.sys.argv', argv):
             self.assertEqual(
                 '--gui --no-uac --exit',
-                _add_command_line_parameters('--gui --no-uac'))
+                _add_command_line_parameters(['--gui', '--no-uac']))
 
     def test_add_command_line_parameters_context_menu_omits_duplicate_gui(self):
         """Context-menu UAC parameters keep the quoted path but skip --gui."""
@@ -723,7 +723,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.assertEqual(
                 '--gui --no-uac --no-delete-confirmation --context-menu '
                 f'"{file_to_shred}"',
-                _add_command_line_parameters('--gui --no-uac'))
+                _add_command_line_parameters(['--gui', '--no-uac']))
 
     def test_elevate_privileges_omits_duplicate_gui(self):
         """The elevated UAC command line should contain --gui only once."""
@@ -1364,3 +1364,45 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             set_environ('cd_test', test_dir)
             self.assertEqual(os.environ['cd_test'], test_dir)
             os.environ.pop('cd_test')
+
+    @staticmethod
+    def _parse_windows_command_line(cmd):
+        """Parse a command line the same way Windows does (CommandLineToArgvW)."""
+        fn = ctypes.windll.shell32.CommandLineToArgvW
+        fn.argtypes = [ctypes.c_wchar_p, ctypes.POINTER(ctypes.c_int)]
+        fn.restype = ctypes.POINTER(ctypes.c_wchar_p)
+        argc = ctypes.c_int()
+        argv_p = fn(cmd, ctypes.byref(argc))
+        try:
+            return [argv_p[i] for i in range(argc.value)]
+        finally:
+            ctypes.windll.kernel32.LocalFree(argv_p)
+
+    def _assert_roundtrips(self, base, extra_argv):
+        """cmd has no exe name, so prepend one before parsing it back."""
+        with mock.patch('bleachbit.Windows.sys.argv', ['bleachbit.exe'] + extra_argv):
+            cmd = _add_command_line_parameters(base)
+        argv = self._parse_windows_command_line(f'"dummy.exe" {cmd}')
+        self.assertEqual(argv[1:], base + extra_argv)
+
+    def test_add_command_line_parameters_quoting(self):
+        """Args must round-trip unchanged through the Windows argv parser."""
+        base = [r'C:\Program Files\BleachBit\bleachbit.py', '--gui', '--no-uac']
+
+        # simple argument
+        self._assert_roundtrips(base, ['--debug-log'])
+
+        # argument with spaces
+        self._assert_roundtrips(base, ['--debug-log', r'C:\temp\my log.txt'])
+
+        # embedded quotes and ampersands attempting to break out of the argument
+        malicious = r'C:\test" & calc.exe & "'
+        self._assert_roundtrips(base, ['--context-menu', malicious])
+
+        # embedded quote attempting to inject a whole extra argument
+        injection = 'foo" --no-uac "bar'
+        self._assert_roundtrips(base, ['--context-menu', injection])
+
+        # multiple arguments, one with spaces, in a realistic combination
+        self._assert_roundtrips(
+            base, ['--context-menu', r'C:\path with spaces\file.txt', '--debug-log'])

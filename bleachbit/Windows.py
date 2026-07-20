@@ -786,7 +786,7 @@ def elevate_privileges(uac):
     if hasattr(sys, 'frozen'):
         # running frozen in py2exe
         exe = sys.executable
-        parameters = "--gui --no-uac"
+        parameters = ['--gui', '--no-uac']
     else:
         pyfile = os.path.join(bleachbit.bleachbit_exe_path, 'bleachbit.py')
         # If the Python file is on a network drive, do not offer the UAC because
@@ -796,12 +796,12 @@ def elevate_privileges(uac):
             logger.debug(
                 "debug: skipping UAC because '%s' is on network", pyfile)
             return False
-        parameters = '"%s" --gui --no-uac' % pyfile
+        parameters = [pyfile, '--gui', '--no-uac']
         exe = sys.executable
 
     try:
         token = get_sid_token_48()
-        parameters = f"{parameters} --uac-sid-token {token}"
+        parameters = parameters + ['--uac-sid-token', token]
     except Exception as e:
         logger.error('could not compute SID token: %s', e)
 
@@ -830,17 +830,11 @@ def elevate_privileges(uac):
 
 
 def _add_command_line_parameters(parameters):
-    """
-    Add any command line parameters such as --debug-log.
-    """
+    """Add any command line parameters such as --debug-log."""
+    import subprocess  # pylint: disable=import-outside-toplevel
+    # parameters already has --gui, so drop it from argv to avoid a duplicate
     args = [arg for arg in sys.argv[1:] if arg != '--gui']
-    if '--context-menu' in args:
-        return '{} {} "{}"'.format(parameters, ' '.join(args[:-1]), args[-1])
-
-    if not args:
-        return parameters
-
-    return '{} {}'.format(parameters, ' '.join(args))
+    return subprocess.list2cmdline(parameters + args)
 
 
 def empty_recycle_bin(path, really_delete):
