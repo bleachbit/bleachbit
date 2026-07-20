@@ -38,11 +38,15 @@ from bleachbit.FileUtilities import expand_glob_join, listdir
 from bleachbit.General import boolstr_to_bool
 from bleachbit.General import os_match as general_os_match
 from bleachbit.Language import get_text as _
+from bleachbit.PathUtils import path_startswith
 from bleachbit import Cleaner
 if IS_WINDOWS:
     from bleachbit.Windows import read_registry_key
 
 logger = logging.getLogger(__name__)
+
+"""Actions blocked for untrusted (user-writable) cleaners."""
+UNTRUSTED_BLOCKED_COMMANDS = ('process', 'winreg')
 
 
 class _ETSimpleTextNode:
@@ -131,14 +135,19 @@ class CleanerML:
 
     """Create a cleaner from CleanerML"""
 
-    def __init__(self, pathname, xlate_cb=None):
+    def __init__(self, pathname, xlate_cb=None, trusted=True):
         """Create cleaner from XML in pathname.
 
         If xlate_cb is set, use it as a callback for each
         translate-able string.
+
+        trusted is False for cleaners from user-writable directories;
+        their command-execution actions are ignored.
         """
 
         self.action = None
+        self.trusted = trusted
+        self.ignored_commands = set()
         self.cleaner = Cleaner.Cleaner()
         self.option_id = None
         self.option_name = None
@@ -170,6 +179,12 @@ class CleanerML:
                 return
 
         self.handle_cleaner(cleaner_element)
+
+        if self.ignored_commands:
+            commands = ', '.join(f"'{c}'" for c in sorted(self.ignored_commands))
+            logger.warning(
+                "ignoring %s actions from untrusted cleaner: %s",
+                commands, pathname)
 
     def get_cleaner(self):
         """Return the created cleaner"""
@@ -299,6 +314,13 @@ class CleanerML:
         if not self.os_match(action_node.attrib.get('os', '')):
             return
         command = action_node.attrib.get('command', '')
+        if command in UNTRUSTED_BLOCKED_COMMANDS and not self.trusted:
+            # __init__ logs a summary warning once the whole file is parsed
+            self.ignored_commands.add(command)
+            logger.debug(
+                "ignoring '%s' action from untrusted cleaner '%s'",
+                command, self.cleaner.id or '?')
+            return
         provider = None
         for actionplugin in ActionProvider.plugins:
             if actionplugin.action_key == command:
@@ -391,6 +413,22 @@ def list_cleanerml_files(local_only=False, system_only=False):
         yield pathname
 
 
+def is_trusted_cleaner(pathname):
+    """Return True if the cleaner file is in the system cleaners directory.
+
+    The personal cleaners directory is user-writable, so a lower-integrity
+    process could plant a cleaner there. In portable mode the system
+    directory is writable too, but so is the executable beside it, so
+    distrusting it would gain nothing.
+    """
+    system_dir = bleachbit.system_cleaners_dir
+    if not system_dir:
+        return False
+    pathname = os.path.normpath(os.path.abspath(pathname))
+    system_dir = os.path.normpath(os.path.abspath(system_dir))
+    return path_startswith(pathname, system_dir)
+
+
 def load_cleaners(cb_progress=lambda x: None, allow_local=True):
     """Scan for CleanerML and load them"""
     cleanerml_files = list(list_cleanerml_files(system_only=not allow_local))
@@ -404,7 +442,7 @@ def load_cleaners(cb_progress=lambda x: None, allow_local=True):
     not_usable = []
     for pathname in cleanerml_files:
         try:
-            xmlcleaner = CleanerML(pathname)
+            xmlcleaner = CleanerML(pathname, trusted=is_trusted_cleaner(pathname))
         except Exception:
             # TRANSLATORS: Error message printed to the log.
             # %s expands to the path of the XML cleaner file

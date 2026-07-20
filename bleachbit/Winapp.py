@@ -18,6 +18,7 @@ from xml.dom.minidom import parseString
 import bleachbit
 from bleachbit import Cleaner, Windows
 from bleachbit.Action import Delete, Winreg
+from bleachbit.CleanerML import is_trusted_cleaner
 from bleachbit.Language import get_text as _
 
 logger = logging.getLogger(__name__)
@@ -154,9 +155,15 @@ class Winapp:
 
     """Create cleaners from a Winapp2.ini-style file"""
 
-    def __init__(self, pathname, cb_progress=_noop_progress):
-        """Create cleaners from a Winapp2.ini-style file"""
+    def __init__(self, pathname, cb_progress=_noop_progress, trusted=True):
+        """Create cleaners from a Winapp2.ini-style file
 
+        trusted is False for winapp2.ini files from user-writable
+        directories; their registry-deletion actions are ignored.
+        """
+
+        self.trusted = trusted
+        self.ignored_regkey_sections = set()
         self.cleaners = {}
         self.cleaner_ids = []
         for langsecref in set(langsecref_map.values()):
@@ -178,6 +185,11 @@ class Winapp:
             else:
                 section_done_count += 1
                 cb_progress(1.0 * section_done_count / section_total_count)
+        if self.ignored_regkey_sections:
+            logger.warning(
+                "ignoring 'winreg' actions from untrusted winapp2.ini: %s "
+                "(sections affected: %d)",
+                pathname, len(self.ignored_regkey_sections))
 
     def add_section(self, cleaner_id, name):
         """Add a section (cleaners)"""
@@ -424,6 +436,12 @@ class Winapp:
 
     def handle_regkey(self, lid, ini_section, ini_option, reg_excludekeys):
         """Parse a RegKey# option"""
+        if not self.trusted:
+            # __init__ logs a summary warning once the whole file is parsed
+            self.ignored_regkey_sections.add(ini_section)
+            logger.debug(
+                "ignoring 'winreg' action from untrusted winapp2.ini: section=%s", ini_section)
+            return
         elements = self.parser.get(
             ini_section, ini_option).strip().split('|')
         path = elements[0]
@@ -468,7 +486,8 @@ def load_cleaners(cb_progress=_noop_progress):
     cb_progress(0.0)
     for pathname in list_winapp_files():
         try:
-            inicleaner = Winapp(pathname, cb_progress)
+            inicleaner = Winapp(pathname, cb_progress,
+                               trusted=is_trusted_cleaner(pathname))
         except Exception:
             logger.exception(
                 "Error reading winapp2.ini cleaner '%s'", pathname)
