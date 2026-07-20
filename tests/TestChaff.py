@@ -29,7 +29,7 @@ from shutil import rmtree
 from urllib.parse import urlparse
 
 from tests import common
-from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models, MODEL_BASENAMES, DEFAULT_MODELS_DIR
+from bleachbit.Chaff import download_models, generate_emails, generate_2600, have_models, MODEL_BASENAMES, MODEL_SHA512, DEFAULT_MODELS_DIR
 from bleachbit.FileUtilities import getsize
 
 
@@ -105,6 +105,18 @@ class ChaffTestCase(common.BleachbitTestCase):
         self.assertFalse(
             ret, "download_models() should return False when any download fails")
         self.assertEqual(mock_download.call_count, 2)
+
+        rmtree(tmp_dir)
+
+    @mock.patch('bleachbit.Network.download_url_to_fn')
+    def test_download_models_verifies_hash(self, mock_download):
+        """download_models() must pass the expected SHA-512 for each model"""
+        tmp_dir = mkdtemp(prefix='bleachbit-chaff')
+        mock_download.return_value = True
+        download_models(models_dir=tmp_dir)
+        hashes_passed = {call.kwargs.get('expected_sha512')
+                         for call in mock_download.call_args_list}
+        self.assertEqual(hashes_passed, set(MODEL_SHA512.values()))
 
         rmtree(tmp_dir)
 
