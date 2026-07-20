@@ -100,24 +100,11 @@ class Bleachbit(Gtk.Application):
     def build_app_menu(self):
         """Build the application menu
 
-        On Linux with GTK 3.24, this code is necessary but not sufficient for
-        the menu to work. The headerbar code is also needed.
-
-        On Windows with GTK 3.18, this code is sufficient for the menu to work.
+        This code is necessary but not sufficient for the menu to work. The
+        headerbar code is also needed.
         """
         from bleachbit.Language import setup_translation
         setup_translation()
-
-        # set_translation_domain() seems to have no effect.
-        # builder.set_translation_domain('bleachbit')
-        app_menu_path = bleachbit.get_share_path('app-menu.ui')
-        if app_menu_path:
-            builder = Gtk.Builder()
-            builder.add_from_file(app_menu_path)
-            menu = builder.get_object('app-menu')
-            self.set_app_menu(menu)
-        else:
-            logger.error('build_app_menu(): app-menu.ui not found')
 
         # set up mappings between <attribute name="action"> in app-menu.ui and methods in this class
         actions = {'shredFiles': self.cb_shred_file,
