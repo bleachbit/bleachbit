@@ -29,7 +29,6 @@ JSON or INI file, delete registry key, edit SQLite3 database, etc.
 import errno
 import logging
 import os
-import sqlite3
 import types
 import warnings
 
@@ -159,6 +158,9 @@ class Function:
     def execute(self, really_delete):
         """Execute the function and return results"""
 
+        # In FreeBSD, sqlite3 is a separate package
+        # pylint: disable=import-outside-toplevel
+        import sqlite3
         if self.path is not None and FileUtilities.whitelisted(self.path):
             yield ret_keep_list(self.path)
             return
