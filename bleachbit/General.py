@@ -28,6 +28,7 @@ import shlex
 import shutil
 import subprocess
 import sys
+import xml.parsers.expat
 
 import bleachbit
 from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
@@ -54,6 +55,18 @@ def getText(nodelist):
         node.data for node in nodelist if node.nodeType == node.TEXT_NODE
     )
     return rc
+
+
+def reject_xml_dtd(data, description='XML'):
+    """Raise ValueError if data declares a DTD with an internal subset, to block entity-expansion attacks"""
+    def on_doctype(_name, _sysid, _pubid, has_internal_subset):
+        # external-only doctype (e.g. fontconfig's fonts.conf) is harmless: no ExternalEntityRefHandler is registered, so expat never fetches it
+        if has_internal_subset:
+            raise ValueError(
+                f'DTD with an internal subset is not allowed in {description}')
+    parser = xml.parsers.expat.ParserCreate()
+    parser.StartDoctypeDeclHandler = on_doctype
+    parser.Parse(data, True)
 
 
 #

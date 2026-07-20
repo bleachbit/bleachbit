@@ -33,6 +33,7 @@ from urllib.parse import quote, urlparse, urlunparse
 
 # local application imports
 from bleachbit import FileUtilities, IS_WINDOWS
+from bleachbit.General import reject_xml_dtd
 from bleachbit.Options import options
 
 logger = logging.getLogger(__name__)
@@ -283,7 +284,10 @@ def delete_chrome_keywords(path):
 
 def delete_office_registrymodifications(path):
     """Erase LibreOffice 3.4 and Apache OpenOffice.org 3.4 MRU in registrymodifications.xcu"""
-    dom1 = xml.dom.minidom.parse(path)
+    with open(path, 'rb') as f:
+        data = f.read()
+    reject_xml_dtd(data, 'registrymodifications.xcu')
+    dom1 = xml.dom.minidom.parseString(data)
     modified = False
     pathprefix = '/org.openoffice.Office.Histories/Histories/'
     for node in dom1.getElementsByTagName("item"):

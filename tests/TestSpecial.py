@@ -455,6 +455,36 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
                                  Special.delete_chrome_keywords,
                                  check_chrome_keywords)
 
+    def test_delete_office_registrymodifications(self):
+        """Unit test for delete_office_registrymodifications"""
+        xml_str = (
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<oor:items xmlns:oor="http://openoffice.org/2001/registry">\n'
+            '  <item oor:path="/org.openoffice.Office.Histories/Histories/'
+            'PickList">\n'
+            '    <value>keep me out of it</value>\n'
+            '  </item>\n'
+            '</oor:items>\n')
+        fn = os.path.join(self.mkdtemp(prefix='bleachbit-office-xcu'),
+                          'registrymodifications.xcu')
+        self.write_file(fn, text=xml_str)
+        Special.delete_office_registrymodifications(fn)
+        with open(fn, encoding='utf-8') as f:
+            contents = f.read()
+        self.assertNotIn('PickList', contents)
+
+    def test_delete_office_registrymodifications_rejects_dtd(self):
+        """A registrymodifications.xcu with a DTD is rejected (entity-expansion defense)"""
+        xml_str = (
+            '<?xml version="1.0"?>\n'
+            '<!DOCTYPE oor:items [ <!ENTITY x "y"> ]>\n'
+            '<oor:items xmlns:oor="http://openoffice.org/2001/registry"/>\n')
+        fn = os.path.join(self.mkdtemp(prefix='bleachbit-office-xcu-dtd'),
+                          'registrymodifications.xcu')
+        self.write_file(fn, text=xml_str)
+        self.assertRaises(
+            ValueError, Special.delete_office_registrymodifications, fn)
+
     def test_delete_mozilla_url_history(self):
         """Test for delete_mozilla_url_history"""
         self.sqlite_clean_helper(

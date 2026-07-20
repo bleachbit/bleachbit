@@ -50,6 +50,7 @@ from bleachbit.Windows import (
     get_windows_system_paths,
     get_windows_version,
     elevate_privileges,
+    has_fontconfig_cache,
     is_junction,
     move_to_recycle_bin,
     parse_windows_build,
@@ -1049,6 +1050,34 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.skipTest("GTK is not available")
         font_fn = get_font_conf_file()
         self.assertExists(font_fn)
+
+    def test_has_fontconfig_cache(self):
+        """Unit test for has_fontconfig_cache()"""
+        font_conf = self.write_file(
+            'fonts.conf',
+            text='<?xml version="1.0"?>\n'
+            '<fontconfig>\n'
+            '  <cachedir>~/.fontconfig</cachedir>\n'
+            '</fontconfig>\n')
+        self.assertFalse(has_fontconfig_cache(font_conf))
+
+    def test_has_fontconfig_cache_rejects_dtd(self):
+        """A fonts.conf with a DTD is rejected (entity-expansion defense)"""
+        font_conf = self.write_file(
+            'fonts_dtd.conf',
+            text='<?xml version="1.0"?>\n'
+            '<!DOCTYPE fontconfig [ <!ENTITY x "y"> ]>\n'
+            '<fontconfig><cachedir>~/.fontconfig</cachedir></fontconfig>\n')
+        self.assertRaises(ValueError, has_fontconfig_cache, font_conf)
+
+    def test_has_fontconfig_cache_allows_external_doctype(self):
+        """A real fonts.conf, which declares an external-only DOCTYPE, must not be rejected"""
+        font_conf = self.write_file(
+            'fonts_external_dtd.conf',
+            text='<?xml version="1.0"?>\n'
+            '<!DOCTYPE fontconfig SYSTEM "fonts.dtd">\n'
+            '<fontconfig><cachedir>~/.fontconfig</cachedir></fontconfig>\n')
+        self.assertFalse(has_fontconfig_cache(font_conf))
 
     def test_get_known_folder_path(self):
         """Unit test for get_known_folder_path"""

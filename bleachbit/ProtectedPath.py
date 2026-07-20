@@ -31,7 +31,7 @@ import xml.dom.minidom
 
 import bleachbit
 from bleachbit import FileUtilities, FS_CASE_SENSITIVE
-from bleachbit.General import getText, os_match
+from bleachbit.General import getText, os_match, reject_xml_dtd
 from bleachbit.Language import get_text as _
 from bleachbit.PathUtils import (
     expand_path,
@@ -77,7 +77,10 @@ def load_protected_paths(force_reload=False):
     protected_paths = []
 
     try:
-        dom = xml.dom.minidom.parse(xml_path)
+        with open(xml_path, 'rb') as f:
+            data = f.read()
+        reject_xml_dtd(data, 'protected_path.xml')
+        dom = xml.dom.minidom.parseString(data)
     except Exception as e:
         logger.error("Error parsing protected path XML: %s", e)
         return []

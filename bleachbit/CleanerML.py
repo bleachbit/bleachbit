@@ -28,7 +28,6 @@ import os
 import stat
 import sys
 import xml.etree.ElementTree
-import xml.parsers.expat
 
 # local import
 import bleachbit
@@ -37,6 +36,7 @@ from bleachbit.Action import ActionProvider
 from bleachbit.FileUtilities import expand_glob_join, listdir
 from bleachbit.General import boolstr_to_bool
 from bleachbit.General import os_match as general_os_match
+from bleachbit.General import reject_xml_dtd
 from bleachbit.Language import get_text as _
 from bleachbit.PathUtils import path_startswith
 from bleachbit import Cleaner
@@ -131,6 +131,14 @@ def default_vars():
     return ret
 
 
+def _parse_cleaner_xml(pathname):
+    """Parse a CleanerML file and return the root element."""
+    with open(pathname, 'rb') as f:
+        data = f.read()
+    reject_xml_dtd(data, 'CleanerML')
+    return xml.etree.ElementTree.fromstring(data)
+
+
 class CleanerML:
 
     """Create a cleaner from CleanerML"""
@@ -162,8 +170,7 @@ class CleanerML:
             self.xlate_mode = True
 
         try:
-            tree = xml.etree.ElementTree.parse(pathname)
-            root_element = tree.getroot()
+            root_element = _parse_cleaner_xml(pathname)
         except Exception as e:
             logger.error(
                 "Error parsing CleanerML file %s with error %s", pathname, e)

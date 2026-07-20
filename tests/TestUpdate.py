@@ -80,6 +80,17 @@ class UpdateTestCase(common.BleachbitTestCase):
                 if 'X-GTK-Version' in sent_headers:
                     self.assertIsInstance(sent_headers['X-GTK-Version'], str)
 
+    def test_check_updates_rejects_dtd(self):
+        """Update XML that declares a DTD is rejected"""
+        xml_text = ('<?xml version="1.0"?><!DOCTYPE u [<!ENTITY x "y">]>'
+                    '<updates><stable ver="1">http://x</stable></updates>')
+        with patch('bleachbit.Update.fetch_url') as mock_fetch:
+            resp = Mock()
+            resp.status_code = 200
+            resp.text = xml_text
+            mock_fetch.return_value = resp
+            self.assertEqual(check_updates(True, False, None, None), ())
+
     def test_check_updates_real_network(self):
         """Unit test for function check_updates() using real network"""
         for update in check_updates(True, False, None, None):

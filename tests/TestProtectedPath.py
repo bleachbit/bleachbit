@@ -11,6 +11,7 @@ Test case for module ProtectedPath
 import os
 import tempfile
 import unittest
+from unittest import mock
 
 from functools import wraps
 
@@ -155,6 +156,21 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
                 result = check_protected_path(candidate)
                 self.assertIsNotNone(result)
         clear_cache()
+
+    def test_load_protected_paths_rejects_dtd(self):
+        """A protected_path.xml with a DTD is rejected (entity-expansion defense)"""
+        xml_str = (
+            '<?xml version="1.0"?>\n'
+            '<!DOCTYPE paths [ <!ENTITY x "y"> ]>\n'
+            '<paths/>\n')
+        fn = os.path.join(self.mkdtemp(prefix='bleachbit-protected-path-dtd'),
+                          'protected_path.xml')
+        self.write_file(fn, text=xml_str)
+        with mock.patch.object(
+                protected_path_module, '_get_protected_path_xml',
+                return_value=fn):
+            paths = load_protected_paths(force_reload=True)
+        self.assertEqual(paths, [])
 
     @requirePPXML
     def test_load_protected_paths_caching(self):

@@ -31,6 +31,7 @@ import xml.dom.minidom
 
 # local
 import bleachbit
+from bleachbit.General import reject_xml_dtd
 from bleachbit.Language import get_text as _
 from bleachbit.Network import (download_url_to_fn, fetch_url,
                                get_ip_for_url, get_update_request_headers,
@@ -111,6 +112,7 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
             logger.debug(e.response.headers)
         return ()
     try:
+        reject_xml_dtd(response.text, 'update XML')
         dom = xml.dom.minidom.parseString(response.text)
     except:
         logger.exception(

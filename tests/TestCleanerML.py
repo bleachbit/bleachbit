@@ -229,6 +229,21 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertFalse(is_trusted_cleaner(
             os.path.join(bleachbit.personal_cleaners_dir, 'example.xml')))
 
+    def test_rejects_dtd(self):
+        """A CleanerML file with a DTD is rejected (entity-expansion defense)"""
+        xml_str = (
+            '<?xml version="1.0"?>\n'
+            '<!DOCTYPE cleaner [ <!ENTITY x "y"> ]>\n'
+            '<cleaner id="dtd_test">\n'
+            '  <label>Test</label>\n'
+            '  <description>Test</description>\n'
+            '</cleaner>\n')
+        fn = os.path.join(self.mkdtemp(prefix='bleachbit-cleanerml-dtd'),
+                          'dtd.xml')
+        self.write_file(fn, text=xml_str)
+        xmlcleaner = CleanerML(fn)
+        self.assertFalse(xmlcleaner.cleaner.is_usable())
+
     def test_nvalid_utf8(self):
         """Test CleanerML() with invalid UTF-8 encoding
 
