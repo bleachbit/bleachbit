@@ -151,6 +151,17 @@ check_online_updates=True
         bleachbit.Options.init_configuration()
         self.assertExists(bleachbit.options_file)
 
+    @common.skipIfWindows
+    def test_open_config_write_refuses_symlink(self):
+        """The config write must not follow a symlink to another file"""
+        target = self.write_file('cfg_target', b'keepme')
+        link = os.path.join(self.tempdir, 'cfg_link')
+        os.symlink(target, link)
+        with self.assertRaises(OSError):
+            bleachbit.Options._open_config_write(link)
+        with open(target, 'rb') as f:
+            self.assertEqual(f.read(), b'keepme')
+
     def test_is_corrupt(self):
         """Test is_corrupt()"""
         def _test_is_corrupt(contents, expect_is_corrupt):

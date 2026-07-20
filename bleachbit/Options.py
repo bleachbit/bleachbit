@@ -113,6 +113,26 @@ def path_to_option(pathname):
     return pathname
 
 
+def _open_config_write(path):
+    """Open the config file for writing without following a final symlink.
+
+    Stops a planted symlink from redirecting a root-written config to
+    another file. POSIX only; O_NOFOLLOW does not exist on Windows.
+    """
+    kwargs = {'encoding': 'utf-8-sig', 'errors': 'surrogateescape'}
+    if hasattr(os, 'O_NOFOLLOW'):
+        flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW
+        fd = os.open(path, flags, 0o600)
+        try:
+            # open() on the fd, not os.fdopen(), so a mocked builtins.open
+            # still applies (the error-handling tests patch it).
+            return open(fd, 'w', **kwargs)
+        except Exception:
+            os.close(fd)
+            raise
+    return open(path, 'w', **kwargs)
+
+
 def init_configuration(*, log=True):
     """Initialize an empty configuration, if necessary"""
     if not os.path.exists(bleachbit.options_dir):
@@ -121,7 +141,7 @@ def init_configuration(*, log=True):
         if log:
             logger.debug('Deleting configuration: %s', bleachbit.options_file)
         os.remove(bleachbit.options_file)
-    with open(bleachbit.options_file, 'w', encoding='utf-8-sig', errors='surrogateescape') as f_ini:
+    with _open_config_write(bleachbit.options_file) as f_ini:
         f_ini.write('[bleachbit]\n')
         if IS_WINDOWS and bleachbit.portable_mode:
             f_ini.write('[Portable]\n')
@@ -210,7 +230,7 @@ class Options:
             if not os.path.exists(bleachbit.options_dir):
                 General.makedirs(bleachbit.options_dir)
             mkfile = not os.path.exists(bleachbit.options_file)
-            with open(bleachbit.options_file, 'w', encoding='utf-8-sig', errors='surrogateescape') as _file:
+            with _open_config_write(bleachbit.options_file) as _file:
                 self.config.write(_file)
             if mkfile and General.sudo_mode():
                 General.chownself(bleachbit.options_file)

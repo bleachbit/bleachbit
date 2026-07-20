@@ -19,10 +19,11 @@ import warnings
 from unittest import mock
 
 # local
-from bleachbit import IS_POSIX, IS_WINDOWS, logger
+from bleachbit import General, IS_POSIX, IS_WINDOWS, logger
 from bleachbit.FileUtilities import exe_exists, exists_in_path
 from bleachbit.General import (
     boolstr_to_bool,
+    chownself,
     get_executable,
     get_real_uid,
     get_real_username,
@@ -144,6 +145,31 @@ class GeneralTestCase(common.BleachbitTestCase):
                 uid = get_real_uid()
         self.assertIsInstance(uid, int)
         self.assertGreaterEqual(uid, 0)
+
+    def test_chownself_root_guard(self):
+        """chownself() must refuse /root and its descendants, including
+        via a non-canonical path spelling that a raw substring check
+        would miss."""
+        if not IS_POSIX:
+            self.skipTest('POSIX-only behavior')
+
+        with mock.patch.object(General, 'get_real_uid', return_value=1000), \
+                mock.patch.object(os, 'chown') as mock_chown:
+            for path in ('/root', '/root/', '/root/.ssh/authorized_keys',
+                        '/home/x/../../root', '/home/x/../../root/.bashrc'):
+                with self.subTest(path=path):
+                    chownself(path)
+                    mock_chown.assert_not_called()
+
+            # a sibling directory that merely starts with the string
+            # "root" must not be treated as /root
+            chownself('/rootlookalike/file')
+            mock_chown.assert_called_once()
+            mock_chown.reset_mock()
+
+            # an ordinary path is still chowned
+            chownself('/home/user/file')
+            mock_chown.assert_called_once()
 
     @also_with_sudo
     def test_get_real_username(self):

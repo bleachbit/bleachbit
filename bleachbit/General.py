@@ -32,6 +32,7 @@ import xml.parsers.expat
 
 import bleachbit
 from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
+from bleachbit.PathUtils import path_startswith
 
 logger = logging.getLogger(__name__)
 
@@ -91,11 +92,14 @@ def chownself(path):
         return
     uid = get_real_uid()
     logger.debug('chown(%s, uid=%s)', path, uid)
-    if 0 == path.find('/root'):
+    normalized_path = os.path.normpath(os.path.abspath(path))
+    if normalized_path == '/root' or path_startswith(normalized_path, '/root'):
         logger.info('chown for path /root aborted')
         return
     try:
-        os.chown(path, uid, -1)
+        # follow_symlinks=False (lchown) so a symlink planted at this path
+        # cannot redirect the ownership change to its target.
+        os.chown(path, uid, -1, follow_symlinks=False)
     except:
         logger.exception('Error in chown() under chownself()')
 
