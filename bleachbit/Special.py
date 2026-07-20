@@ -51,14 +51,43 @@ def __get_chrome_history(path, fn='History'):
     return ver
 
 
-def _sqlite_readonly_uri(pathname):
-    """Return a proper SQLite URI for read-only access to pathname"""
+def _sqlite_uri(pathname, mode=None):
+    """Return a safe SQLite file: URI for pathname.
+
+    The path is percent-encoded so a character such as '?' cannot be
+    misparsed as the start of the URI query and defeat the mode. mode is
+    an optional open mode ('ro', 'rw', ...); None omits it (default rwc).
+    """
     assert isinstance(pathname, str)
     abs_path = os.path.abspath(pathname)
     if IS_WINDOWS:
         abs_path = abs_path.replace('\\', '/')
     quoted = quote(abs_path, safe='/:')
-    return f'file:{quoted}?mode=ro'
+    uri = f'file:{quoted}'
+    if mode:
+        uri += f'?mode={mode}'
+    return uri
+
+
+def _sqlite_readonly_uri(pathname):
+    """Return a proper SQLite URI for read-only access to pathname"""
+    return _sqlite_uri(pathname, 'ro')
+
+
+def _quote_sqlite_identifier(name):
+    """Return a safely-quoted SQLite identifier."""
+    if not isinstance(name, str):
+        raise TypeError('SQLite identifier must be a string')
+    return '"' + name.replace('"', '""') + '"'
+
+
+def _escape_sqlite_str_literal(value):
+    """Escape a value for use in a single-quoted SQLite string literal.
+
+    Double quotes are an identifier in standard SQL; SQLite only accepts
+    them as a string when built with SQLITE_DQS enabled.
+    """
+    return value.replace("'", "''")
 
 
 def sqlite_table_exists(pathname, table):
@@ -82,7 +111,8 @@ def _sqlite_is_valid_database(pathname):
     """Return boolean indicating whether pathname points to a readable SQLite database."""
     import sqlite3  # pylint: disable=import-outside-toplevel
     try:
-        with contextlib.closing(sqlite3.connect(f'file:{pathname}?mode=ro', uri=True)) as conn:
+        uri = _sqlite_readonly_uri(pathname)
+        with contextlib.closing(sqlite3.connect(uri, uri=True)) as conn:
             conn.execute('select 1 from sqlite_master limit 1;')
             return True
     except (sqlite3.DatabaseError, sqlite3.OperationalError):
@@ -97,11 +127,14 @@ def __shred_sqlite_char_columns(table, cols=None, where="", path=None):
     if not where:
         # If None, set to empty string.
         where = ""
+    quoted_table = _quote_sqlite_identifier(table)
     if cols and options.get('shred'):
         for blob_type in ('randomblob', 'zeroblob'):
-            updates = [f'{col} = {blob_type}(length({col}))' for col in cols]
-            cmd += f"update or ignore {table} set {', '.join(updates)} {where};"
-    cmd += f"delete from {table} {where};"
+            updates = [f'{_quote_sqlite_identifier(col)} = '
+                       f'{blob_type}(length({_quote_sqlite_identifier(col)}))'
+                       for col in cols]
+            cmd += f"update or ignore {quoted_table} set {', '.join(updates)} {where};"
+    cmd += f"delete from {quoted_table} {where};"
     return cmd
 
 
@@ -116,7 +149,7 @@ def get_sqlite_int(path, sql, parameters=()):
 def _get_sqlite_values(path, sql, row_factory=None, parameters=()):
     """Run SQL on database in 'path' and return the integers"""
     import sqlite3  # pylint: disable=import-outside-toplevel
-    with contextlib.closing(sqlite3.connect(f'file:{path}?mode=ro', uri=True)) as conn:
+    with contextlib.closing(sqlite3.connect(_sqlite_readonly_uri(path), uri=True)) as conn:
         if row_factory is not None:
             conn.row_factory = row_factory
         cursor = conn.execute(sql, parameters)
@@ -192,7 +225,7 @@ def delete_chrome_favicons(path):
         cols = ('page_url',)
         where = None
         if os.path.exists(path_history):
-            cmds += f"attach database \"{path_history}\" as History;"
+            cmds += f"attach database '{_escape_sqlite_str_literal(path_history)}' as History;"
             where = "where page_url not in (select distinct url from History.urls)"
         cmds += __shred_sqlite_char_columns('icon_mapping', cols, where, path)
 
@@ -217,7 +250,7 @@ def delete_chrome_favicons(path):
         cols = ('url', 'image_data')
         where = None
         if os.path.exists(path_history):
-            cmds += f"attach database \"{path_history}\" as History;"
+            cmds += f"attach database '{_escape_sqlite_str_literal(path_history)}' as History;"
             where = "where id not in(select distinct favicon_id from History.urls)"
         cmds += __shred_sqlite_char_columns('favicons', cols, where, path)
     else:
@@ -407,7 +440,7 @@ def delete_mozilla_favicons(path):
     cmds = ""
 
     places_path = os.path.join(os.path.dirname(path), 'places.sqlite')
-    cmds += f'attach database "{places_path}" as places;'
+    cmds += f"attach database '{_escape_sqlite_str_literal(places_path)}' as places;"
 
     bookmarked_urls_query = ("select url from {db}moz_places where id in "
                              "(select distinct fk from {db}moz_bookmarks "
@@ -468,7 +501,10 @@ def delete_mozilla_favicons(path):
 
     # delete all not bookmarked icons
     if ids_to_delete:
-        icons_where = f"where (id in ({str(ids_to_delete).replace('[', '').replace(']', '')}))"
+        if not all(isinstance(i, int) for i in ids_to_delete):
+            raise ValueError('icon IDs must be integers')
+        ids_str = ','.join(str(i) for i in ids_to_delete)
+        icons_where = f'where (id in ({ids_str}))'
         cols = ('icon_url', 'data')
         cmds += __shred_sqlite_char_columns('moz_icons', cols, icons_where, path)
         FileUtilities.execute_sqlite3(path, cmds)
