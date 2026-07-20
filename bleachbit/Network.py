@@ -58,7 +58,7 @@ else:
         pass
 
 # local imports
-from bleachbit import bleachbit_exe_path, APP_VERSION, IS_LINUX, IS_NETBSD, IS_WINDOWS
+from bleachbit import bleachbit_exe_path, APP_VERSION, General, IS_LINUX, IS_NETBSD, IS_WINDOWS
 from bleachbit.FileUtilities import delete
 from bleachbit.Language import get_active_language_code, get_text as _
 
@@ -143,9 +143,7 @@ def download_url_to_fn(url, fn, expected_sha512=None, on_error=None,
             msg2 = f"SHA-512 mismatch: expected {expected_sha512}, got {hash_actual}"
             do_error(msg2)
             return False
-    fn_dir = os.path.dirname(fn)
-    if not os.path.exists(fn_dir):
-        os.makedirs(fn_dir)
+    General.makedirs(os.path.dirname(fn))
     with open(fn, 'wb') as f:
         f.write(response.content)
     return True

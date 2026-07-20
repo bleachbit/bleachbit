@@ -134,6 +134,22 @@ class NetworkTestCase(common.BleachbitTestCase):
                 self.assertEqual(rc, expected_rc, err_msg)
                 delete(fn, ignore_missing=True)
 
+    @common.skipIfWindows
+    def test_download_url_to_fn_creates_private_dir(self):
+        """download_url_to_fn() must create missing directories mode 0o700"""
+        new_dir = os.path.join(self.tempdir, 'not', 'yet', 'created')
+        fn = os.path.join(new_dir, 'download')
+        self.assertNotExists(new_dir)
+
+        rc = download_url_to_fn(self.status_generator_url.format(200), fn)
+        self.assertTrue(rc)
+        self.assertExists(fn)
+        for created_dir in (new_dir, os.path.dirname(new_dir),
+                            os.path.dirname(os.path.dirname(new_dir))):
+            mode = os.stat(created_dir).st_mode & 0o777
+            self.assertEqual(mode, 0o700,
+                             f'{created_dir} has mode {oct(mode)}, expected 0o700')
+
     def test_get_gtk_version(self):
         """Unit test for get_gtk_version()"""
         gtk_ver = get_gtk_version()
