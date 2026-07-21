@@ -283,9 +283,13 @@ class System(Cleaner):
                         for path in children_in_directory(c_path, True):
                             yield Command.Delete(path)
                         yield Command.Delete(c_path)
+                elif 'folder_contents' == c_type:
+                    if os.path.lexists(c_path):
+                        for path in children_in_directory(c_path, True):
+                            yield Command.Delete(path)
                 else:
                     raise RuntimeError(
-                        f'custom folder has invalid type {c_type}')
+                        f'custom path has invalid type {c_type}')
 
         # menu
         menu_dirs = ['~/.local/share/applications',

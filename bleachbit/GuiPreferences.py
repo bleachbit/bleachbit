@@ -36,7 +36,7 @@ from bleachbit.GuiUtil import (detect_dark_background, flush_gtk_events,
                                should_show_dark_mode_warning)
 from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _, pget_text as _p
-from bleachbit.Options import options
+from bleachbit.Options import CUSTOM_PATH_TYPES, options
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +56,21 @@ EXPERT_MODE_MSG = _('Expert mode')
 # TRANSLATORS: Notice shown in an infobar after changing a preference
 # that requires starting the application to be effective.
 RESTART_APP_MSG = _("Restart BleachBit for full effect.")
+
+
+def _path_type_label(path_type):
+    """Return the user-facing label for a stored path type."""
+    if path_type == 'file':
+        # TRANSLATORS: Noun used as a column value in the preferences dialog.
+        return _('File')
+    if path_type == 'folder':
+        # TRANSLATORS: Noun used as a column value in the preferences dialog.
+        return _('Folder')
+    if path_type == 'folder_contents':
+        # TRANSLATORS: Noun phrase used as a column value in the preferences
+        # dialog. This means the contents of a folder, but not the folder itself.
+        return _('Folder contents')
+    raise RuntimeError("Invalid type code: '%s'" % path_type)
 
 
 class PreferencesDialog:
@@ -823,11 +838,10 @@ class PreferencesDialog:
             if not self._check_protected_path(pathname):
                 return
 
-        # TRANSLATORS: Noun used as a column header in the preferences dialog.
-        type_str_file = _('File')
-        # TRANSLATORS: Noun used as a column header in the preferences dialog.
-        type_str_folder = _('Folder')
-        type_str = type_str_file if path_type == 'file' else type_str_folder
+        if path_type not in CUSTOM_PATH_TYPES:
+            raise RuntimeError("Invalid type code: '%s'" % path_type)
+
+        type_str = _path_type_label(path_type)
         display_path = pathname.encode('utf-8', errors='replace').decode('utf-8')
         liststore.append([type_str, display_path])
         pathnames.append([path_type, pathname])
@@ -877,13 +891,7 @@ class PreferencesDialog:
         liststore = Gtk.ListStore(str, str)
         for paths in pathnames:
             type_code = paths[0]
-            type_str = None
-            if type_code == 'file':
-                type_str = _('File')
-            elif type_code == 'folder':
-                type_str = _('Folder')
-            else:
-                raise RuntimeError("Invalid type code: '%s'" % type_code)
+            type_str = _path_type_label(type_code)
             path = paths[1]
             display_path = path.encode('utf-8', errors='replace').decode('utf-8')
             liststore.append([type_str, display_path])
@@ -989,6 +997,16 @@ class PreferencesDialog:
                 self._add_path(pathname, 'folder', page_type,
                                liststore, pathnames)
 
+        def add_folder_contents_cb(button):
+            """Callback for adding the contents of a folder"""
+            # TRANSLATORS: Title of a folder chooser dialog.
+            title = _("Choose a folder")
+            pathname = GuiBasic.browse_folder(self.parent, title,
+                                              multiple=False, stock_button=Gtk.STOCK_ADD)
+            if pathname:
+                self._add_path(pathname, 'folder_contents', page_type,
+                               liststore, pathnames)
+
         def remove_path_cb(button):
             """Callback for removing a path"""
             self._remove_path(treeview, liststore, pathnames, page_type)
@@ -1001,6 +1019,12 @@ class PreferencesDialog:
             label=_p('button', 'Add folder'))
         button_add_folder.connect("clicked", add_folder_cb)
 
+        button_add_folder_contents = Gtk.Button.new_with_label(
+            # TRANSLATORS: Button label in the Custom preferences page. It adds
+            # a folder whose contents will be cleaned while the folder remains.
+            label=_p('button', 'Add folder contents'))
+        button_add_folder_contents.connect("clicked", add_folder_contents_cb)
+
         button_remove = Gtk.Button.new_with_label(label=_p('button', 'Remove'))
         button_remove.connect("clicked", remove_path_cb)
 
@@ -1008,6 +1032,8 @@ class PreferencesDialog:
         button_box.set_layout(Gtk.ButtonBoxStyle.START)
         button_box.pack_start(button_add_file, True, True, 0)
         button_box.pack_start(button_add_folder, True, True, 0)
+        if page_type == LOCATIONS_CUSTOM:
+            button_box.pack_start(button_add_folder_contents, True, True, 0)
         button_box.pack_start(button_remove, True, True, 0)
         vbox.pack_start(button_box, False, True, 0)
 
