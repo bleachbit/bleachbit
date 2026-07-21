@@ -356,24 +356,37 @@ def children_in_directory(top, list_directories=False):
             yield pending_dirs.pop()
 
 
-def open_for_overwrite(path, mode='w', **kwargs):
-    """Open path for overwriting without following a final symlink.
+def _open_nofollow_fd(path, flags, mode=0o600):
+    """Open path with os.open(), refusing a symlink (or Windows junction).
 
-    Rejects a symlink (or Windows junction) at path, and on POSIX also
-    passes O_NOFOLLOW so a symlink raced in after the check is refused
-    instead of redirecting the write to its target.
+    Adds O_NOFOLLOW to flags on POSIX so a symlink raced in after the
+    islink() check is also refused, instead of redirecting the open to
+    its target. Windows has no O_NOFOLLOW; the islink() check is the
+    only protection there. Returns a raw file descriptor.
     """
     if os.path.islink(path):
-        raise OSError(errno.EACCES, 'refusing to write to a link', path)
+        raise OSError(errno.EACCES, 'refusing to open a link', path)
     if hasattr(os, 'O_NOFOLLOW'):
-        flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW
-        fd = os.open(path, flags, 0o600)
-        try:
-            return open(fd, mode, **kwargs)
-        except Exception:
-            os.close(fd)
-            raise
-    return open(path, mode, **kwargs)
+        flags |= os.O_NOFOLLOW
+    return os.open(path, flags, mode)
+
+
+def open_for_overwrite(path, mode='w', **kwargs):
+    """Open path for overwriting without following a final symlink."""
+    if not hasattr(os, 'O_NOFOLLOW'):
+        # Windows gains nothing from os.open() here, and O_TRUNC would empty
+        # the file before a write error could be reported, losing the old
+        # contents. islink() (which also catches junctions) is the only
+        # protection available either way.
+        if os.path.islink(path):
+            raise OSError(errno.EACCES, 'refusing to open a link', path)
+        return open(path, mode, **kwargs)
+    fd = _open_nofollow_fd(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC)
+    try:
+        return open(fd, mode, **kwargs)
+    except Exception:
+        os.close(fd)
+        raise
 
 
 def clean_ini(path, section, parameter):
@@ -531,19 +544,9 @@ def truncate_file(path):
     (or Windows reparse point) so the truncation is not redirected
     through a link to another file.
     """
-    if os.path.islink(path):
-        raise OSError(errno.EACCES,
-                      'refusing to truncate a link', path)
-
     def _truncate():
-        if hasattr(os, 'O_NOFOLLOW'):
-            # POSIX: also refuse a symlink raced in after the check above
-            fd = os.open(path, os.O_WRONLY | os.O_CREAT |
-                         os.O_TRUNC | os.O_NOFOLLOW, 0o600)
-            os.close(fd)
-        else:
-            with open(path, 'w', encoding='ascii') as f:
-                f.truncate(0)
+        # No O_CREAT: if the file went away, do not recreate it as an empty one
+        os.close(_open_nofollow_fd(path, os.O_WRONLY | os.O_TRUNC))
 
     _run_with_delete_lock(path, _truncate)
 

@@ -197,31 +197,21 @@ def wipe_write(path):
 
     Return the open file handle; the caller must close it."""
     # pylint: disable=import-outside-toplevel
-    from bleachbit.FileUtilities import getsize
+    from bleachbit.FileUtilities import getsize, _open_nofollow_fd
     size = getsize(path)
-    if hasattr(os, 'O_NOFOLLOW'):
-        # POSIX: delete() checks for a symlink before we get here, but that
-        # check and this open are not atomic. O_NOFOLLOW refuses a symlink
-        # raced in at this path instead of overwriting its target
-        flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW
-        try:
-            fd = os.open(path, flags, 0o600)
-        except OSError as e:
-            if e.errno == errno.EACCES:  # permission denied
-                os.chmod(path, 0o200)  # user write only
-                fd = os.open(path, flags, 0o600)
-            else:
-                raise
-        f = os.fdopen(fd, 'wb')
-    else:
-        try:
-            f = open(path, 'wb')
-        except IOError as e:
-            if e.errno == errno.EACCES:  # permission denied
-                os.chmod(path, 0o200)  # user write only
-                f = open(path, 'wb')
-            else:
-                raise
+    flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
+    try:
+        fd = _open_nofollow_fd(path, flags)
+    except OSError as e:
+        # Only retry on a genuine permission error; a symlink also raises
+        # EACCES here, and chmod() on a symlink path follows it, which
+        # would mutate an attacker-controlled target's permissions.
+        if e.errno == errno.EACCES and not os.path.islink(path):
+            os.chmod(path, 0o200)  # user write only
+            fd = _open_nofollow_fd(path, flags)
+        else:
+            raise
+    f = os.fdopen(fd, 'wb')
     try:
         blanks = b'\0' * 4096
         while size > 0:
