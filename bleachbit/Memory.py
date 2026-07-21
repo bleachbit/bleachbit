@@ -334,7 +334,7 @@ def physical_free_darwin(run_vmstat=None):
         return int(m.groups()[0])
     if run_vmstat is None:
         def run_vmstat():
-            return subprocess.check_output(["vm_stat"], text=True)
+            return subprocess.check_output(["/usr/bin/vm_stat"], text=True)
     output = iter(run_vmstat().split("\n"))
     page_size = get_page_size(next(output))
     vm_stat = dict(parse_line(*l.split(":")) for l in output if l != "")

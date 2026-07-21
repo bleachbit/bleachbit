@@ -154,6 +154,16 @@ Swapouts:                              20258188.
         self.assertRaises(RuntimeError, physical_free_darwin,
                           lambda: "Invalid header")
 
+    @common.skipIfWindows
+    def test_physical_free_darwin_uses_absolute_path(self):
+        """physical_free_darwin() must invoke vm_stat via its absolute path, not PATH lookup"""
+        sample = ("Mach Virtual Memory Statistics: (page size of 4096 bytes)\n"
+                  "Pages free:                              1.\n")
+        with mock.patch('bleachbit.Memory.subprocess.check_output',
+                        return_value=sample) as mock_check_output:
+            physical_free_darwin()
+        mock_check_output.assert_called_once_with(['/usr/bin/vm_stat'], text=True)
+
     @common.skipUnlessLinux
     def test_physical_free(self):
         """Test for method physical_free"""
