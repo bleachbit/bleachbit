@@ -100,10 +100,8 @@ class Bleachbit(Gtk.Application):
     def build_app_menu(self):
         """Build the application menu
 
-        On Linux with GTK 3.24, this code is necessary but not sufficient for
-        the menu to work. The headerbar code is also needed.
-
-        On Windows with GTK 3.18, this code is sufficient for the menu to work.
+        This code is necessary but not sufficient for the menu to work. The
+        headerbar code is also needed.
         """
         from bleachbit.Language import setup_translation
         setup_translation()

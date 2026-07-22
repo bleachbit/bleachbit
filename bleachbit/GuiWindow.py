@@ -1141,10 +1141,6 @@ class GUI(Gtk.ApplicationWindow):
         hbar.pack_start(box)
 
         # Add hamburger menu on the right.
-        # This is not needed for Microsoft Windows because other code places its
-        # menu on the left side.
-        if IS_WINDOWS:
-            return hbar
         menu_button = Gtk.MenuButton()
         icon = Gio.ThemedIcon(name="open-menu-symbolic")
         image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
