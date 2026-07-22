@@ -276,6 +276,10 @@ jobs:
 
       - name: Build executable and installers
         shell: cmd # zizmor: ignore[misfeature] cmd is required for MSYS make, psexec, and .bat wrappers
+        # The English-only installer is built only for tags (releases) to save
+        # the cost of GHA minutes and storage.
+        env:
+          BB_BUILD_ENGLISH_INSTALLER: ${{ github.ref_type == 'tag' && '1' || '' }}
         run: |
           set PATH=%MSYS_BIN%;%PATH%
           "%PYTHON_EXE%" -m windows.setup
@@ -289,7 +293,7 @@ jobs:
             "$($_.Hash)  $($_.Path | Split-Path -Leaf)"
           }
 
-      - name: Upload build artifacts
+      - name: Upload build artifacts (core)
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: windows-build-${{ steps.revision.outputs.version }}
@@ -297,8 +301,17 @@ jobs:
           compression-level: 9
           path: |
             BleachBit-*-setup.exe
-            BleachBit-*-setup-English.exe
             BleachBit-*-portable.zip
+
+      - name: Upload build artifacts (English installer)
+        if: github.ref_type == 'tag'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: windows-build-${{ steps.revision.outputs.version }}
+          if-no-files-found: error
+          compression-level: 9
+          path: |
+            BleachBit-*-setup-English.exe
 
   windows-test:
     name: windows-test (${{ matrix.suite }})
