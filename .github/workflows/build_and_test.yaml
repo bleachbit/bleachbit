@@ -153,10 +153,10 @@ jobs:
           export $(dbus-launch)
           sudo Xvfb :1 -screen 0 800x600x24 &
           sleep 5
-          if [[ "${{ matrix.python-version }}" == "3.14" ]]; then
-            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "PYTHONPATH=. pytest -n auto"'
-          else
+          if [[ "${{ matrix.python-version }}" == "3.9" ]]; then
             dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make tests && make tests-with-sudo"'
+          else
+            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make -C cleaners tests && PYTHONWARNINGS=error PYTHONPATH=. pytest -n auto && python windows/nsis_translations.py --unittest && make tests-with-sudo"'
           fi
 
       - name: Generate lcov coverage
