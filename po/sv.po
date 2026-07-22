@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-07-12 15:23-0600\n"
-"PO-Revision-Date: 2026-07-15 05:01+0000\n"
-"Last-Translator: Mona Lisa <monalisa@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-07-22 06:13+0000\n"
+"Last-Translator: bittin1ddc447d824349b2 <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/bleachbit/main/"
 "sv/>\n"
 "Language: sv\n"
@@ -2742,15 +2742,11 @@ msgid "Error when checking for updates: %s"
 msgstr "Fel vid uppdateringssökning: %s"
 
 #: ../bleachbit/Memory.py
-#, fuzzy
-#| msgid ""
-#| "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
-#| "information."
 msgid ""
 "The command 'swapon -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"Kommandot \"swapoff -s\" misslyckades, så /proc/swaps används i stället för "
+"Kommandot \"swapon -s\" misslyckades, så /proc/swaps används i stället för "
 "växlingsinformation."
 
 #: ../bleachbit/Memory.py
