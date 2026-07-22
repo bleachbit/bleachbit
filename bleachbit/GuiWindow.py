@@ -14,6 +14,7 @@ import bleachbit
 from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path, IS_WINDOWS
 from bleachbit.Cleaner import backends, register_cleaners
 from bleachbit.Constant import ABORT_BUTTON_LABEL, REQUIRES_EXPERT_MODE
+from bleachbit.Diagnostics import run_diagnostics
 from bleachbit.GUI import logger
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiPreferences import PreferencesDialog
@@ -871,6 +872,62 @@ class GUI(Gtk.ApplicationWindow):
         """Callback to stop the preview/cleaning process"""
         self.worker.abort()
 
+    def on_run_diagnostics_clicked(self, _widget):
+        """Run targeted diagnostics for 'Access denied' errors (issue #2233).
+
+        Logs system information, running browser processes, file permission
+        tests, and SQLite open tests to the main log via append_text().
+
+        Runs in a background thread so the UI stays responsive; append_text()
+        is thread-safe (it forwards to GLib.idle_add when called off the
+        main thread).
+        """
+        import threading
+        self.textbuffer.set_text("")
+        self.append_text("=== BleachBit Diagnostics ===\n", 'operation')
+        self.append_text(
+            "Diagnostic build for issue #2233: Access denied & SQLite "
+            "errors on Windows\n\n")
+        self.append_text("Running diagnostics, please wait...\n\n",
+                         'description')
+        # Disable the button and change its label so the user sees feedback.
+        self.diagnostics_button.set_sensitive(False)
+        self.diagnostics_button.set_label('Running...')
+
+        def _run_in_thread():
+            try:
+                run_diagnostics(self.append_text)
+            except Exception as e:
+                self.append_text(f"\nDiagnostic error: {e}\n", 'error')
+                import traceback
+                self.append_text(traceback.format_exc() + "\n", 'error')
+            finally:
+                # Re-enable the button from the main loop.
+                GLib.idle_add(self._diagnostics_finished)
+
+        thread = threading.Thread(target=_run_in_thread, daemon=True)
+        thread.start()
+
+    def _diagnostics_finished(self):
+        """Re-enable the diagnostics button after the run completes."""
+        self.diagnostics_button.set_sensitive(True)
+        self.diagnostics_button.set_label('Run Diagnostics')
+        # Return False so GLib removes this from the idle queue.
+        return False
+
+    def on_copy_log_clicked(self, _widget):
+        """Copy the entire log buffer to the clipboard."""
+        if self.textbuffer is None:
+            return
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        text = self.textbuffer.get_text(
+            self.textbuffer.get_start_iter(),
+            self.textbuffer.get_end_iter(),
+            True)
+        clipboard.set_text(text, -1)
+        self.append_text("\n(Log copied to clipboard)\n")
+
+
     def cb_manage_cookies(self, widget):
         """Callback to launch the preferences dialog with Cookies page"""
         self.show_preferences_dialog('cookies')
@@ -1137,6 +1194,23 @@ class GUI(Gtk.ApplicationWindow):
         self.stop_button.set_sensitive(False)
         self.stop_button.connect('clicked', self.cb_stop_operations)
         box.add(self.stop_button)
+
+        # Diagnostic buttons (issue #2233)
+        self.diagnostics_button = Gtk.Button.new_with_label(
+            'Run Diagnostics')
+        self.diagnostics_button.set_always_show_image(True)
+        self.diagnostics_button.set_tooltip_text(
+            'Run diagnostic tests for Access denied errors (issue #2233)')
+        self.diagnostics_button.connect(
+            'clicked', self.on_run_diagnostics_clicked)
+        box.add(self.diagnostics_button)
+
+        self.copy_log_button = Gtk.Button.new_with_label('Copy Log')
+        self.copy_log_button.set_always_show_image(True)
+        self.copy_log_button.set_tooltip_text(
+            'Copy the entire log to the clipboard')
+        self.copy_log_button.connect('clicked', self.on_copy_log_clicked)
+        box.add(self.copy_log_button)
 
         hbar.pack_start(box)
 
