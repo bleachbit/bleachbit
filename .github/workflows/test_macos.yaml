@@ -1,3 +1,10 @@
+# GitHub charges much more for macOS runner than Linux or Windows, so be
+# careful to manage costs
+#
+# References
+#  - https://docs.github.com/en/billing/reference/actions-runner-pricing
+#  - https://docs.github.com/en/actions/reference/runners/github-hosted-runners
+#
 name: Run tests on macOS
 
 on:
@@ -42,7 +49,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-15-intel, macos-latest]
+        os: [macos-latest]
         python-version: ['3.12']
 
     steps:

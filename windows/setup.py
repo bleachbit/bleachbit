@@ -876,9 +876,17 @@ def package_installer(fast_build, nsi_path=r'windows\bleachbit.nsi'):
     opts = '' if fast_build else '/V3 /Dpackhdr /DCompressor'
     nsis(opts, exe_name_multilang, nsi_path)
 
+    # The English-only installer is opt-in: it is built only when not in
+    # fast_build mode and BB_BUILD_ENGLISH_INSTALLER is set to a truthy value
+    # (e.g., "1"). This lets CI skip it for non-tag builds to save GHA minutes
+    # while still building it for tag/release builds. Local development builds
+    # skip it by default; set BB_BUILD_ENGLISH_INSTALLER=1 to enable.
+    build_english = (not fast_build) and \
+        os.getenv('BB_BUILD_ENGLISH_INSTALLER', '').strip().lower() not in ('', '0', 'false', 'no')
+
     if fast_build:
         sign_files((exe_name_multilang,))
-    else:
+    elif build_english:
         # Was:
         # nsis('/DNoTranslations',
         # Now: Compression gets now done in NSIS file!
@@ -887,6 +895,9 @@ def package_installer(fast_build, nsi_path=r'windows\bleachbit.nsi'):
         # version as malware.
         nsis(opts + ' /DNoTranslations', exe_name_en, nsi_path)
         sign_files((exe_name_multilang, exe_name_en))
+    else:
+        # English-only installer skipped (e.g., non-tag CI build).
+        sign_files((exe_name_multilang,))
 
     if os.path.exists(SZ_EXE):
         logger.info('Zipping installer')
