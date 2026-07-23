@@ -60,12 +60,12 @@ jobs:
             use-setup-python: true
           - python-version: '3.12'
             ubuntu-version: ubuntu-24.04
-            python-extra-dep: 'libgirepository-2.0-dev'
+            python-extra-dep: 'libgirepository-2.0-dev python3-gi python3-gi-cairo'
             pygobject-version: ''
             use-setup-python: false
           - python-version: '3.14'
             ubuntu-version: ubuntu-26.04
-            python-extra-dep: 'libgirepository-2.0-dev'
+            python-extra-dep: 'libgirepository-2.0-dev python3-gi python3-gi-cairo'
             pygobject-version: ''
             use-setup-python: false
 
@@ -115,7 +115,9 @@ jobs:
       - name: Use system Python ${{ matrix.python-version }} via virtualenv
         if: ${{ !matrix.use-setup-python }}
         run: |
-          python3 -m venv "$HOME/venv"
+          # --system-site-packages so the apt python3-gi is visible: without it
+          # is_gtk_available() is False and every GTK test silently skips
+          python3 -m venv --system-site-packages "$HOME/venv"
           echo "$HOME/venv/bin" >> "$GITHUB_PATH"
 
       - name: Cache pip packages
@@ -154,19 +156,21 @@ jobs:
           sudo Xvfb :1 -screen 0 800x600x24 &
           sleep 5
           if [[ "${{ matrix.python-version }}" == "3.9" ]]; then
-            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make tests && make tests-with-sudo"'
+            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make tests"'
+          elif [[ "${{ matrix.python-version }}" == "3.12" ]]; then
+            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "PYTHONWARNINGS=error PYTHONPATH=. pytest -n logical -m '"'"'not no_xdist'"'"' && PYTHONWARNINGS=error PYTHONPATH=. pytest -m no_xdist"'
           else
-            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make -C cleaners tests && PYTHONWARNINGS=error PYTHONPATH=. pytest -n logical -m '"'"'not no_xdist'"'"' && PYTHONWARNINGS=error PYTHONPATH=. pytest -m no_xdist && python windows/nsis_translations.py --unittest && make tests-with-sudo"'
+            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make -C cleaners tests && PYTHONWARNINGS=error PYTHONPATH=. pytest -n logical -m '"'"'not no_xdist'"'"' --cov=bleachbit --cov-report= && PYTHONWARNINGS=error PYTHONPATH=. pytest -m no_xdist --cov=bleachbit --cov-append --cov-report= && python windows/nsis_translations.py --unittest && make tests-with-sudo"'
           fi
 
       - name: Generate lcov coverage
-        if: matrix.python-version == '3.9' && github.repository == 'bleachbit/bleachbit'
+        if: matrix.python-version == '3.14' && github.repository == 'bleachbit/bleachbit'
         run: |
           coverage report
           coverage lcov -o coverage.lcov
 
       - name: Upload coverage to Coveralls
-        if: matrix.python-version == '3.9' && github.repository == 'bleachbit/bleachbit'
+        if: matrix.python-version == '3.14' && github.repository == 'bleachbit/bleachbit'
         uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
         with:
           file: coverage.lcov
