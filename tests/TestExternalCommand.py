@@ -18,6 +18,18 @@ from unittest import mock
 
 import psutil
 
+try:
+    import pytest
+except ImportError:  # pytest is optional for unittest discovery
+    class _pytest_shim:
+        class mark:
+            @staticmethod
+            def xdist_group(_name):
+                def decorator(func):
+                    return func
+                return decorator
+    pytest = _pytest_shim()
+
 import bleachbit
 from bleachbit import IS_WINDOWS
 from bleachbit.GtkShim import is_gtk_available
@@ -275,6 +287,7 @@ class ApplicationRunningTracker:
             f"\ntime elapsed: {round(self.elapsed_time, 2)}"
 
 
+@pytest.mark.xdist_group('external-command')
 class ExternalCommandTestCase(common.BleachbitTestCase):
     """Test case for the context menu command"""
 

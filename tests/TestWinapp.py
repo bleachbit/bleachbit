@@ -18,6 +18,18 @@ import tempfile
 import time
 from unittest import mock
 
+try:
+    import pytest
+except ImportError:  # pytest is optional for unittest discovery
+    class _pytest_shim:
+        class mark:
+            @staticmethod
+            def xdist_group(_name):
+                def decorator(func):
+                    return func
+                return decorator
+    pytest = _pytest_shim()
+
 from tests import common
 from bleachbit.Winapp import Winapp, detectos, detect_file, fnmatch_translate, section2option
 from bleachbit.Windows import detect_registry_key, parse_windows_build
@@ -199,6 +211,7 @@ class WinappTestCase(common.BleachbitTestCase):
         return Winapp(self.ini_fn).get_cleaners()
 
     @common.skipUnlessWindows
+    @pytest.mark.xdist_group('winapp-registry')
     def test_fake(self):
         """Test with fake file"""
 
@@ -481,6 +494,7 @@ class WinappTestCase(common.BleachbitTestCase):
                 self.assertFalse(exists, f'Key {key_path} should not exist')
 
     @common.skipUnlessWindows
+    @pytest.mark.xdist_group('winapp-registry')
     def test_excludekey_reg(self):
         """Test for ExcludeKey with REG type to prevent registry key deletion"""
 

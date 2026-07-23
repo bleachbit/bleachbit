@@ -17,6 +17,18 @@ import types
 import warnings
 from unittest import mock
 
+try:
+    import pytest
+except ImportError:  # pytest is optional for unittest discovery
+    class _pytest_shim:
+        class mark:
+            @staticmethod
+            def xdist_group(_name):
+                def decorator(func):
+                    return func
+                return decorator
+    pytest = _pytest_shim()
+
 import bleachbit
 from bleachbit.Cleaner import backends
 from bleachbit.GtkShim import Gdk, Gio, GLib, GObject, Gtk, is_gtk_available
@@ -456,6 +468,7 @@ class GUITestCase(common.BleachbitTestCase):
         mock_clear_clipboard.assert_called_once()
         self.assertNotExists(test_file)
 
+    @pytest.mark.xdist_group('clipboard')
     def test_shred_paths_from_clipboard_menu_integration(self):
         """Shred a path copied to the real clipboard"""
         test_file = self.write_file('shred-me-via-real-clipboard')
@@ -475,6 +488,7 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertTrue(self.wait_until(lambda: not os.path.exists(test_file)))
         self.assertNotExists(test_file)
 
+    @pytest.mark.xdist_group('clipboard')
     def test_shred_clipboard_empty_no_glib_warnings(self):
         """Empty clipboard must not trigger GLib g_array warnings."""
         clear_clipboard()

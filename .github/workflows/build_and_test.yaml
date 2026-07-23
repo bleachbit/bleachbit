@@ -395,7 +395,7 @@ jobs:
           COVERAGE_FILE: .coverage.admin
         run: |
           set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
-          "%PYTHON_EXE%" -m coverage run -m tests.TestAll
+          "%PYTHON_EXE%" -m pytest -n auto --dist=loadgroup --cov=bleachbit --cov-report= tests
 
       - name: Run non-admin tests
         if: matrix.suite == 'nonadmin'
