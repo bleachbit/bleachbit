@@ -36,6 +36,7 @@ bleachbit.online_update_notification_enabled = False
 
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module and a display environment')
+@pytest.mark.xdist_group('gui')
 class GUITestCase(common.BleachbitTestCase):
     app = None
     options_get_tree = options.get_tree
@@ -486,7 +487,6 @@ class GUITestCase(common.BleachbitTestCase):
         mock_clear_clipboard.assert_called_once()
         self.assertNotExists(test_file)
 
-    @pytest.mark.xdist_group('clipboard')
     def test_shred_paths_from_clipboard_menu_integration(self):
         """Shred a path copied to the real clipboard"""
         test_file = self.write_file('shred-me-via-real-clipboard')
@@ -506,7 +506,6 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertTrue(self.wait_until(lambda: not os.path.exists(test_file)))
         self.assertNotExists(test_file)
 
-    @pytest.mark.xdist_group('clipboard')
     def test_shred_clipboard_empty_no_glib_warnings(self):
         """Empty clipboard must not trigger GLib g_array warnings."""
         clear_clipboard()

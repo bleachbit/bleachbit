@@ -277,7 +277,7 @@ class ApplicationRunningTracker:
             f"\ntime elapsed: {round(self.elapsed_time, 2)}"
 
 
-@pytest.mark.xdist_group('external-command')
+@pytest.mark.xdist_group('gui')
 class ExternalCommandTestCase(common.BleachbitTestCase):
     """Test case for the context menu command"""
 

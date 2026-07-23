@@ -101,7 +101,7 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
             f'{elapsed:.1f}s: expected {expected}, got {got}, '
             f'targets={target_names}')
 
-    @pytest.mark.xdist_group('clipboard')
+    @pytest.mark.xdist_group('gui')
     def test_get_clipboard_paths_text_plain(self):
         """Get text/plain paths from the real clipboard."""
 
@@ -148,7 +148,7 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
         self.assertEqual(self.paths, get1)
 
     @common.skipUnlessWindows
-    @pytest.mark.xdist_group('clipboard')
+    @pytest.mark.xdist_group('gui')
     def test_get_clipboard_paths_windows(self):
         """Get file paths from the clipboard on Windows."""
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)

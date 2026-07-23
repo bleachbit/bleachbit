@@ -584,6 +584,7 @@ class CLITestCase(common.BleachbitTestCase):
             # FIXME: verify that there is not a message like
             # (bleachbit.py:1234): Gdk-CRITICAL **: 23:05:08.581: gdk_screen_get_root_window: assertion 'GDK_IS_SCREEN (screen)' failed
 
+    @pytest.mark.xdist_group('gui')
     @common.skipUnlessWindows
     def test_gui_exit(self):
         """Unit test for --gui --exit, only for Windows"""

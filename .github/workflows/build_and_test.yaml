@@ -158,9 +158,9 @@ jobs:
           if [[ "${{ matrix.python-version }}" == "3.9" ]]; then
             dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make tests"'
           elif [[ "${{ matrix.python-version }}" == "3.12" ]]; then
-            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "PYTHONWARNINGS=error PYTHONPATH=. pytest -n logical -m '"'"'not no_xdist'"'"' && PYTHONWARNINGS=error PYTHONPATH=. pytest -m no_xdist"'
+            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "PYTHONWARNINGS=error PYTHONPATH=. pytest -n logical --dist=loadgroup -m '"'"'not no_xdist'"'"' && PYTHONWARNINGS=error PYTHONPATH=. pytest -m no_xdist"'
           else
-            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make -C cleaners tests && PYTHONWARNINGS=error PYTHONPATH=. pytest -n logical -m '"'"'not no_xdist'"'"' --cov=bleachbit --cov-report= && PYTHONWARNINGS=error PYTHONPATH=. pytest -m no_xdist --cov=bleachbit --cov-append --cov-report= && python windows/nsis_translations.py --unittest && make tests-with-sudo"'
+            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make -C cleaners tests && PYTHONWARNINGS=error PYTHONPATH=. pytest -n logical --dist=loadgroup -m '"'"'not no_xdist'"'"' --cov=bleachbit --cov-report= && PYTHONWARNINGS=error PYTHONPATH=. pytest -m no_xdist --cov=bleachbit --cov-append --cov-report= && python windows/nsis_translations.py --unittest && make tests-with-sudo"'
           fi
 
       - name: Generate lcov coverage

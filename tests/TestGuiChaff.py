@@ -19,6 +19,7 @@ import warnings
 from unittest.mock import patch
 
 from tests import common
+from tests.common import pytest
 
 from bleachbit.GtkShim import Gtk, GLib, Gio, is_gtk_available
 from bleachbit.Options import options
@@ -35,6 +36,7 @@ if HAVE_GTK:
 
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
+@pytest.mark.xdist_group('gui')
 class GuiChaffTestCase(common.BleachbitTestCase):
     """Test case for module GuiChaff"""
     app = Bleachbit(auto_exit=False, uac=False) if HAVE_GTK else None
