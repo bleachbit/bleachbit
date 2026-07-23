@@ -12,6 +12,7 @@ Test case for module Options
 import errno
 import os
 import sys
+import threading
 from unittest import mock
 
 from tests import common
@@ -465,6 +466,58 @@ protected_path = /tmp = True
                     # Clean up for next iteration
                     self.tearDown()
                     self.setUp()
+
+    def test_mutators_flush_atomically_with_lock(self):
+        """Test that mutating self.config and scheduling the flush is atomic"""
+        self._write_seed_options_file()
+
+        mutators = (
+            ('set', lambda o: o.set('shred', 'RACE_PROBE')),
+            ('set_list', lambda o: o.set_list('race_list', ['x'])),
+            ('set_tree', lambda o: o.set_tree(
+                'race_parent', 'race_child', True)),
+            ('remember_warning_preference',
+             lambda o: o.remember_warning_preference('race_key')),
+        )
+
+        with mock.patch('bleachbit.Options.threading.Timer', FakeTimer):
+            for name, mutate in mutators:
+                with self.subTest(mutator=name):
+                    o = bleachbit.Options.Options()
+                    entered = threading.Event()
+                    finish = threading.Event()
+                    real_schedule_flush = o._Options__schedule_flush
+
+                    # blocks mid-flush so a concurrent lock probe can check who holds the lock
+                    def blocking_schedule_flush():
+                        entered.set()
+                        finish.wait(timeout=5)
+                        real_schedule_flush()
+
+                    with mock.patch.object(
+                            o, '_Options__schedule_flush',
+                            side_effect=blocking_schedule_flush):
+                        t = threading.Thread(
+                            target=mutate, args=(o,))
+                        t.start()
+                        self.assertTrue(
+                            entered.wait(timeout=5),
+                            f'{name}() never reached __schedule_flush')
+                        acquired = o._flush_lock.acquire(timeout=0.2)
+                        if acquired:
+                            o._flush_lock.release()
+                        finish.set()
+                        t.join(timeout=5)
+
+                    self.assertFalse(
+                        acquired,
+                        f'{name}() released _flush_lock between '
+                        'mutating self.config and scheduling the '
+                        'flush - a concurrent background flush could '
+                        'observe and persist the change before '
+                        'restore() gets a chance to discard it')
+                    # cancel_pending_flush(), not close(): probe values must never hit disk
+                    o.cancel_pending_flush()
 
     def test_close_unregisters_atexit_and_is_idempotent(self):
         """Test close() unregisters its atexit callback and only flushes once."""
