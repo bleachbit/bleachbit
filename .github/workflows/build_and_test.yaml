@@ -156,7 +156,7 @@ jobs:
           if [[ "${{ matrix.python-version }}" == "3.9" ]]; then
             dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make tests && make tests-with-sudo"'
           else
-            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make -C cleaners tests && PYTHONWARNINGS=error PYTHONPATH=. pytest -n auto && python windows/nsis_translations.py --unittest && make tests-with-sudo"'
+            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make -C cleaners tests && PYTHONWARNINGS=error PYTHONPATH=. pytest -n logical -m '"'"'not no_xdist'"'"' && PYTHONWARNINGS=error PYTHONPATH=. pytest -m no_xdist && python windows/nsis_translations.py --unittest && make tests-with-sudo"'
           fi
 
       - name: Generate lcov coverage
@@ -395,7 +395,12 @@ jobs:
           COVERAGE_FILE: .coverage.admin
         run: |
           set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
-          "%PYTHON_EXE%" -m pytest -n auto --dist=loadgroup --cov=bleachbit --cov-report= tests
+          "%PYTHON_EXE%" -m pytest -n logical --dist=loadgroup -m "not no_xdist" --cov=bleachbit --cov-report= tests
+          set RC1=%ERRORLEVEL%
+          "%PYTHON_EXE%" -m pytest -m no_xdist --cov=bleachbit --cov-append --cov-report= tests
+          set RC2=%ERRORLEVEL%
+          if not %RC1%==0 exit /b %RC1%
+          if not %RC2%==0 exit /b %RC2%
 
       - name: Run non-admin tests
         if: matrix.suite == 'nonadmin'

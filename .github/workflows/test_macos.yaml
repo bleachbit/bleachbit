@@ -96,5 +96,6 @@ jobs:
           PYTHONWARNINGS: error
         run: |
           touch ~/.zshrc # for test_expanduser
-          .venv/bin/python -m pytest -n auto
+          .venv/bin/python -m pytest -n logical -m "not no_xdist"
+          .venv/bin/python -m pytest -m no_xdist
           .venv/bin/python windows/nsis_translations.py --unittest
