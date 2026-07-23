@@ -185,6 +185,9 @@ def open_files():
             # /proc/###/fd/0 with systemd
             # https://github.com/bleachbit/bleachbit/issues/1515
             continue
+        except FileNotFoundError:
+            # fd closed between listing and resolving it (TOCTOU race)
+            continue
         else:
             yield target
 
