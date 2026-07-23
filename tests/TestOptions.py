@@ -155,7 +155,11 @@ check_online_updates=True
             with open(bleachbit.options_file, 'w', encoding='utf-8-sig') as f:
                 f.write(contents)
             o = bleachbit.Options.Options()
-            self.assertEqual(o.is_corrupt(), expect_is_corrupt)
+            try:
+                self.assertEqual(o.is_corrupt(), expect_is_corrupt)
+            finally:
+                # cancel any real flush timer restore() may have scheduled
+                o.cancel_pending_flush()
 
         # test blank
         _test_is_corrupt('', False)
@@ -239,26 +243,33 @@ check_online_updates=True
         disk_full_error = OSError('No space left on device')
         disk_full_error.errno = errno.ENOSPC
         o = bleachbit.Options.Options()
-        with mock.patch('builtins.open', side_effect=disk_full_error):
-            with self.assertLogs(level='ERROR') as log_context:
-                o.set('test_key', 'test_value')
-                o.commit()
-        self.assertIn('Disk was full', log_context.output[0])
-        self.assertIn(bleachbit.options_file, log_context.output[0])
-        self.assertEqual(o.get('test_key'), 'test_value')
+        try:
+            with mock.patch('builtins.open', side_effect=disk_full_error):
+                with self.assertLogs(level='ERROR') as log_context:
+                    o.set('test_key', 'test_value')
+                    o.commit()
+            self.assertIn('Disk was full', log_context.output[0])
+            self.assertIn(bleachbit.options_file, log_context.output[0])
+            self.assertEqual(o.get('test_key'), 'test_value')
+        finally:
+            # forced commit() failure above never clears dirty/cancels the timer
+            o.cancel_pending_flush()
 
     def test_error_permission(self):
         """Test graceful degradation with permission errors"""
         permission_error = PermissionError('Permission denied')
         permission_error.errno = errno.EACCES
         o = bleachbit.Options.Options()
-        with mock.patch('builtins.open', side_effect=permission_error):
-            with self.assertLogs(level='ERROR') as log_context:
-                o.set('test_key', 'test_value')
-                o.commit()
-        self.assertIn('Permission denied', log_context.output[0])
-        self.assertIn(bleachbit.options_file, log_context.output[0])
-        self.assertEqual(o.get('test_key'), 'test_value')
+        try:
+            with mock.patch('builtins.open', side_effect=permission_error):
+                with self.assertLogs(level='ERROR') as log_context:
+                    o.set('test_key', 'test_value')
+                    o.commit()
+            self.assertIn('Permission denied', log_context.output[0])
+            self.assertIn(bleachbit.options_file, log_context.output[0])
+            self.assertEqual(o.get('test_key'), 'test_value')
+        finally:
+            o.cancel_pending_flush()
 
     def test_warning(self):
         """Test warning preferences"""

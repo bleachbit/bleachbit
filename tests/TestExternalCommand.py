@@ -299,9 +299,9 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         cls._lang_env.__enter__()
         super().setUpClass()
         cls._test_options_env = None
-        # This should not be needed because of using CLI arg --no-delete-confirmation.
-        options.set('delete_confirmation', False)
-        options.commit()
+        # override, not a committed set: never hits the shared file, so it
+        # can't leak to other tests (subprocesses get --no-delete-confirmation)
+        options.set_override('delete_confirmation', False)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             # Set environment variable for child process.
             cls._test_options_env = common.set_temporary_env(
