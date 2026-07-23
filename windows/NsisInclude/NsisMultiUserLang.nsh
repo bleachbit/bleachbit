@@ -2286,7 +2286,7 @@ Version: 2023-02-223
 !ifdef LANG_SWEDISH
 	LangString ALREADY_INSTALLED ${LANG_SWEDISH} "${prodname} är redan installerat.$\r$\nKlicka på 'OK' för att avinstallera den gamla versionen innan du uppgraderar, eller klicka på 'Avbryt' för att avbryta uppgraderingen."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_SWEDISH} "Besök webbplatsen för ${prodname}"
-	LangString INSTALLER_CAPTION ${LANG_SWEDISH} "${prodname} ${VERSION} Installation"
+	LangString INSTALLER_CAPTION ${LANG_SWEDISH} "Installationsprogram för ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_SWEDISH} "Nästa steg är att bygga teckensnittscachen, under vilken ett svart konsolfönster kan visas."
 	LangString MULTIPRINT2 ${LANG_SWEDISH} "Det brukar ta en minut, men ibland tar det upp till tio minuter."
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_SWEDISH} "Du måste logga in med ett konto som är medlem i administratörsgruppen för att fortsätta."
@@ -2317,10 +2317,10 @@ Version: 2023-02-223
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_SWEDISH} "Välj för vilka användare $(^NameDA) ska tas bort."
 	LangString OLD_WINDOWS_WARNING ${LANG_SWEDISH} "Den här versionen av BleachBit kräver Windows 10 eller senare. För att ladda ner en kompatibel version för ditt system klickar du på OK. För att avsluta installationsprogrammet klickar du på Avbryt."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_SWEDISH} "Det här är de grundläggande filerna som behövs för att ${prodname} ska fungera (obligatoriskt)."
-	LangString SECTION_CORE_NAME ${LANG_SWEDISH} "Kärnfiler (obligatoriskt)"
+	LangString SECTION_CORE_NAME ${LANG_SWEDISH} "Kärnfiler (obligatoriska)"
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_SWEDISH} "Skapa en genväg på skrivbordet."
 	LangString SECTION_DESKTOP_NAME ${LANG_SWEDISH} "Skrivbord"
-	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_SWEDISH} "Lägg till ett alternativ för att ta bort filer i filernas snabbmeny i Windows Utforskaren."
+	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_SWEDISH} "Lägg till ett alternativ för att ta bort filer från deras snabbmeny i Utforskaren."
 	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_SWEDISH} "Integrera säkerhetsradering"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_SWEDISH} "Skapa en genväg i snabbstartsfältet."
 	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_SWEDISH} "Snabbstart"
@@ -2328,13 +2328,13 @@ Version: 2023-02-223
 	LangString SECTION_SHORTCUTS_NAME ${LANG_SWEDISH} "Genvägar"
 	LangString SECTION_START_MENU_DESCRIPTION ${LANG_SWEDISH} "Skapa en genväg i Start-menyn."
 	LangString SECTION_START_MENU_NAME ${LANG_SWEDISH} "Startmeny"
-	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_SWEDISH} "Installera språkfiler för att använda ${prodname} på ditt föredragna lokala språk."
+	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_SWEDISH} "Installera språkfiler för att använda ${prodname} på önskat språk."
 	LangString SECTION_TRANSLATIONS_NAME ${LANG_SWEDISH} "Översättningar"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_SWEDISH} "Lägg till ett avinstallationsprogram."
-	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SWEDISH} "${prodname} felsökningsterminal"
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_SWEDISH} "Felsökningsterminal för ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_SWEDISH} "${prodname} (utan UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_SWEDISH} "Säkerhetsradera med ${prodname}"
-	LangString UNINSTALL_TEXT ${LANG_SWEDISH} "Välj en skrivbar mapp för varje disk vars lediga utrymme ska städas."
+	LangString UNINSTALL_TEXT ${LANG_SWEDISH} "Välj en skrivbar mapp på varje enhet där ledigt utrymme ska skrivas över."
 !endif
 
 !ifdef LANG_THAI
