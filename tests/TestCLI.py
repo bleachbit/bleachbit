@@ -20,6 +20,8 @@ import random
 import tempfile
 from unittest.mock import MagicMock, patch
 
+from tests.common import pytest
+
 # first party imports
 import bleachbit
 from bleachbit.CLI import (
@@ -285,6 +287,7 @@ class CLITestCase(common.BleachbitTestCase):
                 self.assertNotExists(filename)
                 self.assertFalse(crash[0], "Crash detected during deletion")
 
+    @pytest.mark.no_xdist
     def test_append_text(self):
         """Unit test for CliCallback.append_text() with special strings"""
         cb = CliCallback(quiet=False)

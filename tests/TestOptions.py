@@ -15,6 +15,8 @@ import sys
 import threading
 from unittest import mock
 
+from tests.common import pytest
+
 from tests import common
 import bleachbit.Options
 from bleachbit import IS_WINDOWS
@@ -597,6 +599,7 @@ protected_path = /tmp = True
             mock_flush.assert_called_once_with(force=False)
             mock_unregister.assert_called_once()
 
+    @pytest.mark.no_xdist
     def test_unicode_paths(self):
         """Test that paths with various Unicode characters"""
         # On Linux, os.listdir() may return filenames with surrogate-escaped

@@ -14,17 +14,7 @@ import time
 import unittest
 from pathlib import Path
 
-try:
-    import pytest
-except ImportError:  # pytest is optional for unittest discovery
-    class _pytest_shim:
-        class mark:
-            @staticmethod
-            def xdist_group(_name):
-                def decorator(func):
-                    return func
-                return decorator
-    pytest = _pytest_shim()
+from tests.common import pytest
 
 from bleachbit import General, logger
 from bleachbit.GtkShim import is_gtk_available

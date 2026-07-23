@@ -28,6 +28,8 @@ import warnings
 # third-party import
 import psutil
 
+from tests.common import pytest
+
 # local import
 from bleachbit.FileUtilities import (
     _remove_windows_readonly,
@@ -675,6 +677,7 @@ State=AAAA/wA...
                 options.set('shred', shred)
                 json_helper(self, clean_json)
 
+    @pytest.mark.no_xdist
     def test_delete(self):
         """Unit test for method delete()"""
         for shred in (False, True):

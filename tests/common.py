@@ -21,6 +21,23 @@ import warnings
 from pathlib import Path
 from unittest import mock
 
+try:
+    import pytest
+except ImportError:  # pytest is optional for plain unittest discovery
+    class _PytestShim:
+        """No-op stand-in so @pytest.mark.* decorators work under unittest."""
+        class mark:
+            @staticmethod
+            def xdist_group(_name):
+                def decorator(func):
+                    return func
+                return decorator
+
+            @staticmethod
+            def no_xdist(func):
+                return func
+    pytest = _PytestShim()
+
 import bleachbit
 from bleachbit import logger
 

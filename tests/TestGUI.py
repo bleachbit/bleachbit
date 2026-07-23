@@ -17,17 +17,7 @@ import types
 import warnings
 from unittest import mock
 
-try:
-    import pytest
-except ImportError:  # pytest is optional for unittest discovery
-    class _pytest_shim:
-        class mark:
-            @staticmethod
-            def xdist_group(_name):
-                def decorator(func):
-                    return func
-                return decorator
-    pytest = _pytest_shim()
+from tests.common import pytest
 
 import bleachbit
 from bleachbit.Cleaner import backends
@@ -194,6 +184,7 @@ class GUITestCase(common.BleachbitTestCase):
         self.refresh_gui()
         return condition()
 
+    @pytest.mark.no_xdist
     def test_append_text(self):
         """Test append_text handles special strings"""
         gui = self.get_window()

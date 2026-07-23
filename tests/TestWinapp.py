@@ -18,17 +18,7 @@ import tempfile
 import time
 from unittest import mock
 
-try:
-    import pytest
-except ImportError:  # pytest is optional for unittest discovery
-    class _pytest_shim:
-        class mark:
-            @staticmethod
-            def xdist_group(_name):
-                def decorator(func):
-                    return func
-                return decorator
-    pytest = _pytest_shim()
+from tests.common import pytest
 
 from tests import common
 from bleachbit.Winapp import Winapp, detectos, detect_file, fnmatch_translate, section2option
