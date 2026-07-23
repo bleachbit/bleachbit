@@ -208,6 +208,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
     def tearDown(self):
         """Call after each test method"""
+        super().tearDown()
         if self.old_locale_tuple == (None, None):
             locale.setlocale(locale.LC_NUMERIC, 'C')
             return

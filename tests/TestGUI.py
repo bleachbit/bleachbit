@@ -63,7 +63,9 @@ class GUITestCase(common.BleachbitTestCase):
         super().setUpClass()
         options.get_tree = types.MethodType(
             lambda self, parent, child: False, options)
-        options.set('font_check_completed', True)
+        # override, not set(): a plain set() is reverted by the per-test
+        # tearDown reload after the first test in the class
+        options.set_override('font_check_completed', True)
         try:
             cls.app.register()
         except GLib.GError as e:

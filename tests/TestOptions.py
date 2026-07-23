@@ -463,10 +463,6 @@ protected_path = /tmp = True
                     if commit_method == 'timer':
                         o.close()
 
-                    # Clean up for next iteration
-                    self.tearDown()
-                    self.setUp()
-
     def test_mutators_flush_atomically_with_lock(self):
         """Test that mutating self.config and scheduling the flush is atomic"""
         self._write_seed_options_file()
