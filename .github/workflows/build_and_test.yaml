@@ -336,14 +336,21 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Cache downloaded dependencies
+      - name: Cache the installed environment
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
+          # Cache the downloaded archives AND the unpacked+pip-installed tree, so
+          # a warm run skips both the slow Expand-Archive and the pip installs.
+          # No restore-keys: a partial-key hit would restore a tree with stale
+          # dependencies that the install script would then skip re-installing.
+          # Test jobs don't mutate the tree, so caching it here is safe (unlike
+          # windows-build, whose shrink/UPX step strips files in place).
           path: |
             gtk*-x86-windows.zip
             gtk-themes.zip
             pygobject-*-win32.whl
-          key: win-test-deps-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1') }}
+            vcpkg_installed
+          key: win-test-env-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1', 'requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
 
       - name: Cache pip packages
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -510,7 +517,7 @@ jobs:
         run: |
           # Sanitize
           $ref = ($env:GITHUB_REF_NAME -replace '[^A-Za-z0-9._/-]','_')
-          $ver = ($env:VERSION        -replace '[^A-Za-z0-9._-]','_')
+          $ver = ($env:VERSION         -replace '[^A-Za-z0-9._-]','_')
           $run = $env:GITHUB_RUN_NUMBER
           $attempt = $env:GITHUB_RUN_ATTEMPT
           $sha = $env:GITHUB_SHA.Substring(0,8)
