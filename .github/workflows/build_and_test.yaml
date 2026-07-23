@@ -318,15 +318,8 @@ jobs:
             BleachBit-*-setup-English.exe
 
   windows-test:
-    name: windows-test (${{ matrix.suite }})
-    timeout-minutes: 25
-    strategy:
-      fail-fast: false
-      matrix:
-        suite:
-          - admin
-          - nonadmin
-          - low-integrity
+    name: windows-test
+    timeout-minutes: 30
     runs-on: windows-latest
 
     env:
@@ -347,7 +340,7 @@ jobs:
           # a warm run skips both the slow Expand-Archive and the pip installs.
           # No restore-keys: a partial-key hit would restore a tree with stale
           # dependencies that the install script would then skip re-installing.
-          # Test jobs don't mutate the tree, so caching it here is safe (unlike
+          # This job doesn't mutate the tree, so caching it here is safe (unlike
           # windows-build, whose shrink/UPX step strips files in place).
           path: |
             gtk*-x86-windows.zip
@@ -360,7 +353,7 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ github.workspace }}\.pip-cache
-          # The test matrix installs requirements.txt + windows/requirements.txt
+          # This job installs requirements.txt + windows/requirements.txt
           # + requirements-test.txt, so the cache key includes all three.
           key: pip-win-test-${{ hashFiles('requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
           restore-keys: pip-win-
@@ -370,7 +363,6 @@ jobs:
         run: .\windows\python-gtk3-install.ps1
 
       - name: Install PsExec
-        if: matrix.suite != 'admin'
         shell: pwsh
         run: choco install psexec --version=2.43 -y
 
@@ -390,8 +382,10 @@ jobs:
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: '"%PYTHON_HOME%\Scripts\pip3.exe" install --disable-pip-version-check -r requirements-test.txt'
 
+      # Suites run as separate steps (not a matrix); ids let the coverage
+      # steps below check each suite's outcome before reporting.
       - name: Run admin tests
-        if: matrix.suite == 'admin'
+        id: admin
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         env:
           DESTRUCTIVE_TESTS: T
@@ -407,69 +401,26 @@ jobs:
           if not %RC2%==0 exit /b %RC2%
 
       - name: Run non-admin tests
-        if: matrix.suite == 'nonadmin'
+        id: nonadmin
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: |
           set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
           call windows\run-psexec-nonadmin-tests.bat
 
       - name: Run low-integrity tests
-        if: matrix.suite == 'low-integrity'
+        id: lowintegrity
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: |
           set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
           call windows\run-psexec-low-integrity-tests.bat
 
       - name: Collect low-integrity coverage
-        if: matrix.suite == 'low-integrity' && github.repository == 'bleachbit/bleachbit'
+        if: github.repository == 'bleachbit/bleachbit'
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: copy /Y "%USERPROFILE%\AppData\LocalLow\.coverage.psexec" .coverage.psexec
 
-      - name: Upload coverage artifact
-        if: github.repository == 'bleachbit/bleachbit'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: coverage-${{ matrix.suite }}
-          path: .coverage.*
-          include-hidden-files: true
-          if-no-files-found: warn
-          retention-days: 1
-
-  windows-coverage:
-    needs: [windows-test]
-    if: always() && github.repository == 'bleachbit/bleachbit'
-    runs-on: windows-latest
-    timeout-minutes: 10
-
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          persist-credentials: false
-
-      - name: Generate Revision.py
-        shell: pwsh
-        run: |
-          $rev = $env:GITHUB_SHA.Substring(0, 8)
-          Set-Content -Path bleachbit\Revision.py -Encoding utf8 -Value "revision = `"$rev`"`nbuild_number = `"$env:GITHUB_RUN_NUMBER`""
-
-      - name: Download coverage artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-        with:
-          pattern: coverage-*
-          merge-multiple: true
-
-      - name: Set up Python
-        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
-        with:
-          python-version: '3.12'
-          cache: pip
-          cache-dependency-path: requirements-test.txt
-
-      - name: Install coverage
-        shell: pwsh
-        run: pip install -r requirements-test.txt
-
       - name: Combine coverage
+        if: &all_suites_passed steps.admin.outcome == 'success' && steps.nonadmin.outcome == 'success' && steps.lowintegrity.outcome == 'success' && github.repository == 'bleachbit/bleachbit'
         shell: pwsh
         run: |
           Get-ChildItem .coverage* -Force -ErrorAction SilentlyContinue | Format-Table Name, Length
@@ -479,14 +430,16 @@ jobs:
             Write-Host "::error::No coverage files found"
             exit 1
           }
-          python -m coverage combine --data-file=.coverage @files
-          python -m coverage report --data-file=.coverage
+          & $env:PYTHON_EXE -m coverage combine --data-file=.coverage @files
+          & $env:PYTHON_EXE -m coverage report --data-file=.coverage
 
       - name: Generate lcov coverage
+        if: *all_suites_passed
         shell: pwsh
-        run: python -m coverage lcov -o coverage.lcov --data-file=.coverage
+        run: "& $env:PYTHON_EXE -m coverage lcov -o coverage.lcov --data-file=.coverage"
 
       - name: Upload coverage to Coveralls
+        if: *all_suites_passed
         uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
         with:
           file: coverage.lcov
@@ -552,7 +505,7 @@ jobs:
             }
 
   coveralls-finish:
-    needs: [linux, windows-coverage]
+    needs: [linux, windows-test]
     if: github.repository == 'bleachbit/bleachbit'
     runs-on: ubuntu-latest
     steps:
