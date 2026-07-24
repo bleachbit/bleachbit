@@ -76,7 +76,7 @@ jobs:
         uses: ./.github/actions/generate-revision
 
       - name: Generate translations
-        run: make -C po local bleachbit.pot PYTHON="$GITHUB_WORKSPACE/.venv/bin/python"
+        run: make -C po local PYTHON="$GITHUB_WORKSPACE/.venv/bin/python"
 
       - name: Smoke test (CLI --version and --list)
         run: |

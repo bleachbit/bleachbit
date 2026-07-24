@@ -144,7 +144,7 @@ jobs:
         uses: ./.github/actions/generate-revision
 
       - name: Generate translations
-        run: make -C po local bleachbit.pot
+        run: make -C po local
 
       - name: Run tests (regular and sudo)
         timeout-minutes: 20
@@ -275,7 +275,7 @@ jobs:
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: |
           set PATH=%MSYS_BIN%;%PATH%
-          make PYTHON="%PYTHON_EXE%" -C po local bleachbit.pot
+          make PYTHON="%PYTHON_EXE%" -C po local
 
       - name: Build executable and installers
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
@@ -372,7 +372,7 @@ jobs:
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: |
           set PATH=%MSYS_BIN%;%PATH%
-          make PYTHON="%PYTHON_EXE%" -C po local bleachbit.pot
+          make PYTHON="%PYTHON_EXE%" -C po local
 
       - name: Install test dependencies
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
