@@ -288,28 +288,34 @@ def _scan_children(top, list_directories, pending_dirs):
     except OSError:
         return
     subdirs = []
-    with scandir_it:
-        for entry in scandir_it:
-            try:
-                is_dir = entry.is_dir()
-            except OSError:
-                # e.g. permission denied; os.walk also treats this as a file
-                is_dir = False
-            if not is_dir:
-                # regular file, symlink to a file, or broken link
-                yield entry.path
-                continue
-            try:
-                # is_junction_entry() is Windows-only and never reached on
-                # POSIX thanks to short-circuit evaluation.
-                is_link = entry.is_symlink() or (
-                    IS_WINDOWS and _is_junction_entry(entry))
-            except OSError:
-                is_link = False
-            if list_directories:
-                pending_dirs.append(entry.path)
-            if not is_link:
-                subdirs.append(entry.path)
+    try:
+        with scandir_it:
+            for entry in scandir_it:
+                try:
+                    is_dir = entry.is_dir()
+                except OSError:
+                    # e.g. permission denied; os.walk also treats this as a file
+                    is_dir = False
+                if not is_dir:
+                    # regular file, symlink to a file, or broken link
+                    yield entry.path
+                    continue
+                try:
+                    # is_junction_entry() is Windows-only and never reached on
+                    # POSIX thanks to short-circuit evaluation.
+                    is_link = entry.is_symlink() or (
+                        IS_WINDOWS and _is_junction_entry(entry))
+                except OSError:
+                    is_link = False
+                if list_directories:
+                    pending_dirs.append(entry.path)
+                if not is_link:
+                    subdirs.append(entry.path)
+    except OSError:
+        # The directory may disappear or become unreadable mid-iteration.
+        # os.walk silently skips such directories, so do the same instead of
+        # propagating PermissionError and aborting the whole cleanup.
+        return
     for subdir in subdirs:
         yield from _scan_children(subdir, list_directories, pending_dirs)
 

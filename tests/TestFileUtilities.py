@@ -384,6 +384,58 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertTrue(delete(root))
         self.assertNotExists(root)
 
+    def test_children_in_directory_scandir_unreadable_mid_iteration(self):
+        """Regression test: a directory becoming unreadable mid-iteration
+        must not abort the whole cleanup.
+
+        os.walk silently skips directories that turn unreadable while being
+        listed; _scan_children must do the same instead of propagating the
+        OSError/PermissionError from the scandir iterator.
+        """
+        root = self.mkdir('scandir-unreadable-root')
+        self.mkstemp(prefix='file_before', dir=root)
+
+        class _FakeEntry:
+            def __init__(self, path, is_dir=False):
+                self.path = path
+                self._is_dir = is_dir
+
+            def is_dir(self):
+                return self._is_dir
+
+            def is_symlink(self):
+                return False
+
+        class _RaisingScandir:
+            """Yields one file entry, then raises PermissionError mid-iteration."""
+
+            def __init__(self, first_entry):
+                self._first = first_entry
+
+            def __iter__(self):
+                return self
+
+            def __next__(self):
+                if self._first is None:
+                    raise PermissionError('simulated mid-iteration failure')
+                entry = self._first
+                self._first = None
+                return entry
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+        first_entry = _FakeEntry(os.path.join(root, 'file_before'), is_dir=False)
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities.os.scandir',
+                return_value=_RaisingScandir(first_entry)):
+            # Must not raise; entries yielded before the failure are kept.
+            results = list(children_in_directory(root, list_directories=False))
+        self.assertEqual(results, [os.path.join(root, 'file_before')])
+
     @common.skipIfWindows
     def test_children_in_directory_posix_symlink(self):
         """POSIX: ensure directory symlinks are not followed"""
