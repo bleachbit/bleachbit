@@ -472,36 +472,36 @@ class Options:
             # so clear it first.
             for section in self.config.sections():
                 self.config.remove_section(section)
-        try:
-            with open(bleachbit.options_file, 'r', encoding='utf-8-sig', errors='surrogateescape') as _file:
-                self.config.read_file(_file, bleachbit.options_file)
-        except FileNotFoundError:
-            if not bleachbit.options_file.startswith('/tmp'):
-                logger.debug("Configuration file does not exist yet: %s",
-                             bleachbit.options_file)
-        except Exception:
-            logger.exception("Error reading application's configuration")
-        if not self.config.has_section("bleachbit"):
-            self.config.add_section("bleachbit")
-        if not self.config.has_section("hashpath"):
-            self.config.add_section("hashpath")
-        self.__migrate_warning_preferences()
-        if not self.config.has_section("list/shred_drives"):
-            from bleachbit.FileUtilities import guess_overwrite_paths
             try:
-                self.set_list('shred_drives', guess_overwrite_paths())
-            except:
-                logger.exception(
-                    _("Error when setting the default drives to shred."))
-        # BleachBit upgrade or first start ever
-        if not self.config.has_option('bleachbit', 'version') or \
-                self.get('version') != bleachbit.APP_VERSION:
-            if self.config.has_option('bleachbit', 'version'):
-                self.old_version = self.get('version')
-            self.set('first_start', True)
+                with open(bleachbit.options_file, 'r', encoding='utf-8-sig', errors='surrogateescape') as _file:
+                    self.config.read_file(_file, bleachbit.options_file)
+            except FileNotFoundError:
+                if not bleachbit.options_file.startswith('/tmp'):
+                    logger.debug("Configuration file does not exist yet: %s",
+                                 bleachbit.options_file)
+            except Exception:
+                logger.exception("Error reading application's configuration")
+            if not self.config.has_section("bleachbit"):
+                self.config.add_section("bleachbit")
+            if not self.config.has_section("hashpath"):
+                self.config.add_section("hashpath")
+            self.__migrate_warning_preferences()
+            if not self.config.has_section("list/shred_drives"):
+                from bleachbit.FileUtilities import guess_overwrite_paths
+                try:
+                    self.set_list('shred_drives', guess_overwrite_paths())
+                except:
+                    logger.exception(
+                        _("Error when setting the default drives to shred."))
+            # BleachBit upgrade or first start ever
+            if not self.config.has_option('bleachbit', 'version') or \
+                    self.get('version') != bleachbit.APP_VERSION:
+                if self.config.has_option('bleachbit', 'version'):
+                    self.old_version = self.get('version')
+                self.set('first_start', True)
 
-        # set version
-        self.set("version", bleachbit.APP_VERSION)
+            # set version
+            self.set("version", bleachbit.APP_VERSION)
 
     def set(self, key, value, section='bleachbit'):
         """Set a general option"""

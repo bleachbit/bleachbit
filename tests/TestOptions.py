@@ -519,6 +519,65 @@ protected_path = /tmp = True
                     # cancel_pending_flush(), not close(): probe values must never hit disk
                     o.cancel_pending_flush()
 
+    def test_restore_does_not_expose_partial_configuration(self):
+        """Test restore() keeps setters out until all sections are rebuilt."""
+        self._write_seed_options_file()
+        o = bleachbit.Options.Options()
+        entered_read = threading.Event()
+        continue_restore = threading.Event()
+        setter_finished = threading.Event()
+        restore_errors = []
+        setter_errors = []
+        original_read_file = o.config.read_file
+
+        def blocking_read_file(*args, **kwargs):
+            entered_read.set()
+            continue_restore.wait(timeout=5)
+            return original_read_file(*args, **kwargs)
+
+        def restore():
+            try:
+                o.restore()
+            except Exception as error:
+                restore_errors.append(error)
+
+        def set_option():
+            try:
+                o.set('race_probe', 'True')
+            except Exception as error:
+                setter_errors.append(error)
+            finally:
+                setter_finished.set()
+
+        restore_thread = threading.Thread(target=restore)
+        setter_thread = threading.Thread(target=set_option)
+        try:
+            with mock.patch.object(
+                    o.config, 'read_file', side_effect=blocking_read_file):
+                restore_thread.start()
+                self.assertTrue(entered_read.wait(timeout=5))
+                setter_thread.start()
+
+                self.assertFalse(
+                    setter_finished.wait(timeout=0.2),
+                    'set() ran while restore() had cleared self.config')
+
+                continue_restore.set()
+                restore_thread.join(timeout=5)
+                setter_thread.join(timeout=5)
+
+            self.assertFalse(restore_thread.is_alive())
+            self.assertFalse(setter_thread.is_alive())
+            self.assertEqual([], restore_errors)
+            self.assertEqual([], setter_errors)
+            self.assertTrue(o.get('race_probe'))
+        finally:
+            continue_restore.set()
+            restore_thread.join(timeout=5)
+            setter_thread.join(timeout=5)
+            o.cancel_pending_flush()
+            o.close()
+
     def test_close_unregisters_atexit_and_is_idempotent(self):
         """Test close() unregisters its atexit callback and only flushes once."""
         self._write_seed_options_file()
