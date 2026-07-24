@@ -141,9 +141,7 @@ jobs:
           fi
 
       - name: Generate Revision.py
-        run: |
-          echo "revision = \"`git rev-parse --short HEAD`\"" > bleachbit/Revision.py
-          echo "build_number = \"${{ github.run_number }}\"" >> bleachbit/Revision.py
+        uses: ./.github/actions/generate-revision
 
       - name: Generate translations
         run: make -C po local bleachbit.pot
@@ -264,11 +262,12 @@ jobs:
           Start-Process -FilePath .\nsis-3.12-setup.exe -ArgumentList '/S' -Wait
 
       - name: Generate Revision.py
+        uses: ./.github/actions/generate-revision
+
+      - name: Get version
         id: revision
         shell: pwsh
         run: |
-          $rev = $env:GITHUB_SHA.Substring(0, 8)
-          Set-Content -Path bleachbit\Revision.py -Encoding utf8 -Value "revision = `"$rev`"`nbuild_number = `"$env:GITHUB_RUN_NUMBER`""
           $version = & $env:PYTHON_EXE -c "from bleachbit.SystemInformation import get_version; print(get_version())"
           "version=$version" >> $env:GITHUB_OUTPUT
 
@@ -367,10 +366,7 @@ jobs:
         run: choco install psexec --version=2.43 -y
 
       - name: Generate Revision.py
-        shell: pwsh
-        run: |
-          $rev = $env:GITHUB_SHA.Substring(0, 8)
-          Set-Content -Path bleachbit\Revision.py -Encoding utf8 -Value "revision = `"$rev`"`nbuild_number = `"$env:GITHUB_RUN_NUMBER`""
+        uses: ./.github/actions/generate-revision
 
       - name: Generate translations
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
