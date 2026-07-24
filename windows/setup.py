@@ -781,11 +781,34 @@ def upx(fast_build):
     # Do not compress bleachbit.exe and bleachbit_console.exe to avoid false positives
     # with antivirus software. Not much is space with gained with these small files, anyway.
     upx_files = recursive_glob('dist', ['*.dll', '*.pyd'])
-    cmd = [UPX_EXE] + UPX_OPTS.split() + upx_files
-    # Not fatal because UPX returns non-zero for any file it cannot pack
-    returncode = run_cmd(cmd, check=False)
-    if returncode:
-        logger.error('UPX exited with code %d', returncode)
+
+    # upx is single-threaded, so split files into size-balanced batches
+    # and run them as concurrent processes to use all CPU cores.
+    num_batches = min(os.cpu_count() or 1, len(upx_files)) or 1
+    batches = [[] for _ in range(num_batches)]
+    batch_sizes = [0] * num_batches
+    for f in sorted(upx_files, key=os.path.getsize, reverse=True):
+        i = batch_sizes.index(min(batch_sizes))
+        batches[i].append(f)
+        batch_sizes[i] += os.path.getsize(f)
+
+    procs = []
+    for batch in batches:
+        if not batch:
+            continue
+        cmd = [UPX_EXE] + UPX_OPTS.split() + batch
+        logger.info(subprocess.list2cmdline(cmd))
+        procs.append(subprocess.Popen(cmd, stdin=subprocess.PIPE,
+                                      stdout=subprocess.PIPE, stderr=subprocess.PIPE))
+    for p in procs:
+        stdout, stderr = p.communicate()
+        logger.info(stdout.decode(SetupEncoding))
+        if stderr:
+            logger.error(stderr.decode(SetupEncoding))
+        # Not fatal because UPX returns non-zero for any file it cannot pack
+        if p.returncode:
+            logger.error('UPX exited with code %d', p.returncode)
+
     assert_execute_console()
 
 
