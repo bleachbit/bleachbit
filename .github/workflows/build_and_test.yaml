@@ -194,18 +194,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up MSVC x86 environment
-        shell: pwsh
-        run: |
-          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-          $installPath = & $vswhere -latest -property installationPath
-          $vcvars = "$installPath\VC\Auxiliary\Build\vcvarsall.bat"
-          cmd /c "call `"$vcvars`" x86 && set" | ForEach-Object {
-            if ($_ -match '^(PATH|INCLUDE|LIB|LIBPATH)=(.*)$') {
-              "$($matches[1])=$($matches[2])" >> $env:GITHUB_ENV
-            }
-          }
-
       - name: Cache downloaded dependencies
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
