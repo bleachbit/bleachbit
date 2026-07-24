@@ -54,16 +54,36 @@ class Cleaner:
         self.running = []
         self.warnings = {}
         self.regexes_compiled = []
+        # Lazily built {option_id: [action, ...]} index over self.actions.
+        # Winapp2 cleaners aggregate thousands of actions, so scanning the
+        # whole list per option (get_commands/get_deep_scan) is quadratic.
+        self._actions_index = None
+        self._actions_index_src = None
+        self._sorted_option_keys = None
 
     def add_action(self, option_id, action):
         """Register 'action' (instance of class Action) to be executed
         for ''option_id'.  The actions must implement list_files and
         other_cleanup()"""
         self.actions.append((option_id, action))
+        self._actions_index = None
+
+    def _actions_for(self, option_id):
+        """Return the actions registered for option_id, in insertion order."""
+        # Rebuild when invalidated by add_action or when self.actions was
+        # reassigned to a different list.
+        if self._actions_index is None or self._actions_index_src is not self.actions:
+            index = {}
+            for oid, action in self.actions:
+                index.setdefault(oid, []).append(action)
+            self._actions_index = index
+            self._actions_index_src = self.actions
+        return self._actions_index.get(option_id, ())
 
     def add_option(self, option_id, name, description):
         """Register option (such as 'cache')"""
         self.options[option_id] = (name, description)
+        self._sorted_option_keys = None
 
     def add_running(self, detection_type, pathname, same_user=False):
         """Add a way to detect this program is currently running"""
@@ -87,20 +107,18 @@ class Cleaner:
 
     def get_commands(self, option_id):
         """Get list of Command instances for option 'option_id'"""
-        for action in self.actions:
-            if option_id == action[0]:
-                yield from action[1].get_commands()
+        for action in self._actions_for(option_id):
+            yield from action.get_commands()
         if option_id not in self.options:
             raise RuntimeError(f"Unknown option '{option_id}'")
 
     def get_deep_scan(self, option_id):
         """Get dictionary used to build a deep scan"""
-        for action in self.actions:
-            if option_id == action[0]:
-                try:
-                    yield from action[1].get_deep_scan()
-                except StopIteration:
-                    return
+        for action in self._actions_for(option_id):
+            try:
+                yield from action.get_deep_scan()
+            except StopIteration:
+                return
         if option_id not in self.options:
             raise RuntimeError(f"Unknown option '{option_id}'")
 
@@ -116,17 +134,21 @@ class Cleaner:
         """Return the human name of this cleaner"""
         return self.name
 
+    def _get_sorted_option_keys(self):
+        """Return option keys sorted once and cached until options change."""
+        if self._sorted_option_keys is None:
+            self._sorted_option_keys = sorted(self.options.keys())
+        return self._sorted_option_keys
+
     def get_option_descriptions(self):
         """Yield the names and descriptions of each option in a 2-tuple"""
-        if self.options:
-            for key in sorted(self.options.keys()):
-                yield (self.options[key][0], self.options[key][1])
+        for key in self._get_sorted_option_keys():
+            yield (self.options[key][0], self.options[key][1])
 
     def get_options(self):
         """Return user-configurable options in 2-tuple (id, name)"""
-        if self.options:
-            for key in sorted(self.options.keys()):
-                yield (key, self.options[key][0])
+        for key in self._get_sorted_option_keys():
+            yield (key, self.options[key][0])
 
     def get_warning(self, option_id):
         """Return a warning as string."""

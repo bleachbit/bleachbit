@@ -43,6 +43,9 @@ logger = logging.getLogger(__name__)
 
 FLUSH_DELAY_SECS = 15.0  # decimal seconds
 
+# Matches a Windows drive-letter key that lost its colon to ConfigParser
+_HASHPATH_DRIVE_RE = re.compile(r'^[a-z]\\')
+
 OPTION_DEFAULTS = {
     'auto_hide': {'value': True},
     'auto_detect_lang': {'value': True},
@@ -230,7 +233,7 @@ class Options:
             return
         for option in self.config.options('hashpath'):
             pathname = option
-            if IS_WINDOWS and re.search(r'^[a-z]\\', option):
+            if IS_WINDOWS and _HASHPATH_DRIVE_RE.search(option):
                 # restore colon lost because ConfigParser treats colon special
                 # in keys
                 pathname = pathname[0] + ':' + pathname[1:]

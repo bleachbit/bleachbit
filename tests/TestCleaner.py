@@ -112,6 +112,42 @@ class CleanerTestCase(common.BleachbitTestCase):
         self.assertRaises(
             RuntimeError, cleaner.get_commands('option3').__next__)
 
+    def test_multiple_actions_per_option(self):
+        """Multiple actions under one option run in registration order, and
+        actions added after get_commands()/get_deep_scan() are reflected."""
+
+        class _StubAction:
+            """Minimal action provider yielding sentinel values."""
+
+            def __init__(self, token):
+                self.token = token
+
+            def get_commands(self):
+                yield self.token
+
+            def get_deep_scan(self):
+                yield ('deep', self.token)
+
+        cleaner = Cleaner()
+        cleaner.add_option('opt', 'name', 'description')
+        cleaner.add_action('opt', _StubAction('a'))
+        cleaner.add_action('opt', _StubAction('b'))
+
+        # Both actions run, in registration order
+        self.assertEqual(list(cleaner.get_commands('opt')), ['a', 'b'])
+        self.assertEqual(list(cleaner.get_deep_scan('opt')),
+                         [('deep', 'a'), ('deep', 'b')])
+
+        # Adding an action after the index is built must be reflected
+        cleaner.add_action('opt', _StubAction('c'))
+        self.assertEqual(list(cleaner.get_commands('opt')), ['a', 'b', 'c'])
+        self.assertEqual(list(cleaner.get_deep_scan('opt')),
+                         [('deep', 'a'), ('deep', 'b'), ('deep', 'c')])
+
+        # A registered option with no actions yields nothing without raising
+        cleaner.add_option('empty', 'name2', 'description2')
+        self.assertEqual(list(cleaner.get_commands('empty')), [])
+
     def test_auto_hide(self):
         for key in sorted(backends):
             self.assertIsInstance(backends[key].auto_hide(), bool)
@@ -274,7 +310,20 @@ class CleanerTestCase(common.BleachbitTestCase):
         _lexists = os.path.lexists
         _listdir = os.listdir
         _oswalk = os.walk
-        _fu_walk = bleachbit.FileUtilities.walk
+        _scandir = os.scandir
+
+        class _EmptyScandir:
+            """Mimic os.scandir returning no entries (and a no-op context)."""
+
+            def __iter__(self):
+                return iter(())
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
         try:
             glob.iglob = lambda path, *args, **kwargs: []
             os.path.exists = lambda path: False
@@ -282,7 +331,7 @@ class CleanerTestCase(common.BleachbitTestCase):
             os.path.lexists = lambda path: False
             os.listdir = lambda path: []
             os.walk = lambda top, topdown=True, onerror=None, followlinks=False: []
-            bleachbit.FileUtilities.walk = lambda top, topdown=True, onerror=None, followlinks=False: []
+            os.scandir = lambda path='.', *args, **kwargs: _EmptyScandir()
             for key in sorted(backends):
                 for (option_id, __name) in backends[key].get_options():
                     for cmd in backends[key].get_commands(option_id):
@@ -300,7 +349,7 @@ class CleanerTestCase(common.BleachbitTestCase):
             os.path.lexists = _lexists
             os.listdir = _listdir
             os.walk = _oswalk
-            bleachbit.FileUtilities.walk = _fu_walk
+            os.scandir = _scandir
 
     def test_register_cleaners(self):
         """Unit test for register_cleaners"""
