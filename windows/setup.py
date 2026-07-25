@@ -283,7 +283,9 @@ def environment_check():
     """Check the build environment"""
     logger.info('Checking for 32-bit Python')
     bits = 8 * struct.calcsize('P')
-    assert 32 == bits
+    if bits != 32:
+        logger.error('Expected 32-bit Python but found %d-bit', bits)
+        sys.exit(1)
 
     logger.info('Checking for translations')
     assert_exist('locale', 'run "make -C po local" to build translations')
