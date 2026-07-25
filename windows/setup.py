@@ -94,7 +94,7 @@ def archive(infile, outfile, fast_build):
         # fast compression
         sz_opts = ['-tzip', '-mx=1', '-bso0', '-bsp0']
     cmd = [SZ_EXE, 'a'] + sz_opts + [outfile, infile]
-    run_cmd(cmd)
+    run_7z(cmd)
     assert_exist(outfile)
 
 
@@ -165,8 +165,11 @@ def assert_execute_console():
                    'Success')
 
 
-def run_cmd(cmd):
-    """Run a command and log the output"""
+def run_cmd(cmd, check=True):
+    """Run a command and log the output
+
+    Return the exit code. If check is true, a non-zero exit code aborts.
+    """
     if isinstance(cmd, list):
         logger.info(subprocess.list2cmdline(cmd))
     else:
@@ -177,6 +180,23 @@ def run_cmd(cmd):
         logger.info(stdout.decode(SetupEncoding))
         if stderr:
             logger.error(stderr.decode(SetupEncoding))
+    if p.returncode and check:
+        logger.error('Command exited with code %d', p.returncode)
+        sys.exit(1)
+    return p.returncode
+
+
+def run_7z(cmd):
+    """Run 7-Zip
+
+    Exit code 1 is a warning, such as a locked file. Higher is fatal.
+    """
+    returncode = run_cmd(cmd, check=False)
+    if returncode == 1:
+        logger.warning('7-Zip exited with a warning')
+    elif returncode:
+        logger.error('7-Zip exited with code %d', returncode)
+        sys.exit(1)
 
 
 def sign_files(filenames):
@@ -188,7 +208,11 @@ def sign_files(filenames):
     if os.path.exists('CodeSign.bat'):
         logger.info('Signing code: %s', ' '.join(filenames))
         cmd = ['CodeSign.bat', *filenames]
-        run_cmd(cmd)
+        # Not fatal because signing needs a certificate that may be missing
+        returncode = run_cmd(cmd, check=False)
+        if returncode:
+            logger.error('CodeSign.bat exited with code %d for %s',
+                         returncode, ' '.join(filenames))
     else:
         logger.warning('CodeSign.bat not available for %s', ' '.join(filenames))
 
@@ -709,7 +733,11 @@ def strip():
             continue
         cmd = ['strip.exe', '--strip-debug', '--discard-all',
                '--preserve-dates', '-o', 'strip.tmp', strip_file]
-        run_cmd(cmd)
+        returncode = run_cmd(cmd, check=False)
+        if returncode:
+            logger.error('strip.exe exited with code %d for %s',
+                         returncode, strip_file)
+            continue
         if not os.path.exists(strip_file):
             logger.error('%s does not exist after stripping', strip_file)
             continue
@@ -752,7 +780,10 @@ def upx(fast_build):
     # with antivirus software. Not much is space with gained with these small files, anyway.
     upx_files = recursive_glob('dist', ['*.dll', '*.pyd'])
     cmd = [UPX_EXE] + UPX_OPTS.split() + upx_files
-    run_cmd(cmd)
+    # Not fatal because UPX returns non-zero for any file it cannot pack
+    returncode = run_cmd(cmd, check=False)
+    if returncode:
+        logger.error('UPX exited with code %d', returncode)
     assert_execute_console()
 
 
@@ -785,7 +816,7 @@ def recompress_library(fast_build):
     if not os.path.exists('dist\\library'):
         os.makedirs('dist\\library')
     cmd = [SZ_EXE, 'x', 'dist\\library.zip', '-odist\\library', '-y']
-    run_cmd(cmd)
+    run_7z(cmd)
     file_size_old = os.path.getsize('dist\\library.zip')
     os.remove('dist\\library.zip')
 
