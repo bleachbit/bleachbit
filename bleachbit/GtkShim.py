@@ -249,9 +249,9 @@ def _show_windows_error_dialog(title, html_content):
         result = ctypes.windll.user32.MessageBoxW(
             0, prompt, title, MB_YESNO | MB_ICONERROR)
         if result == IDYES:
-            tmp_dir = os.environ.get('TEMP', tempfile.gettempdir())
-            html_path = os.path.join(tmp_dir, 'bleachbit_error.html')
-            with open(html_path, 'w', encoding='utf-8') as f:
+            fd, html_path = tempfile.mkstemp(
+                prefix='bleachbit_error_', suffix='.html')
+            with os.fdopen(fd, 'w', encoding='utf-8') as f:
                 f.write(html_content)
             webbrowser.open(f'file:///{html_path}')
     except Exception as e:

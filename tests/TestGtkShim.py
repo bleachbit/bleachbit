@@ -129,6 +129,7 @@ class ShowWindowsErrorDialogTestCase(unittest.TestCase):
             _show_windows_error_dialog('BleachBit', '<html>test</html>')
             mock_open.assert_called_once()
             html_path = mock_open.call_args[0][0].replace('file:///', '')
+            self.addCleanup(os.remove, html_path)
             with open(html_path, encoding='utf-8') as f:
                 self.assertIn('test', f.read())
 
