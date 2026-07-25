@@ -325,6 +325,27 @@ def get_gtk_unavailable_reason():
     return _gtk_unavailable_reason
 
 
+def is_gtk_available():
+    """Return whether GTK is available.
+
+    Compatibility wrapper for code written against the lazy-loading
+    GtkShim API.  This branch initializes GTK eagerly at module load,
+    so this is equivalent to the module-level ``HAVE_GTK`` flag.
+    """
+    return HAVE_GTK
+
+
+def gtk_may_be_available():
+    """Cheap check for whether GTK might be available.
+
+    Compatibility wrapper for code written against the lazy-loading
+    GtkShim API.  In this branch GTK is probed eagerly at import time,
+    so the cheap and expensive checks coincide and this just returns
+    ``HAVE_GTK``.
+    """
+    return HAVE_GTK
+
+
 def require_gtk():
     """Raise an exception if GTK is not available.
 
