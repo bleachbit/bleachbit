@@ -274,7 +274,7 @@ def _is_junction_entry(entry):
 
 
 def _scan_children(top, list_directories, pending_dirs):
-    """Yield files under `top`, recursing into real subdirectories.
+    """Yield files under `top`, descending into real subdirectories.
 
     Symlinks and, on Windows, junctions are not descended into. When
     list_directories is set, every directory found (including those links)
@@ -282,42 +282,46 @@ def _scan_children(top, list_directories, pending_dirs):
 
     Using os.scandir directly lets us reuse each entry's cached type instead
     of re-stat'ing every subdirectory to test for links, as os.walk required.
+    The stack is explicit rather than recursive so that a deeply nested tree
+    cannot exhaust the interpreter's recursion limit.
     """
-    try:
-        scandir_it = os.scandir(top)
-    except OSError:
-        return
-    subdirs = []
-    try:
-        with scandir_it:
-            for entry in scandir_it:
-                try:
-                    is_dir = entry.is_dir()
-                except OSError:
-                    # e.g. permission denied; os.walk also treats this as a file
-                    is_dir = False
-                if not is_dir:
-                    # regular file, symlink to a file, or broken link
-                    yield entry.path
-                    continue
-                try:
-                    # is_junction_entry() is Windows-only and never reached on
-                    # POSIX thanks to short-circuit evaluation.
-                    is_link = entry.is_symlink() or (
-                        IS_WINDOWS and _is_junction_entry(entry))
-                except OSError:
-                    is_link = False
-                if list_directories:
-                    pending_dirs.append(entry.path)
-                if not is_link:
-                    subdirs.append(entry.path)
-    except OSError:
-        # The directory may disappear or become unreadable mid-iteration.
-        # os.walk silently skips such directories, so do the same instead of
-        # propagating PermissionError and aborting the whole cleanup.
-        return
-    for subdir in subdirs:
-        yield from _scan_children(subdir, list_directories, pending_dirs)
+    stack = [top]
+    while stack:
+        try:
+            scandir_it = os.scandir(stack.pop())
+        except OSError:
+            continue
+        subdirs = []
+        try:
+            with scandir_it:
+                for entry in scandir_it:
+                    try:
+                        is_dir = entry.is_dir()
+                    except OSError:
+                        # e.g. permission denied; os.walk also treats this as a file
+                        is_dir = False
+                    if not is_dir:
+                        # regular file, symlink to a file, or broken link
+                        yield entry.path
+                        continue
+                    try:
+                        # is_junction_entry() is Windows-only and never reached on
+                        # POSIX thanks to short-circuit evaluation.
+                        is_link = entry.is_symlink() or (
+                            IS_WINDOWS and _is_junction_entry(entry))
+                    except OSError:
+                        is_link = False
+                    if list_directories:
+                        pending_dirs.append(entry.path)
+                    if not is_link:
+                        subdirs.append(entry.path)
+        except OSError:
+            # The directory may disappear or become unreadable mid-iteration.
+            # os.walk silently skips such directories, so do the same instead of
+            # propagating PermissionError and aborting the whole cleanup.
+            continue
+        # Reversed so siblings are visited in the order scandir returned them
+        stack.extend(reversed(subdirs))
 
 
 def children_in_directory(top, list_directories=False):

@@ -436,6 +436,65 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             results = list(children_in_directory(root, list_directories=False))
         self.assertEqual(results, [os.path.join(root, 'file_before')])
 
+    def test_children_in_directory_deep_tree(self):
+        """Regression test: a deeply nested tree must not exhaust the
+        recursion limit.
+
+        A recursive walk raises RecursionError past about 1000 levels, which
+        would abort the cleanup and leave the remaining files behind. os.scandir
+        is faked so the depth is not capped by the platform's maximum path
+        length.
+        """
+        depth = 5000
+
+        class _FakeEntry:
+            def __init__(self, path, is_dir):
+                self.path = path
+                self._is_dir = is_dir
+
+            def is_dir(self):
+                return self._is_dir
+
+            def is_symlink(self):
+                return False
+
+            def is_junction(self):
+                return False
+
+        class _FakeScandir:
+            def __init__(self, entries):
+                self._entries = entries
+
+            def __iter__(self):
+                return iter(self._entries)
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+        # One subdirectory per level, with a single file at the bottom
+        root = 'deep-tree-root'
+        tree = {}
+        path = root
+        for _ in range(depth):
+            child = os.path.join(path, 'a')
+            tree[path] = [_FakeEntry(child, True)]
+            path = child
+        deep_file = os.path.join(path, 'deepfile')
+        tree[path] = [_FakeEntry(deep_file, False)]
+
+        with unittest.mock.patch('bleachbit.FileUtilities.os.scandir',
+                                 side_effect=lambda p: _FakeScandir(tree[p])):
+            results = list(children_in_directory(root, list_directories=True))
+
+        self.assertEqual(len(results), depth + 1)
+        # The file comes first, then the directories, deepest first
+        self.assertEqual(results[0], deep_file)
+        self.assertEqual(results[1], path)
+        self.assertEqual(results[-1], os.path.join(root, 'a'))
+
     @common.skipIfWindows
     def test_children_in_directory_posix_symlink(self):
         """POSIX: ensure directory symlinks are not followed"""
