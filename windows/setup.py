@@ -89,11 +89,11 @@ def archive(infile, outfile, fast_build):
     # mfb=number of fast bytes
     # bso0 bsp0 quiet output
     # 7-Zip Command Line Reverence Wizard: https://axelstudios.github.io/7z/#!/
-    sz_opts = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'  # best compression
+    sz_opts = ['-tzip', '-mm=Deflate', '-mfb=258', '-mpass=7', '-bso0', '-bsp0']  # best compression
     if fast_build:
         # fast compression
-        sz_opts = '-tzip -mx=1 -bso0 -bsp0'
-    cmd = f'{SZ_EXE} a {sz_opts} {outfile} {infile}'
+        sz_opts = ['-tzip', '-mx=1', '-bso0', '-bsp0']
+    cmd = [SZ_EXE, 'a'] + sz_opts + [outfile, infile]
     run_cmd(cmd)
     assert_exist(outfile)
 
@@ -167,7 +167,10 @@ def assert_execute_console():
 
 def run_cmd(cmd):
     """Run a command and log the output"""
-    logger.info(cmd)
+    if isinstance(cmd, list):
+        logger.info(subprocess.list2cmdline(cmd))
+    else:
+        logger.info(cmd)
     with subprocess.Popen(cmd, stdin=subprocess.PIPE,
                           stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
         stdout, stderr = p.communicate()
@@ -182,13 +185,12 @@ def sign_files(filenames):
     Passing multiple filenames in one function call can be faster than
     two calls.
     """
-    filenames_str = ' '.join(filenames)
     if os.path.exists('CodeSign.bat'):
-        logger.info('Signing code: %s', filenames_str)
-        cmd = f'CodeSign.bat {filenames_str}'
+        logger.info('Signing code: %s', ' '.join(filenames))
+        cmd = ['CodeSign.bat', *filenames]
         run_cmd(cmd)
     else:
-        logger.warning('CodeSign.bat not available for %s', filenames_str)
+        logger.warning('CodeSign.bat not available for %s', ' '.join(filenames))
 
 
 def get_dir_size(start_path='.'):
@@ -705,7 +707,8 @@ def strip():
         if not os.path.exists(strip_file):
             logger.error('%s does not exist before stripping', strip_file)
             continue
-        cmd = f'strip.exe --strip-debug --discard-all --preserve-dates -o strip.tmp {strip_file}'
+        cmd = ['strip.exe', '--strip-debug', '--discard-all',
+               '--preserve-dates', '-o', 'strip.tmp', strip_file]
         run_cmd(cmd)
         if not os.path.exists(strip_file):
             logger.error('%s does not exist after stripping', strip_file)
@@ -748,7 +751,7 @@ def upx(fast_build):
     # Do not compress bleachbit.exe and bleachbit_console.exe to avoid false positives
     # with antivirus software. Not much is space with gained with these small files, anyway.
     upx_files = recursive_glob('dist', ['*.dll', '*.pyd'])
-    cmd = f'{UPX_EXE} {UPX_OPTS} {" ".join(upx_files)}'
+    cmd = [UPX_EXE] + UPX_OPTS.split() + upx_files
     run_cmd(cmd)
     assert_execute_console()
 
@@ -781,7 +784,7 @@ def recompress_library(fast_build):
     # extract library.zip
     if not os.path.exists('dist\\library'):
         os.makedirs('dist\\library')
-    cmd = SZ_EXE + ' x  dist\\library.zip' + ' -odist\\library  -y'
+    cmd = [SZ_EXE, 'x', 'dist\\library.zip', '-odist\\library', '-y']
     run_cmd(cmd)
     file_size_old = os.path.getsize('dist\\library.zip')
     os.remove('dist\\library.zip')
@@ -849,7 +852,10 @@ def nsis(opts, exe_name, nsi_path):
     if os.path.exists(exe_name):
         logger.info('Deleting old file: %s', exe_name)
         os.remove(exe_name)
-    cmd = f'{NSIS_EXE} {opts} /DVERSION={get_version()} /DSHRED_REGEX_KEY={SHRED_REGEX_KEY} {nsi_path}'
+    cmd = [NSIS_EXE] + opts.split() + [
+        f'/DVERSION={get_version()}',
+        f'/DSHRED_REGEX_KEY={SHRED_REGEX_KEY}',
+        nsi_path]
     run_cmd(cmd)
     assert_exist(exe_name)
 
@@ -921,7 +927,8 @@ def main():
     package_installer(fast_build)
     # Clearly show the sizes of the files that end users download because the
     # goal is to minimize them.
-    os.system(r'dir *.zip windows\*.exe windows\*.zip')
+    subprocess.run(
+        ['cmd', '/c', 'dir', '*.zip', r'windows\*.exe', r'windows\*.zip'])
     duration = time.time() - start_time
     minutes = int(duration // 60)
     seconds = int(duration % 60)
