@@ -18,13 +18,11 @@ import logging
 import os
 import os.path
 import re
-import sqlite3
 import stat
 import subprocess
 import time
 import urllib.parse
 import urllib.request
-from os import walk
 from pathlib import Path
 
 # local imports
@@ -55,6 +53,12 @@ if IS_POSIX:
     from bleachbit.General import WindowsError
     # pylint: disable=invalid-name
     pywinerror = WindowsError
+
+# DirEntry.is_junction() was added in Python 3.12. Below that, fall back to
+# bleachbit.Windows.is_junction(), which stats the path itself instead of
+# reusing the DirEntry's cached data.
+# TODO: drop this fallback once the minimum Python version is 3.12+
+_DIRENTRY_HAS_IS_JUNCTION = hasattr(os.DirEntry, 'is_junction')
 
 
 def _remove_windows_readonly(path):
@@ -186,6 +190,9 @@ def open_files():
             # /proc/###/fd/0 with systemd
             # https://github.com/bleachbit/bleachbit/issues/1515
             continue
+        except FileNotFoundError:
+            # fd closed between listing and resolving it (TOCTOU race)
+            continue
         else:
             yield target
 
@@ -259,49 +266,83 @@ def bytes_to_human(bytes_i):
     return 'A lot.'
 
 
+def _is_junction_entry(entry):
+    """Check whether a scandir entry is a Windows junction (mount point)"""
+    if _DIRENTRY_HAS_IS_JUNCTION:
+        return entry.is_junction()
+    return bleachbit.Windows.is_junction(entry.path)
+
+
+def _scan_children(top, list_directories, pending_dirs):
+    """Yield files under `top`, descending into real subdirectories.
+
+    Symlinks and, on Windows, junctions are not descended into. When
+    list_directories is set, every directory found (including those links)
+    is collected into pending_dirs to be emitted after its contents.
+
+    Using os.scandir directly lets us reuse each entry's cached type instead
+    of re-stat'ing every subdirectory to test for links, as os.walk required.
+    The stack is explicit rather than recursive so that a deeply nested tree
+    cannot exhaust the interpreter's recursion limit.
+    """
+    stack = [top]
+    while stack:
+        try:
+            scandir_it = os.scandir(stack.pop())
+        except OSError:
+            continue
+        subdirs = []
+        try:
+            with scandir_it:
+                for entry in scandir_it:
+                    try:
+                        is_dir = entry.is_dir()
+                    except OSError:
+                        # e.g. permission denied; os.walk also treats this as a file
+                        is_dir = False
+                    if not is_dir:
+                        # regular file, symlink to a file, or broken link
+                        yield entry.path
+                        continue
+                    try:
+                        # is_junction_entry() is Windows-only and never reached on
+                        # POSIX thanks to short-circuit evaluation.
+                        is_link = entry.is_symlink() or (
+                            IS_WINDOWS and _is_junction_entry(entry))
+                    except OSError:
+                        is_link = False
+                    if list_directories:
+                        pending_dirs.append(entry.path)
+                    if not is_link:
+                        subdirs.append(entry.path)
+        except OSError:
+            # The directory may disappear or become unreadable mid-iteration.
+            # os.walk silently skips such directories, so do the same instead of
+            # propagating PermissionError and aborting the whole cleanup.
+            continue
+        # Reversed so siblings are visited in the order scandir returned them
+        stack.extend(reversed(subdirs))
+
+
 def children_in_directory(top, list_directories=False):
     """Iterate files and, optionally, subdirectories in directory
 
     Directories are returned after children to avoid trying to delete
-    a non-empty directory.
+    a non-empty directory. Symlinks and Windows junctions are never
+    traversed.
     """
     if isinstance(top, tuple):
         for top_ in top:
             yield from children_in_directory(top_, list_directories)
         return
 
-    def _normalized_prefix(path):
-        norm_path = os.path.normpath(path)
-        if IS_WINDOWS:
-            norm_path = norm_path.lower()
-        if not norm_path.endswith(os.sep):
-            norm_path += os.sep
-        return norm_path
-
     pending_dirs = [] if list_directories else None
-
-    for (dirpath, dirnames, filenames) in walk(top, topdown=True, followlinks=False):
-        if IS_WINDOWS and dirnames:
-            # Avoid traversing Windows symlinks or junctions.
-            link_dirnames = []
-            for dirname in list(dirnames):
-                if os.path.islink(os.path.join(dirpath, dirname)):
-                    link_dirnames.append(dirname)
-                    dirnames.remove(dirname)
-            if list_directories:
-                for dirname in link_dirnames:
-                    yield os.path.join(dirpath, dirname)
-        if list_directories:
-            for dirname in dirnames:
-                full_path = os.path.join(dirpath, dirname)
-                pending_dirs.append((full_path, _normalized_prefix(full_path)))
-        for filename in filenames:
-            yield os.path.join(dirpath, filename)
+    yield from _scan_children(top, list_directories, pending_dirs)
 
     if list_directories:
-        pending_dirs.sort(key=lambda x: len(x[1]))
+        pending_dirs.sort(key=len)
         while pending_dirs:
-            yield pending_dirs.pop()[0]
+            yield pending_dirs.pop()
 
 
 def clean_ini(path, section, parameter):
@@ -614,6 +655,9 @@ def execute_sqlite3(path, cmds):
         None
     """
     from bleachbit.Options import options
+    # In FreeBSD, sqlite3 is a separate package
+    # pylint: disable=import-outside-toplevel
+    import sqlite3
     assert isinstance(path, str)
     assert isinstance(cmds, str)
     with contextlib.closing(sqlite3.connect(path)) as conn:
@@ -919,6 +963,12 @@ def uris_to_paths(file_uris):
             if len(file_path) > 2 and file_path[2] == ':':
                 # remove front slash for Windows-style path
                 file_path = file_path[1:]
+            if not file_path:
+                # An empty path (e.g. from "file://") would resolve to the
+                # current working directory downstream via os.path.abspath('')
+                # in create_simple_cleaner.
+                logger.warning('Skipping malformed file URI: %s', file_uri)
+                continue
             file_paths.append(file_path)
         else:
             logger.warning('Unsupported scheme: %s', file_uri)
@@ -928,13 +978,16 @@ def uris_to_paths(file_uris):
 def whitelisted_posix(path, check_realpath=True, _followed_link=False):
     """Check whether this POSIX path is whitelisted"""
     from bleachbit.Options import options
+    keep_paths = options.get_whitelist_paths()
+    if not keep_paths:
+        return False
     if check_realpath and os.path.islink(path):
         # also check the link name
         if whitelisted_posix(path, False):
             return True
         # resolve symlink
         return whitelisted_posix(os.path.realpath(path), False, _followed_link=True)
-    for (keep_type, keep_path) in options.get_whitelist_paths():
+    for (keep_type, keep_path) in keep_paths:
         if keep_type == 'file':
             if path_equal(path, keep_path):
                 return True

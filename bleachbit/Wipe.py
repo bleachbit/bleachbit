@@ -388,6 +388,7 @@ def wipe_path(pathname, idle=False):
     start_free_bytes = free_space(pathname)
     start_time = time.time()
     done_wiping = False
+    disk_full = False
     try:
 
         # Because FAT32 has a maximum file size of 4,294,967,295 bytes,
@@ -433,6 +434,7 @@ def wipe_path(pathname, idle=False):
                             # Try writing smaller blocks
                             blanks = blanks[0:len(blanks) // 2]
                         else:
+                            disk_full = True
                             break
                     elif e.errno == errno.EFBIG:
                         break
@@ -452,11 +454,19 @@ def wipe_path(pathname, idle=False):
                 # not on another XP SP3 with 64MB free space
                 # [Errno 122] Disk quota exceeded (EDQUOT) is treated the same
                 # way because the file is as full as the quota allows.
-                if e.errno not in (errno.ENOSPC, errno.EDQUOT):
+                if e.errno in (errno.ENOSPC, errno.EDQUOT):
+                    disk_full = True
+                else:
                     logger.error(
                         _("Error #%d when flushing the file buffer."), e.errno)
 
-            os.fsync(f.fileno())  # write to disk
+            try:
+                os.fsync(f.fileno())  # write to disk
+            except OSError as e:
+                if e.errno in (errno.ENOSPC, errno.EDQUOT):
+                    disk_full = True
+                else:
+                    raise
             # For statistics
             total_bytes += f.tell()
             # sync to disk
@@ -496,6 +506,9 @@ def wipe_path(pathname, idle=False):
             #    Replace `f.tell() < 2` with `len(blanks) < 2`
             #  * https://github.com/bleachbit/bleachbit/issues/1051
             #    Replace `len(blanks) < 2` with `estimated_free_space < 2`
+            if disk_full:
+                logger.debug('Disk full (ENOSPC/EDQUOT), stopping wipe')
+                break
             estimated_free_space = start_free_bytes - total_bytes
             if estimated_free_space < 2:
                 logger.debug(

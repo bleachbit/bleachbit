@@ -90,6 +90,7 @@ SPLASH_ICON_SIZE_PX = 256  # 256x256 pixels
 SPLASH_CLOSE_TIMEOUT_MS = 1000
 
 WINDOWS_SYSTEM_VAR = 'WindowsSystem'
+_WINDOWS_SYSTEM_VAR_RE = re.compile(rf'%{WINDOWS_SYSTEM_VAR}%', flags=re.IGNORECASE)
 
 _delete_parent_lock_admin = None
 _delete_parent_lock_handle = None
@@ -221,14 +222,13 @@ def expand_windows_system_vars(pathname, system_paths=None):
     Returns:
         list: A list of expanded path strings, one for each system path.
     """
-    pattern = re.compile(rf'%{WINDOWS_SYSTEM_VAR}%', flags=re.IGNORECASE)
-    if not pattern.search(pathname):
+    if not _WINDOWS_SYSTEM_VAR_RE.search(pathname):
         return [pathname]
     system_paths = system_paths or get_windows_system_paths()
     if not system_paths:
         return [pathname]
     return [
-        pattern.sub(lambda _match: system_path, pathname)
+        _WINDOWS_SYSTEM_VAR_RE.sub(lambda _match: system_path, pathname)
         for system_path in system_paths
     ]
 
@@ -867,7 +867,8 @@ def flush_dns():
     Returns 0 on success.
     Raises RuntimeError on failure.
     """
-    args = ['ipconfig', '/flushdns']
+    ipconfig = os.path.join(get_windows_system_paths()[0], 'ipconfig.exe')
+    args = [ipconfig, '/flushdns']
     (rc, stdout, stderr) = General.run_external(args)
     if 0 != rc:
         raise RuntimeError(
@@ -1278,8 +1279,7 @@ def get_font_conf_file():
 class SplashThread(Thread):
     _class_atom = None
 
-    def __init__(self, group=None, target=None, name=None,
-                 args=(), kwargs=None, Verbose=None):
+    def __init__(self, group=None, name=None, args=(), kwargs=None):
         super().__init__(group, self._show_splash_screen, name, args, kwargs)
         self.daemon = True
         self._splash_screen_started = Event()

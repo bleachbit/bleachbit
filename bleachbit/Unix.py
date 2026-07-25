@@ -678,15 +678,33 @@ def dnf_clean():
         msg = _(
             "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "Dnf"
         raise RuntimeError(msg)
+    if not FileUtilities.exe_exists('/usr/bin/dnf'):
+        raise RuntimeError(_('Executable not found: %s') % 'dnf')
 
+    # DNF4 does not report freed space in its output, so infer effect
+    # by measuring the delta in directory size.
     old_size = FileUtilities.getsizedir('/var/cache/dnf')
-    args = ['--enablerepo=*', 'clean', 'all']
+    args = ['/usr/bin/dnf', '--enablerepo=*', 'clean', 'all']
     invalid = ['You need to be root', 'Cannot remove rpmdb file']
-    try:
-        run_cleaner_cmd('dnf', args, '^unused regex$', invalid)
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError(
-            f"Error calling '{' '.join(str(part) for part in e.cmd)}':\n{e.output}") from e
+    (rc, stdout, stderr) = General.run_external(args)
+    allout = stdout + stderr
+    for line in allout.split('\n'):
+        for error_re in invalid:
+            if re.search(error_re, line):
+                raise RuntimeError(f'Invalid output from dnf: {line}')
+    if rc > 0:
+        raise RuntimeError(f'dnf clean raised error {rc}: {stderr}')
+    match = DNF5_CLEAN_ERRORS_RE.search(allout)
+    if match:
+        raise RuntimeError(f'dnf clean reported {match.group(1)} errors')
+
+    # DNF5 reports the freed space directly in its summary line.
+    freed_bytes = parse_dnf_freed_space(allout)
+    if freed_bytes is not None:
+        logger.debug('dnf_clean >> parsed freed bytes: %s', freed_bytes)
+        return freed_bytes
+
+    # DNF4 fallback: measure the cache directory.
     new_size = FileUtilities.getsizedir('/var/cache/dnf')
 
     return old_size - new_size
@@ -695,9 +713,52 @@ def dnf_clean():
 units = {"B": 1, "k": 10**3, "M": 10**6, "G": 10**9,
          "KiB": 2**10, "MiB": 2**20, "GiB": 2**30, "TiB": 2**40}
 
+_DNF_UNITS = {
+    ' ': 1, 'k': 1024, 'M': 1024**2, 'G': 1024**3,
+    'T': 1024**4, 'P': 1024**5, 'E': 1024**6,
+    'Z': 1024**7, 'Y': 1024**8,
+}
+
+# DNF5 (a total rewrite of DNF4) uses explicit 1024-based binary unit
+# symbols produced by libdnf5::cli::utils::units::to_size().
+_DNF5_UNITS = {
+    'B': 1,
+    'KiB': 1024,
+    'MiB': 1024**2,
+    'GiB': 1024**3,
+    'TiB': 1024**4,
+    'PiB': 1024**5,
+    'EiB': 1024**6,
+    'ZiB': 1024**7,
+    'YiB': 1024**8,
+}
+
+_DNF5_UNIT_NAMES = '|'.join(_DNF5_UNITS)
+
+# DNF5 autoremove summary, e.g.
+# "After this operation, 299 MiB will be freed (install 0 B, remove 299 MiB)."
+DNF5_AUTOREMOVE_RE = re.compile(
+    r'After this operation, '
+    r'([0-9]+(?:\.[0-9]+)?) '
+    r'(' + _DNF5_UNIT_NAMES + r') '
+    r'will be freed')
+
+# DNF5 "clean all" summary, e.g.
+# "Removed 12 files, 3 directories (total of 25 MiB). 0 errors occurred."
+DNF5_CLEAN_RE = re.compile(
+    r'Removed \d+ files, \d+ directories '
+    r'\(total of ([0-9]+(?:\.[0-9]+)?) '
+    r'(' + _DNF5_UNIT_NAMES + r')\)')
+
+DNF5_CLEAN_ERRORS_RE = re.compile(
+    r'Removed \d+ files, \d+ directories '
+    r'\(total of [0-9]+(?:\.[0-9]+)? '
+    r'(?:' + _DNF5_UNIT_NAMES + r')\)\. '
+    r'([1-9]\d*) errors occurred\.')
+
 
 def parse_size(size):
-    """Parse the size returned by dnf"""
+    """Parse the size returned when cleaning pacman cache"""
     number, unit = [string.strip() for string in size.split()]
     return int(float(number) * units[unit])
 
@@ -708,7 +769,7 @@ def dnf_autoremove():
         msg = _(
             "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "Dnf"
         raise RuntimeError(msg)
-    cmd = ['dnf', '-y', 'autoremove']
+    cmd = ['/usr/bin/dnf', '-y', 'autoremove']
     (rc, stdout, stderr) = General.run_external(cmd)
     freed_bytes = 0
     allout = stdout + stderr
@@ -717,13 +778,50 @@ def dnf_autoremove():
     if rc > 0:
         raise RuntimeError(f'dnf autoremove raised error {rc}: {stderr}')
 
-    cregex = re.compile(r"Freed space: ([\d.]+[\s]+[BkMG])")
-    match = cregex.search(allout)
-    if match:
-        freed_bytes = parse_size(match.group(1))
+    freed_bytes = parse_dnf_freed_space(allout) or 0
     logger.debug(
         'dnf_autoremove >> total freed bytes: %s', freed_bytes)
     return freed_bytes
+
+
+def parse_dnf_freed_space(output):
+    """Parse dnf output for the freed-space line and return bytes freed.
+
+    Handles both DNF4 and DNF5:
+
+    DNF4 autoremove ("Freed space: 299 M"):
+    - dnf's format_number() divides by 1024 and uses unit symbols
+      ' ' (bytes), k, M, G, T, P, E, Z, Y.  The byte tier uses a literal
+      space as the symbol, so byte values print with two trailing spaces.
+
+    DNF5 autoremove ("After this operation, 299 MiB will be freed "
+    "(install 0 B, remove 299 MiB).") reports the net installed size of
+    removed RPMs (remove - install).
+
+    DNF5 "clean all" ("Removed 12 files, 3 directories (total of 25 MiB). "
+    "0 errors occurred.") reports the apparent size of deleted cache files.
+
+    DNF5 uses 1024-based binary units (B, KiB, MiB, ...).
+
+    Returns None when no freed-space line is found.
+    """
+    # DNF4 autoremove
+    match = re.search(
+        r"Freed space: (\d+(?:\.\d+)?) ([ kMGTPEZY])", output)
+    if match:
+        return int(float(match.group(1)) * _DNF_UNITS[match.group(2)])
+
+    # DNF5 autoremove
+    match = DNF5_AUTOREMOVE_RE.search(output)
+    if match:
+        return int(float(match.group(1)) * _DNF5_UNITS[match.group(2)])
+
+    # DNF5 clean all
+    match = DNF5_CLEAN_RE.search(output)
+    if match:
+        return int(float(match.group(1)) * _DNF5_UNITS[match.group(2)])
+
+    return None
 
 
 def pacman_cache():

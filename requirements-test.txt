@@ -1,4 +1,9 @@
 # Test/CI dependencies.
 coverage==7.10.7
-pytest==8.4.2
-pytest-xdist==3.8.0
+# pytest 9+ does not support Python 3.9, but pytest 8 has
+# CVE-2025-71176
+# In CI, we use pytest only for Python 3.14, so it pytest 8
+# is never used.
+pytest==9.1.1; python_version>='3.10'
+pytest==8.4.2; python_version<'3.10'
+pytest-xdist==3.8.0; python_version>='3.10'

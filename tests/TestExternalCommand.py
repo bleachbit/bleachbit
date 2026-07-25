@@ -20,10 +20,11 @@ import psutil
 
 import bleachbit
 from bleachbit import IS_WINDOWS
-from bleachbit.GtkShim import HAVE_GTK
+from bleachbit.GtkShim import is_gtk_available
 from bleachbit.Options import options
 from tests import common
 
+HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
     from bleachbit.GuiApplication import Bleachbit
 

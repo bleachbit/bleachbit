@@ -90,6 +90,17 @@ def mock_missing_package(*package_names, clear_prefixes=()):
         for mod, mod_obj in saved_modules.items():
             if mod not in sys.modules:
                 sys.modules[mod] = mod_obj
+        # Re-importing a submodule also rebinds it as an attribute on its
+        # parent package (e.g. bleachbit.Network on the bleachbit package).
+        # sys.modules restore alone leaves that attribute stale, so a later
+        # mock.patch('bleachbit.Network...') would hit the orphaned module.
+        for mod, mod_obj in saved_modules.items():
+            if '.' not in mod:
+                continue
+            parent_name, _, attr = mod.rpartition('.')
+            parent = sys.modules.get(parent_name)
+            if parent is not None and getattr(parent, attr, None) is not mod_obj:
+                setattr(parent, attr, mod_obj)
 
 
 @contextlib.contextmanager

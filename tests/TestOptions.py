@@ -12,6 +12,7 @@ Test case for module Options
 import errno
 import os
 import sys
+import threading
 from unittest import mock
 
 from tests import common
@@ -465,6 +466,117 @@ protected_path = /tmp = True
                     # Clean up for next iteration
                     self.tearDown()
                     self.setUp()
+
+    def test_mutators_flush_atomically_with_lock(self):
+        """Test that mutating self.config and scheduling the flush is atomic"""
+        self._write_seed_options_file()
+
+        mutators = (
+            ('set', lambda o: o.set('shred', 'RACE_PROBE')),
+            ('set_list', lambda o: o.set_list('race_list', ['x'])),
+            ('set_tree', lambda o: o.set_tree(
+                'race_parent', 'race_child', True)),
+            ('remember_warning_preference',
+             lambda o: o.remember_warning_preference('race_key')),
+        )
+
+        with mock.patch('bleachbit.Options.threading.Timer', FakeTimer):
+            for name, mutate in mutators:
+                with self.subTest(mutator=name):
+                    o = bleachbit.Options.Options()
+                    entered = threading.Event()
+                    finish = threading.Event()
+                    real_schedule_flush = o._Options__schedule_flush
+
+                    # blocks mid-flush so a concurrent lock probe can check who holds the lock
+                    def blocking_schedule_flush():
+                        entered.set()
+                        finish.wait(timeout=5)
+                        real_schedule_flush()
+
+                    with mock.patch.object(
+                            o, '_Options__schedule_flush',
+                            side_effect=blocking_schedule_flush):
+                        t = threading.Thread(
+                            target=mutate, args=(o,))
+                        t.start()
+                        self.assertTrue(
+                            entered.wait(timeout=5),
+                            f'{name}() never reached __schedule_flush')
+                        acquired = o._flush_lock.acquire(timeout=0.2)
+                        if acquired:
+                            o._flush_lock.release()
+                        finish.set()
+                        t.join(timeout=5)
+
+                    self.assertFalse(
+                        acquired,
+                        f'{name}() released _flush_lock between '
+                        'mutating self.config and scheduling the '
+                        'flush - a concurrent background flush could '
+                        'observe and persist the change before '
+                        'restore() gets a chance to discard it')
+                    # cancel_pending_flush(), not close(): probe values must never hit disk
+                    o.cancel_pending_flush()
+
+    def test_restore_does_not_expose_partial_configuration(self):
+        """Test restore() keeps setters out until all sections are rebuilt."""
+        self._write_seed_options_file()
+        o = bleachbit.Options.Options()
+        entered_read = threading.Event()
+        continue_restore = threading.Event()
+        setter_finished = threading.Event()
+        restore_errors = []
+        setter_errors = []
+        original_read_file = o.config.read_file
+
+        def blocking_read_file(*args, **kwargs):
+            entered_read.set()
+            continue_restore.wait(timeout=5)
+            return original_read_file(*args, **kwargs)
+
+        def restore():
+            try:
+                o.restore()
+            except Exception as error:
+                restore_errors.append(error)
+
+        def set_option():
+            try:
+                o.set('race_probe', 'True')
+            except Exception as error:
+                setter_errors.append(error)
+            finally:
+                setter_finished.set()
+
+        restore_thread = threading.Thread(target=restore)
+        setter_thread = threading.Thread(target=set_option)
+        try:
+            with mock.patch.object(
+                    o.config, 'read_file', side_effect=blocking_read_file):
+                restore_thread.start()
+                self.assertTrue(entered_read.wait(timeout=5))
+                setter_thread.start()
+
+                self.assertFalse(
+                    setter_finished.wait(timeout=0.2),
+                    'set() ran while restore() had cleared self.config')
+
+                continue_restore.set()
+                restore_thread.join(timeout=5)
+                setter_thread.join(timeout=5)
+
+            self.assertFalse(restore_thread.is_alive())
+            self.assertFalse(setter_thread.is_alive())
+            self.assertEqual([], restore_errors)
+            self.assertEqual([], setter_errors)
+            self.assertTrue(o.get('race_probe'))
+        finally:
+            continue_restore.set()
+            restore_thread.join(timeout=5)
+            setter_thread.join(timeout=5)
+            o.cancel_pending_flush()
+            o.close()
 
     def test_close_unregisters_atexit_and_is_idempotent(self):
         """Test close() unregisters its atexit callback and only flushes once."""

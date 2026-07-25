@@ -15,10 +15,11 @@ import unittest
 from pathlib import Path
 
 from bleachbit import General, logger
-from bleachbit.GtkShim import HAVE_GTK
+from bleachbit.GtkShim import is_gtk_available
 
 from tests import common
 
+HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
     from bleachbit.GtkShim import Gdk, Gtk  # pylint: disable=ungrouped-imports
     from bleachbit.GuiUtil import (clear_clipboard, flush_gtk_events,

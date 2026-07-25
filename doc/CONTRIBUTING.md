@@ -66,6 +66,9 @@ Please consider reviewing someone else's pull requests and asking him or her to 
 * Format your code using PEP-8 standards like this:
 ````autopep8 -i bleachbit/Action.py````
 * Follow other best practices such as they relate to readability, documentation, error handling, and performance.
+* Run pylint to check for issues.
+* Each function should have a basic docstring. Sometimes, a single line may be sufficient.
+  Docstrings may optionally use Google style or reStructuredText (reST) syntax for formatting.
 * See OpenStack [Git Commit Good Practice](https://wiki.openstack.org/wiki/GitCommitMessages) for advice on writing good Git commit messages. In particular, the first line of the commit message is important.
 
 ## Messages in the user interface

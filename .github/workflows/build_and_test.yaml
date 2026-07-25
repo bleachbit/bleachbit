@@ -35,9 +35,15 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
-# 2025-05-01: ubuntu-latest is currently 24.04, and its native
-# python version is 3.12.
-# native python for 22.04 is 3.10.
+# Each Ubuntu image is paired with a Python version that is as close to
+# "natural" (the image's pre-installed system Python) as possible, while still
+# covering the range 3.9 to 3.14:
+#   ubuntu-22.04 natural Python 3.10, tested 3.9  (older, via setup-python)
+#   ubuntu-24.04 natural Python 3.12, tested 3.12 (natural, system venv)
+#   ubuntu-26.04 natural Python 3.14, tested 3.14 (natural, system venv)
+# The "natural" entries skip actions/setup-python and use the system Python
+# through a virtualenv: because Ubuntu 24.04+ enforces PEP 668, not allowing
+# override system packages.
 jobs:
   linux:
     name: linux (${{ matrix.python-version }})
@@ -51,24 +57,17 @@ jobs:
             ubuntu-version: ubuntu-22.04
             python-extra-dep: ''
             pygobject-version: '<3.51.0'
-            # wxPython has no manylinux wheels on PyPI; use the pre-built
-            # wheels from the wxPython extras index for the matching Ubuntu
-            # version so tests.TestGUIwx runs on Linux too.  4.2.4 is the
-            # newest release with a cp39 Linux wheel.
-            wx-extras-url: 'https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04'
-            wx-version: '4.2.4'
-          - python-version: '3.13'
-            ubuntu-version: ubuntu-latest
+            use-setup-python: true
+          - python-version: '3.12'
+            ubuntu-version: ubuntu-24.04
             python-extra-dep: 'libgirepository-2.0-dev'
             pygobject-version: ''
-            wx-extras-url: 'https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04'
-            wx-version: '4.2.5'
+            use-setup-python: false
           - python-version: '3.14'
-            ubuntu-version: ubuntu-latest
+            ubuntu-version: ubuntu-26.04
             python-extra-dep: 'libgirepository-2.0-dev'
             pygobject-version: ''
-            wx-extras-url: 'https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04'
-            wx-version: '4.2.5'
+            use-setup-python: false
 
     env:
       COVERAGE: "coverage run"
@@ -92,9 +91,9 @@ jobs:
             libcairo2-dev \
             libgirepository1.0-dev \
             libnotify-bin \
-            libsdl2-2.0-0 \
             libxml2-utils \
             notification-daemon \
+            python3-venv \
             xvfb \
             ${{ matrix.python-extra-dep }}
           # for tests.TestLanguage
@@ -104,6 +103,7 @@ jobs:
           sudo update-locale
 
       - name: Set up Python ${{ matrix.python-version }}
+        if: ${{ matrix.use-setup-python }}
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version: ${{ matrix.python-version }}
@@ -111,6 +111,20 @@ jobs:
           cache-dependency-path: |
             requirements.txt
             requirements-test.txt
+
+      - name: Use system Python ${{ matrix.python-version }} via virtualenv
+        if: ${{ !matrix.use-setup-python }}
+        run: |
+          python3 -m venv "$HOME/venv"
+          echo "$HOME/venv/bin" >> "$GITHUB_PATH"
+
+      - name: Cache pip packages
+        if: ${{ !matrix.use-setup-python }}
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/pip
+          key: pip-linux-${{ matrix.ubuntu-version }}-${{ hashFiles('requirements.txt', 'requirements-test.txt') }}
+          restore-keys: pip-linux-${{ matrix.ubuntu-version }}-
 
       - name: Update Python packages
         run: |
@@ -123,17 +137,6 @@ jobs:
           if [[ "${{ matrix.pygobject-version }}" != "" ]]; then
             pip install "PyGObject${{ matrix.pygobject-version }}"
           fi
-
-      - name: Install wxPython (for wx GUI tests)
-        if: matrix.wx-extras-url != ''
-        run: |
-          # wxPython has no manylinux wheels on PyPI.  The wxPython project
-          # publishes pre-built linux_x86_64 wheels on an extras index keyed
-          # by Ubuntu version.  These bundle the wxWidgets shared libraries
-          # and link against the system GTK 3 runtime (already installed via
-          # gir1.2-gtk-3.0 above).
-          pip install -f ${{ matrix.wx-extras-url }} wxPython==${{ matrix.wx-version }}
-          python -c "import wx; print('wxPython', wx.version())"
 
       - name: Generate Revision.py
         run: |
@@ -273,6 +276,10 @@ jobs:
 
       - name: Build executable and installers
         shell: cmd # zizmor: ignore[misfeature] cmd is required for MSYS make, psexec, and .bat wrappers
+        # The English-only installer is built only for tags (releases) to save
+        # the cost of GHA minutes and storage.
+        env:
+          BB_BUILD_ENGLISH_INSTALLER: ${{ github.ref_type == 'tag' && '1' || '' }}
         run: |
           set PATH=%MSYS_BIN%;%PATH%
           "%PYTHON_EXE%" -m windows.setup
@@ -286,7 +293,7 @@ jobs:
             "$($_.Hash)  $($_.Path | Split-Path -Leaf)"
           }
 
-      - name: Upload build artifacts
+      - name: Upload build artifacts (core)
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: windows-build-${{ steps.revision.outputs.version }}
@@ -294,8 +301,17 @@ jobs:
           compression-level: 9
           path: |
             BleachBit-*-setup.exe
-            BleachBit-*-setup-English.exe
             BleachBit-*-portable.zip
+
+      - name: Upload build artifacts (English installer)
+        if: github.ref_type == 'tag'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: windows-build-${{ steps.revision.outputs.version }}
+          if-no-files-found: error
+          compression-level: 9
+          path: |
+            BleachBit-*-setup-English.exe
 
   windows-test:
     name: windows-test (${{ matrix.suite }})
@@ -421,7 +437,7 @@ jobs:
           Set-Content -Path bleachbit\Revision.py -Encoding utf8 -Value "revision = `"$rev`"`nbuild_number = `"$env:GITHUB_RUN_NUMBER`""
 
       - name: Download coverage artifacts
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           pattern: coverage-*
           merge-multiple: true
@@ -469,7 +485,9 @@ jobs:
     # - Tags
     # - workflow_dispatch
     # - No pull requests, whether from a fork or the same repository
-    if: github.repository == 'bleachbit/bleachbit' && github.event_name != 'pull_request'
+    # - No Dependabot branches: GitHub Actions withholds repository secrets
+    #   from workflows triggered by Dependabot, so the S3 upload would fail.
+    if: github.repository == 'bleachbit/bleachbit' && github.event_name != 'pull_request' && !startsWith(github.ref_name, 'dependabot/')
     runs-on: windows-latest
     timeout-minutes: 5
     env:
@@ -477,7 +495,7 @@ jobs:
 
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: windows-build-${{ needs.windows-build.outputs.version }}
           merge-multiple: true
@@ -501,14 +519,19 @@ jobs:
           $branch = ''
           $tag = ''
           if ($env:GITHUB_REF_TYPE -eq 'tag') { $tag = $ref } else { $branch = $ref }
-          $dest = "s3://${{ secrets.AWS_BUCKET_NAME }}/$run/$ref/$ver/"
+          $dest = "s3://${{ secrets.AWS_BUCKET_NAME }}/"
           Get-ChildItem BleachBit-*-setup.exe, BleachBit-*-setup-English.exe, BleachBit-*-portable.zip -File |
             ForEach-Object {
               $file = $_.FullName
+              $name = $_.Name
               $sha256 = (Get-FileHash -Algorithm SHA256 $file).Hash.ToLower()
               $sha1   = (Get-FileHash -Algorithm SHA1   $file).Hash.ToLower()
               $md5    = (Get-FileHash -Algorithm MD5    $file).Hash.ToLower()
-              $meta = "ref=$ref,run=$run,attempt=$attempt,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5"
+              $artifactType = if ($name -like '*-setup-English.exe') { 'installer-english' } `
+                              elseif ($name -like '*-setup.exe') { 'installer' } `
+                              elseif ($name -like '*-portable.zip') { 'portable' } `
+                              else { 'unknown' }
+              $meta = "ref=$ref,run=$run,attempt=$attempt,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5,artifact_type=$artifactType"
               aws s3 cp $file "$dest" --metadata "$meta"
             }
 

@@ -546,6 +546,10 @@ class CLITestCase(common.BleachbitTestCase):
                 os.close(fd)
                 if '.' == dir_:
                     filename = os.path.basename(filename)
+                    # The CWD case is not covered by tearDownClass, so register
+                    # this cleanup.
+                    self.addCleanup(
+                        lambda f=filename: os.path.exists(f) and os.remove(f))
                 # not assertExists because something strange happens on Windows
                 self.assertTrue(os.path.exists(filename))
                 args = [get_executable(), '-m',

@@ -18,7 +18,7 @@ from xml.dom.minidom import parseString
 import bleachbit
 from bleachbit import IS_WINDOWS, IS_POSIX
 from bleachbit.Action import ActionProvider, Command
-from bleachbit.Cleaner import Cleaner, backends, create_simple_cleaner, register_cleaners
+from bleachbit.Cleaner import Cleaner, backends, create_simple_cleaner, simpler_cleaner_process_path, register_cleaners
 import bleachbit.FileUtilities
 
 from tests import common
@@ -112,6 +112,42 @@ class CleanerTestCase(common.BleachbitTestCase):
         self.assertRaises(
             RuntimeError, cleaner.get_commands('option3').__next__)
 
+    def test_multiple_actions_per_option(self):
+        """Multiple actions under one option run in registration order, and
+        actions added after get_commands()/get_deep_scan() are reflected."""
+
+        class _StubAction:
+            """Minimal action provider yielding sentinel values."""
+
+            def __init__(self, token):
+                self.token = token
+
+            def get_commands(self):
+                yield self.token
+
+            def get_deep_scan(self):
+                yield ('deep', self.token)
+
+        cleaner = Cleaner()
+        cleaner.add_option('opt', 'name', 'description')
+        cleaner.add_action('opt', _StubAction('a'))
+        cleaner.add_action('opt', _StubAction('b'))
+
+        # Both actions run, in registration order
+        self.assertEqual(list(cleaner.get_commands('opt')), ['a', 'b'])
+        self.assertEqual(list(cleaner.get_deep_scan('opt')),
+                         [('deep', 'a'), ('deep', 'b')])
+
+        # Adding an action after the index is built must be reflected
+        cleaner.add_action('opt', _StubAction('c'))
+        self.assertEqual(list(cleaner.get_commands('opt')), ['a', 'b', 'c'])
+        self.assertEqual(list(cleaner.get_deep_scan('opt')),
+                         [('deep', 'a'), ('deep', 'b'), ('deep', 'c')])
+
+        # A registered option with no actions yields nothing without raising
+        cleaner.add_option('empty', 'name2', 'description2')
+        self.assertEqual(list(cleaner.get_commands('empty')), [])
+
     def test_auto_hide(self):
         for key in sorted(backends):
             self.assertIsInstance(backends[key].auto_hide(), bool)
@@ -157,6 +193,65 @@ class CleanerTestCase(common.BleachbitTestCase):
 
         for dirname in dirnames:
             self.assertNotExists(dirname)
+
+    def test_create_simple_cleaner_refuses_cwd(self):
+        """create_simple_cleaner must refuse to shred CWD or its parent."""
+        cwd = os.getcwd()
+        cwd_parent = os.path.dirname(cwd)
+        # Every spelling of "the working directory" or its parent.
+        bad_inputs = ('', ' ', '.', '..', './', './.', 'foo/..',
+                      cwd, cwd_parent,
+                      cwd + os.sep, os.path.join(cwd, '.'),
+                      cwd_parent + os.sep, os.path.join(cwd_parent, '.'))
+        for bad in bad_inputs:
+            cleaner = create_simple_cleaner([bad])
+            cmds = list(cleaner.get_commands('files'))
+            self.assertEqual(cmds, [], f'expected no commands for {bad!r}')
+
+    def test_simpler_cleaner_process_path(self):
+        """Unit test for simpler_cleaner_process_path()."""
+        cwd = os.getcwd()
+        cwd_parent = os.path.dirname(cwd)
+
+        # Refused inputs return None.
+        for bad in ('', ' ', '.', '..', './', './.', 'foo/..', cwd, cwd_parent):
+            self.assertIsNone(simpler_cleaner_process_path(bad),
+                              f'expected None for {bad!r}')
+
+        # Non-string raises.
+        for bad in (123, None, [], {}, set()):
+            with self.assertRaises(RuntimeError):
+                simpler_cleaner_process_path(bad)
+
+        # An absolute path is returned unchanged.
+        # It does not need to exist.
+        if IS_WINDOWS:
+            missing_abs_path = r'c:\nonexistent\path'
+        else:
+            missing_abs_path = '/nonexistent/path'
+        self.assertEqual(simpler_cleaner_process_path(
+            missing_abs_path), missing_abs_path)
+
+        # A relative path is returned as an absolute path.
+        # It does not need to exist.
+        # A genuinely relative path (a bare filename relative to CWD)
+        # is normalized to an absolute one and must not collapse to CWD.
+        # chdir into the tempdir so a bare filename resolves there; the
+        # context manager restores CWD even on assertion failure.
+        # macOS needs realpath because path uses symlink.
+        rel_target = os.path.join(os.path.realpath(self.tempdir), 'rel-target')
+        # After dropping support for Python 3.9, this can be simplified to:
+        # `with contextlib.chdir(self.tempdir):`
+        orig_cwd = os.getcwd()
+        try:
+            os.chdir(self.tempdir)
+            processed = simpler_cleaner_process_path('rel-target')
+        finally:
+            os.chdir(orig_cwd)
+        # On Windows, `processed` may be a 8.3 short name, so expand to
+        # long path before comparison.
+        self.assertEqual(os.path.realpath(processed), rel_target)
+        self.assertNotEqual(processed, self.tempdir)
 
     def test_get_name(self):
         for key in sorted(backends):
@@ -215,7 +310,20 @@ class CleanerTestCase(common.BleachbitTestCase):
         _lexists = os.path.lexists
         _listdir = os.listdir
         _oswalk = os.walk
-        _fu_walk = bleachbit.FileUtilities.walk
+        _scandir = os.scandir
+
+        class _EmptyScandir:
+            """Mimic os.scandir returning no entries (and a no-op context)."""
+
+            def __iter__(self):
+                return iter(())
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
         try:
             glob.iglob = lambda path, *args, **kwargs: []
             os.path.exists = lambda path: False
@@ -223,7 +331,7 @@ class CleanerTestCase(common.BleachbitTestCase):
             os.path.lexists = lambda path: False
             os.listdir = lambda path: []
             os.walk = lambda top, topdown=True, onerror=None, followlinks=False: []
-            bleachbit.FileUtilities.walk = lambda top, topdown=True, onerror=None, followlinks=False: []
+            os.scandir = lambda path='.', *args, **kwargs: _EmptyScandir()
             for key in sorted(backends):
                 for (option_id, __name) in backends[key].get_options():
                     for cmd in backends[key].get_commands(option_id):
@@ -241,7 +349,7 @@ class CleanerTestCase(common.BleachbitTestCase):
             os.path.lexists = _lexists
             os.listdir = _listdir
             os.walk = _oswalk
-            bleachbit.FileUtilities.walk = _fu_walk
+            os.scandir = _scandir
 
     def test_register_cleaners(self):
         """Unit test for register_cleaners"""

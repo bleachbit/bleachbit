@@ -66,7 +66,8 @@ def get_wx_info():
 def get_gtk_info():
     """Get dictionary of information about GTK"""
     # pylint: disable=import-outside-toplevel
-    from bleachbit.GtkShim import gi, Gtk, HAVE_GTK, get_gtk_unavailable_reason
+    from bleachbit.GtkShim import (
+        gi, Gtk, is_gtk_available, get_gtk_unavailable_reason)
 
     info = {}
     if gi is None:
@@ -78,7 +79,7 @@ def get_gtk_info():
     else:
         info['gi.version'] = gi.__version__
 
-    if not HAVE_GTK:
+    if not is_gtk_available():
         logger.debug('GTK not available: %s', get_gtk_unavailable_reason())
         return info
 

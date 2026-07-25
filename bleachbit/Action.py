@@ -30,10 +30,12 @@ if IS_WINDOWS:
 
 logger = logging.getLogger(__name__)
 
+_GLOB_CHARS_RE = re.compile(r'[?*\[\]]')
+
 
 def has_glob(s):
     """Checks whether the string contains any glob characters"""
-    return re.search(r'[?*\[\]]', s) is not None
+    return _GLOB_CHARS_RE.search(s) is not None
 
 
 def expand_multi_var(s, variables):
