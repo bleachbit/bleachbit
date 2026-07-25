@@ -262,11 +262,17 @@ print(f"OK success={{success}}")
         script = '''
 import sys
 import bleachbit.GtkShim as shim
-assert not shim.is_gtk_available()
-assert not shim.gtk_may_be_available()
+if shim.is_gtk_available():
+    sys.exit('is_gtk_available() is true without a display')
+if shim.gtk_may_be_available():
+    sys.exit('gtk_may_be_available() is true without a display')
 from bleachbit.GtkShim import Gtk
-assert Gtk is None
-assert not any(name.startswith('gi.repository') for name in sys.modules)
+if Gtk is not None:
+    sys.exit('Gtk is not None without a display')
+imported = [n for n in sys.modules if n.startswith('gi.repository')]
+if imported:
+    sys.exit(f'imported GTK libraries: {imported}')
+print('OK')
 '''
         env = os.environ.copy()
         env.pop('DISPLAY', None)
@@ -279,6 +285,7 @@ assert not any(name.startswith('gi.repository') for name in sys.modules)
         )
         self.assertEqual(result.returncode, 0,
                          f'stderr: {result.stderr}')
+        self.assertIn('OK', result.stdout, f'stderr: {result.stderr}')
 
 
 class GtkAvailabilityTestCase(unittest.TestCase):
