@@ -96,12 +96,9 @@ class Bleachbit(Gtk.Application):
         return application_id_suffix
 
     def build_app_menu(self):
-        """Build the application menu
+        """Register the actions used by the application menu
 
-        On Linux with GTK 3.24, this code is necessary but not sufficient for
-        the menu to work. The headerbar code is also needed.
-
-        On Windows with GTK 3.18, this code is sufficient for the menu to work.
+        The menu itself is built by the headerbar code in GuiWindow.
         """
         from bleachbit.Language import setup_translation
         setup_translation()
