@@ -35,7 +35,8 @@ if errorlevel 1 (
 echo Repo root: %CD%>> "%LOG%"
 echo.>> "%LOG%"
 
-"%PYTHON_EXE%" -m coverage run -m unittest -v ^
+REM -u keeps stdout in order with stderr when both are redirected to the log
+"%PYTHON_EXE%" -u -m coverage run -m unittest -v ^
     tests.TestWorker.WorkerTestCase.test_Locked ^
     tests.TestWorker.WorkerTestCase.test_AccessDenied ^
     tests.TestWorker.WorkerTestCase.test_DoesNotExist ^
