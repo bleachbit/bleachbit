@@ -798,10 +798,14 @@ def getsize(path):
 
 def getsizedir(path):
     """Return the size of the contents of a directory"""
-    total_bytes = sum(
-        getsize(node)
-        for node in children_in_directory(path, list_directories=False)
-    )
+    total_bytes = 0
+    for node in children_in_directory(path, list_directories=False):
+        try:
+            total_bytes += getsize(node)
+        except FileNotFoundError:
+            # A file may vanish between the walk and the measurement, as when
+            # a package manager writes to the cache directory being measured
+            pass
     return total_bytes
 
 
