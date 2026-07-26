@@ -267,7 +267,9 @@ class System(Cleaner):
         # options for GTK+
         #
 
-        if gtk_may_be_available():
+        # The clipboard option is available wherever a clipboard can be
+        # cleared: under GTK (POSIX) or natively on Windows.
+        if gtk_may_be_available() or IS_WINDOWS:
             self.add_option('clipboard', _('Clipboard'), _(
                 'The desktop environment\'s clipboard used for copy and paste operations'))
 
@@ -470,12 +472,20 @@ class System(Cleaner):
                 yield p
 
         # clipboard
-        if HAVE_GTK and 'clipboard' == option_id:
-            def func_clear_clipboard():
-                """Command function to clear clipboard"""
-                import bleachbit.GuiUtil
-                bleachbit.GuiUtil.clear_clipboard()
-                return 0
+        if 'clipboard' == option_id and (HAVE_GTK or IS_WINDOWS):
+            if IS_WINDOWS and not HAVE_GTK:
+                # Works with TUI or wxPython
+                def func_clear_clipboard():
+                    """Command function to clear clipboard (Windows native)"""
+                    Windows.clear_clipboard()
+                    return 0
+            else:
+                def func_clear_clipboard():
+                    """Command function to clear clipboard"""
+                    # GuiUtil is GTK-specific
+                    import bleachbit.GuiUtil
+                    bleachbit.GuiUtil.clear_clipboard()
+                    return 0
             yield Command.Function(None, func_clear_clipboard, _('Clipboard'))
 
         # wipe empty space
