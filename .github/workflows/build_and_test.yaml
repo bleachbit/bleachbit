@@ -468,7 +468,10 @@ jobs:
           $ref = ($env:GITHUB_REF_NAME -replace '[^A-Za-z0-9._/-]','_')
           $ver = ($env:VERSION         -replace '[^A-Za-z0-9._-]','_')
           $run = $env:GITHUB_RUN_NUMBER
+          $runId = $env:GITHUB_RUN_ID
           $attempt = $env:GITHUB_RUN_ATTEMPT
+          $event = ($env:GITHUB_EVENT_NAME -replace '[^A-Za-z0-9._-]','_')
+          $actor = ($env:GITHUB_TRIGGERING_ACTOR -replace '[^A-Za-z0-9._@-]','_')
           $sha = $env:GITHUB_SHA.Substring(0,8)
           # Three-part version (APP_VERSION without the run number suffix)
           $ver3 = (($ver -split '\.')[0..2] -join '.')
@@ -487,7 +490,7 @@ jobs:
                               elseif ($name -like '*-setup.exe') { 'installer' } `
                               elseif ($name -like '*-portable.zip') { 'portable' } `
                               else { 'unknown' }
-              $meta = "ref=$ref,run=$run,attempt=$attempt,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5,artifact_type=$artifactType"
+              $meta = "ref=$ref,run=$run,run_id=$runId,attempt=$attempt,event=$event,actor=$actor,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5,artifact_type=$artifactType,frontend=gtk"
               aws s3 cp $file "$dest" --metadata "$meta"
             }
 
