@@ -25,6 +25,22 @@ from bleachbit.Cleaner import backends, register_cleaners
 logger = logging.getLogger(__name__)
 
 
+def _post_on_main(callable_obj, *args, **kwargs):
+    """Marshal ``callable_obj`` to the wx main thread if an app exists.
+
+    :func:`wx.CallAfter` asserts that a :class:`wx.App` is present, so
+    calling it from a background thread after the app has been torn down
+    (e.g. the user closed the window while cleaners were still loading,
+    or during test teardown) raises ``AssertionError`` and spams the log
+    with an unhandled-thread traceback.  Guard against that by checking
+    :func:`wx.GetApp` first; if there is no app, drop the callback
+    silently -- there is nothing on the main thread to receive it.
+    """
+    if wx.GetApp() is None:
+        return
+    wx.CallAfter(callable_obj, *args, **kwargs)
+
+
 class LoaderThread(threading.Thread):
     """Run :func:`register_cleaners` on a background thread."""
 
@@ -47,7 +63,7 @@ class LoaderThread(threading.Thread):
         # (status message) or a float (unused by this front-end).  Only
         # forward strings; they are the user-visible messages.
         if isinstance(msg, str):
-            wx.CallAfter(self._on_progress, msg)
+            _post_on_main(self._on_progress, msg)
 
     def run(self):  # noqa: D401 - threading.Thread API
         try:
@@ -62,14 +78,14 @@ class LoaderThread(threading.Thread):
             # slow because it invokes get_commands().execute(False),
             # which walks globs and the filesystem.  Doing it here keeps
             # the wx main thread responsive when _populate_tree runs.
-            wx.CallAfter(self._on_progress,
-                         'Detecting usable cleaners\u2026')
+            _post_on_main(self._on_progress,
+                          'Detecting usable cleaners\u2026')
             hidden = _compute_auto_hidden()
         except Exception as exc:  # pylint: disable=broad-except
             logger.exception('register_cleaners failed')
-            wx.CallAfter(self._on_error, exc)
+            _post_on_main(self._on_error, exc)
             return
-        wx.CallAfter(self._on_done, hidden)
+        _post_on_main(self._on_done, hidden)
 
 
 def _compute_auto_hidden():
