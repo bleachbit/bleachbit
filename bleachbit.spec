@@ -98,7 +98,7 @@ BuildRequires:  %{pyprefix}-sqlite-utils
 BuildRequires:  %{pyprefix}-xml
 BuildRequires:  update-desktop-files
 Requires:       gobject-introspection
-Requires:	    %{pyprefix}
+Requires:       %{pyprefix}
 Requires:       %{pyprefix}-chardet
 Requires:       %{pyprefix}-gobject
 Requires:       %{pyprefix}-gobject-Gdk
@@ -108,10 +108,10 @@ Requires:       %{pyprefix}-requests
 Requires:       %{pyprefix}-sqlite-utils
 %endif
 Requires:       %{pyprefix}-xml
-Requires: 		typelib(Gtk) = 3.0
+Requires:       typelib(Gtk) = 3.0
 Requires:       typelib(Notify)
 Requires:       xdg-utils
-Recommends: 	libayatana-appindicator3-1
+Recommends:     libayatana-appindicator3-1
 %endif
 
 %if %{has_fdupes}
@@ -138,9 +138,9 @@ sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' org.bleachbit.Bl
 
 cat > bleachbit.pam <<EOF
 #%%PAM-1.0
-auth		include		config-util
-account		include		config-util
-session		include		config-util
+auth        include     config-util
+account     include     config-util
+session     include     config-util
 EOF
 
 cat > bleachbit.console <<EOF
@@ -162,8 +162,8 @@ make install PYTHON=%{pyexe} DESTDIR=%{buildroot} prefix=%{_prefix}
 sed -i -e 's/Exec=bleachbit$/Exec=bleachbit-root/g' org.bleachbit.BleachBit-root.desktop
 
 desktop-file-install \
-	--dir=%{buildroot}/%{_datadir}/applications/ \
-	--vendor="" org.bleachbit.BleachBit-root.desktop
+    --dir=%{buildroot}/%{_datadir}/applications/ \
+    --vendor="" org.bleachbit.BleachBit-root.desktop
 
 # consolehelper and userhelper
 ln -s consolehelper %{buildroot}/%{_bindir}/%{name}-root
@@ -183,8 +183,8 @@ install -m 644 %{name}.console %{buildroot}%{_sysconfdir}/security/console.apps/
 sed -i -e 's/^Exec=bleachbit$/Exec=xdg-su -c bleachbit/g' org.bleachbit.BleachBit-root.desktop
 
 desktop-file-install \
-	--dir=%{buildroot}/%{_datadir}/applications/ \
-	--vendor="" org.bleachbit.BleachBit-root.desktop
+    --dir=%{buildroot}/%{_datadir}/applications/ \
+    --vendor="" org.bleachbit.BleachBit-root.desktop
 
 %suse_update_desktop_file -i org.bleachbit.BleachBit-root Utility Filesystem
 

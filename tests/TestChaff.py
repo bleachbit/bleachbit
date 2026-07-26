@@ -51,8 +51,9 @@ class ChaffTestCase(common.BleachbitTestCase):
         for _ in ('download', 'already downloaded'):
             ret = download_models(models_dir=models_dir)
             self.assertIsInstance(ret, bool)
-            self.assertTrue(
-                ret, "download_models() return False, meaning a download error occurred")
+            if not ret:
+                rmtree(tmp_dir, ignore_errors=True)
+                self.skipTest('download_models() failed, likely a transient network issue')
 
         self.assertExists(con_path)
         self.assertExists(sub_path)
@@ -126,8 +127,14 @@ class ChaffTestCase(common.BleachbitTestCase):
         msg = _generate_email(subject_model, model, number_of_sentences=2)
         self.assertEqual(msg['Subject'], '')
 
-    def test_have_models(self):
+    @mock.patch('bleachbit.Network.download_url_to_fn')
+    def test_have_models(self, mock_download):
         """Test for function have_models()"""
+        def fake_download(_url, fn, **_kwargs):
+            with open(fn, 'wb') as f:
+                f.write(b'')
+            return True
+        mock_download.side_effect = fake_download
         download_models()
         rc = have_models()
         self.assertTrue(

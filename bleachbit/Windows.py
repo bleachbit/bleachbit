@@ -290,6 +290,11 @@ def browse_folder(_, title):
 
 def cleanup_nonce():
     """On exit, clean up GTK junk files"""
+    if os.environ.get('BLEACHBIT_TEST_OPTIONS_DIR'):
+        # Under the test suite this runs at every worker and subprocess exit
+        # and deletes shared %TEMP% files with a %TEMP% parent lock, racing
+        # other workers.
+        return
     for fn in glob.glob(os.path.expandvars(r'%TEMP%\gdbus-nonce-file-*')):
         logger.debug('cleaning GTK nonce file: %s', fn)
         FileUtilities.delete(fn)

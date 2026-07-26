@@ -19,6 +19,7 @@ import warnings
 from unittest.mock import patch
 
 from tests import common
+from tests.common import pytest
 
 from bleachbit.GtkShim import Gtk, GLib, Gio, is_gtk_available
 from bleachbit.Options import options
@@ -35,6 +36,7 @@ if HAVE_GTK:
 
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module')
+@pytest.mark.xdist_group('gui')
 class GuiChaffTestCase(common.BleachbitTestCase):
     """Test case for module GuiChaff"""
     app = Bleachbit(auto_exit=False, uac=False) if HAVE_GTK else None
@@ -42,7 +44,9 @@ class GuiChaffTestCase(common.BleachbitTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        options.set('font_check_completed', True)
+        # override, not set(): a plain set() is reverted by the per-test
+        # tearDown reload after the first test in the class
+        options.set_override('font_check_completed', True)
 
         # Try to register the application, catch the error if already registered
         glib_errors = []
@@ -105,12 +109,14 @@ class GuiChaffTestCase(common.BleachbitTestCase):
 
     def setUp(self):
         """Set up test fixtures before each test method."""
+        super().setUp()
         from bleachbit.GuiChaff import ChaffDialog
         # Pass the GtkWindow object
         self.dialog = ChaffDialog(parent=self.app._window)
 
     def tearDown(self):
         """Clean up test fixtures after each test method."""
+        super().tearDown()
         self.dialog.destroy()
 
     def test_dialog_creation(self):

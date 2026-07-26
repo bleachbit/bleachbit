@@ -240,14 +240,13 @@ class UnixTestCase(common.BleachbitTestCase):
     @mock.patch('bleachbit.Unix.logger.info')
     def test_is_broken_xdg_desktop_other(self, mock_logger):
         """Unit test for is_broken_xdg_desktop() using non-.desktop files"""
-        system_dirs = ['/usr/bin', '/usr/lib', '/etc']
-        filenames = []
-        for dirname in system_dirs:
-            for filename in children_in_directory(dirname, False):
-                if filename.endswith('.desktop'):
-                    continue
-                filenames.append(filename)
-        sample_size = min(1000, len(filenames))
+        # Recursing /usr/bin and /usr/lib was slow (100k+ files, each getting
+        # children_in_directory's symlink checks). A flat /etc listing is enough.
+        etc_dir = '/etc'
+        filenames = [os.path.join(etc_dir, name) for name in os.listdir(etc_dir)
+                     if not name.endswith('.desktop')
+                     and os.path.isfile(os.path.join(etc_dir, name))]
+        sample_size = min(30, len(filenames))
         sampled_filenames = random.sample(filenames, sample_size)
         for filename in sampled_filenames:
             result = is_broken_xdg_desktop(filename)

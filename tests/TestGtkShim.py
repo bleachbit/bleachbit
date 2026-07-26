@@ -16,6 +16,8 @@ import sys
 import unittest
 from unittest import mock
 
+from tests.common import pytest
+
 from tests import common
 from bleachbit import IS_WINDOWS
 from bleachbit.General import get_executable
@@ -175,6 +177,7 @@ class FixArgTestCase(unittest.TestCase):
         """ASCII strings must pass through unchanged."""
         self.assertEqual(_fix_arg('hello'), 'hello')
 
+    @pytest.mark.no_xdist
     def test_surrogate_replaced(self):
         """Unpaired surrogates must be replaced with the replacement character."""
         arg = 'prefix' + chr(0xD800) + 'suffix'

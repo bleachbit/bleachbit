@@ -21,6 +21,23 @@ import warnings
 from pathlib import Path
 from unittest import mock
 
+try:
+    import pytest
+except ImportError:  # pytest is optional for plain unittest discovery
+    class _PytestShim:
+        """No-op stand-in so @pytest.mark.* decorators work under unittest."""
+        class mark:
+            @staticmethod
+            def xdist_group(_name):
+                def decorator(func):
+                    return func
+                return decorator
+
+            @staticmethod
+            def no_xdist(func):
+                return func
+    pytest = _PytestShim()
+
 import bleachbit
 from bleachbit import logger
 
@@ -254,6 +271,23 @@ class BleachbitTestCase(unittest.TestCase):
         """Call before each test method"""
         basedir = os.path.join(os.path.dirname(__file__), '..')
         os.chdir(basedir)
+        self._options_file_snapshot = None
+        if os.path.exists(bleachbit.options_file):
+            with open(bleachbit.options_file, 'rb') as f:
+                self._options_file_snapshot = f.read()
+
+    def tearDown(self):
+        """Call after each test method; restore options file, reload Options"""
+        if self._options_file_snapshot is not None:
+            os.makedirs(os.path.dirname(bleachbit.options_file), exist_ok=True)
+            with open(bleachbit.options_file, 'wb') as f:
+                f.write(self._options_file_snapshot)
+        elif os.path.exists(bleachbit.options_file):
+            os.remove(bleachbit.options_file)
+        bleachbit.Options.options.restore()
+        # cancel the flush timer restore() re-arms when the file has no
+        # matching version, else it fires during a later test
+        bleachbit.Options.options.cancel_pending_flush()
 
     #
     # type asserts

@@ -362,7 +362,7 @@ class GeneralTestCase(common.BleachbitTestCase):
         with common.set_temporary_env('LC_ALL', 'C'):
             (rc, _, stderr) = run_external(
                 ['ls', '/doesnotexist'], clean_env=False)
-	    # GNU ls returns 2 for missing files, while BSD/macOS ls returns 1
+            # GNU ls returns 2 for missing files, while BSD/macOS ls returns 1
             self.assertIn(rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
             self.assertIn('No such file', stderr)
 

@@ -28,6 +28,8 @@ import warnings
 # third-party import
 import psutil
 
+from tests.common import pytest
+
 # local import
 from bleachbit.FileUtilities import (
     _remove_windows_readonly,
@@ -208,6 +210,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
     def tearDown(self):
         """Call after each test method"""
+        super().tearDown()
         if self.old_locale_tuple == (None, None):
             locale.setlocale(locale.LC_NUMERIC, 'C')
             return
@@ -674,6 +677,7 @@ State=AAAA/wA...
                 options.set('shred', shred)
                 json_helper(self, clean_json)
 
+    @pytest.mark.no_xdist
     def test_delete(self):
         """Unit test for method delete()"""
         for shred in (False, True):
