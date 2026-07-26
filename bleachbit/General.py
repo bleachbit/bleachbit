@@ -230,10 +230,15 @@ def os_match(os_str, platform=sys.platform):
     # If blank, return true.
     if len(os_str) == 0:
         return True
+    # "darwin" is accepted as a deprecated alias for "macos"
+    if os_str == 'darwin':
+        logger.warning(
+            'The os="darwin" attribute is deprecated; use os="macos" instead.')
+        os_str = 'macos'
     # Otherwise, check platform.
     # Define the current operating system.
     if platform == 'darwin':
-        current_os = ('darwin', 'bsd', 'unix')
+        current_os = ('macos', 'bsd', 'unix')
     elif platform == 'linux':
         current_os = ('linux', 'unix')
     elif platform.startswith('openbsd'):

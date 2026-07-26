@@ -21,7 +21,7 @@ from bleachbit.Options import options
 from bleachbit.PathUtils import path_equal
 from bleachbit.Process import is_process_running
 from bleachbit import Action, CleanerML, Command, FileUtilities, Memory
-from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
+from bleachbit import IS_LINUX, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.GtkShim import gtk_may_be_available
 from bleachbit.Wipe import wipe_path
 
@@ -289,10 +289,13 @@ class System(Cleaner):
     def get_commands(self, option_id):
         # cache
         if IS_POSIX and 'cache' == option_id:
-            dirname = os.path.expanduser("~/.cache/")
-            for filename in children_in_directory(dirname, True):
-                if not self.whitelisted(filename):
-                    yield Command.Delete(filename)
+            dirnames = [os.path.expanduser("~/.cache/")]
+            if IS_MAC:
+                dirnames.insert(0, os.path.expanduser("~/Library/Caches/"))
+            for dirname in dirnames:
+                for filename in children_in_directory(dirname, True):
+                    if not self.whitelisted(filename):
+                        yield Command.Delete(filename)
 
         # custom
         if 'custom' == option_id:
