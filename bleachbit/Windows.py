@@ -358,13 +358,14 @@ def _delete_parent_directory(pathname):
     return FileUtilities.extended_path(os.path.dirname(path))
 
 
-def _close_delete_parent_lock():
+def _close_delete_parent_lock(log=True):
     """Close the parent lock handle."""
     global _delete_parent_lock_handle
     global _delete_parent_lock_key
     if _delete_parent_lock_handle is not None:
-        logger.debug('Closing parent lock handle for %s',
-                     _delete_parent_lock_key)
+        if log:
+            logger.debug('Closing parent lock handle for %s',
+                         _delete_parent_lock_key)
         win32file.CloseHandle(_delete_parent_lock_handle)
         _delete_parent_lock_handle = None
         _delete_parent_lock_key = None
@@ -463,7 +464,7 @@ def with_parent_lock(pathname, func, *args, **kwargs):
 
 
 if IS_WINDOWS:
-    atexit.register(_close_delete_parent_lock)
+    atexit.register(_close_delete_parent_lock, False)
 
 
 def delete_locked_file(pathname):
@@ -1289,6 +1290,7 @@ class SplashThread(Thread):
         self._splash_screen_width = None
         self._startup_error = None
         self._thread_id = None
+        self._closed = False
 
     def start(self):
         if self.ident is not None:
@@ -1335,6 +1337,10 @@ class SplashThread(Thread):
         self.close(timeout)
 
     def close(self, timeout=None):
+        if self._closed:
+            return
+        self._closed = True
+        atexit.unregister(self.close)
         if not self.is_alive():
             return
         splash_delay = get_splash_screen_delay_seconds()
