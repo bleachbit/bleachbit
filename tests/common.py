@@ -278,6 +278,11 @@ class BleachbitTestCase(unittest.TestCase):
 
     def tearDown(self):
         """Call after each test method; restore options file, reload Options"""
+        # Restore the working directory in case a test chdir'd into
+        # self.tempdir (e.g., test_assertExists_relative_path) to avoid
+        # WinError 32 in rmtree() in tearDownClass.
+        basedir = os.path.join(os.path.dirname(__file__), '..')
+        os.chdir(basedir)
         if self._options_file_snapshot is not None:
             os.makedirs(os.path.dirname(bleachbit.options_file), exist_ok=True)
             with open(bleachbit.options_file, 'wb') as f:
