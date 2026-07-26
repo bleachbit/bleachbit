@@ -40,6 +40,14 @@ from bleachbit.GtkShim import HAVE_GTK
 from bleachbit import FileUtilities, Options, IS_WINDOWS, IS_POSIX
 from tests import common
 
+
+try:
+    import wx  # noqa: F401
+except ImportError:
+    HAVE_WX = False
+else:
+    HAVE_WX = True
+
 RUN_EXTERNAL_TIMEOUT = 30
 
 
@@ -613,11 +621,15 @@ class CLITestCase(common.BleachbitTestCase):
     @pytest.mark.xdist_group('gui')
     @common.skipUnlessWindows
     def test_gui_exit(self):
-        """Unit test for --gui-wx --exit, only for Windows"""
-        # In the wxgui branch GTK is not available on Windows, so the wx
-        # GUI is exercised explicitly here.
+        """Unit test for --gui-{wx,gtk} --exit, only for Windows"""
+        if HAVE_WX:
+            gui_flag = '--gui-wx'
+        elif HAVE_GTK:
+            gui_flag = '--gui-gtk'
+        else:
+            self.skipTest('requires wxPython or GTK')
         args = (get_executable(), '-m',
-                'bleachbit.CLI', '--gui-wx', '--exit')
+                'bleachbit.CLI', gui_flag, '--exit')
         (rc, _stdout, stderr) = run_external(
             args, timeout=RUN_EXTERNAL_TIMEOUT)
         self.assertNotIn('no such option', stderr)
