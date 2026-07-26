@@ -83,18 +83,22 @@ def get_clipboard_paths(clipboard=None, targets=None):
         if not has_targets:
             targets = []
 
+    # Compare names: an interned Gdk.Atom does not reliably compare equal to
+    # the atom for the same name in the target list.
+    targets_by_name = {target.name(): target for target in targets}
+
     shred_paths = []
-    if Gdk.atom_intern_static_string('text/uri-list') in targets:
+    uri_target = targets_by_name.get('text/uri-list')
+    if uri_target is not None:
         # Linux
-        shred_uri_contents = clipboard.wait_for_contents(
-            Gdk.atom_intern_static_string('text/uri-list'))
+        shred_uri_contents = clipboard.wait_for_contents(uri_target)
         if shred_uri_contents:
             shred_paths = FileUtilities.uris_to_paths(
                 shred_uri_contents.get_uris())
 
     if not shred_paths and (
-            Gdk.atom_intern_static_string('text/plain') in targets or
-            Gdk.atom_intern_static_string('UTF8_STRING') in targets):
+            'text/plain' in targets_by_name or
+            'UTF8_STRING' in targets_by_name):
         # Plain text pasted from a text editor
         text = clipboard.wait_for_text()
         if text:
