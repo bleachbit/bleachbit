@@ -17,7 +17,9 @@ import io
 import locale
 import os
 import random
+import sys
 import tempfile
+import types
 from contextlib import nullcontext
 from unittest.mock import MagicMock, patch
 
@@ -492,10 +494,13 @@ class CLITestCase(common.BleachbitTestCase):
     def test_process_cmd_line_gui_wx(self):
         """Unit test for process_cmd_line() with --gui-wx"""
         mock_wx_run = MagicMock(return_value=0)
+        # Stub the lazy wx GUI import because wxPython is optional.
+        fake_app = types.ModuleType('bleachbit.GUIwx.App')
+        fake_app.run = mock_wx_run
         with patch('bleachbit.Bootstrap.check_wayland_and_root', return_value=False):
             # simulate wx on non-Windows
             with patch('bleachbit.CLI.IS_WINDOWS', False):
-                with patch('bleachbit.GUIwx.App.run', mock_wx_run):
+                with patch.dict(sys.modules, {'bleachbit.GUIwx.App': fake_app}):
                     with patch('sys.argv', ['bleachbit', '--gui-wx', '--exit']):
                         with self.assertRaises(SystemExit) as cm:
                             process_cmd_line()
