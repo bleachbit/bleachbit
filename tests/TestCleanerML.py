@@ -96,6 +96,22 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         for pathname in list_cleanerml_files():
             self.assertExists(pathname)
 
+    @common.skipIfWindows
+    def test_list_cleanerml_files_vanished(self):
+        """list_cleanerml_files() skips a cleaner deleted after listdir()
+
+        The world-writable check is POSIX only, so this race does not exist
+        on Windows.
+        """
+        dirname = self.mkdtemp(prefix='bleachbit-cleanerml-vanished')
+        real_fn = os.path.join(dirname, 'real.xml')
+        self.write_file(real_fn, contents=b'<cleaner id="test"/>')
+        os.chmod(real_fn, 0o600)
+        ghost_fn = os.path.join(dirname, 'ghost.xml')
+        with mock.patch('bleachbit.CleanerML.listdir',
+                        return_value=iter([ghost_fn, real_fn])):
+            self.assertEqual(list(list_cleanerml_files()), [real_fn])
+
     def test_load_cleaners(self):
         """Unit test for load_cleaners()"""
         # normal
