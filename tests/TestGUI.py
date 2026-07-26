@@ -416,7 +416,10 @@ class GUITestCase(common.BleachbitTestCase):
             self.assertTrue(gui._confirm_delete(False, False))
             gui.shred_paths(test_files_dirs)
 
-        self.refresh_gui()
+        # shred_paths runs the delete on a background GtkWorkerThread, so
+        # wait for the worker to finish before asserting the files are gone.
+        self.assertTrue(
+            self.wait_until(lambda: all(not os.path.exists(obj) for obj in test_files_dirs)))
 
         for obj in test_files_dirs:
             self.assertNotExists(obj)
@@ -482,7 +485,9 @@ class GUITestCase(common.BleachbitTestCase):
             with mock.patch.object(gui, '_confirm_delete', return_value=True):
                 gui.shred_paths([test_file], should_clear_clipboard=True)
 
-        self.refresh_gui()
+        # shred_paths runs the delete on a background GtkWorkerThread, so
+        # wait for the worker to finish before asserting the file is gone.
+        self.assertTrue(self.wait_until(lambda: not os.path.exists(test_file)))
 
         mock_clear_clipboard.assert_called_once()
         self.assertNotExists(test_file)
