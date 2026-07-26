@@ -23,17 +23,7 @@ from pathlib import Path
 from unittest import mock
 from random import randint
 
-try:
-    import pytest
-except ImportError:  # pytest is optional for unittest discovery
-    class _pytest_shim:
-        class mark:
-            @staticmethod
-            def xdist_group(_name):
-                def decorator(func):
-                    return func
-                return decorator
-    pytest = _pytest_shim()
+from tests.common import pytest
 
 # first party imports
 from tests import common
@@ -287,6 +277,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         for f in get_recycle_bin():
             self.assertLExists(extended_path(f))
 
+    @pytest.mark.no_xdist
     @pytest.mark.xdist_group('recycle-bin')
     @common.skipUnlessDestructive
     def test_get_recycle_bin_destructive(self):
@@ -1061,6 +1052,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             ret = empty_recycle_bin(drive, really_delete=False)
             self.assertIsInteger(ret)
 
+    @pytest.mark.no_xdist
     @pytest.mark.xdist_group('recycle-bin')
     @common.skipUnlessDestructive
     def test_empty_recycle_bin_per_drive_destructive(self):
@@ -1078,6 +1070,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                     raise
                 self.assertIsInteger(ret)
 
+    @pytest.mark.no_xdist
     @pytest.mark.xdist_group('recycle-bin')
     @common.skipUnlessDestructive
     def test_empty_recycle_bin_all_drives_destructive(self):

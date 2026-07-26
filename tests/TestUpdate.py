@@ -34,7 +34,7 @@ import xml
 from tests import common
 import bleachbit
 from bleachbit import logger, personal_cleaners_dir
-from bleachbit.Network import fetch_url
+from bleachbit.Network import fetch_url, RequestException
 from bleachbit.Update import check_updates, update_winapp2
 
 
@@ -102,16 +102,21 @@ class UpdateTestCase(common.BleachbitTestCase):
 
     def test_update_url(self):
         """Check that the real update URL returns XML"""
-        response = fetch_url(bleachbit.update_check_url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.text.startswith('<?xml version='))
-        xml.dom.minidom.parseString(response.text)
+        try:
+            response = fetch_url(bleachbit.update_check_url)
+        except RequestException as e:
+            self.skipTest(f'real network unavailable: {e}')
+        else:
+            self.assertEqual(response.status_code, 200)
+            self.assertTrue(response.text.startswith('<?xml version='))
+            xml.dom.minidom.parseString(response.text)
 
     def test_update_winapp2(self):
         fn = os.path.join(personal_cleaners_dir, 'winapp2.ini')
         if os.path.exists(fn):
             logger.info('deleting %s', fn)
             os.unlink(fn)
+        self.addCleanup(lambda: os.path.exists(fn) and os.remove(fn))
 
         url = 'https://download.bleachbit.org/winapp2/winapp2-2021-11-22.ini'
 
@@ -128,7 +133,10 @@ class UpdateTestCase(common.BleachbitTestCase):
                           "notahash", print, expect_failure)
 
         # blank hash, download file
-        update_winapp2(url, None, print, on_success)
+        try:
+            update_winapp2(url, None, print, on_success)
+        except RuntimeError as e:
+            self.skipTest(f'real network unavailable: {e}')
         self.assertTrue(succeeded['r'])
 
         # blank hash, do not download again

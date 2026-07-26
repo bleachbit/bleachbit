@@ -50,11 +50,7 @@ def actions_to_cleaner(action_strs):
 
 
 def register_all_cleaners():
-    """Register all cleaners for testing
-
-    _patch_options_paths() changes the options directory during testing
-    to a clean directory, so by default it will not have Winapp2.ini.
-    """
+    """Register all cleaners for testing; leaves winapp2.ini in the shared personal_cleaners_dir"""
     if IS_WINDOWS:
         from tests.TestWinapp import get_winapp2  # pylint: disable=import-outside-toplevel
 

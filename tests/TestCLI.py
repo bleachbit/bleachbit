@@ -20,6 +20,8 @@ import random
 import tempfile
 from unittest.mock import MagicMock, patch
 
+from tests.common import pytest
+
 # first party imports
 import bleachbit
 from bleachbit.CLI import (
@@ -285,6 +287,7 @@ class CLITestCase(common.BleachbitTestCase):
                 self.assertNotExists(filename)
                 self.assertFalse(crash[0], "Crash detected during deletion")
 
+    @pytest.mark.no_xdist
     def test_append_text(self):
         """Unit test for CliCallback.append_text() with special strings"""
         cb = CliCallback(quiet=False)
@@ -581,6 +584,7 @@ class CLITestCase(common.BleachbitTestCase):
             # FIXME: verify that there is not a message like
             # (bleachbit.py:1234): Gdk-CRITICAL **: 23:05:08.581: gdk_screen_get_root_window: assertion 'GDK_IS_SCREEN (screen)' failed
 
+    @pytest.mark.xdist_group('gui')
     @common.skipUnlessWindows
     def test_gui_exit(self):
         """Unit test for --gui --exit, only for Windows"""

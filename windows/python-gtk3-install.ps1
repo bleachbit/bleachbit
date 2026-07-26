@@ -27,6 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 $root_dir = Join-Path (Get-Location).Path "vcpkg_installed\x86-windows"
 $python_home = Join-Path $root_dir "tools\python3"
 $themes_dir = Join-Path $python_home "share\themes"
+# When the tree is restored from cache python.exe already exists, so the pip
+# bootstrap and installs below can be skipped. A dependency change busts the
+# cache key, forcing a fresh unpack where this is false.
+$python_exists = Test-Path "$python_home\python.exe"
 # location of this .ps1 script
 $script_dir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $base_download_url = "https://github.com/bleachbit/pygtkwin/releases/download/v2025-12-03/"
@@ -123,17 +127,21 @@ if ($env:PATH -notlike "*$python_home*") {
     Write-Host "Updated PATH: $env:PATH"
 }
 
-Write-Host "ensurepip"
-& "$python_home\python.exe" -m ensurepip
+if (-not $python_exists) {
+    Write-Host "ensurepip"
+    & "$python_home\python.exe" -m ensurepip
 
-Write-Host "Checking pip version"
-& "$python_home\Scripts\pip3.exe" --version  # show pip version
+    Write-Host "Checking pip version"
+    & "$python_home\Scripts\pip3.exe" --version  # show pip version
 
-Write-Host "Updating pip..."
-& "$python_home\python.exe" -m pip install --disable-pip-version-check --upgrade pip
-if ($LASTEXITCODE -ne 0) {
-    Write-Error "Failed to update pip: exit code $LASTEXITCODE"
-    exit $LASTEXITCODE
+    Write-Host "Updating pip..."
+    & "$python_home\python.exe" -m pip install --disable-pip-version-check --upgrade pip
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Failed to update pip: exit code $LASTEXITCODE"
+        exit $LASTEXITCODE
+    }
+} else {
+    Write-Host "Python is already unpacked; skipping pip bootstrap."
 }
 
 if (-not (Test-Path gtk-themes.zip)) {
@@ -173,11 +181,13 @@ Copy-Item -Path "$root_dir\lib\python312.lib" -Destination $pylibdest
 Get-ChildItem -Path $pylibdest | Format-List -Property Name, Length
 
 # Install pip packages
-Write-Host "pip install -r requirements.txt..."
-& "$python_home\Scripts\pip3.exe" install --disable-pip-version-check -r "$script_dir\requirements.txt"
-if ($LASTEXITCODE -ne 0) {
-    Write-Error "Failed to update pip: exit code $LASTEXITCODE"
-    exit $LASTEXITCODE
+if (-not $python_exists) {
+    Write-Host "pip install -r requirements.txt..."
+    & "$python_home\Scripts\pip3.exe" install --disable-pip-version-check -r "$script_dir\requirements.txt"
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Failed to update pip: exit code $LASTEXITCODE"
+        exit $LASTEXITCODE
+    }
 }
 
 $PYGOBJECT_FN = "pygobject-3.55.0-cp312-cp312-win32.whl"
@@ -189,11 +199,13 @@ if (-not (Test-Path $PYGOBJECT_FN)) {
 }
 Assert-FileHash $PYGOBJECT_FN "9d63c2b1cfafa5607f5c0b02e5298ac1fb9962448e394f9d4b7ee55aeae2b183"
 
-Write-Host "pip install $PYGOBJECT_FN..."
-& "$python_home\Scripts\pip3.exe" install --disable-pip-version-check $PYGOBJECT_FN
-if ($LASTEXITCODE -ne 0) {
-    Write-Error "Failed to install PyGObject: exit code $LASTEXITCODE"
-    exit $LASTEXITCODE
+if (-not $python_exists) {
+    Write-Host "pip install $PYGOBJECT_FN..."
+    & "$python_home\Scripts\pip3.exe" install --disable-pip-version-check $PYGOBJECT_FN
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Failed to install PyGObject: exit code $LASTEXITCODE"
+        exit $LASTEXITCODE
+    }
 }
 
 # By default, pygobject installs to `x86-windows\lib\girepository-1.0`.

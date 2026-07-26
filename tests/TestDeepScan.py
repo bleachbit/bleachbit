@@ -15,6 +15,8 @@ import shutil
 import unittest
 from unittest import mock
 
+from tests.common import pytest
+
 # first party imports
 from tests import common
 from tests import TestCleaner
@@ -58,6 +60,7 @@ class DeepScanTestCase(common.BleachbitTestCase):
 
         shutil.rmtree(subdir)
 
+    @pytest.mark.no_xdist
     def test_encoding(self):
         """Test encoding"""
         for test in SPECIAL_TEST_STRINGS:

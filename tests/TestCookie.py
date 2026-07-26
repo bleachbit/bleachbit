@@ -67,9 +67,11 @@ class CookieTestCase(common.BleachbitTestCase):
     def setUp(self):
         """Set up test fixtures"""
         super().setUp()
-        # Reminder: each test case has its own, temporary bleachbit.ini config,
-        # so no need to save/restore options.
+        # tearDown reloads Options, so this doesn't leak between tests
         options.set('shred', True)
+        # remove the shared cookie keep-list file after every test
+        keep_path = os.path.join(bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        self.addCleanup(lambda: os.path.exists(keep_path) and os.remove(keep_path))
 
     def _get_file_hash(self, filepath):
         """Calculate SHA-256 hash of a file"""

@@ -32,7 +32,8 @@ if not defined PYTHON_EXE (
 "%PYTHON_EXE%" -c "from win32com.shell import shell; print('IsUserAnAdmin:', shell.IsUserAnAdmin())" >> "%LOG%" 2>&1
 echo.>> "%LOG%"
 
-"%PYTHON_EXE%" -m coverage run -m unittest -v ^
+REM -u keeps stdout in order with stderr when both are redirected to the log
+"%PYTHON_EXE%" -u -m coverage run -m unittest -v ^
     tests.TestWindows.WindowsTestCase.test_delete_registry_key ^
     tests.TestWindows.WindowsTestCase.test_delete_registry_value ^
     tests.TestWindows.WindowsTestCase.test_detect_registry_key ^

@@ -47,6 +47,7 @@ class LanguageTestCase(common.BleachbitTestCase):
         options.set('forced_language', '')
 
     def tearDown(self):
+        super().tearDown()
         # reset
         options.set('forced_language', 'en')
         setup_translation()
