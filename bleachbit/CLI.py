@@ -259,6 +259,14 @@ def parse_cmd_line(argv=None):
                       # TRANSLATORS: Help for the --gui option on the CLI,
                       # and 'launch' is a verb
                       help=_("launch the graphical interface"))
+    parser.add_option("--gui-gtk", action="store_true",
+                      # TRANSLATORS: Help for the --gui-gtk option on the CLI,
+                      # and 'launch' is a verb
+                      help=_("launch the GTK graphical interface"))
+    parser.add_option("--gui-wx", action="store_true",
+                      # TRANSLATORS: Help for the --gui-wx option on the CLI,
+                      # and 'launch' is a verb
+                      help=_("launch the wxPython graphical interface"))
     parser.add_option("--preset", action="store_true",
                       # TRANSLATORS: Help for the --preset option on the CLI,
                       # and 'use' is a verb, referring to enabling options set earlier.
@@ -318,6 +326,7 @@ def parse_cmd_line(argv=None):
     # https://github.com/bleachbit/bleachbit/commit/b09625925149c98a6c79e278c35d5995e7526993
     def expand_context_menu_option(_option, _opt, _value, parser):
         setattr(parser.values, 'gui', True)
+        setattr(parser.values, 'gui_gtk', True)
         setattr(parser.values, 'exit', True)
         setattr(parser.values, 'load_cleaners', False)
         setattr(parser.values, 'check_online_updates', False)
@@ -422,15 +431,28 @@ There is NO WARRANTY, to the extent permitted by law.
     if options.clean or options.preview:
         preview_or_clean(operations, options.clean)
         sys.exit(0)
-    if options.gui:
+    if options.gui or options.gui_gtk or options.gui_wx:
         from bleachbit.Bootstrap import check_wayland_and_root
         if check_wayland_and_root():
             sys.exit(1)
-        import bleachbit.GuiApplication
         enable_uac = IS_WINDOWS and not options.no_uac
-        app = bleachbit.GuiApplication.Bleachbit(
-            uac=enable_uac, shred_paths=args, auto_exit=options.exit)
-        sys.exit(app.run())
+        # --gui-gtk and --gui-wx are explicit choices.  Bare --gui tries
+        # GTK first and falls back to the wx GUI when GTK is unavailable
+        # (e.g., the wxgui branch on Windows).
+        if options.gui_wx:
+            want_gtk = False
+        elif options.gui_gtk:
+            want_gtk = True
+        else:
+            from bleachbit.GtkShim import gtk_may_be_available
+            want_gtk = gtk_may_be_available()
+        if want_gtk:
+            import bleachbit.GuiApplication
+            app = bleachbit.GuiApplication.Bleachbit(
+                uac=enable_uac, shred_paths=args, auto_exit=options.exit)
+            sys.exit(app.run())
+        from bleachbit.GUIwx.App import run as run_wx
+        sys.exit(run_wx(auto_exit=options.exit, shred_paths=args))
     if options.shred:
         # delete arbitrary files without GUI
         Options.options.set_override('first_start', False)

@@ -358,13 +358,19 @@ class _CleanerTreeModel(dv.PyDataViewModel):
 class MainFrame(wx.Frame):
     """Top-level window for the wx MVP."""
 
-    def __init__(self):
+    def __init__(self, shred_paths=None, auto_exit=False):
         title = '%s %s (wx MVP)' % (APP_NAME, APP_VERSION)
         super().__init__(None, title=title, size=(900, 650))
         self.SetMinSize((640, 480))
 
         self._worker_thread = None
         self._loader_thread = None
+        # Optional paths to shred on startup (e.g. from ``--gui-wx``).
+        self._pending_shred_paths = shred_paths
+        # When set (e.g. ``--gui-wx --exit``), close the window after the
+        # startup shred completes or is cancelled.  Mirrors the GTK
+        # ``auto_exit`` behavior in :class:`bleachbit.GuiApplication`.
+        self._auto_exit = auto_exit
         # All result rows as dicts {cleaner_id, option_id, cleaner_name,
         # option_name, path, size, size_human, action}.  ``_visible`` is
         # the filtered/sorted projection that the virtual ListCtrl reads
@@ -1188,6 +1194,13 @@ class MainFrame(wx.Frame):
         self.status.SetLabel(summary)
         self.SetStatusText(done_msg)
         self._worker_thread = None
+        if self._auto_exit and not worker.is_aborted:
+            # Started from the CLI with ``--gui-wx --exit`` (typically
+            # the context-menu shred invocation).  Close the window now
+            # that the startup shred finished.  GTK handles this from
+            # ``GUI.shred_paths``; the wx front-end closes here because
+            # ``worker_done`` already runs on the main thread.
+            self.Close()
 
     # ------------------------------------------------------------------
     # Results context menu
@@ -1475,11 +1488,15 @@ class MainFrame(wx.Frame):
 
     def _shred_paths(self, paths):
         if not paths:
+            if self._auto_exit:
+                self.Close()
             return
         if self._worker_thread is not None and self._worker_thread.is_alive():
             wx.MessageBox(
                 _('An operation is already running.'),
                 APP_NAME, wx.ICON_INFORMATION)
+            if self._auto_exit:
+                self.Close()
             return
         if options.get('delete_confirmation'):
             msg = _('Permanently delete the %d selected item(s)?  '
@@ -1489,6 +1506,8 @@ class MainFrame(wx.Frame):
                 wx.YES_NO | wx.NO_DEFAULT | wx.ICON_WARNING)
             try:
                 if dlg.ShowModal() != wx.ID_YES:
+                    if self._auto_exit:
+                        self.Close()
                     return
             finally:
                 dlg.Destroy()

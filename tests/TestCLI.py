@@ -18,6 +18,7 @@ import locale
 import os
 import random
 import tempfile
+from contextlib import nullcontext
 from unittest.mock import MagicMock, patch
 
 # first party imports
@@ -464,22 +465,42 @@ class CLITestCase(common.BleachbitTestCase):
                     mock_preview.assert_called_once()
 
     def test_process_cmd_line_gui(self):
-        """Unit test for process_cmd_line() with --gui"""
-        mock_gui_module = MagicMock()
-        mock_app = MagicMock()
-        mock_app.run.return_value = 0
-        mock_gui_module.Bleachbit.return_value = mock_app
-        with patch.dict('sys.modules', {'bleachbit.GuiApplication': mock_gui_module}):
-            with patch.object(bleachbit, 'GuiApplication', mock_gui_module, create=True):
-                with patch('bleachbit.Bootstrap.check_wayland_and_root', return_value=False):
-                    with patch('bleachbit.CLI.IS_WINDOWS', False):
-                        with patch('sys.argv', ['bleachbit', '--gui']):
-                            with self.assertRaises(SystemExit) as cm:
-                                process_cmd_line()
-                            self.assertEqual(cm.exception.code, 0)
-        mock_gui_module.Bleachbit.assert_called_once_with(
-            uac=False, shred_paths=[], auto_exit=None)
-        mock_app.run.assert_called_once()
+        """Unit test for process_cmd_line() with --gui and --gui-gtk"""
+        for flag, gtk_may_be_available in (('--gui', True), ('--gui-gtk', None)):
+            with self.subTest(flag=flag):
+                mock_gui_module = MagicMock()
+                mock_app = MagicMock()
+                mock_app.run.return_value = 0
+                mock_gui_module.Bleachbit.return_value = mock_app
+                with patch.dict('sys.modules', {'bleachbit.GuiApplication': mock_gui_module}):
+                    with patch.object(bleachbit, 'GuiApplication', mock_gui_module, create=True):
+                        with patch('bleachbit.Bootstrap.check_wayland_and_root', return_value=False):
+                            # simulate GTK on non-Windows
+                            with patch('bleachbit.CLI.IS_WINDOWS', False):
+                                gtk_patch = (
+                                    patch('bleachbit.GtkShim.gtk_may_be_available', return_value=True)
+                                    if gtk_may_be_available is not None else nullcontext())
+                                with gtk_patch:
+                                    with patch('sys.argv', ['bleachbit', flag]):
+                                        with self.assertRaises(SystemExit) as cm:
+                                            process_cmd_line()
+                                        self.assertEqual(cm.exception.code, 0)
+                mock_gui_module.Bleachbit.assert_called_once_with(
+                    uac=False, shred_paths=[], auto_exit=None)
+                mock_app.run.assert_called_once()
+
+    def test_process_cmd_line_gui_wx(self):
+        """Unit test for process_cmd_line() with --gui-wx"""
+        mock_wx_run = MagicMock(return_value=0)
+        with patch('bleachbit.Bootstrap.check_wayland_and_root', return_value=False):
+            # simulate wx on non-Windows
+            with patch('bleachbit.CLI.IS_WINDOWS', False):
+                with patch('bleachbit.GUIwx.App.run', mock_wx_run):
+                    with patch('sys.argv', ['bleachbit', '--gui-wx', '--exit']):
+                        with self.assertRaises(SystemExit) as cm:
+                            process_cmd_line()
+                        self.assertEqual(cm.exception.code, 0)
+        mock_wx_run.assert_called_once_with(auto_exit=True, shred_paths=[])
 
     def test_process_cmd_line_no_command(self):
         """Unit test for process_cmd_line() with no command"""
@@ -583,9 +604,11 @@ class CLITestCase(common.BleachbitTestCase):
 
     @common.skipUnlessWindows
     def test_gui_exit(self):
-        """Unit test for --gui --exit, only for Windows"""
+        """Unit test for --gui-wx --exit, only for Windows"""
+        # In the wxgui branch GTK is not available on Windows, so the wx
+        # GUI is exercised explicitly here.
         args = (get_executable(), '-m',
-                'bleachbit.CLI', '--gui', '--exit')
+                'bleachbit.CLI', '--gui-wx', '--exit')
         (rc, _stdout, stderr) = run_external(
             args, timeout=RUN_EXTERNAL_TIMEOUT)
         self.assertNotIn('no such option', stderr)
