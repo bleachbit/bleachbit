@@ -1502,6 +1502,25 @@ State=AAAA/wA...
             path = 'c:\\windows\\system32'
         self.assertGreater(getsizedir(path), 0)
 
+    def test_getsizedir_vanished(self):
+        """getsizedir() skips a file that vanishes between the walk and the stat"""
+        dirname = self.mkdtemp(prefix='bleachbit-test-getsizedir-vanished')
+        real_fn = os.path.join(dirname, 'real')
+        self.write_file(real_fn, contents=b'0123456789')
+        expected = getsize(real_fn)
+        self.assertGreater(expected, 0)
+
+        ghost_fn = os.path.join(dirname, 'ghost')
+        with unittest.mock.patch('bleachbit.FileUtilities.children_in_directory',
+                                 return_value=iter([real_fn, ghost_fn])):
+            self.assertEqual(getsizedir(dirname), expected)
+
+        # Other errors must still propagate
+        with unittest.mock.patch('bleachbit.FileUtilities.getsize',
+                                 side_effect=PermissionError('denied')):
+            with self.assertRaises(PermissionError):
+                getsizedir(dirname)
+
     def test_globex(self):
         """Unit test for method globex()"""
         for path in globex('/bin/*', '/ls$'):
