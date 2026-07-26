@@ -9,6 +9,7 @@ Integration specific to Unix-like operating systems
 """
 
 import configparser
+import errno
 import glob
 import logging
 import os
@@ -649,7 +650,10 @@ def get_globs_size(paths):
     total_size = 0
     for path in paths:
         for p in glob.iglob(path):
-            total_size += FileUtilities.getsize(p)
+            try:
+                total_size += FileUtilities.getsize(p)
+            except FileNotFoundError:
+                pass
     return total_size
 
 
@@ -937,12 +941,16 @@ def snap_disabled_full(really_delete):
         # `snap info` returns info only about active snaps.
         # Instead, get size from the snap file directly.
         snap_file = f'/var/lib/snapd/snaps/{snapname}_{revision}.snap'
-        if os.path.exists(snap_file):
+        try:
             snap_size = os.path.getsize(snap_file)
             logger.debug('Found snap file: %s, size: %s',
                          snap_file, f"{snap_size:,}")
-        else:
-            logger.warning('Could not find snap file: %s', snap_file)
+        except OSError as e:
+            if e.errno == errno.ENOENT:
+                logger.warning('Could not find snap file: %s', snap_file)
+            else:
+                logger.warning('Could not measure snap file %s: %s',
+                               snap_file, e)
             snap_size = 0
 
         # Remove the snap revision
