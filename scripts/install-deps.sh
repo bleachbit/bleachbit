@@ -437,6 +437,7 @@ install_macos() {
 }
 
 setup_venv() {
+    local distro="$1"
     local req_file="$REPO_ROOT/requirements.txt"
     echo "[venv] creating virtual environment in $VENV_DIR"
     if [[ -d "$VENV_DIR" ]]; then
@@ -449,6 +450,11 @@ setup_venv() {
     pip install --upgrade pip setuptools
     echo "[venv] installing runtime Python deps from $req_file"
     pip install -r "$req_file"
+    if [[ "$distro" == "macos" ]]; then
+        echo "[venv] installing wxPython (macOS) for the wx GUI"
+        # wxPython==4.2.5 is missing .whl for Python 3.9
+        pip install wxPython==4.2.4
+    fi
     if [[ "$MODE" == "dev" ]]; then
         echo "[venv] installing dev/test/lint Python deps"
         pip install pylint pyflakes autopep8 pytest pytest-xdist
@@ -477,7 +483,7 @@ main() {
         *) echo "ERROR: unsupported distro '$distro'" >&2; exit 1 ;;
     esac
     if [[ "$VENV" == 1 ]]; then
-        setup_venv
+        setup_venv "$distro"
     fi
     echo
     echo "Done. You can now run BleachBit from source:"
