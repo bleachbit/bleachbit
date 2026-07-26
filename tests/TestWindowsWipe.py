@@ -93,7 +93,11 @@ class WindowsWipeTestCase(common.BleachbitTestCase):
             try:
                 file_handle = open_file(path)
             except pywintypes.error as e:
-                if e.winerror in (5, 32):
+                # 5  = ERROR_ACCESS_DENIED
+                # 32 = ERROR_SHARING_VIOLATION
+                # 1920 = ERROR_FILE_ENCRYPTED (reparse points / AppExecutionAlias
+                #        stubs under WindowsApps are not openable).
+                if e.winerror in (5, 32, 1920):
                     error_count += 1
                     continue
                 print(f"Error opening {path}: {e}")
