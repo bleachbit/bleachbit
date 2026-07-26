@@ -518,7 +518,7 @@ def package_portable(fast_build):
     with open("BleachBit-Portable\\BleachBit.ini", "w") as text_file:
         text_file.write("[Portable]")
     archive('BleachBit-Portable',
-            f'BleachBit-{get_version()}-portable.zip', fast_build)
+            f'BleachBit-wx-{get_version()}-portable.zip', fast_build)
 
 
 def nsis(opts, exe_name, nsi_path):
@@ -542,14 +542,14 @@ def package_installer(fast_build, nsi_path=r'windows\bleachbit-wx.nsi'):
 
     logger.info('Building installer')
     write_nsis_expressions_to_files()
-    exe_name = f'windows\\BleachBit-{get_version()}-setup.exe'
+    exe_name = f'windows\\BleachBit-wx-{get_version()}-setup.exe'
     opts = '' if fast_build else '/V3'
     nsis(opts, exe_name, nsi_path)
 
     if os.path.exists(SZ_EXE):
         logger.info('Zipping installer')
-        outfile = f"{ROOT_DIR}\\windows\\BleachBit-{get_version()}-setup.zip"
-        infile = f"{ROOT_DIR}\\windows\\BleachBit-{get_version()}-setup.exe"
+        outfile = f"{ROOT_DIR}\\windows\\BleachBit-wx-{get_version()}-setup.zip"
+        infile = f"{ROOT_DIR}\\windows\\BleachBit-wx-{get_version()}-setup.exe"
         archive(infile, outfile, fast_build)
     else:
         logger.warning('%s does not exist', SZ_EXE)

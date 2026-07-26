@@ -5,7 +5,7 @@
 
 !define prodname "BleachBit"
 Name "${prodname}"
-OutFile "BleachBit-${VERSION}-setup.exe"
+OutFile "BleachBit-wx-${VERSION}-setup.exe"
 Unicode true
 InstallDir "$PROGRAMFILES64\${prodname}"
 RequestExecutionLevel admin

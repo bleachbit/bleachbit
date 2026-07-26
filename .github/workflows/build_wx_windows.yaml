@@ -1,0 +1,201 @@
+# Python GTK requires special 32-bit Python build using vcpkg,
+# while wxWidgets works with vanilla Python.
+
+name: Build and Test with wxWidgets
+
+on:
+  push:
+    branches:
+      - wx-gui-mvp
+    tags:
+      - 'v*'
+    paths-ignore: &paths-ignore
+      - '.gitignore'
+      - '.gitattributes'
+      - 'bleachbit.png'
+      - 'bleachbit.spec'
+      - 'COPYING'
+      - 'debian/**'
+      - 'doc/**'
+      - 'docker/**'
+      - 'MANIFEST.in'
+      - 'org.bleachbit.BleachBit.desktop'
+      - 'org.bleachbit.BleachBit.metainfo.xml'
+      - 'org.bleachbit.BleachBit.policy'
+      - 'po/*.po' # translation strings
+      - 'po/*.pot' # translation template
+      - 'README.md'
+      - 'windows/NsisInclude/NsisMultiUserLang.nsh' # translation strings only
+  pull_request:
+    branches:
+      - wx-gui-mvp
+    paths-ignore: *paths-ignore
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  windows-wx-build:
+    name: windows-wx-build-and-test
+    runs-on: windows-latest
+    timeout-minutes: 20
+    outputs:
+      version: ${{ steps.revision.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.13'
+          architecture: x64
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-test.txt
+            windows/requirements_wx.txt
+
+      - name: Cache downloaded dependencies
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: nsis-3.12-setup.exe
+          key: win-wx-build-deps-${{ hashFiles('.github/workflows/build_wx_windows.yaml') }}
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --disable-pip-version-check -r windows/requirements_wx.txt -r requirements-test.txt
+          python -c "import wx; print(wx.version())"
+          # Capture the absolute path to setup-python's interpreter so later
+          # cmd/batch steps can invoke it by full path instead of relying on
+          # PATH order (which is shuffled when MSYS2 is prepended).
+          "PYTHON_EXE=$((Get-Command python).Source)" >> $env:GITHUB_ENV
+
+      - name: Install NSIS
+        shell: pwsh
+        run: |
+          if (-not (Test-Path nsis-3.12-setup.exe)) {
+            Invoke-WebRequest -Uri "https://master.dl.sourceforge.net/project/nsis/NSIS%203/3.12/nsis-3.12-setup.exe?viasf=1" -OutFile nsis-3.12-setup.exe -UserAgent 'Mozilla/5.0'
+          }
+          $hash = (Get-FileHash nsis-3.12-setup.exe -Algorithm SHA256).Hash
+          if ($hash -ne '3bc2b06253a7e4957111be152ac6a536e0c7478a706e19da814038db5d706495') {
+            throw "SHA256 mismatch=$hash"
+          }
+          Start-Process -FilePath .\nsis-3.12-setup.exe -ArgumentList '/S' -Wait
+
+      - name: Generate Revision.py
+        uses: ./.github/actions/generate-revision
+
+      - name: Get version
+        id: revision
+        shell: pwsh
+        run: |
+          $version = & $env:PYTHON_EXE -c "from bleachbit.SystemInformation import get_version; print(get_version())"
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Generate translations
+        shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
+        run: |
+          set PATH=C:\msys64\usr\bin;%PATH%
+          make PYTHON="%PYTHON_EXE%" -C po local
+
+      - name: Run wx unit tests
+        shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
+        env:
+          DESTRUCTIVE_TESTS: T
+          PYTHONWARNINGS: error
+        run: |
+          set PATH=C:\msys64\usr\bin;%PATH%
+          # FIXME: After PR 2236 is merged, enable xdist here.
+          "%PYTHON_EXE%" -m pytest tests/ -v
+
+      - name: Build executable and installers
+        shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
+        env:
+          SETUP_ARGS: ${{ github.event_name == 'pull_request' && 'fast' || '' }}
+        run: |
+          set PATH=C:\msys64\usr\bin;%PATH%
+          "%PYTHON_EXE%" -m windows.setup_wx %SETUP_ARGS%
+          move windows\BleachBit*.exe .
+          move windows\BleachBit*.zip .
+
+      - name: Show artifact hashes
+        shell: pwsh
+        run: |
+          Get-ChildItem BleachBit-* -File | Get-FileHash | ForEach-Object {
+            "$($_.Hash)  $($_.Path | Split-Path -Leaf)"
+          }
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: windows-wx-build-${{ steps.revision.outputs.version }}
+          if-no-files-found: error
+          compression-level: 9
+          path: |
+            BleachBit-*-setup.exe
+            BleachBit-*-portable.zip
+
+  windows-wx-deploy:
+    needs: [windows-wx-build]
+    # Eligible for deployment:
+    # - Any branch push in bleachbit/bleachbit
+    # - Tags (matches 'v*' push filter above)
+    # - workflow_dispatch
+    # - No pull requests, whether from a fork or the same repository
+    # - No Dependabot branches: GitHub Actions withholds repository secrets
+    #   from workflows triggered by Dependabot, so the S3 upload would fail.
+    if: github.repository == 'bleachbit/bleachbit' && github.event_name != 'pull_request' && !startsWith(github.ref_name, 'dependabot/')
+    runs-on: windows-latest
+    timeout-minutes: 5
+    env:
+      VERSION: ${{ needs.windows-wx-build.outputs.version }}
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: windows-wx-build-${{ needs.windows-wx-build.outputs.version }}
+          merge-multiple: true
+
+      - name: Deploy wx Windows build
+        shell: pwsh
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          AWS_ENDPOINT_URL: ${{ secrets.AWS_ENDPOINT_URL }}
+        run: |
+          $ref = ($env:GITHUB_REF_NAME -replace '[^A-Za-z0-9._/-]','_')
+          $ver = ($env:VERSION -replace '[^A-Za-z0-9._-]','_')
+          $run = $env:GITHUB_RUN_NUMBER
+          $runId = $env:GITHUB_RUN_ID
+          $attempt = $env:GITHUB_RUN_ATTEMPT
+          $event = ($env:GITHUB_EVENT_NAME -replace '[^A-Za-z0-9._-]','_')
+          $actor = ($env:GITHUB_TRIGGERING_ACTOR -replace '[^A-Za-z0-9._@-]','_')
+          $sha = $env:GITHUB_SHA.Substring(0,8)
+          $ver3 = (($ver -split '\.')[0..2] -join '.')
+          $branch = ''
+          $tag = ''
+          if ($env:GITHUB_REF_TYPE -eq 'tag') { $tag = $ref } else { $branch = $ref }
+          $dest = "s3://${{ secrets.AWS_BUCKET_NAME }}/"
+          Get-ChildItem BleachBit-*-setup.exe, BleachBit-*-portable.zip -File |
+            ForEach-Object {
+              $file = $_.FullName
+              $name = $_.Name
+              $sha256 = (Get-FileHash -Algorithm SHA256 $file).Hash.ToLower()
+              $sha1 = (Get-FileHash -Algorithm SHA1 $file).Hash.ToLower()
+              $md5 = (Get-FileHash -Algorithm MD5 $file).Hash.ToLower()
+              $artifactType = if ($name -like '*-setup.exe') { 'installer' } else { 'portable' }
+              $meta = "ref=$ref,run=$run,run_id=$runId,attempt=$attempt,event=$event,actor=$actor,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5,artifact_type=$artifactType,frontend=wx"
+              aws s3 cp $file "$dest" --metadata "$meta"
+            }
