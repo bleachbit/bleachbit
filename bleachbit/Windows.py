@@ -1262,7 +1262,15 @@ def has_fontconfig_cache(font_conf_file):
 
 
 def get_font_conf_file():
-    """Return the full path to fonts.conf"""
+    """Return the full path to fonts.conf
+    
+    This function should be called only on Windows with GTK
+    """
+    if not IS_WINDOWS:
+        raise RuntimeError("get_font_conf_file() requires Windows")
+    from bleachbit.GtkShim import gtk_may_be_available
+    if not gtk_may_be_available():
+        raise RuntimeError("get_font_conf_file() requires GTK")
     if hasattr(sys, 'frozen'):
         # running inside py2exe
         return os.path.join(bleachbit.bleachbit_exe_path, 'etc', 'fonts', 'fonts.conf')

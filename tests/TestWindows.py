@@ -1009,6 +1009,9 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_get_font_conf_file(self):
         """Unit test for get_font_conf_file"""
         # This tests only one of three situations.
+        from bleachbit.GtkShim import gtk_may_be_available
+        if not gtk_may_be_available():
+            self.skipTest("GTK is not available")
         font_fn = get_font_conf_file()
         self.assertExists(font_fn)
 
