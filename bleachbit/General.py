@@ -199,7 +199,7 @@ def get_real_uid():
             return pwd.getpwnam(login).pw_uid
         except KeyError:
             # Docker containers may set LOGNAME to a raw UID that lacks a passwd entry.
-            if login.isdigit():
+            if login.isdecimal():
                 return int(login)
 
     # os.getuid() returns 0 for sudo, so use it as a last resort.
