@@ -1185,6 +1185,14 @@ State=AAAA/wA...
         # pylint: disable=no-member
         self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
 
+        own_fn = self.mkstemp()
+        self.assertTrue(ego_owner(own_fn))
+
+        # A path that vanished must not raise
+        os.unlink(own_fn)
+        self.assertFalse(ego_owner(own_fn))
+        self.assertFalse(ego_owner(os.path.join(self.tempdir, 'does_not_exist')))
+
     def test_execute_sqlite3(self):
         """Unit test for execute_sqlite3()"""
         db_path = self.mkstemp(suffix='.sqlite')

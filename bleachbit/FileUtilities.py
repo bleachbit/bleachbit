@@ -611,10 +611,17 @@ def detect_encoding(fn):
 def ego_owner(filename):
     """Return whether current user owns the file
 
+    Returns False if the file is gone or unreadable, so callers walking a
+    busy directory such as /tmp do not abort on a vanished file.
+
     POSIX only"""
     assert IS_POSIX
+    try:
+        st_uid = os.lstat(filename).st_uid
+    except OSError:
+        return False
     # pylint: disable=no-member
-    return os.lstat(filename).st_uid == os.getuid()
+    return st_uid == os.getuid()
 
 
 def exists_in_path(filename):
