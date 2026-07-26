@@ -343,7 +343,9 @@ class System(Cleaner):
         # unwanted locales
         if IS_POSIX and 'localizations' == option_id:
             for path in Unix.locales.localization_paths(locales_to_keep=options.get_languages()):
-                if os.path.isdir(path):
+                # A symlinked locale directory points at a locale that may be
+                # on the keep list, so delete the link without its contents.
+                if FileUtilities.is_normal_directory(path):
                     for f in FileUtilities.children_in_directory(path, True):
                         yield Command.Delete(f)
                 yield Command.Delete(path)
