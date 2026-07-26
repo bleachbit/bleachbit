@@ -79,8 +79,9 @@ class CLITestCase(common.BleachbitTestCase):
         self.assertIsInstance(o, list)
         self.assertIn('google_chrome.cache', o)
         self.assertIn('system.tmp', o)
-        gui_available = IS_WINDOWS or gtk_may_be_available()
-        self.assertEqual(gui_available, 'system.clipboard' in o)
+        # The clipboard option is added only when GTK may be available,
+        # regardless of the operating system.  See Cleaner.System.
+        self.assertEqual(gtk_may_be_available(), 'system.clipboard' in o)
         self.assertNotIn('system.empty_space', o)
         self.assertNotIn('system.memory', o)
 
