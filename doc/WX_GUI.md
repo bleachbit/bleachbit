@@ -151,10 +151,9 @@ as a safety net even if the process is killed outright.
   list and Custom pages, but no languages tab, drives selector,
   expert-mode control, warning preferences, or per-cleaner options yet.
 - Chaff generator is not wired up.
-- Not translated through the wx machinery yet; user-visible strings go
-  through `bleachbit.Language.get_text`, while keyboard shortcuts are
-  currently defined explicitly with `wx.AcceleratorTable` and menu
-  labels.
+- wx reuses the same gettext catalog and translated msgids as the GTK
+  front-end. Keyboard shortcuts remain outside translatable strings and
+  are defined explicitly with `wx.AcceleratorTable` and menu labels.
 
 ## Accessibility
 

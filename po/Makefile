@@ -1,7 +1,10 @@
 APP = bleachbit
 POFILES = $(wildcard *.po)
 MOFILES = $(patsubst %.po,%.mo,$(POFILES))
-PY_SRC = $(wildcard ../bleachbit/*.py)
+# Keep front-end modules in the gettext extraction set. The wx sources live
+# in a subpackage, so the original non-recursive wildcard silently skipped
+# every wx-only message.
+PY_SRC = $(wildcard ../bleachbit/*.py ../bleachbit/GUIwx/*.py)
 UI_SRC = ../share/app-menu.ui
 SRC = $(PY_SRC) $(UI_SRC)
 POTFILE = $(APP).pot

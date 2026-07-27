@@ -20,11 +20,14 @@ from bleachbit.Options import options
 
 # (option_key, label) pairs.  Order is preserved in the dialog.
 _PREFS = (
-    ('delete_confirmation', _('Confirm before deleting files')),
+    # Reuse the GTK front-end's msgids so the existing translations apply to
+    # both interfaces.
+    ('delete_confirmation', _('Confirm before delete')),
     ('shred',
-     _('Overwrite contents of files to prevent recovery (slow)')),
-    ('check_online_updates', _('Check periodically for software updates')),
-    ('debug', _('Log debug messages')),
+     _('Overwrite contents of files to prevent recovery')),
+    ('check_online_updates',
+     _('Check periodically for software updates via the Internet')),
+    ('debug', _('Show debug messages')),
 )
 
 
@@ -46,16 +49,14 @@ class _LocationsPanel(wx.Panel):
         if page_type == LOCATIONS_WHITELIST:
             # TRANSLATORS: Notice at the top of the keep list (whitelist)
             # page in the preferences dialog.
-            notice_text = _('Keep list: these paths will not be deleted '
-                            'or modified during cleaning.')
+            notice_text = _('These paths will not be deleted or modified.')
             notice_bg = wx.Colour(220, 240, 225)
             self._pathnames = list(options.get_whitelist_paths())
             self._save = options.set_whitelist_paths
         elif page_type == LOCATIONS_CUSTOM:
             # TRANSLATORS: Notice at the top of the custom (delete)
             # page in the preferences dialog.
-            notice_text = _('Custom list: these paths can be selected '
-                            'for deletion from the main window.')
+            notice_text = _('These locations can be selected for deletion.')
             notice_bg = wx.Colour(248, 226, 200)
             self._pathnames = list(options.get_custom_paths())
             self._save = options.set_custom_paths
