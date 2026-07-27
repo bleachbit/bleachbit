@@ -14,7 +14,6 @@ from bleachbit.Cleaner import backends
 from bleachbit.GtkShim import (
     GLib, Gdk, Gio, Gtk,
     require_gtk,
-    suppress_pygobject_asyncio_warnings,
 )
 from bleachbit.GUI import logger
 from bleachbit.GuiUtil import get_clipboard_paths
@@ -74,8 +73,7 @@ class Bleachbit(Gtk.Application):
 
     def run(self, *args, **kwargs):
         """Run the GTK application."""
-        with suppress_pygobject_asyncio_warnings():
-            return Gtk.Application.run(self, *args, **kwargs)
+        return Gtk.Application.run(self, *args, **kwargs)
 
     def _init_windows_misc(self, auto_exit, shred_paths, uac):
         application_id_suffix = ''

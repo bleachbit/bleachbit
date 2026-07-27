@@ -17,7 +17,6 @@ from bleachbit import APP_NAME, FileUtilities, IS_WINDOWS
 from bleachbit.GUI import logger
 from bleachbit.GtkShim import (
     GLib, Gdk, Gtk, gi,
-    suppress_pygobject_asyncio_warnings,
     suppress_pygobject_import_warnings,
 )
 
@@ -225,10 +224,7 @@ def flush_gtk_events(max_iterations: int = 5):
     """Process pending GTK events to allow style updates to land."""
     iterations = 0
     while Gtk.events_pending() and (max_iterations is None or iterations < max_iterations):
-        # PyGObject 3.56.2 calls deprecated asyncio APIs, which breaks tests
-        # run with PYTHONWARNINGS=error.
-        with suppress_pygobject_asyncio_warnings():
-            Gtk.main_iteration_do(False)
+        Gtk.main_iteration_do(False)
         iterations += 1
 
 
