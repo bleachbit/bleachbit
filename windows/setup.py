@@ -672,6 +672,7 @@ def delete_icons():
         'edit-find.png',
         'list-add-symbolic.svg',  # spin box in chaff dialog
         'list-remove-symbolic.svg',  # spin box in chaff dialog
+        'open-menu-symbolic.svg',  # hamburger menu on headerbar
         'pan-down-symbolic.svg',  # there is no pan-down.png
         'pan-end-symbolic.svg',  # there is no pan-end.png
         'process-stop.png',  # abort on toolbar
