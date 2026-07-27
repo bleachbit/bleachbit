@@ -54,6 +54,35 @@ COL_ACTION = 4
 _ROW_FIELDS = ('cleaner_name', 'option_name', 'path', 'size_human', 'action')
 
 
+def _gtk_mnemonic_to_wx(label):
+    """Convert a translated GTK menu mnemonic to wx syntax.
+
+    GTK marks a mnemonic with ``_`` and escapes a literal underscore as
+    ``__``. wx uses ``&`` and escapes a literal ampersand as ``&&``.
+    Reusing the GTK menu msgids lets the wx front-end benefit from the
+    existing translations without displaying the GTK mnemonic marker.
+    """
+    converted = []
+    index = 0
+    while index < len(label):
+        char = label[index]
+        if char == '&':
+            converted.append('&&')
+        elif char == '_':
+            if index + 1 < len(label) and label[index + 1] == '_':
+                converted.append('_')
+                index += 1
+            elif index + 1 == len(label):
+                # A dangling GTK marker cannot designate a mnemonic.
+                converted.append('_')
+            else:
+                converted.append('&')
+        else:
+            converted.append(char)
+        index += 1
+    return ''.join(converted)
+
+
 class _VirtualResultsList(wx.ListCtrl):
     """Virtual ``wx.ListCtrl`` backed by ``MainFrame._visible_rows()``.
 
@@ -423,20 +452,20 @@ class MainFrame(wx.Frame):
 
         self.btn_preview = wx.Button(panel, label=_('Preview'))
         self.btn_preview.SetToolTip(
-            _('Preview what would be cleaned without deleting anything '
-              '(F5).'))
+            _('Preview files in the selected operations '
+              '(without deleting any files)') + ' (F5)')
         self.btn_clean = wx.Button(panel, label=_('Clean'))
         self.btn_clean.SetToolTip(
-            _('Permanently delete the selected items (Ctrl+Enter).'))
+            _('Clean files in the selected operations') + ' (Ctrl+Enter)')
         self.btn_abort = wx.Button(panel, label=_('Abort'))
         self.btn_abort.SetToolTip(
-            _('Abort the running operation (Esc).'))
+            _('Abort the preview or cleaning process') + ' (Esc)')
         self.btn_abort.Disable()
         self.btn_select_safe = wx.Button(panel, label=_('Select safe'))
         self.btn_select_safe.SetToolTip(
             _('Check only low-risk options (cache, log, vacuum, '
               'temporary files).'))
-        self.btn_deselect_all = wx.Button(panel, label=_('Deselect all'))
+        self.btn_deselect_all = wx.Button(panel, label=_('Deselect All'))
         self.btn_deselect_all.SetToolTip(
             _('Uncheck every option in the tree.'))
 
@@ -597,16 +626,20 @@ class MainFrame(wx.Frame):
         mb = wx.MenuBar()
         file_menu = wx.Menu()
         item_shred_files = file_menu.Append(
-            wx.ID_ANY, _('Shred files\u2026') + '\tCtrl+Shift+F',
+            wx.ID_ANY,
+            _gtk_mnemonic_to_wx(_('_Shred Files')) +
+            '\u2026\tCtrl+Shift+F',
             _('Permanently delete specific files.'))
         self.Bind(wx.EVT_MENU, self._on_shred_files, item_shred_files)
         item_shred_folders = file_menu.Append(
-            wx.ID_ANY, _('Shred folders\u2026') + '\tCtrl+Shift+D',
+            wx.ID_ANY,
+            _gtk_mnemonic_to_wx(_('Sh_red Folders')) +
+            '\u2026\tCtrl+Shift+D',
             _('Permanently delete specific folders.'))
         self.Bind(wx.EVT_MENU, self._on_shred_folders, item_shred_folders)
         file_menu.AppendSeparator()
         item_prefs = file_menu.Append(
-            wx.ID_PREFERENCES, _('Preferences\u2026') + '\tCtrl+,')
+            wx.ID_PREFERENCES, _('Preferences') + '\u2026\tCtrl+,')
         self.Bind(wx.EVT_MENU, self._on_preferences, item_prefs)
         file_menu.AppendSeparator()
         item_exit = file_menu.Append(
@@ -616,13 +649,15 @@ class MainFrame(wx.Frame):
 
         help_menu = wx.Menu()
         item_sysinfo = help_menu.Append(
-            wx.ID_ANY, _('System information\u2026'),
+            wx.ID_ANY,
+            _gtk_mnemonic_to_wx(_('S_ystem Information')) + '\u2026',
             _('Show information useful for bug reports.'))
         self.Bind(wx.EVT_MENU, self._on_system_information, item_sysinfo)
         item_about = help_menu.Append(
-            wx.ID_ABOUT, _('About') + '\tF1')
+            wx.ID_ABOUT,
+            _gtk_mnemonic_to_wx(_('_About BleachBit')) + '\tF1')
         self.Bind(wx.EVT_MENU, self._on_about, item_about)
-        mb.Append(help_menu, _('Help'))
+        mb.Append(help_menu, _gtk_mnemonic_to_wx(_('_Help')))
 
         self.SetMenuBar(mb)
 
@@ -675,7 +710,7 @@ class MainFrame(wx.Frame):
     # Cleaner registration (async)
     # ------------------------------------------------------------------
     def _load_cleaners(self):
-        self.SetStatusText(_('Loading cleaners\u2026'))
+        self.SetStatusText(_('Loading native cleaners\u2026'))
         self.gauge.Pulse()
         # Disable action buttons until registration finishes.
         self.btn_preview.Disable()
@@ -844,7 +879,7 @@ class MainFrame(wx.Frame):
                     if o_id == oid:
                         oname = o_name
                         break
-            label = _('%(cleaner)s \u2014 %(option)s') % {
+            label = _('%(cleaner)s - %(option)s') % {
                 'cleaner': cname, 'option': oname}
             mi_preview_one = menu.Append(
                 wx.ID_ANY, _('Preview only %s') % label)
@@ -884,7 +919,7 @@ class MainFrame(wx.Frame):
                 mi_uncheck_cleaner)
             menu.AppendSeparator()
         mi_deselect = menu.Append(
-            wx.ID_ANY, _('Deselect all options'))
+            wx.ID_ANY, _('Deselect All'))
         self.Bind(wx.EVT_MENU, self._on_deselect_all, mi_deselect)
         mi_safe = menu.Append(
             wx.ID_ANY, _('Select safe (cache, log, vacuum, temp)'))
@@ -902,8 +937,8 @@ class MainFrame(wx.Frame):
                 APP_NAME, wx.ICON_INFORMATION)
             return
         if really_delete:
-            msg = _('Are you sure you want to permanently delete '
-                    'the selected items?')
+            msg = _('Are you sure you want to permanently delete these '
+                    'files?')
             dlg = wx.MessageDialog(
                 self, msg, APP_NAME,
                 wx.YES_NO | wx.NO_DEFAULT | wx.ICON_WARNING)
@@ -944,7 +979,9 @@ class MainFrame(wx.Frame):
             self._no_selection()
             return
         msg = _(
-            'Are you sure you want to permanently delete the selected items?')
+            'Are you sure you want to permanently delete files according '
+            'to the selected operations?  The actual files that will be '
+            'deleted may have changed since you ran the preview.')
         dlg = wx.MessageDialog(
             self, msg, APP_NAME,
             wx.YES_NO | wx.NO_DEFAULT | wx.ICON_WARNING)
@@ -977,7 +1014,7 @@ class MainFrame(wx.Frame):
         info.SetName(APP_NAME)
         info.SetVersion(APP_VERSION + ' (wx MVP)')
         info.SetDescription(
-            _('Experimental wxPython front-end for BleachBit.'))
+            _('Program to clean unnecessary files'))
         wx.adv.AboutBox(info)
 
     def _on_close(self, evt):
@@ -1007,7 +1044,7 @@ class MainFrame(wx.Frame):
     # ------------------------------------------------------------------
     def _no_selection(self):
         wx.MessageBox(
-            _('You must select an operation.'),
+            _('You must select an operation'),
             APP_NAME, wx.ICON_INFORMATION)
 
     def _start_worker(self, really_delete, operations=None):
@@ -1474,7 +1511,7 @@ class MainFrame(wx.Frame):
         paths = []
         while True:
             dlg = wx.DirDialog(
-                self, _('Choose a folder to shred (Cancel to finish)'),
+                self, _('Choose folder to shred'),
                 style=wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST,
             )
             try:
@@ -1499,8 +1536,8 @@ class MainFrame(wx.Frame):
                 self.Close()
             return
         if options.get('delete_confirmation'):
-            msg = _('Permanently delete the %d selected item(s)?  '
-                    'This cannot be undone.') % len(paths)
+            msg = _('Are you sure you want to permanently delete these '
+                    'files?')
             dlg = wx.MessageDialog(
                 self, msg, APP_NAME,
                 wx.YES_NO | wx.NO_DEFAULT | wx.ICON_WARNING)

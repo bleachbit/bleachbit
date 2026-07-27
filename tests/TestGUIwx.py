@@ -120,6 +120,16 @@ class GUIwxTestCase(common.BleachbitTestCase):
             loader.join(timeout=5.0)
         self.assertIs(self.app.GetTopWindow(), self.frame)
 
+    def test_gtk_menu_mnemonics_are_converted_for_wx(self):
+        """GTK catalog labels retain mnemonics without leaking syntax."""
+        convert = self.MainFrameModule._gtk_mnemonic_to_wx
+        self.assertEqual('&Shred Files', convert('_Shred Files'))
+        self.assertEqual('Sh&red Folders', convert('Sh_red Folders'))
+        self.assertEqual(
+            'Literal _ underscore && ampersand',
+            convert('Literal __ underscore & ampersand'))
+        self.assertEqual('Trailing_', convert('Trailing_'))
+
     def test_cleaner_tree_model_filters_and_toggles(self):
         """Test _CleanerTreeModel filtering and check-state toggles."""
         model = self.MainFrameModule._CleanerTreeModel()
