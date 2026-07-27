@@ -12,6 +12,7 @@ import getpass
 import os
 import re
 import sys
+import warnings
 
 from bleachbit import IS_POSIX, IS_WINDOWS
 
@@ -139,7 +140,36 @@ def bootstrap():
         return
     _bootstrapped = True
     _apply_fontconfig_backend_preference()
+    _suppress_pygobject_asyncio_deprecations()
     if IS_WINDOWS:
         _bootstrap_windows()
     elif IS_POSIX:
         _bootstrap_posix()
+
+
+def _suppress_pygobject_asyncio_deprecations():
+    """Globally ignore PyGObject's asyncio deprecation warnings on Python 3.14+.
+
+    PyGObject 3.56 calls ``asyncio.get_event_loop_policy()`` (deprecated in
+    Python 3.14, removed in 3.16) from inside ``Gtk.main_iteration_do()`` and
+    ``Gtk.Application.run()``.  If this warning is not suppressed globally,
+    it surfaces as a red error in the GUI log: ``Worker.run()`` captures all
+    warnings via ``catch_warnings(record=True)`` and re-logs them as
+    ``logger.warning()``, which ``GtkLoggerHandler`` tags as ``'error'``.
+
+    Installing the filter once here (before any thread starts) avoids the
+    race condition that per-call ``catch_warnings()`` suppressors have when
+    a background ``GtkWorkerThread`` enters its own ``catch_warnings()``.
+    """
+    if sys.version_info < (3, 14):
+        return
+    warnings.filterwarnings(
+        "ignore",
+        message=r".*asyncio\.get_event_loop_policy.*",
+        category=DeprecationWarning,
+    )
+    warnings.filterwarnings(
+        "ignore",
+        message=r".*asyncio\.AbstractEventLoopPolicy.*",
+        category=DeprecationWarning,
+    )

@@ -185,11 +185,39 @@ class BleachbitTestCase(unittest.TestCase):
         """
         bootstrap()
         warnings.simplefilter("error")
+        cls._install_py314_asyncio_filters()
         cls.tempdir = tempfile.mkdtemp(prefix=cls.__name__)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             cls._patch_options_paths()
         bleachbit.Options.options.reset_overrides()
         bleachbit.Options.options.set_override("first_start", False)
+
+    @staticmethod
+    def _install_py314_asyncio_filters():
+        """Ignore asyncio event-loop-policy deprecation warnings on Python 3.14+.
+
+        PyGObject calls ``asyncio.get_event_loop_policy()`` (deprecated in
+        Python 3.14, removed in 3.16) from inside ``Gtk.main_iteration_do()``.
+        The warning must be suppressed in the *current* warnings-filter scope
+        rather than inside a per-call ``catch_warnings()`` in ``refresh_gui()``:
+        ``test_shred_paths`` runs a background ``GtkWorkerThread`` whose own
+        ``catch_warnings()`` (inside PyGObject/asyncio) can race with the main
+        thread's ``catch_warnings()``, causing the ignore filter to be applied
+        to the wrong filter-list copy and silently dropped.  Installing the
+        filter in the active scope (``setUpClass``/``setUp``) makes it visible
+        to every copy of the filter list, including the worker thread's.
+        """
+        if sys.version_info >= (3, 14):
+            warnings.filterwarnings(
+                "ignore",
+                message=r".*asyncio\.get_event_loop_policy.*",
+                category=DeprecationWarning,
+            )
+            warnings.filterwarnings(
+                "ignore",
+                message=r".*asyncio\.AbstractEventLoopPolicy.*",
+                category=DeprecationWarning,
+            )
 
     @classmethod
     def _patch_options_paths(cls):
@@ -275,6 +303,9 @@ class BleachbitTestCase(unittest.TestCase):
         if os.path.exists(bleachbit.options_file):
             with open(bleachbit.options_file, 'rb') as f:
                 self._options_file_snapshot = f.read()
+        # Re-install the asyncio deprecation filters for this test's
+        # catch_warnings() scope (setUpClass ran in a different scope).
+        self._install_py314_asyncio_filters()
 
     def tearDown(self):
         """Call after each test method; restore options file, reload Options"""

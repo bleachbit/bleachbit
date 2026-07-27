@@ -298,6 +298,21 @@ class Worker:
             # the log.
 
             warnings.simplefilter('once')
+            # simplefilter('once') prepends a catch-all filter that would
+            # capture PyGObject's asyncio deprecation warnings and re-log
+            # them as red errors in the GUI.  Re-install the ignore filter
+            # so it takes precedence over the 'once' filter.
+            if sys.version_info >= (3, 14):
+                warnings.filterwarnings(
+                    "ignore",
+                    message=r".*asyncio\.get_event_loop_policy.*",
+                    category=DeprecationWarning,
+                )
+                warnings.filterwarnings(
+                    "ignore",
+                    message=r".*asyncio\.AbstractEventLoopPolicy.*",
+                    category=DeprecationWarning,
+                )
             for _dummy in self.run_operations(self.operations):
                 # yield to GTK+ idle loop
                 yield True
