@@ -961,6 +961,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertTrue(not detect_registry_key(
             'HKCU\\Software\\DoesNotExist'))
 
+    @pytest.mark.xdist_group('gui')
     def test_get_clipboard_paths(self):
         """Unit test for get_clipboard_paths"""
         # The clipboard is an unknown state, so check the function does
@@ -990,7 +991,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         args = ('powershell.exe', 'Set-Clipboard',
                 '-Path', r'c:\windows\*.exe')
         (ext_rc, _stdout, _stderr) = General.run_external(args)
-        self.assertEqual(ext_rc, 0)
+        # It may print "Requested Clipboard operation did not succeed" to stderr.
+        self.assertEqual(ext_rc, 0, f"powershell.exe failed with return code {ext_rc}: {_stderr}")
         paths = get_clipboard_paths()
         self.assertIsInstance(paths, (type(None), tuple))
         self.assertGreater(len(paths), 1)
