@@ -555,7 +555,9 @@ class GUITestCase(common.BleachbitTestCase):
             # same as b = self.click_button(gui, _("Clean"))
             gui.run_operations(None)
 
-        self.refresh_gui()
+        # run_operations runs the delete on a background GtkWorkerThread, so
+        # wait for the worker to finish before asserting the file is gone.
+        self.assertTrue(self.wait_until(lambda: not os.path.exists(file_to_clean)))
         self.assertNotExists(file_to_clean)
 
     def test_cb_run_option(self):
@@ -569,6 +571,18 @@ class GUITestCase(common.BleachbitTestCase):
                     None, really_delete, self._NEW_CLEANER_ID, self._NEW_OPTION_ID
                 )  # activated from context menu
 
+            # cb_run_option runs preview/delete on a background GtkWorkerThread,
+            # so wait for the worker to finish before asserting the file state.
+            # For preview (really_delete=False) the file is not removed, but we
+            # still wait for the worker to drain so it does not race with the
+            # delete worker started on the next loop iteration.
+            if really_delete:
+                self.assertTrue(
+                    self.wait_until(lambda: not os.path.exists(file_to_clean)))
+            else:
+                self.assertTrue(self.wait_until(
+                    lambda: getattr(gui, 'worker', None) is None
+                    or not gui.worker.is_alive()))
             self.refresh_gui()
             assert_method(file_to_clean)
 
