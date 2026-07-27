@@ -490,7 +490,7 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertTrue(self.wait_until(
             lambda: test_file == clipboard.wait_for_text()))
 
-        targets = [Gdk.atom_intern_static_string('text/plain')]
+        targets = [Gdk.Atom.intern('text/plain', False)]
         self.app.cb_clipboard_uri_received(clipboard, targets, None)
         self.assertTrue(self.wait_until(lambda: not os.path.exists(test_file)))
         self.assertNotExists(test_file)

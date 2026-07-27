@@ -84,10 +84,27 @@ def get_clipboard_paths(clipboard=None, targets=None):
 
     # Compare names: an interned Gdk.Atom does not reliably compare equal to
     # the atom for the same name in the target list.
-    targets_by_name = {target.name(): target for target in targets}
+    targets_by_name = {}
+    has_unusable_target_name = False
+    for target in targets:
+        try:
+            target_name = target.name()
+        except UnicodeDecodeError:
+            has_unusable_target_name = True
+            logger.debug('Failed to decode clipboard target name', exc_info=True)
+        else:
+            if target_name == 'Gdk.Atom':
+                has_unusable_target_name = True
+            else:
+                targets_by_name[target_name] = target
 
     shred_paths = []
     uri_target = targets_by_name.get('text/uri-list')
+    if uri_target is None and has_unusable_target_name:
+        # Use intern(), not atom_intern_static_string(), which keeps a raw
+        # pointer to our string instead of copying it and can corrupt the
+        # atom once that string is garbage collected.
+        uri_target = Gdk.Atom.intern('text/uri-list', False)
     if uri_target is not None:
         # Linux
         shred_uri_contents = clipboard.wait_for_contents(uri_target)

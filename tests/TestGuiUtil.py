@@ -138,7 +138,7 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
                 """Return mock clipboard contents"""
                 return ClipboardContents()
 
-        targets = [Gdk.atom_intern_static_string('text/uri-list')]
+        targets = [Gdk.Atom.intern('text/uri-list', False)]
 
         get1 = get_clipboard_paths(Clipboard(), targets)
         get2 = get_clipboard_paths(Clipboard(), targets)
@@ -185,6 +185,40 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
             with self.subTest(target=target_name):
                 self.assertEqual(self.paths, get_clipboard_paths(
                     Clipboard(), [Target(target_name)]))
+
+    @common.skipIfWindows
+    def test_get_clipboard_paths_unusable_target_name(self):
+        """Fall back to a fresh atom when a target's name cannot be decoded.
+
+        Regression test for a real-world bug where Gdk.atom_intern_static_string()
+        returned an atom whose name() raised UnicodeDecodeError.
+        """
+        uris = [Path(path).as_uri() for path in self.paths]
+
+        class UnusableTarget:
+            """Stand-in for a Gdk.Atom with a corrupted, undecodable name"""
+
+            def name(self):
+                """Simulate a corrupted atom name"""
+                raise UnicodeDecodeError(
+                    'utf-8', b'\xff', 0, 1, 'invalid start byte')
+
+        class ClipboardContents:
+            """Mock clipboard contents for testing"""
+
+            def get_uris(self):
+                """Return the URIs"""
+                return uris
+
+        class Clipboard:
+            """Mock clipboard for testing"""
+
+            def wait_for_contents(self, _target):
+                """Return mock clipboard contents"""
+                return ClipboardContents()
+
+        result = get_clipboard_paths(Clipboard(), [UnusableTarget()])
+        self.assertEqual(self.paths, result)
 
     @common.skipUnlessWindows
     @pytest.mark.xdist_group('gui')
