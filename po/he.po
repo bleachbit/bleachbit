@@ -6,18 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-07-12 15:23-0600\n"
-"PO-Revision-Date: 2026-06-08 18:01+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/he/"
-">\n"
+"PO-Revision-Date: 2026-07-28 13:01+0000\n"
+"Last-Translator: \"Omer I.S.\" <omeritzicschwartz@gmail.com>\n"
+"Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/"
+"he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -725,7 +725,7 @@ msgstr "התאוששות, המשכיות וחזרה להפעלות קודמות 
 #. In Claude Code: captured shell environment used by the Bash tool
 #: ../cleaners/claude.xml
 msgid "Shell snapshots"
-msgstr ""
+msgstr "תמונות מצב של שורת הפקודה"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -744,6 +744,8 @@ msgid ""
 "This option is slow. Inspect the preview for files you want to keep, like "
 "those bundled with applications."
 msgstr ""
+"אפשרות זו תיקח זמן רב. נא לעיין בתצוגה המקדימה כדי לראות אילו קבצים היית "
+"רוצה לשמור, כמו אלה שהגיעו עם יישומים."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
@@ -1092,6 +1094,8 @@ msgid ""
 "compatible version for your system, click OK. To exit the installer, click "
 "Cancel."
 msgstr ""
+"גרסה זו של BleachBit דורשת Windows 10 ומעלה. יש ללחוץ על אישור בשביל להוריד "
+"גרסה תואמת למחשבך. כדי לצאת מאשף ההתקנה, יש ללחוץ על ביטול."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
@@ -1263,6 +1267,11 @@ msgid ""
 "See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-"
 "questions.html"
 msgstr ""
+"לצורך הרצת יישום עם ממשק משתמש גרפי עם הרשאות שורש ב־Wayland, נא לאפשר גישה "
+"בעזרת הפקודה הבאה:\n"
+"xhost si:localuser:root\n"
+"ניתן למצוא מידע נוסף על הפקודה xhost בכתובת https://docs.bleachbit.org/doc/"
+"frequently-asked-questions.html"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1348,7 +1357,7 @@ msgstr "אפשרות זו הינה נסיונית ועלולה לגרום לבע
 #. TRANSLATORS: This is a label for the option to clear the system DNS cache.
 #: ../bleachbit/Cleaner.py
 msgid "DNS cache"
-msgstr ""
+msgstr "מטמון DNS"
 
 #. TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py
@@ -2931,14 +2940,14 @@ msgstr "נדרשות הרשאות מנהל כדי לנקות עדכוני Window
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "stop Windows service %(service)s"
-msgstr ""
+msgstr "עצירת שירות ה־Windows‏ %(service)s"
 
 #. TRANSLATORS: Message in log file when starting a Windows service.
 #. The placeholder is the code name of the service.
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "start Windows service %(service)s"
-msgstr ""
+msgstr "הפעלת שירות ה־Windows ‏%(service)s"
 
 #: ../bleachbit/Wipe.py
 msgid ""
@@ -3067,7 +3076,7 @@ msgstr ""
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Please wait.  Cleaning %s."
-msgstr "נא להמתין, כעת בניקוי %s."
+msgstr "נא להמתין.  מתבצע ניקוי של נתוני %s."
 
 #: ../bleachbit/Worker.py
 #, python-format
