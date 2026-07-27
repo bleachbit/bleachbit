@@ -13,7 +13,11 @@ permissions:
 jobs:
   update-desktop:
     if: github.repository == 'bleachbit/bleachbit'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
+    # Normal runtime on ubuntu-latest is 30 to 60 seconds, but 2
+    # minutes was observed. Python setup and dependencies take
+    # the longest.
+    timeout-minutes: 10
     permissions:
       contents: write # commit and push localization files
 
