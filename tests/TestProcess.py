@@ -16,7 +16,7 @@ from unittest import mock
 import psutil
 
 from bleachbit import IS_WINDOWS
-from bleachbit.General import get_real_username, sudo_mode
+from bleachbit.General import get_real_username, resolve_exe, sudo_mode
 from bleachbit.Process import (
     _enumerate_proc_fs,
     _enumerate_ps_aux,
@@ -84,7 +84,7 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
         self.assertEqual(result, expected)
         mock_check_output.assert_called_once()
         call = mock_check_output.call_args
-        self.assertEqual(call.args[0], ['/bin/ps', 'aux', '-c'])
+        self.assertEqual(call.args[0], [resolve_exe('ps'), 'aux', '-c'])
         self.assertTrue(call.kwargs.get('universal_newlines'))
         # the child's env is sanitized (LD_*/DYLD_* dropped when root)
         self.assertIn('env', call.kwargs)

@@ -237,7 +237,7 @@ def _is_broken_xdg_desktop_application(config, desktop_pathname):
 
 def find_available_locales():
     """Returns a list of available locales using locale -a"""
-    rc, stdout, stderr = General.run_external(['/usr/bin/locale', '-a'])
+    rc, stdout, stderr = General.run_external([General.resolve_exe('locale'), '-a'])
     if rc == 0:
         return stdout.strip().split('\n')
 
@@ -598,7 +598,7 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
 def journald_clean():
     """Clean the system journals"""
     try:
-        return run_cleaner_cmd('/usr/bin/journalctl', ['--vacuum-size=1'], JOURNALD_REGEX)
+        return run_cleaner_cmd(General.resolve_exe('journalctl'), ['--vacuum-size=1'], JOURNALD_REGEX)
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
@@ -612,7 +612,7 @@ def apt_autoremove():
     # After this operation, 44.0 kB disk space will be freed.
     freed_space_regex = r'.*, ([\d.]+ ?[a-zA-Z]{2}) disk space will be freed.'
     try:
-        return run_cleaner_cmd('/usr/bin/apt-get', args, freed_space_regex, ['^E: '])
+        return run_cleaner_cmd(General.resolve_exe('apt-get'), args, freed_space_regex, ['^E: '])
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
@@ -621,7 +621,7 @@ def apt_autoremove():
 def apt_autoclean():
     """Run 'apt-get autoclean' and return the size (un-rounded, in bytes) of freed space"""
     try:
-        return run_cleaner_cmd('/usr/bin/apt-get', ['autoclean'], r'^Del .*\[([\d.]+ ?[a-zA-Z]{2})\]', ['^E: '])
+        return run_cleaner_cmd(General.resolve_exe('apt-get'), ['autoclean'], r'^Del .*\[([\d.]+ ?[a-zA-Z]{2})\]', ['^E: '])
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
@@ -631,7 +631,7 @@ def apt_clean():
     """Run 'apt-get clean' and return the size in bytes of freed space"""
     old_size = get_apt_size()
     try:
-        run_cleaner_cmd('/usr/bin/apt-get', ['clean'], '^unused regex$', ['^E: '])
+        run_cleaner_cmd(General.resolve_exe('apt-get'), ['clean'], '^unused regex$', ['^E: '])
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
@@ -641,7 +641,8 @@ def apt_clean():
 
 def get_apt_size():
     """Return the size of the apt cache (in bytes)"""
-    (_rc, stdout, _stderr) = General.run_external(['/usr/bin/apt-get', '-s', 'clean'])
+    (_rc, stdout, _stderr) = General.run_external(
+        [General.resolve_exe('apt-get'), '-s', 'clean'])
     paths = re.findall(r'/[/a-z\.\*]+', stdout)
     return get_globs_size(paths)
 
@@ -669,7 +670,7 @@ def yum_clean():
     args = ['--enablerepo=*', 'clean', 'all']
     invalid = ['You need to be root', 'Cannot remove rpmdb file']
     try:
-        run_cleaner_cmd('/usr/bin/yum', args, '^unused regex$', invalid)
+        run_cleaner_cmd(General.resolve_exe('yum'), args, '^unused regex$', invalid)
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(str(part) for part in e.cmd)}':\n{e.output}") from e
@@ -683,7 +684,7 @@ def dnf_clean():
         msg = _(
             "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "Dnf"
         raise RuntimeError(msg)
-    if not FileUtilities.exe_exists('/usr/bin/dnf'):
+    if not FileUtilities.exe_exists(General.resolve_exe('dnf')):
         raise RuntimeError(_('Executable not found: %s') % 'dnf')
     # DNF5 permits "clean all" as a non-root user, but it then cleans the
     # per-user cache (~/.cache/libdnf5) instead of the system cache
@@ -696,7 +697,7 @@ def dnf_clean():
     # DNF4 does not report freed space in its output, so infer effect
     # by measuring the delta in directory size.
     old_size = FileUtilities.getsizedir('/var/cache/dnf')
-    args = ['/usr/bin/dnf', '--enablerepo=*', 'clean', 'all']
+    args = [General.resolve_exe('dnf'), '--enablerepo=*', 'clean', 'all']
     invalid = ['You need to be root', 'Cannot remove rpmdb file']
     (rc, stdout, stderr) = General.run_external(args)
     allout = stdout + stderr
@@ -781,9 +782,9 @@ def dnf_autoremove():
         msg = _(
             "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "Dnf"
         raise RuntimeError(msg)
-    if not FileUtilities.exe_exists('/usr/bin/dnf'):
+    if not FileUtilities.exe_exists(General.resolve_exe('dnf')):
         raise RuntimeError(_('Executable not found: %s') % 'dnf')
-    cmd = ['/usr/bin/dnf', '-y', 'autoremove']
+    cmd = [General.resolve_exe('dnf'), '-y', 'autoremove']
     (rc, stdout, stderr) = General.run_external(cmd)
     freed_bytes = 0
     allout = stdout + stderr
@@ -844,9 +845,10 @@ def pacman_cache():
         msg = _(
             "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "pacman"
         raise RuntimeError(msg)
-    if not exe_exists('/usr/bin/paccache'):
+    paccache = General.resolve_exe('paccache')
+    if not exe_exists(paccache):
         raise RuntimeError('paccache not found')
-    cmd = ['/usr/bin/paccache', '-rk0']
+    cmd = [paccache, '-rk0']
     (rc, stdout, stderr) = General.run_external(cmd)
     if rc > 0:
         raise RuntimeError(f'paccache raised error {rc}: {stderr}')
@@ -892,17 +894,17 @@ def snapd_is_active():
     global _snapd_is_active_cache  # pylint: disable=global-statement
     if _snapd_is_active_cache is not None:
         return _snapd_is_active_cache
-    if not exe_exists('/usr/bin/snap'):
+    if not exe_exists(General.resolve_exe('snap')):
         _snapd_is_active_cache = False
         return False
-    if not exe_exists('/usr/bin/systemctl'):
+    if not exe_exists(General.resolve_exe('systemctl')):
         _snapd_is_active_cache = False
         return False
     # When snap is installed but snapd is inactive, then `snap list --all`
     # or `snap version` may have a long delay, so we check the service status first.
     try:
         (rc, _stdout, _stderr) = General.run_external(
-            ['/usr/bin/systemctl', 'is-active', '--quiet', 'snapd.socket'],
+            [General.resolve_exe('systemctl'), 'is-active', '--quiet', 'snapd.socket'],
             timeout=5)
     except subprocess.TimeoutExpired:
         logger.warning(
@@ -930,7 +932,7 @@ def snap_disabled_full(really_delete):
         raise RuntimeError('snap not found or snapd is not active')
 
     # Get list of all snaps.
-    cmd = ['/usr/bin/snap', 'list', '--all']
+    cmd = [General.resolve_exe('snap'), 'list', '--all']
     try:
         (rc, stdout, stderr) = General.run_external(
             cmd, clean_env=True, timeout=15)
@@ -966,7 +968,8 @@ def snap_disabled_full(really_delete):
         # Remove the snap revision
         if really_delete:
             # Consider there may be a slow system with a large snap.
-            remove_cmd = ['/usr/bin/snap', 'remove', snapname, f'--revision={revision}']
+            remove_cmd = [General.resolve_exe('snap'), 'remove',
+                          snapname, f'--revision={revision}']
             try:
                 (rc, _, remove_stderr) = General.run_external(
                     remove_cmd, clean_env=True, timeout=60)
@@ -1014,7 +1017,7 @@ def is_unix_display_protocol_wayland():
         return False
     # Wayland (Ubuntu 23.10) sets DISPLAY=:0 like x11, so do not check DISPLAY.
     try:
-        (rc, stdout, _stderr) = General.run_external(['/usr/bin/loginctl'])
+        (rc, stdout, _stderr) = General.run_external([General.resolve_exe('loginctl')])
     except FileNotFoundError:
         return False
     if rc != 0:
@@ -1029,7 +1032,7 @@ def is_unix_display_protocol_wayland():
         logger.warning('unexpected session loginctl: %s', session)
         return False
     result = General.run_external(
-        ['/usr/bin/loginctl', 'show-session', session, '-p', 'Type'])
+        [General.resolve_exe('loginctl'), 'show-session', session, '-p', 'Type'])
     return 'wayland' in result[1].lower()
 
 
@@ -1040,7 +1043,7 @@ def root_is_not_allowed_to_X_session():
     """
     assert IS_POSIX
     try:
-        result = General.run_external(['/usr/bin/xhost'], clean_env=False)
+        result = General.run_external([General.resolve_exe('xhost')], clean_env=False)
         xhost_returned_error = result[0] == 1
         return xhost_returned_error
     except (FileNotFoundError, OSError) as exc:
@@ -1069,10 +1072,10 @@ def flush_dns():
     Returns 0 on success.
     Raises RuntimeError on failure.
     """
-    if exe_exists('/usr/bin/resolvectl'):
-        args = ['/usr/bin/resolvectl', 'flush-caches']
-    elif exe_exists('/usr/bin/systemd-resolve'):
-        args = ['/usr/bin/systemd-resolve', '--flush-caches']
+    if exe_exists(General.resolve_exe('resolvectl')):
+        args = [General.resolve_exe('resolvectl'), 'flush-caches']
+    elif exe_exists(General.resolve_exe('systemd-resolve')):
+        args = [General.resolve_exe('systemd-resolve'), '--flush-caches']
     else:
         raise RuntimeError('Neither resolvectl nor systemd-resolve found')
     (rc, stdout, stderr) = General.run_external(args)

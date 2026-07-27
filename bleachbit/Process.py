@@ -127,13 +127,13 @@ def _enumerate_proc_fs():
 
 def _enumerate_ps_aux():
     """ps aux strategy (BSD/macOS)"""
-    from bleachbit.General import get_real_username, sanitize_root_env
+    from bleachbit.General import (get_real_username, resolve_exe,
+                                   sanitize_root_env)
     current_user = get_real_username()
-    # macOS 26 (Tahoe) has /bin/ps.
     # sanitize the env so a hostile inherited LD_*/DYLD_* cannot redirect
     # this child when BleachBit runs as root.
     ps_out = subprocess.check_output(
-        ["/bin/ps", "aux", "-c"], universal_newlines=True,
+        [resolve_exe('ps'), "aux", "-c"], universal_newlines=True,
         env=sanitize_root_env(dict(os.environ)))
     first_line = ps_out.split('\n', maxsplit=1)[0].strip()
     if "USER" not in first_line or "COMMAND" not in first_line:

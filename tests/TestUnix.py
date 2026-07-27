@@ -18,7 +18,7 @@ import unittest
 from xml.dom.minidom import parseString
 
 from tests import common
-from bleachbit import logger
+from bleachbit import General, logger
 from bleachbit.FileUtilities import children_in_directory, exe_exists, getsize
 from bleachbit.VFS import ListVFS
 from bleachbit.Unix import (
@@ -82,7 +82,7 @@ class UnixTestCase(common.BleachbitTestCase):
     @common.skipIfWindows
     def test_apt(self):
         """Unit test for method apt_autoclean() and apt_autoremove()"""
-        if 0 != os.geteuid() or not exe_exists('/usr/bin/apt-get'):
+        if 0 != os.geteuid() or not exe_exists(General.resolve_exe('apt-get')):
             self.assertRaises(RuntimeError, apt_autoclean)
             self.assertRaises(RuntimeError, apt_autoremove)
         else:
@@ -128,7 +128,7 @@ class UnixTestCase(common.BleachbitTestCase):
                 0, "\n".join(mock_locales) + "\n", "")
             locales = find_available_locales()
             self.assertEqual(locales, mock_locales)
-            mock_run_external.assert_called_once_with(['/usr/bin/locale', '-a'])
+            mock_run_external.assert_called_once_with([General.resolve_exe('locale'), '-a'])
 
     @mock.patch('locale.getlocale')
     @mock.patch('bleachbit.Unix.find_available_locales')
@@ -185,7 +185,7 @@ class UnixTestCase(common.BleachbitTestCase):
         self.assertRaises(AssertionError, find_best_locale, None)
         self.assertRaises(AssertionError, find_best_locale, [])
 
-    @unittest.skipUnless(exe_exists('/usr/bin/apt-get'),
+    @unittest.skipUnless(exe_exists(General.resolve_exe('apt-get')),
                          'skipping tests for unavailable apt-get')
     def test_get_apt_size(self):
         """Unit test for method get_apt_size()"""
@@ -491,7 +491,7 @@ PrefersNonDefaultGPU=false""")
 
     @common.skipIfWindows
     def test_journald_clean(self):
-        if not exe_exists('/usr/bin/journalctl'):
+        if not exe_exists(General.resolve_exe('journalctl')):
             self.assertRaises(RuntimeError, journald_clean)
         else:
             try:
@@ -707,7 +707,7 @@ PrefersNonDefaultGPU=false""")
     def test_yum_clean(self):
         """Unit test for yum_clean()"""
         if 0 != os.geteuid() or os.path.exists('/var/run/yum.pid') \
-                or not exe_exists('/usr/bin/yum'):
+                or not exe_exists(General.resolve_exe('yum')):
             self.assertRaises(RuntimeError, yum_clean)
         else:
             bytes_freed = yum_clean()
@@ -718,7 +718,7 @@ PrefersNonDefaultGPU=false""")
     def test_dnf_clean(self):
         """Unit test for dnf_clean()"""
         if 0 != os.geteuid() or os.path.exists('/var/run/dnf.pid') \
-                or not exe_exists('/usr/bin/dnf'):
+                or not exe_exists(General.resolve_exe('dnf')):
             self.assertRaises(RuntimeError, dnf_clean)
         else:
             bytes_freed = dnf_clean()
@@ -731,8 +731,8 @@ PrefersNonDefaultGPU=false""")
     @mock.patch('bleachbit.Unix.FileUtilities.exe_exists')
     @mock.patch('bleachbit.Unix.General.run_external')
     @mock.patch('bleachbit.Unix.FileUtilities.getsizedir')
-    @mock.patch('bleachbit.Unix.os.path')
-    def test_dnf_clean_mock(self, mock_path, mock_getsizedir, mock_run,
+    @mock.patch('bleachbit.Unix.os.path.exists')
+    def test_dnf_clean_mock(self, mock_path_exists, mock_getsizedir, mock_run,
                             mock_exe, mock_geteuid, mock_setup):
         """Unit test for dnf_clean() with mock for DNF4 and DNF5"""
         # Don't call setup_translation() for real because it uses
@@ -742,11 +742,11 @@ PrefersNonDefaultGPU=false""")
         # short-circuit the rest of the logic under test.
         mock_geteuid.return_value = 0
         mock_exe.return_value = True
-        mock_path.exists.return_value = True
+        mock_path_exists.return_value = True
         # dnf.pid present -> RuntimeError
         self.assertRaises(RuntimeError, dnf_clean)
 
-        mock_path.exists.return_value = False
+        mock_path_exists.return_value = False
 
         # DNF5 reports freed space directly in its summary line, so the
         # getsizedir fallback (post-run measurement) must not be used.
@@ -800,7 +800,7 @@ PrefersNonDefaultGPU=false""")
     def test_dnf_autoremove_real(self):
         """Unit test for dnf_autoremove() with real dnf"""
         if 0 != os.geteuid() or os.path.exists('/var/run/dnf.pid') \
-                or not exe_exists('/usr/bin/dnf'):
+                or not exe_exists(General.resolve_exe('dnf')):
             self.assertRaises(RuntimeError, dnf_autoremove)
         else:
             bytes_freed = dnf_autoremove()
@@ -810,19 +810,19 @@ PrefersNonDefaultGPU=false""")
     @common.skipIfWindows
     @mock.patch('bleachbit.Language.setup_translation')
     @mock.patch('bleachbit.Unix.FileUtilities.exe_exists')
-    @mock.patch('bleachbit.Unix.os.path')
+    @mock.patch('bleachbit.Unix.os.path.exists')
     @mock.patch('bleachbit.General.run_external')
-    def test_dnf_autoremove_mock(self, mock_run, mock_path, mock_exe,
+    def test_dnf_autoremove_mock(self, mock_run, mock_path_exists, mock_exe,
                                  mock_setup):
         """Unit test for dnf_autoremove() with mock"""
         # Don't call setup_translation() for real because it uses
         # os.path.exists(), which is mocked here.
         mock_setup.return_value = None
         mock_exe.return_value = True
-        mock_path.exists.return_value = True
+        mock_path_exists.return_value = True
         self.assertRaises(RuntimeError, dnf_autoremove)
 
-        mock_path.exists.return_value = False
+        mock_path_exists.return_value = False
 
         # dnf not installed -> RuntimeError.
         mock_exe.return_value = False
@@ -927,7 +927,7 @@ PrefersNonDefaultGPU=false""")
     def test_pacman_cache(self):
         """Unit test for pacman_cache()"""
         if 0 != os.geteuid() or os.path.exists('/var/lib/pacman/db.lck') \
-                or not exe_exists('/usr/bin/paccache'):
+                or not exe_exists(General.resolve_exe('paccache')):
             self.assertRaises(RuntimeError, pacman_cache)
         else:
             bytes_freed = pacman_cache()
@@ -937,10 +937,10 @@ PrefersNonDefaultGPU=false""")
     @common.skipIfWindows
     @mock.patch('bleachbit.Unix.General.run_external')
     @mock.patch('bleachbit.Unix.exe_exists')
-    @mock.patch('bleachbit.Unix.os.path')
-    def test_pacman_cache_mock(self, mock_path, mock_exe_exists, mock_run):
+    @mock.patch('bleachbit.Unix.os.path.exists')
+    def test_pacman_cache_mock(self, mock_path_exists, mock_exe_exists, mock_run):
         """Unit test pacman_cache() parse logic without pacman installed"""
-        mock_path.exists.return_value = False
+        mock_path_exists.return_value = False
         mock_exe_exists.return_value = True
         mock_run.return_value = (
             0,
@@ -951,7 +951,7 @@ PrefersNonDefaultGPU=false""")
         bytes_freed = pacman_cache()
         self.assertEqual(bytes_freed, 42310000)
 
-        mock_run.assert_called_once_with(['/usr/bin/paccache', '-rk0'])
+        mock_run.assert_called_once_with([General.resolve_exe('paccache'), '-rk0'])
 
         # real paccache reports binary units (MiB), not decimal (M)
         mock_run.return_value = (
@@ -996,7 +996,7 @@ PrefersNonDefaultGPU=false""")
     @common.skipUnlessDestructive
     def test_snap_disabled_clean(self):
         """Unit test for snap_disabled_clean()"""
-        if not exe_exists('/usr/bin/snap'):
+        if not exe_exists(General.resolve_exe('snap')):
             self.assertRaises(RuntimeError, snap_disabled_clean)
         else:
             bytes_freed = snap_disabled_clean()
@@ -1006,7 +1006,7 @@ PrefersNonDefaultGPU=false""")
     @common.skipIfWindows
     def test_snap_disabled_preview(self):
         """Unit test for snap_disabled_preview()"""
-        if not exe_exists('/usr/bin/snap'):
+        if not exe_exists(General.resolve_exe('snap')):
             self.assertRaises(RuntimeError, snap_disabled_preview)
         else:
             bytes_freed = snap_disabled_preview()
@@ -1112,7 +1112,7 @@ PrefersNonDefaultGPU=false""")
         error_code = None
 
         def side_effect_func(*args, **_kwargs):
-            self.assertEqual(args[0][0], '/usr/bin/xhost')
+            self.assertEqual(args[0][0], General.resolve_exe('xhost'))
             return (error_code,
                     '',
                     '')

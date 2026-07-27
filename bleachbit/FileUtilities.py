@@ -165,8 +165,9 @@ def open_files_lsof(run_lsof=None):
     if run_lsof is None:
         # macOS 26 (Tahoe) has /usr/sbin/lsof
         # FreeBSD has /usr/local/sbin/lsof
-        lsof_path = '/usr/sbin/lsof' if IS_MAC else '/usr/local/sbin/lsof'
-        from bleachbit.General import sanitize_root_env
+        from bleachbit.General import resolve_exe, sanitize_root_env
+        lsof_path = resolve_exe(
+            'lsof', '/usr/sbin/lsof' if IS_MAC else '/usr/local/sbin/lsof')
 
         def run_lsof():
             # sanitize the env so a hostile inherited LD_*/DYLD_* cannot

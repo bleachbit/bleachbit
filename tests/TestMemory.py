@@ -14,7 +14,7 @@ from contextlib import contextmanager
 from unittest import mock
 
 from tests import common
-from bleachbit import logger
+from bleachbit import General, logger
 from bleachbit.FileUtilities import exe_exists
 from bleachbit.Memory import (
     _memory_child_script,
@@ -96,7 +96,7 @@ class MemoryTestCase(common.BleachbitTestCase):
     @common.skipUnlessLinux
     def test_get_proc_swaps(self):
         """Test for method get_proc_swaps"""
-        if not exe_exists('/usr/sbin/swapon'):
+        if not exe_exists(General.resolve_exe('swapon')):
             self.skipTest('swapon not found')
         ret = get_proc_swaps()
         self.assertGreater(len(ret), 10)
@@ -164,7 +164,7 @@ Swapouts:                              20258188.
             physical_free_darwin()
         mock_check_output.assert_called_once()
         call = mock_check_output.call_args
-        self.assertEqual(call.args[0], ['/usr/bin/vm_stat'])
+        self.assertEqual(call.args[0], [General.resolve_exe('vm_stat')])
         self.assertTrue(call.kwargs.get('text'))
         # the child's env is sanitized (LD_*/DYLD_* dropped when root)
         self.assertIn('env', call.kwargs)
@@ -207,7 +207,7 @@ Swapouts:                              20258188.
     @common.skipUnlessLinux
     def test_get_swap_size_linux(self):
         """Test for get_swap_size_linux()"""
-        if not exe_exists('/usr/sbin/swapon'):
+        if not exe_exists(General.resolve_exe('swapon')):
             self.skipTest('swapon not found')
         with open('/proc/swaps', encoding='utf-8') as f:
             swapdev = f.read().split('\n')[1].split(' ')[0]
@@ -226,7 +226,7 @@ Swapouts:                              20258188.
     @common.skipIfWindows
     def test_get_swap_uuid(self):
         """Test for method get_swap_uuid"""
-        if not exe_exists('/usr/sbin/blkid'):
+        if not exe_exists(General.resolve_exe('blkid')):
             self.skipTest('blkid not found')
         self.assertEqual(get_swap_uuid('/dev/doesnotexist'), None)
 
@@ -273,7 +273,7 @@ Swapouts:                              20258188.
         with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
             with mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')) as mock_run:
                 enable_swap_linux()
-                self.assertEqual(mock_run.call_args.args[0], ['/usr/sbin/swapon', '-a'])
+                self.assertEqual(mock_run.call_args.args[0], [General.resolve_exe('swapon'), '-a'])
 
         # Failure
         with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
@@ -343,7 +343,9 @@ Swapouts:                              20258188.
         with mock.patch('bleachbit.FileUtilities.exe_exists', return_value=False):
             gen = wipe_memory()
             self.assertRaisesRegex(
-                RuntimeError, 'Command /usr/sbin/swapon not found', next, gen)
+                RuntimeError,
+                f"Command {General.resolve_exe('swapon')} not found",
+                next, gen)
 
         # Happy path via the fork fallback (systemd-run path disabled)
         self._assert_wipe_memory_happy_path(

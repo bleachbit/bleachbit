@@ -87,6 +87,29 @@ def sanitize_root_env(env):
     return env
 
 
+_STANDARD_EXE_DIRS = ('/usr/bin', '/usr/sbin', '/bin', '/sbin')
+
+
+def resolve_exe(name, *candidates):
+    """Return an absolute path to an executable, or name if none is found.
+
+    Checks the standard directories, or the given candidates instead, before
+    falling back to PATH for layouts that put the tool somewhere else (NixOS,
+    Alpine, an unmerged /usr). Skips user-writable PATH entries when root.
+    """
+    if not candidates:
+        candidates = tuple(os.path.join(d, name) for d in _STANDARD_EXE_DIRS)
+    for candidate in candidates:
+        if os.path.exists(candidate):
+            return candidate
+    search_path = os.environ.get('PATH') or os.defpath
+    if hasattr(os, 'geteuid') and 0 == os.geteuid():
+        search_path = os.pathsep.join(
+            d for d in search_path.split(os.pathsep)
+            if _path_dir_is_root_safe(d))
+    return shutil.which(name, path=search_path) or name
+
+
 #
 # XML
 #

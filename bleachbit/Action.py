@@ -348,7 +348,7 @@ class AptAutoclean(ActionProvider):
         assert IS_POSIX
         # If apt-get is not installed, then enable fast auto-hide.
         # The exe_exists() function is fast.
-        if not FileUtilities.exe_exists('/usr/bin/apt-get'):
+        if not FileUtilities.exe_exists(General.resolve_exe('apt-get')):
             return
         yield Command.Function(None,
                                # pylint: disable=possibly-used-before-assignment
@@ -365,7 +365,7 @@ class AptAutoremove(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        if not FileUtilities.exe_exists('/usr/bin/apt-get'):
+        if not FileUtilities.exe_exists(General.resolve_exe('apt-get')):
             return
         yield Command.Function(None,
                                Unix.apt_autoremove,
@@ -381,7 +381,7 @@ class AptClean(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        if not FileUtilities.exe_exists('/usr/bin/apt-get'):
+        if not FileUtilities.exe_exists(General.resolve_exe('apt-get')):
             return
         yield Command.Function(None,
                                Unix.apt_clean,
@@ -549,7 +549,7 @@ class Journald(ActionProvider):
 
     def get_commands(self):
         # If journalctl is not installed, then enable fast auto-hide.
-        if not FileUtilities.exe_exists('/usr/bin/journalctl'):
+        if not FileUtilities.exe_exists(General.resolve_exe('journalctl')):
             return
         yield Command.Function(None, Unix.journald_clean, 'journalctl --vacuum-time=1')
 
@@ -716,7 +716,7 @@ class YumCleanAll(ActionProvider):
 
     def get_commands(self):
         # If yum is not installed, then enable fast auto-hide.
-        if not FileUtilities.exe_exists('/usr/bin/yum'):
+        if not FileUtilities.exe_exists(General.resolve_exe('yum')):
             return
 
         yield Command.Function(
@@ -735,7 +735,7 @@ class DnfCleanAll(ActionProvider):
 
     def get_commands(self):
         # If dnf is not installed, then enable fast auto-hide.
-        if not FileUtilities.exe_exists('/usr/bin/dnf'):
+        if not FileUtilities.exe_exists(General.resolve_exe('dnf')):
             return
 
         yield Command.Function(
@@ -754,7 +754,7 @@ class DnfAutoremove(ActionProvider):
 
     def get_commands(self):
         # If dnf is not installed, then enable fast auto-hide.
-        if not FileUtilities.exe_exists('/usr/bin/dnf'):
+        if not FileUtilities.exe_exists(General.resolve_exe('dnf')):
             return
 
         yield Command.Function(
@@ -772,7 +772,7 @@ class PacmanCache(ActionProvider):
         ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
-        if not FileUtilities.exe_exists('/usr/bin/paccache'):
+        if not FileUtilities.exe_exists(General.resolve_exe('paccache')):
             return
 
         yield Command.Function(
