@@ -1127,7 +1127,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_RUN_AS_ADMIN ${LANG_HEBREW} "יש להריץ את התוכנית הזאת כמנהל."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_HEBREW} "$(^NameDA) מותקן גם לכל המשתמשים וגם למשתמש הנוכחי.$\r$\nנא לבחור איזו התקנה להסיר."
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_HEBREW} "נא לבחור לאילו משתמשים להסיר את $(^NameDA)."
-	LangString OLD_WINDOWS_WARNING ${LANG_HEBREW} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
+	LangString OLD_WINDOWS_WARNING ${LANG_HEBREW} "גרסה זו של BleachBit דורשת Windows 10 ומעלה. יש ללחוץ על אישור בשביל להוריד גרסה תואמת למחשבך. כדי לצאת מאשף ההתקנה, יש ללחוץ על ביטול."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_HEBREW} "אלו הקבצים הבסיסיים הנחוצים כדי ש־${prodname} יתפקד (חובה)."
 	LangString SECTION_CORE_NAME ${LANG_HEBREW} "קובצי ליבה (הכרחי)"
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_HEBREW} "יצירת קיצור דרך על שולחן העבודה."
