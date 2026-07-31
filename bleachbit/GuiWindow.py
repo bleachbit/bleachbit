@@ -939,7 +939,7 @@ class GUI(Gtk.ApplicationWindow):
         # show the context menu
         menu.attach_to_widget(treeview)
         menu.show_all()
-        menu.popup(None, None, None, None, event.button, event.time)
+        menu.popup_at_pointer(event)
         return True
 
     def setup_drag_n_drop(self):
