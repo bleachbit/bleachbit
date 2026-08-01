@@ -667,7 +667,23 @@ def execute_sqlite3(path, cmds):
     import sqlite3
     assert isinstance(path, str)
     assert isinstance(cmds, str)
-    with contextlib.closing(sqlite3.connect(path)) as conn:
+    try:
+        conn = sqlite3.connect(path)
+    except sqlite3.OperationalError as exc:
+        # sqlite3 raises a cryptic "unable to open database file" for a
+        # variety of causes (permission denied, read-only parent directory,
+        # locked file, ...). Translate it into the same OSError(EACCES)
+        # "Access denied" message users already see for locked files, or
+        # FileNotFoundError if the path is gone, so the Worker can surface a
+        # clean summary instead of an opaque traceback.
+        if not os.path.exists(path):
+            raise FileNotFoundError(
+                errno.ENOENT, "File not found when opening SQLite database",
+                path) from exc
+        raise OSError(
+            errno.EACCES,
+            "Access denied when opening SQLite database", path) from exc
+    with contextlib.closing(conn) as conn:
         # overwrites deleted content with zeros
         # https://www.sqlite.org/pragma.html#pragma_secure_delete
         if options.get('shred'):

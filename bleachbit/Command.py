@@ -211,8 +211,7 @@ class Function:
                     if 'no such collation sequence' in str(e):
                         logger.debug(str(e))
                         return
-                    logger.exception(e)
-                    return
+                    raise
                 try:
                     newsize = FileUtilities.getsize(self.path)
                 except OSError as e:
