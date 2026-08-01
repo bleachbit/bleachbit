@@ -352,7 +352,9 @@ def build_py2exe():
                      'pickle', 'ftplib', 'bleachbit.Unix', 'charset_normalizer',
                      'setuptools', 'pydoc_data', 'unittest', 'test',
                      'email', 'pygments', 'tomli', 'wheel', 'backports',
-                     'importlib_metadata', 'zipp', 'packaging', 'distutils'],
+                     'importlib_metadata', 'zipp', 'packaging', 'distutils',
+                     # Exclude TUI packages from the GTK build.
+                     'bleachbit.tui', 'bleachbit.tui.app', 'textual', 'tree_sitter', 'rich'],
         'dll_excludes': [
             'libgstreamer-1.0-0.dll',
             'CRYPT32.DLL',  # required by ssl
