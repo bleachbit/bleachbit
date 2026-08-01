@@ -1,5 +1,6 @@
 # Test/CI dependencies
-coverage==7.10.7
+coverage==7.15.2; python_version>='3.10'
+coverage==7.10.7; python_version<'3.10'
 # pytest 9+ does not support Python 3.9, but pytest 8 has
 # CVE-2025-71176. Python 3.9's CI never invoke pytest
 # (unittest only), so pytest 8 is never actually used.
