@@ -49,6 +49,7 @@ from bleachbit.Windows import (
     get_recycle_bin,
     get_windows_system_paths,
     get_windows_version,
+    elevate_privileges,
     is_junction,
     move_to_recycle_bin,
     parse_windows_build,
@@ -60,6 +61,7 @@ from bleachbit.Windows import (
     read_registry_key,
     get_sid_token_48,
     is_ots_elevation,
+    _add_command_line_parameters,
     get_splash_screen_delay_seconds,
     expand_windows_system_vars,
     SplashThread,
@@ -697,6 +699,46 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         with mock.patch('bleachbit.Windows.sys.argv', argv):
             with mock.patch('bleachbit.Windows.get_sid_token_48', side_effect=RuntimeError('error')):
                 self.assertFalse(is_ots_elevation())
+
+    def test_add_command_line_parameters_omits_duplicate_gui(self):
+        """UAC parameters already include --gui, so do not append it again."""
+        argv = ['bleachbit.exe', '--gui', '--exit']
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            self.assertEqual(
+                '--gui --no-uac --exit',
+                _add_command_line_parameters('--gui --no-uac'))
+
+    def test_add_command_line_parameters_context_menu_omits_duplicate_gui(self):
+        """Context-menu UAC parameters keep the quoted path but skip --gui."""
+        file_to_shred = r'C:\Users\test user\AppData\Local\Temp\delete me.txt'
+        argv = [
+            'bleachbit.exe',
+            '--gui',
+            '--no-delete-confirmation',
+            '--context-menu',
+            file_to_shred,
+        ]
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            self.assertEqual(
+                '--gui --no-uac --no-delete-confirmation --context-menu '
+                f'"{file_to_shred}"',
+                _add_command_line_parameters('--gui --no-uac'))
+
+    def test_elevate_privileges_omits_duplicate_gui(self):
+        """The elevated UAC command line should contain --gui only once."""
+        argv = ['bleachbit.exe', '--gui', '--exit']
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            with mock.patch('bleachbit.Windows.shell.IsUserAnAdmin', return_value=False):
+                with mock.patch('bleachbit.Windows.path_on_network', return_value=False):
+                    with mock.patch('bleachbit.Windows.get_sid_token_48', return_value='ABCDEFGH'):
+                        with mock.patch(
+                                'bleachbit.Windows.shell.ShellExecuteEx',
+                                return_value={'hProcess': object()}) as shell_exec:
+                            self.assertTrue(elevate_privileges(True))
+
+        parameters = shell_exec.call_args.kwargs['lpParameters']
+        self.assertEqual(1, parameters.split().count('--gui'))
+        self.assertIn('--exit', parameters)
 
     def test_splash_thread_reuses_cached_class_atom(self):
         """_register_window_class skips RegisterClass when cached."""
