@@ -833,10 +833,14 @@ def _add_command_line_parameters(parameters):
     """
     Add any command line parameters such as --debug-log.
     """
-    if '--context-menu' in sys.argv:
-        return '{} {} "{}"'.format(parameters, ' '.join(sys.argv[1:-1]), sys.argv[-1])
+    args = [arg for arg in sys.argv[1:] if arg != '--gui']
+    if '--context-menu' in args:
+        return '{} {} "{}"'.format(parameters, ' '.join(args[:-1]), args[-1])
 
-    return '{} {}'.format(parameters, ' '.join(sys.argv[1:]))
+    if not args:
+        return parameters
+
+    return '{} {}'.format(parameters, ' '.join(args))
 
 
 def empty_recycle_bin(path, really_delete):
