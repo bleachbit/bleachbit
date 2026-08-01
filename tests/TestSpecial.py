@@ -334,6 +334,7 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
 
     def tearDown(self):
         """Remove test browser files."""
+        super().tearDown()
         from bleachbit.General import gc_collect
         gc_collect()
         shutil.rmtree(self.dir_base)

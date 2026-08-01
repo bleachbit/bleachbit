@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-07-12 15:23-0600\n"
-"PO-Revision-Date: 2026-05-25 13:11+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
+"PO-Revision-Date: 2026-07-19 11:01+0000\n"
+"Last-Translator: Luiz Vaz Camoes <web.image590@passmail.net>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/bleachbit/"
 "main/pt/>\n"
 "Language: pt\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Launchpad-Export-Date: 2021-07-06 03:44+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -719,10 +719,8 @@ msgstr "Histórico de formulários"
 
 #. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the list of recently used documents"
 msgid "Delete the file history used for /restore"
-msgstr "Limpar lista de documentos recentes"
+msgstr "Eliminar o histórico de ficheiros utilizado para / restaurar"
 
 #. Description for deleting Claude Code sessions
 #: ../cleaners/claude.xml
@@ -738,7 +736,7 @@ msgstr ""
 #. In Claude Code: captured shell environment used by the Bash tool
 #: ../cleaners/claude.xml
 msgid "Shell snapshots"
-msgstr ""
+msgstr "Instantâneos do shell"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -757,6 +755,8 @@ msgid ""
 "This option is slow. Inspect the preview for files you want to keep, like "
 "those bundled with applications."
 msgstr ""
+"Esta opção é (está) lenta. Verifique na pré-visualização os ficheiros que "
+"pretende manter, como os que vêm incluídos nas aplicações."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
@@ -1128,6 +1128,9 @@ msgid ""
 "compatible version for your system, click OK. To exit the installer, click "
 "Cancel."
 msgstr ""
+"Esta versão do BleachBit requer o Windows 10 ou uma versão posterior. Para "
+"descarregar uma versão compatível com o seu sistema, clique em OK. Para sair "
+"do programa de instalação, clique em Cancelar."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
@@ -1304,6 +1307,11 @@ msgid ""
 "See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-"
 "questions.html"
 msgstr ""
+"Para executar uma aplicação GUI no Wayland com privilégios de root, autorize "
+"o acesso com este comando:\n"
+"xhost si:localuser:root\n"
+"Saiba mais sobre o xhost em https://docs.bleachbit.org/doc/frequently-asked-"
+"questions.ht"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1390,6 +1398,7 @@ msgstr "Esta opção é experimental e pode causar problemas."
 #: ../bleachbit/Cleaner.py
 msgid "DNS cache"
 msgstr ""
+"Esta é uma etiqueta para a opção que permite limpar a cache DNS do sistema."
 
 #. TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py
@@ -1987,7 +1996,7 @@ msgstr "Selecione a pasta de destino"
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error generating chaff: {error}"
-msgstr ""
+msgstr "Erro ao gerar chaff: {erro}"
 
 #. TRANSLATORS: Progress message shown while deleting chaff files.
 #. 'Deleting files' is a present participle.
@@ -2002,7 +2011,7 @@ msgstr "A eliminar ficheiros…"
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error deleting chaff files: {error}"
-msgstr ""
+msgstr "Erro ao eliminar ficheiros chaff: {erro}"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves

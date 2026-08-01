@@ -10,20 +10,22 @@ Test case for module GUI
 """
 
 import os
-import sys
 import unittest
 import time
 import types
 import warnings
 from unittest import mock
 
+from tests.common import pytest
+
 import bleachbit
 from bleachbit.Cleaner import backends
-from bleachbit.GtkShim import HAVE_GTK, Gdk, Gio, GLib, GObject, Gtk
+from bleachbit.GtkShim import Gdk, Gio, GLib, GObject, Gtk, is_gtk_available
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 from tests import common
 
+HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
     from bleachbit.GuiUtil import (clear_clipboard, get_font_size_from_name,
                                    get_window_info)
@@ -33,6 +35,7 @@ bleachbit.online_update_notification_enabled = False
 
 
 @unittest.skipUnless(HAVE_GTK, 'requires GTK+ module and a display environment')
+@pytest.mark.xdist_group('gui')
 class GUITestCase(common.BleachbitTestCase):
     app = None
     options_get_tree = options.get_tree
@@ -50,7 +53,9 @@ class GUITestCase(common.BleachbitTestCase):
         super().setUpClass()
         options.get_tree = types.MethodType(
             lambda self, parent, child: False, options)
-        options.set('font_check_completed', True)
+        # override, not set(): a plain set() is reverted by the per-test
+        # tearDown reload after the first test in the class
+        options.set_override('font_check_completed', True)
         try:
             cls.app.register()
         except GLib.GError as e:
@@ -87,22 +92,7 @@ class GUITestCase(common.BleachbitTestCase):
     @classmethod
     def refresh_gui(cls, delay=0):
         while Gtk.events_pending():
-            if sys.version_info >= (3, 14):
-                with warnings.catch_warnings():
-                    warnings.simplefilter("error")
-                    warnings.filterwarnings(
-                        "ignore",
-                        message=".*asyncio.AbstractEventLoopPolicy.*",
-                        category=DeprecationWarning
-                    )
-                    warnings.filterwarnings(
-                        "ignore",
-                        message=".*asyncio.get_event_loop_policy.*",
-                        category=DeprecationWarning
-                    )
-                    Gtk.main_iteration_do(blocking=False)
-            else:
-                Gtk.main_iteration_do(blocking=False)
+            Gtk.main_iteration_do(blocking=False)
         time.sleep(delay)
 
     @classmethod
@@ -179,6 +169,7 @@ class GUITestCase(common.BleachbitTestCase):
         self.refresh_gui()
         return condition()
 
+    @pytest.mark.no_xdist
     def test_append_text(self):
         """Test append_text handles special strings"""
         gui = self.get_window()
@@ -276,30 +267,55 @@ class GUITestCase(common.BleachbitTestCase):
     def test_chaff(self):
         """Minimal test of the chaff dialog"""
         from bleachbit import Chaff, GuiChaff
-        # common.py patches the download directory, so have_models() will return False.
-        if not Chaff.download_models():
-            self.skipTest('Unable to download chaff models for GUI test')
-        gui = self.get_window()
-        cd = GuiChaff.ChaffDialog(gui)
-        cd.show_all()
-        # Trigger missing-folder branch (no destination chosen)
-        cd.choose_folder_button.unselect_all()
-        self.refresh_gui()
-        cd.on_make_files(None)
-        self.refresh_gui()
-        self.assertTrue(cd.infobar.get_visible())
-        chaff_dst_dir = os.path.join(self.tempdir, 'chaff_dst')
-        os.mkdir(chaff_dst_dir)
-        cd.choose_folder_button.set_filename(chaff_dst_dir)
-        cd.when_finished_combo.set_active(1)  # do not delete after generation
-        cd.stop_value_spin.set_value(10)
-        self.refresh_gui()
-        self.click_button(cd, _("Make files"))
-        self.assertIsNotNone(
-            cd.thread, 'Chaff generation thread did not start')
-        cd.thread.join()
-        self.refresh_gui()
-        self.assertEqual(len(os.listdir(chaff_dst_dir)), 10)
+        # each function's models_dir default is frozen at def-time, so each needs its own patch
+        models_dir = os.path.join(self.tempdir, 'chaff_models')
+        os.makedirs(models_dir, exist_ok=True)
+        real_download_models = Chaff.download_models
+        real_generate_2600 = GuiChaff.generate_2600
+        real_generate_emails = GuiChaff.generate_emails
+
+        def isolated_download_models(*args, **kwargs):
+            kwargs.setdefault('models_dir', models_dir)
+            return real_download_models(*args, **kwargs)
+
+        def isolated_generate_2600(*args, **kwargs):
+            kwargs.setdefault('model_dir', models_dir)
+            return real_generate_2600(*args, **kwargs)
+
+        def isolated_generate_emails(*args, **kwargs):
+            kwargs.setdefault('models_dir', models_dir)
+            return real_generate_emails(*args, **kwargs)
+
+        with mock.patch('bleachbit.Chaff.DEFAULT_MODELS_DIR', models_dir), \
+                mock.patch('bleachbit.Chaff.download_models',
+                          side_effect=isolated_download_models), \
+                mock.patch('bleachbit.GuiChaff.generate_2600',
+                          side_effect=isolated_generate_2600), \
+                mock.patch('bleachbit.GuiChaff.generate_emails',
+                          side_effect=isolated_generate_emails):
+            if not Chaff.download_models():
+                self.skipTest('Unable to download chaff models for GUI test')
+            gui = self.get_window()
+            cd = GuiChaff.ChaffDialog(gui)
+            cd.show_all()
+            # Trigger missing-folder branch (no destination chosen)
+            cd.choose_folder_button.unselect_all()
+            self.refresh_gui()
+            cd.on_make_files(None)
+            self.refresh_gui()
+            self.assertTrue(cd.infobar.get_visible())
+            chaff_dst_dir = os.path.join(self.tempdir, 'chaff_dst')
+            os.mkdir(chaff_dst_dir)
+            cd.choose_folder_button.set_filename(chaff_dst_dir)
+            cd.when_finished_combo.set_active(1)  # do not delete after generation
+            cd.stop_value_spin.set_value(10)
+            self.refresh_gui()
+            self.click_button(cd, _("Make files"))
+            self.assertIsNotNone(
+                cd.thread, 'Chaff generation thread did not start')
+            cd.thread.join()
+            self.refresh_gui()
+            self.assertEqual(len(os.listdir(chaff_dst_dir)), 10)
 
     def test_cookie_manager_bulk_actions_wait_for_loading(self):
         """Bulk cookie actions should not save until loading finishes"""
@@ -469,7 +485,7 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertTrue(self.wait_until(
             lambda: test_file == clipboard.wait_for_text()))
 
-        targets = [Gdk.atom_intern_static_string('text/plain')]
+        targets = [Gdk.Atom.intern('text/plain', False)]
         self.app.cb_clipboard_uri_received(clipboard, targets, None)
         self.assertTrue(self.wait_until(lambda: not os.path.exists(test_file)))
         self.assertNotExists(test_file)

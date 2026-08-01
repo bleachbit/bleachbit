@@ -9,6 +9,7 @@ Test case for module Wipe
 """
 
 import errno
+import itertools
 import os
 import unittest
 from contextlib import ExitStack
@@ -263,15 +264,17 @@ class WipeTestCase(common.BleachbitTestCase):
     def test_wipe_path_fast(self):
         """Unit test for wipe_path() with fast mode
 
-        This test runs three iterations of the generator
-        and then aborts. Each iteration takes a little more
-        than two seconds.
+        This test runs three iterations of the generator and then
+        aborts. The idle clock is mocked forward on every check so
+        this doesn't depend on how fast the real disk/quota fills,
+        which varies a lot between CI runners.
         """
         counter = 0
-        for _i in wipe_path(self.tempdir, True):
-            counter += 1
-            if counter >= 3:
-                break
+        with mock.patch('bleachbit.Wipe.time.time', side_effect=itertools.count(0, 3)):
+            for _i in wipe_path(self.tempdir, True):
+                counter += 1
+                if counter >= 3:
+                    break
         self.assertGreater(counter, 0)
 
     def _make_mock_file(self, name='/tmp/empty_abc123'):
@@ -373,6 +376,69 @@ class WipeTestCase(common.BleachbitTestCase):
         second_call_len = len(mock_file.write.call_args_list[1][0][0])
         self.assertEqual(first_call_len, 65536)
         self.assertEqual(second_call_len, 32768)
+
+    def test_wipe_path_write_persistent_edquot(self):
+        """Persistent EDQUOT (even at 1-byte blocks) stops the outer loop.
+
+        When every write fails with EDQUOT (errno 122, "Disk quota
+        exceeded"), the inner loop halves the block down to 1 byte and
+        then sets ``disk_full`` so the outer loop breaks instead of
+        spinning forever creating empty temp files.
+
+        This reproduces a scenario seen on on Linux with /tmp on a small tmpfs
+        using usrquota with a significant gap between available space and the
+        quota. Other processes (like other tests running in parallel with
+        pytest-xdist) failed when not being able to write to /tmp.
+
+        In this test, ``NamedTemporaryFile`` is allowed to create one file and
+        then raises EDQUOT. With the fix, ``disk_full`` breaks the outer loop
+        after the first file, so ``NamedTemporaryFile`` is called exactly once.
+        Without the fix, the outer loop would call it again.
+        """
+        mock_file = self._make_mock_file()
+        mock_file.write.side_effect = IOError(
+            errno.EDQUOT, 'Disk quota exceeded')
+        mock_file.tell.return_value = 0
+        ntf_calls = [0]
+
+        # ntf=NamedTemporaryFile
+        def ntf_side_effect(*_args, **_kwargs):
+            ntf_calls[0] += 1
+            if ntf_calls[0] == 1:
+                return mock_file
+            raise OSError(errno.EDQUOT, 'Disk quota exceeded')
+        with self._wipe_path_common_mocks() as stack:
+            # Simulate EDQUOT despite adequete free space
+            stack.enter_context(mock.patch(
+                'bleachbit.FileUtilities.free_space', return_value=196 * 1024 * 1024))
+            stack.enter_context(mock.patch(
+                'bleachbit.Wipe.tempfile.NamedTemporaryFile', side_effect=ntf_side_effect))
+            list(wipe_path(self.tempdir))
+        # With the fix, disk_full breaks the outer loop after the first file.
+        self.assertEqual(ntf_calls[0], 1)
+        # Block was halved down to 1 byte before giving up.
+        last_call_len = len(mock_file.write.call_args_list[-1][0][0])
+        self.assertEqual(last_call_len, 1)
+
+    def test_wipe_path_fsync_edquot(self):
+        """EDQUOT from fsync stops the outer loop."""
+        mock_file = self._make_mock_file()
+        mock_file.write.side_effect = IOError(errno.EFBIG, 'File too large')
+        ntf_mock = mock.Mock(side_effect=[
+            mock_file,
+            AssertionError('wipe_path created another temporary file')
+        ])
+        with self._wipe_path_common_mocks() as stack:
+            stack.enter_context(mock.patch(
+                'bleachbit.FileUtilities.free_space', return_value=196 * 1024 * 1024))
+            stack.enter_context(mock.patch(
+                'bleachbit.Wipe.tempfile.NamedTemporaryFile', ntf_mock))
+            fsync_mock = stack.enter_context(mock.patch(
+                'bleachbit.Wipe.os.fsync', side_effect=[
+                    OSError(errno.EDQUOT, 'Disk quota exceeded'), None]))
+            list(wipe_path(self.tempdir))
+        self.assertEqual(fsync_mock.call_count, 2)
+        self.assertEqual(ntf_mock.call_count, 1)
 
     def test_wipe_path_write_efbig(self):
         """Write loop handles EFBIG by breaking"""

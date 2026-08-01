@@ -18,6 +18,8 @@ import tempfile
 import time
 from unittest import mock
 
+from tests.common import pytest
+
 from tests import common
 from bleachbit.Winapp import Winapp, detectos, detect_file, fnmatch_translate, section2option
 from bleachbit.Windows import detect_registry_key, parse_windows_build
@@ -89,9 +91,14 @@ class WinappTestCase(common.BleachbitTestCase):
     @common.skipUnlessWindows
     def test_remote(self):
         """Test with downloaded file"""
-        winapps = Winapp(get_winapp2())
-        for cleaner in winapps.get_cleaners():
-            self.run_all(cleaner, False)
+        try:
+            fname = get_winapp2()
+        except AssertionError as e:
+            self.skipTest(f'real network unavailable: {e}')
+        else:
+            winapps = Winapp(fname)
+            for cleaner in winapps.get_cleaners():
+                self.run_all(cleaner, False)
 
     def test_detectos(self):
         """Test detectos function"""
@@ -199,6 +206,7 @@ class WinappTestCase(common.BleachbitTestCase):
         return Winapp(self.ini_fn).get_cleaners()
 
     @common.skipUnlessWindows
+    @pytest.mark.xdist_group('winapp-registry')
     def test_fake(self):
         """Test with fake file"""
 
@@ -481,6 +489,7 @@ class WinappTestCase(common.BleachbitTestCase):
                 self.assertFalse(exists, f'Key {key_path} should not exist')
 
     @common.skipUnlessWindows
+    @pytest.mark.xdist_group('winapp-registry')
     def test_excludekey_reg(self):
         """Test for ExcludeKey with REG type to prevent registry key deletion"""
 

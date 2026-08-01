@@ -28,6 +28,8 @@ import warnings
 # third-party import
 import psutil
 
+from tests.common import pytest
+
 # local import
 from bleachbit.FileUtilities import (
     _remove_windows_readonly,
@@ -208,6 +210,7 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
     def tearDown(self):
         """Call after each test method"""
+        super().tearDown()
         if self.old_locale_tuple == (None, None):
             locale.setlocale(locale.LC_NUMERIC, 'C')
             return
@@ -383,6 +386,117 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.assertTrue(delete(child))
         self.assertTrue(delete(root))
         self.assertNotExists(root)
+
+    def test_children_in_directory_scandir_unreadable_mid_iteration(self):
+        """Regression test: a directory becoming unreadable mid-iteration
+        must not abort the whole cleanup.
+
+        os.walk silently skips directories that turn unreadable while being
+        listed; _scan_children must do the same instead of propagating the
+        OSError/PermissionError from the scandir iterator.
+        """
+        root = self.mkdir('scandir-unreadable-root')
+        self.mkstemp(prefix='file_before', dir=root)
+
+        class _FakeEntry:
+            def __init__(self, path, is_dir=False):
+                self.path = path
+                self._is_dir = is_dir
+
+            def is_dir(self):
+                return self._is_dir
+
+            def is_symlink(self):
+                return False
+
+        class _RaisingScandir:
+            """Yields one file entry, then raises PermissionError mid-iteration."""
+
+            def __init__(self, first_entry):
+                self._first = first_entry
+
+            def __iter__(self):
+                return self
+
+            def __next__(self):
+                if self._first is None:
+                    raise PermissionError('simulated mid-iteration failure')
+                entry = self._first
+                self._first = None
+                return entry
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+        first_entry = _FakeEntry(os.path.join(root, 'file_before'), is_dir=False)
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities.os.scandir',
+                return_value=_RaisingScandir(first_entry)):
+            # Must not raise; entries yielded before the failure are kept.
+            results = list(children_in_directory(root, list_directories=False))
+        self.assertEqual(results, [os.path.join(root, 'file_before')])
+
+    def test_children_in_directory_deep_tree(self):
+        """Regression test: a deeply nested tree must not exhaust the
+        recursion limit.
+
+        A recursive walk raises RecursionError past about 1000 levels, which
+        would abort the cleanup and leave the remaining files behind. os.scandir
+        is faked so the depth is not capped by the platform's maximum path
+        length.
+        """
+        depth = 5000
+
+        class _FakeEntry:
+            def __init__(self, path, is_dir):
+                self.path = path
+                self._is_dir = is_dir
+
+            def is_dir(self):
+                return self._is_dir
+
+            def is_symlink(self):
+                return False
+
+            def is_junction(self):
+                return False
+
+        class _FakeScandir:
+            def __init__(self, entries):
+                self._entries = entries
+
+            def __iter__(self):
+                return iter(self._entries)
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+        # One subdirectory per level, with a single file at the bottom
+        root = 'deep-tree-root'
+        tree = {}
+        path = root
+        for _ in range(depth):
+            child = os.path.join(path, 'a')
+            tree[path] = [_FakeEntry(child, True)]
+            path = child
+        deep_file = os.path.join(path, 'deepfile')
+        tree[path] = [_FakeEntry(deep_file, False)]
+
+        with unittest.mock.patch('bleachbit.FileUtilities.os.scandir',
+                                 side_effect=lambda p: _FakeScandir(tree[p])):
+            results = list(children_in_directory(root, list_directories=True))
+
+        self.assertEqual(len(results), depth + 1)
+        # The file comes first, then the directories, deepest first
+        self.assertEqual(results[0], deep_file)
+        self.assertEqual(results[1], path)
+        self.assertEqual(results[-1], os.path.join(root, 'a'))
 
     @common.skipIfWindows
     def test_children_in_directory_posix_symlink(self):
@@ -563,6 +677,7 @@ State=AAAA/wA...
                 options.set('shred', shred)
                 json_helper(self, clean_json)
 
+    @pytest.mark.no_xdist
     def test_delete(self):
         """Unit test for method delete()"""
         for shred in (False, True):
@@ -1070,6 +1185,14 @@ State=AAAA/wA...
         # pylint: disable=no-member
         self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
 
+        own_fn = self.mkstemp()
+        self.assertTrue(ego_owner(own_fn))
+
+        # A path that vanished must not raise
+        os.unlink(own_fn)
+        self.assertFalse(ego_owner(own_fn))
+        self.assertFalse(ego_owner(os.path.join(self.tempdir, 'does_not_exist')))
+
     def test_execute_sqlite3(self):
         """Unit test for execute_sqlite3()"""
         db_path = self.mkstemp(suffix='.sqlite')
@@ -1379,6 +1502,25 @@ State=AAAA/wA...
             path = 'c:\\windows\\system32'
         self.assertGreater(getsizedir(path), 0)
 
+    def test_getsizedir_vanished(self):
+        """getsizedir() skips a file that vanishes between the walk and the stat"""
+        dirname = self.mkdtemp(prefix='bleachbit-test-getsizedir-vanished')
+        real_fn = os.path.join(dirname, 'real')
+        self.write_file(real_fn, contents=b'0123456789')
+        expected = getsize(real_fn)
+        self.assertGreater(expected, 0)
+
+        ghost_fn = os.path.join(dirname, 'ghost')
+        with unittest.mock.patch('bleachbit.FileUtilities.children_in_directory',
+                                 return_value=iter([real_fn, ghost_fn])):
+            self.assertEqual(getsizedir(dirname), expected)
+
+        # Other errors must still propagate
+        with unittest.mock.patch('bleachbit.FileUtilities.getsize',
+                                 side_effect=PermissionError('denied')):
+            with self.assertRaises(PermissionError):
+                getsizedir(dirname)
+
     def test_globex(self):
         """Unit test for method globex()"""
         for path in globex('/bin/*', '/ls$'):
@@ -1525,6 +1667,12 @@ State=AAAA/wA...
         # Unsupported scheme
         uri_s = ['foo://bar']
         self.assertEqual(uris_to_paths(uri_u + uri_w + uri_s), path_u + path_w)
+
+        # Malformed file URIs must not yield an empty path, which previously
+        # resolved to CWD in create_simple_cleaner.
+        self.assertEqual(uris_to_paths(['file:']), [])
+        self.assertEqual(uris_to_paths(['file://']), [])
+        self.assertEqual(uris_to_paths(['file:///']), [os.path.normpath('/')])
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""

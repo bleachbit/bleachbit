@@ -22,6 +22,7 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
     _os_walk_original = os.walk
 
     def setUp(self):
+        super().setUp()
         # We need to sort the files in order to compare them correctly
         self._patcher = mock.patch('os.walk')
         self._patcher.start()
@@ -268,4 +269,5 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
         return r'{} "{}\{}"'.format(command, dir, subdir)
 
     def tearDown(self):
+        super().tearDown()
         self._patcher.stop()

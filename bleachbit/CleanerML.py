@@ -374,7 +374,14 @@ def list_cleanerml_files(local_only=False, system_only=False):
     for pathname in listdir(cleanerdirs):
         if not pathname.lower().endswith('.xml'):
             continue
-        if check_world_writable and stat.S_IMODE(os.stat(pathname)[stat.ST_MODE]) & 2:
+        try:
+            world_writable = check_world_writable and stat.S_IMODE(
+                os.stat(pathname)[stat.ST_MODE]) & 2
+        except OSError as e:
+            logger.warning('Could not read cleaner metadata %s: %s',
+                           pathname, e)
+            continue
+        if world_writable:
             # TRANSLATORS: Warning printed to the log.
             # %s expands to the path of the XML cleaner file that was skipped
             warning_msg = _("Ignoring cleaner because it is "

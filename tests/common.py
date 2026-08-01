@@ -21,6 +21,23 @@ import warnings
 from pathlib import Path
 from unittest import mock
 
+try:
+    import pytest
+except ImportError:  # pytest is optional for plain unittest discovery
+    class _PytestShim:
+        """No-op stand-in so @pytest.mark.* decorators work under unittest."""
+        class mark:
+            @staticmethod
+            def xdist_group(_name):
+                def decorator(func):
+                    return func
+                return decorator
+
+            @staticmethod
+            def no_xdist(func):
+                return func
+    pytest = _PytestShim()
+
 import bleachbit
 from bleachbit import logger
 
@@ -90,6 +107,17 @@ def mock_missing_package(*package_names, clear_prefixes=()):
         for mod, mod_obj in saved_modules.items():
             if mod not in sys.modules:
                 sys.modules[mod] = mod_obj
+        # Re-importing a submodule also rebinds it as an attribute on its
+        # parent package (e.g. bleachbit.Network on the bleachbit package).
+        # sys.modules restore alone leaves that attribute stale, so a later
+        # mock.patch('bleachbit.Network...') would hit the orphaned module.
+        for mod, mod_obj in saved_modules.items():
+            if '.' not in mod:
+                continue
+            parent_name, _, attr = mod.rpartition('.')
+            parent = sys.modules.get(parent_name)
+            if parent is not None and getattr(parent, attr, None) is not mod_obj:
+                setattr(parent, attr, mod_obj)
 
 
 @contextlib.contextmanager
@@ -157,11 +185,39 @@ class BleachbitTestCase(unittest.TestCase):
         """
         bootstrap()
         warnings.simplefilter("error")
+        cls._install_py314_asyncio_filters()
         cls.tempdir = tempfile.mkdtemp(prefix=cls.__name__)
         if 'BLEACHBIT_TEST_OPTIONS_DIR' not in os.environ:
             cls._patch_options_paths()
         bleachbit.Options.options.reset_overrides()
         bleachbit.Options.options.set_override("first_start", False)
+
+    @staticmethod
+    def _install_py314_asyncio_filters():
+        """Ignore asyncio event-loop-policy deprecation warnings on Python 3.14+.
+
+        PyGObject calls ``asyncio.get_event_loop_policy()`` (deprecated in
+        Python 3.14, removed in 3.16) from inside ``Gtk.main_iteration_do()``.
+        The warning must be suppressed in the *current* warnings-filter scope
+        rather than inside a per-call ``catch_warnings()`` in ``refresh_gui()``:
+        ``test_shred_paths`` runs a background ``GtkWorkerThread`` whose own
+        ``catch_warnings()`` (inside PyGObject/asyncio) can race with the main
+        thread's ``catch_warnings()``, causing the ignore filter to be applied
+        to the wrong filter-list copy and silently dropped.  Installing the
+        filter in the active scope (``setUpClass``/``setUp``) makes it visible
+        to every copy of the filter list, including the worker thread's.
+        """
+        if sys.version_info >= (3, 14):
+            warnings.filterwarnings(
+                "ignore",
+                message=r".*asyncio\.get_event_loop_policy.*",
+                category=DeprecationWarning,
+            )
+            warnings.filterwarnings(
+                "ignore",
+                message=r".*asyncio\.AbstractEventLoopPolicy.*",
+                category=DeprecationWarning,
+            )
 
     @classmethod
     def _patch_options_paths(cls):
@@ -243,6 +299,31 @@ class BleachbitTestCase(unittest.TestCase):
         """Call before each test method"""
         basedir = os.path.join(os.path.dirname(__file__), '..')
         os.chdir(basedir)
+        self._options_file_snapshot = None
+        if os.path.exists(bleachbit.options_file):
+            with open(bleachbit.options_file, 'rb') as f:
+                self._options_file_snapshot = f.read()
+        # Re-install the asyncio deprecation filters for this test's
+        # catch_warnings() scope (setUpClass ran in a different scope).
+        self._install_py314_asyncio_filters()
+
+    def tearDown(self):
+        """Call after each test method; restore options file, reload Options"""
+        # Restore the working directory in case a test chdir'd into
+        # self.tempdir (e.g., test_assertExists_relative_path) to avoid
+        # WinError 32 in rmtree() in tearDownClass.
+        basedir = os.path.join(os.path.dirname(__file__), '..')
+        os.chdir(basedir)
+        if self._options_file_snapshot is not None:
+            os.makedirs(os.path.dirname(bleachbit.options_file), exist_ok=True)
+            with open(bleachbit.options_file, 'wb') as f:
+                f.write(self._options_file_snapshot)
+        elif os.path.exists(bleachbit.options_file):
+            os.remove(bleachbit.options_file)
+        bleachbit.Options.options.restore()
+        # cancel the flush timer restore() re-arms when the file has no
+        # matching version, else it fires during a later test
+        bleachbit.Options.options.cancel_pending_flush()
 
     #
     # type asserts

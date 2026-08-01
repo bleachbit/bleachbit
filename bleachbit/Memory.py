@@ -37,6 +37,9 @@ from bleachbit.Wipe import wipe_write
 
 logger = logging.getLogger(__name__)
 
+# Do not match "SwapCached".
+_MEMINFO_FREE_RE = re.compile(r'^(MemFree|Cached):[ ]*([0-9]*) kB')
+
 
 def count_swap_linux():
     """Count the number of swap devices in use"""
@@ -289,8 +292,9 @@ def get_swap_size_linux(device, proc_swaps=None):
     line = proc_swaps.split('\n')[0]
     if not re.search(r'Filename\s+Type\s+Size', line):
         raise RuntimeError("Unexpected first line in swap summary '%s'" % line)
+    size_re = re.compile(r"%s\s+\w+\s+([0-9]+)\s" % device)
     for line in proc_swaps.split('\n')[1:]:
-        ret = re.search(r"%s\s+\w+\s+([0-9]+)\s" % device, line)
+        ret = size_re.search(line)
         if ret:
             return int(ret.group(1)) * 1024
     raise RuntimeError("error: cannot find size of swap device '%s'\n%s" %
@@ -302,9 +306,10 @@ def get_swap_uuid(device):
     uuid = None
     args = ['blkid', device, '-s', 'UUID']
     (_rc, stdout, _stderr) = General.run_external(args)
+    uuid_re = re.compile(r"^%s: UUID=\"([a-z0-9-]+)\"" % device)
     for line in stdout.split('\n'):
         # example: /dev/sda5: UUID="ee0e85f6-6e5c-42b9-902f-776531938bbf"
-        ret = re.search(r"^%s: UUID=\"([a-z0-9-]+)\"" % device, line)
+        ret = uuid_re.search(line)
         if ret is not None:
             uuid = ret.group(1)
     # TRANSLATORS: Debug message. 'Found' is a past tense verb (short for
@@ -345,8 +350,7 @@ def _parse_meminfo_free(meminfo_text):
     free_bytes = 0
     num_matches = 0
     for line in meminfo_text.splitlines():
-        # Do not match "SwapCached"
-        ret = re.search(r'^(MemFree|Cached):[ ]*([0-9]*) kB', line)
+        ret = _MEMINFO_FREE_RE.search(line)
         if ret is not None:
             kb = int(ret.group(2))
             free_bytes += kb * 1024

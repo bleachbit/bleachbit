@@ -16,6 +16,8 @@ import sys
 import unittest
 from unittest import mock
 
+from tests.common import pytest
+
 from tests import common
 from bleachbit import IS_WINDOWS
 from bleachbit.General import get_executable
@@ -129,6 +131,7 @@ class ShowWindowsErrorDialogTestCase(unittest.TestCase):
             _show_windows_error_dialog('BleachBit', '<html>test</html>')
             mock_open.assert_called_once()
             html_path = mock_open.call_args[0][0].replace('file:///', '')
+            self.addCleanup(os.remove, html_path)
             with open(html_path, encoding='utf-8') as f:
                 self.assertIn('test', f.read())
 
@@ -175,6 +178,7 @@ class FixArgTestCase(unittest.TestCase):
         """ASCII strings must pass through unchanged."""
         self.assertEqual(_fix_arg('hello'), 'hello')
 
+    @pytest.mark.no_xdist
     def test_surrogate_replaced(self):
         """Unpaired surrogates must be replaced with the replacement character."""
         arg = 'prefix' + chr(0xD800) + 'suffix'
@@ -217,7 +221,7 @@ class PatchedArgvTestCase(unittest.TestCase):
 
 
 class TryImportGtkTestCase(unittest.TestCase):
-    """Test _try_import_gtk."""
+    """Test GTK import flow with surrogate paths in argv."""
 
     def test_surrogate_in_argv(self):
         """Must not crash for surrogates in sys.argv."""
@@ -231,29 +235,85 @@ import sys
 from unittest import mock
 sys.argv = ['bleachbit.py', {bad_path!r}]
 with mock.patch.object(ctypes.windll.user32, 'MessageBoxW', return_value=7):
-    from bleachbit.GtkShim import _try_import_gtk
-    success, reason = _try_import_gtk()
-print(f"OK success={{success}} reason={{reason}}")
+    from bleachbit.GtkShim import is_gtk_available
+    success = is_gtk_available()
+print(f"OK success={{success}}")
 '''
         else:
             script = f'''
 import sys
 sys.argv = ['bleachbit.py', {bad_path!r}]
-from bleachbit.GtkShim import _try_import_gtk
-success, reason = _try_import_gtk()
-print(f"OK success={{success}} reason={{reason}}")
+from bleachbit.GtkShim import is_gtk_available
+success = is_gtk_available()
+print(f"OK success={{success}}")
 '''
 
         result = subprocess.run(
             [get_executable(), '-c', script],
             capture_output=True, text=True,
-            timeout=30,
+            timeout=30, check=False,
         )
 
         self.assertEqual(result.returncode, 0,
                          f'stderr: {result.stderr}')
         self.assertIn('OK success=', result.stdout,
                       'surrogate argv caused GTK import to crash')
+
+    @common.skipIfWindows
+    def test_no_display_does_not_import_gtk_libraries(self):
+        """A failed display precondition must not import gi.repository."""
+        script = '''
+import sys
+import bleachbit.GtkShim as shim
+if shim.is_gtk_available():
+    sys.exit('is_gtk_available() is true without a display')
+if shim.gtk_may_be_available():
+    sys.exit('gtk_may_be_available() is true without a display')
+from bleachbit.GtkShim import Gtk
+if Gtk is not None:
+    sys.exit('Gtk is not None without a display')
+imported = [n for n in sys.modules if n.startswith('gi.repository')]
+if imported:
+    sys.exit(f'imported GTK libraries: {imported}')
+print('OK')
+'''
+        env = os.environ.copy()
+        env.pop('DISPLAY', None)
+        env.pop('WAYLAND_DISPLAY', None)
+        env.pop('XDG_RUNTIME_DIR', None)
+        result = subprocess.run(
+            [get_executable(), '-c', script],
+            capture_output=True, text=True, env=env, timeout=30,
+            check=False,
+        )
+        self.assertEqual(result.returncode, 0,
+                         f'stderr: {result.stderr}')
+        self.assertIn('OK', result.stdout, f'stderr: {result.stderr}')
+
+
+class GtkAvailabilityTestCase(unittest.TestCase):
+    """Test actual and preflight GTK availability states."""
+
+    def test_require_gtk_reports_deferred_import_failure(self):
+        """A deferred import failure raises RuntimeError and reports the reason."""
+        import bleachbit.GtkShim as shim  # pylint: disable=import-outside-toplevel
+
+        with mock.patch.multiple(
+            shim,
+            _gtk_preconditions_met=True,
+            _gtk_libraries_imported=False,
+            _gtk_libraries_available=False,
+            _gtk_unavailable_reason=None,
+        ), mock.patch.object(
+            shim, '_import_gtk_libraries',
+            return_value=(False, 'simulated GTK import failure'),
+        ):
+            self.assertTrue(shim.gtk_may_be_available())
+            self.assertFalse(shim.is_gtk_available())
+            with self.assertRaisesRegex(
+                RuntimeError, 'simulated GTK import failure',
+            ):
+                shim.require_gtk()
 
 
 if __name__ == '__main__':

@@ -7,9 +7,11 @@ BleachBit cleans files to free disk space and to maintain privacy.
 To run BleachBit without installation, first install the system dependencies,
 then build the translations and run it:
 
-    make install-deps       # runtime deps (auto-detects Debian/Fedora/openSUSE/Arch)
-    make -C po local        # build translations
-    python3 bleachbit.py
+```sh
+make install-deps       # runtime deps (auto-detects Debian/Fedora/openSUSE/Arch)
+make -C po local        # build translations
+python3 bleachbit.py
+```
 
 Many Linux systems have the basic dependencies: you may skip installation,
 but in case of any issues, please check for missing dependencies.
@@ -20,7 +22,9 @@ Then, select some options, and click Preview.  Review the files, toggle options 
 
 For information regarding the command line interface, run:
 
-     python3 bleachbit.py --help
+```sh
+python3 bleachbit.py --help
+```
 
 Read more about [running from source](https://docs.bleachbit.org/dev/running-from-source-code.html).
 
@@ -49,17 +53,21 @@ markovify is licensed under the [MIT License](https://github.com/jsvine/markovif
 To develop, run the test suite, or build packages, install the
 extra build/test/lint/packaging tools too:
 
-    make install-deps-dev
+```sh
+make install-deps-dev
+```
 
 Common commands include:
 
-    make tests   # run tests
-    make lint    # check .py and .sh files for issues
-    make pretty  # format .py and .xml files
+```sh
+make tests   # run tests
+make lint    # check .py and .sh files for issues
+make pretty  # format .py and .xml files
+```
 
 More resources:
-
-* [![BleachBit on GitHub Actions](https://github.com/bleachbit/bleachbit/actions/workflows/tests.yaml/badge.svg?branch=master)](https://github.com/bleachbit/bleachbit/actions/workflows/tests.yaml)
+* [![Build and Test](https://github.com/bleachbit/bleachbit/actions/workflows/build_and_test.yaml/badge.svg?branch=master)](https://github.com/bleachbit/bleachbit/actions/workflows/build_and_test.yaml)
+* [![Run tests on macOS](https://github.com/bleachbit/bleachbit/actions/workflows/test_macos.yaml/badge.svg?branch=master)](https://github.com/bleachbit/bleachbit/actions/workflows/test_macos.yaml)
 * [CleanerML Repository](https://github.com/bleachbit/cleanerml)
 * [BleachBit Miscellaneous Repository](https://github.com/bleachbit/bleachbit-misc)
 * [Winapp2.ini Repository](https://github.com/bleachbit/winapp2.ini)
@@ -69,7 +77,7 @@ More resources:
 The `docker/build.sh` script sets up a container, runs `make tests`,
 and builds packages for a selected distribution. Usage:
 
-```
+```sh
 ./docker/build.sh <distro> # distro is one of {debian, fedora, opensuse}
 ```
 

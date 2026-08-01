@@ -89,12 +89,12 @@ def archive(infile, outfile, fast_build):
     # mfb=number of fast bytes
     # bso0 bsp0 quiet output
     # 7-Zip Command Line Reverence Wizard: https://axelstudios.github.io/7z/#!/
-    sz_opts = '-tzip -mm=Deflate -mfb=258 -mpass=7 -bso0 -bsp0'  # best compression
+    sz_opts = ['-tzip', '-mm=Deflate', '-mfb=258', '-mpass=7', '-bso0', '-bsp0']  # best compression
     if fast_build:
         # fast compression
-        sz_opts = '-tzip -mx=1 -bso0 -bsp0'
-    cmd = f'{SZ_EXE} a {sz_opts} {outfile} {infile}'
-    run_cmd(cmd)
+        sz_opts = ['-tzip', '-mx=1', '-bso0', '-bsp0']
+    cmd = [SZ_EXE, 'a'] + sz_opts + [outfile, infile]
+    run_7z(cmd)
     assert_exist(outfile)
 
 
@@ -165,15 +165,38 @@ def assert_execute_console():
                    'Success')
 
 
-def run_cmd(cmd):
-    """Run a command and log the output"""
-    logger.info(cmd)
+def run_cmd(cmd, check=True):
+    """Run a command and log the output
+
+    Return the exit code. If check is true, a non-zero exit code aborts.
+    """
+    if isinstance(cmd, list):
+        logger.info(subprocess.list2cmdline(cmd))
+    else:
+        logger.info(cmd)
     with subprocess.Popen(cmd, stdin=subprocess.PIPE,
                           stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
         stdout, stderr = p.communicate()
         logger.info(stdout.decode(SetupEncoding))
         if stderr:
             logger.error(stderr.decode(SetupEncoding))
+    if p.returncode and check:
+        logger.error('Command exited with code %d', p.returncode)
+        sys.exit(1)
+    return p.returncode
+
+
+def run_7z(cmd):
+    """Run 7-Zip
+
+    Exit code 1 is a warning, such as a locked file. Higher is fatal.
+    """
+    returncode = run_cmd(cmd, check=False)
+    if returncode == 1:
+        logger.warning('7-Zip exited with a warning')
+    elif returncode:
+        logger.error('7-Zip exited with code %d', returncode)
+        sys.exit(1)
 
 
 def sign_files(filenames):
@@ -182,13 +205,16 @@ def sign_files(filenames):
     Passing multiple filenames in one function call can be faster than
     two calls.
     """
-    filenames_str = ' '.join(filenames)
     if os.path.exists('CodeSign.bat'):
-        logger.info('Signing code: %s', filenames_str)
-        cmd = f'CodeSign.bat {filenames_str}'
-        run_cmd(cmd)
+        logger.info('Signing code: %s', ' '.join(filenames))
+        cmd = ['CodeSign.bat', *filenames]
+        # Not fatal because signing needs a certificate that may be missing
+        returncode = run_cmd(cmd, check=False)
+        if returncode:
+            logger.error('CodeSign.bat exited with code %d for %s',
+                         returncode, ' '.join(filenames))
     else:
-        logger.warning('CodeSign.bat not available for %s', filenames_str)
+        logger.warning('CodeSign.bat not available for %s', ' '.join(filenames))
 
 
 def get_dir_size(start_path='.'):
@@ -257,7 +283,9 @@ def environment_check():
     """Check the build environment"""
     logger.info('Checking for 32-bit Python')
     bits = 8 * struct.calcsize('P')
-    assert 32 == bits
+    if bits != 32:
+        logger.error('Expected 32-bit Python but found %d-bit', bits)
+        sys.exit(1)
 
     logger.info('Checking for translations')
     assert_exist('locale', 'run "make -C po local" to build translations')
@@ -319,7 +347,7 @@ def build_py2exe():
         'compressed': 1,     # Create compressed archive
         'optimize': 2,       # Extra optimization (like python -OO)
         'includes': ['gi'],
-        'packages': ['chardet', 'encodings', 'gi', 'gi.overrides', 'plyer'],
+        'packages': ['chardet', 'encodings', 'gi', 'gi.overrides', 'plyer.platforms.win.notification'],
         'excludes': ['pyreadline', 'difflib', 'doctest',
                      'pickle', 'ftplib', 'bleachbit.Unix', 'charset_normalizer',
                      'setuptools', 'pydoc_data', 'unittest', 'test',
@@ -645,6 +673,7 @@ def delete_icons():
         'edit-find.png',
         'list-add-symbolic.svg',  # spin box in chaff dialog
         'list-remove-symbolic.svg',  # spin box in chaff dialog
+        'open-menu-symbolic.svg',  # hamburger menu on headerbar
         'pan-down-symbolic.svg',  # there is no pan-down.png
         'pan-end-symbolic.svg',  # there is no pan-end.png
         'process-stop.png',  # abort on toolbar
@@ -706,8 +735,13 @@ def strip():
         if not os.path.exists(strip_file):
             logger.error('%s does not exist before stripping', strip_file)
             continue
-        cmd = f'strip.exe --strip-debug --discard-all --preserve-dates -o strip.tmp {strip_file}'
-        run_cmd(cmd)
+        cmd = ['strip.exe', '--strip-debug', '--discard-all',
+               '--preserve-dates', '-o', 'strip.tmp', strip_file]
+        returncode = run_cmd(cmd, check=False)
+        if returncode:
+            logger.error('strip.exe exited with code %d for %s',
+                         returncode, strip_file)
+            continue
         if not os.path.exists(strip_file):
             logger.error('%s does not exist after stripping', strip_file)
             continue
@@ -730,7 +764,7 @@ def strip():
                            error_counter, strip_file)
         if not os.path.exists(strip_file):
             os.rename('strip.tmp', strip_file)
-    assert_execute_console()
+#    assert_execute_console()
 
 
 @count_size_improvement
@@ -749,8 +783,34 @@ def upx(fast_build):
     # Do not compress bleachbit.exe and bleachbit_console.exe to avoid false positives
     # with antivirus software. Not much is space with gained with these small files, anyway.
     upx_files = recursive_glob('dist', ['*.dll', '*.pyd'])
-    cmd = f'{UPX_EXE} {UPX_OPTS} {" ".join(upx_files)}'
-    run_cmd(cmd)
+
+    # upx is single-threaded, so split files into size-balanced batches
+    # and run them as concurrent processes to use all CPU cores.
+    num_batches = min(os.cpu_count() or 1, len(upx_files)) or 1
+    batches = [[] for _ in range(num_batches)]
+    batch_sizes = [0] * num_batches
+    for f in sorted(upx_files, key=os.path.getsize, reverse=True):
+        i = batch_sizes.index(min(batch_sizes))
+        batches[i].append(f)
+        batch_sizes[i] += os.path.getsize(f)
+
+    procs = []
+    for batch in batches:
+        if not batch:
+            continue
+        cmd = [UPX_EXE] + UPX_OPTS.split() + batch
+        logger.info(subprocess.list2cmdline(cmd))
+        procs.append(subprocess.Popen(cmd, stdin=subprocess.PIPE,
+                                      stdout=subprocess.PIPE, stderr=subprocess.PIPE))
+    for p in procs:
+        stdout, stderr = p.communicate()
+        logger.info(stdout.decode(SetupEncoding))
+        if stderr:
+            logger.error(stderr.decode(SetupEncoding))
+        # Not fatal because UPX returns non-zero for any file it cannot pack
+        if p.returncode:
+            logger.error('UPX exited with code %d', p.returncode)
+
     assert_execute_console()
 
 
@@ -782,8 +842,8 @@ def recompress_library(fast_build):
     # extract library.zip
     if not os.path.exists('dist\\library'):
         os.makedirs('dist\\library')
-    cmd = SZ_EXE + ' x  dist\\library.zip' + ' -odist\\library  -y'
-    run_cmd(cmd)
+    cmd = [SZ_EXE, 'x', 'dist\\library.zip', '-odist\\library', '-y']
+    run_7z(cmd)
     file_size_old = os.path.getsize('dist\\library.zip')
     os.remove('dist\\library.zip')
 
@@ -862,7 +922,10 @@ def nsis(opts, exe_name, nsi_path):
     if os.path.exists(exe_name):
         logger.info('Deleting old file: %s', exe_name)
         os.remove(exe_name)
-    cmd = f'{NSIS_EXE} {opts} /DVERSION={get_version()} /DSHRED_REGEX_KEY={SHRED_REGEX_KEY} {nsi_path}'
+    cmd = [NSIS_EXE] + opts.split() + [
+        f'/DVERSION={get_version()}',
+        f'/DSHRED_REGEX_KEY={SHRED_REGEX_KEY}',
+        nsi_path]
     run_cmd(cmd)
     assert_exist(exe_name)
 
@@ -889,9 +952,17 @@ def package_installer(fast_build, nsi_path=r'windows\bleachbit.nsi'):
     opts = '' if fast_build else '/V3 /Dpackhdr /DCompressor'
     nsis(opts, exe_name_multilang, nsi_path)
 
+    # The English-only installer is opt-in: it is built only when not in
+    # fast_build mode and BB_BUILD_ENGLISH_INSTALLER is set to a truthy value
+    # (e.g., "1"). This lets CI skip it for non-tag builds to save GHA minutes
+    # while still building it for tag/release builds. Local development builds
+    # skip it by default; set BB_BUILD_ENGLISH_INSTALLER=1 to enable.
+    build_english = (not fast_build) and \
+        os.getenv('BB_BUILD_ENGLISH_INSTALLER', '').strip().lower() not in ('', '0', 'false', 'no')
+
     if fast_build:
         sign_files((exe_name_multilang,))
-    else:
+    elif build_english:
         # Was:
         # nsis('/DNoTranslations',
         # Now: Compression gets now done in NSIS file!
@@ -900,6 +971,9 @@ def package_installer(fast_build, nsi_path=r'windows\bleachbit.nsi'):
         # version as malware.
         nsis(opts + ' /DNoTranslations', exe_name_en, nsi_path)
         sign_files((exe_name_multilang, exe_name_en))
+    else:
+        # English-only installer skipped (e.g., non-tag CI build).
+        sign_files((exe_name_multilang,))
 
     if os.path.exists(SZ_EXE):
         logger.info('Zipping installer')
@@ -923,7 +997,8 @@ def main():
     package_installer(fast_build)
     # Clearly show the sizes of the files that end users download because the
     # goal is to minimize them.
-    os.system(r'dir *.zip windows\*.exe windows\*.zip')
+    subprocess.run(
+        ['cmd', '/c', 'dir', '*.zip', r'windows\*.exe', r'windows\*.zip'])
     duration = time.time() - start_time
     minutes = int(duration // 60)
     seconds = int(duration % 60)

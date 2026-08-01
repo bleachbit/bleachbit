@@ -23,7 +23,7 @@ from pathlib import Path
 from unittest import mock
 from random import randint
 
-import pytest
+from tests.common import pytest
 
 # first party imports
 from tests import common
@@ -41,6 +41,7 @@ from bleachbit.Windows import (
     run_net_service_command,
     detect_registry_key,
     empty_recycle_bin,
+    flush_dns,
     get_clipboard_paths,
     get_fixed_drives,
     get_font_conf_file,
@@ -260,12 +261,23 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         if not shell.IsUserAnAdmin():
             self.skipTest('requires administrator privileges')
 
+    def test_flush_dns_uses_absolute_path(self):
+        """flush_dns runs an absolute ipconfig path, not a bare name"""
+        with mock.patch('bleachbit.General.run_external',
+                        return_value=(0, '', '')) as mock_run:
+            flush_dns()
+        args = mock_run.call_args[0][0]
+        self.assertTrue(os.path.isabs(args[0]), args[0])
+        self.assertTrue(args[0].lower().endswith('ipconfig.exe'), args[0])
+        self.assertEqual(args[1], '/flushdns')
+
     @pytest.mark.xdist_group('recycle-bin')
     def test_get_recycle_bin(self):
         """Unit test for get_recycle_bin"""
         for f in get_recycle_bin():
             self.assertLExists(extended_path(f))
 
+    @pytest.mark.no_xdist
     @pytest.mark.xdist_group('recycle-bin')
     @common.skipUnlessDestructive
     def test_get_recycle_bin_destructive(self):
@@ -949,6 +961,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertTrue(not detect_registry_key(
             'HKCU\\Software\\DoesNotExist'))
 
+    @pytest.mark.xdist_group('gui')
     def test_get_clipboard_paths(self):
         """Unit test for get_clipboard_paths"""
         # The clipboard is an unknown state, so check the function does
@@ -978,7 +991,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         args = ('powershell.exe', 'Set-Clipboard',
                 '-Path', r'c:\windows\*.exe')
         (ext_rc, _stdout, _stderr) = General.run_external(args)
-        self.assertEqual(ext_rc, 0)
+        # It may print "Requested Clipboard operation did not succeed" to stderr.
+        self.assertEqual(ext_rc, 0, f"powershell.exe failed with return code {ext_rc}: {_stderr}")
         paths = get_clipboard_paths()
         self.assertIsInstance(paths, (type(None), tuple))
         self.assertGreater(len(paths), 1)
@@ -989,6 +1003,9 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_get_font_conf_file(self):
         """Unit test for get_font_conf_file"""
         # This tests only one of three situations.
+        from bleachbit.GtkShim import gtk_may_be_available
+        if not gtk_may_be_available():
+            self.skipTest("GTK is not available")
         font_fn = get_font_conf_file()
         self.assertExists(font_fn)
 
@@ -1041,6 +1058,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             ret = empty_recycle_bin(drive, really_delete=False)
             self.assertIsInteger(ret)
 
+    @pytest.mark.no_xdist
     @pytest.mark.xdist_group('recycle-bin')
     @common.skipUnlessDestructive
     def test_empty_recycle_bin_per_drive_destructive(self):
@@ -1058,6 +1076,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                     raise
                 self.assertIsInteger(ret)
 
+    @pytest.mark.no_xdist
     @pytest.mark.xdist_group('recycle-bin')
     @common.skipUnlessDestructive
     def test_empty_recycle_bin_all_drives_destructive(self):

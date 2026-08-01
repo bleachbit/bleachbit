@@ -13,13 +13,17 @@ later.  See the COPYING file in the top-level directory.
   <description>Web browser</description>
   <running type="exe" os="windows" same_user="true">brave.exe</running>
   <running type="exe" os="linux" same_user="true">brave</running>
+  <running type="exe" os="macos" same_user="true">Brave Browser</running>
+  <running type="pathname" os="macos">~/Library/Application Support/BraveSoftware/Brave-Browser/SingletonLock</running>
   <var name="base">
     <value os="windows">%LocalAppData%\BraveSoftware\Brave-Browser\User Data</value>
+    <value os="macos">~/Library/Application Support/BraveSoftware/Brave-Browser</value>
     <value os="linux">$XDG_CONFIG_HOME/BraveSoftware/Brave-Browser</value>
     <value os="linux">~/snap/brave/current/.config/BraveSoftware/Brave-Browser</value>
   </var>
   <var name="profile">
     <value os="windows">%LocalAppData%\BraveSoftware\Brave-Browser\User Data\Default</value>
+    <value os="macos">~/Library/Application Support/BraveSoftware/Brave-Browser/Default</value>
     <value os="linux">$XDG_CONFIG_HOME/BraveSoftware/Brave-Browser/Default</value>
     <value os="linux">~/snap/brave/current/.config/BraveSoftware/Brave-Browser/Default</value>
   </var>
@@ -46,6 +50,8 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="$XDG_CACHE_HOME/BraveSoftware/Brave-Browser/"/>
     <action command="delete" search="walk.all" path="~/snap/brave/common/.cache/BraveSoftware/"/>
     <action command="delete" search="walk.all" path="~/snap/brave/common/.cache/mesa_shader_cache"/>
+    <!-- macOS-specific -->
+    <action command="delete" search="walk.all" path="~/Library/Caches/BraveSoftware/Brave-Browser/" os="macos"/>
     <!-- Windows-specific -->
     <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
     <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
@@ -66,6 +72,7 @@ later.  See the COPYING file in the top-level directory.
     <label>Crash reports</label>
     <description>Delete the files</description>
     <action command="delete" search="walk.all" path="$$base$$/Crash Reports/"/>
+    <action command="delete" search="walk.all" path="$$base$$/Crashpad/" os="macos"/>
   </option>
   <option id="form_history">
     <label>Form history</label>

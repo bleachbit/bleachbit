@@ -31,7 +31,7 @@ https://www.zsh.org/
     <description>Delete the command history</description>
     <action command="delete" search="file" path="~/.zsh_history"/>
   </option>
-  <option id="session" os="darwin">
+  <option id="session" os="macos">
     <label>Session</label>
     <description>Delete the files</description>
     <action command="delete" search="walk.all" path="~/.zsh_sessions/"/>

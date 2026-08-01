@@ -1,22 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 """
 Test cases for module CleanerML
@@ -110,6 +96,22 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         for pathname in list_cleanerml_files():
             self.assertExists(pathname)
 
+    @common.skipIfWindows
+    def test_list_cleanerml_files_vanished(self):
+        """list_cleanerml_files() skips a cleaner deleted after listdir()
+
+        The world-writable check is POSIX only, so this race does not exist
+        on Windows.
+        """
+        dirname = self.mkdtemp(prefix='bleachbit-cleanerml-vanished')
+        real_fn = os.path.join(dirname, 'real.xml')
+        self.write_file(real_fn, contents=b'<cleaner id="test"/>')
+        os.chmod(real_fn, 0o600)
+        ghost_fn = os.path.join(dirname, 'ghost.xml')
+        with mock.patch('bleachbit.CleanerML.listdir',
+                        return_value=iter([ghost_fn, real_fn])):
+            self.assertEqual(list(list_cleanerml_files()), [real_fn])
+
     def test_load_cleaners(self):
         """Unit test for load_cleaners()"""
         # normal
@@ -193,6 +195,17 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertFalse(xmlcleaner.os_match('unix', 'win32'))
         self.assertTrue(xmlcleaner.os_match('windows', 'win32'))
 
+        # as macOS (canonical name)
+        self.assertTrue(xmlcleaner.os_match('macos', 'darwin'))
+        self.assertTrue(xmlcleaner.os_match('bsd', 'darwin'))
+        self.assertTrue(xmlcleaner.os_match('unix', 'darwin'))
+        self.assertFalse(xmlcleaner.os_match('linux', 'darwin'))
+        self.assertFalse(xmlcleaner.os_match('windows', 'darwin'))
+
+        # "darwin" is accepted as a deprecated alias for "macos"
+        with self.assertLogs('bleachbit.General', level='WARNING'):
+            self.assertTrue(xmlcleaner.os_match('darwin', 'darwin'))
+
         # as unknown operating system
         with self.assertRaises(RuntimeError):
             xmlcleaner.os_match('linux', 'hal9000')
@@ -221,7 +234,7 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         <description>Delete the files</description>
         <action search="file" command="delete" path="{self.tempdir}/linux.log"/>
     </option>
-    <option id="mac_only" os="darwin">
+    <option id="mac_only" os="macos">
         <label>macOS only</label>
         <description>Delete the files</description>
         <action search="file" command="delete" path="{self.tempdir}/mac.log"/>

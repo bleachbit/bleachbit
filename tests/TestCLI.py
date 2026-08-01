@@ -20,6 +20,8 @@ import random
 import tempfile
 from unittest.mock import MagicMock, patch
 
+from tests.common import pytest
+
 # first party imports
 import bleachbit
 from bleachbit.CLI import (
@@ -31,7 +33,7 @@ from bleachbit.CLI import (
     preview_or_clean,
     process_cmd_line)
 from bleachbit.General import get_executable, run_external
-from bleachbit.GtkShim import HAVE_GTK
+from bleachbit.GtkShim import gtk_may_be_available
 from bleachbit import FileUtilities, Options, IS_WINDOWS, IS_POSIX
 from tests import common
 
@@ -79,7 +81,7 @@ class CLITestCase(common.BleachbitTestCase):
         self.assertIsInstance(o, list)
         self.assertIn('google_chrome.cache', o)
         self.assertIn('system.tmp', o)
-        gui_available = IS_WINDOWS or HAVE_GTK
+        gui_available = IS_WINDOWS or gtk_may_be_available()
         self.assertEqual(gui_available, 'system.clipboard' in o)
         self.assertNotIn('system.empty_space', o)
         self.assertNotIn('system.memory', o)
@@ -285,6 +287,7 @@ class CLITestCase(common.BleachbitTestCase):
                 self.assertNotExists(filename)
                 self.assertFalse(crash[0], "Crash detected during deletion")
 
+    @pytest.mark.no_xdist
     def test_append_text(self):
         """Unit test for CliCallback.append_text() with special strings"""
         cb = CliCallback(quiet=False)
@@ -546,6 +549,10 @@ class CLITestCase(common.BleachbitTestCase):
                 os.close(fd)
                 if '.' == dir_:
                     filename = os.path.basename(filename)
+                    # The CWD case is not covered by tearDownClass, so register
+                    # this cleanup.
+                    self.addCleanup(
+                        lambda f=filename: os.path.exists(f) and os.remove(f))
                 # not assertExists because something strange happens on Windows
                 self.assertTrue(os.path.exists(filename))
                 args = [get_executable(), '-m',
@@ -577,6 +584,7 @@ class CLITestCase(common.BleachbitTestCase):
             # FIXME: verify that there is not a message like
             # (bleachbit.py:1234): Gdk-CRITICAL **: 23:05:08.581: gdk_screen_get_root_window: assertion 'GDK_IS_SCREEN (screen)' failed
 
+    @pytest.mark.xdist_group('gui')
     @common.skipUnlessWindows
     @common.skipIfGtkUnavailable
     def test_gui_exit(self):

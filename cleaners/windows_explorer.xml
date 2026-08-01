@@ -97,7 +97,7 @@
     <label>Thumbnails</label>
     <description>Delete the cache</description>
     <warning>This will restart Windows Explorer.</warning>
-    <action command="process" cmd="taskkill.exe /f /IM explorer.exe"/>
+    <action command="process" cmd="%WINDIR%\System32\taskkill.exe /f /IM explorer.exe"/>
     <action command="delete" search="glob" path="%LOCALAPPDATA%\Microsoft\Windows\Explorer\thumbcache*.db"/>
     <!-- On 64-bit Windows, it is important to start the 64-bit Windows Explorer,
          so use the full path. Also, do not wait for the process to terminate.
