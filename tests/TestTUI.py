@@ -9,12 +9,30 @@
 Test case for BleachBit TUI module
 """
 
+# pylint: disable=protected-access
 import asyncio
-import unittest
+import sys
+
+from textual.markup import to_content
 
 from tests import common
 from bleachbit.tui.cleaner_tree import CleanerTree
-from bleachbit.FileUtilities import bytes_to_human
+from bleachbit.tui.screens.file_list import _escape_markup
+
+
+class FileListMarkupTestCase(common.BleachbitTestCase):
+    """Test markup escaping in file-list paths."""
+
+    def test_escape_markup_preserves_path_characters(self):
+        """Escaped paths should render without markup or changed characters."""
+        for path in (
+                "C:\\Users\\Alice",
+                "/tmp/a]b",
+                "/tmp/[=red]bad[/]",
+                "/tmp/[ ",
+                "/tmp/[(x)",
+        ):
+            self.assertEqual(to_content(_escape_markup(path)).plain, path)
 
 
 class CleanerTreeNodeDataTestCase(common.BleachbitTestCase):
@@ -252,8 +270,7 @@ class CleanerTreeNavigationTestCase(common.BleachbitTestCase):
         option_node = tree._option_nodes[("test", "opt1")]
 
         captured = []
-        original_select = tree.select_node
-        tree.select_node = lambda node: captured.append(node)
+        tree.select_node = captured.append
 
         tree._cursor_node = option_node
         tree.action_collapse_node()
@@ -548,8 +565,23 @@ class ConfirmScreenTestCase(common.BleachbitTestCase):
     def setUp(self):
         super().setUp()
         # Python 3.9 requires an active event loop for asyncio.Lock() which
-        # Textual's widget __init__ creates.  Python 3.10+ defers this lazily.
-        asyncio.set_event_loop(asyncio.new_event_loop())
+        # Textual's widget __init__ creates.  Python 3.10+ defers this lazily,
+        # so creating a loop here would just leak an unclosed event loop (and
+        # its AF_UNIX self-pipe sockets) on modern Python.
+        if sys.version_info < (3, 10):
+            self._setup_event_loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(self._setup_event_loop)
+        else:
+            self._setup_event_loop = None
+
+    def tearDown(self):
+        # Close the event loop created in setUp (Python 3.9 only) so it
+        # does not leak sockets across tests.
+        loop = getattr(self, '_setup_event_loop', None)
+        if loop is not None:
+            loop.close()
+            asyncio.set_event_loop(None)
+        super().tearDown()
 
     def test_confirm_screen_y_dismisses_true(self):
         """Pressing y should dismiss with True."""
@@ -627,7 +659,7 @@ class IntegrationTestCase(common.BleachbitTestCase):
 
         async def run():
             app = BleachBitTUI()
-            async with app.run_test() as pilot:
+            async with app.run_test():
                 tree = app.query_one("CleanerTree")
                 self.assertIsNotNone(tree)
                 self.assertTrue(tree.root.is_expanded)

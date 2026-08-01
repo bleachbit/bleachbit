@@ -22,6 +22,17 @@ from bleachbit.FileUtilities import bytes_to_human
 from bleachbit.Language import get_text as _
 
 
+def _escape_markup(text: str) -> str:
+    """Escape text so Textual won't interpret it as markup.
+
+    Textual parses markup only after an opening ``[``. Escape every
+    opening bracket because paths can contain it in any position (e.g.
+    test fixtures like ``/tmp/.../[``). Do not escape closing brackets or
+    backslashes: they are literal text unless paired with an opening tag.
+    """
+    return text.replace("[", r"\[")
+
+
 class FileListWidget(VerticalScroll):
     """Scrollable file list widget — reusable for both inline and overlay modes."""
 
@@ -96,7 +107,9 @@ class FileListWidget(VerticalScroll):
             abs_idx = start + i
             marker = "[green][X][/green] " if abs_idx in self._selected else "  "
             size_str = bytes_to_human(size) if size else "0"
-            lines.append(f"  {marker}{path}  ({size_str})")
+            # Paths and localized size strings may contain '[', which
+            # Textual's markup parser would otherwise interpret as markup.
+            lines.append(f"  {marker}{_escape_markup(path)}  ({_escape_markup(size_str)})")
 
         if total_pages > 1:
             lines.append("")
