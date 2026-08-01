@@ -19,7 +19,7 @@ from xml.dom.minidom import parseString
 
 from tests import common
 from bleachbit import logger
-from bleachbit.FileUtilities import children_in_directory, exe_exists
+from bleachbit.FileUtilities import children_in_directory, exe_exists, getsize
 from bleachbit.VFS import ListVFS
 from bleachbit.Unix import (
     _is_broken_xdg_desktop_application,
@@ -36,6 +36,7 @@ from bleachbit.Unix import (
     get_distribution_name_version_os_release,
     get_distribution_name_version_platform_freedesktop,
     get_distribution_name_version,
+    get_globs_size,
     get_purgeable_locales,
     get_trash_paths,
     is_broken_xdg_desktop,
@@ -191,6 +192,26 @@ class UnixTestCase(common.BleachbitTestCase):
         size = get_apt_size()
         self.assertIsInteger(size)
         self.assertGreaterEqual(size, 0)
+
+    def test_get_globs_size_vanished(self):
+        """get_globs_size() skips a file that vanishes between glob and getsize"""
+        real_fn = self.write_file('globs-size-real', contents=b'0123456789')
+        expected = getsize(real_fn)
+        self.assertGreater(expected, 0)
+        pattern = os.path.join(self.tempdir, 'globs-size-*')
+        self.assertEqual(expected, get_globs_size([pattern]))
+
+        # A file listed by the glob but gone by the time it is measured
+        ghost_fn = os.path.join(self.tempdir, 'globs-size-ghost')
+        with mock.patch('bleachbit.Unix.glob.iglob',
+                        return_value=iter([real_fn, ghost_fn])):
+            self.assertEqual(expected, get_globs_size([pattern]))
+
+        # Other errors must still propagate
+        with mock.patch('bleachbit.Unix.FileUtilities.getsize',
+                        side_effect=PermissionError('denied')):
+            with self.assertRaises(PermissionError):
+                get_globs_size([pattern])
 
     @common.skipIfWindows
     def test_get_distribution_name_version(self):

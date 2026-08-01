@@ -497,7 +497,9 @@ jobs:
   coveralls-finish:
     needs: [linux, windows-test]
     if: github.repository == 'bleachbit/bleachbit'
-    runs-on: ubuntu-latest
+    # This took 11s on ubuntu-slim (2026-07-27).
+    runs-on: ubuntu-slim
+    timeout-minutes: 3
     steps:
       - name: Coveralls finished
         uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
