@@ -11,6 +11,7 @@ Test case for module Worker
 
 import errno
 import os
+import sqlite3
 import tempfile
 
 from tests import TestCleaner, common
@@ -283,6 +284,22 @@ class WorkerTestCase(common.BleachbitTestCase):
             total_deleted = 1
         self.action_test_helper(
             'locked', 0, errors_expected, None, None, bytes_expected, total_deleted)
+
+    def test_SqliteDatabaseLocked(self):
+        """Test Worker logs a locked SQLite database without a traceback"""
+        path = self.write_file('test_sqlite_database_locked', b'')
+
+        def sqlite_locked(_):
+            raise sqlite3.OperationalError('database is locked')
+
+        cmd = Command.Function(path, sqlite_locked, 'Test SQLite database locked')
+        worker = Worker(CLI.CliCallback(), True, {'test': ['option1']})
+        with self.assertLogs('bleachbit.Worker', level='ERROR') as log_context:
+            list(worker.execute(cmd, 'option1'))
+        output = '\n'.join(log_context.output)
+        self.assertIn(f'Database is locked: {path}', output)
+        self.assertNotIn('Traceback', output)
+        self.assertEqual(worker.total_errors, 1)
 
     def test_RuntimeError(self):
         """Test Worker using Action.RuntimeErrorAction. It is normal to see a traceback.

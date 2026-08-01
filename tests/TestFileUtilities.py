@@ -11,8 +11,8 @@ Test case for module FileUtilities
 # standard library
 import contextlib
 import ctypes
+import errno
 import itertools
-import unittest.mock
 import json
 import locale
 import os
@@ -23,6 +23,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import unittest.mock
 import warnings
 
 # third-party import
@@ -1214,6 +1215,35 @@ State=AAAA/wA...
         gc_collect()
         os.unlink(db_path)
         self.assertNotExists(db_path)
+
+    def test_execute_sqlite3_open_error_translation(self):
+        """Unit test for execute_sqlite3() open-error translation
+
+        A cryptic sqlite3 "unable to open database file" must be translated
+        into OSError(EACCES) (or FileNotFoundError if the path is gone) so the
+        Worker can surface the same "Access denied" summary users see for
+        locked files.
+        """
+        # Path whose parent directory does not exist: sqlite cannot create
+        # it and raises "unable to open database file"; the path itself is
+        # gone -> FileNotFoundError.
+        gone_path = os.path.join(self.tempdir, 'no_such_subdir', 'gone.sqlite')
+        self.assertNotExists(gone_path)
+        with self.assertRaises(FileNotFoundError) as ctx:
+            execute_sqlite3(gone_path, 'vacuum')
+        self.assertEqual(ctx.exception.errno, errno.ENOENT)
+        self.assertEqual(ctx.exception.filename, gone_path)
+
+        # Path that exists but is a directory: sqlite cannot open a directory
+        # as a database and raises "unable to open database file"; the path
+        # is present -> OSError(EACCES) "Access denied".
+        present_path = self.tempdir
+        self.assertExists(present_path)
+        with self.assertRaises(OSError) as ctx:
+            execute_sqlite3(present_path, 'vacuum')
+        self.assertEqual(ctx.exception.errno, errno.EACCES)
+        self.assertEqual(ctx.exception.filename, present_path)
+        self.assertIn('Access denied', ctx.exception.strerror)
 
     def test_exe_exists(self):
         """Unit test for exe_exists()"""

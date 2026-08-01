@@ -128,6 +128,10 @@ class Worker:
                         _("Access denied when deleting registry key: %s"), e.filename)
                 else:
                     logger.error(_("Access denied: %s"), e.filename)
+            elif (e.__class__.__module__ == 'sqlite3'
+                  and e.__class__.__name__ == 'OperationalError'
+                  and str(e).startswith('database is locked')):
+                logger.error(_("Database is locked: %s"), getattr(cmd, 'path', cmd))
             else:
                 # For other errors, show the traceback.
                 msg = _('Error: {operation_option}: {command}')

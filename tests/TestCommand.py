@@ -23,6 +23,7 @@ Test case for Command
 """
 
 import os
+import sqlite3
 from unittest import mock
 
 from tests import common
@@ -99,6 +100,21 @@ class CommandTestCase(common.BleachbitTestCase):
             with self.assertRaises(StopIteration):
                 next(cmd.execute(True))
             mock_debug.assert_called_with(mock.ANY)
+
+    def test_Function_sqlite_error_propagates(self):
+        """Unit test for Function with sqlite error that is not collation
+
+        Non-collation sqlite errors must propagate to the Worker instead of
+        being silently swallowed by Command.execute().
+        """
+        path = self.write_file('test_Function_sqlite_error', b'')
+        cmd = Function(path,
+                       lambda p: FileUtilities.execute_sqlite3(
+                           p, 'SELECT * FROM nonexistent_table;'),
+                       'test_sqlite_error')
+
+        with self.assertRaises(sqlite3.OperationalError):
+            next(cmd.execute(True))
 
     def test_Shred(self):
         """Unit test for Shred"""
