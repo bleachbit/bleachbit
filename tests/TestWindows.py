@@ -249,7 +249,7 @@ class WindowsLinksMixIn():
         self.assertTrue(Windows.is_junction(linkname))
         path = Path(linkname)
         self.assertTrue(path.is_dir())
-        self.assertFalse(path.is_symlink())
+        self.assertTrue(path.is_junction())
 
 
 @common.skipUnlessWindows
