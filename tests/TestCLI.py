@@ -588,8 +588,11 @@ class CLITestCase(common.BleachbitTestCase):
     @common.skipUnlessWindows
     def test_gui_exit(self):
         """Unit test for --gui --exit, only for Windows"""
+        # When running tests without elevated privileges, then --no-uac shows
+        # the UAC dialog, requiring user interaction. Also, the parent
+        # closes immediately, but the child continues, causing test to fail.
         args = (get_executable(), '-m',
-                'bleachbit.CLI', '--gui', '--exit')
+                'bleachbit.CLI', '--gui', '--exit', '--no-uac')
         (rc, _stdout, stderr) = run_external(
             args, timeout=RUN_EXTERNAL_TIMEOUT)
         self.assertNotIn('no such option', stderr)
