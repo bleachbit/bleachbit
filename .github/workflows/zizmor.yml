@@ -25,8 +25,12 @@ concurrency:
 jobs:
   zizmor:
     name: Run zizmor
+    # The zimzore action requires working Docker daemon, which is not provided on ubuntu-slim.
+    # The zimzor binary could be installed directly on -slim, but it is simpler to use
+    # ubuntu-latest.
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Normal runtime is under 30 seconds.
+    timeout-minutes: 5
 
     permissions:
       security-events: write # upload SARIF to code scanning

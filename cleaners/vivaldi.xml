@@ -17,20 +17,20 @@ later.  See the COPYING file in the top-level directory.
   <description>Web browser</description>
   <running type="exe" os="windows" same_user="true">vivaldi.exe</running>
   <running type="exe" os="linux" same_user="true">vivaldi</running>
-  <running type="exe" os="darwin" same_user="true">Vivaldi</running>
+  <running type="exe" os="macos" same_user="true">Vivaldi</running>
   <var name="base">
     <value os="windows">%LOCALAPPDATA%\Vivaldi\User Data</value>
     <value os="linux">$XDG_CONFIG_HOME/vivaldi</value>
     <value os="linux">~/.config/vivaldi</value>
     <value os="linux">~/snap/vivaldi/current/.config/vivaldi</value>
-    <value os="darwin">$HOME/Library/Application Support/Vivaldi</value>
+    <value os="macos">$HOME/Library/Application Support/Vivaldi</value>
   </var>
   <var name="profile">
     <value os="windows">%LOCALAPPDATA%\Vivaldi\User Data\Default</value>
     <value os="linux">$XDG_CONFIG_HOME/vivaldi/Default</value>
     <value os="linux">~/.config/vivaldi/Default</value>
     <value os="linux">~/snap/vivaldi/current/.config/vivaldi/Default</value>
-    <value os="darwin">$HOME/Library/Application Support/Vivaldi/Default</value>
+    <value os="macos">$HOME/Library/Application Support/Vivaldi/Default</value>
   </var>
   <option id="cache">
     <label>Cache</label>

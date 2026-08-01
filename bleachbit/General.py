@@ -199,7 +199,7 @@ def get_real_uid():
             return pwd.getpwnam(login).pw_uid
         except KeyError:
             # Docker containers may set LOGNAME to a raw UID that lacks a passwd entry.
-            if login.isdigit():
+            if login.isdecimal():
                 return int(login)
 
     # os.getuid() returns 0 for sudo, so use it as a last resort.
@@ -230,10 +230,15 @@ def os_match(os_str, platform=sys.platform):
     # If blank, return true.
     if len(os_str) == 0:
         return True
+    # "darwin" is accepted as a deprecated alias for "macos"
+    if os_str == 'darwin':
+        logger.warning(
+            'The os="darwin" attribute is deprecated; use os="macos" instead.')
+        os_str = 'macos'
     # Otherwise, check platform.
     # Define the current operating system.
     if platform == 'darwin':
-        current_os = ('darwin', 'bsd', 'unix')
+        current_os = ('macos', 'bsd', 'unix')
     elif platform == 'linux':
         current_os = ('linux', 'unix')
     elif platform.startswith('openbsd'):

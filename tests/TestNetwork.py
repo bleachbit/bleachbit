@@ -9,10 +9,11 @@ Test case for module Network
 """
 
 # standard imports
+import http.server
 import ipaddress
 import logging
 import os
-import random
+import threading
 import unittest
 import warnings
 from unittest.mock import MagicMock, Mock, patch
@@ -44,53 +45,53 @@ def response_to_error_msg(response):
            f"Response content: {response.text}"
 
 
+class _StatusCodeHandler(http.server.BaseHTTPRequestHandler):
+    """Reply with the HTTP status code named in the request path.
+
+    A request for /status/404 responds with 404. Serving the codes
+    locally keeps the tests off external services.
+    """
+
+    # do_GET is the handler name required by http.server
+    # pylint: disable-next=invalid-name
+    def do_GET(self):
+        try:
+            status_code = int(self.path.rsplit('/', 1)[-1])
+        except ValueError:
+            status_code = 400
+        body = b'BleachBit test server\n'
+        self.send_response(status_code)
+        self.send_header('Content-Type', 'text/plain')
+        self.send_header('Content-Length', str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def log_message(self, *args):
+        """Silence the default per-request logging to stderr."""
+
+
 class NetworkTestCase(common.BleachbitTestCase):
     """Test case for module Network"""
-    status_generators = [
-        'https://browsergym.bleachbit.org/api/status/{}',
-        'https://httpbingo.org/status/{}',
-        'https://mock.httpstatus.io/{}',
-        'https://postman-echo.com/status/{}',
-        'https://the-internet.herokuapp.com/status_codes/{}'
-    ]
     status_generator_url = None
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        status_generators = list(cls.status_generators)
-        random.shuffle(status_generators)
-        for generator in status_generators:
-            # Verify the generator returns both 200 and 404 correctly.
-            # Some unreliable generators (e.g. httpbin.org) may return 200
-            # for /status/200 but 502 for /status/404, which breaks tests.
-            ok = True
-            for check_status in (200, 404):
-                url = generator.format(check_status)
-                try:
-                    response = fetch_url(url, timeout=5, max_retries=0)
-                    if response.status_code != check_status:
-                        logger.warning('Status generator %s returned %s for %s',
-                                       generator, response.status_code,
-                                       check_status)
-                        ok = False
-                        break
-                except requests.exceptions.RequestException as e:
-                    logger.warning('Status generator failed: %s (%s)',
-                                   generator.format('...'), e)
-                    ok = False
-                    break
-            if ok:
-                cls.status_generator_url = generator
-                logger.info('Using status generator: %s',
-                            cls.status_generator_url)
-                return
-        if not cls.status_generator_url:
-            raise RuntimeError('No working HTTP status code generator found.')
+        cls._httpd = http.server.ThreadingHTTPServer(
+            ('127.0.0.1', 0), _StatusCodeHandler)
+        cls._server_thread = threading.Thread(
+            target=cls._httpd.serve_forever, daemon=True)
+        cls._server_thread.start()
+        host, port = cls._httpd.server_address
+        cls.status_generator_url = f'http://{host}:{port}/status/{{}}'
+        logger.info('Local status server: %s', cls.status_generator_url)
 
-    def setUp(self):
-        """Set up the test environment before each test method."""
-        super().setUp()
+    @classmethod
+    def tearDownClass(cls):
+        cls._httpd.shutdown()
+        cls._server_thread.join(timeout=5)
+        cls._httpd.server_close()
+        super().tearDownClass()
 
     def test_unset_sslkeylogfile(self):
         """Test the function unset_sslkeylogfile()."""
@@ -163,15 +164,7 @@ class NetworkTestCase(common.BleachbitTestCase):
         for status_code in status_codes:
             url = self.status_generator_url.format(status_code)
             with self.subTest(status_code=status_code):
-                try:
-                    response = fetch_url(url, max_retries=0, timeout=5)
-                except requests.exceptions.RetryError as exc:
-                    # The server returned a retryable status (e.g. 502)
-                    # instead of the expected status code, which is a
-                    # transient server-side issue, not a code bug.
-                    self.skipTest(
-                        f'Status generator returned retryable error '
-                        f'for {status_code}: {exc}')
+                response = fetch_url(url, max_retries=0, timeout=5)
                 error_msg = response_to_error_msg(response)
                 self.assertEqual(response.status_code, status_code,
                                  error_msg)
@@ -210,14 +203,8 @@ class NetworkTestCase(common.BleachbitTestCase):
     def test_fetch_url_retry(self):
         """Unit test for fetch_url() with retry"""
         url = self.status_generator_url.format(500)
-        try:
+        with self.assertRaises(requests.exceptions.RetryError):
             fetch_url(url, max_retries=1, timeout=5)
-        except requests.exceptions.RetryError:
-            return
-        except (requests.exceptions.ConnectionError,
-                requests.exceptions.Timeout) as exc:
-            self.skipTest(f"Status generator unavailable ({exc})")
-        self.fail('fetch_url() did not raise RetryError for HTTP 500 response')
 
     def test_fetch_url_invalid(self):
         """Unit test for fetch_url() with invalid URL"""

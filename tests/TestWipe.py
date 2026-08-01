@@ -9,6 +9,7 @@ Test case for module Wipe
 """
 
 import errno
+import itertools
 import os
 import unittest
 from contextlib import ExitStack
@@ -263,15 +264,17 @@ class WipeTestCase(common.BleachbitTestCase):
     def test_wipe_path_fast(self):
         """Unit test for wipe_path() with fast mode
 
-        This test runs three iterations of the generator
-        and then aborts. Each iteration takes a little more
-        than two seconds.
+        This test runs three iterations of the generator and then
+        aborts. The idle clock is mocked forward on every check so
+        this doesn't depend on how fast the real disk/quota fills,
+        which varies a lot between CI runners.
         """
         counter = 0
-        for _i in wipe_path(self.tempdir, True):
-            counter += 1
-            if counter >= 3:
-                break
+        with mock.patch('bleachbit.Wipe.time.time', side_effect=itertools.count(0, 3)):
+            for _i in wipe_path(self.tempdir, True):
+                counter += 1
+                if counter >= 3:
+                    break
         self.assertGreater(counter, 0)
 
     def _make_mock_file(self, name='/tmp/empty_abc123'):

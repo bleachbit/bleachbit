@@ -43,6 +43,9 @@ logger = logging.getLogger(__name__)
 
 FLUSH_DELAY_SECS = 15.0  # decimal seconds
 
+# Matches a Windows drive-letter key that lost its colon to ConfigParser
+_HASHPATH_DRIVE_RE = re.compile(r'^[a-z]\\')
+
 OPTION_DEFAULTS = {
     'auto_hide': {'value': True},
     'auto_detect_lang': {'value': True},
@@ -230,7 +233,7 @@ class Options:
             return
         for option in self.config.options('hashpath'):
             pathname = option
-            if IS_WINDOWS and re.search(r'^[a-z]\\', option):
+            if IS_WINDOWS and _HASHPATH_DRIVE_RE.search(option):
                 # restore colon lost because ConfigParser treats colon special
                 # in keys
                 pathname = pathname[0] + ':' + pathname[1:]
@@ -255,26 +258,27 @@ class Options:
         section = 'warnings'
         if not self.config.has_section(section):
             return
-        migrated = False
-        for option in tuple(self.config.options(section)):
-            if option not in ('cleaner', 'protected_path'):
-                continue
-            value = self.config.get(section, option)
-            if '=' not in value:
-                continue
-            suffix, warning_value = value.rsplit('=', 1)
-            suffix = suffix.strip()
-            warning_value = warning_value.strip()
-            if not suffix or \
-                    warning_value.lower() not in self.config.BOOLEAN_STATES:
-                continue
-            migrated_option = f'{option}:{suffix}'
-            if not self.config.has_option(section, migrated_option):
-                self.config.set(section, migrated_option, warning_value)
-            self.config.remove_option(section, option)
-            migrated = True
-        if migrated:
-            self.__schedule_flush()
+        with self._flush_lock:
+            migrated = False
+            for option in tuple(self.config.options(section)):
+                if option not in ('cleaner', 'protected_path'):
+                    continue
+                value = self.config.get(section, option)
+                if '=' not in value:
+                    continue
+                suffix, warning_value = value.rsplit('=', 1)
+                suffix = suffix.strip()
+                warning_value = warning_value.strip()
+                if not suffix or \
+                        warning_value.lower() not in self.config.BOOLEAN_STATES:
+                    continue
+                migrated_option = f'{option}:{suffix}'
+                if not self.config.has_option(section, migrated_option):
+                    self.config.set(section, migrated_option, warning_value)
+                self.config.remove_option(section, option)
+                migrated = True
+            if migrated:
+                self.__schedule_flush()
 
     def __auto_preserve_languages(self):
         """Automatically preserve the active language"""
@@ -399,17 +403,19 @@ class Options:
     def remember_warning_preference(self, key):
         """Persist that a specific warning was confirmed once."""
         section = "warnings"
-        if not self.config.has_section(section):
-            self.config.add_section(section)
-        self.config.set(section, key, 'True')
-        self.__schedule_flush()
+        with self._flush_lock:
+            if not self.config.has_section(section):
+                self.config.add_section(section)
+            self.config.set(section, key, 'True')
+            self.__schedule_flush()
 
     def clear_warning_preferences(self):
         """Clear all saved warning confirmations."""
         section = "warnings"
-        if self.config.has_section(section):
-            self.config.remove_section(section)
-            self.__schedule_flush()
+        with self._flush_lock:
+            if self.config.has_section(section):
+                self.config.remove_section(section)
+                self.__schedule_flush()
 
     def get_tree(self, parent, child):
         """Retrieve an option for the tree view.
@@ -469,36 +475,36 @@ class Options:
             # so clear it first.
             for section in self.config.sections():
                 self.config.remove_section(section)
-        try:
-            with open(bleachbit.options_file, 'r', encoding='utf-8-sig', errors='surrogateescape') as _file:
-                self.config.read_file(_file, bleachbit.options_file)
-        except FileNotFoundError:
-            if not bleachbit.options_file.startswith('/tmp'):
-                logger.debug("Configuration file does not exist yet: %s",
-                             bleachbit.options_file)
-        except Exception:
-            logger.exception("Error reading application's configuration")
-        if not self.config.has_section("bleachbit"):
-            self.config.add_section("bleachbit")
-        if not self.config.has_section("hashpath"):
-            self.config.add_section("hashpath")
-        self.__migrate_warning_preferences()
-        if not self.config.has_section("list/shred_drives"):
-            from bleachbit.FileUtilities import guess_overwrite_paths
             try:
-                self.set_list('shred_drives', guess_overwrite_paths())
-            except:
-                logger.exception(
-                    _("Error when setting the default drives to shred."))
-        # BleachBit upgrade or first start ever
-        if not self.config.has_option('bleachbit', 'version') or \
-                self.get('version') != bleachbit.APP_VERSION:
-            if self.config.has_option('bleachbit', 'version'):
-                self.old_version = self.get('version')
-            self.set('first_start', True)
+                with open(bleachbit.options_file, 'r', encoding='utf-8-sig', errors='surrogateescape') as _file:
+                    self.config.read_file(_file, bleachbit.options_file)
+            except FileNotFoundError:
+                if not bleachbit.options_file.startswith('/tmp'):
+                    logger.debug("Configuration file does not exist yet: %s",
+                                 bleachbit.options_file)
+            except Exception:
+                logger.exception("Error reading application's configuration")
+            if not self.config.has_section("bleachbit"):
+                self.config.add_section("bleachbit")
+            if not self.config.has_section("hashpath"):
+                self.config.add_section("hashpath")
+            self.__migrate_warning_preferences()
+            if not self.config.has_section("list/shred_drives"):
+                from bleachbit.FileUtilities import guess_overwrite_paths
+                try:
+                    self.set_list('shred_drives', guess_overwrite_paths())
+                except:
+                    logger.exception(
+                        _("Error when setting the default drives to shred."))
+            # BleachBit upgrade or first start ever
+            if not self.config.has_option('bleachbit', 'version') or \
+                    self.get('version') != bleachbit.APP_VERSION:
+                if self.config.has_option('bleachbit', 'version'):
+                    self.old_version = self.get('version')
+                self.set('first_start', True)
 
-        # set version
-        self.set("version", bleachbit.APP_VERSION)
+            # set version
+            self.set("version", bleachbit.APP_VERSION)
 
     def set(self, key, value, section='bleachbit'):
         """Set a general option"""
@@ -507,10 +513,11 @@ class Options:
         override_key = (section, key)
         if override_key not in self.overrides:
             value = str(value)
-            if self.config.has_option(section, key) and self.config.get(section, key) == value:
-                return
-            self.config.set(section, key, value)
-            self.__schedule_flush()
+            with self._flush_lock:
+                if self.config.has_option(section, key) and self.config.get(section, key) == value:
+                    return
+                self.config.set(section, key, value)
+                self.__schedule_flush()
 
     def commit(self):
         """Cancel times and write changes"""
@@ -547,28 +554,30 @@ class Options:
         """Set a value which is a list data type"""
         assert isinstance(key, str), f"key must be a string: {key}"
         section = f"list/{key}"
-        # Remove existing section first to clear old values
-        # before writing new ones.
-        if self.config.has_section(section):
-            self.config.remove_section(section)
-        self.config.add_section(section)
-        for counter, value in enumerate(values):
-            self.config.set(section, str(counter), value)
-        self.__schedule_flush()
+        with self._flush_lock:
+            # Remove existing section first to clear old values
+            # before writing new ones.
+            if self.config.has_section(section):
+                self.config.remove_section(section)
+            self.config.add_section(section)
+            for counter, value in enumerate(values):
+                self.config.set(section, str(counter), value)
+            self.__schedule_flush()
 
     def set_whitelist_paths(self, values):
         """Save the keep list (formerly whitelist)"""
         section = "whitelist/paths"
-        # Remove existing section first to clear old values
-        # before writing new ones.
-        if self.config.has_section(section):
-            self.config.remove_section(section)
-        self.config.add_section(section)
-        for counter, value in enumerate(values):
-            self.config.set(section, str(counter) + '_type', value[0])
-            self.config.set(section, str(counter) + '_path', value[1])
-        self._paths_cache.pop(section, None)
-        self.__schedule_flush()
+        with self._flush_lock:
+            # Remove existing section first to clear old values
+            # before writing new ones.
+            if self.config.has_section(section):
+                self.config.remove_section(section)
+            self.config.add_section(section)
+            for counter, value in enumerate(values):
+                self.config.set(section, str(counter) + '_type', value[0])
+                self.config.set(section, str(counter) + '_path', value[1])
+            self._paths_cache.pop(section, None)
+            self.__schedule_flush()
 
     def set_custom_paths(self, values):
         """Save the custom paths
@@ -577,41 +586,44 @@ class Options:
             where path_type is either 'file' or 'folder'
         """
         section = "custom/paths"
-        # Remove existing section first to clear old values
-        # before writing new ones.
-        if self.config.has_section(section):
-            self.config.remove_section(section)
-        self.config.add_section(section)
-        for counter, value in enumerate(values):
-            path_type, path = value
-            assert path_type in ('file', 'folder')
-            self.config.set(section, str(counter) + '_type', path_type)
-            self.config.set(section, str(counter) + '_path', path)
-        self._paths_cache.pop(section, None)
-        self.__schedule_flush()
+        with self._flush_lock:
+            # Remove existing section first to clear old values
+            # before writing new ones.
+            if self.config.has_section(section):
+                self.config.remove_section(section)
+            self.config.add_section(section)
+            for counter, value in enumerate(values):
+                path_type, path = value
+                assert path_type in ('file', 'folder')
+                self.config.set(section, str(counter) + '_type', path_type)
+                self.config.set(section, str(counter) + '_path', path)
+            self._paths_cache.pop(section, None)
+            self.__schedule_flush()
 
     def set_language(self, langid, value):
         """Set the value for a locale (whether to preserve it)"""
-        if not self.config.has_section('preserve_languages'):
-            self.config.add_section('preserve_languages')
-        if self.config.has_option('preserve_languages', langid) and not value:
-            self.config.remove_option('preserve_languages', langid)
-        else:
-            self.config.set('preserve_languages', langid, str(value))
-        self.__schedule_flush()
+        with self._flush_lock:
+            if not self.config.has_section('preserve_languages'):
+                self.config.add_section('preserve_languages')
+            if self.config.has_option('preserve_languages', langid) and not value:
+                self.config.remove_option('preserve_languages', langid)
+            else:
+                self.config.set('preserve_languages', langid, str(value))
+            self.__schedule_flush()
 
     def set_tree(self, parent, child, value):
         """Set an option for the tree view.  The child may be None."""
-        if not self.config.has_section("tree"):
-            self.config.add_section("tree")
-        option = parent
-        if child is not None:
-            option = option + "." + child
-        if self.config.has_option('tree', option) and not value:
-            self.config.remove_option('tree', option)
-        else:
-            self.config.set('tree', option, str(value))
-        self.__schedule_flush()
+        with self._flush_lock:
+            if not self.config.has_section("tree"):
+                self.config.add_section("tree")
+            option = parent
+            if child is not None:
+                option = option + "." + child
+            if self.config.has_option('tree', option) and not value:
+                self.config.remove_option('tree', option)
+            else:
+                self.config.set('tree', option, str(value))
+            self.__schedule_flush()
 
     def toggle(self, key):
         """Toggle a boolean key"""

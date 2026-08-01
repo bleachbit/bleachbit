@@ -19,7 +19,7 @@ from xml.dom.minidom import parseString
 
 from tests import common
 from bleachbit import logger
-from bleachbit.FileUtilities import children_in_directory, exe_exists
+from bleachbit.FileUtilities import children_in_directory, exe_exists, getsize
 from bleachbit.VFS import ListVFS
 from bleachbit.Unix import (
     _is_broken_xdg_desktop_application,
@@ -36,6 +36,7 @@ from bleachbit.Unix import (
     get_distribution_name_version_os_release,
     get_distribution_name_version_platform_freedesktop,
     get_distribution_name_version,
+    get_globs_size,
     get_purgeable_locales,
     get_trash_paths,
     is_broken_xdg_desktop,
@@ -192,6 +193,26 @@ class UnixTestCase(common.BleachbitTestCase):
         self.assertIsInteger(size)
         self.assertGreaterEqual(size, 0)
 
+    def test_get_globs_size_vanished(self):
+        """get_globs_size() skips a file that vanishes between glob and getsize"""
+        real_fn = self.write_file('globs-size-real', contents=b'0123456789')
+        expected = getsize(real_fn)
+        self.assertGreater(expected, 0)
+        pattern = os.path.join(self.tempdir, 'globs-size-*')
+        self.assertEqual(expected, get_globs_size([pattern]))
+
+        # A file listed by the glob but gone by the time it is measured
+        ghost_fn = os.path.join(self.tempdir, 'globs-size-ghost')
+        with mock.patch('bleachbit.Unix.glob.iglob',
+                        return_value=iter([real_fn, ghost_fn])):
+            self.assertEqual(expected, get_globs_size([pattern]))
+
+        # Other errors must still propagate
+        with mock.patch('bleachbit.Unix.FileUtilities.getsize',
+                        side_effect=PermissionError('denied')):
+            with self.assertRaises(PermissionError):
+                get_globs_size([pattern])
+
     @common.skipIfWindows
     def test_get_distribution_name_version(self):
         """Unit test for method get_distribution_name_version()"""
@@ -240,14 +261,13 @@ class UnixTestCase(common.BleachbitTestCase):
     @mock.patch('bleachbit.Unix.logger.info')
     def test_is_broken_xdg_desktop_other(self, mock_logger):
         """Unit test for is_broken_xdg_desktop() using non-.desktop files"""
-        system_dirs = ['/usr/bin', '/usr/lib', '/etc']
-        filenames = []
-        for dirname in system_dirs:
-            for filename in children_in_directory(dirname, False):
-                if filename.endswith('.desktop'):
-                    continue
-                filenames.append(filename)
-        sample_size = min(1000, len(filenames))
+        # Recursing /usr/bin and /usr/lib was slow (100k+ files, each getting
+        # children_in_directory's symlink checks). A flat /etc listing is enough.
+        etc_dir = '/etc'
+        filenames = [os.path.join(etc_dir, name) for name in os.listdir(etc_dir)
+                     if not name.endswith('.desktop')
+                     and os.path.isfile(os.path.join(etc_dir, name))]
+        sample_size = min(30, len(filenames))
         sampled_filenames = random.sample(filenames, sample_size)
         for filename in sampled_filenames:
             result = is_broken_xdg_desktop(filename)

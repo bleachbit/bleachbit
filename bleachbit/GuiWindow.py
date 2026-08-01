@@ -996,7 +996,7 @@ class GUI(Gtk.ApplicationWindow):
         # show the context menu
         menu.attach_to_widget(treeview)
         menu.show_all()
-        menu.popup(None, None, None, None, event.button, event.time)
+        menu.popup_at_pointer(event)
         return True
 
     def setup_drag_n_drop(self):
@@ -1214,11 +1214,7 @@ class GUI(Gtk.ApplicationWindow):
 
         hbar.pack_start(box)
 
-        # Add hamburger menu on the right.
-        # This is not needed for Microsoft Windows because other code places its
-        # menu on the left side.
-        if IS_WINDOWS:
-            return hbar
+        # Add hamburger menu on the right
         menu_button = Gtk.MenuButton()
         icon = Gio.ThemedIcon(name="open-menu-symbolic")
         image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)

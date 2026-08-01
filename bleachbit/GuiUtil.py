@@ -17,7 +17,6 @@ from bleachbit import APP_NAME, FileUtilities, IS_WINDOWS
 from bleachbit.GUI import logger
 from bleachbit.GtkShim import (
     GLib, Gdk, Gtk, gi,
-    suppress_pygobject_asyncio_warnings,
     suppress_pygobject_import_warnings,
 )
 
@@ -83,18 +82,39 @@ def get_clipboard_paths(clipboard=None, targets=None):
         if not has_targets:
             targets = []
 
+    # Compare names: an interned Gdk.Atom does not reliably compare equal to
+    # the atom for the same name in the target list.
+    targets_by_name = {}
+    has_unusable_target_name = False
+    for target in targets:
+        try:
+            target_name = target.name()
+        except UnicodeDecodeError:
+            has_unusable_target_name = True
+            logger.debug('Failed to decode clipboard target name', exc_info=True)
+        else:
+            if target_name == 'Gdk.Atom':
+                has_unusable_target_name = True
+            else:
+                targets_by_name[target_name] = target
+
     shred_paths = []
-    if Gdk.atom_intern_static_string('text/uri-list') in targets:
+    uri_target = targets_by_name.get('text/uri-list')
+    if uri_target is None and has_unusable_target_name:
+        # Use intern(), not atom_intern_static_string(), which keeps a raw
+        # pointer to our string instead of copying it and can corrupt the
+        # atom once that string is garbage collected.
+        uri_target = Gdk.Atom.intern('text/uri-list', False)
+    if uri_target is not None:
         # Linux
-        shred_uri_contents = clipboard.wait_for_contents(
-            Gdk.atom_intern_static_string('text/uri-list'))
+        shred_uri_contents = clipboard.wait_for_contents(uri_target)
         if shred_uri_contents:
             shred_paths = FileUtilities.uris_to_paths(
                 shred_uri_contents.get_uris())
 
     if not shred_paths and (
-            Gdk.atom_intern_static_string('text/plain') in targets or
-            Gdk.atom_intern_static_string('UTF8_STRING') in targets):
+            'text/plain' in targets_by_name or
+            'UTF8_STRING' in targets_by_name):
         # Plain text pasted from a text editor
         text = clipboard.wait_for_text()
         if text:
@@ -221,10 +241,7 @@ def flush_gtk_events(max_iterations: int = 5):
     """Process pending GTK events to allow style updates to land."""
     iterations = 0
     while Gtk.events_pending() and (max_iterations is None or iterations < max_iterations):
-        # PyGObject 3.56.2 calls deprecated asyncio APIs, which breaks tests
-        # run with PYTHONWARNINGS=error.
-        with suppress_pygobject_asyncio_warnings():
-            Gtk.main_iteration_do(False)
+        Gtk.main_iteration_do(False)
         iterations += 1
 
 

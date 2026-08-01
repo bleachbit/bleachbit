@@ -23,17 +23,7 @@ from pathlib import Path
 from unittest import mock
 from random import randint
 
-try:
-    import pytest
-except ImportError:  # pytest is optional for unittest discovery
-    class _pytest_shim:
-        class mark:
-            @staticmethod
-            def xdist_group(_name):
-                def decorator(func):
-                    return func
-                return decorator
-    pytest = _pytest_shim()
+from tests.common import pytest
 
 # first party imports
 from tests import common
@@ -287,6 +277,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         for f in get_recycle_bin():
             self.assertLExists(extended_path(f))
 
+    @pytest.mark.no_xdist
     @pytest.mark.xdist_group('recycle-bin')
     @common.skipUnlessDestructive
     def test_get_recycle_bin_destructive(self):
@@ -970,6 +961,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertTrue(not detect_registry_key(
             'HKCU\\Software\\DoesNotExist'))
 
+    @pytest.mark.xdist_group('gui')
     def test_get_clipboard_paths(self):
         """Unit test for get_clipboard_paths"""
         # The clipboard is an unknown state, so check the function does
@@ -999,7 +991,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         args = ('powershell.exe', 'Set-Clipboard',
                 '-Path', r'c:\windows\*.exe')
         (ext_rc, _stdout, _stderr) = General.run_external(args)
-        self.assertEqual(ext_rc, 0)
+        # It may print "Requested Clipboard operation did not succeed" to stderr.
+        self.assertEqual(ext_rc, 0, f"powershell.exe failed with return code {ext_rc}: {_stderr}")
         paths = get_clipboard_paths()
         self.assertIsInstance(paths, (type(None), tuple))
         self.assertGreater(len(paths), 1)
@@ -1009,6 +1002,9 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_get_font_conf_file(self):
         """Unit test for get_font_conf_file"""
         # This tests only one of three situations.
+        from bleachbit.GtkShim import gtk_may_be_available
+        if not gtk_may_be_available():
+            self.skipTest("GTK is not available")
         font_fn = get_font_conf_file()
         self.assertExists(font_fn)
 
@@ -1061,6 +1057,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             ret = empty_recycle_bin(drive, really_delete=False)
             self.assertIsInteger(ret)
 
+    @pytest.mark.no_xdist
     @pytest.mark.xdist_group('recycle-bin')
     @common.skipUnlessDestructive
     def test_empty_recycle_bin_per_drive_destructive(self):
@@ -1078,6 +1075,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                     raise
                 self.assertIsInteger(ret)
 
+    @pytest.mark.no_xdist
     @pytest.mark.xdist_group('recycle-bin')
     @common.skipUnlessDestructive
     def test_empty_recycle_bin_all_drives_destructive(self):

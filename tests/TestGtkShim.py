@@ -16,6 +16,8 @@ import sys
 import unittest
 from unittest import mock
 
+from tests.common import pytest
+
 from tests import common
 from bleachbit import IS_WINDOWS
 from bleachbit.General import get_executable
@@ -129,6 +131,7 @@ class ShowWindowsErrorDialogTestCase(unittest.TestCase):
             _show_windows_error_dialog('BleachBit', '<html>test</html>')
             mock_open.assert_called_once()
             html_path = mock_open.call_args[0][0].replace('file:///', '')
+            self.addCleanup(os.remove, html_path)
             with open(html_path, encoding='utf-8') as f:
                 self.assertIn('test', f.read())
 
@@ -175,6 +178,7 @@ class FixArgTestCase(unittest.TestCase):
         """ASCII strings must pass through unchanged."""
         self.assertEqual(_fix_arg('hello'), 'hello')
 
+    @pytest.mark.no_xdist
     def test_surrogate_replaced(self):
         """Unpaired surrogates must be replaced with the replacement character."""
         arg = 'prefix' + chr(0xD800) + 'suffix'
@@ -261,11 +265,17 @@ print(f"OK success={{success}}")
         script = '''
 import sys
 import bleachbit.GtkShim as shim
-assert not shim.is_gtk_available()
-assert not shim.gtk_may_be_available()
+if shim.is_gtk_available():
+    sys.exit('is_gtk_available() is true without a display')
+if shim.gtk_may_be_available():
+    sys.exit('gtk_may_be_available() is true without a display')
 from bleachbit.GtkShim import Gtk
-assert Gtk is None
-assert not any(name.startswith('gi.repository') for name in sys.modules)
+if Gtk is not None:
+    sys.exit('Gtk is not None without a display')
+imported = [n for n in sys.modules if n.startswith('gi.repository')]
+if imported:
+    sys.exit(f'imported GTK libraries: {imported}')
+print('OK')
 '''
         env = os.environ.copy()
         env.pop('DISPLAY', None)
@@ -278,6 +288,7 @@ assert not any(name.startswith('gi.repository') for name in sys.modules)
         )
         self.assertEqual(result.returncode, 0,
                          f'stderr: {result.stderr}')
+        self.assertIn('OK', result.stdout, f'stderr: {result.stderr}')
 
 
 class GtkAvailabilityTestCase(unittest.TestCase):

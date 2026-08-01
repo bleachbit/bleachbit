@@ -51,7 +51,9 @@ jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # Normal runtime is about 1.5 minutes on ubuntu-latest, but a test on
+    # ubuntu-slim was 4 minutes.
+    timeout-minutes: 5
 
     permissions:
       security-events: write # upload results to code scanning
