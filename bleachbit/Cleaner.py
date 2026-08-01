@@ -10,9 +10,11 @@ Perform (or assist with) cleaning operations.
 
 import glob
 import logging
+import os
 import os.path
 import re
 import tempfile
+import time
 
 from bleachbit.Constant import EMPTY_SPACE_WARNING
 from bleachbit.Language import get_text as _
@@ -460,11 +462,24 @@ class System(Cleaner):
                 r'%temp%'), os.path.expandvars("%windir%\\temp\\")]
             # whitelist the folder %TEMP%\Low but not its contents
             # https://bugs.launchpad.net/bleachbit/+bug/1421726
+            # Do not delete recent D-Bus nonce files because it allows
+            # starting more than once instance of this application.
+            gdbus_nonce_re = re.compile(r'gdbus-nonce-file-[0-9A-Za-z]+$',
+                                        re.IGNORECASE)
+            gdbus_nonce_max_age_seconds = 7 * 24 * 60 * 60 # 7 days
             for dirname in dirnames:
                 low = os.path.join(dirname, 'low')
                 for filename in children_in_directory(dirname, True):
-                    if not path_equal(low, filename, case_sensitive=False):
-                        yield Command.Delete(filename)
+                    if path_equal(low, filename, case_sensitive=False):
+                        continue
+                    if gdbus_nonce_re.match(os.path.basename(filename)):
+                        try:
+                            age = time.time() - os.stat(filename).st_mtime
+                        except OSError:
+                            continue
+                        if age < gdbus_nonce_max_age_seconds:
+                            continue
+                    yield Command.Delete(filename)
 
         # trash
         if IS_POSIX and 'trash' == option_id:
