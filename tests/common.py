@@ -321,16 +321,39 @@ class BleachbitTestCase(unittest.TestCase):
         # WinError 32 in rmtree() in tearDownClass.
         basedir = os.path.join(os.path.dirname(__file__), '..')
         os.chdir(basedir)
-        if self._options_file_snapshot is not None:
-            os.makedirs(os.path.dirname(bleachbit.options_file), exist_ok=True)
-            with open(bleachbit.options_file, 'wb') as f:
-                f.write(self._options_file_snapshot)
-        elif os.path.exists(bleachbit.options_file):
-            os.remove(bleachbit.options_file)
+        # Cancel first: a deferred flush holds bleachbit.ini open, which
+        # fails the remove below with WinError 32. Cancelling takes the
+        # flush lock, so it also waits out a flush already running.
+        bleachbit.Options.options.cancel_pending_flush()
+        self._restore_options_file()
         bleachbit.Options.options.restore()
         # cancel the flush timer restore() re-arms when the file has no
         # matching version, else it fires during a later test
         bleachbit.Options.options.cancel_pending_flush()
+
+    def _restore_options_file(self):
+        """Put bleachbit.ini back the way setUp() found it.
+
+        Retries because on Windows a test subprocess can briefly hold
+        the file open.
+        """
+        for attempt in range(5):
+            try:
+                if self._options_file_snapshot is not None:
+                    os.makedirs(os.path.dirname(
+                        bleachbit.options_file), exist_ok=True)
+                    with open(bleachbit.options_file, 'wb') as f:
+                        f.write(self._options_file_snapshot)
+                elif os.path.exists(bleachbit.options_file):
+                    os.remove(bleachbit.options_file)
+                return
+            except PermissionError:
+                logger.warning('tearDown: restoring %s failed (attempt %d): %s',
+                               bleachbit.options_file, attempt + 1,
+                               sys.exc_info()[1])
+                if attempt == 4:
+                    raise
+                time.sleep(0.5)
 
     #
     # type asserts
