@@ -479,7 +479,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_RUN_AS_ADMIN ${LANG_BULGARIAN} "Трябва да пуснете приложението като администратор."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_BULGARIAN} "Приложението $(^NameDA) е инсталирано и за всички потребители, и за текущия потребител.$\r$\nИзберете кое да бъде премахнато."
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_BULGARIAN} "Избиране на премахвана инсталация на $(^NameDA)."
-	LangString OLD_WINDOWS_WARNING ${LANG_BULGARIAN} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
+	LangString OLD_WINDOWS_WARNING ${LANG_BULGARIAN} "Това издание на BleachBit изисква Windows 10 или по-нов. За да изтеглите съвместимо издание изберете Добре. За изход от инсталатора изберете Отказ."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_BULGARIAN} "Основни файлове за нормалната работа на ${prodname} (задължително)."
 	LangString SECTION_CORE_NAME ${LANG_BULGARIAN} "Основни файлове (задължително)"
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_BULGARIAN} "Създаване на препратка на работния плот."
