@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: BleachBit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-07-12 15:23-0600\n"
-"PO-Revision-Date: 2026-07-16 07:01+0000\n"
+"PO-Revision-Date: 2026-08-02 18:04+0000\n"
 "Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/bleachbit/main/"
@@ -762,6 +762,8 @@ msgid ""
 "This option is slow. Inspect the preview for files you want to keep, like "
 "those bundled with applications."
 msgstr ""
+"Тази настройка работи бавно. Проверете файловете в режима за преглед за "
+"такива, които искате да бъдат оставени, напр., такива, идващи с приложения."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
@@ -1128,6 +1130,8 @@ msgid ""
 "compatible version for your system, click OK. To exit the installer, click "
 "Cancel."
 msgstr ""
+"Това издание на BleachBit изисква Windows 10 или по-нов. За да изтеглите "
+"съвместимо издание изберете Добре. За изход от инсталатора изберете Отказ."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
@@ -1300,6 +1304,11 @@ msgid ""
 "See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-"
 "questions.html"
 msgstr ""
+"За да стартирате приложение в Wayland с права на суперпотербителя, разрешете "
+"достъпа с тази команда:\n"
+"xhost si:localuser:root\n"
+"Повече информация за xhost можете да намерите на https://docs.bleachbit.org/"
+"doc/frequently-asked-questions.html"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1389,7 +1398,7 @@ msgstr ""
 #. TRANSLATORS: This is a label for the option to clear the system DNS cache.
 #: ../bleachbit/Cleaner.py
 msgid "DNS cache"
-msgstr ""
+msgstr "Временна памет за DNS"
 
 #. TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py
