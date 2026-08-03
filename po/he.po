@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-07-12 15:23-0600\n"
-"PO-Revision-Date: 2026-07-28 13:01+0000\n"
-"Last-Translator: \"Omer I.S.\" <omeritzicschwartz@gmail.com>\n"
+"PO-Revision-Date: 2026-08-03 13:50+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/bleachbit/main/"
 "he/>\n"
 "Language: he\n"
@@ -703,10 +703,8 @@ msgstr "מסייע בינה מלאכותית"
 
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Form history"
 msgid "File history"
-msgstr "היסטוריית הטפסים"
+msgstr "היסטוריית קבצים"
 
 #. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
 #: ../cleaners/claude.xml
@@ -744,8 +742,8 @@ msgid ""
 "This option is slow. Inspect the preview for files you want to keep, like "
 "those bundled with applications."
 msgstr ""
-"אפשרות זו תיקח זמן רב. נא לעיין בתצוגה המקדימה כדי לראות אילו קבצים היית "
-"רוצה לשמור, כמו אלה שהגיעו עם יישומים."
+"אפשרות זו תיקח זמן רב. נא לעיין בתצוגה המקדימה כדי לראות אילו קבצים חשוב לך "
+"לשמור, כמו אלה שהגיעו יחד עם יישומים."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
@@ -1094,8 +1092,8 @@ msgid ""
 "compatible version for your system, click OK. To exit the installer, click "
 "Cancel."
 msgstr ""
-"גרסה זו של BleachBit דורשת Windows 10 ומעלה. יש ללחוץ על אישור בשביל להוריד "
-"גרסה תואמת למחשבך. כדי לצאת מאשף ההתקנה, יש ללחוץ על ביטול."
+"גרסה זו של BleachBit דורשת Windows 10 ומעלה. אפשר ללחוץ על אישור בשביל "
+"להוריד גרסה תואמת למחשבך או על ביטול כדי לצאת מתוכנית ההתקנה."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
@@ -1267,8 +1265,8 @@ msgid ""
 "See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-"
 "questions.html"
 msgstr ""
-"לצורך הרצת יישום עם ממשק משתמש גרפי עם הרשאות שורש ב־Wayland, נא לאפשר גישה "
-"בעזרת הפקודה הבאה:\n"
+"לצורך הרצת יישום עם ממשק משתמש גרפי עם הרשאות על (root) ב־Wayland, נא לאפשר "
+"גישה בעזרת הפקודה הבאה:\n"
 "xhost si:localuser:root\n"
 "ניתן למצוא מידע נוסף על הפקודה xhost בכתובת https://docs.bleachbit.org/doc/"
 "frequently-asked-questions.html"
@@ -2682,15 +2680,11 @@ msgid "Error when checking for updates: %s"
 msgstr "שגיאה בעת איתור עדכונים: %s"
 
 #: ../bleachbit/Memory.py
-#, fuzzy
-#| msgid ""
-#| "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
-#| "information."
 msgid ""
 "The command 'swapon -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"הפקודה ‚swapoff -s’ נכשלה, לכן בוצעה נסיגה אל ‎/proc/swaps לפרטי שטח הדפדוף."
+"הפקודה ‚swapon -s’ נכשלה, לכן בוצעה נסיגה אל ‎/proc/swaps לפרטי שטח הדפדוף."
 
 #: ../bleachbit/Memory.py
 msgid "Disabling swap."
