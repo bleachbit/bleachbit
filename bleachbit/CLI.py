@@ -130,7 +130,9 @@ def args_to_operations(args, preset, all_but_warning, excludes=None):
     """Convert command-line arguments to a dictionary of operations
 
     Args:
-        args: List of cleaner.option strings (e.g., ['system.tmp', 'firefox.cache'])
+        args: List of cleaner.option strings (e.g., ['system.tmp', 'firefox.cache']).
+            An argument prefixed with '-' (e.g., '-system.recycle_bin') is treated
+            as an exclusion, the same as passing it via --except.
         preset: Boolean indicating whether to use saved preset operations
         all_but_warning: Boolean indicating whether to include all non-warning operations
         excludes: Optional list of cleaner.option strings to remove from operations
@@ -146,8 +148,25 @@ def args_to_operations(args, preset, all_but_warning, excludes=None):
 
     if excludes is None:
         excludes = []
+    else:
+        # Copy so the leading-'-' negations below are not appended to the
+        # caller's list.
+        excludes = list(excludes)
+
+    # Support the leading '-' negation syntax (e.g. 'system.*'
+    # '-system.recycle_bin') by routing negated arguments into the same
+    # exclusion path as --except.  Without this, '-system.recycle_bin' was
+    # treated as a cleaner literally named '-system', which later raised a
+    # KeyError in Worker.run_operations.
+    included_args = []
+    for arg in args:
+        if arg.startswith('-') and len(arg) > 1:
+            excludes.append(arg[1:])
+        else:
+            included_args.append(arg)
+
     positive_args = set(
-        args + args_to_operations_list(preset, all_but_warning))
+        included_args + args_to_operations_list(preset, all_but_warning))
 
     def fix_deprecated(cid, oid):
         if 'system' == cid and 'free_disk_space' == oid:
