@@ -1235,7 +1235,7 @@ Version: 2023-02-223
 	LangString MULTIUSER_RUN_AS_ADMIN ${LANG_INDONESIAN} "Anda perlu menjalankan program ini sebagai administrator."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_INDONESIAN} "$(^NameDA) terinstal baik untuk semua pengguna maupun untuk pengguna saat ini.\$\r$\nPilih instalasi mana yang akan dihapus."
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_INDONESIAN} "Pilih untuk pengguna mana $(^NameDA) akan dihapus."
-	LangString OLD_WINDOWS_WARNING ${LANG_INDONESIAN} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
+	LangString OLD_WINDOWS_WARNING ${LANG_INDONESIAN} "Versi BleachBit ini memerlukan Windows 10 atau yang lebih baru. Untuk mengunduh versi yang kompatibel untuk sistem Anda, klik OK. Untuk keluar dari installer, klik Batal."
 	LangString SECTION_CORE_DESCRIPTION ${LANG_INDONESIAN} "Ini adalah berkas dasar yang diperlukan agar ${prodname} berfungsi (diperlukan)."
 	LangString SECTION_CORE_NAME ${LANG_INDONESIAN} "Berkas inti (diperlukan)"
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_INDONESIAN} "Buat pintasan di desktop."
