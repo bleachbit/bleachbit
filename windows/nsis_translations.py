@@ -557,7 +557,7 @@ def main():
     parser.add_argument('--pot', action='store_true',
                         help='Generate po/nsis.pot from NSIS English strings.')
     parser.add_argument('--generate', action='store_true',
-                        help='Generate NsisInclude/BleachBitLang.nsh from po/*.po.')
+                        help='Generate NsisInclude/NsisMultiUserLang.nsh from po/*.po.')
     parser.add_argument('--check-keys', action='store_true',
                         help='Check that TRANSLATION_HINTS keys exist in NSIS files.')
     parser.add_argument('--unittest', action='store_true',

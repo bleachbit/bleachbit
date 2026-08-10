@@ -45,7 +45,7 @@ jobs:
       - name: Extract translations from .mo to .desktop
         run: python3 extract_desktop.py
 
-      # Generate NsisInclude/BleachBitLang.nsh from po/*.po
+      # Generate windows/NsisInclude/NsisMultiUserLang.nsh from po/*.po
       - name: Extract translations to NSIS
         run: python3 windows/nsis_translations.py --generate
 
