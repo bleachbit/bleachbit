@@ -82,7 +82,9 @@ class Delete:
         except Exception as e:
             # Handle Windows-specific pywintypes.error
             # pywintypes.error: (5, 'FindFirstFileW', 'Access is denied.')
-            if hasattr(e, 'winerror'):
+            # Use a truthy check rather than hasattr(): on Windows every
+            # OSError carries a winerror attribute, sometimes None.
+            if getattr(e, 'winerror', None):
                 size = None
             else:
                 raise
