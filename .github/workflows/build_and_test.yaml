@@ -336,7 +336,8 @@ jobs:
         with:
           name: windows-build-${{ steps.revision.outputs.version }}
           if-no-files-found: error
-          compression-level: 9
+          # The installer and the portable zip are already compressed
+          compression-level: 0
           path: |
             BleachBit-*-setup.exe
             BleachBit-*-portable.zip
@@ -347,7 +348,7 @@ jobs:
         with:
           name: windows-build-english-${{ steps.revision.outputs.version }}
           if-no-files-found: error
-          compression-level: 9
+          compression-level: 0
           path: |
             BleachBit-*-setup-English.exe
 
