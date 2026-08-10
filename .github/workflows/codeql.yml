@@ -5,7 +5,7 @@ on:
     branches:
       - '**'
       - '!dependabot/**'
-    paths-ignore:
+    paths-ignore: &paths-ignore
       - 'appveyor.yml'
       - 'bleachbit.png'
       - 'bleachbit.spec'
@@ -23,20 +23,7 @@ on:
     branches:
       - '**'
       - '!dependabot/**'
-    paths-ignore:
-      - 'appveyor.yml'
-      - 'bleachbit.png'
-      - 'bleachbit.spec'
-      - 'COPYING'
-      - 'debian/**'
-      - 'doc/**'
-      - 'docker/**'
-      - 'MANIFEST.in'
-      - 'org.bleachbit.BleachBit.desktop'
-      - 'org.bleachbit.BleachBit.metainfo.xml'
-      - 'org.bleachbit.policy'
-      - 'po/**'
-      - 'README.md'
+    paths-ignore: *paths-ignore
   workflow_dispatch:
   schedule:
     - cron: "30 4 * * 1"
