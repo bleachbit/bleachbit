@@ -67,6 +67,15 @@ def register_all_cleaners():
 
 class CleanerTestCase(common.BleachbitTestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        """Set up CleanerTestCase class"""
+        super().setUpClass()
+        # Register all cleaners once for the whole class so that tests can
+        # rely on `backends` being populated even when run in isolation.
+        # register_all_cleaners() is idempotent.
+        register_all_cleaners()
+
     def test_add_action(self):
         """Unit test for Cleaner.add_action()"""
         self.actions = []
@@ -145,8 +154,11 @@ class CleanerTestCase(common.BleachbitTestCase):
         self.assertEqual(list(cleaner.get_commands('empty')), [])
 
     def test_auto_hide(self):
+        count = 0
         for key in sorted(backends):
             self.assertIsInstance(backends[key].auto_hide(), bool)
+            count += 1
+        self.assertGreater(count, 0)
 
     def test_create_simple_cleaner(self):
         """Unit test for method create_simple_cleaner"""
@@ -250,10 +262,14 @@ class CleanerTestCase(common.BleachbitTestCase):
         self.assertNotEqual(processed, self.tempdir)
 
     def test_get_name(self):
+        count = 0
         for key in sorted(backends):
             self.assertIsString(backends[key].get_name())
+            count += 1
+        self.assertGreater(count, 10)
 
     def test_get_description(self):
+        count = 0
         for key in sorted(backends):
             self.assertIsString(key)
             self.assertIsInstance(backends[key], Cleaner)
@@ -261,30 +277,36 @@ class CleanerTestCase(common.BleachbitTestCase):
             if desc is not None:
                 self.assertIsString(
                     desc, msg="description for '%s' is '%s'" % (key, desc))
+            count += 1
+        self.assertGreater(count, 10)
 
     def test_get_options(self):
+        count = 0
         for key in sorted(backends):
             for (test_id, name) in backends[key].get_options():
                 self.assertIsString(
                     test_id, msg='%s.%s is not a string' % (key, test_id))
                 self.assertIsString(name)
+                count += 1
+        self.assertGreater(count, 10)
 
     def test_get_commands(self):
+        validate_count = 0
         for key in sorted(backends):
             logger.debug("test_get_commands: key='%s'", key)
             for (option_id, __name) in backends[key].get_options():
                 for cmd in backends[key].get_commands(option_id):
                     for result in cmd.execute(really_delete=False):
-                        if result != True:
-                            break
                         common.validate_result(self, result)
+                        validate_count += 1
+        self.assertGreater(validate_count, 10,
+                           "expected >10 file/results to validate")
         # make sure trash and tmp don't return the same results
         if IS_WINDOWS:
             return
 
         def get_files(option_id):
             ret = []
-            register_all_cleaners()
             for cmd in backends['system'].get_commands(option_id):
                 result = next(cmd.execute(False))
                 ret.append(result['path'])
@@ -349,6 +371,8 @@ class CleanerTestCase(common.BleachbitTestCase):
 
     def test_register_cleaners(self):
         """Unit test for register_cleaners"""
+        # setUpClass already registered cleaners; clear to test cold start.
+        backends.clear()
         register_all_cleaners()
         register_all_cleaners()
         backends.clear()
@@ -374,7 +398,6 @@ class CleanerTestCase(common.BleachbitTestCase):
         self.assertGreater(len(mgr.get_items()), 0)
         self.assertTrue(mgr.has_item(uri))
 
-        register_all_cleaners()
         for cmd in backends['system'].get_commands('recent_documents'):
             for result in cmd.execute(really_delete=True):
                 common.validate_result(self, result, True)
@@ -421,7 +444,6 @@ class CleanerTestCase(common.BleachbitTestCase):
             ('~/.cache/qtshadercache-x86_64-little_endian-lp64/test_file', True),
             ('~/.cache/plasma_theme_default.kcache', True)
         ]
-        register_all_cleaners()
         for pathname, expected in tests:
             path = os.path.expanduser(
                 pathname) if pathname.startswith('~') else pathname
@@ -446,7 +468,6 @@ class CleanerTestCase(common.BleachbitTestCase):
         from bleachbit.Options import options
         original_custom_paths = options.get_custom_paths()
 
-        register_all_cleaners()
         test_pathname = os.path.join(self.tempdir, 'foo')
 
         # Check that custom cleaner doesn't iterate non-existent object
