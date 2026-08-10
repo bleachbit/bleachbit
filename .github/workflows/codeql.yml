@@ -43,7 +43,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: ${{ github.ref_name != 'master' && github.ref_type != 'tag' }}
 
 permissions: {}
 

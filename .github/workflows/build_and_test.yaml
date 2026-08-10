@@ -35,7 +35,9 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  # Cancel superseded runs on PRs and feature branches, but let master and
+  # tags finish: their artifacts get deployed.
+  cancel-in-progress: ${{ github.ref_name != 'master' && github.ref_type != 'tag' }}
 
 # Each Ubuntu image is paired with a Python version that is as close to
 # "natural" (the image's pre-installed system Python) as possible, while still
