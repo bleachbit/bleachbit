@@ -295,10 +295,20 @@ class CleanerTestCase(common.BleachbitTestCase):
         for key in sorted(backends):
             logger.debug("test_get_commands: key='%s'", key)
             for (option_id, __name) in backends[key].get_options():
+                allow_vanishing = (key, option_id) == ('system', 'tmp')
                 for cmd in backends[key].get_commands(option_id):
-                    for result in cmd.execute(really_delete=False):
-                        common.validate_result(self, result)
-                        validate_count += 1
+                    # When running pytest xdist in parallel and this
+                    # is cleaning system.tmp, there is meaningful
+                    # risk of TOCTOU.
+                    try:
+                        for result in cmd.execute(really_delete=False):
+                            common.validate_result(
+                                self, result, allow_vanishing=allow_vanishing)
+                            validate_count += 1
+                    except FileNotFoundError as e:
+                        if not allow_vanishing:
+                            raise
+                        logger.debug('TOCTOU: file vanished: %s', e.filename)
         self.assertGreater(validate_count, 10,
                            "expected >10 file/results to validate")
         # make sure trash and tmp don't return the same results
@@ -308,7 +318,11 @@ class CleanerTestCase(common.BleachbitTestCase):
         def get_files(option_id):
             ret = []
             for cmd in backends['system'].get_commands(option_id):
-                result = next(cmd.execute(False))
+                try:
+                    result = next(cmd.execute(False))
+                except FileNotFoundError as e:
+                    logger.debug('TOCTOU: file vanished: %s', e.filename)
+                    continue
                 ret.append(result['path'])
             return ret
         trash_paths = get_files('trash')
