@@ -12,7 +12,7 @@ on:
     branches:
       - '**'
       - '!dependabot/**' # avoid duplicate runs; the pull_request event handles dependabot PRs
-    paths:
+    paths: &paths
       - '**'
       - '!bleachbit.spec'
       - '!debian/**'
@@ -22,15 +22,7 @@ on:
       - '!README.md'
       - '!windows/**'
   pull_request:
-    paths:
-      - '**'
-      - '!bleachbit.spec'
-      - '!debian/**'
-      - '!doc/**'
-      - '!po/**'
-      - 'po/Makefile'
-      - '!README.md'
-      - '!windows/**'
+    paths: *paths
   workflow_dispatch:
 
 permissions:
