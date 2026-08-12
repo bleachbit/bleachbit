@@ -114,6 +114,11 @@ class CLITestCase(common.BleachbitTestCase):
                 ['adobe_reader.mru'], False, False, ['adobe_reader.*'])
         self.assertEqual(cm.exception.code, 1)
 
+        excludes = ['adobe_reader.cache']
+        args_to_operations(
+            ['adobe_reader.*', '-adobe_reader.mru'], False, False, excludes)
+        self.assertEqual(excludes, ['adobe_reader.cache'])
+
     def test_parse_cmd_line_except(self):
         """Unit test for parse_cmd_line() --except handling"""
         tests = (
