@@ -314,6 +314,10 @@ class BleachbitTestCase(unittest.TestCase):
         # WinError 32 in rmtree() in tearDownClass.
         basedir = os.path.join(os.path.dirname(__file__), '..')
         os.chdir(basedir)
+        # Stop the delayed flush before touching the options file. It writes
+        # bleachbit.ini from a daemon timer thread, so on Windows an open
+        # write handle makes the os.remove() below fail with WinError 32.
+        bleachbit.Options.options.cancel_pending_flush()
         if self._options_file_snapshot is not None:
             os.makedirs(os.path.dirname(bleachbit.options_file), exist_ok=True)
             with open(bleachbit.options_file, 'wb') as f:

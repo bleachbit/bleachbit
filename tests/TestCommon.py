@@ -11,8 +11,11 @@ Test case for Common
 
 # standard imports
 import os
+from unittest import mock
 
 # first party imports
+import bleachbit
+import bleachbit.Options
 from tests import common
 
 
@@ -206,3 +209,43 @@ class CommonTestCase(common.BleachbitTestCase):
         os.remove(relative_fn)
         self.assertNotExists(relative_fn)
         self.assertNotExists('this-does-not-exist')
+
+    def test_teardown_cancels_flush_before_removing_options_file(self):
+        """Unit test for tearDown stopping the delayed flush first
+
+        The delayed flush writes bleachbit.ini from a daemon timer thread.
+        On Windows an open write handle makes os.remove() fail with
+        WinError 32, so tearDown must cancel the flush before it touches
+        the file.
+        """
+        options = bleachbit.Options.options
+
+        # Recreate what a test that writes an option leaves behind: the
+        # options file exists on disk and a fresh delayed flush is pending.
+        self._options_file_snapshot = None
+        options.set('check_online_updates',
+                    not options.get('check_online_updates'))
+        options.commit()
+        self.assertExists(bleachbit.options_file)
+        options.set('check_online_updates',
+                    not options.get('check_online_updates'))
+        self.assertIsNotNone(options._flush_timer,
+                             'precondition: a delayed flush is pending')
+
+        pending_at_remove = []
+        real_remove = os.remove
+
+        def recording_remove(path, *args, **kwargs):
+            if os.path.abspath(path) == os.path.abspath(bleachbit.options_file):
+                pending_at_remove.append(options._flush_timer)
+            return real_remove(path, *args, **kwargs)
+
+        with mock.patch('os.remove', side_effect=recording_remove):
+            self.tearDown()
+
+        self.assertEqual(len(pending_at_remove), 1,
+                         'tearDown did not remove the options file')
+        self.assertIsNone(pending_at_remove[0],
+                          'a delayed flush was still armed while tearDown '
+                          'removed the options file, which races the timer '
+                          'thread and raises WinError 32 on Windows')
