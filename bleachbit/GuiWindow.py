@@ -634,10 +634,11 @@ class GUI(Gtk.ApplicationWindow):
 
     def restore_tree_state(self):
         """Restore expanded top-level cleaners."""
-        if not options.has_option("expanded_cleaners"):
+        expanded = options.get_list("expanded_cleaners")
+        if expanded is None:
             return
 
-        expanded = set(options.get_list("expanded_cleaners"))
+        expanded = set(expanded)
 
         model = self.view.get_model()
 
