@@ -451,6 +451,9 @@ def wipe_swap_linux(devices, proc_swaps):
 
 def wipe_memory():
     """Wipe unallocated memory"""
+    if not IS_LINUX:
+        raise RuntimeError(
+            'wipe_memory() requires Linux')
     for cmd in ('swapon', 'swapoff', 'blkid'):
         if not FileUtilities.exe_exists(cmd):
             raise RuntimeError(f"wipe_memory: Command {cmd} not found")
