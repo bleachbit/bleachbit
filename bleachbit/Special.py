@@ -44,7 +44,7 @@ def __get_chrome_history(path, fn='History'):
     'path' is name of any file in same directory"""
     path_history = os.path.join(os.path.dirname(path), fn)
     ver = get_sqlite_int(
-        path_history, 'select value from meta where key="version"')[0]
+        path_history, "select value from meta where key='version'")[0]
     if ver <= 1:
         raise RuntimeError(f'unexpected Chrome history version: {ver}')
     return ver

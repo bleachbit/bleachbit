@@ -1305,7 +1305,7 @@ Version: 2023-02-223
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_ITALIAN} "Installa i file lingua per usare ${prodname} nella lingua locale preferita."
 	LangString SECTION_TRANSLATIONS_NAME ${LANG_ITALIAN} "Traduzioni"
 	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_ITALIAN} "Aggiungi programma di disinstallazione."
-	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ITALIAN} "Terminale debug ${proname}"
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_ITALIAN} "Terminale debug ${prodname}"
 	LangString SHORTCUT_NO_UAC ${LANG_ITALIAN} "${prodname} (nessun UAC)."
 	LangString SHRED_SHELL_MENU ${LANG_ITALIAN} "Sovrascrivi con ${prodname}"
 	LangString UNINSTALL_TEXT ${LANG_ITALIAN} "Scegli una cartella scrivibile per ogni unità nella quale pulire lo spazio vuoto."

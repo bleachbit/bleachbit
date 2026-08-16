@@ -93,7 +93,7 @@ class MemoryTestCase(common.BleachbitTestCase):
                                         self.assertEqual(mock_fork.called,
                                                          fork_called)
 
-    @common.skipIfWindows
+    @common.skipUnlessLinux
     def test_get_proc_swaps(self):
         """Test for method get_proc_swaps"""
         if not exe_exists('swapon'):
@@ -154,7 +154,7 @@ Swapouts:                              20258188.
         self.assertRaises(RuntimeError, physical_free_darwin,
                           lambda: "Invalid header")
 
-    @common.skipIfWindows
+    @common.skipUnlessLinux
     def test_physical_free(self):
         """Test for method physical_free"""
         ret = physical_free()
@@ -189,7 +189,7 @@ Swapouts:                              20258188.
         self.assertEqual(num_matches, 2)
         self.assertGreater(free_bytes, 0)
 
-    @common.skipIfWindows
+    @common.skipUnlessLinux
     def test_get_swap_size_linux(self):
         """Test for get_swap_size_linux()"""
         if not exe_exists('swapon'):
@@ -321,7 +321,7 @@ Swapouts:                              20258188.
                                 RuntimeError, 'mkswap failed',
                                 wipe_swap_linux, ['/dev/sda1'], '')
 
-    @common.skipIfWindows
+    @common.skipUnlessLinux
     def test_wipe_memory(self):
         """Test for wipe_memory() with mocks"""
         # Command missing

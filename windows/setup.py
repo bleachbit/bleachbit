@@ -72,7 +72,7 @@ if not os.path.exists(NSIS_EXE) and os.path.exists(NSIS_ALT_EXE):
     logger.info('NSIS found in alternate location: %s', NSIS_ALT_EXE)
     NSIS_EXE = NSIS_ALT_EXE
 SZ_EXE = 'C:\\Program Files\\7-Zip\\7z.exe'
-UPX_EXE = ROOT_DIR + '\\upx\\upx.exe'
+UPX_EXE = shutil.which('upx') or (ROOT_DIR + '\\upx\\upx.exe')
 UPX_OPTS = '--best --nrv2e'
 
 
@@ -913,6 +913,10 @@ def nsis(opts, exe_name, nsi_path):
         f'/DVERSION={get_version()}',
         f'/DSHRED_REGEX_KEY={SHRED_REGEX_KEY}',
         nsi_path]
+    if os.path.exists(UPX_EXE):
+        # NSIS !packhdr requires backslashes and no quotes in the define
+        upx_path = UPX_EXE.replace('/', '\\')
+        cmd.insert(-1, f'/DUPX_EXE={upx_path}')
     run_cmd(cmd)
     assert_exist(exe_name)
 
@@ -936,7 +940,9 @@ def package_installer(fast_build, nsi_path=r'windows\bleachbit.nsi'):
     # Was:
     # opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
     # Now: Done in NSIS file!
-    opts = '' if fast_build else '/V3 /Dpackhdr /DCompressor'
+    opts = '' if fast_build else '/V3 /DCompressor'
+    if not fast_build and os.path.exists(UPX_EXE):
+        opts += ' /Dpackhdr'
     nsis(opts, exe_name_multilang, nsi_path)
 
     # The English-only installer is opt-in: it is built only when not in

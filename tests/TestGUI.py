@@ -471,6 +471,9 @@ class GUITestCase(common.BleachbitTestCase):
         mock_clear_clipboard.assert_called_once()
         self.assertNotExists(test_file)
 
+    # Flaky ~1/100 on Linux: X11 CLIPBOARD owner can be transiently lost
+    # under parallel xdist workers. assertTrue (not skipTest) lets flaky rerun.
+    @pytest.mark.flaky(reruns=2, reruns_delay=1)
     def test_shred_paths_from_clipboard_menu_integration(self):
         """Shred a path copied to the real clipboard"""
         test_file = self.write_file('shred-me-via-real-clipboard')

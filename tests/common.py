@@ -24,18 +24,25 @@ from unittest import mock
 try:
     import pytest
 except ImportError:  # pytest is optional for plain unittest discovery
+    class _MarkShimMeta(type):
+        """Metaclass so any @pytest.mark.<name> is a no-op decorator.
+
+        Supports both forms: ``@pytest.mark.foo`` (no parens) and
+        ``@pytest.mark.foo(...)`` (with parens).
+        """
+        def __getattr__(cls, _name):
+            def decorator(func=None, *_args, **_kwargs):
+                if callable(func):
+                    # Used as @pytest.mark.foo without parentheses.
+                    return func
+                # Used as @pytest.mark.foo(...) with parentheses.
+                return lambda f: f
+            return decorator
+
     class _PytestShim:
         """No-op stand-in so @pytest.mark.* decorators work under unittest."""
-        class mark:
-            @staticmethod
-            def xdist_group(_name):
-                def decorator(func):
-                    return func
-                return decorator
-
-            @staticmethod
-            def no_xdist(func):
-                return func
+        class mark(metaclass=_MarkShimMeta):
+            pass
     pytest = _PytestShim()
 
 import bleachbit
@@ -590,8 +597,15 @@ def touch_file(filename):
     assert not is_normal_directory(filename)
 
 
-def validate_result(self, result, really_delete=False):
-    """Validate the command returned valid results"""
+def validate_result(self, result, really_delete=False, allow_vanishing=False):
+    """Validate the command returned valid results.
+
+    Args:
+        result: The result dictionary to validate.
+        really_delete: Whether the operation actually deleted files.
+        allow_vanishing: When True, allows for files that may disappear between
+            discovery and validation (e.g., /tmp on a busy system)
+    """
     self.assertIsInstance(result, dict, "result is a %s" % type(result))
     # label
     self.assertIsString(result['label'])
@@ -614,7 +628,12 @@ def validate_result(self, result, really_delete=False):
     if isinstance(filename, str) and not filename[0:2] == 'HK':
         if really_delete:
             self.assertNotLExists(filename)
+        elif allow_vanishing:
+            # Tolerate vanishing files during preview.
+            if not os.path.lexists(filename):
+                logger.debug('vanished %s', filename)
         else:
+            # Do not tolerate vanishing during preview.
             self.assertLExists(filename)
 
 

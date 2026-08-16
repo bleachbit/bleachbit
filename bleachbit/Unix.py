@@ -684,6 +684,13 @@ def dnf_clean():
         raise RuntimeError(msg)
     if not FileUtilities.exe_exists('/usr/bin/dnf'):
         raise RuntimeError(_('Executable not found: %s') % 'dnf')
+    # DNF5 permits "clean all" as a non-root user, but it then cleans the
+    # per-user cache (~/.cache/libdnf5) instead of the system cache
+    # (/var/cache/dnf) that this function measures. Require root so the
+    # returned byte count reflects real system-cache cleaning rather than
+    # silently returning 0.
+    if os.geteuid() != 0:
+        raise RuntimeError('dnf clean requires root permissions')
 
     # DNF4 does not report freed space in its output, so infer effect
     # by measuring the delta in directory size.
@@ -773,6 +780,8 @@ def dnf_autoremove():
         msg = _(
             "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "Dnf"
         raise RuntimeError(msg)
+    if not FileUtilities.exe_exists('/usr/bin/dnf'):
+        raise RuntimeError(_('Executable not found: %s') % 'dnf')
     cmd = ['/usr/bin/dnf', '-y', 'autoremove']
     (rc, stdout, stderr) = General.run_external(cmd)
     freed_bytes = 0

@@ -13,11 +13,12 @@ import errno
 import os
 import sqlite3
 import tempfile
+from unittest import mock
 
 from tests import TestCleaner, common
 from tests.TestFileUtilities import _open_blocking_handle
 import bleachbit
-from bleachbit import CLI, Command
+from bleachbit import CLI, Command, FileUtilities
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import backends
 from bleachbit.Worker import Worker
@@ -60,6 +61,29 @@ class DoesNotExistAction(ActionProvider):
             yield Command.Delete("/does/not/exist")
 
         # real file, should succeed
+        yield Command.Delete(self.pathname)
+
+
+class ToctouAction(ActionProvider):
+    """Simulate a TOCTOU race: a file exists at listing time but vanishes before getsize()"""
+
+    action_key = 'toctou'
+    ghost_path = None  # stored for test cleanup
+
+    def __init__(self, action_element):
+        ActionProvider.__init__(self, action_element)
+        self.pathname = action_element.getAttribute('path')
+
+    def get_commands(self):
+        # Create a file that physically exists at listing time.
+        # The test mocks getsize() to raise FileNotFoundError for it,
+        # simulating the file vanishing between listing and size check.
+        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker-toctou-')
+        os.close(fd)
+        ToctouAction.ghost_path = filename
+        yield Command.Delete(filename)
+
+        # Real file, should succeed even after the prior TOCTOU failure.
         yield Command.Delete(self.pathname)
 
 
@@ -247,6 +271,36 @@ class WorkerTestCase(common.BleachbitTestCase):
                 self.assertIn(
                     'File not found: c:\\does\\not\\exist', log_context.output[0])
                 self.assertNotIn('\\\\', log_context.output[0])
+
+    def test_TOCTOU_vanished_during_preview(self):
+        """Test Worker continues to the next file after a TOCTOU race
+
+        A file that exists at listing time but vanishes before getsize()
+        (simulated via mock) should log an error but not block the next file.
+        """
+        real_getsize = FileUtilities.getsize
+        call_count = [0]
+
+        def vanishing_getsize(path):
+            call_count[0] += 1
+            if call_count[0] == 1:
+                raise FileNotFoundError(
+                    errno.ENOENT, 'No such file or directory', path)
+            return real_getsize(path)
+
+        try:
+            with mock.patch('bleachbit.FileUtilities.getsize',
+                            side_effect=vanishing_getsize):
+                with self.assertLogs(level='ERROR') as log_context:
+                    # assert 1 file processed and 1 error
+                    self.action_test_helper(
+                        'toctou', 0, 1, 4096, 1, 3, 1)
+            self.assertIn('File not found', '\n'.join(log_context.output))
+        finally:
+            # Clean up the ghost file that was not deleted by the worker
+            if ToctouAction.ghost_path and os.path.exists(ToctouAction.ghost_path):
+                os.unlink(ToctouAction.ghost_path)
+            ToctouAction.ghost_path = None
 
     def test_FunctionGenerator(self):
         """Test Worker using Action.FunctionGenerator"""

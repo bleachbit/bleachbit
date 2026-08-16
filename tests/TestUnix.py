@@ -727,16 +727,20 @@ PrefersNonDefaultGPU=false""")
 
     @common.skipIfWindows
     @mock.patch('bleachbit.Language.setup_translation')
+    @mock.patch('bleachbit.Unix.os.geteuid')
     @mock.patch('bleachbit.Unix.FileUtilities.exe_exists')
     @mock.patch('bleachbit.Unix.General.run_external')
     @mock.patch('bleachbit.Unix.FileUtilities.getsizedir')
     @mock.patch('bleachbit.Unix.os.path')
     def test_dnf_clean_mock(self, mock_path, mock_getsizedir, mock_run,
-                            mock_exe, mock_setup):
+                            mock_exe, mock_geteuid, mock_setup):
         """Unit test for dnf_clean() with mock for DNF4 and DNF5"""
         # Don't call setup_translation() for real because it uses
         # os.path.exists(), which is mocked here.
         mock_setup.return_value = None
+        # Pretend to be root so the euid guard in dnf_clean() does not
+        # short-circuit the rest of the logic under test.
+        mock_geteuid.return_value = 0
         mock_exe.return_value = True
         mock_path.exists.return_value = True
         # dnf.pid present -> RuntimeError
@@ -786,12 +790,18 @@ PrefersNonDefaultGPU=false""")
         mock_exe.return_value = False
         self.assertRaises(RuntimeError, dnf_clean)
 
+        # non-root user -> RuntimeError (DNF5 would otherwise silently
+        # clean the per-user cache and report 0 bytes freed).
+        mock_exe.return_value = True
+        mock_geteuid.return_value = 1000
+        self.assertRaises(RuntimeError, dnf_clean)
+
     @common.skipIfWindows
     def test_dnf_autoremove_real(self):
         """Unit test for dnf_autoremove() with real dnf"""
         if 0 != os.geteuid() or os.path.exists('/var/run/dnf.pid') \
                 or not exe_exists('dnf'):
-            self.assertRaises(RuntimeError, dnf_clean)
+            self.assertRaises(RuntimeError, dnf_autoremove)
         else:
             bytes_freed = dnf_autoremove()
             self.assertIsInteger(bytes_freed)
@@ -799,17 +809,26 @@ PrefersNonDefaultGPU=false""")
 
     @common.skipIfWindows
     @mock.patch('bleachbit.Language.setup_translation')
+    @mock.patch('bleachbit.Unix.FileUtilities.exe_exists')
     @mock.patch('bleachbit.Unix.os.path')
     @mock.patch('bleachbit.General.run_external')
-    def test_dnf_autoremove_mock(self, mock_run, mock_path, mock_setup):
+    def test_dnf_autoremove_mock(self, mock_run, mock_path, mock_exe,
+                                 mock_setup):
         """Unit test for dnf_autoremove() with mock"""
         # Don't call setup_translation() for real because it uses
         # os.path.exists(), which is mocked here.
         mock_setup.return_value = None
+        mock_exe.return_value = True
         mock_path.exists.return_value = True
         self.assertRaises(RuntimeError, dnf_autoremove)
 
         mock_path.exists.return_value = False
+
+        # dnf not installed -> RuntimeError.
+        mock_exe.return_value = False
+        self.assertRaises(RuntimeError, dnf_autoremove)
+        mock_exe.return_value = True
+
         mock_run.return_value = (1, 'stdout', 'stderr')
         self.assertRaises(RuntimeError, dnf_autoremove)
 

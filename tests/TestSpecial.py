@@ -638,7 +638,7 @@ INSERT INTO "meta" VALUES('version','20');"""
         self.assertExists(filename)
         # run the test
         ver = Special.get_sqlite_int(
-            filename, 'select value from meta where key="version"')
+            filename, "select value from meta where key='version'")
         self.assertEqual(ver, [20])
         os.unlink(filename)
 

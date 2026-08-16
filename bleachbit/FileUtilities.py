@@ -598,8 +598,16 @@ def detect_encoding(fn):
             'chardet module is not available to detect character encoding')
         return None
 
+    # chardet 6.0 removed the chardet.universaldetector submodule and exposed
+    # UniversalDetector directly on the package. Fall back to the old path for
+    # chardet 5.x (and earlier) that still ship the submodule.
+    UniversalDetector = getattr(chardet, 'UniversalDetector', None)
+    if UniversalDetector is None:
+        # pylint: disable=import-outside-toplevel,no-name-in-module
+        from chardet.universaldetector import UniversalDetector
+
     with open(fn, 'rb') as f:
-        detector = chardet.universaldetector.UniversalDetector()
+        detector = UniversalDetector()
         for line in f:
             detector.feed(line)
             if detector.done:

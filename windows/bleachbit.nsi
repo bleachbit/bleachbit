@@ -31,7 +31,10 @@
 
 !ifdef packhdr
   ;Using UPX path info from windows/setup.py ->
-  !packhdr "$%TEMP%\exehead.tmp" '"\upx\upx.exe" -9 -q "$%TEMP%\exehead.tmp"'
+  !ifndef UPX_EXE
+    !error "packhdr is defined but UPX_EXE is not. Pass /DUPX_EXE=<path> to makensis."
+  !endif
+  !packhdr "$%TEMP%\exehead.tmp" '"${UPX_EXE}" -9 -q "$%TEMP%\exehead.tmp"'
 !endif
 
 
