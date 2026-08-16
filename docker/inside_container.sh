@@ -91,8 +91,10 @@ case "$DISTRO_NAME" in
         fi
         # Run all tests with unittest.
         run_optional_tests
-        # Run GUI tests with pytest.
-        PYTHONWARNINGS=error xvfb-run -a python -m pytest --numprocesses auto tests/
+        # Mirror how build_and_test.yaml calls pytest
+        PYTHONWARNINGS=error xvfb-run -a bash -c \
+            "python -m pytest -n logical --dist=loadgroup -m 'not no_xdist' tests/ && \
+             python -m pytest -m no_xdist tests/"
         ;;
     fedora)
         prep_redhat

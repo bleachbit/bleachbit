@@ -161,6 +161,7 @@ install_debian() {
         python3-pyflakes
         python3-pytest
         python3-pytest-xdist
+        python3-pytest-rerunfailures
         pylint
     )
     if [[ "$VENV" == 1 ]]; then
@@ -224,6 +225,7 @@ install_fedora() {
         python3-pyflakes
         python3-pytest
         python3-pytest-xdist
+        python3-pytest-rerunfailures
         pylint
     )
     # skip dnf update: focus on just the installation.
@@ -303,6 +305,7 @@ install_opensuse() {
     local dev_pip=(
         "${py}-pytest"
         "${py}-pytest-xdist"
+        "${py}-pytest-rerunfailures"
     )
     # Lint tools on openSUSE are packaged differently; install via pip
     # in dev mode if the system packages are unavailable.
@@ -362,6 +365,7 @@ install_arch() {
         python-pyflakes
         python-pytest
         python-pytest-xdist
+        python-pytest-rerunfailures
         pylint
     )
     # no `pacman -Sy` to avoid partial upgrade.
@@ -451,7 +455,7 @@ setup_venv() {
     pip install -r "$req_file"
     if [[ "$MODE" == "dev" ]]; then
         echo "[venv] installing dev/test/lint Python deps"
-        pip install pylint pyflakes autopep8 pytest pytest-xdist
+        pip install pylint pyflakes autopep8 pytest pytest-xdist pytest-rerunfailures
     fi
 }
 
