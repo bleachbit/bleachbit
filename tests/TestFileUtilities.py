@@ -1207,7 +1207,7 @@ State=AAAA/wA...
         execute_sqlite3(db_path, 'vacuum')
 
         with contextlib.closing(sqlite3.connect(db_path)) as conn:
-            res = conn.execute('select 1 from test where name = "A"')
+            res = conn.execute("select 1 from test where name = 'A'")
             row = res.fetchone()
             self.assertIsNotNone(row)
             self.assertEqual(row[0], 1)
