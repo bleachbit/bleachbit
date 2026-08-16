@@ -611,6 +611,52 @@ class GUI(Gtk.ApplicationWindow):
                 self.append_text(description, scroll=False)
             self.append_text("\n\n", scroll=False)
 
+    def capture_tree_state(self):
+        """Capture the expanded top-level cleaner sections."""
+        expanded = []
+
+        model = self.view.get_model()
+
+        def walk(model, path, treeiter, data):
+            # Only consider top-level cleaners
+            if path.get_depth() != 1:
+                return False
+
+            if self.view.row_expanded(path):
+                expanded.append(model[treeiter][2])
+
+            return False
+
+        model.foreach(walk, None)
+
+        return expanded
+
+
+    def restore_tree_state(self):
+        """Restore expanded top-level cleaners."""
+        expanded = options.get_list("expanded_cleaners")
+        if expanded is None:
+            return
+
+        expanded = set(expanded)
+
+        model = self.view.get_model()
+
+        def walk(model, path, treeiter, data):
+            if path.get_depth() != 1:
+                return False
+
+            cleaner_id = model[treeiter][2]
+
+            if cleaner_id in expanded:
+                self.view.expand_row(path, False)
+            else:
+                self.view.collapse_row(path)
+
+            return False
+
+        model.foreach(walk, None)
+
     def get_selected_operations(self):
         """Return a list of the IDs of the selected operations in the tree view"""
         ret = []
@@ -813,8 +859,7 @@ class GUI(Gtk.ApplicationWindow):
                 allow_local = False
             else:
                 self.recognized_cleanerml = True
-        # reload cleaners from disk
-        self.view.expand_all()
+
         self.progressbar.show()
         rc = register_cleaners(self.update_progress_bar,
                                self.cb_register_cleaners_done,
@@ -827,8 +872,8 @@ class GUI(Gtk.ApplicationWindow):
         self.progressbar.hide()
         # update tree view
         self.tree_store.refresh_rows()
-        # expand tree view
-        self.view.expand_all()
+        # Restore the user's expanded cleaner sections
+        self.restore_tree_state()
 
         if self._showed_startup_messages:
             # remove from idle loop (see GObject.idle_add)
@@ -1209,6 +1254,12 @@ class GUI(Gtk.ApplicationWindow):
         return False
 
     def on_delete_event(self, _widget, _event):
+        # Save the expanded cleaner sections for the next session
+        options.set_list(
+            "expanded_cleaners",
+            self.capture_tree_state()
+        )
+
         # commit options to disk
         options.close()
         return False
