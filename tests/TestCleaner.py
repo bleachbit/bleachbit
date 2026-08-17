@@ -19,7 +19,7 @@ import bleachbit
 from bleachbit import IS_WINDOWS, IS_POSIX
 from bleachbit.Action import ActionProvider, Command
 from bleachbit.Cleaner import Cleaner, backends, create_simple_cleaner, simpler_cleaner_process_path, register_cleaners
-import bleachbit.FileUtilities
+from bleachbit.PathUtils import path_startswith
 
 from tests import common
 
@@ -292,21 +292,39 @@ class CleanerTestCase(common.BleachbitTestCase):
 
     def test_get_commands(self):
         validate_count = 0
+        # Directories shared across parallel pytest-xdist workers where
+        # files may appear/vanish between discovery and validation
+        # (TOCTOU). 
+        # %temp% in volatile_dirs is redundant to the system.tmp, but 
+        # %temp% covers Winapp2.ini `[Windows Temporary Files *]`.
+        # Its name and ID may change, so we check for it here by directory
+        # name instead. POSIX is included for symmetry.
+        volatile_dirs = []
+        if IS_WINDOWS:
+            volatile_dirs = [os.path.expandvars(r'%temp%'),]
+        else:
+            volatile_dirs = ['/tmp',]
+
+        def is_volatile(path):
+            if not path:
+                return False
+            return any(path_startswith(path, d, case_sensitive=False)
+                       for d in volatile_dirs)
+
         for key in sorted(backends):
             logger.debug("test_get_commands: key='%s'", key)
             for (option_id, __name) in backends[key].get_options():
-                allow_vanishing = (key, option_id) == ('system', 'tmp')
+                is_system_tmp = (key, option_id) == ('system', 'tmp')
                 for cmd in backends[key].get_commands(option_id):
-                    # When running pytest xdist in parallel and this
-                    # is cleaning system.tmp, there is meaningful
-                    # risk of TOCTOU.
                     try:
                         for result in cmd.execute(really_delete=False):
+                            allow_vanishing = is_system_tmp \
+                                or is_volatile(result.get('path'))
                             common.validate_result(
                                 self, result, allow_vanishing=allow_vanishing)
                             validate_count += 1
                     except FileNotFoundError as e:
-                        if not allow_vanishing:
+                        if not (is_system_tmp or is_volatile(e.filename)):
                             raise
                         logger.debug('TOCTOU: file vanished: %s', e.filename)
         self.assertGreater(validate_count, 10,

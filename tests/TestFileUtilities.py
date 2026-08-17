@@ -1706,8 +1706,13 @@ State=AAAA/wA...
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""
-        path = os.path.join(self.tempdir, 'bleachbit.tmp.sqlite3')
+        path = os.path.join(self.tempdir, 'bleachbit_test_vacuum.sqlite3')
         conn = sqlite3.connect(path)
+        # Use in-memory journal to avoid creating a transient
+        # file that could trigger TOCTOU error in parallel tests.
+        # (This prevents writing the `-journal` file, but the `.sqlite3`
+        # database is still written.)
+        conn.execute('PRAGMA journal_mode=memory')
         conn.execute('create table numbers (number)')
         conn.commit()
         empty_size = getsize(path)
