@@ -277,6 +277,8 @@ def _run_memory_child_fork():
         fill_memory_linux()
         os._exit(0)
     else:
+        # The else is load-bearing: tests mock os._exit, so without it the
+        # child path would fall through into the parent's waitpid().
         # TRANSLATORS: This is a debugging message that the parent process
         # is waiting for the child process. %(parent_pid)d is the parent
         # process ID; %(child_pid)d is the child process ID.
@@ -432,9 +434,6 @@ def wipe_swap_linux(devices, proc_swaps):
     if 0 < count_swap_linux():
         raise RuntimeError('Cannot wipe swap while it is in use')
     for device in devices:
-        # if '/cryptswap' in device:
-        #    logger.info('Skipping encrypted swap device %s.', device)
-        #    continue
         # TRANSLATORS: The variable is a device like /dev/sda2
         logger.info(_("Wiping the swap device %s."), device)
         safety_limit_bytes = 29 * 1024 ** 3  # 29 gibibytes

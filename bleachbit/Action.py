@@ -302,18 +302,12 @@ class FileActionProvider(ActionProvider):
             # use cache
             if (self.search in self.CACHEABLE_SEARCHERS and cache[0] == self.search
                     and cache[1] == input_path and cache[3]):
-                # logger.debug(_('using cached walk for path %s'), input_path)
                 for x in cache[2]:
                     yield x
                 return
-            # if self.search in self.CACHEABLE_SEARCHERS:
-            #    logger.debug('not using cache because it has (%s,%s) and we want (%s,%s)',
-            #                 cache[0], cache[1], self.search, input_path)
             self.__class__.cache = ('cleared by', input_path, tuple(), False)
 
             # build new cache
-            # logger.debug('%s walking %s', id(self), input_path)
-
             if self.search in self.CACHEABLE_SEARCHERS:
                 entries = []
                 self.__class__.cache = (self.search, input_path, entries, False)

@@ -75,11 +75,8 @@ if IS_WINDOWS:
     setattr(win32gui, 'GetClassInfo', getattr(
         win32gui, 'GetClassInfo', _get_class_info_fallback))
 
-    from ctypes import windll, byref
+    from ctypes import windll
     from win32com.shell import shell, shellcon
-
-    psapi = windll.psapi
-    kernel = windll.kernel32
 
 logger = logging.getLogger(__name__)
 

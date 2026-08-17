@@ -657,11 +657,7 @@ def obtain_readwrite(volume):
     Returns:
         Volume handle
     """
-    # Optional protection that we are running on removable media only.
     assert volume
-    # if drive_letter_safety:
-    #    drive_containing_file = volume[0].upper()
-    #    assert drive_containing_file >= drive_letter_safety.upper()
 
     volume = '\\\\.\\' + volume
     if volume[-1] == os.sep:
