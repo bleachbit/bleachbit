@@ -100,7 +100,10 @@ def update_dialog(parent, updates):
 
 
 def check_updates(check_beta, check_winapp2, append_text, cb_success):
-    """Check for updates via the Internet"""
+    """Check for updates via the Internet
+
+    Returns a list of (ver, url) pairs, empty when there is no update.
+    """
     url = bleachbit.update_check_url
     if 'windowsapp' in sys.executable.lower():
         url += '?windowsapp=1'
@@ -113,18 +116,19 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
         logger.debug('URL %s has IP address %s', url, get_ip_for_url(url))
         if HAVE_REQUESTS and hasattr(e, 'response') and e.response is not None:
             logger.debug(e.response.headers)
-        return ()
+        return []
     try:
         reject_xml_dtd(response.text, 'update XML')
         dom = xml.dom.minidom.parseString(response.text)
     except Exception:
         logger.exception(
             'The update information does not parse: %s', response.text)
-        return ()
+        return []
 
     def parse_updates(element):
+        """Return a (ver, url) pair, or None when there is nothing usable"""
         if not element:
-            return ()
+            return None
         ver = element[0].getAttribute('ver')
         child = element[0].firstChild
         url = child.data.strip() if child is not None and hasattr(child, 'data') else ''
@@ -132,7 +136,7 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
                 and url.lower().startswith('https://')):
             logger.warning('ignoring malformed update entry: ver=%r, url=%r',
                            ver, url)
-            return ()
+            return None
         return ver, url
 
     stable = parse_updates(dom.getElementsByTagName("stable"))
@@ -147,9 +151,9 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     dom.unlink()
 
     if stable and beta and check_beta:
-        return (stable, beta)
+        return [stable, beta]
     if stable:
-        return (stable,)
+        return [stable]
     if beta and check_beta:
-        return (beta,)
-    return ()
+        return [beta]
+    return []
