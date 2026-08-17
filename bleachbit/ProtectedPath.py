@@ -127,7 +127,7 @@ def load_protected_paths(force_reload=False):
 
     _protected_paths_cache = protected_paths
     logger.debug("Loaded %d protected paths", len(protected_paths))
-    return protected_paths
+    return _protected_paths_cache
 
 
 def _check_exempt(user_path):

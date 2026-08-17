@@ -415,7 +415,7 @@ def _ensure_gtk_libraries():
     _gtk_libraries_available = success
     if not success:
         _gtk_unavailable_reason = reason
-    return success
+    return _gtk_libraries_available
 
 
 def _init_gtk():
