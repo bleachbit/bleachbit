@@ -173,7 +173,7 @@ def chownself(path):
         # follow_symlinks=False (lchown) so a symlink planted at this path
         # cannot redirect the ownership change to its target.
         os.chown(path, uid, -1, follow_symlinks=False)
-    except:
+    except Exception:
         logger.exception('Error in chown() under chownself()')
 
 
@@ -278,7 +278,7 @@ def get_real_uid():
         # On Fedora 11, getlogin() under sudo returns 'root'.
         # On Fedora 41, getlogin() under sudo returns non-root user.
         # On Fedora 11 and 41, getlogin() under su returns non-root user.
-    except:
+    except Exception:
         login = os.getenv('LOGNAME')
 
     if login:

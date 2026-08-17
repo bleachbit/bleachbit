@@ -709,7 +709,7 @@ def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
                                         FSCTL_GET_RETRIEVAL_POINTERS,
                                         input_struct,
                                         retrieval_pointers_buf_size)
-        except:
+        except Exception:
             err_info = sys.exc_info()[1]
             err_code = err_info.winerror
             if err_code == 38:     # when file size is 0.
@@ -1185,7 +1185,7 @@ def clean_up(file_handle, volume_handle, tmp_file_path):
             CloseHandle(volume_handle)
         if tmp_file_path:
             DeleteFile(tmp_file_path)
-    except:
+    except Exception:
         pass
 
 

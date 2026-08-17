@@ -304,7 +304,7 @@ def csidl_to_environ(varname, csidl):
     """Define an environment variable from a CSIDL for use in CleanerML and Winapp2.ini"""
     try:
         sppath = shell.SHGetSpecialFolderPath(None, csidl)
-    except:
+    except Exception:
         logger.info(
             'exception when getting special folder path for %s', varname)
         return
@@ -1134,7 +1134,7 @@ def set_environ(varname, path):
             raise RuntimeError(
                 'Variable %s points to a non-existent path %s' % (varname, path))
         os.environ[varname] = path
-    except:
+    except Exception:
         logger.exception(
             'set_environ(%s, %s): exception when setting environment variable', varname, path)
 
@@ -1155,7 +1155,7 @@ def setup_environment():
     # SHGetKnownFolderPath in Windows Vista and later
     try:
         path = get_known_folder_path('LocalAppDataLow')
-    except:
+    except Exception:
         logger.exception('exception identifying LocalAppDataLow')
     else:
         set_environ('LocalAppDataLow', path)

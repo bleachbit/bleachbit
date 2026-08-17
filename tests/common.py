@@ -386,7 +386,7 @@ class BleachbitTestCase(unittest.TestCase):
             # Python 3.4: on Windows os.path.[l]exists may return False when access is denied:
             # https://bugs.python.org/issue28075
             return True
-        except:
+        except Exception:
             return False
 
     #

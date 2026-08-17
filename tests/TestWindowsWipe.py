@@ -427,7 +427,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 if config.get("handle"):
                     try:
                         close_file(config["handle"])
-                    except:
+                    except Exception:
                         pass
 
     def test_not_included(self):

@@ -404,5 +404,5 @@ class Worker:
                 # Propagate to the top-level handler (e.g., when the
                 # downstream pipe consumer like `less` closes early).
                 raise
-            except:
+            except Exception:
                 self.print_exception(operation)

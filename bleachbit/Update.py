@@ -117,7 +117,7 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     try:
         reject_xml_dtd(response.text, 'update XML')
         dom = xml.dom.minidom.parseString(response.text)
-    except:
+    except Exception:
         logger.exception(
             'The update information does not parse: %s', response.text)
         return ()
