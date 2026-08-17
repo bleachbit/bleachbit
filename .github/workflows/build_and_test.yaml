@@ -240,8 +240,7 @@ jobs:
         shell: pwsh
         run: |
           if (-not (Test-Path nsis-3.12-setup.exe)) {
-            # sourceforge.net/.../download serves an HTML interstitial; master.dl serves the raw file.
-            Invoke-WebRequest -Uri "https://master.dl.sourceforge.net/project/nsis/NSIS%203/3.12/nsis-3.12-setup.exe?viasf=1" -OutFile nsis-3.12-setup.exe -UserAgent 'Mozilla/5.0'
+            Invoke-WebRequest -Uri "https://download.bleachbit.org/dependency/nsis-3.12-setup.exe" -OutFile nsis-3.12-setup.exe
           }
           $hash = (Get-FileHash nsis-3.12-setup.exe -Algorithm SHA256).Hash
           if ($hash -ne '3bc2b06253a7e4957111be152ac6a536e0c7478a706e19da814038db5d706495') {
