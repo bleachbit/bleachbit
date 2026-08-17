@@ -53,7 +53,4 @@ Exec=kdialog --yesno "This action will shred the following:\n\n$(echo %F | tr ' 
                     'failed to create KDE service menu file %s: %s',
                     service_file_path, exc)
     else:
-        try:
-            service_file_path.unlink()
-        except FileNotFoundError:
-            pass
+        service_file_path.unlink(missing_ok=True)
