@@ -60,8 +60,10 @@ def register_all_cleaners():
             get_winapp2(),
             os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini'),
         )
-    if not backends:
-        list(register_cleaners())
+    # Previously, we guarded registration with `if not backends`, but
+    # this was unreliable under pytest-xdist, like if a test created
+    # a single test cleaner.
+    list(register_cleaners())
     assert len(backends) > 1
 
 
@@ -294,8 +296,8 @@ class CleanerTestCase(common.BleachbitTestCase):
         validate_count = 0
         # Directories shared across parallel pytest-xdist workers where
         # files may appear/vanish between discovery and validation
-        # (TOCTOU). 
-        # %temp% in volatile_dirs is redundant to the system.tmp, but 
+        # (TOCTOU).
+        # %temp% in volatile_dirs is redundant to the system.tmp, but
         # %temp% covers Winapp2.ini `[Windows Temporary Files *]`.
         # Its name and ID may change, so we check for it here by directory
         # name instead. POSIX is included for symmetry.
