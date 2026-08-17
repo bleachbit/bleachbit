@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-08-16 16:46-0600\n"
-"PO-Revision-Date: 2026-07-14 00:01+0000\n"
+"PO-Revision-Date: 2026-08-18 02:09+0000\n"
 "Last-Translator: Pin-Hsien Lee <plesry@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/bleachbit/main/zh_Hant/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/adobe_reader.xml
@@ -681,7 +681,7 @@ msgstr "刪除最近使用檔案清單"
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
-msgstr "自訂資料夾將被重置。"
+msgstr "自定義資料夾將被重置。"
 
 #: ../cleaners/profanity.xml
 msgid "Downloaded files"
@@ -1366,7 +1366,7 @@ msgstr "更新的卸載程序"
 msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
-msgstr "刪除微軟更新的卸載程序，包換修復補丁、服務包與 IE 瀏覽器更新"
+msgstr "刪除微軟更新卸載程序，包含熱補丁、服務包和網頁瀏覽器更新"
 
 #. TRANSLATORS: Warning shown when selecting an option.
 #: ../bleachbit/Cleaner.py
@@ -1387,7 +1387,7 @@ msgstr "桌面環境下用於複製、貼上的剪貼簿"
 #. Short label meaning "Custom locations".
 #: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
 msgid "Custom"
-msgstr "自訂"
+msgstr "自定義"
 
 #: ../bleachbit/Cleaner.py
 msgid "Delete user-specified files and folders"
@@ -2999,7 +2999,7 @@ msgstr "存取被拒：%s"
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Database is locked: %s"
-msgstr ""
+msgstr "資料庫被鎖定：%s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
