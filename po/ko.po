@@ -6,12 +6,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-07-12 15:23-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-16 16:46-0600\n"
 "PO-Revision-Date: 2026-08-17 02:40+0000\n"
 "Last-Translator: VenusGirl <VenusGirl@outlook.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/bleachbit/main/"
-"ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/bleachbit/main/ko/"
+">\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,635 +20,166 @@ msgstr ""
 "X-Generator: Weblate 2026.9.dev0\n"
 "X-Launchpad-Export-Date: 2020-04-02 02:28+0000\n"
 
-#: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
-#: ../cleaners/vlc.xml
-msgid "Media player"
-msgstr "미디어 플레이어"
+#: ../cleaners/adobe_reader.xml
+msgid "Document viewer"
+msgstr "문서 뷰어"
 
-#. TRANSLATORS: Sidebar label for the page managing browser cookies in
-#. the Preferences dialog.
-#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
-#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
-#: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../bleachbit/GuiPreferences.py
-msgid "Cookies"
-msgstr "쿠키"
-
-#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
-#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
-#: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-msgid ""
-"Delete cookies, which store login information, website preferences, and "
-"tracking identifiers"
-msgstr "로그인 정보, 웹사이트 환경설정 및 추적 식별자를 저장하는 쿠키 삭제"
-
-#: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
-#: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
-#: ../cleaners/safari.xml ../cleaners/fish.xml ../cleaners/chromium.xml
-#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
-#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
-#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
-#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
-#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/python.xml
-#: ../cleaners/vim.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../cleaners/octave.xml
-msgid "History"
-msgstr "사용 기록"
-
-#: ../cleaners/realplayer.xml ../cleaners/easytag.xml ../cleaners/filezilla.xml
-#: ../cleaners/gnome.xml ../cleaners/windows_defender.xml
-#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
-#: ../cleaners/libreoffice.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
-#: ../cleaners/amule.xml
-msgid "Delete the usage history"
-msgstr "사용 기록 삭제"
-
-#: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
-#: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Logs"
-msgstr "로그"
-
-#: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
-#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Delete the logs"
-msgstr "로그 삭제"
-
-#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
-#: ../cleaners/flash.xml
-msgid "Multimedia viewer"
-msgstr "멀티미디어 뷰어"
-
-#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
-#: ../cleaners/librewolf.xml ../cleaners/openoffice.xml
-#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
-#: ../cleaners/vivaldi.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/pidgin.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/emesene.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/epiphany.xml
-#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
-#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
-#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/seamonkey.xml
-#: ../cleaners/flash.xml ../cleaners/google_chrome.xml
-#: ../cleaners/tremulous.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/gftp.xml ../cleaners/kde.xml
-#: ../cleaners/vuze.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/adobe_reader.xml ../cleaners/amsn.xml ../cleaners/audacious.xml
+#: ../cleaners/beagle.xml ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/claude.xml ../cleaners/discord.xml ../cleaners/emesene.xml
+#: ../cleaners/epiphany.xml ../cleaners/evolution.xml ../cleaners/exaile.xml
+#: ../cleaners/firefox.xml ../cleaners/flash.xml ../cleaners/geary.xml
+#: ../cleaners/gftp.xml ../cleaners/google_chrome.xml ../cleaners/gpodder.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/java.xml ../cleaners/kde.xml ../cleaners/librewolf.xml
+#: ../cleaners/liferea.xml ../cleaners/microsoft_edge.xml ../cleaners/miro.xml
+#: ../cleaners/nexuiz.xml ../cleaners/openoffice.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/pidgin.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/slack.xml
+#: ../cleaners/smartftp.xml ../cleaners/thumbnails.xml
+#: ../cleaners/thunderbird.xml ../cleaners/tremulous.xml
+#: ../cleaners/vivaldi.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
+#: ../cleaners/waterfox.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/xine.xml ../cleaners/yahoo_messenger.xml ../cleaners/zen.xml
+#: ../cleaners/zoom.xml ../bleachbit/Cleaner.py
 msgid "Cache"
 msgstr "캐시"
 
 #. TRANSLATORS: The description of what certain cleaning options do.
-#: ../cleaners/xine.xml ../cleaners/dnf.xml ../cleaners/miro.xml
-#: ../cleaners/amsn.xml ../cleaners/librewolf.xml ../cleaners/openoffice.xml
-#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml ../cleaners/yum.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
-#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
-#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
-#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/vscode.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/adobe_reader.xml ../cleaners/amsn.xml ../cleaners/apt.xml
+#: ../cleaners/audacious.xml ../cleaners/beagle.xml ../cleaners/claude.xml
+#: ../cleaners/dnf.xml ../cleaners/evolution.xml ../cleaners/exaile.xml
+#: ../cleaners/firefox.xml ../cleaners/flash.xml ../cleaners/geary.xml
+#: ../cleaners/gftp.xml ../cleaners/gpodder.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/java.xml ../cleaners/kde.xml ../cleaners/librewolf.xml
+#: ../cleaners/liferea.xml ../cleaners/miro.xml ../cleaners/nexuiz.xml
+#: ../cleaners/openoffice.xml ../cleaners/pacman.xml ../cleaners/palemoon.xml
+#: ../cleaners/pidgin.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/smartftp.xml
+#: ../cleaners/thumbnails.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
+#: ../cleaners/waterfox.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/xine.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/yum.xml ../cleaners/zen.xml
+#: ../cleaners/zoom.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "캐시 삭제"
 
-#: ../cleaners/paint.xml ../cleaners/openoffice.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/wordpad.xml ../cleaners/audacious.xml ../cleaners/filezilla.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/winamp.xml ../cleaners/adobe_reader.xml ../cleaners/winzip.xml
-#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/audacious.xml
+#: ../cleaners/filezilla.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/openoffice.xml ../cleaners/paint.xml ../cleaners/smartftp.xml
+#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/winzip.xml ../cleaners/wordpad.xml
 msgid "Most recently used"
 msgstr "최근 사용순"
 
-#: ../cleaners/paint.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/wordpad.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/winamp.xml ../cleaners/winzip.xml ../cleaners/teamviewer.xml
-#: ../cleaners/vlc.xml
-msgid "Delete the most recently used list"
-msgstr "가장 최근에 사용된 파일 목록 삭제"
-
-#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
-#: ../cleaners/apt.xml ../cleaners/snap.xml
-msgid "Package manager"
-msgstr "패키지 관리자"
-
-#: ../cleaners/dnf.xml
-msgid "Remove packages that were formerly dependencies"
-msgstr "이전의 의존성 패키지 제거"
-
-#: ../cleaners/dnf.xml
-msgid ""
-"Carefully review the list of packages that will be removed by running \"dnf "
-"list autoremove\"."
-msgstr ""
-"\"dnf 목록 자동 제거\"를 실행하여 제거될 패키지 목록을 자세히 검토하십시오."
-
-#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
-#: ../cleaners/zoom.xml ../cleaners/skype.xml ../cleaners/profanity.xml
-#: ../cleaners/discord.xml
-msgid "Chat client"
-msgstr "채팅 클라이언트"
-
-#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
-#: ../cleaners/seamonkey.xml
-msgid "Chat logs"
-msgstr "채팅 로그"
-
-#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
-#: ../cleaners/seamonkey.xml
-msgid "Delete the chat logs"
-msgstr "채팅 로그 삭제"
-
-#: ../cleaners/librewolf.xml ../cleaners/elinks.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/links2.xml ../cleaners/seamonkey.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Web browser"
-msgstr "웹 브라우저"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
-#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
-msgid "Backup files"
-msgstr "파일 백업"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
-#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
-msgid "Delete the backup files"
-msgstr "백업 파일 삭제"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Crash reports"
-msgstr "오류 보고서"
-
-#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/geary.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/windows_defender.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml
-#: ../cleaners/google_chrome.xml ../cleaners/transmission.xml
-#: ../cleaners/profanity.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/vuze.xml ../cleaners/opera.xml
-msgid "Delete the files"
-msgstr "파일 삭제"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "Form history"
-msgstr "양식 기록"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/internet_explorer.xml
-msgid "Saved form entries and search bar history"
-msgstr "저장된 양식 항목 및 검색창 기록"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Passwords"
-msgstr "암호"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid ""
-"A database of usernames and passwords as well as a list of sites that should "
-"not store passwords"
-msgstr "사용자 이름 및 암호와 암호를 저장하지 않는 사이트 목록 데이터베이스"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "This option will delete your saved passwords."
-msgstr "이 옵션은 저장한 암호를 삭제합니다."
-
-#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/claude.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Session"
-msgstr "세션"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Previously open tabs and windows"
-msgstr "이전에 열린 탭과 창"
-
-#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "Site data"
-msgstr "사이트 데이터"
-
-#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
-msgstr "웹사이트에 저장된 로컬저장소, 인덱스DB 및 기타 데이터 삭제"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Site preferences"
-msgstr "사이트 설정"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Settings for individual sites"
-msgstr "개별 사이트에 대한 설정"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/konqueror.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-msgid "URL history"
-msgstr "URL 기록"
-
-#: ../cleaners/librewolf.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
-msgid "List of visited web pages"
-msgstr "방문한 웹 페이지 목록"
-
-#. TRANSLATORS: Vacuum is a verb.  The term is jargon
-#. from the SQLite database.  Microsoft Access uses
-#. the term 'Compact Database' (which you may translate
-#. instead).  Another synonym is 'defragment.'
-#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Action.py
-msgid "Vacuum"
-msgstr "조각 모음"
-
-#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml
-msgid ""
-"Clean database fragmentation to reduce space and improve speed without "
-"removing any data"
-msgstr ""
-"데이터베이스 단편화를 해소해 데이터 삭제 없이 용량을 줄이고 속도를 개선"
-
-#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
-msgid "Shell"
-msgstr "셸"
-
-#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
-#: ../cleaners/sqlite3.xml ../cleaners/python.xml ../cleaners/octave.xml
-msgid "Delete the command history"
-msgstr "명령어 기록 삭제"
-
-#: ../cleaners/openoffice.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/libreoffice.xml
-msgid "Office suite"
-msgstr "오피스 프로그램"
-
-#: ../cleaners/openoffice.xml ../cleaners/audacious.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/gedit.xml ../cleaners/kde.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/adobe_reader.xml ../cleaners/audacious.xml ../cleaners/gedit.xml
+#: ../cleaners/gwenview.xml ../cleaners/kde.xml ../cleaners/openoffice.xml
+#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py
 msgid "Delete the list of recently used documents"
 msgstr "최근에 사용된 문서 목록 삭제"
 
-#: ../cleaners/rhythmbox.xml
-msgid "Database"
-msgstr "데이터베이스"
-
-#: ../cleaners/rhythmbox.xml
-msgid ""
-"Delete the database, which contains information such as play count and last "
-"played"
-msgstr "재생 횟수나 마지막 재생 목록 등의 정보가 있는 데이터베이스 삭제"
-
-#: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
-msgid "Debug logs"
-msgstr "디버그 로그"
-
-#: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/easytag.xml
-#: ../cleaners/x11.xml ../cleaners/gl-117.xml
-msgid "Delete the debug logs"
-msgstr "디버그 로그 삭제"
-
-#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
-#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/bash.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/silverlight.xml
+#: ../cleaners/vuze.xml ../cleaners/windows_defender.xml ../cleaners/wine.xml
+#: ../cleaners/winetricks.xml ../cleaners/winrar.xml ../bleachbit/Cleaner.py
 msgid "Temporary files"
 msgstr "임시 파일"
 
-#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
-#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/bash.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/silverlight.xml
+#: ../cleaners/vuze.xml ../cleaners/windows_defender.xml ../cleaners/wine.xml
+#: ../cleaners/winetricks.xml ../cleaners/winrar.xml ../bleachbit/Cleaner.py
 msgid "Delete the temporary files"
 msgstr "임시 파일 삭제"
 
-#: ../cleaners/beagle.xml ../cleaners/recoll.xml
-msgid "Search tool"
-msgstr "검색 도구"
+#: ../cleaners/amsn.xml ../cleaners/discord.xml ../cleaners/emesene.xml
+#: ../cleaners/hexchat.xml ../cleaners/pidgin.xml ../cleaners/profanity.xml
+#: ../cleaners/skype.xml ../cleaners/slack.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/zoom.xml
+msgid "Chat client"
+msgstr "채팅 클라이언트"
 
-#: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/recoll.xml
-msgid "Index"
-msgstr "인덱스"
+#: ../cleaners/amsn.xml ../cleaners/emesene.xml ../cleaners/hexchat.xml
+#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/skype.xml
+#: ../cleaners/yahoo_messenger.xml
+msgid "Chat logs"
+msgstr "채팅 로그"
 
-#: ../cleaners/elinks.xml
-msgid "Delete the cookies, visited URLs, and search history"
-msgstr "쿠키 파일, 방문한 URL, 검색 기록 삭제"
+#: ../cleaners/amsn.xml ../cleaners/emesene.xml ../cleaners/hexchat.xml
+#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/skype.xml
+#: ../cleaners/yahoo_messenger.xml
+msgid "Delete the chat logs"
+msgstr "채팅 로그 삭제"
 
-#: ../cleaners/wordpad.xml
-msgid "Word processor"
-msgstr "워드 프로세서"
-
-#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/epiphany.xml
-#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
-#: ../cleaners/brave.xml ../cleaners/seamonkey.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr "재방문 페이지의 표시 시간을 단축해주는 웹 캐시 정보 삭제"
-
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "A history of forms entered in websites"
-msgstr "웹사이트에 입력된 양식의 기록"
-
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-msgid ""
-"Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr "방문한 사이트, 다운로드, 썸네일을 포함한 사용 기록 삭제"
-
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-msgid "Sync"
-msgstr "동기화"
-
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-msgid "Delete the sync data (including web apps) and sign out of the browser"
-msgstr "동기화 데이터 (웹 앱 포함)를 삭제하고 브라우저에서 로그아웃"
-
-#: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
-#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/gl-117.xml ../cleaners/tremulous.xml
-msgid "Game"
-msgstr "게임"
-
-#. This software edits metadata tags, such as title and artist, in audio files
-#: ../cleaners/easytag.xml
-msgid "Audio files tagger"
-msgstr "오디오 파일 태거"
-
-#: ../cleaners/journald.xml
-msgid "System journals"
-msgstr "시스템 저널"
-
-#: ../cleaners/journald.xml
-msgid "Clean old system journals"
-msgstr "오래된 시스템 저널 정리"
-
-#: ../cleaners/emesene.xml
-msgid "Delete the avatars and emoticons cache"
-msgstr "아바타와 이모티콘 캐시 삭제"
-
-#: ../cleaners/filezilla.xml ../cleaners/smartftp.xml
-#: ../cleaners/transmission.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml
+#: ../cleaners/amule.xml ../cleaners/filezilla.xml ../cleaners/gftp.xml
+#: ../cleaners/smartftp.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
 msgid "File transfer client"
 msgstr "파일 전송 클라이언트"
 
-#: ../cleaners/epiphany.xml
-msgid "Places"
-msgstr "위치"
+#: ../cleaners/amule.xml ../cleaners/audacious.xml ../cleaners/claude.xml
+#: ../cleaners/easytag.xml ../cleaners/exaile.xml ../cleaners/gftp.xml
+#: ../cleaners/gpodder.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/miro.xml
+#: ../cleaners/profanity.xml ../cleaners/realplayer.xml
+#: ../cleaners/screenlets.xml ../cleaners/smartftp.xml
+#: ../cleaners/teamviewer.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
+#: ../cleaners/warzone2100.xml ../cleaners/windows_defender.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../bleachbit/Cleaner.py
+msgid "Logs"
+msgstr "로그"
 
-#: ../cleaners/epiphany.xml
-msgid ""
-"A database of URLs including bookmarks, favicons, and a history of visited "
-"websites"
-msgstr "북마크, 즐겨찾기 및 방문한 웹사이트의 기록을 포함한 URL 데이터베이스"
+#: ../cleaners/amule.xml ../cleaners/audacious.xml ../cleaners/claude.xml
+#: ../cleaners/exaile.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/miro.xml ../cleaners/profanity.xml ../cleaners/realplayer.xml
+#: ../cleaners/screenlets.xml ../cleaners/smartftp.xml
+#: ../cleaners/teamviewer.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
+#: ../cleaners/warzone2100.xml ../cleaners/windows_defender.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../bleachbit/Cleaner.py
+msgid "Delete the logs"
+msgstr "로그 삭제"
 
-#: ../cleaners/epiphany.xml
-msgid "This option deletes all bookmarks."
-msgstr "이 옵션은 모든 즐겨찾기를 삭제합니다."
+#: ../cleaners/amule.xml
+msgid "Known files history"
+msgstr "알려진 파일 기록"
 
-#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
-msgid "Downloaded podcasts"
-msgstr "다운로드한 팟캐스트"
+#: ../cleaners/amule.xml ../cleaners/d4x.xml ../cleaners/easytag.xml
+#: ../cleaners/filezilla.xml ../cleaners/gnome.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
+#: ../cleaners/links2.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
+#: ../cleaners/realplayer.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/windows_defender.xml ../cleaners/winrar.xml
+msgid "Delete the usage history"
+msgstr "사용 기록 삭제"
 
-#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
-msgid "Delete downloaded podcasts"
-msgstr "다운로드한 팟캐스트 삭제"
+#. http://wiki.amule.org/wiki/Friend
+#: ../cleaners/amule.xml
+msgid "Known clients and friends"
+msgstr "알려진 클라이언트 및 친구"
 
-#: ../cleaners/geary.xml ../cleaners/thunderbird.xml ../cleaners/evolution.xml
-msgid "Email client"
-msgstr "이메일 클라이언트"
+#: ../cleaners/amule.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
+#: ../cleaners/firefox.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
+#: ../cleaners/vscode.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_defender.xml ../cleaners/zen.xml
+msgid "Backup files"
+msgstr "파일 백업"
 
-#: ../cleaners/geary.xml
-msgid "Attachments"
-msgstr "부가 속성"
+#: ../cleaners/amule.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
+#: ../cleaners/firefox.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
+#: ../cleaners/vscode.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_defender.xml ../cleaners/zen.xml
+msgid "Delete the backup files"
+msgstr "백업 파일 삭제"
 
-#: ../cleaners/geary.xml
-msgid "Sync conflict"
-msgstr "동기화 충돌"
-
-#: ../cleaners/geary.xml ../cleaners/deepscan.xml
-msgid "This option is slow."
-msgstr "이 옵션은 느립니다."
-
-#: ../cleaners/wine.xml
-msgid "Compatibility layer for Windows software"
-msgstr "윈도우 소프트웨어 호환 레이어"
-
-#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
-msgid "Thumbnails"
-msgstr "썸네일"
-
-#: ../cleaners/thumbnails.xml
-msgid "Icons for files on the system"
-msgstr "시스템의 파일 아이콘"
-
-#: ../cleaners/gnome.xml ../cleaners/kde.xml
-msgid "Desktop environment"
-msgstr "데스크탑 환경"
-
-#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
-#. In Windows 'Run' is the dialog in the Start menu
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-msgid "Run"
-msgstr "실행"
-
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/google_toolbar.xml
-msgid "Search history"
-msgstr "검색 기록"
-
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/google_toolbar.xml
-msgid "Delete the search history"
-msgstr "검색 기록 삭제"
-
-#: ../cleaners/konqueror.xml
-msgid "Current session"
-msgstr "현재 세션"
-
-#: ../cleaners/konqueror.xml
-msgid "Delete the current session"
-msgstr "현재 세션 삭제"
-
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-msgid "Search engines"
-msgstr "검색 엔진"
-
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-msgid ""
-"Reset the search engine usage history and delete non-factory search engines, "
-"some of which are added automatically"
-msgstr "검색 엔진 사용 기록 재설정 및 자동으로 추가된 일부 검색 엔진 삭제"
-
-#: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
-msgid "File manager"
-msgstr "파일 관리자"
-
-#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
-#: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py
-msgid "Recent documents list"
-msgstr "최근 문서 목록"
-
-#: ../cleaners/windows_explorer.xml
-msgid ""
-"This option will reset pinned locations in Quick Access to their defaults."
-msgstr "이 옵션을 선택하면 퀵 액세스에 고정된 위치가 기본값으로 재설정됩니다."
-
-#: ../cleaners/windows_explorer.xml
-msgid "Shellbags"
-msgstr "셸백"
-
-#: ../cleaners/windows_explorer.xml
-msgid "Delete the usage date, window position, and other data for folders"
-msgstr "사용량 데이터, 창 위치 및 기타 폴더 정보 삭제"
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will reset the position of desktop icons."
-msgstr "바탕화면 아이콘의 위치가 초기화됩니다."
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will restart Windows Explorer."
-msgstr "윈도우 탐색기가 재실행됩니다."
-
-#: ../cleaners/windows_defender.xml
-msgid "Anti-virus"
-msgstr "백신 프로그램"
-
-#: ../cleaners/windows_defender.xml
-msgid "Quarantine"
-msgstr "격리"
-
-#: ../cleaners/thunderbird.xml
-msgid ""
-"Deleting the index will reset the configuration of columns in the message "
-"list."
-msgstr "인덱스를 삭제하면 메시지 목록의 열 구성이 초기화됩니다."
-
-#: ../cleaners/thunderbird.xml
-msgid "Session restore"
-msgstr "세션 복원"
-
-#: ../cleaners/thunderbird.xml
-msgid "Restores the previous session when the browser next starts"
-msgstr "브라우저가 다음에 시작될 때 이전 세션 복원"
+#: ../cleaners/apt.xml ../cleaners/dnf.xml ../cleaners/pacman.xml
+#: ../cleaners/snap.xml ../cleaners/yum.xml
+msgid "Package manager"
+msgstr "패키지 관리자"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -658,34 +189,264 @@ msgstr "더 이상 사용하지 않는 파일 삭제"
 msgid "Package lists"
 msgstr "패키지 목록"
 
-#. Cleaner description for vim, VS Code, etc.
-#: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
-msgid "Editor"
-msgstr "편집기"
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/realplayer.xml
+#: ../cleaners/vlc.xml ../cleaners/winamp.xml
+#: ../cleaners/windows_media_player.xml
+msgid "Media player"
+msgstr "미디어 플레이어"
 
+#: ../cleaners/bash.xml ../cleaners/fish.xml ../cleaners/zsh.xml
+msgid "Shell"
+msgstr "셸"
+
+#: ../cleaners/bash.xml ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/d4x.xml ../cleaners/discord.xml ../cleaners/easytag.xml
+#: ../cleaners/elinks.xml ../cleaners/fish.xml ../cleaners/google_chrome.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
+#: ../cleaners/links2.xml ../cleaners/mc.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/nautilus.xml ../cleaners/octave.xml ../cleaners/opera.xml
+#: ../cleaners/python.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
+#: ../cleaners/seamonkey.xml ../cleaners/slack.xml ../cleaners/sqlite3.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/vim.xml ../cleaners/vivaldi.xml
+#: ../cleaners/windows_defender.xml ../cleaners/winrar.xml ../cleaners/zsh.xml
+msgid "History"
+msgstr "사용 기록"
+
+#: ../cleaners/bash.xml ../cleaners/fish.xml ../cleaners/octave.xml
+#: ../cleaners/python.xml ../cleaners/sqlite3.xml ../cleaners/zsh.xml
+msgid "Delete the command history"
+msgstr "명령어 기록 삭제"
+
+#: ../cleaners/beagle.xml ../cleaners/recoll.xml
+msgid "Search tool"
+msgstr "검색 도구"
+
+#: ../cleaners/beagle.xml ../cleaners/recoll.xml ../cleaners/thunderbird.xml
+msgid "Index"
+msgstr "인덱스"
+
+#: ../cleaners/beagle.xml ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/firefox.xml
+#: ../cleaners/geary.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/profanity.xml
+#: ../cleaners/thunderbird.xml ../cleaners/transmission.xml
+#: ../cleaners/vivaldi.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_defender.xml ../cleaners/zen.xml ../cleaners/zsh.xml
+msgid "Delete the files"
+msgstr "파일 삭제"
+
+#: ../cleaners/beagle.xml ../cleaners/gl-117.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
 #: ../cleaners/x11.xml
-msgid "Windowing system"
-msgstr "윈도잉 시스템"
+msgid "Debug logs"
+msgstr "디버그 로그"
 
-#: ../cleaners/gimp.xml
-msgid "Graphics editor"
-msgstr "그래픽 편집기"
+#: ../cleaners/beagle.xml ../cleaners/easytag.xml ../cleaners/gl-117.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/x11.xml
+msgid "Delete the debug logs"
+msgstr "디버그 로그 삭제"
 
-#: ../cleaners/snap.xml
-msgid "Disabled"
-msgstr "사용 안 함"
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/elinks.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/links2.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Web browser"
+msgstr "웹 브라우저"
 
-#: ../cleaners/snap.xml
-msgid "Remove disabled packages"
-msgstr "비활성화된 패키지 제거"
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml
+msgid "Delete the web cache, which reduces time to display revisited pages"
+msgstr "재방문 페이지의 표시 시간을 단축해주는 웹 캐시 정보 삭제"
 
-#: ../cleaners/adobe_reader.xml
-msgid "Document viewer"
-msgstr "문서 뷰어"
+#. TRANSLATORS: Sidebar label for the page managing browser cookies in
+#. the Preferences dialog.
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/flash.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
+#: ../cleaners/seamonkey.xml ../cleaners/silverlight.xml ../cleaners/slack.xml
+#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../bleachbit/GuiPreferences.py
+msgid "Cookies"
+msgstr "쿠키"
 
-#: ../cleaners/nautilus.xml
-msgid "Custom folders will be reset."
-msgstr "커스텀 폴더가 재설정됩니다."
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/flash.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
+#: ../cleaners/seamonkey.xml ../cleaners/silverlight.xml ../cleaners/slack.xml
+#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml
+msgid ""
+"Delete cookies, which store login information, website preferences, and "
+"tracking identifiers"
+msgstr "로그인 정보, 웹사이트 환경설정 및 추적 식별자를 저장하는 쿠키 삭제"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml
+msgid "Crash reports"
+msgstr "오류 보고서"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Form history"
+msgstr "양식 기록"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/vivaldi.xml
+msgid "A history of forms entered in websites"
+msgstr "웹사이트에 입력된 양식의 기록"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/slack.xml ../cleaners/vivaldi.xml
+msgid ""
+"Delete the history which includes visited sites, downloads, and thumbnails"
+msgstr "방문한 사이트, 다운로드, 썸네일을 포함한 사용 기록 삭제"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml
+msgid "Search engines"
+msgstr "검색 엔진"
+
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml
+msgid ""
+"Reset the search engine usage history and delete non-factory search engines, "
+"some of which are added automatically"
+msgstr "검색 엔진 사용 기록 재설정 및 자동으로 추가된 일부 검색 엔진 삭제"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/claude.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/zsh.xml
+msgid "Session"
+msgstr "세션"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml
+msgid "Previously open tabs and windows"
+msgstr "이전에 열린 탭과 창"
+
+#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Site data"
+msgstr "사이트 데이터"
+
+#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
+msgstr "웹사이트에 저장된 로컬저장소, 인덱스DB 및 기타 데이터 삭제"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/vivaldi.xml
+msgid "Sync"
+msgstr "동기화"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/vivaldi.xml
+msgid "Delete the sync data (including web apps) and sign out of the browser"
+msgstr "동기화 데이터 (웹 앱 포함)를 삭제하고 브라우저에서 로그아웃"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Passwords"
+msgstr "암호"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid ""
+"A database of usernames and passwords as well as a list of sites that should "
+"not store passwords"
+msgstr "사용자 이름 및 암호와 암호를 저장하지 않는 사이트 목록 데이터베이스"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "This option will delete your saved passwords."
+msgstr "이 옵션은 저장한 암호를 삭제합니다."
+
+#. TRANSLATORS: Vacuum is a verb.  The term is jargon
+#. from the SQLite database.  Microsoft Access uses
+#. the term 'Compact Database' (which you may translate
+#. instead).  Another synonym is 'defragment.'
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/firefox.xml ../cleaners/geary.xml ../cleaners/google_chrome.xml
+#: ../cleaners/gpodder.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/slack.xml
+#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/yum.xml ../cleaners/zen.xml ../bleachbit/Action.py
+msgid "Vacuum"
+msgstr "조각 모음"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/firefox.xml ../cleaners/geary.xml ../cleaners/google_chrome.xml
+#: ../cleaners/gpodder.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/slack.xml
+#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/yum.xml ../cleaners/zen.xml
+msgid ""
+"Clean database fragmentation to reduce space and improve speed without "
+"removing any data"
+msgstr ""
+"데이터베이스 단편화를 해소해 데이터 삭제 없이 용량을 줄이고 속도를 개선"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Site preferences"
+msgstr "사이트 설정"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Settings for individual sites"
+msgstr "개별 사이트에 대한 설정"
 
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
@@ -724,6 +485,10 @@ msgstr "정밀 검사"
 msgid "Clean files widely scattered across the disk"
 msgstr "디스크에 널리 흩어져 있는 파일 정리"
 
+#: ../cleaners/deepscan.xml ../cleaners/geary.xml
+msgid "This option is slow."
+msgstr "이 옵션은 느립니다."
+
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
 msgstr "미리 보기에서 보관할 파일이 있는지 확인하세요."
@@ -742,37 +507,133 @@ msgstr "사용자 프로필 아래 VIM 스왑 파일"
 msgid "VIM swap files across system"
 msgstr "시스템 전체 VIM 스왑 파일"
 
-#: ../cleaners/zoom.xml
-msgid "Recordings"
-msgstr "기록"
+#: ../cleaners/discord.xml
+msgid ""
+"Delete the web cache, which reduces time to display revisited pages. This "
+"also clears favorited GIFs."
+msgstr ""
+"웹 캐시를 삭제하면 재방문한 페이지를 표시하는 시간이 줄어듭니다. 이 작업은 즐"
+"겨찾기한 GIF도 함께 삭제합니다."
 
-#: ../cleaners/zoom.xml
-msgid "Delete the audio and video recordings"
-msgstr "오디오 및 비디오 녹화 삭제"
+#: ../cleaners/dnf.xml
+msgid "Remove packages that were formerly dependencies"
+msgstr "이전의 의존성 패키지 제거"
 
-#: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
-msgstr "검색 색인, 단어 데이터베이스 및 포함된 파일 삭제"
+#: ../cleaners/dnf.xml
+msgid ""
+"Carefully review the list of packages that will be removed by running \"dnf "
+"list autoremove\"."
+msgstr ""
+"\"dnf 목록 자동 제거\"를 실행하여 제거될 패키지 목록을 자세히 검토하십시오."
 
-#: ../cleaners/skype.xml
-msgid "Installers"
-msgstr "설치 프로그램"
+#. This software edits metadata tags, such as title and artist, in audio files
+#: ../cleaners/easytag.xml
+msgid "Audio files tagger"
+msgstr "오디오 파일 태거"
 
-#: ../cleaners/skype.xml
-msgid "Delete cached patches and installers"
-msgstr "캐시된 패치와 설치 프로그램 삭제"
+#: ../cleaners/elinks.xml
+msgid "Delete the cookies, visited URLs, and search history"
+msgstr "쿠키 파일, 방문한 URL, 검색 기록 삭제"
 
-#: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
-msgid "Download history"
-msgstr "다운로드 기록"
+#: ../cleaners/emesene.xml
+msgid "Delete the avatars and emoticons cache"
+msgstr "아바타와 이모티콘 캐시 삭제"
 
-#: ../cleaners/seamonkey.xml
-msgid "List of files downloaded"
-msgstr "다운로드한 파일 목록"
+#: ../cleaners/epiphany.xml
+msgid "Places"
+msgstr "위치"
 
-#: ../cleaners/seamonkey.xml
-msgid "Delete the list of visited web pages"
-msgstr "방문한 웹 페이지 목록 삭제"
+#: ../cleaners/epiphany.xml
+msgid ""
+"A database of URLs including bookmarks, favicons, and a history of visited "
+"websites"
+msgstr "북마크, 즐겨찾기 및 방문한 웹사이트의 기록을 포함한 URL 데이터베이스"
+
+#: ../cleaners/epiphany.xml
+msgid "This option deletes all bookmarks."
+msgstr "이 옵션은 모든 즐겨찾기를 삭제합니다."
+
+#: ../cleaners/evolution.xml ../cleaners/geary.xml ../cleaners/thunderbird.xml
+msgid "Email client"
+msgstr "이메일 클라이언트"
+
+#: ../cleaners/exaile.xml ../cleaners/gpodder.xml
+msgid "Downloaded podcasts"
+msgstr "다운로드한 팟캐스트"
+
+#: ../cleaners/exaile.xml ../cleaners/gpodder.xml
+msgid "Delete downloaded podcasts"
+msgstr "다운로드한 팟캐스트 삭제"
+
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/librewolf.xml ../cleaners/palemoon.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml
+msgid "Saved form entries and search bar history"
+msgstr "저장된 양식 항목 및 검색창 기록"
+
+#: ../cleaners/firefox.xml ../cleaners/konqueror.xml ../cleaners/librewolf.xml
+#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "URL history"
+msgstr "URL 기록"
+
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "List of visited web pages"
+msgstr "방문한 웹 페이지 목록"
+
+#: ../cleaners/flash.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
+#: ../cleaners/xine.xml
+msgid "Multimedia viewer"
+msgstr "멀티미디어 뷰어"
+
+#: ../cleaners/geary.xml
+msgid "Attachments"
+msgstr "부가 속성"
+
+#: ../cleaners/geary.xml
+msgid "Sync conflict"
+msgstr "동기화 충돌"
+
+#. Cleaner description for vim, VS Code, etc.
+#: ../cleaners/gedit.xml ../cleaners/vim.xml ../cleaners/vscode.xml
+msgid "Editor"
+msgstr "편집기"
+
+#: ../cleaners/gedit.xml ../cleaners/gwenview.xml ../cleaners/kde.xml
+#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py
+msgid "Recent documents list"
+msgstr "최근 문서 목록"
+
+#: ../cleaners/gimp.xml
+msgid "Graphics editor"
+msgstr "그래픽 편집기"
+
+#: ../cleaners/gl-117.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/nexuiz.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/tremulous.xml ../cleaners/warzone2100.xml
+msgid "Game"
+msgstr "게임"
+
+#: ../cleaners/gnome.xml ../cleaners/kde.xml
+msgid "Desktop environment"
+msgstr "데스크탑 환경"
+
+#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
+#. In Windows 'Run' is the dialog in the Start menu
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+msgid "Run"
+msgstr "실행"
+
+#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
+#: ../cleaners/windows_explorer.xml
+msgid "Search history"
+msgstr "검색 기록"
+
+#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the search history"
+msgstr "검색 기록 삭제"
 
 #. Cleaning option that deletes AI models in a web browser
 #: ../cleaners/google_chrome.xml
@@ -784,6 +645,121 @@ msgstr ""
 #| msgid "Delete the logs"
 msgid "Delete the AI models"
 msgstr "로그 삭제"
+
+#: ../cleaners/internet_explorer.xml ../cleaners/seamonkey.xml
+msgid "Download history"
+msgstr "다운로드 기록"
+
+#: ../cleaners/journald.xml
+msgid "System journals"
+msgstr "시스템 저널"
+
+#: ../cleaners/journald.xml
+msgid "Clean old system journals"
+msgstr "오래된 시스템 저널 정리"
+
+#: ../cleaners/konqueror.xml
+msgid "Current session"
+msgstr "현재 세션"
+
+#: ../cleaners/konqueror.xml
+msgid "Delete the current session"
+msgstr "현재 세션 삭제"
+
+#: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/openoffice.xml
+msgid "Office suite"
+msgstr "오피스 프로그램"
+
+#: ../cleaners/mc.xml ../cleaners/nautilus.xml ../cleaners/windows_explorer.xml
+msgid "File manager"
+msgstr "파일 관리자"
+
+#: ../cleaners/microsoft_office.xml ../cleaners/paint.xml
+#: ../cleaners/smartftp.xml ../cleaners/teamviewer.xml ../cleaners/vlc.xml
+#: ../cleaners/winamp.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/winzip.xml
+#: ../cleaners/wordpad.xml
+msgid "Delete the most recently used list"
+msgstr "가장 최근에 사용된 파일 목록 삭제"
+
+#: ../cleaners/nautilus.xml
+msgid "Custom folders will be reset."
+msgstr "커스텀 폴더가 재설정됩니다."
+
+#: ../cleaners/profanity.xml
+#, fuzzy
+#| msgid "Downloading URL failed: %s"
+msgid "Downloaded files"
+msgstr "URL 다운로드 실패 : %s"
+
+#: ../cleaners/recoll.xml
+msgid "Delete the search index, a database of words and the files they contain"
+msgstr "검색 색인, 단어 데이터베이스 및 포함된 파일 삭제"
+
+#: ../cleaners/rhythmbox.xml
+msgid "Database"
+msgstr "데이터베이스"
+
+#: ../cleaners/rhythmbox.xml
+msgid ""
+"Delete the database, which contains information such as play count and last "
+"played"
+msgstr "재생 횟수나 마지막 재생 목록 등의 정보가 있는 데이터베이스 삭제"
+
+#: ../cleaners/screenlets.xml
+msgid "Desktop widgets"
+msgstr "데스크톱 위젯"
+
+#: ../cleaners/seamonkey.xml
+msgid "List of files downloaded"
+msgstr "다운로드한 파일 목록"
+
+#: ../cleaners/seamonkey.xml
+msgid "Delete the list of visited web pages"
+msgstr "방문한 웹 페이지 목록 삭제"
+
+#: ../cleaners/skype.xml
+msgid "Installers"
+msgstr "설치 프로그램"
+
+#: ../cleaners/skype.xml
+msgid "Delete cached patches and installers"
+msgstr "캐시된 패치와 설치 프로그램 삭제"
+
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr "사용 안 함"
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr "비활성화된 패키지 제거"
+
+#: ../cleaners/teamviewer.xml
+msgid "Remote control software"
+msgstr "원격 제어 프로그램"
+
+#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
+msgid "Thumbnails"
+msgstr "썸네일"
+
+#: ../cleaners/thumbnails.xml
+msgid "Icons for files on the system"
+msgstr "시스템의 파일 아이콘"
+
+#: ../cleaners/thunderbird.xml
+msgid ""
+"Deleting the index will reset the configuration of columns in the message "
+"list."
+msgstr "인덱스를 삭제하면 메시지 목록의 열 구성이 초기화됩니다."
+
+#: ../cleaners/thunderbird.xml
+msgid "Session restore"
+msgstr "세션 복원"
+
+#: ../cleaners/thunderbird.xml
+msgid "Restores the previous session when the browser next starts"
+msgstr "브라우저가 다음에 시작될 때 이전 세션 복원"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -814,49 +790,67 @@ msgstr "파일 삭제"
 msgid "Delete the list of game servers"
 msgstr "게임 서버 목록 삭제"
 
-#: ../cleaners/profanity.xml
-#, fuzzy
-#| msgid "Downloading URL failed: %s"
-msgid "Downloaded files"
-msgstr "URL 다운로드 실패 : %s"
-
-#: ../cleaners/teamviewer.xml
-msgid "Remote control software"
-msgstr "원격 제어 프로그램"
-
-#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
-msgid "Memory dump"
-msgstr "메모리 덤프"
-
-#: ../cleaners/screenlets.xml
-msgid "Desktop widgets"
-msgstr "데스크톱 위젯"
-
-#: ../cleaners/winrar.xml
-msgid "File archiver"
-msgstr "파일 압축기"
-
-#: ../cleaners/amule.xml
-msgid "Known files history"
-msgstr "알려진 파일 기록"
-
-#. http://wiki.amule.org/wiki/Friend
-#: ../cleaners/amule.xml
-msgid "Known clients and friends"
-msgstr "알려진 클라이언트 및 친구"
-
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr "파일 기록, 명령어 사용 기록, 버퍼 등의 정보를 포함한 ~/.viminfo 삭제"
 
-#: ../cleaners/discord.xml
+#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
+msgid "Memory dump"
+msgstr "메모리 덤프"
+
+#: ../cleaners/windows_defender.xml
+msgid "Anti-virus"
+msgstr "백신 프로그램"
+
+#: ../cleaners/windows_defender.xml
+msgid "Quarantine"
+msgstr "격리"
+
+#: ../cleaners/windows_explorer.xml
 msgid ""
-"Delete the web cache, which reduces time to display revisited pages. This "
-"also clears favorited GIFs."
-msgstr ""
-"웹 캐시를 삭제하면 재방문한 페이지를 표시하는 시간이 줄어듭니다. 이 작업은 즐"
-"겨찾기한 GIF도 함께 삭제합니다."
+"This option will reset pinned locations in Quick Access to their defaults."
+msgstr "이 옵션을 선택하면 퀵 액세스에 고정된 위치가 기본값으로 재설정됩니다."
+
+#: ../cleaners/windows_explorer.xml
+msgid "Shellbags"
+msgstr "셸백"
+
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the usage date, window position, and other data for folders"
+msgstr "사용량 데이터, 창 위치 및 기타 폴더 정보 삭제"
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will reset the position of desktop icons."
+msgstr "바탕화면 아이콘의 위치가 초기화됩니다."
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will restart Windows Explorer."
+msgstr "윈도우 탐색기가 재실행됩니다."
+
+#: ../cleaners/wine.xml
+msgid "Compatibility layer for Windows software"
+msgstr "윈도우 소프트웨어 호환 레이어"
+
+#: ../cleaners/winrar.xml
+msgid "File archiver"
+msgstr "파일 압축기"
+
+#: ../cleaners/wordpad.xml
+msgid "Word processor"
+msgstr "워드 프로세서"
+
+#: ../cleaners/x11.xml
+msgid "Windowing system"
+msgstr "윈도잉 시스템"
+
+#: ../cleaners/zoom.xml
+msgid "Recordings"
+msgstr "기록"
+
+#: ../cleaners/zoom.xml
+msgid "Delete the audio and video recordings"
+msgstr "오디오 및 비디오 녹화 삭제"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
@@ -1287,6 +1281,14 @@ msgstr "전역사용 권한이 있으므로 클리너 무시: %s"
 msgid "Error reading cleaner: %s"
 msgstr "클리너 읽기 오류: %s"
 
+#: ../bleachbit/Cleaner.py
+msgid "System"
+msgstr "시스템"
+
+#: ../bleachbit/Cleaner.py
+msgid "The system in general"
+msgstr "시스템 전반"
+
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
 #. Firefox, and others.  The .desktop files also associate file
@@ -1412,14 +1414,6 @@ msgstr "빈 공간"
 #: ../bleachbit/Cleaner.py
 msgid "Wipe empty space to hide deleted files"
 msgstr "삭제된 파일을 숨기기 위해 빈 공간 지우기"
-
-#: ../bleachbit/Cleaner.py
-msgid "The system in general"
-msgstr "시스템 전반"
-
-#: ../bleachbit/Cleaner.py
-msgid "System"
-msgstr "시스템"
 
 #. TRANSLATORS: 'Empty' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
@@ -3080,6 +3074,11 @@ msgstr "레지스트리 키를 삭제하는 동안 접근이 거부되었습니�
 #, python-format
 msgid "Access denied: %s"
 msgstr "접근이 거부되었습니다 : %s"
+
+#: ../bleachbit/Worker.py
+#, python-format
+msgid "Database is locked: %s"
+msgstr ""
 
 #: ../bleachbit/Worker.py
 #, python-brace-format

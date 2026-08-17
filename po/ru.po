@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-07-12 15:23-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-16 16:46-0600\n"
 "PO-Revision-Date: 2026-07-15 05:01+0000\n"
 "Last-Translator: Andrei Stepanov <adem4ik@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/bleachbit/main/"
@@ -21,654 +21,166 @@ msgstr ""
 "X-Generator: Weblate 2026.8.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
-#: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
-#: ../cleaners/vlc.xml
-msgid "Media player"
-msgstr "Медиаплеер"
+#: ../cleaners/adobe_reader.xml
+msgid "Document viewer"
+msgstr "Просмотрщик документов"
 
-#. TRANSLATORS: Sidebar label for the page managing browser cookies in
-#. the Preferences dialog.
-#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
-#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
-#: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../bleachbit/GuiPreferences.py
-msgid "Cookies"
-msgstr "Cookies"
-
-#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
-#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
-#: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-msgid ""
-"Delete cookies, which store login information, website preferences, and "
-"tracking identifiers"
-msgstr ""
-"Удалить куки, которые хранят информацию о входе в систему, настройки веб-"
-"сайта и идентификаторы отслеживания"
-
-#: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
-#: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
-#: ../cleaners/safari.xml ../cleaners/fish.xml ../cleaners/chromium.xml
-#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
-#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
-#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
-#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
-#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/python.xml
-#: ../cleaners/vim.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../cleaners/octave.xml
-msgid "History"
-msgstr "Журнал"
-
-#: ../cleaners/realplayer.xml ../cleaners/easytag.xml ../cleaners/filezilla.xml
-#: ../cleaners/gnome.xml ../cleaners/windows_defender.xml
-#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
-#: ../cleaners/libreoffice.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
-#: ../cleaners/amule.xml
-msgid "Delete the usage history"
-msgstr "Удалить журнал использования"
-
-#: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
-#: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Logs"
-msgstr "Журналы событий"
-
-#: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
-#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Delete the logs"
-msgstr "Удалить журналы"
-
-#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
-#: ../cleaners/flash.xml
-msgid "Multimedia viewer"
-msgstr "Мультимедийный обозреватель"
-
-#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
-#: ../cleaners/librewolf.xml ../cleaners/openoffice.xml
-#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
-#: ../cleaners/vivaldi.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/pidgin.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/emesene.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/epiphany.xml
-#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
-#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
-#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/seamonkey.xml
-#: ../cleaners/flash.xml ../cleaners/google_chrome.xml
-#: ../cleaners/tremulous.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/gftp.xml ../cleaners/kde.xml
-#: ../cleaners/vuze.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/adobe_reader.xml ../cleaners/amsn.xml ../cleaners/audacious.xml
+#: ../cleaners/beagle.xml ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/claude.xml ../cleaners/discord.xml ../cleaners/emesene.xml
+#: ../cleaners/epiphany.xml ../cleaners/evolution.xml ../cleaners/exaile.xml
+#: ../cleaners/firefox.xml ../cleaners/flash.xml ../cleaners/geary.xml
+#: ../cleaners/gftp.xml ../cleaners/google_chrome.xml ../cleaners/gpodder.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/java.xml ../cleaners/kde.xml ../cleaners/librewolf.xml
+#: ../cleaners/liferea.xml ../cleaners/microsoft_edge.xml ../cleaners/miro.xml
+#: ../cleaners/nexuiz.xml ../cleaners/openoffice.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/pidgin.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/slack.xml
+#: ../cleaners/smartftp.xml ../cleaners/thumbnails.xml
+#: ../cleaners/thunderbird.xml ../cleaners/tremulous.xml
+#: ../cleaners/vivaldi.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
+#: ../cleaners/waterfox.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/xine.xml ../cleaners/yahoo_messenger.xml ../cleaners/zen.xml
+#: ../cleaners/zoom.xml ../bleachbit/Cleaner.py
 msgid "Cache"
 msgstr "Кэш"
 
 #. TRANSLATORS: The description of what certain cleaning options do.
-#: ../cleaners/xine.xml ../cleaners/dnf.xml ../cleaners/miro.xml
-#: ../cleaners/amsn.xml ../cleaners/librewolf.xml ../cleaners/openoffice.xml
-#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml ../cleaners/yum.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
-#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
-#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
-#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/vscode.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/adobe_reader.xml ../cleaners/amsn.xml ../cleaners/apt.xml
+#: ../cleaners/audacious.xml ../cleaners/beagle.xml ../cleaners/claude.xml
+#: ../cleaners/dnf.xml ../cleaners/evolution.xml ../cleaners/exaile.xml
+#: ../cleaners/firefox.xml ../cleaners/flash.xml ../cleaners/geary.xml
+#: ../cleaners/gftp.xml ../cleaners/gpodder.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/java.xml ../cleaners/kde.xml ../cleaners/librewolf.xml
+#: ../cleaners/liferea.xml ../cleaners/miro.xml ../cleaners/nexuiz.xml
+#: ../cleaners/openoffice.xml ../cleaners/pacman.xml ../cleaners/palemoon.xml
+#: ../cleaners/pidgin.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/smartftp.xml
+#: ../cleaners/thumbnails.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
+#: ../cleaners/waterfox.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/xine.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/yum.xml ../cleaners/zen.xml
+#: ../cleaners/zoom.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "Удалить кэш"
 
-#: ../cleaners/paint.xml ../cleaners/openoffice.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/wordpad.xml ../cleaners/audacious.xml ../cleaners/filezilla.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/winamp.xml ../cleaners/adobe_reader.xml ../cleaners/winzip.xml
-#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/audacious.xml
+#: ../cleaners/filezilla.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/openoffice.xml ../cleaners/paint.xml ../cleaners/smartftp.xml
+#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/winzip.xml ../cleaners/wordpad.xml
 msgid "Most recently used"
 msgstr "Недавние"
 
-#: ../cleaners/paint.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/wordpad.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/winamp.xml ../cleaners/winzip.xml ../cleaners/teamviewer.xml
-#: ../cleaners/vlc.xml
-msgid "Delete the most recently used list"
-msgstr "Удалить список недавно использовавшихся"
-
-#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
-#: ../cleaners/apt.xml ../cleaners/snap.xml
-msgid "Package manager"
-msgstr "Менеджер пакетов"
-
-#: ../cleaners/dnf.xml
-msgid "Remove packages that were formerly dependencies"
-msgstr "Удалить пакеты, являющиеся устаревшими зависимостями"
-
-#: ../cleaners/dnf.xml
-msgid ""
-"Carefully review the list of packages that will be removed by running \"dnf "
-"list autoremove\"."
-msgstr ""
-"Внимательно проверьте список пакетов, которые будут удалены с помощью "
-"команды \"dnf list autoremove\"."
-
-#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
-#: ../cleaners/zoom.xml ../cleaners/skype.xml ../cleaners/profanity.xml
-#: ../cleaners/discord.xml
-msgid "Chat client"
-msgstr "Клиент для общения"
-
-#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
-#: ../cleaners/seamonkey.xml
-msgid "Chat logs"
-msgstr "Журналы разговоров"
-
-#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
-#: ../cleaners/seamonkey.xml
-msgid "Delete the chat logs"
-msgstr "Удалить журналы разговоров"
-
-#: ../cleaners/librewolf.xml ../cleaners/elinks.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/links2.xml ../cleaners/seamonkey.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Web browser"
-msgstr "Веб-браузер"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
-#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
-msgid "Backup files"
-msgstr "Файлы резервных копий"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
-#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
-msgid "Delete the backup files"
-msgstr "Удалить файлы резервных копий"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Crash reports"
-msgstr "Отчёты об ошибках"
-
-#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/geary.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/windows_defender.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml
-#: ../cleaners/google_chrome.xml ../cleaners/transmission.xml
-#: ../cleaners/profanity.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/vuze.xml ../cleaners/opera.xml
-msgid "Delete the files"
-msgstr "Удалить эти файлы"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "Form history"
-msgstr "Журнал форм ввода"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/internet_explorer.xml
-msgid "Saved form entries and search bar history"
-msgstr "Сохранённые данные форм и история строки поиска"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Passwords"
-msgstr "Пароли"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid ""
-"A database of usernames and passwords as well as a list of sites that should "
-"not store passwords"
-msgstr ""
-"База данных имён пользователей и паролей, а также список сайтов, для которых "
-"не нужно сохранять пароли"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "This option will delete your saved passwords."
-msgstr "Этот параметр удалит все сохранённые пароли."
-
-#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/claude.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Session"
-msgstr "Сеанс"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Previously open tabs and windows"
-msgstr "Ранее открытые вкладки и окна"
-
-#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "Site data"
-msgstr "Данные сайта"
-
-#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
-msgstr ""
-"Удалять LocalStorage, IndexedDB и другие данные, хранящиеся на веб-сайтах"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Site preferences"
-msgstr "Параметры сайта"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Settings for individual sites"
-msgstr "Параметры для отдельных сайтов"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/konqueror.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-msgid "URL history"
-msgstr "Журнал веб-ссылок"
-
-#: ../cleaners/librewolf.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
-msgid "List of visited web pages"
-msgstr "Список посещённых веб-страниц"
-
-#. TRANSLATORS: Vacuum is a verb.  The term is jargon
-#. from the SQLite database.  Microsoft Access uses
-#. the term 'Compact Database' (which you may translate
-#. instead).  Another synonym is 'defragment.'
-#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Action.py
-msgid "Vacuum"
-msgstr "Сжать базу данных"
-
-#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml
-msgid ""
-"Clean database fragmentation to reduce space and improve speed without "
-"removing any data"
-msgstr ""
-"Дефрагментировать базу данных для высвобождения места и увеличения скорости, "
-"без удаления данных"
-
-#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
-msgid "Shell"
-msgstr "Командный интерпретатор"
-
-#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
-#: ../cleaners/sqlite3.xml ../cleaners/python.xml ../cleaners/octave.xml
-msgid "Delete the command history"
-msgstr "Удалить журнал команд"
-
-#: ../cleaners/openoffice.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/libreoffice.xml
-msgid "Office suite"
-msgstr "Офисный пакет"
-
-#: ../cleaners/openoffice.xml ../cleaners/audacious.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/gedit.xml ../cleaners/kde.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/adobe_reader.xml ../cleaners/audacious.xml ../cleaners/gedit.xml
+#: ../cleaners/gwenview.xml ../cleaners/kde.xml ../cleaners/openoffice.xml
+#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py
 msgid "Delete the list of recently used documents"
 msgstr "Удалить список недавно использованных документов"
 
-#: ../cleaners/rhythmbox.xml
-msgid "Database"
-msgstr "База данных"
-
-#: ../cleaners/rhythmbox.xml
-msgid ""
-"Delete the database, which contains information such as play count and last "
-"played"
-msgstr ""
-"Удалить базу данных, содержащую такую информацию, как число воспроизведений "
-"и последний воспроизведённый файл"
-
-#: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
-msgid "Debug logs"
-msgstr "Журналы отладки"
-
-#: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/easytag.xml
-#: ../cleaners/x11.xml ../cleaners/gl-117.xml
-msgid "Delete the debug logs"
-msgstr "Удалить журналы отладки"
-
-#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
-#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/bash.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/silverlight.xml
+#: ../cleaners/vuze.xml ../cleaners/windows_defender.xml ../cleaners/wine.xml
+#: ../cleaners/winetricks.xml ../cleaners/winrar.xml ../bleachbit/Cleaner.py
 msgid "Temporary files"
 msgstr "Временные файлы"
 
-#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
-#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/bash.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/silverlight.xml
+#: ../cleaners/vuze.xml ../cleaners/windows_defender.xml ../cleaners/wine.xml
+#: ../cleaners/winetricks.xml ../cleaners/winrar.xml ../bleachbit/Cleaner.py
 msgid "Delete the temporary files"
 msgstr "Удалить временные файлы"
 
-#: ../cleaners/beagle.xml ../cleaners/recoll.xml
-msgid "Search tool"
-msgstr "Инструмент поиска"
+#: ../cleaners/amsn.xml ../cleaners/discord.xml ../cleaners/emesene.xml
+#: ../cleaners/hexchat.xml ../cleaners/pidgin.xml ../cleaners/profanity.xml
+#: ../cleaners/skype.xml ../cleaners/slack.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/zoom.xml
+msgid "Chat client"
+msgstr "Клиент для общения"
 
-#: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/recoll.xml
-msgid "Index"
-msgstr "Индекс"
+#: ../cleaners/amsn.xml ../cleaners/emesene.xml ../cleaners/hexchat.xml
+#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/skype.xml
+#: ../cleaners/yahoo_messenger.xml
+msgid "Chat logs"
+msgstr "Журналы разговоров"
 
-#: ../cleaners/elinks.xml
-msgid "Delete the cookies, visited URLs, and search history"
-msgstr "Удалить cookie, посещённые веб-ссылки и журнал поиска"
+#: ../cleaners/amsn.xml ../cleaners/emesene.xml ../cleaners/hexchat.xml
+#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/skype.xml
+#: ../cleaners/yahoo_messenger.xml
+msgid "Delete the chat logs"
+msgstr "Удалить журналы разговоров"
 
-#: ../cleaners/wordpad.xml
-msgid "Word processor"
-msgstr "Текстовый редактор"
-
-#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/epiphany.xml
-#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
-#: ../cleaners/brave.xml ../cleaners/seamonkey.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr ""
-"Удалить временные файлы интернета, которые ускоряют загрузку ранее "
-"посещённых страниц"
-
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "A history of forms entered in websites"
-msgstr "Журнал форм ввода на веб-сайтах"
-
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-msgid ""
-"Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr "Удалить журнал, включая посещённые веб-сайты, загрузки и миниатюры"
-
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-msgid "Sync"
-msgstr "Синхронизация"
-
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-msgid "Delete the sync data (including web apps) and sign out of the browser"
-msgstr ""
-"Удалить данные синхронизации (включая веб-приложения) и выйти из учётной "
-"записи браузера"
-
-#: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
-#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/gl-117.xml ../cleaners/tremulous.xml
-msgid "Game"
-msgstr "Игра"
-
-#. This software edits metadata tags, such as title and artist, in audio files
-#: ../cleaners/easytag.xml
-msgid "Audio files tagger"
-msgstr "Маркировщик аудиофайлов"
-
-#: ../cleaners/journald.xml
-msgid "System journals"
-msgstr "Системные журналы"
-
-#: ../cleaners/journald.xml
-msgid "Clean old system journals"
-msgstr "Очистить старые системные журналы"
-
-#: ../cleaners/emesene.xml
-msgid "Delete the avatars and emoticons cache"
-msgstr "Удалить временные файлы аватаров и смайликов"
-
-#: ../cleaners/filezilla.xml ../cleaners/smartftp.xml
-#: ../cleaners/transmission.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml
+#: ../cleaners/amule.xml ../cleaners/filezilla.xml ../cleaners/gftp.xml
+#: ../cleaners/smartftp.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
 msgid "File transfer client"
 msgstr "Клиент для передачи файлов"
 
-#: ../cleaners/epiphany.xml
-msgid "Places"
-msgstr "Места"
+#: ../cleaners/amule.xml ../cleaners/audacious.xml ../cleaners/claude.xml
+#: ../cleaners/easytag.xml ../cleaners/exaile.xml ../cleaners/gftp.xml
+#: ../cleaners/gpodder.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/miro.xml
+#: ../cleaners/profanity.xml ../cleaners/realplayer.xml
+#: ../cleaners/screenlets.xml ../cleaners/smartftp.xml
+#: ../cleaners/teamviewer.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
+#: ../cleaners/warzone2100.xml ../cleaners/windows_defender.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../bleachbit/Cleaner.py
+msgid "Logs"
+msgstr "Журналы событий"
 
-#: ../cleaners/epiphany.xml
-msgid ""
-"A database of URLs including bookmarks, favicons, and a history of visited "
-"websites"
-msgstr ""
-"База данных веб-ссылок, включая закладки, значки и журнал посещения веб-"
-"сайтов"
+#: ../cleaners/amule.xml ../cleaners/audacious.xml ../cleaners/claude.xml
+#: ../cleaners/exaile.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/miro.xml ../cleaners/profanity.xml ../cleaners/realplayer.xml
+#: ../cleaners/screenlets.xml ../cleaners/smartftp.xml
+#: ../cleaners/teamviewer.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
+#: ../cleaners/warzone2100.xml ../cleaners/windows_defender.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../bleachbit/Cleaner.py
+msgid "Delete the logs"
+msgstr "Удалить журналы"
 
-#: ../cleaners/epiphany.xml
-msgid "This option deletes all bookmarks."
-msgstr "Этот параметр удаляет все закладки."
+#: ../cleaners/amule.xml
+msgid "Known files history"
+msgstr "Журнал файлов"
 
-#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
-msgid "Downloaded podcasts"
-msgstr "Загруженные подкасты"
+#: ../cleaners/amule.xml ../cleaners/d4x.xml ../cleaners/easytag.xml
+#: ../cleaners/filezilla.xml ../cleaners/gnome.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
+#: ../cleaners/links2.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
+#: ../cleaners/realplayer.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/windows_defender.xml ../cleaners/winrar.xml
+msgid "Delete the usage history"
+msgstr "Удалить журнал использования"
 
-#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
-msgid "Delete downloaded podcasts"
-msgstr "Удалить загруженные подкасты"
+#. http://wiki.amule.org/wiki/Friend
+#: ../cleaners/amule.xml
+msgid "Known clients and friends"
+msgstr "Клиенты и друзья"
 
-#: ../cleaners/geary.xml ../cleaners/thunderbird.xml ../cleaners/evolution.xml
-msgid "Email client"
-msgstr "Почтовый клиент"
+#: ../cleaners/amule.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
+#: ../cleaners/firefox.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
+#: ../cleaners/vscode.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_defender.xml ../cleaners/zen.xml
+msgid "Backup files"
+msgstr "Файлы резервных копий"
 
-#: ../cleaners/geary.xml
-msgid "Attachments"
-msgstr "Вложения"
+#: ../cleaners/amule.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
+#: ../cleaners/firefox.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
+#: ../cleaners/vscode.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_defender.xml ../cleaners/zen.xml
+msgid "Delete the backup files"
+msgstr "Удалить файлы резервных копий"
 
-#: ../cleaners/geary.xml
-msgid "Sync conflict"
-msgstr "Конфликт синхронизации"
-
-#: ../cleaners/geary.xml ../cleaners/deepscan.xml
-msgid "This option is slow."
-msgstr "Скорость работы этого параметра медленная."
-
-#: ../cleaners/wine.xml
-msgid "Compatibility layer for Windows software"
-msgstr "Уровень совместимости для программного обеспечения Windows"
-
-#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
-msgid "Thumbnails"
-msgstr "Миниатюры"
-
-#: ../cleaners/thumbnails.xml
-msgid "Icons for files on the system"
-msgstr "Значки для файлов в системе"
-
-#: ../cleaners/gnome.xml ../cleaners/kde.xml
-msgid "Desktop environment"
-msgstr "Среда рабочего стола"
-
-#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
-#. In Windows 'Run' is the dialog in the Start menu
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-msgid "Run"
-msgstr "Выполнить (Alt+F2)"
-
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/google_toolbar.xml
-msgid "Search history"
-msgstr "Журнал поиска"
-
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/google_toolbar.xml
-msgid "Delete the search history"
-msgstr "Удалить журнал поиска"
-
-#: ../cleaners/konqueror.xml
-msgid "Current session"
-msgstr "Текущий сеанс"
-
-#: ../cleaners/konqueror.xml
-msgid "Delete the current session"
-msgstr "Удалить текущий сеанс"
-
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-msgid "Search engines"
-msgstr "Поисковые системы"
-
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-msgid ""
-"Reset the search engine usage history and delete non-factory search engines, "
-"some of which are added automatically"
-msgstr ""
-"Очистить журнал использования поисковых систем и удалить не заводские "
-"поисковые системы, которые могли добавиться автоматически"
-
-#: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
-msgid "File manager"
-msgstr "Менеджер файлов"
-
-#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
-#: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py
-msgid "Recent documents list"
-msgstr "Список недавно использованных документов"
-
-#: ../cleaners/windows_explorer.xml
-msgid ""
-"This option will reset pinned locations in Quick Access to their defaults."
-msgstr ""
-"Эта опция сбросит прикреплённые элементы в панели \"Быстрый доступ\" к "
-"значениям по умолчанию."
-
-#: ../cleaners/windows_explorer.xml
-msgid "Shellbags"
-msgstr "Shellbag-записи реестра"
-
-#: ../cleaners/windows_explorer.xml
-msgid "Delete the usage date, window position, and other data for folders"
-msgstr "Удалить дату использования, позицию окна и прочие данные для папок"
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will reset the position of desktop icons."
-msgstr "Это действие сбросит позиции значков рабочего стола."
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will restart Windows Explorer."
-msgstr "Это приведёт к перезапуску Проводника Windows."
-
-#: ../cleaners/windows_defender.xml
-msgid "Anti-virus"
-msgstr "Антивирус"
-
-#: ../cleaners/windows_defender.xml
-msgid "Quarantine"
-msgstr "Карантин"
-
-#: ../cleaners/thunderbird.xml
-msgid ""
-"Deleting the index will reset the configuration of columns in the message "
-"list."
-msgstr "Удаление индекса сбросит настройки столбцов в списке сообщений."
-
-#: ../cleaners/thunderbird.xml
-msgid "Session restore"
-msgstr "Восстановление сеанса"
-
-#: ../cleaners/thunderbird.xml
-msgid "Restores the previous session when the browser next starts"
-msgstr "Восстанавливать предыдущий сеанс при следующем запуске браузера"
+#: ../cleaners/apt.xml ../cleaners/dnf.xml ../cleaners/pacman.xml
+#: ../cleaners/snap.xml ../cleaners/yum.xml
+msgid "Package manager"
+msgstr "Менеджер пакетов"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -678,34 +190,276 @@ msgstr "Удалить устаревшие файлы"
 msgid "Package lists"
 msgstr "Списки пакетов"
 
-#. Cleaner description for vim, VS Code, etc.
-#: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
-msgid "Editor"
-msgstr "Редактор"
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/realplayer.xml
+#: ../cleaners/vlc.xml ../cleaners/winamp.xml
+#: ../cleaners/windows_media_player.xml
+msgid "Media player"
+msgstr "Медиаплеер"
 
+#: ../cleaners/bash.xml ../cleaners/fish.xml ../cleaners/zsh.xml
+msgid "Shell"
+msgstr "Командный интерпретатор"
+
+#: ../cleaners/bash.xml ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/d4x.xml ../cleaners/discord.xml ../cleaners/easytag.xml
+#: ../cleaners/elinks.xml ../cleaners/fish.xml ../cleaners/google_chrome.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
+#: ../cleaners/links2.xml ../cleaners/mc.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/nautilus.xml ../cleaners/octave.xml ../cleaners/opera.xml
+#: ../cleaners/python.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
+#: ../cleaners/seamonkey.xml ../cleaners/slack.xml ../cleaners/sqlite3.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/vim.xml ../cleaners/vivaldi.xml
+#: ../cleaners/windows_defender.xml ../cleaners/winrar.xml ../cleaners/zsh.xml
+msgid "History"
+msgstr "Журнал"
+
+#: ../cleaners/bash.xml ../cleaners/fish.xml ../cleaners/octave.xml
+#: ../cleaners/python.xml ../cleaners/sqlite3.xml ../cleaners/zsh.xml
+msgid "Delete the command history"
+msgstr "Удалить журнал команд"
+
+#: ../cleaners/beagle.xml ../cleaners/recoll.xml
+msgid "Search tool"
+msgstr "Инструмент поиска"
+
+#: ../cleaners/beagle.xml ../cleaners/recoll.xml ../cleaners/thunderbird.xml
+msgid "Index"
+msgstr "Индекс"
+
+#: ../cleaners/beagle.xml ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/firefox.xml
+#: ../cleaners/geary.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/profanity.xml
+#: ../cleaners/thunderbird.xml ../cleaners/transmission.xml
+#: ../cleaners/vivaldi.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_defender.xml ../cleaners/zen.xml ../cleaners/zsh.xml
+msgid "Delete the files"
+msgstr "Удалить эти файлы"
+
+#: ../cleaners/beagle.xml ../cleaners/gl-117.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
 #: ../cleaners/x11.xml
-msgid "Windowing system"
-msgstr "Система управления окнами"
+msgid "Debug logs"
+msgstr "Журналы отладки"
 
-#: ../cleaners/gimp.xml
-msgid "Graphics editor"
-msgstr "Графический редактор"
+#: ../cleaners/beagle.xml ../cleaners/easytag.xml ../cleaners/gl-117.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/x11.xml
+msgid "Delete the debug logs"
+msgstr "Удалить журналы отладки"
 
-#: ../cleaners/snap.xml
-msgid "Disabled"
-msgstr "Отключено"
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/elinks.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/links2.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Web browser"
+msgstr "Веб-браузер"
 
-#: ../cleaners/snap.xml
-msgid "Remove disabled packages"
-msgstr "Удалить отключённые пакеты"
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml
+msgid "Delete the web cache, which reduces time to display revisited pages"
+msgstr ""
+"Удалить временные файлы интернета, которые ускоряют загрузку ранее "
+"посещённых страниц"
 
-#: ../cleaners/adobe_reader.xml
-msgid "Document viewer"
-msgstr "Просмотрщик документов"
+#. TRANSLATORS: Sidebar label for the page managing browser cookies in
+#. the Preferences dialog.
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/flash.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
+#: ../cleaners/seamonkey.xml ../cleaners/silverlight.xml ../cleaners/slack.xml
+#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../bleachbit/GuiPreferences.py
+msgid "Cookies"
+msgstr "Cookies"
 
-#: ../cleaners/nautilus.xml
-msgid "Custom folders will be reset."
-msgstr "Выбранные папки будут сброшены."
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/flash.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
+#: ../cleaners/seamonkey.xml ../cleaners/silverlight.xml ../cleaners/slack.xml
+#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml
+msgid ""
+"Delete cookies, which store login information, website preferences, and "
+"tracking identifiers"
+msgstr ""
+"Удалить куки, которые хранят информацию о входе в систему, настройки веб-"
+"сайта и идентификаторы отслеживания"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml
+msgid "Crash reports"
+msgstr "Отчёты об ошибках"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Form history"
+msgstr "Журнал форм ввода"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/vivaldi.xml
+msgid "A history of forms entered in websites"
+msgstr "Журнал форм ввода на веб-сайтах"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/slack.xml ../cleaners/vivaldi.xml
+msgid ""
+"Delete the history which includes visited sites, downloads, and thumbnails"
+msgstr "Удалить журнал, включая посещённые веб-сайты, загрузки и миниатюры"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml
+msgid "Search engines"
+msgstr "Поисковые системы"
+
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml
+msgid ""
+"Reset the search engine usage history and delete non-factory search engines, "
+"some of which are added automatically"
+msgstr ""
+"Очистить журнал использования поисковых систем и удалить не заводские "
+"поисковые системы, которые могли добавиться автоматически"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/claude.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/zsh.xml
+msgid "Session"
+msgstr "Сеанс"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml
+msgid "Previously open tabs and windows"
+msgstr "Ранее открытые вкладки и окна"
+
+#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Site data"
+msgstr "Данные сайта"
+
+#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
+msgstr ""
+"Удалять LocalStorage, IndexedDB и другие данные, хранящиеся на веб-сайтах"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/vivaldi.xml
+msgid "Sync"
+msgstr "Синхронизация"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/vivaldi.xml
+msgid "Delete the sync data (including web apps) and sign out of the browser"
+msgstr ""
+"Удалить данные синхронизации (включая веб-приложения) и выйти из учётной "
+"записи браузера"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Passwords"
+msgstr "Пароли"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid ""
+"A database of usernames and passwords as well as a list of sites that should "
+"not store passwords"
+msgstr ""
+"База данных имён пользователей и паролей, а также список сайтов, для которых "
+"не нужно сохранять пароли"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "This option will delete your saved passwords."
+msgstr "Этот параметр удалит все сохранённые пароли."
+
+#. TRANSLATORS: Vacuum is a verb.  The term is jargon
+#. from the SQLite database.  Microsoft Access uses
+#. the term 'Compact Database' (which you may translate
+#. instead).  Another synonym is 'defragment.'
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/firefox.xml ../cleaners/geary.xml ../cleaners/google_chrome.xml
+#: ../cleaners/gpodder.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/slack.xml
+#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/yum.xml ../cleaners/zen.xml ../bleachbit/Action.py
+msgid "Vacuum"
+msgstr "Сжать базу данных"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/firefox.xml ../cleaners/geary.xml ../cleaners/google_chrome.xml
+#: ../cleaners/gpodder.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/slack.xml
+#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/yum.xml ../cleaners/zen.xml
+msgid ""
+"Clean database fragmentation to reduce space and improve speed without "
+"removing any data"
+msgstr ""
+"Дефрагментировать базу данных для высвобождения места и увеличения скорости, "
+"без удаления данных"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Site preferences"
+msgstr "Параметры сайта"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Settings for individual sites"
+msgstr "Параметры для отдельных сайтов"
 
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
@@ -746,6 +500,10 @@ msgstr "Глубокий анализ"
 msgid "Clean files widely scattered across the disk"
 msgstr "Очистить файлы, разбросанные по диску"
 
+#: ../cleaners/deepscan.xml ../cleaners/geary.xml
+msgid "This option is slow."
+msgstr "Скорость работы этого параметра медленная."
+
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
 msgstr ""
@@ -768,38 +526,137 @@ msgstr "Файлы подкачки VIM в профиле пользовател
 msgid "VIM swap files across system"
 msgstr "Файлы подкачки VIM в системе"
 
-#: ../cleaners/zoom.xml
-msgid "Recordings"
-msgstr "Записи"
-
-#: ../cleaners/zoom.xml
-msgid "Delete the audio and video recordings"
-msgstr "Удалить аудио- и видеозаписи"
-
-#: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
+#: ../cleaners/discord.xml
+msgid ""
+"Delete the web cache, which reduces time to display revisited pages. This "
+"also clears favorited GIFs."
 msgstr ""
-"Удалить поисковый индекс, базу данных слов и файлы, которые они содержат"
+"Удалить кэш посещенных веб-страниц, который сокращает время, необходимое для "
+"отображения повторно посещаемых страниц. Это действие также удаляет "
+"избранные GIF-изображения."
 
-#: ../cleaners/skype.xml
-msgid "Installers"
-msgstr "Установщики"
+#: ../cleaners/dnf.xml
+msgid "Remove packages that were formerly dependencies"
+msgstr "Удалить пакеты, являющиеся устаревшими зависимостями"
 
-#: ../cleaners/skype.xml
-msgid "Delete cached patches and installers"
-msgstr "Удалить кэшированные обновления и установщики"
+#: ../cleaners/dnf.xml
+msgid ""
+"Carefully review the list of packages that will be removed by running \"dnf "
+"list autoremove\"."
+msgstr ""
+"Внимательно проверьте список пакетов, которые будут удалены с помощью "
+"команды \"dnf list autoremove\"."
 
-#: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
-msgid "Download history"
-msgstr "Журнал загрузок"
+#. This software edits metadata tags, such as title and artist, in audio files
+#: ../cleaners/easytag.xml
+msgid "Audio files tagger"
+msgstr "Маркировщик аудиофайлов"
 
-#: ../cleaners/seamonkey.xml
-msgid "List of files downloaded"
-msgstr "Список загруженных файлов"
+#: ../cleaners/elinks.xml
+msgid "Delete the cookies, visited URLs, and search history"
+msgstr "Удалить cookie, посещённые веб-ссылки и журнал поиска"
 
-#: ../cleaners/seamonkey.xml
-msgid "Delete the list of visited web pages"
-msgstr "Удалить список посещённых веб-страниц"
+#: ../cleaners/emesene.xml
+msgid "Delete the avatars and emoticons cache"
+msgstr "Удалить временные файлы аватаров и смайликов"
+
+#: ../cleaners/epiphany.xml
+msgid "Places"
+msgstr "Места"
+
+#: ../cleaners/epiphany.xml
+msgid ""
+"A database of URLs including bookmarks, favicons, and a history of visited "
+"websites"
+msgstr ""
+"База данных веб-ссылок, включая закладки, значки и журнал посещения веб-"
+"сайтов"
+
+#: ../cleaners/epiphany.xml
+msgid "This option deletes all bookmarks."
+msgstr "Этот параметр удаляет все закладки."
+
+#: ../cleaners/evolution.xml ../cleaners/geary.xml ../cleaners/thunderbird.xml
+msgid "Email client"
+msgstr "Почтовый клиент"
+
+#: ../cleaners/exaile.xml ../cleaners/gpodder.xml
+msgid "Downloaded podcasts"
+msgstr "Загруженные подкасты"
+
+#: ../cleaners/exaile.xml ../cleaners/gpodder.xml
+msgid "Delete downloaded podcasts"
+msgstr "Удалить загруженные подкасты"
+
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/librewolf.xml ../cleaners/palemoon.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml
+msgid "Saved form entries and search bar history"
+msgstr "Сохранённые данные форм и история строки поиска"
+
+#: ../cleaners/firefox.xml ../cleaners/konqueror.xml ../cleaners/librewolf.xml
+#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "URL history"
+msgstr "Журнал веб-ссылок"
+
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "List of visited web pages"
+msgstr "Список посещённых веб-страниц"
+
+#: ../cleaners/flash.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
+#: ../cleaners/xine.xml
+msgid "Multimedia viewer"
+msgstr "Мультимедийный обозреватель"
+
+#: ../cleaners/geary.xml
+msgid "Attachments"
+msgstr "Вложения"
+
+#: ../cleaners/geary.xml
+msgid "Sync conflict"
+msgstr "Конфликт синхронизации"
+
+#. Cleaner description for vim, VS Code, etc.
+#: ../cleaners/gedit.xml ../cleaners/vim.xml ../cleaners/vscode.xml
+msgid "Editor"
+msgstr "Редактор"
+
+#: ../cleaners/gedit.xml ../cleaners/gwenview.xml ../cleaners/kde.xml
+#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py
+msgid "Recent documents list"
+msgstr "Список недавно использованных документов"
+
+#: ../cleaners/gimp.xml
+msgid "Graphics editor"
+msgstr "Графический редактор"
+
+#: ../cleaners/gl-117.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/nexuiz.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/tremulous.xml ../cleaners/warzone2100.xml
+msgid "Game"
+msgstr "Игра"
+
+#: ../cleaners/gnome.xml ../cleaners/kde.xml
+msgid "Desktop environment"
+msgstr "Среда рабочего стола"
+
+#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
+#. In Windows 'Run' is the dialog in the Start menu
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+msgid "Run"
+msgstr "Выполнить (Alt+F2)"
+
+#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
+#: ../cleaners/windows_explorer.xml
+msgid "Search history"
+msgstr "Журнал поиска"
+
+#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the search history"
+msgstr "Удалить журнал поиска"
 
 #. Cleaning option that deletes AI models in a web browser
 #: ../cleaners/google_chrome.xml
@@ -809,6 +666,122 @@ msgstr "ИИ"
 #: ../cleaners/google_chrome.xml
 msgid "Delete the AI models"
 msgstr "Удалить модели ИИ"
+
+#: ../cleaners/internet_explorer.xml ../cleaners/seamonkey.xml
+msgid "Download history"
+msgstr "Журнал загрузок"
+
+#: ../cleaners/journald.xml
+msgid "System journals"
+msgstr "Системные журналы"
+
+#: ../cleaners/journald.xml
+msgid "Clean old system journals"
+msgstr "Очистить старые системные журналы"
+
+#: ../cleaners/konqueror.xml
+msgid "Current session"
+msgstr "Текущий сеанс"
+
+#: ../cleaners/konqueror.xml
+msgid "Delete the current session"
+msgstr "Удалить текущий сеанс"
+
+#: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/openoffice.xml
+msgid "Office suite"
+msgstr "Офисный пакет"
+
+#: ../cleaners/mc.xml ../cleaners/nautilus.xml ../cleaners/windows_explorer.xml
+msgid "File manager"
+msgstr "Менеджер файлов"
+
+#: ../cleaners/microsoft_office.xml ../cleaners/paint.xml
+#: ../cleaners/smartftp.xml ../cleaners/teamviewer.xml ../cleaners/vlc.xml
+#: ../cleaners/winamp.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/winzip.xml
+#: ../cleaners/wordpad.xml
+msgid "Delete the most recently used list"
+msgstr "Удалить список недавно использовавшихся"
+
+#: ../cleaners/nautilus.xml
+msgid "Custom folders will be reset."
+msgstr "Выбранные папки будут сброшены."
+
+#: ../cleaners/profanity.xml
+msgid "Downloaded files"
+msgstr "Загруженные файлы"
+
+#: ../cleaners/recoll.xml
+msgid "Delete the search index, a database of words and the files they contain"
+msgstr ""
+"Удалить поисковый индекс, базу данных слов и файлы, которые они содержат"
+
+#: ../cleaners/rhythmbox.xml
+msgid "Database"
+msgstr "База данных"
+
+#: ../cleaners/rhythmbox.xml
+msgid ""
+"Delete the database, which contains information such as play count and last "
+"played"
+msgstr ""
+"Удалить базу данных, содержащую такую информацию, как число воспроизведений "
+"и последний воспроизведённый файл"
+
+#: ../cleaners/screenlets.xml
+msgid "Desktop widgets"
+msgstr "Виджеты рабочего стола"
+
+#: ../cleaners/seamonkey.xml
+msgid "List of files downloaded"
+msgstr "Список загруженных файлов"
+
+#: ../cleaners/seamonkey.xml
+msgid "Delete the list of visited web pages"
+msgstr "Удалить список посещённых веб-страниц"
+
+#: ../cleaners/skype.xml
+msgid "Installers"
+msgstr "Установщики"
+
+#: ../cleaners/skype.xml
+msgid "Delete cached patches and installers"
+msgstr "Удалить кэшированные обновления и установщики"
+
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr "Отключено"
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr "Удалить отключённые пакеты"
+
+#: ../cleaners/teamviewer.xml
+msgid "Remote control software"
+msgstr "Программа удалённого управления"
+
+#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
+msgid "Thumbnails"
+msgstr "Миниатюры"
+
+#: ../cleaners/thumbnails.xml
+msgid "Icons for files on the system"
+msgstr "Значки для файлов в системе"
+
+#: ../cleaners/thunderbird.xml
+msgid ""
+"Deleting the index will reset the configuration of columns in the message "
+"list."
+msgstr "Удаление индекса сбросит настройки столбцов в списке сообщений."
+
+#: ../cleaners/thunderbird.xml
+msgid "Session restore"
+msgstr "Восстановление сеанса"
+
+#: ../cleaners/thunderbird.xml
+msgid "Restores the previous session when the browser next starts"
+msgstr "Восстанавливать предыдущий сеанс при следующем запуске браузера"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -839,35 +812,6 @@ msgstr "Удалить файл"
 msgid "Delete the list of game servers"
 msgstr "Удалить список игровых серверов"
 
-#: ../cleaners/profanity.xml
-msgid "Downloaded files"
-msgstr "Загруженные файлы"
-
-#: ../cleaners/teamviewer.xml
-msgid "Remote control software"
-msgstr "Программа удалённого управления"
-
-#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
-msgid "Memory dump"
-msgstr "Дамп памяти"
-
-#: ../cleaners/screenlets.xml
-msgid "Desktop widgets"
-msgstr "Виджеты рабочего стола"
-
-#: ../cleaners/winrar.xml
-msgid "File archiver"
-msgstr "Архиватор файлов"
-
-#: ../cleaners/amule.xml
-msgid "Known files history"
-msgstr "Журнал файлов"
-
-#. http://wiki.amule.org/wiki/Friend
-#: ../cleaners/amule.xml
-msgid "Known clients and friends"
-msgstr "Клиенты и друзья"
-
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
@@ -875,14 +819,64 @@ msgstr ""
 "Удалить файл ~/.viminfo, содержащий журнал использования файлов, команд и "
 "буферов"
 
-#: ../cleaners/discord.xml
+#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
+msgid "Memory dump"
+msgstr "Дамп памяти"
+
+#: ../cleaners/windows_defender.xml
+msgid "Anti-virus"
+msgstr "Антивирус"
+
+#: ../cleaners/windows_defender.xml
+msgid "Quarantine"
+msgstr "Карантин"
+
+#: ../cleaners/windows_explorer.xml
 msgid ""
-"Delete the web cache, which reduces time to display revisited pages. This "
-"also clears favorited GIFs."
+"This option will reset pinned locations in Quick Access to their defaults."
 msgstr ""
-"Удалить кэш посещенных веб-страниц, который сокращает время, необходимое для "
-"отображения повторно посещаемых страниц. Это действие также удаляет "
-"избранные GIF-изображения."
+"Эта опция сбросит прикреплённые элементы в панели \"Быстрый доступ\" к "
+"значениям по умолчанию."
+
+#: ../cleaners/windows_explorer.xml
+msgid "Shellbags"
+msgstr "Shellbag-записи реестра"
+
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the usage date, window position, and other data for folders"
+msgstr "Удалить дату использования, позицию окна и прочие данные для папок"
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will reset the position of desktop icons."
+msgstr "Это действие сбросит позиции значков рабочего стола."
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will restart Windows Explorer."
+msgstr "Это приведёт к перезапуску Проводника Windows."
+
+#: ../cleaners/wine.xml
+msgid "Compatibility layer for Windows software"
+msgstr "Уровень совместимости для программного обеспечения Windows"
+
+#: ../cleaners/winrar.xml
+msgid "File archiver"
+msgstr "Архиватор файлов"
+
+#: ../cleaners/wordpad.xml
+msgid "Word processor"
+msgstr "Текстовый редактор"
+
+#: ../cleaners/x11.xml
+msgid "Windowing system"
+msgstr "Система управления окнами"
+
+#: ../cleaners/zoom.xml
+msgid "Recordings"
+msgstr "Записи"
+
+#: ../cleaners/zoom.xml
+msgid "Delete the audio and video recordings"
+msgstr "Удалить аудио- и видеозаписи"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
@@ -1332,6 +1326,14 @@ msgstr "Уборщик игнорируется из-за небезопасны
 msgid "Error reading cleaner: %s"
 msgstr "Ошибка чтения уборщика: %s"
 
+#: ../bleachbit/Cleaner.py
+msgid "System"
+msgstr "Система"
+
+#: ../bleachbit/Cleaner.py
+msgid "The system in general"
+msgstr "Система в целом"
+
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
 #. Firefox, and others.  The .desktop files also associate file
@@ -1461,14 +1463,6 @@ msgid "Wipe empty space to hide deleted files"
 msgstr ""
 "Очистить свободное место на диске, чтобы удалённые файлы невозможно было "
 "восстановить"
-
-#: ../bleachbit/Cleaner.py
-msgid "The system in general"
-msgstr "Система в целом"
-
-#: ../bleachbit/Cleaner.py
-msgid "System"
-msgstr "Система"
 
 #. TRANSLATORS: 'Empty' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
@@ -3120,6 +3114,11 @@ msgstr "Отказано в доступе при удалении ключа р
 #, python-format
 msgid "Access denied: %s"
 msgstr "Отказано в доступе: %s"
+
+#: ../bleachbit/Worker.py
+#, python-format
+msgid "Database is locked: %s"
+msgstr ""
 
 #: ../bleachbit/Worker.py
 #, python-brace-format

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit 0.7.3-1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-12 15:23-0600\n"
+"POT-Creation-Date: 2026-08-16 16:46-0600\n"
 "PO-Revision-Date: 2025-08-28 16:02+0000\n"
 "Last-Translator: Anucha Hlownonkor <tony.chompoo@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/bleachbit/main/th/"
@@ -20,649 +20,166 @@ msgstr ""
 "X-Generator: Weblate 5.13.1-dev\n"
 "X-Launchpad-Export-Date: 2021-11-12 15:52+0000\n"
 
-#: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
-#: ../cleaners/vlc.xml
-msgid "Media player"
-msgstr "เครื่องเล่นสื่อ"
+#: ../cleaners/adobe_reader.xml
+msgid "Document viewer"
+msgstr "โปรแกรมดูเอกสาร"
 
-#. TRANSLATORS: Sidebar label for the page managing browser cookies in
-#. the Preferences dialog.
-#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
-#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
-#: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../bleachbit/GuiPreferences.py
-msgid "Cookies"
-msgstr "คุกกี้"
-
-#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
-#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
-#: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#, fuzzy
-#| msgid ""
-#| "Delete cookies, which contain information such as web site preferences, "
-#| "authentication, and tracking identification"
-msgid ""
-"Delete cookies, which store login information, website preferences, and "
-"tracking identifiers"
-msgstr "ลบคุกกี้ซึ่งมีข้อมูล เช่น การตั้งค่าเว็บไซต์ การยืนยันตัวตน และการติดตามการระบุตัวตน"
-
-#: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
-#: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
-#: ../cleaners/safari.xml ../cleaners/fish.xml ../cleaners/chromium.xml
-#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
-#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
-#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
-#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
-#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/python.xml
-#: ../cleaners/vim.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../cleaners/octave.xml
-msgid "History"
-msgstr "ประวัติ"
-
-#: ../cleaners/realplayer.xml ../cleaners/easytag.xml ../cleaners/filezilla.xml
-#: ../cleaners/gnome.xml ../cleaners/windows_defender.xml
-#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
-#: ../cleaners/libreoffice.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
-#: ../cleaners/amule.xml
-msgid "Delete the usage history"
-msgstr "ลบประวัติการใช้งาน"
-
-#: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
-#: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Logs"
-msgstr "บันทึก"
-
-#: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
-#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
-msgid "Delete the logs"
-msgstr "ลบบันทึก"
-
-#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
-#: ../cleaners/flash.xml
-msgid "Multimedia viewer"
-msgstr "โปรแกรมดูมัลติมีเดีย"
-
-#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
-#: ../cleaners/librewolf.xml ../cleaners/openoffice.xml
-#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
-#: ../cleaners/vivaldi.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/pidgin.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/emesene.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/epiphany.xml
-#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
-#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
-#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/seamonkey.xml
-#: ../cleaners/flash.xml ../cleaners/google_chrome.xml
-#: ../cleaners/tremulous.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/gftp.xml ../cleaners/kde.xml
-#: ../cleaners/vuze.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/adobe_reader.xml ../cleaners/amsn.xml ../cleaners/audacious.xml
+#: ../cleaners/beagle.xml ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/claude.xml ../cleaners/discord.xml ../cleaners/emesene.xml
+#: ../cleaners/epiphany.xml ../cleaners/evolution.xml ../cleaners/exaile.xml
+#: ../cleaners/firefox.xml ../cleaners/flash.xml ../cleaners/geary.xml
+#: ../cleaners/gftp.xml ../cleaners/google_chrome.xml ../cleaners/gpodder.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/java.xml ../cleaners/kde.xml ../cleaners/librewolf.xml
+#: ../cleaners/liferea.xml ../cleaners/microsoft_edge.xml ../cleaners/miro.xml
+#: ../cleaners/nexuiz.xml ../cleaners/openoffice.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/pidgin.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/slack.xml
+#: ../cleaners/smartftp.xml ../cleaners/thumbnails.xml
+#: ../cleaners/thunderbird.xml ../cleaners/tremulous.xml
+#: ../cleaners/vivaldi.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
+#: ../cleaners/waterfox.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/xine.xml ../cleaners/yahoo_messenger.xml ../cleaners/zen.xml
+#: ../cleaners/zoom.xml ../bleachbit/Cleaner.py
 msgid "Cache"
 msgstr "แคช"
 
 #. TRANSLATORS: The description of what certain cleaning options do.
-#: ../cleaners/xine.xml ../cleaners/dnf.xml ../cleaners/miro.xml
-#: ../cleaners/amsn.xml ../cleaners/librewolf.xml ../cleaners/openoffice.xml
-#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml ../cleaners/yum.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
-#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
-#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
-#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/vscode.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
-#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
-#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/adobe_reader.xml ../cleaners/amsn.xml ../cleaners/apt.xml
+#: ../cleaners/audacious.xml ../cleaners/beagle.xml ../cleaners/claude.xml
+#: ../cleaners/dnf.xml ../cleaners/evolution.xml ../cleaners/exaile.xml
+#: ../cleaners/firefox.xml ../cleaners/flash.xml ../cleaners/geary.xml
+#: ../cleaners/gftp.xml ../cleaners/gpodder.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/java.xml ../cleaners/kde.xml ../cleaners/librewolf.xml
+#: ../cleaners/liferea.xml ../cleaners/miro.xml ../cleaners/nexuiz.xml
+#: ../cleaners/openoffice.xml ../cleaners/pacman.xml ../cleaners/palemoon.xml
+#: ../cleaners/pidgin.xml ../cleaners/rhythmbox.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/smartftp.xml
+#: ../cleaners/thumbnails.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
+#: ../cleaners/waterfox.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/xine.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/yum.xml ../cleaners/zen.xml
+#: ../cleaners/zoom.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "ลบแคช"
 
-#: ../cleaners/paint.xml ../cleaners/openoffice.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/wordpad.xml ../cleaners/audacious.xml ../cleaners/filezilla.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/winamp.xml ../cleaners/adobe_reader.xml ../cleaners/winzip.xml
-#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/audacious.xml
+#: ../cleaners/filezilla.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/openoffice.xml ../cleaners/paint.xml ../cleaners/smartftp.xml
+#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/winzip.xml ../cleaners/wordpad.xml
 msgid "Most recently used"
 msgstr "ใช้ล่าสุด"
 
-#: ../cleaners/paint.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/wordpad.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/winamp.xml ../cleaners/winzip.xml ../cleaners/teamviewer.xml
-#: ../cleaners/vlc.xml
-msgid "Delete the most recently used list"
-msgstr "ลบรายการที่ใช้ล่าสุด"
-
-#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
-#: ../cleaners/apt.xml ../cleaners/snap.xml
-msgid "Package manager"
-msgstr "จัดการแพ็คเกจ"
-
-#: ../cleaners/dnf.xml
-msgid "Remove packages that were formerly dependencies"
-msgstr "ลบแพ็คเกจที่เคยอ้างอิง"
-
-#: ../cleaners/dnf.xml
-msgid ""
-"Carefully review the list of packages that will be removed by running \"dnf "
-"list autoremove\"."
-msgstr "ตรวจสอบรายการแพ็คเกจที่จะถูกลบโดยใช้ \"dnf list autoremove\""
-
-#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
-#: ../cleaners/zoom.xml ../cleaners/skype.xml ../cleaners/profanity.xml
-#: ../cleaners/discord.xml
-msgid "Chat client"
-msgstr "สนทนาลูกข่าย"
-
-#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
-#: ../cleaners/seamonkey.xml
-msgid "Chat logs"
-msgstr "บันทึกการสนทนา"
-
-#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
-#: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
-#: ../cleaners/seamonkey.xml
-msgid "Delete the chat logs"
-msgstr "ลบบันทึกการสนทนา"
-
-#: ../cleaners/librewolf.xml ../cleaners/elinks.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/links2.xml ../cleaners/seamonkey.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Web browser"
-msgstr "เว็บเบราว์เซอร์"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
-#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
-msgid "Backup files"
-msgstr "ไฟล์สำรองข้อมูล"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
-#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
-msgid "Delete the backup files"
-msgstr "ลบไฟล์สำรองข้อมูล"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Crash reports"
-msgstr "รายงานปัญหา"
-
-#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/geary.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/windows_defender.xml ../cleaners/thunderbird.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml
-#: ../cleaners/google_chrome.xml ../cleaners/transmission.xml
-#: ../cleaners/profanity.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/vuze.xml ../cleaners/opera.xml
-msgid "Delete the files"
-msgstr "ลบไฟล์"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "Form history"
-msgstr "ประวัติแบบฟอร์ม"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/internet_explorer.xml
-#, fuzzy
-#| msgid "Delete the search history"
-msgid "Saved form entries and search bar history"
-msgstr "ลบประวัติการค้นหา"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Passwords"
-msgstr "รหัสผ่าน"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid ""
-"A database of usernames and passwords as well as a list of sites that should "
-"not store passwords"
-msgstr "ฐานข้อมูลชื่อผู้ใช้และรหัสผ่าน รวมถึงรายชื่อเว็บไซต์ที่ไม่ควรเก็บรหัสผ่าน"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "This option will delete your saved passwords."
-msgstr "ตัวเลือกนี้จะลบรหัสผ่านที่คุณบันทึกไว้"
-
-#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/claude.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Session"
-msgstr "เซสชัน"
-
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Previously open tabs and windows"
-msgstr ""
-
-#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "Site data"
-msgstr ""
-
-#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
-msgstr ""
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Site preferences"
-msgstr "การตั้งค่าไซต์"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-msgid "Settings for individual sites"
-msgstr "การตั้งค่าสำหรับแต่ละไซต์"
-
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/konqueror.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-msgid "URL history"
-msgstr "ประวัติ URL"
-
-#: ../cleaners/librewolf.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
-msgid "List of visited web pages"
-msgstr "รายการหน้าเว็บที่เข้าชม"
-
-#. TRANSLATORS: Vacuum is a verb.  The term is jargon
-#. from the SQLite database.  Microsoft Access uses
-#. the term 'Compact Database' (which you may translate
-#. instead).  Another synonym is 'defragment.'
-#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Action.py
-msgid "Vacuum"
-msgstr "รวมเข้าด้วยกัน"
-
-#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml
-msgid ""
-"Clean database fragmentation to reduce space and improve speed without "
-"removing any data"
-msgstr "ล้างการกระจายตัวของฐานข้อมูลเพื่อลดพื้นที่และเพิ่มความเร็วโดยไม่ต้องลบข้อมูลใด ๆ"
-
-#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
-msgid "Shell"
-msgstr "หน่วยติดต่อผู้ใช้ (Shell)"
-
-#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
-#: ../cleaners/sqlite3.xml ../cleaners/python.xml ../cleaners/octave.xml
-msgid "Delete the command history"
-msgstr "ลบประวัติคำสั่ง"
-
-#: ../cleaners/openoffice.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/libreoffice.xml
-msgid "Office suite"
-msgstr "ชุดโปรแกรมสำนักงาน"
-
-#: ../cleaners/openoffice.xml ../cleaners/audacious.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
-#: ../cleaners/adobe_reader.xml ../cleaners/gedit.xml ../cleaners/kde.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/adobe_reader.xml ../cleaners/audacious.xml ../cleaners/gedit.xml
+#: ../cleaners/gwenview.xml ../cleaners/kde.xml ../cleaners/openoffice.xml
+#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py
 msgid "Delete the list of recently used documents"
 msgstr "ลบรายชื่อเอกสารที่ใช้ล่าสุด"
 
-#: ../cleaners/rhythmbox.xml
-msgid "Database"
-msgstr "ฐานข้อมูล"
-
-#: ../cleaners/rhythmbox.xml
-msgid ""
-"Delete the database, which contains information such as play count and last "
-"played"
-msgstr "ลบฐานข้อมูลซึ่งมีข้อมูล เช่น จำนวนการเล่นและการเล่นล่าสุด"
-
-#: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
-msgid "Debug logs"
-msgstr "บันทึกการแก้จุดบกพร่อง"
-
-#: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/easytag.xml
-#: ../cleaners/x11.xml ../cleaners/gl-117.xml
-msgid "Delete the debug logs"
-msgstr "ลบบันทึกการแก้จุดบกพร่อง"
-
-#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
-#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/bash.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/silverlight.xml
+#: ../cleaners/vuze.xml ../cleaners/windows_defender.xml ../cleaners/wine.xml
+#: ../cleaners/winetricks.xml ../cleaners/winrar.xml ../bleachbit/Cleaner.py
 msgid "Temporary files"
 msgstr "แฟ้มชั่วคราว"
 
-#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
-#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
-#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
-#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
-#: ../bleachbit/Cleaner.py
+#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/bash.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
+#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/silverlight.xml
+#: ../cleaners/vuze.xml ../cleaners/windows_defender.xml ../cleaners/wine.xml
+#: ../cleaners/winetricks.xml ../cleaners/winrar.xml ../bleachbit/Cleaner.py
 msgid "Delete the temporary files"
 msgstr "ลบแฟ้มชั่วคราว"
 
-#: ../cleaners/beagle.xml ../cleaners/recoll.xml
-msgid "Search tool"
-msgstr "เครื่องมือค้นหา"
+#: ../cleaners/amsn.xml ../cleaners/discord.xml ../cleaners/emesene.xml
+#: ../cleaners/hexchat.xml ../cleaners/pidgin.xml ../cleaners/profanity.xml
+#: ../cleaners/skype.xml ../cleaners/slack.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/zoom.xml
+msgid "Chat client"
+msgstr "สนทนาลูกข่าย"
 
-#: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/recoll.xml
-msgid "Index"
-msgstr "ดัชนี"
+#: ../cleaners/amsn.xml ../cleaners/emesene.xml ../cleaners/hexchat.xml
+#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/skype.xml
+#: ../cleaners/yahoo_messenger.xml
+msgid "Chat logs"
+msgstr "บันทึกการสนทนา"
 
-#: ../cleaners/elinks.xml
-msgid "Delete the cookies, visited URLs, and search history"
-msgstr "ลบคุกกี้, URL ที่เข้าชม และประวัติการค้นหา"
+#: ../cleaners/amsn.xml ../cleaners/emesene.xml ../cleaners/hexchat.xml
+#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/skype.xml
+#: ../cleaners/yahoo_messenger.xml
+msgid "Delete the chat logs"
+msgstr "ลบบันทึกการสนทนา"
 
-#: ../cleaners/wordpad.xml
-msgid "Word processor"
-msgstr "โปรแกรมประมวลผลคำ"
-
-#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/epiphany.xml
-#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
-#: ../cleaners/brave.xml ../cleaners/seamonkey.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr "ลบแคชของเว็บ ซึ่งลดเวลาในการแสดงหน้าที่เข้าชมแล้ว"
-
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
-#, fuzzy
-#| msgid "A history of forms entered in web sites"
-msgid "A history of forms entered in websites"
-msgstr "ประวัติการกรอกแบบฟอร์มในเว็บไซต์"
-
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-msgid ""
-"Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr "ลบประวัติ ซึ่งรวมถึงไซต์ที่เข้าชม การดาวน์โหลดและรูปขนาดย่อ"
-
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-msgid "Sync"
-msgstr "ซิงค์"
-
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#, fuzzy
-#| msgid "Delete the sync data and sign out of the browser"
-msgid "Delete the sync data (including web apps) and sign out of the browser"
-msgstr "ลบข้อมูลการซิงค์และออกจากระบบเบราว์เซอร์"
-
-#: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
-#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/gl-117.xml ../cleaners/tremulous.xml
-msgid "Game"
-msgstr "เกม"
-
-#. This software edits metadata tags, such as title and artist, in audio files
-#: ../cleaners/easytag.xml
-msgid "Audio files tagger"
-msgstr "ตัวแท็กแฟ้มเสียง"
-
-#: ../cleaners/journald.xml
-msgid "System journals"
-msgstr "วารสารระบบ"
-
-#: ../cleaners/journald.xml
-msgid "Clean old system journals"
-msgstr "ล้างวารสารระบบเก่า"
-
-#: ../cleaners/emesene.xml
-msgid "Delete the avatars and emoticons cache"
-msgstr "ลบแคชอวาตาร์และอีโมติคอน"
-
-#: ../cleaners/filezilla.xml ../cleaners/smartftp.xml
-#: ../cleaners/transmission.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml
+#: ../cleaners/amule.xml ../cleaners/filezilla.xml ../cleaners/gftp.xml
+#: ../cleaners/smartftp.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
 msgid "File transfer client"
 msgstr "โปรแกรมถ่ายโอนไฟล์"
 
-#: ../cleaners/epiphany.xml
-msgid "Places"
-msgstr "สถานที่"
+#: ../cleaners/amule.xml ../cleaners/audacious.xml ../cleaners/claude.xml
+#: ../cleaners/easytag.xml ../cleaners/exaile.xml ../cleaners/gftp.xml
+#: ../cleaners/gpodder.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/miro.xml
+#: ../cleaners/profanity.xml ../cleaners/realplayer.xml
+#: ../cleaners/screenlets.xml ../cleaners/smartftp.xml
+#: ../cleaners/teamviewer.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
+#: ../cleaners/warzone2100.xml ../cleaners/windows_defender.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../bleachbit/Cleaner.py
+msgid "Logs"
+msgstr "บันทึก"
 
-#: ../cleaners/epiphany.xml
-#, fuzzy
-#| msgid ""
-#| "A database of URLs including bookmarks, favicons, and a history of "
-#| "visited web sites"
-msgid ""
-"A database of URLs including bookmarks, favicons, and a history of visited "
-"websites"
-msgstr "ฐานข้อมูลของ URL รวมถึงบุ๊กมาร์ก, Favicons และประวัติการเข้าชมเว็บไซต์"
+#: ../cleaners/amule.xml ../cleaners/audacious.xml ../cleaners/claude.xml
+#: ../cleaners/exaile.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/miro.xml ../cleaners/profanity.xml ../cleaners/realplayer.xml
+#: ../cleaners/screenlets.xml ../cleaners/smartftp.xml
+#: ../cleaners/teamviewer.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
+#: ../cleaners/warzone2100.xml ../cleaners/windows_defender.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../bleachbit/Cleaner.py
+msgid "Delete the logs"
+msgstr "ลบบันทึก"
 
-#: ../cleaners/epiphany.xml
-msgid "This option deletes all bookmarks."
-msgstr "ตัวเลือกนี้จะลบบุ๊กมาร์กทั้งหมด"
+#: ../cleaners/amule.xml
+msgid "Known files history"
+msgstr "ประวัติไฟล์ที่รู้จัก"
 
-#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
-msgid "Downloaded podcasts"
-msgstr "พอดแคสต์ที่ดาวน์โหลดแล้ว"
+#: ../cleaners/amule.xml ../cleaners/d4x.xml ../cleaners/easytag.xml
+#: ../cleaners/filezilla.xml ../cleaners/gnome.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
+#: ../cleaners/links2.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
+#: ../cleaners/realplayer.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/windows_defender.xml ../cleaners/winrar.xml
+msgid "Delete the usage history"
+msgstr "ลบประวัติการใช้งาน"
 
-#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
-msgid "Delete downloaded podcasts"
-msgstr "ลบพอดแคสต์ที่ดาวน์โหลดแล้ว"
+#. http://wiki.amule.org/wiki/Friend
+#: ../cleaners/amule.xml
+msgid "Known clients and friends"
+msgstr "บุคคลที่รู้จัก"
 
-#: ../cleaners/geary.xml ../cleaners/thunderbird.xml ../cleaners/evolution.xml
-msgid "Email client"
-msgstr "โปรแกรม Email client"
+#: ../cleaners/amule.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
+#: ../cleaners/firefox.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
+#: ../cleaners/vscode.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_defender.xml ../cleaners/zen.xml
+msgid "Backup files"
+msgstr "ไฟล์สำรองข้อมูล"
 
-#: ../cleaners/geary.xml
-msgid "Attachments"
-msgstr "สิ่งที่แนบมา"
+#: ../cleaners/amule.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
+#: ../cleaners/firefox.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
+#: ../cleaners/vscode.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_defender.xml ../cleaners/zen.xml
+msgid "Delete the backup files"
+msgstr "ลบไฟล์สำรองข้อมูล"
 
-#: ../cleaners/geary.xml
-msgid "Sync conflict"
-msgstr "ความขัดแย้งในการซิงค์"
-
-#: ../cleaners/geary.xml ../cleaners/deepscan.xml
-msgid "This option is slow."
-msgstr "ตัวเลือกนี้ช้า"
-
-#: ../cleaners/wine.xml
-msgid "Compatibility layer for Windows software"
-msgstr "เลเยอร์ความเข้ากันได้สำหรับซอฟต์แวร์ Windows"
-
-#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
-msgid "Thumbnails"
-msgstr "รูปขนาดย่อ"
-
-#: ../cleaners/thumbnails.xml
-msgid "Icons for files on the system"
-msgstr "ไอคอนสำหรับแฟ้มในระบบ"
-
-#: ../cleaners/gnome.xml ../cleaners/kde.xml
-msgid "Desktop environment"
-msgstr "สภาพแวดล้อมเดสก์ท็อป"
-
-#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
-#. In Windows 'Run' is the dialog in the Start menu
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-msgid "Run"
-msgstr "เรียกใช้"
-
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/google_toolbar.xml
-msgid "Search history"
-msgstr "ประวัติการค้นหา"
-
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/google_toolbar.xml
-msgid "Delete the search history"
-msgstr "ลบประวัติการค้นหา"
-
-#: ../cleaners/konqueror.xml
-msgid "Current session"
-msgstr "เซสชันปัจจุบัน"
-
-#: ../cleaners/konqueror.xml
-msgid "Delete the current session"
-msgstr "ลบเซสชันปัจจุบัน"
-
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-msgid "Search engines"
-msgstr "เครื่องมือค้นหา"
-
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-msgid ""
-"Reset the search engine usage history and delete non-factory search engines, "
-"some of which are added automatically"
-msgstr ""
-"รีเซ็ตประวัติการใช้เครื่องมือค้นหาและลบเครื่องมือค้นหาที่ไม่ใช่จากโรงงาน "
-"ซึ่งบางส่วนจะถูกเพิ่มโดยอัตโนมัติ"
-
-#: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
-msgid "File manager"
-msgstr "ตัวจัดการแฟ้ม"
-
-#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
-#: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py
-msgid "Recent documents list"
-msgstr "รายชื่อเอกสารล่าสุด"
-
-#: ../cleaners/windows_explorer.xml
-msgid ""
-"This option will reset pinned locations in Quick Access to their defaults."
-msgstr "ตัวเลือกนี้จะรีเซ็ตที่ตั้งที่ปักหมุดไว้ใน 'การเข้าถึงด่วน' กลับสู่ค่าเริ่มต้น"
-
-#: ../cleaners/windows_explorer.xml
-msgid "Shellbags"
-msgstr "Shellbags"
-
-#: ../cleaners/windows_explorer.xml
-msgid "Delete the usage date, window position, and other data for folders"
-msgstr "ลบวันที่ใช้งาน ตำแหน่งหน้าต่าง และข้อมูลอื่นๆ สำหรับโฟลเดอร์"
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will reset the position of desktop icons."
-msgstr "การดำเนินการนี้จะรีเซ็ตตำแหน่งของไอคอนเดสก์ท็อป"
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will restart Windows Explorer."
-msgstr "การดำเนินการนี้จะรีสตาร์ท Windows Explorer"
-
-#: ../cleaners/windows_defender.xml
-msgid "Anti-virus"
-msgstr "โปรแกรมป้องกันไวรัส"
-
-#: ../cleaners/windows_defender.xml
-msgid "Quarantine"
-msgstr "กักกัน"
-
-#: ../cleaners/thunderbird.xml
-msgid ""
-"Deleting the index will reset the configuration of columns in the message "
-"list."
-msgstr "การลบดัชนีจะรีเซ็ตการกำหนดค่าของคอลัมน์ในรายการข้อความ"
-
-#: ../cleaners/thunderbird.xml
-msgid "Session restore"
-msgstr "การกู้คืนเซสชัน"
-
-#: ../cleaners/thunderbird.xml
-msgid "Restores the previous session when the browser next starts"
-msgstr ""
+#: ../cleaners/apt.xml ../cleaners/dnf.xml ../cleaners/pacman.xml
+#: ../cleaners/snap.xml ../cleaners/yum.xml
+msgid "Package manager"
+msgstr "จัดการแพ็คเกจ"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -672,34 +189,273 @@ msgstr "ลบแฟ้มที่ล้าสมัย"
 msgid "Package lists"
 msgstr "รายการแพ็กเกจ"
 
-#. Cleaner description for vim, VS Code, etc.
-#: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
-msgid "Editor"
-msgstr "เครื่องมือแก้ไข"
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/realplayer.xml
+#: ../cleaners/vlc.xml ../cleaners/winamp.xml
+#: ../cleaners/windows_media_player.xml
+msgid "Media player"
+msgstr "เครื่องเล่นสื่อ"
 
+#: ../cleaners/bash.xml ../cleaners/fish.xml ../cleaners/zsh.xml
+msgid "Shell"
+msgstr "หน่วยติดต่อผู้ใช้ (Shell)"
+
+#: ../cleaners/bash.xml ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/d4x.xml ../cleaners/discord.xml ../cleaners/easytag.xml
+#: ../cleaners/elinks.xml ../cleaners/fish.xml ../cleaners/google_chrome.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
+#: ../cleaners/links2.xml ../cleaners/mc.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/nautilus.xml ../cleaners/octave.xml ../cleaners/opera.xml
+#: ../cleaners/python.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
+#: ../cleaners/seamonkey.xml ../cleaners/slack.xml ../cleaners/sqlite3.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/vim.xml ../cleaners/vivaldi.xml
+#: ../cleaners/windows_defender.xml ../cleaners/winrar.xml ../cleaners/zsh.xml
+msgid "History"
+msgstr "ประวัติ"
+
+#: ../cleaners/bash.xml ../cleaners/fish.xml ../cleaners/octave.xml
+#: ../cleaners/python.xml ../cleaners/sqlite3.xml ../cleaners/zsh.xml
+msgid "Delete the command history"
+msgstr "ลบประวัติคำสั่ง"
+
+#: ../cleaners/beagle.xml ../cleaners/recoll.xml
+msgid "Search tool"
+msgstr "เครื่องมือค้นหา"
+
+#: ../cleaners/beagle.xml ../cleaners/recoll.xml ../cleaners/thunderbird.xml
+msgid "Index"
+msgstr "ดัชนี"
+
+#: ../cleaners/beagle.xml ../cleaners/brave.xml ../cleaners/chromium.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/firefox.xml
+#: ../cleaners/geary.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/profanity.xml
+#: ../cleaners/thunderbird.xml ../cleaners/transmission.xml
+#: ../cleaners/vivaldi.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
+#: ../cleaners/windows_defender.xml ../cleaners/zen.xml ../cleaners/zsh.xml
+msgid "Delete the files"
+msgstr "ลบไฟล์"
+
+#: ../cleaners/beagle.xml ../cleaners/gl-117.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
 #: ../cleaners/x11.xml
-msgid "Windowing system"
-msgstr "ระบบการวางหน้าต่าง"
+msgid "Debug logs"
+msgstr "บันทึกการแก้จุดบกพร่อง"
 
-#: ../cleaners/gimp.xml
-msgid "Graphics editor"
-msgstr "โปรแกรมแก้ไขรูปภาพ"
+#: ../cleaners/beagle.xml ../cleaners/easytag.xml ../cleaners/gl-117.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/x11.xml
+msgid "Delete the debug logs"
+msgstr "ลบบันทึกการแก้จุดบกพร่อง"
 
-#: ../cleaners/snap.xml
-msgid "Disabled"
-msgstr "ปิดใช้งานแล้ว"
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/elinks.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/links2.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Web browser"
+msgstr "เว็บเบราว์เซอร์"
 
-#: ../cleaners/snap.xml
-msgid "Remove disabled packages"
-msgstr "ลบแพ็คเกจที่ปิดใช้งาน"
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
+#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml
+msgid "Delete the web cache, which reduces time to display revisited pages"
+msgstr "ลบแคชของเว็บ ซึ่งลดเวลาในการแสดงหน้าที่เข้าชมแล้ว"
 
-#: ../cleaners/adobe_reader.xml
-msgid "Document viewer"
-msgstr "โปรแกรมดูเอกสาร"
+#. TRANSLATORS: Sidebar label for the page managing browser cookies in
+#. the Preferences dialog.
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/flash.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
+#: ../cleaners/seamonkey.xml ../cleaners/silverlight.xml ../cleaners/slack.xml
+#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../bleachbit/GuiPreferences.py
+msgid "Cookies"
+msgstr "คุกกี้"
 
-#: ../cleaners/nautilus.xml
-msgid "Custom folders will be reset."
-msgstr "โฟลเดอร์ที่กำหนดเองจะถูกรีเซ็ต"
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/flash.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
+#: ../cleaners/seamonkey.xml ../cleaners/silverlight.xml ../cleaners/slack.xml
+#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml
+#, fuzzy
+#| msgid ""
+#| "Delete cookies, which contain information such as web site preferences, "
+#| "authentication, and tracking identification"
+msgid ""
+"Delete cookies, which store login information, website preferences, and "
+"tracking identifiers"
+msgstr "ลบคุกกี้ซึ่งมีข้อมูล เช่น การตั้งค่าเว็บไซต์ การยืนยันตัวตน และการติดตามการระบุตัวตน"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml
+msgid "Crash reports"
+msgstr "รายงานปัญหา"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Form history"
+msgstr "ประวัติแบบฟอร์ม"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/vivaldi.xml
+#, fuzzy
+#| msgid "A history of forms entered in web sites"
+msgid "A history of forms entered in websites"
+msgstr "ประวัติการกรอกแบบฟอร์มในเว็บไซต์"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/slack.xml ../cleaners/vivaldi.xml
+msgid ""
+"Delete the history which includes visited sites, downloads, and thumbnails"
+msgstr "ลบประวัติ ซึ่งรวมถึงไซต์ที่เข้าชม การดาวน์โหลดและรูปขนาดย่อ"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml
+msgid "Search engines"
+msgstr "เครื่องมือค้นหา"
+
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml
+msgid ""
+"Reset the search engine usage history and delete non-factory search engines, "
+"some of which are added automatically"
+msgstr ""
+"รีเซ็ตประวัติการใช้เครื่องมือค้นหาและลบเครื่องมือค้นหาที่ไม่ใช่จากโรงงาน "
+"ซึ่งบางส่วนจะถูกเพิ่มโดยอัตโนมัติ"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/claude.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/zsh.xml
+msgid "Session"
+msgstr "เซสชัน"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml
+msgid "Previously open tabs and windows"
+msgstr ""
+
+#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Site data"
+msgstr ""
+
+#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
+msgstr ""
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/vivaldi.xml
+msgid "Sync"
+msgstr "ซิงค์"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/vivaldi.xml
+#, fuzzy
+#| msgid "Delete the sync data and sign out of the browser"
+msgid "Delete the sync data (including web apps) and sign out of the browser"
+msgstr "ลบข้อมูลการซิงค์และออกจากระบบเบราว์เซอร์"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Passwords"
+msgstr "รหัสผ่าน"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid ""
+"A database of usernames and passwords as well as a list of sites that should "
+"not store passwords"
+msgstr "ฐานข้อมูลชื่อผู้ใช้และรหัสผ่าน รวมถึงรายชื่อเว็บไซต์ที่ไม่ควรเก็บรหัสผ่าน"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
+#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "This option will delete your saved passwords."
+msgstr "ตัวเลือกนี้จะลบรหัสผ่านที่คุณบันทึกไว้"
+
+#. TRANSLATORS: Vacuum is a verb.  The term is jargon
+#. from the SQLite database.  Microsoft Access uses
+#. the term 'Compact Database' (which you may translate
+#. instead).  Another synonym is 'defragment.'
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/firefox.xml ../cleaners/geary.xml ../cleaners/google_chrome.xml
+#: ../cleaners/gpodder.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/slack.xml
+#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/yum.xml ../cleaners/zen.xml ../bleachbit/Action.py
+msgid "Vacuum"
+msgstr "รวมเข้าด้วยกัน"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
+#: ../cleaners/firefox.xml ../cleaners/geary.xml ../cleaners/google_chrome.xml
+#: ../cleaners/gpodder.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/slack.xml
+#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/yum.xml ../cleaners/zen.xml
+msgid ""
+"Clean database fragmentation to reduce space and improve speed without "
+"removing any data"
+msgstr "ล้างการกระจายตัวของฐานข้อมูลเพื่อลดพื้นที่และเพิ่มความเร็วโดยไม่ต้องลบข้อมูลใด ๆ"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Site preferences"
+msgstr "การตั้งค่าไซต์"
+
+#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
+#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "Settings for individual sites"
+msgstr "การตั้งค่าสำหรับแต่ละไซต์"
 
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
@@ -744,6 +500,10 @@ msgstr "สแกนละเอียด"
 msgid "Clean files widely scattered across the disk"
 msgstr "ล้างไฟล์ที่กระจัดกระจายทั่วดิสก์"
 
+#: ../cleaners/deepscan.xml ../cleaners/geary.xml
+msgid "This option is slow."
+msgstr "ตัวเลือกนี้ช้า"
+
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
 msgstr "ตรวจสอบตัวอย่างแฟ้มใดๆ ที่คุณต้องการเก็บไว้"
@@ -762,37 +522,137 @@ msgstr "VIM ภายใต้โปรไฟล์ผู้ใช้"
 msgid "VIM swap files across system"
 msgstr "VIM สลับไฟล์ข้ามระบบ"
 
-#: ../cleaners/zoom.xml
-msgid "Recordings"
-msgstr "บันทึก"
+#: ../cleaners/discord.xml
+msgid ""
+"Delete the web cache, which reduces time to display revisited pages. This "
+"also clears favorited GIFs."
+msgstr ""
+"ลบแคชของเว็บซึ่งช่วยลดเวลาในการแสดงหน้าที่เข้าชมซ้ำ นอกจากนี้ยังล้าง GIF ที่ชื่นชอบอีกด้วย"
 
-#: ../cleaners/zoom.xml
-msgid "Delete the audio and video recordings"
-msgstr "ลบการบันทึกเสียงและวิดีโอ"
+#: ../cleaners/dnf.xml
+msgid "Remove packages that were formerly dependencies"
+msgstr "ลบแพ็คเกจที่เคยอ้างอิง"
 
-#: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
-msgstr "ลบดัชนีการค้นหา ฐานข้อมูลของคำ และไฟล์ที่อยู่ในนั้น"
+#: ../cleaners/dnf.xml
+msgid ""
+"Carefully review the list of packages that will be removed by running \"dnf "
+"list autoremove\"."
+msgstr "ตรวจสอบรายการแพ็คเกจที่จะถูกลบโดยใช้ \"dnf list autoremove\""
 
-#: ../cleaners/skype.xml
-msgid "Installers"
-msgstr "โปรแกรมติดตั้ง"
+#. This software edits metadata tags, such as title and artist, in audio files
+#: ../cleaners/easytag.xml
+msgid "Audio files tagger"
+msgstr "ตัวแท็กแฟ้มเสียง"
 
-#: ../cleaners/skype.xml
-msgid "Delete cached patches and installers"
-msgstr "ลบแพตช์แคชและโปรแกรมติดตั้ง"
+#: ../cleaners/elinks.xml
+msgid "Delete the cookies, visited URLs, and search history"
+msgstr "ลบคุกกี้, URL ที่เข้าชม และประวัติการค้นหา"
 
-#: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
-msgid "Download history"
-msgstr "ประวัติการดาวน์โหลด"
+#: ../cleaners/emesene.xml
+msgid "Delete the avatars and emoticons cache"
+msgstr "ลบแคชอวาตาร์และอีโมติคอน"
 
-#: ../cleaners/seamonkey.xml
-msgid "List of files downloaded"
-msgstr "รายการแฟ้มที่ดาวน์โหลดแล้ว"
+#: ../cleaners/epiphany.xml
+msgid "Places"
+msgstr "สถานที่"
 
-#: ../cleaners/seamonkey.xml
-msgid "Delete the list of visited web pages"
-msgstr "ลบรายการหน้าเว็บที่เข้าชม"
+#: ../cleaners/epiphany.xml
+#, fuzzy
+#| msgid ""
+#| "A database of URLs including bookmarks, favicons, and a history of "
+#| "visited web sites"
+msgid ""
+"A database of URLs including bookmarks, favicons, and a history of visited "
+"websites"
+msgstr "ฐานข้อมูลของ URL รวมถึงบุ๊กมาร์ก, Favicons และประวัติการเข้าชมเว็บไซต์"
+
+#: ../cleaners/epiphany.xml
+msgid "This option deletes all bookmarks."
+msgstr "ตัวเลือกนี้จะลบบุ๊กมาร์กทั้งหมด"
+
+#: ../cleaners/evolution.xml ../cleaners/geary.xml ../cleaners/thunderbird.xml
+msgid "Email client"
+msgstr "โปรแกรม Email client"
+
+#: ../cleaners/exaile.xml ../cleaners/gpodder.xml
+msgid "Downloaded podcasts"
+msgstr "พอดแคสต์ที่ดาวน์โหลดแล้ว"
+
+#: ../cleaners/exaile.xml ../cleaners/gpodder.xml
+msgid "Delete downloaded podcasts"
+msgstr "ลบพอดแคสต์ที่ดาวน์โหลดแล้ว"
+
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/librewolf.xml ../cleaners/palemoon.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml
+#, fuzzy
+#| msgid "Delete the search history"
+msgid "Saved form entries and search bar history"
+msgstr "ลบประวัติการค้นหา"
+
+#: ../cleaners/firefox.xml ../cleaners/konqueror.xml ../cleaners/librewolf.xml
+#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "URL history"
+msgstr "ประวัติ URL"
+
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+msgid "List of visited web pages"
+msgstr "รายการหน้าเว็บที่เข้าชม"
+
+#: ../cleaners/flash.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
+#: ../cleaners/xine.xml
+msgid "Multimedia viewer"
+msgstr "โปรแกรมดูมัลติมีเดีย"
+
+#: ../cleaners/geary.xml
+msgid "Attachments"
+msgstr "สิ่งที่แนบมา"
+
+#: ../cleaners/geary.xml
+msgid "Sync conflict"
+msgstr "ความขัดแย้งในการซิงค์"
+
+#. Cleaner description for vim, VS Code, etc.
+#: ../cleaners/gedit.xml ../cleaners/vim.xml ../cleaners/vscode.xml
+msgid "Editor"
+msgstr "เครื่องมือแก้ไข"
+
+#: ../cleaners/gedit.xml ../cleaners/gwenview.xml ../cleaners/kde.xml
+#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py
+msgid "Recent documents list"
+msgstr "รายชื่อเอกสารล่าสุด"
+
+#: ../cleaners/gimp.xml
+msgid "Graphics editor"
+msgstr "โปรแกรมแก้ไขรูปภาพ"
+
+#: ../cleaners/gl-117.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/nexuiz.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/tremulous.xml ../cleaners/warzone2100.xml
+msgid "Game"
+msgstr "เกม"
+
+#: ../cleaners/gnome.xml ../cleaners/kde.xml
+msgid "Desktop environment"
+msgstr "สภาพแวดล้อมเดสก์ท็อป"
+
+#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
+#. In Windows 'Run' is the dialog in the Start menu
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+msgid "Run"
+msgstr "เรียกใช้"
+
+#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
+#: ../cleaners/windows_explorer.xml
+msgid "Search history"
+msgstr "ประวัติการค้นหา"
+
+#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the search history"
+msgstr "ลบประวัติการค้นหา"
 
 #. Cleaning option that deletes AI models in a web browser
 #: ../cleaners/google_chrome.xml
@@ -804,6 +664,121 @@ msgstr ""
 #| msgid "Delete the logs"
 msgid "Delete the AI models"
 msgstr "ลบบันทึก"
+
+#: ../cleaners/internet_explorer.xml ../cleaners/seamonkey.xml
+msgid "Download history"
+msgstr "ประวัติการดาวน์โหลด"
+
+#: ../cleaners/journald.xml
+msgid "System journals"
+msgstr "วารสารระบบ"
+
+#: ../cleaners/journald.xml
+msgid "Clean old system journals"
+msgstr "ล้างวารสารระบบเก่า"
+
+#: ../cleaners/konqueror.xml
+msgid "Current session"
+msgstr "เซสชันปัจจุบัน"
+
+#: ../cleaners/konqueror.xml
+msgid "Delete the current session"
+msgstr "ลบเซสชันปัจจุบัน"
+
+#: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/openoffice.xml
+msgid "Office suite"
+msgstr "ชุดโปรแกรมสำนักงาน"
+
+#: ../cleaners/mc.xml ../cleaners/nautilus.xml ../cleaners/windows_explorer.xml
+msgid "File manager"
+msgstr "ตัวจัดการแฟ้ม"
+
+#: ../cleaners/microsoft_office.xml ../cleaners/paint.xml
+#: ../cleaners/smartftp.xml ../cleaners/teamviewer.xml ../cleaners/vlc.xml
+#: ../cleaners/winamp.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/winzip.xml
+#: ../cleaners/wordpad.xml
+msgid "Delete the most recently used list"
+msgstr "ลบรายการที่ใช้ล่าสุด"
+
+#: ../cleaners/nautilus.xml
+msgid "Custom folders will be reset."
+msgstr "โฟลเดอร์ที่กำหนดเองจะถูกรีเซ็ต"
+
+#: ../cleaners/profanity.xml
+#, fuzzy
+#| msgid "Downloading URL failed: %s"
+msgid "Downloaded files"
+msgstr "ดาวน์โหลด URL ล้มเหลว: %s"
+
+#: ../cleaners/recoll.xml
+msgid "Delete the search index, a database of words and the files they contain"
+msgstr "ลบดัชนีการค้นหา ฐานข้อมูลของคำ และไฟล์ที่อยู่ในนั้น"
+
+#: ../cleaners/rhythmbox.xml
+msgid "Database"
+msgstr "ฐานข้อมูล"
+
+#: ../cleaners/rhythmbox.xml
+msgid ""
+"Delete the database, which contains information such as play count and last "
+"played"
+msgstr "ลบฐานข้อมูลซึ่งมีข้อมูล เช่น จำนวนการเล่นและการเล่นล่าสุด"
+
+#: ../cleaners/screenlets.xml
+msgid "Desktop widgets"
+msgstr "วิดเจ็ตเดสก์ท็อป"
+
+#: ../cleaners/seamonkey.xml
+msgid "List of files downloaded"
+msgstr "รายการแฟ้มที่ดาวน์โหลดแล้ว"
+
+#: ../cleaners/seamonkey.xml
+msgid "Delete the list of visited web pages"
+msgstr "ลบรายการหน้าเว็บที่เข้าชม"
+
+#: ../cleaners/skype.xml
+msgid "Installers"
+msgstr "โปรแกรมติดตั้ง"
+
+#: ../cleaners/skype.xml
+msgid "Delete cached patches and installers"
+msgstr "ลบแพตช์แคชและโปรแกรมติดตั้ง"
+
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr "ปิดใช้งานแล้ว"
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr "ลบแพ็คเกจที่ปิดใช้งาน"
+
+#: ../cleaners/teamviewer.xml
+msgid "Remote control software"
+msgstr "ซอฟต์แวร์ควบคุมระยะไกล"
+
+#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
+msgid "Thumbnails"
+msgstr "รูปขนาดย่อ"
+
+#: ../cleaners/thumbnails.xml
+msgid "Icons for files on the system"
+msgstr "ไอคอนสำหรับแฟ้มในระบบ"
+
+#: ../cleaners/thunderbird.xml
+msgid ""
+"Deleting the index will reset the configuration of columns in the message "
+"list."
+msgstr "การลบดัชนีจะรีเซ็ตการกำหนดค่าของคอลัมน์ในรายการข้อความ"
+
+#: ../cleaners/thunderbird.xml
+msgid "Session restore"
+msgstr "การกู้คืนเซสชัน"
+
+#: ../cleaners/thunderbird.xml
+msgid "Restores the previous session when the browser next starts"
+msgstr ""
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -836,48 +811,67 @@ msgstr "ลบแฟ้มนี้"
 msgid "Delete the list of game servers"
 msgstr "ลบรายชื่อเซิร์ฟเวอร์เกม"
 
-#: ../cleaners/profanity.xml
-#, fuzzy
-#| msgid "Downloading URL failed: %s"
-msgid "Downloaded files"
-msgstr "ดาวน์โหลด URL ล้มเหลว: %s"
-
-#: ../cleaners/teamviewer.xml
-msgid "Remote control software"
-msgstr "ซอฟต์แวร์ควบคุมระยะไกล"
-
-#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
-msgid "Memory dump"
-msgstr "memory dump"
-
-#: ../cleaners/screenlets.xml
-msgid "Desktop widgets"
-msgstr "วิดเจ็ตเดสก์ท็อป"
-
-#: ../cleaners/winrar.xml
-msgid "File archiver"
-msgstr "ตัวจัดการแฟ้มจัดเก็บ"
-
-#: ../cleaners/amule.xml
-msgid "Known files history"
-msgstr "ประวัติไฟล์ที่รู้จัก"
-
-#. http://wiki.amule.org/wiki/Friend
-#: ../cleaners/amule.xml
-msgid "Known clients and friends"
-msgstr "บุคคลที่รู้จัก"
-
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
 msgstr "ลบ ~/.viminfo ซึ่งรวมถึงประวัติแฟ้ม ประวัติคำสั่ง และบัฟเฟอร์"
 
-#: ../cleaners/discord.xml
+#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
+msgid "Memory dump"
+msgstr "memory dump"
+
+#: ../cleaners/windows_defender.xml
+msgid "Anti-virus"
+msgstr "โปรแกรมป้องกันไวรัส"
+
+#: ../cleaners/windows_defender.xml
+msgid "Quarantine"
+msgstr "กักกัน"
+
+#: ../cleaners/windows_explorer.xml
 msgid ""
-"Delete the web cache, which reduces time to display revisited pages. This "
-"also clears favorited GIFs."
-msgstr ""
-"ลบแคชของเว็บซึ่งช่วยลดเวลาในการแสดงหน้าที่เข้าชมซ้ำ นอกจากนี้ยังล้าง GIF ที่ชื่นชอบอีกด้วย"
+"This option will reset pinned locations in Quick Access to their defaults."
+msgstr "ตัวเลือกนี้จะรีเซ็ตที่ตั้งที่ปักหมุดไว้ใน 'การเข้าถึงด่วน' กลับสู่ค่าเริ่มต้น"
+
+#: ../cleaners/windows_explorer.xml
+msgid "Shellbags"
+msgstr "Shellbags"
+
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the usage date, window position, and other data for folders"
+msgstr "ลบวันที่ใช้งาน ตำแหน่งหน้าต่าง และข้อมูลอื่นๆ สำหรับโฟลเดอร์"
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will reset the position of desktop icons."
+msgstr "การดำเนินการนี้จะรีเซ็ตตำแหน่งของไอคอนเดสก์ท็อป"
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will restart Windows Explorer."
+msgstr "การดำเนินการนี้จะรีสตาร์ท Windows Explorer"
+
+#: ../cleaners/wine.xml
+msgid "Compatibility layer for Windows software"
+msgstr "เลเยอร์ความเข้ากันได้สำหรับซอฟต์แวร์ Windows"
+
+#: ../cleaners/winrar.xml
+msgid "File archiver"
+msgstr "ตัวจัดการแฟ้มจัดเก็บ"
+
+#: ../cleaners/wordpad.xml
+msgid "Word processor"
+msgstr "โปรแกรมประมวลผลคำ"
+
+#: ../cleaners/x11.xml
+msgid "Windowing system"
+msgstr "ระบบการวางหน้าต่าง"
+
+#: ../cleaners/zoom.xml
+msgid "Recordings"
+msgstr "บันทึก"
+
+#: ../cleaners/zoom.xml
+msgid "Delete the audio and video recordings"
+msgstr "ลบการบันทึกเสียงและวิดีโอ"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
@@ -1305,6 +1299,14 @@ msgstr "เพิกเฉยต่อเครื่องมือทำคว
 msgid "Error reading cleaner: %s"
 msgstr "เกิดข้อผิดพลาดในการอ่านเครื่องมือทำความสะอาด: %s"
 
+#: ../bleachbit/Cleaner.py
+msgid "System"
+msgstr "ระบบ"
+
+#: ../bleachbit/Cleaner.py
+msgid "The system in general"
+msgstr "ระบบทั่วไป"
+
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
 #. Firefox, and others.  The .desktop files also associate file
@@ -1432,14 +1434,6 @@ msgstr ""
 #| msgid "Overwrite free disk space to hide deleted files"
 msgid "Wipe empty space to hide deleted files"
 msgstr "เขียนทับพื้นที่ว่างในดิสก์เพื่อซ่อนแฟ้มที่ถูกลบ"
-
-#: ../bleachbit/Cleaner.py
-msgid "The system in general"
-msgstr "ระบบทั่วไป"
-
-#: ../bleachbit/Cleaner.py
-msgid "System"
-msgstr "ระบบ"
 
 #. TRANSLATORS: 'Empty' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
@@ -3092,6 +3086,11 @@ msgstr "การเข้าถึงถูกปฏิเสธเมื่อ
 #, python-format
 msgid "Access denied: %s"
 msgstr "การเข้าถึงถูกปฏิเสธ: %s"
+
+#: ../bleachbit/Worker.py
+#, python-format
+msgid "Database is locked: %s"
+msgstr ""
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
