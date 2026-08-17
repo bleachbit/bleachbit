@@ -14,7 +14,7 @@ import re
 import sys
 import warnings
 
-from bleachbit import IS_POSIX, IS_WINDOWS
+from bleachbit import IS_POSIX, IS_WINDOWS, logger
 
 # pylint: disable=invalid-name
 _bootstrapped = False
@@ -33,8 +33,8 @@ def _apply_fontconfig_backend_preference():
         from bleachbit.Options import options  # pylint: disable=import-outside-toplevel
         if options.get('use_fontconfig_backend'):
             os.environ['PANGOCAIRO_BACKEND'] = 'fc'
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug('could not read the fontconfig backend preference: %s', e)
 
 
 def check_wayland_and_root():
@@ -80,8 +80,8 @@ def _bootstrap_posix():
     if not os.getenv('USER'):
         try:
             envs['USER'] = getpass.getuser()
-        except (OSError, KeyError):
-            pass
+        except (OSError, KeyError) as e:
+            logger.debug('could not determine the user name: %s', e)
     for varname, value in envs.items():
         if not os.getenv(varname):
             os.environ[varname] = value

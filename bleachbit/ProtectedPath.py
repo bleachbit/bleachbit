@@ -244,8 +244,9 @@ def calculate_impact(path):
                 file_count += 1
                 try:
                     total_size += FileUtilities.getsize(child)
-                except (OSError, PermissionError):
-                    pass
+                except (OSError, PermissionError) as e:
+                    logger.debug('skipping %s in the impact total: %s',
+                                 child, e)
     except (OSError, PermissionError) as e:
         logger.debug("Error calculating impact for %s: %s", path, e)
 

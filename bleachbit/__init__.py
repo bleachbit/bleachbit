@@ -74,8 +74,9 @@ def _harden_dll_search_path():
             set_default.restype = wintypes.BOOL
             if set_default(LOAD_LIBRARY_SEARCH_DEFAULT_DIRS):
                 return
-        except (AttributeError, OSError):
-            pass
+        except (AttributeError, OSError) as e:
+            logger.debug('SetDefaultDllDirectories is unavailable, so falling '
+                         'back to SetDllDirectoryW: %s', e)
 
     # drops the current directory but keeps PATH; NULL would restore the default
     try:
@@ -83,8 +84,9 @@ def _harden_dll_search_path():
         set_dir.argtypes = [wintypes.LPCWSTR]
         set_dir.restype = wintypes.BOOL
         set_dir("")
-    except (AttributeError, OSError):
-        pass
+    except (AttributeError, OSError) as e:
+        logger.debug('could not drop the current directory from the DLL '
+                     'search path: %s', e)
 
 
 # file system attributes

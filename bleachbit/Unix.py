@@ -655,7 +655,7 @@ def get_globs_size(paths):
             try:
                 total_size += FileUtilities.getsize(p)
             except FileNotFoundError:
-                pass
+                logger.debug('%s vanished while totalling sizes', p)
     return total_size
 
 

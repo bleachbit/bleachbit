@@ -1024,9 +1024,9 @@ def is_junction(path):
         tag = getattr(stat_result, 'st_reparse_tag', None)
         if tag is not None:
             return tag == IO_REPARSE_TAG_MOUNT_POINT
-    except (OSError, AttributeError):
+    except (OSError, AttributeError) as e:
         logger.debug('no reparse tag for %s, so falling back to '
-                     'GetFileAttributesW', path, exc_info=True)
+                     'GetFileAttributesW: %s', path, e)
 
     attr = windll.kernel32.GetFileAttributesW(path)
     # INVALID_FILE_ATTRIBUTES (0xFFFFFFFF) indicates GetFileAttributesW failed
@@ -1573,7 +1573,8 @@ class SplashThread(Thread):
             try:
                 win32gui.DestroyIcon(hIcon)
             except Exception:
-                pass
+                logger.debug('could not destroy the splash icon',
+                             exc_info=True)
 
     def _safe_render_splash(self, hWnd):
         """Render the splash screen without letting paint failures escape."""

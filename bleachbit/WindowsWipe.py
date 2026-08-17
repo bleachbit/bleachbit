@@ -1182,7 +1182,7 @@ def clean_up(file_handle, volume_handle, tmp_file_path):
         if tmp_file_path:
             DeleteFile(tmp_file_path)
     except Exception:
-        pass
+        logger.debug('error while cleaning up wipe handles', exc_info=True)
 
 
 def file_wipe(file_name):

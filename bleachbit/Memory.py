@@ -149,7 +149,7 @@ def fill_memory_linux():
     try:
         buf = '\x00' * allocbytes
     except MemoryError:
-        pass
+        logger.debug('could not allocate %s, so stopping here', bytes_str)
     else:
         fill_memory_linux()
         # TRANSLATORS: The variable is a quantity like 5kB

@@ -209,8 +209,8 @@ def get_executable():
         # example: /usr/bin/python3.12
         # Notice it ends with .12.
         return os.readlink('/proc/self/exe')
-    except Exception:
-        pass
+    except OSError:
+        logger.debug('/proc/self/exe is unreadable, so falling back to PATH')
     for py in ['python3', 'python']:
         py_which = shutil.which(py)
         if py_which:

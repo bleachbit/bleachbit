@@ -284,7 +284,7 @@ def get_supported_language_codes():
                 if translation:
                     supported_langs.append(lang)
             except FileNotFoundError:
-                pass
+                logger.debug('no compiled translation for language %s', lang)
     return supported_langs
 
 

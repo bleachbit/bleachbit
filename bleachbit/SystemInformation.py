@@ -99,8 +99,8 @@ def _get_home_dirs_to_anonymize():
             short_home_dir = win32api.GetShortPathName(home_dir)
             if short_home_dir and short_home_dir != home_dir:
                 home_dirs.append(short_home_dir)
-        except (ImportError, OSError, ValueError):
-            logger.debug('no short path for the home directory', exc_info=True)
+        except (ImportError, OSError, ValueError) as e:
+            logger.debug('no short path for the home directory: %s', e)
 
     # Filter out root directories and duplicates
     filtered_dirs = []
