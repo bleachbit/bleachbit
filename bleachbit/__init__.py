@@ -23,7 +23,7 @@ APP_COPYRIGHT = "Copyright (C) 2008-2026 Andrew Ziem"
 socket_timeout = 10
 
 if sys.version_info < (3, 8, 0):
-    print('BleachBit requires Python version 3.8 or later')
+    sys.stderr.write('BleachBit requires Python version 3.8 or later\n')
     sys.exit(1)
 
 if hasattr(sys, 'frozen'):
