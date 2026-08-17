@@ -88,6 +88,12 @@ BuildRequires:  make
 BuildRequires:  %{pyprefix}
 BuildRequires:  python-rpm-macros
 BuildRequires:  %{pyprefix}-base
+# Leap 16.0 split the unversioned /usr/bin/python3 symlink into a separate
+# python3-base package that is no longer pulled in transitively by
+# python313-base. Require it explicitly so %{__python3} resolves.
+%if 0%{?suse_version} == 1600
+BuildRequires:  python3-base
+%endif
 BuildRequires:  %{pyprefix}-chardet
 BuildRequires:  %{pyprefix}-psutil
 BuildRequires:  %{pyprefix}-requests
