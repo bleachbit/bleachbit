@@ -11,7 +11,7 @@ Code that is commonly shared throughout BleachBit
 import os
 import re
 import sys
-from configparser import NoOptionError, RawConfigParser  # used in other files
+from configparser import RawConfigParser  # used in other files
 
 from bleachbit import Log
 
@@ -149,10 +149,7 @@ elif IS_WINDOWS:
         # installed mode
         options_dir = os.path.expandvars(r"${APPDATA}\BleachBit")
 
-try:
-    options_dir = os.environ['BLEACHBIT_TEST_OPTIONS_DIR']
-except KeyError:
-    pass
+options_dir = os.environ.get('BLEACHBIT_TEST_OPTIONS_DIR', options_dir)
 
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
