@@ -339,6 +339,15 @@ class WipeTestCase(common.BleachbitTestCase):
                     break
         self.assertGreater(counter, 0)
 
+    def test_wipe_path_world_writable_warns(self):
+        """wipe_path() warns when the shred drive is world-writable"""
+        with mock.patch('bleachbit.Wipe.IS_POSIX', True), \
+                mock.patch('bleachbit.PathUtils.is_world_writable', return_value=True), \
+                self.assertLogs('bleachbit.Wipe', level='WARNING') as cm:
+            for _ret in wipe_path(self.tempdir, True):
+                break
+        self.assertTrue(any('world-writable' in m for m in cm.output))
+
     def _make_mock_file(self, name='/tmp/empty_abc123'):
         """Return a mock file object for wipe_path tests"""
         mock_file = mock.Mock()
