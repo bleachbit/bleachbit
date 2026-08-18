@@ -14,6 +14,7 @@ import os
 import sys
 import time
 import unittest
+from contextlib import suppress
 
 import bleachbit
 
@@ -419,10 +420,8 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         finally:
             for config in file_configs:
                 if config.get("handle"):
-                    try:
+                    with suppress(Exception):
                         close_file(config["handle"])
-                    except Exception:
-                        pass
 
     def test_not_included(self):
         """Notify users there are more tests"""

@@ -16,6 +16,7 @@ import string
 import struct
 import tempfile
 import time
+from contextlib import suppress
 from unittest import mock
 
 from tests.common import pytest
@@ -34,21 +35,17 @@ def _create_registry_keys(*key_paths):
     if not IS_WINDOWS:
         return
     for key_path in key_paths:
-        try:
+        with suppress(OSError):
             hkey = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path)
             hkey.Close()
-        except OSError:
-            pass
 
 def _delete_registry_keys(*key_paths):
     """Delete registry keys, ignoring errors if they don't exist"""
     if not IS_WINDOWS:
         return
     for key_path in key_paths:
-        try:
+        with suppress(OSError):
             winreg.DeleteKey(winreg.HKEY_CURRENT_USER, key_path)
-        except OSError:
-            pass
 
 KEYFULL = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
 
