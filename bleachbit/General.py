@@ -147,6 +147,9 @@ def reject_xml_dtd(data, description='XML'):
         if has_internal_subset:
             raise ValueError(
                 f'DTD with an internal subset is not allowed in {description}')
+    if isinstance(data, str):
+        # pyexpat rejects str input carrying an encoding declaration
+        data = data.encode('utf-8')
     parser = xml.parsers.expat.ParserCreate()
     parser.StartDoctypeDeclHandler = on_doctype
     parser.Parse(data, True)
