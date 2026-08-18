@@ -1917,7 +1917,8 @@ State=AAAA/wA...
         self.assertEqual(set(keep_list), set(options.get_whitelist_paths()))
 
         # test
-        tests = ('', '/', '/home/foo2', '/home/fo', '/home/', '/home')
+        # '/' is system-critical and always kept, so it is excluded here
+        tests = ('', '/home/foo2', '/home/fo', '/home/', '/home')
         for path in tests:
             self.assertFalse(whitelisted(
                 path), f"{path} should not be whitelisted")
@@ -1949,6 +1950,22 @@ State=AAAA/wA...
         self.assertFalse(whitelisted('/home/foo'))
         self.assertFalse(whitelisted('/home/folder'))
         self.assertFalse(whitelisted('/home/folder/file'))
+
+    def test_whitelisted_posix_system_critical(self):
+        """System-critical POSIX paths are kept even with an empty keep list."""
+        if not IS_POSIX:
+            self.skipTest('POSIX only')
+        options.set_whitelist_paths([])
+        for path in ('/', '//', '/proc', '/proc/cpuinfo', '/sys/',
+                     '/sys/kernel', '/run', '/run/user/0'):
+            self.assertTrue(whitelisted(path),
+                            f"{path} should be protected")
+        # Real cleaners legitimately act under /var, /dev/shm, /etc
+        for path in ('/home/user/file', '/tmp/scratch', '/opt/data/x',
+                     '/etc/passwd', '/var/log/syslog', '/dev/shm/x',
+                     '/procfile', '/sysfs2/x', ''):
+            self.assertFalse(whitelisted(path),
+                             f"{path} should not be protected")
 
     @common.skipUnlessWindows
     def test_whitelisted_windows(self):
