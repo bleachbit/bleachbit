@@ -105,9 +105,10 @@ logger = logging.getLogger(__name__)
 # between the cheap preconditions (_gtk_preconditions_met) and the
 # expensive gi.repository import (_gtk_libraries_imported).
 gi = None
-# Gtk, Gdk, GObject, GLib, Gio are intentionally NOT defined here as
-# module-level names.  They are populated by _import_gtk_libraries()
-# and accessed lazily via __getattr__ before that.
+# Gtk, Gdk, GObject, GLib, Gio are intentionally NOT module-level names.
+# _import_gtk_libraries() fills this dict and __getattr__ serves them out
+# of it, which is what keeps the expensive import deferred.
+_gtk_modules = {}
 
 # Whether the cheap, non-GUI GTK preconditions have passed.
 _gtk_preconditions_met = False
@@ -349,8 +350,6 @@ def _import_gtk_libraries():
     Returns:
         tuple: (success: bool, reason: str or None)
     """
-    global Gtk, Gdk, GObject, GLib, Gio
-
     if not _gtk_preconditions_met or gi is None:
         return False, _gtk_unavailable_reason or 'GTK preconditions not met'
 
@@ -369,11 +368,8 @@ def _import_gtk_libraries():
                 from gi.repository import GLib as _GLib
                 from gi.repository import Gio as _Gio
 
-                Gtk = _Gtk
-                Gdk = _Gdk
-                GObject = _GObject
-                GLib = _GLib
-                Gio = _Gio
+                _gtk_modules.update(Gtk=_Gtk, Gdk=_Gdk, GObject=_GObject,
+                                    GLib=_GLib, Gio=_Gio)
 
         except (ImportError, RuntimeError, ValueError) as e:
             _handle_gtk_import_error(e)
@@ -382,7 +378,7 @@ def _import_gtk_libraries():
         # On POSIX, verify we can actually get a display
         if IS_POSIX:
             try:
-                if Gdk.get_default_root_window() is None:
+                if _Gdk.get_default_root_window() is None:
                     return False, 'No default root window (display not accessible)'
             except Exception as e:
                 return False, f'Display check failed: {e}'
@@ -514,10 +510,9 @@ def __getattr__(name):
     """
     if name in _LAZY_GTK_NAMES:
         _ensure_gtk_libraries()
-        # On success the module global is populated by _import_gtk_libraries.
         # On failure the name is absent; return None so callers see a
         # falsy placeholder rather than an AttributeError from this import.
-        return globals().get(name)
+        return _gtk_modules.get(name)
     raise AttributeError(f'module {__name__!r} has no attribute {name!r}')
 
 
