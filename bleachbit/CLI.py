@@ -93,10 +93,9 @@ def preview_or_clean(operations, really_clean, quiet=False):
     cb = CliCallback(quiet)
     worker = Worker.Worker(cb, really_clean, operations).run()
     try:
-        while next(worker):
-            pass
-    except StopIteration:
-        pass
+        for ret in worker:
+            if not ret:
+                break
     except BrokenPipeError:
         # Propagate to the top-level handler (e.g., when the downstream
         # pipe consumer like `less` or `head` closes early).

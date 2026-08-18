@@ -890,11 +890,11 @@ def clear_clipboard():
 def get_clipboard_paths():
     """Return a tuple of Unicode pathnames from the clipboard"""
     _open_clipboard()
-    path_list = ()
     try:
         path_list = win32clipboard.GetClipboardData(win32clipboard.CF_HDROP)
     except TypeError:
-        pass
+        # the clipboard holds something that is not a file drop
+        path_list = ()
     finally:
         win32clipboard.CloseClipboard()
     return path_list
@@ -1025,7 +1025,8 @@ def is_junction(path):
         if tag is not None:
             return tag == IO_REPARSE_TAG_MOUNT_POINT
     except (OSError, AttributeError):
-        pass
+        logger.debug('no reparse tag for %s, so falling back to '
+                     'GetFileAttributesW', path, exc_info=True)
 
     attr = windll.kernel32.GetFileAttributesW(path)
     # INVALID_FILE_ATTRIBUTES (0xFFFFFFFF) indicates GetFileAttributesW failed
