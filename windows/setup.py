@@ -1,21 +1,14 @@
-"""
-BleachBit
-Copyright (C) 2008-2025 Andrew Ziem
-https://www.bleachbit.org
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
+#
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
+"""
+Windows build and packaging
 
 Example invocation (from parent directory):
-python3 -m windows.setup
+python3.exe -m windows.setup
 """
 
 # standard library
@@ -291,6 +284,51 @@ def delete_file(path, warn_if_exists=False):
     if warn_if_exists:
         logger.warning('Deleting file that already exists: %s', path)
     os.remove(path)
+
+def _delete_paths(paths):
+    """Delete a list of paths under dist/, logging size saved per entry.
+
+    Each entry in *paths* is a path relative to dist/. Directories are
+    removed with shutil.rmtree(ignore_errors=True); files are removed
+    with os.remove, with a warning logged on failure rather than
+    aborting the prune pass.
+    """
+    for rel in paths:
+        path = os.path.join('dist', rel)
+        if not os.path.exists(path):
+            logger.warning('Path does not exist: %s', path)
+            continue
+        if os.path.isdir(path):
+            size = get_dir_size(path)
+            shutil.rmtree(path, ignore_errors=True)
+            logger.info('Deleting directory %s saved %s B', path, f'{size:,}')
+        else:
+            size = os.path.getsize(path)
+            try:
+                os.remove(path)
+            except OSError as e:
+                logger.warning('Failed to remove %s: %s', path, e)
+                continue
+            logger.info('Deleting file %s saved %s B', path, f'{size:,}')
+
+
+def _prune_assets(root, exts, keep_list, label='asset'):
+    """Remove assets under *root* matching *exts*, keeping *keep_list*.
+
+    Glob *root* recursively for files matching *exts* (e.g. ['*.png',
+    '*.svg']); remove any whose basename is not in *keep_list*, logging
+    each kept file as 'keeping <label>: <path>'. Removal failures are
+    logged as warnings rather than raised.
+    """
+    for f in recursive_glob(root, exts):
+        if os.path.basename(f) not in keep_list:
+            try:
+                os.remove(f)
+            except OSError as e:
+                logger.warning('Failed to remove %s: %s', f, e)
+        else:
+            logger.info('keeping %s: %s', label, f)
+
 
 def environment_check():
     """Check the build environment"""
@@ -658,20 +696,7 @@ def delete_unnecessary():
         r'win32pipe.pyd',
         r'win32wnet.pyd',
     ]
-    for path in delete_paths:
-        path = fr'dist\{path}'
-        if not os.path.exists(path):
-            logger.warning('Path does not exist: %s', path)
-            continue
-        if os.path.isdir(path):
-            this_dir_size = get_dir_size(path)
-            shutil.rmtree(path, ignore_errors=True)
-            logger.info('Deleting directory %s saved %s B',
-                        path, f'{this_dir_size:,}')
-        else:
-            file_size = os.path.getsize(path)
-            logger.info('Deleting file %s saved %s B', path, f'{file_size:,}')
-            os.remove(path)
+    _delete_paths(delete_paths)
 
 
 @count_size_improvement
@@ -679,27 +704,63 @@ def delete_icons():
     """Delete unused PNG/SVG icons to reduce size"""
     logger.info('Deleting unused PNG/SVG icons')
     # This keep list comes from analyze_process_monitor_events.py
+    # (run via procmon_capture.py in bleachbit-misc repo).
+    # SVGs were removed from the keep list because ProcMon tracing
+    # confirmed GTK 3 did not load any .svg files from disk.
+    # It does load some resources from its dll.
     icon_keep_list = [
         'edit-clear-all.png',
         'edit-delete.png',
         'edit-find.png',
-        'list-add-symbolic.svg',  # spin box in chaff dialog
-        'list-remove-symbolic.svg',  # spin box in chaff dialog
-        'open-menu-symbolic.svg',  # hamburger menu on headerbar
-        'pan-down-symbolic.svg',  # there is no pan-down.png
-        'pan-end-symbolic.svg',  # there is no pan-end.png
         'process-stop.png',  # abort on toolbar
-        'window-close-symbolic.svg',  # png does not get used
-        'window-maximize-symbolic.svg',  # no png
-        'window-minimize-symbolic.svg',  # no png
-        'window-restore-symbolic.svg'  # no png
     ]
-    strip_list = recursive_glob(r'dist\share\icons', ['*.png', '*.svg'])
-    for f in strip_list:
-        if os.path.basename(f) not in icon_keep_list:
-            os.remove(f)
-        else:
-            logger.info('keeping protected icon: %s', f)
+    _prune_assets(r'dist\share\icons', ['*.png', '*.svg'],
+                  icon_keep_list, label='protected icon')
+
+
+@count_size_improvement
+def delete_unused_themes():
+    """Delete unused theme files to reduce size"""
+    logger.info('Deleting unused theme files')
+    # share\themes\adwaita\ ships a gtk.css that literally says
+    # "this file is not used": GTK uses its internal Adwaita theme.
+    _delete_paths([r'share\themes\adwaita'])
+
+    # Prune unused assets from themes\windows10\assets\.
+    # The keep list comes from ProcMon tracing (analyze_process_monitor_events.py
+    # in bleachbit-misc repo).
+    theme_asset_keep_list = [
+        # arrows (non-active states)
+        'arrow-down.svg',
+        'arrow-left.svg',
+        'arrow-right.svg',
+        'arrow-up.svg',
+        # checkboxes (checked + unchecked, with insensitive/over states)
+        'checkbox-checked.png',
+        'checkbox-checked@2.png',
+        'checkbox-checked-insensitive.png',
+        'checkbox-checked-insensitive@2.png',
+        'checkbox-checked-over.png',
+        'checkbox-checked-over@2.png',
+        'checkbox-unchecked.png',
+        'checkbox-unchecked@2.png',
+        'checkbox-unchecked-insensitive.png',
+        'checkbox-unchecked-insensitive@2.png',
+        'checkbox-unchecked-over.png',
+        'checkbox-unchecked-over@2.png',
+        # window buttons
+        'close-focused.png',
+        'close-focused-active.png',
+        'close-unfocused.png',
+        'maximize-focused.png',
+        'maximize-unfocused.png',
+        'minimize-focused.png',
+        'minimize-unfocused.png',
+    ]
+    assets_dir = r'dist\themes\windows10\assets'
+    if os.path.exists(assets_dir):
+        _prune_assets(assets_dir, ['*.png', '*.svg'],
+                      theme_asset_keep_list, label='theme asset')
 
 
 def remove_empty_dirs(root):
@@ -906,6 +967,7 @@ def shrink(fast_build):
     """After building, run all the applicable size optimizations"""
     delete_unnecessary()
     delete_icons()
+    delete_unused_themes()
     clean_translations()
     remove_empty_dirs('dist')
     strip()
