@@ -44,8 +44,11 @@ if IS_WINDOWS:
 
 logger = logging.getLogger(__name__)
 
-"""Actions blocked for untrusted (user-writable) cleaners."""
-UNTRUSTED_BLOCKED_COMMANDS = ('process', 'winreg')
+"""Actions blocked for untrusted (user-writable) cleaners.
+
+Deletion stays allowed, so blocking registry deletion too would buy nothing.
+"""
+UNTRUSTED_BLOCKED_COMMANDS = ('process',)
 
 
 class _ETSimpleTextNode:
