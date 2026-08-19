@@ -219,13 +219,28 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertIn("'process'", cm.output[0])
 
     def test_is_trusted_cleaner(self):
-        """Only files under the system cleaners dir are trusted"""
+        """Files shipped next to the application are trusted"""
         from bleachbit.CleanerML import is_trusted_cleaner
         system_dir = bleachbit.system_cleaners_dir
         self.assertTrue(is_trusted_cleaner(
             os.path.join(system_dir, 'example.xml')))
         self.assertFalse(is_trusted_cleaner(
             os.path.join(bleachbit.personal_cleaners_dir, 'example.xml')))
+
+    def test_is_trusted_cleaner_portable(self):
+        """In portable mode the personal cleaners dir is the local one"""
+        from bleachbit.CleanerML import is_trusted_cleaner
+        app_dir = self.mkdtemp(prefix='bleachbit-portable')
+        cleaners_dir = os.path.join(app_dir, 'cleaners')
+        with mock.patch.multiple(
+                'bleachbit',
+                local_cleaners_dir=cleaners_dir,
+                personal_cleaners_dir=cleaners_dir,
+                system_cleaners_dir=os.path.join(app_dir, 'share', 'cleaners')):
+            self.assertTrue(is_trusted_cleaner(
+                os.path.join(cleaners_dir, 'winapp2.ini')))
+            self.assertFalse(is_trusted_cleaner(
+                os.path.join(app_dir, 'elsewhere', 'winapp2.ini')))
 
     def test_rejects_dtd(self):
         """A CleanerML file with a DTD is rejected (entity-expansion defense)"""
