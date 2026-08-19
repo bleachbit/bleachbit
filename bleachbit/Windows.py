@@ -1013,13 +1013,15 @@ def get_windows_version():
 def is_junction(path):
     """Check whether the path is a junction (mount point) on Windows.
 
-    Python 3.12 added os.is_junction()
-    https://docs.python.org/3/library/os.html#os.DirEntry.is_junction
+    https://docs.python.org/3/library/os.path.html#os.path.isjunction
     """
     if not IS_WINDOWS:
         return False
-    if hasattr(os, 'is_junction'):
-        return os.is_junction(path)
+    # os.path.isjunction() was added in Python 3.12. Below that, read the
+    # reparse tag ourselves.
+    # TODO: drop this fallback once the minimum Python version is 3.12+
+    if hasattr(os.path, 'isjunction'):
+        return os.path.isjunction(path)
 
     # Get reparse tag from stat result
     try:
