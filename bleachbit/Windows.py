@@ -75,11 +75,8 @@ if IS_WINDOWS:
     setattr(win32gui, 'GetClassInfo', getattr(
         win32gui, 'GetClassInfo', _get_class_info_fallback))
 
-    from ctypes import windll, byref
+    from ctypes import windll
     from win32com.shell import shell, shellcon
-
-    psapi = windll.psapi
-    kernel = windll.kernel32
 
 logger = logging.getLogger(__name__)
 
@@ -304,7 +301,7 @@ def csidl_to_environ(varname, csidl):
     """Define an environment variable from a CSIDL for use in CleanerML and Winapp2.ini"""
     try:
         sppath = shell.SHGetSpecialFolderPath(None, csidl)
-    except:
+    except Exception:
         logger.info(
             'exception when getting special folder path for %s', varname)
         return
@@ -893,11 +890,11 @@ def clear_clipboard():
 def get_clipboard_paths():
     """Return a tuple of Unicode pathnames from the clipboard"""
     _open_clipboard()
-    path_list = ()
     try:
         path_list = win32clipboard.GetClipboardData(win32clipboard.CF_HDROP)
     except TypeError:
-        pass
+        # the clipboard holds something that is not a file drop
+        path_list = ()
     finally:
         win32clipboard.CloseClipboard()
     return path_list
@@ -1027,8 +1024,9 @@ def is_junction(path):
         tag = getattr(stat_result, 'st_reparse_tag', None)
         if tag is not None:
             return tag == IO_REPARSE_TAG_MOUNT_POINT
-    except (OSError, AttributeError):
-        pass
+    except (OSError, AttributeError) as e:
+        logger.debug('no reparse tag for %s, so falling back to '
+                     'GetFileAttributesW: %s', path, e)
 
     attr = windll.kernel32.GetFileAttributesW(path)
     # INVALID_FILE_ATTRIBUTES (0xFFFFFFFF) indicates GetFileAttributesW failed
@@ -1134,7 +1132,7 @@ def set_environ(varname, path):
             raise RuntimeError(
                 'Variable %s points to a non-existent path %s' % (varname, path))
         os.environ[varname] = path
-    except:
+    except Exception:
         logger.exception(
             'set_environ(%s, %s): exception when setting environment variable', varname, path)
 
@@ -1155,7 +1153,7 @@ def setup_environment():
     # SHGetKnownFolderPath in Windows Vista and later
     try:
         path = get_known_folder_path('LocalAppDataLow')
-    except:
+    except Exception:
         logger.exception('exception identifying LocalAppDataLow')
     else:
         set_environ('LocalAppDataLow', path)
@@ -1575,7 +1573,8 @@ class SplashThread(Thread):
             try:
                 win32gui.DestroyIcon(hIcon)
             except Exception:
-                pass
+                logger.debug('could not destroy the splash icon',
+                             exc_info=True)
 
     def _safe_render_splash(self, hWnd):
         """Render the splash screen without letting paint failures escape."""

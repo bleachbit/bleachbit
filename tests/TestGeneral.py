@@ -116,7 +116,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
         try:
             logger.debug('os.getlogin() = %s', os.getlogin())
-        except:
+        except Exception:
             logger.exception('os.getlogin() raised exception')
 
         # Test that function doesn't modify global state

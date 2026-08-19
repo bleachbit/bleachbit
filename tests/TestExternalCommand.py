@@ -14,6 +14,7 @@ import os
 import sys
 import subprocess
 import time
+from contextlib import suppress
 from unittest import mock
 
 import psutil
@@ -95,13 +96,11 @@ def wait_for_process_tree_windows(process, timeout=60, poll_interval=0.1):
             if child_status is not None:
                 child_exited = True
             else:
-                try:
+                with suppress(psutil.NoSuchProcess, psutil.AccessDenied):
                     parent_process = psutil.Process(child_pid)
                     current_children = {
                         child.pid for child in parent_process.children(recursive=True)}
                     grandchild_pids.update(current_children)
-                except (psutil.NoSuchProcess, psutil.AccessDenied):
-                    pass
 
         if child_exited:
             if not grandchild_pids:
@@ -109,13 +108,11 @@ def wait_for_process_tree_windows(process, timeout=60, poll_interval=0.1):
 
             still_running = set()
             for pid in grandchild_pids:
-                try:
+                with suppress(psutil.NoSuchProcess, psutil.AccessDenied):
                     if psutil.pid_exists(pid):
                         proc = psutil.Process(pid)
                         if proc.is_running() and proc.status() != psutil.STATUS_ZOMBIE:
                             still_running.add(pid)
-                except (psutil.NoSuchProcess, psutil.AccessDenied):
-                    pass
 
             grandchild_pids = still_running
             if not grandchild_pids:
@@ -148,7 +145,7 @@ class ApplicationRunningTracker:
         window_open = False
 
         for process in psutil.process_iter(['name', 'cmdline']):
-            try:
+            with suppress(psutil.NoSuchProcess, psutil.AccessDenied):
                 name = process.info['name'] or ''
                 cmdline = process.info['cmdline'] or []
                 name_and_cmdline = f"{name}: {' '.join(cmdline)[:MAX_PATH_DISPLAY]}"
@@ -160,8 +157,6 @@ class ApplicationRunningTracker:
 
                 if is_bleachbit_running_process(name, cmdline):
                     is_process_running = True
-            except (psutil.NoSuchProcess, psutil.AccessDenied):
-                pass
 
         # Check window titles on Windows
         if IS_WINDOWS and self.check_window_title:

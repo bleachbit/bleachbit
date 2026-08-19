@@ -81,13 +81,12 @@ def _get_home_dirs_to_anonymize():
     home_dirs.append(home_dir)
 
     if IS_POSIX:
-        real_home_dir = ''
         try:
             # reminder: pwd is not available on Windows
             import pwd  # pylint: disable=import-outside-toplevel
             real_home_dir = pwd.getpwuid(get_real_uid()).pw_dir
         except (ImportError, KeyError, RuntimeError, ValueError):
-            pass
+            real_home_dir = ''
         home_dirs.append(real_home_dir)
 
     if IS_WINDOWS:
@@ -100,8 +99,8 @@ def _get_home_dirs_to_anonymize():
             short_home_dir = win32api.GetShortPathName(home_dir)
             if short_home_dir and short_home_dir != home_dir:
                 home_dirs.append(short_home_dir)
-        except (ImportError, OSError, ValueError):
-            pass
+        except (ImportError, OSError, ValueError) as e:
+            logger.debug('no short path for the home directory: %s', e)
 
     # Filter out root directories and duplicates
     filtered_dirs = []
@@ -157,13 +156,12 @@ def get_version(four_parts=False):
     If False, return three or four parts, depending on available information.
     """
     build_number_env = os.getenv('GITHUB_RUN_NUMBER')
-    build_number_src = None
     try:
         # pylint: disable=import-outside-toplevel
-        from bleachbit.Revision import build_number as build_number_import
-        build_number_src = build_number_import
+        from bleachbit.Revision import build_number as build_number_src
     except ImportError:
-        pass
+        # Revision.py only exists in CI and tarball builds
+        build_number_src = None
 
     build_number = build_number_src or build_number_env
     if build_number and not str(build_number).isdigit():
@@ -193,7 +191,7 @@ def get_system_information():
         from bleachbit.Revision import revision
         info['Git revision'] = revision
     except ImportError:
-        pass
+        logger.debug('no Revision module, so no git revision to report')
 
     info.update(get_gtk_info())
 

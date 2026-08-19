@@ -14,6 +14,7 @@ import os
 import sys
 import time
 import unittest
+from contextlib import suppress
 
 import bleachbit
 
@@ -44,10 +45,7 @@ if bleachbit.IS_WINDOWS:
         wipe_file_direct,
         extents_a_minus_b,
         GENERIC_READ,
-        GENERIC_WRITE,
-        SetFilePointer,
-        FILE_BEGIN,
-        FlushFileBuffers
+        GENERIC_WRITE
     )
     from tests.TestWindows import WindowsLinksMixIn
 else:
@@ -377,8 +375,6 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 config["size"], _ = get_file_basic_info(
                     config["path"], config["handle"])
 
-                # SetFilePointer(config["handle"], 0, FILE_BEGIN)
-
             # Wipe files with swapped handles and extents
             # Wipe file1 using file2's handle and extents
             wipe_file_direct(file_configs[1]["handle"], file_configs[0]["extents"],
@@ -389,7 +385,6 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
             for config in file_configs:
                 if config["handle"]:
-                    # FlushFileBuffers(config["handle"])
                     close_file(config["handle"])
                     config["handle"] = None
 
@@ -425,10 +420,8 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         finally:
             for config in file_configs:
                 if config.get("handle"):
-                    try:
+                    with suppress(Exception):
                         close_file(config["handle"])
-                    except:
-                        pass
 
     def test_not_included(self):
         """Notify users there are more tests"""

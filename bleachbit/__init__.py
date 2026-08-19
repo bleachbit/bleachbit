@@ -11,7 +11,7 @@ Code that is commonly shared throughout BleachBit
 import os
 import re
 import sys
-from configparser import NoOptionError, RawConfigParser  # used in other files
+from configparser import RawConfigParser  # used in other files
 
 from bleachbit import Log
 
@@ -23,7 +23,7 @@ APP_COPYRIGHT = "Copyright (C) 2008-2026 Andrew Ziem"
 socket_timeout = 10
 
 if sys.version_info < (3, 8, 0):
-    print('BleachBit requires Python version 3.8 or later')
+    sys.stderr.write('BleachBit requires Python version 3.8 or later\n')
     sys.exit(1)
 
 if hasattr(sys, 'frozen'):
@@ -74,8 +74,9 @@ def _harden_dll_search_path():
             set_default.restype = wintypes.BOOL
             if set_default(LOAD_LIBRARY_SEARCH_DEFAULT_DIRS):
                 return
-        except (AttributeError, OSError):
-            pass
+        except (AttributeError, OSError) as e:
+            logger.debug('SetDefaultDllDirectories is unavailable, so falling '
+                         'back to SetDllDirectoryW: %s', e)
 
     # drops the current directory but keeps PATH; NULL would restore the default
     try:
@@ -83,8 +84,9 @@ def _harden_dll_search_path():
         set_dir.argtypes = [wintypes.LPCWSTR]
         set_dir.restype = wintypes.BOOL
         set_dir("")
-    except (AttributeError, OSError):
-        pass
+    except (AttributeError, OSError) as e:
+        logger.debug('could not drop the current directory from the DLL '
+                     'search path: %s', e)
 
 
 # file system attributes
@@ -149,10 +151,7 @@ elif IS_WINDOWS:
         # installed mode
         options_dir = os.path.expandvars(r"${APPDATA}\BleachBit")
 
-try:
-    options_dir = os.environ['BLEACHBIT_TEST_OPTIONS_DIR']
-except KeyError:
-    pass
+options_dir = os.environ.get('BLEACHBIT_TEST_OPTIONS_DIR', options_dir)
 
 options_file = os.path.join(options_dir, "bleachbit.ini")
 

@@ -1,0 +1,13 @@
+name: BleachBit CodeQL config
+
+# Vendored upstream copy of markovify
+paths-ignore:
+  - bleachbit/markovify # this doesn't work
+
+query-filters:
+  # Both forms are needed: bleachbit.options_file and friends are rebound at runtime
+  - exclude:
+      id: py/import-and-import-from
+  # In-function imports break these. py/unsafe-cyclic-import still catches the rest
+  - exclude:
+      id: py/cyclic-import

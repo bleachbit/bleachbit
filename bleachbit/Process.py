@@ -117,11 +117,11 @@ def _enumerate_proc_fs():
                                     stat_content.rindex(')')]
             except (OSError, ValueError):
                 continue
-        same_user = False
         try:
             same_user = os.stat(pid_dir).st_uid == target_uid
         except OSError:
-            pass
+            # the process exited between listing and stat
+            same_user = False
         yield ProcessInfo(pid, name, same_user)
 
 

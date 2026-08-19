@@ -588,7 +588,8 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             is_special = bool(
                 os.lstat(path).st_file_attributes & stat.FILE_ATTRIBUTE_REPARSE_POINT)
         except OSError:
-            pass
+            # lstat returns Access Denied on some Windows files
+            is_special = False
     if is_special:
         _delete_path(path, os.remove)
         return True

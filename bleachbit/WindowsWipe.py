@@ -657,11 +657,7 @@ def obtain_readwrite(volume):
     Returns:
         Volume handle
     """
-    # Optional protection that we are running on removable media only.
     assert volume
-    # if drive_letter_safety:
-    #    drive_containing_file = volume[0].upper()
-    #    assert drive_containing_file >= drive_letter_safety.upper()
 
     volume = '\\\\.\\' + volume
     if volume[-1] == os.sep:
@@ -709,7 +705,7 @@ def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
                                         FSCTL_GET_RETRIEVAL_POINTERS,
                                         input_struct,
                                         retrieval_pointers_buf_size)
-        except:
+        except Exception:
             err_info = sys.exc_info()[1]
             err_code = err_info.winerror
             if err_code == 38:     # when file size is 0.
@@ -1185,8 +1181,8 @@ def clean_up(file_handle, volume_handle, tmp_file_path):
             CloseHandle(volume_handle)
         if tmp_file_path:
             DeleteFile(tmp_file_path)
-    except:
-        pass
+    except Exception:
+        logger.debug('error while cleaning up wipe handles', exc_info=True)
 
 
 def file_wipe(file_name):

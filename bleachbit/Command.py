@@ -137,7 +137,8 @@ class Function:
             label (str): Label for display in the UI
             preview_func (function, optional): Function to call in preview mode
 
-        func and preview_func take no arguments and return an integer.
+        func takes the path when path is set and no arguments when it is
+        None. preview_func always takes no arguments. Both return an integer.
         """
         self.path = path
         self.func = func

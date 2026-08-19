@@ -247,7 +247,7 @@ class Options:
             exists = False
             try:
                 exists = os.path.lexists(pathname)
-            except:
+            except Exception:
                 # this deals with corrupt keys
                 # https://www.bleachbit.org/forum/bleachbit-wont-launch-error-startup
                 logger.error(
@@ -442,7 +442,7 @@ class Options:
             return False
         try:
             return self.config.getboolean('tree', option)
-        except:
+        except Exception:
             # in case of corrupt configuration (Launchpad #799130)
             logger.exception('Error in get_tree()')
             return False
@@ -500,7 +500,7 @@ class Options:
                 from bleachbit.FileUtilities import guess_overwrite_paths
                 try:
                     self.set_list('shred_drives', guess_overwrite_paths())
-                except:
+                except Exception:
                     logger.exception(
                         _("Error when setting the default drives to shred."))
             # BleachBit upgrade or first start ever

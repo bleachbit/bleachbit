@@ -108,15 +108,18 @@ def detectos(required_ver, mock=False):
 
 
 def winapp_expand_vars(pathname):
-    """Expand environment variables using special Winapp2.ini rules"""
+    """Expand environment variables using special Winapp2.ini rules
+
+    Returns the list of candidate paths to try, which is one or two long.
+    """
     # This is the regular expansion
     expand1 = os.path.expandvars(pathname)
     # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%, etc.
     for pattern, sub_repl in _WINAPP_VAR_SUBS:
         if pattern.match(pathname):
             expand2 = pattern.sub(sub_repl, pathname)
-            return expand1, os.path.expandvars(expand2)
-    return expand1,
+            return [expand1, os.path.expandvars(expand2)]
+    return [expand1]
 
 
 def detect_file(pathname):

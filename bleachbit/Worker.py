@@ -98,7 +98,7 @@ class Worker:
                 if self.is_aborted:
                     return
         except SystemExit:
-            pass
+            logger.debug('%s raised SystemExit, which we do not honor', cmd)
         except Exception as e:
             from errno import ENOENT, EACCES
             if isinstance(e, OSError) and e.errno == ENOENT:
@@ -404,5 +404,5 @@ class Worker:
                 # Propagate to the top-level handler (e.g., when the
                 # downstream pipe consumer like `less` closes early).
                 raise
-            except:
+            except Exception:
                 self.print_exception(operation)

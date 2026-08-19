@@ -655,7 +655,7 @@ def get_globs_size(paths):
             try:
                 total_size += FileUtilities.getsize(p)
             except FileNotFoundError:
-                pass
+                logger.debug('%s vanished while totalling sizes', p)
     return total_size
 
 
@@ -896,10 +896,10 @@ def snapd_is_active():
         return _snapd_is_active_cache
     if not exe_exists(General.resolve_exe('snap')):
         _snapd_is_active_cache = False
-        return False
+        return _snapd_is_active_cache
     if not exe_exists(General.resolve_exe('systemctl')):
         _snapd_is_active_cache = False
-        return False
+        return _snapd_is_active_cache
     # When snap is installed but snapd is inactive, then `snap list --all`
     # or `snap version` may have a long delay, so we check the service status first.
     try:
@@ -910,11 +910,11 @@ def snapd_is_active():
         logger.warning(
             'systemctl is-active snapd.socket timed out: it seems snap is installed but snapd is inactive')
         _snapd_is_active_cache = False
-        return False
+        return _snapd_is_active_cache
     except (FileNotFoundError, OSError) as exc:
         logger.warning('systemctl is-active snapd.socket failed: %s', exc)
         _snapd_is_active_cache = False
-        return False
+        return _snapd_is_active_cache
     _snapd_is_active_cache = rc == 0
     return _snapd_is_active_cache
 

@@ -157,7 +157,10 @@ check_online_updates=True
         with mock.patch('bleachbit.FileUtilities.os.path.islink',
                         side_effect=lambda p: p == filename):
             with self.assertRaises(OSError):
-                bleachbit.Options._open_config_write(filename)
+                # nested with() so a regression that returns a handle
+                # instead of raising does not leak it
+                with bleachbit.Options._open_config_write(filename):
+                    pass
         with open(filename, 'rb') as f:
             self.assertEqual(f.read(), b'keepme')
 
