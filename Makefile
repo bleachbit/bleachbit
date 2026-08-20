@@ -134,12 +134,10 @@ lint:
 	else \
 		echo "WARNING: Missing shellcheck. APT users, try: sudo apt install shellcheck"; \
 	fi
-	for f in *py */*py; \
-	do \
-		echo "$$f"; \
-		( pyflakes3 "$$f" > "$$f".pyflakes.log ); \
-		( pylint "$$f" > "$$f".pylint.log ); \
-	done; \
+	@echo "Running pyflakes3 and pylint in parallel: see all.pyflakes.log and all.pylint.log"
+	@pyflakes3 *py */*py > all.pyflakes.log 2>&1 & \
+	pylint -j 0 *py */*py > all.pylint.log 2>&1 & \
+	wait; \
 	exit 0
 
 delete_windows_files:
