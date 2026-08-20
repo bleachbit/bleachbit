@@ -59,10 +59,10 @@ class UpdateTestCase(common.BleachbitTestCase):
             mock_response.status_code = 200
             mock_response.content = b''
 
-            for xml, expected in update_tests:
+            for xml_text, expected in update_tests:
                 # Set up mock response content
-                mock_response.text = xml
-                mock_response.content = xml.encode()
+                mock_response.text = xml_text
+                mock_response.content = xml_text.encode()
                 mock_fetch.return_value = mock_response
 
                 # Run test

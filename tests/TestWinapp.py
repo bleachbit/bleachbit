@@ -738,10 +738,10 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
             (r'C:\dir', r'C:\dir\file.txt', True),
             (r'C:\dir', r'C:\other\file.txt', False),
         )
-        for pattern, string, expected in cases:
-            msg = f'pattern={pattern!r} string={string!r}'
+        for pattern, text, expected in cases:
+            msg = f'pattern={pattern!r} string={text!r}'
             self.assertEqual(
-                bool(re.search(fnmatch_translate(pattern), string)),
+                bool(re.search(fnmatch_translate(pattern), text)),
                 expected,
                 msg)
 
