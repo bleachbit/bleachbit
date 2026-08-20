@@ -21,12 +21,13 @@ INSTALL_SCRIPT = $(INSTALL) -m 755
 
 # if not specified, do not check coverage
 PYTHON ?= python3
-COVERAGE ?= $(PYTHON)
+# Quoted form for calling Python. Windows CI passes a backslash path that bash
+# mangles unquoted, so use this instead of $(PYTHON).
+PYTHON_CMD := "$(PYTHON)"
+COVERAGE ?= $(PYTHON_CMD)
 
-# pytest runner used by `tests-pytest`. Extra arguments go in PYTEST_ARGS.
-# PYTHON is quoted because Windows CI passes a backslash path, which bash
-# would otherwise strip the separators from.
-PYTEST ?= "$(PYTHON)" -m pytest
+# pytest runner used by `tests-pytest`. Extra arguments go in PYTEST_ARGS
+PYTEST ?= $(PYTHON_CMD) -m pytest
 PYTEST_ARGS ?=
 
 # Set PYTEST_COVERAGE to any value to measure coverage of the pytest runs
@@ -38,7 +39,7 @@ endif
 # Arguments forwarded to scripts/install-deps.sh, such as --venv
 INSTALL_DEPS_ARGS ?=
 
-ifneq ($(COVERAGE),$(PYTHON))
+ifneq ($(COVERAGE),$(PYTHON_CMD))
 BLEACHBIT_SUDO_COVERAGE_RUNNER := $(COVERAGE) --append
 BLEACHBIT_SUDO_COVERAGE_FILE := $(if $(COVERAGE_FILE),$(COVERAGE_FILE),.coverage)
 else
@@ -92,8 +93,8 @@ install:
 	$(INSTALL_DATA) bleachbit/markovify/*.py $(DESTDIR)$(datadir)/bleachbit/markovify
 	#note: compileall is recursive
 	cd $(DESTDIR)$(datadir)/bleachbit && \
-	$(PYTHON) -O -c "import compileall; compileall.compile_dir('.')" && \
-	$(PYTHON) -c "import compileall; compileall.compile_dir('.')"
+	$(PYTHON_CMD) -O -c "import compileall; compileall.compile_dir('.')" && \
+	$(PYTHON_CMD) -c "import compileall; compileall.compile_dir('.')"
 
 	# cleaners
 	mkdir -p $(DESTDIR)$(datadir)/bleachbit/cleaners
@@ -173,14 +174,14 @@ tests-pytest:
 		-m no_xdist $(PYTEST_COV_APPEND) $(PYTEST_ARGS)
 
 tests-nsis:
-	"$(PYTHON)" windows/nsis_translations.py --unittest
+	$(PYTHON_CMD) windows/nsis_translations.py --unittest
 
 tests-with-sudo:
 	# Run tests marked with @test_also_with_sudo using sudo
 	PYTHONWARNINGS=error \
 		BLEACHBIT_COVERAGE_RUNNER="$(BLEACHBIT_SUDO_COVERAGE_RUNNER)" \
 		BLEACHBIT_COVERAGE_FILE="$(BLEACHBIT_SUDO_COVERAGE_FILE)" \
-		$(PYTHON) tests/test_with_sudo.py
+		$(PYTHON_CMD) tests/test_with_sudo.py
 
 pretty:
 	@if command -v autopep8 >/dev/null 2>&1; then \
@@ -207,7 +208,7 @@ pretty:
 # AppImage build
 APPIMAGE_BUILD_DIR ?= appimage-build
 APPIMAGE_APPDIR := $(abspath $(APPIMAGE_BUILD_DIR))
-APPIMAGE_OUTPUT ?= BleachBit-$(shell $(PYTHON) -c "import sys; sys.path.insert(0,'.'); from bleachbit import APP_VERSION; print(APP_VERSION)" 2>/dev/null || echo "latest")-x86_64.AppImage
+APPIMAGE_OUTPUT ?= BleachBit-$(shell $(PYTHON_CMD) -c "import sys; sys.path.insert(0,'.'); from bleachbit import APP_VERSION; print(APP_VERSION)" 2>/dev/null || echo "latest")-x86_64.AppImage
 APPIMAGE_OUTPUT_PATH := $(abspath $(APPIMAGE_OUTPUT))
 LINUXDEPLOY ?= linuxdeploy-x86_64.AppImage
 LINUXDEPLOY_GTK_PLUGIN ?= linuxdeploy-plugin-gtk.sh
