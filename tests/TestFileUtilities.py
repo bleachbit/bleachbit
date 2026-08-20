@@ -1234,12 +1234,14 @@ State=AAAA/wA...
         # Latin-1 bytes that are invalid as UTF-8 (0xe9 = 'é' in Latin-1).
         content = b'[RecentsMRL]\nlist=\xe9\xe9\n'
         filename = self.write_file('bleachbit-test-ini-latin1', content)
-        original = open(filename, 'rb').read()
+        with open(filename, 'rb') as f:
+            original = f.read()
         with self.assertLogs('bleachbit.FileUtilities', level='ERROR') as cm:
             clean_ini(filename, 'RecentsMRL', None)
         self.assertIn('not valid UTF-8', cm.output[0])
         # The file must not have been modified.
-        self.assertEqual(original, open(filename, 'rb').read())
+        with open(filename, 'rb') as f:
+            self.assertEqual(original, f.read())
         delete(filename)
         self.assertNotExists(filename)
 
