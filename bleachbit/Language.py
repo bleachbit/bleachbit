@@ -415,7 +415,6 @@ def get_text(str):
 
     The name has an underscore to avoid conflicting with gettext module.
     """
-    global attempted_setup_translation, t
     if not attempted_setup_translation:
         setup_translation()
     if not t:
@@ -425,7 +424,6 @@ def get_text(str):
 
 def nget_text(singular, plural, n):
     """Return translated string with plural variant"""
-    global t
     if not t:
         if 1 == n:
             return singular
@@ -438,7 +436,6 @@ def pget_text(msgctxt, msgid):
 
     Example context is button
     """
-    global t
     if not t:
         return msgid
     return t.pgettext(msgctxt, msgid)

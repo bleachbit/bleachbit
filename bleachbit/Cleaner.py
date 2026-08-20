@@ -646,9 +646,6 @@ class System(Cleaner):
 
 def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None, allow_local=True):
     """Register all known cleaners: system, CleanerML, and Winapp2"""
-    # pylint: disable=global-variable-not-assigned
-    global backends
-
     # wipe out any registrations
     # Because this is a global variable, cannot use backends = {}
     backends.clear()
