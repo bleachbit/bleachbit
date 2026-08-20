@@ -370,7 +370,8 @@ def write_nsis_langfile():
                 f'\tLangString {key} ${{{lang_macro}}} "{_escape_nsis_text(text)}"\n')
         lines.append('!endif\n\n')
 
-    with open(OUTPUT_NSH, 'w', encoding='utf-8') as nsh_file:
+    # CRLF to match .gitattributes (*.nsh text eol=crlf)
+    with open(OUTPUT_NSH, 'w', encoding='utf-8', newline='\r\n') as nsh_file:
         nsh_file.write(''.join(lines))
 
 
