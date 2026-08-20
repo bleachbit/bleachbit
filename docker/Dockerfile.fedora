@@ -21,6 +21,7 @@ RUN dnf -y update \
         make \
         patch \
         python3 \
+        python3-charset-normalizer \
         python3-gobject \
         python3-gobject-base \
         python3-pip \
