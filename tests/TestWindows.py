@@ -1302,7 +1302,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                  ('HKCU\\Software\\BleachBit\\DoesNotExist', 'DoesNotExist', None))
         for (input_key, input_value, expected_value) in tests:
             value = read_registry_key(input_key, input_value)
-            if value != None:
+            if value is not None:
                 value = value.lower()  # casing varies by Windows version: image vs Image
             self.assertEqual(expected_value, value)
 
