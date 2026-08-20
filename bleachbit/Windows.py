@@ -1207,7 +1207,7 @@ def split_registry_key(full_key):
 def read_registry_key(full_key, value_name):
     try:
         (hive, sub_key) = split_registry_key(full_key)
-    except RuntimeError as e:
+    except RuntimeError:
         return None
     try:
         with winreg.OpenKey(hive, sub_key, 0, winreg.KEY_QUERY_VALUE) as hkey:
@@ -1782,7 +1782,7 @@ class SplashThread(Thread):
             return 1
 
         if message == win32con.WM_PAINT:
-            hDC, paintStruct = win32gui.BeginPaint(hWnd)
+            _, paintStruct = win32gui.BeginPaint(hWnd)
             try:
                 self._safe_render_splash(hWnd)
             finally:

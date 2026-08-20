@@ -181,7 +181,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
         from bleachbit.General import run_external
         compact_cmd = ["compact", "/c", path]
-        (rc, stdout, stderr) = run_external(compact_cmd)
+        (rc, _, _) = run_external(compact_cmd)
         self.assertEqual(0, rc)
 
         file_handle = open_file(path)
@@ -192,7 +192,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         sparse_path = os.path.join(self.tempdir, 'sparse')
         self.write_file(sparse_path, b'test data')
         fsutil_cmd = ["fsutil", "sparse", "setflag", sparse_path]
-        (rc, stdout, stderr) = run_external(fsutil_cmd)
+        (rc, _, _) = run_external(fsutil_cmd)
         self.assertEqual(0, rc)
 
         file_handle = open_file(sparse_path)
