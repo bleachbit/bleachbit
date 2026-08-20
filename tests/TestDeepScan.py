@@ -91,7 +91,8 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         keep_dir = self.mkdir('keep')
         search_dir = self.mkdir('search')
         keep_file = self.write_file(os.path.join(keep_dir, 'skip.bbtestbak'))
-        search_file = self.write_file(os.path.join(search_dir, 'find.bbtestbak'))
+        search_file = self.write_file(
+            os.path.join(search_dir, 'find.bbtestbak'))
 
         options.set_whitelist_paths([('folder', keep_dir)])
         searches = {
@@ -115,8 +116,10 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.write_file(os.path.join(victim, 'target.bbtestbak'))
         self._create_win_junction(victim, os.path.join(scan_root, 'link'))
 
-        searches = {scan_root: [Search(command='delete', regex=r'\.bbtestbak$')]}
-        paths = [cmd.path for cmd in DeepScan(searches).scan() if cmd is not True]
+        searches = {scan_root: [
+            Search(command='delete', regex=r'\.bbtestbak$')]}
+        paths = [cmd.path for cmd in DeepScan(
+            searches).scan() if cmd is not True]
         self.assertEqual(paths, [], 'DeepScan followed a junction: %s' % paths)
 
     def _get_compiled_search(self, wholeregex_substr):

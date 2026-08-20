@@ -310,7 +310,8 @@ class FileActionProvider(ActionProvider):
             # build new cache
             if self.search in self.CACHEABLE_SEARCHERS:
                 entries = []
-                self.__class__.cache = (self.search, input_path, entries, False)
+                self.__class__.cache = (
+                    self.search, input_path, entries, False)
                 for path in func(input_path):
                     entries.append(path)
                     yield path

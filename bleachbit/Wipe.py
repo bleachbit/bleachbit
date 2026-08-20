@@ -276,7 +276,8 @@ def wipe_contents(path):
             # file_wipe() checked before the wipe, so one could have been
             # planted since.
             if os.path.islink(path):
-                raise OSError(errno.EACCES, 'refusing to truncate a link', path)
+                raise OSError(
+                    errno.EACCES, 'refusing to truncate a link', path)
             f = open(path, 'wb')
     else:
         f = wipe_write(path)

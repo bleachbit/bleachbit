@@ -147,12 +147,14 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         zero_frac = (len(large_files_zero_extents) / large_files_count
                      if large_files_count else 0)
         print(f"\ntest_get_extents() stats: {error_count:,} errors; {zero_extents_count:,} files with zero extents; {nonzero_extents_count:,} files with nonzero extents; {int(elapsed_seconds)} seconds; {int(files_per_second) if files_per_second else None} files per second")
-        print(f"large files: {large_files_count:,}; large files with zero extents: {len(large_files_zero_extents):,} ({zero_frac:.0%})")
+        print(
+            f"large files: {large_files_count:,}; large files with zero extents: {len(large_files_zero_extents):,} ({zero_frac:.0%})")
         self.assertGreater(zero_extents_count, 10)
         self.assertGreater(nonzero_extents_count, 100)
         # Print the first few heuristic exceptions for diagnostics.
         for path, fsize, extent_count in heuristic_exceptions[:5]:
-            print(f"  heuristic exception: {path} size={fsize:,} extents={extent_count}")
+            print(
+                f"  heuristic exception: {path} size={fsize:,} extents={extent_count}")
         self.assertLess(
             len(heuristic_exceptions), 6,
             f"Too many heuristic exceptions ({len(heuristic_exceptions)}): "
@@ -167,7 +169,8 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 f"Too many large files with zero extents "
                 f"({len(large_files_zero_extents)}): {large_files_zero_extents[:5]}")
         else:
-            print("skipping large-file extent check: volume appears WOF-compressed (Compact OS)")
+            print(
+                "skipping large-file extent check: volume appears WOF-compressed (Compact OS)")
 
     def test_get_file_basic_info(self):
         """Unit test for get_file_basic_info()"""
@@ -453,7 +456,8 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             ([(0, 100)], [(0, 100)]),  # fully covered
             ([(0, 100)], [(40, 60)]),  # B in the middle of A
             ([(0, 100)], [(0, 30), (40, 100)]),  # multiple B ranges
-            ([(0, 10), (20, 30), (40, 50)], [(5, 25), (45, 60)]),  # multiple A and B
+            ([(0, 10), (20, 30), (40, 50)], [
+             (5, 25), (45, 60)]),  # multiple A and B
             ([(10, 20), (30, 40)], [(50, 60)]),  # B after all of A
         ]
         for a, b in cases:

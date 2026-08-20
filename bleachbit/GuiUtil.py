@@ -91,7 +91,8 @@ def get_clipboard_paths(clipboard=None, targets=None):
             target_name = target.name()
         except UnicodeDecodeError:
             has_unusable_target_name = True
-            logger.debug('Failed to decode clipboard target name', exc_info=True)
+            logger.debug(
+                'Failed to decode clipboard target name', exc_info=True)
         else:
             if target_name == 'Gdk.Atom':
                 has_unusable_target_name = True

@@ -30,6 +30,7 @@ from bleachbit import IS_POSIX, IS_WINDOWS, logger
 if IS_WINDOWS:
     import winreg
 
+
 def _create_registry_keys(*key_paths):
     """Create registry keys, ignoring errors if they already exist"""
     if not IS_WINDOWS:
@@ -39,6 +40,7 @@ def _create_registry_keys(*key_paths):
             hkey = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path)
             hkey.Close()
 
+
 def _delete_registry_keys(*key_paths):
     """Delete registry keys, ignoring errors if they don't exist"""
     if not IS_WINDOWS:
@@ -47,13 +49,14 @@ def _delete_registry_keys(*key_paths):
         with suppress(OSError):
             winreg.DeleteKey(winreg.HKEY_CURRENT_USER, key_path)
 
+
 KEYFULL = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
 
 
 def get_winapp2():
     """Download and cache winapp2.ini.  Return local filename."""
     url = ("https://raw.githubusercontent.com/bleachbit/winapp2.ini"
-            "/refs/heads/master/Winapp2-BleachBit.ini")
+           "/refs/heads/master/Winapp2-BleachBit.ini")
     tmpdir = None
     if IS_POSIX:
         tmpdir = '/tmp'
@@ -176,12 +179,15 @@ class WinappTestCase(common.BleachbitTestCase):
         # put ampersand in directory name to test
         # https://github.com/bleachbit/bleachbit/issues/308
         dirname = self.mkdtemp(prefix='bleachbit-test-winapp&')
-        fname1 = self.write_file(os.path.join(dirname, f1_filename or 'deleteme.log'), b'', 'wb')
+        fname1 = self.write_file(os.path.join(
+            dirname, f1_filename or 'deleteme.log'), b'', 'wb')
 
         dirname2 = self.mkdir(os.path.join(dirname, 'sub'))
-        fname2 = self.write_file(os.path.join(dirname2, 'deleteme.log'), b'', 'wb')
+        fname2 = self.write_file(os.path.join(
+            dirname2, 'deleteme.log'), b'', 'wb')
 
-        fbak = self.write_file(os.path.join(dirname, 'deleteme.bak'), b'', 'wb')
+        fbak = self.write_file(os.path.join(
+            dirname, 'deleteme.bak'), b'', 'wb')
 
         self.assertExists(fname1)
         self.assertExists(fname2)

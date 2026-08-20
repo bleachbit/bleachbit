@@ -159,7 +159,8 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         def action_classes(cleaner):
             return [a.__class__.__name__ for (_option_id, a) in cleaner.actions]
 
-        self.assertIn('Process', action_classes(CleanerML(fn, trusted=True).cleaner))
+        self.assertIn('Process', action_classes(
+            CleanerML(fn, trusted=True).cleaner))
 
         # The delete action stays; only the process action is dropped
         untrusted = action_classes(CleanerML(fn, trusted=False).cleaner)
@@ -187,7 +188,8 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         def action_classes(cleaner):
             return [a.__class__.__name__ for (_option_id, a) in cleaner.actions]
 
-        self.assertIn('Winreg', action_classes(CleanerML(fn, trusted=True).cleaner))
+        self.assertIn('Winreg', action_classes(
+            CleanerML(fn, trusted=True).cleaner))
 
         # The delete action stays; only the winreg action is dropped
         untrusted = action_classes(CleanerML(fn, trusted=False).cleaner)

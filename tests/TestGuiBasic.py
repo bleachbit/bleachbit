@@ -28,13 +28,13 @@ class GuiBasicTestCase(common.BleachbitTestCase):
     def test_open_url_rejects_disallowed_scheme(self):
         """open_url() must refuse any scheme other than http(s)"""
         urls = ('file:///etc/passwd',
-               'javascript:alert(1)',
-               'myapp://action',
-               'HTTP:evil')  # missing slashes: not a valid http(s) URL
+                'javascript:alert(1)',
+                'myapp://action',
+                'HTTP:evil')  # missing slashes: not a valid http(s) URL
         with mock.patch('webbrowser.open') as mock_open, \
-             mock.patch.object(GuiBasic.Gtk, 'show_uri_on_window') as mock_show_uri, \
-             mock.patch.object(GuiBasic.Gtk, 'show_uri') as mock_show_uri_old, \
-             mock.patch.object(GuiBasic, 'logger') as mock_logger:
+                mock.patch.object(GuiBasic.Gtk, 'show_uri_on_window') as mock_show_uri, \
+                mock.patch.object(GuiBasic.Gtk, 'show_uri') as mock_show_uri_old, \
+                mock.patch.object(GuiBasic, 'logger') as mock_logger:
             for url in urls:
                 with self.subTest(url=url):
                     mock_logger.reset_mock()
@@ -47,8 +47,8 @@ class GuiBasicTestCase(common.BleachbitTestCase):
     def test_open_url_accepts_http_https(self):
         """open_url() proceeds past the scheme check for http(s) URLs"""
         with mock.patch('webbrowser.open'), \
-             mock.patch.object(GuiBasic.Gtk, 'show_uri_on_window'), \
-             mock.patch.object(GuiBasic.Gtk, 'show_uri'), \
-             mock.patch.object(GuiBasic, 'logger') as mock_logger:
+                mock.patch.object(GuiBasic.Gtk, 'show_uri_on_window'), \
+                mock.patch.object(GuiBasic.Gtk, 'show_uri'), \
+                mock.patch.object(GuiBasic, 'logger') as mock_logger:
             open_url('https://example.com', prompt=False)
             mock_logger.error.assert_not_called()

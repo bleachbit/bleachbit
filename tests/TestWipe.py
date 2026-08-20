@@ -139,7 +139,7 @@ class WipeTestCase(common.BleachbitTestCase):
         with mock.patch('bleachbit.Wipe.IsUserAnAdmin', return_value=True), \
                 mock.patch('bleachbit.WindowsWipe.file_wipe'), \
                 mock.patch('bleachbit.Wipe.os.path.islink',
-                          side_effect=lambda p: p == filename):
+                           side_effect=lambda p: p == filename):
             with self.assertRaises(OSError):
                 wipe_contents(filename)
 
@@ -155,9 +155,9 @@ class WipeTestCase(common.BleachbitTestCase):
         locked_error = pywintypes.error(32, 'CreateFile', 'locked')
         with mock.patch('bleachbit.Wipe.IsUserAnAdmin', return_value=True), \
                 mock.patch('bleachbit.WindowsWipe.file_wipe',
-                          side_effect=locked_error), \
+                           side_effect=locked_error), \
                 mock.patch('bleachbit.Wipe.os.path.islink',
-                          side_effect=lambda p: p == filename), \
+                           side_effect=lambda p: p == filename), \
                 mock.patch('bleachbit.FileUtilities.truncate_f') as mock_truncate_f:
             with self.assertRaises(WindowsError):
                 wipe_contents(filename)
@@ -170,7 +170,7 @@ class WipeTestCase(common.BleachbitTestCase):
         locked_error = pywintypes.error(32, 'CreateFile', 'locked')
         with mock.patch('bleachbit.Wipe.IsUserAnAdmin', return_value=True), \
                 mock.patch('bleachbit.WindowsWipe.file_wipe',
-                          side_effect=locked_error):
+                           side_effect=locked_error):
             with self.assertRaises(WindowsError):
                 wipe_contents(filename)
         self.assertEqual(os.path.getsize(filename), 0)

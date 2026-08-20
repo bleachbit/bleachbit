@@ -187,7 +187,8 @@ class CleanerML:
         self.handle_cleaner(cleaner_element)
 
         if self.ignored_commands:
-            commands = ', '.join(f"'{c}'" for c in sorted(self.ignored_commands))
+            commands = ', '.join(
+                f"'{c}'" for c in sorted(self.ignored_commands))
             logger.warning(
                 "ignoring %s actions from untrusted cleaner: %s",
                 commands, pathname)
@@ -263,7 +264,8 @@ class CleanerML:
             detection_type = running.attrib.get('type', '')
             value = _gettext_etree(running)
             same_user_attr = running.attrib.get('same_user')
-            same_user = boolstr_to_bool(same_user_attr) if same_user_attr else False
+            same_user = boolstr_to_bool(
+                same_user_attr) if same_user_attr else False
             self.cleaner.add_running(detection_type, value, same_user)
 
     def handle_cleaner_option(self, option):
@@ -454,7 +456,8 @@ def load_cleaners(cb_progress=lambda x: None, allow_local=True):
     not_usable = []
     for pathname in cleanerml_files:
         try:
-            xmlcleaner = CleanerML(pathname, trusted=is_trusted_cleaner(pathname))
+            xmlcleaner = CleanerML(
+                pathname, trusted=is_trusted_cleaner(pathname))
         except Exception:
             # TRANSLATORS: Error message printed to the log.
             # %s expands to the path of the XML cleaner file

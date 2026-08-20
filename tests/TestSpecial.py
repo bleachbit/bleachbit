@@ -732,7 +732,7 @@ INSERT INTO "meta" VALUES('version','20');"""
         # Special characters check that the path is properly escaped as a
         # SQLite URI, not misparsed as query/fragment separators.
         basenames = ['test_get_sqlite_values.sqlite',
-                    'space in name.sqlite', 'hash#in#name#.sqlite']
+                     'space in name.sqlite', 'hash#in#name#.sqlite']
         if not IS_WINDOWS:
             basenames.append('question?mark.sqlite')
         for basename in basenames:
@@ -810,7 +810,7 @@ INSERT INTO "meta" VALUES('version','20');"""
         # Special characters check that the path is properly escaped as a
         # SQLite URI, not misparsed as query/fragment separators.
         basenames = ['test_sqlite_is_valid_database.sqlite',
-                    'space in name.sqlite', 'hash#in#name#.sqlite']
+                     'space in name.sqlite', 'hash#in#name#.sqlite']
         if not IS_WINDOWS:
             basenames.append('question?mark.sqlite')
         for basename in basenames:

@@ -32,6 +32,7 @@ def is_world_writable(path):
     except OSError:
         return False
 
+
 # On Windows both backslash and forward slash are path separators.
 # On POSIX only os.sep is a separator (backslash is a legal filename
 # character), so we must not treat it as a boundary there.

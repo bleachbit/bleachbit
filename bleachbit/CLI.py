@@ -51,7 +51,8 @@ class CliCallback:
         if self.quiet or self._output_closed:
             return
         try:
-            print(msg.strip('\n').encode(stdout_encoding, errors='replace').decode(stdout_encoding))
+            print(msg.strip('\n').encode(stdout_encoding,
+                  errors='replace').decode(stdout_encoding))
         except BrokenPipeError:
             self._output_closed = True
         except OSError as e:

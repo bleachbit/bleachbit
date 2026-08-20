@@ -432,6 +432,7 @@ def _remove_path_from_url(url):
         return url.geturl()
     return urlunparse((url.scheme, url.netloc, '', '', '', ''))
 
+
 def delete_mozilla_favicons(path):
     """Delete favorites icons in Mozilla places.favicons
 
@@ -506,7 +507,8 @@ def delete_mozilla_favicons(path):
         ids_str = ','.join(str(i) for i in ids_to_delete)
         icons_where = f'where (id in ({ids_str}))'
         cols = ('icon_url', 'data')
-        cmds += __shred_sqlite_char_columns('moz_icons', cols, icons_where, path)
+        cmds += __shred_sqlite_char_columns('moz_icons',
+                                            cols, icons_where, path)
         FileUtilities.execute_sqlite3(path, cmds)
 
 

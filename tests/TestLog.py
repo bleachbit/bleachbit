@@ -52,7 +52,8 @@ class LogTestCase(common.BleachbitTestCase):
     @common.skipIfWindows
     def test_init_log_debug_log_file_existing_untouched(self):
         """init_log() must not clobber an existing debug log file's permissions"""
-        debug_log_path = self.write_file('existing_debug.log', text='previous content\n')
+        debug_log_path = self.write_file(
+            'existing_debug.log', text='previous content\n')
         # Any mode that init_log() would not pick on its own works here.
         # The execute bit is the harmless way to differ from its 0o600.
         os.chmod(debug_log_path, 0o700)
