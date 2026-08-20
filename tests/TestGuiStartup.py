@@ -196,8 +196,7 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         self.assertIsNotNone(owner_name)
         self.assertIsInstance(owner_sid_str, str)
         self.assertIsInstance(owner_name, str)
-        if 'GITHUB_ACTIONS' in os.environ:
-            expected_owner = 'Administrators'
-        else:
-            expected_owner = os.environ.get('USERNAME', '')
-        self.assertEqual(owner_name, expected_owner)
+        # Elevated processes get Administrators as the owner, others get the
+        # user, so accept either, like _get_windows_permission_issues does.
+        current_sid, _name, group_sids = GuiStartup._get_windows_user_info()
+        self.assertIn(owner_sid_str, {current_sid} | group_sids)
