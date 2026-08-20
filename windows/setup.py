@@ -360,7 +360,7 @@ def build_py2exe():
         'compressed': 1,     # Create compressed archive
         'optimize': 2,       # Extra optimization (like python -OO)
         'includes': ['gi'],
-        'packages': ['chardet', 'encodings', 'gi', 'gi.overrides', 'plyer.platforms.win.notification'],
+        'packages': ['encodings', 'gi', 'gi.overrides', 'plyer.platforms.win.notification'],
         'excludes': ['pyreadline', 'difflib', 'doctest',
                      'pickle', 'ftplib', 'bleachbit.Unix', 'charset_normalizer',
                      'setuptools', 'tomli', 'wheel', 'backports',

@@ -45,7 +45,7 @@ def _get_missing_dependencies():
     Returns: list of missing dependency names
     """
     # On FreeBSD, sqlite3 is a separate package.
-    deps = ['chardet', 'psutil', 'requests', 'sqlite3', 'urllib3']
+    deps = ['psutil', 'requests', 'sqlite3', 'urllib3']
     if IS_WINDOWS:
         deps.append('plyer')
 
