@@ -1066,7 +1066,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 '-Path', r'c:\windows\*.exe')
         (ext_rc, _stdout, _stderr) = General.run_external(args)
         # It may print "Requested Clipboard operation did not succeed" to stderr.
-        self.assertEqual(ext_rc, 0, f"powershell.exe failed with return code {ext_rc}: {_stderr}")
+        self.assertEqual(
+            ext_rc, 0, f"powershell.exe failed with return code {ext_rc}: {_stderr}")
         paths = get_clipboard_paths()
         self.assertIsInstance(paths, (type(None), tuple))
         self.assertGreater(len(paths), 1)

@@ -434,7 +434,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             def __exit__(self, *exc):
                 return False
 
-        first_entry = _FakeEntry(os.path.join(root, 'file_before'), is_dir=False)
+        first_entry = _FakeEntry(os.path.join(
+            root, 'file_before'), is_dir=False)
         with unittest.mock.patch(
                 'bleachbit.FileUtilities.os.scandir',
                 return_value=_RaisingScandir(first_entry)):
@@ -795,7 +796,7 @@ State=AAAA/wA...
 
             # make symlink
             self.assertExists(srcname)
-            linkname = os.path.join(self.tempdir,'bblink')
+            linkname = os.path.join(self.tempdir, 'bblink')
             self.assertNotExists(linkname)
             link_fn(srcname, linkname)
             self.assertExists(linkname)
@@ -1279,7 +1280,8 @@ State=AAAA/wA...
         # A path that vanished must not raise
         os.unlink(own_fn)
         self.assertFalse(ego_owner(own_fn))
-        self.assertFalse(ego_owner(os.path.join(self.tempdir, 'does_not_exist')))
+        self.assertFalse(
+            ego_owner(os.path.join(self.tempdir, 'does_not_exist')))
 
     def test_execute_sqlite3(self):
         """Unit test for execute_sqlite3()"""

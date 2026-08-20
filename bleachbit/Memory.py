@@ -127,9 +127,10 @@ def make_self_oom_target_linux(uid=None):
         if uid is None:
             uid = General.get_real_uid()
         if uid > 0:
-            # TRANSLATORS: Debug message when a process gives up root/admin privileges.
-            # %(pid)d is the integer process ID; %(uid)d is the integer user ID to switch to.
-            drop_msg = _("Dropping privileges of process ID %(pid)d to user ID %(uid)d.")
+            drop_msg = _(
+                # TRANSLATORS: Debug message when a process gives up root/admin privileges.
+                # %(pid)d is the integer process ID; %(uid)d is the integer user ID to switch to.
+                "Dropping privileges of process ID %(pid)d to user ID %(uid)d.")
             logger.debug(drop_msg, {'pid': os.getpid(), 'uid': uid})
             os.seteuid(uid)
     except Exception:
@@ -218,6 +219,7 @@ def _run_memory_child_systemd_scope():
         '--property=OOMPolicy=kill',
         '--', sys.executable, '-c', _memory_child_script(real_uid),
     ]
+
     def run_scope(scope_args):
         logger.debug('Running command: %s', ' '.join(scope_args))
         try:

@@ -288,11 +288,11 @@ class GUITestCase(common.BleachbitTestCase):
 
         with mock.patch('bleachbit.Chaff.DEFAULT_MODELS_DIR', models_dir), \
                 mock.patch('bleachbit.Chaff.download_models',
-                          side_effect=isolated_download_models), \
+                           side_effect=isolated_download_models), \
                 mock.patch('bleachbit.GuiChaff.generate_2600',
-                          side_effect=isolated_generate_2600), \
+                           side_effect=isolated_generate_2600), \
                 mock.patch('bleachbit.GuiChaff.generate_emails',
-                          side_effect=isolated_generate_emails):
+                           side_effect=isolated_generate_emails):
             if not Chaff.download_models():
                 self.skipTest('Unable to download chaff models for GUI test')
             gui = self.get_window()
@@ -307,7 +307,8 @@ class GUITestCase(common.BleachbitTestCase):
             chaff_dst_dir = os.path.join(self.tempdir, 'chaff_dst')
             os.mkdir(chaff_dst_dir)
             cd.choose_folder_button.set_filename(chaff_dst_dir)
-            cd.when_finished_combo.set_active(1)  # do not delete after generation
+            # do not delete after generation
+            cd.when_finished_combo.set_active(1)
             cd.stop_value_spin.set_value(10)
             self.refresh_gui()
             self.click_button(cd, _("Make files"))

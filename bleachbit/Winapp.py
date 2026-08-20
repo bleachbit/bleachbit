@@ -517,7 +517,7 @@ def load_cleaners(cb_progress=_noop_progress):
     for pathname in list_winapp_files():
         try:
             inicleaner = Winapp(pathname, cb_progress,
-                               trusted=is_trusted_cleaner(pathname))
+                                trusted=is_trusted_cleaner(pathname))
         except Exception:
             logger.exception(
                 "Error reading winapp2.ini cleaner '%s'", pathname)

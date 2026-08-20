@@ -120,7 +120,8 @@ def _bootstrap_windows():
     try:
         modules = win32process.EnumProcessModules(-1)
     except Exception:
-        logger.exception('EnumProcessModules failed; skipping GDK_PIXBUF_MODULE_FILE')
+        logger.exception(
+            'EnumProcessModules failed; skipping GDK_PIXBUF_MODULE_FILE')
         modules = []
     for module in modules:
         try:

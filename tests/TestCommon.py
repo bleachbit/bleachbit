@@ -65,8 +65,10 @@ class CommonTestCase(common.BleachbitTestCase):
     def test_assertIsLanguageCode_hardcoded_invalid(self):
         """Test assertIsLanguageCode() rejects hard-coded invalid codes"""
         invalid_codes = list(self._invalid_language_codes)
-        invalid_codes.extend([code + ' ' for code in self._valid_language_codes])
-        invalid_codes.extend([' ' + code for code in self._valid_language_codes])
+        invalid_codes.extend(
+            [code + ' ' for code in self._valid_language_codes])
+        invalid_codes.extend(
+            [' ' + code for code in self._valid_language_codes])
         for code in invalid_codes:
             with self.subTest(code=code):
                 with self.assertRaises(AssertionError, msg=f'Expected exception for {code}'):

@@ -1237,7 +1237,8 @@ def file_wipe(file_name):
         if not is_special:
             # Direct overwrite when it's a regular file.
             # logger.info("Attempting direct file wipe.")
-            wipe_file_direct(file_handle, orig_extents, cluster_size, file_size)
+            wipe_file_direct(file_handle, orig_extents,
+                             cluster_size, file_size)
             new_extents = get_extents(file_handle, True, file_name)
             CloseHandle(file_handle)
             file_handle = None

@@ -100,7 +100,8 @@ class InitTestCase(common.BleachbitTestCase):
             handle = load('bb_dll_preload_test.dll')
             if handle:
                 free(handle)
-            self.assertFalse(handle, 'current directory still on DLL search path')
+            self.assertFalse(
+                handle, 'current directory still on DLL search path')
             self.assertEqual(ctypes.get_last_error(), ERROR_MOD_NOT_FOUND)
 
             # A full path still loads

@@ -465,7 +465,8 @@ class BleachbitTestCase(unittest.TestCase):
         """
         if text is not None:
             if contents != b'':
-                raise ValueError("write_file: `text` is exclusive to `contents`")
+                raise ValueError(
+                    "write_file: `text` is exclusive to `contents`")
             contents = text
             mode = 'w'
             encoding = 'utf-8'

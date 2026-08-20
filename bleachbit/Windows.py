@@ -87,7 +87,8 @@ SPLASH_ICON_SIZE_PX = 256  # 256x256 pixels
 SPLASH_CLOSE_TIMEOUT_MS = 1000
 
 WINDOWS_SYSTEM_VAR = 'WindowsSystem'
-_WINDOWS_SYSTEM_VAR_RE = re.compile(rf'%{WINDOWS_SYSTEM_VAR}%', flags=re.IGNORECASE)
+_WINDOWS_SYSTEM_VAR_RE = re.compile(
+    rf'%{WINDOWS_SYSTEM_VAR}%', flags=re.IGNORECASE)
 
 _delete_parent_lock_admin = None
 _delete_parent_lock_handle = None
@@ -626,7 +627,8 @@ def delete_updates():
             for service in restart_services:
                 # TRANSLATORS: Message in log file when stopping a Windows service.
                 # The placeholder is the code name of the service.
-                label = _("stop Windows service %(service)s") % {'service': service}
+                label = _("stop Windows service %(service)s") % {
+                    'service': service}
                 yield Command.Function(None, make_run_service(service, False), label)
         yield Command.Delete(path2)
     yield Command.Delete(sdist_dir)
@@ -1269,7 +1271,7 @@ def has_fontconfig_cache(font_conf_file):
 
 def get_font_conf_file():
     """Return the full path to fonts.conf
-    
+
     This function should be called only on Windows with GTK
     """
     if not IS_WINDOWS:
@@ -1372,7 +1374,8 @@ class SplashThread(Thread):
                 self._post_quit_message()
                 return
         except Exception:
-            logger.debug('Could not verify splash screen window', exc_info=True)
+            logger.debug(
+                'Could not verify splash screen window', exc_info=True)
 
         self._hide_window(hWindow)
         if self._send_close_message(hWindow):

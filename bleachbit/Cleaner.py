@@ -472,7 +472,7 @@ class System(Cleaner):
             # starting more than once instance of this application.
             gdbus_nonce_re = re.compile(r'gdbus-nonce-file-[0-9A-Za-z]+$',
                                         re.IGNORECASE)
-            gdbus_nonce_max_age_seconds = 7 * 24 * 60 * 60 # 7 days
+            gdbus_nonce_max_age_seconds = 7 * 24 * 60 * 60  # 7 days
             for dirname in dirnames:
                 low = os.path.join(dirname, 'low')
                 for filename in children_in_directory(dirname, True):
