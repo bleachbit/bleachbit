@@ -28,7 +28,7 @@ import http.client
 import os
 import os.path
 from unittest.mock import Mock, patch
-import xml
+import xml.dom.minidom
 
 # first party imports
 from tests import common
