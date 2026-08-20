@@ -398,9 +398,9 @@ def build_py2exe():
         'compressed': 1,     # Create compressed archive
         'optimize': 2,       # Extra optimization (like python -OO)
         'includes': ['gi'],
-        'packages': ['encodings', 'gi', 'gi.overrides', 'plyer.platforms.win.notification'],
+        'packages': ['charset_normalizer', 'encodings', 'gi', 'gi.overrides', 'plyer.platforms.win.notification'],
         'excludes': ['pyreadline', 'difflib', 'doctest',
-                     'pickle', 'ftplib', 'bleachbit.Unix', 'charset_normalizer',
+                     'pickle', 'ftplib', 'bleachbit.Unix',
                      'setuptools', 'tomli', 'wheel', 'backports',
                      'importlib_metadata', 'zipp', 'packaging', 'distutils'],
         'dll_excludes': [

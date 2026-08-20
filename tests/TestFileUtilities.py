@@ -9,6 +9,7 @@ Test case for module FileUtilities
 """
 
 # standard library
+import codecs
 import contextlib
 import ctypes
 import errno
@@ -41,6 +42,7 @@ from bleachbit.FileUtilities import (
     clean_json,
     delete_file,
     delete,
+    detect_encoding,
     ego_owner,
     exe_exists,
     execute_sqlite3,
@@ -1245,6 +1247,51 @@ State=AAAA/wA...
             self.assertEqual(original, f.read())
         delete(filename)
         self.assertNotExists(filename)
+
+    def test_detect_encoding(self):
+        """Unit test for detect_encoding"""
+        eat_glass = '나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
+        bom = '\ufeff' + eat_glass  # Add BOM for utf-8-sig
+        # ASCII is valid UTF-8, so either answer reads the file correctly
+        tests = (('This is just an ASCII file', ['ascii', 'utf-8']),
+                 (eat_glass, ['utf-8']),
+                 # Accept both EUC-KR and CP949 for Korean
+                 (eat_glass, ['EUC-KR', 'CP949']),
+                 (bom, ['UTF-8-SIG']))
+        for file_contents, expected_encodings in tests:
+            with self.subTest(encoding=expected_encodings):
+                # Use first encoding for writing
+                write_encoding = expected_encodings[0]
+
+                with tempfile.NamedTemporaryFile(mode='w', delete=False,
+                                                 dir=self.tempdir,
+                                                 encoding=write_encoding) as temp:
+                    temp.write(file_contents)
+                    temp.flush()
+                det = detect_encoding(temp.name)
+
+                # Detectors spell codec names differently, so compare
+                # the canonical names
+                expected_names = [codecs.lookup(e).name
+                                  for e in expected_encodings]
+                self.assertIn(
+                    codecs.lookup(det).name, expected_names,
+                    f"{file_contents} -> {det}, expected one of {expected_encodings}")
+
+    def test_detect_encoding_missing_charset_normalizer(self):
+        """detect_encoding should log a warning when charset_normalizer is missing."""
+        with common.mock_missing_package('charset_normalizer'):
+            # Latin-1 is not valid UTF-8, so a detector is needed
+            with tempfile.NamedTemporaryFile(mode='w', delete=False,
+                                             dir=self.tempdir,
+                                             encoding='latin-1') as temp:
+                temp.write('café')
+                temp.flush()
+            with self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
+                self.assertIsNone(detect_encoding(temp.name))
+            self.assertIn(
+                'charset_normalizer module is not available', cm.output[0])
+            os.unlink(temp.name)
 
     @common.skipIfWindows
     def test_ego_owner(self):
