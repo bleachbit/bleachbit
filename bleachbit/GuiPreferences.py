@@ -607,7 +607,7 @@ class PreferencesDialog:
             """Callback for removing a drive"""
             treeselection = treeview.get_selection()
             (model, _iter) = treeselection.get_selected()
-            if None == _iter:
+            if _iter is None:
                 # nothing selected
                 return
             pathname = model[_iter][0]
@@ -845,7 +845,7 @@ class PreferencesDialog:
         """Common function to remove a path from either whitelist or custom list"""
         treeselection = treeview.get_selection()
         (model, _iter) = treeselection.get_selected()
-        if None == _iter:
+        if _iter is None:
             return
         tree_path = model.get_path(_iter)
         row_index = tree_path.get_indices()[0]

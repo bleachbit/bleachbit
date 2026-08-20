@@ -1175,7 +1175,7 @@ class LocalizationsTestCase(common.BleachbitTestCase):
                 locales.add_xml(child)
 
         recognized = set()
-        for (locale, specifier, path) in locales._paths.get_localizations('/'):
+        for (_locale, _specifier, path) in locales._paths.get_localizations('/'):
             recognized.add(path)
         return recognized
 

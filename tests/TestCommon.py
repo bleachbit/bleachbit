@@ -80,11 +80,11 @@ class CommonTestCase(common.BleachbitTestCase):
         # Skip directories that are not valid language codes
         # 'UTF-8' is a macOS-specific LC_CTYPE directory, not a locale.
         skip_dirs = {'l10n', 'UTF-8'}
-        for locale_dir in locale_dirs:
-            if not os.path.isdir(locale_dir):
+        for this_dir in locale_dirs:
+            if not os.path.isdir(this_dir):
                 continue
-            for lang_code in os.listdir(locale_dir):
-                if not os.path.isdir(os.path.join(locale_dir, lang_code)):
+            for lang_code in os.listdir(this_dir):
+                if not os.path.isdir(os.path.join(this_dir, lang_code)):
                     continue
                 if lang_code in skip_dirs:
                     continue

@@ -616,7 +616,7 @@ def touch_file(filename):
         # Make the directory, if it does not exist.
         os.makedirs(dname)
     Path(filename).touch()
-    assert (os.path.exists(filename))
+    assert os.path.exists(filename)
     assert not is_normal_directory(filename)
 
 
