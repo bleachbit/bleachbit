@@ -148,18 +148,22 @@ jobs:
 
       - name: Run tests (regular and sudo)
         timeout-minutes: 20
+        env:
+          # `tests-pytest` collects coverage only when this is non-empty
+          PYTEST_COVERAGE: ${{ matrix.python-version == '3.14' && '1' || '' }}
         run: |
           export DISPLAY=":1.0"
           export $(dbus-launch)
           sudo Xvfb :1 -screen 0 800x600x24 &
           sleep 5
           if [[ "${{ matrix.python-version }}" == "3.9" ]]; then
-            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make -C po tests && PYTHONWARNINGS=error PYTHONPATH=. pytest -n logical --dist=loadgroup -m '"'"'not no_xdist'"'"' && PYTHONWARNINGS=error PYTHONPATH=. pytest -m no_xdist && python windows/nsis_translations.py --unittest"'
+            suite="make -C po tests && make tests-pytest && make tests-nsis"
           elif [[ "${{ matrix.python-version }}" == "3.12" ]]; then
-            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "PYTHONWARNINGS=error PYTHONPATH=. pytest -n logical --dist=loadgroup -m '"'"'not no_xdist'"'"' && PYTHONWARNINGS=error PYTHONPATH=. pytest -m no_xdist"'
+            suite="make tests-pytest"
           else
-            dbus-run-session -- bash -c '/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c "make -C cleaners tests && PYTHONWARNINGS=error PYTHONPATH=. pytest -n logical --dist=loadgroup -m '"'"'not no_xdist'"'"' --cov=bleachbit --cov-report= && PYTHONWARNINGS=error PYTHONPATH=. pytest -m no_xdist --cov=bleachbit --cov-append --cov-report= && python windows/nsis_translations.py --unittest && make tests-with-sudo"'
+            suite="make -C cleaners tests && make tests-pytest && make tests-nsis && make tests-with-sudo"
           fi
+          dbus-run-session -- bash -c "/usr/lib/notification-daemon/notification-daemon & sleep 2 && xvfb-run -a bash -c '$suite'"
 
       - name: Generate lcov coverage
         if: matrix.python-version == '3.14' && github.repository == 'bleachbit/bleachbit'
@@ -378,13 +382,8 @@ jobs:
           PYTHONWARNINGS: error
           COVERAGE_FILE: .coverage.admin
         run: |
-          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\
-          "%PYTHON_EXE%" -m pytest -n logical --dist=loadgroup -m "not no_xdist" --cov=bleachbit --cov-report= tests
-          set RC1=%ERRORLEVEL%
-          "%PYTHON_EXE%" -m pytest -m no_xdist --cov=bleachbit --cov-append --cov-report= tests
-          set RC2=%ERRORLEVEL%
-          if not %RC1%==0 exit /b %RC1%
-          if not %RC2%==0 exit /b %RC2%
+          set PATH=%MSYS_BIN%;C:\ProgramData\chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\system32\wbem;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\;%PATH%
+          make tests-pytest PYTHON="%PYTHON_EXE%" PYTEST_COVERAGE=1 PYTEST_ARGS=tests
 
       - name: Run non-admin tests
         id: nonadmin

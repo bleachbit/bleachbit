@@ -9,7 +9,7 @@
 # On some systems if not explicitly given, make uses /bin/sh
 SHELL != command -v bash || echo /bin/sh
 
-.PHONY: clean install tests build tests-with-sudo lint delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
+.PHONY: clean install tests tests-pytest tests-nsis build tests-with-sudo lint delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
 
 prefix ?= /usr/local
 bindir ?= $(prefix)/bin
@@ -23,6 +23,21 @@ INSTALL_SCRIPT = $(INSTALL) -m 755
 PYTHON ?= python3
 COVERAGE ?= $(PYTHON)
 
+# pytest runner used by `tests-pytest`. Extra arguments go in PYTEST_ARGS.
+# PYTHON is quoted because Windows CI passes a backslash path, which bash
+# would otherwise strip the separators from.
+PYTEST ?= "$(PYTHON)" -m pytest
+PYTEST_ARGS ?=
+
+# Set PYTEST_COVERAGE to any value to measure coverage of the pytest runs
+ifdef PYTEST_COVERAGE
+PYTEST_COV := --cov=bleachbit --cov-report=
+PYTEST_COV_APPEND := --cov=bleachbit --cov-append --cov-report=
+endif
+
+# Arguments forwarded to scripts/install-deps.sh, such as --venv
+INSTALL_DEPS_ARGS ?=
+
 ifneq ($(COVERAGE),$(PYTHON))
 BLEACHBIT_SUDO_COVERAGE_RUNNER := $(COVERAGE) --append
 BLEACHBIT_SUDO_COVERAGE_FILE := $(if $(COVERAGE_FILE),$(COVERAGE_FILE),.coverage)
@@ -35,10 +50,10 @@ build:
 	echo Nothing to build
 
 install-deps:
-	@./scripts/install-deps.sh
+	@./scripts/install-deps.sh $(INSTALL_DEPS_ARGS)
 
 install-deps-dev:
-	@./scripts/install-deps.sh --dev
+	@./scripts/install-deps.sh --dev $(INSTALL_DEPS_ARGS)
 
 clean:
 	@rm -vf {.,bleachbit,tests,windows,bleachbit/markovify}/*{pyc,pyo,~} # files
@@ -146,8 +161,19 @@ tests:
 	# Catch Python warnings as errors. Also set in `tests/common.py`.
 	$(MAKE) -C cleaners tests; cleaners_status=$$?; \
 	PYTHONWARNINGS=error $(COVERAGE) -m unittest discover -p Test*.py -v; py_status=$$?; \
-	$(PYTHON) windows/nsis_translations.py --unittest; nsis_status=$$?; \
+	$(MAKE) tests-nsis; nsis_status=$$?; \
 	exit $$(($$cleaners_status + $$py_status + $$nsis_status))
+
+# The suite CI runs: the xdist pass, then the serial no_xdist pass.
+# The second pass is skipped if the first fails.
+tests-pytest:
+	PYTHONWARNINGS=error PYTHONPATH=. $(PYTEST) -n logical --dist=loadgroup \
+		-m 'not no_xdist' $(PYTEST_COV) $(PYTEST_ARGS)
+	PYTHONWARNINGS=error PYTHONPATH=. $(PYTEST) \
+		-m no_xdist $(PYTEST_COV_APPEND) $(PYTEST_ARGS)
+
+tests-nsis:
+	"$(PYTHON)" windows/nsis_translations.py --unittest
 
 tests-with-sudo:
 	# Run tests marked with @test_also_with_sudo using sudo
