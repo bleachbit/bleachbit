@@ -9,6 +9,7 @@ Test case for module FileUtilities
 """
 
 # standard library
+import codecs
 import contextlib
 import ctypes
 import errno
@@ -117,8 +118,7 @@ def ini_helper(self, execute):
                              os.path.getsize(filename))
 
             # The parameter does exist, so the file shrinks.
-            # The file will be size 14 if chardet is available.
-            # Otherwise, size will be 17 with BOM.
+            # The file is size 14 without the BOM and 17 with it
             execute(filename, 'RecentsMRL', 'list')
             self.assertIn(os.path.getsize(filename), (14, 17))
 
@@ -1233,7 +1233,8 @@ State=AAAA/wA...
         """Unit test for detect_encoding"""
         eat_glass = '나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
         bom = '\ufeff' + eat_glass  # Add BOM for utf-8-sig
-        tests = (('This is just an ASCII file', ['ascii']),
+        # ASCII is valid UTF-8, so either answer reads the file correctly
+        tests = (('This is just an ASCII file', ['ascii', 'utf-8']),
                  (eat_glass, ['utf-8']),
                  # Accept both EUC-KR and CP949 for Korean
                  (eat_glass, ['EUC-KR', 'CP949']),
@@ -1250,21 +1251,27 @@ State=AAAA/wA...
                     temp.flush()
                 det = detect_encoding(temp.name)
 
+                # Detectors spell codec names differently, so compare
+                # the canonical names
+                expected_names = [codecs.lookup(e).name
+                                  for e in expected_encodings]
                 self.assertIn(
-                    det, expected_encodings,
+                    codecs.lookup(det).name, expected_names,
                     f"{file_contents} -> {det}, expected one of {expected_encodings}")
 
-    def test_detect_encoding_missing_chardet(self):
-        """detect_encoding should log a warning when chardet is missing."""
-        with common.mock_missing_package('chardet'):
+    def test_detect_encoding_missing_charset_normalizer(self):
+        """detect_encoding should log a warning when charset_normalizer is missing."""
+        with common.mock_missing_package('charset_normalizer'):
+            # Latin-1 is not valid UTF-8, so a detector is needed
             with tempfile.NamedTemporaryFile(mode='w', delete=False,
                                              dir=self.tempdir,
-                                             encoding='utf-8') as temp:
-                temp.write('hello world')
+                                             encoding='latin-1') as temp:
+                temp.write('café')
                 temp.flush()
             with self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
-                detect_encoding(temp.name)
-            self.assertIn('chardet module is not available', cm.output[0])
+                self.assertIsNone(detect_encoding(temp.name))
+            self.assertIn(
+                'charset_normalizer module is not available', cm.output[0])
             os.unlink(temp.name)
 
     @common.skipIfWindows

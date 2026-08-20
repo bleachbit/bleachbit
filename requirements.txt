@@ -1,11 +1,7 @@
 # These are universal dependencies.
 
-# requests 2.32.5 throws warning with chardet >= 6.0.0
-# https://github.com/psf/requests/issues/7219#issuecomment-3956177087
-# Fixed in requests 2.33.1
-# chardet 6.0 removed the chardet.universaldetector submodule; detect_encoding()
-# handles both 5.x and 6.x.
-chardet>=5.2.0,<7 # for cleaning .ini files
+# requests already requires charset_normalizer, so this costs nothing extra
+charset_normalizer>=2,<4 # for cleaning .ini files
 
 # On Windows with 32-bit Python if you do not wish to build from source,
 # then use psutils==7.1.1.
