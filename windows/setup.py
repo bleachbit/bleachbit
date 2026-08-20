@@ -79,10 +79,7 @@ UPX_OPTS = '--best --nrv2e'
 def archive(infile, outfile, fast_build):
     """Create an archive from a file"""
     assert_exist(infile)
-    if os.path.exists(outfile):
-        logger.warning(
-            'Deleting output archive that already exists: %s', outfile)
-        os.remove(outfile)
+    delete_file(outfile, warn_if_exists=True)
     # maximum compression with maximum compatibility
     # mm=deflate method because deflate64 not widely supported
     # mpass=passes for deflate encoder
@@ -165,19 +162,23 @@ def assert_execute_console():
                    'Success')
 
 
-def run_cmd(cmd, check=True):
+def run_cmd(cmd, check=True, log_cmd=True):
     """Run a command and log the output
 
     Return the exit code. If check is true, a non-zero exit code aborts.
+    When log_cmd is false, the command line itself is not logged (useful
+    for tight loops that log their own summary).
     """
-    if isinstance(cmd, list):
-        logger.info(subprocess.list2cmdline(cmd))
-    else:
-        logger.info(cmd)
+    if log_cmd:
+        if isinstance(cmd, list):
+            logger.info(subprocess.list2cmdline(cmd))
+        else:
+            logger.info(cmd)
     with subprocess.Popen(cmd, stdin=subprocess.PIPE,
                           stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
         stdout, stderr = p.communicate()
-        logger.info(stdout.decode(SetupEncoding))
+        if stdout:
+            logger.info(stdout.decode(SetupEncoding))
         if stderr:
             logger.error(stderr.decode(SetupEncoding))
     if p.returncode and check:
@@ -250,7 +251,7 @@ def copy_file(src, dst):
                         'files identical, skipping copy: %s to %s', src, dst)
                     return
         logger.warning('target file exists with different content: %s', dst)
-        os.remove(dst)
+        delete_file(dst)
 
     shutil.copy2(src, dst)
 
@@ -278,6 +279,18 @@ def count_size_improvement(func):
                     f'{size0 - size1:,}', f'{size0:,}', f'{size1:,}', t1 - t0)
     return wrapper
 
+def delete_file(path, warn_if_exists=False):
+    """Delete a file.
+
+    If the file does not exist, silently skip.
+    If it exists and ``warn_if_exists`` is True, log a warning before
+    deleting.
+    """
+    if not os.path.exists(path):
+        return
+    if warn_if_exists:
+        logger.warning('Deleting file that already exists: %s', path)
+    os.remove(path)
 
 def environment_check():
     """Check the build environment"""
@@ -721,48 +734,63 @@ def strip():
     if not bleachbit.FileUtilities.exe_exists('strip.exe'):
         logger.warning('strip.exe does not exist. Skipping strip.')
         return
-    logger.info('Stripping executables')
-    strip_list = recursive_glob('dist', ['*.dll', '*.pyd'])
+    strip_patterns = ['*.dll', '*.pyd']
     strip_keep_list = ['_sqlite3.dll']
+    strip_list = recursive_glob('dist', strip_patterns)
     strip_files_str = [f for f in strip_list if os.path.basename(
         f) not in strip_keep_list]
+    logger.info('Stripping %d executables matching %s except %d filename%s',
+                len(strip_files_str),
+                ' '.join(strip_patterns),
+                len(strip_keep_list),
+                '' if len(strip_keep_list) == 1 else 's')
+    strip_tmp_fn = 'strip.tmp'
     # Process each file individually in case it is locked. See
     # https://github.com/bleachbit/bleachbit/issues/690
     for strip_file in strip_files_str:
-        if os.path.exists('strip.tmp'):
-            os.remove('strip.tmp')
+        delete_file(strip_tmp_fn)
         if not os.path.exists(strip_file):
             logger.error('%s does not exist before stripping', strip_file)
             continue
         cmd = ['strip.exe', '--strip-debug', '--discard-all',
-               '--preserve-dates', '-o', 'strip.tmp', strip_file]
-        returncode = run_cmd(cmd, check=False)
+               '--preserve-dates', '-o', strip_tmp_fn, strip_file]
+        returncode = run_cmd(cmd, check=False, log_cmd=False)
         if returncode:
             logger.error('strip.exe exited with code %d for %s',
                          returncode, strip_file)
+            delete_file(strip_tmp_fn)
             continue
         if not os.path.exists(strip_file):
-            logger.error('%s does not exist after stripping', strip_file)
+            delete_file(strip_tmp_fn)
+            raise RuntimeError(f"{strip_file} disappeared after stripping")
+        if not os.path.exists(strip_tmp_fn):
+            logger.warning('%s was not produced by stripping %s', strip_tmp_fn, strip_file)
             continue
-        if not os.path.exists('strip.tmp'):
-            logger.warning('strip.tmp missing while processing %s', strip_file)
-            continue
-        error_counter = 0
-        while error_counter < 100:
+
+        # A kernel file system filter driver may briefly lock the file
+        # after strip.exe reads it, so we have a retry loop.
+        # https://github.com/bleachbit/bleachbit/issues/690
+        replaced = False
+        for attempt in range(100):
             try:
-                os.remove(strip_file)
-            except PermissionError:
-                logger.warning(
-                    'permissions error while removing %s', strip_file)
-                time.sleep(.1)
-                error_counter += 1
-            else:
+                os.replace(strip_tmp_fn, strip_file) # atomic replace
+                replaced = True
                 break
-        if error_counter > 1:
-            logger.warning('error counter %d while removing %s',
-                           error_counter, strip_file)
-        if not os.path.exists(strip_file):
-            os.rename('strip.tmp', strip_file)
+            except PermissionError:
+                if attempt == 0:
+                    logger.warning(
+                        'permissions error while replacing %s (retrying)',
+                        strip_file)
+                else:
+                    logger.debug(
+                        'retry %d replacing %s', attempt + 1, strip_file)
+                time.sleep(.1)
+        if not replaced:
+            logger.error(
+                'failed to replace %s after 100 retries; '
+                'keeping original (unstripped) and discarding %s',
+                strip_file, strip_tmp_fn)
+        delete_file(strip_tmp_fn)
 #    assert_execute_console()
 
 
