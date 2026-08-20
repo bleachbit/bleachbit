@@ -135,11 +135,6 @@ jobs:
           key: pip-linux-${{ matrix.ubuntu-version }}-${{ hashFiles('requirements.txt', 'requirements-test.txt') }}
           restore-keys: pip-linux-${{ matrix.ubuntu-version }}-
 
-      - name: Update Python packages
-        run: |
-          pip list
-          python -m pip install --upgrade pip
-
       - name: Install Python dependencies
         run: |
           pip install -r requirements.txt -r requirements-test.txt
