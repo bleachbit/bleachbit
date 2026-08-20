@@ -115,7 +115,7 @@ class WindowsSystemPathsTestCase(common.BleachbitTestCase):
 
     def test_expand_windows_system_vars(self):
         """Unit test expand_windows_system_vars()."""
-        path_arg = (r'%WindowsSystem%\LogFiles\*.log')
+        path_arg = r'%WindowsSystem%\LogFiles\*.log'
         # Without providing system paths
         paths = expand_windows_system_vars(path_arg)
         self.assertIsInstance(paths, list)

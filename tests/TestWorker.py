@@ -172,7 +172,7 @@ class LockedAction(ActionProvider):
         from bleachbit.FileUtilities import getsize
         # Without admin privileges, this delete fails.
         yield Command.Delete(self.pathname)
-        assert (os.path.exists(self.pathname))
+        assert os.path.exists(self.pathname)
         fsize = getsize(self.pathname)
         if not fsize == 0:  # File should be truncated to 0 bytes
             raise RuntimeError('Locked file has size %dB (not 0B)' % fsize)
