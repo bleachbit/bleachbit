@@ -614,7 +614,8 @@ def apt_autoremove():
     args = ['--yes', 'autoremove']
     # After this operation, 74.7MB disk space will be freed.
     # After this operation, 44.0 kB disk space will be freed.
-    freed_space_regex = r'.*, ([\d.]+ ?[a-zA-Z]{2}) disk space will be freed.'
+    # After this operation, 1234 B disk space will be freed.
+    freed_space_regex = r'.*, ([\d.]+ ?[kMGTE]?B) disk space will be freed.'
     try:
         return run_cleaner_cmd(General.resolve_exe('apt-get'), args, freed_space_regex, ['^E: '])
     except subprocess.CalledProcessError as e:
@@ -625,7 +626,8 @@ def apt_autoremove():
 def apt_autoclean():
     """Run 'apt-get autoclean' and return the size (un-rounded, in bytes) of freed space"""
     try:
-        return run_cleaner_cmd(General.resolve_exe('apt-get'), ['autoclean'], r'^Del .*\[([\d.]+ ?[a-zA-Z]{2})\]', ['^E: '])
+        # Del foo 1.0-1 [1234 B]
+        return run_cleaner_cmd(General.resolve_exe('apt-get'), ['autoclean'], r'^Del .*\[([\d.]+ ?[kMGTE]?B)\]', ['^E: '])
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
