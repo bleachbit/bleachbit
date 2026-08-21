@@ -68,7 +68,6 @@ BuildArch:      noarch
 %if %{is_redhat_family}
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
-BuildRequires:  python3-chardet
 BuildRequires:  python3-psutil
 BuildRequires:  python3-requests
 BuildRequires:  python3-setuptools
@@ -76,7 +75,6 @@ Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 Requires:       python3
 Requires:       gtk3
-Requires:       python3-chardet
 Requires:       python3-gobject
 Requires:       python3-psutil
 Requires:       python3-requests
@@ -94,7 +92,6 @@ BuildRequires:  %{pyprefix}-base
 %if 0%{?suse_version} == 1600
 BuildRequires:  python3-base
 %endif
-BuildRequires:  %{pyprefix}-chardet
 BuildRequires:  %{pyprefix}-psutil
 BuildRequires:  %{pyprefix}-requests
 BuildRequires:  %{pyprefix}-setuptools
@@ -105,7 +102,6 @@ BuildRequires:  %{pyprefix}-xml
 BuildRequires:  update-desktop-files
 Requires:       gobject-introspection
 Requires:       %{pyprefix}
-Requires:       %{pyprefix}-chardet
 Requires:       %{pyprefix}-gobject
 Requires:       %{pyprefix}-gobject-Gdk
 Requires:       %{pyprefix}-psutil

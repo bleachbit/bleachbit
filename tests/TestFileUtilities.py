@@ -41,7 +41,6 @@ from bleachbit.FileUtilities import (
     clean_json,
     delete_file,
     delete,
-    detect_encoding,
     ego_owner,
     exe_exists,
     execute_sqlite3,
@@ -93,9 +92,8 @@ def ini_helper(self, execute):
     teststr = '#Test\n[RecentsMRL]\nlist=C:\\Users\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n'
     for encoding in ['utf-8', 'utf-8-sig']:
         with self.subTest(encoding=encoding):
-            extra_size = 0
-            if 'utf-8-sig' == encoding:
-                extra_size = 3
+            bom_size = 3 if 'utf-8-sig' == encoding else 0
+            extra_size = bom_size
             if IS_WINDOWS:
                 extra_size += teststr.count('\n')
 
@@ -117,10 +115,12 @@ def ini_helper(self, execute):
                              os.path.getsize(filename))
 
             # The parameter does exist, so the file shrinks.
-            # The file will be size 14 if chardet is available.
-            # Otherwise, size will be 17 with BOM.
+            # Comments are not preserved, so only "[RecentsMRL]\n" (14
+            # bytes) remains. The BOM is preserved, so utf-8-sig files
+            # are 17 bytes and plain utf-8 files are 14 bytes. clean_ini
+            # writes with newline='' so there is no \r\n expansion.
             execute(filename, 'RecentsMRL', 'list')
-            self.assertIn(os.path.getsize(filename), (14, 17))
+            self.assertEqual(14 + bom_size, os.path.getsize(filename))
 
             # The section does exist, so the file shrinks.
             execute(filename, 'RecentsMRL', None)
@@ -1229,43 +1229,21 @@ State=AAAA/wA...
                 delete(long_dir, shred=shred)
                 self.assertNotExists(extended_path(long_dir))
 
-    def test_detect_encoding(self):
-        """Unit test for detect_encoding"""
-        eat_glass = '나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
-        bom = '\ufeff' + eat_glass  # Add BOM for utf-8-sig
-        tests = (('This is just an ASCII file', ['ascii']),
-                 (eat_glass, ['utf-8']),
-                 # Accept both EUC-KR and CP949 for Korean
-                 (eat_glass, ['EUC-KR', 'CP949']),
-                 (bom, ['UTF-8-SIG']))
-        for file_contents, expected_encodings in tests:
-            with self.subTest(encoding=expected_encodings):
-                # Use first encoding for writing
-                write_encoding = expected_encodings[0]
-
-                with tempfile.NamedTemporaryFile(mode='w', delete=False,
-                                                 dir=self.tempdir,
-                                                 encoding=write_encoding) as temp:
-                    temp.write(file_contents)
-                    temp.flush()
-                det = detect_encoding(temp.name)
-
-                self.assertIn(
-                    det, expected_encodings,
-                    f"{file_contents} -> {det}, expected one of {expected_encodings}")
-
-    def test_detect_encoding_missing_chardet(self):
-        """detect_encoding should log a warning when chardet is missing."""
-        with common.mock_missing_package('chardet'):
-            with tempfile.NamedTemporaryFile(mode='w', delete=False,
-                                             dir=self.tempdir,
-                                             encoding='utf-8') as temp:
-                temp.write('hello world')
-                temp.flush()
-            with self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
-                detect_encoding(temp.name)
-            self.assertIn('chardet module is not available', cm.output[0])
-            os.unlink(temp.name)
+    def test_clean_ini_non_utf8(self):
+        """clean_ini() leaves a non-UTF-8 file untouched and logs an error"""
+        # Latin-1 bytes that are invalid as UTF-8 (0xe9 = 'é' in Latin-1).
+        content = b'[RecentsMRL]\nlist=\xe9\xe9\n'
+        filename = self.write_file('bleachbit-test-ini-latin1', content)
+        with open(filename, 'rb') as f:
+            original = f.read()
+        with self.assertLogs('bleachbit.FileUtilities', level='ERROR') as cm:
+            clean_ini(filename, 'RecentsMRL', None)
+        self.assertIn('not valid UTF-8', cm.output[0])
+        # The file must not have been modified.
+        with open(filename, 'rb') as f:
+            self.assertEqual(original, f.read())
+        delete(filename)
+        self.assertNotExists(filename)
 
     @common.skipIfWindows
     def test_ego_owner(self):

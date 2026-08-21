@@ -394,14 +394,26 @@ def clean_ini(path, section, parameter):
     """Delete sections and parameters (aka option) in the file
 
     Comments are not preserved.
+
+    The file is expected to be UTF-8, optionally with a BOM. This matches
+    how VLC writes its configuration file (verified for over a decade). If
+    the file cannot be decoded as UTF-8, it is left untouched and an error
+    is logged so cleaning continues with the next file. The presence (or
+    absence) of a BOM is preserved on write.
     """
-    encoding = detect_encoding(path) or 'utf_8_sig'
+    # utf_8_sig transparently strips a BOM when reading, if present.
+    read_encoding = 'utf_8_sig'
 
     # read file to parser
     config = bleachbit.RawConfigParser(delimiters='=')
     config.optionxform = str
-    with open(path, 'r', encoding=encoding) as fp:
-        config.read_file(fp)
+    try:
+        with open(path, 'r', encoding=read_encoding) as fp:
+            config.read_file(fp)
+    except UnicodeDecodeError:
+        logger.error(
+            "Cannot clean INI file because it is not valid UTF-8: %s", path)
+        return
 
     # change file
     changed = False
@@ -416,11 +428,17 @@ def clean_ini(path, section, parameter):
     if not changed:
         return
 
+    # Preserve whether the file had a BOM: write with utf_8_sig (which
+    # re-adds it) only if the original file began with the UTF-8 BOM.
+    with open(path, 'rb') as bom_fp:
+        has_bom = bom_fp.read(3) == b'\xef\xbb\xbf'
+    write_encoding = 'utf_8_sig' if has_bom else 'utf_8'
+
     # write file
     from bleachbit.Options import options
     if options.get('shred'):
         delete(path, True)
-    with open_for_overwrite(path, encoding=encoding, newline='') as fp:
+    with open_for_overwrite(path, encoding=write_encoding, newline='') as fp:
         config.write(fp)
 
 
@@ -649,34 +667,6 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         # TRANSLATORS: Log message where %s is the pathname.
         logger.info(_("Special file type cannot be deleted: %s"), path)
         return False
-
-
-def detect_encoding(fn):
-    """Detect the encoding of the file"""
-    try:
-        # pylint: disable=import-outside-toplevel
-        import chardet
-    except ImportError:
-        logger.warning(
-            'chardet module is not available to detect character encoding')
-        return None
-
-    # chardet 6.0 removed the chardet.universaldetector submodule and exposed
-    # UniversalDetector directly on the package. Fall back to the old path for
-    # chardet 5.x (and earlier) that still ship the submodule.
-    UniversalDetector = getattr(chardet, 'UniversalDetector', None)
-    if UniversalDetector is None:
-        # pylint: disable=import-outside-toplevel,no-name-in-module
-        from chardet.universaldetector import UniversalDetector
-
-    with open(fn, 'rb') as f:
-        detector = UniversalDetector()
-        for line in f:
-            detector.feed(line)
-            if detector.done:
-                break
-        detector.close()
-    return detector.result['encoding']
 
 
 def ego_owner(filename):

@@ -1,21 +1,14 @@
-"""
-BleachBit
-Copyright (C) 2008-2025 Andrew Ziem
-https://www.bleachbit.org
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
+#
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
+"""
+Windows build and packaging
 
 Example invocation (from parent directory):
-python3 -m windows.setup
+python3.exe -m windows.setup
 """
 
 # standard library
@@ -79,10 +72,7 @@ UPX_OPTS = '--best --nrv2e'
 def archive(infile, outfile, fast_build):
     """Create an archive from a file"""
     assert_exist(infile)
-    if os.path.exists(outfile):
-        logger.warning(
-            'Deleting output archive that already exists: %s', outfile)
-        os.remove(outfile)
+    delete_file(outfile, warn_if_exists=True)
     # maximum compression with maximum compatibility
     # mm=deflate method because deflate64 not widely supported
     # mpass=passes for deflate encoder
@@ -165,19 +155,23 @@ def assert_execute_console():
                    'Success')
 
 
-def run_cmd(cmd, check=True):
+def run_cmd(cmd, check=True, log_cmd=True):
     """Run a command and log the output
 
     Return the exit code. If check is true, a non-zero exit code aborts.
+    When log_cmd is false, the command line itself is not logged (useful
+    for tight loops that log their own summary).
     """
-    if isinstance(cmd, list):
-        logger.info(subprocess.list2cmdline(cmd))
-    else:
-        logger.info(cmd)
+    if log_cmd:
+        if isinstance(cmd, list):
+            logger.info(subprocess.list2cmdline(cmd))
+        else:
+            logger.info(cmd)
     with subprocess.Popen(cmd, stdin=subprocess.PIPE,
                           stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
         stdout, stderr = p.communicate()
-        logger.info(stdout.decode(SetupEncoding))
+        if stdout:
+            logger.info(stdout.decode(SetupEncoding))
         if stderr:
             logger.error(stderr.decode(SetupEncoding))
     if p.returncode and check:
@@ -250,7 +244,7 @@ def copy_file(src, dst):
                         'files identical, skipping copy: %s to %s', src, dst)
                     return
         logger.warning('target file exists with different content: %s', dst)
-        os.remove(dst)
+        delete_file(dst)
 
     shutil.copy2(src, dst)
 
@@ -277,6 +271,63 @@ def count_size_improvement(func):
         logger.info('Reduced size of the dist directory by %s B from %s B to %s B in %.1f s',
                     f'{size0 - size1:,}', f'{size0:,}', f'{size1:,}', t1 - t0)
     return wrapper
+
+def delete_file(path, warn_if_exists=False):
+    """Delete a file.
+
+    If the file does not exist, silently skip.
+    If it exists and ``warn_if_exists`` is True, log a warning before
+    deleting.
+    """
+    if not os.path.exists(path):
+        return
+    if warn_if_exists:
+        logger.warning('Deleting file that already exists: %s', path)
+    os.remove(path)
+
+def _delete_paths(paths):
+    """Delete a list of paths under dist/, logging size saved per entry.
+
+    Each entry in *paths* is a path relative to dist/. Directories are
+    removed with shutil.rmtree(ignore_errors=True); files are removed
+    with os.remove, with a warning logged on failure rather than
+    aborting the prune pass.
+    """
+    for rel in paths:
+        path = os.path.join('dist', rel)
+        if not os.path.exists(path):
+            logger.warning('Path does not exist: %s', path)
+            continue
+        if os.path.isdir(path):
+            size = get_dir_size(path)
+            shutil.rmtree(path, ignore_errors=True)
+            logger.info('Deleting directory %s saved %s B', path, f'{size:,}')
+        else:
+            size = os.path.getsize(path)
+            try:
+                os.remove(path)
+            except OSError as e:
+                logger.warning('Failed to remove %s: %s', path, e)
+                continue
+            logger.info('Deleting file %s saved %s B', path, f'{size:,}')
+
+
+def _prune_assets(root, exts, keep_list, label='asset'):
+    """Remove assets under *root* matching *exts*, keeping *keep_list*.
+
+    Glob *root* recursively for files matching *exts* (e.g. ['*.png',
+    '*.svg']); remove any whose basename is not in *keep_list*, logging
+    each kept file as 'keeping <label>: <path>'. Removal failures are
+    logged as warnings rather than raised.
+    """
+    for f in recursive_glob(root, exts):
+        if os.path.basename(f) not in keep_list:
+            try:
+                os.remove(f)
+            except OSError as e:
+                logger.warning('Failed to remove %s: %s', f, e)
+        else:
+            logger.info('keeping %s: %s', label, f)
 
 
 def environment_check():
@@ -347,7 +398,7 @@ def build_py2exe():
         'compressed': 1,     # Create compressed archive
         'optimize': 2,       # Extra optimization (like python -OO)
         'includes': ['gi'],
-        'packages': ['chardet', 'encodings', 'gi', 'gi.overrides', 'plyer.platforms.win.notification'],
+        'packages': ['encodings', 'gi', 'gi.overrides', 'plyer.platforms.win.notification'],
         'excludes': ['pyreadline', 'difflib', 'doctest',
                      'pickle', 'ftplib', 'bleachbit.Unix', 'charset_normalizer',
                      'setuptools', 'tomli', 'wheel', 'backports',
@@ -645,20 +696,7 @@ def delete_unnecessary():
         r'win32pipe.pyd',
         r'win32wnet.pyd',
     ]
-    for path in delete_paths:
-        path = fr'dist\{path}'
-        if not os.path.exists(path):
-            logger.warning('Path does not exist: %s', path)
-            continue
-        if os.path.isdir(path):
-            this_dir_size = get_dir_size(path)
-            shutil.rmtree(path, ignore_errors=True)
-            logger.info('Deleting directory %s saved %s B',
-                        path, f'{this_dir_size:,}')
-        else:
-            file_size = os.path.getsize(path)
-            logger.info('Deleting file %s saved %s B', path, f'{file_size:,}')
-            os.remove(path)
+    _delete_paths(delete_paths)
 
 
 @count_size_improvement
@@ -666,27 +704,63 @@ def delete_icons():
     """Delete unused PNG/SVG icons to reduce size"""
     logger.info('Deleting unused PNG/SVG icons')
     # This keep list comes from analyze_process_monitor_events.py
+    # (run via procmon_capture.py in bleachbit-misc repo).
+    # SVGs were removed from the keep list because ProcMon tracing
+    # confirmed GTK 3 did not load any .svg files from disk.
+    # It does load some resources from its dll.
     icon_keep_list = [
         'edit-clear-all.png',
         'edit-delete.png',
         'edit-find.png',
-        'list-add-symbolic.svg',  # spin box in chaff dialog
-        'list-remove-symbolic.svg',  # spin box in chaff dialog
-        'open-menu-symbolic.svg',  # hamburger menu on headerbar
-        'pan-down-symbolic.svg',  # there is no pan-down.png
-        'pan-end-symbolic.svg',  # there is no pan-end.png
         'process-stop.png',  # abort on toolbar
-        'window-close-symbolic.svg',  # png does not get used
-        'window-maximize-symbolic.svg',  # no png
-        'window-minimize-symbolic.svg',  # no png
-        'window-restore-symbolic.svg'  # no png
     ]
-    strip_list = recursive_glob(r'dist\share\icons', ['*.png', '*.svg'])
-    for f in strip_list:
-        if os.path.basename(f) not in icon_keep_list:
-            os.remove(f)
-        else:
-            logger.info('keeping protected icon: %s', f)
+    _prune_assets(r'dist\share\icons', ['*.png', '*.svg'],
+                  icon_keep_list, label='protected icon')
+
+
+@count_size_improvement
+def delete_unused_themes():
+    """Delete unused theme files to reduce size"""
+    logger.info('Deleting unused theme files')
+    # share\themes\adwaita\ ships a gtk.css that literally says
+    # "this file is not used": GTK uses its internal Adwaita theme.
+    _delete_paths([r'share\themes\adwaita'])
+
+    # Prune unused assets from themes\windows10\assets\.
+    # The keep list comes from ProcMon tracing (analyze_process_monitor_events.py
+    # in bleachbit-misc repo).
+    theme_asset_keep_list = [
+        # arrows (non-active states)
+        'arrow-down.svg',
+        'arrow-left.svg',
+        'arrow-right.svg',
+        'arrow-up.svg',
+        # checkboxes (checked + unchecked, with insensitive/over states)
+        'checkbox-checked.png',
+        'checkbox-checked@2.png',
+        'checkbox-checked-insensitive.png',
+        'checkbox-checked-insensitive@2.png',
+        'checkbox-checked-over.png',
+        'checkbox-checked-over@2.png',
+        'checkbox-unchecked.png',
+        'checkbox-unchecked@2.png',
+        'checkbox-unchecked-insensitive.png',
+        'checkbox-unchecked-insensitive@2.png',
+        'checkbox-unchecked-over.png',
+        'checkbox-unchecked-over@2.png',
+        # window buttons
+        'close-focused.png',
+        'close-focused-active.png',
+        'close-unfocused.png',
+        'maximize-focused.png',
+        'maximize-unfocused.png',
+        'minimize-focused.png',
+        'minimize-unfocused.png',
+    ]
+    assets_dir = r'dist\themes\windows10\assets'
+    if os.path.exists(assets_dir):
+        _prune_assets(assets_dir, ['*.png', '*.svg'],
+                      theme_asset_keep_list, label='theme asset')
 
 
 def remove_empty_dirs(root):
@@ -721,48 +795,63 @@ def strip():
     if not bleachbit.FileUtilities.exe_exists('strip.exe'):
         logger.warning('strip.exe does not exist. Skipping strip.')
         return
-    logger.info('Stripping executables')
-    strip_list = recursive_glob('dist', ['*.dll', '*.pyd'])
+    strip_patterns = ['*.dll', '*.pyd']
     strip_keep_list = ['_sqlite3.dll']
+    strip_list = recursive_glob('dist', strip_patterns)
     strip_files_str = [f for f in strip_list if os.path.basename(
         f) not in strip_keep_list]
+    logger.info('Stripping %d executables matching %s except %d filename%s',
+                len(strip_files_str),
+                ' '.join(strip_patterns),
+                len(strip_keep_list),
+                '' if len(strip_keep_list) == 1 else 's')
+    strip_tmp_fn = 'strip.tmp'
     # Process each file individually in case it is locked. See
     # https://github.com/bleachbit/bleachbit/issues/690
     for strip_file in strip_files_str:
-        if os.path.exists('strip.tmp'):
-            os.remove('strip.tmp')
+        delete_file(strip_tmp_fn)
         if not os.path.exists(strip_file):
             logger.error('%s does not exist before stripping', strip_file)
             continue
         cmd = ['strip.exe', '--strip-debug', '--discard-all',
-               '--preserve-dates', '-o', 'strip.tmp', strip_file]
-        returncode = run_cmd(cmd, check=False)
+               '--preserve-dates', '-o', strip_tmp_fn, strip_file]
+        returncode = run_cmd(cmd, check=False, log_cmd=False)
         if returncode:
             logger.error('strip.exe exited with code %d for %s',
                          returncode, strip_file)
+            delete_file(strip_tmp_fn)
             continue
         if not os.path.exists(strip_file):
-            logger.error('%s does not exist after stripping', strip_file)
+            delete_file(strip_tmp_fn)
+            raise RuntimeError(f"{strip_file} disappeared after stripping")
+        if not os.path.exists(strip_tmp_fn):
+            logger.warning('%s was not produced by stripping %s', strip_tmp_fn, strip_file)
             continue
-        if not os.path.exists('strip.tmp'):
-            logger.warning('strip.tmp missing while processing %s', strip_file)
-            continue
-        error_counter = 0
-        while error_counter < 100:
+
+        # A kernel file system filter driver may briefly lock the file
+        # after strip.exe reads it, so we have a retry loop.
+        # https://github.com/bleachbit/bleachbit/issues/690
+        replaced = False
+        for attempt in range(100):
             try:
-                os.remove(strip_file)
-            except PermissionError:
-                logger.warning(
-                    'permissions error while removing %s', strip_file)
-                time.sleep(.1)
-                error_counter += 1
-            else:
+                os.replace(strip_tmp_fn, strip_file) # atomic replace
+                replaced = True
                 break
-        if error_counter > 1:
-            logger.warning('error counter %d while removing %s',
-                           error_counter, strip_file)
-        if not os.path.exists(strip_file):
-            os.rename('strip.tmp', strip_file)
+            except PermissionError:
+                if attempt == 0:
+                    logger.warning(
+                        'permissions error while replacing %s (retrying)',
+                        strip_file)
+                else:
+                    logger.debug(
+                        'retry %d replacing %s', attempt + 1, strip_file)
+                time.sleep(.1)
+        if not replaced:
+            logger.error(
+                'failed to replace %s after 100 retries; '
+                'keeping original (unstripped) and discarding %s',
+                strip_file, strip_tmp_fn)
+        delete_file(strip_tmp_fn)
 #    assert_execute_console()
 
 
@@ -878,6 +967,7 @@ def shrink(fast_build):
     """After building, run all the applicable size optimizations"""
     delete_unnecessary()
     delete_icons()
+    delete_unused_themes()
     clean_translations()
     remove_empty_dirs('dist')
     strip()

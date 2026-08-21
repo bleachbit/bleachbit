@@ -268,6 +268,21 @@ jobs:
           set PATH=%MSYS_BIN%;%PATH%
           make PYTHON="%PYTHON_EXE%" -C po local
 
+      - name: Configure Windows Defender exclusion
+        shell: pwsh
+        # Windows kernel filter driver briefly locks newly-written DLLs written
+        # by strip.exe in setup.py
+        # Defender is already disabled with exclusion in place, so this step just
+        # verifies the status.
+        run: |
+          $status = Get-MpComputerStatus | Select-Object RealTimeProtectionEnabled, AMServiceEnabled
+          Write-Output "Defender status: $($status | Out-String)"
+          Write-Output "Current exclusions:"
+          (Get-MpPreference).ExclusionPath
+          # List kernel file system filter drivers for diagnostics.
+          Write-Output "File system filter drivers:"
+          fltmc filters
+
       - name: Build executable and installers
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         # The English-only installer is built only for tags (releases) to save
