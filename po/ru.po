@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-08-21 05:26-0600\n"
-"PO-Revision-Date: 2026-08-18 02:09+0000\n"
-"Last-Translator: Andrei Stepanov <adem4ik@gmail.com>\n"
+"PO-Revision-Date: 2026-08-22 12:38+0000\n"
+"Last-Translator: vityatii <vitya.molodets.000@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/bleachbit/main/"
 "ru/>\n"
 "Language: ru\n"
@@ -1338,8 +1338,7 @@ msgstr "Уборщик игнорируется из-за небезопасны
 #. path of the XML cleaner file whose directory is world
 #. writable.
 #: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
-#, fuzzy, python-format
-#| msgid "Ignoring cleaner because it is world writable: %s"
+#, python-format
 msgid "Ignoring cleaner because its directory is world writable: %s"
 msgstr "Уборщик игнорируется из-за небезопасных прав доступа к файлу: %s"
 
