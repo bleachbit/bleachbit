@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-08-21 05:26-0600\n"
-"PO-Revision-Date: 2026-08-18 02:08+0000\n"
+"PO-Revision-Date: 2026-08-22 12:38+0000\n"
 "Last-Translator: Ghost of Sparta <makesocialfoss32@keemail.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/bleachbit/main/"
 "hu/>\n"
@@ -1347,10 +1347,11 @@ msgstr "Tisztító figyelmen kívül hagyása, mert mindenki számára írható:
 #. path of the XML cleaner file whose directory is world
 #. writable.
 #: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
-#, fuzzy, python-format
-#| msgid "Ignoring cleaner because it is world writable: %s"
+#, python-format
 msgid "Ignoring cleaner because its directory is world writable: %s"
-msgstr "Tisztító figyelmen kívül hagyása, mert mindenki számára írható: %s"
+msgstr ""
+"Tisztító figyelmen kívül hagyása, mert a könyvtára mindenki számára írható: "
+"%s"
 
 #. TRANSLATORS: Error message printed to the log.
 #. %s expands to the path of the XML cleaner file
@@ -3115,8 +3116,6 @@ msgstr "A törlendő útvonalnak egy létező könyvtárnak kell lennie: %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Creating new, temporary file for wiping free space."
 msgid "Creating new, temporary file for wiping empty space."
 msgstr "Új, ideiglenes fájl létrehozása a szabad terület törléséhez."
 
