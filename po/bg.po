@@ -6,11 +6,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BleachBit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-08-21 05:26-0600\n"
-"PO-Revision-Date: 2026-08-02 18:04+0000\n"
-"Last-Translator: 109247019824 "
-"<109247019824@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-08-22 12:38+0000\n"
+"Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate.org>"
+"\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/bleachbit/main/"
 "bg/>\n"
 "Language: bg\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 "X-Launchpad-Export-Date: 2014-01-24 03:57+0000\n"
 "X-Poedit-Country: BULGARIA\n"
 "X-Poedit-Language: Bulgarian\n"
@@ -1341,12 +1341,10 @@ msgstr ""
 #. path of the XML cleaner file whose directory is world
 #. writable.
 #: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
-#, fuzzy, python-format
-#| msgid "Ignoring cleaner because it is world writable: %s"
+#, python-format
 msgid "Ignoring cleaner because its directory is world writable: %s"
 msgstr ""
-"Шаблонът за почистване е пренебрегнат поради твърде широки права за достъп: "
-"%s"
+"Шаблонът за почистване е пренебрегнат поради небезопасни права за достъп: %s"
 
 #. TRANSLATORS: Error message printed to the log.
 #. %s expands to the path of the XML cleaner file
@@ -3106,8 +3104,6 @@ msgstr "Пътят за почистване трябва да бъде съще
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Creating new, temporary file for wiping free space."
 msgid "Creating new, temporary file for wiping empty space."
 msgstr ""
 "Създаване на нов временен файл с цел презаписване на свободното дисково "
@@ -3191,7 +3187,7 @@ msgstr "Достъпът отказан: %s"
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Database is locked: %s"
-msgstr ""
+msgstr "Базата от данни е заключена: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
