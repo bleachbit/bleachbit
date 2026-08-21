@@ -101,6 +101,23 @@ def _option_index(option_name):
     return int(option_name.split('_')[0])
 
 
+def _section_sort_key(section_name):
+    """Sort key for section names: alphabetical, ignoring case"""
+    return (section_name.lower(), section_name)
+
+
+def _option_sort_key(option_name):
+    """Sort key for option names within a section.
+
+    Keys with a numeric prefix (e.g. '2_path') are ordered by that number
+    so lists do not come out as 1, 10, 2.
+    """
+    prefix = option_name.split('_', 1)[0]
+    if prefix.isdigit():
+        return (0, int(prefix), option_name.lower(), option_name)
+    return (1, 0, option_name.lower(), option_name)
+
+
 def path_to_option(pathname):
     """Change a pathname to a .ini option name (a key)"""
     # On Windows change to lowercase and use backwards slashes.
@@ -212,6 +229,7 @@ class Options:
             return
         if not self.purged:
             self.__purge()
+        self.__sort()
 
         try:
             if not os.path.exists(bleachbit.options_dir):
@@ -232,6 +250,37 @@ class Options:
                 raise
         else:
             self._dirty = False
+
+    def __sort(self):
+        """Sort sections and their keys so the file is easy to read
+
+        ConfigParser writes in insertion order, so reorder its sections
+        in place instead of building a copy, which would flatten any
+        [DEFAULT] section.
+        """
+        sections = self.config._sections
+        for section_name in sorted(sections, key=_section_sort_key):
+            section = sections.pop(section_name)
+            for option in sorted(section, key=_option_sort_key):
+                section[option] = section.pop(option)
+            sections[section_name] = section
+
+    def __apply_defaults(self):
+        """Store the default value of every preference not already set
+
+        This way the file shows all preferences, not only the ones the
+        user has changed.
+        """
+        changed = False
+        for option, meta in OPTION_DEFAULTS.items():
+            if not _platform_allows(meta):
+                continue
+            if self.config.has_option('bleachbit', option):
+                continue
+            self.config.set('bleachbit', option, str(meta['value']))
+            changed = True
+        if changed:
+            self.__schedule_flush()
 
     def __purge(self):
         """Clear out obsolete data"""
@@ -498,6 +547,7 @@ class Options:
                 self.config.add_section("bleachbit")
             if not self.config.has_section("hashpath"):
                 self.config.add_section("hashpath")
+            self.__apply_defaults()
             self.__migrate_warning_preferences()
             if not self.config.has_section("list/shred_drives"):
                 from bleachbit.FileUtilities import guess_overwrite_paths
