@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-08-21 05:26-0600\n"
-"PO-Revision-Date: 2026-08-18 02:08+0000\n"
+"PO-Revision-Date: 2026-08-22 12:38+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/bleachbit/main/"
 "et/>\n"
@@ -1333,10 +1333,9 @@ msgstr "Eirame Bleachbitti, kuna kõik saavad seda muuta: %s"
 #. path of the XML cleaner file whose directory is world
 #. writable.
 #: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
-#, fuzzy, python-format
-#| msgid "Ignoring cleaner because it is world writable: %s"
+#, python-format
 msgid "Ignoring cleaner because its directory is world writable: %s"
-msgstr "Eirame Bleachbitti, kuna kõik saavad seda muuta: %s"
+msgstr "Eirame Bleachbitti, kuna kõik saavad siia kausta kirjutada: %s"
 
 #. TRANSLATORS: Error message printed to the log.
 #. %s expands to the path of the XML cleaner file
@@ -3085,10 +3084,8 @@ msgstr "Kustutamise teeks peab olema olemasolev kaust: %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Creating new, temporary file for wiping free space."
 msgid "Creating new, temporary file for wiping empty space."
-msgstr "Uue ajutise faili loomine vaba ruumi pühkimiseks."
+msgstr "Loon uut ajutist faili tühja andmeruumi ülekirjutamiseks."
 
 #: ../bleachbit/Wipe.py
 #, python-format
