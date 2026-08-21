@@ -34,7 +34,7 @@ import threading
 import bleachbit
 from bleachbit import General, IS_WINDOWS
 from bleachbit.FileUtilities import open_for_overwrite
-from bleachbit.Language import get_text as _
+from bleachbit.Language import get_installer_language_code, get_text as _
 
 # third-party imports
 if IS_WINDOWS:
@@ -297,6 +297,21 @@ class Options:
             logger.info(_("Automatically preserving language %s."), lang_id)
             self.set_language(lang_id, True)
 
+    def __apply_installer_language(self):
+        """Adopt the language chosen in the installer
+
+        Called only when there is no configuration yet, so a language
+        picked later in the preferences is never overwritten.
+        """
+        if not IS_WINDOWS:
+            return
+        lang_code = get_installer_language_code()
+        if not lang_code:
+            return
+        logger.debug('Using language %s from the installer.', lang_code)
+        self.set('forced_language', lang_code)
+        self.set('auto_detect_lang', False)
+
     def has_option(self, option, section='bleachbit'):
         """Check if option is set"""
         return self.config.has_option(section, option)
@@ -485,10 +500,12 @@ class Options:
             # so clear it first.
             for section in self.config.sections():
                 self.config.remove_section(section)
+            config_existed = True
             try:
                 with open(bleachbit.options_file, 'r', encoding='utf-8-sig', errors='surrogateescape') as _file:
                     self.config.read_file(_file, bleachbit.options_file)
             except FileNotFoundError:
+                config_existed = False
                 if not bleachbit.options_file.startswith('/tmp'):
                     logger.debug("Configuration file does not exist yet: %s",
                                  bleachbit.options_file)
@@ -515,6 +532,9 @@ class Options:
 
             # set version
             self.set("version", bleachbit.APP_VERSION)
+
+            if not config_existed:
+                self.__apply_installer_language()
 
     def set(self, key, value, section='bleachbit'):
         """Set a general option"""

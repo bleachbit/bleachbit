@@ -30,6 +30,7 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PO_DIR = os.path.join(ROOT_DIR, 'po')
 NSIS_MULTIUSER_LANG = os.path.join(
     ROOT_DIR, 'windows', 'NsisInclude', 'NsisMultiUserLang.nsh')
+NSIS_INSTALLER = os.path.join(ROOT_DIR, 'windows', 'bleachbit.nsi')
 OUTPUT_NSH = NSIS_MULTIUSER_LANG
 OUTPUT_POT = os.path.join(PO_DIR, 'nsis.pot')
 
@@ -169,6 +170,43 @@ def validate_keys_usage():
             f'LangString keys not used in NSIS files: '
             f'{sorted(unused_keys)}'
         )
+
+
+def validate_language_codes():
+    """Validate the BLEACHBIT_LANGUAGE_CODE table in bleachbit.nsi.
+
+    The installer writes that code to installer-language.txt, which the
+    application reads on its first run, so every language offered by
+    MUI_LANGUAGE needs an entry matching LANGUAGE_MAP.
+
+    Raises:
+        RuntimeError: If the table disagrees with LANGUAGE_MAP or with the
+            list of MUI_LANGUAGE macros.
+    """
+    with open(NSIS_INSTALLER, encoding='utf-8') as nsi_file:
+        content = nsi_file.read()
+
+    found = dict(re.findall(
+        r'^\s*LangString\s+BLEACHBIT_LANGUAGE_CODE\s+\$\{(LANG_\w+)\}\s+"([^"]*)"',
+        content, re.MULTILINE))
+    expected = {macro: locale for locale, macro in LANGUAGE_MAP}
+    if found != expected:
+        missing = sorted(set(expected) - set(found))
+        extra = sorted(set(found) - set(expected))
+        wrong = sorted(k for k in set(found) & set(expected)
+                       if found[k] != expected[k])
+        raise RuntimeError(
+            f'BLEACHBIT_LANGUAGE_CODE does not match LANGUAGE_MAP: '
+            f'missing={missing}, unexpected={extra}, wrong={wrong}')
+
+    mui_macros = {f'LANG_{name.upper()}' for name in
+                  re.findall(r'^\s*!insertmacro\s+MUI_LANGUAGE\s+"(\w+)"',
+                             content, re.MULTILINE)}
+    without_code = sorted(mui_macros - set(found))
+    if without_code:
+        raise RuntimeError(
+            f'MUI_LANGUAGE entries without a BLEACHBIT_LANGUAGE_CODE: '
+            f'{without_code}')
 
 
 def _parse_po_string(token):
@@ -528,6 +566,10 @@ Header line 2
             # Should never have doubled escapes like $\$\
             self.assertNotIn('$\\$\\', re_escaped)
 
+    def test_validate_language_codes(self):
+        """Every installer language maps to a BleachBit language code."""
+        validate_language_codes()
+
     def test_validate_translation_hints_passes_with_valid_hints(self):
         """Test that validation passes when all hints correspond to real strings."""
         # This should not raise any exception since we cleaned up orphaned hints
@@ -571,6 +613,8 @@ def main():
     if args.check_keys:
         validate_keys_usage()
         print('All TRANSLATION_HINTS keys are used in NSIS files.')
+        validate_language_codes()
+        print('All installer languages have a BleachBit language code.')
         return 0
 
     if not args.pot and not args.generate:
