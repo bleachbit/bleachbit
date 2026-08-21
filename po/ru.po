@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-08-21 05:26-0600\n"
 "PO-Revision-Date: 2026-08-22 12:38+0000\n"
-"Last-Translator: vityatii <vitya.molodets.000@gmail.com>\n"
+"Last-Translator: Andrei Stepanov <adem4ik@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/bleachbit/main/"
 "ru/>\n"
 "Language: ru\n"
@@ -3097,10 +3097,8 @@ msgstr "Путь для стирания должен быть существу�
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Creating new, temporary file for wiping free space."
 msgid "Creating new, temporary file for wiping empty space."
-msgstr "Создание нового временного файла для очистки свободного пространства."
+msgstr "Создание нового временного файла для очистки пустого пространства."
 
 #: ../bleachbit/Wipe.py
 #, python-format
