@@ -191,48 +191,82 @@ class System(Cleaner):
     """Clean the system in general"""
 
     def __init__(self):
-        Cleaner.__init__(self, id_='system', name=_("System"),
-                         description=_("The system in general"))
+        Cleaner.__init__(
+            self,
+            id_='system',
+            # TRANSLATORS: Cleaner name shown in the list of applications.
+            name=_("System"),
+            # TRANSLATORS: Description of the System cleaner.
+            description=_("The system in general"))
 
         #
         # options for Linux and BSD
         #
         if IS_POSIX:
-            # TRANSLATORS: desktop entries are .desktop files in Linux that
-            # make up the application menu (the menu that shows BleachBit,
-            # Firefox, and others.  The .desktop files also associate file
-            # types, so clicking on an .html file in Nautilus brings up
-            # Firefox.
-            # More information:
-            # http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-            self.add_option('desktop_entry', _('Broken desktop files'), _(
-                'Delete broken application menu entries and file associations'))
-            self.add_option('cache', _('Cache'), DELETE_CACHE_DESCRIPTION)
-            # TRANSLATORS: Localizations are files supporting specific
-            # languages, so applications appear in Spanish, etc.
-            self.add_option('localizations', _('Localizations'), _(
-                'Delete files for unwanted languages'))
-            self.set_warning(
-                'localizations', _("Configure this option in the preferences."))
-            # TRANSLATORS: 'Rotated logs' refers to old system log files.
-            # Linux systems often have a scheduled job to rotate the logs
-            # which means compress all except the newest log and then delete
-            # the oldest log.  You could translate this 'old logs.'
             self.add_option(
-                'rotated_logs', _('Rotated logs'), _('Delete old system logs'))
-            self.add_option('recent_documents', _('Recent documents list'), _(
-                'Delete the list of recently used documents'))
-            self.add_option('trash', _('Trash'), _('Empty the trash'))
+                'desktop_entry',
+                # TRANSLATORS: desktop entries are .desktop files in Linux that
+                # make up the application menu (the menu that shows BleachBit,
+                # Firefox, and others.  The .desktop files also associate file
+                # types, so clicking on an .html file in Nautilus brings up
+                # Firefox.
+                # More information:
+                # http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
+                _('Broken desktop files'),
+                # TRANSLATORS: Description of the Broken desktop files cleaning option.
+                _('Delete broken application menu entries and file associations'))
+            self.add_option(
+                'cache',
+                # TRANSLATORS: Name of a cleaning option. Cache is a noun.
+                _('Cache'),
+                DELETE_CACHE_DESCRIPTION)
+            self.add_option(
+                'localizations',
+                # TRANSLATORS: Localizations are files supporting specific
+                # languages, so applications appear in Spanish, etc.
+                _('Localizations'),
+                # TRANSLATORS: Description of the Localizations cleaning option.
+                _('Delete files for unwanted languages'))
+            self.set_warning(
+                'localizations',
+                # TRANSLATORS: Warning for the Localizations cleaning option.
+                _("Configure this option in the preferences."))
+            self.add_option(
+                'rotated_logs',
+                # TRANSLATORS: 'Rotated logs' refers to old system log files.
+                # Linux systems often have a scheduled job to rotate the logs
+                # which means compress all except the newest log and then delete
+                # the oldest log. You could translate this as 'old logs.'
+                _('Rotated logs'),
+                # TRANSLATORS: Description of the Rotated logs cleaning option.
+                _('Delete old system logs'))
+            self.add_option(
+                'recent_documents',
+                # TRANSLATORS: Name of a cleaning option for the history of recently used files.
+                _('Recent documents list'),
+                # TRANSLATORS: Description of the Recent documents list cleaning option.
+                _('Delete the list of recently used documents'))
+            self.add_option(
+                'trash',
+                # TRANSLATORS: Name of a cleaning option. Trash is a noun.
+                _('Trash'),
+                # TRANSLATORS: Description of the Trash cleaning option.
+                _('Empty the trash'))
 
         #
         # options just for Linux
         #
         if IS_LINUX:
-            self.add_option('memory', _('Memory'),
-                            # TRANSLATORS: 'free' means 'unallocated'
-                            _('Wipe the swap and free memory'))
+            self.add_option(
+                'memory',
+                # TRANSLATORS: Name of a cleaning option for system memory.
+                _('Memory'),
+                # TRANSLATORS: 'free' means 'unallocated'
+                _('Wipe the swap and free memory'))
             self.set_warning(
-                'memory', _('This option is experimental and may cause system problems.'))
+                'memory',
+                # TRANSLATORS: Warning for the experimental Memory cleaning option.
+                _('This option is experimental and may cause system problems.'))
 
         #
         # options just for Microsoft Windows
@@ -248,15 +282,28 @@ class System(Cleaner):
                             _('Delete the cache'))
 
         if IS_WINDOWS:
-            self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option(
-                'memory_dump', _('Memory dump'), _('Delete the file'))
+                'logs',
+                # TRANSLATORS: Name of a cleaning option for Windows log files.
+                _('Logs'),
+                # TRANSLATORS: Description of the Logs cleaning option.
+                _('Delete the logs'))
+            self.add_option(
+                'memory_dump',
+                # TRANSLATORS: Name of a cleaning option for Windows crash dump files.
+                _('Memory dump'),
+                # TRANSLATORS: Description of the Memory dump cleaning option.
+                _('Delete the file'))
             self.add_option('muicache', 'MUICache', DELETE_CACHE_DESCRIPTION)
             # TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
             self.add_option('prefetch', _('Prefetch'),
                             DELETE_CACHE_DESCRIPTION)
             self.add_option(
-                'recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
+                'recycle_bin',
+                # TRANSLATORS: Name of a cleaning option for the Windows recycle bin.
+                _('Recycle bin'),
+                # TRANSLATORS: Description of the Recycle bin cleaning option.
+                _('Empty the recycle bin'))
             # TRANSLATORS: Name for cleaning option. 'Update' is an adjective to
             # describe the kind of uninstallers.
             updates_name = _('Update uninstallers')
@@ -276,23 +323,34 @@ class System(Cleaner):
         # The clipboard option is available wherever a clipboard can be
         # cleared: under GTK (POSIX) or natively on Windows.
         if gtk_may_be_available() or IS_WINDOWS:
-            self.add_option('clipboard', _('Clipboard'), _(
-                'The desktop environment\'s clipboard used for copy and paste operations'))
+            self.add_option(
+                'clipboard',
+                # TRANSLATORS: Name of a cleaning option. Clipboard is a noun.
+                _('Clipboard'),
+                # TRANSLATORS: Description of the Clipboard cleaning option.
+                _('The desktop environment\'s clipboard used for copy and paste operations'))
 
         #
         # options common to all platforms
         #
-        # TRANSLATORS: "Custom" is an option allowing the user to specify which
-        # files and folders will be erased.
-        self.add_option('custom', _('Custom'), _(
-            'Delete user-specified files and folders'))
+        self.add_option(
+            'custom',
+            # TRANSLATORS: "Custom" is an option allowing the user to specify which
+            # files and folders will be erased.
+            _('Custom'),
+            # TRANSLATORS: Description of the Custom cleaning option.
+            _('Delete user-specified files and folders'))
         # TRANSLATORS: 'empty' means 'unallocated'
         self.add_option('empty_space', _('Empty space'),
                         # TRANSLATORS: 'empty' means 'unallocated'
                         _('Wipe empty space to hide deleted files'))
         self.set_warning('empty_space', EMPTY_SPACE_WARNING)
         self.add_option(
-            'tmp', _('Temporary files'), _('Delete the temporary files'))
+            'tmp',
+            # TRANSLATORS: Name of a cleaning option for temporary files.
+            _('Temporary files'),
+            # TRANSLATORS: Description of the Temporary files cleaning option.
+            _('Delete the temporary files'))
 
     def get_commands(self, option_id):
         # cache
@@ -748,6 +806,7 @@ def create_wipe_empty_space_cleaner(path):
     cleaner.name = ''
 
     # create a temporary cleaner object
+    # TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
     display = _("Wipe empty space %s") % path
 
     def wipe_path_func():

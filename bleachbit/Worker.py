@@ -226,6 +226,7 @@ class Worker:
             self.ui.append_text(EMPTY_SPACE_WARNING)
             self.ui.append_text('\n\n')
             self.ui.append_text(
+                # TRANSLATORS: Instruction shown while wiping a drive's empty space.
                 _('To stop this process, press the abort button on the toolbar and wait.'))
             self.ui.append_text('\n\n')
             self.ui.append_text(
@@ -252,6 +253,7 @@ class Worker:
                     self.ui.update_progress_bar(percent_done)
                     if isinstance(eta_seconds, int):
                         eta_mins = math.ceil(eta_seconds / 60)
+                        # TRANSLATORS: %d is the estimated number of minutes remaining.
                         msg2 = ngettext("About %d minute remaining.",
                                         "About %d minutes remaining.", eta_mins) \
                             % eta_mins
@@ -355,6 +357,10 @@ class Worker:
             line = _("Files to be deleted: %d") % self.total_deleted
         self.ui.append_text("\n%s" % line)
         if self.total_special > 0:
+            # TRANSLATORS: %d is the number of special cleaning operations
+            # completed. Special operations are cleaning actions that do
+            # not delete a file, such as overwriting a file's contents,
+            # truncating a file, or deleting a Windows registry key.
             line = _("Special operations: %d") % self.total_special
             self.ui.append_text("\n%s" % line)
         if self.total_errors > 0:

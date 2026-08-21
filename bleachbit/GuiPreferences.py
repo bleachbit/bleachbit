@@ -444,11 +444,11 @@ class PreferencesDialog:
         self.reset_warnings_button.set_sensitive(options.get('expert_mode'))
         vbox.pack_start(self.reset_warnings_button, False, True, 0)
 
-        # TRANSLATORS: This means to hide cleaners which would do
-        # nothing.  For example, if Firefox were never used on
-        # this system, this option would hide Firefox to simplify
-        # the list of cleaners.
         self._create_checkbox(
+            # TRANSLATORS: This means to hide cleaners which would do
+            # nothing. For example, if Firefox were never used on
+            # this system, this option would hide Firefox to simplify
+            # the list of cleaners.
             _("Hide irrelevant cleaners"),
             'auto_hide',
             vbox=vbox)
@@ -996,10 +996,12 @@ class PreferencesDialog:
             self._remove_path(treeview, liststore, pathnames, page_type)
 
         button_add_file = Gtk.Button.new_with_label(
+            # TRANSLATORS: Button label in the preferences for adding a file.
             label=_p('button', 'Add file'))
         button_add_file.connect("clicked", add_file_cb)
 
         button_add_folder = Gtk.Button.new_with_label(
+            # TRANSLATORS: Button label in the preferences for adding a folder.
             label=_p('button', 'Add folder'))
         button_add_folder.connect("clicked", add_folder_cb)
 

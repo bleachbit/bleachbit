@@ -48,7 +48,10 @@ langsecref_map = {
     '3033': ('winapp2_vivaldi', 'Vivaldi'),
     '3034': ('winapp2_brave', 'Brave'),
     # Section=Games (technically not langsecref)
-    'Games': ('winapp2_games', _('Games'))}
+    'Games': (
+        'winapp2_games',
+        # TRANSLATORS: Cleaner category name for games imported from winapp2.ini.
+        _('Games'))}
 
 
 # Compiled once; these run for every section/filekey when importing winapp2.ini
@@ -217,6 +220,8 @@ class Winapp:
         self.cleaners[cleaner_id].id = cleaner_id
         self.cleaners[cleaner_id].name = name
         assert name.strip() == name
+        # TRANSLATORS: Description shown for a cleaner imported from winapp2.ini,
+        # which is a database of cleaning definitions.
         self.cleaners[cleaner_id].description = _('Imported from winapp2.ini')
         # The detect() function in this module effectively does what
         # auto_hide() does, so this avoids redundant, slow processing.

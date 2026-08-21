@@ -62,6 +62,7 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
         raise RuntimeError(f"{msg}: {msg2}")
 
     if download_url_to_fn(url, fn, hash_expected, on_error):
+        # TRANSLATORS: Status message after a successful winapp2.ini update.
         append_text(_('New winapp2.ini was downloaded.'))
         cb_success()
 
@@ -71,12 +72,15 @@ def update_dialog(parent, updates):
     # import these here to allow headless mode.
     from bleachbit.GtkShim import Gtk  # pylint: disable=import-outside-toplevel
     from bleachbit.GuiBasic import open_url  # pylint: disable=import-outside-toplevel
-    dlg = Gtk.Dialog(title=_("Update BleachBit"),
-                     transient_for=parent,
-                     modal=True,
-                     destroy_with_parent=True)
+    dlg = Gtk.Dialog(
+        # TRANSLATORS: Title of the software update dialog.
+        title=_("Update BleachBit"),
+        transient_for=parent,
+        modal=True,
+        destroy_with_parent=True)
     dlg.set_default_size(250, 125)
 
+    # TRANSLATORS: Message in the software update dialog.
     label = Gtk.Label(label=_("A new version is available."))
     dlg.vbox.pack_start(label, True, True, 0)
 

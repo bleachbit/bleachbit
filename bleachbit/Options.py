@@ -291,6 +291,9 @@ class Options:
         """Automatically preserve the active language"""
         active_lang = bleachbit.Language.get_active_language_code()
         for lang_id in set([active_lang.split('_')[0], 'en']):
+            # TRANSLATORS: %s is a ISO language code of two or three letters.
+            # "Preserving" means the language's localization files will be
+            # kept and not deleted when cleaning.
             logger.info(_("Automatically preserving language %s."), lang_id)
             self.set_language(lang_id, True)
 

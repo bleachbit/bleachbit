@@ -581,6 +581,7 @@ def delete_updates():
     from bleachbit import Command
     if not shell.IsUserAnAdmin():
         logger.warning(
+            # TRANSLATORS: Warning shown when cleaning Windows Updates without administrator access.
             _("Administrator privileges are required to clean Windows Updates"))
         return
     windir = os.path.expandvars('%windir%')
