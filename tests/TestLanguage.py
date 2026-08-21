@@ -12,8 +12,10 @@ import unittest
 from unittest import mock
 
 from bleachbit.Language import _UNSET, \
+    INSTALLER_LANGUAGE_FILENAME, \
     find_supported_language_code, \
     get_active_language_code, \
+    get_installer_language_code, \
     get_supported_language_codes, \
     get_text, \
     LocaleCode, \
@@ -323,6 +325,37 @@ class LanguageTestCase(common.BleachbitTestCase):
                 mock.patch('bleachbit.Language._locale_fallback', _UNSET), \
                 mock.patch('locale.getlocale', side_effect=ValueError):
             self.assertEqual(get_active_language_code(), 'C')
+
+    def _write_installer_language(self, contents):
+        """Write installer-language.txt to a patched application directory"""
+        exe_dir = self.mkdtemp()
+        with open(os.path.join(exe_dir, INSTALLER_LANGUAGE_FILENAME), 'wb') as f:
+            f.write(contents)
+        return mock.patch('bleachbit.bleachbit_exe_path', exe_dir)
+
+    def test_get_installer_language_code_missing(self):
+        """Without installer-language.txt, there is no installer language"""
+        with mock.patch('bleachbit.bleachbit_exe_path', self.mkdtemp()):
+            self.assertIsNone(get_installer_language_code())
+
+    @skipIfMissingPo
+    def test_get_installer_language_code(self):
+        """Read the language code the installer left behind"""
+        # NSIS writes ANSI, UTF-8, or UTF-16LE depending on its build.
+        for contents in (b'es', b'\xef\xbb\xbfes', 'es'.encode('utf-16-le'),
+                         b'es\r\n'):
+            with self._write_installer_language(contents):
+                self.assertEqual(get_installer_language_code(), 'es',
+                                 f'contents: {contents!r}')
+
+    def test_get_installer_language_code_invalid(self):
+        """Garbage and unsupported languages are ignored"""
+        for contents in (b'', b'not a language code', b'../../etc/passwd',
+                         b'zz'):
+            with self._write_installer_language(contents):
+                with self.assertLogs(level='INFO'):
+                    self.assertIsNone(get_installer_language_code(),
+                                      f'contents: {contents!r}')
 
     def test_options_import_failure(self):
         """Test handling of failed Options import in language detection"""
