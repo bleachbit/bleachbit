@@ -410,7 +410,7 @@ def wipe_path(pathname, idle=False):
             try:
                 logger.debug(
                     # TRANSLATORS: Status message while wiping a drive's empty space.
-                    _('Creating new, temporary file for wiping free space.'))
+                    _('Creating new, temporary file for wiping empty space.'))
                 f = temporaryfile()
             except OSError as e:
                 # Linux gives errno 24
