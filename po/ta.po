@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-16 16:46-0600\n"
+"POT-Creation-Date: 2026-08-21 05:26-0600\n"
 "PO-Revision-Date: 2026-06-22 08:01+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/bleachbit/main/ta/"
@@ -20,166 +20,656 @@ msgstr ""
 "X-Generator: Weblate 2026.7.dev0\n"
 "X-Launchpad-Export-Date: 2015-12-14 18:16+0000\n"
 
-#: ../cleaners/adobe_reader.xml
-msgid "Document viewer"
-msgstr "ஆவண பார்வையாளர்"
+#: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
+msgid "Media player"
+msgstr "ஊடக இயக்கி"
 
-#: ../cleaners/adobe_reader.xml ../cleaners/amsn.xml ../cleaners/audacious.xml
-#: ../cleaners/beagle.xml ../cleaners/brave.xml ../cleaners/chromium.xml
-#: ../cleaners/claude.xml ../cleaners/discord.xml ../cleaners/emesene.xml
-#: ../cleaners/epiphany.xml ../cleaners/evolution.xml ../cleaners/exaile.xml
-#: ../cleaners/firefox.xml ../cleaners/flash.xml ../cleaners/geary.xml
-#: ../cleaners/gftp.xml ../cleaners/google_chrome.xml ../cleaners/gpodder.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/java.xml ../cleaners/kde.xml ../cleaners/librewolf.xml
-#: ../cleaners/liferea.xml ../cleaners/microsoft_edge.xml ../cleaners/miro.xml
-#: ../cleaners/nexuiz.xml ../cleaners/openoffice.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/pidgin.xml ../cleaners/rhythmbox.xml
-#: ../cleaners/safari.xml ../cleaners/seamonkey.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/slack.xml
-#: ../cleaners/smartftp.xml ../cleaners/thumbnails.xml
-#: ../cleaners/thunderbird.xml ../cleaners/tremulous.xml
-#: ../cleaners/vivaldi.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
-#: ../cleaners/waterfox.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/xine.xml ../cleaners/yahoo_messenger.xml ../cleaners/zen.xml
-#: ../cleaners/zoom.xml ../bleachbit/Cleaner.py
+#. TRANSLATORS: Sidebar label for the page managing browser cookies in
+#. the Preferences dialog.
+#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../bleachbit/GuiPreferences.py
+msgid "Cookies"
+msgstr "நினைவிகள்"
+
+#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+msgid ""
+"Delete cookies, which store login information, website preferences, and "
+"tracking identifiers"
+msgstr ""
+"உள்நுழைவுத் செய்தி, இணையதள விருப்பத்தேர்வுகள் மற்றும் கண்காணிப்பு அடையாளங்காட்டிகளைச் "
+"சேமிக்கும் குக்கீகளை நீக்கவும்"
+
+#: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
+#: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
+#: ../cleaners/safari.xml ../cleaners/fish.xml ../cleaners/chromium.xml
+#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
+#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
+#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
+#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/python.xml
+#: ../cleaners/vim.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/octave.xml
+msgid "History"
+msgstr "வரலாறு"
+
+#: ../cleaners/realplayer.xml ../cleaners/easytag.xml ../cleaners/filezilla.xml
+#: ../cleaners/gnome.xml ../cleaners/windows_defender.xml
+#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
+#: ../cleaners/libreoffice.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
+#: ../cleaners/amule.xml
+msgid "Delete the usage history"
+msgstr "பாவனை வரலாற்றை அழி"
+
+#. TRANSLATORS: Name of a cleaning option for Windows log files.
+#: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
+#: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
+#: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
+#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
+#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Logs"
+msgstr "பதிவுகள்"
+
+#. TRANSLATORS: Description of the Logs cleaning option.
+#: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
+#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
+#: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
+#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
+#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the logs"
+msgstr "பதிவுகளை அழி"
+
+#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
+#: ../cleaners/flash.xml
+msgid "Multimedia viewer"
+msgstr "வரைகலை பார்வையாளர்"
+
+#. TRANSLATORS: Name of a cleaning option. Cache is a noun.
+#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
+#: ../cleaners/librewolf.xml ../cleaners/openoffice.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
+#: ../cleaners/vivaldi.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/pidgin.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/emesene.xml
+#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/epiphany.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
+#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/seamonkey.xml
+#: ../cleaners/flash.xml ../cleaners/google_chrome.xml
+#: ../cleaners/tremulous.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../bleachbit/Cleaner.py
 msgid "Cache"
 msgstr "இடைமாற்று"
 
 #. TRANSLATORS: The description of what certain cleaning options do.
-#: ../cleaners/adobe_reader.xml ../cleaners/amsn.xml ../cleaners/apt.xml
-#: ../cleaners/audacious.xml ../cleaners/beagle.xml ../cleaners/claude.xml
-#: ../cleaners/dnf.xml ../cleaners/evolution.xml ../cleaners/exaile.xml
-#: ../cleaners/firefox.xml ../cleaners/flash.xml ../cleaners/geary.xml
-#: ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/java.xml ../cleaners/kde.xml ../cleaners/librewolf.xml
-#: ../cleaners/liferea.xml ../cleaners/miro.xml ../cleaners/nexuiz.xml
-#: ../cleaners/openoffice.xml ../cleaners/pacman.xml ../cleaners/palemoon.xml
-#: ../cleaners/pidgin.xml ../cleaners/rhythmbox.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/smartftp.xml
-#: ../cleaners/thumbnails.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
-#: ../cleaners/waterfox.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/xine.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/yum.xml ../cleaners/zen.xml
-#: ../cleaners/zoom.xml ../bleachbit/Cleaner.py
+#: ../cleaners/xine.xml ../cleaners/dnf.xml ../cleaners/miro.xml
+#: ../cleaners/amsn.xml ../cleaners/librewolf.xml ../cleaners/openoffice.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml ../cleaners/yum.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
+#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
+#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
+#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
+#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
 msgid "Delete the cache"
 msgstr "நினைவில் உள்ளதை அழி"
 
-#: ../cleaners/adobe_reader.xml ../cleaners/audacious.xml
-#: ../cleaners/filezilla.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/openoffice.xml ../cleaners/paint.xml ../cleaners/smartftp.xml
-#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winzip.xml ../cleaners/wordpad.xml
+#: ../cleaners/paint.xml ../cleaners/openoffice.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/wordpad.xml ../cleaners/audacious.xml ../cleaners/filezilla.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
+#: ../cleaners/winamp.xml ../cleaners/adobe_reader.xml ../cleaners/winzip.xml
+#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml
 msgid "Most recently used"
 msgstr "சமீபத்தில் பாவிக்கப்பட்டவை"
 
-#: ../cleaners/adobe_reader.xml ../cleaners/audacious.xml ../cleaners/gedit.xml
-#: ../cleaners/gwenview.xml ../cleaners/kde.xml ../cleaners/openoffice.xml
-#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py
-msgid "Delete the list of recently used documents"
-msgstr "சமீபத்தில் பாவித்த கோப்புகளின் பட்டியலை அழி"
+#: ../cleaners/paint.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/wordpad.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
+#: ../cleaners/winamp.xml ../cleaners/winzip.xml ../cleaners/teamviewer.xml
+#: ../cleaners/vlc.xml
+msgid "Delete the most recently used list"
+msgstr "அழி மிக சமீபத்திய வரலாற்று பட்டியலை"
 
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/bash.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
-#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/silverlight.xml
-#: ../cleaners/vuze.xml ../cleaners/windows_defender.xml ../cleaners/wine.xml
-#: ../cleaners/winetricks.xml ../cleaners/winrar.xml ../bleachbit/Cleaner.py
-msgid "Temporary files"
-msgstr "தற்காலிக கோப்புகள்"
+#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
+#: ../cleaners/apt.xml ../cleaners/snap.xml
+msgid "Package manager"
+msgstr "தொகுப்பு மேலாளர்"
 
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/bash.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
-#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/silverlight.xml
-#: ../cleaners/vuze.xml ../cleaners/windows_defender.xml ../cleaners/wine.xml
-#: ../cleaners/winetricks.xml ../cleaners/winrar.xml ../bleachbit/Cleaner.py
-msgid "Delete the temporary files"
-msgstr "தற்காலிக கோப்புகளை அழி"
+#: ../cleaners/dnf.xml
+msgid "Remove packages that were formerly dependencies"
+msgstr "முன்னர் சார்புடைய தொகுப்புகளை அகற்றவும்"
 
-#: ../cleaners/amsn.xml ../cleaners/discord.xml ../cleaners/emesene.xml
-#: ../cleaners/hexchat.xml ../cleaners/pidgin.xml ../cleaners/profanity.xml
-#: ../cleaners/skype.xml ../cleaners/slack.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/zoom.xml
+#: ../cleaners/dnf.xml
+msgid ""
+"Carefully review the list of packages that will be removed by running \"dnf "
+"list autoremove\"."
+msgstr ""
+"\"டி.என்.எஃப் பட்டியல் தன்னியக்க\" இயக்குவதன் மூலம் அகற்றப்படும் தொகுப்புகளின் பட்டியலை "
+"கவனமாக மதிப்பாய்வு செய்யவும்."
+
+#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
+#: ../cleaners/zoom.xml ../cleaners/skype.xml ../cleaners/profanity.xml
+#: ../cleaners/discord.xml
 msgid "Chat client"
 msgstr "அரட்டை வாங்கி"
 
-#: ../cleaners/amsn.xml ../cleaners/emesene.xml ../cleaners/hexchat.xml
-#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/skype.xml
-#: ../cleaners/yahoo_messenger.xml
+#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
+#: ../cleaners/seamonkey.xml
 msgid "Chat logs"
 msgstr "அரட்டை பதிவுகள்"
 
-#: ../cleaners/amsn.xml ../cleaners/emesene.xml ../cleaners/hexchat.xml
-#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/skype.xml
-#: ../cleaners/yahoo_messenger.xml
+#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
+#: ../cleaners/seamonkey.xml
 msgid "Delete the chat logs"
 msgstr "அரட்டை பதிவுகளை அழி"
 
-#: ../cleaners/amule.xml ../cleaners/filezilla.xml ../cleaners/gftp.xml
-#: ../cleaners/smartftp.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
-msgid "File transfer client"
-msgstr "கோப்பு பரிமாற்ற வாங்கி"
+#: ../cleaners/librewolf.xml ../cleaners/elinks.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/links2.xml ../cleaners/seamonkey.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Web browser"
+msgstr "வலைய உலாவி"
 
-#: ../cleaners/amule.xml ../cleaners/audacious.xml ../cleaners/claude.xml
-#: ../cleaners/easytag.xml ../cleaners/exaile.xml ../cleaners/gftp.xml
-#: ../cleaners/gpodder.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/miro.xml
-#: ../cleaners/profanity.xml ../cleaners/realplayer.xml
-#: ../cleaners/screenlets.xml ../cleaners/smartftp.xml
-#: ../cleaners/teamviewer.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
-#: ../cleaners/warzone2100.xml ../cleaners/windows_defender.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../bleachbit/Cleaner.py
-msgid "Logs"
-msgstr "பதிவுகள்"
-
-#: ../cleaners/amule.xml ../cleaners/audacious.xml ../cleaners/claude.xml
-#: ../cleaners/exaile.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/miro.xml ../cleaners/profanity.xml ../cleaners/realplayer.xml
-#: ../cleaners/screenlets.xml ../cleaners/smartftp.xml
-#: ../cleaners/teamviewer.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
-#: ../cleaners/warzone2100.xml ../cleaners/windows_defender.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../bleachbit/Cleaner.py
-msgid "Delete the logs"
-msgstr "பதிவுகளை அழி"
-
-#: ../cleaners/amule.xml
-msgid "Known files history"
-msgstr "அறியப்பட்ட கோப்புகள் வரலாறு"
-
-#: ../cleaners/amule.xml ../cleaners/d4x.xml ../cleaners/easytag.xml
-#: ../cleaners/filezilla.xml ../cleaners/gnome.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
-#: ../cleaners/links2.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
-#: ../cleaners/realplayer.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/windows_defender.xml ../cleaners/winrar.xml
-msgid "Delete the usage history"
-msgstr "பாவனை வரலாற்றை அழி"
-
-#. http://wiki.amule.org/wiki/Friend
-#: ../cleaners/amule.xml
-msgid "Known clients and friends"
-msgstr "அறியப்பட்ட வாடிக்கையாளர்கள் மற்றும் நண்பர்கள்"
-
-#: ../cleaners/amule.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
-#: ../cleaners/firefox.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
-#: ../cleaners/vscode.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
-#: ../cleaners/windows_defender.xml ../cleaners/zen.xml
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
+#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
 msgid "Backup files"
 msgstr "காப்புக் கோப்புகள்"
 
-#: ../cleaners/amule.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
-#: ../cleaners/firefox.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
-#: ../cleaners/vscode.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
-#: ../cleaners/windows_defender.xml ../cleaners/zen.xml
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
+#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
 msgid "Delete the backup files"
 msgstr "காப்புக் கோப்புகளை அழி"
 
-#: ../cleaners/apt.xml ../cleaners/dnf.xml ../cleaners/pacman.xml
-#: ../cleaners/snap.xml ../cleaners/yum.xml
-msgid "Package manager"
-msgstr "தொகுப்பு மேலாளர்"
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Crash reports"
+msgstr "சிதைவு அறிக்கைகள்"
+
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/geary.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/windows_defender.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml
+#: ../cleaners/google_chrome.xml ../cleaners/transmission.xml
+#: ../cleaners/profanity.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/vuze.xml ../cleaners/opera.xml
+msgid "Delete the files"
+msgstr "கோப்புகளை அழி"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Form history"
+msgstr "படிவ வரலாறு"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/internet_explorer.xml
+msgid "Saved form entries and search bar history"
+msgstr "சேமித்த படிவ உள்ளீடுகள் மற்றும் தேடல் பட்டி வரலாறு"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Passwords"
+msgstr "கடவுச்சொற்கள்"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid ""
+"A database of usernames and passwords as well as a list of sites that should "
+"not store passwords"
+msgstr ""
+"பயனர்பெயர்கள் மற்றும் கடவுச்சொற்களின் தரவுத்தளம் மற்றும் கடவுச்சொற்களை சேமிக்காத தளங்களின் "
+"பட்டியல்"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "This option will delete your saved passwords."
+msgstr "இந்தத் தேர்வு உங்கள் சேமிக்கப்பட்ட கடவுச்சொல்லை நீக்குவதற்கானது."
+
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Session"
+msgstr "அமர்வு"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Previously open tabs and windows"
+msgstr "முன்பு தாவல்கள் மற்றும் சாளரங்களைத் திறக்கவும்"
+
+#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Site data"
+msgstr "தள தரவு"
+
+#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
+msgstr "வலைத்தளங்களால் சேமிக்கப்பட்ட LocalStorage, IndexedDB மற்றும் பிற தரவை நீக்கவும்"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Site preferences"
+msgstr "தள விருப்பத்தேர்வுகள்"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Settings for individual sites"
+msgstr "தனிப்பட்ட தளங்களுக்கான அமைப்புகள்"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/konqueror.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+msgid "URL history"
+msgstr "முகவரி வரலாறு"
+
+#: ../cleaners/librewolf.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+msgid "List of visited web pages"
+msgstr "பார்த்த இனைய பக்கங்களை பட்டியலிடு"
+
+#. TRANSLATORS: Vacuum is a verb.  The term is jargon
+#. from the SQLite database.  Microsoft Access uses
+#. the term 'Compact Database' (which you may translate
+#. instead).  Another synonym is 'defragment.'
+#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
+#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Action.py
+msgid "Vacuum"
+msgstr "வெற்றிடம்"
+
+#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
+#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml
+msgid ""
+"Clean database fragmentation to reduce space and improve speed without "
+"removing any data"
+msgstr ""
+"எந்த தரவையும் அகற்றாமல் இடத்தைக் குறைக்கவும் வேகத்தை மேம்படுத்தவும் தரவுத்தள துண்டு துண்டாக"
+
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+msgid "Shell"
+msgstr "ஓடு"
+
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+#: ../cleaners/sqlite3.xml ../cleaners/python.xml ../cleaners/octave.xml
+msgid "Delete the command history"
+msgstr "கட்டளை வரலாற்றை அழி"
+
+#: ../cleaners/openoffice.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/libreoffice.xml
+msgid "Office suite"
+msgstr "அலுவலக தொகுப்பு"
+
+#. TRANSLATORS: Description of the Recent documents list cleaning option.
+#: ../cleaners/openoffice.xml ../cleaners/audacious.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/gedit.xml ../cleaners/kde.xml
+#: ../bleachbit/Cleaner.py
+msgid "Delete the list of recently used documents"
+msgstr "சமீபத்தில் பாவித்த கோப்புகளின் பட்டியலை அழி"
+
+#: ../cleaners/rhythmbox.xml
+msgid "Database"
+msgstr "தரவுத்தளம்"
+
+#: ../cleaners/rhythmbox.xml
+msgid ""
+"Delete the database, which contains information such as play count and last "
+"played"
+msgstr ""
+"பிளே எண்ணிக்கை மற்றும் கடைசியாக விளையாடியவை போன்ற தகவல்களைக் கொண்ட தரவுத்தளத்தை நீக்கு"
+
+#: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
+msgid "Debug logs"
+msgstr "வலுநீக்கி பதிவுகள்"
+
+#: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/easytag.xml
+#: ../cleaners/x11.xml ../cleaners/gl-117.xml
+msgid "Delete the debug logs"
+msgstr "வலுநீக்கி பதிவுகளை அழி"
+
+#. TRANSLATORS: Name of a cleaning option for temporary files.
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
+#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr "தற்காலிக கோப்புகள்"
+
+#. TRANSLATORS: Description of the Temporary files cleaning option.
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
+#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr "தற்காலிக கோப்புகளை அழி"
+
+#: ../cleaners/beagle.xml ../cleaners/recoll.xml
+msgid "Search tool"
+msgstr "தேடற் கருவி"
+
+#: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/recoll.xml
+msgid "Index"
+msgstr "பொருளடக்கம்"
+
+#: ../cleaners/elinks.xml
+msgid "Delete the cookies, visited URLs, and search history"
+msgstr "குக்கீகளை நீக்கு, பார்வையிட்ட முகவரி கள் மற்றும் தேடல் வரலாற்றை நீக்கவும்"
+
+#: ../cleaners/wordpad.xml
+msgid "Word processor"
+msgstr "சொல் செயலி"
+
+#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/epiphany.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
+#: ../cleaners/brave.xml ../cleaners/seamonkey.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Delete the web cache, which reduces time to display revisited pages"
+msgstr ""
+"வலை தற்காலிக சேமிப்பை நீக்கவும், இது மறுபரிசீலனை செய்யப்பட்ட பக்கங்களைக் காண்பிக்கும் "
+"நேரத்தை குறைக்கிறது"
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "A history of forms entered in websites"
+msgstr "இணையதளங்களில் உள்ளிடப்பட்ட படிவங்களின் வரலாறு"
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/slack.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+msgid ""
+"Delete the history which includes visited sites, downloads, and thumbnails"
+msgstr "பார்வையிட்ட தளங்கள், பதிவிறக்கங்கள் மற்றும் சிறுபடங்கள் அடங்கிய வரலாற்றை நீக்கவும்"
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+msgid "Sync"
+msgstr "ஒத்திசைவு"
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+msgid "Delete the sync data (including web apps) and sign out of the browser"
+msgstr "ஒத்திசைவு தரவை (இணைய பயன்பாடுகள் உட்பட) நீக்கி, உலாவியில் இருந்து வெளியேறவும்"
+
+#: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
+#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/gl-117.xml ../cleaners/tremulous.xml
+msgid "Game"
+msgstr "விளையாட்டு"
+
+#. This software edits metadata tags, such as title and artist, in audio files
+#: ../cleaners/easytag.xml
+msgid "Audio files tagger"
+msgstr "ஆடியோ கோப்புகள் குறிச்சொற்கள்"
+
+#: ../cleaners/journald.xml
+msgid "System journals"
+msgstr "கணினி பத்திரிகைகள்"
+
+#: ../cleaners/journald.xml
+msgid "Clean old system journals"
+msgstr "பழைய கணினி பத்திரிகைகளை தூய்மை செய்யுங்கள்"
+
+#: ../cleaners/emesene.xml
+msgid "Delete the avatars and emoticons cache"
+msgstr "அவதாரங்கள் மற்றும் எமோடிகான்கள் தற்காலிக சேமிப்பை நீக்கவும்"
+
+#: ../cleaners/filezilla.xml ../cleaners/smartftp.xml
+#: ../cleaners/transmission.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml
+msgid "File transfer client"
+msgstr "கோப்பு பரிமாற்ற வாங்கி"
+
+#: ../cleaners/epiphany.xml
+msgid "Places"
+msgstr "இடங்கள்"
+
+#: ../cleaners/epiphany.xml
+msgid ""
+"A database of URLs including bookmarks, favicons, and a history of visited "
+"websites"
+msgstr ""
+"புக்மார்க்குகள், ஃபேவிகான்கள் மற்றும் பார்வையிட்ட இணையதளங்களின் வரலாறு உள்ளிட்ட URLகளின் "
+"தரவுத்தளம்"
+
+#: ../cleaners/epiphany.xml
+msgid "This option deletes all bookmarks."
+msgstr "இந்தத் தேர்வு அனைத்து புத்தக்குறிகளையும் நீக்கவல்லது."
+
+#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
+msgid "Downloaded podcasts"
+msgstr "பதிவிறக்கப்பட்ட podcasts"
+
+#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
+msgid "Delete downloaded podcasts"
+msgstr "அழி பதிவிறக்கப்பட்ட podcasts"
+
+#: ../cleaners/geary.xml ../cleaners/thunderbird.xml ../cleaners/evolution.xml
+msgid "Email client"
+msgstr "மின்னஞ்சல் கிளையன்ட்"
+
+#: ../cleaners/geary.xml
+msgid "Attachments"
+msgstr "இணைப்புகள்"
+
+#: ../cleaners/geary.xml
+msgid "Sync conflict"
+msgstr "மோதல் ஒத்திசைவு"
+
+#: ../cleaners/geary.xml ../cleaners/deepscan.xml
+msgid "This option is slow."
+msgstr "இந்தத் தேர்வு மெதுவானது."
+
+#: ../cleaners/wine.xml
+msgid "Compatibility layer for Windows software"
+msgstr "சாளரங்கள் மென்பொருளுக்கான பொருந்தக்கூடிய அடுக்கு"
+
+#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
+msgid "Thumbnails"
+msgstr "சிறுபடங்கள்"
+
+#: ../cleaners/thumbnails.xml
+msgid "Icons for files on the system"
+msgstr "கணினியில் உள்ள கோப்புகளுக்கான சின்னங்கள்"
+
+#: ../cleaners/gnome.xml ../cleaners/kde.xml
+msgid "Desktop environment"
+msgstr "டெச்க்டாப் சூழல்"
+
+#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
+#. In Windows 'Run' is the dialog in the Start menu
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+msgid "Run"
+msgstr "இயக்கு"
+
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/google_toolbar.xml
+msgid "Search history"
+msgstr "தேடல் வரலாறு"
+
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/google_toolbar.xml
+msgid "Delete the search history"
+msgstr "தேடல் வரலாற்றை அழி"
+
+#: ../cleaners/konqueror.xml
+msgid "Current session"
+msgstr "நடப்பு அமர்வு"
+
+#: ../cleaners/konqueror.xml
+msgid "Delete the current session"
+msgstr "நடப்பு அமர்வை அழி"
+
+#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml
+msgid "Search engines"
+msgstr "தேடு பொறிகள்"
+
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
+#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml
+msgid ""
+"Reset the search engine usage history and delete non-factory search engines, "
+"some of which are added automatically"
+msgstr ""
+"தேடுபொறி பயன்பாட்டு வரலாற்றை மீட்டமைக்கவும், காரணி அல்லாத தேடுபொறிகளை நீக்கவும், அவற்றில் "
+"சில தானாக சேர்க்கப்படுகின்றன"
+
+#: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
+msgid "File manager"
+msgstr "கோப்பு நிர்வாகி"
+
+#. TRANSLATORS: Name of a cleaning option for the history of recently used files.
+#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
+#: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py
+msgid "Recent documents list"
+msgstr "சமீப ஆவணங்களின் பட்டியல்"
+
+#: ../cleaners/windows_explorer.xml
+msgid ""
+"This option will reset pinned locations in Quick Access to their defaults."
+msgstr ""
+"இந்த விருப்பம் அவற்றின் இயல்புநிலைக்கு விரைவான அணுகலில் பின் செய்யப்பட்ட இடங்களை "
+"மீட்டமைக்கும்."
+
+#: ../cleaners/windows_explorer.xml
+msgid "Shellbags"
+msgstr "செல்பாக்ச்"
+
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the usage date, window position, and other data for folders"
+msgstr "பயன்பாட்டு தேதி, சாளர நிலை மற்றும் கோப்புறைகளுக்கான பிற தரவை நீக்கவும்"
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will reset the position of desktop icons."
+msgstr "இது டெச்க்டாப் ஐகான்களின் நிலையை மீட்டமைக்கும்."
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will restart Windows Explorer."
+msgstr "இது சாளரங்கள் எக்ச்ப்ளோரரை மறுதொடக்கம் செய்யும்."
+
+#: ../cleaners/windows_defender.xml
+msgid "Anti-virus"
+msgstr "எதிர்ப்பு வைரச்"
+
+#: ../cleaners/windows_defender.xml
+msgid "Quarantine"
+msgstr "தொற்றொதுக்கம்"
+
+#: ../cleaners/thunderbird.xml
+msgid ""
+"Deleting the index will reset the configuration of columns in the message "
+"list."
+msgstr "குறியீட்டை நீக்குவது செய்தி பட்டியலில் உள்ள நெடுவரிசைகளின் உள்ளமைவை மீட்டமைக்கும்."
+
+#: ../cleaners/thunderbird.xml
+msgid "Session restore"
+msgstr "அமர்வு மீட்டமை"
+
+#: ../cleaners/thunderbird.xml
+msgid "Restores the previous session when the browser next starts"
+msgstr "உலாவி அடுத்து தொடங்கும் போது முந்தைய அமர்வை மீட்டெடுக்கிறது"
 
 #: ../cleaners/apt.xml
 msgid "Delete obsolete files"
@@ -189,272 +679,34 @@ msgstr "வழக்கற்ற கோப்புகளை அழி"
 msgid "Package lists"
 msgstr "தொகுப்பு பட்டியல்"
 
-#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/realplayer.xml
-#: ../cleaners/vlc.xml ../cleaners/winamp.xml
-#: ../cleaners/windows_media_player.xml
-msgid "Media player"
-msgstr "ஊடக இயக்கி"
+#. Cleaner description for vim, VS Code, etc.
+#: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
+msgid "Editor"
+msgstr "திருத்தி"
 
-#: ../cleaners/bash.xml ../cleaners/fish.xml ../cleaners/zsh.xml
-msgid "Shell"
-msgstr "ஓடு"
-
-#: ../cleaners/bash.xml ../cleaners/brave.xml ../cleaners/chromium.xml
-#: ../cleaners/d4x.xml ../cleaners/discord.xml ../cleaners/easytag.xml
-#: ../cleaners/elinks.xml ../cleaners/fish.xml ../cleaners/google_chrome.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
-#: ../cleaners/links2.xml ../cleaners/mc.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/nautilus.xml ../cleaners/octave.xml ../cleaners/opera.xml
-#: ../cleaners/python.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
-#: ../cleaners/seamonkey.xml ../cleaners/slack.xml ../cleaners/sqlite3.xml
-#: ../cleaners/tortoisesvn.xml ../cleaners/vim.xml ../cleaners/vivaldi.xml
-#: ../cleaners/windows_defender.xml ../cleaners/winrar.xml ../cleaners/zsh.xml
-msgid "History"
-msgstr "வரலாறு"
-
-#: ../cleaners/bash.xml ../cleaners/fish.xml ../cleaners/octave.xml
-#: ../cleaners/python.xml ../cleaners/sqlite3.xml ../cleaners/zsh.xml
-msgid "Delete the command history"
-msgstr "கட்டளை வரலாற்றை அழி"
-
-#: ../cleaners/beagle.xml ../cleaners/recoll.xml
-msgid "Search tool"
-msgstr "தேடற் கருவி"
-
-#: ../cleaners/beagle.xml ../cleaners/recoll.xml ../cleaners/thunderbird.xml
-msgid "Index"
-msgstr "பொருளடக்கம்"
-
-#: ../cleaners/beagle.xml ../cleaners/brave.xml ../cleaners/chromium.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/firefox.xml
-#: ../cleaners/geary.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/profanity.xml
-#: ../cleaners/thunderbird.xml ../cleaners/transmission.xml
-#: ../cleaners/vivaldi.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
-#: ../cleaners/windows_defender.xml ../cleaners/zen.xml ../cleaners/zsh.xml
-msgid "Delete the files"
-msgstr "கோப்புகளை அழி"
-
-#: ../cleaners/beagle.xml ../cleaners/gl-117.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
 #: ../cleaners/x11.xml
-msgid "Debug logs"
-msgstr "வலுநீக்கி பதிவுகள்"
+msgid "Windowing system"
+msgstr "சாளரம் அமைப்பு"
 
-#: ../cleaners/beagle.xml ../cleaners/easytag.xml ../cleaners/gl-117.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/x11.xml
-msgid "Delete the debug logs"
-msgstr "வலுநீக்கி பதிவுகளை அழி"
+#: ../cleaners/gimp.xml
+msgid "Graphics editor"
+msgstr "கிராபிக்ச் ஆசிரியர்"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/elinks.xml
-#: ../cleaners/epiphany.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/links2.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Web browser"
-msgstr "வலைய உலாவி"
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr "முடக்கப்பட்டது"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
-#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml
-msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr ""
-"வலை தற்காலிக சேமிப்பை நீக்கவும், இது மறுபரிசீலனை செய்யப்பட்ட பக்கங்களைக் காண்பிக்கும் "
-"நேரத்தை குறைக்கிறது"
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr "முடக்கப்பட்ட தொகுப்புகளை அகற்று"
 
-#. TRANSLATORS: Sidebar label for the page managing browser cookies in
-#. the Preferences dialog.
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
-#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
-#: ../cleaners/seamonkey.xml ../cleaners/silverlight.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../bleachbit/GuiPreferences.py
-msgid "Cookies"
-msgstr "நினைவிகள்"
+#: ../cleaners/adobe_reader.xml
+msgid "Document viewer"
+msgstr "ஆவண பார்வையாளர்"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
-#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/flash.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
-#: ../cleaners/seamonkey.xml ../cleaners/silverlight.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml
-msgid ""
-"Delete cookies, which store login information, website preferences, and "
-"tracking identifiers"
-msgstr ""
-"உள்நுழைவுத் செய்தி, இணையதள விருப்பத்தேர்வுகள் மற்றும் கண்காணிப்பு அடையாளங்காட்டிகளைச் "
-"சேமிக்கும் குக்கீகளை நீக்கவும்"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml
-msgid "Crash reports"
-msgstr "சிதைவு அறிக்கைகள்"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Form history"
-msgstr "படிவ வரலாறு"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/vivaldi.xml
-msgid "A history of forms entered in websites"
-msgstr "இணையதளங்களில் உள்ளிடப்பட்ட படிவங்களின் வரலாறு"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/slack.xml ../cleaners/vivaldi.xml
-msgid ""
-"Delete the history which includes visited sites, downloads, and thumbnails"
-msgstr "பார்வையிட்ட தளங்கள், பதிவிறக்கங்கள் மற்றும் சிறுபடங்கள் அடங்கிய வரலாற்றை நீக்கவும்"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-msgid "Search engines"
-msgstr "தேடு பொறிகள்"
-
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml
-msgid ""
-"Reset the search engine usage history and delete non-factory search engines, "
-"some of which are added automatically"
-msgstr ""
-"தேடுபொறி பயன்பாட்டு வரலாற்றை மீட்டமைக்கவும், காரணி அல்லாத தேடுபொறிகளை நீக்கவும், அவற்றில் "
-"சில தானாக சேர்க்கப்படுகின்றன"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/claude.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/zsh.xml
-msgid "Session"
-msgstr "அமர்வு"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml
-msgid "Previously open tabs and windows"
-msgstr "முன்பு தாவல்கள் மற்றும் சாளரங்களைத் திறக்கவும்"
-
-#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Site data"
-msgstr "தள தரவு"
-
-#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
-msgstr "வலைத்தளங்களால் சேமிக்கப்பட்ட LocalStorage, IndexedDB மற்றும் பிற தரவை நீக்கவும்"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/vivaldi.xml
-msgid "Sync"
-msgstr "ஒத்திசைவு"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/vivaldi.xml
-msgid "Delete the sync data (including web apps) and sign out of the browser"
-msgstr "ஒத்திசைவு தரவை (இணைய பயன்பாடுகள் உட்பட) நீக்கி, உலாவியில் இருந்து வெளியேறவும்"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Passwords"
-msgstr "கடவுச்சொற்கள்"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid ""
-"A database of usernames and passwords as well as a list of sites that should "
-"not store passwords"
-msgstr ""
-"பயனர்பெயர்கள் மற்றும் கடவுச்சொற்களின் தரவுத்தளம் மற்றும் கடவுச்சொற்களை சேமிக்காத தளங்களின் "
-"பட்டியல்"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "This option will delete your saved passwords."
-msgstr "இந்தத் தேர்வு உங்கள் சேமிக்கப்பட்ட கடவுச்சொல்லை நீக்குவதற்கானது."
-
-#. TRANSLATORS: Vacuum is a verb.  The term is jargon
-#. from the SQLite database.  Microsoft Access uses
-#. the term 'Compact Database' (which you may translate
-#. instead).  Another synonym is 'defragment.'
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
-#: ../cleaners/firefox.xml ../cleaners/geary.xml ../cleaners/google_chrome.xml
-#: ../cleaners/gpodder.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/yum.xml ../cleaners/zen.xml ../bleachbit/Action.py
-msgid "Vacuum"
-msgstr "வெற்றிடம்"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
-#: ../cleaners/firefox.xml ../cleaners/geary.xml ../cleaners/google_chrome.xml
-#: ../cleaners/gpodder.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/yum.xml ../cleaners/zen.xml
-msgid ""
-"Clean database fragmentation to reduce space and improve speed without "
-"removing any data"
-msgstr ""
-"எந்த தரவையும் அகற்றாமல் இடத்தைக் குறைக்கவும் வேகத்தை மேம்படுத்தவும் தரவுத்தள துண்டு துண்டாக"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Site preferences"
-msgstr "தள விருப்பத்தேர்வுகள்"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Settings for individual sites"
-msgstr "தனிப்பட்ட தளங்களுக்கான அமைப்புகள்"
+#: ../cleaners/nautilus.xml
+msgid "Custom folders will be reset."
+msgstr "விருப்ப கோப்புறைகள் மீட்டமைக்கப்படும்."
 
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
@@ -493,10 +745,6 @@ msgstr "ஆழ் சோதனை"
 msgid "Clean files widely scattered across the disk"
 msgstr "வட்டு முழுவதும் பரவலாக சிதறடிக்கப்பட்ட கோப்புகளை தூய்மை செய்யுங்கள்"
 
-#: ../cleaners/deepscan.xml ../cleaners/geary.xml
-msgid "This option is slow."
-msgstr "இந்தத் தேர்வு மெதுவானது."
-
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
 msgstr "நீங்கள் வைத்திருக்க விரும்பும் எந்த கோப்புகளுக்கும் முன்னோட்டத்தை ஆய்வு செய்யுங்கள்."
@@ -515,217 +763,17 @@ msgstr "பயனர் சுயவிவரத்தின் கீழ் VIM
 msgid "VIM swap files across system"
 msgstr "கணினி முழுவதும் விம் கோப்புகளை மாற்றவும்"
 
-#: ../cleaners/discord.xml
-msgid ""
-"Delete the web cache, which reduces time to display revisited pages. This "
-"also clears favorited GIFs."
-msgstr ""
-"வலை தற்காலிக சேமிப்பை நீக்கு, இது மறுபரிசீலனை செய்யப்பட்ட பக்கங்களைக் காண்பிப்பதற்கான "
-"நேரத்தைக் குறைக்கிறது. இது விருப்பமான GIF களையும் அழிக்கிறது."
+#: ../cleaners/zoom.xml
+msgid "Recordings"
+msgstr "ஊடகபதிவுகள்"
 
-#: ../cleaners/dnf.xml
-msgid "Remove packages that were formerly dependencies"
-msgstr "முன்னர் சார்புடைய தொகுப்புகளை அகற்றவும்"
-
-#: ../cleaners/dnf.xml
-msgid ""
-"Carefully review the list of packages that will be removed by running \"dnf "
-"list autoremove\"."
-msgstr ""
-"\"டி.என்.எஃப் பட்டியல் தன்னியக்க\" இயக்குவதன் மூலம் அகற்றப்படும் தொகுப்புகளின் பட்டியலை "
-"கவனமாக மதிப்பாய்வு செய்யவும்."
-
-#. This software edits metadata tags, such as title and artist, in audio files
-#: ../cleaners/easytag.xml
-msgid "Audio files tagger"
-msgstr "ஆடியோ கோப்புகள் குறிச்சொற்கள்"
-
-#: ../cleaners/elinks.xml
-msgid "Delete the cookies, visited URLs, and search history"
-msgstr "குக்கீகளை நீக்கு, பார்வையிட்ட முகவரி கள் மற்றும் தேடல் வரலாற்றை நீக்கவும்"
-
-#: ../cleaners/emesene.xml
-msgid "Delete the avatars and emoticons cache"
-msgstr "அவதாரங்கள் மற்றும் எமோடிகான்கள் தற்காலிக சேமிப்பை நீக்கவும்"
-
-#: ../cleaners/epiphany.xml
-msgid "Places"
-msgstr "இடங்கள்"
-
-#: ../cleaners/epiphany.xml
-msgid ""
-"A database of URLs including bookmarks, favicons, and a history of visited "
-"websites"
-msgstr ""
-"புக்மார்க்குகள், ஃபேவிகான்கள் மற்றும் பார்வையிட்ட இணையதளங்களின் வரலாறு உள்ளிட்ட URLகளின் "
-"தரவுத்தளம்"
-
-#: ../cleaners/epiphany.xml
-msgid "This option deletes all bookmarks."
-msgstr "இந்தத் தேர்வு அனைத்து புத்தக்குறிகளையும் நீக்கவல்லது."
-
-#: ../cleaners/evolution.xml ../cleaners/geary.xml ../cleaners/thunderbird.xml
-msgid "Email client"
-msgstr "மின்னஞ்சல் கிளையன்ட்"
-
-#: ../cleaners/exaile.xml ../cleaners/gpodder.xml
-msgid "Downloaded podcasts"
-msgstr "பதிவிறக்கப்பட்ட podcasts"
-
-#: ../cleaners/exaile.xml ../cleaners/gpodder.xml
-msgid "Delete downloaded podcasts"
-msgstr "அழி பதிவிறக்கப்பட்ட podcasts"
-
-#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/librewolf.xml ../cleaners/palemoon.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml
-msgid "Saved form entries and search bar history"
-msgstr "சேமித்த படிவ உள்ளீடுகள் மற்றும் தேடல் பட்டி வரலாறு"
-
-#: ../cleaners/firefox.xml ../cleaners/konqueror.xml ../cleaners/librewolf.xml
-#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "URL history"
-msgstr "முகவரி வரலாறு"
-
-#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "List of visited web pages"
-msgstr "பார்த்த இனைய பக்கங்களை பட்டியலிடு"
-
-#: ../cleaners/flash.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
-#: ../cleaners/xine.xml
-msgid "Multimedia viewer"
-msgstr "வரைகலை பார்வையாளர்"
-
-#: ../cleaners/geary.xml
-msgid "Attachments"
-msgstr "இணைப்புகள்"
-
-#: ../cleaners/geary.xml
-msgid "Sync conflict"
-msgstr "மோதல் ஒத்திசைவு"
-
-#. Cleaner description for vim, VS Code, etc.
-#: ../cleaners/gedit.xml ../cleaners/vim.xml ../cleaners/vscode.xml
-msgid "Editor"
-msgstr "திருத்தி"
-
-#: ../cleaners/gedit.xml ../cleaners/gwenview.xml ../cleaners/kde.xml
-#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py
-msgid "Recent documents list"
-msgstr "சமீப ஆவணங்களின் பட்டியல்"
-
-#: ../cleaners/gimp.xml
-msgid "Graphics editor"
-msgstr "கிராபிக்ச் ஆசிரியர்"
-
-#: ../cleaners/gl-117.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/nexuiz.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/tremulous.xml ../cleaners/warzone2100.xml
-msgid "Game"
-msgstr "விளையாட்டு"
-
-#: ../cleaners/gnome.xml ../cleaners/kde.xml
-msgid "Desktop environment"
-msgstr "டெச்க்டாப் சூழல்"
-
-#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
-#. In Windows 'Run' is the dialog in the Start menu
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-msgid "Run"
-msgstr "இயக்கு"
-
-#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
-#: ../cleaners/windows_explorer.xml
-msgid "Search history"
-msgstr "தேடல் வரலாறு"
-
-#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
-#: ../cleaners/windows_explorer.xml
-msgid "Delete the search history"
-msgstr "தேடல் வரலாற்றை அழி"
-
-#. Cleaning option that deletes AI models in a web browser
-#: ../cleaners/google_chrome.xml
-msgid "AI"
-msgstr "AI"
-
-#: ../cleaners/google_chrome.xml
-msgid "Delete the AI models"
-msgstr "AI மாதிரிகளை நீக்கவும்"
-
-#: ../cleaners/internet_explorer.xml ../cleaners/seamonkey.xml
-msgid "Download history"
-msgstr "பதிவிறக்க வரலாறு"
-
-#: ../cleaners/journald.xml
-msgid "System journals"
-msgstr "கணினி பத்திரிகைகள்"
-
-#: ../cleaners/journald.xml
-msgid "Clean old system journals"
-msgstr "பழைய கணினி பத்திரிகைகளை தூய்மை செய்யுங்கள்"
-
-#: ../cleaners/konqueror.xml
-msgid "Current session"
-msgstr "நடப்பு அமர்வு"
-
-#: ../cleaners/konqueror.xml
-msgid "Delete the current session"
-msgstr "நடப்பு அமர்வை அழி"
-
-#: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/openoffice.xml
-msgid "Office suite"
-msgstr "அலுவலக தொகுப்பு"
-
-#: ../cleaners/mc.xml ../cleaners/nautilus.xml ../cleaners/windows_explorer.xml
-msgid "File manager"
-msgstr "கோப்பு நிர்வாகி"
-
-#: ../cleaners/microsoft_office.xml ../cleaners/paint.xml
-#: ../cleaners/smartftp.xml ../cleaners/teamviewer.xml ../cleaners/vlc.xml
-#: ../cleaners/winamp.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/winzip.xml
-#: ../cleaners/wordpad.xml
-msgid "Delete the most recently used list"
-msgstr "அழி மிக சமீபத்திய வரலாற்று பட்டியலை"
-
-#: ../cleaners/nautilus.xml
-msgid "Custom folders will be reset."
-msgstr "விருப்ப கோப்புறைகள் மீட்டமைக்கப்படும்."
-
-#: ../cleaners/profanity.xml
-msgid "Downloaded files"
-msgstr "பதிவிறக்கம் செய்யப்பட்ட கோப்புகள்"
+#: ../cleaners/zoom.xml
+msgid "Delete the audio and video recordings"
+msgstr "ஆடியோ மற்றும் வீடியோ பதிவுகளை நீக்கவும்"
 
 #: ../cleaners/recoll.xml
 msgid "Delete the search index, a database of words and the files they contain"
 msgstr "தேடல் குறியீட்டை நீக்கு, சொற்களின் தரவுத்தளம் மற்றும் அவற்றில் உள்ள கோப்புகள்"
-
-#: ../cleaners/rhythmbox.xml
-msgid "Database"
-msgstr "தரவுத்தளம்"
-
-#: ../cleaners/rhythmbox.xml
-msgid ""
-"Delete the database, which contains information such as play count and last "
-"played"
-msgstr ""
-"பிளே எண்ணிக்கை மற்றும் கடைசியாக விளையாடியவை போன்ற தகவல்களைக் கொண்ட தரவுத்தளத்தை நீக்கு"
-
-#: ../cleaners/screenlets.xml
-msgid "Desktop widgets"
-msgstr "திரைபலக நிரல்பலகைகள்"
-
-#: ../cleaners/seamonkey.xml
-msgid "List of files downloaded"
-msgstr "பதிவிறக்கப்பட்ட கோப்புகளின் பட்டியல்"
-
-#: ../cleaners/seamonkey.xml
-msgid "Delete the list of visited web pages"
-msgstr "அழி பார்க்கப்பட்ட வலைப்பக்க வரலாற்றை"
 
 #: ../cleaners/skype.xml
 msgid "Installers"
@@ -735,39 +783,26 @@ msgstr "நிறுவிகள்"
 msgid "Delete cached patches and installers"
 msgstr "தற்காலிக சேமிப்பு திட்டுகள் மற்றும் நிறுவிகளை நீக்கு"
 
-#: ../cleaners/snap.xml
-msgid "Disabled"
-msgstr "முடக்கப்பட்டது"
+#: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
+msgid "Download history"
+msgstr "பதிவிறக்க வரலாறு"
 
-#: ../cleaners/snap.xml
-msgid "Remove disabled packages"
-msgstr "முடக்கப்பட்ட தொகுப்புகளை அகற்று"
+#: ../cleaners/seamonkey.xml
+msgid "List of files downloaded"
+msgstr "பதிவிறக்கப்பட்ட கோப்புகளின் பட்டியல்"
 
-#: ../cleaners/teamviewer.xml
-msgid "Remote control software"
-msgstr "தொலை கட்டுப்பாட்டு மென்பொருள்"
+#: ../cleaners/seamonkey.xml
+msgid "Delete the list of visited web pages"
+msgstr "அழி பார்க்கப்பட்ட வலைப்பக்க வரலாற்றை"
 
-#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
-msgid "Thumbnails"
-msgstr "சிறுபடங்கள்"
+#. Cleaning option that deletes AI models in a web browser
+#: ../cleaners/google_chrome.xml
+msgid "AI"
+msgstr "AI"
 
-#: ../cleaners/thumbnails.xml
-msgid "Icons for files on the system"
-msgstr "கணினியில் உள்ள கோப்புகளுக்கான சின்னங்கள்"
-
-#: ../cleaners/thunderbird.xml
-msgid ""
-"Deleting the index will reset the configuration of columns in the message "
-"list."
-msgstr "குறியீட்டை நீக்குவது செய்தி பட்டியலில் உள்ள நெடுவரிசைகளின் உள்ளமைவை மீட்டமைக்கும்."
-
-#: ../cleaners/thunderbird.xml
-msgid "Session restore"
-msgstr "அமர்வு மீட்டமை"
-
-#: ../cleaners/thunderbird.xml
-msgid "Restores the previous session when the browser next starts"
-msgstr "உலாவி அடுத்து தொடங்கும் போது முந்தைய அமர்வை மீட்டெடுக்கிறது"
+#: ../cleaners/google_chrome.xml
+msgid "Delete the AI models"
+msgstr "AI மாதிரிகளை நீக்கவும்"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -790,6 +825,7 @@ msgstr "டோரண்டுகளை நீக்கு (மெட்டாட
 msgid "Statistics"
 msgstr "புள்ளிவிவரங்கள்"
 
+#. TRANSLATORS: Description of the Memory dump cleaning option.
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Delete the file"
 msgstr "கோப்பை நீக்கு"
@@ -798,6 +834,36 @@ msgstr "கோப்பை நீக்கு"
 msgid "Delete the list of game servers"
 msgstr "விளையாட்டு சேவையகங்களின் பட்டியலை அழி"
 
+#: ../cleaners/profanity.xml
+msgid "Downloaded files"
+msgstr "பதிவிறக்கம் செய்யப்பட்ட கோப்புகள்"
+
+#: ../cleaners/teamviewer.xml
+msgid "Remote control software"
+msgstr "தொலை கட்டுப்பாட்டு மென்பொருள்"
+
+#. TRANSLATORS: Name of a cleaning option for Windows crash dump files.
+#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
+msgid "Memory dump"
+msgstr "நினைவக டம்ப்"
+
+#: ../cleaners/screenlets.xml
+msgid "Desktop widgets"
+msgstr "திரைபலக நிரல்பலகைகள்"
+
+#: ../cleaners/winrar.xml
+msgid "File archiver"
+msgstr "கோப்பு காப்பகம்"
+
+#: ../cleaners/amule.xml
+msgid "Known files history"
+msgstr "அறியப்பட்ட கோப்புகள் வரலாறு"
+
+#. http://wiki.amule.org/wiki/Friend
+#: ../cleaners/amule.xml
+msgid "Known clients and friends"
+msgstr "அறியப்பட்ட வாடிக்கையாளர்கள் மற்றும் நண்பர்கள்"
+
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
@@ -805,64 +871,13 @@ msgstr ""
 "அகற்று ~/.viminfo இது உள்ளடக்கியுள்ளது கோப்பு வரலாறு,கட்டளை வரலாறு,மற்றும் தற்காலிக "
 "சேமிப்பு"
 
-#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
-msgid "Memory dump"
-msgstr "நினைவக டம்ப்"
-
-#: ../cleaners/windows_defender.xml
-msgid "Anti-virus"
-msgstr "எதிர்ப்பு வைரச்"
-
-#: ../cleaners/windows_defender.xml
-msgid "Quarantine"
-msgstr "தொற்றொதுக்கம்"
-
-#: ../cleaners/windows_explorer.xml
+#: ../cleaners/discord.xml
 msgid ""
-"This option will reset pinned locations in Quick Access to their defaults."
+"Delete the web cache, which reduces time to display revisited pages. This "
+"also clears favorited GIFs."
 msgstr ""
-"இந்த விருப்பம் அவற்றின் இயல்புநிலைக்கு விரைவான அணுகலில் பின் செய்யப்பட்ட இடங்களை "
-"மீட்டமைக்கும்."
-
-#: ../cleaners/windows_explorer.xml
-msgid "Shellbags"
-msgstr "செல்பாக்ச்"
-
-#: ../cleaners/windows_explorer.xml
-msgid "Delete the usage date, window position, and other data for folders"
-msgstr "பயன்பாட்டு தேதி, சாளர நிலை மற்றும் கோப்புறைகளுக்கான பிற தரவை நீக்கவும்"
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will reset the position of desktop icons."
-msgstr "இது டெச்க்டாப் ஐகான்களின் நிலையை மீட்டமைக்கும்."
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will restart Windows Explorer."
-msgstr "இது சாளரங்கள் எக்ச்ப்ளோரரை மறுதொடக்கம் செய்யும்."
-
-#: ../cleaners/wine.xml
-msgid "Compatibility layer for Windows software"
-msgstr "சாளரங்கள் மென்பொருளுக்கான பொருந்தக்கூடிய அடுக்கு"
-
-#: ../cleaners/winrar.xml
-msgid "File archiver"
-msgstr "கோப்பு காப்பகம்"
-
-#: ../cleaners/wordpad.xml
-msgid "Word processor"
-msgstr "சொல் செயலி"
-
-#: ../cleaners/x11.xml
-msgid "Windowing system"
-msgstr "சாளரம் அமைப்பு"
-
-#: ../cleaners/zoom.xml
-msgid "Recordings"
-msgstr "ஊடகபதிவுகள்"
-
-#: ../cleaners/zoom.xml
-msgid "Delete the audio and video recordings"
-msgstr "ஆடியோ மற்றும் வீடியோ பதிவுகளை நீக்கவும்"
+"வலை தற்காலிக சேமிப்பை நீக்கு, இது மறுபரிசீலனை செய்யப்பட்ட பக்கங்களைக் காண்பிப்பதற்கான "
+"நேரத்தைக் குறைக்கிறது. இது விருப்பமான GIF களையும் அழிக்கிறது."
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
@@ -1290,11 +1305,20 @@ msgid ""
 "XML={option_xml}"
 msgstr "கிளீனர் ஐடி = {cleaner_id}, விருப்பம் நீகுமொ = {option_xml}"
 
-#. TRANSLATORS: Warning printed to the log.
-#. %s expands to the path of the XML cleaner file that was skipped
-#: ../bleachbit/CleanerML.py
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file that was skipped
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
+msgstr "துப்புரவாளரைப் புறக்கணித்தல் ஏனெனில் இது உலகத்தை எழுதக்கூடியது: %s"
+
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file whose directory is world
+#. writable.
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
+#, fuzzy, python-format
+#| msgid "Ignoring cleaner because it is world writable: %s"
+msgid "Ignoring cleaner because its directory is world writable: %s"
 msgstr "துப்புரவாளரைப் புறக்கணித்தல் ஏனெனில் இது உலகத்தை எழுதக்கூடியது: %s"
 
 #. TRANSLATORS: Error message printed to the log.
@@ -1304,10 +1328,12 @@ msgstr "துப்புரவாளரைப் புறக்கணித�
 msgid "Error reading cleaner: %s"
 msgstr "கிளீனரை வாசிப்பது பிழை: %s"
 
+#. TRANSLATORS: Cleaner name shown in the list of applications.
 #: ../bleachbit/Cleaner.py
 msgid "System"
 msgstr "அமைப்பு"
 
+#. TRANSLATORS: Description of the System cleaner.
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
 msgstr "பொதுவாக அமைப்பு"
@@ -1323,6 +1349,7 @@ msgstr "பொதுவாக அமைப்பு"
 msgid "Broken desktop files"
 msgstr "பழுதடைந்த திரைப்பலக கோப்புகள்"
 
+#. TRANSLATORS: Description of the Broken desktop files cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete broken application menu entries and file associations"
 msgstr "உடைந்த பயன்பாட்டு பட்டியல் உள்ளீடுகள் மற்றும் கோப்பு சங்கங்களை நீக்கு"
@@ -1333,30 +1360,40 @@ msgstr "உடைந்த பயன்பாட்டு பட்டியல�
 msgid "Localizations"
 msgstr "உள்ளூர்மயமாக்கல்கள்"
 
+#. TRANSLATORS: Description of the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete files for unwanted languages"
 msgstr "தேவையற்ற மொழிகளுக்கான கோப்புகளை அழி"
 
+#. TRANSLATORS: Warning for the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Configure this option in the preferences."
 msgstr "இந்த விருப்பத்தை விருப்பங்களில் உள்ளமைக்கவும்."
 
+#. TRANSLATORS: 'Rotated logs' refers to old system log files.
+#. Linux systems often have a scheduled job to rotate the logs
+#. which means compress all except the newest log and then delete
+#. the oldest log. You could translate this as 'old logs.'
 #: ../bleachbit/Cleaner.py
 msgid "Rotated logs"
 msgstr "சுழலும் பதிவுகள்"
 
+#. TRANSLATORS: Description of the Rotated logs cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete old system logs"
 msgstr "பழைய கணினி பதிவுகளை நீக்கவும்"
 
+#. TRANSLATORS: Name of a cleaning option. Trash is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Trash"
 msgstr "குப்பைத்தொட்டி"
 
+#. TRANSLATORS: Description of the Trash cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the trash"
 msgstr "குப்பையை காலி செய்"
 
+#. TRANSLATORS: Name of a cleaning option for system memory.
 #: ../bleachbit/Cleaner.py ../bleachbit/Worker.py
 msgid "Memory"
 msgstr "நினைவகம்"
@@ -1366,6 +1403,7 @@ msgstr "நினைவகம்"
 msgid "Wipe the swap and free memory"
 msgstr "இடமாற்று மற்றும் இலவச நினைவகத்தைத் துடைக்கவும்"
 
+#. TRANSLATORS: Warning for the experimental Memory cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "This option is experimental and may cause system problems."
 msgstr "இந்த விருப்பம் சோதனை மற்றும் கணினி சிக்கல்களை ஏற்படுத்தக்கூடும்."
@@ -1380,10 +1418,12 @@ msgstr "டிஎன்எச் கேச்"
 msgid "Prefetch"
 msgstr "தற்காலிக"
 
+#. TRANSLATORS: Name of a cleaning option for the Windows recycle bin.
 #: ../bleachbit/Cleaner.py
 msgid "Recycle bin"
 msgstr "மீள்சுழற்சிக் கூடை"
 
+#. TRANSLATORS: Description of the Recycle bin cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the recycle bin"
 msgstr "மீள்சுழற்சிக் கூடையை வெறுமனாக்கு"
@@ -1408,10 +1448,12 @@ msgstr ""
 msgid "This option may prevent uninstalling some updates."
 msgstr "இந்த விருப்பம் சில புதுப்பிப்புகளை நிறுவல் நீக்குவதைத் தடுக்கலாம்."
 
+#. TRANSLATORS: Name of a cleaning option. Clipboard is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
 msgstr "ஒட்டுப்பலகை"
 
+#. TRANSLATORS: Description of the Clipboard cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
@@ -1425,6 +1467,7 @@ msgstr ""
 msgid "Custom"
 msgstr "தனிப்பயன்"
 
+#. TRANSLATORS: Description of the Custom cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete user-specified files and folders"
 msgstr "பயனர் குறிப்பிட்ட கோப்புகள் மற்றும் கோப்புறைகளை நீக்கவும்"
@@ -1465,6 +1508,7 @@ msgstr "நேட்டிவ் கிளீனர்களை ஏற்று�
 msgid "Importing cleaners from Winapp2.ini…"
 msgstr "Winapp2.ini இலிருந்து கிளீனர்களை இறக்குமதி செய்கிறது…"
 
+#. TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
 #: ../bleachbit/Cleaner.py
 #, python-format
 msgid "Wipe empty space %s"
@@ -2263,6 +2307,10 @@ msgstr "தூய்மை செய்த பிறகு வெளியேற
 msgid "Reset warning confirmations"
 msgstr "முன்னறிவிப்பு உறுதிப்படுத்தல்களை மீட்டமைக்கவும்"
 
+#. TRANSLATORS: This means to hide cleaners which would do
+#. nothing. For example, if Firefox were never used on
+#. this system, this option would hide Firefox to simplify
+#. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
 msgstr "பொருத்தமற்ற கிளீனர்களை மறைக்கவும்"
@@ -2469,11 +2517,13 @@ msgstr "பாதை"
 msgid "Choose a file"
 msgstr "கோப்பினை தேர்ந்தெடுக்கவும்"
 
+#. TRANSLATORS: Button label in the preferences for adding a file.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add file"
 msgstr "கோப்பினை சேர்"
 
+#. TRANSLATORS: Button label in the preferences for adding a folder.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add folder"
@@ -2817,6 +2867,9 @@ msgstr "உள்ளமைவை எழுதும்வது மறுக்�
 msgid "Error checking whether path exists: %s"
 msgstr "பாதை இருக்கிறதா என்று சோதிப்பது: %s"
 
+#. TRANSLATORS: %s is a ISO language code of two or three letters.
+#. "Preserving" means the language's localization files will be
+#. kept and not deleted when cleaning.
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Automatically preserving language %s."
@@ -2899,14 +2952,17 @@ msgid ""
 msgstr ""
 "தற்போது இயங்குவதால் %sஐ தூய்மை செய்ய முடியாது.  அதை மூடி, மீண்டும் முயற்சிக்கவும்."
 
+#. TRANSLATORS: Status message after a successful winapp2.ini update.
 #: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
 msgstr "புதிய winapp2.ini பதிவிறக்கம் செய்யப்பட்டது."
 
+#. TRANSLATORS: Title of the software update dialog.
 #: ../bleachbit/Update.py
 msgid "Update BleachBit"
 msgstr "ப்ளீச்ச்பிட்டைப் புதுப்பிக்கவும்"
 
+#. TRANSLATORS: Message in the software update dialog.
 #: ../bleachbit/Update.py
 msgid "A new version is available."
 msgstr "புதிய பதிப்பு கிடைக்கிறது."
@@ -2947,14 +3003,18 @@ msgstr "பன்னூடகம்"
 msgid "Utilities"
 msgstr "பயன்பாடுகள்"
 
+#. TRANSLATORS: Cleaner category name for games imported from winapp2.ini.
 #: ../bleachbit/Winapp.py
 msgid "Games"
 msgstr "விளையாட்டுகள்"
 
+#. TRANSLATORS: Description shown for a cleaner imported from winapp2.ini,
+#. which is a database of cleaning definitions.
 #: ../bleachbit/Winapp.py
 msgid "Imported from winapp2.ini"
 msgstr "WinApp2.ini இலிருந்து இறக்குமதி செய்யப்பட்டது"
 
+#. TRANSLATORS: Warning shown when cleaning Windows Updates without administrator access.
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr "சாளரங்கள் புதுப்பிப்புகளை தூய்மை செய்ய நிர்வாகி சிறப்புரிமைகள் தேவை"
@@ -2995,8 +3055,11 @@ msgstr "கோப்பு முறைமை வகை %(fstype)s உடன் 
 msgid "Path to wipe must be an existing directory: %s"
 msgstr "துடைப்பதற்கான பாதை ஏற்கனவே இருக்கும் கோப்பகமாக இருக்க வேண்டும்: %s"
 
+#. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-msgid "Creating new, temporary file for wiping free space."
+#, fuzzy
+#| msgid "Creating new, temporary file for wiping free space."
+msgid "Creating new, temporary file for wiping empty space."
 msgstr "இலவச இடத்தைத் துடைப்பதற்கு புதிய, தற்காலிக கோப்பை உருவாக்குதல்."
 
 #: ../bleachbit/Wipe.py
@@ -3088,6 +3151,7 @@ msgstr "பிழை: {operation_option}: {command}"
 msgid "Please wait. Wiping empty space."
 msgstr "தயவுசெய்து காத்திருக்கவும். வெற்று இடத்தை துடைத்தல்."
 
+#. TRANSLATORS: Instruction shown while wiping a drive's empty space.
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
@@ -3109,6 +3173,7 @@ msgstr ""
 msgid "Please wait.  Cleaning %s."
 msgstr "தயவுசெய்து காத்திருங்கள். தூய்மை %s."
 
+#. TRANSLATORS: %d is the estimated number of minutes remaining.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "About %d minute remaining."
@@ -3144,6 +3209,10 @@ msgstr "அழிக்கப்பட்ட கோப்புகள்: %d"
 msgid "Files to be deleted: %d"
 msgstr "அழிக்கப்படவுள்ள கோப்புகள்: %d"
 
+#. TRANSLATORS: %d is the number of special cleaning operations
+#. completed. Special operations are cleaning actions that do
+#. not delete a file, such as overwriting a file's contents,
+#. truncating a file, or deleting a Windows registry key.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Special operations: %d"

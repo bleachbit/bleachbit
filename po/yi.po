@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-16 16:46-0600\n"
+"POT-Creation-Date: 2026-08-21 05:26-0600\n"
 "PO-Revision-Date: 2020-04-05 02:23+0000\n"
 "Last-Translator: bernard stafford <Unknown>\n"
 "Language-Team: Yiddish <yi@li.org>\n"
@@ -19,275 +19,34 @@ msgstr ""
 "X-Launchpad-Export-Date: 2020-04-05 14:20+0000\n"
 "X-Generator: Launchpad (build a296f04231dee355be5db73cc878b9e21689a253)\n"
 
-#: ../cleaners/adobe_reader.xml
-msgid "Document viewer"
-msgstr "דאָקומענט וויוער"
-
-#: ../cleaners/adobe_reader.xml ../cleaners/amsn.xml ../cleaners/audacious.xml
-#: ../cleaners/beagle.xml ../cleaners/brave.xml ../cleaners/chromium.xml
-#: ../cleaners/claude.xml ../cleaners/discord.xml ../cleaners/emesene.xml
-#: ../cleaners/epiphany.xml ../cleaners/evolution.xml ../cleaners/exaile.xml
-#: ../cleaners/firefox.xml ../cleaners/flash.xml ../cleaners/geary.xml
-#: ../cleaners/gftp.xml ../cleaners/google_chrome.xml ../cleaners/gpodder.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/java.xml ../cleaners/kde.xml ../cleaners/librewolf.xml
-#: ../cleaners/liferea.xml ../cleaners/microsoft_edge.xml ../cleaners/miro.xml
-#: ../cleaners/nexuiz.xml ../cleaners/openoffice.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/pidgin.xml ../cleaners/rhythmbox.xml
-#: ../cleaners/safari.xml ../cleaners/seamonkey.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/slack.xml
-#: ../cleaners/smartftp.xml ../cleaners/thumbnails.xml
-#: ../cleaners/thunderbird.xml ../cleaners/tremulous.xml
-#: ../cleaners/vivaldi.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
-#: ../cleaners/waterfox.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/xine.xml ../cleaners/yahoo_messenger.xml ../cleaners/zen.xml
-#: ../cleaners/zoom.xml ../bleachbit/Cleaner.py
-msgid "Cache"
-msgstr "וועב קאַש"
-
-#. TRANSLATORS: The description of what certain cleaning options do.
-#: ../cleaners/adobe_reader.xml ../cleaners/amsn.xml ../cleaners/apt.xml
-#: ../cleaners/audacious.xml ../cleaners/beagle.xml ../cleaners/claude.xml
-#: ../cleaners/dnf.xml ../cleaners/evolution.xml ../cleaners/exaile.xml
-#: ../cleaners/firefox.xml ../cleaners/flash.xml ../cleaners/geary.xml
-#: ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/java.xml ../cleaners/kde.xml ../cleaners/librewolf.xml
-#: ../cleaners/liferea.xml ../cleaners/miro.xml ../cleaners/nexuiz.xml
-#: ../cleaners/openoffice.xml ../cleaners/pacman.xml ../cleaners/palemoon.xml
-#: ../cleaners/pidgin.xml ../cleaners/rhythmbox.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/smartftp.xml
-#: ../cleaners/thumbnails.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
-#: ../cleaners/waterfox.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/xine.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/yum.xml ../cleaners/zen.xml
-#: ../cleaners/zoom.xml ../bleachbit/Cleaner.py
-msgid "Delete the cache"
-msgstr "ויסמעקן די קאַש"
-
-#: ../cleaners/adobe_reader.xml ../cleaners/audacious.xml
-#: ../cleaners/filezilla.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/openoffice.xml ../cleaners/paint.xml ../cleaners/smartftp.xml
-#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winzip.xml ../cleaners/wordpad.xml
-msgid "Most recently used"
-msgstr "רובֿ לעצטנס געוויינט"
-
-#: ../cleaners/adobe_reader.xml ../cleaners/audacious.xml ../cleaners/gedit.xml
-#: ../cleaners/gwenview.xml ../cleaners/kde.xml ../cleaners/openoffice.xml
-#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py
-msgid "Delete the list of recently used documents"
-msgstr "ויסמעקן די רשימה פון לעצטנס געוויינט דאָקומענטן"
-
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/bash.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
-#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/silverlight.xml
-#: ../cleaners/vuze.xml ../cleaners/windows_defender.xml ../cleaners/wine.xml
-#: ../cleaners/winetricks.xml ../cleaners/winrar.xml ../bleachbit/Cleaner.py
-msgid "Temporary files"
-msgstr "צייטווייליגע טעקעס"
-
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/bash.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
-#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/silverlight.xml
-#: ../cleaners/vuze.xml ../cleaners/windows_defender.xml ../cleaners/wine.xml
-#: ../cleaners/winetricks.xml ../cleaners/winrar.xml ../bleachbit/Cleaner.py
-msgid "Delete the temporary files"
-msgstr "ויסמעקן די צייַטווייַליק טעקעס"
-
-#: ../cleaners/amsn.xml ../cleaners/discord.xml ../cleaners/emesene.xml
-#: ../cleaners/hexchat.xml ../cleaners/pidgin.xml ../cleaners/profanity.xml
-#: ../cleaners/skype.xml ../cleaners/slack.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/zoom.xml
-msgid "Chat client"
-msgstr "שמועסן קליענט"
-
-#: ../cleaners/amsn.xml ../cleaners/emesene.xml ../cleaners/hexchat.xml
-#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/skype.xml
-#: ../cleaners/yahoo_messenger.xml
-msgid "Chat logs"
-msgstr "שמועסן לאָגס"
-
-#: ../cleaners/amsn.xml ../cleaners/emesene.xml ../cleaners/hexchat.xml
-#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/skype.xml
-#: ../cleaners/yahoo_messenger.xml
-msgid "Delete the chat logs"
-msgstr "ויסמעקן די שמועס לאָגס"
-
-#: ../cleaners/amule.xml ../cleaners/filezilla.xml ../cleaners/gftp.xml
-#: ../cleaners/smartftp.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
-msgid "File transfer client"
-msgstr "טעקע אַריבערפירן קליענט"
-
-#: ../cleaners/amule.xml ../cleaners/audacious.xml ../cleaners/claude.xml
-#: ../cleaners/easytag.xml ../cleaners/exaile.xml ../cleaners/gftp.xml
-#: ../cleaners/gpodder.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/miro.xml
-#: ../cleaners/profanity.xml ../cleaners/realplayer.xml
-#: ../cleaners/screenlets.xml ../cleaners/smartftp.xml
-#: ../cleaners/teamviewer.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
-#: ../cleaners/warzone2100.xml ../cleaners/windows_defender.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../bleachbit/Cleaner.py
-msgid "Logs"
-msgstr "לאָגס"
-
-#: ../cleaners/amule.xml ../cleaners/audacious.xml ../cleaners/claude.xml
-#: ../cleaners/exaile.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/miro.xml ../cleaners/profanity.xml ../cleaners/realplayer.xml
-#: ../cleaners/screenlets.xml ../cleaners/smartftp.xml
-#: ../cleaners/teamviewer.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
-#: ../cleaners/warzone2100.xml ../cleaners/windows_defender.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../bleachbit/Cleaner.py
-msgid "Delete the logs"
-msgstr "ויסמעקן די לאָגס"
-
-#: ../cleaners/amule.xml
-msgid "Known files history"
-msgstr "באַוווסט טעקעס געשיכטע"
-
-#: ../cleaners/amule.xml ../cleaners/d4x.xml ../cleaners/easytag.xml
-#: ../cleaners/filezilla.xml ../cleaners/gnome.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
-#: ../cleaners/links2.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
-#: ../cleaners/realplayer.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/windows_defender.xml ../cleaners/winrar.xml
-msgid "Delete the usage history"
-msgstr "ויסמעקן די באַניץ געשיכטע"
-
-#. http://wiki.amule.org/wiki/Friend
-#: ../cleaners/amule.xml
-msgid "Known clients and friends"
-msgstr "באקאנט קלייאַנץ און Friends"
-
-#: ../cleaners/amule.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
-#: ../cleaners/firefox.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
-#: ../cleaners/vscode.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
-#: ../cleaners/windows_defender.xml ../cleaners/zen.xml
-msgid "Backup files"
-msgstr "באַקקופּ טעקעס"
-
-#: ../cleaners/amule.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
-#: ../cleaners/firefox.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
-#: ../cleaners/vscode.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
-#: ../cleaners/windows_defender.xml ../cleaners/zen.xml
-msgid "Delete the backup files"
-msgstr "ויסמעקן די באַקאַפּ טעקעס"
-
-#: ../cleaners/apt.xml ../cleaners/dnf.xml ../cleaners/pacman.xml
-#: ../cleaners/snap.xml ../cleaners/yum.xml
-msgid "Package manager"
-msgstr "פּעקל פאַרוואַלטער"
-
-#: ../cleaners/apt.xml
-msgid "Delete obsolete files"
-msgstr "ויסמעקן פאַרעלטערט טעקעס"
-
-#: ../cleaners/apt.xml
-msgid "Package lists"
-msgstr "פּעקל רשימות"
-
-#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/realplayer.xml
-#: ../cleaners/vlc.xml ../cleaners/winamp.xml
-#: ../cleaners/windows_media_player.xml
+#: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "מעדיע שפּילער"
 
-#: ../cleaners/bash.xml ../cleaners/fish.xml ../cleaners/zsh.xml
-msgid "Shell"
-msgstr "שעל"
-
-#: ../cleaners/bash.xml ../cleaners/brave.xml ../cleaners/chromium.xml
-#: ../cleaners/d4x.xml ../cleaners/discord.xml ../cleaners/easytag.xml
-#: ../cleaners/elinks.xml ../cleaners/fish.xml ../cleaners/google_chrome.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
-#: ../cleaners/links2.xml ../cleaners/mc.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/nautilus.xml ../cleaners/octave.xml ../cleaners/opera.xml
-#: ../cleaners/python.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
-#: ../cleaners/seamonkey.xml ../cleaners/slack.xml ../cleaners/sqlite3.xml
-#: ../cleaners/tortoisesvn.xml ../cleaners/vim.xml ../cleaners/vivaldi.xml
-#: ../cleaners/windows_defender.xml ../cleaners/winrar.xml ../cleaners/zsh.xml
-msgid "History"
-msgstr "היסטאריע"
-
-#: ../cleaners/bash.xml ../cleaners/fish.xml ../cleaners/octave.xml
-#: ../cleaners/python.xml ../cleaners/sqlite3.xml ../cleaners/zsh.xml
-msgid "Delete the command history"
-msgstr "ויסמעקן די באַפֿעל געשיכטע"
-
-#: ../cleaners/beagle.xml ../cleaners/recoll.xml
-msgid "Search tool"
-msgstr "זוכן געצייַג"
-
-#: ../cleaners/beagle.xml ../cleaners/recoll.xml ../cleaners/thunderbird.xml
-msgid "Index"
-msgstr "אינדעקס"
-
-#: ../cleaners/beagle.xml ../cleaners/brave.xml ../cleaners/chromium.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/firefox.xml
-#: ../cleaners/geary.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/profanity.xml
-#: ../cleaners/thunderbird.xml ../cleaners/transmission.xml
-#: ../cleaners/vivaldi.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
-#: ../cleaners/windows_defender.xml ../cleaners/zen.xml ../cleaners/zsh.xml
-msgid "Delete the files"
-msgstr "ויסמעקן די טעקעס"
-
-#: ../cleaners/beagle.xml ../cleaners/gl-117.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/x11.xml
-msgid "Debug logs"
-msgstr "דעבוג לאָגס"
-
-#: ../cleaners/beagle.xml ../cleaners/easytag.xml ../cleaners/gl-117.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/x11.xml
-msgid "Delete the debug logs"
-msgstr "ויסמעקן די דיבאַג לאָגס"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/elinks.xml
-#: ../cleaners/epiphany.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/links2.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Web browser"
-msgstr "וועב בלעטערער"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
-#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml
-msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr ""
-"ויסמעקן די וועב קאַש, וואָס ראַדוסאַז צייַט צו אַרויסווייַזן רעוויסיטעד בלעטער"
-
 #. TRANSLATORS: Sidebar label for the page managing browser cookies in
 #. the Preferences dialog.
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
-#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/flash.xml
+#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
-#: ../cleaners/seamonkey.xml ../cleaners/silverlight.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../bleachbit/GuiPreferences.py
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../bleachbit/GuiPreferences.py
 msgid "Cookies"
 msgstr "קיכלעך"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
-#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/flash.xml
+#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
-#: ../cleaners/seamonkey.xml ../cleaners/silverlight.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
 #, fuzzy
 #| msgid ""
 #| "Delete cookies, which contain information such as web site preferences, "
@@ -299,37 +58,561 @@ msgstr ""
 "ויסמעקן קיכלעך, וואָס אַנטהאַלטן אינפֿאָרמאַציע אַזאַ ווי וועב פּלאַץ פּרעפֿערענצן, "
 "אָטענטאַקיישאַן, און טראַקינג לעגיטימאַציע"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
+#: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
+#: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
+#: ../cleaners/safari.xml ../cleaners/fish.xml ../cleaners/chromium.xml
+#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
+#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
+#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
+#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/python.xml
+#: ../cleaners/vim.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/octave.xml
+msgid "History"
+msgstr "היסטאריע"
+
+#: ../cleaners/realplayer.xml ../cleaners/easytag.xml ../cleaners/filezilla.xml
+#: ../cleaners/gnome.xml ../cleaners/windows_defender.xml
+#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
+#: ../cleaners/libreoffice.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
+#: ../cleaners/amule.xml
+msgid "Delete the usage history"
+msgstr "ויסמעקן די באַניץ געשיכטע"
+
+#. TRANSLATORS: Name of a cleaning option for Windows log files.
+#: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
+#: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
+#: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
+#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
+#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Logs"
+msgstr "לאָגס"
+
+#. TRANSLATORS: Description of the Logs cleaning option.
+#: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
+#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
+#: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
+#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
+#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the logs"
+msgstr "ויסמעקן די לאָגס"
+
+#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
+#: ../cleaners/flash.xml
+msgid "Multimedia viewer"
+msgstr "מולטימעדיאַ צוקוקער"
+
+#. TRANSLATORS: Name of a cleaning option. Cache is a noun.
+#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
+#: ../cleaners/librewolf.xml ../cleaners/openoffice.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
+#: ../cleaners/vivaldi.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/pidgin.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/emesene.xml
+#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/epiphany.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
+#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/seamonkey.xml
+#: ../cleaners/flash.xml ../cleaners/google_chrome.xml
+#: ../cleaners/tremulous.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../bleachbit/Cleaner.py
+msgid "Cache"
+msgstr "וועב קאַש"
+
+#. TRANSLATORS: The description of what certain cleaning options do.
+#: ../cleaners/xine.xml ../cleaners/dnf.xml ../cleaners/miro.xml
+#: ../cleaners/amsn.xml ../cleaners/librewolf.xml ../cleaners/openoffice.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml ../cleaners/yum.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
+#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
+#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
+#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
+#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the cache"
+msgstr "ויסמעקן די קאַש"
+
+#: ../cleaners/paint.xml ../cleaners/openoffice.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/wordpad.xml ../cleaners/audacious.xml ../cleaners/filezilla.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
+#: ../cleaners/winamp.xml ../cleaners/adobe_reader.xml ../cleaners/winzip.xml
+#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml
+msgid "Most recently used"
+msgstr "רובֿ לעצטנס געוויינט"
+
+#: ../cleaners/paint.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/wordpad.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
+#: ../cleaners/winamp.xml ../cleaners/winzip.xml ../cleaners/teamviewer.xml
+#: ../cleaners/vlc.xml
+msgid "Delete the most recently used list"
+msgstr "ויסמעקן די מערסט לעצטנס געוויינט רשימה"
+
+#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
+#: ../cleaners/apt.xml ../cleaners/snap.xml
+msgid "Package manager"
+msgstr "פּעקל פאַרוואַלטער"
+
+#: ../cleaners/dnf.xml
+msgid "Remove packages that were formerly dependencies"
+msgstr "באַזייַטיקן פּאַקאַדזשאַז אַז זענען אַמאָל דיפּענדאַנסיז"
+
+#: ../cleaners/dnf.xml
+msgid ""
+"Carefully review the list of packages that will be removed by running \"dnf "
+"list autoremove\"."
+msgstr ""
+"איבערבליק קערפאַלי די רשימה פון פּאַקאַדזשאַז וואָס וועט זיין אַוועקגענומען דורך "
+"פליסנדיק \"dnf list autoremove\"."
+
+#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
+#: ../cleaners/zoom.xml ../cleaners/skype.xml ../cleaners/profanity.xml
+#: ../cleaners/discord.xml
+msgid "Chat client"
+msgstr "שמועסן קליענט"
+
+#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
+#: ../cleaners/seamonkey.xml
+msgid "Chat logs"
+msgstr "שמועסן לאָגס"
+
+#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
+#: ../cleaners/seamonkey.xml
+msgid "Delete the chat logs"
+msgstr "ויסמעקן די שמועס לאָגס"
+
+#: ../cleaners/librewolf.xml ../cleaners/elinks.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/links2.xml ../cleaners/seamonkey.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml
+msgid "Web browser"
+msgstr "וועב בלעטערער"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
+#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+msgid "Backup files"
+msgstr "באַקקופּ טעקעס"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
+#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+msgid "Delete the backup files"
+msgstr "ויסמעקן די באַקאַפּ טעקעס"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Crash reports"
 msgstr "קראַך ריפּאָרץ"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/geary.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/windows_defender.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml
+#: ../cleaners/google_chrome.xml ../cleaners/transmission.xml
+#: ../cleaners/profanity.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/vuze.xml ../cleaners/opera.xml
+msgid "Delete the files"
+msgstr "ויסמעקן די טעקעס"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Form history"
 msgstr "פאָרעם געשיכטע"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/vivaldi.xml
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/internet_explorer.xml
+#, fuzzy
+#| msgid "Delete the search history"
+msgid "Saved form entries and search bar history"
+msgstr "ויסמעקן די זוכן געשיכטע"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Passwords"
+msgstr "פּאַססוואָרדס"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid ""
+"A database of usernames and passwords as well as a list of sites that should "
+"not store passwords"
+msgstr ""
+"אַ דייטאַבייס פון וסערנאַמעס און פּאַסווערדז ווי געזונט ווי אַ רשימה פון זייטלעך "
+"אַז זאָל ניט קראָם פּאַסווערדז"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "This option will delete your saved passwords."
+msgstr "די אָפּציע וועט ויסמעקן דיין געראטעוועט פּאַסווערדז."
+
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Session"
+msgstr "סעסיע"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Previously open tabs and windows"
+msgstr ""
+
+#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Site data"
+msgstr ""
+
+#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
+msgstr ""
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Site preferences"
+msgstr "פּלאַץ פּרעפֿערענצן"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Settings for individual sites"
+msgstr "סעטטינגספֿאַר יחיד זייטלעך"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/konqueror.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+msgid "URL history"
+msgstr "URL געשיכטע"
+
+#: ../cleaners/librewolf.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+msgid "List of visited web pages"
+msgstr "רשימה פון באזוכט וועב זייַטלעך"
+
+#. TRANSLATORS: Vacuum is a verb.  The term is jargon
+#. from the SQLite database.  Microsoft Access uses
+#. the term 'Compact Database' (which you may translate
+#. instead).  Another synonym is 'defragment.'
+#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
+#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Action.py
+msgid "Vacuum"
+msgstr "וואַקוום"
+
+#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
+#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml
+msgid ""
+"Clean database fragmentation to reduce space and improve speed without "
+"removing any data"
+msgstr ""
+"ריין דייטאַבייס פראַגמאַנטיישאַן צו רעדוצירן פּלאַץ און פֿאַרבעסערן גיכקייַט אָן "
+"רימוווינג קיין דאַטן"
+
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+msgid "Shell"
+msgstr "שעל"
+
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+#: ../cleaners/sqlite3.xml ../cleaners/python.xml ../cleaners/octave.xml
+msgid "Delete the command history"
+msgstr "ויסמעקן די באַפֿעל געשיכטע"
+
+#: ../cleaners/openoffice.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/libreoffice.xml
+msgid "Office suite"
+msgstr "אָפיס סוויט"
+
+#. TRANSLATORS: Description of the Recent documents list cleaning option.
+#: ../cleaners/openoffice.xml ../cleaners/audacious.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/gedit.xml ../cleaners/kde.xml
+#: ../bleachbit/Cleaner.py
+msgid "Delete the list of recently used documents"
+msgstr "ויסמעקן די רשימה פון לעצטנס געוויינט דאָקומענטן"
+
+#: ../cleaners/rhythmbox.xml
+msgid "Database"
+msgstr "דאַטאַבאַסע"
+
+#: ../cleaners/rhythmbox.xml
+msgid ""
+"Delete the database, which contains information such as play count and last "
+"played"
+msgstr ""
+"ויסמעקן די דייטאַבייס, וואָס כּולל אינפֿאָרמאַציע אַזאַ ווי שפּילן ציילן און לעצטע "
+"פּלייַעד"
+
+#: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
+msgid "Debug logs"
+msgstr "דעבוג לאָגס"
+
+#: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/easytag.xml
+#: ../cleaners/x11.xml ../cleaners/gl-117.xml
+msgid "Delete the debug logs"
+msgstr "ויסמעקן די דיבאַג לאָגס"
+
+#. TRANSLATORS: Name of a cleaning option for temporary files.
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
+#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr "צייטווייליגע טעקעס"
+
+#. TRANSLATORS: Description of the Temporary files cleaning option.
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
+#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr "ויסמעקן די צייַטווייַליק טעקעס"
+
+#: ../cleaners/beagle.xml ../cleaners/recoll.xml
+msgid "Search tool"
+msgstr "זוכן געצייַג"
+
+#: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/recoll.xml
+msgid "Index"
+msgstr "אינדעקס"
+
+#: ../cleaners/elinks.xml
+msgid "Delete the cookies, visited URLs, and search history"
+msgstr "ויסמעקן די קיכלעך, באזוכט URL ס, און זוכן געשיכטע"
+
+#: ../cleaners/wordpad.xml
+msgid "Word processor"
+msgstr "וואָרט פּראַסעסער"
+
+#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/epiphany.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
+#: ../cleaners/brave.xml ../cleaners/seamonkey.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Delete the web cache, which reduces time to display revisited pages"
+msgstr ""
+"ויסמעקן די וועב קאַש, וואָס ראַדוסאַז צייַט צו אַרויסווייַזן רעוויסיטעד בלעטער"
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 #, fuzzy
 #| msgid "A history of forms entered in web sites"
 msgid "A history of forms entered in websites"
 msgstr "א געשיכטע פון פארמען אריין אין וועב זייטלעך"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/slack.xml ../cleaners/vivaldi.xml
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/slack.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr "ויסמעקן די געשיכטע וואָס כולל באזוכט זייטלעך, דאַונלאָודז און טאַמניילז"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+msgid "Sync"
+msgstr "סינק"
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#, fuzzy
+#| msgid "Delete the sync data and sign out of the browser"
+msgid "Delete the sync data (including web apps) and sign out of the browser"
+msgstr "ויסמעקן די סינק דאַטן און צייכן אויס פון דעם בלעטערער"
+
+#: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
+#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/gl-117.xml ../cleaners/tremulous.xml
+msgid "Game"
+msgstr "שפּיל"
+
+#. This software edits metadata tags, such as title and artist, in audio files
+#: ../cleaners/easytag.xml
+msgid "Audio files tagger"
+msgstr "אַודיאָ טעקעס טאַגגער"
+
+#: ../cleaners/journald.xml
+msgid "System journals"
+msgstr "סיסטעם דזשערנאַלז"
+
+#: ../cleaners/journald.xml
+msgid "Clean old system journals"
+msgstr "ריין אַלט סיסטעם דזשערנאַלז"
+
+#: ../cleaners/emesene.xml
+msgid "Delete the avatars and emoticons cache"
+msgstr "ויסמעקן די אַוואַטאַרס און עמאָטיקאָנס קאַש"
+
+#: ../cleaners/filezilla.xml ../cleaners/smartftp.xml
+#: ../cleaners/transmission.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml
+msgid "File transfer client"
+msgstr "טעקע אַריבערפירן קליענט"
+
+#: ../cleaners/epiphany.xml
+msgid "Places"
+msgstr "ערטער"
+
+#: ../cleaners/epiphany.xml
+#, fuzzy
+#| msgid ""
+#| "A database of URLs including bookmarks, favicons, and a history of "
+#| "visited web sites"
+msgid ""
+"A database of URLs including bookmarks, favicons, and a history of visited "
+"websites"
+msgstr ""
+"א דאַטאַבייס פון URL ס אַרייַנגערעכנט בוקמאַרקס, פאַוויקאָנס און אַ געשיכטע פון "
+"וויזיטיד וועבסיטעס"
+
+#: ../cleaners/epiphany.xml
+msgid "This option deletes all bookmarks."
+msgstr "דער אָפּציע דיליץ אַלע בוקמאַרקס."
+
+#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
+msgid "Downloaded podcasts"
+msgstr "דאַונלאָודיד פּאָדקאַסץ"
+
+#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
+msgid "Delete downloaded podcasts"
+msgstr "ויסמעקן דאַונלאָודיד פּאָדקאַסץ"
+
+#: ../cleaners/geary.xml ../cleaners/thunderbird.xml ../cleaners/evolution.xml
+msgid "Email client"
+msgstr "בליצפּאָסט קליענט"
+
+#: ../cleaners/geary.xml
+msgid "Attachments"
+msgstr ""
+
+#: ../cleaners/geary.xml
+msgid "Sync conflict"
+msgstr ""
+
+#: ../cleaners/geary.xml ../cleaners/deepscan.xml
+msgid "This option is slow."
+msgstr "דעם אָפּציע איז פּאַמעלעך."
+
+#: ../cleaners/wine.xml
+msgid "Compatibility layer for Windows software"
+msgstr "קאַמפּאַטאַבילאַטי שיכטע פֿאַר Windows ווייכווארג"
+
+#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
+msgid "Thumbnails"
+msgstr "טהומבנאַילס"
+
+#: ../cleaners/thumbnails.xml
+msgid "Icons for files on the system"
+msgstr "יקאָנס פֿאַר טעקעס אויף די סיסטעם"
+
+#: ../cleaners/gnome.xml ../cleaners/kde.xml
+msgid "Desktop environment"
+msgstr "דעסקטאָפּ סוויווע"
+
+#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
+#. In Windows 'Run' is the dialog in the Start menu
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+msgid "Run"
+msgstr "אַרומלויפן"
+
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/google_toolbar.xml
+msgid "Search history"
+msgstr "זוך געשיכטע"
+
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/google_toolbar.xml
+msgid "Delete the search history"
+msgstr "ויסמעקן די זוכן געשיכטע"
+
+#: ../cleaners/konqueror.xml
+msgid "Current session"
+msgstr "קראַנט סעסיע"
+
+#: ../cleaners/konqueror.xml
+msgid "Delete the current session"
+msgstr "ויסמעקן די קראַנט סעסיע"
+
+#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 msgid "Search engines"
 msgstr "זוכן ענדזשאַנז"
@@ -338,7 +621,7 @@ msgstr "זוכן ענדזשאַנז"
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
@@ -347,121 +630,96 @@ msgstr ""
 "באַשטעטיק די זוכן מאָטאָר באַניץ געשיכטע און ויסמעקן ניט-פאַבריק זוכן ענדזשאַנז, "
 "עטלעכע פון וואָס זענען צוגעגעבן אויטאָמאַטיש"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/claude.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/zsh.xml
-msgid "Session"
-msgstr "סעסיע"
+#: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
+msgid "File manager"
+msgstr "טעקע פאַרוואַלטער"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml
-msgid "Previously open tabs and windows"
-msgstr ""
+#. TRANSLATORS: Name of a cleaning option for the history of recently used files.
+#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
+#: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py
+msgid "Recent documents list"
+msgstr "לעצטע דאָקומענטן רשימה"
 
-#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Site data"
-msgstr ""
-
-#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
-msgstr ""
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/vivaldi.xml
-msgid "Sync"
-msgstr "סינק"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/vivaldi.xml
-#, fuzzy
-#| msgid "Delete the sync data and sign out of the browser"
-msgid "Delete the sync data (including web apps) and sign out of the browser"
-msgstr "ויסמעקן די סינק דאַטן און צייכן אויס פון דעם בלעטערער"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Passwords"
-msgstr "פּאַססוואָרדס"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/windows_explorer.xml
 msgid ""
-"A database of usernames and passwords as well as a list of sites that should "
-"not store passwords"
+"This option will reset pinned locations in Quick Access to their defaults."
 msgstr ""
-"אַ דייטאַבייס פון וסערנאַמעס און פּאַסווערדז ווי געזונט ווי אַ רשימה פון זייטלעך "
-"אַז זאָל ניט קראָם פּאַסווערדז"
+"די אָפּציע וועט באַשטעטיק פּיננעד לאָוקיישאַנז אין קוויק אַקסעס צו זייער דיפאָלץ."
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "This option will delete your saved passwords."
-msgstr "די אָפּציע וועט ויסמעקן דיין געראטעוועט פּאַסווערדז."
+#: ../cleaners/windows_explorer.xml
+msgid "Shellbags"
+msgstr "שעלבאַגס"
 
-#. TRANSLATORS: Vacuum is a verb.  The term is jargon
-#. from the SQLite database.  Microsoft Access uses
-#. the term 'Compact Database' (which you may translate
-#. instead).  Another synonym is 'defragment.'
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
-#: ../cleaners/firefox.xml ../cleaners/geary.xml ../cleaners/google_chrome.xml
-#: ../cleaners/gpodder.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/yum.xml ../cleaners/zen.xml ../bleachbit/Action.py
-msgid "Vacuum"
-msgstr "וואַקוום"
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the usage date, window position, and other data for folders"
+msgstr "ויסמעקן די נוצן טאָג, פֿענצטער שטעלע און אנדערע דאַטן פֿאַר פאָלדערס"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
-#: ../cleaners/firefox.xml ../cleaners/geary.xml ../cleaners/google_chrome.xml
-#: ../cleaners/gpodder.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/yum.xml ../cleaners/zen.xml
+#: ../cleaners/windows_explorer.xml
+msgid "This will reset the position of desktop icons."
+msgstr "דאָס וועט באַשטעטיק די שטעלע פון דעסקטאַפּ ייקאַנז."
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will restart Windows Explorer."
+msgstr "דעם וועט ריסטאַרט ווינדאָוז Explorer."
+
+#: ../cleaners/windows_defender.xml
+msgid "Anti-virus"
+msgstr "אַנטי-ווירוס"
+
+#: ../cleaners/windows_defender.xml
+msgid "Quarantine"
+msgstr "קאַראַנטין"
+
+#: ../cleaners/thunderbird.xml
 msgid ""
-"Clean database fragmentation to reduce space and improve speed without "
-"removing any data"
+"Deleting the index will reset the configuration of columns in the message "
+"list."
 msgstr ""
-"ריין דייטאַבייס פראַגמאַנטיישאַן צו רעדוצירן פּלאַץ און פֿאַרבעסערן גיכקייַט אָן "
-"רימוווינג קיין דאַטן"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Site preferences"
-msgstr "פּלאַץ פּרעפֿערענצן"
+#: ../cleaners/thunderbird.xml
+msgid "Session restore"
+msgstr "סעסיע ומקערן"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Settings for individual sites"
-msgstr "סעטטינגספֿאַר יחיד זייטלעך"
+#: ../cleaners/thunderbird.xml
+msgid "Restores the previous session when the browser next starts"
+msgstr ""
+
+#: ../cleaners/apt.xml
+msgid "Delete obsolete files"
+msgstr "ויסמעקן פאַרעלטערט טעקעס"
+
+#: ../cleaners/apt.xml
+msgid "Package lists"
+msgstr "פּעקל רשימות"
+
+#. Cleaner description for vim, VS Code, etc.
+#: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
+msgid "Editor"
+msgstr "רעדאַקטאָר"
+
+#: ../cleaners/x11.xml
+msgid "Windowing system"
+msgstr "ווינדאָווינג סיסטעם"
+
+#: ../cleaners/gimp.xml
+msgid "Graphics editor"
+msgstr "גראַפיקס רעדאַקטאָר"
+
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr ""
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr ""
+
+#: ../cleaners/adobe_reader.xml
+msgid "Document viewer"
+msgstr "דאָקומענט וויוער"
+
+#: ../cleaners/nautilus.xml
+msgid "Custom folders will be reset."
+msgstr "מנהג פאָלדערס וועט זיין באַשטעטיק."
 
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
@@ -506,10 +764,6 @@ msgstr "טיף יבערקוקן"
 msgid "Clean files widely scattered across the disk"
 msgstr "ריין טעקעס וויידלי צעוואָרפן אַריבער דעם דיסק"
 
-#: ../cleaners/deepscan.xml ../cleaners/geary.xml
-msgid "This option is slow."
-msgstr "דעם אָפּציע איז פּאַמעלעך."
-
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
 msgstr "דורכקוקן די פאָרויסיקע ווייַזונג פֿאַר קיין טעקעס איר ווילן צו האַלטן."
@@ -528,143 +782,40 @@ msgstr "VIM ויסבייַטן טעקעס אונטער באַניצער פּרא
 msgid "VIM swap files across system"
 msgstr "VIM ויסבייַטן טעקעס אַריבער סיסטעם"
 
-#: ../cleaners/discord.xml
+#: ../cleaners/zoom.xml
+msgid "Recordings"
+msgstr ""
+
+#: ../cleaners/zoom.xml
 #, fuzzy
-#| msgid "Delete the web cache, which reduces time to display revisited pages"
-msgid ""
-"Delete the web cache, which reduces time to display revisited pages. This "
-"also clears favorited GIFs."
+#| msgid "Delete the list of game servers"
+msgid "Delete the audio and video recordings"
+msgstr "ויסמעקן די רשימה פון שפּיל סערווערס"
+
+#: ../cleaners/recoll.xml
+msgid "Delete the search index, a database of words and the files they contain"
 msgstr ""
-"ויסמעקן די וועב קאַש, וואָס ראַדוסאַז צייַט צו אַרויסווייַזן רעוויסיטעד בלעטער"
+"ויסמעקן די זוכן אינדעקס, אַ דאַטאַבייס פון ווערטער און די טעקעס זיי אַנטהאַלטן"
 
-#: ../cleaners/dnf.xml
-msgid "Remove packages that were formerly dependencies"
-msgstr "באַזייַטיקן פּאַקאַדזשאַז אַז זענען אַמאָל דיפּענדאַנסיז"
+#: ../cleaners/skype.xml
+msgid "Installers"
+msgstr "ינסטאָלערז"
 
-#: ../cleaners/dnf.xml
-msgid ""
-"Carefully review the list of packages that will be removed by running \"dnf "
-"list autoremove\"."
-msgstr ""
-"איבערבליק קערפאַלי די רשימה פון פּאַקאַדזשאַז וואָס וועט זיין אַוועקגענומען דורך "
-"פליסנדיק \"dnf list autoremove\"."
+#: ../cleaners/skype.xml
+msgid "Delete cached patches and installers"
+msgstr "ויסמעקן קאַשט פּאַטשאַז און ינסטאָלערז"
 
-#. This software edits metadata tags, such as title and artist, in audio files
-#: ../cleaners/easytag.xml
-msgid "Audio files tagger"
-msgstr "אַודיאָ טעקעס טאַגגער"
+#: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
+msgid "Download history"
+msgstr "אראפקאפיע געשיכטע"
 
-#: ../cleaners/elinks.xml
-msgid "Delete the cookies, visited URLs, and search history"
-msgstr "ויסמעקן די קיכלעך, באזוכט URL ס, און זוכן געשיכטע"
+#: ../cleaners/seamonkey.xml
+msgid "List of files downloaded"
+msgstr "רשימה פון טעקעס דאַונלאָודיד"
 
-#: ../cleaners/emesene.xml
-msgid "Delete the avatars and emoticons cache"
-msgstr "ויסמעקן די אַוואַטאַרס און עמאָטיקאָנס קאַש"
-
-#: ../cleaners/epiphany.xml
-msgid "Places"
-msgstr "ערטער"
-
-#: ../cleaners/epiphany.xml
-#, fuzzy
-#| msgid ""
-#| "A database of URLs including bookmarks, favicons, and a history of "
-#| "visited web sites"
-msgid ""
-"A database of URLs including bookmarks, favicons, and a history of visited "
-"websites"
-msgstr ""
-"א דאַטאַבייס פון URL ס אַרייַנגערעכנט בוקמאַרקס, פאַוויקאָנס און אַ געשיכטע פון "
-"וויזיטיד וועבסיטעס"
-
-#: ../cleaners/epiphany.xml
-msgid "This option deletes all bookmarks."
-msgstr "דער אָפּציע דיליץ אַלע בוקמאַרקס."
-
-#: ../cleaners/evolution.xml ../cleaners/geary.xml ../cleaners/thunderbird.xml
-msgid "Email client"
-msgstr "בליצפּאָסט קליענט"
-
-#: ../cleaners/exaile.xml ../cleaners/gpodder.xml
-msgid "Downloaded podcasts"
-msgstr "דאַונלאָודיד פּאָדקאַסץ"
-
-#: ../cleaners/exaile.xml ../cleaners/gpodder.xml
-msgid "Delete downloaded podcasts"
-msgstr "ויסמעקן דאַונלאָודיד פּאָדקאַסץ"
-
-#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/librewolf.xml ../cleaners/palemoon.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml
-#, fuzzy
-#| msgid "Delete the search history"
-msgid "Saved form entries and search bar history"
-msgstr "ויסמעקן די זוכן געשיכטע"
-
-#: ../cleaners/firefox.xml ../cleaners/konqueror.xml ../cleaners/librewolf.xml
-#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "URL history"
-msgstr "URL געשיכטע"
-
-#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "List of visited web pages"
-msgstr "רשימה פון באזוכט וועב זייַטלעך"
-
-#: ../cleaners/flash.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
-#: ../cleaners/xine.xml
-msgid "Multimedia viewer"
-msgstr "מולטימעדיאַ צוקוקער"
-
-#: ../cleaners/geary.xml
-msgid "Attachments"
-msgstr ""
-
-#: ../cleaners/geary.xml
-msgid "Sync conflict"
-msgstr ""
-
-#. Cleaner description for vim, VS Code, etc.
-#: ../cleaners/gedit.xml ../cleaners/vim.xml ../cleaners/vscode.xml
-msgid "Editor"
-msgstr "רעדאַקטאָר"
-
-#: ../cleaners/gedit.xml ../cleaners/gwenview.xml ../cleaners/kde.xml
-#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py
-msgid "Recent documents list"
-msgstr "לעצטע דאָקומענטן רשימה"
-
-#: ../cleaners/gimp.xml
-msgid "Graphics editor"
-msgstr "גראַפיקס רעדאַקטאָר"
-
-#: ../cleaners/gl-117.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/nexuiz.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/tremulous.xml ../cleaners/warzone2100.xml
-msgid "Game"
-msgstr "שפּיל"
-
-#: ../cleaners/gnome.xml ../cleaners/kde.xml
-msgid "Desktop environment"
-msgstr "דעסקטאָפּ סוויווע"
-
-#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
-#. In Windows 'Run' is the dialog in the Start menu
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-msgid "Run"
-msgstr "אַרומלויפן"
-
-#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
-#: ../cleaners/windows_explorer.xml
-msgid "Search history"
-msgstr "זוך געשיכטע"
-
-#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
-#: ../cleaners/windows_explorer.xml
-msgid "Delete the search history"
-msgstr "ויסמעקן די זוכן געשיכטע"
+#: ../cleaners/seamonkey.xml
+msgid "Delete the list of visited web pages"
+msgstr "ויסמעקן די רשימה פון באזוכט וועב זייַטלעך"
 
 #. Cleaning option that deletes AI models in a web browser
 #: ../cleaners/google_chrome.xml
@@ -676,126 +827,6 @@ msgstr ""
 #| msgid "Delete the logs"
 msgid "Delete the AI models"
 msgstr "ויסמעקן די לאָגס"
-
-#: ../cleaners/internet_explorer.xml ../cleaners/seamonkey.xml
-msgid "Download history"
-msgstr "אראפקאפיע געשיכטע"
-
-#: ../cleaners/journald.xml
-msgid "System journals"
-msgstr "סיסטעם דזשערנאַלז"
-
-#: ../cleaners/journald.xml
-msgid "Clean old system journals"
-msgstr "ריין אַלט סיסטעם דזשערנאַלז"
-
-#: ../cleaners/konqueror.xml
-msgid "Current session"
-msgstr "קראַנט סעסיע"
-
-#: ../cleaners/konqueror.xml
-msgid "Delete the current session"
-msgstr "ויסמעקן די קראַנט סעסיע"
-
-#: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/openoffice.xml
-msgid "Office suite"
-msgstr "אָפיס סוויט"
-
-#: ../cleaners/mc.xml ../cleaners/nautilus.xml ../cleaners/windows_explorer.xml
-msgid "File manager"
-msgstr "טעקע פאַרוואַלטער"
-
-#: ../cleaners/microsoft_office.xml ../cleaners/paint.xml
-#: ../cleaners/smartftp.xml ../cleaners/teamviewer.xml ../cleaners/vlc.xml
-#: ../cleaners/winamp.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/winzip.xml
-#: ../cleaners/wordpad.xml
-msgid "Delete the most recently used list"
-msgstr "ויסמעקן די מערסט לעצטנס געוויינט רשימה"
-
-#: ../cleaners/nautilus.xml
-msgid "Custom folders will be reset."
-msgstr "מנהג פאָלדערס וועט זיין באַשטעטיק."
-
-#: ../cleaners/profanity.xml
-#, fuzzy
-#| msgid "Downloading url failed: %s"
-msgid "Downloaded files"
-msgstr "דאַונלאָודינג URL ניט אַנדערש: %s"
-
-#: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
-msgstr ""
-"ויסמעקן די זוכן אינדעקס, אַ דאַטאַבייס פון ווערטער און די טעקעס זיי אַנטהאַלטן"
-
-#: ../cleaners/rhythmbox.xml
-msgid "Database"
-msgstr "דאַטאַבאַסע"
-
-#: ../cleaners/rhythmbox.xml
-msgid ""
-"Delete the database, which contains information such as play count and last "
-"played"
-msgstr ""
-"ויסמעקן די דייטאַבייס, וואָס כּולל אינפֿאָרמאַציע אַזאַ ווי שפּילן ציילן און לעצטע "
-"פּלייַעד"
-
-#: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
-msgid "Desktop widgets"
-msgstr "דעסקטאָפּ סוויווע"
-
-#: ../cleaners/seamonkey.xml
-msgid "List of files downloaded"
-msgstr "רשימה פון טעקעס דאַונלאָודיד"
-
-#: ../cleaners/seamonkey.xml
-msgid "Delete the list of visited web pages"
-msgstr "ויסמעקן די רשימה פון באזוכט וועב זייַטלעך"
-
-#: ../cleaners/skype.xml
-msgid "Installers"
-msgstr "ינסטאָלערז"
-
-#: ../cleaners/skype.xml
-msgid "Delete cached patches and installers"
-msgstr "ויסמעקן קאַשט פּאַטשאַז און ינסטאָלערז"
-
-#: ../cleaners/snap.xml
-msgid "Disabled"
-msgstr ""
-
-#: ../cleaners/snap.xml
-msgid "Remove disabled packages"
-msgstr ""
-
-#: ../cleaners/teamviewer.xml
-msgid "Remote control software"
-msgstr "רימאָוט קאָנטראָל ווייכווארג"
-
-#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
-msgid "Thumbnails"
-msgstr "טהומבנאַילס"
-
-#: ../cleaners/thumbnails.xml
-msgid "Icons for files on the system"
-msgstr "יקאָנס פֿאַר טעקעס אויף די סיסטעם"
-
-#: ../cleaners/thunderbird.xml
-msgid ""
-"Deleting the index will reset the configuration of columns in the message "
-"list."
-msgstr ""
-
-#: ../cleaners/thunderbird.xml
-msgid "Session restore"
-msgstr "סעסיע ומקערן"
-
-#: ../cleaners/thunderbird.xml
-msgid "Restores the previous session when the browser next starts"
-msgstr ""
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -820,6 +851,7 @@ msgstr "ויסמעקן די שטראמען (נאָר די מעטאַדאַטאַ
 msgid "Statistics"
 msgstr "סטאַטיסטיק"
 
+#. TRANSLATORS: Description of the Memory dump cleaning option.
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Delete the file"
 msgstr "ויסמעקן די טעקע"
@@ -828,70 +860,53 @@ msgstr "ויסמעקן די טעקע"
 msgid "Delete the list of game servers"
 msgstr "ויסמעקן די רשימה פון שפּיל סערווערס"
 
-#: ../cleaners/vim.xml
-msgid ""
-"Delete ~/.viminfo which includes file history, command history, and buffers"
-msgstr "ויסמעקן ~/.viminfo וואָס כולל טעקע געשיכטע, באַפֿעלן געשיכטע און באַפערז"
+#: ../cleaners/profanity.xml
+#, fuzzy
+#| msgid "Downloading url failed: %s"
+msgid "Downloaded files"
+msgstr "דאַונלאָודינג URL ניט אַנדערש: %s"
 
+#: ../cleaners/teamviewer.xml
+msgid "Remote control software"
+msgstr "רימאָוט קאָנטראָל ווייכווארג"
+
+#. TRANSLATORS: Name of a cleaning option for Windows crash dump files.
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Memory dump"
 msgstr "זיקאָרן דאַמפּ"
 
-#: ../cleaners/windows_defender.xml
-msgid "Anti-virus"
-msgstr "אַנטי-ווירוס"
-
-#: ../cleaners/windows_defender.xml
-msgid "Quarantine"
-msgstr "קאַראַנטין"
-
-#: ../cleaners/windows_explorer.xml
-msgid ""
-"This option will reset pinned locations in Quick Access to their defaults."
-msgstr ""
-"די אָפּציע וועט באַשטעטיק פּיננעד לאָוקיישאַנז אין קוויק אַקסעס צו זייער דיפאָלץ."
-
-#: ../cleaners/windows_explorer.xml
-msgid "Shellbags"
-msgstr "שעלבאַגס"
-
-#: ../cleaners/windows_explorer.xml
-msgid "Delete the usage date, window position, and other data for folders"
-msgstr "ויסמעקן די נוצן טאָג, פֿענצטער שטעלע און אנדערע דאַטן פֿאַר פאָלדערס"
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will reset the position of desktop icons."
-msgstr "דאָס וועט באַשטעטיק די שטעלע פון דעסקטאַפּ ייקאַנז."
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will restart Windows Explorer."
-msgstr "דעם וועט ריסטאַרט ווינדאָוז Explorer."
-
-#: ../cleaners/wine.xml
-msgid "Compatibility layer for Windows software"
-msgstr "קאַמפּאַטאַבילאַטי שיכטע פֿאַר Windows ווייכווארג"
+#: ../cleaners/screenlets.xml
+#, fuzzy
+#| msgid "Desktop environment"
+msgid "Desktop widgets"
+msgstr "דעסקטאָפּ סוויווע"
 
 #: ../cleaners/winrar.xml
 msgid "File archiver"
 msgstr "טעקע אַרטשיווער"
 
-#: ../cleaners/wordpad.xml
-msgid "Word processor"
-msgstr "וואָרט פּראַסעסער"
+#: ../cleaners/amule.xml
+msgid "Known files history"
+msgstr "באַוווסט טעקעס געשיכטע"
 
-#: ../cleaners/x11.xml
-msgid "Windowing system"
-msgstr "ווינדאָווינג סיסטעם"
+#. http://wiki.amule.org/wiki/Friend
+#: ../cleaners/amule.xml
+msgid "Known clients and friends"
+msgstr "באקאנט קלייאַנץ און Friends"
 
-#: ../cleaners/zoom.xml
-msgid "Recordings"
-msgstr ""
+#: ../cleaners/vim.xml
+msgid ""
+"Delete ~/.viminfo which includes file history, command history, and buffers"
+msgstr "ויסמעקן ~/.viminfo וואָס כולל טעקע געשיכטע, באַפֿעלן געשיכטע און באַפערז"
 
-#: ../cleaners/zoom.xml
+#: ../cleaners/discord.xml
 #, fuzzy
-#| msgid "Delete the list of game servers"
-msgid "Delete the audio and video recordings"
-msgstr "ויסמעקן די רשימה פון שפּיל סערווערס"
+#| msgid "Delete the web cache, which reduces time to display revisited pages"
+msgid ""
+"Delete the web cache, which reduces time to display revisited pages. This "
+"also clears favorited GIFs."
+msgstr ""
+"ויסמעקן די וועב קאַש, וואָס ראַדוסאַז צייַט צו אַרויסווייַזן רעוויסיטעד בלעטער"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
@@ -1301,11 +1316,20 @@ msgstr ""
 "טעות אין handle_cleaner_option() for cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 
-#. TRANSLATORS: Warning printed to the log.
-#. %s expands to the path of the XML cleaner file that was skipped
-#: ../bleachbit/CleanerML.py
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file that was skipped
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
+msgstr "יגנאָרינג רייניקונג ווייַל עס איז וועלט שרייבן: %s"
+
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file whose directory is world
+#. writable.
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
+#, fuzzy, python-format
+#| msgid "Ignoring cleaner because it is world writable: %s"
+msgid "Ignoring cleaner because its directory is world writable: %s"
 msgstr "יגנאָרינג רייניקונג ווייַל עס איז וועלט שרייבן: %s"
 
 #. TRANSLATORS: Error message printed to the log.
@@ -1315,10 +1339,12 @@ msgstr "יגנאָרינג רייניקונג ווייַל עס איז וועל�
 msgid "Error reading cleaner: %s"
 msgstr "טעות לייענען קלינער: %s"
 
+#. TRANSLATORS: Cleaner name shown in the list of applications.
 #: ../bleachbit/Cleaner.py
 msgid "System"
 msgstr "סיסטעם"
 
+#. TRANSLATORS: Description of the System cleaner.
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
 msgstr "די סיסטעם אין אַלגעמיין"
@@ -1334,6 +1360,7 @@ msgstr "די סיסטעם אין אַלגעמיין"
 msgid "Broken desktop files"
 msgstr "צעבראכן דעסקטאַפּ טעקעס"
 
+#. TRANSLATORS: Description of the Broken desktop files cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete broken application menu entries and file associations"
 msgstr "ויסמעקן געווען בראָקען אַפּלאַקיישאַן מעניו איינסן און טעקע אַסאָוסייישאַנז"
@@ -1344,30 +1371,40 @@ msgstr "ויסמעקן געווען בראָקען אַפּלאַקיישאַן 
 msgid "Localizations"
 msgstr "לאָקאַליזאַטיאָנס"
 
+#. TRANSLATORS: Description of the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete files for unwanted languages"
 msgstr "ויסמעקן טעקעס פֿאַר אַנוואָנטיד שפּראַכן"
 
+#. TRANSLATORS: Warning for the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Configure this option in the preferences."
 msgstr "קאַנפיגיער דעם אָפּציע אין די פּרעפֿערענצן."
 
+#. TRANSLATORS: 'Rotated logs' refers to old system log files.
+#. Linux systems often have a scheduled job to rotate the logs
+#. which means compress all except the newest log and then delete
+#. the oldest log. You could translate this as 'old logs.'
 #: ../bleachbit/Cleaner.py
 msgid "Rotated logs"
 msgstr "ראָוטייטיד לאָגס"
 
+#. TRANSLATORS: Description of the Rotated logs cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete old system logs"
 msgstr "ויסמעקן אַלט סיסטעם לאָגס"
 
+#. TRANSLATORS: Name of a cleaning option. Trash is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Trash"
 msgstr "אָפּפאַל"
 
+#. TRANSLATORS: Description of the Trash cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the trash"
 msgstr "ליידיק די אָפּפאַל"
 
+#. TRANSLATORS: Name of a cleaning option for system memory.
 #: ../bleachbit/Cleaner.py ../bleachbit/Worker.py
 msgid "Memory"
 msgstr "זכּרון"
@@ -1377,6 +1414,7 @@ msgstr "זכּרון"
 msgid "Wipe the swap and free memory"
 msgstr "ווישן די ויסבייַטן און פריי זיקאָרן"
 
+#. TRANSLATORS: Warning for the experimental Memory cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "This option is experimental and may cause system problems."
 msgstr "די אָפּציע איז יקספּערמענאַל און קען פאַרשאַפן סיסטעם פּראָבלעמס."
@@ -1391,10 +1429,12 @@ msgstr ""
 msgid "Prefetch"
 msgstr "Prefetch"
 
+#. TRANSLATORS: Name of a cleaning option for the Windows recycle bin.
 #: ../bleachbit/Cleaner.py
 msgid "Recycle bin"
 msgstr "רעסיקלע בין"
 
+#. TRANSLATORS: Description of the Recycle bin cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the recycle bin"
 msgstr "ליידיק די ריסייקאַל בין"
@@ -1419,10 +1459,12 @@ msgstr ""
 msgid "This option may prevent uninstalling some updates."
 msgstr ""
 
+#. TRANSLATORS: Name of a cleaning option. Clipboard is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
 msgstr "קליפּבאָרד"
 
+#. TRANSLATORS: Description of the Clipboard cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
@@ -1436,6 +1478,7 @@ msgstr ""
 msgid "Custom"
 msgstr "מנהג"
 
+#. TRANSLATORS: Description of the Custom cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete user-specified files and folders"
 msgstr "ויסמעקן באַניצער-ספּעסיפיעד טעקעס און פאָלדערס"
@@ -1482,6 +1525,7 @@ msgstr "לאָודינג געבוירן קלינערז."
 msgid "Importing cleaners from Winapp2.ini…"
 msgstr "ימפּאָרטינג קלענזערז פֿון Winapp2.ini."
 
+#. TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
 #: ../bleachbit/Cleaner.py
 #, fuzzy, python-format
 #| msgid "_Wipe Free Space"
@@ -2309,6 +2353,10 @@ msgstr "אַרויסגאַנג נאָך רייניקונג"
 msgid "Reset warning confirmations"
 msgstr "ויסמעקן באַשטעטיקונג"
 
+#. TRANSLATORS: This means to hide cleaners which would do
+#. nothing. For example, if Firefox were never used on
+#. this system, this option would hide Firefox to simplify
+#. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
 msgstr "באַהאַלטן ירעלאַוואַנט קלינערז"
@@ -2525,11 +2573,13 @@ msgstr "דרך"
 msgid "Choose a file"
 msgstr "קלייַבן אַ טעקע"
 
+#. TRANSLATORS: Button label in the preferences for adding a file.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add file"
 msgstr "לייג טעקע"
 
+#. TRANSLATORS: Button label in the preferences for adding a folder.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add folder"
@@ -2878,6 +2928,9 @@ msgstr "דיסק איז געווען פול ווען שרייבן קאַנפיג
 msgid "Error checking whether path exists: %s"
 msgstr "פֿעלער קאָנטראָלירונג צי דרך עקזיסטירט: %s"
 
+#. TRANSLATORS: %s is a ISO language code of two or three letters.
+#. "Preserving" means the language's localization files will be
+#. kept and not deleted when cleaning.
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Automatically preserving language %s."
@@ -2953,14 +3006,17 @@ msgstr ""
 "%sקענען ניט זיין קלינד ווייַל עס איז איצט פליסנדיק. נאָענט עס, און פּרובירן "
 "ווידער."
 
+#. TRANSLATORS: Status message after a successful winapp2.ini update.
 #: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
 msgstr "נייַ winapp2.ini איז דאַונלאָודיד."
 
+#. TRANSLATORS: Title of the software update dialog.
 #: ../bleachbit/Update.py
 msgid "Update BleachBit"
 msgstr "דערהייַנטיקן בלעאַטשביט"
 
+#. TRANSLATORS: Message in the software update dialog.
 #: ../bleachbit/Update.py
 msgid "A new version is available."
 msgstr "א נייַע ווערסיע איז בארעכטיגט."
@@ -3001,14 +3057,18 @@ msgstr "מולטימעדיאַ"
 msgid "Utilities"
 msgstr "וטיליטיעס"
 
+#. TRANSLATORS: Cleaner category name for games imported from winapp2.ini.
 #: ../bleachbit/Winapp.py
 msgid "Games"
 msgstr "גאַמעס"
 
+#. TRANSLATORS: Description shown for a cleaner imported from winapp2.ini,
+#. which is a database of cleaning definitions.
 #: ../bleachbit/Winapp.py
 msgid "Imported from winapp2.ini"
 msgstr "ימפּאָרטיד פֿון winapp2.ini"
 
+#. TRANSLATORS: Warning shown when cleaning Windows Updates without administrator access.
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr ""
@@ -3049,8 +3109,11 @@ msgstr ""
 msgid "Path to wipe must be an existing directory: %s"
 msgstr "דרך צו ווישן מוזן זיין אַ יגזיסטינג וועגווייַזער: %s"
 
+#. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-msgid "Creating new, temporary file for wiping free space."
+#, fuzzy
+#| msgid "Creating new, temporary file for wiping free space."
+msgid "Creating new, temporary file for wiping empty space."
 msgstr "קרעאַטינג נייַ, צייַטווייַליק טעקע פֿאַר ווייפּינג פּאָטער פּלאַץ."
 
 #: ../bleachbit/Wipe.py
@@ -3151,6 +3214,7 @@ msgstr "Error: {operation_option}: {command}"
 msgid "Please wait. Wiping empty space."
 msgstr "ביטע ווארט. ווייפּינג פּאָטער דיסק פּלאַץ."
 
+#. TRANSLATORS: Instruction shown while wiping a drive's empty space.
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
@@ -3168,6 +3232,7 @@ msgstr ""
 msgid "Please wait.  Cleaning %s."
 msgstr "ביטע ווארט. רייניגען %s"
 
+#. TRANSLATORS: %d is the estimated number of minutes remaining.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "About %d minute remaining."
@@ -3203,6 +3268,10 @@ msgstr "טעקעס אויסגעמעקט: %d"
 msgid "Files to be deleted: %d"
 msgstr "טעקעס צו ווערן אויסגעמעקט:%d"
 
+#. TRANSLATORS: %d is the number of special cleaning operations
+#. completed. Special operations are cleaning actions that do
+#. not delete a file, such as overwriting a file's contents,
+#. truncating a file, or deleting a Windows registry key.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Special operations: %d"
