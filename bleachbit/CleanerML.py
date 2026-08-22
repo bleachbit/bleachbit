@@ -44,8 +44,11 @@ if IS_WINDOWS:
 
 logger = logging.getLogger(__name__)
 
-"""Actions blocked for untrusted (user-writable) cleaners."""
-UNTRUSTED_BLOCKED_COMMANDS = ('process', 'winreg')
+"""Actions blocked for untrusted (user-writable) cleaners.
+
+Deletion stays allowed, so blocking registry deletion too would buy nothing.
+"""
+UNTRUSTED_BLOCKED_COMMANDS = ('process',)
 
 
 class _ETSimpleTextNode:
@@ -428,19 +431,22 @@ def list_cleanerml_files(local_only=False, system_only=False):
 
 
 def is_trusted_cleaner(pathname):
-    """Return True if the cleaner file is in the system cleaners directory.
+    """Return True if the cleaner file sits next to the application.
 
     The personal cleaners directory is user-writable, so a lower-integrity
-    process could plant a cleaner there. In portable mode the system
-    directory is writable too, but so is the executable beside it, so
-    distrusting it would gain nothing.
+    process could plant a cleaner there. The system and local cleaners
+    directories are writable in portable mode and in the source tree, but so
+    is the executable beside them, so distrusting them would gain nothing.
+    In portable mode the personal cleaners directory is the local one.
     """
-    system_dir = bleachbit.system_cleaners_dir
-    if not system_dir:
-        return False
+    trusted_dirs = [d for d in (bleachbit.system_cleaners_dir,
+                                bleachbit.local_cleaners_dir) if d]
     pathname = os.path.normpath(os.path.abspath(pathname))
-    system_dir = os.path.normpath(os.path.abspath(system_dir))
-    return path_startswith(pathname, system_dir)
+    for trusted_dir in trusted_dirs:
+        trusted_dir = os.path.normpath(os.path.abspath(trusted_dir))
+        if path_startswith(pathname, trusted_dir):
+            return True
+    return False
 
 
 def load_cleaners(cb_progress=lambda x: None, allow_local=True):

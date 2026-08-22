@@ -545,40 +545,18 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
                         test_key_parent, test_key_child0,
                         test_key_child1, test_key_not_exc)
 
-    def test_untrusted_regkey_action(self):
-        """A RegKey action is ignored when winapp2.ini is untrusted"""
+    def test_regkey_action_kept(self):
+        """RegKey actions are kept wherever winapp2.ini lives"""
         self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-trust')
         with open(self.ini_fn, 'w', encoding='utf-8') as ini:
             ini.write('[someapp]\nLangSecRef=3021\n'
-                      f'FileKey1=%Temp%|bleachbit-test-does-not-exist.tmp\n'
+                      'FileKey1=%Temp%|bleachbit-test-does-not-exist.tmp\n'
                       f'RegKey1={KEYFULL}\n')
 
-        def action_classes(winapp):
-            cleaner = next(winapp.get_cleaners())
-            return [a.__class__.__name__ for (_option_id, a) in cleaner.actions]
-
-        trusted = action_classes(Winapp(self.ini_fn, trusted=True))
-        self.assertIn('Winreg', trusted)
-        self.assertIn('Delete', trusted)
-
-        # The delete action stays; only the winreg action is dropped
-        untrusted = action_classes(Winapp(self.ini_fn, trusted=False))
-        self.assertNotIn('Winreg', untrusted)
-        self.assertIn('Delete', untrusted)
-
-    def test_untrusted_regkey_warns_once_per_file(self):
-        """Ignored RegKey actions are summarized in one warning, not one per key"""
-        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-trust-log')
-        with open(self.ini_fn, 'w', encoding='utf-8') as ini:
-            for section in ('appone', 'apptwo'):
-                ini.write(f'[{section}]\nLangSecRef=3021\n')
-                for i in range(1, 11):
-                    ini.write(f'RegKey{i}={KEYFULL}{i}\n')
-
-        with self.assertLogs('bleachbit.Winapp', level='WARNING') as cm:
-            Winapp(self.ini_fn, trusted=False)
-        self.assertEqual(len(cm.output), 1)
-        self.assertIn('sections affected: 2', cm.output[0])
+        cleaner = next(Winapp(self.ini_fn).get_cleaners())
+        actions = [a.__class__.__name__ for (_option_id, a) in cleaner.actions]
+        self.assertIn('Winreg', actions)
+        self.assertIn('Delete', actions)
 
     def test_filekey_recurse_rejects_excessive_wildcards(self):
         """A FileKey RECURSE pattern with too many wildcards is rejected (ReDoS defense)"""
