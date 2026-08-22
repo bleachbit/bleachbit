@@ -242,6 +242,33 @@ auto_hide = True
         bleachbit.Options.init_configuration()
         self.assertExists(bleachbit.options_file)
 
+    def test_installer_language(self):
+        """The installer language seeds a fresh configuration only"""
+        def _new_options():
+            with mock.patch('bleachbit.Options.IS_WINDOWS', True), \
+                    mock.patch('bleachbit.Options.get_installer_language_code',
+                               return_value='es'):
+                return bleachbit.Options.Options()
+
+        if os.path.exists(bleachbit.options_file):
+            os.remove(bleachbit.options_file)
+        o = _new_options()
+        try:
+            self.assertEqual(o.get('forced_language'), 'es')
+            self.assertFalse(o.get('auto_detect_lang'))
+            o.set('forced_language', 'fr')
+            o.close()
+        finally:
+            o.cancel_pending_flush()
+
+        # the existing configuration wins over the installer
+        o = _new_options()
+        try:
+            self.assertEqual(o.get('forced_language'), 'fr')
+        finally:
+            o.cancel_pending_flush()
+        os.remove(bleachbit.options_file)
+
     def test_open_config_write_refuses_symlink(self):
         """The config write must not follow a symlink to another file"""
         filename = self.write_file('cfg_target', b'keepme')
