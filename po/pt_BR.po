@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-08-21 05:26-0600\n"
 "PO-Revision-Date: 2026-08-22 12:38+0000\n"
-"Last-Translator: Cirnos <cirnos@tuta.io>\n"
+"Last-Translator: Igor Rückert <igorruckert@yahoo.com.br>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "bleachbit/main/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -1339,10 +1339,9 @@ msgstr "Ignorando o limpador %s porque ele esta em modo de leitura"
 #. path of the XML cleaner file whose directory is world
 #. writable.
 #: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
-#, fuzzy, python-format
-#| msgid "Ignoring cleaner because it is world writable: %s"
+#, python-format
 msgid "Ignoring cleaner because its directory is world writable: %s"
-msgstr "Ignorando o limpador %s porque ele esta em modo de leitura"
+msgstr "Ignorando limpador porque sua pasta possui permissão de escrita: %s"
 
 #. TRANSLATORS: Error message printed to the log.
 #. %s expands to the path of the XML cleaner file
@@ -3115,8 +3114,6 @@ msgstr "Caminho para limpeza %s precisa ser um diretório existente"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Creating new, temporary file for wiping free space."
 msgid "Creating new, temporary file for wiping empty space."
 msgstr "Criando um novo arquivo temporário para limpar o espaço livre."
 
