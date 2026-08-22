@@ -142,6 +142,7 @@ sessionstore-backups/recovery.jsonlz4
     <label>URL history</label>
     <description>List of visited web pages</description>
     <action command="delete" search="file" path="$$profile$$/SiteSecurityServiceState.txt"/>
+    <action command="delete" search="file" path="$$profile$$/SiteSecurityServiceState.bin"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Zen\Profiles\*\thumbnails"/>
     <!-- Firefox versions 1 and 2 -->
     <action command="delete" search="file" path="$$profile$$/history.dat"/>
