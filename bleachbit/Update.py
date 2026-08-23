@@ -88,8 +88,10 @@ def update_dialog(parent, updates):
         box_update = Gtk.Box()
         # TRANSLATORS: %s expands to version such as '4.6.0'
         button_stable = Gtk.Button(_("Update to version %s") % ver)
+        # Bind url now: the callback runs after the loop, when url would
+        # otherwise be the last update's.
         button_stable.connect(
-            'clicked', lambda dummy: open_url(url, parent, False))
+            'clicked', lambda dummy, url=url: open_url(url, parent, False))
         button_stable.connect('clicked', lambda dummy: dlg.response(0))
         box_update.pack_start(button_stable, False, True, 10)
         dlg.vbox.pack_start(box_update, False, True, 0)
