@@ -2070,7 +2070,7 @@ State=AAAA/wA...
             d = os.path.expandvars(r'%windir%\system32')
             keep_list = [('file', r'c:\filename'), ('folder', r'c:\\folder')]
         reps = 20
-        paths = [p for p in children_in_directory(d, True)]
+        paths = list(children_in_directory(d, True))
         paths = paths[:1000]  # truncate
         self.assertGreater(len(paths), 10)
         old_keep_list = options.get_whitelist_paths()

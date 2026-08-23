@@ -311,8 +311,8 @@ def choose_if_bridged(volume_handle, total_clusters,
         bridged_extents,
         volume_bitmap,
         allocated_extents)
-    bridged_extents = [x for x in extents_a_minus_b(bridged_extents,
-                                                    allocated_extents)]
+    bridged_extents = list(extents_a_minus_b(bridged_extents,
+                                             allocated_extents))
 
     extra_allocated_clusters = count_ballocated - count_oallocated
     saving_in_extents = len(orig_extents) - len(bridged_extents)

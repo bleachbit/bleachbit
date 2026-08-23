@@ -610,7 +610,7 @@ def orphaned_framework_versions(versions_dir):
     except OSError:
         return
     for name in entries:
-        if name == 'Current' or name == current_name:
+        if name in ('Current', current_name):
             continue
         full_path = os.path.join(versions_dir, name)
         if not os.path.isdir(full_path) or os.path.islink(full_path):

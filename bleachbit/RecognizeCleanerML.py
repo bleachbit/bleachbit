@@ -155,7 +155,7 @@ class RecognizeCleanerML:
         for pathname in sorted(list_cleanerml_files(local_only=True)):
             pathname = os.path.abspath(pathname)
             (status, myhash) = self.__recognized(pathname)
-            if NEW == status or CHANGED == status:
+            if status in (NEW, CHANGED):
                 changes.append([pathname, status, myhash])
         if changes:
             cleaner_change_dialog(changes, self.parent_window)

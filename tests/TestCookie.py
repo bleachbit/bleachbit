@@ -88,7 +88,7 @@ class CookieTestCase(common.BleachbitTestCase):
                 (host if host.startswith('.') else f'.{host}', name)
                 for host, name in cookies
             ]
-        return [(host, name) for host, name in cookies]
+        return list(cookies)
 
     def _create_chrome_cookies_db(self, cookies=None):
         """Create a Chrome cookies database for testing
