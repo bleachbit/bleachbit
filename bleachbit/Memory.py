@@ -227,7 +227,7 @@ def _run_memory_child_systemd_scope():
             # resolves there, not an attacker-controlled working directory.
             return subprocess.run(
                 scope_args, env=env, cwd=pkg_parent,
-                capture_output=True, text=True)
+                capture_output=True, text=True, check=False)
         except FileNotFoundError:
             return None
 

@@ -1072,7 +1072,8 @@ def main():
     # Clearly show the sizes of the files that end users download because the
     # goal is to minimize them.
     subprocess.run(
-        ['cmd', '/c', 'dir', '*.zip', r'windows\*.exe', r'windows\*.zip'])
+        ['cmd', '/c', 'dir', '*.zip', r'windows\*.exe', r'windows\*.zip'],
+        check=False)
     duration = time.time() - start_time
     minutes = int(duration // 60)
     seconds = int(duration % 60)
