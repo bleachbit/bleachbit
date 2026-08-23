@@ -130,8 +130,19 @@ def _bootstrap_windows():
             continue
         if _PYTHON_DLL_RE.search(name):
             bindir = os.path.dirname(name)
+            pixbuf_dir = os.path.join(
+                bindir, 'lib', 'gdk-pixbuf-2.0', '2.10.0')
+            loaders_dir = os.path.join(pixbuf_dir, 'loaders')
             os.environ['GDK_PIXBUF_MODULE_FILE'] = os.path.join(
-                bindir, 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache')
+                pixbuf_dir, 'loaders.cache')
+            # setup.py rewrites loader paths in loaders.cache to bare
+            # filenames (e.g. "pixbufloader-svg.dll"), so gdk-pixbuf needs
+            # GDK_PIXBUF_MODULEDIR to resolve them. Without it, gdk-pixbuf
+            # falls back to its compiled-in PIXBUF_LIBDIR (a CI-only path),
+            # and the external SVG pixbuf loader cannot be found, which
+            # prevents GTK from rendering SVG resources such as
+            # check-symbolic.svg from its GResource bundle.
+            os.environ['GDK_PIXBUF_MODULEDIR'] = loaders_dir
             break
 
 

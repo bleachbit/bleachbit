@@ -708,11 +708,15 @@ def delete_icons():
     # SVGs were removed from the keep list because ProcMon tracing
     # confirmed GTK 3 did not load any .svg files from disk.
     # It does load some resources from its dll.
+    # emblem-readonly is an exception: it is requested by name in
+    # GuiPreferences.py and has no GTK built-in equivalent.
     icon_keep_list = [
         'edit-clear-all.png',
         'edit-delete.png',
         'edit-find.png',
         'process-stop.png',  # abort on toolbar
+        'emblem-readonly.png', # keep list page in preferences
+        'emblem-readonly.svg', # keep list page in preferences
     ]
     _prune_assets(r'dist\share\icons', ['*.png', '*.svg'],
                   icon_keep_list, label='protected icon')
