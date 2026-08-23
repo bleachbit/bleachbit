@@ -4,6 +4,9 @@
 # This work is licensed under the terms of the GNU GPL, version 3 or
 # later.  See the COPYING file in the top-level directory.
 
+
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
 import os
 from unittest import mock
 

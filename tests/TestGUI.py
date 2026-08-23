@@ -9,6 +9,9 @@
 Test case for module GUI
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 import os
 import unittest
 import time

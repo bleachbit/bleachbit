@@ -8,6 +8,9 @@
 Test case for module GuiStartup
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 import os
 import shutil
 import stat

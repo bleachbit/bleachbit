@@ -8,6 +8,9 @@
 Test case for module ProtectedPath
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 import os
 import tempfile
 import unittest

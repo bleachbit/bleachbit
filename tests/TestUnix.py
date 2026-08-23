@@ -8,6 +8,9 @@
 Test case for module Unix
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 from unittest import mock
 import os
 import random

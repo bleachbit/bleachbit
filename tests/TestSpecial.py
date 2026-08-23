@@ -9,6 +9,9 @@
 Test case for module Special
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 # standard imports
 import contextlib
 import os
@@ -740,7 +743,6 @@ INSERT INTO "meta" VALUES('version','20');"""
                 filename = os.path.join(self.tempdir, basename)
                 FileUtilities.execute_sqlite3(filename, ddl)
                 self.assertExists(filename)
-                # pylint: disable=protected-access
                 ver = Special._get_sqlite_values(filename, sql)
                 self.assertEqual(ver, [(12, 34), (56, 78)])
                 ver = Special._get_sqlite_values(
@@ -791,7 +793,6 @@ INSERT INTO "meta" VALUES('version','20');"""
                 self.assertExists(filename)
 
                 # run the test
-                # pylint: disable=protected-access
                 self.assertTrue(Special.sqlite_table_exists(filename, 'foo'))
                 self.assertFalse(Special.sqlite_table_exists(
                     filename, 'table_does_not_exist'))

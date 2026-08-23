@@ -9,6 +9,9 @@
 Test case for module GuiChaff
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 
 import tempfile
 import threading
