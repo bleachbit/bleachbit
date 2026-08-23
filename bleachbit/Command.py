@@ -349,8 +349,6 @@ class Winreg:
         """Execute the Windows registry cleaner"""
         if not IS_WINDOWS:
             return
-        _str = None  # string representation
-        ret = None  # return value meaning 'deleted' or 'delete-able'
         if self.valuename:
             _str = f'{self.keyname}<{self.valuename}>'
             ret = bleachbit.Windows.delete_registry_value(self.keyname,

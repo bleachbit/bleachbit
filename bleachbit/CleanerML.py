@@ -97,9 +97,6 @@ class _ETActionElementAdapter:
     def getAttribute(self, name):
         return self._element.attrib.get(name, '')
 
-    def toxml(self):
-        return xml.etree.ElementTree.tostring(self._element, encoding='unicode')
-
 
 def _gettext_etree(element):
     """Return text like General.getText() would for minidom nodes."""
