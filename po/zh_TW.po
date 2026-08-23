@@ -6,10 +6,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-08-21 05:26-0600\n"
-"PO-Revision-Date: 2026-08-18 02:09+0000\n"
-"Last-Translator: Pin-Hsien Lee <plesry@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-08-23 13:51+0000\n"
+"Last-Translator: 那個呆萌在山外 "
+"<5h1n38r16h7.d14m0nd@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/bleachbit/main/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -1283,10 +1284,9 @@ msgstr "忽略具有「全域寫入」權限的清理器：%s"
 #. path of the XML cleaner file whose directory is world
 #. writable.
 #: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
-#, fuzzy, python-format
-#| msgid "Ignoring cleaner because it is world writable: %s"
+#, python-format
 msgid "Ignoring cleaner because its directory is world writable: %s"
-msgstr "忽略具有「全域寫入」權限的清理器：%s"
+msgstr "已忽略清理器，因其所在目錄開放所有人寫入：%s"
 
 #. TRANSLATORS: Error message printed to the log.
 #. %s expands to the path of the XML cleaner file
@@ -2981,10 +2981,8 @@ msgstr "要擦除的路徑必須是一個存在的目錄：%s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Creating new, temporary file for wiping free space."
 msgid "Creating new, temporary file for wiping empty space."
-msgstr "建立新暫存檔以抹寫可用空間。"
+msgstr "建立新的暫存檔以抹寫剩餘空間。"
 
 #: ../bleachbit/Wipe.py
 #, python-format
