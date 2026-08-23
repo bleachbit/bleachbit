@@ -915,9 +915,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                         scm, svc, win32service.SERVICE_ALL_ACCESS)
                 except pywintypes.error:
                     return False
-                else:
-                    win32service.CloseServiceHandle(hs)
-                    return True
+                win32service.CloseServiceHandle(hs)
+                return True
             finally:
                 win32service.CloseServiceHandle(scm)
 

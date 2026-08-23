@@ -638,7 +638,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             if errno.ENOTEMPTY == e.errno:
                 logger.info(not_empty_msg, path)
                 return False
-            elif errno.EBUSY == e.errno:
+            if errno.EBUSY == e.errno:
                 if IS_POSIX and os.path.ismount(path):
                     # TRANSLATORS: Log message where %s is the pathname.
                     logger.info(_("Skipping mount point: %s"), path)
@@ -646,7 +646,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
                     # TRANSLATORS: Log message where %s is the pathname.
                     logger.info(_("Device or resource is busy: %s"), path)
                 return False
-            elif IS_WINDOWS and errno.EACCES == e.errno:
+            if IS_WINDOWS and errno.EACCES == e.errno:
                 # On Windows, read-only directories cause Access Denied
                 if _remove_windows_readonly(delpath):
                     _delete_path(delpath, os.rmdir)
@@ -662,19 +662,17 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             if 145 == e.winerror:
                 logger.info(not_empty_msg, path)
                 return False
-            else:
-                raise
+            raise
         return True
-    elif os.path.isfile(path):
+    if os.path.isfile(path):
         delete_file(path, do_shred)
         return True
-    elif os.path.islink(path):
+    if os.path.islink(path):
         _delete_path(path, os.remove)
         return True
-    else:
-        # TRANSLATORS: Log message where %s is the pathname.
-        logger.info(_("Special file type cannot be deleted: %s"), path)
-        return False
+    # TRANSLATORS: Log message where %s is the pathname.
+    logger.info(_("Special file type cannot be deleted: %s"), path)
+    return False
 
 
 def detect_encoding(fn):
@@ -744,8 +742,7 @@ def exe_exists(pathname):
     """Returns boolean whether executable exists"""
     if os.path.isabs(pathname):
         return os.path.exists(pathname)
-    else:
-        return exists_in_path(pathname)
+    return exists_in_path(pathname)
 
 
 def execute_sqlite3(path, cmds):

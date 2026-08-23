@@ -757,7 +757,7 @@ def elevate_privileges(uac):
         win32security.AdjustTokenPrivileges(htoken, 0, newPrivileges)
         win32file.CloseHandle(htoken)
         return False
-    elif not uac:
+    if not uac:
         return False
 
     if hasattr(sys, 'frozen'):
@@ -1218,8 +1218,7 @@ def read_registry_key(full_key, value_name):
             (reg_value, reg_type) = winreg.QueryValueEx(hkey, value_name)
             if reg_type in (winreg.REG_EXPAND_SZ, winreg.REG_SZ):
                 return reg_value
-            else:
-                return None
+            return None
     except OSError as e:
         if e.winerror == errno.ENOENT:
             # ENOENT = 'file not found' means value does not exist
@@ -1792,7 +1791,7 @@ class SplashThread(Thread):
                 win32gui.EndPaint(hWnd, paintStruct)
             return 0
 
-        elif message == win32con.WM_CLOSE:
+        if message == win32con.WM_CLOSE:
             try:
                 win32gui.DestroyWindow(hWnd)
                 return 0
@@ -1808,8 +1807,7 @@ class SplashThread(Thread):
             win32gui.PostQuitMessage(0)
             return 0
 
-        else:
-            return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
+        return win32gui.DefWindowProc(hWnd, message, wParam, lParam)
 
 
 splash_thread = SplashThread()

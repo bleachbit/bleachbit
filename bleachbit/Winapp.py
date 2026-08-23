@@ -141,8 +141,7 @@ def special_detect(code):
                'DET_SPACE_QUEST': r'HKCU\Software\Sierra Games\Space Quest'}
     if code in sd_keys:
         return Windows.detect_registry_key(sd_keys[code])
-    else:
-        logger.error('Unknown SpecialDetect=%s', code)
+    logger.error('Unknown SpecialDetect=%s', code)
     return False
 
 
@@ -276,8 +275,7 @@ class Winapp:
 
         if len(regexes) == 1:
             return regexes[0]
-        else:
-            return f"({'|'.join(regexes)})"
+        return f"({'|'.join(regexes)})"
 
     def detect(self, section):
         """Check whether to show the section

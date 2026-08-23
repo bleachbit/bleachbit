@@ -359,7 +359,7 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
         if fn and sql:
             raise RuntimeError(
                 'sqlite_clean_helper: supply either fn or sql but not both')
-        elif fn:
+        if fn:
             filename = os.path.normpath(os.path.join(self.dir_base, fn))
             self.assertExists(filename)
         # create sqlite file

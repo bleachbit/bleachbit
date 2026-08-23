@@ -420,8 +420,7 @@ def wipe_path(pathname, idle=False):
                 # Linux gives errno 122 Disk quota exceeded (EDQUOT)
                 if e.errno in (errno.EMFILE, errno.ENOSPC, errno.EDQUOT):
                     break
-                else:
-                    raise
+                raise
 
             # Remember to delete
             files.append(f)
