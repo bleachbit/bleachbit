@@ -11,7 +11,6 @@ Code that is commonly shared throughout BleachBit
 import os
 import re
 import sys
-from configparser import RawConfigParser  # used in other files
 
 from bleachbit import Log
 

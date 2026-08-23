@@ -177,17 +177,29 @@ class CommonTestCase(common.BleachbitTestCase):
 
     def test_mock_missing_package(self):
         """Test mock_missing_package context manager"""
+        # The imports are what this test exercises, so each one lives in its
+        # own function and is returned, rather than left as an unused name
+        def import_logging():
+            import logging  # pylint: disable=import-outside-toplevel
+            return logging
+
+        def import_cli():
+            import bleachbit.CLI  # pylint: disable=import-outside-toplevel
+            return bleachbit.CLI
+
+        def import_sys():
+            import sys  # pylint: disable=import-outside-toplevel
+            return sys
+
         # Inside the context, importing logging should raise an errorl.
         with common.mock_missing_package('logging', clear_prefixes=('bleachbit.CLI',)):
-            with self.assertRaises(ImportError):
-                import logging  # pylint: disable=import-outside-toplevel
-            with self.assertRaises(ImportError):
-                import bleachbit.CLI  # pylint: disable=import-outside-toplevel
+            self.assertRaises(ImportError, import_logging)
+            self.assertRaises(ImportError, import_cli)
             # Importing sys should be unaffected.
-            import sys  # pylint: disable=import-outside-toplevel
+            self.assertIsNotNone(import_sys())
         # Outside the context, importing should work.
-        import logging  # pylint: disable=import-outside-toplevel
-        import bleachbit.CLI  # pylint: disable=import-outside-toplevel
+        self.assertIsNotNone(import_logging())
+        self.assertIsNotNone(import_cli())
 
     def test_set_temporary_env(self):
         """Test set_temporary_env context manager"""
