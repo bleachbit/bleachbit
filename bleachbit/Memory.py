@@ -377,8 +377,7 @@ def physical_free_linux():
         free_bytes, _ = _parse_meminfo_free(f.read())
     if free_bytes > 0:
         return free_bytes
-    else:
-        raise Exception("unknown")
+    raise Exception("unknown")
 
 
 def physical_free_windows():
@@ -412,12 +411,11 @@ def physical_free_windows():
 def physical_free():
     if IS_LINUX:
         return physical_free_linux()
-    elif IS_WINDOWS:
+    if IS_WINDOWS:
         return physical_free_windows()
-    elif IS_MAC:
+    if IS_MAC:
         return physical_free_darwin()
-    else:
-        raise RuntimeError('unsupported platform for physical_free()')
+    raise RuntimeError('unsupported platform for physical_free()')
 
 
 def report_free():

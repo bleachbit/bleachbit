@@ -260,18 +260,17 @@ def extents_a_minus_b(a, b):
                 # Return this range of A unbroken.
                 yield (a_begin, a_end)
                 break
-            elif b_end < a_begin:
+            if b_end < a_begin:
                 # Too early in list, keep searching.
                 continue
-            elif b_begin <= a_begin:
+            if b_begin <= a_begin:
                 if b_end >= a_end:
                     # This range of A is completely covered by B.
                     # Do nothing and pass on to next range of A.
                     break
-                else:
-                    # This range of A is partially covered by B.
-                    # Remove the covered range from A and loop
-                    a_begin = b_end + 1
+                # This range of A is partially covered by B.
+                # Remove the covered range from A and loop
+                a_begin = b_end + 1
             else:
                 # This range of A is partially covered by B.
                 # Return the first part of A not covered.
@@ -279,8 +278,7 @@ def extents_a_minus_b(a, b):
                 yield (a_begin, b_begin - 1)
                 if b_end >= a_end:
                     break
-                else:
-                    a_begin = b_end + 1
+                a_begin = b_end + 1
         else:
             # Loop exhausted without a break: nothing in B covered the
             # rest of this A range, so yield what's left of it.
@@ -510,10 +508,9 @@ def determine_win_version():
     is_home = bool(ver_info[7] & VER_SUITE_PERSONAL)
     if ver_info[:2] == (6, 0):
         return "Vista", is_home
-    elif ver_info[0] >= 6:
+    if ver_info[0] >= 6:
         return "Later than Vista", is_home
-    else:
-        return "Something else", is_home
+    return "Something else", is_home
 
 
 def open_file(file_name, mode=GENERIC_READ):
@@ -708,7 +705,7 @@ def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
             if err_code == 38:     # when file size is 0.
                 # (38, 'DeviceIoControl', 'Reached the end of the file.')
                 return []
-            elif err_code in [122, 234]:  # when buffer not large enough.
+            if err_code in [122, 234]:  # when buffer not large enough.
                 # (122, 'DeviceIoControl',
                 # 'The data area passed to a system call is too small.')
                 # (234, 'DeviceIoControl', 'More data is available.')
