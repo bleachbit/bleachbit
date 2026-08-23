@@ -354,7 +354,7 @@ def setup_translation():
     # Use local import to avoid circular import.
     from bleachbit import locale_dir
     user_locale = get_active_language_code()
-    logger.debug(f"user_locale: {user_locale}, locale_dir: {locale_dir}")
+    logger.debug("user_locale: %s, locale_dir: %s", user_locale, locale_dir)
     assert isinstance(user_locale, str)
     assert isinstance(locale_dir, str), f"locale_dir: {locale_dir}"
     if IS_WINDOWS and user_locale:
@@ -423,8 +423,8 @@ def setup_translation():
                 'The function wbindtextdomain() is not available.')
 
         # Log for debugging
-        logger.debug(
-            f"Windows translation domain set to: {text_domain}, dir: {locale_dir}")
+        logger.debug("Windows translation domain set to: %s, dir: %s",
+                     text_domain, locale_dir)
     else:
         logger.error('The function bindtextdomain() is not available.')
 

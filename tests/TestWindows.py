@@ -550,7 +550,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             pathname = self.mkstemp(suffix=test)
             time.sleep(5)  # avoid race condition
             self.assertExists(pathname)
-            logger.debug('delete_locked_file(%s) ' % pathname)
+            logger.debug('delete_locked_file(%s) ', pathname)
             if not shell.IsUserAnAdmin():
                 with self.assertRaises(WindowsError):
                     delete_locked_file(pathname)
@@ -1248,8 +1248,10 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                     if deny_access:
                         _deny_access(fh)
                     close_file(fh)
-                logger.debug('test_file_wipe(): filename length={}, shortname length ={}, contents length={}, is_sparse={}'.format(
-                    len(longname), len(shortname), len(contents), is_sparse))
+                logger.debug(
+                    'test_file_wipe(): filename length=%d, '
+                    'shortname length =%d, contents length=%d, is_sparse=%s',
+                    len(longname), len(shortname), len(contents), is_sparse)
                 if shell.IsUserAnAdmin():
                     # wiping requires admin privileges
                     file_wipe(shortname)
