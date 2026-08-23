@@ -294,13 +294,14 @@ class GeneralTestCase(common.BleachbitTestCase):
     def test_makedirs(self):
         """Unit test for makedirs"""
 
-        dir = os.path.join(self.tempdir, 'just', 'a', 'directory', 'adventure')
+        path = os.path.join(self.tempdir, 'just', 'a',
+                            'directory', 'adventure')
         # directory does not exist
-        makedirs(dir)
-        self.assertLExists(dir)
+        makedirs(path)
+        self.assertLExists(path)
         # directory already exists
-        makedirs(dir)
-        self.assertLExists(dir)
+        makedirs(path)
+        self.assertLExists(path)
         # clean up
         shutil.rmtree(os.path.join(self.tempdir, 'just'))
 

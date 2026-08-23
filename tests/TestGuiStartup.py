@@ -90,6 +90,7 @@ class GuiStartupTestCase(common.BleachbitTestCase):
             # `from x import Y` would hand back the stale module.
             # pylint: disable=consider-using-from-import
             # pylint: disable=reimported
+            # pylint: disable-next=redefined-outer-name
             import bleachbit.GuiStartup as GuiStartup
             missing = GuiStartup._get_missing_dependencies()
             self.assertIn('requests', missing)

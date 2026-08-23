@@ -68,25 +68,25 @@ def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
     Returns (should_stop, file_count).
     """
     if stop_mode == STOP_MODE_FILE_COUNT:
-        def should_stop(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
+        def stop_on_file_count(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
             return abort_event.is_set()
 
-        return should_stop, stop_value
+        return stop_on_file_count, stop_value
 
     if stop_mode == STOP_MODE_TOTAL_SIZE:
         target_bytes = stop_value * 1024 * 1024  # MB to bytes
 
-        def should_stop(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
+        def stop_on_total_size(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
             if abort_event.is_set():
                 return True
             return cumulative_size >= target_bytes
 
-        return should_stop, MAX_FILE_COUNT
+        return stop_on_total_size, MAX_FILE_COUNT
 
     if stop_mode == STOP_MODE_FREE_SPACE:
         target_free_pct = stop_value
 
-        def should_stop(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
+        def stop_on_free_space(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
             if abort_event.is_set():
                 return True
             try:
@@ -96,7 +96,7 @@ def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
             free_pct = 100.0 * usage.free / usage.total
             return free_pct <= target_free_pct
 
-        return should_stop, MAX_FILE_COUNT
+        return stop_on_free_space, MAX_FILE_COUNT
 
     raise ValueError(f'Invalid stop_mode {stop_mode}')
 
@@ -109,28 +109,28 @@ def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
     or compute from disk usage.
     """
     if stop_mode == STOP_MODE_FILE_COUNT:
-        def progress_cb(fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
+        def progress_by_file_count(fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
             on_progress(fraction)
 
-        return progress_cb
+        return progress_by_file_count
 
     if stop_mode == STOP_MODE_TOTAL_SIZE:
         target_bytes = stop_value * 1024 * 1024
 
-        def progress_cb(fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
+        def progress_by_total_size(fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
             if cumulative_size > 0:
                 on_progress(min(1.0, cumulative_size / target_bytes))
             else:
                 on_progress(fraction)
 
-        return progress_cb
+        return progress_by_total_size
 
     if stop_mode == STOP_MODE_FREE_SPACE:
         target_free_pct = stop_value
         # Use list to allow mutation in nested function
         initial_free_pct = [None]
 
-        def progress_cb(_fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
+        def progress_by_free_space(_fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
             try:
                 usage = shutil.disk_usage(output_folder)
             except FileNotFoundError:
@@ -147,7 +147,7 @@ def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
                 frac = 1.0
             on_progress(frac)
 
-        return progress_cb
+        return progress_by_free_space
 
     raise ValueError(f'Invalid stop_mode {stop_mode}')
 

@@ -1053,8 +1053,8 @@ def load_i18n_dll():
     """
     dirs = set([bleachbit.bleachbit_exe_path, os.path.dirname(sys.executable)])
     lib_path = None
-    for dir in dirs:
-        lib_path = os.path.join(dir, 'intl-8.dll')
+    for dirname in dirs:
+        lib_path = os.path.join(dirname, 'intl-8.dll')
         if os.path.exists(lib_path):
             break
     if not lib_path:
