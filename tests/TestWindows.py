@@ -898,7 +898,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                     scm, svc, win32service.SERVICE_QUERY_STATUS | win32service.SERVICE_QUERY_CONFIG)
                 try:
                     cfg = win32service.QueryServiceConfig(hs)
-                    return True if cfg[1] != win32service.SERVICE_DISABLED else False
+                    return cfg[1] != win32service.SERVICE_DISABLED
                 finally:
                     win32service.CloseServiceHandle(hs)
             except pywintypes.error:

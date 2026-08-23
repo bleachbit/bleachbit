@@ -366,8 +366,8 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 config["extents"] = get_extents(
                     config["handle"], filename=config["path"])
 
-                total_clusters = sum([(end - start + 1)
-                                     for start, end in config["extents"]])
+                total_clusters = sum((end - start + 1)
+                                     for start, end in config["extents"])
                 self.assertEqual(total_clusters, config["clusters"],
                                  f"File should have exactly {config['clusters']} cluster(s)")
 

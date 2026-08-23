@@ -213,10 +213,8 @@ def logical_ranges_to_extents(ranges, bridge_compressed=False):
             # that are arranged with gaps of 16 clusters or less.
             merge_index = index
             while (merge_index + 2 < last_record and
-                   ranges[merge_index + 1][1] < 0 and
-                   ranges[merge_index + 2][1] >= 0 and
-                   ranges[merge_index + 2][1] - ranges[merge_index][1] <= 16 and
-                   ranges[merge_index + 2][1] - ranges[merge_index][1] > 0):
+                   ranges[merge_index + 1][1] < 0 <= ranges[merge_index + 2][1] and
+                   0 < ranges[merge_index + 2][1] - ranges[merge_index][1] <= 16):
                 merge_index += 2
 
             # Figure out length for this cluster range.

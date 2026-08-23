@@ -175,7 +175,7 @@ class LockedAction(ActionProvider):
         yield Command.Delete(self.pathname)
         assert os.path.exists(self.pathname)
         fsize = getsize(self.pathname)
-        if not fsize == 0:  # File should be truncated to 0 bytes
+        if fsize != 0:  # File should be truncated to 0 bytes
             raise RuntimeError('Locked file has size %dB (not 0B)' % fsize)
         win32file.CloseHandle(handle)
 
