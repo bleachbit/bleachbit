@@ -1217,7 +1217,7 @@ PrefersNonDefaultGPU=false""")
                 real_rev, '.local', 'share', 'Trash', 'files')
             os.makedirs(trash_files)
             test_file = os.path.join(trash_files, 'test.txt')
-            with open(test_file, 'w') as f:
+            with open(test_file, 'w', encoding='utf-8') as f:
                 f.write('test')
             # Create symlink current -> 238
             current_dir = os.path.join(self.tempdir, 'snap', 'app', 'current')

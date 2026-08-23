@@ -248,7 +248,7 @@ class Bleachbit(Gtk.Application):
                                  website=bleachbit.APP_URL,
                                  transient_for=self._window)
         try:
-            with open(bleachbit.license_filename) as f_license:
+            with open(bleachbit.license_filename, encoding='utf-8') as f_license:
                 dialog.set_license(f_license.read())
         except (IOError, TypeError):
             # TRANSLATORS: License text shown in the 'About' dialog.
