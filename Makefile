@@ -9,7 +9,7 @@
 # On some systems if not explicitly given, make uses /bin/sh
 SHELL != command -v bash || echo /bin/sh
 
-.PHONY: clean install tests tests-pytest tests-nsis build tests-with-sudo lint delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
+.PHONY: clean install tests tests-pytest tests-nsis build tests-with-sudo lint require-lint-tools delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
 
 prefix ?= /usr/local
 bindir ?= $(prefix)/bin
@@ -116,29 +116,63 @@ install:
 	mkdir -p $(DESTDIR)$(datadir)/polkit-1/actions
 	$(INSTALL_DATA) org.bleachbit.policy $(DESTDIR)$(datadir)/polkit-1/actions/
 
+# `lint` only warns about a missing tool, which is fine locally but hides a
+# skipped check in CI. Depend on this to turn those warnings into an error.
+require-lint-tools:
+	@missing=; \
+	for c in pyflakes3 pylint shellcheck appstreamcli; do \
+		command -v $$c >/dev/null 2>&1 || missing="$$missing $$c"; \
+	done; \
+	if [ -n "$$missing" ]; then \
+		echo "ERROR: Missing lint tools:$$missing"; \
+		echo "APT users, try: sudo apt install pyflakes3 pylint shellcheck appstream"; \
+		exit 1; \
+	fi
+
 lint:
-	command -v pyflakes3 >/dev/null 2>&1 || echo "WARNING: Missing pyflakes3. APT users, try: sudo apt install pyflakes3"
-	command -v pylint >/dev/null 2>&1 || echo "WARNING: Missing pylint. APT users, try: sudo apt install pylint"
-	@if command -v appstreamcli >/dev/null 2>&1; then \
-		appstreamcli validate org.bleachbit.BleachBit.metainfo.xml; \
+	@rc=0; \
+	if command -v appstreamcli >/dev/null 2>&1; then \
+		appstreamcli validate org.bleachbit.BleachBit.metainfo.xml || rc=1; \
 	else \
 		echo "WARNING: Missing appstreamcli. APT users, try: sudo apt install appstream"; \
-	fi
-	@if command -v shellcheck >/dev/null 2>&1; then \
+	fi; \
+	if command -v shellcheck >/dev/null 2>&1; then \
 		echo "Running shellcheck on .sh files"; \
 		for f in scripts/*.sh docker/*.sh; do \
 			[ -e "$$f" ] || continue; \
 			echo "$$f"; \
-			( shellcheck "$$f" > "$$f".shellcheck.log ); \
+			shellcheck "$$f" > "$$f".shellcheck.log || { \
+				rc=1; \
+				echo "ERROR: shellcheck reported problems in $$f"; \
+				cat "$$f".shellcheck.log; \
+			}; \
 		done; \
 	else \
 		echo "WARNING: Missing shellcheck. APT users, try: sudo apt install shellcheck"; \
-	fi
-	@echo "Running pyflakes3 and pylint in parallel: see all.pyflakes.log and all.pylint.log"
-	@pyflakes3 *py */*py > all.pyflakes.log 2>&1 & \
-	pylint -j 0 *py */*py > all.pylint.log 2>&1 & \
+	fi; \
+	echo "Running pyflakes3 and pylint in parallel: see all.pyflakes.log and all.pylint.log"; \
+	pyflakes_pid=; \
+	if command -v pyflakes3 >/dev/null 2>&1; then \
+		pyflakes3 *py */*py > all.pyflakes.log 2>&1 & \
+		pyflakes_pid=$$!; \
+	else \
+		echo "WARNING: Missing pyflakes3. APT users, try: sudo apt install pyflakes3"; \
+	fi; \
+	if command -v pylint >/dev/null 2>&1; then \
+		pylint -j 0 *py */*py > all.pylint.log 2>&1 & \
+	else \
+		echo "WARNING: Missing pylint. APT users, try: sudo apt install pylint"; \
+	fi; \
+	if [ -n "$$pyflakes_pid" ]; then \
+		wait $$pyflakes_pid || { \
+			rc=1; \
+			echo "ERROR: pyflakes3 reported problems"; \
+			cat all.pyflakes.log; \
+		}; \
+	fi; \
+	: 'pylint reports too much to gate on, so only its log is kept.'; \
 	wait; \
-	exit 0
+	exit $$rc
 
 delete_windows_files:
 	# This is used for building .deb and .rpm packages.
