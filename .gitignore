@@ -1,6 +1,11 @@
 # dynamically created during build
 bleachbit/Revision.py
 
+# make lint
+all.pyflakes.log
+all.pylint.log
+*.shellcheck.log
+
 # test/code coverage
 .coverage*
 htmlcov

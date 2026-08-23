@@ -1,0 +1,58 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!dependabot/**' # avoid duplicate runs; the pull_request event handles dependabot PRs
+    paths: &paths
+      - '**.py'
+      - '**.sh'
+      - 'Makefile'
+      - 'setup.cfg'
+      - 'org.bleachbit.BleachBit.metainfo.xml'
+      - '.github/workflows/lint.yml'
+      - '.pylintrc'
+  pull_request:
+    branches:
+      - '**'
+    paths: *paths
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-26.04
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install dependencies
+        run: make install-deps-dev
+
+      # Without it, pylint reports bleachbit.Revision as an unresolved import
+      - name: Generate Revision.py
+        uses: $/.github/actions/generate-revision
+
+      - name: Run lint
+        run: make require-lint-tools lint
+
+      - name: Show results
+        if: always()
+        run: |
+          shopt -s nullglob
+          for f in all.*.log */*.shellcheck.log; do
+            echo "::group::$f"
+            cat "$f"
+            echo "::endgroup::"
+          done
