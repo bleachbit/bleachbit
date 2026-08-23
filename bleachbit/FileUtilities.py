@@ -897,7 +897,7 @@ def getsize(path):
             finddata = win32file.FindFilesW(extended_path(path))
         except pywinerror as e:
             if e.winerror == 3:  # 3 = The system cannot find the path specified.
-                raise OSError(errno.ENOENT, e.strerror, path)
+                raise OSError(errno.ENOENT, e.strerror, path) from e
             raise e
         if not finddata:
             # FindFilesW does not work for directories, so fall back to

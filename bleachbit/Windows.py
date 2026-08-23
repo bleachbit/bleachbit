@@ -454,11 +454,12 @@ def delete_locked_file(pathname):
         # WinError throws the right exception based on last error.
         try:
             raise ctypes.WinError()
-        except PermissionError:
+        except PermissionError as e:
             # OSError has special handling in Worker.py
             # Use a special message for flagging files for later deletion
             raise OSError(
-                errno.EACCES, "Access denied in delete_locked_file()", pathname)
+                errno.EACCES,
+                "Access denied in delete_locked_file()", pathname) from e
 
 
 def delete_registry_value(key, value_name, really_delete):
@@ -474,9 +475,10 @@ def delete_registry_value(key, value_name, really_delete):
         else:
             hkey = winreg.OpenKey(hive, sub_key)
             winreg.QueryValueEx(hkey, value_name)
-    except PermissionError:
+    except PermissionError as e:
         raise OSError(
-            errno.EACCES, "Access denied in delete_registry_value()", key)
+            errno.EACCES,
+            "Access denied in delete_registry_value()", key) from e
     except WindowsError as e:
         if e.winerror == errno.ENOENT:
             # ENOENT = 'file not found' means value does not exist
@@ -537,9 +539,10 @@ def delete_registry_key(parent_key, really_delete, excludekeys=None):
 
     try:
         winreg.DeleteKey(hive, parent_sub_key)
-    except PermissionError:
+    except PermissionError as e:
         raise OSError(
-            errno.EACCES, "Access denied in delete_registry_key()", parent_key)
+            errno.EACCES,
+            "Access denied in delete_registry_key()", parent_key) from e
     return True
 
 
