@@ -146,10 +146,10 @@ def special_detect(code):
     return False
 
 
-"""fnmatch.translate() only got atomic groups (avoiding catastrophic
-regex backtracking) in Python 3.11, but BleachBit supports 3.8+, so
-cap the wildcard count instead of trusting the stdlib on older versions.
-TODO: drop this once the minimum supported Python is 3.11+."""
+# fnmatch.translate() only got atomic groups (avoiding catastrophic
+# regex backtracking) in Python 3.11, but BleachBit supports 3.8+, so
+# cap the wildcard count instead of trusting the stdlib on older versions.
+# TODO: drop this once the minimum supported Python is 3.11+
 MAX_GLOB_WILDCARDS = 10
 
 
