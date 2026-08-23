@@ -779,6 +779,7 @@ class CustomFileAction(Action.ActionProvider):
         self.paths = paths
 
     def get_commands(self):
+        """Yield a shred command for each path"""
         for path in self.paths:
             path = simpler_cleaner_process_path(path)
             if not path:
@@ -809,6 +810,7 @@ class CustomWipeAction(Action.ActionProvider):
         self.display = _("Wipe empty space %s") % path
 
     def get_commands(self):
+        """Yield the command that wipes the free space"""
         def wipe_path_func():
             yield from wipe_path(self.path, idle=True)
             yield 0
