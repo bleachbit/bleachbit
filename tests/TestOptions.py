@@ -619,6 +619,9 @@ protected_path = /tmp = True
                         self.assertTrue(
                             entered.wait(timeout=5),
                             f'{name}() never reached __schedule_flush')
+                        # A `with` would block; this probes who holds the
+                        # lock and must give up after the timeout.
+                        # pylint: disable=consider-using-with
                         acquired = o._flush_lock.acquire(timeout=0.2)
                         if acquired:
                             o._flush_lock.release()

@@ -253,6 +253,10 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
         with common.mock_missing_package(
                 'psutil',
                 clear_prefixes=('bleachbit.Process',)):
+            # `import x.y as Y` is deliberate: mock_missing_package drops the
+            # submodule from sys.modules but leaves the parent attribute, so
+            # `from x import Y` would hand back the stale module.
+            # pylint: disable=consider-using-from-import
             import bleachbit.Process as Process
             self.assertFalse(Process._has_psutil)
 
@@ -284,6 +288,10 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
         with common.mock_missing_package(
                 'psutil',
                 clear_prefixes=('bleachbit.Process',)):
+            # `import x.y as Y` is deliberate: mock_missing_package drops the
+            # submodule from sys.modules but leaves the parent attribute, so
+            # `from x import Y` would hand back the stale module.
+            # pylint: disable=consider-using-from-import
             import bleachbit.Process as Process
             self.assertFalse(Process._has_psutil)
             if IS_WINDOWS:

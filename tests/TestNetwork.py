@@ -251,6 +251,10 @@ class MissingPackagesTestCase(unittest.TestCase):
         with common.mock_missing_package(
                 'requests', 'urllib3',
                 clear_prefixes=('bleachbit.Network', 'bleachbit.Update')):
+            # `import x.y as Y` is deliberate: mock_missing_package drops the
+            # submodule from sys.modules but leaves the parent attribute, so
+            # `from x import Y` would hand back the stale module.
+            # pylint: disable=consider-using-from-import
             import bleachbit.Network as Network
             self.assertFalse(Network.HAVE_REQUESTS)
             with self.assertRaises(Network.RequestException):
@@ -261,5 +265,9 @@ class MissingPackagesTestCase(unittest.TestCase):
         with common.mock_missing_package(
                 'urllib3',
                 clear_prefixes=('bleachbit.Network',)):
+            # `import x.y as Y` is deliberate: mock_missing_package drops the
+            # submodule from sys.modules but leaves the parent attribute, so
+            # `from x import Y` would hand back the stale module.
+            # pylint: disable=consider-using-from-import
             import bleachbit.Network as Network
             self.assertFalse(Network.HAVE_URLLIB3)

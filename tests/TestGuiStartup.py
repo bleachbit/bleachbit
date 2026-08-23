@@ -84,6 +84,11 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         with common.mock_missing_package(
                 'requests',
                 clear_prefixes=('bleachbit.Network', 'bleachbit.Update', 'bleachbit.GuiStartup')):
+            # `import x.y as Y` is deliberate: mock_missing_package drops the
+            # submodule from sys.modules but leaves the parent attribute, so
+            # `from x import Y` would hand back the stale module.
+            # pylint: disable=consider-using-from-import
+            # pylint: disable=reimported
             import bleachbit.GuiStartup as GuiStartup
             missing = GuiStartup._get_missing_dependencies()
             self.assertIn('requests', missing)
