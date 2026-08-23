@@ -21,6 +21,7 @@
 General code
 """
 
+import gc
 import getpass
 import logging
 import os
@@ -187,7 +188,6 @@ def gc_collect():
     if not IS_WINDOWS:
         return
 
-    import gc
     gc.collect()
 
 
