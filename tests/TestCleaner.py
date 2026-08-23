@@ -54,7 +54,7 @@ def actions_to_cleaner(action_strs):
 def register_all_cleaners():
     """Register all cleaners for testing; leaves winapp2.ini in the shared personal_cleaners_dir"""
     if IS_WINDOWS:
-        from tests.TestWinapp import get_winapp2  # pylint: disable=import-outside-toplevel
+        from tests.TestWinapp import get_winapp2
 
         os.makedirs(bleachbit.personal_cleaners_dir, exist_ok=True)
         print(f"personal_cleaners_dir: {bleachbit.personal_cleaners_dir}")

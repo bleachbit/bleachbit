@@ -43,7 +43,7 @@ def clear_clipboard():
     # GTK may leave the clipboard locked, so the win32api may
     # get an "access denied" error.
     if IS_WINDOWS:
-        import bleachbit.Windows  # pylint: disable=import-outside-toplevel
+        import bleachbit.Windows
         try:
             bleachbit.Windows.clear_clipboard()
         except bleachbit.Windows.pywintypes.error as e:
@@ -63,7 +63,7 @@ def get_clipboard_paths(clipboard=None, targets=None):
     if IS_WINDOWS:
         # Prefer native CF_HDROP data when available. Query Win32 before
         # wait_for_targets() because GTK target queries can race with CF_HDROP.
-        import bleachbit.Windows  # pylint: disable=import-outside-toplevel
+        import bleachbit.Windows
         win32_paths = ()
         try:
             win32_paths = bleachbit.Windows.get_clipboard_paths()

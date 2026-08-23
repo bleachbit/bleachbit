@@ -196,7 +196,6 @@ def wipe_write(path):
     """Overwrite a file's contents with zeros without truncating it.
 
     Return the open file handle; the caller must close it."""
-    # pylint: disable=import-outside-toplevel
     from bleachbit.FileUtilities import getsize, _open_nofollow_fd
     size = getsize(path)
     flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
@@ -233,13 +232,11 @@ def wipe_contents(path):
     shown that most of today's media can be effectively cleared
     by one overwrite"
     """
-    # pylint: disable=import-outside-toplevel
     from bleachbit.FileUtilities import truncate_f
 
     # pylint: disable=possibly-used-before-assignment
     if IS_WINDOWS and IsUserAnAdmin():
         # The import placement here avoids a circular import.
-        # pylint: disable=import-outside-toplevel
         from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
         from bleachbit.FileUtilities import pywinerror
         try:
@@ -329,7 +326,6 @@ def wipe_name(pathname1):
 def wipe_path(pathname, idle=False):
     """Wipe the free space in the path
     This function uses an iterator to update the GUI."""
-    # pylint: disable=import-outside-toplevel
     from bleachbit.FileUtilities import delete, free_space, get_filesystem_type, truncate_f
 
     def temporaryfile():

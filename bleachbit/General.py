@@ -298,7 +298,7 @@ def get_real_uid():
     if login and 'root' != login:
         # pwd does not exist on Windows, so global unconditional import
         # would cause a ModuleNotFoundError.
-        import pwd  # pylint: disable=import-outside-toplevel
+        import pwd
         try:
             return pwd.getpwnam(login).pw_uid
         except KeyError:

@@ -198,7 +198,6 @@ def _get_os_name_version():
     """Return (os_name, os_version) tuple for network requests."""
     os_name = platform.system()  # 'Linux', 'Windows', etc.
     if IS_LINUX:
-        # pylint: disable=import-outside-toplevel
         from bleachbit.Unix import get_distribution_name_version
         os_version = get_distribution_name_version()
     elif IS_MAC:
@@ -238,7 +237,7 @@ def get_gtk_version():
 
     If GTK is not available, returns None.
     """
-    # pylint: disable=import-outside-toplevel, import-error
+    # pylint: disable=import-error
     from bleachbit.GtkShim import Gtk, is_gtk_available
     if not is_gtk_available():
         return None

@@ -555,7 +555,6 @@ def delete_updates():
     Yields commands
     """
     # Import here to avoid a circular import.
-    # pylint: disable=import-outside-toplevel
     from bleachbit import Command
     if not shell.IsUserAnAdmin():
         logger.warning(
@@ -809,7 +808,7 @@ def elevate_privileges(uac):
 
 def _add_command_line_parameters(parameters):
     """Add any command line parameters such as --debug-log."""
-    import subprocess  # pylint: disable=import-outside-toplevel
+    import subprocess
     # parameters already has --gui, so drop it from argv to avoid a duplicate
     args = [arg for arg in sys.argv[1:] if arg != '--gui']
     return subprocess.list2cmdline(parameters + args)

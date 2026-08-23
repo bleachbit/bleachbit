@@ -29,7 +29,7 @@ def _apply_fontconfig_backend_preference():
     if not IS_WINDOWS:
         return
     try:
-        from bleachbit.Options import options  # pylint: disable=import-outside-toplevel
+        from bleachbit.Options import options
         if options.get('use_fontconfig_backend'):
             os.environ['PANGOCAIRO_BACKEND'] = 'fc'
     except Exception as e:
@@ -46,8 +46,8 @@ def check_wayland_and_root():
         return False
 
     # The two imports from bleachbit must come after sys.path is adjusted.
-    import bleachbit.Unix  # pylint: disable=import-outside-toplevel
-    from bleachbit.Language import get_text as _  # pylint: disable=import-outside-toplevel
+    import bleachbit.Unix
+    from bleachbit.Language import get_text as _
 
     # FIXME: if started from launcher (.desktop file), there may be no console
     # to which to print this message.
@@ -161,7 +161,7 @@ def bootstrap():
     _bootstrapped = True
     if IS_WINDOWS:
         # Do this before anything loads a DLL (e.g. bleachbit.Windows).
-        import bleachbit  # pylint: disable=import-outside-toplevel
+        import bleachbit
         try:
             bleachbit._harden_dll_search_path()
         except Exception:
@@ -191,6 +191,5 @@ def _suppress_pygobject_asyncio_deprecations():
     """
     # Imported here so bootstrapping (which hardens the DLL search path on
     # Windows) is not preceded by importing anything GTK-related.
-    # pylint: disable=import-outside-toplevel
     from bleachbit.GtkShim import ignore_pygobject_asyncio_warnings
     ignore_pygobject_asyncio_warnings()

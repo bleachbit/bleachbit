@@ -161,7 +161,6 @@ class Function:
         """Execute the function and return results"""
 
         # In FreeBSD, sqlite3 is a separate package
-        # pylint: disable=import-outside-toplevel
         import sqlite3
         if self.path is not None and FileUtilities.whitelisted(self.path):
             yield ret_keep_list(self.path)

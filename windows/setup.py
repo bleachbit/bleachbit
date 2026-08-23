@@ -422,7 +422,6 @@ def environment_check():
 
 def build_py2exe():
     """Build executables using py2exe's freeze API"""
-    # pylint: disable=import-outside-toplevel
     from py2exe import freeze
     # See multiple issues about overly description such as:
     # https://github.com/bleachbit/bleachbit/issues/1000

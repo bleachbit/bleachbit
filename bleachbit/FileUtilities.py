@@ -126,7 +126,6 @@ def get_filesystem_type(path):
     * On Windows: NTFS, FAT32, CDFS
     """
     try:
-        # pylint: disable=import-outside-toplevel
         import psutil
     except ImportError:
         logger.warning(
@@ -765,7 +764,6 @@ def execute_sqlite3(path, cmds):
     """
     from bleachbit.Options import options
     # In FreeBSD, sqlite3 is a separate package
-    # pylint: disable=import-outside-toplevel
     import sqlite3
     assert isinstance(path, str)
     assert isinstance(cmds, str)
@@ -864,7 +862,7 @@ def free_space(pathname):
     estimation of completion time in wipe_path().
     """
     if IS_WINDOWS:
-        # pylint: disable=import-error,import-outside-toplevel
+        # pylint: disable=import-error
         import psutil
         return psutil.disk_usage(pathname).free
     assert IS_POSIX
