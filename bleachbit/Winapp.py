@@ -8,6 +8,7 @@
 Import Winapp2.ini files
 """
 
+import configparser
 import fnmatch
 import glob
 import logging
@@ -181,7 +182,7 @@ class Winapp:
         for langsecref in set(langsecref_map.values()):
             self.add_section(langsecref[0], langsecref[1])
         self.errors = 0
-        self.parser = bleachbit.RawConfigParser()
+        self.parser = configparser.RawConfigParser()
         encoding = detect_encoding(pathname) or 'utf_8_sig'
         self.parser.read(pathname, encoding=encoding)
         self.re_detect = re.compile(r'^detect(\d+)?$')

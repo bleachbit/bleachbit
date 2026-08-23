@@ -24,6 +24,7 @@ Store and retrieve user preferences
 
 # standard library imports
 import atexit
+import configparser
 import errno
 import logging
 import os
@@ -160,7 +161,7 @@ class Options:
 
     def __init__(self):
         self.purged = False
-        self.config = bleachbit.RawConfigParser(delimiters='=')
+        self.config = configparser.RawConfigParser(delimiters='=')
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
         self.config.BOOLEAN_STATES['t'] = True
         self.config.BOOLEAN_STATES['f'] = False

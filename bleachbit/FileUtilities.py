@@ -10,6 +10,7 @@ File-related utilities
 
 # standard imports
 import codecs
+import configparser
 import contextlib
 import errno
 import glob
@@ -49,7 +50,7 @@ if IS_WINDOWS:
     os.path.islink = lambda path: os_path_islink(
         path) or bleachbit.Windows.is_junction(path)
 
-if IS_POSIX:
+else:
     # pylint: disable=redefined-builtin
     from bleachbit.General import WindowsError
     # pylint: disable=invalid-name
@@ -413,7 +414,7 @@ def clean_ini(path, section, parameter):
     read_encoding = 'utf_8_sig'
 
     # read file to parser
-    config = bleachbit.RawConfigParser(delimiters='=')
+    config = configparser.RawConfigParser(delimiters='=')
     config.optionxform = str
     try:
         with open(path, 'r', encoding=read_encoding) as fp:
