@@ -36,6 +36,12 @@ PYTEST_COV := --cov=bleachbit --cov-report=
 PYTEST_COV_APPEND := --cov=bleachbit --cov-append --cov-report=
 endif
 
+# The executable is pyflakes3 on Debian and pyflakes elsewhere, and Debian's
+# python3-pyflakes ships neither, so fall back to the module.
+PYFLAKES ?= $(or $(shell command -v pyflakes3 2>/dev/null),\
+                 $(shell command -v pyflakes 2>/dev/null),\
+                 $(PYTHON_CMD) -m pyflakes)
+
 # Arguments forwarded to scripts/install-deps.sh, such as --venv
 INSTALL_DEPS_ARGS ?=
 
@@ -120,7 +126,8 @@ install:
 # skipped check in CI. Depend on this to turn those warnings into an error.
 require-lint-tools:
 	@missing=; \
-	for c in pyflakes3 pylint shellcheck appstreamcli; do \
+	$(PYFLAKES) --version >/dev/null 2>&1 || missing="$$missing pyflakes"; \
+	for c in pylint shellcheck appstreamcli; do \
 		command -v $$c >/dev/null 2>&1 || missing="$$missing $$c"; \
 	done; \
 	if [ -n "$$missing" ]; then \
@@ -150,13 +157,13 @@ lint:
 	else \
 		echo "WARNING: Missing shellcheck. APT users, try: sudo apt install shellcheck"; \
 	fi; \
-	echo "Running pyflakes3 and pylint in parallel: see all.pyflakes.log and all.pylint.log"; \
+	echo "Running pyflakes and pylint in parallel: see all.pyflakes.log and all.pylint.log"; \
 	pyflakes_pid=; \
-	if command -v pyflakes3 >/dev/null 2>&1; then \
-		pyflakes3 *py */*py > all.pyflakes.log 2>&1 & \
+	if $(PYFLAKES) --version >/dev/null 2>&1; then \
+		$(PYFLAKES) *py */*py > all.pyflakes.log 2>&1 & \
 		pyflakes_pid=$$!; \
 	else \
-		echo "WARNING: Missing pyflakes3. APT users, try: sudo apt install pyflakes3"; \
+		echo "WARNING: Missing pyflakes. APT users, try: sudo apt install pyflakes3"; \
 	fi; \
 	if command -v pylint >/dev/null 2>&1; then \
 		pylint -j 0 *py */*py > all.pylint.log 2>&1 & \
@@ -166,7 +173,7 @@ lint:
 	if [ -n "$$pyflakes_pid" ]; then \
 		wait $$pyflakes_pid || { \
 			rc=1; \
-			echo "ERROR: pyflakes3 reported problems"; \
+			echo "ERROR: pyflakes reported problems"; \
 			cat all.pyflakes.log; \
 		}; \
 	fi; \
