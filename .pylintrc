@@ -1,0 +1,70 @@
+[MAIN]
+
+# Modules are CamelCase by convention: Action.py, CLI.py, GuiWindow.py.
+module-naming-style=any
+
+# pywin32 and the Windows-only extras do not install on Linux, and gi resolves
+# its members at run time.
+ignored-modules=gi,
+                winreg,
+                gi.repository,
+                bleachbit.GtkShim,
+                certifi,
+                ntsecuritycon,
+                plyer,
+                py2exe,
+                pywintypes,
+                win32api,
+                win32clipboard,
+                win32com,
+                win32con,
+                win32event,
+                win32file,
+                win32gui,
+                win32process,
+                win32security,
+                win32service,
+                win32serviceutil,
+                winioctlcon
+
+extension-pkg-allow-list=gi
+
+[MESSAGES CONTROL]
+
+# Only rules that conflict with a deliberate choice in this project.
+disable=
+    # Import cycles make these vary with -j and between runs at the same -j:
+    # a worker linting bleachbit.Log first sees a half-built package, and every
+    # module after it sees that stub. Counts ranged from 1383 to 745.
+    # TODO: break the import cycles, then drop these three
+    cyclic-import,
+    no-member,
+    no-name-in-module,
+    # Docstrings and snake_case names are not required here.
+    invalid-name,
+    missing-class-docstring,
+    missing-function-docstring,
+    missing-module-docstring,
+    # autopep8 owns formatting; see `make pretty`.
+    line-too-long,
+    # Local imports break cycles and keep optional dependencies off the import path.
+    import-outside-toplevel,
+    # xgettext extracts the literal, so an f-string would never match a translation.
+    consider-using-f-string,
+    # Cleaning must survive one unreadable file, so handlers catch Exception.
+    broad-exception-caught,
+    # TODO and FIXME markers are intentional.
+    fixme,
+    # GTK widgets are built in helper methods rather than __init__.
+    attribute-defined-outside-init,
+    # Size and shape of existing code, not defects.
+    too-few-public-methods,
+    too-many-arguments,
+    too-many-branches,
+    too-many-instance-attributes,
+    too-many-lines,
+    too-many-locals,
+    too-many-positional-arguments,
+    too-many-public-methods,
+    too-many-return-statements,
+    too-many-statements

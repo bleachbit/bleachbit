@@ -9,6 +9,9 @@
 Common code for unit tests
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 import contextlib
 import os
 import re

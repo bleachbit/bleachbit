@@ -9,6 +9,9 @@
 Test case for module Options
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 import errno
 import os
 import sys

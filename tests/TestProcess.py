@@ -7,6 +7,9 @@
 """
 Test case for the module Process
 """
+
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
 import os
 import sys
 from unittest import mock

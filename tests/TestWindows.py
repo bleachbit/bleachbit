@@ -8,6 +8,9 @@
 Test case for module Windows
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 
 # standard imports
 import ctypes
