@@ -59,7 +59,7 @@ class GuiChaffTestCase(common.BleachbitTestCase):
                 cls.refresh_gui()
             glib_errors.extend(errs)
         except GLib.GError as e:
-            if not "already exported" in str(e):
+            if "already exported" not in str(e):
                 raise
             # Application already registered, just hold it
             cls.app.hold()

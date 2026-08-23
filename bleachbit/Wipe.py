@@ -364,9 +364,8 @@ def wipe_path(pathname, idle=False):
         """Return (percent, seconds) to complete"""
         remaining_bytes = free_space(pathname)
         done_bytes = start_free_bytes - remaining_bytes
-        if done_bytes < 0:
-            # maybe user deleted large file after starting wipe
-            done_bytes = 0
+        # maybe user deleted large file after starting wipe
+        done_bytes = max(done_bytes, 0)
         if 0 == start_free_bytes:
             done_percent = 0
         else:

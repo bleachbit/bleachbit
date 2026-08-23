@@ -241,7 +241,7 @@ class CookieTestCase(common.BleachbitTestCase):
         for test_path, description, expected_exception in scenarios:
             with self.subTest(description=description):
                 original_hash = None
-                if not test_path == path_missing:
+                if test_path != path_missing:
                     original_hash = self._get_file_hash(test_path)
                 with self.assertRaises(expected_exception):
                     Cookie.delete_cookies(
