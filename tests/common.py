@@ -61,6 +61,7 @@ from bleachbit.FileUtilities import (
     is_normal_directory,
 )
 from bleachbit.General import gc_collect, sudo_mode
+from bleachbit.PathUtils import path_startswith
 
 # /etc/locale.alias may list the qaa-qtz range, which is reserved for
 # private use rather than a concrete locale. Skip it if present.
@@ -619,6 +620,45 @@ def touch_file(filename):
     Path(filename).touch()
     assert os.path.exists(filename)
     assert not is_normal_directory(filename)
+
+
+def _path_forms(path):
+    """Return the spellings of `path` worth comparing.
+
+    On Windows %temp% may be an 8.3 short path (RUNNER~1) in one place and
+    the long form in another, so compare against both.
+    """
+    forms = {path}
+    if os.path.isabs(path):
+        with contextlib.suppress(OSError, ValueError):
+            forms.add(os.path.realpath(path))
+    return forms
+
+
+def path_in_dir(path, directory):
+    """Return True if `path` is under `directory`, ignoring path spelling"""
+    if not path or not directory:
+        return False
+    return any(path_startswith(p, d, case_sensitive=False)
+               for p in _path_forms(path) for d in _path_forms(directory))
+
+
+def _volatile_dirs():
+    """Directories shared by parallel pytest-xdist workers and the rest of
+    the system, where files may appear and vanish at any moment (TOCTOU)."""
+    if bleachbit.IS_WINDOWS:
+        candidates = [os.path.expandvars(r'%temp%'), tempfile.gettempdir()]
+    else:
+        candidates = ['/tmp', tempfile.gettempdir()]
+    return tuple(dict.fromkeys(c for c in candidates if c))
+
+
+VOLATILE_DIRS = _volatile_dirs()
+
+
+def is_volatile_path(path):
+    """Return True if path is in a directory other processes churn"""
+    return any(path_in_dir(path, d) for d in VOLATILE_DIRS)
 
 
 def validate_result(self, result, really_delete=False, allow_vanishing=False):

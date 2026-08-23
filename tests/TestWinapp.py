@@ -82,12 +82,29 @@ class WinappTestCase(common.BleachbitTestCase):
 
     ini_fn = None
 
+    def tolerate_vanishing(self, path):
+        """Whether a file may disappear between discovery and validation.
+
+        Winapp2.ini `[Windows Temporary Files *]` scans %temp%, which
+        parallel xdist workers fill and empty as they run. Our own tempdir
+        lives there too but nobody else touches it, so keep it strict.
+        """
+        return (common.is_volatile_path(path)
+                and not common.path_in_dir(path, self.tempdir))
+
     def run_all(self, cleaner, really_delete):
         """Test all the cleaner options"""
         for (option_id, __name) in cleaner.get_options():
-            for cmd in cleaner.get_commands(option_id):
-                for result in cmd.execute(really_delete):
-                    common.validate_result(self, result, really_delete)
+            try:
+                for cmd in cleaner.get_commands(option_id):
+                    for result in cmd.execute(really_delete):
+                        common.validate_result(
+                            self, result, really_delete,
+                            allow_vanishing=self.tolerate_vanishing(result.get('path')))
+            except FileNotFoundError as e:
+                if not self.tolerate_vanishing(e.filename):
+                    raise
+                logger.debug('TOCTOU: file vanished: %s', e.filename)
 
     @common.skipUnlessWindows
     def test_remote(self):
