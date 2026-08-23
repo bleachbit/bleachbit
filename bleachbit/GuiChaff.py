@@ -19,6 +19,7 @@ import threading
 from bleachbit.Chaff import generate_emails, generate_2600
 from bleachbit.Constant import ABORT_BUTTON_LABEL
 from bleachbit.GtkShim import Gtk, GLib
+from bleachbit.GuiInfoBar import InfoBarMixin
 from bleachbit.Language import get_text as _
 
 
@@ -201,11 +202,10 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
     on_progress(1.0, is_done=True)
 
 
-class ChaffDialog(Gtk.Dialog):
+class ChaffDialog(InfoBarMixin, Gtk.Dialog):
 
     """Present the dialog to make chaff"""
 
-    _infobar_timeout_id = None
     _download_success = None
     _abort_event = None
     thread = None
@@ -227,14 +227,7 @@ class ChaffDialog(Gtk.Dialog):
         box.set_spacing(10)
 
         # Add InfoBar for non-blocking messages
-        self.infobar = Gtk.InfoBar()
-        self.infobar.set_show_close_button(True)
-        self.infobar.connect('response', self._on_infobar_response)
-        self.infobar_label = Gtk.Label()
-        self.infobar_label.set_line_wrap(True)
-        self.infobar.get_content_area().add(self.infobar_label)
-        box.pack_start(self.infobar, False, False, 0)
-        self._infobar_timeout_id = None
+        self._build_infobar(box)
 
         # TRANSLATORS: Label at the top of the chaff dialog
         dialog_label = _("Make randomly-generated messages "
@@ -382,13 +375,6 @@ class ChaffDialog(Gtk.Dialog):
 
         self._abort_event = None
 
-    def _on_infobar_response(self, _infobar, _response_id):
-        """Handle InfoBar close button click"""
-        if self._infobar_timeout_id:
-            GLib.source_remove(self._infobar_timeout_id)
-            self._infobar_timeout_id = None
-        self.infobar.hide()
-
     def _on_stop_mode_changed(self, combo):
         """Update the value spin button when the stop mode changes"""
         mode = combo.get_active()
@@ -406,23 +392,6 @@ class ChaffDialog(Gtk.Dialog):
         if self._abort_event:
             self._abort_event.set()
         return False  # Allow the dialog to close
-
-    def _hide_infobar(self):
-        """Hide the InfoBar (used for auto-dismiss timeout)"""
-        self._infobar_timeout_id = None
-        self.infobar.hide()
-        return False  # Remove from GLib timeout
-
-    def show_infobar(self, message, message_type=Gtk.MessageType.ERROR):
-        """Show a non-blocking InfoBar message that auto-dismisses"""
-        if self._infobar_timeout_id:
-            GLib.source_remove(self._infobar_timeout_id)
-            self._infobar_timeout_id = None
-        self.infobar_label.set_text(message)
-        self.infobar.set_message_type(message_type)
-        self.infobar.show_all()
-        self._infobar_timeout_id = GLib.timeout_add_seconds(
-            15, self._hide_infobar)
 
     def download_models_gui(self, on_complete):
         """Download models in a background thread.
