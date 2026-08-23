@@ -158,6 +158,7 @@ def reject_xml_dtd(data, description='XML'):
 #
 # General
 #
+# pylint: disable-next=redefined-builtin
 class WindowsError(Exception):
     """Dummy class for non-Windows systems"""
 

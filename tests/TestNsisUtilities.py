@@ -260,16 +260,16 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
         return '\n'.join(result)
 
     @classmethod
-    def _generate_setoutpath_expression(cls, dir, subdir):
-        return cls._generate_dir_subdir_expression('SetOutPath', dir, subdir)
+    def _generate_setoutpath_expression(cls, dirname, subdir):
+        return cls._generate_dir_subdir_expression('SetOutPath', dirname, subdir)
 
     @classmethod
-    def _generate_rmdir_expression(cls, dir, subdir):
-        return cls._generate_dir_subdir_expression('RMDir', dir, subdir)
+    def _generate_rmdir_expression(cls, dirname, subdir):
+        return cls._generate_dir_subdir_expression('RMDir', dirname, subdir)
 
     @classmethod
-    def _generate_dir_subdir_expression(cls, command, dir, subdir):
-        return r'{} "{}\{}"'.format(command, dir, subdir)
+    def _generate_dir_subdir_expression(cls, command, dirname, subdir):
+        return r'{} "{}\{}"'.format(command, dirname, subdir)
 
     def tearDown(self):
         super().tearDown()

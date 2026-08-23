@@ -444,7 +444,7 @@ def setup_translation():
             logger.error('locale.setlocale(%s): %s:', setlocale_local, e)
 
 
-def get_text(str):
+def get_text(text):
     """Return translated string
 
     The name has an underscore to avoid conflicting with gettext module.
@@ -452,8 +452,8 @@ def get_text(str):
     if not attempted_setup_translation:
         setup_translation()
     if not t:
-        return str
-    return t.gettext(str)
+        return text
+    return t.gettext(text)
 
 
 def nget_text(singular, plural, n):

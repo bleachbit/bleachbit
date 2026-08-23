@@ -51,9 +51,9 @@ if IS_WINDOWS:
         path) or bleachbit.Windows.is_junction(path)
 
 else:
-    # pylint: disable=redefined-builtin
+    # pylint: disable-next=redefined-builtin
     from bleachbit.General import WindowsError
-    # pylint: disable=invalid-name
+    # pylint: disable-next=invalid-name
     pywinerror = WindowsError
 
 # DirEntry.is_junction() was added in Python 3.12. Below that, fall back to

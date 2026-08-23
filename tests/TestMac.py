@@ -77,8 +77,8 @@ class MacTestCase(common.BleachbitTestCase):
         """is_full_disk_access_enabled() returns True on non-macOS."""
         if IS_MAC:
             self.skipTest('This test is only for non-macOS')
-        from bleachbit.Mac import is_full_disk_access_enabled
-        self.assertTrue(is_full_disk_access_enabled())
+        from bleachbit import Mac
+        self.assertTrue(Mac.is_full_disk_access_enabled())
 
     @common.skipUnlessMac
     def test_is_full_disk_access_enabled_no_probe_exists(self):
