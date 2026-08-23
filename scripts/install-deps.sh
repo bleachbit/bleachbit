@@ -1,4 +1,9 @@
 #!/bin/sh
+
+# The shebang is sh, but the script re-executes itself with Bash below, so
+# check it as Bash rather than reporting every bashism.
+# shellcheck shell=bash
+
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (c) 2008-2026 Andrew Ziem.
 #

@@ -176,6 +176,7 @@ ssh_opts=(
     -p "$SSH_PORT"
 )
 
+# shellcheck disable=SC2329  # invoked by the trap below
 cleanup() {
     local rc=$?
     local pid=""
@@ -352,7 +353,7 @@ qemu-system-x86_64 \
     -smp "$VM_CPUS" \
     -drive file="$SNAPSHOT_IMG",if=virtio,format=qcow2 \
     -drive file="$SEED_ISO",if=virtio,format=raw,readonly=on,media=cdrom \
-    -netdev user,id=net0,hostfwd=tcp::${SSH_PORT}-:22 \
+    -netdev user,id=net0,hostfwd=tcp::"${SSH_PORT}"-:22 \
     -device virtio-net-pci,netdev=net0 \
     -display none \
     -serial file:"$VM_LOG" \
@@ -404,6 +405,7 @@ log "Root access via su works (no password needed)"
 
 # Helper: run a command as root in the VM via su (no password needed).
 vm_root() {
+    # shellcheck disable=SC2029  # $1 is meant to expand here, not in the VM
     ssh "${ssh_opts[@]}" "${SSH_USER}@localhost" "su root -c '$1'"
 }
 
@@ -437,6 +439,7 @@ fi
 # Use a directory under the freebsd user's home (writable without sudo).
 REMOTE_DIR="bleachbit"
 log "Copying BleachBit source tree to VM (~/$REMOTE_DIR)"
+# shellcheck disable=SC2029  # $REMOTE_DIR is meant to expand here, not in the VM
 tar -C "$REPO_ROOT" --exclude='.git' --exclude='__pycache__' \
     --exclude='*.pyc' --exclude='*.egg-info' --exclude='dist' \
     --exclude='build' --exclude='docker-artifacts' --exclude='.venv' \
