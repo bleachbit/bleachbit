@@ -6,12 +6,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-08-21 05:26-0600\n"
-"PO-Revision-Date: 2026-08-18 02:08+0000\n"
+"PO-Revision-Date: 2026-08-24 15:51+0000\n"
 "Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/bleachbit/main/de/"
-">\n"
+"Language-Team: German <https://hosted.weblate.org/projects/bleachbit/main/"
+"de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1350,10 +1350,10 @@ msgstr "Reiniger wird ignoriert, da er für alle beschreibbar ist: %s"
 #. path of the XML cleaner file whose directory is world
 #. writable.
 #: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
-#, fuzzy, python-format
-#| msgid "Ignoring cleaner because it is world writable: %s"
+#, python-format
 msgid "Ignoring cleaner because its directory is world writable: %s"
-msgstr "Reiniger wird ignoriert, da er für alle beschreibbar ist: %s"
+msgstr ""
+"Reiniger wird ignoriert, da sein Verzeichnis für alle beschreibbar ist: %s"
 
 #. TRANSLATORS: Error message printed to the log.
 #. %s expands to the path of the XML cleaner file
@@ -3127,11 +3127,9 @@ msgstr "Pfad zum Säubern muss ein existierendes Verzeichnis sein: %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Creating new, temporary file for wiping free space."
 msgid "Creating new, temporary file for wiping empty space."
 msgstr ""
-"Eine neue, temporäre Datei zum Löschen von freiem Speicherplatz wird "
+"Eine neue temporäre Datei zum Löschen des freien Speicherplatzes wird "
 "erstellt."
 
 #: ../bleachbit/Wipe.py
