@@ -1013,7 +1013,7 @@ def is_junction(path):
     attr = windll.kernel32.GetFileAttributesW(path)
     # INVALID_FILE_ATTRIBUTES (0xFFFFFFFF) indicates GetFileAttributesW failed
     # On 64-bit Python, ctypes may interpret this as signed -1 instead of unsigned 0xFFFFFFFF
-    if attr == 0xFFFFFFFF or attr == -1:
+    if attr in (0xFFFFFFFF, -1):
         error_code = windll.kernel32.GetLastError()
         logger.error(
             'GetFileAttributesW() failed for path %s with error code %d', path, error_code)
@@ -1216,7 +1216,7 @@ def read_registry_key(full_key, value_name):
     try:
         with winreg.OpenKey(hive, sub_key, 0, winreg.KEY_QUERY_VALUE) as hkey:
             (reg_value, reg_type) = winreg.QueryValueEx(hkey, value_name)
-            if reg_type == winreg.REG_EXPAND_SZ or reg_type == winreg.REG_SZ:
+            if reg_type in (winreg.REG_EXPAND_SZ, winreg.REG_SZ):
                 return reg_value
             else:
                 return None
