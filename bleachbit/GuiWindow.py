@@ -108,7 +108,8 @@ class GUI(Gtk.ApplicationWindow):
             logger.error(
                 # TRANSLATORS: Error message shown in the log on the main window.
                 # %s is the file path.
-                _('Resetting the configuration file because it is corrupt: %s') % bleachbit.options_file)
+                _('Resetting the configuration file because it is corrupt: %s'),
+                bleachbit.options_file)
             bleachbit.Options.init_configuration()
 
         GLib.idle_add(self.cb_refresh_operations)
