@@ -320,7 +320,7 @@ def os_match(os_str, platform=sys.platform):
     platform -- used only for unit tests
     """
     # If blank, return true.
-    if len(os_str) == 0:
+    if not os_str:
         return True
     # "darwin" is accepted as a deprecated alias for "macos"
     if os_str == 'darwin':
@@ -412,10 +412,10 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
     for arg in args:
         if arg is None:
             raise ValueError("Command argument cannot be None")
-    assert len(args) > 0
+    assert args
     if not args[0]:
         raise ValueError("First command argument cannot be empty")
-    if clean_env and isinstance(env, dict) and len(env) > 0:
+    if clean_env and isinstance(env, dict) and env:
         raise ValueError(
             "Cannot set environment variables when clean_env is True")
     logger.debug('running cmd %s', ' '.join(args))

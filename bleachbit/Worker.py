@@ -66,7 +66,7 @@ class Worker:
         self.total_special = 0  # special operations
         self.yield_time = None
         self.is_aborted = False
-        if 0 == len(self.operations):
+        if not self.operations:
             raise RuntimeError("No work to do")
 
     def abort(self):
@@ -149,10 +149,7 @@ class Worker:
             else:
                 size = "?B"
 
-            if ret['path']:
-                path = ret['path']
-            else:
-                path = ''
+            path = ret['path'] or ''
 
             line = "%s %s %s\n" % (ret['label'], size, path)
             self.total_deleted += ret['n_deleted']
@@ -282,8 +279,7 @@ class Worker:
             delayables = ['empty_space', 'memory']
             for delayable in delayables:
                 if delayable in self.operations[operation]:
-                    i = self.operations[operation].index(delayable)
-                    del self.operations[operation][i]
+                    self.operations[operation].remove(delayable)
                     priority = 99
                     if 'empty_space' == delayable:
                         priority = 100
@@ -376,7 +372,7 @@ class Worker:
 
     def run_deep_scan(self):
         """Run deep scans"""
-        logger.debug(' deepscans=%s' % self.deepscans)
+        logger.debug(' deepscans=%s', self.deepscans)
         # TRANSLATORS: The "deep scan" feature searches over broad
         # areas of the file system such as the user's whole home directory
         # or all the system executables.

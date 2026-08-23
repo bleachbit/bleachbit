@@ -790,7 +790,7 @@ def elevate_privileges(uac):
         # If the Python file is on a network drive, do not offer the UAC because
         # the administrator may not have privileges and user will not be
         # prompted.
-        if len(pyfile) > 0 and path_on_network(pyfile):
+        if pyfile and path_on_network(pyfile):
             logger.debug(
                 "debug: skipping UAC because '%s' is on network", pyfile)
             return False

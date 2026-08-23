@@ -100,8 +100,9 @@ def detectos(required_ver, mock=False):
         # Exact version
         return Windows.parse_windows_build(required_ver) == current_os
     # Format of min|max
-    req_min = required_ver.split('|')[0]
-    req_max = required_ver.split('|')[1]
+    req_parts = required_ver.split('|')
+    req_min = req_parts[0]
+    req_max = req_parts[1]
     if req_min and current_os < Windows.parse_windows_build(req_min):
         return False
     if req_max and current_os > Windows.parse_windows_build(req_max):
@@ -219,7 +220,7 @@ class Winapp:
         """Given a langsecref (or section name), find the internal
         BleachBit cleaner ID."""
         # pre-defined, such as 3021
-        if langsecref in langsecref_map.keys():
+        if langsecref in langsecref_map:
             return langsecref_map[langsecref][0]
         # custom, such as games
         cleanerid = 'winapp2_' + section2option(langsecref)
@@ -264,16 +265,15 @@ class Winapp:
         # the middle part contains the file
         regexes = []
         for expanded in winapp_expand_vars(parts[1]):
-            regex = None
-            if not files:
-                # There is no third part, so this is either just a folder,
-                # or sometimes the file is specified directly.
-                regex = fnmatch_translate(expanded)
             if files:
                 # match one or more file types, directly in this tree or in any
                 # sub folder
                 regex = r'%s\\%s' % (
                     _EXCLUDEKEY_TRAILING_SEP.sub(r'\1', fnmatch_translate(expanded)), files_regex)
+            else:
+                # There is no third part, so this is either just a folder,
+                # or sometimes the file is specified directly.
+                regex = fnmatch_translate(expanded)
             regexes.append(regex)
 
         if len(regexes) == 1:
@@ -378,7 +378,6 @@ class Winapp:
             else:
                 logger.warning(
                     'unknown option %s in section %s', option, section)
-                continue
 
     def __make_file_provider(self, dirname, filename, recurse, removeself, excludekeys):
         """Change parsed FileKey to action provider"""

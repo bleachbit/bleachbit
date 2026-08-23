@@ -154,7 +154,7 @@ def unpack_element(fmt, structure):
     """
     chunk_size = struct.calcsize(fmt)
     element = struct.unpack(fmt, structure[:chunk_size])
-    if element and len(element) > 0:
+    if element:
         element = element[0]    # convert from tuple to single element
     structure = structure[chunk_size:]
     return element, structure

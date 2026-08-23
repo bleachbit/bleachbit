@@ -98,7 +98,7 @@ def cleaner_change_dialog(changes, parent):
             path = row[1]
             if b:
                 delete.append(path)
-        if 0 == len(delete):
+        if not delete:
             # no files selected to delete
             break
         from . import GuiBasic
