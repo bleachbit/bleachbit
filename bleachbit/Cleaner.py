@@ -486,9 +486,9 @@ class System(Cleaner):
 
             def gtk_purge_items():
                 """Purge GTK items"""
-                from bleachbit.GtkShim import require_gtk  # pylint: disable=import-outside-toplevel
+                from bleachbit.GtkShim import require_gtk
                 require_gtk()
-                from bleachbit.GtkShim import Gtk  # pylint: disable=import-outside-toplevel
+                from bleachbit.GtkShim import Gtk
                 Gtk.RecentManager().get_default().purge_items()
                 yield 0
 
@@ -562,7 +562,7 @@ class System(Cleaner):
                 def func_clear_clipboard():
                     """Command function to clear clipboard"""
                     # GuiUtil is GTK-specific
-                    from bleachbit.GtkShim import require_gtk  # pylint: disable=import-outside-toplevel
+                    from bleachbit.GtkShim import require_gtk
                     require_gtk()
                     import bleachbit.GuiUtil
                     bleachbit.GuiUtil.clear_clipboard()
@@ -730,7 +730,6 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None, allow_lo
         # To indicate an ongoing operation, include the ellipsis as literal
         # Unicode (…) or as Unicode escape (\u2026).
         cb_progress(_('Importing cleaners from Winapp2.ini\u2026'))
-        # pylint: disable=import-outside-toplevel
         from bleachbit import Winapp
         yield from Winapp.load_cleaners(cb_progress)
 

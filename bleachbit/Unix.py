@@ -252,7 +252,7 @@ def find_best_locale(user_locale):
     # If requesting a language like 'es' and current locale is compatible
     # like 'es_MX', then return that.
     # Import here for mock patch.
-    import locale  # pylint: disable=import-outside-toplevel
+    import locale
     current_locale = locale.getlocale()[0]
     if current_locale and current_locale.startswith(user_locale.split('.')[0]):
         # getlocale() may return (language, None) when the encoding is unknown.
@@ -315,7 +315,7 @@ def get_distribution_name_version_distro():
     """
     try:
         # Import here in case of ImportError.
-        import distro  # pylint: disable=import-outside-toplevel
+        import distro
         # example 'ubuntu 24.10'
         # Arch Linux returns id='arch' and version=''.
         dist_version = distro.version()
@@ -385,7 +385,7 @@ def get_distribution_name_version():
 def get_mount_points():
     """Return read-write mount points that may have trash"""
     try:
-        import psutil  # pylint: disable=import-outside-toplevel
+        import psutil
     except ImportError:
         logger.warning('install psutil for better trash detection')
         return []
@@ -430,7 +430,6 @@ def get_purgeable_locales(locales_to_keep):
 def get_trash_paths():
     """Iterate over all trash on POSIX systems"""
     # Import here to avoid a circular import.
-    # pylint: disable=import-outside-toplevel
     from bleachbit import Command
     # macOS-style flat trash. list_directories=True is required so that
     # a folder sent to Trash is itself removed after its contents are
@@ -476,7 +475,7 @@ def is_unregistered_mime(mimetype):
     """Returns True if the MIME type is known to be unregistered. If
     registered or unknown, conservatively returns False."""
     try:
-        from bleachbit.GtkShim import Gio  # pylint: disable=import-outside-toplevel
+        from bleachbit.GtkShim import Gio
         if 0 == len(Gio.app_info_get_all_for_type(mimetype)):
             return True
     except ImportError:

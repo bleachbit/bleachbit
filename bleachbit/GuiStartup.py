@@ -67,7 +67,7 @@ def _get_posix_permission_issues(fstat, options_file):
     """
     lines = []
     has_error = False
-    import pwd  # pylint: disable=import-outside-toplevel
+    import pwd
     from bleachbit.General import get_real_uid, get_real_username
     try:
         file_owner = pwd.getpwuid(fstat.st_uid).pw_name
@@ -125,9 +125,9 @@ def _get_windows_user_info():
     """
     if not IS_WINDOWS:
         raise RuntimeError("This function is only available on Windows")
-    import win32api  # pylint: disable=import-outside-toplevel
-    import win32file  # pylint: disable=import-outside-toplevel
-    import win32security  # pylint: disable=import-outside-toplevel
+    import win32api
+    import win32file
+    import win32security
     process_token = win32security.OpenProcessToken(
         win32api.GetCurrentProcess(),
         win32security.TOKEN_QUERY)
@@ -150,7 +150,7 @@ def _get_windows_file_owner(filepath):
     """
     if not IS_WINDOWS:
         raise RuntimeError("This function is only available on Windows")
-    import win32security  # pylint: disable=import-outside-toplevel
+    import win32security
     file_sd = win32security.GetFileSecurity(
         filepath, win32security.OWNER_SECURITY_INFORMATION)
     file_owner_sid = file_sd.GetSecurityDescriptorOwner()
@@ -271,7 +271,7 @@ def _has_selected_warning_option():
 
     Returns True if any selected option has a warning, False otherwise.
     """
-    from bleachbit.Cleaner import backends  # pylint: disable=import-outside-toplevel
+    from bleachbit.Cleaner import backends
     if not backends:
         return False
     for cleaner_id, cleaner in backends.items():

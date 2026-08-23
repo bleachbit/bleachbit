@@ -1817,7 +1817,6 @@ State=AAAA/wA...
             self.assertFalse(same_partition(home, '/dev'))
         elif IS_WINDOWS:
             home_drive = os.path.splitdrive(home)[0]
-            # pylint: disable=import-outside-toplevel
             from bleachbit.Windows import get_fixed_drives
             for drive in get_fixed_drives():
                 this_drive = os.path.splitdrive(drive)[0]

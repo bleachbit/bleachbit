@@ -180,15 +180,15 @@ class CommonTestCase(common.BleachbitTestCase):
         # The imports are what this test exercises, so each one lives in its
         # own function and is returned, rather than left as an unused name
         def import_logging():
-            import logging  # pylint: disable=import-outside-toplevel
+            import logging
             return logging
 
         def import_cli():
-            import bleachbit.CLI  # pylint: disable=import-outside-toplevel
+            import bleachbit.CLI
             return bleachbit.CLI
 
         def import_sys():
-            import sys  # pylint: disable=import-outside-toplevel
+            import sys
             return sys
 
         # Inside the context, importing logging should raise an errorl.
