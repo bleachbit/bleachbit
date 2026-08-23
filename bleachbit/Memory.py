@@ -44,7 +44,7 @@ _MEMINFO_FREE_RE = re.compile(r'^(MemFree|Cached):[ ]*([0-9]*) kB')
 def count_swap_linux():
     """Count the number of swap devices in use"""
     count = 0
-    with open("/proc/swaps") as f:
+    with open("/proc/swaps", encoding="utf-8") as f:
         for line in f:
             if line[0] == '/':
                 count += 1
@@ -62,7 +62,7 @@ def get_proc_swaps():
         return stdout
     logger.debug(
         _("The command 'swapon -s' failed, so falling back to /proc/swaps for swap information."))
-    with open("/proc/swaps") as f:
+    with open("/proc/swaps", encoding="utf-8") as f:
         return f.read()
 
 

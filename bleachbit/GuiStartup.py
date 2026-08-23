@@ -221,7 +221,7 @@ def _get_config_permission_issues():
         lines.append(f"Read error: {type(e).__name__}: {e}")
 
     try:
-        with open(_options_file, 'a') as f:
+        with open(_options_file, 'a', encoding='utf-8') as f:
             f.write('')
     except (IOError, OSError, PermissionError) as e:
         has_error = True

@@ -52,7 +52,7 @@ class CLITestCase(common.BleachbitTestCase):
         """Helper to test preview"""
         # Use devnull because in some cases the buffer will be too large,
         # and the other alternative, the screen, is not desirable.
-        with open(os.devnull, 'w') as stdout:
+        with open(os.devnull, 'w', encoding='utf-8') as stdout:
             if not redirect_stdout:
                 stdout = None
             output = run_external(args, stdout=stdout,

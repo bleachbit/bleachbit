@@ -93,7 +93,7 @@ class CommonTestCase(common.BleachbitTestCase):
                     continue
                 lang_codes.append(lang_code)
         if os.path.exists('/etc/locale.alias'):
-            with open('/etc/locale.alias', 'r') as f:
+            with open('/etc/locale.alias', 'r', encoding='utf-8') as f:
                 for line in f:
                     line = line.strip()
                     if not line.startswith('#'):
@@ -220,7 +220,7 @@ class CommonTestCase(common.BleachbitTestCase):
 
         # Increase size of file.
         fsize = 2**13
-        with open(fn, "w") as f:
+        with open(fn, "w", encoding="utf-8") as f:
             f.write(' ' * fsize)
         self.assertEqual(fsize, getsize(fn))
 

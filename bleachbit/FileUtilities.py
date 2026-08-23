@@ -386,9 +386,12 @@ def open_for_overwrite(path, mode='w', **kwargs):
         # protection available either way.
         if os.path.islink(path):
             raise OSError(errno.EACCES, 'refusing to open a link', path)
+        # encoding comes via **kwargs (e.g. utf-8-sig); don't hardcode it.
+        # pylint: disable-next=unspecified-encoding
         return open(path, mode, **kwargs)
     fd = _open_nofollow_fd(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC)
     try:
+        # pylint: disable-next=unspecified-encoding
         return open(fd, mode, **kwargs)
     except Exception:
         os.close(fd)
