@@ -17,6 +17,7 @@ from bleachbit.Constant import ABORT_BUTTON_LABEL, REQUIRES_EXPERT_MODE
 from bleachbit.GUI import logger
 from bleachbit.General import sanitize_surrogates
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
+from bleachbit.GuiInfoBar import InfoBarMixin
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.GuiStartup import get_startup_messages
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
@@ -60,7 +61,7 @@ def _iter_rows(model, parent=None):
         tree_iter = model.iter_next(tree_iter)
 
 
-class GUI(Gtk.ApplicationWindow):
+class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     """The main application GUI"""
     _style_provider = None
     _style_provider_regular = None
@@ -75,7 +76,6 @@ class GUI(Gtk.ApplicationWindow):
         self._show_splash_screen()
 
         self._auto_exit = auto_exit
-        self._infobar_timeout_id = None
         self._gui_cleaner_cleanup_pending = None
 
         self.set_property('name', APP_NAME)
@@ -182,13 +182,7 @@ class GUI(Gtk.ApplicationWindow):
         self.add(vbox)
 
         # add InfoBar for non-blocking messages
-        self.infobar = Gtk.InfoBar()
-        self.infobar.set_show_close_button(True)
-        self.infobar.connect('response', self._on_infobar_response)
-        self.infobar_label = Gtk.Label()
-        self.infobar_label.set_line_wrap(True)
-        self.infobar.get_content_area().add(self.infobar_label)
-        vbox.pack_start(self.infobar, False, False, 0)
+        self._build_infobar(vbox)
 
         vbox.add(hbox)
 
@@ -463,37 +457,6 @@ class GUI(Gtk.ApplicationWindow):
             Gtk.main_quit()
         else:
             self.destroy()
-
-    def _on_infobar_response(self, _infobar, _response_id):
-        """Handle InfoBar close button click"""
-        timeout_id = getattr(self, '_infobar_timeout_id', None)
-        if timeout_id is not None:
-            GLib.source_remove(timeout_id)
-            self._infobar_timeout_id = None
-        self.infobar.hide()
-
-    def _hide_infobar(self):
-        """Hide the InfoBar (used for auto-dismiss timeout)"""
-        self.infobar.hide()
-        self._infobar_timeout_id = None
-        return False  # Remove from GLib timeout
-
-    def show_infobar(self, message, message_type=Gtk.MessageType.ERROR):
-        """Show a non-blocking InfoBar message that auto-dismisses
-
-        Args:
-            message: The message to display
-            message_type: Gtk.MessageType (ERROR, WARNING, INFO, etc.)
-        """
-        # Cancel any existing timeout before creating a new one
-        timeout_id = getattr(self, '_infobar_timeout_id', None)
-        if timeout_id is not None:
-            GLib.source_remove(timeout_id)
-        self.infobar_label.set_text(message)
-        self.infobar.set_message_type(message_type)
-        self.infobar.show_all()
-        self._infobar_timeout_id = GLib.timeout_add_seconds(
-            15, self._hide_infobar)
 
     def _confirm_delete(self, mention_preview, shred_settings=False):
         if options.get("delete_confirmation") or not options.get('expert_mode'):
