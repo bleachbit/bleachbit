@@ -298,8 +298,7 @@ class FileActionProvider(ActionProvider):
             # use cache
             if (self.search in self.CACHEABLE_SEARCHERS and cache[0] == self.search
                     and cache[1] == input_path and cache[3]):
-                for x in cache[2]:
-                    yield x
+                yield from cache[2]
                 return
             self.__class__.cache = ('cleared by', input_path, tuple(), False)
 
@@ -315,8 +314,7 @@ class FileActionProvider(ActionProvider):
                 # early-abandoned generator doesn't poison the cache
                 self.__class__.cache = (self.search, input_path, entries, True)
             else:
-                for path in func(input_path):
-                    yield path
+                yield from func(input_path)
 
     def get_commands(self):
         raise NotImplementedError('not implemented')

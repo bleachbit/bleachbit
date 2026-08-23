@@ -536,9 +536,8 @@ def open_file(file_name, mode=GENERIC_READ):
     """
     if os.path.islink(file_name):
         raise OSError(errno.EACCES, 'refusing to wipe a link', file_name)
-    file_handle = CreateFileW(file_name, mode, 0, None,
-                              OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, None)
-    return file_handle
+    return CreateFileW(file_name, mode, 0, None,
+                       OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, None)
 
 
 def close_file(file_handle):

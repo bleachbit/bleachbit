@@ -46,7 +46,7 @@ logger = logging.getLogger(__name__)
 
 def ret_keep_list(path):
     """Return information that this file matched by keep list"""
-    ret = {
+    return {
         # TRANSLATORS: This is the label in the log indicating a path
         # was skipped because it matches the keep list
         'label': _('Skip'),
@@ -54,7 +54,6 @@ def ret_keep_list(path):
         'n_special': 0,
         'path': path,
         'size': 0}
-    return ret
 
 
 class Delete:

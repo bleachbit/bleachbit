@@ -271,8 +271,7 @@ def browse_files(_, title):
         # only one filename
         return _split
     dirname = _split[0]
-    pathnames = [os.path.join(dirname, fname) for fname in _split[1:]]
-    return pathnames
+    return [os.path.join(dirname, fname) for fname in _split[1:]]
 
 
 def browse_folder(_, title):
@@ -282,8 +281,7 @@ def browse_folder(_, title):
     if pidl is None:
         # user cancelled
         return None
-    fullpath = shell.SHGetPathFromIDListW(pidl)
-    return fullpath
+    return shell.SHGetPathFromIDListW(pidl)
 
 
 def cleanup_nonce():

@@ -493,12 +493,11 @@ def pot_fragment(msgid, pathname, translators=None):
     else:
         translators = ""
     pathname = pathname.replace('\\', '/')
-    ret = f'''{translators}#: {pathname}
+    return f'''{translators}#: {pathname}
 msgid "{msgid}"
 msgstr ""
 
 '''
-    return ret
 
 
 def create_pot():

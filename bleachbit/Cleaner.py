@@ -547,8 +547,7 @@ class System(Cleaner):
 
         # trash
         if IS_POSIX and 'trash' == option_id:
-            for p in Unix.get_trash_paths():
-                yield p
+            yield from Unix.get_trash_paths()
 
         # clipboard
         if 'clipboard' == option_id and (gtk_may_be_available() or IS_WINDOWS):
@@ -633,8 +632,7 @@ class System(Cleaner):
 
         # Windows Updates
         if IS_WINDOWS and 'updates' == option_id:
-            for wu in Windows.delete_updates():
-                yield wu
+            yield from Windows.delete_updates()
 
     def init_whitelist(self):
         """Initialize the keep list (formerly whitelist) only once for performance"""

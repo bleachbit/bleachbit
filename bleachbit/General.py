@@ -125,10 +125,9 @@ def boolstr_to_bool(value):
 def getText(nodelist):
     """Return the text data in an XML node
     http://docs.python.org/library/xml.dom.minidom.html"""
-    rc = "".join(
+    return "".join(
         node.data for node in nodelist if node.nodeType == node.TEXT_NODE
     )
-    return rc
 
 
 def reject_xml_dtd(data, description='XML'):
