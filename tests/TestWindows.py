@@ -1211,7 +1211,6 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         """
 
         from bleachbit.WindowsWipe import file_wipe, open_file, close_file, file_make_sparse
-        from bleachbit.Windows import elevate_privileges
         from win32con import GENERIC_WRITE, WRITE_DAC
 
         dirname = self.mkdtemp()
