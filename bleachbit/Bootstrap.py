@@ -63,7 +63,7 @@ def _bootstrap_posix():
     """Bootstrap for POSIX systems"""
     # os.path.expanduser('~') returns '~' unchanged when HOME is unset
     # and the user has no passwd entry (e.g., Docker containers).
-    from bleachbit import _home_dir, logger
+    from bleachbit import _home_dir
     home_dir = _home_dir()
     if not os.getenv('HOME') and home_dir == '/tmp':
         logger.warning('HOME not set and no passwd entry; using %s', home_dir)
@@ -88,7 +88,7 @@ def _bootstrap_posix():
 
 def _bootstrap_windows():
     """Bootstrap for Windows"""
-    from bleachbit import Windows, logger
+    from bleachbit import Windows
     Windows.setup_environment()
 
     # Use our `font.conf` (see commit 3385952b37d78).

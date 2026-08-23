@@ -56,10 +56,6 @@ else:
 class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     """Test case for module WindowsWipe"""
 
-    def setUp(self):
-        """Set up test environment"""
-        super().setUp()
-
     def test_check_os(self):
         """Unit test for check_os()"""
         # This should not raise an exception on Windows

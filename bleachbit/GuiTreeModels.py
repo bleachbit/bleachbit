@@ -146,7 +146,6 @@ class TreeDisplayModel:
                 child = model.iter_next(child)
             if not any_child_enabled:
                 model[i][1] = False
-        return
 
 
 class TreeInfoModel:
