@@ -54,6 +54,7 @@ if bleachbit.IS_WINDOWS:
     from bleachbit import Windows
 import bleachbit.Options
 from bleachbit.Bootstrap import bootstrap
+from bleachbit.GtkShim import ignore_pygobject_asyncio_warnings
 from bleachbit.FileUtilities import (
     children_in_directory,
     extended_path,
@@ -230,17 +231,7 @@ class BleachbitTestCase(unittest.TestCase):
         filter in the active scope (``setUpClass``/``setUp``) makes it visible
         to every copy of the filter list, including the worker thread's.
         """
-        if sys.version_info >= (3, 14):
-            warnings.filterwarnings(
-                "ignore",
-                message=r".*asyncio\.get_event_loop_policy.*",
-                category=DeprecationWarning,
-            )
-            warnings.filterwarnings(
-                "ignore",
-                message=r".*asyncio\.AbstractEventLoopPolicy.*",
-                category=DeprecationWarning,
-            )
+        ignore_pygobject_asyncio_warnings()
 
     @classmethod
     def _patch_options_paths(cls):

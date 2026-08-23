@@ -12,7 +12,6 @@ import getpass
 import os
 import re
 import sys
-import warnings
 
 from bleachbit import IS_POSIX, IS_WINDOWS, logger
 
@@ -190,15 +189,8 @@ def _suppress_pygobject_asyncio_deprecations():
     race condition that per-call ``catch_warnings()`` suppressors have when
     a background ``GtkWorkerThread`` enters its own ``catch_warnings()``.
     """
-    if sys.version_info < (3, 14):
-        return
-    warnings.filterwarnings(
-        "ignore",
-        message=r".*asyncio\.get_event_loop_policy.*",
-        category=DeprecationWarning,
-    )
-    warnings.filterwarnings(
-        "ignore",
-        message=r".*asyncio\.AbstractEventLoopPolicy.*",
-        category=DeprecationWarning,
-    )
+    # Imported here so bootstrapping (which hardens the DLL search path on
+    # Windows) is not preceded by importing anything GTK-related.
+    # pylint: disable=import-outside-toplevel
+    from bleachbit.GtkShim import ignore_pygobject_asyncio_warnings
+    ignore_pygobject_asyncio_warnings()
