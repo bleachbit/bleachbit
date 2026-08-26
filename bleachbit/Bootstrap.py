@@ -142,7 +142,15 @@ def _bootstrap_windows():
             # and the external SVG pixbuf loader cannot be found, which
             # prevents GTK from rendering SVG resources such as
             # check-symbolic.svg from its GResource bundle.
-            os.environ['GDK_PIXBUF_MODULEDIR'] = loaders_dir
+            # Only set it when the directory actually exists: in a
+            # non-packaged run (e.g. dev/test from vcpkg_installed) the
+            # loaders cache keeps absolute paths and the directory may not
+            # be needed, so avoid pointing gdk-pixbuf at a dangling path.
+            if os.path.isdir(loaders_dir):
+                os.environ['GDK_PIXBUF_MODULEDIR'] = loaders_dir
+            else:
+                logger.debug(
+                    'gdk-pixbuf loaders directory not found: %s', loaders_dir)
             break
 
 
