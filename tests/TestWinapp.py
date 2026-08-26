@@ -14,7 +14,6 @@ import shutil
 import stat
 import string
 import struct
-import tempfile
 import time
 from contextlib import suppress
 from unittest import mock
@@ -25,7 +24,9 @@ from tests import common
 import bleachbit
 from bleachbit.Winapp import Winapp, detectos, detect_file, fnmatch_translate, list_winapp_files, section2option
 from bleachbit.Windows import detect_registry_key, parse_windows_build
-from bleachbit import IS_POSIX, IS_WINDOWS, logger
+from bleachbit import IS_WINDOWS, logger
+from bleachbit.FileUtilities import extended_path_undo
+from bleachbit.PathUtils import path_startswith
 
 if IS_WINDOWS:
     import winreg
@@ -57,13 +58,7 @@ def get_winapp2():
     """Download and cache winapp2.ini.  Return local filename."""
     url = ("https://raw.githubusercontent.com/bleachbit/winapp2.ini"
            "/refs/heads/master/Winapp2-BleachBit.ini")
-    tmpdir = None
-    if IS_POSIX:
-        tmpdir = '/tmp'
-    if IS_WINDOWS:
-        tmpdir = os.getenv('TMP')
-    if not tmpdir:
-        tmpdir = tempfile.gettempdir()
+    tmpdir = common.get_volatile_dir()
     fname = os.path.join(tmpdir, 'bleachbit_test_winapp2.ini')
     if os.path.exists(fname):
         age_seconds = time.time() - os.stat(fname)[stat.ST_MTIME]
@@ -82,12 +77,75 @@ class WinappTestCase(common.BleachbitTestCase):
 
     ini_fn = None
 
-    def run_all(self, cleaner, really_delete):
-        """Test all the cleaner options"""
+    def run_all(self, cleaner, really_delete, allow_volatile=False):
+        """Test all cleaner options, optionally tolerating volatile paths"""
+        volatile_dir = common.get_volatile_dir()
+
+        def is_volatile(path):
+            if not (allow_volatile and path):
+                return False
+            if IS_WINDOWS:
+                path = extended_path_undo(path)
+            return path_startswith(path, volatile_dir)
+
         for (option_id, __name) in cleaner.get_options():
             for cmd in cleaner.get_commands(option_id):
-                for result in cmd.execute(really_delete):
-                    common.validate_result(self, result, really_delete)
+                try:
+                    for result in cmd.execute(really_delete):
+                        common.validate_result(
+                            self, result, really_delete,
+                            allow_vanishing=is_volatile(result.get('path')))
+                except FileNotFoundError as e:
+                    # Tolerate vanished files in the volatile temporary directory.
+                    # FileNotFoundError may carry no filename (e.g. pywinerror -> OSError
+                    # conversions); tolerate it when allow_volatile is set.
+                    if not (allow_volatile and (e.filename is None or is_volatile(e.filename))):
+                        raise
+                    logger.debug('TOCTOU: file vanished: %s', e.filename)
+
+    def test_run_all_volatile(self):
+        """Allow paths in the volatile temporary directory to vanish"""
+        path = os.path.join(self.tempdir, 'vanished')
+        result = {'label': 'Delete', 'n_deleted': 1, 'n_special': 0,
+                  'path': path, 'size': 0}
+        cmd = mock.Mock()
+        cmd.execute.return_value = iter((result,))
+        cleaner = mock.Mock()
+        cleaner.get_options.return_value = (('option', 'name'),)
+        cleaner.get_commands.return_value = (cmd,)
+        self.run_all(cleaner, False, allow_volatile=True)
+
+        cmd.execute.return_value = iter((result,))
+        with self.assertRaises(AssertionError):
+            self.run_all(cleaner, False)
+
+        cmd.execute.side_effect = FileNotFoundError(2, 'vanished', path)
+        self.run_all(cleaner, False, allow_volatile=True)
+
+        with self.assertRaises(FileNotFoundError):
+            self.run_all(cleaner, False)
+
+        # Non-volatile paths must not be tolerated even when allow_volatile is set.
+        non_volatile_path = (r'C:\bleachbit_nonexistent_test_path'
+                             if IS_WINDOWS else '/bleachbit_nonexistent_test_path')
+        non_volatile_result = {'label': 'Delete', 'n_deleted': 1, 'n_special': 0,
+                               'path': non_volatile_path, 'size': 0}
+        cmd.execute.side_effect = None
+        cmd.execute.return_value = iter((non_volatile_result,))
+        with self.assertRaises(AssertionError):
+            self.run_all(cleaner, False, allow_volatile=True)
+
+        cmd.execute.side_effect = FileNotFoundError(2, 'vanished', non_volatile_path)
+        with self.assertRaises(FileNotFoundError):
+            self.run_all(cleaner, False, allow_volatile=True)
+
+        # FileNotFoundError may carry no filename (e.g. pywinerror -> OSError
+        # conversions); tolerate it when allow_volatile is set.
+        cmd.execute.side_effect = FileNotFoundError(2, 'vanished')
+        self.run_all(cleaner, False, allow_volatile=True)
+
+        with self.assertRaises(FileNotFoundError):
+            self.run_all(cleaner, False)
 
     @common.skipUnlessWindows
     def test_remote(self):
@@ -99,7 +157,7 @@ class WinappTestCase(common.BleachbitTestCase):
         else:
             winapps = Winapp(fname)
             for cleaner in winapps.get_cleaners():
-                self.run_all(cleaner, False)
+                self.run_all(cleaner, False, allow_volatile=True)
 
     def test_detectos(self):
         """Test detectos function"""

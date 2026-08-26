@@ -33,6 +33,7 @@ from bleachbit.Constant import EMPTY_SPACE_WARNING, REQUIRES_EXPERT_MODE
 from bleachbit.GtkShim import Gtk, GLib
 from bleachbit.GuiCookie import CookieManagerPane
 from bleachbit.GuiUtil import (detect_dark_background, flush_gtk_events,
+                               load_icon_or_fallback,
                                should_show_dark_mode_warning)
 from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _, pget_text as _p
@@ -925,7 +926,7 @@ class PreferencesDialog:
         notice_label.set_line_wrap(True)
         notice_label.set_xalign(0.0)
 
-        notice_image = Gtk.Image.new_from_icon_name(
+        notice_image = load_icon_or_fallback(
             notice_icon, Gtk.IconSize.MENU)
         notice_image.set_valign(Gtk.Align.START)
 

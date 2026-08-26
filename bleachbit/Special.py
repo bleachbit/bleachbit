@@ -24,6 +24,7 @@ Cross-platform, special cleaning operations
 
 # standard library imports
 import contextlib
+import errno
 import json
 import logging
 import os
@@ -37,6 +38,9 @@ from bleachbit.General import reject_xml_dtd
 from bleachbit.Options import options
 
 logger = logging.getLogger(__name__)
+
+# SQLite primary result code for "unable to open database file".
+SQLITE_CANTOPEN = 14
 
 
 def __get_chrome_history(path, fn='History'):
@@ -91,7 +95,12 @@ def _escape_sqlite_str_literal(value):
 
 
 def sqlite_table_exists(pathname, table):
-    """Check whether a table exists in the SQLite database"""
+    """Check whether a table exists in the SQLite database
+
+    Returns True if the table exists, False if it does not.
+
+    Raises PermissionError if the file exists but cannot be opened.
+    """
     # In FreeBSD, sqlite3 is a separate package
     # pylint: disable=import-outside-toplevel
     import sqlite3
@@ -101,8 +110,23 @@ def sqlite_table_exists(pathname, table):
         with contextlib.closing(sqlite3.connect(uri, uri=True)) as conn:
             if conn.execute(cmd, (table,)).fetchone():
                 return True
-    except sqlite3.OperationalError:
-        # Database does not exist or cannot be opened in read-only mode
+    except sqlite3.OperationalError as exc:
+        # SQLITE_CANTOPEN (14) and extended variants are raised when
+        # Norton blocks access to browser cookies. The primary code
+        # is the low byte.
+        # sqlite_errorcode requires Python 3.11+, which is satisfied on
+        # Windows where the antivirus issue occurs.
+        errorcode = getattr(exc, 'sqlite_errorcode', None)
+        if os.path.exists(pathname) and errorcode is not None and \
+                (errorcode & 0xff) == SQLITE_CANTOPEN:
+            # Worker shows prettier message for PermissionError
+            raise PermissionError(
+                errno.EACCES,
+                f"Cannot open database file (possibly blocked by "
+                f"antivirus or another process): {pathname}",
+                pathname) from exc
+        # Database may be locked, busy, corrupt, or not a valid SQLite DB.
+        logger.debug('sqlite_table_exists: %s: %s', pathname, exc)
         return False
     return False
 
