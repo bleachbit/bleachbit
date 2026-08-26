@@ -405,11 +405,10 @@ class Options:
         section = f"list/{option}"
         if not self.config.has_section(section):
             return None
-        values = [
+        return [
             self.config.get(section, opt)
             for opt in sorted(self.config.options(section), key=_option_index)
         ]
-        return values
 
     def get_paths(self, section):
         """Abstracts get_whitelist_paths and get_custom_paths"""

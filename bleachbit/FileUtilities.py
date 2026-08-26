@@ -269,11 +269,10 @@ def bytes_to_human(bytes_i):
     else:
         decimals = 0
 
-    for _exponent, prefix in enumerate(prefixes):
+    for prefix in prefixes:
         if bytes_i < base:
             abbrev = round(bytes_i, decimals)
-            suf = prefix
-            return locale.str(abbrev) + suf + 'B'
+            return locale.str(abbrev) + prefix + 'B'
         bytes_i /= base
     return 'A lot.'
 
@@ -457,7 +456,7 @@ def clean_json(path, target):
         new_target = targets.pop(0)
         if not isinstance(pos, dict):
             break
-        if new_target in pos and len(targets) > 0:
+        if new_target in pos and targets:
             # descend
             pos = pos[new_target]
         elif new_target in pos:
@@ -467,7 +466,7 @@ def clean_json(path, target):
         else:
             # target not found
             break
-        if 0 == len(targets):
+        if not targets:
             # target not found
             break
 
@@ -687,14 +686,11 @@ def ego_owner(filename):
 
 def exists_in_path(filename):
     """Returns boolean whether the filename exists in the path"""
-    delimiter = ':'
-    if IS_WINDOWS:
-        delimiter = ';'
     path_env = os.getenv('PATH')
     if not path_env:
         return False
     assert not os.path.isabs(filename)
-    for dirname in path_env.split(delimiter):
+    for dirname in path_env.split(os.pathsep):
         if os.path.exists(os.path.join(dirname, filename)):
             return True
     return False
@@ -775,8 +771,7 @@ def expand_glob_join(pathname1, pathname2):
     """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
     pathname3 = os.path.expanduser(os.path.expandvars(
         os.path.join(pathname1, pathname2)))
-    ret = [pathname4 for pathname4 in glob.iglob(pathname3)]
-    return ret
+    return list(glob.iglob(pathname3))
 
 
 def extended_path(path):
@@ -867,9 +862,7 @@ def getsize(path):
             # FindFilesW does not work for directories, so fall back to
             # getsize()
             return os.path.getsize(path)
-        else:
-            size = (finddata[0][4] * (0xffffffff + 1)) + finddata[0][5]
-            return size
+        return (finddata[0][4] * (0xffffffff + 1)) + finddata[0][5]
     return os.path.getsize(path)
 
 

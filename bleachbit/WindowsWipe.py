@@ -154,7 +154,7 @@ def unpack_element(fmt, structure):
     """
     chunk_size = struct.calcsize(fmt)
     element = struct.unpack(fmt, structure[:chunk_size])
-    if element and len(element) > 0:
+    if element:
         element = element[0]    # convert from tuple to single element
     structure = structure[chunk_size:]
     return element, structure
@@ -536,9 +536,8 @@ def open_file(file_name, mode=GENERIC_READ):
     """
     if os.path.islink(file_name):
         raise OSError(errno.EACCES, 'refusing to wipe a link', file_name)
-    file_handle = CreateFileW(file_name, mode, 0, None,
-                              OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, None)
-    return file_handle
+    return CreateFileW(file_name, mode, 0, None,
+                       OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, None)
 
 
 def close_file(file_handle):

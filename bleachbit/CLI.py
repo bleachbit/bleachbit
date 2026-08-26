@@ -113,7 +113,7 @@ def args_to_operations_list(preset, all_but_warning):
     args = []
     if not backends:
         list(register_cleaners())
-    if len(backends) == 0:
+    if not backends:
         raise RuntimeError('no cleaners registered')
     for key in sorted(backends):
         c_id = backends[key].get_id()
@@ -160,10 +160,11 @@ def args_to_operations(args, preset, all_but_warning, excludes=None):
     not_valid_cleaner_msg = _("not a valid cleaner: %s")
 
     for arg in positive_args:
-        if 2 != len(arg.split('.')):
+        parts = arg.split('.')
+        if 2 != len(parts):
             logger.warning(not_valid_cleaner_msg, arg)
             continue
-        (cleaner_id, option_id) = arg.split('.')
+        (cleaner_id, option_id) = parts
         # enable all options (for example, firefox.*)
         if '*' == option_id:
             if cleaner_id not in backends:
@@ -194,11 +195,12 @@ def args_to_operations(args, preset, all_but_warning, excludes=None):
             logger.error(wildcard_msg, arg)
             # Exit to avoid over-cleaning.
             sys.exit(1)
-        if 2 != len(arg.split('.')):
+        parts = arg.split('.')
+        if 2 != len(parts):
             logger.error(not_valid_cleaner_msg, arg)
             # Exit to avoid over-cleaning.
             sys.exit(1)
-        (cleaner_id, option_id) = arg.split('.')
+        (cleaner_id, option_id) = parts
         option_id = fix_deprecated(cleaner_id, option_id)
         if cleaner_id in operations and option_id in operations[cleaner_id]:
             operations[cleaner_id].remove(option_id)

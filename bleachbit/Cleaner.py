@@ -35,6 +35,8 @@ elif not (IS_POSIX or IS_WINDOWS):
     raise RuntimeError(f"Unknown OS '{os.name}'")
 
 
+logger = logging.getLogger(__name__)
+
 # a module-level variable for holding cleaners
 backends = {}
 
@@ -102,7 +104,6 @@ class Cleaner:
                 for _ds in self.get_deep_scan(option_id):
                     return False
             except Exception:
-                logger = logging.getLogger(__name__)
                 logger.exception('exception in auto_hide(), cleaner=%s, option=%s',
                                  self.name, option_id)
         return True
@@ -154,13 +155,10 @@ class Cleaner:
 
     def get_warning(self, option_id):
         """Return a warning as string."""
-        if option_id in self.warnings:
-            return self.warnings[option_id]
-        return None
+        return self.warnings.get(option_id)
 
     def is_process_running(self):
         """Return whether the process is currently running"""
-        logger = logging.getLogger(__name__)
         for (test, pathname, same_user) in self.running:
             if 'exe' == test:
                 if is_process_running(pathname, same_user):
@@ -179,7 +177,7 @@ class Cleaner:
 
     def is_usable(self):
         """Return whether the cleaner is usable (has actions)"""
-        return len(self.actions) > 0
+        return bool(self.actions)
 
     def set_warning(self, option_id, description):
         """Set a warning to be displayed when option is selected interactively"""
@@ -547,8 +545,7 @@ class System(Cleaner):
 
         # trash
         if IS_POSIX and 'trash' == option_id:
-            for p in Unix.get_trash_paths():
-                yield p
+            yield from Unix.get_trash_paths()
 
         # clipboard
         if 'clipboard' == option_id and (gtk_may_be_available() or IS_WINDOWS):
@@ -616,7 +613,7 @@ class System(Cleaner):
                 try:
                     Windows.empty_recycle_bin(None, True)
                 except Exception:
-                    logging.getLogger(__name__).info(
+                    logger.info(
                         'error in empty_recycle_bin()', exc_info=True)
                 yield 0
             # Using the Function Command prevents emptying the recycle bin
@@ -633,8 +630,7 @@ class System(Cleaner):
 
         # Windows Updates
         if IS_WINDOWS and 'updates' == option_id:
-            for wu in Windows.delete_updates():
-                yield wu
+            yield from Windows.delete_updates()
 
     def init_whitelist(self):
         """Initialize the keep list (formerly whitelist) only once for performance"""
@@ -754,12 +750,11 @@ def simpler_cleaner_process_path(path):
 
     Not checked: path existence or type of path
     """
-    if not isinstance(path, (str)):
+    if not isinstance(path, str):
         raise RuntimeError(
             f'expected path as string but got {str(path)}')
     if not path.strip():
-        logging.getLogger(__name__).warning(
-            'Refusing to clean an empty path')
+        logger.warning('Refusing to clean an empty path')
         return None
     if not os.path.isabs(path):
         path = os.path.abspath(path)
@@ -768,7 +763,7 @@ def simpler_cleaner_process_path(path):
     cwd = os.getcwd()
     cwd_parent = os.path.dirname(cwd)
     if path in (cwd, cwd_parent):
-        logging.getLogger(__name__).warning(
+        logger.warning(
             'Refusing to shred working directory or its parent: %s', path)
         return None
     return path

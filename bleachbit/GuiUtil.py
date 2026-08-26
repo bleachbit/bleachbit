@@ -8,6 +8,7 @@
 WindowInfo class and utility functions for GUI
 """
 
+import importlib.util
 import os
 import threading
 from enum import Enum
@@ -284,7 +285,6 @@ def load_icon_or_fallback(icon_name, size=None,
 
 def notify(msg):
     """Show a popup-notification"""
-    import importlib.util
     if importlib.util.find_spec('plyer'):
         # On Windows, use Plyer.
         notify_plyer(msg)

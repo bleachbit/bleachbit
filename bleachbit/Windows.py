@@ -271,8 +271,7 @@ def browse_files(_, title):
         # only one filename
         return _split
     dirname = _split[0]
-    pathnames = [os.path.join(dirname, fname) for fname in _split[1:]]
-    return pathnames
+    return [os.path.join(dirname, fname) for fname in _split[1:]]
 
 
 def browse_folder(_, title):
@@ -282,8 +281,7 @@ def browse_folder(_, title):
     if pidl is None:
         # user cancelled
         return None
-    fullpath = shell.SHGetPathFromIDListW(pidl)
-    return fullpath
+    return shell.SHGetPathFromIDListW(pidl)
 
 
 def cleanup_nonce():
@@ -475,10 +473,9 @@ def delete_locked_file(pathname):
         return
     MOVEFILE_DELAY_UNTIL_REBOOT = 4
     if 0 == windll.kernel32.MoveFileExW(pathname, None, MOVEFILE_DELAY_UNTIL_REBOOT):
-        from ctypes import WinError
         # WinError throws the right exception based on last error.
         try:
-            raise WinError()
+            raise ctypes.WinError()
         except PermissionError:
             # OSError has special handling in Worker.py
             # Use a special message for flagging files for later deletion
@@ -792,7 +789,7 @@ def elevate_privileges(uac):
         # If the Python file is on a network drive, do not offer the UAC because
         # the administrator may not have privileges and user will not be
         # prompted.
-        if len(pyfile) > 0 and path_on_network(pyfile):
+        if pyfile and path_on_network(pyfile):
             logger.debug(
                 "debug: skipping UAC because '%s' is on network", pyfile)
             return False

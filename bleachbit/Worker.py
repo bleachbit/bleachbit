@@ -23,10 +23,13 @@ Perform the preview or delete operations
 """
 
 # standard imports
+import errno
 import logging
 import math
 import os
 import sys
+import time
+import warnings
 
 # first party imports
 from bleachbit import DeepScan, FileUtilities, IS_WINDOWS
@@ -66,7 +69,7 @@ class Worker:
         self.total_special = 0  # special operations
         self.yield_time = None
         self.is_aborted = False
-        if 0 == len(self.operations):
+        if not self.operations:
             raise RuntimeError("No work to do")
 
     def abort(self):
@@ -100,8 +103,7 @@ class Worker:
         except SystemExit:
             logger.debug('%s raised SystemExit, which we do not honor', cmd)
         except Exception as e:
-            from errno import ENOENT, EACCES
-            if isinstance(e, OSError) and e.errno == ENOENT:
+            if isinstance(e, OSError) and e.errno == errno.ENOENT:
                 # ENOENT (Error NO ENTry) means file not found.
                 # Normalize Windows extended paths (\\?\) before logging
                 # so the user sees the canonical form and tests avoid
@@ -111,7 +113,7 @@ class Worker:
                     filename = FileUtilities.extended_path_undo(filename)
                 # Do not show traceback.
                 logger.error(_("File not found: %s"), filename)
-            elif isinstance(e, OSError) and e.errno == EACCES:
+            elif isinstance(e, OSError) and e.errno == errno.EACCES:
                 # EACCES (Error ACCESS) means access denied.
                 # Do not show traceback.
                 if e.strerror == "Access denied in delete_locked_file()":
@@ -149,10 +151,7 @@ class Worker:
             else:
                 size = "?B"
 
-            if ret['path']:
-                path = ret['path']
-            else:
-                path = ''
+            path = ret['path'] or ''
 
             line = "%s %s %s\n" % (ret['label'], size, path)
             self.total_deleted += ret['n_deleted']
@@ -179,7 +178,6 @@ class Worker:
             self.ui.append_text(err + "\n", 'error')
             self.total_errors += 1
             return
-        import time
         self.yield_time = time.time()
 
         total_size = 0
@@ -282,8 +280,7 @@ class Worker:
             delayables = ['empty_space', 'memory']
             for delayable in delayables:
                 if delayable in self.operations[operation]:
-                    i = self.operations[operation].index(delayable)
-                    del self.operations[operation][i]
+                    self.operations[operation].remove(delayable)
                     priority = 99
                     if 'empty_space' == delayable:
                         priority = 100
@@ -291,7 +288,6 @@ class Worker:
                     self.delayed_ops.append(new_op)
 
         # standard operations
-        import warnings
         with warnings.catch_warnings(record=True) as ws:
             # This warning system allows general warnings. Duplicate will
             # be removed, and the warnings will show near the end of
@@ -376,7 +372,7 @@ class Worker:
 
     def run_deep_scan(self):
         """Run deep scans"""
-        logger.debug(' deepscans=%s' % self.deepscans)
+        logger.debug(' deepscans=%s', self.deepscans)
         # TRANSLATORS: The "deep scan" feature searches over broad
         # areas of the file system such as the user's whole home directory
         # or all the system executables.

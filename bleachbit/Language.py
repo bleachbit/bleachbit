@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import gettext
+import locale
 import os
 import logging
 
@@ -316,7 +317,6 @@ def get_active_language_code():
     else:
         if not options.get('auto_detect_lang') and options.has_option('forced_language') and options.get('forced_language'):
             return options.get('forced_language')
-    import locale
     # locale.getdefaultlocale() will be removed in Python 3.15, so
     # use getlocale() instead.
     # However, on Windows, getlocale() may return values like
@@ -367,7 +367,6 @@ def setup_translation():
             "Error in setup_translation() with language code %s: %s", user_locale, e)
         t = None
         return
-    import locale
     if hasattr(locale, 'bindtextdomain'):
         locale.bindtextdomain(text_domain, locale_dir)
         locale.textdomain(text_domain)

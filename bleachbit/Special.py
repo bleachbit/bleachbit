@@ -580,7 +580,7 @@ def get_chrome_bookmark_urls(path):
             urls.append(node['url'])
 
     # find bookmarks
-    for node in js['roots']:
-        get_chrome_bookmark_urls_helper(js['roots'][node])
+    for node in js['roots'].values():
+        get_chrome_bookmark_urls_helper(node)
 
     return list(set(urls))  # unique

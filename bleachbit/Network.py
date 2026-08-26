@@ -284,5 +284,4 @@ def get_user_agent():
     if (gtk_ver := get_gtk_version()):
         parts.append(f'GTK {gtk_ver}')
 
-    agent = f"BleachBit/{APP_VERSION} ({'; '.join(parts)})"
-    return agent
+    return f"BleachBit/{APP_VERSION} ({'; '.join(parts)})"
