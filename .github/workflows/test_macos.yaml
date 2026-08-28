@@ -70,7 +70,7 @@ jobs:
           cache-dependency-path: requirements.txt
 
       - name: Install dependencies
-        run: ./scripts/install-deps.sh --dev --venv
+        run: make install-deps-dev INSTALL_DEPS_ARGS=--venv
 
       - name: Generate Revision.py
         uses: ./.github/actions/generate-revision
@@ -84,17 +84,11 @@ jobs:
           .venv/bin/python bleachbit.py --list | head -n 20
 
       - name: Validate cleaner XML
-        run: |
-          for f in cleaners/*.xml; do
-            xmllint --noout --schema doc/cleaner_markup_language.xsd "$f"
-          done
+        run: make -C cleaners tests
 
       - name: Run tests
         env:
           PYTHONWARNINGS: error
         run: |
           touch ~/.zshrc # for test_expanduser
-          # Mirror how build_and_test.yaml calls pytest
-          .venv/bin/python -m pytest -n logical --dist=loadgroup -m "not no_xdist"
-          .venv/bin/python -m pytest -m no_xdist
-          .venv/bin/python windows/nsis_translations.py --unittest
+          make tests-pytest tests-nsis PYTHON="$GITHUB_WORKSPACE/.venv/bin/python"

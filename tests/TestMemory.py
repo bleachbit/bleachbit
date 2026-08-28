@@ -273,7 +273,8 @@ Swapouts:                              20258188.
         with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
             with mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')) as mock_run:
                 enable_swap_linux()
-                self.assertEqual(mock_run.call_args.args[0], [General.resolve_exe('swapon'), '-a'])
+                self.assertEqual(mock_run.call_args.args[0], [
+                                 General.resolve_exe('swapon'), '-a'])
 
         # Failure
         with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
@@ -450,8 +451,10 @@ Swapouts:                              20258188.
                     side_effect=(unsupported_proc, success_proc)) as mock_run:
                 self.assertEqual(_run_memory_child_systemd_scope(), 0)
         self.assertEqual(mock_run.call_count, 2)
-        self.assertIn('--property=OOMPolicy=kill', mock_run.call_args_list[0].args[0])
-        self.assertNotIn('--property=OOMPolicy=kill', mock_run.call_args_list[1].args[0])
+        self.assertIn('--property=OOMPolicy=kill',
+                      mock_run.call_args_list[0].args[0])
+        self.assertNotIn('--property=OOMPolicy=kill',
+                         mock_run.call_args_list[1].args[0])
 
     @common.skipIfWindows
     def test_run_memory_child_systemd_scope_runtime_failure(self):

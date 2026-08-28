@@ -269,11 +269,10 @@ def bytes_to_human(bytes_i):
     else:
         decimals = 0
 
-    for _exponent, prefix in enumerate(prefixes):
+    for prefix in prefixes:
         if bytes_i < base:
             abbrev = round(bytes_i, decimals)
-            suf = prefix
-            return locale.str(abbrev) + suf + 'B'
+            return locale.str(abbrev) + prefix + 'B'
         bytes_i /= base
     return 'A lot.'
 
@@ -394,14 +393,26 @@ def clean_ini(path, section, parameter):
     """Delete sections and parameters (aka option) in the file
 
     Comments are not preserved.
+
+    The file is expected to be UTF-8, optionally with a BOM. This matches
+    how VLC writes its configuration file (verified for over a decade). If
+    the file cannot be decoded as UTF-8, it is left untouched and an error
+    is logged so cleaning continues with the next file. The presence (or
+    absence) of a BOM is preserved on write.
     """
-    encoding = detect_encoding(path) or 'utf_8_sig'
+    # utf_8_sig transparently strips a BOM when reading, if present.
+    read_encoding = 'utf_8_sig'
 
     # read file to parser
     config = bleachbit.RawConfigParser(delimiters='=')
     config.optionxform = str
-    with open(path, 'r', encoding=encoding) as fp:
-        config.read_file(fp)
+    try:
+        with open(path, 'r', encoding=read_encoding) as fp:
+            config.read_file(fp)
+    except UnicodeDecodeError:
+        logger.error(
+            "Cannot clean INI file because it is not valid UTF-8: %s", path)
+        return
 
     # change file
     changed = False
@@ -416,11 +427,17 @@ def clean_ini(path, section, parameter):
     if not changed:
         return
 
+    # Preserve whether the file had a BOM: write with utf_8_sig (which
+    # re-adds it) only if the original file began with the UTF-8 BOM.
+    with open(path, 'rb') as bom_fp:
+        has_bom = bom_fp.read(3) == b'\xef\xbb\xbf'
+    write_encoding = 'utf_8_sig' if has_bom else 'utf_8'
+
     # write file
     from bleachbit.Options import options
     if options.get('shred'):
         delete(path, True)
-    with open_for_overwrite(path, encoding=encoding, newline='') as fp:
+    with open_for_overwrite(path, encoding=write_encoding, newline='') as fp:
         config.write(fp)
 
 
@@ -439,7 +456,7 @@ def clean_json(path, target):
         new_target = targets.pop(0)
         if not isinstance(pos, dict):
             break
-        if new_target in pos and len(targets) > 0:
+        if new_target in pos and targets:
             # descend
             pos = pos[new_target]
         elif new_target in pos:
@@ -449,7 +466,7 @@ def clean_json(path, target):
         else:
             # target not found
             break
-        if 0 == len(targets):
+        if not targets:
             # target not found
             break
 
@@ -588,7 +605,8 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             is_special = bool(
                 os.lstat(path).st_file_attributes & stat.FILE_ATTRIBUTE_REPARSE_POINT)
         except OSError:
-            pass
+            # lstat returns Access Denied on some Windows files
+            is_special = False
     if is_special:
         _delete_path(path, os.remove)
         return True
@@ -650,34 +668,6 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         return False
 
 
-def detect_encoding(fn):
-    """Detect the encoding of the file"""
-    try:
-        # pylint: disable=import-outside-toplevel
-        import chardet
-    except ImportError:
-        logger.warning(
-            'chardet module is not available to detect character encoding')
-        return None
-
-    # chardet 6.0 removed the chardet.universaldetector submodule and exposed
-    # UniversalDetector directly on the package. Fall back to the old path for
-    # chardet 5.x (and earlier) that still ship the submodule.
-    UniversalDetector = getattr(chardet, 'UniversalDetector', None)
-    if UniversalDetector is None:
-        # pylint: disable=import-outside-toplevel,no-name-in-module
-        from chardet.universaldetector import UniversalDetector
-
-    with open(fn, 'rb') as f:
-        detector = UniversalDetector()
-        for line in f:
-            detector.feed(line)
-            if detector.done:
-                break
-        detector.close()
-    return detector.result['encoding']
-
-
 def ego_owner(filename):
     """Return whether current user owns the file
 
@@ -696,14 +686,11 @@ def ego_owner(filename):
 
 def exists_in_path(filename):
     """Returns boolean whether the filename exists in the path"""
-    delimiter = ':'
-    if IS_WINDOWS:
-        delimiter = ';'
     path_env = os.getenv('PATH')
     if not path_env:
         return False
     assert not os.path.isabs(filename)
-    for dirname in path_env.split(delimiter):
+    for dirname in path_env.split(os.pathsep):
         if os.path.exists(os.path.join(dirname, filename)):
             return True
     return False
@@ -784,8 +771,7 @@ def expand_glob_join(pathname1, pathname2):
     """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
     pathname3 = os.path.expanduser(os.path.expandvars(
         os.path.join(pathname1, pathname2)))
-    ret = [pathname4 for pathname4 in glob.iglob(pathname3)]
-    return ret
+    return list(glob.iglob(pathname3))
 
 
 def extended_path(path):
@@ -876,9 +862,7 @@ def getsize(path):
             # FindFilesW does not work for directories, so fall back to
             # getsize()
             return os.path.getsize(path)
-        else:
-            size = (finddata[0][4] * (0xffffffff + 1)) + finddata[0][5]
-            return size
+        return (finddata[0][4] * (0xffffffff + 1)) + finddata[0][5]
     return os.path.getsize(path)
 
 

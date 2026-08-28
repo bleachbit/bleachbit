@@ -159,15 +159,16 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         def action_classes(cleaner):
             return [a.__class__.__name__ for (_option_id, a) in cleaner.actions]
 
-        self.assertIn('Process', action_classes(CleanerML(fn, trusted=True).cleaner))
+        self.assertIn('Process', action_classes(
+            CleanerML(fn, trusted=True).cleaner))
 
         # The delete action stays; only the process action is dropped
         untrusted = action_classes(CleanerML(fn, trusted=False).cleaner)
         self.assertNotIn('Process', untrusted)
         self.assertIn('Delete', untrusted)
 
-    def test_untrusted_winreg_action(self):
-        """A winreg action is ignored for an untrusted cleaner"""
+    def test_untrusted_winreg_action_allowed(self):
+        """A winreg action is kept even for an untrusted cleaner"""
         xml_str = (
             '<?xml version="1.0" encoding="UTF-8"?>\n'
             '<cleaner id="test_untrusted_winreg">\n'
@@ -187,12 +188,10 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         def action_classes(cleaner):
             return [a.__class__.__name__ for (_option_id, a) in cleaner.actions]
 
-        self.assertIn('Winreg', action_classes(CleanerML(fn, trusted=True).cleaner))
-
-        # The delete action stays; only the winreg action is dropped
-        untrusted = action_classes(CleanerML(fn, trusted=False).cleaner)
-        self.assertNotIn('Winreg', untrusted)
-        self.assertIn('Delete', untrusted)
+        for trusted in (True, False):
+            actions = action_classes(CleanerML(fn, trusted=trusted).cleaner)
+            self.assertIn('Winreg', actions)
+            self.assertIn('Delete', actions)
 
     def test_untrusted_actions_warn_once_per_file(self):
         """Ignored actions are summarized in one warning, not one per action"""
@@ -208,7 +207,6 @@ class CleanerMLTestCase(common.BleachbitTestCase):
             '    <label>Opt</label>\n'
             '    <description>Opt</description>\n'
             f'{actions}\n'
-            '    <action command="winreg" path="HKCU\\Software\\BleachBitTest"/>\n'
             '  </option>\n'
             '</cleaner>\n')
         fn = os.path.join(self.mkdtemp(prefix='bleachbit-cleanerml-trust-log'),
@@ -218,16 +216,31 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         with self.assertLogs('bleachbit.CleanerML', level='WARNING') as cm:
             CleanerML(fn, trusted=False)
         self.assertEqual(len(cm.output), 1)
-        self.assertIn("'process', 'winreg'", cm.output[0])
+        self.assertIn("'process'", cm.output[0])
 
     def test_is_trusted_cleaner(self):
-        """Only files under the system cleaners dir are trusted"""
+        """Files shipped next to the application are trusted"""
         from bleachbit.CleanerML import is_trusted_cleaner
         system_dir = bleachbit.system_cleaners_dir
         self.assertTrue(is_trusted_cleaner(
             os.path.join(system_dir, 'example.xml')))
         self.assertFalse(is_trusted_cleaner(
             os.path.join(bleachbit.personal_cleaners_dir, 'example.xml')))
+
+    def test_is_trusted_cleaner_portable(self):
+        """In portable mode the personal cleaners dir is the local one"""
+        from bleachbit.CleanerML import is_trusted_cleaner
+        app_dir = self.mkdtemp(prefix='bleachbit-portable')
+        cleaners_dir = os.path.join(app_dir, 'cleaners')
+        with mock.patch.multiple(
+                'bleachbit',
+                local_cleaners_dir=cleaners_dir,
+                personal_cleaners_dir=cleaners_dir,
+                system_cleaners_dir=os.path.join(app_dir, 'share', 'cleaners')):
+            self.assertTrue(is_trusted_cleaner(
+                os.path.join(cleaners_dir, 'winapp2.ini')))
+            self.assertFalse(is_trusted_cleaner(
+                os.path.join(app_dir, 'elsewhere', 'winapp2.ini')))
 
     def test_rejects_dtd(self):
         """A CleanerML file with a DTD is rejected (entity-expansion defense)"""

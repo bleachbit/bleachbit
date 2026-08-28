@@ -18,7 +18,6 @@ from xml.dom.minidom import parseString
 import bleachbit
 from bleachbit import Cleaner, IS_WINDOWS, Windows
 from bleachbit.Action import Delete, Winreg
-from bleachbit.CleanerML import is_trusted_cleaner
 from bleachbit.Language import get_text as _
 from bleachbit.PathUtils import is_world_writable
 
@@ -48,7 +47,10 @@ langsecref_map = {
     '3033': ('winapp2_vivaldi', 'Vivaldi'),
     '3034': ('winapp2_brave', 'Brave'),
     # Section=Games (technically not langsecref)
-    'Games': ('winapp2_games', _('Games'))}
+    'Games': (
+        'winapp2_games',
+        # TRANSLATORS: Cleaner category name for games imported from winapp2.ini.
+        _('Games'))}
 
 
 # Compiled once; these run for every section/filekey when importing winapp2.ini
@@ -98,8 +100,9 @@ def detectos(required_ver, mock=False):
         # Exact version
         return Windows.parse_windows_build(required_ver) == current_os
     # Format of min|max
-    req_min = required_ver.split('|')[0]
-    req_max = required_ver.split('|')[1]
+    req_parts = required_ver.split('|')
+    req_min = req_parts[0]
+    req_max = req_parts[1]
     if req_min and current_os < Windows.parse_windows_build(req_min):
         return False
     if req_max and current_os > Windows.parse_windows_build(req_max):
@@ -108,15 +111,18 @@ def detectos(required_ver, mock=False):
 
 
 def winapp_expand_vars(pathname):
-    """Expand environment variables using special Winapp2.ini rules"""
+    """Expand environment variables using special Winapp2.ini rules
+
+    Returns the list of candidate paths to try, which is one or two long.
+    """
     # This is the regular expansion
     expand1 = os.path.expandvars(pathname)
     # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%, etc.
     for pattern, sub_repl in _WINAPP_VAR_SUBS:
         if pattern.match(pathname):
             expand2 = pattern.sub(sub_repl, pathname)
-            return expand1, os.path.expandvars(expand2)
-    return expand1,
+            return [expand1, os.path.expandvars(expand2)]
+    return [expand1]
 
 
 def detect_file(pathname):
@@ -171,15 +177,9 @@ class Winapp:
 
     """Create cleaners from a Winapp2.ini-style file"""
 
-    def __init__(self, pathname, cb_progress=_noop_progress, trusted=True):
-        """Create cleaners from a Winapp2.ini-style file
+    def __init__(self, pathname, cb_progress=_noop_progress):
+        """Create cleaners from a Winapp2.ini-style file"""
 
-        trusted is False for winapp2.ini files from user-writable
-        directories; their registry-deletion actions are ignored.
-        """
-
-        self.trusted = trusted
-        self.ignored_regkey_sections = set()
         self.cleaners = {}
         self.cleaner_ids = []
         for langsecref in set(langsecref_map.values()):
@@ -201,11 +201,6 @@ class Winapp:
             else:
                 section_done_count += 1
                 cb_progress(1.0 * section_done_count / section_total_count)
-        if self.ignored_regkey_sections:
-            logger.warning(
-                "ignoring 'winreg' actions from untrusted winapp2.ini: %s "
-                "(sections affected: %d)",
-                pathname, len(self.ignored_regkey_sections))
 
     def add_section(self, cleaner_id, name):
         """Add a section (cleaners)"""
@@ -214,6 +209,8 @@ class Winapp:
         self.cleaners[cleaner_id].id = cleaner_id
         self.cleaners[cleaner_id].name = name
         assert name.strip() == name
+        # TRANSLATORS: Description shown for a cleaner imported from winapp2.ini,
+        # which is a database of cleaning definitions.
         self.cleaners[cleaner_id].description = _('Imported from winapp2.ini')
         # The detect() function in this module effectively does what
         # auto_hide() does, so this avoids redundant, slow processing.
@@ -223,7 +220,7 @@ class Winapp:
         """Given a langsecref (or section name), find the internal
         BleachBit cleaner ID."""
         # pre-defined, such as 3021
-        if langsecref in langsecref_map.keys():
+        if langsecref in langsecref_map:
             return langsecref_map[langsecref][0]
         # custom, such as games
         cleanerid = 'winapp2_' + section2option(langsecref)
@@ -268,16 +265,15 @@ class Winapp:
         # the middle part contains the file
         regexes = []
         for expanded in winapp_expand_vars(parts[1]):
-            regex = None
-            if not files:
-                # There is no third part, so this is either just a folder,
-                # or sometimes the file is specified directly.
-                regex = fnmatch_translate(expanded)
             if files:
                 # match one or more file types, directly in this tree or in any
                 # sub folder
                 regex = r'%s\\%s' % (
                     _EXCLUDEKEY_TRAILING_SEP.sub(r'\1', fnmatch_translate(expanded)), files_regex)
+            else:
+                # There is no third part, so this is either just a folder,
+                # or sometimes the file is specified directly.
+                regex = fnmatch_translate(expanded)
             regexes.append(regex)
 
         if len(regexes) == 1:
@@ -382,7 +378,6 @@ class Winapp:
             else:
                 logger.warning(
                     'unknown option %s in section %s', option, section)
-                continue
 
     def __make_file_provider(self, dirname, filename, recurse, removeself, excludekeys):
         """Change parsed FileKey to action provider"""
@@ -452,12 +447,6 @@ class Winapp:
 
     def handle_regkey(self, lid, ini_section, ini_option, reg_excludekeys):
         """Parse a RegKey# option"""
-        if not self.trusted:
-            # __init__ logs a summary warning once the whole file is parsed
-            self.ignored_regkey_sections.add(ini_section)
-            logger.debug(
-                "ignoring 'winreg' action from untrusted winapp2.ini: section=%s", ini_section)
-            return
         elements = self.parser.get(
             ini_section, ini_option).strip().split('|')
         path = elements[0]
@@ -513,8 +502,7 @@ def load_cleaners(cb_progress=_noop_progress):
     cb_progress(0.0)
     for pathname in list_winapp_files():
         try:
-            inicleaner = Winapp(pathname, cb_progress,
-                               trusted=is_trusted_cleaner(pathname))
+            inicleaner = Winapp(pathname, cb_progress)
         except Exception:
             logger.exception(
                 "Error reading winapp2.ini cleaner '%s'", pathname)

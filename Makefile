@@ -9,7 +9,7 @@
 # On some systems if not explicitly given, make uses /bin/sh
 SHELL != command -v bash || echo /bin/sh
 
-.PHONY: clean install tests build tests-with-sudo lint delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
+.PHONY: clean install tests tests-pytest tests-nsis build tests-with-sudo lint delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
 
 prefix ?= /usr/local
 bindir ?= $(prefix)/bin
@@ -21,9 +21,25 @@ INSTALL_SCRIPT = $(INSTALL) -m 755
 
 # if not specified, do not check coverage
 PYTHON ?= python3
-COVERAGE ?= $(PYTHON)
+# Quoted form for calling Python. Windows CI passes a backslash path that bash
+# mangles unquoted, so use this instead of $(PYTHON).
+PYTHON_CMD := "$(PYTHON)"
+COVERAGE ?= $(PYTHON_CMD)
 
-ifneq ($(COVERAGE),$(PYTHON))
+# pytest runner used by `tests-pytest`. Extra arguments go in PYTEST_ARGS
+PYTEST ?= $(PYTHON_CMD) -m pytest
+PYTEST_ARGS ?=
+
+# Set PYTEST_COVERAGE to any value to measure coverage of the pytest runs
+ifdef PYTEST_COVERAGE
+PYTEST_COV := --cov=bleachbit --cov-report=
+PYTEST_COV_APPEND := --cov=bleachbit --cov-append --cov-report=
+endif
+
+# Arguments forwarded to scripts/install-deps.sh, such as --venv
+INSTALL_DEPS_ARGS ?=
+
+ifneq ($(COVERAGE),$(PYTHON_CMD))
 BLEACHBIT_SUDO_COVERAGE_RUNNER := $(COVERAGE) --append
 BLEACHBIT_SUDO_COVERAGE_FILE := $(if $(COVERAGE_FILE),$(COVERAGE_FILE),.coverage)
 else
@@ -35,10 +51,10 @@ build:
 	echo Nothing to build
 
 install-deps:
-	@./scripts/install-deps.sh
+	@./scripts/install-deps.sh $(INSTALL_DEPS_ARGS)
 
 install-deps-dev:
-	@./scripts/install-deps.sh --dev
+	@./scripts/install-deps.sh --dev $(INSTALL_DEPS_ARGS)
 
 clean:
 	@rm -vf {.,bleachbit,tests,windows,bleachbit/markovify}/*{pyc,pyo,~} # files
@@ -77,8 +93,8 @@ install:
 	$(INSTALL_DATA) bleachbit/markovify/*.py $(DESTDIR)$(datadir)/bleachbit/markovify
 	#note: compileall is recursive
 	cd $(DESTDIR)$(datadir)/bleachbit && \
-	$(PYTHON) -O -c "import compileall; compileall.compile_dir('.')" && \
-	$(PYTHON) -c "import compileall; compileall.compile_dir('.')"
+	$(PYTHON_CMD) -O -c "import compileall; compileall.compile_dir('.')" && \
+	$(PYTHON_CMD) -c "import compileall; compileall.compile_dir('.')"
 
 	# cleaners
 	mkdir -p $(DESTDIR)$(datadir)/bleachbit/cleaners
@@ -118,12 +134,10 @@ lint:
 	else \
 		echo "WARNING: Missing shellcheck. APT users, try: sudo apt install shellcheck"; \
 	fi
-	for f in *py */*py; \
-	do \
-		echo "$$f"; \
-		( pyflakes3 "$$f" > "$$f".pyflakes.log ); \
-		( pylint "$$f" > "$$f".pylint.log ); \
-	done; \
+	@echo "Running pyflakes3 and pylint in parallel: see all.pyflakes.log and all.pylint.log"
+	@pyflakes3 *py */*py > all.pyflakes.log 2>&1 & \
+	pylint -j 0 *py */*py > all.pylint.log 2>&1 & \
+	wait; \
 	exit 0
 
 delete_windows_files:
@@ -146,15 +160,26 @@ tests:
 	# Catch Python warnings as errors. Also set in `tests/common.py`.
 	$(MAKE) -C cleaners tests; cleaners_status=$$?; \
 	PYTHONWARNINGS=error $(COVERAGE) -m unittest discover -p Test*.py -v; py_status=$$?; \
-	$(PYTHON) windows/nsis_translations.py --unittest; nsis_status=$$?; \
+	$(MAKE) tests-nsis; nsis_status=$$?; \
 	exit $$(($$cleaners_status + $$py_status + $$nsis_status))
+
+# The suite CI runs: the xdist pass, then the serial no_xdist pass.
+# The second pass is skipped if the first fails.
+tests-pytest:
+	PYTHONWARNINGS=error PYTHONPATH=. $(PYTEST) -n logical --dist=loadgroup \
+		-m 'not no_xdist' $(PYTEST_COV) $(PYTEST_ARGS)
+	PYTHONWARNINGS=error PYTHONPATH=. $(PYTEST) \
+		-m no_xdist $(PYTEST_COV_APPEND) $(PYTEST_ARGS)
+
+tests-nsis:
+	$(PYTHON_CMD) windows/nsis_translations.py --unittest
 
 tests-with-sudo:
 	# Run tests marked with @test_also_with_sudo using sudo
 	PYTHONWARNINGS=error \
 		BLEACHBIT_COVERAGE_RUNNER="$(BLEACHBIT_SUDO_COVERAGE_RUNNER)" \
 		BLEACHBIT_COVERAGE_FILE="$(BLEACHBIT_SUDO_COVERAGE_FILE)" \
-		$(PYTHON) tests/test_with_sudo.py
+		$(PYTHON_CMD) tests/test_with_sudo.py
 
 pretty:
 	@if command -v autopep8 >/dev/null 2>&1; then \
@@ -181,7 +206,7 @@ pretty:
 # AppImage build
 APPIMAGE_BUILD_DIR ?= appimage-build
 APPIMAGE_APPDIR := $(abspath $(APPIMAGE_BUILD_DIR))
-APPIMAGE_OUTPUT ?= BleachBit-$(shell $(PYTHON) -c "import sys; sys.path.insert(0,'.'); from bleachbit import APP_VERSION; print(APP_VERSION)" 2>/dev/null || echo "latest")-x86_64.AppImage
+APPIMAGE_OUTPUT ?= BleachBit-$(shell $(PYTHON_CMD) -c "import sys; sys.path.insert(0,'.'); from bleachbit import APP_VERSION; print(APP_VERSION)" 2>/dev/null || echo "latest")-x86_64.AppImage
 APPIMAGE_OUTPUT_PATH := $(abspath $(APPIMAGE_OUTPUT))
 LINUXDEPLOY ?= linuxdeploy-x86_64.AppImage
 LINUXDEPLOY_GTK_PLUGIN ?= linuxdeploy-plugin-gtk.sh

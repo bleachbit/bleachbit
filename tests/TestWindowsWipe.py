@@ -14,6 +14,7 @@ import os
 import sys
 import time
 import unittest
+from contextlib import suppress
 
 import bleachbit
 
@@ -44,10 +45,7 @@ if bleachbit.IS_WINDOWS:
         wipe_file_direct,
         extents_a_minus_b,
         GENERIC_READ,
-        GENERIC_WRITE,
-        SetFilePointer,
-        FILE_BEGIN,
-        FlushFileBuffers
+        GENERIC_WRITE
     )
     from tests.TestWindows import WindowsLinksMixIn
 else:
@@ -149,12 +147,14 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         zero_frac = (len(large_files_zero_extents) / large_files_count
                      if large_files_count else 0)
         print(f"\ntest_get_extents() stats: {error_count:,} errors; {zero_extents_count:,} files with zero extents; {nonzero_extents_count:,} files with nonzero extents; {int(elapsed_seconds)} seconds; {int(files_per_second) if files_per_second else None} files per second")
-        print(f"large files: {large_files_count:,}; large files with zero extents: {len(large_files_zero_extents):,} ({zero_frac:.0%})")
+        print(
+            f"large files: {large_files_count:,}; large files with zero extents: {len(large_files_zero_extents):,} ({zero_frac:.0%})")
         self.assertGreater(zero_extents_count, 10)
         self.assertGreater(nonzero_extents_count, 100)
         # Print the first few heuristic exceptions for diagnostics.
         for path, fsize, extent_count in heuristic_exceptions[:5]:
-            print(f"  heuristic exception: {path} size={fsize:,} extents={extent_count}")
+            print(
+                f"  heuristic exception: {path} size={fsize:,} extents={extent_count}")
         self.assertLess(
             len(heuristic_exceptions), 6,
             f"Too many heuristic exceptions ({len(heuristic_exceptions)}): "
@@ -169,7 +169,8 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 f"Too many large files with zero extents "
                 f"({len(large_files_zero_extents)}): {large_files_zero_extents[:5]}")
         else:
-            print("skipping large-file extent check: volume appears WOF-compressed (Compact OS)")
+            print(
+                "skipping large-file extent check: volume appears WOF-compressed (Compact OS)")
 
     def test_get_file_basic_info(self):
         """Unit test for get_file_basic_info()"""
@@ -183,7 +184,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
         from bleachbit.General import run_external
         compact_cmd = ["compact", "/c", path]
-        (rc, stdout, stderr) = run_external(compact_cmd)
+        (rc, _, _) = run_external(compact_cmd)
         self.assertEqual(0, rc)
 
         file_handle = open_file(path)
@@ -194,7 +195,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         sparse_path = os.path.join(self.tempdir, 'sparse')
         self.write_file(sparse_path, b'test data')
         fsutil_cmd = ["fsutil", "sparse", "setflag", sparse_path]
-        (rc, stdout, stderr) = run_external(fsutil_cmd)
+        (rc, _, _) = run_external(fsutil_cmd)
         self.assertEqual(0, rc)
 
         file_handle = open_file(sparse_path)
@@ -377,8 +378,6 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 config["size"], _ = get_file_basic_info(
                     config["path"], config["handle"])
 
-                # SetFilePointer(config["handle"], 0, FILE_BEGIN)
-
             # Wipe files with swapped handles and extents
             # Wipe file1 using file2's handle and extents
             wipe_file_direct(file_configs[1]["handle"], file_configs[0]["extents"],
@@ -389,7 +388,6 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
             for config in file_configs:
                 if config["handle"]:
-                    # FlushFileBuffers(config["handle"])
                     close_file(config["handle"])
                     config["handle"] = None
 
@@ -425,10 +423,8 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         finally:
             for config in file_configs:
                 if config.get("handle"):
-                    try:
+                    with suppress(Exception):
                         close_file(config["handle"])
-                    except:
-                        pass
 
     def test_not_included(self):
         """Notify users there are more tests"""
@@ -460,7 +456,8 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             ([(0, 100)], [(0, 100)]),  # fully covered
             ([(0, 100)], [(40, 60)]),  # B in the middle of A
             ([(0, 100)], [(0, 30), (40, 100)]),  # multiple B ranges
-            ([(0, 10), (20, 30), (40, 50)], [(5, 25), (45, 60)]),  # multiple A and B
+            ([(0, 10), (20, 30), (40, 50)], [
+             (5, 25), (45, 60)]),  # multiple A and B
             ([(10, 20), (30, 40)], [(50, 60)]),  # B after all of A
         ]
         for a, b in cases:

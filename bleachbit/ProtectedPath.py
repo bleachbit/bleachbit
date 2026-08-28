@@ -127,7 +127,7 @@ def load_protected_paths(force_reload=False):
 
     _protected_paths_cache = protected_paths
     logger.debug("Loaded %d protected paths", len(protected_paths))
-    return protected_paths
+    return _protected_paths_cache
 
 
 def _check_exempt(user_path):
@@ -244,8 +244,9 @@ def calculate_impact(path):
                 file_count += 1
                 try:
                     total_size += FileUtilities.getsize(child)
-                except (OSError, PermissionError):
-                    pass
+                except (OSError, PermissionError) as e:
+                    logger.debug('skipping %s in the impact total: %s',
+                                 child, e)
     except (OSError, PermissionError) as e:
         logger.debug("Error calculating impact for %s: %s", path, e)
 

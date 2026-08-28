@@ -46,7 +46,7 @@ logger = logging.getLogger(__name__)
 
 def ret_keep_list(path):
     """Return information that this file matched by keep list"""
-    ret = {
+    return {
         # TRANSLATORS: This is the label in the log indicating a path
         # was skipped because it matches the keep list
         'label': _('Skip'),
@@ -54,7 +54,6 @@ def ret_keep_list(path):
         'n_special': 0,
         'path': path,
         'size': 0}
-    return ret
 
 
 class Delete:
@@ -137,7 +136,8 @@ class Function:
             label (str): Label for display in the UI
             preview_func (function, optional): Function to call in preview mode
 
-        func and preview_func take no arguments and return an integer.
+        func takes the path when path is set and no arguments when it is
+        None. preview_func always takes no arguments. Both return an integer.
         """
         self.path = path
         self.func = func
@@ -348,8 +348,6 @@ class Winreg:
         """Execute the Windows registry cleaner"""
         if not IS_WINDOWS:
             return
-        _str = None  # string representation
-        ret = None  # return value meaning 'deleted' or 'delete-able'
         if self.valuename:
             _str = f'{self.keyname}<{self.valuename}>'
             ret = bleachbit.Windows.delete_registry_value(self.keyname,

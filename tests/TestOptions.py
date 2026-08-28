@@ -20,7 +20,8 @@ from tests.common import pytest
 from tests import common
 import bleachbit.Options
 from bleachbit import IS_WINDOWS
-from bleachbit.Options import _option_index
+from bleachbit.Options import (
+    _option_index, _option_sort_key, _section_sort_key)
 from bleachbit.Log import is_debugging_enabled_via_cli
 
 
@@ -73,6 +74,96 @@ check_online_updates=True
         self.assertEqual(_option_index('3'), 3)
         self.assertEqual(_option_index('1_type'), 1)
         self.assertEqual(_option_index('2_path'), 2)
+
+    def _write_private_options_file(self, contents):
+        """Point options_file to a file of this test only and seed it
+
+        This keeps the seed out of the options file shared by the whole
+        test case.
+        """
+        filename = os.path.join(self.tempdir, f'{self.id()}.ini')
+        patcher = mock.patch('bleachbit.options_file', filename)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        with open(filename, 'w', encoding='utf-8-sig') as handle:
+            handle.write(contents)
+        return filename
+
+    @staticmethod
+    def _section_keys(contents, section):
+        """Return the keys of one section of an ini file"""
+        keys = []
+        in_section = False
+        for line in contents.splitlines():
+            if line.startswith('['):
+                in_section = line == f'[{section}]'
+            elif in_section and '=' in line:
+                keys.append(line.split('=')[0].strip())
+        return keys
+
+    def test_option_sort_key(self):
+        """Unit test for _option_sort_key"""
+        self.assertEqual(
+            sorted(['10_path', '2_path', '1_path'], key=_option_sort_key),
+            ['1_path', '2_path', '10_path'])
+        self.assertEqual(
+            sorted(['shred', 'debug', 'Auto'], key=_option_sort_key),
+            ['Auto', 'debug', 'shred'])
+        # numeric keys come before named keys
+        self.assertEqual(
+            sorted(['debug', '1'], key=_option_sort_key), ['1', 'debug'])
+
+    def test_sorted_file(self):
+        """Test that the file is written with sections and keys sorted"""
+        filename = self._write_private_options_file('''[tree]
+system.tmp = True
+firefox.cache = True
+[bleachbit]
+shred = False
+auto_hide = True
+''')
+        o = bleachbit.Options.Options()
+        o.set_list('sort_test', ['a'] * 11)
+        o.close()
+        with open(filename, 'r', encoding='utf-8-sig') as handle:
+            contents = handle.read()
+
+        sections = [line[1:-1]
+                    for line in contents.splitlines() if line.startswith('[')]
+        self.assertIn('bleachbit', sections)
+        self.assertIn('tree', sections)
+        self.assertEqual(sections, sorted(sections, key=_section_sort_key))
+
+        for section in sections:
+            keys = self._section_keys(contents, section)
+            self.assertEqual(keys, sorted(keys, key=_option_sort_key), section)
+
+        # a list must not be written as 1, 10, 2
+        self.assertEqual(self._section_keys(contents, 'list/sort_test'),
+                         [str(i) for i in range(11)])
+
+    def test_defaults_are_written(self):
+        """Test that untouched preferences are written to the file"""
+        filename = self._write_private_options_file(
+            '[bleachbit]\nshred = True\n')
+        o = bleachbit.Options.Options()
+        o.close()
+        with open(filename, 'r', encoding='utf-8-sig') as handle:
+            contents = handle.read()
+
+        keys = self._section_keys(contents, 'bleachbit')
+        for bkey in bleachbit.Options.boolean_keys:
+            self.assertIn(bkey, keys)
+        # an existing value must not be replaced by the default
+        self.assertIn('shred = True', contents)
+
+        o2 = bleachbit.Options.Options()
+        try:
+            self.assertTrue(o2.get('shred'))
+            for bkey in bleachbit.Options.boolean_keys:
+                self.assertIsInstance(o2.get(bkey), bool)
+        finally:
+            o2.close()
 
     def test_Options(self):
         """Unit test for class Options"""
@@ -157,7 +248,10 @@ check_online_updates=True
         with mock.patch('bleachbit.FileUtilities.os.path.islink',
                         side_effect=lambda p: p == filename):
             with self.assertRaises(OSError):
-                bleachbit.Options._open_config_write(filename)
+                # nested with() so a regression that returns a handle
+                # instead of raising does not leak it
+                with bleachbit.Options._open_config_write(filename):
+                    pass
         with open(filename, 'rb') as f:
             self.assertEqual(f.read(), b'keepme')
 

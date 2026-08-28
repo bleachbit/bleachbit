@@ -237,7 +237,8 @@ def _is_broken_xdg_desktop_application(config, desktop_pathname):
 
 def find_available_locales():
     """Returns a list of available locales using locale -a"""
-    rc, stdout, stderr = General.run_external([General.resolve_exe('locale'), '-a'])
+    rc, stdout, stderr = General.run_external(
+        [General.resolve_exe('locale'), '-a'])
     if rc == 0:
         return stdout.strip().split('\n')
 
@@ -346,7 +347,8 @@ def get_distribution_name_version_os_release():
         dist_name = os_release['ID']
         # ArchLinux has BUILD_ID='rolling' but not VERSION_ID.
         # Ubuntu has VERSION_ID like '26.04' but does not have BUILD_ID.
-        dist_version = os_release.get('VERSION_ID') or os_release.get('BUILD_ID')
+        dist_version = os_release.get(
+            'VERSION_ID') or os_release.get('BUILD_ID')
         if dist_version:
             return f"{dist_name} {dist_version}"
     return None
@@ -392,7 +394,7 @@ def get_distribution_name_version():
 def get_mount_points():
     """Return read-write mount points that may have trash"""
     try:
-        import psutil # pylint: disable=import-outside-toplevel
+        import psutil  # pylint: disable=import-outside-toplevel
     except ImportError:
         logger.warning('install psutil for better trash detection')
         return []
@@ -408,6 +410,7 @@ def get_mount_points():
     except (OSError, psutil.Error) as e:
         logger.warning("Error getting mount points: %s", e)
     return mount_points
+
 
 def get_purgeable_locales(locales_to_keep):
     """Returns all locales to be purged"""
@@ -473,6 +476,7 @@ def get_trash_paths():
             dirname = os.path.join(trash_dir, subdir)
             for filename in children_in_directory(dirname, True):
                 yield Command.Delete(filename)
+
 
 def is_unregistered_mime(mimetype):
     """Returns True if the MIME type is known to be unregistered. If
@@ -633,7 +637,8 @@ def apt_clean():
     """Run 'apt-get clean' and return the size in bytes of freed space"""
     old_size = get_apt_size()
     try:
-        run_cleaner_cmd(General.resolve_exe('apt-get'), ['clean'], '^unused regex$', ['^E: '])
+        run_cleaner_cmd(General.resolve_exe('apt-get'),
+                        ['clean'], '^unused regex$', ['^E: '])
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
@@ -657,7 +662,7 @@ def get_globs_size(paths):
             try:
                 total_size += FileUtilities.getsize(p)
             except FileNotFoundError:
-                pass
+                logger.debug('%s vanished while totalling sizes', p)
     return total_size
 
 
@@ -672,7 +677,8 @@ def yum_clean():
     args = ['--enablerepo=*', 'clean', 'all']
     invalid = ['You need to be root', 'Cannot remove rpmdb file']
     try:
-        run_cleaner_cmd(General.resolve_exe('yum'), args, '^unused regex$', invalid)
+        run_cleaner_cmd(General.resolve_exe('yum'),
+                        args, '^unused regex$', invalid)
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(str(part) for part in e.cmd)}':\n{e.output}") from e
@@ -898,25 +904,26 @@ def snapd_is_active():
         return _snapd_is_active_cache
     if not exe_exists(General.resolve_exe('snap')):
         _snapd_is_active_cache = False
-        return False
+        return _snapd_is_active_cache
     if not exe_exists(General.resolve_exe('systemctl')):
         _snapd_is_active_cache = False
-        return False
+        return _snapd_is_active_cache
     # When snap is installed but snapd is inactive, then `snap list --all`
     # or `snap version` may have a long delay, so we check the service status first.
     try:
         (rc, _stdout, _stderr) = General.run_external(
-            [General.resolve_exe('systemctl'), 'is-active', '--quiet', 'snapd.socket'],
+            [General.resolve_exe('systemctl'), 'is-active',
+             '--quiet', 'snapd.socket'],
             timeout=5)
     except subprocess.TimeoutExpired:
         logger.warning(
             'systemctl is-active snapd.socket timed out: it seems snap is installed but snapd is inactive')
         _snapd_is_active_cache = False
-        return False
+        return _snapd_is_active_cache
     except (FileNotFoundError, OSError) as exc:
         logger.warning('systemctl is-active snapd.socket failed: %s', exc)
         _snapd_is_active_cache = False
-        return False
+        return _snapd_is_active_cache
     _snapd_is_active_cache = rc == 0
     return _snapd_is_active_cache
 
@@ -1019,7 +1026,8 @@ def is_unix_display_protocol_wayland():
         return False
     # Wayland (Ubuntu 23.10) sets DISPLAY=:0 like x11, so do not check DISPLAY.
     try:
-        (rc, stdout, _stderr) = General.run_external([General.resolve_exe('loginctl')])
+        (rc, stdout, _stderr) = General.run_external(
+            [General.resolve_exe('loginctl')])
     except FileNotFoundError:
         return False
     if rc != 0:
@@ -1045,7 +1053,8 @@ def root_is_not_allowed_to_X_session():
     """
     assert IS_POSIX
     try:
-        result = General.run_external([General.resolve_exe('xhost')], clean_env=False)
+        result = General.run_external(
+            [General.resolve_exe('xhost')], clean_env=False)
         xhost_returned_error = result[0] == 1
         return xhost_returned_error
     except (FileNotFoundError, OSError) as exc:

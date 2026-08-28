@@ -209,8 +209,8 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
         process by either name.
         """
         proc = psutil.Process()
-        psutil_name = proc.name() # 'Process'
-        exe = proc.exe() # '/Library/Developer/.../Python' (long string)
+        psutil_name = proc.name()  # 'Process'
+        exe = proc.exe()  # '/Library/Developer/.../Python' (long string)
         exe_basename = os.path.basename(exe) if exe else psutil_name
         self.assertTrue(psutil_name, 'psutil did not return a process name')
 

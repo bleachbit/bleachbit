@@ -7,6 +7,9 @@ SRC = $(PY_SRC) $(UI_SRC)
 POTFILE = $(APP).pot
 ITS ?= /usr/share/gettext/its/metainfo.its
 PYTHON ?= python3
+# Quoted form for calling Python. Windows CI passes a backslash path that bash
+# mangles unquoted, so use this instead of $(PYTHON).
+PYTHON_CMD := "$(PYTHON)"
 
 
 .PHONY: refresh-po spelling local install clean all require-gettext tests
@@ -22,7 +25,7 @@ require-gettext:
 	fi
 
 cleanerml.pot: ../bleachbit/CleanerML.py ../cleaners/*xml
-	$(PYTHON) ../bleachbit.py --pot
+	$(PYTHON_CMD) ../bleachbit.py --pot
 
 desktop.pot: ../org.bleachbit.BleachBit.desktop
 	echo "#: ../org.bleachbit.BleachBit.desktop" > desktop.pot
@@ -50,7 +53,7 @@ metainfo.pot: ../org.bleachbit.BleachBit.metainfo.xml require-gettext
 	fi
 
 nsis.pot: ../windows/NsisInclude/NsisMultiUserLang.nsh ../windows/nsis_translations.py
-	$(PYTHON) ../windows/nsis_translations.py --pot
+	$(PYTHON_CMD) ../windows/nsis_translations.py --pot
 
 $(POTFILE): $(SRC) cleanerml.pot desktop.pot metainfo.pot nsis.pot require-gettext
 	@echo "* Generating $(POTFILE)"

@@ -41,7 +41,7 @@ def normalized_walk(top, **kwargs):
     """
     try:
         from scandir import walk
-    except:
+    except Exception:
         # there is a warning in FileUtilities, so don't warn again here
         from os import walk
     if IS_MAC:

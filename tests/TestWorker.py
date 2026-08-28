@@ -78,7 +78,8 @@ class ToctouAction(ActionProvider):
         # Create a file that physically exists at listing time.
         # The test mocks getsize() to raise FileNotFoundError for it,
         # simulating the file vanishing between listing and size check.
-        (fd, filename) = tempfile.mkstemp(prefix='bleachbit-test-worker-toctou-')
+        (fd, filename) = tempfile.mkstemp(
+            prefix='bleachbit-test-worker-toctou-')
         os.close(fd)
         ToctouAction.ghost_path = filename
         yield Command.Delete(filename)
@@ -172,7 +173,7 @@ class LockedAction(ActionProvider):
         from bleachbit.FileUtilities import getsize
         # Without admin privileges, this delete fails.
         yield Command.Delete(self.pathname)
-        assert (os.path.exists(self.pathname))
+        assert os.path.exists(self.pathname)
         fsize = getsize(self.pathname)
         if not fsize == 0:  # File should be truncated to 0 bytes
             raise RuntimeError('Locked file has size %dB (not 0B)' % fsize)
@@ -346,7 +347,8 @@ class WorkerTestCase(common.BleachbitTestCase):
         def sqlite_locked(_):
             raise sqlite3.OperationalError('database is locked')
 
-        cmd = Command.Function(path, sqlite_locked, 'Test SQLite database locked')
+        cmd = Command.Function(path, sqlite_locked,
+                               'Test SQLite database locked')
         worker = Worker(CLI.CliCallback(), True, {'test': ['option1']})
         with self.assertLogs('bleachbit.Worker', level='ERROR') as log_context:
             list(worker.execute(cmd, 'option1'))

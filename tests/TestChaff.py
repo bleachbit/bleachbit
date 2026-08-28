@@ -53,7 +53,8 @@ class ChaffTestCase(common.BleachbitTestCase):
             self.assertIsInstance(ret, bool)
             if not ret:
                 rmtree(tmp_dir, ignore_errors=True)
-                self.skipTest('download_models() failed, likely a transient network issue')
+                self.skipTest(
+                    'download_models() failed, likely a transient network issue')
 
         self.assertExists(con_path)
         self.assertExists(sub_path)

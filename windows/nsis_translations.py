@@ -60,12 +60,10 @@ LANGUAGE_MAP = [
     ('it', 'LANG_ITALIAN'),
     ('ja', 'LANG_JAPANESE'),
     ('ko', 'LANG_KOREAN'),
-    ('ku', 'LANG_KURDISH'),
     ('lv', 'LANG_LATVIAN'),
     ('lt', 'LANG_LITHUANIAN'),
     ('ms', 'LANG_MALAY'),
     ('nb', 'LANG_NORWEGIAN'),
-    ('nn', 'LANG_NORWEGIANNYNORSK'),
     ('pl', 'LANG_POLISH'),
     ('pt', 'LANG_PORTUGUESE'),
     ('pt_BR', 'LANG_PORTUGUESEBR'),
@@ -316,7 +314,7 @@ def write_nsis_pot():
         lines.append(f'msgid "{msgid}"\n')
         lines.append('msgstr ""\n\n')
 
-    with open(OUTPUT_POT, 'w', encoding='utf-8') as pot_file:
+    with open(OUTPUT_POT, 'w', encoding='utf-8', newline='\n') as pot_file:
         pot_file.write(''.join(lines))
 
 
@@ -372,7 +370,7 @@ def write_nsis_langfile():
                 f'\tLangString {key} ${{{lang_macro}}} "{_escape_nsis_text(text)}"\n')
         lines.append('!endif\n\n')
 
-    with open(OUTPUT_NSH, 'w', encoding='utf-8') as nsh_file:
+    with open(OUTPUT_NSH, 'w', encoding='utf-8', newline='\n') as nsh_file:
         nsh_file.write(''.join(lines))
 
 
@@ -557,7 +555,7 @@ def main():
     parser.add_argument('--pot', action='store_true',
                         help='Generate po/nsis.pot from NSIS English strings.')
     parser.add_argument('--generate', action='store_true',
-                        help='Generate NsisInclude/BleachBitLang.nsh from po/*.po.')
+                        help='Generate NsisInclude/NsisMultiUserLang.nsh from po/*.po.')
     parser.add_argument('--check-keys', action='store_true',
                         help='Check that TRANSLATION_HINTS keys exist in NSIS files.')
     parser.add_argument('--unittest', action='store_true',

@@ -459,7 +459,7 @@ class ProtectedPathTestCase(common.BleachbitTestCase):
                                 print(
                                     f'warning: {path} is protected by {result}')
                                 return
-                except:
+                except Exception:
                     continue
         option_counter = 0
         for key in sorted(backends):

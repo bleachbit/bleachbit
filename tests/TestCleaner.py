@@ -19,6 +19,7 @@ import bleachbit
 from bleachbit import IS_WINDOWS, IS_POSIX
 from bleachbit.Action import ActionProvider, Command
 from bleachbit.Cleaner import Cleaner, backends, create_simple_cleaner, simpler_cleaner_process_path, register_cleaners
+from bleachbit.FileUtilities import extended_path_undo
 from bleachbit.PathUtils import path_startswith
 
 from tests import common
@@ -297,21 +298,17 @@ class CleanerTestCase(common.BleachbitTestCase):
         # Directories shared across parallel pytest-xdist workers where
         # files may appear/vanish between discovery and validation
         # (TOCTOU).
-        # %temp% in volatile_dirs is redundant to the system.tmp, but
-        # %temp% covers Winapp2.ini `[Windows Temporary Files *]`.
-        # Its name and ID may change, so we check for it here by directory
-        # name instead. POSIX is included for symmetry.
-        volatile_dirs = []
-        if IS_WINDOWS:
-            volatile_dirs = [os.path.expandvars(r'%temp%'),]
-        else:
-            volatile_dirs = ['/tmp',]
+        # The system temporary directory covers Winapp2.ini
+        # `[Windows Temporary Files *]`, whose name and ID may change, so
+        # we check for it here by directory name.
+        volatile_dir = common.get_volatile_dir()
 
         def is_volatile(path):
             if not path:
                 return False
-            return any(path_startswith(path, d, case_sensitive=False)
-                       for d in volatile_dirs)
+            if IS_WINDOWS:
+                path = extended_path_undo(path)
+            return path_startswith(path, volatile_dir, case_sensitive=False)
 
         for key in sorted(backends):
             logger.debug("test_get_commands: key='%s'", key)

@@ -101,6 +101,23 @@ def _option_index(option_name):
     return int(option_name.split('_')[0])
 
 
+def _section_sort_key(section_name):
+    """Sort key for section names: alphabetical, ignoring case"""
+    return (section_name.lower(), section_name)
+
+
+def _option_sort_key(option_name):
+    """Sort key for option names within a section.
+
+    Keys with a numeric prefix (e.g. '2_path') are ordered by that number
+    so lists do not come out as 1, 10, 2.
+    """
+    prefix = option_name.split('_', 1)[0]
+    if prefix.isdigit():
+        return (0, int(prefix), option_name.lower(), option_name)
+    return (1, 0, option_name.lower(), option_name)
+
+
 def path_to_option(pathname):
     """Change a pathname to a .ini option name (a key)"""
     # On Windows change to lowercase and use backwards slashes.
@@ -212,6 +229,7 @@ class Options:
             return
         if not self.purged:
             self.__purge()
+        self.__sort()
 
         try:
             if not os.path.exists(bleachbit.options_dir):
@@ -233,6 +251,37 @@ class Options:
         else:
             self._dirty = False
 
+    def __sort(self):
+        """Sort sections and their keys so the file is easy to read
+
+        ConfigParser writes in insertion order, so reorder its sections
+        in place instead of building a copy, which would flatten any
+        [DEFAULT] section.
+        """
+        sections = self.config._sections
+        for section_name in sorted(sections, key=_section_sort_key):
+            section = sections.pop(section_name)
+            for option in sorted(section, key=_option_sort_key):
+                section[option] = section.pop(option)
+            sections[section_name] = section
+
+    def __apply_defaults(self):
+        """Store the default value of every preference not already set
+
+        This way the file shows all preferences, not only the ones the
+        user has changed.
+        """
+        changed = False
+        for option, meta in OPTION_DEFAULTS.items():
+            if not _platform_allows(meta):
+                continue
+            if self.config.has_option('bleachbit', option):
+                continue
+            self.config.set('bleachbit', option, str(meta['value']))
+            changed = True
+        if changed:
+            self.__schedule_flush()
+
     def __purge(self):
         """Clear out obsolete data"""
         self.purged = True
@@ -247,7 +296,7 @@ class Options:
             exists = False
             try:
                 exists = os.path.lexists(pathname)
-            except:
+            except Exception:
                 # this deals with corrupt keys
                 # https://www.bleachbit.org/forum/bleachbit-wont-launch-error-startup
                 logger.error(
@@ -291,6 +340,9 @@ class Options:
         """Automatically preserve the active language"""
         active_lang = bleachbit.Language.get_active_language_code()
         for lang_id in set([active_lang.split('_')[0], 'en']):
+            # TRANSLATORS: %s is a ISO language code of two or three letters.
+            # "Preserving" means the language's localization files will be
+            # kept and not deleted when cleaning.
             logger.info(_("Automatically preserving language %s."), lang_id)
             self.set_language(lang_id, True)
 
@@ -353,11 +405,10 @@ class Options:
         section = f"list/{option}"
         if not self.config.has_section(section):
             return None
-        values = [
+        return [
             self.config.get(section, opt)
             for opt in sorted(self.config.options(section), key=_option_index)
         ]
-        return values
 
     def get_paths(self, section):
         """Abstracts get_whitelist_paths and get_custom_paths"""
@@ -442,7 +493,7 @@ class Options:
             return False
         try:
             return self.config.getboolean('tree', option)
-        except:
+        except Exception:
             # in case of corrupt configuration (Launchpad #799130)
             logger.exception('Error in get_tree()')
             return False
@@ -495,12 +546,13 @@ class Options:
                 self.config.add_section("bleachbit")
             if not self.config.has_section("hashpath"):
                 self.config.add_section("hashpath")
+            self.__apply_defaults()
             self.__migrate_warning_preferences()
             if not self.config.has_section("list/shred_drives"):
                 from bleachbit.FileUtilities import guess_overwrite_paths
                 try:
                     self.set_list('shred_drives', guess_overwrite_paths())
-                except:
+                except Exception:
                     logger.exception(
                         _("Error when setting the default drives to shred."))
             # BleachBit upgrade or first start ever

@@ -8,6 +8,7 @@
 WindowInfo class and utility functions for GUI
 """
 
+import importlib.util
 import os
 import threading
 from enum import Enum
@@ -91,7 +92,8 @@ def get_clipboard_paths(clipboard=None, targets=None):
             target_name = target.name()
         except UnicodeDecodeError:
             has_unusable_target_name = True
-            logger.debug('Failed to decode clipboard target name', exc_info=True)
+            logger.debug(
+                'Failed to decode clipboard target name', exc_info=True)
         else:
             if target_name == 'Gdk.Atom':
                 has_unusable_target_name = True
@@ -245,9 +247,44 @@ def flush_gtk_events(max_iterations: int = 5):
         iterations += 1
 
 
+def resolve_icon_name(icon_name, fallback_name='image-missing'):
+    """Return ``icon_name`` if it resolves in the current icon theme.
+
+    ``Gtk.Image.new_from_icon_name`` and ``Gtk.Button.new_from_icon_name``
+    silently substitute a fallback icon when the requested name is not found
+    in the current icon theme, which makes missing icons hard to notice.
+    This helper checks the theme first, logs a warning when the icon is
+    missing, and returns ``fallback_name`` (the standard "image-missing"
+    icon) so the substitution is explicit.
+    """
+    theme = Gtk.IconTheme.get_default()
+    if theme is None:
+        logger.warning(
+            'No icon theme available, cannot validate icon: %s', icon_name)
+        return fallback_name
+    if not theme.has_icon(icon_name):
+        logger.warning('Icon not found in theme, falling back: %s', icon_name)
+        return fallback_name
+    return icon_name
+
+
+def load_icon_or_fallback(icon_name, size=None,
+                          fallback_name='image-missing'):
+    """Return a ``Gtk.Image`` for ``icon_name``, falling back if missing.
+
+    ``size`` is a ``Gtk.IconSize``, defaulting to ``Gtk.IconSize.MENU``
+    when None (resolved at call time, not import time).
+
+    See :func:`resolve_icon_name` for the fallback behavior.
+    """
+    if size is None:
+        size = Gtk.IconSize.MENU
+    return Gtk.Image.new_from_icon_name(
+        resolve_icon_name(icon_name, fallback_name), size)
+
+
 def notify(msg):
     """Show a popup-notification"""
-    import importlib.util
     if importlib.util.find_spec('plyer'):
         # On Windows, use Plyer.
         notify_plyer(msg)

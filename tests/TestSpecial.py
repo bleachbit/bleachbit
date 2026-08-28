@@ -670,8 +670,6 @@ CREATE TABLE moz_pages_w_icons (id INTEGER PRIMARY KEY, page_url TEXT NOT NULL, 
         FileUtilities.execute_sqlite3(places_path, places_sql)
         FileUtilities.execute_sqlite3(favicons_path, favicons_sql)
 
-        original_get = Special._get_sqlite_values
-
         def fake_get(path, sql, row_factory=None, parameters=()):
             if 'icon_url' in sql:
                 # First query: orphaned favicons. Inject a non-integer ID.
@@ -734,7 +732,7 @@ INSERT INTO "meta" VALUES('version','20');"""
         # Special characters check that the path is properly escaped as a
         # SQLite URI, not misparsed as query/fragment separators.
         basenames = ['test_get_sqlite_values.sqlite',
-                    'space in name.sqlite', 'hash#in#name#.sqlite']
+                     'space in name.sqlite', 'hash#in#name#.sqlite']
         if not IS_WINDOWS:
             basenames.append('question?mark.sqlite')
         for basename in basenames:
@@ -800,11 +798,65 @@ INSERT INTO "meta" VALUES('version','20');"""
 
                 os.unlink(filename)
 
-        # Test non-existing file
+        # Test non-existing file — should return False, not raise
         non_existing_file = os.path.join(self.tempdir, 'file_does_not_exist')
         self.assertFalse(Special.sqlite_table_exists(
             non_existing_file, 'table_does_not_exist'))
         self.assertNotExists(non_existing_file)
+
+    def test_sqlite_table_exists_permission_denied(self):
+        """sqlite_table_exists raises PermissionError when the file exists
+        but cannot be opened (e.g. antivirus blocking, exclusive lock).
+
+        Norton Antivirus block access, causing SQLITE_CANTOPEN
+        https://github.com/bleachbit/bleachbit/issues/2288
+        """
+        # Create a valid SQLite database
+        filename = os.path.join(
+            self.tempdir, 'test_permission_denied.sqlite')
+        sql = "CREATE TABLE cookies(host_key TEXT)"
+        FileUtilities.execute_sqlite3(filename, sql)
+        self.assertExists(filename)
+
+        # Simulate SQLITE_CANTOPEN
+        # 14: no extended variant
+        # 782: SQLITE_CANTOPEN_FULLPATH shares low byte 14
+        cantopen_exc = sqlite3.OperationalError(
+            'unable to open database file')
+        for errorcode in (14, 782):
+            cantopen_exc.sqlite_errorcode = errorcode
+
+            with mock.patch('sqlite3.connect',
+                            side_effect=cantopen_exc):
+                with self.assertRaises(PermissionError):
+                    Special.sqlite_table_exists(filename, 'cookies')
+
+        # Non-existing file with same mock should still return False
+        non_existing = os.path.join(self.tempdir, 'no_such_file.db')
+        with mock.patch('sqlite3.connect',
+                        side_effect=cantopen_exc):
+            self.assertFalse(
+                Special.sqlite_table_exists(non_existing, 'cookies'))
+
+    def test_sqlite_table_exists_other_operational_error(self):
+        """sqlite_table_exists returns False for OperationalError other
+        than SQLITE_CANTOPEN (e.g. SQLITE_BUSY)."""
+        filename = os.path.join(
+            self.tempdir, 'test_other_op_error.sqlite')
+        sql = "CREATE TABLE foo(id int)"
+        FileUtilities.execute_sqlite3(filename, sql)
+        self.assertExists(filename)
+
+        # SQLITE_BUSY (5) — should still return False, not raise
+        busy_exc = sqlite3.OperationalError('database is locked')
+        busy_exc.sqlite_errorcode = 5
+
+        with mock.patch('sqlite3.connect',
+                        side_effect=busy_exc):
+            self.assertFalse(
+                Special.sqlite_table_exists(filename, 'foo'))
+
+        os.unlink(filename)
 
     def test_sqlite_is_valid_database(self):
         """Unit test for _sqlite_is_valid_database()"""
@@ -812,7 +864,7 @@ INSERT INTO "meta" VALUES('version','20');"""
         # Special characters check that the path is properly escaped as a
         # SQLite URI, not misparsed as query/fragment separators.
         basenames = ['test_sqlite_is_valid_database.sqlite',
-                    'space in name.sqlite', 'hash#in#name#.sqlite']
+                     'space in name.sqlite', 'hash#in#name#.sqlite']
         if not IS_WINDOWS:
             basenames.append('question?mark.sqlite')
         for basename in basenames:

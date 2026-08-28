@@ -34,7 +34,7 @@ class DesktopMenuOptionsTestCase(common.BleachbitTestCase):
         with mock.patch.dict(os.environ, {'HOME': home}, clear=False), \
                 mock.patch.object(options, 'get', return_value=True), \
                 mock.patch('bleachbit.FileUtilities.os.path.islink',
-                          side_effect=lambda p: p == service_file):
+                           side_effect=lambda p: p == service_file):
             os.environ.pop('XDG_DATA_HOME', None)
             install_kde_service_menu_file()
         self.assertNotExists(service_file)

@@ -176,6 +176,22 @@ def set_temporary_env(env_var, env_value):
             os.environ[env_var] = original_value
 
 
+def get_volatile_dir():
+    """Return the volatile system temporary directory for TOCTOU tolerance.
+
+    Use tempfile.gettempdir() instead of a hardcoded '/tmp' (POSIX) or
+    '%temp%' (Windows) so custom TMPDIR/TMP/TEMP environments work.
+    gettempdir() prefers TMP over TEMP on Windows while winapp '%Temp%'
+    expands to TEMP, but conftest.py sets both identically, so the
+    difference is theoretical.
+    """
+    volatile_dir = tempfile.gettempdir().rstrip('/\\')
+    if not volatile_dir:
+        # TMPDIR=/ would rstrip to an empty prefix that matches every path
+        volatile_dir = os.sep
+    return volatile_dir
+
+
 class BleachbitTestCase(unittest.TestCase):
     """TestCase class with several convenience methods and asserts"""
     _patchers = []
@@ -386,7 +402,7 @@ class BleachbitTestCase(unittest.TestCase):
             # Python 3.4: on Windows os.path.[l]exists may return False when access is denied:
             # https://bugs.python.org/issue28075
             return True
-        except:
+        except Exception:
             return False
 
     #
@@ -465,7 +481,8 @@ class BleachbitTestCase(unittest.TestCase):
         """
         if text is not None:
             if contents != b'':
-                raise ValueError("write_file: `text` is exclusive to `contents`")
+                raise ValueError(
+                    "write_file: `text` is exclusive to `contents`")
             contents = text
             mode = 'w'
             encoding = 'utf-8'
@@ -616,7 +633,7 @@ def touch_file(filename):
         # Make the directory, if it does not exist.
         os.makedirs(dname)
     Path(filename).touch()
-    assert (os.path.exists(filename))
+    assert os.path.exists(filename)
     assert not is_normal_directory(filename)
 
 

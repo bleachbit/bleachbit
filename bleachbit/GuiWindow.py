@@ -20,7 +20,7 @@ from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.GuiStartup import get_startup_messages
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
 from bleachbit.GuiUtil import (clear_clipboard, detect_dark_background, get_font_size_from_name,
-                               get_window_info, notify, threaded)
+                               get_window_info, notify, resolve_icon_name, threaded)
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 from bleachbit.Wipe import detect_orphaned_wipe_files
@@ -772,7 +772,7 @@ class GUI(Gtk.ApplicationWindow):
         # notification for long-running process
         if self.start_time is None:
             return
-        elapsed = (time.time() - self.start_time)
+        elapsed = time.time() - self.start_time
         logger.debug('elapsed time: %d seconds', elapsed)
         if elapsed < 10 or self.is_active():
             return
@@ -1117,7 +1117,7 @@ class GUI(Gtk.ApplicationWindow):
 
         # create the preview button
         self.preview_button = Gtk.Button.new_from_icon_name(
-            'edit-find', icon_size)
+            resolve_icon_name('edit-find'), icon_size)
         self.preview_button.set_always_show_image(True)
         self.preview_button.connect(
             'clicked', lambda *dummy: self.preview_or_run_operations(False))
@@ -1125,14 +1125,14 @@ class GUI(Gtk.ApplicationWindow):
 
         # create the delete button
         self.run_button = Gtk.Button.new_from_icon_name(
-            'edit-clear-all', icon_size)
+            resolve_icon_name('edit-clear-all'), icon_size)
         self.run_button.set_always_show_image(True)
         self.run_button.connect("clicked", self.run_operations)
         box.add(self.run_button)
 
         # stop cleaning
         self.stop_button = Gtk.Button.new_from_icon_name(
-            'process-stop', icon_size)
+            resolve_icon_name('process-stop'), icon_size)
         self.stop_button.set_always_show_image(True)
         self.stop_button.set_sensitive(False)
         self.stop_button.connect('clicked', self.cb_stop_operations)

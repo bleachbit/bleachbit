@@ -62,6 +62,7 @@ def update_winapp2(url, hash_expected, append_text, cb_success):
         raise RuntimeError(f"{msg}: {msg2}")
 
     if download_url_to_fn(url, fn, hash_expected, on_error):
+        # TRANSLATORS: Status message after a successful winapp2.ini update.
         append_text(_('New winapp2.ini was downloaded.'))
         cb_success()
 
@@ -71,12 +72,15 @@ def update_dialog(parent, updates):
     # import these here to allow headless mode.
     from bleachbit.GtkShim import Gtk  # pylint: disable=import-outside-toplevel
     from bleachbit.GuiBasic import open_url  # pylint: disable=import-outside-toplevel
-    dlg = Gtk.Dialog(title=_("Update BleachBit"),
-                     transient_for=parent,
-                     modal=True,
-                     destroy_with_parent=True)
+    dlg = Gtk.Dialog(
+        # TRANSLATORS: Title of the software update dialog.
+        title=_("Update BleachBit"),
+        transient_for=parent,
+        modal=True,
+        destroy_with_parent=True)
     dlg.set_default_size(250, 125)
 
+    # TRANSLATORS: Message in the software update dialog.
     label = Gtk.Label(label=_("A new version is available."))
     dlg.vbox.pack_start(label, True, True, 0)
 
@@ -84,8 +88,10 @@ def update_dialog(parent, updates):
         box_update = Gtk.Box()
         # TRANSLATORS: %s expands to version such as '4.6.0'
         button_stable = Gtk.Button(_("Update to version %s") % ver)
+        # Bind url now: the callback runs after the loop, when url would
+        # otherwise be the last update's.
         button_stable.connect(
-            'clicked', lambda dummy: open_url(url, parent, False))
+            'clicked', lambda dummy, url=url: open_url(url, parent, False))
         button_stable.connect('clicked', lambda dummy: dlg.response(0))
         box_update.pack_start(button_stable, False, True, 10)
         dlg.vbox.pack_start(box_update, False, True, 0)
@@ -100,7 +106,10 @@ def update_dialog(parent, updates):
 
 
 def check_updates(check_beta, check_winapp2, append_text, cb_success):
-    """Check for updates via the Internet"""
+    """Check for updates via the Internet
+
+    Returns a list of (ver, url) pairs, empty when there is no update.
+    """
     url = bleachbit.update_check_url
     if 'windowsapp' in sys.executable.lower():
         url += '?windowsapp=1'
@@ -113,18 +122,19 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
         logger.debug('URL %s has IP address %s', url, get_ip_for_url(url))
         if HAVE_REQUESTS and hasattr(e, 'response') and e.response is not None:
             logger.debug(e.response.headers)
-        return ()
+        return []
     try:
         reject_xml_dtd(response.text, 'update XML')
         dom = xml.dom.minidom.parseString(response.text)
-    except:
+    except Exception:
         logger.exception(
             'The update information does not parse: %s', response.text)
-        return ()
+        return []
 
     def parse_updates(element):
+        """Return a (ver, url) pair, or None when there is nothing usable"""
         if not element:
-            return ()
+            return None
         ver = element[0].getAttribute('ver')
         child = element[0].firstChild
         url = child.data.strip() if child is not None and hasattr(child, 'data') else ''
@@ -132,7 +142,7 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
                 and url.lower().startswith('https://')):
             logger.warning('ignoring malformed update entry: ver=%r, url=%r',
                            ver, url)
-            return ()
+            return None
         return ver, url
 
     stable = parse_updates(dom.getElementsByTagName("stable"))
@@ -147,9 +157,9 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
     dom.unlink()
 
     if stable and beta and check_beta:
-        return (stable, beta)
+        return [stable, beta]
     if stable:
-        return (stable,)
+        return [stable]
     if beta and check_beta:
-        return (beta,)
-    return ()
+        return [beta]
+    return []

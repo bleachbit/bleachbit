@@ -144,7 +144,8 @@ class UnixTestCase(common.BleachbitTestCase):
                 0, "\n".join(mock_locales) + "\n", "")
             locales = find_available_locales()
             self.assertEqual(locales, mock_locales)
-            mock_run_external.assert_called_once_with([General.resolve_exe('locale'), '-a'])
+            mock_run_external.assert_called_once_with(
+                [General.resolve_exe('locale'), '-a'])
 
     @mock.patch('locale.getlocale')
     @mock.patch('bleachbit.Unix.find_available_locales')
@@ -368,7 +369,6 @@ PrefersNonDefaultGPU=false""")
             tmp.flush()
             self.assertFalse(is_broken_xdg_desktop(tmp.name))
 
-
     @common.skipIfWindows
     def test_get_trash_paths(self):
         """Unit test for get_trash_paths()"""
@@ -376,8 +376,8 @@ PrefersNonDefaultGPU=false""")
         for p in get_trash_paths():
             seen.append(p)
             self.assertExists(p.path)
-        self.assertEqual(len(seen), len(set(p.path for p in seen)), "Duplicate trash paths found")
-
+        self.assertEqual(len(seen), len(
+            set(p.path for p in seen)), "Duplicate trash paths found")
 
     @common.skipIfWindows
     def test_desktop_valid_exe(self):
@@ -419,7 +419,8 @@ PrefersNonDefaultGPU=false""")
         result = _is_broken_xdg_desktop_application(
             fake_config, "com.github.AppManager.desktop")
         self.assertFalse(result)
-        mock_exe_exists.assert_called_with('/home/user/Applications/AppManager')
+        mock_exe_exists.assert_called_with(
+            '/home/user/Applications/AppManager')
 
     @mock.patch('bleachbit.FileUtilities.exe_exists')
     def test_desktop_quoted_exe_path_containing_spaces(self, mock_exe_exists):
@@ -967,7 +968,8 @@ PrefersNonDefaultGPU=false""")
         bytes_freed = pacman_cache()
         self.assertEqual(bytes_freed, 42310000)
 
-        mock_run.assert_called_once_with([General.resolve_exe('paccache'), '-rk0'])
+        mock_run.assert_called_once_with(
+            [General.resolve_exe('paccache'), '-rk0'])
 
         # real paccache reports binary units (MiB), not decimal (M)
         mock_run.return_value = (
@@ -1191,7 +1193,7 @@ class LocalizationsTestCase(common.BleachbitTestCase):
                 locales.add_xml(child)
 
         recognized = set()
-        for (locale, specifier, path) in locales._paths.get_localizations('/'):
+        for (_locale, _specifier, path) in locales._paths.get_localizations('/'):
             recognized.add(path)
         return recognized
 

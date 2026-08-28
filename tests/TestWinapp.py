@@ -14,8 +14,8 @@ import shutil
 import stat
 import string
 import struct
-import tempfile
 import time
+from contextlib import suppress
 from unittest import mock
 
 from tests.common import pytest
@@ -24,31 +24,32 @@ from tests import common
 import bleachbit
 from bleachbit.Winapp import Winapp, detectos, detect_file, fnmatch_translate, list_winapp_files, section2option
 from bleachbit.Windows import detect_registry_key, parse_windows_build
-from bleachbit import IS_POSIX, IS_WINDOWS, logger
+from bleachbit import IS_WINDOWS, logger
+from bleachbit.FileUtilities import extended_path_undo
+from bleachbit.PathUtils import path_startswith
 
 if IS_WINDOWS:
     import winreg
+
 
 def _create_registry_keys(*key_paths):
     """Create registry keys, ignoring errors if they already exist"""
     if not IS_WINDOWS:
         return
     for key_path in key_paths:
-        try:
+        with suppress(OSError):
             hkey = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path)
             hkey.Close()
-        except OSError:
-            pass
+
 
 def _delete_registry_keys(*key_paths):
     """Delete registry keys, ignoring errors if they don't exist"""
     if not IS_WINDOWS:
         return
     for key_path in key_paths:
-        try:
+        with suppress(OSError):
             winreg.DeleteKey(winreg.HKEY_CURRENT_USER, key_path)
-        except OSError:
-            pass
+
 
 KEYFULL = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
 
@@ -56,14 +57,8 @@ KEYFULL = 'HKCU\\Software\\BleachBit\\DeleteThisKey'
 def get_winapp2():
     """Download and cache winapp2.ini.  Return local filename."""
     url = ("https://raw.githubusercontent.com/bleachbit/winapp2.ini"
-            "/refs/heads/master/Winapp2-BleachBit.ini")
-    tmpdir = None
-    if IS_POSIX:
-        tmpdir = '/tmp'
-    if IS_WINDOWS:
-        tmpdir = os.getenv('TMP')
-    if not tmpdir:
-        tmpdir = tempfile.gettempdir()
+           "/refs/heads/master/Winapp2-BleachBit.ini")
+    tmpdir = common.get_volatile_dir()
     fname = os.path.join(tmpdir, 'bleachbit_test_winapp2.ini')
     if os.path.exists(fname):
         age_seconds = time.time() - os.stat(fname)[stat.ST_MTIME]
@@ -82,12 +77,75 @@ class WinappTestCase(common.BleachbitTestCase):
 
     ini_fn = None
 
-    def run_all(self, cleaner, really_delete):
-        """Test all the cleaner options"""
+    def run_all(self, cleaner, really_delete, allow_volatile=False):
+        """Test all cleaner options, optionally tolerating volatile paths"""
+        volatile_dir = common.get_volatile_dir()
+
+        def is_volatile(path):
+            if not (allow_volatile and path):
+                return False
+            if IS_WINDOWS:
+                path = extended_path_undo(path)
+            return path_startswith(path, volatile_dir)
+
         for (option_id, __name) in cleaner.get_options():
             for cmd in cleaner.get_commands(option_id):
-                for result in cmd.execute(really_delete):
-                    common.validate_result(self, result, really_delete)
+                try:
+                    for result in cmd.execute(really_delete):
+                        common.validate_result(
+                            self, result, really_delete,
+                            allow_vanishing=is_volatile(result.get('path')))
+                except FileNotFoundError as e:
+                    # Tolerate vanished files in the volatile temporary directory.
+                    # FileNotFoundError may carry no filename (e.g. pywinerror -> OSError
+                    # conversions); tolerate it when allow_volatile is set.
+                    if not (allow_volatile and (e.filename is None or is_volatile(e.filename))):
+                        raise
+                    logger.debug('TOCTOU: file vanished: %s', e.filename)
+
+    def test_run_all_volatile(self):
+        """Allow paths in the volatile temporary directory to vanish"""
+        path = os.path.join(self.tempdir, 'vanished')
+        result = {'label': 'Delete', 'n_deleted': 1, 'n_special': 0,
+                  'path': path, 'size': 0}
+        cmd = mock.Mock()
+        cmd.execute.return_value = iter((result,))
+        cleaner = mock.Mock()
+        cleaner.get_options.return_value = (('option', 'name'),)
+        cleaner.get_commands.return_value = (cmd,)
+        self.run_all(cleaner, False, allow_volatile=True)
+
+        cmd.execute.return_value = iter((result,))
+        with self.assertRaises(AssertionError):
+            self.run_all(cleaner, False)
+
+        cmd.execute.side_effect = FileNotFoundError(2, 'vanished', path)
+        self.run_all(cleaner, False, allow_volatile=True)
+
+        with self.assertRaises(FileNotFoundError):
+            self.run_all(cleaner, False)
+
+        # Non-volatile paths must not be tolerated even when allow_volatile is set.
+        non_volatile_path = (r'C:\bleachbit_nonexistent_test_path'
+                             if IS_WINDOWS else '/bleachbit_nonexistent_test_path')
+        non_volatile_result = {'label': 'Delete', 'n_deleted': 1, 'n_special': 0,
+                               'path': non_volatile_path, 'size': 0}
+        cmd.execute.side_effect = None
+        cmd.execute.return_value = iter((non_volatile_result,))
+        with self.assertRaises(AssertionError):
+            self.run_all(cleaner, False, allow_volatile=True)
+
+        cmd.execute.side_effect = FileNotFoundError(2, 'vanished', non_volatile_path)
+        with self.assertRaises(FileNotFoundError):
+            self.run_all(cleaner, False, allow_volatile=True)
+
+        # FileNotFoundError may carry no filename (e.g. pywinerror -> OSError
+        # conversions); tolerate it when allow_volatile is set.
+        cmd.execute.side_effect = FileNotFoundError(2, 'vanished')
+        self.run_all(cleaner, False, allow_volatile=True)
+
+        with self.assertRaises(FileNotFoundError):
+            self.run_all(cleaner, False)
 
     @common.skipUnlessWindows
     def test_remote(self):
@@ -99,7 +157,7 @@ class WinappTestCase(common.BleachbitTestCase):
         else:
             winapps = Winapp(fname)
             for cleaner in winapps.get_cleaners():
-                self.run_all(cleaner, False)
+                self.run_all(cleaner, False, allow_volatile=True)
 
     def test_detectos(self):
         """Test detectos function"""
@@ -179,12 +237,15 @@ class WinappTestCase(common.BleachbitTestCase):
         # put ampersand in directory name to test
         # https://github.com/bleachbit/bleachbit/issues/308
         dirname = self.mkdtemp(prefix='bleachbit-test-winapp&')
-        fname1 = self.write_file(os.path.join(dirname, f1_filename or 'deleteme.log'), b'', 'wb')
+        fname1 = self.write_file(os.path.join(
+            dirname, f1_filename or 'deleteme.log'), b'', 'wb')
 
         dirname2 = self.mkdir(os.path.join(dirname, 'sub'))
-        fname2 = self.write_file(os.path.join(dirname2, 'deleteme.log'), b'', 'wb')
+        fname2 = self.write_file(os.path.join(
+            dirname2, 'deleteme.log'), b'', 'wb')
 
-        fbak = self.write_file(os.path.join(dirname, 'deleteme.bak'), b'', 'wb')
+        fbak = self.write_file(os.path.join(
+            dirname, 'deleteme.bak'), b'', 'wb')
 
         self.assertExists(fname1)
         self.assertExists(fname2)
@@ -542,40 +603,18 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
                         test_key_parent, test_key_child0,
                         test_key_child1, test_key_not_exc)
 
-    def test_untrusted_regkey_action(self):
-        """A RegKey action is ignored when winapp2.ini is untrusted"""
+    def test_regkey_action_kept(self):
+        """RegKey actions are kept wherever winapp2.ini lives"""
         self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-trust')
         with open(self.ini_fn, 'w', encoding='utf-8') as ini:
             ini.write('[someapp]\nLangSecRef=3021\n'
-                      f'FileKey1=%Temp%|bleachbit-test-does-not-exist.tmp\n'
+                      'FileKey1=%Temp%|bleachbit-test-does-not-exist.tmp\n'
                       f'RegKey1={KEYFULL}\n')
 
-        def action_classes(winapp):
-            cleaner = next(winapp.get_cleaners())
-            return [a.__class__.__name__ for (_option_id, a) in cleaner.actions]
-
-        trusted = action_classes(Winapp(self.ini_fn, trusted=True))
-        self.assertIn('Winreg', trusted)
-        self.assertIn('Delete', trusted)
-
-        # The delete action stays; only the winreg action is dropped
-        untrusted = action_classes(Winapp(self.ini_fn, trusted=False))
-        self.assertNotIn('Winreg', untrusted)
-        self.assertIn('Delete', untrusted)
-
-    def test_untrusted_regkey_warns_once_per_file(self):
-        """Ignored RegKey actions are summarized in one warning, not one per key"""
-        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-trust-log')
-        with open(self.ini_fn, 'w', encoding='utf-8') as ini:
-            for section in ('appone', 'apptwo'):
-                ini.write(f'[{section}]\nLangSecRef=3021\n')
-                for i in range(1, 11):
-                    ini.write(f'RegKey{i}={KEYFULL}{i}\n')
-
-        with self.assertLogs('bleachbit.Winapp', level='WARNING') as cm:
-            Winapp(self.ini_fn, trusted=False)
-        self.assertEqual(len(cm.output), 1)
-        self.assertIn('sections affected: 2', cm.output[0])
+        cleaner = next(Winapp(self.ini_fn).get_cleaners())
+        actions = [a.__class__.__name__ for (_option_id, a) in cleaner.actions]
+        self.assertIn('Winreg', actions)
+        self.assertIn('Delete', actions)
 
     def test_filekey_recurse_rejects_excessive_wildcards(self):
         """A FileKey RECURSE pattern with too many wildcards is rejected (ReDoS defense)"""
@@ -741,10 +780,10 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
             (r'C:\dir', r'C:\dir\file.txt', True),
             (r'C:\dir', r'C:\other\file.txt', False),
         )
-        for pattern, string, expected in cases:
-            msg = f'pattern={pattern!r} string={string!r}'
+        for pattern, text, expected in cases:
+            msg = f'pattern={pattern!r} string={text!r}'
             self.assertEqual(
-                bool(re.search(fnmatch_translate(pattern), string)),
+                bool(re.search(fnmatch_translate(pattern), text)),
                 expected,
                 msg)
 

@@ -116,7 +116,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
         try:
             logger.debug('os.getlogin() = %s', os.getlogin())
-        except:
+        except Exception:
             logger.exception('os.getlogin() raised exception')
 
         # Test that function doesn't modify global state
@@ -212,7 +212,7 @@ class GeneralTestCase(common.BleachbitTestCase):
         with mock.patch.object(General, 'get_real_uid', return_value=1000), \
                 mock.patch.object(os, 'chown') as mock_chown:
             for path in ('/root', '/root/', '/root/.ssh/authorized_keys',
-                        '/home/x/../../root', '/home/x/../../root/.bashrc'):
+                         '/home/x/../../root', '/home/x/../../root/.bashrc'):
                 with self.subTest(path=path):
                     chownself(path)
                     mock_chown.assert_not_called()
@@ -456,14 +456,16 @@ class GeneralTestCase(common.BleachbitTestCase):
             (rc, _, stderr) = run_external(
                 ['ls', '/doesnotexist'], clean_env=False)
             # GNU ls returns 2 for missing files, while BSD/macOS ls returns 1
-            self.assertIn(rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
+            self.assertIn(
+                rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
             self.assertIn('No such file', stderr)
 
             # Set parent environment to Spanish.
             with common.set_temporary_env('LC_ALL', 'es_MX.UTF-8'):
                 (rc, _, stderr) = run_external(
                     ['ls', '/doesnotexist'], clean_env=False)
-                self.assertIn(rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
+                self.assertIn(
+                    rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
                 if os.path.exists('/usr/share/locale-langpack/es/LC_MESSAGES/coreutils.mo'):
                     # Spanish language pack is installed.
                     self.assertIn('No existe el archivo', stderr)
@@ -472,7 +474,8 @@ class GeneralTestCase(common.BleachbitTestCase):
                 # should use English.
                 (rc, _, stderr) = run_external(
                     ['ls', '/doesnotexist'], clean_env=True)
-                self.assertIn(rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
+                self.assertIn(
+                    rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
                 self.assertIn('No such file', stderr)
 
     def test_run_external_invalid(self):

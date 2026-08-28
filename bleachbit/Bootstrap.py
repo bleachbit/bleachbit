@@ -14,7 +14,7 @@ import re
 import sys
 import warnings
 
-from bleachbit import IS_POSIX, IS_WINDOWS
+from bleachbit import IS_POSIX, IS_WINDOWS, logger
 
 # pylint: disable=invalid-name
 _bootstrapped = False
@@ -33,8 +33,8 @@ def _apply_fontconfig_backend_preference():
         from bleachbit.Options import options  # pylint: disable=import-outside-toplevel
         if options.get('use_fontconfig_backend'):
             os.environ['PANGOCAIRO_BACKEND'] = 'fc'
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug('could not read the fontconfig backend preference: %s', e)
 
 
 def check_wayland_and_root():
@@ -80,8 +80,8 @@ def _bootstrap_posix():
     if not os.getenv('USER'):
         try:
             envs['USER'] = getpass.getuser()
-        except (OSError, KeyError):
-            pass
+        except (OSError, KeyError) as e:
+            logger.debug('could not determine the user name: %s', e)
     for varname, value in envs.items():
         if not os.getenv(varname):
             os.environ[varname] = value
@@ -120,7 +120,8 @@ def _bootstrap_windows():
     try:
         modules = win32process.EnumProcessModules(-1)
     except Exception:
-        logger.exception('EnumProcessModules failed; skipping GDK_PIXBUF_MODULE_FILE')
+        logger.exception(
+            'EnumProcessModules failed; skipping GDK_PIXBUF_MODULE_FILE')
         modules = []
     for module in modules:
         try:
@@ -129,8 +130,27 @@ def _bootstrap_windows():
             continue
         if _PYTHON_DLL_RE.search(name):
             bindir = os.path.dirname(name)
+            pixbuf_dir = os.path.join(
+                bindir, 'lib', 'gdk-pixbuf-2.0', '2.10.0')
+            loaders_dir = os.path.join(pixbuf_dir, 'loaders')
             os.environ['GDK_PIXBUF_MODULE_FILE'] = os.path.join(
-                bindir, 'lib', 'gdk-pixbuf-2.0', '2.10.0', 'loaders.cache')
+                pixbuf_dir, 'loaders.cache')
+            # setup.py rewrites loader paths in loaders.cache to bare
+            # filenames (e.g. "pixbufloader-svg.dll"), so gdk-pixbuf needs
+            # GDK_PIXBUF_MODULEDIR to resolve them. Without it, gdk-pixbuf
+            # falls back to its compiled-in PIXBUF_LIBDIR (a CI-only path),
+            # and the external SVG pixbuf loader cannot be found, which
+            # prevents GTK from rendering SVG resources such as
+            # check-symbolic.svg from its GResource bundle.
+            # Only set it when the directory actually exists: in a
+            # non-packaged run (e.g. dev/test from vcpkg_installed) the
+            # loaders cache keeps absolute paths and the directory may not
+            # be needed, so avoid pointing gdk-pixbuf at a dangling path.
+            if os.path.isdir(loaders_dir):
+                os.environ['GDK_PIXBUF_MODULEDIR'] = loaders_dir
+            else:
+                logger.debug(
+                    'gdk-pixbuf loaders directory not found: %s', loaders_dir)
             break
 
 

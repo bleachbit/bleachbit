@@ -24,6 +24,7 @@ Basic GUI code
 # standard library
 import logging
 import os
+import re
 
 # local import
 from bleachbit import IS_POSIX, IS_WINDOWS
@@ -273,7 +274,6 @@ def open_url(url, parent_window=None, prompt=True):
         return
     if prompt:
         # find hostname
-        import re
         ret = re.search(r'^http(s)?://([a-z.]+)', url)
         if not ret:
             host = url

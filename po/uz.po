@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-16 16:46-0600\n"
+"POT-Creation-Date: 2026-08-21 05:26-0600\n"
 "PO-Revision-Date: 2023-10-28 04:16+0000\n"
 "Last-Translator: OtabekVaxobov <elot2017@mail.ru>\n"
 "Language-Team: Uzbek <https://hosted.weblate.org/projects/bleachbit/main/uz/"
@@ -20,278 +20,34 @@ msgstr ""
 "X-Generator: Weblate 5.2-dev\n"
 "X-Launchpad-Export-Date: 2015-11-29 21:20+0000\n"
 
-#: ../cleaners/adobe_reader.xml
-msgid "Document viewer"
-msgstr "Hujjat ko‘rsatkich"
-
-#: ../cleaners/adobe_reader.xml ../cleaners/amsn.xml ../cleaners/audacious.xml
-#: ../cleaners/beagle.xml ../cleaners/brave.xml ../cleaners/chromium.xml
-#: ../cleaners/claude.xml ../cleaners/discord.xml ../cleaners/emesene.xml
-#: ../cleaners/epiphany.xml ../cleaners/evolution.xml ../cleaners/exaile.xml
-#: ../cleaners/firefox.xml ../cleaners/flash.xml ../cleaners/geary.xml
-#: ../cleaners/gftp.xml ../cleaners/google_chrome.xml ../cleaners/gpodder.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/java.xml ../cleaners/kde.xml ../cleaners/librewolf.xml
-#: ../cleaners/liferea.xml ../cleaners/microsoft_edge.xml ../cleaners/miro.xml
-#: ../cleaners/nexuiz.xml ../cleaners/openoffice.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/pidgin.xml ../cleaners/rhythmbox.xml
-#: ../cleaners/safari.xml ../cleaners/seamonkey.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/slack.xml
-#: ../cleaners/smartftp.xml ../cleaners/thumbnails.xml
-#: ../cleaners/thunderbird.xml ../cleaners/tremulous.xml
-#: ../cleaners/vivaldi.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
-#: ../cleaners/waterfox.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/xine.xml ../cleaners/yahoo_messenger.xml ../cleaners/zen.xml
-#: ../cleaners/zoom.xml ../bleachbit/Cleaner.py
-msgid "Cache"
-msgstr "Kesh"
-
-#. TRANSLATORS: The description of what certain cleaning options do.
-#: ../cleaners/adobe_reader.xml ../cleaners/amsn.xml ../cleaners/apt.xml
-#: ../cleaners/audacious.xml ../cleaners/beagle.xml ../cleaners/claude.xml
-#: ../cleaners/dnf.xml ../cleaners/evolution.xml ../cleaners/exaile.xml
-#: ../cleaners/firefox.xml ../cleaners/flash.xml ../cleaners/geary.xml
-#: ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/java.xml ../cleaners/kde.xml ../cleaners/librewolf.xml
-#: ../cleaners/liferea.xml ../cleaners/miro.xml ../cleaners/nexuiz.xml
-#: ../cleaners/openoffice.xml ../cleaners/pacman.xml ../cleaners/palemoon.xml
-#: ../cleaners/pidgin.xml ../cleaners/rhythmbox.xml
-#: ../cleaners/secondlife_viewer.xml ../cleaners/smartftp.xml
-#: ../cleaners/thumbnails.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
-#: ../cleaners/waterfox.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/xine.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/yum.xml ../cleaners/zen.xml
-#: ../cleaners/zoom.xml ../bleachbit/Cleaner.py
-msgid "Delete the cache"
-msgstr "Keshni o‘chirish"
-
-#: ../cleaners/adobe_reader.xml ../cleaners/audacious.xml
-#: ../cleaners/filezilla.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/openoffice.xml ../cleaners/paint.xml ../cleaners/smartftp.xml
-#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml ../cleaners/winamp.xml
-#: ../cleaners/windows_explorer.xml ../cleaners/windows_media_player.xml
-#: ../cleaners/winzip.xml ../cleaners/wordpad.xml
-msgid "Most recently used"
-msgstr "So‘nggi ko‘p foydalanilgan"
-
-#: ../cleaners/adobe_reader.xml ../cleaners/audacious.xml ../cleaners/gedit.xml
-#: ../cleaners/gwenview.xml ../cleaners/kde.xml ../cleaners/openoffice.xml
-#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py
-msgid "Delete the list of recently used documents"
-msgstr "Yaqinda foydalanilgan hujjatlar ro‘yxatini o‘chirish"
-
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/bash.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
-#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/silverlight.xml
-#: ../cleaners/vuze.xml ../cleaners/windows_defender.xml ../cleaners/wine.xml
-#: ../cleaners/winetricks.xml ../cleaners/winrar.xml ../bleachbit/Cleaner.py
-msgid "Temporary files"
-msgstr "Vaqtinchalik fayllar"
-
-#: ../cleaners/adobe_reader.xml ../cleaners/amule.xml ../cleaners/bash.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/gimp.xml
-#: ../cleaners/google_earth.xml ../cleaners/kde.xml ../cleaners/silverlight.xml
-#: ../cleaners/vuze.xml ../cleaners/windows_defender.xml ../cleaners/wine.xml
-#: ../cleaners/winetricks.xml ../cleaners/winrar.xml ../bleachbit/Cleaner.py
-msgid "Delete the temporary files"
-msgstr "Vaqtinchalik fayllarni o‘chirish"
-
-#: ../cleaners/amsn.xml ../cleaners/discord.xml ../cleaners/emesene.xml
-#: ../cleaners/hexchat.xml ../cleaners/pidgin.xml ../cleaners/profanity.xml
-#: ../cleaners/skype.xml ../cleaners/slack.xml ../cleaners/yahoo_messenger.xml
-#: ../cleaners/zoom.xml
-msgid "Chat client"
-msgstr "Suhbat mijozlari"
-
-#: ../cleaners/amsn.xml ../cleaners/emesene.xml ../cleaners/hexchat.xml
-#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/skype.xml
-#: ../cleaners/yahoo_messenger.xml
-msgid "Chat logs"
-msgstr "Suhbat jurnallari"
-
-#: ../cleaners/amsn.xml ../cleaners/emesene.xml ../cleaners/hexchat.xml
-#: ../cleaners/pidgin.xml ../cleaners/seamonkey.xml ../cleaners/skype.xml
-#: ../cleaners/yahoo_messenger.xml
-msgid "Delete the chat logs"
-msgstr "Suhbat jurnallarini o‘chirish"
-
-#: ../cleaners/amule.xml ../cleaners/filezilla.xml ../cleaners/gftp.xml
-#: ../cleaners/smartftp.xml ../cleaners/transmission.xml ../cleaners/vuze.xml
-msgid "File transfer client"
-msgstr "Fayl ko‘chirish mijozi"
-
-#: ../cleaners/amule.xml ../cleaners/audacious.xml ../cleaners/claude.xml
-#: ../cleaners/easytag.xml ../cleaners/exaile.xml ../cleaners/gftp.xml
-#: ../cleaners/gpodder.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/miro.xml
-#: ../cleaners/profanity.xml ../cleaners/realplayer.xml
-#: ../cleaners/screenlets.xml ../cleaners/smartftp.xml
-#: ../cleaners/teamviewer.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
-#: ../cleaners/warzone2100.xml ../cleaners/windows_defender.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../bleachbit/Cleaner.py
-msgid "Logs"
-msgstr "Jurnallar"
-
-#: ../cleaners/amule.xml ../cleaners/audacious.xml ../cleaners/claude.xml
-#: ../cleaners/exaile.xml ../cleaners/gftp.xml ../cleaners/gpodder.xml
-#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/miro.xml ../cleaners/profanity.xml ../cleaners/realplayer.xml
-#: ../cleaners/screenlets.xml ../cleaners/smartftp.xml
-#: ../cleaners/teamviewer.xml ../cleaners/vscode.xml ../cleaners/vuze.xml
-#: ../cleaners/warzone2100.xml ../cleaners/windows_defender.xml
-#: ../cleaners/yahoo_messenger.xml ../cleaners/zoom.xml ../bleachbit/Cleaner.py
-msgid "Delete the logs"
-msgstr "Jurnallarni o‘chirish"
-
-#: ../cleaners/amule.xml
-#, fuzzy
-#| msgid "Download history"
-msgid "Known files history"
-msgstr "Yuklab olish tarixi"
-
-#: ../cleaners/amule.xml ../cleaners/d4x.xml ../cleaners/easytag.xml
-#: ../cleaners/filezilla.xml ../cleaners/gnome.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
-#: ../cleaners/links2.xml ../cleaners/mc.xml ../cleaners/nautilus.xml
-#: ../cleaners/realplayer.xml ../cleaners/tortoisesvn.xml
-#: ../cleaners/windows_defender.xml ../cleaners/winrar.xml
-msgid "Delete the usage history"
-msgstr "Foydalanish tarixini o‘chirish"
-
-#. http://wiki.amule.org/wiki/Friend
-#: ../cleaners/amule.xml
-msgid "Known clients and friends"
-msgstr ""
-
-#: ../cleaners/amule.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
-#: ../cleaners/firefox.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
-#: ../cleaners/vscode.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
-#: ../cleaners/windows_defender.xml ../cleaners/zen.xml
-msgid "Backup files"
-msgstr "Zahiralangan fayllar"
-
-#: ../cleaners/amule.xml ../cleaners/claude.xml ../cleaners/deepscan.xml
-#: ../cleaners/firefox.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
-#: ../cleaners/vscode.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
-#: ../cleaners/windows_defender.xml ../cleaners/zen.xml
-msgid "Delete the backup files"
-msgstr "Zahira fayllarini o‘chirish"
-
-#: ../cleaners/apt.xml ../cleaners/dnf.xml ../cleaners/pacman.xml
-#: ../cleaners/snap.xml ../cleaners/yum.xml
-msgid "Package manager"
-msgstr "Paket menejeri"
-
-#: ../cleaners/apt.xml
-msgid "Delete obsolete files"
-msgstr "Mutlaq fayllarni o‘chirish"
-
-#: ../cleaners/apt.xml
-msgid "Package lists"
-msgstr "Paket ro‘yxati"
-
-#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/realplayer.xml
-#: ../cleaners/vlc.xml ../cleaners/winamp.xml
-#: ../cleaners/windows_media_player.xml
+#: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
+#: ../cleaners/vlc.xml
 msgid "Media player"
 msgstr "Musiqa pleyeri"
 
-#: ../cleaners/bash.xml ../cleaners/fish.xml ../cleaners/zsh.xml
-msgid "Shell"
-msgstr "Terminal"
-
-#: ../cleaners/bash.xml ../cleaners/brave.xml ../cleaners/chromium.xml
-#: ../cleaners/d4x.xml ../cleaners/discord.xml ../cleaners/easytag.xml
-#: ../cleaners/elinks.xml ../cleaners/fish.xml ../cleaners/google_chrome.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/libreoffice.xml
-#: ../cleaners/links2.xml ../cleaners/mc.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/nautilus.xml ../cleaners/octave.xml ../cleaners/opera.xml
-#: ../cleaners/python.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
-#: ../cleaners/seamonkey.xml ../cleaners/slack.xml ../cleaners/sqlite3.xml
-#: ../cleaners/tortoisesvn.xml ../cleaners/vim.xml ../cleaners/vivaldi.xml
-#: ../cleaners/windows_defender.xml ../cleaners/winrar.xml ../cleaners/zsh.xml
-msgid "History"
-msgstr "Tarix"
-
-#: ../cleaners/bash.xml ../cleaners/fish.xml ../cleaners/octave.xml
-#: ../cleaners/python.xml ../cleaners/sqlite3.xml ../cleaners/zsh.xml
-msgid "Delete the command history"
-msgstr "Buyruq tarixini o‘chirish"
-
-#: ../cleaners/beagle.xml ../cleaners/recoll.xml
-msgid "Search tool"
-msgstr "Qidiruv asbobi"
-
-#: ../cleaners/beagle.xml ../cleaners/recoll.xml ../cleaners/thunderbird.xml
-msgid "Index"
-msgstr "Indeks"
-
-#: ../cleaners/beagle.xml ../cleaners/brave.xml ../cleaners/chromium.xml
-#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/firefox.xml
-#: ../cleaners/geary.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/profanity.xml
-#: ../cleaners/thunderbird.xml ../cleaners/transmission.xml
-#: ../cleaners/vivaldi.xml ../cleaners/vuze.xml ../cleaners/waterfox.xml
-#: ../cleaners/windows_defender.xml ../cleaners/zen.xml ../cleaners/zsh.xml
-msgid "Delete the files"
-msgstr "Fayllarni o‘chirish"
-
-#: ../cleaners/beagle.xml ../cleaners/gl-117.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/x11.xml
-msgid "Debug logs"
-msgstr "Tuzatish jurnallari"
-
-#: ../cleaners/beagle.xml ../cleaners/easytag.xml ../cleaners/gl-117.xml
-#: ../cleaners/microsoft_office.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/x11.xml
-msgid "Delete the debug logs"
-msgstr "Tuzatish jurnallarini o‘chirish"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/elinks.xml
-#: ../cleaners/epiphany.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/links2.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Web browser"
-msgstr "Veb brauzer"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/safari.xml ../cleaners/seamonkey.xml
-#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml
-msgid "Delete the web cache, which reduces time to display revisited pages"
-msgstr ""
-"Qayta tashrif buyurilgan saytlarga kirishni tezlshtiradigan veb keshni "
-"o‘chirish"
-
 #. TRANSLATORS: Sidebar label for the page managing browser cookies in
 #. the Preferences dialog.
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
-#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/flash.xml
+#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
-#: ../cleaners/seamonkey.xml ../cleaners/silverlight.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../bleachbit/GuiPreferences.py
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../bleachbit/GuiPreferences.py
 msgid "Cookies"
 msgstr "Kukilar"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
-#: ../cleaners/epiphany.xml ../cleaners/firefox.xml ../cleaners/flash.xml
+#: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/realplayer.xml ../cleaners/safari.xml
-#: ../cleaners/seamonkey.xml ../cleaners/silverlight.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
 #, fuzzy
 #| msgid ""
 #| "Delete cookies, which contain information such as web site preferences, "
@@ -303,39 +59,562 @@ msgstr ""
 "Vebsayt parametrlari, tasdiqdan o‘tkazish va shaxsiyatni aniqlashtirish kabi "
 "ma’lumotlarni o‘zida jamlagan kukilarni o‘chirish"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
+#: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
+#: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
+#: ../cleaners/safari.xml ../cleaners/fish.xml ../cleaners/chromium.xml
+#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
+#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
+#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
+#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
+#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/python.xml
+#: ../cleaners/vim.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/octave.xml
+msgid "History"
+msgstr "Tarix"
+
+#: ../cleaners/realplayer.xml ../cleaners/easytag.xml ../cleaners/filezilla.xml
+#: ../cleaners/gnome.xml ../cleaners/windows_defender.xml
+#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
+#: ../cleaners/libreoffice.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
+#: ../cleaners/amule.xml
+msgid "Delete the usage history"
+msgstr "Foydalanish tarixini o‘chirish"
+
+#. TRANSLATORS: Name of a cleaning option for Windows log files.
+#: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
+#: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
+#: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
+#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
+#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Logs"
+msgstr "Jurnallar"
+
+#. TRANSLATORS: Description of the Logs cleaning option.
+#: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
+#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
+#: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
+#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
+#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the logs"
+msgstr "Jurnallarni o‘chirish"
+
+#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
+#: ../cleaners/flash.xml
+msgid "Multimedia viewer"
+msgstr "Multimediya ko‘ruvchi"
+
+#. TRANSLATORS: Name of a cleaning option. Cache is a noun.
+#: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
+#: ../cleaners/librewolf.xml ../cleaners/openoffice.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
+#: ../cleaners/vivaldi.xml ../cleaners/yahoo_messenger.xml
+#: ../cleaners/pidgin.xml ../cleaners/secondlife_viewer.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/emesene.xml
+#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/epiphany.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
+#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
+#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/evolution.xml ../cleaners/seamonkey.xml
+#: ../cleaners/flash.xml ../cleaners/google_chrome.xml
+#: ../cleaners/tremulous.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/gftp.xml ../cleaners/kde.xml
+#: ../cleaners/vuze.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../bleachbit/Cleaner.py
+msgid "Cache"
+msgstr "Kesh"
+
+#. TRANSLATORS: The description of what certain cleaning options do.
+#: ../cleaners/xine.xml ../cleaners/dnf.xml ../cleaners/miro.xml
+#: ../cleaners/amsn.xml ../cleaners/librewolf.xml ../cleaners/openoffice.xml
+#: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml ../cleaners/yum.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
+#: ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/pacman.xml
+#: ../cleaners/waterfox.xml ../cleaners/nexuiz.xml ../cleaners/java.xml
+#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
+#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
+#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
+#: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
+#: ../cleaners/kde.xml ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+msgid "Delete the cache"
+msgstr "Keshni o‘chirish"
+
+#: ../cleaners/paint.xml ../cleaners/openoffice.xml
+#: ../cleaners/microsoft_office.xml ../cleaners/windows_media_player.xml
+#: ../cleaners/wordpad.xml ../cleaners/audacious.xml ../cleaners/filezilla.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
+#: ../cleaners/winamp.xml ../cleaners/adobe_reader.xml ../cleaners/winzip.xml
+#: ../cleaners/teamviewer.xml ../cleaners/vlc.xml
+msgid "Most recently used"
+msgstr "So‘nggi ko‘p foydalanilgan"
+
+#: ../cleaners/paint.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/windows_media_player.xml ../cleaners/wordpad.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
+#: ../cleaners/winamp.xml ../cleaners/winzip.xml ../cleaners/teamviewer.xml
+#: ../cleaners/vlc.xml
+msgid "Delete the most recently used list"
+msgstr "Eng so‘nggi foydalanilganlar ro‘yxatini o‘chirish"
+
+#: ../cleaners/dnf.xml ../cleaners/yum.xml ../cleaners/pacman.xml
+#: ../cleaners/apt.xml ../cleaners/snap.xml
+msgid "Package manager"
+msgstr "Paket menejeri"
+
+#: ../cleaners/dnf.xml
+msgid "Remove packages that were formerly dependencies"
+msgstr ""
+
+#: ../cleaners/dnf.xml
+msgid ""
+"Carefully review the list of packages that will be removed by running \"dnf "
+"list autoremove\"."
+msgstr ""
+
+#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/emesene.xml ../cleaners/slack.xml ../cleaners/hexchat.xml
+#: ../cleaners/zoom.xml ../cleaners/skype.xml ../cleaners/profanity.xml
+#: ../cleaners/discord.xml
+msgid "Chat client"
+msgstr "Suhbat mijozlari"
+
+#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
+#: ../cleaners/seamonkey.xml
+msgid "Chat logs"
+msgstr "Suhbat jurnallari"
+
+#: ../cleaners/amsn.xml ../cleaners/yahoo_messenger.xml ../cleaners/pidgin.xml
+#: ../cleaners/emesene.xml ../cleaners/hexchat.xml ../cleaners/skype.xml
+#: ../cleaners/seamonkey.xml
+msgid "Delete the chat logs"
+msgstr "Suhbat jurnallarini o‘chirish"
+
+#: ../cleaners/librewolf.xml ../cleaners/elinks.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/links2.xml ../cleaners/seamonkey.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml
+msgid "Web browser"
+msgstr "Veb brauzer"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
+#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+msgid "Backup files"
+msgstr "Zahiralangan fayllar"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/windows_defender.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/vscode.xml ../cleaners/claude.xml
+#: ../cleaners/deepscan.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+msgid "Delete the backup files"
+msgstr "Zahira fayllarini o‘chirish"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Crash reports"
 msgstr "Nosozlik hisobotlari"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
+#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/geary.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/windows_defender.xml ../cleaners/thunderbird.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml
+#: ../cleaners/google_chrome.xml ../cleaners/transmission.xml
+#: ../cleaners/profanity.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/vuze.xml ../cleaners/opera.xml
+msgid "Delete the files"
+msgstr "Fayllarni o‘chirish"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Form history"
 msgstr "Shakl tarixi"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/vivaldi.xml
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/internet_explorer.xml
+#, fuzzy
+#| msgid "Delete the search history"
+msgid "Saved form entries and search bar history"
+msgstr "Qidiruv tarixini o‘chirish"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Passwords"
+msgstr "Parollar"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid ""
+"A database of usernames and passwords as well as a list of sites that should "
+"not store passwords"
+msgstr ""
+"Parollar joylashmasligi kerak bo‘lgan saytlar ro‘yxati, foydalanuvchilar va "
+"parollar ma’lumot bazasi"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "This option will delete your saved passwords."
+msgstr "Ushbu tanlov saqlangan parollaringizni o‘chiradi."
+
+#: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/vivaldi.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/claude.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Session"
+msgstr "Seans"
+
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Previously open tabs and windows"
+msgstr ""
+
+#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Site data"
+msgstr ""
+
+#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
+#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
+msgstr ""
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Site preferences"
+msgstr "Sayt parametrlari"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+msgid "Settings for individual sites"
+msgstr "Alohida saytlar uchun sozlamalar"
+
+#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/konqueror.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+msgid "URL history"
+msgstr "URL tarixi"
+
+#: ../cleaners/librewolf.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+msgid "List of visited web pages"
+msgstr "Tashrif buyurilgan vebsahifalar ro‘yxati"
+
+#. TRANSLATORS: Vacuum is a verb.  The term is jargon
+#. from the SQLite database.  Microsoft Access uses
+#. the term 'Compact Database' (which you may translate
+#. instead).  Another synonym is 'defragment.'
+#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
+#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Action.py
+msgid "Vacuum"
+msgstr "Vakuum"
+
+#: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
+#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml
+msgid ""
+"Clean database fragmentation to reduce space and improve speed without "
+"removing any data"
+msgstr ""
+"Bo‘sh joyni tozalash va ma’lumotlarni o‘chirmasdan tezlikni oshirish uchun "
+"ma’lumotlar bazasini fragmentlashni tozalash"
+
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+msgid "Shell"
+msgstr "Terminal"
+
+#: ../cleaners/zsh.xml ../cleaners/bash.xml ../cleaners/fish.xml
+#: ../cleaners/sqlite3.xml ../cleaners/python.xml ../cleaners/octave.xml
+msgid "Delete the command history"
+msgstr "Buyruq tarixini o‘chirish"
+
+#: ../cleaners/openoffice.xml ../cleaners/microsoft_office.xml
+#: ../cleaners/libreoffice.xml
+msgid "Office suite"
+msgstr "Ofis to‘plami"
+
+#. TRANSLATORS: Description of the Recent documents list cleaning option.
+#: ../cleaners/openoffice.xml ../cleaners/audacious.xml
+#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
+#: ../cleaners/adobe_reader.xml ../cleaners/gedit.xml ../cleaners/kde.xml
+#: ../bleachbit/Cleaner.py
+msgid "Delete the list of recently used documents"
+msgstr "Yaqinda foydalanilgan hujjatlar ro‘yxatini o‘chirish"
+
+#: ../cleaners/rhythmbox.xml
+msgid "Database"
+msgstr ""
+
+#: ../cleaners/rhythmbox.xml
+msgid ""
+"Delete the database, which contains information such as play count and last "
+"played"
+msgstr ""
+
+#: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/x11.xml ../cleaners/gl-117.xml
+msgid "Debug logs"
+msgstr "Tuzatish jurnallari"
+
+#: ../cleaners/microsoft_office.xml ../cleaners/beagle.xml
+#: ../cleaners/secondlife_viewer.xml ../cleaners/easytag.xml
+#: ../cleaners/x11.xml ../cleaners/gl-117.xml
+msgid "Delete the debug logs"
+msgstr "Tuzatish jurnallarini o‘chirish"
+
+#. TRANSLATORS: Name of a cleaning option for temporary files.
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
+#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
+msgid "Temporary files"
+msgstr "Vaqtinchalik fayllar"
+
+#. TRANSLATORS: Description of the Temporary files cleaning option.
+#: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
+#: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
+#: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
+#: ../cleaners/claude.xml ../cleaners/deepscan.xml ../cleaners/winrar.xml
+#: ../cleaners/amule.xml ../cleaners/kde.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
+msgid "Delete the temporary files"
+msgstr "Vaqtinchalik fayllarni o‘chirish"
+
+#: ../cleaners/beagle.xml ../cleaners/recoll.xml
+msgid "Search tool"
+msgstr "Qidiruv asbobi"
+
+#: ../cleaners/beagle.xml ../cleaners/thunderbird.xml ../cleaners/recoll.xml
+msgid "Index"
+msgstr "Indeks"
+
+#: ../cleaners/elinks.xml
+msgid "Delete the cookies, visited URLs, and search history"
+msgstr "Kukilar, ochilgan URL’lar va qidiruv tarixini tozalash"
+
+#: ../cleaners/wordpad.xml
+msgid "Word processor"
+msgstr ""
+
+#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/epiphany.xml
+#: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
+#: ../cleaners/brave.xml ../cleaners/seamonkey.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
+msgid "Delete the web cache, which reduces time to display revisited pages"
+msgstr ""
+"Qayta tashrif buyurilgan saytlarga kirishni tezlshtiradigan veb keshni "
+"o‘chirish"
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 #, fuzzy
 #| msgid "A history of forms entered in web sites"
 msgid "A history of forms entered in websites"
 msgstr "Vebsahifalarga kiritilgan shakllar tarixi"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/slack.xml ../cleaners/vivaldi.xml
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/slack.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
 msgstr ""
 "Ochilgan saytlar, yuklab olishlar va nishonchalarni o‘zida jamlagan tarixni "
 "o‘chirish"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+msgid "Sync"
+msgstr ""
+
+#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+msgid "Delete the sync data (including web apps) and sign out of the browser"
+msgstr ""
+
+#: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
+#: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
+#: ../cleaners/gl-117.xml ../cleaners/tremulous.xml
+msgid "Game"
+msgstr "O‘yin"
+
+#. This software edits metadata tags, such as title and artist, in audio files
+#: ../cleaners/easytag.xml
+msgid "Audio files tagger"
+msgstr "Audio fayllarni belgilagich"
+
+#: ../cleaners/journald.xml
+#, fuzzy
+#| msgid "System information"
+msgid "System journals"
+msgstr "Tizim ma’lumoti"
+
+#: ../cleaners/journald.xml
+#, fuzzy
+#| msgid "Delete old system logs"
+msgid "Clean old system journals"
+msgstr "Eski tizim jurnallarini o‘chirish"
+
+#: ../cleaners/emesene.xml
+msgid "Delete the avatars and emoticons cache"
+msgstr "Avatar va hissiyotni ifodalovchi rasmchalar keshini o‘chirish"
+
+#: ../cleaners/filezilla.xml ../cleaners/smartftp.xml
+#: ../cleaners/transmission.xml ../cleaners/gftp.xml ../cleaners/amule.xml
+#: ../cleaners/vuze.xml
+msgid "File transfer client"
+msgstr "Fayl ko‘chirish mijozi"
+
+#: ../cleaners/epiphany.xml
+msgid "Places"
+msgstr "Joylar"
+
+#: ../cleaners/epiphany.xml
+#, fuzzy
+#| msgid ""
+#| "A database of URLs including bookmarks, favicons, and a history of "
+#| "visited web sites"
+msgid ""
+"A database of URLs including bookmarks, favicons, and a history of visited "
+"websites"
+msgstr ""
+"Xatcho‘plar, nishonchalar va tashrif buyurilgan vebsahifalar tarixini o‘zida "
+"jamlagan URL’lar ma’lumot bazasi"
+
+#: ../cleaners/epiphany.xml
+msgid "This option deletes all bookmarks."
+msgstr "Ushbu tanlov barcha xatcho‘plarni o‘chiradi."
+
+#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
+msgid "Downloaded podcasts"
+msgstr "Yuklab olingan podkastlar"
+
+#: ../cleaners/gpodder.xml ../cleaners/exaile.xml
+msgid "Delete downloaded podcasts"
+msgstr "Yuklab olingan podkastlarni o‘chirish"
+
+#: ../cleaners/geary.xml ../cleaners/thunderbird.xml ../cleaners/evolution.xml
+msgid "Email client"
+msgstr "E-pochta mijozi"
+
+#: ../cleaners/geary.xml
+msgid "Attachments"
+msgstr ""
+
+#: ../cleaners/geary.xml
+msgid "Sync conflict"
+msgstr ""
+
+#: ../cleaners/geary.xml ../cleaners/deepscan.xml
+msgid "This option is slow."
+msgstr "Ushbu tanlov sekin."
+
+#: ../cleaners/wine.xml
+msgid "Compatibility layer for Windows software"
+msgstr "Windows dasturiy ta’minoti uchun mos qatlam"
+
+#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
+msgid "Thumbnails"
+msgstr "Nishonchalar"
+
+#: ../cleaners/thumbnails.xml
+msgid "Icons for files on the system"
+msgstr "Tizimdagi fayllar uchun nishonchalar"
+
+#: ../cleaners/gnome.xml ../cleaners/kde.xml
+msgid "Desktop environment"
+msgstr "Ish stoli muhiti"
+
+#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
+#. In Windows 'Run' is the dialog in the Start menu
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+msgid "Run"
+msgstr "Bajarish"
+
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/google_toolbar.xml
+msgid "Search history"
+msgstr "Qidiruv tarixi"
+
+#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
+#: ../cleaners/google_toolbar.xml
+msgid "Delete the search history"
+msgstr "Qidiruv tarixini o‘chirish"
+
+#: ../cleaners/konqueror.xml
+msgid "Current session"
+msgstr "Joriy seans"
+
+#: ../cleaners/konqueror.xml
+msgid "Delete the current session"
+msgstr "Joriy seansni o‘chirish"
+
+#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 msgid "Search engines"
 msgstr "Qidiruv tizimlari"
@@ -344,7 +623,7 @@ msgstr "Qidiruv tizimlari"
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
 #. 'Factory' means a search engine that is installed by default 'from the factory,' but this is different than a 'default search engine' https://lists.launchpad.net/launchpad-translators/msg00283.html
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
+#: ../cleaners/chromium.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml
 msgid ""
 "Reset the search engine usage history and delete non-factory search engines, "
@@ -353,119 +632,97 @@ msgstr ""
 "Qidiruv tizimida foydalanilgan tarixni tiklash va ba’zi avtomatik qo‘shilgan "
 "qidiruv tizimlarini o‘chirish"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/claude.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/zsh.xml
-msgid "Session"
-msgstr "Seans"
+#: ../cleaners/windows_explorer.xml ../cleaners/nautilus.xml ../cleaners/mc.xml
+msgid "File manager"
+msgstr "Fayl menejeri"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml
-msgid "Previously open tabs and windows"
-msgstr ""
+#. TRANSLATORS: Name of a cleaning option for the history of recently used files.
+#: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
+#: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py
+msgid "Recent documents list"
+msgstr "So‘nggi foydalanilgan hujatlar ro‘yxati"
 
-#. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Site data"
-msgstr ""
-
-#. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
-msgstr ""
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/vivaldi.xml
-msgid "Sync"
-msgstr ""
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/vivaldi.xml
-msgid "Delete the sync data (including web apps) and sign out of the browser"
-msgstr ""
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Passwords"
-msgstr "Parollar"
-
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/windows_explorer.xml
 msgid ""
-"A database of usernames and passwords as well as a list of sites that should "
-"not store passwords"
+"This option will reset pinned locations in Quick Access to their defaults."
 msgstr ""
-"Parollar joylashmasligi kerak bo‘lgan saytlar ro‘yxati, foydalanuvchilar va "
-"parollar ma’lumot bazasi"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/epiphany.xml
-#: ../cleaners/firefox.xml ../cleaners/google_chrome.xml
-#: ../cleaners/librewolf.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/palemoon.xml ../cleaners/thunderbird.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "This option will delete your saved passwords."
-msgstr "Ushbu tanlov saqlangan parollaringizni o‘chiradi."
+#: ../cleaners/windows_explorer.xml
+#, fuzzy
+#| msgid "Shell"
+msgid "Shellbags"
+msgstr "Terminal"
 
-#. TRANSLATORS: Vacuum is a verb.  The term is jargon
-#. from the SQLite database.  Microsoft Access uses
-#. the term 'Compact Database' (which you may translate
-#. instead).  Another synonym is 'defragment.'
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
-#: ../cleaners/firefox.xml ../cleaners/geary.xml ../cleaners/google_chrome.xml
-#: ../cleaners/gpodder.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/yum.xml ../cleaners/zen.xml ../bleachbit/Action.py
-msgid "Vacuum"
-msgstr "Vakuum"
+#: ../cleaners/windows_explorer.xml
+msgid "Delete the usage date, window position, and other data for folders"
+msgstr ""
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/discord.xml
-#: ../cleaners/firefox.xml ../cleaners/geary.xml ../cleaners/google_chrome.xml
-#: ../cleaners/gpodder.xml ../cleaners/librewolf.xml ../cleaners/liferea.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/safari.xml ../cleaners/slack.xml
-#: ../cleaners/thunderbird.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/yum.xml ../cleaners/zen.xml
+#: ../cleaners/windows_explorer.xml
+msgid "This will reset the position of desktop icons."
+msgstr ""
+
+#: ../cleaners/windows_explorer.xml
+msgid "This will restart Windows Explorer."
+msgstr ""
+
+#: ../cleaners/windows_defender.xml
+msgid "Anti-virus"
+msgstr "Antivirus"
+
+#: ../cleaners/windows_defender.xml
+msgid "Quarantine"
+msgstr ""
+
+#: ../cleaners/thunderbird.xml
 msgid ""
-"Clean database fragmentation to reduce space and improve speed without "
-"removing any data"
+"Deleting the index will reset the configuration of columns in the message "
+"list."
 msgstr ""
-"Bo‘sh joyni tozalash va ma’lumotlarni o‘chirmasdan tezlikni oshirish uchun "
-"ma’lumotlar bazasini fragmentlashni tozalash"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Site preferences"
-msgstr "Sayt parametrlari"
+#: ../cleaners/thunderbird.xml
+msgid "Session restore"
+msgstr "Tiklash seansi"
 
-#: ../cleaners/brave.xml ../cleaners/chromium.xml ../cleaners/firefox.xml
-#: ../cleaners/google_chrome.xml ../cleaners/librewolf.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
-#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "Settings for individual sites"
-msgstr "Alohida saytlar uchun sozlamalar"
+#: ../cleaners/thunderbird.xml
+msgid "Restores the previous session when the browser next starts"
+msgstr ""
+
+#: ../cleaners/apt.xml
+msgid "Delete obsolete files"
+msgstr "Mutlaq fayllarni o‘chirish"
+
+#: ../cleaners/apt.xml
+msgid "Package lists"
+msgstr "Paket ro‘yxati"
+
+#. Cleaner description for vim, VS Code, etc.
+#: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
+msgid "Editor"
+msgstr "Muharrir"
+
+#: ../cleaners/x11.xml
+msgid "Windowing system"
+msgstr ""
+
+#: ../cleaners/gimp.xml
+msgid "Graphics editor"
+msgstr "Grafika muharriri"
+
+#: ../cleaners/snap.xml
+msgid "Disabled"
+msgstr ""
+
+#: ../cleaners/snap.xml
+msgid "Remove disabled packages"
+msgstr ""
+
+#: ../cleaners/adobe_reader.xml
+msgid "Document viewer"
+msgstr "Hujjat ko‘rsatkich"
+
+#: ../cleaners/nautilus.xml
+msgid "Custom folders will be reset."
+msgstr "Boshqa jildlar tiklanadi."
 
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
@@ -510,10 +767,6 @@ msgstr "Chuqur tekshirish"
 msgid "Clean files widely scattered across the disk"
 msgstr ""
 
-#: ../cleaners/deepscan.xml ../cleaners/geary.xml
-msgid "This option is slow."
-msgstr "Ushbu tanlov sekin."
-
 #: ../cleaners/deepscan.xml
 msgid "Inspect the preview for any files you want to keep."
 msgstr ""
@@ -534,142 +787,39 @@ msgstr ""
 msgid "VIM swap files across system"
 msgstr ""
 
-#: ../cleaners/discord.xml
+#: ../cleaners/zoom.xml
+msgid "Recordings"
+msgstr ""
+
+#: ../cleaners/zoom.xml
 #, fuzzy
-#| msgid "Delete the web cache, which reduces time to display revisited pages"
-msgid ""
-"Delete the web cache, which reduces time to display revisited pages. This "
-"also clears favorited GIFs."
-msgstr ""
-"Qayta tashrif buyurilgan saytlarga kirishni tezlshtiradigan veb keshni "
-"o‘chirish"
+#| msgid "Delete the list of game servers"
+msgid "Delete the audio and video recordings"
+msgstr "O‘yin serverlari ro‘yxatini o‘chirish"
 
-#: ../cleaners/dnf.xml
-msgid "Remove packages that were formerly dependencies"
-msgstr ""
+#: ../cleaners/recoll.xml
+msgid "Delete the search index, a database of words and the files they contain"
+msgstr "Indeks, so‘zlar va ulardagi fayllar ma’lumot bazasini o‘chirish"
 
-#: ../cleaners/dnf.xml
-msgid ""
-"Carefully review the list of packages that will be removed by running \"dnf "
-"list autoremove\"."
-msgstr ""
+#: ../cleaners/skype.xml
+msgid "Installers"
+msgstr "O‘rnatkichlar"
 
-#. This software edits metadata tags, such as title and artist, in audio files
-#: ../cleaners/easytag.xml
-msgid "Audio files tagger"
-msgstr "Audio fayllarni belgilagich"
+#: ../cleaners/skype.xml
+msgid "Delete cached patches and installers"
+msgstr "Keshlangan to‘g‘rilanishlar va o‘rnatkichlarni o‘chirish"
 
-#: ../cleaners/elinks.xml
-msgid "Delete the cookies, visited URLs, and search history"
-msgstr "Kukilar, ochilgan URL’lar va qidiruv tarixini tozalash"
+#: ../cleaners/seamonkey.xml ../cleaners/internet_explorer.xml
+msgid "Download history"
+msgstr "Yuklab olish tarixi"
 
-#: ../cleaners/emesene.xml
-msgid "Delete the avatars and emoticons cache"
-msgstr "Avatar va hissiyotni ifodalovchi rasmchalar keshini o‘chirish"
+#: ../cleaners/seamonkey.xml
+msgid "List of files downloaded"
+msgstr "Yuklab olingan fayllar ro‘yxati"
 
-#: ../cleaners/epiphany.xml
-msgid "Places"
-msgstr "Joylar"
-
-#: ../cleaners/epiphany.xml
-#, fuzzy
-#| msgid ""
-#| "A database of URLs including bookmarks, favicons, and a history of "
-#| "visited web sites"
-msgid ""
-"A database of URLs including bookmarks, favicons, and a history of visited "
-"websites"
-msgstr ""
-"Xatcho‘plar, nishonchalar va tashrif buyurilgan vebsahifalar tarixini o‘zida "
-"jamlagan URL’lar ma’lumot bazasi"
-
-#: ../cleaners/epiphany.xml
-msgid "This option deletes all bookmarks."
-msgstr "Ushbu tanlov barcha xatcho‘plarni o‘chiradi."
-
-#: ../cleaners/evolution.xml ../cleaners/geary.xml ../cleaners/thunderbird.xml
-msgid "Email client"
-msgstr "E-pochta mijozi"
-
-#: ../cleaners/exaile.xml ../cleaners/gpodder.xml
-msgid "Downloaded podcasts"
-msgstr "Yuklab olingan podkastlar"
-
-#: ../cleaners/exaile.xml ../cleaners/gpodder.xml
-msgid "Delete downloaded podcasts"
-msgstr "Yuklab olingan podkastlarni o‘chirish"
-
-#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/librewolf.xml ../cleaners/palemoon.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml
-#, fuzzy
-#| msgid "Delete the search history"
-msgid "Saved form entries and search bar history"
-msgstr "Qidiruv tarixini o‘chirish"
-
-#: ../cleaners/firefox.xml ../cleaners/konqueror.xml ../cleaners/librewolf.xml
-#: ../cleaners/palemoon.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "URL history"
-msgstr "URL tarixi"
-
-#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/konqueror.xml ../cleaners/librewolf.xml ../cleaners/palemoon.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-msgid "List of visited web pages"
-msgstr "Tashrif buyurilgan vebsahifalar ro‘yxati"
-
-#: ../cleaners/flash.xml ../cleaners/miro.xml ../cleaners/silverlight.xml
-#: ../cleaners/xine.xml
-msgid "Multimedia viewer"
-msgstr "Multimediya ko‘ruvchi"
-
-#: ../cleaners/geary.xml
-msgid "Attachments"
-msgstr ""
-
-#: ../cleaners/geary.xml
-msgid "Sync conflict"
-msgstr ""
-
-#. Cleaner description for vim, VS Code, etc.
-#: ../cleaners/gedit.xml ../cleaners/vim.xml ../cleaners/vscode.xml
-msgid "Editor"
-msgstr "Muharrir"
-
-#: ../cleaners/gedit.xml ../cleaners/gwenview.xml ../cleaners/kde.xml
-#: ../cleaners/windows_explorer.xml ../bleachbit/Cleaner.py
-msgid "Recent documents list"
-msgstr "So‘nggi foydalanilgan hujatlar ro‘yxati"
-
-#: ../cleaners/gimp.xml
-msgid "Graphics editor"
-msgstr "Grafika muharriri"
-
-#: ../cleaners/gl-117.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/nexuiz.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/tremulous.xml ../cleaners/warzone2100.xml
-msgid "Game"
-msgstr "O‘yin"
-
-#: ../cleaners/gnome.xml ../cleaners/kde.xml
-msgid "Desktop environment"
-msgstr "Ish stoli muhiti"
-
-#. In GNOME 'Run' is the dialog shown when typing ALT+F2'
-#. In Windows 'Run' is the dialog in the Start menu
-#: ../cleaners/gnome.xml ../cleaners/windows_explorer.xml
-msgid "Run"
-msgstr "Bajarish"
-
-#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
-#: ../cleaners/windows_explorer.xml
-msgid "Search history"
-msgstr "Qidiruv tarixi"
-
-#: ../cleaners/gnome.xml ../cleaners/google_toolbar.xml
-#: ../cleaners/windows_explorer.xml
-msgid "Delete the search history"
-msgstr "Qidiruv tarixini o‘chirish"
+#: ../cleaners/seamonkey.xml
+msgid "Delete the list of visited web pages"
+msgstr "Tashrif buyurilgan vebsahifalar ro‘yxatini o‘chirish"
 
 #. Cleaning option that deletes AI models in a web browser
 #: ../cleaners/google_chrome.xml
@@ -681,127 +831,6 @@ msgstr ""
 #| msgid "Delete the logs"
 msgid "Delete the AI models"
 msgstr "Jurnallarni o‘chirish"
-
-#: ../cleaners/internet_explorer.xml ../cleaners/seamonkey.xml
-msgid "Download history"
-msgstr "Yuklab olish tarixi"
-
-#: ../cleaners/journald.xml
-#, fuzzy
-#| msgid "System information"
-msgid "System journals"
-msgstr "Tizim ma’lumoti"
-
-#: ../cleaners/journald.xml
-#, fuzzy
-#| msgid "Delete old system logs"
-msgid "Clean old system journals"
-msgstr "Eski tizim jurnallarini o‘chirish"
-
-#: ../cleaners/konqueror.xml
-msgid "Current session"
-msgstr "Joriy seans"
-
-#: ../cleaners/konqueror.xml
-msgid "Delete the current session"
-msgstr "Joriy seansni o‘chirish"
-
-#: ../cleaners/libreoffice.xml ../cleaners/microsoft_office.xml
-#: ../cleaners/openoffice.xml
-msgid "Office suite"
-msgstr "Ofis to‘plami"
-
-#: ../cleaners/mc.xml ../cleaners/nautilus.xml ../cleaners/windows_explorer.xml
-msgid "File manager"
-msgstr "Fayl menejeri"
-
-#: ../cleaners/microsoft_office.xml ../cleaners/paint.xml
-#: ../cleaners/smartftp.xml ../cleaners/teamviewer.xml ../cleaners/vlc.xml
-#: ../cleaners/winamp.xml ../cleaners/windows_explorer.xml
-#: ../cleaners/windows_media_player.xml ../cleaners/winzip.xml
-#: ../cleaners/wordpad.xml
-msgid "Delete the most recently used list"
-msgstr "Eng so‘nggi foydalanilganlar ro‘yxatini o‘chirish"
-
-#: ../cleaners/nautilus.xml
-msgid "Custom folders will be reset."
-msgstr "Boshqa jildlar tiklanadi."
-
-#: ../cleaners/profanity.xml
-#, fuzzy
-#| msgid "Download history"
-msgid "Downloaded files"
-msgstr "Yuklab olish tarixi"
-
-#: ../cleaners/recoll.xml
-msgid "Delete the search index, a database of words and the files they contain"
-msgstr "Indeks, so‘zlar va ulardagi fayllar ma’lumot bazasini o‘chirish"
-
-#: ../cleaners/rhythmbox.xml
-msgid "Database"
-msgstr ""
-
-#: ../cleaners/rhythmbox.xml
-msgid ""
-"Delete the database, which contains information such as play count and last "
-"played"
-msgstr ""
-
-#: ../cleaners/screenlets.xml
-#, fuzzy
-#| msgid "Desktop environment"
-msgid "Desktop widgets"
-msgstr "Ish stoli muhiti"
-
-#: ../cleaners/seamonkey.xml
-msgid "List of files downloaded"
-msgstr "Yuklab olingan fayllar ro‘yxati"
-
-#: ../cleaners/seamonkey.xml
-msgid "Delete the list of visited web pages"
-msgstr "Tashrif buyurilgan vebsahifalar ro‘yxatini o‘chirish"
-
-#: ../cleaners/skype.xml
-msgid "Installers"
-msgstr "O‘rnatkichlar"
-
-#: ../cleaners/skype.xml
-msgid "Delete cached patches and installers"
-msgstr "Keshlangan to‘g‘rilanishlar va o‘rnatkichlarni o‘chirish"
-
-#: ../cleaners/snap.xml
-msgid "Disabled"
-msgstr ""
-
-#: ../cleaners/snap.xml
-msgid "Remove disabled packages"
-msgstr ""
-
-#: ../cleaners/teamviewer.xml
-msgid "Remote control software"
-msgstr ""
-
-#: ../cleaners/thumbnails.xml ../cleaners/windows_explorer.xml
-msgid "Thumbnails"
-msgstr "Nishonchalar"
-
-#: ../cleaners/thumbnails.xml
-msgid "Icons for files on the system"
-msgstr "Tizimdagi fayllar uchun nishonchalar"
-
-#: ../cleaners/thunderbird.xml
-msgid ""
-"Deleting the index will reset the configuration of columns in the message "
-"list."
-msgstr ""
-
-#: ../cleaners/thunderbird.xml
-msgid "Session restore"
-msgstr "Tiklash seansi"
-
-#: ../cleaners/thunderbird.xml
-msgid "Restores the previous session when the browser next starts"
-msgstr ""
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -828,6 +857,7 @@ msgstr ""
 msgid "Statistics"
 msgstr ""
 
+#. TRANSLATORS: Description of the Memory dump cleaning option.
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 #, fuzzy
 #| msgid "Delete the files"
@@ -838,6 +868,42 @@ msgstr "Fayllarni o‘chirish"
 msgid "Delete the list of game servers"
 msgstr "O‘yin serverlari ro‘yxatini o‘chirish"
 
+#: ../cleaners/profanity.xml
+#, fuzzy
+#| msgid "Download history"
+msgid "Downloaded files"
+msgstr "Yuklab olish tarixi"
+
+#: ../cleaners/teamviewer.xml
+msgid "Remote control software"
+msgstr ""
+
+#. TRANSLATORS: Name of a cleaning option for Windows crash dump files.
+#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
+msgid "Memory dump"
+msgstr "Xotira yetishmovchiligi"
+
+#: ../cleaners/screenlets.xml
+#, fuzzy
+#| msgid "Desktop environment"
+msgid "Desktop widgets"
+msgstr "Ish stoli muhiti"
+
+#: ../cleaners/winrar.xml
+msgid "File archiver"
+msgstr "Fayl arxivlagich"
+
+#: ../cleaners/amule.xml
+#, fuzzy
+#| msgid "Download history"
+msgid "Known files history"
+msgstr "Yuklab olish tarixi"
+
+#. http://wiki.amule.org/wiki/Friend
+#: ../cleaners/amule.xml
+msgid "Known clients and friends"
+msgstr ""
+
 #: ../cleaners/vim.xml
 msgid ""
 "Delete ~/.viminfo which includes file history, command history, and buffers"
@@ -845,66 +911,15 @@ msgstr ""
 "Tarix, buyruqlar tarixiva xotira omborini o‘zida jamlagan ~/.viminfo'ni "
 "o‘chirish"
 
-#: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
-msgid "Memory dump"
-msgstr "Xotira yetishmovchiligi"
-
-#: ../cleaners/windows_defender.xml
-msgid "Anti-virus"
-msgstr "Antivirus"
-
-#: ../cleaners/windows_defender.xml
-msgid "Quarantine"
-msgstr ""
-
-#: ../cleaners/windows_explorer.xml
+#: ../cleaners/discord.xml
+#, fuzzy
+#| msgid "Delete the web cache, which reduces time to display revisited pages"
 msgid ""
-"This option will reset pinned locations in Quick Access to their defaults."
+"Delete the web cache, which reduces time to display revisited pages. This "
+"also clears favorited GIFs."
 msgstr ""
-
-#: ../cleaners/windows_explorer.xml
-#, fuzzy
-#| msgid "Shell"
-msgid "Shellbags"
-msgstr "Terminal"
-
-#: ../cleaners/windows_explorer.xml
-msgid "Delete the usage date, window position, and other data for folders"
-msgstr ""
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will reset the position of desktop icons."
-msgstr ""
-
-#: ../cleaners/windows_explorer.xml
-msgid "This will restart Windows Explorer."
-msgstr ""
-
-#: ../cleaners/wine.xml
-msgid "Compatibility layer for Windows software"
-msgstr "Windows dasturiy ta’minoti uchun mos qatlam"
-
-#: ../cleaners/winrar.xml
-msgid "File archiver"
-msgstr "Fayl arxivlagich"
-
-#: ../cleaners/wordpad.xml
-msgid "Word processor"
-msgstr ""
-
-#: ../cleaners/x11.xml
-msgid "Windowing system"
-msgstr ""
-
-#: ../cleaners/zoom.xml
-msgid "Recordings"
-msgstr ""
-
-#: ../cleaners/zoom.xml
-#, fuzzy
-#| msgid "Delete the list of game servers"
-msgid "Delete the audio and video recordings"
-msgstr "O‘yin serverlari ro‘yxatini o‘chirish"
+"Qayta tashrif buyurilgan saytlarga kirishni tezlshtiradigan veb keshni "
+"o‘chirish"
 
 #: ../org.bleachbit.BleachBit.desktop
 msgid "Unnecessary file cleaner"
@@ -1310,11 +1325,19 @@ msgid ""
 "XML={option_xml}"
 msgstr ""
 
-#. TRANSLATORS: Warning printed to the log.
-#. %s expands to the path of the XML cleaner file that was skipped
-#: ../bleachbit/CleanerML.py
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file that was skipped
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
+msgstr ""
+
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file whose directory is world
+#. writable.
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
+#, python-format
+msgid "Ignoring cleaner because its directory is world writable: %s"
 msgstr ""
 
 #. TRANSLATORS: Error message printed to the log.
@@ -1325,10 +1348,12 @@ msgstr ""
 msgid "Error reading cleaner: %s"
 msgstr "to‘g‘ri tozalagich emas: %s"
 
+#. TRANSLATORS: Cleaner name shown in the list of applications.
 #: ../bleachbit/Cleaner.py
 msgid "System"
 msgstr "Tizim"
 
+#. TRANSLATORS: Description of the System cleaner.
 #: ../bleachbit/Cleaner.py
 msgid "The system in general"
 msgstr "Umumiy tizim"
@@ -1344,6 +1369,7 @@ msgstr "Umumiy tizim"
 msgid "Broken desktop files"
 msgstr "Buzilgan ish stoli fayllari"
 
+#. TRANSLATORS: Description of the Broken desktop files cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete broken application menu entries and file associations"
 msgstr ""
@@ -1356,30 +1382,40 @@ msgstr ""
 msgid "Localizations"
 msgstr "Mahalliylashtirishlar"
 
+#. TRANSLATORS: Description of the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete files for unwanted languages"
 msgstr "Foydalanilmaydigan tillar uchun fayllarni o‘chirish"
 
+#. TRANSLATORS: Warning for the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Configure this option in the preferences."
 msgstr "Ushbu tanlovni parametrlardan moslang."
 
+#. TRANSLATORS: 'Rotated logs' refers to old system log files.
+#. Linux systems often have a scheduled job to rotate the logs
+#. which means compress all except the newest log and then delete
+#. the oldest log. You could translate this as 'old logs.'
 #: ../bleachbit/Cleaner.py
 msgid "Rotated logs"
 msgstr "Burilgan jurnallar"
 
+#. TRANSLATORS: Description of the Rotated logs cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete old system logs"
 msgstr "Eski tizim jurnallarini o‘chirish"
 
+#. TRANSLATORS: Name of a cleaning option. Trash is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Trash"
 msgstr "Chiqindi"
 
+#. TRANSLATORS: Description of the Trash cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the trash"
 msgstr "Chiqindilarni tozlash"
 
+#. TRANSLATORS: Name of a cleaning option for system memory.
 #: ../bleachbit/Cleaner.py ../bleachbit/Worker.py
 msgid "Memory"
 msgstr "Xotira"
@@ -1389,6 +1425,7 @@ msgstr "Xotira"
 msgid "Wipe the swap and free memory"
 msgstr "Svep va bo‘sh joyni tozalash"
 
+#. TRANSLATORS: Warning for the experimental Memory cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "This option is experimental and may cause system problems."
 msgstr ""
@@ -1404,10 +1441,12 @@ msgstr ""
 msgid "Prefetch"
 msgstr "Oldindan tanlash"
 
+#. TRANSLATORS: Name of a cleaning option for the Windows recycle bin.
 #: ../bleachbit/Cleaner.py
 msgid "Recycle bin"
 msgstr "Chiqindilar qutisi"
 
+#. TRANSLATORS: Description of the Recycle bin cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the recycle bin"
 msgstr "Chiqindilar qutisini tozalash"
@@ -1433,10 +1472,12 @@ msgstr ""
 msgid "This option may prevent uninstalling some updates."
 msgstr ""
 
+#. TRANSLATORS: Name of a cleaning option. Clipboard is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
 msgstr "Xotira buferi"
 
+#. TRANSLATORS: Description of the Clipboard cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
@@ -1451,6 +1492,7 @@ msgstr ""
 msgid "Custom"
 msgstr "Boshqa"
 
+#. TRANSLATORS: Description of the Custom cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete user-specified files and folders"
 msgstr "Foydalanuvchi ko‘rsatgan fayllar va jildlarni o‘chirish"
@@ -1495,6 +1537,7 @@ msgstr ""
 msgid "Importing cleaners from Winapp2.ini…"
 msgstr "winapp2.ini’dan import qilindi"
 
+#. TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
 #: ../bleachbit/Cleaner.py
 #, fuzzy, python-format
 #| msgid "_Wipe Free Space"
@@ -2315,6 +2358,10 @@ msgstr "Tozalashdan keyin chiqish"
 msgid "Reset warning confirmations"
 msgstr "Tasdiqni o‘chirish"
 
+#. TRANSLATORS: This means to hide cleaners which would do
+#. nothing. For example, if Firefox were never used on
+#. this system, this option would hide Firefox to simplify
+#. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
 msgstr "Keraksiz tozalagichlarni yashirish"
@@ -2531,11 +2578,13 @@ msgstr "Yo‘l"
 msgid "Choose a file"
 msgstr "Faylni tanlash"
 
+#. TRANSLATORS: Button label in the preferences for adding a file.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add file"
 msgstr "Fayl qo‘shish"
 
+#. TRANSLATORS: Button label in the preferences for adding a folder.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add folder"
@@ -2866,6 +2915,9 @@ msgstr ""
 msgid "Error checking whether path exists: %s"
 msgstr "Yangilanishlar uchun tekshirishda xatolik: "
 
+#. TRANSLATORS: %s is a ISO language code of two or three letters.
+#. "Preserving" means the language's localization files will be
+#. kept and not deleted when cleaning.
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Automatically preserving language %s."
@@ -2941,14 +2993,17 @@ msgstr ""
 "T%s’ni tozalab bo‘lmaydi, chunki u hozir ishlamoqda. Uni yoping va qaytadan "
 "urinib ko‘ring."
 
+#. TRANSLATORS: Status message after a successful winapp2.ini update.
 #: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
 msgstr "Yangi winapp2.ini yuklab olindi."
 
+#. TRANSLATORS: Title of the software update dialog.
 #: ../bleachbit/Update.py
 msgid "Update BleachBit"
 msgstr "BleachBit’ni yangilash"
 
+#. TRANSLATORS: Message in the software update dialog.
 #: ../bleachbit/Update.py
 msgid "A new version is available."
 msgstr "Yangi versiyasi mavjud."
@@ -2986,14 +3041,18 @@ msgstr "Multimedia"
 msgid "Utilities"
 msgstr "Vositalar"
 
+#. TRANSLATORS: Cleaner category name for games imported from winapp2.ini.
 #: ../bleachbit/Winapp.py
 msgid "Games"
 msgstr "O‘yinlar"
 
+#. TRANSLATORS: Description shown for a cleaner imported from winapp2.ini,
+#. which is a database of cleaning definitions.
 #: ../bleachbit/Winapp.py
 msgid "Imported from winapp2.ini"
 msgstr "winapp2.ini’dan import qilindi"
 
+#. TRANSLATORS: Warning shown when cleaning Windows Updates without administrator access.
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr ""
@@ -3032,8 +3091,9 @@ msgstr ""
 msgid "Path to wipe must be an existing directory: %s"
 msgstr ""
 
+#. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-msgid "Creating new, temporary file for wiping free space."
+msgid "Creating new, temporary file for wiping empty space."
 msgstr ""
 
 #: ../bleachbit/Wipe.py
@@ -3125,6 +3185,7 @@ msgstr ""
 msgid "Please wait. Wiping empty space."
 msgstr "Kutib turing.  Bo‘sh joy tozalanmoqda."
 
+#. TRANSLATORS: Instruction shown while wiping a drive's empty space.
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
@@ -3142,6 +3203,7 @@ msgstr ""
 msgid "Please wait.  Cleaning %s."
 msgstr "Kutib turing.  %s tozalanmoqda."
 
+#. TRANSLATORS: %d is the estimated number of minutes remaining.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "About %d minute remaining."
@@ -3176,6 +3238,10 @@ msgstr "O‘chirilgan fayllar: %d"
 msgid "Files to be deleted: %d"
 msgstr "O‘chiriladigan fayllar: %d"
 
+#. TRANSLATORS: %d is the number of special cleaning operations
+#. completed. Special operations are cleaning actions that do
+#. not delete a file, such as overwriting a file's contents,
+#. truncating a file, or deleting a Windows registry key.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Special operations: %d"

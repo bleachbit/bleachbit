@@ -21,6 +21,7 @@
 General code
 """
 
+import gc
 import getpass
 import logging
 import os
@@ -125,10 +126,9 @@ def boolstr_to_bool(value):
 def getText(nodelist):
     """Return the text data in an XML node
     http://docs.python.org/library/xml.dom.minidom.html"""
-    rc = "".join(
+    return "".join(
         node.data for node in nodelist if node.nodeType == node.TEXT_NODE
     )
-    return rc
 
 
 def reject_xml_dtd(data, description='XML'):
@@ -173,7 +173,7 @@ def chownself(path):
         # follow_symlinks=False (lchown) so a symlink planted at this path
         # cannot redirect the ownership change to its target.
         os.chown(path, uid, -1, follow_symlinks=False)
-    except:
+    except Exception:
         logger.exception('Error in chown() under chownself()')
 
 
@@ -188,7 +188,6 @@ def gc_collect():
     if not IS_WINDOWS:
         return
 
-    import gc
     gc.collect()
 
 
@@ -209,8 +208,8 @@ def get_executable():
         # example: /usr/bin/python3.12
         # Notice it ends with .12.
         return os.readlink('/proc/self/exe')
-    except Exception:
-        pass
+    except OSError:
+        logger.debug('/proc/self/exe is unreadable, so falling back to PATH')
     for py in ['python3', 'python']:
         py_which = shutil.which(py)
         if py_which:
@@ -278,7 +277,7 @@ def get_real_uid():
         # On Fedora 11, getlogin() under sudo returns 'root'.
         # On Fedora 41, getlogin() under sudo returns non-root user.
         # On Fedora 11 and 41, getlogin() under su returns non-root user.
-    except:
+    except Exception:
         login = os.getenv('LOGNAME')
 
     if login:
@@ -321,7 +320,7 @@ def os_match(os_str, platform=sys.platform):
     platform -- used only for unit tests
     """
     # If blank, return true.
-    if len(os_str) == 0:
+    if not os_str:
         return True
     # "darwin" is accepted as a deprecated alias for "macos"
     if os_str == 'darwin':
@@ -413,10 +412,10 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
     for arg in args:
         if arg is None:
             raise ValueError("Command argument cannot be None")
-    assert len(args) > 0
+    assert args
     if not args[0]:
         raise ValueError("First command argument cannot be empty")
-    if clean_env and isinstance(env, dict) and len(env) > 0:
+    if clean_env and isinstance(env, dict) and env:
         raise ValueError(
             "Cannot set environment variables when clean_env is True")
     logger.debug('running cmd %s', ' '.join(args))

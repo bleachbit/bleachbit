@@ -276,7 +276,8 @@ def wipe_contents(path):
             # file_wipe() checked before the wipe, so one could have been
             # planted since.
             if os.path.islink(path):
-                raise OSError(errno.EACCES, 'refusing to truncate a link', path)
+                raise OSError(
+                    errno.EACCES, 'refusing to truncate a link', path)
             f = open(path, 'wb')
     else:
         f = wipe_write(path)
@@ -408,7 +409,8 @@ def wipe_path(pathname, idle=False):
         while True:
             try:
                 logger.debug(
-                    _('Creating new, temporary file for wiping free space.'))
+                    # TRANSLATORS: Status message while wiping a drive's empty space.
+                    _('Creating new, temporary file for wiping empty space.'))
                 f = temporaryfile()
             except OSError as e:
                 # Linux gives errno 24

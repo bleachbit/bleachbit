@@ -154,7 +154,7 @@ def unpack_element(fmt, structure):
     """
     chunk_size = struct.calcsize(fmt)
     element = struct.unpack(fmt, structure[:chunk_size])
-    if element and len(element) > 0:
+    if element:
         element = element[0]    # convert from tuple to single element
     structure = structure[chunk_size:]
     return element, structure
@@ -536,9 +536,8 @@ def open_file(file_name, mode=GENERIC_READ):
     """
     if os.path.islink(file_name):
         raise OSError(errno.EACCES, 'refusing to wipe a link', file_name)
-    file_handle = CreateFileW(file_name, mode, 0, None,
-                              OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, None)
-    return file_handle
+    return CreateFileW(file_name, mode, 0, None,
+                       OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, None)
 
 
 def close_file(file_handle):
@@ -657,11 +656,7 @@ def obtain_readwrite(volume):
     Returns:
         Volume handle
     """
-    # Optional protection that we are running on removable media only.
     assert volume
-    # if drive_letter_safety:
-    #    drive_containing_file = volume[0].upper()
-    #    assert drive_containing_file >= drive_letter_safety.upper()
 
     volume = '\\\\.\\' + volume
     if volume[-1] == os.sep:
@@ -709,7 +704,7 @@ def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
                                         FSCTL_GET_RETRIEVAL_POINTERS,
                                         input_struct,
                                         retrieval_pointers_buf_size)
-        except:
+        except Exception:
             err_info = sys.exc_info()[1]
             err_code = err_info.winerror
             if err_code == 38:     # when file size is 0.
@@ -1185,8 +1180,8 @@ def clean_up(file_handle, volume_handle, tmp_file_path):
             CloseHandle(volume_handle)
         if tmp_file_path:
             DeleteFile(tmp_file_path)
-    except:
-        pass
+    except Exception:
+        logger.debug('error while cleaning up wipe handles', exc_info=True)
 
 
 def file_wipe(file_name):
@@ -1241,7 +1236,8 @@ def file_wipe(file_name):
         if not is_special:
             # Direct overwrite when it's a regular file.
             # logger.info("Attempting direct file wipe.")
-            wipe_file_direct(file_handle, orig_extents, cluster_size, file_size)
+            wipe_file_direct(file_handle, orig_extents,
+                             cluster_size, file_size)
             new_extents = get_extents(file_handle, True, file_name)
             CloseHandle(file_handle)
             file_handle = None

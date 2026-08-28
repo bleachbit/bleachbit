@@ -52,11 +52,14 @@ class LogTestCase(common.BleachbitTestCase):
     @common.skipIfWindows
     def test_init_log_debug_log_file_existing_untouched(self):
         """init_log() must not clobber an existing debug log file's permissions"""
-        debug_log_path = self.write_file('existing_debug.log', text='previous content\n')
-        os.chmod(debug_log_path, 0o644)
+        debug_log_path = self.write_file(
+            'existing_debug.log', text='previous content\n')
+        # Any mode that init_log() would not pick on its own works here.
+        # The execute bit is the harmless way to differ from its 0o600.
+        os.chmod(debug_log_path, 0o700)
         with mock.patch.object(sys, 'argv', ['bleachbit', '--debug-log', debug_log_path]):
             init_log()
         mode = stat.S_IMODE(os.stat(debug_log_path).st_mode)
-        self.assertEqual(mode, 0o644)
+        self.assertEqual(mode, 0o700)
         with open(debug_log_path, encoding='utf-8') as f:
             self.assertIn('previous content', f.read())

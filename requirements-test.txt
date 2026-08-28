@@ -1,13 +1,16 @@
 # Test/CI dependencies
 coverage==7.15.2; python_version>='3.10'
 coverage==7.10.7; python_version<'3.10'
-# pytest 9+ does not support Python 3.9, but pytest 8 has
-# CVE-2025-71176. Python 3.9's CI never invoke pytest
-# (unittest only), so pytest 8 is never actually used.
+# pytest 9+ does not support Python 3.9, so 3.9 is stuck on the last 8.x
+# release, which has CVE-2025-71176 (predictable /tmp/pytest-of-$USER path).
+# There is no fixed 8.x, and the attack needs a second local user, so it does
+# not apply to a throwaway CI runner.
 pytest==9.1.1; python_version>='3.10'
 pytest==8.4.2; python_version<'3.10'
-pytest-xdist==3.8.0; python_version>='3.10'
+pytest-xdist==3.8.0
 # needed to combine coverage across pytest-xdist worker processes
-pytest-cov==7.1.0; python_version>='3.10'
+pytest-cov==7.1.0
 # re-runs flaky tests (e.g. X11 clipboard integration test under parallel workers)
 pytest-rerunfailures==16.4; python_version>='3.10'
+# 16.1+ requires Python 3.10
+pytest-rerunfailures==16.0.1; python_version<'3.10'
