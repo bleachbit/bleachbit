@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-08-21 05:26-0600\n"
-"PO-Revision-Date: 2026-06-30 09:01+0000\n"
-"Last-Translator: Henry Ngo <huy.ngo.tech@gmail.com>\n"
+"PO-Revision-Date: 2026-08-29 14:51+0000\n"
+"Last-Translator: caoc78611-bot <caoc78611@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/bleachbit/"
 "main/vi/>\n"
 "Language: vi\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 "X-Launchpad-Export-Date: 2021-12-02 04:08+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -778,6 +778,8 @@ msgid ""
 "This option is slow. Inspect the preview for files you want to keep, like "
 "those bundled with applications."
 msgstr ""
+"Tùy chọn này hoạt động chậm. Hãy xem phần xem trước để kiểm tra các tệp bạn "
+"muốn giữ lại, chẳng hạn như những tệp đi kèm với ứng dụng."
 
 #: ../cleaners/deepscan.xml
 #, fuzzy
@@ -1000,7 +1002,7 @@ msgstr "Cần quyền quản trị để gỡ cài đặt."
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ALL_USERS"
 msgid "For &anyone who uses this computer (all users)"
-msgstr ""
+msgstr "Dành cho những người mà đang sử dụng máy tính ( tất cả người dùng )"
 
 #. TRANSLATORS: Radio button label for Ultra Modern UI (NSIS). Same as MULTIUSER_ALL_USERS but without the & accelerator.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1088,11 +1090,9 @@ msgstr "Không có một cài đặt nào của $(^NameDA)."
 
 #. TRANSLATORS: Title of the installation mode page in the Windows installer. User selects whether to install for all users or the current user.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Choose a folder"
 msgctxt "nsis:MULTIUSER_PAGE_TITLE"
 msgid "Choose Users"
-msgstr "Chọn thư mục"
+msgstr "Chọn tài khoản người dùng"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_DIFF_VERSION_ALL_USERS"
@@ -1107,11 +1107,13 @@ msgid ""
 "Uninstall version {OLD_VERSION} and install version {VERSION} for the "
 "current user."
 msgstr ""
+"Gỡ cài đặt phiên bản {OLD_VERSION} và cài đặt phiên bản {VERSION} cho người "
+"dùng hiện tại."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_ALL_USERS"
 msgid "Reinstall version {VERSION} for all users."
-msgstr ""
+msgstr "Tải lại phiên bản {VERSION} cho tất cả người dùng."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_REINSTALL_SAME_VERSION_CURRENT_USER"
@@ -1158,19 +1160,15 @@ msgid "Core files (required)"
 msgstr "Chọn (các) tập tin để xóa"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Widgets for the desktop"
 msgctxt "nsis:SECTION_DESKTOP_DESCRIPTION"
 msgid "Create a shortcut on the desktop."
-msgstr "Tiện ích cho màn hình làm việc"
+msgstr "Tạo một lối tắt ở trên màn hình làm việc chính"
 
 #. TRANSLATORS: Name of the desktop section in the Windows installer: user selects which desktop items to install.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgid "Desktop environment"
 msgctxt "nsis:SECTION_DESKTOP_NAME"
 msgid "Desktop"
-msgstr "Môi trường desktop"
+msgstr "Màn hình làm việc chính"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_DESCRIPTION"
