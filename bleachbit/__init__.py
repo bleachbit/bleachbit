@@ -258,6 +258,7 @@ for __icon in __icons:
     if os.path.exists(__icon):
         appicon_path = __icon
 
+
 def _resolve_locale_dir(exe_path, is_linux, is_mac, is_windows, is_netbsd, is_bsd,
                         path_exists=os.path.exists):
     """Return the locale directory to use, given the platform and the

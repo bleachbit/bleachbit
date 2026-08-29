@@ -492,9 +492,11 @@ class CleanerTestCase(common.BleachbitTestCase):
             with mock.patch('os.path.expanduser',
                             lambda path, home=home: path.replace('~', home, 1)):
                 cleaner.init_whitelist()
-            self.assertTrue(cleaner.whitelisted(home + '/.cache/mozilla/x'), home)
+            self.assertTrue(cleaner.whitelisted(
+                home + '/.cache/mozilla/x'), home)
             self.assertTrue(cleaner.whitelisted(home + '/.cache/kwin/y'), home)
-            self.assertFalse(cleaner.whitelisted(home + '/.cache/other/z'), home)
+            self.assertFalse(cleaner.whitelisted(
+                home + '/.cache/other/z'), home)
             self.assertFalse(cleaner.whitelisted('/tmp/nope'), home)
 
     @common.skipIfWindows

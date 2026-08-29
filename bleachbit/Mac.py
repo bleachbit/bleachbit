@@ -119,6 +119,7 @@ _FDA_PROBE_PATHS = (
     '~/Library/Containers/com.apple.Safari/',
 )
 
+
 def is_full_disk_access_enabled():
     """Detect whether Full Disk Access is enabled on macOS.
 

@@ -298,4 +298,3 @@ class GUIUtilFontTestCase(common.BleachbitTestCase):
         for font_name in tests:
             self.assertIsNone(get_font_size_from_name(font_name),
                               f"Font name '{font_name}' should return None")
-
