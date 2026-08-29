@@ -125,6 +125,7 @@ def path_to_option(pathname):
     pathname = os.path.normcase(pathname)
     # On Windows expand DOS-8.3-style pathnames.
     if IS_WINDOWS and os.path.exists(pathname):
+        # pylint: disable-next=possibly-used-before-assignment
         pathname = GetLongPathName(pathname)
     if len(pathname) > 1 and ':' == pathname[1]:
         # ConfigParser treats colons in a special way

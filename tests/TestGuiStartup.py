@@ -42,6 +42,7 @@ class StubOptions:
         """Set a option value."""
         self.values[key] = value
 
+    # pylint: disable-next=unused-argument
     def get_tree(self, parent, child):
         """Return whether a tree option is selected."""
         return False

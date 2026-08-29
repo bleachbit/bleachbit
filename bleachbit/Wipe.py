@@ -163,6 +163,7 @@ def fitrim(pathname):
             # Set range to the entire filesystem
             trim_range = struct.pack(
                 'QQQ', 0, stats.f_blocks * stats.f_bsize, 0)
+            # pylint: disable-next=possibly-used-before-assignment
             fcntl.ioctl(fd, fitrim_id, trim_range)
             logger.debug(
                 "Successfully performed FITRIM on filesystem at %s", pathname)
@@ -234,7 +235,7 @@ def wipe_contents(path):
     """
     from bleachbit.FileUtilities import truncate_f
 
-    # pylint: disable=possibly-used-before-assignment
+    # pylint: disable-next=possibly-used-before-assignment
     if IS_WINDOWS and IsUserAnAdmin():
         # The import placement here avoids a circular import.
         from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
@@ -262,6 +263,8 @@ def wipe_contents(path):
                         # Errno 13 Permission Denied
                         pass
             # translate exception to mark file to deletion in Command.py
+            # WindowsError is a real builtin, reachable only under IS_WINDOWS.
+            # pylint: disable-next=undefined-variable
             raise WindowsError(e.winerror, e.strerror) from e
         except UnsupportedFileSystemError:
             warnings.warn(

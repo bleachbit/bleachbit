@@ -29,6 +29,7 @@ import warnings
 # third-party import
 import psutil
 
+from tests import common
 from tests.common import pytest
 
 # local import
@@ -71,20 +72,23 @@ from bleachbit.FileUtilities import (
 from bleachbit.General import gc_collect, run_external
 from bleachbit.Options import init_configuration, options
 from bleachbit import logger, FS_CASE_SENSITIVE, IS_POSIX, IS_WINDOWS
-from tests import common
 
 
 if IS_WINDOWS:
+    from bleachbit import Windows
     # pylint: disable=import-error
     import win32api
     import win32com.shell
     import win32con
     import win32file
 
-    from bleachbit import Windows
+    # pylint: disable-next=ungrouped-imports
     from tests.TestWindows import WindowsLinksMixIn
 else:
     WindowsLinksMixIn = object
+    # WindowsError is a builtin only on Windows
+    # pylint: disable-next=redefined-builtin, ungrouped-imports
+    from bleachbit.General import WindowsError
 
 
 def ini_helper(self, execute):
@@ -190,8 +194,10 @@ def _open_blocking_handle(path, share_mode):
     Returns:
         File handle that blocks other processes from accessing the file
     """
+    # pylint: disable-next=possibly-used-before-assignment
     return win32file.CreateFile(
         path,
+        # pylint: disable-next=possibly-used-before-assignment
         win32con.GENERIC_READ | win32con.GENERIC_WRITE,
         share_mode,
         None,
@@ -903,7 +909,8 @@ State=AAAA/wA...
         for shred in (False, True):
             fn = os.path.join(self.tempdir, 'hidden')
             common.touch_file(fn)
-            # pylint: disable=possibly-used-before-assignment, c-extension-no-member
+            # pylint: disable=c-extension-no-member
+            # pylint: disable-next=possibly-used-before-assignment
             win32api.SetFileAttributes(fn, win32con.FILE_ATTRIBUTE_HIDDEN)
             self.assertExists(fn)
             self.assertFalse(is_hard_link(fn))
@@ -966,7 +973,7 @@ State=AAAA/wA...
                     self.assertTrue(delete_file(filename, shred))
                 else:
                     # Delete expected to fail.
-                    # pylint: disable=undefined-variable
+                    # pylint: disable=undefined-variable, possibly-used-before-assignment
                     with self.assertRaises(WindowsError):
                         delete_file(filename, shred)
                 win32file.CloseHandle(handle)
@@ -1609,7 +1616,7 @@ State=AAAA/wA...
                 # Expand the directory names, which are in the short format,
                 # to test the case where the full path (including the directory)
                 # is longer than 255 characters.
-                # pylint: disable=possibly-used-before-assignment, c-extension-no-member
+                # pylint: disable=c-extension-no-member
                 lname = win32api.GetLongPathNameW(extended_path(filename))
                 self.assertEqual(getsize(lname), 10 * 12345)
                 # this function returns a byte string instead of Unicode

@@ -349,6 +349,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # Check if splash screen is forced via environment variable
         splash_delay = os.environ.get('BLEACHBIT_SPLASH_SCREEN_DELAY')
         if splash_delay is not None:
+            # pylint: disable-next=possibly-used-before-assignment
             Windows.splash_thread.start()
             return
 

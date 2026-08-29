@@ -26,6 +26,7 @@ from bleachbit.Options import options
 from bleachbit.DeepScan import DeepScan, Search, normalized_walk
 
 if IS_WINDOWS:
+    # pylint: disable-next=ungrouped-imports
     from tests.TestWindows import WindowsLinksMixIn
 else:
     WindowsLinksMixIn = object

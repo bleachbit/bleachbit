@@ -143,7 +143,12 @@ if bleachbit.IS_WINDOWS:
     import winreg
     from win32com.shell import shell
 
+    # pylint: disable-next=ungrouped-imports
     from bleachbit import Windows
+else:
+    # WindowsError is a builtin only on Windows
+    # pylint: disable-next=redefined-builtin
+    from bleachbit.General import WindowsError
 
 
 def put_objects_into_recycle_bin():
@@ -201,6 +206,7 @@ class WindowsLinksMixIn():
         link_path = Path(linkname)
         self.assertTrue(link_path.is_symlink())
         self.assertTrue(link_path.is_dir())
+        # pylint: disable-next=possibly-used-before-assignment
         self.assertFalse(Windows.is_junction(linkname))
         self.assertFalse(FileUtilities.is_normal_directory(linkname))
 
@@ -296,6 +302,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     """Test case for module Windows"""
 
     def skipUnlessAdmin(self):
+        # pylint: disable-next=possibly-used-before-assignment
         if not shell.IsUserAnAdmin():
             self.skipTest('requires administrator privileges')
 
@@ -555,6 +562,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.assertExists(pathname)
             logger.debug('delete_locked_file(%s) ', pathname)
             if not shell.IsUserAnAdmin():
+                # pylint: disable-next=possibly-used-before-assignment
                 with self.assertRaises(WindowsError):
                     delete_locked_file(pathname)
             else:
@@ -644,6 +652,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         # create a nested key
         key = 'Software\\BleachBit\\DeleteThisKey'
         subkey = key + '\\AndThisKey'
+        # pylint: disable-next=possibly-used-before-assignment
         hkey = winreg.CreateKey(winreg.HKEY_CURRENT_USER, subkey)
         hkey.Close()
 
@@ -694,6 +703,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         # Windows Update is sometimes running.
         self.assertIsInstance(is_service_running('wuauserv'), bool)
         # Non-existent service should raise an error.
+        # pylint: disable-next=possibly-used-before-assignment
         with self.assertRaises(pywintypes.error):
             is_service_running('does_not_exist')
         # None should raise an error.
@@ -891,6 +901,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.skipTest('requires administrator privileges')
 
         def _service_exists_and_enabled(svc):
+            # pylint: disable-next=possibly-used-before-assignment
             scm = win32service.OpenSCManager(
                 None, None, win32service.SC_MANAGER_CONNECT)
             try:
@@ -1232,6 +1243,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 import ntsecuritycon as con
 
                 user, _, _ = win32security.LookupAccountName(
+                    # pylint: disable-next=possibly-used-before-assignment
                     "", win32api.GetUserName())
                 dacl = win32security.ACL()
                 dacl.AddAccessDeniedAce(

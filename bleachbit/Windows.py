@@ -65,6 +65,8 @@ if IS_WINDOWS:
     # Ensure GetClassInfo exists for compatibility and testing
     # Some win32gui builds don't have GetClassInfo, so we create a stub
     # In the future, consider GetClassInfoEx instead.
+    # The signature mirrors win32gui.GetClassInfo.
+    # pylint: disable-next=unused-argument
     def _get_class_info_fallback(hInstance, className):
         """Fallback GetClassInfo - returns a default atom value"""
         return (1234,)  # Return tuple with default atom
@@ -233,10 +235,12 @@ def browse_file(_, title):
     """Ask the user to select a single file.  Return full path"""
     try:
         ret = win32gui.GetOpenFileNameW(None,
+                                        # pylint: disable-next=possibly-used-before-assignment
                                         Flags=win32con.OFN_EXPLORER
                                         | win32con.OFN_FILEMUSTEXIST
                                         | win32con.OFN_HIDEREADONLY,
                                         Title=title)
+    # pylint: disable-next=possibly-used-before-assignment
     except pywintypes.error as e:
         if 0 == e.winerror:
             logger.debug('browse_file(): user cancelled')
@@ -274,6 +278,7 @@ def browse_files(_, title):
 def browse_folder(_, title):
     """Ask the user to select a folder.  Return full path."""
     flags = 0x0010  # SHBrowseForFolder path input
+    # pylint: disable-next=possibly-used-before-assignment
     pidl = shell.SHBrowseForFolder(None, None, title, flags)[0]
     if pidl is None:
         # user cancelled
@@ -363,6 +368,7 @@ def _close_delete_parent_lock():
     if _delete_parent_lock_handle is not None:
         logger.debug('Closing parent lock handle for %s',
                      _delete_parent_lock_key)
+        # pylint: disable-next=possibly-used-before-assignment
         win32file.CloseHandle(_delete_parent_lock_handle)
         _delete_parent_lock_handle = None
         _delete_parent_lock_key = None
@@ -469,6 +475,7 @@ def delete_registry_value(key, value_name, really_delete):
     (hive, sub_key) = split_registry_key(key)
     try:
         if really_delete:
+            # pylint: disable-next=possibly-used-before-assignment
             hkey = winreg.OpenKey(hive, sub_key, 0, winreg.KEY_SET_VALUE)
             winreg.DeleteValue(hkey, value_name)
         else:
@@ -478,6 +485,8 @@ def delete_registry_value(key, value_name, really_delete):
         raise OSError(
             errno.EACCES,
             "Access denied in delete_registry_value()", key) from e
+    # WindowsError is a real builtin; this file only runs on Windows.
+    # pylint: disable-next=undefined-variable
     except WindowsError as e:
         if e.winerror == errno.ENOENT:
             # ENOENT = 'file not found' means value does not exist
@@ -509,6 +518,8 @@ def delete_registry_key(parent_key, really_delete, excludekeys=None):
     hkey = None
     try:
         hkey = winreg.OpenKey(hive, parent_sub_key)
+    # WindowsError is a real builtin; this file only runs on Windows.
+    # pylint: disable-next=undefined-variable
     except WindowsError as e:
         if e.winerror == 2:
             # 2 = 'file not found' happens when key does not exist
@@ -623,6 +634,7 @@ def delete_updates():
 def is_service_running(service):
     """Return True if service is running."""
     assert isinstance(service, str)
+    # pylint: disable-next=possibly-used-before-assignment
     service_status_code = win32serviceutil.QueryServiceStatus(service)[1]
     logger.debug('Windows service %s has current state %d',
                  service, service_status_code)
@@ -657,6 +669,7 @@ def run_net_service_command(service, start):
         ignore_codes = (1056,)  # already running
         ignore_msgs = ('already',)
         verb = 'start'
+        # pylint: disable-next=possibly-used-before-assignment
         desired = win32service.SERVICE_RUNNING
         state_txt = 'RUNNING'
     else:
@@ -698,6 +711,8 @@ def detect_registry_key(parent_key):
     hkey = None
     try:
         hkey = winreg.OpenKey(hive, parent_sub_key)
+    # WindowsError is a real builtin; this file only runs on Windows.
+    # pylint: disable-next=undefined-variable
     except WindowsError as e:
         if e.winerror == 2:
             # 2 = 'file not found' happens when key does not exist
@@ -710,7 +725,9 @@ def detect_registry_key(parent_key):
 
 def get_sid_token_48():
     """Return a 48-bit token for the current user"""
+    # pylint: disable-next=possibly-used-before-assignment
     htoken = win32security.OpenProcessToken(
+        # pylint: disable-next=possibly-used-before-assignment
         win32api.GetCurrentProcess(), win32security.TOKEN_QUERY)
     try:
         token_user = win32security.GetTokenInformation(
@@ -829,6 +846,7 @@ def empty_recycle_bin(path, really_delete):
     if really_delete and num_files > 0:
         # Trying to delete an empty Recycle Bin on Vista/7 causes a
         # 'catastrophic failure'
+        # pylint: disable-next=possibly-used-before-assignment
         flags = shellcon.SHERB_NOSOUND | shellcon.SHERB_NOCONFIRMATION | shellcon.SHERB_NOPROGRESSUI
         try:
             shell.SHEmptyRecycleBin(None, path, flags)
@@ -859,6 +877,7 @@ def clear_clipboard():
     """Clear the clipboard"""
     _open_clipboard()
     try:
+        # pylint: disable-next=possibly-used-before-assignment
         win32clipboard.EmptyClipboard()
     except Exception:
         logger.exception('error clearing clipboard')
@@ -1720,6 +1739,7 @@ class SplashThread(Thread):
 
         # Solution 2: Attaching current thread to the foreground thread in order to use BringWindowToTop
         # https://shlomio.wordpress.com/2012/09/04/solved-setforegroundwindow-win32-api-not-always-works/
+        # pylint: disable-next=possibly-used-before-assignment
         foreground_thread_id, _foreground_process_id = win32process.GetWindowThreadProcessId(
             win32gui.GetForegroundWindow())
         appThread = win32api.GetCurrentThreadId()

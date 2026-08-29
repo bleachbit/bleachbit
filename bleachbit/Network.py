@@ -32,6 +32,12 @@ import platform
 import warnings
 from collections.abc import Callable
 
+# local imports
+from bleachbit import bleachbit_exe_path, APP_VERSION, ARCH_BITS, General, IS_LINUX, IS_MAC, IS_NETBSD, IS_WINDOWS
+from bleachbit.FileUtilities import delete, open_for_overwrite
+from bleachbit.General import unset_sslkeylogfile
+from bleachbit.Language import get_active_language_code, get_text as _
+
 # urllib3 v2 warns when the ssl module is not OpenSSL (e.g. macOS
 # LibreSSL).  The warning is informational and does not prevent
 # urllib3 from functioning, so suppress it before importing urllib3.
@@ -55,12 +61,6 @@ if HAVE_REQUESTS:
 else:
     class RequestException(Exception):
         pass
-
-# local imports
-from bleachbit import bleachbit_exe_path, APP_VERSION, ARCH_BITS, General, IS_LINUX, IS_MAC, IS_NETBSD, IS_WINDOWS
-from bleachbit.FileUtilities import delete, open_for_overwrite
-from bleachbit.General import unset_sslkeylogfile
-from bleachbit.Language import get_active_language_code, get_text as _
 
 logger = logging.getLogger(__name__)
 

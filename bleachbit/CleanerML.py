@@ -372,6 +372,7 @@ class CleanerML:
             elif search_type == 'winreg':
                 if not IS_WINDOWS:
                     continue
+                # pylint: disable-next=possibly-used-before-assignment
                 value_list = read_registry_key(value_element.attrib.get(
                     'path', ''), value_element.attrib.get('name', ''))
                 if value_list is None:

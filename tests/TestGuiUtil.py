@@ -14,16 +14,15 @@ import time
 import unittest
 from pathlib import Path
 
+from tests import common
 from tests.common import pytest
 
 from bleachbit import General, logger
 from bleachbit.GtkShim import is_gtk_available
 
-from tests import common
-
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
-    from bleachbit.GtkShim import Gdk, Gtk  # pylint: disable=ungrouped-imports
+    from bleachbit.GtkShim import Gdk, Gtk
     from bleachbit.GuiUtil import (clear_clipboard, flush_gtk_events,
                                    get_clipboard_paths, get_font_size_from_name)
 
@@ -48,7 +47,9 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
         """Clean up after each test method."""
         super().tearDown()
         # Verify that clearing the clipboard works.
+        # pylint: disable-next=possibly-used-before-assignment
         clear_clipboard()
+        # pylint: disable-next=possibly-used-before-assignment
         self.assertEqual([], list(get_clipboard_paths()))
 
     def _wait_for_clipboard_text(self, clipboard, text):
@@ -60,6 +61,7 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
                 'clipboard text available after first wait attempt at %.1fs', time.time() - start_time)
             return True
         while time.time() < deadline:
+            # pylint: disable-next=possibly-used-before-assignment
             flush_gtk_events()
             if clipboard.wait_for_text() == text:
                 elapsed = time.time() - start_time
@@ -106,6 +108,7 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
     def test_get_clipboard_paths_text_plain(self):
         """Get text/plain paths from the real clipboard."""
 
+        # pylint: disable-next=possibly-used-before-assignment
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         clipboard_text = '\n'.join([f'  {self.paths[0]}  ', self.paths[1], ''])
         clipboard.set_text(clipboard_text, -1)
@@ -281,6 +284,7 @@ class GUIUtilFontTestCase(common.BleachbitTestCase):
             ('Arial 10.5', 10),
         )
         for font_name, expected in tests:
+            # pylint: disable-next=possibly-used-before-assignment
             self.assertEqual(get_font_size_from_name(font_name), expected,
                              f"Font name '{font_name}' should return {expected}")
 

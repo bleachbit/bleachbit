@@ -19,6 +19,8 @@ from unittest import mock
 from functools import wraps
 
 from tests import common
+from tests.TestCleaner import register_all_cleaners
+
 from bleachbit.ProtectedPath import (
     _check_exempt,
     _get_protected_path_xml,
@@ -36,7 +38,6 @@ from bleachbit.PathUtils import (
     path_has_relative_suffix,
 )
 from bleachbit.Cleaner import backends
-from tests.TestCleaner import register_all_cleaners
 
 
 CASE_METHODS = (

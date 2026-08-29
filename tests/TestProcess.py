@@ -101,6 +101,7 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
         """/proc fallback keeps a comm field with spaces intact"""
         stat_line = "1234 (Web Content) S 1 1234 1234 0 -1 4194304 0 0 0 0"
 
+        # pylint: disable-next=unused-argument
         def fake_open(path, *args, **kwargs):
             if path == '/proc/1234/stat':
                 return mock.mock_open(read_data=stat_line)()
