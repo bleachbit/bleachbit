@@ -39,6 +39,7 @@ from bleachbit.Language import get_text as _
 if IS_WINDOWS:
     import bleachbit.Windows
 else:
+    # pylint: disable-next=redefined-builtin
     from bleachbit.General import WindowsError
 
 logger = logging.getLogger(__name__)
@@ -191,7 +192,7 @@ class Function:
                 if isinstance(func_ret, types.GeneratorType):
                     # function returned generator
                     for func_ret in func_ret:
-                        if True == func_ret or isinstance(func_ret, tuple):
+                        if func_ret is True or isinstance(func_ret, tuple):
                             # Return control to GTK idle loop.
                             # If tuple, then display progress.
                             yield func_ret

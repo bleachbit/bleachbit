@@ -52,7 +52,7 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         ds = DeepScan(searches)
         found = False
         for cmd in ds.scan():
-            if cmd == True:
+            if cmd is True:
                 # True is used to yield to GTK+, but it is not
                 # needed in this test.
                 continue
@@ -80,7 +80,7 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             searches[path].append(Search(command='delete', regex=regex))
         ds = DeepScan(searches)
         for cmd in ds.scan():
-            if True == cmd:
+            if cmd is True:
                 # it's yielding control to the GTK idle loop
                 continue
             self.assertLExists(cmd.path)
