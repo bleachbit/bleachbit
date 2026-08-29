@@ -136,9 +136,11 @@ class GuiChaffTestCase(common.BleachbitTestCase):
 
     def test_stop_value_spinner_file_count(self):
         """Test stop value spinner limits for file count mode"""
+        # pylint: disable-next=possibly-used-before-assignment
         self.dialog.stop_mode_combo.set_active(STOP_MODE_FILE_COUNT)
         self.dialog.stop_value_spin.set_value(1)
         self.assertEqual(self.dialog.stop_value_spin.get_value_as_int(), 1)
+        # pylint: disable-next=possibly-used-before-assignment
         self.dialog.stop_value_spin.set_value(MAX_FILE_COUNT)
         self.assertEqual(
             self.dialog.stop_value_spin.get_value_as_int(), MAX_FILE_COUNT)
@@ -151,6 +153,7 @@ class GuiChaffTestCase(common.BleachbitTestCase):
 
     def test_stop_value_spinner_total_size(self):
         """Test stop value spinner limits for total size mode"""
+        # pylint: disable-next=possibly-used-before-assignment
         self.dialog.stop_mode_combo.set_active(STOP_MODE_TOTAL_SIZE)
         self.dialog.stop_value_spin.set_value(1)
         self.assertEqual(self.dialog.stop_value_spin.get_value_as_int(), 1)
@@ -160,6 +163,7 @@ class GuiChaffTestCase(common.BleachbitTestCase):
 
     def test_stop_value_spinner_free_space(self):
         """Test stop value spinner limits for free space mode"""
+        # pylint: disable-next=possibly-used-before-assignment
         self.dialog.stop_mode_combo.set_active(STOP_MODE_FREE_SPACE)
         self.dialog.stop_value_spin.set_value(1)
         self.assertEqual(self.dialog.stop_value_spin.get_value_as_int(), 1)
@@ -273,6 +277,7 @@ class GuiChaffTestCase(common.BleachbitTestCase):
             collected.append(fraction)
 
         for stop_mode in (STOP_MODE_FILE_COUNT, STOP_MODE_TOTAL_SIZE, STOP_MODE_FREE_SPACE):
+            # pylint: disable-next=possibly-used-before-assignment
             cb = _make_progress_cb(stop_mode, 100, self.tempdir, on_progress)
             # Must accept keyword arguments as Chaff.py passes them
             cb(0.5, generated_file_names=['/tmp/fake'], cumulative_size=12345)
@@ -289,6 +294,7 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         abort_event = threading.Event()
 
         for stop_mode in (STOP_MODE_FILE_COUNT, STOP_MODE_TOTAL_SIZE, STOP_MODE_FREE_SPACE):
+            # pylint: disable-next=possibly-used-before-assignment
             should_stop, _file_count = _make_should_stop(
                 stop_mode, 100, self.tempdir, abort_event)
             # Must accept keyword argument as Chaff.py passes it

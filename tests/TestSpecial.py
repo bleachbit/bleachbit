@@ -673,6 +673,7 @@ CREATE TABLE moz_pages_w_icons (id INTEGER PRIMARY KEY, page_url TEXT NOT NULL, 
         FileUtilities.execute_sqlite3(places_path, places_sql)
         FileUtilities.execute_sqlite3(favicons_path, favicons_sql)
 
+        # pylint: disable-next=unused-argument
         def fake_get(path, sql, row_factory=None, parameters=()):
             if 'icon_url' in sql:
                 # First query: orphaned favicons. Inject a non-integer ID.

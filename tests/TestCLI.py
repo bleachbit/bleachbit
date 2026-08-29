@@ -20,6 +20,7 @@ import random
 import tempfile
 from unittest.mock import MagicMock, patch
 
+from tests import common
 from tests.common import pytest
 
 # first party imports
@@ -35,7 +36,6 @@ from bleachbit.CLI import (
 from bleachbit.General import get_executable, run_external
 from bleachbit.GtkShim import gtk_may_be_available
 from bleachbit import FileUtilities, Options, IS_WINDOWS, IS_POSIX
-from tests import common
 
 RUN_EXTERNAL_TIMEOUT = 30
 
@@ -261,6 +261,7 @@ class CLITestCase(common.BleachbitTestCase):
                 deleted_paths = []
                 crash = [False]
 
+                # pylint: disable-next=unused-argument
                 def dummy_delete(path, shred=False, crash=crash,
                                  deleted_paths=deleted_paths):
                     try:

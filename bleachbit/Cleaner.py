@@ -286,6 +286,8 @@ class System(Cleaner):
         #
         # options just for Microsoft Windows
         #
+        # IS_LINUX implies IS_POSIX, which is what binds Unix; pylint can't see that.
+        # pylint: disable-next=possibly-used-before-assignment
         has_dns_flush = IS_WINDOWS or (IS_LINUX and Unix.can_flush_dns())
         if has_dns_flush:
             # TRANSLATORS: This is a label for the option to clear the system DNS cache.
@@ -395,7 +397,7 @@ class System(Cleaner):
             for path in MENU_DIRS:
                 dirname = os.path.expanduser(path)
                 for filename in children_in_directory(dirname, False):
-                    # pylint: disable=possibly-used-before-assignment
+                    # pylint: disable-next=possibly-used-before-assignment
                     if filename.endswith('.desktop') and Unix.is_broken_xdg_desktop(filename):
                         yield Command.Delete(filename)
 
@@ -450,6 +452,7 @@ class System(Cleaner):
                 '%WindowsSystem%\\wbem\\Logs\\*.log', )
 
             for path in paths:
+                # pylint: disable-next=possibly-used-before-assignment
                 for expanded in Windows.expand_windows_system_vars(path):
                     expanded = os.path.expandvars(expanded)
                     for globbed in glob.iglob(expanded):
@@ -600,7 +603,6 @@ class System(Cleaner):
         if IS_WINDOWS and 'recycle_bin' == option_id:
             # This method allows shredding
             recycled_any = False
-            # pylint: disable=possibly-used-before-assignment
             for path in Windows.get_recycle_bin():
                 recycled_any = True
                 yield Command.Delete(path)

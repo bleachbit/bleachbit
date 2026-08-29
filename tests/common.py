@@ -51,10 +51,6 @@ except ImportError:  # pytest is optional for plain unittest discovery
 import bleachbit
 from bleachbit import logger
 
-if bleachbit.IS_WINDOWS:
-    import winreg
-    import win32gui
-    from bleachbit import Windows
 import bleachbit.Options
 from bleachbit.Bootstrap import bootstrap
 from bleachbit.GtkShim import ignore_pygobject_asyncio_warnings
@@ -65,6 +61,12 @@ from bleachbit.FileUtilities import (
     is_normal_directory,
 )
 from bleachbit.General import gc_collect, sudo_mode
+
+if bleachbit.IS_WINDOWS:
+    import winreg
+    import win32gui
+    # pylint: disable-next=ungrouped-imports
+    from bleachbit import Windows
 
 # /etc/locale.alias may list the qaa-qtz range, which is reserved for
 # private use rather than a concrete locale. Skip it if present.
@@ -673,6 +675,7 @@ def validate_result(self, result, really_delete=False, allow_vanishing=False):
 
 def get_winregistry_value(key, subkey):
     try:
+        # pylint: disable-next=possibly-used-before-assignment
         with winreg.OpenKey(key, subkey) as hkey:
             return winreg.QueryValue(hkey, None)
     except FileNotFoundError:
@@ -689,6 +692,7 @@ def get_opened_windows_titles():
     opened_windows_titles = []
 
     def enumerate_opened_windows_titles(hwnd, _ctx):
+        # pylint: disable-next=possibly-used-before-assignment
         text = win32gui.GetWindowText(hwnd)
         if win32gui.IsWindowVisible(hwnd) and text:
             opened_windows_titles.append(text)

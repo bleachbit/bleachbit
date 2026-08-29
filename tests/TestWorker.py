@@ -168,6 +168,7 @@ class LockedAction(ActionProvider):
     def get_commands(self):
         # Open the file with a blocking handle that allows read/write but blocks delete.
         # This causes delete() to truncate and mark for deletion. Windows only.
+        # pylint: disable-next=possibly-used-before-assignment
         share_mode = win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE
         handle = _open_blocking_handle(self.pathname, share_mode)
         from bleachbit.FileUtilities import getsize
@@ -177,6 +178,7 @@ class LockedAction(ActionProvider):
         fsize = getsize(self.pathname)
         if fsize != 0:  # File should be truncated to 0 bytes
             raise RuntimeError('Locked file has size %dB (not 0B)' % fsize)
+        # pylint: disable-next=possibly-used-before-assignment
         win32file.CloseHandle(handle)
 
         # Now that the file is not locked, admin privileges

@@ -24,13 +24,19 @@ from unittest.mock import MagicMock, Mock, patch
 warnings.filterwarnings("ignore", message="urllib3 v2 only supports OpenSSL")
 
 # third party imports
+# pylint: disable-next=wrong-import-position
 import requests
 
 # first party imports
+# pylint: disable-next=wrong-import-position
 import bleachbit
+# pylint: disable-next=wrong-import-position
 from tests import common
+# pylint: disable-next=wrong-import-position
 from bleachbit import IS_WINDOWS
+# pylint: disable-next=wrong-import-position
 from bleachbit.FileUtilities import delete
+# pylint: disable-next=wrong-import-position
 from bleachbit.Network import (download_url_to_fn, fetch_url, get_gtk_version,
                                get_ip_for_url, get_user_agent, unset_sslkeylogfile)
 

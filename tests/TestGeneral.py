@@ -177,6 +177,7 @@ class GeneralTestCase(common.BleachbitTestCase):
                        'LD_PRELOAD': '/tmp/evil.so'}
         captured = {}
 
+        # pylint: disable-next=unused-argument
         def fake_popen(args, **kwargs):
             captured['env'] = kwargs.get('env')
             proc = mock.Mock()

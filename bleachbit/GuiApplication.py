@@ -397,11 +397,13 @@ class Bleachbit(Gtk.Application):
             return False
         if not self._window:
             return False
+        # pylint: disable-next=possibly-used-before-assignment
         dialog = create_font_check_dialog(self._window)
         response = dialog.run()
         dialog.destroy()
         if response == Gtk.ResponseType.YES:
             options.set('font_check_completed', True)
+        # pylint: disable-next=possibly-used-before-assignment
         elif response in (RESPONSE_TEXT_BLURRY, RESPONSE_TEXT_UNREADABLE):
             self._restart_with_fontconfig_backend()
         # If user dismisses the dialog, ask again next time.

@@ -98,6 +98,7 @@ class Delete:
         if really_delete:
             try:
                 deleted = FileUtilities.delete(self.path, self.shred)
+            # pylint: disable-next=possibly-used-before-assignment
             except WindowsError as e:
                 # WindowsError: [Error 32] The process cannot access the file because it is being
                 # used by another process: 'C:\\Documents and
@@ -105,6 +106,7 @@ class Delete:
                 if not e.winerror == 32:
                     raise
 
+                # pylint: disable-next=possibly-used-before-assignment
                 bleachbit.Windows.delete_locked_file(self.path)
 
                 if self.shred:

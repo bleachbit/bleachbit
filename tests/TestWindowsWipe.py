@@ -18,18 +18,19 @@ from contextlib import suppress
 
 import bleachbit
 
+# local
+from tests import common
+from bleachbit.FileUtilities import children_in_directory
+
 # third party
 if bleachbit.IS_WINDOWS:
     import win32file
     import pywintypes
     from win32com.shell import shell
 
-# local
-from tests import common
-from bleachbit.FileUtilities import children_in_directory
-
 if bleachbit.IS_WINDOWS:
     # importing WindowsWipe fails on non-Windows
+    # pylint: disable-next=ungrouped-imports
     from bleachbit.WindowsWipe import (
         check_os,
         determine_win_version,
@@ -47,6 +48,7 @@ if bleachbit.IS_WINDOWS:
         GENERIC_READ,
         GENERIC_WRITE
     )
+    # pylint: disable-next=ungrouped-imports
     from tests.TestWindows import WindowsLinksMixIn
 else:
     WindowsLinksMixIn = object
@@ -59,10 +61,12 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_check_os(self):
         """Unit test for check_os()"""
         # This should not raise an exception on Windows
+        # pylint: disable-next=possibly-used-before-assignment
         check_os()
 
     def test_determine_win_version(self):
         """Unit test for determine_win_version"""
+        # pylint: disable-next=possibly-used-before-assignment
         version, is_win_home = determine_win_version()
         self.assertIsInstance(version, str)
         self.assertIsInstance(is_win_home, bool)
@@ -71,8 +75,10 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         """Unit tests for open_file() and close_file"""
         open_path = os.path.join(self.tempdir, 'open')
         self.write_file(open_path, b'test data')
+        # pylint: disable-next=possibly-used-before-assignment
         file_handle = open_file(open_path)
         self.assertIsNotNone(file_handle)
+        # pylint: disable-next=possibly-used-before-assignment
         close_file(file_handle)
 
     def test_open_file_refuses_symlink(self):
@@ -97,6 +103,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         for path in children_in_directory(os.path.expandvars(r'%windir%\system32')):
             try:
                 file_handle = open_file(path)
+            # pylint: disable-next=possibly-used-before-assignment
             except pywintypes.error as e:
                 # 5  = ERROR_ACCESS_DENIED
                 # 32 = ERROR_SHARING_VIOLATION
@@ -113,6 +120,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 error_count += 1
                 continue
 
+            # pylint: disable-next=possibly-used-before-assignment
             ret = get_extents(file_handle, filename=path)
             self.assertIsInstance(ret, list)
             close_file(file_handle)
@@ -173,6 +181,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         path = self.write_file(filename='test.txt', text='test data')
 
         file_handle = open_file(path)
+        # pylint: disable-next=possibly-used-before-assignment
         file_size, is_special = get_file_basic_info(path, file_handle)
         self.assertEqual(file_size, 9)
         self.assertFalse(is_special)
@@ -206,7 +215,9 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
         self.assertGreater(os.path.getsize(truncate_path), 0)
 
+        # pylint: disable-next=possibly-used-before-assignment
         file_handle = open_file(truncate_path, GENERIC_READ | GENERIC_WRITE)
+        # pylint: disable-next=possibly-used-before-assignment
         truncate_file(file_handle)
         close_file(file_handle)
 
@@ -214,12 +225,14 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
     def test_get_volume_information(self):
         """Unit test for get_volume_information"""
+        # pylint: disable-next=possibly-used-before-assignment
         volume = volume_from_file(sys.executable)
         self.assertIsInstance(volume, str)
         self.assertTrue(volume.endswith('\\'))
         self.assertTrue(os.path.exists(volume))
         self.assertEqual(len(volume), 3)
 
+        # pylint: disable-next=possibly-used-before-assignment
         volume_info = get_volume_information(volume)
 
         self.assertIsNotNone(volume_info)
@@ -234,6 +247,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
         file_handle = open_file(tmp_path, GENERIC_READ | GENERIC_WRITE)
         write_length = 1024
+        # pylint: disable-next=possibly-used-before-assignment
         write_zero_fill(file_handle, write_length)
         close_file(file_handle)
 
@@ -245,6 +259,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
     def test_file_wipe_basic(self):
         """Basic unit test for file_wipe"""
+        # pylint: disable-next=possibly-used-before-assignment
         if not shell.IsUserAnAdmin():
             self.skipTest("Test requires administrator privileges")
 
@@ -287,6 +302,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 self.assertGreaterEqual(
                     total_clusters * cluster_size, len(write_data))
 
+            # pylint: disable-next=possibly-used-before-assignment
             file_wipe(tmp_path)
 
             with open(tmp_path, 'rb') as f:
@@ -303,6 +319,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
         file_handle = None
         try:
+            # pylint: disable-next=possibly-used-before-assignment
             file_handle = win32file.CreateFileW(
                 tmp_path,
                 win32file.GENERIC_READ,  # Only need read access to lock it
@@ -376,6 +393,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
             # Wipe files with swapped handles and extents
             # Wipe file1 using file2's handle and extents
+            # pylint: disable-next=possibly-used-before-assignment
             wipe_file_direct(file_configs[1]["handle"], file_configs[0]["extents"],
                              cluster_size, file_configs[0]["size"])
             # Wipe file2 using file1's handle and extents
@@ -431,6 +449,7 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         """Unit test for extents_a_minus_b()"""
         def a_minus_b_as_set(a, b):
             result = set()
+            # pylint: disable-next=possibly-used-before-assignment
             for start, end in extents_a_minus_b(a, b):
                 self.assertLessEqual(start, end)
                 result.update(range(start, end + 1))

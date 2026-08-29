@@ -102,6 +102,11 @@ from win32file import (CreateFile, CreateFileW,
                        WriteFile,
                        LockFile, DeleteFile,
                        SetEndOfFile, FlushFileBuffers)
+from win32file import (GENERIC_READ, GENERIC_WRITE, FILE_BEGIN,
+                       FILE_SHARE_DELETE,
+                       FILE_SHARE_READ, FILE_SHARE_WRITE,
+                       OPEN_EXISTING, CREATE_ALWAYS, FILE_FLAG_BACKUP_SEMANTICS,
+                       DRIVE_REMOTE, DRIVE_CDROM, DRIVE_UNKNOWN)
 from winioctlcon import (FSCTL_GET_RETRIEVAL_POINTERS,
                          FSCTL_GET_VOLUME_BITMAP,
                          FSCTL_GET_NTFS_VOLUME_DATA,
@@ -109,11 +114,6 @@ from winioctlcon import (FSCTL_GET_RETRIEVAL_POINTERS,
                          FSCTL_SET_COMPRESSION,
                          FSCTL_SET_SPARSE,
                          FSCTL_SET_ZERO_DATA)
-from win32file import (GENERIC_READ, GENERIC_WRITE, FILE_BEGIN,
-                       FILE_SHARE_DELETE,
-                       FILE_SHARE_READ, FILE_SHARE_WRITE,
-                       OPEN_EXISTING, CREATE_ALWAYS, FILE_FLAG_BACKUP_SEMANTICS,
-                       DRIVE_REMOTE, DRIVE_CDROM, DRIVE_UNKNOWN)
 from win32con import (FILE_ATTRIBUTE_ENCRYPTED,
                       FILE_ATTRIBUTE_COMPRESSED,
                       FILE_ATTRIBUTE_SPARSE_FILE,

@@ -71,10 +71,13 @@ def _remove_windows_readonly(path):
     if not IS_WINDOWS:
         return False
     try:
+        # pylint: disable-next=possibly-used-before-assignment
         attrs = GetFileAttributesW(path)
     except pywinerror:
         return False
+    # pylint: disable-next=possibly-used-before-assignment
     if attrs & FILE_ATTRIBUTE_READONLY:
+        # pylint: disable-next=possibly-used-before-assignment
         SetFileAttributesW(path, attrs & ~FILE_ATTRIBUTE_READONLY)
         return True
     return False
@@ -519,7 +522,7 @@ def _delete_file_impl(path, shred):
     if shred and not is_hard_link(path):
         try:
             wipe_contents(path)
-        except pywinerror as e:  # pylint: disable=possibly-used-before-assignment
+        except pywinerror as e:
             # 2 = The system cannot find the file specified.
             # This can happen with a broken symlink
             # https://github.com/bleachbit/bleachbit/issues/195

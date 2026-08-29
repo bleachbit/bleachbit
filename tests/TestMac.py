@@ -38,6 +38,7 @@ class MacTestCase(common.BleachbitTestCase):
     def test_notify_macos_calls_osascript(self):
         """notify_macos() invokes osascript with a display notification script."""
         with mock.patch('subprocess.run') as mock_run:
+            # pylint: disable-next=used-before-assignment, possibly-used-before-assignment
             notify_macos('hello world')
 
         self.assertEqual(mock_run.call_count, 1)
@@ -85,6 +86,7 @@ class MacTestCase(common.BleachbitTestCase):
         fake_probes = ('~/nonexistent_fda_probe_1/',
                        '~/nonexistent_fda_probe_2/')
         with mock.patch('bleachbit.Mac._FDA_PROBE_PATHS', fake_probes):
+            # pylint: disable-next=used-before-assignment, possibly-used-before-assignment
             self.assertTrue(is_full_disk_access_enabled())
 
     @common.skipUnlessMac
@@ -128,6 +130,7 @@ class MacTestCase(common.BleachbitTestCase):
     @common.skipUnlessMac
     def test_get_macos_locale(self):
         """get_macos_locale() returns system locale preference or None."""
+        # pylint: disable-next=used-before-assignment, possibly-used-before-assignment
         ret = get_macos_locale()
         if ret is not None:
             self.assertIsInstance(ret, str)
@@ -207,6 +210,7 @@ class MacTestCase(common.BleachbitTestCase):
     def _create_binarycookies_file(self, domain_records):
         """Create a temporary binarycookies file"""
         pages = [{'records': domain_records}]
+        # pylint: disable-next=used-before-assignment, possibly-used-before-assignment
         data = _serialize_safari_cookie_records(pages)
         temp_path = self.mkstemp(suffix='.binarycookies')
         with open(temp_path, 'wb') as f:
@@ -218,6 +222,7 @@ class MacTestCase(common.BleachbitTestCase):
         """is_safari_binarycookies correctly identifies binarycookies files."""
         rec = self._make_cookie_record('webkit.org')
         path = self._create_binarycookies_file([('webkit.org', rec)])
+        # pylint: disable-next=used-before-assignment, possibly-used-before-assignment
         self.assertTrue(is_safari_binarycookies(path))
 
         # Non-binarycookies file
@@ -252,6 +257,7 @@ class MacTestCase(common.BleachbitTestCase):
             f.write(b'\xff')
 
         with self.assertRaises(ValueError):
+            # pylint: disable-next=used-before-assignment, possibly-used-before-assignment
             list(_read_safari_cookie_records(temp_path))
 
     @common.skipUnlessMac
@@ -285,6 +291,7 @@ class MacTestCase(common.BleachbitTestCase):
             ('sub.domain.org', rec2),
         ])
 
+        # pylint: disable-next=used-before-assignment, possibly-used-before-assignment
         domains = list_safari_cookies(path)
         self.assertEqual(domains, ['sub.domain.org', 'webkit.org'])
 
@@ -296,6 +303,7 @@ class MacTestCase(common.BleachbitTestCase):
 
         # Test writing via _write_safari_cookie_records
         write_path = os.path.join(self.tempdir, 'rewritten.binarycookies')
+        # pylint: disable-next=used-before-assignment, possibly-used-before-assignment
         _write_safari_cookie_records(write_path, pages)
         self.assertEqual(list_safari_cookies(write_path),
                          ['sub.domain.org', 'webkit.org'])
@@ -310,6 +318,7 @@ class MacTestCase(common.BleachbitTestCase):
             ('github.com', rec2),
         ])
 
+        # pylint: disable-next=used-before-assignment, possibly-used-before-assignment
         res = delete_safari_cookies(path, {'github.com'}, really_delete=False)
         self.assertEqual(res['total_deleted'], 1)
         self.assertEqual(res['total_kept'], 1)
