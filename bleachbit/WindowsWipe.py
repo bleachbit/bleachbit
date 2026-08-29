@@ -719,7 +719,7 @@ def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
             break
 
     if rp_struct is None:
-        raise Exception(
+        raise RuntimeError(
             f"Failed to get retrieval pointers for file '{filename}'")
 
     # At this point we have a FSCTL_GET_RETRIEVAL_POINTERS (rp) structure.

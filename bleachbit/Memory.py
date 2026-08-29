@@ -377,7 +377,7 @@ def physical_free_linux():
         free_bytes, _ = _parse_meminfo_free(f.read())
     if free_bytes > 0:
         return free_bytes
-    raise Exception("unknown")
+    raise RuntimeError("unknown")
 
 
 def physical_free_windows():
