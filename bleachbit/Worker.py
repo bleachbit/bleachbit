@@ -97,7 +97,7 @@ class Worker:
         ret = None
         try:
             for ret in cmd.execute(self.really_delete):
-                if True == ret or isinstance(ret, tuple):
+                if ret is True or isinstance(ret, tuple):
                     # Temporarily pass control to the GTK idle loop,
                     # allow user to abort, and
                     # display progress (if applicable).
@@ -191,7 +191,7 @@ class Worker:
             # normal scan
             for cmd in backends[operation].get_commands(option_id):
                 for ret in self.execute(cmd, '%s.%s' % (operation, option_id)):
-                    if True == ret:
+                    if ret is True:
                         # Return control to PyGTK idle loop to keep
                         # it responding allow the user to abort
                         self.yield_time = time.time()
@@ -264,7 +264,7 @@ class Worker:
                         self.ui.update_progress_bar(msg)
                 if self.is_aborted:
                     break
-                if True == ret or isinstance(ret, tuple):
+                if ret is True or isinstance(ret, tuple):
                     # Return control to PyGTK idle loop to keep
                     # it responding and allow the user to abort.
                     yield True
@@ -369,7 +369,7 @@ class Worker:
         ds = DeepScan.DeepScan(self.deepscans)
 
         for cmd in ds.scan():
-            if True == cmd:
+            if cmd is True:
                 yield True
                 continue
             for _ret in self.execute(cmd, 'deepscan'):
