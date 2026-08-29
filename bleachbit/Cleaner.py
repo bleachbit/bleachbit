@@ -31,7 +31,7 @@ if IS_POSIX:
     from bleachbit import Unix
 elif IS_WINDOWS:
     from bleachbit import Windows
-elif not (IS_POSIX or IS_WINDOWS):
+else:
     raise RuntimeError(f"Unknown OS '{os.name}'")
 
 
