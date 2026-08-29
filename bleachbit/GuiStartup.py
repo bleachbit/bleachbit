@@ -114,7 +114,8 @@ def _lookup_account_name_or_sid(sid):
     try:
         return win32security.LookupAccountSid(None, sid)[0], sid_str
     except pywintypes.error as e:
-        logger.debug('LookupAccountSid failed (%s); falling back to SID string', e)
+        logger.debug(
+            'LookupAccountSid failed (%s); falling back to SID string', e)
         return sid_str, sid_str
 
 

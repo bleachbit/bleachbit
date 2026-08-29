@@ -1391,7 +1391,7 @@ class OrphanedFrameworkVersionsTestCase(common.BleachbitTestCase):
         yielded."""
         versions_dir = self._make_versions_dir(['150.0.1.1'])
         os.symlink('152.0.7977.83-does-not-exist',
-                  os.path.join(versions_dir, 'Current'))
+                   os.path.join(versions_dir, 'Current'))
         result = list(orphaned_framework_versions(versions_dir))
         self.assertEqual(result, [])
 

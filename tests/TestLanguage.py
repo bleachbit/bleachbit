@@ -238,7 +238,7 @@ class WindowsGettextCacheTestCase(common.BleachbitTestCase):
     @common.skipUnlessWindows
     @skipIfMissingPo
     def test_setup_translation_reloads_libintl_catalog(self):
-        
+
         from bleachbit import Language as language_module
         from bleachbit.Windows import load_i18n_dll
 

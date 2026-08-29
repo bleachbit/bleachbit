@@ -590,7 +590,7 @@ class ActionTestCase(common.BleachbitTestCase):
                         f'{versions_dir}/150.0.1.1']
         with mock.patch('bleachbit.Action.IS_MAC', True), \
                 mock.patch('bleachbit.Action.Unix.orphaned_framework_versions',
-                          return_value=iter(fake_orphans)) as mock_orphans:
+                           return_value=iter(fake_orphans)) as mock_orphans:
             commands = list(action.get_commands())
 
         mock_orphans.assert_called_once_with(versions_dir)

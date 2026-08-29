@@ -127,6 +127,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             # META_MASK|MOD2_MASK combination, but the accelerator group
             # never activates), so handle it directly instead.
             mac_cmd_q_mods = Gdk.ModifierType.META_MASK | Gdk.ModifierType.MOD2_MASK
+
             def _on_mac_key_press(_widget, event):
                 if event.keyval == Gdk.KEY_q and event.state & mac_cmd_q_mods == mac_cmd_q_mods:
                     self.on_quit(None)
