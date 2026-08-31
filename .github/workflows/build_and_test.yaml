@@ -5,6 +5,8 @@ on:
     branches:
       - '**'
       - '!dependabot/**' # avoid duplicate runs; the pull_request event handles dependabot PRs
+    tags:
+      - 'v*' # release tags trigger the max-effort Windows build
     paths-ignore: &paths-ignore
       - '.gitignore'
       - '.gitattributes'
