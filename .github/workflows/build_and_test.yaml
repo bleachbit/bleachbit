@@ -287,11 +287,11 @@ jobs:
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         # The English-only installer is built only for tags (releases) to save
         # the cost of GHA minutes and storage.
-        # PR builds pass fast_build (skips UPX and library recompression)
+        # PR builds pass 'fast' (skips UPX and library recompression)
         # since windows-deploy never ships PR-triggered artifacts.
+        # Tagged builds pass 'max-effort' (enables the English-only installer).
         env:
-          BB_BUILD_ENGLISH_INSTALLER: ${{ github.ref_type == 'tag' && '1' || '' }}
-          SETUP_ARGS: ${{ github.event_name == 'pull_request' && 'fast' || '' }}
+          SETUP_ARGS: ${{ github.event_name == 'pull_request' && 'fast' || (github.ref_type == 'tag' && 'max-effort' || '') }}
         run: |
           set PATH=%MSYS_BIN%;%PATH%
           "%PYTHON_EXE%" -m windows.setup %SETUP_ARGS%

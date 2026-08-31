@@ -67,9 +67,42 @@ if not os.path.exists(NSIS_EXE) and os.path.exists(NSIS_ALT_EXE):
 SZ_EXE = 'C:\\Program Files\\7-Zip\\7z.exe'
 UPX_EXE = shutil.which('upx') or (ROOT_DIR + '\\upx\\upx.exe')
 UPX_OPTS = '--best --nrv2e'
+STRIP_EXE = shutil.which('strip')
 
 
-def archive(infile, outfile, fast_build):
+def get_build_settings():
+    """Determine build preset and optimization flags.
+
+    Presets:
+      fast       - quick build for PRs
+                   * skips UPX/strip/recompression
+                   * faster .zip and NSIS compression
+      regular    - default build
+                   * enables UPX, strip, and 7-Zip library recompression
+                   * maximum .zip and NSIS compression
+      max-effort - for releases (tagged builds)
+                   * build English-only installer
+    """
+    arg = 'regular'
+    for a in sys.argv[1:]:
+        if a.lower() != 'py2exe':
+            arg = a.lower()
+            break
+
+    is_fast = arg == 'fast'
+    is_max_effort = arg == 'max-effort'
+
+    return {
+        'preset': 'fast' if is_fast else ('max-effort' if is_max_effort else 'regular'),
+        'fast': is_fast, # controls .zip and NSIS compression levels
+        'build_english': is_max_effort, # build English-only installer
+        'upx': not is_fast and bool(os.path.exists(UPX_EXE)), # compress executables
+        'strip': not is_fast and bool(STRIP_EXE), # strip executables
+        'recompress_lib': not is_fast, # recompress library.zip
+    }
+
+
+def archive(infile, outfile, settings):
     """Create an archive from a file"""
     assert_exist(infile)
     delete_file(outfile, warn_if_exists=True)
@@ -80,7 +113,7 @@ def archive(infile, outfile, fast_build):
     # bso0 bsp0 quiet output
     # 7-Zip Command Line Reverence Wizard: https://axelstudios.github.io/7z/#!/
     sz_opts = ['-tzip', '-mm=Deflate', '-mfb=258', '-mpass=7', '-bso0', '-bsp0']  # best compression
-    if fast_build:
+    if settings['fast']:
         # fast compression
         sz_opts = ['-tzip', '-mx=1', '-bso0', '-bsp0']
     cmd = [SZ_EXE, 'a'] + sz_opts + [outfile, infile]
@@ -735,7 +768,7 @@ def clean_translations():
 @count_size_improvement
 def strip():
     """Strip executables to reduce size"""
-    if not bleachbit.FileUtilities.exe_exists('strip.exe'):
+    if not STRIP_EXE:
         logger.warning('strip.exe does not exist. Skipping strip.')
         return
     strip_patterns = ['*.dll', '*.pyd']
@@ -756,7 +789,7 @@ def strip():
         if not os.path.exists(strip_file):
             logger.error('%s does not exist before stripping', strip_file)
             continue
-        cmd = ['strip.exe', '--strip-debug', '--discard-all',
+        cmd = [STRIP_EXE, '--strip-debug', '--discard-all',
                '--preserve-dates', '-o', strip_tmp_fn, strip_file]
         returncode = run_cmd(cmd, check=False, log_cmd=False)
         if returncode:
@@ -799,12 +832,8 @@ def strip():
 
 
 @count_size_improvement
-def upx(fast_build):
+def upx():
     """Compress executables with UPX to reduce size"""
-    if fast_build:
-        logger.warning('Fast mode: Skipped executable with UPX')
-        return
-
     if not os.path.exists(UPX_EXE):
         logger.warning(
             'UPX not found. To compress executables, install UPX to: %s', UPX_EXE)
@@ -858,12 +887,8 @@ def delete_linux_only():
 
 
 @count_size_improvement
-def recompress_library(fast_build):
+def recompress_library(settings):
     """Recompress library.zip to reduce size"""
-    if fast_build:
-        logger.warning('Fast mode: Skipped recompression of library.zip')
-        return
-
     if not os.path.exists(SZ_EXE):
         logger.warning('%s does not exist', SZ_EXE)
         return
@@ -896,7 +921,7 @@ def recompress_library(fast_build):
 
     # recompress library.zip
     os.chdir('dist\\library')
-    archive('.', '..\\library.zip', fast_build)
+    archive('.', '..\\library.zip', settings)
     os.chdir('..\\..')
     file_size_new = os.path.getsize('dist\\library.zip')
     file_size_diff = file_size_old - file_size_new
@@ -906,27 +931,30 @@ def recompress_library(fast_build):
     assert_exist('dist\\library.zip')
 
 
-def shrink(fast_build):
+def shrink(settings):
     """After building, run all the applicable size optimizations"""
     delete_unnecessary()
     delete_icons()
     delete_unused_themes()
     clean_translations()
     remove_empty_dirs('dist')
-    strip()
-    upx(fast_build)
+    if settings['strip']:
+        strip()
+    if settings['upx']:
+        upx()
     clean_dist_locale()
 
     delete_linux_only()
 
-    recompress_library(fast_build)
+    if settings['recompress_lib']:
+        recompress_library(settings)
 
     # so calculate the size of the folder, as it is a goal to shrink it.
     logger.info('Final size of the dist folder: %s',
                 f'{get_dir_size("dist"):,}')
 
 
-def package_portable(fast_build):
+def package_portable(settings):
     """Package the portable version"""
     logger.info('Building portable')
     copy_tree('dist', 'BleachBit-Portable')
@@ -934,7 +962,7 @@ def package_portable(fast_build):
         text_file.write("[Portable]")
 
     archive('BleachBit-Portable',
-            f'BleachBit-{get_version()}-portable.zip', fast_build)
+            f'BleachBit-{get_version()}-portable.zip', settings)
 
 
 def nsis(opts, exe_name, nsi_path):
@@ -954,10 +982,10 @@ def nsis(opts, exe_name, nsi_path):
     assert_exist(exe_name)
 
 
-def package_installer(fast_build, nsi_path=r'windows\bleachbit.nsi'):
+def package_installer(settings, nsi_path=r'windows\bleachbit.nsi'):
     """Package the installer"""
 
-    assert isinstance(fast_build, bool)
+    assert isinstance(settings, dict)
     assert isinstance(nsi_path, str)
 
     if not os.path.exists(NSIS_EXE):
@@ -973,20 +1001,18 @@ def package_installer(fast_build, nsi_path=r'windows\bleachbit.nsi'):
     # Was:
     # opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
     # Now: Done in NSIS file!
-    opts = '' if fast_build else '/V3 /DCompressor'
-    if not fast_build and os.path.exists(UPX_EXE):
+    opts = '' if settings['fast'] else '/V3 /DCompressor'
+    if settings['upx']:
         opts += ' /Dpackhdr'
     nsis(opts, exe_name_multilang, nsi_path)
 
-    # The English-only installer is opt-in: it is built only when not in
-    # fast_build mode and BB_BUILD_ENGLISH_INSTALLER is set to a truthy value
-    # (e.g., "1"). This lets CI skip it for non-tag builds to save GHA minutes
-    # while still building it for tag/release builds. Local development builds
-    # skip it by default; set BB_BUILD_ENGLISH_INSTALLER=1 to enable.
-    build_english = (not fast_build) and \
-        os.getenv('BB_BUILD_ENGLISH_INSTALLER', '').strip().lower() not in ('', '0', 'false', 'no')
+    # The English-only installer is controlled by the build_english setting,
+    # which the max-effort preset enables (used for tag/release builds). This
+    # lets CI skip it for non-tag builds to save GHA minutes. Local
+    # development builds skip it by default; pass max-effort to enable.
+    build_english = settings['build_english']
 
-    if fast_build:
+    if settings['fast']:
         sign_files((exe_name_multilang,))
     elif build_english:
         # Was:
@@ -1006,7 +1032,7 @@ def package_installer(fast_build, nsi_path=r'windows\bleachbit.nsi'):
         # The archive does not have the folder name.
         outfile = f"{ROOT_DIR}\\windows\\BleachBit-{get_version()}-setup.zip"
         infile = f"{ROOT_DIR}\\windows\\BleachBit-{get_version()}-setup.exe"
-        archive(infile, outfile, fast_build)
+        archive(infile, outfile, settings)
     else:
         logger.warning('%s does not exist', SZ_EXE)
 
@@ -1016,11 +1042,13 @@ def main():
     start_time = time.time()
     logger.info('BleachBit version %s', get_version())
     environment_check()
-    fast_build = len(sys.argv) > 1 and sys.argv[1] == 'fast'
+    settings = get_build_settings()
+    logger.info('Build preset: %s (UPX: %s, Strip: %s)',
+                settings['preset'], settings['upx'], settings['strip'])
     build()
-    shrink(fast_build)
-    package_portable(fast_build)
-    package_installer(fast_build)
+    shrink(settings)
+    package_portable(settings)
+    package_installer(settings)
     # Clearly show the sizes of the files that end users download because the
     # goal is to minimize them.
     subprocess.run(
@@ -1028,7 +1056,7 @@ def main():
     duration = time.time() - start_time
     minutes = int(duration // 60)
     seconds = int(duration % 60)
-    logger.info(__file__ + ' success! Duration: %d minutes, %d seconds', minutes, seconds)
+    logger.info('%s success! Duration: %d minutes, %d seconds', __file__, minutes, seconds)
 
 
 if '__main__' == __name__:
