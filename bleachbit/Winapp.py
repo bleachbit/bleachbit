@@ -18,6 +18,7 @@ from xml.dom.minidom import parseString
 import bleachbit
 from bleachbit import Cleaner, IS_WINDOWS, Windows
 from bleachbit.Action import Delete, Winreg
+from bleachbit.FileUtilities import detect_encoding
 from bleachbit.Language import get_text as _
 from bleachbit.PathUtils import is_world_writable
 
@@ -186,7 +187,8 @@ class Winapp:
             self.add_section(langsecref[0], langsecref[1])
         self.errors = 0
         self.parser = bleachbit.RawConfigParser()
-        self.parser.read(pathname)
+        encoding = detect_encoding(pathname) or 'utf_8_sig'
+        self.parser.read(pathname, encoding=encoding)
         self.re_detect = re.compile(r'^detect(\d+)?$')
         self.re_detectfile = re.compile(r'^detectfile(\d+)?$')
         self.re_excludekey = re.compile(r'^excludekey\d+$')
