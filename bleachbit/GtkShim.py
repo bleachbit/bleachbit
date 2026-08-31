@@ -94,7 +94,7 @@ from pathlib import PureWindowsPath
 from html import escape as esc
 from traceback import format_exc
 
-from bleachbit import bleachbit_exe_path, IS_POSIX, IS_WINDOWS
+from bleachbit import bleachbit_exe_path, IS_MAC, IS_POSIX, IS_WINDOWS
 
 HELP_URL = 'https://link.bleachbit.org/get-help'
 PYGOBJECT_URL = 'https://link.bleachbit.org/pygobject-lib-bin-error'
@@ -280,6 +280,11 @@ def _check_display_available():
         # Windows always has a display
         return True, None
 
+    # macOS uses GDK Quartz rather than X11 or Wayland.
+    # GDK will perform the actual display availability check later.
+    if IS_MAC:
+        return True, None
+
     # Check for X11 or Wayland display
     has_display = bool(
         os.environ.get('DISPLAY') or
@@ -375,8 +380,9 @@ def _import_gtk_libraries():
             _handle_gtk_import_error(e)
             return False, f'Failed to import GTK libraries: {e}'
 
-        # On POSIX, verify we can actually get a display
-        if IS_POSIX:
+        # On POSIX, verify we can actually get a display.
+        # macOS uses GDK Quartz and has no X11-style root window.
+        if IS_POSIX and not IS_MAC:
             try:
                 if _Gdk.get_default_root_window() is None:
                     return False, 'No default root window (display not accessible)'
