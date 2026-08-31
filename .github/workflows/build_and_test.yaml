@@ -183,6 +183,15 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   windows-build:
+    # When a tag is pushed at the same time as a branch push, they trigger racing
+    # builds with the same SHA but different build numbers, so different filenames
+    # in the deployment step (i.e., no overwriting risk). The tagged build has more
+    # optimizations, and we do not need both, so cancel the branch build: the more
+    # optimized files will be uploaded, instead.
+    # Push the branch first and wait a moment before pushing the tag.
+    concurrency:
+      group: ${{ github.workflow }}-windows-build-${{ github.sha }}
+      cancel-in-progress: ${{ github.ref_type == 'tag' }}
     name: windows-build
     timeout-minutes: 30
     runs-on: windows-latest
@@ -475,7 +484,9 @@ jobs:
     # - No pull requests, whether from a fork or the same repository
     # - No Dependabot branches: GitHub Actions withholds repository secrets
     #   from workflows triggered by Dependabot, so the S3 upload would fail.
-    if: github.repository == 'bleachbit/bleachbit' && github.event_name != 'pull_request' && !startsWith(github.ref_name, 'dependabot/')
+    # needs.windows-build.result == 'success' guards against tagged build
+    # cancelled by the job-level concurrency group.
+    if: needs.windows-build.result == 'success' && github.repository == 'bleachbit/bleachbit' && github.event_name != 'pull_request' && !startsWith(github.ref_name, 'dependabot/')
     runs-on: windows-latest
     timeout-minutes: 5
     env:
