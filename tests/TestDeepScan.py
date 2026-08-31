@@ -84,6 +84,22 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 continue
             self.assertLExists(cmd.path)
 
+    def test_compiled_search_path_prefix(self):
+        """CompiledSearch.match should preserve root path semantics."""
+        from bleachbit.DeepScan import CompiledSearch
+
+        compiled = CompiledSearch(
+            Search(command='delete', regex=r'\.txt$')
+        )
+
+        for dirpath in (self.tempdir, os.path.abspath(os.sep)):
+            with self.subTest(dirpath=dirpath):
+                path_prefix = os.path.join(dirpath, '')
+                self.assertEqual(
+                    compiled.match(dirpath, 'foo.txt', path_prefix),
+                    os.path.join(dirpath, 'foo.txt'),
+                )
+
     def test_skip_whitelisted_directory(self):
         """DeepScan should not search whitelisted directories."""
         # Reminder: each test case gets a new options directory,
