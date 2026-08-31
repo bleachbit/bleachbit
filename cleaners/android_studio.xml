@@ -32,14 +32,13 @@ later.  See the COPYING file in the top-level directory.
   <var name="as_cache">
     <value search="glob" os="windows">%LocalAppData%\Google\AndroidStudio*\caches</value>
     <value search="glob" os="macos">~/Library/Caches/Google/AndroidStudio*</value>
-    <value search="glob" os="unix">~/.cache/Google/AndroidStudio*</value>
+    <value search="glob" os="unix">~/.cache/Google/AndroidStudio*/caches</value>
   </var>
 
   <var name="as_logs">
     <value search="glob" os="windows">%LocalAppData%\Google\AndroidStudio*\log</value>
     <value search="glob" os="macos">~/Library/Logs/Google/AndroidStudio*</value>
     <value search="glob" os="unix">~/.cache/Google/AndroidStudio*/log</value>
-    <value search="glob" os="unix">~/.config/Google/AndroidStudio*/log</value>
   </var>
 
   <option id="gradle_cache">
