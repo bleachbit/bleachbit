@@ -68,20 +68,22 @@ SZ_EXE = 'C:\\Program Files\\7-Zip\\7z.exe'
 UPX_EXE = shutil.which('upx') or (ROOT_DIR + '\\upx\\upx.exe')
 UPX_OPTS = '--best --nrv2e'
 STRIP_EXE = shutil.which('strip')
+ADVZIP_EXE = shutil.which('advzip') or (ROOT_DIR + '\\advancecomp\\advzip.exe')
 
 
 def get_build_settings():
     """Determine build preset and optimization flags.
 
     Presets:
-      fast       - quick build for PRs
-                   * skips UPX/strip/recompression
-                   * faster .zip and NSIS compression
+      fast       - enable quick mode for PR builds
+                   * skip UPX, strip, and recompression
+                   * set faster compression for .zip and NSIS
       regular    - default build
                    * enables UPX, strip, and 7-Zip library recompression
-                   * maximum .zip and NSIS compression
-      max-effort - for releases (tagged builds)
+                   * set maximum compression for .zip and NSIS
+      max-effort - enable Deadpool mode for release builds
                    * build English-only installer
+                   * recompress .zip with advzip
     """
     arg = 'regular'
     for a in sys.argv[1:]:
@@ -97,13 +99,36 @@ def get_build_settings():
         'fast': is_fast, # controls .zip and NSIS compression levels
         'build_english': is_max_effort, # build English-only installer
         'upx': not is_fast and bool(os.path.exists(UPX_EXE)), # compress executables
+        'advzip': is_max_effort and bool(os.path.exists(ADVZIP_EXE)), # recompress zips with advzip
         'strip': not is_fast and bool(STRIP_EXE), # strip executables
         'recompress_lib': not is_fast, # recompress library.zip
     }
 
 
-def archive(infile, outfile, settings):
-    """Create an archive from a file"""
+def recompress_with_advzip(zip_path):
+    """Recompress a .zip archive with advzip"""
+    assert_exist(zip_path)
+    logger.info('Recompressing %s with advzip -4 (zopfli)', zip_path)
+    file_size_old = os.path.getsize(zip_path)
+    t0 = time.time()
+    cmd = [ADVZIP_EXE, '--recompress', '--shrink-insane', zip_path]
+    run_cmd(cmd)
+    t1 = time.time()
+    file_size_new = os.path.getsize(zip_path)
+    file_size_diff = file_size_old - file_size_new
+    logger.info('advzip recompression of %s reduced size by %s from %s to %s in %.1f s',
+                zip_path, f'{file_size_diff:,}', f'{file_size_old:,}', f'{file_size_new:,}', t1 - t0)
+
+
+def archive(infile, outfile, settings, use_advzip=False):
+    """Create an archive from a file
+
+    This uses 7-Zip to create a .zip archive with the request
+    compression stings.
+
+    If use_advzip is enabled, then advzip recompresses the .zip
+    file, which is not needed for the zipped installer.
+    """
     assert_exist(infile)
     delete_file(outfile, warn_if_exists=True)
     # maximum compression with maximum compatibility
@@ -119,6 +144,8 @@ def archive(infile, outfile, settings):
     cmd = [SZ_EXE, 'a'] + sz_opts + [outfile, infile]
     run_7z(cmd)
     assert_exist(outfile)
+    if use_advzip and settings['advzip']:
+        recompress_with_advzip(outfile)
 
 
 def recursive_glob(rootdir, patterns):
@@ -921,7 +948,7 @@ def recompress_library(settings):
 
     # recompress library.zip
     os.chdir('dist\\library')
-    archive('.', '..\\library.zip', settings)
+    archive('.', '..\\library.zip', settings, use_advzip=True)
     os.chdir('..\\..')
     file_size_new = os.path.getsize('dist\\library.zip')
     file_size_diff = file_size_old - file_size_new
@@ -962,7 +989,7 @@ def package_portable(settings):
         text_file.write("[Portable]")
 
     archive('BleachBit-Portable',
-            f'BleachBit-{get_version()}-portable.zip', settings)
+            f'BleachBit-{get_version()}-portable.zip', settings, use_advzip=True)
 
 
 def nsis(opts, exe_name, nsi_path):
@@ -1043,8 +1070,8 @@ def main():
     logger.info('BleachBit version %s', get_version())
     environment_check()
     settings = get_build_settings()
-    logger.info('Build preset: %s (UPX: %s, Strip: %s)',
-                settings['preset'], settings['upx'], settings['strip'])
+    logger.info('Build preset: %s (UPX: %s, AdvZip: %s, Strip: %s)',
+                settings['preset'], settings['upx'], settings['advzip'], settings['strip'])
     build()
     shrink(settings)
     package_portable(settings)

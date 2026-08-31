@@ -207,6 +207,7 @@ jobs:
             pygobject-*-win32.whl
             upx.zip
             nsis-*-setup.exe
+            advancecomp.zip
           key: win-build-deps-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1') }}
 
       - name: Cache pip packages
@@ -252,6 +253,21 @@ jobs:
           }
           Start-Process -FilePath .\nsis-3.12-setup.exe -ArgumentList '/S' -Wait
 
+      - name: Install AdvanceCOMP (advzip)
+        # This is used in the NSIS build setup for releases (tags).
+        if: github.ref_type == 'tag'
+        shell: pwsh
+        run: |
+          if (-not (Test-Path advancecomp.zip)) {
+            Invoke-WebRequest -Uri "https://github.com/amadvance/advancecomp/releases/download/v2.6/advancecomp-2.6-windows-x64.zip" -OutFile advancecomp.zip
+          }
+          $hash = (Get-FileHash advancecomp.zip -Algorithm SHA256).Hash
+          if ($hash -ne '39478E2810D2E6FECEA321D11A8E8AAD678E9E52F83C684D85DCB70342607704') {
+            throw "SHA256 mismatch=$hash"
+          }
+          7z x advancecomp.zip -oadvancecomp -y
+          Get-ChildItem .\advancecomp\
+
       - name: Generate Revision.py
         uses: ./.github/actions/generate-revision
 
@@ -289,7 +305,8 @@ jobs:
         # the cost of GHA minutes and storage.
         # PR builds pass 'fast' (skips UPX and library recompression)
         # since windows-deploy never ships PR-triggered artifacts.
-        # Tagged builds pass 'max-effort' (enables the English-only installer).
+        # Tagged builds pass 'max-effort' (enables advzip zopfli recompression
+        # and the English-only installer).
         env:
           SETUP_ARGS: ${{ github.event_name == 'pull_request' && 'fast' || (github.ref_type == 'tag' && 'max-effort' || '') }}
         run: |
