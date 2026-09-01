@@ -30,12 +30,6 @@ logger = logging.getLogger(__name__)
 # Cache for snapd_is_active() to avoid repeated systemctl calls.
 _snapd_is_active_cache = None
 
-try:
-    Pattern = re.Pattern
-except AttributeError:
-    Pattern = re._pattern_type
-
-
 JOURNALD_REGEX = r'^Vacuuming done, freed ([\d.]+[BKMGT]?) of archived journals (on disk|from [\w/]+).$'
 
 _real_vfs = RealVFS()
@@ -78,7 +72,7 @@ class LocaleCleanerPath:
         """Returns direct subpaths for this object, i.e. either the named subfolder or all
         subfolders matching the pattern"""
         vfs = self._get_vfs()
-        if isinstance(self.pattern, Pattern):
+        if isinstance(self.pattern, re.Pattern):
             # posixpath is easy way to test also from Windows.
             return (posixpath.join(basepath, p) for p in vfs.listdir(basepath)
                     if self.pattern.match(p) and vfs.isdir(posixpath.join(basepath, p)))
@@ -92,7 +86,7 @@ class LocaleCleanerPath:
             for child in self.children:
                 if isinstance(child, LocaleCleanerPath):
                     yield from child.get_localizations(path)
-                elif isinstance(child, Pattern):
+                elif isinstance(child, re.Pattern):
                     for element in vfs.listdir(path):
                         match = child.match(element)
                         if match is not None:

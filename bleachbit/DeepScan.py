@@ -39,19 +39,14 @@ def normalized_walk(top, **kwargs):
     is like `os.walk` but recomposes those decomposed filenames on
     macOS
     """
-    try:
-        from scandir import walk
-    except Exception:
-        # there is a warning in FileUtilities, so don't warn again here
-        from os import walk
     if IS_MAC:
-        for dirpath, dirnames, filenames in walk(top, **kwargs):
+        for dirpath, dirnames, filenames in os.walk(top, **kwargs):
             yield dirpath, dirnames, [
                 unicodedata.normalize('NFC', fn)
                 for fn in filenames
             ]
     else:
-        yield from walk(top, **kwargs)
+        yield from os.walk(top, **kwargs)
 
 
 Search = namedtuple(
