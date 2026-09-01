@@ -352,21 +352,19 @@ class PreferencesDialog:
         self.lang_combo = Gtk.ComboBoxText()
         current_lang_code = get_active_language_code()
         # Add available languages
-        lang_idx = 0
         active_language_idx = None
         try:
             supported_langs = get_supported_language_code_name_dict().items()
-        except (KeyError, ValueError, Exception) as e:
+        except Exception as e:
             logger.error("Failed to get list of supported languages: %s", e)
             supported_langs = [('en_us', 'English')]
-        for lang_code, native in supported_langs:
+        for lang_idx, (lang_code, native) in enumerate(supported_langs):
             if native:
                 self.lang_combo.append_text(f"{native} ({lang_code})")
             else:
                 self.lang_combo.append_text(lang_code)
             if lang_code == current_lang_code:
                 active_language_idx = lang_idx
-            lang_idx += 1
         if active_language_idx is not None:
             self.lang_combo.set_active(active_language_idx)
         # set_wrap_width() prevents infinite space to scroll up.
@@ -642,11 +640,7 @@ class PreferencesDialog:
 
         liststore = Gtk.ListStore(str)
 
-        pathnames = options.get_list('shred_drives')
-        if pathnames:
-            pathnames = sorted(pathnames)
-        if not pathnames:
-            pathnames = []
+        pathnames = sorted(options.get_list('shred_drives') or [])
         for pathname in pathnames:
             liststore.append([pathname])
         treeview = Gtk.TreeView.new_with_model(liststore)

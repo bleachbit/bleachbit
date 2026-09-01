@@ -1005,10 +1005,8 @@ def is_unix_display_protocol_wayland():
     """Return True if the display protocol is Wayland."""
     assert IS_POSIX
     if 'XDG_SESSION_TYPE' in os.environ:
-        if os.environ['XDG_SESSION_TYPE'] == 'wayland':
-            return True
         # If not wayland, then x11, mir, etc.
-        return False
+        return os.environ['XDG_SESSION_TYPE'] == 'wayland'
     if 'WAYLAND_DISPLAY' in os.environ:
         return True
     # Ubuntu 24.10 showed "ubuntu-xorg".
