@@ -543,7 +543,7 @@ class MozillaUrlHistory(FileActionProvider):
 
 class MozillaFavicons(FileActionProvider):
 
-    """Action to clean Mozilla (Firefox) URL history in places.sqlite"""
+    """Action to clean Mozilla (Firefox) favicons in favicons.sqlite"""
     action_key = 'mozilla.favicons'
 
     def get_commands(self):
