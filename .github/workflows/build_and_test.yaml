@@ -175,7 +175,7 @@ jobs:
 
       - name: Upload coverage to Coveralls
         if: matrix.python-version == '3.14' && github.repository == 'bleachbit/bleachbit'
-        uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
+        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
         with:
           file: coverage.lcov
           flag-name: linux
@@ -468,7 +468,7 @@ jobs:
 
       - name: Upload coverage to Coveralls
         if: *all_suites_passed
-        uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
+        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
         with:
           file: coverage.lcov
           flag-name: windows
@@ -552,7 +552,7 @@ jobs:
     timeout-minutes: 3
     steps:
       - name: Coveralls finished
-        uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
+        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
         with:
           parallel-finished: true
           carryforward: "linux,windows"
