@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-01 10:05-0600\n"
-"PO-Revision-Date: 2026-08-22 12:38+0000\n"
+"PO-Revision-Date: 2026-09-01 20:47+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/bleachbit/main/"
 "tr/>\n"
@@ -686,30 +686,24 @@ msgid "Package lists"
 msgstr "Paket listeleri"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Development environment"
-msgstr "Masaüstü ortamı"
+msgstr "Geliştirme ortamı"
 
 #: ../cleaners/android_studio.xml
 msgid "Gradle cache"
-msgstr ""
+msgstr "Gradle önbelleği"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Delete downloaded podcasts"
 msgid "Delete downloaded dependencies and build artifacts"
-msgstr "İndirilmiş pod yayınlarını sil"
+msgstr "İndirilen bağımlılıkları ve derleme çıktılarını sil"
 
 #: ../cleaners/android_studio.xml
 msgid "Dependencies will need to be downloaded on the next build."
-msgstr ""
+msgstr "Bir sonraki derlemede bağımlılıkların indirilmesi gerekecektir."
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "DNS cache"
 msgid "IDE cache"
-msgstr "DNS önbelleği"
+msgstr "IDE önbelleği"
 
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
