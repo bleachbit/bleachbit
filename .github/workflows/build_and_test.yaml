@@ -106,6 +106,7 @@ jobs:
 
       - name: Set up Python ${{ matrix.python-version }}
         if: ${{ matrix.use-setup-python }}
+        # zizmor: ignore[cache-poisoning] test-only job, nothing cached here is published
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}
@@ -124,6 +125,7 @@ jobs:
 
       - name: Cache pip packages
         if: ${{ !matrix.use-setup-python }}
+        # zizmor: ignore[cache-poisoning] test-only job, nothing cached here is published
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/pip
@@ -143,7 +145,7 @@ jobs:
           fi
 
       - name: Generate Revision.py
-        uses: ./.github/actions/generate-revision
+        uses: $/.github/actions/generate-revision
 
       - name: Generate translations
         run: make -C po local
@@ -210,6 +212,7 @@ jobs:
           persist-credentials: false
 
       - name: Cache downloaded dependencies
+        # zizmor: ignore[cache-poisoning] every archive here is SHA256-verified after restore
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
@@ -222,6 +225,10 @@ jobs:
           key: win-build-deps-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1') }}
 
       - name: Cache pip packages
+        # Skipped for tags: requirements are version-pinned but not hash-pinned,
+        # so a poisoned pip cache could reach a released installer.
+        if: github.ref_type != 'tag'
+        # zizmor: ignore[cache-poisoning] releases build with a cold pip cache, see above
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ github.workspace }}\.pip-cache
@@ -280,7 +287,7 @@ jobs:
           Get-ChildItem .\advancecomp\
 
       - name: Generate Revision.py
-        uses: ./.github/actions/generate-revision
+        uses: $/.github/actions/generate-revision
 
       - name: Get version
         id: revision
@@ -370,6 +377,7 @@ jobs:
           persist-credentials: false
 
       - name: Cache the installed environment
+        # zizmor: ignore[cache-poisoning] test-only job, windows-deploy ships windows-build output
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           # Cache the downloaded archives AND the unpacked+pip-installed tree, so
@@ -386,6 +394,7 @@ jobs:
           key: win-test-env-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1', 'requirements.txt', 'windows/requirements.txt', 'requirements-test.txt') }}
 
       - name: Cache pip packages
+        # zizmor: ignore[cache-poisoning] test-only job, windows-deploy ships windows-build output
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ github.workspace }}\.pip-cache
@@ -403,7 +412,7 @@ jobs:
         run: choco install psexec --version=2.43 -y
 
       - name: Generate Revision.py
-        uses: ./.github/actions/generate-revision
+        uses: $/.github/actions/generate-revision
 
       - name: Generate translations
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
