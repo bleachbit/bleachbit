@@ -1449,7 +1449,7 @@ class SplashThread(Thread):
 
         user32 = ctypes.windll.user32
         gdi32 = ctypes.windll.gdi32
-        icon_size = 256
+        icon_size = SPLASH_ICON_SIZE_PX
         flags = win32con.LR_LOADFROMFILE
         hIcon = win32gui.LoadImage(
             0, str(filename), win32con.IMAGE_ICON, icon_size, icon_size, flags)

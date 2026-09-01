@@ -19,7 +19,6 @@ import logging
 import os
 import re
 import shutil
-import struct
 import subprocess
 import sys
 import tempfile
@@ -393,9 +392,9 @@ def _prune_assets(root, exts, keep_list, label='asset'):
 def environment_check():
     """Check the build environment"""
     logger.info('Checking for 32-bit Python')
-    bits = 8 * struct.calcsize('P')
-    if bits != 32:
-        logger.error('Expected 32-bit Python but found %d-bit', bits)
+    if bleachbit.ARCH_BITS != 32:
+        logger.error('Expected 32-bit Python but found %d-bit',
+                     bleachbit.ARCH_BITS)
         sys.exit(1)
 
     logger.info('Checking for translations')
