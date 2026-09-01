@@ -44,6 +44,17 @@ backends = {}
 # TRANSLATORS: The description of what certain cleaning options do.
 DELETE_CACHE_DESCRIPTION = _("Delete the cache")
 
+MENU_DIRS = ('~/.local/share/applications',
+             '~/.config/autostart',
+             '~/.gnome/apps/',
+             '~/.gnome2/panel2.d/default/launchers',
+             '~/.gnome2/vfolders/applications/',
+             '~/.kde/share/apps/RecentDocuments/',
+             '~/.kde/share/mimelnk',
+             '~/.kde/share/mimelnk/application/ram.desktop',
+             '~/.kde2/share/mimelnk/application/',
+             '~/.kde2/share/applnk')
+
 
 class Cleaner:
 
@@ -57,7 +68,7 @@ class Cleaner:
         self.options = {}
         self.running = []
         self.warnings = {}
-        self.regexes_compiled = []
+        self.keep_list_re = None
         # Lazily built {option_id: [action, ...]} index over self.actions.
         # Winapp2 cleaners aggregate thousands of actions, so scanning the
         # whole list per option (get_commands/get_deep_scan) is quadratic.
@@ -377,19 +388,8 @@ class System(Cleaner):
                         f'custom folder has invalid type {c_type}')
 
         # menu
-        menu_dirs = ['~/.local/share/applications',
-                     '~/.config/autostart',
-                     '~/.gnome/apps/',
-                     '~/.gnome2/panel2.d/default/launchers',
-                     '~/.gnome2/vfolders/applications/',
-                     '~/.kde/share/apps/RecentDocuments/',
-                     '~/.kde/share/mimelnk',
-                     '~/.kde/share/mimelnk/application/ram.desktop',
-                     '~/.kde2/share/mimelnk/application/',
-                     '~/.kde2/share/applnk']
-
         if IS_POSIX and 'desktop_entry' == option_id:
-            for path in menu_dirs:
+            for path in MENU_DIRS:
                 dirname = os.path.expanduser(path)
                 for filename in children_in_directory(dirname, False):
                     # pylint: disable=possibly-used-before-assignment
@@ -567,8 +567,7 @@ class System(Cleaner):
             yield Command.Function(None, func_clear_clipboard, _('Clipboard'))
 
         # wipe empty space
-        shred_drives = options.get_list('shred_drives')
-        if 'empty_space' == option_id and shred_drives:
+        if 'empty_space' == option_id and (shred_drives := options.get_list('shred_drives')):
             for pathname in shred_drives:
                 # TRANSLATORS: 'Empty' means 'unallocated.'
                 # %s expands to a path such as C:\ or /tmp/
@@ -682,20 +681,17 @@ class System(Cleaner):
             # file
             '^' + os.path.expanduser(r'~/\.cache/plasma_theme_default\.kcache$')]
 
-        for regex in regexes:
-            self.regexes_compiled.append(re.compile(regex))
+        self.keep_list_re = re.compile(
+            '|'.join(f'(?:{regex})' for regex in regexes))
 
     def whitelisted(self, pathname):
         """Return boolean whether file is keep listed (formerly whitelisted)"""
         if IS_WINDOWS:
             # Whitelist is specific to POSIX
             return False
-        if not self.regexes_compiled:
+        if self.keep_list_re is None:
             self.init_whitelist()
-        for regex in self.regexes_compiled:
-            if regex.match(pathname) is not None:
-                return True
-        return False
+        return self.keep_list_re.match(pathname) is not None
 
 
 def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None, allow_local=True):
