@@ -38,7 +38,6 @@ import re
 import shutil
 import sys
 import time
-import xml.dom.minidom
 from ctypes import wintypes
 from decimal import Decimal
 from pathlib import Path
@@ -1219,6 +1218,9 @@ def symlink_or_copy(src, dst):
 
 
 def has_fontconfig_cache(font_conf_file):
+    # Keep minidom out of module scope: FileUtilities imports Windows on every
+    # Windows run, and this is the only function that needs it.
+    import xml.dom.minidom  # pylint: disable=import-outside-toplevel
     with open(font_conf_file, 'rb') as f:
         data = f.read()
     General.reject_xml_dtd(data, 'fonts.conf')
