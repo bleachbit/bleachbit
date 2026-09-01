@@ -30,6 +30,7 @@ from bleachbit import GuiBasic, ProtectedPath, IS_POSIX, IS_WINDOWS
 from bleachbit import online_update_notification_enabled
 from bleachbit.PathUtils import normalize_path
 from bleachbit.Constant import EMPTY_SPACE_WARNING, REQUIRES_EXPERT_MODE
+from bleachbit.General import sanitize_surrogates
 from bleachbit.GtkShim import Gtk, GLib
 from bleachbit.GuiCookie import CookieManagerPane
 from bleachbit.GuiUtil import (detect_dark_background, flush_gtk_events,
@@ -823,8 +824,7 @@ class PreferencesDialog:
         # TRANSLATORS: Noun used as a column header in the preferences dialog.
         type_str_folder = _('Folder')
         type_str = type_str_file if path_type == 'file' else type_str_folder
-        display_path = pathname.encode(
-            'utf-8', errors='replace').decode('utf-8')
+        display_path = sanitize_surrogates(pathname)
         liststore.append([type_str, display_path])
         pathnames.append([path_type, pathname])
 
@@ -881,8 +881,7 @@ class PreferencesDialog:
             else:
                 raise RuntimeError("Invalid type code: '%s'" % type_code)
             path = paths[1]
-            display_path = path.encode(
-                'utf-8', errors='replace').decode('utf-8')
+            display_path = sanitize_surrogates(path)
             liststore.append([type_str, display_path])
 
         if not self._locations_notice_css_provider:

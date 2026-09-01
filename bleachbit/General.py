@@ -88,6 +88,15 @@ def sanitize_root_env(env):
     return env
 
 
+def sanitize_surrogates(text):
+    """Replace surrogates so the text can be encoded.
+
+    Surrogates (like \\udcd6) come from filenames the filesystem returned
+    as undecodable, and raise UnicodeEncodeError in GTK and on stdout.
+    """
+    return text.encode('utf-8', errors='replace').decode('utf-8')
+
+
 _STANDARD_EXE_DIRS = ('/usr/bin', '/usr/sbin', '/bin', '/sbin')
 
 

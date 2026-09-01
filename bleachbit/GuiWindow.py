@@ -15,6 +15,7 @@ from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, 
 from bleachbit.Cleaner import backends, register_cleaners
 from bleachbit.Constant import ABORT_BUTTON_LABEL, REQUIRES_EXPERT_MODE
 from bleachbit.GUI import logger
+from bleachbit.General import sanitize_surrogates
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.GuiStartup import get_startup_messages
@@ -566,10 +567,7 @@ class GUI(Gtk.ApplicationWindow):
             return
         if not __iter:
             __iter = self.textbuffer.get_end_iter()
-        # Sanitize text to handle surrogate characters that GTK cannot encode.
-        # Surrogates (like \udcd6) can appear in filenames from the filesystem
-        # and cause UnicodeEncodeError when GTK tries to insert them.
-        text = text.encode('utf-8', errors='replace').decode('utf-8')
+        text = sanitize_surrogates(text)
         if tag:
             self.textbuffer.insert_with_tags_by_name(__iter, text, tag)
         else:
