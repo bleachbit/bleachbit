@@ -156,6 +156,29 @@ class CleanerTestCase(common.BleachbitTestCase):
         cleaner.add_option('empty', 'name2', 'description2')
         self.assertEqual(list(cleaner.get_commands('empty')), [])
 
+    def test_deep_scan_after_action_without_deep_scan(self):
+        """An action without a deep scan must not hide later deep scans"""
+
+        class _DeepStubAction:
+            """Minimal action provider yielding one deep scan entry."""
+
+            def get_deep_scan(self):
+                yield ('deep', 'entry')
+
+        cleaner = Cleaner()
+        cleaner.add_option('opt', 'name', 'description')
+        # The base class stands in for any action without a deep scan,
+        # such as winreg or process.
+        cleaner.add_action('opt', ActionProvider(None))
+        cleaner.add_action('opt', _DeepStubAction())
+
+        self.assertEqual(list(cleaner.get_deep_scan('opt')),
+                         [('deep', 'entry')])
+
+        # should fail, like get_commands()
+        self.assertRaises(
+            RuntimeError, cleaner.get_deep_scan('unknown').__next__)
+
     def test_auto_hide(self):
         count = 0
         for key in sorted(backends):

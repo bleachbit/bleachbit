@@ -133,10 +133,7 @@ class Cleaner:
     def get_deep_scan(self, option_id):
         """Get dictionary used to build a deep scan"""
         for action in self._actions_for(option_id):
-            try:
-                yield from action.get_deep_scan()
-            except StopIteration:
-                return
+            yield from action.get_deep_scan()
         if option_id not in self.options:
             raise RuntimeError(f"Unknown option '{option_id}'")
 
