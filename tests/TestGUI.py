@@ -21,6 +21,7 @@ from tests.common import pytest
 import bleachbit
 from bleachbit.Cleaner import Cleaner, backends
 from bleachbit.GtkShim import Gdk, Gio, GLib, GObject, Gtk, is_gtk_available
+from bleachbit.Language import get_supported_language_code_name_dict
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 from tests import common
@@ -227,6 +228,14 @@ class GUITestCase(common.BleachbitTestCase):
         self.click_button(pref.dialog, Gtk.STOCK_CLOSE)
 
         # destroy
+        pref.dialog.destroy()
+
+    def test_preferences_language_scan_once(self):
+        """Opening the preferences dialog scans for languages once"""
+        with mock.patch('bleachbit.GuiPreferences.get_supported_language_code_name_dict',
+                        wraps=get_supported_language_code_name_dict) as mock_get:
+            pref = self.app.get_preferences_dialog()
+        self.assertEqual(mock_get.call_count, 1)
         pref.dialog.destroy()
 
     def test_preferences_cookies_page(self):
