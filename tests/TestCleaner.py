@@ -13,12 +13,13 @@ import glob
 import logging
 import os
 import shutil
+from unittest import mock
 from xml.dom.minidom import parseString
 
 import bleachbit
 from bleachbit import IS_WINDOWS, IS_POSIX
 from bleachbit.Action import ActionProvider, Command
-from bleachbit.Cleaner import Cleaner, backends, create_simple_cleaner, simpler_cleaner_process_path, register_cleaners
+from bleachbit.Cleaner import Cleaner, System, backends, create_simple_cleaner, simpler_cleaner_process_path, register_cleaners
 from bleachbit.FileUtilities import extended_path_undo
 from bleachbit.PathUtils import path_startswith
 
@@ -482,6 +483,19 @@ class CleanerTestCase(common.BleachbitTestCase):
                 common.validate_result(self, result, True)
 
         self.assertEqual(len(mgr.get_items()), 0)
+
+    @common.skipIfWindows
+    def test_whitelist_home_with_regex_metacharacters(self):
+        """A home directory with regex metacharacters must still be kept"""
+        for home in ('/home/a*b', '/home/a+b', '/home/x)y(z'):
+            cleaner = System()
+            with mock.patch('os.path.expanduser',
+                            lambda path, home=home: path.replace('~', home, 1)):
+                cleaner.init_whitelist()
+            self.assertTrue(cleaner.whitelisted(home + '/.cache/mozilla/x'), home)
+            self.assertTrue(cleaner.whitelisted(home + '/.cache/kwin/y'), home)
+            self.assertFalse(cleaner.whitelisted(home + '/.cache/other/z'), home)
+            self.assertFalse(cleaner.whitelisted('/tmp/nope'), home)
 
     @common.skipIfWindows
     def test_whitelist(self):

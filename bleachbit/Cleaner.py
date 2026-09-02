@@ -636,6 +636,8 @@ class System(Cleaner):
 
     def init_whitelist(self):
         """Initialize the keep list (formerly whitelist) only once for performance"""
+        # re.escape because a home directory may contain regex metacharacters
+        home = re.escape(os.path.expanduser('~'))
         regexes = [
             r'^/tmp/\.X0-lock$',
             r'^/tmp/\.truecrypt_aux_mnt.*/(control|volume)$',
@@ -651,38 +653,38 @@ class System(Cleaner):
             '^/tmp/pulse-[^/]+/pid$',
             '^/tmp/xauth',
             '^/var/tmp/kdecache-',
-            '^' + os.path.expanduser(r'~/\.cache/wallpaper/'),
+            '^' + home + r'/\.cache/wallpaper/',
             # Flatpak mount point
-            '^' + os.path.expanduser(r'~/\.cache/doc($|/)'),
+            '^' + home + r'/\.cache/doc($|/)',
             # Clean Firefox cache from Firefox cleaner (LP#1295826)
-            '^' + os.path.expanduser(r'~/\.cache/mozilla/'),
+            '^' + home + r'/\.cache/mozilla/',
             # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
-            '^' + os.path.expanduser(r'~/\.cache/google-chrome/'),
-            '^' + os.path.expanduser(r'~/\.cache/gnome-control-center/'),
+            '^' + home + r'/\.cache/google-chrome/',
+            '^' + home + r'/\.cache/gnome-control-center/',
             # Clean Evolution cache from Evolution cleaner (GitHub #249)
-            '^' + os.path.expanduser(r'~/\.cache/evolution/'),
+            '^' + home + r'/\.cache/evolution/',
             # iBus Pinyin
             # https://bugs.launchpad.net/bleachbit/+bug/1538919
-            '^' + os.path.expanduser(r'~/\.cache/ibus/'),
+            '^' + home + r'/\.cache/ibus/',
             # Linux Bluetooth daemon obexd directory is typically empty, so be careful
             # not to delete the empty directory.
-            '^' + os.path.expanduser(r'~/\.cache/obexd($|/)'),
+            '^' + home + r'/\.cache/obexd($|/)',
             # KDE/Plasma cache files
             # https://github.com/bleachbit/bleachbit/issues/1853
-            '^' + os.path.expanduser(r'~/\.cache/kwin($|/)'),  # folder
+            '^' + home + r'/\.cache/kwin($|/)',  # folder
             # folder
-            '^' + os.path.expanduser(r'~/\.cache/mesa_shader_cache($|/)'),
-            '^' + os.path.expanduser(r'~/\.cache/plasmashell($|/)'),  # folder
-            '^' + os.path.expanduser(r'~/\.cache/icon-cache\.kcache$'),  # file
+            '^' + home + r'/\.cache/mesa_shader_cache($|/)',
+            '^' + home + r'/\.cache/plasmashell($|/)',  # folder
+            '^' + home + r'/\.cache/icon-cache\.kcache$',  # file
             # file
-            r'^' + os.path.expanduser(r'~/\.cache/plasma_theme_.*\.kcache$'),
-            '^' + os.path.expanduser(r'~/\.cache/drkonqi($|/)'),  # folder
+            r'^' + home + r'/\.cache/plasma_theme_.*\.kcache$',
+            '^' + home + r'/\.cache/drkonqi($|/)',  # folder
             # folder
-            '^' + os.path.expanduser(r'~/\.cache/mesa_shader_cache_db($|/)'),
+            '^' + home + r'/\.cache/mesa_shader_cache_db($|/)',
             # folder
-            '^' + os.path.expanduser(r'~/\.cache/qtshadercache-[^/]+($|/)'),
+            '^' + home + r'/\.cache/qtshadercache-[^/]+($|/)',
             # file
-            '^' + os.path.expanduser(r'~/\.cache/plasma_theme_default\.kcache$')]
+            '^' + home + r'/\.cache/plasma_theme_default\.kcache$']
 
         self.keep_list_re = re.compile(
             '|'.join(f'(?:{regex})' for regex in regexes))
