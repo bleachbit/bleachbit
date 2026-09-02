@@ -263,9 +263,15 @@ def find_best_locale(user_locale):
         return user_locale
 
     # Next, match like 'en' to 'en_US.utf8' (if available) because
-    # of preference for UTF-8.
+    # of preference for UTF-8. Compare case- and hyphen-insensitively:
+    # macOS's locale -a uses '.UTF-8' (uppercase, hyphenated), while
+    # some Linux distros use '.utf8' (lowercase, no hyphen); comparing
+    # only against '.utf8' silently never matched on macOS, falling
+    # through to the next loop and picking whatever locale happened to
+    # be listed first for the prefix -- including a non-UTF-8 one.
     for avail_locale in available_locales:
-        if avail_locale.startswith(user_locale) and avail_locale.endswith('.utf8'):
+        suffix = avail_locale.rsplit('.', 1)[-1].replace('-', '').lower()
+        if avail_locale.startswith(user_locale) and suffix == 'utf8':
             return avail_locale
 
     # Next, match like 'en' to 'en_US' or 'en_US.iso88591'.
@@ -542,12 +548,11 @@ def rotated_logs():
         if bleachbit.FileUtilities.whitelisted(path):
             continue
 
-        # macOS protects these system log directories from normal users.
-        if IS_MAC and (
-            path.startswith('/var/log/powermanagement/') or
-            path.startswith('/var/log/asl/') or
-            path.startswith('/var/log/DiagnosticMessages/')
-        ):
+        # On macOS, skip a path only if its parent dir exists and we
+        # truly lack write access (a missing parent must not count as
+        # 'no permission', since os.access() returns False for both).
+        parent_dir = os.path.dirname(path)
+        if IS_MAC and os.path.isdir(parent_dir) and not os.access(parent_dir, os.W_OK):
             continue
 
         if any(keep_list.search(path) for keep_list in keep_lists):

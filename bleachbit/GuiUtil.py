@@ -13,7 +13,7 @@ import os
 import threading
 from typing import Optional
 
-from bleachbit import APP_NAME, FileUtilities, IS_WINDOWS
+from bleachbit import APP_NAME, FileUtilities, IS_MAC, IS_WINDOWS
 from bleachbit.GUI import logger
 from bleachbit.GtkShim import (
     GLib, Gdk, Gtk, gi,
@@ -87,6 +87,15 @@ def get_clipboard_paths(clipboard=None, targets=None):
     targets_by_name = {}
     has_unusable_target_name = False
     for target in targets:
+        if target is None:
+            # On macOS/Quartz, a clipboard target whose NSPasteboard type
+            # cannot be mapped to a Gdk.Atom can surface here as None
+            # instead of a valid atom object (seen alongside a
+            # 'gdk_atom_intern: assertion atom_name != NULL failed'
+            # warning), rather than raising or being omitted.
+            has_unusable_target_name = True
+            logger.debug('Skipping a None clipboard target')
+            continue
         try:
             target_name = target.name()
         except UnicodeDecodeError:
@@ -266,12 +275,40 @@ def load_icon_or_fallback(icon_name, size=None,
 
 def notify(msg):
     """Show a popup-notification"""
+    if IS_MAC:
+        # The macOS GTK stack has no libnotify typelib, so use AppleScript.
+        notify_macos(msg)
+        return
     if importlib.util.find_spec('plyer'):
         # On Windows, use Plyer.
         notify_plyer(msg)
         return
     # On Linux, use GTK Notify.
     notify_gi(msg)
+
+
+def notify_macos(msg):
+    """Show a pop-up notification on macOS via osascript.
+
+    The macOS GTK stack ships no libnotify typelib, so route the message
+    through AppleScript's ``display notification``, which posts it to the
+    system Notification Center.
+    """
+    if not IS_MAC:
+        raise RuntimeError("notify_macos() is only for macOS")
+    import subprocess
+
+    def _escape(text):
+        # AppleScript string literals: escape backslash then double quote.
+        return text.replace('\\', '\\\\').replace('"', '\\"')
+
+    script = 'display notification "{}" with title "{}"'.format(
+        _escape(msg), _escape(APP_NAME))
+    try:
+        subprocess.run(['osascript', '-e', script],
+                       capture_output=True, timeout=5, check=False)
+    except (OSError, subprocess.SubprocessError) as e:
+        logger.debug('osascript notification failed: %s', e)
 
 
 def notify_gi(msg):
