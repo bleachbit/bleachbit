@@ -169,6 +169,11 @@ class Cleaner:
         """Return a warning as string."""
         return self.warnings.get(option_id)
 
+    def has_action_key(self, option_id, action_key):
+        """Return whether an action registered for option_id has action_key"""
+        return any(getattr(action, 'action_key', None) == action_key
+                   for action in self._actions_for(option_id))
+
     def is_process_running(self):
         """Return whether the process is currently running"""
         for (test, pathname, same_user) in self.running:

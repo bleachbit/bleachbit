@@ -874,13 +874,7 @@ class GUI(Gtk.ApplicationWindow):
     def _option_has_cookie_command(self, cleaner_id, option_id):
         """Return True if the given option runs a cookie command."""
         cleaner = backends.get(cleaner_id)
-        if not cleaner:
-            return False
-        actions = getattr(cleaner, 'actions', ())
-        for opt_id, action in actions:
-            if opt_id == option_id and getattr(action, 'action_key', None) == 'cookie':
-                return True
-        return False
+        return bool(cleaner) and cleaner.has_action_key(option_id, 'cookie')
 
     def context_menu_event(self, treeview, event):
         """When user right clicks on the tree view"""

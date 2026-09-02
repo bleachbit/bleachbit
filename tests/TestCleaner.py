@@ -179,6 +179,31 @@ class CleanerTestCase(common.BleachbitTestCase):
         self.assertRaises(
             RuntimeError, cleaner.get_deep_scan('unknown').__next__)
 
+    def test_has_action_key(self):
+        """Unit test for Cleaner.has_action_key()"""
+
+        class _StubAction:
+            """Minimal action provider carrying only an action_key."""
+
+            def __init__(self, action_key):
+                self.action_key = action_key
+
+        cleaner = Cleaner()
+        cleaner.add_option('opt', 'name', 'description')
+        cleaner.add_action('opt', _StubAction('delete'))
+        self.assertFalse(cleaner.has_action_key('opt', 'cookie'))
+        # an option id that was never registered is not an error
+        self.assertFalse(cleaner.has_action_key('missing', 'cookie'))
+
+        # an action added after the index was built must be reflected
+        cleaner.add_action('opt', _StubAction('cookie'))
+        self.assertTrue(cleaner.has_action_key('opt', 'cookie'))
+
+        # the action must belong to the option that is asked about
+        cleaner.add_action('other', _StubAction('shred'))
+        self.assertTrue(cleaner.has_action_key('other', 'shred'))
+        self.assertFalse(cleaner.has_action_key('opt', 'shred'))
+
     def test_auto_hide(self):
         count = 0
         for key in sorted(backends):

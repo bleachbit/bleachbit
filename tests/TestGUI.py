@@ -19,7 +19,7 @@ from unittest import mock
 from tests.common import pytest
 
 import bleachbit
-from bleachbit.Cleaner import backends
+from bleachbit.Cleaner import Cleaner, backends
 from bleachbit.GtkShim import Gdk, Gio, GLib, GObject, Gtk, is_gtk_available
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
@@ -585,10 +585,10 @@ class GUITestCase(common.BleachbitTestCase):
         saved_non_cookie_cleaner = backends.get(non_cookie_cleaner_id)
 
         try:
-            cookie_cleaner = type('DummyCleaner', (), {})()
-            cookie_cleaner.actions = [('cookies', _DummyAction('cookie'))]
-            non_cookie_cleaner = type('DummyCleaner', (), {})()
-            non_cookie_cleaner.actions = [('logs', _DummyAction('delete'))]
+            cookie_cleaner = Cleaner()
+            cookie_cleaner.add_action('cookies', _DummyAction('cookie'))
+            non_cookie_cleaner = Cleaner()
+            non_cookie_cleaner.add_action('logs', _DummyAction('delete'))
 
             backends[cookie_cleaner_id] = cookie_cleaner
             backends[non_cookie_cleaner_id] = non_cookie_cleaner
