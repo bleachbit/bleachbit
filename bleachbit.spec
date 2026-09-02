@@ -49,13 +49,6 @@
 %define has_fdupes 1
 %endif
 
-# Fedora 42 unified /usr/sbin https://fedoraproject.org/wiki/Changes/Unify_bin_and_sbin
-%if "%{_bindir}" == "%{_sbindir}"
-%define has_sbin 0
-%else
-%define has_sbin 1
-%endif
-
 Name:           bleachbit
 Version:        6.0.3
 Release:        1%{?dist}
@@ -78,6 +71,7 @@ Requires:       gtk3
 Requires:       python3-gobject
 Requires:       python3-psutil
 Requires:       python3-requests
+Requires:       polkit
 %endif
 
 %if 0%{?is_opensuse}
@@ -136,23 +130,6 @@ space to prevent data recovery.
 cp org.bleachbit.BleachBit.desktop org.bleachbit.BleachBit-root.desktop
 sed -i -e 's/Name=BleachBit$/Name=BleachBit as Administrator/g' org.bleachbit.BleachBit-root.desktop
 
-%if %{is_redhat_family}
-
-cat > bleachbit.pam <<EOF
-#%%PAM-1.0
-auth        include     config-util
-account     include     config-util
-session     include     config-util
-EOF
-
-cat > bleachbit.console <<EOF
-USER=root
-PROGRAM=/usr/bin/bleachbit
-SESSION=true
-EOF
-
-%endif
-
 make delete_windows_files
 
 
@@ -161,22 +138,11 @@ make install PYTHON=%{pyexe} DESTDIR=%{buildroot} prefix=%{_prefix}
 
 %if %{is_redhat_family}
 
-sed -i -e 's/Exec=bleachbit$/Exec=bleachbit-root/g' org.bleachbit.BleachBit-root.desktop
+sed -i -e 's/^Exec=bleachbit$/Exec=pkexec bleachbit/g' org.bleachbit.BleachBit-root.desktop
 
 desktop-file-install \
     --dir=%{buildroot}/%{_datadir}/applications/ \
     --vendor="" org.bleachbit.BleachBit-root.desktop
-
-# consolehelper and userhelper
-ln -s consolehelper %{buildroot}/%{_bindir}/%{name}-root
-%if %{has_sbin}
-mkdir -p %{buildroot}/%{_sbindir}
-ln -s ../..%{_bindir}/%{name} %{buildroot}/%{_sbindir}/%{name}-root
-%endif
-mkdir -p %{buildroot}%{_sysconfdir}/pam.d
-install -m 644 %{name}.pam %{buildroot}%{_sysconfdir}/pam.d/%{name}-root
-mkdir -p %{buildroot}%{_sysconfdir}/security/console.apps
-install -m 644 %{name}.console %{buildroot}%{_sysconfdir}/security/console.apps/%{name}-root
 
 %endif
 
@@ -225,14 +191,6 @@ update-desktop-database &> /dev/null ||:
 %defattr(-,root,root,-)
 %doc README.md
 %license COPYING
-%if %{is_redhat_family}
-%config(noreplace) %{_sysconfdir}/pam.d/%{name}-root
-%config(noreplace) %{_sysconfdir}/security/console.apps/%{name}-root
-%{_bindir}/%{name}-root
-%if %{has_sbin}
-%{_sbindir}/%{name}-root
-%endif
-%endif
 %{_bindir}/%{name}
 %{_datadir}/metainfo/org.bleachbit.BleachBit.metainfo.xml
 %{_datadir}/applications/org.bleachbit.BleachBit.desktop
