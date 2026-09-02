@@ -30,12 +30,6 @@ logger = logging.getLogger(__name__)
 # Cache for snapd_is_active() to avoid repeated systemctl calls.
 _snapd_is_active_cache = None
 
-try:
-    Pattern = re.Pattern
-except AttributeError:
-    Pattern = re._pattern_type
-
-
 JOURNALD_REGEX = r'^Vacuuming done, freed ([\d.]+[BKMGT]?) of archived journals (on disk|from [\w/]+).$'
 
 _real_vfs = RealVFS()
@@ -78,7 +72,7 @@ class LocaleCleanerPath:
         """Returns direct subpaths for this object, i.e. either the named subfolder or all
         subfolders matching the pattern"""
         vfs = self._get_vfs()
-        if isinstance(self.pattern, Pattern):
+        if isinstance(self.pattern, re.Pattern):
             # posixpath is easy way to test also from Windows.
             return (posixpath.join(basepath, p) for p in vfs.listdir(basepath)
                     if self.pattern.match(p) and vfs.isdir(posixpath.join(basepath, p)))
@@ -92,7 +86,7 @@ class LocaleCleanerPath:
             for child in self.children:
                 if isinstance(child, LocaleCleanerPath):
                     yield from child.get_localizations(path)
-                elif isinstance(child, Pattern):
+                elif isinstance(child, re.Pattern):
                     for element in vfs.listdir(path):
                         match = child.match(element)
                         if match is not None:
@@ -365,29 +359,20 @@ def get_distribution_name_version():
     Python 3.7 had platform.linux_distribution(), but it
     was removed in Python 3.8.
     """
-    ret = get_distribution_name_version_platform_freedesktop()
-    if ret:
-        return ret
-    ret = get_distribution_name_version_distro()
-    if ret:
-        return ret
-    ret = get_distribution_name_version_os_release()
-    if ret:
-        return ret
-    try:
-        linux_version = platform.release()
-        # example '6.12.3-061203-generic'
-        linux_version = linux_version.split('-')[0]
-        return f"Linux {linux_version} (unknown distribution)"
-    except Exception as e1:
-        logger.debug("Error calling platform.release(): %s", e1)
+    for get_dist in (get_distribution_name_version_platform_freedesktop,
+                     get_distribution_name_version_distro,
+                     get_distribution_name_version_os_release):
+        ret = get_dist()
+        if ret:
+            return ret
+    for name, get_release in (('platform.release()', platform.release),
+                              ('os.uname()', lambda: os.uname().release)):
         try:
-            linux_version = os.uname().release
             # example '6.12.3-061203-generic'
-            linux_version = linux_version.split('-')[0]
+            linux_version = get_release().split('-')[0]
             return f"Linux {linux_version} (unknown distribution)"
-        except Exception as e2:
-            logger.debug("Error calling os.uname(): %s", e2)
+        except Exception as e:
+            logger.debug("Error calling %s: %s", name, e)
     return "Linux (unknown version and distribution)"
 
 
@@ -897,32 +882,30 @@ def snapd_is_active():
     The result is cached in a module-level variable to avoid repeated
     systemctl calls during a single BleachBit run.
     """
+    def check_snapd():
+        if not exe_exists(General.resolve_exe('snap')):
+            return False
+        if not exe_exists(General.resolve_exe('systemctl')):
+            return False
+        # When snap is installed but snapd is inactive, then `snap list --all`
+        # or `snap version` may have a long delay, so we check the service status first
+        try:
+            (rc, _stdout, _stderr) = General.run_external(
+                [General.resolve_exe('systemctl'), 'is-active',
+                 '--quiet', 'snapd.socket'],
+                timeout=5)
+        except subprocess.TimeoutExpired:
+            logger.warning(
+                'systemctl is-active snapd.socket timed out: it seems snap is installed but snapd is inactive')
+            return False
+        except (FileNotFoundError, OSError) as exc:
+            logger.warning('systemctl is-active snapd.socket failed: %s', exc)
+            return False
+        return rc == 0
+
     global _snapd_is_active_cache  # pylint: disable=global-statement
-    if _snapd_is_active_cache is not None:
-        return _snapd_is_active_cache
-    if not exe_exists(General.resolve_exe('snap')):
-        _snapd_is_active_cache = False
-        return _snapd_is_active_cache
-    if not exe_exists(General.resolve_exe('systemctl')):
-        _snapd_is_active_cache = False
-        return _snapd_is_active_cache
-    # When snap is installed but snapd is inactive, then `snap list --all`
-    # or `snap version` may have a long delay, so we check the service status first.
-    try:
-        (rc, _stdout, _stderr) = General.run_external(
-            [General.resolve_exe('systemctl'), 'is-active',
-             '--quiet', 'snapd.socket'],
-            timeout=5)
-    except subprocess.TimeoutExpired:
-        logger.warning(
-            'systemctl is-active snapd.socket timed out: it seems snap is installed but snapd is inactive')
-        _snapd_is_active_cache = False
-        return _snapd_is_active_cache
-    except (FileNotFoundError, OSError) as exc:
-        logger.warning('systemctl is-active snapd.socket failed: %s', exc)
-        _snapd_is_active_cache = False
-        return _snapd_is_active_cache
-    _snapd_is_active_cache = rc == 0
+    if _snapd_is_active_cache is None:
+        _snapd_is_active_cache = check_snapd()
     return _snapd_is_active_cache
 
 
@@ -1011,10 +994,8 @@ def is_unix_display_protocol_wayland():
     """Return True if the display protocol is Wayland."""
     assert IS_POSIX
     if 'XDG_SESSION_TYPE' in os.environ:
-        if os.environ['XDG_SESSION_TYPE'] == 'wayland':
-            return True
         # If not wayland, then x11, mir, etc.
-        return False
+        return os.environ['XDG_SESSION_TYPE'] == 'wayland'
     if 'WAYLAND_DISPLAY' in os.environ:
         return True
     # Ubuntu 24.10 showed "ubuntu-xorg".
@@ -1075,17 +1056,29 @@ def is_display_protocol_wayland_and_root_not_allowed():
     )
 
 
+def _dns_flush_command():
+    """Return the command to flush the DNS resolver cache, or None if there is none"""
+    for exe, arg in (('resolvectl', 'flush-caches'),
+                     ('systemd-resolve', '--flush-caches')):
+        path = General.resolve_exe(exe)
+        if exe_exists(path):
+            return [path, arg]
+    return None
+
+
+def can_flush_dns():
+    """Return whether the DNS resolver cache can be flushed"""
+    return _dns_flush_command() is not None
+
+
 def flush_dns():
     """Flush the DNS resolver cache
 
     Returns 0 on success.
     Raises RuntimeError on failure.
     """
-    if exe_exists(General.resolve_exe('resolvectl')):
-        args = [General.resolve_exe('resolvectl'), 'flush-caches']
-    elif exe_exists(General.resolve_exe('systemd-resolve')):
-        args = [General.resolve_exe('systemd-resolve'), '--flush-caches']
-    else:
+    args = _dns_flush_command()
+    if args is None:
         raise RuntimeError('Neither resolvectl nor systemd-resolve found')
     (rc, stdout, stderr) = General.run_external(args)
     if 0 != rc:

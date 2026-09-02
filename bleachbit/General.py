@@ -88,6 +88,15 @@ def sanitize_root_env(env):
     return env
 
 
+def sanitize_surrogates(text):
+    """Replace surrogates so the text can be encoded.
+
+    Surrogates (like \\udcd6) come from filenames the filesystem returned
+    as undecodable, and raise UnicodeEncodeError in GTK and on stdout.
+    """
+    return text.encode('utf-8', errors='replace').decode('utf-8')
+
+
 _STANDARD_EXE_DIRS = ('/usr/bin', '/usr/sbin', '/bin', '/sbin')
 
 
@@ -347,6 +356,18 @@ def os_match(os_str, platform=sys.platform):
     return os_str in current_os
 
 
+def _set_detached_kwargs(kwargs):
+    """Add the Popen keywords that detach the child from this process."""
+    if IS_WINDOWS:
+        kwargs['creationflags'] = (
+            kwargs.get('creationflags', 0) |
+            subprocess.DETACHED_PROCESS |
+            subprocess.CREATE_NEW_PROCESS_GROUP)
+    else:
+        kwargs['start_new_session'] = True
+    kwargs['close_fds'] = True
+
+
 def run_external_nowait(args, env=None, kwargs=None):
     """Run an external program in the background. Return immediately.
 
@@ -365,32 +386,16 @@ def run_external_nowait(args, env=None, kwargs=None):
         # function is also called directly, bypassing that sanitization.
         env = sanitize_root_env(dict(os.environ) if env is None else env)
     try:
+        _set_detached_kwargs(kwargs)
+        process = subprocess.Popen(args,
+                                   stdin=subprocess.DEVNULL,
+                                   stdout=subprocess.DEVNULL,
+                                   stderr=subprocess.DEVNULL,
+                                   env=env, **kwargs)
+        process.returncode = 0
         if IS_WINDOWS:
-            creationflags = kwargs.get('creationflags', 0)
-            kwargs['creationflags'] = (
-                creationflags |
-                subprocess.DETACHED_PROCESS |
-                subprocess.CREATE_NEW_PROCESS_GROUP)
-        else:
-            # Unix/Linux
-            kwargs['start_new_session'] = True
-        kwargs['close_fds'] = True
-        try:
-            process = subprocess.Popen(args,
-                                       stdin=subprocess.DEVNULL,
-                                       stdout=subprocess.DEVNULL,
-                                       stderr=subprocess.DEVNULL,
-                                       env=env, **kwargs)
-            process.returncode = 0
-            if IS_WINDOWS:
-                process._handle.Close()
-                process._handle = None
-            return True
-        except Exception as e:
-            logger.warning('Failed to start process %s: %s', args, e)
-            return False
-    except subprocess.TimeoutExpired:
-        # This is good on Windows.
+            process._handle.Close()
+            process._handle = None
         return True
     except Exception as e:
         logger.warning('Failed to start process %s: %s', args, e)
@@ -450,15 +455,7 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
         if run_external_nowait(args, env=env, kwargs=kwargs):
             return (0, '', '')
         # Use fallback method.
-        if IS_WINDOWS:
-            creationflags = kwargs.get('creationflags', 0)
-            kwargs['creationflags'] = (
-                creationflags |
-                subprocess.DETACHED_PROCESS |
-                subprocess.CREATE_NEW_PROCESS_GROUP)
-        else:
-            kwargs['start_new_session'] = True
-        kwargs['close_fds'] = True
+        _set_detached_kwargs(kwargs)
         process = subprocess.Popen(args,
                                    stdout=subprocess.DEVNULL,
                                    stderr=subprocess.DEVNULL,
@@ -509,3 +506,21 @@ def sudo_mode():
         # return False
 
     return os.getenv('SUDO_UID') is not None
+
+
+def unset_sslkeylogfile(use_logger):
+    """Unset environment variable SSLKEYLOGFILE
+
+    Workaround for an OpenSSL crash before checking for updates.
+    https://github.com/bleachbit/bleachbit/issues/1826
+
+    Returns True if unset
+    """
+    if not IS_WINDOWS:
+        return False
+    if not os.environ.get('SSLKEYLOGFILE'):
+        return False
+    del os.environ['SSLKEYLOGFILE']
+    if use_logger:
+        logger.debug('The environment variable SSLKEYLOGFILE is not supported')
+    return True

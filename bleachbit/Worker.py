@@ -40,6 +40,9 @@ from bleachbit.FileUtilities import close_delete_parent_lock
 
 logger = logging.getLogger(__name__)
 
+# Delayed ops run last, sorted ascending: memory, then empty space
+_DELAY_PRIORITY = {'empty_space': 100, 'memory': 99}
+
 
 class Worker:
 
@@ -277,15 +280,10 @@ class Worker:
         for operation in self.operations:
             if operation not in ('system', '_gui'):
                 continue
-            delayables = ['empty_space', 'memory']
-            for delayable in delayables:
+            for delayable, priority in _DELAY_PRIORITY.items():
                 if delayable in self.operations[operation]:
                     self.operations[operation].remove(delayable)
-                    priority = 99
-                    if 'empty_space' == delayable:
-                        priority = 100
-                    new_op = (priority, {operation: [delayable]})
-                    self.delayed_ops.append(new_op)
+                    self.delayed_ops.append((priority, operation, delayable))
 
         # standard operations
         with warnings.catch_warnings(record=True) as ws:
@@ -324,12 +322,11 @@ class Worker:
         close_delete_parent_lock()
 
         # delayed operations
-        for op in sorted(self.delayed_ops, key=lambda op: op[0]):
-            operation = list(op[1].keys())[0]
-            for option_id in list(op[1].values())[0]:
-                for _ret in self.run_delayed_op(operation, option_id):
-                    # yield to GTK+ idle loop
-                    yield True
+        for _priority, operation, option_id in sorted(
+                self.delayed_ops, key=lambda op: op[0]):
+            for _ret in self.run_delayed_op(operation, option_id):
+                # yield to GTK+ idle loop
+                yield True
 
         # print final stats
         bytes_delete = FileUtilities.bytes_to_human(self.total_bytes)

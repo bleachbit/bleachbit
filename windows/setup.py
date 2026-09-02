@@ -19,7 +19,6 @@ import logging
 import os
 import re
 import shutil
-import struct
 import subprocess
 import sys
 import tempfile
@@ -32,6 +31,7 @@ import certifi
 import bleachbit
 from setup import supported_languages
 from bleachbit.CleanerML import CleanerML
+from bleachbit.FileUtilities import children_in_directory
 from bleachbit.SystemInformation import get_version
 from windows.NsisUtilities import write_nsis_expressions_to_files
 
@@ -272,14 +272,13 @@ def sign_files(filenames):
 
 
 def get_dir_size(start_path='.'):
-    """Get the size of a directory"""
-    # http://stackoverflow.com/questions/1392413/calculating-a-directory-size-using-python
-    total_size = 0
-    for dirpath, _dirnames, filenames in os.walk(start_path):
-        for f in filenames:
-            fp = os.path.join(dirpath, f)
-            total_size += os.path.getsize(fp)
-    return total_size
+    """Get the size of a directory
+
+    FileUtilities.getsizedir() is not used because it prepends the
+    extended-length prefix, which Windows rejects on the relative paths
+    used here.
+    """
+    return sum(os.path.getsize(fn) for fn in children_in_directory(start_path))
 
 
 def copy_file(src, dst):
@@ -393,9 +392,9 @@ def _prune_assets(root, exts, keep_list, label='asset'):
 def environment_check():
     """Check the build environment"""
     logger.info('Checking for 32-bit Python')
-    bits = 8 * struct.calcsize('P')
-    if bits != 32:
-        logger.error('Expected 32-bit Python but found %d-bit', bits)
+    if bleachbit.ARCH_BITS != 32:
+        logger.error('Expected 32-bit Python but found %d-bit',
+                     bleachbit.ARCH_BITS)
         sys.exit(1)
 
     logger.info('Checking for translations')
@@ -511,18 +510,14 @@ def recompile_mo(langdir, app, langid, dst):
 
 @count_size_improvement
 def clean_dist_locale():
-    """Clean dist/share/locale"""
+    """Recompile GTK translations in dist/share/locale to shrink them"""
     tmpd = tempfile.mkdtemp('gtk_locale')
     supported_langs = supported_languages()
     basedir = os.path.normpath('dist/share/locale')
     have_msgunfmt = bleachbit.FileUtilities.exe_exists('msgunfmt.exe')
-    recompile_langs = []  # supported languages to recompile
-    remove_langs = []  # unsupported languages to remove
-    for langid in sorted(os.listdir(basedir)):
-        if langid in supported_langs:
-            recompile_langs.append(langid)
-        else:
-            remove_langs.append(langid)
+    # clean_translations() already removed the unsupported languages
+    recompile_langs = [langid for langid in sorted(os.listdir(basedir))
+                       if langid in supported_langs]
     if recompile_langs:
         if have_msgunfmt:
             logger.info('recompiling supported GTK languages: %s',
@@ -532,15 +527,6 @@ def clean_dist_locale():
                 recompile_mo(langdir, 'gtk30', lang_id, tmpd)
         else:
             logger.warning('msgunfmt missing: skipping recompile')
-    if remove_langs:
-        logger.info('removing unsupported GTK languages: %s', remove_langs)
-        for langid in remove_langs:
-            langdir = os.path.join(basedir, langid)
-            if os.path.exists(langdir):
-                logger.info('Removing directory: %s', langdir)
-                shutil.rmtree(langdir)
-    else:
-        logger.info('no unsupported GTK languages found')
     os.rmdir(tmpd)
 
 
@@ -785,7 +771,7 @@ def clean_translations():
     else:
         logger.warning('locale.alias does not exist')
     pygtk_translations = os.listdir('dist/share/locale')
-    supported_translations = [f[3:-3] for f in glob.glob('po/*.po')]
+    supported_translations = supported_languages()
     for pt in pygtk_translations:
         if pt not in supported_translations:
             path = 'dist/share/locale/' + pt

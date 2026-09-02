@@ -13,12 +13,13 @@ import glob
 import logging
 import os
 import shutil
+from unittest import mock
 from xml.dom.minidom import parseString
 
 import bleachbit
 from bleachbit import IS_WINDOWS, IS_POSIX
 from bleachbit.Action import ActionProvider, Command
-from bleachbit.Cleaner import Cleaner, backends, create_simple_cleaner, simpler_cleaner_process_path, register_cleaners
+from bleachbit.Cleaner import Cleaner, System, backends, create_simple_cleaner, simpler_cleaner_process_path, register_cleaners
 from bleachbit.FileUtilities import extended_path_undo
 from bleachbit.PathUtils import path_startswith
 
@@ -155,6 +156,54 @@ class CleanerTestCase(common.BleachbitTestCase):
         # A registered option with no actions yields nothing without raising
         cleaner.add_option('empty', 'name2', 'description2')
         self.assertEqual(list(cleaner.get_commands('empty')), [])
+
+    def test_deep_scan_after_action_without_deep_scan(self):
+        """An action without a deep scan must not hide later deep scans"""
+
+        class _DeepStubAction:
+            """Minimal action provider yielding one deep scan entry."""
+
+            def get_deep_scan(self):
+                yield ('deep', 'entry')
+
+        cleaner = Cleaner()
+        cleaner.add_option('opt', 'name', 'description')
+        # The base class stands in for any action without a deep scan,
+        # such as winreg or process.
+        cleaner.add_action('opt', ActionProvider(None))
+        cleaner.add_action('opt', _DeepStubAction())
+
+        self.assertEqual(list(cleaner.get_deep_scan('opt')),
+                         [('deep', 'entry')])
+
+        # should fail, like get_commands()
+        self.assertRaises(
+            RuntimeError, cleaner.get_deep_scan('unknown').__next__)
+
+    def test_has_action_key(self):
+        """Unit test for Cleaner.has_action_key()"""
+
+        class _StubAction:
+            """Minimal action provider carrying only an action_key."""
+
+            def __init__(self, action_key):
+                self.action_key = action_key
+
+        cleaner = Cleaner()
+        cleaner.add_option('opt', 'name', 'description')
+        cleaner.add_action('opt', _StubAction('delete'))
+        self.assertFalse(cleaner.has_action_key('opt', 'cookie'))
+        # an option id that was never registered is not an error
+        self.assertFalse(cleaner.has_action_key('missing', 'cookie'))
+
+        # an action added after the index was built must be reflected
+        cleaner.add_action('opt', _StubAction('cookie'))
+        self.assertTrue(cleaner.has_action_key('opt', 'cookie'))
+
+        # the action must belong to the option that is asked about
+        cleaner.add_action('other', _StubAction('shred'))
+        self.assertTrue(cleaner.has_action_key('other', 'shred'))
+        self.assertFalse(cleaner.has_action_key('opt', 'shred'))
 
     def test_auto_hide(self):
         count = 0
@@ -434,6 +483,19 @@ class CleanerTestCase(common.BleachbitTestCase):
                 common.validate_result(self, result, True)
 
         self.assertEqual(len(mgr.get_items()), 0)
+
+    @common.skipIfWindows
+    def test_whitelist_home_with_regex_metacharacters(self):
+        """A home directory with regex metacharacters must still be kept"""
+        for home in ('/home/a*b', '/home/a+b', '/home/x)y(z'):
+            cleaner = System()
+            with mock.patch('os.path.expanduser',
+                            lambda path, home=home: path.replace('~', home, 1)):
+                cleaner.init_whitelist()
+            self.assertTrue(cleaner.whitelisted(home + '/.cache/mozilla/x'), home)
+            self.assertTrue(cleaner.whitelisted(home + '/.cache/kwin/y'), home)
+            self.assertFalse(cleaner.whitelisted(home + '/.cache/other/z'), home)
+            self.assertFalse(cleaner.whitelisted('/tmp/nope'), home)
 
     @common.skipIfWindows
     def test_whitelist(self):

@@ -30,6 +30,7 @@ from bleachbit import GuiBasic, ProtectedPath, IS_POSIX, IS_WINDOWS
 from bleachbit import online_update_notification_enabled
 from bleachbit.PathUtils import normalize_path
 from bleachbit.Constant import EMPTY_SPACE_WARNING, REQUIRES_EXPERT_MODE
+from bleachbit.General import sanitize_surrogates
 from bleachbit.GtkShim import Gtk, GLib
 from bleachbit.GuiCookie import CookieManagerPane
 from bleachbit.GuiUtil import (detect_dark_background, flush_gtk_events,
@@ -331,8 +332,12 @@ class PreferencesDialog:
                 store_as_attr='cb_winapp2')
         vbox.pack_start(updates_box, False, True, 0)
 
-    def __create_language_widgets(self, vbox):
-        """Create and configure language selection widgets."""
+    def __create_language_widgets(self, vbox, supported_langs):
+        """Create and configure language selection widgets.
+
+        supported_langs maps language code to native name, or is None if
+        the scan failed.
+        """
         lang_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         is_auto_detect = options.get("auto_detect_lang")
         # TRANSLATORS: Checkbutton label in the preferences dialog.
@@ -352,21 +357,18 @@ class PreferencesDialog:
         self.lang_combo = Gtk.ComboBoxText()
         current_lang_code = get_active_language_code()
         # Add available languages
-        lang_idx = 0
         active_language_idx = None
-        try:
-            supported_langs = get_supported_language_code_name_dict().items()
-        except (KeyError, ValueError, Exception) as e:
-            logger.error("Failed to get list of supported languages: %s", e)
-            supported_langs = [('en_us', 'English')]
-        for lang_code, native in supported_langs:
+        if supported_langs is None:
+            lang_items = [('en_us', 'English')]
+        else:
+            lang_items = supported_langs.items()
+        for lang_idx, (lang_code, native) in enumerate(lang_items):
             if native:
                 self.lang_combo.append_text(f"{native} ({lang_code})")
             else:
                 self.lang_combo.append_text(lang_code)
             if lang_code == current_lang_code:
                 active_language_idx = lang_idx
-            lang_idx += 1
         if active_language_idx is not None:
             self.lang_combo.set_active(active_language_idx)
         # set_wrap_width() prevents infinite space to scroll up.
@@ -642,11 +644,7 @@ class PreferencesDialog:
 
         liststore = Gtk.ListStore(str)
 
-        pathnames = options.get_list('shred_drives')
-        if pathnames:
-            pathnames = sorted(pathnames)
-        if not pathnames:
-            pathnames = []
+        pathnames = sorted(options.get_list('shred_drives') or [])
         for pathname in pathnames:
             liststore.append([pathname])
         treeview = Gtk.TreeView.new_with_model(liststore)
@@ -692,7 +690,13 @@ class PreferencesDialog:
             # TRANSLATORS: Section title on the preferences languages page.
             _("BleachBit interface language"))
 
-        self.__create_language_widgets(ui_language_box)
+        try:
+            supported_langs = get_supported_language_code_name_dict()
+        except Exception as e:
+            logger.error("Failed to get list of supported languages: %s", e)
+            supported_langs = None
+
+        self.__create_language_widgets(ui_language_box, supported_langs)
 
         # Windows does not have locale cleaner.
         if not IS_POSIX:
@@ -705,7 +709,10 @@ class PreferencesDialog:
 
         # populate data
         liststore = Gtk.ListStore('gboolean', str, str)
-        for lang, native in get_supported_language_code_name_dict().items():
+        if supported_langs is None:
+            # There is no English fallback here, so let the failure propagate.
+            supported_langs = get_supported_language_code_name_dict()
+        for lang, native in supported_langs.items():
             liststore.append([(options.get_language(lang)), lang, native])
 
         # create treeview
@@ -829,8 +836,7 @@ class PreferencesDialog:
         # TRANSLATORS: Noun used as a column header in the preferences dialog.
         type_str_folder = _('Folder')
         type_str = type_str_file if path_type == 'file' else type_str_folder
-        display_path = pathname.encode(
-            'utf-8', errors='replace').decode('utf-8')
+        display_path = sanitize_surrogates(pathname)
         liststore.append([type_str, display_path])
         pathnames.append([path_type, pathname])
 
@@ -887,8 +893,7 @@ class PreferencesDialog:
             else:
                 raise RuntimeError("Invalid type code: '%s'" % type_code)
             path = paths[1]
-            display_path = path.encode(
-                'utf-8', errors='replace').decode('utf-8')
+            display_path = sanitize_surrogates(path)
             liststore.append([type_str, display_path])
 
         if not self._locations_notice_css_provider:

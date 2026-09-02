@@ -39,19 +39,14 @@ def normalized_walk(top, **kwargs):
     is like `os.walk` but recomposes those decomposed filenames on
     macOS
     """
-    try:
-        from scandir import walk
-    except Exception:
-        # there is a warning in FileUtilities, so don't warn again here
-        from os import walk
     if IS_MAC:
-        for dirpath, dirnames, filenames in walk(top, **kwargs):
+        for dirpath, dirnames, filenames in os.walk(top, **kwargs):
             yield dirpath, dirnames, [
                 unicodedata.normalize('NFC', fn)
                 for fn in filenames
             ]
     else:
-        yield from walk(top, **kwargs)
+        yield from os.walk(top, **kwargs)
 
 
 Search = namedtuple(
@@ -115,12 +110,12 @@ class DeepScan:
                 # Prune keep-list dirs, symlinks, and reparse points:
                 # os.walk's followlinks=False skips POSIX links but not
                 # junctions, which would otherwise redirect the scan.
-                dirnames[:] = [
-                    dirname
-                    for dirname in dirnames
-                    if not whitelisted(os.path.join(dirpath, dirname))
-                    and is_normal_directory(os.path.join(dirpath, dirname))
-                ]
+                kept_dirs = []
+                for dirname in dirnames:
+                    subdir = os.path.join(dirpath, dirname)
+                    if not whitelisted(subdir) and is_normal_directory(subdir):
+                        kept_dirs.append(dirname)
+                dirnames[:] = kept_dirs
                 for c in compiled_searches:
                     # fixme, don't match filename twice
                     for filename in filenames:

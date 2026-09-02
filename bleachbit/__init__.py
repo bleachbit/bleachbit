@@ -222,14 +222,7 @@ def get_share_dirs():
         # This works when installed, like under `/usr/share`.
         base_dirs.append(os.path.dirname(system_cleaners_dir))
     # Remove duplicates while preserving the order.
-    seen = set()
-    unique_dirs = []
-    for base_dir in base_dirs:
-        if base_dir in seen:
-            continue
-        seen.add(base_dir)
-        unique_dirs.append(base_dir)
-    return unique_dirs
+    return list(dict.fromkeys(base_dirs))
 
 
 def get_share_path(filename):

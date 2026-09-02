@@ -11,7 +11,6 @@ WindowInfo class and utility functions for GUI
 import importlib.util
 import os
 import threading
-from enum import Enum
 from typing import Optional
 
 from bleachbit import APP_NAME, FileUtilities, IS_WINDOWS
@@ -185,14 +184,6 @@ def get_window_info(window):
     return WindowInfo(geo.x, geo.y, geo.width, geo.height, monitor_model)
 
 
-class ThemeChangeStatus(Enum):
-    """State machine for detecting whether a theme update occurred."""
-
-    CHANGED = "changed"
-    UNCHANGED = "unchanged"
-    UNKNOWN = "unknown"
-
-
 def detect_dark_background(widget: Optional[Gtk.Widget]) -> Optional[bool]:
     """Return True if the widget background is dark, False if light, None on failure."""
     threshold = 0.45
@@ -223,20 +214,10 @@ def detect_dark_background(widget: Optional[Gtk.Widget]) -> Optional[bool]:
         return None
 
 
-def classify_theme_change(before_dark: Optional[bool], after_dark: Optional[bool]) -> ThemeChangeStatus:
-    """Compare observations before and after a toggle to classify change."""
-    if before_dark is None or after_dark is None:
-        return ThemeChangeStatus.UNKNOWN
-    if before_dark == after_dark:
-        return ThemeChangeStatus.UNCHANGED
-    return ThemeChangeStatus.CHANGED
-
-
 def should_show_dark_mode_warning(before_dark: Optional[bool], after_dark: Optional[bool]) -> bool:
     """Return True when we should warn the user about theme toggles."""
-    status = classify_theme_change(before_dark, after_dark)
-    # Warn when the theme did not change or when we cannot tell (UNKNOWN).
-    return status != ThemeChangeStatus.CHANGED
+    # Warn when the theme did not change or when we cannot tell.
+    return before_dark is None or after_dark is None or before_dark == after_dark
 
 
 def flush_gtk_events(max_iterations: int = 5):

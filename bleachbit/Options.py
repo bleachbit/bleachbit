@@ -623,41 +623,32 @@ class Options:
                 self.config.set(section, str(counter), value)
             self.__schedule_flush()
 
-    def set_whitelist_paths(self, values):
-        """Save the keep list (formerly whitelist)"""
-        section = "whitelist/paths"
-        with self._flush_lock:
-            # Remove existing section first to clear old values
-            # before writing new ones.
-            if self.config.has_section(section):
-                self.config.remove_section(section)
-            self.config.add_section(section)
-            for counter, value in enumerate(values):
-                self.config.set(section, str(counter) + '_type', value[0])
-                self.config.set(section, str(counter) + '_path', value[1])
-            self._paths_cache.pop(section, None)
-            self.__schedule_flush()
-
-    def set_custom_paths(self, values):
-        """Save the custom paths
+    def __set_paths(self, section, values):
+        """Abstracts set_whitelist_paths and set_custom_paths
 
         @param values: list of tuples containing (path_type, path)
             where path_type is either 'file' or 'folder'
         """
-        section = "custom/paths"
         with self._flush_lock:
             # Remove existing section first to clear old values
             # before writing new ones.
             if self.config.has_section(section):
                 self.config.remove_section(section)
             self.config.add_section(section)
-            for counter, value in enumerate(values):
-                path_type, path = value
+            for counter, (path_type, path) in enumerate(values):
                 assert path_type in ('file', 'folder')
                 self.config.set(section, str(counter) + '_type', path_type)
                 self.config.set(section, str(counter) + '_path', path)
             self._paths_cache.pop(section, None)
             self.__schedule_flush()
+
+    def set_whitelist_paths(self, values):
+        """Save the keep list (formerly whitelist)"""
+        self.__set_paths("whitelist/paths", values)
+
+    def set_custom_paths(self, values):
+        """Save the custom paths"""
+        self.__set_paths("custom/paths", values)
 
     def set_language(self, langid, value):
         """Set the value for a locale (whether to preserve it)"""

@@ -18,9 +18,9 @@ from xml.dom.minidom import parseString
 import bleachbit
 from bleachbit import Cleaner, IS_WINDOWS, Windows
 from bleachbit.Action import Delete, Winreg
+from bleachbit.CleanerML import reject_world_writable
 from bleachbit.FileUtilities import detect_encoding
 from bleachbit.Language import get_text as _
-from bleachbit.PathUtils import is_world_writable
 
 logger = logging.getLogger(__name__)
 
@@ -82,11 +82,6 @@ def section2option(s):
 def _noop_progress(_fraction):
     """Default progress callback used when one is not provided."""
     return None
-
-
-def _always_false():
-    """Return False for cleaner auto_hide overrides."""
-    return False
 
 
 def detectos(required_ver, mock=False):
@@ -216,7 +211,7 @@ class Winapp:
         self.cleaners[cleaner_id].description = _('Imported from winapp2.ini')
         # The detect() function in this module effectively does what
         # auto_hide() does, so this avoids redundant, slow processing.
-        self.cleaners[cleaner_id].auto_hide = _always_false
+        self.cleaners[cleaner_id].auto_hide_supported = False
 
     def section_to_cleanerid(self, langsecref):
         """Given a langsecref (or section name), find the internal
@@ -487,14 +482,7 @@ def list_winapp_files():
         fname = os.path.join(dirname, 'winapp2.ini')
         if not os.path.exists(fname):
             continue
-        if check_world_writable and is_world_writable(fname):
-            logger.warning(
-                _("Ignoring cleaner because it is world writable: %s"), fname)
-            continue
-        if check_world_writable and is_world_writable(dirname):
-            logger.warning(
-                _("Ignoring cleaner because its directory is world writable: %s"),
-                fname)
+        if check_world_writable and reject_world_writable(fname):
             continue
         yield fname
 

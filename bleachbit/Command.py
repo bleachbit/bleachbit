@@ -226,7 +226,36 @@ class Function:
         yield ret
 
 
-class Ini:
+class ConfigFile:
+
+    """Base for commands that shrink a configuration file in place"""
+
+    def _clean(self):
+        """Rewrite the file without the targeted content"""
+        raise NotImplementedError
+
+    def execute(self, really_delete):
+        """Make changes and return results"""
+
+        if FileUtilities.whitelisted(self.path):
+            yield ret_keep_list(self.path)
+            return
+
+        ret = {
+            'label': CLEAN_FILE_LABEL,
+            'n_deleted': 0,
+            'n_special': 1,
+            'path': self.path,
+            'size': None}
+        if really_delete:
+            oldsize = FileUtilities.getsize(self.path)
+            self._clean()
+            newsize = FileUtilities.getsize(self.path)
+            ret['size'] = oldsize - newsize
+        yield ret
+
+
+class Ini(ConfigFile):
 
     """Remove sections or parameters from a .ini file"""
 
@@ -239,28 +268,11 @@ class Ini:
     def __str__(self):
         return f'Command to clean .ini path={self.path}, section={self.section}, parameter={self.parameter} '
 
-    def execute(self, really_delete):
-        """Make changes and return results"""
-
-        if FileUtilities.whitelisted(self.path):
-            yield ret_keep_list(self.path)
-            return
-
-        ret = {
-            'label': CLEAN_FILE_LABEL,
-            'n_deleted': 0,
-            'n_special': 1,
-            'path': self.path,
-            'size': None}
-        if really_delete:
-            oldsize = FileUtilities.getsize(self.path)
-            FileUtilities.clean_ini(self.path, self.section, self.parameter)
-            newsize = FileUtilities.getsize(self.path)
-            ret['size'] = oldsize - newsize
-        yield ret
+    def _clean(self):
+        FileUtilities.clean_ini(self.path, self.section, self.parameter)
 
 
-class Json:
+class Json(ConfigFile):
 
     """Remove a key from a JSON configuration file"""
 
@@ -272,25 +284,8 @@ class Json:
     def __str__(self):
         return f'Command to clean JSON file, path={self.path}, address={self.address} '
 
-    def execute(self, really_delete):
-        """Make changes and return results"""
-
-        if FileUtilities.whitelisted(self.path):
-            yield ret_keep_list(self.path)
-            return
-
-        ret = {
-            'label': CLEAN_FILE_LABEL,
-            'n_deleted': 0,
-            'n_special': 1,
-            'path': self.path,
-            'size': None}
-        if really_delete:
-            oldsize = FileUtilities.getsize(self.path)
-            FileUtilities.clean_json(self.path, self.address)
-            newsize = FileUtilities.getsize(self.path)
-            ret['size'] = oldsize - newsize
-        yield ret
+    def _clean(self):
+        FileUtilities.clean_json(self.path, self.address)
 
 
 class Shred(Delete):

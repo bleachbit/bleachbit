@@ -8,12 +8,12 @@ import logging
 import os
 import stat
 import sys
-from importlib import import_module
+from importlib.util import find_spec
 
 import bleachbit
 from bleachbit import IS_POSIX, IS_WINDOWS
+from bleachbit.General import unset_sslkeylogfile
 from bleachbit.Language import get_text as _
-from bleachbit.Network import unset_sslkeylogfile
 from bleachbit.Options import options
 
 if IS_WINDOWS:
@@ -49,11 +49,13 @@ def _get_missing_dependencies():
     if IS_WINDOWS:
         deps.append('plyer')
 
+    # find_spec() avoids executing the modules just to test they exist
     missing = []
     for dep in deps:
         try:
-            import_module(dep)
-        except ImportError:
+            if find_spec(dep) is None:
+                missing.append(dep)
+        except (ImportError, ValueError):
             missing.append(dep)
     return sorted(missing)
 

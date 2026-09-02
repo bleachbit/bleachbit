@@ -99,8 +99,8 @@ class ActionProvider(metaclass=PluginMount):
         """Create ActionProvider from CleanerML <action>"""
 
     def get_deep_scan(self):
-        """Return a dictionary used to construct a deep scan"""
-        raise StopIteration
+        """Return an iterable of deep scan searches (empty by default)"""
+        return ()
 
     def get_commands(self):
         """Yield each command (which can be previewed or executed)"""
@@ -543,7 +543,7 @@ class MozillaUrlHistory(FileActionProvider):
 
 class MozillaFavicons(FileActionProvider):
 
-    """Action to clean Mozilla (Firefox) URL history in places.sqlite"""
+    """Action to clean Mozilla (Firefox) favicons in favicons.sqlite"""
     action_key = 'mozilla.favicons'
 
     def get_commands(self):
