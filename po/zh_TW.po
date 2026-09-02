@@ -6,11 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-01 10:05-0600\n"
-"PO-Revision-Date: 2026-08-23 13:51+0000\n"
-"Last-Translator: 那個呆萌在山外 "
-"<5h1n38r16h7.d14m0nd@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-09-02 11:02+0000\n"
+"Last-Translator: Pin-Hsien Lee <plesry@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/bleachbit/main/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -667,30 +666,24 @@ msgid "Package lists"
 msgstr "軟體包清單"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Development environment"
-msgstr "桌面環境"
+msgstr "開發環境"
 
 #: ../cleaners/android_studio.xml
 msgid "Gradle cache"
-msgstr ""
+msgstr "Gradle 快取"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Delete downloaded podcasts"
 msgid "Delete downloaded dependencies and build artifacts"
-msgstr "刪除下載的 Podcast（播客）"
+msgstr "刪除下載的依賴項和構建物"
 
 #: ../cleaners/android_studio.xml
 msgid "Dependencies will need to be downloaded on the next build."
-msgstr ""
+msgstr "下次構建時需要下載依賴項。"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "DNS cache"
 msgid "IDE cache"
-msgstr "DNS 快取"
+msgstr "IDE 快取"
 
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
