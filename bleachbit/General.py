@@ -506,3 +506,21 @@ def sudo_mode():
         # return False
 
     return os.getenv('SUDO_UID') is not None
+
+
+def unset_sslkeylogfile(use_logger):
+    """Unset environment variable SSLKEYLOGFILE
+
+    Workaround for an OpenSSL crash before checking for updates.
+    https://github.com/bleachbit/bleachbit/issues/1826
+
+    Returns True if unset
+    """
+    if not IS_WINDOWS:
+        return False
+    if not os.environ.get('SSLKEYLOGFILE'):
+        return False
+    del os.environ['SSLKEYLOGFILE']
+    if use_logger:
+        logger.debug('The environment variable SSLKEYLOGFILE is not supported')
+    return True

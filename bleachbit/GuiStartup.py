@@ -12,8 +12,8 @@ from importlib.util import find_spec
 
 import bleachbit
 from bleachbit import IS_POSIX, IS_WINDOWS
+from bleachbit.General import unset_sslkeylogfile
 from bleachbit.Language import get_text as _
-from bleachbit.Network import unset_sslkeylogfile
 from bleachbit.Options import options
 
 if IS_WINDOWS:
