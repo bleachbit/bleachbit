@@ -510,18 +510,14 @@ def recompile_mo(langdir, app, langid, dst):
 
 @count_size_improvement
 def clean_dist_locale():
-    """Clean dist/share/locale"""
+    """Recompile GTK translations in dist/share/locale to shrink them"""
     tmpd = tempfile.mkdtemp('gtk_locale')
     supported_langs = supported_languages()
     basedir = os.path.normpath('dist/share/locale')
     have_msgunfmt = bleachbit.FileUtilities.exe_exists('msgunfmt.exe')
-    recompile_langs = []  # supported languages to recompile
-    remove_langs = []  # unsupported languages to remove
-    for langid in sorted(os.listdir(basedir)):
-        if langid in supported_langs:
-            recompile_langs.append(langid)
-        else:
-            remove_langs.append(langid)
+    # clean_translations() already removed the unsupported languages
+    recompile_langs = [langid for langid in sorted(os.listdir(basedir))
+                       if langid in supported_langs]
     if recompile_langs:
         if have_msgunfmt:
             logger.info('recompiling supported GTK languages: %s',
@@ -531,15 +527,6 @@ def clean_dist_locale():
                 recompile_mo(langdir, 'gtk30', lang_id, tmpd)
         else:
             logger.warning('msgunfmt missing: skipping recompile')
-    if remove_langs:
-        logger.info('removing unsupported GTK languages: %s', remove_langs)
-        for langid in remove_langs:
-            langdir = os.path.join(basedir, langid)
-            if os.path.exists(langdir):
-                logger.info('Removing directory: %s', langdir)
-                shutil.rmtree(langdir)
-    else:
-        logger.info('no unsupported GTK languages found')
     os.rmdir(tmpd)
 
 
