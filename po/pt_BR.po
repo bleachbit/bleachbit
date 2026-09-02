@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-01 10:05-0600\n"
-"PO-Revision-Date: 2026-08-22 12:38+0000\n"
+"PO-Revision-Date: 2026-09-02 11:02+0000\n"
 "Last-Translator: Igor Rückert <igorruckert@yahoo.com.br>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "bleachbit/main/pt_BR/>\n"
@@ -686,30 +686,24 @@ msgid "Package lists"
 msgstr "Listas de pacotes"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Development environment"
-msgstr "Ambiente da Área de trabalho"
+msgstr "Ambiente de desenvolvimento"
 
 #: ../cleaners/android_studio.xml
 msgid "Gradle cache"
-msgstr ""
+msgstr "Cache do Gradle"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Delete downloaded podcasts"
 msgid "Delete downloaded dependencies and build artifacts"
-msgstr "Apagar podcasts baixados"
+msgstr "Excluir dependências baixadas e artefatos de compilação"
 
 #: ../cleaners/android_studio.xml
 msgid "Dependencies will need to be downloaded on the next build."
-msgstr ""
+msgstr "As dependências precisarão ser baixadas na próxima compilação."
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "DNS cache"
 msgid "IDE cache"
-msgstr "Cache DNS"
+msgstr "Cache IDE"
 
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
