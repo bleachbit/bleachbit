@@ -891,32 +891,30 @@ def snapd_is_active():
     The result is cached in a module-level variable to avoid repeated
     systemctl calls during a single BleachBit run.
     """
+    def check_snapd():
+        if not exe_exists(General.resolve_exe('snap')):
+            return False
+        if not exe_exists(General.resolve_exe('systemctl')):
+            return False
+        # When snap is installed but snapd is inactive, then `snap list --all`
+        # or `snap version` may have a long delay, so we check the service status first
+        try:
+            (rc, _stdout, _stderr) = General.run_external(
+                [General.resolve_exe('systemctl'), 'is-active',
+                 '--quiet', 'snapd.socket'],
+                timeout=5)
+        except subprocess.TimeoutExpired:
+            logger.warning(
+                'systemctl is-active snapd.socket timed out: it seems snap is installed but snapd is inactive')
+            return False
+        except (FileNotFoundError, OSError) as exc:
+            logger.warning('systemctl is-active snapd.socket failed: %s', exc)
+            return False
+        return rc == 0
+
     global _snapd_is_active_cache  # pylint: disable=global-statement
-    if _snapd_is_active_cache is not None:
-        return _snapd_is_active_cache
-    if not exe_exists(General.resolve_exe('snap')):
-        _snapd_is_active_cache = False
-        return _snapd_is_active_cache
-    if not exe_exists(General.resolve_exe('systemctl')):
-        _snapd_is_active_cache = False
-        return _snapd_is_active_cache
-    # When snap is installed but snapd is inactive, then `snap list --all`
-    # or `snap version` may have a long delay, so we check the service status first.
-    try:
-        (rc, _stdout, _stderr) = General.run_external(
-            [General.resolve_exe('systemctl'), 'is-active',
-             '--quiet', 'snapd.socket'],
-            timeout=5)
-    except subprocess.TimeoutExpired:
-        logger.warning(
-            'systemctl is-active snapd.socket timed out: it seems snap is installed but snapd is inactive')
-        _snapd_is_active_cache = False
-        return _snapd_is_active_cache
-    except (FileNotFoundError, OSError) as exc:
-        logger.warning('systemctl is-active snapd.socket failed: %s', exc)
-        _snapd_is_active_cache = False
-        return _snapd_is_active_cache
-    _snapd_is_active_cache = rc == 0
+    if _snapd_is_active_cache is None:
+        _snapd_is_active_cache = check_snapd()
     return _snapd_is_active_cache
 
 

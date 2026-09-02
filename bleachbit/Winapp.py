@@ -84,11 +84,6 @@ def _noop_progress(_fraction):
     return None
 
 
-def _always_false():
-    """Return False for cleaner auto_hide overrides."""
-    return False
-
-
 def detectos(required_ver, mock=False):
     """Returns boolean whether the detectos is compatible with the
     current operating system, or the mock version, if given."""
@@ -216,7 +211,7 @@ class Winapp:
         self.cleaners[cleaner_id].description = _('Imported from winapp2.ini')
         # The detect() function in this module effectively does what
         # auto_hide() does, so this avoids redundant, slow processing.
-        self.cleaners[cleaner_id].auto_hide = _always_false
+        self.cleaners[cleaner_id].auto_hide_supported = False
 
     def section_to_cleanerid(self, langsecref):
         """Given a langsecref (or section name), find the internal

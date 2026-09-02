@@ -68,6 +68,8 @@ class Cleaner:
         self.options = {}
         self.running = []
         self.warnings = {}
+        # Winapp2 cleaners clear this because their own detect() already ran
+        self.auto_hide_supported = True
         self.keep_list_re = None
         # Lazily built {option_id: [action, ...]} index over self.actions.
         # Winapp2 cleaners aggregate thousands of actions, so scanning the
@@ -107,6 +109,8 @@ class Cleaner:
     def auto_hide(self):
         """Return boolean whether it is OK to automatically hide this
         cleaner"""
+        if not self.auto_hide_supported:
+            return False
         for (option_id, __name) in self.get_options():
             try:
                 for cmd in self.get_commands(option_id):
@@ -765,28 +769,50 @@ def simpler_cleaner_process_path(path):
     return path
 
 
+class CustomFileAction(Action.ActionProvider):
+    """Custom file action"""
+    # At module level because the metaclass registers every subclass globally
+    action_key = '__customfileaction'
+
+    def __init__(self, paths):
+        Action.ActionProvider.__init__(self, None)
+        self.paths = paths
+
+    def get_commands(self):
+        for path in self.paths:
+            path = simpler_cleaner_process_path(path)
+            if not path:
+                continue
+            if os.path.isdir(path):
+                for child in children_in_directory(path, True):
+                    yield Command.Shred(child)
+            yield Command.Shred(path)
+
+
 def create_simple_cleaner(paths):
     """Shred arbitrary files (used in CLI and GUI)"""
     cleaner = Cleaner()
     cleaner.add_option(option_id='files', name='', description='')
     cleaner.name = _("System")  # shows up in progress bar
-
-    class CustomFileAction(Action.ActionProvider):
-        """Custom file action"""
-        action_key = '__customfileaction'
-
-        def get_commands(self):
-            for path in paths:
-                path = simpler_cleaner_process_path(path)
-                if not path:
-                    continue
-                if os.path.isdir(path):
-                    for child in children_in_directory(path, True):
-                        yield Command.Shred(child)
-                yield Command.Shred(path)
-    provider = CustomFileAction(None)
-    cleaner.add_action('files', provider)
+    cleaner.add_action('files', CustomFileAction(paths))
     return cleaner
+
+
+class CustomWipeAction(Action.ActionProvider):
+    """Custom wipe action"""
+    action_key = '__customwipeaction'
+
+    def __init__(self, path):
+        Action.ActionProvider.__init__(self, None)
+        self.path = path
+        # TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
+        self.display = _("Wipe empty space %s") % path
+
+    def get_commands(self):
+        def wipe_path_func():
+            yield from wipe_path(self.path, idle=True)
+            yield 0
+        yield Command.Function(None, wipe_path_func, self.display)
 
 
 def create_wipe_empty_space_cleaner(path):
@@ -795,20 +821,5 @@ def create_wipe_empty_space_cleaner(path):
     cleaner.add_option(
         option_id='empty_space', name='', description='')
     cleaner.name = ''
-
-    # create a temporary cleaner object
-    # TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
-    display = _("Wipe empty space %s") % path
-
-    def wipe_path_func():
-        yield from wipe_path(path, idle=True)
-        yield 0
-
-    class CustomWipeAction(Action.ActionProvider):
-        action_key = '__customwipeaction'
-
-        def get_commands(self):
-            yield Command.Function(None, wipe_path_func, display)
-    provider = CustomWipeAction(None)
-    cleaner.add_action('empty_space', provider)
+    cleaner.add_action('empty_space', CustomWipeAction(path))
     return cleaner
