@@ -359,29 +359,20 @@ def get_distribution_name_version():
     Python 3.7 had platform.linux_distribution(), but it
     was removed in Python 3.8.
     """
-    ret = get_distribution_name_version_platform_freedesktop()
-    if ret:
-        return ret
-    ret = get_distribution_name_version_distro()
-    if ret:
-        return ret
-    ret = get_distribution_name_version_os_release()
-    if ret:
-        return ret
-    try:
-        linux_version = platform.release()
-        # example '6.12.3-061203-generic'
-        linux_version = linux_version.split('-')[0]
-        return f"Linux {linux_version} (unknown distribution)"
-    except Exception as e1:
-        logger.debug("Error calling platform.release(): %s", e1)
+    for get_dist in (get_distribution_name_version_platform_freedesktop,
+                     get_distribution_name_version_distro,
+                     get_distribution_name_version_os_release):
+        ret = get_dist()
+        if ret:
+            return ret
+    for name, get_release in (('platform.release()', platform.release),
+                              ('os.uname()', lambda: os.uname().release)):
         try:
-            linux_version = os.uname().release
             # example '6.12.3-061203-generic'
-            linux_version = linux_version.split('-')[0]
+            linux_version = get_release().split('-')[0]
             return f"Linux {linux_version} (unknown distribution)"
-        except Exception as e2:
-            logger.debug("Error calling os.uname(): %s", e2)
+        except Exception as e:
+            logger.debug("Error calling %s: %s", name, e)
     return "Linux (unknown version and distribution)"
 
 
@@ -1065,17 +1056,29 @@ def is_display_protocol_wayland_and_root_not_allowed():
     )
 
 
+def _dns_flush_command():
+    """Return the command to flush the DNS resolver cache, or None if there is none"""
+    for exe, arg in (('resolvectl', 'flush-caches'),
+                     ('systemd-resolve', '--flush-caches')):
+        path = General.resolve_exe(exe)
+        if exe_exists(path):
+            return [path, arg]
+    return None
+
+
+def can_flush_dns():
+    """Return whether the DNS resolver cache can be flushed"""
+    return _dns_flush_command() is not None
+
+
 def flush_dns():
     """Flush the DNS resolver cache
 
     Returns 0 on success.
     Raises RuntimeError on failure.
     """
-    if exe_exists(General.resolve_exe('resolvectl')):
-        args = [General.resolve_exe('resolvectl'), 'flush-caches']
-    elif exe_exists(General.resolve_exe('systemd-resolve')):
-        args = [General.resolve_exe('systemd-resolve'), '--flush-caches']
-    else:
+    args = _dns_flush_command()
+    if args is None:
         raise RuntimeError('Neither resolvectl nor systemd-resolve found')
     (rc, stdout, stderr) = General.run_external(args)
     if 0 != rc:

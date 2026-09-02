@@ -388,6 +388,27 @@ class CleanerML:
                 self.vars[var_name] = value_list
 
 
+def reject_world_writable(pathname):
+    """Warn and return True if the cleaner or its directory is world writable.
+
+    Callers gate this on POSIX: the mode bits are meaningless on Windows.
+    """
+    if is_world_writable(pathname):
+        # TRANSLATORS: Warning printed to the log. %s expands to the
+        # path of the XML cleaner file that was skipped
+        logger.warning(_("Ignoring cleaner because it is "
+                         "world writable: %s"), pathname)
+        return True
+    if is_world_writable(os.path.dirname(pathname)):
+        # TRANSLATORS: Warning printed to the log. %s expands to the
+        # path of the XML cleaner file whose directory is world
+        # writable.
+        logger.warning(_("Ignoring cleaner because its directory is "
+                         "world writable: %s"), pathname)
+        return True
+    return False
+
+
 def list_cleanerml_files(local_only=False, system_only=False):
     """List CleanerML files"""
     cleanerdirs = ()
@@ -411,18 +432,7 @@ def list_cleanerml_files(local_only=False, system_only=False):
                 logger.warning('Could not read cleaner metadata %s: %s',
                                pathname, e)
                 continue
-            if is_world_writable(pathname):
-                # TRANSLATORS: Warning printed to the log. %s expands to the
-                # path of the XML cleaner file that was skipped
-                logger.warning(_("Ignoring cleaner because it is "
-                                 "world writable: %s"), pathname)
-                continue
-            if is_world_writable(os.path.dirname(pathname)):
-                # TRANSLATORS: Warning printed to the log. %s expands to the
-                # path of the XML cleaner file whose directory is world
-                # writable.
-                logger.warning(_("Ignoring cleaner because its directory is "
-                                 "world writable: %s"), pathname)
+            if reject_world_writable(pathname):
                 continue
         yield pathname
 

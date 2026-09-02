@@ -784,7 +784,7 @@ def clean_translations():
     else:
         logger.warning('locale.alias does not exist')
     pygtk_translations = os.listdir('dist/share/locale')
-    supported_translations = [f[3:-3] for f in glob.glob('po/*.po')]
+    supported_translations = supported_languages()
     for pt in pygtk_translations:
         if pt not in supported_translations:
             path = 'dist/share/locale/' + pt

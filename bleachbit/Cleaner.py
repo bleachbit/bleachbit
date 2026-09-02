@@ -22,7 +22,7 @@ from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
 from bleachbit.PathUtils import path_equal
 from bleachbit.Process import is_process_running
-from bleachbit import Action, CleanerML, Command, FileUtilities, General, Memory
+from bleachbit import Action, CleanerML, Command, FileUtilities, Memory
 from bleachbit import IS_LINUX, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.GtkShim import gtk_may_be_available
 from bleachbit.Wipe import wipe_path
@@ -284,10 +284,7 @@ class System(Cleaner):
         #
         # options just for Microsoft Windows
         #
-        has_dns_flush = IS_WINDOWS or (
-            IS_LINUX and (
-                FileUtilities.exe_exists(General.resolve_exe('resolvectl')) or
-                FileUtilities.exe_exists(General.resolve_exe('systemd-resolve'))))
+        has_dns_flush = IS_WINDOWS or (IS_LINUX and Unix.can_flush_dns())
         if has_dns_flush:
             # TRANSLATORS: This is a label for the option to clear the system DNS cache.
             dns_cache_label = _('DNS cache')

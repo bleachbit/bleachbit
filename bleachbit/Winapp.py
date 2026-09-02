@@ -18,9 +18,9 @@ from xml.dom.minidom import parseString
 import bleachbit
 from bleachbit import Cleaner, IS_WINDOWS, Windows
 from bleachbit.Action import Delete, Winreg
+from bleachbit.CleanerML import reject_world_writable
 from bleachbit.FileUtilities import detect_encoding
 from bleachbit.Language import get_text as _
-from bleachbit.PathUtils import is_world_writable
 
 logger = logging.getLogger(__name__)
 
@@ -482,14 +482,7 @@ def list_winapp_files():
         fname = os.path.join(dirname, 'winapp2.ini')
         if not os.path.exists(fname):
             continue
-        if check_world_writable and is_world_writable(fname):
-            logger.warning(
-                _("Ignoring cleaner because it is world writable: %s"), fname)
-            continue
-        if check_world_writable and is_world_writable(dirname):
-            logger.warning(
-                _("Ignoring cleaner because its directory is world writable: %s"),
-                fname)
+        if check_world_writable and reject_world_writable(fname):
             continue
         yield fname
 

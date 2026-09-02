@@ -356,6 +356,18 @@ def os_match(os_str, platform=sys.platform):
     return os_str in current_os
 
 
+def _set_detached_kwargs(kwargs):
+    """Add the Popen keywords that detach the child from this process."""
+    if IS_WINDOWS:
+        kwargs['creationflags'] = (
+            kwargs.get('creationflags', 0) |
+            subprocess.DETACHED_PROCESS |
+            subprocess.CREATE_NEW_PROCESS_GROUP)
+    else:
+        kwargs['start_new_session'] = True
+    kwargs['close_fds'] = True
+
+
 def run_external_nowait(args, env=None, kwargs=None):
     """Run an external program in the background. Return immediately.
 
@@ -374,32 +386,16 @@ def run_external_nowait(args, env=None, kwargs=None):
         # function is also called directly, bypassing that sanitization.
         env = sanitize_root_env(dict(os.environ) if env is None else env)
     try:
+        _set_detached_kwargs(kwargs)
+        process = subprocess.Popen(args,
+                                   stdin=subprocess.DEVNULL,
+                                   stdout=subprocess.DEVNULL,
+                                   stderr=subprocess.DEVNULL,
+                                   env=env, **kwargs)
+        process.returncode = 0
         if IS_WINDOWS:
-            creationflags = kwargs.get('creationflags', 0)
-            kwargs['creationflags'] = (
-                creationflags |
-                subprocess.DETACHED_PROCESS |
-                subprocess.CREATE_NEW_PROCESS_GROUP)
-        else:
-            # Unix/Linux
-            kwargs['start_new_session'] = True
-        kwargs['close_fds'] = True
-        try:
-            process = subprocess.Popen(args,
-                                       stdin=subprocess.DEVNULL,
-                                       stdout=subprocess.DEVNULL,
-                                       stderr=subprocess.DEVNULL,
-                                       env=env, **kwargs)
-            process.returncode = 0
-            if IS_WINDOWS:
-                process._handle.Close()
-                process._handle = None
-            return True
-        except Exception as e:
-            logger.warning('Failed to start process %s: %s', args, e)
-            return False
-    except subprocess.TimeoutExpired:
-        # This is good on Windows.
+            process._handle.Close()
+            process._handle = None
         return True
     except Exception as e:
         logger.warning('Failed to start process %s: %s', args, e)
@@ -459,15 +455,7 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
         if run_external_nowait(args, env=env, kwargs=kwargs):
             return (0, '', '')
         # Use fallback method.
-        if IS_WINDOWS:
-            creationflags = kwargs.get('creationflags', 0)
-            kwargs['creationflags'] = (
-                creationflags |
-                subprocess.DETACHED_PROCESS |
-                subprocess.CREATE_NEW_PROCESS_GROUP)
-        else:
-            kwargs['start_new_session'] = True
-        kwargs['close_fds'] = True
+        _set_detached_kwargs(kwargs)
         process = subprocess.Popen(args,
                                    stdout=subprocess.DEVNULL,
                                    stderr=subprocess.DEVNULL,

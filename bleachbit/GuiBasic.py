@@ -78,54 +78,45 @@ def browse_folder(parent, title, multiple, stock_button):
     return ret
 
 
-def browse_file(parent, title):
-    """Prompt user to select a single file"""
+def _browse_open(parent, title, multiple, stock_button):
+    """Ask the user to select one or more files. Return path(s) or None."""
 
     if IS_WINDOWS and not os.getenv('BB_NATIVE'):
+        if multiple:
+            return Windows.browse_files(parent, title)
         return Windows.browse_file(parent, title)
 
     chooser = Gtk.FileChooserDialog(title=title,
                                     transient_for=parent,
                                     action=Gtk.FileChooserAction.OPEN)
     chooser.add_buttons(CANCEL_BUTTON_LABEL, Gtk.ResponseType.CANCEL,
-                        # TRANSLATORS: This is a label for the Open button in a file chooser dialog.
-                        _("_Open"), Gtk.ResponseType.OK)
+                        stock_button, Gtk.ResponseType.OK)
     chooser.set_default_response(Gtk.ResponseType.OK)
+    chooser.set_select_multiple(multiple)
     chooser.set_current_folder(os.path.expanduser('~'))
     resp = chooser.run()
-    path = chooser.get_filename()
+    if multiple:
+        ret = chooser.get_filenames()
+    else:
+        ret = chooser.get_filename()
     chooser.destroy()
 
     if Gtk.ResponseType.OK != resp:
         # user cancelled
         return None
 
-    return path
+    return ret
+
+
+def browse_file(parent, title):
+    """Prompt user to select a single file"""
+    # TRANSLATORS: This is a label for the Open button in a file chooser dialog.
+    return _browse_open(parent, title, False, _("_Open"))
 
 
 def browse_files(parent, title):
     """Prompt user to select multiple files to delete"""
-
-    if IS_WINDOWS and not os.getenv('BB_NATIVE'):
-        return Windows.browse_files(parent, title)
-
-    chooser = Gtk.FileChooserDialog(title=title,
-                                    transient_for=parent,
-                                    action=Gtk.FileChooserAction.OPEN)
-    chooser.add_buttons(CANCEL_BUTTON_LABEL, Gtk.ResponseType.CANCEL,
-                        DELETE_BUTTON_LABEL, Gtk.ResponseType.OK)
-    chooser.set_default_response(Gtk.ResponseType.OK)
-    chooser.set_select_multiple(True)
-    chooser.set_current_folder(os.path.expanduser('~'))
-    resp = chooser.run()
-    paths = chooser.get_filenames()
-    chooser.destroy()
-
-    if Gtk.ResponseType.OK != resp:
-        # user cancelled
-        return None
-
-    return paths
+    return _browse_open(parent, title, True, DELETE_BUTTON_LABEL)
 
 
 def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
