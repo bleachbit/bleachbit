@@ -11,7 +11,7 @@ import threading
 import time
 
 import bleachbit
-from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path, IS_WINDOWS
+from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path, IS_MAC, IS_WINDOWS
 from bleachbit.Cleaner import backends, register_cleaners
 from bleachbit.Constant import ABORT_BUTTON_LABEL, REQUIRES_EXPERT_MODE
 from bleachbit.GUI import logger
@@ -120,6 +120,18 @@ class GUI(Gtk.ApplicationWindow):
         accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
         key, mod = Gtk.accelerator_parse("<Control>W")
         accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
+        if IS_MAC:
+            # Gtk.AccelGroup does not reliably fire for Cmd+Q on this
+            # GTK/Quartz build (the key-press-event carries the correct
+            # META_MASK|MOD2_MASK combination, but the accelerator group
+            # never activates), so handle it directly instead.
+            mac_cmd_q_mods = Gdk.ModifierType.META_MASK | Gdk.ModifierType.MOD2_MASK
+            def _on_mac_key_press(_widget, event):
+                if event.keyval == Gdk.KEY_q and event.state & mac_cmd_q_mods == mac_cmd_q_mods:
+                    self.on_quit(None)
+                    return True
+                return False
+            self.connect("key-press-event", _on_mac_key_press)
 
         # Enable the user to change font size with keyboard or mouse.
         gtk_font_name = None

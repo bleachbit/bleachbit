@@ -22,7 +22,7 @@ import locale
 import os
 import logging
 
-from bleachbit import IS_POSIX, IS_WINDOWS
+from bleachbit import IS_MAC, IS_POSIX, IS_WINDOWS
 
 logger = logging.getLogger(__name__)
 
@@ -300,6 +300,36 @@ def get_supported_language_code_name_dict():
     return supported_langs
 
 
+def _get_macos_locale():
+    """Return the user's preferred locale on macOS, e.g. 'es_ES'.
+
+    On macOS, locale.getlocale() reflects POSIX environment variables
+    (LANG/LC_ALL), which are not set when the app is launched from
+    Finder (as opposed to a terminal) and can be stale or inconsistent
+    with the user's actual System Settings > General > Language & Region
+    preference. AppleLocale, read via `defaults read -g AppleLocale`,
+    reflects the real system preference regardless of how the app was
+    launched.
+    """
+    import subprocess
+    try:
+        result = subprocess.run(
+            ['defaults', 'read', '-g', 'AppleLocale'],
+            capture_output=True, text=True, timeout=2, check=False)
+    except (OSError, ValueError, subprocess.SubprocessError) as e:
+        # SubprocessError covers TimeoutExpired, which is not an OSError.
+        logger.debug('failed to read AppleLocale: %s', e)
+        return None
+    if result.returncode != 0:
+        return None
+    value = result.stdout.strip()
+    if not value:
+        return None
+    # AppleLocale can include a variant suffix like 'es_ES@currency=EUR'.
+    value = value.split('@')[0]
+    return value or None
+
+
 def get_active_language_code():
     """Return the language ID to use for translations
 
@@ -328,7 +358,20 @@ def get_active_language_code():
         # Convert Windows LCID (e.g., 1033) to RFC1766 (e.g., en-US).
         user_locale = locale.windows_locale.get(lcid, '')
     else:
-        user_locale = locale.getlocale()[0]
+        # On macOS, locale.getlocale() always returns *something* (e.g.
+        # a built-in default) even with no LANG/LC_ALL in the
+        # environment at all, so its truthiness cannot detect "nothing
+        # was explicitly set". Check os.environ directly instead: if the
+        # caller (a shell, a test suite) put LANG/LC_ALL/LC_MESSAGES
+        # there on purpose, honor it via locale.getlocale(); otherwise
+        # (Finder launches the app with none of these set) prefer the
+        # real system preference from AppleLocale.
+        env_locale_set = any(
+            os.environ.get(name) for name in ("LC_ALL", "LC_MESSAGES", "LANG"))
+        if IS_MAC and not env_locale_set:
+            user_locale = _get_macos_locale()
+        else:
+            user_locale = locale.getlocale()[0]
 
     if not user_locale:
         user_locale = 'C'

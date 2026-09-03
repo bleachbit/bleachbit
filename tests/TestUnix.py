@@ -186,6 +186,21 @@ class UnixTestCase(common.BleachbitTestCase):
         self.assertRaises(AssertionError, find_best_locale, None)
         self.assertRaises(AssertionError, find_best_locale, [])
 
+    @mock.patch('locale.getlocale')
+    @mock.patch('bleachbit.Unix.find_available_locales')
+    def test_find_best_locale_macos_uppercase_utf8(
+            self, mock_find_available_locales, mock_getlocale):
+        """macOS's locale -a uses '.UTF-8' (uppercase, hyphenated),
+        unlike the lowercase '.utf8' used elsewhere in this test file.
+        The UTF-8 variant must still be preferred over a non-UTF-8 one
+        regardless of that formatting difference."""
+        mock_getlocale.return_value = ('fr_FR', 'UTF-8')
+        mock_find_available_locales.return_value = [
+            'en_NZ.ISO8859-1',
+            'en_US.UTF-8',
+        ]
+        self.assertEqual(find_best_locale('en'), 'en_US.UTF-8')
+
     @unittest.skipUnless(exe_exists(General.resolve_exe('apt-get')),
                          'skipping tests for unavailable apt-get')
     def test_get_apt_size(self):
@@ -626,9 +641,17 @@ PrefersNonDefaultGPU=false""")
             self.assertLExists(
                 path, f"Rotated log path '{path}' does not exist")
 
+    @mock.patch('os.access')
+    @mock.patch('os.path.isdir')
     @mock.patch('bleachbit.FileUtilities.whitelisted')
     @mock.patch('bleachbit.FileUtilities.children_in_directory')
-    def test_rotated_logs_mock(self, mock_cid, mock_whitelisted):
+    def test_rotated_logs_mock(self, mock_cid, mock_whitelisted, mock_isdir, mock_access):
+        # Simulate a writable /var/log so the macOS permission check in
+        # rotated_logs() does not interfere with this test, which is
+        # about the keep_lists/positive_re filtering logic, not
+        # permissions (that's covered by a dedicated test).
+        mock_isdir.return_value = True
+        mock_access.return_value = True
         mock_whitelisted.side_effect = lambda path: path.startswith(
             '/var/log/whitelisted/')
         expected_delete = [
@@ -672,6 +695,30 @@ PrefersNonDefaultGPU=false""")
             self.assertNotIn(path, result)
         mock_cid.assert_called_once_with('/var/log')
         mock_whitelisted.assert_called()
+
+    @mock.patch('bleachbit.Unix.IS_MAC', True)
+    @mock.patch('os.access')
+    @mock.patch('os.path.isdir')
+    @mock.patch('bleachbit.FileUtilities.whitelisted')
+    @mock.patch('bleachbit.FileUtilities.children_in_directory')
+    def test_rotated_logs_macos_permission_check(
+            self, mock_cid, mock_whitelisted, mock_isdir, mock_access):
+        """On macOS, skip a path only if its parent dir exists and is
+        unwritable. A nonexistent parent (os.access() also returns False
+        for that) must not be treated the same as 'no permission'."""
+        mock_whitelisted.return_value = False
+        candidates = [
+            '/var/log/protected/foo.0',
+            '/var/log/missing_parent/foo.0',
+        ]
+        mock_cid.return_value = iter(candidates)
+        mock_isdir.side_effect = lambda p: p == '/var/log/protected'
+        mock_access.return_value = False
+
+        result = list(rotated_logs())
+
+        self.assertNotIn('/var/log/protected/foo.0', result)
+        self.assertIn('/var/log/missing_parent/foo.0', result)
 
     @common.skipIfWindows
     def test_run_cleaner_cmd(self):
