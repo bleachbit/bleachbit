@@ -50,4 +50,17 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="~/Library/Containers/com.apple.Safari/Data/Library/WebKit/WebsiteData/LocalStorage/"/>
     <action command="delete" search="walk.all" path="~/Library/Containers/com.apple.Safari/Data/Library/WebKit/WebsiteData/IndexedDB/"/>
   </option>
+  <option id="vacuum">
+    <label>Vacuum</label>
+    <description>Clean database fragmentation to reduce space and improve speed without removing any data</description>
+    <action command="sqlite.vacuum" search="file" path="~/Library/Safari/History.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/Library/Safari/PerSitePreferences.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/Library/Safari/BlockedBannerHighlights.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/Library/Safari/CloudAutoFillCorrections.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/Library/Safari/ContentBlockerStatistics.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/Library/Safari/IgnoredSiriSuggestedSites.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/Library/Safari/UserDefinedContentBlockers.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/Library/Safari/Favicon Cache/favicons.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/Library/Safari/Touch Icons Cache/TouchIconCacheSettings.db"/>
+  </option>
 </cleaner>
