@@ -18,6 +18,7 @@ RUN zypper --non-interactive refresh \
         make \
         python313 \
         python313-base \
+        python313-charset-normalizer \
         python313-gobject \
         python313-psutil \
         python313-requests \

@@ -135,6 +135,7 @@ install_debian() {
         xdg-utils
     )
     local runtime_pip=(
+        python3-charset-normalizer
         python3-distro
         python3-psutil
         python3-requests
@@ -194,6 +195,7 @@ install_fedora() {
         xdg-utils
     )
     local runtime_pip=(
+        python3-charset-normalizer
         python3-distro
         python3-psutil
         python3-requests
@@ -278,6 +280,7 @@ install_opensuse() {
         xdg-utils
     )
     local runtime_pip=(
+        "${py}-charset-normalizer"
         "${py}-psutil"
         "${py}-requests"
     )
@@ -342,6 +345,7 @@ install_arch() {
         xdg-utils
     )
     local runtime_pip=(
+        python-charset-normalizer
         python-distro
         python-psutil
         python-requests
@@ -399,6 +403,7 @@ install_freebsd() {
     local runtime=(
         lsof # for checking for open files
         python3
+        "${py}-charset-normalizer"
         "${py}-distro"
         "${py}-psutil"
         "${py}-requests"
