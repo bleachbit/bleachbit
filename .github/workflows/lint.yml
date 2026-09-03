@@ -63,7 +63,7 @@ jobs:
         if: always()
         run: |
           shopt -s nullglob
-          for f in all.*.log */*.shellcheck.log; do
+          for f in all.*.log; do
             echo "::group::$f"
             cat "$f"
             echo "::endgroup::"
