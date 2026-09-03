@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-01 10:05-0600\n"
-"PO-Revision-Date: 2026-08-22 12:38+0000\n"
+"PO-Revision-Date: 2026-09-03 02:36+0000\n"
 "Last-Translator: Andrei Stepanov <adem4ik@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/bleachbit/main/"
 "ru/>\n"
@@ -688,30 +688,24 @@ msgid "Package lists"
 msgstr "Списки пакетов"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Development environment"
-msgstr "Среда рабочего стола"
+msgstr "Среда разработки"
 
 #: ../cleaners/android_studio.xml
 msgid "Gradle cache"
-msgstr ""
+msgstr "Кэш Gradle"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Delete downloaded podcasts"
 msgid "Delete downloaded dependencies and build artifacts"
-msgstr "Удалить загруженные подкасты"
+msgstr "Удалить загруженные зависимости и артефакты сборки"
 
 #: ../cleaners/android_studio.xml
 msgid "Dependencies will need to be downloaded on the next build."
-msgstr ""
+msgstr "Зависимости потребуется загрузить при следующей сборке."
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "DNS cache"
 msgid "IDE cache"
-msgstr "Кэш DNS"
+msgstr "Кэш IDE"
 
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
@@ -1360,7 +1354,8 @@ msgstr ""
 #: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
-msgstr "Уборщик игнорируется из-за небезопасных прав доступа к файлу: %s"
+msgstr ""
+"Уборщик игнорируется, так как доступен для записи всем пользователям: %s"
 
 #. TRANSLATORS: Warning printed to the log. %s expands to the
 #. path of the XML cleaner file whose directory is world
@@ -1368,7 +1363,9 @@ msgstr "Уборщик игнорируется из-за небезопасны
 #: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
 #, python-format
 msgid "Ignoring cleaner because its directory is world writable: %s"
-msgstr "Уборщик игнорируется из-за небезопасных прав доступа к файлу: %s"
+msgstr ""
+"Уборщик игнорируется, так как его каталог доступен для записи всем "
+"пользователям: %s"
 
 #. TRANSLATORS: Error message printed to the log.
 #. %s expands to the path of the XML cleaner file
