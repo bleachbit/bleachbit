@@ -20,7 +20,7 @@ import shlex
 import subprocess
 
 import bleachbit
-from bleachbit import FileUtilities, General, IS_POSIX
+from bleachbit import FileUtilities, General, IS_MAC, IS_POSIX
 from bleachbit.FileUtilities import children_in_directory, exe_exists
 from bleachbit.Language import get_text as _, native_locale_names
 from bleachbit.VFS import RealVFS
@@ -541,6 +541,15 @@ def rotated_logs():
     for path in bleachbit.FileUtilities.children_in_directory('/var/log'):
         if bleachbit.FileUtilities.whitelisted(path):
             continue
+
+        # macOS protects these system log directories from normal users.
+        if IS_MAC and (
+            path.startswith('/var/log/powermanagement/') or
+            path.startswith('/var/log/asl/') or
+            path.startswith('/var/log/DiagnosticMessages/')
+        ):
+            continue
+
         if any(keep_list.search(path) for keep_list in keep_lists):
             continue
         if positive_re.search(path):
