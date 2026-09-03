@@ -35,8 +35,6 @@ later.  See the COPYING file in the top-level directory.
     <description>Delete the files</description>
     <action command="delete" search="glob" path="~/Library/Logs/DiagnosticReports/Safari-*.ips"/>
     <action command="delete" search="glob" path="~/Library/Logs/DiagnosticReports/Safari_*.crash"/>
-    <action command="delete" search="glob" path="~/Library/Containers/com.apple.Safari/Data/Library/Logs/DiagnosticReports/Safari-*.ips"/>
-    <action command="delete" search="glob" path="~/Library/Containers/com.apple.Safari/Data/Library/Logs/DiagnosticReports/Safari_*.crash"/>
   </option>
   <option id="site_preferences">
     <label>Site preferences</label>
