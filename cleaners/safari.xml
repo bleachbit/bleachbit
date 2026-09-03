@@ -11,6 +11,7 @@ later.  See the COPYING file in the top-level directory.
 <cleaner id="safari" os="macos">
   <label>Safari</label>
   <description>Web browser</description>
+  <running type="exe" os="macos" same_user="true">Safari</running>
   <option id="cookies">
     <label>Cookies</label>
     <description>Delete cookies, which store login information, website preferences, and tracking identifiers</description>
