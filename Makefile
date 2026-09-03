@@ -143,21 +143,14 @@ lint:
 	else \
 		echo "WARNING: Missing appstreamcli. APT users, try: sudo apt install appstream"; \
 	fi; \
+	echo "Running shellcheck, pyflakes, and pylint in parallel: see all.shellcheck.log, all.pyflakes.log, and all.pylint.log"; \
+	shellcheck_pid=; \
 	if command -v shellcheck >/dev/null 2>&1; then \
-		echo "Running shellcheck on .sh files"; \
-		for f in scripts/*.sh docker/*.sh; do \
-			[ -e "$$f" ] || continue; \
-			echo "$$f"; \
-			shellcheck "$$f" > "$$f".shellcheck.log || { \
-				rc=1; \
-				echo "ERROR: shellcheck reported problems in $$f"; \
-				cat "$$f".shellcheck.log; \
-			}; \
-		done; \
+		shellcheck scripts/*.sh docker/*.sh > all.shellcheck.log 2>&1 & \
+		shellcheck_pid=$$!; \
 	else \
 		echo "WARNING: Missing shellcheck. APT users, try: sudo apt install shellcheck"; \
 	fi; \
-	echo "Running pyflakes and pylint in parallel: see all.pyflakes.log and all.pylint.log"; \
 	pyflakes_pid=; \
 	if $(PYFLAKES) --version >/dev/null 2>&1; then \
 		$(PYFLAKES) *py */*py > all.pyflakes.log 2>&1 & \
@@ -169,6 +162,13 @@ lint:
 		pylint -j 0 *py */*py > all.pylint.log 2>&1 & \
 	else \
 		echo "WARNING: Missing pylint. APT users, try: sudo apt install pylint"; \
+	fi; \
+	if [ -n "$$shellcheck_pid" ]; then \
+		wait $$shellcheck_pid || { \
+			rc=1; \
+			echo "ERROR: shellcheck reported problems"; \
+			cat all.shellcheck.log; \
+		}; \
 	fi; \
 	if [ -n "$$pyflakes_pid" ]; then \
 		wait $$pyflakes_pid || { \
