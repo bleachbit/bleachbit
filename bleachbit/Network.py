@@ -57,7 +57,7 @@ else:
         pass
 
 # local imports
-from bleachbit import bleachbit_exe_path, APP_VERSION, ARCH_BITS, General, IS_LINUX, IS_NETBSD, IS_WINDOWS
+from bleachbit import bleachbit_exe_path, APP_VERSION, ARCH_BITS, General, IS_LINUX, IS_MAC, IS_NETBSD, IS_WINDOWS
 from bleachbit.FileUtilities import delete, open_for_overwrite
 from bleachbit.General import unset_sslkeylogfile
 from bleachbit.Language import get_active_language_code, get_text as _
@@ -201,6 +201,10 @@ def _get_os_name_version():
         # pylint: disable=import-outside-toplevel
         from bleachbit.Unix import get_distribution_name_version
         os_version = get_distribution_name_version()
+    elif IS_MAC:
+        # platform.uname().version returns too much info on macOS.
+        # Also, drop the patch version (e.g. 26.6.2 -> 26.6).
+        os_version = '.'.join(platform.mac_ver()[0].split('.')[:2])
     elif IS_NETBSD:
         os_version = os_name + '/' + platform.machine() + ' ' + platform.release()
     else:
