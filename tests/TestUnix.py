@@ -111,6 +111,22 @@ class UnixTestCase(common.BleachbitTestCase):
                 mock.patch('bleachbit.Unix.subprocess.check_output', return_value=output):
             self.assertEqual(apt_autoclean(), 272000)
 
+        # sizes under 10,000 bytes have no unit prefix, just 'B'
+        output = 'Del curl 8.18.0-1ubuntu2.2 [1234 B]'
+        with mock.patch('bleachbit.Unix.FileUtilities.exe_exists', return_value=True), \
+                mock.patch('bleachbit.Unix.subprocess.check_output', return_value=output):
+            self.assertEqual(apt_autoclean(), 1234)
+
+    def test_apt_autoremove_mock(self):
+        """Unit test for apt_autoremove() parsing of the freed space line"""
+        for (size, expected) in (('1234 B', 1234),
+                                 ('44.0 kB', 44000),
+                                 ('74.7MB', 74700000)):
+            output = f'After this operation, {size} disk space will be freed.'
+            with mock.patch('bleachbit.Unix.FileUtilities.exe_exists', return_value=True), \
+                    mock.patch('bleachbit.Unix.subprocess.check_output', return_value=output):
+                self.assertEqual(apt_autoremove(), expected)
+
     @common.skipIfWindows
     def test_find_available_locales(self):
         """Unit test for method find_available_locales()"""
