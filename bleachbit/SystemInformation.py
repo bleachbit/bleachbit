@@ -219,33 +219,14 @@ def get_system_information():
 
     info['os.path.expanduser(~")'] = os.path.expanduser('~')
 
-    # Mac Version Name - Dictionary.
-    # macOS 10.0-10.15 (Cheetah..Catalina) used '10.x' with the release
-    # identified by the SECOND component (the old scheme this dict was
-    # originally written for). Since macOS 11 (Big Sur), Apple dropped
-    # the '10.' prefix and the release is identified by the FIRST
-    # component instead (11, 12, ..., 26); using split('.')[1] against a
-    # modern version string reads the minor/patch number instead of the
-    # release identifier, so e.g. '26.6.2' incorrectly looked up '6' and
-    # showed 'Snow Leopard'. Two separate dicts, keyed by the field that
-    # actually identifies the release in each scheme.
-    macosx_dict_legacy = {'5': 'Leopard', '6': 'Snow Leopard', '7': 'Lion', '8': 'Mountain Lion',
-                          '9': 'Mavericks', '10': 'Yosemite', '11': 'El Capitan', '12': 'Sierra',
-                          '13': 'High Sierra', '14': 'Mojave', '15': 'Catalina'}
-    macosx_dict_modern = {'11': 'Big Sur', '12': 'Monterey', '13': 'Ventura',
-                          '14': 'Sonoma', '15': 'Sequoia', '26': 'Tahoe'}
-
     if IS_LINUX:
         from bleachbit.Unix import get_distribution_name_version
         info['get_distribution_name_version()'] = get_distribution_name_version()
     elif IS_MAC:
         if hasattr(platform, 'mac_ver'):
             mac_version = platform.mac_ver()[0]
-            version_parts = mac_version.split('.')
-            version_major = version_parts[0]
-            name = macosx_dict_modern.get(version_major)
-            if name is None and version_major == '10' and len(version_parts) > 1:
-                name = macosx_dict_legacy.get(version_parts[1])
+            from bleachbit.Mac import macos_version_name
+            name = macos_version_name(mac_version)
             if name:
                 info['platform.mac_ver()'] = f'{mac_version} ({name})'
     else:

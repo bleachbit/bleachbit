@@ -277,6 +277,7 @@ def notify(msg):
     """Show a popup-notification"""
     if IS_MAC:
         # The macOS GTK stack has no libnotify typelib, so use AppleScript.
+        from bleachbit.Mac import notify_macos
         notify_macos(msg)
         return
     if importlib.util.find_spec('plyer'):
@@ -285,30 +286,6 @@ def notify(msg):
         return
     # On Linux, use GTK Notify.
     notify_gi(msg)
-
-
-def notify_macos(msg):
-    """Show a pop-up notification on macOS via osascript.
-
-    The macOS GTK stack ships no libnotify typelib, so route the message
-    through AppleScript's ``display notification``, which posts it to the
-    system Notification Center.
-    """
-    if not IS_MAC:
-        raise RuntimeError("notify_macos() is only for macOS")
-    import subprocess
-
-    def _escape(text):
-        # AppleScript string literals: escape backslash then double quote.
-        return text.replace('\\', '\\\\').replace('"', '\\"')
-
-    script = 'display notification "{}" with title "{}"'.format(
-        _escape(msg), _escape(APP_NAME))
-    try:
-        subprocess.run(['osascript', '-e', script],
-                       capture_output=True, timeout=5, check=False)
-    except (OSError, subprocess.SubprocessError) as e:
-        logger.debug('osascript notification failed: %s', e)
 
 
 def notify_gi(msg):
