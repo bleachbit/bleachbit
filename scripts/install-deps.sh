@@ -327,8 +327,8 @@ install_opensuse() {
             # fall back to pip --user for the lint tooling used by `make pretty`/`make lint`.
             if ! command -v pylint >/dev/null 2>&1; then
                 echo "[opensuse] installing lint tools via pip --user"
-                pip install --user --break-system-packages pylint pyflakes autopep8 || \
-                    pip install --user pylint pyflakes autopep8
+                pip install --user --break-system-packages -r "$REPO_ROOT/requirements-lint.txt" || \
+                    pip install --user -r "$REPO_ROOT/requirements-lint.txt"
             fi
         fi
     fi
@@ -446,7 +446,11 @@ setup_venv() {
     if [[ -d "$VENV_DIR" ]]; then
         echo "[venv] $VENV_DIR already exists; reusing it"
     else
-        python3 -m venv "$VENV_DIR"
+        # --system-site-packages: on Linux, python3-gi is installed as a system
+        # package (see install_debian/install_fedora/etc.), and pip cannot
+        # install PyGObject reliably. Without this flag, pylint would report
+        # spurious unresolved-import errors for every `import gi`.
+        python3 -m venv --system-site-packages "$VENV_DIR"
     fi
     # shellcheck disable=SC1091
     . "$VENV_DIR/bin/activate"
@@ -455,7 +459,7 @@ setup_venv() {
     pip install -r "$req_file"
     if [[ "$MODE" == "dev" ]]; then
         echo "[venv] installing dev/test/lint Python deps"
-        pip install pylint pyflakes autopep8 pytest pytest-xdist pytest-rerunfailures
+        pip install -r "$REPO_ROOT/requirements-test.txt" -r "$REPO_ROOT/requirements-lint.txt"
     fi
 }
 
