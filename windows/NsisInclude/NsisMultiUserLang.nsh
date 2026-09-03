@@ -1853,7 +1853,7 @@ Version: 2023-02-223
 
 !ifdef LANG_RUSSIAN
 	LangString ALREADY_INSTALLED ${LANG_RUSSIAN} "Приложение ${prodname} уже установлено.$\r$\nНажмите «ОК», чтобы удалить старую версию перед обновлением, или нажмите «Отменить», чтобы отменить обновление."
-	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_RUSSIAN} "Посетите ваб-сайт приложения ${prodname}"
+	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_RUSSIAN} "Посетите веб-сайт ${prodname}"
 	LangString INSTALLER_CAPTION ${LANG_RUSSIAN} "Установить ${prodname} ${VERSION}"
 	LangString MULTIPRINT1 ${LANG_RUSSIAN} "Следующим шагом является создание кэша шрифтов, в ходе которого может появиться чёрное окно консоли."
 	LangString MULTIPRINT2 ${LANG_RUSSIAN} "Обычно это длится не более минуты, но иногда может потребоваться больше времени."
