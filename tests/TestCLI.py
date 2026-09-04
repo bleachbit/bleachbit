@@ -94,7 +94,15 @@ class CLITestCase(common.BleachbitTestCase):
              {'adobe_reader': ['cache', 'mru', 'tmp']}),
             (['adobe_reader.mru'], [], {'adobe_reader': ['mru']}),
             (['adobe_reader.*'], ['adobe_reader.cache'],
-             {'adobe_reader': ['mru', 'tmp']}))
+             {'adobe_reader': ['mru', 'tmp']}),
+            (['adobe_reader.*', '-adobe_reader.cache'], [],
+             {'adobe_reader': ['mru', 'tmp']}),
+            # Leading '-' negation combined with an explicit --except (issue #2028)
+            (['adobe_reader.*', '-adobe_reader.mru'], ['adobe_reader.cache'],
+             {'adobe_reader': ['tmp']}),
+            # A negation that removes every option drops the cleaner entirely,
+            # rather than leaving a '-adobe_reader' key that later raises KeyError
+            (['adobe_reader.mru', '-adobe_reader.mru'], [], {}))
         for test_args, excludes, expected in tests:
             o = args_to_operations(test_args, False, False, excludes)
             self.assertIsInstance(o, dict)
@@ -105,6 +113,11 @@ class CLITestCase(common.BleachbitTestCase):
             args_to_operations(
                 ['adobe_reader.mru'], False, False, ['adobe_reader.*'])
         self.assertEqual(cm.exception.code, 1)
+
+        excludes = ['adobe_reader.cache']
+        args_to_operations(
+            ['adobe_reader.*', '-adobe_reader.mru'], False, False, excludes)
+        self.assertEqual(excludes, ['adobe_reader.cache'])
 
     def test_parse_cmd_line_except(self):
         """Unit test for parse_cmd_line() --except handling"""
