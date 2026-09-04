@@ -426,9 +426,12 @@ def get_trash_paths():
     # Import here to avoid a circular import.
     # pylint: disable=import-outside-toplevel
     from bleachbit import Command
-    # macOS-style flat trash (non-recursive)
+    # macOS-style flat trash. list_directories=True is required so that
+    # a folder sent to Trash is itself removed after its contents are
+    # deleted; with False, only files inside it are yielded and the now-
+    # empty folder is left behind forever.
     dirname = os.path.expanduser("~/.Trash")
-    for filename in children_in_directory(dirname, False):
+    for filename in children_in_directory(dirname, True):
         yield Command.Delete(filename)
     # Freedesktop trash spec directories
     # https://specifications.freedesktop.org/trash-spec/trashspec-1.0.html

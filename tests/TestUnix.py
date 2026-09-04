@@ -363,6 +363,38 @@ PrefersNonDefaultGPU=false""")
         self.assertEqual(len(seen), len(
             set(p.path for p in seen)), "Duplicate trash paths found")
 
+    def test_get_trash_paths_includes_now_empty_folder(self):
+        """Regression test: a folder sent to the macOS Trash must be
+        yielded for deletion itself, not just the files inside it.
+
+        get_trash_paths() previously called
+        children_in_directory(dirname, False), where the second argument
+        is list_directories, not 'recursive' as an earlier comment
+        claimed. With False, only files are yielded and a folder emptied
+        by this same cleaning pass is left behind forever, empty, in
+        ~/.Trash.
+        """
+        trash_dir = self.mkdtemp(prefix='bleachbit-test-trash')
+        sub_dir = os.path.join(trash_dir, 'folder-in-trash')
+        os.mkdir(sub_dir)
+        file_path = os.path.join(sub_dir, 'file.txt')
+        self.write_file(file_path)
+
+        real_expanduser = os.path.expanduser
+
+        def fake_expanduser(p):
+            if p == '~/.Trash':
+                return trash_dir
+            return real_expanduser(p)
+
+        with mock.patch('os.path.expanduser', side_effect=fake_expanduser):
+            paths = [p.path for p in get_trash_paths()]
+
+        self.assertIn(file_path, paths)
+        self.assertIn(
+            sub_dir, paths,
+            'the emptied folder itself must also be yielded for deletion')
+
     @common.skipIfWindows
     def test_desktop_valid_exe(self):
         """Unit test for .desktop file with valid Unix exe (not env)"""
