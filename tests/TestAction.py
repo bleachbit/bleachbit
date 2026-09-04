@@ -24,7 +24,7 @@ from xml.sax.saxutils import quoteattr
 
 # first party imports
 from bleachbit import IS_WINDOWS, IS_POSIX, IS_LINUX, FS_CASE_SENSITIVE, logger
-from bleachbit.Action import ActionProvider, Command, Delete, has_glob, expand_multi_var
+from bleachbit.Action import ActionProvider, ChromeOrphanedFrameworkVersions, Command, Delete, has_glob, expand_multi_var
 from bleachbit.CleanerML import CleanerML
 from tests import common
 from tests.TestFileUtilities import ini_helper
@@ -568,6 +568,40 @@ class ActionTestCase(common.BleachbitTestCase):
                     self.assertEqual(IS_LINUX, cleaner.is_usable())
                     self.assertTrue(cleaner.auto_hide())
                     mock_run_external.assert_not_called()
+
+    def test_chrome_orphaned_framework_versions_delegates_to_unix(self):
+        """ChromeOrphanedFrameworkVersions.get_commands() must delegate
+        to Unix.orphaned_framework_versions() and wrap each yielded path
+        in a Command.Delete, and must yield nothing at all on
+        non-macOS platforms (where bleachbit.Unix may not even be
+        importable)."""
+        # search="file" only registers a path get_paths() will later
+        # yield if it exists on disk, so a real (but empty) temp
+        # directory stands in for a genuine Versions/ folder.
+        versions_dir = self.mkdtemp(prefix='bleachbit-test-versions')
+        action_xml = (
+            f'<action command="macos.orphaned_framework_versions" '
+            f'search="file" path="{versions_dir}"/>')
+        action_node = parseString(action_xml).childNodes[0]
+        action = ChromeOrphanedFrameworkVersions(action_node)
+
+        fake_orphans = [f'{versions_dir}/150.0.1.1/file.txt',
+                        f'{versions_dir}/150.0.1.1']
+        with mock.patch('bleachbit.Action.IS_MAC', True), \
+                mock.patch('bleachbit.Action.Unix.orphaned_framework_versions',
+                          return_value=iter(fake_orphans)) as mock_orphans:
+            commands = list(action.get_commands())
+
+        mock_orphans.assert_called_once_with(versions_dir)
+        self.assertEqual([c.path for c in commands], fake_orphans)
+        self.assertTrue(all(isinstance(c, Command.Delete) for c in commands))
+
+        with mock.patch('bleachbit.Action.IS_MAC', False), \
+                mock.patch('bleachbit.Action.Unix.orphaned_framework_versions') as mock_orphans_win:
+            commands = list(action.get_commands())
+
+        self.assertEqual(commands, [])
+        mock_orphans_win.assert_not_called()
 
 
 def main():

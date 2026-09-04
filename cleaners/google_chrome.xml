@@ -251,4 +251,17 @@ later.  See the COPYING file in the top-level directory.
     <description>Settings for individual sites</description>
     <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
   </option>
+  <option id="old_versions">
+    <label>Old versions</label>
+    <description>Remove old versions of Chrome left behind by updates, which Google's own updater does not clean up</description>
+    <!-- Google's macOS auto-updater has never reliably removed the
+         previous version(s) after updating, a bug publicly reported
+         since at least 2011: these can accumulate to several GB over
+         an installation's lifetime. Only the version the 'Current'
+         symlink points to is genuinely in use, so
+         orphaned_framework_versions() (bleachbit.Unix) removes every
+         sibling folder except that one; if 'Current' is missing or
+         broken, nothing is removed. -->
+    <action command="macos.orphaned_framework_versions" os="macos" search="file" path="/Applications/Google Chrome.app/Contents/Frameworks/Google Chrome Framework.framework/Versions"/>
+  </option>
 </cleaner>

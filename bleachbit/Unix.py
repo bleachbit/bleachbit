@@ -547,6 +547,72 @@ def rotated_logs():
             yield path
 
 
+def orphaned_framework_versions(versions_dir):
+    """Yield paths of files (and, once emptied, the folder itself)
+    inside each orphaned version folder under a macOS .app's
+    Contents/Frameworks/*.framework/Versions/ directory.
+
+    Individual files are yielded rather than each orphaned folder as a
+    single unit because Command.Delete sizes a directory via a single
+    lstat(), reflecting only the directory inode itself (near 0 bytes)
+    rather than its actual recursive disk usage.
+
+    Chromium-based browsers on macOS (e.g. Google Chrome) keep every
+    version they have ever been updated to/from inside this directory,
+    with a 'Current' symlink pointing at the one actually in use.
+    Google's own auto-update mechanism has never reliably cleaned up
+    the old ones (a bug reported publicly since at least 2011), so
+    these can accumulate to several GB over the lifetime of an
+    installation.
+
+    Only 'Current' identifies the version genuinely in use -- version
+    numbers are not orderable across schemes (e.g. '152.0.7977.83' vs
+    '152.1.94.117') and a folder's modification time can be misleading
+    (e.g. after restoring from a backup), so both are deliberately
+    ignored here. If 'Current' cannot be read as a valid symlink to an
+    existing sibling directory, nothing is yielded at all, erring on
+    the side of not deleting anything rather than guessing which
+    version is safe to remove.
+    """
+    current_link = os.path.join(versions_dir, 'Current')
+    if not os.path.islink(current_link):
+        return
+    try:
+        current_target = os.readlink(current_link)
+    except OSError:
+        return
+    # The symlink is typically relative (e.g. '152.0.7977.83'), but
+    # tolerate an absolute target too.
+    current_name = os.path.basename(current_target.rstrip('/'))
+    current_real = os.path.realpath(current_link)
+    if not os.path.isdir(current_real):
+        # 'Current' points at something that doesn't exist -- do not
+        # guess which folder is safe to remove.
+        return
+    try:
+        entries = os.listdir(versions_dir)
+    except OSError:
+        return
+    for name in entries:
+        if name == 'Current' or name == current_name:
+            continue
+        full_path = os.path.join(versions_dir, name)
+        if not os.path.isdir(full_path) or os.path.islink(full_path):
+            continue
+        # Yield each file individually (rather than the folder as one
+        # unit) so Command.Delete reports the real disk space freed --
+        # it sizes a directory via a single lstat(), which reflects
+        # only the directory inode itself (near 0 bytes), not its
+        # recursive content. children_in_directory() only yields items
+        # found INSIDE full_path (with list_directories=True also
+        # yielding any nested subdirectories, once emptied) -- it never
+        # yields full_path itself, so that is yielded explicitly last,
+        # once its own contents have all been accounted for above.
+        yield from bleachbit.FileUtilities.children_in_directory(
+            full_path, list_directories=True)
+        yield full_path
+
+
 def wine_to_linux_path(wineprefix, windows_pathname):
     """Return a Linux pathname from an absolute Windows pathname and Wine prefix"""
     drive_letter = windows_pathname[0]
