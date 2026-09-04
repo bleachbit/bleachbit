@@ -21,10 +21,17 @@ import gettext
 import locale
 import os
 import logging
+import re
 
 from bleachbit import IS_POSIX, IS_WINDOWS
 
 logger = logging.getLogger(__name__)
+
+# Written by the Windows installer next to the executable, so a per-machine
+# install seeds every account on the machine.
+INSTALLER_LANGUAGE_FILENAME = 'installer-language.txt'
+
+_LANGUAGE_CODE_RE = re.compile(r'\A[a-z]{2,3}(_[A-Z]{2})?\Z')
 
 
 native_locale_names = \
@@ -298,6 +305,34 @@ def get_supported_language_code_name_dict():
     for lang in get_supported_language_codes():
         supported_langs[lang] = native_locale_names.get(lang, None)
     return supported_langs
+
+
+def get_installer_language_code():
+    """Return the language code chosen in the installer
+
+    Returns None when the file is missing, malformed, or names a language
+    without an installed translation.
+    """
+    from bleachbit import bleachbit_exe_path
+    fn = os.path.join(bleachbit_exe_path, INSTALLER_LANGUAGE_FILENAME)
+    try:
+        with open(fn, 'rb') as f:
+            raw = f.read(64)
+    except FileNotFoundError:
+        return None
+    except OSError as e:
+        logger.warning('Error reading %s: %s', fn, e)
+        return None
+    # NSIS may write ANSI, UTF-8, or UTF-16LE, but the code is ASCII either way
+    code = raw.replace(b'\x00', b'').decode('ascii', 'ignore').strip()
+    if not _LANGUAGE_CODE_RE.match(code):
+        logger.warning('Invalid language code in %s: %s', fn, code)
+        return None
+    if code not in get_supported_language_codes():
+        logger.info('Translation for installer language %s is not installed.',
+                    code)
+        return None
+    return code
 
 
 def get_active_language_code():
