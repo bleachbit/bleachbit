@@ -363,6 +363,7 @@ PrefersNonDefaultGPU=false""")
         self.assertEqual(len(seen), len(
             set(p.path for p in seen)), "Duplicate trash paths found")
 
+    @common.skipIfWindows
     def test_get_trash_paths_includes_now_empty_folder(self):
         """Regression test: a folder sent to the macOS Trash must be
         yielded for deletion itself, not just the files inside it.
