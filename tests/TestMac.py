@@ -173,6 +173,49 @@ class MacTestCase(common.BleachbitTestCase):
         self.assertFalse(is_safari_binarycookies('/nonexistent/path/cookies.binarycookies'))
 
     @common.skipUnlessMac
+    def test_read_safari_cookies_rejects_bad_page_marker(self):
+        """Regression test: _read_safari_cookie_records() must reject a
+        page whose marker doesn't match what real Safari (and this
+        module's own writer) always emits, rather than trusting
+        cookie_count blindly. Confirmed against a real, unmodified
+        Safari Cookies.binarycookies file that this exact marker value
+        (b'\\x00\\x00\\x01\\x00') is what real Safari writes.
+
+        File layout for a single-page, single-record file: 'cook'(4) +
+        page_count(4) + page_size_table(4x1) = 12 bytes of file header,
+        then the page itself starts at file offset 12 (the page marker
+        is its first 4 bytes).
+        """
+        rec = self._make_cookie_record('webkit.org')
+        temp_path = self._create_binarycookies_file([('webkit.org', rec)])
+
+        with open(temp_path, 'r+b') as f:
+            f.seek(12)
+            f.write(b'\xff')
+
+        with self.assertRaises(ValueError):
+            list(_read_safari_cookie_records(temp_path))
+
+    def test_read_safari_cookies_rejects_bad_end_of_table_marker(self):
+        """Regression test: _read_safari_cookie_records() must reject a
+        page whose end-of-table marker (right after the offset table)
+        doesn't match what real Safari (and this module's own writer)
+        always emits.
+
+        For a single-record page, the offset table is 4 bytes (one
+        entry), so the end-of-table marker sits at page offset
+        8 + 1*4 = 12, i.e. file offset 12 (page start) + 12 = 24.
+        """
+        rec = self._make_cookie_record('webkit.org')
+        temp_path = self._create_binarycookies_file([('webkit.org', rec)])
+
+        with open(temp_path, 'r+b') as f:
+            f.seek(24)
+            f.write(b'\xff')
+
+        with self.assertRaises(ValueError):
+            list(_read_safari_cookie_records(temp_path))
+
     def test_safari_binarycookies_roundtrip(self):
         """Roundtrip serialize, write, read, and list Safari binary cookies."""
         rec1 = self._make_cookie_record('webkit.org')

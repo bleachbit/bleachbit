@@ -18,6 +18,12 @@ from bleachbit import APP_NAME, FileUtilities, IS_MAC
 
 logger = logging.getLogger(__name__)
 
+# Shared between the Safari BinaryCookies reader and writer, so the
+# reader can validate that a page's structure actually matches what
+# the writer (and real Safari) produces before trusting cookie_count.
+SAFARI_PAGE_MARKER = b"\x00\x00\x01\x00"
+SAFARI_END_OF_TABLE_MARKER = b"\x00\x00\x00\x00"
+
 # macOS 10.0-10.15 (Cheetah..Catalina) used '10.x' with the release
 # identified by the SECOND component (the old scheme this dict was
 # originally written for). Since macOS 11 (Big Sur), Apple dropped
@@ -175,15 +181,22 @@ def list_safari_cookies(path):
         page = data[offset:offset + page_size]
 
         # Safari BinaryCookies page header is little endian:
-        #   +0: page size
+        #   +0: page marker (constant)
         #   +4: cookie count
         #   +8: cookie record offsets
+        if page[0:4] != SAFARI_PAGE_MARKER:
+            raise ValueError(f"invalid Safari cookies page marker: {path}")
+
         cookie_count = struct.unpack_from("<I", page, 4)[0]
 
         offsets_end = 8 + (cookie_count * 4)
 
         if offsets_end > len(page):
             raise ValueError(f"invalid Safari cookie offsets: {path}")
+
+        if page[offsets_end:offsets_end + 4] != SAFARI_END_OF_TABLE_MARKER:
+            raise ValueError(
+                f"invalid Safari cookies end-of-table marker: {path}")
 
         for i in range(cookie_count):
             cookie_offset = struct.unpack_from(
@@ -259,11 +272,24 @@ def _read_safari_cookie_records(path):
 
         page = data[offset:offset + page_size]
 
+        # The page marker and end-of-table marker are constants the
+        # writer always emits (see safari_pages_to_bytes below); the
+        # writer always produces both correctly, so relying only on
+        # cookie_count without checking them would silently trust a
+        # page that a hand-crafted or corrupted file never actually
+        # laid out this way.
+        if page[0:4] != SAFARI_PAGE_MARKER:
+            raise ValueError(f"invalid Safari cookies page marker: {path}")
+
         cookie_count = struct.unpack_from("<I", page, 4)[0]
         offsets_end = 8 + (cookie_count * 4)
 
         if offsets_end > len(page):
             raise ValueError(f"invalid Safari cookie offsets: {path}")
+
+        if page[offsets_end:offsets_end + 4] != SAFARI_END_OF_TABLE_MARKER:
+            raise ValueError(
+                f"invalid Safari cookies end-of-table marker: {path}")
 
         records = []
 
@@ -338,9 +364,6 @@ def _serialize_safari_cookie_records(pages):
     """
     import struct
 
-    PAGE_MARKER = b"\x00\x01\x00\x00"   # 0x00000100 little endian
-    END_OF_TABLE_MARKER = b"\x00\x00\x00\x00"
-
     output_pages = []
 
     for page in pages:
@@ -349,7 +372,7 @@ def _serialize_safari_cookie_records(pages):
         header = bytearray()
 
         # Page marker (constant, NOT a page-size field).
-        header.extend(PAGE_MARKER)
+        header.extend(SAFARI_PAGE_MARKER)
 
         # Cookie count.
         header.extend(struct.pack("<I", len(records)))
@@ -363,7 +386,7 @@ def _serialize_safari_cookie_records(pages):
             record_offset += len(record)
 
         # End-of-table marker, required before the first record.
-        header.extend(END_OF_TABLE_MARKER)
+        header.extend(SAFARI_END_OF_TABLE_MARKER)
 
         for _, record in records:
             header.extend(record)
