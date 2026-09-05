@@ -298,8 +298,9 @@ def get_startup_messages(auto_exit):
     if perm_issues_list:
         perm_issues_str = '\n'.join(perm_issues_list)
         ret_msgs.append((
-            f'The configuration file {bleachbit.options_file} has a permissions issue, so existing '
-            'preferences might not be loaded, and changes may not be saved.\n\n'
+            f'The configuration file {bleachbit.options_file} may have a permissions issue, so existing '
+            'preferences might not be loaded, and changes may not be saved. If your preferences are saved, '
+            'then you may ignore this error message or report it as a bad error message.\n\n'
             f'{perm_issues_str}', True))
 
     missing_deps = _get_missing_dependencies()
