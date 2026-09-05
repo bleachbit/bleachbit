@@ -94,6 +94,30 @@ def _get_posix_permission_issues(fstat, options_file):
     return has_error, lines
 
 
+def _lookup_account_name_or_sid(sid):
+    """Resolve a SID to an account name and its string form.
+
+    Returns ``(account_name, sid_str)``. ``sid_str`` is the canonical
+    string representation of ``sid`` and is always returned, regardless
+    of whether ``LookupAccountSid`` succeeds.
+
+    Issue 2271 observed that ``LookupAccountSid`` failed when the SID
+    belonged to an account from other Windows instance in dual-boot
+    system with shared NTFS. In that case ``account_name`` falls back
+    to ``sid_str`` so the ownership comparison can still proceed by SID.
+    """
+    if not IS_WINDOWS:
+        raise RuntimeError("This function is only available on Windows")
+    import win32security  # pylint: disable=import-outside-toplevel
+    import pywintypes  # pylint: disable=import-outside-toplevel
+    sid_str = win32security.ConvertSidToStringSid(sid)
+    try:
+        return win32security.LookupAccountSid(None, sid)[0], sid_str
+    except pywintypes.error as e:
+        logger.debug('LookupAccountSid failed (%s); falling back to SID string', e)
+        return sid_str, sid_str
+
+
 def _get_windows_user_info():
     """Get Windows user information.
 
@@ -109,15 +133,13 @@ def _get_windows_user_info():
         win32security.TOKEN_QUERY)
     current_sid = win32security.GetTokenInformation(
         process_token, win32security.TokenUser)[0]
-    current_name = win32security.LookupAccountSid(
-        None, current_sid)[0]
+    current_name, current_sid_str = _lookup_account_name_or_sid(current_sid)
     token_groups = win32security.GetTokenInformation(
         process_token, win32security.TokenGroups)
     win32file.CloseHandle(process_token)
     # Convert PySID objects to string representation for hashing
     group_sids = {win32security.ConvertSidToStringSid(
         g[0]) for g in token_groups}
-    current_sid_str = win32security.ConvertSidToStringSid(current_sid)
     return current_sid_str, current_name, group_sids
 
 
@@ -132,9 +154,8 @@ def _get_windows_file_owner(filepath):
     file_sd = win32security.GetFileSecurity(
         filepath, win32security.OWNER_SECURITY_INFORMATION)
     file_owner_sid = file_sd.GetSecurityDescriptorOwner()
-    file_owner_name = win32security.LookupAccountSid(
-        None, file_owner_sid)[0]
-    file_owner_sid_str = win32security.ConvertSidToStringSid(file_owner_sid)
+    file_owner_name, file_owner_sid_str = _lookup_account_name_or_sid(
+        file_owner_sid)
     return file_owner_sid_str, file_owner_name
 
 
@@ -159,8 +180,15 @@ def _get_windows_permission_issues(options_file):
             lines.append('Skipping file ownership check in CI')
             return False, lines
         if file_owner_sid_str != current_sid and file_owner_sid_str not in group_sids:
-            has_error = True
-            lines.append('File owner does not match current user')
+            if file_owner_name == file_owner_sid_str:
+                # The file owner's SID could not be resolved to an account
+                # name (e.g., issue #2271).
+                lines.append(
+                    'File owner SID could not be resolved to an account name '
+                    '(may be from another Windows installation)')
+            else:
+                has_error = True
+                lines.append('File owner does not match current user')
     except Exception as e:
         has_error = True
         lines.append(f'Could not check file ownership: {e}')
