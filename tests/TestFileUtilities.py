@@ -17,7 +17,6 @@ import itertools
 import json
 import locale
 import os
-import random
 import sqlite3
 import stat
 import subprocess
@@ -286,28 +285,48 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_bytes_to_human_roundtrip(self):
         """Test roundtrip conversion of bytes_to_human()
 
-        Example: 1,964,950 -> 2MB -> 2,000,000 with difference of 1.78% (0.0178).
+        Example: 1,175,818 -> 1.2MB -> 1,200,000 is 2.06% different,
+        but only 24,182 bytes, within half of the displayed 0.1MB step.
         """
-
-        for _n in range(0, 1000):
-            bytes1 = random.randrange(0, 1000 ** 4)
-            human = bytes_to_human(bytes1)
-            bytes2 = human_to_bytes(human)
-            error = abs(float(bytes2 - bytes1) / bytes1)
-            self.assertLess(abs(
-                error), 0.02, f"{bytes1:,} ({human}) is "
-                f"{error * 100:.2f}% different than {bytes2:,}")
+        old_iec = options.get('units_iec')
+        for units_iec in (False, True):
+            options.set('units_iec', units_iec)
+            base = 1024 if units_iec else 1000
+            for k in range(0, 6):
+                step = base ** k
+                decimals = 2 if k >= 3 else (1 if k >= 1 else 0)
+                half_step = 0.5 * 10 ** -decimals * step
+                for frac in (1.0, 1.049, 1.05, 2.5, 7.5, 9.994, 9.995):
+                    for delta in (-1, 0, 1):
+                        bytes1 = int(frac * step) + delta
+                        if bytes1 <= 0:
+                            continue
+                        human = bytes_to_human(bytes1)
+                        if units_iec:
+                            bytes2 = human_to_bytes(
+                                human.replace('i', ''), 'du')
+                        else:
+                            bytes2 = human_to_bytes(human)
+                        self.assertLessEqual(
+                            abs(bytes2 - bytes1), half_step + 1,
+                            f"{bytes1:,} -> {human} -> {bytes2:,} exceeds "
+                            f"half a display unit ({half_step:,.0f})")
+        options.set('units_iec', old_iec)
 
     def test_bytes_to_human_localization(self):
         """Test localization of bytes_to_human()"""
         if not hasattr(locale, 'format_string'):
             self.skipTest('Locale module does not support format_string')
+        old_locale = locale.setlocale(locale.LC_NUMERIC, None)
         try:
             locale.setlocale(locale.LC_NUMERIC, 'de_DE.utf8')
         except locale.Error as e:
             logger.warning('exception when setlocale to de_DE.utf8: %s', e)
         else:
-            self.assertEqual("1,01GB", bytes_to_human(1000 ** 3 + 5812389))
+            try:
+                self.assertEqual("1,01GB", bytes_to_human(1000 ** 3 + 5812389))
+            finally:
+                locale.setlocale(locale.LC_NUMERIC, old_locale)
 
     def test_children_in_directory(self):
         """Unit test for function children_in_directory()"""

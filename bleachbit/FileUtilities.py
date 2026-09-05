@@ -964,10 +964,10 @@ def human_to_bytes(human, hformat='si'):
 
     if 'si' == hformat:
         base = 1000
-        suffixes = 'kMGTE'
+        suffixes = 'kMGTPE'
     elif 'du' == hformat:
         base = 1024
-        suffixes = 'KMGTE'
+        suffixes = 'KMGTPE'
     else:
         raise ValueError(f"Invalid format: '{hformat}'")
     matches = re.match(r'^(\d+(?:\.\d+)?) ?([' + suffixes + ']?)B?$', human)
