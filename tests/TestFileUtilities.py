@@ -1248,8 +1248,22 @@ State=AAAA/wA...
         delete(filename)
         self.assertNotExists(filename)
 
+    @common.skipUnlessWindows
     def test_detect_encoding(self):
-        """Unit test for detect_encoding"""
+        """Unit test for detect_encoding
+
+        The detect_encoding function is used only on Windows.
+
+        Old Linux distributions (e.g., openSUSE 15.6) charset_normalizer <= 3.4.1
+        misclassifies EUC-KR as big5hkscs. This was fixed in 3.4.2, but it's moot
+        because detect_encoding is not used on Linux. Also, the standard winapp2.ini
+        is ASCII as of September 2026.
+
+        311e49c: added use of detect_encoding for Winapp
+
+        498abfb: removed use of detect_encoding for cleaning .ini files, so
+        detect_encoding is no longer needed on Linux.
+        """
         eat_glass = '나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
         bom = '\ufeff' + eat_glass  # Add BOM for utf-8-sig
         # ASCII is valid UTF-8, so either answer reads the file correctly
