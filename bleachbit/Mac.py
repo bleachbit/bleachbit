@@ -8,6 +8,7 @@
 Integration specific to macOS
 """
 
+import errno
 import logging
 import os
 import platform
@@ -106,6 +107,43 @@ def notify_macos(msg):
                        capture_output=True, timeout=5, check=False)
     except (OSError, subprocess.SubprocessError) as e:
         logger.debug('osascript notification failed: %s', e)
+
+
+# Paths that macOS guards with TCC (Transparency, Consent and Control)
+# when Full Disk Access is not granted to the calling process. Each is
+# TCC-protected and expected to exist on a typical macOS install, so an
+# EPERM when scanning one of them is a strong signal that FDA is off.
+_FDA_PROBE_PATHS = (
+    '~/Library/Safari/',
+    '~/Library/Caches/com.apple.Safari/',
+    '~/Library/Containers/com.apple.Safari/',
+)
+
+def is_full_disk_access_enabled():
+    """Detect whether Full Disk Access is enabled on macOS.
+
+    Returns False if a TCC-protected probe path is blocked with EPERM.
+    Returns True on non-macOS, when no probe exists, or when accessible.
+    """
+    if not IS_MAC:
+        return True
+    for probe in _FDA_PROBE_PATHS:
+        path = os.path.expanduser(probe)
+        if not os.path.exists(path):
+            logger.debug('FDA probe skipped: %s (does not exist)', path)
+            continue
+        try:
+            # Consume the iterator so the scandir() call actually opens
+            # the directory and triggers the TCC check.
+            list(os.scandir(path))
+        except OSError as e:
+            if e.errno == errno.EPERM:
+                logger.debug('FDA probe blocked: %s', path)
+                return False
+            # EACCES is a normal Unix mode issue, not a TCC guard.
+            # Any other OSError is also not a TCC signal.
+            logger.debug('FDA probe skipped %s: %s', path, e)
+    return True
 
 
 def macos_version_name(version=None):

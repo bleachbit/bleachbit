@@ -8,6 +8,7 @@
 Test case for module Mac
 """
 
+import errno
 import glob
 import os
 import struct
@@ -20,6 +21,7 @@ if IS_MAC:
     from bleachbit.Mac import (
         delete_safari_cookies,
         get_macos_locale,
+        is_full_disk_access_enabled,
         is_safari_binarycookies,
         list_safari_cookies,
         notify_macos,
@@ -69,6 +71,58 @@ class MacTestCase(common.BleachbitTestCase):
         with mock.patch('bleachbit.Mac.IS_MAC', False):
             with self.assertRaises(RuntimeError):
                 notify_macos('test')
+
+    def test_is_full_disk_access_enabled_non_mac(self):
+        """is_full_disk_access_enabled() returns True on non-macOS."""
+        if IS_MAC:
+            self.skipTest('This test is only for non-macOS')
+        from bleachbit.Mac import is_full_disk_access_enabled
+        self.assertTrue(is_full_disk_access_enabled())
+
+    @common.skipUnlessMac
+    def test_is_full_disk_access_enabled_no_probe_exists(self):
+        """When no probe path exists, the function returns True (assume enabled)."""
+        fake_probes = ('~/nonexistent_fda_probe_1/', '~/nonexistent_fda_probe_2/')
+        with mock.patch('bleachbit.Mac._FDA_PROBE_PATHS', fake_probes):
+            self.assertTrue(is_full_disk_access_enabled())
+
+    @common.skipUnlessMac
+    def test_is_full_disk_access_enabled_eperm_detected(self):
+        """EPERM on an existing probe path is detected as FDA not enabled."""
+        
+        fake_probes = ('~/Library/Safari/',)
+        real_exists = os.path.exists
+
+        def fake_scandir(path):
+            # Simulate TCC blocking the directory with EPERM.
+            raise OSError(errno.EPERM, 'Operation not permitted', path)
+
+        with mock.patch('bleachbit.Mac._FDA_PROBE_PATHS', fake_probes), \
+                mock.patch('os.scandir', side_effect=fake_scandir), \
+                mock.patch('os.path.exists', side_effect=real_exists):
+            self.assertFalse(is_full_disk_access_enabled())
+
+    @common.skipUnlessMac
+    def test_is_full_disk_access_enabled_eacces_not_fda(self):
+        """EACCES (Unix mode) is not mistaken for a TCC/FDA denial."""
+        fake_probes = ('~/Library/Safari/',)
+        real_exists = os.path.exists
+
+        def fake_scandir(path):
+            raise OSError(errno.EACCES, 'Permission denied', path)
+
+        with mock.patch('bleachbit.Mac._FDA_PROBE_PATHS', fake_probes), \
+                mock.patch('os.scandir', side_effect=fake_scandir), \
+                mock.patch('os.path.exists', side_effect=real_exists):
+            self.assertTrue(is_full_disk_access_enabled())
+
+    @common.skipUnlessMac
+    def test_is_full_disk_access_enabled_accessible(self):
+        """When probe paths are accessible, FDA is reported as enabled."""
+        # Use a path that exists and is accessible (not TCC-protected).
+        fake_probes = (self.tempdir + '/',)
+        with mock.patch('bleachbit.Mac._FDA_PROBE_PATHS', fake_probes):
+            self.assertTrue(is_full_disk_access_enabled())
 
     @common.skipUnlessMac
     def test_get_macos_locale(self):
@@ -338,6 +392,9 @@ class MacTestCase(common.BleachbitTestCase):
         ]
         if not paths:
             self.skipTest('no real Safari cookie files present on this system')
+
+        if not is_full_disk_access_enabled():
+            self.skipTest('Full Disk Access is not enabled')
 
         for path in paths:
             self.assertTrue(is_safari_binarycookies(path))
