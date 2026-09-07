@@ -14,7 +14,7 @@ import logging
 import os
 
 import bleachbit
-from bleachbit import FileUtilities
+from bleachbit import FileUtilities, IS_MAC
 from bleachbit.Special import sqlite_table_exists, _sqlite_uri
 
 logger = logging.getLogger(__name__)
@@ -123,6 +123,11 @@ def detect_browser(path):
 
 def list_cookies(path):
     """List cookies in the database"""
+    if IS_MAC:
+        from bleachbit.Mac import is_safari_binarycookies, list_safari_cookies
+        if is_safari_binarycookies(path):
+            return [(domain,) for domain in list_safari_cookies(path)]
+
     import sqlite3  # pylint: disable=import-outside-toplevel
     (table_name, host_column) = detect_browser(path)
     uri = _sqlite_uri(path)
@@ -172,6 +177,14 @@ def delete_cookies(path, keep_list, really_delete=False):
         raise ValueError("keep_list must not be empty")
     assert isinstance(keep_list, set)
 
+    if IS_MAC:
+        from bleachbit.Mac import is_safari_binarycookies, delete_safari_cookies
+        if is_safari_binarycookies(path):
+            return delete_safari_cookies(path, keep_list, really_delete=really_delete)
+
+    from bleachbit.Options import options
+    shred_enabled = options.get('shred')
+
     import sqlite3  # pylint: disable=import-outside-toplevel
     # Find the first matching table configuration
     (table_name, host_column) = detect_browser(path)
@@ -183,9 +196,6 @@ def delete_cookies(path, keep_list, really_delete=False):
     # Set up connection. Preview opens read-only; the percent-encoded URI
     # keeps a '?' in the path from defeating the mode.
     uri = _sqlite_uri(path, None if really_delete else 'ro')
-
-    from bleachbit.Options import options
-    shred_enabled = options.get('shred')
 
     try:
         with contextlib.closing(sqlite3.connect(uri, uri=True)) as conn:

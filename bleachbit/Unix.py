@@ -20,7 +20,7 @@ import shlex
 import subprocess
 
 import bleachbit
-from bleachbit import FileUtilities, General, IS_POSIX
+from bleachbit import FileUtilities, General, IS_MAC, IS_POSIX
 from bleachbit.FileUtilities import children_in_directory, exe_exists
 from bleachbit.Language import get_text as _, native_locale_names
 from bleachbit.VFS import RealVFS
@@ -263,9 +263,15 @@ def find_best_locale(user_locale):
         return user_locale
 
     # Next, match like 'en' to 'en_US.utf8' (if available) because
-    # of preference for UTF-8.
+    # of preference for UTF-8. Compare case- and hyphen-insensitively:
+    # macOS's locale -a uses '.UTF-8' (uppercase, hyphenated), while
+    # some Linux distros use '.utf8' (lowercase, no hyphen); comparing
+    # only against '.utf8' silently never matched on macOS, falling
+    # through to the next loop and picking whatever locale happened to
+    # be listed first for the prefix -- including a non-UTF-8 one.
     for avail_locale in available_locales:
-        if avail_locale.startswith(user_locale) and avail_locale.endswith('.utf8'):
+        suffix = avail_locale.rsplit('.', 1)[-1].replace('-', '').lower()
+        if avail_locale.startswith(user_locale) and suffix == 'utf8':
             return avail_locale
 
     # Next, match like 'en' to 'en_US' or 'en_US.iso88591'.
@@ -426,9 +432,12 @@ def get_trash_paths():
     # Import here to avoid a circular import.
     # pylint: disable=import-outside-toplevel
     from bleachbit import Command
-    # macOS-style flat trash (non-recursive)
+    # macOS-style flat trash. list_directories=True is required so that
+    # a folder sent to Trash is itself removed after its contents are
+    # deleted; with False, only files inside it are yielded and the now-
+    # empty folder is left behind forever.
     dirname = os.path.expanduser("~/.Trash")
-    for filename in children_in_directory(dirname, False):
+    for filename in children_in_directory(dirname, True):
         yield Command.Delete(filename)
     # Freedesktop trash spec directories
     # https://specifications.freedesktop.org/trash-spec/trashspec-1.0.html
@@ -541,6 +550,14 @@ def rotated_logs():
     for path in bleachbit.FileUtilities.children_in_directory('/var/log'):
         if bleachbit.FileUtilities.whitelisted(path):
             continue
+
+        # On macOS, skip a path only if its parent dir exists and we
+        # truly lack write access (a missing parent must not count as
+        # 'no permission', since os.access() returns False for both).
+        parent_dir = os.path.dirname(path)
+        if IS_MAC and os.path.isdir(parent_dir) and not os.access(parent_dir, os.W_OK):
+            continue
+
         if any(keep_list.search(path) for keep_list in keep_lists):
             continue
         if positive_re.search(path):

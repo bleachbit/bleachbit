@@ -173,9 +173,14 @@ def open_files_lsof(run_lsof=None):
         def run_lsof():
             # sanitize the env so a hostile inherited LD_*/DYLD_* cannot
             # redirect this child when BleachBit runs as root
+            env = sanitize_root_env(dict(os.environ))
+            if IS_MAC:
+                env.pop('DYLD_LIBRARY_PATH', None)
+                env.pop('DYLD_INSERT_LIBRARIES', None)
+
             return subprocess.check_output(
                 [lsof_path, "-Fn", "-n"], text=True,
-                env=sanitize_root_env(dict(os.environ)))
+                env=env)
     output = run_lsof()
     if isinstance(output, bytes):
         output = output.decode('utf-8', errors='replace')

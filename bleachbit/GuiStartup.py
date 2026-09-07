@@ -11,7 +11,7 @@ import sys
 from importlib.util import find_spec
 
 import bleachbit
-from bleachbit import IS_POSIX, IS_WINDOWS
+from bleachbit import IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.General import unset_sslkeylogfile
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
@@ -382,5 +382,16 @@ def get_startup_messages(auto_exit):
                 _('There is no official version of BleachBit on the Microsoft Store. '
                   'Get the genuine version at https://www.bleachbit.org where it is '
                   'always free of charge.'), False))
+
+    if IS_MAC:
+        from bleachbit.Mac import is_full_disk_access_enabled
+        if not is_full_disk_access_enabled():
+            ret_msgs.append((
+                # TRANSLATORS: Startup warning on macOS when the application
+                # lacks Full Disk Access.
+                _('Full Disk Access is not granted to BleachBit. macOS will '
+                  'block access and some cleaners will not work. Grant Full '
+                  'Disk Access to this application in System Settings > '
+                  'Privacy & Security > Full Disk Access.'), True))
 
     return ret_msgs

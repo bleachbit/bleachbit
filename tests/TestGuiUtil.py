@@ -220,6 +220,35 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
         result = get_clipboard_paths(Clipboard(), [UnusableTarget()])
         self.assertEqual(self.paths, result)
 
+    def test_get_clipboard_paths_none_target(self):
+        """Fall back to a fresh atom when a target is None.
+
+        Regression test for a real-world crash on macOS/Quartz where a
+        clipboard target whose NSPasteboard type could not be mapped to
+        a Gdk.Atom appeared as None in the target list (alongside a
+        'gdk_atom_intern: assertion atom_name != NULL failed' GDK
+        warning) instead of a valid atom object, crashing on
+        target.name() with AttributeError.
+        """
+        uris = [Path(path).as_uri() for path in self.paths]
+
+        class ClipboardContents:
+            """Mock clipboard contents for testing"""
+
+            def get_uris(self):
+                """Return the URIs"""
+                return uris
+
+        class Clipboard:
+            """Mock clipboard for testing"""
+
+            def wait_for_contents(self, _target):
+                """Return mock clipboard contents"""
+                return ClipboardContents()
+
+        result = get_clipboard_paths(Clipboard(), [None])
+        self.assertEqual(self.paths, result)
+
     @common.skipUnlessWindows
     @pytest.mark.xdist_group('gui')
     def test_get_clipboard_paths_windows(self):
@@ -267,3 +296,4 @@ class GUIUtilFontTestCase(common.BleachbitTestCase):
         for font_name in tests:
             self.assertIsNone(get_font_size_from_name(font_name),
                               f"Font name '{font_name}' should return None")
+

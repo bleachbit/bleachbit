@@ -28,6 +28,31 @@ class SystemInformationTestCase(common.BleachbitTestCase):
         ret = get_system_information()
         self.assertIsString(ret)
 
+    def test_get_system_information_mac_version_name(self):
+        """macOS dropped the '10.' version prefix starting with 11
+        (Big Sur), so the release name must be looked up by the FIRST
+        version component for modern versions, falling back to the
+        second component only for the old '10.x' scheme. A modern
+        version's second component must never be misread as an old-
+        scheme release code (e.g. '26.6.2' must show 'Tahoe', not
+        misread the '6' as the old code for 'Snow Leopard')."""
+        cases = {
+            '26.6.2': 'Tahoe',
+            '15.1.0': 'Sequoia',
+            '14.0': 'Sonoma',
+            '10.15.7': 'Catalina',
+            '10.6.8': 'Snow Leopard',
+            '10.6': 'Snow Leopard',
+        }
+        for version, expected_name in cases.items():
+            with mock.patch('platform.mac_ver', return_value=(version, ('', '', ''), '')), \
+                    mock.patch('bleachbit.SystemInformation.IS_MAC', True), \
+                    mock.patch('bleachbit.SystemInformation.IS_LINUX', False):
+                ret = get_system_information()
+            self.assertIn(
+                f'platform.mac_ver() = {version} ({expected_name})', ret,
+                f'version {version} should show {expected_name}')
+
     @common.skipUnlessWindows
     def test_get_system_information_invalid_unicode_userprofile(self):
         invalid_userprofile = 'C:\\Users\\invalid\ud803'

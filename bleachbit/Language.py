@@ -22,7 +22,7 @@ import locale
 import os
 import logging
 
-from bleachbit import IS_POSIX, IS_WINDOWS
+from bleachbit import IS_MAC, IS_POSIX, IS_WINDOWS
 
 logger = logging.getLogger(__name__)
 
@@ -328,7 +328,21 @@ def get_active_language_code():
         # Convert Windows LCID (e.g., 1033) to RFC1766 (e.g., en-US).
         user_locale = locale.windows_locale.get(lcid, '')
     else:
-        user_locale = locale.getlocale()[0]
+        # On macOS, locale.getlocale() always returns *something* (e.g.
+        # a built-in default) even with no LANG/LC_ALL in the
+        # environment at all, so its truthiness cannot detect "nothing
+        # was explicitly set". Check os.environ directly instead: if the
+        # caller (a shell, a test suite) put LANG/LC_ALL/LC_MESSAGES
+        # there on purpose, honor it via locale.getlocale(); otherwise
+        # (Finder launches the app with none of these set) prefer the
+        # real system preference from AppleLocale.
+        env_locale_set = any(
+            os.environ.get(name) for name in ("LC_ALL", "LC_MESSAGES", "LANG"))
+        if IS_MAC and not env_locale_set:
+            from bleachbit.Mac import get_macos_locale
+            user_locale = get_macos_locale()
+        else:
+            user_locale = locale.getlocale()[0]
 
     if not user_locale:
         user_locale = 'C'
