@@ -7,6 +7,14 @@ Copyright (c) 2008-2026 Andrew Ziem.
 This work is licensed under the terms of the GNU GPL, version 3 or
 later.  See the COPYING file in the top-level directory.
 
+
+These changes reorganized where Safari stores site data. For a profile that used only modern
+Safari, WebKit/WebsiteData/{LocalStorage,IndexedDB} may be empty, but some profiles may have
+data there from older Safari versions.
+
+https://trac.webkit.org/changeset/291909/webkit
+https://trac.webkit.org/changeset/289878/webkit
+
 -->
 <cleaner id="safari" os="macos">
   <label>Safari</label>
@@ -23,6 +31,10 @@ later.  See the COPYING file in the top-level directory.
     <description>Delete the web cache, which reduces time to display revisited pages</description>
     <action command="delete" search="walk.all" path="~/Library/Containers/com.apple.Safari/Data/Library/Caches/com.apple.Safari/"/>
     <action command="delete" search="walk.all" path="~/Library/Caches/com.apple.Safari/"/>
+    <action command="delete" search="walk.all" path="~/Library/Safari/Metadata Cache/"/>
+    <action command="delete" search="file" path="~/Library/Containers/com.apple.Safari/Data/Library/HTTPStorages/com.apple.Safari/httpstorages.sqlite"/>
+    <action command="delete" search="file" path="~/Library/Containers/com.apple.Safari/Data/Library/HTTPStorages/com.apple.Safari/httpstorages.sqlite-wal"/>
+    <action command="delete" search="file" path="~/Library/Containers/com.apple.Safari/Data/Library/HTTPStorages/com.apple.Safari/httpstorages.sqlite-shm"/>
   </option>
   <option id="history">
     <label>History</label>
@@ -31,12 +43,31 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="~/Library/Safari/History.db-wal"/>
     <action command="delete" search="file" path="~/Library/Safari/History.db-shm"/>
     <action command="delete" search="file" path="~/Library/Safari/History.db-lock"/>
+    <action command="delete" search="file" path="~/Library/Safari/RecentlyClosedTabs.plist"/>
+    <action command="delete" search="file" path="~/Library/Safari/TopSites.plist"/>
+    <action command="delete" search="file" path="~/Library/Safari/Downloads.plist"/>
+  </option>
+  <option id="session">
+    <label>Session</label>
+    <description>Previously open tabs and windows</description>
+    <action command="delete" search="file" path="~/Library/Containers/com.apple.Safari/Data/Library/Safari/SafariTabs.db"/>
+    <action command="delete" search="file" path="~/Library/Containers/com.apple.Safari/Data/Library/Safari/SafariTabs.db-wal"/>
+    <action command="delete" search="file" path="~/Library/Containers/com.apple.Safari/Data/Library/Safari/SafariTabs.db-shm"/>
+    <action command="delete" search="file" path="~/Library/Containers/com.apple.Safari/Data/Library/Safari/CloudTabs.db"/>
+    <action command="delete" search="file" path="~/Library/Containers/com.apple.Safari/Data/Library/Safari/CloudTabs.db-wal"/>
+    <action command="delete" search="file" path="~/Library/Containers/com.apple.Safari/Data/Library/Safari/CloudTabs.db-shm"/>
+    <action command="delete" search="walk.all" path="~/Library/Containers/com.apple.Safari/Data/Library/Saved Application State/"/>
   </option>
   <option id="crash_reports">
     <label>Crash reports</label>
     <description>Delete the files</description>
     <action command="delete" search="glob" path="~/Library/Logs/DiagnosticReports/Safari-*.ips"/>
     <action command="delete" search="glob" path="~/Library/Logs/DiagnosticReports/Safari_*.crash"/>
+  </option>
+  <option id="form_history">
+    <label>Form history</label>
+    <description>A history of forms entered in websites</description>
+    <action command="delete" search="file" path="~/Library/Safari/Form Values"/>
   </option>
   <option id="site_preferences">
     <label>Site preferences</label>
@@ -49,6 +80,8 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="~/Library/Containers/com.apple.Safari/Data/Library/WebKit/WebsiteData/Default/"/>
     <action command="delete" search="walk.all" path="~/Library/Containers/com.apple.Safari/Data/Library/WebKit/WebsiteData/LocalStorage/"/>
     <action command="delete" search="walk.all" path="~/Library/Containers/com.apple.Safari/Data/Library/WebKit/WebsiteData/IndexedDB/"/>
+    <action command="delete" search="walk.all" path="~/Library/Safari/LocalStorage/"/>
+    <action command="delete" search="walk.all" path="~/Library/Safari/Databases/___IndexedDB/"/>
   </option>
   <option id="vacuum">
     <label>Vacuum</label>
@@ -62,5 +95,10 @@ later.  See the COPYING file in the top-level directory.
     <action command="sqlite.vacuum" search="file" path="~/Library/Safari/UserDefinedContentBlockers.db"/>
     <action command="sqlite.vacuum" search="file" path="~/Library/Safari/Favicon Cache/favicons.db"/>
     <action command="sqlite.vacuum" search="file" path="~/Library/Safari/Touch Icons Cache/TouchIconCacheSettings.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/Library/Safari/Metadata Cache/LPLinkMetadata.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/Library/Containers/com.apple.Safari/Data/Library/Safari/SafariTabs.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/Library/Containers/com.apple.Safari/Data/Library/Safari/CloudTabs.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/Library/Containers/com.apple.Safari/Data/Library/Safari/CloudExtensions.db"/>
+    <action command="sqlite.vacuum" search="file" path="~/Library/Containers/com.apple.Safari/Data/Library/HTTPStorages/com.apple.Safari/httpstorages.sqlite"/>
   </option>
 </cleaner>
