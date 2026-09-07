@@ -412,6 +412,144 @@ def _write_safari_cookie_records(path, pages):
         raise
 
 
+def _cookie_result(total_deleted, total_kept, skipped, whole_file_deleted,
+                   file_size_reduction, method=None, ratio=None, in_memory=None):
+    """Build a Safari cookie deletion result dict with a stable schema.
+
+    Every branch returns the same set of keys; estimation fields default
+    to None when not applicable (e.g. whole-file delete, error fallback).
+    """
+    return {
+        "total_deleted": total_deleted,
+        "total_kept": total_kept,
+        "skipped": skipped,
+        "whole_file_deleted": whole_file_deleted,
+        "file_size_reduction": file_size_reduction,
+        "file_size_estimation_method": method,
+        "file_size_reduction_ratio": ratio,
+        "file_size_reduction_in_memory": in_memory,
+    }
+
+
+def _filter_safari_cookie_records(pages, keep_domains):
+    """Split cookie records into kept and deleted sets by domain.
+
+    A record is kept when its domain equals or is a subdomain of any
+    domain in keep_domains.
+
+    Returns (new_pages, total_before, kept_count, deleted_count).
+    """
+    total_before = 0
+    kept_count = 0
+    deleted_count = 0
+    new_pages = []
+
+    for page in pages:
+        new_records = []
+        for domain, record in page["records"]:
+            total_before += 1
+            keep = any(
+                domain == d or domain.endswith("." + d)
+                for d in keep_domains
+            )
+            if keep:
+                kept_count += 1
+                new_records.append((domain, record))
+            else:
+                deleted_count += 1
+        new_pages.append({"records": new_records})
+
+    return new_pages, total_before, kept_count, deleted_count
+
+
+def _preview_safari_cookie_deletion(deleted_count, kept_count, total_before,
+                                    original_size):
+    """Build a preview result dict without modifying the file."""
+    if kept_count == 0:
+        return _cookie_result(
+            total_deleted=deleted_count,
+            total_kept=0,
+            skipped=False,
+            whole_file_deleted=True,
+            file_size_reduction=original_size,
+            method="whole_file",
+        )
+
+    ratio_estimate = 0
+    if total_before > 0:
+        ratio_estimate = int((deleted_count / total_before) * original_size)
+
+    return _cookie_result(
+        total_deleted=deleted_count,
+        total_kept=kept_count,
+        skipped=False,
+        whole_file_deleted=False,
+        file_size_reduction=ratio_estimate,
+        method="ratio",
+        ratio=ratio_estimate,
+    )
+
+
+def _apply_safari_cookie_deletion(path, new_pages, kept_count, deleted_count,
+                                  original_size, shred_enabled):
+    """Perform real deletion and return a result dict."""
+    if deleted_count == 0:
+        return _cookie_result(
+            total_deleted=0,
+            total_kept=kept_count,
+            skipped=False,
+            whole_file_deleted=False,
+            file_size_reduction=0,
+            method="actual",
+        )
+
+    if kept_count == 0:
+        try:
+            FileUtilities.delete(path, shred_enabled)
+            return _cookie_result(
+                total_deleted=deleted_count,
+                total_kept=0,
+                skipped=False,
+                whole_file_deleted=True,
+                file_size_reduction=original_size,
+            )
+        except OSError as e:
+            logger.error(
+                "Failed to delete Safari cookie database %s: %s",
+                path, e)
+            return _cookie_result(
+                total_deleted=0,
+                total_kept=0,
+                skipped=True,
+                whole_file_deleted=False,
+                file_size_reduction=0,
+            )
+
+    try:
+        _write_safari_cookie_records(path, new_pages)
+    except (OSError, ValueError) as e:
+        logger.error(
+            "Failed to rewrite Safari cookie database %s: %s",
+            path, e)
+        return _cookie_result(
+            total_deleted=0,
+            total_kept=kept_count,
+            skipped=True,
+            whole_file_deleted=False,
+            file_size_reduction=0,
+        )
+
+    new_size = _get_cookie_disk_size(path)
+    return _cookie_result(
+        total_deleted=deleted_count,
+        total_kept=kept_count,
+        skipped=False,
+        whole_file_deleted=False,
+        file_size_reduction=max(0, original_size - new_size),
+        method="actual",
+    )
+
+
 def delete_safari_cookies(path, keep_list, really_delete=False):
     """Process Safari cookies with optional deletion based on keep list
 
@@ -434,140 +572,20 @@ def delete_safari_cookies(path, keep_list, really_delete=False):
     shred_enabled = options.get('shred')
 
     original_size = _get_cookie_disk_size(path)
-
     if original_size <= 0:
         raise RuntimeError(
             f"cookies database is empty: {path}")
 
     pages = _read_safari_cookie_records(path)
+    keep_domains = [str(d).lstrip('.').lower() for d in keep_list]
 
-    domains = [
-        str(d).lstrip('.').lower()
-        for d in keep_list
-    ]
+    new_pages, total_before, kept_count, deleted_count = \
+        _filter_safari_cookie_records(pages, keep_domains)
 
-    total_before = 0
-    kept_count = 0
-    deleted_count = 0
-    new_pages = []
-
-    for page in pages:
-        new_records = []
-
-        for domain, record in page["records"]:
-            total_before += 1
-
-            keep = any(
-                domain == d or domain.endswith("." + d)
-                for d in domains
-            )
-
-            if keep:
-                kept_count += 1
-                new_records.append((domain, record))
-            else:
-                deleted_count += 1
-
-        new_pages.append({
-            "records": new_records,
-        })
-
-    # Preview
     if not really_delete:
-        if kept_count == 0:
-            return {
-                "total_deleted": deleted_count,
-                "total_kept": 0,
-                "skipped": False,
-                "whole_file_deleted": True,
-                "file_size_reduction": original_size,
-                "file_size_estimation_method": "whole_file",
-                "file_size_reduction_ratio": None,
-                "file_size_reduction_in_memory": None,
-            }
+        return _preview_safari_cookie_deletion(
+            deleted_count, kept_count, total_before, original_size)
 
-        ratio_estimate = 0
-
-        if total_before > 0:
-            ratio_estimate = int(
-                (deleted_count / total_before) * original_size
-            )
-
-        return {
-            "total_deleted": deleted_count,
-            "total_kept": kept_count,
-            "skipped": False,
-            "whole_file_deleted": False,
-            "file_size_reduction": ratio_estimate,
-            "file_size_estimation_method": "ratio",
-            "file_size_reduction_ratio": ratio_estimate,
-            "file_size_reduction_in_memory": None,
-        }
-
-    # Real deletion
-    if deleted_count == 0:
-        return {
-            "total_deleted": 0,
-            "total_kept": kept_count,
-            "skipped": False,
-            "whole_file_deleted": False,
-            "file_size_reduction": 0,
-            "file_size_estimation_method": "actual",
-            "file_size_reduction_ratio": None,
-            "file_size_reduction_in_memory": None,
-        }
-
-    if kept_count == 0:
-        try:
-            FileUtilities.delete(path, shred_enabled)
-
-            return {
-                "total_deleted": deleted_count,
-                "total_kept": 0,
-                "skipped": False,
-                "whole_file_deleted": True,
-                "file_size_reduction": original_size,
-            }
-
-        except OSError as e:
-            logger.error(
-                "Failed to delete Safari cookie database %s: %s",
-                path, e)
-
-            return {
-                "total_deleted": 0,
-                "total_kept": 0,
-                "skipped": True,
-                "whole_file_deleted": False,
-                "file_size_reduction": 0,
-            }
-
-    try:
-        _write_safari_cookie_records(path, new_pages)
-
-    except (OSError, ValueError) as e:
-        logger.error(
-            "Failed to rewrite Safari cookie database %s: %s",
-            path, e)
-
-        return {
-            "total_deleted": 0,
-            "total_kept": kept_count,
-            "skipped": True,
-            "whole_file_deleted": False,
-            "file_size_reduction": 0,
-        }
-
-    new_size = _get_cookie_disk_size(path)
-
-    return {
-        "total_deleted": deleted_count,
-        "total_kept": kept_count,
-        "skipped": False,
-        "whole_file_deleted": False,
-        "file_size_reduction": max(
-            0, original_size - new_size),
-        "file_size_estimation_method": "actual",
-        "file_size_reduction_ratio": None,
-        "file_size_reduction_in_memory": None,
-    }
+    return _apply_safari_cookie_deletion(
+        path, new_pages, kept_count, deleted_count,
+        original_size, shred_enabled)
