@@ -250,7 +250,7 @@ class ResolveLocaleDirTestCase(common.BleachbitTestCase):
         fallback, when it exists."""
         from bleachbit import _resolve_locale_dir
         exe_path = '/Applications/BleachBit.app/Contents/Resources'
-        bundle_dir = '/Applications/BleachBit.app/Contents/locale'
+        bundle_dir = os.path.normpath(os.path.join(exe_path, '..', 'locale'))
         result = _resolve_locale_dir(
             exe_path, is_linux=False, is_mac=True, is_windows=False,
             is_netbsd=False, is_bsd=False,
