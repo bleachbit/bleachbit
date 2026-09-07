@@ -250,6 +250,7 @@ class MacTestCase(common.BleachbitTestCase):
         with self.assertRaises(ValueError):
             list(_read_safari_cookie_records(temp_path))
 
+    @common.skipUnlessMac
     def test_read_safari_cookies_rejects_bad_end_of_table_marker(self):
         """Regression test: _read_safari_cookie_records() must reject a
         page whose end-of-table marker (right after the offset table)
@@ -270,6 +271,7 @@ class MacTestCase(common.BleachbitTestCase):
         with self.assertRaises(ValueError):
             list(_read_safari_cookie_records(temp_path))
 
+    @common.skipUnlessMac
     def test_safari_binarycookies_roundtrip(self):
         """Roundtrip serialize, write, read, and list Safari binary cookies."""
         rec1 = self._make_cookie_record('webkit.org')
