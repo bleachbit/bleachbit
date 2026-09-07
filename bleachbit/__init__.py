@@ -259,25 +259,46 @@ for __icon in __icons:
     if os.path.exists(__icon):
         appicon_path = __icon
 
+def _resolve_locale_dir(exe_path, is_linux, is_mac, is_windows, is_netbsd, is_bsd,
+                        path_exists=os.path.exists):
+    """Return the locale directory to use, given the platform and the
+    directory containing the running executable.
+
+    In the macOS .app bundle, exe_path is Contents/Resources (the parent
+    of the bleachbit package directory), while locale/ lives one level up
+    at Contents/locale -- neither the './locale/' nor the AppImage-style
+    'next to the executable' check below finds it, which previously fell
+    through to the Linux/macOS '/usr/share/locale/' fallback and silently
+    lost all bundled translations.
+    """
+    exe_locale_dir = os.path.join(exe_path, 'locale')
+    bundle_locale_dir = os.path.normpath(
+        os.path.join(exe_path, '..', 'locale')) if is_mac else None
+    if path_exists("./locale/"):
+        # local locale (personal)
+        return os.path.abspath("./locale/")
+    if path_exists(exe_locale_dir):
+        # AppImage
+        return exe_locale_dir
+    if is_mac and bundle_locale_dir and path_exists(bundle_locale_dir):
+        # macOS .app bundle: Contents/locale, one level above
+        # Contents/Resources
+        return bundle_locale_dir
+    # system-wide installed locale
+    if is_linux or is_mac:
+        return "/usr/share/locale/"
+    if is_windows:
+        return os.path.join(exe_path, "share\\locale\\")
+    if is_netbsd:
+        return "/usr/pkg/share/locale/"
+    if is_bsd:
+        return "/usr/local/share/locale/"
+    return "/usr/share/locale/"
+
+
 # locale directory
-_exe_locale_dir = os.path.join(bleachbit_exe_path, 'locale')
-if os.path.exists("./locale/"):
-    # local locale (personal)
-    locale_dir = os.path.abspath("./locale/")
-elif os.path.exists(_exe_locale_dir):
-    # AppImage
-    locale_dir = _exe_locale_dir
-# system-wide installed locale
-elif IS_LINUX or IS_MAC:
-    locale_dir = "/usr/share/locale/"
-elif IS_WINDOWS:
-    locale_dir = os.path.join(bleachbit_exe_path, "share\\locale\\")
-elif IS_NETBSD:
-    locale_dir = "/usr/pkg/share/locale/"
-elif IS_BSD:
-    locale_dir = "/usr/local/share/locale/"
-else:
-    locale_dir = "/usr/share/locale/"
+locale_dir = _resolve_locale_dir(
+    bleachbit_exe_path, IS_LINUX, IS_MAC, IS_WINDOWS, IS_NETBSD, IS_BSD)
 
 
 #
