@@ -6,18 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-01 10:05-0600\n"
-"PO-Revision-Date: 2026-06-14 14:01+0000\n"
-"Last-Translator: Theodoros Asimakopoulos <theoasima@gmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/bleachbit/main/el/"
-">\n"
+"PO-Revision-Date: 2026-09-09 11:51+0000\n"
+"Last-Translator: \"Vasilis K.\" <skyhirules@gmail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/bleachbit/main/el/>"
+"\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.9.1\n"
 "X-Launchpad-Export-Date: 2021-06-15 14:28+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -696,28 +696,24 @@ msgid "Package lists"
 msgstr "Λίστες πακέτων"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Development environment"
-msgstr "Περιβάλλον επιφάνειας εργασίας"
+msgstr "Περιβάλλον ανάπτυξης"
 
 #: ../cleaners/android_studio.xml
 msgid "Gradle cache"
-msgstr ""
+msgstr "Gradle cache"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Delete downloaded podcasts"
 msgid "Delete downloaded dependencies and build artifacts"
-msgstr "Διαγραφή κατεβασμένων αρχείων ψηφιακού ραδιοφώνου (podcast)"
+msgstr "Διαγραφή ληφθέντων εξαρτήσεων και δημιουργία αντικειμένων"
 
 #: ../cleaners/android_studio.xml
 msgid "Dependencies will need to be downloaded on the next build."
-msgstr ""
+msgstr "Οι εξαρτήσεις θα πρέπει να ληφθούν στην επόμενη έκδοση."
 
 #: ../cleaners/android_studio.xml
 msgid "IDE cache"
-msgstr ""
+msgstr "IDE cache"
 
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
@@ -755,17 +751,13 @@ msgstr "Βοηθός AI"
 
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Form history"
 msgid "File history"
-msgstr "Ιστορικό Φορμών"
+msgstr "Ιστορικό αρχείων"
 
 #. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the list of recently used documents"
 msgid "Delete the file history used for /restore"
-msgstr "Διαγραφή λίστας των πρόσφατα χρησιμοποιημένων εγγράφων"
+msgstr "Διαγραφή του ιστορικού αρχείου που χρησιμοποιείται για /restore"
 
 #. Description for deleting Claude Code sessions
 #: ../cleaners/claude.xml
@@ -782,6 +774,8 @@ msgstr ""
 #: ../cleaners/claude.xml
 msgid "Shell snapshots"
 msgstr ""
+"Στον κώδικα claude: το καταγεγραμμένο περιβάλλον κελύφους χρησιμοποιείται "
+"από το εργαλείο Bash"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -800,6 +794,8 @@ msgid ""
 "This option is slow. Inspect the preview for files you want to keep, like "
 "those bundled with applications."
 msgstr ""
+"Αυτή η επιλογή είναι αργή. Ελέγξτε την προεπισκόπηση για αρχεία που θέλετε "
+"να διατηρήσετε, όπως αυτά που περιλαμβάνονται σε εφαρμογές."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
@@ -1177,6 +1173,9 @@ msgid ""
 "compatible version for your system, click OK. To exit the installer, click "
 "Cancel."
 msgstr ""
+"Αυτή η έκδοση του BleachBit απαιτεί Windows 10 ή νεότερη έκδοση. Για να "
+"κατεβάσετε μια συμβατή έκδοση για το σύστημά σας, κάντε κλικ στο OK. Για να "
+"κλείσετε το πρόγραμμα εγκατάστασης, κάντε κλικ στο Άκυρο."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
@@ -1353,6 +1352,11 @@ msgid ""
 "See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-"
 "questions.html"
 msgstr ""
+"Για να εκτελέσετε μια εφαρμογή GUI στο Wayland με root, επιτρέψτε την "
+"πρόσβαση με αυτήν την εντολή:\n"
+"xhost si:localuser:root\n"
+"Δείτε περισσότερα για το xhost στη διεύθυνση https://docs.bleachbit.org/doc/"
+"frequently-asked-questions.html"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1374,10 +1378,10 @@ msgstr "Αγνοώντας τον καθαριστή επειδή είναι π�
 #. path of the XML cleaner file whose directory is world
 #. writable.
 #: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
-#, fuzzy, python-format
-#| msgid "Ignoring cleaner because it is world writable: %s"
+#, python-format
 msgid "Ignoring cleaner because its directory is world writable: %s"
-msgstr "Αγνοώντας τον καθαριστή επειδή είναι παγκοσμίως εγγράψιμος:%s"
+msgstr ""
+"Αγνόηση του καθαριστή επειδή ο φάκελος του είναι παγκοσμίως εγγράψιμος:%s"
 
 #. TRANSLATORS: Error message printed to the log.
 #. %s expands to the path of the XML cleaner file
@@ -1472,7 +1476,7 @@ msgstr ""
 #. TRANSLATORS: This is a label for the option to clear the system DNS cache.
 #: ../bleachbit/Cleaner.py
 msgid "DNS cache"
-msgstr ""
+msgstr "DNS cache"
 
 #. TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py
@@ -2850,16 +2854,11 @@ msgid "Error when checking for updates: %s"
 msgstr "Σφάλμα κατά τον έλεγχο ενημερώσεων: %s"
 
 #: ../bleachbit/Memory.py
-#, fuzzy
-#| msgid ""
-#| "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
-#| "information."
 msgid ""
 "The command 'swapon -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"Η εντολή 'swapoff -s' απέτυχε. Επιστροφή στο /proc/swaps για πληροφορίες "
-"swap."
+"Η εντολή 'swapon -s' απέτυχε. Επιστροφή στο /proc/swaps για πληροφορίες swap."
 
 #: ../bleachbit/Memory.py
 msgid "Disabling swap."
@@ -3126,14 +3125,14 @@ msgstr ""
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "stop Windows service %(service)s"
-msgstr ""
+msgstr "παύση υπηρεσίας Windows %(service)s"
 
 #. TRANSLATORS: Message in log file when starting a Windows service.
 #. The placeholder is the code name of the service.
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "start Windows service %(service)s"
-msgstr ""
+msgstr "έναρξη υπηρεσίας Windows %(service)s"
 
 #: ../bleachbit/Wipe.py
 msgid ""
@@ -3160,8 +3159,6 @@ msgstr "Η διαδρομή προς εκκαθάριση πρέπει να εί
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Creating new, temporary file for wiping free space."
 msgid "Creating new, temporary file for wiping empty space."
 msgstr "Δημιουργία νέου, προσωρινού αρχείου, για την εκκαθάριση κενού χώρου."
 
@@ -3243,7 +3240,7 @@ msgstr "Δεν επιτρέπεται η πρόσβαση: %s"
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Database is locked: %s"
-msgstr ""
+msgstr "Η βάση δεδομένων είναι κλειδωμένη: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
