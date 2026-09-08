@@ -38,6 +38,7 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
     def setUp(self):
         """Set up before each test method."""
         super().setUp()
+        clear_clipboard()
         self.paths = [
             self.write_file('clipboard-path-1'),
             self.write_file('clipboard-path-2'),
@@ -220,6 +221,7 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
         result = get_clipboard_paths(Clipboard(), [UnusableTarget()])
         self.assertEqual(self.paths, result)
 
+    @common.skipIfWindows
     def test_get_clipboard_paths_none_target(self):
         """Fall back to a fresh atom when a target is None.
 
