@@ -1629,9 +1629,9 @@ State=AAAA/wA...
                 self.assertEqual(counter, 1)
             if IS_POSIX:
                 encoding = sys.getdefaultencoding()
-                output = str(subprocess.Popen(
-                    ["du", "-h", filename],
-                    stdout=subprocess.PIPE).communicate()[0], encoding=encoding)
+                output = str(subprocess.run(
+                    ["du", "-h", filename], stdout=subprocess.PIPE,
+                    check=False).stdout, encoding=encoding)
                 output = output.replace("\n", "")
                 du_size = output.split('\t', maxsplit=1)[0] + "B"
                 print(f"output = '{output}', size='{du_size}'")
