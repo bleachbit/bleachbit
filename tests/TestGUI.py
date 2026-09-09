@@ -649,3 +649,23 @@ class GUITestCase(common.BleachbitTestCase):
 
         self.assertFalse(model[parent_iter][1],
                          "Parent should remain unchecked when all children are blocked by expert mode")
+
+    def test_on_quit_commits_pending_options(self):
+        """Regression test: quitting via on_quit() (Ctrl+Q/Ctrl+W, and
+        Cmd+Q on macOS) must flush pending option changes to disk, the
+        same way closing the window via its own close button does
+        through on_delete_event() -> options.close().
+
+        Before the fix, on_quit() called Gtk.main_quit()/self.destroy()
+        directly without ever emitting delete-event, so a setting
+        change still waiting on the delayed flush timer
+        (Options.__schedule_flush) would be lost if the process exited
+        via this path before that timer fired.
+        """
+        with mock.patch('bleachbit.GuiWindow.options.close') as mock_close, \
+                mock.patch('bleachbit.GuiWindow.Gtk.main_level', return_value=1), \
+                mock.patch('bleachbit.GuiWindow.Gtk.main_quit') as mock_main_quit:
+            self.app._window.on_quit()
+
+        mock_close.assert_called_once()
+        mock_main_quit.assert_called_once()
