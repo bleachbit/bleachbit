@@ -53,7 +53,10 @@ class LocaleCleanerPath:
 
     def add_child(self, child):
         """Adds a child LocaleCleanerPath"""
+        # child is the same class, so _vfs is not foreign.
+        # pylint: disable-next=protected-access
         if isinstance(child, LocaleCleanerPath) and child._vfs is None:
+            # pylint: disable-next=protected-access
             child._vfs = self._vfs
         self.children.append(child)
         return child

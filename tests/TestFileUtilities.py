@@ -974,6 +974,8 @@ State=AAAA/wA...
                 else:
                     # Delete expected to fail.
                     # pylint: disable=undefined-variable, possibly-used-before-assignment
+                    # WindowsError is a builtin on Windows and imported above otherwise.
+                    # pylint: disable-next=possibly-used-before-assignment
                     with self.assertRaises(WindowsError):
                         delete_file(filename, shred)
                 win32file.CloseHandle(handle)

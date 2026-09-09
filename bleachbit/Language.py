@@ -349,6 +349,8 @@ def get_active_language_code():
 
 def setup_translation():
     """Do a one-time setup of translations"""
+    # Translation setup runs once per process.
+    # pylint: disable-next=global-statement
     global attempted_setup_translation, t
     attempted_setup_translation = True
     # Use local import to avoid circular import.

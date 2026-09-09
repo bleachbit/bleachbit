@@ -162,6 +162,8 @@ def reject_xml_dtd(data, description='XML'):
 class WindowsError(Exception):
     """Dummy class for non-Windows systems"""
 
+    # The stand-in mirrors the builtin WindowsError signature.
+    # pylint: disable-next=keyword-arg-before-vararg
     def __init__(self, winerror=None, *args, **kwargs):
         self.winerror = winerror
         super().__init__(*args, **kwargs)
@@ -391,6 +393,8 @@ def run_external_nowait(args, env=None, kwargs=None):
         env = sanitize_root_env(dict(os.environ) if env is None else env)
     try:
         _set_detached_kwargs(kwargs)
+        # The detached process must outlive this call.
+        # pylint: disable-next=consider-using-with
         process = subprocess.Popen(args,
                                    stdin=subprocess.DEVNULL,
                                    stdout=subprocess.DEVNULL,
@@ -398,7 +402,10 @@ def run_external_nowait(args, env=None, kwargs=None):
                                    env=env, **kwargs)
         process.returncode = 0
         if IS_WINDOWS:
+            # Popen offers no public way to release the Windows handle.
+            # pylint: disable-next=protected-access
             process._handle.Close()
+            # pylint: disable-next=protected-access
             process._handle = None
         return True
     except Exception as e:
@@ -461,6 +468,8 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
             return (0, '', '')
         # Use fallback method.
         _set_detached_kwargs(kwargs)
+        # The detached process must outlive this call.
+        # pylint: disable-next=consider-using-with
         process = subprocess.Popen(args,
                                    stdout=subprocess.DEVNULL,
                                    stderr=subprocess.DEVNULL,

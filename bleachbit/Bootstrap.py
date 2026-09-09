@@ -163,6 +163,8 @@ def bootstrap():
         # Do this before anything loads a DLL (e.g. bleachbit.Windows).
         import bleachbit
         try:
+            # Private helper of our own package.
+            # pylint: disable-next=protected-access
             bleachbit._harden_dll_search_path()
         except Exception:
             bleachbit.logger.warning(

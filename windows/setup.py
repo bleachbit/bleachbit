@@ -879,6 +879,8 @@ def upx():
             continue
         cmd = [UPX_EXE] + UPX_OPTS.split() + batch
         logger.info(subprocess.list2cmdline(cmd))
+        # The processes run in parallel and are collected below.
+        # pylint: disable-next=consider-using-with
         procs.append(subprocess.Popen(cmd, stdin=subprocess.PIPE,
                                       stdout=subprocess.PIPE, stderr=subprocess.PIPE))
     for p in procs:

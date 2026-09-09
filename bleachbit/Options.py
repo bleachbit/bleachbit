@@ -260,6 +260,8 @@ class Options:
         in place instead of building a copy, which would flatten any
         [DEFAULT] section.
         """
+        # ConfigParser has no public API for reordering sections.
+        # pylint: disable-next=protected-access
         sections = self.config._sections
         for section_name in sorted(sections, key=_section_sort_key):
             section = sections.pop(section_name)

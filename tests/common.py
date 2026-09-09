@@ -25,6 +25,8 @@ from pathlib import Path
 from unittest import mock
 
 try:
+    # pytest is re-exported for the test modules.
+    # pylint: disable-next=unused-import
     import pytest
 except ImportError:  # pytest is optional for plain unittest discovery
     class _MarkShimMeta(type):
@@ -34,6 +36,8 @@ except ImportError:  # pytest is optional for plain unittest discovery
         ``@pytest.mark.foo(...)`` (with parens).
         """
         def __getattr__(cls, _name):
+            # func is positional so the shim works with and without parentheses.
+            # pylint: disable-next=keyword-arg-before-vararg
             def decorator(func=None, *_args, **_kwargs):
                 if callable(func):
                     # Used as @pytest.mark.foo without parentheses.

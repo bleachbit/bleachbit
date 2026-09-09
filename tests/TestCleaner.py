@@ -422,6 +422,8 @@ class CleanerTestCase(common.BleachbitTestCase):
             def __exit__(self, *exc):
                 return False
 
+        # The nesting is the scaffolding that patches the filesystem.
+        # pylint: disable-next=too-many-nested-blocks
         try:
             glob.iglob = lambda path, *args, **kwargs: []
             os.path.exists = lambda path: False
