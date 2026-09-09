@@ -673,6 +673,8 @@ def delete_unnecessary():
     # Error loading theme icon 'dialog-warning' for stock: Unable to load image-loading module: C:/PythonXY/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll: `C:/PythonXY/Lib/site-packages/gtk-2.0/runtime/lib/gdk-pixbuf-2.0/2.10.0/loaders/libpixbufloader-svg.dll': The specified module could not be found.
     # https://bugs.launchpad.net/bleachbit/+bug/1650907
     delete_paths = [
+        r'_multiprocessing.pyd',
+        r'_queue.pyd',
         r'_win32sysloader.pyd',
         r'perfmon.pyd',
         r'servicemanager.pyd',
