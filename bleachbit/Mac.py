@@ -470,7 +470,7 @@ def _write_safari_cookie_records(path, pages):
         try:
             os.unlink(temp_path)
         except OSError:
-            pass
+            pass  # best-effort cleanup, original error takes priority
         raise
 
 
