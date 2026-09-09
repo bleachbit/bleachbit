@@ -43,6 +43,8 @@ def discover_sudo_tests():
         'tests.TestUnix',
     ]
 
+    # The nesting mirrors module, class, and method discovery.
+    # pylint: disable-next=too-many-nested-blocks
     for module_name in test_modules:
         try:
             module = import_module(module_name)

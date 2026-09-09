@@ -162,6 +162,8 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
 
         for nsis_file in nsis_files:
             self.assertExists(nsis_file.filepath)
+            # Written in the platform default encoding, so read it back the same way.
+            # pylint: disable-next=unspecified-encoding
             with open(nsis_file.filepath) as f:
                 file_content = f.read()
                 self.assertEqual(self._sort_string_by_lines(file_content),

@@ -606,6 +606,8 @@ protected_path = /tmp = True
 
                     # blocks mid-flush so a concurrent lock probe can check who holds the lock
                     def blocking_schedule_flush():
+                        # The closure runs inside the iteration that defines these names.
+                        # pylint: disable=cell-var-from-loop
                         entered.set()
                         finish.wait(timeout=5)
                         real_schedule_flush()

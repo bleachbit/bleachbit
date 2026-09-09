@@ -1233,6 +1233,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             def _write_file(longname, contents):
                 self.write_file(longname, contents)
                 shortname = extended_path_undo(
+                    # win32api is imported on Windows, where this test runs.
+                    # pylint: disable-next=possibly-used-before-assignment
                     win32api.GetShortPathName(extended_path(longname)))
                 self.assertExists(shortname)
                 return shortname
@@ -1251,6 +1253,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                                               None, None, dacl, None)
 
             def _test_wipe(contents, deny_access=False, is_sparse=False):
+                # The closure runs inside the iteration that defines these names.
+                # pylint: disable=cell-var-from-loop
                 shortname = _write_file(longname, contents)
                 if deny_access or is_sparse:
                     fh = open_file(extended_path(longname),

@@ -319,6 +319,8 @@ def _delete_parent_lock_needed(pathname):
     """
     if not IS_WINDOWS:
         return False
+    # The admin check is cached for the process.
+    # pylint: disable-next=global-statement
     global _delete_parent_lock_admin
     if _delete_parent_lock_admin is None:
         try:
@@ -363,7 +365,10 @@ def _delete_parent_directory(pathname):
 
 def _close_delete_parent_lock():
     """Close the parent lock handle."""
+    # The parent lock is process-wide state.
+    # pylint: disable-next=global-statement
     global _delete_parent_lock_handle
+    # pylint: disable-next=global-statement
     global _delete_parent_lock_key
     if _delete_parent_lock_handle is not None:
         logger.debug('Closing parent lock handle for %s',
@@ -380,7 +385,10 @@ def _lock_delete_parent(pathname):
 
     This function does not perform the deletion.
     """
+    # The parent lock is process-wide state.
+    # pylint: disable-next=global-statement
     global _delete_parent_lock_handle
+    # pylint: disable-next=global-statement
     global _delete_parent_lock_key
     parent = _delete_parent_directory(pathname)
     parent_key = os.path.normcase(parent)
@@ -1612,6 +1620,8 @@ class SplashThread(Thread):
 
     def _register_window_class(self, wndClass):
         """Register splash screen window class, handling reuse."""
+        # _class_atom belongs to this class.
+        # pylint: disable-next=protected-access
         cached_atom = self.__class__._class_atom
         if cached_atom:
             return cached_atom
@@ -1638,6 +1648,8 @@ class SplashThread(Thread):
                 # GetClassInfo failed, use fallback
                 atom = 1234
 
+        # _class_atom belongs to this class.
+        # pylint: disable-next=protected-access
         self.__class__._class_atom = atom
         return atom
 

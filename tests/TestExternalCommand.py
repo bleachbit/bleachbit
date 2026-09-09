@@ -291,6 +291,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
             # Set environment variable for child process.
             cls._test_options_env = common.set_temporary_env(
                 'BLEACHBIT_TEST_OPTIONS_DIR', cls.tempdir)
+            # The context manager spans setUpClass and tearDownClass.
+            # pylint: disable-next=unnecessary-dunder-call
             cls._test_options_env.__enter__()
 
     @classmethod
@@ -364,6 +366,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         will launch an elevated process, so the child will exit.
         We must wait for the grandchild to finish.
         """
+        # The process is managed by the try/finally below.
+        # pylint: disable-next=consider-using-with
         process = subprocess.Popen(shred_command_string,
                                    shell=True, cwd=cwd)
         try:
@@ -416,6 +420,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         # The --no-load-cleaners makes it faster.
         args = [sys.executable, 'bleachbit.py',
                 '--gui', '--no-load-cleaners', '--no-check-online-updates', '--no-uac']
+        # The process is managed by the try/finally below.
+        # pylint: disable-next=consider-using-with
         p = subprocess.Popen(args, shell=False)
         try:
             # Let the first process start up before launching the second process.
@@ -563,6 +569,8 @@ p.wait()
 sys.exit(0)
 ''')
 
+        # The process is handed to the wait helper below.
+        # pylint: disable-next=consider-using-with
         process = subprocess.Popen([sys.executable, child_script])
 
         start_time = time.time()

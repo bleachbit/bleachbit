@@ -106,6 +106,8 @@ def _run_with_delete_lock(path, func):
 def close_delete_parent_lock():
     """Close the delete parent lock if on Windows."""
     if IS_WINDOWS:
+        # Private helper of our own package.
+        # pylint: disable-next=protected-access
         bleachbit.Windows._close_delete_parent_lock()
 
 

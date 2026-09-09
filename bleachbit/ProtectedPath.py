@@ -64,6 +64,8 @@ def load_protected_paths(force_reload=False):
     Args:
         force_reload: If True, reload from XML even if cached
     """
+    # The parsed XML is cached for the process.
+    # pylint: disable-next=global-statement
     global _protected_paths_cache
 
     if _protected_paths_cache is not None and not force_reload:
@@ -296,5 +298,7 @@ def get_warning_message(user_path, impact):
 
 def clear_cache():
     """Clear the protected paths cache."""
+    # Clearing the cache means rebinding it.
+    # pylint: disable-next=global-statement
     global _protected_paths_cache
     _protected_paths_cache = None

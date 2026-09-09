@@ -37,6 +37,8 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
     def setUp(self):
         """Set up before each test method."""
         super().setUp()
+        # The class is skipped unless GTK bound this name.
+        # pylint: disable-next=possibly-used-before-assignment
         clear_clipboard()
         self.paths = [
             self.write_file('clipboard-path-1'),

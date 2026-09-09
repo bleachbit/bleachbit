@@ -278,6 +278,8 @@ def wipe_contents(path):
             if os.path.islink(path):
                 raise OSError(
                     errno.EACCES, 'refusing to truncate a link', path)
+            # f is closed by the try/finally below.
+            # pylint: disable-next=consider-using-with
             f = open(path, 'wb')
     else:
         f = wipe_write(path)
@@ -338,6 +340,8 @@ def wipe_path(pathname, idle=False):
         f = None
         while True:
             try:
+                # The temporary file outlives the retry loop and is deleted at exit.
+                # pylint: disable-next=consider-using-with
                 f = tempfile.NamedTemporaryFile(
                     dir=pathname,
                     suffix=__random_string(maxlen),
