@@ -74,7 +74,6 @@ if IS_WINDOWS:
     setattr(win32gui, 'GetClassInfo', getattr(
         win32gui, 'GetClassInfo', _get_class_info_fallback))
 
-    from ctypes import windll
     from win32com.shell import shell, shellcon
 
 logger = logging.getLogger(__name__)
@@ -450,7 +449,7 @@ def delete_locked_file(pathname):
     if not os.path.exists(pathname):
         return
     MOVEFILE_DELAY_UNTIL_REBOOT = 4
-    if 0 == windll.kernel32.MoveFileExW(pathname, None, MOVEFILE_DELAY_UNTIL_REBOOT):
+    if 0 == ctypes.windll.kernel32.MoveFileExW(pathname, None, MOVEFILE_DELAY_UNTIL_REBOOT):
         # WinError throws the right exception based on last error.
         try:
             raise ctypes.WinError()
@@ -937,12 +936,12 @@ def get_known_folder_path(folder_name):
     class UserHandle:
         current = wintypes.HANDLE(0)
 
-    _CoTaskMemFree = windll.ole32.CoTaskMemFree
+    _CoTaskMemFree = ctypes.windll.ole32.CoTaskMemFree
     _CoTaskMemFree.restype = None
     _CoTaskMemFree.argtypes = [ctypes.c_void_p]
 
     try:
-        _SHGetKnownFolderPath = windll.shell32.SHGetKnownFolderPath
+        _SHGetKnownFolderPath = ctypes.windll.shell32.SHGetKnownFolderPath
     except AttributeError:
         # Not supported on Windows XP
         return None
@@ -1010,11 +1009,11 @@ def is_junction(path):
         logger.debug('no reparse tag for %s, so falling back to '
                      'GetFileAttributesW: %s', path, e)
 
-    attr = windll.kernel32.GetFileAttributesW(path)
+    attr = ctypes.windll.kernel32.GetFileAttributesW(path)
     # INVALID_FILE_ATTRIBUTES (0xFFFFFFFF) indicates GetFileAttributesW failed
     # On 64-bit Python, ctypes may interpret this as signed -1 instead of unsigned 0xFFFFFFFF
     if attr in (0xFFFFFFFF, -1):
-        error_code = windll.kernel32.GetLastError()
+        error_code = ctypes.windll.kernel32.GetLastError()
         logger.error(
             'GetFileAttributesW() failed for path %s with error code %d', path, error_code)
         return False
