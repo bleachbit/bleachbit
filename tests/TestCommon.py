@@ -239,3 +239,53 @@ class CommonTestCase(common.BleachbitTestCase):
         os.remove(relative_fn)
         self.assertNotExists(relative_fn)
         self.assertNotExists('this-does-not-exist')
+
+
+class ResolveLocaleDirTestCase(common.BleachbitTestCase):
+    """Test case for bleachbit._resolve_locale_dir()"""
+
+    def test_macos_app_bundle(self):
+        """On macOS, prefer Contents/locale (one level above
+        Contents/Resources) over the generic /usr/share/locale/
+        fallback, when it exists."""
+        from bleachbit import _resolve_locale_dir
+        exe_path = '/Applications/BleachBit.app/Contents/Resources'
+        bundle_dir = os.path.normpath(os.path.join(exe_path, '..', 'locale'))
+        result = _resolve_locale_dir(
+            exe_path, is_linux=False, is_mac=True, is_windows=False,
+            is_netbsd=False, is_bsd=False,
+            path_exists=lambda p: p == bundle_dir)
+        self.assertEqual(result, bundle_dir)
+
+    def test_macos_no_bundle_falls_back(self):
+        """On macOS, when neither the local, AppImage-style, nor
+        bundle-relative locale directory exists, fall back to the
+        generic system path."""
+        from bleachbit import _resolve_locale_dir
+        result = _resolve_locale_dir(
+            '/some/dev/path', is_linux=False, is_mac=True,
+            is_windows=False, is_netbsd=False, is_bsd=False,
+            path_exists=lambda p: False)
+        self.assertEqual(result, '/usr/share/locale/')
+
+    def test_local_locale_takes_priority(self):
+        """A local ./locale/ directory (running from source) takes
+        priority over the macOS bundle path, even on macOS."""
+        from bleachbit import _resolve_locale_dir
+        result = _resolve_locale_dir(
+            '/Applications/BleachBit.app/Contents/Resources',
+            is_linux=False, is_mac=True, is_windows=False,
+            is_netbsd=False, is_bsd=False,
+            path_exists=lambda p: p == './locale/')
+        self.assertTrue(result.endswith('locale'))
+        self.assertNotIn('BleachBit.app', result)
+
+    def test_non_mac_unaffected(self):
+        """On Linux, the macOS bundle-relative check must never be
+        consulted, even if such a path happened to exist."""
+        from bleachbit import _resolve_locale_dir
+        result = _resolve_locale_dir(
+            '/usr/bin', is_linux=True, is_mac=False, is_windows=False,
+            is_netbsd=False, is_bsd=False,
+            path_exists=lambda p: False)
+        self.assertEqual(result, '/usr/share/locale/')
