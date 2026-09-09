@@ -226,7 +226,8 @@ def expand_windows_system_vars(pathname, system_paths=None):
     if not system_paths:
         return [pathname]
     return [
-        _WINDOWS_SYSTEM_VAR_RE.sub(lambda _match: system_path, pathname)
+        _WINDOWS_SYSTEM_VAR_RE.sub(
+            lambda _match, system_path=system_path: system_path, pathname)
         for system_path in system_paths
     ]
 
