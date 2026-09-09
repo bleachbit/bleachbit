@@ -33,7 +33,7 @@ $themes_dir = Join-Path $python_home "share\themes"
 $python_exists = Test-Path "$python_home\python.exe"
 # location of this .ps1 script
 $script_dir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$base_download_url = "https://github.com/bleachbit/pygtkwin/releases/download/v2026-09-21/"
+$base_download_url = "https://github.com/bleachbit/pygtkwin/releases/download/v2026-09-09/"
 
 function Assert-FileHash($Path, $Expected) {
     $actual = (Get-FileHash -Path $Path -Algorithm SHA256).Hash
@@ -76,7 +76,7 @@ if (-not (Test-Path $GTK_ZIP_FN)) {
 } else {
     Write-Host "Python and GTK+ are already downloaded."
 }
-Assert-FileHash $GTK_ZIP_FN "de88f4e3a3404105473477bbf2c88f1b122fe246949ac67c8d8d7c1fee5de9cd"
+Assert-FileHash $GTK_ZIP_FN "74401344fb3365b15f7b1f2127688cbf3a55a76493551b908f325c9581c63aee"
 
 if (-not (Test-Path $python_home\python.exe)) {
     Write-Host "Unpacking Python and GTK+..."
@@ -190,14 +190,14 @@ if (-not $python_exists) {
     }
 }
 
-$PYGOBJECT_FN = "pygobject-3.56.3-cp312-cp312-win32.whl"
+$PYGOBJECT_FN = "pygobject-3.58.0-cp312-cp312-win32.whl"
 if (-not (Test-Path $PYGOBJECT_FN)) {
     Write-Host "Downloading PyGObject..."
     Invoke-WebRequest -Uri "$base_download_url/$PYGOBJECT_FN" -OutFile "$PYGOBJECT_FN"
 } else {
     Write-Host "PyGObject is already downloaded."
 }
-Assert-FileHash $PYGOBJECT_FN "1ce56a4a1fb4a42bed2c0f06ba6df6210f005a6b61df3a5731c71d103a28b3a1"
+Assert-FileHash $PYGOBJECT_FN "cdfeda8285aba55ed2cc04f73913869c486b03ee1a884f0e1c0ec73f849aacfe"
 
 if (-not $python_exists) {
     Write-Host "pip install $PYGOBJECT_FN..."
