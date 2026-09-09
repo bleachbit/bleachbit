@@ -261,9 +261,10 @@ class CLITestCase(common.BleachbitTestCase):
                 deleted_paths = []
                 crash = [False]
 
-                # pylint: disable-next=unused-argument
+                # the defaults bind this iteration's values into the closure
+                # pylint: disable-next=unused-argument, dangerous-default-value
                 def dummy_delete(path, shred=False, crash=crash,
-                                 deleted_paths=deleted_paths):
+                                 deleted_paths=deleted_paths, filename=filename):
                     try:
                         self.assertLExists(path)
                     except AssertionError:
