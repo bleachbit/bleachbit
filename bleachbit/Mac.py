@@ -12,6 +12,7 @@ import errno
 import logging
 import os
 import platform
+import plistlib
 import subprocess
 from pathlib import Path
 
@@ -57,16 +58,30 @@ MACOSX_DICT_MODERN = {
 }
 
 
-def get_macos_locale():
-    """Return the user's preferred locale on macOS, e.g. 'es_ES'.
+def _read_global_preferences_plist():
+    """Return the parsed contents of ~/Library/Preferences/
+    .GlobalPreferences.plist, or None if it cannot be read."""
+    path = os.path.expanduser(
+        '~/Library/Preferences/.GlobalPreferences.plist')
+    try:
+        with open(path, 'rb') as f:
+            return plistlib.load(f)
+    except (OSError, ValueError, plistlib.InvalidFileException) as e:
+        logger.debug('failed to read %s: %s', path, e)
+        return None
 
-    On macOS, locale.getlocale() reflects POSIX environment variables
-    (LANG/LC_ALL), which are not set when the app is launched from
-    Finder (as opposed to a terminal) and can be stale or inconsistent
-    with the user's actual System Settings > General > Language & Region
-    preference. AppleLocale, read via `defaults read -g AppleLocale`,
-    reflects the real system preference regardless of how the app was
-    launched.
+
+def _get_apple_locale_via_defaults():
+    """Return AppleLocale by shelling out to `defaults read -g
+    AppleLocale`, or None on any failure.
+
+    This is the fallback path: reliable when tested from a terminal,
+    but observed to consistently fail (falling through to the 'C'
+    locale) when the app is launched via an actual Finder double-click
+    rather than a terminal or `open` -- `_read_global_preferences_plist`
+    above does not depend on spawning a subprocess at all, so it is
+    unaffected by whatever session/TCC context differs between those
+    two launch paths, and is tried first.
     """
     try:
         result = subprocess.run(
@@ -79,6 +94,37 @@ def get_macos_locale():
     if result.returncode != 0:
         return None
     value = result.stdout.strip()
+    return value or None
+
+
+def get_macos_locale():
+    """Return the user's preferred locale on macOS, e.g. 'es_ES'.
+
+    On macOS, locale.getlocale() reflects POSIX environment variables
+    (LANG/LC_ALL), which are not set when the app is launched from
+    Finder (as opposed to a terminal) and can be stale or inconsistent
+    with the user's actual System Settings > General > Language & Region
+    preference. AppleLocale reflects the real system preference
+    regardless of how the app was launched.
+
+    Prefer reading it directly from .GlobalPreferences.plist (pure file
+    I/O, no subprocess); fall back to `defaults read -g AppleLocale`,
+    and finally to the first entry of AppleLanguages, if that fails.
+    """
+    value = None
+    prefs = _read_global_preferences_plist()
+    if prefs is not None:
+        value = prefs.get('AppleLocale')
+        if not value:
+            languages = prefs.get('AppleLanguages')
+            if languages:
+                # AppleLanguages uses hyphens ('es-ES'); AppleLocale and
+                # everywhere else in this codebase use underscores.
+                value = languages[0].replace('-', '_')
+
+    if not value:
+        value = _get_apple_locale_via_defaults()
+
     if not value:
         return None
     # AppleLocale can include a variant suffix like 'es_ES@currency=EUR'.
