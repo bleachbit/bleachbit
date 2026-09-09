@@ -569,6 +569,7 @@ class ActionTestCase(common.BleachbitTestCase):
                     self.assertTrue(cleaner.auto_hide())
                     mock_run_external.assert_not_called()
 
+    @common.skipUnlessMac
     def test_chrome_orphaned_framework_versions_delegates_to_unix(self):
         """ChromeOrphanedFrameworkVersions.get_commands() must delegate
         to Unix.orphaned_framework_versions() and wrap each yielded path

@@ -251,7 +251,7 @@ later.  See the COPYING file in the top-level directory.
     <description>Settings for individual sites</description>
     <action command="json" search="file" path="$$profile$$/Preferences" address="profile/content_settings/exceptions"/>
   </option>
-  <option id="old_versions">
+  <option id="old_versions" os="macos">
     <label>Old versions</label>
     <description>Remove old versions of Chrome left behind by updates, which Google's own updater does not clean up</description>
     <!-- Google's macOS auto-updater has never reliably removed the
