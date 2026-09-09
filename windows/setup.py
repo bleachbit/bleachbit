@@ -461,7 +461,8 @@ def build_py2exe():
         'excludes': ['pyreadline', 'difflib', 'doctest',
                      'pickle', 'ftplib', 'bleachbit.Unix',
                      'setuptools', 'tomli', 'wheel', 'backports',
-                     'importlib_metadata', 'zipp', 'packaging', 'distutils'],
+                     'importlib_metadata', 'zipp', 'packaging', 'distutils',
+                     'unittest','test'],
     }
 
     freeze(
