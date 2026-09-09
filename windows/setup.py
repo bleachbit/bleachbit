@@ -858,6 +858,10 @@ def upx():
     # Do not compress bleachbit.exe and bleachbit_console.exe to avoid false positives
     # with antivirus software. Not much is space with gained with these small files, anyway.
     upx_files = recursive_glob('dist', ['*.dll', '*.pyd'])
+    # Skip vcruntime140.dll because CantPackException and already signed.
+    upx_skip = {'vcruntime140.dll'}
+    upx_files = [f for f in upx_files
+                 if os.path.basename(f).lower() not in upx_skip]
 
     # upx is single-threaded, so split files into size-balanced batches
     # and run them as concurrent processes to use all CPU cores.
