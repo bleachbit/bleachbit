@@ -36,7 +36,7 @@ from bleachbit.GuiCookie import CookieManagerPane
 from bleachbit.GuiUtil import (detect_dark_background, flush_gtk_events,
                                load_icon_or_fallback,
                                should_show_dark_mode_warning)
-from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
+from bleachbit.Language import find_supported_language_code, get_active_language_code, get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _, pget_text as _p
 from bleachbit.Options import options
 
@@ -350,27 +350,23 @@ class PreferencesDialog:
 
         self.lang_select_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         # TRANSLATORS: Label for the language selection dropdown.
-        lang_label = Gtk.Label(label=_("Language:"))
-        lang_label.set_margin_start(20)  # Add some indentation
-        self.lang_select_box.pack_start(lang_label, False, True, 5)
+        self.lang_label = Gtk.Label(label=_("Language:"))
+        self.lang_label.set_margin_start(20)  # Add some indentation
+        self.lang_select_box.pack_start(self.lang_label, False, True, 5)
 
         self.lang_combo = Gtk.ComboBoxText()
-        current_lang_code = get_active_language_code()
         # Add available languages
-        active_language_idx = None
         if supported_langs is None:
-            lang_items = [('en_us', 'English')]
+            lang_items = [('en_US', 'English')]
         else:
             lang_items = supported_langs.items()
-        for lang_idx, (lang_code, native) in enumerate(lang_items):
+        self.lang_codes = []
+        for lang_code, native in lang_items:
+            self.lang_codes.append(lang_code)
             if native:
                 self.lang_combo.append_text(f"{native} ({lang_code})")
             else:
                 self.lang_combo.append_text(lang_code)
-            if lang_code == current_lang_code:
-                active_language_idx = lang_idx
-        if active_language_idx is not None:
-            self.lang_combo.set_active(active_language_idx)
         # set_wrap_width() prevents infinite space to scroll up.
         # https://github.com/bleachbit/bleachbit/issues/1764
         self.lang_combo.set_wrap_width(1)
@@ -378,13 +374,37 @@ class PreferencesDialog:
         lang_box.pack_start(self.lang_select_box, False, True, 0)
 
         vbox.pack_start(lang_box, False, True, 0)
-        self.lang_select_box.set_sensitive(not is_auto_detect)
         self.cb_auto_lang.connect('toggled', self.on_auto_detect_toggled)
         self.lang_combo.connect('changed', self.on_lang_changed)
+        self.__select_supported_language(get_active_language_code())
+        self.__set_language_widgets_sensitive(not is_auto_detect)
+
+    def __select_supported_language(self, lang_code):
+        """Select the best matching supported language in the combobox.
+
+        The 'changed' signal is blocked, so the forced_language option
+        is not changed.
+        """
+        matched = find_supported_language_code(lang_code, self.lang_codes)
+        if matched is None:
+            matched = find_supported_language_code('en', self.lang_codes)
+        if matched is None:
+            return
+        self.lang_combo.handler_block_by_func(self.on_lang_changed)
+        self.lang_combo.set_active(self.lang_codes.index(matched))
+        self.lang_combo.handler_unblock_by_func(self.on_lang_changed)
+
+    def __set_language_widgets_sensitive(self, sensitive):
+        """Enable or disable the language label and dropdown together."""
+        self.lang_select_box.set_sensitive(sensitive)
+        self.lang_label.set_sensitive(sensitive)
+        self.lang_combo.set_sensitive(sensitive)
 
     def on_lang_changed(self, widget):
         """Callback for when the language combobox is changed."""
         text = widget.get_active_text()
+        if text is None:
+            return
         # Extract language code from the format "Native Name (lang_code)"
         lang_code = text.split("(")[-1].rstrip(")")
         if lang_code:
@@ -400,9 +420,22 @@ class PreferencesDialog:
         """Callback for when the auto-detect language checkbox is toggled."""
         self.__toggle_callback(None, 'auto_detect_lang')
         is_auto_detect = options.get("auto_detect_lang")
-        self.lang_select_box.set_sensitive(not is_auto_detect)
+        self.__set_language_widgets_sensitive(not is_auto_detect)
         if is_auto_detect:
             options.set("forced_language", "", section="bleachbit")
+        else:
+            # Keep the detected language as the default now that it is
+            # no longer automatically detected.
+            # https://github.com/bleachbit/bleachbit/issues/1799
+            detected = find_supported_language_code(
+                get_active_language_code(), self.lang_codes)
+            if detected:
+                options.set("forced_language", detected,
+                            section="bleachbit")
+        # Show the detected language when auto-detect is enabled, or
+        # keep it as the default when auto-detect is disabled.
+        # https://github.com/bleachbit/bleachbit/issues/1800
+        self.__select_supported_language(get_active_language_code())
         setup_translation()
         self.refresh_operations = True
         self.show_infobar(RESTART_APP_MSG, Gtk.MessageType.INFO)

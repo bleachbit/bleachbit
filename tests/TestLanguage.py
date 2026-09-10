@@ -11,7 +11,8 @@ import os
 import unittest
 from unittest import mock
 
-from bleachbit.Language import get_active_language_code, \
+from bleachbit.Language import find_supported_language_code, \
+    get_active_language_code, \
     get_supported_language_codes, \
     get_text, \
     setup_translation, \
@@ -59,6 +60,44 @@ class LanguageTestCase(common.BleachbitTestCase):
         if len(get_supported_language_codes()) < 3:
             self.skipTest('missing translations')
         self.assertIn('es', slangs)
+
+    def test_find_supported_language_code(self):
+        """Test find_supported_language_code()
+
+        The detected language code may differ from the supported code:
+        Windows may return a hyphen like 'en-US' or a region like
+        'hi_IN' while only 'hi' is supported.
+
+        https://github.com/bleachbit/bleachbit/issues/1799
+        https://github.com/bleachbit/bleachbit/issues/1800
+        """
+        supported = ['en', 'en_US', 'es', 'hi', 'pt_BR']
+        # Exact match.
+        self.assertEqual(
+            find_supported_language_code('en_US', supported), 'en_US')
+        self.assertEqual(
+            find_supported_language_code('es', supported), 'es')
+        # Hyphen instead of underscore.
+        self.assertEqual(
+            find_supported_language_code('en-US', supported), 'en_US')
+        # Region falls back to primary language subtag.
+        self.assertEqual(
+            find_supported_language_code('hi_IN', supported), 'hi')
+        self.assertEqual(
+            find_supported_language_code('es_419', supported), 'es')
+        # Primary language subtag falls back to a regional variant.
+        self.assertEqual(
+            find_supported_language_code('pt', supported), 'pt_BR')
+        self.assertEqual(
+            find_supported_language_code('en_GB', supported), 'en')
+        # Case-insensitive match.
+        self.assertEqual(
+            find_supported_language_code('EN-us', supported), 'en_US')
+        # No match.
+        self.assertIsNone(find_supported_language_code('de', supported))
+        self.assertIsNone(find_supported_language_code('C', supported))
+        self.assertIsNone(find_supported_language_code('', supported))
+        self.assertIsNone(find_supported_language_code('en', []))
 
     def test_get_supported_language_code_name_dict_unknown_code(self):
         with mock.patch('bleachbit.Language.get_supported_language_codes', return_value=['en', 'es', 'foo@bar']):
@@ -117,6 +156,41 @@ class LanguageTestCase(common.BleachbitTestCase):
             setup_translation()
             self.assertIn(get_text('Preview'),
                           ('Vista previa', 'Previsualizar'))
+
+    def test_get_active_language_code_posix_env_not_setlocale(self):
+        """On POSIX, detection must read the environment, not the
+        locale set by locale.setlocale() in setup_translation().
+
+        Otherwise, after manually forcing a language once, re-enabling
+        auto-detection keeps "detecting" the forced language.
+        """
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        with mock.patch('bleachbit.Language.IS_POSIX', True), \
+                mock.patch('bleachbit.Language.IS_WINDOWS', False), \
+                mock.patch('bleachbit.Language.IS_MAC', False), \
+                mock.patch.dict(os.environ, {'LANG': 'en_US.UTF-8'}), \
+                mock.patch('locale.getlocale',
+                           return_value=('es_ES', 'UTF-8')):
+            os.environ.pop('LC_ALL', None)
+            os.environ.pop('LC_MESSAGES', None)
+            self.assertEqual(get_active_language_code(), 'en_US')
+
+    def test_get_active_language_code_posix_env_unset(self):
+        """On POSIX with no locale environment variables, fall back to
+        locale.getlocale()."""
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        with mock.patch('bleachbit.Language.IS_POSIX', True), \
+                mock.patch('bleachbit.Language.IS_WINDOWS', False), \
+                mock.patch('bleachbit.Language.IS_MAC', False), \
+                mock.patch.dict(os.environ), \
+                mock.patch('locale.getlocale',
+                           return_value=('fr_FR', 'UTF-8')):
+            os.environ.pop('LC_ALL', None)
+            os.environ.pop('LC_MESSAGES', None)
+            os.environ.pop('LANG', None)
+            self.assertEqual(get_active_language_code(), 'fr_FR')
 
     def test_options_import_failure(self):
         """Test handling of failed Options import in language detection"""

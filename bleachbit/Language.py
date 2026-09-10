@@ -287,6 +287,38 @@ def get_supported_language_code_name_dict():
     return supported_langs
 
 
+def find_supported_language_code(lang_code, supported_codes):
+    """Return the supported language code best matching lang_code.
+
+    lang_code is a detected code like 'en_US' or 'hi_IN', and
+    supported_codes is an iterable of codes like 'en', 'en_US', 'hi'.
+
+    For example, 'hi_IN' matches 'hi', 'en-US' matches 'en_US', and
+    'pt' may match 'pt_BR'.
+
+    Returns None if there is no match.
+    """
+    if not lang_code:
+        return None
+    codes = list(supported_codes)
+    # Windows language codes may use a hyphen like 'en-US' instead
+    # of an underscore like 'en_US'.
+    normalized = lang_code.replace('-', '_')
+    # Try the full code ('hi_IN'), then the primary subtag ('hi').
+    lowered = {code.lower(): code for code in codes}
+    for candidate in (normalized, normalized.split('_')[0]):
+        if candidate in codes:
+            return candidate
+        if candidate.lower() in lowered:
+            return lowered[candidate.lower()]
+    # Try a supported regional variant like 'pt_BR' for 'pt'.
+    prefix = normalized.split('_')[0].lower() + '_'
+    for code in codes:
+        if code.lower().startswith(prefix):
+            return code
+    return None
+
+
 def get_active_language_code():
     """Return the language ID to use for translations
 
@@ -320,14 +352,29 @@ def get_active_language_code():
         # environment at all, so its truthiness cannot detect "nothing
         # was explicitly set". Check os.environ directly instead: if the
         # caller (a shell, a test suite) put LANG/LC_ALL/LC_MESSAGES
-        # there on purpose, honor it via locale.getlocale(); otherwise
-        # (Finder launches the app with none of these set) prefer the
-        # real system preference from AppleLocale.
+        # there on purpose, honor it; otherwise (Finder launches the app
+        # with none of these set) prefer the real system preference from
+        # AppleLocale.
         env_locale_set = any(
             os.environ.get(name) for name in ("LC_ALL", "LC_MESSAGES", "LANG"))
         if IS_MAC and not env_locale_set:
             from bleachbit.Mac import get_macos_locale
             user_locale = get_macos_locale()
+        elif env_locale_set:
+            # Read the environment variables instead of
+            # locale.getlocale(), which reports the locale set by
+            # locale.setlocale() in setup_translation().  Without this,
+            # after manually forcing a language once, the detected
+            # language would stay stuck on the forced language even
+            # after re-enabling auto-detection.
+            # LANGUAGE is deliberately not read: setup_translation()
+            # sets it on POSIX, so it has the same problem.
+            for name in ("LC_ALL", "LC_MESSAGES", "LANG"):
+                env_value = os.environ.get(name)
+                if env_value:
+                    # Strip codeset ('.UTF-8') and modifier ('@latin').
+                    user_locale = env_value.split('.')[0].split('@')[0]
+                    break
         else:
             user_locale = locale.getlocale()[0]
 
