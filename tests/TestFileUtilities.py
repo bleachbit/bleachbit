@@ -61,6 +61,8 @@ from bleachbit.FileUtilities import (
     is_normal_directory,
     listdir,
     open_files_lsof,
+    open_files_psutil,
+    open_files_freebsd,
     OpenFiles,
     same_partition,
     truncate_file,
@@ -70,7 +72,7 @@ from bleachbit.FileUtilities import (
 )
 from bleachbit.General import gc_collect, run_external
 from bleachbit.Options import init_configuration, options
-from bleachbit import logger, FS_CASE_SENSITIVE, IS_POSIX, IS_WINDOWS
+from bleachbit import logger, FS_CASE_SENSITIVE, IS_FREEBSD, IS_POSIX, IS_WINDOWS
 from tests import common
 
 
@@ -1585,8 +1587,11 @@ State=AAAA/wA...
         elif IS_POSIX:
             for check_path in (home, '/'):
                 detected_fs = get_filesystem_type(check_path)[0]
-                self.assertIn(detected_fs, ['apfs', 'btrfs', 'ext4', 'ext3', 'hfs', 'squashfs', 'unknown'],
-                              f"Unexpected file system type for {check_path}: {detected_fs}")
+                self.assertIn(detected_fs, [
+                    'apfs', 'btrfs', 'ext4', 'ext3', 'ext2', 'xfs',
+                    'hfs', 'squashfs', 'ufs', 'zfs', 'tmpfs', 'ffs',
+                    'unknown'],
+                    f"Unexpected file system type for {check_path}: {detected_fs}")
 
     def test_get_filesystem_type_missing_psutil(self):
         """get_filesystem_type should return unknown when psutil is missing."""
@@ -1666,11 +1671,20 @@ State=AAAA/wA...
     def test_getsize_sparse(self):
         """Test getsize() with a sparse file"""
         # macOS HFS+ did not support sparse files, but APFS does.
+        logical_size = 1000 ** 2
         (handle, filename) = tempfile.mkstemp(
             prefix="bleachbit-test-sparse-", dir=self.tempdir)
-        os.ftruncate(handle, 1000 ** 2)
+        os.ftruncate(handle, logical_size)
         os.close(handle)
-        self.assertEqual(getsize(filename), 0)
+        allocated = getsize(filename)
+        if IS_FREEBSD:
+            # UFS still allocates a small amount of metadata (often 64KiB).
+            self.assertEqual(os.lstat(filename).st_size, logical_size)
+            self.assertLess(allocated, logical_size // 10,
+                            f"sparse file allocated {allocated} bytes "
+                            f"for logical size {logical_size}")
+        else:
+            self.assertEqual(allocated, 0)
 
     def test_getsizedir(self):
         """Unit test for getsizedir()"""
@@ -1786,13 +1800,42 @@ State=AAAA/wA...
         """Unit test for open_files_lsof()"""
         self.assertEqual(list(open_files_lsof(
             lambda: 'n/bar/foo\nn/foo/bar\nnoise')), ['/bar/foo', '/foo/bar'])
+        # FreeBSD lsof appends the mount device to NAME.
+        self.assertEqual(list(open_files_lsof(
+            lambda: 'n/tmp/foo (/dev/gpt/rootfs)\nn/bar/baz\nnoise')),
+            ['/tmp/foo', '/bar/baz'])
+
+    def test_open_files_psutil(self):
+        """Unit test for open_files_psutil()"""
+        fake_file = unittest.mock.Mock(path='/tmp/opened')
+        proc = unittest.mock.Mock()
+        proc.open_files.return_value = [fake_file]
+        denied = unittest.mock.Mock()
+        denied.open_files.side_effect = OSError('denied')
+        empty = unittest.mock.Mock(path='')
+        proc_empty = unittest.mock.Mock()
+        proc_empty.open_files.return_value = [empty]
+        with unittest.mock.patch('psutil.process_iter', return_value=[proc, denied, proc_empty]):
+            self.assertEqual(list(open_files_psutil()), ['/tmp/opened'])
+
+    def test_open_files_freebsd_without_psutil(self):
+        """open_files_freebsd() falls back to lsof when psutil is missing"""
+        with unittest.mock.patch('bleachbit.FileUtilities.open_files_psutil',
+                                 side_effect=ImportError('no psutil')), \
+                unittest.mock.patch('bleachbit.FileUtilities.open_files_lsof',
+                                   return_value=iter(['/tmp/via-lsof'])):
+            self.assertEqual(list(open_files_freebsd()), ['/tmp/via-lsof'])
 
     @common.skipIfWindows
     def test_open_files(self):
         """Unit test for class OpenFiles"""
 
         filename = os.path.join(self.tempdir, 'bleachbit-test-open-files')
-        with open(filename, 'wb'):
+        # FreeBSD kinfo_getfile leaves kf_path empty for a newly created
+        # O_WRONLY file (Python's 'wb'). Open an existing file for reading
+        # so the kernel reports the path.
+        self.write_file(filename, b'x')
+        with open(filename, 'rb'):
             openfiles = OpenFiles()
             ago = None
             if openfiles.last_scan_time:

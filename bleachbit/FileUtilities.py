@@ -159,6 +159,11 @@ def get_filesystem_type(path):
     return ("unknown", "none")
 
 
+# FreeBSD lsof appends the mount device to NAME, e.g.
+# "/tmp/foo (/dev/gpt/rootfs)".
+_LSOF_DEV_SUFFIX = re.compile(r' \(/dev/[^)]+\)$')
+
+
 def open_files_lsof(run_lsof=None):
     """Return iterator of open files using lsof"""
     if IS_LINUX and run_lsof is None:
@@ -186,14 +191,46 @@ def open_files_lsof(run_lsof=None):
         output = output.decode('utf-8', errors='replace')
     for f in output.split("\n"):
         if f.startswith("n/"):
-            yield f[1:]  # Drop lsof's "n"
+            yield _LSOF_DEV_SUFFIX.sub('', f[1:])  # Drop lsof's "n"
+
+
+def open_files_psutil():
+    """Return iterator of open files using psutil
+
+    FreeBSD lsof typically lists cwd and the process executable but not
+    file descriptors unless it is setgid kmem. psutil uses
+    KERN_PROC_FILEDESC, which a user can read for their own processes.
+    """
+    # pylint: disable=import-outside-toplevel
+    import psutil
+    for proc in psutil.process_iter():
+        try:
+            open_file_list = proc.open_files()
+        except (psutil.Error, OSError):
+            continue
+        for ofile in open_file_list:
+            # FreeBSD kinfo_getfile leaves an empty path for a newly
+            # created O_WRONLY file (Python's 'wb').
+            if ofile.path:
+                yield ofile.path
+
+
+def open_files_freebsd():
+    """Return iterator of open files on FreeBSD"""
+    try:
+        yield from open_files_psutil()
+    except ImportError:
+        logger.debug('psutil not available; listing open files with lsof')
+        yield from open_files_lsof()
 
 
 def open_files():
     """Return iterator of open files"""
     if IS_LINUX:
         files = open_files_linux()
-    elif IS_MAC or IS_FREEBSD:
+    elif IS_FREEBSD:
+        files = open_files_freebsd()
+    elif IS_MAC:
         files = open_files_lsof()
     else:
         raise RuntimeError('unsupported platform for open_files()')
