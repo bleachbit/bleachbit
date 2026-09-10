@@ -16,6 +16,7 @@ from contextlib import ExitStack
 from unittest import mock
 
 import bleachbit
+from bleachbit.FileUtilities import FilesystemInfo
 from bleachbit.Options import options
 from bleachbit import Wipe
 from bleachbit.Wipe import (
@@ -369,7 +370,8 @@ class WipeTestCase(common.BleachbitTestCase):
         stack.enter_context(mock.patch(
             'bleachbit.Wipe.os.path.isdir', return_value=True))
         stack.enter_context(mock.patch(
-            'bleachbit.FileUtilities.get_filesystem_type', return_value=(fs_type,)))
+            'bleachbit.FileUtilities.get_filesystem_type',
+            return_value=FilesystemInfo(fs_type, 'none', False)))
         stack.enter_context(mock.patch(
             'bleachbit.FileUtilities.free_space', return_value=0))
         stack.enter_context(mock.patch('bleachbit.Wipe.sync'))
@@ -383,7 +385,8 @@ class WipeTestCase(common.BleachbitTestCase):
 
     def test_wipe_path_not_directory(self):
         """Non-directory path should return early"""
-        with mock.patch('bleachbit.FileUtilities.get_filesystem_type', return_value=('ntfs',)), \
+        with mock.patch('bleachbit.FileUtilities.get_filesystem_type',
+                        return_value=FilesystemInfo('ntfs', 'none', False)), \
                 mock.patch('bleachbit.Wipe.os.path.isdir', return_value=False):
             results = list(wipe_path('/not-a-directory'))
         self.assertEqual(results, [])
