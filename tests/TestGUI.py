@@ -9,6 +9,9 @@
 Test case for module GUI
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 import os
 import unittest
 import time
@@ -16,6 +19,7 @@ import types
 import warnings
 from unittest import mock
 
+from tests import common
 from tests.common import pytest
 
 import bleachbit
@@ -24,7 +28,6 @@ from bleachbit.GtkShim import Gdk, Gio, GLib, GObject, Gtk, is_gtk_available
 from bleachbit.Language import get_supported_language_code_name_dict
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
-from tests import common
 
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
@@ -184,6 +187,7 @@ class GUITestCase(common.BleachbitTestCase):
     def test_get_window_info(self):
         """Test get_window_info"""
         gui = self.get_window()
+        # pylint: disable-next=possibly-used-before-assignment
         geo = get_window_info(gui)
         self.assertGreaterEqual(geo.x, 0)
         self.assertGreaterEqual(geo.y, 0)
@@ -213,6 +217,7 @@ class GUITestCase(common.BleachbitTestCase):
                  ("", None),
                  (None, None))
         for font_name, expected in tests:
+            # pylint: disable-next=possibly-used-before-assignment
             self.assertEqual(get_font_size_from_name(
                 font_name), expected, f"Font name '{font_name}' should return {expected}")
 
@@ -505,6 +510,7 @@ class GUITestCase(common.BleachbitTestCase):
 
     def test_shred_clipboard_empty_no_glib_warnings(self):
         """Empty clipboard must not trigger GLib g_array warnings."""
+        # pylint: disable-next=possibly-used-before-assignment
         clear_clipboard()
         self.refresh_gui()
 
@@ -633,6 +639,7 @@ class GUITestCase(common.BleachbitTestCase):
         model.append(parent_iter, ("Option1", False, "option1", "", ""))
         model.append(parent_iter, ("Option2", False, "option2", "", ""))
 
+        # pylint: disable-next=possibly-used-before-assignment
         tdm = TreeDisplayModel()
 
         def blocked_warning(_option_id):

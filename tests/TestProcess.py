@@ -7,6 +7,9 @@
 """
 Test case for the module Process
 """
+
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
 import os
 import sys
 from unittest import mock
@@ -98,6 +101,7 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
         """/proc fallback keeps a comm field with spaces intact"""
         stat_line = "1234 (Web Content) S 1 1234 1234 0 -1 4194304 0 0 0 0"
 
+        # pylint: disable-next=unused-argument
         def fake_open(path, *args, **kwargs):
             if path == '/proc/1234/stat':
                 return mock.mock_open(read_data=stat_line)()
@@ -250,6 +254,10 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
         with common.mock_missing_package(
                 'psutil',
                 clear_prefixes=('bleachbit.Process',)):
+            # `import x.y as Y` is deliberate: mock_missing_package drops the
+            # submodule from sys.modules but leaves the parent attribute, so
+            # `from x import Y` would hand back the stale module.
+            # pylint: disable=consider-using-from-import
             import bleachbit.Process as Process
             self.assertFalse(Process._has_psutil)
 
@@ -281,6 +289,10 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
         with common.mock_missing_package(
                 'psutil',
                 clear_prefixes=('bleachbit.Process',)):
+            # `import x.y as Y` is deliberate: mock_missing_package drops the
+            # submodule from sys.modules but leaves the parent attribute, so
+            # `from x import Y` would hand back the stale module.
+            # pylint: disable=consider-using-from-import
             import bleachbit.Process as Process
             self.assertFalse(Process._has_psutil)
             if IS_WINDOWS:

@@ -102,6 +102,11 @@ from win32file import (CreateFile, CreateFileW,
                        WriteFile,
                        LockFile, DeleteFile,
                        SetEndOfFile, FlushFileBuffers)
+from win32file import (GENERIC_READ, GENERIC_WRITE, FILE_BEGIN,
+                       FILE_SHARE_DELETE,
+                       FILE_SHARE_READ, FILE_SHARE_WRITE,
+                       OPEN_EXISTING, CREATE_ALWAYS, FILE_FLAG_BACKUP_SEMANTICS,
+                       DRIVE_REMOTE, DRIVE_CDROM, DRIVE_UNKNOWN)
 from winioctlcon import (FSCTL_GET_RETRIEVAL_POINTERS,
                          FSCTL_GET_VOLUME_BITMAP,
                          FSCTL_GET_NTFS_VOLUME_DATA,
@@ -109,11 +114,6 @@ from winioctlcon import (FSCTL_GET_RETRIEVAL_POINTERS,
                          FSCTL_SET_COMPRESSION,
                          FSCTL_SET_SPARSE,
                          FSCTL_SET_ZERO_DATA)
-from win32file import (GENERIC_READ, GENERIC_WRITE, FILE_BEGIN,
-                       FILE_SHARE_DELETE,
-                       FILE_SHARE_READ, FILE_SHARE_WRITE,
-                       OPEN_EXISTING, CREATE_ALWAYS, FILE_FLAG_BACKUP_SEMANTICS,
-                       DRIVE_REMOTE, DRIVE_CDROM, DRIVE_UNKNOWN)
 from win32con import (FILE_ATTRIBUTE_ENCRYPTED,
                       FILE_ATTRIBUTE_COMPRESSED,
                       FILE_ATTRIBUTE_SPARSE_FILE,
@@ -213,10 +213,8 @@ def logical_ranges_to_extents(ranges, bridge_compressed=False):
             # that are arranged with gaps of 16 clusters or less.
             merge_index = index
             while (merge_index + 2 < last_record and
-                   ranges[merge_index + 1][1] < 0 and
-                   ranges[merge_index + 2][1] >= 0 and
-                   ranges[merge_index + 2][1] - ranges[merge_index][1] <= 16 and
-                   ranges[merge_index + 2][1] - ranges[merge_index][1] > 0):
+                   ranges[merge_index + 1][1] < 0 <= ranges[merge_index + 2][1] and
+                   0 < ranges[merge_index + 2][1] - ranges[merge_index][1] <= 16):
                 merge_index += 2
 
             # Figure out length for this cluster range.
@@ -262,18 +260,17 @@ def extents_a_minus_b(a, b):
                 # Return this range of A unbroken.
                 yield (a_begin, a_end)
                 break
-            elif b_end < a_begin:
+            if b_end < a_begin:
                 # Too early in list, keep searching.
                 continue
-            elif b_begin <= a_begin:
+            if b_begin <= a_begin:
                 if b_end >= a_end:
                     # This range of A is completely covered by B.
                     # Do nothing and pass on to next range of A.
                     break
-                else:
-                    # This range of A is partially covered by B.
-                    # Remove the covered range from A and loop
-                    a_begin = b_end + 1
+                # This range of A is partially covered by B.
+                # Remove the covered range from A and loop
+                a_begin = b_end + 1
             else:
                 # This range of A is partially covered by B.
                 # Return the first part of A not covered.
@@ -281,8 +278,7 @@ def extents_a_minus_b(a, b):
                 yield (a_begin, b_begin - 1)
                 if b_end >= a_end:
                     break
-                else:
-                    a_begin = b_end + 1
+                a_begin = b_end + 1
         else:
             # Loop exhausted without a break: nothing in B covered the
             # rest of this A range, so yield what's left of it.
@@ -313,8 +309,8 @@ def choose_if_bridged(volume_handle, total_clusters,
         bridged_extents,
         volume_bitmap,
         allocated_extents)
-    bridged_extents = [x for x in extents_a_minus_b(bridged_extents,
-                                                    allocated_extents)]
+    bridged_extents = list(extents_a_minus_b(bridged_extents,
+                                             allocated_extents))
 
     extra_allocated_clusters = count_ballocated - count_oallocated
     saving_in_extents = len(orig_extents) - len(bridged_extents)
@@ -512,10 +508,9 @@ def determine_win_version():
     is_home = bool(ver_info[7] & VER_SUITE_PERSONAL)
     if ver_info[:2] == (6, 0):
         return "Vista", is_home
-    elif ver_info[0] >= 6:
+    if ver_info[0] >= 6:
         return "Later than Vista", is_home
-    else:
-        return "Something else", is_home
+    return "Something else", is_home
 
 
 def open_file(file_name, mode=GENERIC_READ):
@@ -710,7 +705,7 @@ def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
             if err_code == 38:     # when file size is 0.
                 # (38, 'DeviceIoControl', 'Reached the end of the file.')
                 return []
-            elif err_code in [122, 234]:  # when buffer not large enough.
+            if err_code in [122, 234]:  # when buffer not large enough.
                 # (122, 'DeviceIoControl',
                 # 'The data area passed to a system call is too small.')
                 # (234, 'DeviceIoControl', 'More data is available.')
@@ -724,7 +719,7 @@ def get_extents(file_handle, translate_to_extents=True, filename="<unknown>"):
             break
 
     if rp_struct is None:
-        raise Exception(
+        raise RuntimeError(
             f"Failed to get retrieval pointers for file '{filename}'")
 
     # At this point we have a FSCTL_GET_RETRIEVAL_POINTERS (rp) structure.

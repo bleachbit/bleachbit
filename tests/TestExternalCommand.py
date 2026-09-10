@@ -19,13 +19,13 @@ from unittest import mock
 
 import psutil
 
+from tests import common
 from tests.common import pytest
 
 import bleachbit
 from bleachbit import IS_WINDOWS
 from bleachbit.GtkShim import is_gtk_available
 from bleachbit.Options import options
-from tests import common
 
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
@@ -291,6 +291,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
             # Set environment variable for child process.
             cls._test_options_env = common.set_temporary_env(
                 'BLEACHBIT_TEST_OPTIONS_DIR', cls.tempdir)
+            # The context manager spans setUpClass and tearDownClass.
+            # pylint: disable-next=unnecessary-dunder-call
             cls._test_options_env.__enter__()
 
     @classmethod
@@ -364,6 +366,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         will launch an elevated process, so the child will exit.
         We must wait for the grandchild to finish.
         """
+        # The process is managed by the try/finally below.
+        # pylint: disable-next=consider-using-with
         process = subprocess.Popen(shred_command_string,
                                    shell=True, cwd=cwd)
         try:
@@ -416,6 +420,8 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         # The --no-load-cleaners makes it faster.
         args = [sys.executable, 'bleachbit.py',
                 '--gui', '--no-load-cleaners', '--no-check-online-updates', '--no-uac']
+        # The process is managed by the try/finally below.
+        # pylint: disable-next=consider-using-with
         p = subprocess.Popen(args, shell=False)
         try:
             # Let the first process start up before launching the second process.
@@ -477,6 +483,7 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
                     file_to_shred,  # The pathname must be last
                 ]
                 with mock.patch('bleachbit.Windows.sys.argv', custom_argv):
+                    # pylint: disable-next=possibly-used-before-assignment
                     Bleachbit(auto_exit=True, shred_paths=[
                               file_to_shred], uac=True)
 
@@ -562,6 +569,8 @@ p.wait()
 sys.exit(0)
 ''')
 
+        # The process is handed to the wait helper below.
+        # pylint: disable-next=consider-using-with
         process = subprocess.Popen([sys.executable, child_script])
 
         start_time = time.time()

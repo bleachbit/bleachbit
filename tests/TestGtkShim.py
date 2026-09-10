@@ -296,7 +296,7 @@ class GtkAvailabilityTestCase(unittest.TestCase):
 
     def test_require_gtk_reports_deferred_import_failure(self):
         """A deferred import failure raises RuntimeError and reports the reason."""
-        import bleachbit.GtkShim as shim  # pylint: disable=import-outside-toplevel
+        import bleachbit.GtkShim as shim
 
         with mock.patch.multiple(
             shim,

@@ -17,18 +17,17 @@ from unittest import mock
 
 from tests import common
 from bleachbit import IS_MAC
-if IS_MAC:
-    from bleachbit.Mac import (
-        delete_safari_cookies,
-        get_macos_locale,
-        is_full_disk_access_enabled,
-        is_safari_binarycookies,
-        list_safari_cookies,
-        notify_macos,
-        _read_safari_cookie_records,
-        _serialize_safari_cookie_records,
-        _write_safari_cookie_records,
-    )
+from bleachbit.Mac import (
+    delete_safari_cookies,
+    get_macos_locale,
+    is_full_disk_access_enabled,
+    is_safari_binarycookies,
+    list_safari_cookies,
+    notify_macos,
+    _read_safari_cookie_records,
+    _serialize_safari_cookie_records,
+    _write_safari_cookie_records,
+)
 
 
 class MacTestCase(common.BleachbitTestCase):
@@ -76,20 +75,21 @@ class MacTestCase(common.BleachbitTestCase):
         """is_full_disk_access_enabled() returns True on non-macOS."""
         if IS_MAC:
             self.skipTest('This test is only for non-macOS')
-        from bleachbit.Mac import is_full_disk_access_enabled
-        self.assertTrue(is_full_disk_access_enabled())
+        from bleachbit import Mac
+        self.assertTrue(Mac.is_full_disk_access_enabled())
 
     @common.skipUnlessMac
     def test_is_full_disk_access_enabled_no_probe_exists(self):
         """When no probe path exists, the function returns True (assume enabled)."""
-        fake_probes = ('~/nonexistent_fda_probe_1/', '~/nonexistent_fda_probe_2/')
+        fake_probes = ('~/nonexistent_fda_probe_1/',
+                       '~/nonexistent_fda_probe_2/')
         with mock.patch('bleachbit.Mac._FDA_PROBE_PATHS', fake_probes):
             self.assertTrue(is_full_disk_access_enabled())
 
     @common.skipUnlessMac
     def test_is_full_disk_access_enabled_eperm_detected(self):
         """EPERM on an existing probe path is detected as FDA not enabled."""
-        
+
         fake_probes = ('~/Library/Safari/',)
         real_exists = os.path.exists
 
@@ -174,7 +174,8 @@ class MacTestCase(common.BleachbitTestCase):
         """macos_version_name() with no argument names the running macOS."""
         from bleachbit.Mac import macos_version_name, MACOSX_DICT_LEGACY, MACOSX_DICT_MODERN
         name = macos_version_name()
-        self.assertIn(name, {**MACOSX_DICT_LEGACY, **MACOSX_DICT_MODERN}.values())
+        self.assertIn(name, {**MACOSX_DICT_LEGACY, **
+                      MACOSX_DICT_MODERN}.values())
 
     def test_macos_version_name_empty_mac_ver(self):
         """An empty platform.mac_ver() string yields None, not an exception."""
@@ -197,7 +198,8 @@ class MacTestCase(common.BleachbitTestCase):
         v_off = p_off + len(p_bytes)
         total_size = v_off + len(v_bytes)
         return (
-            struct.pack('<IIIIIIII', total_size, 0, 0, 0, d_off, n_off, p_off, v_off)
+            struct.pack('<IIIIIIII', total_size, 0, 0,
+                        0, d_off, n_off, p_off, v_off)
             + d_bytes + n_bytes + p_bytes + v_bytes
         )
 
@@ -224,7 +226,8 @@ class MacTestCase(common.BleachbitTestCase):
         self.assertFalse(is_safari_binarycookies(not_cookie))
 
         # Nonexistent file
-        self.assertFalse(is_safari_binarycookies('/nonexistent/path/cookies.binarycookies'))
+        self.assertFalse(is_safari_binarycookies(
+            '/nonexistent/path/cookies.binarycookies'))
 
     @common.skipUnlessMac
     def test_read_safari_cookies_rejects_bad_page_marker(self):
@@ -293,7 +296,8 @@ class MacTestCase(common.BleachbitTestCase):
         # Test writing via _write_safari_cookie_records
         write_path = os.path.join(self.tempdir, 'rewritten.binarycookies')
         _write_safari_cookie_records(write_path, pages)
-        self.assertEqual(list_safari_cookies(write_path), ['sub.domain.org', 'webkit.org'])
+        self.assertEqual(list_safari_cookies(write_path),
+                         ['sub.domain.org', 'webkit.org'])
 
     @common.skipUnlessMac
     def test_delete_safari_cookies_preview(self):
@@ -312,7 +316,8 @@ class MacTestCase(common.BleachbitTestCase):
         self.assertFalse(res['whole_file_deleted'])
         self.assertEqual(res['file_size_estimation_method'], 'ratio')
         # File should remain unmodified
-        self.assertEqual(list_safari_cookies(path), ['bugs.webkit.org', 'github.com'])
+        self.assertEqual(list_safari_cookies(path), [
+                         'bugs.webkit.org', 'github.com'])
 
     @common.skipUnlessMac
     def test_delete_safari_cookies_selective(self):
@@ -368,12 +373,14 @@ class MacTestCase(common.BleachbitTestCase):
         self.assertEqual(cookie_list, [('bleachbit.org',), ('webkit.org',)])
 
         # delete_cookies preview
-        preview = Cookie.delete_cookies(path, {'bleachbit.org'}, really_delete=False)
+        preview = Cookie.delete_cookies(
+            path, {'bleachbit.org'}, really_delete=False)
         self.assertEqual(preview['total_deleted'], 1)
         self.assertEqual(preview['total_kept'], 1)
 
         # delete_cookies execute
-        result = Cookie.delete_cookies(path, {'bleachbit.org'}, really_delete=True)
+        result = Cookie.delete_cookies(
+            path, {'bleachbit.org'}, really_delete=True)
         self.assertEqual(result['total_deleted'], 1)
         self.assertEqual(result['total_kept'], 1)
         self.assertEqual(Cookie.list_cookies(path), [('bleachbit.org',)])
@@ -403,7 +410,8 @@ class MacTestCase(common.BleachbitTestCase):
 
             domains = list_safari_cookies(path)
             self.assertIsInstance(domains, list)
-            self.assertEqual(Cookie.list_cookies(path), [(d,) for d in domains])
+            self.assertEqual(Cookie.list_cookies(
+                path), [(d,) for d in domains])
 
             for domain in domains:
                 self.assertIsInstance(domain, str)

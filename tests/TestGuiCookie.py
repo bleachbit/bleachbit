@@ -14,9 +14,9 @@ import types
 import unittest
 from unittest import mock
 
-from bleachbit.GtkShim import is_gtk_available
-
 from tests import common
+
+from bleachbit.GtkShim import is_gtk_available
 
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
@@ -40,6 +40,7 @@ class GuiCookieTestCase(common.BleachbitTestCase):
         pane = self._fake_pane(filename, ['evil.example'])
         with mock.patch('bleachbit.FileUtilities.os.path.islink',
                         side_effect=lambda p: p == filename):
+            # pylint: disable-next=possibly-used-before-assignment
             result = CookieManagerPane.save_changes(pane)
         self.assertFalse(result)
         with open(filename, encoding='utf-8') as f:

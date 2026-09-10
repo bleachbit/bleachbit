@@ -37,6 +37,8 @@ def write_nsis_expressions_to_files():
         (uninstall_locale_expressions, _LOCALE_TO_UNINSTALL_PATH),
     ]
     for nsis_expressions, filename in nsisexpressions_filename:
+        # NSIS reads these files in the platform default encoding.
+        # pylint: disable-next=unspecified-encoding
         with open(filename, 'w') as f:
             f.write(nsis_expressions)
 

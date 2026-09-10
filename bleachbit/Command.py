@@ -39,6 +39,7 @@ from bleachbit.Language import get_text as _
 if IS_WINDOWS:
     import bleachbit.Windows
 else:
+    # pylint: disable-next=redefined-builtin
     from bleachbit.General import WindowsError
 
 logger = logging.getLogger(__name__)
@@ -98,6 +99,7 @@ class Delete:
         if really_delete:
             try:
                 deleted = FileUtilities.delete(self.path, self.shred)
+            # pylint: disable-next=possibly-used-before-assignment
             except WindowsError as e:
                 # WindowsError: [Error 32] The process cannot access the file because it is being
                 # used by another process: 'C:\\Documents and
@@ -105,6 +107,7 @@ class Delete:
                 if not e.winerror == 32:
                     raise
 
+                # pylint: disable-next=possibly-used-before-assignment
                 bleachbit.Windows.delete_locked_file(self.path)
 
                 if self.shred:
@@ -161,7 +164,6 @@ class Function:
         """Execute the function and return results"""
 
         # In FreeBSD, sqlite3 is a separate package
-        # pylint: disable=import-outside-toplevel
         import sqlite3
         if self.path is not None and FileUtilities.whitelisted(self.path):
             yield ret_keep_list(self.path)
@@ -190,7 +192,7 @@ class Function:
                 if isinstance(func_ret, types.GeneratorType):
                     # function returned generator
                     for func_ret in func_ret:
-                        if True == func_ret or isinstance(func_ret, tuple):
+                        if func_ret is True or isinstance(func_ret, tuple):
                             # Return control to GTK idle loop.
                             # If tuple, then display progress.
                             yield func_ret

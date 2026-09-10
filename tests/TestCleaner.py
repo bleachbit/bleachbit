@@ -54,7 +54,7 @@ def actions_to_cleaner(action_strs):
 def register_all_cleaners():
     """Register all cleaners for testing; leaves winapp2.ini in the shared personal_cleaners_dir"""
     if IS_WINDOWS:
-        from tests.TestWinapp import get_winapp2  # pylint: disable=import-outside-toplevel
+        from tests.TestWinapp import get_winapp2
 
         os.makedirs(bleachbit.personal_cleaners_dir, exist_ok=True)
         print(f"personal_cleaners_dir: {bleachbit.personal_cleaners_dir}")
@@ -422,6 +422,8 @@ class CleanerTestCase(common.BleachbitTestCase):
             def __exit__(self, *exc):
                 return False
 
+        # The nesting is the scaffolding that patches the filesystem.
+        # pylint: disable-next=too-many-nested-blocks
         try:
             glob.iglob = lambda path, *args, **kwargs: []
             os.path.exists = lambda path: False
@@ -492,9 +494,11 @@ class CleanerTestCase(common.BleachbitTestCase):
             with mock.patch('os.path.expanduser',
                             lambda path, home=home: path.replace('~', home, 1)):
                 cleaner.init_whitelist()
-            self.assertTrue(cleaner.whitelisted(home + '/.cache/mozilla/x'), home)
+            self.assertTrue(cleaner.whitelisted(
+                home + '/.cache/mozilla/x'), home)
             self.assertTrue(cleaner.whitelisted(home + '/.cache/kwin/y'), home)
-            self.assertFalse(cleaner.whitelisted(home + '/.cache/other/z'), home)
+            self.assertFalse(cleaner.whitelisted(
+                home + '/.cache/other/z'), home)
             self.assertFalse(cleaner.whitelisted('/tmp/nope'), home)
 
     @common.skipIfWindows

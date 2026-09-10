@@ -31,7 +31,7 @@ if IS_POSIX:
     from bleachbit import Unix
 elif IS_WINDOWS:
     from bleachbit import Windows
-elif not (IS_POSIX or IS_WINDOWS):
+else:
     raise RuntimeError(f"Unknown OS '{os.name}'")
 
 
@@ -286,6 +286,8 @@ class System(Cleaner):
         #
         # options just for Microsoft Windows
         #
+        # IS_LINUX implies IS_POSIX, which is what binds Unix; pylint can't see that.
+        # pylint: disable-next=possibly-used-before-assignment
         has_dns_flush = IS_WINDOWS or (IS_LINUX and Unix.can_flush_dns())
         if has_dns_flush:
             # TRANSLATORS: This is a label for the option to clear the system DNS cache.
@@ -395,7 +397,7 @@ class System(Cleaner):
             for path in MENU_DIRS:
                 dirname = os.path.expanduser(path)
                 for filename in children_in_directory(dirname, False):
-                    # pylint: disable=possibly-used-before-assignment
+                    # pylint: disable-next=possibly-used-before-assignment
                     if filename.endswith('.desktop') and Unix.is_broken_xdg_desktop(filename):
                         yield Command.Delete(filename)
 
@@ -450,6 +452,7 @@ class System(Cleaner):
                 '%WindowsSystem%\\wbem\\Logs\\*.log', )
 
             for path in paths:
+                # pylint: disable-next=possibly-used-before-assignment
                 for expanded in Windows.expand_windows_system_vars(path):
                     expanded = os.path.expandvars(expanded)
                     for globbed in glob.iglob(expanded):
@@ -486,9 +489,9 @@ class System(Cleaner):
 
             def gtk_purge_items():
                 """Purge GTK items"""
-                from bleachbit.GtkShim import require_gtk  # pylint: disable=import-outside-toplevel
+                from bleachbit.GtkShim import require_gtk
                 require_gtk()
-                from bleachbit.GtkShim import Gtk  # pylint: disable=import-outside-toplevel
+                from bleachbit.GtkShim import Gtk
                 Gtk.RecentManager().get_default().purge_items()
                 yield 0
 
@@ -562,7 +565,7 @@ class System(Cleaner):
                 def func_clear_clipboard():
                     """Command function to clear clipboard"""
                     # GuiUtil is GTK-specific
-                    from bleachbit.GtkShim import require_gtk  # pylint: disable=import-outside-toplevel
+                    from bleachbit.GtkShim import require_gtk
                     require_gtk()
                     import bleachbit.GuiUtil
                     bleachbit.GuiUtil.clear_clipboard()
@@ -600,7 +603,6 @@ class System(Cleaner):
         if IS_WINDOWS and 'recycle_bin' == option_id:
             # This method allows shredding
             recycled_any = False
-            # pylint: disable=possibly-used-before-assignment
             for path in Windows.get_recycle_bin():
                 recycled_any = True
                 yield Command.Delete(path)
@@ -730,7 +732,6 @@ def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None, allow_lo
         # To indicate an ongoing operation, include the ellipsis as literal
         # Unicode (…) or as Unicode escape (\u2026).
         cb_progress(_('Importing cleaners from Winapp2.ini\u2026'))
-        # pylint: disable=import-outside-toplevel
         from bleachbit import Winapp
         yield from Winapp.load_cleaners(cb_progress)
 
@@ -780,6 +781,7 @@ class CustomFileAction(Action.ActionProvider):
         self.paths = paths
 
     def get_commands(self):
+        """Yield a shred command for each path"""
         for path in self.paths:
             path = simpler_cleaner_process_path(path)
             if not path:
@@ -810,6 +812,7 @@ class CustomWipeAction(Action.ActionProvider):
         self.display = _("Wipe empty space %s") % path
 
     def get_commands(self):
+        """Yield the command that wipes the free space"""
         def wipe_path_func():
             yield from wipe_path(self.path, idle=True)
             yield 0

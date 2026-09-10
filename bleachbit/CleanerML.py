@@ -342,7 +342,6 @@ class CleanerML:
         """<localizations> element under <cleaner>"""
         if not IS_POSIX:
             return
-        # pylint: disable=import-outside-toplevel
         from bleachbit import Unix
         for localization_node in localization_nodes:
             for child_element in list(localization_node):
@@ -373,6 +372,7 @@ class CleanerML:
             elif search_type == 'winreg':
                 if not IS_WINDOWS:
                     continue
+                # pylint: disable-next=possibly-used-before-assignment
                 value_list = read_registry_key(value_element.attrib.get(
                     'path', ''), value_element.attrib.get('name', ''))
                 if value_list is None:

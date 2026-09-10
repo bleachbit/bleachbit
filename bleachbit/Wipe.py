@@ -163,6 +163,7 @@ def fitrim(pathname):
             # Set range to the entire filesystem
             trim_range = struct.pack(
                 'QQQ', 0, stats.f_blocks * stats.f_bsize, 0)
+            # pylint: disable-next=possibly-used-before-assignment
             fcntl.ioctl(fd, fitrim_id, trim_range)
             logger.debug(
                 "Successfully performed FITRIM on filesystem at %s", pathname)
@@ -196,7 +197,6 @@ def wipe_write(path):
     """Overwrite a file's contents with zeros without truncating it.
 
     Return the open file handle; the caller must close it."""
-    # pylint: disable=import-outside-toplevel
     from bleachbit.FileUtilities import getsize, _open_nofollow_fd
     size = getsize(path)
     flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
@@ -233,13 +233,11 @@ def wipe_contents(path):
     shown that most of today's media can be effectively cleared
     by one overwrite"
     """
-    # pylint: disable=import-outside-toplevel
     from bleachbit.FileUtilities import truncate_f
 
-    # pylint: disable=possibly-used-before-assignment
+    # pylint: disable-next=possibly-used-before-assignment
     if IS_WINDOWS and IsUserAnAdmin():
         # The import placement here avoids a circular import.
-        # pylint: disable=import-outside-toplevel
         from bleachbit.WindowsWipe import file_wipe, UnsupportedFileSystemError
         from bleachbit.FileUtilities import pywinerror
         try:
@@ -265,7 +263,9 @@ def wipe_contents(path):
                         # Errno 13 Permission Denied
                         pass
             # translate exception to mark file to deletion in Command.py
-            raise WindowsError(e.winerror, e.strerror)
+            # WindowsError is a real builtin, reachable only under IS_WINDOWS.
+            # pylint: disable-next=undefined-variable
+            raise WindowsError(e.winerror, e.strerror) from e
         except UnsupportedFileSystemError:
             warnings.warn(
                 _('There was at least one file on a file system that does not support advanced overwriting.'), UserWarning)
@@ -278,6 +278,8 @@ def wipe_contents(path):
             if os.path.islink(path):
                 raise OSError(
                     errno.EACCES, 'refusing to truncate a link', path)
+            # f is closed by the try/finally below.
+            # pylint: disable-next=consider-using-with
             f = open(path, 'wb')
     else:
         f = wipe_write(path)
@@ -329,7 +331,6 @@ def wipe_name(pathname1):
 def wipe_path(pathname, idle=False):
     """Wipe the free space in the path
     This function uses an iterator to update the GUI."""
-    # pylint: disable=import-outside-toplevel
     from bleachbit.FileUtilities import delete, free_space, get_filesystem_type, truncate_f
 
     def temporaryfile():
@@ -339,6 +340,8 @@ def wipe_path(pathname, idle=False):
         f = None
         while True:
             try:
+                # The temporary file outlives the retry loop and is deleted at exit.
+                # pylint: disable-next=consider-using-with
                 f = tempfile.NamedTemporaryFile(
                     dir=pathname,
                     suffix=__random_string(maxlen),
@@ -368,9 +371,8 @@ def wipe_path(pathname, idle=False):
         """Return (percent, seconds) to complete"""
         remaining_bytes = free_space(pathname)
         done_bytes = start_free_bytes - remaining_bytes
-        if done_bytes < 0:
-            # maybe user deleted large file after starting wipe
-            done_bytes = 0
+        # maybe user deleted large file after starting wipe
+        done_bytes = max(done_bytes, 0)
         if 0 == start_free_bytes:
             done_percent = 0
         else:
@@ -425,8 +427,7 @@ def wipe_path(pathname, idle=False):
                 # Linux gives errno 122 Disk quota exceeded (EDQUOT)
                 if e.errno in (errno.EMFILE, errno.ENOSPC, errno.EDQUOT):
                     break
-                else:
-                    raise
+                raise
 
             # Remember to delete
             files.append(f)

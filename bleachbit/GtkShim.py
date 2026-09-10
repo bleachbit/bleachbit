@@ -306,6 +306,8 @@ def _check_gtk_available():
     Returns:
         tuple: (success: bool, reason: str or None)
     """
+    # gi is imported lazily into a module global.
+    # pylint: disable-next=global-statement
     global gi
 
     with warnings.catch_warnings():
@@ -332,6 +334,8 @@ def _check_gtk_available():
                 bleachbit_exe_path, 'lib', 'girepository-1.0')
             if os.path.isdir(typelib_dir):
                 logger.debug('Setting typelib search path to: %s', typelib_dir)
+                # PyGObject exposes Repository only under gi._gi.
+                # pylint: disable-next=protected-access
                 gi._gi.Repository.get_default().prepend_search_path(typelib_dir)
             else:
                 logger.warning('Typelib directory not found: %s', typelib_dir)
@@ -407,6 +411,8 @@ def _ensure_gtk_libraries():
     display are available.  Does nothing when the cheap preconditions
     have failed.
     """
+    # The import result is cached for the process.
+    # pylint: disable-next=global-statement
     global _gtk_libraries_imported, _gtk_libraries_available, _gtk_unavailable_reason
     if _gtk_libraries_imported:
         return _gtk_libraries_available
@@ -427,6 +433,8 @@ def _init_gtk():
     :func:`_ensure_gtk_libraries`; ``is_gtk_available()`` returns
     ``False`` and ``require_gtk()`` raises until it succeeds.
     """
+    # The precondition check runs once per process.
+    # pylint: disable-next=global-statement
     global _gtk_preconditions_met, _gtk_unavailable_reason
 
     _gtk_preconditions_met, _gtk_unavailable_reason = _check_gtk_available()
@@ -466,6 +474,28 @@ def require_gtk():
         raise RuntimeError(f'GTK is required but not available: {reason}')
 
 
+# PyGObject 3.56 calls both from inside Gtk.main_iteration_do() and
+# Gtk.Application.run(). Python 3.14 deprecated them; 3.16 removes them.
+_ASYNCIO_DEPRECATIONS = (
+    r".*asyncio\.AbstractEventLoopPolicy.*",
+    r".*asyncio\.get_event_loop_policy.*",
+)
+
+
+def ignore_pygobject_asyncio_warnings():
+    """Ignore PyGObject's asyncio deprecation warnings under Python 3.14+.
+
+    This changes the active filter list rather than a catch_warnings() copy,
+    so a thread that copies the list later still sees it. Use the context
+    manager below to scope the filters instead.
+    """
+    if sys.version_info < (3, 14):
+        return
+    for message in _ASYNCIO_DEPRECATIONS:
+        warnings.filterwarnings(
+            "ignore", message=message, category=DeprecationWarning)
+
+
 @contextmanager
 def suppress_pygobject_asyncio_warnings():
     """Suppress known PyGObject asyncio warnings under Python 3.14+."""
@@ -473,14 +503,7 @@ def suppress_pygobject_asyncio_warnings():
         yield
         return
     with warnings.catch_warnings():
-        warnings.filterwarnings(
-            "ignore",
-            message=".*asyncio.AbstractEventLoopPolicy.*",
-            category=DeprecationWarning)
-        warnings.filterwarnings(
-            "ignore",
-            message=".*asyncio.get_event_loop_policy.*",
-            category=DeprecationWarning)
+        ignore_pygobject_asyncio_warnings()
         yield
 
 

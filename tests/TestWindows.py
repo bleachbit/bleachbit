@@ -8,6 +8,9 @@
 Test case for module Windows
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 
 # standard imports
 import ctypes
@@ -140,7 +143,12 @@ if bleachbit.IS_WINDOWS:
     import winreg
     from win32com.shell import shell
 
+    # pylint: disable-next=ungrouped-imports
     from bleachbit import Windows
+else:
+    # WindowsError is a builtin only on Windows
+    # pylint: disable-next=redefined-builtin
+    from bleachbit.General import WindowsError
 
 
 def put_objects_into_recycle_bin():
@@ -198,6 +206,7 @@ class WindowsLinksMixIn():
         link_path = Path(linkname)
         self.assertTrue(link_path.is_symlink())
         self.assertTrue(link_path.is_dir())
+        # pylint: disable-next=possibly-used-before-assignment
         self.assertFalse(Windows.is_junction(linkname))
         self.assertFalse(FileUtilities.is_normal_directory(linkname))
 
@@ -293,6 +302,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     """Test case for module Windows"""
 
     def skipUnlessAdmin(self):
+        # pylint: disable-next=possibly-used-before-assignment
         if not shell.IsUserAnAdmin():
             self.skipTest('requires administrator privileges')
 
@@ -550,8 +560,9 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             pathname = self.mkstemp(suffix=test)
             time.sleep(5)  # avoid race condition
             self.assertExists(pathname)
-            logger.debug('delete_locked_file(%s) ' % pathname)
+            logger.debug('delete_locked_file(%s) ', pathname)
             if not shell.IsUserAnAdmin():
+                # pylint: disable-next=possibly-used-before-assignment
                 with self.assertRaises(WindowsError):
                     delete_locked_file(pathname)
             else:
@@ -641,6 +652,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         # create a nested key
         key = 'Software\\BleachBit\\DeleteThisKey'
         subkey = key + '\\AndThisKey'
+        # pylint: disable-next=possibly-used-before-assignment
         hkey = winreg.CreateKey(winreg.HKEY_CURRENT_USER, subkey)
         hkey.Close()
 
@@ -691,6 +703,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         # Windows Update is sometimes running.
         self.assertIsInstance(is_service_running('wuauserv'), bool)
         # Non-existent service should raise an error.
+        # pylint: disable-next=possibly-used-before-assignment
         with self.assertRaises(pywintypes.error):
             is_service_running('does_not_exist')
         # None should raise an error.
@@ -888,6 +901,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.skipTest('requires administrator privileges')
 
         def _service_exists_and_enabled(svc):
+            # pylint: disable-next=possibly-used-before-assignment
             scm = win32service.OpenSCManager(
                 None, None, win32service.SC_MANAGER_CONNECT)
             try:
@@ -895,7 +909,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                     scm, svc, win32service.SERVICE_QUERY_STATUS | win32service.SERVICE_QUERY_CONFIG)
                 try:
                     cfg = win32service.QueryServiceConfig(hs)
-                    return True if cfg[1] != win32service.SERVICE_DISABLED else False
+                    return cfg[1] != win32service.SERVICE_DISABLED
                 finally:
                     win32service.CloseServiceHandle(hs)
             except pywintypes.error:
@@ -912,9 +926,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                         scm, svc, win32service.SERVICE_ALL_ACCESS)
                 except pywintypes.error:
                     return False
-                else:
-                    win32service.CloseServiceHandle(hs)
-                    return True
+                win32service.CloseServiceHandle(hs)
+                return True
             finally:
                 win32service.CloseServiceHandle(scm)
 
@@ -1208,7 +1221,6 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         """
 
         from bleachbit.WindowsWipe import file_wipe, open_file, close_file, file_make_sparse
-        from bleachbit.Windows import elevate_privileges
         from win32con import GENERIC_WRITE, WRITE_DAC
 
         dirname = self.mkdtemp()
@@ -1220,8 +1232,9 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
             def _write_file(longname, contents):
                 self.write_file(longname, contents)
-                import win32api
                 shortname = extended_path_undo(
+                    # win32api is imported on Windows, where this test runs.
+                    # pylint: disable-next=possibly-used-before-assignment
                     win32api.GetShortPathName(extended_path(longname)))
                 self.assertExists(shortname)
                 return shortname
@@ -1231,6 +1244,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 import ntsecuritycon as con
 
                 user, _, _ = win32security.LookupAccountName(
+                    # pylint: disable-next=possibly-used-before-assignment
                     "", win32api.GetUserName())
                 dacl = win32security.ACL()
                 dacl.AddAccessDeniedAce(
@@ -1239,6 +1253,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                                               None, None, dacl, None)
 
             def _test_wipe(contents, deny_access=False, is_sparse=False):
+                # The closure runs inside the iteration that defines these names.
+                # pylint: disable=cell-var-from-loop
                 shortname = _write_file(longname, contents)
                 if deny_access or is_sparse:
                     fh = open_file(extended_path(longname),
@@ -1248,8 +1264,10 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                     if deny_access:
                         _deny_access(fh)
                     close_file(fh)
-                logger.debug('test_file_wipe(): filename length={}, shortname length ={}, contents length={}, is_sparse={}'.format(
-                    len(longname), len(shortname), len(contents), is_sparse))
+                logger.debug(
+                    'test_file_wipe(): filename length=%d, '
+                    'shortname length =%d, contents length=%d, is_sparse=%s',
+                    len(longname), len(shortname), len(contents), is_sparse)
                 if shell.IsUserAnAdmin():
                     # wiping requires admin privileges
                     file_wipe(shortname)

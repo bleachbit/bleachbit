@@ -212,6 +212,8 @@ def download_models(models_dir=DEFAULT_MODELS_DIR,
     return True
 
 
+# Reordering the parameters would break the call sites.
+# pylint: disable-next=keyword-arg-before-vararg
 def generate_emails(number_of_emails,
                     email_output_dir,
                     models_dir=DEFAULT_MODELS_DIR,

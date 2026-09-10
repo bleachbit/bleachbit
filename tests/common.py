@@ -9,6 +9,9 @@
 Common code for unit tests
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 import contextlib
 import os
 import re
@@ -22,6 +25,8 @@ from pathlib import Path
 from unittest import mock
 
 try:
+    # pytest is re-exported for the test modules.
+    # pylint: disable-next=unused-import
     import pytest
 except ImportError:  # pytest is optional for plain unittest discovery
     class _MarkShimMeta(type):
@@ -31,6 +36,8 @@ except ImportError:  # pytest is optional for plain unittest discovery
         ``@pytest.mark.foo(...)`` (with parens).
         """
         def __getattr__(cls, _name):
+            # func is positional so the shim works with and without parentheses.
+            # pylint: disable-next=keyword-arg-before-vararg
             def decorator(func=None, *_args, **_kwargs):
                 if callable(func):
                     # Used as @pytest.mark.foo without parentheses.
@@ -48,12 +55,9 @@ except ImportError:  # pytest is optional for plain unittest discovery
 import bleachbit
 from bleachbit import logger
 
-if bleachbit.IS_WINDOWS:
-    import winreg
-    import win32gui
-    from bleachbit import Windows
 import bleachbit.Options
 from bleachbit.Bootstrap import bootstrap
+from bleachbit.GtkShim import ignore_pygobject_asyncio_warnings
 from bleachbit.FileUtilities import (
     children_in_directory,
     extended_path,
@@ -61,6 +65,12 @@ from bleachbit.FileUtilities import (
     is_normal_directory,
 )
 from bleachbit.General import gc_collect, sudo_mode
+
+if bleachbit.IS_WINDOWS:
+    import winreg
+    import win32gui
+    # pylint: disable-next=ungrouped-imports
+    from bleachbit import Windows
 
 # /etc/locale.alias may list the qaa-qtz range, which is reserved for
 # private use rather than a concrete locale. Skip it if present.
@@ -230,17 +240,7 @@ class BleachbitTestCase(unittest.TestCase):
         filter in the active scope (``setUpClass``/``setUp``) makes it visible
         to every copy of the filter list, including the worker thread's.
         """
-        if sys.version_info >= (3, 14):
-            warnings.filterwarnings(
-                "ignore",
-                message=r".*asyncio\.get_event_loop_policy.*",
-                category=DeprecationWarning,
-            )
-            warnings.filterwarnings(
-                "ignore",
-                message=r".*asyncio\.AbstractEventLoopPolicy.*",
-                category=DeprecationWarning,
-            )
+        ignore_pygobject_asyncio_warnings()
 
     @classmethod
     def _patch_options_paths(cls):
@@ -679,6 +679,7 @@ def validate_result(self, result, really_delete=False, allow_vanishing=False):
 
 def get_winregistry_value(key, subkey):
     try:
+        # pylint: disable-next=possibly-used-before-assignment
         with winreg.OpenKey(key, subkey) as hkey:
             return winreg.QueryValue(hkey, None)
     except FileNotFoundError:
@@ -695,6 +696,7 @@ def get_opened_windows_titles():
     opened_windows_titles = []
 
     def enumerate_opened_windows_titles(hwnd, _ctx):
+        # pylint: disable-next=possibly-used-before-assignment
         text = win32gui.GetWindowText(hwnd)
         if win32gui.IsWindowVisible(hwnd) and text:
             opened_windows_titles.append(text)

@@ -30,6 +30,10 @@ from tests import common
 
 if bleachbit.IS_WINDOWS:
     import pywintypes
+else:
+    # WindowsError is a builtin only on Windows
+    # pylint: disable-next=redefined-builtin, ungrouped-imports
+    from bleachbit.General import WindowsError
 
 
 class WipeTestCase(common.BleachbitTestCase):
@@ -152,6 +156,7 @@ class WipeTestCase(common.BleachbitTestCase):
         not follow a symlink planted at the path in the meantime.
         """
         filename = self.write_file('wipe_contents_locked_fallback', b'abc')
+        # pylint: disable-next=possibly-used-before-assignment
         locked_error = pywintypes.error(32, 'CreateFile', 'locked')
         with mock.patch('bleachbit.Wipe.IsUserAnAdmin', return_value=True), \
                 mock.patch('bleachbit.WindowsWipe.file_wipe',
@@ -159,6 +164,7 @@ class WipeTestCase(common.BleachbitTestCase):
                 mock.patch('bleachbit.Wipe.os.path.islink',
                            side_effect=lambda p: p == filename), \
                 mock.patch('bleachbit.FileUtilities.truncate_f') as mock_truncate_f:
+            # pylint: disable-next=possibly-used-before-assignment
             with self.assertRaises(WindowsError):
                 wipe_contents(filename)
         mock_truncate_f.assert_not_called()

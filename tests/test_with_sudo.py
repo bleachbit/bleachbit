@@ -26,7 +26,9 @@ from importlib import import_module
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import common test utilities
+# pylint: disable-next=wrong-import-position
 from tests import common
+# pylint: disable-next=wrong-import-position
 from bleachbit import IS_POSIX
 
 
@@ -41,6 +43,8 @@ def discover_sudo_tests():
         'tests.TestUnix',
     ]
 
+    # The nesting mirrors module, class, and method discovery.
+    # pylint: disable-next=too-many-nested-blocks
     for module_name in test_modules:
         try:
             module = import_module(module_name)

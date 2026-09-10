@@ -8,6 +8,9 @@
 Test case for module GuiStartup
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 import os
 import shutil
 import stat
@@ -39,6 +42,7 @@ class StubOptions:
         """Set a option value."""
         self.values[key] = value
 
+    # pylint: disable-next=unused-argument
     def get_tree(self, parent, child):
         """Return whether a tree option is selected."""
         return False
@@ -81,6 +85,12 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         with common.mock_missing_package(
                 'requests',
                 clear_prefixes=('bleachbit.Network', 'bleachbit.Update', 'bleachbit.GuiStartup')):
+            # `import x.y as Y` is deliberate: mock_missing_package drops the
+            # submodule from sys.modules but leaves the parent attribute, so
+            # `from x import Y` would hand back the stale module.
+            # pylint: disable=consider-using-from-import
+            # pylint: disable=reimported
+            # pylint: disable-next=redefined-outer-name
             import bleachbit.GuiStartup as GuiStartup
             missing = GuiStartup._get_missing_dependencies()
             self.assertIn('requests', missing)

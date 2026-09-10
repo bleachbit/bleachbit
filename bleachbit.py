@@ -54,12 +54,12 @@ def main():
     if 1 == len(sys.argv) and have_gui and not check_wayland_and_root():
         # Import GUI inside the condition for Linux packagers to
         # separate GUI into another package.
-        import bleachbit.GuiApplication  # pylint: disable=import-outside-toplevel
+        import bleachbit.GuiApplication
         app = bleachbit.GuiApplication.Bleachbit()
         sys.exit(app.run(sys.argv))
 
     # Either CLI args were provided or no display is available
-    import bleachbit.CLI  # pylint: disable=import-outside-toplevel
+    import bleachbit.CLI
     # If no args and defaulting to CLI, print usage information
     if 1 == len(sys.argv) and not have_gui:
         sys.argv.append('--help')

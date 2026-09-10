@@ -28,6 +28,7 @@ from bleachbit.Language import get_text as _
 
 require_gtk()
 
+# pylint: disable-next=wrong-import-order, wrong-import-position
 from gi.repository import Pango
 
 

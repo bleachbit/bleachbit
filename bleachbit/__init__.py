@@ -11,7 +11,6 @@ Code that is commonly shared throughout BleachBit
 import os
 import re
 import sys
-from configparser import RawConfigParser  # used in other files
 
 from bleachbit import Log
 
@@ -258,6 +257,7 @@ appicon_path = None
 for __icon in __icons:
     if os.path.exists(__icon):
         appicon_path = __icon
+
 
 def _resolve_locale_dir(exe_path, is_linux, is_mac, is_windows, is_netbsd, is_bsd,
                         path_exists=os.path.exists):

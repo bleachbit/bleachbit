@@ -146,7 +146,6 @@ class TreeDisplayModel:
                 child = model.iter_next(child)
             if not any_child_enabled:
                 model[i][1] = False
-        return
 
 
 class TreeInfoModel:
@@ -156,7 +155,7 @@ class TreeInfoModel:
         self.tree_store = Gtk.TreeStore(
             GObject.TYPE_STRING, GObject.TYPE_BOOLEAN, GObject.TYPE_PYOBJECT, GObject.TYPE_STRING, GObject.TYPE_STRING)
         if not self.tree_store:
-            raise Exception("cannot create tree store")
+            raise RuntimeError("cannot create tree store")
         self.row_changed_handler_id = None
         self.refresh_rows()
         self.tree_store.set_sort_func(3, self.sort_func)

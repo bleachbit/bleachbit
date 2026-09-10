@@ -9,6 +9,9 @@
 Test case for module Options
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 import errno
 import os
 import sys
@@ -603,6 +606,8 @@ protected_path = /tmp = True
 
                     # blocks mid-flush so a concurrent lock probe can check who holds the lock
                     def blocking_schedule_flush():
+                        # The closure runs inside the iteration that defines these names.
+                        # pylint: disable=cell-var-from-loop
                         entered.set()
                         finish.wait(timeout=5)
                         real_schedule_flush()
@@ -616,6 +621,9 @@ protected_path = /tmp = True
                         self.assertTrue(
                             entered.wait(timeout=5),
                             f'{name}() never reached __schedule_flush')
+                        # A `with` would block; this probes who holds the
+                        # lock and must give up after the timeout.
+                        # pylint: disable=consider-using-with
                         acquired = o._flush_lock.acquire(timeout=0.2)
                         if acquired:
                             o._flush_lock.release()
