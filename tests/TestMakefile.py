@@ -17,6 +17,32 @@ from bleachbit.FileUtilities import exe_exists
 from bleachbit.General import get_executable, run_external
 
 
+def _find_gnu_make():
+    """Return a GNU Make executable, or None.
+
+    The Makefile is GNU-specific (ifdef, ifneq, abspath, $(shell)). On
+    FreeBSD /usr/bin/make is BSD make, so honor $MAKE and prefer gmake.
+    """
+    candidates = []
+    env_make = os.environ.get('MAKE')
+    if env_make:
+        candidates.append(env_make)
+    # Prefer `make` when it is GNU (Linux/macOS). On FreeBSD, /usr/bin/make
+    # is BSD make, so the GNU Make check fails and we fall through to gmake.
+    candidates.extend(('make', 'gmake'))
+    seen = set()
+    for exe in candidates:
+        if exe in seen:
+            continue
+        seen.add(exe)
+        if not exe_exists(exe) and not os.path.isfile(exe):
+            continue
+        (_rc, stdout, stderr) = run_external([exe, '--version'])
+        if 'GNU Make' in (stdout or '') + (stderr or ''):
+            return exe
+    return None
+
+
 class MakefileTestCase(common.BleachbitTestCase):
     """Test case for Makefile"""
 
@@ -36,14 +62,22 @@ class MakefileTestCase(common.BleachbitTestCase):
             'xgettext_exe': ('xgettext', 'xgettext (run `apt install gettext` or equivalent)'),
             'tar_exe': ('tar', 'tar (not found in PATH)'),
         }
-        # make is only used on non-Windows; the Windows path returns early
-        # before invoking it, so do not require it there.
+        # GNU make is only used on non-Windows; the Windows path returns
+        # early before invoking it, so do not require it there.
         if not IS_WINDOWS:
-            tools['make_exe'] = ('make', 'make (not found in PATH)')
+            self.make_exe = _find_gnu_make()
+            if not self.make_exe:
+                missing_make = True
+            else:
+                missing_make = False
         else:
             self.make_exe = None
+            missing_make = False
 
         missing = []
+        if missing_make:
+            missing.append(
+                'GNU Make (gmake or GNU make; set MAKE= if it is not in PATH)')
         for attr, (tool_name, error_msg) in tools.items():
             exe_name = tool_name + exe_suffix
             if exe_exists(exe_name):
