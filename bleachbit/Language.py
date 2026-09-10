@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 import gettext
 import locale
@@ -414,7 +401,7 @@ def setup_translation():
         locale.bindtextdomain(text_domain, locale_dir)
         locale.textdomain(text_domain)
     elif IS_WINDOWS:
-        from bleachbit.Windows import load_i18n_dll
+        from bleachbit.Windows import flush_gettext_cache, load_i18n_dll
         libintl = load_i18n_dll()
         if not libintl:
             logger.error(
@@ -426,6 +413,11 @@ def setup_translation():
             libintl.libintl_wbindtextdomain(encoded_domain, locale_dir)
             libintl.textdomain(encoded_domain)
             libintl.bind_textdomain_codeset(encoded_domain, b'UTF-8')
+            # Without this flush, Gtk.Builder / g_dgettext keep serving the
+            # .mo loaded for the previous language for the rest of the
+            # process (issue #1801). Env-var changes and re-binding the
+            # domain are not enough on the Windows gettext build.
+            flush_gettext_cache(libintl)
         else:
             logger.error(
                 'The function wbindtextdomain() is not available.')

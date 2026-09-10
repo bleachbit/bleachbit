@@ -1062,6 +1062,30 @@ def load_i18n_dll():
     return libintl
 
 
+def flush_gettext_cache(libintl=None):
+    """Force GNU libintl to reload message catalogs after a language change.
+
+    libintl caches the loaded .mo file per text domain. Changing LANG or
+    LANGUAGE (or calling bindtextdomain again) does not by itself reload
+    that cache on Windows. GNU gettext exposes `_nl_msg_cat_cntr` for this:
+    incrementing it invalidates the catalog cache so the next dgettext /
+    Gtk.Builder translation lookup reloads for the new language.
+
+    Returns True if the counter was incremented.
+    """
+    if libintl is None:
+        libintl = load_i18n_dll()
+    if not libintl or not hasattr(libintl, '_nl_msg_cat_cntr'):
+        return False
+    try:
+        cntr = ctypes.c_int.in_dll(libintl, '_nl_msg_cat_cntr')
+        cntr.value += 1
+        return True
+    except (ValueError, AttributeError, TypeError) as e:
+        logger.debug('Could not flush gettext cache: %s', e)
+        return False
+
+
 def move_to_recycle_bin(path):
     """Move 'path' into recycle bin"""
     shell.SHFileOperation(

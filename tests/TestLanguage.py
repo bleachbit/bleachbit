@@ -1,23 +1,11 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
+import ctypes
 import locale
 import os
 import unittest
@@ -237,3 +225,52 @@ class SetupTranslationEnvironTestCase(common.BleachbitTestCase):
                 os.environ.pop('LC_ALL', None)
             else:
                 os.environ['LC_ALL'] = lc_all_backup
+
+
+class WindowsGettextCacheTestCase(common.BleachbitTestCase):
+    """Windows: libintl must reload .mo files after an in-process language change.
+
+    Regression for https://github.com/bleachbit/bleachbit/issues/1801 :
+    without incrementing _nl_msg_cat_cntr, dgettext/Gtk.Builder keep
+    serving the first non-English catalog for the rest of the process.
+    """
+
+    @common.skipUnlessWindows
+    @skipIfMissingPo
+    def test_setup_translation_reloads_libintl_catalog(self):
+        
+        from bleachbit import Language as language_module
+        from bleachbit.Windows import load_i18n_dll
+
+        libintl = load_i18n_dll()
+        if not libintl:
+            self.skipTest('intl-8.dll not available')
+
+        libintl.dgettext.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
+        libintl.dgettext.restype = ctypes.c_char_p
+        msgid = b'_Shred Files'
+        domain = b'bleachbit'
+
+        with common.set_temporary_env('LANG', os.environ.get('LANG')), \
+                common.set_temporary_env('LANGUAGE', os.environ.get('LANGUAGE')):
+            t_backup = language_module.t
+            try:
+                translations = {}
+                for lang in ('es', 'it', 'de', 'fr'):
+                    with mock.patch(
+                            'bleachbit.Language.get_active_language_code',
+                            return_value=lang):
+                        setup_translation()
+                    translated = libintl.dgettext(domain, msgid)
+                    self.assertIsNotNone(translated)
+                    translations[lang] = translated.decode('utf-8')
+
+                # Distinct languages must not all freeze on the first catalog.
+                self.assertNotEqual(translations['es'], translations['it'])
+                self.assertNotEqual(translations['es'], translations['de'])
+                self.assertIn('archivos', translations['es'].lower())
+                self.assertIn('dateien', translations['de'].lower())
+            finally:
+                language_module.t = t_backup
+                # Restore process gettext state for later tests.
+                setup_translation()
