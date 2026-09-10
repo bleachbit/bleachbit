@@ -9,7 +9,7 @@
 # On some systems if not explicitly given, make uses /bin/sh
 SHELL != command -v bash || echo /bin/sh
 
-.PHONY: clean install tests tests-pytest tests-nsis build tests-with-sudo lint require-lint-tools delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
+.PHONY: clean install tests tests-pytest tests-nsis build tests-with-sudo lint lint-pylint require-lint-tools delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
 
 prefix ?= /usr/local
 bindir ?= $(prefix)/bin
@@ -44,6 +44,16 @@ PYFLAKES ?= $(or $(shell command -v pyflakes3 2>/dev/null),\
 
 # Arguments forwarded to scripts/install-deps.sh, such as --venv
 INSTALL_DEPS_ARGS ?=
+
+# Windows drops pywin32 from ignored-modules so extension-pkg-allow-list can
+# check it, and ignores the POSIX-only modules instead.
+# MSYS make does not inherit OS, hence uname.
+UNAME_S := $(shell uname -s 2>/dev/null)
+ifneq (,$(filter MSYS% MINGW% CYGWIN%,$(UNAME_S)))
+PYLINT_ARGS ?= --ignored-modules=bleachbit.GtkShim,certifi,fcntl,gi,gi.repository,plyer,pwd,py2exe,win32com.shell
+else
+PYLINT_ARGS ?=
+endif
 
 ifneq ($(COVERAGE),$(PYTHON_CMD))
 BLEACHBIT_SUDO_COVERAGE_RUNNER := $(COVERAGE) --append
@@ -136,6 +146,11 @@ require-lint-tools:
 		exit 1; \
 	fi
 
+# Just pylint, for platforms without shellcheck and appstreamcli. Unlike the
+# lint target this one fails on findings, so it can gate the Windows job.
+lint-pylint:
+	pylint -j 0 $(PYLINT_ARGS) *py */*py
+
 lint:
 	@rc=0; \
 	if command -v appstreamcli >/dev/null 2>&1; then \
@@ -159,7 +174,7 @@ lint:
 		echo "WARNING: Missing pyflakes. APT users, try: sudo apt install pyflakes3"; \
 	fi; \
 	if command -v pylint >/dev/null 2>&1; then \
-		pylint -j 0 *py */*py > all.pylint.log 2>&1 & \
+		pylint -j 0 $(PYLINT_ARGS) *py */*py > all.pylint.log 2>&1 & \
 	else \
 		echo "WARNING: Missing pylint. APT users, try: sudo apt install pylint"; \
 	fi; \
