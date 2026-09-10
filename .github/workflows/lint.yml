@@ -68,3 +68,46 @@ jobs:
             cat "$f"
             echo "::endgroup::"
           done
+
+  # The Linux job ignores pywin32, and with it every win32 call. Here pywin32
+  # installs, so extension-pkg-allow-list in .pylintrc checks those calls.
+  pylint-windows:
+    name: Pylint (Windows)
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    env:
+      MSYS_BIN: C:\msys64\usr\bin
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.14'
+
+      - name: Cache pip packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~\AppData\Local\pip\Cache
+          key: pip-pylint-win-${{ hashFiles('requirements.txt', 'requirements-lint.txt') }}
+          restore-keys: pip-pylint-win-
+
+      # requirements.txt is only so psutil and requests resolve. The rest of
+      # windows/requirements.txt is not needed to lint.
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt -r requirements-lint.txt pywin32
+
+      # Without it, pylint reports bleachbit.Revision as an unresolved import
+      - name: Generate Revision.py
+        uses: $/.github/actions/generate-revision
+
+      - name: Run pylint
+        shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
+        run: |
+          set PATH=%MSYS_BIN%;%PATH%
+          make lint-pylint
