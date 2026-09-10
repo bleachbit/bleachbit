@@ -9,7 +9,7 @@
 # On some systems if not explicitly given, make uses /bin/sh
 SHELL != command -v bash || echo /bin/sh
 
-.PHONY: clean install tests tests-pytest tests-nsis build tests-with-sudo lint lint-pylint require-lint-tools delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
+.PHONY: clean install tests tests-pytest tests-nsis build tests-with-sudo lint require-lint-tools delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
 
 prefix ?= /usr/local
 bindir ?= $(prefix)/bin
@@ -81,7 +81,7 @@ clean:
 	@rm -vf MANIFEST # created by setup.py
 	$(MAKE) -C po clean
 	@rm -vrf locale
-	@rm -vrf {*/,./}*.{pylint,pyflakes,shellcheck}.log
+	@rm -vrf {*/,./}*.{autopep8,pylint,pyflakes,shellcheck}.log
 	@rm -vrf windows/BleachBit-*-setup*.{exe,zip}
 	@rm -vrf htmlcov .coverage # code coverage reports
 	@rm -vrf *.egg-info # Python package metadata
@@ -137,19 +137,14 @@ install:
 require-lint-tools:
 	@missing=; \
 	$(PYFLAKES) --version >/dev/null 2>&1 || missing="$$missing pyflakes"; \
-	for c in pylint shellcheck appstreamcli; do \
+	for c in pylint autopep8 shellcheck appstreamcli; do \
 		command -v $$c >/dev/null 2>&1 || missing="$$missing $$c"; \
 	done; \
 	if [ -n "$$missing" ]; then \
 		echo "ERROR: Missing lint tools:$$missing"; \
-		echo "APT users, try: sudo apt install pyflakes3 pylint shellcheck appstream"; \
+		echo "APT users, try: sudo apt install pyflakes3 pylint python3-autopep8 shellcheck appstream"; \
 		exit 1; \
 	fi
-
-# Just pylint, for platforms without shellcheck and appstreamcli. Unlike the
-# lint target this one fails on findings, so it can gate the Windows job.
-lint-pylint:
-	pylint -j 0 $(PYLINT_ARGS) *py */*py
 
 lint:
 	@rc=0; \
@@ -158,7 +153,7 @@ lint:
 	else \
 		echo "WARNING: Missing appstreamcli. APT users, try: sudo apt install appstream"; \
 	fi; \
-	echo "Running shellcheck, pyflakes, and pylint in parallel: see all.shellcheck.log, all.pyflakes.log, and all.pylint.log"; \
+	echo "Running shellcheck, pyflakes, pylint, and autopep8 in parallel: see all.shellcheck.log, all.pyflakes.log, all.pylint.log, and all.autopep8.log"; \
 	shellcheck_pid=; \
 	if command -v shellcheck >/dev/null 2>&1; then \
 		shellcheck scripts/*.sh docker/*.sh > all.shellcheck.log 2>&1 & \
@@ -173,10 +168,19 @@ lint:
 	else \
 		echo "WARNING: Missing pyflakes. APT users, try: sudo apt install pyflakes3"; \
 	fi; \
+	pylint_pid=; \
 	if command -v pylint >/dev/null 2>&1; then \
 		pylint -j 0 $(PYLINT_ARGS) *py */*py > all.pylint.log 2>&1 & \
+		pylint_pid=$$!; \
 	else \
 		echo "WARNING: Missing pylint. APT users, try: sudo apt install pylint"; \
+	fi; \
+	autopep8_pid=; \
+	if command -v autopep8 >/dev/null 2>&1; then \
+		autopep8 --diff --exit-code {.,bleachbit,tests}/*py > all.autopep8.log 2>&1 & \
+		autopep8_pid=$$!; \
+	else \
+		echo "WARNING: Missing autopep8. APT users, try: sudo apt install python3-autopep8"; \
 	fi; \
 	if [ -n "$$shellcheck_pid" ]; then \
 		wait $$shellcheck_pid || { \
@@ -192,7 +196,20 @@ lint:
 			cat all.pyflakes.log; \
 		}; \
 	fi; \
-	: 'pylint reports too much to gate on, so only its log is kept.'; \
+	if [ -n "$$pylint_pid" ]; then \
+		wait $$pylint_pid || { \
+			rc=1; \
+			echo "ERROR: pylint reported problems"; \
+			cat all.pylint.log; \
+		}; \
+	fi; \
+	if [ -n "$$autopep8_pid" ]; then \
+		wait $$autopep8_pid || { \
+			rc=1; \
+			echo "ERROR: autopep8 would reformat; run make pretty"; \
+			cat all.autopep8.log; \
+		}; \
+	fi; \
 	wait; \
 	exit $$rc
 
