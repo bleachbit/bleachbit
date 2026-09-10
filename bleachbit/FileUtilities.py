@@ -112,7 +112,8 @@ def open_files_linux():
 
 
 FilesystemInfo = collections.namedtuple(
-    'FilesystemInfo', ['fstype', 'device', 'is_readonly'])
+    'FilesystemInfo', ['fstype', 'device', 'is_readonly', 'is_cdrom'],
+    defaults=[False])
 
 
 def get_filesystem_type(path):
@@ -121,11 +122,12 @@ def get_filesystem_type(path):
     path: directory path
 
     Return value:
-    A FilesystemInfo named tuple of (fstype, device, is_readonly)
+    A FilesystemInfo named tuple of (fstype, device, is_readonly, is_cdrom)
         * fstype: vfat, ntfs, tmpfs, etc.
         * device: C:, /dev/sda1, etc.
         * is_readonly: True if the file system is mounted read-only,
           from the mount options reported by psutil
+        * is_cdrom: CD-ROM or other optical disc
 
     File system types seen
     * On Linux: btrfs, ext4, squashfs, tmpfs, vfat
@@ -162,8 +164,11 @@ def get_filesystem_type(path):
         # sdiskpart(device='C:\\', mountpoint='C:\\', fstype='NTFS', opts='rw,fixed')
         # sdiskpart(device='D:\\', mountpoint='D:\\', fstype='CDFS', opts='ro,readonly,cdrom')
         is_readonly = 'ro' in mount_opts or 'readonly' in mount_opts
+        # Windows reports 'cdrom' in opts; the fstype list covers POSIX.
+        is_cdrom = 'cdrom' in mount_opts or partition.fstype.lower() in (
+            'cdfs', 'cd9660', 'iso9660', 'udf')
         partitions[mount_path] = FilesystemInfo(
-            partition.fstype, partition.device, is_readonly)
+            partition.fstype, partition.device, is_readonly, is_cdrom)
 
     # Exact match
     for mount_path, fs_info in partitions.items():
