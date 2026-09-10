@@ -133,19 +133,66 @@ class MacTestCase(common.BleachbitTestCase):
             self.assertNotIn('@', ret)
 
     @common.skipUnlessMac
-    def test_get_macos_locale_mocked(self):
-        """get_macos_locale() parses AppleLocale output and strips variants."""
+    def test_get_macos_locale_prefers_plist_apple_locale(self):
+        """get_macos_locale() reads AppleLocale from
+        .GlobalPreferences.plist directly (no subprocess) when
+        available, and strips any variant suffix."""
+        with mock.patch(
+                'bleachbit.Mac._read_global_preferences_plist',
+                return_value={'AppleLocale': 'es_ES@currency=EUR'}), \
+                mock.patch('subprocess.run') as mock_run:
+            self.assertEqual(get_macos_locale(), 'es_ES')
+        mock_run.assert_not_called()
+
+    @common.skipUnlessMac
+    def test_get_macos_locale_falls_back_to_apple_languages(self):
+        """When the plist has no AppleLocale, fall back to the first
+        entry of AppleLanguages, converting its hyphen to the
+        underscore used everywhere else in this codebase."""
+        with mock.patch(
+                'bleachbit.Mac._read_global_preferences_plist',
+                return_value={'AppleLanguages': ['fr-FR', 'en-US']}), \
+                mock.patch('subprocess.run') as mock_run:
+            self.assertEqual(get_macos_locale(), 'fr_FR')
+        mock_run.assert_not_called()
+
+    @common.skipUnlessMac
+    def test_get_macos_locale_falls_back_to_defaults_command(self):
+        """When the plist cannot be read at all, fall back to
+        `defaults read -g AppleLocale`."""
         proc_mock = mock.Mock()
         proc_mock.returncode = 0
         proc_mock.stdout = 'es_ES@currency=EUR\n'
-        with mock.patch('subprocess.run', return_value=proc_mock):
+        with mock.patch(
+                'bleachbit.Mac._read_global_preferences_plist',
+                return_value=None), \
+                mock.patch('subprocess.run', return_value=proc_mock):
             self.assertEqual(get_macos_locale(), 'es_ES')
 
         proc_mock.stdout = ''
-        with mock.patch('subprocess.run', return_value=proc_mock):
+        with mock.patch(
+                'bleachbit.Mac._read_global_preferences_plist',
+                return_value=None), \
+                mock.patch('subprocess.run', return_value=proc_mock):
             self.assertIsNone(get_macos_locale())
 
-        with mock.patch('subprocess.run', side_effect=subprocess.SubprocessError):
+        with mock.patch(
+                'bleachbit.Mac._read_global_preferences_plist',
+                return_value=None), \
+                mock.patch('subprocess.run',
+                          side_effect=subprocess.SubprocessError):
+            self.assertIsNone(get_macos_locale())
+
+    @common.skipUnlessMac
+    def test_get_macos_locale_returns_none_when_all_sources_fail(self):
+        """When both the plist and the defaults command yield
+        nothing, return None rather than an empty string."""
+        with mock.patch(
+                'bleachbit.Mac._read_global_preferences_plist',
+                return_value={}), \
+                mock.patch('subprocess.run') as mock_run:
+            mock_run.return_value.returncode = 0
+            mock_run.return_value.stdout = ''
             self.assertIsNone(get_macos_locale())
 
     def test_macos_version_name(self):
