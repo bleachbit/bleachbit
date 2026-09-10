@@ -71,8 +71,8 @@ jobs:
 
   # The Linux job ignores pywin32, and with it every win32 call. Here pywin32
   # installs, so extension-pkg-allow-list in .pylintrc checks those calls.
-  pylint-windows:
-    name: Pylint (Windows)
+  lint-windows:
+    name: Lint (Windows)
     runs-on: windows-latest
     timeout-minutes: 20
 
@@ -92,8 +92,8 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~\AppData\Local\pip\Cache
-          key: pip-pylint-win-${{ hashFiles('requirements.txt', 'requirements-lint.txt') }}
-          restore-keys: pip-pylint-win-
+          key: pip-lint-win-${{ hashFiles('requirements.txt', 'requirements-lint.txt') }}
+          restore-keys: pip-lint-win-
 
       # requirements.txt is only so psutil and requests resolve. The rest of
       # windows/requirements.txt is not needed to lint.
@@ -106,8 +106,20 @@ jobs:
       - name: Generate Revision.py
         uses: $/.github/actions/generate-revision
 
-      - name: Run pylint
+      # lint warns and skips the shellcheck and appstreamcli steps here.
+      - name: Run lint
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: |
           set PATH=%MSYS_BIN%;%PATH%
-          make lint-pylint
+          make lint
+
+      - name: Show results
+        if: always()
+        shell: bash
+        run: |
+          shopt -s nullglob
+          for f in all.*.log; do
+            echo "::group::$f"
+            cat "$f"
+            echo "::endgroup::"
+          done
