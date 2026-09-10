@@ -57,6 +57,7 @@ from bleachbit.Bootstrap import bootstrap
 from bleachbit.FileUtilities import (
     children_in_directory,
     extended_path,
+    get_filesystem_type,
     is_hard_link,
     is_normal_directory,
 )
@@ -190,6 +191,18 @@ def get_volatile_dir():
         # TMPDIR=/ would rstrip to an empty prefix that matches every path
         volatile_dir = os.sep
     return volatile_dir
+
+
+def cdrom_mountpoints():
+    """Return mountpoints of mounted CD-ROM drives (real or virtual).
+
+    Returns an empty list when no CD-ROM is present. CI mounts a test
+    ISO: see scripts/mount_test_iso.ps1 (Windows) and
+    scripts/mount_test_iso.sh (Linux).
+    """
+    import psutil
+    return [part.mountpoint for part in psutil.disk_partitions(all=False)
+            if get_filesystem_type(part.mountpoint).is_cdrom]
 
 
 class BleachbitTestCase(unittest.TestCase):
