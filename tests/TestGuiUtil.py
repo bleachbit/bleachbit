@@ -18,11 +18,10 @@ from tests import common
 from tests.common import pytest
 
 from bleachbit import General, logger
-from bleachbit.GtkShim import is_gtk_available
+from bleachbit.GtkShim import Gdk, Gtk, is_gtk_available
 
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
-    from bleachbit.GtkShim import Gdk, Gtk
     from bleachbit.GuiUtil import (clear_clipboard, flush_gtk_events,
                                    get_clipboard_paths, get_font_size_from_name)
 
@@ -49,7 +48,6 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
         """Clean up after each test method."""
         super().tearDown()
         # Verify that clearing the clipboard works.
-        # pylint: disable-next=possibly-used-before-assignment
         clear_clipboard()
         # pylint: disable-next=possibly-used-before-assignment
         self.assertEqual([], list(get_clipboard_paths()))
@@ -110,7 +108,6 @@ class GUIUtilClipboardTestCase(common.BleachbitTestCase):
     def test_get_clipboard_paths_text_plain(self):
         """Get text/plain paths from the real clipboard."""
 
-        # pylint: disable-next=possibly-used-before-assignment
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         clipboard_text = '\n'.join([f'  {self.paths[0]}  ', self.paths[1], ''])
         clipboard.set_text(clipboard_text, -1)
