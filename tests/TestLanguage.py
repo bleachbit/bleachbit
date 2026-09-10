@@ -19,6 +19,7 @@
 
 
 import locale
+import os
 import unittest
 from unittest import mock
 
@@ -138,3 +139,101 @@ class LanguageTestCase(common.BleachbitTestCase):
                           log_context.output[0])
 
         self.assertIn(result, [locale.getlocale()[0], 'C', 'en', 'en_US'])
+
+
+class SetupTranslationEnvironTestCase(common.BleachbitTestCase):
+    """Test case for the LANGUAGE environment variable side effect
+    of setup_translation()"""
+
+    def setUp(self):
+        super().setUp()
+        self._language_env_backup = os.environ.get('LANGUAGE')
+        # setup_translation() reassigns this plain module-level
+        # global (used by every _()/get_text() call throughout the
+        # whole codebase) as a real side effect of calling the real
+        # gettext.translation() -- mocking that call prevents the
+        # reassignment in the first place, but capture/restore the
+        # global directly too as a second line of defense, since
+        # this specific global is the actual, confirmed mechanism by
+        # which an earlier, less careful version of this same test
+        # leaked a real Italian translation into unrelated later
+        # tests' own log messages for the rest of the test process.
+        from bleachbit import Language as _language_module
+        self._t_backup = _language_module.t
+
+    def tearDown(self):
+        from bleachbit import Language as _language_module
+        _language_module.t = self._t_backup
+        if self._language_env_backup is None:
+            os.environ.pop('LANGUAGE', None)
+        else:
+            os.environ['LANGUAGE'] = self._language_env_backup
+        super().tearDown()
+
+    def test_setup_translation_sets_language_env_on_posix(self):
+        """Regression test: GLib's g_get_language_names(), used
+        by Gtk.Builder to translate .ui files such as the hamburger
+        menu, reads LANGUAGE directly from the environment with
+        top priority -- it does not consult locale.setlocale()'s C
+        locale state at all, so without setting it, a
+        Gtk.Builder-loaded menu stays frozen in whatever locale
+        was in the environment at process launch (e.g. the real
+        macOS AppleLocale system preference), never following a
+        later in-app language change.
+
+        Confirmed by hand on the real .app: without this, the
+        hamburger menu stayed in Spanish through three different
+        manually-selected languages and a full app restart, on a
+        machine whose real System Settings > Language is Spanish;
+        setting LANGUAGE made it follow the selected language
+        immediately, without even restarting the app.
+
+        Only LANGUAGE is checked here, deliberately not LANG/
+        LC_ALL: an earlier version of this fix also set those,
+        which crashed a subprocess Python interpreter started
+        later with 'Fatal Python error:
+        config_get_locale_encoding: ... nl_langinfo(CODESET)
+        failed', since a bare code without an explicit encoding
+        (required for GLib's own parsing of these variables
+        specifically -- a '.UTF-8' suffix breaks it, verified by
+        hand) is not a well-formed LC_ALL/LANG value for every
+        other locale-aware consumer in the process.
+        """
+        os.environ.pop('LANGUAGE', None)
+        with mock.patch('bleachbit.Language.get_active_language_code',
+                        return_value='it_IT'), \
+                mock.patch('bleachbit.Language.IS_POSIX', True), \
+                mock.patch('bleachbit.Language.IS_WINDOWS', False), \
+                mock.patch('locale.setlocale'), \
+                mock.patch('gettext.translation'):
+            setup_translation()
+        self.assertEqual(os.environ.get('LANGUAGE'), 'it_IT')
+
+    def test_setup_translation_does_not_set_lang_or_lc_all_on_posix(self):
+        """LANG/LC_ALL must be left untouched on POSIX -- see the
+        comment in setup_translation() and in the test above for
+        why setting them crashed a subprocess Python interpreter.
+        """
+        lang_backup = os.environ.get('LANG')
+        lc_all_backup = os.environ.get('LC_ALL')
+        try:
+            os.environ.pop('LANG', None)
+            os.environ.pop('LC_ALL', None)
+            with mock.patch('bleachbit.Language.get_active_language_code',
+                            return_value='es_ES'), \
+                    mock.patch('bleachbit.Language.IS_POSIX', True), \
+                    mock.patch('bleachbit.Language.IS_WINDOWS', False), \
+                    mock.patch('locale.setlocale'), \
+                    mock.patch('gettext.translation'):
+                setup_translation()
+            self.assertIsNone(os.environ.get('LANG'))
+            self.assertIsNone(os.environ.get('LC_ALL'))
+        finally:
+            if lang_backup is None:
+                os.environ.pop('LANG', None)
+            else:
+                os.environ['LANG'] = lang_backup
+            if lc_all_backup is None:
+                os.environ.pop('LC_ALL', None)
+            else:
+                os.environ['LC_ALL'] = lc_all_backup

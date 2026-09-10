@@ -1023,6 +1023,13 @@ class GUI(Gtk.ApplicationWindow):
 
     def update_headerbar_labels(self):
         """Update the labels and tooltips in the headerbar buttons"""
+        # The hamburger menu is not just a label -- it's a whole
+        # Gtk.Builder-loaded Gio.MenuModel that only picks up a
+        # language change if explicitly reloaded (see the comment in
+        # _reload_app_menu()).
+        if hasattr(self, 'menu_button'):
+            self._reload_app_menu()
+
         # Preview button
         self.preview_button.set_label(PREVIEW_MSG)
         self.preview_button.set_tooltip_text(
@@ -1138,22 +1145,41 @@ class GUI(Gtk.ApplicationWindow):
         hbar.pack_start(box)
 
         # Add hamburger menu on the right
-        menu_button = Gtk.MenuButton()
-        icon = Gio.ThemedIcon(name="open-menu-symbolic")
-        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
-        builder = Gtk.Builder()
+        self.menu_button = Gtk.MenuButton()
         app_menu_path = bleachbit.get_share_path('app-menu.ui')
         if app_menu_path:
-            builder.add_from_file(app_menu_path)
-            menu_button.set_menu_model(builder.get_object('app-menu'))
-            menu_button.add(image)
-            hbar.pack_end(menu_button)
+            icon = Gio.ThemedIcon(name="open-menu-symbolic")
+            image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+            self._reload_app_menu(app_menu_path)
+            self.menu_button.add(image)
+            hbar.pack_end(self.menu_button)
         else:
             hbar.pack_end(Gtk.Label('error: app-menu.ui not found'))
 
         # Update all labels and tooltips
         self.update_headerbar_labels()
         return hbar
+
+    def _reload_app_menu(self, app_menu_path=None):
+        """(Re)load app-menu.ui into self.menu_button.
+
+        Gtk.Builder translates the .ui file's own translatable strings
+        via the C locale set by locale.setlocale() (see the comment in
+        Language.setup_translation()), baked in at load time -- unlike
+        the rest of the headerbar, which re-reads its labels through
+        Python's own gettext calls on every call to
+        update_headerbar_labels() and so picks up a later language
+        change immediately, a Gtk.Builder-loaded menu stays frozen in
+        whatever language was active the one time it was originally
+        loaded unless it is explicitly reloaded like this.
+        """
+        if app_menu_path is None:
+            app_menu_path = bleachbit.get_share_path('app-menu.ui')
+        if not app_menu_path:
+            return
+        builder = Gtk.Builder()
+        builder.add_from_file(app_menu_path)
+        self.menu_button.set_menu_model(builder.get_object('app-menu'))
 
     def on_configure_event(self, _widget, _event):
         (x, y) = self.get_position()

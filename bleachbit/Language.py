@@ -372,6 +372,35 @@ def setup_translation():
     assert isinstance(locale_dir, str), f"locale_dir: {locale_dir}"
     if IS_WINDOWS and user_locale:
         os.environ['LANG'] = user_locale
+    elif IS_POSIX and user_locale:
+        # GLib's own g_get_language_names() (used by Gtk.Builder to
+        # translate .ui files like the hamburger menu) reads LANGUAGE
+        # directly from the environment with top priority -- it does
+        # not consult locale.setlocale()'s C-level locale state at
+        # all, so without this, a Gtk.Builder-loaded menu stays frozen
+        # in whatever locale the OS environment happened to have at
+        # process launch (e.g. always the real macOS AppleLocale
+        # preference), never following a later in-app language change.
+        # Confirmed by hand: without setting this, the app-menu.ui
+        # hamburger menu stayed in Spanish through three different
+        # manually-selected languages and a full app restart, on a
+        # machine whose real System Settings > Language is Spanish;
+        # setting it here made it follow the selected language
+        # immediately.
+        #
+        # Only LANGUAGE is set, deliberately not LANG/LC_ALL: LANGUAGE
+        # is a GNU gettext-specific extension used purely as a
+        # translation-priority hint and has no effect on the process's
+        # actual C locale/encoding, whereas LANG/LC_ALL are read by
+        # every other locale-aware consumer in the process, including
+        # any subprocess spawned afterward -- and a bare code without
+        # an explicit encoding (which GLib's own parsing of these
+        # variables specifically requires; a '.UTF-8' suffix breaks it,
+        # verified by hand) crashed a subprocess Python interpreter
+        # started later with 'Fatal Python error:
+        # config_get_locale_encoding: ... nl_langinfo(CODESET) failed'
+        # when this was tried with LANG/LC_ALL instead.
+        os.environ['LANGUAGE'] = user_locale
     text_domain = 'bleachbit'
     try:
         t = gettext.translation(
