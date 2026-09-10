@@ -406,6 +406,7 @@ def setup_translation():
         if not libintl:
             logger.error(
                 'The internationalization library is not available.')
+            return
         assert isinstance(text_domain, str)
         encoded_domain = text_domain.encode('utf-8')
         # wbindtextdomain(char, wchar): first parameter is encoded
@@ -417,7 +418,10 @@ def setup_translation():
             # .mo loaded for the previous language for the rest of the
             # process (issue #1801). Env-var changes and re-binding the
             # domain are not enough on the Windows gettext build.
-            flush_gettext_cache(libintl)
+            if not flush_gettext_cache(libintl):
+                logger.warning(
+                    'Failed to flush gettext cache; the GUI may stay in the '
+                    'previous language.')
         else:
             logger.error(
                 'The function wbindtextdomain() is not available.')
