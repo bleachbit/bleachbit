@@ -321,6 +321,13 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertFalse(xmlcleaner.os_match('linux', 'darwin'))
         self.assertFalse(xmlcleaner.os_match('windows', 'darwin'))
 
+        # as FreeBSD
+        self.assertTrue(xmlcleaner.os_match('unix', 'freebsd'))
+        self.assertTrue(xmlcleaner.os_match('bsd', 'freebsd'))
+        self.assertTrue(xmlcleaner.os_match('freebsd', 'freebsd'))
+        self.assertFalse(xmlcleaner.os_match('linux', 'freebsd'))
+        self.assertFalse(xmlcleaner.os_match('windows', 'freebsd'))
+
         # "darwin" is accepted as a deprecated alias for "macos"
         with self.assertLogs('bleachbit.General', level='WARNING'):
             self.assertTrue(xmlcleaner.os_match('darwin', 'darwin'))
