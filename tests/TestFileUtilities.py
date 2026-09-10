@@ -49,6 +49,7 @@ from bleachbit.FileUtilities import (
     expand_glob_join,
     extended_path_undo,
     extended_path,
+    FilesystemInfo,
     free_space,
     get_filesystem_type,
     getsize,
@@ -1598,7 +1599,7 @@ State=AAAA/wA...
         with common.mock_missing_package('psutil'):
             with self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
                 result = get_filesystem_type('/')
-            self.assertEqual(result, ("unknown", "none"))
+            self.assertEqual(result, FilesystemInfo("unknown", "none", False))
             self.assertIn('psutil', cm.output[0])
 
     def test_getsize(self):
