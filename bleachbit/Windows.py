@@ -1075,7 +1075,14 @@ def flush_gettext_cache(libintl=None):
     """
     if libintl is None:
         libintl = load_i18n_dll()
-    if not libintl or not hasattr(libintl, '_nl_msg_cat_cntr'):
+    if not libintl:
+        logger.warning(
+            'Could not flush gettext cache: intl-8.dll is not loaded.')
+        return False
+    if not hasattr(libintl, '_nl_msg_cat_cntr'):
+        logger.warning(
+            'Could not flush gettext cache: _nl_msg_cat_cntr is not exported '
+            'by this libintl. Language changes will not take effect (issue #1801).')
         return False
     try:
         cntr = ctypes.c_int.in_dll(libintl, '_nl_msg_cat_cntr')

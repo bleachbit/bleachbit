@@ -193,7 +193,9 @@ class SetupTranslationEnvironTestCase(common.BleachbitTestCase):
                 mock.patch('bleachbit.Language.IS_POSIX', True), \
                 mock.patch('bleachbit.Language.IS_WINDOWS', False), \
                 mock.patch('locale.setlocale'), \
-                mock.patch('gettext.translation'):
+                mock.patch('gettext.translation'), \
+                mock.patch('bleachbit.Unix.find_best_locale',
+                           return_value='it_IT'):
             setup_translation()
         self.assertEqual(os.environ.get('LANGUAGE'), 'it_IT')
 
@@ -212,7 +214,9 @@ class SetupTranslationEnvironTestCase(common.BleachbitTestCase):
                     mock.patch('bleachbit.Language.IS_POSIX', True), \
                     mock.patch('bleachbit.Language.IS_WINDOWS', False), \
                     mock.patch('locale.setlocale'), \
-                    mock.patch('gettext.translation'):
+                    mock.patch('gettext.translation'), \
+                    mock.patch('bleachbit.Unix.find_best_locale',
+                               return_value='es_ES'):
                 setup_translation()
             self.assertIsNone(os.environ.get('LANG'))
             self.assertIsNone(os.environ.get('LC_ALL'))
@@ -238,8 +242,6 @@ class WindowsGettextCacheTestCase(common.BleachbitTestCase):
     @common.skipUnlessWindows
     @skipIfMissingPo
     def test_setup_translation_reloads_libintl_catalog(self):
-        
-        from bleachbit import Language as language_module
         from bleachbit.Windows import load_i18n_dll
 
         libintl = load_i18n_dll()
@@ -253,24 +255,21 @@ class WindowsGettextCacheTestCase(common.BleachbitTestCase):
 
         with common.set_temporary_env('LANG', os.environ.get('LANG')), \
                 common.set_temporary_env('LANGUAGE', os.environ.get('LANGUAGE')):
-            t_backup = language_module.t
-            try:
-                translations = {}
-                for lang in ('es', 'it', 'de', 'fr'):
-                    with mock.patch(
-                            'bleachbit.Language.get_active_language_code',
-                            return_value=lang):
-                        setup_translation()
-                    translated = libintl.dgettext(domain, msgid)
-                    self.assertIsNotNone(translated)
-                    translations[lang] = translated.decode('utf-8')
+            translations = {}
+            for lang in ('es', 'it', 'de', 'fr'):
+                with mock.patch(
+                        'bleachbit.Language.get_active_language_code',
+                        return_value=lang):
+                    setup_translation()
+                translated = libintl.dgettext(domain, msgid)
+                translations[lang] = translated.decode('utf-8')
 
-                # Distinct languages must not all freeze on the first catalog.
-                self.assertNotEqual(translations['es'], translations['it'])
-                self.assertNotEqual(translations['es'], translations['de'])
-                self.assertIn('archivos', translations['es'].lower())
-                self.assertIn('dateien', translations['de'].lower())
-            finally:
-                language_module.t = t_backup
-                # Restore process gettext state for later tests.
-                setup_translation()
+            # Distinct languages must not all freeze on the first catalog.
+            self.assertNotEqual(translations['es'], translations['it'])
+            self.assertNotEqual(translations['es'], translations['de'])
+            self.assertNotEqual(translations['es'], translations['fr'])
+            self.assertIn('archivos', translations['es'].lower())
+            self.assertIn('dateien', translations['de'].lower())
+        # Restore process gettext state for later tests, after the
+        # environment variables have been restored to their pre-test values.
+        setup_translation()
