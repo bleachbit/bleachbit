@@ -17,7 +17,7 @@ from itertools import product
 
 # first party imports
 from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod  # mod=module
-from bleachbit import FS_SCAN_RE_FLAGS, IS_POSIX, IS_WINDOWS
+from bleachbit import FS_SCAN_RE_FLAGS, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.Constant import CLEAN_FILE_LABEL
 from bleachbit.Cookie import load_keep_list
 from bleachbit.Language import get_text as _
@@ -405,6 +405,23 @@ class ChromeFavicons(FileActionProvider):
                 path,
                 Special.delete_chrome_favicons,
                 CLEAN_FILE_LABEL)
+
+
+class ChromeOrphanedFrameworkVersions(FileActionProvider):
+
+    """Action to remove orphaned old version folders left behind under
+    a Chromium-based browser's Contents/Frameworks/*.framework/Versions/
+    on macOS, keeping only the one the 'Current' symlink points to."""
+    action_key = 'macos.orphaned_framework_versions'
+
+    def get_commands(self):
+        if not IS_MAC:
+            # This action only ever applies to macOS .app bundles;
+            # 'Unix' may not even be imported on other platforms.
+            return
+        for versions_dir in self.get_paths():
+            for orphan_path in Unix.orphaned_framework_versions(versions_dir):
+                yield Command.Delete(orphan_path)
 
 
 class ChromeHistory(FileActionProvider):
