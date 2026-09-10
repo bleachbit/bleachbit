@@ -1585,6 +1585,13 @@ State=AAAA/wA...
                     check_path.lower())[0], 'NTFS')
                 self.assertEqual(get_filesystem_type(
                     check_path.upper())[0], 'NTFS')
+            # build_and_test.yml sets up a virtual CD drive for testing.
+            if 'GITHUB_ACTIONS' in os.environ:
+                fs_info = get_filesystem_type(r'O:\\')
+                self.assertEqual(fs_info[0], 'CDFS',
+                                 f'O:\\ should be CDFS, got {fs_info[0]}')
+                self.assertTrue(fs_info.is_readonly,
+                                f'O:\\ should be read-only, got {fs_info}')
         elif IS_POSIX:
             for check_path in (home, '/'):
                 detected_fs = get_filesystem_type(check_path)[0]
