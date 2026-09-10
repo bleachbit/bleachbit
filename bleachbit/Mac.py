@@ -14,6 +14,7 @@ import os
 import platform
 import plistlib
 import subprocess
+import xml.parsers.expat
 from pathlib import Path
 
 from bleachbit import APP_NAME, FileUtilities, IS_MAC
@@ -66,7 +67,8 @@ def _read_global_preferences_plist():
     try:
         with open(path, 'rb') as f:
             return plistlib.load(f)
-    except (OSError, ValueError, plistlib.InvalidFileException) as e:
+    except (OSError, ValueError, plistlib.InvalidFileException,
+            xml.parsers.expat.ExpatError) as e:
         logger.debug('failed to read %s: %s', path, e)
         return None
 
@@ -107,9 +109,11 @@ def get_macos_locale():
     preference. AppleLocale reflects the real system preference
     regardless of how the app was launched.
 
-    Prefer reading it directly from .GlobalPreferences.plist (pure file
-    I/O, no subprocess); fall back to `defaults read -g AppleLocale`,
-    and finally to the first entry of AppleLanguages, if that fails.
+    Prefer reading AppleLocale directly from .GlobalPreferences.plist
+    (pure file I/O, no subprocess); if AppleLocale is absent from the
+    plist, fall back to the first entry of AppleLanguages in the same
+    plist, and finally to `defaults read -g AppleLocale` if the plist
+    itself cannot be read.
     """
     value = None
     prefs = _read_global_preferences_plist()
