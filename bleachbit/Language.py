@@ -287,6 +287,53 @@ def get_supported_language_code_name_dict():
     return supported_langs
 
 
+def find_supported_language_code(lang_code, supported_codes):
+    """Return the supported language code best matching lang_code.
+
+    lang_code is a detected code like 'en_US' or 'hi_IN', and
+    supported_codes is an iterable of codes like 'en', 'en_US', 'hi'.
+
+    For example, 'hi_IN' matches 'hi', 'en-US' matches 'en_US', and
+    'pt' may match 'pt_BR'.
+
+    Returns None if there is no match.
+    """
+    if not lang_code:
+        return None
+    codes = list(supported_codes)
+    # Windows language codes may use a hyphen like 'en-US' instead
+    # of an underscore like 'en_US'.
+    normalized = lang_code.replace('-', '_')
+    # Try the full code ('hi_IN'), then the primary subtag ('hi').
+    lowered = {code.lower(): code for code in codes}
+    for candidate in (normalized, normalized.split('_')[0]):
+        if candidate in codes:
+            return candidate
+        if candidate.lower() in lowered:
+            return lowered[candidate.lower()]
+    # Try a supported regional variant like 'pt_BR' for 'pt'.
+    prefix = normalized.split('_')[0].lower() + '_'
+    for code in codes:
+        if code.lower().startswith(prefix):
+            return code
+    return None
+
+
+_UNSET = object()
+
+# locale.getlocale() reports whatever setlocale() set, so the real system
+# locale is captured here before setup_translation() forces a language.
+_locale_fallback = _UNSET
+
+
+def _get_locale_fallback():
+    """Return the system locale as seen before setup_translation() ran."""
+    global _locale_fallback
+    if _locale_fallback is _UNSET:
+        _locale_fallback = locale.getlocale()[0]
+    return _locale_fallback
+
+
 def get_active_language_code():
     """Return the language ID to use for translations
 
@@ -320,16 +367,32 @@ def get_active_language_code():
         # environment at all, so its truthiness cannot detect "nothing
         # was explicitly set". Check os.environ directly instead: if the
         # caller (a shell, a test suite) put LANG/LC_ALL/LC_MESSAGES
-        # there on purpose, honor it via locale.getlocale(); otherwise
-        # (Finder launches the app with none of these set) prefer the
-        # real system preference from AppleLocale.
+        # there on purpose, honor it; otherwise (Finder launches the app
+        # with none of these set) prefer the real system preference from
+        # AppleLocale.
         env_locale_set = any(
             os.environ.get(name) for name in ("LC_ALL", "LC_MESSAGES", "LANG"))
         if IS_MAC and not env_locale_set:
             from bleachbit.Mac import get_macos_locale
             user_locale = get_macos_locale()
+        elif env_locale_set:
+            # Read the environment variables instead of
+            # locale.getlocale(), which reports the locale set by
+            # locale.setlocale() in setup_translation().  Without this,
+            # after manually forcing a language once, the detected
+            # language would stay stuck on the forced language even
+            # after re-enabling auto-detection.
+            # LANGUAGE is deliberately not read: setup_translation()
+            # sets it on POSIX, so it has the same problem.
+            for name in ("LC_ALL", "LC_MESSAGES", "LANG"):
+                env_value = os.environ.get(name)
+                if env_value:
+                    # Strip codeset ('.UTF-8') and modifier ('@latin').
+                    user_locale = env_value.split('.')[0].split('@')[0]
+                    break
         else:
-            user_locale = locale.getlocale()[0]
+            # Not locale.getlocale(): setlocale() has already poisoned it.
+            user_locale = _get_locale_fallback()
 
     if not user_locale:
         user_locale = 'C'
@@ -353,6 +416,10 @@ def setup_translation():
     attempted_setup_translation = True
     # Use local import to avoid circular import.
     from bleachbit import locale_dir
+    # Capture the system locale before setlocale() below poisons getlocale().
+    # This must precede get_active_language_code(), which returns early on a
+    # forced language without capturing it.
+    _get_locale_fallback()
     user_locale = get_active_language_code()
     logger.debug(f"user_locale: {user_locale}, locale_dir: {locale_dir}")
     assert isinstance(user_locale, str)
@@ -360,33 +427,11 @@ def setup_translation():
     if IS_WINDOWS and user_locale:
         os.environ['LANG'] = user_locale
     elif IS_POSIX and user_locale:
-        # GLib's own g_get_language_names() (used by Gtk.Builder to
-        # translate .ui files like the hamburger menu) reads LANGUAGE
-        # directly from the environment with top priority -- it does
-        # not consult locale.setlocale()'s C-level locale state at
-        # all, so without this, a Gtk.Builder-loaded menu stays frozen
-        # in whatever locale the OS environment happened to have at
-        # process launch (e.g. always the real macOS AppleLocale
-        # preference), never following a later in-app language change.
-        # Confirmed by hand: without setting this, the app-menu.ui
-        # hamburger menu stayed in Spanish through three different
-        # manually-selected languages and a full app restart, on a
-        # machine whose real System Settings > Language is Spanish;
-        # setting it here made it follow the selected language
-        # immediately.
-        #
-        # Only LANGUAGE is set, deliberately not LANG/LC_ALL: LANGUAGE
-        # is a GNU gettext-specific extension used purely as a
-        # translation-priority hint and has no effect on the process's
-        # actual C locale/encoding, whereas LANG/LC_ALL are read by
-        # every other locale-aware consumer in the process, including
-        # any subprocess spawned afterward -- and a bare code without
-        # an explicit encoding (which GLib's own parsing of these
-        # variables specifically requires; a '.UTF-8' suffix breaks it,
-        # verified by hand) crashed a subprocess Python interpreter
-        # started later with 'Fatal Python error:
-        # config_get_locale_encoding: ... nl_langinfo(CODESET) failed'
-        # when this was tried with LANG/LC_ALL instead.
+        # Only LANGUAGE, deliberately not LANG/LC_ALL. LANGUAGE is a
+        # gettext-only hint that GLib's g_get_language_names() (Gtk.Builder
+        # .ui files) reads directly, so setlocale() alone is not enough.
+        # LANG/LC_ALL also affect subprocesses, and a '.UTF-8' suffix breaks
+        # GLib's parsing of them.
         os.environ['LANGUAGE'] = user_locale
     text_domain = 'bleachbit'
     try:
