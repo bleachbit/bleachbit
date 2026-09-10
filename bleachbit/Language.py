@@ -319,6 +319,32 @@ def find_supported_language_code(lang_code, supported_codes):
     return None
 
 
+_UNSET = object()
+
+# Memoized locale.getlocale() result used as the detection fallback.
+# setup_translation() calls locale.setlocale(locale.LC_ALL, ...) with
+# the selected language, after which locale.getlocale() reports that
+# language instead of the system default.  The value is captured on
+# first use -- which happens before setup_translation() changes the
+# locale, because setup_translation() calls get_active_language_code()
+# before it calls setlocale() -- so detection does not stay stuck on a
+# language the user forced earlier.
+_locale_fallback = _UNSET
+
+
+def _get_locale_fallback():
+    """Return the system locale, ignoring any locale BleachBit forced.
+
+    This is locale.getlocale()[0] as reported before
+    setup_translation() called locale.setlocale(), cached so that
+    forcing a language does not change what auto-detection reports.
+    """
+    global _locale_fallback
+    if _locale_fallback is _UNSET:
+        _locale_fallback = locale.getlocale()[0]
+    return _locale_fallback
+
+
 def get_active_language_code():
     """Return the language ID to use for translations
 
@@ -376,7 +402,11 @@ def get_active_language_code():
                     user_locale = env_value.split('.')[0].split('@')[0]
                     break
         else:
-            user_locale = locale.getlocale()[0]
+            # locale.getlocale() reports the locale most recently passed
+            # to locale.setlocale(), which setup_translation() sets to
+            # the forced language, so use the value captured before that
+            # happened instead.  See _get_locale_fallback().
+            user_locale = _get_locale_fallback()
 
     if not user_locale:
         user_locale = 'C'

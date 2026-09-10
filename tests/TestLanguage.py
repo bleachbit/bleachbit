@@ -5,13 +5,14 @@
 # later.  See the COPYING file in the top-level directory.
 
 
+import contextlib
 import ctypes
 import locale
 import os
 import unittest
 from unittest import mock
 
-from bleachbit.Language import find_supported_language_code, \
+from bleachbit.Language import _UNSET, find_supported_language_code, \
     get_active_language_code, \
     get_supported_language_codes, \
     get_text, \
@@ -157,6 +158,19 @@ class LanguageTestCase(common.BleachbitTestCase):
             self.assertIn(get_text('Preview'),
                           ('Vista previa', 'Previsualizar'))
 
+    @contextlib.contextmanager
+    def mock_posix_locale_env(self, **env):
+        """Detect languages as on POSIX with exactly the given environment.
+
+        Anything not passed is absent, so LC_ALL, LC_MESSAGES, and LANG
+        are never inherited from the test runner's environment.
+        """
+        with mock.patch('bleachbit.Language.IS_POSIX', True), \
+                mock.patch('bleachbit.Language.IS_WINDOWS', False), \
+                mock.patch('bleachbit.Language.IS_MAC', False), \
+                mock.patch.dict(os.environ, env, clear=True):
+            yield
+
     def test_get_active_language_code_posix_env_not_setlocale(self):
         """On POSIX, detection must read the environment, not the
         locale set by locale.setlocale() in setup_translation().
@@ -166,14 +180,9 @@ class LanguageTestCase(common.BleachbitTestCase):
         """
         options.set('auto_detect_lang', True)
         options.set('forced_language', '')
-        with mock.patch('bleachbit.Language.IS_POSIX', True), \
-                mock.patch('bleachbit.Language.IS_WINDOWS', False), \
-                mock.patch('bleachbit.Language.IS_MAC', False), \
-                mock.patch.dict(os.environ, {'LANG': 'en_US.UTF-8'}), \
+        with self.mock_posix_locale_env(LANG='en_US.UTF-8'), \
                 mock.patch('locale.getlocale',
                            return_value=('es_ES', 'UTF-8')):
-            os.environ.pop('LC_ALL', None)
-            os.environ.pop('LC_MESSAGES', None)
             self.assertEqual(get_active_language_code(), 'en_US')
 
     def test_get_active_language_code_posix_env_unset(self):
@@ -181,16 +190,57 @@ class LanguageTestCase(common.BleachbitTestCase):
         locale.getlocale()."""
         options.set('auto_detect_lang', True)
         options.set('forced_language', '')
-        with mock.patch('bleachbit.Language.IS_POSIX', True), \
-                mock.patch('bleachbit.Language.IS_WINDOWS', False), \
-                mock.patch('bleachbit.Language.IS_MAC', False), \
-                mock.patch.dict(os.environ), \
+        with self.mock_posix_locale_env(), \
+                mock.patch('bleachbit.Language._locale_fallback', _UNSET), \
                 mock.patch('locale.getlocale',
                            return_value=('fr_FR', 'UTF-8')):
-            os.environ.pop('LC_ALL', None)
-            os.environ.pop('LC_MESSAGES', None)
-            os.environ.pop('LANG', None)
             self.assertEqual(get_active_language_code(), 'fr_FR')
+
+    def test_get_active_language_code_posix_env_strips_codeset(self):
+        """Strip the codeset ('.UTF-8') and modifier ('@latin')."""
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        for raw, expected in (('de_DE.UTF-8', 'de_DE'),
+                              ('de_DE@euro', 'de_DE'),
+                              ('sr_RS.UTF-8@latin', 'sr_RS'),
+                              ('C.UTF-8', 'C')):
+            with self.subTest(raw=raw), \
+                    self.mock_posix_locale_env(LANG=raw):
+                self.assertEqual(get_active_language_code(), expected)
+
+    def test_get_active_language_code_posix_env_precedence(self):
+        """LC_ALL wins over LC_MESSAGES, which wins over LANG, and an
+        empty value counts as unset."""
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        with self.subTest('all set'), \
+                self.mock_posix_locale_env(LC_ALL='es_ES.UTF-8',
+                                           LC_MESSAGES='fr_FR.UTF-8',
+                                           LANG='en_US.UTF-8'):
+            self.assertEqual(get_active_language_code(), 'es_ES')
+        with self.subTest('empty LC_ALL'), \
+                self.mock_posix_locale_env(LC_ALL='', LANG='en_US.UTF-8'):
+            self.assertEqual(get_active_language_code(), 'en_US')
+
+    def test_get_active_language_code_locale_fallback_cached(self):
+        """The locale.getlocale() fallback is captured before
+        setup_translation() calls locale.setlocale(), so detection does
+        not later report the forced language.
+        """
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        with self.mock_posix_locale_env(), \
+                mock.patch('bleachbit.Language._locale_fallback', _UNSET), \
+                mock.patch('locale.getlocale',
+                           side_effect=[('fr_FR', 'UTF-8'),
+                                        ('es_ES', 'UTF-8')]) as getlocale:
+            # The first call captures the system locale.
+            self.assertEqual(get_active_language_code(), 'fr_FR')
+            # The second returns the captured value, even though
+            # locale.getlocale() would now report a different locale,
+            # as it does after setup_translation() calls setlocale().
+            self.assertEqual(get_active_language_code(), 'fr_FR')
+            self.assertEqual(getlocale.call_count, 1)
 
     def test_options_import_failure(self):
         """Test handling of failed Options import in language detection"""
