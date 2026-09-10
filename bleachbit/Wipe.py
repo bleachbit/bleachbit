@@ -381,13 +381,13 @@ def wipe_path(pathname, idle=False):
         return 1, done_percent, remaining_seconds
 
     # Get the file system type from the given path
-    fstype = get_filesystem_type(pathname)[0]
+    fs_info = get_filesystem_type(pathname)
     # TRANSLATORS: Debug log message shown during file wiping. 'Wiping' is a
     # present participle (ongoing action) refering to secure overwrite.
     # %(pathname)s is the file/directory path; %(fstype)s is the file system type
     # (e.g., ext3, ntfs). Do not translate placeholders.
     logger.debug(_("Wiping path %(pathname)s with file system type %(fstype)s"),
-                 {"pathname": pathname, "fstype": fstype})
+                 {"pathname": pathname, "fstype": fs_info.fstype})
     if not os.path.isdir(pathname):
         logger.error(
             _("Path to wipe must be an existing directory: %s"), pathname)
@@ -400,7 +400,7 @@ def wipe_path(pathname, idle=False):
             logger.warning(
                 _("Shred drive is world-writable; wiping there is unsafe: %s"), pathname)
 
-    if fstype in ('ext4', 'btrfs'):
+    if fs_info.fstype in ('ext4', 'btrfs'):
         fitrim(pathname)
 
     files = []
@@ -438,7 +438,7 @@ def wipe_path(pathname, idle=False):
             while True:
 
                 try:
-                    if fstype != 'vfat':
+                    if fs_info.fstype != 'vfat':
                         f.write(blanks)
                     # On Ubuntu, the size of file should be less than
                     # 4GB. If not, there should be EFBIG error, so the

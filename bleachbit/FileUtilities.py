@@ -10,6 +10,7 @@ File-related utilities
 
 # standard imports
 import codecs
+import collections
 import contextlib
 import errno
 import glob
@@ -110,19 +111,30 @@ def open_files_linux():
     return glob.iglob("/proc/*/fd/*")
 
 
+FilesystemInfo = collections.namedtuple(
+    'FilesystemInfo', ['fstype', 'device', 'is_readonly'])
+
+
 def get_filesystem_type(path):
     """Get file system type from the given path
 
     path: directory path
 
     Return value:
-    A tuple of (file_system_type, device_name)
-    file_system_type: vfat, ntfs, etc.
-    device_name: C:, D:, etc.
+    A FilesystemInfo named tuple of (fstype, device, is_readonly)
+        * fstype: vfat, ntfs, tmpfs, etc.
+        * device: C:, /dev/sda1, etc.
+        * is_readonly: True if the file system is mounted read-only,
+          from the mount options reported by psutil
 
     File system types seen
-    * On Linux: btrfs,ext4, vfat, squashfs
-    * On Windows: NTFS, FAT32, CDFS
+    * On Linux: btrfs, ext4, squashfs, tmpfs, vfat
+    * On macOS: apfs, autofs, devfs
+    * On Windows: NTFS, FAT32, CDFS, unknown
+
+    When checking remote file share on Linux server, psutils may return
+        - fstype = 'unknown' for UNC path
+        - fstype = 'NTFS' for same path mapped to drive letter
     """
     try:
         # pylint: disable=import-outside-toplevel
@@ -130,18 +142,28 @@ def get_filesystem_type(path):
     except ImportError:
         logger.warning(
             'To get the file system type from the given path, you need to install psutil package')
-        return ("unknown", "none")
+        return FilesystemInfo("unknown", "none", False)
 
     path_obj = Path(path)
     if IS_WINDOWS:
         if len(path) == 2 and path[1] == ':':
             path_obj = Path(path + '\\')
 
-    # Get all partitions with Path objects as keys
+    # Get all partitions with Path objects as keys.
     partitions = {}
-    for partition in psutil.disk_partitions():
+    for partition in psutil.disk_partitions(all=False):
+        # all=True on Windows
+        # "may spin up a removable drive or go over the wire for a network one"
+        # https://github.com/giampaolo/psutil/blob/master/psutil/arch/windows/disk.c
         mount_path = Path(partition.mountpoint)
-        partitions[mount_path] = (partition.fstype, partition.device)
+        mount_opts = [opt.strip().lower()
+                      for opt in partition.opts.split(',')]
+        # examples from Windows
+        # sdiskpart(device='C:\\', mountpoint='C:\\', fstype='NTFS', opts='rw,fixed')
+        # sdiskpart(device='D:\\', mountpoint='D:\\', fstype='CDFS', opts='ro,readonly,cdrom')
+        is_readonly = 'ro' in mount_opts or 'readonly' in mount_opts
+        partitions[mount_path] = FilesystemInfo(
+            partition.fstype, partition.device, is_readonly)
 
     # Exact match
     for mount_path, fs_info in partitions.items():
@@ -156,7 +178,7 @@ def get_filesystem_type(path):
             if current == mount_path:
                 return fs_info
 
-    return ("unknown", "none")
+    return FilesystemInfo("unknown", "none", False)
 
 
 # FreeBSD lsof appends the mount device to NAME, e.g.
