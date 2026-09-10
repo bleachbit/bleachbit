@@ -73,7 +73,7 @@ from bleachbit.FileUtilities import (
 )
 from bleachbit.General import gc_collect, run_external
 from bleachbit.Options import init_configuration, options
-from bleachbit import logger, FS_CASE_SENSITIVE, IS_FREEBSD, IS_POSIX, IS_WINDOWS
+from bleachbit import logger, FS_CASE_SENSITIVE, IS_FREEBSD, IS_LINUX, IS_POSIX, IS_WINDOWS
 from tests import common
 
 
@@ -1593,6 +1593,32 @@ State=AAAA/wA...
                     'hfs', 'squashfs', 'ufs', 'zfs', 'tmpfs', 'ffs',
                     'unknown'],
                     f"Unexpected file system type for {check_path}: {detected_fs}")
+
+    def test_get_filesystem_type_cdrom(self):
+        """Unit test for get_filesystem_type() on a CD-ROM drive"""
+        cdrom_mounts = common.cdrom_mountpoints()
+        if 'GITHUB_ACTIONS' in os.environ and (IS_LINUX or IS_WINDOWS):
+            self.assertTrue(
+                cdrom_mounts, 'Expected a mounted CD-ROM drive in CI')
+        for mountpoint in cdrom_mounts:
+            fs_info = get_filesystem_type(mountpoint)
+            self.assertTrue(fs_info.is_cdrom)
+            self.assertTrue(fs_info.is_readonly)
+
+
+    @common.skipUnlessMac
+    def test_get_filesystem_type_macos(self):
+        """get_filesystem_type quirks on macOS"""
+        root_fs_info = None
+        # Because of firmlinks, read-write paths like ~ resolve to
+        # the root partition, which is a secured sealed volume.
+        for pathname in ('/', '/tmp', os.path.expanduser('~')):
+            fs_info = get_filesystem_type(pathname)
+            if not root_fs_info:
+                root_fs_info = fs_info
+            self.assertTrue(fs_info.is_readonly)
+            self.assertFalse(fs_info.is_cdrom)
+            self.assertEqual(fs_info, root_fs_info)
 
     def test_get_filesystem_type_missing_psutil(self):
         """get_filesystem_type should return unknown when psutil is missing."""
