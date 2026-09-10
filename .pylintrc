@@ -5,6 +5,8 @@ module-naming-style=any
 
 # pywin32 and the Windows-only extras do not install on Linux, and gi resolves
 # its members at run time.
+# Ignoring also disables member checking, so the Windows job narrows this list.
+# See PYLINT_ARGS in the Makefile.
 ignored-modules=gi,
                 winreg,
                 gi.repository,
@@ -27,7 +29,23 @@ ignored-modules=gi,
                 win32serviceutil,
                 winioctlcon
 
-extension-pkg-allow-list=gi
+# pylint imports and checks these where they install, which is Windows only.
+extension-pkg-allow-list=gi,
+                         ntsecuritycon,
+                         pywintypes,
+                         win32api,
+                         win32clipboard,
+                         win32com,
+                         win32con,
+                         win32event,
+                         win32file,
+                         win32gui,
+                         win32process,
+                         win32security,
+                         win32service,
+                         win32serviceutil,
+                         winioctlcon,
+                         winreg
 
 [MESSAGES CONTROL]
 
