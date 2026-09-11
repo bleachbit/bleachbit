@@ -69,6 +69,14 @@ class Worker:
         self.total_bytes = 0
         self.total_deleted = 0
         self.total_errors = 0
+        # Counts only the generic 'Access denied' case below (a
+        # plain EACCES with none of the more specific Windows
+        # sub-causes matched) -- e.g. a file owned by another
+        # user because it was installed by an app's own updater
+        # running with elevated privileges. Used to show one
+        # extra hint line in the final summary, without
+        # changing the per-file 'Access denied: %s' message.
+        self.total_access_denied_errors = 0
         self.total_special = 0  # special operations
         self.yield_time = None
         self.is_aborted = False
@@ -133,6 +141,7 @@ class Worker:
                         _("Access denied when deleting registry key: %s"), e.filename)
                 else:
                     logger.error(_("Access denied: %s"), e.filename)
+                    self.total_access_denied_errors += 1
             elif (e.__class__.__module__ == 'sqlite3'
                   and e.__class__.__name__ == 'OperationalError'
                   and str(e).startswith('database is locked')):
@@ -358,6 +367,18 @@ class Worker:
             self.ui.append_text("\n%s" % line)
         if self.total_errors > 0:
             line = _("Errors: %d") % self.total_errors
+            self.ui.append_text("\n%s" % line, 'error')
+        if self.total_access_denied_errors > 0:
+            # TRANSLATORS: Shown after cleaning when at least one
+            # file could not be accessed due to a permission
+            # error, to suggest a likely cause and remedy (e.g. a
+            # file owned by another user because it was
+            # installed by an app's own updater running with
+            # elevated privileges).
+            line = _("Some files could not be accessed due to "
+                    "permission errors. If they belong to "
+                    "another user, try running BleachBit with "
+                    "administrator privileges.")
             self.ui.append_text("\n%s" % line, 'error')
         self.ui.append_text('\n')
 
