@@ -424,9 +424,9 @@ jobs:
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         run: '"%PYTHON_HOME%\Scripts\pip3.exe" install --disable-pip-version-check -r requirements-test.txt'
 
-      - name: Mount ISO as O drive for testing
+      - name: Mount virtual CD-ROM for testing
         shell: pwsh
-        run: .\scripts\attach_dir_as_iso.ps1 -DriveLetter O
+        run: .\scripts\attach_dir_as_iso.ps1
 
       # Suites run as separate steps (not a matrix); ids let the coverage
       # steps below check each suite's outcome before reporting.
