@@ -326,6 +326,46 @@ def wipe_name(pathname1):
     return pathname2
 
 
+def is_wipe_path_readonly(pathname, fs_info=None):
+    """Quick check for some directories that should not be wiped
+
+    Returns True for cases including:
+        - CD-ROM and optical drives (including writeable types)
+        - read-only USB flash drive
+        - special file systems like /dev, /proc, snap squashfs
+
+    This function is not exhausitive: it may have false negatives,
+    but it should not have false positives, so that is why it is
+    not named `is_wipe_path_writable`.
+    """
+    # pylint: disable=import-outside-toplevel
+    from bleachbit.FileUtilities import get_filesystem_type
+    if IS_POSIX:
+        # /dev exists on FreeBSD, Linux, and macOS
+        # /proc exists on Linux and FreeBSD
+        real = os.path.realpath(pathname)
+        if any(real == dirname or real.startswith(dirname + os.sep)
+               for dirname in ('/dev', '/proc')):
+            return True
+    if fs_info is None:
+        fs_info = get_filesystem_type(pathname)
+    if fs_info.is_cdrom:
+        return True
+    if IS_WINDOWS:
+        return fs_info.is_readonly
+    if fs_info.fstype in ('devfs', 'devpts', 'devtmpfs', 'proc', 'procfs'):
+        return True
+    if not fs_info.is_readonly:
+        return False
+    # On macOS because of firmlinks, get_filesystem_type() resolves many paths
+    # such as ~ and /tmp to the root directory, which is read-only (sealed
+    # system volume).
+    try:
+        return bool(os.statvfs(pathname).f_flag & os.ST_RDONLY)
+    except OSError:
+        return True
+
+
 def wipe_path(pathname, idle=False):
     """Wipe the free space in the path
     This function uses an iterator to update the GUI."""
@@ -401,9 +441,9 @@ def wipe_path(pathname, idle=False):
             _("Path to wipe must be an existing directory: %s"), pathname)
         return
 
-    if fs_info.is_readonly:
+    if is_wipe_path_readonly(pathname, fs_info):
         logger.warning(
-            'Not wiping %s: the %s file system is mounted read-only.',
+            'Not wiping %s: the %s file system is read-only.',
             pathname, fs_info.fstype)
         return
 
@@ -439,8 +479,12 @@ def wipe_path(pathname, idle=False):
                 # Linux gives errno 122 Disk quota exceeded (EDQUOT)
                 if e.errno in (errno.EMFILE, errno.ENOSPC, errno.EDQUOT):
                     break
-                if e.errno in (errno.EACCES, errno.EPERM, errno.EROFS, errno.EEXIST):
-                    # Read-only mount; EEXIST = tempfile exhausted its retries.
+                if e.errno == errno.EROFS or \
+                        (IS_WINDOWS and e.errno in (errno.EACCES, errno.EPERM, errno.EEXIST)):
+                    # Read-only mount missed by the check above. POSIX always
+                    # reports it as EROFS, so EACCES/EPERM there are genuine
+                    # permission errors worth raising. On Windows, tempfile
+                    # retries a denied write and finally raises EEXIST.
                     logger.warning(
                         'Cannot create a temporary file for wiping; '
                         'the file system may be read-only: %s', e)

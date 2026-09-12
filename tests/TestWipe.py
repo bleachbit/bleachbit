@@ -16,13 +16,16 @@ import unittest
 from contextlib import ExitStack
 from unittest import mock
 
+import psutil
+
 import bleachbit
 from bleachbit.FileUtilities import FilesystemInfo, get_filesystem_type
 from bleachbit.Options import options
-from bleachbit import Wipe
+from bleachbit import IS_MAC, Wipe
 from bleachbit.Wipe import (
     detect_orphaned_wipe_files,
     sync,
+    is_wipe_path_readonly,
     wipe_contents,
     wipe_path,
     wipe_name,
@@ -573,6 +576,41 @@ class WipeTestCase(common.BleachbitTestCase):
             self.assertIsInstance(result, tuple)
             self.assertEqual(len(result), 3)
 
+
+    @common.skipIfWindows
+    def test_is_wipe_path_readonly_posix(self):
+        """is_wipe_path_readonly on POSIX"""
+        tests = [
+            ('/', IS_MAC),
+            ('/bin', IS_MAC),
+            ('/dev', True),
+            ('/etc', False),
+            ('/var', False),
+            ('/tmp', False),
+            (os.path.expanduser('~'), False),
+        ]
+        # macOS does not have /proc
+        # Linux has /dev/shm
+        for path, expected in [('/proc', True), ('/dev/shm', True)]:
+            if os.path.isdir(path):
+                tests.append((path, expected))
+        if IS_MAC:
+            tests.extend([
+                ('/System', True),
+                ('/System/Library', True),
+            ])
+        if bleachbit.IS_LINUX:
+            # squashfs for snap is a common read-only mount point.
+            for part in psutil.disk_partitions(all=False):
+                if get_filesystem_type(part.mountpoint).is_readonly:
+                    tests.append((part.mountpoint, True))
+                    break
+        for (pathname, bool_expected) in tests:
+            self.assertEqual(is_wipe_path_readonly(pathname), bool_expected, pathname)
+
+
+
+
     def test_wipe_path_readonly_drive(self):
         """wipe_path() returns early on a real read-only CD-ROM drive"""
         mounts = common.cdrom_mountpoints()
@@ -584,6 +622,7 @@ class WipeTestCase(common.BleachbitTestCase):
             self.skipTest('no CD-ROM drive present')
         for mountpoint in mounts:
             with self.subTest(mountpoint=mountpoint):
+                self.assertTrue(is_wipe_path_readonly(mountpoint))
                 with self.assertLogs('bleachbit.Wipe', level='WARNING') as cm:
                     results = list(wipe_path(mountpoint))
                 self.assertEqual(results, [])
@@ -617,12 +656,14 @@ class WipeTestCase(common.BleachbitTestCase):
     def test_wipe_path_tempfile_write_denied(self):
         """Write-denied errors creating the temp file stop wiping cleanly.
 
-        Covers the errno values a real CD-ROM cannot produce: on Windows,
-        tempfile turns EACCES into EEXIST after its bounded retries, and
-        on POSIX a read-only mount raises EROFS. Both are exercised for
-        real by test_wipe_path_readonly_drive_detection_missed().
+        On POSIX a read-only mount raises EROFS. On Windows, where a
+        read-only mount is not always detected, tempfile turns EACCES or
+        EPERM into EEXIST after its bounded retries. The real errors are
+        exercised by test_wipe_path_readonly_drive_detection_missed().
         """
-        for errnum in (errno.EACCES, errno.EPERM):
+        denied = (errno.EACCES, errno.EPERM, errno.EEXIST) \
+            if bleachbit.IS_WINDOWS else (errno.EROFS,)
+        for errnum in denied:
             with self.subTest(errnum=errnum):
                 ntf_mock = mock.Mock(side_effect=OSError(
                     errnum, os.strerror(errnum)))
@@ -632,6 +673,24 @@ class WipeTestCase(common.BleachbitTestCase):
                     with self.assertLogs('bleachbit.Wipe', level='WARNING'):
                         results = list(wipe_path(self.tempdir))
                 self.assertEqual(results, [])
+                ntf_mock.assert_called_once()
+
+    @common.skipIfWindows
+    def test_wipe_path_tempfile_permission_denied_raises(self):
+        """On POSIX, EACCES/EPERM creating the temp file propagate.
+
+        A read-only mount gives EROFS, not EACCES, so these errnos mean a
+        genuine permission problem rather than a missed read-only mount.
+        """
+        for errnum in (errno.EACCES, errno.EPERM):
+            with self.subTest(errnum=errnum):
+                ntf_mock = mock.Mock(side_effect=OSError(
+                    errnum, os.strerror(errnum)))
+                with self._wipe_path_common_mocks() as stack:
+                    stack.enter_context(mock.patch(
+                        'bleachbit.Wipe.tempfile.NamedTemporaryFile', ntf_mock))
+                    with self.assertRaises(OSError):
+                        list(wipe_path(self.tempdir))
                 ntf_mock.assert_called_once()
 
     def test_wipe_path_full_writable_fs_still_attempts(self):
