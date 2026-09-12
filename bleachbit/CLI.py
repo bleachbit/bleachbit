@@ -398,13 +398,19 @@ There is NO WARRANTY, to the extent permitted by law.
             sys.exit(1)
         # TRANSLATORS: Log message on the CLI.
         logger.info(_("Wiping empty space can take a long time."))
+        had_error = False
         for wipe_path in args:
             # TRANSLATORS: Shows activity in the CLI, and %s is the path to the directory.
             logger.info(_("Wipe empty space in %s"), wipe_path)
             import bleachbit.Wipe
-            for _ret in bleachbit.Wipe.wipe_path(wipe_path):
-                pass
-        sys.exit(0)
+            try:
+                for _ret in bleachbit.Wipe.wipe_path(wipe_path):
+                    pass
+            except OSError as e:
+                # Do not let one bad path abort the remaining ones.
+                logger.error('%s: %s', wipe_path, e)
+                had_error = True
+        sys.exit(1 if had_error else 0)
     operations = {}
     if options.preview or options.clean:
         operations = args_to_operations(
