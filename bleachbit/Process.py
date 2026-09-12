@@ -51,7 +51,7 @@ def _enumerate_psutil_posix():
     """Enumerate processes with psutils on POSIX"""
     from bleachbit.General import get_real_uid
     target_uid = get_real_uid()
-    for proc in psutil.process_iter(['name', 'exe', 'uids']):
+    for proc in psutil.process_iter(['name', 'exe', 'uids', 'cmdline']):
         try:
             name = proc.info['name']
             if not name:
@@ -59,10 +59,18 @@ def _enumerate_psutil_posix():
             exe = proc.info.get('exe')
             uids = proc.info.get('uids')
             same_user = uids is not None and uids.real == target_uid
-            yield ProcessInfo(proc.pid, name, same_user)
+            names = {name}
             # exe basename may differ from name (e.g. truncated comm)
-            if exe and os.path.basename(exe) != name:
-                yield ProcessInfo(proc.pid, os.path.basename(exe), same_user)
+            if exe:
+                names.add(os.path.basename(exe))
+            # argv[0] may differ from exe (e.g. a versioned binary like
+            # ~/.local/share/claude/versions/2.1.270 launched as 'claude')
+            cmdline = proc.info.get('cmdline')
+            if cmdline:
+                names.add(os.path.basename(cmdline[0]))
+            for proc_name in names:
+                if proc_name:
+                    yield ProcessInfo(proc.pid, proc_name, same_user)
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             continue
 
@@ -71,13 +79,19 @@ def _enumerate_psutil_windows():
     """Enumerate processes with psutils on Windows"""
 
     current_user = psutil.Process().username().lower()
-    for proc in psutil.process_iter(['name', 'username']):
+    for proc in psutil.process_iter(['name', 'username', 'cmdline']):
         try:
             name = proc.info['name']
             if not name:
                 continue
             same_user = (proc.info['username'] or '').lower() == current_user
-            yield ProcessInfo(proc.pid, name, same_user)
+            names = {name}
+            cmdline = proc.info.get('cmdline')
+            if cmdline:
+                names.add(os.path.basename(cmdline[0]))
+            for proc_name in names:
+                if proc_name:
+                    yield ProcessInfo(proc.pid, proc_name, same_user)
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             continue
 
@@ -123,6 +137,16 @@ def _enumerate_proc_fs():
             # the process exited between listing and stat
             same_user = False
         yield ProcessInfo(pid, name, same_user)
+        # argv[0] may differ from the exe name (e.g. a versioned binary
+        # launched through a symlink)
+        try:
+            with open(os.path.join(pid_dir, 'cmdline'), 'rb') as f:
+                argv0 = os.path.basename(
+                    f.read().split(b'\x00')[0].decode('utf-8', 'replace'))
+        except OSError:
+            argv0 = ''
+        if argv0 and argv0 != name:
+            yield ProcessInfo(pid, argv0, same_user)
 
 
 def _enumerate_ps_aux():
