@@ -15,6 +15,7 @@ Usage:
 
 import inspect
 import os
+import pkgutil
 import shlex
 import shutil
 import subprocess
@@ -26,6 +27,7 @@ from importlib import import_module
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import common test utilities
+import tests
 from tests import common
 from bleachbit import IS_POSIX
 
@@ -34,11 +36,12 @@ def discover_sudo_tests():
     """Discover all test methods marked with @also_with_sudo decorator"""
     sudo_tests = []
 
-    # Import test modules to scan for decorated tests
+    # Scan all test modules for decorated tests, so modules cannot
+    # silently fall out of coverage when tests are added elsewhere.
     test_modules = [
-        'tests.TestCLI',
-        'tests.TestGeneral',
-        'tests.TestUnix',
+        info.name
+        for info in pkgutil.iter_modules(tests.__path__, 'tests.')
+        if info.name.startswith('tests.Test')
     ]
 
     for module_name in test_modules:

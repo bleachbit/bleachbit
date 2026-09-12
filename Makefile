@@ -169,7 +169,7 @@ tests-nsis:
 	$(PYTHON_CMD) windows/nsis_translations.py --unittest
 
 tests-with-sudo:
-	# Run tests marked with @test_also_with_sudo using sudo
+	# Run tests marked with @also_with_sudo using sudo
 	PYTHONWARNINGS=error \
 		BLEACHBIT_COVERAGE_RUNNER="$(BLEACHBIT_SUDO_COVERAGE_RUNNER)" \
 		BLEACHBIT_COVERAGE_FILE="$(BLEACHBIT_SUDO_COVERAGE_FILE)" \
