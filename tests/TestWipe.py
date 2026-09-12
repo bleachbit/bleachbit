@@ -11,12 +11,13 @@ Test case for module Wipe
 import errno
 import itertools
 import os
+import tempfile
 import unittest
 from contextlib import ExitStack
 from unittest import mock
 
 import bleachbit
-from bleachbit.FileUtilities import FilesystemInfo
+from bleachbit.FileUtilities import FilesystemInfo, get_filesystem_type
 from bleachbit.Options import options
 from bleachbit import Wipe
 from bleachbit.Wipe import (
@@ -360,7 +361,7 @@ class WipeTestCase(common.BleachbitTestCase):
         mock_file.close.return_value = None
         return mock_file
 
-    def _wipe_path_common_mocks(self, fs_type='ntfs'):
+    def _wipe_path_common_mocks(self, fs_type='ntfs', read_only=False):
         """Return an ExitStack with the common wipe_path mocks applied.
 
         Each test can extend the returned stack with additional patches
@@ -371,7 +372,7 @@ class WipeTestCase(common.BleachbitTestCase):
             'bleachbit.Wipe.os.path.isdir', return_value=True))
         stack.enter_context(mock.patch(
             'bleachbit.FileUtilities.get_filesystem_type',
-            return_value=FilesystemInfo(fs_type, 'none', False)))
+            return_value=FilesystemInfo(fs_type, 'none', read_only)))
         stack.enter_context(mock.patch(
             'bleachbit.FileUtilities.free_space', return_value=0))
         stack.enter_context(mock.patch('bleachbit.Wipe.sync'))
@@ -571,6 +572,81 @@ class WipeTestCase(common.BleachbitTestCase):
         for result in results:
             self.assertIsInstance(result, tuple)
             self.assertEqual(len(result), 3)
+
+    def test_wipe_path_readonly_drive(self):
+        """wipe_path() returns early on a real read-only CD-ROM drive"""
+        mounts = common.cdrom_mountpoints()
+        if 'GITHUB_ACTIONS' in os.environ and (
+                bleachbit.IS_LINUX or bleachbit.IS_WINDOWS):
+            self.assertTrue(
+                mounts, 'Expected a mounted CD-ROM drive in CI')
+        if not mounts:
+            self.skipTest('no CD-ROM drive present')
+        for mountpoint in mounts:
+            with self.subTest(mountpoint=mountpoint):
+                with self.assertLogs('bleachbit.Wipe', level='WARNING') as cm:
+                    results = list(wipe_path(mountpoint))
+                self.assertEqual(results, [])
+                self.assertTrue(any('read-only' in m for m in cm.output))
+
+    def test_wipe_path_readonly_drive_detection_missed(self):
+        """wipe_path() stops cleanly when a read-only drive is not detected
+
+        Stubs get_filesystem_type() to report a real CD-ROM as an unknown,
+        writable file system, so the real OS errors from creating a file on
+        read-only media exercise the fallback path: on Windows, tempfile
+        retries PermissionError up to the bounded TMP_MAX and then raises
+        EEXIST; on POSIX, os.open fails immediately with EROFS.
+        """
+        if not (mounts := common.cdrom_mountpoints()):
+            self.skipTest('no CD-ROM drive present')
+        tmp_max_before = tempfile.TMP_MAX
+        for mountpoint in mounts:
+            with self.subTest(mountpoint=mountpoint):
+                # Never write-test media that might actually be writable.
+                self.assertTrue(get_filesystem_type(mountpoint).is_readonly)
+                with mock.patch(
+                        'bleachbit.FileUtilities.get_filesystem_type',
+                        return_value=FilesystemInfo('unknown', 'none', False)), \
+                        self.assertLogs('bleachbit.Wipe', level='WARNING') as cm:
+                    results = list(wipe_path(mountpoint))
+                self.assertEqual(results, [])
+                self.assertTrue(any('read-only' in m for m in cm.output))
+        self.assertEqual(tempfile.TMP_MAX, tmp_max_before)
+
+    def test_wipe_path_tempfile_write_denied(self):
+        """Write-denied errors creating the temp file stop wiping cleanly.
+
+        Covers the errno values a real CD-ROM cannot produce: on Windows,
+        tempfile turns EACCES into EEXIST after its bounded retries, and
+        on POSIX a read-only mount raises EROFS. Both are exercised for
+        real by test_wipe_path_readonly_drive_detection_missed().
+        """
+        for errnum in (errno.EACCES, errno.EPERM):
+            with self.subTest(errnum=errnum):
+                ntf_mock = mock.Mock(side_effect=OSError(
+                    errnum, os.strerror(errnum)))
+                with self._wipe_path_common_mocks() as stack:
+                    stack.enter_context(mock.patch(
+                        'bleachbit.Wipe.tempfile.NamedTemporaryFile', ntf_mock))
+                    with self.assertLogs('bleachbit.Wipe', level='WARNING'):
+                        results = list(wipe_path(self.tempdir))
+                self.assertEqual(results, [])
+                ntf_mock.assert_called_once()
+
+    def test_wipe_path_full_writable_fs_still_attempts(self):
+        """A writable cdfs mount with 0 free space still tries to wipe.
+
+        Guards the early-out from keying off the file system type; the
+        read-only flag, not the fstype string, decides whether to wipe.
+        """
+        ntf_mock = mock.Mock(side_effect=OSError(
+            errno.EDQUOT, 'Disk quota exceeded'))
+        with self._wipe_path_common_mocks(fs_type='cdfs', read_only=False) as stack:
+            stack.enter_context(mock.patch(
+                'bleachbit.Wipe.tempfile.NamedTemporaryFile', ntf_mock))
+            list(wipe_path(self.tempdir))
+        ntf_mock.assert_called_once()
 
     def test_wipe_path_cleanup_finally(self):
         """Cleanup runs in finally even when truncate_f fails"""
