@@ -1605,6 +1605,21 @@ State=AAAA/wA...
             self.assertTrue(fs_info.is_cdrom)
             self.assertTrue(fs_info.is_readonly)
 
+
+    @common.skipUnlessMac
+    def test_get_filesystem_type_macos(self):
+        """get_filesystem_type quirks on macOS"""
+        root_fs_info = None
+        # Because of firmlinks, read-write paths like ~ resolve to
+        # the root partition, which is a secured sealed volume.
+        for pathname in ('/', '/tmp', os.path.expanduser('~')):
+            fs_info = get_filesystem_type(pathname)
+            if not root_fs_info:
+                root_fs_info = fs_info
+            self.assertTrue(fs_info.is_readonly)
+            self.assertFalse(fs_info.is_cdrom)
+            self.assertEqual(fs_info, root_fs_info)
+
     def test_get_filesystem_type_missing_psutil(self):
         """get_filesystem_type should return unknown when psutil is missing."""
         with common.mock_missing_package('psutil'):
