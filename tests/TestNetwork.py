@@ -32,7 +32,9 @@ from tests import common
 from bleachbit import IS_WINDOWS
 from bleachbit.FileUtilities import delete
 from bleachbit.Network import (download_url_to_fn, fetch_url, get_gtk_version,
-                               get_ip_for_url, get_user_agent, unset_sslkeylogfile)
+                               get_ip_for_url, get_user_agent,
+                               unset_sslkeylogfile, _coarsen_os_version,
+                               _coarsen_windows_build, _version_major_minor)
 
 logger = logging.getLogger(__name__)
 
@@ -187,6 +189,74 @@ class NetworkTestCase(common.BleachbitTestCase):
         agent = get_user_agent()
         logger.debug("user agent = '%s'", agent)
         self.assertIsString(agent)
+
+    def test_version_major_minor(self):
+        """Unit test for _version_major_minor()"""
+        cases = (
+            ('6.18.50_1', '6.18'),
+            ('7.0.12+deb14.1', '7.0'),
+            ('6.12.3-061203-generic', '6.12'),
+            ('15.1-STABLE', '15.1'),
+            ('2026-05-16', '2026-05'),
+            ('2026-05', '2026-05'),
+            ('20260402', '202604'),
+            ('20250302.0.316047', '202503'),
+            ('24.10', '24.10'),
+            ('6.12', '6.12'),
+        )
+        for version, expected in cases:
+            with self.subTest(version=version):
+                self.assertEqual(expected, _version_major_minor(version))
+
+    def test_coarsen_os_version(self):
+        """Unit test for _coarsen_os_version()"""
+        cases = (
+            ('arch 20081221.0.316047', 'arch 200812'),
+            ('artix 20081221', 'artix 200812'),
+            ('biglinux 2008-12-21', 'biglinux 2008-12'),
+            ('endeavouros 2008.12.21', 'endeavouros 2008.12'),
+            ('omarchy 4.0.0.r1854.g06e32d2', 'omarchy 4.0'),
+            ('opensuse-slowroll 20081221', 'opensuse-slowroll 200812'),
+            ('opensuse-tumbleweed 20081221', 'opensuse-tumbleweed 200812'),
+            ('ubuntu 24.10', 'ubuntu 24.10'),
+            ('Linux 7.0.12+deb14.1 (unknown distribution)', 'Linux 7.0'),
+            ('Linux 6.18.50_1 (unknown distribution)', 'Linux 6.18'),
+            ('Linux', 'Linux'),
+            ('FreeBSD 15.1-STABLE stable/15-n284829-192a5eeab8d1', 'FreeBSD 15.1'),
+            ('', ''),
+        )
+        for os_version, expected in cases:
+            with self.subTest(os_version=os_version):
+                self.assertEqual(expected,
+                                 _coarsen_os_version(os_version))
+
+    def test_coarsen_windows_build(self):
+        """Unit test for _coarsen_windows_build()"""
+        cases = (
+            ('10.0.27999', '10.0.26300'),
+            ('10.0.26461', '10.0.26300'),
+            ('10.0.22625', '10.0.22621'),
+            ('10.0.28000', '10.0.28000'),
+            ('10.0.22000', '10.0.22000'),
+            ('10.0.19045', '10.0.19045'),
+            ('10.0.10240', '10.0.10240'),
+            # Future builds beyond the newest known release keep two
+            # significant digits
+            ('10.0.28001', '10.0.28000'),
+            ('10.0.99999', '10.0.99000'),
+            ('11.0.100000', '11.0.100000'),
+            # Builds below the first known release are unchanged
+            ('6.1.7601', '6.1.7601'),
+            ('10.0.9', '10.0.9'),
+            ('10.0.2660', '10.0.2660'),
+            ('10.0', '10.0'),
+            ('10.0.26461.foo', '10.0.26461.foo'),
+            ('', ''),
+        )
+        for os_version, expected in cases:
+            with self.subTest(os_version=os_version):
+                self.assertEqual(expected,
+                                 _coarsen_windows_build(os_version))
 
     def test_fetch_url_nonretry(self):
         """Unit test for fetch_url() without retry"""
