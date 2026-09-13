@@ -198,7 +198,8 @@ class LanguageTestCase(common.BleachbitTestCase):
         """Language code x_Y should fall back to x"""
         for lang_id in ('es', 'es_XX', 'es_ES', 'es_ES.UTF-8', 'es_1235'):
             options.set('forced_language', lang_id)
-            self.assertEqual(get_active_language_code(), lang_id)
+            self.assertEqual(get_active_language_code(),
+                             normalize_locale_code(lang_id))
             setup_translation()
             self.assertIn(get_text('Preview'),
                           ('Vista previa', 'Previsualizar'))
