@@ -424,6 +424,9 @@ class PreferencesDialog:
         if is_auto_detect:
             options.set("forced_language", "", section="bleachbit")
         else:
+            # Clear first so detection below sees the system locale
+            # rather than a stale forced value.
+            options.set("forced_language", "", section="bleachbit")
             # Keep the detected language as the default now that it is
             # no longer automatically detected.
             # https://github.com/bleachbit/bleachbit/issues/1799
