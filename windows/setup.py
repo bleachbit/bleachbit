@@ -93,12 +93,14 @@ def get_build_settings():
 
     is_fast = arg == 'fast'
     is_max_effort = arg == 'max-effort'
+    #enable_upx = not is_fast and bool(os.path.exists(UPX_EXE)) # compress executables
+    enable_upx = False # temporary override
 
     return {
         'preset': 'fast' if is_fast else ('max-effort' if is_max_effort else 'regular'),
         'fast': is_fast, # controls .zip and NSIS compression levels
         'build_english': is_max_effort, # build English-only installer
-        'upx': not is_fast and bool(os.path.exists(UPX_EXE)), # compress executables
+        'upx': enable_upx,
         'advzip': is_max_effort and bool(os.path.exists(ADVZIP_EXE)), # recompress zips with advzip
         'strip': not is_fast and bool(STRIP_EXE), # strip executables
         'recompress_lib': not is_fast, # recompress library.zip
@@ -985,7 +987,7 @@ def package_portable(settings):
             f'BleachBit-{get_version()}-portable.zip', settings, use_advzip=True)
 
 
-def nsis(opts, exe_name, nsi_path):
+def nsis(opts, exe_name, nsi_path, settings):
     """Run NSIS with the options to build exe_name"""
     if os.path.exists(exe_name):
         logger.info('Deleting old file: %s', exe_name)
@@ -994,7 +996,7 @@ def nsis(opts, exe_name, nsi_path):
         f'/DVERSION={get_version()}',
         f'/DSHRED_REGEX_KEY={SHRED_REGEX_KEY}',
         nsi_path]
-    if os.path.exists(UPX_EXE):
+    if settings['upx'] and os.path.exists(UPX_EXE):
         # NSIS !packhdr requires backslashes and no quotes in the define
         upx_path = UPX_EXE.replace('/', '\\')
         cmd.insert(-1, f'/DUPX_EXE={upx_path}')
@@ -1024,7 +1026,7 @@ def package_installer(settings, nsi_path=r'windows\bleachbit.nsi'):
     opts = '' if settings['fast'] else '/V3 /DCompressor'
     if settings['upx']:
         opts += ' /Dpackhdr'
-    nsis(opts, exe_name_multilang, nsi_path)
+    nsis(opts, exe_name_multilang, nsi_path, settings)
 
     # The English-only installer is controlled by the build_english setting,
     # which the max-effort preset enables (used for tag/release builds). This
@@ -1041,7 +1043,7 @@ def package_installer(settings, nsi_path=r'windows\bleachbit.nsi'):
         # As of 2022-11-20, there is not a big size difference for
         # the English-only build, and Google Search flags the Python 3.10
         # version as malware.
-        nsis(opts + ' /DNoTranslations', exe_name_en, nsi_path)
+        nsis(opts + ' /DNoTranslations', exe_name_en, nsi_path, settings)
         sign_files((exe_name_multilang, exe_name_en))
     else:
         # English-only installer skipped (e.g., non-tag CI build).
