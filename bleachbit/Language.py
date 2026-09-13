@@ -321,12 +321,27 @@ def find_supported_language_code(lang_code, supported_codes):
             return candidate
         if candidate.lower() in lowered:
             return lowered[candidate.lower()]
-    # Try a supported regional variant like 'pt_BR' for 'pt'.
+    # Try a supported regional variant like 'pt_BR' for 'pt'. Prefer the
+    # variant whose region is implied by the detected code's region or
+    # script subtags: 'zh_Hant_TW', 'zh_Hant', and 'zh_HK' all imply
+    # Traditional Chinese, so they match 'zh_TW' rather than 'zh_CN'.
+    subtags = set(normalized.lower().split('_')[1:])
+    if subtags & {'hant', 'tw', 'hk', 'mo'}:
+        preferred_region = 'tw'
+    elif len(normalized.split('_')) > 1:
+        preferred_region = normalized.lower().rsplit('_', 1)[-1]
+    else:
+        preferred_region = None
     prefix = normalized.split('_')[0].lower() + '_'
+    first_match = None
     for code in codes:
-        if code.lower().startswith(prefix):
+        if not code.lower().startswith(prefix):
+            continue
+        if first_match is None:
+            first_match = code
+        if preferred_region and code.lower() == prefix + preferred_region:
             return code
-    return None
+    return first_match
 
 
 _UNSET = object()

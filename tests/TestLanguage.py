@@ -95,10 +95,33 @@ class LanguageTestCase(common.BleachbitTestCase):
         # Case-insensitive match.
         self.assertEqual(
             find_supported_language_code('EN-us', supported), 'en_US')
+        # Strip codeset and modifier.
+        self.assertEqual(
+            find_supported_language_code('de_DE.UTF-8', ['de_DE']), 'de_DE')
+        self.assertEqual(
+            find_supported_language_code('de@euro', ['de']), 'de')
+        self.assertEqual(
+            find_supported_language_code('sr_RS@latin', ['sr']), 'sr')
+        # Regional variant prefers the same or script-implied region:
+        # 'zh_Hant', 'zh_HK', and 'zh_MO' are Traditional Chinese.
+        supported_zh = ['zh_CN', 'zh_TW']
+        self.assertEqual(
+            find_supported_language_code('zh_Hant_TW', supported_zh), 'zh_TW')
+        self.assertEqual(
+            find_supported_language_code('zh_Hant', supported_zh), 'zh_TW')
+        self.assertEqual(
+            find_supported_language_code('zh_HK', supported_zh), 'zh_TW')
+        self.assertEqual(
+            find_supported_language_code('zh_MO', supported_zh), 'zh_TW')
+        self.assertEqual(
+            find_supported_language_code('zh_Hans', supported_zh), 'zh_CN')
+        self.assertEqual(
+            find_supported_language_code('zh', supported_zh), 'zh_CN')
         # No match.
         self.assertIsNone(find_supported_language_code('de', supported))
         self.assertIsNone(find_supported_language_code('C', supported))
         self.assertIsNone(find_supported_language_code('', supported))
+        self.assertIsNone(find_supported_language_code('.UTF-8', supported))
         self.assertIsNone(find_supported_language_code('en', []))
 
     def test_normalize_locale_code(self):
