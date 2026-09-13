@@ -16,6 +16,7 @@ import subprocess
 from pathlib import Path
 
 from bleachbit import APP_NAME, FileUtilities, IS_MAC
+from bleachbit.Language import normalize_locale_code
 
 logger = logging.getLogger(__name__)
 
@@ -82,7 +83,7 @@ def get_macos_locale():
     if not value:
         return None
     # AppleLocale can include a variant suffix like 'es_ES@currency=EUR'.
-    value = value.split('@')[0]
+    value = normalize_locale_code(value)
     return value or None
 
 
