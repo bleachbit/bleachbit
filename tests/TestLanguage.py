@@ -258,6 +258,12 @@ class LanguageTestCase(common.BleachbitTestCase):
         with self.subTest('empty LC_ALL'), \
                 self.mock_posix_locale_env(LC_ALL='', LANG='en_US.UTF-8'):
             self.assertEqual(get_active_language_code(), 'en_US')
+        with self.subTest('malformed LC_ALL skipped'), \
+                self.mock_posix_locale_env(LC_ALL='x', LANG='en_US.UTF-8'):
+            self.assertEqual(get_active_language_code(), 'en_US')
+        with self.subTest('malformed LANG'), \
+                self.mock_posix_locale_env(LANG='x'):
+            self.assertEqual(get_active_language_code(), 'C')
 
     def test_get_active_language_code_locale_fallback_cached(self):
         """The fallback is captured once, not re-read after setlocale()."""
@@ -273,6 +279,15 @@ class LanguageTestCase(common.BleachbitTestCase):
             self.assertEqual(get_active_language_code(), 'fr_FR')
             self.assertEqual(getlocale.call_count, 1)
 
+    def test_get_active_language_code_getlocale_valueerror(self):
+        """An unparseable getlocale() result falls back to 'C'."""
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        with self.mock_posix_locale_env(), \
+                mock.patch('bleachbit.Language._locale_fallback', _UNSET), \
+                mock.patch('locale.getlocale', side_effect=ValueError):
+            self.assertEqual(get_active_language_code(), 'C')
+
     def test_options_import_failure(self):
         """Test handling of failed Options import in language detection"""
         with mock.patch.dict('sys.modules', {'bleachbit.Options': None}):
@@ -281,7 +296,9 @@ class LanguageTestCase(common.BleachbitTestCase):
             self.assertIn("Failed to get language options",
                           log_context.output[0])
 
-        self.assertIn(result, [locale.getlocale()[0], 'C', 'en', 'en_US'])
+        # The detected code comes from the environment on POSIX, so it
+        # may differ from the (possibly setlocale-poisoned) getlocale().
+        self.assertIsLanguageCode(result)
 
 
 class SetupTranslationEnvironTestCase(common.BleachbitTestCase):
@@ -330,6 +347,7 @@ class SetupTranslationEnvironTestCase(common.BleachbitTestCase):
         with mock.patch('bleachbit.Language._locale_fallback', _UNSET), \
                 mock.patch('bleachbit.Language.IS_POSIX', True), \
                 mock.patch('bleachbit.Language.IS_WINDOWS', False), \
+                mock.patch('bleachbit.Language.IS_MAC', False), \
                 mock.patch.dict(os.environ, {}, clear=True), \
                 mock.patch('locale.setlocale'), \
                 mock.patch('gettext.translation'), \

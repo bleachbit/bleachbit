@@ -355,7 +355,12 @@ def _get_locale_fallback():
     """Return the system locale as seen before setup_translation() ran."""
     global _locale_fallback
     if _locale_fallback is _UNSET:
-        _locale_fallback = locale.getlocale()[0]
+        # locale.getlocale() can raise ValueError for a locale name it
+        # cannot normalize.
+        try:
+            _locale_fallback = locale.getlocale()[0]
+        except ValueError:
+            _locale_fallback = None
     return _locale_fallback
 
 
@@ -410,11 +415,14 @@ def get_active_language_code():
             # after re-enabling auto-detection.
             # LANGUAGE is deliberately not read: setup_translation()
             # sets it on POSIX, so it has the same problem.
+            user_locale = None
             for name in ("LC_ALL", "LC_MESSAGES", "LANG"):
                 env_value = os.environ.get(name)
                 if env_value:
-                    user_locale = normalize_locale_code(env_value)
-                    break
+                    candidate = normalize_locale_code(env_value)
+                    if len(candidate) >= 2 or candidate == 'C':
+                        user_locale = candidate
+                        break
         else:
             # Not locale.getlocale(): setlocale() has already poisoned it.
             user_locale = _get_locale_fallback()
@@ -441,12 +449,13 @@ def setup_translation():
     attempted_setup_translation = True
     # Use local import to avoid circular import.
     from bleachbit import locale_dir
-    # Capture the system locale before setlocale() below poisons getlocale().
-    # This must precede get_active_language_code(), which returns early on a
-    # forced language without capturing it.
-    _get_locale_fallback()
+    # On POSIX, capture the system locale before setlocale() below poisons
+    # getlocale(). This must precede get_active_language_code(), which
+    # returns early on a forced language without capturing it.
+    if IS_POSIX:
+        _get_locale_fallback()
     user_locale = get_active_language_code()
-    logger.debug(f"user_locale: {user_locale}, locale_dir: {locale_dir}")
+    logger.debug('user_locale: %s, locale_dir: %s', user_locale, locale_dir)
     assert isinstance(user_locale, str)
     assert isinstance(locale_dir, str), f"locale_dir: {locale_dir}"
     if IS_WINDOWS and user_locale:
@@ -498,7 +507,7 @@ def setup_translation():
 
         # Log for debugging
         logger.debug(
-            f"Windows translation domain set to: {text_domain}, dir: {locale_dir}")
+            'Windows translation domain set to: %s, dir: %s', text_domain, locale_dir)
     else:
         logger.error('The function bindtextdomain() is not available.')
 
