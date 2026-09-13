@@ -333,11 +333,11 @@ jobs:
           move windows\BleachBit*.exe .
           move windows\BleachBit*.zip .
 
-      - name: Show artifact hashes
+      - name: Show artifact sizes and hashes
         shell: pwsh
         run: |
-          Get-ChildItem BleachBit-* -File | Get-FileHash | ForEach-Object {
-            "$($_.Hash)  $($_.Path | Split-Path -Leaf)"
+          Get-ChildItem BleachBit-* -File | ForEach-Object {
+            "{0,15:N0} bytes  {1}  {2}" -f $_.Length, $_.Name, (Get-FileHash $_.FullName).Hash
           }
 
       - name: Upload build artifacts (core)
@@ -538,6 +538,7 @@ jobs:
           $tag = ''
           if ($env:GITHUB_REF_TYPE -eq 'tag') { $tag = $ref } else { $branch = $ref }
           $dest = "s3://${{ secrets.AWS_BUCKET_NAME }}/"
+          "## Windows CI builds`n" >> $env:GITHUB_STEP_SUMMARY
           Get-ChildItem BleachBit-*-setup.exe, BleachBit-*-setup-English.exe, BleachBit-*-portable.zip -File |
             ForEach-Object {
               $file = $_.FullName
@@ -549,9 +550,16 @@ jobs:
                               elseif ($name -like '*-setup.exe') { 'installer' } `
                               elseif ($name -like '*-portable.zip') { 'portable' } `
                               else { 'unknown' }
-              $meta = "ref=$ref,run=$run,run_id=$runId,attempt=$attempt,event=$event,actor=$actor,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5,artifact_type=$artifactType,frontend=gtk"
+              $meta = "ref=$ref,run=$run,run_id=$runId,attempt=$attempt,event=$event,actor=$actor,version=$ver,version3=$ver3,commit=$sha,branch=$branch,tag=$tag,sha256=$sha256,sha1=$sha1,md5=$md5,size=$($_.Length),artifact_type=$artifactType,frontend=gtk"
+              $url = "https://download.bleachbit.org/ci/$name"
+              Write-Output ("{0,15:N0} bytes  {1}  ->  {2}" -f $_.Length, $name, $url)
               aws s3 cp $file "$dest" --metadata "$meta"
+              "- [$name]($url) ({0:N0} bytes)" -f $_.Length >> $env:GITHUB_STEP_SUMMARY
             }
+          $filter = if ($tag) { "tag=$tag" } else { "branch=$branch" }
+          $indexUrl = "https://download.bleachbit.org/ci/#$filter"
+          Write-Output "Index: $indexUrl"
+          "`n[All builds for this $($filter.Split('=')[0])]($indexUrl)" >> $env:GITHUB_STEP_SUMMARY
 
   coveralls-finish:
     needs: [linux, windows-test]
