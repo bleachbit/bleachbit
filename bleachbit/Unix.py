@@ -361,8 +361,8 @@ def get_distribution_name_version():
 
     Depending on system capabilities, return value may be:
     * 'ubuntu 24.10'
-    * 'Linux 6.12.3 (unknown distribution)'
-    * 'Linux (unknown version and distribution)'
+    * 'Linux 6.12.3'
+    * 'Linux'
 
     Python 3.7 had platform.linux_distribution(), but it
     was removed in Python 3.8.
@@ -370,18 +370,17 @@ def get_distribution_name_version():
     for get_dist in (get_distribution_name_version_platform_freedesktop,
                      get_distribution_name_version_distro,
                      get_distribution_name_version_os_release):
-        ret = get_dist()
-        if ret:
+        if ret := get_dist():
             return ret
     for name, get_release in (('platform.release()', platform.release),
                               ('os.uname()', lambda: os.uname().release)):
         try:
             # example '6.12.3-061203-generic'
             linux_version = get_release().split('-')[0]
-            return f"Linux {linux_version} (unknown distribution)"
+            return f"Linux {linux_version}"
         except Exception as e:
             logger.debug("Error calling %s: %s", name, e)
-    return "Linux (unknown version and distribution)"
+    return "Linux"
 
 
 def get_mount_points():
