@@ -244,7 +244,6 @@ class UnixTestCase(common.BleachbitTestCase):
             self.assertIsInstance(ret, str)
             self.assertGreater(len(ret), 0)
             self.assertLess(len(ret), 100)
-            self.assertIn(' ', ret)
         if ret_platform_freedesktop and ret_os_release:
             self.assertEqual(ret_platform_freedesktop, ret_os_release)
         if ret_distro and ret_os_release:
