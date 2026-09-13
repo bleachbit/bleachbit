@@ -16,6 +16,7 @@ from bleachbit.Language import _UNSET, find_supported_language_code, \
     get_active_language_code, \
     get_supported_language_codes, \
     get_text, \
+    normalize_locale_code, \
     setup_translation, \
     get_supported_language_code_name_dict
 from bleachbit.Options import options
@@ -99,6 +100,27 @@ class LanguageTestCase(common.BleachbitTestCase):
         self.assertIsNone(find_supported_language_code('C', supported))
         self.assertIsNone(find_supported_language_code('', supported))
         self.assertIsNone(find_supported_language_code('en', []))
+
+    def test_normalize_locale_code(self):
+        """Test normalize_locale_code()"""
+        tests = [
+            ('ca@valencia', 'ca'),
+            ('de_DE.utf8@euro', 'de_DE'),
+            ('en_US.UTF-8', 'en_US'),
+            ('en-US', 'en_US'),
+            ('ko_KR.eucKR', 'ko_KR'),
+            ('sr_RS@latin', 'sr_RS'),
+            ('zh-Hant-TW', 'zh_Hant_TW'),
+            ('C.UTF-8', 'C'),
+            ('.UTF-8', ''),
+            ('@', ''),
+            ('@euro', ''),
+        ]
+        same_cases = ['en_US', 'en_001', 'es_419', 'it_CARES', 'C', '']
+        tests.extend((c, c) for c in same_cases)
+        for raw, expected in tests:
+            with self.subTest(raw=raw):
+                self.assertEqual(normalize_locale_code(raw), expected)
 
     def test_get_supported_language_code_name_dict_unknown_code(self):
         with mock.patch('bleachbit.Language.get_supported_language_codes', return_value=['en', 'es', 'foo@bar']):
@@ -187,12 +209,14 @@ class LanguageTestCase(common.BleachbitTestCase):
             self.assertEqual(get_active_language_code(), 'fr_FR')
 
     def test_get_active_language_code_posix_env_strips_codeset(self):
-        """Strip the codeset ('.UTF-8') and modifier ('@latin')."""
+        """Strip the codeset ('.UTF-8') and modifier ('@latin'), and
+        convert hyphens to underscores."""
         options.set('auto_detect_lang', True)
         options.set('forced_language', '')
         for raw, expected in (('de_DE.UTF-8', 'de_DE'),
                               ('de_DE@euro', 'de_DE'),
                               ('sr_RS.UTF-8@latin', 'sr_RS'),
+                              ('de-DE.UTF-8', 'de_DE'),
                               ('C.UTF-8', 'C')):
             with self.subTest(raw=raw), \
                     self.mock_posix_locale_env(LANG=raw):

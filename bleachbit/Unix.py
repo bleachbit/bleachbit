@@ -22,7 +22,8 @@ import subprocess
 import bleachbit
 from bleachbit import FileUtilities, General, IS_MAC, IS_POSIX
 from bleachbit.FileUtilities import children_in_directory, exe_exists
-from bleachbit.Language import get_text as _, native_locale_names
+from bleachbit.Language import get_text as _, native_locale_names, \
+    normalize_locale_code
 from bleachbit.VFS import RealVFS
 
 logger = logging.getLogger(__name__)
@@ -247,6 +248,7 @@ def find_best_locale(user_locale):
         return 'C'
     if user_locale in ('C', 'C.utf8', 'POSIX'):
         return user_locale
+    user_locale = normalize_locale_code(user_locale)
     available_locales = find_available_locales()
 
     # If requesting a language like 'es' and current locale is compatible
@@ -254,7 +256,7 @@ def find_best_locale(user_locale):
     # Import here for mock patch.
     import locale  # pylint: disable=import-outside-toplevel
     current_locale = locale.getlocale()[0]
-    if current_locale and current_locale.startswith(user_locale.split('.')[0]):
+    if current_locale and current_locale.startswith(user_locale):
         # getlocale() may return (language, None) when the encoding is unknown.
         return '.'.join(p for p in locale.getlocale() if p)
 

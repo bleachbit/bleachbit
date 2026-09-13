@@ -287,6 +287,16 @@ def get_supported_language_code_name_dict():
     return supported_langs
 
 
+def normalize_locale_code(code):
+    """Return the language code normalized like 'en_US'.
+
+    Strips the codeset ('.UTF-8') and modifier ('@latin'), and converts
+    hyphens to underscores, so a BCP 47 code like 'en-US' matches the
+    underscore form used in locale directory names.
+    """
+    return code.split('.')[0].split('@')[0].replace('-', '_')
+
+
 def find_supported_language_code(lang_code, supported_codes):
     """Return the supported language code best matching lang_code.
 
@@ -301,9 +311,9 @@ def find_supported_language_code(lang_code, supported_codes):
     if not lang_code:
         return None
     codes = list(supported_codes)
-    # Windows language codes may use a hyphen like 'en-US' instead
-    # of an underscore like 'en_US'.
-    normalized = lang_code.replace('-', '_')
+    normalized = normalize_locale_code(lang_code)
+    if not normalized:
+        return None
     # Try the full code ('hi_IN'), then the primary subtag ('hi').
     lowered = {code.lower(): code for code in codes}
     for candidate in (normalized, normalized.split('_')[0]):
@@ -350,7 +360,7 @@ def get_active_language_code():
         logger.error("Failed to get language options")
     else:
         if not options.get('auto_detect_lang') and options.has_option('forced_language') and options.get('forced_language'):
-            return options.get('forced_language')
+            return normalize_locale_code(options.get('forced_language'))
     # locale.getdefaultlocale() will be removed in Python 3.15, so
     # use getlocale() instead.
     # However, on Windows, getlocale() may return values like
@@ -360,7 +370,8 @@ def get_active_language_code():
         kernel32 = ctypes.windll.kernel32
         lcid = kernel32.GetUserDefaultLCID()
         # Convert Windows LCID (e.g., 1033) to RFC1766 (e.g., en-US).
-        user_locale = locale.windows_locale.get(lcid, '')
+        user_locale = normalize_locale_code(
+            locale.windows_locale.get(lcid, ''))
     else:
         # On macOS, locale.getlocale() always returns *something* (e.g.
         # a built-in default) even with no LANG/LC_ALL in the
@@ -387,8 +398,7 @@ def get_active_language_code():
             for name in ("LC_ALL", "LC_MESSAGES", "LANG"):
                 env_value = os.environ.get(name)
                 if env_value:
-                    # Strip codeset ('.UTF-8') and modifier ('@latin').
-                    user_locale = env_value.split('.')[0].split('@')[0]
+                    user_locale = normalize_locale_code(env_value)
                     break
         else:
             # Not locale.getlocale(): setlocale() has already poisoned it.
@@ -401,7 +411,7 @@ def get_active_language_code():
     if '.' in user_locale:
         # This should never happen.
         logger.warning('locale contains a dot: %s', user_locale)
-        user_locale = user_locale.split('.')[0]
+        user_locale = normalize_locale_code(user_locale)
 
     assert isinstance(user_locale, str)
     assert len(
