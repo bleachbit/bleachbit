@@ -420,6 +420,40 @@ class GUITestCase(common.BleachbitTestCase):
         for obj in test_files_dirs:
             self.assertNotExists(obj)
 
+    @common.skipUnlessMac
+    def test_worker_done_no_elevated_retry_prompt_when_paths_ineligible(self):
+        """worker_done() must not offer the elevated-retry prompt at all
+        when none of the access-denied paths match the allowed pattern --
+        otherwise the user says yes to a retry that was always going to
+        fail, and only finds out afterward."""
+        gui = self.get_window()
+        gui.start_time = time.time()
+        fake_worker = types.SimpleNamespace(
+            access_denied_paths=['/etc/passwd'])
+        with mock.patch('bleachbit.GuiWindow.IS_MAC', True), \
+                mock.patch('bleachbit.GuiBasic.message_dialog') as mock_dialog:
+            gui.worker_done(fake_worker, really_delete=True)
+
+        mock_dialog.assert_not_called()
+
+    @common.skipUnlessMac
+    def test_worker_done_offers_elevated_retry_prompt_when_paths_eligible(self):
+        """worker_done() offers the elevated-retry prompt when at least
+        one access-denied path matches the allowed orphaned-app-version
+        pattern."""
+        gui = self.get_window()
+        eligible_path = (
+            '/Applications/Google Chrome.app/Contents/Frameworks/'
+            'Google Chrome Framework.framework/Versions/100.0/foo')
+        gui.start_time = time.time()
+        fake_worker = types.SimpleNamespace(
+            access_denied_paths=[eligible_path])
+        with mock.patch('bleachbit.GuiWindow.IS_MAC', True), \
+                mock.patch('bleachbit.GuiBasic.message_dialog') as mock_dialog:
+            gui.worker_done(fake_worker, really_delete=True)
+
+        mock_dialog.assert_called_once()
+
     def test_shred_paths_cancel_cleans_temporary_backend(self):
         """Test that shred_paths with cancel cleans up the temporary backend"""
         test_file = self.write_file('shred-cancel')
