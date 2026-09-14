@@ -67,7 +67,7 @@ def _get_posix_permission_issues(fstat, options_file):
     """
     lines = []
     has_error = False
-    import pwd  # pylint: disable=import-outside-toplevel
+    import pwd
     from bleachbit.General import get_real_uid, get_real_username
     try:
         file_owner = pwd.getpwuid(fstat.st_uid).pw_name
@@ -114,7 +114,8 @@ def _lookup_account_name_or_sid(sid):
     try:
         return win32security.LookupAccountSid(None, sid)[0], sid_str
     except pywintypes.error as e:
-        logger.debug('LookupAccountSid failed (%s); falling back to SID string', e)
+        logger.debug(
+            'LookupAccountSid failed (%s); falling back to SID string', e)
         return sid_str, sid_str
 
 
@@ -125,9 +126,9 @@ def _get_windows_user_info():
     """
     if not IS_WINDOWS:
         raise RuntimeError("This function is only available on Windows")
-    import win32api  # pylint: disable=import-outside-toplevel
-    import win32file  # pylint: disable=import-outside-toplevel
-    import win32security  # pylint: disable=import-outside-toplevel
+    import win32api
+    import win32file
+    import win32security
     process_token = win32security.OpenProcessToken(
         win32api.GetCurrentProcess(),
         win32security.TOKEN_QUERY)
@@ -150,7 +151,7 @@ def _get_windows_file_owner(filepath):
     """
     if not IS_WINDOWS:
         raise RuntimeError("This function is only available on Windows")
-    import win32security  # pylint: disable=import-outside-toplevel
+    import win32security
     file_sd = win32security.GetFileSecurity(
         filepath, win32security.OWNER_SECURITY_INFORMATION)
     file_owner_sid = file_sd.GetSecurityDescriptorOwner()
@@ -221,7 +222,7 @@ def _get_config_permission_issues():
         lines.append(f"Read error: {type(e).__name__}: {e}")
 
     try:
-        with open(_options_file, 'a') as f:
+        with open(_options_file, 'a', encoding='utf-8') as f:
             f.write('')
     except (IOError, OSError, PermissionError) as e:
         has_error = True
@@ -271,7 +272,7 @@ def _has_selected_warning_option():
 
     Returns True if any selected option has a warning, False otherwise.
     """
-    from bleachbit.Cleaner import backends  # pylint: disable=import-outside-toplevel
+    from bleachbit.Cleaner import backends
     if not backends:
         return False
     for cleaner_id, cleaner in backends.items():

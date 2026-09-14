@@ -35,6 +35,7 @@ import warnings
 from bleachbit import DeepScan, FileUtilities, IS_WINDOWS
 from bleachbit.Cleaner import backends
 from bleachbit.Constant import EMPTY_SPACE_WARNING
+from bleachbit.GtkShim import ignore_pygobject_asyncio_warnings
 from bleachbit.Language import get_text as _, nget_text as ngettext
 from bleachbit.FileUtilities import close_delete_parent_lock
 
@@ -96,7 +97,7 @@ class Worker:
         ret = None
         try:
             for ret in cmd.execute(self.really_delete):
-                if True == ret or isinstance(ret, tuple):
+                if ret is True or isinstance(ret, tuple):
                     # Temporarily pass control to the GTK idle loop,
                     # allow user to abort, and
                     # display progress (if applicable).
@@ -190,7 +191,7 @@ class Worker:
             # normal scan
             for cmd in backends[operation].get_commands(option_id):
                 for ret in self.execute(cmd, '%s.%s' % (operation, option_id)):
-                    if True == ret:
+                    if ret is True:
                         # Return control to PyGTK idle loop to keep
                         # it responding allow the user to abort
                         self.yield_time = time.time()
@@ -263,7 +264,7 @@ class Worker:
                         self.ui.update_progress_bar(msg)
                 if self.is_aborted:
                     break
-                if True == ret or isinstance(ret, tuple):
+                if ret is True or isinstance(ret, tuple):
                     # Return control to PyGTK idle loop to keep
                     # it responding and allow the user to abort.
                     yield True
@@ -296,17 +297,7 @@ class Worker:
             # capture PyGObject's asyncio deprecation warnings and re-log
             # them as red errors in the GUI.  Re-install the ignore filter
             # so it takes precedence over the 'once' filter.
-            if sys.version_info >= (3, 14):
-                warnings.filterwarnings(
-                    "ignore",
-                    message=r".*asyncio\.get_event_loop_policy.*",
-                    category=DeprecationWarning,
-                )
-                warnings.filterwarnings(
-                    "ignore",
-                    message=r".*asyncio\.AbstractEventLoopPolicy.*",
-                    category=DeprecationWarning,
-                )
+            ignore_pygobject_asyncio_warnings()
             for _dummy in self.run_operations(self.operations):
                 # yield to GTK+ idle loop
                 yield True
@@ -378,7 +369,7 @@ class Worker:
         ds = DeepScan.DeepScan(self.deepscans)
 
         for cmd in ds.scan():
-            if True == cmd:
+            if cmd is True:
                 yield True
                 continue
             for _ret in self.execute(cmd, 'deepscan'):

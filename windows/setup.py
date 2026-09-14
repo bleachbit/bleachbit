@@ -422,7 +422,6 @@ def environment_check():
 
 def build_py2exe():
     """Build executables using py2exe's freeze API"""
-    # pylint: disable=import-outside-toplevel
     from py2exe import freeze
     # See multiple issues about overly description such as:
     # https://github.com/bleachbit/bleachbit/issues/1000
@@ -880,6 +879,8 @@ def upx():
             continue
         cmd = [UPX_EXE] + UPX_OPTS.split() + batch
         logger.info(subprocess.list2cmdline(cmd))
+        # The processes run in parallel and are collected below.
+        # pylint: disable-next=consider-using-with
         procs.append(subprocess.Popen(cmd, stdin=subprocess.PIPE,
                                       stdout=subprocess.PIPE, stderr=subprocess.PIPE))
     for p in procs:
@@ -1072,7 +1073,8 @@ def main():
     # Clearly show the sizes of the files that end users download because the
     # goal is to minimize them.
     subprocess.run(
-        ['cmd', '/c', 'dir', '*.zip', r'windows\*.exe', r'windows\*.zip'])
+        ['cmd', '/c', 'dir', '*.zip', r'windows\*.exe', r'windows\*.zip'],
+        check=False)
     duration = time.time() - start_time
     minutes = int(duration // 60)
     seconds = int(duration % 60)

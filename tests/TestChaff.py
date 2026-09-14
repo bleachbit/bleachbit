@@ -67,6 +67,8 @@ class ChaffTestCase(common.BleachbitTestCase):
         for fn in generated_file_names:
             self.assertExists(fn)
             self.assertGreater(getsize(fn), 100)
+            # Chaff wrote this file in the platform default encoding.
+            # pylint: disable-next=unspecified-encoding
             with open(fn) as f:
                 contents = f.read()
                 self.assertIn('To: ', contents)

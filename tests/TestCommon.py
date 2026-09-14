@@ -93,7 +93,7 @@ class CommonTestCase(common.BleachbitTestCase):
                     continue
                 lang_codes.append(lang_code)
         if os.path.exists('/etc/locale.alias'):
-            with open('/etc/locale.alias', 'r') as f:
+            with open('/etc/locale.alias', 'r', encoding='utf-8') as f:
                 for line in f:
                     line = line.strip()
                     if not line.startswith('#'):
@@ -177,17 +177,29 @@ class CommonTestCase(common.BleachbitTestCase):
 
     def test_mock_missing_package(self):
         """Test mock_missing_package context manager"""
+        # The imports are what this test exercises, so each one lives in its
+        # own function and is returned, rather than left as an unused name
+        def import_logging():
+            import logging
+            return logging
+
+        def import_cli():
+            import bleachbit.CLI
+            return bleachbit.CLI
+
+        def import_sys():
+            import sys
+            return sys
+
         # Inside the context, importing logging should raise an errorl.
         with common.mock_missing_package('logging', clear_prefixes=('bleachbit.CLI',)):
-            with self.assertRaises(ImportError):
-                import logging  # pylint: disable=import-outside-toplevel
-            with self.assertRaises(ImportError):
-                import bleachbit.CLI  # pylint: disable=import-outside-toplevel
+            self.assertRaises(ImportError, import_logging)
+            self.assertRaises(ImportError, import_cli)
             # Importing sys should be unaffected.
-            import sys  # pylint: disable=import-outside-toplevel
+            self.assertIsNotNone(import_sys())
         # Outside the context, importing should work.
-        import logging  # pylint: disable=import-outside-toplevel
-        import bleachbit.CLI  # pylint: disable=import-outside-toplevel
+        self.assertIsNotNone(import_logging())
+        self.assertIsNotNone(import_cli())
 
     def test_set_temporary_env(self):
         """Test set_temporary_env context manager"""
@@ -220,7 +232,7 @@ class CommonTestCase(common.BleachbitTestCase):
 
         # Increase size of file.
         fsize = 2**13
-        with open(fn, "w") as f:
+        with open(fn, "w", encoding="utf-8") as f:
             f.write(' ' * fsize)
         self.assertEqual(fsize, getsize(fn))
 
