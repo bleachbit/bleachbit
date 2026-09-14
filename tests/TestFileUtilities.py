@@ -1641,6 +1641,8 @@ State=AAAA/wA...
                  '12B': 12,
                  '1.0M': 1000 * 1000,
                  '1TB': 1000**4,
+                 '1PB': 1000**5,
+                 '1EB': 1000**6,
                  '1000': 1000}
         for test, result in valid.items():
             self.assertEqual(human_to_bytes(test), result)

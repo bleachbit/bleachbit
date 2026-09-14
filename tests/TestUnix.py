@@ -121,7 +121,8 @@ class UnixTestCase(common.BleachbitTestCase):
         """Unit test for apt_autoremove() parsing of the freed space line"""
         for (size, expected) in (('1234 B', 1234),
                                  ('44.0 kB', 44000),
-                                 ('74.7MB', 74700000)):
+                                 ('74.7MB', 74700000),
+                                 ('1.5 PB', 1500000000000000)):
             output = f'After this operation, {size} disk space will be freed.'
             with mock.patch('bleachbit.Unix.FileUtilities.exe_exists', return_value=True), \
                     mock.patch('bleachbit.Unix.subprocess.check_output', return_value=output):
