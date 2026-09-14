@@ -9,6 +9,7 @@ Test case for module FileUtilities
 """
 
 # standard library
+import codecs
 import contextlib
 import ctypes
 import errno
@@ -16,7 +17,6 @@ import itertools
 import json
 import locale
 import os
-import random
 import sqlite3
 import stat
 import subprocess
@@ -41,6 +41,7 @@ from bleachbit.FileUtilities import (
     clean_json,
     delete_file,
     delete,
+    detect_encoding,
     ego_owner,
     exe_exists,
     execute_sqlite3,
@@ -284,28 +285,48 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_bytes_to_human_roundtrip(self):
         """Test roundtrip conversion of bytes_to_human()
 
-        Example: 1,964,950 -> 2MB -> 2,000,000 with difference of 1.78% (0.0178).
+        Example: 1,175,818 -> 1.2MB -> 1,200,000 is 2.06% different,
+        but only 24,182 bytes, within half of the displayed 0.1MB step.
         """
-
-        for _n in range(0, 1000):
-            bytes1 = random.randrange(0, 1000 ** 4)
-            human = bytes_to_human(bytes1)
-            bytes2 = human_to_bytes(human)
-            error = abs(float(bytes2 - bytes1) / bytes1)
-            self.assertLess(abs(
-                error), 0.02, f"{bytes1:,} ({human}) is "
-                f"{error * 100:.2f}% different than {bytes2:,}")
+        old_iec = options.get('units_iec')
+        for units_iec in (False, True):
+            options.set('units_iec', units_iec)
+            base = 1024 if units_iec else 1000
+            for k in range(0, 6):
+                step = base ** k
+                decimals = 2 if k >= 3 else (1 if k >= 1 else 0)
+                half_step = 0.5 * 10 ** -decimals * step
+                for frac in (1.0, 1.049, 1.05, 2.5, 7.5, 9.994, 9.995):
+                    for delta in (-1, 0, 1):
+                        bytes1 = int(frac * step) + delta
+                        if bytes1 <= 0:
+                            continue
+                        human = bytes_to_human(bytes1)
+                        if units_iec:
+                            bytes2 = human_to_bytes(
+                                human.replace('i', ''), 'du')
+                        else:
+                            bytes2 = human_to_bytes(human)
+                        self.assertLessEqual(
+                            abs(bytes2 - bytes1), half_step + 1,
+                            f"{bytes1:,} -> {human} -> {bytes2:,} exceeds "
+                            f"half a display unit ({half_step:,.0f})")
+        options.set('units_iec', old_iec)
 
     def test_bytes_to_human_localization(self):
         """Test localization of bytes_to_human()"""
         if not hasattr(locale, 'format_string'):
             self.skipTest('Locale module does not support format_string')
+        old_locale = locale.setlocale(locale.LC_NUMERIC, None)
         try:
             locale.setlocale(locale.LC_NUMERIC, 'de_DE.utf8')
         except locale.Error as e:
             logger.warning('exception when setlocale to de_DE.utf8: %s', e)
         else:
-            self.assertEqual("1,01GB", bytes_to_human(1000 ** 3 + 5812389))
+            try:
+                self.assertEqual("1,01GB", bytes_to_human(1000 ** 3 + 5812389))
+            finally:
+                locale.setlocale(locale.LC_NUMERIC, old_locale)
 
     def test_children_in_directory(self):
         """Unit test for function children_in_directory()"""
@@ -1246,6 +1267,65 @@ State=AAAA/wA...
         delete(filename)
         self.assertNotExists(filename)
 
+    @common.skipUnlessWindows
+    def test_detect_encoding(self):
+        """Unit test for detect_encoding
+
+        The detect_encoding function is used only on Windows.
+
+        Old Linux distributions (e.g., openSUSE 15.6) charset_normalizer <= 3.4.1
+        misclassifies EUC-KR as big5hkscs. This was fixed in 3.4.2, but it's moot
+        because detect_encoding is not used on Linux. Also, the standard winapp2.ini
+        is ASCII as of September 2026.
+
+        311e49c: added use of detect_encoding for Winapp
+
+        498abfb: removed use of detect_encoding for cleaning .ini files, so
+        detect_encoding is no longer needed on Linux.
+        """
+        eat_glass = '나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
+        bom = '\ufeff' + eat_glass  # Add BOM for utf-8-sig
+        # ASCII is valid UTF-8, so either answer reads the file correctly
+        tests = (('This is just an ASCII file', ['ascii', 'utf-8']),
+                 (eat_glass, ['utf-8']),
+                 # Accept both EUC-KR and CP949 for Korean
+                 (eat_glass, ['EUC-KR', 'CP949']),
+                 (bom, ['UTF-8-SIG']))
+        for file_contents, expected_encodings in tests:
+            with self.subTest(encoding=expected_encodings):
+                # Use first encoding for writing
+                write_encoding = expected_encodings[0]
+
+                with tempfile.NamedTemporaryFile(mode='w', delete=False,
+                                                 dir=self.tempdir,
+                                                 encoding=write_encoding) as temp:
+                    temp.write(file_contents)
+                    temp.flush()
+                det = detect_encoding(temp.name)
+
+                # Detectors spell codec names differently, so compare
+                # the canonical names
+                expected_names = [codecs.lookup(e).name
+                                  for e in expected_encodings]
+                self.assertIn(
+                    codecs.lookup(det).name, expected_names,
+                    f"{file_contents} -> {det}, expected one of {expected_encodings}")
+
+    def test_detect_encoding_missing_charset_normalizer(self):
+        """detect_encoding should log a warning when charset_normalizer is missing."""
+        with common.mock_missing_package('charset_normalizer'):
+            # Latin-1 is not valid UTF-8, so a detector is needed
+            with tempfile.NamedTemporaryFile(mode='w', delete=False,
+                                             dir=self.tempdir,
+                                             encoding='latin-1') as temp:
+                temp.write('café')
+                temp.flush()
+            with self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
+                self.assertIsNone(detect_encoding(temp.name))
+            self.assertIn(
+                'charset_normalizer module is not available', cm.output[0])
+            os.unlink(temp.name)
+
     @common.skipIfWindows
     def test_ego_owner(self):
         """Unit test for ego_owner()"""
@@ -1839,7 +1919,8 @@ State=AAAA/wA...
         self.assertEqual(set(keep_list), set(options.get_whitelist_paths()))
 
         # test
-        tests = ('', '/', '/home/foo2', '/home/fo', '/home/', '/home')
+        # '/' is system-critical and always kept, so it is excluded here
+        tests = ('', '/home/foo2', '/home/fo', '/home/', '/home')
         for path in tests:
             self.assertFalse(whitelisted(
                 path), f"{path} should not be whitelisted")
@@ -1871,6 +1952,22 @@ State=AAAA/wA...
         self.assertFalse(whitelisted('/home/foo'))
         self.assertFalse(whitelisted('/home/folder'))
         self.assertFalse(whitelisted('/home/folder/file'))
+
+    def test_whitelisted_posix_system_critical(self):
+        """System-critical POSIX paths are kept even with an empty keep list."""
+        if not IS_POSIX:
+            self.skipTest('POSIX only')
+        options.set_whitelist_paths([])
+        for path in ('/', '//', '/proc', '/proc/cpuinfo', '/sys/',
+                     '/sys/kernel', '/run', '/run/user/0'):
+            self.assertTrue(whitelisted(path),
+                            f"{path} should be protected")
+        # Real cleaners legitimately act under /var, /dev/shm, /etc
+        for path in ('/home/user/file', '/tmp/scratch', '/opt/data/x',
+                     '/etc/passwd', '/var/log/syslog', '/dev/shm/x',
+                     '/procfile', '/sysfs2/x', ''):
+            self.assertFalse(whitelisted(path),
+                             f"{path} should not be protected")
 
     @common.skipUnlessWindows
     def test_whitelisted_windows(self):

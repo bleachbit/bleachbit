@@ -17,7 +17,7 @@ from itertools import product
 
 # first party imports
 from bleachbit import Command, FileUtilities, General, Special, DeepScan, Cookie as CookieMod  # mod=module
-from bleachbit import FS_SCAN_RE_FLAGS, IS_POSIX, IS_WINDOWS
+from bleachbit import FS_SCAN_RE_FLAGS, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.Constant import CLEAN_FILE_LABEL
 from bleachbit.Cookie import load_keep_list
 from bleachbit.Language import get_text as _
@@ -99,8 +99,8 @@ class ActionProvider(metaclass=PluginMount):
         """Create ActionProvider from CleanerML <action>"""
 
     def get_deep_scan(self):
-        """Return a dictionary used to construct a deep scan"""
-        raise StopIteration
+        """Return an iterable of deep scan searches (empty by default)"""
+        return ()
 
     def get_commands(self):
         """Yield each command (which can be previewed or executed)"""
@@ -407,6 +407,23 @@ class ChromeFavicons(FileActionProvider):
                 CLEAN_FILE_LABEL)
 
 
+class ChromeOrphanedFrameworkVersions(FileActionProvider):
+
+    """Action to remove orphaned old version folders left behind under
+    a Chromium-based browser's Contents/Frameworks/*.framework/Versions/
+    on macOS, keeping only the one the 'Current' symlink points to."""
+    action_key = 'macos.orphaned_framework_versions'
+
+    def get_commands(self):
+        if not IS_MAC:
+            # This action only ever applies to macOS .app bundles;
+            # 'Unix' may not even be imported on other platforms.
+            return
+        for versions_dir in self.get_paths():
+            for orphan_path in Unix.orphaned_framework_versions(versions_dir):
+                yield Command.Delete(orphan_path)
+
+
 class ChromeHistory(FileActionProvider):
 
     """Action to clean 'History' file in Google Chrome/Chromium"""
@@ -543,7 +560,7 @@ class MozillaUrlHistory(FileActionProvider):
 
 class MozillaFavicons(FileActionProvider):
 
-    """Action to clean Mozilla (Firefox) URL history in places.sqlite"""
+    """Action to clean Mozilla (Firefox) favicons in favicons.sqlite"""
     action_key = 'mozilla.favicons'
 
     def get_commands(self):

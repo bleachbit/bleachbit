@@ -73,7 +73,7 @@ jobs:
         run: make install-deps-dev INSTALL_DEPS_ARGS=--venv
 
       - name: Generate Revision.py
-        uses: ./.github/actions/generate-revision
+        uses: $/.github/actions/generate-revision
 
       - name: Generate translations
         run: make -C po local PYTHON="$GITHUB_WORKSPACE/.venv/bin/python"

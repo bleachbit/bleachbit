@@ -1,28 +1,15 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 import gettext
 import locale
 import os
 import logging
 
-from bleachbit import IS_POSIX, IS_WINDOWS
+from bleachbit import IS_MAC, IS_POSIX, IS_WINDOWS
 
 logger = logging.getLogger(__name__)
 
@@ -328,7 +315,21 @@ def get_active_language_code():
         # Convert Windows LCID (e.g., 1033) to RFC1766 (e.g., en-US).
         user_locale = locale.windows_locale.get(lcid, '')
     else:
-        user_locale = locale.getlocale()[0]
+        # On macOS, locale.getlocale() always returns *something* (e.g.
+        # a built-in default) even with no LANG/LC_ALL in the
+        # environment at all, so its truthiness cannot detect "nothing
+        # was explicitly set". Check os.environ directly instead: if the
+        # caller (a shell, a test suite) put LANG/LC_ALL/LC_MESSAGES
+        # there on purpose, honor it via locale.getlocale(); otherwise
+        # (Finder launches the app with none of these set) prefer the
+        # real system preference from AppleLocale.
+        env_locale_set = any(
+            os.environ.get(name) for name in ("LC_ALL", "LC_MESSAGES", "LANG"))
+        if IS_MAC and not env_locale_set:
+            from bleachbit.Mac import get_macos_locale
+            user_locale = get_macos_locale()
+        else:
+            user_locale = locale.getlocale()[0]
 
     if not user_locale:
         user_locale = 'C'
@@ -358,6 +359,35 @@ def setup_translation():
     assert isinstance(locale_dir, str), f"locale_dir: {locale_dir}"
     if IS_WINDOWS and user_locale:
         os.environ['LANG'] = user_locale
+    elif IS_POSIX and user_locale:
+        # GLib's own g_get_language_names() (used by Gtk.Builder to
+        # translate .ui files like the hamburger menu) reads LANGUAGE
+        # directly from the environment with top priority -- it does
+        # not consult locale.setlocale()'s C-level locale state at
+        # all, so without this, a Gtk.Builder-loaded menu stays frozen
+        # in whatever locale the OS environment happened to have at
+        # process launch (e.g. always the real macOS AppleLocale
+        # preference), never following a later in-app language change.
+        # Confirmed by hand: without setting this, the app-menu.ui
+        # hamburger menu stayed in Spanish through three different
+        # manually-selected languages and a full app restart, on a
+        # machine whose real System Settings > Language is Spanish;
+        # setting it here made it follow the selected language
+        # immediately.
+        #
+        # Only LANGUAGE is set, deliberately not LANG/LC_ALL: LANGUAGE
+        # is a GNU gettext-specific extension used purely as a
+        # translation-priority hint and has no effect on the process's
+        # actual C locale/encoding, whereas LANG/LC_ALL are read by
+        # every other locale-aware consumer in the process, including
+        # any subprocess spawned afterward -- and a bare code without
+        # an explicit encoding (which GLib's own parsing of these
+        # variables specifically requires; a '.UTF-8' suffix breaks it,
+        # verified by hand) crashed a subprocess Python interpreter
+        # started later with 'Fatal Python error:
+        # config_get_locale_encoding: ... nl_langinfo(CODESET) failed'
+        # when this was tried with LANG/LC_ALL instead.
+        os.environ['LANGUAGE'] = user_locale
     text_domain = 'bleachbit'
     try:
         t = gettext.translation(
@@ -371,7 +401,7 @@ def setup_translation():
         locale.bindtextdomain(text_domain, locale_dir)
         locale.textdomain(text_domain)
     elif IS_WINDOWS:
-        from bleachbit.Windows import load_i18n_dll
+        from bleachbit.Windows import flush_gettext_cache, load_i18n_dll
         libintl = load_i18n_dll()
         if not libintl:
             logger.error(
@@ -383,6 +413,11 @@ def setup_translation():
             libintl.libintl_wbindtextdomain(encoded_domain, locale_dir)
             libintl.textdomain(encoded_domain)
             libintl.bind_textdomain_codeset(encoded_domain, b'UTF-8')
+            # Without this flush, Gtk.Builder / g_dgettext keep serving the
+            # .mo loaded for the previous language for the rest of the
+            # process (issue #1801). Env-var changes and re-binding the
+            # domain are not enough on the Windows gettext build.
+            flush_gettext_cache(libintl)
         else:
             logger.error(
                 'The function wbindtextdomain() is not available.')

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-08-21 05:26-0600\n"
-"PO-Revision-Date: 2026-08-22 12:38+0000\n"
+"POT-Creation-Date: 2026-09-01 10:05-0600\n"
+"PO-Revision-Date: 2026-09-01 16:17+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/bleachbit/main/"
 "pl/>\n"
@@ -87,11 +87,12 @@ msgstr "Usuwa historię użycia"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Logs"
 msgstr "Dzienniki"
 
@@ -100,11 +101,12 @@ msgstr "Dzienniki"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Delete the logs"
 msgstr "Usuwa pliki dzienników"
 
@@ -148,8 +150,8 @@ msgstr "Pamięć podręczna"
 #: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/android_studio.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
@@ -688,6 +690,26 @@ msgstr "Usuwa przestarzałe pliki"
 #: ../cleaners/apt.xml
 msgid "Package lists"
 msgstr "Listy pakietów"
+
+#: ../cleaners/android_studio.xml
+msgid "Development environment"
+msgstr "Środowisko programistyczne"
+
+#: ../cleaners/android_studio.xml
+msgid "Gradle cache"
+msgstr "Pamięć podręczna Gradle"
+
+#: ../cleaners/android_studio.xml
+msgid "Delete downloaded dependencies and build artifacts"
+msgstr "Usuń pobrane zależności i skompiluj artefakty"
+
+#: ../cleaners/android_studio.xml
+msgid "Dependencies will need to be downloaded on the next build."
+msgstr "Zależności trzeba będzie pobrać podczas następnej kompilacji."
+
+#: ../cleaners/android_studio.xml
+msgid "IDE cache"
+msgstr "Pamięć podręczna IDE"
 
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml

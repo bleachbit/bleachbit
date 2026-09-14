@@ -43,6 +43,7 @@ from bleachbit.Unix import (
     is_unix_display_protocol_wayland,
     journald_clean,
     JOURNALD_REGEX,
+    orphaned_framework_versions,
     LocaleCleanerPath,
     Locales,
     pacman_cache,
@@ -202,6 +203,21 @@ class UnixTestCase(common.BleachbitTestCase):
 
         self.assertRaises(AssertionError, find_best_locale, None)
         self.assertRaises(AssertionError, find_best_locale, [])
+
+    @mock.patch('locale.getlocale')
+    @mock.patch('bleachbit.Unix.find_available_locales')
+    def test_find_best_locale_macos_uppercase_utf8(
+            self, mock_find_available_locales, mock_getlocale):
+        """macOS's locale -a uses '.UTF-8' (uppercase, hyphenated),
+        unlike the lowercase '.utf8' used elsewhere in this test file.
+        The UTF-8 variant must still be preferred over a non-UTF-8 one
+        regardless of that formatting difference."""
+        mock_getlocale.return_value = ('fr_FR', 'UTF-8')
+        mock_find_available_locales.return_value = [
+            'en_NZ.ISO8859-1',
+            'en_US.UTF-8',
+        ]
+        self.assertEqual(find_best_locale('en'), 'en_US.UTF-8')
 
     @unittest.skipUnless(exe_exists(General.resolve_exe('apt-get')),
                          'skipping tests for unavailable apt-get')
@@ -379,6 +395,39 @@ PrefersNonDefaultGPU=false""")
             self.assertExists(p.path)
         self.assertEqual(len(seen), len(
             set(p.path for p in seen)), "Duplicate trash paths found")
+
+    @common.skipIfWindows
+    def test_get_trash_paths_includes_now_empty_folder(self):
+        """Regression test: a folder sent to the macOS Trash must be
+        yielded for deletion itself, not just the files inside it.
+
+        get_trash_paths() previously called
+        children_in_directory(dirname, False), where the second argument
+        is list_directories, not 'recursive' as an earlier comment
+        claimed. With False, only files are yielded and a folder emptied
+        by this same cleaning pass is left behind forever, empty, in
+        ~/.Trash.
+        """
+        trash_dir = self.mkdtemp(prefix='bleachbit-test-trash')
+        sub_dir = os.path.join(trash_dir, 'folder-in-trash')
+        os.mkdir(sub_dir)
+        file_path = os.path.join(sub_dir, 'file.txt')
+        self.write_file(file_path)
+
+        real_expanduser = os.path.expanduser
+
+        def fake_expanduser(p):
+            if p == '~/.Trash':
+                return trash_dir
+            return real_expanduser(p)
+
+        with mock.patch('os.path.expanduser', side_effect=fake_expanduser):
+            paths = [p.path for p in get_trash_paths()]
+
+        self.assertIn(file_path, paths)
+        self.assertIn(
+            sub_dir, paths,
+            'the emptied folder itself must also be yielded for deletion')
 
     @common.skipIfWindows
     def test_desktop_valid_exe(self):
@@ -643,9 +692,17 @@ PrefersNonDefaultGPU=false""")
             self.assertLExists(
                 path, f"Rotated log path '{path}' does not exist")
 
+    @mock.patch('os.access')
+    @mock.patch('os.path.isdir')
     @mock.patch('bleachbit.FileUtilities.whitelisted')
     @mock.patch('bleachbit.FileUtilities.children_in_directory')
-    def test_rotated_logs_mock(self, mock_cid, mock_whitelisted):
+    def test_rotated_logs_mock(self, mock_cid, mock_whitelisted, mock_isdir, mock_access):
+        # Simulate a writable /var/log so the macOS permission check in
+        # rotated_logs() does not interfere with this test, which is
+        # about the keep_lists/positive_re filtering logic, not
+        # permissions (that's covered by a dedicated test).
+        mock_isdir.return_value = True
+        mock_access.return_value = True
         mock_whitelisted.side_effect = lambda path: path.startswith(
             '/var/log/whitelisted/')
         expected_delete = [
@@ -689,6 +746,30 @@ PrefersNonDefaultGPU=false""")
             self.assertNotIn(path, result)
         mock_cid.assert_called_once_with('/var/log')
         mock_whitelisted.assert_called()
+
+    @mock.patch('bleachbit.Unix.IS_MAC', True)
+    @mock.patch('os.access')
+    @mock.patch('os.path.isdir')
+    @mock.patch('bleachbit.FileUtilities.whitelisted')
+    @mock.patch('bleachbit.FileUtilities.children_in_directory')
+    def test_rotated_logs_macos_permission_check(
+            self, mock_cid, mock_whitelisted, mock_isdir, mock_access):
+        """On macOS, skip a path only if its parent dir exists and is
+        unwritable. A nonexistent parent (os.access() also returns False
+        for that) must not be treated the same as 'no permission'."""
+        mock_whitelisted.return_value = False
+        candidates = [
+            '/var/log/protected/foo.0',
+            '/var/log/missing_parent/foo.0',
+        ]
+        mock_cid.return_value = iter(candidates)
+        mock_isdir.side_effect = lambda p: p == '/var/log/protected'
+        mock_access.return_value = False
+
+        result = list(rotated_logs())
+
+        self.assertNotIn('/var/log/protected/foo.0', result)
+        self.assertIn('/var/log/missing_parent/foo.0', result)
 
     @common.skipIfWindows
     def test_run_cleaner_cmd(self):
@@ -1263,3 +1344,107 @@ class LocalizationsTestCase(common.BleachbitTestCase):
                 self._path_matches_recognized(neg_path, recognized),
                 f'Path should NOT be matched by localizations.xml: {neg_path}'
             )
+
+
+class OrphanedFrameworkVersionsTestCase(common.BleachbitTestCase):
+    """Test case for orphaned_framework_versions()
+
+    This targets the Contents/Frameworks/*.framework/Versions/ directory
+    found in macOS .app bundles for Chromium-based browsers, where
+    Google's own auto-updater has never reliably removed the previous
+    version(s) after updating (a bug publicly reported since at least
+    2011). Only the 'Current' symlink identifies the version genuinely
+    in use, since version numbers are not orderable across schemes and a
+    folder's modification time can be misleading (e.g. after restoring
+    from a backup)."""
+
+    def _make_versions_dir(self, folder_names, current_target=None):
+        """Create a temp Versions/ directory with the given version
+        folders (each containing one file, so size isn't trivially
+        zero), and an optional 'Current' symlink."""
+        versions_dir = self.mkdtemp(prefix='bleachbit-test-versions')
+        for name in folder_names:
+            folder = os.path.join(versions_dir, name)
+            os.mkdir(folder)
+            self.write_file(os.path.join(folder, 'placeholder.txt'))
+        if current_target is not None:
+            os.symlink(current_target, os.path.join(versions_dir, 'Current'))
+        return versions_dir
+
+    def test_orphaned_framework_versions_basic(self):
+        """One orphaned version alongside the current one is detected;
+        the current version's own files are never yielded."""
+        versions_dir = self._make_versions_dir(
+            ['150.0.1.1', '152.0.7977.83'], current_target='152.0.7977.83')
+        result = list(orphaned_framework_versions(versions_dir))
+        self.assertTrue(
+            any('150.0.1.1' in p for p in result),
+            'the orphaned version was not detected')
+        self.assertFalse(
+            any('152.0.7977.83' in p for p in result),
+            'the current version must never be yielded')
+
+    def test_orphaned_framework_versions_single_version(self):
+        """With only the current version present, nothing is yielded."""
+        versions_dir = self._make_versions_dir(
+            ['152.0.7977.83'], current_target='152.0.7977.83')
+        result = list(orphaned_framework_versions(versions_dir))
+        self.assertEqual(result, [])
+
+    def test_orphaned_framework_versions_no_current_symlink(self):
+        """Without a 'Current' symlink, nothing is yielded: guessing
+        which version is genuinely in use would risk deleting it."""
+        versions_dir = self._make_versions_dir(
+            ['150.0.1.1', '152.0.7977.83'])
+        result = list(orphaned_framework_versions(versions_dir))
+        self.assertEqual(result, [])
+
+    def test_orphaned_framework_versions_broken_current_symlink(self):
+        """A 'Current' symlink pointing at a nonexistent target must not
+        be treated as safe to infer anything from -- nothing is
+        yielded."""
+        versions_dir = self._make_versions_dir(['150.0.1.1'])
+        os.symlink('152.0.7977.83-does-not-exist',
+                  os.path.join(versions_dir, 'Current'))
+        result = list(orphaned_framework_versions(versions_dir))
+        self.assertEqual(result, [])
+
+    def test_orphaned_framework_versions_missing_directory(self):
+        """A Versions/ directory that does not exist at all yields
+        nothing, rather than raising."""
+        result = list(orphaned_framework_versions(
+            '/nonexistent/path/Versions'))
+        self.assertEqual(result, [])
+
+    def test_orphaned_framework_versions_multiple_orphans(self):
+        """Every sibling folder except 'Current' is detected, even with
+        more than one orphan present."""
+        versions_dir = self._make_versions_dir(
+            ['150.0.1.1', '151.0.2.2', '152.0.7977.83'],
+            current_target='152.0.7977.83')
+        result = list(orphaned_framework_versions(versions_dir))
+        self.assertTrue(any('150.0.1.1' in p for p in result))
+        self.assertTrue(any('151.0.2.2' in p for p in result))
+        self.assertFalse(any('152.0.7977.83' in p for p in result))
+
+    def test_orphaned_framework_versions_yields_files_not_folder_as_unit(self):
+        """Regression test: files inside an orphaned version folder must
+        be yielded individually (with the now-empty folder last), not
+        the folder as a single path -- Command.Delete sizes a directory
+        via a single lstat(), which reflects only the directory inode
+        itself (near 0 bytes) rather than its actual recursive disk
+        usage, so yielding the folder as one unit would silently
+        under-report the space to be freed."""
+        versions_dir = self._make_versions_dir(
+            ['150.0.1.1', '152.0.7977.83'], current_target='152.0.7977.83')
+        orphan_folder = os.path.join(versions_dir, '150.0.1.1')
+        orphan_file = os.path.join(orphan_folder, 'placeholder.txt')
+
+        result = list(orphaned_framework_versions(versions_dir))
+
+        self.assertIn(orphan_file, result)
+        self.assertNotIn(orphan_folder, result[:-1])
+        # The folder itself is still eventually yielded, once emptied,
+        # so it too gets removed -- just last, and never as the sole
+        # representative of its contents.
+        self.assertIn(orphan_folder, result)

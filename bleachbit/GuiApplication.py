@@ -281,6 +281,13 @@ class Bleachbit(Gtk.Application):
             # After "shred settings and quit", rebuild the minimal configuration.
             # which is important for portable mode.
             bleachbit.Options.init_configuration()
+        else:
+            # Flush any pending preference changes immediately instead of
+            # relying on the delayed background timer (FLUSH_DELAY_SECS),
+            # which would otherwise silently lose changes made shortly
+            # before quitting (e.g. toggling a checkbox and closing the
+            # app within a few seconds).
+            options.commit()
         self._window.destroy()
 
     def get_system_information_dialog(self):

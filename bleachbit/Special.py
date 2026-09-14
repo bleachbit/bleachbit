@@ -28,7 +28,6 @@ import errno
 import json
 import logging
 import os
-import xml.dom.minidom
 from urllib.parse import quote, urlparse, urlunparse
 
 
@@ -341,6 +340,9 @@ def delete_chrome_keywords(path):
 
 def delete_office_registrymodifications(path):
     """Erase LibreOffice 3.4 and Apache OpenOffice.org 3.4 MRU in registrymodifications.xcu"""
+    # Keep minidom out of module scope: Special is on the CLI and GUI startup
+    # paths, and this is the only function that needs it.
+    import xml.dom.minidom  # pylint: disable=import-outside-toplevel
     with open(path, 'rb') as f:
         data = f.read()
     reject_xml_dtd(data, 'registrymodifications.xcu')

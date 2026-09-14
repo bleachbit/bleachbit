@@ -11,10 +11,11 @@ import threading
 import time
 
 import bleachbit
-from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path, IS_WINDOWS
+from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path, IS_MAC, IS_WINDOWS
 from bleachbit.Cleaner import backends, register_cleaners
 from bleachbit.Constant import ABORT_BUTTON_LABEL, REQUIRES_EXPERT_MODE
 from bleachbit.GUI import logger
+from bleachbit.General import sanitize_surrogates
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.GuiStartup import get_startup_messages
@@ -46,6 +47,17 @@ MANAGE_COOKIES_TO_KEEP = _("Manage cookies to keep\u2026")
 
 # Ensure GTK is available for this GUI module
 require_gtk()
+
+
+def _iter_rows(model, parent=None):
+    """Yield the tree iter of each row under parent, or of each top-level row"""
+    if parent is None:
+        tree_iter = model.get_iter_first()
+    else:
+        tree_iter = model.iter_children(parent)
+    while tree_iter:
+        yield tree_iter
+        tree_iter = model.iter_next(tree_iter)
 
 
 class GUI(Gtk.ApplicationWindow):
@@ -108,6 +120,18 @@ class GUI(Gtk.ApplicationWindow):
         accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
         key, mod = Gtk.accelerator_parse("<Control>W")
         accel.connect(key, mod, Gtk.AccelFlags.VISIBLE, self.on_quit)
+        if IS_MAC:
+            # Gtk.AccelGroup does not reliably fire for Cmd+Q on this
+            # GTK/Quartz build (the key-press-event carries the correct
+            # META_MASK|MOD2_MASK combination, but the accelerator group
+            # never activates), so handle it directly instead.
+            mac_cmd_q_mods = Gdk.ModifierType.META_MASK | Gdk.ModifierType.MOD2_MASK
+            def _on_mac_key_press(_widget, event):
+                if event.keyval == Gdk.KEY_q and event.state & mac_cmd_q_mods == mac_cmd_q_mods:
+                    self.on_quit(None)
+                    return True
+                return False
+            self.connect("key-press-event", _on_mac_key_press)
 
         # Enable the user to change font size with keyboard or mouse.
         gtk_font_name = None
@@ -566,10 +590,7 @@ class GUI(Gtk.ApplicationWindow):
             return
         if not __iter:
             __iter = self.textbuffer.get_end_iter()
-        # Sanitize text to handle surrogate characters that GTK cannot encode.
-        # Surrogates (like \udcd6) can appear in filenames from the filesystem
-        # and cause UnicodeEncodeError when GTK tries to insert them.
-        text = text.encode('utf-8', errors='replace').decode('utf-8')
+        text = sanitize_surrogates(text)
         if tag:
             self.textbuffer.insert_with_tags_by_name(__iter, text, tag)
         else:
@@ -613,40 +634,23 @@ class GUI(Gtk.ApplicationWindow):
 
     def get_selected_operations(self):
         """Return a list of the IDs of the selected operations in the tree view"""
-        ret = []
         model = self.tree_store.get_model()
-        path = Gtk.TreePath(0)
-        try:
-            __iter = model.get_iter(path)
-        except ValueError:
-            return ret
-        while __iter:
-            if model[__iter][1]:
-                ret.append(model[__iter][2])
-            __iter = model.iter_next(__iter)
-        return ret
+        return [model[__iter][2]
+                for __iter in _iter_rows(model) if model[__iter][1]]
 
     def get_operation_options(self, operation):
         """For the given operation ID, return a list of the selected option IDs."""
-        ret = []
         model = self.tree_store.get_model()
-        path = Gtk.TreePath(0)
-        try:
-            __iter = model.get_iter(path)
-        except ValueError:
-            return ret
-        while __iter:
-            if operation == model[__iter][2]:
-                iterc = model.iter_children(__iter)
-                if not iterc:
-                    return None
-                while iterc:
-                    if model[iterc][1]:
-                        # option is enabled
-                        ret.append(model[iterc][2])
-                    iterc = model.iter_next(iterc)
-                return ret
-            __iter = model.iter_next(__iter)
+        if model.get_iter_first() is None:
+            return []
+        for __iter in _iter_rows(model):
+            if operation != model[__iter][2]:
+                continue
+            if not model.iter_children(__iter):
+                return None
+            # only the enabled options
+            return [model[iterc][2]
+                    for iterc in _iter_rows(model, __iter) if model[iterc][1]]
         return None
 
     def set_sensitive(self, is_sensitive):
@@ -882,13 +886,7 @@ class GUI(Gtk.ApplicationWindow):
     def _option_has_cookie_command(self, cleaner_id, option_id):
         """Return True if the given option runs a cookie command."""
         cleaner = backends.get(cleaner_id)
-        if not cleaner:
-            return False
-        actions = getattr(cleaner, 'actions', ())
-        for opt_id, action in actions:
-            if opt_id == option_id and getattr(action, 'action_key', None) == 'cookie':
-                return True
-        return False
+        return bool(cleaner) and cleaner.has_action_key(option_id, 'cookie')
 
     def context_menu_event(self, treeview, event):
         """When user right clicks on the tree view"""
@@ -996,23 +994,22 @@ class GUI(Gtk.ApplicationWindow):
             text = ""
 
         treepath = Gtk.TreePath(0)
+        # get_iter() raises ValueError when the tree is empty
         try:
-            __iter = model.get_iter(treepath)
+            model.get_iter(treepath)
         except ValueError:
             logger.warning(
                 'ValueError in get_iter() when updating file size for tree path=%s', treepath)
             return
-        while __iter:
-            if model[__iter][2] == option:
-                if option_id == -1:
-                    model[__iter][3] = text
-                else:
-                    child = model.iter_children(__iter)
-                    while child:
-                        if model[child][2] == option_id:
-                            model[child][3] = text
-                        child = model.iter_next(child)
-            __iter = model.iter_next(__iter)
+        for __iter in _iter_rows(model):
+            if model[__iter][2] != option:
+                continue
+            if option_id == -1:
+                model[__iter][3] = text
+            else:
+                for child in _iter_rows(model, __iter):
+                    if model[child][2] == option_id:
+                        model[child][3] = text
 
     def update_total_size(self, bytes_removed):
         """Callback to update the total size cleaned"""
@@ -1026,6 +1023,13 @@ class GUI(Gtk.ApplicationWindow):
 
     def update_headerbar_labels(self):
         """Update the labels and tooltips in the headerbar buttons"""
+        # The hamburger menu is not just a label -- it's a whole
+        # Gtk.Builder-loaded Gio.MenuModel that only picks up a
+        # language change if explicitly reloaded (see the comment in
+        # _reload_app_menu()).
+        if hasattr(self, 'menu_button'):
+            self._reload_app_menu()
+
         # Preview button
         self.preview_button.set_label(PREVIEW_MSG)
         self.preview_button.set_tooltip_text(
@@ -1141,22 +1145,41 @@ class GUI(Gtk.ApplicationWindow):
         hbar.pack_start(box)
 
         # Add hamburger menu on the right
-        menu_button = Gtk.MenuButton()
-        icon = Gio.ThemedIcon(name="open-menu-symbolic")
-        image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
-        builder = Gtk.Builder()
+        self.menu_button = Gtk.MenuButton()
         app_menu_path = bleachbit.get_share_path('app-menu.ui')
         if app_menu_path:
-            builder.add_from_file(app_menu_path)
-            menu_button.set_menu_model(builder.get_object('app-menu'))
-            menu_button.add(image)
-            hbar.pack_end(menu_button)
+            icon = Gio.ThemedIcon(name="open-menu-symbolic")
+            image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+            self._reload_app_menu(app_menu_path)
+            self.menu_button.add(image)
+            hbar.pack_end(self.menu_button)
         else:
             hbar.pack_end(Gtk.Label('error: app-menu.ui not found'))
 
         # Update all labels and tooltips
         self.update_headerbar_labels()
         return hbar
+
+    def _reload_app_menu(self, app_menu_path=None):
+        """(Re)load app-menu.ui into self.menu_button.
+
+        Gtk.Builder translates the .ui file's own translatable strings
+        via the C locale set by locale.setlocale() (see the comment in
+        Language.setup_translation()), baked in at load time -- unlike
+        the rest of the headerbar, which re-reads its labels through
+        Python's own gettext calls on every call to
+        update_headerbar_labels() and so picks up a later language
+        change immediately, a Gtk.Builder-loaded menu stays frozen in
+        whatever language was active the one time it was originally
+        loaded unless it is explicitly reloaded like this.
+        """
+        if app_menu_path is None:
+            app_menu_path = bleachbit.get_share_path('app-menu.ui')
+        if not app_menu_path:
+            return
+        builder = Gtk.Builder()
+        builder.add_from_file(app_menu_path)
+        self.menu_button.set_menu_model(builder.get_object('app-menu'))
 
     def on_configure_event(self, _widget, _event):
         (x, y) = self.get_position()

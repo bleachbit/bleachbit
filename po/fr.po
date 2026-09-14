@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 05:26-0600\n"
-"PO-Revision-Date: 2026-07-28 13:01+0000\n"
+"POT-Creation-Date: 2026-09-01 10:05-0600\n"
+"PO-Revision-Date: 2026-08-31 11:51+0000\n"
 "Last-Translator: \"David D.\" <dadu042@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/bleachbit/main/fr/"
 ">\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -82,11 +82,12 @@ msgstr "Supprime l’historique d’utilisation"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Logs"
 msgstr "Journaux"
 
@@ -95,11 +96,12 @@ msgstr "Journaux"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Delete the logs"
 msgstr "Supprime les journaux"
 
@@ -143,8 +145,8 @@ msgstr "Cache"
 #: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/android_studio.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
@@ -692,6 +694,32 @@ msgstr "Supprime les fichiers obsolètes"
 msgid "Package lists"
 msgstr "Listes des paquets"
 
+#: ../cleaners/android_studio.xml
+#, fuzzy
+#| msgid "Desktop environment"
+msgid "Development environment"
+msgstr "Environnement de bureau"
+
+#: ../cleaners/android_studio.xml
+msgid "Gradle cache"
+msgstr ""
+
+#: ../cleaners/android_studio.xml
+#, fuzzy
+#| msgid "Delete downloaded podcasts"
+msgid "Delete downloaded dependencies and build artifacts"
+msgstr "Supprime les podcasts téléchargés"
+
+#: ../cleaners/android_studio.xml
+msgid "Dependencies will need to be downloaded on the next build."
+msgstr ""
+
+#: ../cleaners/android_studio.xml
+#, fuzzy
+#| msgid "DNS cache"
+msgid "IDE cache"
+msgstr "Cache DNS"
+
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
 msgid "Editor"
@@ -750,7 +778,7 @@ msgstr ""
 #. In Claude Code: captured shell environment used by the Bash tool
 #: ../cleaners/claude.xml
 msgid "Shell snapshots"
-msgstr ""
+msgstr "Captures d'écran du Shell"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -2825,15 +2853,11 @@ msgid "Error when checking for updates: %s"
 msgstr "Erreur lors de la recherche de mises à jour : %s"
 
 #: ../bleachbit/Memory.py
-#, fuzzy
-#| msgid ""
-#| "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
-#| "information."
 msgid ""
 "The command 'swapon -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"La commande « swapoff -s » a échoué ; il vous faut donc retourner dans /proc/"
+"La commande « swapon -s » a échoué ; il vous faut donc retourner dans /proc/"
 "swaps pour échanger des informations."
 
 #: ../bleachbit/Memory.py
@@ -3141,10 +3165,8 @@ msgstr "Le chemin d’accès à écraser doit être un répertoire existant : %s
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Creating new, temporary file for wiping free space."
 msgid "Creating new, temporary file for wiping empty space."
-msgstr "Création d'un nouveau fichier temporaire pour écraser l’espace libre."
+msgstr "Création d'un nouveau fichier temporaire pour écraser l’espace vide."
 
 #: ../bleachbit/Wipe.py
 #, python-format
@@ -3227,7 +3249,7 @@ msgstr "Accès refusé : %s"
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Database is locked: %s"
-msgstr ""
+msgstr "Base de données est verrouillée : %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format

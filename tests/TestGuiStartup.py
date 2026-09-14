@@ -200,3 +200,19 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         # user, so accept either, like _get_windows_permission_issues does.
         current_sid, _name, group_sids = GuiStartup._get_windows_user_info()
         self.assertIn(owner_sid_str, {current_sid} | group_sids)
+
+    @common.skipUnlessWindows
+    def test_lookup_account_name_or_sid_unresolvable(self):
+        """An unresolvable SID falls back to its string form (issue #2271).
+
+        Reproduces the dual-boot / shared NTFS scenario where
+        ``LookupAccountSid`` fails because the SID belongs to an
+        account from the other Windows installation. The helper must
+        not raise; it should return the SID string so the ownership
+        comparison can still proceed by SID.
+        """
+        import win32security
+        bogus = 'S-1-5-21-1234567890-1234567890-1234567890-1234'
+        sid = win32security.ConvertStringSidToSid(bogus)
+        name, _ = GuiStartup._lookup_account_name_or_sid(sid)
+        self.assertEqual(name, bogus)

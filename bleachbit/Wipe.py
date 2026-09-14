@@ -393,6 +393,13 @@ def wipe_path(pathname, idle=False):
             _("Path to wipe must be an existing directory: %s"), pathname)
         return
 
+    if IS_POSIX:
+        # Another user could tamper with wipe files in a world-writable dir
+        from bleachbit.PathUtils import is_world_writable
+        if is_world_writable(pathname):
+            logger.warning(
+                _("Shred drive is world-writable; wiping there is unsafe: %s"), pathname)
+
     if fstype in ('ext4', 'btrfs'):
         fitrim(pathname)
 

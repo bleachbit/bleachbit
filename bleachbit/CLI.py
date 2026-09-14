@@ -14,6 +14,7 @@ import optparse
 import sys
 
 from bleachbit.Cleaner import backends, create_simple_cleaner, register_cleaners
+from bleachbit.General import sanitize_surrogates
 from bleachbit import APP_VERSION, stdout_encoding, IS_WINDOWS
 from bleachbit import SystemInformation, Options, Worker
 from bleachbit.Bootstrap import bootstrap
@@ -44,10 +45,7 @@ class CliCallback:
 
     def append_text(self, msg, _tag=None):
         """Write text to the terminal"""
-        # Sanitize text to handle surrogate characters that GTK cannot encode.
-        # Surrogates (like \udcd6) can appear in filenames from the filesystem
-        # and cause UnicodeEncodeError when GTK tries to insert them.
-        msg = msg.encode('utf-8', errors='replace').decode('utf-8')
+        msg = sanitize_surrogates(msg)
         if self.quiet or self._output_closed:
             return
         try:

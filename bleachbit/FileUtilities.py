@@ -9,6 +9,7 @@ File-related utilities
 """
 
 # standard imports
+import codecs
 import contextlib
 import errno
 import glob
@@ -172,9 +173,14 @@ def open_files_lsof(run_lsof=None):
         def run_lsof():
             # sanitize the env so a hostile inherited LD_*/DYLD_* cannot
             # redirect this child when BleachBit runs as root
+            env = sanitize_root_env(dict(os.environ))
+            if IS_MAC:
+                env.pop('DYLD_LIBRARY_PATH', None)
+                env.pop('DYLD_INSERT_LIBRARIES', None)
+
             return subprocess.check_output(
                 [lsof_path, "-Fn", "-n"], text=True,
-                env=sanitize_root_env(dict(os.environ)))
+                env=env)
     output = run_lsof()
     if isinstance(output, bytes):
         output = output.decode('utf-8', errors='replace')
@@ -668,6 +674,41 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
         return False
 
 
+def detect_encoding(fn):
+    """Detect the encoding of the file
+
+    Returns a codec name or None if it could not be determined.
+    """
+    with open(fn, 'rb') as f:
+        raw = f.read()
+
+    # UTF-8 is unambiguous, so do not guess. This covers ASCII and what
+    # current applications write, such as VLC since 3.0.
+    encoding = 'utf_8_sig' if raw.startswith(codecs.BOM_UTF8) else 'utf_8'
+    try:
+        raw.decode(encoding)
+    except UnicodeDecodeError:
+        pass
+    else:
+        return encoding
+
+    try:
+        # pylint: disable=import-outside-toplevel
+        from charset_normalizer import from_bytes
+    except ImportError:
+        logger.warning(
+            'charset_normalizer module is not available to detect character encoding')
+        return None
+
+    match = from_bytes(raw).best()
+    if match is None:
+        return None
+    if match.bom and 'utf_8' == match.encoding:
+        # charset_normalizer reports the BOM separately from the codec
+        return 'utf_8_sig'
+    return match.encoding
+
+
 def ego_owner(filename):
     """Return whether current user owns the file
 
@@ -1056,8 +1097,31 @@ def uris_to_paths(file_uris):
     return file_paths
 
 
+def _is_system_critical_posix(path):
+    """Check whether a POSIX path is system-critical and must never be deleted.
+
+    Applies even when the keep list is empty, so a bad cleaner file cannot
+    delete the filesystem root or a mounted pseudo-filesystem. Real cleaners
+    legitimately act under /var and /dev/shm, so only the root itself and
+    virtual filesystems are off limits.
+    """
+    if not isinstance(path, str) or not path.startswith('/'):
+        return False
+    # Strip leading slashes: POSIX leaves '//' and friends implementation-
+    # defined, so normpath alone will not collapse them to '/'.
+    norm = os.path.normpath('/' + path.lstrip('/'))
+    if norm == '/':
+        return True
+    for prefix in ('/proc', '/sys', '/run'):
+        if norm == prefix or path_startswith(norm, prefix):
+            return True
+    return False
+
+
 def whitelisted_posix(path, check_realpath=True, _followed_link=False):
     """Check whether this POSIX path is whitelisted"""
+    if _is_system_critical_posix(path):
+        return True
     from bleachbit.Options import options
     keep_paths = options.get_whitelist_paths()
     if not keep_paths:

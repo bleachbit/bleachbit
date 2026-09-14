@@ -146,13 +146,7 @@ delete_windows_files:
 	grep -l "cleaner id=\"\w*\" os=\"windows\"" cleaners/*xml | xargs rm -f
 	# Remove Windows-specific code.
 	rm -f bleachbit/{Winapp,Windows*}.py tests/TestWindows{,Wipe}.py
-	# Remove the whole directory after verifying it's the Windows build directory.
-	# This is disabled because it break po/Makefile
-	#@if [ -f windows/bleachbit.nsi ]; then \
-	#	rm -rf windows; \
-	#else \
-	#	echo "WARNING: windows/bleachbit.nsi not found, skipping windows directory removal"; \
-	#fi
+	# The windows/ directory is left in place because removing it breaks po/Makefile.
 
 tests:
 	# Check translations but do not abort.

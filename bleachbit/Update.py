@@ -124,8 +124,9 @@ def check_updates(check_beta, check_winapp2, append_text, cb_success):
             logger.debug(e.response.headers)
         return []
     try:
-        reject_xml_dtd(response.text, 'update XML')
-        dom = xml.dom.minidom.parseString(response.text)
+        # pyexpat rejects a str carrying an encoding declaration; pass bytes
+        reject_xml_dtd(response.content, 'update XML')
+        dom = xml.dom.minidom.parseString(response.content)
     except Exception:
         logger.exception(
             'The update information does not parse: %s', response.text)

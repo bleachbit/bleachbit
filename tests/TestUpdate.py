@@ -88,8 +88,22 @@ class UpdateTestCase(common.BleachbitTestCase):
             resp = Mock()
             resp.status_code = 200
             resp.text = xml_text
+            resp.content = xml_text.encode()
             mock_fetch.return_value = resp
             self.assertEqual(check_updates(True, False, None, None), [])
+
+    def test_check_updates_encoding_declaration(self):
+        """Update XML with an encoding declaration still parses"""
+        xml_text = ('<?xml version="1.0" encoding="UTF-8"?>'
+                    '<updates><stable ver="9.9">https://999</stable></updates>')
+        with patch('bleachbit.Update.fetch_url') as mock_fetch:
+            resp = Mock()
+            resp.status_code = 200
+            resp.text = xml_text
+            resp.content = xml_text.encode()
+            mock_fetch.return_value = resp
+            self.assertEqual(check_updates(True, False, None, None),
+                             [('9.9', 'https://999')])
 
     def test_check_updates_rejects_insecure_url(self):
         """A stable/beta update URL that is not https is ignored"""
@@ -99,6 +113,7 @@ class UpdateTestCase(common.BleachbitTestCase):
             resp = Mock()
             resp.status_code = 200
             resp.text = xml_text
+            resp.content = xml_text.encode()
             mock_fetch.return_value = resp
             updates = check_updates(True, False, None, None)
             self.assertEqual(updates, [('2', 'https://secure.example')])

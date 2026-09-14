@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-08-21 05:26-0600\n"
-"PO-Revision-Date: 2026-08-23 13:51+0000\n"
+"POT-Creation-Date: 2026-09-01 10:05-0600\n"
+"PO-Revision-Date: 2026-09-02 11:02+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/bleachbit/main/ga/>"
 "\n"
@@ -83,11 +83,12 @@ msgstr "Scrios an stair úsáide"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Logs"
 msgstr "Logaí"
 
@@ -96,11 +97,12 @@ msgstr "Logaí"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Delete the logs"
 msgstr "Scrios na logaí"
 
@@ -144,8 +146,8 @@ msgstr "Taisce"
 #: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/android_studio.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
@@ -692,6 +694,26 @@ msgstr "Scrios comhaid atá imithe i léig"
 #: ../cleaners/apt.xml
 msgid "Package lists"
 msgstr "Liostaí pacáistí"
+
+#: ../cleaners/android_studio.xml
+msgid "Development environment"
+msgstr "Timpeallacht forbartha"
+
+#: ../cleaners/android_studio.xml
+msgid "Gradle cache"
+msgstr "Taisce Gradle"
+
+#: ../cleaners/android_studio.xml
+msgid "Delete downloaded dependencies and build artifacts"
+msgstr "Scrios spleáchais íoslódáilte agus tóg déantáin"
+
+#: ../cleaners/android_studio.xml
+msgid "Dependencies will need to be downloaded on the next build."
+msgstr "Beidh gá spleáchais a íoslódáil ar an gcéad thógáil eile."
+
+#: ../cleaners/android_studio.xml
+msgid "IDE cache"
+msgstr "Taisce IDE"
 
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
