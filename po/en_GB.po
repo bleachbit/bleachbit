@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-01 10:05-0600\n"
-"PO-Revision-Date: 2026-07-14 00:01+0000\n"
+"PO-Revision-Date: 2026-09-16 04:51+0000\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "bleachbit/main/en_GB/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -684,30 +684,24 @@ msgid "Package lists"
 msgstr "Package lists"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Development environment"
-msgstr "Desktop environment"
+msgstr "Development environment"
 
 #: ../cleaners/android_studio.xml
 msgid "Gradle cache"
-msgstr ""
+msgstr "Gradle cache"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Delete downloaded podcasts"
 msgid "Delete downloaded dependencies and build artifacts"
-msgstr "Delete downloaded podcasts"
+msgstr "Delete downloaded dependencies and build artifacts"
 
 #: ../cleaners/android_studio.xml
 msgid "Dependencies will need to be downloaded on the next build."
-msgstr ""
+msgstr "Dependencies will need to be downloaded on the next build."
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "DNS cache"
 msgid "IDE cache"
-msgstr "DNS cache"
+msgstr "IDE cache"
 
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
@@ -1350,10 +1344,9 @@ msgstr "Ignoring cleaner because it is world writable: %s"
 #. path of the XML cleaner file whose directory is world
 #. writable.
 #: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
-#, fuzzy, python-format
-#| msgid "Ignoring cleaner because it is world writable: %s"
+#, python-format
 msgid "Ignoring cleaner because its directory is world writable: %s"
-msgstr "Ignoring cleaner because it is world writable: %s"
+msgstr "Ignoring cleaner because its directory is world writable: %s"
 
 #. TRANSLATORS: Error message printed to the log.
 #. %s expands to the path of the XML cleaner file
@@ -3086,10 +3079,8 @@ msgstr "Path to wipe must be an existing directory: %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Creating new, temporary file for wiping free space."
 msgid "Creating new, temporary file for wiping empty space."
-msgstr "Creating new, temporary file for wiping free space."
+msgstr "Creating new, temporary file for wiping empty space."
 
 #: ../bleachbit/Wipe.py
 #, python-format
@@ -3167,7 +3158,7 @@ msgstr "Access denied: %s"
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Database is locked: %s"
-msgstr ""
+msgstr "Database is locked: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
