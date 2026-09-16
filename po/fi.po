@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-01 10:05-0600\n"
-"PO-Revision-Date: 2026-04-19 14:50+0000\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
+"PO-Revision-Date: 2026-09-16 07:18+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/bleachbit/main/"
 "fi/>\n"
 "Language: fi\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Launchpad-Export-Date: 2021-12-02 04:08+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -703,7 +703,7 @@ msgstr "Työpöytäympäristö"
 
 #: ../cleaners/android_studio.xml
 msgid "Gradle cache"
-msgstr ""
+msgstr "Gradle-välimuisti"
 
 #: ../cleaners/android_studio.xml
 #, fuzzy
@@ -713,11 +713,11 @@ msgstr "Poista ladatut podcastit"
 
 #: ../cleaners/android_studio.xml
 msgid "Dependencies will need to be downloaded on the next build."
-msgstr ""
+msgstr "Riippuvuudet on ladattava seuraavassa koontiversiossa."
 
 #: ../cleaners/android_studio.xml
 msgid "IDE cache"
-msgstr ""
+msgstr "IDE-välimuisti"
 
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
@@ -751,7 +751,7 @@ msgstr "Omat kansiot alustetaan."
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
 msgid "AI assistant"
-msgstr ""
+msgstr "Tekoälyavustaja"
 
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
@@ -777,11 +777,12 @@ msgstr "Poista päätteen historia"
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
 msgstr ""
+"Menetäisit aiempien istuntojen palauttamis-, jatkamis- ja kelaustoiminnot"
 
 #. In Claude Code: captured shell environment used by the Bash tool
 #: ../cleaners/claude.xml
 msgid "Shell snapshots"
-msgstr ""
+msgstr "Komentorivitulkkitilannevedokset"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -800,6 +801,8 @@ msgid ""
 "This option is slow. Inspect the preview for files you want to keep, like "
 "those bundled with applications."
 msgstr ""
+"Tämä vaihtoehto on hidas. Tarkista esikatselusta tiedostot, jotka haluat "
+"säilyttää, kuten sovellusten mukana tulleet tiedostot."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
@@ -845,7 +848,7 @@ msgstr "Poista vierailtujen web-sivujen lista"
 #. Cleaning option that deletes AI models in a web browser
 #: ../cleaners/google_chrome.xml
 msgid "AI"
-msgstr ""
+msgstr "Tekoäly"
 
 #: ../cleaners/google_chrome.xml
 #, fuzzy
@@ -1066,13 +1069,13 @@ msgstr "Minulle ({USER})"
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
 msgid "Unable to elevate, error {ERROR}."
-msgstr ""
+msgstr "Ei voitu nostaa; virhe {ERROR}."
 
 #. TRANSLATORS: Error message shown in a dialog box when Windows does not support elevation.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_NOT_SUPPORTED"
 msgid "The operating system doesn't support elevation."
-msgstr ""
+msgstr "Käyttöjärjestelmä ei tue nostamista."
 
 #. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1111,6 +1114,8 @@ msgstr "Virheellinen yhdistelmä parametrejä."
 msgctxt "nsis:MULTIUSER_LOGON_SERVICE_NOT_RUNNING"
 msgid "Unable to elevate, Secondary Logon service not running."
 msgstr ""
+"Käyttöoikeuksien nostaminen ei onnistu, toissijainen "
+"sisäänkirjautumispalvelu ei ole käynnissä."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
