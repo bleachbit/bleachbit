@@ -826,10 +826,10 @@ Version: 2023-02-223
 !endif
 
 !ifdef LANG_FINNISH
-	LangString ALREADY_INSTALLED ${LANG_FINNISH} "${prodname} on jo asennettu.$\r$\nNapsauta 'OK' poistaaksesi vanhan version asennuksen ennen päivitystä, tai napsauta 'Peru' keskeyttääksesi päivityksen."
+	LangString ALREADY_INSTALLED ${LANG_FINNISH} "${prodname} on jo asennettu.$\r$\nNapsauta 'Hyvä on' poistaaksesi vanhan version ennen päivittämistä tai napsauta 'Peru' keskeyttääksesi päivityksen."
 	LangString BLEACHBIT_MUI_FINISHPAGE_LINK ${LANG_FINNISH} "Vieraile ${prodname}in verkkosivustolla"
 	LangString INSTALLER_CAPTION ${LANG_FINNISH} "${prodname} ${VERSION} -määritys"
-	LangString MULTIPRINT1 ${LANG_FINNISH} "Seuraava vaihe on fonttien välimuistin koostaminen; sen aikana saatat nähdä mustan ikkunan."
+	LangString MULTIPRINT1 ${LANG_FINNISH} "Seuraava vaihe on fonttivälimuistin rakentaminen, jonka aikana saattaa tulla näkyviin musta konsoli-ikkuna."
 	LangString MULTIPRINT2 ${LANG_FINNISH} "Se valmistuu yleensä minuutissa, mutta toisinaan voi kestää jopa kymmenen minuuttia."
 	LangString MULTIUSER_ADMIN_ACCOUNT_LOGIN_REQUIRED ${LANG_FINNISH} "Jatkaaksesi sinun täytyy kirjautua tilillä, joka on järjestelmänvalvojaryhmän jäsen."
 	LangString MULTIUSER_ADMIN_CREDENTIALS_REQUIRED ${LANG_FINNISH} "Järjestelmänvalvojan käyttöoikeudet vaaditaan."
@@ -857,13 +857,13 @@ Version: 2023-02-223
 	LangString MULTIUSER_RUN_AS_ADMIN ${LANG_FINNISH} "Tämä ohjelma tulee suorittaa järjestelmävalvojana."
 	LangString MULTIUSER_UNINSTALL_HEADER ${LANG_FINNISH} "$(^NameDA) on asennettu sekä kaikille käyttäjille että nykyiselle käyttäjälle.$\r$\nValitse poistettava asennus."
 	LangString MULTIUSER_UNINSTALL_PAGE_SUBTITLE ${LANG_FINNISH} "Valitse käyttäjät, joilta $(^NameDA) poistetaan."
-	LangString OLD_WINDOWS_WARNING ${LANG_FINNISH} "This version of BleachBit requires Windows 10 or later. To download a compatible version for your system, click OK. To exit the installer, click Cancel."
-	LangString SECTION_CORE_DESCRIPTION ${LANG_FINNISH} "These are the basic files needed for ${prodname} to function (required)."
+	LangString OLD_WINDOWS_WARNING ${LANG_FINNISH} "Tämä BleachBit-versio vaatii Windows 10:n tai uudemman käyttöjärjestelmän. Lataa järjestelmällesi yhteensopiva versio napsauttamalla 'Hyvä on'. Poistu asennusohjelmasta napsauttamalla 'Peruuta'."
+	LangString SECTION_CORE_DESCRIPTION ${LANG_FINNISH} "Nämä ovat perustiedostot, joita tarvitaan ${prodname}:n toimimiseen (pakollinen)."
 	LangString SECTION_CORE_NAME ${LANG_FINNISH} "Keskeisimmät tiedostot (vaaditaan)"
 	LangString SECTION_DESKTOP_DESCRIPTION ${LANG_FINNISH} "Luo pikakuvake työpöydälle."
 	LangString SECTION_DESKTOP_NAME ${LANG_FINNISH} "Työpöytä"
 	LangString SECTION_INTEGRATE_SHRED_DESCRIPTION ${LANG_FINNISH} "Lisää Windowsin tiedostonhallinnan kontekstivalikkoon valinta, jonka avulla voi poistaa tiedostoja."
-	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_FINNISH} "Integrate Shred"
+	LangString SECTION_INTEGRATE_SHRED_NAME ${LANG_FINNISH} "Integroi Shred"
 	LangString SECTION_QUICK_LAUNCH_DESCRIPTION ${LANG_FINNISH} "Luo pikakuvake pikakäynnistykseen."
 	LangString SECTION_QUICK_LAUNCH_NAME ${LANG_FINNISH} "Pikakäynnistys"
 	LangString SECTION_SHORTCUTS_DESCRIPTION ${LANG_FINNISH} "Luo pikakuvake ${prodname}iin"
@@ -872,11 +872,11 @@ Version: 2023-02-223
 	LangString SECTION_START_MENU_NAME ${LANG_FINNISH} "Käynnistä-valikko"
 	LangString SECTION_TRANSLATIONS_DESCRIPTION ${LANG_FINNISH} "Asenna kielitiedostot käyttääksesi ${prodname}iä suosimallasi kielellä."
 	LangString SECTION_TRANSLATIONS_NAME ${LANG_FINNISH} "Käännökset"
-	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_FINNISH} "Lisää ohjelma asennuksen poistoa varten."
-	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_FINNISH} "${prodname} Debugging Terminal"
+	LangString SECTION_UNINSTALL_DESCRIPTION ${LANG_FINNISH} "Lisää asennuksenpoisto-ohjelma."
+	LangString SHORTCUT_DEBUGGING_TERMINAL ${LANG_FINNISH} "${prodname} Päätteen virheenkorjaus"
 	LangString SHORTCUT_NO_UAC ${LANG_FINNISH} "${prodname} (Ei UAC:tä)."
 	LangString SHRED_SHELL_MENU ${LANG_FINNISH} "Silppua ${prodname}illä"
-	LangString UNINSTALL_TEXT ${LANG_FINNISH} "Valitse kirjoitettava kansio jokaiselle asemalle joihin ylikirjoitetaan käyttämätöntä tilaa."
+	LangString UNINSTALL_TEXT ${LANG_FINNISH} "Valitse jokaiselle asemalle kirjoitettava kansio, johon tyhjää tilaa pyyhitään."
 !endif
 
 !ifdef LANG_FRENCH
