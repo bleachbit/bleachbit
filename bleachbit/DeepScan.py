@@ -54,6 +54,23 @@ Search = namedtuple(
 Search.__new__.__defaults__ = (None,) * len(Search._fields)
 
 
+def directory_prefix(dirpath):
+    """Return a prefix such that prefix + filename == os.path.join(dirpath, filename).
+
+    Uses os.path.join(dirpath, '') for the common case. Bare UNC roots like
+    \\\\server\\share are special: join(dir, '') does not add a separator, but
+    join(dir, name) still inserts one.
+    """
+    prefix = os.path.join(dirpath, '')
+    if prefix == dirpath:
+        # join was a no-op (e.g. 'C:' or a bare UNC share). Probe whether a
+        # real filename would insert a separator that concatenation would miss.
+        probe = os.path.join(dirpath, 'a')
+        if probe != dirpath + 'a':
+            return probe[:-1]
+    return prefix
+
+
 class CompiledSearch:
     """Compiled search condition"""
 
@@ -68,14 +85,17 @@ class CompiledSearch:
         self.wholeregex = re_compile(search.wholeregex)
         self.nwholeregex = re_compile(search.nwholeregex)
 
-    def match(self, dirpath, filename):
+    def match(self, dirpath, filename, path_prefix=None):
         if self.regex and not self.regex.search(filename):
             return None
 
         if self.nregex and self.nregex.search(filename):
             return None
 
-        full_path = os.path.join(dirpath, filename)
+        if path_prefix is None:
+            full_path = os.path.join(dirpath, filename)
+        else:
+            full_path = path_prefix + filename
 
         if self.wholeregex and not self.wholeregex.search(full_path):
             return None
@@ -116,10 +136,11 @@ class DeepScan:
                     if not whitelisted(subdir) and is_normal_directory(subdir):
                         kept_dirs.append(dirname)
                 dirnames[:] = kept_dirs
+                path_prefix = directory_prefix(dirpath)
                 for c in compiled_searches:
                     # fixme, don't match filename twice
                     for filename in filenames:
-                        full_name = c.match(dirpath, filename)
+                        full_name = c.match(dirpath, filename, path_prefix)
                         if full_name is None:
                             continue
                         # fixme: support other commands
