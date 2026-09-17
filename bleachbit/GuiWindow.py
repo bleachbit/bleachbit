@@ -457,7 +457,14 @@ class GUI(Gtk.ApplicationWindow):
         return False
 
     def on_quit(self, *_args):
-        """Quit the application, used with CTRL+Q or CTRL+W"""
+        """Quit the application, used with CTRL+Q, CTRL+W, or Cmd+Q on macOS"""
+        # Unlike closing via the window's own close button (which fires
+        # delete-event -> on_delete_event() -> options.close()), calling
+        # Gtk.main_quit() directly here never emits delete-event, so any
+        # setting change still waiting on the delayed flush timer
+        # (see Options.__schedule_flush) would otherwise be lost if the
+        # process exits before that timer fires.
+        options.close()
         if Gtk.main_level() > 0:
             Gtk.main_quit()
         else:
