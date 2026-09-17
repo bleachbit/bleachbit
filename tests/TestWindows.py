@@ -33,6 +33,7 @@ from bleachbit import FileUtilities, General
 from bleachbit.Command import Delete, Function
 from bleachbit.FileUtilities import extended_path, extended_path_undo
 from bleachbit.Windows import (
+    clear_clipboard,
     delete_locked_file,
     delete_registry_key,
     delete_registry_value,
@@ -1038,6 +1039,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     @pytest.mark.xdist_group('gui')
     def test_get_clipboard_paths(self):
         """Unit test for get_clipboard_paths"""
+        self.addCleanup(clear_clipboard)
         # The clipboard is an unknown state, so check the function does
         # not crash and that it returns the right data type.
         paths = get_clipboard_paths()

@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 05:26-0600\n"
-"PO-Revision-Date: 2026-07-19 11:01+0000\n"
-"Last-Translator: Luiz Vaz Camoes <web.image590@passmail.net>\n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
+"POT-Creation-Date: 2026-09-01 10:05-0600\n"
+"PO-Revision-Date: 2026-09-16 21:13+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/bleachbit/"
 "main/pt/>\n"
 "Language: pt\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Launchpad-Export-Date: 2021-07-06 03:44+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -83,11 +83,12 @@ msgstr "Eliminar histórico de utilização"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Logs"
 msgstr "Registos"
 
@@ -96,11 +97,12 @@ msgstr "Registos"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Delete the logs"
 msgstr "Limpar registos"
 
@@ -144,8 +146,8 @@ msgstr "Cache"
 #: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/android_studio.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
@@ -683,6 +685,26 @@ msgstr "Limpar ficheiros obsoletos"
 msgid "Package lists"
 msgstr "Listas de pacotes"
 
+#: ../cleaners/android_studio.xml
+msgid "Development environment"
+msgstr "Ambiente de desenvolvimento"
+
+#: ../cleaners/android_studio.xml
+msgid "Gradle cache"
+msgstr "Cache do Gradle"
+
+#: ../cleaners/android_studio.xml
+msgid "Delete downloaded dependencies and build artifacts"
+msgstr "Apagar dependências descarregadas e construir artefactos"
+
+#: ../cleaners/android_studio.xml
+msgid "Dependencies will need to be downloaded on the next build."
+msgstr "As dependências precisam de ser descarregadas na próxima compilação."
+
+#: ../cleaners/android_studio.xml
+msgid "IDE cache"
+msgstr "Cache do IDE"
+
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
 msgid "Editor"
@@ -719,10 +741,8 @@ msgstr "Assistente de IA"
 
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Form history"
 msgid "File history"
-msgstr "Histórico de formulários"
+msgstr "Histórico de ficheiros"
 
 #. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
 #: ../cleaners/claude.xml
@@ -1342,10 +1362,9 @@ msgstr "A ignorar ferramenta porque é mundialmente gravável: %s"
 #. path of the XML cleaner file whose directory is world
 #. writable.
 #: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
-#, fuzzy, python-format
-#| msgid "Ignoring cleaner because it is world writable: %s"
+#, python-format
 msgid "Ignoring cleaner because its directory is world writable: %s"
-msgstr "A ignorar ferramenta porque é mundialmente gravável: %s"
+msgstr "A ignorar limpado porque o seu diretório é mundialmente gravável: %s"
 
 #. TRANSLATORS: Error message printed to the log.
 #. %s expands to the path of the XML cleaner file
@@ -1437,8 +1456,7 @@ msgstr "Esta opção é experimental e pode causar problemas."
 #. TRANSLATORS: This is a label for the option to clear the system DNS cache.
 #: ../bleachbit/Cleaner.py
 msgid "DNS cache"
-msgstr ""
-"Esta é uma etiqueta para a opção que permite limpar a cache DNS do sistema."
+msgstr "Cache DNS"
 
 #. TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py
@@ -2786,16 +2804,12 @@ msgid "Error when checking for updates: %s"
 msgstr "Erro ao procurar por atualizações: %s"
 
 #: ../bleachbit/Memory.py
-#, fuzzy
-#| msgid ""
-#| "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
-#| "information."
 msgid ""
 "The command 'swapon -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"O comando 'swapoff -s' falhou e estamos a utilizar /proc/swaps para a "
-"informação de swap."
+"O comando 'swapon -s' falhou, pelo que se recorre a /proc/swaps para obter "
+"informações de swap."
 
 #: ../bleachbit/Memory.py
 msgid "Disabling swap."
@@ -3059,14 +3073,14 @@ msgstr ""
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "stop Windows service %(service)s"
-msgstr ""
+msgstr "parar serviço de Windows %(service)s"
 
 #. TRANSLATORS: Message in log file when starting a Windows service.
 #. The placeholder is the code name of the service.
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "start Windows service %(service)s"
-msgstr ""
+msgstr "iniciar serviço de Windows %(service)s"
 
 #: ../bleachbit/Wipe.py
 msgid ""
@@ -3092,8 +3106,6 @@ msgstr "O caminho a limpar tem de ser uma pasta existente: %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Creating new, temporary file for wiping free space."
 msgid "Creating new, temporary file for wiping empty space."
 msgstr "Criar ficheiro temporário para limpar o espaço livre."
 
@@ -3177,7 +3189,7 @@ msgstr "Acesso negado: %s"
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Database is locked: %s"
-msgstr ""
+msgstr "Banco de dados está bloqueado: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format

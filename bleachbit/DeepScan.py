@@ -39,24 +39,36 @@ def normalized_walk(top, **kwargs):
     is like `os.walk` but recomposes those decomposed filenames on
     macOS
     """
-    try:
-        from scandir import walk
-    except Exception:
-        # there is a warning in FileUtilities, so don't warn again here
-        from os import walk
     if IS_MAC:
-        for dirpath, dirnames, filenames in walk(top, **kwargs):
+        for dirpath, dirnames, filenames in os.walk(top, **kwargs):
             yield dirpath, dirnames, [
                 unicodedata.normalize('NFC', fn)
                 for fn in filenames
             ]
     else:
-        yield from walk(top, **kwargs)
+        yield from os.walk(top, **kwargs)
 
 
 Search = namedtuple(
     'Search', ['command', 'regex', 'nregex', 'wholeregex', 'nwholeregex'])
 Search.__new__.__defaults__ = (None,) * len(Search._fields)
+
+
+def directory_prefix(dirpath):
+    """Return a prefix such that prefix + filename == os.path.join(dirpath, filename).
+
+    Uses os.path.join(dirpath, '') for the common case. Bare UNC roots like
+    \\\\server\\share are special: join(dir, '') does not add a separator, but
+    join(dir, name) still inserts one.
+    """
+    prefix = os.path.join(dirpath, '')
+    if prefix == dirpath:
+        # join was a no-op (e.g. 'C:' or a bare UNC share). Probe whether a
+        # real filename would insert a separator that concatenation would miss.
+        probe = os.path.join(dirpath, 'a')
+        if probe != dirpath + 'a':
+            return probe[:-1]
+    return prefix
 
 
 class CompiledSearch:
@@ -118,13 +130,13 @@ class DeepScan:
                 # Prune keep-list dirs, symlinks, and reparse points:
                 # os.walk's followlinks=False skips POSIX links but not
                 # junctions, which would otherwise redirect the scan.
-                dirnames[:] = [
-                    dirname
-                    for dirname in dirnames
-                    if not whitelisted(os.path.join(dirpath, dirname))
-                    and is_normal_directory(os.path.join(dirpath, dirname))
-                ]
-                path_prefix = os.path.join(dirpath, '')
+                kept_dirs = []
+                for dirname in dirnames:
+                    subdir = os.path.join(dirpath, dirname)
+                    if not whitelisted(subdir) and is_normal_directory(subdir):
+                        kept_dirs.append(dirname)
+                dirnames[:] = kept_dirs
+                path_prefix = directory_prefix(dirpath)
                 for c in compiled_searches:
                     # fixme, don't match filename twice
                     for filename in filenames:

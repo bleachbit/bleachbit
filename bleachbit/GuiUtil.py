@@ -11,10 +11,9 @@ WindowInfo class and utility functions for GUI
 import importlib.util
 import os
 import threading
-from enum import Enum
 from typing import Optional
 
-from bleachbit import APP_NAME, FileUtilities, IS_WINDOWS
+from bleachbit import APP_NAME, FileUtilities, IS_MAC, IS_WINDOWS
 from bleachbit.GUI import logger
 from bleachbit.GtkShim import (
     GLib, Gdk, Gtk, gi,
@@ -88,6 +87,15 @@ def get_clipboard_paths(clipboard=None, targets=None):
     targets_by_name = {}
     has_unusable_target_name = False
     for target in targets:
+        if target is None:
+            # On macOS/Quartz, a clipboard target whose NSPasteboard type
+            # cannot be mapped to a Gdk.Atom can surface here as None
+            # instead of a valid atom object (seen alongside a
+            # 'gdk_atom_intern: assertion atom_name != NULL failed'
+            # warning), rather than raising or being omitted.
+            has_unusable_target_name = True
+            logger.debug('Skipping a None clipboard target')
+            continue
         try:
             target_name = target.name()
         except UnicodeDecodeError:
@@ -185,14 +193,6 @@ def get_window_info(window):
     return WindowInfo(geo.x, geo.y, geo.width, geo.height, monitor_model)
 
 
-class ThemeChangeStatus(Enum):
-    """State machine for detecting whether a theme update occurred."""
-
-    CHANGED = "changed"
-    UNCHANGED = "unchanged"
-    UNKNOWN = "unknown"
-
-
 def detect_dark_background(widget: Optional[Gtk.Widget]) -> Optional[bool]:
     """Return True if the widget background is dark, False if light, None on failure."""
     threshold = 0.45
@@ -223,20 +223,10 @@ def detect_dark_background(widget: Optional[Gtk.Widget]) -> Optional[bool]:
         return None
 
 
-def classify_theme_change(before_dark: Optional[bool], after_dark: Optional[bool]) -> ThemeChangeStatus:
-    """Compare observations before and after a toggle to classify change."""
-    if before_dark is None or after_dark is None:
-        return ThemeChangeStatus.UNKNOWN
-    if before_dark == after_dark:
-        return ThemeChangeStatus.UNCHANGED
-    return ThemeChangeStatus.CHANGED
-
-
 def should_show_dark_mode_warning(before_dark: Optional[bool], after_dark: Optional[bool]) -> bool:
     """Return True when we should warn the user about theme toggles."""
-    status = classify_theme_change(before_dark, after_dark)
-    # Warn when the theme did not change or when we cannot tell (UNKNOWN).
-    return status != ThemeChangeStatus.CHANGED
+    # Warn when the theme did not change or when we cannot tell.
+    return before_dark is None or after_dark is None or before_dark == after_dark
 
 
 def flush_gtk_events(max_iterations: int = 5):
@@ -285,6 +275,11 @@ def load_icon_or_fallback(icon_name, size=None,
 
 def notify(msg):
     """Show a popup-notification"""
+    if IS_MAC:
+        # The macOS GTK stack has no libnotify typelib, so use AppleScript.
+        from bleachbit.Mac import notify_macos
+        notify_macos(msg)
+        return
     if importlib.util.find_spec('plyer'):
         # On Windows, use Plyer.
         notify_plyer(msg)

@@ -27,7 +27,6 @@ import hashlib
 import logging
 import os
 import socket
-import struct
 import sys
 import platform
 import warnings
@@ -58,29 +57,12 @@ else:
         pass
 
 # local imports
-from bleachbit import bleachbit_exe_path, APP_VERSION, General, IS_LINUX, IS_NETBSD, IS_WINDOWS
+from bleachbit import bleachbit_exe_path, APP_VERSION, ARCH_BITS, General, IS_LINUX, IS_MAC, IS_NETBSD, IS_WINDOWS
 from bleachbit.FileUtilities import delete, open_for_overwrite
+from bleachbit.General import unset_sslkeylogfile
 from bleachbit.Language import get_active_language_code, get_text as _
 
 logger = logging.getLogger(__name__)
-
-
-def unset_sslkeylogfile(use_logger):
-    """Unset environment variable SSLKEYLOGFILE
-
-    Workaround for an OpenSSL crash before checking for updates.
-    https://github.com/bleachbit/bleachbit/issues/1826
-
-    Returns True if unset
-    """
-    if not IS_WINDOWS:
-        return False
-    if not os.environ.get('SSLKEYLOGFILE'):
-        return False
-    del os.environ['SSLKEYLOGFILE']
-    if use_logger:
-        logger.debug('The environment variable SSLKEYLOGFILE is not supported')
-    return True
 
 
 def download_url_to_fn(url, fn, expected_sha512=None, on_error=None,
@@ -219,6 +201,10 @@ def _get_os_name_version():
         # pylint: disable=import-outside-toplevel
         from bleachbit.Unix import get_distribution_name_version
         os_version = get_distribution_name_version()
+    elif IS_MAC:
+        # platform.uname().version returns too much info on macOS.
+        # Also, drop the patch version (e.g. 26.6.2 -> 26.6).
+        os_version = '.'.join(platform.mac_ver()[0].split('.')[:2])
     elif IS_NETBSD:
         os_version = os_name + '/' + platform.machine() + ' ' + platform.release()
     else:
@@ -242,7 +228,7 @@ def get_update_request_headers():
 
     if IS_WINDOWS:
         headers['X-Python-Version'] = platform.python_version()
-        headers['X-Pointer-Bits'] = str(8 * struct.calcsize('P'))
+        headers['X-Pointer-Bits'] = str(ARCH_BITS)
 
     return headers
 

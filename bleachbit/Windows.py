@@ -38,7 +38,6 @@ import re
 import shutil
 import sys
 import time
-import xml.dom.minidom
 from ctypes import wintypes
 from decimal import Decimal
 from pathlib import Path
@@ -240,7 +239,6 @@ def browse_file(_, title):
                                         | win32con.OFN_HIDEREADONLY,
                                         Title=title)
     except pywintypes.error as e:
-        logger = logging.getLogger(__name__)
         if 0 == e.winerror:
             logger.debug('browse_file(): user cancelled')
         else:
@@ -420,25 +418,6 @@ def _lock_delete_parent(pathname):
     _delete_parent_lock_key = parent_key
 
 
-def is_handle_valid(h):
-    """
-    Check if a Windows file handle is still valid.
-
-    FIXME: temporary function
-
-    Returns True if the handle is valid, False otherwise.
-    """
-    try:
-        win32file.GetFileType(h)
-        return True
-    except TypeError:
-        # TypeError happens in tests with mock.
-        return False
-    except pywintypes.error:
-        # If GetFileType fails for any reason, the handle is likely invalid
-        return False
-
-
 def with_parent_lock(pathname, func, *args, **kwargs):
     """
     Run a function with a lock on the parent directory of pathname.
@@ -453,9 +432,8 @@ def with_parent_lock(pathname, func, *args, **kwargs):
         return func(*args, **kwargs)
     logger.debug('with_parent_lock(%s): acquiring lock', pathname)
     _lock_delete_parent(pathname)
-    logger.debug('lock acquired: calling clean function with parent lock, is_handle_valid(%s)=%s',
-                 _delete_parent_lock_key,
-                 is_handle_valid(_delete_parent_lock_handle))
+    logger.debug('lock acquired: calling clean function with parent lock on %s',
+                 _delete_parent_lock_key)
     try:
         return func(*args, **kwargs)
     except Exception as e:
@@ -1084,6 +1062,30 @@ def load_i18n_dll():
     return libintl
 
 
+def flush_gettext_cache(libintl=None):
+    """Force GNU libintl to reload message catalogs after a language change.
+
+    libintl caches the loaded .mo file per text domain. Changing LANG or
+    LANGUAGE (or calling bindtextdomain again) does not by itself reload
+    that cache on Windows. GNU gettext exposes `_nl_msg_cat_cntr` for this:
+    incrementing it invalidates the catalog cache so the next dgettext /
+    Gtk.Builder translation lookup reloads for the new language.
+
+    Returns True if the counter was incremented.
+    """
+    if libintl is None:
+        libintl = load_i18n_dll()
+    if not libintl or not hasattr(libintl, '_nl_msg_cat_cntr'):
+        return False
+    try:
+        cntr = ctypes.c_int.in_dll(libintl, '_nl_msg_cat_cntr')
+        cntr.value += 1
+        return True
+    except (ValueError, AttributeError, TypeError) as e:
+        logger.debug('Could not flush gettext cache: %s', e)
+        return False
+
+
 def move_to_recycle_bin(path):
     """Move 'path' into recycle bin"""
     shell.SHFileOperation(
@@ -1240,6 +1242,9 @@ def symlink_or_copy(src, dst):
 
 
 def has_fontconfig_cache(font_conf_file):
+    # Keep minidom out of module scope: FileUtilities imports Windows on every
+    # Windows run, and this is the only function that needs it.
+    import xml.dom.minidom  # pylint: disable=import-outside-toplevel
     with open(font_conf_file, 'rb') as f:
         data = f.read()
     General.reject_xml_dtd(data, 'fonts.conf')
@@ -1470,7 +1475,7 @@ class SplashThread(Thread):
 
         user32 = ctypes.windll.user32
         gdi32 = ctypes.windll.gdi32
-        icon_size = 256
+        icon_size = SPLASH_ICON_SIZE_PX
         flags = win32con.LR_LOADFROMFILE
         hIcon = win32gui.LoadImage(
             0, str(filename), win32con.IMAGE_ICON, icon_size, icon_size, flags)

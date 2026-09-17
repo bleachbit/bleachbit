@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-21 05:26-0600\n"
-"PO-Revision-Date: 2026-04-19 14:50+0000\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
+"POT-Creation-Date: 2026-09-01 10:05-0600\n"
+"PO-Revision-Date: 2026-09-16 21:13+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/bleachbit/main/"
 "fi/>\n"
 "Language: fi\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Launchpad-Export-Date: 2021-12-02 04:08+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -48,16 +48,12 @@ msgstr "Evästeet"
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#, fuzzy
-#| msgid ""
-#| "Delete cookies, which contain information such as web site preferences, "
-#| "authentication, and tracking identification"
 msgid ""
 "Delete cookies, which store login information, website preferences, and "
 "tracking identifiers"
 msgstr ""
-"Poista evästeet, jotka sisältävät tietoja, kuten verkkosivuston "
-"mieltymykset, todennus ja seurantatunnistus"
+"Poista evästeet, jotka tallentavat kirjautumistiedot, verkkosivuston "
+"asetukset ja jäljittämistunnisteet"
 
 #: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
 #: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
@@ -87,11 +83,12 @@ msgstr "Poista käyttöhistoria"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Logs"
 msgstr "Lokit"
 
@@ -100,11 +97,12 @@ msgstr "Lokit"
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Delete the logs"
 msgstr "Poista lokit"
 
@@ -148,8 +146,8 @@ msgstr "Välimuisti"
 #: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/android_studio.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
@@ -262,10 +260,8 @@ msgstr "Lomakehistoria"
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
-#, fuzzy
-#| msgid "Delete the search history"
 msgid "Saved form entries and search bar history"
-msgstr "Poista hakuhistoria"
+msgstr "Tallennettu merkinnöistä ja hakupalkin historiasta"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
 #: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
@@ -474,10 +470,8 @@ msgstr "Poista sivuhistoria, joka nopeuttaa vierailtujen sivujen näyttämistä"
 #: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
 #: ../cleaners/opera.xml
-#, fuzzy
-#| msgid "A history of forms entered in web sites"
 msgid "A history of forms entered in websites"
-msgstr "Sivujen lomakkeille kirjoitettu historia"
+msgstr "Verkkosivustoille syötettyjen lomakkeiden historia"
 
 #: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/slack.xml
 #: ../cleaners/brave.xml ../cleaners/google_chrome.xml
@@ -493,10 +487,10 @@ msgstr "Synkronointi"
 
 #: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#, fuzzy
-#| msgid "Delete the sync data and sign out of the browser"
 msgid "Delete the sync data (including web apps) and sign out of the browser"
-msgstr "Poista synkronointitiedot ja kirjaudu ulos selaimesta"
+msgstr ""
+"Poista synkronointitiedot (mukaan lukien verkkosovellukset) ja kirjaudu ulos "
+"selaimesta"
 
 #: ../cleaners/secondlife_viewer.xml ../cleaners/warzone2100.xml
 #: ../cleaners/nexuiz.xml ../cleaners/hippo_opensim_viewer.xml
@@ -532,16 +526,12 @@ msgid "Places"
 msgstr "Sijainnit"
 
 #: ../cleaners/epiphany.xml
-#, fuzzy
-#| msgid ""
-#| "A database of URLs including bookmarks, favicons, and a history of "
-#| "visited web sites"
 msgid ""
 "A database of URLs including bookmarks, favicons, and a history of visited "
 "websites"
 msgstr ""
-"URL:eista koostuva tietokanta, jossa on kirjanmerkit, suosikki-kuvakkeet ja "
-"vierailtujen verkkosivujen historia"
+"URL:eista koostuva tietokanta, joka sisältää kirjanmerkkejä, "
+"suosikkikuvakkeita ja vierailtujen verkkosivustojen historian"
 
 #: ../cleaners/epiphany.xml
 msgid "This option deletes all bookmarks."
@@ -693,6 +683,26 @@ msgstr "Poista vanhentuneet tiedostot"
 msgid "Package lists"
 msgstr "Pakettiluettelot"
 
+#: ../cleaners/android_studio.xml
+msgid "Development environment"
+msgstr "Kehitysympäristö"
+
+#: ../cleaners/android_studio.xml
+msgid "Gradle cache"
+msgstr "Gradle-välimuisti"
+
+#: ../cleaners/android_studio.xml
+msgid "Delete downloaded dependencies and build artifacts"
+msgstr "Poista ladatut riippuvuudet ja koontiartefaktit"
+
+#: ../cleaners/android_studio.xml
+msgid "Dependencies will need to be downloaded on the next build."
+msgstr "Riippuvuudet on ladattava seuraavassa koontiversiossa."
+
+#: ../cleaners/android_studio.xml
+msgid "IDE cache"
+msgstr "IDE-välimuisti"
+
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
 msgid "Editor"
@@ -725,37 +735,32 @@ msgstr "Omat kansiot alustetaan."
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
 msgid "AI assistant"
-msgstr ""
+msgstr "Tekoälyavustaja"
 
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Form history"
 msgid "File history"
-msgstr "Lomakehistoria"
+msgstr "Tiedostohistoria"
 
 #. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the list of recently used documents"
 msgid "Delete the file history used for /restore"
-msgstr "Poista viimeisimpien asiakirjojen lista"
+msgstr "Poista '/restore':een käytetty tiedostohistoria"
 
 #. Description for deleting Claude Code sessions
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the command history"
 msgid "Delete the conversation history"
-msgstr "Poista päätteen historia"
+msgstr "Poista keskusteluhistoria"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
 msgstr ""
+"Menetäisit aiempien istuntojen palauttamis-, jatkamis- ja kelaustoiminnot"
 
 #. In Claude Code: captured shell environment used by the Bash tool
 #: ../cleaners/claude.xml
 msgid "Shell snapshots"
-msgstr ""
+msgstr "Komentorivitulkkitilannevedokset"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -774,6 +779,8 @@ msgid ""
 "This option is slow. Inspect the preview for files you want to keep, like "
 "those bundled with applications."
 msgstr ""
+"Tämä vaihtoehto on hidas. Tarkista esikatselusta tiedostot, jotka haluat "
+"säilyttää, kuten sovellusten mukana tulleet tiedostot."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
@@ -819,13 +826,11 @@ msgstr "Poista vierailtujen web-sivujen lista"
 #. Cleaning option that deletes AI models in a web browser
 #: ../cleaners/google_chrome.xml
 msgid "AI"
-msgstr ""
+msgstr "Tekoäly"
 
 #: ../cleaners/google_chrome.xml
-#, fuzzy
-#| msgid "Delete the logs"
 msgid "Delete the AI models"
-msgstr "Poista lokit"
+msgstr "Poista tekoälymallit"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -833,10 +838,8 @@ msgid "Blocklists"
 msgstr "Estolistat"
 
 #: ../cleaners/transmission.xml
-#, fuzzy
-#| msgid "Blocklists will need update to work."
 msgid "Blocklists will need to be updated to work."
-msgstr "Estolistat vaativat päivitystä toimiakseen."
+msgstr "Estolistat on päivitettävä, jotta ne toimivat."
 
 #: ../cleaners/transmission.xml
 msgid "Torrents"
@@ -860,10 +863,8 @@ msgid "Delete the list of game servers"
 msgstr "Poista lista pelipalvelimista"
 
 #: ../cleaners/profanity.xml
-#, fuzzy
-#| msgid "Downloading URL failed: %s"
 msgid "Downloaded files"
-msgstr "URL-osoitteen lataus epäonnistui: %s"
+msgstr "Ladatut tiedostot"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
@@ -939,20 +940,15 @@ msgstr "Tumma oletustila, näyttää löydetyt roskatiedostot"
 
 #. TRANSLATORS: Dialog shown when an older version is detected. {prodname} is replaced with the product name. Do not translate placeholder.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:ALREADY_INSTALLED"
-#| msgid ""
-#| "${prodname} is already installed.$\\r$\\nClick 'OK' to uninstall the old "
-#| "version before upgrading, or click 'Cancel' to abort the upgrade."
 msgctxt "nsis:ALREADY_INSTALLED"
 msgid ""
 "${prodname} is already installed.\n"
 "Click 'OK' to uninstall the old version before upgrading, or click 'Cancel' "
 "to abort the upgrade."
 msgstr ""
-"${prodname} on jo asennettu.$\\r$\\nNapsauta 'OK' poistaaksesi vanhan "
-"version asennuksen ennen päivitystä, tai napsauta 'Peru' keskeyttääksesi "
-"päivityksen."
+"${prodname} on jo asennettu.\n"
+"Napsauta 'Hyvä on' poistaaksesi vanhan version ennen päivittämistä tai "
+"napsauta 'Peru' keskeyttääksesi päivityksen."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:BLEACHBIT_MUI_FINISHPAGE_LINK"
@@ -965,18 +961,13 @@ msgid "${prodname} ${VERSION} Setup"
 msgstr "${prodname} ${VERSION} -määritys"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:MULTIPRINT1"
-#| msgid ""
-#| "The next step is building font cache, during which you may see a black "
-#| "window."
 msgctxt "nsis:MULTIPRINT1"
 msgid ""
 "The next step is building the font cache, during which a black console "
 "window may appear."
 msgstr ""
-"Seuraava vaihe on fonttien välimuistin koostaminen; sen aikana saatat nähdä "
-"mustan ikkunan."
+"Seuraava vaihe on fonttivälimuistin rakentaminen, jonka aikana saattaa tulla "
+"näkyviin musta konsoli-ikkuna."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIPRINT2"
@@ -1040,13 +1031,13 @@ msgstr "Minulle ({USER})"
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_ERROR"
 msgid "Unable to elevate, error {ERROR}."
-msgstr ""
+msgstr "Ei voitu nostaa; virhe {ERROR}."
 
 #. TRANSLATORS: Error message shown in a dialog box when Windows does not support elevation.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_ELEVATION_NOT_SUPPORTED"
 msgid "The operating system doesn't support elevation."
-msgstr ""
+msgstr "Käyttöjärjestelmä ei tue nostamista."
 
 #. TRANSLATORS: Radio button option for the method of installation. {VERSION} and {FOLDER} are placeholders replaced by the installer with the installed version and folder path.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1085,6 +1076,8 @@ msgstr "Virheellinen yhdistelmä parametrejä."
 msgctxt "nsis:MULTIUSER_LOGON_SERVICE_NOT_RUNNING"
 msgid "Unable to elevate, Secondary Logon service not running."
 msgstr ""
+"Käyttöoikeuksien nostaminen ei onnistu, toissijainen "
+"sisäänkirjautumispalvelu ei ole käynnissä."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:MULTIUSER_NEW_INSTALLATION_ALL_USERS"
@@ -1162,12 +1155,17 @@ msgid ""
 "compatible version for your system, click OK. To exit the installer, click "
 "Cancel."
 msgstr ""
+"Tämä BleachBit-versio vaatii Windows 10:n tai uudemman käyttöjärjestelmän. "
+"Lataa järjestelmällesi yhteensopiva versio napsauttamalla 'Hyvä on'. Poistu "
+"asennusohjelmasta napsauttamalla 'Peruuta'."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
 msgid ""
 "These are the basic files needed for ${prodname} to function (required)."
 msgstr ""
+"Nämä ovat perustiedostot, joita tarvitaan ${prodname}:n toimimiseen "
+"(pakollinen)."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_NAME"
@@ -1196,7 +1194,7 @@ msgstr ""
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_INTEGRATE_SHRED_NAME"
 msgid "Integrate Shred"
-msgstr ""
+msgstr "Integroi Shred"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_QUICK_LAUNCH_DESCRIPTION"
@@ -1245,18 +1243,15 @@ msgid "Translations"
 msgstr "Käännökset"
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
-#, fuzzy
-#| msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
-#| msgid "Add uninstall program."
 msgctxt "nsis:SECTION_UNINSTALL_DESCRIPTION"
 msgid "Add an uninstall program."
-msgstr "Lisää ohjelma asennuksen poistoa varten."
+msgstr "Lisää asennuksenpoisto-ohjelma."
 
 #. TRANSLATORS: Shortcut name for a desktop shortcut that opens a debugging terminal.
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SHORTCUT_DEBUGGING_TERMINAL"
 msgid "${prodname} Debugging Terminal"
-msgstr ""
+msgstr "${prodname} Päätteen virheenkorjaus"
 
 #. TRANSLATORS: Shortcut name for a desktop shortcut that runs without UAC elevation (admin privileges).
 #: windows/NsisInclude/NsisMultiUserLang.nsh
@@ -1279,6 +1274,11 @@ msgid ""
 "including any files (such as custom cleaners) that you may have added or "
 "changed."
 msgstr ""
+"${prodname} poistetaan seuraavasta kansiosta.\n"
+"Aloita asennuksen poisto napsauttamalla 'Poista asennus'.\n"
+"VAROITUS: Asennuksen poisto-ohjelma poistaa asennushakemiston kokonaan, "
+"mukaan lukien kaikki lisäämäsi tai muuttamasi tiedostot (kuten mukautetut "
+"puhdistusohjelmat)."
 
 #. TRANSLATORS: Multi-value variables are explained
 #. in the online documentation. Basically, they are like
@@ -1286,10 +1286,8 @@ msgstr ""
 #. can have multiple values. They're a way to make CleanerML
 #. files more concise.
 #: ../bleachbit/Action.py
-#, fuzzy
-#| msgid "Deep scan does not support multi-value variable."
 msgid "Deep scan does not support multi-value variables."
-msgstr "Syväskannaus ei tue useamman arvon muuttujia."
+msgstr "Syväskannaus ei tue moniarvoisia muuttujia."
 
 #. TRANSLATORS: This is a lint-style warning that there seems to be a
 #. mild mistake in the CleanerML file because walk.all is expected to
@@ -1335,6 +1333,11 @@ msgid ""
 "See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-"
 "questions.html"
 msgstr ""
+"Suorittaaksesi graafisen käyttöliittymän sovelluksen Waylandissa "
+"pääkäyttäjänä, salli käyttöoikeus tällä komennolla:\n"
+"`xhost si:localuser:root`\n"
+"Lisätietoja xhostista osoitteessa https://docs.bleachbit.org/doc/frequently-"
+"asked-questions.html"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1356,10 +1359,10 @@ msgstr "Sivuutetaan puhdistaja, koska se on kaikkien kirjoitettavissa: %s"
 #. path of the XML cleaner file whose directory is world
 #. writable.
 #: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
-#, fuzzy, python-format
-#| msgid "Ignoring cleaner because it is world writable: %s"
+#, python-format
 msgid "Ignoring cleaner because its directory is world writable: %s"
-msgstr "Sivuutetaan puhdistaja, koska se on kaikkien kirjoitettavissa: %s"
+msgstr ""
+"Sivuutetaan puhdistaja, koska sen hakemisto on kaikkien kirjoitettavissa: %s"
 
 #. TRANSLATORS: Error message printed to the log.
 #. %s expands to the path of the XML cleaner file
@@ -1451,7 +1454,7 @@ msgstr "Tämä valinta on kokeellinen ja voi aiheuttaa ongelmia järjestelmään
 #. TRANSLATORS: This is a label for the option to clear the system DNS cache.
 #: ../bleachbit/Cleaner.py
 msgid "DNS cache"
-msgstr ""
+msgstr "DNS-välimuisti"
 
 #. TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py
@@ -1486,7 +1489,7 @@ msgstr ""
 #. TRANSLATORS: Warning shown when selecting an option.
 #: ../bleachbit/Cleaner.py
 msgid "This option may prevent uninstalling some updates."
-msgstr ""
+msgstr "Tämä vaihtoehto saattaa estää joidenkin päivitysten poistamisen."
 
 #. TRANSLATORS: Name of a cleaning option. Clipboard is a noun.
 #: ../bleachbit/Cleaner.py
@@ -1518,10 +1521,8 @@ msgstr "Tyhjä tila"
 
 #. TRANSLATORS: 'empty' means 'unallocated'
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Overwrite free disk space to hide deleted files"
 msgid "Wipe empty space to hide deleted files"
-msgstr "Piilota poistetut tiedostot kirjoittamalla vapaan levytilan päälle"
+msgstr "Pyyhi tyhjä tila piilottaaksesi poistetut tiedostot"
 
 #. TRANSLATORS: 'Empty' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
@@ -1529,7 +1530,7 @@ msgstr "Piilota poistetut tiedostot kirjoittamalla vapaan levytilan päälle"
 #: ../bleachbit/Cleaner.py ../bleachbit/CLI.py
 #, python-format
 msgid "Wipe empty space in %s"
-msgstr ""
+msgstr "Pyyhi tyhjä tila %s:ssa"
 
 #. TRANSLATORS: Progress message shown typically on startup.
 #. 'Native' refers to the .xml cleaners designed for this application,
@@ -1538,27 +1539,22 @@ msgstr ""
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Loading native cleaners."
 msgid "Loading native cleaners…"
-msgstr "Ladataan natiiveja puhdistajia."
+msgstr "Ladataan natiiveja puhdistajia…"
 
 #. TRANSLATORS: Progress message shown typically on startup.
 #. 'Importing' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/Cleaner.py
-#, fuzzy
-#| msgid "Importing cleaners from Winapp2.ini."
 msgid "Importing cleaners from Winapp2.ini…"
-msgstr "Tuodaan puhdistajat Winapp2.ini:stä."
+msgstr "Tuodaan puhdistajat Winapp2.ini:stä…"
 
 #. TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
 #: ../bleachbit/Cleaner.py
-#, fuzzy, python-format
-#| msgid "_Wipe Free Space"
+#, python-format
 msgid "Wipe empty space %s"
-msgstr "Ty_hjennä levytilaa"
+msgstr "Pyyhi tyhjä tila %s"
 
 #. TRANSLATORS: Error shown on CLI, and %s is the name of a cleaning action
 #: ../bleachbit/CLI.py
@@ -1570,7 +1566,7 @@ msgstr "ei kelvollinen puhdistaja: %s"
 #: ../bleachbit/CLI.py
 #, python-format
 msgid "Wildcard characters are not allowed in --except: %s"
-msgstr ""
+msgstr "Jokerimerkkejä ei sallita '--except':ssa: %s"
 
 #. TRANSLATORS: This is the command line usage.  Don't translate
 #. %prog, but do translate options, cleaner, and option.
@@ -1578,10 +1574,9 @@ msgstr ""
 #. More information about the command line is here
 #. https://www.bleachbit.org/documentation/command-line
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "usage: %prog [options] cleaner.option1 cleaner.option2"
 msgid "usage: %prog [options] cleaner.option1 [cleaner.option2 ...]"
-msgstr "käyttö: %prog [valitsimet] puhdistaja.valitsin1 puhdistaja.valitsin2"
+msgstr ""
+"käyttö: %prog [valitsimet] puhdistajavalitsin-1 [puhdistajavalitsin-2...]"
 
 #. TRANSLATORS: Help for the --list-cleaners command on the CLI,
 #. and 'list' is a verb
@@ -1611,10 +1606,8 @@ msgstr "tee silppua tietyistä tiedostoista tai kansioista"
 #. TRANSLATORS: Help for the --wipe-empty-space
 #. command on the CLI, and 'wipe' is a verb
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "wipe free space in the given paths"
 msgid "wipe empty space in the given paths"
-msgstr "pyyhi vapaa tila annetuissa poluissa"
+msgstr "pyyhi tyhjä tila annetuissa poluissa"
 
 #. TRANSLATORS: Help for the --overwrite option on the CLI,
 #. and 'overwrite' is a verb
@@ -1644,7 +1637,7 @@ msgstr "ota käyttöön kaikki valinnat joissa ei ole varoitusta"
 #. and 'exclude' is a verb.
 #: ../bleachbit/CLI.py
 msgid "exclude cleaner options (can be repeated, comma-separated)"
-msgstr ""
+msgstr "sulje pois puhdistusvaihtoehdot (voidaan toistaa, pilkulla erotettuna)"
 
 #. TRANSLATORS: Help for the --debug option on the CLI,
 #. and 'set' is a verb.
@@ -1679,16 +1672,12 @@ msgstr "päivitä winapp2.ini, jos uusi versio on saatavilla"
 
 #. TRANSLATORS: Error message shown on CLI.
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid ""
-#| "Specify only one of these commands: --list-cleaners, --wipe-free-space, --"
-#| "preview, --clean"
 msgid ""
 "Specify only one of these commands: --list-cleaners, --wipe-empty-space, --"
 "preview, --clean, --shred"
 msgstr ""
 "Määritä vain yksi näistä komennoista: --list-cleaners, --wipe-free-space, --"
-"preview, --clean"
+"preview, --clean, --shred"
 
 #. TRANSLATORS: Log message on the CLI.
 #: ../bleachbit/CLI.py
@@ -1697,24 +1686,18 @@ msgstr "Tarkista verkosta winapp2.ini-päivitykset"
 
 #. TRANSLATORS: Error message on the CLI.
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "No directories given for --wipe-free-space"
 msgid "No directories given for --wipe-empty-space"
-msgstr "Ei määriteltyjä hakemistoja --wipe-free-space -argumentille"
+msgstr "Ei määriteltyjä hakemistoja --wipe-free-space:lle"
 
 #. TRANSLATORS: Log message on the CLI.
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "Wiping free space can take a long time."
 msgid "Wiping empty space can take a long time."
-msgstr "Vapaan tilan puhdistaminen voi viedä paljon aikaa."
+msgstr "Tyhjän tilan pyyhkiminen voi kestää kauan."
 
 #. TRANSLATORS: Error message on the CLI.
 #: ../bleachbit/CLI.py
-#, fuzzy
-#| msgid "No work to do. Specify options."
 msgid "No operations selected. Specify cleaner options."
-msgstr "Ei työtä tehtäväksi. Määritä valinnat."
+msgstr "Ei valittuja toimintoja. Määritä puhdistajavaihtoehdot."
 
 #. TRANSLATORS: '--overwrite' and '--clean' are command line options
 #: ../bleachbit/CLI.py
@@ -1784,6 +1767,12 @@ msgid ""
 "on traditional hard drives. On solid-state drives, it is less reliable, and "
 "frequent use contributes to wear."
 msgstr ""
+"Tyhjän tilan pyyhkiminen poistaa jäljet tiedostoista, jotka poistettiin "
+"ilman silppuamista, mutta se ei vapauta lisää levytilaa. Prosessi voi kestää "
+"hyvin kauan ja saattaa hidastaa tietokonettasi tilapäisesti. Se ei ole "
+"välttämätöntä, jos asemasi on suojattu koko levyn salauksella. Menetelmä "
+"toimii parhaiten perinteisillä kiintolevyillä. SSD-levyillä se on vähemmän "
+"luotettava, ja usein toistuva käyttö lisää kulumista."
 
 #. TRANSLATORS: Error message shown in the infobar or notice shown in a tooltip.
 #. Expert mode is an option in the preferences to relax guardrails.
@@ -2000,7 +1989,7 @@ msgstr "Ota käyttöön %(option)s"
 #: ../bleachbit/GuiBasic.py
 #, python-format
 msgid "Remember my choice for %(option)s"
-msgstr ""
+msgstr "Muista valintani näille %(option)s"
 
 #. TRANSLATORS: Button label in a warning dialog to confirm enabling an option.
 #. The underscore is the accelerator key.
@@ -2047,20 +2036,16 @@ msgstr "Tiedostojen määrä"
 #. has an official abbreviation (e.g., "Mo" in French); otherwise keep
 #. "MB".
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Size"
 msgid "Size (MB)"
-msgstr "Koko"
+msgstr "Koko (Mt)"
 
 #. TRANSLATORS: Option in combo box to choose to stop when free space
 #. reaches a certain percentage.
 #. The percentage symbol (%) is a literal character, not a format
 #. placeholder.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Free disk space"
 msgid "Free space (%)"
-msgstr "Vapaa levytila"
+msgstr "Vapaa tila (%)"
 
 #. TRANSLATORS: Used for (1) label for folder chooser button and
 #. (2) error message shown in the infobar when the folder has not
@@ -2074,24 +2059,22 @@ msgstr "Valitse kohdekansio"
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error generating chaff: {error}"
-msgstr ""
+msgstr "Virhe chaffin luomisessa: {error}"
 
 #. TRANSLATORS: Progress message shown while deleting chaff files.
 #. 'Deleting files' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Deleting files"
 msgid "Deleting files…"
-msgstr "Poistetaan tiedostoja"
+msgstr "Poistetaan tiedostoja…"
 
 #. TRANSLATORS: Error message shown when deleting chaff files fails.
 #. The placeholder is for the technical error details.
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error deleting chaff files: {error}"
-msgstr ""
+msgstr "Virhe chaff-tiedostojen poistamisessa: {error}"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves
@@ -2125,7 +2108,7 @@ msgstr "Hillary Clintonin sähköpostiviestit"
 #. generating chaff files.
 #: ../bleachbit/GuiChaff.py
 msgid "Stop after"
-msgstr ""
+msgstr "Pysähdy jälkeen"
 
 #. TRANSLATORS: Label for the combo box that selects what to do
 #. when chaff generation is finished.
@@ -2153,7 +2136,7 @@ msgstr "Älä poista"
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
 msgid "Downloading inspiration content…"
-msgstr ""
+msgstr "Ladataan 'inspiraatiosisältö':ä…"
 
 #. TRANSLATORS: Button label in a dialog window to start making
 #. chaff files.
@@ -2164,32 +2147,28 @@ msgstr "Luo tiedostoja"
 #. TRANSLATORS: Error message shown when downloading
 #. chaff models failed.
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Downloading URL failed: %s"
 msgid "Download failed"
-msgstr "URL-osoitteen lataus epäonnistui: %s"
+msgstr "Lataus epäonnistui"
 
 #. TRANSLATORS: Notification shown in an infobar when
 #. chaff file generation is aborted by the user.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation aborted"
-msgstr ""
+msgstr "Chaff-generointi keskeytetty"
 
 #. TRANSLATORS: Notification shown in an infobar when chaff file generation
 #. is complete.
 #: ../bleachbit/GuiChaff.py
 msgid "Chaff generation complete"
-msgstr ""
+msgstr "Chaff-generointi valmis"
 
 #. TRANSLATORS: Progress message shown while generating chaff files.
 #. 'Generating' is a present participle.
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiChaff.py
-#, fuzzy
-#| msgid "Generating files"
 msgid "Generating files…"
-msgstr "Generoidaan tiedostoja"
+msgstr "Generoidaan tiedostoja…"
 
 #. TRANSLATORS: Instruction label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
@@ -2236,7 +2215,7 @@ msgstr "Näytä vain evästeet, jotka on tällä hetkellä valittu"
 #. 'Host' is a noun meaning the website hostname (domain name) of the cookie.
 #: ../bleachbit/GuiCookie.py
 msgid "Host"
-msgstr ""
+msgstr "Isäntä"
 
 #. TRANSLATORS: Button label in the manage cookies dialog.
 #: ../bleachbit/GuiCookie.py
@@ -2254,16 +2233,16 @@ msgstr "Poista kaikkien valinta"
 #. To indicate an ongoing operation, include the ellipsis as literal
 #. Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiCookie.py
-#, fuzzy
-#| msgid "Clean cookies"
 msgid "Loading cookies…"
-msgstr "Siivoa evästeet"
+msgstr "Ladataan evästeitä…"
 
 #: ../bleachbit/GuiPreferences.py
 msgid ""
 "Expert mode enables advanced features and relaxes guardrails. Use extra "
 "caution in expert mode."
 msgstr ""
+"Asiantuntijatila ottaa käyttöön edistyneet ominaisuudet ja löysentää "
+"kaiteita. Ole erityisen varovainen tällaisessa tilassa."
 
 #. TRANSLATORS: Used both as (1) a checkbox label in the preferences dialog
 #. to bypass some safety guardails for advanced users and (2) the title of
@@ -2292,10 +2271,8 @@ msgstr "Yleiset"
 
 #. TRANSLATORS: Sidebar label for the software updates page of the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Update"
 msgid "Updates"
-msgstr "Päivitä"
+msgstr "Päivitykset"
 
 #. TRANSLATORS: Sidebar label for the "Languages" page in the Preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2323,7 +2300,7 @@ msgstr "Jotkin GTK-teemat eivät tue sekä vaaleaa että tummaa tilaa."
 #. TRANSLATORS: Success message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
 msgid "Warning confirmations reset."
-msgstr ""
+msgstr "Varoitusvahvistukset nollattu."
 
 #. TRANSLATORS: Checkbox label in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2387,10 +2364,8 @@ msgstr "Poistu puhdistuksen jälkeen"
 
 #. TRANSLATORS: Button label in the preferences. 'Reset' is a verb.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Delete confirmation"
 msgid "Reset warning confirmations"
-msgstr "Poiston vahvistus"
+msgstr "Nollaa varoitusvahvistukset"
 
 #. TRANSLATORS: This means to hide cleaners which would do
 #. nothing. For example, if Firefox were never used on
@@ -2409,10 +2384,8 @@ msgstr ""
 
 #. TRANSLATORS: Section title on the preferences updates page.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Update to version %s"
 msgid "Update notifications"
-msgstr "Päivitä versioon %s"
+msgstr "Päivitysilmoitukset"
 
 #. TRANSLATORS: Section title (noun) on the Preferences - General page
 #. for options related to cleaning stored data.
@@ -2448,12 +2421,14 @@ msgstr "Windows 10 -teema"
 #. Fontconfig, which is software, is a proper noun.
 #: ../bleachbit/GuiPreferences.py
 msgid "Use Fontconfig text rendering backend"
-msgstr ""
+msgstr "Käytä Fontconfig-tekstinmuodostustaustajärjestelmää"
 
 #. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
 msgid "May fix blurry or unreadable text. Requires restart."
 msgstr ""
+"Saattaa korjata epäselvän tai lukukelvottoman tekstin. Vaatii "
+"uudelleenkäynnistyksen."
 
 #. TRANSLATORS: Section title on the preferences general page,
 #. labelling options for OS integration and advanced/developer features.
@@ -2481,13 +2456,10 @@ msgstr "Näytä vianjäljitysviestit"
 #. For example, to wipe C:\, the user may choose %TEMP% which
 #. is a folder anywhere on C:.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid ""
-#| "Choose a writable folder for each drive for which to overwrite free space."
 msgid "Choose a writable folder for each drive for which to wipe empty space."
 msgstr ""
-"Valitse kirjoitettava kansio jokaiselle asemalle joihin ylikirjoitetaan "
-"käyttämätöntä tilaa."
+"Valitse jokaiselle asemalle kirjoitettava kansio, johon tyhjää tilaa "
+"pyyhitään."
 
 #. TRANSLATORS: In the preferences dialog, this button adds a path to
 #. the list of paths
@@ -2536,10 +2508,8 @@ msgstr "Nimi"
 
 #. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "This path already exists in the whitelist."
 msgid "This path already exists in the keep list."
-msgstr "Tämä polku on jo olemassa valkolistassa."
+msgstr "Tämä polku on jo säilytettävä-luettelossa olemassa."
 
 #. TRANSLATORS: Error message shown in the infobar.
 #: ../bleachbit/GuiPreferences.py
@@ -2627,12 +2597,12 @@ msgstr "Lisää kansio"
 #. in the preferences dialog. This message appears when cleaning options
 #. with warnings are selected but expert mode is disabled.
 #: ../bleachbit/GuiStartup.py
-#, fuzzy
-#| msgid "This option requires expert mode. Enable it in Preferences."
 msgid ""
 "One or more selected cleaning options have warnings and require Expert Mode "
 "to clean. Enable it in preferences."
-msgstr "Tämä asetus vaatii asiantuntijatilan. Ota se käyttöön asetuksissa."
+msgstr ""
+"Yhdellä tai useammalla valitulla puhdistajavaihtoehdolla on varoituksia ja "
+"ne vaativat asiantuntijatilan puhdistamiseen. Ota se asetuksista käyttöön."
 
 #. TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
 #. Preferences. Keep it consistent with the translation of "Expert Mode"
@@ -2643,6 +2613,9 @@ msgid ""
 "Delete confirmation is disabled but expert mode is not enabled. Enable "
 "Expert Mode in preferences to skip delete confirmations."
 msgstr ""
+"Poiston vahvistus on poistettu käytöstä, mutta asiantuntijatila ei ole "
+"käytössä. Ota asiantuntijatila käyttöön asetuksissa ohittaaksesi "
+"poistovahvistukset."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
@@ -2689,6 +2662,10 @@ msgid ""
 "the system. User-specific paths will refer to the administrator account, so "
 "to clean your profile, run BleachBit again as a standard user."
 msgstr ""
+"Olet nostanut käyttöoikeuksiasi eri tilillä puhdistaaksesi järjestelmän "
+"jaettuja osia. Käyttäjäkohtaiset polut viittaavat järjestelmänvalvojan "
+"tiliin, joten profiilisi puhdistamiseksi suorita BleachBit uudelleen "
+"vakiokäyttäjänä."
 
 #. TRANSLATORS: Warning shown on startup on Windows when running
 #. unofficial Microsoft Store version. Advises user to get genuine
@@ -2726,16 +2703,9 @@ msgstr ""
 #. TRANSLATORS: %(cleaner) may be Firefox, System, etc.
 #. %(option) may be cache, logs, cookies, etc.
 #: ../bleachbit/GuiTreeModels.py
-#, fuzzy, python-format
-#| msgid ""
-#| "Warning regarding %(cleaner)s - %(option)s:\n"
-#| "\n"
-#| "%(warning)s"
+#, python-format
 msgid "%(cleaner)s - %(option)s"
-msgstr ""
-"Varoitus: %(cleaner)s - %(option)s:\n"
-"\n"
-"%(warning)s"
+msgstr "%(cleaner)s - %(option)s"
 
 #. TRANSLATORS: Button label on the headerbar and context menu item
 #. in the treeview.
@@ -2755,10 +2725,8 @@ msgstr "Puhdista"
 #. manager.
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
-#, fuzzy
-#| msgid "Manage cookies to keep"
 msgid "Manage cookies to keep…"
-msgstr "Hallitse säilytettäviä evästeitä"
+msgstr "Hallitse säilytettäviä evästeitä…"
 
 #. TRANSLATORS: Error message shown in the log on the main window.
 #. %s is the file path.
@@ -2775,6 +2743,8 @@ msgstr "Nollataan asetustiedosto koska se on rikkoutunut: %s"
 msgid ""
 "%(cleaner)s - %(option)s cannot be cleaned because expert mode is disabled."
 msgstr ""
+"%(cleaner)s - %(option)s:ta ei voida puhdistaa, koska asiantuntijatila on "
+"poistettu käytöstä."
 
 #. TRANSLATORS: Error message shown in the infobar when the user clicks
 #. the preview or clean button without selecting any cleaner options.
@@ -2791,10 +2761,8 @@ msgstr "Tehty."
 #. TRANSLATORS: Context menu item in the tree view that opens the preferences dialog.
 #. Preserve the ellipsis as literal Unicode (…) or as Unicode escape (\u2026).
 #: ../bleachbit/GuiWindow.py
-#, fuzzy
-#| msgid "Manage cookies to keep"
 msgid "Manage custom paths…"
-msgstr "Hallitse säilytettäviä evästeitä"
+msgstr "Hallinnoi mukautettuja polkuja…"
 
 #. TRANSLATORS: Tooltip for the preview button on the headerbar.
 #. 'Preview' is a verb, and 'selected operations' refers to
@@ -2840,26 +2808,24 @@ msgid ""
 "BleachBit detected leftover files from an interrupted disk wipe operation. "
 "Would you like to preview them with an option to delete them?"
 msgstr ""
+"BleachBit havaitsi keskeytetyn levynpyyhintätoiminnon jälkeen jäljellä "
+"olevia tiedostoja. Haluatko esikatsella niitä vaihtoehdon kanssa, jolla ne "
+"voi poistaa?"
 
 #. TRANSLATORS: Error message shown when checking for updates fails.
 #. %s is the error details.
 #: ../bleachbit/GuiWindow.py
-#, fuzzy, python-format
-#| msgid "Error when checking for updates: "
+#, python-format
 msgid "Error when checking for updates: %s"
-msgstr "Virhe tarkistettaessa päivityksiä: "
+msgstr "Virhe tarkistettaessa päivityksiä: %s"
 
 #: ../bleachbit/Memory.py
-#, fuzzy
-#| msgid ""
-#| "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
-#| "information."
 msgid ""
 "The command 'swapon -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"Komento 'swapoff -s' epäonnistui, joten palaudutaan käyttämään /proc/swaps "
-"swap-tietoja varten."
+"Komento 'swapon -s' epäonnistui, joten palaudutaan käyttämään /proc/swaps "
+"sivutustietojen saantia varten."
 
 #: ../bleachbit/Memory.py
 msgid "Disabling swap."
@@ -2877,11 +2843,10 @@ msgstr "Asetetaan nice-arvo %d tälle prosessille."
 #. TRANSLATORS: Debug message when a process gives up root/admin privileges.
 #. %(pid)d is the integer process ID; %(uid)d is the integer user ID to switch to.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid "Dropping privileges of process ID {pid} to user ID {uid}."
+#, python-format
 msgid "Dropping privileges of process ID %(pid)d to user ID %(uid)d."
 msgstr ""
-"Poistetaan prosessitunnuksen {pid} etuoikeudet käyttäjätunnukselta {uid}."
+"Pudotetaan prosessitunnuksen %(pid)d etuoikeudet käyttäjätunnukselle %(uid)d."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -2899,26 +2864,22 @@ msgstr "Vapautetaan %s muistia."
 #. is waiting for the child process. %(parent_pid)d is the parent
 #. process ID; %(child_pid)d is the child process ID.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The function wipe_memory() with process ID {pid} is waiting for child "
-#| "process ID {cid}."
+#, python-format
 msgid ""
 "The function wipe_memory() with process ID %(parent_pid)d is waiting for "
 "child process ID %(child_pid)d."
 msgstr ""
-"Funktio wipe_memory(), jolla on prosessin ID {pid}, odottaa lapsiprosessin "
-"tunnusta {cid}."
+"Funktio wipe_memory() prosessitunnuksella %(parent_pid)d odottaa "
+"lapsiprosessitunnusta %(child_pid)d."
 
 #. TRANSLATORS: Debug message. 'Found' is a past tense verb (short for
 #. "Found [that] the UUID for swap device ..."). %(device)s is the device
 #. path (e.g., /dev/sda5); %(uuid)s is a UUID string
 #. (e.g., ee0e85f6-6e5c-42b9-902f-776531938bbf). Do not translate variables.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid "Found UUID for swap file {device} is {uuid}."
+#, python-format
 msgid "Found UUID for swap device %(device)s is %(uuid)s."
-msgstr "Löydetyn sivutustiedoston {device} UUID on {uuid}."
+msgstr "Sivutuslaitteelle %(device)s löydetty UUID, on %(uuid)s."
 
 #. TRANSLATORS: The variable is a quantity like 5kB
 #: ../bleachbit/Memory.py
@@ -3128,14 +3089,14 @@ msgstr ""
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "stop Windows service %(service)s"
-msgstr ""
+msgstr "pysäytä Windows-palvelu %(service)s"
 
 #. TRANSLATORS: Message in log file when starting a Windows service.
 #. The placeholder is the code name of the service.
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "start Windows service %(service)s"
-msgstr ""
+msgstr "käynnistä Windows-palvelu %(service)s"
 
 #: ../bleachbit/Wipe.py
 msgid ""
@@ -3152,7 +3113,7 @@ msgstr ""
 #: ../bleachbit/Wipe.py
 #, python-format
 msgid "Wiping path %(pathname)s with file system type %(fstype)s"
-msgstr ""
+msgstr "Pyyhitään polkua %(pathname)s tiedostojärjestelmätyypillä %(fstype)s"
 
 #: ../bleachbit/Wipe.py
 #, python-format
@@ -3161,10 +3122,8 @@ msgstr "Pyyhittävän polun on oltava olemassa oleva hakemisto: %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Creating new, temporary file for wiping free space."
 msgid "Creating new, temporary file for wiping empty space."
-msgstr "Luodaan uusi väliaikainen tiedosto vapaan tilan pyyhkimistä varten."
+msgstr "Luodaan uusi, väliaikainen tiedosto tyhjän tilan pyyhkimistä varten."
 
 #: ../bleachbit/Wipe.py
 #, python-format
@@ -3177,40 +3136,34 @@ msgstr "Virhe #%d tiedostopuskuria tyhjennettäessä."
 #. elapsed seconds; %(rate_mbs).2f = decimal megabytes per second (e.g., 3.14).
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid ""
-#| "Wrote {files:,} files and {bytes:,} bytes in {seconds:,} seconds at "
-#| "{rate:.2f} MB/s"
+#, python-format
 msgid ""
 "Wrote %(file_count)d files and %(total_bytes)d bytes in %(elapsed_sec)d "
 "seconds at %(rate_mbs).2f MB/s"
 msgstr ""
-"Kirjoitettiin {files:,} tiedostoa ja {bytes:,} tavua {seconds:,} sekunnissa "
-"nopeudella {rate:.2f} Mt/s"
+"Kirjoitettiin %(file_count)d tiedostoa ja %(total_bytes)d tavua %"
+"(elapsed_sec)d sekunnissa nopeudella %(rate_mbs).2f Mt/s"
 
 #. TRANSLATORS: Debug message showing disk space available to regular (non-root) users.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "{bytes:,} bytes and {inodes:,} inodes available to non-super-user"
+#, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to non-super-user"
-msgstr "{bytes:,} tavua ja {inodes:,} inodea tarjolla ei-pääkäyttäjälle"
+msgstr ""
+"%(bytes)d tavua ja %(inodes)d inodea käytettävissä muulle kuin pääkäyttäjälle"
 
 #. TRANSLATORS: Debug message showing disk space available to the root (admin) user.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
 #. Do not translate variables.
 #: ../bleachbit/Wipe.py
-#, fuzzy, python-format
-#| msgid "{bytes:,} bytes and {inodes:,} inodes available to super-user"
+#, python-format
 msgid "%(bytes)d bytes and %(inodes)d inodes available to super-user"
-msgstr "{bytes:,} tavua ja {inodes:,} inodea tarjolla pääkäyttäjälle"
+msgstr "%(bytes)d tavua ja %(inodes)d inodea käytettävissä pääkäyttäjälle"
 
 #: ../bleachbit/Wipe.py
-#, fuzzy
-#| msgid "Handled unknown error #0 while truncating file."
 msgid "Encountered unknown error #0 while truncating file."
-msgstr "käsiteltiin tuntematon virhe #0 tiedostoa katkaistaessa."
+msgstr "Tiedostoa katkaistaessa tapahtui tuntematon virhe #0."
 
 #. TRANSLATORS: This indicates an error.  The special keyword
 #. %(operation)s will be replaced by 'firefox' or 'opera' or
@@ -3249,7 +3202,7 @@ msgstr "Käyttö estetty: %s"
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Database is locked: %s"
-msgstr ""
+msgstr "Tietokanta on lukittu: %s"
 
 #: ../bleachbit/Worker.py
 #, python-brace-format
@@ -3274,6 +3227,9 @@ msgid ""
 "files may remain on the disk, and they may use all available space. To "
 "remove them, start BleachBit again."
 msgstr ""
+"Jos sovellus suljetaan pakotetusti ennen prosessin valmistumista, levylle "
+"voi jäädä suuria tiedostoja, jotka voivat viedä kaiken käytettävissä olevan "
+"tilan. Poistaaksesi ne, käynnistä BleachBit uudelleen."
 
 #. TRANSLATORS: %s is replaced with Firefox, System, etc.
 #: ../bleachbit/Worker.py

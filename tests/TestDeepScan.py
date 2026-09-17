@@ -86,7 +86,7 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
     def test_compiled_search_path_prefix(self):
         """CompiledSearch.match should preserve root path semantics."""
-        from bleachbit.DeepScan import CompiledSearch
+        from bleachbit.DeepScan import CompiledSearch, directory_prefix
 
         compiled = CompiledSearch(
             Search(command='delete', regex=r'\.txt$')
@@ -94,11 +94,42 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
 
         for dirpath in (self.tempdir, os.path.abspath(os.sep)):
             with self.subTest(dirpath=dirpath):
-                path_prefix = os.path.join(dirpath, '')
+                path_prefix = directory_prefix(dirpath)
                 self.assertEqual(
                     compiled.match(dirpath, 'foo.txt', path_prefix),
                     os.path.join(dirpath, 'foo.txt'),
                 )
+
+    def test_directory_prefix_unc_share_root(self):
+        """Bare UNC share roots must insert a separator before the filename."""
+        import ntpath
+        from bleachbit import DeepScan as deepscan_mod
+        from bleachbit.DeepScan import CompiledSearch
+
+        with mock.patch.object(deepscan_mod.os, 'path', ntpath):
+            unc_root = r'\\server\share'
+            prefix = deepscan_mod.directory_prefix(unc_root)
+            # join(unc_root, '') alone omits the separator; concatenation
+            # would otherwise produce \\server\sharefoo.txt.
+            self.assertNotEqual(prefix, unc_root)
+            self.assertTrue(prefix.endswith('\\'))
+            self.assertEqual(
+                prefix + 'foo.txt',
+                ntpath.join(unc_root, 'foo.txt'),
+            )
+            # Drive-relative paths must not gain a separator.
+            self.assertEqual(deepscan_mod.directory_prefix('C:'), 'C:')
+            self.assertEqual(
+                deepscan_mod.directory_prefix('C:') + 'foo.txt',
+                ntpath.join('C:', 'foo.txt'),
+            )
+            compiled = CompiledSearch(
+                Search(command='delete', regex=r'\.txt$')
+            )
+            self.assertEqual(
+                compiled.match(unc_root, 'foo.txt', prefix),
+                ntpath.join(unc_root, 'foo.txt'),
+            )
 
     def test_skip_whitelisted_directory(self):
         """DeepScan should not search whitelisted directories."""

@@ -22,7 +22,7 @@ from bleachbit.FileUtilities import children_in_directory
 from bleachbit.Options import options
 from bleachbit.PathUtils import path_equal
 from bleachbit.Process import is_process_running
-from bleachbit import Action, CleanerML, Command, FileUtilities, General, Memory
+from bleachbit import Action, CleanerML, Command, FileUtilities, Memory
 from bleachbit import IS_LINUX, IS_MAC, IS_POSIX, IS_WINDOWS
 from bleachbit.GtkShim import gtk_may_be_available
 from bleachbit.Wipe import wipe_path
@@ -44,6 +44,17 @@ backends = {}
 # TRANSLATORS: The description of what certain cleaning options do.
 DELETE_CACHE_DESCRIPTION = _("Delete the cache")
 
+MENU_DIRS = ('~/.local/share/applications',
+             '~/.config/autostart',
+             '~/.gnome/apps/',
+             '~/.gnome2/panel2.d/default/launchers',
+             '~/.gnome2/vfolders/applications/',
+             '~/.kde/share/apps/RecentDocuments/',
+             '~/.kde/share/mimelnk',
+             '~/.kde/share/mimelnk/application/ram.desktop',
+             '~/.kde2/share/mimelnk/application/',
+             '~/.kde2/share/applnk')
+
 
 class Cleaner:
 
@@ -57,7 +68,9 @@ class Cleaner:
         self.options = {}
         self.running = []
         self.warnings = {}
-        self.regexes_compiled = []
+        # Winapp2 cleaners clear this because their own detect() already ran
+        self.auto_hide_supported = True
+        self.keep_list_re = None
         # Lazily built {option_id: [action, ...]} index over self.actions.
         # Winapp2 cleaners aggregate thousands of actions, so scanning the
         # whole list per option (get_commands/get_deep_scan) is quadratic.
@@ -96,6 +109,8 @@ class Cleaner:
     def auto_hide(self):
         """Return boolean whether it is OK to automatically hide this
         cleaner"""
+        if not self.auto_hide_supported:
+            return False
         for (option_id, __name) in self.get_options():
             try:
                 for cmd in self.get_commands(option_id):
@@ -118,10 +133,7 @@ class Cleaner:
     def get_deep_scan(self, option_id):
         """Get dictionary used to build a deep scan"""
         for action in self._actions_for(option_id):
-            try:
-                yield from action.get_deep_scan()
-            except StopIteration:
-                return
+            yield from action.get_deep_scan()
         if option_id not in self.options:
             raise RuntimeError(f"Unknown option '{option_id}'")
 
@@ -156,6 +168,11 @@ class Cleaner:
     def get_warning(self, option_id):
         """Return a warning as string."""
         return self.warnings.get(option_id)
+
+    def has_action_key(self, option_id, action_key):
+        """Return whether an action registered for option_id has action_key"""
+        return any(getattr(action, 'action_key', None) == action_key
+                   for action in self._actions_for(option_id))
 
     def is_process_running(self):
         """Return whether the process is currently running"""
@@ -269,10 +286,7 @@ class System(Cleaner):
         #
         # options just for Microsoft Windows
         #
-        has_dns_flush = IS_WINDOWS or (
-            IS_LINUX and (
-                FileUtilities.exe_exists(General.resolve_exe('resolvectl')) or
-                FileUtilities.exe_exists(General.resolve_exe('systemd-resolve'))))
+        has_dns_flush = IS_WINDOWS or (IS_LINUX and Unix.can_flush_dns())
         if has_dns_flush:
             # TRANSLATORS: This is a label for the option to clear the system DNS cache.
             dns_cache_label = _('DNS cache')
@@ -377,19 +391,8 @@ class System(Cleaner):
                         f'custom folder has invalid type {c_type}')
 
         # menu
-        menu_dirs = ['~/.local/share/applications',
-                     '~/.config/autostart',
-                     '~/.gnome/apps/',
-                     '~/.gnome2/panel2.d/default/launchers',
-                     '~/.gnome2/vfolders/applications/',
-                     '~/.kde/share/apps/RecentDocuments/',
-                     '~/.kde/share/mimelnk',
-                     '~/.kde/share/mimelnk/application/ram.desktop',
-                     '~/.kde2/share/mimelnk/application/',
-                     '~/.kde2/share/applnk']
-
         if IS_POSIX and 'desktop_entry' == option_id:
-            for path in menu_dirs:
+            for path in MENU_DIRS:
                 dirname = os.path.expanduser(path)
                 for filename in children_in_directory(dirname, False):
                     # pylint: disable=possibly-used-before-assignment
@@ -567,8 +570,7 @@ class System(Cleaner):
             yield Command.Function(None, func_clear_clipboard, _('Clipboard'))
 
         # wipe empty space
-        shred_drives = options.get_list('shred_drives')
-        if 'empty_space' == option_id and shred_drives:
+        if 'empty_space' == option_id and (shred_drives := options.get_list('shred_drives')):
             for pathname in shred_drives:
                 # TRANSLATORS: 'Empty' means 'unallocated.'
                 # %s expands to a path such as C:\ or /tmp/
@@ -634,6 +636,8 @@ class System(Cleaner):
 
     def init_whitelist(self):
         """Initialize the keep list (formerly whitelist) only once for performance"""
+        # re.escape because a home directory may contain regex metacharacters
+        home = re.escape(os.path.expanduser('~'))
         regexes = [
             r'^/tmp/\.X0-lock$',
             r'^/tmp/\.truecrypt_aux_mnt.*/(control|volume)$',
@@ -649,53 +653,50 @@ class System(Cleaner):
             '^/tmp/pulse-[^/]+/pid$',
             '^/tmp/xauth',
             '^/var/tmp/kdecache-',
-            '^' + os.path.expanduser(r'~/\.cache/wallpaper/'),
+            '^' + home + r'/\.cache/wallpaper/',
             # Flatpak mount point
-            '^' + os.path.expanduser(r'~/\.cache/doc($|/)'),
+            '^' + home + r'/\.cache/doc($|/)',
             # Clean Firefox cache from Firefox cleaner (LP#1295826)
-            '^' + os.path.expanduser(r'~/\.cache/mozilla/'),
+            '^' + home + r'/\.cache/mozilla/',
             # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
-            '^' + os.path.expanduser(r'~/\.cache/google-chrome/'),
-            '^' + os.path.expanduser(r'~/\.cache/gnome-control-center/'),
+            '^' + home + r'/\.cache/google-chrome/',
+            '^' + home + r'/\.cache/gnome-control-center/',
             # Clean Evolution cache from Evolution cleaner (GitHub #249)
-            '^' + os.path.expanduser(r'~/\.cache/evolution/'),
+            '^' + home + r'/\.cache/evolution/',
             # iBus Pinyin
             # https://bugs.launchpad.net/bleachbit/+bug/1538919
-            '^' + os.path.expanduser(r'~/\.cache/ibus/'),
+            '^' + home + r'/\.cache/ibus/',
             # Linux Bluetooth daemon obexd directory is typically empty, so be careful
             # not to delete the empty directory.
-            '^' + os.path.expanduser(r'~/\.cache/obexd($|/)'),
+            '^' + home + r'/\.cache/obexd($|/)',
             # KDE/Plasma cache files
             # https://github.com/bleachbit/bleachbit/issues/1853
-            '^' + os.path.expanduser(r'~/\.cache/kwin($|/)'),  # folder
+            '^' + home + r'/\.cache/kwin($|/)',  # folder
             # folder
-            '^' + os.path.expanduser(r'~/\.cache/mesa_shader_cache($|/)'),
-            '^' + os.path.expanduser(r'~/\.cache/plasmashell($|/)'),  # folder
-            '^' + os.path.expanduser(r'~/\.cache/icon-cache\.kcache$'),  # file
+            '^' + home + r'/\.cache/mesa_shader_cache($|/)',
+            '^' + home + r'/\.cache/plasmashell($|/)',  # folder
+            '^' + home + r'/\.cache/icon-cache\.kcache$',  # file
             # file
-            r'^' + os.path.expanduser(r'~/\.cache/plasma_theme_.*\.kcache$'),
-            '^' + os.path.expanduser(r'~/\.cache/drkonqi($|/)'),  # folder
+            r'^' + home + r'/\.cache/plasma_theme_.*\.kcache$',
+            '^' + home + r'/\.cache/drkonqi($|/)',  # folder
             # folder
-            '^' + os.path.expanduser(r'~/\.cache/mesa_shader_cache_db($|/)'),
+            '^' + home + r'/\.cache/mesa_shader_cache_db($|/)',
             # folder
-            '^' + os.path.expanduser(r'~/\.cache/qtshadercache-[^/]+($|/)'),
+            '^' + home + r'/\.cache/qtshadercache-[^/]+($|/)',
             # file
-            '^' + os.path.expanduser(r'~/\.cache/plasma_theme_default\.kcache$')]
+            '^' + home + r'/\.cache/plasma_theme_default\.kcache$']
 
-        for regex in regexes:
-            self.regexes_compiled.append(re.compile(regex))
+        self.keep_list_re = re.compile(
+            '|'.join(f'(?:{regex})' for regex in regexes))
 
     def whitelisted(self, pathname):
         """Return boolean whether file is keep listed (formerly whitelisted)"""
         if IS_WINDOWS:
             # Whitelist is specific to POSIX
             return False
-        if not self.regexes_compiled:
+        if self.keep_list_re is None:
             self.init_whitelist()
-        for regex in self.regexes_compiled:
-            if regex.match(pathname) is not None:
-                return True
-        return False
+        return self.keep_list_re.match(pathname) is not None
 
 
 def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None, allow_local=True):
@@ -769,28 +770,50 @@ def simpler_cleaner_process_path(path):
     return path
 
 
+class CustomFileAction(Action.ActionProvider):
+    """Custom file action"""
+    # At module level because the metaclass registers every subclass globally
+    action_key = '__customfileaction'
+
+    def __init__(self, paths):
+        Action.ActionProvider.__init__(self, None)
+        self.paths = paths
+
+    def get_commands(self):
+        for path in self.paths:
+            path = simpler_cleaner_process_path(path)
+            if not path:
+                continue
+            if os.path.isdir(path):
+                for child in children_in_directory(path, True):
+                    yield Command.Shred(child)
+            yield Command.Shred(path)
+
+
 def create_simple_cleaner(paths):
     """Shred arbitrary files (used in CLI and GUI)"""
     cleaner = Cleaner()
     cleaner.add_option(option_id='files', name='', description='')
     cleaner.name = _("System")  # shows up in progress bar
-
-    class CustomFileAction(Action.ActionProvider):
-        """Custom file action"""
-        action_key = '__customfileaction'
-
-        def get_commands(self):
-            for path in paths:
-                path = simpler_cleaner_process_path(path)
-                if not path:
-                    continue
-                if os.path.isdir(path):
-                    for child in children_in_directory(path, True):
-                        yield Command.Shred(child)
-                yield Command.Shred(path)
-    provider = CustomFileAction(None)
-    cleaner.add_action('files', provider)
+    cleaner.add_action('files', CustomFileAction(paths))
     return cleaner
+
+
+class CustomWipeAction(Action.ActionProvider):
+    """Custom wipe action"""
+    action_key = '__customwipeaction'
+
+    def __init__(self, path):
+        Action.ActionProvider.__init__(self, None)
+        self.path = path
+        # TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
+        self.display = _("Wipe empty space %s") % path
+
+    def get_commands(self):
+        def wipe_path_func():
+            yield from wipe_path(self.path, idle=True)
+            yield 0
+        yield Command.Function(None, wipe_path_func, self.display)
 
 
 def create_wipe_empty_space_cleaner(path):
@@ -799,20 +822,5 @@ def create_wipe_empty_space_cleaner(path):
     cleaner.add_option(
         option_id='empty_space', name='', description='')
     cleaner.name = ''
-
-    # create a temporary cleaner object
-    # TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
-    display = _("Wipe empty space %s") % path
-
-    def wipe_path_func():
-        yield from wipe_path(path, idle=True)
-        yield 0
-
-    class CustomWipeAction(Action.ActionProvider):
-        action_key = '__customwipeaction'
-
-        def get_commands(self):
-            yield Command.Function(None, wipe_path_func, display)
-    provider = CustomWipeAction(None)
-    cleaner.add_action('empty_space', provider)
+    cleaner.add_action('empty_space', CustomWipeAction(path))
     return cleaner

@@ -28,6 +28,7 @@ from bleachbit.General import (
     get_real_uid,
     get_real_username,
     makedirs,
+    reject_xml_dtd,
     run_external,
     run_external_nowait,
     sanitize_root_env,
@@ -190,6 +191,30 @@ class GeneralTestCase(common.BleachbitTestCase):
         self.assertEqual(captured['env']['PATH'], '/usr/bin')
         # the caller's own dict must not be mutated in place
         self.assertIn('LD_PRELOAD', hostile_env)
+
+    def test_reject_xml_dtd_internal_subset(self):
+        """A DTD with an internal subset is rejected, str or bytes."""
+        xml_text = ('<?xml version="1.0" encoding="UTF-8"?>'
+                    '<!DOCTYPE r [<!ENTITY x "y">]><r/>')
+        with self.assertRaises(ValueError):
+            reject_xml_dtd(xml_text)
+        with self.assertRaises(ValueError):
+            reject_xml_dtd(xml_text.encode('utf-8'))
+
+    def test_reject_xml_dtd_str_with_encoding_declaration(self):
+        """pyexpat rejects str input with an encoding declaration; the wrapper must not."""
+        xml_text = ('<?xml version="1.0" encoding="UTF-8"?>'
+                    '<updates><stable ver="1">https://x</stable></updates>')
+        # must not raise
+        reject_xml_dtd(xml_text)
+        reject_xml_dtd(xml_text.encode('utf-8'))
+        reject_xml_dtd(xml_text, 'update XML')
+
+    def test_reject_xml_dtd_external_doctype_allowed(self):
+        """An external-only DOCTYPE without internal subset is allowed."""
+        xml_text = ('<?xml version="1.0" encoding="UTF-8"?>'
+                    '<!DOCTYPE fonts SYSTEM "fonts.dtd"><fonts/>')
+        reject_xml_dtd(xml_text)
 
     def test_get_real_uid_non_numeric_sudo_uid(self):
         """A bogus SUDO_UID must not crash; fall through instead."""

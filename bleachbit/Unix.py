@@ -20,7 +20,7 @@ import shlex
 import subprocess
 
 import bleachbit
-from bleachbit import FileUtilities, General, IS_POSIX
+from bleachbit import FileUtilities, General, IS_MAC, IS_POSIX
 from bleachbit.FileUtilities import children_in_directory, exe_exists
 from bleachbit.Language import get_text as _, native_locale_names
 from bleachbit.VFS import RealVFS
@@ -29,12 +29,6 @@ logger = logging.getLogger(__name__)
 
 # Cache for snapd_is_active() to avoid repeated systemctl calls.
 _snapd_is_active_cache = None
-
-try:
-    Pattern = re.Pattern
-except AttributeError:
-    Pattern = re._pattern_type
-
 
 JOURNALD_REGEX = r'^Vacuuming done, freed ([\d.]+[BKMGT]?) of archived journals (on disk|from [\w/]+).$'
 
@@ -78,7 +72,7 @@ class LocaleCleanerPath:
         """Returns direct subpaths for this object, i.e. either the named subfolder or all
         subfolders matching the pattern"""
         vfs = self._get_vfs()
-        if isinstance(self.pattern, Pattern):
+        if isinstance(self.pattern, re.Pattern):
             # posixpath is easy way to test also from Windows.
             return (posixpath.join(basepath, p) for p in vfs.listdir(basepath)
                     if self.pattern.match(p) and vfs.isdir(posixpath.join(basepath, p)))
@@ -92,7 +86,7 @@ class LocaleCleanerPath:
             for child in self.children:
                 if isinstance(child, LocaleCleanerPath):
                     yield from child.get_localizations(path)
-                elif isinstance(child, Pattern):
+                elif isinstance(child, re.Pattern):
                     for element in vfs.listdir(path):
                         match = child.match(element)
                         if match is not None:
@@ -269,9 +263,15 @@ def find_best_locale(user_locale):
         return user_locale
 
     # Next, match like 'en' to 'en_US.utf8' (if available) because
-    # of preference for UTF-8.
+    # of preference for UTF-8. Compare case- and hyphen-insensitively:
+    # macOS's locale -a uses '.UTF-8' (uppercase, hyphenated), while
+    # some Linux distros use '.utf8' (lowercase, no hyphen); comparing
+    # only against '.utf8' silently never matched on macOS, falling
+    # through to the next loop and picking whatever locale happened to
+    # be listed first for the prefix -- including a non-UTF-8 one.
     for avail_locale in available_locales:
-        if avail_locale.startswith(user_locale) and avail_locale.endswith('.utf8'):
+        suffix = avail_locale.rsplit('.', 1)[-1].replace('-', '').lower()
+        if avail_locale.startswith(user_locale) and suffix == 'utf8':
             return avail_locale
 
     # Next, match like 'en' to 'en_US' or 'en_US.iso88591'.
@@ -365,29 +365,20 @@ def get_distribution_name_version():
     Python 3.7 had platform.linux_distribution(), but it
     was removed in Python 3.8.
     """
-    ret = get_distribution_name_version_platform_freedesktop()
-    if ret:
-        return ret
-    ret = get_distribution_name_version_distro()
-    if ret:
-        return ret
-    ret = get_distribution_name_version_os_release()
-    if ret:
-        return ret
-    try:
-        linux_version = platform.release()
-        # example '6.12.3-061203-generic'
-        linux_version = linux_version.split('-')[0]
-        return f"Linux {linux_version} (unknown distribution)"
-    except Exception as e1:
-        logger.debug("Error calling platform.release(): %s", e1)
+    for get_dist in (get_distribution_name_version_platform_freedesktop,
+                     get_distribution_name_version_distro,
+                     get_distribution_name_version_os_release):
+        ret = get_dist()
+        if ret:
+            return ret
+    for name, get_release in (('platform.release()', platform.release),
+                              ('os.uname()', lambda: os.uname().release)):
         try:
-            linux_version = os.uname().release
             # example '6.12.3-061203-generic'
-            linux_version = linux_version.split('-')[0]
+            linux_version = get_release().split('-')[0]
             return f"Linux {linux_version} (unknown distribution)"
-        except Exception as e2:
-            logger.debug("Error calling os.uname(): %s", e2)
+        except Exception as e:
+            logger.debug("Error calling %s: %s", name, e)
     return "Linux (unknown version and distribution)"
 
 
@@ -441,9 +432,12 @@ def get_trash_paths():
     # Import here to avoid a circular import.
     # pylint: disable=import-outside-toplevel
     from bleachbit import Command
-    # macOS-style flat trash (non-recursive)
+    # macOS-style flat trash. list_directories=True is required so that
+    # a folder sent to Trash is itself removed after its contents are
+    # deleted; with False, only files inside it are yielded and the now-
+    # empty folder is left behind forever.
     dirname = os.path.expanduser("~/.Trash")
-    for filename in children_in_directory(dirname, False):
+    for filename in children_in_directory(dirname, True):
         yield Command.Delete(filename)
     # Freedesktop trash spec directories
     # https://specifications.freedesktop.org/trash-spec/trashspec-1.0.html
@@ -556,10 +550,84 @@ def rotated_logs():
     for path in bleachbit.FileUtilities.children_in_directory('/var/log'):
         if bleachbit.FileUtilities.whitelisted(path):
             continue
+
+        # On macOS, skip a path only if its parent dir exists and we
+        # truly lack write access (a missing parent must not count as
+        # 'no permission', since os.access() returns False for both).
+        parent_dir = os.path.dirname(path)
+        if IS_MAC and os.path.isdir(parent_dir) and not os.access(parent_dir, os.W_OK):
+            continue
+
         if any(keep_list.search(path) for keep_list in keep_lists):
             continue
         if positive_re.search(path):
             yield path
+
+
+def orphaned_framework_versions(versions_dir):
+    """Yield paths of files (and, once emptied, the folder itself)
+    inside each orphaned version folder under a macOS .app's
+    Contents/Frameworks/*.framework/Versions/ directory.
+
+    Individual files are yielded rather than each orphaned folder as a
+    single unit because Command.Delete sizes a directory via a single
+    lstat(), reflecting only the directory inode itself (near 0 bytes)
+    rather than its actual recursive disk usage.
+
+    Chromium-based browsers on macOS (e.g. Google Chrome) keep every
+    version they have ever been updated to/from inside this directory,
+    with a 'Current' symlink pointing at the one actually in use.
+    Google's own auto-update mechanism has never reliably cleaned up
+    the old ones (a bug reported publicly since at least 2011), so
+    these can accumulate to several GB over the lifetime of an
+    installation.
+
+    Only 'Current' identifies the version genuinely in use -- version
+    numbers are not orderable across schemes (e.g. '152.0.7977.83' vs
+    '152.1.94.117') and a folder's modification time can be misleading
+    (e.g. after restoring from a backup), so both are deliberately
+    ignored here. If 'Current' cannot be read as a valid symlink to an
+    existing sibling directory, nothing is yielded at all, erring on
+    the side of not deleting anything rather than guessing which
+    version is safe to remove.
+    """
+    current_link = os.path.join(versions_dir, 'Current')
+    if not os.path.islink(current_link):
+        return
+    try:
+        current_target = os.readlink(current_link)
+    except OSError:
+        return
+    # The symlink is typically relative (e.g. '152.0.7977.83'), but
+    # tolerate an absolute target too.
+    current_name = os.path.basename(current_target.rstrip('/'))
+    current_real = os.path.realpath(current_link)
+    if not os.path.isdir(current_real):
+        # 'Current' points at something that doesn't exist -- do not
+        # guess which folder is safe to remove.
+        return
+    try:
+        entries = os.listdir(versions_dir)
+    except OSError:
+        return
+    for name in entries:
+        if name == 'Current' or name == current_name:
+            continue
+        full_path = os.path.join(versions_dir, name)
+        if not os.path.isdir(full_path) or os.path.islink(full_path):
+            continue
+        # Yield each file individually (rather than the folder as one
+        # unit) so Command.Delete reports the real disk space freed --
+        # it sizes a directory via a single lstat(), which reflects
+        # only the directory inode itself (near 0 bytes), not its
+        # recursive content. children_in_directory() only yields items
+        # found INSIDE full_path (with list_directories=True also
+        # yielding any nested subdirectories, once emptied) -- it never
+        # yields full_path itself, so that is yielded explicitly last,
+        # once its own contents have all been accounted for above.
+        yield from bleachbit.FileUtilities.children_in_directory(
+            full_path, list_directories=True)
+        yield full_path
 
 
 def wine_to_linux_path(wineprefix, windows_pathname):
@@ -897,32 +965,30 @@ def snapd_is_active():
     The result is cached in a module-level variable to avoid repeated
     systemctl calls during a single BleachBit run.
     """
+    def check_snapd():
+        if not exe_exists(General.resolve_exe('snap')):
+            return False
+        if not exe_exists(General.resolve_exe('systemctl')):
+            return False
+        # When snap is installed but snapd is inactive, then `snap list --all`
+        # or `snap version` may have a long delay, so we check the service status first
+        try:
+            (rc, _stdout, _stderr) = General.run_external(
+                [General.resolve_exe('systemctl'), 'is-active',
+                 '--quiet', 'snapd.socket'],
+                timeout=5)
+        except subprocess.TimeoutExpired:
+            logger.warning(
+                'systemctl is-active snapd.socket timed out: it seems snap is installed but snapd is inactive')
+            return False
+        except (FileNotFoundError, OSError) as exc:
+            logger.warning('systemctl is-active snapd.socket failed: %s', exc)
+            return False
+        return rc == 0
+
     global _snapd_is_active_cache  # pylint: disable=global-statement
-    if _snapd_is_active_cache is not None:
-        return _snapd_is_active_cache
-    if not exe_exists(General.resolve_exe('snap')):
-        _snapd_is_active_cache = False
-        return _snapd_is_active_cache
-    if not exe_exists(General.resolve_exe('systemctl')):
-        _snapd_is_active_cache = False
-        return _snapd_is_active_cache
-    # When snap is installed but snapd is inactive, then `snap list --all`
-    # or `snap version` may have a long delay, so we check the service status first.
-    try:
-        (rc, _stdout, _stderr) = General.run_external(
-            [General.resolve_exe('systemctl'), 'is-active',
-             '--quiet', 'snapd.socket'],
-            timeout=5)
-    except subprocess.TimeoutExpired:
-        logger.warning(
-            'systemctl is-active snapd.socket timed out: it seems snap is installed but snapd is inactive')
-        _snapd_is_active_cache = False
-        return _snapd_is_active_cache
-    except (FileNotFoundError, OSError) as exc:
-        logger.warning('systemctl is-active snapd.socket failed: %s', exc)
-        _snapd_is_active_cache = False
-        return _snapd_is_active_cache
-    _snapd_is_active_cache = rc == 0
+    if _snapd_is_active_cache is None:
+        _snapd_is_active_cache = check_snapd()
     return _snapd_is_active_cache
 
 
@@ -1011,10 +1077,8 @@ def is_unix_display_protocol_wayland():
     """Return True if the display protocol is Wayland."""
     assert IS_POSIX
     if 'XDG_SESSION_TYPE' in os.environ:
-        if os.environ['XDG_SESSION_TYPE'] == 'wayland':
-            return True
         # If not wayland, then x11, mir, etc.
-        return False
+        return os.environ['XDG_SESSION_TYPE'] == 'wayland'
     if 'WAYLAND_DISPLAY' in os.environ:
         return True
     # Ubuntu 24.10 showed "ubuntu-xorg".
@@ -1075,17 +1139,29 @@ def is_display_protocol_wayland_and_root_not_allowed():
     )
 
 
+def _dns_flush_command():
+    """Return the command to flush the DNS resolver cache, or None if there is none"""
+    for exe, arg in (('resolvectl', 'flush-caches'),
+                     ('systemd-resolve', '--flush-caches')):
+        path = General.resolve_exe(exe)
+        if exe_exists(path):
+            return [path, arg]
+    return None
+
+
+def can_flush_dns():
+    """Return whether the DNS resolver cache can be flushed"""
+    return _dns_flush_command() is not None
+
+
 def flush_dns():
     """Flush the DNS resolver cache
 
     Returns 0 on success.
     Raises RuntimeError on failure.
     """
-    if exe_exists(General.resolve_exe('resolvectl')):
-        args = [General.resolve_exe('resolvectl'), 'flush-caches']
-    elif exe_exists(General.resolve_exe('systemd-resolve')):
-        args = [General.resolve_exe('systemd-resolve'), '--flush-caches']
-    else:
+    args = _dns_flush_command()
+    if args is None:
         raise RuntimeError('Neither resolvectl nor systemd-resolve found')
     (rc, stdout, stderr) = General.run_external(args)
     if 0 != rc:
