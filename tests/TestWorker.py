@@ -263,6 +263,30 @@ class WorkerTestCase(common.BleachbitTestCase):
                               log_context.output[0])
                 self.assertNotIn('\\\\', log_context.output[0])
 
+    def test_access_denied_permission_hint(self):
+        """A generic EACCES (not one of the specific Windows sub-cases,
+        e.g. a plain 'Permission denied' from a file owned by another
+        user) increments Worker.total_access_denied_errors, which the
+        final summary uses to show one extra hint line suggesting
+        administrator privileges -- in addition to, not instead of,
+        the existing unchanged per-file 'Access denied: %s' line."""
+        ui = CLI.CliCallback()
+        (fd, filename) = tempfile.mkstemp(
+            prefix='bleachbit-test-worker', dir=self.tempdir)
+        os.write(fd, b'123')
+        os.close(fd)
+        astr = '<action command="access.denied" path="%s"/>' % filename
+        cleaner = TestCleaner.action_to_cleaner(astr)
+        backends['test'] = cleaner
+        operations = {'test': ['option1']}
+        worker = Worker(ui, True, operations)
+        run = worker.run()
+        with self.assertLogs(level='ERROR'):
+            while next(run):
+                pass
+        del backends['test']
+        self.assertEqual(worker.total_access_denied_errors, 1)
+
     def test_DoesNotExist(self):
         """Test Worker using Action.DoesNotExistAction"""
         with self.assertLogs(level='ERROR') as log_context:
