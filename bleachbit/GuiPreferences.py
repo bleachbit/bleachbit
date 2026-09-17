@@ -362,12 +362,22 @@ class PreferencesDialog:
             lang_items = [('en_us', 'English')]
         else:
             lang_items = supported_langs.items()
+        # current_lang_code may be a region-specific code like 'es_ES'
+        # (e.g. from macOS AppleLocale), while lang_items' keys are the
+        # bare base codes BleachBit ships translations under (e.g.
+        # 'es') -- matching only the base part before the underscore
+        # keeps the combo box in sync with the language actually in
+        # use instead of leaving nothing selected.
+        current_lang_base = current_lang_code.split(
+            '_')[0] if current_lang_code else None
         for lang_idx, (lang_code, native) in enumerate(lang_items):
             if native:
                 self.lang_combo.append_text(f"{native} ({lang_code})")
             else:
                 self.lang_combo.append_text(lang_code)
             if lang_code == current_lang_code:
+                active_language_idx = lang_idx
+            elif active_language_idx is None and lang_code == current_lang_base:
                 active_language_idx = lang_idx
         if active_language_idx is not None:
             self.lang_combo.set_active(active_language_idx)

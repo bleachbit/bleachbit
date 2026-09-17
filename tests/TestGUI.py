@@ -238,6 +238,23 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertEqual(mock_get.call_count, 1)
         pref.dialog.destroy()
 
+    def test_preferences_language_combo_matches_region_specific_code(self):
+        """Regression test: when the active language code is
+        region-specific (e.g. 'es_ES', as returned by macOS's
+        AppleLocale-based auto-detection), the language combo box must
+        still show it as selected, matching against the base code
+        ('es') that BleachBit's own supported-language list uses --
+        not leave nothing selected because 'es_ES' != 'es'."""
+        with mock.patch('bleachbit.GuiPreferences.get_active_language_code',
+                        return_value='es_ES'):
+            pref = self.app.get_preferences_dialog()
+        try:
+            active_text = pref.lang_combo.get_active_text()
+            self.assertIsNotNone(active_text)
+            self.assertIn('(es)', active_text)
+        finally:
+            pref.dialog.destroy()
+
     def test_preferences_cookies_page(self):
         """Opens the preferences dialog and navigates to cookies page"""
         pref = self.app.get_preferences_dialog()
