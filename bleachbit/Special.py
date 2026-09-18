@@ -101,7 +101,6 @@ def sqlite_table_exists(pathname, table):
     Raises PermissionError if the file exists but cannot be opened.
     """
     # In FreeBSD, sqlite3 is a separate package
-    # pylint: disable=import-outside-toplevel
     import sqlite3
     cmd = "select name from sqlite_master where type='table' and name=?;"
     try:
@@ -132,7 +131,7 @@ def sqlite_table_exists(pathname, table):
 
 def _sqlite_is_valid_database(pathname):
     """Return boolean indicating whether pathname points to a readable SQLite database."""
-    import sqlite3  # pylint: disable=import-outside-toplevel
+    import sqlite3
     try:
         uri = _sqlite_readonly_uri(pathname)
         with contextlib.closing(sqlite3.connect(uri, uri=True)) as conn:
@@ -171,7 +170,7 @@ def get_sqlite_int(path, sql, parameters=()):
 
 def _get_sqlite_values(path, sql, row_factory=None, parameters=()):
     """Run SQL on database in 'path' and return the integers"""
-    import sqlite3  # pylint: disable=import-outside-toplevel
+    import sqlite3
     with contextlib.closing(sqlite3.connect(_sqlite_readonly_uri(path), uri=True)) as conn:
         if row_factory is not None:
             conn.row_factory = row_factory
@@ -365,7 +364,7 @@ def delete_office_registrymodifications(path):
 def delete_mozilla_url_history(path):
     """Delete URL history in Mozilla places.sqlite (Firefox 3 and family)"""
 
-    import sqlite3  # pylint: disable=import-outside-toplevel
+    import sqlite3
     if not os.path.exists(path):
         raise sqlite3.DatabaseError(f"{path} does not exist")
 

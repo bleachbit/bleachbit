@@ -10,6 +10,7 @@ File-related utilities
 
 # standard imports
 import codecs
+import configparser
 import contextlib
 import errno
 import glob
@@ -49,10 +50,10 @@ if IS_WINDOWS:
     os.path.islink = lambda path: os_path_islink(
         path) or bleachbit.Windows.is_junction(path)
 
-if IS_POSIX:
-    # pylint: disable=redefined-builtin
+else:
+    # pylint: disable-next=redefined-builtin
     from bleachbit.General import WindowsError
-    # pylint: disable=invalid-name
+    # pylint: disable-next=invalid-name
     pywinerror = WindowsError
 
 # DirEntry.is_junction() was added in Python 3.12. Below that, fall back to
@@ -70,10 +71,13 @@ def _remove_windows_readonly(path):
     if not IS_WINDOWS:
         return False
     try:
+        # pylint: disable-next=possibly-used-before-assignment
         attrs = GetFileAttributesW(path)
     except pywinerror:
         return False
+    # pylint: disable-next=possibly-used-before-assignment
     if attrs & FILE_ATTRIBUTE_READONLY:
+        # pylint: disable-next=possibly-used-before-assignment
         SetFileAttributesW(path, attrs & ~FILE_ATTRIBUTE_READONLY)
         return True
     return False
@@ -102,6 +106,8 @@ def _run_with_delete_lock(path, func):
 def close_delete_parent_lock():
     """Close the delete parent lock if on Windows."""
     if IS_WINDOWS:
+        # Private helper of our own package.
+        # pylint: disable-next=protected-access
         bleachbit.Windows._close_delete_parent_lock()
 
 
@@ -125,7 +131,6 @@ def get_filesystem_type(path):
     * On Windows: NTFS, FAT32, CDFS
     """
     try:
-        # pylint: disable=import-outside-toplevel
         import psutil
     except ImportError:
         logger.warning(
@@ -386,9 +391,12 @@ def open_for_overwrite(path, mode='w', **kwargs):
         # protection available either way.
         if os.path.islink(path):
             raise OSError(errno.EACCES, 'refusing to open a link', path)
+        # encoding comes via **kwargs (e.g. utf-8-sig); don't hardcode it.
+        # pylint: disable-next=unspecified-encoding
         return open(path, mode, **kwargs)
     fd = _open_nofollow_fd(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC)
     try:
+        # pylint: disable-next=unspecified-encoding
         return open(fd, mode, **kwargs)
     except Exception:
         os.close(fd)
@@ -410,7 +418,7 @@ def clean_ini(path, section, parameter):
     read_encoding = 'utf_8_sig'
 
     # read file to parser
-    config = bleachbit.RawConfigParser(delimiters='=')
+    config = configparser.RawConfigParser(delimiters='=')
     config.optionxform = str
     try:
         with open(path, 'r', encoding=read_encoding) as fp:
@@ -516,7 +524,7 @@ def _delete_file_impl(path, shred):
     if shred and not is_hard_link(path):
         try:
             wipe_contents(path)
-        except pywinerror as e:  # pylint: disable=possibly-used-before-assignment
+        except pywinerror as e:
             # 2 = The system cannot find the file specified.
             # This can happen with a broken symlink
             # https://github.com/bleachbit/bleachbit/issues/195
@@ -635,7 +643,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             if errno.ENOTEMPTY == e.errno:
                 logger.info(not_empty_msg, path)
                 return False
-            elif errno.EBUSY == e.errno:
+            if errno.EBUSY == e.errno:
                 if IS_POSIX and os.path.ismount(path):
                     # TRANSLATORS: Log message where %s is the pathname.
                     logger.info(_("Skipping mount point: %s"), path)
@@ -643,7 +651,7 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
                     # TRANSLATORS: Log message where %s is the pathname.
                     logger.info(_("Device or resource is busy: %s"), path)
                 return False
-            elif IS_WINDOWS and errno.EACCES == e.errno:
+            if IS_WINDOWS and errno.EACCES == e.errno:
                 # On Windows, read-only directories cause Access Denied
                 if _remove_windows_readonly(delpath):
                     _delete_path(delpath, os.rmdir)
@@ -659,19 +667,17 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             if 145 == e.winerror:
                 logger.info(not_empty_msg, path)
                 return False
-            else:
-                raise
+            raise
         return True
-    elif os.path.isfile(path):
+    if os.path.isfile(path):
         delete_file(path, do_shred)
         return True
-    elif os.path.islink(path):
+    if os.path.islink(path):
         _delete_path(path, os.remove)
         return True
-    else:
-        # TRANSLATORS: Log message where %s is the pathname.
-        logger.info(_("Special file type cannot be deleted: %s"), path)
-        return False
+    # TRANSLATORS: Log message where %s is the pathname.
+    logger.info(_("Special file type cannot be deleted: %s"), path)
+    return False
 
 
 def detect_encoding(fn):
@@ -741,8 +747,7 @@ def exe_exists(pathname):
     """Returns boolean whether executable exists"""
     if os.path.isabs(pathname):
         return os.path.exists(pathname)
-    else:
-        return exists_in_path(pathname)
+    return exists_in_path(pathname)
 
 
 def execute_sqlite3(path, cmds):
@@ -761,7 +766,6 @@ def execute_sqlite3(path, cmds):
     """
     from bleachbit.Options import options
     # In FreeBSD, sqlite3 is a separate package
-    # pylint: disable=import-outside-toplevel
     import sqlite3
     assert isinstance(path, str)
     assert isinstance(cmds, str)
@@ -860,7 +864,7 @@ def free_space(pathname):
     estimation of completion time in wipe_path().
     """
     if IS_WINDOWS:
-        # pylint: disable=import-error,import-outside-toplevel
+        # pylint: disable=import-error
         import psutil
         return psutil.disk_usage(pathname).free
     assert IS_POSIX
@@ -897,7 +901,7 @@ def getsize(path):
             finddata = win32file.FindFilesW(extended_path(path))
         except pywinerror as e:
             if e.winerror == 3:  # 3 = The system cannot find the path specified.
-                raise OSError(errno.ENOENT, e.strerror, path)
+                raise OSError(errno.ENOENT, e.strerror, path) from e
             raise e
         if not finddata:
             # FindFilesW does not work for directories, so fall back to

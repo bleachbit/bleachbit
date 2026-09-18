@@ -8,6 +8,7 @@
 Import Winapp2.ini files
 """
 
+import configparser
 import fnmatch
 import glob
 import logging
@@ -140,15 +141,14 @@ def special_detect(code):
                'DET_SPACE_QUEST': r'HKCU\Software\Sierra Games\Space Quest'}
     if code in sd_keys:
         return Windows.detect_registry_key(sd_keys[code])
-    else:
-        logger.error('Unknown SpecialDetect=%s', code)
+    logger.error('Unknown SpecialDetect=%s', code)
     return False
 
 
-"""fnmatch.translate() only got atomic groups (avoiding catastrophic
-regex backtracking) in Python 3.11, but BleachBit supports 3.8+, so
-cap the wildcard count instead of trusting the stdlib on older versions.
-TODO: drop this once the minimum supported Python is 3.11+."""
+# fnmatch.translate() only got atomic groups (avoiding catastrophic
+# regex backtracking) in Python 3.11, but BleachBit supports 3.8+, so
+# cap the wildcard count instead of trusting the stdlib on older versions.
+# TODO: drop this once the minimum supported Python is 3.11+
 MAX_GLOB_WILDCARDS = 10
 
 
@@ -181,7 +181,7 @@ class Winapp:
         for langsecref in set(langsecref_map.values()):
             self.add_section(langsecref[0], langsecref[1])
         self.errors = 0
-        self.parser = bleachbit.RawConfigParser()
+        self.parser = configparser.RawConfigParser()
         encoding = detect_encoding(pathname) or 'utf_8_sig'
         self.parser.read(pathname, encoding=encoding)
         self.re_detect = re.compile(r'^detect(\d+)?$')
@@ -275,8 +275,7 @@ class Winapp:
 
         if len(regexes) == 1:
             return regexes[0]
-        else:
-            return f"({'|'.join(regexes)})"
+        return f"({'|'.join(regexes)})"
 
     def detect(self, section):
         """Check whether to show the section

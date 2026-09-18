@@ -8,6 +8,9 @@
 Test case for module Unix
 """
 
+# These tests reach into internals on purpose.
+# pylint: disable=protected-access
+
 from unittest import mock
 import os
 import random
@@ -1217,7 +1220,7 @@ PrefersNonDefaultGPU=false""")
                 real_rev, '.local', 'share', 'Trash', 'files')
             os.makedirs(trash_files)
             test_file = os.path.join(trash_files, 'test.txt')
-            with open(test_file, 'w') as f:
+            with open(test_file, 'w', encoding='utf-8') as f:
                 f.write('test')
             # Create symlink current -> 238
             current_dir = os.path.join(self.tempdir, 'snap', 'app', 'current')
@@ -1388,7 +1391,7 @@ class OrphanedFrameworkVersionsTestCase(common.BleachbitTestCase):
         yielded."""
         versions_dir = self._make_versions_dir(['150.0.1.1'])
         os.symlink('152.0.7977.83-does-not-exist',
-                  os.path.join(versions_dir, 'Current'))
+                   os.path.join(versions_dir, 'Current'))
         result = list(orphaned_framework_versions(versions_dir))
         self.assertEqual(result, [])
 

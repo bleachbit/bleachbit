@@ -32,6 +32,7 @@ from bleachbit.PathUtils import normalize_path
 from bleachbit.Constant import EMPTY_SPACE_WARNING, REQUIRES_EXPERT_MODE
 from bleachbit.General import sanitize_surrogates
 from bleachbit.GtkShim import Gtk, GLib
+from bleachbit.GuiInfoBar import InfoBarMixin
 from bleachbit.GuiCookie import CookieManagerPane
 from bleachbit.GuiUtil import (detect_dark_background, flush_gtk_events,
                                load_icon_or_fallback,
@@ -60,7 +61,7 @@ EXPERT_MODE_MSG = _('Expert mode')
 RESTART_APP_MSG = _("Restart BleachBit for full effect.")
 
 
-class PreferencesDialog:
+class PreferencesDialog(InfoBarMixin):
 
     """Present the preferences dialog and save changes"""
 
@@ -82,14 +83,7 @@ class PreferencesDialog:
         self._cookie_page_container = None
 
         # Add InfoBar for non-blocking messages
-        self.infobar = Gtk.InfoBar()
-        self.infobar.set_show_close_button(True)
-        self.infobar.connect('response', self._on_infobar_response)
-        self.infobar_label = Gtk.Label()
-        self.infobar_label.set_line_wrap(True)
-        self.infobar.get_content_area().add(self.infobar_label)
-        self.dialog.get_content_area().pack_start(self.infobar, False, False, 0)
-        self._infobar_timeout_id = None
+        self._build_infobar(self.dialog.get_content_area())
 
         content_box = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL, spacing=18)
@@ -193,36 +187,6 @@ class PreferencesDialog:
         if self.refresh_operations:
             # refresh the list of cleaners
             self.cb_refresh_operations()
-
-    def _on_infobar_response(self, _infobar, _response_id):
-        """Handle InfoBar close button click"""
-        if self._infobar_timeout_id:
-            GLib.source_remove(self._infobar_timeout_id)
-            self._infobar_timeout_id = None
-        self.infobar.hide()
-
-    def _hide_infobar(self):
-        """Hide the InfoBar (used for auto-dismiss timeout)"""
-        self._infobar_timeout_id = None
-        self.infobar.hide()
-        return False  # Remove from GLib timeout
-
-    def show_infobar(self, message, message_type=Gtk.MessageType.ERROR):
-        """Show a non-blocking InfoBar message that auto-dismisses
-
-        Args:
-            message: The message to display
-            message_type: Gtk.MessageType (ERROR, WARNING, INFO, etc.)
-        """
-        # Cancel any existing timeout
-        if self._infobar_timeout_id:
-            GLib.source_remove(self._infobar_timeout_id)
-            self._infobar_timeout_id = None
-        self.infobar_label.set_text(message)
-        self.infobar.set_message_type(message_type)
-        self.infobar.show_all()
-        self._infobar_timeout_id = GLib.timeout_add_seconds(
-            15, self._hide_infobar)
 
     def __on_expert_mode_toggled(self, cb):
         """Callback for expert mode checkbox"""
