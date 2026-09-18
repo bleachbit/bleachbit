@@ -309,6 +309,64 @@ Caption "$(INSTALLER_CAPTION)"
 
 !include NsisMultiUserLang.nsh
 
+
+;--------------------------------
+;Application language codes
+; The selected one is written to installer-language.txt, which BleachBit
+; reads on its first run. Keep in sync with the list above and with
+; LANGUAGE_MAP in windows/nsis_translations.py.
+
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_ENGLISH} "en"
+!ifndef NoTranslations
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_ALBANIAN} "sq"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_ARABIC} "ar"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_ARMENIAN} "hy"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_ASTURIAN} "ast"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_BASQUE} "eu"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_BELARUSIAN} "be"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_BOSNIAN} "bs"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_BULGARIAN} "bg"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_CATALAN} "ca"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_CROATIAN} "hr"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_CZECH} "cs"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_DANISH} "da"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_DUTCH} "nl"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_ESTONIAN} "et"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_FINNISH} "fi"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_FRENCH} "fr"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_GALICIAN} "gl"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_GERMAN} "de"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_GREEK} "el"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_HEBREW} "he"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_HUNGARIAN} "hu"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_INDONESIAN} "id"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_ITALIAN} "it"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_JAPANESE} "ja"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_KOREAN} "ko"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_LATVIAN} "lv"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_LITHUANIAN} "lt"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_MALAY} "ms"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_NORWEGIAN} "nb"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_POLISH} "pl"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_PORTUGUESE} "pt"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_PORTUGUESEBR} "pt_BR"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_ROMANIAN} "ro"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_RUSSIAN} "ru"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_SERBIAN} "sr"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_SIMPCHINESE} "zh_CN"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_SLOVAK} "sk"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_SLOVENIAN} "sl"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_SPANISH} "es"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_SWEDISH} "sv"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_THAI} "th"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_TRADCHINESE} "zh_TW"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_TURKISH} "tr"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_UKRAINIAN} "uk"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_UZBEK} "uz"
+  LangString BLEACHBIT_LANGUAGE_CODE ${LANG_VIETNAMESE} "vi"
+!endif
+
+
 !include "StrFunc.nsh"
 # Declare used functions
 ${StrCase}
@@ -342,6 +400,15 @@ Section "$(SECTION_CORE_NAME)" SectionCore
     SectionIn RO
 
     !include FilesToInstall.nsh
+
+    # Skip silent installs, where the user picked no language.
+    IfSilent skip_language_file
+    ClearErrors
+    FileOpen $0 "$INSTDIR\installer-language.txt" w
+    IfErrors skip_language_file
+    FileWrite $0 "$(BLEACHBIT_LANGUAGE_CODE)"
+    FileClose $0
+    skip_language_file:
 
     # uninstaller
     WriteUninstaller "$INSTDIR\uninstall.exe"
@@ -483,6 +550,7 @@ UninstallText "$(UNINSTALL_TEXT)"
 
 Section "Uninstall" SectionUninstall
     Delete $INSTDIR\bleachbit.exe.log
+    Delete "$INSTDIR\installer-language.txt"
 
     !ifndef NoTranslations
       !include LocaleToUninstall.nsh
