@@ -355,9 +355,9 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                                  xmlcleaner.os_match(os_attr, platform))
 
         # as unknown operating system
-        with self.assertRaises(RuntimeError):
+        with self.assertRaisesRegex(RuntimeError, 'Unknown operating system: hal9000'):
             xmlcleaner.os_match('linux', 'hal9000')
-        with self.assertRaises(RuntimeError):
+        with self.assertRaisesRegex(RuntimeError, 'Unknown operating system: hal9000'):
             xmlcleaner.os_match('!macos', 'hal9000')
 
     def test_option_os_filter(self):

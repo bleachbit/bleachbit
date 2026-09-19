@@ -351,7 +351,7 @@ def _os_match_token(os_str, platform):
     elif platform == 'win32':
         current_os = ('windows',)
     else:
-        raise RuntimeError(f'Unknown operating system: {sys.platform}')
+        raise RuntimeError(f'Unknown operating system: {platform}')
     # Compare current OS against required OS.
     return os_str in current_os
 
