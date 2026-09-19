@@ -23,7 +23,7 @@ import bleachbit
 from bleachbit import FileUtilities, General, IS_MAC, IS_POSIX
 from bleachbit.FileUtilities import children_in_directory, exe_exists
 from bleachbit.Language import get_text as _, native_locale_names, \
-    normalize_locale_code
+    LocaleCode
 from bleachbit.VFS import RealVFS
 
 logger = logging.getLogger(__name__)
@@ -241,20 +241,6 @@ def find_available_locales():
     return []
 
 
-def _is_utf8_locale(locale_name):
-    """Return whether the locale name specifies a UTF-8 codeset
-
-    The codeset is compared case- and punctuation-insensitively because
-    `locale -a` prints '.utf8' on Linux and '.UTF-8' on macOS. A name
-    without a codeset, like 'de_DE' or 'sr_RS@latin', is not assumed to
-    be UTF-8: a bare alias may use a legacy codeset such as ISO-8859-1.
-    """
-    if '.' not in locale_name:
-        return False
-    codeset = locale_name.rsplit('.', 1)[-1].split('@')[0]
-    return codeset.replace('-', '').replace('_', '').lower() == 'utf8'
-
-
 def find_best_locale(user_locale):
     """Find closest match to available locales, preferring UTF-8
 
@@ -263,41 +249,41 @@ def find_best_locale(user_locale):
     UTF-8 is not available.
     """
     assert isinstance(user_locale, str)
-    if not user_locale:
+    req = LocaleCode(user_locale)
+    if not req.raw:
         return 'C'
-    if user_locale in ('C', 'C.utf8', 'POSIX'):
-        return user_locale
-    normalized_locale = normalize_locale_code(user_locale)
-    available_locales = find_available_locales()
+    if req.is_special:
+        return req.raw
+    available_raw = find_available_locales()
+    available = [LocaleCode(a) for a in available_raw]
 
     # Exact match if already UTF-8.
-    if _is_utf8_locale(user_locale) and user_locale in available_locales:
-        return user_locale
+    if req.is_utf8 and req.raw in available_raw:
+        return req.raw
 
     # Prefer current system locale if compatible and UTF-8
     # (e.g., system is 'es_MX.UTF-8' when requesting 'es').
     # Import here for mock patch.
     import locale  # pylint: disable=import-outside-toplevel
     lang, codeset = locale.getlocale()
-    if lang and codeset and lang.startswith(normalized_locale) and \
+    if lang and codeset and lang.startswith(req.normalized) and \
             codeset.replace('-', '').replace('_', '').lower() == 'utf8':
         return '.'.join((lang, codeset))
 
     # Otherwise search installed locales for UTF-8 (e.g., 'es_ES.utf8').
-    for avail_locale in available_locales:
-        if avail_locale.startswith(normalized_locale) and \
-                _is_utf8_locale(avail_locale):
-            return avail_locale
+    for avail in available:
+        if avail.normalized.startswith(req.normalized) and avail.is_utf8:
+            return avail.raw
 
     # Fall back to exact non-UTF-8 match (e.g., 'de_DE@euro').
-    for candidate in (user_locale, normalized_locale):
-        if candidate in available_locales:
+    for candidate in (req.raw, req.normalized):
+        if candidate in available_raw:
             return candidate
 
     # Fall back to any installed match (e.g., 'en_US.iso88591').
-    for avail_locale in available_locales:
-        if avail_locale.startswith(normalized_locale):
-            return avail_locale
+    for avail in available:
+        if avail.normalized.startswith(req.normalized):
+            return avail.raw
 
     return 'C'
 
@@ -434,14 +420,15 @@ def get_purgeable_locales(locales_to_keep):
 
     # Remove the locales we want to keep
     for keep in locales_to_keep:
+        keep_loc = LocaleCode(keep)
         purgeable_locales.discard(keep)
         # If keeping a variant (e.g. 'en_US'), also keep the base locale (e.g. 'en')
-        if '_' in keep:
-            purgeable_locales.discard(keep[:keep.find('_')])
+        if keep_loc.territory:
+            purgeable_locales.discard(keep_loc.language)
         # If keeping a base locale (e.g. 'en'), also keep all its variants (e.g. 'en_US')
-        if '_' not in keep:
+        else:
             purgeable_locales = {locale for locale in purgeable_locales
-                                 if not locale.startswith(keep + '_')}
+                                 if LocaleCode(locale).language != keep_loc.language}
 
     return frozenset(purgeable_locales)
 

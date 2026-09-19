@@ -14,6 +14,7 @@ from unittest import mock
 from bleachbit.Language import get_active_language_code, \
     get_supported_language_codes, \
     get_text, \
+    LocaleCode, \
     normalize_locale_code, \
     setup_translation, \
     get_supported_language_code_name_dict
@@ -81,6 +82,38 @@ class LanguageTestCase(common.BleachbitTestCase):
         for raw, expected in tests:
             with self.subTest(raw=raw):
                 self.assertEqual(normalize_locale_code(raw), expected)
+
+    def test_localecode_parse(self):
+        """Test LocaleCode parsing, including @ before . for locale.alias"""
+        tests = [
+            # raw, language, territory, encoding, modifier
+            ('en', 'en', None, None, None),
+            ('de-CH', 'de', 'CH', None, None),
+            ('es_419', 'es', '419', None, None),
+            ('de_DE.utf8@euro', 'de', 'DE', 'utf8', 'euro'),
+            ('en_US@piglatin', 'en', 'US', None, 'piglatin'),
+            ('C.UTF-8', 'C', None, 'UTF-8', None),
+            ('en@boldquot.header', 'en', None, None, 'boldquot.header'),
+        ]
+        for raw, language, territory, encoding, modifier in tests:
+            with self.subTest(raw=raw):
+                loc = LocaleCode(raw)
+                self.assertEqual(loc.language, language)
+                self.assertEqual(loc.territory, territory)
+                self.assertEqual(loc.encoding, encoding)
+                self.assertEqual(loc.modifier, modifier)
+                self.assertEqual(str(loc), raw)
+
+    def test_localecode_is_utf8(self):
+        """Test LocaleCode.is_utf8"""
+        for raw in ('en_US.utf8', 'en_US.UTF-8', 'de_DE.utf8@euro',
+                    'C.utf8', 'C.UTF-8'):
+            with self.subTest(raw=raw):
+                self.assertTrue(LocaleCode(raw).is_utf8)
+        for raw in ('de_DE.iso88591', 'de_DE', 'sr_RS@latin', 'en_US',
+                    'nb_NO.ISO-8859-1'):
+            with self.subTest(raw=raw):
+                self.assertFalse(LocaleCode(raw).is_utf8)
 
     def test_get_supported_language_code_name_dict_unknown_code(self):
         with mock.patch('bleachbit.Language.get_supported_language_codes', return_value=['en', 'es', 'foo@bar']):

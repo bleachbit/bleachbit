@@ -195,6 +195,8 @@ class UnixTestCase(common.BleachbitTestCase):
         self.assertEqual(find_best_locale('de_DE@euro'), 'de_DE@euro')
 
         self.assertEqual(find_best_locale('C'), 'C')
+        self.assertEqual(find_best_locale('C.utf8'), 'C.utf8')
+        self.assertEqual(find_best_locale('C.UTF-8'), 'C.UTF-8')
         self.assertEqual(find_best_locale(''), 'C')
         self.assertEqual(find_best_locale('POSIX'), 'POSIX')
 

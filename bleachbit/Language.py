@@ -14,6 +14,56 @@ from bleachbit import IS_MAC, IS_POSIX, IS_WINDOWS
 logger = logging.getLogger(__name__)
 
 
+class LocaleCode:
+    """Parsed locale name like 'de_DE.ISO8859-15@euro'.
+
+    Locale names have the shape language[_territory][.codeset][@modifier].
+    Missing pieces are None, not empty strings.
+    """
+
+    __slots__ = ('raw', 'language', 'territory', 'encoding', 'modifier')
+
+    def __init__(self, raw):
+        # Split '@' before '.', because a modifier may itself contain a
+        # dot ('en@boldquot.header' in locale.alias).
+        pre, _, modifier = raw.partition('@')
+        code, _, encoding = pre.partition('.')
+        language, _, territory = code.replace('-', '_').partition('_')
+        self.raw = raw
+        self.language = language
+        self.territory = territory or None
+        self.encoding = encoding or None
+        self.modifier = modifier or None
+
+    def __str__(self):
+        return self.raw
+
+    @property
+    def normalized(self):
+        """Return 'de_DE': language[_territory], without codeset or modifier."""
+        if self.territory:
+            return f'{self.language}_{self.territory}'
+        return self.language
+
+    @property
+    def is_utf8(self):
+        """Return whether the locale name specifies a UTF-8 codeset.
+
+        Compared case- and punctuation-insensitively because `locale -a`
+        prints '.utf8' on Linux and '.UTF-8' on macOS. A name without a
+        codeset is not assumed to be UTF-8.
+        """
+        if not self.encoding:
+            return False
+        return self.encoding.replace(
+            '-', '').replace('_', '').lower() == 'utf8'
+
+    @property
+    def is_special(self):
+        """Return whether this is C/POSIX (with optional codeset/modifier)."""
+        return self.language in ('C', 'POSIX') and self.territory is None
+
+
 native_locale_names = \
     {'aa': 'Afaraf',
      'ab': 'аҧсуа бызшәа',
@@ -294,7 +344,7 @@ def normalize_locale_code(code):
     hyphens to underscores, so a BCP 47 code like 'en-US' matches the
     underscore form used in locale directory names.
     """
-    return code.split('.')[0].split('@')[0].replace('-', '_')
+    return LocaleCode(code).normalized
 
 
 def get_active_language_code():
@@ -346,10 +396,11 @@ def get_active_language_code():
         user_locale = 'C'
         logger.warning("no default locale found.  Assuming '%s'", user_locale)
 
-    if '.' in user_locale:
+    loc = LocaleCode(user_locale)
+    if loc.encoding or loc.modifier:
         # This should never happen.
-        logger.warning('locale contains a dot: %s', user_locale)
-        user_locale = normalize_locale_code(user_locale)
+        logger.warning('locale contains a codeset or modifier: %s', user_locale)
+        user_locale = loc.normalized
 
     assert isinstance(user_locale, str)
     assert len(
