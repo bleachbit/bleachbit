@@ -223,7 +223,6 @@ jobs:
             gtk*-x86-windows.zip
             gtk-themes.zip
             pygobject-*-win32.whl
-            upx.zip
             nsis-*-setup.exe
             advancecomp.zip
           key: win-build-deps-${{ hashFiles('.github/workflows/build_and_test.yaml', 'windows/python-gtk3-deps.lst', 'windows/python-gtk3-install.ps1') }}
@@ -248,20 +247,6 @@ jobs:
       - name: Install Python and GTK
         shell: pwsh
         run: .\windows\python-gtk3-install.ps1
-
-      - name: Install UPX
-        shell: pwsh
-        run: |
-          if (-not (Test-Path upx.zip)) {
-            Invoke-WebRequest -Uri "https://github.com/upx/upx/releases/download/v5.1.1/upx-5.1.1-win64.zip" -OutFile upx.zip
-          }
-          $hash = (Get-FileHash upx.zip -Algorithm SHA256).Hash
-          if ($hash -ne 'fa5380bca4c2718547aaa0134bc0d8a7fa27e102f0ac6371573d60d1c21d64de') {
-            throw "SHA256 mismatch=$hash"
-          }
-          7z x upx.zip
-          Rename-Item upx-5.1.1-win64 upx
-          Get-ChildItem .\upx\
 
       - name: Install NSIS
         shell: pwsh
@@ -325,7 +310,7 @@ jobs:
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         # The English-only installer is built only for tags (releases) to save
         # the cost of GHA minutes and storage.
-        # PR builds pass 'fast' (skips UPX and library recompression)
+        # PR builds pass 'fast' (skips strip and library recompression)
         # since windows-deploy never ships PR-triggered artifacts.
         # Tagged builds pass 'max-effort' (enables advzip zopfli recompression
         # and the English-only installer).
@@ -389,7 +374,7 @@ jobs:
           # No restore-keys: a partial-key hit would restore a tree with stale
           # dependencies that the install script would then skip re-installing.
           # This job doesn't mutate the tree, so caching it here is safe (unlike
-          # windows-build, whose shrink/UPX step strips files in place).
+          # windows-build, whose shrink step strips files in place).
           path: |
             gtk*-x86-windows.zip
             gtk-themes.zip

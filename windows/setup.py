@@ -7,8 +7,18 @@
 """
 Windows build and packaging
 
-Example invocation (from parent directory):
+Examples of invocation (from parent directory):
+
+```
 python3.exe -m windows.setup
+python3.exe -m windows.setup max-effort
+python3.exe -m windows.setup upx
+```
+
+Maximum-effort is disabled by default to save time on routine CI builds.
+
+UPX is disabled by default because it increases build time and sometimes
+triggers antivirus false positives.
 """
 
 # standard library
@@ -79,7 +89,7 @@ def get_build_settings():
                    * skip UPX, strip, and recompression
                    * set faster compression for .zip and NSIS
       regular    - default build
-                   * enables UPX, strip, and 7-Zip library recompression
+                   * enables strip and 7-Zip library recompression
                    * set maximum compression for .zip and NSIS
       max-effort - enable Deadpool mode for release builds
                    * build English-only installer
@@ -87,18 +97,26 @@ def get_build_settings():
     """
     arg = 'regular'
     for a in sys.argv[1:]:
-        if a.lower() != 'py2exe':
+        if a.lower() not in ('py2exe', 'upx'):
             arg = a.lower()
             break
 
     is_fast = arg == 'fast'
     is_max_effort = arg == 'max-effort'
 
+    upx_requested = 'upx' in (a.lower() for a in sys.argv[1:])
+    if upx_requested and not os.path.exists(UPX_EXE):
+        logger.error('UPX was requested (with "upx") '
+                     'but not found at %s', UPX_EXE)
+        sys.exit(1)
+    upx_enabled = upx_requested
+
     return {
         'preset': 'fast' if is_fast else ('max-effort' if is_max_effort else 'regular'),
         'fast': is_fast, # controls .zip and NSIS compression levels
         'build_english': is_max_effort, # build English-only installer
-        'upx': not is_fast and bool(os.path.exists(UPX_EXE)), # compress executables
+        'upx': upx_enabled, # compress executables
+        'upx_tag': '-upx' if upx_enabled else '', # filename tag for UPX builds
         'advzip': is_max_effort and bool(os.path.exists(ADVZIP_EXE)), # recompress zips with advzip
         'strip': not is_fast and bool(STRIP_EXE), # strip executables
         'recompress_lib': not is_fast, # recompress library.zip
@@ -982,10 +1000,11 @@ def package_portable(settings):
         text_file.write("[Portable]")
 
     archive('BleachBit-Portable',
-            f'BleachBit-{get_version()}-portable.zip', settings, use_advzip=True)
+            f'BleachBit-{get_version()}-portable{settings["upx_tag"]}.zip',
+            settings, use_advzip=True)
 
 
-def nsis(opts, exe_name, nsi_path):
+def nsis(opts, exe_name, nsi_path, settings):
     """Run NSIS with the options to build exe_name"""
     if os.path.exists(exe_name):
         logger.info('Deleting old file: %s', exe_name)
@@ -994,12 +1013,17 @@ def nsis(opts, exe_name, nsi_path):
         f'/DVERSION={get_version()}',
         f'/DSHRED_REGEX_KEY={SHRED_REGEX_KEY}',
         nsi_path]
-    if os.path.exists(UPX_EXE):
+    if settings['upx'] and os.path.exists(UPX_EXE):
         # NSIS !packhdr requires backslashes and no quotes in the define
         upx_path = UPX_EXE.replace('/', '\\')
         cmd.insert(-1, f'/DUPX_EXE={upx_path}')
     run_cmd(cmd)
     assert_exist(exe_name)
+
+
+def installer_name(settings, lang='', ext='exe'):
+    """Return the installer filename for the given language and extension"""
+    return f'windows\\BleachBit-{get_version()}-setup{lang}{settings["upx_tag"]}.{ext}'
 
 
 def package_installer(settings, nsi_path=r'windows\bleachbit.nsi'):
@@ -1016,15 +1040,15 @@ def package_installer(settings, nsi_path=r'windows\bleachbit.nsi'):
 
     write_nsis_expressions_to_files()
 
-    exe_name_multilang = f'windows\\BleachBit-{get_version()}-setup.exe'
-    exe_name_en = f'windows\\BleachBit-{get_version()}-setup-English.exe'
+    exe_name_multilang = installer_name(settings)
+    exe_name_en = installer_name(settings, '-English')
     # Was:
     # opts = '' if fast else '/X"SetCompressor /FINAL zlib"'
     # Now: Done in NSIS file!
     opts = '' if settings['fast'] else '/V3 /DCompressor'
     if settings['upx']:
         opts += ' /Dpackhdr'
-    nsis(opts, exe_name_multilang, nsi_path)
+    nsis(opts, exe_name_multilang, nsi_path, settings)
 
     # The English-only installer is controlled by the build_english setting,
     # which the max-effort preset enables (used for tag/release builds). This
@@ -1041,7 +1065,7 @@ def package_installer(settings, nsi_path=r'windows\bleachbit.nsi'):
         # As of 2022-11-20, there is not a big size difference for
         # the English-only build, and Google Search flags the Python 3.10
         # version as malware.
-        nsis(opts + ' /DNoTranslations', exe_name_en, nsi_path)
+        nsis(opts + ' /DNoTranslations', exe_name_en, nsi_path, settings)
         sign_files((exe_name_multilang, exe_name_en))
     else:
         # English-only installer skipped (e.g., non-tag CI build).
@@ -1050,8 +1074,8 @@ def package_installer(settings, nsi_path=r'windows\bleachbit.nsi'):
     if os.path.exists(SZ_EXE):
         logger.info('Zipping installer')
         # The archive does not have the folder name.
-        outfile = f"{ROOT_DIR}\\windows\\BleachBit-{get_version()}-setup.zip"
-        infile = f"{ROOT_DIR}\\windows\\BleachBit-{get_version()}-setup.exe"
+        infile = f'{ROOT_DIR}\\{exe_name_multilang}'
+        outfile = os.path.splitext(infile)[0] + '.zip'
         archive(infile, outfile, settings)
     else:
         logger.warning('%s does not exist', SZ_EXE)
