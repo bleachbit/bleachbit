@@ -149,8 +149,9 @@ class UnixTestCase(common.BleachbitTestCase):
             'POSIX',
         ]
         mock_getlocale.return_value = ('en_US', 'UTF-8')
-        for locale in ('en', 'en_US', 'en_US.utf8'):
+        for locale in ('en', 'en_US'):
             self.assertEqual(find_best_locale(locale), 'en_US.UTF-8')
+        self.assertEqual(find_best_locale('en_US.utf8'), 'en_US.utf8')
 
         mock_find_available_locales.assert_called()
         mock_getlocale.assert_called()
@@ -165,8 +166,9 @@ class UnixTestCase(common.BleachbitTestCase):
         # Reverse the list.
         mock_find_available_locales.return_value = mock_find_available_locales.return_value[
             ::-1]
-        for locale in ('en', 'en_US', 'en_US.utf8'):
+        for locale in ('en', 'en_US'):
             self.assertEqual(find_best_locale(locale), 'en_US.UTF-8')
+        self.assertEqual(find_best_locale('en_US.utf8'), 'en_US.utf8')
 
         # ISO-8859-1 is less preferred than UTF-8
         mock_find_available_locales.return_value.remove('en_US.utf8')
@@ -177,8 +179,20 @@ class UnixTestCase(common.BleachbitTestCase):
         mock_getlocale.return_value = ('es_MX', 'UTF-8')
         mock_find_available_locales.return_value = ['C', 'C.utf8', 'en_US.utf8',
                                                     'es_MX.iso88591', 'es_MX.utf8', 'POSIX']
-        for locale in ('es', 'es_MX', 'es_MX.utf8'):
+        for locale in ('es', 'es_MX'):
             self.assertEqual(find_best_locale(locale), 'es_MX.UTF-8')
+        self.assertEqual(find_best_locale('es_MX.utf8'), 'es_MX.utf8')
+
+        # Prefer UTF-8 over legacy codesets or modifiers.
+        mock_getlocale.return_value = ('de_DE', 'ISO8859-15')
+        mock_find_available_locales.return_value = [
+            'de_DE@euro', 'de_DE.utf8', 'en_US.utf8']
+        for locale in ('de', 'de_DE', 'de_DE@euro', 'de_DE.iso88591'):
+            self.assertEqual(find_best_locale(locale), 'de_DE.utf8')
+        # Fall back to requested variant when no UTF-8 is available.
+        mock_find_available_locales.return_value = [
+            'de_DE@euro', 'en_US.utf8']
+        self.assertEqual(find_best_locale('de_DE@euro'), 'de_DE@euro')
 
         self.assertEqual(find_best_locale('C'), 'C')
         self.assertEqual(find_best_locale(''), 'C')
@@ -201,6 +215,30 @@ class UnixTestCase(common.BleachbitTestCase):
             'en_US.UTF-8',
         ]
         self.assertEqual(find_best_locale('en'), 'en_US.UTF-8')
+
+    @mock.patch('locale.getlocale')
+    @mock.patch('bleachbit.Unix.find_available_locales')
+    def test_find_best_locale_prefers_utf8_over_bare(
+            self, mock_find_available_locales, mock_getlocale):
+        """Prefer UTF-8 over an exact bare-locale match.
+
+        - `locale -a` may list a bare alias like 'de_DE' alongside
+          'de_DE.UTF-8'.
+          - On macOS 26.6 observed every `en` had bare locale plus
+            at least one with encoding. Example: ('en_US','en_US.UTF-8')
+          - On Ubuntu 26.04, observed that `C` plus every language + region
+            combination had `.utf8` encoding, and some had bare locales
+            or another (non-Unicode) encoding.
+        - Matching the bare alias sets a non-UTF-8 locale, and GTK may
+          fail to render.
+        """
+        mock_getlocale.return_value = ('en_US', 'UTF-8')
+        mock_find_available_locales.return_value = [
+            'de_DE', 'de_DE.UTF-8', 'en_US', 'en_US.UTF-8', 'C', 'POSIX']
+        for locale in ('de', 'de_DE', 'de-DE', 'de_DE.UTF-8', 'de_DE.utf8'):
+            self.assertEqual(find_best_locale(locale), 'de_DE.UTF-8')
+        # Also applies when the request matches the running locale.
+        self.assertEqual(find_best_locale('en_US'), 'en_US.UTF-8')
 
     @unittest.skipUnless(exe_exists(General.resolve_exe('apt-get')),
                          'skipping tests for unavailable apt-get')

@@ -241,44 +241,62 @@ def find_available_locales():
     return []
 
 
+def _is_utf8_locale(locale_name):
+    """Return whether the locale name specifies a UTF-8 codeset
+
+    The codeset is compared case- and punctuation-insensitively because
+    `locale -a` prints '.utf8' on Linux and '.UTF-8' on macOS. A name
+    without a codeset, like 'de_DE' or 'sr_RS@latin', is not assumed to
+    be UTF-8: a bare alias may use a legacy codeset such as ISO-8859-1.
+    """
+    if '.' not in locale_name:
+        return False
+    codeset = locale_name.rsplit('.', 1)[-1].split('@')[0]
+    return codeset.replace('-', '').replace('_', '').lower() == 'utf8'
+
+
 def find_best_locale(user_locale):
-    """Find closest match to available locales"""
+    """Find closest match to available locales, preferring UTF-8
+
+    BleachBit's code and .po files are UTF-8 and GTK 3 requires UTF-8
+    for display strings, so a non-UTF-8 locale is returned only when
+    UTF-8 is not available.
+    """
     assert isinstance(user_locale, str)
     if not user_locale:
         return 'C'
     if user_locale in ('C', 'C.utf8', 'POSIX'):
         return user_locale
-    user_locale = normalize_locale_code(user_locale)
+    normalized_locale = normalize_locale_code(user_locale)
     available_locales = find_available_locales()
 
-    # If requesting a language like 'es' and current locale is compatible
-    # like 'es_MX', then return that.
-    # Import here for mock patch.
-    import locale  # pylint: disable=import-outside-toplevel
-    current_locale = locale.getlocale()[0]
-    if current_locale and current_locale.startswith(user_locale):
-        # getlocale() may return (language, None) when the encoding is unknown.
-        return '.'.join(p for p in locale.getlocale() if p)
-
-    # Check for exact match.
-    if user_locale in available_locales:
+    # Exact match if already UTF-8.
+    if _is_utf8_locale(user_locale) and user_locale in available_locales:
         return user_locale
 
-    # Next, match like 'en' to 'en_US.utf8' (if available) because
-    # of preference for UTF-8. Compare case- and hyphen-insensitively:
-    # macOS's locale -a uses '.UTF-8' (uppercase, hyphenated), while
-    # some Linux distros use '.utf8' (lowercase, no hyphen); comparing
-    # only against '.utf8' silently never matched on macOS, falling
-    # through to the next loop and picking whatever locale happened to
-    # be listed first for the prefix -- including a non-UTF-8 one.
+    # Prefer current system locale if compatible and UTF-8
+    # (e.g., system is 'es_MX.UTF-8' when requesting 'es').
+    # Import here for mock patch.
+    import locale  # pylint: disable=import-outside-toplevel
+    lang, codeset = locale.getlocale()
+    if lang and codeset and lang.startswith(normalized_locale) and \
+            codeset.replace('-', '').replace('_', '').lower() == 'utf8':
+        return '.'.join((lang, codeset))
+
+    # Otherwise search installed locales for UTF-8 (e.g., 'es_ES.utf8').
     for avail_locale in available_locales:
-        suffix = avail_locale.rsplit('.', 1)[-1].replace('-', '').lower()
-        if avail_locale.startswith(user_locale) and suffix == 'utf8':
+        if avail_locale.startswith(normalized_locale) and \
+                _is_utf8_locale(avail_locale):
             return avail_locale
 
-    # Next, match like 'en' to 'en_US' or 'en_US.iso88591'.
+    # Fall back to exact non-UTF-8 match (e.g., 'de_DE@euro').
+    for candidate in (user_locale, normalized_locale):
+        if candidate in available_locales:
+            return candidate
+
+    # Fall back to any installed match (e.g., 'en_US.iso88591').
     for avail_locale in available_locales:
-        if avail_locale.startswith(user_locale):
+        if avail_locale.startswith(normalized_locale):
             return avail_locale
 
     return 'C'
