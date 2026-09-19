@@ -324,16 +324,13 @@ def makedirs(path):
         chownself(path)
 
 
-def os_match(os_str, platform=sys.platform):
-    """Return boolean whether operating system matches
+def _os_match_token(os_str, platform):
+    """Return whether a single operating system token matches the platform
 
     Keyword arguments:
-    os_str -- the required operating system as written in XML
+    os_str -- one operating system as written in XML (e.g., 'linux')
     platform -- used only for unit tests
     """
-    # If blank, return true.
-    if not os_str:
-        return True
     # "darwin" is accepted as a deprecated alias for "macos"
     if os_str == 'darwin':
         logger.warning(
@@ -357,6 +354,31 @@ def os_match(os_str, platform=sys.platform):
         raise RuntimeError(f'Unknown operating system: {sys.platform}')
     # Compare current OS against required OS.
     return os_str in current_os
+
+
+def os_match(os_str, platform=sys.platform):
+    """Return boolean whether operating system matches
+
+    Keyword arguments:
+    os_str -- the required operating system as written in XML. It may
+        be a comma-separated list of tokens, each optionally negated
+        with a leading '!' (e.g., 'unix,!macos'). If negated tokens
+        are present, none may match; if positive tokens are present,
+        at least one must match.
+    platform -- used only for unit tests
+    """
+    # If blank, return true.
+    if not os_str:
+        return True
+    tokens = [token.strip() for token in os_str.split(',') if token.strip()]
+    neg_tokens = [t[1:] for t in tokens if t.startswith('!')]
+    pos_tokens = [t for t in tokens if not t.startswith('!')]
+
+    if any(_os_match_token(t, platform) for t in neg_tokens):
+        return False
+    if pos_tokens:
+        return any(_os_match_token(t, platform) for t in pos_tokens)
+    return True
 
 
 def _set_detached_kwargs(kwargs):
