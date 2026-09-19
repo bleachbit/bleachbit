@@ -218,34 +218,36 @@ class System(Cleaner):
         # options for Linux and BSD
         #
         if IS_POSIX:
-            self.add_option(
-                'desktop_entry',
-                # TRANSLATORS: desktop entries are .desktop files in Linux that
-                # make up the application menu (the menu that shows BleachBit,
-                # Firefox, and others.  The .desktop files also associate file
-                # types, so clicking on an .html file in Nautilus brings up
-                # Firefox.
-                # More information:
-                # http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-                _('Broken desktop files'),
-                # TRANSLATORS: Description of the Broken desktop files cleaning option.
-                _('Delete broken application menu entries and file associations'))
+            if not IS_MAC:
+                self.add_option(
+                    'desktop_entry',
+                    # TRANSLATORS: desktop entries are .desktop files in Linux that
+                    # make up the application menu (the menu that shows BleachBit,
+                    # Firefox, and others.  The .desktop files also associate file
+                    # types, so clicking on an .html file in Nautilus brings up
+                    # Firefox.
+                    # More information:
+                    # http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
+                    _('Broken desktop files'),
+                    # TRANSLATORS: Description of the Broken desktop files cleaning option.
+                    _('Delete broken application menu entries and file associations'))
             self.add_option(
                 'cache',
                 # TRANSLATORS: Name of a cleaning option. Cache is a noun.
                 _('Cache'),
                 DELETE_CACHE_DESCRIPTION)
-            self.add_option(
-                'localizations',
-                # TRANSLATORS: Localizations are files supporting specific
-                # languages, so applications appear in Spanish, etc.
-                _('Localizations'),
-                # TRANSLATORS: Description of the Localizations cleaning option.
-                _('Delete files for unwanted languages'))
-            self.set_warning(
-                'localizations',
-                # TRANSLATORS: Warning for the Localizations cleaning option.
-                _("Configure this option in the preferences."))
+            if not IS_MAC:
+                self.add_option(
+                    'localizations',
+                    # TRANSLATORS: Localizations are files supporting specific
+                    # languages, so applications appear in Spanish, etc.
+                    _('Localizations'),
+                    # TRANSLATORS: Description of the Localizations cleaning option.
+                    _('Delete files for unwanted languages'))
+                self.set_warning(
+                    'localizations',
+                    # TRANSLATORS: Warning for the Localizations cleaning option.
+                    _("Configure this option in the preferences."))
             self.add_option(
                 'rotated_logs',
                 # TRANSLATORS: 'Rotated logs' refers to old system log files.
@@ -391,7 +393,7 @@ class System(Cleaner):
                         f'custom folder has invalid type {c_type}')
 
         # menu
-        if IS_POSIX and 'desktop_entry' == option_id:
+        if IS_POSIX and not IS_MAC and 'desktop_entry' == option_id:
             for path in MENU_DIRS:
                 dirname = os.path.expanduser(path)
                 for filename in children_in_directory(dirname, False):
@@ -400,7 +402,7 @@ class System(Cleaner):
                         yield Command.Delete(filename)
 
         # unwanted locales
-        if IS_POSIX and 'localizations' == option_id:
+        if IS_POSIX and not IS_MAC and 'localizations' == option_id:
             for path in Unix.locales.localization_paths(locales_to_keep=options.get_languages()):
                 # A symlinked locale directory points at a locale that may be
                 # on the keep list, so delete the link without its contents.

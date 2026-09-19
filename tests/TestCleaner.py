@@ -17,7 +17,7 @@ from unittest import mock
 from xml.dom.minidom import parseString
 
 import bleachbit
-from bleachbit import IS_WINDOWS, IS_POSIX
+from bleachbit import IS_WINDOWS, IS_POSIX, IS_LINUX, IS_MAC
 from bleachbit.Action import ActionProvider, Command
 from bleachbit.Cleaner import Cleaner, System, backends, create_simple_cleaner, simpler_cleaner_process_path, register_cleaners
 from bleachbit.FileUtilities import extended_path_undo
@@ -594,3 +594,40 @@ class CleanerTestCase(common.BleachbitTestCase):
 
         # Restore the original settings.
         options.set_custom_paths(original_custom_paths)
+
+    def test_system_options_platform(self):
+        """Test that System cleaner options match the current platform"""
+        options_ids = [o[0] for o in System().get_options()]
+
+        has_dns_flush = IS_WINDOWS
+        if IS_LINUX:
+            from bleachbit.Unix import can_flush_dns
+            has_dns_flush = can_flush_dns()
+        from bleachbit.GtkShim import gtk_may_be_available
+
+        cases = (
+            ('cache', IS_POSIX),
+            ('clipboard', IS_WINDOWS or gtk_may_be_available()),
+            ('custom', True),
+            ('desktop_entry', IS_POSIX and not IS_MAC),
+            ('dns_cache', has_dns_flush),
+            ('empty_space', True),
+            ('localizations', IS_POSIX and not IS_MAC),
+            ('logs', IS_WINDOWS),
+            ('memory', IS_LINUX),
+            ('memory_dump', IS_WINDOWS),
+            ('muicache', IS_WINDOWS),
+            ('prefetch', IS_WINDOWS),
+            ('recent_documents', IS_POSIX),
+            ('recycle_bin', IS_WINDOWS),
+            ('rotated_logs', IS_POSIX),
+            ('tmp', True),
+            ('trash', IS_POSIX),
+            ('updates', IS_WINDOWS),
+        )
+        for option_id, expected in cases:
+            with self.subTest(option_id=option_id):
+                if expected:
+                    self.assertIn(option_id, options_ids)
+                else:
+                    self.assertNotIn(option_id, options_ids)
