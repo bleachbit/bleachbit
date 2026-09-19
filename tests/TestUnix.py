@@ -1368,6 +1368,7 @@ class LocalizationsTestCase(common.BleachbitTestCase):
             )
 
 
+@common.skipIfWindows
 class OrphanedFrameworkVersionsTestCase(common.BleachbitTestCase):
     """Test case for orphaned_framework_versions()
 
