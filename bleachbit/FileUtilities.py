@@ -218,7 +218,12 @@ def open_files_lsof(run_lsof=None):
         output = output.decode('utf-8', errors='replace')
     for f in output.split("\n"):
         if f.startswith("n/"):
-            yield _LSOF_DEV_SUFFIX.sub('', f[1:])  # Drop lsof's "n"
+            # example: "n/dev/null"
+            name = f[1:]  # Drop lsof's "n"
+            if IS_FREEBSD:
+                # See comment above by definition of _LSOF_DEV_SUFFIX.
+                name = _LSOF_DEV_SUFFIX.sub('', name)
+            yield name
 
 
 def open_files_psutil():

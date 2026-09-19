@@ -1828,9 +1828,16 @@ State=AAAA/wA...
         self.assertEqual(list(open_files_lsof(
             lambda: 'n/bar/foo\nn/foo/bar\nnoise')), ['/bar/foo', '/foo/bar'])
         # FreeBSD lsof appends the mount device to NAME.
-        self.assertEqual(list(open_files_lsof(
-            lambda: 'n/tmp/foo (/dev/gpt/rootfs)\nn/bar/baz\nnoise')),
-            ['/tmp/foo', '/bar/baz'])
+        with unittest.mock.patch('bleachbit.FileUtilities.IS_FREEBSD', True):
+            self.assertEqual(list(open_files_lsof(
+                lambda: 'n/tmp/foo (/dev/gpt/rootfs)\nn/bar/baz\nnoise')),
+                ['/tmp/foo', '/bar/baz'])
+        # Other lsof (e.g., macOS) does not append the device, so a real
+        # file whose name ends in ' (/dev/x)' must not be mangled.
+        with unittest.mock.patch('bleachbit.FileUtilities.IS_FREEBSD', False):
+            self.assertEqual(list(open_files_lsof(
+                lambda: 'n/tmp/foo (/dev/sr0)')),
+                ['/tmp/foo (/dev/sr0)'])
 
     def test_open_files_psutil(self):
         """Unit test for open_files_psutil()"""
