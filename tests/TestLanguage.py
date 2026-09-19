@@ -298,6 +298,7 @@ class WindowsGettextCacheTestCase(common.BleachbitTestCase):
     @common.skipUnlessWindows
     @skipIfMissingPo
     def test_setup_translation_reloads_libintl_catalog(self):
+        from bleachbit import Language as language_module
         from bleachbit.Windows import load_i18n_dll
 
         libintl = load_i18n_dll()
@@ -311,21 +312,26 @@ class WindowsGettextCacheTestCase(common.BleachbitTestCase):
 
         with common.set_temporary_env('LANG', os.environ.get('LANG')), \
                 common.set_temporary_env('LANGUAGE', os.environ.get('LANGUAGE')):
-            translations = {}
-            for lang in ('es', 'it', 'de', 'fr'):
-                with mock.patch(
-                        'bleachbit.Language.get_active_language_code',
-                        return_value=lang):
-                    setup_translation()
-                translated = libintl.dgettext(domain, msgid)
-                translations[lang] = translated.decode('utf-8')
+            t_backup = language_module.t
+            try:
+                translations = {}
+                for lang in ('es', 'it', 'de', 'fr'):
+                    with mock.patch(
+                            'bleachbit.Language.get_active_language_code',
+                            return_value=lang):
+                        setup_translation()
+                    translated = libintl.dgettext(domain, msgid)
+                    translations[lang] = translated.decode('utf-8')
 
-            # Distinct languages must not all freeze on the first catalog.
-            self.assertNotEqual(translations['es'], translations['it'])
-            self.assertNotEqual(translations['es'], translations['de'])
-            self.assertNotEqual(translations['es'], translations['fr'])
-            self.assertIn('archivos', translations['es'].lower())
-            self.assertIn('dateien', translations['de'].lower())
-        # Restore process gettext state for later tests, after the
-        # environment variables have been restored to their pre-test values.
-        setup_translation()
+                # Distinct languages must not all freeze on the first catalog.
+                self.assertNotEqual(translations['es'], translations['it'])
+                self.assertNotEqual(translations['es'], translations['de'])
+                self.assertNotEqual(translations['es'], translations['fr'])
+                self.assertIn('archivos', translations['es'].lower())
+                self.assertIn('dateien', translations['de'].lower())
+            finally:
+                language_module.t = t_backup
+                # Restore process gettext state for later tests, after the
+                # environment variables have been restored to their
+                # pre-test values.
+                setup_translation()
