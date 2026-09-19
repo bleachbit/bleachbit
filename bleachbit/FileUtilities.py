@@ -125,13 +125,15 @@ def get_filesystem_type(path):
     A FilesystemInfo named tuple of (fstype, device, is_readonly, is_cdrom)
         * fstype: vfat, ntfs, tmpfs, etc.
         * device: C:, /dev/sda1, etc.
-        * is_readonly: True if the file system is mounted read-only,
-          from the mount options reported by psutil
+        * is_readonly: True if the file system is mounted read-only.
+          On POSIX, this is from os.statvfs(), which follows firmlinks
+          and stacked mounts; on Windows, from the mount options
+          reported by psutil
         * is_cdrom: CD-ROM or other optical disc
 
     File system types seen
     * On Linux: btrfs, ext4, squashfs, tmpfs, vfat
-    * On macOS: apfs, autofs, devfs
+    * On macOS: apfs
     * On Windows: NTFS, FAT32, CDFS, unknown
 
     When checking remote file share on Linux server, psutils may return
@@ -166,24 +168,44 @@ def get_filesystem_type(path):
         is_readonly = 'ro' in mount_opts or 'readonly' in mount_opts
         # Windows reports 'cdrom' in opts; the fstype list covers POSIX.
         is_cdrom = 'cdrom' in mount_opts or partition.fstype.lower() in (
-            'cdfs', 'cd9660', 'iso9660', 'udf')
+            'cdfs', 'cddafs', 'cd9660', 'iso9660', 'udf')
         partitions[mount_path] = FilesystemInfo(
             partition.fstype, partition.device, is_readonly, is_cdrom)
 
     # Exact match
-    for mount_path, fs_info in partitions.items():
+    fs_info = None
+    for mount_path, fs_info_iter in partitions.items():
         if path_obj == mount_path:
-            return fs_info
+            fs_info = fs_info_iter
+            break
 
     # Try parent paths
-    current = path_obj
-    while current.parent != current:  # Stop at root
-        current = current.parent
-        for mount_path, fs_info in partitions.items():
-            if current == mount_path:
-                return fs_info
+    if fs_info is None:
+        current = path_obj
+        while current.parent != current and fs_info is None:  # Stop at root
+            current = current.parent
+            for mount_path, fs_info_iter in partitions.items():
+                if current == mount_path:
+                    fs_info = fs_info_iter
+                    break
 
-    return FilesystemInfo("unknown", "none", False)
+    if fs_info is None:
+        fs_info = FilesystemInfo("unknown", "none", False)
+
+    if IS_POSIX:
+        # On macOS, firmlinks redirect most user paths from the sealed,
+        # read-only system volume to the read-write data volume, so the
+        # matched ancestor's mount options are wrong. os.statvfs() asks
+        # the kernel, which resolves firmlinks and stacked mounts.
+        try:
+            is_readonly = bool(os.statvfs(path).f_flag & os.ST_RDONLY)
+        except OSError:
+            # The path may not exist; keep the mount options.
+            pass
+        else:
+            fs_info = fs_info._replace(is_readonly=is_readonly)
+
+    return fs_info
 
 
 # FreeBSD lsof appends the mount device to NAME, e.g.

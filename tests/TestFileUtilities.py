@@ -1600,25 +1600,32 @@ State=AAAA/wA...
         if 'GITHUB_ACTIONS' in os.environ and (IS_LINUX or IS_WINDOWS):
             self.assertTrue(
                 cdrom_mounts, 'Expected a mounted CD-ROM drive in CI')
-        for mountpoint in cdrom_mounts:
-            fs_info = get_filesystem_type(mountpoint)
-            self.assertTrue(fs_info.is_cdrom)
-            self.assertTrue(fs_info.is_readonly)
+        # Scan all partitions: cdrom_mountpoints() already filters on
+        # is_cdrom and is_readonly, so asserting on its output cannot fail.
+        for part in psutil.disk_partitions(all=False):
+            fs_info = get_filesystem_type(part.mountpoint)
+            # UDF is excluded: it can be writable (e.g., DVD-RAM).
+            if fs_info.is_cdrom and fs_info.fstype.lower() != 'udf':
+                self.assertTrue(fs_info.is_readonly, part)
 
 
     @common.skipUnlessMac
     def test_get_filesystem_type_macos(self):
-        """get_filesystem_type quirks on macOS"""
-        root_fs_info = None
-        # Because of firmlinks, read-write paths like ~ resolve to
-        # the root partition, which is a secured sealed volume.
-        for pathname in ('/', '/tmp', os.path.expanduser('~')):
+        """get_filesystem_type handles firmlinks on macOS"""
+        # The sealed system volume is read-only.
+        root_fs_info = get_filesystem_type('/')
+        self.assertTrue(root_fs_info.is_readonly)
+        self.assertFalse(root_fs_info.is_cdrom)
+
+        # Because of firmlinks, read-write paths like ~ resolve to the
+        # root partition, which is a secured sealed volume, but
+        # os.statvfs() sees through the firmlink to the read-write
+        # data volume.
+        for pathname in ('/tmp', os.path.expanduser('~')):
             fs_info = get_filesystem_type(pathname)
-            if not root_fs_info:
-                root_fs_info = fs_info
-            self.assertTrue(fs_info.is_readonly)
+            self.assertFalse(fs_info.is_readonly)
             self.assertFalse(fs_info.is_cdrom)
-            self.assertEqual(fs_info, root_fs_info)
+            self.assertEqual(fs_info.fstype, root_fs_info.fstype)
 
     def test_get_filesystem_type_missing_psutil(self):
         """get_filesystem_type should return unknown when psutil is missing."""
