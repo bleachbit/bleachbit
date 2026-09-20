@@ -399,7 +399,8 @@ def get_active_language_code():
     loc = LocaleCode(user_locale)
     if loc.encoding or loc.modifier:
         # This should never happen.
-        logger.warning('locale contains a codeset or modifier: %s', user_locale)
+        logger.warning(
+            'locale contains a codeset or modifier: %s', user_locale)
         user_locale = loc.normalized
 
     assert isinstance(user_locale, str)

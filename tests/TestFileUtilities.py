@@ -1617,7 +1617,6 @@ State=AAAA/wA...
             if fs_info.is_cdrom and fs_info.fstype.lower() != 'udf':
                 self.assertTrue(fs_info.is_readonly, part)
 
-
     @common.skipUnlessMac
     def test_get_filesystem_type_macos(self):
         """get_filesystem_type handles firmlinks on macOS"""
@@ -1873,7 +1872,7 @@ State=AAAA/wA...
         with unittest.mock.patch('bleachbit.FileUtilities.open_files_psutil',
                                  side_effect=ImportError('no psutil')), \
                 unittest.mock.patch('bleachbit.FileUtilities.open_files_lsof',
-                                   return_value=iter(['/tmp/via-lsof'])):
+                                    return_value=iter(['/tmp/via-lsof'])):
             self.assertEqual(list(open_files_freebsd()), ['/tmp/via-lsof'])
 
     @common.skipIfWindows

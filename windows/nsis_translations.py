@@ -254,7 +254,8 @@ def _parse_nsis_lang_strings(nsh_path):
             match = pattern.match(line)
             if match:
                 key, lang_macro, text = match.groups()
-                lang_strings.setdefault(lang_macro, {})[key] = _unescape_nsis_text(text)
+                lang_strings.setdefault(lang_macro, {})[
+                    key] = _unescape_nsis_text(text)
 
     return header_lines, lang_strings
 
@@ -379,13 +380,15 @@ class TestNsisEscaping(unittest.TestCase):
 
     def test_unescape_nsis_newlines(self):
         """Test unescaping NSIS newline sequences."""
-        self.assertEqual(_unescape_nsis_text(r'Line1$\r$\nLine2'), 'Line1\nLine2')
+        self.assertEqual(_unescape_nsis_text(
+            r'Line1$\r$\nLine2'), 'Line1\nLine2')
         self.assertEqual(_unescape_nsis_text(r'Line1$\nLine2'), 'Line1\nLine2')
         self.assertEqual(_unescape_nsis_text(r'Line1$\rLine2'), 'Line1\nLine2')
 
     def test_unescape_nsis_quotes(self):
         """Test unescaping NSIS quote sequences."""
-        self.assertEqual(_unescape_nsis_text(r'Text with $\"quotes$\"'), 'Text with "quotes"')
+        self.assertEqual(_unescape_nsis_text(
+            r'Text with $\"quotes$\"'), 'Text with "quotes"')
 
     def test_unescape_nsis_dollar_signs(self):
         """Test that literal dollar signs in NSIS strings are preserved."""
@@ -401,7 +404,8 @@ class TestNsisEscaping(unittest.TestCase):
 
     def test_escape_po_text_backslashes(self):
         """Test escaping backslashes for PO format."""
-        self.assertEqual(_escape_po_text('path\\to\\file'), 'path\\\\to\\\\file')
+        self.assertEqual(_escape_po_text(
+            'path\\to\\file'), 'path\\\\to\\\\file')
 
     def test_escape_po_text_quotes(self):
         """Test escaping quotes for PO format."""
@@ -413,12 +417,15 @@ class TestNsisEscaping(unittest.TestCase):
 
     def test_escape_nsis_newlines(self):
         """Test escaping newlines for NSIS format."""
-        self.assertEqual(_escape_nsis_text('Line1\nLine2'), 'Line1$\\r$\\nLine2')
-        self.assertEqual(_escape_nsis_text('Line1\r\nLine2'), 'Line1$\\r$\\nLine2')
+        self.assertEqual(_escape_nsis_text(
+            'Line1\nLine2'), 'Line1$\\r$\\nLine2')
+        self.assertEqual(_escape_nsis_text(
+            'Line1\r\nLine2'), 'Line1$\\r$\\nLine2')
 
     def test_escape_nsis_quotes(self):
         """Test escaping quotes for NSIS format."""
-        self.assertEqual(_escape_nsis_text('Text with "quotes"'), 'Text with $\\"quotes$\\"')
+        self.assertEqual(_escape_nsis_text(
+            'Text with "quotes"'), 'Text with $\\"quotes$\\"')
 
     def test_escape_nsis_no_dollar_escaping(self):
         """Regression test: ensure we don't escape literal $ as $$."""
@@ -431,11 +438,15 @@ class TestNsisEscaping(unittest.TestCase):
         """Test that NSIS -> PO -> NSIS roundtrip preserves content."""
         original_nsis = r'Version {VERSION} is installed in $\"{FOLDER}$\".'
         unescaped = _unescape_nsis_text(original_nsis)
-        self.assertEqual(unescaped, 'Version {VERSION} is installed in "{FOLDER}".')
+        self.assertEqual(
+            unescaped, 'Version {VERSION} is installed in "{FOLDER}".')
         po_escaped = _escape_po_text(unescaped)
-        self.assertEqual(po_escaped, 'Version {VERSION} is installed in \\"{FOLDER}\\".')
-        back_to_plain = po_escaped.replace('\\n', '\n').replace('\\"', '"').replace('\\\\', '\\')
-        self.assertEqual(back_to_plain, 'Version {VERSION} is installed in "{FOLDER}".')
+        self.assertEqual(
+            po_escaped, 'Version {VERSION} is installed in \\"{FOLDER}\\".')
+        back_to_plain = po_escaped.replace('\\n', '\n').replace(
+            '\\"', '"').replace('\\\\', '\\')
+        self.assertEqual(
+            back_to_plain, 'Version {VERSION} is installed in "{FOLDER}".')
         back_to_nsis = _escape_nsis_text(back_to_plain)
         self.assertEqual(back_to_nsis, original_nsis)
 
@@ -443,7 +454,8 @@ class TestNsisEscaping(unittest.TestCase):
         """Test handling of strings with multiple escape sequences."""
         nsis_text = r'${prodname} is installed.$\r$\nClick $\"OK$\" to continue.'
         unescaped = _unescape_nsis_text(nsis_text)
-        self.assertEqual(unescaped, '${prodname} is installed.\nClick "OK" to continue.')
+        self.assertEqual(
+            unescaped, '${prodname} is installed.\nClick "OK" to continue.')
         re_escaped = _escape_nsis_text(unescaped)
         self.assertEqual(re_escaped, nsis_text)
 
@@ -482,7 +494,8 @@ Header line 2
             self.assertNotIn('auto-generated', header_text)
             # But it should have parsed the LangStrings
             self.assertIn('LANG_ENGLISH', lang_strings)
-            self.assertEqual(lang_strings['LANG_ENGLISH']['TEST_KEY'], 'Test value')
+            self.assertEqual(
+                lang_strings['LANG_ENGLISH']['TEST_KEY'], 'Test value')
         finally:
             os.unlink(temp_path)
 
@@ -500,11 +513,15 @@ Header line 2
         try:
             _header, lang_strings = _parse_nsis_lang_strings(temp_path)
             # Text should be unescaped when read
-            self.assertEqual(lang_strings['LANG_ENGLISH']['TEST_QUOTES'], 'Text with "quotes"')
-            self.assertEqual(lang_strings['LANG_ENGLISH']['TEST_NEWLINE'], 'Line1\nLine2')
+            self.assertEqual(
+                lang_strings['LANG_ENGLISH']['TEST_QUOTES'], 'Text with "quotes"')
+            self.assertEqual(
+                lang_strings['LANG_ENGLISH']['TEST_NEWLINE'], 'Line1\nLine2')
             # Should not contain NSIS escape sequences
-            self.assertNotIn('$\\', lang_strings['LANG_ENGLISH']['TEST_QUOTES'])
-            self.assertNotIn('$\\', lang_strings['LANG_ENGLISH']['TEST_NEWLINE'])
+            self.assertNotIn(
+                '$\\', lang_strings['LANG_ENGLISH']['TEST_QUOTES'])
+            self.assertNotIn(
+                '$\\', lang_strings['LANG_ENGLISH']['TEST_NEWLINE'])
         finally:
             os.unlink(temp_path)
 
@@ -514,7 +531,8 @@ Header line 2
 
         # Simulate reading from file (should unescape)
         unescaped = _unescape_nsis_text(original_escaped)
-        self.assertEqual(unescaped, 'Version {VERSION} is installed in "{FOLDER}".')
+        self.assertEqual(
+            unescaped, 'Version {VERSION} is installed in "{FOLDER}".')
 
         # Simulate writing back to file (should re-escape)
         re_escaped = _escape_nsis_text(unescaped)

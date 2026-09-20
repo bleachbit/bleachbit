@@ -66,10 +66,7 @@ class MakefileTestCase(common.BleachbitTestCase):
         # early before invoking it, so do not require it there.
         if not IS_WINDOWS:
             self.make_exe = _find_gnu_make()
-            if not self.make_exe:
-                missing_make = True
-            else:
-                missing_make = False
+            missing_make = not self.make_exe
         else:
             self.make_exe = None
             missing_make = False

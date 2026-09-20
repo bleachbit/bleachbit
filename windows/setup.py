@@ -113,13 +113,14 @@ def get_build_settings():
 
     return {
         'preset': 'fast' if is_fast else ('max-effort' if is_max_effort else 'regular'),
-        'fast': is_fast, # controls .zip and NSIS compression levels
-        'build_english': is_max_effort, # build English-only installer
-        'upx': upx_enabled, # compress executables
-        'upx_tag': '-upx' if upx_enabled else '', # filename tag for UPX builds
-        'advzip': is_max_effort and bool(os.path.exists(ADVZIP_EXE)), # recompress zips with advzip
-        'strip': not is_fast and bool(STRIP_EXE), # strip executables
-        'recompress_lib': not is_fast, # recompress library.zip
+        'fast': is_fast,  # controls .zip and NSIS compression levels
+        'build_english': is_max_effort,  # build English-only installer
+        'upx': upx_enabled,  # compress executables
+        'upx_tag': '-upx' if upx_enabled else '',  # filename tag for UPX builds
+        # recompress zips with advzip
+        'advzip': is_max_effort and bool(os.path.exists(ADVZIP_EXE)),
+        'strip': not is_fast and bool(STRIP_EXE),  # strip executables
+        'recompress_lib': not is_fast,  # recompress library.zip
     }
 
 
@@ -155,7 +156,8 @@ def archive(infile, outfile, settings, use_advzip=False):
     # mfb=number of fast bytes
     # bso0 bsp0 quiet output
     # 7-Zip Command Line Reverence Wizard: https://axelstudios.github.io/7z/#!/
-    sz_opts = ['-tzip', '-mm=Deflate', '-mfb=258', '-mpass=7', '-bso0', '-bsp0']  # best compression
+    sz_opts = ['-tzip', '-mm=Deflate', '-mfb=258',
+               '-mpass=7', '-bso0', '-bsp0']  # best compression
     if settings['fast']:
         # fast compression
         sz_opts = ['-tzip', '-mx=1', '-bso0', '-bsp0']
@@ -286,7 +288,8 @@ def sign_files(filenames):
             logger.error('CodeSign.bat exited with code %d for %s',
                          returncode, ' '.join(filenames))
     else:
-        logger.warning('CodeSign.bat not available for %s', ' '.join(filenames))
+        logger.warning('CodeSign.bat not available for %s',
+                       ' '.join(filenames))
 
 
 def get_dir_size(start_path='.'):
@@ -349,6 +352,7 @@ def count_size_improvement(func):
                     f'{size0 - size1:,}', f'{size0:,}', f'{size1:,}', t1 - t0)
     return wrapper
 
+
 def delete_file(path, warn_if_exists=False):
     """Delete a file.
 
@@ -361,6 +365,7 @@ def delete_file(path, warn_if_exists=False):
     if warn_if_exists:
         logger.warning('Deleting file that already exists: %s', path)
     os.remove(path)
+
 
 def _delete_paths(paths):
     """Delete a list of paths under dist/, logging size saved per entry.
@@ -479,7 +484,7 @@ def build_py2exe():
                      'pickle', 'ftplib', 'bleachbit.Unix',
                      'setuptools', 'tomli', 'wheel', 'backports',
                      'importlib_metadata', 'zipp', 'packaging', 'distutils',
-                     'unittest','test'],
+                     'unittest', 'test'],
     }
 
     freeze(
@@ -720,8 +725,8 @@ def delete_icons():
         'edit-delete.png',
         'edit-find.png',
         'process-stop.png',  # abort on toolbar
-        'emblem-readonly.png', # keep list page in preferences
-        'emblem-readonly.svg', # keep list page in preferences
+        'emblem-readonly.png',  # keep list page in preferences
+        'emblem-readonly.svg',  # keep list page in preferences
     ]
     _prune_assets(r'dist\share\icons', ['*.png', '*.svg'],
                   icon_keep_list, label='protected icon')
@@ -834,7 +839,8 @@ def strip():
             delete_file(strip_tmp_fn)
             raise RuntimeError(f"{strip_file} disappeared after stripping")
         if not os.path.exists(strip_tmp_fn):
-            logger.warning('%s was not produced by stripping %s', strip_tmp_fn, strip_file)
+            logger.warning('%s was not produced by stripping %s',
+                           strip_tmp_fn, strip_file)
             continue
 
         # A kernel file system filter driver may briefly lock the file
@@ -843,7 +849,7 @@ def strip():
         replaced = False
         for attempt in range(100):
             try:
-                os.replace(strip_tmp_fn, strip_file) # atomic replace
+                os.replace(strip_tmp_fn, strip_file)  # atomic replace
                 replaced = True
                 break
             except PermissionError:
@@ -1102,7 +1108,8 @@ def main():
     duration = time.time() - start_time
     minutes = int(duration // 60)
     seconds = int(duration % 60)
-    logger.info('%s success! Duration: %d minutes, %d seconds', __file__, minutes, seconds)
+    logger.info('%s success! Duration: %d minutes, %d seconds',
+                __file__, minutes, seconds)
 
 
 if '__main__' == __name__:
