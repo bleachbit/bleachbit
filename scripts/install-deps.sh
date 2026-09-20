@@ -22,7 +22,7 @@
 # On Linux, native libraries (GTK, GObject introspection, etc.) are still
 # installed via the system package manager because PyGObject cannot be
 # pip-installed reliably. On macOS, GTK/GObject is ignored and only the
-# venv is used.
+# venv is used; with --dev, lint tools come from Homebrew.
 #
 # Distro is auto-detected from /etc/os-release; macOS is detected via uname;
 # FreeBSD is detected via uname -s.
@@ -32,7 +32,7 @@
 #   opensuse (Tumbleweed, Leap)                   -> zypper
 #   arch    (Arch, Manjaro, etc.)                 -> pacman
 #   freebsd (FreeBSD)                             -> pkg
-#   macos   (macOS)                               -> pip in venv
+#   macos   (macOS)                               -> pip in venv + Homebrew (dev)
 #
 # This Bash script works similarly to:
 #   - .github/workflows/tests.yaml
@@ -82,7 +82,8 @@ Usage: ./scripts/install-deps.sh [--dev] [--venv] [--help]
   --venv      Create a Python virtualenv (.venv) and install pure-Python
               deps into it with pip. On Linux, native libs are still
               installed via the system package manager. On macOS, GTK/
-              GObject is ignored and --venv is used. Override the location
+              GObject is ignored and --venv is used; --dev also installs
+              lint tools via Homebrew. Override the location
               with VENV_DIR=/path/to/venv.
   --help      Show this help.
 
@@ -425,7 +426,7 @@ install_freebsd() {
     fi
 }
 
-# --- macOS (no native package manager; use pip in a venv) --------------------
+# --- macOS (pip in a venv; Homebrew for dev tools) ---------------------------
 install_macos() {
     echo "[macos] using pip in a venv (GTK/GObject is not installed on macOS)"
     if ! command -v python3 >/dev/null 2>&1; then
@@ -438,7 +439,32 @@ install_macos() {
         exit 1
     fi
     if [[ "$MODE" == "dev" ]]; then
+        install_macos_dev
         echo "[macos] dev/test/lint Python deps will be installed via venv"
+    fi
+}
+
+# The shellcheck, appstreamcli (`make lint`), and dos2unix (`make pretty`)
+# tools are not installable via pip; get them from Homebrew.
+install_macos_dev() {
+    local brew_cmd
+    brew_cmd="$(command -v brew || true)"
+    # Homebrew may be installed but not on PATH in a non-interactive shell.
+    if [[ -z "$brew_cmd" ]]; then
+        local candidate
+        for candidate in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+            if [[ -x "$candidate" ]]; then
+                brew_cmd="$candidate"
+                break
+            fi
+        done
+    fi
+    if [[ -n "$brew_cmd" ]]; then
+        echo "[macos] installing dev/lint tools via Homebrew"
+        "$brew_cmd" install shellcheck appstream dos2unix
+    else
+        echo "WARNING: Homebrew not found; skipping shellcheck, appstream, dos2unix." >&2
+        echo "         Install Homebrew (https://brew.sh) or install them manually." >&2
     fi
 }
 
