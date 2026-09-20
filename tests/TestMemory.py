@@ -14,7 +14,7 @@ from contextlib import contextmanager
 from unittest import mock
 
 from tests import common
-from bleachbit import logger
+from bleachbit import General, logger
 from bleachbit.FileUtilities import exe_exists
 from bleachbit.Memory import (
     _memory_child_script,
@@ -93,10 +93,10 @@ class MemoryTestCase(common.BleachbitTestCase):
                                         self.assertEqual(mock_fork.called,
                                                          fork_called)
 
-    @common.skipIfWindows
+    @common.skipUnlessLinux
     def test_get_proc_swaps(self):
         """Test for method get_proc_swaps"""
-        if not exe_exists('swapon'):
+        if not exe_exists(General.resolve_exe('swapon')):
             self.skipTest('swapon not found')
         ret = get_proc_swaps()
         self.assertGreater(len(ret), 10)
@@ -155,6 +155,21 @@ Swapouts:                              20258188.
                           lambda: "Invalid header")
 
     @common.skipIfWindows
+    def test_physical_free_darwin_uses_absolute_path(self):
+        """physical_free_darwin() must invoke vm_stat via its absolute path, not PATH lookup"""
+        sample = ("Mach Virtual Memory Statistics: (page size of 4096 bytes)\n"
+                  "Pages free:                              1.\n")
+        with mock.patch('bleachbit.Memory.subprocess.check_output',
+                        return_value=sample) as mock_check_output:
+            physical_free_darwin()
+        mock_check_output.assert_called_once()
+        call = mock_check_output.call_args
+        self.assertEqual(call.args[0], [General.resolve_exe('vm_stat')])
+        self.assertTrue(call.kwargs.get('text'))
+        # the child's env is sanitized (LD_*/DYLD_* dropped when root)
+        self.assertIn('env', call.kwargs)
+
+    @common.skipUnlessLinux
     def test_physical_free(self):
         """Test for method physical_free"""
         ret = physical_free()
@@ -189,10 +204,10 @@ Swapouts:                              20258188.
         self.assertEqual(num_matches, 2)
         self.assertGreater(free_bytes, 0)
 
-    @common.skipIfWindows
+    @common.skipUnlessLinux
     def test_get_swap_size_linux(self):
         """Test for get_swap_size_linux()"""
-        if not exe_exists('swapon'):
+        if not exe_exists(General.resolve_exe('swapon')):
             self.skipTest('swapon not found')
         with open('/proc/swaps', encoding='utf-8') as f:
             swapdev = f.read().split('\n')[1].split(' ')[0]
@@ -211,7 +226,7 @@ Swapouts:                              20258188.
     @common.skipIfWindows
     def test_get_swap_uuid(self):
         """Test for method get_swap_uuid"""
-        if not exe_exists('blkid'):
+        if not exe_exists(General.resolve_exe('blkid')):
             self.skipTest('blkid not found')
         self.assertEqual(get_swap_uuid('/dev/doesnotexist'), None)
 
@@ -258,7 +273,8 @@ Swapouts:                              20258188.
         with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
             with mock.patch('bleachbit.Memory.General.run_external', return_value=(0, '', '')) as mock_run:
                 enable_swap_linux()
-                self.assertEqual(mock_run.call_args.args[0], ['swapon', '-a'])
+                self.assertEqual(mock_run.call_args.args[0], [
+                                 General.resolve_exe('swapon'), '-a'])
 
         # Failure
         with mock.patch('bleachbit.Memory._', side_effect=lambda s: s):
@@ -321,14 +337,16 @@ Swapouts:                              20258188.
                                 RuntimeError, 'mkswap failed',
                                 wipe_swap_linux, ['/dev/sda1'], '')
 
-    @common.skipIfWindows
+    @common.skipUnlessLinux
     def test_wipe_memory(self):
         """Test for wipe_memory() with mocks"""
         # Command missing
         with mock.patch('bleachbit.FileUtilities.exe_exists', return_value=False):
             gen = wipe_memory()
             self.assertRaisesRegex(
-                RuntimeError, 'Command swapon not found', next, gen)
+                RuntimeError,
+                f"Command {General.resolve_exe('swapon')} not found",
+                next, gen)
 
         # Happy path via the fork fallback (systemd-run path disabled)
         self._assert_wipe_memory_happy_path(
@@ -375,6 +393,32 @@ Swapouts:                              20258188.
         self.assertIn(f'bleachbit-wipe-memory-{os.getpid()}', unit_args[0])
 
     @common.skipIfWindows
+    def test_run_memory_child_systemd_scope_sanitizes_env(self):
+        """The root child gets a fixed PYTHONPATH and a safe cwd, not the inherited env"""
+        import bleachbit.Memory as Memory_mod
+        pkg_parent = os.path.dirname(
+            os.path.dirname(os.path.abspath(Memory_mod.__file__)))
+        captured = {}
+
+        def fake_run(args, env=None, **kwargs):
+            captured['env'] = env
+            captured['kwargs'] = kwargs
+            proc = mock.Mock()
+            proc.returncode = 0
+            proc.stderr = ''
+            return proc
+
+        with self._mock_systemd_scope_common():
+            with mock.patch.dict(os.environ,
+                                 {'PYTHONPATH': '/tmp/attacker'}):
+                with mock.patch('bleachbit.Memory.subprocess.run',
+                                side_effect=fake_run):
+                    _run_memory_child_systemd_scope()
+        self.assertEqual(captured['env']['PYTHONPATH'], pkg_parent)
+        self.assertNotIn('/tmp/attacker', captured['env']['PYTHONPATH'])
+        self.assertEqual(captured['kwargs'].get('cwd'), pkg_parent)
+
+    @common.skipIfWindows
     def test_run_memory_child_systemd_scope_signal(self):
         """_run_memory_child_systemd_scope() normalizes signal exit codes"""
         # subprocess.run reports -N when its direct child is killed by signal N.
@@ -407,8 +451,10 @@ Swapouts:                              20258188.
                     side_effect=(unsupported_proc, success_proc)) as mock_run:
                 self.assertEqual(_run_memory_child_systemd_scope(), 0)
         self.assertEqual(mock_run.call_count, 2)
-        self.assertIn('--property=OOMPolicy=kill', mock_run.call_args_list[0].args[0])
-        self.assertNotIn('--property=OOMPolicy=kill', mock_run.call_args_list[1].args[0])
+        self.assertIn('--property=OOMPolicy=kill',
+                      mock_run.call_args_list[0].args[0])
+        self.assertNotIn('--property=OOMPolicy=kill',
+                         mock_run.call_args_list[1].args[0])
 
     @common.skipIfWindows
     def test_run_memory_child_systemd_scope_runtime_failure(self):

@@ -25,10 +25,8 @@ Create cleaners from CleanerML (markup language)
 # standard library
 import logging
 import os
-import stat
 import sys
 import xml.etree.ElementTree
-import xml.parsers.expat
 
 # local import
 import bleachbit
@@ -37,12 +35,20 @@ from bleachbit.Action import ActionProvider
 from bleachbit.FileUtilities import expand_glob_join, listdir
 from bleachbit.General import boolstr_to_bool
 from bleachbit.General import os_match as general_os_match
+from bleachbit.General import reject_xml_dtd
 from bleachbit.Language import get_text as _
+from bleachbit.PathUtils import is_world_writable, path_startswith
 from bleachbit import Cleaner
 if IS_WINDOWS:
     from bleachbit.Windows import read_registry_key
 
 logger = logging.getLogger(__name__)
+
+"""Actions blocked for untrusted (user-writable) cleaners.
+
+Deletion stays allowed, so blocking registry deletion too would buy nothing.
+"""
+UNTRUSTED_BLOCKED_COMMANDS = ('process',)
 
 
 class _ETSimpleTextNode:
@@ -91,9 +97,6 @@ class _ETActionElementAdapter:
     def getAttribute(self, name):
         return self._element.attrib.get(name, '')
 
-    def toxml(self):
-        return xml.etree.ElementTree.tostring(self._element, encoding='unicode')
-
 
 def _gettext_etree(element):
     """Return text like General.getText() would for minidom nodes."""
@@ -127,18 +130,31 @@ def default_vars():
     return ret
 
 
+def _parse_cleaner_xml(pathname):
+    """Parse a CleanerML file and return the root element."""
+    with open(pathname, 'rb') as f:
+        data = f.read()
+    reject_xml_dtd(data, 'CleanerML')
+    return xml.etree.ElementTree.fromstring(data)
+
+
 class CleanerML:
 
     """Create a cleaner from CleanerML"""
 
-    def __init__(self, pathname, xlate_cb=None):
+    def __init__(self, pathname, xlate_cb=None, trusted=True):
         """Create cleaner from XML in pathname.
 
         If xlate_cb is set, use it as a callback for each
         translate-able string.
+
+        trusted is False for cleaners from user-writable directories;
+        their command-execution actions are ignored.
         """
 
         self.action = None
+        self.trusted = trusted
+        self.ignored_commands = set()
         self.cleaner = Cleaner.Cleaner()
         self.option_id = None
         self.option_name = None
@@ -153,8 +169,7 @@ class CleanerML:
             self.xlate_mode = True
 
         try:
-            tree = xml.etree.ElementTree.parse(pathname)
-            root_element = tree.getroot()
+            root_element = _parse_cleaner_xml(pathname)
         except Exception as e:
             logger.error(
                 "Error parsing CleanerML file %s with error %s", pathname, e)
@@ -170,6 +185,13 @@ class CleanerML:
                 return
 
         self.handle_cleaner(cleaner_element)
+
+        if self.ignored_commands:
+            commands = ', '.join(
+                f"'{c}'" for c in sorted(self.ignored_commands))
+            logger.warning(
+                "ignoring %s actions from untrusted cleaner: %s",
+                commands, pathname)
 
     def get_cleaner(self):
         """Return the created cleaner"""
@@ -242,7 +264,8 @@ class CleanerML:
             detection_type = running.attrib.get('type', '')
             value = _gettext_etree(running)
             same_user_attr = running.attrib.get('same_user')
-            same_user = boolstr_to_bool(same_user_attr) if same_user_attr else False
+            same_user = boolstr_to_bool(
+                same_user_attr) if same_user_attr else False
             self.cleaner.add_running(detection_type, value, same_user)
 
     def handle_cleaner_option(self, option):
@@ -299,6 +322,13 @@ class CleanerML:
         if not self.os_match(action_node.attrib.get('os', '')):
             return
         command = action_node.attrib.get('command', '')
+        if command in UNTRUSTED_BLOCKED_COMMANDS and not self.trusted:
+            # __init__ logs a summary warning once the whole file is parsed
+            self.ignored_commands.add(command)
+            logger.debug(
+                "ignoring '%s' action from untrusted cleaner '%s'",
+                command, self.cleaner.id or '?')
+            return
         provider = None
         for actionplugin in ActionProvider.plugins:
             if actionplugin.action_key == command:
@@ -358,6 +388,27 @@ class CleanerML:
                 self.vars[var_name] = value_list
 
 
+def reject_world_writable(pathname):
+    """Warn and return True if the cleaner or its directory is world writable.
+
+    Callers gate this on POSIX: the mode bits are meaningless on Windows.
+    """
+    if is_world_writable(pathname):
+        # TRANSLATORS: Warning printed to the log. %s expands to the
+        # path of the XML cleaner file that was skipped
+        logger.warning(_("Ignoring cleaner because it is "
+                         "world writable: %s"), pathname)
+        return True
+    if is_world_writable(os.path.dirname(pathname)):
+        # TRANSLATORS: Warning printed to the log. %s expands to the
+        # path of the XML cleaner file whose directory is world
+        # writable.
+        logger.warning(_("Ignoring cleaner because its directory is "
+                         "world writable: %s"), pathname)
+        return True
+    return False
+
+
 def list_cleanerml_files(local_only=False, system_only=False):
     """List CleanerML files"""
     cleanerdirs = ()
@@ -374,14 +425,35 @@ def list_cleanerml_files(local_only=False, system_only=False):
     for pathname in listdir(cleanerdirs):
         if not pathname.lower().endswith('.xml'):
             continue
-        if check_world_writable and stat.S_IMODE(os.stat(pathname)[stat.ST_MODE]) & 2:
-            # TRANSLATORS: Warning printed to the log.
-            # %s expands to the path of the XML cleaner file that was skipped
-            warning_msg = _("Ignoring cleaner because it is "
-                            "world writable: %s")
-            logger.warning(warning_msg, pathname)
-            continue
+        if check_world_writable:
+            try:
+                os.stat(pathname)
+            except OSError as e:
+                logger.warning('Could not read cleaner metadata %s: %s',
+                               pathname, e)
+                continue
+            if reject_world_writable(pathname):
+                continue
         yield pathname
+
+
+def is_trusted_cleaner(pathname):
+    """Return True if the cleaner file sits next to the application.
+
+    The personal cleaners directory is user-writable, so a lower-integrity
+    process could plant a cleaner there. The system and local cleaners
+    directories are writable in portable mode and in the source tree, but so
+    is the executable beside them, so distrusting them would gain nothing.
+    In portable mode the personal cleaners directory is the local one.
+    """
+    trusted_dirs = [d for d in (bleachbit.system_cleaners_dir,
+                                bleachbit.local_cleaners_dir) if d]
+    pathname = os.path.normpath(os.path.abspath(pathname))
+    for trusted_dir in trusted_dirs:
+        trusted_dir = os.path.normpath(os.path.abspath(trusted_dir))
+        if path_startswith(pathname, trusted_dir):
+            return True
+    return False
 
 
 def load_cleaners(cb_progress=lambda x: None, allow_local=True):
@@ -397,7 +469,8 @@ def load_cleaners(cb_progress=lambda x: None, allow_local=True):
     not_usable = []
     for pathname in cleanerml_files:
         try:
-            xmlcleaner = CleanerML(pathname)
+            xmlcleaner = CleanerML(
+                pathname, trusted=is_trusted_cleaner(pathname))
         except Exception:
             # TRANSLATORS: Error message printed to the log.
             # %s expands to the path of the XML cleaner file
@@ -430,12 +503,11 @@ def pot_fragment(msgid, pathname, translators=None):
     else:
         translators = ""
     pathname = pathname.replace('\\', '/')
-    ret = f'''{translators}#: {pathname}
+    return f'''{translators}#: {pathname}
 msgid "{msgid}"
 msgstr ""
 
 '''
-    return ret
 
 
 def create_pot():

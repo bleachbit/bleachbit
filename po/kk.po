@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-12 15:23-0600\n"
-"PO-Revision-Date: 2026-03-30 13:09+0000\n"
+"POT-Creation-Date: 2026-09-01 10:05-0600\n"
+"PO-Revision-Date: 2026-07-28 13:01+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://hosted.weblate.org/projects/bleachbit/main/kk/"
 ">\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
 #: ../cleaners/audacious.xml ../cleaners/exaile.xml ../cleaners/winamp.xml
@@ -47,16 +47,12 @@ msgstr "Куки файлдары"
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
 #: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#, fuzzy
-#| msgid ""
-#| "Delete cookies, which contain information such as website preferences, "
-#| "authentication, and tracking identification"
 msgid ""
 "Delete cookies, which store login information, website preferences, and "
 "tracking identifiers"
 msgstr ""
-"Веб-сайт баптаулары, аутентификация және бақылау идентификациясы сияқты "
-"ақпараты бар куки файлдарын өшіру"
+"Кіру ақпаратын, веб-сайт баптауларын және бақылау идентификаторларын "
+"сақтайтын cookies өшіру"
 
 #: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
 #: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
@@ -81,27 +77,31 @@ msgstr "Тарих"
 msgid "Delete the usage history"
 msgstr "Пайдалану тарихын өшіру"
 
+#. TRANSLATORS: Name of a cleaning option for Windows log files.
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Logs"
 msgstr "Журналдар"
 
+#. TRANSLATORS: Description of the Logs cleaning option.
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Delete the logs"
 msgstr "Журналдарды өшір"
 
@@ -110,6 +110,7 @@ msgstr "Журналдарды өшір"
 msgid "Multimedia viewer"
 msgstr "Мультимедиа қарау құралы"
 
+#. TRANSLATORS: Name of a cleaning option. Cache is a noun.
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
 #: ../cleaners/librewolf.xml ../cleaners/openoffice.xml
 #: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
@@ -144,8 +145,8 @@ msgstr "Кэш"
 #: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/android_studio.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
@@ -260,10 +261,8 @@ msgstr "Пішін тарихы"
 #: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml
 #: ../cleaners/internet_explorer.xml
-#, fuzzy
-#| msgid "Delete the search history"
 msgid "Saved form entries and search bar history"
-msgstr "Іздеу тарихын өшіру"
+msgstr "Сақталған форма жазбалары және іздеу панелінің тарихы"
 
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
 #: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
@@ -306,7 +305,7 @@ msgstr "Сессия"
 #: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Previously open tabs and windows"
-msgstr ""
+msgstr "Бұрын ашылған беттер мен терезелер"
 
 #. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
 #: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
@@ -394,6 +393,7 @@ msgstr "Командалар тарихын өшіру"
 msgid "Office suite"
 msgstr "Офистік десте"
 
+#. TRANSLATORS: Description of the Recent documents list cleaning option.
 #: ../cleaners/openoffice.xml ../cleaners/audacious.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/gedit.xml ../cleaners/kde.xml
@@ -422,6 +422,7 @@ msgstr "Жөндеу журналдары"
 msgid "Delete the debug logs"
 msgstr "Жөндеу журналдарын өшіру"
 
+#. TRANSLATORS: Name of a cleaning option for temporary files.
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
@@ -431,6 +432,7 @@ msgstr "Жөндеу журналдарын өшіру"
 msgid "Temporary files"
 msgstr "Уақытша файлдар"
 
+#. TRANSLATORS: Description of the Temporary files cleaning option.
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
@@ -620,6 +622,7 @@ msgstr ""
 msgid "File manager"
 msgstr "Файлдар басқарушысы"
 
+#. TRANSLATORS: Name of a cleaning option for the history of recently used files.
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py
 msgid "Recent documents list"
@@ -680,6 +683,32 @@ msgstr "Ескірген файлдарды өшіру"
 msgid "Package lists"
 msgstr "Дестелер тізімі"
 
+#: ../cleaners/android_studio.xml
+#, fuzzy
+#| msgid "Desktop environment"
+msgid "Development environment"
+msgstr "Жұмыс үстелі ортасы"
+
+#: ../cleaners/android_studio.xml
+msgid "Gradle cache"
+msgstr ""
+
+#: ../cleaners/android_studio.xml
+#, fuzzy
+#| msgid "Delete downloaded podcasts"
+msgid "Delete downloaded dependencies and build artifacts"
+msgstr "Жүктеп алынған подкасттарды өшіру"
+
+#: ../cleaners/android_studio.xml
+msgid "Dependencies will need to be downloaded on the next build."
+msgstr ""
+
+#: ../cleaners/android_studio.xml
+#, fuzzy
+#| msgid "DNS cache"
+msgid "IDE cache"
+msgstr "DNS кэші"
+
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
 msgid "Editor"
@@ -712,37 +741,33 @@ msgstr "Пайдаланушы бумалары бастапқы күйіне к
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
 msgid "AI assistant"
-msgstr ""
+msgstr "ЖИ көмекшісі"
 
 #. Pre-edit snapshots of files Claude Code changed, used for checkpoint restore
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Form history"
 msgid "File history"
-msgstr "Пішін тарихы"
+msgstr "Файлдар тарихы"
 
 #. Claude Code: checkpoint restore for past sessions. Also, do not translate /restore, which is a command.
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the list of recently used documents"
 msgid "Delete the file history used for /restore"
-msgstr "Жақында пайдаланылған құжаттар тізімін өшіру"
+msgstr "/restore үшін пайдаланылатын файлдар тарихын өшіру"
 
 #. Description for deleting Claude Code sessions
 #: ../cleaners/claude.xml
-#, fuzzy
-#| msgid "Delete the command history"
 msgid "Delete the conversation history"
-msgstr "Командалар тарихын өшіру"
+msgstr "Әңгімелер тарихын өшіру"
 
 #: ../cleaners/claude.xml
 msgid "You would lose resume, continue, and rewind for past sessions"
 msgstr ""
+"Өткен сеанстар үшін жалғастыру, қайта бастау және кері айналдыру "
+"мүмкіндіктерін жоғалтасыз"
 
 #. In Claude Code: captured shell environment used by the Bash tool
 #: ../cleaners/claude.xml
 msgid "Shell snapshots"
-msgstr ""
+msgstr "Қоршам снапшоттары"
 
 #: ../cleaners/deepscan.xml
 msgid "Deep scan"
@@ -761,6 +786,8 @@ msgid ""
 "This option is slow. Inspect the preview for files you want to keep, like "
 "those bundled with applications."
 msgstr ""
+"Бұл опция баяу. Сақтап қалғыңыз келетін файлдарды, мысалы, қолданбалармен "
+"бірге келетін файлдарды алдын ала қарау арқылы тексеріңіз."
 
 #: ../cleaners/deepscan.xml
 msgid "VIM swap files under user profile"
@@ -805,13 +832,11 @@ msgstr "Кірілген веб-беттер тізімін өшіру"
 #. Cleaning option that deletes AI models in a web browser
 #: ../cleaners/google_chrome.xml
 msgid "AI"
-msgstr ""
+msgstr "ЖИ"
 
 #: ../cleaners/google_chrome.xml
-#, fuzzy
-#| msgid "Delete the logs"
 msgid "Delete the AI models"
-msgstr "Журналдарды өшір"
+msgstr "ЖИ модельдерін өшіру"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -835,6 +860,7 @@ msgstr ""
 msgid "Statistics"
 msgstr "Статистика"
 
+#. TRANSLATORS: Description of the Memory dump cleaning option.
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Delete the file"
 msgstr "Файлды өшіру"
@@ -844,15 +870,14 @@ msgid "Delete the list of game servers"
 msgstr "Ойын серверлерінің тізімін өшіру"
 
 #: ../cleaners/profanity.xml
-#, fuzzy
-#| msgid "Download failed"
 msgid "Downloaded files"
-msgstr "Жүктеп алу сәтсіз аяқталды"
+msgstr "Жүктеп алынған файлдар"
 
 #: ../cleaners/teamviewer.xml
 msgid "Remote control software"
 msgstr "Қашықтан басқару бағдарламалық қамтамасы"
 
+#. TRANSLATORS: Name of a cleaning option for Windows crash dump files.
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Memory dump"
 msgstr "Жад дампы"
@@ -1135,6 +1160,9 @@ msgid ""
 "compatible version for your system, click OK. To exit the installer, click "
 "Cancel."
 msgstr ""
+"BleachBit қолданбасының бұл нұсқасы Windows 10 немесе одан жаңарақ нұсқасын "
+"талап етеді. Жүйеңіз үшін үйлесімді нұсқаны жүктеп алу үшін OK батырмасын "
+"шертіңіз. Орнатқыштан шығу үшін Бас тарту батырмасын шертіңіз."
 
 #: windows/NsisInclude/NsisMultiUserLang.nsh
 msgctxt "nsis:SECTION_CORE_DESCRIPTION"
@@ -1308,6 +1336,11 @@ msgid ""
 "See more about xhost at https://docs.bleachbit.org/doc/frequently-asked-"
 "questions.html"
 msgstr ""
+"Wayland ортасында GUI қолданбасын әкімші (root) құқығымен орындау үшін, мына "
+"команда арқылы қол жеткізуге рұқсат етіңіз:\n"
+"xhost si:localuser:root\n"
+"xhost туралы толығырақ https://docs.bleachbit.org/doc/frequently-asked-"
+"questions.html сілтемесінен қараңыз"
 
 #: ../bleachbit/CleanerML.py
 #, python-brace-format
@@ -1318,11 +1351,20 @@ msgstr ""
 "Тазартқыш id = {cleaner_id}, опция XML={option_xml} үшін "
 "handle_cleaner_option() функциясында қате орын алды"
 
-#. TRANSLATORS: Warning printed to the log.
-#. %s expands to the path of the XML cleaner file that was skipped
-#: ../bleachbit/CleanerML.py
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file that was skipped
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
+msgstr "Тазартқыш еленбейді, себебі ол баршаға жазуға ашық: %s"
+
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file whose directory is world
+#. writable.
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
+#, fuzzy, python-format
+#| msgid "Ignoring cleaner because it is world writable: %s"
+msgid "Ignoring cleaner because its directory is world writable: %s"
 msgstr "Тазартқыш еленбейді, себебі ол баршаға жазуға ашық: %s"
 
 #. TRANSLATORS: Error message printed to the log.
@@ -1331,6 +1373,16 @@ msgstr "Тазартқыш еленбейді, себебі ол баршаға 
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "Тазартқышты оқу қатесі: %s"
+
+#. TRANSLATORS: Cleaner name shown in the list of applications.
+#: ../bleachbit/Cleaner.py
+msgid "System"
+msgstr "Жүйелік"
+
+#. TRANSLATORS: Description of the System cleaner.
+#: ../bleachbit/Cleaner.py
+msgid "The system in general"
+msgstr "Жалпы жүйе"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1343,6 +1395,7 @@ msgstr "Тазартқышты оқу қатесі: %s"
 msgid "Broken desktop files"
 msgstr "Бұзылған жұмыс үстелі файлдары"
 
+#. TRANSLATORS: Description of the Broken desktop files cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete broken application menu entries and file associations"
 msgstr ""
@@ -1354,30 +1407,40 @@ msgstr ""
 msgid "Localizations"
 msgstr "Локализациялар"
 
+#. TRANSLATORS: Description of the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete files for unwanted languages"
 msgstr "Қажет емес тілдер файлдарын өшіру"
 
+#. TRANSLATORS: Warning for the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Configure this option in the preferences."
 msgstr "Бұл опцияны баптауларда конфигурациялаңыз."
 
+#. TRANSLATORS: 'Rotated logs' refers to old system log files.
+#. Linux systems often have a scheduled job to rotate the logs
+#. which means compress all except the newest log and then delete
+#. the oldest log. You could translate this as 'old logs.'
 #: ../bleachbit/Cleaner.py
 msgid "Rotated logs"
 msgstr "Ротацияланған логтар"
 
+#. TRANSLATORS: Description of the Rotated logs cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete old system logs"
 msgstr "Ескі жүйелік логтарды өшіру"
 
+#. TRANSLATORS: Name of a cleaning option. Trash is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Trash"
 msgstr "Қоқыс шелегі"
 
+#. TRANSLATORS: Description of the Trash cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the trash"
 msgstr "Қоқыс шелегін босату"
 
+#. TRANSLATORS: Name of a cleaning option for system memory.
 #: ../bleachbit/Cleaner.py ../bleachbit/Worker.py
 msgid "Memory"
 msgstr "Жады"
@@ -1387,6 +1450,7 @@ msgstr "Жады"
 msgid "Wipe the swap and free memory"
 msgstr "Swap және бос жадты тазарту"
 
+#. TRANSLATORS: Warning for the experimental Memory cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "This option is experimental and may cause system problems."
 msgstr ""
@@ -1396,17 +1460,19 @@ msgstr ""
 #. TRANSLATORS: This is a label for the option to clear the system DNS cache.
 #: ../bleachbit/Cleaner.py
 msgid "DNS cache"
-msgstr ""
+msgstr "DNS кэші"
 
 #. TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
 #: ../bleachbit/Cleaner.py
 msgid "Prefetch"
 msgstr "Жадыдан алдын ала таңдау (Prefetch)"
 
+#. TRANSLATORS: Name of a cleaning option for the Windows recycle bin.
 #: ../bleachbit/Cleaner.py
 msgid "Recycle bin"
 msgstr "Қоқыс шелегі"
 
+#. TRANSLATORS: Description of the Recycle bin cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the recycle bin"
 msgstr "Қоқыс шелегін босату"
@@ -1432,10 +1498,12 @@ msgstr ""
 msgid "This option may prevent uninstalling some updates."
 msgstr "Бұл опция кейбір жаңартуларды өшіруге кедергі болуы мүмкін."
 
+#. TRANSLATORS: Name of a cleaning option. Clipboard is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
 msgstr "Алмасу буфері"
 
+#. TRANSLATORS: Description of the Clipboard cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
@@ -1450,6 +1518,7 @@ msgstr ""
 msgid "Custom"
 msgstr "Таңдауыңызша"
 
+#. TRANSLATORS: Description of the Custom cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete user-specified files and folders"
 msgstr "Пайдаланушы көрсеткен файлдар мен бумаларды өшіру"
@@ -1463,14 +1532,6 @@ msgstr "Бос орын"
 #: ../bleachbit/Cleaner.py
 msgid "Wipe empty space to hide deleted files"
 msgstr "Өшірілген файлдардың іздерін жасыру үшін бос орынды тазарту"
-
-#: ../bleachbit/Cleaner.py
-msgid "The system in general"
-msgstr "Жалпы жүйе"
-
-#: ../bleachbit/Cleaner.py
-msgid "System"
-msgstr "Жүйелік"
 
 #. TRANSLATORS: 'Empty' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
@@ -1498,6 +1559,7 @@ msgstr "Жергілікті тазартқыштарды жүктеу…"
 msgid "Importing cleaners from Winapp2.ini…"
 msgstr "Winapp2.ini файлынан тазартқыштар импортталуда…"
 
+#. TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
 #: ../bleachbit/Cleaner.py
 #, python-format
 msgid "Wipe empty space %s"
@@ -1993,7 +2055,7 @@ msgstr "Мақсатты буманы таңдау"
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error generating chaff: {error}"
-msgstr ""
+msgstr "Жалған деректерді генерациялау қатесі: {error}"
 
 #. TRANSLATORS: Progress message shown while deleting chaff files.
 #. 'Deleting files' is a present participle.
@@ -2008,7 +2070,7 @@ msgstr "Файлдар өшірілуде…"
 #: ../bleachbit/GuiChaff.py
 #, python-brace-format
 msgid "Error deleting chaff files: {error}"
-msgstr ""
+msgstr "Жалған файлдарды өшіру қатесі: {error}"
 
 #. TRANSLATORS: Title for dialog window.
 #. Digital chaff is like physical chaff that airplanes use to protect themselves
@@ -2302,6 +2364,10 @@ msgstr "Тазалаудан кейін шығу"
 msgid "Reset warning confirmations"
 msgstr "Ескерту растауларын бастапқы күйіне келтіру"
 
+#. TRANSLATORS: This means to hide cleaners which would do
+#. nothing. For example, if Firefox were never used on
+#. this system, this option would hide Firefox to simplify
+#. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
 msgstr "Қатысы жоқ тазартқыштарды жасыру"
@@ -2350,10 +2416,8 @@ msgstr "Windows 10 темасы"
 #. instead of the default Windows renderer. The option may improve blurry text.
 #. Fontconfig, which is software, is a proper noun.
 #: ../bleachbit/GuiPreferences.py
-#, fuzzy
-#| msgid "Use fontconfig text rendering backend"
 msgid "Use Fontconfig text rendering backend"
-msgstr "Мәтінді бейнелеу үшін fontconfig қолдану"
+msgstr "Fontconfig мәтін рендерингінің бекендін пайдалану"
 
 #. TRANSLATORS: Tooltip for the fontconfig text rendering checkbox in the preferences dialog.
 #: ../bleachbit/GuiPreferences.py
@@ -2510,11 +2574,13 @@ msgstr "Жол"
 msgid "Choose a file"
 msgstr "Файлды таңдау"
 
+#. TRANSLATORS: Button label in the preferences for adding a file.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add file"
 msgstr "Файлды қосу"
 
+#. TRANSLATORS: Button label in the preferences for adding a folder.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add folder"
@@ -2525,16 +2591,12 @@ msgstr "Буманы қосу"
 #. in the preferences dialog. This message appears when cleaning options
 #. with warnings are selected but expert mode is disabled.
 #: ../bleachbit/GuiStartup.py
-#, fuzzy
-#| msgid ""
-#| "Cleaning options with warnings now require expert mode. Enable it in "
-#| "preferences to clean them."
 msgid ""
 "One or more selected cleaning options have warnings and require Expert Mode "
 "to clean. Enable it in preferences."
 msgstr ""
-"Ескертулері бар тазалау опциялары енді сарапшы режимін талап етеді. Оларды "
-"тазалау үшін баптаулардан іске қосыңыз."
+"Таңдалған бір немесе бірнеше тазалау опцияларында ескертулер бар және "
+"тазалау үшін Кеңейтілген режимді талап етеді. Оны баптаулардан іске қосыңыз."
 
 #. TRANSLATORS: "Expert Mode" is the name of a feature/setting found in
 #. Preferences. Keep it consistent with the translation of "Expert Mode"
@@ -2545,6 +2607,8 @@ msgid ""
 "Delete confirmation is disabled but expert mode is not enabled. Enable "
 "Expert Mode in preferences to skip delete confirmations."
 msgstr ""
+"Өшіруді растау сөндірілген, бірақ кеңейтілген режим іске қосылмаған. Өшіруді "
+"растауды аттап кету үшін баптаулардан Кеңейтілген режимді іске қосыңыз."
 
 #. TRANSLATORS: First-start hint for Linux users shown in
 #. the log on the main screen.
@@ -2750,16 +2814,12 @@ msgid "Error when checking for updates: %s"
 msgstr "Жаңартуларды тексеру кезіндегі қате: %s"
 
 #: ../bleachbit/Memory.py
-#, fuzzy
-#| msgid ""
-#| "The command 'swapoff -s' failed, so falling back to /proc/swaps for swap "
-#| "information."
 msgid ""
 "The command 'swapon -s' failed, so falling back to /proc/swaps for swap "
 "information."
 msgstr ""
-"'swapoff -s' командасы сәтсіз аяқталды, сондықтан swap ақпараты үшін /proc/"
-"swaps файлына ауысылды."
+"'swapon -s' командасы сәтсіз аяқталды, сондықтан ауыстыру ақпараты үшін /"
+"proc/swaps файлына қайта жүгінеді."
 
 #: ../bleachbit/Memory.py
 msgid "Disabling swap."
@@ -2799,16 +2859,13 @@ msgstr "Жадтың %s бөлігі босатылуда."
 #. is waiting for the child process. %(parent_pid)d is the parent
 #. process ID; %(child_pid)d is the child process ID.
 #: ../bleachbit/Memory.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The function wipe_memory() with process ID %d is waiting for child "
-#| "process ID %d."
+#, python-format
 msgid ""
 "The function wipe_memory() with process ID %(parent_pid)d is waiting for "
 "child process ID %(child_pid)d."
 msgstr ""
-"Процесс ID-і %d болатын wipe_memory() функциясы ID-і %d болатын еншілес "
-"процесті күтуде."
+"%(parent_pid)d процесс идентификаторы бар wipe_memory() функциясы "
+"%(child_pid)d еншілес процесс идентификаторын күтуде."
 
 #. TRANSLATORS: Debug message. 'Found' is a past tense verb (short for
 #. "Found [that] the UUID for swap device ..."). %(device)s is the device
@@ -2868,6 +2925,9 @@ msgstr "Конфигурацияны файлға жазу кезінде рұқ
 msgid "Error checking whether path exists: %s"
 msgstr "Жолдың бар-жоғын тексеру кезіндегі қате: %s"
 
+#. TRANSLATORS: %s is a ISO language code of two or three letters.
+#. "Preserving" means the language's localization files will be
+#. kept and not deleted when cleaning.
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Automatically preserving language %s."
@@ -2950,14 +3010,17 @@ msgid ""
 msgstr ""
 "%s тазартылмайды, себебі ол қазір жұмыс істеп тұр. Оны жауып, қайта көріңіз."
 
+#. TRANSLATORS: Status message after a successful winapp2.ini update.
 #: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
 msgstr "Жаңа winapp2.ini жүктеп алынды."
 
+#. TRANSLATORS: Title of the software update dialog.
 #: ../bleachbit/Update.py
 msgid "Update BleachBit"
 msgstr "BleachBit бағдарламасын жаңарту"
 
+#. TRANSLATORS: Message in the software update dialog.
 #: ../bleachbit/Update.py
 msgid "A new version is available."
 msgstr "Жаңа нұсқа қолжетімді."
@@ -2998,14 +3061,18 @@ msgstr "Мультимедиа"
 msgid "Utilities"
 msgstr "Утилиталар"
 
+#. TRANSLATORS: Cleaner category name for games imported from winapp2.ini.
 #: ../bleachbit/Winapp.py
 msgid "Games"
 msgstr "Ойындар"
 
+#. TRANSLATORS: Description shown for a cleaner imported from winapp2.ini,
+#. which is a database of cleaning definitions.
 #: ../bleachbit/Winapp.py
 msgid "Imported from winapp2.ini"
 msgstr "winapp2.ini файлынан импортталған"
 
+#. TRANSLATORS: Warning shown when cleaning Windows Updates without administrator access.
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr "Windows жаңартуларын тазарту үшін әкімші құқықтары қажет"
@@ -3015,14 +3082,14 @@ msgstr "Windows жаңартуларын тазарту үшін әкімші қ
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "stop Windows service %(service)s"
-msgstr ""
+msgstr "%(service)s Windows қызметін тоқтату"
 
 #. TRANSLATORS: Message in log file when starting a Windows service.
 #. The placeholder is the code name of the service.
 #: ../bleachbit/Windows.py
 #, python-format
 msgid "start Windows service %(service)s"
-msgstr ""
+msgstr "%(service)s Windows қызметін бастау"
 
 #: ../bleachbit/Wipe.py
 msgid ""
@@ -3046,8 +3113,11 @@ msgstr "Файлдық жүйесі %(fstype)s болатын %(pathname)s жо�
 msgid "Path to wipe must be an existing directory: %s"
 msgstr "Тазартылатын жол бұрыннан бар каталог болуы тиіс: %s"
 
+#. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-msgid "Creating new, temporary file for wiping free space."
+#, fuzzy
+#| msgid "Creating new, temporary file for wiping free space."
+msgid "Creating new, temporary file for wiping empty space."
 msgstr "Бос орынды тазарту үшін жаңа, уақытша файл жасалуда."
 
 #: ../bleachbit/Wipe.py
@@ -3125,6 +3195,11 @@ msgid "Access denied: %s"
 msgstr "Рұқсат жоқ: %s"
 
 #: ../bleachbit/Worker.py
+#, python-format
+msgid "Database is locked: %s"
+msgstr ""
+
+#: ../bleachbit/Worker.py
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
 msgstr "Қате: {operation_option}: {command}"
@@ -3134,6 +3209,7 @@ msgstr "Қате: {operation_option}: {command}"
 msgid "Please wait. Wiping empty space."
 msgstr "Күте тұрыңыз. Бос орын тазартылуда."
 
+#. TRANSLATORS: Instruction shown while wiping a drive's empty space.
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
@@ -3156,6 +3232,7 @@ msgstr ""
 msgid "Please wait.  Cleaning %s."
 msgstr "Күте тұрыңыз. %s тазартылуда."
 
+#. TRANSLATORS: %d is the estimated number of minutes remaining.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "About %d minute remaining."
@@ -3191,6 +3268,10 @@ msgstr "Өшірілген файлдар: %d"
 msgid "Files to be deleted: %d"
 msgstr "Өшірілетін файлдар: %d"
 
+#. TRANSLATORS: %d is the number of special cleaning operations
+#. completed. Special operations are cleaning actions that do
+#. not delete a file, such as overwriting a file's contents,
+#. truncating a file, or deleting a Windows registry key.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Special operations: %d"

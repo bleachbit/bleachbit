@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-12 15:23-0600\n"
+"POT-Creation-Date: 2026-09-01 10:05-0600\n"
 "PO-Revision-Date: 2018-02-14 11:51+0000\n"
 "Last-Translator: Matic Gradišer <Unknown>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -85,27 +85,31 @@ msgstr "Zgodovina"
 msgid "Delete the usage history"
 msgstr "Izbriši zgodovino uporabe"
 
+#. TRANSLATORS: Name of a cleaning option for Windows log files.
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Logs"
 msgstr "Dnevniki"
 
+#. TRANSLATORS: Description of the Logs cleaning option.
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Delete the logs"
 msgstr "Izbriši dnevnike"
 
@@ -114,6 +118,7 @@ msgstr "Izbriši dnevnike"
 msgid "Multimedia viewer"
 msgstr "Pregledovalnik predstavnih vsebin"
 
+#. TRANSLATORS: Name of a cleaning option. Cache is a noun.
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
 #: ../cleaners/librewolf.xml ../cleaners/openoffice.xml
 #: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
@@ -148,8 +153,8 @@ msgstr "Predpomnilnik"
 #: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/android_studio.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
@@ -395,6 +400,7 @@ msgstr "Izbriši zgodovino ukazov"
 msgid "Office suite"
 msgstr "Pisarniški programski paket"
 
+#. TRANSLATORS: Description of the Recent documents list cleaning option.
 #: ../cleaners/openoffice.xml ../cleaners/audacious.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/gedit.xml ../cleaners/kde.xml
@@ -423,6 +429,7 @@ msgstr "Dnevniki razhroščevanja"
 msgid "Delete the debug logs"
 msgstr "Izbriši dnevnike razhroščevanja"
 
+#. TRANSLATORS: Name of a cleaning option for temporary files.
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
@@ -432,6 +439,7 @@ msgstr "Izbriši dnevnike razhroščevanja"
 msgid "Temporary files"
 msgstr "Začasne datoteke"
 
+#. TRANSLATORS: Description of the Temporary files cleaning option.
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
@@ -626,6 +634,7 @@ msgstr ""
 msgid "File manager"
 msgstr "Upravljalnik datotek"
 
+#. TRANSLATORS: Name of a cleaning option for the history of recently used files.
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py
 msgid "Recent documents list"
@@ -683,6 +692,30 @@ msgstr "Izbriši zastarele datoteke"
 #: ../cleaners/apt.xml
 msgid "Package lists"
 msgstr "Seznami paketov"
+
+#: ../cleaners/android_studio.xml
+#, fuzzy
+#| msgid "Desktop environment"
+msgid "Development environment"
+msgstr "Namizno okolje"
+
+#: ../cleaners/android_studio.xml
+msgid "Gradle cache"
+msgstr ""
+
+#: ../cleaners/android_studio.xml
+#, fuzzy
+#| msgid "Delete downloaded podcasts"
+msgid "Delete downloaded dependencies and build artifacts"
+msgstr "Izbriši prejete podcaste"
+
+#: ../cleaners/android_studio.xml
+msgid "Dependencies will need to be downloaded on the next build."
+msgstr ""
+
+#: ../cleaners/android_studio.xml
+msgid "IDE cache"
+msgstr ""
 
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
@@ -841,6 +874,7 @@ msgstr ""
 msgid "Statistics"
 msgstr "Statistike"
 
+#. TRANSLATORS: Description of the Memory dump cleaning option.
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Delete the file"
 msgstr ""
@@ -859,6 +893,7 @@ msgstr "Zgodovina prejema"
 msgid "Remote control software"
 msgstr ""
 
+#. TRANSLATORS: Name of a cleaning option for Windows crash dump files.
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Memory dump"
 msgstr "Izpis pomnilnika"
@@ -1305,11 +1340,19 @@ msgid ""
 "XML={option_xml}"
 msgstr ""
 
-#. TRANSLATORS: Warning printed to the log.
-#. %s expands to the path of the XML cleaner file that was skipped
-#: ../bleachbit/CleanerML.py
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file that was skipped
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
+msgstr ""
+
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file whose directory is world
+#. writable.
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
+#, python-format
+msgid "Ignoring cleaner because its directory is world writable: %s"
 msgstr ""
 
 #. TRANSLATORS: Error message printed to the log.
@@ -1319,6 +1362,16 @@ msgstr ""
 #| msgid "not a valid cleaner: %s"
 msgid "Error reading cleaner: %s"
 msgstr "ni veljaven čistilnik: %s"
+
+#. TRANSLATORS: Cleaner name shown in the list of applications.
+#: ../bleachbit/Cleaner.py
+msgid "System"
+msgstr "Sistem"
+
+#. TRANSLATORS: Description of the System cleaner.
+#: ../bleachbit/Cleaner.py
+msgid "The system in general"
+msgstr "Sistem na splošno"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1331,6 +1384,7 @@ msgstr "ni veljaven čistilnik: %s"
 msgid "Broken desktop files"
 msgstr "Okvarjene datoteke namizja"
 
+#. TRANSLATORS: Description of the Broken desktop files cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete broken application menu entries and file associations"
 msgstr "Izbriši okvarjene vnose menijev in vezi datotek"
@@ -1341,30 +1395,40 @@ msgstr "Izbriši okvarjene vnose menijev in vezi datotek"
 msgid "Localizations"
 msgstr "Jezikovne prilagoditve"
 
+#. TRANSLATORS: Description of the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete files for unwanted languages"
 msgstr "Izbriše datoteke neuporabljenih jezikov"
 
+#. TRANSLATORS: Warning for the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Configure this option in the preferences."
 msgstr "Izbor jezikov je mogoče prilagoditi med  nastavitvami"
 
+#. TRANSLATORS: 'Rotated logs' refers to old system log files.
+#. Linux systems often have a scheduled job to rotate the logs
+#. which means compress all except the newest log and then delete
+#. the oldest log. You could translate this as 'old logs.'
 #: ../bleachbit/Cleaner.py
 msgid "Rotated logs"
 msgstr "Stari dnevniki"
 
+#. TRANSLATORS: Description of the Rotated logs cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete old system logs"
 msgstr "Izbriši stare sistemske dnevnike"
 
+#. TRANSLATORS: Name of a cleaning option. Trash is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Trash"
 msgstr "Smeti"
 
+#. TRANSLATORS: Description of the Trash cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the trash"
 msgstr "Izprazni smeti"
 
+#. TRANSLATORS: Name of a cleaning option for system memory.
 #: ../bleachbit/Cleaner.py ../bleachbit/Worker.py
 msgid "Memory"
 msgstr "Pomnilnik"
@@ -1374,6 +1438,7 @@ msgstr "Pomnilnik"
 msgid "Wipe the swap and free memory"
 msgstr "Počisti izmenjevalni razdelek in sprosti pomnilnik"
 
+#. TRANSLATORS: Warning for the experimental Memory cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "This option is experimental and may cause system problems."
 msgstr "Možnost je poskusna in lahko povzroči sistemske napake"
@@ -1388,10 +1453,12 @@ msgstr ""
 msgid "Prefetch"
 msgstr "Vnaprejšnje pridobivanje"
 
+#. TRANSLATORS: Name of a cleaning option for the Windows recycle bin.
 #: ../bleachbit/Cleaner.py
 msgid "Recycle bin"
 msgstr "Smeti"
 
+#. TRANSLATORS: Description of the Recycle bin cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the recycle bin"
 msgstr "Izprazni smeti"
@@ -1414,10 +1481,12 @@ msgstr ""
 msgid "This option may prevent uninstalling some updates."
 msgstr ""
 
+#. TRANSLATORS: Name of a cleaning option. Clipboard is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
 msgstr "Odložišče"
 
+#. TRANSLATORS: Description of the Clipboard cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
@@ -1431,6 +1500,7 @@ msgstr ""
 msgid "Custom"
 msgstr "Po meri"
 
+#. TRANSLATORS: Description of the Custom cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete user-specified files and folders"
 msgstr "Izbriši datoteke in mape, ki jih določi uporabnik"
@@ -1446,14 +1516,6 @@ msgstr ""
 #| msgid "Overwrite free disk space to hide deleted files"
 msgid "Wipe empty space to hide deleted files"
 msgstr "Prepiši prosti prostor na disku, da se izbrisane datoteke skrije"
-
-#: ../bleachbit/Cleaner.py
-msgid "The system in general"
-msgstr "Sistem na splošno"
-
-#: ../bleachbit/Cleaner.py
-msgid "System"
-msgstr "Sistem"
 
 #. TRANSLATORS: 'Empty' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
@@ -1483,6 +1545,7 @@ msgstr ""
 msgid "Importing cleaners from Winapp2.ini…"
 msgstr "Uvoženo iz winapp2.ini"
 
+#. TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
 #: ../bleachbit/Cleaner.py
 #, fuzzy, python-format
 #| msgid "_Wipe Free Space"
@@ -2303,6 +2366,10 @@ msgstr ""
 msgid "Reset warning confirmations"
 msgstr "Potrditev brisanja"
 
+#. TRANSLATORS: This means to hide cleaners which would do
+#. nothing. For example, if Firefox were never used on
+#. this system, this option would hide Firefox to simplify
+#. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
 msgstr ""
@@ -2519,11 +2586,13 @@ msgstr "Pot"
 msgid "Choose a file"
 msgstr "Izberi datoteko"
 
+#. TRANSLATORS: Button label in the preferences for adding a file.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add file"
 msgstr "Dodaj datoteko"
 
+#. TRANSLATORS: Button label in the preferences for adding a folder.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add folder"
@@ -2849,6 +2918,9 @@ msgstr ""
 msgid "Error checking whether path exists: %s"
 msgstr "Napaka med preverjanjem za posodobitve: "
 
+#. TRANSLATORS: %s is a ISO language code of two or three letters.
+#. "Preserving" means the language's localization files will be
+#. kept and not deleted when cleaning.
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Automatically preserving language %s."
@@ -2923,14 +2995,17 @@ msgid ""
 msgstr ""
 "%s ni mogoče očistiti, saj se trenutno izvaja. Zaprite in poskusite znova."
 
+#. TRANSLATORS: Status message after a successful winapp2.ini update.
 #: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
 msgstr "Prejeta je nova različica winapp2.ini."
 
+#. TRANSLATORS: Title of the software update dialog.
 #: ../bleachbit/Update.py
 msgid "Update BleachBit"
 msgstr "Posodobi BleachBit"
 
+#. TRANSLATORS: Message in the software update dialog.
 #: ../bleachbit/Update.py
 msgid "A new version is available."
 msgstr "Na voljo je nova različica."
@@ -2968,14 +3043,18 @@ msgstr "Predstavnost"
 msgid "Utilities"
 msgstr "Pripomočki"
 
+#. TRANSLATORS: Cleaner category name for games imported from winapp2.ini.
 #: ../bleachbit/Winapp.py
 msgid "Games"
 msgstr "Igre"
 
+#. TRANSLATORS: Description shown for a cleaner imported from winapp2.ini,
+#. which is a database of cleaning definitions.
 #: ../bleachbit/Winapp.py
 msgid "Imported from winapp2.ini"
 msgstr "Uvoženo iz winapp2.ini"
 
+#. TRANSLATORS: Warning shown when cleaning Windows Updates without administrator access.
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr ""
@@ -3014,8 +3093,9 @@ msgstr ""
 msgid "Path to wipe must be an existing directory: %s"
 msgstr ""
 
+#. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-msgid "Creating new, temporary file for wiping free space."
+msgid "Creating new, temporary file for wiping empty space."
 msgstr ""
 
 #: ../bleachbit/Wipe.py
@@ -3091,6 +3171,11 @@ msgid "Access denied: %s"
 msgstr ""
 
 #: ../bleachbit/Worker.py
+#, python-format
+msgid "Database is locked: %s"
+msgstr ""
+
+#: ../bleachbit/Worker.py
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
 msgstr ""
@@ -3102,6 +3187,7 @@ msgstr ""
 msgid "Please wait. Wiping empty space."
 msgstr "Počakajte. Poteka brisanje nezasedenega prostora na disku."
 
+#. TRANSLATORS: Instruction shown while wiping a drive's empty space.
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
@@ -3119,6 +3205,7 @@ msgstr ""
 msgid "Please wait.  Cleaning %s."
 msgstr "Počakajte. Poteka čiščenje %s."
 
+#. TRANSLATORS: %d is the estimated number of minutes remaining.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "About %d minute remaining."
@@ -3156,6 +3243,10 @@ msgstr "Izbrisane datoteke: %d"
 msgid "Files to be deleted: %d"
 msgstr "Datoteke, ki bodo izbrisane: %d"
 
+#. TRANSLATORS: %d is the number of special cleaning operations
+#. completed. Special operations are cleaning actions that do
+#. not delete a file, such as overwriting a file's contents,
+#. truncating a file, or deleting a Windows registry key.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Special operations: %d"

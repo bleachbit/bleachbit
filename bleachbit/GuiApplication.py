@@ -96,12 +96,9 @@ class Bleachbit(Gtk.Application):
         return application_id_suffix
 
     def build_app_menu(self):
-        """Build the application menu
+        """Register the actions used by the application menu
 
-        On Linux with GTK 3.24, this code is necessary but not sufficient for
-        the menu to work. The headerbar code is also needed.
-
-        On Windows with GTK 3.18, this code is sufficient for the menu to work.
+        The menu itself is built by the headerbar code in GuiWindow.
         """
         from bleachbit.Language import setup_translation
         setup_translation()
@@ -284,6 +281,13 @@ class Bleachbit(Gtk.Application):
             # After "shred settings and quit", rebuild the minimal configuration.
             # which is important for portable mode.
             bleachbit.Options.init_configuration()
+        else:
+            # Flush any pending preference changes immediately instead of
+            # relying on the delayed background timer (FLUSH_DELAY_SECS),
+            # which would otherwise silently lose changes made shortly
+            # before quitting (e.g. toggling a checkbox and closing the
+            # app within a few seconds).
+            options.commit()
         self._window.destroy()
 
     def get_system_information_dialog(self):

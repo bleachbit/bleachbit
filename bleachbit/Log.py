@@ -95,6 +95,12 @@ def init_log():
             break
 
     if debug_log_path:
+        if os.name != 'nt' and not os.path.exists(debug_log_path):
+            # This log may contain sensitive system info (paths, username),
+            # so keep it from being created world-readable.
+            fd = os.open(debug_log_path,
+                         os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o600)
+            os.close(fd)
         file_handler = logging.FileHandler(debug_log_path)
         # Always use DEBUG level for log file.
         file_handler.setLevel(logging.DEBUG)

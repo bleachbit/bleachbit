@@ -23,11 +23,12 @@ Test case for Command
 """
 
 import os
+import sqlite3
 from unittest import mock
 
 from tests import common
 from bleachbit import FileUtilities
-from bleachbit.Command import Delete, Function, Shred
+from bleachbit.Command import Delete, Function, Shred, Truncate
 
 
 class CommandTestCase(common.BleachbitTestCase):
@@ -100,6 +101,37 @@ class CommandTestCase(common.BleachbitTestCase):
                 next(cmd.execute(True))
             mock_debug.assert_called_with(mock.ANY)
 
+    def test_Function_sqlite_error_propagates(self):
+        """Unit test for Function with sqlite error that is not collation
+
+        Non-collation sqlite errors must propagate to the Worker instead of
+        being silently swallowed by Command.execute().
+        """
+        path = self.write_file('test_Function_sqlite_error', b'')
+        cmd = Function(path,
+                       lambda p: FileUtilities.execute_sqlite3(
+                           p, 'SELECT * FROM nonexistent_table;'),
+                       'test_sqlite_error')
+
+        with self.assertRaises(sqlite3.OperationalError):
+            next(cmd.execute(True))
+
     def test_Shred(self):
         """Unit test for Shred"""
         self.test_Delete(Shred)
+
+    def test_Truncate(self):
+        """Unit test for Truncate"""
+        path = self.write_file('test_Truncate', b'foo')
+        cmd = Truncate(path)
+
+        # preview leaves the file intact
+        ret = next(cmd.execute(really_delete=False))
+        self.assertEqual(ret['path'], path)
+        self.assertGreater(os.path.getsize(path), 0)
+
+        # truncate empties the file but keeps it
+        ret = next(cmd.execute(really_delete=True))
+        self.assertEqual(ret['path'], path)
+        self.assertExists(path)
+        self.assertEqual(os.path.getsize(path), 0)

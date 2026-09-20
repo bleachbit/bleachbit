@@ -30,9 +30,11 @@ from bleachbit import GuiBasic, ProtectedPath, IS_POSIX, IS_WINDOWS
 from bleachbit import online_update_notification_enabled
 from bleachbit.PathUtils import normalize_path
 from bleachbit.Constant import EMPTY_SPACE_WARNING, REQUIRES_EXPERT_MODE
+from bleachbit.General import sanitize_surrogates
 from bleachbit.GtkShim import Gtk, GLib
 from bleachbit.GuiCookie import CookieManagerPane
 from bleachbit.GuiUtil import (detect_dark_background, flush_gtk_events,
+                               load_icon_or_fallback,
                                should_show_dark_mode_warning)
 from bleachbit.Language import get_active_language_code, get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _, pget_text as _p
@@ -330,8 +332,12 @@ class PreferencesDialog:
                 store_as_attr='cb_winapp2')
         vbox.pack_start(updates_box, False, True, 0)
 
-    def __create_language_widgets(self, vbox):
-        """Create and configure language selection widgets."""
+    def __create_language_widgets(self, vbox, supported_langs):
+        """Create and configure language selection widgets.
+
+        supported_langs maps language code to native name, or is None if
+        the scan failed.
+        """
         lang_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         is_auto_detect = options.get("auto_detect_lang")
         # TRANSLATORS: Checkbutton label in the preferences dialog.
@@ -351,21 +357,18 @@ class PreferencesDialog:
         self.lang_combo = Gtk.ComboBoxText()
         current_lang_code = get_active_language_code()
         # Add available languages
-        lang_idx = 0
         active_language_idx = None
-        try:
-            supported_langs = get_supported_language_code_name_dict().items()
-        except (KeyError, ValueError, Exception) as e:
-            logger.error("Failed to get list of supported languages: %s", e)
-            supported_langs = [('en_us', 'English')]
-        for lang_code, native in supported_langs:
+        if supported_langs is None:
+            lang_items = [('en_us', 'English')]
+        else:
+            lang_items = supported_langs.items()
+        for lang_idx, (lang_code, native) in enumerate(lang_items):
             if native:
                 self.lang_combo.append_text(f"{native} ({lang_code})")
             else:
                 self.lang_combo.append_text(lang_code)
             if lang_code == current_lang_code:
                 active_language_idx = lang_idx
-            lang_idx += 1
         if active_language_idx is not None:
             self.lang_combo.set_active(active_language_idx)
         # set_wrap_width() prevents infinite space to scroll up.
@@ -444,11 +447,11 @@ class PreferencesDialog:
         self.reset_warnings_button.set_sensitive(options.get('expert_mode'))
         vbox.pack_start(self.reset_warnings_button, False, True, 0)
 
-        # TRANSLATORS: This means to hide cleaners which would do
-        # nothing.  For example, if Firefox were never used on
-        # this system, this option would hide Firefox to simplify
-        # the list of cleaners.
         self._create_checkbox(
+            # TRANSLATORS: This means to hide cleaners which would do
+            # nothing. For example, if Firefox were never used on
+            # this system, this option would hide Firefox to simplify
+            # the list of cleaners.
             _("Hide irrelevant cleaners"),
             'auto_hide',
             vbox=vbox)
@@ -607,7 +610,7 @@ class PreferencesDialog:
             """Callback for removing a drive"""
             treeselection = treeview.get_selection()
             (model, _iter) = treeselection.get_selected()
-            if None == _iter:
+            if _iter is None:
                 # nothing selected
                 return
             pathname = model[_iter][0]
@@ -641,11 +644,7 @@ class PreferencesDialog:
 
         liststore = Gtk.ListStore(str)
 
-        pathnames = options.get_list('shred_drives')
-        if pathnames:
-            pathnames = sorted(pathnames)
-        if not pathnames:
-            pathnames = []
+        pathnames = sorted(options.get_list('shred_drives') or [])
         for pathname in pathnames:
             liststore.append([pathname])
         treeview = Gtk.TreeView.new_with_model(liststore)
@@ -691,7 +690,13 @@ class PreferencesDialog:
             # TRANSLATORS: Section title on the preferences languages page.
             _("BleachBit interface language"))
 
-        self.__create_language_widgets(ui_language_box)
+        try:
+            supported_langs = get_supported_language_code_name_dict()
+        except Exception as e:
+            logger.error("Failed to get list of supported languages: %s", e)
+            supported_langs = None
+
+        self.__create_language_widgets(ui_language_box, supported_langs)
 
         # Windows does not have locale cleaner.
         if not IS_POSIX:
@@ -704,7 +709,10 @@ class PreferencesDialog:
 
         # populate data
         liststore = Gtk.ListStore('gboolean', str, str)
-        for lang, native in get_supported_language_code_name_dict().items():
+        if supported_langs is None:
+            # There is no English fallback here, so let the failure propagate.
+            supported_langs = get_supported_language_code_name_dict()
+        for lang, native in supported_langs.items():
             liststore.append([(options.get_language(lang)), lang, native])
 
         # create treeview
@@ -828,7 +836,7 @@ class PreferencesDialog:
         # TRANSLATORS: Noun used as a column header in the preferences dialog.
         type_str_folder = _('Folder')
         type_str = type_str_file if path_type == 'file' else type_str_folder
-        display_path = pathname.encode('utf-8', errors='replace').decode('utf-8')
+        display_path = sanitize_surrogates(pathname)
         liststore.append([type_str, display_path])
         pathnames.append([path_type, pathname])
 
@@ -845,7 +853,7 @@ class PreferencesDialog:
         """Common function to remove a path from either whitelist or custom list"""
         treeselection = treeview.get_selection()
         (model, _iter) = treeselection.get_selected()
-        if None == _iter:
+        if _iter is None:
             return
         tree_path = model.get_path(_iter)
         row_index = tree_path.get_indices()[0]
@@ -885,7 +893,7 @@ class PreferencesDialog:
             else:
                 raise RuntimeError("Invalid type code: '%s'" % type_code)
             path = paths[1]
-            display_path = path.encode('utf-8', errors='replace').decode('utf-8')
+            display_path = sanitize_surrogates(path)
             liststore.append([type_str, display_path])
 
         if not self._locations_notice_css_provider:
@@ -923,7 +931,7 @@ class PreferencesDialog:
         notice_label.set_line_wrap(True)
         notice_label.set_xalign(0.0)
 
-        notice_image = Gtk.Image.new_from_icon_name(
+        notice_image = load_icon_or_fallback(
             notice_icon, Gtk.IconSize.MENU)
         notice_image.set_valign(Gtk.Align.START)
 
@@ -994,10 +1002,12 @@ class PreferencesDialog:
             self._remove_path(treeview, liststore, pathnames, page_type)
 
         button_add_file = Gtk.Button.new_with_label(
+            # TRANSLATORS: Button label in the preferences for adding a file.
             label=_p('button', 'Add file'))
         button_add_file.connect("clicked", add_file_cb)
 
         button_add_folder = Gtk.Button.new_with_label(
+            # TRANSLATORS: Button label in the preferences for adding a folder.
             label=_p('button', 'Add folder'))
         button_add_folder.connect("clicked", add_folder_cb)
 

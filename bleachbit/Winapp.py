@@ -16,8 +16,10 @@ import re
 from xml.dom.minidom import parseString
 
 import bleachbit
-from bleachbit import Cleaner, Windows
+from bleachbit import Cleaner, IS_WINDOWS, Windows
 from bleachbit.Action import Delete, Winreg
+from bleachbit.CleanerML import reject_world_writable
+from bleachbit.FileUtilities import detect_encoding
 from bleachbit.Language import get_text as _
 
 logger = logging.getLogger(__name__)
@@ -46,7 +48,10 @@ langsecref_map = {
     '3033': ('winapp2_vivaldi', 'Vivaldi'),
     '3034': ('winapp2_brave', 'Brave'),
     # Section=Games (technically not langsecref)
-    'Games': ('winapp2_games', _('Games'))}
+    'Games': (
+        'winapp2_games',
+        # TRANSLATORS: Cleaner category name for games imported from winapp2.ini.
+        _('Games'))}
 
 
 # Compiled once; these run for every section/filekey when importing winapp2.ini
@@ -79,11 +84,6 @@ def _noop_progress(_fraction):
     return None
 
 
-def _always_false():
-    """Return False for cleaner auto_hide overrides."""
-    return False
-
-
 def detectos(required_ver, mock=False):
     """Returns boolean whether the detectos is compatible with the
     current operating system, or the mock version, if given."""
@@ -96,8 +96,9 @@ def detectos(required_ver, mock=False):
         # Exact version
         return Windows.parse_windows_build(required_ver) == current_os
     # Format of min|max
-    req_min = required_ver.split('|')[0]
-    req_max = required_ver.split('|')[1]
+    req_parts = required_ver.split('|')
+    req_min = req_parts[0]
+    req_max = req_parts[1]
     if req_min and current_os < Windows.parse_windows_build(req_min):
         return False
     if req_max and current_os > Windows.parse_windows_build(req_max):
@@ -106,15 +107,18 @@ def detectos(required_ver, mock=False):
 
 
 def winapp_expand_vars(pathname):
-    """Expand environment variables using special Winapp2.ini rules"""
+    """Expand environment variables using special Winapp2.ini rules
+
+    Returns the list of candidate paths to try, which is one or two long.
+    """
     # This is the regular expansion
     expand1 = os.path.expandvars(pathname)
     # Winapp2.ini expands %ProgramFiles% to %ProgramW6432%, etc.
     for pattern, sub_repl in _WINAPP_VAR_SUBS:
         if pattern.match(pathname):
             expand2 = pattern.sub(sub_repl, pathname)
-            return expand1, os.path.expandvars(expand2)
-    return expand1,
+            return [expand1, os.path.expandvars(expand2)]
+    return [expand1]
 
 
 def detect_file(pathname):
@@ -141,8 +145,23 @@ def special_detect(code):
     return False
 
 
+"""fnmatch.translate() only got atomic groups (avoiding catastrophic
+regex backtracking) in Python 3.11, but BleachBit supports 3.8+, so
+cap the wildcard count instead of trusting the stdlib on older versions.
+TODO: drop this once the minimum supported Python is 3.11+."""
+MAX_GLOB_WILDCARDS = 10
+
+
+def _check_wildcard_count(pattern):
+    """Raise if pattern has enough wildcards to risk a regex backtracking blowup"""
+    wildcard_count = pattern.count('*') + pattern.count('?')
+    if wildcard_count > MAX_GLOB_WILDCARDS:
+        raise ValueError(f'too many wildcards in pattern: {pattern!r}')
+
+
 def fnmatch_translate(pattern):
     """Same as the original without the end"""
+    _check_wildcard_count(pattern)
     ret = fnmatch.translate(pattern)
     if ret.endswith('$'):
         return ret[:-1]
@@ -163,7 +182,8 @@ class Winapp:
             self.add_section(langsecref[0], langsecref[1])
         self.errors = 0
         self.parser = bleachbit.RawConfigParser()
-        self.parser.read(pathname)
+        encoding = detect_encoding(pathname) or 'utf_8_sig'
+        self.parser.read(pathname, encoding=encoding)
         self.re_detect = re.compile(r'^detect(\d+)?$')
         self.re_detectfile = re.compile(r'^detectfile(\d+)?$')
         self.re_excludekey = re.compile(r'^excludekey\d+$')
@@ -186,16 +206,18 @@ class Winapp:
         self.cleaners[cleaner_id].id = cleaner_id
         self.cleaners[cleaner_id].name = name
         assert name.strip() == name
+        # TRANSLATORS: Description shown for a cleaner imported from winapp2.ini,
+        # which is a database of cleaning definitions.
         self.cleaners[cleaner_id].description = _('Imported from winapp2.ini')
         # The detect() function in this module effectively does what
         # auto_hide() does, so this avoids redundant, slow processing.
-        self.cleaners[cleaner_id].auto_hide = _always_false
+        self.cleaners[cleaner_id].auto_hide_supported = False
 
     def section_to_cleanerid(self, langsecref):
         """Given a langsecref (or section name), find the internal
         BleachBit cleaner ID."""
         # pre-defined, such as 3021
-        if langsecref in langsecref_map.keys():
+        if langsecref in langsecref_map:
             return langsecref_map[langsecref][0]
         # custom, such as games
         cleanerid = 'winapp2_' + section2option(langsecref)
@@ -240,16 +262,15 @@ class Winapp:
         # the middle part contains the file
         regexes = []
         for expanded in winapp_expand_vars(parts[1]):
-            regex = None
-            if not files:
-                # There is no third part, so this is either just a folder,
-                # or sometimes the file is specified directly.
-                regex = fnmatch_translate(expanded)
             if files:
                 # match one or more file types, directly in this tree or in any
                 # sub folder
                 regex = r'%s\\%s' % (
                     _EXCLUDEKEY_TRAILING_SEP.sub(r'\1', fnmatch_translate(expanded)), files_regex)
+            else:
+                # There is no third part, so this is either just a folder,
+                # or sometimes the file is specified directly.
+                regex = fnmatch_translate(expanded)
             regexes.append(regex)
 
         if len(regexes) == 1:
@@ -354,7 +375,6 @@ class Winapp:
             else:
                 logger.warning(
                     'unknown option %s in section %s', option, section)
-                continue
 
     def __make_file_provider(self, dirname, filename, recurse, removeself, excludekeys):
         """Change parsed FileKey to action provider"""
@@ -366,7 +386,7 @@ class Winapp:
                 if removeself:
                     search = 'walk.all'
             else:
-                regex = f' regex="^{xml_escape(fnmatch.translate(filename))}$" '
+                regex = f' regex="^{xml_escape(fnmatch_translate(filename))}$" '
         else:
             search = 'glob'
             path = os.path.join(dirname, filename)
@@ -457,10 +477,14 @@ class Winapp:
 
 def list_winapp_files():
     """List winapp2.ini files"""
+    check_world_writable = not IS_WINDOWS
     for dirname in (bleachbit.personal_cleaners_dir, bleachbit.system_cleaners_dir):
         fname = os.path.join(dirname, 'winapp2.ini')
-        if os.path.exists(fname):
-            yield fname
+        if not os.path.exists(fname):
+            continue
+        if check_world_writable and reject_world_writable(fname):
+            continue
+        yield fname
 
 
 def load_cleaners(cb_progress=_noop_progress):

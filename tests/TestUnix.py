@@ -18,8 +18,8 @@ import unittest
 from xml.dom.minidom import parseString
 
 from tests import common
-from bleachbit import logger
-from bleachbit.FileUtilities import children_in_directory, exe_exists
+from bleachbit import General, logger
+from bleachbit.FileUtilities import children_in_directory, exe_exists, getsize
 from bleachbit.VFS import ListVFS
 from bleachbit.Unix import (
     _is_broken_xdg_desktop_application,
@@ -36,6 +36,7 @@ from bleachbit.Unix import (
     get_distribution_name_version_os_release,
     get_distribution_name_version_platform_freedesktop,
     get_distribution_name_version,
+    get_globs_size,
     get_purgeable_locales,
     get_trash_paths,
     is_broken_xdg_desktop,
@@ -81,7 +82,7 @@ class UnixTestCase(common.BleachbitTestCase):
     @common.skipIfWindows
     def test_apt(self):
         """Unit test for method apt_autoclean() and apt_autoremove()"""
-        if 0 != os.geteuid() or not exe_exists('apt-get'):
+        if 0 != os.geteuid() or not exe_exists(General.resolve_exe('apt-get')):
             self.assertRaises(RuntimeError, apt_autoclean)
             self.assertRaises(RuntimeError, apt_autoremove)
         else:
@@ -127,7 +128,8 @@ class UnixTestCase(common.BleachbitTestCase):
                 0, "\n".join(mock_locales) + "\n", "")
             locales = find_available_locales()
             self.assertEqual(locales, mock_locales)
-            mock_run_external.assert_called_once_with(['locale', '-a'])
+            mock_run_external.assert_called_once_with(
+                [General.resolve_exe('locale'), '-a'])
 
     @mock.patch('locale.getlocale')
     @mock.patch('bleachbit.Unix.find_available_locales')
@@ -184,13 +186,48 @@ class UnixTestCase(common.BleachbitTestCase):
         self.assertRaises(AssertionError, find_best_locale, None)
         self.assertRaises(AssertionError, find_best_locale, [])
 
-    @unittest.skipUnless(exe_exists('apt-get'),
+    @mock.patch('locale.getlocale')
+    @mock.patch('bleachbit.Unix.find_available_locales')
+    def test_find_best_locale_macos_uppercase_utf8(
+            self, mock_find_available_locales, mock_getlocale):
+        """macOS's locale -a uses '.UTF-8' (uppercase, hyphenated),
+        unlike the lowercase '.utf8' used elsewhere in this test file.
+        The UTF-8 variant must still be preferred over a non-UTF-8 one
+        regardless of that formatting difference."""
+        mock_getlocale.return_value = ('fr_FR', 'UTF-8')
+        mock_find_available_locales.return_value = [
+            'en_NZ.ISO8859-1',
+            'en_US.UTF-8',
+        ]
+        self.assertEqual(find_best_locale('en'), 'en_US.UTF-8')
+
+    @unittest.skipUnless(exe_exists(General.resolve_exe('apt-get')),
                          'skipping tests for unavailable apt-get')
     def test_get_apt_size(self):
         """Unit test for method get_apt_size()"""
         size = get_apt_size()
         self.assertIsInteger(size)
         self.assertGreaterEqual(size, 0)
+
+    def test_get_globs_size_vanished(self):
+        """get_globs_size() skips a file that vanishes between glob and getsize"""
+        real_fn = self.write_file('globs-size-real', contents=b'0123456789')
+        expected = getsize(real_fn)
+        self.assertGreater(expected, 0)
+        pattern = os.path.join(self.tempdir, 'globs-size-*')
+        self.assertEqual(expected, get_globs_size([pattern]))
+
+        # A file listed by the glob but gone by the time it is measured
+        ghost_fn = os.path.join(self.tempdir, 'globs-size-ghost')
+        with mock.patch('bleachbit.Unix.glob.iglob',
+                        return_value=iter([real_fn, ghost_fn])):
+            self.assertEqual(expected, get_globs_size([pattern]))
+
+        # Other errors must still propagate
+        with mock.patch('bleachbit.Unix.FileUtilities.getsize',
+                        side_effect=PermissionError('denied')):
+            with self.assertRaises(PermissionError):
+                get_globs_size([pattern])
 
     @common.skipIfWindows
     def test_get_distribution_name_version(self):
@@ -331,7 +368,6 @@ PrefersNonDefaultGPU=false""")
             tmp.flush()
             self.assertFalse(is_broken_xdg_desktop(tmp.name))
 
-
     @common.skipIfWindows
     def test_get_trash_paths(self):
         """Unit test for get_trash_paths()"""
@@ -339,8 +375,41 @@ PrefersNonDefaultGPU=false""")
         for p in get_trash_paths():
             seen.append(p)
             self.assertExists(p.path)
-        self.assertEqual(len(seen), len(set(p.path for p in seen)), "Duplicate trash paths found")
+        self.assertEqual(len(seen), len(
+            set(p.path for p in seen)), "Duplicate trash paths found")
 
+    @common.skipIfWindows
+    def test_get_trash_paths_includes_now_empty_folder(self):
+        """Regression test: a folder sent to the macOS Trash must be
+        yielded for deletion itself, not just the files inside it.
+
+        get_trash_paths() previously called
+        children_in_directory(dirname, False), where the second argument
+        is list_directories, not 'recursive' as an earlier comment
+        claimed. With False, only files are yielded and a folder emptied
+        by this same cleaning pass is left behind forever, empty, in
+        ~/.Trash.
+        """
+        trash_dir = self.mkdtemp(prefix='bleachbit-test-trash')
+        sub_dir = os.path.join(trash_dir, 'folder-in-trash')
+        os.mkdir(sub_dir)
+        file_path = os.path.join(sub_dir, 'file.txt')
+        self.write_file(file_path)
+
+        real_expanduser = os.path.expanduser
+
+        def fake_expanduser(p):
+            if p == '~/.Trash':
+                return trash_dir
+            return real_expanduser(p)
+
+        with mock.patch('os.path.expanduser', side_effect=fake_expanduser):
+            paths = [p.path for p in get_trash_paths()]
+
+        self.assertIn(file_path, paths)
+        self.assertIn(
+            sub_dir, paths,
+            'the emptied folder itself must also be yielded for deletion')
 
     @common.skipIfWindows
     def test_desktop_valid_exe(self):
@@ -382,7 +451,8 @@ PrefersNonDefaultGPU=false""")
         result = _is_broken_xdg_desktop_application(
             fake_config, "com.github.AppManager.desktop")
         self.assertFalse(result)
-        mock_exe_exists.assert_called_with('/home/user/Applications/AppManager')
+        mock_exe_exists.assert_called_with(
+            '/home/user/Applications/AppManager')
 
     @mock.patch('bleachbit.FileUtilities.exe_exists')
     def test_desktop_quoted_exe_path_containing_spaces(self, mock_exe_exists):
@@ -470,7 +540,7 @@ PrefersNonDefaultGPU=false""")
 
     @common.skipIfWindows
     def test_journald_clean(self):
-        if not exe_exists('journalctl'):
+        if not exe_exists(General.resolve_exe('journalctl')):
             self.assertRaises(RuntimeError, journald_clean)
         else:
             try:
@@ -604,9 +674,17 @@ PrefersNonDefaultGPU=false""")
             self.assertLExists(
                 path, f"Rotated log path '{path}' does not exist")
 
+    @mock.patch('os.access')
+    @mock.patch('os.path.isdir')
     @mock.patch('bleachbit.FileUtilities.whitelisted')
     @mock.patch('bleachbit.FileUtilities.children_in_directory')
-    def test_rotated_logs_mock(self, mock_cid, mock_whitelisted):
+    def test_rotated_logs_mock(self, mock_cid, mock_whitelisted, mock_isdir, mock_access):
+        # Simulate a writable /var/log so the macOS permission check in
+        # rotated_logs() does not interfere with this test, which is
+        # about the keep_lists/positive_re filtering logic, not
+        # permissions (that's covered by a dedicated test).
+        mock_isdir.return_value = True
+        mock_access.return_value = True
         mock_whitelisted.side_effect = lambda path: path.startswith(
             '/var/log/whitelisted/')
         expected_delete = [
@@ -651,6 +729,30 @@ PrefersNonDefaultGPU=false""")
         mock_cid.assert_called_once_with('/var/log')
         mock_whitelisted.assert_called()
 
+    @mock.patch('bleachbit.Unix.IS_MAC', True)
+    @mock.patch('os.access')
+    @mock.patch('os.path.isdir')
+    @mock.patch('bleachbit.FileUtilities.whitelisted')
+    @mock.patch('bleachbit.FileUtilities.children_in_directory')
+    def test_rotated_logs_macos_permission_check(
+            self, mock_cid, mock_whitelisted, mock_isdir, mock_access):
+        """On macOS, skip a path only if its parent dir exists and is
+        unwritable. A nonexistent parent (os.access() also returns False
+        for that) must not be treated the same as 'no permission'."""
+        mock_whitelisted.return_value = False
+        candidates = [
+            '/var/log/protected/foo.0',
+            '/var/log/missing_parent/foo.0',
+        ]
+        mock_cid.return_value = iter(candidates)
+        mock_isdir.side_effect = lambda p: p == '/var/log/protected'
+        mock_access.return_value = False
+
+        result = list(rotated_logs())
+
+        self.assertNotIn('/var/log/protected/foo.0', result)
+        self.assertIn('/var/log/missing_parent/foo.0', result)
+
     @common.skipIfWindows
     def test_run_cleaner_cmd(self):
         """Unit test for run_cleaner_cmd()"""
@@ -686,7 +788,7 @@ PrefersNonDefaultGPU=false""")
     def test_yum_clean(self):
         """Unit test for yum_clean()"""
         if 0 != os.geteuid() or os.path.exists('/var/run/yum.pid') \
-                or not exe_exists('yum'):
+                or not exe_exists(General.resolve_exe('yum')):
             self.assertRaises(RuntimeError, yum_clean)
         else:
             bytes_freed = yum_clean()
@@ -697,7 +799,7 @@ PrefersNonDefaultGPU=false""")
     def test_dnf_clean(self):
         """Unit test for dnf_clean()"""
         if 0 != os.geteuid() or os.path.exists('/var/run/dnf.pid') \
-                or not exe_exists('dnf'):
+                or not exe_exists(General.resolve_exe('dnf')):
             self.assertRaises(RuntimeError, dnf_clean)
         else:
             bytes_freed = dnf_clean()
@@ -706,22 +808,26 @@ PrefersNonDefaultGPU=false""")
 
     @common.skipIfWindows
     @mock.patch('bleachbit.Language.setup_translation')
+    @mock.patch('bleachbit.Unix.os.geteuid')
     @mock.patch('bleachbit.Unix.FileUtilities.exe_exists')
     @mock.patch('bleachbit.Unix.General.run_external')
     @mock.patch('bleachbit.Unix.FileUtilities.getsizedir')
-    @mock.patch('bleachbit.Unix.os.path')
-    def test_dnf_clean_mock(self, mock_path, mock_getsizedir, mock_run,
-                            mock_exe, mock_setup):
+    @mock.patch('bleachbit.Unix.os.path.exists')
+    def test_dnf_clean_mock(self, mock_path_exists, mock_getsizedir, mock_run,
+                            mock_exe, mock_geteuid, mock_setup):
         """Unit test for dnf_clean() with mock for DNF4 and DNF5"""
         # Don't call setup_translation() for real because it uses
         # os.path.exists(), which is mocked here.
         mock_setup.return_value = None
+        # Pretend to be root so the euid guard in dnf_clean() does not
+        # short-circuit the rest of the logic under test.
+        mock_geteuid.return_value = 0
         mock_exe.return_value = True
-        mock_path.exists.return_value = True
+        mock_path_exists.return_value = True
         # dnf.pid present -> RuntimeError
         self.assertRaises(RuntimeError, dnf_clean)
 
-        mock_path.exists.return_value = False
+        mock_path_exists.return_value = False
 
         # DNF5 reports freed space directly in its summary line, so the
         # getsizedir fallback (post-run measurement) must not be used.
@@ -765,12 +871,18 @@ PrefersNonDefaultGPU=false""")
         mock_exe.return_value = False
         self.assertRaises(RuntimeError, dnf_clean)
 
+        # non-root user -> RuntimeError (DNF5 would otherwise silently
+        # clean the per-user cache and report 0 bytes freed).
+        mock_exe.return_value = True
+        mock_geteuid.return_value = 1000
+        self.assertRaises(RuntimeError, dnf_clean)
+
     @common.skipIfWindows
     def test_dnf_autoremove_real(self):
         """Unit test for dnf_autoremove() with real dnf"""
         if 0 != os.geteuid() or os.path.exists('/var/run/dnf.pid') \
-                or not exe_exists('dnf'):
-            self.assertRaises(RuntimeError, dnf_clean)
+                or not exe_exists(General.resolve_exe('dnf')):
+            self.assertRaises(RuntimeError, dnf_autoremove)
         else:
             bytes_freed = dnf_autoremove()
             self.assertIsInteger(bytes_freed)
@@ -778,17 +890,26 @@ PrefersNonDefaultGPU=false""")
 
     @common.skipIfWindows
     @mock.patch('bleachbit.Language.setup_translation')
-    @mock.patch('bleachbit.Unix.os.path')
+    @mock.patch('bleachbit.Unix.FileUtilities.exe_exists')
+    @mock.patch('bleachbit.Unix.os.path.exists')
     @mock.patch('bleachbit.General.run_external')
-    def test_dnf_autoremove_mock(self, mock_run, mock_path, mock_setup):
+    def test_dnf_autoremove_mock(self, mock_run, mock_path_exists, mock_exe,
+                                 mock_setup):
         """Unit test for dnf_autoremove() with mock"""
         # Don't call setup_translation() for real because it uses
         # os.path.exists(), which is mocked here.
         mock_setup.return_value = None
-        mock_path.exists.return_value = True
+        mock_exe.return_value = True
+        mock_path_exists.return_value = True
         self.assertRaises(RuntimeError, dnf_autoremove)
 
-        mock_path.exists.return_value = False
+        mock_path_exists.return_value = False
+
+        # dnf not installed -> RuntimeError.
+        mock_exe.return_value = False
+        self.assertRaises(RuntimeError, dnf_autoremove)
+        mock_exe.return_value = True
+
         mock_run.return_value = (1, 'stdout', 'stderr')
         self.assertRaises(RuntimeError, dnf_autoremove)
 
@@ -887,7 +1008,7 @@ PrefersNonDefaultGPU=false""")
     def test_pacman_cache(self):
         """Unit test for pacman_cache()"""
         if 0 != os.geteuid() or os.path.exists('/var/lib/pacman/db.lck') \
-                or not exe_exists('paccache'):
+                or not exe_exists(General.resolve_exe('paccache')):
             self.assertRaises(RuntimeError, pacman_cache)
         else:
             bytes_freed = pacman_cache()
@@ -897,10 +1018,10 @@ PrefersNonDefaultGPU=false""")
     @common.skipIfWindows
     @mock.patch('bleachbit.Unix.General.run_external')
     @mock.patch('bleachbit.Unix.exe_exists')
-    @mock.patch('bleachbit.Unix.os.path')
-    def test_pacman_cache_mock(self, mock_path, mock_exe_exists, mock_run):
+    @mock.patch('bleachbit.Unix.os.path.exists')
+    def test_pacman_cache_mock(self, mock_path_exists, mock_exe_exists, mock_run):
         """Unit test pacman_cache() parse logic without pacman installed"""
-        mock_path.exists.return_value = False
+        mock_path_exists.return_value = False
         mock_exe_exists.return_value = True
         mock_run.return_value = (
             0,
@@ -911,7 +1032,8 @@ PrefersNonDefaultGPU=false""")
         bytes_freed = pacman_cache()
         self.assertEqual(bytes_freed, 42310000)
 
-        mock_run.assert_called_once_with(['paccache', '-rk0'])
+        mock_run.assert_called_once_with(
+            [General.resolve_exe('paccache'), '-rk0'])
 
         # real paccache reports binary units (MiB), not decimal (M)
         mock_run.return_value = (
@@ -956,7 +1078,7 @@ PrefersNonDefaultGPU=false""")
     @common.skipUnlessDestructive
     def test_snap_disabled_clean(self):
         """Unit test for snap_disabled_clean()"""
-        if not exe_exists('snap'):
+        if not exe_exists(General.resolve_exe('snap')):
             self.assertRaises(RuntimeError, snap_disabled_clean)
         else:
             bytes_freed = snap_disabled_clean()
@@ -966,7 +1088,7 @@ PrefersNonDefaultGPU=false""")
     @common.skipIfWindows
     def test_snap_disabled_preview(self):
         """Unit test for snap_disabled_preview()"""
-        if not exe_exists('snap'):
+        if not exe_exists(General.resolve_exe('snap')):
             self.assertRaises(RuntimeError, snap_disabled_preview)
         else:
             bytes_freed = snap_disabled_preview()
@@ -1072,7 +1194,7 @@ PrefersNonDefaultGPU=false""")
         error_code = None
 
         def side_effect_func(*args, **_kwargs):
-            self.assertEqual(args[0][0], 'xhost')
+            self.assertEqual(args[0][0], General.resolve_exe('xhost'))
             return (error_code,
                     '',
                     '')
@@ -1135,7 +1257,7 @@ class LocalizationsTestCase(common.BleachbitTestCase):
                 locales.add_xml(child)
 
         recognized = set()
-        for (locale, specifier, path) in locales._paths.get_localizations('/'):
+        for (_locale, _specifier, path) in locales._paths.get_localizations('/'):
             recognized.add(path)
         return recognized
 

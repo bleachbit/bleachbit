@@ -97,6 +97,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$profile$$/Network/Cookies-journal"/>
     <action command="cookie" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
+    <action command="delete" search="file" path="$$profile$$/TransportSecurity"/>
     <!-- below are entries valid before Opera 15 -->
     <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera\cookies.txt -->
     <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera 11.00 beta\cookies.txt -->

@@ -38,6 +38,7 @@ def cleaner_change_dialog(changes, parent):
 
     # TODO: move to GuiBasic
     from bleachbit.GtkShim import Gtk, GObject
+    from bleachbit.GuiUtil import load_icon_or_fallback
 
     dialog = Gtk.Dialog(title=_("Security warning"),
                         transient_for=parent,
@@ -46,8 +47,7 @@ def cleaner_change_dialog(changes, parent):
 
     # create warning
     warnbox = Gtk.Box()
-    image = Gtk.Image()
-    image.set_from_icon_name("dialog-warning", Gtk.IconSize.DIALOG)
+    image = load_icon_or_fallback("dialog-warning", Gtk.IconSize.DIALOG)
     warnbox.pack_start(image, False, True, 0)
 
     # TRANSLATORS: Cleaner definitions are XML data files that define
@@ -98,7 +98,7 @@ def cleaner_change_dialog(changes, parent):
             path = row[1]
             if b:
                 delete.append(path)
-        if 0 == len(delete):
+        if not delete:
             # no files selected to delete
             break
         from . import GuiBasic

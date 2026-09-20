@@ -19,16 +19,19 @@ import warnings
 from unittest import mock
 
 # local
-from bleachbit import IS_POSIX, IS_WINDOWS, logger
+from bleachbit import General, IS_POSIX, IS_WINDOWS, logger
 from bleachbit.FileUtilities import exe_exists, exists_in_path
 from bleachbit.General import (
     boolstr_to_bool,
+    chownself,
     get_executable,
     get_real_uid,
     get_real_username,
     makedirs,
+    reject_xml_dtd,
     run_external,
     run_external_nowait,
+    sanitize_root_env,
     shell_split,
     sudo_mode)
 from tests import common
@@ -114,7 +117,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
         try:
             logger.debug('os.getlogin() = %s', os.getlogin())
-        except:
+        except Exception:
             logger.exception('os.getlogin() raised exception')
 
         # Test that function doesn't modify global state
@@ -133,6 +136,121 @@ class GeneralTestCase(common.BleachbitTestCase):
                 with mock.patch('pwd.getpwnam', side_effect=KeyError):
                     uid = get_real_uid()
         self.assertEqual(uid, 1000)
+
+    def test_sanitize_root_env_non_root(self):
+        """Not running as root: environment is returned unchanged."""
+        env = {'PATH': '/tmp/evil', 'LD_PRELOAD': 'evil.so'}
+        with mock.patch('os.geteuid', return_value=1000, create=True):
+            self.assertEqual(sanitize_root_env(env), env)
+
+    def test_sanitize_root_env_root(self):
+        """As root: drop code-loading vars and PATH entries a non-root user could write."""
+        dropped_vars = ('LD_PRELOAD', 'LD_LIBRARY_PATH', 'LD_AUDIT',
+                        'DYLD_INSERT_LIBRARIES', 'DYLD_LIBRARY_PATH',
+                        'DYLD_FRAMEWORK_PATH',
+                        'GCONV_PATH', 'LOCPATH', 'NLSPATH', 'HOSTALIASES',
+                        'PYTHONPATH', 'PYTHONHOME', 'PYTHONSTARTUP',
+                        'PYTHONEXECUTABLE',
+                        'BASH_ENV', 'ENV', 'SHELLOPTS', 'BASHOPTS', 'IFS',
+                        'PERL5LIB', 'PERL5OPT', 'RUBYLIB', 'RUBYOPT',
+                        'NODE_OPTIONS')
+        env = {var: '/tmp/evil' for var in dropped_vars}
+        env['PATH'] = '/usr/bin' + os.pathsep + '/tmp/evil'
+        env['HOME'] = '/root'
+        with mock.patch('os.geteuid', return_value=0, create=True), \
+                mock.patch('bleachbit.General._path_dir_is_root_safe',
+                           side_effect=lambda d: d == '/usr/bin'):
+            result = sanitize_root_env(env)
+        self.assertEqual(result['PATH'], '/usr/bin')
+        for dropped in dropped_vars:
+            self.assertNotIn(dropped, result)
+        self.assertEqual(result['HOME'], '/root')
+
+    @common.skipIfWindows
+    def test_run_external_nowait_sanitizes_env_when_called_directly(self):
+        """run_external_nowait() must sanitize env even when not called via run_external()
+
+        Some callers (e.g. GuiApplication's self-restart) call this directly,
+        bypassing run_external()'s own sanitize_root_env() call.
+        """
+        hostile_env = {'PATH': '/usr/bin' + os.pathsep + '/tmp/evil',
+                       'LD_PRELOAD': '/tmp/evil.so'}
+        captured = {}
+
+        def fake_popen(args, **kwargs):
+            captured['env'] = kwargs.get('env')
+            proc = mock.Mock()
+            return proc
+
+        with mock.patch('os.geteuid', return_value=0, create=True), \
+                mock.patch('bleachbit.General._path_dir_is_root_safe',
+                           side_effect=lambda d: d == '/usr/bin'), \
+                mock.patch('bleachbit.General.subprocess.Popen', side_effect=fake_popen):
+            run_external_nowait(['/bin/true'], env=hostile_env)
+        self.assertNotIn('LD_PRELOAD', captured['env'])
+        self.assertEqual(captured['env']['PATH'], '/usr/bin')
+        # the caller's own dict must not be mutated in place
+        self.assertIn('LD_PRELOAD', hostile_env)
+
+    def test_reject_xml_dtd_internal_subset(self):
+        """A DTD with an internal subset is rejected, str or bytes."""
+        xml_text = ('<?xml version="1.0" encoding="UTF-8"?>'
+                    '<!DOCTYPE r [<!ENTITY x "y">]><r/>')
+        with self.assertRaises(ValueError):
+            reject_xml_dtd(xml_text)
+        with self.assertRaises(ValueError):
+            reject_xml_dtd(xml_text.encode('utf-8'))
+
+    def test_reject_xml_dtd_str_with_encoding_declaration(self):
+        """pyexpat rejects str input with an encoding declaration; the wrapper must not."""
+        xml_text = ('<?xml version="1.0" encoding="UTF-8"?>'
+                    '<updates><stable ver="1">https://x</stable></updates>')
+        # must not raise
+        reject_xml_dtd(xml_text)
+        reject_xml_dtd(xml_text.encode('utf-8'))
+        reject_xml_dtd(xml_text, 'update XML')
+
+    def test_reject_xml_dtd_external_doctype_allowed(self):
+        """An external-only DOCTYPE without internal subset is allowed."""
+        xml_text = ('<?xml version="1.0" encoding="UTF-8"?>'
+                    '<!DOCTYPE fonts SYSTEM "fonts.dtd"><fonts/>')
+        reject_xml_dtd(xml_text)
+
+    def test_get_real_uid_non_numeric_sudo_uid(self):
+        """A bogus SUDO_UID must not crash; fall through instead."""
+        if not IS_POSIX:
+            self.skipTest('POSIX-only behavior')
+
+        with mock.patch.dict(os.environ, {'SUDO_UID': 'not-a-number'}, clear=False):
+            with mock.patch('os.getlogin', return_value='root'):
+                uid = get_real_uid()
+        self.assertIsInstance(uid, int)
+        self.assertGreaterEqual(uid, 0)
+
+    def test_chownself_root_guard(self):
+        """chownself() must refuse /root and its descendants, including
+        via a non-canonical path spelling that a raw substring check
+        would miss."""
+        if not IS_POSIX:
+            self.skipTest('POSIX-only behavior')
+
+        with mock.patch.object(General, 'get_real_uid', return_value=1000), \
+                mock.patch.object(os, 'chown') as mock_chown:
+            for path in ('/root', '/root/', '/root/.ssh/authorized_keys',
+                         '/home/x/../../root', '/home/x/../../root/.bashrc'):
+                with self.subTest(path=path):
+                    chownself(path)
+                    mock_chown.assert_not_called()
+
+            # a sibling directory that merely starts with the string
+            # "root" must not be treated as /root
+            chownself('/rootlookalike/file')
+            mock_chown.assert_called_once()
+            mock_chown.reset_mock()
+
+            # an ordinary path is still chowned
+            chownself('/home/user/file')
+            mock_chown.assert_called_once()
 
     @also_with_sudo
     def test_get_real_username(self):
@@ -363,14 +481,16 @@ class GeneralTestCase(common.BleachbitTestCase):
             (rc, _, stderr) = run_external(
                 ['ls', '/doesnotexist'], clean_env=False)
             # GNU ls returns 2 for missing files, while BSD/macOS ls returns 1
-            self.assertIn(rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
+            self.assertIn(
+                rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
             self.assertIn('No such file', stderr)
 
             # Set parent environment to Spanish.
             with common.set_temporary_env('LC_ALL', 'es_MX.UTF-8'):
                 (rc, _, stderr) = run_external(
                     ['ls', '/doesnotexist'], clean_env=False)
-                self.assertIn(rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
+                self.assertIn(
+                    rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
                 if os.path.exists('/usr/share/locale-langpack/es/LC_MESSAGES/coreutils.mo'):
                     # Spanish language pack is installed.
                     self.assertIn('No existe el archivo', stderr)
@@ -379,7 +499,8 @@ class GeneralTestCase(common.BleachbitTestCase):
                 # should use English.
                 (rc, _, stderr) = run_external(
                     ['ls', '/doesnotexist'], clean_env=True)
-                self.assertIn(rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
+                self.assertIn(
+                    rc, (1, 2), 'ls /doesnotexist returned exit code %s' % rc)
                 self.assertIn('No such file', stderr)
 
     def test_run_external_invalid(self):

@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-07-12 15:23-0600\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-01 10:05-0600\n"
 "PO-Revision-Date: 2026-07-19 11:01+0000\n"
 "Last-Translator: Jaime Muñoz Martín <jmmartin_5@outlook.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/bleachbit/main/"
@@ -78,27 +78,31 @@ msgstr "Historial"
 msgid "Delete the usage history"
 msgstr "Suprimeix l'historial d'ús"
 
+#. TRANSLATORS: Name of a cleaning option for Windows log files.
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Logs"
 msgstr "Registres"
 
+#. TRANSLATORS: Description of the Logs cleaning option.
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Delete the logs"
 msgstr "Suprimeix els registres"
 
@@ -107,6 +111,7 @@ msgstr "Suprimeix els registres"
 msgid "Multimedia viewer"
 msgstr "Reproductor multimèdia"
 
+#. TRANSLATORS: Name of a cleaning option. Cache is a noun.
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
 #: ../cleaners/librewolf.xml ../cleaners/openoffice.xml
 #: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
@@ -141,8 +146,8 @@ msgstr "Memòria cau"
 #: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/android_studio.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
@@ -390,6 +395,7 @@ msgstr "Suprimeix l'historial d'ordres"
 msgid "Office suite"
 msgstr "Paquet ofimàtic"
 
+#. TRANSLATORS: Description of the Recent documents list cleaning option.
 #: ../cleaners/openoffice.xml ../cleaners/audacious.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/gedit.xml ../cleaners/kde.xml
@@ -420,6 +426,7 @@ msgstr "Registres de depuració"
 msgid "Delete the debug logs"
 msgstr "Suprimeix els registres de depuració"
 
+#. TRANSLATORS: Name of a cleaning option for temporary files.
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
@@ -429,6 +436,7 @@ msgstr "Suprimeix els registres de depuració"
 msgid "Temporary files"
 msgstr "Fitxers temporals"
 
+#. TRANSLATORS: Description of the Temporary files cleaning option.
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
@@ -622,6 +630,7 @@ msgstr ""
 msgid "File manager"
 msgstr "Gestor de fitxers"
 
+#. TRANSLATORS: Name of a cleaning option for the history of recently used files.
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py
 msgid "Recent documents list"
@@ -681,6 +690,32 @@ msgstr "Suprimeix els fitxers obsolets"
 #: ../cleaners/apt.xml
 msgid "Package lists"
 msgstr "Llistes de paquets"
+
+#: ../cleaners/android_studio.xml
+#, fuzzy
+#| msgid "Desktop environment"
+msgid "Development environment"
+msgstr "Entorn d'escriptori"
+
+#: ../cleaners/android_studio.xml
+msgid "Gradle cache"
+msgstr ""
+
+#: ../cleaners/android_studio.xml
+#, fuzzy
+#| msgid "Delete downloaded podcasts"
+msgid "Delete downloaded dependencies and build artifacts"
+msgstr "Suprimeix els podcasts baixats"
+
+#: ../cleaners/android_studio.xml
+msgid "Dependencies will need to be downloaded on the next build."
+msgstr ""
+
+#: ../cleaners/android_studio.xml
+#, fuzzy
+#| msgid "DNS cache"
+msgid "IDE cache"
+msgstr "Memòria cau DNS"
 
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
@@ -833,6 +868,7 @@ msgstr "Suprimeix els torrents (només les metadades, no els fitxers descrits)"
 msgid "Statistics"
 msgstr "Estadístiques"
 
+#. TRANSLATORS: Description of the Memory dump cleaning option.
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Delete the file"
 msgstr "Suprimeix el fitxer"
@@ -849,6 +885,7 @@ msgstr "Fitxers baixats"
 msgid "Remote control software"
 msgstr "Programari de control remot"
 
+#. TRANSLATORS: Name of a cleaning option for Windows crash dump files.
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Memory dump"
 msgstr "Abocament de memòria"
@@ -1324,11 +1361,20 @@ msgstr ""
 "Error a handle_cleaner_option() per al netejador amb id = {cleaner_id}, "
 "opció XML={option_xml}"
 
-#. TRANSLATORS: Warning printed to the log.
-#. %s expands to the path of the XML cleaner file that was skipped
-#: ../bleachbit/CleanerML.py
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file that was skipped
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
+msgstr "S'ignora el netejador perquè per tothom hi té accés d'escriptura: %s"
+
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file whose directory is world
+#. writable.
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
+#, fuzzy, python-format
+#| msgid "Ignoring cleaner because it is world writable: %s"
+msgid "Ignoring cleaner because its directory is world writable: %s"
 msgstr "S'ignora el netejador perquè per tothom hi té accés d'escriptura: %s"
 
 #. TRANSLATORS: Error message printed to the log.
@@ -1337,6 +1383,16 @@ msgstr "S'ignora el netejador perquè per tothom hi té accés d'escriptura: %s"
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "Error en llegir el netejador: %s"
+
+#. TRANSLATORS: Cleaner name shown in the list of applications.
+#: ../bleachbit/Cleaner.py
+msgid "System"
+msgstr "Sistema"
+
+#. TRANSLATORS: Description of the System cleaner.
+#: ../bleachbit/Cleaner.py
+msgid "The system in general"
+msgstr "El sistema en general"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1349,6 +1405,7 @@ msgstr "Error en llegir el netejador: %s"
 msgid "Broken desktop files"
 msgstr "Fitxers .desktop trencats"
 
+#. TRANSLATORS: Description of the Broken desktop files cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete broken application menu entries and file associations"
 msgstr ""
@@ -1360,30 +1417,40 @@ msgstr ""
 msgid "Localizations"
 msgstr "Fitxers d'idioma"
 
+#. TRANSLATORS: Description of the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete files for unwanted languages"
 msgstr "Suprimeix els fitxers dels idiomes no desitjats"
 
+#. TRANSLATORS: Warning for the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Configure this option in the preferences."
 msgstr "Configureu aquesta opció a les preferències."
 
+#. TRANSLATORS: 'Rotated logs' refers to old system log files.
+#. Linux systems often have a scheduled job to rotate the logs
+#. which means compress all except the newest log and then delete
+#. the oldest log. You could translate this as 'old logs.'
 #: ../bleachbit/Cleaner.py
 msgid "Rotated logs"
 msgstr "Registres arxivats"
 
+#. TRANSLATORS: Description of the Rotated logs cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete old system logs"
 msgstr "Suprimeix els registres antics del sistema"
 
+#. TRANSLATORS: Name of a cleaning option. Trash is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Trash"
 msgstr "Paperera"
 
+#. TRANSLATORS: Description of the Trash cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the trash"
 msgstr "Buida la paperera"
 
+#. TRANSLATORS: Name of a cleaning option for system memory.
 #: ../bleachbit/Cleaner.py ../bleachbit/Worker.py
 msgid "Memory"
 msgstr "Memòria"
@@ -1393,6 +1460,7 @@ msgstr "Memòria"
 msgid "Wipe the swap and free memory"
 msgstr "Neteja la memòria lliure i l'espai d'intercanvi"
 
+#. TRANSLATORS: Warning for the experimental Memory cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "This option is experimental and may cause system problems."
 msgstr "Aquesta opció és experimental i pot causar problemes al sistema."
@@ -1407,10 +1475,12 @@ msgstr "Memòria cau DNS"
 msgid "Prefetch"
 msgstr "Prefetch"
 
+#. TRANSLATORS: Name of a cleaning option for the Windows recycle bin.
 #: ../bleachbit/Cleaner.py
 msgid "Recycle bin"
 msgstr "Paperera"
 
+#. TRANSLATORS: Description of the Recycle bin cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the recycle bin"
 msgstr "Buida la paperera"
@@ -1434,12 +1504,15 @@ msgstr ""
 #. TRANSLATORS: Warning shown when selecting an option.
 #: ../bleachbit/Cleaner.py
 msgid "This option may prevent uninstalling some updates."
-msgstr "Aquesta opció pot impedir la desinstal·lació d'algunes actualitzacions."
+msgstr ""
+"Aquesta opció pot impedir la desinstal·lació d'algunes actualitzacions."
 
+#. TRANSLATORS: Name of a cleaning option. Clipboard is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
 msgstr "Porta-retalls"
 
+#. TRANSLATORS: Description of the Clipboard cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "The desktop environment's clipboard used for copy and paste operations"
 msgstr ""
@@ -1454,6 +1527,7 @@ msgstr ""
 msgid "Custom"
 msgstr "Neteja personalitzada"
 
+#. TRANSLATORS: Description of the Custom cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete user-specified files and folders"
 msgstr "Suprimeix fitxers i carpetes especificats per l'usuari"
@@ -1467,14 +1541,6 @@ msgstr "Espai buit"
 #: ../bleachbit/Cleaner.py
 msgid "Wipe empty space to hide deleted files"
 msgstr "Esborra l'espai buit per ocultar els fitxers suprimits"
-
-#: ../bleachbit/Cleaner.py
-msgid "The system in general"
-msgstr "El sistema en general"
-
-#: ../bleachbit/Cleaner.py
-msgid "System"
-msgstr "Sistema"
 
 #. TRANSLATORS: 'Empty' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
@@ -1502,6 +1568,7 @@ msgstr "S'estan carregant els netejadors nadius…"
 msgid "Importing cleaners from Winapp2.ini…"
 msgstr "S'estan important netejadors des de Winapp2.ini…"
 
+#. TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
 #: ../bleachbit/Cleaner.py
 #, python-format
 msgid "Wipe empty space %s"
@@ -2315,6 +2382,10 @@ msgstr "Surt després de netejar"
 msgid "Reset warning confirmations"
 msgstr "Restableix les confirmacions d'avís"
 
+#. TRANSLATORS: This means to hide cleaners which would do
+#. nothing. For example, if Firefox were never used on
+#. this system, this option would hide Firefox to simplify
+#. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
 msgstr "Amaga els netejadors irrellevants"
@@ -2520,11 +2591,13 @@ msgstr "Camí"
 msgid "Choose a file"
 msgstr "Trieu un fitxer"
 
+#. TRANSLATORS: Button label in the preferences for adding a file.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add file"
 msgstr "Afegeix un fitxer"
 
+#. TRANSLATORS: Button label in the preferences for adding a folder.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add folder"
@@ -2871,6 +2944,9 @@ msgstr "Permís denegat en escriure la configuració al fitxer: %s"
 msgid "Error checking whether path exists: %s"
 msgstr "Error en comprovar si existeix el camí: %s"
 
+#. TRANSLATORS: %s is a ISO language code of two or three letters.
+#. "Preserving" means the language's localization files will be
+#. kept and not deleted when cleaning.
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Automatically preserving language %s."
@@ -2954,14 +3030,17 @@ msgstr ""
 "No es pot netejar el %s perquè s'està executant en aquests moments. Tanqueu-"
 "lo i torneu-ho a intentar."
 
+#. TRANSLATORS: Status message after a successful winapp2.ini update.
 #: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
 msgstr "S'ha baixat un fitxer winapp2.ini nou."
 
+#. TRANSLATORS: Title of the software update dialog.
 #: ../bleachbit/Update.py
 msgid "Update BleachBit"
 msgstr "Actualitza el BleachBit"
 
+#. TRANSLATORS: Message in the software update dialog.
 #: ../bleachbit/Update.py
 msgid "A new version is available."
 msgstr "Hi ha una versió nova disponible."
@@ -3002,14 +3081,18 @@ msgstr "Multimèdia"
 msgid "Utilities"
 msgstr "Utilitats"
 
+#. TRANSLATORS: Cleaner category name for games imported from winapp2.ini.
 #: ../bleachbit/Winapp.py
 msgid "Games"
 msgstr "Jocs"
 
+#. TRANSLATORS: Description shown for a cleaner imported from winapp2.ini,
+#. which is a database of cleaning definitions.
 #: ../bleachbit/Winapp.py
 msgid "Imported from winapp2.ini"
 msgstr "Importats des del winapp2.ini"
 
+#. TRANSLATORS: Warning shown when cleaning Windows Updates without administrator access.
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr ""
@@ -3044,16 +3127,19 @@ msgstr ""
 #, python-format
 msgid "Wiping path %(pathname)s with file system type %(fstype)s"
 msgstr ""
-"S'està esborrant la ruta %(pathname)s amb el tipus de sistema de fitxers %"
-"(fstype)s"
+"S'està esborrant la ruta %(pathname)s amb el tipus de sistema de fitxers "
+"%(fstype)s"
 
 #: ../bleachbit/Wipe.py
 #, python-format
 msgid "Path to wipe must be an existing directory: %s"
 msgstr "El camí per a la neteja ha de ser una carpeta existent: %s"
 
+#. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-msgid "Creating new, temporary file for wiping free space."
+#, fuzzy
+#| msgid "Creating new, temporary file for wiping free space."
+msgid "Creating new, temporary file for wiping empty space."
 msgstr "S'està creant un fitxer temporal nou per netejar l'espai lliure."
 
 #: ../bleachbit/Wipe.py
@@ -3072,8 +3158,8 @@ msgid ""
 "Wrote %(file_count)d files and %(total_bytes)d bytes in %(elapsed_sec)d "
 "seconds at %(rate_mbs).2f MB/s"
 msgstr ""
-"S'han escrit %(file_count)d fitxers i %(total_bytes)d bytes en %(elapsed_sec)"
-"d segons a %(rate_mbs).2f MB/s"
+"S'han escrit %(file_count)d fitxers i %(total_bytes)d bytes en "
+"%(elapsed_sec)d segons a %(rate_mbs).2f MB/s"
 
 #. TRANSLATORS: Debug message showing disk space available to regular (non-root) users.
 #. %(bytes)d is an integer count of bytes free; %(inodes)d is an integer count of inodes free.
@@ -3130,6 +3216,11 @@ msgid "Access denied: %s"
 msgstr "Accés denegat: %s"
 
 #: ../bleachbit/Worker.py
+#, python-format
+msgid "Database is locked: %s"
+msgstr ""
+
+#: ../bleachbit/Worker.py
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
 msgstr "Error: {operation_option}: {command}"
@@ -3139,6 +3230,7 @@ msgstr "Error: {operation_option}: {command}"
 msgid "Please wait. Wiping empty space."
 msgstr "Espereu. S'està esborrant l'espai buit."
 
+#. TRANSLATORS: Instruction shown while wiping a drive's empty space.
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
@@ -3160,6 +3252,7 @@ msgstr ""
 msgid "Please wait.  Cleaning %s."
 msgstr "Espereu.  S'està netejant el %s."
 
+#. TRANSLATORS: %d is the estimated number of minutes remaining.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "About %d minute remaining."
@@ -3195,6 +3288,10 @@ msgstr "Fitxers eliminats: %d"
 msgid "Files to be deleted: %d"
 msgstr "Fitxers que se suprimiran: %d"
 
+#. TRANSLATORS: %d is the number of special cleaning operations
+#. completed. Special operations are cleaning actions that do
+#. not delete a file, such as overwriting a file's contents,
+#. truncating a file, or deleting a Windows registry key.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Special operations: %d"

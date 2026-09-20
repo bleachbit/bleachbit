@@ -10,9 +10,11 @@ Perform (or assist with) cleaning operations.
 
 import glob
 import logging
+import os
 import os.path
 import re
 import tempfile
+import time
 
 from bleachbit.Constant import EMPTY_SPACE_WARNING
 from bleachbit.Language import get_text as _
@@ -22,7 +24,7 @@ from bleachbit.PathUtils import path_equal
 from bleachbit.Process import is_process_running
 from bleachbit import Action, CleanerML, Command, FileUtilities, Memory
 from bleachbit import IS_LINUX, IS_MAC, IS_POSIX, IS_WINDOWS
-from bleachbit.GtkShim import Gtk, HAVE_GTK, gtk_may_be_available
+from bleachbit.GtkShim import gtk_may_be_available
 from bleachbit.Wipe import wipe_path
 
 if IS_POSIX:
@@ -33,12 +35,25 @@ elif not (IS_POSIX or IS_WINDOWS):
     raise RuntimeError(f"Unknown OS '{os.name}'")
 
 
+logger = logging.getLogger(__name__)
+
 # a module-level variable for holding cleaners
 backends = {}
 
 # Putting the string here helps with translation.
 # TRANSLATORS: The description of what certain cleaning options do.
 DELETE_CACHE_DESCRIPTION = _("Delete the cache")
+
+MENU_DIRS = ('~/.local/share/applications',
+             '~/.config/autostart',
+             '~/.gnome/apps/',
+             '~/.gnome2/panel2.d/default/launchers',
+             '~/.gnome2/vfolders/applications/',
+             '~/.kde/share/apps/RecentDocuments/',
+             '~/.kde/share/mimelnk',
+             '~/.kde/share/mimelnk/application/ram.desktop',
+             '~/.kde2/share/mimelnk/application/',
+             '~/.kde2/share/applnk')
 
 
 class Cleaner:
@@ -53,7 +68,9 @@ class Cleaner:
         self.options = {}
         self.running = []
         self.warnings = {}
-        self.regexes_compiled = []
+        # Winapp2 cleaners clear this because their own detect() already ran
+        self.auto_hide_supported = True
+        self.keep_list_re = None
         # Lazily built {option_id: [action, ...]} index over self.actions.
         # Winapp2 cleaners aggregate thousands of actions, so scanning the
         # whole list per option (get_commands/get_deep_scan) is quadratic.
@@ -92,6 +109,8 @@ class Cleaner:
     def auto_hide(self):
         """Return boolean whether it is OK to automatically hide this
         cleaner"""
+        if not self.auto_hide_supported:
+            return False
         for (option_id, __name) in self.get_options():
             try:
                 for cmd in self.get_commands(option_id):
@@ -100,7 +119,6 @@ class Cleaner:
                 for _ds in self.get_deep_scan(option_id):
                     return False
             except Exception:
-                logger = logging.getLogger(__name__)
                 logger.exception('exception in auto_hide(), cleaner=%s, option=%s',
                                  self.name, option_id)
         return True
@@ -115,10 +133,7 @@ class Cleaner:
     def get_deep_scan(self, option_id):
         """Get dictionary used to build a deep scan"""
         for action in self._actions_for(option_id):
-            try:
-                yield from action.get_deep_scan()
-            except StopIteration:
-                return
+            yield from action.get_deep_scan()
         if option_id not in self.options:
             raise RuntimeError(f"Unknown option '{option_id}'")
 
@@ -152,13 +167,15 @@ class Cleaner:
 
     def get_warning(self, option_id):
         """Return a warning as string."""
-        if option_id in self.warnings:
-            return self.warnings[option_id]
-        return None
+        return self.warnings.get(option_id)
+
+    def has_action_key(self, option_id, action_key):
+        """Return whether an action registered for option_id has action_key"""
+        return any(getattr(action, 'action_key', None) == action_key
+                   for action in self._actions_for(option_id))
 
     def is_process_running(self):
         """Return whether the process is currently running"""
-        logger = logging.getLogger(__name__)
         for (test, pathname, same_user) in self.running:
             if 'exe' == test:
                 if is_process_running(pathname, same_user):
@@ -177,7 +194,7 @@ class Cleaner:
 
     def is_usable(self):
         """Return whether the cleaner is usable (has actions)"""
-        return len(self.actions) > 0
+        return bool(self.actions)
 
     def set_warning(self, option_id, description):
         """Set a warning to be displayed when option is selected interactively"""
@@ -189,68 +206,116 @@ class System(Cleaner):
     """Clean the system in general"""
 
     def __init__(self):
-        Cleaner.__init__(self, id_='system', name=_("System"),
-                         description=_("The system in general"))
+        Cleaner.__init__(
+            self,
+            id_='system',
+            # TRANSLATORS: Cleaner name shown in the list of applications.
+            name=_("System"),
+            # TRANSLATORS: Description of the System cleaner.
+            description=_("The system in general"))
 
         #
         # options for Linux and BSD
         #
         if IS_POSIX:
-            # TRANSLATORS: desktop entries are .desktop files in Linux that
-            # make up the application menu (the menu that shows BleachBit,
-            # Firefox, and others.  The .desktop files also associate file
-            # types, so clicking on an .html file in Nautilus brings up
-            # Firefox.
-            # More information:
-            # http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
-            self.add_option('desktop_entry', _('Broken desktop files'), _(
-                'Delete broken application menu entries and file associations'))
-            self.add_option('cache', _('Cache'), DELETE_CACHE_DESCRIPTION)
-            # TRANSLATORS: Localizations are files supporting specific
-            # languages, so applications appear in Spanish, etc.
-            self.add_option('localizations', _('Localizations'), _(
-                'Delete files for unwanted languages'))
-            self.set_warning(
-                'localizations', _("Configure this option in the preferences."))
-            # TRANSLATORS: 'Rotated logs' refers to old system log files.
-            # Linux systems often have a scheduled job to rotate the logs
-            # which means compress all except the newest log and then delete
-            # the oldest log.  You could translate this 'old logs.'
             self.add_option(
-                'rotated_logs', _('Rotated logs'), _('Delete old system logs'))
-            self.add_option('recent_documents', _('Recent documents list'), _(
-                'Delete the list of recently used documents'))
-            self.add_option('trash', _('Trash'), _('Empty the trash'))
+                'desktop_entry',
+                # TRANSLATORS: desktop entries are .desktop files in Linux that
+                # make up the application menu (the menu that shows BleachBit,
+                # Firefox, and others.  The .desktop files also associate file
+                # types, so clicking on an .html file in Nautilus brings up
+                # Firefox.
+                # More information:
+                # http://standards.freedesktop.org/menu-spec/latest/index.html#introduction
+                _('Broken desktop files'),
+                # TRANSLATORS: Description of the Broken desktop files cleaning option.
+                _('Delete broken application menu entries and file associations'))
+            self.add_option(
+                'cache',
+                # TRANSLATORS: Name of a cleaning option. Cache is a noun.
+                _('Cache'),
+                DELETE_CACHE_DESCRIPTION)
+            self.add_option(
+                'localizations',
+                # TRANSLATORS: Localizations are files supporting specific
+                # languages, so applications appear in Spanish, etc.
+                _('Localizations'),
+                # TRANSLATORS: Description of the Localizations cleaning option.
+                _('Delete files for unwanted languages'))
+            self.set_warning(
+                'localizations',
+                # TRANSLATORS: Warning for the Localizations cleaning option.
+                _("Configure this option in the preferences."))
+            self.add_option(
+                'rotated_logs',
+                # TRANSLATORS: 'Rotated logs' refers to old system log files.
+                # Linux systems often have a scheduled job to rotate the logs
+                # which means compress all except the newest log and then delete
+                # the oldest log. You could translate this as 'old logs.'
+                _('Rotated logs'),
+                # TRANSLATORS: Description of the Rotated logs cleaning option.
+                _('Delete old system logs'))
+            self.add_option(
+                'recent_documents',
+                # TRANSLATORS: Name of a cleaning option for the history of recently used files.
+                _('Recent documents list'),
+                # TRANSLATORS: Description of the Recent documents list cleaning option.
+                _('Delete the list of recently used documents'))
+            self.add_option(
+                'trash',
+                # TRANSLATORS: Name of a cleaning option. Trash is a noun.
+                _('Trash'),
+                # TRANSLATORS: Description of the Trash cleaning option.
+                _('Empty the trash'))
 
         #
         # options just for Linux
         #
         if IS_LINUX:
-            self.add_option('memory', _('Memory'),
-                            # TRANSLATORS: 'free' means 'unallocated'
-                            _('Wipe the swap and free memory'))
+            self.add_option(
+                'memory',
+                # TRANSLATORS: Name of a cleaning option for system memory.
+                _('Memory'),
+                # TRANSLATORS: 'free' means 'unallocated'
+                _('Wipe the swap and free memory'))
             self.set_warning(
-                'memory', _('This option is experimental and may cause system problems.'))
+                'memory',
+                # TRANSLATORS: Warning for the experimental Memory cleaning option.
+                _('This option is experimental and may cause system problems.'))
 
         #
         # options just for Microsoft Windows
         #
-        if IS_WINDOWS or (IS_LINUX and (FileUtilities.exe_exists('resolvectl') or FileUtilities.exe_exists('systemd-resolve'))):
+        has_dns_flush = IS_WINDOWS or (IS_LINUX and Unix.can_flush_dns())
+        if has_dns_flush:
             # TRANSLATORS: This is a label for the option to clear the system DNS cache.
             dns_cache_label = _('DNS cache')
             self.add_option('dns_cache', dns_cache_label,
                             _('Delete the cache'))
 
         if IS_WINDOWS:
-            self.add_option('logs', _('Logs'), _('Delete the logs'))
             self.add_option(
-                'memory_dump', _('Memory dump'), _('Delete the file'))
+                'logs',
+                # TRANSLATORS: Name of a cleaning option for Windows log files.
+                _('Logs'),
+                # TRANSLATORS: Description of the Logs cleaning option.
+                _('Delete the logs'))
+            self.add_option(
+                'memory_dump',
+                # TRANSLATORS: Name of a cleaning option for Windows crash dump files.
+                _('Memory dump'),
+                # TRANSLATORS: Description of the Memory dump cleaning option.
+                _('Delete the file'))
             self.add_option('muicache', 'MUICache', DELETE_CACHE_DESCRIPTION)
             # TRANSLATORS: Name of cleaning option. 'Prefetch' is Microsoft Windows jargon.
             self.add_option('prefetch', _('Prefetch'),
                             DELETE_CACHE_DESCRIPTION)
             self.add_option(
-                'recycle_bin', _('Recycle bin'), _('Empty the recycle bin'))
+                'recycle_bin',
+                # TRANSLATORS: Name of a cleaning option for the Windows recycle bin.
+                _('Recycle bin'),
+                # TRANSLATORS: Description of the Recycle bin cleaning option.
+                _('Empty the recycle bin'))
             # TRANSLATORS: Name for cleaning option. 'Update' is an adjective to
             # describe the kind of uninstallers.
             updates_name = _('Update uninstallers')
@@ -270,23 +335,34 @@ class System(Cleaner):
         # The clipboard option is available wherever a clipboard can be
         # cleared: under GTK (POSIX) or natively on Windows.
         if gtk_may_be_available() or IS_WINDOWS:
-            self.add_option('clipboard', _('Clipboard'), _(
-                'The desktop environment\'s clipboard used for copy and paste operations'))
+            self.add_option(
+                'clipboard',
+                # TRANSLATORS: Name of a cleaning option. Clipboard is a noun.
+                _('Clipboard'),
+                # TRANSLATORS: Description of the Clipboard cleaning option.
+                _('The desktop environment\'s clipboard used for copy and paste operations'))
 
         #
         # options common to all platforms
         #
-        # TRANSLATORS: "Custom" is an option allowing the user to specify which
-        # files and folders will be erased.
-        self.add_option('custom', _('Custom'), _(
-            'Delete user-specified files and folders'))
+        self.add_option(
+            'custom',
+            # TRANSLATORS: "Custom" is an option allowing the user to specify which
+            # files and folders will be erased.
+            _('Custom'),
+            # TRANSLATORS: Description of the Custom cleaning option.
+            _('Delete user-specified files and folders'))
         # TRANSLATORS: 'empty' means 'unallocated'
         self.add_option('empty_space', _('Empty space'),
                         # TRANSLATORS: 'empty' means 'unallocated'
                         _('Wipe empty space to hide deleted files'))
         self.set_warning('empty_space', EMPTY_SPACE_WARNING)
         self.add_option(
-            'tmp', _('Temporary files'), _('Delete the temporary files'))
+            'tmp',
+            # TRANSLATORS: Name of a cleaning option for temporary files.
+            _('Temporary files'),
+            # TRANSLATORS: Description of the Temporary files cleaning option.
+            _('Delete the temporary files'))
 
     def get_commands(self, option_id):
         # cache
@@ -315,19 +391,8 @@ class System(Cleaner):
                         f'custom folder has invalid type {c_type}')
 
         # menu
-        menu_dirs = ['~/.local/share/applications',
-                     '~/.config/autostart',
-                     '~/.gnome/apps/',
-                     '~/.gnome2/panel2.d/default/launchers',
-                     '~/.gnome2/vfolders/applications/',
-                     '~/.kde/share/apps/RecentDocuments/',
-                     '~/.kde/share/mimelnk',
-                     '~/.kde/share/mimelnk/application/ram.desktop',
-                     '~/.kde2/share/mimelnk/application/',
-                     '~/.kde2/share/applnk']
-
         if IS_POSIX and 'desktop_entry' == option_id:
-            for path in menu_dirs:
+            for path in MENU_DIRS:
                 dirname = os.path.expanduser(path)
                 for filename in children_in_directory(dirname, False):
                     # pylint: disable=possibly-used-before-assignment
@@ -337,7 +402,9 @@ class System(Cleaner):
         # unwanted locales
         if IS_POSIX and 'localizations' == option_id:
             for path in Unix.locales.localization_paths(locales_to_keep=options.get_languages()):
-                if os.path.isdir(path):
+                # A symlinked locale directory points at a locale that may be
+                # on the keep list, so delete the link without its contents.
+                if FileUtilities.is_normal_directory(path):
                     for f in FileUtilities.children_in_directory(path, True):
                         yield Command.Delete(f)
                 yield Command.Delete(path)
@@ -460,20 +527,32 @@ class System(Cleaner):
                 r'%temp%'), os.path.expandvars("%windir%\\temp\\")]
             # whitelist the folder %TEMP%\Low but not its contents
             # https://bugs.launchpad.net/bleachbit/+bug/1421726
+            # Do not delete recent D-Bus nonce files because it allows
+            # starting more than once instance of this application.
+            gdbus_nonce_re = re.compile(r'gdbus-nonce-file-[0-9A-Za-z]+$',
+                                        re.IGNORECASE)
+            gdbus_nonce_max_age_seconds = 7 * 24 * 60 * 60  # 7 days
             for dirname in dirnames:
                 low = os.path.join(dirname, 'low')
                 for filename in children_in_directory(dirname, True):
-                    if not path_equal(low, filename, case_sensitive=False):
-                        yield Command.Delete(filename)
+                    if path_equal(low, filename, case_sensitive=False):
+                        continue
+                    if gdbus_nonce_re.match(os.path.basename(filename)):
+                        try:
+                            age = time.time() - os.stat(filename).st_mtime
+                        except OSError:
+                            continue
+                        if age < gdbus_nonce_max_age_seconds:
+                            continue
+                    yield Command.Delete(filename)
 
         # trash
         if IS_POSIX and 'trash' == option_id:
-            for p in Unix.get_trash_paths():
-                yield p
+            yield from Unix.get_trash_paths()
 
         # clipboard
-        if 'clipboard' == option_id and (HAVE_GTK or IS_WINDOWS):
-            if IS_WINDOWS and not HAVE_GTK:
+        if 'clipboard' == option_id and (gtk_may_be_available() or IS_WINDOWS):
+            if IS_WINDOWS and not gtk_may_be_available():
                 # Works with TUI or wxPython
                 def func_clear_clipboard():
                     """Command function to clear clipboard (Windows native)"""
@@ -483,14 +562,15 @@ class System(Cleaner):
                 def func_clear_clipboard():
                     """Command function to clear clipboard"""
                     # GuiUtil is GTK-specific
+                    from bleachbit.GtkShim import require_gtk  # pylint: disable=import-outside-toplevel
+                    require_gtk()
                     import bleachbit.GuiUtil
                     bleachbit.GuiUtil.clear_clipboard()
                     return 0
             yield Command.Function(None, func_clear_clipboard, _('Clipboard'))
 
         # wipe empty space
-        shred_drives = options.get_list('shred_drives')
-        if 'empty_space' == option_id and shred_drives:
+        if 'empty_space' == option_id and (shred_drives := options.get_list('shred_drives')):
             for pathname in shred_drives:
                 # TRANSLATORS: 'Empty' means 'unallocated.'
                 # %s expands to a path such as C:\ or /tmp/
@@ -535,7 +615,7 @@ class System(Cleaner):
                 try:
                     Windows.empty_recycle_bin(None, True)
                 except Exception:
-                    logging.getLogger(__name__).info(
+                    logger.info(
                         'error in empty_recycle_bin()', exc_info=True)
                 yield 0
             # Using the Function Command prevents emptying the recycle bin
@@ -552,11 +632,12 @@ class System(Cleaner):
 
         # Windows Updates
         if IS_WINDOWS and 'updates' == option_id:
-            for wu in Windows.delete_updates():
-                yield wu
+            yield from Windows.delete_updates()
 
     def init_whitelist(self):
         """Initialize the keep list (formerly whitelist) only once for performance"""
+        # re.escape because a home directory may contain regex metacharacters
+        home = re.escape(os.path.expanduser('~'))
         regexes = [
             r'^/tmp/\.X0-lock$',
             r'^/tmp/\.truecrypt_aux_mnt.*/(control|volume)$',
@@ -572,60 +653,54 @@ class System(Cleaner):
             '^/tmp/pulse-[^/]+/pid$',
             '^/tmp/xauth',
             '^/var/tmp/kdecache-',
-            '^' + os.path.expanduser(r'~/\.cache/wallpaper/'),
+            '^' + home + r'/\.cache/wallpaper/',
             # Flatpak mount point
-            '^' + os.path.expanduser(r'~/\.cache/doc($|/)'),
+            '^' + home + r'/\.cache/doc($|/)',
             # Clean Firefox cache from Firefox cleaner (LP#1295826)
-            '^' + os.path.expanduser(r'~/\.cache/mozilla/'),
+            '^' + home + r'/\.cache/mozilla/',
             # Clean Google Chrome cache from Google Chrome cleaner (LP#656104)
-            '^' + os.path.expanduser(r'~/\.cache/google-chrome/'),
-            '^' + os.path.expanduser(r'~/\.cache/gnome-control-center/'),
+            '^' + home + r'/\.cache/google-chrome/',
+            '^' + home + r'/\.cache/gnome-control-center/',
             # Clean Evolution cache from Evolution cleaner (GitHub #249)
-            '^' + os.path.expanduser(r'~/\.cache/evolution/'),
+            '^' + home + r'/\.cache/evolution/',
             # iBus Pinyin
             # https://bugs.launchpad.net/bleachbit/+bug/1538919
-            '^' + os.path.expanduser(r'~/\.cache/ibus/'),
+            '^' + home + r'/\.cache/ibus/',
             # Linux Bluetooth daemon obexd directory is typically empty, so be careful
             # not to delete the empty directory.
-            '^' + os.path.expanduser(r'~/\.cache/obexd($|/)'),
+            '^' + home + r'/\.cache/obexd($|/)',
             # KDE/Plasma cache files
             # https://github.com/bleachbit/bleachbit/issues/1853
-            '^' + os.path.expanduser(r'~/\.cache/kwin($|/)'),  # folder
+            '^' + home + r'/\.cache/kwin($|/)',  # folder
             # folder
-            '^' + os.path.expanduser(r'~/\.cache/mesa_shader_cache($|/)'),
-            '^' + os.path.expanduser(r'~/\.cache/plasmashell($|/)'),  # folder
-            '^' + os.path.expanduser(r'~/\.cache/icon-cache\.kcache$'),  # file
+            '^' + home + r'/\.cache/mesa_shader_cache($|/)',
+            '^' + home + r'/\.cache/plasmashell($|/)',  # folder
+            '^' + home + r'/\.cache/icon-cache\.kcache$',  # file
             # file
-            r'^' + os.path.expanduser(r'~/\.cache/plasma_theme_.*\.kcache$'),
-            '^' + os.path.expanduser(r'~/\.cache/drkonqi($|/)'),  # folder
+            r'^' + home + r'/\.cache/plasma_theme_.*\.kcache$',
+            '^' + home + r'/\.cache/drkonqi($|/)',  # folder
             # folder
-            '^' + os.path.expanduser(r'~/\.cache/mesa_shader_cache_db($|/)'),
+            '^' + home + r'/\.cache/mesa_shader_cache_db($|/)',
             # folder
-            '^' + os.path.expanduser(r'~/\.cache/qtshadercache-[^/]+($|/)'),
+            '^' + home + r'/\.cache/qtshadercache-[^/]+($|/)',
             # file
-            '^' + os.path.expanduser(r'~/\.cache/plasma_theme_default\.kcache$')]
+            '^' + home + r'/\.cache/plasma_theme_default\.kcache$']
 
-        for regex in regexes:
-            self.regexes_compiled.append(re.compile(regex))
+        self.keep_list_re = re.compile(
+            '|'.join(f'(?:{regex})' for regex in regexes))
 
     def whitelisted(self, pathname):
         """Return boolean whether file is keep listed (formerly whitelisted)"""
         if IS_WINDOWS:
             # Whitelist is specific to POSIX
             return False
-        if not self.regexes_compiled:
+        if self.keep_list_re is None:
             self.init_whitelist()
-        for regex in self.regexes_compiled:
-            if regex.match(pathname) is not None:
-                return True
-        return False
+        return self.keep_list_re.match(pathname) is not None
 
 
 def register_cleaners(cb_progress=lambda x: None, cb_done=lambda: None, allow_local=True):
     """Register all known cleaners: system, CleanerML, and Winapp2"""
-    # pylint: disable=global-variable-not-assigned
-    global backends
-
     # wipe out any registrations
     # Because this is a global variable, cannot use backends = {}
     backends.clear()
@@ -676,12 +751,11 @@ def simpler_cleaner_process_path(path):
 
     Not checked: path existence or type of path
     """
-    if not isinstance(path, (str)):
+    if not isinstance(path, str):
         raise RuntimeError(
             f'expected path as string but got {str(path)}')
     if not path.strip():
-        logging.getLogger(__name__).warning(
-            'Refusing to clean an empty path')
+        logger.warning('Refusing to clean an empty path')
         return None
     if not os.path.isabs(path):
         path = os.path.abspath(path)
@@ -690,10 +764,30 @@ def simpler_cleaner_process_path(path):
     cwd = os.getcwd()
     cwd_parent = os.path.dirname(cwd)
     if path in (cwd, cwd_parent):
-        logging.getLogger(__name__).warning(
+        logger.warning(
             'Refusing to shred working directory or its parent: %s', path)
         return None
     return path
+
+
+class CustomFileAction(Action.ActionProvider):
+    """Custom file action"""
+    # At module level because the metaclass registers every subclass globally
+    action_key = '__customfileaction'
+
+    def __init__(self, paths):
+        Action.ActionProvider.__init__(self, None)
+        self.paths = paths
+
+    def get_commands(self):
+        for path in self.paths:
+            path = simpler_cleaner_process_path(path)
+            if not path:
+                continue
+            if os.path.isdir(path):
+                for child in children_in_directory(path, True):
+                    yield Command.Shred(child)
+            yield Command.Shred(path)
 
 
 def create_simple_cleaner(paths):
@@ -701,23 +795,25 @@ def create_simple_cleaner(paths):
     cleaner = Cleaner()
     cleaner.add_option(option_id='files', name='', description='')
     cleaner.name = _("System")  # shows up in progress bar
-
-    class CustomFileAction(Action.ActionProvider):
-        """Custom file action"""
-        action_key = '__customfileaction'
-
-        def get_commands(self):
-            for path in paths:
-                path = simpler_cleaner_process_path(path)
-                if not path:
-                    continue
-                if os.path.isdir(path):
-                    for child in children_in_directory(path, True):
-                        yield Command.Shred(child)
-                yield Command.Shred(path)
-    provider = CustomFileAction(None)
-    cleaner.add_action('files', provider)
+    cleaner.add_action('files', CustomFileAction(paths))
     return cleaner
+
+
+class CustomWipeAction(Action.ActionProvider):
+    """Custom wipe action"""
+    action_key = '__customwipeaction'
+
+    def __init__(self, path):
+        Action.ActionProvider.__init__(self, None)
+        self.path = path
+        # TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
+        self.display = _("Wipe empty space %s") % path
+
+    def get_commands(self):
+        def wipe_path_func():
+            yield from wipe_path(self.path, idle=True)
+            yield 0
+        yield Command.Function(None, wipe_path_func, self.display)
 
 
 def create_wipe_empty_space_cleaner(path):
@@ -726,19 +822,5 @@ def create_wipe_empty_space_cleaner(path):
     cleaner.add_option(
         option_id='empty_space', name='', description='')
     cleaner.name = ''
-
-    # create a temporary cleaner object
-    display = _("Wipe empty space %s") % path
-
-    def wipe_path_func():
-        yield from wipe_path(path, idle=True)
-        yield 0
-
-    class CustomWipeAction(Action.ActionProvider):
-        action_key = '__customwipeaction'
-
-        def get_commands(self):
-            yield Command.Function(None, wipe_path_func, display)
-    provider = CustomWipeAction(None)
-    cleaner.add_action('empty_space', provider)
+    cleaner.add_action('empty_space', CustomWipeAction(path))
     return cleaner

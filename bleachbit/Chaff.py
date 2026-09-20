@@ -109,6 +109,19 @@ MODEL_BASENAMES = (
     '2600_model.json.bz2',
     'clinton_content_model.json.bz2',
     'clinton_subject_model.json.bz2')
+MODEL_SHA512 = {
+    '2600_model.json.bz2':
+        '1c06c362587c177908fee6a4f7a439a684ada48404f40fec72cba5ba1f90aff5'
+        '9e76742718f8dc290853fe08f32f2c1b60b769c412765340fc428f0ea3fc46d7',
+    'clinton_content_model.json.bz2':
+        'ea92709c17082e1113c00138d9dd9fd970a7089f4de9bc8f58a0ce3312782154'
+        '9554cb2cd6b5591f1e7035513badeff11af09423357b8ecf5a20bc5a61a9b8ef',
+    'clinton_subject_model.json.bz2':
+        '4cff92b6cab27d4efccc65c0f9378c21af0fe02b59e5d1790cfdf675c555fda9'
+        '8cb7083e8268aa0878198ce4df4160db4f4e77f191e301bea31c02c19bc1c2bf',
+}
+if set(MODEL_SHA512) != set(MODEL_BASENAMES):
+    raise RuntimeError('every model in MODEL_BASENAMES needs a SHA-512')
 URL_TEMPLATES = (
     'https://sourceforge.net/projects/bleachbit/files/chaff/%s/download',
     'https://download.bleachbit.org/chaff/%s')
@@ -191,7 +204,7 @@ def download_models(models_dir=DEFAULT_MODELS_DIR,
         this_file_success = False
         for url_template in URL_TEMPLATES:
             url = url_template % basename
-            if download_url_to_fn(url, fn, on_error=on_error):
+            if download_url_to_fn(url, fn, expected_sha512=MODEL_SHA512[basename], on_error=on_error):
                 this_file_success = True
                 break
         if not this_file_success:

@@ -21,18 +21,103 @@
 General code
 """
 
+import gc
 import getpass
 import logging
 import os
 import shlex
 import shutil
+import stat
 import subprocess
 import sys
+import xml.parsers.expat
 
 import bleachbit
 from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
+from bleachbit.PathUtils import path_startswith
 
 logger = logging.getLogger(__name__)
+
+
+def _path_dir_is_root_safe(dirpath):
+    """Return True if dirpath is absolute, root-owned, and not writable by others."""
+    if not os.path.isabs(dirpath):
+        return False
+    try:
+        st = os.stat(dirpath)
+    except OSError:
+        return False
+    if st.st_uid != 0:
+        return False
+    if st.st_mode & stat.S_IWOTH:
+        return False
+    if (st.st_mode & stat.S_IWGRP) and st.st_gid != 0:
+        return False
+    return True
+
+
+# Environment variables that make a child load code from a location the
+# caller chose: the dynamic linker (LD_*, DYLD_*), glibc's loadable modules
+# (honored because a sudo'd root process is not AT_SECURE), and the
+# interpreters we may exec (dnf and yum are Python, paccache is a shell
+# script).
+_UNSAFE_ROOT_ENV_PREFIXES = ('LD_', 'DYLD_')
+_UNSAFE_ROOT_ENV_VARS = (
+    'GCONV_PATH', 'LOCPATH', 'NLSPATH', 'HOSTALIASES',
+    'PYTHONPATH', 'PYTHONHOME', 'PYTHONSTARTUP', 'PYTHONEXECUTABLE',
+    'BASH_ENV', 'ENV', 'SHELLOPTS', 'BASHOPTS', 'IFS',
+    'PERL5LIB', 'PERL5OPT', 'RUBYLIB', 'RUBYOPT', 'NODE_OPTIONS')
+
+
+def sanitize_root_env(env):
+    """Harden a child process's environment when running as root.
+
+    Drop the code-loading variables listed above and PATH entries a non-root
+    user could write, so an inherited hostile environment cannot redirect a
+    privileged child. No-op unless euid 0.
+    """
+    if not hasattr(os, 'geteuid') or 0 != os.geteuid():
+        return env
+    env = {key: value for key, value in env.items()
+           if key not in _UNSAFE_ROOT_ENV_VARS
+           and not key.startswith(_UNSAFE_ROOT_ENV_PREFIXES)}
+    path = env.get('PATH')
+    if path:
+        env['PATH'] = os.pathsep.join(
+            d for d in path.split(os.pathsep) if _path_dir_is_root_safe(d))
+    return env
+
+
+def sanitize_surrogates(text):
+    """Replace surrogates so the text can be encoded.
+
+    Surrogates (like \\udcd6) come from filenames the filesystem returned
+    as undecodable, and raise UnicodeEncodeError in GTK and on stdout.
+    """
+    return text.encode('utf-8', errors='replace').decode('utf-8')
+
+
+_STANDARD_EXE_DIRS = ('/usr/bin', '/usr/sbin', '/bin', '/sbin')
+
+
+def resolve_exe(name, *candidates):
+    """Return an absolute path to an executable, or name if none is found.
+
+    Checks the standard directories, or the given candidates instead, before
+    falling back to PATH for layouts that put the tool somewhere else (NixOS,
+    Alpine, an unmerged /usr). Skips user-writable PATH entries when root.
+    """
+    if not candidates:
+        candidates = tuple(os.path.join(d, name) for d in _STANDARD_EXE_DIRS)
+    for candidate in candidates:
+        if os.path.exists(candidate):
+            return candidate
+    search_path = os.environ.get('PATH') or os.defpath
+    if hasattr(os, 'geteuid') and 0 == os.geteuid():
+        search_path = os.pathsep.join(
+            d for d in search_path.split(os.pathsep)
+            if _path_dir_is_root_safe(d))
+    return shutil.which(name, path=search_path) or name
 
 
 #
@@ -50,10 +135,24 @@ def boolstr_to_bool(value):
 def getText(nodelist):
     """Return the text data in an XML node
     http://docs.python.org/library/xml.dom.minidom.html"""
-    rc = "".join(
+    return "".join(
         node.data for node in nodelist if node.nodeType == node.TEXT_NODE
     )
-    return rc
+
+
+def reject_xml_dtd(data, description='XML'):
+    """Raise ValueError if data declares a DTD with an internal subset, to block entity-expansion attacks"""
+    def on_doctype(_name, _sysid, _pubid, has_internal_subset):
+        # external-only doctype (e.g. fontconfig's fonts.conf) is harmless: no ExternalEntityRefHandler is registered, so expat never fetches it
+        if has_internal_subset:
+            raise ValueError(
+                f'DTD with an internal subset is not allowed in {description}')
+    if isinstance(data, str):
+        # pyexpat rejects str input carrying an encoding declaration
+        data = data.encode('utf-8')
+    parser = xml.parsers.expat.ParserCreate()
+    parser.StartDoctypeDeclHandler = on_doctype
+    parser.Parse(data, True)
 
 
 #
@@ -78,12 +177,15 @@ def chownself(path):
         return
     uid = get_real_uid()
     logger.debug('chown(%s, uid=%s)', path, uid)
-    if 0 == path.find('/root'):
+    normalized_path = os.path.normpath(os.path.abspath(path))
+    if normalized_path == '/root' or path_startswith(normalized_path, '/root'):
         logger.info('chown for path /root aborted')
         return
     try:
-        os.chown(path, uid, -1)
-    except:
+        # follow_symlinks=False (lchown) so a symlink planted at this path
+        # cannot redirect the ownership change to its target.
+        os.chown(path, uid, -1, follow_symlinks=False)
+    except Exception:
         logger.exception('Error in chown() under chownself()')
 
 
@@ -98,7 +200,6 @@ def gc_collect():
     if not IS_WINDOWS:
         return
 
-    import gc
     gc.collect()
 
 
@@ -119,8 +220,8 @@ def get_executable():
         # example: /usr/bin/python3.12
         # Notice it ends with .12.
         return os.readlink('/proc/self/exe')
-    except Exception:
-        pass
+    except OSError:
+        logger.debug('/proc/self/exe is unreadable, so falling back to PATH')
     for py in ['python3', 'python']:
         py_which = shutil.which(py)
         if py_which:
@@ -176,8 +277,11 @@ def get_real_uid():
     if not IS_POSIX:
         raise RuntimeError('get_real_uid() requires POSIX')
 
-    if os.getenv('SUDO_UID'):
-        return int(os.getenv('SUDO_UID'))
+    sudo_uid = os.getenv('SUDO_UID')
+    if sudo_uid:
+        if sudo_uid.isdecimal():
+            return int(sudo_uid)
+        logger.warning('ignoring non-numeric SUDO_UID: %r', sudo_uid)
 
     try:
         login = os.getlogin()
@@ -185,7 +289,7 @@ def get_real_uid():
         # On Fedora 11, getlogin() under sudo returns 'root'.
         # On Fedora 41, getlogin() under sudo returns non-root user.
         # On Fedora 11 and 41, getlogin() under su returns non-root user.
-    except:
+    except Exception:
         login = os.getenv('LOGNAME')
 
     if login:
@@ -228,7 +332,7 @@ def os_match(os_str, platform=sys.platform):
     platform -- used only for unit tests
     """
     # If blank, return true.
-    if len(os_str) == 0:
+    if not os_str:
         return True
     # "darwin" is accepted as a deprecated alias for "macos"
     if os_str == 'darwin':
@@ -255,6 +359,18 @@ def os_match(os_str, platform=sys.platform):
     return os_str in current_os
 
 
+def _set_detached_kwargs(kwargs):
+    """Add the Popen keywords that detach the child from this process."""
+    if IS_WINDOWS:
+        kwargs['creationflags'] = (
+            kwargs.get('creationflags', 0) |
+            subprocess.DETACHED_PROCESS |
+            subprocess.CREATE_NEW_PROCESS_GROUP)
+    else:
+        kwargs['start_new_session'] = True
+    kwargs['close_fds'] = True
+
+
 def run_external_nowait(args, env=None, kwargs=None):
     """Run an external program in the background. Return immediately.
 
@@ -268,33 +384,21 @@ def run_external_nowait(args, env=None, kwargs=None):
         kwargs = {}
     else:
         kwargs = dict(kwargs)
+    if IS_POSIX:
+        # Sanitized here too (not just in run_external()) since this
+        # function is also called directly, bypassing that sanitization.
+        env = sanitize_root_env(dict(os.environ) if env is None else env)
     try:
+        _set_detached_kwargs(kwargs)
+        process = subprocess.Popen(args,
+                                   stdin=subprocess.DEVNULL,
+                                   stdout=subprocess.DEVNULL,
+                                   stderr=subprocess.DEVNULL,
+                                   env=env, **kwargs)
+        process.returncode = 0
         if IS_WINDOWS:
-            creationflags = kwargs.get('creationflags', 0)
-            kwargs['creationflags'] = (
-                creationflags |
-                subprocess.DETACHED_PROCESS |
-                subprocess.CREATE_NEW_PROCESS_GROUP)
-        else:
-            # Unix/Linux
-            kwargs['start_new_session'] = True
-        kwargs['close_fds'] = True
-        try:
-            process = subprocess.Popen(args,
-                                       stdin=subprocess.DEVNULL,
-                                       stdout=subprocess.DEVNULL,
-                                       stderr=subprocess.DEVNULL,
-                                       env=env, **kwargs)
-            process.returncode = 0
-            if IS_WINDOWS:
-                process._handle.Close()
-                process._handle = None
-            return True
-        except Exception as e:
-            logger.warning('Failed to start process %s: %s', args, e)
-            return False
-    except subprocess.TimeoutExpired:
-        # This is good on Windows.
+            process._handle.Close()
+            process._handle = None
         return True
     except Exception as e:
         logger.warning('Failed to start process %s: %s', args, e)
@@ -316,10 +420,10 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
     for arg in args:
         if arg is None:
             raise ValueError("Command argument cannot be None")
-    assert len(args) > 0
+    assert args
     if not args[0]:
         raise ValueError("First command argument cannot be empty")
-    if clean_env and isinstance(env, dict) and len(env) > 0:
+    if clean_env and isinstance(env, dict) and env:
         raise ValueError(
             "Cannot set environment variables when clean_env is True")
     logger.debug('running cmd %s', ' '.join(args))
@@ -339,26 +443,23 @@ def run_external(args, stdout=None, env=None, clean_env=True, timeout=None, wait
         # https://github.com/bleachbit/bleachbit/issues/168
         # dconf reset requires DISPLAY
         # https://github.com/bleachbit/bleachbit/issues/1096
-        keep_env = ('PATH', 'HOME', 'LD_LIBRARY_PATH', 'TMPDIR',
+        # LD_LIBRARY_PATH is dropped by sanitize_root_env() below when root
+        keep_env = ('PATH', 'HOME', 'TMPDIR',
                     'BLEACHBIT_TEST_OPTIONS_DIR', 'DISPLAY', 'DBUS_SESSION_BUS_ADDRESS')
         env = {key: value for key, value in os.environ.items()
                if key in keep_env}
         env['LANG'] = 'C'
         env['LC_ALL'] = 'C'
 
+    if IS_POSIX:
+        # When root, do not let an inherited PATH/LD_* redirect the child
+        env = sanitize_root_env(dict(os.environ) if env is None else env)
+
     if not wait:
         if run_external_nowait(args, env=env, kwargs=kwargs):
             return (0, '', '')
         # Use fallback method.
-        if IS_WINDOWS:
-            creationflags = kwargs.get('creationflags', 0)
-            kwargs['creationflags'] = (
-                creationflags |
-                subprocess.DETACHED_PROCESS |
-                subprocess.CREATE_NEW_PROCESS_GROUP)
-        else:
-            kwargs['start_new_session'] = True
-        kwargs['close_fds'] = True
+        _set_detached_kwargs(kwargs)
         process = subprocess.Popen(args,
                                    stdout=subprocess.DEVNULL,
                                    stderr=subprocess.DEVNULL,
@@ -409,3 +510,21 @@ def sudo_mode():
         # return False
 
     return os.getenv('SUDO_UID') is not None
+
+
+def unset_sslkeylogfile(use_logger):
+    """Unset environment variable SSLKEYLOGFILE
+
+    Workaround for an OpenSSL crash before checking for updates.
+    https://github.com/bleachbit/bleachbit/issues/1826
+
+    Returns True if unset
+    """
+    if not IS_WINDOWS:
+        return False
+    if not os.environ.get('SSLKEYLOGFILE'):
+        return False
+    del os.environ['SSLKEYLOGFILE']
+    if use_logger:
+        logger.debug('The environment variable SSLKEYLOGFILE is not supported')
+    return True

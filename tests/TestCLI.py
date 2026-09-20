@@ -273,7 +273,7 @@ class CLITestCase(common.BleachbitTestCase):
                 crash = [False]
 
                 def dummy_delete(path, shred=False, crash=crash,
-                                   deleted_paths=deleted_paths):
+                                 deleted_paths=deleted_paths):
                     try:
                         self.assertLExists(path)
                     except AssertionError:
@@ -289,7 +289,8 @@ class CLITestCase(common.BleachbitTestCase):
                     # File exists because delete() is mocked, so real
                     # delete() was not called.
                     self.assertExists(filename)
-                    operations = args_to_operations(['system.tmp'], False, False)
+                    operations = args_to_operations(
+                        ['system.tmp'], False, False)
                     preview_or_clean(operations, True, quiet=True)
 
                 self.assertIn(filename, deleted_paths,
@@ -622,6 +623,9 @@ class CLITestCase(common.BleachbitTestCase):
     @common.skipUnlessWindows
     def test_gui_exit(self):
         """Unit test for --gui-{wx,gtk} --exit, only for Windows"""
+        # When running tests without elevated privileges, then --no-uac shows
+        # the UAC dialog, requiring user interaction. Also, the parent
+        # closes immediately, but the child continues, causing test to fail.
         if HAVE_WX:
             gui_flag = '--gui-wx'
         elif HAVE_GTK:
@@ -629,7 +633,7 @@ class CLITestCase(common.BleachbitTestCase):
         else:
             self.skipTest('requires wxPython or GTK')
         args = (get_executable(), '-m',
-                'bleachbit.CLI', gui_flag, '--exit')
+                'bleachbit.CLI', gui_flag, '--exit', '--no-uac')
         (rc, _stdout, stderr) = run_external(
             args, timeout=RUN_EXTERNAL_TIMEOUT)
         self.assertNotIn('no such option', stderr)

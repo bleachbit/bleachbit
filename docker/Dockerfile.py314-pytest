@@ -45,7 +45,7 @@ RUN python -m pip list && python -m pip install --no-cache-dir -U pip
 # Install new Python packages.
 COPY requirements.txt ./
 RUN python -m pip install --no-cache-dir \
-        PyGObject pytest pytest-xdist \
+        PyGObject pytest pytest-xdist pytest-rerunfailures \
         -r requirements.txt
 
 ARG HOME_IN_CONTAINER=/home/user

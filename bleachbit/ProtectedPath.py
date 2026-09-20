@@ -31,7 +31,7 @@ import xml.dom.minidom
 
 import bleachbit
 from bleachbit import FileUtilities, FS_CASE_SENSITIVE
-from bleachbit.General import getText, os_match
+from bleachbit.General import getText, os_match, reject_xml_dtd
 from bleachbit.Language import get_text as _
 from bleachbit.PathUtils import (
     expand_path,
@@ -77,7 +77,10 @@ def load_protected_paths(force_reload=False):
     protected_paths = []
 
     try:
-        dom = xml.dom.minidom.parse(xml_path)
+        with open(xml_path, 'rb') as f:
+            data = f.read()
+        reject_xml_dtd(data, 'protected_path.xml')
+        dom = xml.dom.minidom.parseString(data)
     except Exception as e:
         logger.error("Error parsing protected path XML: %s", e)
         return []
@@ -124,7 +127,7 @@ def load_protected_paths(force_reload=False):
 
     _protected_paths_cache = protected_paths
     logger.debug("Loaded %d protected paths", len(protected_paths))
-    return protected_paths
+    return _protected_paths_cache
 
 
 def _check_exempt(user_path):
@@ -241,8 +244,9 @@ def calculate_impact(path):
                 file_count += 1
                 try:
                     total_size += FileUtilities.getsize(child)
-                except (OSError, PermissionError):
-                    pass
+                except (OSError, PermissionError) as e:
+                    logger.debug('skipping %s in the impact total: %s',
+                                 child, e)
     except (OSError, PermissionError) as e:
         logger.debug("Error calculating impact for %s: %s", path, e)
 

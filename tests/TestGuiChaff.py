@@ -283,7 +283,6 @@ class GuiChaffTestCase(common.BleachbitTestCase):
         so the callbacks must accept those parameter names.
         """
 
-
         abort_event = threading.Event()
 
         for stop_mode in (STOP_MODE_FILE_COUNT, STOP_MODE_TOTAL_SIZE, STOP_MODE_FREE_SPACE):

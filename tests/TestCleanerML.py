@@ -96,6 +96,22 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         for pathname in list_cleanerml_files():
             self.assertExists(pathname)
 
+    @common.skipIfWindows
+    def test_list_cleanerml_files_vanished(self):
+        """list_cleanerml_files() skips a cleaner deleted after listdir()
+
+        The world-writable check is POSIX only, so this race does not exist
+        on Windows.
+        """
+        dirname = self.mkdtemp(prefix='bleachbit-cleanerml-vanished')
+        real_fn = os.path.join(dirname, 'real.xml')
+        self.write_file(real_fn, contents=b'<cleaner id="test"/>')
+        os.chmod(real_fn, 0o600)
+        ghost_fn = os.path.join(dirname, 'ghost.xml')
+        with mock.patch('bleachbit.CleanerML.listdir',
+                        return_value=iter([ghost_fn, real_fn])):
+            self.assertEqual(list(list_cleanerml_files()), [real_fn])
+
     def test_load_cleaners(self):
         """Unit test for load_cleaners()"""
         # normal
@@ -121,6 +137,125 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         list(load_cleaners())
         shutil.rmtree(bleachbit.personal_cleaners_dir)
         bleachbit.personal_cleaners_dir = pcd
+
+    def test_untrusted_process_action(self):
+        """A process action is ignored for an untrusted cleaner"""
+        xml_str = (
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<cleaner id="test_untrusted">\n'
+            '  <label>Test</label>\n'
+            '  <description>Test</description>\n'
+            '  <option id="opt">\n'
+            '    <label>Opt</label>\n'
+            '    <description>Opt</description>\n'
+            '    <action command="delete" search="file" path="test-does-not-exist"/>\n'
+            '    <action command="process" cmd="calc.exe"/>\n'
+            '  </option>\n'
+            '</cleaner>\n')
+        fn = os.path.join(self.mkdtemp(prefix='bleachbit-cleanerml-trust'),
+                          'planted.xml')
+        self.write_file(fn, text=xml_str)
+
+        def action_classes(cleaner):
+            return [a.__class__.__name__ for (_option_id, a) in cleaner.actions]
+
+        self.assertIn('Process', action_classes(
+            CleanerML(fn, trusted=True).cleaner))
+
+        # The delete action stays; only the process action is dropped
+        untrusted = action_classes(CleanerML(fn, trusted=False).cleaner)
+        self.assertNotIn('Process', untrusted)
+        self.assertIn('Delete', untrusted)
+
+    def test_untrusted_winreg_action_allowed(self):
+        """A winreg action is kept even for an untrusted cleaner"""
+        xml_str = (
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<cleaner id="test_untrusted_winreg">\n'
+            '  <label>Test</label>\n'
+            '  <description>Test</description>\n'
+            '  <option id="opt">\n'
+            '    <label>Opt</label>\n'
+            '    <description>Opt</description>\n'
+            '    <action command="delete" search="file" path="test-does-not-exist"/>\n'
+            '    <action command="winreg" path="HKCU\\Software\\BleachBitTest"/>\n'
+            '  </option>\n'
+            '</cleaner>\n')
+        fn = os.path.join(self.mkdtemp(prefix='bleachbit-cleanerml-trust'),
+                          'planted_winreg.xml')
+        self.write_file(fn, text=xml_str)
+
+        def action_classes(cleaner):
+            return [a.__class__.__name__ for (_option_id, a) in cleaner.actions]
+
+        for trusted in (True, False):
+            actions = action_classes(CleanerML(fn, trusted=trusted).cleaner)
+            self.assertIn('Winreg', actions)
+            self.assertIn('Delete', actions)
+
+    def test_untrusted_actions_warn_once_per_file(self):
+        """Ignored actions are summarized in one warning, not one per action"""
+        actions = '\n'.join(
+            f'    <action command="process" cmd="calc{i}.exe"/>'
+            for i in range(10))
+        xml_str = (
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<cleaner id="test_untrusted_many">\n'
+            '  <label>Test</label>\n'
+            '  <description>Test</description>\n'
+            '  <option id="opt">\n'
+            '    <label>Opt</label>\n'
+            '    <description>Opt</description>\n'
+            f'{actions}\n'
+            '  </option>\n'
+            '</cleaner>\n')
+        fn = os.path.join(self.mkdtemp(prefix='bleachbit-cleanerml-trust-log'),
+                          'planted_many.xml')
+        self.write_file(fn, text=xml_str)
+
+        with self.assertLogs('bleachbit.CleanerML', level='WARNING') as cm:
+            CleanerML(fn, trusted=False)
+        self.assertEqual(len(cm.output), 1)
+        self.assertIn("'process'", cm.output[0])
+
+    def test_is_trusted_cleaner(self):
+        """Files shipped next to the application are trusted"""
+        from bleachbit.CleanerML import is_trusted_cleaner
+        system_dir = bleachbit.system_cleaners_dir
+        self.assertTrue(is_trusted_cleaner(
+            os.path.join(system_dir, 'example.xml')))
+        self.assertFalse(is_trusted_cleaner(
+            os.path.join(bleachbit.personal_cleaners_dir, 'example.xml')))
+
+    def test_is_trusted_cleaner_portable(self):
+        """In portable mode the personal cleaners dir is the local one"""
+        from bleachbit.CleanerML import is_trusted_cleaner
+        app_dir = self.mkdtemp(prefix='bleachbit-portable')
+        cleaners_dir = os.path.join(app_dir, 'cleaners')
+        with mock.patch.multiple(
+                'bleachbit',
+                local_cleaners_dir=cleaners_dir,
+                personal_cleaners_dir=cleaners_dir,
+                system_cleaners_dir=os.path.join(app_dir, 'share', 'cleaners')):
+            self.assertTrue(is_trusted_cleaner(
+                os.path.join(cleaners_dir, 'winapp2.ini')))
+            self.assertFalse(is_trusted_cleaner(
+                os.path.join(app_dir, 'elsewhere', 'winapp2.ini')))
+
+    def test_rejects_dtd(self):
+        """A CleanerML file with a DTD is rejected (entity-expansion defense)"""
+        xml_str = (
+            '<?xml version="1.0"?>\n'
+            '<!DOCTYPE cleaner [ <!ENTITY x "y"> ]>\n'
+            '<cleaner id="dtd_test">\n'
+            '  <label>Test</label>\n'
+            '  <description>Test</description>\n'
+            '</cleaner>\n')
+        fn = os.path.join(self.mkdtemp(prefix='bleachbit-cleanerml-dtd'),
+                          'dtd.xml')
+        self.write_file(fn, text=xml_str)
+        xmlcleaner = CleanerML(fn)
+        self.assertFalse(xmlcleaner.cleaner.is_usable())
 
     def test_nvalid_utf8(self):
         """Test CleanerML() with invalid UTF-8 encoding

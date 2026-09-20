@@ -19,8 +19,9 @@ from unittest import mock
 from tests.common import pytest
 
 import bleachbit
-from bleachbit.Cleaner import backends
+from bleachbit.Cleaner import Cleaner, backends
 from bleachbit.GtkShim import Gdk, Gio, GLib, GObject, Gtk, is_gtk_available
+from bleachbit.Language import get_supported_language_code_name_dict
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 from tests import common
@@ -229,6 +230,14 @@ class GUITestCase(common.BleachbitTestCase):
         # destroy
         pref.dialog.destroy()
 
+    def test_preferences_language_scan_once(self):
+        """Opening the preferences dialog scans for languages once"""
+        with mock.patch('bleachbit.GuiPreferences.get_supported_language_code_name_dict',
+                        wraps=get_supported_language_code_name_dict) as mock_get:
+            pref = self.app.get_preferences_dialog()
+        self.assertEqual(mock_get.call_count, 1)
+        pref.dialog.destroy()
+
     def test_preferences_cookies_page(self):
         """Opens the preferences dialog and navigates to cookies page"""
         pref = self.app.get_preferences_dialog()
@@ -288,11 +297,11 @@ class GUITestCase(common.BleachbitTestCase):
 
         with mock.patch('bleachbit.Chaff.DEFAULT_MODELS_DIR', models_dir), \
                 mock.patch('bleachbit.Chaff.download_models',
-                          side_effect=isolated_download_models), \
+                           side_effect=isolated_download_models), \
                 mock.patch('bleachbit.GuiChaff.generate_2600',
-                          side_effect=isolated_generate_2600), \
+                           side_effect=isolated_generate_2600), \
                 mock.patch('bleachbit.GuiChaff.generate_emails',
-                          side_effect=isolated_generate_emails):
+                           side_effect=isolated_generate_emails):
             if not Chaff.download_models():
                 self.skipTest('Unable to download chaff models for GUI test')
             gui = self.get_window()
@@ -307,7 +316,8 @@ class GUITestCase(common.BleachbitTestCase):
             chaff_dst_dir = os.path.join(self.tempdir, 'chaff_dst')
             os.mkdir(chaff_dst_dir)
             cd.choose_folder_button.set_filename(chaff_dst_dir)
-            cd.when_finished_combo.set_active(1)  # do not delete after generation
+            # do not delete after generation
+            cd.when_finished_combo.set_active(1)
             cd.stop_value_spin.set_value(10)
             self.refresh_gui()
             self.click_button(cd, _("Make files"))
@@ -476,6 +486,9 @@ class GUITestCase(common.BleachbitTestCase):
         mock_clear_clipboard.assert_called_once()
         self.assertNotExists(test_file)
 
+    # Flaky ~1/100 on Linux: X11 CLIPBOARD owner can be transiently lost
+    # under parallel xdist workers. assertTrue (not skipTest) lets flaky rerun.
+    @pytest.mark.flaky(reruns=2, reruns_delay=1)
     def test_shred_paths_from_clipboard_menu_integration(self):
         """Shred a path copied to the real clipboard"""
         test_file = self.write_file('shred-me-via-real-clipboard')
@@ -600,10 +613,10 @@ class GUITestCase(common.BleachbitTestCase):
         saved_non_cookie_cleaner = backends.get(non_cookie_cleaner_id)
 
         try:
-            cookie_cleaner = type('DummyCleaner', (), {})()
-            cookie_cleaner.actions = [('cookies', _DummyAction('cookie'))]
-            non_cookie_cleaner = type('DummyCleaner', (), {})()
-            non_cookie_cleaner.actions = [('logs', _DummyAction('delete'))]
+            cookie_cleaner = Cleaner()
+            cookie_cleaner.add_action('cookies', _DummyAction('cookie'))
+            non_cookie_cleaner = Cleaner()
+            non_cookie_cleaner.add_action('logs', _DummyAction('delete'))
 
             backends[cookie_cleaner_id] = cookie_cleaner
             backends[non_cookie_cleaner_id] = non_cookie_cleaner

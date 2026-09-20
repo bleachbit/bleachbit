@@ -24,18 +24,22 @@ Cross-platform, special cleaning operations
 
 # standard library imports
 import contextlib
+import errno
 import json
 import logging
 import os
-import xml.dom.minidom
 from urllib.parse import quote, urlparse, urlunparse
 
 
 # local application imports
 from bleachbit import FileUtilities, IS_WINDOWS
+from bleachbit.General import reject_xml_dtd
 from bleachbit.Options import options
 
 logger = logging.getLogger(__name__)
+
+# SQLite primary result code for "unable to open database file".
+SQLITE_CANTOPEN = 14
 
 
 def __get_chrome_history(path, fn='History'):
@@ -44,24 +48,58 @@ def __get_chrome_history(path, fn='History'):
     'path' is name of any file in same directory"""
     path_history = os.path.join(os.path.dirname(path), fn)
     ver = get_sqlite_int(
-        path_history, 'select value from meta where key="version"')[0]
+        path_history, "select value from meta where key='version'")[0]
     if ver <= 1:
         raise RuntimeError(f'unexpected Chrome history version: {ver}')
     return ver
 
 
-def _sqlite_readonly_uri(pathname):
-    """Return a proper SQLite URI for read-only access to pathname"""
+def _sqlite_uri(pathname, mode=None):
+    """Return a safe SQLite file: URI for pathname.
+
+    The path is percent-encoded so a character such as '?' cannot be
+    misparsed as the start of the URI query and defeat the mode. mode is
+    an optional open mode ('ro', 'rw', ...); None omits it (default rwc).
+    """
     assert isinstance(pathname, str)
     abs_path = os.path.abspath(pathname)
     if IS_WINDOWS:
         abs_path = abs_path.replace('\\', '/')
     quoted = quote(abs_path, safe='/:')
-    return f'file:{quoted}?mode=ro'
+    uri = f'file:{quoted}'
+    if mode:
+        uri += f'?mode={mode}'
+    return uri
+
+
+def _sqlite_readonly_uri(pathname):
+    """Return a proper SQLite URI for read-only access to pathname"""
+    return _sqlite_uri(pathname, 'ro')
+
+
+def _quote_sqlite_identifier(name):
+    """Return a safely-quoted SQLite identifier."""
+    if not isinstance(name, str):
+        raise TypeError('SQLite identifier must be a string')
+    return '"' + name.replace('"', '""') + '"'
+
+
+def _escape_sqlite_str_literal(value):
+    """Escape a value for use in a single-quoted SQLite string literal.
+
+    Double quotes are an identifier in standard SQL; SQLite only accepts
+    them as a string when built with SQLITE_DQS enabled.
+    """
+    return value.replace("'", "''")
 
 
 def sqlite_table_exists(pathname, table):
-    """Check whether a table exists in the SQLite database"""
+    """Check whether a table exists in the SQLite database
+
+    Returns True if the table exists, False if it does not.
+
+    Raises PermissionError if the file exists but cannot be opened.
+    """
     # In FreeBSD, sqlite3 is a separate package
     # pylint: disable=import-outside-toplevel
     import sqlite3
@@ -71,8 +109,23 @@ def sqlite_table_exists(pathname, table):
         with contextlib.closing(sqlite3.connect(uri, uri=True)) as conn:
             if conn.execute(cmd, (table,)).fetchone():
                 return True
-    except sqlite3.OperationalError:
-        # Database does not exist or cannot be opened in read-only mode
+    except sqlite3.OperationalError as exc:
+        # SQLITE_CANTOPEN (14) and extended variants are raised when
+        # Norton blocks access to browser cookies. The primary code
+        # is the low byte.
+        # sqlite_errorcode requires Python 3.11+, which is satisfied on
+        # Windows where the antivirus issue occurs.
+        errorcode = getattr(exc, 'sqlite_errorcode', None)
+        if os.path.exists(pathname) and errorcode is not None and \
+                (errorcode & 0xff) == SQLITE_CANTOPEN:
+            # Worker shows prettier message for PermissionError
+            raise PermissionError(
+                errno.EACCES,
+                f"Cannot open database file (possibly blocked by "
+                f"antivirus or another process): {pathname}",
+                pathname) from exc
+        # Database may be locked, busy, corrupt, or not a valid SQLite DB.
+        logger.debug('sqlite_table_exists: %s: %s', pathname, exc)
         return False
     return False
 
@@ -81,7 +134,8 @@ def _sqlite_is_valid_database(pathname):
     """Return boolean indicating whether pathname points to a readable SQLite database."""
     import sqlite3  # pylint: disable=import-outside-toplevel
     try:
-        with contextlib.closing(sqlite3.connect(f'file:{pathname}?mode=ro', uri=True)) as conn:
+        uri = _sqlite_readonly_uri(pathname)
+        with contextlib.closing(sqlite3.connect(uri, uri=True)) as conn:
             conn.execute('select 1 from sqlite_master limit 1;')
             return True
     except (sqlite3.DatabaseError, sqlite3.OperationalError):
@@ -96,11 +150,14 @@ def __shred_sqlite_char_columns(table, cols=None, where="", path=None):
     if not where:
         # If None, set to empty string.
         where = ""
+    quoted_table = _quote_sqlite_identifier(table)
     if cols and options.get('shred'):
         for blob_type in ('randomblob', 'zeroblob'):
-            updates = [f'{col} = {blob_type}(length({col}))' for col in cols]
-            cmd += f"update or ignore {table} set {', '.join(updates)} {where};"
-    cmd += f"delete from {table} {where};"
+            updates = [f'{_quote_sqlite_identifier(col)} = '
+                       f'{blob_type}(length({_quote_sqlite_identifier(col)}))'
+                       for col in cols]
+            cmd += f"update or ignore {quoted_table} set {', '.join(updates)} {where};"
+    cmd += f"delete from {quoted_table} {where};"
     return cmd
 
 
@@ -115,7 +172,7 @@ def get_sqlite_int(path, sql, parameters=()):
 def _get_sqlite_values(path, sql, row_factory=None, parameters=()):
     """Run SQL on database in 'path' and return the integers"""
     import sqlite3  # pylint: disable=import-outside-toplevel
-    with contextlib.closing(sqlite3.connect(f'file:{path}?mode=ro', uri=True)) as conn:
+    with contextlib.closing(sqlite3.connect(_sqlite_readonly_uri(path), uri=True)) as conn:
         if row_factory is not None:
             conn.row_factory = row_factory
         cursor = conn.execute(sql, parameters)
@@ -191,7 +248,7 @@ def delete_chrome_favicons(path):
         cols = ('page_url',)
         where = None
         if os.path.exists(path_history):
-            cmds += f"attach database \"{path_history}\" as History;"
+            cmds += f"attach database '{_escape_sqlite_str_literal(path_history)}' as History;"
             where = "where page_url not in (select distinct url from History.urls)"
         cmds += __shred_sqlite_char_columns('icon_mapping', cols, where, path)
 
@@ -216,7 +273,7 @@ def delete_chrome_favicons(path):
         cols = ('url', 'image_data')
         where = None
         if os.path.exists(path_history):
-            cmds += f"attach database \"{path_history}\" as History;"
+            cmds += f"attach database '{_escape_sqlite_str_literal(path_history)}' as History;"
             where = "where id not in(select distinct favicon_id from History.urls)"
         cmds += __shred_sqlite_char_columns('favicons', cols, where, path)
     else:
@@ -283,7 +340,13 @@ def delete_chrome_keywords(path):
 
 def delete_office_registrymodifications(path):
     """Erase LibreOffice 3.4 and Apache OpenOffice.org 3.4 MRU in registrymodifications.xcu"""
-    dom1 = xml.dom.minidom.parse(path)
+    # Keep minidom out of module scope: Special is on the CLI and GUI startup
+    # paths, and this is the only function that needs it.
+    import xml.dom.minidom  # pylint: disable=import-outside-toplevel
+    with open(path, 'rb') as f:
+        data = f.read()
+    reject_xml_dtd(data, 'registrymodifications.xcu')
+    dom1 = xml.dom.minidom.parseString(data)
     modified = False
     pathprefix = '/org.openoffice.Office.Histories/Histories/'
     for node in dom1.getElementsByTagName("item"):
@@ -295,7 +358,7 @@ def delete_office_registrymodifications(path):
         node.unlink()
         modified = True
     if modified:
-        with open(path, 'w', encoding='utf-8') as xml_file:
+        with FileUtilities.open_for_overwrite(path, encoding='utf-8') as xml_file:
             dom1.writexml(xml_file)
 
 
@@ -395,6 +458,7 @@ def _remove_path_from_url(url):
         return url.geturl()
     return urlunparse((url.scheme, url.netloc, '', '', '', ''))
 
+
 def delete_mozilla_favicons(path):
     """Delete favorites icons in Mozilla places.favicons
 
@@ -403,7 +467,7 @@ def delete_mozilla_favicons(path):
     cmds = ""
 
     places_path = os.path.join(os.path.dirname(path), 'places.sqlite')
-    cmds += f'attach database "{places_path}" as places;'
+    cmds += f"attach database '{_escape_sqlite_str_literal(places_path)}' as places;"
 
     bookmarked_urls_query = ("select url from {db}moz_places where id in "
                              "(select distinct fk from {db}moz_bookmarks "
@@ -464,9 +528,13 @@ def delete_mozilla_favicons(path):
 
     # delete all not bookmarked icons
     if ids_to_delete:
-        icons_where = f"where (id in ({str(ids_to_delete).replace('[', '').replace(']', '')}))"
+        if not all(isinstance(i, int) for i in ids_to_delete):
+            raise ValueError('icon IDs must be integers')
+        ids_str = ','.join(str(i) for i in ids_to_delete)
+        icons_where = f'where (id in ({ids_str}))'
         cols = ('icon_url', 'data')
-        cmds += __shred_sqlite_char_columns('moz_icons', cols, icons_where, path)
+        cmds += __shred_sqlite_char_columns('moz_icons',
+                                            cols, icons_where, path)
         FileUtilities.execute_sqlite3(path, cmds)
 
 
@@ -514,7 +582,7 @@ def get_chrome_bookmark_urls(path):
             urls.append(node['url'])
 
     # find bookmarks
-    for node in js['roots']:
-        get_chrome_bookmark_urls_helper(js['roots'][node])
+    for node in js['roots'].values():
+        get_chrome_bookmark_urls_helper(node)
 
     return list(set(urls))  # unique

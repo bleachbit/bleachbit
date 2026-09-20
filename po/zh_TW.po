@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
-"POT-Creation-Date: 2026-07-12 15:23-0600\n"
-"PO-Revision-Date: 2026-07-14 00:01+0000\n"
+"POT-Creation-Date: 2026-09-01 10:05-0600\n"
+"PO-Revision-Date: 2026-09-02 11:02+0000\n"
 "Last-Translator: Pin-Hsien Lee <plesry@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/bleachbit/main/zh_Hant/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -76,27 +76,31 @@ msgstr "歷史紀錄"
 msgid "Delete the usage history"
 msgstr "刪除使用紀錄"
 
+#. TRANSLATORS: Name of a cleaning option for Windows log files.
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Logs"
 msgstr "日誌"
 
+#. TRANSLATORS: Description of the Logs cleaning option.
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Delete the logs"
 msgstr "刪除日誌"
 
@@ -105,6 +109,7 @@ msgstr "刪除日誌"
 msgid "Multimedia viewer"
 msgstr "多媒體瀏覽器"
 
+#. TRANSLATORS: Name of a cleaning option. Cache is a noun.
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
 #: ../cleaners/librewolf.xml ../cleaners/openoffice.xml
 #: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
@@ -139,8 +144,8 @@ msgstr "快取"
 #: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/android_studio.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
@@ -380,6 +385,7 @@ msgstr "刪除指令紀錄"
 msgid "Office suite"
 msgstr "辦公套裝軟體"
 
+#. TRANSLATORS: Description of the Recent documents list cleaning option.
 #: ../cleaners/openoffice.xml ../cleaners/audacious.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/gedit.xml ../cleaners/kde.xml
@@ -408,6 +414,7 @@ msgstr "除錯日誌"
 msgid "Delete the debug logs"
 msgstr "刪除 debug（除錯）日誌"
 
+#. TRANSLATORS: Name of a cleaning option for temporary files.
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
@@ -417,6 +424,7 @@ msgstr "刪除 debug（除錯）日誌"
 msgid "Temporary files"
 msgstr "暫存檔"
 
+#. TRANSLATORS: Description of the Temporary files cleaning option.
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
@@ -600,6 +608,7 @@ msgstr "重置搜尋引擎的使用紀錄，並刪除非內建的搜尋引擎；
 msgid "File manager"
 msgstr "檔案管理員"
 
+#. TRANSLATORS: Name of a cleaning option for the history of recently used files.
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py
 msgid "Recent documents list"
@@ -656,6 +665,26 @@ msgstr "刪除過時檔案"
 msgid "Package lists"
 msgstr "軟體包清單"
 
+#: ../cleaners/android_studio.xml
+msgid "Development environment"
+msgstr "開發環境"
+
+#: ../cleaners/android_studio.xml
+msgid "Gradle cache"
+msgstr "Gradle 快取"
+
+#: ../cleaners/android_studio.xml
+msgid "Delete downloaded dependencies and build artifacts"
+msgstr "刪除下載的依賴項和構建物"
+
+#: ../cleaners/android_studio.xml
+msgid "Dependencies will need to be downloaded on the next build."
+msgstr "下次構建時需要下載依賴項。"
+
+#: ../cleaners/android_studio.xml
+msgid "IDE cache"
+msgstr "IDE 快取"
+
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
 msgid "Editor"
@@ -683,7 +712,7 @@ msgstr "文件檢視器"
 
 #: ../cleaners/nautilus.xml
 msgid "Custom folders will be reset."
-msgstr "自訂資料夾將被重置。"
+msgstr "自定義資料夾將被重置。"
 
 #. Label for Claude coding assistant
 #: ../cleaners/claude.xml
@@ -804,6 +833,7 @@ msgstr "刪除 torrent 種子檔（不會刪除下載的檔案）"
 msgid "Statistics"
 msgstr "統計資料"
 
+#. TRANSLATORS: Description of the Memory dump cleaning option.
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Delete the file"
 msgstr "刪除檔案"
@@ -820,6 +850,7 @@ msgstr "已下載的檔案"
 msgid "Remote control software"
 msgstr "遠端控制軟體"
 
+#. TRANSLATORS: Name of a cleaning option for Windows crash dump files.
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Memory dump"
 msgstr "記憶體傾印"
@@ -1263,12 +1294,20 @@ msgstr ""
 "函式 handle_cleaner_option() 錯誤：cleaner id = {cleaner_id}, option "
 "XML={option_xml}"
 
-#. TRANSLATORS: Warning printed to the log.
-#. %s expands to the path of the XML cleaner file that was skipped
-#: ../bleachbit/CleanerML.py
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file that was skipped
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
 msgstr "忽略具有「全域寫入」權限的清理器：%s"
+
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file whose directory is world
+#. writable.
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
+#, python-format
+msgid "Ignoring cleaner because its directory is world writable: %s"
+msgstr "已忽略清理器，因其所在目錄開放所有人寫入：%s"
 
 #. TRANSLATORS: Error message printed to the log.
 #. %s expands to the path of the XML cleaner file
@@ -1276,6 +1315,16 @@ msgstr "忽略具有「全域寫入」權限的清理器：%s"
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "讀取清理器錯誤：%s"
+
+#. TRANSLATORS: Cleaner name shown in the list of applications.
+#: ../bleachbit/Cleaner.py
+msgid "System"
+msgstr "系統"
+
+#. TRANSLATORS: Description of the System cleaner.
+#: ../bleachbit/Cleaner.py
+msgid "The system in general"
+msgstr "系統通用"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1288,6 +1337,7 @@ msgstr "讀取清理器錯誤：%s"
 msgid "Broken desktop files"
 msgstr "損毀的 .desktop 檔"
 
+#. TRANSLATORS: Description of the Broken desktop files cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete broken application menu entries and file associations"
 msgstr "刪除損毀的應用程式選項與檔案關聯"
@@ -1298,30 +1348,40 @@ msgstr "刪除損毀的應用程式選項與檔案關聯"
 msgid "Localizations"
 msgstr "本地化"
 
+#. TRANSLATORS: Description of the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete files for unwanted languages"
 msgstr "刪除不需要的語言檔案"
 
+#. TRANSLATORS: Warning for the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Configure this option in the preferences."
 msgstr "這個選項可在「偏好設定」調整。"
 
+#. TRANSLATORS: 'Rotated logs' refers to old system log files.
+#. Linux systems often have a scheduled job to rotate the logs
+#. which means compress all except the newest log and then delete
+#. the oldest log. You could translate this as 'old logs.'
 #: ../bleachbit/Cleaner.py
 msgid "Rotated logs"
 msgstr "循環日誌"
 
+#. TRANSLATORS: Description of the Rotated logs cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete old system logs"
 msgstr "刪除過時的系統日誌"
 
+#. TRANSLATORS: Name of a cleaning option. Trash is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Trash"
 msgstr "垃圾桶"
 
+#. TRANSLATORS: Description of the Trash cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the trash"
 msgstr "清空垃圾桶"
 
+#. TRANSLATORS: Name of a cleaning option for system memory.
 #: ../bleachbit/Cleaner.py ../bleachbit/Worker.py
 msgid "Memory"
 msgstr "記憶體"
@@ -1331,6 +1391,7 @@ msgstr "記憶體"
 msgid "Wipe the swap and free memory"
 msgstr "擦除 swap 空間並釋放記憶體"
 
+#. TRANSLATORS: Warning for the experimental Memory cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "This option is experimental and may cause system problems."
 msgstr "此為實驗性選項，有可能導致系統出現問題。"
@@ -1345,10 +1406,12 @@ msgstr "DNS 快取"
 msgid "Prefetch"
 msgstr "Prefetch（預取）"
 
+#. TRANSLATORS: Name of a cleaning option for the Windows recycle bin.
 #: ../bleachbit/Cleaner.py
 msgid "Recycle bin"
 msgstr "回收桶"
 
+#. TRANSLATORS: Description of the Recycle bin cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the recycle bin"
 msgstr "清空回收桶"
@@ -1364,17 +1427,19 @@ msgstr "更新的卸載程序"
 msgid ""
 "Delete uninstallers for Microsoft updates including hotfixes, service packs, "
 "and Internet Explorer updates"
-msgstr "刪除微軟更新的卸載程序，包換修復補丁、服務包與 IE 瀏覽器更新"
+msgstr "刪除微軟更新卸載程序，包含熱補丁、服務包和網頁瀏覽器更新"
 
 #. TRANSLATORS: Warning shown when selecting an option.
 #: ../bleachbit/Cleaner.py
 msgid "This option may prevent uninstalling some updates."
 msgstr "此選項可能阻止卸載某些更新。"
 
+#. TRANSLATORS: Name of a cleaning option. Clipboard is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
 msgstr "剪貼簿"
 
+#. TRANSLATORS: Description of the Clipboard cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "The desktop environment's clipboard used for copy and paste operations"
 msgstr "桌面環境下用於複製、貼上的剪貼簿"
@@ -1385,8 +1450,9 @@ msgstr "桌面環境下用於複製、貼上的剪貼簿"
 #. Short label meaning "Custom locations".
 #: ../bleachbit/Cleaner.py ../bleachbit/GuiPreferences.py
 msgid "Custom"
-msgstr "自訂"
+msgstr "自定義"
 
+#. TRANSLATORS: Description of the Custom cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete user-specified files and folders"
 msgstr "刪除使用者指定的檔案與資料夾"
@@ -1400,14 +1466,6 @@ msgstr "未分配空間"
 #: ../bleachbit/Cleaner.py
 msgid "Wipe empty space to hide deleted files"
 msgstr "擦除未分配空間隱藏已刪除的檔案"
-
-#: ../bleachbit/Cleaner.py
-msgid "The system in general"
-msgstr "系統通用"
-
-#: ../bleachbit/Cleaner.py
-msgid "System"
-msgstr "系統"
 
 #. TRANSLATORS: 'Empty' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
@@ -1435,6 +1493,7 @@ msgstr "正在載入自帶的清理器…"
 msgid "Importing cleaners from Winapp2.ini…"
 msgstr "正在從 Winapp2.ini 匯入清理器…"
 
+#. TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
 #: ../bleachbit/Cleaner.py
 #, python-format
 msgid "Wipe empty space %s"
@@ -2222,6 +2281,10 @@ msgstr "清理後退出"
 msgid "Reset warning confirmations"
 msgstr "重置警告確認"
 
+#. TRANSLATORS: This means to hide cleaners which would do
+#. nothing. For example, if Firefox were never used on
+#. this system, this option would hide Firefox to simplify
+#. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
 msgstr "隱藏無關的清理器"
@@ -2424,11 +2487,13 @@ msgstr "路徑"
 msgid "Choose a file"
 msgstr "選擇一個檔案"
 
+#. TRANSLATORS: Button label in the preferences for adding a file.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add file"
 msgstr "添加檔案"
 
+#. TRANSLATORS: Button label in the preferences for adding a folder.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add folder"
@@ -2752,6 +2817,9 @@ msgstr "權限被拒絕，無法將設置寫入檔案：%s"
 msgid "Error checking whether path exists: %s"
 msgstr "路徑檢查錯誤：%s"
 
+#. TRANSLATORS: %s is a ISO language code of two or three letters.
+#. "Preserving" means the language's localization files will be
+#. kept and not deleted when cleaning.
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Automatically preserving language %s."
@@ -2832,14 +2900,17 @@ msgid ""
 "again."
 msgstr "無法清理 %s，因為它正在執行。將它關閉後再試一遍。"
 
+#. TRANSLATORS: Status message after a successful winapp2.ini update.
 #: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
 msgstr "已下載新的 winapp2.ini 。"
 
+#. TRANSLATORS: Title of the software update dialog.
 #: ../bleachbit/Update.py
 msgid "Update BleachBit"
 msgstr "更新 BleachBit"
 
+#. TRANSLATORS: Message in the software update dialog.
 #: ../bleachbit/Update.py
 msgid "A new version is available."
 msgstr "有可用的新版本。"
@@ -2879,14 +2950,18 @@ msgstr "多媒體"
 msgid "Utilities"
 msgstr "實用工具"
 
+#. TRANSLATORS: Cleaner category name for games imported from winapp2.ini.
 #: ../bleachbit/Winapp.py
 msgid "Games"
 msgstr "遊戲"
 
+#. TRANSLATORS: Description shown for a cleaner imported from winapp2.ini,
+#. which is a database of cleaning definitions.
 #: ../bleachbit/Winapp.py
 msgid "Imported from winapp2.ini"
 msgstr "從 winapp2.ini 匯入"
 
+#. TRANSLATORS: Warning shown when cleaning Windows Updates without administrator access.
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr "需要管理員權限以清除 Windows Update 檔案"
@@ -2925,9 +3000,10 @@ msgstr "擦除檔案系統類型為 %(fstype)s 的路徑 %(pathname)s"
 msgid "Path to wipe must be an existing directory: %s"
 msgstr "要擦除的路徑必須是一個存在的目錄：%s"
 
+#. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-msgid "Creating new, temporary file for wiping free space."
-msgstr "建立新暫存檔以抹寫可用空間。"
+msgid "Creating new, temporary file for wiping empty space."
+msgstr "建立新的暫存檔以抹寫剩餘空間。"
 
 #: ../bleachbit/Wipe.py
 #, python-format
@@ -3003,6 +3079,11 @@ msgid "Access denied: %s"
 msgstr "存取被拒：%s"
 
 #: ../bleachbit/Worker.py
+#, python-format
+msgid "Database is locked: %s"
+msgstr "資料庫被鎖定：%s"
+
+#: ../bleachbit/Worker.py
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
 msgstr "錯誤：{operation_option}: {command}"
@@ -3012,6 +3093,7 @@ msgstr "錯誤：{operation_option}: {command}"
 msgid "Please wait. Wiping empty space."
 msgstr "請稍候。正在擦除硬碟未分配區域。"
 
+#. TRANSLATORS: Instruction shown while wiping a drive's empty space.
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr "要停止此作業，按下工具欄上的終止按鈕並等待。"
@@ -3031,6 +3113,7 @@ msgstr ""
 msgid "Please wait.  Cleaning %s."
 msgstr "請稍候。正在清理 %s。"
 
+#. TRANSLATORS: %d is the estimated number of minutes remaining.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "About %d minute remaining."
@@ -3065,6 +3148,10 @@ msgstr "已刪除檔案：%d"
 msgid "Files to be deleted: %d"
 msgstr "預計刪除檔案：%d"
 
+#. TRANSLATORS: %d is the number of special cleaning operations
+#. completed. Special operations are cleaning actions that do
+#. not delete a file, such as overwriting a file's contents,
+#. truncating a file, or deleting a Windows registry key.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Special operations: %d"

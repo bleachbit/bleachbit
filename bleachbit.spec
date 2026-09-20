@@ -57,7 +57,7 @@
 %endif
 
 Name:           bleachbit
-Version:        6.0.2
+Version:        6.0.4
 Release:        1%{?dist}
 Summary:        Remove unnecessary files, free space, and maintain privacy
 License:        GPL-3.0-or-later
@@ -68,7 +68,6 @@ BuildArch:      noarch
 %if %{is_redhat_family}
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
-BuildRequires:  python3-chardet
 BuildRequires:  python3-psutil
 BuildRequires:  python3-requests
 BuildRequires:  python3-setuptools
@@ -76,7 +75,6 @@ Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 Requires:       python3
 Requires:       gtk3
-Requires:       python3-chardet
 Requires:       python3-gobject
 Requires:       python3-psutil
 Requires:       python3-requests
@@ -88,7 +86,12 @@ BuildRequires:  make
 BuildRequires:  %{pyprefix}
 BuildRequires:  python-rpm-macros
 BuildRequires:  %{pyprefix}-base
-BuildRequires:  %{pyprefix}-chardet
+# Leap 16.0 split the unversioned /usr/bin/python3 symlink into a separate
+# python3-base package that is no longer pulled in transitively by
+# python313-base. Require it explicitly so %{__python3} resolves.
+%if 0%{?suse_version} == 1600
+BuildRequires:  python3-base
+%endif
 BuildRequires:  %{pyprefix}-psutil
 BuildRequires:  %{pyprefix}-requests
 BuildRequires:  %{pyprefix}-setuptools
@@ -99,7 +102,6 @@ BuildRequires:  %{pyprefix}-xml
 BuildRequires:  update-desktop-files
 Requires:       gobject-introspection
 Requires:       %{pyprefix}
-Requires:       %{pyprefix}-chardet
 Requires:       %{pyprefix}-gobject
 Requires:       %{pyprefix}-gobject-Gdk
 Requires:       %{pyprefix}-psutil
@@ -244,6 +246,6 @@ update-desktop-database &> /dev/null ||:
 
 %changelog
 
-* Tue Mar 18 2025 Andrew Ziem <andrew@bleachbit.org> - 6.0.2-1
-- Update to 6.0.2
+* Tue Mar 18 2025 Andrew Ziem <andrew@bleachbit.org> - 6.0.4-1
+- Update to 6.0.4
 - See https://www.bleachbit.org/news

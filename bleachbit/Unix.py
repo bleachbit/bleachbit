@@ -9,6 +9,7 @@ Integration specific to Unix-like operating systems
 """
 
 import configparser
+import errno
 import glob
 import logging
 import os
@@ -19,7 +20,7 @@ import shlex
 import subprocess
 
 import bleachbit
-from bleachbit import FileUtilities, General, IS_POSIX
+from bleachbit import FileUtilities, General, IS_MAC, IS_POSIX
 from bleachbit.FileUtilities import children_in_directory, exe_exists
 from bleachbit.Language import get_text as _, native_locale_names
 from bleachbit.VFS import RealVFS
@@ -28,12 +29,6 @@ logger = logging.getLogger(__name__)
 
 # Cache for snapd_is_active() to avoid repeated systemctl calls.
 _snapd_is_active_cache = None
-
-try:
-    Pattern = re.Pattern
-except AttributeError:
-    Pattern = re._pattern_type
-
 
 JOURNALD_REGEX = r'^Vacuuming done, freed ([\d.]+[BKMGT]?) of archived journals (on disk|from [\w/]+).$'
 
@@ -77,7 +72,7 @@ class LocaleCleanerPath:
         """Returns direct subpaths for this object, i.e. either the named subfolder or all
         subfolders matching the pattern"""
         vfs = self._get_vfs()
-        if isinstance(self.pattern, Pattern):
+        if isinstance(self.pattern, re.Pattern):
             # posixpath is easy way to test also from Windows.
             return (posixpath.join(basepath, p) for p in vfs.listdir(basepath)
                     if self.pattern.match(p) and vfs.isdir(posixpath.join(basepath, p)))
@@ -91,7 +86,7 @@ class LocaleCleanerPath:
             for child in self.children:
                 if isinstance(child, LocaleCleanerPath):
                     yield from child.get_localizations(path)
-                elif isinstance(child, Pattern):
+                elif isinstance(child, re.Pattern):
                     for element in vfs.listdir(path):
                         match = child.match(element)
                         if match is not None:
@@ -236,7 +231,8 @@ def _is_broken_xdg_desktop_application(config, desktop_pathname):
 
 def find_available_locales():
     """Returns a list of available locales using locale -a"""
-    rc, stdout, stderr = General.run_external(['locale', '-a'])
+    rc, stdout, stderr = General.run_external(
+        [General.resolve_exe('locale'), '-a'])
     if rc == 0:
         return stdout.strip().split('\n')
 
@@ -267,9 +263,15 @@ def find_best_locale(user_locale):
         return user_locale
 
     # Next, match like 'en' to 'en_US.utf8' (if available) because
-    # of preference for UTF-8.
+    # of preference for UTF-8. Compare case- and hyphen-insensitively:
+    # macOS's locale -a uses '.UTF-8' (uppercase, hyphenated), while
+    # some Linux distros use '.utf8' (lowercase, no hyphen); comparing
+    # only against '.utf8' silently never matched on macOS, falling
+    # through to the next loop and picking whatever locale happened to
+    # be listed first for the prefix -- including a non-UTF-8 one.
     for avail_locale in available_locales:
-        if avail_locale.startswith(user_locale) and avail_locale.endswith('.utf8'):
+        suffix = avail_locale.rsplit('.', 1)[-1].replace('-', '').lower()
+        if avail_locale.startswith(user_locale) and suffix == 'utf8':
             return avail_locale
 
     # Next, match like 'en' to 'en_US' or 'en_US.iso88591'.
@@ -345,7 +347,8 @@ def get_distribution_name_version_os_release():
         dist_name = os_release['ID']
         # ArchLinux has BUILD_ID='rolling' but not VERSION_ID.
         # Ubuntu has VERSION_ID like '26.04' but does not have BUILD_ID.
-        dist_version = os_release.get('VERSION_ID') or os_release.get('BUILD_ID')
+        dist_version = os_release.get(
+            'VERSION_ID') or os_release.get('BUILD_ID')
         if dist_version:
             return f"{dist_name} {dist_version}"
     return None
@@ -362,36 +365,27 @@ def get_distribution_name_version():
     Python 3.7 had platform.linux_distribution(), but it
     was removed in Python 3.8.
     """
-    ret = get_distribution_name_version_platform_freedesktop()
-    if ret:
-        return ret
-    ret = get_distribution_name_version_distro()
-    if ret:
-        return ret
-    ret = get_distribution_name_version_os_release()
-    if ret:
-        return ret
-    try:
-        linux_version = platform.release()
-        # example '6.12.3-061203-generic'
-        linux_version = linux_version.split('-')[0]
-        return f"Linux {linux_version} (unknown distribution)"
-    except Exception as e1:
-        logger.debug("Error calling platform.release(): %s", e1)
+    for get_dist in (get_distribution_name_version_platform_freedesktop,
+                     get_distribution_name_version_distro,
+                     get_distribution_name_version_os_release):
+        ret = get_dist()
+        if ret:
+            return ret
+    for name, get_release in (('platform.release()', platform.release),
+                              ('os.uname()', lambda: os.uname().release)):
         try:
-            linux_version = os.uname().release
             # example '6.12.3-061203-generic'
-            linux_version = linux_version.split('-')[0]
+            linux_version = get_release().split('-')[0]
             return f"Linux {linux_version} (unknown distribution)"
-        except Exception as e2:
-            logger.debug("Error calling os.uname(): %s", e2)
+        except Exception as e:
+            logger.debug("Error calling %s: %s", name, e)
     return "Linux (unknown version and distribution)"
 
 
 def get_mount_points():
     """Return read-write mount points that may have trash"""
     try:
-        import psutil # pylint: disable=import-outside-toplevel
+        import psutil  # pylint: disable=import-outside-toplevel
     except ImportError:
         logger.warning('install psutil for better trash detection')
         return []
@@ -407,6 +401,7 @@ def get_mount_points():
     except (OSError, psutil.Error) as e:
         logger.warning("Error getting mount points: %s", e)
     return mount_points
+
 
 def get_purgeable_locales(locales_to_keep):
     """Returns all locales to be purged"""
@@ -437,9 +432,12 @@ def get_trash_paths():
     # Import here to avoid a circular import.
     # pylint: disable=import-outside-toplevel
     from bleachbit import Command
-    # macOS-style flat trash (non-recursive)
+    # macOS-style flat trash. list_directories=True is required so that
+    # a folder sent to Trash is itself removed after its contents are
+    # deleted; with False, only files inside it are yielded and the now-
+    # empty folder is left behind forever.
     dirname = os.path.expanduser("~/.Trash")
-    for filename in children_in_directory(dirname, False):
+    for filename in children_in_directory(dirname, True):
         yield Command.Delete(filename)
     # Freedesktop trash spec directories
     # https://specifications.freedesktop.org/trash-spec/trashspec-1.0.html
@@ -472,6 +470,7 @@ def get_trash_paths():
             dirname = os.path.join(trash_dir, subdir)
             for filename in children_in_directory(dirname, True):
                 yield Command.Delete(filename)
+
 
 def is_unregistered_mime(mimetype):
     """Returns True if the MIME type is known to be unregistered. If
@@ -551,6 +550,14 @@ def rotated_logs():
     for path in bleachbit.FileUtilities.children_in_directory('/var/log'):
         if bleachbit.FileUtilities.whitelisted(path):
             continue
+
+        # On macOS, skip a path only if its parent dir exists and we
+        # truly lack write access (a missing parent must not count as
+        # 'no permission', since os.access() returns False for both).
+        parent_dir = os.path.dirname(path)
+        if IS_MAC and os.path.isdir(parent_dir) and not os.access(parent_dir, os.W_OK):
+            continue
+
         if any(keep_list.search(path) for keep_list in keep_lists):
             continue
         if positive_re.search(path):
@@ -578,7 +585,8 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
     error_line_regexes = [re.compile(regex)
                           for regex in error_line_regexes or []]
 
-    env = {'LC_ALL': 'C', 'PATH': os.getenv('PATH')}
+    env = General.sanitize_root_env(
+        {'LC_ALL': 'C', 'PATH': os.getenv('PATH') or os.defpath})
     output = subprocess.check_output([cmd] + args, stderr=subprocess.STDOUT,
                                      universal_newlines=True, env=env)
     freed_space = 0
@@ -596,7 +604,7 @@ def run_cleaner_cmd(cmd, args, freed_space_regex=r'[\d.]+[kMGTE]?B?', error_line
 def journald_clean():
     """Clean the system journals"""
     try:
-        return run_cleaner_cmd('journalctl', ['--vacuum-size=1'], JOURNALD_REGEX)
+        return run_cleaner_cmd(General.resolve_exe('journalctl'), ['--vacuum-size=1'], JOURNALD_REGEX)
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
@@ -610,7 +618,7 @@ def apt_autoremove():
     # After this operation, 44.0 kB disk space will be freed.
     freed_space_regex = r'.*, ([\d.]+ ?[a-zA-Z]{2}) disk space will be freed.'
     try:
-        return run_cleaner_cmd('apt-get', args, freed_space_regex, ['^E: '])
+        return run_cleaner_cmd(General.resolve_exe('apt-get'), args, freed_space_regex, ['^E: '])
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
@@ -619,7 +627,7 @@ def apt_autoremove():
 def apt_autoclean():
     """Run 'apt-get autoclean' and return the size (un-rounded, in bytes) of freed space"""
     try:
-        return run_cleaner_cmd('apt-get', ['autoclean'], r'^Del .*\[([\d.]+ ?[a-zA-Z]{2})\]', ['^E: '])
+        return run_cleaner_cmd(General.resolve_exe('apt-get'), ['autoclean'], r'^Del .*\[([\d.]+ ?[a-zA-Z]{2})\]', ['^E: '])
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
@@ -629,7 +637,8 @@ def apt_clean():
     """Run 'apt-get clean' and return the size in bytes of freed space"""
     old_size = get_apt_size()
     try:
-        run_cleaner_cmd('apt-get', ['clean'], '^unused regex$', ['^E: '])
+        run_cleaner_cmd(General.resolve_exe('apt-get'),
+                        ['clean'], '^unused regex$', ['^E: '])
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(e.cmd)}':\n{e.output}") from e
@@ -639,7 +648,8 @@ def apt_clean():
 
 def get_apt_size():
     """Return the size of the apt cache (in bytes)"""
-    (_rc, stdout, _stderr) = General.run_external(['apt-get', '-s', 'clean'])
+    (_rc, stdout, _stderr) = General.run_external(
+        [General.resolve_exe('apt-get'), '-s', 'clean'])
     paths = re.findall(r'/[/a-z\.\*]+', stdout)
     return get_globs_size(paths)
 
@@ -649,7 +659,10 @@ def get_globs_size(paths):
     total_size = 0
     for path in paths:
         for p in glob.iglob(path):
-            total_size += FileUtilities.getsize(p)
+            try:
+                total_size += FileUtilities.getsize(p)
+            except FileNotFoundError:
+                logger.debug('%s vanished while totalling sizes', p)
     return total_size
 
 
@@ -664,7 +677,8 @@ def yum_clean():
     args = ['--enablerepo=*', 'clean', 'all']
     invalid = ['You need to be root', 'Cannot remove rpmdb file']
     try:
-        run_cleaner_cmd('yum', args, '^unused regex$', invalid)
+        run_cleaner_cmd(General.resolve_exe('yum'),
+                        args, '^unused regex$', invalid)
     except subprocess.CalledProcessError as e:
         raise RuntimeError(
             f"Error calling '{' '.join(str(part) for part in e.cmd)}':\n{e.output}") from e
@@ -678,13 +692,20 @@ def dnf_clean():
         msg = _(
             "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "Dnf"
         raise RuntimeError(msg)
-    if not FileUtilities.exe_exists('/usr/bin/dnf'):
+    if not FileUtilities.exe_exists(General.resolve_exe('dnf')):
         raise RuntimeError(_('Executable not found: %s') % 'dnf')
+    # DNF5 permits "clean all" as a non-root user, but it then cleans the
+    # per-user cache (~/.cache/libdnf5) instead of the system cache
+    # (/var/cache/dnf) that this function measures. Require root so the
+    # returned byte count reflects real system-cache cleaning rather than
+    # silently returning 0.
+    if os.geteuid() != 0:
+        raise RuntimeError('dnf clean requires root permissions')
 
     # DNF4 does not report freed space in its output, so infer effect
     # by measuring the delta in directory size.
     old_size = FileUtilities.getsizedir('/var/cache/dnf')
-    args = ['/usr/bin/dnf', '--enablerepo=*', 'clean', 'all']
+    args = [General.resolve_exe('dnf'), '--enablerepo=*', 'clean', 'all']
     invalid = ['You need to be root', 'Cannot remove rpmdb file']
     (rc, stdout, stderr) = General.run_external(args)
     allout = stdout + stderr
@@ -769,7 +790,9 @@ def dnf_autoremove():
         msg = _(
             "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "Dnf"
         raise RuntimeError(msg)
-    cmd = ['/usr/bin/dnf', '-y', 'autoremove']
+    if not FileUtilities.exe_exists(General.resolve_exe('dnf')):
+        raise RuntimeError(_('Executable not found: %s') % 'dnf')
+    cmd = [General.resolve_exe('dnf'), '-y', 'autoremove']
     (rc, stdout, stderr) = General.run_external(cmd)
     freed_bytes = 0
     allout = stdout + stderr
@@ -830,9 +853,10 @@ def pacman_cache():
         msg = _(
             "%s cannot be cleaned because it is currently running.  Close it, and try again.") % "pacman"
         raise RuntimeError(msg)
-    if not exe_exists('paccache'):
+    paccache = General.resolve_exe('paccache')
+    if not exe_exists(paccache):
         raise RuntimeError('paccache not found')
-    cmd = ['paccache', '-rk0']
+    cmd = [paccache, '-rk0']
     (rc, stdout, stderr) = General.run_external(cmd)
     if rc > 0:
         raise RuntimeError(f'paccache raised error {rc}: {stderr}')
@@ -875,31 +899,30 @@ def snapd_is_active():
     The result is cached in a module-level variable to avoid repeated
     systemctl calls during a single BleachBit run.
     """
+    def check_snapd():
+        if not exe_exists(General.resolve_exe('snap')):
+            return False
+        if not exe_exists(General.resolve_exe('systemctl')):
+            return False
+        # When snap is installed but snapd is inactive, then `snap list --all`
+        # or `snap version` may have a long delay, so we check the service status first
+        try:
+            (rc, _stdout, _stderr) = General.run_external(
+                [General.resolve_exe('systemctl'), 'is-active',
+                 '--quiet', 'snapd.socket'],
+                timeout=5)
+        except subprocess.TimeoutExpired:
+            logger.warning(
+                'systemctl is-active snapd.socket timed out: it seems snap is installed but snapd is inactive')
+            return False
+        except (FileNotFoundError, OSError) as exc:
+            logger.warning('systemctl is-active snapd.socket failed: %s', exc)
+            return False
+        return rc == 0
+
     global _snapd_is_active_cache  # pylint: disable=global-statement
-    if _snapd_is_active_cache is not None:
-        return _snapd_is_active_cache
-    if not exe_exists('snap'):
-        _snapd_is_active_cache = False
-        return False
-    if not exe_exists('systemctl'):
-        _snapd_is_active_cache = False
-        return False
-    # When snap is installed but snapd is inactive, then `snap list --all`
-    # or `snap version` may have a long delay, so we check the service status first.
-    try:
-        (rc, _stdout, _stderr) = General.run_external(
-            ['systemctl', 'is-active', '--quiet', 'snapd.socket'],
-            timeout=5)
-    except subprocess.TimeoutExpired:
-        logger.warning(
-            'systemctl is-active snapd.socket timed out: it seems snap is installed but snapd is inactive')
-        _snapd_is_active_cache = False
-        return False
-    except (FileNotFoundError, OSError) as exc:
-        logger.warning('systemctl is-active snapd.socket failed: %s', exc)
-        _snapd_is_active_cache = False
-        return False
-    _snapd_is_active_cache = rc == 0
+    if _snapd_is_active_cache is None:
+        _snapd_is_active_cache = check_snapd()
     return _snapd_is_active_cache
 
 
@@ -916,7 +939,7 @@ def snap_disabled_full(really_delete):
         raise RuntimeError('snap not found or snapd is not active')
 
     # Get list of all snaps.
-    cmd = ['snap', 'list', '--all']
+    cmd = [General.resolve_exe('snap'), 'list', '--all']
     try:
         (rc, stdout, stderr) = General.run_external(
             cmd, clean_env=True, timeout=15)
@@ -937,18 +960,23 @@ def snap_disabled_full(really_delete):
         # `snap info` returns info only about active snaps.
         # Instead, get size from the snap file directly.
         snap_file = f'/var/lib/snapd/snaps/{snapname}_{revision}.snap'
-        if os.path.exists(snap_file):
+        try:
             snap_size = os.path.getsize(snap_file)
             logger.debug('Found snap file: %s, size: %s',
                          snap_file, f"{snap_size:,}")
-        else:
-            logger.warning('Could not find snap file: %s', snap_file)
+        except OSError as e:
+            if e.errno == errno.ENOENT:
+                logger.warning('Could not find snap file: %s', snap_file)
+            else:
+                logger.warning('Could not measure snap file %s: %s',
+                               snap_file, e)
             snap_size = 0
 
         # Remove the snap revision
         if really_delete:
             # Consider there may be a slow system with a large snap.
-            remove_cmd = ['snap', 'remove', snapname, f'--revision={revision}']
+            remove_cmd = [General.resolve_exe('snap'), 'remove',
+                          snapname, f'--revision={revision}']
             try:
                 (rc, _, remove_stderr) = General.run_external(
                     remove_cmd, clean_env=True, timeout=60)
@@ -983,10 +1011,8 @@ def is_unix_display_protocol_wayland():
     """Return True if the display protocol is Wayland."""
     assert IS_POSIX
     if 'XDG_SESSION_TYPE' in os.environ:
-        if os.environ['XDG_SESSION_TYPE'] == 'wayland':
-            return True
         # If not wayland, then x11, mir, etc.
-        return False
+        return os.environ['XDG_SESSION_TYPE'] == 'wayland'
     if 'WAYLAND_DISPLAY' in os.environ:
         return True
     # Ubuntu 24.10 showed "ubuntu-xorg".
@@ -996,7 +1022,8 @@ def is_unix_display_protocol_wayland():
         return False
     # Wayland (Ubuntu 23.10) sets DISPLAY=:0 like x11, so do not check DISPLAY.
     try:
-        (rc, stdout, _stderr) = General.run_external(['loginctl'])
+        (rc, stdout, _stderr) = General.run_external(
+            [General.resolve_exe('loginctl')])
     except FileNotFoundError:
         return False
     if rc != 0:
@@ -1011,7 +1038,7 @@ def is_unix_display_protocol_wayland():
         logger.warning('unexpected session loginctl: %s', session)
         return False
     result = General.run_external(
-        ['loginctl', 'show-session', session, '-p', 'Type'])
+        [General.resolve_exe('loginctl'), 'show-session', session, '-p', 'Type'])
     return 'wayland' in result[1].lower()
 
 
@@ -1022,7 +1049,8 @@ def root_is_not_allowed_to_X_session():
     """
     assert IS_POSIX
     try:
-        result = General.run_external(['xhost'], clean_env=False)
+        result = General.run_external(
+            [General.resolve_exe('xhost')], clean_env=False)
         xhost_returned_error = result[0] == 1
         return xhost_returned_error
     except (FileNotFoundError, OSError) as exc:
@@ -1045,17 +1073,29 @@ def is_display_protocol_wayland_and_root_not_allowed():
     )
 
 
+def _dns_flush_command():
+    """Return the command to flush the DNS resolver cache, or None if there is none"""
+    for exe, arg in (('resolvectl', 'flush-caches'),
+                     ('systemd-resolve', '--flush-caches')):
+        path = General.resolve_exe(exe)
+        if exe_exists(path):
+            return [path, arg]
+    return None
+
+
+def can_flush_dns():
+    """Return whether the DNS resolver cache can be flushed"""
+    return _dns_flush_command() is not None
+
+
 def flush_dns():
     """Flush the DNS resolver cache
 
     Returns 0 on success.
     Raises RuntimeError on failure.
     """
-    if exe_exists('resolvectl'):
-        args = ['resolvectl', 'flush-caches']
-    elif exe_exists('systemd-resolve'):
-        args = ['systemd-resolve', '--flush-caches']
-    else:
+    args = _dns_flush_command()
+    if args is None:
         raise RuntimeError('Neither resolvectl nor systemd-resolve found')
     (rc, stdout, stderr) = General.run_external(args)
     if 0 != rc:

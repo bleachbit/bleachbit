@@ -197,16 +197,21 @@ def wipe_write(path):
 
     Return the open file handle; the caller must close it."""
     # pylint: disable=import-outside-toplevel
-    from bleachbit.FileUtilities import getsize
+    from bleachbit.FileUtilities import getsize, _open_nofollow_fd
     size = getsize(path)
+    flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
     try:
-        f = open(path, 'wb')
-    except IOError as e:
-        if e.errno == errno.EACCES:  # permission denied
+        fd = _open_nofollow_fd(path, flags)
+    except OSError as e:
+        # Only retry on a genuine permission error; a symlink also raises
+        # EACCES here, and chmod() on a symlink path follows it, which
+        # would mutate an attacker-controlled target's permissions.
+        if e.errno == errno.EACCES and not os.path.islink(path):
             os.chmod(path, 0o200)  # user write only
-            f = open(path, 'wb')
+            fd = _open_nofollow_fd(path, flags)
         else:
             raise
+    f = os.fdopen(fd, 'wb')
     try:
         blanks = b'\0' * 4096
         while size > 0:
@@ -248,14 +253,17 @@ def wipe_contents(path):
                 raise
             # Try to truncate the file. This makes the behavior consistent
             # with Linux and with Windows when IsUserAdmin=False.
-            try:
-                with open(path, 'wb') as f:
-                    truncate_f(f)
-            except IOError as e2:
-                if errno.EACCES == e2.errno:
-                    # Common when the file is locked
-                    # Errno 13 Permission Denied
-                    pass
+            if os.path.islink(path):
+                logger.debug('refusing to truncate a link: %s', path)
+            else:
+                try:
+                    with open(path, 'wb') as f:
+                        truncate_f(f)
+                except IOError as e2:
+                    if errno.EACCES == e2.errno:
+                        # Common when the file is locked
+                        # Errno 13 Permission Denied
+                        pass
             # translate exception to mark file to deletion in Command.py
             raise WindowsError(e.winerror, e.strerror)
         except UnsupportedFileSystemError:
@@ -264,7 +272,12 @@ def wipe_contents(path):
             f = wipe_write(path)
         else:
             # The wipe succeeded and already overwrote the file in place.
-            # Reopen with 'wb' to truncate it to zero
+            # Reopen with 'wb' to truncate it to zero. Re-check for a link:
+            # file_wipe() checked before the wipe, so one could have been
+            # planted since.
+            if os.path.islink(path):
+                raise OSError(
+                    errno.EACCES, 'refusing to truncate a link', path)
             f = open(path, 'wb')
     else:
         f = wipe_write(path)
@@ -380,6 +393,13 @@ def wipe_path(pathname, idle=False):
             _("Path to wipe must be an existing directory: %s"), pathname)
         return
 
+    if IS_POSIX:
+        # Another user could tamper with wipe files in a world-writable dir
+        from bleachbit.PathUtils import is_world_writable
+        if is_world_writable(pathname):
+            logger.warning(
+                _("Shred drive is world-writable; wiping there is unsafe: %s"), pathname)
+
     if fstype in ('ext4', 'btrfs'):
         fitrim(pathname)
 
@@ -396,7 +416,8 @@ def wipe_path(pathname, idle=False):
         while True:
             try:
                 logger.debug(
-                    _('Creating new, temporary file for wiping free space.'))
+                    # TRANSLATORS: Status message while wiping a drive's empty space.
+                    _('Creating new, temporary file for wiping empty space.'))
                 f = temporaryfile()
             except OSError as e:
                 # Linux gives errno 24

@@ -11,10 +11,12 @@ runs:
   steps:
     - id: generate
       shell: bash
+      env:
+        BUILD_NUMBER: ${{ github.run_number }}
       run: |
         rev="$(git rev-parse --short=8 HEAD)"
         {
           echo "revision = \"$rev\""
-          echo "build_number = \"${{ github.run_number }}\""
+          echo "build_number = \"$BUILD_NUMBER\""
         } > bleachbit/Revision.py
         echo "revision=$rev" >> "$GITHUB_OUTPUT"

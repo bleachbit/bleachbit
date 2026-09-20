@@ -9,6 +9,7 @@ File-related utilities
 """
 
 # standard imports
+import codecs
 import contextlib
 import errno
 import glob
@@ -160,9 +161,26 @@ def get_filesystem_type(path):
 
 def open_files_lsof(run_lsof=None):
     """Return iterator of open files using lsof"""
+    if IS_LINUX and run_lsof is None:
+        raise RuntimeError("open_files_lsof() should not be called on Linux")
     if run_lsof is None:
+        # macOS 26 (Tahoe) has /usr/sbin/lsof
+        # FreeBSD has /usr/local/sbin/lsof
+        from bleachbit.General import resolve_exe, sanitize_root_env
+        lsof_path = resolve_exe(
+            'lsof', '/usr/sbin/lsof' if IS_MAC else '/usr/local/sbin/lsof')
+
         def run_lsof():
-            return subprocess.check_output(["lsof", "-Fn", "-n"], text=True)
+            # sanitize the env so a hostile inherited LD_*/DYLD_* cannot
+            # redirect this child when BleachBit runs as root
+            env = sanitize_root_env(dict(os.environ))
+            if IS_MAC:
+                env.pop('DYLD_LIBRARY_PATH', None)
+                env.pop('DYLD_INSERT_LIBRARIES', None)
+
+            return subprocess.check_output(
+                [lsof_path, "-Fn", "-n"], text=True,
+                env=env)
     output = run_lsof()
     if isinstance(output, bytes):
         output = output.decode('utf-8', errors='replace')
@@ -257,11 +275,10 @@ def bytes_to_human(bytes_i):
     else:
         decimals = 0
 
-    for _exponent, prefix in enumerate(prefixes):
+    for prefix in prefixes:
         if bytes_i < base:
             abbrev = round(bytes_i, decimals)
-            suf = prefix
-            return locale.str(abbrev) + suf + 'B'
+            return locale.str(abbrev) + prefix + 'B'
         bytes_i /= base
     return 'A lot.'
 
@@ -345,18 +362,63 @@ def children_in_directory(top, list_directories=False):
             yield pending_dirs.pop()
 
 
+def _open_nofollow_fd(path, flags, mode=0o600):
+    """Open path with os.open(), refusing a symlink (or Windows junction).
+
+    Adds O_NOFOLLOW to flags on POSIX so a symlink raced in after the
+    islink() check is also refused, instead of redirecting the open to
+    its target. Windows has no O_NOFOLLOW; the islink() check is the
+    only protection there. Returns a raw file descriptor.
+    """
+    if os.path.islink(path):
+        raise OSError(errno.EACCES, 'refusing to open a link', path)
+    if hasattr(os, 'O_NOFOLLOW'):
+        flags |= os.O_NOFOLLOW
+    return os.open(path, flags, mode)
+
+
+def open_for_overwrite(path, mode='w', **kwargs):
+    """Open path for overwriting without following a final symlink."""
+    if not hasattr(os, 'O_NOFOLLOW'):
+        # Windows gains nothing from os.open() here, and O_TRUNC would empty
+        # the file before a write error could be reported, losing the old
+        # contents. islink() (which also catches junctions) is the only
+        # protection available either way.
+        if os.path.islink(path):
+            raise OSError(errno.EACCES, 'refusing to open a link', path)
+        return open(path, mode, **kwargs)
+    fd = _open_nofollow_fd(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC)
+    try:
+        return open(fd, mode, **kwargs)
+    except Exception:
+        os.close(fd)
+        raise
+
+
 def clean_ini(path, section, parameter):
     """Delete sections and parameters (aka option) in the file
 
     Comments are not preserved.
+
+    The file is expected to be UTF-8, optionally with a BOM. This matches
+    how VLC writes its configuration file (verified for over a decade). If
+    the file cannot be decoded as UTF-8, it is left untouched and an error
+    is logged so cleaning continues with the next file. The presence (or
+    absence) of a BOM is preserved on write.
     """
-    encoding = detect_encoding(path) or 'utf_8_sig'
+    # utf_8_sig transparently strips a BOM when reading, if present.
+    read_encoding = 'utf_8_sig'
 
     # read file to parser
     config = bleachbit.RawConfigParser(delimiters='=')
     config.optionxform = str
-    with open(path, 'r', encoding=encoding) as fp:
-        config.read_file(fp)
+    try:
+        with open(path, 'r', encoding=read_encoding) as fp:
+            config.read_file(fp)
+    except UnicodeDecodeError:
+        logger.error(
+            "Cannot clean INI file because it is not valid UTF-8: %s", path)
+        return
 
     # change file
     changed = False
@@ -371,11 +433,17 @@ def clean_ini(path, section, parameter):
     if not changed:
         return
 
+    # Preserve whether the file had a BOM: write with utf_8_sig (which
+    # re-adds it) only if the original file began with the UTF-8 BOM.
+    with open(path, 'rb') as bom_fp:
+        has_bom = bom_fp.read(3) == b'\xef\xbb\xbf'
+    write_encoding = 'utf_8_sig' if has_bom else 'utf_8'
+
     # write file
     from bleachbit.Options import options
     if options.get('shred'):
         delete(path, True)
-    with open(path, 'w', encoding=encoding, newline='') as fp:
+    with open_for_overwrite(path, encoding=write_encoding, newline='') as fp:
         config.write(fp)
 
 
@@ -394,7 +462,7 @@ def clean_json(path, target):
         new_target = targets.pop(0)
         if not isinstance(pos, dict):
             break
-        if new_target in pos and len(targets) > 0:
+        if new_target in pos and targets:
             # descend
             pos = pos[new_target]
         elif new_target in pos:
@@ -404,7 +472,7 @@ def clean_json(path, target):
         else:
             # target not found
             break
-        if 0 == len(targets):
+        if not targets:
             # target not found
             break
 
@@ -413,16 +481,19 @@ def clean_json(path, target):
         if options.get('shred'):
             delete(path, True)
         # write file
-        with open(path, 'w', encoding='utf-8') as f:
+        with open_for_overwrite(path, encoding='utf-8') as f:
             json.dump(js, f)
 
 
 def _truncate_locked_file(path):
-    """Best-effort truncate of a locked file (Windows).
+    """Best-effort truncate of a file, used on Windows when a lock prevents deletion.
 
     Returns True if truncation succeeded, False otherwise.
     Shared locks allow truncation, exclusive locks prevent it.
     """
+    if os.path.islink(path):
+        logger.debug("refusing to truncate a link: %s", path)
+        return False
     try:
         with open(path, 'r+b') as handle:
             handle.truncate(0)
@@ -490,6 +561,20 @@ def delete_file(path, shred):
         path, lambda: _delete_file_impl(path, shred))
 
 
+def truncate_file(path):
+    """Truncate a file to zero length.
+
+    Runs under the same parent lock as delete() and refuses a symlink
+    (or Windows reparse point) so the truncation is not redirected
+    through a link to another file.
+    """
+    def _truncate():
+        # No O_CREAT: if the file went away, do not recreate it as an empty one
+        os.close(_open_nofollow_fd(path, os.O_WRONLY | os.O_TRUNC))
+
+    _run_with_delete_lock(path, _truncate)
+
+
 def delete(path, shred=False, ignore_missing=False, allow_shred=True):
     """Delete path that is either file, directory, link or FIFO.
 
@@ -526,7 +611,8 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
             is_special = bool(
                 os.lstat(path).st_file_attributes & stat.FILE_ATTRIBUTE_REPARSE_POINT)
         except OSError:
-            pass
+            # lstat returns Access Denied on some Windows files
+            is_special = False
     if is_special:
         _delete_path(path, os.remove)
         return True
@@ -589,44 +675,63 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
 
 
 def detect_encoding(fn):
-    """Detect the encoding of the file"""
+    """Detect the encoding of the file
+
+    Returns a codec name or None if it could not be determined.
+    """
+    with open(fn, 'rb') as f:
+        raw = f.read()
+
+    # UTF-8 is unambiguous, so do not guess. This covers ASCII and what
+    # current applications write, such as VLC since 3.0.
+    encoding = 'utf_8_sig' if raw.startswith(codecs.BOM_UTF8) else 'utf_8'
+    try:
+        raw.decode(encoding)
+    except UnicodeDecodeError:
+        pass
+    else:
+        return encoding
+
     try:
         # pylint: disable=import-outside-toplevel
-        import chardet
+        from charset_normalizer import from_bytes
     except ImportError:
         logger.warning(
-            'chardet module is not available to detect character encoding')
+            'charset_normalizer module is not available to detect character encoding')
         return None
 
-    with open(fn, 'rb') as f:
-        detector = chardet.universaldetector.UniversalDetector()
-        for line in f:
-            detector.feed(line)
-            if detector.done:
-                break
-        detector.close()
-    return detector.result['encoding']
+    match = from_bytes(raw).best()
+    if match is None:
+        return None
+    if match.bom and 'utf_8' == match.encoding:
+        # charset_normalizer reports the BOM separately from the codec
+        return 'utf_8_sig'
+    return match.encoding
 
 
 def ego_owner(filename):
     """Return whether current user owns the file
 
+    Returns False if the file is gone or unreadable, so callers walking a
+    busy directory such as /tmp do not abort on a vanished file.
+
     POSIX only"""
     assert IS_POSIX
+    try:
+        st_uid = os.lstat(filename).st_uid
+    except OSError:
+        return False
     # pylint: disable=no-member
-    return os.lstat(filename).st_uid == os.getuid()
+    return st_uid == os.getuid()
 
 
 def exists_in_path(filename):
     """Returns boolean whether the filename exists in the path"""
-    delimiter = ':'
-    if IS_WINDOWS:
-        delimiter = ';'
     path_env = os.getenv('PATH')
     if not path_env:
         return False
     assert not os.path.isabs(filename)
-    for dirname in path_env.split(delimiter):
+    for dirname in path_env.split(os.pathsep):
         if os.path.exists(os.path.join(dirname, filename)):
             return True
     return False
@@ -660,7 +765,23 @@ def execute_sqlite3(path, cmds):
     import sqlite3
     assert isinstance(path, str)
     assert isinstance(cmds, str)
-    with contextlib.closing(sqlite3.connect(path)) as conn:
+    try:
+        conn = sqlite3.connect(path)
+    except sqlite3.OperationalError as exc:
+        # sqlite3 raises a cryptic "unable to open database file" for a
+        # variety of causes (permission denied, read-only parent directory,
+        # locked file, ...). Translate it into the same OSError(EACCES)
+        # "Access denied" message users already see for locked files, or
+        # FileNotFoundError if the path is gone, so the Worker can surface a
+        # clean summary instead of an opaque traceback.
+        if not os.path.exists(path):
+            raise FileNotFoundError(
+                errno.ENOENT, "File not found when opening SQLite database",
+                path) from exc
+        raise OSError(
+            errno.EACCES,
+            "Access denied when opening SQLite database", path) from exc
+    with contextlib.closing(conn) as conn:
         # overwrites deleted content with zeros
         # https://www.sqlite.org/pragma.html#pragma_secure_delete
         if options.get('shred'):
@@ -691,8 +812,7 @@ def expand_glob_join(pathname1, pathname2):
     """Join pathname1 and pathname1, expand pathname, glob, and return as list"""
     pathname3 = os.path.expanduser(os.path.expandvars(
         os.path.join(pathname1, pathname2)))
-    ret = [pathname4 for pathname4 in glob.iglob(pathname3)]
-    return ret
+    return list(glob.iglob(pathname3))
 
 
 def extended_path(path):
@@ -783,18 +903,20 @@ def getsize(path):
             # FindFilesW does not work for directories, so fall back to
             # getsize()
             return os.path.getsize(path)
-        else:
-            size = (finddata[0][4] * (0xffffffff + 1)) + finddata[0][5]
-            return size
+        return (finddata[0][4] * (0xffffffff + 1)) + finddata[0][5]
     return os.path.getsize(path)
 
 
 def getsizedir(path):
     """Return the size of the contents of a directory"""
-    total_bytes = sum(
-        getsize(node)
-        for node in children_in_directory(path, list_directories=False)
-    )
+    total_bytes = 0
+    for node in children_in_directory(path, list_directories=False):
+        try:
+            total_bytes += getsize(node)
+        except FileNotFoundError:
+            # A file may vanish between the walk and the measurement, as when
+            # a package manager writes to the cache directory being measured
+            pass
     return total_bytes
 
 
@@ -847,10 +969,10 @@ def human_to_bytes(human, hformat='si'):
 
     if 'si' == hformat:
         base = 1000
-        suffixes = 'kMGTE'
+        suffixes = 'kMGTPE'
     elif 'du' == hformat:
         base = 1024
-        suffixes = 'KMGTE'
+        suffixes = 'KMGTPE'
     else:
         raise ValueError(f"Invalid format: '{hformat}'")
     matches = re.match(r'^(\d+(?:\.\d+)?) ?([' + suffixes + ']?)B?$', human)
@@ -975,8 +1097,31 @@ def uris_to_paths(file_uris):
     return file_paths
 
 
+def _is_system_critical_posix(path):
+    """Check whether a POSIX path is system-critical and must never be deleted.
+
+    Applies even when the keep list is empty, so a bad cleaner file cannot
+    delete the filesystem root or a mounted pseudo-filesystem. Real cleaners
+    legitimately act under /var and /dev/shm, so only the root itself and
+    virtual filesystems are off limits.
+    """
+    if not isinstance(path, str) or not path.startswith('/'):
+        return False
+    # Strip leading slashes: POSIX leaves '//' and friends implementation-
+    # defined, so normpath alone will not collapse them to '/'.
+    norm = os.path.normpath('/' + path.lstrip('/'))
+    if norm == '/':
+        return True
+    for prefix in ('/proc', '/sys', '/run'):
+        if norm == prefix or path_startswith(norm, prefix):
+            return True
+    return False
+
+
 def whitelisted_posix(path, check_realpath=True, _followed_link=False):
     """Check whether this POSIX path is whitelisted"""
+    if _is_system_critical_posix(path):
+        return True
     from bleachbit.Options import options
     keep_paths = options.get_whitelist_paths()
     if not keep_paths:

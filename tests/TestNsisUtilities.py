@@ -198,7 +198,7 @@ class NsisUtilitiesTestCase(common.BleachbitTestCase):
             for i in range(number_of_files):
                 try:
                     suffix = '.{}'.format(filename_suffixes[i])
-                except:
+                except Exception:
                     suffix = ''
                 file_ = self.mkstemp(
                     dir=in_folder,

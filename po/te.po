@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-12 15:23-0600\n"
+"POT-Creation-Date: 2026-09-01 10:05-0600\n"
 "PO-Revision-Date: 2021-06-18 15:40+0000\n"
 "Last-Translator: N.SUJATHA DEVI <Unknown>\n"
 "Language-Team: Telugu <te@li.org>\n"
@@ -81,27 +81,31 @@ msgstr "హిస్టరీ"
 msgid "Delete the usage history"
 msgstr "యూసేజ్ హిస్టరీని డిలీట్ చేయండి"
 
+#. TRANSLATORS: Name of a cleaning option for Windows log files.
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/easytag.xml
 #: ../cleaners/warzone2100.xml ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Logs"
 msgstr "లాగ్స్"
 
+#. TRANSLATORS: Description of the Logs cleaning option.
 #: ../cleaners/realplayer.xml ../cleaners/miro.xml ../cleaners/audacious.xml
 #: ../cleaners/yahoo_messenger.xml ../cleaners/warzone2100.xml
 #: ../cleaners/gpodder.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_defender.xml ../cleaners/smartftp.xml
-#: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
-#: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/profanity.xml
-#: ../cleaners/teamviewer.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/screenlets.xml ../cleaners/gftp.xml ../cleaners/amule.xml
-#: ../cleaners/vuze.xml ../bleachbit/Cleaner.py
+#: ../cleaners/android_studio.xml ../cleaners/vscode.xml
+#: ../cleaners/hippo_opensim_viewer.xml ../cleaners/claude.xml
+#: ../cleaners/zoom.xml ../cleaners/profanity.xml ../cleaners/teamviewer.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/screenlets.xml
+#: ../cleaners/gftp.xml ../cleaners/amule.xml ../cleaners/vuze.xml
+#: ../bleachbit/Cleaner.py
 msgid "Delete the logs"
 msgstr "లాగ్స్‌ను డిలీట్ చేయండి"
 
@@ -110,6 +114,7 @@ msgstr "లాగ్స్‌ను డిలీట్ చేయండి"
 msgid "Multimedia viewer"
 msgstr "మల్టీమీడియా వ్యూయర్"
 
+#. TRANSLATORS: Name of a cleaning option. Cache is a noun.
 #: ../cleaners/xine.xml ../cleaners/miro.xml ../cleaners/amsn.xml
 #: ../cleaners/librewolf.xml ../cleaners/openoffice.xml
 #: ../cleaners/rhythmbox.xml ../cleaners/beagle.xml
@@ -144,8 +149,8 @@ msgstr "క్యాషె"
 #: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
 #: ../cleaners/thumbnails.xml ../cleaners/exaile.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/smartftp.xml
-#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/liferea.xml ../cleaners/vscode.xml
+#: ../cleaners/apt.xml ../cleaners/palemoon.xml ../cleaners/android_studio.xml
+#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/vscode.xml
 #: ../cleaners/hippo_opensim_viewer.xml ../cleaners/adobe_reader.xml
 #: ../cleaners/claude.xml ../cleaners/zoom.xml ../cleaners/evolution.xml
 #: ../cleaners/flash.xml ../cleaners/internet_explorer.xml ../cleaners/gftp.xml
@@ -389,6 +394,7 @@ msgstr "కమాండ్ హిస్టరీని డిలీట్ చే
 msgid "Office suite"
 msgstr "ఆఫీస్ సూట్"
 
+#. TRANSLATORS: Description of the Recent documents list cleaning option.
 #: ../cleaners/openoffice.xml ../cleaners/audacious.xml
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/gedit.xml ../cleaners/kde.xml
@@ -417,6 +423,7 @@ msgstr "డీబగ్ లాగ్స్"
 msgid "Delete the debug logs"
 msgstr "డీబగ్ లాగ్స్‌ను డిలీట్ చేయండి"
 
+#. TRANSLATORS: Name of a cleaning option for temporary files.
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
@@ -426,6 +433,7 @@ msgstr "డీబగ్ లాగ్స్‌ను డిలీట్ చేయ
 msgid "Temporary files"
 msgstr "తాత్కాలిక ఫైళ్ళు"
 
+#. TRANSLATORS: Description of the Temporary files cleaning option.
 #: ../cleaners/bash.xml ../cleaners/google_earth.xml ../cleaners/wine.xml
 #: ../cleaners/silverlight.xml ../cleaners/windows_defender.xml
 #: ../cleaners/winetricks.xml ../cleaners/gimp.xml ../cleaners/adobe_reader.xml
@@ -619,6 +627,7 @@ msgstr ""
 msgid "File manager"
 msgstr "ఫైల్ మేనేజర్"
 
+#. TRANSLATORS: Name of a cleaning option for the history of recently used files.
 #: ../cleaners/windows_explorer.xml ../cleaners/gwenview.xml
 #: ../cleaners/gedit.xml ../cleaners/kde.xml ../bleachbit/Cleaner.py
 msgid "Recent documents list"
@@ -674,6 +683,30 @@ msgstr "వాడుకలో లేని ఫైల్స్‌ను డిల
 #: ../cleaners/apt.xml
 msgid "Package lists"
 msgstr "ప్యాకేజ్ లిస్టులు"
+
+#: ../cleaners/android_studio.xml
+#, fuzzy
+#| msgid "Desktop environment"
+msgid "Development environment"
+msgstr "డెస్క్టాప్ ఎన్విరాన్మెంట్"
+
+#: ../cleaners/android_studio.xml
+msgid "Gradle cache"
+msgstr ""
+
+#: ../cleaners/android_studio.xml
+#, fuzzy
+#| msgid "Delete downloaded podcasts"
+msgid "Delete downloaded dependencies and build artifacts"
+msgstr "డౌన్‌లోడ్ చేయబడిన పోడ్‌కాస్ట్‌లను డిలీట్ చేయండి"
+
+#: ../cleaners/android_studio.xml
+msgid "Dependencies will need to be downloaded on the next build."
+msgstr ""
+
+#: ../cleaners/android_studio.xml
+msgid "IDE cache"
+msgstr ""
 
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
@@ -831,6 +864,7 @@ msgstr "టొరెంట్‌లను డిలీట్ చేయండి 
 msgid "Statistics"
 msgstr "గణాంకాలు"
 
+#. TRANSLATORS: Description of the Memory dump cleaning option.
 #: ../cleaners/transmission.xml ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Delete the file"
 msgstr "ఫైల్‌ను డిలీట్ చేయండి"
@@ -849,6 +883,7 @@ msgstr "urlను డౌన్‌లోడ్ చేయడం విఫలమై
 msgid "Remote control software"
 msgstr "రిమోట్ కంట్రోల్ సాఫ్ట్‌వేర్"
 
+#. TRANSLATORS: Name of a cleaning option for Windows crash dump files.
 #: ../cleaners/vlc.xml ../bleachbit/Cleaner.py
 msgid "Memory dump"
 msgstr "మెమరీ డంప్"
@@ -1293,11 +1328,20 @@ msgstr ""
 "క్లీనర్ ఐడి = {cleaner_id}, ఆప్షన్ XML={option_xml} కోసం handle_cleaner_option()లో "
 "ఎర్రర్ ఉంది"
 
-#. TRANSLATORS: Warning printed to the log.
-#. %s expands to the path of the XML cleaner file that was skipped
-#: ../bleachbit/CleanerML.py
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file that was skipped
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
+msgstr "క్లీనర్ వరల్డ్ రైటబుల్ కాబట్టి దాన్ని విస్మరిస్తుంది:  %s"
+
+#. TRANSLATORS: Warning printed to the log. %s expands to the
+#. path of the XML cleaner file whose directory is world
+#. writable.
+#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
+#, fuzzy, python-format
+#| msgid "Ignoring cleaner because it is world writable: %s"
+msgid "Ignoring cleaner because its directory is world writable: %s"
 msgstr "క్లీనర్ వరల్డ్ రైటబుల్ కాబట్టి దాన్ని విస్మరిస్తుంది:  %s"
 
 #. TRANSLATORS: Error message printed to the log.
@@ -1306,6 +1350,16 @@ msgstr "క్లీనర్ వరల్డ్ రైటబుల్ కాబ
 #, python-format
 msgid "Error reading cleaner: %s"
 msgstr "క్లీనర్‌ను చదవడంలో దోషం ఏర్పడింది: %s"
+
+#. TRANSLATORS: Cleaner name shown in the list of applications.
+#: ../bleachbit/Cleaner.py
+msgid "System"
+msgstr "సిస్టం"
+
+#. TRANSLATORS: Description of the System cleaner.
+#: ../bleachbit/Cleaner.py
+msgid "The system in general"
+msgstr "సాధారణ సిస్టం"
 
 #. TRANSLATORS: desktop entries are .desktop files in Linux that
 #. make up the application menu (the menu that shows BleachBit,
@@ -1318,6 +1372,7 @@ msgstr "క్లీనర్‌ను చదవడంలో దోషం ఏర
 msgid "Broken desktop files"
 msgstr "విచ్చిన్నమైన డెస్క్‌టాప్ ఫైల్స్"
 
+#. TRANSLATORS: Description of the Broken desktop files cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete broken application menu entries and file associations"
 msgstr "విచ్చిన్నమైన అప్లికేషన్ మెను ఎంట్రీలు మరియు ఫైల్ అసోసియేషన్‌లను డిలీట్ చేయండి"
@@ -1328,30 +1383,40 @@ msgstr "విచ్చిన్నమైన అప్లికేషన్ మ�
 msgid "Localizations"
 msgstr "స్థానీకరణలు"
 
+#. TRANSLATORS: Description of the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete files for unwanted languages"
 msgstr "అవాంచిత భాషల కోసం ఫైల్స్‌ను డిలీట్ చేయండి"
 
+#. TRANSLATORS: Warning for the Localizations cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Configure this option in the preferences."
 msgstr "ప్రాధాన్యతలలో ఈ ఎంపికను కన్ఫిగర్ చేయండి."
 
+#. TRANSLATORS: 'Rotated logs' refers to old system log files.
+#. Linux systems often have a scheduled job to rotate the logs
+#. which means compress all except the newest log and then delete
+#. the oldest log. You could translate this as 'old logs.'
 #: ../bleachbit/Cleaner.py
 msgid "Rotated logs"
 msgstr "రొటేట్ చేయబడిన లాగ్స్"
 
+#. TRANSLATORS: Description of the Rotated logs cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete old system logs"
 msgstr "పాత సిస్టం లాగ్స్‌ను డిలీట్ చేయండి"
 
+#. TRANSLATORS: Name of a cleaning option. Trash is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Trash"
 msgstr "ట్రాష్"
 
+#. TRANSLATORS: Description of the Trash cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the trash"
 msgstr "ట్రాష్‌ను ఖాళీచేయండి"
 
+#. TRANSLATORS: Name of a cleaning option for system memory.
 #: ../bleachbit/Cleaner.py ../bleachbit/Worker.py
 msgid "Memory"
 msgstr "మెమరీ"
@@ -1361,6 +1426,7 @@ msgstr "మెమరీ"
 msgid "Wipe the swap and free memory"
 msgstr "స్వాప్‌ను వైప్ చేసి, మెమరీని ఖాళీ చేయండి"
 
+#. TRANSLATORS: Warning for the experimental Memory cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "This option is experimental and may cause system problems."
 msgstr "ఈ ఎంపిక ప్రయోగాత్మకమైనది మరియు సిస్టం సమస్యలను కలిగించవచ్చు."
@@ -1375,10 +1441,12 @@ msgstr ""
 msgid "Prefetch"
 msgstr "ప్రీఫెచ్ చేయండి"
 
+#. TRANSLATORS: Name of a cleaning option for the Windows recycle bin.
 #: ../bleachbit/Cleaner.py
 msgid "Recycle bin"
 msgstr "రీసైకిల్ బిన్"
 
+#. TRANSLATORS: Description of the Recycle bin cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Empty the recycle bin"
 msgstr "రీసైకిల్ బిన్‌ను ఖాళీచేయండి"
@@ -1403,10 +1471,12 @@ msgstr ""
 msgid "This option may prevent uninstalling some updates."
 msgstr ""
 
+#. TRANSLATORS: Name of a cleaning option. Clipboard is a noun.
 #: ../bleachbit/Cleaner.py
 msgid "Clipboard"
 msgstr "క్లిప్‌బోర్డ్"
 
+#. TRANSLATORS: Description of the Clipboard cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "The desktop environment's clipboard used for copy and paste operations"
 msgstr "డెస్క్‌టాప్ ఎన్విరాన్మెంట్ క్లిప్‌బోర్ద్ కాపీ, పేస్ట్ చర్యల కోసం ఉపయోగించబడుతుంది"
@@ -1419,6 +1489,7 @@ msgstr "డెస్క్‌టాప్ ఎన్విరాన్మెం�
 msgid "Custom"
 msgstr "కస్టమ్"
 
+#. TRANSLATORS: Description of the Custom cleaning option.
 #: ../bleachbit/Cleaner.py
 msgid "Delete user-specified files and folders"
 msgstr "యూజర్-స్పెసిఫైడ్ ఫైల్స్, ఫోల్డర్స్‌ను డిలీట్ చేయండి"
@@ -1434,14 +1505,6 @@ msgstr ""
 #| msgid "Overwrite free disk space to hide deleted files"
 msgid "Wipe empty space to hide deleted files"
 msgstr "డిలీట్ చేయబడిన ఫైల్స్‌ను దాచడానికి ఖాళీ డిస్క్ స్పేస్‌ను ఓవర్‌రైట్ చేయండి"
-
-#: ../bleachbit/Cleaner.py
-msgid "The system in general"
-msgstr "సాధారణ సిస్టం"
-
-#: ../bleachbit/Cleaner.py
-msgid "System"
-msgstr "సిస్టం"
 
 #. TRANSLATORS: 'Empty' means 'unallocated.'
 #. %s expands to a path such as C:\ or /tmp/
@@ -1473,6 +1536,7 @@ msgstr "స్థానిక క్లీనర్‌లను లోడ్ చ
 msgid "Importing cleaners from Winapp2.ini…"
 msgstr "Winapp2.ini నుండి క్లీనర్‌లను ఇంపోర్ట్ చేయడం."
 
+#. TRANSLATORS: %s is the path of the drive whose empty space will be wiped.
 #: ../bleachbit/Cleaner.py
 #, fuzzy, python-format
 #| msgid "_Wipe Free Space"
@@ -2293,6 +2357,10 @@ msgstr "క్లీన్ చేసిన తర్వాత నిష్క్
 msgid "Reset warning confirmations"
 msgstr "తొలగింపు నిర్ధారణ"
 
+#. TRANSLATORS: This means to hide cleaners which would do
+#. nothing. For example, if Firefox were never used on
+#. this system, this option would hide Firefox to simplify
+#. the list of cleaners.
 #: ../bleachbit/GuiPreferences.py
 msgid "Hide irrelevant cleaners"
 msgstr "అసంబద్ధ క్లీనర్స్‌ను దాచండి"
@@ -2507,11 +2575,13 @@ msgstr "పాథ్"
 msgid "Choose a file"
 msgstr "ఒక ఫైల్‌ని ఎంచుకోండి"
 
+#. TRANSLATORS: Button label in the preferences for adding a file.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add file"
 msgstr "ఫైల్‌ను జోడించండి"
 
+#. TRANSLATORS: Button label in the preferences for adding a folder.
 #: ../bleachbit/GuiPreferences.py
 msgctxt "button"
 msgid "Add folder"
@@ -2851,6 +2921,9 @@ msgstr "ఫైల్ %sకు కన్ఫిగరేషన్ ను వ్ర
 msgid "Error checking whether path exists: %s"
 msgstr "పాథ్ ఉనికిలో ఉందా అని తనిఖీ చేయడంలో దోషం: %s"
 
+#. TRANSLATORS: %s is a ISO language code of two or three letters.
+#. "Preserving" means the language's localization files will be
+#. kept and not deleted when cleaning.
 #: ../bleachbit/Options.py
 #, python-format
 msgid "Automatically preserving language %s."
@@ -2924,14 +2997,17 @@ msgid ""
 msgstr ""
 "%s ప్రస్తుతం రన్ అవుతున్నందున దాన్ని క్లీన్ చేయడం సాధ్యం కాదు. దాన్ని మూసివేసి, మళ్ళీ ప్రయత్నించండి."
 
+#. TRANSLATORS: Status message after a successful winapp2.ini update.
 #: ../bleachbit/Update.py
 msgid "New winapp2.ini was downloaded."
 msgstr "కొత్త winapp2.ini డౌన్‌లోడ్ చేయబడింది."
 
+#. TRANSLATORS: Title of the software update dialog.
 #: ../bleachbit/Update.py
 msgid "Update BleachBit"
 msgstr "BleachBitను అప్డేట్ చేయండి"
 
+#. TRANSLATORS: Message in the software update dialog.
 #: ../bleachbit/Update.py
 msgid "A new version is available."
 msgstr "ఒక కొత్త వెర్షన్ అందుబాటులో ఉంది."
@@ -2971,14 +3047,18 @@ msgstr "మల్టీమీడియా"
 msgid "Utilities"
 msgstr "వినియోగాలు"
 
+#. TRANSLATORS: Cleaner category name for games imported from winapp2.ini.
 #: ../bleachbit/Winapp.py
 msgid "Games"
 msgstr "గేమ్స్"
 
+#. TRANSLATORS: Description shown for a cleaner imported from winapp2.ini,
+#. which is a database of cleaning definitions.
 #: ../bleachbit/Winapp.py
 msgid "Imported from winapp2.ini"
 msgstr "winapp2.ini నుండి ఇంపోర్ట్ చేయబడింది"
 
+#. TRANSLATORS: Warning shown when cleaning Windows Updates without administrator access.
 #: ../bleachbit/Windows.py
 msgid "Administrator privileges are required to clean Windows Updates"
 msgstr ""
@@ -3017,8 +3097,11 @@ msgstr ""
 msgid "Path to wipe must be an existing directory: %s"
 msgstr "వైప్ చేసే పాథ్ ప్రస్తుతం ఉన్న ఒక డైరెక్టరీ అయి ఉండాలి: %s"
 
+#. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
-msgid "Creating new, temporary file for wiping free space."
+#, fuzzy
+#| msgid "Creating new, temporary file for wiping free space."
+msgid "Creating new, temporary file for wiping empty space."
 msgstr "వైపింగ్ ఫ్రీ స్పేస్ కోసం కొత్త, తాత్కాలిక ఫైల్‌ను సృష్టించడం."
 
 #: ../bleachbit/Wipe.py
@@ -3103,6 +3186,11 @@ msgid "Access denied: %s"
 msgstr ""
 
 #: ../bleachbit/Worker.py
+#, python-format
+msgid "Database is locked: %s"
+msgstr ""
+
+#: ../bleachbit/Worker.py
 #, python-brace-format
 msgid "Error: {operation_option}: {command}"
 msgstr "ఎర్రర్: {operation_option}: {command}"
@@ -3114,6 +3202,7 @@ msgstr "ఎర్రర్: {operation_option}: {command}"
 msgid "Please wait. Wiping empty space."
 msgstr "దయచేసి వేచి ఉండండి. ఫ్రీ డిస్క్ స్పేస్ను వైప్ చేస్తోంది."
 
+#. TRANSLATORS: Instruction shown while wiping a drive's empty space.
 #: ../bleachbit/Worker.py
 msgid "To stop this process, press the abort button on the toolbar and wait."
 msgstr ""
@@ -3131,6 +3220,7 @@ msgstr ""
 msgid "Please wait.  Cleaning %s."
 msgstr "దయచేసి వేచి ఉండండి.  %s ను క్లీన్ చేస్తోంది."
 
+#. TRANSLATORS: %d is the estimated number of minutes remaining.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "About %d minute remaining."
@@ -3166,6 +3256,10 @@ msgstr "డిలీట్ చేయబడిన ఫైల్స్: %d"
 msgid "Files to be deleted: %d"
 msgstr "డిలీట్ చేయాల్సిన ఫైల్స్: %d"
 
+#. TRANSLATORS: %d is the number of special cleaning operations
+#. completed. Special operations are cleaning actions that do
+#. not delete a file, such as overwriting a file's contents,
+#. truncating a file, or deleting a Windows registry key.
 #: ../bleachbit/Worker.py
 #, python-format
 msgid "Special operations: %d"

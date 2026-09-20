@@ -126,7 +126,8 @@ def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
 
     if stop_mode == STOP_MODE_FREE_SPACE:
         target_free_pct = stop_value
-        initial_free_pct = [None]  # Use list to allow mutation in nested function
+        # Use list to allow mutation in nested function
+        initial_free_pct = [None]
 
         def progress_cb(_fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
             try:
@@ -193,7 +194,8 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
         logger.exception('Error deleting chaff files')
         # TRANSLATORS: Error message shown when deleting chaff files fails.
         # The placeholder is for the technical error details.
-        error_msg = _("Error deleting chaff files: {error}").format(error=str(exc))
+        error_msg = _("Error deleting chaff files: {error}").format(
+            error=str(exc))
         on_progress(1.0, is_done=True, error=error_msg)
         return
     on_progress(1.0, is_done=True)

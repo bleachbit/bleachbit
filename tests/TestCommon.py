@@ -11,6 +11,7 @@ Test case for Common
 
 # standard imports
 import os
+import tempfile
 
 # first party imports
 from tests import common
@@ -65,8 +66,10 @@ class CommonTestCase(common.BleachbitTestCase):
     def test_assertIsLanguageCode_hardcoded_invalid(self):
         """Test assertIsLanguageCode() rejects hard-coded invalid codes"""
         invalid_codes = list(self._invalid_language_codes)
-        invalid_codes.extend([code + ' ' for code in self._valid_language_codes])
-        invalid_codes.extend([' ' + code for code in self._valid_language_codes])
+        invalid_codes.extend(
+            [code + ' ' for code in self._valid_language_codes])
+        invalid_codes.extend(
+            [' ' + code for code in self._valid_language_codes])
         for code in invalid_codes:
             with self.subTest(code=code):
                 with self.assertRaises(AssertionError, msg=f'Expected exception for {code}'):
@@ -80,11 +83,11 @@ class CommonTestCase(common.BleachbitTestCase):
         # Skip directories that are not valid language codes
         # 'UTF-8' is a macOS-specific LC_CTYPE directory, not a locale.
         skip_dirs = {'l10n', 'UTF-8'}
-        for locale_dir in locale_dirs:
-            if not os.path.isdir(locale_dir):
+        for this_dir in locale_dirs:
+            if not os.path.isdir(this_dir):
                 continue
-            for lang_code in os.listdir(locale_dir):
-                if not os.path.isdir(os.path.join(locale_dir, lang_code)):
+            for lang_code in os.listdir(this_dir):
+                if not os.path.isdir(os.path.join(this_dir, lang_code)):
                     continue
                 if lang_code in skip_dirs:
                     continue
@@ -115,6 +118,36 @@ class CommonTestCase(common.BleachbitTestCase):
             self.assertIsNotNone(e, f"Environment variable {env} is not set")
             self.assertNotEqual(
                 e.strip(), "", f"Environment variable {env} is empty")
+
+    def test_xdist_tempdir_isolation(self):
+        """Use a private temporary directory in each xdist worker"""
+        worker_id = os.environ.get('PYTEST_XDIST_WORKER')
+        if not worker_id:
+            self.skipTest('requires pytest-xdist worker')
+        options_dir = os.environ.get('BLEACHBIT_TEST_OPTIONS_DIR')
+        self.assertIsNotNone(
+            options_dir, 'conftest must set BLEACHBIT_TEST_OPTIONS_DIR')
+        # The per-worker keying is the isolation mechanism: without it every
+        # worker would share one directory and the environment checks below
+        # would still pass, so also require the worker id in the name.
+        self.assertIn(worker_id, os.path.basename(options_dir))
+        for env_var in ('TEMP', 'TMP', 'TMPDIR'):
+            env_dir = os.environ.get(env_var)
+            self.assertIsNotNone(env_dir, f'conftest must set {env_var}')
+            self.assertExists(env_dir)
+            self.assertTrue(
+                os.path.samefile(options_dir, env_dir),
+                f'{env_var} must point to the worker temp directory')
+        temp_dir = tempfile.gettempdir()
+        self.assertExists(temp_dir)
+        self.assertTrue(os.path.samefile(options_dir, temp_dir))
+        # setUpClass creates self.tempdir via tempfile.mkdtemp(); with
+        # tempfile.tempdir pointed at the worker dir it must live inside it.
+        # samefile (not string equality) is used so path case or symlinks
+        # do not cause spurious failures.
+        self.assertExists(self.tempdir)
+        self.assertTrue(os.path.samefile(
+            options_dir, os.path.commonpath((options_dir, self.tempdir))))
 
     def test_get_put_env(self):
         """Unit test for get_env() and put_env()"""

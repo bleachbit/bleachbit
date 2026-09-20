@@ -38,7 +38,6 @@ import re
 import shutil
 import sys
 import time
-import xml.dom.minidom
 from ctypes import wintypes
 from decimal import Decimal
 from pathlib import Path
@@ -75,11 +74,8 @@ if IS_WINDOWS:
     setattr(win32gui, 'GetClassInfo', getattr(
         win32gui, 'GetClassInfo', _get_class_info_fallback))
 
-    from ctypes import windll, byref
+    from ctypes import windll
     from win32com.shell import shell, shellcon
-
-    psapi = windll.psapi
-    kernel = windll.kernel32
 
 logger = logging.getLogger(__name__)
 
@@ -90,7 +86,8 @@ SPLASH_ICON_SIZE_PX = 256  # 256x256 pixels
 SPLASH_CLOSE_TIMEOUT_MS = 1000
 
 WINDOWS_SYSTEM_VAR = 'WindowsSystem'
-_WINDOWS_SYSTEM_VAR_RE = re.compile(rf'%{WINDOWS_SYSTEM_VAR}%', flags=re.IGNORECASE)
+_WINDOWS_SYSTEM_VAR_RE = re.compile(
+    rf'%{WINDOWS_SYSTEM_VAR}%', flags=re.IGNORECASE)
 
 _delete_parent_lock_admin = None
 _delete_parent_lock_handle = None
@@ -242,7 +239,6 @@ def browse_file(_, title):
                                         | win32con.OFN_HIDEREADONLY,
                                         Title=title)
     except pywintypes.error as e:
-        logger = logging.getLogger(__name__)
         if 0 == e.winerror:
             logger.debug('browse_file(): user cancelled')
         else:
@@ -273,8 +269,7 @@ def browse_files(_, title):
         # only one filename
         return _split
     dirname = _split[0]
-    pathnames = [os.path.join(dirname, fname) for fname in _split[1:]]
-    return pathnames
+    return [os.path.join(dirname, fname) for fname in _split[1:]]
 
 
 def browse_folder(_, title):
@@ -284,8 +279,7 @@ def browse_folder(_, title):
     if pidl is None:
         # user cancelled
         return None
-    fullpath = shell.SHGetPathFromIDListW(pidl)
-    return fullpath
+    return shell.SHGetPathFromIDListW(pidl)
 
 
 def cleanup_nonce():
@@ -304,7 +298,7 @@ def csidl_to_environ(varname, csidl):
     """Define an environment variable from a CSIDL for use in CleanerML and Winapp2.ini"""
     try:
         sppath = shell.SHGetSpecialFolderPath(None, csidl)
-    except:
+    except Exception:
         logger.info(
             'exception when getting special folder path for %s', varname)
         return
@@ -424,25 +418,6 @@ def _lock_delete_parent(pathname):
     _delete_parent_lock_key = parent_key
 
 
-def is_handle_valid(h):
-    """
-    Check if a Windows file handle is still valid.
-
-    FIXME: temporary function
-
-    Returns True if the handle is valid, False otherwise.
-    """
-    try:
-        win32file.GetFileType(h)
-        return True
-    except TypeError:
-        # TypeError happens in tests with mock.
-        return False
-    except pywintypes.error:
-        # If GetFileType fails for any reason, the handle is likely invalid
-        return False
-
-
 def with_parent_lock(pathname, func, *args, **kwargs):
     """
     Run a function with a lock on the parent directory of pathname.
@@ -457,9 +432,8 @@ def with_parent_lock(pathname, func, *args, **kwargs):
         return func(*args, **kwargs)
     logger.debug('with_parent_lock(%s): acquiring lock', pathname)
     _lock_delete_parent(pathname)
-    logger.debug('lock acquired: calling clean function with parent lock, is_handle_valid(%s)=%s',
-                 _delete_parent_lock_key,
-                 is_handle_valid(_delete_parent_lock_handle))
+    logger.debug('lock acquired: calling clean function with parent lock on %s',
+                 _delete_parent_lock_key)
     try:
         return func(*args, **kwargs)
     except Exception as e:
@@ -477,10 +451,9 @@ def delete_locked_file(pathname):
         return
     MOVEFILE_DELAY_UNTIL_REBOOT = 4
     if 0 == windll.kernel32.MoveFileExW(pathname, None, MOVEFILE_DELAY_UNTIL_REBOOT):
-        from ctypes import WinError
         # WinError throws the right exception based on last error.
         try:
-            raise WinError()
+            raise ctypes.WinError()
         except PermissionError:
             # OSError has special handling in Worker.py
             # Use a special message for flagging files for later deletion
@@ -583,6 +556,7 @@ def delete_updates():
     from bleachbit import Command
     if not shell.IsUserAnAdmin():
         logger.warning(
+            # TRANSLATORS: Warning shown when cleaning Windows Updates without administrator access.
             _("Administrator privileges are required to clean Windows Updates"))
         return
     windir = os.path.expandvars('%windir%')
@@ -629,7 +603,8 @@ def delete_updates():
             for service in restart_services:
                 # TRANSLATORS: Message in log file when stopping a Windows service.
                 # The placeholder is the code name of the service.
-                label = _("stop Windows service %(service)s") % {'service': service}
+                label = _("stop Windows service %(service)s") % {
+                    'service': service}
                 yield Command.Function(None, make_run_service(service, False), label)
         yield Command.Delete(path2)
     yield Command.Delete(sdist_dir)
@@ -786,22 +761,22 @@ def elevate_privileges(uac):
     if hasattr(sys, 'frozen'):
         # running frozen in py2exe
         exe = sys.executable
-        parameters = "--gui --no-uac"
+        parameters = ['--gui', '--no-uac']
     else:
         pyfile = os.path.join(bleachbit.bleachbit_exe_path, 'bleachbit.py')
         # If the Python file is on a network drive, do not offer the UAC because
         # the administrator may not have privileges and user will not be
         # prompted.
-        if len(pyfile) > 0 and path_on_network(pyfile):
+        if pyfile and path_on_network(pyfile):
             logger.debug(
                 "debug: skipping UAC because '%s' is on network", pyfile)
             return False
-        parameters = '"%s" --gui --no-uac' % pyfile
+        parameters = [pyfile, '--gui', '--no-uac']
         exe = sys.executable
 
     try:
         token = get_sid_token_48()
-        parameters = f"{parameters} --uac-sid-token {token}"
+        parameters = parameters + ['--uac-sid-token', token]
     except Exception as e:
         logger.error('could not compute SID token: %s', e)
 
@@ -830,13 +805,11 @@ def elevate_privileges(uac):
 
 
 def _add_command_line_parameters(parameters):
-    """
-    Add any command line parameters such as --debug-log.
-    """
-    if '--context-menu' in sys.argv:
-        return '{} {} "{}"'.format(parameters, ' '.join(sys.argv[1:-1]), sys.argv[-1])
-
-    return '{} {}'.format(parameters, ' '.join(sys.argv[1:]))
+    """Add any command line parameters such as --debug-log."""
+    import subprocess  # pylint: disable=import-outside-toplevel
+    # parameters already has --gui, so drop it from argv to avoid a duplicate
+    args = [arg for arg in sys.argv[1:] if arg != '--gui']
+    return subprocess.list2cmdline(parameters + args)
 
 
 def empty_recycle_bin(path, really_delete):
@@ -895,11 +868,11 @@ def clear_clipboard():
 def get_clipboard_paths():
     """Return a tuple of Unicode pathnames from the clipboard"""
     _open_clipboard()
-    path_list = ()
     try:
         path_list = win32clipboard.GetClipboardData(win32clipboard.CF_HDROP)
     except TypeError:
-        pass
+        # the clipboard holds something that is not a file drop
+        path_list = ()
     finally:
         win32clipboard.CloseClipboard()
     return path_list
@@ -1015,13 +988,15 @@ def get_windows_version():
 def is_junction(path):
     """Check whether the path is a junction (mount point) on Windows.
 
-    Python 3.12 added os.is_junction()
-    https://docs.python.org/3/library/os.html#os.DirEntry.is_junction
+    https://docs.python.org/3/library/os.path.html#os.path.isjunction
     """
     if not IS_WINDOWS:
         return False
-    if hasattr(os, 'is_junction'):
-        return os.is_junction(path)
+    # os.path.isjunction() was added in Python 3.12. Below that, read the
+    # reparse tag ourselves.
+    # TODO: drop this fallback once the minimum Python version is 3.12+
+    if hasattr(os.path, 'isjunction'):
+        return os.path.isjunction(path)
 
     # Get reparse tag from stat result
     try:
@@ -1029,8 +1004,9 @@ def is_junction(path):
         tag = getattr(stat_result, 'st_reparse_tag', None)
         if tag is not None:
             return tag == IO_REPARSE_TAG_MOUNT_POINT
-    except (OSError, AttributeError):
-        pass
+    except (OSError, AttributeError) as e:
+        logger.debug('no reparse tag for %s, so falling back to '
+                     'GetFileAttributesW: %s', path, e)
 
     attr = windll.kernel32.GetFileAttributesW(path)
     # INVALID_FILE_ATTRIBUTES (0xFFFFFFFF) indicates GetFileAttributesW failed
@@ -1136,7 +1112,7 @@ def set_environ(varname, path):
             raise RuntimeError(
                 'Variable %s points to a non-existent path %s' % (varname, path))
         os.environ[varname] = path
-    except:
+    except Exception:
         logger.exception(
             'set_environ(%s, %s): exception when setting environment variable', varname, path)
 
@@ -1157,7 +1133,7 @@ def setup_environment():
     # SHGetKnownFolderPath in Windows Vista and later
     try:
         path = get_known_folder_path('LocalAppDataLow')
-    except:
+    except Exception:
         logger.exception('exception identifying LocalAppDataLow')
     else:
         set_environ('LocalAppDataLow', path)
@@ -1209,7 +1185,7 @@ def split_registry_key(full_key):
 def read_registry_key(full_key, value_name):
     try:
         (hive, sub_key) = split_registry_key(full_key)
-    except RuntimeError as e:
+    except RuntimeError:
         return None
     try:
         with winreg.OpenKey(hive, sub_key, 0, winreg.KEY_QUERY_VALUE) as hkey:
@@ -1242,7 +1218,13 @@ def symlink_or_copy(src, dst):
 
 
 def has_fontconfig_cache(font_conf_file):
-    dom = xml.dom.minidom.parse(font_conf_file)
+    # Keep minidom out of module scope: FileUtilities imports Windows on every
+    # Windows run, and this is the only function that needs it.
+    import xml.dom.minidom  # pylint: disable=import-outside-toplevel
+    with open(font_conf_file, 'rb') as f:
+        data = f.read()
+    General.reject_xml_dtd(data, 'fonts.conf')
+    dom = xml.dom.minidom.parseString(data)
     fc_element = dom.getElementsByTagName('fontconfig')[0]
     cachefile = 'd031bbba323fd9e5b47e0ee5a0353f11-le32d8.cache-6'
     expanded_localdata = os.path.expandvars('%LOCALAPPDATA%')
@@ -1268,7 +1250,7 @@ def has_fontconfig_cache(font_conf_file):
 
 def get_font_conf_file():
     """Return the full path to fonts.conf
-    
+
     This function should be called only on Windows with GTK
     """
     if not IS_WINDOWS:
@@ -1371,7 +1353,8 @@ class SplashThread(Thread):
                 self._post_quit_message()
                 return
         except Exception:
-            logger.debug('Could not verify splash screen window', exc_info=True)
+            logger.debug(
+                'Could not verify splash screen window', exc_info=True)
 
         self._hide_window(hWindow)
         if self._send_close_message(hWindow):
@@ -1468,7 +1451,7 @@ class SplashThread(Thread):
 
         user32 = ctypes.windll.user32
         gdi32 = ctypes.windll.gdi32
-        icon_size = 256
+        icon_size = SPLASH_ICON_SIZE_PX
         flags = win32con.LR_LOADFROMFILE
         hIcon = win32gui.LoadImage(
             0, str(filename), win32con.IMAGE_ICON, icon_size, icon_size, flags)
@@ -1574,7 +1557,8 @@ class SplashThread(Thread):
             try:
                 win32gui.DestroyIcon(hIcon)
             except Exception:
-                pass
+                logger.debug('could not destroy the splash icon',
+                             exc_info=True)
 
     def _safe_render_splash(self, hWnd):
         """Render the splash screen without letting paint failures escape."""
@@ -1780,7 +1764,7 @@ class SplashThread(Thread):
             return 1
 
         if message == win32con.WM_PAINT:
-            hDC, paintStruct = win32gui.BeginPaint(hWnd)
+            _, paintStruct = win32gui.BeginPaint(hWnd)
             try:
                 self._safe_render_splash(hWnd)
             finally:

@@ -28,7 +28,7 @@ import http.client
 import os
 import os.path
 from unittest.mock import Mock, patch
-import xml
+import xml.dom.minidom
 
 # first party imports
 from tests import common
@@ -45,13 +45,13 @@ class UpdateTestCase(common.BleachbitTestCase):
         """Unit test for function check_updates() using mock"""
         wa = '<winapp2 url="http://katana.oooninja.com/bleachbit/winapp2.ini" sha512="ce9e18252f608c8aff28811e372124d29a86404f328d3cd51f1f220578744bb8b15f55549eabfe8f1a80657fc940f6d6deece28e0532b3b0901a4c74110f7ba7"/>'
         update_tests = [
-            ('<updates><stable ver="0.8.4">http://084</stable><beta ver="0.8.5beta">http://085beta</beta>%s</updates>' % wa,
-             (('0.8.4', 'http://084'), ('0.8.5beta', 'http://085beta'))),
-            ('<updates><stable ver="0.8.4">http://084</stable>%s</updates>' % wa,
-             (('0.8.4', 'http://084'), )),
-            ('<updates><beta ver="0.8.5beta">http://085beta</beta>%s</updates>' % wa,
-             (('0.8.5beta', 'http://085beta'), )),
-            ('<updates></updates>', ())]
+            ('<updates><stable ver="0.8.4">https://084</stable><beta ver="0.8.5beta">https://085beta</beta>%s</updates>' % wa,
+             [('0.8.4', 'https://084'), ('0.8.5beta', 'https://085beta')]),
+            ('<updates><stable ver="0.8.4">https://084</stable>%s</updates>' % wa,
+             [('0.8.4', 'https://084')]),
+            ('<updates><beta ver="0.8.5beta">https://085beta</beta>%s</updates>' % wa,
+             [('0.8.5beta', 'https://085beta')]),
+            ('<updates></updates>', [])]
 
         with patch('bleachbit.Update.fetch_url') as mock_fetch:
             # Configure mock responses
@@ -59,10 +59,10 @@ class UpdateTestCase(common.BleachbitTestCase):
             mock_response.status_code = 200
             mock_response.content = b''
 
-            for xml, expected in update_tests:
+            for xml_text, expected in update_tests:
                 # Set up mock response content
-                mock_response.text = xml
-                mock_response.content = xml.encode()
+                mock_response.text = xml_text
+                mock_response.content = xml_text.encode()
                 mock_fetch.return_value = mock_response
 
                 # Run test
@@ -79,6 +79,44 @@ class UpdateTestCase(common.BleachbitTestCase):
                 self.assertIn('X-Locale', sent_headers)
                 if 'X-GTK-Version' in sent_headers:
                     self.assertIsInstance(sent_headers['X-GTK-Version'], str)
+
+    def test_check_updates_rejects_dtd(self):
+        """Update XML that declares a DTD is rejected"""
+        xml_text = ('<?xml version="1.0"?><!DOCTYPE u [<!ENTITY x "y">]>'
+                    '<updates><stable ver="1">http://x</stable></updates>')
+        with patch('bleachbit.Update.fetch_url') as mock_fetch:
+            resp = Mock()
+            resp.status_code = 200
+            resp.text = xml_text
+            resp.content = xml_text.encode()
+            mock_fetch.return_value = resp
+            self.assertEqual(check_updates(True, False, None, None), [])
+
+    def test_check_updates_encoding_declaration(self):
+        """Update XML with an encoding declaration still parses"""
+        xml_text = ('<?xml version="1.0" encoding="UTF-8"?>'
+                    '<updates><stable ver="9.9">https://999</stable></updates>')
+        with patch('bleachbit.Update.fetch_url') as mock_fetch:
+            resp = Mock()
+            resp.status_code = 200
+            resp.text = xml_text
+            resp.content = xml_text.encode()
+            mock_fetch.return_value = resp
+            self.assertEqual(check_updates(True, False, None, None),
+                             [('9.9', 'https://999')])
+
+    def test_check_updates_rejects_insecure_url(self):
+        """A stable/beta update URL that is not https is ignored"""
+        xml_text = ('<updates><stable ver="1">http://insecure.example</stable>'
+                    '<beta ver="2">https://secure.example</beta></updates>')
+        with patch('bleachbit.Update.fetch_url') as mock_fetch:
+            resp = Mock()
+            resp.status_code = 200
+            resp.text = xml_text
+            resp.content = xml_text.encode()
+            mock_fetch.return_value = resp
+            updates = check_updates(True, False, None, None)
+            self.assertEqual(updates, [('2', 'https://secure.example')])
 
     def test_check_updates_real_network(self):
         """Unit test for function check_updates() using real network"""
@@ -97,7 +135,7 @@ class UpdateTestCase(common.BleachbitTestCase):
             bleachbit.update_check_url = url
             self.assertEqual(
                 check_updates(True, False, None, None),
-                ())
+                [])
         bleachbit.update_check_url = preserve_url
 
     def test_update_url(self):
@@ -142,6 +180,15 @@ class UpdateTestCase(common.BleachbitTestCase):
         # blank hash, do not download again
         update_winapp2(url, None, print, on_success)
         update_winapp2(url, None, print, expect_failure)
+
+    def test_update_winapp2_insecure_url_rejected(self):
+        """An insecure winapp2 URL is refused before download, even with a hash"""
+        with patch('bleachbit.Update.download_url_to_fn') as mock_dl:
+            update_winapp2('http://example.invalid/winapp2.ini', None,
+                           print, print)
+            update_winapp2('http://example.invalid/winapp2.ini', 'a' * 128,
+                           print, print)
+            mock_dl.assert_not_called()
 
     def test_environment(self):
         """Check the sanity of the environment"""

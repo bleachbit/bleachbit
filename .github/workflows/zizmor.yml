@@ -25,8 +25,12 @@ concurrency:
 jobs:
   zizmor:
     name: Run zizmor
+    # The zimzore action requires working Docker daemon, which is not provided on ubuntu-slim.
+    # The zimzor binary could be installed directly on -slim, but it is simpler to use
+    # ubuntu-latest.
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Normal runtime is under 30 seconds.
+    timeout-minutes: 5
 
     permissions:
       security-events: write # upload SARIF to code scanning
@@ -35,9 +39,9 @@ jobs:
 
     steps:
       - name: Clone repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Run zizmor
-        uses: zizmorcore/zizmor-action@6599ee8b7a49aef6a770f63d261d214911a7ce02 # v0.6.0
+        uses: zizmorcore/zizmor-action@70fb788f84895a7701f5643d103d587e460b5c99 # v0.6.3

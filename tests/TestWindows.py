@@ -33,6 +33,7 @@ from bleachbit import FileUtilities, General
 from bleachbit.Command import Delete, Function
 from bleachbit.FileUtilities import extended_path, extended_path_undo
 from bleachbit.Windows import (
+    clear_clipboard,
     delete_locked_file,
     delete_registry_key,
     delete_registry_value,
@@ -49,6 +50,8 @@ from bleachbit.Windows import (
     get_recycle_bin,
     get_windows_system_paths,
     get_windows_version,
+    elevate_privileges,
+    has_fontconfig_cache,
     is_junction,
     move_to_recycle_bin,
     parse_windows_build,
@@ -60,6 +63,7 @@ from bleachbit.Windows import (
     read_registry_key,
     get_sid_token_48,
     is_ots_elevation,
+    _add_command_line_parameters,
     get_splash_screen_delay_seconds,
     expand_windows_system_vars,
     SplashThread,
@@ -112,7 +116,7 @@ class WindowsSystemPathsTestCase(common.BleachbitTestCase):
 
     def test_expand_windows_system_vars(self):
         """Unit test expand_windows_system_vars()."""
-        path_arg = (r'%WindowsSystem%\LogFiles\*.log')
+        path_arg = r'%WindowsSystem%\LogFiles\*.log'
         # Without providing system paths
         paths = expand_windows_system_vars(path_arg)
         self.assertIsInstance(paths, list)
@@ -197,6 +201,37 @@ class WindowsLinksMixIn():
         self.assertFalse(Windows.is_junction(linkname))
         self.assertFalse(FileUtilities.is_normal_directory(linkname))
 
+    def _create_win_file_symlink(self, target, linkname):
+        """Create a file symlink"""
+
+        self.assertFalse(os.path.lexists(linkname),
+                         f'Link must not exist: {linkname}')
+        self.assertTrue(os.path.isabs(target),
+                        f'Target must be absolute path: {target}')
+        self.assertTrue(os.path.isabs(linkname),
+                        f'Link must be absolute path: {linkname}')
+        self.assertExists(target)
+        target_path = Path(target)
+        self.assertTrue(target_path.is_file(),
+                        f'Target must be an existing file: {target}')
+
+        kernel32 = ctypes.windll.kernel32
+        kernel32.CreateSymbolicLinkW.argtypes = [
+            ctypes.c_wchar_p,
+            ctypes.c_wchar_p,
+            ctypes.c_uint32,
+        ]
+        kernel32.CreateSymbolicLinkW.restype = ctypes.c_ubyte
+        result = kernel32.CreateSymbolicLinkW(
+            linkname, target, 0)  # SYMBOLIC_LINK_FLAG_FILE
+        if result == 0:
+            err = ctypes.GetLastError()
+            raise OSError(err, ctypes.FormatError(err))
+        self.assertExists(linkname)
+        link_path = Path(linkname)
+        self.assertTrue(link_path.is_symlink())
+        self.assertTrue(link_path.is_file())
+
     def _create_win_hard_link(self, target, linkname):
         """Create a hard link to a file"""
 
@@ -249,7 +284,7 @@ class WindowsLinksMixIn():
         self.assertTrue(Windows.is_junction(linkname))
         path = Path(linkname)
         self.assertTrue(path.is_dir())
-        self.assertFalse(path.is_symlink())
+        self.assertTrue(path.is_junction())
 
 
 @common.skipUnlessWindows
@@ -698,6 +733,46 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             with mock.patch('bleachbit.Windows.get_sid_token_48', side_effect=RuntimeError('error')):
                 self.assertFalse(is_ots_elevation())
 
+    def test_add_command_line_parameters_omits_duplicate_gui(self):
+        """UAC parameters already include --gui, so do not append it again."""
+        argv = ['bleachbit.exe', '--gui', '--exit']
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            self.assertEqual(
+                '--gui --no-uac --exit',
+                _add_command_line_parameters(['--gui', '--no-uac']))
+
+    def test_add_command_line_parameters_context_menu_omits_duplicate_gui(self):
+        """Context-menu UAC parameters keep the quoted path but skip --gui."""
+        file_to_shred = r'C:\Users\test user\AppData\Local\Temp\delete me.txt'
+        argv = [
+            'bleachbit.exe',
+            '--gui',
+            '--no-delete-confirmation',
+            '--context-menu',
+            file_to_shred,
+        ]
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            self.assertEqual(
+                '--gui --no-uac --no-delete-confirmation --context-menu '
+                f'"{file_to_shred}"',
+                _add_command_line_parameters(['--gui', '--no-uac']))
+
+    def test_elevate_privileges_omits_duplicate_gui(self):
+        """The elevated UAC command line should contain --gui only once."""
+        argv = ['bleachbit.exe', '--gui', '--exit']
+        with mock.patch('bleachbit.Windows.sys.argv', argv):
+            with mock.patch('bleachbit.Windows.shell.IsUserAnAdmin', return_value=False):
+                with mock.patch('bleachbit.Windows.path_on_network', return_value=False):
+                    with mock.patch('bleachbit.Windows.get_sid_token_48', return_value='ABCDEFGH'):
+                        with mock.patch(
+                                'bleachbit.Windows.shell.ShellExecuteEx',
+                                return_value={'hProcess': object()}) as shell_exec:
+                            self.assertTrue(elevate_privileges(True))
+
+        parameters = shell_exec.call_args.kwargs['lpParameters']
+        self.assertEqual(1, parameters.split().count('--gui'))
+        self.assertIn('--exit', parameters)
+
     def test_splash_thread_reuses_cached_class_atom(self):
         """_register_window_class skips RegisterClass when cached."""
         splash = SplashThread()
@@ -964,6 +1039,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     @pytest.mark.xdist_group('gui')
     def test_get_clipboard_paths(self):
         """Unit test for get_clipboard_paths"""
+        self.addCleanup(clear_clipboard)
         # The clipboard is an unknown state, so check the function does
         # not crash and that it returns the right data type.
         paths = get_clipboard_paths()
@@ -992,7 +1068,8 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                 '-Path', r'c:\windows\*.exe')
         (ext_rc, _stdout, _stderr) = General.run_external(args)
         # It may print "Requested Clipboard operation did not succeed" to stderr.
-        self.assertEqual(ext_rc, 0, f"powershell.exe failed with return code {ext_rc}: {_stderr}")
+        self.assertEqual(
+            ext_rc, 0, f"powershell.exe failed with return code {ext_rc}: {_stderr}")
         paths = get_clipboard_paths()
         self.assertIsInstance(paths, (type(None), tuple))
         self.assertGreater(len(paths), 1)
@@ -1007,6 +1084,34 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             self.skipTest("GTK is not available")
         font_fn = get_font_conf_file()
         self.assertExists(font_fn)
+
+    def test_has_fontconfig_cache(self):
+        """Unit test for has_fontconfig_cache()"""
+        font_conf = self.write_file(
+            'fonts.conf',
+            text='<?xml version="1.0"?>\n'
+            '<fontconfig>\n'
+            '  <cachedir>~/.fontconfig</cachedir>\n'
+            '</fontconfig>\n')
+        self.assertFalse(has_fontconfig_cache(font_conf))
+
+    def test_has_fontconfig_cache_rejects_dtd(self):
+        """A fonts.conf with a DTD is rejected (entity-expansion defense)"""
+        font_conf = self.write_file(
+            'fonts_dtd.conf',
+            text='<?xml version="1.0"?>\n'
+            '<!DOCTYPE fontconfig [ <!ENTITY x "y"> ]>\n'
+            '<fontconfig><cachedir>~/.fontconfig</cachedir></fontconfig>\n')
+        self.assertRaises(ValueError, has_fontconfig_cache, font_conf)
+
+    def test_has_fontconfig_cache_allows_external_doctype(self):
+        """A real fonts.conf, which declares an external-only DOCTYPE, must not be rejected"""
+        font_conf = self.write_file(
+            'fonts_external_dtd.conf',
+            text='<?xml version="1.0"?>\n'
+            '<!DOCTYPE fontconfig SYSTEM "fonts.dtd">\n'
+            '<fontconfig><cachedir>~/.fontconfig</cachedir></fontconfig>\n')
+        self.assertFalse(has_fontconfig_cache(font_conf))
 
     def test_get_known_folder_path(self):
         """Unit test for get_known_folder_path"""
@@ -1200,7 +1305,7 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
                  ('HKCU\\Software\\BleachBit\\DoesNotExist', 'DoesNotExist', None))
         for (input_key, input_value, expected_value) in tests:
             value = read_registry_key(input_key, input_value)
-            if value != None:
+            if value is not None:
                 value = value.lower()  # casing varies by Windows version: image vs Image
             self.assertEqual(expected_value, value)
 
@@ -1293,3 +1398,45 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             set_environ('cd_test', test_dir)
             self.assertEqual(os.environ['cd_test'], test_dir)
             os.environ.pop('cd_test')
+
+    @staticmethod
+    def _parse_windows_command_line(cmd):
+        """Parse a command line the same way Windows does (CommandLineToArgvW)."""
+        fn = ctypes.windll.shell32.CommandLineToArgvW
+        fn.argtypes = [ctypes.c_wchar_p, ctypes.POINTER(ctypes.c_int)]
+        fn.restype = ctypes.POINTER(ctypes.c_wchar_p)
+        argc = ctypes.c_int()
+        argv_p = fn(cmd, ctypes.byref(argc))
+        try:
+            return [argv_p[i] for i in range(argc.value)]
+        finally:
+            ctypes.windll.kernel32.LocalFree(argv_p)
+
+    def _assert_roundtrips(self, base, extra_argv):
+        """cmd has no exe name, so prepend one before parsing it back."""
+        with mock.patch('bleachbit.Windows.sys.argv', ['bleachbit.exe'] + extra_argv):
+            cmd = _add_command_line_parameters(base)
+        argv = self._parse_windows_command_line(f'"dummy.exe" {cmd}')
+        self.assertEqual(argv[1:], base + extra_argv)
+
+    def test_add_command_line_parameters_quoting(self):
+        """Args must round-trip unchanged through the Windows argv parser."""
+        base = [r'C:\Program Files\BleachBit\bleachbit.py', '--gui', '--no-uac']
+
+        # simple argument
+        self._assert_roundtrips(base, ['--debug-log'])
+
+        # argument with spaces
+        self._assert_roundtrips(base, ['--debug-log', r'C:\temp\my log.txt'])
+
+        # embedded quotes and ampersands attempting to break out of the argument
+        malicious = r'C:\test" & calc.exe & "'
+        self._assert_roundtrips(base, ['--context-menu', malicious])
+
+        # embedded quote attempting to inject a whole extra argument
+        injection = 'foo" --no-uac "bar'
+        self._assert_roundtrips(base, ['--context-menu', injection])
+
+        # multiple arguments, one with spaces, in a realistic combination
+        self._assert_roundtrips(
+            base, ['--context-menu', r'C:\path with spaces\file.txt', '--debug-log'])

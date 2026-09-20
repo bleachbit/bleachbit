@@ -56,7 +56,8 @@ def get_proc_swaps():
     # Usually 'swapon -s' is identical to '/proc/swaps'
     # Here is one exception:
     # https://bugs.launchpad.net/ubuntu/+source/bleachbit/+bug/1092792
-    (rc, stdout, _stderr) = General.run_external(['swapon', '-s'])
+    (rc, stdout, _stderr) = General.run_external(
+        [General.resolve_exe('swapon'), '-s'])
     if 0 == rc:
         return stdout
     logger.debug(
@@ -82,7 +83,7 @@ def disable_swap_linux():
     if 0 == count_swap_linux():
         return None
     logger.debug(_("Disabling swap."))
-    args = ["swapoff", "-a", "-v"]
+    args = [General.resolve_exe('swapoff'), "-a", "-v"]
     (rc, stdout, stderr) = General.run_external(args)
     if 0 != rc:
         raise RuntimeError(stderr.replace("\n", ""))
@@ -102,7 +103,7 @@ def disable_swap_linux():
 def enable_swap_linux():
     """Enable Linux swap"""
     logger.debug(_("Re-enabling swap."))
-    args = ["swapon", "-a"]
+    args = [General.resolve_exe('swapon'), "-a"]
     (rc, _stdout, stderr) = General.run_external(args)
     if 0 != rc:
         raise RuntimeError(stderr.replace("\n", ""))
@@ -126,12 +127,13 @@ def make_self_oom_target_linux(uid=None):
         if uid is None:
             uid = General.get_real_uid()
         if uid > 0:
-            # TRANSLATORS: Debug message when a process gives up root/admin privileges.
-            # %(pid)d is the integer process ID; %(uid)d is the integer user ID to switch to.
-            drop_msg = _("Dropping privileges of process ID %(pid)d to user ID %(uid)d.")
+            drop_msg = _(
+                # TRANSLATORS: Debug message when a process gives up root/admin privileges.
+                # %(pid)d is the integer process ID; %(uid)d is the integer user ID to switch to.
+                "Dropping privileges of process ID %(pid)d to user ID %(uid)d.")
             logger.debug(drop_msg, {'pid': os.getpid(), 'uid': uid})
             os.seteuid(uid)
-    except:
+    except Exception:
         logger.exception('Error when dropping privileges')
 
 
@@ -148,7 +150,7 @@ def fill_memory_linux():
     try:
         buf = '\x00' * allocbytes
     except MemoryError:
-        pass
+        logger.debug('could not allocate %s, so stopping here', bytes_str)
     else:
         fill_memory_linux()
         # TRANSLATORS: The variable is a quantity like 5kB
@@ -190,20 +192,20 @@ def _run_memory_child_systemd_scope():
     not be started this way -- in which case the caller should fall back
     to ``_run_memory_child_fork``).
     """
-    if not FileUtilities.exe_exists('systemd-run'):
+    systemd_run = General.resolve_exe('systemd-run')
+    if not FileUtilities.exe_exists(systemd_run):
         return None
     try:
         real_uid = General.get_real_uid()
     except Exception:
         real_uid = None
-    # Make the bleachbit package importable when running from a source
-    # checkout. When installed, this is harmless (the directory is already
-    # on sys.path).
+    # This child runs Python as root, so keep an inherited PATH/LD_*/PYTHONPATH
+    # from redirecting it. sanitize_root_env drops LD_* and unsafe PATH entries;
+    # PYTHONPATH is set to only our package's parent (enough to import
+    # bleachbit) rather than appending the inherited value.
     pkg_parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    env = os.environ.copy()
-    python_path = os.pathsep.join(
-        p for p in (pkg_parent, env.get('PYTHONPATH', '')) if p)
-    env['PYTHONPATH'] = python_path
+    env = General.sanitize_root_env(os.environ.copy())
+    env['PYTHONPATH'] = pkg_parent
     # The child is launched via "python -c", so it cannot see --debug in
     # sys.argv. Forward the parent's debug state via an environment variable
     # so the child's logger (initialized on import) matches the parent's.
@@ -212,16 +214,20 @@ def _run_memory_child_systemd_scope():
     # Include the PID so concurrent runs do not collide on a fixed unit
     # name (systemd-run refuses to create a unit that already exists).
     args = [
-        'systemd-run', '--scope', '--collect', '--quiet',
+        systemd_run, '--scope', '--collect', '--quiet',
         f'--unit=bleachbit-wipe-memory-{os.getpid()}',
         '--property=OOMPolicy=kill',
         '--', sys.executable, '-c', _memory_child_script(real_uid),
     ]
+
     def run_scope(scope_args):
         logger.debug('Running command: %s', ' '.join(scope_args))
         try:
+            # cwd=pkg_parent so "python -c"'s implicit '' sys.path entry
+            # resolves there, not an attacker-controlled working directory.
             return subprocess.run(
-                scope_args, env=env, capture_output=True, text=True)
+                scope_args, env=env, cwd=pkg_parent,
+                capture_output=True, text=True)
         except FileNotFoundError:
             return None
 
@@ -273,6 +279,8 @@ def _run_memory_child_fork():
         fill_memory_linux()
         os._exit(0)
     else:
+        # The else is load-bearing: tests mock os._exit, so without it the
+        # child path would fall through into the parent's waitpid().
         # TRANSLATORS: This is a debugging message that the parent process
         # is waiting for the child process. %(parent_pid)d is the parent
         # process ID; %(child_pid)d is the child process ID.
@@ -304,7 +312,8 @@ def get_swap_size_linux(device, proc_swaps=None):
 def get_swap_uuid(device):
     """Find the UUID for the swap device"""
     uuid = None
-    args = ['blkid', device, '-s', 'UUID']
+    args = [General.resolve_exe('blkid'),
+            device, '-s', 'UUID']
     (_rc, stdout, _stderr) = General.run_external(args)
     uuid_re = re.compile(r"^%s: UUID=\"([a-z0-9-]+)\"" % device)
     for line in stdout.split('\n'):
@@ -334,7 +343,11 @@ def physical_free_darwin(run_vmstat=None):
         return int(m.groups()[0])
     if run_vmstat is None:
         def run_vmstat():
-            return subprocess.check_output(["vm_stat"], text=True)
+            # sanitize the env so a hostile inherited LD_*/DYLD_* cannot
+            # redirect this child when BleachBit runs as root
+            return subprocess.check_output(
+                [General.resolve_exe('vm_stat')],
+                text=True, env=General.sanitize_root_env(dict(os.environ)))
     output = iter(run_vmstat().split("\n"))
     page_size = get_page_size(next(output))
     vm_stat = dict(parse_line(*l.split(":")) for l in output if l != "")
@@ -424,9 +437,6 @@ def wipe_swap_linux(devices, proc_swaps):
     if 0 < count_swap_linux():
         raise RuntimeError('Cannot wipe swap while it is in use')
     for device in devices:
-        # if '/cryptswap' in device:
-        #    logger.info('Skipping encrypted swap device %s.', device)
-        #    continue
         # TRANSLATORS: The variable is a device like /dev/sda2
         logger.info(_("Wiping the swap device %s."), device)
         safety_limit_bytes = 29 * 1024 ** 3  # 29 gibibytes
@@ -441,7 +451,7 @@ def wipe_swap_linux(devices, proc_swaps):
         # reinitialize
         # TRANSLATORS: The variable is a device like /dev/sda2
         logger.debug(_("Reinitializing the swap device %s."), device)
-        args = ['mkswap', device]
+        args = [General.resolve_exe('mkswap'), device]
         if uuid:
             args.append("-U")
             args.append(uuid)
@@ -452,7 +462,11 @@ def wipe_swap_linux(devices, proc_swaps):
 
 def wipe_memory():
     """Wipe unallocated memory"""
-    for cmd in ('swapon', 'swapoff', 'blkid'):
+    if not IS_LINUX:
+        raise RuntimeError(
+            'wipe_memory() requires Linux')
+    for name in ('swapon', 'swapoff', 'blkid'):
+        cmd = General.resolve_exe(name)
         if not FileUtilities.exe_exists(cmd):
             raise RuntimeError(f"wipe_memory: Command {cmd} not found")
     # cache the file because 'swapoff' changes it

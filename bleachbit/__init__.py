@@ -11,11 +11,11 @@ Code that is commonly shared throughout BleachBit
 import os
 import re
 import sys
-from configparser import NoOptionError, RawConfigParser  # used in other files
+from configparser import RawConfigParser  # used in other files
 
 from bleachbit import Log
 
-APP_VERSION = "6.0.2"
+APP_VERSION = "6.0.4"
 APP_NAME = "BleachBit"
 APP_URL = "https://www.bleachbit.org"
 APP_COPYRIGHT = "Copyright (C) 2008-2026 Andrew Ziem"
@@ -23,7 +23,7 @@ APP_COPYRIGHT = "Copyright (C) 2008-2026 Andrew Ziem"
 socket_timeout = 10
 
 if sys.version_info < (3, 8, 0):
-    print('BleachBit requires Python version 3.8 or later')
+    sys.stderr.write('BleachBit requires Python version 3.8 or later\n')
     sys.exit(1)
 
 if hasattr(sys, 'frozen'):
@@ -50,6 +50,44 @@ IS_BSD = sys.platform.startswith(('freebsd', 'openbsd', 'netbsd'))
 IS_FREEBSD = sys.platform.startswith('freebsd')
 IS_NETBSD = sys.platform[:6] == 'netbsd'
 ARCH_BITS = 64 if sys.maxsize > 2**32 else 32
+
+
+def _harden_dll_search_path():
+    """Drop the current directory (and PATH when frozen) from the DLL search path.
+
+    Blocks DLL-preloading privilege escalation. bootstrap() calls it before
+    the first DLL loads, not at import, so build tooling that imports the
+    package does not disturb the search path.
+    """
+    import ctypes
+    from ctypes import wintypes
+    kernel32 = ctypes.WinDLL('kernel32', use_last_error=True)
+
+    # Frozen builds bundle every dependency next to the exe, so restrict to
+    # app dir + System32 + add_dll_directory() dirs (also drops PATH).
+    # SetDefaultDllDirectories needs Win8+ (or 7 with KB2533623)
+    if hasattr(sys, 'frozen'):
+        LOAD_LIBRARY_SEARCH_DEFAULT_DIRS = 0x00001000
+        try:
+            set_default = kernel32.SetDefaultDllDirectories
+            set_default.argtypes = [wintypes.DWORD]
+            set_default.restype = wintypes.BOOL
+            if set_default(LOAD_LIBRARY_SEARCH_DEFAULT_DIRS):
+                return
+        except (AttributeError, OSError) as e:
+            logger.debug('SetDefaultDllDirectories is unavailable, so falling '
+                         'back to SetDllDirectoryW: %s', e)
+
+    # drops the current directory but keeps PATH; NULL would restore the default
+    try:
+        set_dir = kernel32.SetDllDirectoryW
+        set_dir.argtypes = [wintypes.LPCWSTR]
+        set_dir.restype = wintypes.BOOL
+        set_dir("")
+    except (AttributeError, OSError) as e:
+        logger.debug('could not drop the current directory from the DLL '
+                     'search path: %s', e)
+
 
 # file system attributes
 FS_CASE_SENSITIVE = not (IS_WINDOWS or IS_MAC)
@@ -113,10 +151,7 @@ elif IS_WINDOWS:
         # installed mode
         options_dir = os.path.expandvars(r"${APPDATA}\BleachBit")
 
-try:
-    options_dir = os.environ['BLEACHBIT_TEST_OPTIONS_DIR']
-except KeyError:
-    pass
+options_dir = os.environ.get('BLEACHBIT_TEST_OPTIONS_DIR', options_dir)
 
 options_file = os.path.join(options_dir, "bleachbit.ini")
 
@@ -187,14 +222,7 @@ def get_share_dirs():
         # This works when installed, like under `/usr/share`.
         base_dirs.append(os.path.dirname(system_cleaners_dir))
     # Remove duplicates while preserving the order.
-    seen = set()
-    unique_dirs = []
-    for base_dir in base_dirs:
-        if base_dir in seen:
-            continue
-        seen.add(base_dir)
-        unique_dirs.append(base_dir)
-    return unique_dirs
+    return list(dict.fromkeys(base_dirs))
 
 
 def get_share_path(filename):

@@ -14,8 +14,8 @@ import logging
 import os
 
 import bleachbit
-from bleachbit import FileUtilities
-from bleachbit.Special import sqlite_table_exists
+from bleachbit import FileUtilities, IS_MAC
+from bleachbit.Special import sqlite_table_exists, _sqlite_uri
 
 logger = logging.getLogger(__name__)
 
@@ -123,10 +123,15 @@ def detect_browser(path):
 
 def list_cookies(path):
     """List cookies in the database"""
+    if IS_MAC:
+        from bleachbit.Mac import is_safari_binarycookies, list_safari_cookies
+        if is_safari_binarycookies(path):
+            return [(domain,) for domain in list_safari_cookies(path)]
+
     import sqlite3  # pylint: disable=import-outside-toplevel
     (table_name, host_column) = detect_browser(path)
-    uri = f'file:{path}'
-    with contextlib.closing(sqlite3.connect(uri, uri=bool(uri.startswith('file:')))) as conn:
+    uri = _sqlite_uri(path)
+    with contextlib.closing(sqlite3.connect(uri, uri=True)) as conn:
         cursor = conn.cursor()
         cursor.execute(f"SELECT distinct {host_column} FROM {table_name}")
         return cursor.fetchall()
@@ -172,6 +177,14 @@ def delete_cookies(path, keep_list, really_delete=False):
         raise ValueError("keep_list must not be empty")
     assert isinstance(keep_list, set)
 
+    if IS_MAC:
+        from bleachbit.Mac import is_safari_binarycookies, delete_safari_cookies
+        if is_safari_binarycookies(path):
+            return delete_safari_cookies(path, keep_list, really_delete=really_delete)
+
+    from bleachbit.Options import options
+    shred_enabled = options.get('shred')
+
     import sqlite3  # pylint: disable=import-outside-toplevel
     # Find the first matching table configuration
     (table_name, host_column) = detect_browser(path)
@@ -180,16 +193,12 @@ def delete_cookies(path, keep_list, really_delete=False):
     if original_size <= 0:
         raise RuntimeError(f"cookies database is empty: {path}")
 
-    # Set up connection
-    uri = f'file:{path}'
-    if not really_delete:
-        uri += '?mode=ro'
-
-    from bleachbit.Options import options
-    shred_enabled = options.get('shred')
+    # Set up connection. Preview opens read-only; the percent-encoded URI
+    # keeps a '?' in the path from defeating the mode.
+    uri = _sqlite_uri(path, None if really_delete else 'ro')
 
     try:
-        with contextlib.closing(sqlite3.connect(uri, uri=bool(uri.startswith('file:')))) as conn:
+        with contextlib.closing(sqlite3.connect(uri, uri=True)) as conn:
             cursor = conn.cursor()
             if shred_enabled:
                 cursor.execute('PRAGMA secure_delete = ON;')

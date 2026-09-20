@@ -104,13 +104,12 @@ def _get_home_dirs_to_anonymize():
     home_dirs.append(home_dir)
 
     if IS_POSIX:
-        real_home_dir = ''
         try:
             # reminder: pwd is not available on Windows
             import pwd  # pylint: disable=import-outside-toplevel
             real_home_dir = pwd.getpwuid(get_real_uid()).pw_dir
         except (ImportError, KeyError, RuntimeError, ValueError):
-            pass
+            real_home_dir = ''
         home_dirs.append(real_home_dir)
 
     if IS_WINDOWS:
@@ -123,8 +122,8 @@ def _get_home_dirs_to_anonymize():
             short_home_dir = win32api.GetShortPathName(home_dir)
             if short_home_dir and short_home_dir != home_dir:
                 home_dirs.append(short_home_dir)
-        except (ImportError, OSError, ValueError):
-            pass
+        except (ImportError, OSError, ValueError) as e:
+            logger.debug('no short path for the home directory: %s', e)
 
     # Filter out root directories and duplicates
     filtered_dirs = []
@@ -180,13 +179,12 @@ def get_version(four_parts=False):
     If False, return three or four parts, depending on available information.
     """
     build_number_env = os.getenv('GITHUB_RUN_NUMBER')
-    build_number_src = None
     try:
         # pylint: disable=import-outside-toplevel
-        from bleachbit.Revision import build_number as build_number_import
-        build_number_src = build_number_import
+        from bleachbit.Revision import build_number as build_number_src
     except ImportError:
-        pass
+        # Revision.py only exists in CI and tarball builds
+        build_number_src = None
 
     build_number = build_number_src or build_number_env
     if build_number and not str(build_number).isdigit():
@@ -222,7 +220,7 @@ def get_system_information(gui=None):
         from bleachbit.Revision import revision
         info['Git revision'] = revision
     except ImportError:
-        pass
+        logger.debug('no Revision module, so no git revision to report')
 
     if gui is None:
         # Auto-detect based on which GUI module has been imported.
@@ -259,19 +257,16 @@ def get_system_information(gui=None):
 
     info['os.path.expanduser(~")'] = os.path.expanduser('~')
 
-    # Mac Version Name - Dictionary
-    macosx_dict = {'5': 'Leopard', '6': 'Snow Leopard', '7': 'Lion', '8': 'Mountain Lion',
-                   '9': 'Mavericks', '10': 'Yosemite', '11': 'El Capitan', '12': 'Sierra'}
-
     if IS_LINUX:
         from bleachbit.Unix import get_distribution_name_version
         info['get_distribution_name_version()'] = get_distribution_name_version()
     elif IS_MAC:
         if hasattr(platform, 'mac_ver'):
             mac_version = platform.mac_ver()[0]
-            version_minor = mac_version.split('.')[1]
-            if version_minor in macosx_dict:
-                info['platform.mac_ver()'] = f'{mac_version} ({macosx_dict[version_minor]})'
+            from bleachbit.Mac import macos_version_name
+            name = macos_version_name(mac_version)
+            if name:
+                info['platform.mac_ver()'] = f'{mac_version} ({name})'
     else:
         info['platform.uname().version'] = platform.uname().version
 

@@ -135,7 +135,6 @@ install_debian() {
         xdg-utils
     )
     local runtime_pip=(
-        python3-chardet
         python3-distro
         python3-psutil
         python3-requests
@@ -161,6 +160,7 @@ install_debian() {
         python3-pyflakes
         python3-pytest
         python3-pytest-xdist
+        python3-pytest-rerunfailures
         pylint
     )
     if [[ "$VENV" == 1 ]]; then
@@ -194,7 +194,6 @@ install_fedora() {
         xdg-utils
     )
     local runtime_pip=(
-        python3-chardet
         python3-distro
         python3-psutil
         python3-requests
@@ -224,6 +223,7 @@ install_fedora() {
         python3-pyflakes
         python3-pytest
         python3-pytest-xdist
+        python3-pytest-rerunfailures
         pylint
     )
     # skip dnf update: focus on just the installation.
@@ -278,7 +278,6 @@ install_opensuse() {
         xdg-utils
     )
     local runtime_pip=(
-        "${py}-chardet"
         "${py}-psutil"
         "${py}-requests"
     )
@@ -303,6 +302,7 @@ install_opensuse() {
     local dev_pip=(
         "${py}-pytest"
         "${py}-pytest-xdist"
+        "${py}-pytest-rerunfailures"
     )
     # Lint tools on openSUSE are packaged differently; install via pip
     # in dev mode if the system packages are unavailable.
@@ -342,7 +342,6 @@ install_arch() {
         xdg-utils
     )
     local runtime_pip=(
-        python-chardet
         python-distro
         python-psutil
         python-requests
@@ -362,6 +361,7 @@ install_arch() {
         python-pyflakes
         python-pytest
         python-pytest-xdist
+        python-pytest-rerunfailures
         pylint
     )
     # no `pacman -Sy` to avoid partial upgrade.
@@ -399,7 +399,6 @@ install_freebsd() {
     local runtime=(
         lsof # for checking for open files
         python3
-        "${py}-chardet"
         "${py}-distro"
         "${py}-psutil"
         "${py}-requests"
@@ -457,7 +456,7 @@ setup_venv() {
     fi
     if [[ "$MODE" == "dev" ]]; then
         echo "[venv] installing dev/test/lint Python deps"
-        pip install pylint pyflakes autopep8 pytest pytest-xdist
+        pip install pylint pyflakes autopep8 pytest pytest-xdist pytest-rerunfailures
     fi
 }
 

@@ -117,20 +117,24 @@ def _enumerate_proc_fs():
                                     stat_content.rindex(')')]
             except (OSError, ValueError):
                 continue
-        same_user = False
         try:
             same_user = os.stat(pid_dir).st_uid == target_uid
         except OSError:
-            pass
+            # the process exited between listing and stat
+            same_user = False
         yield ProcessInfo(pid, name, same_user)
 
 
 def _enumerate_ps_aux():
     """ps aux strategy (BSD/macOS)"""
-    from bleachbit.General import get_real_username
+    from bleachbit.General import (get_real_username, resolve_exe,
+                                   sanitize_root_env)
     current_user = get_real_username()
+    # sanitize the env so a hostile inherited LD_*/DYLD_* cannot redirect
+    # this child when BleachBit runs as root.
     ps_out = subprocess.check_output(
-        ["ps", "aux", "-c"], universal_newlines=True)
+        [resolve_exe('ps'), "aux", "-c"], universal_newlines=True,
+        env=sanitize_root_env(dict(os.environ)))
     first_line = ps_out.split('\n', maxsplit=1)[0].strip()
     if "USER" not in first_line or "COMMAND" not in first_line:
         raise RuntimeError("Unexpected ps header format")

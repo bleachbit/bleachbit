@@ -550,7 +550,7 @@ class ActionTestCase(common.BleachbitTestCase):
 
         # A fresh walk of the same path must still see every file
         results = [next(cmd.execute(False))['path']
-                  for cmd in _action_str_to_commands(action_str)]
+                   for cmd in _action_str_to_commands(action_str)]
         self.assertEqual(sorted(results), sorted(filenames))
 
     def test_package_manager_missing(self):

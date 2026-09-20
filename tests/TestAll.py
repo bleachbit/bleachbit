@@ -43,7 +43,8 @@ def main():
         with common.set_temporary_env('BLEACHBIT_TEST_OPTIONS_DIR', testdir):
             suite = unittest.defaultTestLoader.discover(
                 os.getcwd(), pattern='Test*.py')
-            success = unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()
+            success = unittest.TextTestRunner(
+                verbosity=2).run(suite).wasSuccessful()
 
     elapsed_time = time.time() - start_time
     minutes = int(elapsed_time // 60)

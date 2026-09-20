@@ -15,6 +15,7 @@ import os
 import re
 import shutil
 import sqlite3
+from unittest import mock
 
 # first party imports
 from bleachbit.Options import options
@@ -455,6 +456,57 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
                                  Special.delete_chrome_keywords,
                                  check_chrome_keywords)
 
+    def test_delete_office_registrymodifications(self):
+        """Unit test for delete_office_registrymodifications"""
+        xml_str = (
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<oor:items xmlns:oor="http://openoffice.org/2001/registry">\n'
+            '  <item oor:path="/org.openoffice.Office.Histories/Histories/'
+            'PickList">\n'
+            '    <value>keep me out of it</value>\n'
+            '  </item>\n'
+            '</oor:items>\n')
+        fn = os.path.join(self.mkdtemp(prefix='bleachbit-office-xcu'),
+                          'registrymodifications.xcu')
+        self.write_file(fn, text=xml_str)
+        Special.delete_office_registrymodifications(fn)
+        with open(fn, encoding='utf-8') as f:
+            contents = f.read()
+        self.assertNotIn('PickList', contents)
+
+    def test_delete_office_registrymodifications_rejects_dtd(self):
+        """A registrymodifications.xcu with a DTD is rejected (entity-expansion defense)"""
+        xml_str = (
+            '<?xml version="1.0"?>\n'
+            '<!DOCTYPE oor:items [ <!ENTITY x "y"> ]>\n'
+            '<oor:items xmlns:oor="http://openoffice.org/2001/registry"/>\n')
+        fn = os.path.join(self.mkdtemp(prefix='bleachbit-office-xcu-dtd'),
+                          'registrymodifications.xcu')
+        self.write_file(fn, text=xml_str)
+        self.assertRaises(
+            ValueError, Special.delete_office_registrymodifications, fn)
+
+    def test_delete_office_registrymodifications_refuses_symlink(self):
+        """delete_office_registrymodifications() must not write through a symlink"""
+        xml_str = (
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<oor:items xmlns:oor="http://openoffice.org/2001/registry">\n'
+            '  <item oor:path="/org.openoffice.Office.Histories/Histories/'
+            'PickList">\n'
+            '    <value>keep me out of it</value>\n'
+            '  </item>\n'
+            '</oor:items>\n')
+        fn = os.path.join(self.mkdtemp(prefix='bleachbit-office-xcu-link'),
+                          'registrymodifications.xcu')
+        self.write_file(fn, text=xml_str)
+        with mock.patch('bleachbit.Special.os.path.islink',
+                        side_effect=lambda p: p == fn):
+            with self.assertRaises(OSError):
+                Special.delete_office_registrymodifications(fn)
+        with open(fn, encoding='utf-8') as f:
+            contents = f.read()
+        self.assertIn('PickList', contents)
+
     def test_delete_mozilla_url_history(self):
         """Test for delete_mozilla_url_history"""
         self.sqlite_clean_helper(
@@ -599,6 +651,37 @@ INSERT INTO moz_pages_w_icons VALUES(1,'https://example.com/sub/page',123456789)
         assert icon_ids == [1], \
             "Icon on bookmarked domain must be kept"
 
+    def test_delete_mozilla_favicons_rejects_non_int_ids(self):
+        """Non-integer icon IDs must raise ValueError to avoid SQL injection."""
+        tempdir = self.mkdir('non-int-ids')
+        places_path = os.path.join(tempdir, 'places.sqlite')
+        favicons_path = os.path.join(tempdir, 'favicons.sqlite')
+        places_sql = """
+CREATE TABLE moz_bookmarks (id INTEGER PRIMARY KEY, type INTEGER, fk INTEGER DEFAULT NULL, parent INTEGER, position INTEGER, title LONGVARCHAR);
+INSERT INTO moz_bookmarks VALUES(1,1,1,2,0,'Example');
+CREATE TABLE moz_places (id INTEGER PRIMARY KEY, url LONGVARCHAR);
+INSERT INTO moz_places VALUES(1,'https://example.com/');
+"""
+        favicons_sql = """
+CREATE TABLE moz_icons (id INTEGER PRIMARY KEY, icon_url TEXT NOT NULL);
+CREATE TABLE moz_icons_to_pages (page_id INTEGER NOT NULL, icon_id INTEGER NOT NULL, expire_ms INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (page_id, icon_id)) WITHOUT ROWID;
+CREATE TABLE moz_pages_w_icons (id INTEGER PRIMARY KEY, page_url TEXT NOT NULL, page_url_hash INTEGER NOT NULL);
+"""
+        FileUtilities.execute_sqlite3(places_path, places_sql)
+        FileUtilities.execute_sqlite3(favicons_path, favicons_sql)
+
+        def fake_get(path, sql, row_factory=None, parameters=()):
+            if 'icon_url' in sql:
+                # First query: orphaned favicons. Inject a non-integer ID.
+                return [(1, 'https://example.com/'),
+                        ('2; drop table moz_icons; --', 'https://other.example/')]
+            # Second query: bookmarked URLs.
+            return ['https://example.com/']
+
+        with mock.patch.object(Special, '_get_sqlite_values', fake_get):
+            with self.assertRaises(ValueError):
+                Special.delete_mozilla_favicons(favicons_path)
+
     def test_remove_path_from_url(self):
         """Test the function _remove_path_from_url"""
         for tests in (('fake-favicon-uri:https://support.mozilla.org/en-US/products/firefox', 'https://support.mozilla.org'),
@@ -638,34 +721,50 @@ INSERT INTO "meta" VALUES('version','20');"""
         self.assertExists(filename)
         # run the test
         ver = Special.get_sqlite_int(
-            filename, 'select value from meta where key="version"')
+            filename, "select value from meta where key='version'")
         self.assertEqual(ver, [20])
         os.unlink(filename)
 
     def test_get_sqlite_values(self):
         """Unit test for get_sqlite_values()"""
         ddl = """CREATE TABLE foo(id int, value int);INSERT INTO foo VALUES(12, 34), (56, 78);"""
-        # create test file
-        filename = os.path.join(self.tempdir, 'test_get_sqlite_values.sqlite')
-        FileUtilities.execute_sqlite3(filename, ddl)
-        self.assertExists(filename)
-        # run the test
         sql = 'select id, value from foo'
-        # pylint: disable=protected-access
-        ver = Special._get_sqlite_values(filename, sql)
-        self.assertEqual(ver, [(12, 34), (56, 78)])
-        ver = Special._get_sqlite_values(
-            filename, f'{sql} where id = 0')
-        self.assertEqual(ver, [])
-        with self.assertRaises(sqlite3.OperationalError):
-            Special._get_sqlite_values(
-                filename, 'select id, value from does_not_exist')
+        # Special characters check that the path is properly escaped as a
+        # SQLite URI, not misparsed as query/fragment separators.
+        basenames = ['test_get_sqlite_values.sqlite',
+                     'space in name.sqlite', 'hash#in#name#.sqlite']
+        if not IS_WINDOWS:
+            basenames.append('question?mark.sqlite')
+        for basename in basenames:
+            with self.subTest(basename=basename):
+                filename = os.path.join(self.tempdir, basename)
+                FileUtilities.execute_sqlite3(filename, ddl)
+                self.assertExists(filename)
+                # pylint: disable=protected-access
+                ver = Special._get_sqlite_values(filename, sql)
+                self.assertEqual(ver, [(12, 34), (56, 78)])
+                ver = Special._get_sqlite_values(
+                    filename, f'{sql} where id = 0')
+                self.assertEqual(ver, [])
+                with self.assertRaises(sqlite3.OperationalError):
+                    Special._get_sqlite_values(
+                        filename, 'select id, value from does_not_exist')
+                os.unlink(filename)
         # If file is missing, raise exception and do not create the file.
         non_existing_file = os.path.join(self.tempdir, 'non_existing_file')
         with self.assertRaises(sqlite3.OperationalError):
             Special._get_sqlite_values(non_existing_file, sql)
         self.assertNotExists(non_existing_file)
-        os.unlink(filename)
+
+    def test_sqlite_uri(self):
+        """_sqlite_uri percent-encodes the path so '?' cannot defeat the mode"""
+        from bleachbit.Special import _sqlite_uri
+        uri = _sqlite_uri('/tmp/a?mode=rwc/x.db', 'ro')
+        self.assertTrue(uri.endswith('?mode=ro'))
+        self.assertNotIn('?mode=rwc', uri)
+        self.assertIn('%3F', uri)  # the path's '?' is encoded, not a delimiter
+        # no mode -> no query string at all
+        self.assertNotIn('?', _sqlite_uri('/tmp/plain.db'))
 
     def test_sqlite_table_exists(self):
         """Unit test for sqlite_table_exists()"""
@@ -699,22 +798,82 @@ INSERT INTO "meta" VALUES('version','20');"""
 
                 os.unlink(filename)
 
-        # Test non-existing file
+        # Test non-existing file — should return False, not raise
         non_existing_file = os.path.join(self.tempdir, 'file_does_not_exist')
         self.assertFalse(Special.sqlite_table_exists(
             non_existing_file, 'table_does_not_exist'))
         self.assertNotExists(non_existing_file)
 
-    def test_sqlite_is_valid_database(self):
-        """Unit test for _sqlite_is_valid_database()"""
-        # create test file
+    def test_sqlite_table_exists_permission_denied(self):
+        """sqlite_table_exists raises PermissionError when the file exists
+        but cannot be opened (e.g. antivirus blocking, exclusive lock).
+
+        Norton Antivirus block access, causing SQLITE_CANTOPEN
+        https://github.com/bleachbit/bleachbit/issues/2288
+        """
+        # Create a valid SQLite database
         filename = os.path.join(
-            self.tempdir, 'test_sqlite_is_valid_database.sqlite')
+            self.tempdir, 'test_permission_denied.sqlite')
+        sql = "CREATE TABLE cookies(host_key TEXT)"
+        FileUtilities.execute_sqlite3(filename, sql)
+        self.assertExists(filename)
+
+        # Simulate SQLITE_CANTOPEN
+        # 14: no extended variant
+        # 782: SQLITE_CANTOPEN_FULLPATH shares low byte 14
+        cantopen_exc = sqlite3.OperationalError(
+            'unable to open database file')
+        for errorcode in (14, 782):
+            cantopen_exc.sqlite_errorcode = errorcode
+
+            with mock.patch('sqlite3.connect',
+                            side_effect=cantopen_exc):
+                with self.assertRaises(PermissionError):
+                    Special.sqlite_table_exists(filename, 'cookies')
+
+        # Non-existing file with same mock should still return False
+        non_existing = os.path.join(self.tempdir, 'no_such_file.db')
+        with mock.patch('sqlite3.connect',
+                        side_effect=cantopen_exc):
+            self.assertFalse(
+                Special.sqlite_table_exists(non_existing, 'cookies'))
+
+    def test_sqlite_table_exists_other_operational_error(self):
+        """sqlite_table_exists returns False for OperationalError other
+        than SQLITE_CANTOPEN (e.g. SQLITE_BUSY)."""
+        filename = os.path.join(
+            self.tempdir, 'test_other_op_error.sqlite')
         sql = "CREATE TABLE foo(id int)"
         FileUtilities.execute_sqlite3(filename, sql)
         self.assertExists(filename)
-        # run the test
-        self.assertTrue(Special._sqlite_is_valid_database(filename))
+
+        # SQLITE_BUSY (5) — should still return False, not raise
+        busy_exc = sqlite3.OperationalError('database is locked')
+        busy_exc.sqlite_errorcode = 5
+
+        with mock.patch('sqlite3.connect',
+                        side_effect=busy_exc):
+            self.assertFalse(
+                Special.sqlite_table_exists(filename, 'foo'))
+
+        os.unlink(filename)
+
+    def test_sqlite_is_valid_database(self):
+        """Unit test for _sqlite_is_valid_database()"""
+        sql = "CREATE TABLE foo(id int)"
+        # Special characters check that the path is properly escaped as a
+        # SQLite URI, not misparsed as query/fragment separators.
+        basenames = ['test_sqlite_is_valid_database.sqlite',
+                     'space in name.sqlite', 'hash#in#name#.sqlite']
+        if not IS_WINDOWS:
+            basenames.append('question?mark.sqlite')
+        for basename in basenames:
+            with self.subTest(basename=basename):
+                filename = os.path.join(self.tempdir, basename)
+                FileUtilities.execute_sqlite3(filename, sql)
+                self.assertExists(filename)
+                self.assertTrue(Special._sqlite_is_valid_database(filename))
+                os.unlink(filename)
         # create test file
         other_file = os.path.join(
             self.tempdir, 'test_sqlite_is_valid_database_invalid.sqlite')

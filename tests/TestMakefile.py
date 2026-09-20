@@ -124,7 +124,8 @@ class MakefileTestCase(common.BleachbitTestCase):
                            'install', 'DESTDIR=' + install_tgt_dir]
         os.chdir(extract_subdir)
         (rc, _, stderr) = run_external(install_command)
-        self.assertEqual(rc, 0, f"make install failed with rc={rc}, stderr={stderr}")
+        self.assertEqual(
+            rc, 0, f"make install failed with rc={rc}, stderr={stderr}")
         self.assertTrue(os.path.isdir(install_tgt_dir))
         self.assertExists(os.path.join(
             install_tgt_dir, 'usr/local/share/bleachbit/cleaners/chromium.xml'))

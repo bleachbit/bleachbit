@@ -24,18 +24,25 @@ from unittest import mock
 try:
     import pytest
 except ImportError:  # pytest is optional for plain unittest discovery
+    class _MarkShimMeta(type):
+        """Metaclass so any @pytest.mark.<name> is a no-op decorator.
+
+        Supports both forms: ``@pytest.mark.foo`` (no parens) and
+        ``@pytest.mark.foo(...)`` (with parens).
+        """
+        def __getattr__(cls, _name):
+            def decorator(func=None, *_args, **_kwargs):
+                if callable(func):
+                    # Used as @pytest.mark.foo without parentheses.
+                    return func
+                # Used as @pytest.mark.foo(...) with parentheses.
+                return lambda f: f
+            return decorator
+
     class _PytestShim:
         """No-op stand-in so @pytest.mark.* decorators work under unittest."""
-        class mark:
-            @staticmethod
-            def xdist_group(_name):
-                def decorator(func):
-                    return func
-                return decorator
-
-            @staticmethod
-            def no_xdist(func):
-                return func
+        class mark(metaclass=_MarkShimMeta):
+            pass
     pytest = _PytestShim()
 
 import bleachbit
@@ -167,6 +174,22 @@ def set_temporary_env(env_var, env_value):
             os.environ.pop(env_var, None)
         else:
             os.environ[env_var] = original_value
+
+
+def get_volatile_dir():
+    """Return the volatile system temporary directory for TOCTOU tolerance.
+
+    Use tempfile.gettempdir() instead of a hardcoded '/tmp' (POSIX) or
+    '%temp%' (Windows) so custom TMPDIR/TMP/TEMP environments work.
+    gettempdir() prefers TMP over TEMP on Windows while winapp '%Temp%'
+    expands to TEMP, but conftest.py sets both identically, so the
+    difference is theoretical.
+    """
+    volatile_dir = tempfile.gettempdir().rstrip('/\\')
+    if not volatile_dir:
+        # TMPDIR=/ would rstrip to an empty prefix that matches every path
+        volatile_dir = os.sep
+    return volatile_dir
 
 
 class BleachbitTestCase(unittest.TestCase):
@@ -309,16 +332,44 @@ class BleachbitTestCase(unittest.TestCase):
 
     def tearDown(self):
         """Call after each test method; restore options file, reload Options"""
-        if self._options_file_snapshot is not None:
-            os.makedirs(os.path.dirname(bleachbit.options_file), exist_ok=True)
-            with open(bleachbit.options_file, 'wb') as f:
-                f.write(self._options_file_snapshot)
-        elif os.path.exists(bleachbit.options_file):
-            os.remove(bleachbit.options_file)
+        # Restore the working directory in case a test chdir'd into
+        # self.tempdir (e.g., test_assertExists_relative_path) to avoid
+        # WinError 32 in rmtree() in tearDownClass.
+        basedir = os.path.join(os.path.dirname(__file__), '..')
+        os.chdir(basedir)
+        # Cancel first: a deferred flush holds bleachbit.ini open, which
+        # fails the remove below with WinError 32. Cancelling takes the
+        # flush lock, so it also waits out a flush already running.
+        bleachbit.Options.options.cancel_pending_flush()
+        self._restore_options_file()
         bleachbit.Options.options.restore()
         # cancel the flush timer restore() re-arms when the file has no
         # matching version, else it fires during a later test
         bleachbit.Options.options.cancel_pending_flush()
+
+    def _restore_options_file(self):
+        """Put bleachbit.ini back the way setUp() found it.
+
+        Retries because on Windows a test subprocess can briefly hold
+        the file open.
+        """
+        for attempt in range(5):
+            try:
+                if self._options_file_snapshot is not None:
+                    os.makedirs(os.path.dirname(
+                        bleachbit.options_file), exist_ok=True)
+                    with open(bleachbit.options_file, 'wb') as f:
+                        f.write(self._options_file_snapshot)
+                elif os.path.exists(bleachbit.options_file):
+                    os.remove(bleachbit.options_file)
+                return
+            except PermissionError:
+                logger.warning('tearDown: restoring %s failed (attempt %d): %s',
+                               bleachbit.options_file, attempt + 1,
+                               sys.exc_info()[1])
+                if attempt == 4:
+                    raise
+                time.sleep(0.5)
 
     #
     # type asserts
@@ -351,7 +402,7 @@ class BleachbitTestCase(unittest.TestCase):
             # Python 3.4: on Windows os.path.[l]exists may return False when access is denied:
             # https://bugs.python.org/issue28075
             return True
-        except:
+        except Exception:
             return False
 
     #
@@ -430,7 +481,8 @@ class BleachbitTestCase(unittest.TestCase):
         """
         if text is not None:
             if contents != b'':
-                raise ValueError("write_file: `text` is exclusive to `contents`")
+                raise ValueError(
+                    "write_file: `text` is exclusive to `contents`")
             contents = text
             mode = 'w'
             encoding = 'utf-8'
@@ -581,12 +633,19 @@ def touch_file(filename):
         # Make the directory, if it does not exist.
         os.makedirs(dname)
     Path(filename).touch()
-    assert (os.path.exists(filename))
+    assert os.path.exists(filename)
     assert not is_normal_directory(filename)
 
 
-def validate_result(self, result, really_delete=False):
-    """Validate the command returned valid results"""
+def validate_result(self, result, really_delete=False, allow_vanishing=False):
+    """Validate the command returned valid results.
+
+    Args:
+        result: The result dictionary to validate.
+        really_delete: Whether the operation actually deleted files.
+        allow_vanishing: When True, allows for files that may disappear between
+            discovery and validation (e.g., /tmp on a busy system)
+    """
     self.assertIsInstance(result, dict, "result is a %s" % type(result))
     # label
     self.assertIsString(result['label'])
@@ -609,7 +668,12 @@ def validate_result(self, result, really_delete=False):
     if isinstance(filename, str) and not filename[0:2] == 'HK':
         if really_delete:
             self.assertNotLExists(filename)
+        elif allow_vanishing:
+            # Tolerate vanishing files during preview.
+            if not os.path.lexists(filename):
+                logger.debug('vanished %s', filename)
         else:
+            # Do not tolerate vanishing during preview.
             self.assertLExists(filename)
 
 

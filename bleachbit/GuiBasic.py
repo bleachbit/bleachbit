@@ -22,7 +22,9 @@ Basic GUI code
 """
 
 # standard library
+import logging
 import os
+import re
 
 # local import
 from bleachbit import IS_POSIX, IS_WINDOWS
@@ -34,6 +36,8 @@ if IS_WINDOWS:
 
 # Ensure GTK is available for this GUI module
 require_gtk()
+
+logger = logging.getLogger(__name__)
 
 
 # TRANSLATORS: Label for the Cancel button in several dialog windows:
@@ -74,54 +78,45 @@ def browse_folder(parent, title, multiple, stock_button):
     return ret
 
 
-def browse_file(parent, title):
-    """Prompt user to select a single file"""
+def _browse_open(parent, title, multiple, stock_button):
+    """Ask the user to select one or more files. Return path(s) or None."""
 
     if IS_WINDOWS and not os.getenv('BB_NATIVE'):
+        if multiple:
+            return Windows.browse_files(parent, title)
         return Windows.browse_file(parent, title)
 
     chooser = Gtk.FileChooserDialog(title=title,
                                     transient_for=parent,
                                     action=Gtk.FileChooserAction.OPEN)
     chooser.add_buttons(CANCEL_BUTTON_LABEL, Gtk.ResponseType.CANCEL,
-                        # TRANSLATORS: This is a label for the Open button in a file chooser dialog.
-                        _("_Open"), Gtk.ResponseType.OK)
+                        stock_button, Gtk.ResponseType.OK)
     chooser.set_default_response(Gtk.ResponseType.OK)
+    chooser.set_select_multiple(multiple)
     chooser.set_current_folder(os.path.expanduser('~'))
     resp = chooser.run()
-    path = chooser.get_filename()
+    if multiple:
+        ret = chooser.get_filenames()
+    else:
+        ret = chooser.get_filename()
     chooser.destroy()
 
     if Gtk.ResponseType.OK != resp:
         # user cancelled
         return None
 
-    return path
+    return ret
+
+
+def browse_file(parent, title):
+    """Prompt user to select a single file"""
+    # TRANSLATORS: This is a label for the Open button in a file chooser dialog.
+    return _browse_open(parent, title, False, _("_Open"))
 
 
 def browse_files(parent, title):
     """Prompt user to select multiple files to delete"""
-
-    if IS_WINDOWS and not os.getenv('BB_NATIVE'):
-        return Windows.browse_files(parent, title)
-
-    chooser = Gtk.FileChooserDialog(title=title,
-                                    transient_for=parent,
-                                    action=Gtk.FileChooserAction.OPEN)
-    chooser.add_buttons(CANCEL_BUTTON_LABEL, Gtk.ResponseType.CANCEL,
-                        DELETE_BUTTON_LABEL, Gtk.ResponseType.OK)
-    chooser.set_default_response(Gtk.ResponseType.OK)
-    chooser.set_select_multiple(True)
-    chooser.set_current_folder(os.path.expanduser('~'))
-    resp = chooser.run()
-    paths = chooser.get_filenames()
-    chooser.destroy()
-
-    if Gtk.ResponseType.OK != resp:
-        # user cancelled
-        return None
-
-    return paths
+    return _browse_open(parent, title, True, DELETE_BUTTON_LABEL)
 
 
 def delete_confirmation_dialog(parent, mention_preview, shred_settings=False):
@@ -257,6 +252,9 @@ def message_dialog(parent, msg, mtype=Gtk.MessageType.ERROR, buttons=Gtk.Buttons
 
 def open_url(url, parent_window=None, prompt=True):
     """Open an HTTP URL.  Try to run as non-root."""
+    if not url.lower().startswith(('http://', 'https://')):
+        logger.error('refusing to open URL with disallowed scheme: %s', url)
+        return
     # drop privileges so the web browser is running as a normal process
     if IS_POSIX and os.getuid() == 0:
         # TRANSLATORS: This is an error message shown to root users.
@@ -267,7 +265,6 @@ def open_url(url, parent_window=None, prompt=True):
         return
     if prompt:
         # find hostname
-        import re
         ret = re.search(r'^http(s)?://([a-z.]+)', url)
         if not ret:
             host = url

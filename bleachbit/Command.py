@@ -46,7 +46,7 @@ logger = logging.getLogger(__name__)
 
 def ret_keep_list(path):
     """Return information that this file matched by keep list"""
-    ret = {
+    return {
         # TRANSLATORS: This is the label in the log indicating a path
         # was skipped because it matches the keep list
         'label': _('Skip'),
@@ -54,7 +54,6 @@ def ret_keep_list(path):
         'n_special': 0,
         'path': path,
         'size': 0}
-    return ret
 
 
 class Delete:
@@ -82,7 +81,9 @@ class Delete:
         except Exception as e:
             # Handle Windows-specific pywintypes.error
             # pywintypes.error: (5, 'FindFirstFileW', 'Access is denied.')
-            if hasattr(e, 'winerror'):
+            # Use a truthy check rather than hasattr(): on Windows every
+            # OSError carries a winerror attribute, sometimes None.
+            if getattr(e, 'winerror', None):
                 size = None
             else:
                 raise
@@ -135,7 +136,8 @@ class Function:
             label (str): Label for display in the UI
             preview_func (function, optional): Function to call in preview mode
 
-        func and preview_func take no arguments and return an integer.
+        func takes the path when path is set and no arguments when it is
+        None. preview_func always takes no arguments. Both return an integer.
         """
         self.path = path
         self.func = func
@@ -211,8 +213,7 @@ class Function:
                     if 'no such collation sequence' in str(e):
                         logger.debug(str(e))
                         return
-                    logger.exception(e)
-                    return
+                    raise
                 try:
                     newsize = FileUtilities.getsize(self.path)
                 except OSError as e:
@@ -225,7 +226,36 @@ class Function:
         yield ret
 
 
-class Ini:
+class ConfigFile:
+
+    """Base for commands that shrink a configuration file in place"""
+
+    def _clean(self):
+        """Rewrite the file without the targeted content"""
+        raise NotImplementedError
+
+    def execute(self, really_delete):
+        """Make changes and return results"""
+
+        if FileUtilities.whitelisted(self.path):
+            yield ret_keep_list(self.path)
+            return
+
+        ret = {
+            'label': CLEAN_FILE_LABEL,
+            'n_deleted': 0,
+            'n_special': 1,
+            'path': self.path,
+            'size': None}
+        if really_delete:
+            oldsize = FileUtilities.getsize(self.path)
+            self._clean()
+            newsize = FileUtilities.getsize(self.path)
+            ret['size'] = oldsize - newsize
+        yield ret
+
+
+class Ini(ConfigFile):
 
     """Remove sections or parameters from a .ini file"""
 
@@ -238,28 +268,11 @@ class Ini:
     def __str__(self):
         return f'Command to clean .ini path={self.path}, section={self.section}, parameter={self.parameter} '
 
-    def execute(self, really_delete):
-        """Make changes and return results"""
-
-        if FileUtilities.whitelisted(self.path):
-            yield ret_keep_list(self.path)
-            return
-
-        ret = {
-            'label': CLEAN_FILE_LABEL,
-            'n_deleted': 0,
-            'n_special': 1,
-            'path': self.path,
-            'size': None}
-        if really_delete:
-            oldsize = FileUtilities.getsize(self.path)
-            FileUtilities.clean_ini(self.path, self.section, self.parameter)
-            newsize = FileUtilities.getsize(self.path)
-            ret['size'] = oldsize - newsize
-        yield ret
+    def _clean(self):
+        FileUtilities.clean_ini(self.path, self.section, self.parameter)
 
 
-class Json:
+class Json(ConfigFile):
 
     """Remove a key from a JSON configuration file"""
 
@@ -271,25 +284,8 @@ class Json:
     def __str__(self):
         return f'Command to clean JSON file, path={self.path}, address={self.address} '
 
-    def execute(self, really_delete):
-        """Make changes and return results"""
-
-        if FileUtilities.whitelisted(self.path):
-            yield ret_keep_list(self.path)
-            return
-
-        ret = {
-            'label': CLEAN_FILE_LABEL,
-            'n_deleted': 0,
-            'n_special': 1,
-            'path': self.path,
-            'size': None}
-        if really_delete:
-            oldsize = FileUtilities.getsize(self.path)
-            FileUtilities.clean_json(self.path, self.address)
-            newsize = FileUtilities.getsize(self.path)
-            ret['size'] = oldsize - newsize
-        yield ret
+    def _clean(self):
+        FileUtilities.clean_json(self.path, self.address)
 
 
 class Shred(Delete):
@@ -326,8 +322,7 @@ class Truncate(Delete):
             'path': self.path,
             'size': FileUtilities.getsize(self.path)}
         if really_delete:
-            with open(self.path, 'w', encoding='ascii') as f:
-                f.truncate(0)
+            FileUtilities.truncate_file(self.path)
         yield ret
 
 
@@ -348,8 +343,6 @@ class Winreg:
         """Execute the Windows registry cleaner"""
         if not IS_WINDOWS:
             return
-        _str = None  # string representation
-        ret = None  # return value meaning 'deleted' or 'delete-able'
         if self.valuename:
             _str = f'{self.keyname}<{self.valuename}>'
             ret = bleachbit.Windows.delete_registry_value(self.keyname,

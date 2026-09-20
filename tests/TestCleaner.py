@@ -13,13 +13,15 @@ import glob
 import logging
 import os
 import shutil
+from unittest import mock
 from xml.dom.minidom import parseString
 
 import bleachbit
 from bleachbit import IS_WINDOWS, IS_POSIX
 from bleachbit.Action import ActionProvider, Command
-from bleachbit.Cleaner import Cleaner, backends, create_simple_cleaner, simpler_cleaner_process_path, register_cleaners
-import bleachbit.FileUtilities
+from bleachbit.Cleaner import Cleaner, System, backends, create_simple_cleaner, simpler_cleaner_process_path, register_cleaners
+from bleachbit.FileUtilities import extended_path_undo
+from bleachbit.PathUtils import path_startswith
 
 from tests import common
 
@@ -60,12 +62,23 @@ def register_all_cleaners():
             get_winapp2(),
             os.path.join(bleachbit.personal_cleaners_dir, 'winapp2.ini'),
         )
-    if not backends:
-        list(register_cleaners())
+    # Previously, we guarded registration with `if not backends`, but
+    # this was unreliable under pytest-xdist, like if a test created
+    # a single test cleaner.
+    list(register_cleaners())
     assert len(backends) > 1
 
 
 class CleanerTestCase(common.BleachbitTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        """Set up CleanerTestCase class"""
+        super().setUpClass()
+        # Register all cleaners once for the whole class so that tests can
+        # rely on `backends` being populated even when run in isolation.
+        # register_all_cleaners() is idempotent.
+        register_all_cleaners()
 
     def test_add_action(self):
         """Unit test for Cleaner.add_action()"""
@@ -144,9 +157,60 @@ class CleanerTestCase(common.BleachbitTestCase):
         cleaner.add_option('empty', 'name2', 'description2')
         self.assertEqual(list(cleaner.get_commands('empty')), [])
 
+    def test_deep_scan_after_action_without_deep_scan(self):
+        """An action without a deep scan must not hide later deep scans"""
+
+        class _DeepStubAction:
+            """Minimal action provider yielding one deep scan entry."""
+
+            def get_deep_scan(self):
+                yield ('deep', 'entry')
+
+        cleaner = Cleaner()
+        cleaner.add_option('opt', 'name', 'description')
+        # The base class stands in for any action without a deep scan,
+        # such as winreg or process.
+        cleaner.add_action('opt', ActionProvider(None))
+        cleaner.add_action('opt', _DeepStubAction())
+
+        self.assertEqual(list(cleaner.get_deep_scan('opt')),
+                         [('deep', 'entry')])
+
+        # should fail, like get_commands()
+        self.assertRaises(
+            RuntimeError, cleaner.get_deep_scan('unknown').__next__)
+
+    def test_has_action_key(self):
+        """Unit test for Cleaner.has_action_key()"""
+
+        class _StubAction:
+            """Minimal action provider carrying only an action_key."""
+
+            def __init__(self, action_key):
+                self.action_key = action_key
+
+        cleaner = Cleaner()
+        cleaner.add_option('opt', 'name', 'description')
+        cleaner.add_action('opt', _StubAction('delete'))
+        self.assertFalse(cleaner.has_action_key('opt', 'cookie'))
+        # an option id that was never registered is not an error
+        self.assertFalse(cleaner.has_action_key('missing', 'cookie'))
+
+        # an action added after the index was built must be reflected
+        cleaner.add_action('opt', _StubAction('cookie'))
+        self.assertTrue(cleaner.has_action_key('opt', 'cookie'))
+
+        # the action must belong to the option that is asked about
+        cleaner.add_action('other', _StubAction('shred'))
+        self.assertTrue(cleaner.has_action_key('other', 'shred'))
+        self.assertFalse(cleaner.has_action_key('opt', 'shred'))
+
     def test_auto_hide(self):
+        count = 0
         for key in sorted(backends):
             self.assertIsInstance(backends[key].auto_hide(), bool)
+            count += 1
+        self.assertGreater(count, 0)
 
     def test_create_simple_cleaner(self):
         """Unit test for method create_simple_cleaner"""
@@ -250,10 +314,14 @@ class CleanerTestCase(common.BleachbitTestCase):
         self.assertNotEqual(processed, self.tempdir)
 
     def test_get_name(self):
+        count = 0
         for key in sorted(backends):
             self.assertIsString(backends[key].get_name())
+            count += 1
+        self.assertGreater(count, 10)
 
     def test_get_description(self):
+        count = 0
         for key in sorted(backends):
             self.assertIsString(key)
             self.assertIsInstance(backends[key], Cleaner)
@@ -261,32 +329,66 @@ class CleanerTestCase(common.BleachbitTestCase):
             if desc is not None:
                 self.assertIsString(
                     desc, msg="description for '%s' is '%s'" % (key, desc))
+            count += 1
+        self.assertGreater(count, 10)
 
     def test_get_options(self):
+        count = 0
         for key in sorted(backends):
             for (test_id, name) in backends[key].get_options():
                 self.assertIsString(
                     test_id, msg='%s.%s is not a string' % (key, test_id))
                 self.assertIsString(name)
+                count += 1
+        self.assertGreater(count, 10)
 
     def test_get_commands(self):
+        validate_count = 0
+        # Directories shared across parallel pytest-xdist workers where
+        # files may appear/vanish between discovery and validation
+        # (TOCTOU).
+        # The system temporary directory covers Winapp2.ini
+        # `[Windows Temporary Files *]`, whose name and ID may change, so
+        # we check for it here by directory name.
+        volatile_dir = common.get_volatile_dir()
+
+        def is_volatile(path):
+            if not path:
+                return False
+            if IS_WINDOWS:
+                path = extended_path_undo(path)
+            return path_startswith(path, volatile_dir, case_sensitive=False)
+
         for key in sorted(backends):
             logger.debug("test_get_commands: key='%s'", key)
             for (option_id, __name) in backends[key].get_options():
+                is_system_tmp = (key, option_id) == ('system', 'tmp')
                 for cmd in backends[key].get_commands(option_id):
-                    for result in cmd.execute(really_delete=False):
-                        if result != True:
-                            break
-                        common.validate_result(self, result)
+                    try:
+                        for result in cmd.execute(really_delete=False):
+                            allow_vanishing = is_system_tmp \
+                                or is_volatile(result.get('path'))
+                            common.validate_result(
+                                self, result, allow_vanishing=allow_vanishing)
+                            validate_count += 1
+                    except FileNotFoundError as e:
+                        if not (is_system_tmp or is_volatile(e.filename)):
+                            raise
+                        logger.debug('TOCTOU: file vanished: %s', e.filename)
+        self.assertGreater(validate_count, 10,
+                           "expected >10 file/results to validate")
         # make sure trash and tmp don't return the same results
         if IS_WINDOWS:
             return
 
         def get_files(option_id):
             ret = []
-            register_all_cleaners()
             for cmd in backends['system'].get_commands(option_id):
-                result = next(cmd.execute(False))
+                try:
+                    result = next(cmd.execute(False))
+                except FileNotFoundError as e:
+                    logger.debug('TOCTOU: file vanished: %s', e.filename)
+                    continue
                 ret.append(result['path'])
             return ret
         trash_paths = get_files('trash')
@@ -349,6 +451,8 @@ class CleanerTestCase(common.BleachbitTestCase):
 
     def test_register_cleaners(self):
         """Unit test for register_cleaners"""
+        # setUpClass already registered cleaners; clear to test cold start.
+        backends.clear()
         register_all_cleaners()
         register_all_cleaners()
         backends.clear()
@@ -374,12 +478,24 @@ class CleanerTestCase(common.BleachbitTestCase):
         self.assertGreater(len(mgr.get_items()), 0)
         self.assertTrue(mgr.has_item(uri))
 
-        register_all_cleaners()
         for cmd in backends['system'].get_commands('recent_documents'):
             for result in cmd.execute(really_delete=True):
                 common.validate_result(self, result, True)
 
         self.assertEqual(len(mgr.get_items()), 0)
+
+    @common.skipIfWindows
+    def test_whitelist_home_with_regex_metacharacters(self):
+        """A home directory with regex metacharacters must still be kept"""
+        for home in ('/home/a*b', '/home/a+b', '/home/x)y(z'):
+            cleaner = System()
+            with mock.patch('os.path.expanduser',
+                            lambda path, home=home: path.replace('~', home, 1)):
+                cleaner.init_whitelist()
+            self.assertTrue(cleaner.whitelisted(home + '/.cache/mozilla/x'), home)
+            self.assertTrue(cleaner.whitelisted(home + '/.cache/kwin/y'), home)
+            self.assertFalse(cleaner.whitelisted(home + '/.cache/other/z'), home)
+            self.assertFalse(cleaner.whitelisted('/tmp/nope'), home)
 
     @common.skipIfWindows
     def test_whitelist(self):
@@ -421,7 +537,6 @@ class CleanerTestCase(common.BleachbitTestCase):
             ('~/.cache/qtshadercache-x86_64-little_endian-lp64/test_file', True),
             ('~/.cache/plasma_theme_default.kcache', True)
         ]
-        register_all_cleaners()
         for pathname, expected in tests:
             path = os.path.expanduser(
                 pathname) if pathname.startswith('~') else pathname
@@ -446,7 +561,6 @@ class CleanerTestCase(common.BleachbitTestCase):
         from bleachbit.Options import options
         original_custom_paths = options.get_custom_paths()
 
-        register_all_cleaners()
         test_pathname = os.path.join(self.tempdir, 'foo')
 
         # Check that custom cleaner doesn't iterate non-existent object

@@ -18,10 +18,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import gettext
+import locale
 import os
 import logging
 
-from bleachbit import IS_POSIX, IS_WINDOWS
+from bleachbit import IS_MAC, IS_POSIX, IS_WINDOWS
 
 logger = logging.getLogger(__name__)
 
@@ -284,7 +285,7 @@ def get_supported_language_codes():
                 if translation:
                     supported_langs.append(lang)
             except FileNotFoundError:
-                pass
+                logger.debug('no compiled translation for language %s', lang)
     return supported_langs
 
 
@@ -316,7 +317,6 @@ def get_active_language_code():
     else:
         if not options.get('auto_detect_lang') and options.has_option('forced_language') and options.get('forced_language'):
             return options.get('forced_language')
-    import locale
     # locale.getdefaultlocale() will be removed in Python 3.15, so
     # use getlocale() instead.
     # However, on Windows, getlocale() may return values like
@@ -328,7 +328,21 @@ def get_active_language_code():
         # Convert Windows LCID (e.g., 1033) to RFC1766 (e.g., en-US).
         user_locale = locale.windows_locale.get(lcid, '')
     else:
-        user_locale = locale.getlocale()[0]
+        # On macOS, locale.getlocale() always returns *something* (e.g.
+        # a built-in default) even with no LANG/LC_ALL in the
+        # environment at all, so its truthiness cannot detect "nothing
+        # was explicitly set". Check os.environ directly instead: if the
+        # caller (a shell, a test suite) put LANG/LC_ALL/LC_MESSAGES
+        # there on purpose, honor it via locale.getlocale(); otherwise
+        # (Finder launches the app with none of these set) prefer the
+        # real system preference from AppleLocale.
+        env_locale_set = any(
+            os.environ.get(name) for name in ("LC_ALL", "LC_MESSAGES", "LANG"))
+        if IS_MAC and not env_locale_set:
+            from bleachbit.Mac import get_macos_locale
+            user_locale = get_macos_locale()
+        else:
+            user_locale = locale.getlocale()[0]
 
     if not user_locale:
         user_locale = 'C'
@@ -367,7 +381,6 @@ def setup_translation():
             "Error in setup_translation() with language code %s: %s", user_locale, e)
         t = None
         return
-    import locale
     if hasattr(locale, 'bindtextdomain'):
         locale.bindtextdomain(text_domain, locale_dir)
         locale.textdomain(text_domain)
@@ -415,7 +428,6 @@ def get_text(str):
 
     The name has an underscore to avoid conflicting with gettext module.
     """
-    global attempted_setup_translation, t
     if not attempted_setup_translation:
         setup_translation()
     if not t:
@@ -425,7 +437,6 @@ def get_text(str):
 
 def nget_text(singular, plural, n):
     """Return translated string with plural variant"""
-    global t
     if not t:
         if 1 == n:
             return singular
@@ -438,7 +449,6 @@ def pget_text(msgctxt, msgid):
 
     Example context is button
     """
-    global t
     if not t:
         return msgid
     return t.pgettext(msgctxt, msgid)

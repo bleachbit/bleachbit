@@ -9,20 +9,21 @@ Test case for module FileUtilities
 """
 
 # standard library
+import codecs
 import contextlib
 import ctypes
+import errno
 import itertools
-import unittest.mock
 import json
 import locale
 import os
-import random
 import sqlite3
 import stat
 import subprocess
 import sys
 import tempfile
 import time
+import unittest.mock
 import warnings
 
 # third-party import
@@ -33,6 +34,7 @@ from tests.common import pytest
 # local import
 from bleachbit.FileUtilities import (
     _remove_windows_readonly,
+    _truncate_locked_file,
     bytes_to_human,
     children_in_directory,
     clean_ini,
@@ -61,6 +63,7 @@ from bleachbit.FileUtilities import (
     open_files_lsof,
     OpenFiles,
     same_partition,
+    truncate_file,
     uris_to_paths,
     vacuum_sqlite3,
     whitelisted
@@ -90,9 +93,8 @@ def ini_helper(self, execute):
     teststr = '#Test\n[RecentsMRL]\nlist=C:\\Users\\me\\Videos\\movie.mpg,C:\\Users\\me\\movie2.mpg\n'
     for encoding in ['utf-8', 'utf-8-sig']:
         with self.subTest(encoding=encoding):
-            extra_size = 0
-            if 'utf-8-sig' == encoding:
-                extra_size = 3
+            bom_size = 3 if 'utf-8-sig' == encoding else 0
+            extra_size = bom_size
             if IS_WINDOWS:
                 extra_size += teststr.count('\n')
 
@@ -114,10 +116,12 @@ def ini_helper(self, execute):
                              os.path.getsize(filename))
 
             # The parameter does exist, so the file shrinks.
-            # The file will be size 14 if chardet is available.
-            # Otherwise, size will be 17 with BOM.
+            # Comments are not preserved, so only "[RecentsMRL]\n" (14
+            # bytes) remains. The BOM is preserved, so utf-8-sig files
+            # are 17 bytes and plain utf-8 files are 14 bytes. clean_ini
+            # writes with newline='' so there is no \r\n expansion.
             execute(filename, 'RecentsMRL', 'list')
-            self.assertIn(os.path.getsize(filename), (14, 17))
+            self.assertEqual(14 + bom_size, os.path.getsize(filename))
 
             # The section does exist, so the file shrinks.
             execute(filename, 'RecentsMRL', None)
@@ -281,28 +285,48 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
     def test_bytes_to_human_roundtrip(self):
         """Test roundtrip conversion of bytes_to_human()
 
-        Example: 1,964,950 -> 2MB -> 2,000,000 with difference of 1.78% (0.0178).
+        Example: 1,175,818 -> 1.2MB -> 1,200,000 is 2.06% different,
+        but only 24,182 bytes, within half of the displayed 0.1MB step.
         """
-
-        for _n in range(0, 1000):
-            bytes1 = random.randrange(0, 1000 ** 4)
-            human = bytes_to_human(bytes1)
-            bytes2 = human_to_bytes(human)
-            error = abs(float(bytes2 - bytes1) / bytes1)
-            self.assertLess(abs(
-                error), 0.02, f"{bytes1:,} ({human}) is "
-                f"{error * 100:.2f}% different than {bytes2:,}")
+        old_iec = options.get('units_iec')
+        for units_iec in (False, True):
+            options.set('units_iec', units_iec)
+            base = 1024 if units_iec else 1000
+            for k in range(0, 6):
+                step = base ** k
+                decimals = 2 if k >= 3 else (1 if k >= 1 else 0)
+                half_step = 0.5 * 10 ** -decimals * step
+                for frac in (1.0, 1.049, 1.05, 2.5, 7.5, 9.994, 9.995):
+                    for delta in (-1, 0, 1):
+                        bytes1 = int(frac * step) + delta
+                        if bytes1 <= 0:
+                            continue
+                        human = bytes_to_human(bytes1)
+                        if units_iec:
+                            bytes2 = human_to_bytes(
+                                human.replace('i', ''), 'du')
+                        else:
+                            bytes2 = human_to_bytes(human)
+                        self.assertLessEqual(
+                            abs(bytes2 - bytes1), half_step + 1,
+                            f"{bytes1:,} -> {human} -> {bytes2:,} exceeds "
+                            f"half a display unit ({half_step:,.0f})")
+        options.set('units_iec', old_iec)
 
     def test_bytes_to_human_localization(self):
         """Test localization of bytes_to_human()"""
         if not hasattr(locale, 'format_string'):
             self.skipTest('Locale module does not support format_string')
+        old_locale = locale.setlocale(locale.LC_NUMERIC, None)
         try:
             locale.setlocale(locale.LC_NUMERIC, 'de_DE.utf8')
         except locale.Error as e:
             logger.warning('exception when setlocale to de_DE.utf8: %s', e)
         else:
-            self.assertEqual("1,01GB", bytes_to_human(1000 ** 3 + 5812389))
+            try:
+                self.assertEqual("1,01GB", bytes_to_human(1000 ** 3 + 5812389))
+            finally:
+                locale.setlocale(locale.LC_NUMERIC, old_locale)
 
     def test_children_in_directory(self):
         """Unit test for function children_in_directory()"""
@@ -431,7 +455,8 @@ class FileUtilitiesTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             def __exit__(self, *exc):
                 return False
 
-        first_entry = _FakeEntry(os.path.join(root, 'file_before'), is_dir=False)
+        first_entry = _FakeEntry(os.path.join(
+            root, 'file_before'), is_dir=False)
         with unittest.mock.patch(
                 'bleachbit.FileUtilities.os.scandir',
                 return_value=_RaisingScandir(first_entry)):
@@ -677,6 +702,63 @@ State=AAAA/wA...
                 options.set('shred', shred)
                 json_helper(self, clean_json)
 
+    def test_clean_ini_refuses_symlink(self):
+        """clean_ini() must not write through a symlink to another file
+
+        With shred disabled, the original file is never deleted, so a
+        (simulated) symlink at its path must block the write and leave
+        the original content in place. With shred enabled, the original
+        is deleted first as usual, and the guard must then block the
+        symlinked path from being recreated.
+        """
+        content = '[Section]\nkey=value\n'
+
+        options.set('shred', False)
+        filename = self.write_file('clean_ini_target_noshred', text=content)
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities.os.path.islink',
+                side_effect=lambda p: p == filename):
+            with self.assertRaises(OSError):
+                clean_ini(filename, 'Section', None)
+        with open(filename, encoding='utf-8') as f:
+            self.assertEqual(f.read(), content)
+
+        options.set('shred', True)
+        filename = self.write_file('clean_ini_target_shred', text=content)
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities.os.path.islink',
+                side_effect=lambda p: p == filename):
+            with self.assertRaises(OSError):
+                clean_ini(filename, 'Section', None)
+        self.assertNotExists(filename)
+
+    def test_clean_json_refuses_symlink(self):
+        """clean_json() must not write through a symlink to another file
+
+        See test_clean_ini_refuses_symlink for why shred=True and
+        shred=False need different post-conditions.
+        """
+        content = '{"deleteme": 1, "keep": 2}'
+
+        options.set('shred', False)
+        filename = self.write_file('clean_json_target_noshred', text=content)
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities.os.path.islink',
+                side_effect=lambda p: p == filename):
+            with self.assertRaises(OSError):
+                clean_json(filename, 'deleteme')
+        with open(filename, encoding='utf-8') as f:
+            self.assertEqual(f.read(), content)
+
+        options.set('shred', True)
+        filename = self.write_file('clean_json_target_shred', text=content)
+        with unittest.mock.patch(
+                'bleachbit.FileUtilities.os.path.islink',
+                side_effect=lambda p: p == filename):
+            with self.assertRaises(OSError):
+                clean_json(filename, 'deleteme')
+        self.assertNotExists(filename)
+
     @pytest.mark.no_xdist
     def test_delete(self):
         """Unit test for method delete()"""
@@ -735,7 +817,7 @@ State=AAAA/wA...
 
             # make symlink
             self.assertExists(srcname)
-            linkname = os.path.join(self.tempdir,'bblink')
+            linkname = os.path.join(self.tempdir, 'bblink')
             self.assertNotExists(linkname)
             link_fn(srcname, linkname)
             self.assertExists(linkname)
@@ -1027,6 +1109,34 @@ State=AAAA/wA...
                 self.assertDirectoryCount(tmp_dir, 0)
 
     @common.skipUnlessWindows
+    def test_truncate_file_refuses_reparse_point(self):
+        """truncate_file() refuses a junction or symlink target"""
+        target_dir = self.mkdtemp(prefix='truncate-target')
+        junction = os.path.join(self.mkdtemp(prefix='truncate'), 'link')
+        self._create_win_junction(target_dir, junction)
+        with self.assertRaises(OSError):
+            truncate_file(junction)
+
+    @common.skipIfWindows
+    def test_truncate_file_refuses_symlink(self):
+        """truncate_file() must not truncate a symlink's target"""
+        target = self.write_file('truncate_target', b'keepme')
+        link = os.path.join(self.tempdir, 'truncate_link')
+        os.symlink(target, link)
+        with self.assertRaises(OSError):
+            truncate_file(link)
+        self.assertEqual(os.path.getsize(target), len(b'keepme'))
+
+    @common.skipIfWindows
+    def test_truncate_locked_file_refuses_symlink(self):
+        """_truncate_locked_file() must not truncate a symlink's target"""
+        target = self.write_file('locked_truncate_target', b'keepme')
+        link = os.path.join(self.tempdir, 'locked_truncate_link')
+        os.symlink(target, link)
+        self.assertFalse(_truncate_locked_file(link))
+        self.assertEqual(os.path.getsize(target), len(b'keepme'))
+
+    @common.skipUnlessWindows
     def test_delete_junction(self):
         """Unit test for delete() with Windows junction
 
@@ -1141,11 +1251,42 @@ State=AAAA/wA...
                 delete(long_dir, shred=shred)
                 self.assertNotExists(extended_path(long_dir))
 
+    def test_clean_ini_non_utf8(self):
+        """clean_ini() leaves a non-UTF-8 file untouched and logs an error"""
+        # Latin-1 bytes that are invalid as UTF-8 (0xe9 = 'é' in Latin-1).
+        content = b'[RecentsMRL]\nlist=\xe9\xe9\n'
+        filename = self.write_file('bleachbit-test-ini-latin1', content)
+        with open(filename, 'rb') as f:
+            original = f.read()
+        with self.assertLogs('bleachbit.FileUtilities', level='ERROR') as cm:
+            clean_ini(filename, 'RecentsMRL', None)
+        self.assertIn('not valid UTF-8', cm.output[0])
+        # The file must not have been modified.
+        with open(filename, 'rb') as f:
+            self.assertEqual(original, f.read())
+        delete(filename)
+        self.assertNotExists(filename)
+
+    @common.skipUnlessWindows
     def test_detect_encoding(self):
-        """Unit test for detect_encoding"""
+        """Unit test for detect_encoding
+
+        The detect_encoding function is used only on Windows.
+
+        Old Linux distributions (e.g., openSUSE 15.6) charset_normalizer <= 3.4.1
+        misclassifies EUC-KR as big5hkscs. This was fixed in 3.4.2, but it's moot
+        because detect_encoding is not used on Linux. Also, the standard winapp2.ini
+        is ASCII as of September 2026.
+
+        311e49c: added use of detect_encoding for Winapp
+
+        498abfb: removed use of detect_encoding for cleaning .ini files, so
+        detect_encoding is no longer needed on Linux.
+        """
         eat_glass = '나는 유리를 먹을 수 있어요. 그래도 아프지 않아요'
         bom = '\ufeff' + eat_glass  # Add BOM for utf-8-sig
-        tests = (('This is just an ASCII file', ['ascii']),
+        # ASCII is valid UTF-8, so either answer reads the file correctly
+        tests = (('This is just an ASCII file', ['ascii', 'utf-8']),
                  (eat_glass, ['utf-8']),
                  # Accept both EUC-KR and CP949 for Korean
                  (eat_glass, ['EUC-KR', 'CP949']),
@@ -1162,21 +1303,27 @@ State=AAAA/wA...
                     temp.flush()
                 det = detect_encoding(temp.name)
 
+                # Detectors spell codec names differently, so compare
+                # the canonical names
+                expected_names = [codecs.lookup(e).name
+                                  for e in expected_encodings]
                 self.assertIn(
-                    det, expected_encodings,
+                    codecs.lookup(det).name, expected_names,
                     f"{file_contents} -> {det}, expected one of {expected_encodings}")
 
-    def test_detect_encoding_missing_chardet(self):
-        """detect_encoding should log a warning when chardet is missing."""
-        with common.mock_missing_package('chardet'):
+    def test_detect_encoding_missing_charset_normalizer(self):
+        """detect_encoding should log a warning when charset_normalizer is missing."""
+        with common.mock_missing_package('charset_normalizer'):
+            # Latin-1 is not valid UTF-8, so a detector is needed
             with tempfile.NamedTemporaryFile(mode='w', delete=False,
                                              dir=self.tempdir,
-                                             encoding='utf-8') as temp:
-                temp.write('hello world')
+                                             encoding='latin-1') as temp:
+                temp.write('café')
                 temp.flush()
             with self.assertLogs('bleachbit.FileUtilities', level='WARNING') as cm:
-                detect_encoding(temp.name)
-            self.assertIn('chardet module is not available', cm.output[0])
+                self.assertIsNone(detect_encoding(temp.name))
+            self.assertIn(
+                'charset_normalizer module is not available', cm.output[0])
             os.unlink(temp.name)
 
     @common.skipIfWindows
@@ -1184,6 +1331,15 @@ State=AAAA/wA...
         """Unit test for ego_owner()"""
         # pylint: disable=no-member
         self.assertEqual(ego_owner('/bin/ls'), os.getuid() == 0)
+
+        own_fn = self.mkstemp()
+        self.assertTrue(ego_owner(own_fn))
+
+        # A path that vanished must not raise
+        os.unlink(own_fn)
+        self.assertFalse(ego_owner(own_fn))
+        self.assertFalse(
+            ego_owner(os.path.join(self.tempdir, 'does_not_exist')))
 
     def test_execute_sqlite3(self):
         """Unit test for execute_sqlite3()"""
@@ -1198,7 +1354,7 @@ State=AAAA/wA...
         execute_sqlite3(db_path, 'vacuum')
 
         with contextlib.closing(sqlite3.connect(db_path)) as conn:
-            res = conn.execute('select 1 from test where name = "A"')
+            res = conn.execute("select 1 from test where name = 'A'")
             row = res.fetchone()
             self.assertIsNotNone(row)
             self.assertEqual(row[0], 1)
@@ -1206,6 +1362,35 @@ State=AAAA/wA...
         gc_collect()
         os.unlink(db_path)
         self.assertNotExists(db_path)
+
+    def test_execute_sqlite3_open_error_translation(self):
+        """Unit test for execute_sqlite3() open-error translation
+
+        A cryptic sqlite3 "unable to open database file" must be translated
+        into OSError(EACCES) (or FileNotFoundError if the path is gone) so the
+        Worker can surface the same "Access denied" summary users see for
+        locked files.
+        """
+        # Path whose parent directory does not exist: sqlite cannot create
+        # it and raises "unable to open database file"; the path itself is
+        # gone -> FileNotFoundError.
+        gone_path = os.path.join(self.tempdir, 'no_such_subdir', 'gone.sqlite')
+        self.assertNotExists(gone_path)
+        with self.assertRaises(FileNotFoundError) as ctx:
+            execute_sqlite3(gone_path, 'vacuum')
+        self.assertEqual(ctx.exception.errno, errno.ENOENT)
+        self.assertEqual(ctx.exception.filename, gone_path)
+
+        # Path that exists but is a directory: sqlite cannot open a directory
+        # as a database and raises "unable to open database file"; the path
+        # is present -> OSError(EACCES) "Access denied".
+        present_path = self.tempdir
+        self.assertExists(present_path)
+        with self.assertRaises(OSError) as ctx:
+            execute_sqlite3(present_path, 'vacuum')
+        self.assertEqual(ctx.exception.errno, errno.EACCES)
+        self.assertEqual(ctx.exception.filename, present_path)
+        self.assertIn('Access denied', ctx.exception.strerror)
 
     def test_exe_exists(self):
         """Unit test for exe_exists()"""
@@ -1494,6 +1679,25 @@ State=AAAA/wA...
             path = 'c:\\windows\\system32'
         self.assertGreater(getsizedir(path), 0)
 
+    def test_getsizedir_vanished(self):
+        """getsizedir() skips a file that vanishes between the walk and the stat"""
+        dirname = self.mkdtemp(prefix='bleachbit-test-getsizedir-vanished')
+        real_fn = os.path.join(dirname, 'real')
+        self.write_file(real_fn, contents=b'0123456789')
+        expected = getsize(real_fn)
+        self.assertGreater(expected, 0)
+
+        ghost_fn = os.path.join(dirname, 'ghost')
+        with unittest.mock.patch('bleachbit.FileUtilities.children_in_directory',
+                                 return_value=iter([real_fn, ghost_fn])):
+            self.assertEqual(getsizedir(dirname), expected)
+
+        # Other errors must still propagate
+        with unittest.mock.patch('bleachbit.FileUtilities.getsize',
+                                 side_effect=PermissionError('denied')):
+            with self.assertRaises(PermissionError):
+                getsizedir(dirname)
+
     def test_globex(self):
         """Unit test for method globex()"""
         for path in globex('/bin/*', '/ls$'):
@@ -1649,8 +1853,13 @@ State=AAAA/wA...
 
     def test_vacuum_sqlite3(self):
         """Unit test for method vacuum_sqlite3()"""
-        path = os.path.join(self.tempdir, 'bleachbit.tmp.sqlite3')
+        path = os.path.join(self.tempdir, 'bleachbit_test_vacuum.sqlite3')
         conn = sqlite3.connect(path)
+        # Use in-memory journal to avoid creating a transient
+        # file that could trigger TOCTOU error in parallel tests.
+        # (This prevents writing the `-journal` file, but the `.sqlite3`
+        # database is still written.)
+        conn.execute('PRAGMA journal_mode=memory')
         conn.execute('create table numbers (number)')
         conn.commit()
         empty_size = getsize(path)
@@ -1708,7 +1917,8 @@ State=AAAA/wA...
         self.assertEqual(set(keep_list), set(options.get_whitelist_paths()))
 
         # test
-        tests = ('', '/', '/home/foo2', '/home/fo', '/home/', '/home')
+        # '/' is system-critical and always kept, so it is excluded here
+        tests = ('', '/home/foo2', '/home/fo', '/home/', '/home')
         for path in tests:
             self.assertFalse(whitelisted(
                 path), f"{path} should not be whitelisted")
@@ -1740,6 +1950,22 @@ State=AAAA/wA...
         self.assertFalse(whitelisted('/home/foo'))
         self.assertFalse(whitelisted('/home/folder'))
         self.assertFalse(whitelisted('/home/folder/file'))
+
+    def test_whitelisted_posix_system_critical(self):
+        """System-critical POSIX paths are kept even with an empty keep list."""
+        if not IS_POSIX:
+            self.skipTest('POSIX only')
+        options.set_whitelist_paths([])
+        for path in ('/', '//', '/proc', '/proc/cpuinfo', '/sys/',
+                     '/sys/kernel', '/run', '/run/user/0'):
+            self.assertTrue(whitelisted(path),
+                            f"{path} should be protected")
+        # Real cleaners legitimately act under /var, /dev/shm, /etc
+        for path in ('/home/user/file', '/tmp/scratch', '/opt/data/x',
+                     '/etc/passwd', '/var/log/syslog', '/dev/shm/x',
+                     '/procfile', '/sysfs2/x', ''):
+            self.assertFalse(whitelisted(path),
+                             f"{path} should not be protected")
 
     @common.skipUnlessWindows
     def test_whitelisted_windows(self):

@@ -99,8 +99,8 @@ class ActionProvider(metaclass=PluginMount):
         """Create ActionProvider from CleanerML <action>"""
 
     def get_deep_scan(self):
-        """Return a dictionary used to construct a deep scan"""
-        raise StopIteration
+        """Return an iterable of deep scan searches (empty by default)"""
+        return ()
 
     def get_commands(self):
         """Yield each command (which can be previewed or executed)"""
@@ -245,22 +245,18 @@ class FileActionProvider(ActionProvider):
         def get_walk_all(top):
             """Delete files and directories inside a directory but not the top directory"""
             for expanded in glob.iglob(top):
-                path = None  # sentinel value
                 yield from FileUtilities.children_in_directory(expanded, True)
-                # This condition executes when there are zero iterations
-                # in the loop above.
-                if path is None:
-                    # This is a lint checker because this scenario may
-                    # indicate the cleaner developer made a mistake.
-                    if os.path.isfile(expanded):
-                        logger.debug(
-                            # TRANSLATORS: This is a lint-style warning that there seems to be a
-                            # mild mistake in the CleanerML file because walk.all is expected to
-                            # be used with directories instead of with files. Do not translate
-                            # search="walk.all" and path="%s"
-                            _('search="walk.all" used with regular file path="%s"'),
-                            expanded,
-                        )
+                # This is a lint checker because this scenario may
+                # indicate the cleaner developer made a mistake.
+                if os.path.isfile(expanded):
+                    logger.debug(
+                        # TRANSLATORS: This is a lint-style warning that there seems to be a
+                        # mild mistake in the CleanerML file because walk.all is expected to
+                        # be used with directories instead of with files. Do not translate
+                        # search="walk.all" and path="%s"
+                        _('search="walk.all" used with regular file path="%s"'),
+                        expanded,
+                    )
 
         def get_walk_files(top):
             """Delete files inside a directory but not any directories"""
@@ -302,21 +298,15 @@ class FileActionProvider(ActionProvider):
             # use cache
             if (self.search in self.CACHEABLE_SEARCHERS and cache[0] == self.search
                     and cache[1] == input_path and cache[3]):
-                # logger.debug(_('using cached walk for path %s'), input_path)
-                for x in cache[2]:
-                    yield x
+                yield from cache[2]
                 return
-            # if self.search in self.CACHEABLE_SEARCHERS:
-            #    logger.debug('not using cache because it has (%s,%s) and we want (%s,%s)',
-            #                 cache[0], cache[1], self.search, input_path)
             self.__class__.cache = ('cleared by', input_path, tuple(), False)
 
             # build new cache
-            # logger.debug('%s walking %s', id(self), input_path)
-
             if self.search in self.CACHEABLE_SEARCHERS:
                 entries = []
-                self.__class__.cache = (self.search, input_path, entries, False)
+                self.__class__.cache = (
+                    self.search, input_path, entries, False)
                 for path in func(input_path):
                     entries.append(path)
                     yield path
@@ -324,8 +314,7 @@ class FileActionProvider(ActionProvider):
                 # early-abandoned generator doesn't poison the cache
                 self.__class__.cache = (self.search, input_path, entries, True)
             else:
-                for path in func(input_path):
-                    yield path
+                yield from func(input_path)
 
     def get_commands(self):
         raise NotImplementedError('not implemented')
@@ -341,14 +330,11 @@ class AptAutoclean(ActionProvider):
     """Action to run 'apt-get autoclean'"""
     action_key = 'apt.autoclean'
 
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
-
     def get_commands(self):
         assert IS_POSIX
         # If apt-get is not installed, then enable fast auto-hide.
         # The exe_exists() function is fast.
-        if not FileUtilities.exe_exists('apt-get'):
+        if not FileUtilities.exe_exists(General.resolve_exe('apt-get')):
             return
         yield Command.Function(None,
                                # pylint: disable=possibly-used-before-assignment
@@ -361,11 +347,8 @@ class AptAutoremove(ActionProvider):
     """Action to run 'apt-get autoremove'"""
     action_key = 'apt.autoremove'
 
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
-
     def get_commands(self):
-        if not FileUtilities.exe_exists('apt-get'):
+        if not FileUtilities.exe_exists(General.resolve_exe('apt-get')):
             return
         yield Command.Function(None,
                                Unix.apt_autoremove,
@@ -377,11 +360,8 @@ class AptClean(ActionProvider):
     """Action to run 'apt-get clean'"""
     action_key = 'apt.clean'
 
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
-
     def get_commands(self):
-        if not FileUtilities.exe_exists('apt-get'):
+        if not FileUtilities.exe_exists(General.resolve_exe('apt-get')):
             return
         yield Command.Function(None,
                                Unix.apt_clean,
@@ -496,22 +476,6 @@ class Cookie(FileActionProvider):
                 _('Clean cookies'),
                 preview_func)
 
-    def _delete_cookies_with_keep_list(self, path):
-        """Delete cookies while honoring the keep list"""
-        keep_list = load_keep_list()
-        if not keep_list:
-            return 0
-        result = CookieMod.delete_cookies(path, keep_list, really_delete=True)
-        return result.get('file_size_reduction', 0)
-
-    def _preview_cookies_deletion(self, path):
-        """Preview cookies deletion, honoring the keep list"""
-        keep_list = load_keep_list()
-        if not keep_list:
-            return 0
-        result = CookieMod.delete_cookies(path, keep_list, really_delete=False)
-        return result.get('file_size_reduction', 0)
-
 
 class Delete(FileActionProvider):
 
@@ -544,12 +508,9 @@ class Journald(ActionProvider):
     """Action to run 'journalctl --vacuum-time=1'"""
     action_key = 'journald.clean'
 
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
-
     def get_commands(self):
         # If journalctl is not installed, then enable fast auto-hide.
-        if not FileUtilities.exe_exists('journalctl'):
+        if not FileUtilities.exe_exists(General.resolve_exe('journalctl')):
             return
         yield Command.Function(None, Unix.journald_clean, 'journalctl --vacuum-time=1')
 
@@ -582,7 +543,7 @@ class MozillaUrlHistory(FileActionProvider):
 
 class MozillaFavicons(FileActionProvider):
 
-    """Action to clean Mozilla (Firefox) URL history in places.sqlite"""
+    """Action to clean Mozilla (Firefox) favicons in favicons.sqlite"""
     action_key = 'mozilla.favicons'
 
     def get_commands(self):
@@ -711,12 +672,9 @@ class YumCleanAll(ActionProvider):
     """Action to run 'yum clean all'"""
     action_key = 'yum.clean_all'
 
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
-
     def get_commands(self):
         # If yum is not installed, then enable fast auto-hide.
-        if not FileUtilities.exe_exists('yum'):
+        if not FileUtilities.exe_exists(General.resolve_exe('yum')):
             return
 
         yield Command.Function(
@@ -730,12 +688,9 @@ class DnfCleanAll(ActionProvider):
     """Action to run 'dnf clean all'"""
     action_key = 'dnf.clean_all'
 
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
-
     def get_commands(self):
         # If dnf is not installed, then enable fast auto-hide.
-        if not FileUtilities.exe_exists('dnf'):
+        if not FileUtilities.exe_exists(General.resolve_exe('dnf')):
             return
 
         yield Command.Function(
@@ -749,12 +704,9 @@ class DnfAutoremove(ActionProvider):
     """Action to run 'dnf autoremove'"""
     action_key = 'dnf.autoremove'
 
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
-
     def get_commands(self):
         # If dnf is not installed, then enable fast auto-hide.
-        if not FileUtilities.exe_exists('dnf'):
+        if not FileUtilities.exe_exists(General.resolve_exe('dnf')):
             return
 
         yield Command.Function(
@@ -768,11 +720,8 @@ class PacmanCache(ActionProvider):
     """Action to run `paccache -rk0'"""
     action_key = 'pacman.cache'
 
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
-
     def get_commands(self):
-        if not FileUtilities.exe_exists('paccache'):
+        if not FileUtilities.exe_exists(General.resolve_exe('paccache')):
             return
 
         yield Command.Function(
@@ -785,9 +734,6 @@ class SnapDisabled(ActionProvider):
 
     """Action to remove disabled snaps"""
     action_key = 'snap.disabled'
-
-    def __init__(self, action_element, path_vars=None):
-        ActionProvider.__init__(self, action_element, path_vars)
 
     def get_commands(self):
         # If snap is not installed or snapd is not active, enable fast auto-hide.
