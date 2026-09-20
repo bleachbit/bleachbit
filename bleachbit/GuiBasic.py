@@ -53,6 +53,7 @@ def browse_folder(parent, title, multiple, stock_button):
     """Ask the user to select a folder.  Return the full path or None."""
 
     if IS_WINDOWS and not os.getenv('BB_NATIVE'):
+        # pylint: disable-next=possibly-used-before-assignment
         ret = Windows.browse_folder(parent, title)
         return [ret] if multiple and not ret is None else ret
 

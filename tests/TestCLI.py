@@ -20,6 +20,7 @@ import random
 import tempfile
 from unittest.mock import MagicMock, patch
 
+from tests import common
 from tests.common import pytest
 
 # first party imports
@@ -35,7 +36,6 @@ from bleachbit.CLI import (
 from bleachbit.General import get_executable, run_external
 from bleachbit.GtkShim import gtk_may_be_available
 from bleachbit import FileUtilities, Options, IS_WINDOWS, IS_POSIX
-from tests import common
 
 RUN_EXTERNAL_TIMEOUT = 30
 
@@ -52,7 +52,7 @@ class CLITestCase(common.BleachbitTestCase):
         """Helper to test preview"""
         # Use devnull because in some cases the buffer will be too large,
         # and the other alternative, the screen, is not desirable.
-        with open(os.devnull, 'w') as stdout:
+        with open(os.devnull, 'w', encoding='utf-8') as stdout:
             if not redirect_stdout:
                 stdout = None
             output = run_external(args, stdout=stdout,
@@ -261,8 +261,10 @@ class CLITestCase(common.BleachbitTestCase):
                 deleted_paths = []
                 crash = [False]
 
+                # the defaults bind this iteration's values into the closure
+                # pylint: disable-next=unused-argument, dangerous-default-value
                 def dummy_delete(path, shred=False, crash=crash,
-                                 deleted_paths=deleted_paths):
+                                 deleted_paths=deleted_paths, filename=filename):
                     try:
                         self.assertLExists(path)
                     except AssertionError:

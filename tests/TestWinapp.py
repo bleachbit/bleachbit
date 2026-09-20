@@ -37,6 +37,7 @@ def _create_registry_keys(*key_paths):
         return
     for key_path in key_paths:
         with suppress(OSError):
+            # pylint: disable-next=possibly-used-before-assignment
             hkey = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path)
             hkey.Close()
 
@@ -134,7 +135,8 @@ class WinappTestCase(common.BleachbitTestCase):
         with self.assertRaises(AssertionError):
             self.run_all(cleaner, False, allow_volatile=True)
 
-        cmd.execute.side_effect = FileNotFoundError(2, 'vanished', non_volatile_path)
+        cmd.execute.side_effect = FileNotFoundError(
+            2, 'vanished', non_volatile_path)
         with self.assertRaises(FileNotFoundError):
             self.run_all(cleaner, False, allow_volatile=True)
 

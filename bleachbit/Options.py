@@ -24,6 +24,7 @@ Store and retrieve user preferences
 
 # standard library imports
 import atexit
+import configparser
 import errno
 import logging
 import os
@@ -124,6 +125,7 @@ def path_to_option(pathname):
     pathname = os.path.normcase(pathname)
     # On Windows expand DOS-8.3-style pathnames.
     if IS_WINDOWS and os.path.exists(pathname):
+        # pylint: disable-next=possibly-used-before-assignment
         pathname = GetLongPathName(pathname)
     if len(pathname) > 1 and ':' == pathname[1]:
         # ConfigParser treats colons in a special way
@@ -160,7 +162,7 @@ class Options:
 
     def __init__(self):
         self.purged = False
-        self.config = bleachbit.RawConfigParser(delimiters='=')
+        self.config = configparser.RawConfigParser(delimiters='=')
         self.config.optionxform = str  # make keys case sensitive for hashpath purging
         self.config.BOOLEAN_STATES['t'] = True
         self.config.BOOLEAN_STATES['f'] = False
@@ -258,6 +260,8 @@ class Options:
         in place instead of building a copy, which would flatten any
         [DEFAULT] section.
         """
+        # ConfigParser has no public API for reordering sections.
+        # pylint: disable-next=protected-access
         sections = self.config._sections
         for section_name in sorted(sections, key=_section_sort_key):
             section = sections.pop(section_name)

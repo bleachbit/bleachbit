@@ -19,6 +19,7 @@ import threading
 from bleachbit.Chaff import generate_emails, generate_2600
 from bleachbit.Constant import ABORT_BUTTON_LABEL
 from bleachbit.GtkShim import Gtk, GLib
+from bleachbit.GuiInfoBar import InfoBarMixin
 from bleachbit.Language import get_text as _
 
 
@@ -67,25 +68,25 @@ def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
     Returns (should_stop, file_count).
     """
     if stop_mode == STOP_MODE_FILE_COUNT:
-        def should_stop(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
+        def stop_on_file_count(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
             return abort_event.is_set()
 
-        return should_stop, stop_value
+        return stop_on_file_count, stop_value
 
     if stop_mode == STOP_MODE_TOTAL_SIZE:
         target_bytes = stop_value * 1024 * 1024  # MB to bytes
 
-        def should_stop(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
+        def stop_on_total_size(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
             if abort_event.is_set():
                 return True
             return cumulative_size >= target_bytes
 
-        return should_stop, MAX_FILE_COUNT
+        return stop_on_total_size, MAX_FILE_COUNT
 
     if stop_mode == STOP_MODE_FREE_SPACE:
         target_free_pct = stop_value
 
-        def should_stop(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
+        def stop_on_free_space(generated_file_names, cumulative_size=0):  # pylint: disable=unused-argument
             if abort_event.is_set():
                 return True
             try:
@@ -95,7 +96,7 @@ def _make_should_stop(stop_mode, stop_value, output_folder, abort_event):
             free_pct = 100.0 * usage.free / usage.total
             return free_pct <= target_free_pct
 
-        return should_stop, MAX_FILE_COUNT
+        return stop_on_free_space, MAX_FILE_COUNT
 
     raise ValueError(f'Invalid stop_mode {stop_mode}')
 
@@ -108,28 +109,28 @@ def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
     or compute from disk usage.
     """
     if stop_mode == STOP_MODE_FILE_COUNT:
-        def progress_cb(fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
+        def progress_by_file_count(fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
             on_progress(fraction)
 
-        return progress_cb
+        return progress_by_file_count
 
     if stop_mode == STOP_MODE_TOTAL_SIZE:
         target_bytes = stop_value * 1024 * 1024
 
-        def progress_cb(fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
+        def progress_by_total_size(fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
             if cumulative_size > 0:
                 on_progress(min(1.0, cumulative_size / target_bytes))
             else:
                 on_progress(fraction)
 
-        return progress_cb
+        return progress_by_total_size
 
     if stop_mode == STOP_MODE_FREE_SPACE:
         target_free_pct = stop_value
         # Use list to allow mutation in nested function
         initial_free_pct = [None]
 
-        def progress_cb(_fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
+        def progress_by_free_space(_fraction, generated_file_names=None, cumulative_size=0):  # pylint: disable=unused-argument
             try:
                 usage = shutil.disk_usage(output_folder)
             except FileNotFoundError:
@@ -146,7 +147,7 @@ def _make_progress_cb(stop_mode, stop_value, output_folder, on_progress):
                 frac = 1.0
             on_progress(frac)
 
-        return progress_cb
+        return progress_by_free_space
 
     raise ValueError(f'Invalid stop_mode {stop_mode}')
 
@@ -201,11 +202,10 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
     on_progress(1.0, is_done=True)
 
 
-class ChaffDialog(Gtk.Dialog):
+class ChaffDialog(InfoBarMixin, Gtk.Dialog):
 
     """Present the dialog to make chaff"""
 
-    _infobar_timeout_id = None
     _download_success = None
     _abort_event = None
     thread = None
@@ -218,6 +218,8 @@ class ChaffDialog(Gtk.Dialog):
         # TRANSLATORS: Title for dialog window.
         # Digital chaff is like physical chaff that airplanes use to protect themselves
         # from radar-guided missiles. For more explanation, see the online documentation.
+        # GTK initialisation is deferred to this method.
+        # pylint: disable-next=unnecessary-dunder-call
         Gtk.Dialog.__init__(self, title=_("Make chaff"), transient_for=parent)
         Gtk.Dialog.set_modal(self, True)
         self.set_border_width(10)
@@ -227,14 +229,7 @@ class ChaffDialog(Gtk.Dialog):
         box.set_spacing(10)
 
         # Add InfoBar for non-blocking messages
-        self.infobar = Gtk.InfoBar()
-        self.infobar.set_show_close_button(True)
-        self.infobar.connect('response', self._on_infobar_response)
-        self.infobar_label = Gtk.Label()
-        self.infobar_label.set_line_wrap(True)
-        self.infobar.get_content_area().add(self.infobar_label)
-        box.pack_start(self.infobar, False, False, 0)
-        self._infobar_timeout_id = None
+        self._build_infobar(box)
 
         # TRANSLATORS: Label at the top of the chaff dialog
         dialog_label = _("Make randomly-generated messages "
@@ -382,13 +377,6 @@ class ChaffDialog(Gtk.Dialog):
 
         self._abort_event = None
 
-    def _on_infobar_response(self, _infobar, _response_id):
-        """Handle InfoBar close button click"""
-        if self._infobar_timeout_id:
-            GLib.source_remove(self._infobar_timeout_id)
-            self._infobar_timeout_id = None
-        self.infobar.hide()
-
     def _on_stop_mode_changed(self, combo):
         """Update the value spin button when the stop mode changes"""
         mode = combo.get_active()
@@ -406,23 +394,6 @@ class ChaffDialog(Gtk.Dialog):
         if self._abort_event:
             self._abort_event.set()
         return False  # Allow the dialog to close
-
-    def _hide_infobar(self):
-        """Hide the InfoBar (used for auto-dismiss timeout)"""
-        self._infobar_timeout_id = None
-        self.infobar.hide()
-        return False  # Remove from GLib timeout
-
-    def show_infobar(self, message, message_type=Gtk.MessageType.ERROR):
-        """Show a non-blocking InfoBar message that auto-dismisses"""
-        if self._infobar_timeout_id:
-            GLib.source_remove(self._infobar_timeout_id)
-            self._infobar_timeout_id = None
-        self.infobar_label.set_text(message)
-        self.infobar.set_message_type(message_type)
-        self.infobar.show_all()
-        self._infobar_timeout_id = GLib.timeout_add_seconds(
-            15, self._hide_infobar)
 
     def download_models_gui(self, on_complete):
         """Download models in a background thread.

@@ -44,7 +44,7 @@ _MEMINFO_FREE_RE = re.compile(r'^(MemFree|Cached):[ ]*([0-9]*) kB')
 def count_swap_linux():
     """Count the number of swap devices in use"""
     count = 0
-    with open("/proc/swaps") as f:
+    with open("/proc/swaps", encoding="utf-8") as f:
         for line in f:
             if line[0] == '/':
                 count += 1
@@ -62,7 +62,7 @@ def get_proc_swaps():
         return stdout
     logger.debug(
         _("The command 'swapon -s' failed, so falling back to /proc/swaps for swap information."))
-    with open("/proc/swaps") as f:
+    with open("/proc/swaps", encoding="utf-8") as f:
         return f.read()
 
 
@@ -227,7 +227,7 @@ def _run_memory_child_systemd_scope():
             # resolves there, not an attacker-controlled working directory.
             return subprocess.run(
                 scope_args, env=env, cwd=pkg_parent,
-                capture_output=True, text=True)
+                capture_output=True, text=True, check=False)
         except FileNotFoundError:
             return None
 
@@ -377,8 +377,7 @@ def physical_free_linux():
         free_bytes, _ = _parse_meminfo_free(f.read())
     if free_bytes > 0:
         return free_bytes
-    else:
-        raise Exception("unknown")
+    raise RuntimeError("unknown")
 
 
 def physical_free_windows():
@@ -412,12 +411,11 @@ def physical_free_windows():
 def physical_free():
     if IS_LINUX:
         return physical_free_linux()
-    elif IS_WINDOWS:
+    if IS_WINDOWS:
         return physical_free_windows()
-    elif IS_MAC:
+    if IS_MAC:
         return physical_free_darwin()
-    else:
-        raise RuntimeError('unsupported platform for physical_free()')
+    raise RuntimeError('unsupported platform for physical_free()')
 
 
 def report_free():

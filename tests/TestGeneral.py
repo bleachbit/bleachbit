@@ -86,7 +86,7 @@ class GeneralTestCase(common.BleachbitTestCase):
 
         # Test that UID is exists in passwd
         # Import pwd here because it would fail on Windows.
-        import pwd  # pylint: disable=import-outside-toplevel
+        import pwd
         try:
             pwd_entry = pwd.getpwuid(uid)
             self.assertIsInstance(pwd_entry.pw_name, str)
@@ -177,6 +177,7 @@ class GeneralTestCase(common.BleachbitTestCase):
                        'LD_PRELOAD': '/tmp/evil.so'}
         captured = {}
 
+        # pylint: disable-next=unused-argument
         def fake_popen(args, **kwargs):
             captured['env'] = kwargs.get('env')
             proc = mock.Mock()
@@ -293,13 +294,14 @@ class GeneralTestCase(common.BleachbitTestCase):
     def test_makedirs(self):
         """Unit test for makedirs"""
 
-        dir = os.path.join(self.tempdir, 'just', 'a', 'directory', 'adventure')
+        path = os.path.join(self.tempdir, 'just', 'a',
+                            'directory', 'adventure')
         # directory does not exist
-        makedirs(dir)
-        self.assertLExists(dir)
+        makedirs(path)
+        self.assertLExists(path)
         # directory already exists
-        makedirs(dir)
-        self.assertLExists(dir)
+        makedirs(path)
+        self.assertLExists(path)
         # clean up
         shutil.rmtree(os.path.join(self.tempdir, 'just'))
 
@@ -538,7 +540,6 @@ class GeneralTestCase(common.BleachbitTestCase):
             self.skipTest('dconf not found')
         if sudo_mode():
             self.skipTest('dconf not supported in sudo mode')
-        # pylint: disable=import-outside-toplevel
         from bleachbit.GtkShim import is_gtk_available
         if not is_gtk_available():
             self.skipTest('dconf not supported without GUI')

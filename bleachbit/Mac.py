@@ -120,6 +120,7 @@ _FDA_PROBE_PATHS = (
     '~/Library/Containers/com.apple.Safari/',
 )
 
+
 def is_full_disk_access_enabled():
     """Detect whether Full Disk Access is enabled on macOS.
 
@@ -470,7 +471,7 @@ def _write_safari_cookie_records(path, pages):
         try:
             os.unlink(temp_path)
         except OSError:
-            pass
+            pass  # best-effort cleanup, original error takes priority
         raise
 
 

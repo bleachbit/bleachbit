@@ -42,7 +42,6 @@ logger = logging.getLogger(__name__)
 
 def get_gtk_info():
     """Get dictionary of information about GTK"""
-    # pylint: disable=import-outside-toplevel
     from bleachbit.GtkShim import (
         gi, Gtk, is_gtk_available, get_gtk_unavailable_reason)
 
@@ -83,7 +82,7 @@ def _get_home_dirs_to_anonymize():
     if IS_POSIX:
         try:
             # reminder: pwd is not available on Windows
-            import pwd  # pylint: disable=import-outside-toplevel
+            import pwd
             real_home_dir = pwd.getpwuid(get_real_uid()).pw_dir
         except (ImportError, KeyError, RuntimeError, ValueError):
             real_home_dir = ''
@@ -157,7 +156,6 @@ def get_version(four_parts=False):
     """
     build_number_env = os.getenv('GITHUB_RUN_NUMBER')
     try:
-        # pylint: disable=import-outside-toplevel
         from bleachbit.Revision import build_number as build_number_src
     except ImportError:
         # Revision.py only exists in CI and tarball builds
@@ -187,7 +185,6 @@ def get_system_information():
 
     try:
         # CI builds and Linux tarball will have a revision.
-        # pylint: disable=import-outside-toplevel
         from bleachbit.Revision import revision
         info['Git revision'] = revision
     except ImportError:

@@ -54,7 +54,10 @@ class LocaleCleanerPath:
 
     def add_child(self, child):
         """Adds a child LocaleCleanerPath"""
+        # child is the same class, so _vfs is not foreign.
+        # pylint: disable-next=protected-access
         if isinstance(child, LocaleCleanerPath) and child._vfs is None:
+            # pylint: disable-next=protected-access
             child._vfs = self._vfs
         self.children.append(child)
         return child
@@ -264,7 +267,7 @@ def find_best_locale(user_locale):
     # Prefer current system locale if compatible and UTF-8
     # (e.g., system is 'es_MX.UTF-8' when requesting 'es').
     # Import here for mock patch.
-    import locale  # pylint: disable=import-outside-toplevel
+    import locale
     lang, codeset = locale.getlocale()
     if lang and codeset and lang.startswith(req.normalized) and \
             codeset.replace('-', '').replace('_', '').lower() == 'utf8':
@@ -321,7 +324,7 @@ def get_distribution_name_version_distro():
     """
     try:
         # Import here in case of ImportError.
-        import distro  # pylint: disable=import-outside-toplevel
+        import distro
         # example 'ubuntu 24.10'
         # Arch Linux returns id='arch' and version=''.
         dist_version = distro.version()
@@ -390,7 +393,7 @@ def get_distribution_name_version():
 def get_mount_points():
     """Return read-write mount points that may have trash"""
     try:
-        import psutil  # pylint: disable=import-outside-toplevel
+        import psutil
     except ImportError:
         logger.warning('install psutil for better trash detection')
         return []
@@ -436,7 +439,6 @@ def get_purgeable_locales(locales_to_keep):
 def get_trash_paths():
     """Iterate over all trash on POSIX systems"""
     # Import here to avoid a circular import.
-    # pylint: disable=import-outside-toplevel
     from bleachbit import Command
     # macOS-style flat trash. list_directories=True is required so that
     # a folder sent to Trash is itself removed after its contents are
@@ -482,7 +484,7 @@ def is_unregistered_mime(mimetype):
     """Returns True if the MIME type is known to be unregistered. If
     registered or unknown, conservatively returns False."""
     try:
-        from bleachbit.GtkShim import Gio  # pylint: disable=import-outside-toplevel
+        from bleachbit.GtkShim import Gio
         if 0 == len(Gio.app_info_get_all_for_type(mimetype)):
             return True
     except ImportError:
@@ -494,7 +496,7 @@ def is_unregistered_mime(mimetype):
 def is_broken_xdg_desktop(pathname):
     """Returns whether the given XDG .desktop file is critically broken.
     Reference: http://standards.freedesktop.org/desktop-entry-spec/latest/"""
-    config = bleachbit.RawConfigParser()
+    config = configparser.RawConfigParser()
     try:
         config.read(pathname)
     except UnicodeDecodeError:
@@ -617,7 +619,7 @@ def orphaned_framework_versions(versions_dir):
     except OSError:
         return
     for name in entries:
-        if name == 'Current' or name == current_name:
+        if name in ('Current', current_name):
             continue
         full_path = os.path.join(versions_dir, name)
         if not os.path.isdir(full_path) or os.path.islink(full_path):

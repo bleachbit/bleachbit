@@ -60,6 +60,7 @@ def _remove_options_dir():
 atexit.register(_remove_options_dir)
 
 
+# pylint: disable-next=unused-argument
 def pytest_sessionfinish(session, exitstatus):
     """Clean up the temporary directory after the test session."""
     # pytest-rerunfailures keeps a ClientStatusDB socket open in each xdist

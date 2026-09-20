@@ -43,10 +43,10 @@ RUN sed -i 's/# \(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
 RUN python -m pip list && python -m pip install --no-cache-dir -U pip
 
 # Install new Python packages.
-COPY requirements.txt ./
+COPY requirements.txt requirements-test.txt ./
 RUN python -m pip install --no-cache-dir \
-        PyGObject pytest pytest-xdist pytest-rerunfailures \
-        -r requirements.txt
+        PyGObject==3.58.0 \
+        -r requirements.txt -r requirements-test.txt
 
 ARG HOME_IN_CONTAINER=/home/user
 ARG USER_ID=1000

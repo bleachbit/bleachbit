@@ -9,7 +9,7 @@
 # On some systems if not explicitly given, make uses /bin/sh
 SHELL != command -v bash || echo /bin/sh
 
-.PHONY: clean install tests tests-pytest tests-nsis build tests-with-sudo lint delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
+.PHONY: clean install tests tests-pytest tests-nsis build tests-with-sudo lint require-lint-tools delete_windows_files pretty appimage clean-appimage install-deps install-deps-dev
 
 prefix ?= /usr/local
 bindir ?= $(prefix)/bin
@@ -36,8 +36,24 @@ PYTEST_COV := --cov=bleachbit --cov-report=
 PYTEST_COV_APPEND := --cov=bleachbit --cov-append --cov-report=
 endif
 
+# The executable is pyflakes3 on Debian and pyflakes elsewhere, and Debian's
+# python3-pyflakes ships neither, so fall back to the module.
+PYFLAKES ?= $(or $(shell command -v pyflakes3 2>/dev/null),\
+                 $(shell command -v pyflakes 2>/dev/null),\
+                 $(PYTHON_CMD) -m pyflakes)
+
 # Arguments forwarded to scripts/install-deps.sh, such as --venv
 INSTALL_DEPS_ARGS ?=
+
+# Windows drops pywin32 from ignored-modules so extension-pkg-allow-list can
+# check it, and ignores the POSIX-only modules instead.
+# MSYS make does not inherit OS, hence uname.
+UNAME_S := $(shell uname -s 2>/dev/null)
+ifneq (,$(filter MSYS% MINGW% CYGWIN%,$(UNAME_S)))
+PYLINT_ARGS ?= --ignored-modules=bleachbit.GtkShim,certifi,fcntl,gi,gi.repository,plyer,pwd,py2exe,win32com.shell
+else
+PYLINT_ARGS ?=
+endif
 
 ifneq ($(COVERAGE),$(PYTHON_CMD))
 BLEACHBIT_SUDO_COVERAGE_RUNNER := $(COVERAGE) --append
@@ -65,7 +81,7 @@ clean:
 	@rm -vf MANIFEST # created by setup.py
 	$(MAKE) -C po clean
 	@rm -vrf locale
-	@rm -vrf {*/,./}*.{pylint,pyflakes,shellcheck}.log
+	@rm -vrf {*/,./}*.{autopep8,pylint,pyflakes,shellcheck}.log
 	@rm -vrf windows/BleachBit-*-setup*.{exe,zip}
 	@rm -vrf htmlcov .coverage # code coverage reports
 	@rm -vrf *.egg-info # Python package metadata
@@ -116,29 +132,86 @@ install:
 	mkdir -p $(DESTDIR)$(datadir)/polkit-1/actions
 	$(INSTALL_DATA) org.bleachbit.policy $(DESTDIR)$(datadir)/polkit-1/actions/
 
+# `lint` only warns about a missing tool, which is fine locally but hides a
+# skipped check in CI. Depend on this to turn those warnings into an error.
+require-lint-tools:
+	@missing=; \
+	$(PYFLAKES) --version >/dev/null 2>&1 || missing="$$missing pyflakes"; \
+	for c in pylint autopep8 shellcheck appstreamcli; do \
+		command -v $$c >/dev/null 2>&1 || missing="$$missing $$c"; \
+	done; \
+	if [ -n "$$missing" ]; then \
+		echo "ERROR: Missing lint tools:$$missing"; \
+		echo "APT users, try: sudo apt install pyflakes3 pylint python3-autopep8 shellcheck appstream"; \
+		exit 1; \
+	fi
+
 lint:
-	command -v pyflakes3 >/dev/null 2>&1 || echo "WARNING: Missing pyflakes3. APT users, try: sudo apt install pyflakes3"
-	command -v pylint >/dev/null 2>&1 || echo "WARNING: Missing pylint. APT users, try: sudo apt install pylint"
-	@if command -v appstreamcli >/dev/null 2>&1; then \
-		appstreamcli validate org.bleachbit.BleachBit.metainfo.xml; \
+	@rc=0; \
+	if command -v appstreamcli >/dev/null 2>&1; then \
+		appstreamcli validate org.bleachbit.BleachBit.metainfo.xml || rc=1; \
 	else \
 		echo "WARNING: Missing appstreamcli. APT users, try: sudo apt install appstream"; \
-	fi
-	@if command -v shellcheck >/dev/null 2>&1; then \
-		echo "Running shellcheck on .sh files"; \
-		for f in scripts/*.sh docker/*.sh; do \
-			[ -e "$$f" ] || continue; \
-			echo "$$f"; \
-			( shellcheck "$$f" > "$$f".shellcheck.log ); \
-		done; \
+	fi; \
+	echo "Running shellcheck, pyflakes, pylint, and autopep8 in parallel: see all.shellcheck.log, all.pyflakes.log, all.pylint.log, and all.autopep8.log"; \
+	shellcheck_pid=; \
+	if command -v shellcheck >/dev/null 2>&1; then \
+		shellcheck scripts/*.sh docker/*.sh > all.shellcheck.log 2>&1 & \
+		shellcheck_pid=$$!; \
 	else \
 		echo "WARNING: Missing shellcheck. APT users, try: sudo apt install shellcheck"; \
-	fi
-	@echo "Running pyflakes3 and pylint in parallel: see all.pyflakes.log and all.pylint.log"
-	@pyflakes3 *py */*py > all.pyflakes.log 2>&1 & \
-	pylint -j 0 *py */*py > all.pylint.log 2>&1 & \
+	fi; \
+	pyflakes_pid=; \
+	if $(PYFLAKES) --version >/dev/null 2>&1; then \
+		$(PYFLAKES) *py */*py > all.pyflakes.log 2>&1 & \
+		pyflakes_pid=$$!; \
+	else \
+		echo "WARNING: Missing pyflakes. APT users, try: sudo apt install pyflakes3"; \
+	fi; \
+	pylint_pid=; \
+	if command -v pylint >/dev/null 2>&1; then \
+		pylint -j 0 $(PYLINT_ARGS) *py */*py > all.pylint.log 2>&1 & \
+		pylint_pid=$$!; \
+	else \
+		echo "WARNING: Missing pylint. APT users, try: sudo apt install pylint"; \
+	fi; \
+	autopep8_pid=; \
+	if command -v autopep8 >/dev/null 2>&1; then \
+		autopep8 --diff --exit-code {.,bleachbit,tests}/*py > all.autopep8.log 2>&1 & \
+		autopep8_pid=$$!; \
+	else \
+		echo "WARNING: Missing autopep8. APT users, try: sudo apt install python3-autopep8"; \
+	fi; \
+	if [ -n "$$shellcheck_pid" ]; then \
+		wait $$shellcheck_pid || { \
+			rc=1; \
+			echo "ERROR: shellcheck reported problems"; \
+			cat all.shellcheck.log; \
+		}; \
+	fi; \
+	if [ -n "$$pyflakes_pid" ]; then \
+		wait $$pyflakes_pid || { \
+			rc=1; \
+			echo "ERROR: pyflakes reported problems"; \
+			cat all.pyflakes.log; \
+		}; \
+	fi; \
+	if [ -n "$$pylint_pid" ]; then \
+		wait $$pylint_pid || { \
+			rc=1; \
+			echo "ERROR: pylint reported problems"; \
+			cat all.pylint.log; \
+		}; \
+	fi; \
+	if [ -n "$$autopep8_pid" ]; then \
+		wait $$autopep8_pid || { \
+			rc=1; \
+			echo "ERROR: autopep8 would reformat; run make pretty"; \
+			cat all.autopep8.log; \
+		}; \
+	fi; \
 	wait; \
-	exit 0
+	exit $$rc
 
 delete_windows_files:
 	# This is used for building .deb and .rpm packages.

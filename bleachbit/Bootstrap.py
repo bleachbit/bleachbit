@@ -12,7 +12,6 @@ import getpass
 import os
 import re
 import sys
-import warnings
 
 from bleachbit import IS_POSIX, IS_WINDOWS, logger
 
@@ -30,7 +29,7 @@ def _apply_fontconfig_backend_preference():
     if not IS_WINDOWS:
         return
     try:
-        from bleachbit.Options import options  # pylint: disable=import-outside-toplevel
+        from bleachbit.Options import options
         if options.get('use_fontconfig_backend'):
             os.environ['PANGOCAIRO_BACKEND'] = 'fc'
     except Exception as e:
@@ -47,8 +46,8 @@ def check_wayland_and_root():
         return False
 
     # The two imports from bleachbit must come after sys.path is adjusted.
-    import bleachbit.Unix  # pylint: disable=import-outside-toplevel
-    from bleachbit.Language import get_text as _  # pylint: disable=import-outside-toplevel
+    import bleachbit.Unix
+    from bleachbit.Language import get_text as _
 
     # FIXME: if started from launcher (.desktop file), there may be no console
     # to which to print this message.
@@ -64,7 +63,7 @@ def _bootstrap_posix():
     """Bootstrap for POSIX systems"""
     # os.path.expanduser('~') returns '~' unchanged when HOME is unset
     # and the user has no passwd entry (e.g., Docker containers).
-    from bleachbit import _home_dir, logger
+    from bleachbit import _home_dir
     home_dir = _home_dir()
     if not os.getenv('HOME') and home_dir == '/tmp':
         logger.warning('HOME not set and no passwd entry; using %s', home_dir)
@@ -89,7 +88,7 @@ def _bootstrap_posix():
 
 def _bootstrap_windows():
     """Bootstrap for Windows"""
-    from bleachbit import Windows, logger
+    from bleachbit import Windows
     Windows.setup_environment()
 
     # Use our `font.conf` (see commit 3385952b37d78).
@@ -162,8 +161,10 @@ def bootstrap():
     _bootstrapped = True
     if IS_WINDOWS:
         # Do this before anything loads a DLL (e.g. bleachbit.Windows).
-        import bleachbit  # pylint: disable=import-outside-toplevel
+        import bleachbit
         try:
+            # Private helper of our own package.
+            # pylint: disable-next=protected-access
             bleachbit._harden_dll_search_path()
         except Exception:
             bleachbit.logger.warning(
@@ -190,15 +191,7 @@ def _suppress_pygobject_asyncio_deprecations():
     race condition that per-call ``catch_warnings()`` suppressors have when
     a background ``GtkWorkerThread`` enters its own ``catch_warnings()``.
     """
-    if sys.version_info < (3, 14):
-        return
-    warnings.filterwarnings(
-        "ignore",
-        message=r".*asyncio\.get_event_loop_policy.*",
-        category=DeprecationWarning,
-    )
-    warnings.filterwarnings(
-        "ignore",
-        message=r".*asyncio\.AbstractEventLoopPolicy.*",
-        category=DeprecationWarning,
-    )
+    # Imported here so bootstrapping (which hardens the DLL search path on
+    # Windows) is not preceded by importing anything GTK-related.
+    from bleachbit.GtkShim import ignore_pygobject_asyncio_warnings
+    ignore_pygobject_asyncio_warnings()
