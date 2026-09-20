@@ -163,21 +163,21 @@ lint:
 	fi; \
 	pyflakes_pid=; \
 	if $(PYFLAKES) --version >/dev/null 2>&1; then \
-		$(PYFLAKES) *py */*py > all.pyflakes.log 2>&1 & \
+		$(PYFLAKES) {.,bleachbit,tests,windows}/*py > all.pyflakes.log 2>&1 & \
 		pyflakes_pid=$$!; \
 	else \
 		echo "WARNING: Missing pyflakes. APT users, try: sudo apt install pyflakes3"; \
 	fi; \
 	pylint_pid=; \
 	if command -v pylint >/dev/null 2>&1; then \
-		pylint -j 0 $(PYLINT_ARGS) *py */*py > all.pylint.log 2>&1 & \
+		pylint -j 0 $(PYLINT_ARGS) {.,bleachbit,tests,windows}/*py > all.pylint.log 2>&1 & \
 		pylint_pid=$$!; \
 	else \
 		echo "WARNING: Missing pylint. APT users, try: sudo apt install pylint"; \
 	fi; \
 	autopep8_pid=; \
 	if command -v autopep8 >/dev/null 2>&1; then \
-		autopep8 --diff --exit-code {.,bleachbit,tests}/*py > all.autopep8.log 2>&1 & \
+		autopep8 --diff --exit-code {.,bleachbit,tests,windows}/*py > all.autopep8.log 2>&1 & \
 		autopep8_pid=$$!; \
 	else \
 		echo "WARNING: Missing autopep8. APT users, try: sudo apt install python3-autopep8"; \
@@ -251,13 +251,13 @@ tests-with-sudo:
 pretty:
 	@if command -v autopep8 >/dev/null 2>&1; then \
 		echo "Running autopep* on .py files"; \
-		autopep8 -i {.,bleachbit,tests}/*py; \
+		autopep8 -i {.,bleachbit,tests,windows}/*py; \
 	else \
 		echo "WARNING: Missing autopep8. APT users, try: sudo apt install python3-autopep8"; \
 	fi
 	@if command -v dos2unix >/dev/null 2>&1; then \
 		echo "Running dos2unix on .py files"; \
-		dos2unix {.,bleachbit,tests}/*py; \
+		dos2unix {.,bleachbit,tests,windows}/*py; \
 	else \
 		echo "WARNING: Missing dos2unix. APT users, try: sudo apt install dos2unix"; \
 	fi
