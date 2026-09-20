@@ -14,6 +14,8 @@ from unittest import mock
 from bleachbit.Language import get_active_language_code, \
     get_supported_language_codes, \
     get_text, \
+    LocaleCode, \
+    normalize_locale_code, \
     setup_translation, \
     get_supported_language_code_name_dict
 from bleachbit.Options import options
@@ -59,6 +61,59 @@ class LanguageTestCase(common.BleachbitTestCase):
         if len(get_supported_language_codes()) < 3:
             self.skipTest('missing translations')
         self.assertIn('es', slangs)
+
+    def test_normalize_locale_code(self):
+        """Test normalize_locale_code()"""
+        tests = [
+            ('ca@valencia', 'ca'),
+            ('de_DE.utf8@euro', 'de_DE'),
+            ('en_US.UTF-8', 'en_US'),
+            ('en-US', 'en_US'),
+            ('ko_KR.eucKR', 'ko_KR'),
+            ('sr_RS@latin', 'sr_RS'),
+            ('zh-Hant-TW', 'zh_Hant_TW'),
+            ('C.UTF-8', 'C'),
+            ('.UTF-8', ''),
+            ('@', ''),
+            ('@euro', ''),
+        ]
+        same_cases = ['en_US', 'en_001', 'es_419', 'it_CARES', 'C', '']
+        tests.extend((c, c) for c in same_cases)
+        for raw, expected in tests:
+            with self.subTest(raw=raw):
+                self.assertEqual(normalize_locale_code(raw), expected)
+
+    def test_localecode_parse(self):
+        """Test LocaleCode parsing, including @ before . for locale.alias"""
+        tests = [
+            # raw, language, territory, encoding, modifier
+            ('en', 'en', None, None, None),
+            ('de-CH', 'de', 'CH', None, None),
+            ('es_419', 'es', '419', None, None),
+            ('de_DE.utf8@euro', 'de', 'DE', 'utf8', 'euro'),
+            ('en_US@piglatin', 'en', 'US', None, 'piglatin'),
+            ('C.UTF-8', 'C', None, 'UTF-8', None),
+            ('en@boldquot.header', 'en', None, None, 'boldquot.header'),
+        ]
+        for raw, language, territory, encoding, modifier in tests:
+            with self.subTest(raw=raw):
+                loc = LocaleCode(raw)
+                self.assertEqual(loc.language, language)
+                self.assertEqual(loc.territory, territory)
+                self.assertEqual(loc.encoding, encoding)
+                self.assertEqual(loc.modifier, modifier)
+                self.assertEqual(str(loc), raw)
+
+    def test_localecode_is_utf8(self):
+        """Test LocaleCode.is_utf8"""
+        for raw in ('en_US.utf8', 'en_US.UTF-8', 'de_DE.utf8@euro',
+                    'C.utf8', 'C.UTF-8'):
+            with self.subTest(raw=raw):
+                self.assertTrue(LocaleCode(raw).is_utf8)
+        for raw in ('de_DE.iso88591', 'de_DE', 'sr_RS@latin', 'en_US',
+                    'nb_NO.ISO-8859-1'):
+            with self.subTest(raw=raw):
+                self.assertFalse(LocaleCode(raw).is_utf8)
 
     def test_get_supported_language_code_name_dict_unknown_code(self):
         with mock.patch('bleachbit.Language.get_supported_language_codes', return_value=['en', 'es', 'foo@bar']):
@@ -113,7 +168,8 @@ class LanguageTestCase(common.BleachbitTestCase):
         """Language code x_Y should fall back to x"""
         for lang_id in ('es', 'es_XX', 'es_ES', 'es_ES.UTF-8', 'es_1235'):
             options.set('forced_language', lang_id)
-            self.assertEqual(get_active_language_code(), lang_id)
+            self.assertEqual(get_active_language_code(),
+                             normalize_locale_code(lang_id))
             setup_translation()
             self.assertIn(get_text('Preview'),
                           ('Vista previa', 'Previsualizar'))
@@ -193,7 +249,9 @@ class SetupTranslationEnvironTestCase(common.BleachbitTestCase):
                 mock.patch('bleachbit.Language.IS_POSIX', True), \
                 mock.patch('bleachbit.Language.IS_WINDOWS', False), \
                 mock.patch('locale.setlocale'), \
-                mock.patch('gettext.translation'):
+                mock.patch('gettext.translation'), \
+                mock.patch('bleachbit.Unix.find_best_locale',
+                           return_value='it_IT'):
             setup_translation()
         self.assertEqual(os.environ.get('LANGUAGE'), 'it_IT')
 
@@ -212,7 +270,9 @@ class SetupTranslationEnvironTestCase(common.BleachbitTestCase):
                     mock.patch('bleachbit.Language.IS_POSIX', True), \
                     mock.patch('bleachbit.Language.IS_WINDOWS', False), \
                     mock.patch('locale.setlocale'), \
-                    mock.patch('gettext.translation'):
+                    mock.patch('gettext.translation'), \
+                    mock.patch('bleachbit.Unix.find_best_locale',
+                               return_value='es_ES'):
                 setup_translation()
             self.assertIsNone(os.environ.get('LANG'))
             self.assertIsNone(os.environ.get('LC_ALL'))
@@ -238,7 +298,6 @@ class WindowsGettextCacheTestCase(common.BleachbitTestCase):
     @common.skipUnlessWindows
     @skipIfMissingPo
     def test_setup_translation_reloads_libintl_catalog(self):
-        
         from bleachbit import Language as language_module
         from bleachbit.Windows import load_i18n_dll
 
@@ -262,15 +321,17 @@ class WindowsGettextCacheTestCase(common.BleachbitTestCase):
                             return_value=lang):
                         setup_translation()
                     translated = libintl.dgettext(domain, msgid)
-                    self.assertIsNotNone(translated)
                     translations[lang] = translated.decode('utf-8')
 
                 # Distinct languages must not all freeze on the first catalog.
                 self.assertNotEqual(translations['es'], translations['it'])
                 self.assertNotEqual(translations['es'], translations['de'])
+                self.assertNotEqual(translations['es'], translations['fr'])
                 self.assertIn('archivos', translations['es'].lower())
                 self.assertIn('dateien', translations['de'].lower())
             finally:
                 language_module.t = t_backup
-                # Restore process gettext state for later tests.
+                # Restore process gettext state for later tests, after the
+                # environment variables have been restored to their
+                # pre-test values.
                 setup_translation()

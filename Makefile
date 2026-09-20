@@ -61,7 +61,7 @@ clean:
 	@rm -vrf {.,bleachbit,tests,windows,bleachbit/markovify}/__pycache__ # directories
 	@rm -vrf build dist # created by py2exe
 	@rm -rf BleachBit-Portable # created by windows/setup.bat
-	@rm -rf BleachBit-*-portable.zip
+	@rm -rf BleachBit-*-portable*.zip
 	@rm -vf MANIFEST # created by setup.py
 	$(MAKE) -C po clean
 	@rm -vrf locale
@@ -169,7 +169,7 @@ tests-nsis:
 	$(PYTHON_CMD) windows/nsis_translations.py --unittest
 
 tests-with-sudo:
-	# Run tests marked with @test_also_with_sudo using sudo
+	# Run tests marked with @also_with_sudo using sudo
 	PYTHONWARNINGS=error \
 		BLEACHBIT_COVERAGE_RUNNER="$(BLEACHBIT_SUDO_COVERAGE_RUNNER)" \
 		BLEACHBIT_COVERAGE_FILE="$(BLEACHBIT_SUDO_COVERAGE_FILE)" \

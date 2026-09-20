@@ -321,13 +321,44 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertFalse(xmlcleaner.os_match('linux', 'darwin'))
         self.assertFalse(xmlcleaner.os_match('windows', 'darwin'))
 
+        # as FreeBSD
+        self.assertTrue(xmlcleaner.os_match('unix', 'freebsd'))
+        self.assertTrue(xmlcleaner.os_match('bsd', 'freebsd'))
+        self.assertTrue(xmlcleaner.os_match('freebsd', 'freebsd'))
+        self.assertFalse(xmlcleaner.os_match('linux', 'freebsd'))
+        self.assertFalse(xmlcleaner.os_match('windows', 'freebsd'))
+
         # "darwin" is accepted as a deprecated alias for "macos"
         with self.assertLogs('bleachbit.General', level='WARNING'):
             self.assertTrue(xmlcleaner.os_match('darwin', 'darwin'))
 
+        # comma-separated list with negation (positive tokens OR'd, negative tokens excluded)
+        cases = [
+            ('unix,!macos', 'linux', True),
+            ('unix,!macos', 'freebsd', True),
+            ('unix,!macos', 'darwin', False),
+            ('unix,!macos', 'win32', False),
+            ('!macos', 'win32', True),
+            ('linux , unix', 'linux', True),
+            ('!macos', 'darwin', False),
+            ('linux,freebsd', 'linux', True),
+            ('linux,freebsd', 'freebsd', True),
+            ('linux,freebsd', 'darwin', False),
+            ('linux,freebsd', 'win32', False),
+            ('!macos,!windows', 'linux', True),
+            ('!macos,!windows', 'darwin', False),
+            ('!macos,!windows', 'win32', False),
+        ]
+        for os_attr, platform, expected in cases:
+            with self.subTest(os=os_attr, platform=platform):
+                self.assertEqual(expected,
+                                 xmlcleaner.os_match(os_attr, platform))
+
         # as unknown operating system
-        with self.assertRaises(RuntimeError):
+        with self.assertRaisesRegex(RuntimeError, 'Unknown operating system: hal9000'):
             xmlcleaner.os_match('linux', 'hal9000')
+        with self.assertRaisesRegex(RuntimeError, 'Unknown operating system: hal9000'):
+            xmlcleaner.os_match('!macos', 'hal9000')
 
     def test_option_os_filter(self):
         """Unit test for <option os="..."> filtering

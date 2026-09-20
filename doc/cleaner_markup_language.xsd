@@ -13,15 +13,7 @@ later.  See the COPYING file in the top-level directory.
     <xs:attribute name="os" use="optional">
       <xs:simpleType>
         <xs:restriction base="xs:string">
-          <xs:enumeration value="bsd"/>
-          <xs:enumeration value="darwin"/>
-          <xs:enumeration value="linux"/>
-          <xs:enumeration value="macos"/>
-          <xs:enumeration value="netbsd"/>
-          <xs:enumeration value="openbsd"/>
-          <xs:enumeration value="freebsd"/>
-          <xs:enumeration value="unix"/>
-          <xs:enumeration value="windows"/>
+          <xs:pattern value="!?(bsd|darwin|linux|macos|netbsd|openbsd|freebsd|unix|windows)(\s*,\s*!?(bsd|darwin|linux|macos|netbsd|openbsd|freebsd|unix|windows))*"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>

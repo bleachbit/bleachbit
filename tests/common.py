@@ -21,6 +21,8 @@ import warnings
 from pathlib import Path
 from unittest import mock
 
+import psutil
+
 try:
     import pytest
 except ImportError:  # pytest is optional for plain unittest discovery
@@ -57,6 +59,7 @@ from bleachbit.Bootstrap import bootstrap
 from bleachbit.FileUtilities import (
     children_in_directory,
     extended_path,
+    get_filesystem_type,
     is_hard_link,
     is_normal_directory,
 )
@@ -190,6 +193,21 @@ def get_volatile_dir():
         # TMPDIR=/ would rstrip to an empty prefix that matches every path
         volatile_dir = os.sep
     return volatile_dir
+
+
+def cdrom_mountpoints():
+    """Return mountpoints of mounted CD-ROM drives (real or virtual).
+
+    Only read-only mounts are returned, so tests never write to media
+    that might be writable (e.g., a UDF DVD-RAM).
+
+    Returns an empty list when no CD-ROM is present. CI mounts a test
+    ISO: see scripts/mount_test_iso.ps1 (Windows) and
+    scripts/mount_test_iso.sh (Linux).
+    """
+    return [part.mountpoint for part in psutil.disk_partitions(all=False)
+            if (fs_info := get_filesystem_type(part.mountpoint)).is_cdrom
+            and fs_info.is_readonly]
 
 
 class BleachbitTestCase(unittest.TestCase):
@@ -389,7 +407,9 @@ class BleachbitTestCase(unittest.TestCase):
         if lang_id in ('C', 'C.UTF-8', 'C.utf8', 'POSIX'):
             return
         self.assertGreaterEqual(len(lang_id), 2)
-        pattern = r'^[a-z]{2,3}([_-]([A-Z][A-Za-z]{1,3}|[0-9]{3}))?(\.[a-zA-Z][a-zA-Z0-9-]+)?(@\w+)?$'
+        pattern = (
+            r'^[a-z]{2,3}([_-]([A-Z][A-Za-z]{1,3}|[0-9]{3}))?'
+            r'(\.[a-zA-Z][a-zA-Z0-9-]+)?(@\w+)?$')
         self.assertTrue(re.match(pattern, lang_id),
                         f'Invalid language code format: {lang_id}')
 

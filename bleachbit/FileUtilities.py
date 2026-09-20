@@ -10,6 +10,7 @@ File-related utilities
 
 # standard imports
 import codecs
+import collections
 import contextlib
 import errno
 import glob
@@ -110,19 +111,34 @@ def open_files_linux():
     return glob.iglob("/proc/*/fd/*")
 
 
+FilesystemInfo = collections.namedtuple(
+    'FilesystemInfo', ['fstype', 'device', 'is_readonly', 'is_cdrom'],
+    defaults=[False])
+
+
 def get_filesystem_type(path):
     """Get file system type from the given path
 
     path: directory path
 
     Return value:
-    A tuple of (file_system_type, device_name)
-    file_system_type: vfat, ntfs, etc.
-    device_name: C:, D:, etc.
+    A FilesystemInfo named tuple of (fstype, device, is_readonly, is_cdrom)
+        * fstype: vfat, ntfs, tmpfs, etc.
+        * device: C:, /dev/sda1, etc.
+        * is_readonly: True if the file system is mounted read-only.
+          On POSIX, this is from os.statvfs(), which follows firmlinks
+          and stacked mounts; on Windows, from the mount options
+          reported by psutil
+        * is_cdrom: CD-ROM or other optical disc
 
     File system types seen
-    * On Linux: btrfs,ext4, vfat, squashfs
-    * On Windows: NTFS, FAT32, CDFS
+    * On Linux: btrfs, ext4, squashfs, tmpfs, vfat
+    * On macOS: apfs
+    * On Windows: NTFS, FAT32, CDFS, unknown
+
+    When checking remote file share on Linux server, psutils may return
+        - fstype = 'unknown' for UNC path
+        - fstype = 'NTFS' for same path mapped to drive letter
     """
     try:
         # pylint: disable=import-outside-toplevel
@@ -130,33 +146,71 @@ def get_filesystem_type(path):
     except ImportError:
         logger.warning(
             'To get the file system type from the given path, you need to install psutil package')
-        return ("unknown", "none")
+        return FilesystemInfo("unknown", "none", False)
 
     path_obj = Path(path)
     if IS_WINDOWS:
         if len(path) == 2 and path[1] == ':':
             path_obj = Path(path + '\\')
 
-    # Get all partitions with Path objects as keys
+    # Get all partitions with Path objects as keys.
     partitions = {}
-    for partition in psutil.disk_partitions():
+    for partition in psutil.disk_partitions(all=False):
+        # all=True on Windows
+        # "may spin up a removable drive or go over the wire for a network one"
+        # https://github.com/giampaolo/psutil/blob/master/psutil/arch/windows/disk.c
         mount_path = Path(partition.mountpoint)
-        partitions[mount_path] = (partition.fstype, partition.device)
+        mount_opts = [opt.strip().lower()
+                      for opt in partition.opts.split(',')]
+        # examples from Windows
+        # sdiskpart(device='C:\\', mountpoint='C:\\', fstype='NTFS', opts='rw,fixed')
+        # sdiskpart(device='D:\\', mountpoint='D:\\', fstype='CDFS', opts='ro,readonly,cdrom')
+        is_readonly = 'ro' in mount_opts or 'readonly' in mount_opts
+        # Windows reports 'cdrom' in opts; the fstype list covers POSIX.
+        is_cdrom = 'cdrom' in mount_opts or partition.fstype.lower() in (
+            'cdfs', 'cddafs', 'cd9660', 'iso9660', 'udf')
+        partitions[mount_path] = FilesystemInfo(
+            partition.fstype, partition.device, is_readonly, is_cdrom)
 
     # Exact match
-    for mount_path, fs_info in partitions.items():
+    fs_info = None
+    for mount_path, fs_info_iter in partitions.items():
         if path_obj == mount_path:
-            return fs_info
+            fs_info = fs_info_iter
+            break
 
     # Try parent paths
-    current = path_obj
-    while current.parent != current:  # Stop at root
-        current = current.parent
-        for mount_path, fs_info in partitions.items():
-            if current == mount_path:
-                return fs_info
+    if fs_info is None:
+        current = path_obj
+        while current.parent != current and fs_info is None:  # Stop at root
+            current = current.parent
+            for mount_path, fs_info_iter in partitions.items():
+                if current == mount_path:
+                    fs_info = fs_info_iter
+                    break
 
-    return ("unknown", "none")
+    if fs_info is None:
+        fs_info = FilesystemInfo("unknown", "none", False)
+
+    if IS_POSIX:
+        # On macOS, firmlinks redirect most user paths from the sealed,
+        # read-only system volume to the read-write data volume, so the
+        # matched ancestor's mount options are wrong. os.statvfs() asks
+        # the kernel, which resolves firmlinks and stacked mounts.
+        try:
+            is_readonly = bool(os.statvfs(path).f_flag & os.ST_RDONLY)
+        except OSError:
+            # The path may not exist; keep the mount options.
+            pass
+        else:
+            fs_info = fs_info._replace(is_readonly=is_readonly)
+
+    return fs_info
+
+
+# FreeBSD lsof appends the mount device to NAME, e.g.
+# "/tmp/foo (/dev/gpt/rootfs)".
+_LSOF_DEV_SUFFIX = re.compile(r' \(/dev/[^)]+\)$')
 
 
 def open_files_lsof(run_lsof=None):
@@ -186,14 +240,51 @@ def open_files_lsof(run_lsof=None):
         output = output.decode('utf-8', errors='replace')
     for f in output.split("\n"):
         if f.startswith("n/"):
-            yield f[1:]  # Drop lsof's "n"
+            # example: "n/dev/null"
+            name = f[1:]  # Drop lsof's "n"
+            if IS_FREEBSD:
+                # See comment above by definition of _LSOF_DEV_SUFFIX.
+                name = _LSOF_DEV_SUFFIX.sub('', name)
+            yield name
+
+
+def open_files_psutil():
+    """Return iterator of open files using psutil
+
+    FreeBSD lsof typically lists cwd and the process executable but not
+    file descriptors unless it is setgid kmem. psutil uses
+    KERN_PROC_FILEDESC, which a user can read for their own processes.
+    """
+    # pylint: disable=import-outside-toplevel
+    import psutil
+    for proc in psutil.process_iter():
+        try:
+            open_file_list = proc.open_files()
+        except (psutil.Error, OSError):
+            continue
+        for ofile in open_file_list:
+            # FreeBSD kinfo_getfile leaves an empty path for a newly
+            # created O_WRONLY file (Python's 'wb').
+            if ofile.path:
+                yield ofile.path
+
+
+def open_files_freebsd():
+    """Return iterator of open files on FreeBSD"""
+    try:
+        yield from open_files_psutil()
+    except ImportError:
+        logger.debug('psutil not available; listing open files with lsof')
+        yield from open_files_lsof()
 
 
 def open_files():
     """Return iterator of open files"""
     if IS_LINUX:
         files = open_files_linux()
-    elif IS_MAC or IS_FREEBSD:
+    elif IS_FREEBSD:
+        files = open_files_freebsd()
+    elif IS_MAC:
         files = open_files_lsof()
     else:
         raise RuntimeError('unsupported platform for open_files()')

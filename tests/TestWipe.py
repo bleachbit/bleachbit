@@ -16,6 +16,7 @@ from contextlib import ExitStack
 from unittest import mock
 
 import bleachbit
+from bleachbit.FileUtilities import FilesystemInfo
 from bleachbit.Options import options
 from bleachbit import Wipe
 from bleachbit.Wipe import (
@@ -369,7 +370,8 @@ class WipeTestCase(common.BleachbitTestCase):
         stack.enter_context(mock.patch(
             'bleachbit.Wipe.os.path.isdir', return_value=True))
         stack.enter_context(mock.patch(
-            'bleachbit.FileUtilities.get_filesystem_type', return_value=(fs_type,)))
+            'bleachbit.FileUtilities.get_filesystem_type',
+            return_value=FilesystemInfo(fs_type, 'none', False)))
         stack.enter_context(mock.patch(
             'bleachbit.FileUtilities.free_space', return_value=0))
         stack.enter_context(mock.patch('bleachbit.Wipe.sync'))
@@ -383,7 +385,8 @@ class WipeTestCase(common.BleachbitTestCase):
 
     def test_wipe_path_not_directory(self):
         """Non-directory path should return early"""
-        with mock.patch('bleachbit.FileUtilities.get_filesystem_type', return_value=('ntfs',)), \
+        with mock.patch('bleachbit.FileUtilities.get_filesystem_type',
+                        return_value=FilesystemInfo('ntfs', 'none', False)), \
                 mock.patch('bleachbit.Wipe.os.path.isdir', return_value=False):
             results = list(wipe_path('/not-a-directory'))
         self.assertEqual(results, [])
@@ -510,6 +513,35 @@ class WipeTestCase(common.BleachbitTestCase):
             list(wipe_path(self.tempdir))
         self.assertEqual(fsync_mock.call_count, 2)
         self.assertEqual(ntf_mock.call_count, 1)
+
+    def test_wipe_path_fat32_file_size_limit(self):
+        """FAT32 caps each wipe file below 4 GiB and starts another file
+
+        psutil reports 'FAT32' (uppercase) on Windows and 'vfat' on Linux;
+        both must trigger the 4 GiB limit. On Windows, writing past 4 GiB
+        raises ENOSPC rather than EFBIG, which would otherwise be misread
+        as a full disk and stop the wipe early.
+        """
+        for fs_type in ('vfat', 'FAT32'):
+            with self.subTest(fs_type=fs_type):
+                mock_file1 = self._make_mock_file()
+                mock_file1.write.return_value = 65536
+                mock_file2 = self._make_mock_file()
+                mock_file2.write.side_effect = IOError(
+                    errno.ENOSPC, 'No space left on device')
+                ntf_mock = mock.Mock(side_effect=[mock_file1, mock_file2])
+                with self._wipe_path_common_mocks(fs_type=fs_type) as stack:
+                    stack.enter_context(mock.patch(
+                        'bleachbit.FileUtilities.free_space',
+                        return_value=8 * 1024 * 1024 * 1024))
+                    stack.enter_context(mock.patch(
+                        'bleachbit.Wipe.tempfile.NamedTemporaryFile', ntf_mock))
+                    list(wipe_path(self.tempdir))
+                # Each write adds 64 KiB until writtensize reaches
+                # 4 GiB - 64 KiB, then the loop breaks for a new file.
+                self.assertEqual(65535, mock_file1.write.call_count)
+                # A second file was opened after the first hit the limit.
+                self.assertEqual(2, ntf_mock.call_count)
 
     def test_wipe_path_write_efbig(self):
         """Write loop handles EFBIG by breaking"""

@@ -381,13 +381,13 @@ def wipe_path(pathname, idle=False):
         return 1, done_percent, remaining_seconds
 
     # Get the file system type from the given path
-    fstype = get_filesystem_type(pathname)[0]
+    fs_info = get_filesystem_type(pathname)
     # TRANSLATORS: Debug log message shown during file wiping. 'Wiping' is a
     # present participle (ongoing action) refering to secure overwrite.
     # %(pathname)s is the file/directory path; %(fstype)s is the file system type
     # (e.g., ext3, ntfs). Do not translate placeholders.
     logger.debug(_("Wiping path %(pathname)s with file system type %(fstype)s"),
-                 {"pathname": pathname, "fstype": fstype})
+                 {"pathname": pathname, "fstype": fs_info.fstype})
     if not os.path.isdir(pathname):
         logger.error(
             _("Path to wipe must be an existing directory: %s"), pathname)
@@ -400,8 +400,12 @@ def wipe_path(pathname, idle=False):
             logger.warning(
                 _("Shred drive is world-writable; wiping there is unsafe: %s"), pathname)
 
-    if fstype in ('ext4', 'btrfs'):
+    if fs_info.fstype in ('ext4', 'btrfs'):
         fitrim(pathname)
+
+    # FAT12/16/32 limit file size to 4 GB; exFAT does not. Linux reports
+    # 'vfat', while Windows reports 'FAT' or 'FAT32'.
+    is_fat = fs_info.fstype.lower() in ('vfat', 'fat', 'fat12', 'fat16', 'fat32')
 
     files = []
     total_bytes = 0
@@ -413,6 +417,7 @@ def wipe_path(pathname, idle=False):
 
         # Because FAT32 has a maximum file size of 4,294,967,295 bytes,
         # this loop is sometimes necessary to create multiple files.
+
         while True:
             try:
                 logger.debug(
@@ -438,7 +443,7 @@ def wipe_path(pathname, idle=False):
             while True:
 
                 try:
-                    if fstype != 'vfat':
+                    if not is_fat:
                         f.write(blanks)
                     # On Ubuntu, the size of file should be less than
                     # 4GB. If not, there should be EFBIG error, so the
@@ -450,6 +455,8 @@ def wipe_path(pathname, idle=False):
                         break
 
                 except IOError as e:
+                    # Windows 11 25H2 (10.0.26220.9472) raised ENOSPC (not EFBIG) on
+                    # 4GB VFAT, but the `is_fat` guard above should prevent it.
                     if e.errno in (errno.ENOSPC, errno.EDQUOT):
                         if len(blanks) > 1:
                             # Try writing smaller blocks
@@ -458,6 +465,13 @@ def wipe_path(pathname, idle=False):
                             disk_full = True
                             break
                     elif e.errno == errno.EFBIG:
+                        # Normally the  `is_fat` guard stops first, so this
+                        # is a fallback.
+                        # Writes beyond a filesystem's s_maxbytes fail with
+                        # EFBIG (generic_write_check_limits).
+                        # VFAT sets s_maxbytes = 0xffffffff (4 GiB - 1).
+                        # RLIMIT_FSIZE produces the same errno on any FS.
+                        # EFBIG with VFAT verified with Linux 6.12.
                         break
                     else:
                         raise

@@ -291,7 +291,6 @@ install_opensuse() {
         libxml2-tools
         make
         "${py}-pip"
-        "${py}-sqlite-utils"
         "${py}-xml"
         python-rpm-macros
         rpm-build
@@ -299,6 +298,8 @@ install_opensuse() {
         ShellCheck
         timezone
     )
+    # sqlite-utils is not packaged on Leap (see bleachbit.spec); install if available.
+    local dev_extra=("${py}-sqlite-utils")
     local dev_pip=(
         "${py}-pytest"
         "${py}-pytest-xdist"
@@ -316,6 +317,7 @@ install_opensuse() {
     if [[ "$MODE" == "dev" ]]; then
         echo "[opensuse] installing dev/test/packaging deps"
         sudo zypper --non-interactive install --no-recommends "${dev[@]}"
+        sudo zypper --non-interactive install --no-recommends "${dev_extra[@]}" || true
         if [[ "$VENV" == 0 ]]; then
             sudo zypper --non-interactive install --no-recommends "${dev_pip[@]}" || true
             # pylint/pyflakes/autopep8 may not be in the main repos;

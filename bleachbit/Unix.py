@@ -22,7 +22,8 @@ import subprocess
 import bleachbit
 from bleachbit import FileUtilities, General, IS_MAC, IS_POSIX
 from bleachbit.FileUtilities import children_in_directory, exe_exists
-from bleachbit.Language import get_text as _, native_locale_names
+from bleachbit.Language import get_text as _, native_locale_names, \
+    LocaleCode
 from bleachbit.VFS import RealVFS
 
 logger = logging.getLogger(__name__)
@@ -241,43 +242,48 @@ def find_available_locales():
 
 
 def find_best_locale(user_locale):
-    """Find closest match to available locales"""
-    assert isinstance(user_locale, str)
-    if not user_locale:
-        return 'C'
-    if user_locale in ('C', 'C.utf8', 'POSIX'):
-        return user_locale
-    available_locales = find_available_locales()
+    """Find closest match to available locales, preferring UTF-8
 
-    # If requesting a language like 'es' and current locale is compatible
-    # like 'es_MX', then return that.
+    BleachBit's code and .po files are UTF-8 and GTK 3 requires UTF-8
+    for display strings, so a non-UTF-8 locale is returned only when
+    UTF-8 is not available.
+    """
+    assert isinstance(user_locale, str)
+    req = LocaleCode(user_locale)
+    if not req.raw:
+        return 'C'
+    if req.is_special:
+        return req.raw
+    available_raw = find_available_locales()
+    available = [LocaleCode(a) for a in available_raw]
+
+    # Exact match if already UTF-8.
+    if req.is_utf8 and req.raw in available_raw:
+        return req.raw
+
+    # Prefer current system locale if compatible and UTF-8
+    # (e.g., system is 'es_MX.UTF-8' when requesting 'es').
     # Import here for mock patch.
     import locale  # pylint: disable=import-outside-toplevel
-    current_locale = locale.getlocale()[0]
-    if current_locale and current_locale.startswith(user_locale.split('.')[0]):
-        # getlocale() may return (language, None) when the encoding is unknown.
-        return '.'.join(p for p in locale.getlocale() if p)
+    lang, codeset = locale.getlocale()
+    if lang and codeset and lang.startswith(req.normalized) and \
+            codeset.replace('-', '').replace('_', '').lower() == 'utf8':
+        return '.'.join((lang, codeset))
 
-    # Check for exact match.
-    if user_locale in available_locales:
-        return user_locale
+    # Otherwise search installed locales for UTF-8 (e.g., 'es_ES.utf8').
+    for avail in available:
+        if avail.normalized.startswith(req.normalized) and avail.is_utf8:
+            return avail.raw
 
-    # Next, match like 'en' to 'en_US.utf8' (if available) because
-    # of preference for UTF-8. Compare case- and hyphen-insensitively:
-    # macOS's locale -a uses '.UTF-8' (uppercase, hyphenated), while
-    # some Linux distros use '.utf8' (lowercase, no hyphen); comparing
-    # only against '.utf8' silently never matched on macOS, falling
-    # through to the next loop and picking whatever locale happened to
-    # be listed first for the prefix -- including a non-UTF-8 one.
-    for avail_locale in available_locales:
-        suffix = avail_locale.rsplit('.', 1)[-1].replace('-', '').lower()
-        if avail_locale.startswith(user_locale) and suffix == 'utf8':
-            return avail_locale
+    # Fall back to exact non-UTF-8 match (e.g., 'de_DE@euro').
+    for candidate in (req.raw, req.normalized):
+        if candidate in available_raw:
+            return candidate
 
-    # Next, match like 'en' to 'en_US' or 'en_US.iso88591'.
-    for avail_locale in available_locales:
-        if avail_locale.startswith(user_locale):
-            return avail_locale
+    # Fall back to any installed match (e.g., 'en_US.iso88591').
+    for avail in available:
+        if avail.normalized.startswith(req.normalized):
+            return avail.raw
 
     return 'C'
 
@@ -359,8 +365,8 @@ def get_distribution_name_version():
 
     Depending on system capabilities, return value may be:
     * 'ubuntu 24.10'
-    * 'Linux 6.12.3 (unknown distribution)'
-    * 'Linux (unknown version and distribution)'
+    * 'Linux 6.12.3'
+    * 'Linux'
 
     Python 3.7 had platform.linux_distribution(), but it
     was removed in Python 3.8.
@@ -368,18 +374,17 @@ def get_distribution_name_version():
     for get_dist in (get_distribution_name_version_platform_freedesktop,
                      get_distribution_name_version_distro,
                      get_distribution_name_version_os_release):
-        ret = get_dist()
-        if ret:
+        if ret := get_dist():
             return ret
     for name, get_release in (('platform.release()', platform.release),
                               ('os.uname()', lambda: os.uname().release)):
         try:
             # example '6.12.3-061203-generic'
             linux_version = get_release().split('-')[0]
-            return f"Linux {linux_version} (unknown distribution)"
+            return f"Linux {linux_version}"
         except Exception as e:
             logger.debug("Error calling %s: %s", name, e)
-    return "Linux (unknown version and distribution)"
+    return "Linux"
 
 
 def get_mount_points():
@@ -415,14 +420,15 @@ def get_purgeable_locales(locales_to_keep):
 
     # Remove the locales we want to keep
     for keep in locales_to_keep:
+        keep_loc = LocaleCode(keep)
         purgeable_locales.discard(keep)
         # If keeping a variant (e.g. 'en_US'), also keep the base locale (e.g. 'en')
-        if '_' in keep:
-            purgeable_locales.discard(keep[:keep.find('_')])
+        if keep_loc.territory:
+            purgeable_locales.discard(keep_loc.language)
         # If keeping a base locale (e.g. 'en'), also keep all its variants (e.g. 'en_US')
-        if '_' not in keep:
+        else:
             purgeable_locales = {locale for locale in purgeable_locales
-                                 if not locale.startswith(keep + '_')}
+                                 if LocaleCode(locale).language != keep_loc.language}
 
     return frozenset(purgeable_locales)
 
