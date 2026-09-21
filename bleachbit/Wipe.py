@@ -132,7 +132,7 @@ def detect_orphaned_wipe_files():
                 try:
                     with open(entry.path, 'rb') as f:
                         sample = f.read(4096)
-                        if sample and all(b == 0 for b in sample):
+                        if sample and not sample.strip(b'\0'):
                             orphaned_files.append(entry.path)
                 except (IOError, OSError) as e:
                     logger.debug('Could not read file %s: %s', entry.path, e)
