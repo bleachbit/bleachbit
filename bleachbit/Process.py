@@ -19,11 +19,22 @@ from bleachbit import IS_LINUX, IS_POSIX, IS_WINDOWS
 
 ProcessInfo = namedtuple('ProcessInfo', ['pid', 'name', 'same_user'])
 
-try:
-    import psutil
-    _has_psutil = True
-except ImportError:
-    _has_psutil = False
+# Resolved on first use, not at import
+_psutil = None
+_has_psutil = None
+
+
+def _import_psutil():
+    """Return the psutil module, or None when it is not installed"""
+    global _psutil, _has_psutil  # pylint: disable=global-statement
+    if _has_psutil is None:
+        try:
+            import psutil  # pylint: disable=import-outside-toplevel
+        except ImportError:
+            _psutil, _has_psutil = None, False
+        else:
+            _psutil, _has_psutil = psutil, True
+    return _psutil
 
 
 def enumerate_processes():
@@ -32,11 +43,11 @@ def enumerate_processes():
     'same_user' is True if the process owner matches the current (real) user.
     On Unix with sudo, compares against the non-root user.
     """
-    if _has_psutil and IS_POSIX:
+    if _import_psutil() and IS_POSIX:
         yield from _enumerate_psutil_posix()
         return
     # Windows should always have psutil.
-    if _has_psutil and IS_WINDOWS:
+    if _import_psutil() and IS_WINDOWS:
         yield from _enumerate_psutil_windows()
         return
     if IS_LINUX:
@@ -51,6 +62,7 @@ def enumerate_processes():
 def _enumerate_psutil_posix():
     """Enumerate processes with psutils on POSIX"""
     from bleachbit.General import get_real_uid
+    psutil = _import_psutil()
     target_uid = get_real_uid()
     for proc in psutil.process_iter(['name', 'exe', 'uids', 'cmdline']):
         try:
@@ -78,7 +90,7 @@ def _enumerate_psutil_posix():
 
 def _enumerate_psutil_windows():
     """Enumerate processes with psutils on Windows"""
-
+    psutil = _import_psutil()
     current_user = psutil.Process().username().lower()
     for proc in psutil.process_iter(['name', 'username', 'cmdline']):
         try:
@@ -226,7 +238,7 @@ def terminate_process(exename, require_same_user):
                 continue
             try:
                 if IS_WINDOWS:
-                    psutil.Process(proc.pid).kill()
+                    _import_psutil().Process(proc.pid).kill()
                 else:
                     os.kill(proc.pid, signal.SIGTERM)
                 terminated.append(proc.pid)

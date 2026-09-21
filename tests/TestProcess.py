@@ -11,6 +11,7 @@ Test case for the module Process
 # These tests reach into internals on purpose.
 # pylint: disable=protected-access
 import os
+import subprocess
 import sys
 from unittest import mock
 
@@ -249,8 +250,17 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
                     self.assertFalse(is_process_running(exename, require_same_user),
                                      f'is_running({exename}, {require_same_user})')
 
+    def test_psutil_not_imported_at_module_load(self):
+        """psutil stays off the import path until something needs it"""
+        code = ('import sys, bleachbit.Process; '
+                'print("psutil" in sys.modules)')
+        proc = subprocess.run([sys.executable, '-c', code],
+                              capture_output=True, text=True, check=True, timeout=60,
+                              cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        self.assertEqual(proc.stdout.strip(), 'False', proc.stderr)
+
     def test_missing_psutil(self):
-        """Process should be importable without psutil and set _has_psutil=False."""
+        """Process imports without psutil and remembers it is missing"""
         with common.mock_missing_package(
                 'psutil',
                 clear_prefixes=('bleachbit.Process',)):
@@ -259,7 +269,10 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
             # `from x import Y` would hand back the stale module.
             # pylint: disable=consider-using-from-import
             import bleachbit.Process as Process
-            self.assertFalse(Process._has_psutil)
+            # force the lazy detection
+            self.assertIsNone(Process._import_psutil())
+            # assertIs, not assertFalse: the un-probed state is None.
+            self.assertIs(Process._has_psutil, False)
 
     @common.skipUnlessWindows
     def test_is_process_running_windows(self):
@@ -285,7 +298,7 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
                     expected, result, f'Expecting is_process_running({exename}, {require_same_user}) = {expected}, got {result}')
 
     def test_missing_psutil_import(self):
-        """Process should be importable without psutil and set _has_psutil=False."""
+        """Process imports without psutil and remembers it is missing"""
         with common.mock_missing_package(
                 'psutil',
                 clear_prefixes=('bleachbit.Process',)):
@@ -294,7 +307,10 @@ alocaluseraccount   530   0.0  0.0  2496700    530   ??  S    20May16   0:04.44 
             # `from x import Y` would hand back the stale module.
             # pylint: disable=consider-using-from-import
             import bleachbit.Process as Process
-            self.assertFalse(Process._has_psutil)
+            # force the lazy detection
+            self.assertIsNone(Process._import_psutil())
+            # assertIs, not assertFalse: the un-probed state is None.
+            self.assertIs(Process._has_psutil, False)
             if IS_WINDOWS:
                 with self.assertRaises(RuntimeError):
                     list(Process.enumerate_processes())
