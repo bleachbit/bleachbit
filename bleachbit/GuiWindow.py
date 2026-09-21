@@ -733,9 +733,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             self.progressbar.set_text("")
             self.progressbar.set_fraction(1)
             self.progressbar.set_text(done_msg)
-        if self.textbuffer is not None:
-            self.textview.scroll_mark_onscreen(
-                self.textbuffer.get_insert())
+        # No scroll here: append_text() has queued one, and scrolling
+        # before GTK lays out the new text makes it do that twice.
         self.set_sensitive(True)
 
         # Close the program after cleaning is completed.
