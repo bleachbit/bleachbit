@@ -823,7 +823,6 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             else:
                 self.recognized_cleanerml = True
         # reload cleaners from disk
-        self.view.expand_all()
         self.progressbar.show()
         rc = register_cleaners(self.update_progress_bar,
                                self.cb_register_cleaners_done,
