@@ -617,6 +617,56 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
         self.assertIn('Winreg', actions)
         self.assertIn('Delete', actions)
 
+    def _build_actions(self, body, prefix):
+        """Return the actions of a one-section winapp2.ini, by class name"""
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix=prefix)
+        with open(self.ini_fn, 'w', encoding='utf-8') as ini:
+            ini.write('[someapp]\nLangSecRef=3021\n' + body)
+        cleaner = next(Winapp(self.ini_fn).get_cleaners())
+        actions = {}
+        for (_option_id, action) in cleaner.actions:
+            actions.setdefault(action.__class__.__name__, []).append(action)
+        return actions
+
+    def test_action_keeps_xml_special_characters(self):
+        """XML-special characters in keys reach the providers unchanged"""
+        actions = self._build_actions(
+            'FileKey1=C:\\BB Test\\A & B <c> "d"|*.log\n'
+            'RegKey1=HKCU\\Software\\BleachBit\\A & B|Value & Name\n',
+            'winapp2-xmlchars')
+
+        delete_path = actions['Delete'][0].paths[0]
+        self.assertIn('A & B <c> "d"', delete_path)
+        self.assertNotIn('&amp;', delete_path)
+        self.assertNotIn('&lt;', delete_path)
+        self.assertNotIn('&quot;', delete_path)
+
+        winreg_action = actions['Winreg'][0]
+        self.assertIn('A & B', winreg_action.keyname)
+        self.assertNotIn('&amp;', winreg_action.keyname)
+        self.assertEqual(winreg_action.name, 'Value & Name')
+
+    def test_action_keeps_control_character_in_path(self):
+        """A control character in a path no longer drops its section"""
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-ctrlchar')
+        with open(self.ini_fn, 'w', encoding='utf-8') as ini:
+            ini.write('[someapp]\nLangSecRef=3021\n'
+                      'FileKey1=C:\\BB Test\\a\x01b|*.log\n')
+
+        winapp = Winapp(self.ini_fn)
+        self.assertEqual(winapp.errors, 0)
+        cleaner = next(winapp.get_cleaners())
+        delete_path = cleaner.actions[0][1].paths[0]
+        self.assertIn('a\x01b', delete_path)
+
+    def test_action_keeps_tab_in_path(self):
+        """A tab in a path is kept, not collapsed to a space"""
+        actions = self._build_actions(
+            'FileKey1=C:\\BB Test\\a\tb|*.log\n', 'winapp2-tabpath')
+
+        delete_path = actions['Delete'][0].paths[0]
+        self.assertIn('a\tb', delete_path)
+
     def test_filekey_recurse_rejects_excessive_wildcards(self):
         """A FileKey RECURSE pattern with too many wildcards is rejected (ReDoS defense)"""
         self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-redos')

@@ -14,7 +14,6 @@ import glob
 import logging
 import os
 import re
-from xml.dom.minidom import parseString
 
 import bleachbit
 from bleachbit import Cleaner, IS_WINDOWS, Windows
@@ -67,9 +66,14 @@ _WINAPP_VAR_SUBS = (
 )
 
 
-def xml_escape(s):
-    """Lightweight way to escape XML entities"""
-    return s.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;').replace('>', '&gt;')
+class _ActionNode:
+    """Stand-in for a minidom <action> node, without the parse per key"""
+
+    def __init__(self, attrs):
+        self._attrs = attrs
+
+    def getAttribute(self, name):
+        return self._attrs.get(name, '')
 
 
 def section2option(s):
@@ -377,7 +381,7 @@ class Winapp:
 
     def __make_file_provider(self, dirname, filename, recurse, removeself, excludekeys):
         """Change parsed FileKey to action provider"""
-        regex = ''
+        attrs = {'command': 'delete'}
         if recurse:
             search = 'walk.files'
             path = dirname
@@ -385,13 +389,12 @@ class Winapp:
                 if removeself:
                     search = 'walk.all'
             else:
-                regex = f' regex="^{xml_escape(fnmatch_translate(filename))}$" '
+                attrs['regex'] = f'^{fnmatch_translate(filename)}$'
         else:
             search = 'glob'
             path = os.path.join(dirname, filename)
             if path.find('*') == -1:
                 search = 'file'
-        excludekeysxml = ''
         if excludekeys:
             if len(excludekeys) > 1:
                 # multiple
@@ -399,15 +402,16 @@ class Winapp:
             else:
                 # just one
                 exclude_str = excludekeys[0]
-            excludekeysxml = f'nwholeregex="{xml_escape(exclude_str)}"'
-        action_str = f'<option command="delete" search="{search}" path="{xml_escape(path)}" {regex}{excludekeysxml}/>'
-        yield Delete(parseString(action_str).childNodes[0])
+            attrs['nwholeregex'] = exclude_str
+        attrs['search'] = search
+        attrs['path'] = path
+        yield Delete(_ActionNode(attrs))
         if removeself:
             search = 'file'
             if dirname.find('*') > -1:
                 search = 'glob'
-            action_str = f'<option command="delete" search="{search}" path="{xml_escape(dirname)}" type="d"/>'
-            yield Delete(parseString(action_str).childNodes[0])
+            yield Delete(_ActionNode({'command': 'delete', 'search': search,
+                                      'path': dirname, 'type': 'd'}))
 
     def handle_filekey(self, lid, ini_section, ini_option, excludekeys):
         """Parse a FileKey# option.
@@ -458,12 +462,10 @@ class Winapp:
                 logger.debug('Skipping excluded registry key: %s', path)
                 return
 
-        path = xml_escape(path)
-        name = ""
+        attrs = {'command': 'winreg', 'path': path}
         if len(elements) == 2:
-            name = f' name="{xml_escape(elements[1])}"'
-        action_str = f'<option command="winreg" path="{path}"{name}/>'
-        provider = Winreg(parseString(action_str).childNodes[0])
+            attrs['name'] = elements[1]
+        provider = Winreg(_ActionNode(attrs))
         provider.excludekeys = reg_excludekeys
         self.cleaners[lid].add_action(section2option(ini_section), provider)
 
