@@ -72,26 +72,34 @@ class LocaleCleanerPath:
                 f"Malformed regex '{pre}' or '{post}': {errormsg}") from errormsg
         self.add_child(regex)
 
+    def _listdir(self, path):
+        """List a directory, treating one that cannot be read as empty"""
+        try:
+            return self._get_vfs().listdir(path)
+        except OSError:
+            # Such as /usr/share/empty.sshd, which is mode 0711
+            return []
+
     def get_subpaths(self, basepath):
         """Returns direct subpaths for this object, i.e. either the named subfolder or all
         subfolders matching the pattern"""
         vfs = self._get_vfs()
         if isinstance(self.pattern, re.Pattern):
+            names = self._listdir(basepath)
             # posixpath is easy way to test also from Windows.
-            return (posixpath.join(basepath, p) for p in vfs.listdir(basepath)
+            return (posixpath.join(basepath, p) for p in names
                     if self.pattern.match(p) and vfs.isdir(posixpath.join(basepath, p)))
         path = posixpath.join(basepath, self.pattern)
         return [path] if vfs.isdir(path) else []
 
     def get_localizations(self, basepath):
         """Returns all localization items for this object and all descendant objects"""
-        vfs = self._get_vfs()
         for path in self.get_subpaths(basepath):
             for child in self.children:
                 if isinstance(child, LocaleCleanerPath):
                     yield from child.get_localizations(path)
                 elif isinstance(child, re.Pattern):
-                    for element in vfs.listdir(path):
+                    for element in self._listdir(path):
                         match = child.match(element)
                         if match is not None:
                             yield (match.group('locale'),
