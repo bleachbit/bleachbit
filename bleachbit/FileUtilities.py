@@ -674,6 +674,39 @@ def truncate_file(path):
     _run_with_delete_lock(path, _truncate)
 
 
+def _file_type(path):
+    """Return the file type bits of path, or None if it is missing
+
+    On Windows only the type bits are set, and 0 means a type delete()
+    does not handle.
+    """
+    if IS_POSIX:
+        try:
+            return os.lstat(path).st_mode
+        except (OSError, ValueError):
+            return None
+    # os.lstat() returns Access Denied on some Windows files that the
+    # native os.path checks can still see
+    if not os.path.lexists(path):
+        return None
+    try:
+        attrs = os.lstat(path).st_file_attributes
+    except OSError:
+        attrs = 0
+    # A junction/symlink's contents belong to the target, not
+    # this path; isdir() would follow it and judge the target's
+    # emptiness instead of removing the reparse point itself.
+    if attrs & stat.FILE_ATTRIBUTE_REPARSE_POINT:
+        return stat.S_IFLNK
+    if os.path.isdir(path):
+        return stat.S_IFDIR
+    if os.path.isfile(path):
+        return stat.S_IFREG
+    if os.path.islink(path):
+        return stat.S_IFLNK
+    return 0
+
+
 def delete(path, shred=False, ignore_missing=False, allow_shred=True):
     """Delete path that is either file, directory, link or FIFO.
 
@@ -690,32 +723,17 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
        Returns True if the path was deleted, False otherwise.
     """
     from bleachbit.Options import options
-    is_special = False
     path = extended_path(path)
     do_shred = allow_shred and (shred or options.get('shred'))
-    if not os.path.lexists(path):
+    mode = _file_type(path)
+    if mode is None:
         if ignore_missing:
             return False
         raise OSError(2, 'No such file or directory', path)
-    if IS_POSIX:
-        # With certain (relatively rare) files on Windows os.lstat()
-        # may return Access Denied
-        mode = os.lstat(path)[stat.ST_MODE]
-        is_special = stat.S_ISFIFO(mode) or stat.S_ISLNK(mode)
-    elif IS_WINDOWS:
-        try:
-            # A junction/symlink's contents belong to the target, not
-            # this path; isdir() would follow it and judge the target's
-            # emptiness instead of removing the reparse point itself.
-            is_special = bool(
-                os.lstat(path).st_file_attributes & stat.FILE_ATTRIBUTE_REPARSE_POINT)
-        except OSError:
-            # lstat returns Access Denied on some Windows files
-            is_special = False
-    if is_special:
+    if stat.S_ISLNK(mode) or stat.S_ISFIFO(mode):
         _delete_path(path, os.remove)
         return True
-    if os.path.isdir(path):
+    if stat.S_ISDIR(mode):
         delpath = path
         # TRANSLATORS: Log message where %s is the pathname.
         not_empty_msg = _("Directory is not empty: %s")
@@ -760,11 +778,8 @@ def delete(path, shred=False, ignore_missing=False, allow_shred=True):
                 return False
             raise
         return True
-    if os.path.isfile(path):
+    if stat.S_ISREG(mode):
         delete_file(path, do_shred)
-        return True
-    if os.path.islink(path):
-        _delete_path(path, os.remove)
         return True
     # TRANSLATORS: Log message where %s is the pathname.
     logger.info(_("Special file type cannot be deleted: %s"), path)
