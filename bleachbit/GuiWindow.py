@@ -844,8 +844,23 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         if self._showed_startup_messages:
             # remove from idle loop (see GObject.idle_add)
             return False
+        self._showed_startup_messages = True
+        # Let the tree paint first: the checks can block on antivirus or a
+        # domain controller. Not PRIORITY_LOW, where --exit queues quit().
+        GLib.idle_add(self._show_startup_messages)
+        return False
 
-        startup_msgs = get_startup_messages(self._auto_exit)
+    def _show_startup_messages(self):
+        """Show startup messages once the cleaner tree is on screen"""
+        if self.textbuffer is None:
+            # window was destroyed before this callback ran
+            return False
+        try:
+            startup_msgs = get_startup_messages(self._auto_exit)
+        except Exception:
+            # must not also skip the update check below
+            logger.exception('Error getting startup messages')
+            startup_msgs = []
         for (msg, is_error) in startup_msgs:
             self.append_text(msg + '\n', 'error' if is_error else None)
 
@@ -856,7 +871,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
                 options.get("check_online_updates"):
             self.check_online_updates()
 
-        self._showed_startup_messages = True
+        bleachbit.log_startup_time('startup messages done')
         return False
 
     def cb_run_option(self, widget, really_delete, cleaner_id, option_id):
