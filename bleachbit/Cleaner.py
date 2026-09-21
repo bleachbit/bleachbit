@@ -518,11 +518,13 @@ class System(Cleaner):
             dirnames = ['/tmp', '/var/tmp']
             for dirname in dirnames:
                 for path in children_in_directory(dirname, True):
-                    is_open = FileUtilities.openfiles.is_open(path)
-                    ok = not is_open and os.path.isfile(path) and \
+                    # is_open() resolves the path and rescans /proc, so leave
+                    # it until the cheaper tests have had a chance to reject.
+                    ok = os.path.isfile(path) and \
                         not os.path.islink(path) and \
                         FileUtilities.ego_owner(path) and \
-                        not self.whitelisted(path)
+                        not self.whitelisted(path) and \
+                        not FileUtilities.openfiles.is_open(path)
                     if ok:
                         yield Command.Delete(path)
 
