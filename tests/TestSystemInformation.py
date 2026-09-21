@@ -55,15 +55,20 @@ class SystemInformationTestCase(common.BleachbitTestCase):
 
     def test_get_system_information_mac_version_unknown_codename(self):
         """A macOS release newer than this codebase's MACOSX_DICT_MODERN
-        (e.g. '27.0', observed by hand on a real Mac mini M4 and M1
-        running that version) must still show the raw version number
-        -- previously the whole 'platform.mac_ver()' line was silently
-        omitted from the report whenever the codename lookup came up
-        empty, hiding the version number itself along with the missing
-        codename."""
-        with mock.patch('platform.mac_ver', return_value=('27.0', ('', '', ''), '')),                 mock.patch('bleachbit.SystemInformation.IS_MAC', True),                 mock.patch('bleachbit.SystemInformation.IS_LINUX', False):
+        must still show the raw version number -- previously the whole
+        'platform.mac_ver()' line was silently omitted from the report
+        whenever the codename lookup came up empty, hiding the version
+        number itself along with the missing codename. Uses '99.0' to
+        stay valid regardless of which real releases this codebase's
+        dict has been updated for by the time this test runs (it
+        originally used '27.0', observed by hand as unknown on a real
+        Mac mini M4 and M1 -- until 27 got its own codename added to
+        MACOSX_DICT_MODERN the same day, which would have silently
+        turned this into a no-longer-unknown-codename case had the
+        version stayed hardcoded to '27.0')."""
+        with mock.patch('platform.mac_ver', return_value=('99.0', ('', '', ''), '')), mock.patch('bleachbit.SystemInformation.IS_MAC', True), mock.patch('bleachbit.SystemInformation.IS_LINUX', False):
             ret = get_system_information()
-        self.assertIn('platform.mac_ver() = 27.0', ret)
+        self.assertIn('platform.mac_ver() = 99.0', ret)
 
     @common.skipUnlessWindows
     def test_get_system_information_invalid_unicode_userprofile(self):
