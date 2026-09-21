@@ -33,6 +33,10 @@ if IS_POSIX:
 
 logger = logging.getLogger(__name__)
 
+# Same buffer size as WindowsWipe.py.
+WRITE_BUF_SIZE = 512 * 1024     # 512 kilobytes
+ZERO_FILL_BUFFER = bytes(WRITE_BUF_SIZE)
+
 FILENAME_CHARS = string.ascii_lowercase + \
     string.digits + '_.-+~!@#$%^&()=[]{},'
 if bleachbit.FS_CASE_SENSITIVE:
@@ -213,10 +217,10 @@ def wipe_write(path):
             raise
     f = os.fdopen(fd, 'wb')
     try:
-        blanks = b'\0' * 4096
+        blanks = memoryview(ZERO_FILL_BUFFER)
         while size > 0:
-            f.write(blanks)
-            size -= 4096
+            f.write(blanks[:min(size, WRITE_BUF_SIZE)])
+            size -= WRITE_BUF_SIZE
         f.flush()  # flush to OS buffer
         os.fsync(f.fileno())  # force write to disk
     except BaseException:
