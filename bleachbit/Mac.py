@@ -93,10 +93,33 @@ def _get_apple_locale_via_defaults():
     unaffected by whatever session/TCC context differs between those
     two launch paths, and is tried first.
     """
+    # defaults is a signed Apple binary launched as a child of
+    # BleachBit's own (unsigned/ad-hoc-signed) bundled Python -- same
+    # DYLD_LIBRARY_PATH inheritance issue already found and fixed for
+    # osascript (notify_macos(), delete_with_admin_privileges()):
+    # inheriting DYLD_LIBRARY_PATH (set by the bundled Python to find
+    # its own packaged libraries) or any other DYLD_* variable trips
+    # the kernel's code-signing check (cs_invalid_page) inside a
+    # strictly-signed system binary, killing it with SIGKILL.
+    # Reproduced against a real /Applications/BleachBit.app on a Mac
+    # mini M1 (Apple Silicon), confirmed via a full crash report
+    # (parentProc: BleachBit, termination: CODESIGNING/Invalid Page)
+    # and, isolated from BleachBit entirely, by hand:
+    # `DYLD_LIBRARY_PATH=<app>/Contents/Frameworks/lib defaults read -g
+    # AppleLocale` alone reliably kills the process (exit 137) on this
+    # same machine, while the identical command with no DYLD_* set
+    # succeeds normally. Reproduced on both macOS Tahoe 26.6.2 and
+    # macOS 27.0 on this machine -- never observed on a Mac mini M4
+    # with the identical app bundle. Give defaults a clean environment
+    # instead of silently inheriting BleachBit's, same as the other
+    # two call sites.
+    clean_env = {k: v for k, v in os.environ.items()
+                 if not k.startswith('DYLD_')}
     try:
         result = subprocess.run(
             ['defaults', 'read', '-g', 'AppleLocale'],
-            capture_output=True, text=True, timeout=2, check=False)
+            capture_output=True, text=True, timeout=2, check=False,
+            env=clean_env)
     except (OSError, ValueError, subprocess.SubprocessError) as e:
         # SubprocessError covers TimeoutExpired, which is not an OSError.
         logger.debug('failed to read AppleLocale: %s', e)
