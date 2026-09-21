@@ -1157,7 +1157,6 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         if app_menu_path:
             icon = Gio.ThemedIcon(name="open-menu-symbolic")
             image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
-            self._reload_app_menu(app_menu_path)
             self.menu_button.add(image)
             hbar.pack_end(self.menu_button)
         else:
