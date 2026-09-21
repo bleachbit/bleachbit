@@ -229,11 +229,11 @@ def build_py2exe():
         'includes': ['wx', 'win32api', 'win32con'],
         'packages': [
             'wx', 'bleachbit.markovify', 'bleachbit.GUIwx',
-            'encodings', 'chardet', 'requests', 'psutil', 'plyer'
+            'charset_normalizer', 'encodings', 'requests', 'psutil', 'plyer'
         ],
         'excludes': [
             'pyreadline', 'difflib', 'doctest', 'pickle', 'ftplib',
-            'bleachbit.Unix', 'charset_normalizer'
+            'bleachbit.Unix'
         ],
         'dll_excludes': [
             'CRYPT32.DLL', 'DNSAPI.DLL', 'IPHLPAPI.DLL', 'MPR.dll',
