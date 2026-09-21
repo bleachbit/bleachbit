@@ -11,6 +11,7 @@ Code that is commonly shared throughout BleachBit
 import os
 import re
 import sys
+import time
 
 from bleachbit import Log
 
@@ -31,6 +32,19 @@ else:
     stdout_encoding = getattr(sys.stdout, 'encoding', None) or 'utf-8'
 
 logger = Log.init_log()
+
+_startup_t0 = time.monotonic()
+_startup_profile = os.getenv(
+    'BLEACHBIT_STARTUP_PROFILE') in ('1', 'true', 'True')
+
+
+def log_startup_time(name):
+    """Log time since package import when BLEACHBIT_STARTUP_PROFILE is set"""
+    if not _startup_profile:
+        return
+    logger.info('startup %s: %.1f ms', name,
+                (time.monotonic() - _startup_t0) * 1000)
+
 
 # Setting below value to false disables update notification (useful
 # for packages in repositories).

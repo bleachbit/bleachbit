@@ -49,6 +49,8 @@ MANAGE_COOKIES_TO_KEEP = _("Manage cookies to keep\u2026")
 # Ensure GTK is available for this GUI module
 require_gtk()
 
+bleachbit.log_startup_time('GuiWindow imported')
+
 
 def _iter_rows(model, parent=None):
     """Yield the tree iter of each row under parent, or of each top-level row"""
@@ -74,8 +76,10 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
     def __init__(self, auto_exit, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        bleachbit.log_startup_time('window created')
 
         self._show_splash_screen()
+        bleachbit.log_startup_time('splash checked')
 
         self._auto_exit = auto_exit
         self._gui_cleaner_cleanup_pending = None
@@ -150,6 +154,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         self._font_css_provider = None
         if options.has_option("window_font_size"):
             self.set_font_size(absolute_size=options.get("window_font_size"))
+        bleachbit.log_startup_time('window init done')
 
     def populate_window(self):
         """Create the main application window"""
@@ -174,10 +179,12 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
         if appicon_path and os.path.exists(appicon_path):
             self.set_icon_from_file(appicon_path)
+        bleachbit.log_startup_time('icon set')
 
         # add headerbar
         self.headerbar = self.create_headerbar()
         self.set_titlebar(self.headerbar)
+        bleachbit.log_startup_time('headerbar built')
 
         # split main window twice
         hbox = Gtk.Box(homogeneous=False)
@@ -241,10 +248,12 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         vbox.add(self.status_bar)
         # setup drag&drop
         self.setup_drag_n_drop()
+        bleachbit.log_startup_time('widgets built')
         # done
         self.show_all()
         self.progressbar.hide()
         self.infobar.hide()
+        bleachbit.log_startup_time('window shown')
 
     def _update_error_tag_color(self, *_args):
         """Ensure error messages stay high contrast in current theme"""
@@ -798,6 +807,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         """Callback to refresh the list of cleaners and header bar labels"""
         if getattr(self, '_destroyed', False) or self.in_destruction():
             return False
+        bleachbit.log_startup_time('refresh started')
         # In case language changed, update the header bar labels.
         self.update_headerbar_labels()
         # Is this the first time in this session?
@@ -823,11 +833,13 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
     def cb_register_cleaners_done(self):
         """Called from register_cleaners()"""
+        bleachbit.log_startup_time('cleaners registered')
         self.progressbar.hide()
         # update tree view
         self.tree_store.refresh_rows()
         # expand tree view
         self.view.expand_all()
+        bleachbit.log_startup_time('tree filled')
 
         if self._showed_startup_messages:
             # remove from idle loop (see GObject.idle_add)
@@ -1237,6 +1249,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         The event is triggered when the window is first shown.
         It is not emitted when the window is moved or unminimized.
         """
+        # "show" is RUN_FIRST, so the window is already realized and mapped
+        bleachbit.log_startup_time('show handler')
         if IS_WINDOWS and Windows.splash_thread.is_alive():
             Windows.splash_thread.join(0)
 
