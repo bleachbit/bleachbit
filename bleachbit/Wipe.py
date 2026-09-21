@@ -91,10 +91,12 @@ def __valid_random_filename(filename):
     return True
 
 
-def detect_orphaned_wipe_files():
+def detect_orphaned_wipe_files(shred_drives=None):
     """Detect orphaned temporary files from interrupted wipe_path operations.
 
     These files are created by wipe_path() to fill free disk space with zeros.
+
+    Pass shred_drives from a worker thread: Options.get_list() is not locked.
 
     Detection criteria:
     - Located in directories from options shred_drives
@@ -106,10 +108,11 @@ def detect_orphaned_wipe_files():
     Returns:
         list: Paths to detected orphaned wipe files
     """
-    from bleachbit.Options import options
     orphaned_files = []
 
-    shred_drives = options.get_list('shred_drives')
+    if shred_drives is None:
+        from bleachbit.Options import options
+        shred_drives = options.get_list('shred_drives')
     if not shred_drives:
         return orphaned_files
 

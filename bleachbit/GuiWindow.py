@@ -664,6 +664,13 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         self.run_button.set_sensitive(is_sensitive)
         self.stop_button.set_sensitive(not is_sensitive)
 
+    def run_button_get_sensitive(self):
+        """Return whether commands are enabled
+
+        set_sensitive() leaves the window itself sensitive, so ask the button.
+        """
+        return self.run_button.get_sensitive()
+
     def run_operations(self, __widget):
         """Event when the 'delete' toolbar button is clicked."""
         # fixme: should present this dialog after finding operations
@@ -1304,9 +1311,32 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         """Check for orphaned wipe files and offer to delete them.
 
         These files are created by wipe_path() to fill empty disk space."""
-        orphaned_files = detect_orphaned_wipe_files()
-        if not orphaned_files:
-            return
+        # Scan off the main loop: a sleeping drive can block it for seconds.
+        # Read the option here, since Options.get_list() takes no lock.
+        shred_drives = options.get_list('shred_drives')
+
+        def _worker():
+            try:
+                orphaned_files = detect_orphaned_wipe_files(shred_drives)
+            except Exception:
+                logger.exception('Error detecting orphaned wipe files')
+                return
+            if orphaned_files:
+                GLib.idle_add(self._prompt_orphaned_wipe_files, orphaned_files)
+
+        threading.Thread(target=_worker, daemon=True).start()
+        return False
+
+    def _prompt_orphaned_wipe_files(self, orphaned_files):
+        """Ask whether to preview orphaned wipe files, on the main thread"""
+        if self.textbuffer is None:
+            # window was destroyed while the scan was running
+            return False
+        if not self.run_button_get_sensitive():
+            # an operation is running, and shred_paths() would replace it
+            logger.debug(
+                'skipping orphaned wipe file prompt: operation running')
+            return False
 
         # TRANSLATORS: This message is shown when orphaned temporary files
         # from an interrupted disk wipe operation are detected.
@@ -1323,6 +1353,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
         if resp == Gtk.ResponseType.YES:
             self.shred_paths(orphaned_files)
+        return False
 
     @threaded
     def check_online_updates(self):

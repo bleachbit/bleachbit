@@ -660,6 +660,20 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertExists(file_to_clean)
         return file_to_clean
 
+    def test_orphaned_wipe_prompt_waits_for_idle(self):
+        """The orphaned wipe prompt is skipped while an operation runs"""
+        gui = self.get_window()
+        with mock.patch('bleachbit.GuiBasic.message_dialog') as dialog:
+            gui.set_sensitive(False)
+            self.addCleanup(gui.set_sensitive, True)
+            self.assertFalse(
+                gui._prompt_orphaned_wipe_files(['/does/not/exist']))
+            dialog.assert_not_called()
+
+            gui.set_sensitive(True)
+            gui._prompt_orphaned_wipe_files(['/does/not/exist'])
+            dialog.assert_called_once()
+
     def test_run_operations(self):
         gui = self.get_window()
         file_to_clean = self._setup_new_cleaner(gui)
