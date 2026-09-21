@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: BleachBit\n"
 "Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-01 10:05-0600\n"
-"PO-Revision-Date: 2026-09-17 05:12+0000\n"
+"PO-Revision-Date: 2026-09-22 19:51+0000\n"
 "Last-Translator: 109247019824 <109247019824@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/bleachbit/main/"
@@ -695,30 +695,24 @@ msgid "Package lists"
 msgstr "Списъци на пакети"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Desktop environment"
 msgid "Development environment"
-msgstr "Среда на работния плот"
+msgstr "Развойна среда"
 
 #: ../cleaners/android_studio.xml
 msgid "Gradle cache"
 msgstr "Временна памет на Gradle"
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "Delete downloaded podcasts"
 msgid "Delete downloaded dependencies and build artifacts"
-msgstr "Премахва изтеглените подкасти"
+msgstr "Премахва изтеглените зависимости и артефакти от компилации"
 
 #: ../cleaners/android_studio.xml
 msgid "Dependencies will need to be downloaded on the next build."
 msgstr "Зависимостите трябва да бъдат изтеглени при следващо компилиране."
 
 #: ../cleaners/android_studio.xml
-#, fuzzy
-#| msgid "DNS cache"
 msgid "IDE cache"
-msgstr "Временна памет за DNS"
+msgstr "Временна памет на IDE"
 
 #. Cleaner description for vim, VS Code, etc.
 #: ../cleaners/vscode.xml ../cleaners/gedit.xml ../cleaners/vim.xml
