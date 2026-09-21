@@ -11,6 +11,7 @@ Enumerate and terminate processes
 import signal
 import glob
 import subprocess
+import time
 from collections import namedtuple
 import os
 
@@ -170,12 +171,41 @@ def _enumerate_ps_aux():
         yield ProcessInfo(int(parts[1]), parts[10].strip(), parts[0] == current_user)
 
 
+class ProcessCache:
+
+    """Cached way to determine whether a process is running"""
+
+    def __init__(self, max_age_seconds=10):
+        self.max_age_seconds = max_age_seconds
+        self.last_scan_time = None
+        self.processes = ()
+
+    def invalidate(self):
+        """Drop the cache so the next get() rescans"""
+        self.last_scan_time = None
+        self.processes = ()
+
+    def get(self):
+        """Return the process list, rescanning when stale.
+
+        The scan expires so an application started mid-run is still noticed.
+        """
+        if self.last_scan_time is None or \
+                (time.time() - self.last_scan_time) > self.max_age_seconds:
+            self.processes = tuple(enumerate_processes())
+            self.last_scan_time = time.time()
+        return self.processes
+
+
+process_cache = ProcessCache()
+
+
 def is_process_running(exename, require_same_user):
     """Check whether exename is running"""
     ci = IS_WINDOWS  # case-insensitive on Windows
     if ci:
         exename = exename.lower()
-    for proc in enumerate_processes():
+    for proc in process_cache.get():
         name = proc.name.lower() if ci else proc.name
         if name == exename and (not require_same_user or proc.same_user):
             return True
@@ -188,6 +218,7 @@ def terminate_process(exename, require_same_user):
     if ci:
         exename = exename.lower()
     terminated = []
+    # Not the cache: a stale PID may since have been recycled
     for proc in enumerate_processes():
         name = proc.name.lower() if ci else proc.name
         if name == exename and (not require_same_user or proc.same_user):
@@ -201,4 +232,6 @@ def terminate_process(exename, require_same_user):
                 terminated.append(proc.pid)
             except (ProcessLookupError, PermissionError, OSError):
                 continue
+    if terminated:
+        process_cache.invalidate()
     return terminated

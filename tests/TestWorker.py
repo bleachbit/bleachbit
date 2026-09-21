@@ -13,6 +13,7 @@ import errno
 import os
 import sqlite3
 import tempfile
+import time
 from unittest import mock
 
 from tests import TestCleaner, common
@@ -21,6 +22,7 @@ import bleachbit
 from bleachbit import CLI, Command, FileUtilities
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import backends
+from bleachbit.Process import process_cache
 from bleachbit.Worker import Worker, format_minutes_remaining
 
 if bleachbit.IS_WINDOWS:
@@ -255,6 +257,22 @@ class WorkerTestCase(common.BleachbitTestCase):
         elif bleachbit.IS_WINDOWS:
             self.assertEqual(worker.total_bytes, bytes_expected_nt)
             self.assertEqual(worker.total_deleted, count_deleted_nt)
+
+    def test_run_invalidates_process_cache(self):
+        """Each run rescans instead of reusing a cached process list"""
+        missing = os.path.join(self.tempdir, 'does-not-exist')
+        backends['test'] = TestCleaner.action_to_cleaner(
+            f'<action command="delete" search="file" path="{missing}"/>')
+        self.addCleanup(backends.pop, 'test', None)
+        process_cache.processes = ('stale',)
+        process_cache.last_scan_time = time.time()
+        self.addCleanup(process_cache.invalidate)
+
+        for _dummy in Worker(CLI.CliCallback(), True, {'test': ['option1']}).run():
+            pass
+
+        self.assertIsNone(process_cache.last_scan_time)
+        self.assertEqual(process_cache.processes, ())
 
     def test_format_minutes_remaining(self):
         """Test format_minutes_remaining() for issue #2305"""

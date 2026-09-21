@@ -25,6 +25,7 @@ from bleachbit.Constant import EMPTY_SPACE_WARNING
 from bleachbit.GtkShim import ignore_pygobject_asyncio_warnings
 from bleachbit.Language import get_text as _, nget_text as ngettext
 from bleachbit.FileUtilities import close_delete_parent_lock
+from bleachbit.Process import process_cache
 
 logger = logging.getLogger(__name__)
 
@@ -276,6 +277,9 @@ class Worker:
         2. Deep scan
         3. Memory
         4. Empty space"""
+        # Otherwise a scan from an earlier run still reports an application
+        # the user has just closed.
+        process_cache.invalidate()
         self.deepscans = {}
         # prioritize
         self.delayed_ops = []
