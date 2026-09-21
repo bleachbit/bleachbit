@@ -1,21 +1,8 @@
-# vim: ts=4:sw=4:expandtab
-
-# BleachBit
-# Copyright (C) 2008-2025 Andrew Ziem
-# https://www.bleachbit.org
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (c) 2008-2026 Andrew Ziem.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This work is licensed under the terms of the GNU GPL, version 3 or
+# later.  See the COPYING file in the top-level directory.
 
 
 """
@@ -43,6 +30,19 @@ logger = logging.getLogger(__name__)
 
 # Delayed ops run last, sorted ascending: memory, then empty space
 _DELAY_PRIORITY = {'empty_space': 100, 'memory': 99}
+
+
+def format_minutes_remaining(msg2, eta_mins):
+    """Format the localized time-remaining message.
+
+    Some translations (e.g., Arabic and Hebrew) intentionally omit the
+    %d placeholder for certain plural forms, so tolerate a failed
+    formatting and show the message as-is. (Issue #2305)
+    """
+    try:
+        return msg2 % eta_mins
+    except (TypeError, ValueError):
+        return msg2
 
 
 class Worker:
@@ -255,10 +255,11 @@ class Worker:
                     self.ui.update_progress_bar(percent_done)
                     if isinstance(eta_seconds, int):
                         eta_mins = math.ceil(eta_seconds / 60)
+                        # xgettext: no-python-format
                         # TRANSLATORS: %d is the estimated number of minutes remaining.
                         msg2 = ngettext("About %d minute remaining.",
-                                        "About %d minutes remaining.", eta_mins) \
-                            % eta_mins
+                                        "About %d minutes remaining.", eta_mins)
+                        msg2 = format_minutes_remaining(msg2, eta_mins)
                         self.ui.update_progress_bar(msg + ' ' + msg2)
                     else:
                         self.ui.update_progress_bar(msg)
