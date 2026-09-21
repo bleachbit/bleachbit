@@ -68,6 +68,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     _style_provider_dark = None
     _error_tag_color = None
     _showed_startup_messages = False
+    _scroll_pending = False
+    _scroll_again = False
     recognized_cleanerml = False
 
     def __init__(self, auto_exit, *args, **kwargs):
@@ -571,9 +573,29 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # through the idle loop, it may only scroll most of the way
         # as seen on Ubuntu 9.04 with Italian and Spanish.
         if scroll:
-            GLib.idle_add(lambda: self.textbuffer is not None and
-                          self.textview.scroll_mark_onscreen(
-                              self.textbuffer.get_insert()))
+            self._queue_scroll()
+
+    def _queue_scroll(self):
+        """Scroll the log to the end from the idle loop"""
+        if self._scroll_pending:
+            self._scroll_again = True
+            return
+        self._scroll_pending = True
+        GLib.idle_add(self._scroll_to_end)
+
+    def _scroll_to_end(self):
+        """Scroll the log to the insert mark"""
+        # While text keeps arriving, keep one scroll queued behind
+        # whatever appends next, as one idle per line used to. Set the
+        # flags first so a failed scroll cannot leave them stuck.
+        again = self._scroll_again
+        self._scroll_again = False
+        self._scroll_pending = again
+        if again:
+            GLib.idle_add(self._scroll_to_end)
+        if self.textbuffer is not None:
+            self.textview.scroll_mark_onscreen(self.textbuffer.get_insert())
+        return False
 
     def update_log_level(self):
         """This gets called when the log level might have changed via the preferences."""
