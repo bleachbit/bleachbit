@@ -62,14 +62,19 @@ MACOSX_DICT_MODERN = {
 
 def _read_global_preferences_plist():
     """Return the parsed contents of ~/Library/Preferences/
-    .GlobalPreferences.plist, or None if it cannot be read."""
+    .GlobalPreferences.plist as a dict, or None if it cannot be read
+    or does not parse to a dictionary."""
     path = os.path.expanduser(
         '~/Library/Preferences/.GlobalPreferences.plist')
     try:
         with open(path, 'rb') as f:
-            return plistlib.load(f)
-    except (OSError, ValueError, plistlib.InvalidFileException,
-            xml.parsers.expat.ExpatError) as e:
+            data = plistlib.load(f)
+            if isinstance(data, dict):
+                return data
+            logger.debug('unexpected non-dict root in %s: %r',
+                         path, type(data))
+            return None
+    except (OSError, ValueError, xml.parsers.expat.ExpatError) as e:
         logger.debug('failed to read %s: %s', path, e)
         return None
 
@@ -118,19 +123,23 @@ def get_macos_locale():
     """
     value = None
     prefs = _read_global_preferences_plist()
-    if prefs is not None:
-        value = prefs.get('AppleLocale')
-        if not value:
+    if isinstance(prefs, dict):
+        apple_locale = prefs.get('AppleLocale')
+        if isinstance(apple_locale, str) and apple_locale:
+            value = apple_locale
+        else:
             languages = prefs.get('AppleLanguages')
-            if languages:
-                # AppleLanguages uses hyphens ('es-ES'); AppleLocale and
-                # everywhere else in this codebase use underscores.
-                value = languages[0].replace('-', '_')
+            if isinstance(languages, (list, tuple)) and languages:
+                first_lang = languages[0]
+                if isinstance(first_lang, str) and first_lang:
+                    # AppleLanguages uses hyphens ('es-ES'); AppleLocale and
+                    # everywhere else in this codebase use underscores.
+                    value = first_lang.replace('-', '_')
 
-    if not value:
+    if not value or not isinstance(value, str):
         value = _get_apple_locale_via_defaults()
 
-    if not value:
+    if not isinstance(value, str) or not value:
         return None
     # AppleLocale can include a variant suffix like 'es_ES@currency=EUR'.
     value = normalize_locale_code(value)

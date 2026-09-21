@@ -180,7 +180,7 @@ class MacTestCase(common.BleachbitTestCase):
                 'bleachbit.Mac._read_global_preferences_plist',
                 return_value=None), \
                 mock.patch('subprocess.run',
-                          side_effect=subprocess.SubprocessError):
+                           side_effect=subprocess.SubprocessError):
             self.assertIsNone(get_macos_locale())
 
     @common.skipUnlessMac
@@ -190,6 +190,16 @@ class MacTestCase(common.BleachbitTestCase):
         with mock.patch(
                 'bleachbit.Mac._read_global_preferences_plist',
                 return_value={}), \
+                mock.patch('subprocess.run') as mock_run:
+            mock_run.return_value.returncode = 0
+            mock_run.return_value.stdout = ''
+            self.assertIsNone(get_macos_locale())
+
+    @common.skipUnlessMac
+    def test_get_macos_locale_handles_malformed_plist(self):
+        """get_macos_locale() falls back gracefully if plist data is malformed."""
+        with mock.patch('bleachbit.Mac._read_global_preferences_plist',
+                        return_value=['not-a-dict']), \
                 mock.patch('subprocess.run') as mock_run:
             mock_run.return_value.returncode = 0
             mock_run.return_value.stdout = ''
