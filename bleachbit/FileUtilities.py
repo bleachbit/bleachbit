@@ -25,7 +25,6 @@ import stat
 import subprocess
 import time
 import urllib.parse
-import urllib.request
 from pathlib import Path
 
 # local imports
@@ -1184,6 +1183,8 @@ def truncate_f(f):
 def uris_to_paths(file_uris):
     """Return a list of paths from text/uri-list"""
     assert isinstance(file_uris, (tuple, list))
+    # Keep urllib.request off the startup path: it drags in ssl and socket.
+    from urllib.request import url2pathname  # pylint: disable=import-outside-toplevel
     file_paths = []
     for file_uri in file_uris:
         if not file_uri:
@@ -1191,7 +1192,7 @@ def uris_to_paths(file_uris):
             continue
         parsed_uri = urllib.parse.urlparse(file_uri)
         if parsed_uri.scheme == 'file':
-            file_path = urllib.request.url2pathname(parsed_uri.path)
+            file_path = url2pathname(parsed_uri.path)
             if len(file_path) > 2 and file_path[2] == ':':
                 # remove front slash for Windows-style path
                 file_path = file_path[1:]
