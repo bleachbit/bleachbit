@@ -18,7 +18,6 @@ from bleachbit.GUI import logger
 from bleachbit.General import sanitize_surrogates
 from bleachbit.GtkShim import GLib, Gdk, Gio, Gtk, require_gtk
 from bleachbit.GuiInfoBar import InfoBarMixin
-from bleachbit.GuiPreferences import PreferencesDialog
 from bleachbit.GuiStartup import get_startup_messages
 from bleachbit.GuiTreeModels import TreeDisplayModel, TreeInfoModel
 from bleachbit.GuiUtil import (clear_clipboard, detect_dark_background, get_font_size_from_name,
@@ -490,6 +489,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         super().destroy()
 
     def get_preferences_dialog(self):
+        # Keep the dialog and its minidom/cookie deps off the startup path.
+        from bleachbit.GuiPreferences import PreferencesDialog  # pylint: disable=import-outside-toplevel
         return PreferencesDialog(
             self,
             self.cb_refresh_operations,
