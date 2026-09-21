@@ -53,6 +53,18 @@ class SystemInformationTestCase(common.BleachbitTestCase):
                 f'platform.mac_ver() = {version} ({expected_name})', ret,
                 f'version {version} should show {expected_name}')
 
+    def test_get_system_information_mac_version_unknown_codename(self):
+        """A macOS release newer than this codebase's MACOSX_DICT_MODERN
+        (e.g. '27.0', observed by hand on a real Mac mini M4 and M1
+        running that version) must still show the raw version number
+        -- previously the whole 'platform.mac_ver()' line was silently
+        omitted from the report whenever the codename lookup came up
+        empty, hiding the version number itself along with the missing
+        codename."""
+        with mock.patch('platform.mac_ver', return_value=('27.0', ('', '', ''), '')),                 mock.patch('bleachbit.SystemInformation.IS_MAC', True),                 mock.patch('bleachbit.SystemInformation.IS_LINUX', False):
+            ret = get_system_information()
+        self.assertIn('platform.mac_ver() = 27.0', ret)
+
     @common.skipUnlessWindows
     def test_get_system_information_invalid_unicode_userprofile(self):
         invalid_userprofile = 'C:\\Users\\invalid\ud803'
