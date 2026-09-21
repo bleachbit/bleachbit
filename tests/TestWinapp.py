@@ -667,6 +667,24 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
         delete_path = actions['Delete'][0].paths[0]
         self.assertIn('a\tb', delete_path)
 
+    def test_detect_probed_once_per_key(self):
+        """A Detect key repeated across sections is probed once per load"""
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-detectcache')
+        key = 'HKCU\\Software\\BleachBit\\DetectCacheTest'
+        with open(self.ini_fn, 'w', encoding='utf-8') as ini:
+            for i in range(3):
+                ini.write(f'[App{i}*]\nLangSecRef=3021\n'
+                          f'Detect={key}\n'
+                          f'FileKey1=%Temp%|bleachbit-test-{i}.tmp\n')
+
+        with mock.patch('bleachbit.Windows.detect_registry_key',
+                        return_value=True) as probe:
+            cleaner = next(Winapp(self.ini_fn).get_cleaners())
+
+        probe.assert_called_once_with(key)
+        # All three sections are still active.
+        self.assertEqual(len(cleaner.actions), 3)
+
     def test_filekey_recurse_rejects_excessive_wildcards(self):
         """A FileKey RECURSE pattern with too many wildcards is rejected (ReDoS defense)"""
         self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-redos')

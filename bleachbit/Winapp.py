@@ -191,6 +191,8 @@ class Winapp:
         self.re_detect = re.compile(r'^detect(\d+)?$')
         self.re_detectfile = re.compile(r'^detectfile(\d+)?$')
         self.re_excludekey = re.compile(r'^excludekey\d+$')
+        # An app's sections repeat Detect keys; cache the probes for this load
+        self._detect_cache = {}
         section_total_count = len(self.parser.sections())
         section_done_count = 0
         for section in self.parser.sections():
@@ -281,6 +283,13 @@ class Winapp:
             return regexes[0]
         return f"({'|'.join(regexes)})"
 
+    def _detect_cached(self, kind, probe, key):
+        """Run a Detect probe, reusing the result within this load"""
+        cache_key = (kind, key)
+        if cache_key not in self._detect_cache:
+            self._detect_cache[cache_key] = probe(key)
+        return self._detect_cache[cache_key]
+
     def detect(self, section):
         """Check whether to show the section
 
@@ -305,13 +314,13 @@ class Winapp:
                 # Detect= checks for a registry key
                 any_detect_option = True
                 key = self.parser.get(section, option)
-                if Windows.detect_registry_key(key):
+                if self._detect_cached('reg', Windows.detect_registry_key, key):
                     return True
             elif self.re_detectfile.match(option):
                 # DetectFile= checks for a file
                 any_detect_option = True
                 key = self.parser.get(section, option)
-                if detect_file(key):
+                if self._detect_cached('file', detect_file, key):
                     return True
         return not any_detect_option
 
