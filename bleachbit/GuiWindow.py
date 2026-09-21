@@ -461,7 +461,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # setting change still waiting on the delayed flush timer
         # (see Options.__schedule_flush) would otherwise be lost if the
         # process exits before that timer fires.
-        options.close()
+        options.commit()
         if Gtk.main_level() > 0:
             Gtk.main_quit()
         else:

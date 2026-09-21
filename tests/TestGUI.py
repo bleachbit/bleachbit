@@ -669,10 +669,18 @@ class GUITestCase(common.BleachbitTestCase):
         (Options.__schedule_flush) would be lost if the process exited
         via this path before that timer fired.
         """
-        with mock.patch('bleachbit.GuiWindow.options.close') as mock_close, \
+        with mock.patch('bleachbit.GuiWindow.options.commit') as mock_commit, \
                 mock.patch('bleachbit.GuiWindow.Gtk.main_level', return_value=1), \
                 mock.patch('bleachbit.GuiWindow.Gtk.main_quit') as mock_main_quit:
             self.app._window.on_quit()
 
-        mock_close.assert_called_once()
+        mock_commit.assert_called_once()
         mock_main_quit.assert_called_once()
+
+        with mock.patch('bleachbit.GuiWindow.options.commit') as mock_commit, \
+                mock.patch('bleachbit.GuiWindow.Gtk.main_level', return_value=0), \
+                mock.patch.object(self.app._window, 'destroy') as mock_destroy:
+            self.app._window.on_quit()
+
+        mock_commit.assert_called_once()
+        mock_destroy.assert_called_once()
