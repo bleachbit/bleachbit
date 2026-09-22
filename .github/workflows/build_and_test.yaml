@@ -310,7 +310,7 @@ jobs:
         shell: cmd # zizmor: ignore[misfeature] this step's script is written in cmd/batch syntax
         # The English-only installer is built only for tags (releases) to save
         # the cost of GHA minutes and storage.
-        # PR builds pass 'fast' (skips strip and library recompression)
+        # PR builds pass 'fast' (skips strip and the library.zip repack)
         # since windows-deploy never ships PR-triggered artifacts.
         # Tagged builds pass 'max-effort' (enables advzip zopfli recompression
         # and the English-only installer).
