@@ -25,7 +25,7 @@ from tests.common import pytest
 import bleachbit
 from bleachbit.Cleaner import Cleaner, backends
 from bleachbit.GtkShim import Gdk, Gio, GLib, GObject, Gtk, is_gtk_available
-from bleachbit.Language import get_supported_language_code_name_dict
+from bleachbit.Language import get_supported_language_code_name_dict, setup_translation
 from bleachbit.Language import get_text as _
 from bleachbit.Options import options
 
@@ -673,6 +673,16 @@ class GUITestCase(common.BleachbitTestCase):
             gui.set_sensitive(True)
             gui._prompt_orphaned_wipe_files(['/does/not/exist'])
             dialog.assert_called_once()
+
+    def test_app_menu_reloads_only_after_setup_translation(self):
+        """The app menu is rebuilt only after setup_translation() runs again"""
+        gui = self.get_window()
+        menu = gui.menu_button.get_menu_model()
+        gui.update_headerbar_labels()
+        self.assertIs(gui.menu_button.get_menu_model(), menu)
+        setup_translation()
+        gui.update_headerbar_labels()
+        self.assertIsNot(gui.menu_button.get_menu_model(), menu)
 
     def test_refresh_supersedes_running_registration(self):
         """A new refresh stops the registration still running"""

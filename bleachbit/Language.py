@@ -497,12 +497,17 @@ def get_active_language_code():
     return user_locale
 
 
+# Bumped by every setup_translation(), so callers can tell it ran again
+translation_generation = 0
+
+
 def setup_translation():
     """Do a one-time setup of translations"""
     # Translation setup runs once per process.
     # pylint: disable-next=global-statement
-    global attempted_setup_translation, t
+    global attempted_setup_translation, t, translation_generation
     attempted_setup_translation = True
+    translation_generation += 1
     # Use local import to avoid circular import.
     from bleachbit import locale_dir
     # On POSIX, capture the system locale before setlocale() below poisons

@@ -11,7 +11,7 @@ import threading
 import time
 
 import bleachbit
-from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, appicon_path, windows10_theme_path, IS_MAC, IS_WINDOWS
+from bleachbit import APP_NAME, Cleaner, FileUtilities, GuiBasic, Language, appicon_path, windows10_theme_path, IS_MAC, IS_WINDOWS
 from bleachbit.Cleaner import backends, register_cleaners
 from bleachbit.Constant import ABORT_BUTTON_LABEL, REQUIRES_EXPERT_MODE
 from bleachbit.GUI import logger
@@ -72,6 +72,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     _scroll_pending = False
     _scroll_again = False
     _register_generation = 0
+    _app_menu_generation = None
     recognized_cleanerml = False
 
     def __init__(self, auto_exit, *args, **kwargs):
@@ -1213,6 +1214,11 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         whatever language was active the one time it was originally
         loaded unless it is explicitly reloaded like this.
         """
+        # Keyed on setup_translation() runs rather than the language code:
+        # a rerun with the same code can still change the C locale.
+        generation = Language.translation_generation
+        if generation == self._app_menu_generation:
+            return
         if app_menu_path is None:
             app_menu_path = bleachbit.get_share_path('app-menu.ui')
         if not app_menu_path:
@@ -1220,6 +1226,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         builder = Gtk.Builder()
         builder.add_from_file(app_menu_path)
         self.menu_button.set_menu_model(builder.get_object('app-menu'))
+        self._app_menu_generation = generation
 
     def on_configure_event(self, _widget, _event):
         (x, y) = self.get_position()
