@@ -1330,6 +1330,16 @@ def get_font_conf_file():
     return os.path.join(gnome_dir, 'etc', 'fonts', 'fonts.conf')
 
 
+if IS_WINDOWS:
+    # ctypes caches this on the DLL, so set argtypes once
+    _peek_message = ctypes.windll.user32.PeekMessageW
+    _peek_message.argtypes = [ctypes.POINTER(wintypes.MSG), wintypes.HWND,
+                              wintypes.UINT, wintypes.UINT, wintypes.UINT]
+
+# Under the 300 ms default timeout for low-level hooks
+_SPLASH_PUMP_SECONDS = 0.01
+
+
 class SplashThread(Thread):
     _class_atom = None
 
@@ -1353,7 +1363,7 @@ class SplashThread(Thread):
         except RuntimeError:
             logger.debug('SplashThread could not be started', exc_info=True)
             return
-        started = self._splash_screen_started.wait(timeout=10)
+        started = self._wait_started(timeout=10)
         if not started:
             logger.warning('SplashThread did not start within timeout')
         else:
@@ -1361,6 +1371,19 @@ class SplashThread(Thread):
 
         if self._startup_error:
             logger.debug('Splash screen disabled due to startup error')
+
+    def _wait_started(self, timeout):
+        """Wait for the splash window, running messages sent to this thread"""
+        msg = wintypes.MSG()
+        deadline = time.monotonic() + timeout
+        while not self._splash_screen_started.wait(_SPLASH_PUMP_SECONDS):
+            if time.monotonic() >= deadline:
+                return False
+            # Run GDK's keyboard hook, which the splash's ALT keys wait on.
+            # PM_NOREMOVE leaves posted messages for GTK.
+            # pylint: disable-next=possibly-used-before-assignment
+            _peek_message(ctypes.byref(msg), None, 0, 0, win32con.PM_NOREMOVE)
+        return True
 
     def run(self):
         try:
