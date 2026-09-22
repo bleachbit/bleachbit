@@ -674,6 +674,16 @@ class GUITestCase(common.BleachbitTestCase):
             gui._prompt_orphaned_wipe_files(['/does/not/exist'])
             dialog.assert_called_once()
 
+    def test_refresh_supersedes_running_registration(self):
+        """A new refresh stops the registration still running"""
+        gui = self.get_window()
+        with mock.patch.object(gui.tree_store, 'refresh_rows',
+                               wraps=gui.tree_store.refresh_rows) as refresh_rows:
+            gui.cb_refresh_operations()
+            gui.cb_refresh_operations()
+            self.refresh_gui()
+        refresh_rows.assert_called_once_with()
+
     def test_run_operations(self):
         gui = self.get_window()
         file_to_clean = self._setup_new_cleaner(gui)

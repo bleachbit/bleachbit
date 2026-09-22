@@ -71,6 +71,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
     _showed_startup_messages = False
     _scroll_pending = False
     _scroll_again = False
+    _register_generation = 0
     recognized_cleanerml = False
 
     def __init__(self, auto_exit, *args, **kwargs):
@@ -816,6 +817,10 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         if getattr(self, '_destroyed', False) or self.in_destruction():
             return False
         bleachbit.log_startup_time('refresh started')
+        # Only the newest registration may advance. A refresh can arrive
+        # mid-way, e.g. from Preferences, and two would both fill backends.
+        self._register_generation += 1
+        generation = self._register_generation
         # In case language changed, update the header bar labels.
         self.update_headerbar_labels()
         # Is this the first time in this session?
@@ -835,7 +840,14 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         rc = register_cleaners(self.update_progress_bar,
                                self.cb_register_cleaners_done,
                                allow_local=allow_local)
-        GLib.idle_add(rc.__next__)
+
+        def pump():
+            if generation != self._register_generation:
+                rc.close()
+                return False
+            return next(rc)
+
+        GLib.idle_add(pump)
         return False
 
     def cb_register_cleaners_done(self):
