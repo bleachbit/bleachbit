@@ -14,6 +14,7 @@ import glob
 import logging
 import os
 import re
+import time
 
 import bleachbit
 from bleachbit import Cleaner, IS_WINDOWS, Windows
@@ -87,6 +88,10 @@ def section2option(s):
 def _noop_progress(_fraction):
     """Default progress callback used when one is not provided."""
     return None
+
+
+# Longest a winapp2.ini load runs before yielding to the GUI main loop
+_YIELD_SECONDS = 0.05
 
 
 def detectos(required_ver, mock=False):
@@ -177,8 +182,12 @@ class Winapp:
 
     """Create cleaners from a Winapp2.ini-style file"""
 
-    def __init__(self, pathname, cb_progress=_noop_progress):
-        """Create cleaners from a Winapp2.ini-style file"""
+    def __init__(self, pathname, cb_progress=_noop_progress, load_now=True):
+        """Create cleaners from a Winapp2.ini-style file
+
+        Pass load_now=False to drive load_sections() yourself, which lets a
+        GUI caller keep painting between sections.
+        """
 
         self.cleaners = {}
         self.cleaner_ids = []
@@ -193,9 +202,18 @@ class Winapp:
         self.re_excludekey = re.compile(r'^excludekey\d+$')
         # An app's sections repeat Detect keys; cache the probes for this load
         self._detect_cache = {}
-        section_total_count = len(self.parser.sections())
+        if not load_now:
+            return
+        for _dummy in self.load_sections(cb_progress):
+            pass
+
+    def load_sections(self, cb_progress=_noop_progress):
+        """Parse each section, yielding so a GUI caller can keep painting"""
+        sections = self.parser.sections()
+        section_total_count = len(sections)
         section_done_count = 0
-        for section in self.parser.sections():
+        deadline = time.monotonic() + _YIELD_SECONDS
+        for section in sections:
             try:
                 self.handle_section(section)
             except Exception:
@@ -204,6 +222,9 @@ class Winapp:
             else:
                 section_done_count += 1
                 cb_progress(1.0 * section_done_count / section_total_count)
+            if time.monotonic() >= deadline:
+                yield True
+                deadline = time.monotonic() + _YIELD_SECONDS
 
     def add_section(self, cleaner_id, name):
         """Add a section (cleaners)"""
@@ -502,7 +523,9 @@ def load_cleaners(cb_progress=_noop_progress):
     cb_progress(0.0)
     for pathname in list_winapp_files():
         try:
-            inicleaner = Winapp(pathname, cb_progress)
+            inicleaner = Winapp(pathname, load_now=False)
+            yield True
+            yield from inicleaner.load_sections(cb_progress)
         except Exception:
             logger.exception(
                 "Error reading winapp2.ini cleaner '%s'", pathname)

@@ -21,7 +21,7 @@ from tests.common import pytest
 
 from tests import common
 import bleachbit
-from bleachbit.Winapp import Winapp, detectos, detect_file, fnmatch_translate, list_winapp_files, section2option
+from bleachbit.Winapp import Winapp, detectos, detect_file, fnmatch_translate, list_winapp_files, load_cleaners, section2option
 from bleachbit.Windows import detect_registry_key, parse_windows_build
 from bleachbit import IS_WINDOWS, logger
 from bleachbit.FileUtilities import extended_path_undo
@@ -683,6 +683,24 @@ ExcludeKey1=REG|HKCU\\{exclude_key}'''
 
         probe.assert_called_once_with(key)
         # All three sections are still active.
+        self.assertEqual(len(cleaner.actions), 3)
+
+    def test_load_cleaners_yields_between_sections(self):
+        """load_cleaners() yields between winapp2.ini sections"""
+        self.ini_fn = self.mkstemp(suffix='.ini', prefix='winapp2-yield')
+        with open(self.ini_fn, 'w', encoding='utf-8') as ini:
+            for i in range(3):
+                ini.write(f'[App{i}]\nLangSecRef=3021\n'
+                          f'FileKey1=%Temp%|bleachbit-test-{i}.tmp\n')
+
+        with mock.patch('bleachbit.Winapp.list_winapp_files',
+                        return_value=[self.ini_fn]), \
+                mock.patch('bleachbit.Winapp._YIELD_SECONDS', 0), \
+                mock.patch.dict('bleachbit.Cleaner.backends'):
+            steps = list(load_cleaners())
+            cleaner = bleachbit.Cleaner.backends['winapp2_applications']
+
+        self.assertGreaterEqual(len(steps), 3)
         self.assertEqual(len(cleaner.actions), 3)
 
     def test_filekey_recurse_rejects_excessive_wildcards(self):
