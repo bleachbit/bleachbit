@@ -974,6 +974,8 @@ def recompress_library(settings):
                 f'{file_size_diff:,}', f'{file_size_old:,}', f'{file_size_new:,}')
     shutil.rmtree('dist\\library', ignore_errors=True)
     assert_exist('dist\\library.zip')
+    # Nothing else runs the exe after library.zip is rewritten
+    assert_execute_console()
 
 
 def shrink(settings):
