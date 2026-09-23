@@ -243,6 +243,72 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertEqual(mock_get.call_count, 1)
         pref.dialog.destroy()
 
+    def test_preferences_language_selection(self):
+        """Test language selection and sensitivity in preferences dialog"""
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        pref = self.app.get_preferences_dialog()
+        try:
+            # Language widgets are insensitive when auto-detect is on.
+            self.assertFalse(pref.lang_select_box.get_sensitive())
+            self.assertFalse(pref.lang_label.get_sensitive())
+            self.assertFalse(pref.lang_combo.get_sensitive())
+            # Combobox has an active language selected matching detected language.
+            self.assertIsNotNone(pref.lang_combo.get_active_text())
+
+            # Toggle auto-detect off: widgets become sensitive, and
+            # detected language is saved to forced_language.
+            pref.cb_auto_lang.set_active(False)
+            self.assertTrue(pref.lang_select_box.get_sensitive())
+            self.assertTrue(pref.lang_label.get_sensitive())
+            self.assertTrue(pref.lang_combo.get_sensitive())
+            self.assertFalse(options.get('auto_detect_lang'))
+            self.assertTrue(len(options.get('forced_language')) >= 2)
+            # The saved language matches the language shown in the
+            # dropdown.
+            combo_code = pref.lang_combo.get_active_text().split(
+                "(")[-1].rstrip(")")
+            self.assertEqual(options.get('forced_language'), combo_code)
+
+            # Toggle auto-detect back on: widgets become insensitive, and
+            # forced_language is cleared.
+            pref.cb_auto_lang.set_active(True)
+            self.assertFalse(pref.lang_select_box.get_sensitive())
+            self.assertFalse(pref.lang_label.get_sensitive())
+            self.assertFalse(pref.lang_combo.get_sensitive())
+            self.assertTrue(options.get('auto_detect_lang'))
+            self.assertEqual(options.get('forced_language'), '')
+        finally:
+            pref.dialog.destroy()
+            options.set('auto_detect_lang', True)
+            options.set('forced_language', '')
+
+    def test_preferences_language_unsupported_locale(self):
+        """Fallback when the detected language has no supported match
+
+        When detection finds no match (e.g., the 'C' locale), the
+        dropdown falls back to English, and manual mode must save that
+        same fallback so the displayed and saved languages agree.
+        """
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        with mock.patch('bleachbit.GuiPreferences.get_active_language_code',
+                        return_value='C'):
+            pref = self.app.get_preferences_dialog()
+            try:
+                self.assertIsNotNone(pref.lang_combo.get_active_text())
+                # Toggle auto-detect off: the dropdown falls back to
+                # English, and the same fallback is saved.
+                pref.cb_auto_lang.set_active(False)
+                combo_code = pref.lang_combo.get_active_text().split(
+                    "(")[-1].rstrip(")")
+                self.assertTrue(options.get('forced_language'))
+                self.assertEqual(options.get('forced_language'), combo_code)
+            finally:
+                pref.dialog.destroy()
+                options.set('auto_detect_lang', True)
+                options.set('forced_language', '')
+
     def test_preferences_cookies_page(self):
         """Opens the preferences dialog and navigates to cookies page"""
         pref = self.app.get_preferences_dialog()
