@@ -20,8 +20,7 @@ later.  See the COPYING file in the top-level directory.
   <option id="history">
     <label>History</label>
     <description>Delete the usage history</description>
-    <!-- FIXME: RealPlayer uses a special .ini format which isn't currently compatible -->
-    <!-- <action command="ini" search="file" path="$XDG_CONFIG_HOME/real/realplayerrc" section="recent_urls"/> -->
+    <!-- $XDG_CONFIG_HOME/real/realplayerrc has recent_urls, but in an .ini dialect the ini command cannot parse -->
     <action command="delete" search="file" path="$APPDATA\Real\RealPlayer\realplayer.ste"/>
     <action command="delete" search="glob" path="$APPDATA\Real\RealPlayer\History\*.lnk"/>
   </option>

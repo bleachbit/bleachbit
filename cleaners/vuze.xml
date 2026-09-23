@@ -22,16 +22,7 @@ later.  See the COPYING file in the top-level directory.
   <option id="backup">
     <label>Backup files</label>
     <description>Delete the backup files</description>
-    <!--
-    Was: (Tobias)
-    <action command="delete" search="glob" path="$$Profile$$\*.bak"/>
-    <action command="delete" search="glob" path="$$Profile$$\active\*.bak"/>
-    <action command="delete" search="glob" path="$$Profile$$\subs\*.vuze.bak"/>
-    -->
-    <!-- Is now: (Tobias) -->
-    <!-- Delete *.bak recursive: -->
     <action command="delete" search="walk.files" path="$$Profile$$/" regex="\.[Bb][Aa][Kk]$"/>
-    <!-- And: -->
     <action command="delete" search="walk.all" path="$$ProgramFiles$$\backup\"/>
     <action command="delete" search="walk.all" path="$$ProgramFiles$$\Vuze AzConfigBackup\"/>
   </option>
@@ -40,8 +31,7 @@ later.  See the COPYING file in the top-level directory.
     <description>Delete the cache</description>
     <action command="delete" search="file" path="$$Profile$$/ipfilter.cache"/>
     <action command="delete" search="walk.all" path="$$Profile$$/cache"/>
-    <!--<action command="delete" search="walk.all" path="$$Profile$$\shares\cache*\"/>-->
-    <!--Seems that no normal caches and shouldn't be deleted!-->
+    <!-- $$Profile$$\shares\cache* are not ordinary caches, so leave them -->
   </option>
   <option id="logs">
     <label>Logs</label>
