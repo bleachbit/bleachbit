@@ -252,6 +252,58 @@ class GUIwxTestCase(common.BleachbitTestCase):
         self.assertEqual([5, 10, 20], [row['size'] for row in owner._rows])
         self.assertEqual(4, owner.results.refresh_count)
 
+    def _record_navigation(self, window):
+        """Capture navigation events that reach ``window``.
+
+        The events are not skipped, so keyboard focus does not move.
+        """
+        seen = []
+
+        def on_navigate(evt):
+            seen.append((evt.GetDirection(), evt.GetCurrentFocus()))
+
+        window.Bind(wx.EVT_NAVIGATION_KEY, on_navigate)
+        self.addCleanup(window.Unbind, wx.EVT_NAVIGATION_KEY,
+                        handler=on_navigate)
+        return seen
+
+    @unittest.skipUnless(
+        HAVE_WX and wx.Platform == '__WXMSW__', 'requires wxMSW')
+    def test_tab_leaves_cleaner_tree(self):
+        """Tab in the cleaner tree moves focus away (issue #2344)."""
+        tree = self.frame.tree
+        seen = self._record_navigation(tree.GetParent())
+        for shift, key_code in ((False, wx.WXK_TAB), (True, wx.WXK_TAB),
+                                (False, wx.WXK_RIGHT)):
+            # Go through the real binding, as the key would on Windows.
+            evt = wx.KeyEvent(wx.wxEVT_CHAR_HOOK)
+            evt.SetKeyCode(key_code)
+            evt.SetShiftDown(shift)
+            evt.SetEventObject(tree.GetMainWindow())
+            tree.GetMainWindow().GetEventHandler().ProcessEvent(evt)
+        # Tab goes forward, Shift+Tab backward; Right stays in the tree.
+        self.assertEqual([True, False], [fwd for fwd, _focus in seen])
+
+    @unittest.skipUnless(
+        HAVE_WX and wx.Platform == '__WXMSW__', 'requires wxMSW')
+    def test_tab_leaves_results_list(self):
+        """Tab in the Results list moves focus away (issue #2344)."""
+        notebook = self.frame.notebook
+        seen = self._record_navigation(notebook.GetParent())
+        # On Windows the nearest ancestor with wx.TAB_TRAVERSAL turns
+        # Tab into a navigation event it sends to itself.
+        handler = self.frame.results
+        while not handler.HasFlag(wx.TAB_TRAVERSAL):
+            handler = handler.GetParent()
+        evt = wx.NavigationKeyEvent()
+        evt.SetDirection(True)
+        evt.SetFromTab(True)
+        evt.SetEventObject(handler)
+        handler.GetEventHandler().ProcessEvent(evt)
+        # The notebook passes Tab on to its parent instead of putting
+        # focus back into the page.
+        self.assertEqual([(True, notebook)], seen)
+
     def test_wx_ui_proxy_batches_callbacks(self):
         """Test WxUIProxy event batching and rescheduling."""
         class Target:
