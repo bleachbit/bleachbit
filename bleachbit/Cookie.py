@@ -15,7 +15,8 @@ import os
 
 import bleachbit
 from bleachbit import FileUtilities, IS_MAC
-from bleachbit.Special import sqlite_table_exists, _sqlite_uri
+from bleachbit.Special import sqlite_table_exists, SQLITE_PROBE_TIMEOUT, \
+    _sqlite_uri
 
 logger = logging.getLogger(__name__)
 
@@ -110,6 +111,25 @@ SQLITE_TABLES = {
 }
 
 
+def _raise_if_locked(path):
+    """Raise OperationalError if another process holds the database
+
+    sqlite_table_exists() reports a locked database as a missing table, so
+    without this a running browser looks like an invalid cookies file.
+    """
+    import sqlite3
+    try:
+        with contextlib.closing(sqlite3.connect(
+                _sqlite_uri(path, 'ro'), uri=True,
+                timeout=SQLITE_PROBE_TIMEOUT)) as conn:
+            conn.execute('select 1 from sqlite_master limit 1;')
+    except sqlite3.DatabaseError as exc:
+        # Anything else, such as a file that is not a database, is left to
+        # the caller to report.
+        if str(exc).startswith('database is locked'):
+            raise
+
+
 def detect_browser(path):
     """Detect the browser type based on the cookies database file"""
     if not os.path.exists(path):
@@ -117,6 +137,7 @@ def detect_browser(path):
     for table_config in SQLITE_TABLES.values():
         if sqlite_table_exists(path, table_config['table_name']):
             return table_config['table_name'], table_config['host_column']
+    _raise_if_locked(path)
     raise ValueError(f"invalid cookies file: {path}")
 
 
