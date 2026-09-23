@@ -612,7 +612,7 @@ def put_env(key, val):
 
 
 def skipIfWindows(f):
-    """Skip unit test if running on Windows"""
+    """Skip unit test if running on Windows (i.e., skipUnlessPOSIX)"""
     return unittest.skipIf(bleachbit.IS_WINDOWS, 'running on Windows')(f)
 
 
