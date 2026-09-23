@@ -165,6 +165,12 @@ The wx front-end aims to be usable by blind users via screen readers
   text, results list, log, tree, and the two search/filter boxes.
 - Buttons (Preview, Clean, Abort) have tooltips that name their
   keyboard shortcut.
+- Tab and Shift+Tab move focus into and out of every control,
+  including the cleaner tree and the Results list.  On Windows the
+  tree hands Tab back to standard navigation (the generic
+  `DataViewCtrl` would otherwise use it to move between cells), and
+  the Results list sits on a `wx.Panel` notebook page so Tab can
+  leave it.
 - Global keyboard shortcuts (see `MainFrame._build_accelerators`):
   - **F5** — Preview
   - **Ctrl+Enter** — Clean

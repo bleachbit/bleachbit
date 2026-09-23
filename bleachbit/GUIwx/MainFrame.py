@@ -543,6 +543,14 @@ class MainFrame(wx.Frame):
         self.tree.Bind(
             dv.EVT_DATAVIEW_ITEM_CONTEXT_MENU,
             self._on_tree_context_menu)
+        # On Windows the generic DataViewCtrl switches to per-cell focus
+        # because the toggle column is activatable, and then consumes
+        # Tab to move between cells and rows, so keyboard users cannot
+        # Tab out of the tree.  GTK and macOS use native controls that
+        # already move focus with Tab.
+        if wx.Platform == '__WXMSW__':
+            self.tree.GetMainWindow().Bind(
+                wx.EVT_CHAR_HOOK, self._on_tree_char_hook)
         tree_sizer.Add(self.tree, 1, wx.EXPAND)
         tree_panel.SetSizer(tree_sizer)
 
@@ -576,7 +584,12 @@ class MainFrame(wx.Frame):
         # Virtual list: the widget pulls cells from ``self._visible``
         # via ``_VirtualResultsList.OnGetItemText`` on demand, which
         # keeps append_row O(1) even for very large previews.
-        self.results = _VirtualResultsList(self.notebook, self)
+        # The list sits on a wx.Panel page: on Windows, wx.Notebook
+        # treats Tab pressed in a page that is not a panel as coming
+        # from the tab strip and puts focus back into the page, so Tab
+        # could not leave the list.
+        results_page = wx.Panel(self.notebook)
+        self.results = _VirtualResultsList(results_page, self)
         self.results.SetName(_('Results'))
         self.results.InsertColumn(COL_CLEANER, _('Cleaner'), width=120)
         self.results.InsertColumn(COL_OPTION, _('Option'), width=120)
@@ -587,7 +600,10 @@ class MainFrame(wx.Frame):
         self.results.Bind(
             wx.EVT_LIST_ITEM_RIGHT_CLICK, self._on_result_context_menu)
         self.results.Bind(wx.EVT_LIST_COL_CLICK, self._on_result_col_click)
-        self.notebook.AddPage(self.results, _('Results'))
+        results_sizer = wx.BoxSizer(wx.VERTICAL)
+        results_sizer.Add(self.results, 1, wx.EXPAND)
+        results_page.SetSizer(results_sizer)
+        self.notebook.AddPage(results_page, _('Results'))
 
         # Log tab -------------------------------------------------------
         self.log = wx.TextCtrl(
@@ -821,6 +837,16 @@ class MainFrame(wx.Frame):
         if self._tree_filter_text:
             for cn in self._tree_model.cleaner_nodes():
                 self.tree.Expand(self._tree_model.ObjectToItem(cn))
+
+    def _on_tree_char_hook(self, evt):
+        """Let Tab and Shift+Tab move focus out of the cleaner tree.
+
+        Left and Right still move between the checkbox and label cells.
+        """
+        if (evt.GetKeyCode() == wx.WXK_TAB and not evt.HasModifiers()
+                and self.tree.HandleAsNavigationKey(evt)):
+            return
+        evt.Skip()
 
     def _set_all_checked(self, checked, predicate=None):
         """Check or uncheck every option that ``predicate`` accepts.
