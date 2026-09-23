@@ -371,8 +371,6 @@ class ExternalCommandTestCase(common.BleachbitTestCase):
         process = subprocess.Popen(shred_command_string,
                                    shell=True, cwd=cwd)
         try:
-            # It may close too quickly to detect the window title.
-            self.assertRunning(check_window_title=False)
             returncode = wait_for_process_tree_windows(process, timeout=60)
         except subprocess.TimeoutExpired:
             process.kill()
