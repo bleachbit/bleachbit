@@ -12,12 +12,11 @@ later.  See the COPYING file in the top-level directory.
   <label>Internet Explorer</label>
   <description>Web browser</description>
   <var name="IELocalAppData">
-    <!-- Windows 7 Support (and maybe other Windows versions): -->
+    <!-- Windows 7 -->
     <value>%LocalAppData%\Microsoft\Windows</value>
-    <!-- Used e.g. in Windows XP (and maybe before on NT) with e.g. Internet Explorer 8 - English-only-Support: -->
+    <!-- Windows XP, English -->
     <value>%UserProfile%\Local Settings</value>
-    <!-- And now some none-English-Support... -->
-    <!-- Used e.g. in Windows XP (and maybe before on NT) with e.g. Internet Explorer 8 - Polish-Support: -->
+    <!-- Windows XP, Polish -->
     <value>%UserProfile%\Ustawienia lokalne</value>
   </var>
   <option id="cookies">
@@ -49,9 +48,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\TabbedBrowsing\NewTabPage"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Explorer Bars\{C4EE31F3-4768-11D2-BE5C-00A0C9A83DA1}\FilesNamedMRU"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Explorer Bars\{C4EE31F3-4768-11D2-BE5C-00A0C9A83DA1}\ContainingTextMRU"/>
-    <!-- Extras - making WinApp2.ini obsolete: -->
     <action command="delete" search="walk.files" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Microsoft\CLR_v4.0\UsageLogs\"/>
-    <!-- In a wider range some History... -->
     <action command="delete" search="walk.files" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\Microsoft\CryptnetUrlCache\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Packages\windows_ie_ac_*\LocalState\navigationHistory\"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Main\FeatureControl"/>
@@ -62,7 +59,7 @@ later.  See the COPYING file in the top-level directory.
     <label>Cache</label>
     <description>Delete the cache</description>
     <action command="delete" search="walk.all" path="$$IELocalAppData$$\Temporary Internet Files\"/>
-    <!-- Windows 7 Support (and maybe other Windows versions): -->
+    <!-- Windows 7 -->
     <action command="delete" search="walk.all" path="%AppData%\Microsoft\Internet Explorer\UserData\"/>
     <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IETldCache\"/>
     <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IECompatCache\"/>
@@ -71,9 +68,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="$$IELocalAppData$$\INetCache\"/>
     <action command="delete" search="walk.all" path="$$IELocalAppData$$\WebCache\"/>
     <action command="delete" search="walk.top" path="$$IELocalAppData$$\WebCache.old\"/>
-    <!-- Empty folder on the demo machine: (Tobias) -->
     <action command="delete" search="walk.all" path="%LocalAppDataLow%\Microsoft\Internet Explorer\iconcache\"/>
-    <!-- Extras - making WinApp2.ini obsolete: -->
     <action command="delete" search="walk.all" path="$$IELocalAppData$$\AppCache\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\AppCache\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\IECompat*Cache\"/>
@@ -87,15 +82,12 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="%WindowsSystem%\config\systemprofile\AppData\Local\Microsoft\Windows\INetCache\"/>
     <action command="winreg" path="HKCR\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\windows_ie_ac_001\Internet Explorer\DOMStorage"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\LowRegistry\DOMStorage"/>
-    <!-- Deletes Feeds Cache: -->
     <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Feeds Cache\"/>
   </option>
   <option id="downloads">
     <label>Download history</label>
     <description>Delete the usage history</description>
     <action command="delete" search="walk.all" path="%AppData%\Microsoft\Windows\IEDownloadHistory\"/>
-    <!-- Windows 7 Support (and maybe other Windows versions): -->
-    <!-- Extras - making WinApp2.ini obsolete: -->
     <action command="delete" search="walk.all" path="%LocalAppData%\Packages\windows_ie_ac_*\AC\IEDownloadHistory\"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer" name="Download Directory"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\Main" name="Save Directory"/>

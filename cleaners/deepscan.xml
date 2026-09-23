@@ -69,15 +69,9 @@ later.  See the COPYING file in the top-level directory.
     <description>Delete the backup files</description>
     <warning>This option is slow.</warning>
     <!--
-Here is an example. When editing foo.txt, VIM makes a file called .foo.txt.swp
-that starts with a period.
-
-If the .swp file exists, it will cycle through the alphabet according to
-this post
+When editing foo.txt, VIM makes .foo.txt.swp. If that exists, it cycles back
+through the alphabet (.swo, .swn, ...), but more than three is unlikely.
 https://groups.google.com/forum/#!msg/vim_use/JBHSs3kPPJU/X9WeMsZcfWAJ
-
-The likeliness of VIM not being able to create a swap on the first three
-times is small.
 
 Be careful not to match files such as ~/.htpasswd
 https://github.com/bleachbit/bleachbit/issues/683

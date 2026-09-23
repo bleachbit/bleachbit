@@ -26,7 +26,6 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="glob" path="%LocalAppData%\Microsoft\Media Player\Cache*\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Media Player\Grafikcache\LocalMLS\"/>
     <action command="delete" search="walk.all" path="%LocalAppData%\Microsoft\Media Player\Transcoded Files Cache\"/>
-    <!-- Let's say the temp folder is a kind of cache, too... ;-) Tobias. -->
     <action command="delete" search="file" path="%Temp%\wmsetup.log"/>
   </option>
 </cleaner>

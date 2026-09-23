@@ -14,8 +14,8 @@ later.  See the COPYING file in the top-level directory.
   <running type="exe" os="windows" same_user="true">chrome.exe</running>
   <running type="exe" os="linux" same_user="true">chromium-browser</running>
   <!-- OpenBSD and NetBSD use "chrome" for Chromium, while on Linux it means
-    Google Chrome. In other words, on Linux this could give a false positive
-    for Chromium when Google Chrome is running. -->
+    Google Chrome, so on Linux this could mistake Google Chrome for
+    Chromium. -->
   <running type="exe" os="bsd">chrome</running>
   <var name="base">
     <value os="windows">%LocalAppData%\Chromium\User Data</value>
@@ -116,7 +116,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$profile$$/Shortcuts"/>
     <action command="delete" search="glob" path="$$profile$$/History Index ????-??-journal"/>
     <action command="delete" search="glob" path="$$profile$$/History Index ????-??"/>
-    <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
+    <!-- Thumbnails was an SQLite file until about January 2016 and is a folder by Chrome 48 -->
     <action command="delete" search="file" path="$$profile$$/Thumbnails"/>
     <action command="delete" search="walk.files" path="$$profile$$/Thumbnails"/>
     <action command="delete" search="file" path="$$profile$$/Thumbnails-journal"/>
@@ -200,7 +200,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/QuotaManager"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/WebStorage/QuotaManager"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Shortcuts"/>
-    <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
+    <!-- Thumbnails was an SQLite file until about January 2016 and is a folder by Chrome 48 -->
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Thumbnails" type="f"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Web Data"/>

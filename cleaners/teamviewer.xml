@@ -25,7 +25,6 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.files" path="$$Profile$$\MRU\"/>
     <action command="delete" search="file" path="$$Profile$$\MRU\"/>
     <action command="delete" search="file" path="$$Profile$$\Connections.txt"/>
-    <!-- Windows: -->
     <action command="winreg" path="HKCU\Software\TeamViewer\Version4" name="Last_Machine_Connections"/>
   </option>
 </cleaner>

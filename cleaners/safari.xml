@@ -7,9 +7,9 @@ Copyright (c) 2008-2026 Andrew Ziem.
 This work is licensed under the terms of the GNU GPL, version 3 or
 later.  See the COPYING file in the top-level directory.
 
-These changes reorganized where Safari stores site data. For a profile that used only modern
-Safari, WebKit/WebsiteData/{LocalStorage,IndexedDB} may be empty, but some profiles may have
-data there from older Safari versions.
+The WebKit changes below reorganized where Safari stores site data. For a profile
+that used only modern Safari, WebKit/WebsiteData/{LocalStorage,IndexedDB} may be
+empty, but some profiles may have data there from older Safari versions.
 
 https://trac.webkit.org/changeset/291909/webkit
 https://trac.webkit.org/changeset/289878/webkit

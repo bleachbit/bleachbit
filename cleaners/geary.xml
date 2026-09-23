@@ -27,8 +27,6 @@ later.  See the COPYING file in the top-level directory.
   <option id="attachments">
     <label>Attachments</label>
     <description>Delete the files</description>
-    <!-- I use both the "walk.all" and "files" search options
-         to print the files being removed and to remove the attachments directory. -->
     <action command="delete" search="walk.top" path="$$accounts$$/attachments"/>
     <action command="delete" search="file" path="$$accounts$$/attachments"/>
   </option>

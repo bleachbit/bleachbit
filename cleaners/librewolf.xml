@@ -7,8 +7,8 @@ Copyright (c) 2008-2026 Andrew Ziem.
 This work is licensed under the terms of the GNU GPL, version 3 or
 later.  See the COPYING file in the top-level directory.
 
-Mozilla LibreWolf 150.0.1-1 installed by .deb from the browser's
-official repository has pathnames like this with "~/.config/librewolf/librewolf".
+LibreWolf 150.0.1-1 installed by .deb from its official repository uses
+~/.config/librewolf/librewolf, for example
 /home/username/.config/librewolf/librewolf/z52q68c1.default-default/cookies.sqlite
 
 -->
@@ -39,8 +39,8 @@ official repository has pathnames like this with "~/.config/librewolf/librewolf"
     <label>Cache</label>
     <description>Delete the cache</description>
     <!--
-This Linux path is whitelisted under the System - Cache cleaner, so it is not
-redundant. Also, this Linux path contains the cache2 and OfflineCache directories.
+This Linux path is whitelisted by the System - Cache cleaner, so it is not
+redundant. It also contains the cache2 and OfflineCache directories.
 -->
     <action command="delete" search="walk.all" path="~/.cache/librewolf/"/>
     <action command="delete" search="walk.all" path="~/.var/app/io.gitlab.librewolf-community/cache"/>
@@ -88,7 +88,7 @@ https://wiki.mozilla.org/Privacy/Reviews/Necko
     <label>Session</label>
     <description>Previously open tabs and windows</description>
     <!--
-example names
+Example names
 sessionstore.js
 sessionstore.jsonlz4
 sessionstore.bak
@@ -136,7 +136,7 @@ sessionstore-backups/recovery.jsonlz4
     <!-- Firefox 3 introduced downloads.sqlite and places.sqlite -->
     <action command="delete" search="file" path="$$profile$$/downloads.sqlite"/>
     <action command="mozilla.url.history" search="file" path="$$profile$$/places.sqlite"/>
-    <!-- Firefox 78 (or probably some previous version) moved icons from places.sqlite to favicons.sqlite -->
+    <!-- Firefox 78 (or earlier) moved icons from places.sqlite to favicons.sqlite -->
     <action command="mozilla.favicons" search="file" path="$$profile$$/favicons.sqlite"/>
     <!-- Firefox 108 has alternative services with visited domains -->
     <action command="delete" search="file" path="$$profile$$/AlternateServices.txt"/>

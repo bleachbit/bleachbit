@@ -21,9 +21,6 @@ later.  See the COPYING file in the top-level directory.
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
     <action command="delete" search="glob" path="%Temp%\Silverlight*.log"/>
-    <!-- Example:
-    Silverlight0.log
-    SilverlightMSI.log
-    -->
+    <!-- Silverlight0.log, SilverlightMSI.log -->
   </option>
 </cleaner>
