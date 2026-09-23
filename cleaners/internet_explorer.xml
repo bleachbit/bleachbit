@@ -42,7 +42,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.files" path="%LocalAppData%\Microsoft\Internet Explorer\Recovery\Active\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Microsoft\Internet Explorer\Recovery\Immersive\Active\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Microsoft\Internet Explorer\Recovery\Last Active\"/>
-    <!-- "How to clear the History entries in Internet Explorer", http://support.microsoft.com/kb/157729 -->
+    <!-- "How to clear the History entries in Internet Explorer", https://web.archive.org/web/20160527050453/https://support.microsoft.com/en-us/kb/157729 -->
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\TypedURLs"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Internet Explorer\TabbedBrowsing\NewTabPage"/>

@@ -371,7 +371,7 @@ def process_cmd_line():
         version_message = f"""
 BleachBit version {APP_VERSION}
 Copyright (C) 2008-2026 Andrew Ziem.  All rights reserved.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+License GPLv3+: GNU GPL version 3 or later <https://www.gnu.org/licenses/gpl-3.0.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 """

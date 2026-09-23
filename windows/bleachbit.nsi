@@ -15,7 +15,7 @@
 ;  GNU General Public License for more details.
 ;
 ;  You should have received a copy of the GNU General Public License
-;  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;  @scriptversion v3.0.1.1429
 ;  @scriptdate 2019-12-01
@@ -318,7 +318,7 @@ ${StrCase}
 ;--------------------------------
 ;Function
 
-; http://nsis.sourceforge.net/RefreshShellIcons
+; https://nsis.sourceforge.io/RefreshShellIcons
 Function RefreshShellIcons
   !define SHCNE_ASSOCCHANGED 0x08000000
   !define SHCNF_IDLIST 0
