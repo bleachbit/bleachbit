@@ -485,6 +485,20 @@ class CookieTestCase(common.BleachbitTestCase):
         self.assertEqual(Cookie.detect_browser(
             firefox_path), ('moz_cookies', 'host'))
 
+    def test_browser_detection_locked(self):
+        """A locked cookies database is reported as locked after one probe"""
+        path = self._create_chrome_cookies_db()
+        holder = sqlite3.connect(path, isolation_level=None)
+        try:
+            holder.execute('PRAGMA locking_mode=EXCLUSIVE')
+            holder.execute('BEGIN EXCLUSIVE')
+            with mock.patch('sqlite3.connect', side_effect=sqlite3.connect) as mock_connect, \
+                    self.assertRaisesRegex(sqlite3.OperationalError, 'database is locked'):
+                Cookie.detect_browser(path)
+            self.assertEqual(mock_connect.call_count, 1)
+        finally:
+            holder.close()
+
     def test_empty_database(self):
         """Test handling of empty cookie databases"""
         # Create empty Chrome database
