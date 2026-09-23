@@ -103,7 +103,8 @@ def sqlite_table_exists(pathname, table):
 
     Returns True if the table exists, False if it does not.
 
-    Raises PermissionError if the file exists but cannot be opened.
+    Raises PermissionError if the file exists but cannot be opened, and
+    sqlite3.OperationalError if it is locked.
     """
     # In FreeBSD, sqlite3 is a separate package
     import sqlite3
@@ -115,23 +116,23 @@ def sqlite_table_exists(pathname, table):
             if conn.execute(cmd, (table,)).fetchone():
                 return True
     except sqlite3.OperationalError as exc:
+        if not os.path.exists(pathname):
+            return False
         # SQLITE_CANTOPEN (14) and extended variants are raised when
         # Norton blocks access to browser cookies. The primary code
         # is the low byte.
         # sqlite_errorcode requires Python 3.11+, which is satisfied on
         # Windows where the antivirus issue occurs.
         errorcode = getattr(exc, 'sqlite_errorcode', None)
-        if os.path.exists(pathname) and errorcode is not None and \
-                (errorcode & 0xff) == SQLITE_CANTOPEN:
+        if errorcode is not None and (errorcode & 0xff) == SQLITE_CANTOPEN:
             # Worker shows prettier message for PermissionError
             raise PermissionError(
                 errno.EACCES,
                 f"Cannot open database file (possibly blocked by "
                 f"antivirus or another process): {pathname}",
                 pathname) from exc
-        # Database may be locked, busy, corrupt, or not a valid SQLite DB.
-        logger.debug('sqlite_table_exists: %s: %s', pathname, exc)
-        return False
+        # A locked database is not a missing table
+        raise
     return False
 
 
@@ -144,7 +145,9 @@ def _sqlite_is_valid_database(pathname):
                 uri, uri=True, timeout=SQLITE_PROBE_TIMEOUT)) as conn:
             conn.execute('select 1 from sqlite_master limit 1;')
             return True
-    except (sqlite3.DatabaseError, sqlite3.OperationalError):
+    except (sqlite3.DatabaseError, sqlite3.OperationalError) as exc:
+        if str(exc).startswith('database is locked'):
+            raise
         return False
 
 
