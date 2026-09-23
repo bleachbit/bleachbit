@@ -16,7 +16,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 -->
 <cleaner id="unique_id">
@@ -70,7 +70,7 @@
     <action search="walk.files" command="delete" path="/var/tmp/"/>
     <!-- search="glob" deletes all pathnames matching the shell glob
            pattern described in the Python documentation.
-           http://www.python.org/doc/2.5.2/lib/module-glob.html -->
+           https://docs.python.org/3/library/glob.html#module-glob -->
     <action search="glob" command="delete" path="/tmp/*.bak"/>
     <action search="glob" command="delete" path="/var/log/*.[0-9].gz"/>
     <action search="glob" command="delete" path="/tmp/?.bak"/>

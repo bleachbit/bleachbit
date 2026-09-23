@@ -367,7 +367,7 @@ def wipe_path(pathname, idle=False):
 
     def temporaryfile():
         # reference
-        # http://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
+        # https://en.wikipedia.org/wiki/Comparison_of_file_systems#Limits
         maxlen = 185
         f = None
         tmp_max_orig = tempfile.TMP_MAX

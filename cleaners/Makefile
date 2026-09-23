@@ -1,5 +1,5 @@
 # Copyright (C) 2008-2026 Andrew Ziem.  All rights reserved.
-# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+# License GPLv3+: GNU GPL version 3 or later <https://www.gnu.org/licenses/gpl-3.0.html>.
 # This is free software: You are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 

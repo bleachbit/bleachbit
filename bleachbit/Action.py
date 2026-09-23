@@ -76,7 +76,7 @@ def expand_multi_var(s, variables):
 
 #
 # Plugin framework
-# http://martyalchin.com/2008/jan/10/simple-plugin-framework/
+# https://martyalchin.com/2008/jan/10/simple-plugin-framework/
 #
 
 

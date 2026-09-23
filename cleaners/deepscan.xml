@@ -59,9 +59,9 @@ later.  See the COPYING file in the top-level directory.
     <label>Temporary files</label>
     <description>Delete the temporary files</description>
     <warning>This option is slow.</warning>
-    <!-- http://support.microsoft.com/kb/211632 -->
+    <!-- https://web.archive.org/web/20210503033432/https://support.microsoft.com/en-us/topic/description-of-how-word-creates-temporary-files-66b112fb-d2c0-8f40-a0be-70a367cc4c85 -->
     <action command="delete" search="deep" regex="^~wr[a-z][0-9]{4}\.tmp$"/>
-    <!-- http://support.microsoft.com/kb/826810 -->
+    <!-- https://web.archive.org/web/20150228161650/http://support.microsoft.com/kb/826810 -->
     <action command="delete" search="deep" regex="^ppt[0-9]{4}\.tmp$"/>
   </option>
   <option id="vim_swap_user">

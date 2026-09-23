@@ -211,7 +211,7 @@ class WipeTestCase(common.BleachbitTestCase):
         # create file with short name in temporary directory with long name
         if bleachbit.IS_WINDOWS:
             # In Windows, the maximum path length is 260 characters
-            # http://msdn.microsoft.com/en-us/library/aa365247%28VS.85%29.aspx#maxpath
+            # https://learn.microsoft.com/en-us/windows/win32/fileio/naming-a-file#maximum-path-length-limitation
             dir0len = 100
             dir1len = 5
         else:

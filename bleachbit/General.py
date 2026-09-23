@@ -15,7 +15,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """
 General code
@@ -134,7 +134,7 @@ def boolstr_to_bool(value):
 
 def getText(nodelist):
     """Return the text data in an XML node
-    http://docs.python.org/library/xml.dom.minidom.html"""
+    https://docs.python.org/3/library/xml.dom.minidom.html"""
     return "".join(
         node.data for node in nodelist if node.nodeType == node.TEXT_NODE
     )

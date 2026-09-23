@@ -495,7 +495,7 @@ def is_unregistered_mime(mimetype):
 
 def is_broken_xdg_desktop(pathname):
     """Returns whether the given XDG .desktop file is critically broken.
-    Reference: http://standards.freedesktop.org/desktop-entry-spec/latest/"""
+    Reference: https://specifications.freedesktop.org/desktop-entry/latest/"""
     config = configparser.RawConfigParser()
     try:
         config.read(pathname)

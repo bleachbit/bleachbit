@@ -22,7 +22,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{F4E57C4B-2036-45F0-A9AB-443BCFE33D9F}\Count"/>
     <!-- refresh Windows shell after UserAssist -->
     <action command="win.shell.change.notify"/>
-    <!-- http://support.microsoft.com/kb/142298 -->
+    <!-- https://web.archive.org/web/20150224160439/http://support.microsoft.com/kb/142298 -->
     <!-- common open dialog -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedMRU"/>
     <!-- Windows Vista/7 -->

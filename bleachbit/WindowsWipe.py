@@ -15,7 +15,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 """
@@ -25,10 +25,10 @@
 ***
 *** References:
 *** Windows Internals (Russinovich, Solomon, Ionescu), 6th edition
-*** http://windowsitpro.com/systems-management/inside-windows-nt-disk-defragmenting
-*** https://technet.microsoft.com/en-us/sysinternals/sdelete.aspx
-*** https://blogs.msdn.microsoft.com/jeffrey_wall/2004/09/13/defrag-api-c-wrappers/
-*** https://msdn.microsoft.com/en-us/library/windows/desktop/aa364572(v=vs.85).aspx
+*** https://web.archive.org/web/20170227200225/http://windowsitpro.com/systems-management/inside-windows-nt-disk-defragmenting
+*** https://learn.microsoft.com/en-us/sysinternals/downloads/sdelete
+*** https://learn.microsoft.com/en-us/archive/blogs/jeffrey_wall/defrag-api-c-wrappers
+*** https://learn.microsoft.com/en-us/windows/win32/api/winioctl/ni-winioctl-fsctl_get_retrieval_pointers
 ***
 ***
 *** Algorithm
