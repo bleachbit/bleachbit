@@ -448,7 +448,11 @@ def wipe_path(pathname, idle=False):
         from bleachbit.PathUtils import is_world_writable
         if is_world_writable(pathname):
             logger.warning(
-                _("Shred drive is world-writable; wiping there is unsafe: %s"), pathname)
+                # TRANSLATORS: Warning in the log. BleachBit wipes free space by
+                # creating temporary files in the chosen folder. This folder can be
+                # changed by any user on the computer, so another user could tamper
+                # with those files. %s is the folder path.
+                _("Wiping free space here is unsafe because any user can change this folder: %s"), pathname)
 
     if fs_info.fstype in ('ext4', 'btrfs'):
         fitrim(pathname)

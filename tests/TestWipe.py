@@ -357,7 +357,7 @@ class WipeTestCase(common.BleachbitTestCase):
                 self.assertLogs('bleachbit.Wipe', level='WARNING') as cm:
             for _ret in wipe_path(self.tempdir, True):
                 break
-        self.assertTrue(any('world-writable' in m for m in cm.output))
+        self.assertTrue(any('unsafe' in m for m in cm.output))
 
     def _make_mock_file(self, name='/tmp/empty_abc123'):
         """Return a mock file object for wipe_path tests"""
