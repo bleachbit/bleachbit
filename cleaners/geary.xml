@@ -28,7 +28,6 @@ later.  See the COPYING file in the top-level directory.
     <label>Attachments</label>
     <description>Delete the files</description>
     <action command="delete" search="walk.top" path="$$accounts$$/attachments"/>
-    <action command="delete" search="file" path="$$accounts$$/attachments"/>
   </option>
   <option id="sync_conflict">
     <label>Sync conflict</label>
