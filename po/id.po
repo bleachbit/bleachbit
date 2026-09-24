@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-01 10:05-0600\n"
+"POT-Creation-Date: 2026-09-23 20:05-0600\n"
 "PO-Revision-Date: 2026-08-18 02:08+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/bleachbit/"
@@ -29,8 +29,9 @@ msgstr "Pemutar media"
 #. TRANSLATORS: Sidebar label for the page managing browser cookies in
 #. the Preferences dialog.
 #: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
+#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
+#: ../cleaners/konqueror.xml ../cleaners/silverlight.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
@@ -41,8 +42,9 @@ msgid "Cookies"
 msgstr "Kuki"
 
 #: ../cleaners/realplayer.xml ../cleaners/librewolf.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/silverlight.xml
+#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
+#: ../cleaners/konqueror.xml ../cleaners/silverlight.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml ../cleaners/flash.xml
@@ -57,15 +59,15 @@ msgstr ""
 
 #: ../cleaners/realplayer.xml ../cleaners/zsh.xml ../cleaners/bash.xml
 #: ../cleaners/elinks.xml ../cleaners/vivaldi.xml ../cleaners/easytag.xml
-#: ../cleaners/safari.xml ../cleaners/fish.xml ../cleaners/chromium.xml
-#: ../cleaners/sqlite3.xml ../cleaners/windows_defender.xml
-#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/nautilus.xml
-#: ../cleaners/links2.xml ../cleaners/d4x.xml ../cleaners/libreoffice.xml
-#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml ../cleaners/mc.xml
-#: ../cleaners/tortoisesvn.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/winrar.xml ../cleaners/microsoft_edge.xml ../cleaners/python.xml
-#: ../cleaners/vim.xml ../cleaners/opera.xml ../cleaners/discord.xml
-#: ../cleaners/octave.xml
+#: ../cleaners/safari.xml ../cleaners/safari_windows.xml ../cleaners/fish.xml
+#: ../cleaners/chromium.xml ../cleaners/sqlite3.xml
+#: ../cleaners/windows_defender.xml ../cleaners/slack.xml ../cleaners/brave.xml
+#: ../cleaners/nautilus.xml ../cleaners/links2.xml ../cleaners/d4x.xml
+#: ../cleaners/libreoffice.xml ../cleaners/seamonkey.xml
+#: ../cleaners/google_chrome.xml ../cleaners/mc.xml ../cleaners/tortoisesvn.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/winrar.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/python.xml ../cleaners/vim.xml
+#: ../cleaners/opera.xml ../cleaners/discord.xml ../cleaners/octave.xml
 msgid "History"
 msgstr "Riwayat"
 
@@ -118,11 +120,12 @@ msgstr "Penampil multimedia"
 #: ../cleaners/windows_media_player.xml ../cleaners/audacious.xml
 #: ../cleaners/vivaldi.xml ../cleaners/yahoo_messenger.xml
 #: ../cleaners/pidgin.xml ../cleaners/secondlife_viewer.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/emesene.xml
-#: ../cleaners/nexuiz.xml ../cleaners/java.xml ../cleaners/epiphany.xml
-#: ../cleaners/gpodder.xml ../cleaners/geary.xml ../cleaners/zen.xml
-#: ../cleaners/thumbnails.xml ../cleaners/exaile.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
+#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/waterfox.xml ../cleaners/emesene.xml ../cleaners/nexuiz.xml
+#: ../cleaners/java.xml ../cleaners/epiphany.xml ../cleaners/gpodder.xml
+#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/thumbnails.xml
+#: ../cleaners/exaile.xml ../cleaners/chromium.xml ../cleaners/slack.xml
+#: ../cleaners/smartftp.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/liferea.xml
 #: ../cleaners/vscode.xml ../cleaners/hippo_opensim_viewer.xml
 #: ../cleaners/adobe_reader.xml ../cleaners/brave.xml ../cleaners/claude.xml
@@ -209,12 +212,13 @@ msgid "Delete the chat logs"
 msgstr "Hapus log obrolan"
 
 #: ../cleaners/librewolf.xml ../cleaners/elinks.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/epiphany.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/links2.xml ../cleaners/seamonkey.xml
-#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
+#: ../cleaners/konqueror.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/links2.xml
+#: ../cleaners/seamonkey.xml ../cleaners/google_chrome.xml
+#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Web browser"
 msgstr "Peramban Web"
 
@@ -232,16 +236,17 @@ msgstr "Cadangkan berkas"
 msgid "Delete the backup files"
 msgstr "Hapus cadangan berkas-berkas"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Crash reports"
 msgstr "Laporan kemogokan"
 
 #: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/beagle.xml
-#: ../cleaners/vivaldi.xml ../cleaners/waterfox.xml ../cleaners/geary.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
+#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
 #: ../cleaners/windows_defender.xml ../cleaners/thunderbird.xml
 #: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
 #: ../cleaners/claude.xml ../cleaners/deepscan.xml
@@ -251,11 +256,11 @@ msgstr "Laporan kemogokan"
 msgid "Delete the files"
 msgstr "Hapus berkas"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/internet_explorer.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Form history"
 msgstr "Riwayat isian form"
 
@@ -294,49 +299,50 @@ msgid "This option will delete your saved passwords."
 msgstr "Pilihan ini akan menghapus kata sandi yang tersimpan."
 
 #: ../cleaners/librewolf.xml ../cleaners/zsh.xml ../cleaners/vivaldi.xml
-#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/claude.xml ../cleaners/google_chrome.xml
+#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/claude.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Session"
 msgstr "Sesi"
 
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
-#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/chromium.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
+#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
+#: ../cleaners/opera.xml
 msgid "Previously open tabs and windows"
 msgstr "Tab dan jendela yang sebelumnya terbuka"
 
 #. Label for cleaning option to delete site data such as LocalStorage and IndexedDB
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Site data"
 msgstr "Data situs"
 
 #. Description for cleaning option. LocalStorage and IndexedDB are proper nouns: do not translate
-#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/waterfox.xml
-#: ../cleaners/epiphany.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/palemoon.xml ../cleaners/firefox.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/librewolf.xml ../cleaners/vivaldi.xml ../cleaners/safari.xml
+#: ../cleaners/waterfox.xml ../cleaners/epiphany.xml ../cleaners/zen.xml
+#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Delete LocalStorage, IndexedDB, and other data stored by websites"
 msgstr ""
 "Hapus LocalStorage, IndexedDB, dan data lain yang disimpan oleh situs web"
 
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Site preferences"
 msgstr "Preferensi situs"
 
-#: ../cleaners/librewolf.xml ../cleaners/waterfox.xml ../cleaners/zen.xml
-#: ../cleaners/chromium.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/librewolf.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/palemoon.xml
+#: ../cleaners/firefox.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "Settings for individual sites"
 msgstr "Pengaturan masing-masing situs"
@@ -346,9 +352,10 @@ msgstr "Pengaturan masing-masing situs"
 msgid "URL history"
 msgstr "Riwayat URL"
 
-#: ../cleaners/librewolf.xml ../cleaners/safari.xml ../cleaners/waterfox.xml
-#: ../cleaners/zen.xml ../cleaners/konqueror.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/internet_explorer.xml
+#: ../cleaners/librewolf.xml ../cleaners/safari_windows.xml
+#: ../cleaners/waterfox.xml ../cleaners/zen.xml ../cleaners/konqueror.xml
+#: ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/internet_explorer.xml
 msgid "List of visited web pages"
 msgstr "Daftar laman web yang dikunjungi"
 
@@ -357,22 +364,23 @@ msgstr "Daftar laman web yang dikunjungi"
 #. the term 'Compact Database' (which you may translate
 #. instead).  Another synonym is 'defragment.'
 #: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml ../bleachbit/Action.py
+#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/waterfox.xml ../cleaners/gpodder.xml ../cleaners/geary.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/slack.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/liferea.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../bleachbit/Action.py
 msgid "Vacuum"
 msgstr "Optimalkan"
 
 #: ../cleaners/librewolf.xml ../cleaners/yum.xml ../cleaners/vivaldi.xml
-#: ../cleaners/safari.xml ../cleaners/waterfox.xml ../cleaners/gpodder.xml
-#: ../cleaners/geary.xml ../cleaners/zen.xml ../cleaners/chromium.xml
-#: ../cleaners/slack.xml ../cleaners/thunderbird.xml ../cleaners/palemoon.xml
-#: ../cleaners/firefox.xml ../cleaners/liferea.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml ../cleaners/discord.xml
+#: ../cleaners/safari.xml ../cleaners/safari_windows.xml
+#: ../cleaners/waterfox.xml ../cleaners/gpodder.xml ../cleaners/geary.xml
+#: ../cleaners/zen.xml ../cleaners/chromium.xml ../cleaners/slack.xml
+#: ../cleaners/thunderbird.xml ../cleaners/palemoon.xml ../cleaners/firefox.xml
+#: ../cleaners/liferea.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
 msgid ""
 "Clean database fragmentation to reduce space and improve speed without "
 "removing any data"
@@ -461,7 +469,8 @@ msgstr "Hapus kuki, URL yang dikunjungi, dan riwayat pencarian"
 msgid "Word processor"
 msgstr "Pengolah kata"
 
-#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/epiphany.xml
+#: ../cleaners/vivaldi.xml ../cleaners/safari.xml
+#: ../cleaners/safari_windows.xml ../cleaners/epiphany.xml
 #: ../cleaners/chromium.xml ../cleaners/slack.xml ../cleaners/thunderbird.xml
 #: ../cleaners/brave.xml ../cleaners/seamonkey.xml
 #: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
@@ -471,14 +480,14 @@ msgstr ""
 "Hapus tembolok web. Dapat mengurangi waktu penampilan halaman yang telah "
 "dikunjungi"
 
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/brave.xml
-#: ../cleaners/google_chrome.xml ../cleaners/microsoft_edge.xml
-#: ../cleaners/opera.xml
+#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/chromium.xml
+#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml
 msgid "A history of forms entered in websites"
 msgstr "Riwayat formulir yang dimasukkan di situs web"
 
-#: ../cleaners/vivaldi.xml ../cleaners/chromium.xml ../cleaners/slack.xml
-#: ../cleaners/brave.xml ../cleaners/google_chrome.xml
+#: ../cleaners/vivaldi.xml ../cleaners/safari.xml ../cleaners/chromium.xml
+#: ../cleaners/slack.xml ../cleaners/brave.xml ../cleaners/google_chrome.xml
 #: ../cleaners/microsoft_edge.xml ../cleaners/opera.xml ../cleaners/discord.xml
 msgid ""
 "Delete the history which includes visited sites, downloads, and thumbnails"
@@ -844,6 +853,16 @@ msgstr "AI"
 #: ../cleaners/google_chrome.xml
 msgid "Delete the AI models"
 msgstr "Hapus model AI"
+
+#: ../cleaners/google_chrome.xml
+#, fuzzy
+#| msgid "Update to version %s"
+msgid "Old versions"
+msgstr "Mutakhirkan ke versi %s"
+
+#: ../cleaners/google_chrome.xml
+msgid "Delete program files from previous versions left behind by updates"
+msgstr ""
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -1358,7 +1377,7 @@ msgstr ""
 
 #. TRANSLATORS: Warning printed to the log. %s expands to the
 #. path of the XML cleaner file that was skipped
-#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
+#: ../bleachbit/CleanerML.py
 #, python-format
 msgid "Ignoring cleaner because it is world writable: %s"
 msgstr "Abaikan pembersih karena dapat ditulis: %s"
@@ -1366,7 +1385,7 @@ msgstr "Abaikan pembersih karena dapat ditulis: %s"
 #. TRANSLATORS: Warning printed to the log. %s expands to the
 #. path of the XML cleaner file whose directory is world
 #. writable.
-#: ../bleachbit/CleanerML.py ../bleachbit/Winapp.py
+#: ../bleachbit/CleanerML.py
 #, fuzzy, python-format
 #| msgid "Ignoring cleaner because it is world writable: %s"
 msgid "Ignoring cleaner because its directory is world writable: %s"
@@ -2672,6 +2691,19 @@ msgstr ""
 "Tidak ada versi resmi BleachBit di Microsoft Store. Dapatkan versi aslinya "
 "di https://www.bleachbit.org yang selalu gratis."
 
+#. TRANSLATORS: Startup warning on macOS when the application
+#. lacks Full Disk Access. "Full Disk Access", "System
+#. Settings", and "Privacy & Security" are names of macOS
+#. features and settings: match Apple's localization.
+#: ../bleachbit/GuiStartup.py
+msgid ""
+"BleachBit may not have Full Disk Access. Without it, macOS blocks access to "
+"some files, and some cleaners will not work.\n"
+"\n"
+"To fix this, open System Settings > Privacy & Security > Full Disk Access, "
+"turn on BleachBit, and then restart BleachBit."
+msgstr ""
+
 #. TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
 #. Used in the tree view on the main screen.
 #: ../bleachbit/GuiTreeModels.py
@@ -3110,6 +3142,16 @@ msgstr "Menghapus jalur %(pathname)s dengan jenis sistem berkas %(fstype)s"
 msgid "Path to wipe must be an existing directory: %s"
 msgstr "Alamat yang hendak disapu harus merupakan direktori yang sudah ada: %s"
 
+#. TRANSLATORS: Warning in the log. BleachBit wipes free space by
+#. creating temporary files in the chosen folder. This folder can be
+#. changed by any user on the computer, so another user could tamper
+#. with those files. %s is the folder path.
+#: ../bleachbit/Wipe.py
+#, python-format
+msgid ""
+"Wiping free space here is unsafe because any user can change this folder: %s"
+msgstr ""
+
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
 #, fuzzy
@@ -3229,7 +3271,7 @@ msgstr "Silakan tunggu.  Sedang membersikan %s."
 
 #. TRANSLATORS: %d is the estimated number of minutes remaining.
 #: ../bleachbit/Worker.py
-#, python-format
+#, no-python-format
 msgid "About %d minute remaining."
 msgid_plural "About %d minutes remaining."
 msgstr[0] "Sekitar %d menit yang tersisa."
