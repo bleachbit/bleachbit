@@ -281,8 +281,12 @@ Caption "$(INSTALLER_CAPTION)"
   !insertmacro MUI_LANGUAGE "Indonesian"
   !insertmacro MUI_LANGUAGE "Italian"
   ; Override upstream Italian.nsh: add line break on finish page (issue #1453)
+  ; The last LangString wins; 6030 only warns about the replaced string
+  !pragma warning push
+  !pragma warning disable 6030
   LangString MUI_TEXT_FINISH_INFO_REBOOT ${LANG_ITALIAN} "Per completare l'installazione di $(^NameDA) il computer deve essere riavviato.$\r$\n$\r$\nVuoi riavviarlo ora?"
   LangString MUI_UNTEXT_FINISH_INFO_REBOOT ${LANG_ITALIAN} "Per completare la disinstallazione di $(^NameDA) il computer deve essere riavviato.$\r$\n$\r$\nVuoi riavviarlo ora?"
+  !pragma warning pop
   !insertmacro MUI_LANGUAGE "Japanese"
   !insertmacro MUI_LANGUAGE "Korean"
   !insertmacro MUI_LANGUAGE "Latvian"
