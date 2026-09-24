@@ -474,6 +474,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
     def destroy(self, *_args):
         """Prevent textbuffer usage during UI destruction"""
+        self._destroyed = True
         self.textbuffer = None
         super().destroy()
 
@@ -491,8 +492,6 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         """
         pref = self.get_preferences_dialog()
         pref.run(page_name)
-        if pref.refresh_operations:
-            self.cb_refresh_operations()
         self.update_log_level()
 
     def shred_paths(self, paths, shred_settings=False, should_clear_clipboard=False):
@@ -776,6 +775,8 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
 
     def cb_refresh_operations(self):
         """Callback to refresh the list of cleaners and header bar labels"""
+        if getattr(self, '_destroyed', False) or self.in_destruction():
+            return False
         # In case language changed, update the header bar labels.
         self.update_headerbar_labels()
         # Is this the first time in this session?

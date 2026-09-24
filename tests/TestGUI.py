@@ -31,6 +31,7 @@ from bleachbit.Options import options
 
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
+    from bleachbit.GuiPreferences import PreferencesDialog
     from bleachbit.GuiUtil import (clear_clipboard, get_font_size_from_name,
                                    get_window_info)
     from bleachbit.GuiTreeModels import TreeDisplayModel
@@ -83,6 +84,7 @@ class GUITestCase(common.BleachbitTestCase):
         if window:
             window.destroy()
             cls.clear_window()
+            cls.refresh_gui()
 
     @classmethod
     def get_window(cls):
@@ -322,6 +324,40 @@ class GUITestCase(common.BleachbitTestCase):
         # click close button
         self.click_button(pref.dialog, Gtk.STOCK_CLOSE)
         pref.dialog.destroy()
+
+    def test_preferences_run_refresh_operations(self):
+        """PreferencesDialog.run() refreshes operations if needed"""
+        mock_refresh = mock.Mock()
+        mock_theme = mock.Mock()
+        # PreferencesDialog is imported under IS_GTK, causing false positive.
+        # pylint: disable-next=possibly-used-before-assignment
+        pref = PreferencesDialog(self.get_window(), mock_refresh, mock_theme)
+        try:
+            self.assertFalse(pref.refresh_operations)
+            with mock.patch.object(pref.dialog, 'run',
+                                   return_value=Gtk.ResponseType.CLOSE):
+                pref.run()
+            mock_refresh.assert_not_called()
+
+            pref2 = PreferencesDialog(self.get_window(), mock_refresh,
+                                      mock_theme)
+            pref2.refresh_operations = True
+            with mock.patch.object(pref2.dialog, 'run',
+                                   return_value=Gtk.ResponseType.CLOSE):
+                pref2.run()
+            mock_refresh.assert_called_once()
+        finally:
+            if hasattr(pref, 'dialog') and pref.dialog:
+                pref.dialog.destroy()
+
+    def test_cb_refresh_operations_destroyed_window(self):
+        """GuiWindow.cb_refresh_operations() is safe if window is destroyed"""
+        window = self.get_window()
+        window._destroyed = True
+        try:
+            self.assertFalse(window.cb_refresh_operations())
+        finally:
+            window._destroyed = False
 
     def test_system_information(self):
         """Opens the system information dialog and closes it"""

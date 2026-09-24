@@ -185,12 +185,6 @@ class PreferencesDialog(InfoBarMixin):
 
         return cb
 
-    def __del__(self):
-        """Destructor called when the dialog is closing"""
-        if self.refresh_operations:
-            # refresh the list of cleaners
-            self.cb_refresh_operations()
-
     def __on_expert_mode_toggled(self, cb):
         """Callback for expert mode checkbox"""
         new_value = cb.get_active()
@@ -1037,3 +1031,5 @@ class PreferencesDialog(InfoBarMixin):
         self.select_page(page_name)
         self.dialog.run()
         self.dialog.destroy()
+        if self.refresh_operations and self.cb_refresh_operations:
+            self.cb_refresh_operations()
