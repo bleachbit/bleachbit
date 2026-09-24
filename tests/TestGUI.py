@@ -265,7 +265,7 @@ class GUITestCase(common.BleachbitTestCase):
             self.assertTrue(pref.lang_label.get_sensitive())
             self.assertTrue(pref.lang_combo.get_sensitive())
             self.assertFalse(options.get('auto_detect_lang'))
-            self.assertTrue(len(options.get('forced_language')) >= 2)
+            self.assertGreaterEqual(len(options.get('forced_language')), 2)
             # The saved language matches the language shown in the
             # dropdown.
             combo_code = pref.lang_combo.get_active_text().split(
