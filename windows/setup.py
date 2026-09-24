@@ -311,9 +311,7 @@ def copy_file(src, dst):
 
     The dst must be a full path.
     """
-    if not os.path.exists(src):
-        logger.warning('copy_file: %s does not exist', src)
-        return
+    assert_exist(src)
     dst_dirname = os.path.dirname(dst)
     # If the destination directory is current directory, do not create it.
     if dst_dirname and not os.path.exists(dst_dirname):
@@ -336,9 +334,7 @@ def copy_file(src, dst):
 def copy_tree(src, dst):
     """Copy a directory tree"""
     src = os.path.abspath(src)
-    if not os.path.exists(src):
-        logger.warning('copytree: %s does not exist', src)
-        return
+    assert_exist(src)
     logger.info('copying %s to %s', src, dst)
     # copytree() preserves file date
     shutil.copytree(src, dst, dirs_exist_ok=True)
@@ -591,10 +587,9 @@ def build():
         copy_tree(path, os.path.join('dist', 'lib', d))
 
     gtk_share = os.path.join(GTK_LIBDIR, 'share')
-    if os.path.exists(gtk_share):
-        for d in ('icons', 'themes'):
-            path = os.path.join(gtk_share, d)
-            copy_tree(path, os.path.join('dist', 'share', d))
+    for d in ('icons', 'themes'):
+        path = os.path.join(gtk_share, d)
+        copy_tree(path, os.path.join('dist', 'share', d))
 
     logger.info('Fixing paths in loaders.cache file')
     loaders_fn = os.path.join(
@@ -669,8 +664,8 @@ def build():
         # For Python 3.10, copy vcruntime140.dll
         dll_name = 'vcruntime140.dll'
     else:
-        logger.error('Unsupported Python version. Skipping DLL copy.')
-        return
+        logger.error('Unsupported Python version')
+        sys.exit(1)
     dll_dirs = (sys.prefix, r'c:\windows\system32', r'c:\windows\SysWOW64')
     copied_dll = False
     for dll_dir in dll_dirs:
@@ -681,7 +676,8 @@ def build():
             copied_dll = True
             break
     if not copied_dll:
-        logger.warning('%s not found. Skipping copy.', dll_name)
+        logger.error('%s not found', dll_name)
+        sys.exit(1)
 
     sign_files(('dist\\bleachbit.exe', 'dist\\bleachbit_console.exe'))
 
