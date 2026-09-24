@@ -318,7 +318,7 @@ jobs:
           SETUP_ARGS: ${{ github.event_name == 'pull_request' && 'fast' || (github.ref_type == 'tag' && 'max-effort' || '') }}
         run: |
           set PATH=%MSYS_BIN%;%PATH%
-          "%PYTHON_EXE%" -m windows.setup %SETUP_ARGS%
+          "%PYTHON_EXE%" -u -m windows.setup %SETUP_ARGS%
           move windows\BleachBit*.exe .
           move windows\BleachBit*.zip .
 
