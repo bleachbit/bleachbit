@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-23 20:05-0600\n"
-"PO-Revision-Date: 2026-09-01 16:17+0000\n"
+"PO-Revision-Date: 2026-09-25 04:26+0000\n"
 "Last-Translator: Hosted Weblate user 54392 "
 "<hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-26 02:44+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -823,14 +823,12 @@ msgid "Delete the AI models"
 msgstr "删除 AI 模型"
 
 #: ../cleaners/google_chrome.xml
-#, fuzzy
-#| msgid "Update to version %s"
 msgid "Old versions"
-msgstr "更新到版本 %s"
+msgstr "旧版本"
 
 #: ../cleaners/google_chrome.xml
 msgid "Delete program files from previous versions left behind by updates"
-msgstr ""
+msgstr "删除更新留下的之前版本的程序文件"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -2617,6 +2615,11 @@ msgid ""
 "To fix this, open System Settings > Privacy & Security > Full Disk Access, "
 "turn on BleachBit, and then restart BleachBit."
 msgstr ""
+"BleachBit 可能没有完全的磁盘访问权限。没有权限，macOS 拦截对一些文件的访问，"
+"一些清理规则可能不工作。\n"
+"\n"
+"要修复此问题，打开系统设置>隐私和安全>完全磁盘访问，打开 BleachBit，然后重启 "
+"BleachBit。"
 
 #. TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
 #. Used in the tree view on the main screen.
@@ -3051,12 +3054,12 @@ msgstr "要粉碎的路径必须是一个存在的目录：%s"
 #, python-format
 msgid ""
 "Wiping free space here is unsafe because any user can change this folder: %s"
-msgstr ""
+msgstr "擦除此处的剩余空间不安全，因为任何用户都能更改这个文件夹：%s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
 msgid "Creating new, temporary file for wiping empty space."
-msgstr "正在创建新的临时性文件以清除空白空间。"
+msgstr "正在创建新的临时性文件以擦除空白空间。"
 
 #: ../bleachbit/Wipe.py
 #, python-format
