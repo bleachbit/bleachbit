@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-23 20:05-0600\n"
-"PO-Revision-Date: 2026-09-01 20:47+0000\n"
+"PO-Revision-Date: 2026-09-25 04:26+0000\n"
 "Last-Translator: Ghost of Sparta <makesocialfoss32@keemail.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/bleachbit/main/"
 "hu/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Launchpad-Export-Date: 2019-12-26 01:52+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -853,14 +853,13 @@ msgid "Delete the AI models"
 msgstr "MI-modellek törlése"
 
 #: ../cleaners/google_chrome.xml
-#, fuzzy
-#| msgid "Update to version %s"
 msgid "Old versions"
-msgstr "Frissítés %s verzióra"
+msgstr "Korábbi verziók"
 
 #: ../cleaners/google_chrome.xml
 msgid "Delete program files from previous versions left behind by updates"
 msgstr ""
+"Törölje a frissítések által hátrahagyott korábbi verziók programfájljait"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -2728,6 +2727,12 @@ msgid ""
 "To fix this, open System Settings > Privacy & Security > Full Disk Access, "
 "turn on BleachBit, and then restart BleachBit."
 msgstr ""
+"A BleachBit nem rendelkezik teljes lemezeléréssel. Enélkül a macOS tiltja "
+"bizonyos fájlok elérését, ezért egyes tisztítófunkciók nem fognak működni.\n"
+"\n"
+"A probléma megoldásához nyissa meg a Rendszerbeállítások > Adatvédelem és "
+"biztonság > Teljes lemezhozzáférés menüpontot, kapcsolja be a BleachBit "
+"hozzáférését, majd indítsa újra a BleachBit alkalmazást."
 
 #. TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
 #. Used in the tree view on the main screen.
@@ -3179,6 +3184,8 @@ msgstr "A törlendő útvonalnak egy létező könyvtárnak kell lennie: %s"
 msgid ""
 "Wiping free space here is unsafe because any user can change this folder: %s"
 msgstr ""
+"A szabad terület törlése itt nem biztonságos, mert ezt a mappát bármelyik "
+"felhasználó módosíthatja: %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
