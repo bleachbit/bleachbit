@@ -1114,6 +1114,17 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             '</fontconfig>\n')
         self.assertFalse(has_fontconfig_cache(font_conf))
 
+    def test_has_fontconfig_cache_any_version(self):
+        """A cache file of any fontconfig cache version is found"""
+        cache_dir = self.mkdir('fc_cache')
+        font_conf = self.write_file(
+            'fonts_cache_dir.conf',
+            text='<?xml version="1.0"?>\n'
+            f'<fontconfig><cachedir>{cache_dir}</cachedir></fontconfig>\n')
+        self.assertFalse(has_fontconfig_cache(font_conf))
+        self.write_file(os.path.join(cache_dir, 'x-le32d8.cache-9'))
+        self.assertTrue(has_fontconfig_cache(font_conf))
+
     def test_has_fontconfig_cache_rejects_dtd(self):
         """A fonts.conf with a DTD is rejected (entity-expansion defense)"""
         font_conf = self.write_file(
