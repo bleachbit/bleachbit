@@ -194,12 +194,13 @@ def assert_exist(path, msg=None):
 def check_exist(path, msg=None):
     """Check if a path exists
 
-    If not, log a warning and sleep for 5 seconds."""
+    If not, log a warning and sleep for 5 seconds, except on CI."""
     if not os.path.exists(path):
         logger.warning('%s not found', path)
         if msg:
             logger.warning(msg)
-        time.sleep(5)
+        if not os.environ.get('GITHUB_ACTIONS'):
+            time.sleep(5)
 
 
 def assert_module(module):
