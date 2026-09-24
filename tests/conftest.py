@@ -63,14 +63,4 @@ atexit.register(_remove_options_dir)
 # pylint: disable-next=unused-argument
 def pytest_sessionfinish(session, exitstatus):
     """Clean up the temporary directory after the test session."""
-    # pytest-rerunfailures keeps a ClientStatusDB socket open in each xdist
-    # worker (connects to the controller's ServerStatusDB) and never closes
-    # it, so the socket warns "unclosed" during interpreter shutdown under
-    # PYTHONWARNINGS=error. Close it here. Skipped on the controller: closing
-    # its listening socket would make the accept() daemon thread raise.
-    if hasattr(session.config, 'workerinput'):
-        db = getattr(session.config, 'failures_db', None)
-        sock = getattr(db, 'sock', None)
-        if sock is not None:
-            sock.close()
     _remove_options_dir()

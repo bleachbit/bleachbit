@@ -10,7 +10,3 @@ pytest==8.4.2; python_version<'3.10'
 pytest-xdist==3.8.0
 # needed to combine coverage across pytest-xdist worker processes
 pytest-cov==7.1.0
-# re-runs flaky tests (e.g. X11 clipboard integration test under parallel workers)
-pytest-rerunfailures==16.6; python_version>='3.10'
-# 16.1+ requires Python 3.10
-pytest-rerunfailures==16.0.1; python_version<'3.10'
