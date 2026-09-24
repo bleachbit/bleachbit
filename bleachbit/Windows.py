@@ -1296,6 +1296,13 @@ def has_fontconfig_cache(font_conf_file):
             dirpath = os.path.join(expanded_homepath, '.cache', 'fontconfig')
         elif dir_element.firstChild.nodeValue == '~/.fontconfig':
             dirpath = os.path.join(expanded_homepath, '.fontconfig')
+        elif dir_element.firstChild.nodeValue.startswith('/'):
+            # fontconfig puts its install folder, which holds etc\fonts,
+            # in front of a path starting with /
+            prefix = os.path.dirname(os.path.dirname(
+                os.path.dirname(font_conf_file)))
+            dirpath = os.path.normpath(os.path.join(
+                prefix, dir_element.firstChild.nodeValue.lstrip('/')))
         else:
             # user has entered a custom directory
             dirpath = dir_element.firstChild.nodeValue

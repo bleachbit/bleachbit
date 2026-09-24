@@ -999,12 +999,35 @@ def shrink(settings):
                 f'{get_dir_size("dist"):,}')
 
 
+def keep_font_cache_in_portable(portable_dir):
+    """Make fontconfig store its cache in the portable folder
+
+    fontconfig writes to the first cachedir it can create and puts the
+    folder of fontconfig-1.dll in front of a path starting with /.
+    %LOCALAPPDATA% stays as the fallback for a read-only folder.
+    """
+    fn = os.path.join(portable_dir, 'etc', 'fonts', 'fonts.conf')
+    with open(fn, encoding='utf-8', newline='') as f:
+        data = f.read()
+    anchor = '<cachedir>LOCAL_APPDATA_FONTCONFIG_CACHE</cachedir>'
+    data, count = re.subn(
+        rf'^([ \t]*)({re.escape(anchor)})(\r?\n)',
+        r'\1<cachedir>/var/cache/fontconfig</cachedir>\3\1\2\3',
+        data, count=1, flags=re.M)
+    if not count:
+        logger.error('%s not found in %s', anchor, fn)
+        sys.exit(1)
+    with open(fn, 'w', encoding='utf-8', newline='') as f:
+        f.write(data)
+
+
 def package_portable(settings):
     """Package the portable version"""
     logger.info('Building portable')
     copy_tree('dist', 'BleachBit-Portable')
     with open("BleachBit-Portable\\BleachBit.ini", "w", encoding=SetupEncoding) as text_file:
         text_file.write("[Portable]")
+    keep_font_cache_in_portable('BleachBit-Portable')
 
     archive('BleachBit-Portable',
             f'BleachBit-{get_version()}-portable{settings["upx_tag"]}.zip',
