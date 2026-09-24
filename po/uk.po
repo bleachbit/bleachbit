@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-23 20:05-0600\n"
-"PO-Revision-Date: 2026-09-08 00:51+0000\n"
+"PO-Revision-Date: 2026-09-25 04:26+0000\n"
 "Last-Translator: Dan <jonweblin2205@protonmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/bleachbit/main/"
 "uk/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.9.1.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Launchpad-Export-Date: 2020-02-18 20:16+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -848,14 +848,13 @@ msgid "Delete the AI models"
 msgstr "Видалити моделі ШІ"
 
 #: ../cleaners/google_chrome.xml
-#, fuzzy
-#| msgid "Update to version %s"
 msgid "Old versions"
-msgstr "Оновити до версії %s"
+msgstr "Старіші версії"
 
 #: ../cleaners/google_chrome.xml
 msgid "Delete program files from previous versions left behind by updates"
 msgstr ""
+"Видалити програмні файли попередніх версій, що залишилися після оновлень"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -2706,6 +2705,12 @@ msgid ""
 "To fix this, open System Settings > Privacy & Security > Full Disk Access, "
 "turn on BleachBit, and then restart BleachBit."
 msgstr ""
+"Можливо, BleachBit не має повного доступу до диска. Без нього macOS блокує "
+"доступ до деяких файлів, і деякі засоби очищення не працюватимуть.\n"
+"\n"
+"Щоб виправити це, відкрийте «Системні налаштування» > «Конфіденційність і "
+"безпека» > «Повний доступ до диска», ввімкніть BleachBit, а потім "
+"перезапустіть його."
 
 #. TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
 #. Used in the tree view on the main screen.
@@ -3153,6 +3158,8 @@ msgstr "Шляхом для стирання повинна бути існую�
 msgid ""
 "Wiping free space here is unsafe because any user can change this folder: %s"
 msgstr ""
+"Очищати вільне місце тут небезпечно, оскільки будь-який користувач може "
+"змінити цю теку: %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
