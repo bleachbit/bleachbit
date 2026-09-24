@@ -1020,7 +1020,8 @@ def nsis(opts, exe_name, nsi_path, settings):
     if os.path.exists(exe_name):
         logger.info('Deleting old file: %s', exe_name)
         os.remove(exe_name)
-    cmd = [NSIS_EXE] + opts.split() + [
+    # /WX: treat NSIS warnings as errors
+    cmd = [NSIS_EXE, '/WX'] + opts.split() + [
         f'/DVERSION={get_version()}',
         f'/DSHRED_REGEX_KEY={SHRED_REGEX_KEY}',
         nsi_path]
