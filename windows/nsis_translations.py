@@ -37,7 +37,6 @@ LANGUAGE_MAP = [
     ('en', 'LANG_ENGLISH'),
     ('sq', 'LANG_ALBANIAN'),
     ('ar', 'LANG_ARABIC'),
-    ('hy', 'LANG_ARMENIAN'),
     ('ast', 'LANG_ASTURIAN'),
     ('eu', 'LANG_BASQUE'),
     ('be', 'LANG_BELARUSIAN'),
