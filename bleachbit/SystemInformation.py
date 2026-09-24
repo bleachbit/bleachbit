@@ -224,8 +224,17 @@ def get_system_information():
             mac_version = platform.mac_ver()[0]
             from bleachbit.Mac import macos_version_name
             name = macos_version_name(mac_version)
+            # Always show the raw version, even when the codename is
+            # unknown (e.g. a macOS release newer than this codebase's
+            # MACOSX_DICT_MODERN, such as macOS 27.0 at the time of
+            # writing) -- previously this line was silently omitted
+            # from the report entirely whenever the codename lookup
+            # came up empty, hiding the version number itself along
+            # with the missing codename.
             if name:
                 info['platform.mac_ver()'] = f'{mac_version} ({name})'
+            else:
+                info['platform.mac_ver()'] = mac_version
     else:
         info['platform.uname().version'] = platform.uname().version
 
