@@ -171,6 +171,10 @@ The wx front-end aims to be usable by blind users via screen readers
   `DataViewCtrl` would otherwise use it to move between cells), and
   the Results list sits on a `wx.Panel` notebook page so Tab can
   leave it.
+- Shift+F10 and the Menu key open the context menu of the focused
+  cleaner tree item or the selected Results rows, like a right-click.
+  Both controls handle the keyboard `wx.EVT_CONTEXT_MENU` (the one
+  whose position is `wx.DefaultPosition`).
 - Global keyboard shortcuts (see `MainFrame._build_accelerators`):
   - **F5** — Preview
   - **Ctrl+Enter** — Clean
