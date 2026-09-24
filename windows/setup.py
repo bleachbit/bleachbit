@@ -928,7 +928,7 @@ def delete_linux_only():
     for fn in files:
         cml = CleanerML(fn)
         if not cml.get_cleaner().is_usable():
-            logger.warning('Deleting cleaner not usable on this OS: %s', fn)
+            logger.info('Deleting cleaner not usable on this OS: %s', fn)
             os.remove(fn)
 
 
