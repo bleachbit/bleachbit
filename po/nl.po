@@ -6,18 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-23 20:05-0600\n"
-"PO-Revision-Date: 2026-09-02 11:02+0000\n"
+"PO-Revision-Date: 2026-09-25 04:26+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/bleachbit/main/nl/"
-">\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/bleachbit/main/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Launchpad-Export-Date: 2021-10-29 20:32+0000\n"
 
 #: ../cleaners/realplayer.xml ../cleaners/windows_media_player.xml
@@ -846,14 +846,14 @@ msgid "Delete the AI models"
 msgstr "Verwijder de AI-modellen"
 
 #: ../cleaners/google_chrome.xml
-#, fuzzy
-#| msgid "Update to version %s"
 msgid "Old versions"
-msgstr "Bijwerken naar versie %s"
+msgstr "Oude versies"
 
 #: ../cleaners/google_chrome.xml
 msgid "Delete program files from previous versions left behind by updates"
 msgstr ""
+"Verwijder programmabestanden van eerdere versies die zijn achtergelaten door "
+"updates"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -2721,6 +2721,13 @@ msgid ""
 "To fix this, open System Settings > Privacy & Security > Full Disk Access, "
 "turn on BleachBit, and then restart BleachBit."
 msgstr ""
+"BleachBit heeft mogelijk geen volledige schijftoegang. Zonder dit blokkeert "
+"macOS de toegang tot sommige bestanden en sommige cleaners zullen niet "
+"werken.\n"
+"\n"
+"Om dit op te lossen, opent u Systeeminstellingen > Privacy en beveiliging > "
+"Volledige toegang tot de schijf, schakelt u BleachBit in en start u "
+"vervolgens BleachBit opnieuw op."
 
 #. TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
 #. Used in the tree view on the main screen.
@@ -3176,6 +3183,8 @@ msgstr "De te wissen locatie dient een bestaande map te zijn: %s"
 msgid ""
 "Wiping free space here is unsafe because any user can change this folder: %s"
 msgstr ""
+"Hier vrije ruimte wissen is onveilig omdat elke gebruiker deze map kan "
+"wijzigen: %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
