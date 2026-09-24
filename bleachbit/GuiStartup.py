@@ -387,12 +387,18 @@ def get_startup_messages(auto_exit):
     if IS_MAC:
         from bleachbit.Mac import is_full_disk_access_enabled
         if not is_full_disk_access_enabled():
+            # In the future, we could add button to option system settings.
+            # This message doesn't handle a corner case if our application
+            # is running from a terminal: the user would need to grant
+            # permissions to it instead.
             ret_msgs.append((
                 # TRANSLATORS: Startup warning on macOS when the application
-                # lacks Full Disk Access.
-                _('Full Disk Access is not granted to BleachBit. macOS will '
-                  'block access and some cleaners will not work. Grant Full '
-                  'Disk Access to this application in System Settings > '
-                  'Privacy & Security > Full Disk Access.'), True))
+                # lacks Full Disk Access. "Full Disk Access", "System
+                # Settings", and "Privacy & Security" are names of macOS
+                # features and settings: match Apple's localization.
+                _('BleachBit may not have Full Disk Access. Without it, macOS blocks '
+                  'access to some files, and some cleaners will not work.\n\n'
+                  'To fix this, open System Settings > Privacy & Security > Full Disk '
+                  'Access, turn on BleachBit, and then restart BleachBit.'), True))
 
     return ret_msgs

@@ -337,6 +337,75 @@ def get_supported_language_code_name_dict():
     return supported_langs
 
 
+def find_supported_language_code(lang_code, supported_codes):
+    """Return the supported language code best matching lang_code.
+
+    lang_code is a detected code like 'en_US' or 'hi_IN', and
+    supported_codes is an iterable of codes like 'en', 'en_US', 'hi'.
+
+    For example, 'hi_IN' matches 'hi', 'en-US' matches 'en_US', and
+    'pt' may match 'pt_BR'.
+
+    Returns None if there is no match.
+    """
+    if not lang_code:
+        return None
+    loc = LocaleCode(lang_code)
+    if not loc.language or loc.is_special or len(loc.language) < 2:
+        return None
+    codes = list(supported_codes)
+    # Try the full code ('hi_IN'), then the primary subtag ('hi').
+    lowered = {code.lower(): code for code in codes}
+    for candidate in (lang_code, loc.normalized, loc.language):
+        if candidate in codes:
+            return candidate
+        if candidate.lower() in lowered:
+            return lowered[candidate.lower()]
+    # Try a supported regional variant like 'pt_BR' for 'pt'. Prefer the
+    # variant whose region is implied by the detected code's region or
+    # script subtags: 'zh_Hant_TW', 'zh_Hant', and 'zh_HK' all imply
+    # Traditional Chinese, so they match 'zh_TW' rather than 'zh_CN'.
+    subtags = set(loc.normalized.lower().split('_')[1:])
+    if subtags & {'hant', 'tw', 'hk', 'mo'}:
+        preferred_region = 'tw'
+    elif loc.territory:
+        preferred_region = loc.territory.lower().rsplit('_', 1)[-1]
+    else:
+        preferred_region = None
+    prefix = loc.language.lower() + '_'
+    first_match = None
+    for code in codes:
+        if not code.lower().startswith(prefix):
+            continue
+        if first_match is None:
+            first_match = code
+        if preferred_region and code.lower() == prefix + preferred_region:
+            return code
+    return first_match
+
+
+_UNSET = object()
+
+# locale.getlocale() reports whatever setlocale() set, so the real system
+# locale is captured here before setup_translation() forces a language.
+_locale_fallback = _UNSET
+
+
+def _get_locale_fallback():
+    """Return the system locale as seen before setup_translation() ran."""
+    # Captured once per process.
+    # pylint: disable-next=global-statement
+    global _locale_fallback
+    if _locale_fallback is _UNSET:
+        # locale.getlocale() can raise ValueError for a locale name it
+        # cannot normalize.
+        try:
+            _locale_fallback = locale.getlocale()[0]
+        except ValueError:
+            _locale_fallback = None
+    return _locale_fallback
+
+
 def normalize_locale_code(code):
     """Return the language code normalized like 'en_US'.
 
@@ -389,8 +458,26 @@ def get_active_language_code():
         if IS_MAC and not env_locale_set:
             from bleachbit.Mac import get_macos_locale
             user_locale = get_macos_locale()
+        elif env_locale_set:
+            # Read the environment variables instead of
+            # locale.getlocale(), which reports the locale set by
+            # locale.setlocale() in setup_translation().  Without this,
+            # after manually forcing a language once, the detected
+            # language would stay stuck on the forced language even
+            # after re-enabling auto-detection.
+            # LANGUAGE is deliberately not read: setup_translation()
+            # sets it on POSIX, so it has the same problem.
+            user_locale = None
+            for name in ("LC_ALL", "LC_MESSAGES", "LANG"):
+                env_value = os.environ.get(name)
+                if env_value:
+                    candidate = normalize_locale_code(env_value)
+                    if len(candidate) >= 2 or candidate == 'C':
+                        user_locale = candidate
+                        break
         else:
-            user_locale = locale.getlocale()[0]
+            # Not locale.getlocale(): setlocale() has already poisoned it.
+            user_locale = _get_locale_fallback()
 
     if not user_locale:
         user_locale = 'C'
@@ -418,6 +505,11 @@ def setup_translation():
     attempted_setup_translation = True
     # Use local import to avoid circular import.
     from bleachbit import locale_dir
+    # On POSIX, capture the system locale before setlocale() below poisons
+    # getlocale(). This must precede get_active_language_code(), which
+    # returns early on a forced language without capturing it.
+    if IS_POSIX:
+        _get_locale_fallback()
     user_locale = get_active_language_code()
     logger.debug("user_locale: %s, locale_dir: %s", user_locale, locale_dir)
     assert isinstance(user_locale, str)

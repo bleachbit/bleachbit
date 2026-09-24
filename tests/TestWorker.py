@@ -21,7 +21,7 @@ import bleachbit
 from bleachbit import CLI, Command, FileUtilities
 from bleachbit.Action import ActionProvider
 from bleachbit.Cleaner import backends
-from bleachbit.Worker import Worker
+from bleachbit.Worker import Worker, format_minutes_remaining
 
 if bleachbit.IS_WINDOWS:
     import win32con
@@ -255,6 +255,19 @@ class WorkerTestCase(common.BleachbitTestCase):
         elif bleachbit.IS_WINDOWS:
             self.assertEqual(worker.total_bytes, bytes_expected_nt)
             self.assertEqual(worker.total_deleted, count_deleted_nt)
+
+    def test_format_minutes_remaining(self):
+        """Test format_minutes_remaining() for issue #2305"""
+        # The placeholder is substituted normally.
+        self.assertEqual(format_minutes_remaining(
+            "cooking for %d mins", 5), "cooking for 5 mins")
+        # A translation without a placeholder (e.g., some Arabic and
+        # Hebrew plural forms) is shown as-is.
+        so_close = "almost done, like actually"
+        self.assertEqual(format_minutes_remaining(so_close, 0), so_close)
+        # A stray '%' that cannot be formatted must not crash either.
+        self.assertEqual(format_minutes_remaining("100%| done", 1),
+                         "100%| done")
 
     def test_AccessDenied(self):
         """Test Worker using Action.AccessDeniedAction"""

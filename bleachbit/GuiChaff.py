@@ -218,9 +218,12 @@ class ChaffDialog(InfoBarMixin, Gtk.Dialog):
         # TRANSLATORS: Title for dialog window.
         # Digital chaff is like physical chaff that airplanes use to protect themselves
         # from radar-guided missiles. For more explanation, see the online documentation.
+        title = _("Make chaff")
+
+        # Keep the code comment below from leaking into the translation hint comment above.
         # GTK initialisation is deferred to this method.
         # pylint: disable-next=unnecessary-dunder-call
-        Gtk.Dialog.__init__(self, title=_("Make chaff"), transient_for=parent)
+        Gtk.Dialog.__init__(self, title=title, transient_for=parent)
         Gtk.Dialog.set_modal(self, True)
         self.set_border_width(10)
         self.set_default_size(400, -1)

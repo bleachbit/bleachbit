@@ -31,6 +31,7 @@ from bleachbit.Options import options
 
 HAVE_GTK = is_gtk_available()
 if HAVE_GTK:
+    from bleachbit.GuiPreferences import PreferencesDialog
     from bleachbit.GuiUtil import (clear_clipboard, get_font_size_from_name,
                                    get_window_info)
     from bleachbit.GuiTreeModels import TreeDisplayModel
@@ -83,6 +84,7 @@ class GUITestCase(common.BleachbitTestCase):
         if window:
             window.destroy()
             cls.clear_window()
+            cls.refresh_gui()
 
     @classmethod
     def get_window(cls):
@@ -243,6 +245,72 @@ class GUITestCase(common.BleachbitTestCase):
         self.assertEqual(mock_get.call_count, 1)
         pref.dialog.destroy()
 
+    def test_preferences_language_selection(self):
+        """Test language selection and sensitivity in preferences dialog"""
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        pref = self.app.get_preferences_dialog()
+        try:
+            # Language widgets are insensitive when auto-detect is on.
+            self.assertFalse(pref.lang_select_box.get_sensitive())
+            self.assertFalse(pref.lang_label.get_sensitive())
+            self.assertFalse(pref.lang_combo.get_sensitive())
+            # Combobox has an active language selected matching detected language.
+            self.assertIsNotNone(pref.lang_combo.get_active_text())
+
+            # Toggle auto-detect off: widgets become sensitive, and
+            # detected language is saved to forced_language.
+            pref.cb_auto_lang.set_active(False)
+            self.assertTrue(pref.lang_select_box.get_sensitive())
+            self.assertTrue(pref.lang_label.get_sensitive())
+            self.assertTrue(pref.lang_combo.get_sensitive())
+            self.assertFalse(options.get('auto_detect_lang'))
+            self.assertTrue(len(options.get('forced_language')) >= 2)
+            # The saved language matches the language shown in the
+            # dropdown.
+            combo_code = pref.lang_combo.get_active_text().split(
+                "(")[-1].rstrip(")")
+            self.assertEqual(options.get('forced_language'), combo_code)
+
+            # Toggle auto-detect back on: widgets become insensitive, and
+            # forced_language is cleared.
+            pref.cb_auto_lang.set_active(True)
+            self.assertFalse(pref.lang_select_box.get_sensitive())
+            self.assertFalse(pref.lang_label.get_sensitive())
+            self.assertFalse(pref.lang_combo.get_sensitive())
+            self.assertTrue(options.get('auto_detect_lang'))
+            self.assertEqual(options.get('forced_language'), '')
+        finally:
+            pref.dialog.destroy()
+            options.set('auto_detect_lang', True)
+            options.set('forced_language', '')
+
+    def test_preferences_language_unsupported_locale(self):
+        """Fallback when the detected language has no supported match
+
+        When detection finds no match (e.g., the 'C' locale), the
+        dropdown falls back to English, and manual mode must save that
+        same fallback so the displayed and saved languages agree.
+        """
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        with mock.patch('bleachbit.GuiPreferences.get_active_language_code',
+                        return_value='C'):
+            pref = self.app.get_preferences_dialog()
+            try:
+                self.assertIsNotNone(pref.lang_combo.get_active_text())
+                # Toggle auto-detect off: the dropdown falls back to
+                # English, and the same fallback is saved.
+                pref.cb_auto_lang.set_active(False)
+                combo_code = pref.lang_combo.get_active_text().split(
+                    "(")[-1].rstrip(")")
+                self.assertTrue(options.get('forced_language'))
+                self.assertEqual(options.get('forced_language'), combo_code)
+            finally:
+                pref.dialog.destroy()
+                options.set('auto_detect_lang', True)
+                options.set('forced_language', '')
+
     def test_preferences_cookies_page(self):
         """Opens the preferences dialog and navigates to cookies page"""
         pref = self.app.get_preferences_dialog()
@@ -256,6 +324,40 @@ class GUITestCase(common.BleachbitTestCase):
         # click close button
         self.click_button(pref.dialog, Gtk.STOCK_CLOSE)
         pref.dialog.destroy()
+
+    def test_preferences_run_refresh_operations(self):
+        """PreferencesDialog.run() refreshes operations if needed"""
+        mock_refresh = mock.Mock()
+        mock_theme = mock.Mock()
+        # PreferencesDialog is imported under IS_GTK, causing false positive.
+        # pylint: disable-next=possibly-used-before-assignment
+        pref = PreferencesDialog(self.get_window(), mock_refresh, mock_theme)
+        try:
+            self.assertFalse(pref.refresh_operations)
+            with mock.patch.object(pref.dialog, 'run',
+                                   return_value=Gtk.ResponseType.CLOSE):
+                pref.run()
+            mock_refresh.assert_not_called()
+
+            pref2 = PreferencesDialog(self.get_window(), mock_refresh,
+                                      mock_theme)
+            pref2.refresh_operations = True
+            with mock.patch.object(pref2.dialog, 'run',
+                                   return_value=Gtk.ResponseType.CLOSE):
+                pref2.run()
+            mock_refresh.assert_called_once()
+        finally:
+            if hasattr(pref, 'dialog') and pref.dialog:
+                pref.dialog.destroy()
+
+    def test_cb_refresh_operations_destroyed_window(self):
+        """GuiWindow.cb_refresh_operations() is safe if window is destroyed"""
+        window = self.get_window()
+        window._destroyed = True
+        try:
+            self.assertFalse(window.cb_refresh_operations())
+        finally:
+            window._destroyed = False
 
     def test_system_information(self):
         """Opens the system information dialog and closes it"""

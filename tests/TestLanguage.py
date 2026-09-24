@@ -5,13 +5,15 @@
 # later.  See the COPYING file in the top-level directory.
 
 
+import contextlib
 import ctypes
-import locale
 import os
 import unittest
 from unittest import mock
 
-from bleachbit.Language import get_active_language_code, \
+from bleachbit.Language import _UNSET, \
+    find_supported_language_code, \
+    get_active_language_code, \
     get_supported_language_codes, \
     get_text, \
     LocaleCode, \
@@ -61,6 +63,67 @@ class LanguageTestCase(common.BleachbitTestCase):
         if len(get_supported_language_codes()) < 3:
             self.skipTest('missing translations')
         self.assertIn('es', slangs)
+
+    def test_find_supported_language_code(self):
+        """Test find_supported_language_code()
+
+        The detected language code may differ from the supported code:
+        Windows may return a hyphen like 'en-US' or a region like
+        'hi_IN' while only 'hi' is supported.
+
+        https://github.com/bleachbit/bleachbit/issues/1799
+        https://github.com/bleachbit/bleachbit/issues/1800
+        """
+        supported = ['en', 'en_US', 'es', 'hi', 'pt_BR']
+        # Exact match.
+        self.assertEqual(
+            find_supported_language_code('en_US', supported), 'en_US')
+        self.assertEqual(
+            find_supported_language_code('es', supported), 'es')
+        # Hyphen instead of underscore.
+        self.assertEqual(
+            find_supported_language_code('en-US', supported), 'en_US')
+        # Region falls back to primary language subtag.
+        self.assertEqual(
+            find_supported_language_code('hi_IN', supported), 'hi')
+        self.assertEqual(
+            find_supported_language_code('es_419', supported), 'es')
+        # Primary language subtag falls back to a regional variant.
+        self.assertEqual(
+            find_supported_language_code('pt', supported), 'pt_BR')
+        self.assertEqual(
+            find_supported_language_code('en_GB', supported), 'en')
+        # Case-insensitive match.
+        self.assertEqual(
+            find_supported_language_code('EN-us', supported), 'en_US')
+        # Strip codeset and modifier.
+        self.assertEqual(
+            find_supported_language_code('de_DE.UTF-8', ['de_DE']), 'de_DE')
+        self.assertEqual(
+            find_supported_language_code('de@euro', ['de']), 'de')
+        self.assertEqual(
+            find_supported_language_code('sr_RS@latin', ['sr']), 'sr')
+        # Regional variant prefers the same or script-implied region:
+        # 'zh_Hant', 'zh_HK', and 'zh_MO' are Traditional Chinese.
+        supported_zh = ['zh_CN', 'zh_TW']
+        self.assertEqual(
+            find_supported_language_code('zh_Hant_TW', supported_zh), 'zh_TW')
+        self.assertEqual(
+            find_supported_language_code('zh_Hant', supported_zh), 'zh_TW')
+        self.assertEqual(
+            find_supported_language_code('zh_HK', supported_zh), 'zh_TW')
+        self.assertEqual(
+            find_supported_language_code('zh_MO', supported_zh), 'zh_TW')
+        self.assertEqual(
+            find_supported_language_code('zh_Hans', supported_zh), 'zh_CN')
+        self.assertEqual(
+            find_supported_language_code('zh', supported_zh), 'zh_CN')
+        # No match.
+        self.assertIsNone(find_supported_language_code('de', supported))
+        self.assertIsNone(find_supported_language_code('C', supported))
+        self.assertIsNone(find_supported_language_code('', supported))
+        self.assertIsNone(find_supported_language_code('.UTF-8', supported))
+        self.assertIsNone(find_supported_language_code('en', []))
 
     def test_normalize_locale_code(self):
         """Test normalize_locale_code()"""
@@ -174,6 +237,93 @@ class LanguageTestCase(common.BleachbitTestCase):
             self.assertIn(get_text('Preview'),
                           ('Vista previa', 'Previsualizar'))
 
+    @contextlib.contextmanager
+    def cleared_env(self, **env):
+        """Run with exactly the given environment variables; all
+        others are cleared."""
+        with mock.patch.dict(os.environ, env, clear=True):
+            yield
+
+    @common.skipIfWindows
+    def test_get_active_language_code_posix_env_not_setlocale(self):
+        """The environment wins over the locale set by setlocale()."""
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        with self.cleared_env(LANG='en_US.UTF-8'), \
+                mock.patch('locale.getlocale',
+                           return_value=('es_ES', 'UTF-8')):
+            self.assertEqual(get_active_language_code(), 'en_US')
+
+    @common.skipUnlessLinux
+    def test_get_active_language_code_posix_env_unset(self):
+        """With no locale env vars, fall back to locale.getlocale()."""
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        with self.cleared_env(), \
+                mock.patch('bleachbit.Language._locale_fallback', _UNSET), \
+                mock.patch('locale.getlocale',
+                           return_value=('fr_FR', 'UTF-8')):
+            self.assertEqual(get_active_language_code(), 'fr_FR')
+
+    @common.skipIfWindows
+    def test_get_active_language_code_posix_env_strips_codeset(self):
+        """Strip the codeset ('.UTF-8') and modifier ('@latin')."""
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        for raw, expected in (('de_DE.UTF-8', 'de_DE'),
+                              ('de_DE@euro', 'de_DE'),
+                              ('sr_RS.UTF-8@latin', 'sr_RS'),
+                              ('C.UTF-8', 'C')):
+            with self.subTest(raw=raw), \
+                    self.cleared_env(LANG=raw):
+                self.assertEqual(get_active_language_code(), expected)
+
+    @common.skipIfWindows
+    def test_get_active_language_code_posix_env_precedence(self):
+        """LC_ALL wins over LC_MESSAGES, which wins over LANG, and an
+        empty value counts as unset."""
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        with self.subTest('all set'), \
+                self.cleared_env(LC_ALL='es_ES.UTF-8',
+                                 LC_MESSAGES='fr_FR.UTF-8',
+                                 LANG='en_US.UTF-8'):
+            self.assertEqual(get_active_language_code(), 'es_ES')
+        with self.subTest('empty LC_ALL'), \
+                self.cleared_env(LC_ALL='', LANG='en_US.UTF-8'):
+            self.assertEqual(get_active_language_code(), 'en_US')
+        with self.subTest('malformed LC_ALL skipped'), \
+                self.cleared_env(LC_ALL='x', LANG='en_US.UTF-8'):
+            self.assertEqual(get_active_language_code(), 'en_US')
+        with self.subTest('malformed LANG'), \
+                self.cleared_env(LANG='x'):
+            self.assertEqual(get_active_language_code(), 'C')
+
+    @common.skipUnlessLinux
+    def test_get_active_language_code_locale_fallback_cached(self):
+        """The fallback is captured once, not re-read after setlocale()."""
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        with self.cleared_env(), \
+                mock.patch('bleachbit.Language._locale_fallback', _UNSET), \
+                mock.patch('locale.getlocale',
+                           side_effect=[('fr_FR', 'UTF-8'),
+                                        ('es_ES', 'UTF-8')]) as getlocale:
+            # Second call returns the captured value despite the changed locale.
+            self.assertEqual(get_active_language_code(), 'fr_FR')
+            self.assertEqual(get_active_language_code(), 'fr_FR')
+            self.assertEqual(getlocale.call_count, 1)
+
+    @common.skipUnlessLinux
+    def test_get_active_language_code_getlocale_valueerror(self):
+        """An unparseable getlocale() result falls back to 'C'."""
+        options.set('auto_detect_lang', True)
+        options.set('forced_language', '')
+        with self.cleared_env(), \
+                mock.patch('bleachbit.Language._locale_fallback', _UNSET), \
+                mock.patch('locale.getlocale', side_effect=ValueError):
+            self.assertEqual(get_active_language_code(), 'C')
+
     def test_options_import_failure(self):
         """Test handling of failed Options import in language detection"""
         with mock.patch.dict('sys.modules', {'bleachbit.Options': None}):
@@ -182,7 +332,7 @@ class LanguageTestCase(common.BleachbitTestCase):
             self.assertIn("Failed to get language options",
                           log_context.output[0])
 
-        self.assertIn(result, [locale.getlocale()[0], 'C', 'en', 'en_US'])
+        self.assertIsLanguageCode(result)
 
 
 class SetupTranslationEnvironTestCase(common.BleachbitTestCase):
@@ -214,6 +364,7 @@ class SetupTranslationEnvironTestCase(common.BleachbitTestCase):
             os.environ['LANGUAGE'] = self._language_env_backup
         super().tearDown()
 
+    @common.skipIfWindows
     def test_setup_translation_sets_language_env_on_posix(self):
         """Regression test: GLib's g_get_language_names(), used
         by Gtk.Builder to translate .ui files such as the hamburger
@@ -246,8 +397,6 @@ class SetupTranslationEnvironTestCase(common.BleachbitTestCase):
         os.environ.pop('LANGUAGE', None)
         with mock.patch('bleachbit.Language.get_active_language_code',
                         return_value='it_IT'), \
-                mock.patch('bleachbit.Language.IS_POSIX', True), \
-                mock.patch('bleachbit.Language.IS_WINDOWS', False), \
                 mock.patch('locale.setlocale'), \
                 mock.patch('gettext.translation'), \
                 mock.patch('bleachbit.Unix.find_best_locale',
@@ -255,6 +404,34 @@ class SetupTranslationEnvironTestCase(common.BleachbitTestCase):
             setup_translation()
         self.assertEqual(os.environ.get('LANGUAGE'), 'it_IT')
 
+    @common.skipUnlessLinux
+    def test_setup_translation_captures_locale_before_setlocale(self):
+        """A language forced at startup must not poison auto-detection.
+
+        setup_translation() returns early on a forced language without
+        calling get_active_language_code()'s fallback, so it must capture
+        the system locale before setlocale() changes what getlocale() sees.
+        """
+        options.set('auto_detect_lang', False)
+        options.set('forced_language', 'es')
+        with mock.patch('bleachbit.Language._locale_fallback', _UNSET), \
+                mock.patch.dict(os.environ, {}, clear=True), \
+                mock.patch('locale.setlocale'), \
+                mock.patch('gettext.translation'), \
+                mock.patch('bleachbit.Unix.find_best_locale',
+                           return_value='es_ES'):
+            with mock.patch('locale.getlocale',
+                            return_value=('fr_FR', 'UTF-8')):
+                setup_translation()
+            # Re-enable auto-detection; getlocale() now reports the forced
+            # language, but detection must still see the captured one.
+            options.set('auto_detect_lang', True)
+            options.set('forced_language', '')
+            with mock.patch('locale.getlocale',
+                            return_value=('es_ES', 'UTF-8')):
+                self.assertEqual(get_active_language_code(), 'fr_FR')
+
+    @common.skipIfWindows
     def test_setup_translation_does_not_set_lang_or_lc_all_on_posix(self):
         """LANG/LC_ALL must be left untouched on POSIX -- see the
         comment in setup_translation() and in the test above for
@@ -267,8 +444,6 @@ class SetupTranslationEnvironTestCase(common.BleachbitTestCase):
             os.environ.pop('LC_ALL', None)
             with mock.patch('bleachbit.Language.get_active_language_code',
                             return_value='es_ES'), \
-                    mock.patch('bleachbit.Language.IS_POSIX', True), \
-                    mock.patch('bleachbit.Language.IS_WINDOWS', False), \
                     mock.patch('locale.setlocale'), \
                     mock.patch('gettext.translation'), \
                     mock.patch('bleachbit.Unix.find_best_locale',

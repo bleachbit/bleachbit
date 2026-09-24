@@ -253,7 +253,7 @@ later.  See the COPYING file in the top-level directory.
   </option>
   <option id="old_versions" os="macos">
     <label>Old versions</label>
-    <description>Remove old versions of Chrome left behind by updates, which Google's own updater does not clean up</description>
+    <description>Delete program files from previous versions left behind by updates</description>
     <!-- Google's macOS updater has left old versions behind since at least
          2011, and they can add up to several GB. Only the version the
          'Current' symlink points to is in use, so orphaned_framework_versions()

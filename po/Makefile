@@ -132,13 +132,12 @@ install: $(MOFILES)
 	done
 
 tests: require-gettext
-	# ar.po and he.po may have false positives regarding "number of format specifications,"
-	# so treat all problems as warnings.
-	@echo "* Checking .po files with msgfmt --check (warnings only)"
-	@for f in $(POFILES); do \
-		msgfmt --check --check-format --no-hash -o /dev/null "$$f" 2>&1; \
+	@echo "* Checking .po files with msgfmt --check"
+	@rc=0; \
+	for f in $(POFILES); do \
+		msgfmt --check --check-format --no-hash -o /dev/null "$$f" 2>&1 || rc=1; \
 	done; \
-	exit 0
+	exit $$rc
 
 clean:
 	echo "* Cleaning"

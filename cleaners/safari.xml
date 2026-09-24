@@ -37,7 +37,7 @@ https://trac.webkit.org/changeset/289878/webkit
   </option>
   <option id="history">
     <label>History</label>
-    <description>Delete the history of visited sites</description>
+    <description>Delete the history which includes visited sites, downloads, and thumbnails</description>
     <action command="delete" search="file" path="~/Library/Safari/History.db"/>
     <action command="delete" search="file" path="~/Library/Safari/History.db-wal"/>
     <action command="delete" search="file" path="~/Library/Safari/History.db-shm"/>
