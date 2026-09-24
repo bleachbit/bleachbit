@@ -583,10 +583,10 @@ def build():
         copy_file(os.path.join(GTK_LIBDIR, exe), os.path.join('dist', exe))
 
     logger.info('Copying GTK files and icon')
-    for d in ('dbus-1', 'fonts', 'gtk-3.0', 'pango'):
+    for d in ('fonts', 'gtk-3.0'):
         path = os.path.join(GTK_DIR, 'etc', d)
         copy_tree(path, os.path.join('dist', 'etc', d))
-    for d in ('gdk-pixbuf-2.0', 'girepository-1.0', 'glade', 'gtk-3.0'):
+    for d in ('gdk-pixbuf-2.0', 'girepository-1.0'):
         path = os.path.join(GTK_DIR, 'lib', d)
         copy_tree(path, os.path.join('dist', 'lib', d))
 
@@ -607,10 +607,6 @@ def build():
         f.write(data)
         f.truncate()
 
-    # fonts are not needed https://github.com/bleachbit/bleachbit/issues/863
-    for d in ('icons',):
-        path = os.path.join(GTK_DIR, 'share', d)
-        copy_tree(path, os.path.join('dist', 'share', d))
     schemas_dir = 'share\\glib-2.0\\schemas'
     gschemas_compiled_src = os.path.join(
         GTK_DIR, schemas_dir, 'gschemas.compiled')
