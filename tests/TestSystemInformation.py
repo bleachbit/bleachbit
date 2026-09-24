@@ -57,7 +57,7 @@ class SystemInformationTestCase(common.BleachbitTestCase):
         """Unknown codename still shows the raw version number"""
         with mock.patch('platform.mac_ver', return_value=('99.0', ('', '', ''), '')), mock.patch('bleachbit.SystemInformation.IS_MAC', True), mock.patch('bleachbit.SystemInformation.IS_LINUX', False):
             ret = get_system_information()
-        self.assertIn('platform.mac_ver() = 99.0', ret)
+        self.assertIn('platform.mac_ver() = 99.0\n', ret)
 
     @common.skipUnlessWindows
     def test_get_system_information_invalid_unicode_userprofile(self):
