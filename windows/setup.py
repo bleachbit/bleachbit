@@ -687,6 +687,10 @@ def build():
 
     assert_execute_console()
 
+    # The installer runs fc-cache.exe to build the font cache
+    logger.info('Checking fc-cache.exe starts')
+    assert_execute([r'dist\fc-cache.exe', '--version'], 'fontconfig version')
+
 
 @count_size_improvement
 def delete_unnecessary():
