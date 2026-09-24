@@ -54,18 +54,7 @@ class SystemInformationTestCase(common.BleachbitTestCase):
                 f'version {version} should show {expected_name}')
 
     def test_get_system_information_mac_version_unknown_codename(self):
-        """A macOS release newer than this codebase's MACOSX_DICT_MODERN
-        must still show the raw version number -- previously the whole
-        'platform.mac_ver()' line was silently omitted from the report
-        whenever the codename lookup came up empty, hiding the version
-        number itself along with the missing codename. Uses '99.0' to
-        stay valid regardless of which real releases this codebase's
-        dict has been updated for by the time this test runs (it
-        originally used '27.0', observed by hand as unknown on a real
-        Mac mini M4 and M1 -- until 27 got its own codename added to
-        MACOSX_DICT_MODERN the same day, which would have silently
-        turned this into a no-longer-unknown-codename case had the
-        version stayed hardcoded to '27.0')."""
+        """Unknown codename still shows the raw version number"""
         with mock.patch('platform.mac_ver', return_value=('99.0', ('', '', ''), '')), mock.patch('bleachbit.SystemInformation.IS_MAC', True), mock.patch('bleachbit.SystemInformation.IS_LINUX', False):
             ret = get_system_information()
         self.assertIn('platform.mac_ver() = 99.0', ret)
