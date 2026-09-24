@@ -189,7 +189,14 @@ def _parse_po_file(po_path):
     with open(po_path, encoding='utf-8') as po_file:
         for raw_line in po_file:
             line = raw_line.rstrip('\n')
-            if not line or line.startswith('#'):
+            if not line.strip():
+                # A blank line ends the entry, so a following entry without
+                # msgctxt cannot overwrite it
+                if current_ctx and current_id is not None and current_str is not None:
+                    entries[current_ctx] = current_str if current_str else current_id
+                current_ctx = current_id = current_str = state = None
+                continue
+            if line.startswith('#'):
                 continue
             if line.startswith('msgctxt '):
                 if current_ctx and current_id is not None and current_str is not None:
@@ -465,6 +472,25 @@ class TestNsisEscaping(unittest.TestCase):
         self.assertEqual(_parse_po_string('"Say \\"hi\\""'), 'Say "hi"')
         self.assertEqual(_parse_po_string(''), '')
         self.assertEqual(_parse_po_string('  '), '')
+
+    def test_parse_po_entry_without_msgctxt_does_not_overwrite(self):
+        """Regression test: an entry without msgctxt must not replace the one before it."""
+        content = '''msgctxt "nsis:LAST_KEY"
+msgid "English"
+msgstr "Translated"
+
+msgid "Other string"
+msgstr "Other translation"
+'''
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.po', delete=False, encoding='utf-8') as f:
+            f.write(content)
+            temp_path = f.name
+
+        try:
+            self.assertEqual(_parse_po_file(temp_path),
+                             {'nsis:LAST_KEY': 'Translated'})
+        finally:
+            os.unlink(temp_path)
 
     def test_parse_nsis_stops_at_autogen_marker(self):
         """Regression test: ensure header parsing stops at auto-generated marker."""
