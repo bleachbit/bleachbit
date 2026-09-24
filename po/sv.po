@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bleachbit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: andrew@bleachbit.org\n"
 "POT-Creation-Date: 2026-09-23 20:05-0600\n"
-"PO-Revision-Date: 2026-09-24 04:09+0000\n"
-"Last-Translator: Jonatan Nyberg <nickwick@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-09-25 04:26+0000\n"
+"Last-Translator: bittin1ddc447d824349b2 <bittin@reimu.nl>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/bleachbit/main/"
 "sv/>\n"
 "Language: sv\n"
@@ -848,14 +848,14 @@ msgid "Delete the AI models"
 msgstr "Ta bort AI-modellerna"
 
 #: ../cleaners/google_chrome.xml
-#, fuzzy
-#| msgid "Update to version %s"
 msgid "Old versions"
-msgstr "Uppdatera till version %s"
+msgstr "Gamla versioner"
 
 #: ../cleaners/google_chrome.xml
 msgid "Delete program files from previous versions left behind by updates"
 msgstr ""
+"Ta bort programfiler från tidigare versioner som lämnats kvar efter "
+"uppdateringar"
 
 #. Torrent software can block a list of IP addresses, such as those that may belong to malware or anti-piracy organizations
 #: ../cleaners/transmission.xml
@@ -2699,6 +2699,12 @@ msgid ""
 "To fix this, open System Settings > Privacy & Security > Full Disk Access, "
 "turn on BleachBit, and then restart BleachBit."
 msgstr ""
+"BleachBit har kanske inte full åtkomst till disken. Utan detta blockerar "
+"macOS åtkomsten till vissa filer, och vissa rensningsfunktioner kommer inte "
+"att fungera.\n"
+"\n"
+"För att åtgärda detta, öppna Systeminställningar > Integritet och säkerhet > "
+"Fullständig diskåtkomst, slå på BleachBit och starta sedan om BleachBit."
 
 #. TRANSLATORS: Column header indicating whether the cleaner is active/enabled.
 #. Used in the tree view on the main screen.
@@ -3143,6 +3149,8 @@ msgstr "Sökvägen som ska skrivas över måste vara en befintlig mapp: %s"
 msgid ""
 "Wiping free space here is unsafe because any user can change this folder: %s"
 msgstr ""
+"Att rensa ledigt utrymme här är osäkert eftersom vilken användare som helst "
+"kan ändra den här mappen: %s"
 
 #. TRANSLATORS: Status message while wiping a drive's empty space.
 #: ../bleachbit/Wipe.py
