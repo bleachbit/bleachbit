@@ -543,6 +543,7 @@ class MainFrame(wx.Frame):
         self.tree.Bind(
             dv.EVT_DATAVIEW_ITEM_CONTEXT_MENU,
             self._on_tree_context_menu)
+        self.tree.Bind(wx.EVT_CONTEXT_MENU, self._on_tree_key_context_menu)
         # On Windows the generic DataViewCtrl switches to per-cell focus
         # because the toggle column is activatable, and then consumes
         # Tab to move between cells and rows, so keyboard users cannot
@@ -599,6 +600,8 @@ class MainFrame(wx.Frame):
         self.results.InsertColumn(COL_ACTION, _('Action'), width=100)
         self.results.Bind(
             wx.EVT_LIST_ITEM_RIGHT_CLICK, self._on_result_context_menu)
+        self.results.Bind(
+            wx.EVT_CONTEXT_MENU, self._on_result_key_context_menu)
         self.results.Bind(wx.EVT_LIST_COL_CLICK, self._on_result_col_click)
         results_sizer = wx.BoxSizer(wx.VERTICAL)
         results_sizer.Add(self.results, 1, wx.EXPAND)
@@ -889,8 +892,22 @@ class MainFrame(wx.Frame):
         self._set_all_checked(False)
         self.SetStatusText(_('Unchecked all options.'))
 
+    def _on_tree_key_context_menu(self, evt):
+        """Open the tree menu for Shift+F10 and the Menu key.
+
+        A keyboard-triggered ``wx.EVT_CONTEXT_MENU`` has
+        ``wx.DefaultPosition``; mouse clicks are left to
+        ``EVT_DATAVIEW_ITEM_CONTEXT_MENU``.
+        """
+        if evt.GetPosition() == wx.DefaultPosition:
+            self._show_tree_context_menu(self.tree.GetCurrentItem())
+        else:
+            evt.Skip()
+
     def _on_tree_context_menu(self, evt):
-        item = evt.GetItem()
+        self._show_tree_context_menu(evt.GetItem())
+
+    def _show_tree_context_menu(self, item):
         menu = wx.Menu()
         obj = None
         if item and item.IsOk():
@@ -1284,6 +1301,18 @@ class MainFrame(wx.Frame):
 
     def _selected_paths(self):
         return [r['path'] for r in self._selected_rows() if r['path']]
+
+    def _on_result_key_context_menu(self, evt):
+        """Open the Results menu for Shift+F10 and the Menu key.
+
+        A keyboard-triggered ``wx.EVT_CONTEXT_MENU`` has
+        ``wx.DefaultPosition``; mouse clicks are left to
+        ``EVT_LIST_ITEM_RIGHT_CLICK``.
+        """
+        if evt.GetPosition() == wx.DefaultPosition:
+            self._on_result_context_menu(evt)
+        else:
+            evt.Skip()
 
     def _on_result_context_menu(self, _evt):
         rows = self._selected_rows()
