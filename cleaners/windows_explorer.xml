@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    BleachBit
-    Copyright (C) 2008-2025 Andrew Ziem
-    https://www.bleachbit.org
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
 
 -->
 <cleaner id="windows_explorer" os="windows">
@@ -33,22 +22,22 @@
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{F4E57C4B-2036-45F0-A9AB-443BCFE33D9F}\Count"/>
     <!-- refresh Windows shell after UserAssist -->
     <action command="win.shell.change.notify"/>
-    <!-- reference: reference: http://support.microsoft.com/kb/142298 -->
+    <!-- http://support.microsoft.com/kb/142298 -->
     <!-- common open dialog -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedMRU"/>
-    <!--  Windows Vista/7 -->
+    <!-- Windows Vista/7 -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRU"/>
-    <!--  common save as dialog -->
+    <!-- common save as dialog -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSaveMRU"/>
-    <!--  Windows Vista/7 -->
+    <!-- Windows Vista/7 -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSavePidlMRU"/>
-    <!--  find files command -->
+    <!-- find files command -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Doc Find Spec MRU"/>
-    <!--  find Computer command -->
+    <!-- find Computer command -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FindComputerMRU"/>
-    <!--  map network drives -->
+    <!-- map network drives -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Map Network Drive MRU"/>
-    <!--  printer ports -->
+    <!-- printer ports -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PrnPortsMRU"/>
   </option>
   <option id="recent_documents">
@@ -68,7 +57,7 @@
   <option id="run">
     <label translators="In Windows 'Run' is the dialog in the Start menu">Run</label>
     <description>Delete the most recently used list</description>
-    <!--  run command -->
+    <!-- run command -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU"/>
   </option>
   <option id="search_history">
@@ -82,14 +71,14 @@
     <label>Shellbags</label>
     <description>Delete the usage date, window position, and other data for folders</description>
     <warning>This will reset the position of desktop icons.</warning>
-    <!-- What we need to delete: (http://support.microsoft.com/kb/813711) -->
+    <!-- http://support.microsoft.com/kb/813711 -->
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\Shell\Bags"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\Shell\BagMRU"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\ShellNoRoam\Bags"/>
     <action command="winreg" path="HKCU\Software\Microsoft\Windows\ShellNoRoam\BagMRU"/>
     <action command="winreg" path="HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags"/>
     <action command="winreg" path="HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\BagMRU"/>
-    <!-- And on 64-bit systems additionally: -->
+    <!-- 64-bit Windows -->
     <action command="winreg" path="HKCU\Software\Classes\Wow6432Node\Local Settings\Software\Microsoft\Windows\Shell\Bags"/>
     <action command="winreg" path="HKCU\Software\Classes\Wow6432Node\Local Settings\Software\Microsoft\Windows\Shell\BagMRU"/>
   </option>

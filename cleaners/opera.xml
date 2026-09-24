@@ -7,17 +7,8 @@ Copyright (c) 2008-2026 Andrew Ziem.
 This work is licensed under the terms of the GNU GPL, version 3 or
 later.  See the COPYING file in the top-level directory.
 
-    @app Opera
-    @url https://www.opera.com/
-    @os Windows, Linux
-    @cleanerversion v1.6.1
-    @cleanerdate 2019-03-29
-    @cleanerby Andrew Ziem (2009-10-04 - 2018-11-20) & theatre-x (2014-11-04) & Tobias B. Besemer (2019-03-13 - 2019-03-29)
-    @tested ok
-    @testeddate
-    @testedby
-    @note Opera version 15 switched layout engine to Blink like Chromium
-    @note Unlike Chromium, Opera does not support multiple profiles
+Opera 15 switched its layout engine to Blink, like Chromium.
+Unlike Chromium, Opera does not support multiple profiles.
 
 -->
 <cleaner id="opera">
@@ -26,9 +17,8 @@ later.  See the COPYING file in the top-level directory.
   <running type="exe" os="linux" same_user="true">opera</running>
   <running type="exe" os="windows" same_user="true">opera.exe</running>
   <var name="base">
-    <!-- On Windows 10, Opera 68 created "Opera Stable" and "Opera Next" directories.
-        The "Opera Next" is for Opera beta.
-        -->
+    <!-- On Windows 10, Opera 68 created "Opera Stable" and "Opera Next" (beta)
+         directories. -->
     <value os="windows" search="glob">%AppData%\Opera Software\Opera*</value>
     <value os="linux">$XDG_CONFIG_HOME/opera</value>
     <value os="linux" search="glob">~/snap/opera*/*/.config/opera*</value>
@@ -38,11 +28,9 @@ later.  See the COPYING file in the top-level directory.
     <value os="windows" search="glob">%AppData%\Opera Software\Opera*</value>
     <value os="windows" search="glob">%AppData%\Opera Software\Opera*\Default</value>
     <value os="linux">$XDG_CONFIG_HOME/opera</value>
-    <!-- examples:
-        ~/snap/opera/current/.config/opera
-        ~/snap/opera-beta/60/.config/opera-beta
-        ~/snap/opera/420/.config/opera/Default on Opera 126 installed by snap
-        -->
+    <!-- ~/snap/opera/current/.config/opera
+         ~/snap/opera-beta/60/.config/opera-beta
+         ~/snap/opera/420/.config/opera/Default on Opera 126 installed by snap -->
     <!-- Is it still needed without Default? -->
     <value os="linux" search="glob">~/snap/opera*/*/.config/opera*</value>
     <value os="linux" search="glob">~/snap/opera*/*/.config/opera*/Default</value>
@@ -53,7 +41,7 @@ later.  See the COPYING file in the top-level directory.
   <option id="cache">
     <label>Cache</label>
     <description>Delete the web cache, which reduces time to display revisited pages</description>
-    <!-- Opera 126: C:\Users\username\AppData\Roaming\Opera Software\Opera Stable\ShaderCache-->
+    <!-- Opera 126 has C:\Users\username\AppData\Roaming\Opera Software\Opera Stable\ShaderCache -->
     <action command="delete" search="walk.all" path="$$base$$/component_crx_cache"/>
     <action command="delete" search="walk.all" path="$$base$$/extensions_crx_cache"/>
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
@@ -77,7 +65,7 @@ later.  See the COPYING file in the top-level directory.
     <!-- Windows-specific -->
     <action command="delete" search="walk.all" path="$$localapp$$\Cache\"/>
     <action command="delete" search="walk.all" path="$$localapp$$\Media Cache\"/>
-    <!-- below are entries valid before Opera 15 -->
+    <!-- Before Opera 15 -->
     <action command="delete" search="walk.files" path="%LocalAppData%\Opera\Opera*\cache\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Opera\Opera*\opcache\"/>
     <action command="delete" search="walk.files" path="%LocalAppData%\Opera\Opera*\thumbnails\"/>
@@ -98,9 +86,9 @@ later.  See the COPYING file in the top-level directory.
     <action command="cookie" search="file" path="$$profile$$/Extension Cookies"/>
     <action command="delete" search="file" path="$$profile$$/Extension Cookies-journal"/>
     <action command="delete" search="file" path="$$profile$$/TransportSecurity"/>
-    <!-- below are entries valid before Opera 15 -->
-    <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera\cookies.txt -->
-    <!-- example: C:\Documents and Settings\user\Application Data\Opera\Opera 11.00 beta\cookies.txt -->
+    <!-- Before Opera 15 -->
+    <!-- C:\Documents and Settings\user\Application Data\Opera\Opera\cookies.txt -->
+    <!-- C:\Documents and Settings\user\Application Data\Opera\Opera 11.00 beta\cookies.txt -->
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\cookies4.dat"/>
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\profile\cookies4.dat"/>
     <action command="delete" search="file" path="~/.opera/cookies4.dat"/>
@@ -141,7 +129,7 @@ later.  See the COPYING file in the top-level directory.
     <!-- Opera 68 beta on Windows has "Jump List Icons" spelled with space -->
     <action command="delete" search="walk.files" path="$$profile$$\Jump List Icons\"/>
     <action command="delete" search="walk.files" path="$$profile$$\Jump List IconsOld\"/>
-    <!-- below are entries valid before Opera 15 -->
+    <!-- Before Opera 15 -->
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\download.dat"/>
     <action command="delete" search="file" path="%AppData%\Opera\Opera\profile\download.dat"/>
     <action command="delete" search="file" path="~/.opera/download.dat"/>
@@ -182,7 +170,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$profile$$/QuotaManager-journal"/>
     <action command="delete" search="walk.all" path="$$profile$$/Extension State"/>
     <action command="delete" search="walk.all" path="$$profile$$/Session Storage"/>
-    <!-- below are entries valid before Opera 15 -->
+    <!-- Before Opera 15 -->
     <action command="delete" search="walk.all" path="%AppData%\Opera\Opera*\pstorage\"/>
     <action command="delete" search="walk.all" path="~/.opera/pstorage/"/>
   </option>
@@ -192,7 +180,7 @@ later.  See the COPYING file in the top-level directory.
     <warning>This option will delete your saved passwords.</warning>
     <action command="delete" search="file" path="$$profile$$/Login Data"/>
     <action command="delete" search="file" path="$$profile$$/Login Data-journal"/>
-    <!-- below are entries valid before Opera 15 -->
+    <!-- Before Opera 15 -->
     <action command="delete" search="file" path="~/.opera/wand.dat"/>
   </option>
   <option id="session">
@@ -203,7 +191,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$profile$$/Last Session"/>
     <action command="delete" search="file" path="$$profile$$/Last Tabs"/>
     <action command="delete" search="walk.all" path="$$profile$$/Sessions/"/>
-    <!-- below are entries valid before Opera 15 -->
+    <!-- Before Opera 15 -->
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\sessions\autosave.win"/>
     <action command="delete" search="glob" path="%AppData%\Opera\Opera*\sessions\autosave.win.bak"/>
     <action command="delete" search="file" path="~/.opera/sessions/autosave.win"/>
@@ -230,7 +218,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/MediaDeviceSalts"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/ServerCertificate"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Reporting and NEL"/>
-    <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
+    <!-- Thumbnails was an SQLite file until about January 2016 and is a folder by Chrome 48 -->
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Thumbnails" type="f"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Web Data"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/databases/Databases.db"/>

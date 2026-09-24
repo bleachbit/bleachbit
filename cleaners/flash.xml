@@ -1,40 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    BleachBit
-    Copyright (C) 2008-2025 Andrew Ziem
-    https://www.bleachbit.org
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-    @app Adobe Flash Player
-    @url https://adobe.com/products/flashplayer.html
-    @os Windows, Linux
-    @cleanerversion v1.5.0
-    @cleanerdate 2019-03-18
-    @cleanerby Andrew Ziem (2009-05-19 - 2018-10-15) & Tobias B. Besemer (2019-03-13 - 2019-03-18)
-    @tested ok v1:20180313.1-0ubuntu0.16.04.1, Ubuntu 16.04
-    @testeddate ???
-    @testedby ???
-    @tested ok v29.0.0.140, Windows 7
-    @testeddate ???
-    @testedby ???
-    @tested ok v???, Windows 7
-    @testeddate 2019-03-13
-    @testedby https://github.com/Tobias-B-Besemer
-    @note Application framework for writing and running rich Internet applications.
-    @note Adobe announced that it would end support for Flash Player in 2020.
+Adobe ended support for Flash Player in 2020.
 
 -->
 <cleaner id="flash">
@@ -51,12 +24,11 @@
   <option id="cache">
     <label>Cache</label>
     <description>Delete the cache</description>
-    <!-- Reference: http://helpx.adobe.com/x-productkb/multi/flash-player-11-problems-playing.html -->
-    <!-- Reference: http://helpx.adobe.com/flash-player/kb/protected-video-content-play.html -->
+    <!-- http://helpx.adobe.com/x-productkb/multi/flash-player-11-problems-playing.html -->
+    <!-- http://helpx.adobe.com/flash-player/kb/protected-video-content-play.html -->
     <action command="delete" search="walk.all" path="$$adobe$$/AssetCache/"/>
     <action command="delete" search="walk.all" path="$$adobe$$/APSPrivateData2/"/>
     <action command="delete" search="walk.all" path="$$adobe$$/NativeCache/"/>
-    <!-- Reference: "Reverse Engineering" by Tobias ;-) -->
     <action command="delete" search="walk.all" path="$$adobe$$/AFCache/"/>
     <action command="delete" search="walk.all" path="$$adobe$$/Icon Cache/"/>
   </option>

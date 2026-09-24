@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
+
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
+
+-->
 <cleaner id="localizations" os="unix,!macos">
   <label>Localizations</label>
   <localizations>
-    <!-- Here are paths which contain localizations. Each <path> is relative to
-       the parent element, so <path location="/usr"><path location="share"/></path>
-       effects elements in /usr/share.-->
+    <!-- Paths which contain localizations. Each <path> is relative to its
+       parent, so <path location="/usr"><path location="share"/></path>
+       affects /usr/share. -->
     <path location="/usr/lib">
-      <!-- This filter deletes /usr/lib/chromium/locales/*.pak, where * is every
-           valid locale not specifically excluded in the configuration.-->
+      <!-- Deletes /usr/lib/chromium/locales/*.pak for every valid locale not
+           excluded in the configuration. -->
       <path location="chromium/locales" filter="*.pak"/>
       <path location="libreoffice/share">
         <path location="autocorr" filter="acor_*.dat"/>
@@ -16,7 +25,7 @@
     </path>
     <path location="/usr/share">
       <!-- check for Qt translations in every folder's subfolder locale or translations -->
-      <!-- also check for localizations in folders named locale(s)/translation(s) in every subfolder-->
+      <!-- also check for localizations in folders named locale(s)/translation(s) in every subfolder -->
       <path directoryregex="^.*$">
         <path directoryregex="^(locale|translation)s?$">
           <regexfilter prefix=".*_" postfix="\.qm"/>
@@ -33,7 +42,7 @@
       </path>
       <path location="help" filter="*"/>
       <path location="locale" filter="*"/>
-      <!-- for openSuSE -->
+      <!-- openSUSE -->
       <path location="locale-bundle">
         <path location="kf5" filter="*"/>
       </path>
@@ -45,14 +54,14 @@
           <path location="locale/" filter="*.qm"/>
         </path>
       </path>
-      <!-- This already gets cleaned by the more general <path directoryregex="^.*$"> above but might be useful as an example -->
+      <!-- Already covered by <path directoryregex="^.*$"> above, but kept as an example -->
       <path location="qt/translations">
         <!-- <regexfilter> enables filtering files/folders with 2 regular expressions.
            This deletes every file matching |prefix | locale   | postfix, e.g.
                                              qt_help_hu_HU.UTF-8.qm
            This can only be used to delete entries in the current <path> -->
         <regexfilter prefix="q[\w_]*" postfix="\.qm"/>
-        <!-- You can also specify multiple <regexfilter>s within a single path -->
+        <!-- A path can have several <regexfilter>s -->
         <regexfilter prefix="(linguist|designer|assistant)_" postfix="\.qm"/>
       </path>
       <path location="speedcrunch/books" filter="*"/>

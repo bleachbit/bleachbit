@@ -1,33 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    BleachBit
-    Copyright (C) 2008-2025 Andrew Ziem
-    https://www.bleachbit.org
+SPDX-License-Identifier: GPL-3.0-or-later
+Copyright (c) 2008-2026 Andrew Ziem.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+This work is licensed under the terms of the GNU GPL, version 3 or
+later.  See the COPYING file in the top-level directory.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-    @app FileZilla
-    @url https://filezilla-project.org/
-    @os Windows, Linux
-    @cleanerversion v4.4.2
-    @cleanerdate 2021-11-13
-    @cleanerby Andrew Ziem (2009-06-24 - 2009-10-04), Tobias B. Besemer (2019-03-13 - 2019-03-21) & fbruand (2022-12-28)
-    @tested ok debian 11 (FileZilla 3.52.2), debian 11 with flatpak (FileZilla 3.62.2), fedora 37 (FileZilla 3.60.2), debian 11 with snap (FileZilla 3.41.2) & windows 11 (FileZilla 3.62.2)
-    @testeddate 2022-12-29
-    @testedby https://github.com/fbruand
-    @note As long we have no command="xml", we need to delete the complete file!
+Tested with FileZilla 3.52.2 on Debian 11, 3.62.2 as a flatpak on
+Debian 11, 3.41.2 as a snap on Debian 11, 3.60.2 on Fedora 37 and
+3.62.2 on Windows 11.
 
 -->
 <cleaner id="filezilla">
@@ -47,29 +29,4 @@
     <description>Delete the usage history</description>
     <action command="delete" search="file" path="$$profile$$/recentservers.xml"/>
   </option>
-  <!-- Option not for end-user !!!
-  <option id="last_server_path">
-    <label>Last Server Path</label>
-    <description>Delete the last server path</description>
-    <warning>As long we have no command="xml", we need to delete the complete file! Use this option only if you know what you do!</warning>
-    <action command="delete" search="file" path="$$profile$$/filezilla.xml"/>
-    -->
-  <!--
-    This is how IMHO a CleanerML-XML-Cleaning-Syntax maybe can look like (Part 5). Tobias.
-    <action command="xml" search="file" path="$$profile$$/filezilla.xml" element="FileZilla3/Settings/Setting" attribute="name=Last Server Path"/>
-    Explanation: Deletes with a "name=value" as value of "attribute" the content of "<element attribute="value">".
-    Example:
-    <FileZilla3 version="3.32.0" platform="windows">
-        <Settings>
-            <Setting name="Last Server Path">ftp://ftp.demo.org</Setting>
-    -> Deletes "ftp://ftp.demo.org"
-    -->
-  <!--
-    For later! Would be Example Part4...
-    Explanation: Deletes with "/*" at the end the content of the element.
-    <action command="xml" search="file" path="$$profile$$/filezilla.xml" element="FileZilla3/Settings/LastServer/*"/>
-    -->
-  <!--
-  </option>
-  -->
 </cleaner>

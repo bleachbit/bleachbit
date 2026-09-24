@@ -1288,7 +1288,7 @@ class LocalizationsTestCase(common.BleachbitTestCase):
             xml_doc = parseString(f.read())
 
         localizations_node = None
-        for child in xml_doc.firstChild.childNodes:
+        for child in xml_doc.documentElement.childNodes:
             if child.nodeType == child.ELEMENT_NODE and child.nodeName == 'localizations':
                 localizations_node = child
                 break

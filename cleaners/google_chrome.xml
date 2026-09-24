@@ -56,7 +56,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="walk.all" path="$$base$$/GraphiteDawnCache"/>
     <action command="delete" search="walk.all" path="$$base$$/GrShaderCache"/>
     <action command="delete" search="walk.all" path="$$base$$/ShaderCache"/>
-    <!-- Google Chrome 126 on Linux stores Network Persistent State directly under $$profile$$ while Chrome 126 on Windows stores it under $$profile$$/Network -->
+    <!-- Chrome 126 keeps Network Persistent State in $$profile$$ on Linux and in $$profile$$/Network on Windows -->
     <action command="delete" search="file" path="$$profile$$/Network Persistent State"/>
     <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State"/>
     <action command="delete" search="walk.all" path="$$profile$$/GPUCache/"/>
@@ -79,7 +79,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
     <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
     <action command="delete" search="walk.files" path="$$profile$$\Cache\"/>
-    <!-- Linux stores the Code Cache under ~/.cache/ , so it doesn't need an extra rule -->
+    <!-- Linux keeps Code Cache under ~/.cache/, so it needs no extra rule -->
     <action command="delete" search="walk.files" path="$$profile$$\Code Cache\"/>
     <action command="delete" search="walk.files" path="$$profile$$\Media Cache\"/>
   </option>
@@ -131,7 +131,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$profile$$/Shortcuts"/>
     <action command="delete" search="glob" path="$$profile$$/History Index ????-??-journal"/>
     <action command="delete" search="glob" path="$$profile$$/History Index ????-??"/>
-    <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
+    <!-- Thumbnails was an SQLite file until about January 2016 and is a folder by Chrome 48 -->
     <action command="delete" search="file" path="$$profile$$/Thumbnails"/>
     <action command="delete" search="walk.files" path="$$profile$$/Thumbnails"/>
     <action command="delete" search="file" path="$$profile$$/Thumbnails-journal"/>
@@ -227,7 +227,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/SharedStorage"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Shortcuts"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/History Index ????-??"/>
-    <!-- Before about January 2016 Thumbnails was an SQLite file, by Google Chrome 48 it is a folder -->
+    <!-- Thumbnails was an SQLite file until about January 2016 and is a folder by Chrome 48 -->
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Thumbnails" type="f"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Top Sites"/>
     <action command="sqlite.vacuum" search="file" path="$$profile$$/Trust Tokens"/>
@@ -241,7 +241,7 @@ later.  See the COPYING file in the top-level directory.
     <action command="sqlite.vacuum" search="file" path="$$profile$$/WebStorage/QuotaManager"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/??"/>
     <action command="sqlite.vacuum" search="glob" path="$$profile$$/databases/http*/?"/>
-    <!-- The three below were seen on Google Chrome on Windows before Chrome version 66 -->
+    <!-- Seen on Windows before Chrome 66 -->
     <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Archived History"/>
     <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Plugin Data\Google Gears\localserver.db"/>
     <action command="sqlite.vacuum" search="file" path="%LocalAppData%\Google\Chrome\User Data\Default\Plugin Data\Google Gears\permissions.db"/>
@@ -254,14 +254,10 @@ later.  See the COPYING file in the top-level directory.
   <option id="old_versions" os="macos">
     <label>Old versions</label>
     <description>Remove old versions of Chrome left behind by updates, which Google's own updater does not clean up</description>
-    <!-- Google's macOS auto-updater has never reliably removed the
-         previous version(s) after updating, a bug publicly reported
-         since at least 2011: these can accumulate to several GB over
-         an installation's lifetime. Only the version the 'Current'
-         symlink points to is genuinely in use, so
-         orphaned_framework_versions() (bleachbit.Unix) removes every
-         sibling folder except that one; if 'Current' is missing or
-         broken, nothing is removed. -->
+    <!-- Google's macOS updater has left old versions behind since at least
+         2011, and they can add up to several GB. Only the version the
+         'Current' symlink points to is in use, so orphaned_framework_versions()
+         removes the rest, or nothing if 'Current' is missing or broken. -->
     <action command="macos.orphaned_framework_versions" os="macos" search="file" path="/Applications/Google Chrome.app/Contents/Frameworks/Google Chrome Framework.framework/Versions"/>
   </option>
 </cleaner>
