@@ -704,8 +704,6 @@ def delete_unnecessary():
         r'servicemanager.pyd',
         r'share\icons\highcontrast',
         r'win32evtlog.pyd',
-        r'win32pipe.pyd',
-        r'win32wnet.pyd',
     ]
     _delete_paths(delete_paths)
 
@@ -792,10 +790,6 @@ def remove_empty_dirs(root):
 def clean_translations():
     """Clean translations (localizations)"""
     logger.info('Cleaning translations')
-    if os.path.exists(r'dist\share\locale\locale.alias'):
-        os.remove(r'dist\share\locale\locale.alias')
-    else:
-        logger.warning('locale.alias does not exist')
     pygtk_translations = os.listdir('dist/share/locale')
     supported_translations = supported_languages()
     for pt in pygtk_translations:
