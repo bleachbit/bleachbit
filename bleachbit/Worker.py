@@ -193,6 +193,8 @@ class Worker:
 
         total_size = 0
         for option_id in operation_options:
+            if self.is_aborted:
+                break
             self.size = 0
             assert isinstance(option_id, str)
             # normal scan
@@ -203,13 +205,13 @@ class Worker:
                         # it responding allow the user to abort
                         self.yield_time = time.time()
                         yield True
-                if self.is_aborted:
-                    break
                 if time.time() - self.yield_time > 0.25:
                     if self.really_delete:
                         self.ui.update_total_size(self.total_bytes)
                     yield True
                     self.yield_time = time.time()
+                if self.is_aborted:
+                    break
 
             self.ui.update_item_size(operation, option_id, self.size)
             total_size += self.size
@@ -251,6 +253,8 @@ class Worker:
             raise RuntimeError("Unexpected option_id in delayed ops")
         self.ui.update_progress_bar(msg)
         for cmd in backends[operation].get_commands(option_id):
+            if self.is_aborted:
+                return
             for ret in self.execute(cmd, '%s.%s' % (operation, option_id)):
                 if isinstance(ret, tuple):
                     # Display progress (for free disk space)
@@ -319,7 +323,7 @@ class Worker:
                     logger.warning(w.message)
 
             # run deep scan
-            if self.deepscans:
+            if self.deepscans and not self.is_aborted:
                 yield from self.run_deep_scan()
 
             # After standard operations and deep scan, close the lock
@@ -329,6 +333,8 @@ class Worker:
             # delayed operations
             for _priority, operation, option_id in sorted(
                     self.delayed_ops, key=lambda op: op[0]):
+                if self.is_aborted:
+                    break
                 for _ret in self.run_delayed_op(operation, option_id):
                     # yield to GTK+ idle loop
                     yield True
@@ -388,6 +394,8 @@ class Worker:
         ds = DeepScan.DeepScan(self.deepscans)
 
         for cmd in ds.scan():
+            if self.is_aborted:
+                break
             if cmd is True:
                 yield True
                 continue
@@ -397,6 +405,8 @@ class Worker:
     def run_operations(self, my_operations):
         """Run a set of operations (general, memory, free disk space)"""
         for count, operation in enumerate(my_operations):
+            if self.is_aborted:
+                break
             self.ui.update_progress_bar(1.0 * count / len(my_operations))
             name = backends[operation].get_name()
             if self.really_delete:
