@@ -14,7 +14,7 @@ later.  See the COPYING file in the top-level directory.
   <running type="exe" os="unix" same_user="true">waterfox</running>
   <running type="exe" os="unix" same_user="true">waterfox-bin</running>
   <running type="exe" os="windows" same_user="true">waterfox.exe</running>
-  <running type="pathname">~/.waterfox/*.default/lock</running>
+  <running type="pathname">~/.waterfox/*/lock</running>
   <var name="base">
     <value os="windows">%AppData%\Waterfox</value>
     <value os="unix">~/.waterfox</value>
