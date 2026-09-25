@@ -119,3 +119,19 @@ class GuiCookieTestCase(common.BleachbitTestCase):
             pane = CookieManagerPane()
         idle_add.assert_called_once_with(pane._finish_populate, [])
         pane.destroy()
+
+    def test_saved_dotted_host_stays_checked(self):
+        """A saved '.example.com' shows as one checked row after reopening"""
+        keep_path = os.path.join(
+            bleachbit.options_dir, COOKIE_KEEP_LIST_FILENAME)
+        os.makedirs(bleachbit.options_dir, exist_ok=True)
+        self.addCleanup(lambda: os.path.exists(
+            keep_path) and os.remove(keep_path))
+        self.write_file(keep_path, text='[".google.com"]')
+
+        with mock.patch('bleachbit.GuiCookie.threading.Thread'):
+            pane = CookieManagerPane()
+        pane._finish_populate(['.google.com', 'accounts.google.com'])
+        self.assertEqual([tuple(row) for row in pane.cookie_store],
+                         [(False, 'accounts.google.com'), (True, 'google.com')])
+        pane.destroy()

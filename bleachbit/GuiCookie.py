@@ -336,7 +336,9 @@ class CookieManagerPane(Gtk.Box):
         self.select_all_btn.set_sensitive(True)
         self.deselect_all_btn.set_sensitive(True)
 
-        all_hosts = {h.strip() for h in discovered if h}
+        # Normalize like load_keep_list() so a saved '.example.com' still
+        # matches its row.
+        all_hosts = {h.strip().lstrip('.').lower() for h in discovered if h}
         all_hosts.update(self.saved_domains)
         sorted_hosts = sorted(all_hosts, key=lambda host: host.lower())
 
