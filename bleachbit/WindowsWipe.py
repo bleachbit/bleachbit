@@ -908,7 +908,7 @@ def poll_clusters_freed(volume_handle, total_clusters, orig_extents):
         # in between our polling attempts.
         if count_free > count_allocated:
             return True
-        Sleep(1000 / attempts_per_second)
+        Sleep(1000 // attempts_per_second)
 
     return False
 
