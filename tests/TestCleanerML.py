@@ -613,3 +613,8 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         """Chromium is detected under the name Debian and Arch run it as"""
         self.assertTrue(self._bundled_cleaner_detects(
             'chromium', 'linux', 'chromium'))
+
+    def test_firefox_running_esr(self):
+        """Debian's Firefox ESR is detected as a running Firefox"""
+        self.assertTrue(self._bundled_cleaner_detects(
+            'firefox', 'linux', 'firefox-esr'))
