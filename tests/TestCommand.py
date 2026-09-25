@@ -22,13 +22,22 @@
 Test case for Command
 """
 
+import errno
 import os
 import sqlite3
+import warnings
 from unittest import mock
 
 from tests import common
-from bleachbit import FileUtilities
+import bleachbit.Command
+from bleachbit import FileUtilities, IS_WINDOWS
 from bleachbit.Command import Delete, Function, Shred, Truncate
+from bleachbit.Language import get_text as _
+from bleachbit.Options import options
+
+if not IS_WINDOWS:
+    # pylint: disable-next=redefined-builtin
+    from bleachbit.General import WindowsError
 
 
 class CommandTestCase(common.BleachbitTestCase):
@@ -66,6 +75,28 @@ class CommandTestCase(common.BleachbitTestCase):
             self.assertIsNone(ret['size'])
             self.assertEqual(ret['path'], path)
             self.assertExists(path)
+
+    def test_Delete_locked_with_shred_option(self):
+        """A locked file is reported as not overwritten when the global
+        shred option is on, as with the Shred command"""
+        path = self.write_file('test_Delete_locked', b'foo')
+        # The overwrite and the delete both failed on a sharing violation
+        if IS_WINDOWS:
+            locked = PermissionError(errno.EACCES, 'locked', path)
+            locked.winerror = 32
+        else:
+            # pylint: disable-next=possibly-used-before-assignment
+            locked = WindowsError(32, 'locked')
+        options.set('shred', True)
+        with mock.patch('bleachbit.FileUtilities.delete', side_effect=locked), \
+                mock.patch.object(bleachbit.Command, 'bleachbit', mock.Mock(),
+                                  create=True) as fake_bleachbit, \
+                warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter('always')
+            ret = next(Delete(path).execute(really_delete=True))
+        fake_bleachbit.Windows.delete_locked_file.assert_called_once_with(path)
+        self.assertEqual(ret['label'], _('Mark for deletion'))
+        self.assertIn(UserWarning, [w.category for w in caught])
 
     def test_Function(self):
         """Unit test for Function"""

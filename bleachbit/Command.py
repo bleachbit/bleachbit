@@ -110,7 +110,9 @@ class Delete:
                 # pylint: disable-next=possibly-used-before-assignment
                 bleachbit.Windows.delete_locked_file(self.path)
 
-                if self.shred:
+                # delete() also shreds when the global option is on
+                from bleachbit.Options import options
+                if self.shred or options.get('shred'):
                     warnings.warn(
                         # TRANSLATORS: Warning message shown in the progress log.
                         _('At least one file was locked by another process, '
