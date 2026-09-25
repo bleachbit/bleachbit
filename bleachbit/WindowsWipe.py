@@ -96,6 +96,7 @@ from win32api import (GetVolumeInformation, GetDiskFreeSpace,
                       GetVersionEx, Sleep)
 from win32file import (CreateFile, CreateFileW,
                        CloseHandle, GetDriveType,
+                       GetVolumePathName, GetVolumeNameForVolumeMountPoint,
                        GetFileSize, GetFileAttributesW,
                        SetFileAttributesW,
                        DeviceIoControl, SetFilePointer,
@@ -128,7 +129,7 @@ from win32con import (FILE_ATTRIBUTE_ENCRYPTED,
 
 # local import
 from bleachbit import IS_WINDOWS
-from bleachbit.FileUtilities import extended_path, extended_path_undo
+from bleachbit.FileUtilities import extended_path, extended_path_undo, pywinerror
 
 # Constants.
 VER_SUITE_PERSONAL = 0x200   # doesn't seem to be present in win32con.
@@ -579,7 +580,8 @@ def truncate_file(file_handle):
 def volume_from_file(file_name):
     r"""Given a Windows file path, determine the volume that contains it.
 
-    Append the separator \ to it (more useful for subsequent calls).
+    The path ends with the separator \. For a volume mounted on a folder,
+    it is that folder (like C:\Data\), not the drive letter.
 
     Args:
         file_name: Path to the file
@@ -587,9 +589,15 @@ def volume_from_file(file_name):
     Returns:
         Volume path
     """
-    # strip \\?\
-    split_path = os.path.splitdrive(extended_path_undo(file_name))
-    volume = split_path[0]
+    try:
+        # strip \\?\
+        volume = extended_path_undo(GetVolumePathName(file_name))
+    except pywinerror:
+        volume = ''
+    if os.path.splitdrive(volume)[0].endswith(':'):
+        return volume
+    # A network path, or GetVolumePathName failed
+    volume = os.path.splitdrive(extended_path_undo(file_name))[0]
     if volume and volume[-1] != os.sep:
         volume += os.sep
     return volume
@@ -656,7 +664,11 @@ def obtain_readwrite(volume):
     """
     assert volume
 
-    volume = '\\\\.\\' + volume
+    if os.path.splitdrive(volume)[1] == os.sep:
+        volume = '\\\\.\\' + volume
+    else:
+        # A volume mounted on a folder may have no drive letter
+        volume = GetVolumeNameForVolumeMountPoint(volume)
     if volume[-1] == os.sep:
         volume = volume.rstrip(os.sep)
 

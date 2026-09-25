@@ -21,7 +21,7 @@ import bleachbit
 
 # local
 from tests import common
-from bleachbit.FileUtilities import children_in_directory
+from bleachbit.FileUtilities import children_in_directory, extended_path
 
 # third party
 if bleachbit.IS_WINDOWS:
@@ -242,6 +242,21 @@ class WindowsWipeTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         self.assertGreater(volume_info.sectors_per_cluster, 0)
         self.assertGreater(volume_info.bytes_per_sector, 0)
         self.assertGreater(volume_info.total_clusters, 0)
+
+    def test_volume_from_file(self):
+        """volume_from_file() returns the drive root, also as a fallback"""
+        filename = self.write_file('volume_from_file', b'x')
+        path = extended_path(filename)
+        drive = os.path.splitdrive(filename)[0] + os.sep
+        self.assertEqual(volume_from_file(path), drive)
+
+        # pylint: disable-next=possibly-used-before-assignment
+        too_long = pywintypes.error(206, 'GetVolumePathName', 'too long')
+        for kwargs in ({'side_effect': too_long},
+                       {'return_value': '\\\\?\\UNC\\server\\share\\'}):
+            with self.subTest(**kwargs), \
+                    mock.patch('bleachbit.WindowsWipe.GetVolumePathName', **kwargs):
+                self.assertEqual(volume_from_file(path), drive)
 
     def test_write_zero_fill(self):
         """Unit test for write_zero_fill"""
