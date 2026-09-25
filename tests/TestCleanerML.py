@@ -9,6 +9,7 @@ Test cases for module CleanerML
 """
 
 # standard imports
+import json
 import os
 import shutil
 import sys
@@ -614,3 +615,29 @@ class CleanerMLTestCase(common.BleachbitTestCase):
                         cleaner_id, 'site_data', 'linux')
                     self.assertIn(local_storage, paths)
                     self.assertNotIn(state, paths)
+
+    @common.skipIfWindows
+    def test_chrome_sync_keeps_profile_list(self):
+        """Signing out of Chrome keeps every profile in Local State"""
+        config = self.mkdtemp(prefix='bleachbit-chrome-sync')
+        local_state = os.path.join(config, 'google-chrome', 'Local State')
+        os.makedirs(os.path.dirname(local_state))
+        info_cache = {
+            'Default': {'name': 'Personal', 'user_name': 'me@example.com',
+                        'is_consented_primary_account': True},
+            'Profile 1': {'name': 'Work'},
+        }
+        self.write_file(local_state, text=json.dumps(
+            {'profile': {'info_cache': info_cache, 'last_used': 'Profile 1'}}))
+        with common.set_temporary_env('XDG_CONFIG_HOME', config):
+            cleaner = self._load_real_cleaner_as('google_chrome.xml', 'linux')
+            for cmd in cleaner.get_commands('sync'):
+                if cmd.path == local_state:
+                    list(cmd.execute(True))
+        with open(local_state, encoding='utf-8') as f:
+            profile = json.load(f)['profile']
+        self.assertEqual(['Default', 'Profile 1'],
+                         sorted(profile['info_cache']))
+        self.assertEqual('Profile 1', profile['last_used'])
+        self.assertEqual({'name': 'Personal'},
+                         profile['info_cache']['Default'])
