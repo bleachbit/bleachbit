@@ -485,3 +485,26 @@ class WorkerTestCase(common.BleachbitTestCase):
         self.assertExists(filename2)
         self.assertExists(bak)
         self.assertEqual(worker.total_deleted, 1)
+
+    def test_backends_cleared_mid_run(self):
+        """A cleaner refresh during a run does not stop the worker"""
+        filename1 = self.mkstemp(prefix='bleachbit-test-worker')
+        filename2 = self.mkstemp(prefix='bleachbit-test-worker')
+        backends['test1'] = TestCleaner.action_to_cleaner(
+            f'<action command="delete" search="file" path="{filename1}"/>')
+        backends['test2'] = TestCleaner.action_to_cleaner(
+            f'<action command="delete" search="file" path="{filename2}"/>')
+        self.addCleanup(backends.pop, 'test1', None)
+        self.addCleanup(backends.pop, 'test2', None)
+        worker = Worker(CLI.CliCallback(quiet=True), True,
+                        {'test1': ['option1'], 'test2': ['option1']})
+        run = worker.run()
+        self.assertTrue(next(run))
+        # register_cleaners() starts with backends.clear()
+        del backends['test1']
+        del backends['test2']
+        while next(run):
+            pass
+        self.assertNotExists(filename1)
+        self.assertNotExists(filename2)
+        self.assertEqual(worker.total_errors, 0)

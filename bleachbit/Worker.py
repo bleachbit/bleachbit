@@ -176,10 +176,10 @@ class Worker:
         if not operation_options:
             return
 
-        if self.really_delete and backends[operation].is_process_running():
+        if self.really_delete and self.backends[operation].is_process_running():
             # TRANSLATORS: %s expands to a name such as 'Firefox' or 'System'.
             err = _("%s cannot be cleaned because it is currently running.  Close it, and try again.") \
-                % backends[operation].get_name()
+                % self.backends[operation].get_name()
             self.ui.append_text(err + "\n", 'error')
             self.total_errors += 1
             return
@@ -192,7 +192,7 @@ class Worker:
             self.size = 0
             assert isinstance(option_id, str)
             # normal scan
-            for cmd in backends[operation].get_commands(option_id):
+            for cmd in self.backends[operation].get_commands(option_id):
                 for ret in self.execute(cmd, '%s.%s' % (operation, option_id)):
                     if ret is True:
                         # Return control to PyGTK idle loop to keep
@@ -211,7 +211,7 @@ class Worker:
             total_size += self.size
 
             # deep scan
-            for (path, search) in backends[operation].get_deep_scan(option_id):
+            for (path, search) in self.backends[operation].get_deep_scan(option_id):
                 if '' == path:
                     path = os.path.expanduser('~')
                 if search.command not in ('delete', 'shred'):
@@ -244,7 +244,7 @@ class Worker:
         else:
             raise RuntimeError("Unexpected option_id in delayed ops")
         self.ui.update_progress_bar(msg)
-        for cmd in backends[operation].get_commands(option_id):
+        for cmd in self.backends[operation].get_commands(option_id):
             if self.is_aborted:
                 return
             for ret in self.execute(cmd, '%s.%s' % (operation, option_id)):
@@ -284,6 +284,9 @@ class Worker:
         # Otherwise a scan from an earlier run still reports an application
         # the user has just closed.
         process_cache.invalidate()
+        # Keep the cleaners in case a refresh clears backends mid-run
+        self.backends = {operation: backends[operation]
+                         for operation in self.operations}
         self.deepscans = {}
         # prioritize
         self.delayed_ops = []
@@ -394,7 +397,7 @@ class Worker:
             if self.is_aborted:
                 break
             self.ui.update_progress_bar(1.0 * count / len(my_operations))
-            name = backends[operation].get_name()
+            name = self.backends[operation].get_name()
             if self.really_delete:
                 # TRANSLATORS: %s is replaced with Firefox, System, etc.
                 msg = _("Please wait.  Cleaning %s.") % name
