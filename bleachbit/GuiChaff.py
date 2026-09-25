@@ -182,7 +182,8 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
         # The placeholder is for the technical error details.
         error_msg = _("Error generating chaff: {error}").format(error=str(exc))
     try:
-        if delete_when_finished and not abort_event.is_set():
+        # Abort stops only the generation, and closing the dialog sets it too
+        if delete_when_finished:
             # TRANSLATORS: Progress message shown while deleting chaff files.
             # 'Deleting files' is a present participle.
             # To indicate an ongoing operation, include the ellipsis as literal
@@ -190,8 +191,6 @@ def make_files_thread(stop_mode, stop_value, inspiration, output_folder,
             on_progress(0, msg=_('Deleting files\u2026'))
             count = len(generated_file_names)
             for i, fn in enumerate(generated_file_names):
-                if abort_event.is_set():
-                    break
                 os.unlink(fn)
                 on_progress(1.0 * (i + 1) / count)
     except Exception as exc:
