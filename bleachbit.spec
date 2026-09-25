@@ -206,6 +206,7 @@ make -C po install DESTDIR=%{buildroot}
 
 
 %check
+set -o pipefail
 %{pyexe} bleachbit.py --sysinfo
 %{pyexe} bleachbit.py -l | wc -l
 %{pyexe} bleachbit.py -p system.cache | wc -l
