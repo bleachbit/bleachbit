@@ -719,6 +719,18 @@ PrefersNonDefaultGPU=false""")
         self.assertGreater(counter, 0, 'Zero files deleted by localization cleaner. ' +
                                        'This may be an error unless you really deleted all the files.')
 
+    def test_localization_paths_overlapping_rules(self):
+        """A path matched by two rules is yielded once"""
+        locales = Locales(vfs=ListVFS(['/usr/share/qt/translations/qt_de.qm']))
+        configpath = parseString(
+            '<path location="/usr/share/qt/translations">'
+            r'<regexfilter prefix=".*_" postfix="\.qm"/>'
+            r'<regexfilter prefix="q[\w_]*" postfix="\.qm"/>'
+            '</path>').firstChild
+        locales.add_xml(configpath)
+        self.assertEqual(list(locales.localization_paths(['en'])),
+                         ['/usr/share/qt/translations/qt_de.qm'])
+
     @common.skipIfWindows
     def test_fakelocalizationdirs(self):
         """Create a faked localization hierarchy and clean it afterwards"""

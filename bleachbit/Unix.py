@@ -173,12 +173,16 @@ class Locales:
     def localization_paths(self, locales_to_keep):
         """Returns all localization items matching the previously added xml configuration"""
         purgeable_locales = get_purgeable_locales(locales_to_keep)
+        # Overlapping rules, e.g. for Qt translations, can match a path twice
+        seen = set()
 
         for (locale, specifier, path) in self._paths.get_localizations('/'):
             specific = locale + (specifier or '')
             if specific in purgeable_locales or \
                     (locale in purgeable_locales and specific not in locales_to_keep):
-                yield path
+                if path not in seen:
+                    seen.add(path)
+                    yield path
 
 
 def _is_broken_xdg_desktop_application(config, desktop_pathname):
