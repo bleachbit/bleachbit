@@ -482,13 +482,17 @@ def delete_registry_value(key, value_name, really_delete):
     successful.  If really_delete is False (meaning preview),
     just check whether the value exists."""
     (hive, sub_key) = split_registry_key(key)
+    # The Windows build is 32-bit; without KEY_WOW64_64KEY, WOW64 would
+    # send HKLM\Software to WOW6432Node. 32-bit Windows ignores the flag.
     try:
         if really_delete:
             # pylint: disable-next=possibly-used-before-assignment
-            hkey = winreg.OpenKey(hive, sub_key, 0, winreg.KEY_SET_VALUE)
+            hkey = winreg.OpenKey(
+                hive, sub_key, 0, winreg.KEY_SET_VALUE | winreg.KEY_WOW64_64KEY)
             winreg.DeleteValue(hkey, value_name)
         else:
-            hkey = winreg.OpenKey(hive, sub_key)
+            hkey = winreg.OpenKey(
+                hive, sub_key, 0, winreg.KEY_READ | winreg.KEY_WOW64_64KEY)
             winreg.QueryValueEx(hkey, value_name)
     except PermissionError as e:
         raise OSError(
@@ -525,7 +529,8 @@ def delete_registry_key(parent_key, really_delete, excludekeys=None):
 
     (hive, parent_sub_key) = split_registry_key(parent_key)
     try:
-        hkey = winreg.OpenKey(hive, parent_sub_key)
+        hkey = winreg.OpenKey(
+            hive, parent_sub_key, 0, winreg.KEY_READ | winreg.KEY_WOW64_64KEY)
     except PermissionError as e:
         raise OSError(
             errno.EACCES,
@@ -558,7 +563,7 @@ def delete_registry_key(parent_key, really_delete, excludekeys=None):
         return False
 
     try:
-        winreg.DeleteKey(hive, parent_sub_key)
+        winreg.DeleteKeyEx(hive, parent_sub_key, winreg.KEY_WOW64_64KEY)
     except PermissionError as e:
         raise OSError(
             errno.EACCES,
@@ -718,19 +723,19 @@ def detect_registry_key(parent_key):
     except UnicodeEncodeError:
         return False
     (hive, parent_sub_key) = split_registry_key(parent_key)
-    hkey = None
-    try:
-        hkey = winreg.OpenKey(hive, parent_sub_key)
-    # WindowsError is a real builtin; this file only runs on Windows.
-    # pylint: disable-next=undefined-variable
-    except WindowsError as e:
-        if e.winerror == 2:
-            # 2 = 'file not found' happens when key does not exist
+    # A 32-bit app's HKLM\Software key is only in the 32-bit view
+    for view in (winreg.KEY_WOW64_64KEY, winreg.KEY_WOW64_32KEY):
+        try:
+            winreg.OpenKey(hive, parent_sub_key, 0, winreg.KEY_READ | view)
+        # WindowsError is a real builtin; this file only runs on Windows.
+        # pylint: disable-next=undefined-variable
+        except WindowsError as e:
+            if e.winerror == 2:
+                # 2 = 'file not found' happens when key does not exist
+                continue
             return False
-    if not hkey:
-        # key not found
-        return False
-    return True
+        return True
+    return False
 
 
 def get_sid_token_48():
@@ -1249,7 +1254,8 @@ def read_registry_key(full_key, value_name):
     except RuntimeError:
         return None
     try:
-        with winreg.OpenKey(hive, sub_key, 0, winreg.KEY_QUERY_VALUE) as hkey:
+        with winreg.OpenKey(hive, sub_key, 0,
+                            winreg.KEY_QUERY_VALUE | winreg.KEY_WOW64_64KEY) as hkey:
             (reg_value, reg_type) = winreg.QueryValueEx(hkey, value_name)
             if reg_type in (winreg.REG_EXPAND_SZ, winreg.REG_SZ):
                 return reg_value
