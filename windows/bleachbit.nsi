@@ -468,7 +468,25 @@ Function .onInit
   StrCpy $uninstaller_cmd '$R0 _?=$INSTDIR'
   IfSilent 0 +2
   StrCpy $uninstaller_cmd "$uninstaller_cmd /S"
+  ; Files in use get deleted at the next reboot, taking the new ones with them
+  close_bleachbit:
+  Call FindRunningBleachBit
+  ${If} $0 != ""
+    MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "$(^FileError_NoIgnore)" /SD IDCANCEL IDRETRY close_bleachbit
+    Abort
+  ${EndIf}
+  ClearErrors
   ExecWait $uninstaller_cmd ; Actually run the uninstaller
+  ; Catch files still in use, e.g. by another user's BleachBit. Errors mean
+  ; the uninstaller failed or was cancelled and queued nothing
+  ${IfNot} ${Errors}
+    ${If} ${FileExists} "$INSTDIR\${prodname}.exe"
+    ${OrIf} ${FileExists} "$INSTDIR\${prodname}_console.exe"
+      MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(MUI_UNTEXT_FINISH_INFO_REBOOT)" /SD IDNO IDNO +2
+      Reboot
+      Abort
+    ${EndIf}
+  ${EndIf}
 
   new_install:
   Return
@@ -479,6 +497,37 @@ Function .onInit
     ExecShell "open" "https://www.bleachbit.org/goto/old-windows?ver=${VERSION}&os=$R0&lang=$LANGUAGE"
     Abort
 
+FunctionEnd
+
+
+; Set $0 to the path of a BleachBit exe running from $INSTDIR, or to "" if
+; there is none. Clobbers $1-$7.
+Function FindRunningBleachBit
+  StrCpy $0 ""
+  System::Alloc 16384 ; room for 4096 process IDs
+  Pop $1
+  System::Call 'kernel32::K32EnumProcesses(p r1, i 16384, *i .r2) i .r3'
+  ${If} $3 <> 0
+    IntOp $2 $2 - 4
+    ${ForEach} $3 0 $2 + 4
+      IntPtrOp $4 $1 + $3
+      System::Call '*$4(i .r4)'
+      ; PROCESS_QUERY_LIMITED_INFORMATION, which also opens elevated processes
+      System::Call 'kernel32::OpenProcess(i 0x1000, i 0, i r4) p .r5'
+      ${If} $5 <> 0
+        System::Call 'kernel32::QueryFullProcessImageName(p r5, i 0, t .r6, *i ${NSIS_MAX_STRLEN}) i .r7'
+        System::Call 'kernel32::CloseHandle(p r5)'
+        ${If} $7 <> 0
+          ${If} $6 == "$INSTDIR\${prodname}.exe"
+          ${OrIf} $6 == "$INSTDIR\${prodname}_console.exe"
+            StrCpy $0 $6
+            ${ExitFor}
+          ${EndIf}
+        ${EndIf}
+      ${EndIf}
+    ${Next}
+  ${EndIf}
+  System::Free $1
 FunctionEnd
 
 
