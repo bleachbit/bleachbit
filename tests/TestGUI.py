@@ -674,6 +674,29 @@ class GUITestCase(common.BleachbitTestCase):
             gui._prompt_orphaned_wipe_files(['/does/not/exist'])
             dialog.assert_called_once()
 
+    def test_update_found_mid_operation(self):
+        """An update found mid-operation leaves Preview/Clean disabled"""
+        class SyncThread:
+            def __init__(self, target=None, args=()):
+                self.target = target
+                self.args = args
+
+            def start(self):
+                self.target(*self.args)
+
+        gui = self.get_window()
+        gui.set_sensitive(False)
+        self.addCleanup(gui.set_sensitive, True)
+        self.addCleanup(gui.update_button.hide)
+        with mock.patch('bleachbit.GuiUtil.threading.Thread', SyncThread), \
+                mock.patch('bleachbit.Update.check_updates',
+                           return_value=[('99.0', 'https://example.invalid/')]):
+            gui.check_online_updates()
+            self.refresh_gui()
+        self.assertTrue(gui.update_button.get_visible())
+        self.assertFalse(gui.run_button.get_sensitive())
+        self.assertTrue(gui.stop_button.get_sensitive())
+
     def test_app_menu_reloads_only_after_setup_translation(self):
         """The app menu is rebuilt only after setup_translation() runs again"""
         gui = self.get_window()

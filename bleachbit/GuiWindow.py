@@ -1399,5 +1399,4 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
             def update_button_state():
                 if updates and self.textbuffer is not None:
                     self.update_button.show()
-                    self.set_sensitive(True)
             GLib.idle_add(update_button_state)
