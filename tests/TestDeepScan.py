@@ -12,6 +12,7 @@ Test case for module DeepScan
 # standard imports
 import os
 import shutil
+import subprocess
 import unittest
 from unittest import mock
 
@@ -24,6 +25,7 @@ from tests.common import SPECIAL_TEST_STRINGS
 from bleachbit import IS_MAC, IS_WINDOWS, FS_CASE_SENSITIVE
 from bleachbit.Options import options
 from bleachbit.DeepScan import DeepScan, Search, normalized_walk
+from bleachbit.FileUtilities import openfiles
 
 if IS_WINDOWS:
     # pylint: disable-next=ungrouped-imports
@@ -155,6 +157,39 @@ class DeepScanTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
         ]
         self.assertNotIn(keep_file, paths)
         self.assertIn(search_file, paths)
+
+    @common.skipIfWindows
+    def test_scan_skip_open(self):
+        """skip_open leaves files that a process holds open"""
+        open_fn = self.write_file('open.bbtestswp', b'x')
+        closed_fn = self.write_file('closed.bbtestswp', b'x')
+        searches = {self.tempdir: [
+            Search(command='delete', regex=r'\.bbtestswp$', skip_open=True)]}
+        # Open for reading so FreeBSD reports the path, as in test_open_files
+        with open(open_fn, 'rb'):
+            openfiles.scan()
+            paths = [cmd.path for cmd in DeepScan(
+                searches).scan() if cmd is not True]
+        self.assertEqual(paths, [closed_fn])
+
+    @common.skipIfWindows
+    def test_scan_skip_open_unlisted(self):
+        """skip_open keeps files when open files cannot be listed"""
+        self.write_file('a.bbtestswp', b'x')
+        # A second match catches a failed listing cached as empty
+        self.write_file('b.bbtestswp', b'x')
+        bak_fn = self.write_file('c.bbtestbak', b'x')
+        searches = {self.tempdir: [
+            Search(command='delete', regex=r'\.bbtestswp$', skip_open=True),
+            Search(command='delete', regex=r'\.bbtestbak$')]}
+        for exc in (FileNotFoundError('lsof'),
+                    subprocess.CalledProcessError(1, 'lsof')):
+            with self.subTest(exc=exc), \
+                    mock.patch('bleachbit.FileUtilities.open_files', side_effect=exc), \
+                    mock.patch.object(openfiles, 'last_scan_time', None):
+                paths = [cmd.path for cmd in DeepScan(
+                    searches).scan() if cmd is not True]
+                self.assertEqual(paths, [bak_fn])
 
     @common.skipUnlessWindows
     def test_scan_does_not_follow_junction(self):

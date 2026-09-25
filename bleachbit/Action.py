@@ -138,10 +138,12 @@ class FileActionProvider(ActionProvider):
         self._set_paths(action_element.getAttribute('path'), path_vars)
         self.ds = None
         if 'deep' == self.search:
+            skip_open = action_element.getAttribute('skip_open')
             self.ds = (self.paths[0], DeepScan.Search(
                 command=action_element.getAttribute('command'),
                 regex=self.regex, nregex=self.nregex,
-                wholeregex=self.wholeregex, nwholeregex=self.nwholeregex))
+                wholeregex=self.wholeregex, nwholeregex=self.nwholeregex,
+                skip_open=bool(skip_open) and General.boolstr_to_bool(skip_open)))
             if len(self.paths) != 1:
                 logger.warning(
                     # TRANSLATORS: Multi-value variables are explained
