@@ -432,6 +432,10 @@ class SpecialTestCase(common.BleachbitTestCase, SpecialAssertions):
                 # id 2 is www.bleachbit.org which is a bookmark and should
                 # be cleaned
                 self.assertEqual(ids, [2])
+                # with its visit statistics reset
+                c.execute(
+                    'select visit_count, typed_count, last_visit_time from urls')
+                self.assertEqual(c.fetchall(), [(0, 0, 0)])
 
                 # these tables should always be empty after cleaning
                 self.assertTablesAreEmpty(filename, ['downloads', 'keyword_search_terms',
