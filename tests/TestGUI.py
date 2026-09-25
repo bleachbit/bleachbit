@@ -876,6 +876,19 @@ class GUITestCase(common.BleachbitTestCase):
         self.refresh_gui()
         self.assertNotExists(file_to_clean)
 
+    def test_on_destroy_stops_running_worker(self):
+        """Closing the window stops the operation that is still running"""
+        gui = self.get_window()
+        file_to_clean = self._setup_new_cleaner(gui)
+        self.addCleanup(gui.set_sensitive, True)
+        operations = {self._NEW_CLEANER_ID: [self._NEW_OPTION_ID]}
+        with mock.patch.object(gui, 'worker_done') as worker_done:
+            gui.preview_or_run_operations(True, operations)
+            gui.on_destroy(gui)
+            self.refresh_gui()
+        worker_done.assert_not_called()
+        self.assertExists(file_to_clean)
+
     def test_cb_run_option(self):
         gui = self.get_window()
         file_to_clean = self._setup_new_cleaner(gui)

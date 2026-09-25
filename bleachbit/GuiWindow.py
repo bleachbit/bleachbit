@@ -180,6 +180,7 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         self.connect("configure-event", self.on_configure_event)
         self.connect("window-state-event", self.on_window_state_event)
         self.connect("delete-event", self.on_delete_event)
+        self.connect("destroy", self.on_destroy)
         self.connect("show", self.on_show)
 
         if appicon_path and os.path.exists(appicon_path):
@@ -1344,6 +1345,10 @@ class GUI(InfoBarMixin, Gtk.ApplicationWindow):
         # commit options to disk
         options.close()
         return False
+
+    def on_destroy(self, _widget):
+        """Stop the running operation so it does not outlive the window"""
+        self._stop_worker()
 
     def on_show(self, _widget):
         """Handle the show event.
