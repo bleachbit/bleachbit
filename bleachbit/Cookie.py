@@ -365,7 +365,8 @@ def list_unique_cookies():
     cookie_files = set()
     # Import backends here to avoid a circular import.
     from bleachbit.Cleaner import backends as cleaner_backends
-    for cleaner in cleaner_backends.values():
+    # This runs in a thread while the GUI may clear and refill backends.
+    for cleaner in list(cleaner_backends.values()):
         actions = getattr(cleaner, 'actions', ())
         for option_id, action in actions:
             if getattr(action, 'action_key', None) != 'cookie':

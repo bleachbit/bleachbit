@@ -560,6 +560,29 @@ class CookieTestCase(common.BleachbitTestCase):
             list(cmds[0].execute(really_delete=True))
         self.assertExists(path)
 
+    def test_list_unique_cookies_backends_change(self):
+        """Cookie discovery survives the cleaner list changing under it"""
+        from bleachbit import Cleaner
+        chrome = self._create_chrome_cookies_db([('chrome.example', 'n')])
+        firefox = self._create_firefox_cookies_db([('.firefox.example', 'n')])
+
+        def make_cleaner(path, on_get_paths=None):
+            def get_paths():
+                if on_get_paths:
+                    on_get_paths()
+                yield path
+            action = mock.Mock(action_key='cookie', get_paths=get_paths)
+            return mock.Mock(actions=[('cookies', action)])
+
+        # The GUI thread refills backends while discovery runs.
+        backends = {
+            'a': make_cleaner(chrome, lambda: Cleaner.backends.pop('b')),
+            'b': make_cleaner(firefox),
+        }
+        with mock.patch.dict(Cleaner.backends, backends, clear=True):
+            hosts = Cookie.list_unique_cookies()
+        self.assertEqual(hosts, ['.firefox.example', 'chrome.example'])
+
     def _make_cookie_action(self, path=None):
         """Create a Cookie action instance with a mock XML element."""
         if path is None:
