@@ -9,6 +9,12 @@ later.  See the COPYING file in the top-level directory.
 
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <!-- Unlike xs:boolean, no 1, 0 or surrounding spaces: boolstr_to_bool() rejects them -->
+  <xs:simpleType name="trueOrFalse">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee]"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:attributeGroup name="operatingSystem">
     <xs:attribute name="os" use="optional">
       <xs:simpleType>
@@ -25,7 +31,7 @@ later.  See the COPYING file in the top-level directory.
           <xs:complexType>
             <xs:simpleContent>
               <xs:extension base="xs:string">
-                <xs:attribute name="translate" type="xs:boolean" default="false"/>
+                <xs:attribute name="translate" type="trueOrFalse" default="false"/>
               </xs:extension>
             </xs:simpleContent>
           </xs:complexType>
@@ -52,7 +58,7 @@ later.  See the COPYING file in the top-level directory.
                     </xs:restriction>
                   </xs:simpleType>
                 </xs:attribute>
-                <xs:attribute name="same_user" type="xs:boolean" use="optional"/>
+                <xs:attribute name="same_user" type="trueOrFalse" use="optional"/>
               </xs:extension>
             </xs:simpleContent>
           </xs:complexType>
@@ -90,7 +96,7 @@ later.  See the COPYING file in the top-level directory.
                 <xs:complexType>
                   <xs:simpleContent>
                     <xs:extension base="xs:string">
-                      <xs:attribute name="translate" type="xs:boolean" default="false"/>
+                      <xs:attribute name="translate" type="trueOrFalse" default="true"/>
                       <xs:attribute name="translators" type="xs:string"/>
                     </xs:extension>
                   </xs:simpleContent>
@@ -135,6 +141,7 @@ later.  See the COPYING file in the top-level directory.
                             <xs:enumeration value="office_registrymodifications"/>
                             <xs:enumeration value="pacman.cache"/>
                             <xs:enumeration value="process"/>
+                            <xs:enumeration value="shred"/>
                             <xs:enumeration value="snap.disabled"/>
                             <xs:enumeration value="sqlite.vacuum"/>
                             <xs:enumeration value="truncate"/>
@@ -152,7 +159,14 @@ later.  See the COPYING file in the top-level directory.
                       <xs:attribute name="nregex" type="xs:string"/>
                       <xs:attribute name="wholeregex" type="xs:string"/>
                       <xs:attribute name="nwholeregex" type="xs:string"/>
-                      <xs:attribute name="type" type="xs:string"/>
+                      <xs:attribute name="type">
+                        <xs:simpleType>
+                          <xs:restriction base="xs:string">
+                            <xs:enumeration value="d"/>
+                            <xs:enumeration value="f"/>
+                          </xs:restriction>
+                        </xs:simpleType>
+                      </xs:attribute>
                       <xs:attribute name="wait" type="xs:string"/>
                       <xs:attributeGroup ref="operatingSystem"/>
                       <xs:attribute name="search">
@@ -168,7 +182,7 @@ later.  See the COPYING file in the top-level directory.
                         </xs:simpleType>
                       </xs:attribute>
                       <xs:attribute name="section" type="xs:string"/>
-                      <xs:attribute name="skip_open" type="xs:boolean"/>
+                      <xs:attribute name="skip_open" type="trueOrFalse"/>
                     </xs:extension>
                   </xs:simpleContent>
                 </xs:complexType>
