@@ -708,3 +708,16 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertEqual(1, vivaldi_paths.count(vivaldi_history))
         opera_real = [os.path.realpath(path) for path in opera_paths]
         self.assertEqual(1, opera_real.count(os.path.realpath(opera_history)))
+
+    @common.skipIfWindows
+    def test_edge_cache_linux_disk_cache(self):
+        """Edge cache covers its disk cache under XDG_CACHE_HOME"""
+        cache_home = self.mkdtemp(prefix='bleachbit-edge-cache')
+        with common.set_temporary_env('XDG_CACHE_HOME', cache_home):
+            for channel in ('microsoft-edge', 'microsoft-edge-beta'):
+                with self.subTest(channel=channel):
+                    entry = os.path.join(cache_home, channel, 'Default',
+                                         'Cache', 'Cache_Data', 'f_000001')
+                    common.touch_file(entry)
+                    self.assertIn(entry, self._bundled_option_paths(
+                        'microsoft_edge', 'cache', 'linux'))

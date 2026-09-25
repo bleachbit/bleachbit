@@ -38,6 +38,9 @@ later.  See the COPYING file in the top-level directory.
     <action command="delete" search="file" path="$$profile$$/Network/Network Persistent State"/>
     <action command="delete" search="walk.all" path="$$profile$$/GPUCache/"/>
     <action command="delete" search="walk.all" path="$$profile$$/Storage/ext/*/*def/GPUCache"/>
+    <!-- Linux-specific -->
+    <action command="delete" search="walk.all" path="$XDG_CACHE_HOME/microsoft-edge-beta/"/>
+    <action command="delete" search="walk.all" path="$XDG_CACHE_HOME/microsoft-edge/"/>
     <!-- Windows-specific -->
     <action command="delete" search="glob" path="$$base$$\B*.tmp"/>
     <action command="delete" search="walk.all" path="$$profile$$\Default\Application Cache\"/>
