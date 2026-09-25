@@ -280,17 +280,15 @@ class ResolveLocaleDirTestCase(common.BleachbitTestCase):
             path_exists=lambda p: False)
         self.assertEqual(result, '/usr/share/locale/')
 
-    def test_local_locale_takes_priority(self):
-        """A local ./locale/ directory (running from source) takes
-        priority over the macOS bundle path, even on macOS."""
+    def test_current_directory_ignored(self):
+        """A locale/ directory in the current directory is not used"""
         from bleachbit import _resolve_locale_dir
+        exe_path = r'C:\Program Files\BleachBit'
         result = _resolve_locale_dir(
-            '/Applications/BleachBit.app/Contents/Resources',
-            is_linux=False, is_mac=True, is_windows=False,
+            exe_path, is_linux=False, is_mac=False, is_windows=True,
             is_netbsd=False, is_bsd=False,
-            path_exists=lambda p: p == './locale/')
-        self.assertTrue(result.endswith('locale'))
-        self.assertNotIn('BleachBit.app', result)
+            path_exists=lambda p: p in ('./locale/', 'locale'))
+        self.assertEqual(result, os.path.join(exe_path, 'share\\locale\\'))
 
     def test_non_mac_unaffected(self):
         """On Linux, the macOS bundle-relative check must never be
