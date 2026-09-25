@@ -214,6 +214,22 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         self.assertTrue(any('File owner:' in line for line in lines))
         self.assertTrue(any('Current user:' in line for line in lines))
 
+    @common.skipIfWindows
+    def test_permission_issues_effective_user(self):
+        """Under sudo -u or su, the effective user owning the file is fine"""
+        path = self.write_file('check_me')
+        other_uid = os.geteuid() + 1
+        with mock.patch.dict(os.environ, {'SUDO_UID': str(other_uid),
+                                          'SUDO_USER': 'someone_else'}):
+            has_error, _lines = _get_posix_permission_issues(
+                os.stat(path), path)
+            self.assertFalse(has_error)
+            if os.geteuid() != 0:
+                # owned by neither the real nor the effective user
+                has_error, _lines = _get_posix_permission_issues(
+                    mock.Mock(st_uid=other_uid + 1), path)
+                self.assertTrue(has_error)
+
     @common.skipUnlessWindows
     def test_get_windows_user_info(self):
         """Test _get_windows_user_info function."""
