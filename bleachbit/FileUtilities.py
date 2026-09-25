@@ -326,11 +326,14 @@ class OpenFiles:
 
     def scan(self):
         """Update cache"""
-        self.last_scan_time = time.time()
-        self.files = set()
+        scan_time = time.time()
+        files = set()
         for filename in open_files():
             if self.file_qualifies(filename):
-                self.files.add(filename)
+                files.add(filename)
+        # A failed listing must not be cached as nothing open
+        self.files = files
+        self.last_scan_time = scan_time
 
     def is_open(self, filename):
         """Return boolean whether filename is open by running process"""
