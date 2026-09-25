@@ -530,6 +530,29 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         self.assertNotExists(test_log_path_a)
         self.assertNotExists(test_log_path_b)
 
+    def test_xlate_cb_source_text(self):
+        """The .pot callback gets the source text, not its translation"""
+        xml_str = f"""<cleaner id="xlate">
+    <label translate="true">Label</label>
+    <description>Description</description>
+    <option id="option1">
+        <label>Option label</label>
+        <description>Option description</description>
+        <warning>Option warning</warning>
+        <action search="file" command="delete" path="{self.tempdir}/nonexistent"/>
+    </option>
+</cleaner>
+"""
+        cml_path = os.path.join(self.tempdir, 'xlate.xml')
+        self.write_file(cml_path, xml_str.encode(sys.getdefaultencoding()))
+        strings = []
+        with mock.patch('bleachbit.CleanerML._', lambda s: 'translated ' + s):
+            xmlc = CleanerML(cml_path,
+                             lambda s, translators=None: strings.append(s))
+        self.assertEqual(['Label', 'Description', 'Option label',
+                          'Option description', 'Option warning'], strings)
+        self.assertEqual('translated Label', xmlc.cleaner.name)
+
     def test_vuze_program_files(self):
         """Vuze actions under Program Files stay in the Vuze folder"""
         roots = (r'C:\Program Files (x86)', r'C:\Program Files')
