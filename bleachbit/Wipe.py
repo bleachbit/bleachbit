@@ -12,6 +12,7 @@ import atexit
 import ctypes
 import errno
 import os
+import stat
 import string
 import struct
 import tempfile
@@ -222,6 +223,10 @@ def wipe_write(path):
             raise
     f = os.fdopen(fd, 'wb')
     try:
+        if stat.S_ISBLK(os.fstat(fd).st_mode):
+            # getsize() is 0 for a device node, such as a swap partition
+            size = f.seek(0, os.SEEK_END)
+            f.seek(0)
         blanks = memoryview(ZERO_FILL_BUFFER)
         while size > 0:
             f.write(blanks[:min(size, WRITE_BUF_SIZE)])
