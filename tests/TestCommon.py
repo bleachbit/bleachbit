@@ -162,6 +162,35 @@ class CommonTestCase(common.BleachbitTestCase):
         self.assertEqual(proc.returncode, 0, proc.stderr)
         self.assertEqual(proc.stdout.strip(), 'False', proc.stderr)
 
+    def _run_conftest(self, options_dir, worker=None):
+        """Run conftest.py in a child process and return its options dir"""
+        import sys
+        env = dict(os.environ, BLEACHBIT_TEST_OPTIONS_DIR=options_dir)
+        env.pop('PYTEST_XDIST_WORKER', None)
+        if worker:
+            env['PYTEST_XDIST_WORKER'] = worker
+        code = ('import os, runpy, sys; runpy.run_path(sys.argv[1]); '
+                'print(os.environ["BLEACHBIT_TEST_OPTIONS_DIR"])')
+        conftest = os.path.join(os.path.dirname(
+            os.path.abspath(__file__)), 'conftest.py')
+        proc = subprocess.run([sys.executable, '-c', code, conftest],
+                              env=env, capture_output=True, text=True,
+                              check=False, timeout=60)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        return proc.stdout.strip()
+
+    def test_conftest_worker_skips_controller_dir(self):
+        """An xdist worker does not adopt the controller's options dir"""
+        # The worker id can turn up in the controller's random suffix
+        controller_dir = os.path.join(
+            self.tempdir, 'bleachbit-test-master-k0gw1zq_')
+        other_worker_dir = os.path.join(
+            controller_dir, 'bleachbit-test-gw0-abcd1234')
+        os.makedirs(other_worker_dir)
+        worker_dir = self._run_conftest(controller_dir, 'gw1')
+        self.assertNotEqual(controller_dir, worker_dir)
+        self.assertExists(other_worker_dir)
+
     def test_get_put_env(self):
         """Unit test for get_env() and put_env()"""
         self.assertIsNone(common.get_env('PUTENV_TEST'))

@@ -32,9 +32,13 @@ _options_dir = os.environ.get('BLEACHBIT_TEST_OPTIONS_DIR')
 # inherits it. Without keying on the worker id they would all share one
 # config dir and race on the same bleachbit.ini.
 if _worker:
-    if not _options_dir or _worker not in os.path.basename(_options_dir):
+    _prefix = f'bleachbit-test-{_worker}-'
+    # Match the whole prefix: the random suffix of the controller's dir can
+    # contain a worker id such as gw1.
+    if (not _options_dir
+            or not os.path.basename(_options_dir).startswith(_prefix)):
         _options_dir = tempfile.mkdtemp(
-            prefix=f'bleachbit-test-{_worker}-', dir=_options_dir or None)
+            prefix=_prefix, dir=_options_dir or None)
         os.environ['BLEACHBIT_TEST_OPTIONS_DIR'] = _options_dir
     # Give each worker a private temporary directory so that tests
     # spawning subprocesses and Windows %TEMP%-based cleaners do
