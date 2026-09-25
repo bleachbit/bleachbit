@@ -1167,6 +1167,20 @@ class WindowsTestCase(common.BleachbitTestCase, WindowsLinksMixIn):
             '<fontconfig><cachedir>~/.fontconfig</cachedir></fontconfig>\n')
         self.assertFalse(has_fontconfig_cache(font_conf))
 
+    def test_browse_folder_not_file_system(self):
+        """browse_folder() returns None for a folder without a file system path"""
+        e_fail = -2147467259
+        # pylint: disable-next=possibly-used-before-assignment
+        error = pywintypes.com_error(e_fail, 'Unspecified error', None, None)
+        with mock.patch('bleachbit.Windows.shell') as mock_shell:
+            pidl = object()
+            mock_shell.SHBrowseForFolder.return_value = (pidl, 'This PC', 0)
+            mock_shell.SHGetPathFromIDListW.side_effect = error
+            # pylint: disable-next=possibly-used-before-assignment
+            self.assertIsNone(Windows.browse_folder(None, 'title'))
+        flags = mock_shell.SHBrowseForFolder.call_args.args[3]
+        self.assertTrue(flags & 0x0001)  # BIF_RETURNONLYFSDIRS
+
     def test_get_known_folder_path(self):
         """Unit test for get_known_folder_path"""
         ret = get_known_folder_path('LocalAppDataLow')
