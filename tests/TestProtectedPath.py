@@ -351,6 +351,17 @@ class ProtectedPathTestCase(RelativeSuffixAssertions, common.BleachbitTestCase):
             self.assertEqual(result['path'], '.git')
 
     @requirePPXML
+    def test_check_protected_path_git_children(self):
+        """Paths inside a .git directory match its depth="any" entry"""
+        for path in ('/home/test/bleachbit/.git/objects',
+                     '/home/test/bleachbit/.git/objects/pack'):
+            result = check_protected_path(path)
+            self.assertIsNotNone(result, msg=f"Expected .git match for {path}")
+            self.assertEqual(result['path'], '.git')
+        self.assertIsNone(check_protected_path(
+            '/home/test/bleachbit/.github/workflows'))
+
+    @requirePPXML
     def test_check_protected_path_desktop_suffix(self):
         """Ensure Desktop.old variants do not match Desktop protected entry"""
         desktop = os.path.expanduser('~/Desktop')
