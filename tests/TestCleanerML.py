@@ -174,6 +174,36 @@ class CleanerMLTestCase(common.BleachbitTestCase):
         shutil.rmtree(bleachbit.personal_cleaners_dir)
         bleachbit.personal_cleaners_dir = pcd
 
+    def test_load_cleaners_same_id(self):
+        """A personal cleaner does not replace a bundled one with the same id
+
+        Swap the directory names so the result cannot come from sorting paths.
+        """
+        xml_str = ('<cleaner id="test_same_id"><label>{label}</label>'
+                   '<option id="o"><label>O</label><description>D</description>'
+                   '<action command="delete" search="file" path="{base}/nonexistent"/>'
+                   '</option></cleaner>')
+        self.addCleanup(Cleaner.backends.pop, 'test_same_id', None)
+        for personal_name, system_name in (('a', 'b'), ('b', 'a')):
+            with self.subTest(personal=personal_name, system=system_name):
+                base = self.mkdtemp(prefix='bleachbit-cleanerml-same-id')
+                dirs = {'personal': os.path.join(base, personal_name),
+                        'system': os.path.join(base, system_name)}
+                for label, dirname in dirs.items():
+                    os.mkdir(dirname, 0o700)
+                    fn = os.path.join(dirname, 'same_id.xml')
+                    self.write_file(fn, text=xml_str.format(
+                        label=label, base=base))
+                    os.chmod(fn, 0o600)
+                with mock.patch.multiple(bleachbit,
+                                         personal_cleaners_dir=dirs['personal'],
+                                         system_cleaners_dir=dirs['system'],
+                                         local_cleaners_dir=None), \
+                        self.assertLogs('bleachbit.CleanerML', level='WARNING'):
+                    list(load_cleaners())
+                self.assertEqual(
+                    'system', Cleaner.backends['test_same_id'].name)
+
     def test_load_cleaners_invalid_utf8(self):
         """Unit test for load_cleaners() with invalid UTF-8 encoding"""
         pcd = bleachbit.personal_cleaners_dir
