@@ -297,6 +297,9 @@ class GUIUtilFontTestCase(common.BleachbitTestCase):
             'Sans abc',
             'Sans 0',
             'Sans -1',
+            'Sans 0.5',
+            'Sans 10.5px',
+            'Sans 11 @opsz=10.5',
         )
         for font_name in tests:
             self.assertIsNone(get_font_size_from_name(font_name),
