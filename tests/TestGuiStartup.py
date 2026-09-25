@@ -144,6 +144,19 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         self.assertNotExists(bleachbit.options_file)
         issues = GuiStartup._get_config_permission_issues()
         self.assertFalse(issues)
+        # Options creates the file itself, with its own mode and owner
+        self.assertNotExists(bleachbit.options_file)
+
+    def test_config_permission_nonissue_missing_dir(self):
+        """A missing options directory on first start is not an error"""
+        parent_dir = os.path.join(self.tempdir, 'missing_parent')
+        options_dir = os.path.join(parent_dir, 'bleachbit')
+        with mock.patch('bleachbit.options_dir', options_dir), \
+                mock.patch('bleachbit.options_file',
+                           os.path.join(options_dir, 'bleachbit.ini')):
+            issues = GuiStartup._get_config_permission_issues()
+        self.assertFalse(issues)
+        self.assertNotExists(parent_dir)
 
     @common.skipIfWindows
     def test_config_permission_issue_non_writeable_options_dir(self):
@@ -171,6 +184,22 @@ class GuiStartupTestCase(common.BleachbitTestCase):
         self.assertGreater(len(issues), 0)
         self.assertTrue(any('Write error' in issue for issue in issues),
                         f"Expected 'Write error' in issues: {issues}")
+
+    @common.skipIfWindows
+    def test_config_permission_nonissue_non_writeable_options_dir(self):
+        """A writable config in a read-only options dir can still be saved"""
+        read_only_dir = self.mkdir('read_only_options')
+        options_file = os.path.join(read_only_dir, 'bleachbit.ini')
+        common.touch_file(options_file)
+        os.chmod(read_only_dir, stat.S_IRUSR | stat.S_IXUSR)
+        try:
+            with mock.patch('bleachbit.options_dir', read_only_dir), \
+                    mock.patch('bleachbit.options_file', options_file):
+                issues = GuiStartup._get_config_permission_issues()
+        finally:
+            os.chmod(read_only_dir, stat.S_IRWXU)
+            shutil.rmtree(read_only_dir)
+        self.assertFalse(issues)
 
     @common.also_with_sudo
     def test_permission_issues_normal_file(self):
